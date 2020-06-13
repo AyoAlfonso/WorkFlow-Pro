@@ -29,6 +29,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'activeadmin'
+gem 'arctic_admin'
 gem 'devise'
 gem 'pundit'
 
