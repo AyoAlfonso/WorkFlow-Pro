@@ -27,4 +27,8 @@ export class Api {
   addMonitor(monitor) {
     this.client.addMonitor(monitor);
   }
+
+  async getUsers() {
+    return this.client.get("/users");
+  }
 }

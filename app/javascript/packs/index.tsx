@@ -1,13 +1,32 @@
-// Run this example by adding <%= javascript_pack_tag 'hello_react' %> to the head of your layout file,
-// like app/views/layouts/application.html.erb. All it does is render <div>Hello React</div> at the bottom
-// of the page.
-
+import { Provider } from "mobx-react";
+import { getEnv } from "mobx-state-tree";
 import React from "react";
 import ReactDOM from "react-dom";
+import { Router } from "react-router-dom";
+
+// stores
+import { setupRootStore } from "../setup/root-store";
+import { startup } from "../setup/startup";
+import { IRootStore } from "../stores/root-store";
+
+// components
+import { App } from "../components/App";
 
 document.addEventListener("DOMContentLoaded", () => {
-  ReactDOM.render(
-    <div>Home</div>,
-    document.body.appendChild(document.createElement("div"))
-  );
+  setupRootStore()
+    .then((rootStore: IRootStore) => {
+      return new Promise((resolve) => {
+        startup(rootStore).then(() => resolve(rootStore));
+      });
+    })
+    .then((rootStore: IRootStore) => {
+      ReactDOM.render(
+        <Provider {...rootStore}>
+          <Router history={getEnv(rootStore).routerHistory}>
+            <App />
+          </Router>
+        </Provider>,
+        document.getElementById("root")
+      );
+    });
 });

@@ -1,0 +1,38 @@
+import { types, flow } from "mobx-state-tree";
+import { withEnvironment } from "../lib/with-environment";
+import { withRootStore } from "../lib/with-root-store";
+import { UserModel } from "../models/user";
+import { ApiResponse } from "apisauce";
+
+export const UserStoreModel = types
+  .model("UserStoreModel")
+  .props({
+    users: types.array(UserModel),
+  })
+  .extend(withRootStore())
+  .extend(withEnvironment())
+  .views((self) => ({}))
+  .actions((self) => ({
+    fetchUsers: flow(function* () {
+      const response: ApiResponse<any> = yield self.environment.api.getUsers();
+      if (response.ok) {
+        self.users = response.data;
+      }
+    }),
+  }))
+  .actions((self) => ({
+    reset() {
+      self.users = [] as any;
+    },
+  }))
+  .actions((self) => ({
+    load: flow(function* () {
+      self.reset();
+      yield self.fetchUsers();
+    }),
+  }));
+
+type UserStoreType = typeof UserStoreModel.Type;
+export interface IUserStore extends UserStoreType {
+  users: any;
+}
