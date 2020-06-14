@@ -13,6 +13,7 @@
     "@rails/webpacker": "4.2.2",
     "@types/react": "^16.9.36",
     "@types/react-dom": "^16.9.8",
+    "@types/styled-components": "^5.1.0",
     "apisauce": "^1.1.1",
     "arctic_admin": "^3.2.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
@@ -27,6 +28,8 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
+    "styled-components": "^5.1.1",
+    "styled-normalize": "^8.0.7",
     "ts-loader": "^7.0.5",
     "turbolinks": "^5.2.0",
     "typescript": "^3.9.5"

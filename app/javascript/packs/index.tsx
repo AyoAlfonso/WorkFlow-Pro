@@ -1,16 +1,17 @@
 import { Provider } from "mobx-react";
+import "mobx-react-lite/batchingForReactDom";
 import { getEnv } from "mobx-state-tree";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Router } from "react-router-dom";
 
+// components
+import { App } from "../components/App";
+
 // stores
 import { setupRootStore } from "../setup/root-store";
 import { startup } from "../setup/startup";
 import { IRootStore } from "../stores/root-store";
-
-// components
-import { App } from "../components/App";
 
 document.addEventListener("DOMContentLoaded", () => {
   setupRootStore()
