@@ -1,14 +1,26 @@
 import * as React from "react";
 import styled from "styled-components";
-
-const StyledTitle = styled.h1`
-  color: ${(props) => props.theme.colors.warningRed};
-`;
+import { HomeHeaderBar } from "./home-header-bar";
+import { HomePersonalStatus } from "./home-personal-status";
+import { HomePersonalItems } from "./home-personal-items";
+import { HomeCoreFour } from "./home-core-four";
+import { HomeGoals } from "./home-goals";
 
 export const HomeContainer = (): JSX.Element => {
   return (
-    <div>
-      <StyledTitle>Home</StyledTitle>
-    </div>
+    <Container>
+      <HomeHeaderBar />
+      <HomePersonalStatus />
+      <HomePersonalItems />
+      <HomeCoreFour />
+      <HomeGoals />
+    </Container>
   );
 };
+
+const Container = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+  margin-bottom: 50px;
+`;
