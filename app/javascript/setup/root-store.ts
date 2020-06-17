@@ -4,8 +4,15 @@ import { RootStoreModel } from "../stores/root-store";
 
 export async function setupRootStore() {
   const environment = await setupEnvironment();
+
+  console.log("setup root store");
+
   const initialState = {
     router: environment.router,
+    userStore: {
+      users: [],
+      count: 5
+    }
   };
 
   const rootStore = RootStoreModel.create(initialState, environment);
