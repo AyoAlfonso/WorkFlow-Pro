@@ -31,6 +31,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'activeadmin'
 gem 'arctic_admin'
 gem 'devise'
+gem 'devise_invitable'
 gem 'pundit'
 
 group :development, :test do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_13_230513) do
+ActiveRecord::Schema.define(version: 2020_06_16_181906) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,141 @@ ActiveRecord::Schema.define(version: 2020_06_13_230513) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
+  create_table "annual_initiatives", force: :cascade do |t|
+    t.bigint "created_by_id_id"
+    t.bigint "owned_by_id_id"
+    t.string "importance"
+    t.text "description"
+    t.string "key_elements", default: [], array: true
+    t.integer "initiative_type", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["created_by_id_id"], name: "index_annual_initiatives_on_created_by_id_id"
+    t.index ["owned_by_id_id"], name: "index_annual_initiatives_on_owned_by_id_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.bigint "annual_initiative_id", null: false
+    t.bigint "created_by_id_id"
+    t.text "body"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["annual_initiative_id"], name: "index_comments_on_annual_initiative_id"
+    t.index ["created_by_id_id"], name: "index_comments_on_created_by_id_id"
+  end
+
+  create_table "companies", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.string "contact_email"
+    t.string "phone_number"
+    t.text "rallying_cry"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "conversation_starters", force: :cascade do |t|
+    t.string "title"
+    t.string "body"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "core_fours", force: :cascade do |t|
+    t.text "core_1"
+    t.text "core_2"
+    t.text "core_3"
+    t.text "core_4"
+    t.bigint "company_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["company_id"], name: "index_core_fours_on_company_id"
+  end
+
+  create_table "create_my_days", force: :cascade do |t|
+    t.text "i_am_grateful_for"
+    t.text "how_do_i_want_to_feel"
+    t.string "frog_type"
+    t.integer "frog_id"
+    t.text "daily_affirmation"
+    t.text "thoughts_and_reflections"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "issues", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.text "description"
+    t.datetime "completed_at"
+    t.string "priority"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_issues_on_user_id"
+  end
+
+  create_table "key_activities", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.text "description"
+    t.datetime "completed_at"
+    t.string "priority"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "complete"
+    t.boolean "weekly_list"
+    t.index ["user_id"], name: "index_key_activities_on_user_id"
+  end
+
+  create_table "meeting_ratings", force: :cascade do |t|
+    t.float "score"
+    t.bigint "user_id", null: false
+    t.bigint "weekly_meeting_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_meeting_ratings_on_user_id"
+    t.index ["weekly_meeting_id"], name: "index_meeting_ratings_on_weekly_meeting_id"
+  end
+
+  create_table "milestones", force: :cascade do |t|
+    t.bigint "created_by_id_id"
+    t.text "description"
+    t.date "week"
+    t.integer "progress", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["created_by_id_id"], name: "index_milestones_on_created_by_id_id"
+  end
+
+  create_table "personal_reflections", force: :cascade do |t|
+    t.string "how_are_you_feeling"
+    t.text "what_do_you_feel"
+    t.text "reflect_and_celebrate"
+    t.text "daily_affirmations"
+    t.text "thoughts_and_reflections"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "quarterly_goals", force: :cascade do |t|
+    t.bigint "created_by_id_id"
+    t.bigint "owned_by_id_id"
+    t.string "importance"
+    t.text "description"
+    t.string "key_elements", default: [], array: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["created_by_id_id"], name: "index_quarterly_goals_on_created_by_id_id"
+    t.index ["owned_by_id_id"], name: "index_quarterly_goals_on_owned_by_id_id"
+  end
+
+  create_table "thought_challenges", force: :cascade do |t|
+    t.text "negative_thoughts"
+    t.integer "cognitive_distortions", default: 0
+    t.text "how_to_challenge_negative_thoughts"
+    t.text "another_way_to_interpret"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -58,9 +193,38 @@ ActiveRecord::Schema.define(version: 2020_06_13_230513) do
     t.string "unconfirmed_email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "invitation_token"
+    t.datetime "invitation_created_at"
+    t.datetime "invitation_sent_at"
+    t.datetime "invitation_accepted_at"
+    t.integer "invitation_limit"
+    t.string "invited_by_type"
+    t.bigint "invited_by_id"
+    t.integer "invitations_count", default: 0
+    t.text "personal_vision"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
+    t.index ["invitations_count"], name: "index_users_on_invitations_count"
+    t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
+    t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by_type_and_invited_by_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "weekly_meetings", force: :cascade do |t|
+    t.bigint "created_by_id_id"
+    t.string "emotions_img"
+    t.integer "conversation_starter_id"
+    t.float "average_rating"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["created_by_id_id"], name: "index_weekly_meetings_on_created_by_id_id"
+  end
+
+  add_foreign_key "comments", "annual_initiatives"
+  add_foreign_key "core_fours", "companies"
+  add_foreign_key "issues", "users"
+  add_foreign_key "key_activities", "users"
+  add_foreign_key "meeting_ratings", "users"
+  add_foreign_key "meeting_ratings", "weekly_meetings"
 end

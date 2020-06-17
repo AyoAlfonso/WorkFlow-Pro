@@ -1,0 +1,12 @@
+class CreateKeyActivities < ActiveRecord::Migration[6.0]
+  def change
+    create_table :key_activities do |t|
+      t.references :user, null: false, foreign_key: true
+      t.text :description
+      t.datetime :completed_at
+      t.string :priority
+
+      t.timestamps
+    end
+  end
+end
