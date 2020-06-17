@@ -14,6 +14,7 @@ import { GlobalStyles } from "./global-styles";
 import { HomeContainer } from "./domains/home/home-container";
 import { useMst } from "../setup/root";
 import { IIssueStore } from "../stores/issue-store";
+import { LoginForm } from "./domains/user/login-form";
 
 export interface IAppProps {
   userStore?: IUserStore;
@@ -22,11 +23,12 @@ export interface IAppProps {
 
 export const App = observer(
   (props: IAppProps): JSX.Element => {
-    const { userStore } = useMst();
-    console.log("users", userStore.users);
+    const { sessionStore } = useMst();
+    sessionStore.loggedIn; //if logged in show switch
     return (
       <ThemeProvider theme={baseTheme}>
         <GlobalStyles />
+        <LoginForm />
         <Switch>
           <Route
             exact

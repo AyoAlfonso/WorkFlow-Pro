@@ -41,6 +41,15 @@ ActiveRecord::Schema.define(version: 2020_06_19_193246) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
+  create_table "allowlisted_jwts", force: :cascade do |t|
+    t.string "jti", null: false
+    t.string "aud"
+    t.datetime "exp", null: false
+    t.bigint "user_id", null: false
+    t.index ["jti"], name: "index_allowlisted_jwts_on_jti", unique: true
+    t.index ["user_id"], name: "index_allowlisted_jwts_on_user_id"
+  end
+
   create_table "annual_initiatives", force: :cascade do |t|
     t.bigint "created_by_id_id"
     t.bigint "owned_by_id_id"
@@ -226,6 +235,7 @@ ActiveRecord::Schema.define(version: 2020_06_19_193246) do
     t.index ["created_by_id_id"], name: "index_weekly_meetings_on_created_by_id_id"
   end
 
+  add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
   add_foreign_key "comments", "annual_initiatives"
   add_foreign_key "core_fours", "companies"
   add_foreign_key "issues", "users"
