@@ -1,6 +1,7 @@
 import * as React from "react";
 import { HomeContainerBorders } from "./shared-components";
 import styled from "styled-components";
+import { IssuesContainer } from "./issues/issues-container";
 
 export const HomePersonalItems = (): JSX.Element => {
   const renderProritiesContainer = () => {
@@ -20,7 +21,11 @@ export const HomePersonalItems = (): JSX.Element => {
   };
 
   const renderIssuesContainer = () => {
-    return <NonPrioritiesContainer>Issues</NonPrioritiesContainer>;
+    return (
+      <NonPrioritiesContainer>
+        <IssuesContainer />
+      </NonPrioritiesContainer>
+    );
   };
 
   return (

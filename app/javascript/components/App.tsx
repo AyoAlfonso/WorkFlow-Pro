@@ -13,9 +13,11 @@ import { GlobalStyles } from "./global-styles";
 // components
 import { HomeContainer } from "./domains/home/home-container";
 import { useMst } from "../stores/root-store";
+import { IIssueStore } from "../stores/issue-store";
 
 export interface IAppProps {
   userStore?: IUserStore;
+  issueStore?: IIssueStore;
 }
 
 export const App = observer(

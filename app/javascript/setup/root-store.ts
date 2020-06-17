@@ -1,6 +1,7 @@
-import * as Monitors from "./api-monitors";
-import { setupEnvironment } from "./environment";
-import { RootStoreModel } from "../stores/root-store";
+// import * as Monitors from "./api-monitors";
+// import { setupEnvironment } from "./environment";
+// import { RootStoreModel } from "../stores/root-store";
+// import { onSnapshot } from "mobx-state-tree";
 
 export async function setupRootStore() {
   const environment = await setupEnvironment();
@@ -15,15 +16,27 @@ export async function setupRootStore() {
     }
   };
 
-  const rootStore = RootStoreModel.create(initialState, environment);
+  //   const initialState = {
+  //     router: {},
+  //     userStore: {
+  //       users: []
+  //     },
+  //     issueStore: {
+  //       issues: []
+  //     }
+  //   };
 
-  // add API Monitors
-  const { api } = environment;
+  //   const rootStore = RootStoreModel.create(initialState, environment);
 
-  if (process.env.NODE_ENV !== "production") {
-    console.tron.trackMstNode(rootStore);
-    Monitors.addLoggingMonitor(api);
-  }
+  //   onSnapshot(rootStore, snapshot => console.log("Snapshot: ", snapshot));
 
-  return rootStore;
+  //   // add API Monitors
+  //   const { api } = environment;
+
+  //   if (process.env.NODE_ENV !== "production") {
+  //     console.tron.trackMstNode(rootStore);
+  //     Monitors.addLoggingMonitor(api);
+  //   }
+
+  //   return rootStore;
 }

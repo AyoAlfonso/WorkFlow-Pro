@@ -21,17 +21,14 @@ export const HomeGoals = (): JSX.Element => {
 
   const renderAnnualInitiatives = () => {
     const values = [1, 2, 3, 4, 5];
-    return values.map((value, index) => {
-      return index + 1 == values.length ? (
-        <AnnualInitiativesLastItem key={index}>
-          Annual Initiative {index}
-        </AnnualInitiativesLastItem>
-      ) : (
-        <AnnualInitiativesItem key={index}>
-          Annual Initiative {index}
-        </AnnualInitiativesItem>
-      );
-    });
+    return values.map((value, index) => (
+      <AnnualInitiativesItem
+        key={index}
+        margin-right={index + 1 == values.length ? "0px" : "15px"}
+      >
+        Annual Initiative {index}
+      </AnnualInitiativesItem>
+    ));
   };
 
   return (
@@ -74,9 +71,5 @@ const VisionText = styled.p`
 const AnnualInitiativesItem = styled(HomeContainerBorders)`
   height: 100px;
   width: 20%;
-  margin-right: 15px;
-`;
-
-const AnnualInitiativesLastItem = styled(AnnualInitiativesItem)`
-  margin-right: 0px;
+  margin-right: ${props => props["margin-right"] || "0px"};
 `;
