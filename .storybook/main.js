@@ -10,6 +10,8 @@ module.exports = {
         include: [path.resolve(__dirname, "../app/javascript")],
       },
     },
+    "@storybook/addon-actions/register",
+    "@storybook/addon-knobs/register",
   ],
   stories: ["../stories/**/*.stories.tsx"],
 };
