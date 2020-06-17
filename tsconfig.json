@@ -12,6 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true
   },
+  "include": ["app/javascript/", "stories/"],
   "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],
   "compileOnSave": false
 }

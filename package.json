@@ -2,7 +2,8 @@
   "name": "lynchpyn",
   "private": true,
   "scripts": {
-    "lint": "eslint app/javascript/**/*.ts[x]"
+    "lint": "eslint app/javascript/**/*.ts[x]",
+    "storybook": "start-storybook"
   },
   "dependencies": {
     "@activeadmin/activeadmin": "^2.7.0",
@@ -39,10 +40,14 @@
   },
   "version": "0.1.0",
   "devDependencies": {
+    "@storybook/addon-info": "^5.3.19",
+    "@storybook/preset-typescript": "^3.0.0",
+    "@storybook/react": "^5.3.19",
     "@types/webpack-env": "^1.15.2",
     "@typescript-eslint/eslint-plugin": "^3.2.0",
     "@typescript-eslint/parser": "^3.2.0",
     "eslint": "^7.2.0",
+    "react-docgen-typescript-loader": "^3.7.2",
     "reactotron-apisauce": "^3.0.0",
     "reactotron-mst": "^3.1.3",
     "reactotron-react-js": "^3.3.7",
