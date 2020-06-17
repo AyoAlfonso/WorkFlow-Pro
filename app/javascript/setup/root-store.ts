@@ -9,6 +9,9 @@ export async function setupRootStore() {
     userStore: {
       users: [],
       count: 5
+    },
+    issueStore: {
+      issues: []
     }
   };
 

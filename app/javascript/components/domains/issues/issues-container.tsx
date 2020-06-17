@@ -12,7 +12,7 @@ export const IssuesContainer = (): JSX.Element => {
         showAllIssues={showAllIssues}
         setShowAllIssues={setShowAllIssues}
       />
-      <IssuesBody />
+      <IssuesBody showAllIssues={showAllIssues} />
     </>
   );
 };

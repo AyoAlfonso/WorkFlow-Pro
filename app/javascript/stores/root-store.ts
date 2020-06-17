@@ -2,10 +2,12 @@ import { types, IStateTreeNode, Instance } from "mobx-state-tree";
 import { RouterModel } from "mst-react-router";
 import { UserStoreModel, IUserStore } from "./user-store";
 import { createContext, useContext } from "react";
+import { IssueStoreModel, IIssueStore } from "./issue-store";
 
 export const RootStoreModel = types.model({
   router: RouterModel,
-  userStore: UserStoreModel
+  userStore: UserStoreModel,
+  issueStore: IssueStoreModel
 });
 
 // export const RootStoreModel = types
@@ -22,12 +24,16 @@ export const rootStore = RootStoreModel.create({
   userStore: {
     users: [],
     count: 5
+  },
+  issueStore: {
+    issues: []
   }
 });
 
 export interface IRootStore extends IStateTreeNode {
   router: RouterModel;
   userStore: IUserStore;
+  issueStore: IIssueStore;
 }
 
 export type RootInstance = Instance<typeof RootStoreModel>;

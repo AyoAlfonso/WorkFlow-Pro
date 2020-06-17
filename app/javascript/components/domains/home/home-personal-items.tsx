@@ -1,7 +1,7 @@
 import * as React from "react";
 import { HomeContainerBorders } from "./shared-components";
 import styled from "styled-components";
-import { IssuesContainer } from "./issues/issues-container";
+import { IssuesContainer } from "../issues/issues-container";
 
 export const HomePersonalItems = (): JSX.Element => {
   const renderProritiesContainer = () => {
