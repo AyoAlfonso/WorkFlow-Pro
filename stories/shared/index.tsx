@@ -19,11 +19,11 @@ export const RowDiv = styled.div`
 `;
 
 export const CenteredColumnDiv = styled.div`
-  height: 110px;
+  height: 100px;
   width: 110px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   align-content: space-between;
 `;

@@ -1,4 +1,10 @@
-import { boolean, color, text, withKnobs } from "@storybook/addon-knobs";
+import {
+  boolean,
+  color,
+  object,
+  text,
+  withKnobs,
+} from "@storybook/addon-knobs";
 import React from "react";
 import styled from "styled-components";
 import { CopyBlock, atomOneLight } from "react-code-blocks";
@@ -44,6 +50,11 @@ const CodeBlockDiv = styled.div`
   margin-bottom: 20px;
 `;
 
+const TextCenteredDiv = styled.div`
+  text-align: center;
+  vertical-align: middle;
+`;
+
 export const Icons = () => (
   <ContainerDiv>
     <h1>Icons</h1>
@@ -64,15 +75,16 @@ export const Icons = () => (
       />
     </CodeBlockDiv>
     <PropsList propsList={propsList} />
-    <p>Adjust the knobs and change the props to change the preview icon</p>
+    <p>Adjust the knobs and modify the props to change the preview icon</p>
     <RowDiv>
       <CenteredColumnDiv>
         <Icon
-          icon={text("icon", "Plus")}
+          icon={text("icon", "Emotion-A")}
           size={text("size", "3em")}
-          color={color("color", "orange")}
+          color={color("color", "green")}
           disableFill={boolean("disableFill", false)}
           removeInlineStyle={boolean("removeInlineStyle", false)}
+          style={object("style", { backgroundColor: "lightgrey" })}
         />
       </CenteredColumnDiv>
     </RowDiv>
@@ -80,187 +92,187 @@ export const Icons = () => (
     <RowDiv>
       <CenteredColumnDiv>
         <Icon icon={"Arrow"} size={"2em"} />
-        <p>Arrow</p>
+        <TextCenteredDiv>Arrow</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Close"} size={"2em"} />
-        <p>Close</p>
+        <TextCenteredDiv>Close</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Plus"} size={"2em"} />
-        <p>Plus</p>
+        <TextCenteredDiv>Plus</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Delete"} size={"2em"} />
-        <p>Delete</p>
+        <TextCenteredDiv>Delete</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Download"} size={"2em"} />
-        <p>Download</p>
+        <TextCenteredDiv>Download</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Upload"} size={"2em"} />
-        <p>Upload</p>
+        <TextCenteredDiv>Upload</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Edit"} size={"2em"} />
-        <p>Edit</p>
+        <TextCenteredDiv>Edit</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Edit-2"} size={"2em"} />
-        <p>Edit-2</p>
+        <TextCenteredDiv>Edit-2</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Forward"} size={"2em"} />
-        <p>Forward</p>
+        <TextCenteredDiv>Forward</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Search"} size={"2em"} />
-        <p>Search</p>
+        <TextCenteredDiv>Search</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Log-Out"} size={"2em"} />
-        <p>Log-Out</p>
+        <TextCenteredDiv>Log-Out</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Move"} size={"2em"} />
-        <p>Move</p>
+        <TextCenteredDiv>Move</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
     <Divider />
     <RowDiv>
       <CenteredColumnDiv>
         <Icon icon={"User"} size={"2em"} />
-        <p>User</p>
+        <TextCenteredDiv>User</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"New-User"} size={"2em"} />
-        <p>New-User</p>
+        <TextCenteredDiv>New-User</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Home"} size={"2em"} />
-        <p>Home</p>
+        <TextCenteredDiv>Home</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Notification"} size={"2em"} />
-        <p>Notification</p>
+        <TextCenteredDiv>Notification</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Attachments"} size={"2em"} />
-        <p>Attachments</p>
+        <TextCenteredDiv>Attachments</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Tasks"} size={"2em"} />
-        <p>Tasks</p>
+        <TextCenteredDiv>Tasks</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Alert"} size={"2em"} />
-        <p>Alert</p>
+        <TextCenteredDiv>Alert</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Award"} size={"2em"} />
-        <p>Award</p>
+        <TextCenteredDiv>Award</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Comment"} size={"2em"} />
-        <p>Comment</p>
+        <TextCenteredDiv>Comment</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Company"} size={"2em"} />
-        <p>Company</p>
+        <TextCenteredDiv>Company</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Chevron"} size={"2em"} />
-        <p>Chevron</p>
+        <TextCenteredDiv>Chevron</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
     <Divider />
     <RowDiv>
       <CenteredColumnDiv>
         <Icon icon={"Streak"} size={"2em"} />
-        <p>Streak</p>
+        <TextCenteredDiv>Streak</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Star"} size={"2em"} />
-        <p>Star</p>
+        <TextCenteredDiv>Star</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Stats"} size={"2em"} />
-        <p>Stats</p>
+        <TextCenteredDiv>Stats</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Negative-Thoughts"} size={"2em"} />
-        <p>Negative-Thoughts</p>
+        <TextCenteredDiv>Negative-Thoughts</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Empty-Pockets"} size={"2em"} />
-        <p>Empty-Pockets</p>
+        <TextCenteredDiv>Empty-Pockets</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Help"} size={"2em"} />
-        <p>Help</p>
+        <TextCenteredDiv>Help</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Options"} size={"2em"} />
-        <p>Options</p>
+        <TextCenteredDiv>Options</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Key-Elements"} size={"2em"} />
-        <p>Key-Elements</p>
+        <TextCenteredDiv>Key-Elements</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Deadline-Calendar"} size={"2em"} />
-        <p>Deadline-Calendar</p>
+        <TextCenteredDiv>Deadline-Calendar</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Weekly-Milestones"} size={"2em"} />
-        <p>Weekly-Milestones</p>
+        <TextCenteredDiv>Weekly-Milestones</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
     <Divider />
     <RowDiv>
       <CenteredColumnDiv>
         <Icon icon={"Emotion-A"} size={"2em"} />
-        <p>Emotion-A</p>
+        <TextCenteredDiv>Emotion-A</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Emotion-B"} size={"2em"} />
-        <p>Emotion-B</p>
+        <TextCenteredDiv>Emotion-B</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Emotion-C"} size={"2em"} />
-        <p>Emotion-C</p>
+        <TextCenteredDiv>Emotion-C</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Emotion-D"} size={"2em"} />
-        <p>Emotion-D</p>
+        <TextCenteredDiv>Emotion-D</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Emotion-E"} size={"2em"} />
-        <p>Emotion-E</p>
+        <TextCenteredDiv>Emotion-E</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
     <Divider />
     <RowDiv>
       <CenteredColumnDiv>
         <Icon icon={"Priority-High"} size={"2em"} />
-        <p>Priority-High</p>
+        <TextCenteredDiv>Priority-High</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Priority-Urgent"} size={"2em"} />
-        <p>Priority-High</p>
+        <TextCenteredDiv>Priority-High</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Frog-Priority"} size={"2em"} />
-        <p>Frog-Priority</p>
+        <TextCenteredDiv>Frog-Priority</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"AM-Check-in"} size={"2em"} />
-        <p>AM-Check-in</p>
+        <TextCenteredDiv>AM-Check-in</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"PM-Check-in"} size={"2em"} />
-        <p>PM-Check-in</p>
+        <TextCenteredDiv>PM-Check-in</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
   </ContainerDiv>
