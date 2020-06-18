@@ -4,11 +4,11 @@ import { baseTheme } from "../app/javascript/themes/base";
 
 export default { title: "Theme" };
 
-const ColorCircle = styled.div`
+const ColorBox = styled.div`
   background-color: ${(props) => props.color};
   height: 60px;
   width: 60px;
-  border-radius: 50px;
+  border-radius: 10px;
   margin: 0px 20px 10px 20px;
   border: ${(props) => (props.border ? "1px solid black" : "")};
 `;
@@ -38,6 +38,12 @@ const StyledDiv = styled.div`
   align-items: center;
 `;
 
+const Divider = styled.div`
+  height: 1px;
+  width: 100%;
+  background-color: lightgrey;
+`;
+
 export const Colors = () => (
   <ContainerDiv>
     <h1>Primary</h1>
@@ -47,7 +53,7 @@ export const Colors = () => (
         if (index < 6) {
           return (
             <StyledDiv>
-              <ColorCircle color={color[1]}></ColorCircle>
+              <ColorBox color={color[1]}></ColorBox>
               <div>{color[0]}</div>
             </StyledDiv>
           );
@@ -60,41 +66,57 @@ export const Colors = () => (
         if (index >= 6 && index < 14) {
           return (
             <StyledDiv>
-              <ColorCircle color={color[1]}></ColorCircle>
+              <ColorBox color={color[1]}></ColorBox>
               <div>{color[0]}</div>
             </StyledDiv>
           );
         }
       })}
     </RowDiv>
+    <Divider />
     <h1>Secondary</h1>
+    <h3>Bright</h3>
     <RowDiv>
       {Object.entries(baseTheme.colors).map((color, index) => {
         if (index >= 14 && index < 20) {
           return (
             <StyledDiv>
-              <ColorCircle color={color[1]}></ColorCircle>
+              <ColorBox color={color[1]}></ColorBox>
               <div>{color[0]}</div>
             </StyledDiv>
           );
         }
       })}
     </RowDiv>
+    <h3>Faded</h3>
+    <RowDiv>
+      {Object.entries(baseTheme.colors).map((color, index) => {
+        if (index >= 20 && index < 26) {
+          return (
+            <StyledDiv>
+              <ColorBox color={color[1]}></ColorBox>
+              <div>{color[0]}</div>
+            </StyledDiv>
+          );
+        }
+      })}
+    </RowDiv>
+    <Divider />
     <h1>Utility</h1>
     <RowDiv>
       {Object.entries(baseTheme.colors).map((color, index) => {
-        if (index >= 20) {
+        if (index >= 26) {
           if (color[0] === "white") {
             return (
               <StyledDiv>
-                <ColorCircle color={color[1]} border></ColorCircle>
+                <ColorBox color={color[1]} border></ColorBox>
                 <div>{color[0]}</div>
               </StyledDiv>
             );
           } else {
             return (
               <StyledDiv>
-                <ColorCircle color={color[1]}></ColorCircle>
+                <ColorBox color={color[1]}></ColorBox>
                 <div>{color[0]}</div>
               </StyledDiv>
             );
