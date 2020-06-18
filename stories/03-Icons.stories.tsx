@@ -4,6 +4,7 @@ import {
   object,
   text,
   withKnobs,
+  select,
 } from "@storybook/addon-knobs";
 import React from "react";
 import styled from "styled-components";
@@ -16,6 +17,7 @@ import {
   PropsList,
   RowDiv,
 } from "./shared";
+import { baseTheme } from "../app/javascript/themes/base";
 
 export default { title: "Iconography", decorators: [withKnobs] };
 
@@ -70,7 +72,7 @@ export const Icons = () => (
         </div>    
       )
       `}
-        language={"jsx"}
+        language={"tsx"}
         theme={atomOneLight}
       />
     </CodeBlockDiv>
@@ -81,7 +83,7 @@ export const Icons = () => (
         <Icon
           icon={text("icon", "Emotion-A")}
           size={text("size", "3em")}
-          color={color("color", "green")}
+          color={select("color", baseTheme.colors, baseTheme.colors.finePine)}
           disableFill={boolean("disableFill", false)}
           removeInlineStyle={boolean("removeInlineStyle", false)}
           style={object("style", { backgroundColor: "lightgrey" })}
