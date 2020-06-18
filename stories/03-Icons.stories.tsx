@@ -1,15 +1,15 @@
 import {
   boolean,
-  color,
   object,
+  select,
   text,
   withKnobs,
-  select,
 } from "@storybook/addon-knobs";
 import React from "react";
+import { atomOneLight, CopyBlock } from "react-code-blocks";
 import styled from "styled-components";
-import { CopyBlock, atomOneLight } from "react-code-blocks";
 import Icon from "../app/javascript/components/shared/Icon";
+import { baseTheme } from "../app/javascript/themes/base";
 import {
   CenteredColumnDiv,
   ContainerDiv,
@@ -17,7 +17,6 @@ import {
   PropsList,
   RowDiv,
 } from "./shared";
-import { baseTheme } from "../app/javascript/themes/base";
 
 export default { title: "Iconography", decorators: [withKnobs] };
 
@@ -234,46 +233,74 @@ export const Icons = () => (
     <Divider />
     <RowDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Emotion-A"} size={"2em"} />
+        <Icon icon={"Emotion-A"} size={"2em"} color={"darkgreen"} />
         <TextCenteredDiv>Emotion-A</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Emotion-B"} size={"2em"} />
+        <Icon
+          icon={"Emotion-B"}
+          size={"2em"}
+          color={baseTheme.colors.finePine}
+        />
         <TextCenteredDiv>Emotion-B</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Emotion-C"} size={"2em"} />
+        <Icon icon={"Emotion-C"} size={"2em"} color={baseTheme.colors.grey40} />
         <TextCenteredDiv>Emotion-C</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Emotion-D"} size={"2em"} />
+        <Icon
+          icon={"Emotion-D"}
+          size={"2em"}
+          color={baseTheme.colors.cautionYellow}
+        />
         <TextCenteredDiv>Emotion-D</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Emotion-E"} size={"2em"} />
+        <Icon
+          icon={"Emotion-E"}
+          size={"2em"}
+          color={baseTheme.colors.warningRed}
+        />
         <TextCenteredDiv>Emotion-E</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
     <Divider />
     <RowDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Priority-High"} size={"2em"} />
+        <Icon
+          icon={"Priority-High"}
+          size={"2em"}
+          color={baseTheme.colors.cautionYellow}
+        />
         <TextCenteredDiv>Priority-High</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Priority-Urgent"} size={"2em"} />
-        <TextCenteredDiv>Priority-High</TextCenteredDiv>
+        <Icon
+          icon={"Priority-Urgent"}
+          size={"2em"}
+          color={baseTheme.colors.warningRed}
+        />
+        <TextCenteredDiv>Priority-Urgent</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Frog-Priority"} size={"2em"} />
+        <Icon icon={"Frog-Priority"} size={"2em"} color={"#388004"} />
         <TextCenteredDiv>Frog-Priority</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"AM-Check-in"} size={"2em"} />
+        <Icon
+          icon={"AM-Check-in"}
+          size={"2em"}
+          color={baseTheme.colors.cautionYellow}
+        />
         <TextCenteredDiv>AM-Check-in</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"PM-Check-in"} size={"2em"} />
+        <Icon
+          icon={"PM-Check-in"}
+          size={"2em"}
+          color={baseTheme.colors.primary40}
+        />
         <TextCenteredDiv>PM-Check-in</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
