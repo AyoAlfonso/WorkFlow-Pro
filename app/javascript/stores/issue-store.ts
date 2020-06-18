@@ -1,7 +1,7 @@
 import { types, flow } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { IssueModel } from "../models/issue";
-// import { ApiResponse } from "apisauce";
+//import { ApiResponse } from "apisauce";
 
 export const IssueStoreModel = types
   .model("IssueStoreModel")
@@ -20,6 +20,11 @@ export const IssueStoreModel = types
   .actions(self => ({
     //TODO: API Call to fetch issues
     fetchIssues: flow(function*() {
+      // const response: ApiResponse<any> = yield self.environment.api.getIssues();
+      // if (response.ok) {
+      //   self.issues = response.data;
+      // }
+
       self.issues = [
         {
           id: 1,

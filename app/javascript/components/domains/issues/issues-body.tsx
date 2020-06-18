@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useMst } from "../../../stores/root-store";
+import { useMst } from "../../../setup/root";
 import { useEffect, useState } from "react";
 
 interface IIssuesBodyProps {

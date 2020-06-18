@@ -7,5 +7,9 @@ Rails.application.routes.draw do
 
   scope module: :api, path: :api do
     get '/users', to: 'users#index'
+
+    # issues
+    get '/issues', to: 'issues#index'
+
   end
 end

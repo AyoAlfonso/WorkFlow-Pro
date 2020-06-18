@@ -21,7 +21,7 @@ function setupReactotron() {
       .use(apisaucePlugin())
       .use(
         mst({
-          filter: (x) => !x.name.endsWith("@APPLY_SNAPSHOT"),
+          filter: x => !x.name.endsWith("@APPLY_SNAPSHOT")
         })
       )
       .connect()
@@ -33,7 +33,7 @@ function setupReactotron() {
   }
 }
 
-export async function setupEnvironment() {
+export function setupEnvironment() {
   const environment = new Environment();
   environment.api = new Api();
 

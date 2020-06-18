@@ -12,7 +12,7 @@ import { baseTheme } from "../themes/base";
 import { GlobalStyles } from "./global-styles";
 // components
 import { HomeContainer } from "./domains/home/home-container";
-import { useMst } from "../stores/root-store";
+import { useMst } from "../setup/root";
 import { IIssueStore } from "../stores/issue-store";
 
 export interface IAppProps {
