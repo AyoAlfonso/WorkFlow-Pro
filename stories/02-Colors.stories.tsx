@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { baseTheme } from "../app/javascript/themes/base";
+import { ContainerDiv, RowDiv, CenteredColumnDiv, Divider } from "./shared";
 
 export default { title: "Theme" };
 
@@ -13,37 +14,6 @@ const ColorBox = styled.div`
   border: ${(props) => (props.border ? "1px solid black" : "")};
 `;
 
-const ContainerDiv = styled.div`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 0px 25px 0px 25px;
-`;
-
-const RowDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  margin: 10px 0 10px 0;
-`;
-
-const StyledDiv = styled.div`
-  height: 100px;
-  width: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Divider = styled.div`
-  height: 1px;
-  width: 100%;
-  background-color: lightgrey;
-`;
-
 export const Colors = () => (
   <ContainerDiv>
     <h1>Primary</h1>
@@ -52,10 +22,10 @@ export const Colors = () => (
       {Object.entries(baseTheme.colors).map((color, index) => {
         if (index < 6) {
           return (
-            <StyledDiv>
+            <CenteredColumnDiv>
               <ColorBox color={color[1]}></ColorBox>
               <div>{color[0]}</div>
-            </StyledDiv>
+            </CenteredColumnDiv>
           );
         }
       })}
@@ -65,10 +35,10 @@ export const Colors = () => (
       {Object.entries(baseTheme.colors).map((color, index) => {
         if (index >= 6 && index < 14) {
           return (
-            <StyledDiv>
+            <CenteredColumnDiv>
               <ColorBox color={color[1]}></ColorBox>
               <div>{color[0]}</div>
-            </StyledDiv>
+            </CenteredColumnDiv>
           );
         }
       })}
@@ -80,10 +50,10 @@ export const Colors = () => (
       {Object.entries(baseTheme.colors).map((color, index) => {
         if (index >= 14 && index < 20) {
           return (
-            <StyledDiv>
+            <CenteredColumnDiv>
               <ColorBox color={color[1]}></ColorBox>
               <div>{color[0]}</div>
-            </StyledDiv>
+            </CenteredColumnDiv>
           );
         }
       })}
@@ -93,10 +63,10 @@ export const Colors = () => (
       {Object.entries(baseTheme.colors).map((color, index) => {
         if (index >= 20 && index < 26) {
           return (
-            <StyledDiv>
+            <CenteredColumnDiv>
               <ColorBox color={color[1]}></ColorBox>
               <div>{color[0]}</div>
-            </StyledDiv>
+            </CenteredColumnDiv>
           );
         }
       })}
@@ -108,17 +78,17 @@ export const Colors = () => (
         if (index >= 26) {
           if (color[0] === "white") {
             return (
-              <StyledDiv>
+              <CenteredColumnDiv>
                 <ColorBox color={color[1]} border></ColorBox>
                 <div>{color[0]}</div>
-              </StyledDiv>
+              </CenteredColumnDiv>
             );
           } else {
             return (
-              <StyledDiv>
+              <CenteredColumnDiv>
                 <ColorBox color={color[1]}></ColorBox>
                 <div>{color[0]}</div>
-              </StyledDiv>
+              </CenteredColumnDiv>
             );
           }
         }
