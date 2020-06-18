@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-//import { ReactComponent as Chevron } from "../../../lynchpyn-icons/Chevron.svg";
+import Icon from "../../shared/Icon";
 
 interface IssuesHeaderProps {
   showAllIssues: boolean;
@@ -28,9 +28,12 @@ export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
         </FilterOptions>
 
         <SortingChevronContainer>
-          {/* <img src={"/lynchpyn-icons/Chevron.svg"} alt="Icon" height="10px" width="10px" /> */}
-          <div>^</div>
-          <div>v</div>
+          <ChevronUpContainer>
+            <Icon icon={"Chevron-Up"} size={10} color="#c4c4c4" />
+          </ChevronUpContainer>
+          <ChevronDownContainer>
+            <Icon icon={"Chevron-Down"} size={10} color="#c4c4c4" />
+          </ChevronDownContainer>
         </SortingChevronContainer>
       </FilterContainer>
     </Container>
@@ -66,4 +69,13 @@ const FilterOptions = styled.p`
 
 const SortingChevronContainer = styled.div`
   margin-right: 0;
+  margin-top: -3px;
+`;
+
+const ChevronUpContainer = styled.div`
+  margin-bottom: -5px;
+`;
+
+const ChevronDownContainer = styled.div`
+  margin-top: -5px;
 `;

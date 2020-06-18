@@ -25,7 +25,7 @@ export const IssuesBody = (props: IIssuesBodyProps): JSX.Element => {
     return issues.map((issue, index) => (
       <IssueContainer key={index}>
         <div> BOX </div>
-        <IssueText>{issue.text}</IssueText>
+        <IssueText>{issue.description}</IssueText>
       </IssueContainer>
     ));
   };
