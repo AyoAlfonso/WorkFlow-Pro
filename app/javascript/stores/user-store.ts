@@ -1,8 +1,7 @@
 import { types, flow } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
-import { withRootStore } from "../lib/with-root-store";
 import { UserModel } from "../models/user";
-import { ApiResponse } from "apisauce";
+//import { ApiResponse } from "apisauce";
 
 export const UserStoreModel = types
   .model("UserStoreModel")
@@ -10,21 +9,26 @@ export const UserStoreModel = types
     users: types.array(UserModel),
     count: types.number
   })
-  .extend(withRootStore())
   .extend(withEnvironment())
   .views(self => ({}))
   .actions(self => ({
     fetchUsers: flow(function*() {
-      const response: ApiResponse<any> = yield self.environment.api.getUsers();
-      if (response.ok) {
-        //self.users = response.data;
-        self.users = [
-          {
-            id: 1,
-            email: "test@gmail.com"
-          }
-        ] as any;
-      }
+      self.users = [
+        {
+          id: 1,
+          email: "test@gmail.com"
+        }
+      ] as any;
+      // const response: ApiResponse<any> = yield self.environment.api.getUsers();
+      // if (response.ok) {
+      //   //self.users = response.data;
+      //   self.users = [
+      //     {
+      //       id: 1,
+      //       email: "test@gmail.com"
+      //     }
+      //   ] as any;
+      // }
     })
   }))
   .actions(self => ({
@@ -42,4 +46,5 @@ export const UserStoreModel = types
 type UserStoreType = typeof UserStoreModel.Type;
 export interface IUserStore extends UserStoreType {
   users: any;
+  count: number;
 }

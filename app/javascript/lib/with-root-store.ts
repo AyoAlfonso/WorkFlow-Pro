@@ -5,6 +5,6 @@ export const withRootStore = () => (self: IStateTreeNode) => ({
   views: {
     get rootStore() {
       return getRoot<IRootStore>(self);
-    },
-  },
+    }
+  }
 });

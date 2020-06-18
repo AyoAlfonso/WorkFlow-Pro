@@ -5,7 +5,7 @@ import { HomePersonalStatus } from "./home-personal-status";
 import { HomePersonalItems } from "./home-personal-items";
 import { HomeCoreFour } from "./home-core-four";
 import { HomeGoals } from "./home-goals";
-import { useMst } from "../../../stores/root-store";
+import { useMst } from "../../../setup/root";
 
 export const HomeContainer = (): JSX.Element => {
   const { userStore } = useMst();
