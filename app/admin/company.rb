@@ -48,7 +48,8 @@ ActiveAdmin.register Company do
   end
 
   form do |f|
-    f.inputs "Details" do 
+    h1 f.object.name
+    f.inputs "Company Details" do 
       f.input :name
       f.input :address
       f.input :contact_email
@@ -56,7 +57,7 @@ ActiveAdmin.register Company do
       f.input :rallying_cry, input_html: { rows: 5 }
     end
     f.inputs do
-      f.inputs "Core Four", for: [:core_four, f.object.core_four], heading: '', allow_destroy: true, new_record: false do |cf|
+      f.inputs "Core Four", for: [:core_four, f.object.core_four], heading: false, allow_destroy: true, new_record: false do |cf|
         cf.input :core_1, input_html: { rows: 5 }
         cf.input :core_2, input_html: { rows: 5 }
         cf.input :core_3, input_html: { rows: 5 }
