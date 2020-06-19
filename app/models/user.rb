@@ -5,7 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable,
          :validatable
   
-  has_one :company
+  belongs_to :company
+  delegate :name, to: :company, prefix: true, allow_nil: true
   has_many :issues
   has_many :key_activities
   has_many :personal_reflections
