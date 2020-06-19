@@ -24,21 +24,28 @@ export interface IAppProps {
 export const App = observer(
   (props: IAppProps): JSX.Element => {
     const { sessionStore } = useMst();
-    sessionStore.loggedIn; //if logged in show switch
+    const loggedIn = sessionStore.loggedIn; //if logged in show switch
     return (
       <ThemeProvider theme={baseTheme}>
         <GlobalStyles />
-        <LoginForm />
-        <Switch>
-          <Route
-            exact
-            path={"/"}
-            render={() => {
-              return <HomeContainer />;
-            }}
-          />
-        </Switch>
-        <HomeContainer />
+        {loggedIn ? (
+          <>
+            <button onClick={(e) => sessionStore.logoutRequest()}>
+              Logout
+            </button>
+            <Switch>
+              <Route
+                exact
+                path={"/"}
+                render={() => {
+                  return <HomeContainer />;
+                }}
+              />
+            </Switch>
+          </>
+        ) : (
+          <LoginForm />
+        )}
       </ThemeProvider>
     );
   }

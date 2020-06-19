@@ -9,7 +9,6 @@ export const LoginForm = observer(
     const { sessionStore } = useMst();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    console.log("***logged in", sessionStore.loggedIn);
 
     return sessionStore.loggedIn ? (
       <div>You are logged in.</div>
@@ -33,7 +32,7 @@ export const LoginForm = observer(
         />
         <button
           onClick={(e) => {
-            sessionStore.loginForm.submit(email, password);
+            sessionStore.login(email, password);
           }}
         >
           Login
