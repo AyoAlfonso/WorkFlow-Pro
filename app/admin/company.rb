@@ -1,6 +1,6 @@
 ActiveAdmin.register Company do
-  permit_params :name, :address, :contact_email, :phone_number, :rallying_cry
-
+  permit_params :name, :address, :contact_email, :phone_number, :rallying_cry, core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4]
+  
   index do 
     selectable_column
     id_column
@@ -50,12 +50,20 @@ ActiveAdmin.register Company do
   end
 
   form do |f|
-    f.inputs do 
+    f.inputs "Details" do 
       f.input :name
       f.input :address
       f.input :contact_email
       f.input :phone_number 
-      f.input :rallying_cry
+      f.input :rallying_cry, input_html: { rows: 5 }
+    end
+    f.inputs do
+      f.inputs "Core Four", for: [:core_four, f.object.core_four], heading: '', allow_destroy: true, new_record: false do |cf|
+        cf.input :core_1, input_html: { rows: 5 }
+        cf.input :core_2, input_html: { rows: 5 }
+        cf.input :core_3, input_html: { rows: 5 }
+        cf.input :core_4, input_html: { rows: 5 }
+      end
     end
     f.actions
   end
