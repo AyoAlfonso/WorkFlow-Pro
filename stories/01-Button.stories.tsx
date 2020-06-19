@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import styled from "styled-components";
 import { action } from "@storybook/addon-actions";
 import { withKnobs, text } from "@storybook/addon-knobs";
@@ -18,8 +18,8 @@ const StyledButton = styled.button`
   text-align: center;
 `;
 
+const actionFn = action("you clicked the button");
+
 export const Styled_Example = () => (
-  <StyledButton onClick={action("you clicked the button")}>
-    {text("Text", "Button")}
-  </StyledButton>
+  <StyledButton onClick={actionFn}>{text("Text", "Button")}</StyledButton>
 );
