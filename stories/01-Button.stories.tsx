@@ -1,20 +1,25 @@
 import React from "react";
 import styled from "styled-components";
 import { action } from "@storybook/addon-actions";
-import { withKnobs, text, color } from "@storybook/addon-knobs";
+import { withKnobs, text } from "@storybook/addon-knobs";
+import { themeGet } from "@styled-system/theme-get";
 
 export default { title: "Button", decorators: [withKnobs] };
 
 const StyledButton = styled.button`
   height: 40px;
   width: 120px;
+  background-color: ${themeGet("colors.primary100")};
+  border-color: ${themeGet("colors.primary100")};
+  color: ${themeGet("colors.white")};
+  border-radius: 5px;
+  padding: 10px;
+  margin: 20px;
+  text-align: center;
 `;
 
-export const Styled = () => (
-  <StyledButton
-    onClick={action("you clicked the button")}
-    style={{ backgroundColor: color("Color", "red") }}
-  >
-    {text("Text", "Some Button Text")}
+export const Styled_Example = () => (
+  <StyledButton onClick={action("you clicked the button")}>
+    {text("Text", "Button")}
   </StyledButton>
 );
