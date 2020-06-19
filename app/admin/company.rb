@@ -18,6 +18,37 @@ ActiveAdmin.register Company do
   filter :phone_number 
   filter :rallying_cry
 
+  show do
+    h1 company.name
+    attributes_table do
+      row :address
+      row :contact_email
+      row :phone_number 
+      row :rallying_cry
+    end
+    br
+    panel 'Core Four' do
+      attributes_table_for company.core_four do
+        row :core_1
+        row :core_2
+        row :core_3
+        row :core_4
+      end
+    end
+    br
+    panel 'Users' do
+      table_for company.users do
+        column :full_name
+        column :email
+        column :phone_number
+        column :current_sign_in_at
+        column :sign_in_count
+        column :created_at
+        column("View User") { |user| link_to "View", admin_user_path(user) }
+      end
+    end
+  end
+
   form do |f|
     f.inputs do 
       f.input :name

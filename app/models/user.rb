@@ -14,4 +14,8 @@ class User < ApplicationRecord
   has_many :annual_initiatives, :foreign_key => 'created_by_id', :class_name => 'User'
   has_many :weekly_meetings, :foreign_key => 'created_by_id', :class_name => 'User'
   has_many :meeting_ratings
+
+  def full_name                                                                                                                                                                                     
+    ([first_name, last_name] - ['']).compact.join(' ')                         
+  end
 end
