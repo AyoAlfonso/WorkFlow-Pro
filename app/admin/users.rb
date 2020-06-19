@@ -24,6 +24,21 @@ ActiveAdmin.register User do
   filter :sign_in_count
   filter :created_at
 
+  show do
+    h1 user.full_name
+    attributes_table do
+      row("Company Name") { |user| link_to user.company_name, admin_company_path(user.company) }
+      row :first_name
+      row :last_name
+      row :email
+      row :phone_number
+      row :personal_vision
+      row :current_sign_in_at
+      row :last_sign_in_at
+      row :sign_in_count
+      row :created_at
+    end
+  end
   form do |f|
     f.inputs do
       f.input :email

@@ -1,6 +1,5 @@
 ActiveAdmin.register Company do
   permit_params :name, :address, :contact_email, :phone_number, :rallying_cry, core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4]
-  
   index do 
     selectable_column
     id_column
@@ -38,13 +37,12 @@ ActiveAdmin.register Company do
     br
     panel 'Users' do
       table_for company.users do
-        column :full_name
+        column("Full Name") { |user| link_to user.full_name, admin_user_path(user) }
         column :email
         column :phone_number
         column :current_sign_in_at
         column :sign_in_count
         column :created_at
-        column("View User") { |user| link_to "View", admin_user_path(user) }
       end
     end
   end
