@@ -12,6 +12,7 @@ import Icon from "../app/javascript/components/shared/Icon";
 import { baseTheme } from "../app/javascript/themes/base";
 import {
   CenteredColumnDiv,
+  CodeBlockDiv,
   ContainerDiv,
   Divider,
   PropsList,
@@ -44,12 +45,6 @@ const propsList = [
     description: "toggle inline styles on/off",
   },
 ];
-
-const CodeBlockDiv = styled.div`
-  width: 60%;
-  height: 100%;
-  margin-bottom: 20px;
-`;
 
 const TextCenteredDiv = styled.div`
   text-align: center;
