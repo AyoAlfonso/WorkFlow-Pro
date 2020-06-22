@@ -23,6 +23,11 @@ export const IssueStoreModel = types
       if (response.ok) {
         self.issues = response.data;
       }
+    }),
+    updateIssueStatus: flow(function*(id) {
+      //THIS IS VERY STUPID -> JUST TESTING IF THE RERENDER WORKS. MAKE A BACK END CALL HERE
+      const response = self.issues.filter(issue => issue.id !== id);
+      self.issues = response as any;
     })
   }))
   .actions(self => ({

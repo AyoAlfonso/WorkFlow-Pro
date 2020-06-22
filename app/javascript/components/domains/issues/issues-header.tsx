@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import Icon from "../../shared/Icon";
+//import Icon from "../../shared/Icon";
 
 interface IssuesHeaderProps {
   showAllIssues: boolean;
@@ -16,6 +16,7 @@ export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
       <FilterContainer>
         <FilterOptions
           onClick={() => setShowAllIssues(false)}
+          margin-right={"15px"}
           color={!showAllIssues ? "#4a96ed" : "#c4c4c4"}
         >
           Open
@@ -27,14 +28,17 @@ export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
           All
         </FilterOptions>
 
-        <SortingChevronContainer>
+        {/* 
+          COMMENT FROM PARHAM JUNE 19 2020: WE MIGHT NOT NEED THIS IF WE CAN AUTOSORT ISSUES WHENEVER THEY ARE BEING ADDED
+
+          <SortingChevronContainer>
           <ChevronUpContainer>
             <Icon icon={"Chevron-Up"} size={10} color="#c4c4c4" />
           </ChevronUpContainer>
           <ChevronDownContainer>
             <Icon icon={"Chevron-Down"} size={10} color="#c4c4c4" />
           </ChevronDownContainer>
-        </SortingChevronContainer>
+        </SortingChevronContainer> */}
       </FilterContainer>
     </Container>
   );
@@ -61,21 +65,21 @@ const FilterContainer = styled.div`
 `;
 
 const FilterOptions = styled.p`
-  margin-right: 15px;
+  margin-right: ${props => props["margin-right"]};
   font-size: 14px;
   cursor: pointer;
   color: ${props => props.color || "#c4c4c4"};
 `;
 
-const SortingChevronContainer = styled.div`
-  margin-right: 0;
-  margin-top: -3px;
-`;
+// const SortingChevronContainer = styled.div`
+//   margin-right: 0;
+//   margin-top: -3px;
+// `;
 
-const ChevronUpContainer = styled.div`
-  margin-bottom: -5px;
-`;
+// const ChevronUpContainer = styled.div`
+//   margin-bottom: -5px;
+// `;
 
-const ChevronDownContainer = styled.div`
-  margin-top: -5px;
-`;
+// const ChevronDownContainer = styled.div`
+//   margin-top: -5px;
+// `;
