@@ -19,8 +19,8 @@ class Api::IssuesController < Api::ApplicationController
   end
 
   def destroy
-    @issue.destroy
-    render json: @issue
+    @issue.destroy!
+    render json: { issue_id: @issue.id, status: :ok }
   end
 
   private
