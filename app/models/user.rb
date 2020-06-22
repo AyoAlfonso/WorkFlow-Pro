@@ -5,7 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable,
          :validatable
   
-  has_one :company
+  belongs_to :company
+  delegate :name, to: :company, prefix: true, allow_nil: true
   has_many :issues
   has_many :key_activities
   has_many :personal_reflections
@@ -13,4 +14,8 @@ class User < ApplicationRecord
   has_many :annual_initiatives, :foreign_key => 'created_by_id', :class_name => 'User'
   has_many :weekly_meetings, :foreign_key => 'created_by_id', :class_name => 'User'
   has_many :meeting_ratings
+
+  def full_name                                                                                                                                                                                     
+    ([first_name, last_name] - ['']).compact.join(' ')                         
+  end
 end

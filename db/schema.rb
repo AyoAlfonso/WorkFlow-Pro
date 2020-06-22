@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_16_181906) do
+ActiveRecord::Schema.define(version: 2020_06_19_193246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -177,6 +177,9 @@ ActiveRecord::Schema.define(version: 2020_06_16_181906) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "phone_number"
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -202,6 +205,8 @@ ActiveRecord::Schema.define(version: 2020_06_16_181906) do
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
     t.text "personal_vision"
+    t.bigint "company_id", null: false
+    t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
@@ -227,4 +232,5 @@ ActiveRecord::Schema.define(version: 2020_06_16_181906) do
   add_foreign_key "key_activities", "users"
   add_foreign_key "meeting_ratings", "users"
   add_foreign_key "meeting_ratings", "weekly_meetings"
+  add_foreign_key "users", "companies"
 end
