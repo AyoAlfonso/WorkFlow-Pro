@@ -13,7 +13,7 @@ const StyledButton = styled.button`
   ${typography}
   height: 40px;
   width: 120px;
-  color: white;
+  color: ${(props) => props.theme.colors.peach};
   border-radius: 5px;
   text-align: center;
   ${(props) =>
