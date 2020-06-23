@@ -13,6 +13,7 @@ export class Api {
         "Content-Type": "application/json",
       },
       timeout: 30000,
+      withCredentials: true, //allow cookies to be sent if its from same domain
     });
 
     this.client.addResponseTransform((response) => {
@@ -38,6 +39,14 @@ export class Api {
 
   async login(email, password) {
     return this.client.post("/users/sign_in", { user: { email, password } });
+  }
+
+  async profile() {
+    return this.client.get("/profile");
+  }
+
+  async signOut() {
+    return this.client.delete("/users/sign_out");
   }
 
   //async setJWT(jwt) {}

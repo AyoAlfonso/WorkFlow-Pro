@@ -5,6 +5,8 @@ export const UserModel = types
   .props({
     id: types.identifierNumber,
     email: types.maybeNull(types.string),
+    firstName: types.maybeNull(types.string),
+    lastName: types.maybeNull(types.string),
   })
   .views((self) => ({}))
   .actions((self) => ({}));

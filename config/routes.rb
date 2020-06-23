@@ -17,7 +17,8 @@ Rails.application.routes.draw do
   root 'react_app#index'
 
   scope module: :api, path: :api do
-    get '/users', to: 'users#index'
+    resources :users, only: [:index, :show]
+    get '/profile', to: 'users#profile'
 
     # issues
     resources :issues, only: [:index, :create, :update, :destroy]

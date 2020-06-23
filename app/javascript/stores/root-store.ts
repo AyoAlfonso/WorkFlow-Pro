@@ -15,6 +15,8 @@ export const RootStoreModel = types
   .views((self) => ({}))
   .actions((self) => ({
     startup: flow(function* () {
+      //check if there is a cookie, if so try to call the profile endpoint and set logged into true
+      self.sessionStore.loadProfile();
       // do some API calls
       self.userStore.load();
     }),

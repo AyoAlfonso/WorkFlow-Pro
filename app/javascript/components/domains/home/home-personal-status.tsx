@@ -1,14 +1,21 @@
 import * as React from "react";
+import { path } from "ramda";
 import styled from "styled-components";
+import { observer } from "mobx-react";
+import { useMst } from "../../../setup/root";
 
-export const HomePersonalStatus = (): JSX.Element => {
-  return (
-    <Container>
-      <GreetingText> Hey Steven </GreetingText>
-      <DropdownContainer>Status Dropdown</DropdownContainer>
-    </Container>
-  );
-};
+export const HomePersonalStatus = observer(
+  (): JSX.Element => {
+    const { sessionStore } = useMst();
+    const name = path(["profile", "firstName"], sessionStore) || "User";
+    return (
+      <Container>
+        <GreetingText> Hey {name} </GreetingText>
+        <DropdownContainer>Status Dropdown</DropdownContainer>
+      </Container>
+    );
+  }
+);
 
 const Container = styled.div`
   display: flex;
