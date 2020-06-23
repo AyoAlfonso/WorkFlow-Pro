@@ -60,7 +60,7 @@ export const PropsList = ({ propsList }) => {
     <PropsContainer>
       <h3>Props</h3>
       {propsList.map((prop, index) => (
-        <RowDiv key={index}>
+        <RowDiv key={index} m={3}>
           <ColorText color={baseTheme.colors.primary100}>
             {`${prop.name}`}&nbsp;
           </ColorText>
