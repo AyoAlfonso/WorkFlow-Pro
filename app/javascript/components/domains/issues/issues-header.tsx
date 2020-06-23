@@ -1,6 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
-//import { ReactComponent as Chevron } from "../../../lynchpyn-icons/Chevron.svg";
+import { space, color } from "styled-system";
+//import Icon from "../../shared/Icon";
 
 interface IssuesHeaderProps {
   showAllIssues: boolean;
@@ -16,22 +17,29 @@ export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
       <FilterContainer>
         <FilterOptions
           onClick={() => setShowAllIssues(false)}
-          color={!showAllIssues ? "#4a96ed" : "#c4c4c4"}
+          mr={"15px"}
+          color={!showAllIssues ? "primary100" : "grey40"}
         >
           Open
         </FilterOptions>
         <FilterOptions
           onClick={() => setShowAllIssues(true)}
-          color={showAllIssues ? "#4a96ed" : "#c4c4c4"}
+          color={showAllIssues ? "primary100" : "grey40"}
         >
           All
         </FilterOptions>
 
-        <SortingChevronContainer>
-          {/* <img src={"/lynchpyn-icons/Chevron.svg"} alt="Icon" height="10px" width="10px" /> */}
-          <div>^</div>
-          <div>v</div>
-        </SortingChevronContainer>
+        {/* 
+          COMMENT FROM PARHAM JUNE 19 2020: WE MIGHT NOT NEED THIS IF WE CAN AUTOSORT ISSUES WHENEVER THEY ARE BEING ADDED
+
+          <SortingChevronContainer>
+          <ChevronUpContainer>
+            <Icon icon={"Chevron-Up"} size={10} color="grey40" />
+          </ChevronUpContainer>
+          <ChevronDownContainer>
+            <Icon icon={"Chevron-Down"} size={10} color="grey40" />
+          </ChevronDownContainer>
+        </SortingChevronContainer> */}
       </FilterContainer>
     </Container>
   );
@@ -58,12 +66,21 @@ const FilterContainer = styled.div`
 `;
 
 const FilterOptions = styled.p`
-  margin-right: 15px;
+  ${space}
+  ${color}
   font-size: 14px;
   cursor: pointer;
-  color: ${props => props.color || "#c4c4c4"};
 `;
 
-const SortingChevronContainer = styled.div`
-  margin-right: 0;
-`;
+// const SortingChevronContainer = styled.div`
+//   margin-right: 0;
+//   margin-top: -3px;
+// `;
+
+// const ChevronUpContainer = styled.div`
+//   margin-bottom: -5px;
+// `;
+
+// const ChevronDownContainer = styled.div`
+//   margin-top: -5px;
+// `;
