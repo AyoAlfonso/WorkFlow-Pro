@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     get '/users', to: 'users#index'
 
     # issues
-    get '/issues', to: 'issues#index'
+    resources :issues, only: [:index, :create, :update, :destroy]
 
   end
 end
