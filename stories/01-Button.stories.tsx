@@ -33,7 +33,7 @@ const StyledButton = styled.button`
 
 const actionFn = action("you clicked the button");
 
-export const Primary_Example = () => (
+export const PrimaryExample = () => (
   <div>
     <StyledButton
       onClick={actionFn}
@@ -48,7 +48,7 @@ export const Primary_Example = () => (
   </div>
 );
 
-export const Warning_Example = () => (
+export const WarningExample = () => (
   <StyledButton
     onClick={actionFn}
     variant={"warning"}
