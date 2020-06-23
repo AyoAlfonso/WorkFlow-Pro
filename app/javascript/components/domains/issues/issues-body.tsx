@@ -83,18 +83,16 @@ const AddNewIssueText = styled.p`
 `;
 
 const AddNewIssueContainer = styled.div`
-  ${color}
   display: flex;
   cursor: pointer;
   margin-left: 4px;
   margin-bottom: -5px;
   height: 45px;
   &:hover ${AddNewIssueText} {
-    color: black;
     font-weight: bold;
   }
   &:hover ${AddNewIssuePlus} {
-    color: primary100;
+    color: ${props => props.theme.colors.primary100};
   }
 `;
 
@@ -118,8 +116,15 @@ const IssueText = styled.p`
   text-decoration: ${props => props["text-decoration"]};
 `;
 
-const CheckboxContainer = styled(Label)`
-  width: auto !important;
-  margin-top: auto !important;
-  margin-bottom: auto !important;
-`;
+const CheckboxContainer = props => (
+  <Label
+    {...props}
+    sx={{
+      width: "auto",
+      marginTop: "auto",
+      marginBottom: "auto"
+    }}
+  >
+    {props.children}
+  </Label>
+);

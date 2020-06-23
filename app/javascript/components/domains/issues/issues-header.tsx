@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { space } from "styled-system";
+import { space, color } from "styled-system";
 //import Icon from "../../shared/Icon";
 
 interface IssuesHeaderProps {
@@ -18,13 +18,13 @@ export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
         <FilterOptions
           onClick={() => setShowAllIssues(false)}
           mr={"15px"}
-          color={!showAllIssues ? "#4a96ed" : "#c4c4c4"}
+          color={!showAllIssues ? "primary100" : "grey40"}
         >
           Open
         </FilterOptions>
         <FilterOptions
           onClick={() => setShowAllIssues(true)}
-          color={showAllIssues ? "#4a96ed" : "#c4c4c4"}
+          color={showAllIssues ? "primary100" : "grey40"}
         >
           All
         </FilterOptions>
@@ -34,10 +34,10 @@ export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
 
           <SortingChevronContainer>
           <ChevronUpContainer>
-            <Icon icon={"Chevron-Up"} size={10} color="#c4c4c4" />
+            <Icon icon={"Chevron-Up"} size={10} color="grey40" />
           </ChevronUpContainer>
           <ChevronDownContainer>
-            <Icon icon={"Chevron-Down"} size={10} color="#c4c4c4" />
+            <Icon icon={"Chevron-Down"} size={10} color="grey40" />
           </ChevronDownContainer>
         </SortingChevronContainer> */}
       </FilterContainer>
@@ -67,9 +67,9 @@ const FilterContainer = styled.div`
 
 const FilterOptions = styled.p`
   ${space}
+  ${color}
   font-size: 14px;
   cursor: pointer;
-  color: ${props => props.color || "#c4c4c4"};
 `;
 
 // const SortingChevronContainer = styled.div`

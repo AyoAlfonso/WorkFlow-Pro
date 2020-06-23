@@ -4,8 +4,6 @@ class Api::IssuesController < Api::ApplicationController
   respond_to :json
 
   def index
-    #@issues = policy_scope(Issue)
-    @issues = Issue.all
     render json: @issues
   end
 
