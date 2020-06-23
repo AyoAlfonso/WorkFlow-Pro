@@ -15,7 +15,7 @@ const ColorBox = styled.div`
 `;
 
 export const Colors = () => (
-  <ContainerDiv>
+  <ContainerDiv pl={4}>
     <h1>Primary</h1>
     <h3>Blues</h3>
     <RowDiv>

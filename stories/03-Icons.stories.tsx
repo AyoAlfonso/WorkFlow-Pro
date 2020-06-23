@@ -52,7 +52,7 @@ const TextCenteredDiv = styled.div`
 `;
 
 export const Icons = () => (
-  <ContainerDiv>
+  <ContainerDiv pl={4}>
     <h1>Icons</h1>
     <CodeBlockDiv>
       <CopyBlock
