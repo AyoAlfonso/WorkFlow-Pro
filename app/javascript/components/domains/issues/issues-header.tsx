@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import { space } from "styled-system";
 //import Icon from "../../shared/Icon";
 
 interface IssuesHeaderProps {
@@ -16,7 +17,7 @@ export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
       <FilterContainer>
         <FilterOptions
           onClick={() => setShowAllIssues(false)}
-          margin-right={"15px"}
+          mr={"15px"}
           color={!showAllIssues ? "#4a96ed" : "#c4c4c4"}
         >
           Open
@@ -65,7 +66,7 @@ const FilterContainer = styled.div`
 `;
 
 const FilterOptions = styled.p`
-  margin-right: ${props => props["margin-right"]};
+  ${space}
   font-size: 14px;
   cursor: pointer;
   color: ${props => props.color || "#c4c4c4"};

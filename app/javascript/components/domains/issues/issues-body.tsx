@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { useEffect, useState } from "react";
 import { Checkbox, Label } from "@rebass/forms";
-import { baseTheme } from "../../../themes";
 import Icon from "../../shared/Icon";
+import { color } from "styled-system";
 
 interface IIssuesBodyProps {
   showAllIssues: boolean;
@@ -70,28 +70,31 @@ const Container = styled.div`
 `;
 
 const AddNewIssuePlus = styled.p`
+  ${color}
   font-size: 14px;
-  color: ${baseTheme.colors.grey80};
+  color: grey80;
 `;
 
 const AddNewIssueText = styled.p`
+  ${color}
   font-size: 14px;
   margin-left: 21px;
-  color: ${baseTheme.colors.grey80};
+  color: grey80;
 `;
 
 const AddNewIssueContainer = styled.div`
+  ${color}
   display: flex;
   cursor: pointer;
   margin-left: 4px;
   margin-bottom: -5px;
   height: 45px;
   &:hover ${AddNewIssueText} {
-    color: ${baseTheme.colors.black};
+    color: black;
     font-weight: bold;
   }
   &:hover ${AddNewIssuePlus} {
-    color: #4a96ed;
+    color: primary100;
   }
 `;
 
