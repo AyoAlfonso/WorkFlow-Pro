@@ -1,72 +1,86 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Checkbox, Label } from "@rebass/forms";
 import Icon from "../../shared/Icon";
 import { color } from "styled-system";
+import { observer } from "mobx-react";
+import { baseTheme } from "../../../themes/base";
 
 interface IKeyActivitiesBodyProps {
   showAllKeyActivities: boolean;
 }
 
-export const KeyActivitiesBody = (props: IKeyActivitiesBodyProps): JSX.Element => {
-  const { keyActivityStore } = useMst();
-  const { showAllKeyActivities } = props;
-  const [openKeyActivities, setOpenKeyActivities] = useState<Array<any>>([]);
-  const [allKeyActivities, setAllKeyActivities] = useState<Array<any>>([]);
+export const KeyActivitiesBody = observer(
+  (props: IKeyActivitiesBodyProps): JSX.Element => {
+    const { keyActivityStore } = useMst();
+    const { showAllKeyActivities } = props;
+    const { colors } = baseTheme;
 
-  useEffect(() => {
-    keyActivityStore.fetchKeyActivities().then(() => {
-      refetchKeyActivities();
-    });
-  }, []);
+    const weeklyKeyActivities = keyActivityStore.weeklyKeyActivities;
+    const masterKeyActivities = keyActivityStore.masterKeyActivities;
 
-  const refetchKeyActivities = () => {
-    setOpenKeyActivities(keyActivityStore.openKeyActivities);
-    setAllKeyActivities(keyActivityStore.allKeyActivities);
-  };
+    useEffect(() => {
+      keyActivityStore.fetchKeyActivities();
+    }, []);
 
-  const renderKeyActivitiesList = (): Array<JSX.Element> => {
-    const keyActivities = showAllKeyActivities ? allKeyActivities : openKeyActivities;
-    return keyActivities.map((keyActivity, index) => (
-      <KeyActivityContainer key={keyActivity["id"]}>
-        <CheckboxContainer key={keyActivity["id"]}>
-          <Checkbox
-            key={keyActivity["id"]}
-            checked={keyActivity["completedAt"]}
-            onClick={() => {
-              console.log("TODO: MAKE API CALL TO UPDATE STATUS OF KEY ACTIVITY");
-              setTimeout(() => {
-                keyActivityStore.updatekeyActivityStatus(keyActivity.id);
-                refetchKeyActivities();
-              }, 1000);
-            }}
-          />
-        </CheckboxContainer>
+    const renderPriorityIcon = (priority: string) => {
+      switch (priority) {
+        case "1":
+          return <Icon icon={"Priority-High"} size={12} color={colors.cautionYellow} />;
+        case "2":
+          return <Icon icon={"Priority-Urgent"} size={12} color={colors.warningRed} />;
+        default:
+          return <></>;
+      }
+    };
 
-        <KeyActivityText text-decoration={keyActivity.completedAt && "line-through"}>
-          {keyActivity.description}
-        </KeyActivityText>
-      </KeyActivityContainer>
-    ));
-  };
+    const renderKeyActivitiesList = (): Array<JSX.Element> => {
+      const keyActivities = showAllKeyActivities ? masterKeyActivities : weeklyKeyActivities;
+      return keyActivities.map((keyActivity, index) => (
+        <KeyActivityContainer key={keyActivity["id"]}>
+          <CheckboxContainer key={keyActivity["id"]}>
+            <Checkbox
+              key={keyActivity["id"]}
+              checked={keyActivity["completedAt"]}
+              onClick={() => {
+                console.log("TODO: MAKE API CALL TO UPDATE STATUS OF KEY ACTIVITY");
+                setTimeout(() => {
+                  keyActivityStore.updateKeyActivityStatus(keyActivity.id);
+                }, 1000);
+              }}
+            />
+          </CheckboxContainer>
 
-  return (
-    <Container>
-      <AddNewKeyActivityContainer>
-        <AddNewKeyActivityPlus>
-          <Icon icon={"Plus"} size={16} />
-        </AddNewKeyActivityPlus>
-        <AddNewKeyActivityText> Add New Key Activity</AddNewKeyActivityText>
-      </AddNewKeyActivityContainer>
-      <KeyActivitiesContainer>{renderKeyActivitiesList()}</KeyActivitiesContainer>
-    </Container>
-  );
-};
+          <KeyActivityText text-decoration={keyActivity.completedAt && "line-through"}>
+            {keyActivity.description}
+          </KeyActivityText>
+          <KeyActivityPriorityContainer>
+            {renderPriorityIcon(keyActivity.priority)}
+          </KeyActivityPriorityContainer>
+        </KeyActivityContainer>
+      ));
+    };
+
+    return (
+      <Container>
+        <AddNewKeyActivityContainer>
+          <AddNewKeyActivityPlus>
+            <Icon icon={"Plus"} size={16} />
+          </AddNewKeyActivityPlus>
+          <AddNewKeyActivityText> Add New Key Activity</AddNewKeyActivityText>
+        </AddNewKeyActivityContainer>
+        <KeyActivitiesContainer>{renderKeyActivitiesList()}</KeyActivitiesContainer>
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
-  padding: 0px 0px 15px 10px;
+  ${color}
+  padding: 0px 0px 6px 10px;
+  border-left: ${props => `1px solid ${props.theme.colors.grey40}`};
 `;
 
 const AddNewKeyActivityPlus = styled.p`
@@ -110,10 +124,17 @@ const KeyActivityContainer = styled.div`
 
 const KeyActivityText = styled.p`
   margin-left: 10px;
-  width: 210px;
+  width: 160px;
   margin-top: auto;
   margin-bottom: auto;
   text-decoration: ${props => props["text-decoration"]};
+`;
+
+const KeyActivityPriorityContainer = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
+  right: 0;
+  margin-right: 10px;
 `;
 
 const CheckboxContainer = props => (

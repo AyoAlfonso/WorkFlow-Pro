@@ -8,27 +8,26 @@ interface KeyActivitiesHeaderProps {
   setShowAllKeyActivities: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const KeyActivitiesHeader = (
-  props: KeyActivitiesHeaderProps
-): JSX.Element => {
+export const KeyActivitiesHeader = (props: KeyActivitiesHeaderProps): JSX.Element => {
   const { showAllKeyActivities, setShowAllKeyActivities } = props;
 
   return (
     <Container>
-      <KeyActivitiesText> KeyActivities </KeyActivitiesText>
+      <KeyActivitiesText> Key Activities </KeyActivitiesText>
       <FilterContainer>
         <FilterOptions
           onClick={() => setShowAllKeyActivities(false)}
+          //@ts-ignore
           mr={"15px"}
           color={!showAllKeyActivities ? "primary100" : "grey40"}
         >
-          Open
+          Week
         </FilterOptions>
         <FilterOptions
           onClick={() => setShowAllKeyActivities(true)}
           color={showAllKeyActivities ? "primary100" : "grey40"}
         >
-          All
+          Master
         </FilterOptions>
 
         {/* 
@@ -50,11 +49,11 @@ export const KeyActivitiesHeader = (
 const Container = styled.div`
   display: flex;
   border-bottom: 1px solid #e3e3e3;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 
-const KeyActivitiesText = styled.h3`
+const KeyActivitiesText = styled.h4`
   display: flex;
   justify-content: center;
   align-items: center;

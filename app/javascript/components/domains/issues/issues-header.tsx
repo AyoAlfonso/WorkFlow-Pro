@@ -17,6 +17,7 @@ export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
       <FilterContainer>
         <FilterOptions
           onClick={() => setShowAllIssues(false)}
+          //@ts-ignore
           mr={"15px"}
           color={!showAllIssues ? "primary100" : "grey40"}
         >
@@ -52,7 +53,7 @@ const Container = styled.div`
   padding-right: 20px;
 `;
 
-const IssuesText = styled.h3`
+const IssuesText = styled.h4`
   display: flex;
   justify-content: center;
   align-items: center;
