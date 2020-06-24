@@ -9,11 +9,15 @@ const initialState = {
   router: environment.router,
   userStore: {
     users: [],
-    count: 5
+    count: 5,
   },
   issueStore: {
-    issues: []
-  }
+    issues: [],
+  },
+  sessionStore: {
+    loggedIn: false,
+    profile: null,
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);

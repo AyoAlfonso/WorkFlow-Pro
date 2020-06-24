@@ -10,16 +10,17 @@ export class Api {
       baseURL: "/api",
       headers: {
         "Cache-Control": "no-cache",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      timeout: 30000
+      timeout: 30000,
+      withCredentials: true, //allow cookies to be sent if its from same domain
     });
 
-    this.client.addResponseTransform(response => {
+    this.client.addResponseTransform((response) => {
       response.data = camelizeResponse(response.data);
     });
 
-    this.client.addRequestTransform(request => {
+    this.client.addRequestTransform((request) => {
       request.params = decamelizeRequest(request.params);
     });
   }
@@ -35,4 +36,18 @@ export class Api {
   async getIssues() {
     return this.client.get("/issues");
   }
+
+  async login(email, password) {
+    return this.client.post("/users/sign_in", { user: { email, password } });
+  }
+
+  async profile() {
+    return this.client.get("/profile");
+  }
+
+  async signOut() {
+    return this.client.delete("/users/sign_out");
+  }
+
+  //async setJWT(jwt) {}
 }

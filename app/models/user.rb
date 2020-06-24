@@ -1,9 +1,11 @@
 class User < ApplicationRecord
+  include Devise::JWT::RevocationStrategies::Allowlist
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :confirmable, :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable, #:confirmable, 
          :recoverable, :rememberable, :trackable,
-         :validatable
+         :validatable,
+         :jwt_authenticatable, jwt_revocation_strategy: self
   
   belongs_to :company
   delegate :name, to: :company, prefix: true, allow_nil: true
@@ -18,4 +20,9 @@ class User < ApplicationRecord
   def full_name                                                                                                                                                                                     
     ([first_name, last_name] - ['']).compact.join(' ')                         
   end
+
+  # def on_jwt_dispatch(token, payload)
+  #   super
+  #   #do_something(token, payload)
+  # end
 end
