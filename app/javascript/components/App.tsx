@@ -30,9 +30,7 @@ export const App = observer(
         <GlobalStyles />
         {loggedIn ? (
           <>
-            <button onClick={(e) => sessionStore.logoutRequest()}>
-              Logout
-            </button>
+            <button onClick={() => sessionStore.logoutRequest()}>Logout</button>
             <Switch>
               <Route
                 exact

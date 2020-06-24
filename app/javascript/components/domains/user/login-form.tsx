@@ -31,7 +31,7 @@ export const LoginForm = observer(
           }}
         />
         <button
-          onClick={(e) => {
+          onClick={() => {
             sessionStore.login(email, password);
           }}
         >
