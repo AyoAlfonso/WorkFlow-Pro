@@ -10,12 +10,12 @@ class Api::IssuesController < Api::ApplicationController
 
   def create 
     @issue = Issue.create!(issue_params)
-    render json: @issue
+    render json: Issue.sort_by_priority_and_created_at_and_completed_at
   end
 
   def update
     @issue.update(issue_params)
-    render json: @issue
+    render json: Issue.sort_by_priority_and_created_at_and_completed_at
   end
 
   def destroy
