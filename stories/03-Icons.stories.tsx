@@ -16,26 +16,30 @@ import {
 export default { title: "Iconography", decorators: [withKnobs] };
 
 const propsList = [
-  { name: "icon", type: "string", description: "the name of the icon" },
+  { name: "icon", type: "string", required: false, description: "the name of the icon" },
   {
     name: "color",
     type: "string",
+    required: false,
     description: "the color of the icon (RGB, HEX, named color)",
   },
   {
     name: "size",
     type: "string/number",
+    required: false,
     description: "sizes can be in different formats, ex '1em', 10, '100px'",
   },
   { name: "style", type: "object", description: "a style object" },
   {
     name: "disableFill",
     type: "boolean",
+    required: false,
     description: "remove/add fill color",
   },
   {
     name: "removeInlineStyle",
     type: "boolean",
+    required: false,
     description: "toggle inline styles on/off",
   },
 ];
@@ -48,7 +52,7 @@ const TextCenteredDiv = styled.div`
 export const Icons = () => (
   <ContainerDiv pl={4}>
     <h1>Icons</h1>
-    <CodeBlockDiv>
+    <CodeBlockDiv mb={"20px"}>
       <CopyBlock
         text={`
       import * as React from "react";
@@ -172,8 +176,12 @@ export const Icons = () => (
         <TextCenteredDiv>Company</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Chevron"} size={"2em"} />
-        <TextCenteredDiv>Chevron</TextCenteredDiv>
+        <Icon icon={"Chevron-Up"} size={"2em"} />
+        <TextCenteredDiv>Chevron-Up</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Chevron-Down"} size={"2em"} />
+        <TextCenteredDiv>Chevron-Down</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
     <Divider />
