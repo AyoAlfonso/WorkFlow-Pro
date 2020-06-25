@@ -2,7 +2,7 @@ import { boolean, object, select, text, withKnobs } from "@storybook/addon-knobs
 import React from "react";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import styled from "styled-components";
-import Icon from "../app/javascript/components/shared/Icon";
+import { Icon } from "../app/javascript/components/shared/Icon";
 import { baseTheme } from "../app/javascript/themes/base";
 import {
   CenteredColumnDiv,

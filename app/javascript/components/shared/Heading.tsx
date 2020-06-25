@@ -38,7 +38,7 @@ const StyledH6 = styled.h6`
   ${typography}
 `;
 
-const Heading = props => {
+export const Heading = props => {
   const { type, children } = props;
   switch (type) {
     case "h1":
@@ -81,5 +81,3 @@ const Heading = props => {
       return null;
   }
 };
-
-export default Heading;
