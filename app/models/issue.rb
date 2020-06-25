@@ -1,6 +1,5 @@
 class Issue < ApplicationRecord
-  enum priority: [:low, :medium, :high]
-
+  enum priority: { low: 0, medium: 1, high: 2 }
   belongs_to :user
 
   scope :created_by_user, -> (user) { where(user: user) }
