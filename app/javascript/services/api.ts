@@ -16,11 +16,11 @@ export class Api {
       withCredentials: true, //allow cookies to be sent if its from same domain
     });
 
-    this.client.addResponseTransform((response) => {
+    this.client.addResponseTransform(response => {
       response.data = camelizeResponse(response.data);
     });
 
-    this.client.addRequestTransform((request) => {
+    this.client.addRequestTransform(request => {
       request.params = decamelizeRequest(request.params);
     });
   }
@@ -35,6 +35,10 @@ export class Api {
 
   async getIssues() {
     return this.client.get("/issues");
+  }
+
+  async getKeyActivities() {
+    return this.client.get("/key_activities");
   }
 
   async login(email, password) {
