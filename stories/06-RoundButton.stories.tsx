@@ -2,7 +2,7 @@ import * as React from "react";
 import { RoundButton } from "../app/javascript/components/shared/Round-Button";
 import { text, withKnobs } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
-import Icon from "../app/javascript/components/shared/Icon";
+import { Icon } from "../app/javascript/components/shared/Icon";
 import { baseTheme } from "../app/javascript/themes";
 import { ContainerDiv, PropsList } from "./shared";
 

@@ -2,7 +2,7 @@ import * as React from "react";
 import { HomeContainerBorders } from "./shared-components";
 import styled from "styled-components";
 import { useState } from "react";
-import Icon from "../../shared/Icon";
+import { Icon } from "../../shared/Icon";
 import { baseTheme } from "../../../themes";
 import { color } from "styled-system";
 import { RoundButton } from "../../shared/Round-Button";
