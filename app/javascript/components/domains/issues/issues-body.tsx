@@ -1,69 +1,65 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Checkbox, Label } from "@rebass/forms";
 import Icon from "../../shared/Icon";
 import { color } from "styled-system";
+import { observer } from "mobx-react";
 
 interface IIssuesBodyProps {
   showAllIssues: boolean;
 }
 
-export const IssuesBody = (props: IIssuesBodyProps): JSX.Element => {
-  const { issueStore } = useMst();
-  const { showAllIssues } = props;
-  const [openIssues, setOpenIssues] = useState<Array<any>>([]);
-  const [allIssues, setAllIssues] = useState<Array<any>>([]);
+export const IssuesBody = observer(
+  (props: IIssuesBodyProps): JSX.Element => {
+    const { issueStore } = useMst();
+    const { showAllIssues } = props;
 
-  useEffect(() => {
-    issueStore.fetchIssues().then(() => {
-      refetchIssues();
-    });
-  }, []);
+    const openIssues = issueStore.openIssues;
+    const allIssues = issueStore.allIssues;
 
-  const refetchIssues = () => {
-    setOpenIssues(issueStore.openIssues);
-    setAllIssues(issueStore.allIssues);
-  };
+    useEffect(() => {
+      issueStore.fetchIssues();
+    }, []);
 
-  const renderIssuesList = (): Array<JSX.Element> => {
-    const issues = showAllIssues ? allIssues : openIssues;
-    return issues.map((issue, index) => (
-      <IssueContainer key={issue["id"]}>
-        <CheckboxContainer key={issue["id"]}>
-          <Checkbox
-            key={issue["id"]}
-            checked={issue["completedAt"]}
-            onClick={() => {
-              console.log("TODO: MAKE API CALL TO UPDATE STATUS OF ISSUE");
-              setTimeout(() => {
-                issueStore.updateIssueStatus(issue.id);
-                refetchIssues();
-              }, 1000);
-            }}
-          />
-        </CheckboxContainer>
+    const renderIssuesList = (): Array<JSX.Element> => {
+      const issues = showAllIssues ? allIssues : openIssues;
+      return issues.map((issue, index) => (
+        <IssueContainer key={issue["id"]}>
+          <CheckboxContainer key={issue["id"]}>
+            <Checkbox
+              key={issue["id"]}
+              checked={issue["completedAt"]}
+              onClick={() => {
+                console.log("TODO: MAKE API CALL TO UPDATE STATUS OF ISSUE");
+                setTimeout(() => {
+                  issueStore.updateIssueStatus(issue.id);
+                }, 1000);
+              }}
+            />
+          </CheckboxContainer>
 
-        <IssueText text-decoration={issue.completedAt && "line-through"}>
-          {issue.description}
-        </IssueText>
-      </IssueContainer>
-    ));
-  };
+          <IssueText text-decoration={issue.completedAt && "line-through"}>
+            {issue.description}
+          </IssueText>
+        </IssueContainer>
+      ));
+    };
 
-  return (
-    <Container>
-      <AddNewIssueContainer>
-        <AddNewIssuePlus>
-          <Icon icon={"Plus"} size={16} />
-        </AddNewIssuePlus>
-        <AddNewIssueText> Add New Issue</AddNewIssueText>
-      </AddNewIssueContainer>
-      <IssuesContainer>{renderIssuesList()}</IssuesContainer>
-    </Container>
-  );
-};
+    return (
+      <Container>
+        <AddNewIssueContainer>
+          <AddNewIssuePlus>
+            <Icon icon={"Plus"} size={16} />
+          </AddNewIssuePlus>
+          <AddNewIssueText> Add New Issue</AddNewIssueText>
+        </AddNewIssueContainer>
+        <IssuesContainer>{renderIssuesList()}</IssuesContainer>
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
   padding: 0px 0px 15px 10px;
@@ -122,7 +118,7 @@ const CheckboxContainer = props => (
     sx={{
       width: "auto",
       marginTop: "auto",
-      marginBottom: "auto"
+      marginBottom: "auto",
     }}
   >
     {props.children}

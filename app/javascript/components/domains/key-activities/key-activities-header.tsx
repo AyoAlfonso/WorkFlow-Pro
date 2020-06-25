@@ -3,35 +3,35 @@ import styled from "styled-components";
 import { space, color } from "styled-system";
 //import Icon from "../../shared/Icon";
 
-interface IssuesHeaderProps {
-  showAllIssues: boolean;
-  setShowAllIssues: React.Dispatch<React.SetStateAction<boolean>>;
+interface KeyActivitiesHeaderProps {
+  showAllKeyActivities: boolean;
+  setShowAllKeyActivities: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
-  const { showAllIssues, setShowAllIssues } = props;
+export const KeyActivitiesHeader = (props: KeyActivitiesHeaderProps): JSX.Element => {
+  const { showAllKeyActivities, setShowAllKeyActivities } = props;
 
   return (
     <Container>
-      <IssuesText> Issues </IssuesText>
+      <KeyActivitiesText> Key Activities </KeyActivitiesText>
       <FilterContainer>
         <FilterOptions
-          onClick={() => setShowAllIssues(false)}
+          onClick={() => setShowAllKeyActivities(false)}
           //@ts-ignore
           mr={"15px"}
-          color={!showAllIssues ? "primary100" : "grey40"}
+          color={!showAllKeyActivities ? "primary100" : "grey40"}
         >
-          Open
+          Week
         </FilterOptions>
         <FilterOptions
-          onClick={() => setShowAllIssues(true)}
-          color={showAllIssues ? "primary100" : "grey40"}
+          onClick={() => setShowAllKeyActivities(true)}
+          color={showAllKeyActivities ? "primary100" : "grey40"}
         >
-          All
+          Master
         </FilterOptions>
 
         {/* 
-          COMMENT FROM PARHAM JUNE 19 2020: WE MIGHT NOT NEED THIS IF WE CAN AUTOSORT ISSUES WHENEVER THEY ARE BEING ADDED
+          COMMENT FROM PARHAM JUNE 19 2020: WE MIGHT NOT NEED THIS IF WE CAN AUTOSORT KeyActivities WHENEVER THEY ARE BEING ADDED
 
           <SortingChevronContainer>
           <ChevronUpContainer>
@@ -49,11 +49,11 @@ export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
 const Container = styled.div`
   display: flex;
   border-bottom: 1px solid #e3e3e3;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 
-const IssuesText = styled.h4`
+const KeyActivitiesText = styled.h4`
   display: flex;
   justify-content: center;
   align-items: center;

@@ -15,10 +15,12 @@ import { HomeContainer } from "./domains/home/home-container";
 import { useMst } from "../setup/root";
 import { IIssueStore } from "../stores/issue-store";
 import { LoginForm } from "./domains/user/login-form";
+import { IKeyActivityStore } from "../stores/key-activity-store";
 
 export interface IAppProps {
   userStore?: IUserStore;
   issueStore?: IIssueStore;
+  keyActivityStore?: IKeyActivityStore;
 }
 
 export const App = observer(
@@ -46,5 +48,5 @@ export const App = observer(
         )}
       </ThemeProvider>
     );
-  }
+  },
 );
