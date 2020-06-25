@@ -1,10 +1,4 @@
-import {
-  boolean,
-  object,
-  select,
-  text,
-  withKnobs,
-} from "@storybook/addon-knobs";
+import { boolean, object, select, text, withKnobs } from "@storybook/addon-knobs";
 import React from "react";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import styled from "styled-components";
@@ -22,26 +16,30 @@ import {
 export default { title: "Iconography", decorators: [withKnobs] };
 
 const propsList = [
-  { name: "icon", type: "string", description: "the name of the icon" },
+  { name: "icon", type: "string", required: false, description: "the name of the icon" },
   {
     name: "color",
     type: "string",
+    required: false,
     description: "the color of the icon (RGB, HEX, named color)",
   },
   {
     name: "size",
     type: "string/number",
+    required: false,
     description: "sizes can be in different formats, ex '1em', 10, '100px'",
   },
   { name: "style", type: "object", description: "a style object" },
   {
     name: "disableFill",
     type: "boolean",
+    required: false,
     description: "remove/add fill color",
   },
   {
     name: "removeInlineStyle",
     type: "boolean",
+    required: false,
     description: "toggle inline styles on/off",
   },
 ];
@@ -54,7 +52,7 @@ const TextCenteredDiv = styled.div`
 export const Icons = () => (
   <ContainerDiv pl={4}>
     <h1>Icons</h1>
-    <CodeBlockDiv>
+    <CodeBlockDiv mb={"20px"}>
       <CopyBlock
         text={`
       import * as React from "react";
@@ -178,8 +176,12 @@ export const Icons = () => (
         <TextCenteredDiv>Company</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Chevron"} size={"2em"} />
-        <TextCenteredDiv>Chevron</TextCenteredDiv>
+        <Icon icon={"Chevron-Up"} size={"2em"} />
+        <TextCenteredDiv>Chevron-Up</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Chevron-Down"} size={"2em"} />
+        <TextCenteredDiv>Chevron-Down</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
     <Divider />
@@ -232,11 +234,7 @@ export const Icons = () => (
         <TextCenteredDiv>Emotion-A</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon
-          icon={"Emotion-B"}
-          size={"2em"}
-          color={baseTheme.colors.finePine}
-        />
+        <Icon icon={"Emotion-B"} size={"2em"} color={baseTheme.colors.finePine} />
         <TextCenteredDiv>Emotion-B</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
@@ -244,38 +242,22 @@ export const Icons = () => (
         <TextCenteredDiv>Emotion-C</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon
-          icon={"Emotion-D"}
-          size={"2em"}
-          color={baseTheme.colors.cautionYellow}
-        />
+        <Icon icon={"Emotion-D"} size={"2em"} color={baseTheme.colors.cautionYellow} />
         <TextCenteredDiv>Emotion-D</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon
-          icon={"Emotion-E"}
-          size={"2em"}
-          color={baseTheme.colors.warningRed}
-        />
+        <Icon icon={"Emotion-E"} size={"2em"} color={baseTheme.colors.warningRed} />
         <TextCenteredDiv>Emotion-E</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
     <Divider />
     <RowDiv>
       <CenteredColumnDiv>
-        <Icon
-          icon={"Priority-High"}
-          size={"2em"}
-          color={baseTheme.colors.cautionYellow}
-        />
+        <Icon icon={"Priority-High"} size={"2em"} color={baseTheme.colors.cautionYellow} />
         <TextCenteredDiv>Priority-High</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon
-          icon={"Priority-Urgent"}
-          size={"2em"}
-          color={baseTheme.colors.warningRed}
-        />
+        <Icon icon={"Priority-Urgent"} size={"2em"} color={baseTheme.colors.warningRed} />
         <TextCenteredDiv>Priority-Urgent</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
@@ -283,19 +265,11 @@ export const Icons = () => (
         <TextCenteredDiv>Frog-Priority</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon
-          icon={"AM-Check-in"}
-          size={"2em"}
-          color={baseTheme.colors.cautionYellow}
-        />
+        <Icon icon={"AM-Check-in"} size={"2em"} color={baseTheme.colors.cautionYellow} />
         <TextCenteredDiv>AM-Check-in</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon
-          icon={"PM-Check-in"}
-          size={"2em"}
-          color={baseTheme.colors.primary40}
-        />
+        <Icon icon={"PM-Check-in"} size={"2em"} color={baseTheme.colors.primary40} />
         <TextCenteredDiv>PM-Check-in</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>

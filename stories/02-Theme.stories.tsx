@@ -1,17 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 import { baseTheme } from "../app/javascript/themes/base";
-import { ContainerDiv, RowDiv, CenteredColumnDiv, Divider } from "./shared";
+import { ContainerDiv, RowDiv, CenteredColumnDiv, Divider, PropsList } from "./shared";
+import Text from "../app/javascript/components/shared/Text";
+import Heading from "../app/javascript/components/shared/Heading";
 
 export default { title: "Theme" };
 
 const ColorBox = styled.div`
-  background-color: ${(props) => props.color};
+  background-color: ${props => props.color};
   height: 60px;
   width: 60px;
   border-radius: 10px;
   margin: 0px 20px 10px 20px;
-  border: ${(props) => (props.border ? "1px solid black" : "")};
+  border: ${props => (props.border ? "1px solid black" : "")};
 `;
 
 export const Colors = () => (
@@ -94,5 +96,19 @@ export const Colors = () => (
         }
       })}
     </RowDiv>
+  </ContainerDiv>
+);
+
+export const Fonts = () => (
+  <ContainerDiv pl={4}>
+    <h1>Heading Font: Exo</h1>
+    <Heading type={"h1"} color={"primary100"}>
+      The quick brown fox jumps over the lazy dog
+    </Heading>
+    <Divider />
+    <h1>Body Text Font: Lato</h1>
+    <Text fontSize={5} color={"text"}>
+      The quick brown fox jumps over the lazy dog
+    </Text>
   </ContainerDiv>
 );
