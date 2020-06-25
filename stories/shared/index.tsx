@@ -41,7 +41,7 @@ export const Divider = styled.div`
 
 export const ColorText = styled.span`
   ${color}
-  color: ${(props) => props.color};
+  color: ${props => props.color};
 `;
 
 export const PropsContainer = styled.div`
@@ -55,29 +55,59 @@ export const PropsContainer = styled.div`
   margin-bottom: 15px;
 `;
 
-export const PropsList = ({ propsList }) => {
+interface IPropListProps {
+  name: string;
+  type: string;
+  required: boolean;
+  description: string;
+}
+interface IPropsListProps {
+  propsList?: Array<IPropListProps>;
+  styledSystemProps?: Array<string>;
+}
+
+export const PropsList = ({ propsList, styledSystemProps }: IPropsListProps) => {
+  // propsList is an array of objects with keys:
+  // { name: <string>, type: <string>, required: <boolean>, description: <string>}
+
+  // styledSystemProps is an array of strings of the injectable props from styled-system (ie. "color", "space", "layout" etc)
   return (
     <PropsContainer>
       <h3>Props</h3>
-      {propsList.map((prop, index) => (
-        <RowDiv key={index} m={3}>
-          <ColorText color={baseTheme.colors.primary100}>
-            {`${prop.name}`}&nbsp;
-          </ColorText>
-          <ColorText color={baseTheme.colors.poppySunrise}>
-            {`<${prop.type}>`}&nbsp;
-          </ColorText>
-          <ColorText color="darkgrey">
-            &nbsp;:&nbsp;{`${prop.description}`}
-          </ColorText>
-        </RowDiv>
-      ))}
+      {propsList
+        ? propsList.map((prop, index) => (
+            <RowDiv key={index} m={3}>
+              <ColorText color={baseTheme.colors.primary100}>{`${prop.name}`}&nbsp;</ColorText>
+              <ColorText color={baseTheme.colors.poppySunrise}>{`<${prop.type}>`}&nbsp;</ColorText>
+              <ColorText color={baseTheme.colors.finePine}>
+                {`(${prop.required ? "required" : "optional"})`}&nbsp;
+              </ColorText>
+              <ColorText color="darkgrey">&nbsp;:&nbsp;{`${prop.description}`}</ColorText>
+            </RowDiv>
+          ))
+        : null}
+
+      {styledSystemProps ? (
+        <>
+          <RowDiv mb={1}>
+            <ColorText color="darkgrey">
+              All of the injected props from the following styled-system props types:
+            </ColorText>
+          </RowDiv>
+          <RowDiv mb={3}>
+            {styledSystemProps.map(prop => (
+              <ColorText color={baseTheme.colors.bali}>{prop}&nbsp; | &nbsp;</ColorText>
+            ))}
+          </RowDiv>
+        </>
+      ) : null}
     </PropsContainer>
   );
 };
 
 export const CodeBlockDiv = styled.div`
+  ${layout}
+  ${space}
   width: 60%;
   height: 100%;
-  margin-bottom: 20px;
 `;
