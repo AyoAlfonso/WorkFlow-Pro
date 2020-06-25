@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { useEffect } from "react";
 import { Checkbox, Label } from "@rebass/forms";
-import Icon from "../../shared/Icon";
+import { Icon } from "../../shared/Icon";
 import { color } from "styled-system";
 import { observer } from "mobx-react";
 import { baseTheme } from "../../../themes/base";

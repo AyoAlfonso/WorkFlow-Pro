@@ -1,6 +1,6 @@
 import * as React from "react";
-import TextComponent from "../app/javascript/components/shared/Text";
-import HeadingComponent from "../app/javascript/components/shared/Heading";
+import { Text as TextComponent } from "../app/javascript/components/shared/Text";
+import { Heading as HeadingComponent } from "../app/javascript/components/shared/Heading";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import { CodeBlockDiv, ContainerDiv, Divider, PropsList } from "./shared";
 
@@ -12,12 +12,12 @@ export const Text = () => (
     <PropsList styledSystemProps={["color", "layout", "space"]} />
     <CodeBlockDiv mt={4}>
       <CopyBlock
-        text={`<Text color={"text"} fontSize={4}>This is a paragraph element</Text>`}
+        text={`<Text color={"text"} fontSize={3}>This is a paragraph element</Text>`}
         language={"tsx"}
         theme={atomOneLight}
       />
     </CodeBlockDiv>
-    <TextComponent color={"text"} fontSize={4}>
+    <TextComponent color={"text"} fontSize={3}>
       This is a paragraph element
     </TextComponent>
     <Divider />
@@ -49,28 +49,28 @@ export const Heading = () => (
     <CodeBlockDiv mt={4}>
       <CopyBlock
         text={`
-    <Heading type={"h1"} color={"primary100"} fontSize={6}>
+    <Heading type={"h1"} color={"primary100"} fontSize={3}>
       This is an h1 element
     </Heading>`}
         language={"tsx"}
         theme={atomOneLight}
       />
     </CodeBlockDiv>
-    <HeadingComponent type={"h1"} color={"primary100"} fontSize={6}>
+    <HeadingComponent type={"h1"} color={"primary100"} fontSize={3}>
       This is an h1 element
     </HeadingComponent>
     <Divider />
     <CodeBlockDiv mt={4}>
       <CopyBlock
         text={`
-    <Heading type={"h4"} color={"warningRed"} fontSize={3} letterSpacing="0.3em">
+    <Heading type={"h4"} color={"warningRed"} fontSize={2} letterSpacing="0.3em">
       This is an h4 element
     </Heading>`}
         language={"tsx"}
         theme={atomOneLight}
       />
     </CodeBlockDiv>
-    <HeadingComponent type={"h4"} color={"warningRed"} fontSize={3} letterSpacing="0.3em">
+    <HeadingComponent type={"h4"} color={"warningRed"} fontSize={2} letterSpacing="0.3em">
       This is an h4 element
     </HeadingComponent>
   </ContainerDiv>

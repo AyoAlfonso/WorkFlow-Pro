@@ -10,7 +10,7 @@ const IconContainer = styled.div`
   ${space}
 `;
 
-const Icon = ({ ...props }) => {
+export const Icon = ({ ...props }) => {
   const { iconColor } = props;
   return (
     <IconContainer>
@@ -22,5 +22,3 @@ const Icon = ({ ...props }) => {
     </IconContainer>
   );
 };
-
-export default Icon;

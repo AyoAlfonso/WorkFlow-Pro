@@ -2,7 +2,7 @@ import { boolean, object, select, text, withKnobs } from "@storybook/addon-knobs
 import React from "react";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import styled from "styled-components";
-import Icon from "../app/javascript/components/shared/Icon";
+import { Icon } from "../app/javascript/components/shared/Icon";
 import { baseTheme } from "../app/javascript/themes/base";
 import {
   CenteredColumnDiv,
@@ -29,7 +29,7 @@ const propsList = [
     required: false,
     description: "sizes can be in different formats, ex '1em', 10, '100px'",
   },
-  { name: "style", type: "object", description: "a style object" },
+  { name: "style", type: "object", required: false, description: "a style object" },
   {
     name: "disableFill",
     type: "boolean",

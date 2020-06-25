@@ -8,10 +8,8 @@ const StyledText = styled.p`
   ${typography}
 `;
 
-const Text = props => (
+export const Text = props => (
   <StyledText {...props} fontFamily={"Lato"}>
     {props.children}
   </StyledText>
 );
-
-export default Text;
