@@ -1,6 +1,11 @@
 import * as React from "react";
 import { HomeContainerBorders } from "./shared-components";
 import styled from "styled-components";
+import { useState } from "react";
+import Icon from "../../shared/Icon";
+import { baseTheme } from "../../../themes";
+import { color } from "styled-system";
+import { RoundButton } from "../../shared/Round-Button";
 
 export const HomeHeaderBar = (): JSX.Element => {
   const [openCreateDropdown, setOpenCreateDropdown] = useState<boolean>(false);
@@ -12,7 +17,7 @@ export const HomeHeaderBar = (): JSX.Element => {
       <Icon
         icon={iconName}
         size={20}
-        color={dropdownValue ? baseTheme.colors.primary100 : baseTheme.colors.white}
+        iconColor={dropdownValue ? baseTheme.colors.primary100 : baseTheme.colors.white}
         style={{ marginLeft: "10px", marginTop: "10px" }}
       />
     );
@@ -22,12 +27,29 @@ export const HomeHeaderBar = (): JSX.Element => {
     return (
       <DropdownContainer>
         <SelectionContainer>
-          <SelectionIconContainer></SelectionIconContainer>
+          <SelectionIconContainer>
+            <Icon icon={"Alert"} size={20} iconColor={baseTheme.colors.white} disableFill={true} />
+          </SelectionIconContainer>
           <SelectionTextContainer>Add Issue</SelectionTextContainer>
         </SelectionContainer>
-        <SelectionContainer>Create Task</SelectionContainer>
+        <SelectionContainer>
+          <SelectionIconContainer>
+            <Icon icon={"Tasks"} size={20} iconColor={baseTheme.colors.white} disableFill={true} />
+          </SelectionIconContainer>
+          Create Task
+        </SelectionContainer>
 
-        <SelectionContainer>Send Invite</SelectionContainer>
+        <SelectionContainer>
+          <SelectionIconContainer>
+            <Icon
+              icon={"New-User"}
+              size={20}
+              iconColor={baseTheme.colors.white}
+              disableFill={true}
+            />
+          </SelectionIconContainer>
+          Send Invite
+        </SelectionContainer>
       </DropdownContainer>
     );
   };
@@ -35,20 +57,24 @@ export const HomeHeaderBar = (): JSX.Element => {
   return (
     <Container>
       <ActionsContainer>
-        <IconContainer
+        <RoundButton
+          style={{ marginLeft: "12px", zIndex: openCreateDropdown ? 2 : 0 }}
           backgroundColor={openCreateDropdown ? "white" : "primary100"}
-          zIndex={openCreateDropdown ? 2 : 1}
-          onClick={() => setOpenCreateDropdown(!openCreateDropdown)}
+          onClick={() => {
+            setOpenLynchPynDropdown(false);
+            setOpenCreateDropdown(!openCreateDropdown);
+          }}
         >
           {renderHeaderIcon("Plus")}
-        </IconContainer>
+        </RoundButton>
         {openCreateDropdown && renderCreateDropdownModal()}
-        <IconContainer
+        <RoundButton
+          style={{ marginLeft: "12px", zIndex: openLynchPynDropdown ? 2 : 0 }}
           backgroundColor={openLynchPynDropdown ? "white" : "primary100"}
           onClick={() => setOpenLynchPynDropdown(!openLynchPynDropdown)}
         >
-          {renderHeaderIcon("")}
-        </IconContainer>
+          {renderHeaderIcon("Logo")}
+        </RoundButton>
       </ActionsContainer>
     </Container>
   );
@@ -56,31 +82,18 @@ export const HomeHeaderBar = (): JSX.Element => {
 
 const Container = styled(HomeContainerBorders)`
   margin-top: 40px;
-  height: 40px;
+  height: 80px;
 `;
 
-type IconContainerType = {
-  backgroundColor?: string;
-  zIndex?: number;
-};
-
-const IconContainer = styled.div<IconContainerType>`
-  ${color}
-  height: 40px;
-  width: 40px;
-  border-radius: 50px;
-  box-shadow: 0px 2px rgba(0, 0, 0, 0.2);
-  margin-left: 12px;
-  z-index: ${props => props.zIndex};
-  &:hover {
-    cursor: pointer;
-  }
+const ActionsContainer = styled.div`
+  margin: 20px;
+  display: flex;
 `;
 
 const DropdownContainer = styled.div`
   ${color}
   width: 170px;
-  height: 160px;
+  height: 120px;
   background-color: ${props => props.theme.colors.primary100};
   z-index: 1;
   position: absolute;
@@ -96,9 +109,14 @@ const SelectionContainer = styled.div`
   ${color}
   display: flex;
   color: white;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const SelectionIconContainer = styled.div`
-  width: 20px;
+  width: 30px;
 `;
 const SelectionTextContainer = styled.div``;
