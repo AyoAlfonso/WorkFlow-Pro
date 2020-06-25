@@ -23,5 +23,7 @@ Rails.application.routes.draw do
     # issues
     resources :issues, only: [:index, :create, :update, :destroy]
 
+    #key activities
+    resources :key_activities, only: [:index]
   end
 end

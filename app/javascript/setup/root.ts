@@ -18,6 +18,9 @@ const initialState = {
     loggedIn: false,
     profile: null,
   },
+  keyActivityStore: {
+    keyActivities: [],
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);
