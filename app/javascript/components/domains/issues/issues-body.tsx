@@ -7,26 +7,38 @@ import { Icon } from "../../shared/Icon";
 import { color } from "styled-system";
 import { observer } from "mobx-react";
 import { CreateIssueModal } from "./create-issue-modal";
+import { baseTheme } from "../../../themes/base";
 
 interface IIssuesBodyProps {
-  showAllIssues: boolean;
+  showOpenIssues: boolean;
 }
 
 export const IssuesBody = observer(
   (props: IIssuesBodyProps): JSX.Element => {
     const { issueStore } = useMst();
-    const { showAllIssues } = props;
+    const { showOpenIssues } = props;
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
 
     const openIssues = issueStore.openIssues;
-    const allIssues = issueStore.allIssues;
+    const closedIssues = issueStore.closedIssues;
 
     useEffect(() => {
       issueStore.fetchIssues();
     }, []);
 
+    const renderPriorityIcon = (priority: string) => {
+      switch (priority) {
+        case "medium":
+          return <Icon icon={"Priority-High"} size={12} color={baseTheme.colors.cautionYellow} />;
+        case "high":
+          return <Icon icon={"Priority-Urgent"} size={12} color={baseTheme.colors.warningRed} />;
+        default:
+          return <></>;
+      }
+    };
+
     const renderIssuesList = (): Array<JSX.Element> => {
-      const issues = showAllIssues ? allIssues : openIssues;
+      const issues = showOpenIssues ? openIssues : closedIssues;
       return issues.map((issue, index) => (
         <IssueContainer key={issue["id"]}>
           <CheckboxContainer key={issue["id"]}>
@@ -45,6 +57,7 @@ export const IssuesBody = observer(
           <IssueText text-decoration={issue.completedAt && "line-through"}>
             {issue.description}
           </IssueText>
+          <IssuePriorityContainer>{renderPriorityIcon(issue.priority)}</IssuePriorityContainer>
         </IssueContainer>
       ));
     };
@@ -116,6 +129,13 @@ const IssueText = styled.p`
   margin-top: auto;
   margin-bottom: auto;
   text-decoration: ${props => props["text-decoration"]};
+`;
+
+const IssuePriorityContainer = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
+  right: 0;
+  margin-right: 10px;
 `;
 
 const CheckboxContainer = props => (

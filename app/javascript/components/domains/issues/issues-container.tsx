@@ -4,15 +4,12 @@ import { IssuesBody } from "./issues-body";
 import { useState } from "react";
 
 export const IssuesContainer = (): JSX.Element => {
-  const [showAllIssues, setShowAllIssues] = useState<boolean>(false);
+  const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
 
   return (
     <>
-      <IssuesHeader
-        showAllIssues={showAllIssues}
-        setShowAllIssues={setShowAllIssues}
-      />
-      <IssuesBody showAllIssues={showAllIssues} />
+      <IssuesHeader showOpenIssues={showOpenIssues} setShowOpenIssues={setShowOpenIssues} />
+      <IssuesBody showOpenIssues={showOpenIssues} />
     </>
   );
 };

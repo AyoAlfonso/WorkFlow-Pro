@@ -8,10 +8,11 @@ interface IModalWithHeaderProps {
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   headerText?: string;
+  children: any;
 }
 
 export const ModalWithHeader = (props: IModalWithHeaderProps): JSX.Element => {
-  const { modalOpen, setModalOpen, headerText } = props;
+  const { modalOpen, setModalOpen, headerText, children } = props;
 
   return (
     <StyledModal isOpen={modalOpen}>
@@ -23,6 +24,7 @@ export const ModalWithHeader = (props: IModalWithHeaderProps): JSX.Element => {
           <Icon icon={"Close"} size={18} iconColor="grey60" />
         </CloseIconContainer>
       </HeaderContainer>
+      {...children}
     </StyledModal>
   );
 };

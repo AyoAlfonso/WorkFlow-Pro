@@ -4,29 +4,29 @@ import { space, color } from "styled-system";
 //import Icon from "../../shared/Icon";
 
 interface IssuesHeaderProps {
-  showAllIssues: boolean;
-  setShowAllIssues: React.Dispatch<React.SetStateAction<boolean>>;
+  showOpenIssues: boolean;
+  setShowOpenIssues: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
-  const { showAllIssues, setShowAllIssues } = props;
+  const { showOpenIssues, setShowOpenIssues } = props;
 
   return (
     <Container>
       <IssuesText> Issues </IssuesText>
       <FilterContainer>
         <FilterOptions
-          onClick={() => setShowAllIssues(false)}
+          onClick={() => setShowOpenIssues(true)}
           mr={"15px"}
-          color={!showAllIssues ? "primary100" : "grey40"}
+          color={showOpenIssues ? "primary100" : "grey40"}
         >
           Open
         </FilterOptions>
         <FilterOptions
-          onClick={() => setShowAllIssues(true)}
-          color={showAllIssues ? "primary100" : "grey40"}
+          onClick={() => setShowOpenIssues(false)}
+          color={!showOpenIssues ? "primary100" : "grey40"}
         >
-          All
+          Closed
         </FilterOptions>
 
         {/* 
