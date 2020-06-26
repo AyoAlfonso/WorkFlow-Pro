@@ -16,7 +16,7 @@ const ButtonDiv = styled.div`
     variant({
       variants: {
         primary: {
-          bg: props.disabled ? "primary80" : "primary100",
+          bg: props.disabled ? "primary60" : "primary100",
           borderColor: props.disabled ? "primary60" : "primary100",
         },
         primaryOutline: {
