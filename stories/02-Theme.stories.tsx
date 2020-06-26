@@ -17,7 +17,7 @@ const ColorBox = styled.div`
 `;
 
 export const Colors = () => (
-  <ContainerDiv pl={4}>
+  <ContainerDiv>
     <h1>Primary</h1>
     <h3>Blues</h3>
     <RowDiv>
@@ -100,7 +100,7 @@ export const Colors = () => (
 );
 
 export const Fonts = () => (
-  <ContainerDiv pl={4}>
+  <ContainerDiv>
     <h1>Heading Font: Exo</h1>
     <Heading type={"h1"} color={"primary100"}>
       The quick brown fox jumps over the lazy dog

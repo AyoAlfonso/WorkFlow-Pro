@@ -7,7 +7,7 @@ import { CodeBlockDiv, ContainerDiv, Divider, PropsList } from "./shared";
 export default { title: "Text Components" };
 
 export const Text = () => (
-  <ContainerDiv pl={4}>
+  <ContainerDiv>
     <h1>Text</h1>
     <PropsList styledSystemProps={["color", "layout", "space"]} />
     <CodeBlockDiv mt={4}>
@@ -43,7 +43,7 @@ const headingPropsList = [
 ];
 
 export const Heading = () => (
-  <ContainerDiv pl={4}>
+  <ContainerDiv>
     <h1>Heading</h1>
     <PropsList propsList={headingPropsList} styledSystemProps={["color", "layout", "space"]} />
     <CodeBlockDiv mt={4}>

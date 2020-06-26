@@ -50,13 +50,13 @@ const TextCenteredDiv = styled.div`
 `;
 
 export const Icons = () => (
-  <ContainerDiv pl={4}>
+  <ContainerDiv>
     <h1>Icons</h1>
     <CodeBlockDiv mb={"20px"}>
       <CopyBlock
         text={`
       import * as React from "react";
-      import Icon from "../components/shared/Icon"
+      import { Icon } from "../components/shared/Icon"
 
       const MyComponentWithIcon = () => (
         <div>

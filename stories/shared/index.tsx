@@ -8,6 +8,7 @@ export const ContainerDiv = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  padding-left: 40px;
   ${space}
   ${layout}
 `;
@@ -86,7 +87,7 @@ export const PropsList = ({ propsList, styledSystemProps }: IPropsListProps) => 
             </RowDiv>
           ))
         : null}
-
+      <br />
       {styledSystemProps ? (
         <>
           <RowDiv mb={1}>
