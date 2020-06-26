@@ -12,7 +12,7 @@ export const HeaderBar = (): JSX.Element => {
         px={2}
         color="black"
         bg="white"
-        boxShadow="5px 5px 5px 0px rgba(0,0,0,0.75)"
+        boxShadow="0px 0px 0px 2px #f5f5f5"
         border="1px solid #000000"
         alignItems="center"
         className="home-header-bar__placeholder-text"
