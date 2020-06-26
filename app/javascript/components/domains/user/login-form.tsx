@@ -31,7 +31,7 @@ export const LoginForm = observer(
     return (
       <Flex alignItems={"center"}>
         <Box width={1 / 3}></Box>
-        <Box as="form" width={1 / 3} sx={{ margin: "auto" }}>
+        <Box width={1 / 3} sx={{ margin: "auto" }}>
           {sessionStore.loggedIn ? (
             <Label>You are logged in.</Label>
           ) : (
@@ -43,7 +43,7 @@ export const LoginForm = observer(
               <StyledButton
                 bg={"primary100"}
                 borderColor={"primary100"}
-                onClick={sessionStore.login(email, password)}
+                onClick={() => sessionStore.login(email, password)}
               >
                 Login
               </StyledButton>

@@ -1,25 +1,85 @@
 import * as React from "react";
-import styled from "styled-components";
-import { useMst } from "../../../setup/root";
-import { Flex, Box } from "rebass";
 import { HomeContainerBorders } from "../home/shared-components";
+import styled from "styled-components";
+import { useState } from "react";
+import { Icon } from "../../shared/Icon";
+import { baseTheme } from "../../../themes";
+import { color } from "styled-system";
+import { RoundButton } from "../../shared/Round-Button";
+import { Flex, Box } from "rebass";
+import { useMst } from "../../../setup/root";
 
 export const HeaderBar = (): JSX.Element => {
+  const [openCreateDropdown, setOpenCreateDropdown] = useState<boolean>(false);
+  const [openLynchPynDropdown, setOpenLynchPynDropdown] = useState<boolean>(false);
   const { sessionStore } = useMst();
+
+  const renderHeaderIcon = (iconName: string) => {
+    const dropdownValue = iconName == "Plus" ? openCreateDropdown : openLynchPynDropdown;
+    return (
+      <Icon
+        icon={iconName}
+        size={20}
+        iconColor={dropdownValue ? baseTheme.colors.primary100 : baseTheme.colors.white}
+        style={{ marginLeft: "10px", marginTop: "10px" }}
+      />
+    );
+  };
+
+  const renderCreateDropdownModal = () => {
+    return (
+      <DropdownContainer>
+        <SelectionContainer>
+          <SelectionIconContainer>
+            <Icon icon={"Alert"} size={20} iconColor={baseTheme.colors.white} disableFill={true} />
+          </SelectionIconContainer>
+          <SelectionTextContainer>Add Issue</SelectionTextContainer>
+        </SelectionContainer>
+        <SelectionContainer>
+          <SelectionIconContainer>
+            <Icon icon={"Tasks"} size={20} iconColor={baseTheme.colors.white} disableFill={true} />
+          </SelectionIconContainer>
+          Create Task
+        </SelectionContainer>
+
+        <SelectionContainer>
+          <SelectionIconContainer>
+            <Icon
+              icon={"New-User"}
+              size={20}
+              iconColor={baseTheme.colors.white}
+              disableFill={true}
+            />
+          </SelectionIconContainer>
+          Send Invite
+        </SelectionContainer>
+      </DropdownContainer>
+    );
+  };
+
   return (
     <Container>
-      <Flex
-        px={2}
-        color="black"
-        bg="white"
-        boxShadow="0px 0px 0px 2px #f5f5f5"
-        border="1px solid #000000"
-        alignItems="center"
-        className="home-header-bar__placeholder-text"
-      >
-        <PlaceholderText className="home-header-bar__placeholder-text">
-          Home Header Bar
-        </PlaceholderText>
+      <Flex>
+        <ActionsContainer>
+          <RoundButton
+            style={{ marginLeft: "12px", zIndex: openCreateDropdown ? 2 : 0 }}
+            backgroundColor={openCreateDropdown ? "white" : "primary100"}
+            onClick={() => {
+              setOpenLynchPynDropdown(false);
+              setOpenCreateDropdown(!openCreateDropdown);
+            }}
+          >
+            {renderHeaderIcon("Plus")}
+          </RoundButton>
+          {openCreateDropdown && renderCreateDropdownModal()}
+          <RoundButton
+            style={{ marginLeft: "12px", zIndex: openLynchPynDropdown ? 2 : 0 }}
+            backgroundColor={openLynchPynDropdown ? "white" : "primary100"}
+            onClick={() => setOpenLynchPynDropdown(!openLynchPynDropdown)}
+          >
+            {renderHeaderIcon("Logo")}
+          </RoundButton>
+        </ActionsContainer>
         <Box mx="auto" />
         <button onClick={() => sessionStore.logoutRequest()}>Logout</button>
       </Flex>
@@ -28,14 +88,45 @@ export const HeaderBar = (): JSX.Element => {
 };
 
 const Container = styled(HomeContainerBorders)`
+  margin-top: 40px;
+  height: 80px;
+  width: 80%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 40px;
-  height: 40px;
-  width: 80%;
 `;
 
-const PlaceholderText = styled.div`
-  text-align: center;
-  margin-top: 10px;
+const ActionsContainer = styled.div`
+  margin: 20px;
+  display: flex;
 `;
+
+const DropdownContainer = styled.div`
+  ${color}
+  width: 170px;
+  height: 120px;
+  background-color: ${props => props.theme.colors.primary100};
+  z-index: 1;
+  position: absolute;
+  margin-top: -5px;
+  margin-left: 5px;
+  border-radius: 10px;
+  border-top-left-radius: 25px;
+  padding-top: 60px;
+  padding-left: 15px;
+`;
+
+const SelectionContainer = styled.div`
+  ${color}
+  display: flex;
+  color: white;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const SelectionIconContainer = styled.div`
+  width: 30px;
+`;
+const SelectionTextContainer = styled.div``;
