@@ -1,11 +1,12 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Checkbox, Label } from "@rebass/forms";
 import { Icon } from "../../shared/Icon";
 import { color } from "styled-system";
 import { observer } from "mobx-react";
+import { CreateIssueModal } from "./create-issue-modal";
 
 interface IIssuesBodyProps {
   showAllIssues: boolean;
@@ -15,6 +16,7 @@ export const IssuesBody = observer(
   (props: IIssuesBodyProps): JSX.Element => {
     const { issueStore } = useMst();
     const { showAllIssues } = props;
+    const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
 
     const openIssues = issueStore.openIssues;
     const allIssues = issueStore.allIssues;
@@ -49,7 +51,11 @@ export const IssuesBody = observer(
 
     return (
       <Container>
-        <AddNewIssueContainer>
+        <CreateIssueModal
+          createIssueModalOpen={createIssueModalOpen}
+          setCreateIssueModalOpen={setCreateIssueModalOpen}
+        />
+        <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
           <AddNewIssuePlus>
             <Icon icon={"Plus"} size={16} />
           </AddNewIssuePlus>

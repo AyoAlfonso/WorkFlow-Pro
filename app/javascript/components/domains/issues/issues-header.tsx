@@ -17,7 +17,6 @@ export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
       <FilterContainer>
         <FilterOptions
           onClick={() => setShowAllIssues(false)}
-          //@ts-ignore
           mr={"15px"}
           color={!showAllIssues ? "primary100" : "grey40"}
         >
@@ -35,10 +34,10 @@ export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
 
           <SortingChevronContainer>
           <ChevronUpContainer>
-            <Icon icon={"Chevron-Up"} size={10} color="grey40" />
+            <Icon icon={"Chevron-Up"} size={10} iconColor="grey40" />
           </ChevronUpContainer>
           <ChevronDownContainer>
-            <Icon icon={"Chevron-Down"} size={10} color="grey40" />
+            <Icon icon={"Chevron-Down"} size={10} iconColor="grey40" />
           </ChevronDownContainer>
         </SortingChevronContainer> */}
       </FilterContainer>
