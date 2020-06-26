@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
 
+import { Icon } from "../../shared/Icon";
 import { Flex, Box } from "rebass";
 import { Label, Input } from "../../shared/Input";
 
@@ -22,6 +23,10 @@ border-radius: 5px;
 text-align: center;
 `;
 
+const LogoHeaderDiv = styled.div`
+  text-align: center;
+`;
+
 export const LoginForm = observer(
   (): JSX.Element => {
     const { sessionStore } = useMst();
@@ -29,28 +34,33 @@ export const LoginForm = observer(
     const [password, setPassword] = useState("");
 
     return (
-      <Flex alignItems={"center"}>
-        <Box width={1 / 3}></Box>
-        <Box width={1 / 3} sx={{ margin: "auto" }}>
+      <Flex
+        sx={{
+          alignItems: "center",
+          height: "100%",
+          width: "100%",
+        }}
+      >
+        {" "}
+        <Box sx={{ minWidth: "200px", margin: "auto", border: "1" }}>
           {sessionStore.loggedIn ? (
             <Label>You are logged in.</Label>
           ) : (
             <>
+              <LogoHeaderDiv>
+                <Icon icon={"Logo"} size={"14em"} iconColor={"primary100"} paddingBottom={"15px"} />
+              </LogoHeaderDiv>
               <Label htmlFor="email">E-mail</Label>
               <Input name="email" onChange={e => setEmail(e.target.value)} />
               <Label>Password</Label>
               <Input name="password" type="password" onChange={e => setPassword(e.target.value)} />
-              <StyledButton
-                bg={"primary100"}
-                borderColor={"primary100"}
-                onClick={() => sessionStore.login(email, password)}
-              >
+              <StyledButton bg={"primary100"} onClick={() => sessionStore.login(email, password)}>
                 Login
               </StyledButton>
+              <div>Forgot your password? (To be added)</div>
             </>
           )}
         </Box>
-        <Box width={1 / 3}></Box>
       </Flex>
     );
   },
