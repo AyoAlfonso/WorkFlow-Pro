@@ -18,6 +18,10 @@ import { LoginForm } from "./domains/user/login-form";
 import { IKeyActivityStore } from "../stores/key-activity-store";
 import { ModalProvider } from "styled-react-modal";
 
+import { HeaderBar } from "./domains/nav/header-bar";
+import { SideNav } from "./domains/nav/side-nav";
+import { Placeholder } from "./shared/Placeholder";
+
 export interface IAppProps {
   userStore?: IUserStore;
   issueStore?: IIssueStore;
@@ -34,13 +38,36 @@ export const App = observer(
           <GlobalStyles />
           {loggedIn ? (
             <>
-              <button onClick={() => sessionStore.logoutRequest()}>Logout</button>
+              <SideNav />
+              <HeaderBar />
+
               <Switch>
                 <Route
                   exact
                   path={"/"}
                   render={() => {
                     return <HomeContainer />;
+                  }}
+                />
+                <Route
+                  exact
+                  path={"/team"}
+                  render={() => {
+                    return <Placeholder />;
+                  }}
+                />
+                <Route
+                  exact
+                  path={"/company"}
+                  render={() => {
+                    return <Placeholder />;
+                  }}
+                />
+                <Route
+                  exact
+                  path={"/goals"}
+                  render={() => {
+                    return <Placeholder />;
                   }}
                 />
               </Switch>

@@ -1,6 +1,5 @@
 import * as React from "react";
 import styled from "styled-components";
-import { HomeHeaderBar } from "./home-header-bar";
 import { HomePersonalStatus } from "./home-personal-status";
 import { HomePersonalItems } from "./home-personal-items";
 import { HomeCoreFour } from "./home-core-four";
@@ -14,7 +13,6 @@ export const HomeContainer = (): JSX.Element => {
 
   return (
     <Container>
-      <HomeHeaderBar />
       <HomePersonalStatus />
       <HomePersonalItems />
       <HomeCoreFour />
@@ -26,6 +24,6 @@ export const HomeContainer = (): JSX.Element => {
 const Container = styled.div`
   margin-left: auto;
   margin-right: auto;
-  width: 90%;
+  width: 80%;
   margin-bottom: 50px;
 `;
