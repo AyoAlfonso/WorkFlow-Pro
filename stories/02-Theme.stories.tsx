@@ -107,7 +107,7 @@ export const Fonts = () => (
     </Heading>
     <Divider />
     <h1>Body Text Font: Lato</h1>
-    <Text fontSize={5} color={"text"}>
+    <Text fontSize={2} color={"text"}>
       The quick brown fox jumps over the lazy dog
     </Text>
   </ContainerDiv>
