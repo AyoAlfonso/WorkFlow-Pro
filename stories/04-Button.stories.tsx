@@ -3,7 +3,7 @@ import { action } from "@storybook/addon-actions";
 import { Button } from "../app/javascript/components/shared/Button";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import styled from "styled-components";
-import { space } from "styled-system";
+import { space, layout, typography } from "styled-system";
 import { CodeBlockDiv, ContainerDiv, Divider, PropsList, RowDiv } from "./shared";
 
 export default { title: "Button" };
@@ -13,6 +13,35 @@ const actionFn = action("Button was clicked!");
 const ButtonDiv = styled.div`
   ${space}
 `;
+
+const HeightDiv = styled.div`
+  ${space}
+  ${layout}
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
+const HeightLine = styled.div`
+  height: 100%;
+  width: 6px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  margin-left: 3px;
+`;
+
+const HeightText = styled.p`
+  ${typography}
+`;
+
+const HeightDisplay = ({ size }) => (
+  <HeightDiv height={size} mr={2}>
+    <HeightText fontSize={"12px"}>{`${size}`}</HeightText>
+    <HeightLine />
+  </HeightDiv>
+);
 
 const propsList = [
   {
@@ -68,6 +97,7 @@ export const ButtonVariants = () => (
     />
     <h3>Primary</h3>
     <RowDiv mb={4}>
+      <HeightDisplay size={"40px"} />
       <ButtonDiv mr={"20px"}>
         <Button variant={"primary"} onClick={actionFn}>
           Normal
@@ -78,6 +108,7 @@ export const ButtonVariants = () => (
           Disabled
         </Button>
       </ButtonDiv>
+      <HeightDisplay size={"32px"} />
       <ButtonDiv mr={"20px"}>
         <Button variant={"primary"} onClick={null} small>
           Small
