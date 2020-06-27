@@ -4,12 +4,14 @@ class Api::IssuesController < Api::ApplicationController
   respond_to :json
 
   def index
-    @issues = policy_scope(Issue)
+    @issues = policy_scope(Issue).sort_by_priority_and_created_at_and_completed_at
     render json: @issues
   end
 
   def create 
-    @issue = Issue.create!(issue_params)
+    @issue = Issue.new({ description: params[:issue][:description], priority: params[:issue][:priority], user: current_user})
+    authorize @issue
+    @issue.save!
     render json: Issue.sort_by_priority_and_created_at_and_completed_at
   end
 
@@ -31,5 +33,6 @@ class Api::IssuesController < Api::ApplicationController
 
   def set_issue
     @issue = policy_scope(Issue).find(params[:id])
+    authorize @issue
   end
 end

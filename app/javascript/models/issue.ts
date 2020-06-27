@@ -5,7 +5,8 @@ export const IssueModel = types
   .props({
     id: types.optional(types.number, 0),
     description: types.maybeNull(types.string),
-    completedAt: types.maybeNull(types.string)
+    priority: types.maybeNull(types.string),
+    completedAt: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));

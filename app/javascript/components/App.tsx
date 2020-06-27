@@ -16,6 +16,7 @@ import { useMst } from "../setup/root";
 import { IIssueStore } from "../stores/issue-store";
 import { LoginForm } from "./domains/user/login-form";
 import { IKeyActivityStore } from "../stores/key-activity-store";
+import { ModalProvider } from "styled-react-modal";
 
 export interface IAppProps {
   userStore?: IUserStore;
@@ -29,23 +30,25 @@ export const App = observer(
     const loggedIn = sessionStore.loggedIn; //if logged in show switch
     return (
       <ThemeProvider theme={baseTheme}>
-        <GlobalStyles />
-        {loggedIn ? (
-          <>
-            <button onClick={() => sessionStore.logoutRequest()}>Logout</button>
-            <Switch>
-              <Route
-                exact
-                path={"/"}
-                render={() => {
-                  return <HomeContainer />;
-                }}
-              />
-            </Switch>
-          </>
-        ) : (
-          <LoginForm />
-        )}
+        <ModalProvider>
+          <GlobalStyles />
+          {loggedIn ? (
+            <>
+              <button onClick={() => sessionStore.logoutRequest()}>Logout</button>
+              <Switch>
+                <Route
+                  exact
+                  path={"/"}
+                  render={() => {
+                    return <HomeContainer />;
+                  }}
+                />
+              </Switch>
+            </>
+          ) : (
+            <LoginForm />
+          )}
+        </ModalProvider>
       </ThemeProvider>
     );
   },

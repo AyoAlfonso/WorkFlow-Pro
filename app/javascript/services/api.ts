@@ -53,5 +53,9 @@ export class Api {
     return this.client.delete("/users/sign_out");
   }
 
+  async createIssue(issueObject) {
+    return this.client.post("/issues", { issue: issueObject });
+  }
+
   //async setJWT(jwt) {}
 }
