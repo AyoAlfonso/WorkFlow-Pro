@@ -1,15 +1,18 @@
 import * as React from "react";
-import { HomeContainerBorders } from "./shared-components";
+import { HomeContainerBorders } from "../home/shared-components";
 import styled from "styled-components";
 import { useState } from "react";
 import { Icon } from "../../shared/Icon";
 import { baseTheme } from "../../../themes";
 import { color } from "styled-system";
 import { RoundButton } from "../../shared/Round-Button";
+import { Flex, Box } from "rebass";
+import { useMst } from "../../../setup/root";
 
-export const HomeHeaderBar = (): JSX.Element => {
+export const HeaderBar = (): JSX.Element => {
   const [openCreateDropdown, setOpenCreateDropdown] = useState<boolean>(false);
   const [openLynchPynDropdown, setOpenLynchPynDropdown] = useState<boolean>(false);
+  const { sessionStore } = useMst();
 
   const renderHeaderIcon = (iconName: string) => {
     const dropdownValue = iconName == "Plus" ? openCreateDropdown : openLynchPynDropdown;
@@ -56,26 +59,30 @@ export const HomeHeaderBar = (): JSX.Element => {
 
   return (
     <Container>
-      <ActionsContainer>
-        <RoundButton
-          style={{ marginLeft: "12px", zIndex: openCreateDropdown ? 2 : 0 }}
-          backgroundColor={openCreateDropdown ? "white" : "primary100"}
-          onClick={() => {
-            setOpenLynchPynDropdown(false);
-            setOpenCreateDropdown(!openCreateDropdown);
-          }}
-        >
-          {renderHeaderIcon("Plus")}
-        </RoundButton>
-        {openCreateDropdown && renderCreateDropdownModal()}
-        <RoundButton
-          style={{ marginLeft: "12px", zIndex: openLynchPynDropdown ? 2 : 0 }}
-          backgroundColor={openLynchPynDropdown ? "white" : "primary100"}
-          onClick={() => setOpenLynchPynDropdown(!openLynchPynDropdown)}
-        >
-          {renderHeaderIcon("Logo")}
-        </RoundButton>
-      </ActionsContainer>
+      <Flex>
+        <ActionsContainer>
+          <RoundButton
+            style={{ marginLeft: "12px", zIndex: openCreateDropdown ? 2 : 0 }}
+            backgroundColor={openCreateDropdown ? "white" : "primary100"}
+            onClick={() => {
+              setOpenLynchPynDropdown(false);
+              setOpenCreateDropdown(!openCreateDropdown);
+            }}
+          >
+            {renderHeaderIcon("Plus")}
+          </RoundButton>
+          {openCreateDropdown && renderCreateDropdownModal()}
+          <RoundButton
+            style={{ marginLeft: "12px", zIndex: openLynchPynDropdown ? 2 : 0 }}
+            backgroundColor={openLynchPynDropdown ? "white" : "primary100"}
+            onClick={() => setOpenLynchPynDropdown(!openLynchPynDropdown)}
+          >
+            {renderHeaderIcon("Logo")}
+          </RoundButton>
+        </ActionsContainer>
+        <Box mx="auto" />
+        <button onClick={() => sessionStore.logoutRequest()}>Logout</button>
+      </Flex>
     </Container>
   );
 };
@@ -83,6 +90,9 @@ export const HomeHeaderBar = (): JSX.Element => {
 const Container = styled(HomeContainerBorders)`
   margin-top: 40px;
   height: 80px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const ActionsContainer = styled.div`
