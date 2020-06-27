@@ -33,7 +33,7 @@ export const Colors = () => (
       })}
     </RowDiv>
     <h3>Mid Neutrals</h3>
-    <RowDiv>
+    <RowDiv mb={4}>
       {Object.entries(baseTheme.colors).map((color, index) => {
         if (index >= 6 && index < 14) {
           return (
@@ -61,7 +61,7 @@ export const Colors = () => (
       })}
     </RowDiv>
     <h3>Faded</h3>
-    <RowDiv>
+    <RowDiv mb={4}>
       {Object.entries(baseTheme.colors).map((color, index) => {
         if (index >= 20 && index < 26) {
           return (
