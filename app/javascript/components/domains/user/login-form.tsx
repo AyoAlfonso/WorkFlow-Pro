@@ -4,24 +4,11 @@ import React, { useState } from "react";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
 
+import { Button } from "../../shared/Button";
 import { Icon } from "../../shared/Icon";
 import { Flex, Box } from "rebass";
 import { Label, Input } from "../../shared/Input";
-
-//replace with shared button
 import styled from "styled-components";
-import { color, space, layout, typography } from "styled-system";
-const StyledButton = styled.button`
-${color}
-${space}
-${layout}
-${typography}
-height: 40px;
-width: 120px;
-color: ${props => props.theme.colors.peach};
-border-radius: 5px;
-text-align: center;
-`;
 
 const LogoHeaderDiv = styled.div`
   text-align: center;
@@ -54,9 +41,12 @@ export const LoginForm = observer(
               <Input name="email" onChange={e => setEmail(e.target.value)} />
               <Label>Password</Label>
               <Input name="password" type="password" onChange={e => setPassword(e.target.value)} />
-              <StyledButton bg={"primary100"} onClick={() => sessionStore.login(email, password)}>
+              <Button
+                variant={"primaryOutline"}
+                onClick={() => sessionStore.login(email, password)}
+              >
                 Login
-              </StyledButton>
+              </Button>
               <div>Forgot your password? (To be added)</div>
             </>
           )}
