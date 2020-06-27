@@ -41,10 +41,7 @@ export const LoginForm = observer(
               <Input name="email" onChange={e => setEmail(e.target.value)} />
               <Label>Password</Label>
               <Input name="password" type="password" onChange={e => setPassword(e.target.value)} />
-              <Button
-                variant={"primaryOutline"}
-                onClick={() => sessionStore.login(email, password)}
-              >
+              <Button small variant={"primary"} onClick={() => sessionStore.login(email, password)}>
                 Login
               </Button>
               <div>Forgot your password? (To be added)</div>
