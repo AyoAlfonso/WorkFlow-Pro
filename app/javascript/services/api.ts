@@ -57,5 +57,9 @@ export class Api {
     return this.client.post("/issues", { issue: issueObject });
   }
 
+  async updateIssueStatus(id, value) {
+    return this.client.post(`/issues/update_status`, { issue: { id, completed: value } });
+  }
+
   //async setJWT(jwt) {}
 }

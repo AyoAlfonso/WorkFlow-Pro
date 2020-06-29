@@ -20,6 +20,14 @@ class Api::IssuesController < Api::ApplicationController
     render json: Issue.sort_by_priority_and_created_at_and_completed_at
   end
 
+  def update_status
+    @issue = Issue.find(params[:issue][:id])
+    authorize @issue
+    completed_at_value = params[:issue][:completed] ? Time.now : nil
+    @issue.update(completed_at: completed_at_value)
+    render json: Issue.sort_by_priority_and_created_at_and_completed_at
+  end
+
   def destroy
     @issue.destroy!
     render json: { issue_id: @issue.id, status: :ok }
