@@ -96,8 +96,10 @@ export const PropsList = ({ propsList, styledSystemProps }: IPropsListProps) => 
             </ColorText>
           </RowDiv>
           <RowDiv mb={3}>
-            {styledSystemProps.map(prop => (
-              <ColorText color={baseTheme.colors.bali}>{prop}&nbsp; | &nbsp;</ColorText>
+            {styledSystemProps.map((prop, index) => (
+              <ColorText color={baseTheme.colors.bali}>
+                {prop}&nbsp; {index !== styledSystemProps.length - 1 && `|`} &nbsp;
+              </ColorText>
             ))}
           </RowDiv>
         </>

@@ -1,12 +1,15 @@
-import * as React from "react";
 import { action } from "@storybook/addon-actions";
-import { Button } from "../app/javascript/components/shared/Button";
+import { text, withKnobs } from "@storybook/addon-knobs";
+import * as React from "react";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import styled from "styled-components";
-import { space, layout, typography } from "styled-system";
+import { layout, space, typography } from "styled-system";
+import { Button } from "../app/javascript/components/shared/Button";
+import { Icon } from "../app/javascript/components/shared/Icon";
+import { RoundButton as RoundButtonComponent } from "../app/javascript/components/shared/Round-Button";
 import { CodeBlockDiv, ContainerDiv, Divider, PropsList, RowDiv } from "./shared";
 
-export default { title: "Button" };
+export default { title: "Buttons", decorators: [withKnobs] };
 
 const actionFn = action("Button was clicked!");
 
@@ -70,9 +73,9 @@ const propsList = [
   },
 ];
 
-export const ButtonVariants = () => (
+export const BaseButtonVariants = () => (
   <ContainerDiv>
-    <h1>Button Variants</h1>
+    <h1>Base Button Variants</h1>
     <CodeBlockDiv mb={"20px"}>
       <CopyBlock
         text={`
@@ -169,5 +172,22 @@ export const ButtonVariants = () => (
       </ButtonDiv>
     </RowDiv>
     <Divider />
+  </ContainerDiv>
+);
+
+export const RoundButton = () => (
+  <ContainerDiv pl={4}>
+    <h1>Round Button</h1>
+    <PropsList styledSystemProps={["color"]} />
+    <div>
+      <RoundButtonComponent onClick={actionFn}>
+        <Icon
+          icon={text("icon", "Plus")}
+          size={20}
+          iconColor={"primary100"}
+          style={{ marginLeft: "10px", marginTop: "10px" }}
+        />
+      </RoundButtonComponent>
+    </div>
   </ContainerDiv>
 );
