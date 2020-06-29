@@ -18,16 +18,27 @@ export const KeyActivityStoreModel = types
     },
   }))
   .actions(self => ({
-    fetchKeyActivities: flow(function*() {
+    fetchKeyActivities: flow(function* () {
       const response: ApiResponse<any> = yield self.environment.api.getKeyActivities();
       if (response.ok) {
         self.keyActivities = response.data;
       }
     }),
-    updateKeyActivityStatus: flow(function*(id) {
+    updateKeyActivityStatus: flow(function* (id) {
       //THIS IS VERY STUPID -> JUST TESTING IF THE RERENDER WORKS. MAKE A BACK END CALL HERE
       const response = self.keyActivities.filter(keyActivity => keyActivity.id !== id);
       self.keyActivities = response as any;
+    }),
+    createKeyActivity: flow(function* (keyActivityObject) {
+      const response: ApiResponse<any> = yield self.environment.api.createKeyActivity(
+        keyActivityObject,
+      );
+      if (response.ok) {
+        self.keyActivities = response.data;
+        return true;
+      } else {
+        return false;
+      }
     }),
   }))
   .actions(self => ({
@@ -36,7 +47,7 @@ export const KeyActivityStoreModel = types
     },
   }))
   .actions(self => ({
-    load: flow(function*() {
+    load: flow(function* () {
       self.reset();
       yield self.fetchKeyActivities();
     }),

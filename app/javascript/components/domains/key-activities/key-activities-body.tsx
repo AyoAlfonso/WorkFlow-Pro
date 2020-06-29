@@ -1,12 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Checkbox, Label } from "@rebass/forms";
 import { Icon } from "../../shared/Icon";
 import { color } from "styled-system";
 import { observer } from "mobx-react";
 import { baseTheme } from "../../../themes/base";
+import { CreateKeyActivityModal } from "./create-key-activity-modal";
 
 interface IKeyActivitiesBodyProps {
   showAllKeyActivities: boolean;
@@ -17,6 +18,7 @@ export const KeyActivitiesBody = observer(
     const { keyActivityStore } = useMst();
     const { showAllKeyActivities } = props;
     const { colors } = baseTheme;
+    const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
     const weeklyKeyActivities = keyActivityStore.weeklyKeyActivities;
     const masterKeyActivities = keyActivityStore.masterKeyActivities;
@@ -31,6 +33,8 @@ export const KeyActivitiesBody = observer(
           return <Icon icon={"Priority-High"} size={12} color={colors.cautionYellow} />;
         case "2":
           return <Icon icon={"Priority-Urgent"} size={12} color={colors.warningRed} />;
+        case "3":
+          return <Icon icon={"Priority-Frog"} size={12} color={colors.finePine} />;
         default:
           return <></>;
       }
@@ -65,7 +69,11 @@ export const KeyActivitiesBody = observer(
 
     return (
       <Container>
-        <AddNewKeyActivityContainer>
+        <CreateKeyActivityModal
+          createKeyActivityModalOpen={createKeyActivityModalOpen}
+          setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+        />
+        <AddNewKeyActivityContainer onClick={() => setCreateKeyActivityModalOpen(true)}>
           <AddNewKeyActivityPlus>
             <Icon icon={"Plus"} size={16} />
           </AddNewKeyActivityPlus>

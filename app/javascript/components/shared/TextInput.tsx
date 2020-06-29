@@ -7,14 +7,15 @@ interface ITextInputProps {
   textValue: string;
   setTextValue: React.Dispatch<React.SetStateAction<string>>;
   width?: string;
+  placeholder?: string;
 }
 
 export const TextInput = (props: ITextInputProps) => {
-  const { textValue, setTextValue, width } = props;
+  const { textValue, setTextValue, width, placeholder } = props;
 
   return (
     <StyledInput
-      placeholder="e.g. Still waiting on feedback"
+      placeholder={placeholder || "e.g. Still waiting on feedback"}
       value={textValue}
       sx={{ border: `1px solid ${baseTheme.colors.grey40}`, width: `${width}` }}
       onChange={e => setTextValue(e.target.value)}

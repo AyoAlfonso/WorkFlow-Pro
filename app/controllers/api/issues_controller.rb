@@ -12,12 +12,12 @@ class Api::IssuesController < Api::ApplicationController
     @issue = Issue.new({ description: params[:description], priority: params[:priority], user: current_user})
     authorize @issue
     @issue.save!
-    render json: Issue.sort_by_priority_and_created_at_and_completed_at
+    render json: policy_scope(Issue).sort_by_priority_and_created_at_and_completed_at
   end
 
   def update
     @issue.update(issue_params)
-    render json: Issue.sort_by_priority_and_created_at_and_completed_at
+    render json: policy_scope(Issue).sort_by_priority_and_created_at_and_completed_at
   end
 
   def update_status

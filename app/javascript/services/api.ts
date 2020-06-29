@@ -61,5 +61,9 @@ export class Api {
     return this.client.post(`/issues/update_status`, { id, completed: value });
   }
 
+  async createKeyActivity(keyActivityObject) {
+    return this.client.post("/key_activities", { keyActivityObject });
+  }
+
   //async setJWT(jwt) {}
 }
