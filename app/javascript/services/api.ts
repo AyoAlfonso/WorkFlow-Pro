@@ -62,7 +62,7 @@ export class Api {
   }
 
   async createKeyActivity(keyActivityObject) {
-    return this.client.post("/key_activities", { keyActivityObject });
+    return this.client.post("/key_activities", keyActivityObject);
   }
 
   //async setJWT(jwt) {}
