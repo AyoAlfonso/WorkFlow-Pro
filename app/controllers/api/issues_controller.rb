@@ -1,5 +1,5 @@
 class Api::IssuesController < Api::ApplicationController
-  before_action :set_issue, only: [:update, :destroy]
+  before_action :set_issue, only: [:update, :destroy, :update_status]
 
   respond_to :json
 
@@ -9,7 +9,7 @@ class Api::IssuesController < Api::ApplicationController
   end
 
   def create 
-    @issue = Issue.new({ description: params[:issue][:description], priority: params[:issue][:priority], user: current_user})
+    @issue = Issue.new({ description: params[:description], priority: params[:priority], user: current_user})
     authorize @issue
     @issue.save!
     render json: Issue.sort_by_priority_and_created_at_and_completed_at
@@ -21,9 +21,7 @@ class Api::IssuesController < Api::ApplicationController
   end
 
   def update_status
-    @issue = Issue.find(params[:issue][:id])
-    authorize @issue
-    completed_at_value = params[:issue][:completed] ? Time.now : nil
+    completed_at_value = params[:completed] ? Time.now : nil
     @issue.update(completed_at: completed_at_value)
     render json: Issue.sort_by_priority_and_created_at_and_completed_at
   end
