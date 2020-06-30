@@ -10,6 +10,7 @@ import { Flex, Box } from "rebass";
 import { useMst } from "../../../setup/root";
 import { CreateIssueModal } from "../issues/create-issue-modal";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
+import { Text } from "../../shared/Text";
 
 export const HeaderBar = (): JSX.Element => {
   const [openCreateDropdown, setOpenCreateDropdown] = useState<boolean>(false);
@@ -61,7 +62,7 @@ export const HeaderBar = (): JSX.Element => {
               disableFill={true}
             />
           </SelectionIconContainer>
-          <SelectionText>Add Issue</SelectionText>
+          <SelectionText style={{ marginTop: 0, marginBottom: 0 }}>Add Issue</SelectionText>
         </SelectionContainer>
         <SelectionContainer
           onClick={() => {
@@ -77,7 +78,7 @@ export const HeaderBar = (): JSX.Element => {
               disableFill={true}
             />
           </SelectionIconContainer>
-          <SelectionText>Create Task</SelectionText>
+          <SelectionText style={{ marginTop: 0, marginBottom: 0 }}>Create Task</SelectionText>
         </SelectionContainer>
 
         <SelectionContainer>
@@ -89,7 +90,7 @@ export const HeaderBar = (): JSX.Element => {
               disableFill={true}
             />
           </SelectionIconContainer>
-          <SelectionText>Send Invite</SelectionText>
+          <SelectionText style={{ marginTop: 0, marginBottom: 0 }}>Send Invite</SelectionText>
         </SelectionContainer>
       </DropdownContainer>
     );
@@ -162,10 +163,7 @@ const DropdownContainer = styled.div`
   padding-top: 60px;
 `;
 
-const SelectionText = styled.p`
-  margin-top: 0;
-  margin-bottom: 0;
-`;
+const SelectionText = styled(Text)``;
 
 const RefContainer = styled.div`
   display: flex;
