@@ -1,11 +1,12 @@
 import * as React from "react";
 import styled from "styled-components";
+import { useMst } from "../../../setup/root";
 import { Box } from "rebass";
 import { Icon } from "../../../components/shared/Icon";
 import { Text } from "../../../components/shared/Text";
 import { NavLink } from "react-router-dom";
 import { space, color } from "styled-system";
-import { string } from "prop-types";
+import { matchPath } from "react-router";
 
 const StyledSideNav = styled.div`
   position: fixed; /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
@@ -20,36 +21,71 @@ const StyledSideNav = styled.div`
   flex-direction: column;
 `;
 
-const StyledNavLink = styled(NavLink)`
-  ${color}
-  text-align: center;
-  align-item: center;
-  text-decoration: none;
-  margin: 16px;
-  a:link,
-  a:visited {
-    color: ${props => props.theme.colors.primary100};
-  }
-`;
-
-const IconBorder = styled.div`
-  box-shadow: 0px 3px 6px #00000029;
-  width: 48px;
-  height: 48px;
-  margin: auto;
-  align-time: center;
-`;
-
 type SideBarElementType = {
   marginTop?: string;
   margin?: string;
 };
 const SideBarElement = styled.div<SideBarElementType>`
   text-align: center;
-  align-tiems: center;
+  align-items: center;
   margin: ${props => props.margin || "32px"};
   margin-top: ${props => props.marginTop || "32px"};
 `;
+
+const StyledNavLink = styled(NavLink)`
+  ${color}
+  text-align: center;
+  align-item: center;
+  text-decoration: none;
+  margin: 16px;
+  &:link,
+  &:visited {
+    color: ${props => props.theme.colors.text};
+  }
+`;
+
+const IconBorder = styled.div`
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+interface StyledNavLinkChildrenActiveProps {
+  to: string;
+  icon: string;
+  children: any;
+  disabled?: boolean;
+}
+const StyledNavLinkChildrenActive = ({
+  to,
+  icon,
+  children,
+  disabled,
+}: StyledNavLinkChildrenActiveProps): JSX.Element => {
+  const { router } = useMst();
+  var pathMatch = matchPath(router.location.pathname, to);
+  var isActive = pathMatch ? (to == "/" ? pathMatch.isExact : true) : false;
+  console.log(isActive, pathMatch, to);
+  return isActive ? (
+    <StyledNavLink to={to} disabled={disabled}>
+      <IconBorder>
+        <Icon icon={icon} size={"2em"} iconColor={"primary100"} m={"auto"} />
+      </IconBorder>
+      <Text>{children}</Text>
+    </StyledNavLink>
+  ) : (
+    <StyledNavLink to={to} disabled={disabled}>
+      <IconBorder>
+        <Icon icon={icon} size={"2em"} iconColor={"grey40"} m={"auto"} />
+      </IconBorder>
+      <Text color={"grey40"}>{children}</Text>
+    </StyledNavLink>
+  );
+};
 
 export const SideNav = (): JSX.Element => {
   return (
@@ -58,41 +94,25 @@ export const SideNav = (): JSX.Element => {
         <Icon icon={"Logo"} size={"4em"} iconColor={"primary100"} />
       </SideBarElement>
 
-      <StyledNavLink to="/">
-        <IconBorder>
-          <Icon icon={"Home"} size={"2em"} iconColor={"primary100"} />
-        </IconBorder>
-        <Text fontSize={1}>Home</Text>
-      </StyledNavLink>
-      <StyledNavLink to="/team">
-        <IconBorder>
-          <Icon icon={"User"} size={"2em"} iconColor={"primary100"} />
-        </IconBorder>
-        <Text fontSize={1}>Team</Text>
-      </StyledNavLink>
-      <StyledNavLink to="/company">
-        <IconBorder>
-          <Icon icon={"Company"} size={"2em"} iconColor={"primary100"} />
-        </IconBorder>
-        <Text fontSize={1}>Company</Text>
-      </StyledNavLink>
-      <StyledNavLink to="/stats">
-        <IconBorder>
-          <Icon icon={"Stats"} size={"2em"} iconColor={"primary100"} />
-        </IconBorder>
-        <Text fontSize={1}>Stats</Text>
-      </StyledNavLink>
+      <StyledNavLinkChildrenActive to="/" icon={"Home"}>
+        Home
+      </StyledNavLinkChildrenActive>
 
-      <SideBarElement margin={"16px"} marginTop={"auto"}>
+      <StyledNavLinkChildrenActive to="/team" icon={"User"}>
+        Team
+      </StyledNavLinkChildrenActive>
+
+      <StyledNavLinkChildrenActive to="/company" icon={"Company"}>
+        Company
+      </StyledNavLinkChildrenActive>
+
+      <StyledNavLinkChildrenActive to="/goals" icon={"Stats"}>
+        Goals
+      </StyledNavLinkChildrenActive>
+
+      {/* <SideBarElement margin={"16px"} marginTop={"auto"}>
         <Icon icon={"Help"} size={"2em"} iconColor={"primary100"} />
-      </SideBarElement>
+      </SideBarElement> */}
     </StyledSideNav>
   );
 };
-
-// const Container = styled.div`
-//   margin-left: auto;
-//   margin-right: auto;
-//   width: 90%;
-//   margin-bottom: 50px;
-// `;

@@ -50,21 +50,18 @@ export const App = observer(
                   }}
                 />
                 <Route
-                  exact
                   path={"/team"}
                   render={() => {
                     return <Placeholder />;
                   }}
                 />
                 <Route
-                  exact
                   path={"/company"}
                   render={() => {
                     return <Placeholder />;
                   }}
                 />
                 <Route
-                  exact
                   path={"/goals"}
                   render={() => {
                     return <Placeholder />;
