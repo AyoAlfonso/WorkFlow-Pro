@@ -24,13 +24,14 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
       modalOpen={createKeyActivityModalOpen}
       setModalOpen={setCreateKeyActivityModalOpen}
       headerText="Key Activity"
+      width="35rem"
     >
       <Container>
         <FlexContainer>
           <TextInput
             textValue={KeyActivityDescription}
             setTextValue={setKeyActivityDescription}
-            width={"85%"}
+            width={"75%"}
             placeholder={"e.g. Review revenue projections"}
           />
           <UserImageContainer>
@@ -118,7 +119,8 @@ const StyledButton = styled(Button)`
 
 const UserImageContainer = styled.div`
   background-color: ${baseTheme.colors.grey20};
-  margin-left: 30px;
+  margin-left: auto;
+  margin-right: 20px;
   border-radius: 50px;
   height: 55px;
   width: 55px;

@@ -91,10 +91,9 @@ const Container = styled.div`
   border-left: ${props => `1px solid ${props.theme.colors.grey40}`};
 `;
 
-const AddNewKeyActivityPlus = styled.p`
-  ${color}
-  font-size: 14px;
-  color: grey80;
+const AddNewKeyActivityPlus = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
 `;
 
 const AddNewKeyActivityText = styled.p`

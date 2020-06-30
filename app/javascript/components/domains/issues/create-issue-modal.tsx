@@ -24,13 +24,14 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
       modalOpen={createIssueModalOpen}
       setModalOpen={setCreateIssueModalOpen}
       headerText="Issue"
+      width="35rem"
     >
       <Container>
         <FlexContainer>
           <TextInput
             textValue={issueDescription}
             setTextValue={setIssueDescription}
-            width={"85%"}
+            width={"75%"}
           />
           <UserImageContainer>
             <Icon
@@ -110,7 +111,7 @@ const StyledButton = styled(Button)`
 
 const UserImageContainer = styled.div`
   background-color: ${baseTheme.colors.grey20};
-  margin-left: 30px;
+  margin-left: auto;
   border-radius: 50px;
   height: 55px;
   width: 55px;
