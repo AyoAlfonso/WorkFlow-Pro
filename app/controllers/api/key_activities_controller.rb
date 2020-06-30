@@ -9,7 +9,6 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def create
-    binding.pry
     @key_activity = KeyActivity.new({ user: current_user, description: params[:description], complete: false, weekly_list: false })
     authorize @key_activity
     @key_activity.save!
