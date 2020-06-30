@@ -50,7 +50,7 @@ export const Colors = () => (
     <h3>Bright</h3>
     <RowDiv>
       {Object.entries(baseTheme.colors).map((color, index) => {
-        if (index >= 14 && index < 20) {
+        if (index >= 14 && index < 21) {
           return (
             <CenteredColumnDiv>
               <ColorBox color={color[1]}></ColorBox>
@@ -63,7 +63,7 @@ export const Colors = () => (
     <h3>Faded</h3>
     <RowDiv mb={4}>
       {Object.entries(baseTheme.colors).map((color, index) => {
-        if (index >= 20 && index < 26) {
+        if (index >= 21 && index < 28) {
           return (
             <CenteredColumnDiv>
               <ColorBox color={color[1]}></ColorBox>
@@ -77,7 +77,7 @@ export const Colors = () => (
     <h1>Utility</h1>
     <RowDiv>
       {Object.entries(baseTheme.colors).map((color, index) => {
-        if (index >= 26) {
+        if (index >= 28) {
           if (color[0] === "white") {
             return (
               <CenteredColumnDiv>
