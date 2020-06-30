@@ -8,10 +8,14 @@ import { color } from "styled-system";
 import { RoundButton } from "../../shared/Round-Button";
 import { Flex, Box } from "rebass";
 import { useMst } from "../../../setup/root";
+import { CreateIssueModal } from "../issues/create-issue-modal";
+import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 
 export const HeaderBar = (): JSX.Element => {
   const [openCreateDropdown, setOpenCreateDropdown] = useState<boolean>(false);
   const [openLynchPynDropdown, setOpenLynchPynDropdown] = useState<boolean>(false);
+  const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
+  const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
   const { sessionStore } = useMst();
   const dropdownRef = useRef(null);
 
@@ -43,7 +47,12 @@ export const HeaderBar = (): JSX.Element => {
   const renderCreateDropdownModal = () => {
     return (
       <DropdownContainer>
-        <SelectionContainer>
+        <SelectionContainer
+          onClick={() => {
+            setCreateIssueModalOpen(true);
+            setOpenCreateDropdown(false);
+          }}
+        >
           <SelectionIconContainer>
             <SelectionIcon
               icon={"Alert"}
@@ -54,7 +63,12 @@ export const HeaderBar = (): JSX.Element => {
           </SelectionIconContainer>
           <SelectionText>Add Issue</SelectionText>
         </SelectionContainer>
-        <SelectionContainer>
+        <SelectionContainer
+          onClick={() => {
+            setCreateKeyActivityModalOpen(true);
+            setOpenCreateDropdown(false);
+          }}
+        >
           <SelectionIconContainer>
             <SelectionIcon
               icon={"Tasks"}
@@ -109,6 +123,14 @@ export const HeaderBar = (): JSX.Element => {
         <Box mx="auto" />
         <button onClick={() => sessionStore.logoutRequest()}>Logout</button>
       </Flex>
+      <CreateIssueModal
+        createIssueModalOpen={createIssueModalOpen}
+        setCreateIssueModalOpen={setCreateIssueModalOpen}
+      />
+      <CreateKeyActivityModal
+        createKeyActivityModalOpen={createKeyActivityModalOpen}
+        setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+      />
     </Container>
   );
 };
