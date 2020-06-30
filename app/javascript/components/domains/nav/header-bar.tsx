@@ -1,18 +1,37 @@
 import * as React from "react";
 import { HomeContainerBorders } from "../home/shared-components";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Icon } from "../../shared/Icon";
 import { baseTheme } from "../../../themes";
 import { color } from "styled-system";
 import { RoundButton } from "../../shared/Round-Button";
 import { Flex, Box } from "rebass";
 import { useMst } from "../../../setup/root";
+import { CreateIssueModal } from "../issues/create-issue-modal";
+import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
+import { Text } from "../../shared/Text";
 
 export const HeaderBar = (): JSX.Element => {
   const [openCreateDropdown, setOpenCreateDropdown] = useState<boolean>(false);
   const [openLynchPynDropdown, setOpenLynchPynDropdown] = useState<boolean>(false);
+  const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
+  const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
   const { sessionStore } = useMst();
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenCreateDropdown(false);
+        setOpenLynchPynDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   const renderHeaderIcon = (iconName: string) => {
     const dropdownValue = iconName == "Plus" ? openCreateDropdown : openLynchPynDropdown;
@@ -29,29 +48,49 @@ export const HeaderBar = (): JSX.Element => {
   const renderCreateDropdownModal = () => {
     return (
       <DropdownContainer>
-        <SelectionContainer>
+        <SelectionContainer
+          onClick={() => {
+            setCreateIssueModalOpen(true);
+            setOpenCreateDropdown(false);
+          }}
+        >
           <SelectionIconContainer>
-            <Icon icon={"Alert"} size={20} iconColor={baseTheme.colors.white} disableFill={true} />
+            <SelectionIcon
+              icon={"Alert"}
+              size={20}
+              iconColor={baseTheme.colors.white}
+              disableFill={true}
+            />
           </SelectionIconContainer>
-          <SelectionTextContainer>Add Issue</SelectionTextContainer>
+          <SelectionText style={{ marginTop: 0, marginBottom: 0 }}>Add Issue</SelectionText>
         </SelectionContainer>
-        <SelectionContainer>
+        <SelectionContainer
+          onClick={() => {
+            setCreateKeyActivityModalOpen(true);
+            setOpenCreateDropdown(false);
+          }}
+        >
           <SelectionIconContainer>
-            <Icon icon={"Tasks"} size={20} iconColor={baseTheme.colors.white} disableFill={true} />
+            <SelectionIcon
+              icon={"Tasks"}
+              size={20}
+              iconColor={baseTheme.colors.white}
+              disableFill={true}
+            />
           </SelectionIconContainer>
-          Create Task
+          <SelectionText style={{ marginTop: 0, marginBottom: 0 }}>Create Task</SelectionText>
         </SelectionContainer>
 
         <SelectionContainer>
           <SelectionIconContainer>
-            <Icon
+            <SelectionIcon
               icon={"New-User"}
               size={20}
               iconColor={baseTheme.colors.white}
               disableFill={true}
             />
           </SelectionIconContainer>
-          Send Invite
+          <SelectionText style={{ marginTop: 0, marginBottom: 0 }}>Send Invite</SelectionText>
         </SelectionContainer>
       </DropdownContainer>
     );
@@ -61,17 +100,19 @@ export const HeaderBar = (): JSX.Element => {
     <Container>
       <Flex>
         <ActionsContainer>
-          <RoundButton
-            style={{ marginLeft: "12px", zIndex: openCreateDropdown ? 2 : 0 }}
-            backgroundColor={openCreateDropdown ? "white" : "primary100"}
-            onClick={() => {
-              setOpenLynchPynDropdown(false);
-              setOpenCreateDropdown(!openCreateDropdown);
-            }}
-          >
-            {renderHeaderIcon("Plus")}
-          </RoundButton>
-          {openCreateDropdown && renderCreateDropdownModal()}
+          <RefContainer ref={dropdownRef}>
+            <RoundButton
+              style={{ marginLeft: "12px", zIndex: openCreateDropdown ? 2 : 0 }}
+              backgroundColor={openCreateDropdown ? "white" : "primary100"}
+              onClick={() => {
+                setOpenLynchPynDropdown(false);
+                setOpenCreateDropdown(!openCreateDropdown);
+              }}
+            >
+              {renderHeaderIcon("Plus")}
+            </RoundButton>
+            {openCreateDropdown && renderCreateDropdownModal()}
+          </RefContainer>
           <RoundButton
             style={{ marginLeft: "12px", zIndex: openLynchPynDropdown ? 2 : 0 }}
             backgroundColor={openLynchPynDropdown ? "white" : "primary100"}
@@ -83,6 +124,14 @@ export const HeaderBar = (): JSX.Element => {
         <Box mx="auto" />
         <button onClick={() => sessionStore.logoutRequest()}>Logout</button>
       </Flex>
+      <CreateIssueModal
+        createIssueModalOpen={createIssueModalOpen}
+        setCreateIssueModalOpen={setCreateIssueModalOpen}
+      />
+      <CreateKeyActivityModal
+        createKeyActivityModalOpen={createKeyActivityModalOpen}
+        setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+      />
     </Container>
   );
 };
@@ -112,21 +161,38 @@ const DropdownContainer = styled.div`
   border-radius: 10px;
   border-top-left-radius: 25px;
   padding-top: 60px;
-  padding-left: 15px;
 `;
+
+const SelectionText = styled(Text)``;
+
+const RefContainer = styled.div`
+  display: flex;
+`;
+
+const SelectionIcon = styled(Icon)``;
 
 const SelectionContainer = styled.div`
   ${color}
   display: flex;
   color: white;
-  margin-top: 10px;
-  margin-bottom: 5px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  padding-left: 15px;
   &:hover {
     cursor: pointer;
+    background-color: white;
+    color: primary100;
+  }
+
+  &:hover ${SelectionText} {
+    color: ${props => props.theme.colors.primary100};
+  }
+
+  &:hover ${SelectionIcon} {
+    color: ${props => props.theme.colors.primary100};
   }
 `;
 
 const SelectionIconContainer = styled.div`
   width: 30px;
 `;
-const SelectionTextContainer = styled.div``;

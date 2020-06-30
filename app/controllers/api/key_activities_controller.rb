@@ -9,7 +9,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def create
-    @key_activity = KeyActivity.new({ user: current_user, description: params[:description], complete: false, weekly_list: false })
+    @key_activity = KeyActivity.new({ user: current_user, description: params[:description], priority: params[:priority], complete: false, weekly_list: false })
     authorize @key_activity
     @key_activity.save!
     render json: KeyActivity.sort_by_priority_and_created_at_date

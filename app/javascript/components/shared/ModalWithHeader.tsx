@@ -9,13 +9,14 @@ interface IModalWithHeaderProps {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   headerText?: string;
   children: any;
+  width?: string;
 }
 
 export const ModalWithHeader = (props: IModalWithHeaderProps): JSX.Element => {
-  const { modalOpen, setModalOpen, headerText, children } = props;
+  const { modalOpen, setModalOpen, headerText, children, width } = props;
 
   return (
-    <StyledModal isOpen={modalOpen}>
+    <StyledModal isOpen={modalOpen} style={{ width: width || "30rem" }}>
       <HeaderContainer>
         <Heading type={"h4"} color={"primary100"} m={3} mb={2}>
           {headerText}

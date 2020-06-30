@@ -8,30 +8,31 @@ import { Button } from "rebass";
 import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";
 
-interface ICreateIssueModalProps {
-  createIssueModalOpen: boolean;
-  setCreateIssueModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+interface ICreateKeyActivityModalProps {
+  createKeyActivityModalOpen: boolean;
+  setCreateKeyActivityModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => {
-  const { issueStore } = useMst();
-  const { createIssueModalOpen, setCreateIssueModalOpen } = props;
-  const [issueDescription, setIssueDescription] = useState<string>("");
+export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX.Element => {
+  const { keyActivityStore } = useMst();
+  const { createKeyActivityModalOpen, setCreateKeyActivityModalOpen } = props;
+  const [KeyActivityDescription, setKeyActivityDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
 
   return (
     <ModalWithHeader
-      modalOpen={createIssueModalOpen}
-      setModalOpen={setCreateIssueModalOpen}
-      headerText="Issue"
+      modalOpen={createKeyActivityModalOpen}
+      setModalOpen={setCreateKeyActivityModalOpen}
+      headerText="Key Activity"
       width="35rem"
     >
       <Container>
         <FlexContainer>
           <TextInput
-            textValue={issueDescription}
-            setTextValue={setIssueDescription}
+            textValue={KeyActivityDescription}
+            setTextValue={setKeyActivityDescription}
             width={"75%"}
+            placeholder={"e.g. Review revenue projections"}
           />
           <UserImageContainer>
             <Icon
@@ -45,15 +46,15 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
         <FlexContainer>
           <StyledButton
             onClick={() =>
-              issueStore
-                .createIssue({
-                  description: issueDescription,
+              keyActivityStore
+                .createKeyActivity({
+                  description: KeyActivityDescription,
                   priority: selectedPriority,
                 })
                 .then(result => {
                   if (result) {
-                    setIssueDescription("");
-                    setCreateIssueModalOpen(false);
+                    setKeyActivityDescription("");
+                    setCreateKeyActivityModalOpen(false);
                   }
                 })
             }
@@ -73,6 +74,13 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
                 icon={"Priority-Urgent"}
                 size={"25px"}
                 iconColor={selectedPriority == 2 ? "warningRed" : "grey60"}
+              />
+            </IconContainer>
+            <IconContainer onClick={() => setSelectedPriority(selectedPriority == 3 ? 0 : 3)}>
+              <Icon
+                icon={"Priority-Frog"}
+                size={"25px"}
+                iconColor={selectedPriority == 3 ? "finePine" : "grey60"}
               />
             </IconContainer>
           </PriorityContainer>
@@ -112,6 +120,7 @@ const StyledButton = styled(Button)`
 const UserImageContainer = styled.div`
   background-color: ${baseTheme.colors.grey20};
   margin-left: auto;
+  margin-right: 20px;
   border-radius: 50px;
   height: 55px;
   width: 55px;

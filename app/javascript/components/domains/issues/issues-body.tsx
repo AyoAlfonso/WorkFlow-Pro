@@ -81,10 +81,9 @@ const Container = styled.div`
   padding: 0px 0px 15px 10px;
 `;
 
-const AddNewIssuePlus = styled.p`
-  ${color}
-  font-size: 14px;
-  color: grey80;
+const AddNewIssuePlus = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
 `;
 
 const AddNewIssueText = styled.p`
