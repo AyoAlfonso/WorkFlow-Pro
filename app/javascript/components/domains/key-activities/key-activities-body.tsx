@@ -29,11 +29,11 @@ export const KeyActivitiesBody = observer(
 
     const renderPriorityIcon = (priority: string) => {
       switch (priority) {
-        case "1":
+        case "medium":
           return <Icon icon={"Priority-High"} size={12} color={colors.cautionYellow} />;
-        case "2":
+        case "high":
           return <Icon icon={"Priority-Urgent"} size={12} color={colors.warningRed} />;
-        case "3":
+        case "frog":
           return <Icon icon={"Priority-Frog"} size={12} color={colors.finePine} />;
         default:
           return <></>;
