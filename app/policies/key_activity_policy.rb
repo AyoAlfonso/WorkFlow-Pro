@@ -10,6 +10,18 @@ class KeyActivityPolicy < ApplicationPolicy
     true
   end
 
+  def create?
+    true
+  end
+
+  def update?
+    @key_activity.user == @user
+  end
+
+  def destroy?
+    @key_activity.user == @user
+  end
+
   class Scope
     attr_reader :user, :scope
 
