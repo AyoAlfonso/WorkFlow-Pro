@@ -54,7 +54,11 @@ export class Api {
   }
 
   async createIssue(issueObject) {
-    return this.client.post("/issues", { issue: issueObject });
+    return this.client.post("/issues", issueObject);
+  }
+
+  async updateIssueStatus(id, value) {
+    return this.client.post(`/issues/update_status`, { id, completed: value });
   }
 
   //async setJWT(jwt) {}

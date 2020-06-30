@@ -45,11 +45,8 @@ export const IssuesBody = observer(
             <Checkbox
               key={issue["id"]}
               checked={issue["completedAt"]}
-              onClick={() => {
-                console.log("TODO: MAKE API CALL TO UPDATE STATUS OF ISSUE");
-                setTimeout(() => {
-                  issueStore.updateIssueStatus(issue.id);
-                }, 1000);
+              onClick={e => {
+                issueStore.updateIssueStatus(issue.id, e.target.checked);
               }}
             />
           </CheckboxContainer>

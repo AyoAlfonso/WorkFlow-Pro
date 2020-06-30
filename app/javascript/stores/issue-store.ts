@@ -24,10 +24,14 @@ export const IssueStoreModel = types
         self.issues = response.data;
       }
     }),
-    updateIssueStatus: flow(function* (id) {
-      //THIS IS VERY STUPID -> JUST TESTING IF THE RERENDER WORKS. MAKE A BACK END CALL HERE
-      const response = self.issues.filter(issue => issue.id !== id);
-      self.issues = response as any;
+    updateIssueStatus: flow(function* (id, value) {
+      const response: ApiResponse<any> = yield self.environment.api.updateIssueStatus(id, value);
+      if (response.ok) {
+        self.issues = response.data;
+        return true;
+      } else {
+        return false;
+      }
     }),
     createIssue: flow(function* (issueObject) {
       const response: ApiResponse<any> = yield self.environment.api.createIssue(issueObject);
