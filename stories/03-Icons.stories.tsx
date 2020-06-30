@@ -226,6 +226,14 @@ export const Icons = () => (
         <Icon icon={"Weekly-Milestones"} size={"2em"} />
         <TextCenteredDiv>Weekly-Milestones</TextCenteredDiv>
       </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Start"} size={"2em"} />
+        <TextCenteredDiv>Start</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Stop"} size={"2em"} />
+        <TextCenteredDiv>Stop</TextCenteredDiv>
+      </CenteredColumnDiv>
     </RowDiv>
     <Divider />
     <RowDiv>
@@ -261,7 +269,7 @@ export const Icons = () => (
         <TextCenteredDiv>Priority-Urgent</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Frog-Priority"} size={"2em"} iconColor={"#388004"} />
+        <Icon icon={"Priority-Frog"} size={"2em"} iconColor={"frog"} />
         <TextCenteredDiv>Frog-Priority</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
@@ -269,8 +277,24 @@ export const Icons = () => (
         <TextCenteredDiv>AM-Check-in</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"PM-Check-in"} size={"2em"} iconColor={"primary40"} />
-        <TextCenteredDiv>PM-Check-in</TextCenteredDiv>
+        <Icon icon={"Check-in"} size={"2em"} iconColor={"primary40"} />
+        <TextCenteredDiv>Check-in</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"In-Office"} size={"2em"} iconColor={"finePine"} />
+        <TextCenteredDiv>In-Office</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"WFH"} size={"2em"} iconColor={"primary100"} />
+        <TextCenteredDiv>WFH</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Half-Day"} size={"2em"} iconColor={"cautionYellow"} />
+        <TextCenteredDiv>Half-Day</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"No-Check-in"} size={"2em"} iconColor={"warningRed"} />
+        <TextCenteredDiv>No-Check-in</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
   </ContainerDiv>
