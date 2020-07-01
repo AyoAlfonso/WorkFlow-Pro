@@ -1,5 +1,5 @@
 class Api::KeyActivitiesController < Api::ApplicationController
-  before_action :set_key_activity, only: [:update, :destroy]
+  before_action :set_key_activity, only: [:update, :update_status, :destroy]
 
   respond_to :json
 
@@ -17,6 +17,12 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def update
     @key_activity.update(key_activity_params)
+    render json: KeyActivity.sort_by_priority_and_created_at_date
+  end
+
+  def update_status
+    completed_at_value = params[:completed] ? Time.now : nil
+    @key_activity.update(completed_at: completed_at_value)
     render json: KeyActivity.sort_by_priority_and_created_at_date
   end
 

@@ -18,6 +18,10 @@ class KeyActivityPolicy < ApplicationPolicy
     @key_activity.user == @user
   end
 
+  def update_status?
+    @key_activity.user == @user
+  end
+
   def destroy?
     @key_activity.user == @user
   end

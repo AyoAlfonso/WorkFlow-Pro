@@ -26,6 +26,7 @@ Rails.application.routes.draw do
 
     #key activities
     resources :key_activities, only: [:index, :create, :update, :destroy]
+    post '/key_activities/update_status', to: "key_activities#update_status"
   end
   
 

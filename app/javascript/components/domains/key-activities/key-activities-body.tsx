@@ -47,12 +47,9 @@ export const KeyActivitiesBody = observer(
           <CheckboxContainer key={keyActivity["id"]}>
             <Checkbox
               key={keyActivity["id"]}
-              checked={keyActivity["completedAt"]}
-              onClick={() => {
-                console.log("TODO: MAKE API CALL TO UPDATE STATUS OF KEY ACTIVITY");
-                setTimeout(() => {
-                  keyActivityStore.updateKeyActivityStatus(keyActivity.id);
-                }, 1000);
+              checked={keyActivity["completedAt"] ? true : false}
+              onChange={e => {
+                keyActivityStore.updateKeyActivityStatus(keyActivity.id, e.target.checked);
               }}
             />
           </CheckboxContainer>
