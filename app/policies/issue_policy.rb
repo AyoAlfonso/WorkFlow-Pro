@@ -22,10 +22,6 @@ class IssuePolicy < ApplicationPolicy
     @issue.user == @user
   end
 
-  def update_status?
-    @issue.user == @user
-  end
-
   class Scope
     attr_reader :user, :scope
 

@@ -17,7 +17,6 @@ export const KeyActivitiesHeader = (props: KeyActivitiesHeaderProps): JSX.Elemen
       <FilterContainer>
         <FilterOptions
           onClick={() => setShowAllKeyActivities(false)}
-          //@ts-ignore
           mr={"15px"}
           color={!showAllKeyActivities ? "primary100" : "grey40"}
         >
@@ -66,10 +65,14 @@ const FilterContainer = styled.div`
   align-items: center;
 `;
 
-const FilterOptions = styled.p`
+type FilterOptionsType = {
+  mr?: string;
+};
+
+const FilterOptions = styled.p<FilterOptionsType>`
   ${space}
   ${color}
-  font-size: 14px;
+  font-size: 12px;
   cursor: pointer;
 `;
 

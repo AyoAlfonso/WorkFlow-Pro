@@ -44,9 +44,9 @@ export const IssuesBody = observer(
           <CheckboxContainer key={issue["id"]}>
             <Checkbox
               key={issue["id"]}
-              checked={issue["completedAt"]}
-              onClick={e => {
-                issueStore.updateIssueStatus(issue.id, e.target.checked);
+              checked={issue["completedAt"] ? true : false}
+              onChange={e => {
+                issueStore.updateIssueStatus(issue, e.target.checked);
               }}
             />
           </CheckboxContainer>

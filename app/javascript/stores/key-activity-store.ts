@@ -24,10 +24,17 @@ export const KeyActivityStoreModel = types
         self.keyActivities = response.data;
       }
     }),
-    updateKeyActivityStatus: flow(function* (id) {
-      //THIS IS VERY STUPID -> JUST TESTING IF THE RERENDER WORKS. MAKE A BACK END CALL HERE
-      const response = self.keyActivities.filter(keyActivity => keyActivity.id !== id);
-      self.keyActivities = response as any;
+    updateKeyActivityStatus: flow(function* (keyActivity, value) {
+      const response: ApiResponse<any> = yield self.environment.api.updateKeyActivityStatus(
+        keyActivity,
+        value,
+      );
+      if (response.ok) {
+        self.keyActivities = response.data;
+        return true;
+      } else {
+        return false;
+      }
     }),
     createKeyActivity: flow(function* (keyActivityObject) {
       const response: ApiResponse<any> = yield self.environment.api.createKeyActivity(

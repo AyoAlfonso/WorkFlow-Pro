@@ -16,7 +16,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def update
-    @key_activity.update(key_activity_params)
+    @key_activity.update(key_activity_params.merge(completed_at: params[:completed] ? Time.now : nil))
     render json: KeyActivity.sort_by_priority_and_created_at_date
   end
 

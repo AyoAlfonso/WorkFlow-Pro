@@ -1,5 +1,5 @@
 class Api::IssuesController < Api::ApplicationController
-  before_action :set_issue, only: [:update, :destroy, :update_status]
+  before_action :set_issue, only: [:update, :destroy]
 
   respond_to :json
 
@@ -16,14 +16,8 @@ class Api::IssuesController < Api::ApplicationController
   end
 
   def update
-    @issue.update(issue_params)
+    @issue.update(issue_params.merge(completed_at: params[:completed] ? Time.now : nil))
     render json: policy_scope(Issue).sort_by_priority_and_created_at_and_completed_at
-  end
-
-  def update_status
-    completed_at_value = params[:completed] ? Time.now : nil
-    @issue.update(completed_at: completed_at_value)
-    render json: Issue.sort_by_priority_and_created_at_and_completed_at
   end
 
   def destroy
