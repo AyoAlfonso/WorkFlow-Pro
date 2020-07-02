@@ -30,8 +30,6 @@ export const KeyActivityStoreModel = types
         value,
       );
       if (response.ok) {
-        console.log("response data", response.data);
-
         self.keyActivities = response.data;
         return true;
       } else {
