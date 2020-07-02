@@ -10,6 +10,7 @@ import { IUserStore } from "../stores/user-store";
 import {} from "styled-components/cssprop";
 import { baseTheme } from "../themes/base";
 import { GlobalStyles } from "./global-styles";
+
 // components
 import { HomeContainer } from "./domains/home/home-container";
 import { useMst } from "../setup/root";

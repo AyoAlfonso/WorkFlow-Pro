@@ -21,8 +21,8 @@ function setupReactotron() {
       .use(apisaucePlugin())
       .use(
         mst({
-          filter: x => !x.name.endsWith("@APPLY_SNAPSHOT")
-        })
+          filter: x => !x.name.endsWith("@APPLY_SNAPSHOT"),
+        }),
       )
       .connect()
       .clear();

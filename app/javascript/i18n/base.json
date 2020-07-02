@@ -1,0 +1,22 @@
+{
+  "en": {
+    "translations": {
+      "profile": {
+        "logout": "Log Out",
+        "greeting": "Hey {{name}}",
+        "form": {
+          "email": "E-mail",
+          "password": "Password",
+          "login": "Login",
+          "forgot": "Forgot your password? (To be added)"
+        }
+      },
+      "navigation": {
+        "home": "Home",
+        "team": "Team",
+        "company": "Company",
+        "goals": "Goals"
+      }
+    }
+  }
+}

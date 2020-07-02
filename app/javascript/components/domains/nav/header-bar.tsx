@@ -11,6 +11,7 @@ import { useMst } from "../../../setup/root";
 import { CreateIssueModal } from "../issues/create-issue-modal";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 import { Text } from "../../shared/Text";
+import { useTranslation } from "react-i18next";
 
 export const HeaderBar = (): JSX.Element => {
   const [openCreateDropdown, setOpenCreateDropdown] = useState<boolean>(false);
@@ -32,6 +33,7 @@ export const HeaderBar = (): JSX.Element => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dropdownRef]);
+  const { t } = useTranslation();
 
   const renderHeaderIcon = (iconName: string) => {
     const dropdownValue = iconName == "Plus" ? openCreateDropdown : openLynchPynDropdown;
@@ -122,7 +124,9 @@ export const HeaderBar = (): JSX.Element => {
           </RoundButton>
         </ActionsContainer>
         <Box mx="auto" />
-        <button onClick={() => sessionStore.logoutRequest()}>Logout</button>
+        <Box>
+          <button onClick={() => sessionStore.logoutRequest()}>{t("profile.logout")}</button>
+        </Box>
       </Flex>
       <CreateIssueModal
         createIssueModalOpen={createIssueModalOpen}

@@ -4,9 +4,11 @@ import { useMst } from "../../../setup/root";
 import { Box } from "rebass";
 import { Icon } from "../../../components/shared/Icon";
 import { Text } from "../../../components/shared/Text";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { space, color } from "styled-system";
 import { matchPath } from "react-router";
+
+import { useTranslation } from "react-i18next";
 
 const StyledSideNav = styled.div`
   position: fixed; /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
@@ -69,7 +71,7 @@ const StyledNavLinkChildrenActive = ({
   const { router } = useMst();
   var pathMatch = matchPath(router.location.pathname, to);
   var isActive = pathMatch ? (to == "/" ? pathMatch.isExact : true) : false;
-  console.log(isActive, pathMatch, to);
+
   return isActive ? (
     <StyledNavLink to={to} disabled={disabled}>
       <IconBorder>
@@ -88,6 +90,7 @@ const StyledNavLinkChildrenActive = ({
 };
 
 export const SideNav = (): JSX.Element => {
+  const { t } = useTranslation();
   return (
     <StyledSideNav>
       <SideBarElement>
@@ -95,19 +98,19 @@ export const SideNav = (): JSX.Element => {
       </SideBarElement>
 
       <StyledNavLinkChildrenActive to="/" icon={"Home"}>
-        Home
+        {t("navigation.home")}
       </StyledNavLinkChildrenActive>
 
       <StyledNavLinkChildrenActive to="/team" icon={"User"}>
-        Team
+        {t("navigation.team")}
       </StyledNavLinkChildrenActive>
 
       <StyledNavLinkChildrenActive to="/company" icon={"Company"}>
-        Company
+        {t("navigation.company")}
       </StyledNavLinkChildrenActive>
 
       <StyledNavLinkChildrenActive to="/goals" icon={"Stats"}>
-        Goals
+        {t("navigation.goals")}
       </StyledNavLinkChildrenActive>
 
       {/* <SideBarElement margin={"16px"} marginTop={"auto"}>

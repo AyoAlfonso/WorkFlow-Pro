@@ -9,6 +9,7 @@ import { Icon } from "../../shared/Icon";
 import { Flex, Box } from "rebass";
 import { Label, Input } from "../../shared/Input";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 
 const LogoHeaderDiv = styled.div`
   text-align: center;
@@ -19,6 +20,7 @@ export const LoginForm = observer(
     const { sessionStore } = useMst();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const { t } = useTranslation();
 
     return (
       <Flex
@@ -37,14 +39,14 @@ export const LoginForm = observer(
               <LogoHeaderDiv>
                 <Icon icon={"Logo"} size={"14em"} iconColor={"primary100"} paddingBottom={"15px"} />
               </LogoHeaderDiv>
-              <Label htmlFor="email">E-mail</Label>
+              <Label htmlFor="email">{t("profile.form.email")}</Label>
               <Input name="email" onChange={e => setEmail(e.target.value)} />
-              <Label>Password</Label>
+              <Label>{t("profile.form.password")}</Label>
               <Input name="password" type="password" onChange={e => setPassword(e.target.value)} />
               <Button small variant={"primary"} onClick={() => sessionStore.login(email, password)}>
-                Login
+                {t("profile.form.login")}
               </Button>
-              <div>Forgot your password? (To be added)</div>
+              <div>{t("profile.form.forgot")}</div>
             </>
           )}
         </Box>
