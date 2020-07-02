@@ -24,8 +24,8 @@ export const IssueStoreModel = types
         self.issues = response.data;
       }
     }),
-    updateIssueStatus: flow(function* (id, value) {
-      const response: ApiResponse<any> = yield self.environment.api.updateIssueStatus(id, value);
+    updateIssueStatus: flow(function* (issue, value) {
+      const response: ApiResponse<any> = yield self.environment.api.updateIssueStatus(issue, value);
       if (response.ok) {
         self.issues = response.data;
         return true;

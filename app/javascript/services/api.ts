@@ -57,16 +57,18 @@ export class Api {
     return this.client.post("/issues", issueObject);
   }
 
-  async updateIssueStatus(id, value) {
-    return this.client.post(`/issues/update_status`, { id, completed: value });
+  async updateIssueStatus(issue, value) {
+    return this.client.patch(`/issues/${issue.id}`, { completed: value });
   }
 
   async createKeyActivity(keyActivityObject) {
     return this.client.post("/key_activities", keyActivityObject);
   }
 
-  async updateKeyActivityStatus(id, value) {
-    return this.client.post(`/key_activities/update_status`, { id, completed: value });
+  async updateKeyActivityStatus(keyActivity, value) {
+    return this.client.patch(`/key_activities/${keyActivity.id}`, {
+      completed: value,
+    });
   }
 
   //async setJWT(jwt) {}

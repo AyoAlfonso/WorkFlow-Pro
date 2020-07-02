@@ -24,9 +24,9 @@ export const KeyActivityStoreModel = types
         self.keyActivities = response.data;
       }
     }),
-    updateKeyActivityStatus: flow(function* (id, value) {
+    updateKeyActivityStatus: flow(function* (keyActivity, value) {
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivityStatus(
-        id,
+        keyActivity,
         value,
       );
       if (response.ok) {

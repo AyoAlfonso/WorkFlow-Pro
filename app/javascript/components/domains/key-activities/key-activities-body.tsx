@@ -49,7 +49,7 @@ export const KeyActivitiesBody = observer(
               key={keyActivity["id"]}
               checked={keyActivity["completedAt"] ? true : false}
               onChange={e => {
-                keyActivityStore.updateKeyActivityStatus(keyActivity.id, e.target.checked);
+                keyActivityStore.updateKeyActivityStatus(keyActivity, e.target.checked);
               }}
             />
           </CheckboxContainer>
