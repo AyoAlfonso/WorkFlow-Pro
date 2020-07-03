@@ -7,6 +7,8 @@ import { Icon } from "../../shared/icon";
 import { Button } from "rebass";
 import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";
+import { UserDefaultIcon } from "../../shared/user-default-icon";
+import * as R from "ramda";
 
 interface ICreateKeyActivityModalProps {
   createKeyActivityModalOpen: boolean;
@@ -14,7 +16,7 @@ interface ICreateKeyActivityModalProps {
 }
 
 export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX.Element => {
-  const { keyActivityStore } = useMst();
+  const { keyActivityStore, sessionStore } = useMst();
   const { createKeyActivityModalOpen, setCreateKeyActivityModalOpen } = props;
   const [KeyActivityDescription, setKeyActivityDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
@@ -34,14 +36,10 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             width={"75%"}
             placeholder={"e.g. Review revenue projections"}
           />
-          <UserImageContainer>
-            <Icon
-              icon={"User"}
-              size={"35px"}
-              iconColor={"grey60"}
-              style={{ marginLeft: "9px", marginTop: "9px" }}
-            />
-          </UserImageContainer>
+          <UserDefaultIcon
+            firstName={R.path(["profile", "firstName"], sessionStore)}
+            lastName={R.path(["profile", "lastName"], sessionStore)}
+          />
         </FlexContainer>
         <FlexContainer>
           <StyledButton
