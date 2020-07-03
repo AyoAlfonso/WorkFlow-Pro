@@ -14,14 +14,18 @@ export const AccountProfile = (): JSX.Element => {
   const { t } = useTranslation();
 
   return (
-    <Box sx={{ minWidth: "20px", margin: "auto", border: "1" }}>
-      <Label htmlFor="email">{t("profile.profileUpdateForm.email")}</Label>
-      <Input name="email" onChange={e => setEmail(e.target.value)} value={email} />
-      <Label htmlFor="firstName">{t("profile.profileUpdateForm.firstName")}</Label>
-      <Input name="firstName" onChange={e => setFirstName(e.target.value)} value={firstName} />
-      <Label htmlFor="lastName">{t("profile.profileUpdateForm.lastName")}</Label>
-      <Input name="lastName" onChange={e => setLastName(e.target.value)} value={lastName} />
-
+    <Box sx={{ minWidth: "200px", maxWidth: "1000px", margin: "auto", border: "1" }}>
+      <Box>
+        <Label htmlFor="email">{t("profile.profileUpdateForm.email")}</Label>
+        <Input name="email" onChange={e => setEmail(e.target.value)} value={email} />
+        <Label htmlFor="firstName">{t("profile.profileUpdateForm.firstName")}</Label>
+        <Input name="firstName" onChange={e => setFirstName(e.target.value)} value={firstName} />
+        <Label htmlFor="lastName">{t("profile.profileUpdateForm.lastName")}</Label>
+        <Input name="lastName" onChange={e => setLastName(e.target.value)} value={lastName} />
+      </Box>
+      <Box>
+        <img src={sessionStore.profile.avatarUrl} width="256" height="256" />
+      </Box>
       <Button small variant={"primary"} onClick={() => {}}>
         {t("general.save")}
       </Button>
