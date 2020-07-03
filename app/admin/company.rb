@@ -57,7 +57,7 @@ ActiveAdmin.register Company do
       f.input :rallying_cry, input_html: { rows: 5 }
     end
     f.inputs do
-      f.inputs "Core Four", for: [:core_four, f.object.core_four], heading: false, allow_destroy: true, new_record: false do |cf|
+      f.has_many :core_four, heading: 'Core Four', allow_destroy: false, new_record: false do |cf|
         cf.input :core_1, input_html: { rows: 5 }
         cf.input :core_2, input_html: { rows: 5 }
         cf.input :core_3, input_html: { rows: 5 }
