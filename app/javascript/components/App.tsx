@@ -14,14 +14,24 @@ import { GlobalStyles } from "./global-styles";
 // components
 import { HomeContainer } from "./domains/home/home-container";
 import { useMst } from "../setup/root";
+import styled from "styled-components";
 import { IIssueStore } from "../stores/issue-store";
 import { LoginForm } from "./domains/user/login-form";
 import { IKeyActivityStore } from "../stores/key-activity-store";
 import { ModalProvider } from "styled-react-modal";
 
+import { AccountabilityChart } from "./domains/company/accountability-chart";
+
 import { HeaderBar } from "./domains/nav/header-bar";
 import { SideNav } from "./domains/nav/side-nav";
 import { Placeholder } from "./shared/Placeholder";
+
+const Container = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  margin-bottom: 50px;
+`;
 
 export interface IAppProps {
   userStore?: IUserStore;
@@ -42,33 +52,35 @@ export const App = observer(
               <SideNav />
               <HeaderBar />
 
-              <Switch>
-                <Route
-                  exact
-                  path={"/"}
-                  render={() => {
-                    return <HomeContainer />;
-                  }}
-                />
-                <Route
-                  path={"/team"}
-                  render={() => {
-                    return <Placeholder />;
-                  }}
-                />
-                <Route
-                  path={"/company"}
-                  render={() => {
-                    return <Placeholder />;
-                  }}
-                />
-                <Route
-                  path={"/goals"}
-                  render={() => {
-                    return <Placeholder />;
-                  }}
-                />
-              </Switch>
+              <Container>
+                <Switch>
+                  <Route
+                    exact
+                    path={"/"}
+                    render={() => {
+                      return <HomeContainer />;
+                    }}
+                  />
+                  <Route
+                    path={"/team"}
+                    render={() => {
+                      return <Placeholder />;
+                    }}
+                  />
+                  <Route
+                    path={"/company"}
+                    render={() => {
+                      return <AccountabilityChart />;
+                    }}
+                  />
+                  <Route
+                    path={"/goals"}
+                    render={() => {
+                      return <Placeholder />;
+                    }}
+                  />
+                </Switch>
+              </Container>
             </>
           ) : (
             <LoginForm />
