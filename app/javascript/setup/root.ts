@@ -21,6 +21,9 @@ const initialState = {
   keyActivityStore: {
     keyActivities: [],
   },
+  companyStore: {
+    company: null,
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);

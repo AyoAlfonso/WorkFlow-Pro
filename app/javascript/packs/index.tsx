@@ -10,6 +10,8 @@ import { App } from "../components/App";
 import { rootStore, Provider } from "../setup/root";
 import { getEnv } from "mobx-state-tree";
 
+import "../i18n/i18n";
+
 document.addEventListener("DOMContentLoaded", () => {
   ReactDOM.render(
     <Provider value={rootStore}>
@@ -17,6 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <App />
       </Router>
     </Provider>,
-    document.getElementById("root")
+    document.getElementById("root"),
   );
 });

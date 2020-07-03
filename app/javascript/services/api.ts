@@ -49,6 +49,10 @@ export class Api {
     return this.client.get("/profile");
   }
 
+  async getCompany(companyId) {
+    return this.client.get(`/companies/${companyId}`);
+  }
+
   async signOut() {
     return this.client.delete("/users/sign_out");
   }

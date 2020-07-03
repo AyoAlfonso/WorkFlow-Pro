@@ -3,18 +3,20 @@ import { path } from "ramda";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
+import { useTranslation } from "react-i18next";
 
 export const HomePersonalStatus = observer(
   (): JSX.Element => {
     const { sessionStore } = useMst();
+    const { t } = useTranslation();
     const name = path(["profile", "firstName"], sessionStore) || "User";
     return (
       <Container>
-        <GreetingText> Hey {name} </GreetingText>
+        <GreetingText>{t("profile.greeting", { name })}</GreetingText>
         <DropdownContainer>Status Dropdown</DropdownContainer>
       </Container>
     );
-  }
+  },
 );
 
 const Container = styled.div`
