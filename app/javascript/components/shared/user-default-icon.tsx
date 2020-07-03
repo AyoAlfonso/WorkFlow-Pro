@@ -29,7 +29,7 @@ type ContainerProps = {
 const Container = styled.div<ContainerProps>`
   background-color: ${baseTheme.colors.bali};
   margin-left: auto;
-  border-radius: 50px;
+  border-radius: 9999px;
   height: ${props => props.size || 55}px;
   width: ${props => props.size || 55}px;
   display: flex;

@@ -25,7 +25,7 @@ class User < ApplicationRecord
   end
 
   def avatar_url
-    self.avatar.try(:url) || "#{ENV['HOST_URL']}/assets/avatar-blank.png"
+    self.avatar.try(:url)
   end
 
   def get_timezone
