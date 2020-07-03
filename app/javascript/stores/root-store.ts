@@ -4,6 +4,7 @@ import { UserStoreModel, IUserStore } from "./user-store";
 import { IssueStoreModel, IIssueStore } from "./issue-store";
 import { KeyActivityStoreModel, IKeyActivityStore } from "./key-activity-store";
 import { SessionStoreModel, ISessionStore } from "./session-store";
+import { CompanyStoreModel, ICompanyStore } from "./company-store";
 
 export const RootStoreModel = types
   .model("RootStoreModel")
@@ -13,12 +14,14 @@ export const RootStoreModel = types
     issueStore: IssueStoreModel,
     keyActivityStore: KeyActivityStoreModel,
     sessionStore: SessionStoreModel,
+    companyStore: CompanyStoreModel,
   })
   .views(self => ({}))
   .actions(self => ({
-    startup: flow(function*() {
+    startup: flow(function* () {
       //check if there is a cookie, if so try to call the profile endpoint and set logged into true
       self.sessionStore.loadProfile();
+      self.companyStore.load();
       // do some API calls
       self.userStore.load();
     }),

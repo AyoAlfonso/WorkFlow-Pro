@@ -1,4 +1,4 @@
-import { types, getEnv, flow } from "mobx-state-tree";
+import { types, getEnv, flow, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { withRootStore } from "../lib/with-root-store";
 import * as R from "ramda";
@@ -14,8 +14,8 @@ export const SessionStoreModel = types
   })
   .extend(withRootStore())
   .extend(withEnvironment())
-  .views((self) => ({}))
-  .actions((self) => ({
+  .views(self => ({}))
+  .actions(self => ({
     loadProfile: flow(function* () {
       const env = getEnv(self);
       try {
@@ -34,10 +34,11 @@ export const SessionStoreModel = types
       }
     }),
   }))
-  .actions((self) => ({
+  .actions(self => ({
     login: flow(function* (email, password) {
       //may want to show a loading modal here
       const env = getEnv(self);
+      const { companyStore } = getRoot(self);
       try {
         const response: any = yield env.api.login(email, password);
         if (response.ok) {
@@ -59,6 +60,7 @@ export const SessionStoreModel = types
             //TODO SET TOKEN INTO COOKIE
             //env.api.setJWT(newJWT);
             self.loadProfile();
+            companyStore.load();
           }
         }
       } catch {

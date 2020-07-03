@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   scope module: :api, path: :api do
     resources :users, only: [:index, :show]
     get '/profile', to: 'users#profile'
+    resources :companies, only: [:show]
 
     # issues
     resources :issues, only: [:index, :create, :update, :destroy]
