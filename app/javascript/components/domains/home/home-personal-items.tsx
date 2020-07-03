@@ -48,15 +48,19 @@ export const HomePersonalItems = (): JSX.Element => {
 const Container = styled.div`
   display: flex;
   height: 400px;
+  overflow-x: auto;
+  overflow-y: hidden;
 `;
 
 const PrioritiesContainer = styled(HomeContainerBorders)`
   width: 40%;
+  min-width: 480px;
   margin-right: 20px;
 `;
 
 const NonPrioritiesEndContainer = styled(HomeContainerBorders)`
   width: 20%;
+  min-width: 240px;
 `;
 
 const NonPrioritiesContainer = styled(NonPrioritiesEndContainer)`

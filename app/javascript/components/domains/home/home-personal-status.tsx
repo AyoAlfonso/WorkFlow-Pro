@@ -24,13 +24,16 @@ const Container = styled.div`
 `;
 
 const GreetingText = styled.p`
-  font-size: 32px;
+  font-size: 48pt;
+  font-family: Exo;
+  font-weight: 300;
 `;
 
 const DropdownContainer = styled.div`
   margin-left: 50px;
-  margin-top: 38px;
-  border-radius: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+  border-radius: 10px;
   border: 1px solid #e3e3e3;
   height: 20px;
   padding: 5px;

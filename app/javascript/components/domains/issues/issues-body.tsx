@@ -29,9 +29,23 @@ export const IssuesBody = observer(
     const renderPriorityIcon = (priority: string) => {
       switch (priority) {
         case "medium":
-          return <Icon icon={"Priority-High"} size={12} color={baseTheme.colors.cautionYellow} />;
+          return (
+            <Icon
+              icon={"Priority-High"}
+              size={24}
+              color={baseTheme.colors.cautionYellow}
+              style={{ marginTop: "2px" }}
+            />
+          );
         case "high":
-          return <Icon icon={"Priority-Urgent"} size={12} color={baseTheme.colors.warningRed} />;
+          return (
+            <Icon
+              icon={"Priority-Urgent"}
+              size={24}
+              color={baseTheme.colors.warningRed}
+              style={{ marginTop: "2px" }}
+            />
+          );
         default:
           return <></>;
       }
@@ -88,9 +102,10 @@ const AddNewIssuePlus = styled.div`
 
 const AddNewIssueText = styled.p`
   ${color}
-  font-size: 14px;
+  font-size: 14pt;
   margin-left: 21px;
   color: grey80;
+  line-height: 20pt;
 `;
 
 const AddNewIssueContainer = styled.div`
@@ -98,7 +113,6 @@ const AddNewIssueContainer = styled.div`
   cursor: pointer;
   margin-left: 4px;
   margin-bottom: -5px;
-  height: 45px;
   &:hover ${AddNewIssueText} {
     font-weight: bold;
   }
@@ -115,13 +129,15 @@ const IssuesContainer = styled.div`
 const IssueContainer = styled.div`
   display: flex;
   font-size: 14px;
-  width: 98%;
-  height: 35px;
+  width: inherit;
+  padding: 12px 0px 12px 0px;
 `;
 
 const IssueText = styled.p`
-  margin-left: 10px;
-  width: 210px;
+  font-size: 14pt;
+  font-weight: 400;
+  line-height: 20px;
+  margin-left: 20px;
   margin-top: auto;
   margin-bottom: auto;
   text-decoration: ${props => props["text-decoration"]};
@@ -130,7 +146,7 @@ const IssueText = styled.p`
 const IssuePriorityContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
-  right: 0;
+  margin-left: auto;
   margin-right: 10px;
 `;
 
@@ -138,7 +154,7 @@ const CheckboxContainer = props => (
   <Label
     {...props}
     sx={{
-      width: "auto",
+      width: "20px",
       marginTop: "auto",
       marginBottom: "auto",
     }}

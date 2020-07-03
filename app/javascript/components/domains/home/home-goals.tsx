@@ -22,10 +22,7 @@ export const HomeGoals = (): JSX.Element => {
   const renderAnnualInitiatives = () => {
     const values = [1, 2, 3, 4, 5];
     return values.map((value, index) => (
-      <AnnualInitiativesItem
-        key={index}
-        margin-right={index + 1 == values.length ? "0px" : "15px"}
-      >
+      <AnnualInitiativesItem key={index} margin-right={index + 1 == values.length ? "0px" : "15px"}>
         Annual Initiative {index}
       </AnnualInitiativesItem>
     ));
@@ -71,5 +68,6 @@ const VisionText = styled.p`
 const AnnualInitiativesItem = styled(HomeContainerBorders)`
   height: 100px;
   width: 20%;
+  min-width: 240px;
   margin-right: ${props => props["margin-right"] || "0px"};
 `;

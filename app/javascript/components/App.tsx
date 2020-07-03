@@ -29,9 +29,9 @@ import { SideNav } from "./domains/nav/side-nav";
 import { Placeholder } from "./shared/Placeholder";
 
 const Container = styled.div`
-  margin-left: auto;
+  margin-left: 12rem;
   margin-right: auto;
-  width: 80%;
+  width: 85%;
   margin-bottom: 50px;
 `;
 
