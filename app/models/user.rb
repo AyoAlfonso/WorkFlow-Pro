@@ -12,8 +12,10 @@ class User < ApplicationRecord
   has_many :issues
   has_many :key_activities
   has_many :personal_reflections
-  has_many :quarterly_goals, :foreign_key => 'created_by_id', :class_name => 'User'
-  has_many :annual_initiatives, :foreign_key => 'created_by_id', :class_name => 'User'
+  has_many :created_quarterly_goals, :foreign_key => 'created_by_id', :class_name => 'QuarterlyGoal'
+  has_many :owned_quarterly_goals, :foreign_key => 'owned_by_id', :class_name => 'QuarterlyGoal'
+  has_many :created_annual_initiatives, :foreign_key => 'created_by_id', :class_name => 'AnnualInitiative'
+  has_many :owned_annual_initiatives, :foreign_key => 'owned_by_id', :class_name => 'AnnualInitiative'
   has_many :weekly_meetings, :foreign_key => 'created_by_id', :class_name => 'User'
   has_many :meeting_ratings
   has_one_attached :avatar

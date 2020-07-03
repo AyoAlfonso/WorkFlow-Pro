@@ -2,8 +2,12 @@ class AnnualInitiative < ApplicationRecord
   include HasCreator
   include HasOwner
 
-  enum initiative_type: [:personal, :company]
+  belongs_to :company, optional: true
   has_many :quarterly_goals
   has_many :comments, as: :commentable
   # has_many :attachments
+
+  scope :sort_by_created_date, -> { order(created_at: :asc) }
+  scope :owned_by_user, -> (user) { where(owned_by_id: user.id).where(company_id: nil) }
+  scope :for_users_company, -> (user) { where(company_id: user.company_id ) }
 end
