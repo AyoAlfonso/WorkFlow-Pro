@@ -98,13 +98,14 @@ const Container = styled.div`
 const AddNewIssuePlus = styled.div`
   margin-top: auto;
   margin-bottom: auto;
+  color: ${props => props.theme.colors.grey80};
 `;
 
 const AddNewIssueText = styled.p`
   ${color}
   font-size: 14pt;
   margin-left: 21px;
-  color: grey80;
+  color: ${props => props.theme.colors.grey80};
   line-height: 20pt;
 `;
 
@@ -114,6 +115,7 @@ const AddNewIssueContainer = styled.div`
   margin-left: 4px;
   margin-bottom: -5px;
   &:hover ${AddNewIssueText} {
+    color: ${props => props.theme.colors.black};
     font-weight: bold;
   }
   &:hover ${AddNewIssuePlus} {
