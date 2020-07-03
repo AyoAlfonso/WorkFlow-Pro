@@ -26,7 +26,7 @@ import { AccountProfile } from "./domains/account/profile";
 
 import { HeaderBar } from "./domains/nav/header-bar";
 import { SideNav } from "./domains/nav/side-nav";
-import { Placeholder } from "./shared/Placeholder";
+import { Placeholder } from "./shared/placeholder";
 
 const Container = styled.div`
   margin-left: 12rem;

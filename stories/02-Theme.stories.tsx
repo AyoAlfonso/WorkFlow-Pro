@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { baseTheme } from "../app/javascript/themes/base";
 import { ContainerDiv, RowDiv, CenteredColumnDiv, Divider } from "./shared";
-import { Text } from "../app/javascript/components/shared/Text";
-import { Heading } from "../app/javascript/components/shared/Heading";
+import { Text } from "../app/javascript/components/shared/text";
+import { Heading } from "../app/javascript/components/shared/heading";
 
 export default { title: "Theme" };
 

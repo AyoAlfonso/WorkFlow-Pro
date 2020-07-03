@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
 
-import { Button } from "../../shared/Button";
-import { Icon } from "../../shared/Icon";
+import { Button } from "../../shared/button";
+import { Icon } from "../../shared/icon";
 import { Flex, Box } from "rebass";
-import { Label, Input } from "../../shared/Input";
+import { Label, Input } from "../../shared/input";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 
