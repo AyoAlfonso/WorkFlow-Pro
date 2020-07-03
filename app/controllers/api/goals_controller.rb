@@ -2,8 +2,8 @@ class Api::GoalsController < Api::ApplicationController
   respond_to :json
 
   def index
-    @user_goals = policy_scope(AnnualInitiative).for_user.first.as_json(include: {quarterly_goals: {include: :milestones}})
-    @company_goals = policy_scope(AnnualInitiative).for_company.first.as_json(root: true, include: {quarterly_goals: {include: :milestones}})
+    @user_goals = policy_scope(AnnualInitiative).for_user.as_json(include: {quarterly_goals: {include: :milestones}})
+    @company_goals = policy_scope(AnnualInitiative).for_company.as_json(root: true, include: {quarterly_goals: {include: :milestones}})
     render json: { user_goals: @user_goals, company_goals: @company_goals }
   end
 end
