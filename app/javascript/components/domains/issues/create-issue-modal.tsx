@@ -7,6 +7,8 @@ import { Icon } from "../../shared/icon";
 import { Button } from "rebass";
 import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";
+import { UserDefaultIcon } from "../../shared/user-default-icon";
+import * as R from "ramda";
 
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
@@ -14,7 +16,7 @@ interface ICreateIssueModalProps {
 }
 
 export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => {
-  const { issueStore } = useMst();
+  const { issueStore, sessionStore } = useMst();
   const { createIssueModalOpen, setCreateIssueModalOpen } = props;
   const [issueDescription, setIssueDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
@@ -33,14 +35,10 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
             setTextValue={setIssueDescription}
             width={"75%"}
           />
-          <UserImageContainer>
-            <Icon
-              icon={"User"}
-              size={"35px"}
-              iconColor={"grey60"}
-              style={{ marginLeft: "9px", marginTop: "9px" }}
-            />
-          </UserImageContainer>
+          <UserDefaultIcon
+            firstName={R.path(["profile", "firstName"], sessionStore)}
+            lastName={R.path(["profile", "lastName"], sessionStore)}
+          />
         </FlexContainer>
         <FlexContainer>
           <StyledButton

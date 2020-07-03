@@ -112,13 +112,14 @@ const Container = styled.div`
 const AddNewKeyActivityPlus = styled.div`
   margin-top: auto;
   margin-bottom: auto;
+  color: ${props => props.theme.colors.grey80};
 `;
 
 const AddNewKeyActivityText = styled.p`
   ${color}
   font-size: 14pt;
   margin-left: 21px;
-  color: grey80;
+  color: ${props => props.theme.colors.grey80};
   line-height: 20pt;
 `;
 
@@ -128,6 +129,7 @@ const AddNewKeyActivityContainer = styled.div`
   margin-left: 4px;
   margin-bottom: -5px;
   &:hover ${AddNewKeyActivityText} {
+    color: ${props => props.theme.colors.black};
     font-weight: bold;
   }
   &:hover ${AddNewKeyActivityPlus} {
