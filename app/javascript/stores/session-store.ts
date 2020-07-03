@@ -26,6 +26,8 @@ export const SessionStoreModel = types
             id: response.data.id,
             email: response.data.email,
             firstName: response.data.firstName,
+            lastName: response.data.lastName,
+            avatarUrl: response.data.avatarUrl,
           });
           self.loggedIn = true;
         }

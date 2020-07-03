@@ -7,9 +7,11 @@ export const UserModel = types
     email: types.maybeNull(types.string),
     firstName: types.maybeNull(types.string),
     lastName: types.maybeNull(types.string),
+    avatarUrl: types.maybeNull(types.string),
+    //add avatarurl2x
   })
-  .views((self) => ({}))
-  .actions((self) => ({}));
+  .views(self => ({}))
+  .actions(self => ({}));
 
 type UserModelType = typeof UserModel.Type;
 type UserModelDataType = typeof UserModel.CreationType;

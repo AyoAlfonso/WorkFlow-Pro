@@ -22,6 +22,8 @@ import { ModalProvider } from "styled-react-modal";
 
 import { AccountabilityChart } from "./domains/company/accountability-chart";
 
+import { AccountProfile } from "./domains/account/profile";
+
 import { HeaderBar } from "./domains/nav/header-bar";
 import { SideNav } from "./domains/nav/side-nav";
 import { Placeholder } from "./shared/Placeholder";
@@ -65,6 +67,12 @@ export const App = observer(
                     path={"/team"}
                     render={() => {
                       return <Placeholder />;
+                    }}
+                  />
+                  <Route
+                    path={"/account"}
+                    render={() => {
+                      return <AccountProfile />;
                     }}
                   />
                   <Route

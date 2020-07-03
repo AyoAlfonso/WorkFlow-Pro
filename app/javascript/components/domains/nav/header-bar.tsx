@@ -12,6 +12,7 @@ import { CreateIssueModal } from "../issues/create-issue-modal";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 import { Text } from "../../shared/Text";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 export const HeaderBar = (): JSX.Element => {
   const [openCreateDropdown, setOpenCreateDropdown] = useState<boolean>(false);
@@ -125,6 +126,9 @@ export const HeaderBar = (): JSX.Element => {
         </ActionsContainer>
         <Box mx="auto" />
         <Box>
+          <img src={sessionStore.profile.avatarUrl} width="48" height="48" />
+          <div>{sessionStore.profile.firstName}</div>
+          <Link to="/account">{t("profile.account")}</Link>
           <button onClick={() => sessionStore.logoutRequest()}>{t("profile.logout")}</button>
         </Box>
       </Flex>

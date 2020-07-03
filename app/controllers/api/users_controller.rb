@@ -13,7 +13,7 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def profile
-    render json: current_user
+    render json: current_user.serializable_hash(methods: [:avatar_url])
   end
 
   private

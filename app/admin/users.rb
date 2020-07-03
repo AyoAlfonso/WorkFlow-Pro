@@ -32,6 +32,9 @@ ActiveAdmin.register User do
       row :last_name
       row :email
       row :phone_number
+      row :avatar do |user|
+        image_tag user.avatar_url
+      end
       row :personal_vision
       row :current_sign_in_at
       row :last_sign_in_at

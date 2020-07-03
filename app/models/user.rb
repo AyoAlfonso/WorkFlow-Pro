@@ -16,9 +16,14 @@ class User < ApplicationRecord
   has_many :annual_initiatives, :foreign_key => 'created_by_id', :class_name => 'User'
   has_many :weekly_meetings, :foreign_key => 'created_by_id', :class_name => 'User'
   has_many :meeting_ratings
+  has_one_attached :avatar
 
   def full_name                                                                                                                                                                                     
     ([first_name, last_name] - ['']).compact.join(' ')                         
+  end
+
+  def avatar_url
+    self.avatar.try(:url) || "#{ENV['HOST_URL']}/assets/avatar-blank.png"
   end
 
   # def on_jwt_dispatch(token, payload)

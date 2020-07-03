@@ -39,14 +39,14 @@ export const LoginForm = observer(
               <LogoHeaderDiv>
                 <Icon icon={"Logo"} size={"14em"} iconColor={"primary100"} paddingBottom={"15px"} />
               </LogoHeaderDiv>
-              <Label htmlFor="email">{t("profile.form.email")}</Label>
+              <Label htmlFor="email">{t("profile.loginForm.email")}</Label>
               <Input name="email" onChange={e => setEmail(e.target.value)} />
-              <Label>{t("profile.form.password")}</Label>
+              <Label>{t("profile.loginForm.password")}</Label>
               <Input name="password" type="password" onChange={e => setPassword(e.target.value)} />
               <Button small variant={"primary"} onClick={() => sessionStore.login(email, password)}>
-                {t("profile.form.login")}
+                {t("profile.loginForm.login")}
               </Button>
-              <div>{t("profile.form.forgot")}</div>
+              <div>{t("general.loginForm.forgot")}</div>
             </>
           )}
         </Box>

@@ -1,14 +1,23 @@
 {
   "en": {
     "translations": {
+      "general": {
+        "save": "Save"
+      },
       "profile": {
+        "account": "Account",
         "logout": "Log Out",
         "greeting": "Hey {{name}}",
-        "form": {
+        "loginForm": {
           "email": "E-mail",
           "password": "Password",
           "login": "Login",
           "forgot": "Forgot your password? (To be added)"
+        },
+        "profileUpdateForm": {
+          "email": "E-mail",
+          "firstName": "First Name",
+          "lastName": "Last Name"
         }
       },
       "navigation": {
