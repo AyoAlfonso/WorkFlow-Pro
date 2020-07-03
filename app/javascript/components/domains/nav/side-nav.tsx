@@ -62,32 +62,36 @@ interface StyledNavLinkChildrenActiveProps {
   icon: string;
   children: any;
   disabled?: boolean;
+  currentPathName: string;
 }
-const StyledNavLinkChildrenActive = observer(
-  ({ to, icon, children, disabled }: StyledNavLinkChildrenActiveProps): JSX.Element => {
-    const { router } = useMst();
-    var pathMatch = matchPath(router.location.pathname, to);
-    var isActive = pathMatch ? (to == "/" ? pathMatch.isExact : true) : false;
+const StyledNavLinkChildrenActive = ({
+  to,
+  icon,
+  children,
+  disabled,
+  currentPathName,
+}: StyledNavLinkChildrenActiveProps): JSX.Element => {
+  var pathMatch = matchPath(currentPathName, to);
+  var isActive = pathMatch ? (to == "/" ? pathMatch.isExact : true) : false;
 
-    return isActive ? (
-      <StyledNavLink to={to} disabled={disabled}>
-        <IconBorder>
-          <Icon icon={icon} size={"2em"} iconColor={"primary100"} m={"auto"} />
-        </IconBorder>
-        <Text>{children}</Text>
-      </StyledNavLink>
-    ) : (
-      <StyledNavLink to={to} disabled={disabled}>
-        <IconBorder>
-          <Icon icon={icon} size={"2em"} iconColor={"grey40"} m={"auto"} />
-        </IconBorder>
-        <Text color={"grey40"}>{children}</Text>
-      </StyledNavLink>
-    );
-  },
-);
+  return isActive ? (
+    <StyledNavLink to={to} disabled={disabled}>
+      <IconBorder>
+        <Icon icon={icon} size={"2em"} iconColor={"primary100"} m={"auto"} />
+      </IconBorder>
+      <Text>{children}</Text>
+    </StyledNavLink>
+  ) : (
+    <StyledNavLink to={to} disabled={disabled}>
+      <IconBorder>
+        <Icon icon={icon} size={"2em"} iconColor={"grey40"} m={"auto"} />
+      </IconBorder>
+      <Text color={"grey40"}>{children}</Text>
+    </StyledNavLink>
+  );
+};
 
-export const SideNav = (): JSX.Element => {
+export const SideNavNoMst = (currentPathName: string): JSX.Element => {
   const { t } = useTranslation();
   return (
     <StyledSideNav>
@@ -95,19 +99,19 @@ export const SideNav = (): JSX.Element => {
         <Icon icon={"Logo"} size={"4em"} iconColor={"primary100"} />
       </SideBarElement>
 
-      <StyledNavLinkChildrenActive to="/" icon={"Home"}>
+      <StyledNavLinkChildrenActive to="/" icon={"Home"} currentPathName={currentPathName}>
         {t("navigation.home")}
       </StyledNavLinkChildrenActive>
 
-      <StyledNavLinkChildrenActive to="/team" icon={"User"}>
+      <StyledNavLinkChildrenActive to="/team" icon={"User"} currentPathName={currentPathName}>
         {t("navigation.team")}
       </StyledNavLinkChildrenActive>
 
-      <StyledNavLinkChildrenActive to="/company" icon={"Company"}>
+      <StyledNavLinkChildrenActive to="/company" icon={"Company"} currentPathName={currentPathName}>
         {t("navigation.company")}
       </StyledNavLinkChildrenActive>
 
-      <StyledNavLinkChildrenActive to="/goals" icon={"Stats"}>
+      <StyledNavLinkChildrenActive to="/goals" icon={"Stats"} currentPathName={currentPathName}>
         {t("navigation.goals")}
       </StyledNavLinkChildrenActive>
 
@@ -116,4 +120,9 @@ export const SideNav = (): JSX.Element => {
       </SideBarElement> */}
     </StyledSideNav>
   );
+};
+
+export const SideNav = (): JSX.Element => {
+  const { router } = useMst();
+  return SideNavNoMst(router.location.pathname);
 };
