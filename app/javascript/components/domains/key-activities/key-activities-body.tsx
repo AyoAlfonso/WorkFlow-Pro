@@ -139,7 +139,7 @@ const AddNewKeyActivityContainer = styled.div`
 
 const KeyActivitiesContainer = styled.div`
   overflow-y: auto;
-  height: 290px;
+  height: 260px;
 `;
 
 const KeyActivityContainer = styled.div`

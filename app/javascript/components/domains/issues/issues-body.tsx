@@ -125,7 +125,7 @@ const AddNewIssueContainer = styled.div`
 
 const IssuesContainer = styled.div`
   overflow-y: auto;
-  height: 290px;
+  height: 260px;
 `;
 
 const IssueContainer = styled.div`
