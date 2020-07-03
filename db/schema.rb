@@ -72,26 +72,27 @@ ActiveRecord::Schema.define(version: 2020_07_03_145603) do
   end
 
   create_table "annual_initiatives", force: :cascade do |t|
-    t.bigint "created_by_id_id"
-    t.bigint "owned_by_id_id"
-    t.string "importance"
+    t.bigint "created_by_id"
+    t.bigint "owned_by_id"
+    t.string "importance", default: [], array: true
     t.text "description"
     t.string "key_elements", default: [], array: true
-    t.integer "initiative_type", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["created_by_id_id"], name: "index_annual_initiatives_on_created_by_id_id"
-    t.index ["owned_by_id_id"], name: "index_annual_initiatives_on_owned_by_id_id"
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_annual_initiatives_on_company_id"
+    t.index ["created_by_id"], name: "index_annual_initiatives_on_created_by_id"
+    t.index ["owned_by_id"], name: "index_annual_initiatives_on_owned_by_id"
   end
 
   create_table "comments", force: :cascade do |t|
     t.bigint "annual_initiative_id", null: false
-    t.bigint "created_by_id_id"
+    t.bigint "created_by_id"
     t.text "body"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["annual_initiative_id"], name: "index_comments_on_annual_initiative_id"
-    t.index ["created_by_id_id"], name: "index_comments_on_created_by_id_id"
+    t.index ["created_by_id"], name: "index_comments_on_created_by_id"
   end
 
   create_table "companies", force: :cascade do |t|
@@ -166,13 +167,15 @@ ActiveRecord::Schema.define(version: 2020_07_03_145603) do
   end
 
   create_table "milestones", force: :cascade do |t|
-    t.bigint "created_by_id_id"
+    t.bigint "created_by_id"
+    t.bigint "quarterly_goal_id", null: false
     t.text "description"
-    t.date "week"
+    t.integer "week"
     t.integer "progress", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["created_by_id_id"], name: "index_milestones_on_created_by_id_id"
+    t.index ["created_by_id"], name: "index_milestones_on_created_by_id"
+    t.index ["quarterly_goal_id"], name: "index_milestones_on_quarterly_goal_id"
   end
 
   create_table "personal_reflections", force: :cascade do |t|
@@ -186,15 +189,17 @@ ActiveRecord::Schema.define(version: 2020_07_03_145603) do
   end
 
   create_table "quarterly_goals", force: :cascade do |t|
-    t.bigint "created_by_id_id"
-    t.bigint "owned_by_id_id"
-    t.string "importance"
+    t.bigint "created_by_id"
+    t.bigint "owned_by_id"
+    t.bigint "annual_initiative_id", null: false
+    t.string "importance", default: [], array: true
     t.text "description"
     t.string "key_elements", default: [], array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["created_by_id_id"], name: "index_quarterly_goals_on_created_by_id_id"
-    t.index ["owned_by_id_id"], name: "index_quarterly_goals_on_owned_by_id_id"
+    t.index ["annual_initiative_id"], name: "index_quarterly_goals_on_annual_initiative_id"
+    t.index ["created_by_id"], name: "index_quarterly_goals_on_created_by_id"
+    t.index ["owned_by_id"], name: "index_quarterly_goals_on_owned_by_id"
   end
 
   create_table "thought_challenges", force: :cascade do |t|
@@ -247,22 +252,25 @@ ActiveRecord::Schema.define(version: 2020_07_03_145603) do
   end
 
   create_table "weekly_meetings", force: :cascade do |t|
-    t.bigint "created_by_id_id"
+    t.bigint "created_by_id"
     t.string "emotions_img"
     t.integer "conversation_starter_id"
     t.float "average_rating"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["created_by_id_id"], name: "index_weekly_meetings_on_created_by_id_id"
+    t.index ["created_by_id"], name: "index_weekly_meetings_on_created_by_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
+  add_foreign_key "annual_initiatives", "companies"
   add_foreign_key "comments", "annual_initiatives"
   add_foreign_key "core_fours", "companies"
   add_foreign_key "issues", "users"
   add_foreign_key "key_activities", "users"
   add_foreign_key "meeting_ratings", "users"
   add_foreign_key "meeting_ratings", "weekly_meetings"
+  add_foreign_key "milestones", "quarterly_goals"
+  add_foreign_key "quarterly_goals", "annual_initiatives"
   add_foreign_key "users", "companies"
 end

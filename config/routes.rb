@@ -26,6 +26,9 @@ Rails.application.routes.draw do
 
     #key activities
     resources :key_activities, only: [:index, :create, :update, :destroy]
+
+    #goals
+    get '/goals', to: 'goals#index'
   end
   
 
