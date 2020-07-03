@@ -8,6 +8,7 @@ import { UserModel } from "../models/user";
 export const SessionStoreModel = types
   .model("SessionStoreModel")
   .props({
+    loading: types.boolean,
     loggedIn: types.boolean,
     //profile details added as a profile model
     profile: types.maybeNull(UserModel),
@@ -17,27 +18,24 @@ export const SessionStoreModel = types
   .views(self => ({}))
   .actions(self => ({
     loadProfile: flow(function* () {
+      self.loading = true;
       const env = getEnv(self);
       try {
         const response: any = yield env.api.profile();
         if (response.ok) {
           //add details to user model
-          self.profile = UserModel.create({
-            id: response.data.id,
-            email: response.data.email,
-            firstName: response.data.firstName,
-            lastName: response.data.lastName,
-            avatarUrl: response.data.avatarUrl,
-          });
+          self.profile = response.data;
           self.loggedIn = true;
         }
       } catch {
         // error messaging handled by API monitor
       }
+      self.loading = false;
     }),
   }))
   .actions(self => ({
     login: flow(function* (email, password) {
+      self.loading = true;
       //may want to show a loading modal here
       const env = getEnv(self);
       const { companyStore } = getRoot(self);
@@ -68,6 +66,7 @@ export const SessionStoreModel = types
       } catch {
         // error messaging handled by API monitor
       }
+      self.loading = false;
     }),
     // logoutRequest: flow(function* () {
     // yield self.environment.api.logout();

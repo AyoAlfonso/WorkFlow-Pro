@@ -15,6 +15,7 @@ const initialState = {
     issues: [],
   },
   sessionStore: {
+    loading: true,
     loggedIn: false,
     profile: null,
   },
