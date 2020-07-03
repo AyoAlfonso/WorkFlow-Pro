@@ -56,6 +56,9 @@ const KeyActivitiesText = styled.h4`
   display: flex;
   justify-content: center;
   align-items: center;
+  line-height: 20px;
+  font-size: 14pt;
+  font-weight: 400;
 `;
 
 const FilterContainer = styled.div`
@@ -72,7 +75,8 @@ type FilterOptionsType = {
 const FilterOptions = styled.p<FilterOptionsType>`
   ${space}
   ${color}
-  font-size: 12px;
+  font-size: 12pt;
+  font-weight: 400;
   cursor: pointer;
 `;
 

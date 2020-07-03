@@ -147,8 +147,8 @@ export const HeaderBar = (): JSX.Element => {
 const Container = styled(HomeContainerBorders)`
   margin-top: 40px;
   height: 80px;
-  width: 80%;
-  margin-left: auto;
+  width: 85%;
+  margin-left: 12rem;
   margin-right: auto;
 `;
 

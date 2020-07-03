@@ -20,4 +20,7 @@ const TodaysPrioritiesText = styled.h4`
   display: flex;
   justify-content: center;
   align-items: center;
+  line-height: 20px;
+  font-size: 14pt;
+  font-weight: 400;
 `;

@@ -80,7 +80,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
               <Icon
                 icon={"Priority-Frog"}
                 size={"25px"}
-                iconColor={selectedPriority == 3 ? "finePine" : "grey60"}
+                iconColor={selectedPriority == 3 ? "frog" : "grey60"}
               />
             </IconContainer>
           </PriorityContainer>
