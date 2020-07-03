@@ -1,8 +1,8 @@
 import * as React from "react";
 import Modal from "styled-react-modal";
 import styled from "styled-components";
-import { Heading } from "./Heading";
-import { Icon } from "./Icon";
+import { Heading } from "./heading";
+import { Icon } from "./icon";
 
 interface IModalWithHeaderProps {
   modalOpen: boolean;

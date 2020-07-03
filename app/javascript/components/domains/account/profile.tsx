@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useMst } from "../../../setup/root";
 
 import { Box } from "rebass";
-import { Label, Input } from "../../shared/Input";
-import { Button } from "../../shared/Button";
+import { Label, Input } from "../../shared/input";
+import { Button } from "../../shared/button";
 import { useTranslation } from "react-i18next";
 
 export const AccountProfile = (): JSX.Element => {

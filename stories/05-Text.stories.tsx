@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Text as TextComponent } from "../app/javascript/components/shared/Text";
-import { Heading as HeadingComponent } from "../app/javascript/components/shared/Heading";
+import { Text as TextComponent } from "../app/javascript/components/shared/text";
+import { Heading as HeadingComponent } from "../app/javascript/components/shared/heading";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import { CodeBlockDiv, ContainerDiv, Divider, PropsList } from "./shared";
 

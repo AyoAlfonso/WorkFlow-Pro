@@ -2,15 +2,15 @@ import * as React from "react";
 import { HomeContainerBorders } from "../home/shared-components";
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
-import { Icon } from "../../shared/Icon";
+import { Icon } from "../../shared/icon";
 import { baseTheme } from "../../../themes";
 import { color } from "styled-system";
-import { RoundButton } from "../../shared/Round-Button";
+import { RoundButton } from "../../shared/round-button";
 import { Flex, Box } from "rebass";
 import { useMst } from "../../../setup/root";
 import { CreateIssueModal } from "../issues/create-issue-modal";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
-import { Text } from "../../shared/Text";
+import { Text } from "../../shared/text";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 

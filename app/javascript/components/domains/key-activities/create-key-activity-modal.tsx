@@ -1,9 +1,9 @@
 import * as React from "react";
-import { ModalWithHeader } from "../../shared/ModalWithHeader";
+import { ModalWithHeader } from "../../shared/modal-with-header";
 import { useState } from "react";
-import { TextInput } from "../../shared/TextInput";
+import { TextInput } from "../../shared/text-input";
 import styled from "styled-components";
-import { Icon } from "../../shared/Icon";
+import { Icon } from "../../shared/icon";
 import { Button } from "rebass";
 import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";

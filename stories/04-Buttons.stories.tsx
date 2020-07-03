@@ -4,9 +4,9 @@ import * as React from "react";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import styled from "styled-components";
 import { layout, space, typography } from "styled-system";
-import { Button } from "../app/javascript/components/shared/Button";
-import { Icon } from "../app/javascript/components/shared/Icon";
-import { RoundButton as RoundButtonComponent } from "../app/javascript/components/shared/Round-Button";
+import { Button } from "../app/javascript/components/shared/button";
+import { Icon } from "../app/javascript/components/shared/icon";
+import { RoundButton as RoundButtonComponent } from "../app/javascript/components/shared/round-button";
 import { CodeBlockDiv, ContainerDiv, Divider, PropsList, RowDiv } from "./shared";
 
 export default { title: "Buttons", decorators: [withKnobs] };
@@ -80,7 +80,7 @@ export const BaseButtonVariants = () => (
       <CopyBlock
         text={`
       import * as React from "react";
-      import { Button } from "../components/shared/Button"
+      import { Button } from "../components/shared/button"
 
       const onClickAction = () => {}
 
@@ -184,7 +184,7 @@ export const RoundButton = () => (
         <Icon
           icon={text("icon", "Plus")}
           size={20}
-          iconColor={"primary100"}
+          color={"primary100"}
           style={{ marginLeft: "10px", marginTop: "10px" }}
         />
       </RoundButtonComponent>

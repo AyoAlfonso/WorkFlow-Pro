@@ -3,7 +3,7 @@ import * as React from "react";
 import { CodeBlockDiv, ContainerDiv } from "./shared";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 
-import { Input as FormInput, Label as FormLabel } from "../app/javascript/components/shared/Input";
+import { Input as FormInput, Label as FormLabel } from "../app/javascript/components/shared/input";
 
 export const Input = () => (
   <ContainerDiv pl={4}>
@@ -12,7 +12,7 @@ export const Input = () => (
       <CopyBlock
         text={`
       import * as React from "react";
-      import { Input } from "../components/shared/Input"
+      import { Input } from "../components/shared/input"
 
       const MyFormInput = () => (
         <>
