@@ -8,6 +8,6 @@ class AnnualInitiative < ApplicationRecord
   # has_many :attachments
 
   scope :sort_by_created_date, -> { order(created_at: :asc) }
-  scope :for_user, -> { where(company_id: nil) }
-  scope :for_company, -> { where.not(company_id: nil) }
+  scope :owned_by_user, -> (user) { where(owned_by_id: user.id).where(company_id: nil) }
+  scope :for_users_company, -> (user) { where(company_id: user.company_id ) }
 end
