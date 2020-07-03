@@ -7,13 +7,13 @@ import { baseTheme } from "../../../themes";
 import { color } from "styled-system";
 import { RoundButton } from "../../shared/round-button";
 import { Flex } from "rebass";
+import { Avatar } from "../../shared/avatar";
 import { useMst } from "../../../setup/root";
 import { CreateIssueModal } from "../issues/create-issue-modal";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 import { Text } from "../../shared/text";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { UserDefaultIcon } from "~/components/shared/user-default-icon";
 
 export const HeaderBar = (): JSX.Element => {
   const [openCreateDropdown, setOpenCreateDropdown] = useState<boolean>(false);
@@ -154,10 +154,10 @@ export const HeaderBar = (): JSX.Element => {
 
         <PersonalInfoContainer ref={accountActionRef}>
           <PersonalInfoDisplayContainer onClick={() => setShowAccountActions(!showAccountActions)}>
-            <UserDefaultIcon
-              size={48}
+            <Avatar
               firstName={sessionStore.profile.firstName}
               lastName={sessionStore.profile.lastName}
+              avatarUrl={sessionStore.profile.avatarUrl}
             />
             <ProfileActionContainer>
               <ProfileFirstName>{sessionStore.profile.firstName}</ProfileFirstName>
