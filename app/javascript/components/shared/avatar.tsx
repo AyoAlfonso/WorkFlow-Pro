@@ -1,9 +1,7 @@
 import * as React from "react";
-import { color, space, typography } from "styled-system";
 import { Image } from "rebass";
 import styled from "styled-components";
-
-import { UserDefaultIcon } from "~/components/shared/user-default-icon";
+import { UserDefaultIcon } from "./user-default-icon";
 
 const StyledInitials = styled.div`
   border-radius: 9999;
