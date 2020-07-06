@@ -12,7 +12,11 @@
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": false,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["app/javascript/*"]
+    }
   },
   "include": ["app/javascript", "stories", "typings"],
   "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],
