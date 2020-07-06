@@ -24,6 +24,10 @@ const initialState = {
   companyStore: {
     company: null,
   },
+  goalStore: {
+    companyGoals: [],
+    personalGoals: [],
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);
