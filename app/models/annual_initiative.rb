@@ -3,7 +3,7 @@ class AnnualInitiative < ApplicationRecord
   include HasOwner
 
   belongs_to :company, optional: true
-  has_many :quarterly_goals
+  has_many :quarterly_goals, dependent: :destroy
   has_many :comments, as: :commentable
   # has_many :attachments
 
