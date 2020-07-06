@@ -5,6 +5,7 @@ import { IssueStoreModel, IIssueStore } from "./issue-store";
 import { KeyActivityStoreModel, IKeyActivityStore } from "./key-activity-store";
 import { SessionStoreModel, ISessionStore } from "./session-store";
 import { CompanyStoreModel, ICompanyStore } from "./company-store";
+import { GoalStoreModel, IGoalStore } from "./goal-store";
 
 export const RootStoreModel = types
   .model("RootStoreModel")
@@ -15,6 +16,7 @@ export const RootStoreModel = types
     keyActivityStore: KeyActivityStoreModel,
     sessionStore: SessionStoreModel,
     companyStore: CompanyStoreModel,
+    goalStore: GoalStoreModel,
   })
   .views(self => ({}))
   .actions(self => ({
@@ -22,6 +24,7 @@ export const RootStoreModel = types
       //check if there is a cookie, if so try to call the profile endpoint and set logged into true
       self.sessionStore.loadProfile();
       self.companyStore.load();
+      self.goalStore.load();
       // do some API calls
       self.userStore.load();
     }),
@@ -38,4 +41,5 @@ export interface IRootStore extends IStateTreeNode {
   issueStore: IIssueStore;
   keyActivityStore: IKeyActivityStore;
   sessionStore: ISessionStore;
+  goalStore: IGoalStore;
 }

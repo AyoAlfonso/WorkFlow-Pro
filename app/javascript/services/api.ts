@@ -75,5 +75,9 @@ export class Api {
     });
   }
 
+  async getAllGoals() {
+    return this.client.get("/goals");
+  }
+
   //async setJWT(jwt) {}
 }
