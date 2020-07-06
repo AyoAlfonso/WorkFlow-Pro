@@ -21,7 +21,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
 
   def destroy
     @annual_initiative.destroy!
-    render kson: { annual_initiative_id: @annual_initiative.id, status: :ok }
+    render json: { annual_initiative_id: @annual_initiative.id, status: :ok }
   end
 
   private 
