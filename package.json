@@ -10,6 +10,7 @@
     "@babel/preset-react": "^7.10.1",
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@rails/actioncable": "^6.0.0",
+    "@rails/actiontext": "^6.0.3-1",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "4.2.2",
@@ -48,6 +49,7 @@
     "styled-normalize": "^8.0.7",
     "styled-react-modal": "^2.0.1",
     "styled-system": "^5.1.5",
+    "trix": "^1.2.0",
     "ts-loader": "^7.0.5",
     "turbolinks": "^5.2.0",
     "typescript": "^3.9.5"
