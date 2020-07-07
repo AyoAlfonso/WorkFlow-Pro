@@ -11,7 +11,7 @@ class IssuePolicy < ApplicationPolicy
   end
 
   def create?
-    true
+    false
   end
 
   def update?
