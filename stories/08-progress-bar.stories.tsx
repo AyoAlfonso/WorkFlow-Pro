@@ -50,7 +50,7 @@ export const StripedProgressBar = () => (
     <PropsList propsList={propsList} styledSystemProps={["color", "layout", "space"]} />
     <RowDiv width={"50%"} mb={3} mt={3}>
       <ProgressBar
-        completed={number("completed", 50, { range: true, min: 0, max: 100, step: 1 })}
+        completed={number("completed", 50, { range: true, min: 0, max: 100, step: 0.1 })}
         variant={select("variant", ["primary", "success", "warning", "error"], "primary")}
         text={text("text", "Primary")}
       />

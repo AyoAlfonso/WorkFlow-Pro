@@ -21,7 +21,7 @@ const ProgressBarContainer = styled.div`
           bg: "fadedSuccess",
         },
         warning: {
-          bg: "fadedYellow",
+          bg: "peach",
         },
         error: {
           bg: "fadedRed",
