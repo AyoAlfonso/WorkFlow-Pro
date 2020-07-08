@@ -23,7 +23,7 @@ export const addLoggingMonitor = api => {
   }
 };
 
-export const addToastMonitor = api => {
+export const addErrorToastMonitor = api => {
   api.addMonitor(response => {
     if (response.status !== 200 || response.problem !== null) {
       switch (response.problem) {

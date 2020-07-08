@@ -34,7 +34,7 @@ export const rootStore = RootStoreModel.create(initialState, environment);
 
 // add API Monitors
 const { api } = environment;
-Monitors.addToastMonitor(api);
+Monitors.addErrorToastMonitor(api);
 if (process.env.NODE_ENV !== "production") {
   console.tron.trackMstNode(rootStore);
   Monitors.addLoggingMonitor(api);
