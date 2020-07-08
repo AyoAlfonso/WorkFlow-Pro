@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :email, :password, :password_confirmation
+  permit_params :email, :password, :password_confirmation, :timezone
 
   config.sort_order = 'last_name_asc'
 
@@ -32,6 +32,9 @@ ActiveAdmin.register User do
       row :last_name
       row :email
       row :phone_number
+      row :timezone do |u|
+        u.get_timezone
+      end
       row :avatar do |user|
         image_tag user.avatar_url
       end
@@ -47,6 +50,7 @@ ActiveAdmin.register User do
       f.input :email
       f.input :password
       f.input :password_confirmation
+      f.input :timezone, as: :select, collection: timezones
     end
     f.actions
   end
