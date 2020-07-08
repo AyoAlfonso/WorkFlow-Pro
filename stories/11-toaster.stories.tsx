@@ -78,7 +78,11 @@ export const ToastMessages = () => (
       onClick={() => {
         showToast(
           text("message", "Toast Message"),
-          select("variant", Object.values(ToastMessageConstants), ToastMessageConstants.SUCCESS),
+          select(
+            "variant",
+            [ToastMessageConstants.SUCCESS, ToastMessageConstants.ERROR],
+            ToastMessageConstants.SUCCESS,
+          ),
         );
       }}
       width={"180px"}
@@ -90,19 +94,19 @@ export const ToastMessages = () => (
     <h2>Variants</h2>
     <ToastBox>
       <ToastMessage
-        heading={"Notification"}
-        message={"You are being notified!"}
-        color={baseTheme.colors.primary100}
-        iconName={"Star"}
+        heading={"Success"}
+        message={"You did it!"}
+        color={baseTheme.colors.finePine}
+        iconName={"Success"}
       />
       <CloseButton closeToast={() => {}} />
     </ToastBox>
     <ToastBox>
       <ToastMessage
-        heading={"Success"}
-        message={"You did it!"}
-        color={baseTheme.colors.finePine}
-        iconName={"Tasks"}
+        heading={"Error"}
+        message={"Something went wrong..."}
+        color={baseTheme.colors.warningRed}
+        iconName={"Error"}
       />
       <CloseButton closeToast={() => {}} />
     </ToastBox>
@@ -117,10 +121,10 @@ export const ToastMessages = () => (
     </ToastBox>
     <ToastBox>
       <ToastMessage
-        heading={"Error"}
-        message={"Something went wrong..."}
-        color={baseTheme.colors.warningRed}
-        iconName={"Close"}
+        heading={"Notification"}
+        message={"You are being notified!"}
+        color={baseTheme.colors.primary100}
+        iconName={"Comment"}
       />
       <CloseButton closeToast={() => {}} />
     </ToastBox>

@@ -69,9 +69,9 @@ const TextContainer = styled.div`
 export const ToastMessage = ({ heading, message, color, iconName }) => (
   <ToastMessageContainer>
     <ColorBar color={color} />
-    <Icon icon={iconName} size={"1.5em"} iconColor={color} />
+    <Icon icon={iconName} size={"1.8em"} iconColor={color} />
     <TextContainer ml={3}>
-      <Text fontSize={2} pt={2} pl={0} pb={1} pr={0} m={0}>
+      <Text fontSize={"18px"} pt={2} pl={0} pb={1} pr={0} m={0}>
         {heading}
       </Text>
       <Text color={"grey40"} fontSize={"13px"} pt={1} pl={0} pb={1} pr={0} m={0}>
