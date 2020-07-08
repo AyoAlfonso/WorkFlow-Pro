@@ -91,7 +91,7 @@ export const ToastMessages = () => (
     <ToastBox>
       <ToastMessage
         heading={"Notification"}
-        message={"toast message"}
+        message={"You are being notified!"}
         color={baseTheme.colors.primary100}
         iconName={"Star"}
       />
@@ -100,7 +100,7 @@ export const ToastMessages = () => (
     <ToastBox>
       <ToastMessage
         heading={"Success"}
-        message={"toast message"}
+        message={"You did it!"}
         color={baseTheme.colors.finePine}
         iconName={"Tasks"}
       />
@@ -109,7 +109,7 @@ export const ToastMessages = () => (
     <ToastBox>
       <ToastMessage
         heading={"Warning"}
-        message={"toast message"}
+        message={"You've been warned!"}
         color={baseTheme.colors.cautionYellow}
         iconName={"Alert"}
       />
@@ -118,7 +118,7 @@ export const ToastMessages = () => (
     <ToastBox>
       <ToastMessage
         heading={"Error"}
-        message={"toast message"}
+        message={"Something went wrong..."}
         color={baseTheme.colors.warningRed}
         iconName={"Close"}
       />
@@ -127,7 +127,7 @@ export const ToastMessages = () => (
     <ToastBox>
       <ToastMessage
         heading={"Info"}
-        message={"toast message"}
+        message={"For your information..."}
         color={baseTheme.colors.fuschiaBlue}
         iconName={"Search"}
       />
