@@ -35,16 +35,25 @@ export const AnnualInitiativeCardExpanded = (
     });
   };
 
+  const renderQuarterlyGoals = () => {
+    return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
+      return (
+        <QuarterlyGoalContainer>
+          <RowContainer>
+            <StyledText> {quarterlyGoal.description} </StyledText>
+          </RowContainer>
+        </QuarterlyGoalContainer>
+      );
+    });
+  };
+
   return (
     <Container
       key={index}
       margin-right={index + 1 == totalNumberOfAnnualInitiatives ? "0px" : "15px"}
     >
-      <RowContainer>
-        <DescriptionContainer>
-          <StyledText> {annualInitiative.description} </StyledText>
-        </DescriptionContainer>
-      </RowContainer>
+      <StyledText> {annualInitiative.description} </StyledText>
+      <QuarterlyGoalsContainer>{renderQuarterlyGoals()}</QuarterlyGoalsContainer>
     </Container>
   );
 };
@@ -63,6 +72,11 @@ const DescriptionContainer = styled.div`
   width: 60%;
 `;
 
+const QuarterlyGoalsContainer = styled.div`
+  backgroundcolor: ${props => props.theme.colors.grey80};
+  padding: 8px;
+`;
+
 const StyledText = styled(Text)`
   padding-left: 16px;
   padding-right: 16px;
@@ -72,6 +86,8 @@ const StyledText = styled(Text)`
     text-decoration: underline;
   }
 `;
+
+const QuarterlyGoalContainer = styled.div``;
 
 const QuarterlyGoalIndicatorsContainer = styled.div`
   ${color}

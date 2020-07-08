@@ -29,7 +29,7 @@ export const AnnualInitiativeCard = (props: IAnnualInitiativeCardProps): JSX.Ele
           backgroundColor = finePine;
           break;
       }
-      return <QuarterlyGoalIndicator backgroundColor={backgroundColor} />;
+      return <QuarterlyGoalIndicator key={index} backgroundColor={backgroundColor} />;
     });
   };
 
