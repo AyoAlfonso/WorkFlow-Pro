@@ -1,14 +1,13 @@
 import { types, flow, getEnv } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
-import { CompanyModel } from "../models/company";
 import { GoalModel } from "../models/goal";
 //import { ApiResponse } from "apisauce";
 
 export const GoalStoreModel = types
   .model("GoalStoreModel")
   .props({
-    companyGoals: types.array(GoalModel),
-    personalGoals: types.array(GoalModel),
+    companyGoals: types.maybeNull(GoalModel),
+    personalGoals: types.maybeNull(GoalModel),
   })
   .extend(withEnvironment())
   .views(self => ({}))
@@ -18,8 +17,9 @@ export const GoalStoreModel = types
       try {
         const response: any = yield env.api.getAllGoals();
         if (response.ok) {
-          self.companyGoals = response.data.companyGoals;
-          self.personalGoals = response.data.userGoals;
+          console.log("data", response.data);
+          self.companyGoals = response.data.company;
+          self.personalGoals = response.data.user;
         }
       } catch {
         // error messaging handled by API monitor
