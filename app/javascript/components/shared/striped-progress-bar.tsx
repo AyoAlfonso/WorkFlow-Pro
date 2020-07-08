@@ -64,35 +64,18 @@ const ProgressBarFillDiv = styled.div`
     })}
 `;
 
-const ProgressBarCompleted = styled.span`
+const ProgressBarText = styled.span`
   font-family: Lato;
   color: white;
 `;
 
-export const ProgressBar = props => {
+export const StripedProgressBar = props => {
   const { completed, variant } = props;
   return (
     <ProgressBarContainer variant={variant}>
       <ProgressBarFillDiv variant={variant} completed={completed}>
-        <ProgressBarCompleted>Annual Initiative</ProgressBarCompleted>
+        <ProgressBarText>Annual Initiative</ProgressBarText>
       </ProgressBarFillDiv>
     </ProgressBarContainer>
   );
 };
-
-// ${props => variant({
-//   variants: {
-//     primary: {
-
-//     },
-//     success: {
-
-//     },
-//     warning: {
-
-//     },
-//     error: {
-
-//     }
-//   }
-// })}

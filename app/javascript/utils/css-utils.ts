@@ -1,5 +1,3 @@
-import R from "ramda";
-
 export const hexToHSL = hex => {
   // Convert hex to RGB first
   let r, g, b;
@@ -37,7 +35,7 @@ export const hexToHSL = hex => {
   s = +(s * 100).toFixed(1);
   l = +(l * 100).toFixed(1);
 
-  return "hsl(" + h + "," + s + "%," + l + "%)";
+  return `hsl(${h},${s}%,${l}%)`;
 };
 
 export const adjustBrightnessHSL = (hslString, offset) => {
