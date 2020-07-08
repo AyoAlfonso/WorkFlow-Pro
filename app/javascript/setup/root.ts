@@ -25,8 +25,8 @@ const initialState = {
     company: null,
   },
   goalStore: {
-    companyGoals: [],
-    personalGoals: [],
+    companyGoals: null,
+    personalGoals: null,
   },
 };
 

@@ -2,26 +2,37 @@ import * as React from "react";
 import { HomeContainerBorders, HomeTitle } from "./shared-components";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { space, color } from "styled-system";
+import { AnnualInitiativeCard } from "../goals/annual-initiative/annual-initiative-card";
+import { Icon } from "../../shared/icon";
+import { baseTheme } from "../../../themes";
+import { AnnualInitiativeCardExpanded } from "../goals/annual-initiative/annual-initiative-card-expanded";
 
 export const HomeGoals = (): JSX.Element => {
   const { goalStore } = useMst();
 
+  const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(true);
+  const [showMinimizedCards, setShowMinimizedCards] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    goalStore.load().then(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return <>Loading...</>;
+  }
+
   const companyGoals = goalStore.companyGoals;
   const personalGoals = goalStore.personalGoals;
-
-  const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(true);
-
-  const goalsToShow = showCompanyGoals ? companyGoals : personalGoals;
-
-  console.log("comapny goals", companyGoals);
-  console.log("personal goals", personalGoals);
+  const currentGoal = showCompanyGoals ? companyGoals : personalGoals;
 
   const renderRallyingCry = (): JSX.Element => {
     return (
       <VisionContainer>
-        <VisionText>Rallying Cry</VisionText>
+        <VisionTitle>Rallying Cry</VisionTitle>
+        <VisionText> {currentGoal.rallyingCry} </VisionText>
       </VisionContainer>
     );
   };
@@ -29,26 +40,54 @@ export const HomeGoals = (): JSX.Element => {
   const renderPersonalVision = (): JSX.Element => {
     return (
       <VisionContainer>
-        <VisionText>Personal Vision</VisionText>
+        <VisionTitle>Personal Vision</VisionTitle>
+        <VisionText> {currentGoal.personalVision}</VisionText>
       </VisionContainer>
     );
   };
 
-  const renderAnnualInitiatives = () => {
-    return goalsToShow.map((annualInitiative, index) => (
-      <AnnualInitiativesItem
-        key={index}
-        margin-right={index + 1 == goalsToShow.length ? "0px" : "15px"}
-      >
-        {annualInitiative.description}
-      </AnnualInitiativesItem>
-    ));
+  const renderExpandAnnualInitiativesIcon = () => {
+    return showMinimizedCards ? (
+      <IconContainer>
+        <Icon icon={"Chevron-Down"} size={"15px"} iconColor={"primary100"} />
+      </IconContainer>
+    ) : (
+      <IconContainer marginTop={"3px"}>
+        <Icon icon={"Chevron-Up"} size={"15px"} iconColor={"white"} />
+      </IconContainer>
+    );
+  };
+
+  const renderAnnualInitiatives = annualInitiatives => {
+    return annualInitiatives.map((annualInitiative, index) => {
+      return showMinimizedCards ? (
+        <AnnualInitiativeCard
+          key={index}
+          index={index}
+          annualInitiative={annualInitiative}
+          totalNumberOfAnnualInitiatives={annualInitiatives.length}
+        />
+      ) : (
+        <AnnualInitiativeCardExpanded
+          key={index}
+          index={index}
+          annualInitiative={annualInitiative}
+          totalNumberOfAnnualInitiatives={annualInitiatives.length}
+        />
+      );
+    });
   };
 
   return (
     <Container>
       <TitleContainer>
         <HomeTitle> Goals </HomeTitle>
+        <ExpandAnnualInitiativesButton
+          showMinimizedCards={showMinimizedCards}
+          onClick={() => setShowMinimizedCards(!showMinimizedCards)}
+        >
+          {renderExpandAnnualInitiativesIcon()}
+        </ExpandAnnualInitiativesButton>
         <FilterContainer>
           <FilterOptions
             onClick={() => setShowCompanyGoals(false)}
@@ -68,12 +107,16 @@ export const HomeGoals = (): JSX.Element => {
       </TitleContainer>
 
       {renderRallyingCry()}
-      <InitiativesContainer>{renderAnnualInitiatives()}</InitiativesContainer>
+      <InitiativesContainer>{renderAnnualInitiatives(companyGoals.goals)}</InitiativesContainer>
 
-      <PersonalVisionContainer>
-        {renderPersonalVision()}
-        <InitiativesContainer>{renderAnnualInitiatives()}</InitiativesContainer>
-      </PersonalVisionContainer>
+      {!showCompanyGoals && (
+        <PersonalVisionContainer>
+          {renderPersonalVision()}
+          <InitiativesContainer>
+            {renderAnnualInitiatives(personalGoals.goals)}
+          </InitiativesContainer>
+        </PersonalVisionContainer>
+      )}
     </Container>
   );
 };
@@ -93,23 +136,58 @@ const PersonalVisionContainer = styled.div`
 `;
 
 const VisionContainer = styled(HomeContainerBorders)`
-  height: 40px;
+  height: 60px;
+  display: flex;
+`;
+
+const VisionTitle = styled.p`
+  ${color}
+  font-size: 20px;
+  color: ${props => props.theme.colors.primary100};
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 16px;
+  display: flex;
+  align-items: center;
+  height: inherit;
+  position: absolute;
 `;
 
 const VisionText = styled.p`
-  text-align: center;
-  margin-top: 10px;
+  font-size: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
 `;
 
-const AnnualInitiativesItem = styled(HomeContainerBorders)`
-  height: 100px;
-  width: 20%;
-  min-width: 240px;
-  margin-right: ${props => props["margin-right"] || "0px"};
+type ExpandAnnualInitiativesButtonType = {
+  showMinimizedCards: boolean;
+};
+
+const ExpandAnnualInitiativesButton = styled.div<ExpandAnnualInitiativesButtonType>`
+  border-radius: 50px;
+  border: 1px solid #e3e3e3;
+  box-shadow: 0px 3px 6px #f5f5f5;
+  height: 25px;
+  width: 25px;
+  margin-left: 16px;
+  margin-top: 10px;
+  background-color: ${props =>
+    props.showMinimizedCards ? props.theme.colors.white : props.theme.colors.primary100};
 `;
 
 const TitleContainer = styled.div`
   display: flex;
+`;
+
+type IconContainerType = {
+  marginTop?: string;
+};
+
+const IconContainer = styled.div<IconContainerType>`
+  text-align: center;
+  margin-top: ${props => props.marginTop || "6px"};
 `;
 
 const FilterContainer = styled.div`

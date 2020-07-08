@@ -24,7 +24,6 @@ export const RootStoreModel = types
       //check if there is a cookie, if so try to call the profile endpoint and set logged into true
       self.sessionStore.loadProfile();
       self.companyStore.load();
-      self.goalStore.load();
       // do some API calls
       self.userStore.load();
     }),

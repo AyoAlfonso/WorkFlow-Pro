@@ -2,6 +2,8 @@ class QuarterlyGoal < ApplicationRecord
   include HasCreator
   include HasOwner
 
+  enum status: { incomplete: 0, in_progress: 1, completed: 2 }
+
   belongs_to :annual_initiative
   has_many :milestones, dependent: :destroy
 

@@ -176,6 +176,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_175429) do
     t.integer "progress", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "status", default: 0
     t.index ["created_by_id"], name: "index_milestones_on_created_by_id"
     t.index ["quarterly_goal_id"], name: "index_milestones_on_quarterly_goal_id"
   end
@@ -199,6 +200,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_175429) do
     t.string "key_elements", default: [], array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "status", default: 0
     t.index ["annual_initiative_id"], name: "index_quarterly_goals_on_annual_initiative_id"
     t.index ["created_by_id"], name: "index_quarterly_goals_on_created_by_id"
     t.index ["owned_by_id"], name: "index_quarterly_goals_on_owned_by_id"
