@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ToastMessage } from "../components/shared/toaster";
 import { toast } from "react-toastify";
-import { ToastMessageConstants } from "../constants/toaster-types";
+import { ToastMessageConstants } from "../constants/toast-types";
 import { baseTheme } from "../themes/base";
 
 export const showToast = (message, type) => {
