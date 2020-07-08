@@ -110,7 +110,7 @@ export const ToastMessages = () => (
       />
       <CloseButton closeToast={() => {}} />
     </ToastBox>
-    <ToastBox>
+    {/* <ToastBox>
       <ToastMessage
         heading={"Warning"}
         message={"You've been warned!"}
@@ -136,6 +136,6 @@ export const ToastMessages = () => (
         iconName={"Search"}
       />
       <CloseButton closeToast={() => {}} />
-    </ToastBox>
+    </ToastBox> */}
   </ContainerDiv>
 );
