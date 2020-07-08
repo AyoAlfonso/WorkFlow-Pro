@@ -29,6 +29,9 @@ Rails.application.routes.draw do
 
     #goals
     get '/goals', to: 'goals#index'
+
+    #annual_initiatives
+    resources :annual_initiatives, only: [:create, :show, :update, :destroy]
   end
   
 
