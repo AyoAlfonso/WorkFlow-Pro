@@ -13,7 +13,7 @@ export const showToast = (message, variant) => {
           heading={heading}
           message={message}
           color={baseTheme.colors.finePine}
-          iconName={"Tasks"}
+          iconName={"Success"}
         />,
       );
       break;
@@ -43,7 +43,7 @@ export const showToast = (message, variant) => {
           heading={heading}
           message={message}
           color={baseTheme.colors.warningRed}
-          iconName={"Close"}
+          iconName={"Error"}
         />,
       );
       break;

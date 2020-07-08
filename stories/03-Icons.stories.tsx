@@ -257,6 +257,14 @@ export const Icons = () => (
         <Icon icon={"Emotion-E"} size={"2em"} iconColor={"warningRed"} />
         <TextCenteredDiv>Emotion-E</TextCenteredDiv>
       </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Success"} size={"2em"} iconColor={"finePine"} />
+        <TextCenteredDiv>Success</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Error"} size={"2em"} iconColor={"warningRed"} />
+        <TextCenteredDiv>Error</TextCenteredDiv>
+      </CenteredColumnDiv>
     </RowDiv>
     <Divider />
     <RowDiv>
