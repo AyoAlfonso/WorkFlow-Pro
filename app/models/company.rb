@@ -7,4 +7,9 @@ class Company < ApplicationRecord
   def core_four
     super || build_core_four
   end
+  def format_fiscal_year_start
+    month = sprintf('%02d', fiscal_year_start.month)
+    day = sprintf('%02d', fiscal_year_start.day)
+    "#{month}/#{day}"
+  end
 end
