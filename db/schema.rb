@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_03_145603) do
+ActiveRecord::Schema.define(version: 2020_07_07_204704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 2020_07_03_145603) do
     t.text "rallying_cry"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.date "fiscal_year_start"
   end
 
   create_table "conversation_starters", force: :cascade do |t|
@@ -174,6 +175,7 @@ ActiveRecord::Schema.define(version: 2020_07_03_145603) do
     t.integer "progress", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "status", default: 0
     t.index ["created_by_id"], name: "index_milestones_on_created_by_id"
     t.index ["quarterly_goal_id"], name: "index_milestones_on_quarterly_goal_id"
   end
@@ -197,6 +199,7 @@ ActiveRecord::Schema.define(version: 2020_07_03_145603) do
     t.string "key_elements", default: [], array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "status", default: 0
     t.index ["annual_initiative_id"], name: "index_quarterly_goals_on_annual_initiative_id"
     t.index ["created_by_id"], name: "index_quarterly_goals_on_created_by_id"
     t.index ["owned_by_id"], name: "index_quarterly_goals_on_owned_by_id"
