@@ -4,9 +4,9 @@ import { toast } from "react-toastify";
 import { ToastMessageConstants } from "../constants/toast-types";
 import { baseTheme } from "../themes/base";
 
-export const showToast = (message, type) => {
-  const heading = `${type.charAt(0)}${type.slice(1).toLowerCase()}`;
-  switch (type) {
+export const showToast = (message, variant) => {
+  const heading = `${variant.charAt(0)}${variant.slice(1).toLowerCase()}`;
+  switch (variant) {
     case ToastMessageConstants.SUCCESS:
       toast(
         <ToastMessage
