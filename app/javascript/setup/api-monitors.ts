@@ -28,7 +28,7 @@ export const addErrorToastMonitor = api => {
     if (response.status !== 200 || response.problem !== null) {
       switch (response.problem) {
         case CLIENT_ERROR:
-          showToast("An client error occurred", ToastMessageConstants.ERROR);
+          showToast("A client error occurred", ToastMessageConstants.ERROR);
           break;
         case CONNECTION_ERROR:
           showToast("A connection error occurred", ToastMessageConstants.ERROR);
