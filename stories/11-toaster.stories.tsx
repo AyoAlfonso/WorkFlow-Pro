@@ -20,7 +20,7 @@ const propsList = [
     description: "The message you want to display",
   },
   {
-    name: "type",
+    name: "variant",
     type: "string",
     required: true,
     description: "The variant of the toaster.  Use the provided constants",
@@ -78,7 +78,7 @@ export const ToastMessages = () => (
       onClick={() => {
         showToast(
           text("message", "Toast Message"),
-          select("type", Object.values(ToastMessageConstants), ToastMessageConstants.SUCCESS),
+          select("variant", Object.values(ToastMessageConstants), ToastMessageConstants.SUCCESS),
         );
       }}
       width={"180px"}
