@@ -7,9 +7,10 @@ const ProgressBarContainer = styled.div`
   ${color}
   ${layout}
   ${space}
-  height: 20px;
+  height: 23px;
   width: 100%;
   border-radius: 4px;
+  position: relative;
   ${props =>
     variant({
       variants: {
@@ -61,21 +62,31 @@ const ProgressBarFillDiv = styled.div`
           background: buildRepeatingLinearGradient(props.theme.colors.warningRed, 70, 5, "px", 20),
         },
       },
-    })}
+    })};
 `;
 
-const ProgressBarText = styled.span`
+const ProgressBarText = styled.div`
   font-family: Lato;
+  font-weight: 500;
+  font-size: 19px;
   color: white;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
 `;
 
-export const StripedProgressBar = props => {
-  const { completed, variant } = props;
+export interface IStripedProgressBarProps {
+  completed: number;
+  variant: string;
+  text?: string;
+}
+
+export const StripedProgressBar = (props: IStripedProgressBarProps) => {
+  const { completed, variant, text } = props;
   return (
     <ProgressBarContainer variant={variant}>
-      <ProgressBarFillDiv variant={variant} completed={completed}>
-        <ProgressBarText>Annual Initiative</ProgressBarText>
-      </ProgressBarFillDiv>
+      <ProgressBarText>{text}</ProgressBarText>
+      <ProgressBarFillDiv variant={variant} completed={completed} />
     </ProgressBarContainer>
   );
 };
