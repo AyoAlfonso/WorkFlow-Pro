@@ -2,13 +2,13 @@ class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::Allowlist
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable, #:confirmable, 
+  devise :database_authenticatable, :registerable, #:confirmable,
          :recoverable, :rememberable, :trackable,
          :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
-  
+
   belongs_to :company
-  delegate :name, to: :company, prefix: true, allow_nil: true
+  delegate :name, :timezone, to: :company, prefix: true, allow_nil: true
   has_many :issues
   has_many :key_activities
   has_many :personal_reflections
@@ -20,12 +20,16 @@ class User < ApplicationRecord
   has_many :meeting_ratings
   has_one_attached :avatar
 
-  def full_name                                                                                                                                                                                     
-    ([first_name, last_name] - ['']).compact.join(' ')                         
+  def full_name
+    ([first_name, last_name] - ['']).compact.join(' ')
   end
 
   def avatar_url
     self.avatar.try(:url) || "#{ENV['HOST_URL']}/assets/avatar-blank.png"
+  end
+
+  def get_timezone
+    self.timezone.present? ? self.timezone : company_timezone
   end
 
   # def on_jwt_dispatch(token, payload)
