@@ -1,4 +1,5 @@
 import { types } from "mobx-state-tree";
+import { UserModel } from "./user";
 
 export const QuarterlyGoalModel = types
   .model("QuarterlyGoalModel")
@@ -10,7 +11,9 @@ export const QuarterlyGoalModel = types
     importance: types.array(types.string),
     keyElements: types.array(types.string),
     ownedById: types.number,
-    status: types.number,
+    ownedBy: UserModel,
+    status: types.string,
+    description: types.string,
     // milestones
   })
   .views(self => ({}))

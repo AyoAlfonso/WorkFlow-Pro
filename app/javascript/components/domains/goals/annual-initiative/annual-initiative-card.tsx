@@ -19,13 +19,13 @@ export const AnnualInitiativeCard = (props: IAnnualInitiativeCardProps): JSX.Ele
       const { warningRed, cautionYellow, finePine } = baseTheme.colors;
       let backgroundColor;
       switch (quarterlyGoal.status) {
-        case 0:
+        case "incomplete":
           backgroundColor = warningRed;
           break;
-        case 1:
+        case "in_progress":
           backgroundColor = cautionYellow;
           break;
-        case 2:
+        case "completed":
           backgroundColor = finePine;
           break;
       }
@@ -51,6 +51,7 @@ const Container = styled(HomeContainerBorders)`
   width: 20%;
   min-width: 240px;
   margin-right: ${props => props["margin-right"] || "0px"};
+  height: fit-content;
 `;
 
 const DescriptionContainer = styled.div`
@@ -70,7 +71,7 @@ const StyledText = styled(Text)`
 const QuarterlyGoalIndicatorsContainer = styled.div`
   ${color}
   height: 25px;
-  background-color: ${props => props.theme.colors.grey20};
+  background-color: ${props => props.theme.colors.backgroundGrey};
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   display: flex;
