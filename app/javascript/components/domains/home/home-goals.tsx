@@ -6,8 +6,6 @@ import { useState, useEffect } from "react";
 import { space, color } from "styled-system";
 import { AnnualInitiativeCard } from "../goals/annual-initiative/annual-initiative-card";
 import { Icon } from "../../shared/icon";
-import { baseTheme } from "../../../themes";
-import { AnnualInitiativeCardExpanded } from "../goals/annual-initiative/annual-initiative-card-expanded";
 
 export const HomeGoals = (): JSX.Element => {
   const { goalStore } = useMst();
@@ -60,19 +58,13 @@ export const HomeGoals = (): JSX.Element => {
 
   const renderAnnualInitiatives = annualInitiatives => {
     return annualInitiatives.map((annualInitiative, index) => {
-      return showMinimizedCards ? (
+      return (
         <AnnualInitiativeCard
           key={index}
           index={index}
           annualInitiative={annualInitiative}
           totalNumberOfAnnualInitiatives={annualInitiatives.length}
-        />
-      ) : (
-        <AnnualInitiativeCardExpanded
-          key={index}
-          index={index}
-          annualInitiative={annualInitiative}
-          totalNumberOfAnnualInitiatives={annualInitiatives.length}
+          showMinimizedCards={showMinimizedCards}
         />
       );
     });
@@ -107,7 +99,10 @@ export const HomeGoals = (): JSX.Element => {
       </TitleContainer>
 
       {renderRallyingCry()}
-      <InitiativesContainer>{renderAnnualInitiatives(companyGoals.goals)}</InitiativesContainer>
+
+      {showCompanyGoals && (
+        <InitiativesContainer>{renderAnnualInitiatives(companyGoals.goals)}</InitiativesContainer>
+      )}
 
       {!showCompanyGoals && (
         <PersonalVisionContainer>
