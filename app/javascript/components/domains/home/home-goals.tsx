@@ -44,7 +44,7 @@ export const HomeGoals = (): JSX.Element => {
     );
   };
 
-  const renderExpandAnnualInitiativesIcon = () => {
+  const renderExpandAnnualInitiativesIcon = (): JSX.Element => {
     return showMinimizedCards ? (
       <IconContainer>
         <Icon icon={"Chevron-Down"} size={"15px"} iconColor={"primary100"} />
@@ -56,7 +56,7 @@ export const HomeGoals = (): JSX.Element => {
     );
   };
 
-  const renderAnnualInitiatives = annualInitiatives => {
+  const renderAnnualInitiatives = (annualInitiatives): JSX.Element => {
     return annualInitiatives.map((annualInitiative, index) => {
       return (
         <AnnualInitiativeCard

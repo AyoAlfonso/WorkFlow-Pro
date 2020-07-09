@@ -4,9 +4,11 @@ import { Text } from "../../../shared/text";
 import { baseTheme } from "../../../../themes";
 import { Icon } from "../../../shared/icon";
 import { UserDefaultIcon } from "../../../shared/user-default-icon";
+import { QuarterlyGoalType } from "~/types/quarterly-goal";
+import { AnnualInitiativeType } from "~/types/annual-initiative";
 
 interface IAnnualInitiativeCardExpandedProps {
-  annualInitiative: any;
+  annualInitiative: AnnualInitiativeType;
   setShowMinimizedCard: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -15,7 +17,7 @@ export const AnnualInitiativeCardExpanded = (
 ): JSX.Element => {
   const { annualInitiative, setShowMinimizedCard } = props;
 
-  const renderStatusBlocks = quarterlyGoal => {
+  const renderStatusBlocks = (quarterlyGoal: QuarterlyGoalType) => {
     return quarterlyGoal.milestones.map((milestone, index) => {
       const { warningRed, cautionYellow, finePine, grey20 } = baseTheme.colors;
       let backgroundColor;
