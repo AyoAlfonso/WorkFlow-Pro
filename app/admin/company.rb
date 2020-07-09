@@ -39,10 +39,18 @@ ActiveAdmin.register Company do
     br
     panel 'Core Four' do
       attributes_table_for company.core_four do
-        row :core_1
-        row :core_2
-        row :core_3
-        row :core_4
+        row :core_1 do |cf|
+          cf.core_1.body
+        end
+        row :core_2 do |cf|
+          cf.core_2.body
+        end
+        row :core_3 do |cf|
+          cf.core_3.body
+        end
+        row :core_4 do |cf|
+          cf.core_4.body
+        end
       end
     end
     br
@@ -70,11 +78,11 @@ ActiveAdmin.register Company do
       f.input :timezone, as: :select, collection: timezones
     end
     f.inputs do
-      f.has_many :core_four, heading: 'Core Four', allow_destroy: false, new_record: false do |cf|
-        cf.input :core_1, input_html: { rows: 5 }
-        cf.input :core_2, input_html: { rows: 5 }
-        cf.input :core_3, input_html: { rows: 5 }
-        cf.input :core_4, input_html: { rows: 5 }
+      # Some hackery because trix editor was only displaying one field otherwise in the has_many
+      [:core_1, :core_2, :core_3, :core_4].each do |cf_field|
+        f.has_many :core_four, allow_destroy: false, new_record: false do |cf|
+          cf.rich_text_area cf_field
+        end
       end
     end
     f.actions
