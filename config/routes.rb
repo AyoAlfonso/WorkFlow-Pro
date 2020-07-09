@@ -32,6 +32,9 @@ Rails.application.routes.draw do
 
     #annual_initiatives
     resources :annual_initiatives, only: [:create, :show, :update, :destroy]
+
+    #quarterly_goals
+    resources :quarterly_goals, only: [:index, :create, :show, :update, :destroy]
   end
   
 

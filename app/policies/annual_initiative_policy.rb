@@ -10,6 +10,22 @@ class AnnualInitiativePolicy < ApplicationPolicy
     true
   end
 
+  def create?
+    true
+  end
+
+  def show?
+    @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user
+  end
+
+  def update?
+    @annual_initiative.created_by == @user
+  end
+
+  def destroy?
+    @annual_initiative.created_by == @user
+  end
+
   class Scope
     attr_reader :user, :scope
 
