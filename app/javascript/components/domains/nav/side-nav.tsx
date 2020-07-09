@@ -9,6 +9,7 @@ import { space, color } from "styled-system";
 import { matchPath } from "react-router";
 
 import { useTranslation } from "react-i18next";
+import { observer } from "mobx-react";
 
 const StyledSideNav = styled.div`
   position: fixed; /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
@@ -62,32 +63,29 @@ interface StyledNavLinkChildrenActiveProps {
   children: any;
   disabled?: boolean;
 }
-const StyledNavLinkChildrenActive = ({
-  to,
-  icon,
-  children,
-  disabled,
-}: StyledNavLinkChildrenActiveProps): JSX.Element => {
-  const { router } = useMst();
-  var pathMatch = matchPath(router.location.pathname, to);
-  var isActive = pathMatch ? (to == "/" ? pathMatch.isExact : true) : false;
+const StyledNavLinkChildrenActive = observer(
+  ({ to, icon, children, disabled }: StyledNavLinkChildrenActiveProps): JSX.Element => {
+    const { router } = useMst();
+    var pathMatch = matchPath(router.location.pathname, to);
+    var isActive = pathMatch ? (to == "/" ? pathMatch.isExact : true) : false;
 
-  return isActive ? (
-    <StyledNavLink to={to} disabled={disabled}>
-      <IconBorder>
-        <Icon icon={icon} size={"2em"} iconColor={"primary100"} m={"auto"} />
-      </IconBorder>
-      <Text>{children}</Text>
-    </StyledNavLink>
-  ) : (
-    <StyledNavLink to={to} disabled={disabled}>
-      <IconBorder>
-        <Icon icon={icon} size={"2em"} iconColor={"grey40"} m={"auto"} />
-      </IconBorder>
-      <Text color={"grey40"}>{children}</Text>
-    </StyledNavLink>
-  );
-};
+    return isActive ? (
+      <StyledNavLink to={to} disabled={disabled}>
+        <IconBorder>
+          <Icon icon={icon} size={"2em"} iconColor={"primary100"} m={"auto"} />
+        </IconBorder>
+        <Text>{children}</Text>
+      </StyledNavLink>
+    ) : (
+      <StyledNavLink to={to} disabled={disabled}>
+        <IconBorder>
+          <Icon icon={icon} size={"2em"} iconColor={"grey40"} m={"auto"} />
+        </IconBorder>
+        <Text color={"grey40"}>{children}</Text>
+      </StyledNavLink>
+    );
+  },
+);
 
 export const SideNav = (): JSX.Element => {
   const { t } = useTranslation();
