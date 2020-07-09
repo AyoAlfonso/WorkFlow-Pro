@@ -125,10 +125,6 @@ ActiveRecord::Schema.define(version: 2020_07_09_232454) do
   end
 
   create_table "core_fours", force: :cascade do |t|
-    t.text "core_1"
-    t.text "core_2"
-    t.text "core_3"
-    t.text "core_4"
     t.bigint "company_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
