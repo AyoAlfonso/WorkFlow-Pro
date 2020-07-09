@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { color } from "styled-system";
 import { baseTheme } from "../../../../themes";
 import { Icon } from "../../../shared/icon";
+import { AnnualInitiativeType } from "~/types/annual-initiative";
 
 interface IAnnualInitiativeCardMinimizedProps {
-  annualInitiative: any;
+  annualInitiative: AnnualInitiativeType;
   setShowMinimizedCard: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
