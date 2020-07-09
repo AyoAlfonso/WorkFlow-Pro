@@ -1,37 +1,29 @@
 import * as React from "react";
-import { HomeContainerBorders, HomeTitle } from "../../home/shared-components";
+import { HomeContainerBorders } from "../../home/shared-components";
 import styled from "styled-components";
-import { color } from "styled-system";
 import { Text } from "../../../shared/text";
-import { baseTheme } from "../../../../themes";
+import { AnnualInitiativeCardMinimized } from "./annual-initiative-card-minimized";
+import { AnnualInitiativeCardExpanded } from "./annual-initiative-card-expanded";
+import { useState, useEffect } from "react";
 
 interface IAnnualInitiativeCardProps {
   annualInitiative: any;
   index: number;
   totalNumberOfAnnualInitiatives: number;
+  showMinimizedCards: boolean;
 }
 
-export const AnnualInitiativeCard = (props: IAnnualInitiativeCardProps): JSX.Element => {
-  const { annualInitiative, index, totalNumberOfAnnualInitiatives } = props;
+export const AnnualInitiativeCard = ({
+  annualInitiative,
+  index,
+  totalNumberOfAnnualInitiatives,
+  showMinimizedCards,
+}: IAnnualInitiativeCardProps): JSX.Element => {
+  const [showMinimizedCard, setShowMinimizedCard] = useState<boolean>(showMinimizedCards);
 
-  const renderStatusSquares = () => {
-    return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
-      const { warningRed, cautionYellow, finePine } = baseTheme.colors;
-      let backgroundColor;
-      switch (quarterlyGoal.status) {
-        case "incomplete":
-          backgroundColor = warningRed;
-          break;
-        case "in_progress":
-          backgroundColor = cautionYellow;
-          break;
-        case "completed":
-          backgroundColor = finePine;
-          break;
-      }
-      return <QuarterlyGoalIndicator key={index} backgroundColor={backgroundColor} />;
-    });
-  };
+  useEffect(() => {
+    setShowMinimizedCard(showMinimizedCards);
+  }, [showMinimizedCards]);
 
   return (
     <Container
@@ -41,7 +33,18 @@ export const AnnualInitiativeCard = (props: IAnnualInitiativeCardProps): JSX.Ele
       <DescriptionContainer>
         <StyledText> {annualInitiative.description} </StyledText>
       </DescriptionContainer>
-      <QuarterlyGoalIndicatorsContainer>{renderStatusSquares()}</QuarterlyGoalIndicatorsContainer>
+
+      {showMinimizedCard ? (
+        <AnnualInitiativeCardMinimized
+          annualInitiative={annualInitiative}
+          setShowMinimizedCard={setShowMinimizedCard}
+        />
+      ) : (
+        <AnnualInitiativeCardExpanded
+          annualInitiative={annualInitiative}
+          setShowMinimizedCard={setShowMinimizedCard}
+        />
+      )}
     </Container>
   );
 };
@@ -66,29 +69,4 @@ const StyledText = styled(Text)`
     font-weight: bold;
     text-decoration: underline;
   }
-`;
-
-const QuarterlyGoalIndicatorsContainer = styled.div`
-  ${color}
-  height: 25px;
-  background-color: ${props => props.theme.colors.backgroundGrey};
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  display: flex;
-  padding-left: 16px;
-  padding-right: 16px;
-`;
-
-type QuarterlyGoalIndicatorType = {
-  backgroundColor?: string;
-};
-
-const QuarterlyGoalIndicator = styled.div<QuarterlyGoalIndicatorType>`
-  height: 16px;
-  width: 16px;
-  background-color: ${props => props.backgroundColor || props.theme.colors.grey80};
-  margin-right: 6px;
-  margin-top: auto;
-  margin-bottom: auto;
-  border-radius: 3px;
 `;
