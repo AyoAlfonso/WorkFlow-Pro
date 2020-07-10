@@ -1,5 +1,12 @@
 ActiveAdmin.register Company do
-  permit_params :name, :address, :contact_email, :phone_number, :rallying_cry, :fiscal_year_start, core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4]
+  permit_params :name,
+                :address,
+                :contact_email,
+                :phone_number,
+                :rallying_cry,
+                :fiscal_year_start,
+                :timezone,
+                core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4]
   index do
     selectable_column
     id_column
@@ -27,6 +34,7 @@ ActiveAdmin.register Company do
       row :fiscal_year_start do |c|
         c.format_fiscal_year_start
       end
+      row :timezone
     end
     br
     panel 'Core Four' do
@@ -59,6 +67,7 @@ ActiveAdmin.register Company do
       f.input :phone_number
       f.input :rallying_cry, input_html: { rows: 5 }
       f.input :fiscal_year_start, order: [:month, :day]
+      f.input :timezone, as: :select, collection: timezones
     end
     f.inputs do
       f.has_many :core_four, heading: 'Core Four', allow_destroy: false, new_record: false do |cf|

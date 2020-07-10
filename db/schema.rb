@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_07_204704) do
+ActiveRecord::Schema.define(version: 2020_07_08_175429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +104,7 @@ ActiveRecord::Schema.define(version: 2020_07_07_204704) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.date "fiscal_year_start"
+    t.string "timezone"
   end
 
   create_table "conversation_starters", force: :cascade do |t|
@@ -242,6 +243,7 @@ ActiveRecord::Schema.define(version: 2020_07_07_204704) do
     t.integer "invitations_count", default: 0
     t.text "personal_vision"
     t.bigint "company_id", null: false
+    t.string "timezone"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
