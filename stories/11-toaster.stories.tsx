@@ -78,11 +78,7 @@ export const ToastMessages = () => (
       onClick={() => {
         showToast(
           text("message", "Toast Message"),
-          select(
-            "variant",
-            [ToastMessageConstants.SUCCESS, ToastMessageConstants.ERROR],
-            ToastMessageConstants.SUCCESS,
-          ),
+          select("variant", Object.values(ToastMessageConstants), ToastMessageConstants.SUCCESS),
         );
       }}
       width={"180px"}
@@ -110,7 +106,7 @@ export const ToastMessages = () => (
       />
       <CloseButton closeToast={() => {}} />
     </ToastBox>
-    {/* <ToastBox>
+    <ToastBox>
       <ToastMessage
         heading={"Warning"}
         message={"You've been warned!"}
@@ -136,6 +132,6 @@ export const ToastMessages = () => (
         iconName={"Search"}
       />
       <CloseButton closeToast={() => {}} />
-    </ToastBox> */}
+    </ToastBox>
   </ContainerDiv>
 );
