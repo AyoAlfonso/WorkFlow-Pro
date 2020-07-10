@@ -92,13 +92,14 @@ export const StripedProgressBar = (props: IStripedProgressBarProps) => {
   }, [progressBarRef]);
 
   const { completed, variant, text } = props;
+  console.log(progressBarWidth);
   return (
     <ProgressBarContainer variant={variant} ref={progressBarRef}>
       <ProgressBarText>{text}</ProgressBarText>
       <ProgressBarFillDiv
         variant={variant}
         completed={completed}
-        animate={{ width: progressBarWidth * (completed / 100) }}
+        animate={{ width: `${progressBarWidth * (completed / 100)}px` }}
       />
     </ProgressBarContainer>
   );
