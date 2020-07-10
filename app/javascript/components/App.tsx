@@ -30,8 +30,7 @@ import { SideNav } from "./domains/nav/side-nav";
 import { Placeholder } from "./shared/placeholder";
 
 const Container = styled.div`
-  margin-left: 12rem;
-  margin-right: auto;
+  margin-left: 168px;
   width: 85%;
   margin-bottom: 50px;
 `;

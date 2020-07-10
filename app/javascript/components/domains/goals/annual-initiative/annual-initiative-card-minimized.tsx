@@ -38,7 +38,12 @@ export const AnnualInitiativeCardMinimized = (
     <Container>
       <StatusSquareContainer>{renderStatusSquares()}</StatusSquareContainer>
       <MaximizeIconContainer onClick={() => setShowMinimizedCard(false)}>
-        <Icon icon={"Chevron-Down"} size={"15px"} iconColor={"grey60"} />
+        <Icon
+          icon={"Chevron-Down"}
+          size={"15px"}
+          iconColor={"grey60"}
+          style={{ marginTop: "5px" }}
+        />
       </MaximizeIconContainer>
     </Container>
   );
