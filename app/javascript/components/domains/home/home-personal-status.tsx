@@ -24,9 +24,11 @@ const Container = styled.div`
 `;
 
 const GreetingText = styled.p`
-  font-size: 48pt;
+  font-size: 40pt;
   font-family: Exo;
   font-weight: 300;
+  margin-top: 32px;
+  margin-bottom: 32px;
 `;
 
 const DropdownContainer = styled.div`
