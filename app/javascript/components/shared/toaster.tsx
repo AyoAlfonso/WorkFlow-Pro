@@ -74,7 +74,7 @@ export const ToastMessage = ({ heading, message, color, iconName }) => (
       <Text fontSize={"18px"} pt={2} pl={0} pb={1} pr={0} m={0}>
         {heading}
       </Text>
-      <Text color={"grey40"} fontSize={"13px"} pt={1} pl={0} pb={1} pr={0} m={0}>
+      <Text color={"grey60"} fontSize={"13px"} pt={1} pl={0} pb={1} pr={0} m={0}>
         {message}
       </Text>
     </TextContainer>
@@ -92,7 +92,7 @@ const CloseBox = styled.div`
 
 export const CloseButton = ({ closeToast }) => (
   <CloseBox onClick={closeToast}>
-    <Text color={"grey40"} fontSize={"13px"}>
+    <Text color={"grey60"} fontSize={"13px"}>
       Close
     </Text>
   </CloseBox>
