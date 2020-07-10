@@ -24,13 +24,12 @@ export const HomeGoals = (): JSX.Element => {
 
   const companyGoals = goalStore.companyGoals;
   const personalGoals = goalStore.personalGoals;
-  const currentGoal = showCompanyGoals ? companyGoals : personalGoals;
 
   const renderRallyingCry = (): JSX.Element => {
     return (
       <VisionContainer>
         <VisionTitle>Rallying Cry</VisionTitle>
-        <VisionText> {currentGoal.rallyingCry} </VisionText>
+        <VisionText> {companyGoals.rallyingCry} </VisionText>
       </VisionContainer>
     );
   };
@@ -39,7 +38,7 @@ export const HomeGoals = (): JSX.Element => {
     return (
       <VisionContainer>
         <VisionTitle>Personal Vision</VisionTitle>
-        <VisionText> {currentGoal.personalVision}</VisionText>
+        <VisionText> {personalGoals.personalVision}</VisionText>
       </VisionContainer>
     );
   };
@@ -100,18 +99,16 @@ export const HomeGoals = (): JSX.Element => {
 
       {renderRallyingCry()}
 
-      {showCompanyGoals && (
-        <InitiativesContainer>{renderAnnualInitiatives(companyGoals.goals)}</InitiativesContainer>
-      )}
+      <InitiativesContainer>
+        {renderAnnualInitiatives(
+          showCompanyGoals ? companyGoals.goals : companyGoals.myAnnualInitiatives,
+        )}
+      </InitiativesContainer>
 
-      {!showCompanyGoals && (
-        <PersonalVisionContainer>
-          {renderPersonalVision()}
-          <InitiativesContainer>
-            {renderAnnualInitiatives(personalGoals.goals)}
-          </InitiativesContainer>
-        </PersonalVisionContainer>
-      )}
+      <PersonalVisionContainer>
+        {renderPersonalVision()}
+        <InitiativesContainer>{renderAnnualInitiatives(personalGoals.goals)}</InitiativesContainer>
+      </PersonalVisionContainer>
     </Container>
   );
 };
