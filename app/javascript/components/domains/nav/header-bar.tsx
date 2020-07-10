@@ -111,6 +111,7 @@ export const HeaderBar = (): JSX.Element => {
                 setOpenLynchPynDropdown(false);
                 setOpenCreateDropdown(!openCreateDropdown);
               }}
+              rotate={openCreateDropdown}
             >
               {renderHeaderIcon("Plus")}
             </RoundButton>
