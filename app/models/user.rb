@@ -19,6 +19,9 @@ class User < ApplicationRecord
   has_many :weekly_meetings, :foreign_key => 'created_by_id', :class_name => 'User'
   has_many :meeting_ratings
   has_one_attached :avatar
+  belongs_to :user_role
+
+  validates :user_role_id, presence: true
 
   def full_name
     ([first_name, last_name] - ['']).compact.join(' ')
