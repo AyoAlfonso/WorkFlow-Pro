@@ -149,8 +149,7 @@ const Container = styled(HomeContainerBorders)`
   margin-top: 40px;
   height: 80px;
   width: 85%;
-  margin-left: 12rem;
-  margin-right: auto;
+  margin-left: 168px;
 `;
 
 const ActionsContainer = styled.div`
