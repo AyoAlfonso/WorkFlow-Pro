@@ -53,7 +53,7 @@ export const showToast = (message, variant) => {
           heading={"Notification"}
           message={message}
           color={baseTheme.colors.primary100}
-          iconName={"Star"}
+          iconName={"Comment"}
         />,
       );
   }
