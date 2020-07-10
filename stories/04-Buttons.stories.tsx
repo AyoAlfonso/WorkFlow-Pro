@@ -175,19 +175,38 @@ export const BaseButtonVariants = () => (
   </ContainerDiv>
 );
 
-export const RoundButton = () => (
-  <ContainerDiv pl={4}>
-    <h1>Round Button</h1>
-    <PropsList styledSystemProps={["color"]} />
-    <div>
-      <RoundButtonComponent onClick={actionFn}>
-        <Icon
-          icon={text("icon", "Plus")}
-          size={20}
-          color={"primary100"}
-          style={{ marginLeft: "10px", marginTop: "10px" }}
-        />
-      </RoundButtonComponent>
-    </div>
-  </ContainerDiv>
-);
+export const RoundButton = () => {
+  const [rotate, setRotate] = React.useState(false);
+  return (
+    <ContainerDiv pl={4}>
+      <h1>Round Button</h1>
+      <PropsList
+        propsList={[
+          {
+            name: "rotate",
+            type: "boolean",
+            required: false,
+            description: "rotates the button 45 degrees",
+          },
+        ]}
+        styledSystemProps={["color"]}
+      />
+      <div>
+        <RoundButtonComponent
+          onClick={() => {
+            actionFn();
+            setRotate(!rotate);
+          }}
+          rotate={rotate}
+        >
+          <Icon
+            icon={text("icon", "Plus")}
+            size={20}
+            color={"primary100"}
+            style={{ marginLeft: "10px", marginTop: "10px" }}
+          />
+        </RoundButtonComponent>
+      </div>
+    </ContainerDiv>
+  );
+};

@@ -2,13 +2,14 @@ import * as React from "react";
 import styled from "styled-components";
 import { color, layout, space, typography, variant } from "styled-system";
 import { buildRepeatingLinearGradient } from "../../utils/css-utils";
+import { motion } from "framer-motion";
 
 const ProgressBarContainer = styled.div`
   ${color}
   ${layout}
   ${space}
   height: 23px;
-  width: 100%;
+  width: ${props => (props.width ? props.width : "100%")};
   border-radius: 4px;
   position: relative;
   ${props =>
@@ -30,7 +31,7 @@ const ProgressBarContainer = styled.div`
     })}
 `;
 
-const ProgressBarFillDiv = styled.div`
+const ProgressBarFillDiv = styled(motion.div)`
   height: 100%;
   width: ${props => props.completed}%;
   border-radius: inherit;
@@ -82,11 +83,24 @@ export interface IStripedProgressBarProps {
 }
 
 export const StripedProgressBar = (props: IStripedProgressBarProps) => {
+  const progressBarRef = React.useRef(null);
+  const [progressBarWidth, setProgressBarWidth] = React.useState(null);
+  React.useEffect(() => {
+    if (progressBarRef.current) {
+      setProgressBarWidth(progressBarRef.current.offsetWidth);
+    }
+  }, [progressBarRef]);
+
   const { completed, variant, text } = props;
+  console.log(progressBarWidth);
   return (
-    <ProgressBarContainer variant={variant}>
+    <ProgressBarContainer variant={variant} ref={progressBarRef}>
       <ProgressBarText>{text}</ProgressBarText>
-      <ProgressBarFillDiv variant={variant} completed={completed} />
+      <ProgressBarFillDiv
+        variant={variant}
+        completed={completed}
+        animate={{ width: `${progressBarWidth * (completed / 100)}px` }}
+      />
     </ProgressBarContainer>
   );
 };
