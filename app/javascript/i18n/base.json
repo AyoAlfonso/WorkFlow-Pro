@@ -2,12 +2,21 @@
   "en": {
     "translations": {
       "general": {
-        "save": "Save"
+        "save": "Save",
+        "remove": "Remove",
+        "upload": "Upload"
       },
       "profile": {
         "account": "Account",
         "logout": "Log Out",
         "greeting": "Hey {{name}}",
+        "accountSettings": "Account Settings",
+        "profile": "Profile",
+        "reminders": "Reminders",
+        "meeting": "Meeting",
+        "users": "Users",
+        "company": "Company",
+        "editProfile": "Edit Profile",
         "loginForm": {
           "email": "E-mail",
           "password": "Password",

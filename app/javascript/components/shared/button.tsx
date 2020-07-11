@@ -8,7 +8,7 @@ const StyledButton = styled.button`
   ${space}
   ${typography}
   border-radius: 5px;
-  border-width: 2px;
+  border-width: 1px;
   border-style: solid;
   ${props =>
     variant({
