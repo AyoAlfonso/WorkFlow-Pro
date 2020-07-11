@@ -22,7 +22,7 @@ import { ModalProvider } from "styled-react-modal";
 
 import { AccountabilityChart } from "./domains/company/accountability-chart";
 
-import { AccountProfile } from "./domains/account/profile";
+import { AccountSettings } from "./domains/account/account-settings";
 
 import { HeaderBar } from "./domains/nav/header-bar";
 import { SideNav } from "./domains/nav/side-nav";
@@ -71,7 +71,7 @@ export const App = observer(
                   <Route
                     path={"/account"}
                     render={() => {
-                      return <AccountProfile />;
+                      return <AccountSettings />;
                     }}
                   />
                   <Route
