@@ -1,6 +1,6 @@
 import { types, getEnv, getRoot } from "mobx-state-tree";
 import { AnnualInitiativeModel } from "../models/annual-initiative";
-import { withRootStore } from "~/lib/with-root-store";
+import { withRootStore } from "../lib/with-root-store";
 
 export const GoalModel = types
   .model("GoalModel")

@@ -6,27 +6,34 @@ import { Icon } from "../../shared/icon";
 import { baseTheme } from "../../../themes";
 import { color } from "styled-system";
 import { RoundButton } from "../../shared/round-button";
-import { Flex, Box } from "rebass";
+import { Flex } from "rebass";
 import { useMst } from "../../../setup/root";
 import { CreateIssueModal } from "../issues/create-issue-modal";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 import { Text } from "../../shared/text";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { UserDefaultIcon } from "~/components/shared/user-default-icon";
 
 export const HeaderBar = (): JSX.Element => {
   const [openCreateDropdown, setOpenCreateDropdown] = useState<boolean>(false);
   const [openLynchPynDropdown, setOpenLynchPynDropdown] = useState<boolean>(false);
   const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
   const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
+  const [showAccountActions, setShowAccountActions] = useState<boolean>(false);
+
   const { sessionStore } = useMst();
   const dropdownRef = useRef(null);
+  const accountActionRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = event => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setOpenCreateDropdown(false);
         setOpenLynchPynDropdown(false);
+      }
+      if (accountActionRef.current && !accountActionRef.current.contains(event.target)) {
+        setShowAccountActions(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -99,6 +106,25 @@ export const HeaderBar = (): JSX.Element => {
     );
   };
 
+  const renderActionDropdown = (): JSX.Element => {
+    return showAccountActions ? (
+      <ActionDropdownContainer>
+        <AccountOption>
+          <Link to="/account" style={{ textDecoration: "none" }}>
+            <AccountOptionText>{t("profile.account")}</AccountOptionText>
+          </Link>
+        </AccountOption>
+        <AccountOption>
+          <AccountOptionText onClick={() => sessionStore.logoutRequest()}>
+            {t("profile.logout")}
+          </AccountOptionText>
+        </AccountOption>
+      </ActionDropdownContainer>
+    ) : (
+      <></>
+    );
+  };
+
   return (
     <Container>
       <Flex>
@@ -125,14 +151,29 @@ export const HeaderBar = (): JSX.Element => {
             {renderHeaderIcon("Logo")}
           </RoundButton>
         </ActionsContainer>
-        <Box mx="auto" />
-        <Box>
-          <img src={sessionStore.profile.avatarUrl} width="48" height="48" />
-          <div>{sessionStore.profile.firstName}</div>
-          <Link to="/account">{t("profile.account")}</Link>
-          <button onClick={() => sessionStore.logoutRequest()}>{t("profile.logout")}</button>
-        </Box>
+
+        <PersonalInfoContainer ref={accountActionRef}>
+          <PersonalInfoDisplayContainer onClick={() => setShowAccountActions(!showAccountActions)}>
+            <UserDefaultIcon
+              size={48}
+              firstName={sessionStore.profile.firstName}
+              lastName={sessionStore.profile.lastName}
+            />
+            <ProfileActionContainer>
+              <ProfileFirstName>{sessionStore.profile.firstName}</ProfileFirstName>
+              <IconContainer>
+                <ProfileDropdownIcon
+                  icon={"Chevron-Down"}
+                  size={15}
+                  iconColor={baseTheme.colors.primary100}
+                />
+              </IconContainer>
+            </ProfileActionContainer>
+          </PersonalInfoDisplayContainer>
+          {renderActionDropdown()}
+        </PersonalInfoContainer>
       </Flex>
+
       <CreateIssueModal
         createIssueModalOpen={createIssueModalOpen}
         setCreateIssueModalOpen={setCreateIssueModalOpen}
@@ -203,4 +244,94 @@ const SelectionContainer = styled.div`
 
 const SelectionIconContainer = styled.div`
   width: 30px;
+`;
+
+const ProfileFirstName = styled(Text)`
+  color: ${props => props.theme.colors.primary100};
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 0;
+`;
+
+const IconContainer = styled.div`
+  margin-left: 12px;
+  margin-top: 2px;
+`;
+
+const ProfileDropdownIcon = styled(Icon)``;
+
+const ProfileActionContainer = styled.div`
+  display: flex;
+  background-color: ${props => props.theme.colors.backgroundBlue};
+  padding-left: 24px;
+  padding-right: 16px;
+  height: 20px;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  position: relative;
+  margin-left: -10px;
+  z-index: -1;
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 15px;
+    border-radius: 0 50% 50% 0;
+    background-color: white;
+  }
+`;
+
+const PersonalInfoDisplayContainer = styled.div`
+  display: flex;
+  cursor: pointer;
+  &:hover ${ProfileActionContainer} {
+    background-color: ${props => props.theme.colors.primary100};
+  }
+  &:hover ${ProfileFirstName} {
+    color: ${props => props.theme.colors.white};
+  }
+  &:hover ${ProfileDropdownIcon} {
+    color: ${props => props.theme.colors.white};
+  }
+`;
+
+const PersonalInfoContainer = styled.div`
+  margin-left: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 24px;
+`;
+
+const ActionDropdownContainer = styled.div`
+  position: absolute;
+  background-color: ${props => props.theme.colors.backgroundBlue};
+  width: 120px;
+  margin-left: 50px;
+  margin-top: -5px;
+`;
+
+const AccountOptionText = styled(Text)`
+  color: ${props => props.theme.colors.primary100};
+  cursor: pointer;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 12px;
+`;
+
+const AccountOption = styled.div`
+  &:hover {
+    background-color: ${props => props.theme.colors.primary100};
+  }
+  &:hover ${AccountOptionText} {
+    color: white;
+  }
 `;
