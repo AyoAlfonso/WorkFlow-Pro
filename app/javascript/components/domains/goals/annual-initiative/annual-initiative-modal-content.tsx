@@ -9,6 +9,8 @@ import * as R from "ramda";
 import { UserDefaultIcon } from "~/components/shared/user-default-icon";
 import { QuarterlyGoalType } from "~/types/quarterly-goal";
 import { baseTheme } from "~/themes";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -21,6 +23,7 @@ export const AnnualInitiativeModalContent = ({
 }: IAnnualInitiativeModalContentProps): JSX.Element => {
   const { annualInitiativeStore } = useMst();
   const [annualInitiative, setAnnualInitiative] = useState<any>(null);
+  const [selectedContextTab, setSelectedContextTab] = useState<number>(1);
 
   useEffect(() => {
     annualInitiativeStore.getAnnualInitiative(annualInitiativeId).then(() => {
@@ -52,6 +55,38 @@ export const AnnualInitiativeModalContent = ({
       }
       return <StatusBlock backgroundColor={backgroundColor} key={index} />;
     });
+  };
+
+  const renderContextDescriptions = () => {};
+
+  const renderContextTabs = () => {
+    return (
+      <Tabs>
+        <StyledTabList>
+          <StyledTab tabSelected={selectedContextTab == 1} onClick={() => setSelectedContextTab(1)}>
+            <StyledTabTitle>Importance </StyledTabTitle>
+          </StyledTab>
+          <StyledTab tabSelected={selectedContextTab == 2} onClick={() => setSelectedContextTab(2)}>
+            <StyledTabTitle>Description</StyledTabTitle>
+          </StyledTab>
+          <StyledTab tabSelected={selectedContextTab == 3} onClick={() => setSelectedContextTab(3)}>
+            <StyledTabTitle>Key Elements</StyledTabTitle>
+          </StyledTab>
+        </StyledTabList>
+
+        <TabPanelContainer>
+          <StyledTabPanel>
+            <h2>Importance Container</h2>
+          </StyledTabPanel>
+          <StyledTabPanel>
+            <h2>Description Container</h2>
+          </StyledTabPanel>
+          <StyledTabPanel>
+            <h2>Key Elements Container</h2>
+          </StyledTabPanel>
+        </TabPanelContainer>
+      </Tabs>
+    );
   };
 
   const renderQuarterlyGoals = () => {
@@ -101,7 +136,7 @@ export const AnnualInitiativeModalContent = ({
         <SubHeaderContainer>
           <SubHeaderText> Context</SubHeaderText>
         </SubHeaderContainer>
-        <ContextContainer>PLACEHOLDER FOR CONTEXT DETAILS</ContextContainer>
+        <div>{renderContextTabs()}</div>
       </SectionContainer>
       <SectionContainer>
         <SubHeaderContainer>
@@ -236,4 +271,66 @@ const StatusBlock = styled.div<StatusBlockType>`
   border-radius: 5px;
   margin-right: 1px;
   background-color: ${props => props.backgroundColor || props.theme.colors.grey20};
+`;
+
+const TabPanelContainer = styled.div`
+  border-radius: 10px;
+  border: 1px solid #e3e3e3;
+  box-shadow: 0px 3px 6px #f5f5f5;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-top: -20px;
+`;
+
+const StyledTabList = styled(TabList)`
+  padding-left: 0;
+`;
+
+type StyledTabType = {
+  tabSelected: boolean;
+};
+
+const StyledTab = styled(Tab)<StyledTabType>`
+  display: inline-block;
+  border: 1px solid #e3e3e3;
+  outline: ${props => props.tabSelected && "none"};
+  color: ${props =>
+    props.tabSelected ? props.theme.colors.primary100 : props.theme.colors.grey80};
+  border-bottom: none;
+  bottom: -1px;
+  position: relative;
+  list-style: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  width: 140px;
+  margin-left: 20px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+`;
+
+// border-right: 0;
+//   &:after {
+//     content: "";
+//     display: block;
+//     position: absolute;
+//     top: 0;
+//     bottom: 0;
+//     right: -6px;
+//     z-index: 1;
+//     -moz-transform: skewX(-10deg);
+//     -ms-transform: skewX(-10deg);
+//     transform: skewX(10deg);
+//     background-color: #e3e3e3;
+//     border-right: 1px solid #e3e3e3;
+//   }
+
+const StyledTabTitle = styled(Text)`
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 12px;
+`;
+
+const StyledTabPanel = styled(TabPanel)`
+  padding: 16px;
 `;
