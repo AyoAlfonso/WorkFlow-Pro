@@ -9,8 +9,12 @@ import { Icon } from "./icon";
 const StyledToastContainer = styled(ToastContainer).attrs({
   // custom props
 })`
+  margin-right: 50px;
+  .Toastify__toast-container {
+    width: 350px;
+  }
   .Toastify__toast {
-    height: 60px;
+    height: 100%;
     width: 350px;
     border-radius: 13px;
     padding-left: 0;
