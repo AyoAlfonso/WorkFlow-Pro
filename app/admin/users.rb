@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :email, :password, :password_confirmation, :timezone
+  permit_params :email, :password, :password_confirmation, :timezone, :company_id
 
   config.sort_order = 'last_name_asc'
 
@@ -36,7 +36,7 @@ ActiveAdmin.register User do
         u.get_timezone
       end
       row :avatar do |user|
-        image_tag user.avatar_url
+        user.try(:avatar_url) ? image_tag(user.avatar_url) : "No Avatar Set"
       end
       row :personal_vision
       row :current_sign_in_at
@@ -50,6 +50,7 @@ ActiveAdmin.register User do
       f.input :email
       f.input :password
       f.input :password_confirmation
+      f.input :company, as: :select, collection: Company.all
       f.input :timezone, as: :select, collection: timezones
     end
     f.actions

@@ -6,6 +6,8 @@ class Company < ApplicationRecord
   has_rich_text :accountability_chart
   has_rich_text :strategic_plan
 
+  validates :name, :fiscal_year_start, :timezone, presence: true
+
   def core_four
     super || build_core_four
   end
