@@ -93,7 +93,7 @@ export const ToastMessages = () => (
         heading={"Success"}
         message={"You did it!"}
         color={baseTheme.colors.finePine}
-        iconName={"Success"}
+        iconName={"Success-PU"}
       />
       <CloseButton closeToast={() => {}} />
     </ToastBox>
@@ -102,7 +102,7 @@ export const ToastMessages = () => (
         heading={"Error"}
         message={"Something went wrong..."}
         color={baseTheme.colors.warningRed}
-        iconName={"Error"}
+        iconName={"Error-PU"}
       />
       <CloseButton closeToast={() => {}} />
     </ToastBox>
@@ -111,7 +111,7 @@ export const ToastMessages = () => (
         heading={"Warning"}
         message={"You've been warned!"}
         color={baseTheme.colors.cautionYellow}
-        iconName={"Alert"}
+        iconName={"Warning-PU"}
       />
       <CloseButton closeToast={() => {}} />
     </ToastBox>
@@ -120,7 +120,7 @@ export const ToastMessages = () => (
         heading={"Notification"}
         message={"You are being notified!"}
         color={baseTheme.colors.primary100}
-        iconName={"Comment"}
+        iconName={"Notification-PU"}
       />
       <CloseButton closeToast={() => {}} />
     </ToastBox>
@@ -129,7 +129,7 @@ export const ToastMessages = () => (
         heading={"Info"}
         message={"For your information..."}
         color={baseTheme.colors.fuschiaBlue}
-        iconName={"Search"}
+        iconName={"Info-PU"}
       />
       <CloseButton closeToast={() => {}} />
     </ToastBox>
