@@ -57,7 +57,32 @@ export const AnnualInitiativeModalContent = ({
     });
   };
 
-  const renderContextDescriptions = () => {};
+  const renderContextImportance = () => {
+    return (
+      <ContextImportanceContainer>
+        <SubHeaderText> Why is it important?</SubHeaderText>
+        <ContextContainer>
+          <Text>{annualInitiative.importance[0]}</Text>
+        </ContextContainer>
+        <SubHeaderText> What are the consequences if missed?</SubHeaderText>
+        <ContextContainer>
+          <Text>{annualInitiative.importance[1]}</Text>
+        </ContextContainer>
+        <SubHeaderText> How will we celebrate if achieved?</SubHeaderText>
+        <ContextContainer>
+          <Text>{annualInitiative.importance[2]}</Text>
+        </ContextContainer>
+      </ContextImportanceContainer>
+    );
+  };
+
+  const renderContextDescription = () => {
+    return (
+      <ContextContainer>
+        <Text>{annualInitiative.contextDescription}</Text>
+      </ContextContainer>
+    );
+  };
 
   const renderContextTabs = () => {
     return (
@@ -75,12 +100,8 @@ export const AnnualInitiativeModalContent = ({
         </StyledTabList>
 
         <TabPanelContainer>
-          <StyledTabPanel>
-            <h2>Importance Container</h2>
-          </StyledTabPanel>
-          <StyledTabPanel>
-            <h2>Description Container</h2>
-          </StyledTabPanel>
+          <StyledTabPanel>{renderContextImportance()}</StyledTabPanel>
+          <StyledTabPanel>{renderContextDescription()}</StyledTabPanel>
           <StyledTabPanel>
             <h2>Key Elements Container</h2>
           </StyledTabPanel>
@@ -212,7 +233,10 @@ const SectionContainer = styled.div`
   margin-top: 24px;
 `;
 
-const ContextContainer = styled(HomeContainerBorders)``;
+const ContextContainer = styled(HomeContainerBorders)`
+  padding-left: 16px;
+  padding-right: 16px;
+`;
 
 const SubHeaderText = styled(Text)`
   font-size: 16px;
@@ -277,9 +301,8 @@ const TabPanelContainer = styled.div`
   border-radius: 10px;
   border: 1px solid #e3e3e3;
   box-shadow: 0px 3px 6px #f5f5f5;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
   margin-top: -20px;
+  padding: 16px;
 `;
 
 const StyledTabList = styled(TabList)`
@@ -293,11 +316,11 @@ type StyledTabType = {
 const StyledTab = styled(Tab)<StyledTabType>`
   display: inline-block;
   border: 1px solid #e3e3e3;
-  outline: ${props => props.tabSelected && "none"};
+  outline: none;
   color: ${props =>
     props.tabSelected ? props.theme.colors.primary100 : props.theme.colors.grey80};
   border-bottom: none;
-  bottom: -1px;
+  margin-bottom: 3px;
   position: relative;
   list-style: none;
   padding: 6px 12px;
@@ -308,29 +331,15 @@ const StyledTab = styled(Tab)<StyledTabType>`
   border-top-right-radius: 5px;
 `;
 
-// border-right: 0;
-//   &:after {
-//     content: "";
-//     display: block;
-//     position: absolute;
-//     top: 0;
-//     bottom: 0;
-//     right: -6px;
-//     z-index: 1;
-//     -moz-transform: skewX(-10deg);
-//     -ms-transform: skewX(-10deg);
-//     transform: skewX(10deg);
-//     background-color: #e3e3e3;
-//     border-right: 1px solid #e3e3e3;
-//   }
-
 const StyledTabTitle = styled(Text)`
   font-size: 16px;
   font-weight: bold;
-  margin-top: 12px;
-  margin-bottom: 12px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
-const StyledTabPanel = styled(TabPanel)`
-  padding: 16px;
+const StyledTabPanel = styled(TabPanel)``;
+
+const ContextImportanceContainer = styled.div`
+  margin-top: -8px;
 `;
