@@ -16,7 +16,7 @@ export const CompanyStoreModel = types
       try {
         const response: any = yield env.api.getCompany("default");
         if (response.ok) {
-          self.company = CompanyModel.create(response.data);
+          self.company = response.data;
         }
       } catch {
         // error messaging handled by API monitor

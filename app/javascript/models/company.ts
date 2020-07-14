@@ -6,8 +6,7 @@ export const CompanyModel = types
   .props({
     id: types.identifierNumber,
     name: types.string,
-    rallyingCry: types.string,
-    lastName: types.string,
+    rallyingCry: types.maybeNull(types.string),
     coreFour: CoreFourModel,
   })
   .views(self => ({}))

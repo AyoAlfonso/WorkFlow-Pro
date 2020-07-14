@@ -4,9 +4,9 @@ import styled from "styled-components";
 import { Box } from "rebass";
 import { Label, Input } from "~/components/shared/input";
 import { Button } from "~/components/shared/button";
+import { Avatar } from "~/components/shared/avatar";
 import { useTranslation } from "react-i18next";
 import { Text } from "~/components/shared/text";
-import { UserDefaultIcon } from "~/components/shared/user-default-icon";
 
 export const AccountProfile = (): JSX.Element => {
   const { sessionStore } = useMst();
@@ -43,7 +43,12 @@ export const AccountProfile = (): JSX.Element => {
         </PersonalInfoContainer>
         <ProfilePhotoSection>
           <PhotoContainer>
-            <img src={sessionStore.profile.avatarUrl} width="256" height="256" />
+            <Avatar
+              firstName={sessionStore.profile.firstName}
+              lastName={sessionStore.profile.lastName}
+              avatarUrl={sessionStore.profile.avatarUrl}
+              size={256}
+            />
           </PhotoContainer>
           <PhotoModificationButtonsSection>
             <Button small variant={"redOutline"} onClick={() => {}} mr={2}>

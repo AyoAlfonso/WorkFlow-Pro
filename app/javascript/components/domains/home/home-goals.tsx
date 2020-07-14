@@ -1,4 +1,5 @@
 import * as React from "react";
+import { observer } from "mobx-react";
 import { HomeContainerBorders, HomeTitle } from "./shared-components";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
@@ -6,6 +7,7 @@ import { useState, useEffect } from "react";
 import { space, color } from "styled-system";
 import { AnnualInitiativeCard } from "../goals/annual-initiative/annual-initiative-card";
 import { Icon } from "../../shared/icon";
+import { Loading } from "../../shared/loading";
 
 export const HomeGoals = (): JSX.Element => {
   const { goalStore } = useMst();
@@ -19,7 +21,7 @@ export const HomeGoals = (): JSX.Element => {
   }, []);
 
   if (loading) {
-    return <>Loading...</>;
+    return <Loading />;
   }
 
   const companyGoals = goalStore.companyGoals;

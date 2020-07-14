@@ -22,6 +22,7 @@ export const LoginForm = observer(
     const [password, setPassword] = useState("");
     const { t } = useTranslation();
 
+    if (sessionStore.loading) return <div>Loading Screen dummy...</div>;
     return (
       <Flex
         sx={{
