@@ -6,6 +6,7 @@ export const MilestoneModel = types
     id: types.identifierNumber,
     createdById: types.number,
     createdAt: types.string,
+    quarterlyGoalId: types.number,
     status: types.string,
     description: types.string,
     week: types.number,

@@ -79,5 +79,9 @@ export class Api {
     return this.client.get("/goals");
   }
 
+  async getAnnualInitiative(id) {
+    return this.client.get(`/annual_initiatives/${id}`);
+  }
+
   //async setJWT(jwt) {}
 }

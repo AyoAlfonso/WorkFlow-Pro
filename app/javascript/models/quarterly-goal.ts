@@ -12,7 +12,7 @@ export const QuarterlyGoalModel = types
     importance: types.array(types.string),
     keyElements: types.array(types.string),
     ownedById: types.number,
-    ownedBy: UserModel,
+    ownedBy: types.maybeNull(UserModel),
     status: types.string,
     description: types.string,
     milestones: types.array(MilestoneModel),
