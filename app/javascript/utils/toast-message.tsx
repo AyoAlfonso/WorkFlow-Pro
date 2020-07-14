@@ -13,7 +13,7 @@ export const showToast = (message, variant) => {
           heading={heading}
           message={message}
           color={baseTheme.colors.finePine}
-          iconName={"Success"}
+          iconName={"Success-PU"}
         />,
       );
       break;
@@ -23,7 +23,7 @@ export const showToast = (message, variant) => {
           heading={heading}
           message={message}
           color={baseTheme.colors.fuschiaBlue}
-          iconName={"Search"}
+          iconName={"Info-PU"}
         />,
       );
       break;
@@ -33,7 +33,7 @@ export const showToast = (message, variant) => {
           heading={heading}
           message={message}
           color={baseTheme.colors.cautionYellow}
-          iconName={"Alert"}
+          iconName={"Warning-PU"}
         />,
       );
       break;
@@ -43,7 +43,7 @@ export const showToast = (message, variant) => {
           heading={heading}
           message={message}
           color={baseTheme.colors.warningRed}
-          iconName={"Error"}
+          iconName={"Error-PU"}
         />,
       );
       break;
@@ -53,7 +53,7 @@ export const showToast = (message, variant) => {
           heading={"Notification"}
           message={message}
           color={baseTheme.colors.primary100}
-          iconName={"Comment"}
+          iconName={"Notification-PU"}
         />,
       );
   }
