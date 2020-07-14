@@ -257,6 +257,26 @@ export const Icons = () => (
         <Icon icon={"Emotion-E"} size={"2em"} iconColor={"warningRed"} />
         <TextCenteredDiv>Emotion-E</TextCenteredDiv>
       </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Success-PU"} size={"2em"} iconColor={"finePine"} />
+        <TextCenteredDiv>Success</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Error-PU"} size={"2em"} iconColor={"warningRed"} />
+        <TextCenteredDiv>Error-PU</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Warning-PU"} size={"2em"} iconColor={"cautionYellow"} />
+        <TextCenteredDiv>Warning-PU</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Info-PU"} size={"2em"} iconColor={"fuschiaBlue"} />
+        <TextCenteredDiv>Info-PU</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Notification-PU"} size={"2em"} iconColor={"primary100"} />
+        <TextCenteredDiv>Notification-PU</TextCenteredDiv>
+      </CenteredColumnDiv>
     </RowDiv>
     <Divider />
     <RowDiv>

@@ -19,6 +19,7 @@ import { IIssueStore } from "../stores/issue-store";
 import { LoginForm } from "./domains/user/login-form";
 import { IKeyActivityStore } from "../stores/key-activity-store";
 import { ModalProvider } from "styled-react-modal";
+import { Toaster } from "./shared/toaster";
 
 import { AccountabilityChart } from "./domains/company/accountability-chart";
 
@@ -48,6 +49,7 @@ export const App = observer(
       <ThemeProvider theme={baseTheme}>
         <ModalProvider>
           <GlobalStyles />
+          <Toaster position="bottom-right" />
           {loggedIn ? (
             <>
               <SideNav />
