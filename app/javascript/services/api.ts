@@ -76,7 +76,7 @@ export class Api {
   }
 
   async getAllGoals() {
-    return this.client.get("/goalsz");
+    return this.client.get("/goals");
   }
 
   async getAnnualInitiative(id) {

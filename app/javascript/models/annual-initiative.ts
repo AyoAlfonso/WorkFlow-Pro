@@ -12,6 +12,7 @@ export const AnnualInitiativeModel = types
     keyElements: types.array(types.string),
     ownedById: types.number,
     quarterlyGoals: types.array(QuarterlyGoalModel),
+    contextDescription: types.string,
   })
   .views(self => ({}))
   .actions(self => ({}));
