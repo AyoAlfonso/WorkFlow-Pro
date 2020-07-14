@@ -85,14 +85,15 @@ export interface IStripedProgressBarProps {
 export const StripedProgressBar = (props: IStripedProgressBarProps) => {
   const progressBarRef = React.useRef(null);
   const [progressBarWidth, setProgressBarWidth] = React.useState(null);
-  React.useEffect(() => {
+  const handleResize = () => {
     if (progressBarRef.current) {
       setProgressBarWidth(progressBarRef.current.offsetWidth);
     }
-  }, [progressBarRef]);
+  };
+  React.useEffect(handleResize, [progressBarRef]);
+  window.addEventListener("resize", handleResize);
 
   const { completed, variant, text } = props;
-  console.log(progressBarWidth);
   return (
     <ProgressBarContainer variant={variant} ref={progressBarRef}>
       <ProgressBarText>{text}</ProgressBarText>
