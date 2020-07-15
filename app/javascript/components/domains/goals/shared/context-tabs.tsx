@@ -104,10 +104,6 @@ const SubHeaderText = styled(Text)`
   font-weight: bold;
 `;
 
-const SubHeaderContainer = styled.div`
-  display: flex;
-`;
-
 const TabPanelContainer = styled.div`
   border-radius: 10px;
   border: 1px solid #e3e3e3;
