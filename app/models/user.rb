@@ -9,6 +9,7 @@ class User < ApplicationRecord
 
   belongs_to :company
   delegate :name, :timezone, to: :company, prefix: true, allow_nil: true
+  delegate :name, to: :user_role, prefix: true, allow_nil: true
   has_many :issues
   has_many :key_activities
   has_many :personal_reflections

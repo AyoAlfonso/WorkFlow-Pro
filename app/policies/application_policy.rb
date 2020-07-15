@@ -7,15 +7,15 @@ class ApplicationPolicy
   end
 
   def index?
-    @user.user_role.name == "ceo" ? true : false
+    @user.user_role_name == "ceo"
   end
 
   def show?
-    @user.user_role.name == "ceo" ? true : false
+    @user.user_role_name == "ceo"
   end
 
   def create?
-    @user.user_role.name == "ceo" ? true : false
+    @user.user_role_name == "ceo"
   end
 
   def new?
@@ -23,7 +23,7 @@ class ApplicationPolicy
   end
 
   def update?
-    @user.user_role.name == "ceo" ? true : false
+    @user.user_role_name == "ceo"
   end
 
   def edit?
@@ -31,7 +31,7 @@ class ApplicationPolicy
   end
 
   def destroy?
-    @user.user_role.name == "ceo" ? true : false
+    @user.user_role_name == "ceo"
   end
 
   class Scope
