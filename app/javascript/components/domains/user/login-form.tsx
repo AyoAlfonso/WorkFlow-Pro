@@ -47,7 +47,7 @@ export const LoginForm = observer(
               <Button small variant={"primary"} onClick={() => sessionStore.login(email, password)}>
                 {t("profile.loginForm.login")}
               </Button>
-              <div>{t("general.loginForm.forgot")}</div>
+              <div>{t("profile.loginForm.forgot")}</div>
             </>
           )}
         </Box>
