@@ -1,9 +1,10 @@
 import * as React from "react";
 import styled from "styled-components";
 import { baseTheme } from "../../../../themes";
+import { MilestoneType } from "~/types/milestone";
 
 interface IStatusBlockColorIndicatorProps {
-  milestones: any;
+  milestones: Array<MilestoneType>;
   indicatorWidth: number;
   marginBottom?: number;
 }
