@@ -1,8 +1,8 @@
 class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::Allowlist
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable, #:confirmable,
+  # :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable, :confirmable, #:invitable,
          :recoverable, :rememberable, :trackable,
          :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
@@ -19,6 +19,9 @@ class User < ApplicationRecord
   has_many :weekly_meetings, :foreign_key => 'created_by_id', :class_name => 'User'
   has_many :meeting_ratings
   has_one_attached :avatar
+
+  validates :first_name, :last_name, presence: true
+
 
   def full_name
     ([first_name, last_name] - ['']).compact.join(' ')

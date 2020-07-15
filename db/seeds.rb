@@ -37,5 +37,7 @@ if Rails.env.development?
   QuarterlyGoal.where(description: "quarterly goal description").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["important"], description: "quarterly goal description", key_elements: ["key", "element"], annual_initiative_id: AnnualInitiative.find(2).id)
   Milestone.where(description: "new milestone text").first_or_create(created_by_id: u1.id, description: "new milestone text", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.find(3).id)
   Milestone.where(description: "some more new milestone text").first_or_create(created_by_id: u1.id, description: "some more new milestone text", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.find(3).id)
+  
+  c1.users.each{|u| u.confirm}
 end
 
