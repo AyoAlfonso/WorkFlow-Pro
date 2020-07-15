@@ -7,10 +7,10 @@ import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
 import * as R from "ramda";
 import { UserDefaultIcon } from "~/components/shared/user-default-icon";
-import { QuarterlyGoalType } from "~/types/quarterly-goal";
-import { baseTheme } from "~/themes";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
+import { Button } from "~/components/shared/button";
+import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
+import { ContextTabs } from "../shared/context-tabs";
+import { OwnedBySection } from "../shared/owned-by-section";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -23,7 +23,6 @@ export const AnnualInitiativeModalContent = ({
 }: IAnnualInitiativeModalContentProps): JSX.Element => {
   const { annualInitiativeStore } = useMst();
   const [annualInitiative, setAnnualInitiative] = useState<any>(null);
-  const [selectedContextTab, setSelectedContextTab] = useState<number>(1);
 
   useEffect(() => {
     annualInitiativeStore.getAnnualInitiative(annualInitiativeId).then(() => {
@@ -35,86 +34,15 @@ export const AnnualInitiativeModalContent = ({
     return <> Loading... </>;
   }
 
-  const renderStatusBlocks = (quarterlyGoal: QuarterlyGoalType) => {
-    return quarterlyGoal.milestones.map((milestone, index) => {
-      const { warningRed, cautionYellow, finePine, grey20 } = baseTheme.colors;
-      let backgroundColor;
-      switch (milestone.status) {
-        case "incomplete":
-          backgroundColor = warningRed;
-          break;
-        case "in_progress":
-          backgroundColor = cautionYellow;
-          break;
-        case "completed":
-          backgroundColor = finePine;
-          break;
-        default:
-          backgroundColor = grey20;
-          break;
-      }
-      return <StatusBlock backgroundColor={backgroundColor} key={index} />;
-    });
-  };
-
-  const renderContextImportance = () => {
-    return (
-      <ContextImportanceContainer>
-        <SubHeaderText> Why is it important?</SubHeaderText>
-        <ContextContainer>
-          <Text>{annualInitiative.importance[0]}</Text>
-        </ContextContainer>
-        <SubHeaderText> What are the consequences if missed?</SubHeaderText>
-        <ContextContainer>
-          <Text>{annualInitiative.importance[1]}</Text>
-        </ContextContainer>
-        <SubHeaderText> How will we celebrate if achieved?</SubHeaderText>
-        <ContextContainer>
-          <Text>{annualInitiative.importance[2]}</Text>
-        </ContextContainer>
-      </ContextImportanceContainer>
-    );
-  };
-
-  const renderContextDescription = () => {
-    return (
-      <ContextContainer>
-        <Text>{annualInitiative.contextDescription}</Text>
-      </ContextContainer>
-    );
-  };
-
-  const renderContextTabs = () => {
-    return (
-      <Tabs>
-        <StyledTabList>
-          <StyledTab tabSelected={selectedContextTab == 1} onClick={() => setSelectedContextTab(1)}>
-            <StyledTabTitle>Importance </StyledTabTitle>
-          </StyledTab>
-          <StyledTab tabSelected={selectedContextTab == 2} onClick={() => setSelectedContextTab(2)}>
-            <StyledTabTitle>Description</StyledTabTitle>
-          </StyledTab>
-          <StyledTab tabSelected={selectedContextTab == 3} onClick={() => setSelectedContextTab(3)}>
-            <StyledTabTitle>Key Elements</StyledTabTitle>
-          </StyledTab>
-        </StyledTabList>
-
-        <TabPanelContainer>
-          <StyledTabPanel>{renderContextImportance()}</StyledTabPanel>
-          <StyledTabPanel>{renderContextDescription()}</StyledTabPanel>
-          <StyledTabPanel>
-            <h2>Key Elements Container</h2>
-          </StyledTabPanel>
-        </TabPanelContainer>
-      </Tabs>
-    );
-  };
-
   const renderQuarterlyGoals = () => {
     return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
       return (
         <QuarterlyGoalContainer key={index}>
-          <StatusBlocksContainer>{renderStatusBlocks(quarterlyGoal)}</StatusBlocksContainer>
+          <StatusBlockColorIndicator
+            milestones={quarterlyGoal.milestones}
+            indicatorWidth={80}
+            marginBottom={16}
+          />
           <TopRowContainer>
             <QuarterlyGoalDescription>{quarterlyGoal.description}</QuarterlyGoalDescription>
             <QuarterlyGoalOptionContainer>
@@ -135,8 +63,8 @@ export const AnnualInitiativeModalContent = ({
     });
   };
 
-  return (
-    <Container>
+  const renderHeader = (): JSX.Element => {
+    return (
       <HeaderContainer>
         <TitleContainer>
           <DescriptionText>{annualInitiative.description}</DescriptionText>
@@ -153,18 +81,44 @@ export const AnnualInitiativeModalContent = ({
           </CloseIconContainer>
         </AnnualInitiativeActionContainer>
       </HeaderContainer>
-      <SectionContainer>
-        <SubHeaderContainer>
-          <SubHeaderText> Context</SubHeaderText>
-        </SubHeaderContainer>
-        <div>{renderContextTabs()}</div>
-      </SectionContainer>
-      <SectionContainer>
+    );
+  };
+
+  const renderContext = (): JSX.Element => {
+    return (
+      <InfoSectionContainer>
+        <ContextSectionContainer>
+          <SubHeaderContainer>
+            <SubHeaderText> Context</SubHeaderText>
+          </SubHeaderContainer>
+          <ContextTabs annualInitiative={annualInitiative} />
+        </ContextSectionContainer>
+        <OwnedBySection ownedBy={annualInitiative.ownedBy} />
+      </InfoSectionContainer>
+    );
+  };
+
+  const renderGoals = (): JSX.Element => {
+    return (
+      <>
         <SubHeaderContainer>
           <SubHeaderText> Quarterly Goals</SubHeaderText>
+          <ShowPastGoalsContainer>
+            <Button small variant={"primaryOutline"} onClick={() => {}}>
+              Show Past Goals (2)
+            </Button>
+          </ShowPastGoalsContainer>
         </SubHeaderContainer>
         <QuarterlyGoalsContainer>{renderQuarterlyGoals()}</QuarterlyGoalsContainer>
-      </SectionContainer>
+      </>
+    );
+  };
+
+  return (
+    <Container>
+      {renderHeader()}
+      <SectionContainer>{renderContext()}</SectionContainer>
+      <SectionContainer>{renderGoals()}</SectionContainer>
       <SectionContainer>
         <SubHeaderContainer>
           <SubHeaderText> Comments</SubHeaderText>
@@ -278,68 +232,16 @@ const QuarterlyGoalOwnerContainer = styled.div`
   margin-left: auto;
 `;
 
-const StatusBlocksContainer = styled.div`
+const InfoSectionContainer = styled.div`
   display: flex;
-  padding-left: 24px;
-  padding-right: 24px;
-  margin-bottom: 16px;
 `;
 
-type StatusBlockType = {
-  backgroundColor?: string;
-};
-
-const StatusBlock = styled.div<StatusBlockType>`
-  width: 80px;
-  height: 5px;
-  border-radius: 5px;
-  margin-right: 1px;
-  background-color: ${props => props.backgroundColor || props.theme.colors.grey20};
+const ContextSectionContainer = styled.div`
+  width: 90%;
 `;
 
-const TabPanelContainer = styled.div`
-  border-radius: 10px;
-  border: 1px solid #e3e3e3;
-  box-shadow: 0px 3px 6px #f5f5f5;
-  margin-top: -20px;
-  padding: 16px;
-`;
-
-const StyledTabList = styled(TabList)`
-  padding-left: 0;
-`;
-
-type StyledTabType = {
-  tabSelected: boolean;
-};
-
-const StyledTab = styled(Tab)<StyledTabType>`
-  display: inline-block;
-  border: 1px solid #e3e3e3;
-  outline: none;
-  color: ${props =>
-    props.tabSelected ? props.theme.colors.primary100 : props.theme.colors.grey80};
-  border-bottom: none;
-  margin-bottom: 3px;
-  position: relative;
-  list-style: none;
-  padding: 6px 12px;
-  cursor: pointer;
-  width: 140px;
-  margin-left: 20px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-`;
-
-const StyledTabTitle = styled(Text)`
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 10px;
-  margin-bottom: 10px;
-`;
-
-const StyledTabPanel = styled(TabPanel)``;
-
-const ContextImportanceContainer = styled.div`
-  margin-top: -8px;
+const ShowPastGoalsContainer = styled.div`
+  margin-left: auto;
+  margin-top: auto;
+  margin-bottom: auto;
 `;
