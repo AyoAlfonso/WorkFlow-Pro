@@ -1,10 +1,12 @@
 ActiveAdmin.register Company do
-  permit_params :name,
+  permit_params :accountability_chart,
                 :address,
                 :contact_email,
+                :fiscal_year_start,
+                :name,
                 :phone_number,
                 :rallying_cry,
-                :fiscal_year_start,
+                :strategic_plan,
                 :timezone,
                 core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4]
   index do
@@ -56,7 +58,7 @@ ActiveAdmin.register Company do
     br
     panel 'Users' do
       table_for company.users do
-        column("Full Name") { |user| link_to user.full_name, admin_user_path(user) }
+        column('Full Name') { |user| link_to user.full_name, admin_user_path(user) }
         column :email
         column :phone_number
         column :current_sign_in_at
@@ -64,11 +66,27 @@ ActiveAdmin.register Company do
         column :created_at
       end
     end
+    panel 'Accountability Chart' do
+      h2 'Accountability Chart'
+      attributes_table_for company do
+        row :accountability_chart do |c|
+          c.accountability_chart.body
+        end
+      end
+    end
+    panel 'Strategic Plan' do
+      h2 'Strategic Plan'
+      attributes_table_for company do
+        row :strategic_plan do |c|
+          c.strategic_plan.body
+        end
+      end
+    end
   end
 
   form do |f|
     h1 f.object.name
-    f.inputs "Company Details" do
+    f.inputs 'Company Details' do
       f.input :name
       f.input :address
       f.input :contact_email
@@ -77,14 +95,20 @@ ActiveAdmin.register Company do
       f.input :fiscal_year_start, order: [:month, :day]
       f.input :timezone, as: :select, collection: timezones
     end
+    h2 'Core Four '
     f.inputs do
       # Some hackery because trix editor was only displaying one field otherwise in the has_many
-      [:core_1, :core_2, :core_3, :core_4].each do |cf_field|
-        f.has_many :core_four, allow_destroy: false, new_record: false do |cf|
-          cf.rich_text_area cf_field
+      [:core_1, :core_2, :core_3, :core_4].each_with_index do |cf_field|
+        f.label cf_field
+        f.has_many :core_four, heading: false, allow_destroy: false, new_record: false do |cf|
+          cf.rich_text_area cf_field, { label: "Core #{index + 1}" }
         end
       end
     end
+    h2 'Accountability Chart'
+    f.rich_text_area :accountability_chart
+    h2 'Strategic Plan'
+    f.rich_text_area :strategic_plan
     f.actions
   end
 end

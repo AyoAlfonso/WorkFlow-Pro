@@ -3,6 +3,8 @@ class Company < ApplicationRecord
   has_many :annual_initiatives
   has_one :core_four
   accepts_nested_attributes_for :core_four
+  has_rich_text :accountability_chart
+  has_rich_text :strategic_plan
 
   def core_four
     super || build_core_four

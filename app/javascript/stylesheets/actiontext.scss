@@ -1,5 +1,7 @@
 @import "trix/dist/trix";
 .trix-content {
+  overflow-y: auto;
+  resize: both;
   .attachment-gallery {
     > action-text-attachment,
     > .attachment {
