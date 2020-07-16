@@ -1,8 +1,9 @@
 import * as React from "react";
-import styled from "styled-components";
-import { color, layout, space, typography, variant } from "styled-system";
-import { buildRepeatingLinearGradient } from "../../utils/css-utils";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import styled from "styled-components";
+import { color, layout, space, variant } from "styled-system";
+import { buildRepeatingLinearGradient } from "../../utils/css-utils";
 
 const ProgressBarContainer = styled.div`
   ${color}
@@ -83,16 +84,23 @@ export interface IStripedProgressBarProps {
 }
 
 export const StripedProgressBar = (props: IStripedProgressBarProps) => {
-  const progressBarRef = React.useRef(null);
-  const [progressBarWidth, setProgressBarWidth] = React.useState(null);
-  React.useEffect(() => {
-    if (progressBarRef.current) {
-      setProgressBarWidth(progressBarRef.current.offsetWidth);
-    }
+  const progressBarRef = useRef(null);
+  const [progressBarWidth, setProgressBarWidth] = useState(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (progressBarRef.current) {
+        setProgressBarWidth(progressBarRef.current.offsetWidth);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [progressBarRef]);
 
   const { completed, variant, text } = props;
-  console.log(progressBarWidth);
   return (
     <ProgressBarContainer variant={variant} ref={progressBarRef}>
       <ProgressBarText>{text}</ProgressBarText>
