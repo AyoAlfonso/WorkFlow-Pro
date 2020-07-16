@@ -7,12 +7,13 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { Checkbox, Label } from "@rebass/forms";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
+import { QuarterlyGoalType } from "~/types/quarterly-goal";
 
 interface IContextTabsProps {
-  annualInitiative: AnnualInitiativeType;
+  object: AnnualInitiativeType | QuarterlyGoalType;
 }
 
-export const ContextTabs = ({ annualInitiative }: IContextTabsProps): JSX.Element => {
+export const ContextTabs = ({ object }: IContextTabsProps): JSX.Element => {
   const [selectedContextTab, setSelectedContextTab] = useState<number>(1);
 
   const renderContextImportance = () => {
@@ -20,15 +21,15 @@ export const ContextTabs = ({ annualInitiative }: IContextTabsProps): JSX.Elemen
       <ContextImportanceContainer>
         <SubHeaderText> Why is it important?</SubHeaderText>
         <ContextContainer>
-          <Text>{annualInitiative.importance[0]}</Text>
+          <Text>{object.importance[0]}</Text>
         </ContextContainer>
         <SubHeaderText> What are the consequences if missed?</SubHeaderText>
         <ContextContainer>
-          <Text>{annualInitiative.importance[1]}</Text>
+          <Text>{object.importance[1]}</Text>
         </ContextContainer>
         <SubHeaderText> How will we celebrate if achieved?</SubHeaderText>
         <ContextContainer>
-          <Text>{annualInitiative.importance[2]}</Text>
+          <Text>{object.importance[2]}</Text>
         </ContextContainer>
       </ContextImportanceContainer>
     );
@@ -37,13 +38,13 @@ export const ContextTabs = ({ annualInitiative }: IContextTabsProps): JSX.Elemen
   const renderContextDescription = () => {
     return (
       <ContextContainer>
-        <Text>{annualInitiative.contextDescription}</Text>
+        <Text>{object.contextDescription}</Text>
       </ContextContainer>
     );
   };
 
   const renderKeyElements = () => {
-    return annualInitiative.keyElements.map((element, index) => {
+    return object.keyElements.map((element, index) => {
       return (
         <KeyElementContainer key={index}>
           <CheckboxContainer>

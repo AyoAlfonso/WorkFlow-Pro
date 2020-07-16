@@ -17,6 +17,7 @@ export const QuarterlyGoalModel = types
     status: types.string,
     description: types.string,
     milestones: types.array(MilestoneModel),
+    contextDescription: types.string,
   })
   .views(self => ({}))
   .actions(self => ({}));

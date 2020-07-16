@@ -91,7 +91,7 @@ export const AnnualInitiativeModalContent = ({
           <SubHeaderContainer>
             <SubHeaderText> Context</SubHeaderText>
           </SubHeaderContainer>
-          <ContextTabs annualInitiative={annualInitiative} />
+          <ContextTabs object={annualInitiative} />
         </ContextSectionContainer>
         <OwnedBySection ownedBy={annualInitiative.ownedBy} />
       </InfoSectionContainer>

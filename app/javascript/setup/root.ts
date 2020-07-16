@@ -32,6 +32,9 @@ const initialState = {
   annualInitiativeStore: {
     annualInitiative: null,
   },
+  quarterlyGoalStore: {
+    quarterlyGoal: null,
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);

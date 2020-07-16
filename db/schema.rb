@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_14_220656) do
+ActiveRecord::Schema.define(version: 2020_07_16_000228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -193,6 +193,7 @@ ActiveRecord::Schema.define(version: 2020_07_14_220656) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "status", default: 0
+    t.date "week_of"
     t.index ["created_by_id"], name: "index_milestones_on_created_by_id"
     t.index ["quarterly_goal_id"], name: "index_milestones_on_quarterly_goal_id"
   end
@@ -217,6 +218,7 @@ ActiveRecord::Schema.define(version: 2020_07_14_220656) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "status", default: 0
+    t.string "context_description"
     t.index ["annual_initiative_id"], name: "index_quarterly_goals_on_annual_initiative_id"
     t.index ["created_by_id"], name: "index_quarterly_goals_on_created_by_id"
     t.index ["owned_by_id"], name: "index_quarterly_goals_on_owned_by_id"
