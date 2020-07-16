@@ -15,7 +15,7 @@ class AnnualInitiativePolicy < ApplicationPolicy
   end
 
   def show?
-    @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user || @annual_initiative.company_id == @user.company_id
+    @annual_initiative.company_id == @user.company_id
   end
 
   def update?
