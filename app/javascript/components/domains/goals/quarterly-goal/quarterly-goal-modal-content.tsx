@@ -5,12 +5,11 @@ import { Text } from "../../../shared/text";
 import { useState, useEffect } from "react";
 import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
-import * as R from "ramda";
-import { UserDefaultIcon } from "~/components/shared/user-default-icon";
 import { Button } from "~/components/shared/button";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
 import { ContextTabs } from "../shared/context-tabs";
 import { OwnedBySection } from "../shared/owned-by-section";
+import { IndividualVerticalStatusBlockColorIndicator } from "../shared/individual-vertical-status-block-color-indicator";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -69,54 +68,21 @@ export const QuarterlyGoalModalContent = ({
     );
   };
 
-  // const renderWeeklyMilestones = (): JSX.Element => {
-  //   //return quarterlyGoal.milestones.map(())
-  // };
-
-  //   const renderQuarterlyGoals = () => {
-  //   return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
-  //     return (
-  //       <QuarterlyGoalContainer key={index}>
-  //         <StatusBlockColorIndicator
-  //           milestones={quarterlyGoal.milestones}
-  //           indicatorWidth={80}
-  //           marginBottom={16}
-  //         />
-  //         <TopRowContainer>
-  //           <QuarterlyGoalDescription>{quarterlyGoal.description}</QuarterlyGoalDescription>
-  //           <QuarterlyGoalOptionContainer>
-  //             <Icon icon={"Options"} size={"20px"} iconColor={"grey80"} />
-  //           </QuarterlyGoalOptionContainer>
-  //         </TopRowContainer>
-  //         <BottomRowContainer>
-  //           <QuarterlyGoalOwnerContainer>
-  //             <UserDefaultIcon
-  //               firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
-  //               lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
-  //               size={40}
-  //             />
-  //           </QuarterlyGoalOwnerContainer>
-  //         </BottomRowContainer>
-  //       </QuarterlyGoalContainer>
-  //     );
-  //   });
-  // };
-
-  // const renderGoals = (): JSX.Element => {
-  //   return (
-  //     <>
-  //       <SubHeaderContainer>
-  //         <SubHeaderText> Quarterly Goals</SubHeaderText>
-  //         <ShowPastGoalsContainer>
-  //           <Button small variant={"primaryOutline"} onClick={() => {}}>
-  //             Show Past Goals (2)
-  //           </Button>
-  //         </ShowPastGoalsContainer>
-  //       </SubHeaderContainer>
-  //       <QuarterlyGoalsContainer>{renderQuarterlyGoals()}</QuarterlyGoalsContainer>
-  //     </>
-  //   );
-  // };
+  const renderWeeklyMilestones = (): JSX.Element => {
+    return quarterlyGoal.milestones.map((milestone, index) => {
+      return (
+        <MilestoneContainer key={index}>
+          <MilestoneDetails>
+            <WeekOfText>
+              Week of <WeekOfTextValue>{milestone.weekOf}</WeekOfTextValue>
+            </WeekOfText>
+            <MilestoneDescriptionText>{milestone.description}</MilestoneDescriptionText>
+          </MilestoneDetails>
+          <IndividualVerticalStatusBlockColorIndicator milestone={milestone} />
+        </MilestoneContainer>
+      );
+    });
+  };
 
   return (
     <Container>
@@ -129,7 +95,19 @@ export const QuarterlyGoalModalContent = ({
       <QuarterlyGoalBodyContainer>
         {renderHeader()}
         <SectionContainer>{renderContext()}</SectionContainer>
-        {/* <SectionContainer>{renderGoals()}</SectionContainer> */}
+        <SectionContainer>
+          <MilestonesHeaderContainer>
+            <SubHeaderContainer>
+              <SubHeaderText> Weekly Milestones</SubHeaderText>
+            </SubHeaderContainer>
+            <ShowPastWeeksContainer>
+              <Button small variant={"primaryOutline"} onClick={() => {}}>
+                Show Past Weeks (2)
+              </Button>
+            </ShowPastWeeksContainer>
+          </MilestonesHeaderContainer>
+          {renderWeeklyMilestones()}
+        </SectionContainer>
         <SectionContainer>
           <SubHeaderContainer>
             <SubHeaderText> Comments</SubHeaderText>
@@ -217,39 +195,39 @@ const SubHeaderText = styled(Text)`
   font-weight: bold;
 `;
 
-const QuarterlyGoalsContainer = styled.div`
-  margin-top: 8px;
+const MilestoneContainer = styled.div`
+  display: flex;
 `;
 
-const QuarterlyGoalContainer = styled(HomeContainerBorders)`
-  padding: 16px;
-  padding-top: 0;
-  margin-bottom: 16px;
+const MilestoneDetails = styled(HomeContainerBorders)`
+  padding: 8px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  width: 90%;
+`;
+
+const WeekOfText = styled(Text)`
+  color: ${props => props.theme.colors.primary100};
+  margin-top: 8px;
+  margin-bottom: 8px;
+`;
+
+const WeekOfTextValue = styled.span`
+  text-decoration: underline;
+  font-weight: bold;
+`;
+
+const MilestoneDescriptionText = styled(Text)`
+  margin-top: 8px;
+  margin-bottom: 8px;
+`;
+
+const MilestonesHeaderContainer = styled.div`
+  display: flex;
 `;
 
 const SubHeaderContainer = styled.div`
   display: flex;
-`;
-
-const TopRowContainer = styled.div`
-  display: flex;
-`;
-
-const BottomRowContainer = styled.div`
-  display: flex;
-  margin-top: 10px;
-`;
-
-const QuarterlyGoalDescription = styled(Text)`
-  margin-top: 0;
-`;
-
-const QuarterlyGoalOptionContainer = styled.div`
-  margin-left: auto;
-`;
-
-const QuarterlyGoalOwnerContainer = styled.div`
-  margin-left: auto;
 `;
 
 const InfoSectionContainer = styled.div`
@@ -260,7 +238,7 @@ const ContextSectionContainer = styled.div`
   width: 90%;
 `;
 
-const ShowPastGoalsContainer = styled.div`
+const ShowPastWeeksContainer = styled.div`
   margin-left: auto;
   margin-top: auto;
   margin-bottom: auto;

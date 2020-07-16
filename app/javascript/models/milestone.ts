@@ -10,6 +10,7 @@ export const MilestoneModel = types
     status: types.string,
     description: types.string,
     week: types.number,
+    weekOf: types.string,
   })
   .views(self => ({}))
   .actions(self => ({}));
