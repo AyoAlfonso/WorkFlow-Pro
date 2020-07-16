@@ -22,8 +22,6 @@ class User < ApplicationRecord
   has_one_attached :avatar
   belongs_to :user_role
 
-  validates :user_role_id, presence: true
-
   def full_name
     ([first_name, last_name] - ['']).compact.join(' ')
   end
