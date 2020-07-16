@@ -11,7 +11,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   end
 
   def show
-    render json: @annual_initiative.as_json(include: { quarterly_goals: { include: :milestones } })
+    render json: @annual_initiative.as_json(include: [:owned_by, { quarterly_goals: { include:[:milestones, :owned_by] } }])
   end
 
   def update

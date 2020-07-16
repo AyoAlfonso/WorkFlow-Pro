@@ -1,5 +1,7 @@
 import { types } from "mobx-state-tree";
 import { QuarterlyGoalModel } from "./quarterly-goal";
+import { KeyElementModel } from "./key-element";
+import { UserModel } from "./user";
 
 export const AnnualInitiativeModel = types
   .model("AnnualInitiativeModel")
@@ -9,9 +11,11 @@ export const AnnualInitiativeModel = types
     createdById: types.number,
     importance: types.array(types.string),
     description: types.string,
-    keyElements: types.array(types.string),
+    keyElements: types.array(KeyElementModel),
     ownedById: types.number,
     quarterlyGoals: types.array(QuarterlyGoalModel),
+    contextDescription: types.string,
+    ownedBy: types.maybeNull(UserModel),
   })
   .views(self => ({}))
   .actions(self => ({}));

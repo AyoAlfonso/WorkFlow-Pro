@@ -1,11 +1,10 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
-import { baseTheme } from "../../../../themes";
 import { Icon } from "../../../shared/icon";
 import { UserDefaultIcon } from "../../../shared/user-default-icon";
-import { QuarterlyGoalType } from "~/types/quarterly-goal";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
+import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
 
 interface IAnnualInitiativeCardExpandedProps {
   annualInitiative: AnnualInitiativeType;
@@ -17,33 +16,11 @@ export const AnnualInitiativeCardExpanded = (
 ): JSX.Element => {
   const { annualInitiative, setShowMinimizedCard } = props;
 
-  const renderStatusBlocks = (quarterlyGoal: QuarterlyGoalType) => {
-    return quarterlyGoal.milestones.map((milestone, index) => {
-      const { warningRed, cautionYellow, finePine, grey20 } = baseTheme.colors;
-      let backgroundColor;
-      switch (milestone.status) {
-        case "incomplete":
-          backgroundColor = warningRed;
-          break;
-        case "in_progress":
-          backgroundColor = cautionYellow;
-          break;
-        case "completed":
-          backgroundColor = finePine;
-          break;
-        default:
-          backgroundColor = grey20;
-          break;
-      }
-      return <StatusBlock backgroundColor={backgroundColor} key={index} />;
-    });
-  };
-
   const renderQuarterlyGoals = () => {
     return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
       return (
         <QuarterlyGoalContainer key={index}>
-          <StatusBlocksContainer>{renderStatusBlocks(quarterlyGoal)}</StatusBlocksContainer>
+          <StatusBlockColorIndicator milestones={quarterlyGoal.milestones} indicatorWidth={25} />
 
           <RowContainer>
             <StyledText> {quarterlyGoal.description} </StyledText>
@@ -107,24 +84,6 @@ const IconContainer = styled.div`
   margin-left: auto;
   margin-right: 16px;
   display: flex;
-`;
-
-const StatusBlocksContainer = styled.div`
-  display: flex;
-  padding-left: 16px;
-  padding-right: 16px;
-`;
-
-type StatusBlockType = {
-  backgroundColor?: string;
-};
-
-const StatusBlock = styled.div<StatusBlockType>`
-  width: 25px;
-  height: 5px;
-  border-radius: 5px;
-  margin-right: 1px;
-  background-color: ${props => props.backgroundColor || props.theme.colors.grey20};
 `;
 
 const MinimizeIconContainer = styled.div`

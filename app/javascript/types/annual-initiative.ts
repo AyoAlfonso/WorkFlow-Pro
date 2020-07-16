@@ -1,4 +1,5 @@
 import { QuarterlyGoalType } from "./quarterly-goal";
+import { KeyElementType } from "./key-element";
 
 export type AnnualInitiativeType = {
   id: number;
@@ -6,7 +7,8 @@ export type AnnualInitiativeType = {
   createdById: number;
   importance: Array<string>;
   description: string;
-  keyElements: Array<string>;
+  keyElements: Array<KeyElementType>;
   ownedById: number;
   quarterlyGoals: Array<QuarterlyGoalType>;
+  contextDescription: string;
 };

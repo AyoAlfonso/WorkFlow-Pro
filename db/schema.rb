@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_09_232454) do
+ActiveRecord::Schema.define(version: 2020_07_14_220656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(version: 2020_07_09_232454) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "company_id"
+    t.string "context_description"
     t.index ["company_id"], name: "index_annual_initiatives_on_company_id"
     t.index ["created_by_id"], name: "index_annual_initiatives_on_created_by_id"
     t.index ["owned_by_id"], name: "index_annual_initiatives_on_owned_by_id"
@@ -162,6 +163,16 @@ ActiveRecord::Schema.define(version: 2020_07_09_232454) do
     t.boolean "weekly_list"
     t.integer "priority", default: 0
     t.index ["user_id"], name: "index_key_activities_on_user_id"
+  end
+
+  create_table "key_elements", force: :cascade do |t|
+    t.string "value"
+    t.datetime "completed_at"
+    t.string "elementable_type"
+    t.bigint "elementable_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["elementable_type", "elementable_id"], name: "index_key_elements_on_elementable_type_and_elementable_id"
   end
 
   create_table "meeting_ratings", force: :cascade do |t|

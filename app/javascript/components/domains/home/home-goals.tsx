@@ -8,6 +8,8 @@ import { space, color } from "styled-system";
 import { AnnualInitiativeCard } from "../goals/annual-initiative/annual-initiative-card";
 import { Icon } from "../../shared/icon";
 import { Loading } from "../../shared/loading";
+import Modal from "styled-react-modal";
+import { AnnualInitiativeModalContent } from "../goals/annual-initiative/annual-initiative-modal-content";
 
 export const HomeGoals = (): JSX.Element => {
   const { goalStore } = useMst();
@@ -15,6 +17,8 @@ export const HomeGoals = (): JSX.Element => {
   const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(true);
   const [showMinimizedCards, setShowMinimizedCards] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
+  const [annualInitiativeModalOpen, setAnnualInitiativeModalOpen] = useState<boolean>(false);
+  const [annualInitiativeId, setAnnualInitiativeId] = useState<number>(null);
 
   useEffect(() => {
     goalStore.load().then(() => setLoading(false));
@@ -66,6 +70,8 @@ export const HomeGoals = (): JSX.Element => {
           annualInitiative={annualInitiative}
           totalNumberOfAnnualInitiatives={annualInitiatives.length}
           showMinimizedCards={showMinimizedCards}
+          setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+          setAnnualInitiativeId={setAnnualInitiativeId}
         />
       );
     });
@@ -111,6 +117,16 @@ export const HomeGoals = (): JSX.Element => {
         {renderPersonalVision()}
         <InitiativesContainer>{renderAnnualInitiatives(personalGoals.goals)}</InitiativesContainer>
       </PersonalVisionContainer>
+
+      <StyledModal
+        isOpen={annualInitiativeModalOpen}
+        style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
+      >
+        <AnnualInitiativeModalContent
+          annualInitiativeId={annualInitiativeId}
+          setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+        />
+      </StyledModal>
     </Container>
   );
 };
@@ -201,4 +217,11 @@ const FilterOptions = styled.p<FilterOptionsType>`
   font-weight: 400;
   cursor: pointer;
   margin-left: 16px;
+`;
+
+const StyledModal = Modal.styled`
+  width: 30rem;
+  min-height: 100px;
+  border-radius: 5px;
+  background-color: ${props => props.theme.colors.white};
 `;

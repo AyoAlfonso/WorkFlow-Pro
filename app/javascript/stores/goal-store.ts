@@ -17,7 +17,6 @@ export const GoalStoreModel = types
       try {
         const response: any = yield env.api.getAllGoals();
         if (response.ok) {
-          console.log("data", response.data);
           self.companyGoals = response.data.company;
           self.personalGoals = response.data.user;
         }

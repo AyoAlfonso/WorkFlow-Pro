@@ -11,6 +11,8 @@ interface IAnnualInitiativeCardProps {
   index: number;
   totalNumberOfAnnualInitiatives: number;
   showMinimizedCards: boolean;
+  setAnnualInitiativeId: React.Dispatch<React.SetStateAction<number>>;
+  setAnnualInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AnnualInitiativeCard = ({
@@ -18,6 +20,8 @@ export const AnnualInitiativeCard = ({
   index,
   totalNumberOfAnnualInitiatives,
   showMinimizedCards,
+  setAnnualInitiativeId,
+  setAnnualInitiativeModalOpen,
 }: IAnnualInitiativeCardProps): JSX.Element => {
   const [showMinimizedCard, setShowMinimizedCard] = useState<boolean>(showMinimizedCards);
 
@@ -30,7 +34,12 @@ export const AnnualInitiativeCard = ({
       key={index}
       margin-right={index + 1 == totalNumberOfAnnualInitiatives ? "0px" : "15px"}
     >
-      <DescriptionContainer>
+      <DescriptionContainer
+        onClick={() => {
+          setAnnualInitiativeModalOpen(true);
+          setAnnualInitiativeId(annualInitiative.id);
+        }}
+      >
         <StyledText> {annualInitiative.description} </StyledText>
       </DescriptionContainer>
 

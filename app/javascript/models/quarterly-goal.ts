@@ -1,6 +1,7 @@
 import { types } from "mobx-state-tree";
 import { UserModel } from "./user";
 import { MilestoneModel } from "./milestone";
+import { KeyElementModel } from "./key-element";
 
 export const QuarterlyGoalModel = types
   .model("QuarterlyGoalModel")
@@ -10,9 +11,9 @@ export const QuarterlyGoalModel = types
     createdById: types.number,
     createdAt: types.string,
     importance: types.array(types.string),
-    keyElements: types.array(types.string),
+    keyElements: types.array(KeyElementModel),
     ownedById: types.number,
-    ownedBy: UserModel,
+    ownedBy: types.maybeNull(UserModel),
     status: types.string,
     description: types.string,
     milestones: types.array(MilestoneModel),
