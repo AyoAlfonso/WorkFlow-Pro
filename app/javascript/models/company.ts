@@ -10,6 +10,9 @@ export const CompanyModel = types
     coreFour: CoreFourModel,
     accountabilityChartContent: types.string,
     strategicPlanContent: types.string,
+    logoUrl: types.maybeNull(types.string),
+    fiscalYearStart: types.string,
+    timezone: types.string,
   })
   .views(self => ({}))
   .actions(self => ({}));

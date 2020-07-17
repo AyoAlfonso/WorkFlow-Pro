@@ -25,7 +25,7 @@ class User < ApplicationRecord
   end
 
   def avatar_url
-    self.avatar.try(:url)
+    avatar.present? ? Rails.application.routes.url_helpers.rails_blob_url(avatar, host: ENV["ASSETS_HOST_URL"] || ENV["HOST_URL"]) : nil
   end
 
   def get_timezone
