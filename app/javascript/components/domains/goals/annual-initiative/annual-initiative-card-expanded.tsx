@@ -12,12 +12,19 @@ import { QuarterlyGoalModalContent } from "../quarterly-goal/quarterly-goal-moda
 interface IAnnualInitiativeCardExpandedProps {
   annualInitiative: AnnualInitiativeType;
   setShowMinimizedCard: React.Dispatch<React.SetStateAction<boolean>>;
+  setAnnualInitiativeId: React.Dispatch<React.SetStateAction<number>>;
+  setAnnualInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AnnualInitiativeCardExpanded = (
   props: IAnnualInitiativeCardExpandedProps,
 ): JSX.Element => {
-  const { annualInitiative, setShowMinimizedCard } = props;
+  const {
+    annualInitiative,
+    setShowMinimizedCard,
+    setAnnualInitiativeId,
+    setAnnualInitiativeModalOpen,
+  } = props;
   const [quarterlyGoalModalOpen, setQuarterlyGoalModalOpen] = useState<boolean>(false);
   const [quarterlyGoalId, setQuarterlyGoalId] = useState<number>(null);
 
@@ -67,6 +74,9 @@ export const AnnualInitiativeCardExpanded = (
         <QuarterlyGoalModalContent
           quarterlyGoalId={quarterlyGoalId}
           setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
+          setAnnualInitiativeId={setAnnualInitiativeId}
+          annualInitiativeDescription={annualInitiative.description}
+          setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
         />
       </StyledModal>
     </Container>

@@ -14,11 +14,17 @@ import { IndividualVerticalStatusBlockColorIndicator } from "../shared/individua
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
   setQuarterlyGoalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  annualInitiativeDescription: string;
+  setAnnualInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAnnualInitiativeId: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const QuarterlyGoalModalContent = ({
   quarterlyGoalId,
   setQuarterlyGoalModalOpen,
+  annualInitiativeDescription,
+  setAnnualInitiativeModalOpen,
+  setAnnualInitiativeId,
 }: IQuarterlyGoalModalContentProps): JSX.Element => {
   const { quarterlyGoalStore } = useMst();
   const [quarterlyGoal, setQuarterlyGoal] = useState<any>(null);
@@ -43,7 +49,16 @@ export const QuarterlyGoalModalContent = ({
         <TitleContainer>
           <DescriptionText>{quarterlyGoal.description}</DescriptionText>
           <GoalText>
-            driving <UnderlinedGoalText> Validate the technology and benefits </UnderlinedGoalText>
+            driving{" "}
+            <UnderlinedGoalText
+              onClick={() => {
+                setQuarterlyGoalModalOpen(false);
+                setAnnualInitiativeId(quarterlyGoal.annualInitiativeId);
+                setAnnualInitiativeModalOpen(true);
+              }}
+            >
+              {annualInitiativeDescription}
+            </UnderlinedGoalText>
           </GoalText>
         </TitleContainer>
         <AnnualInitiativeActionContainer>
@@ -77,7 +92,7 @@ export const QuarterlyGoalModalContent = ({
     return milestonesToShow.map((milestone, index) => {
       return (
         <MilestoneContainer key={index}>
-          <MilestoneDetails>
+          <MilestoneDetails unstarted={milestone.status == "unstarted"}>
             <WeekOfText>
               Week of <WeekOfTextValue>{milestone.weekOf}</WeekOfTextValue>
             </WeekOfText>
@@ -172,6 +187,9 @@ const GoalText = styled(Text)`
 const UnderlinedGoalText = styled.span`
   font-weight: bold;
   text-decoration: underline;
+  &: hover {
+    cursor: pointer;
+  }
 `;
 
 const AnnualInitiativeActionContainer = styled.div`
@@ -210,11 +228,16 @@ const MilestoneContainer = styled.div`
   display: flex;
 `;
 
-const MilestoneDetails = styled(HomeContainerBorders)`
+type MilestoneDetailsType = {
+  unstarted: boolean;
+};
+
+const MilestoneDetails = styled(HomeContainerBorders)<MilestoneDetailsType>`
   padding: 8px;
   margin-top: 8px;
   margin-bottom: 8px;
   width: 90%;
+  border: ${props => !props.unstarted && `1px solid ${props.theme.colors.primary100}`};
 `;
 
 const WeekOfText = styled(Text)`

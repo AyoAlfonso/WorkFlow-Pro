@@ -21,7 +21,7 @@ export const AnnualInitiativeModalContent = ({
   annualInitiativeId,
   setAnnualInitiativeModalOpen,
 }: IAnnualInitiativeModalContentProps): JSX.Element => {
-  const { annualInitiativeStore } = useMst();
+  const { annualInitiativeStore, companyStore } = useMst();
   const [annualInitiative, setAnnualInitiative] = useState<any>(null);
 
   useEffect(() => {
@@ -69,7 +69,8 @@ export const AnnualInitiativeModalContent = ({
         <TitleContainer>
           <DescriptionText>{annualInitiative.description}</DescriptionText>
           <GoalText>
-            In order to <UnderlinedGoalText> Save At Least 100 People </UnderlinedGoalText>
+            In order to{" "}
+            <UnderlinedGoalText> {companyStore.company.rallyingCry} </UnderlinedGoalText>
           </GoalText>
         </TitleContainer>
         <AnnualInitiativeActionContainer>

@@ -15,6 +15,7 @@ interface IContextTabsProps {
 
 export const ContextTabs = ({ object }: IContextTabsProps): JSX.Element => {
   const [selectedContextTab, setSelectedContextTab] = useState<number>(1);
+  const [hideContent, setHideContent] = useState<boolean>(false);
 
   const renderContextImportance = () => {
     return (
@@ -83,7 +84,7 @@ export const ContextTabs = ({ object }: IContextTabsProps): JSX.Element => {
           </StyledTab>
         </StyledTabList>
 
-        <TabPanelContainer>
+        <TabPanelContainer hideContent={hideContent}>
           <StyledTabPanel>{renderContextImportance()}</StyledTabPanel>
           <StyledTabPanel>{renderContextDescription()}</StyledTabPanel>
           <StyledTabPanel>{renderKeyElements()}</StyledTabPanel>
@@ -105,12 +106,18 @@ const SubHeaderText = styled(Text)`
   font-weight: bold;
 `;
 
-const TabPanelContainer = styled.div`
+type TabPanelContainerType = {
+  hideContent: boolean;
+};
+
+const TabPanelContainer = styled.div<TabPanelContainerType>`
   border-radius: 10px;
   border: 1px solid #e3e3e3;
   box-shadow: 0px 3px 6px #f5f5f5;
   margin-top: -20px;
   padding: 16px;
+  border-top-left-radius: 0px;
+  display: ${props => props.hideContent && "none"};
 `;
 
 const StyledTabList = styled(TabList)`
@@ -121,7 +128,6 @@ const StyledTab = styled(Tab)`
   display: inline-block;
   border: 1px solid #e3e3e3;
   outline: none;
-
   border-bottom: none;
   margin-bottom: 3px;
   position: relative;
@@ -129,9 +135,9 @@ const StyledTab = styled(Tab)`
   padding: 6px 12px;
   cursor: pointer;
   width: 140px;
-  margin-left: 20px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  margin-right: 20px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 `;
 
 type StyledTabTitleType = {

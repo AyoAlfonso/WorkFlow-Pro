@@ -52,6 +52,8 @@ export const AnnualInitiativeCard = ({
         <AnnualInitiativeCardExpanded
           annualInitiative={annualInitiative}
           setShowMinimizedCard={setShowMinimizedCard}
+          setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+          setAnnualInitiativeId={setAnnualInitiativeId}
         />
       )}
     </Container>
