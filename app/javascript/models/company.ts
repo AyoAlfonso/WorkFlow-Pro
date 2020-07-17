@@ -8,6 +8,8 @@ export const CompanyModel = types
     name: types.string,
     rallyingCry: types.maybeNull(types.string),
     coreFour: CoreFourModel,
+    accountabilityChartContent: types.string,
+    strategicPlanContent: types.string,
   })
   .views(self => ({}))
   .actions(self => ({}));

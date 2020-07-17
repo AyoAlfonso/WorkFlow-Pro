@@ -6,3 +6,12 @@
 #     https: false
 #   )
 # end
+
+ActionController::Renderer.const_set('DEFAULTS', {
+    http_host: ENV["HOST_URL"],
+    https: false,
+    method: "get",
+    script_name: "",
+    input: ""
+  }.freeze
+)
