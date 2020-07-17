@@ -22,6 +22,7 @@ export const QuarterlyGoalModalContent = ({
 }: IQuarterlyGoalModalContentProps): JSX.Element => {
   const { quarterlyGoalStore } = useMst();
   const [quarterlyGoal, setQuarterlyGoal] = useState<any>(null);
+  const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
 
   useEffect(() => {
     quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
@@ -32,6 +33,9 @@ export const QuarterlyGoalModalContent = ({
   if (quarterlyGoal == null) {
     return <> Loading... </>;
   }
+
+  const allMilestones = quarterlyGoal.milestones;
+  const activeMilestones = quarterlyGoal.activeMilestones;
 
   const renderHeader = (): JSX.Element => {
     return (
@@ -69,7 +73,8 @@ export const QuarterlyGoalModalContent = ({
   };
 
   const renderWeeklyMilestones = (): JSX.Element => {
-    return quarterlyGoal.milestones.map((milestone, index) => {
+    const milestonesToShow = showInactiveMilestones ? allMilestones : activeMilestones;
+    return milestonesToShow.map((milestone, index) => {
       return (
         <MilestoneContainer key={index}>
           <MilestoneDetails>
@@ -101,8 +106,14 @@ export const QuarterlyGoalModalContent = ({
               <SubHeaderText> Weekly Milestones</SubHeaderText>
             </SubHeaderContainer>
             <ShowPastWeeksContainer>
-              <Button small variant={"primaryOutline"} onClick={() => {}}>
-                Show Past Weeks (2)
+              <Button
+                small
+                variant={"primaryOutline"}
+                onClick={() => setShowInactiveMilestones(!showInactiveMilestones)}
+              >
+                {showInactiveMilestones
+                  ? "Show Present & Upcoming"
+                  : `Show Past Weeks (${allMilestones.length - activeMilestones.length})`}
               </Button>
             </ShowPastWeeksContainer>
           </MilestonesHeaderContainer>
