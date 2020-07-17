@@ -7,9 +7,7 @@ class Api::CompaniesController < Api::ApplicationController
     render json: @company.serializable_hash(only: ['id', 'name', 'phone_number', 'rallying_cry'],
     methods: ['accountability_chart_content', 'strategic_plan_content'], 
     include: {
-      # accountability_chart: nil,
-      # strategic_plan: nil,
-      core_four: {only: ['core_1', 'core_2', 'core_3', 'core_4']}
+      core_four: {methods: ['core_1_content', 'core_2_content', 'core_3_content', 'core_4_content']}
     })
   end
 

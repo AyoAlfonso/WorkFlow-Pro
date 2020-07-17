@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { HomeContainerBorders, HomeTitle } from "./shared-components";
 import { useMst } from "../../../setup/root";
 import { Loading } from "../../shared/loading";
+import { Flex, Box } from "rebass";
 
 export const HomeCoreFour = observer(
   (): JSX.Element => {
@@ -15,10 +16,32 @@ export const HomeCoreFour = observer(
         <HomeTitle> Core Four </HomeTitle>
         {company ? (
           <ValuesContainer>
-            <p>{company.coreFour.core1}</p>
-            <p>{company.coreFour.core2}</p>
-            <p>{company.coreFour.core3}</p>
-            <p>{company.coreFour.core4}</p>
+            <Flex>
+              <Box width={1 / 4}>
+                <div
+                  className="trix-content"
+                  dangerouslySetInnerHTML={{ __html: company.coreFour.core1Content }}
+                ></div>
+              </Box>
+              <Box width={1 / 4}>
+                <div
+                  className="trix-content"
+                  dangerouslySetInnerHTML={{ __html: company.coreFour.core2Content }}
+                ></div>
+              </Box>
+              <Box width={1 / 4}>
+                <div
+                  className="trix-content"
+                  dangerouslySetInnerHTML={{ __html: company.coreFour.core3Content }}
+                ></div>
+              </Box>
+              <Box width={1 / 4}>
+                <div
+                  className="trix-content"
+                  dangerouslySetInnerHTML={{ __html: company.coreFour.core4Content }}
+                ></div>
+              </Box>
+            </Flex>
           </ValuesContainer>
         ) : (
           <Loading />

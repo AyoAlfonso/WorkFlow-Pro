@@ -1,7 +1,8 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
-import { Loading } from "../../shared/loading";
+import { Loading } from "~/components/shared/loading";
+import { Heading } from "~/components/shared/heading";
 
 export const AccountabilityChart = observer(
   (): JSX.Element => {
@@ -12,12 +13,21 @@ export const AccountabilityChart = observer(
       <div>
         {company ? (
           <>
+            <Heading type={"h3"} color={"black"}>
+              Accountability Chart
+            </Heading>
             <div
               className="trix-content"
               dangerouslySetInnerHTML={{ __html: company.accountabilityChartContent }}
             ></div>
             <br />
-            <div dangerouslySetInnerHTML={{ __html: company.strategicPlanContent }}></div>
+            <Heading type={"h3"} color={"black"}>
+              Strategic Plan
+            </Heading>
+            <div
+              className="trix-content"
+              dangerouslySetInnerHTML={{ __html: company.strategicPlanContent }}
+            ></div>
           </>
         ) : (
           <Loading />

@@ -3,10 +3,10 @@ import { types } from "mobx-state-tree";
 export const CoreFourModel = types
   .model("CoreFourModel")
   .props({
-    core1: types.maybeNull(types.string),
-    core2: types.maybeNull(types.string),
-    core3: types.maybeNull(types.string),
-    core4: types.maybeNull(types.string),
+    core1Content: types.maybeNull(types.string),
+    core2Content: types.maybeNull(types.string),
+    core3Content: types.maybeNull(types.string),
+    core4Content: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));

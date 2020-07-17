@@ -25,16 +25,26 @@ if Rails.env.development?
   User.where(email: "allen@laterolabs.com").first_or_create(first_name: 'Allen', last_name: 'Greer', email: 'allen@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id)
   User.where(email: "shaun@laterolabs.com").first_or_create(first_name: 'Shaun', last_name: 'Schwartz', email: 'shaun@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id)
   
-  AnnualInitiative.where(company_id: c1.id, description: "this is the first initiative").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["this is important"], description: "this is the first initiative", key_elements: ["this is a key element", "as is this"], company_id: c1.id)
-  QuarterlyGoal.where(description: "descriptive description").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["important"], description: "descriptive description", key_elements: ["key", "element"], annual_initiative_id: AnnualInitiative.first.id)
+  AnnualInitiative.where(company_id: c1.id, description: "this is the first initiative").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["this is important"], description: "this is the first initiative", key_elements_attributes: [
+    {value: "this is a key element"}, {value: "as is this"}
+  ], company_id: c1.id)
+  QuarterlyGoal.where(description: "descriptive description").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["important"], description: "descriptive description", key_elements_attributes: [
+    {value: "key"}, {value: "element"}
+  ], annual_initiative_id: AnnualInitiative.first.id)
   Milestone.where(created_by: User.where(id: 1)).first_or_create(created_by_id: u1.id, description: "some text", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.first.id)
   Milestone.where(description: "some different").first_or_create(created_by_id: u1.id, description: "some different", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.first.id)
-  QuarterlyGoal.where(description: "this is the description").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["something important"], description: "this is the description", key_elements: ["thing", "another thing"], annual_initiative_id: AnnualInitiative.first.id)
+  QuarterlyGoal.where(description: "this is the description").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["something important"], description: "this is the description", key_elements_attributes: [
+    {value: "thing"}, {value: "another thing"}
+  ], annual_initiative_id: AnnualInitiative.first.id)
   Milestone.where(description: "some milestone text").first_or_create(created_by_id: u1.id, description: "some milestone text", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.find(2).id)
   Milestone.where(description: "some different milestone text").first_or_create(created_by_id: u1.id, description: "some different milestone text", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.find(2).id)
 
-  AnnualInitiative.where(company_id: c1.id, description: "this is the second initiative").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["this is important"], description: "this is the second initiative", key_elements: ["this is a key element", "as is this"], company_id: c1.id)
-  QuarterlyGoal.where(description: "quarterly goal description").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["important"], description: "quarterly goal description", key_elements: ["key", "element"], annual_initiative_id: AnnualInitiative.find(2).id)
+  AnnualInitiative.where(company_id: c1.id, description: "this is the second initiative").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["this is important"], description: "this is the second initiative", key_elements_attributes: [
+    {value: "key"}, {value: "element"}
+  ], company_id: c1.id)
+  QuarterlyGoal.where(description: "quarterly goal description").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["important"], description: "quarterly goal description", key_elements_attributes: [
+    {value: "key"}, {value: "element"}
+  ], annual_initiative_id: AnnualInitiative.find(2).id)
   Milestone.where(description: "new milestone text").first_or_create(created_by_id: u1.id, description: "new milestone text", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.find(3).id)
   Milestone.where(description: "some more new milestone text").first_or_create(created_by_id: u1.id, description: "some more new milestone text", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.find(3).id)
 end
