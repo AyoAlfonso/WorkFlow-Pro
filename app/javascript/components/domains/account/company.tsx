@@ -13,6 +13,17 @@ export const Company = (): JSX.Element => {
     <div>
       <StyledLabel htmlFor="name">{t("company.name")}</StyledLabel>
       <StyledInput disabled={true} name="name" onChange={() => {}} value={company.name} />
+      <StyledLabel htmlFor="logo">{t("company.logo")}</StyledLabel>
+      {company.logoUrl ? <img src={company.logoUrl}></img> : "No Company Logo set"}
+      <StyledLabel htmlFor="fiscal_year_start">{t("company.fiscalYearStartDate")}</StyledLabel>
+      <StyledInput
+        disabled={true}
+        name="fiscal_year_start"
+        onChange={() => {}}
+        value={company.fiscalYearStart}
+      />
+      <StyledLabel htmlFor="timezone">{t("company.timezone")}</StyledLabel>
+      <StyledInput disabled={true} name="timezone" onChange={() => {}} value={company.timezone} />
     </div>
   );
 };
