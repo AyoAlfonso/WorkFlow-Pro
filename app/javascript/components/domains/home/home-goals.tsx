@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as R from "ramda";
 import { observer } from "mobx-react";
 import { HomeContainerBorders, HomeTitle } from "./shared-components";
 import styled from "styled-components";
@@ -24,7 +25,7 @@ export const HomeGoals = (): JSX.Element => {
     goalStore.load().then(() => setLoading(false));
   }, []);
 
-  if (loading) {
+  if (loading || R.isNil(goalStore.companyGoals)) {
     return <Loading />;
   }
 
