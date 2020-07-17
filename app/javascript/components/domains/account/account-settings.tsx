@@ -5,6 +5,10 @@ import { useTranslation } from "react-i18next";
 import { Text } from "~/components/shared/text";
 import { AccountProfile } from "./profile";
 import { HomeContainerBorders } from "../home/shared-components";
+import { Notifications } from "./notifications";
+import { Meeting } from "./meeting";
+import { Users } from "./users";
+import { Company } from "./company";
 
 export const AccountSettings = (): JSX.Element => {
   const { t } = useTranslation();
@@ -22,14 +26,14 @@ export const AccountSettings = (): JSX.Element => {
 
   const renderDisplayBox = (): JSX.Element => {
     switch (selectedTab) {
-      case "reminders":
-        return <div>Reminders Section</div>;
+      case "notifications":
+        return <Notifications />;
       case "meeting":
-        return <div>Meeting Section</div>;
+        return <Meeting />;
       case "users":
-        return <div>Users Section</div>;
+        return <Users />;
       case "company":
-        return <div>Company Section</div>;
+        return <Company />;
       default:
         return <AccountProfile />;
     }
@@ -41,7 +45,7 @@ export const AccountSettings = (): JSX.Element => {
       <SelectionContainer>
         <SelectionTabsContainer>
           {renderOption("profile")}
-          {renderOption("reminders")}
+          {renderOption("notifications")}
           {renderOption("meeting")}
           {renderOption("users")}
           {renderOption("company")}

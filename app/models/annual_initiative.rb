@@ -7,6 +7,7 @@ class AnnualInitiative < ApplicationRecord
   has_many :comments, as: :commentable
   # has_many :attachments
   has_many :key_elements, as: :elementable
+  accepts_nested_attributes_for :key_elements
 
   scope :sort_by_created_date, -> { order(created_at: :asc) }
   scope :owned_by_user, -> (user) { where(owned_by_id: user.id).where(company_id: nil) }

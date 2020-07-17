@@ -1,10 +1,15 @@
 class Company < ApplicationRecord
   has_many :users
   has_many :annual_initiatives
+  has_one_attached :logo
+  
   has_one :core_four
   accepts_nested_attributes_for :core_four
   has_rich_text :accountability_chart
   has_rich_text :strategic_plan
+  
+  include RichTextHelper
+  rich_text_content_render :accountability_chart, :strategic_plan
 
   def core_four
     super || build_core_four
@@ -17,13 +22,8 @@ class Company < ApplicationRecord
     "#{month}/#{day}"
   end
 
-
-  #https://api.rubyonrails.org/classes/ActiveModel/Serialization.html#method-i-serializable_hash
-  def accountability_chart_content
-    accountability_chart.body.to_s
+  def logo_url
+    logo.present? ? Rails.application.routes.url_helpers.rails_blob_url(logo, host: ENV["ASSETS_HOST_URL"] || ENV["HOST_URL"]) : nil
   end
 
-  def strategic_plan_content
-    strategic_plan.body.to_s
-  end
 end

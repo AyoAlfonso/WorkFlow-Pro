@@ -12,7 +12,7 @@
         "greeting": "Hey {{name}}",
         "accountSettings": "Account Settings",
         "profile": "Profile",
-        "reminders": "Reminders",
+        "notifications": "Notifications",
         "meeting": "Meeting",
         "users": "Users",
         "company": "Company",
@@ -28,6 +28,12 @@
           "firstName": "First Name",
           "lastName": "Last Name"
         }
+      },
+      "company": {
+        "name": "Company Name",
+        "logo": "Company Logo",
+        "fiscalYearStartDate": "Fiscal Year Start Date",
+        "timezone": "Location/Time Zone"
       },
       "navigation": {
         "home": "Home",

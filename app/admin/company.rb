@@ -4,11 +4,13 @@ ActiveAdmin.register Company do
                 :contact_email,
                 :fiscal_year_start,
                 :name,
+                :logo,
                 :phone_number,
                 :rallying_cry,
                 :strategic_plan,
                 :timezone,
                 core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4]
+                
   index do
     selectable_column
     id_column
@@ -29,6 +31,9 @@ ActiveAdmin.register Company do
   show do
     h1 company.name
     attributes_table do
+      row :avatar do |company|
+        image_tag url_for(company.logo)
+      end
       row :address
       row :contact_email
       row :phone_number
@@ -86,6 +91,7 @@ ActiveAdmin.register Company do
     h1 f.object.name
     f.inputs 'Company Details' do
       f.input :name
+      f.input :logo, as: :file, hint: (f.object && f.object.logo.present? ? image_tag(url_for(f.object.logo)) : "Please set logo")
       f.input :address
       f.input :contact_email
       f.input :phone_number
