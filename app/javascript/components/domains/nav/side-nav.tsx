@@ -122,7 +122,9 @@ export const SideNavNoMst = (currentPathName: string): JSX.Element => {
   );
 };
 
-export const SideNav = (): JSX.Element => {
-  const { router } = useMst();
-  return SideNavNoMst(router.location.pathname);
-};
+export const SideNav = observer(
+  (): JSX.Element => {
+    const { router } = useMst();
+    return SideNavNoMst(router.location.pathname);
+  },
+);
