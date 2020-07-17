@@ -39,5 +39,5 @@ Rails.application.routes.draw do
   
 
   root 'react_app#index'
-  get "/*path", to: "react_app#index", format: false
+  get "/*path", to: "react_app#index", format: false, constraints: -> (req) { !req.path.include?("/rails") }
 end

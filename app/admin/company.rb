@@ -67,7 +67,6 @@ ActiveAdmin.register Company do
       end
     end
     panel 'Accountability Chart' do
-      h2 'Accountability Chart'
       attributes_table_for company do
         row :accountability_chart do |c|
           c.accountability_chart.body
@@ -75,7 +74,6 @@ ActiveAdmin.register Company do
       end
     end
     panel 'Strategic Plan' do
-      h2 'Strategic Plan'
       attributes_table_for company do
         row :strategic_plan do |c|
           c.strategic_plan.body
