@@ -11,8 +11,8 @@ export const CompanyModel = types
     accountabilityChartContent: types.string,
     strategicPlanContent: types.string,
     logoUrl: types.maybeNull(types.string),
-    fiscalYearStart: types.string,
-    timezone: types.string,
+    fiscalYearStart: types.maybeNull(types.string),
+    timezone: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));
