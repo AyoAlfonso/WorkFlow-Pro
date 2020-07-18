@@ -10,6 +10,7 @@ import { StatusBlockColorIndicator } from "../shared/status-block-color-indicato
 import { ContextTabs } from "../shared/context-tabs";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { IndividualVerticalStatusBlockColorIndicator } from "../shared/individual-vertical-status-block-color-indicator";
+import * as moment from "moment";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -90,11 +91,12 @@ export const QuarterlyGoalModalContent = ({
   const renderWeeklyMilestones = (): JSX.Element => {
     const milestonesToShow = showInactiveMilestones ? allMilestones : activeMilestones;
     return milestonesToShow.map((milestone, index) => {
+      const unstarted = milestone.status == "unstarted";
       return (
         <MilestoneContainer key={index}>
-          <MilestoneDetails unstarted={milestone.status == "unstarted"}>
-            <WeekOfText>
-              Week of <WeekOfTextValue>{milestone.weekOf}</WeekOfTextValue>
+          <MilestoneDetails unstarted={unstarted}>
+            <WeekOfText unstarted={unstarted}>
+              Week of <WeekOfTextValue>{moment(milestone.weekOf).format("MMMM D")}</WeekOfTextValue>
             </WeekOfText>
             <MilestoneDescriptionText>{milestone.description}</MilestoneDescriptionText>
           </MilestoneDetails>
@@ -127,7 +129,7 @@ export const QuarterlyGoalModalContent = ({
                 onClick={() => setShowInactiveMilestones(!showInactiveMilestones)}
               >
                 {showInactiveMilestones
-                  ? "Show Present & Upcoming"
+                  ? "Show Upcoming"
                   : `Show Past Weeks (${allMilestones.length - activeMilestones.length})`}
               </Button>
             </ShowPastWeeksContainer>
@@ -238,10 +240,15 @@ const MilestoneDetails = styled(HomeContainerBorders)<MilestoneDetailsType>`
   margin-bottom: 8px;
   width: 90%;
   border: ${props => !props.unstarted && `1px solid ${props.theme.colors.primary100}`};
+  color: ${props => props.unstarted && props.theme.colors.grey60};
 `;
 
-const WeekOfText = styled(Text)`
-  color: ${props => props.theme.colors.primary100};
+type WeekOfTextType = {
+  unstarted: boolean;
+};
+
+const WeekOfText = styled(Text)<WeekOfTextType>`
+  color: ${props => (props.unstarted ? props.theme.colors.grey60 : props.theme.colors.primary100)};
   margin-top: 8px;
   margin-bottom: 8px;
 `;

@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as R from "ramda";
-import { observer } from "mobx-react";
 import { HomeContainerBorders, HomeTitle } from "./shared-components";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
@@ -11,6 +10,8 @@ import { Icon } from "../../shared/icon";
 import { Loading } from "../../shared/loading";
 import Modal from "styled-react-modal";
 import { AnnualInitiativeModalContent } from "../goals/annual-initiative/annual-initiative-modal-content";
+import { QuarterlyGoalModalContent } from "../goals/quarterly-goal/quarterly-goal-modal-content";
+import { observer } from "mobx-react";
 
 export const HomeGoals = observer(
   (): JSX.Element => {
@@ -21,6 +22,11 @@ export const HomeGoals = observer(
     const [loading, setLoading] = useState<boolean>(true);
     const [annualInitiativeModalOpen, setAnnualInitiativeModalOpen] = useState<boolean>(false);
     const [annualInitiativeId, setAnnualInitiativeId] = useState<number>(null);
+    const [quarterlyGoalModalOpen, setQuarterlyGoalModalOpen] = useState<boolean>(null);
+    const [quarterlyGoalId, setQuarterlyGoalId] = useState<number>(null);
+    const [annualInitiativeDescription, setSelectedAnnualInitiativeDescription] = useState<string>(
+      "",
+    );
 
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
@@ -74,6 +80,9 @@ export const HomeGoals = observer(
             showMinimizedCards={showMinimizedCards}
             setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
             setAnnualInitiativeId={setAnnualInitiativeId}
+            setQuarterlyGoalId={setQuarterlyGoalId}
+            setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
+            setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
           />
         );
       });
@@ -128,6 +137,22 @@ export const HomeGoals = observer(
         >
           <AnnualInitiativeModalContent
             annualInitiativeId={annualInitiativeId}
+            setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+            setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
+            setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
+            setQuarterlyGoalId={setQuarterlyGoalId}
+          />
+        </StyledModal>
+
+        <StyledModal
+          isOpen={quarterlyGoalModalOpen}
+          style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
+        >
+          <QuarterlyGoalModalContent
+            quarterlyGoalId={quarterlyGoalId}
+            setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
+            setAnnualInitiativeId={setAnnualInitiativeId}
+            annualInitiativeDescription={annualInitiativeDescription}
             setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
           />
         </StyledModal>
@@ -227,6 +252,6 @@ const FilterOptions = styled.p<FilterOptionsType>`
 const StyledModal = Modal.styled`
   width: 30rem;
   min-height: 100px;
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: ${props => props.theme.colors.white};
 `;

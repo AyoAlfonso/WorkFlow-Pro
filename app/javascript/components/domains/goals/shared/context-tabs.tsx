@@ -69,17 +69,26 @@ export const ContextTabs = ({ object }: IContextTabsProps): JSX.Element => {
     });
   };
 
+  const tabClicked = (index: number): void => {
+    if (index == selectedContextTab) {
+      setHideContent(!hideContent);
+    } else {
+      setHideContent(false);
+      setSelectedContextTab(index);
+    }
+  };
+
   return (
     <Container>
       <Tabs>
         <StyledTabList>
-          <StyledTab onClick={() => setSelectedContextTab(1)}>
+          <StyledTab onClick={() => tabClicked(1)}>
             <StyledTabTitle tabSelected={selectedContextTab == 1}>Importance </StyledTabTitle>
           </StyledTab>
-          <StyledTab onClick={() => setSelectedContextTab(2)}>
+          <StyledTab onClick={() => tabClicked(2)}>
             <StyledTabTitle tabSelected={selectedContextTab == 2}>Description</StyledTabTitle>
           </StyledTab>
-          <StyledTab onClick={() => setSelectedContextTab(3)}>
+          <StyledTab onClick={() => tabClicked(3)}>
             <StyledTabTitle tabSelected={selectedContextTab == 3}>Key Elements</StyledTabTitle>
           </StyledTab>
         </StyledTabList>

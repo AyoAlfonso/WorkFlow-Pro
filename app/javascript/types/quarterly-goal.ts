@@ -15,4 +15,5 @@ export type QuarterlyGoalType = {
   description: string;
   milestones: Array<MilestoneType>;
   contextDescription: string;
+  quarter: number;
 };

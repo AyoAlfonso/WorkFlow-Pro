@@ -5,15 +5,13 @@ import { Icon } from "../../../shared/icon";
 import { UserDefaultIcon } from "../../../shared/user-default-icon";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
-import { useState } from "react";
-import Modal from "styled-react-modal";
-import { QuarterlyGoalModalContent } from "../quarterly-goal/quarterly-goal-modal-content";
 
 interface IAnnualInitiativeCardExpandedProps {
   annualInitiative: AnnualInitiativeType;
   setShowMinimizedCard: React.Dispatch<React.SetStateAction<boolean>>;
-  setAnnualInitiativeId: React.Dispatch<React.SetStateAction<number>>;
-  setAnnualInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setQuarterlyGoalId: React.Dispatch<React.SetStateAction<number>>;
+  setQuarterlyGoalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedAnnualInitiativeDescription: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const AnnualInitiativeCardExpanded = (
@@ -22,11 +20,10 @@ export const AnnualInitiativeCardExpanded = (
   const {
     annualInitiative,
     setShowMinimizedCard,
-    setAnnualInitiativeId,
-    setAnnualInitiativeModalOpen,
+    setQuarterlyGoalId,
+    setQuarterlyGoalModalOpen,
+    setSelectedAnnualInitiativeDescription,
   } = props;
-  const [quarterlyGoalModalOpen, setQuarterlyGoalModalOpen] = useState<boolean>(false);
-  const [quarterlyGoalId, setQuarterlyGoalId] = useState<number>(null);
 
   const renderQuarterlyGoals = () => {
     return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
@@ -36,6 +33,7 @@ export const AnnualInitiativeCardExpanded = (
           onClick={() => {
             setQuarterlyGoalModalOpen(true);
             setQuarterlyGoalId(quarterlyGoal.id);
+            setSelectedAnnualInitiativeDescription(annualInitiative.description);
           }}
         >
           <StatusBlockColorIndicator milestones={quarterlyGoal.milestones} indicatorWidth={25} />
@@ -66,19 +64,6 @@ export const AnnualInitiativeCardExpanded = (
       <MinimizeIconContainer onClick={() => setShowMinimizedCard(true)}>
         <Icon icon={"Chevron-Up"} size={"15px"} iconColor={"grey60"} />
       </MinimizeIconContainer>
-
-      <StyledModal
-        isOpen={quarterlyGoalModalOpen}
-        style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
-      >
-        <QuarterlyGoalModalContent
-          quarterlyGoalId={quarterlyGoalId}
-          setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
-          setAnnualInitiativeId={setAnnualInitiativeId}
-          annualInitiativeDescription={annualInitiative.description}
-          setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
-        />
-      </StyledModal>
     </Container>
   );
 };
@@ -128,11 +113,7 @@ const MinimizeIconContainer = styled.div`
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-`;
-
-const StyledModal = Modal.styled`
-  width: 30rem;
-  min-height: 100px;
-  border-radius: 5px;
-  background-color: ${props => props.theme.colors.white};
+  &: hover {
+    cursor: pointer;
+  }
 `;

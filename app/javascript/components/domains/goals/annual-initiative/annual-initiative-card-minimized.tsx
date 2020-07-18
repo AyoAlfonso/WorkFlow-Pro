@@ -84,6 +84,9 @@ const MaximizeIconContainer = styled.div`
   justify-content: center;
   text-align: center;
   margin: auto;
+  &: hover {
+    cursor: pointer;
+  }
 `;
 
 const StatusSquareContainer = styled.div`
