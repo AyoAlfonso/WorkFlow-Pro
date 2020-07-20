@@ -3,6 +3,7 @@ import "react-step-progress-bar/styles.css";
 import { ProgressBar, Step } from "react-step-progress-bar";
 import { StepProgressBarIcon } from "./step-progress-bar-icon";
 import { baseTheme } from "../../themes";
+import ReactTooltip from "react-tooltip";
 
 export interface IStepProgressBar {
   percent?: number;
@@ -20,6 +21,7 @@ export interface IStepProgressBarStep {
   position?: number;
   index: number;
   children: () => JSX.Element;
+  title: string;
   transition?: string;
   transitionDuration?: string;
 }
@@ -41,7 +43,11 @@ export const StepProgressBar = (props): JSX.Element => {
       {progressStep => {
         // Getting a bug where it's not reading values correctly from progressStep
         // So using the original step instead
-        return <div>{step.accomplished ? accomplishedIcon : unaccomplishedIcon}</div>;
+        return (
+          <div data-tip={step.title}>
+            {step.accomplished ? accomplishedIcon : unaccomplishedIcon}
+          </div>
+        );
       }}
     </Step>
   ));
@@ -53,12 +59,19 @@ export const StepProgressBar = (props): JSX.Element => {
 
   const allStepsCompleted = steps.every(st => st.accomplished === true);
   return (
-    <ProgressBar {...defaultStepProgressBarProps} percent={calculatePercent()} {...props}>
-      {renderSteps}
-      {/* A Final Default Completed Step is needed so that calculatePercentage calculates properly */}
-      <Step key={"last-step"}>
-        {progressStep => <div>{allStepsCompleted ? accomplishedIcon : unaccomplishedIcon}</div>}
-      </Step>
-    </ProgressBar>
+    <>
+      <ReactTooltip />
+      <ProgressBar {...defaultStepProgressBarProps} percent={calculatePercent()} {...props}>
+        {renderSteps}
+        {/* A Final Default Completed Step is needed so that calculatePercentage calculates properly */}
+        <Step key={"last-step"}>
+          {progressStep => (
+            <div data-tip={"All steps completed."}>
+              {allStepsCompleted ? accomplishedIcon : unaccomplishedIcon}
+            </div>
+          )}
+        </Step>
+      </ProgressBar>
+    </>
   );
 };

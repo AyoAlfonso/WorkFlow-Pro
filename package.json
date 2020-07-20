@@ -49,6 +49,7 @@
     "react-tabs": "^3.1.1",
     "react-toastify": "^6.0.8",
     "reactjs-popup": "^1.5.0",
+    "react-tooltip": "^4.2.7",
     "rebass": "^4.0.7",
     "regenerator-runtime": "^0.13.5",
     "storybook-react-router": "^1.0.8",

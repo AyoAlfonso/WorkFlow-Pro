@@ -76,11 +76,10 @@ export const StepProgressBar = () => (
   <ContainerDiv marginTop={250} marginLeft={25} width={"80%"}>
     <StProgressBar
       steps={[
-        { accomplished: true },
-        { accomplished: true },
-        { accomplished: true },
-        { accomplished: false },
-        { accomplished: false },
+        { accomplished: true, title: "Step #1" },
+        { accomplished: true, title: "Step #2" },
+        { accomplished: false, title: "Step #3" },
+        { accomplished: false, title: "Step #4" },
       ]}
     />
   </ContainerDiv>
