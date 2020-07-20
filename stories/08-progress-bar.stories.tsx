@@ -4,6 +4,7 @@ import { atomOneLight, CopyBlock } from "react-code-blocks";
 import { layout, space, typography } from "styled-system";
 import { CodeBlockDiv, ContainerDiv, Divider, PropsList, RowDiv } from "./shared";
 import { StripedProgressBar as ProgressBar } from "../app/javascript/components/shared/striped-progress-bar";
+import { StepProgressBar as StProgressBar } from "../app/javascript/components/shared";
 
 export default { title: "Progress Bars", decorators: [withKnobs] };
 
@@ -40,7 +41,7 @@ export const StripedProgressBar = () => (
       const MyComponent = () => (
         <div>
           <StripedProgressBar completed={25} variant={"primary"} />
-        </div>    
+        </div>
       )
       `}
         language={"tsx"}
@@ -68,5 +69,19 @@ export const StripedProgressBar = () => (
     <RowDiv width={"50%"} mb={3}>
       <ProgressBar completed={85} variant={"error"} text={"Error"} />
     </RowDiv>
+  </ContainerDiv>
+);
+
+export const StepProgressBar = () => (
+  <ContainerDiv marginTop={250} marginLeft={25} width={"80%"}>
+    <StProgressBar
+      steps={[
+        { accomplished: true },
+        { accomplished: true },
+        { accomplished: true },
+        { accomplished: false },
+        { accomplished: false },
+      ]}
+    />
   </ContainerDiv>
 );
