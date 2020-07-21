@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
-import { Box } from "rebass";
 import { Icon } from "../../../components/shared/icon";
 import { Text } from "../../../components/shared/text";
-import { NavLink, Link } from "react-router-dom";
-import { space, color } from "styled-system";
+import { NavLink } from "react-router-dom";
+import { color } from "styled-system";
 import { matchPath } from "react-router";
 
 import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react";
-import Popup from "reactjs-popup";
+import { SideNavChildLink, SideNavChildPopup } from "./side-nav-child";
 
 const StyledSideNav = styled.div`
   position: fixed; /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
@@ -111,43 +110,6 @@ const isNavMenuIconActive = (currentPath: string, to: string): boolean => {
   return pathMatch ? (to == "/" ? pathMatch.isExact : true) : false;
 };
 
-const PopupContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const PopupTriggerContainer = styled.div`
-  :hover {
-    cursor: pointer;
-  }
-`;
-
-const SideNavChildLink = styled(NavLink)`
-  border-radius: 8px;
-  text-decoration: none;
-  &:link,
-  &:visited {
-    color: ${props => props.theme.colors.greyActive};
-  }
-  &:hover {
-    color: ${props => props.theme.colors.primaryActive};
-    background-color: ${props => props.theme.colors.primary20};
-  }
-`;
-
-const SideNavChildLinkContainer = styled.div`
-  align-items: center;
-  height: 40px;
-  padding-left: 20px;
-  width: 250px;
-  display: flex;
-`;
-
-const SideNavChildLinkText = styled.p`
-  flex: 1;
-  margin: 0;
-`;
-
 export const SideNavNoMst = (currentPathName: string): JSX.Element => {
   const { t } = useTranslation();
   return (
@@ -164,38 +126,21 @@ export const SideNavNoMst = (currentPathName: string): JSX.Element => {
         {t("navigation.team")}
       </StyledNavLinkChildrenActive>
 
-      <Popup
-        arrow={false}
-        closeOnDocumentClick
-        // Had errors trying to do .styled(Popup): https://github.com/yjose/reactjs-popup/issues/118#issuecomment-533941132
-        contentStyle={{ borderRadius: 8, border: "none", boxShadow: "none" }}
-        // defaultOpen={true}
-        mouseLeaveDelay={10000}
-        mouseEnterDelay={0}
-        offsetY={-20}
-        on={"click"}
-        position={"right center"}
+      <SideNavChildPopup
         trigger={
-          <PopupTriggerContainer>
-            <NavMenuIcon icon={"Company"} active={isNavMenuIconActive(currentPathName, "/company")}>
-              {t("navigation.company")}
-            </NavMenuIcon>
-          </PopupTriggerContainer>
+          <NavMenuIcon icon={"Company"} active={isNavMenuIconActive(currentPathName, "/company")}>
+            {t("navigation.company")}
+          </NavMenuIcon>
         }
       >
-        <PopupContainer>
-          <SideNavChildLink to="/company/accountability">
-            <SideNavChildLinkContainer>
-              <SideNavChildLinkText>{"Accountability Chart"}</SideNavChildLinkText>
-            </SideNavChildLinkContainer>
-          </SideNavChildLink>
-          <SideNavChildLink to="/company/strategic_plan">
-            <SideNavChildLinkContainer>
-              <SideNavChildLinkText>{"The Plan"}</SideNavChildLinkText>
-            </SideNavChildLinkContainer>
-          </SideNavChildLink>
-        </PopupContainer>
-      </Popup>
+        <>
+          <SideNavChildLink
+            to="/company/accountability"
+            linkText={t("company.accountabilityChart")}
+          />
+          <SideNavChildLink to="/company/strategic_plan" linkText={t("company.strategicPlan")} />
+        </>
+      </SideNavChildPopup>
       <StyledNavLinkChildrenActive to="/goals" icon={"Stats"} currentPathName={currentPathName}>
         {t("navigation.goals")}
       </StyledNavLinkChildrenActive>
