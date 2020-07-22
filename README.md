@@ -1,24 +1,20 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Setup
 
-Things you may want to cover:
+1. Install npm packages -> `yarn install`
+2. Run Bundler -> `bundle install`
 
-* Ruby version
+## Run Project
 
-* System dependencies
+1. In console, run `rails s`
+2. In another pane/window, run -> `bin/webpack-dev-server`
 
-* Configuration
+## Storybook
 
-* Database creation
+To run storybook -> `yarn storybook`
 
-* Database initialization
+## Chromatic (Publish Storybook)
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+You can publish a static storybook to Chromatic's CDN by using this command -> `yarn chromatic`
+The new storybook can be reviewed by other collaborators on the project.
