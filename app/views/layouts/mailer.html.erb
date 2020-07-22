@@ -2,12 +2,68 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <style>
-      /* Email styles need to be inline */
-    </style>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <script src="https://kit.fontawesome.com/a95e98212b.js" crossorigin="anonymous"></script>
   </head>
 
   <body>
-    <%= yield %>
+    <div class="mail__container">
+      <div class="section__container section__container--logo">
+        <div>
+          <%= image_tag image_path('LynchPyn-Logo_Horizontal-Blue'), height: 67, width: 192 %>
+        </div>
+      </div>
+      <div class="section__container--main">
+        <h1>Let's Get Things Done!</h1>
+        <%= yield %>
+      </div>
+      <footer class="section__container--dark">
+        <div class="mail__footer-item">
+          <div class="mail__footer-header">
+            <h2>What's Lynchpin?</h2>
+          </div>
+          <div class="section__container-item">
+            <p>LynchPyn is a Leadership Success Platform that helps you get focused on what matters most.
+            </p>
+          </div>
+          <div></div>
+          <div class="section__container-item social-network">
+            <div class="social-network__icon">
+              <a class="normal-anchor-styles" href="#">
+                <i class="fab fa-facebook-square fa-lg"></i>
+              </a>
+            </div>
+            <div class="social-network__icon">
+              <a class="normal-anchor-styles" href="#">
+                <i class="fab fa-twitter-square fa-lg"></i>
+              </a>
+            </div>
+            <div class="social-network__icon">
+              <a class="normal-anchor-styles" href="#">
+                <i class="fab fa-linkedin fa-lg"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="mail__footer-item">
+          <div class="mail__footer-header">
+            <h2>Contact Us.</h2>
+          </div>
+          <div class="mail__footer-item__address">
+            <address>
+              King street, 2901 Marmara road,<br>
+              Newyork, WA 98122-1090
+            </address>
+          </div>
+          <div class="mail__footer-item__phone">
+            <a class="normal-anchor-styles" href="tel:647-631-1996">647-631-1996</a>
+          </div>
+          <div>
+            <a class="mail__footer-item__email normal-anchor-styles" href="mailto:parham@lynchpyn.com">parham@lynchpyn.com
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

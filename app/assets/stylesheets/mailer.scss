@@ -1,0 +1,120 @@
+:root {
+  --black: #151515;
+  --blue-primary: #005ffe;
+  --blue-dark: #172b4d;
+  --gray: #f4f4f4;
+  --gray-medium: #D8D8D8;
+  --gray-dark: #9B9B9B;
+  --teal: #00b8d9;
+  --white: #ffffff;
+}
+a {
+  background-color: var(--blue-primary);
+  border-radius: 8px;
+  color: var(--white);
+  font-weight: 500;
+  padding: 14px 19px;
+  text-decoration: none;
+
+}
+address {
+  font-style: inherit;
+}
+body {
+  font-family: 'Exo';
+  display: flex;
+  justify-content: center;
+  background-color: var(--gray);
+}
+footer {
+  height: 200px;
+}
+h1 {
+  color: var(--black);
+  font-weight: 800;
+}
+h2 {
+  margin-top: 0px;
+  font-size: 18px;
+  font-weight: 500;
+}
+@media (max-width: 750px){
+  .mail__container{
+    width: 80%;
+  }
+}
+@media (min-width: 750px){
+  .mail__container{
+    width: 60%;
+  }
+}
+.mail__container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.mail__footer-header{
+  color: var(--white);
+}
+.mail__footer-item {
+  color: var(--gray-medium);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  font-size: 14px;
+  height: 100%;
+  justify-content: space-evenly;
+  margin: 0px 5px;
+  padding: 0px 5px;
+}
+.mail__footer-item__address {
+  margin-bottom: 5px;
+}
+.mail__footer-item__email {
+  color: var(--teal);
+  font-weight: 500;
+}
+.mail__footer-item__phone {
+  font-size: 18px;
+}
+.normal-anchor-styles {
+  background-color: inherit;
+  border-radius: inherit;
+  padding: inherit;
+}
+.section__container {
+  align-items: start;
+  background-color: var(--white);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 10px;
+  padding: 25px 30px;
+}
+.section__container--dark {
+  @extend .section__container;
+  background-color: var(--blue-dark);
+  color: var(--white);
+  display: flex;
+  flex-direction: row;
+}
+.section__container--logo {
+  align-items: center;
+}
+.section__container--main {
+  @extend .section__container;
+  color: var(--gray-dark);
+}
+.section__container-item {
+  p {
+    margin: 0px;
+    padding: 0px;
+  }
+}
+.social-network {
+  display: flex;
+}
+.social-network__icon {
+  margin: 10px 15px 0px 0px;
+}
