@@ -15,13 +15,11 @@ export const AccountProfile = (): JSX.Element => {
   const [firstName, setFirstName] = useState(sessionStore.profile.firstName);
   const [lastName, setLastName] = useState(sessionStore.profile.lastName);
   const { t } = useTranslation();
+  // TODO: image is not re-rendering when profile changes, so avatar isn't updating until page refresh
   const submitAvatar = async (files: FileList) => {
     const form = new FormData();
     form.append("avatar", files[0]);
-    fetch(`http://localhost:3000/api/avatar`, {
-      method: "PUT",
-      body: form,
-    });
+    await sessionStore.updateAvatar(form);
   };
   return (
     <Container>

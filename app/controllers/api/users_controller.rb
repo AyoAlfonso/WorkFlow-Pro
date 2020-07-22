@@ -1,5 +1,5 @@
 class Api::UsersController < Api::ApplicationController
-  before_action :set_user, only: [:show, :update]
+  before_action :set_user, only: [:show, :update, :update_avatar]
   before_action :skip_authorization, only: :profile
   respond_to :json
 
@@ -18,7 +18,7 @@ class Api::UsersController < Api::ApplicationController
 
   def update_avatar
     @user.avatar.attach(params[:avatar])
-    render json: @user
+    render json: { avatar_url: @user.avatar_url }
   end
 
   private

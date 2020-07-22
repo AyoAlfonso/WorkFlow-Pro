@@ -49,6 +49,10 @@ export class Api {
     return this.client.get("/profile");
   }
 
+  async updateAvatar(formData) {
+    return this.client.put("/avatar", formData);
+  }
+
   async getCompany(companyId) {
     return this.client.get(`/companies/${companyId}`);
   }
