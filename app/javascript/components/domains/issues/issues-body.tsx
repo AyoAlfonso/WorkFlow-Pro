@@ -33,7 +33,7 @@ export const IssuesBody = observer(
             <Icon
               icon={"Priority-High"}
               size={24}
-              color={baseTheme.colors.cautionYellow}
+              iconColor={baseTheme.colors.cautionYellow}
               style={{ marginTop: "2px" }}
             />
           );
@@ -42,7 +42,7 @@ export const IssuesBody = observer(
             <Icon
               icon={"Priority-Urgent"}
               size={24}
-              color={baseTheme.colors.warningRed}
+              iconColor={baseTheme.colors.warningRed}
               style={{ marginTop: "2px" }}
             />
           );

@@ -202,7 +202,7 @@ export const RoundButton = () => {
           <Icon
             icon={text("icon", "Plus")}
             size={20}
-            color={"primary100"}
+            iconColor={"primary100"}
             style={{ marginLeft: "10px", marginTop: "10px" }}
           />
         </RoundButtonComponent>

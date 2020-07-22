@@ -60,7 +60,7 @@ export const Icons = () => (
 
       const MyComponentWithIcon = () => (
         <div>
-          <Icon icon={"Arrow"} size={"2em"} color={"red"}/>
+          <Icon icon={"Arrow"} size={"2em"} iconColor={"red"}/>
         </div>    
       )
       `}
