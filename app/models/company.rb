@@ -11,6 +11,8 @@ class Company < ApplicationRecord
   include RichTextHelper
   rich_text_content_render :accountability_chart, :strategic_plan
 
+  validates :name, :fiscal_year_start, :timezone, presence: true
+
   def core_four
     super || build_core_four
   end

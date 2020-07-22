@@ -9,7 +9,14 @@ Rails.application.routes.draw do
   },
   controllers: {
     sessions: 'sessions'
-  }
+  }, skip: [:confirmations]
+
+  devise_scope :user do
+    get '/confirmation/new', to: 'confirmations#new', format: :html, as: :new_user_confirmation
+    get '/confirmation', to: 'confirmations#show', format: :html, as: :user_confirmation
+    post '/confirmation', to: 'confirmations#create', format: :html, as: nil
+  end
+  
 
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
