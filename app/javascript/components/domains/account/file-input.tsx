@@ -22,7 +22,7 @@ const StyledFileInput = styled.input`
   display: none;
 `;
 
-export const FileInput = ({ labelText, onChange }) => {
+export const FileInput = ({ labelText, onChange }: IFileInputProps): JSX.Element => {
   const fileInput = useRef(null);
   return (
     <StyledFileInputLabel>
