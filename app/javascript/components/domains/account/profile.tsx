@@ -15,8 +15,17 @@ export const AccountProfile = (): JSX.Element => {
   const [firstName, setFirstName] = useState(sessionStore.profile.firstName);
   const [lastName, setLastName] = useState(sessionStore.profile.lastName);
   const { t } = useTranslation();
-  const submitProfile = (files: FileList) => {
-    alert(files[0].name);
+  const submitProfile = async (files: FileList) => {
+    const payload = await fetch(`http://localhost:3000/s3/direct_post`).then(res => res.json());
+    const url = payload.url;
+    const formData = new FormData();
+    Object.keys(payload.fields).forEach(key => formData.append(key, payload.fields[key]));
+    formData.append("file", files[0]);
+    const xml = await fetch(url, {
+      method: "POST",
+      body: formData,
+    }).then(res => res.text());
+    alert(xml);
   };
   return (
     <Container>
