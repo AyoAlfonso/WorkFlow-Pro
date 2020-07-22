@@ -9,6 +9,7 @@ export const UserModel = types
     lastName: types.maybeNull(types.string),
     personalVision: types.maybeNull(types.string),
     avatarUrl: types.maybeNull(types.string),
+    role: types.maybeNull(types.string),
     //add avatarurl2x
   })
   .views(self => ({}))
