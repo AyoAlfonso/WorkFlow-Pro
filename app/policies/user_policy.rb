@@ -16,6 +16,11 @@ class UserPolicy < ApplicationPolicy
     @record == @user || current_admin_user.present? # || user = record.company_admin?
   end
 
+  # TODO: Needs logic here
+  def update_avatar?
+    true
+  end
+
   def destroy?
     false #admin does destruction
   end

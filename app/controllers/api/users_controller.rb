@@ -16,6 +16,11 @@ class Api::UsersController < Api::ApplicationController
     render json: current_user.serializable_hash(methods: [:avatar_url])
   end
 
+  def update_avatar
+    @user.avatar.attach(params[:avatar])
+    render json: @user
+  end
+
   private
 
   def set_user

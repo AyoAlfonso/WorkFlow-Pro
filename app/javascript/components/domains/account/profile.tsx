@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useMst } from "~/setup/root";
 import styled from "styled-components";
 import { Box } from "rebass";
@@ -15,17 +15,13 @@ export const AccountProfile = (): JSX.Element => {
   const [firstName, setFirstName] = useState(sessionStore.profile.firstName);
   const [lastName, setLastName] = useState(sessionStore.profile.lastName);
   const { t } = useTranslation();
-  const submitProfile = async (files: FileList) => {
-    const payload = await fetch(`http://localhost:3000/s3/direct_post`).then(res => res.json());
-    const url = payload.url;
-    const formData = new FormData();
-    Object.keys(payload.fields).forEach(key => formData.append(key, payload.fields[key]));
-    formData.append("file", files[0]);
-    const xml = await fetch(url, {
-      method: "POST",
-      body: formData,
-    }).then(res => res.text());
-    alert(xml);
+  const submitAvatar = async (files: FileList) => {
+    const form = new FormData();
+    form.append("avatar", files[0]);
+    fetch(`http://localhost:3000/api/avatar`, {
+      method: "PUT",
+      body: form,
+    });
   };
   return (
     <Container>
@@ -66,7 +62,7 @@ export const AccountProfile = (): JSX.Element => {
             <Button small variant={"redOutline"} onClick={() => {}} mr={2}>
               {t("general.remove")}
             </Button>
-            <FileInput labelText={t("general.upload")} onChange={submitProfile} />
+            <FileInput labelText={t("general.upload")} onChange={submitAvatar} />
           </PhotoModificationButtonsSection>
         </ProfilePhotoSection>
       </BodyContainer>
