@@ -38,6 +38,7 @@ gem 'warden-jwt_auth', '~> 0.4.2' #https://github.com/waiting-for-dev/devise-jwt
 gem 'pundit', '~> 2.1.0'
 
 gem "aws-sdk-s3", require: false
+gem 'rack-cors'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

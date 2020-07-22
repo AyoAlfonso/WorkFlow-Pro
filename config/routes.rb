@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 's3/direct_post'
   # devise_for :users, defaults: {format: :json}
   devise_for :users,
   defaults: {format: :json},
