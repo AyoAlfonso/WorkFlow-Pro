@@ -81,7 +81,7 @@ export const QuarterlyGoalModalContent = ({
           <SubHeaderContainer>
             <SubHeaderText> Context</SubHeaderText>
           </SubHeaderContainer>
-          <ContextTabs object={quarterlyGoal} />
+          <ContextTabs object={quarterlyGoal} type={"quarterlyGoal"} />
         </ContextSectionContainer>
         <OwnedBySection ownedBy={quarterlyGoal.ownedBy} />
       </InfoSectionContainer>

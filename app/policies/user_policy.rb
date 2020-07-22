@@ -1,15 +1,21 @@
 class UserPolicy < ApplicationPolicy
+  attr_reader :user, :record
+
+  def initialize(user, record)
+    @user = user
+    @record = record
+  end
 
   def index?
     true
   end
 
   def show?
-    user.company == record.company
+    @user.company == @record.company
   end
 
   def create?
-    user = record.company_admin? #current_admin_user.present?
+    @user = @record.company_admin? #current_admin_user.present?
   end
 
   def update?
@@ -34,7 +40,7 @@ class UserPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.where(company: user.company)
+      scope.where(company: @user.company)
     end
   end
 end

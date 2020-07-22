@@ -24,6 +24,15 @@ export const GoalStoreModel = types
         // error messaging handled by API monitor
       }
     }),
+  }))
+  .actions(self => ({
+    updateAnnualInitiative(annualInitiative) {
+      const goalObject = annualInitiative.companyId ? self.companyGoals : self.personalGoals;
+      const goalsAnnualInitiativeIndex = self.companyGoals.goals.findIndex(
+        ai => ai.id == annualInitiative.id,
+      );
+      goalObject.goals[goalsAnnualInitiativeIndex] = annualInitiative;
+    },
   }));
 
 type GoalStoreType = typeof GoalStoreModel.Type;

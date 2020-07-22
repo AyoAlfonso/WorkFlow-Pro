@@ -6,7 +6,7 @@ export type QuarterlyGoalType = {
   id: number;
   annualInitiativeId: number;
   createdById: number;
-  createdAt: Date;
+  createdAt: Date | string;
   importance: Array<string>;
   keyElements: Array<KeyElementType>;
   ownedById: number;

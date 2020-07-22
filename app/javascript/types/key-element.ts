@@ -1,6 +1,6 @@
 export type KeyElementType = {
   id: number;
   value: string;
-  completedAt: Date;
+  completedAt: Date | string;
   elementableId: number;
 };
