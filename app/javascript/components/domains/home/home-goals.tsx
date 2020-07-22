@@ -12,125 +12,129 @@ import { Loading } from "../../shared/loading";
 import Modal from "styled-react-modal";
 import { AnnualInitiativeModalContent } from "../goals/annual-initiative/annual-initiative-modal-content";
 
-export const HomeGoals = (): JSX.Element => {
-  const { goalStore } = useMst();
+export const HomeGoals = observer(
+  (): JSX.Element => {
+    const { goalStore } = useMst();
 
-  const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(true);
-  const [showMinimizedCards, setShowMinimizedCards] = useState<boolean>(true);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [annualInitiativeModalOpen, setAnnualInitiativeModalOpen] = useState<boolean>(false);
-  const [annualInitiativeId, setAnnualInitiativeId] = useState<number>(null);
+    const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(true);
+    const [showMinimizedCards, setShowMinimizedCards] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [annualInitiativeModalOpen, setAnnualInitiativeModalOpen] = useState<boolean>(false);
+    const [annualInitiativeId, setAnnualInitiativeId] = useState<number>(null);
 
-  useEffect(() => {
-    goalStore.load().then(() => setLoading(false));
-  }, []);
+    useEffect(() => {
+      goalStore.load().then(() => setLoading(false));
+    }, []);
 
-  if (loading || R.isNil(goalStore.companyGoals)) {
-    return <Loading />;
-  }
+    if (loading || R.isNil(goalStore.companyGoals)) {
+      return <Loading />;
+    }
 
-  const companyGoals = goalStore.companyGoals;
-  const personalGoals = goalStore.personalGoals;
+    const companyGoals = goalStore.companyGoals;
+    const personalGoals = goalStore.personalGoals;
 
-  const renderRallyingCry = (): JSX.Element => {
-    return (
-      <VisionContainer>
-        <VisionTitle>Rallying Cry</VisionTitle>
-        <VisionText> {companyGoals.rallyingCry} </VisionText>
-      </VisionContainer>
-    );
-  };
-
-  const renderPersonalVision = (): JSX.Element => {
-    return (
-      <VisionContainer>
-        <VisionTitle>Personal Vision</VisionTitle>
-        <VisionText> {personalGoals.personalVision}</VisionText>
-      </VisionContainer>
-    );
-  };
-
-  const renderExpandAnnualInitiativesIcon = (): JSX.Element => {
-    return showMinimizedCards ? (
-      <IconContainer>
-        <Icon icon={"Chevron-Down"} size={"15px"} iconColor={"primary100"} />
-      </IconContainer>
-    ) : (
-      <IconContainer marginTop={"3px"}>
-        <Icon icon={"Chevron-Up"} size={"15px"} iconColor={"white"} />
-      </IconContainer>
-    );
-  };
-
-  const renderAnnualInitiatives = (annualInitiatives): JSX.Element => {
-    return annualInitiatives.map((annualInitiative, index) => {
+    const renderRallyingCry = (): JSX.Element => {
       return (
-        <AnnualInitiativeCard
-          key={index}
-          index={index}
-          annualInitiative={annualInitiative}
-          totalNumberOfAnnualInitiatives={annualInitiatives.length}
-          showMinimizedCards={showMinimizedCards}
-          setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
-          setAnnualInitiativeId={setAnnualInitiativeId}
-        />
+        <VisionContainer>
+          <VisionTitle>Rallying Cry</VisionTitle>
+          <VisionText> {companyGoals.rallyingCry} </VisionText>
+        </VisionContainer>
       );
-    });
-  };
+    };
 
-  return (
-    <Container>
-      <TitleContainer>
-        <HomeTitle> Goals </HomeTitle>
-        <ExpandAnnualInitiativesButton
-          showMinimizedCards={showMinimizedCards}
-          onClick={() => setShowMinimizedCards(!showMinimizedCards)}
+    const renderPersonalVision = (): JSX.Element => {
+      return (
+        <VisionContainer>
+          <VisionTitle>Personal Vision</VisionTitle>
+          <VisionText> {personalGoals.personalVision}</VisionText>
+        </VisionContainer>
+      );
+    };
+
+    const renderExpandAnnualInitiativesIcon = (): JSX.Element => {
+      return showMinimizedCards ? (
+        <IconContainer>
+          <Icon icon={"Chevron-Down"} size={"15px"} iconColor={"primary100"} />
+        </IconContainer>
+      ) : (
+        <IconContainer marginTop={"3px"}>
+          <Icon icon={"Chevron-Up"} size={"15px"} iconColor={"white"} />
+        </IconContainer>
+      );
+    };
+
+    const renderAnnualInitiatives = (annualInitiatives): JSX.Element => {
+      return annualInitiatives.map((annualInitiative, index) => {
+        return (
+          <AnnualInitiativeCard
+            key={index}
+            index={index}
+            annualInitiative={annualInitiative}
+            totalNumberOfAnnualInitiatives={annualInitiatives.length}
+            showMinimizedCards={showMinimizedCards}
+            setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+            setAnnualInitiativeId={setAnnualInitiativeId}
+          />
+        );
+      });
+    };
+
+    return (
+      <Container>
+        <TitleContainer>
+          <HomeTitle> Goals </HomeTitle>
+          <ExpandAnnualInitiativesButton
+            showMinimizedCards={showMinimizedCards}
+            onClick={() => setShowMinimizedCards(!showMinimizedCards)}
+          >
+            {renderExpandAnnualInitiativesIcon()}
+          </ExpandAnnualInitiativesButton>
+          <FilterContainer>
+            <FilterOptions
+              onClick={() => setShowCompanyGoals(false)}
+              color={!showCompanyGoals ? "primary100" : "grey40"}
+              style={!showCompanyGoals ? { textDecoration: "underline" } : {}}
+            >
+              Me
+            </FilterOptions>
+            <FilterOptions
+              onClick={() => setShowCompanyGoals(true)}
+              color={showCompanyGoals ? "primary100" : "grey40"}
+              style={showCompanyGoals ? { textDecoration: "underline" } : {}}
+            >
+              Company
+            </FilterOptions>
+          </FilterContainer>
+        </TitleContainer>
+
+        {renderRallyingCry()}
+
+        <InitiativesContainer>
+          {renderAnnualInitiatives(
+            showCompanyGoals ? companyGoals.goals : companyGoals.myAnnualInitiatives,
+          )}
+        </InitiativesContainer>
+
+        <PersonalVisionContainer>
+          {renderPersonalVision()}
+          <InitiativesContainer>
+            {renderAnnualInitiatives(personalGoals.goals)}
+          </InitiativesContainer>
+        </PersonalVisionContainer>
+
+        <StyledModal
+          isOpen={annualInitiativeModalOpen}
+          style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
         >
-          {renderExpandAnnualInitiativesIcon()}
-        </ExpandAnnualInitiativesButton>
-        <FilterContainer>
-          <FilterOptions
-            onClick={() => setShowCompanyGoals(false)}
-            color={!showCompanyGoals ? "primary100" : "grey40"}
-            style={!showCompanyGoals ? { textDecoration: "underline" } : {}}
-          >
-            Me
-          </FilterOptions>
-          <FilterOptions
-            onClick={() => setShowCompanyGoals(true)}
-            color={showCompanyGoals ? "primary100" : "grey40"}
-            style={showCompanyGoals ? { textDecoration: "underline" } : {}}
-          >
-            Company
-          </FilterOptions>
-        </FilterContainer>
-      </TitleContainer>
-
-      {renderRallyingCry()}
-
-      <InitiativesContainer>
-        {renderAnnualInitiatives(
-          showCompanyGoals ? companyGoals.goals : companyGoals.myAnnualInitiatives,
-        )}
-      </InitiativesContainer>
-
-      <PersonalVisionContainer>
-        {renderPersonalVision()}
-        <InitiativesContainer>{renderAnnualInitiatives(personalGoals.goals)}</InitiativesContainer>
-      </PersonalVisionContainer>
-
-      <StyledModal
-        isOpen={annualInitiativeModalOpen}
-        style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
-      >
-        <AnnualInitiativeModalContent
-          annualInitiativeId={annualInitiativeId}
-          setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
-        />
-      </StyledModal>
-    </Container>
-  );
-};
+          <AnnualInitiativeModalContent
+            annualInitiativeId={annualInitiativeId}
+            setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+          />
+        </StyledModal>
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
   margin-top: 30px;
