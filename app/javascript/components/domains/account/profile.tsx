@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useMst } from "~/setup/root";
 import styled from "styled-components";
 import { Box } from "rebass";
@@ -7,6 +7,7 @@ import { Button } from "~/components/shared/button";
 import { Avatar } from "~/components/shared/avatar";
 import { useTranslation } from "react-i18next";
 import { Text } from "~/components/shared/text";
+import { FileInput } from "./file-input";
 
 export const AccountProfile = (): JSX.Element => {
   const { sessionStore } = useMst();
@@ -14,7 +15,9 @@ export const AccountProfile = (): JSX.Element => {
   const [firstName, setFirstName] = useState(sessionStore.profile.firstName);
   const [lastName, setLastName] = useState(sessionStore.profile.lastName);
   const { t } = useTranslation();
-
+  const submitProfile = (files: FileList) => {
+    alert(files[0].name);
+  };
   return (
     <Container>
       <HeaderContainer>
@@ -54,9 +57,7 @@ export const AccountProfile = (): JSX.Element => {
             <Button small variant={"redOutline"} onClick={() => {}} mr={2}>
               {t("general.remove")}
             </Button>
-            <Button small variant={"primaryOutline"} onClick={() => {}}>
-              {t("general.upload")}
-            </Button>
+            <FileInput labelText={t("general.upload")} onChange={submitProfile} />
           </PhotoModificationButtonsSection>
         </ProfilePhotoSection>
       </BodyContainer>
