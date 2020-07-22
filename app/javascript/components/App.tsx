@@ -26,7 +26,7 @@ import { AccountabilityChart } from "./domains/company/accountability-chart";
 import { AccountSettings } from "./domains/account/account-settings";
 
 import { HeaderBar } from "./domains/nav/header-bar";
-import { SideNav } from "./domains/nav/side-nav";
+import { SideNav } from "./domains/nav";
 import { Placeholder } from "./shared/placeholder";
 
 const Container = styled.div`

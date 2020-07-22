@@ -1,15 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { useMst } from "../../../setup/root";
-import { Icon } from "../../../components/shared/icon";
-import { Text } from "../../../components/shared/text";
+import { useMst } from "../../../../setup/root";
+import { Icon } from "../../../shared/icon";
+import { Text } from "../../../shared/text";
 import { NavLink } from "react-router-dom";
 import { color } from "styled-system";
 import { matchPath } from "react-router";
 
 import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react";
-import { SideNavChildLink, SideNavChildPopup } from "./side-nav-child";
+import { SideNavChildLink } from "./side-nav-child-link";
+import { SideNavChildPopup } from "./side-nav-child-popup";
 
 const StyledSideNav = styled.div`
   position: fixed; /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
