@@ -10,6 +10,7 @@ import { Flex, Box } from "rebass";
 import { Label, Input } from "../../shared/input";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import { LoadingScreen } from "./loading-screen";
 
 const LogoHeaderDiv = styled.div`
   text-align: center;
@@ -22,7 +23,7 @@ export const LoginForm = observer(
     const [password, setPassword] = useState("");
     const { t } = useTranslation();
 
-    if (sessionStore.loading) return <div>Loading Screen dummy...</div>;
+    if (sessionStore.loading) return <LoadingScreen />;
     return (
       <Flex
         sx={{

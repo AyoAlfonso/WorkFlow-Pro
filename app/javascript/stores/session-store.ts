@@ -60,7 +60,6 @@ export const SessionStoreModel = types
           const newJWT = R.path(["headers", "authorization"], response);
 
           if (newJWT && newJWT.startsWith("Bearer")) {
-            self.loggedIn = true;
             //default cookie set for rails.  Alternative cookies could be done:
             //https://github.com/js-cookie/js-cookie#cookie-attributes
             // by default cookie removed when browser closed
