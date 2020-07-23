@@ -1,5 +1,15 @@
 const path = require("path");
 module.exports = {
+  webpackFinal: config => ({
+    ...config,
+    resolve: {
+      ...config.resolve,
+      alias: {
+        ...config.resolve.alias,
+        "~": path.resolve(__dirname, "../app/javascript"),
+      },
+    },
+  }),
   addons: [
     {
       name: "@storybook/preset-typescript",
