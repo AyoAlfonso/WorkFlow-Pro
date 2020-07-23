@@ -51,6 +51,17 @@ export const AnnualInitiativeStoreModel = types
         // error messaging handled by API monitor
       }
     }),
+    create: flow(function* (type) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createAnnualInitiative(type);
+        self.annualInitiative = response.data;
+        return response.data;
+      } catch {
+        console.log("is there an error?????????");
+        // error messaging handled by API monitor
+      }
+    }),
   }))
   .actions(self => ({
     updateModelField(field, value) {

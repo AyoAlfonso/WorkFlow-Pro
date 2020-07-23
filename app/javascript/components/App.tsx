@@ -29,6 +29,7 @@ import { AccountSettings } from "./domains/account/account-settings";
 import { HeaderBar } from "./domains/nav/header-bar";
 import { SideNav } from "./domains/nav";
 import { Placeholder } from "./shared/placeholder";
+import { GoalsIndex } from "./domains/goals/goals-index";
 
 const Container = styled.div`
   margin-left: 168px;
@@ -93,7 +94,7 @@ export const App = observer(
                   <Route
                     path={"/goals"}
                     render={() => {
-                      return <Placeholder />;
+                      return <GoalsIndex />;
                     }}
                   />
                 </Switch>

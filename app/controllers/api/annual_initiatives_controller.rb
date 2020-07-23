@@ -4,10 +4,11 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   respond_to :json
 
   def create 
-    @annual_activity = AnnualInitiative.new({user: current_user, description: params[:description], importance: params[:importance], key_elements: params[:key_elements], comapny_id: current_user.company_id})
-    authorize @annual_activity
-    @annual_activity.save!
-    render json: { annual_activity: @annual_activity, status: :ok }
+    binding.pry
+    @annual_initiative = AnnualInitiative.new({user: current_user, company_id: current_user.company_id})
+    authorize @annual_initiative
+    @annual_initiative.save!
+    render json: { annual_initiative: @annual_initiative, status: :ok }
   end
 
   def show
