@@ -32,6 +32,19 @@ export const SessionStoreModel = types
       }
       self.loading = false;
     }),
+    updateAvatar: flow(function* (formData) {
+      self.loading = true;
+      const env = getEnv(self);
+      try {
+        const response = yield env.api.updateAvatar(formData);
+        if (response.ok) {
+          self.profile.setAvatarUrl(response.data.avatarUrl);
+        }
+      } catch {
+        // error messaging handled by API monitor
+      }
+      self.loading = false;
+    }),
   }))
   .actions(self => ({
     login: flow(function* (email, password) {

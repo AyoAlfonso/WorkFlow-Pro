@@ -13,7 +13,11 @@ export const UserModel = types
     //add avatarurl2x
   })
   .views(self => ({}))
-  .actions(self => ({}));
+  .actions(self => ({
+    setAvatarUrl: avatarUrl => {
+      self.avatarUrl = avatarUrl;
+    },
+  }));
 
 type UserModelType = typeof UserModel.Type;
 type UserModelDataType = typeof UserModel.CreationType;
