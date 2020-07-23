@@ -32,7 +32,7 @@ ActiveAdmin.register Company do
     h1 company.name
     attributes_table do
       row :logo do |company|
-        company.try(:logo).try(:url) ? image_tag(url_for(company.logo)) : "No Company Logo Set"
+        company.try(:logo_url) ? image_tag(company.logo_url, style: "max-height: 100px;") : "No Company Logo Set"
       end
       row :address
       row :contact_email
@@ -91,7 +91,7 @@ ActiveAdmin.register Company do
     h1 f.object.name
     f.inputs 'Company Details' do
       f.input :name
-      f.input :logo, as: :file, hint: (f.object && f.object.logo.present? ? image_tag(url_for(f.object.logo)) : "Please set logo")
+      f.input :logo, as: :file, hint: (f.object.try(:logo_url).present? ? image_tag(f.object.logo_url) : "Please set logo")
       f.input :address
       f.input :contact_email
       f.input :phone_number
