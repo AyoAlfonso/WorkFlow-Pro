@@ -38,7 +38,7 @@ export const SessionStoreModel = types
       try {
         const response = yield env.api.updateAvatar(formData);
         if (response.ok) {
-          self.profile.avatarUrl = response.data.avatarUrl;
+          self.profile.setAvatarUrl(response.data.avatarUrl);
         }
       } catch {
         // error messaging handled by API monitor
