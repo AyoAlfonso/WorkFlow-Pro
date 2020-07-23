@@ -11,6 +11,7 @@ import { QuarterlyGoalType } from "~/types/quarterly-goal";
 import { useMst } from "~/setup/root";
 import ContentEditable from "react-contenteditable";
 import * as R from "ramda";
+import { KeyElement } from "./key-element";
 
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;
@@ -23,6 +24,7 @@ export const ContextTabs = ({ object, type }: IContextTabsProps): JSX.Element =>
   const [selectedContextTab, setSelectedContextTab] = useState<number>(1);
   const [hideContent, setHideContent] = useState<boolean>(false);
   const [store, setStore] = useState<any>(null);
+  const editable = currentUser.id == object.ownedById;
 
   useEffect(() => {
     if (type == "annualInitiative") {
@@ -44,21 +46,21 @@ export const ContextTabs = ({ object, type }: IContextTabsProps): JSX.Element =>
         <SubHeaderText> Why is it important?</SubHeaderText>
         <StyledContentEditable
           html={object.importance[0]}
-          disabled={currentUser.id != object.ownedById}
+          disabled={!editable}
           onChange={e => updateImportance(0, e.target.value)}
           onBlur={() => store.updateAnnualInitiative()}
         />
         <SubHeaderText> What are the consequences if missed?</SubHeaderText>
         <StyledContentEditable
           html={object.importance[1]}
-          disabled={currentUser.id != object.ownedById}
+          disabled={!editable}
           onChange={e => updateImportance(1, e.target.value)}
           onBlur={() => store.updateAnnualInitiative()}
         />
         <SubHeaderText> How will we celebrate if achieved?</SubHeaderText>
         <StyledContentEditable
           html={object.importance[2]}
-          disabled={currentUser.id != object.ownedById}
+          disabled={!editable}
           onChange={e => updateImportance(2, e.target.value)}
           onBlur={() => store.updateAnnualInitiative()}
         />
@@ -70,7 +72,7 @@ export const ContextTabs = ({ object, type }: IContextTabsProps): JSX.Element =>
     return (
       <StyledContentEditable
         html={object.contextDescription}
-        disabled={currentUser.id != object.ownedById}
+        disabled={!editable}
         onChange={e => store.updateModelField("contextDescription", e.target.value)}
         onBlur={() => store.updateAnnualInitiative()}
       />
@@ -79,33 +81,7 @@ export const ContextTabs = ({ object, type }: IContextTabsProps): JSX.Element =>
 
   const renderKeyElements = () => {
     return object.keyElements.map((element, index) => {
-      const [checkboxValue, setCheckboxValue] = useState<boolean>(
-        element["completedAt"] ? true : false,
-      );
-      return (
-        <KeyElementContainer key={index}>
-          <CheckboxContainer>
-            <Label>
-              <Checkbox
-                id={index}
-                name={index}
-                checked={checkboxValue}
-                onChange={e => {
-                  setCheckboxValue(e.target.checked);
-                  store.updateKeyElementStatus(element.id, e.target.checked);
-                }}
-              />
-            </Label>
-          </CheckboxContainer>
-
-          <KeyElementStyledContentEditable
-            html={element.value}
-            disabled={currentUser.id != object.ownedById}
-            onChange={e => store.updateKeyElementValue(element.id, e.target.value)}
-            onBlur={() => store.updateAnnualInitiative()}
-          />
-        </KeyElementContainer>
-      );
+      return <KeyElement element={element} store={store} editable={editable} key={index} />;
     });
   };
 
