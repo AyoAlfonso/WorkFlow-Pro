@@ -15,7 +15,7 @@ interface IIconProps extends StyledSystemProps {
   removeInlineStyle?: boolean;
 }
 
-const IconContainer = styled.div<IIconProps>`
+export const IconContainer = styled.div<IIconProps>`
   ${layout}
   ${space}
 `;
