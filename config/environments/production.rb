@@ -71,10 +71,11 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:              ENV["MAILER_ADDRESS"],
-    username:             ENV['MAILER_USERNAME'],
+    user_name:            ENV['MAILER_USERNAME'],
     password:             ENV['MAILER_PASSWORD'],
-    port:                 25,
+    port:                 587,
     domain:               'lynchpyn.com',
+    authentication: :login,
     enable_starttls_auto: true
   }
   config.action_mailer.perform_deliveries = true
