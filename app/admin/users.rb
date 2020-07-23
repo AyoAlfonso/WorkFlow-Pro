@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :first_name, :last_name, :email, :password, :password_confirmation, :timezone, :company_id
+  permit_params :first_name, :last_name, :email, :password, :password_confirmation, :timezone, :company_id, :user_role_id
 
   config.sort_order = 'last_name_asc'
 
@@ -53,6 +53,7 @@ ActiveAdmin.register User do
       f.input :password
       f.input :password_confirmation
       f.input :company, as: :select, collection: Company.all
+      f.input :user_role, as: :select, collection: UserRole.all
       f.input :timezone, as: :select, collection: timezones
     end
     f.actions
