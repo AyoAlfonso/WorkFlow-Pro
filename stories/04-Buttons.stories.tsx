@@ -175,6 +175,10 @@ export const BaseButtonVariants = () => (
   </ContainerDiv>
 );
 
+const FlexDiv = styled.div`
+  display: flex;
+`;
+
 export const RoundButton = () => {
   const [rotate, setRotate] = React.useState(false);
   return (
@@ -191,13 +195,14 @@ export const RoundButton = () => {
         ]}
         styledSystemProps={["color"]}
       />
-      <div>
+      <FlexDiv>
         <RoundButtonComponent
           onClick={() => {
             actionFn();
             setRotate(!rotate);
           }}
           rotate={rotate}
+          style={{ marginLeft: "12px" }}
         >
           <Icon
             icon={text("icon", "Plus")}
@@ -206,7 +211,7 @@ export const RoundButton = () => {
             style={{ marginLeft: "10px", marginTop: "10px" }}
           />
         </RoundButtonComponent>
-      </div>
+      </FlexDiv>
     </ContainerDiv>
   );
 };

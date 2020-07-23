@@ -12,6 +12,8 @@ import {
   PropsList,
   RowDiv,
 } from "./shared";
+import { iconList } from "react-icomoon";
+const iconSet = require("../app/javascript/assets/icons/selection.json");
 
 export default { title: "Iconography", decorators: [withKnobs] };
 
@@ -73,17 +75,21 @@ export const Icons = () => (
     <RowDiv>
       <CenteredColumnDiv>
         <Icon
-          icon={text("icon", "Emotion-A")}
+          icon={select("icon", iconList(iconSet), "Emotion-A")}
           size={text("size", "3em")}
           iconColor={select("color", baseTheme.colors, baseTheme.colors.finePine)}
           disableFill={boolean("disableFill", false)}
           removeInlineStyle={boolean("removeInlineStyle", false)}
-          style={object("style", { backgroundColor: "lightgrey" })}
+          style={object("style", { backgroundColor: "grey" })}
         />
       </CenteredColumnDiv>
     </RowDiv>
     <Divider />
     <RowDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Logo"} size={"2em"} />
+        <TextCenteredDiv>Logo</TextCenteredDiv>
+      </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Arrow"} size={"2em"} />
         <TextCenteredDiv>Arrow</TextCenteredDiv>
@@ -160,6 +166,10 @@ export const Icons = () => (
         <TextCenteredDiv>Tasks</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
+        <Icon icon={"Goals"} size={"2em"} />
+        <TextCenteredDiv>Goals</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
         <Icon icon={"Alert"} size={"2em"} />
         <TextCenteredDiv>Alert</TextCenteredDiv>
       </CenteredColumnDiv>
@@ -225,6 +235,10 @@ export const Icons = () => (
       <CenteredColumnDiv>
         <Icon icon={"Weekly-Milestones"} size={"2em"} />
         <TextCenteredDiv>Weekly-Milestones</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Settings"} size={"2em"} />
+        <TextCenteredDiv>Settings</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Start"} size={"2em"} />
@@ -315,6 +329,10 @@ export const Icons = () => (
       <CenteredColumnDiv>
         <Icon icon={"No-Check-in"} size={"2em"} iconColor={"warningRed"} />
         <TextCenteredDiv>No-Check-in</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Add-User-Circle"} size={"2em"} />
+        <TextCenteredDiv>Add-User-Circle</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
   </ContainerDiv>
