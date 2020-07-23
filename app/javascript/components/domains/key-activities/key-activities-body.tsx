@@ -34,7 +34,7 @@ export const KeyActivitiesBody = observer(
             <Icon
               icon={"Priority-High"}
               size={24}
-              color={colors.cautionYellow}
+              iconColor={colors.cautionYellow}
               style={{ marginTop: "2px" }}
             />
           );
@@ -43,7 +43,7 @@ export const KeyActivitiesBody = observer(
             <Icon
               icon={"Priority-Urgent"}
               size={24}
-              color={colors.warningRed}
+              iconColor={colors.warningRed}
               style={{ marginTop: "2px" }}
             />
           );
@@ -52,7 +52,7 @@ export const KeyActivitiesBody = observer(
             <Icon
               icon={"Priority-Frog"}
               size={24}
-              color={colors.frog}
+              iconColor={colors.frog}
               style={{ marginTop: "2px" }}
             />
           );
