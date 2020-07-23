@@ -73,9 +73,9 @@ Rails.application.configure do
     address:              ENV["MAILER_ADDRESS"],
     user_name:            ENV['MAILER_USERNAME'],
     password:             ENV['MAILER_PASSWORD'],
-    port:                 587,
-    domain:               'lynchpyn.com',
-    authentication: :login,
+    port:                 ENV["MAILER_PORT"] || 587,
+    domain:               ENV["MAILER_DOMAIN"] || 'lynchpyn.com',
+    authentication:       ENV["MAILER_AUTHTYPE"] || 'login',
     enable_starttls_auto: true
   }
   config.action_mailer.perform_deliveries = true
