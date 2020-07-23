@@ -48,12 +48,22 @@ export const SideNavChildPopup: React.FunctionComponent<ISideNavChildPopupProps>
         mouseEnterDelay={0}
         offsetY={-50}
         on={"click"}
+        open={drawerIsOpen}
         onClose={() => setDrawerIsOpen(false)}
         onOpen={() => setDrawerIsOpen(true)}
         position={"right center"}
         trigger={<PopupTriggerContainer>{trigger}</PopupTriggerContainer>}
       >
-        <PopupContainer>{children}</PopupContainer>
+        <PopupContainer>
+          {React.Children.map(children, child =>
+            //@ts-ignore
+            React.cloneElement(child, {
+              onClick: () => {
+                setDrawerIsOpen(false);
+              },
+            }),
+          )}
+        </PopupContainer>
       </Popup>
     </>
   );

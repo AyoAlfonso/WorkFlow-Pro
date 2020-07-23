@@ -31,9 +31,19 @@ export const SideNavChildLinkText = styled.p`
 export interface ISideNavChildLinkProps {
   to: string;
   linkText: string;
+  onClick?: any;
 }
-export const SideNavChildLink = ({ to, linkText }: ISideNavChildLinkProps): JSX.Element => (
-  <SideNavChildLinkNavLink to={to}>
+export const SideNavChildLink = ({
+  to,
+  linkText,
+  onClick,
+}: ISideNavChildLinkProps): JSX.Element => (
+  <SideNavChildLinkNavLink
+    to={to}
+    onClick={() => {
+      onClick && onClick();
+    }}
+  >
     <SideNavChildLinkContainer>
       <SideNavChildLinkText>{linkText}</SideNavChildLinkText>
     </SideNavChildLinkContainer>

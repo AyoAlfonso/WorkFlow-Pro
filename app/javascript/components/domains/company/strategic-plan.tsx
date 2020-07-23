@@ -4,7 +4,7 @@ import { useMst } from "../../../setup/root";
 import { Loading } from "~/components/shared/loading";
 import { Heading } from "~/components/shared/heading";
 
-export const AccountabilityChart = observer(
+export const StrategicPlan = observer(
   (): JSX.Element => {
     const {
       companyStore: { company },
@@ -14,11 +14,11 @@ export const AccountabilityChart = observer(
         {company ? (
           <>
             <Heading type={"h3"} color={"black"}>
-              Accountability Chart
+              Strategic Plan
             </Heading>
             <div
               className="trix-content"
-              dangerouslySetInnerHTML={{ __html: company.accountabilityChartContent }}
+              dangerouslySetInnerHTML={{ __html: company.strategicPlanContent }}
             ></div>
           </>
         ) : (

@@ -134,13 +134,11 @@ export const SideNavNoMst = (currentPathName: string): JSX.Element => {
           </NavMenuIcon>
         }
       >
-        <>
-          <SideNavChildLink
-            to="/company/accountability"
-            linkText={t("company.accountabilityChart")}
-          />
-          <SideNavChildLink to="/company/strategic_plan" linkText={t("company.strategicPlan")} />
-        </>
+        <SideNavChildLink
+          to="/company/accountability"
+          linkText={t("company.accountabilityChart")}
+        />
+        <SideNavChildLink to="/company/strategic_plan" linkText={t("company.strategicPlan")} />
       </SideNavChildPopup>
       <StyledNavLinkChildrenActive to="/goals" icon={"Stats"} currentPathName={currentPathName}>
         {t("navigation.goals")}
