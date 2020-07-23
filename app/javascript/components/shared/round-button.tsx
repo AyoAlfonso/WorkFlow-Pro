@@ -21,7 +21,11 @@ const StyledButton = styled(motion.div)<IconContainerType>`
 export const RoundButton = props => (
   <StyledButton
     {...props}
-    animate={{ transform: props.rotate ? "rotate(45deg)" : "rotate(0deg)" }}
+    animate={{
+      transform: props.rotate
+        ? `rotate(${props.rotation ? props.rotation : 45}deg)`
+        : "rotate(0deg)",
+    }}
     transition={{ ease: "easeOut", duration: 0.4 }}
   >
     {props.children}
