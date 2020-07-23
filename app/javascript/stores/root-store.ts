@@ -7,6 +7,7 @@ import { SessionStoreModel, ISessionStore } from "./session-store";
 import { CompanyStoreModel, ICompanyStore } from "./company-store";
 import { GoalStoreModel, IGoalStore } from "./goal-store";
 import { AnnualInitiativeStoreModel, IAnnualInitiativeStore } from "./annual-initiative-store";
+import { QuarterlyGoalStoreModel, IQuarterlyGoalStore } from "./quarterly-goal-store";
 
 export const RootStoreModel = types
   .model("RootStoreModel")
@@ -19,6 +20,7 @@ export const RootStoreModel = types
     companyStore: CompanyStoreModel,
     goalStore: GoalStoreModel,
     annualInitiativeStore: AnnualInitiativeStoreModel,
+    quarterlyGoalStore: QuarterlyGoalStoreModel,
   })
   .views(self => ({}))
   .actions(self => ({
@@ -44,4 +46,5 @@ export interface IRootStore extends IStateTreeNode {
   sessionStore: ISessionStore;
   goalStore: IGoalStore;
   annualInitiativeStore: IAnnualInitiativeStore;
+  quarterlyGoalStore: IQuarterlyGoalStore;
 }

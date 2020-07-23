@@ -10,6 +10,9 @@ const StyledButton = styled.button`
   border-radius: 5px;
   border-width: 1px;
   border-style: solid;
+  &:hover {
+    cursor: pointer;
+  };
   ${props =>
     variant({
       variants: {

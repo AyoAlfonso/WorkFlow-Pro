@@ -5,4 +5,5 @@ export type MilestoneType = {
   status: string;
   description: string;
   week: number;
+  weekOf: Date;
 };

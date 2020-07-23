@@ -7,28 +7,30 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { Checkbox, Label } from "@rebass/forms";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
+import { QuarterlyGoalType } from "~/types/quarterly-goal";
 
 interface IContextTabsProps {
-  annualInitiative: AnnualInitiativeType;
+  object: AnnualInitiativeType | QuarterlyGoalType;
 }
 
-export const ContextTabs = ({ annualInitiative }: IContextTabsProps): JSX.Element => {
+export const ContextTabs = ({ object }: IContextTabsProps): JSX.Element => {
   const [selectedContextTab, setSelectedContextTab] = useState<number>(1);
+  const [hideContent, setHideContent] = useState<boolean>(false);
 
   const renderContextImportance = () => {
     return (
       <ContextImportanceContainer>
         <SubHeaderText> Why is it important?</SubHeaderText>
         <ContextContainer>
-          <Text>{annualInitiative.importance[0]}</Text>
+          <Text>{object.importance[0]}</Text>
         </ContextContainer>
         <SubHeaderText> What are the consequences if missed?</SubHeaderText>
         <ContextContainer>
-          <Text>{annualInitiative.importance[1]}</Text>
+          <Text>{object.importance[1]}</Text>
         </ContextContainer>
         <SubHeaderText> How will we celebrate if achieved?</SubHeaderText>
         <ContextContainer>
-          <Text>{annualInitiative.importance[2]}</Text>
+          <Text>{object.importance[2]}</Text>
         </ContextContainer>
       </ContextImportanceContainer>
     );
@@ -37,13 +39,13 @@ export const ContextTabs = ({ annualInitiative }: IContextTabsProps): JSX.Elemen
   const renderContextDescription = () => {
     return (
       <ContextContainer>
-        <Text>{annualInitiative.contextDescription}</Text>
+        <Text>{object.contextDescription}</Text>
       </ContextContainer>
     );
   };
 
   const renderKeyElements = () => {
-    return annualInitiative.keyElements.map((element, index) => {
+    return object.keyElements.map((element, index) => {
       return (
         <KeyElementContainer key={index}>
           <CheckboxContainer>
@@ -67,22 +69,31 @@ export const ContextTabs = ({ annualInitiative }: IContextTabsProps): JSX.Elemen
     });
   };
 
+  const tabClicked = (index: number): void => {
+    if (index == selectedContextTab) {
+      setHideContent(!hideContent);
+    } else {
+      setHideContent(false);
+      setSelectedContextTab(index);
+    }
+  };
+
   return (
     <Container>
       <Tabs>
         <StyledTabList>
-          <StyledTab onClick={() => setSelectedContextTab(1)}>
+          <StyledTab onClick={() => tabClicked(1)}>
             <StyledTabTitle tabSelected={selectedContextTab == 1}>Importance </StyledTabTitle>
           </StyledTab>
-          <StyledTab onClick={() => setSelectedContextTab(2)}>
+          <StyledTab onClick={() => tabClicked(2)}>
             <StyledTabTitle tabSelected={selectedContextTab == 2}>Description</StyledTabTitle>
           </StyledTab>
-          <StyledTab onClick={() => setSelectedContextTab(3)}>
+          <StyledTab onClick={() => tabClicked(3)}>
             <StyledTabTitle tabSelected={selectedContextTab == 3}>Key Elements</StyledTabTitle>
           </StyledTab>
         </StyledTabList>
 
-        <TabPanelContainer>
+        <TabPanelContainer hideContent={hideContent}>
           <StyledTabPanel>{renderContextImportance()}</StyledTabPanel>
           <StyledTabPanel>{renderContextDescription()}</StyledTabPanel>
           <StyledTabPanel>{renderKeyElements()}</StyledTabPanel>
@@ -104,12 +115,18 @@ const SubHeaderText = styled(Text)`
   font-weight: bold;
 `;
 
-const TabPanelContainer = styled.div`
+type TabPanelContainerType = {
+  hideContent: boolean;
+};
+
+const TabPanelContainer = styled.div<TabPanelContainerType>`
   border-radius: 10px;
   border: 1px solid #e3e3e3;
   box-shadow: 0px 3px 6px #f5f5f5;
   margin-top: -20px;
   padding: 16px;
+  border-top-left-radius: 0px;
+  display: ${props => props.hideContent && "none"};
 `;
 
 const StyledTabList = styled(TabList)`
@@ -120,7 +137,6 @@ const StyledTab = styled(Tab)`
   display: inline-block;
   border: 1px solid #e3e3e3;
   outline: none;
-
   border-bottom: none;
   margin-bottom: 3px;
   position: relative;
@@ -128,9 +144,9 @@ const StyledTab = styled(Tab)`
   padding: 6px 12px;
   cursor: pointer;
   width: 140px;
-  margin-left: 20px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  margin-right: 20px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 `;
 
 type StyledTabTitleType = {

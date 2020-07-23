@@ -9,17 +9,33 @@ import { StatusBlockColorIndicator } from "../shared/status-block-color-indicato
 interface IAnnualInitiativeCardExpandedProps {
   annualInitiative: AnnualInitiativeType;
   setShowMinimizedCard: React.Dispatch<React.SetStateAction<boolean>>;
+  setQuarterlyGoalId: React.Dispatch<React.SetStateAction<number>>;
+  setQuarterlyGoalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedAnnualInitiativeDescription: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const AnnualInitiativeCardExpanded = (
   props: IAnnualInitiativeCardExpandedProps,
 ): JSX.Element => {
-  const { annualInitiative, setShowMinimizedCard } = props;
+  const {
+    annualInitiative,
+    setShowMinimizedCard,
+    setQuarterlyGoalId,
+    setQuarterlyGoalModalOpen,
+    setSelectedAnnualInitiativeDescription,
+  } = props;
 
   const renderQuarterlyGoals = () => {
     return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
       return (
-        <QuarterlyGoalContainer key={index}>
+        <QuarterlyGoalContainer
+          key={index}
+          onClick={() => {
+            setQuarterlyGoalModalOpen(true);
+            setQuarterlyGoalId(quarterlyGoal.id);
+            setSelectedAnnualInitiativeDescription(annualInitiative.description);
+          }}
+        >
           <StatusBlockColorIndicator milestones={quarterlyGoal.milestones} indicatorWidth={25} />
 
           <RowContainer>
@@ -97,4 +113,7 @@ const MinimizeIconContainer = styled.div`
   text-align: center;
   margin-left: auto;
   margin-right: auto;
+  &: hover {
+    cursor: pointer;
+  }
 `;

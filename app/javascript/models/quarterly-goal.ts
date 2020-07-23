@@ -2,6 +2,7 @@ import { types } from "mobx-state-tree";
 import { UserModel } from "./user";
 import { MilestoneModel } from "./milestone";
 import { KeyElementModel } from "./key-element";
+import * as moment from "moment";
 
 export const QuarterlyGoalModel = types
   .model("QuarterlyGoalModel")
@@ -17,8 +18,18 @@ export const QuarterlyGoalModel = types
     status: types.string,
     description: types.string,
     milestones: types.array(MilestoneModel),
+    contextDescription: types.string,
+    quarter: types.number,
   })
-  .views(self => ({}))
+  .views(self => ({
+    get activeMilestones() {
+      return self.milestones.filter(
+        milestone =>
+          moment(milestone.weekOf).isSame(moment(), "day") ||
+          moment(milestone.weekOf).isAfter(moment(), "day"),
+      );
+    },
+  }))
   .actions(self => ({}));
 
 type QuarterlyGoalModelType = typeof QuarterlyGoalModel.Type;

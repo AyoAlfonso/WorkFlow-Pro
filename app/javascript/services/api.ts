@@ -83,5 +83,9 @@ export class Api {
     return this.client.get(`/annual_initiatives/${id}`);
   }
 
+  async getQuarterlyGoal(id) {
+    return this.client.get(`/quarterly_goals/${id}`);
+  }
+
   //async setJWT(jwt) {}
 }

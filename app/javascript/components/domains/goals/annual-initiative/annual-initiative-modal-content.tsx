@@ -15,13 +15,19 @@ import { OwnedBySection } from "../shared/owned-by-section";
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
   setAnnualInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setQuarterlyGoalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedAnnualInitiativeDescription: React.Dispatch<React.SetStateAction<string>>;
+  setQuarterlyGoalId: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const AnnualInitiativeModalContent = ({
   annualInitiativeId,
   setAnnualInitiativeModalOpen,
+  setQuarterlyGoalModalOpen,
+  setSelectedAnnualInitiativeDescription,
+  setQuarterlyGoalId,
 }: IAnnualInitiativeModalContentProps): JSX.Element => {
-  const { annualInitiativeStore } = useMst();
+  const { annualInitiativeStore, companyStore } = useMst();
   const [annualInitiative, setAnnualInitiative] = useState<any>(null);
 
   useEffect(() => {
@@ -44,7 +50,16 @@ export const AnnualInitiativeModalContent = ({
             marginBottom={16}
           />
           <TopRowContainer>
-            <QuarterlyGoalDescription>{quarterlyGoal.description}</QuarterlyGoalDescription>
+            <QuarterlyGoalDescription
+              onClick={() => {
+                setAnnualInitiativeModalOpen(false);
+                setQuarterlyGoalId(quarterlyGoal.id);
+                setSelectedAnnualInitiativeDescription(annualInitiative.description);
+                setQuarterlyGoalModalOpen(true);
+              }}
+            >
+              {quarterlyGoal.description}
+            </QuarterlyGoalDescription>
             <QuarterlyGoalOptionContainer>
               <Icon icon={"Options"} size={"20px"} iconColor={"grey80"} />
             </QuarterlyGoalOptionContainer>
@@ -69,7 +84,8 @@ export const AnnualInitiativeModalContent = ({
         <TitleContainer>
           <DescriptionText>{annualInitiative.description}</DescriptionText>
           <GoalText>
-            In order to <UnderlinedGoalText> Save At Least 100 People </UnderlinedGoalText>
+            In order to{" "}
+            <UnderlinedGoalText> {companyStore.company.rallyingCry} </UnderlinedGoalText>
           </GoalText>
         </TitleContainer>
         <AnnualInitiativeActionContainer>
@@ -91,7 +107,7 @@ export const AnnualInitiativeModalContent = ({
           <SubHeaderContainer>
             <SubHeaderText> Context</SubHeaderText>
           </SubHeaderContainer>
-          <ContextTabs annualInitiative={annualInitiative} />
+          <ContextTabs object={annualInitiative} />
         </ContextSectionContainer>
         <OwnedBySection ownedBy={annualInitiative.ownedBy} />
       </InfoSectionContainer>
@@ -99,6 +115,7 @@ export const AnnualInitiativeModalContent = ({
   };
 
   const renderGoals = (): JSX.Element => {
+    //TODO: ONLY SHOW GOALS THAT ARE IN THE CURRENT QUARTER. WE NEED TO WAIT FOR FISCAL YEAR TO BE COMPLETED BEFORE WE CAN IMPLEMENT THIS FUNCTIONALITY
     return (
       <>
         <SubHeaderContainer>
@@ -222,6 +239,11 @@ const BottomRowContainer = styled.div`
 
 const QuarterlyGoalDescription = styled(Text)`
   margin-top: 0;
+  &:hover {
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: underline;
+  }
 `;
 
 const QuarterlyGoalOptionContainer = styled.div`
