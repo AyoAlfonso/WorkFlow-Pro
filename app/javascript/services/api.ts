@@ -104,6 +104,10 @@ export class Api {
     return this.client.patch(`/annual_initiatives/${annualInitiative.id}`, parsedAnnualInitiative);
   }
 
+  async createAnnualInitiativeKeyElement(id) {
+    return this.client.post(`/annual_initiatives/create_key_element/${id}`);
+  }
+
   async getQuarterlyGoal(id) {
     return this.client.get(`/quarterly_goals/${id}`);
   }

@@ -14,128 +14,131 @@ import * as R from "ramda";
 import { KeyElement } from "./key-element";
 import { Button } from "~/components/shared/button";
 import { Icon } from "~/components/shared/icon";
+import { observer } from "mobx-react";
 
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;
   type: string;
 }
 
-export const ContextTabs = ({ object, type }: IContextTabsProps): JSX.Element => {
-  const { sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
-  const currentUser = sessionStore.profile;
-  const [selectedContextTab, setSelectedContextTab] = useState<number>(1);
-  const [hideContent, setHideContent] = useState<boolean>(false);
-  const [store, setStore] = useState<any>(null);
-  const editable = currentUser.id == object.ownedById;
+export const ContextTabs = observer(
+  ({ object, type }: IContextTabsProps): JSX.Element => {
+    const { sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
+    const currentUser = sessionStore.profile;
+    const [selectedContextTab, setSelectedContextTab] = useState<number>(1);
+    const [hideContent, setHideContent] = useState<boolean>(false);
+    const [store, setStore] = useState<any>(null);
+    const editable = currentUser.id == object.ownedById;
 
-  useEffect(() => {
-    if (type == "annualInitiative") {
-      setStore(annualInitiativeStore);
-    } else if (type == "quarterlyGoal") {
-      setStore(quarterlyGoalStore);
-    }
-  });
-
-  const updateImportance = (index: number, value: string): void => {
-    let objectToBeModified = R.clone(object);
-    objectToBeModified.importance[index] = value;
-    store.updateModelField("importance", objectToBeModified.importance);
-  };
-
-  const renderContextImportance = () => {
-    return (
-      <ContextImportanceContainer>
-        <SubHeaderText> Why is it important?</SubHeaderText>
-        <StyledContentEditable
-          html={object.importance[0]}
-          disabled={!editable}
-          onChange={e => updateImportance(0, e.target.value)}
-          onBlur={() => store.update()}
-        />
-        <SubHeaderText> What are the consequences if missed?</SubHeaderText>
-        <StyledContentEditable
-          html={object.importance[1]}
-          disabled={!editable}
-          onChange={e => updateImportance(1, e.target.value)}
-          onBlur={() => store.update()}
-        />
-        <SubHeaderText> How will we celebrate if achieved?</SubHeaderText>
-        <StyledContentEditable
-          html={object.importance[2]}
-          disabled={!editable}
-          onChange={e => updateImportance(2, e.target.value)}
-          onBlur={() => store.update()}
-        />
-      </ContextImportanceContainer>
-    );
-  };
-
-  const renderContextDescription = () => {
-    return (
-      <StyledContentEditable
-        html={object.contextDescription}
-        disabled={!editable}
-        onChange={e => store.updateModelField("contextDescription", e.target.value)}
-        onBlur={() => store.update()}
-      />
-    );
-  };
-
-  const renderKeyElements = () => {
-    return object.keyElements.map((element, index) => {
-      return <KeyElement element={element} store={store} editable={editable} key={index} />;
+    useEffect(() => {
+      if (type == "annualInitiative") {
+        setStore(annualInitiativeStore);
+      } else if (type == "quarterlyGoal") {
+        setStore(quarterlyGoalStore);
+      }
     });
-  };
 
-  const tabClicked = (index: number): void => {
-    if (index == selectedContextTab) {
-      setHideContent(!hideContent);
-    } else {
-      setHideContent(false);
-      setSelectedContextTab(index);
-    }
-  };
+    const updateImportance = (index: number, value: string): void => {
+      let objectToBeModified = R.clone(object);
+      objectToBeModified.importance[index] = value;
+      store.updateModelField("importance", objectToBeModified.importance);
+    };
 
-  return (
-    <Container>
-      <Tabs>
-        <StyledTabList>
-          <StyledTab onClick={() => tabClicked(1)}>
-            <StyledTabTitle tabSelected={selectedContextTab == 1}>Importance </StyledTabTitle>
-          </StyledTab>
-          <StyledTab onClick={() => tabClicked(2)}>
-            <StyledTabTitle tabSelected={selectedContextTab == 2}>Description</StyledTabTitle>
-          </StyledTab>
-          <StyledTab onClick={() => tabClicked(3)}>
-            <StyledTabTitle tabSelected={selectedContextTab == 3}>Key Elements</StyledTabTitle>
-          </StyledTab>
-        </StyledTabList>
+    const renderContextImportance = () => {
+      return (
+        <ContextImportanceContainer>
+          <SubHeaderText> Why is it important?</SubHeaderText>
+          <StyledContentEditable
+            html={object.importance[0]}
+            disabled={!editable}
+            onChange={e => updateImportance(0, e.target.value)}
+            onBlur={() => store.update()}
+          />
+          <SubHeaderText> What are the consequences if missed?</SubHeaderText>
+          <StyledContentEditable
+            html={object.importance[1]}
+            disabled={!editable}
+            onChange={e => updateImportance(1, e.target.value)}
+            onBlur={() => store.update()}
+          />
+          <SubHeaderText> How will we celebrate if achieved?</SubHeaderText>
+          <StyledContentEditable
+            html={object.importance[2]}
+            disabled={!editable}
+            onChange={e => updateImportance(2, e.target.value)}
+            onBlur={() => store.update()}
+          />
+        </ContextImportanceContainer>
+      );
+    };
 
-        <TabPanelContainer hideContent={hideContent}>
-          <StyledTabPanel>{renderContextImportance()}</StyledTabPanel>
-          <StyledTabPanel>{renderContextDescription()}</StyledTabPanel>
-          <StyledTabPanel>
-            {renderKeyElements()}
-            {editable && (
-              <ButtonContainer>
-                <StyledButton
-                  small
-                  variant={"primaryOutline"}
-                  onClick={() => {
-                    store.createKeyElement();
-                  }}
-                >
-                  <Icon icon={"Plus"} size={"20px"} />
-                  <AddKeyElementText>Add Key Element</AddKeyElementText>
-                </StyledButton>
-              </ButtonContainer>
-            )}
-          </StyledTabPanel>
-        </TabPanelContainer>
-      </Tabs>
-    </Container>
-  );
-};
+    const renderContextDescription = () => {
+      return (
+        <StyledContentEditable
+          html={object.contextDescription}
+          disabled={!editable}
+          onChange={e => store.updateModelField("contextDescription", e.target.value)}
+          onBlur={() => store.update()}
+        />
+      );
+    };
+
+    const renderKeyElements = () => {
+      return object.keyElements.map((element, index) => {
+        return <KeyElement element={element} store={store} editable={editable} key={index} />;
+      });
+    };
+
+    const tabClicked = (index: number): void => {
+      if (index == selectedContextTab) {
+        setHideContent(!hideContent);
+      } else {
+        setHideContent(false);
+        setSelectedContextTab(index);
+      }
+    };
+
+    return (
+      <Container>
+        <Tabs>
+          <StyledTabList>
+            <StyledTab onClick={() => tabClicked(1)}>
+              <StyledTabTitle tabSelected={selectedContextTab == 1}>Importance </StyledTabTitle>
+            </StyledTab>
+            <StyledTab onClick={() => tabClicked(2)}>
+              <StyledTabTitle tabSelected={selectedContextTab == 2}>Description</StyledTabTitle>
+            </StyledTab>
+            <StyledTab onClick={() => tabClicked(3)}>
+              <StyledTabTitle tabSelected={selectedContextTab == 3}>Key Elements</StyledTabTitle>
+            </StyledTab>
+          </StyledTabList>
+
+          <TabPanelContainer hideContent={hideContent}>
+            <StyledTabPanel>{renderContextImportance()}</StyledTabPanel>
+            <StyledTabPanel>{renderContextDescription()}</StyledTabPanel>
+            <StyledTabPanel>
+              {renderKeyElements()}
+              {editable && (
+                <ButtonContainer>
+                  <StyledButton
+                    small
+                    variant={"primaryOutline"}
+                    onClick={() => {
+                      store.createKeyElement();
+                    }}
+                  >
+                    <Icon icon={"Plus"} size={"20px"} />
+                    <AddKeyElementText>Add Key Element</AddKeyElementText>
+                  </StyledButton>
+                </ButtonContainer>
+              )}
+            </StyledTabPanel>
+          </TabPanelContainer>
+        </Tabs>
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div``;
 

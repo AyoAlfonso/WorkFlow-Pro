@@ -30,7 +30,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def create_key_element
-    key_element = KeyElement.create!(elementable: @quarterly_goal)
+    key_element = KeyElement.create!(elementable: @quarterly_goal, value: "")
     render json: { key_element: key_element, status: :ok }
   end
 

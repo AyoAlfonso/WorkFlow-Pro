@@ -38,6 +38,19 @@ export const AnnualInitiativeStoreModel = types
         // error messaging handled by API monitor
       }
     }),
+    createKeyElement: flow(function* () {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createAnnualInitiativeKeyElement(
+          self.annualInitiative.id,
+        );
+        const updatedKeyElements = [...self.annualInitiative.keyElements, response.data.keyElement];
+        self.annualInitiative.keyElements = updatedKeyElements as any;
+      } catch {
+        console.log("is there an error?????????");
+        // error messaging handled by API monitor
+      }
+    }),
   }))
   .actions(self => ({
     updateModelField(field, value) {

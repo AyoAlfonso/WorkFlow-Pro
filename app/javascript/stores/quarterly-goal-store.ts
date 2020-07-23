@@ -38,12 +38,8 @@ export const QuarterlyGoalStoreModel = types
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createQuarterlyGoalKeyElement(self.quarterlyGoal.id);
-        console.log("response", response);
         const updatedKeyElements = [...self.quarterlyGoal.keyElements, response.data.keyElement];
-        console.log("updated key elements", updatedKeyElements);
-        // const responseQuarterlyGoal = response.data.quarterlyGoal;
         self.quarterlyGoal.keyElements = updatedKeyElements as any;
-        // return responseQuarterlyGoal;
       } catch {
         console.log("is there an error?????????");
         // error messaging handled by API monitor
