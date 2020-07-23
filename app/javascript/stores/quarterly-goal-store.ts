@@ -69,6 +69,12 @@ export const QuarterlyGoalStoreModel = types
       self.quarterlyGoal.ownedById = userId;
       self.update();
     },
+    updateMilestoneDescription(id, value) {
+      let milestones = self.quarterlyGoal.milestones;
+      let milestoneIndex = milestones.findIndex(milestone => milestone.id == id);
+      milestones[milestoneIndex].description = value;
+      self.quarterlyGoal.milestones = milestones;
+    },
   }));
 
 type QuarterlyGoalStoreType = typeof QuarterlyGoalStoreModel.Type;

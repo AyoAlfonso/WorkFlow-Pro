@@ -116,6 +116,7 @@ export class Api {
     const parsedQuarterlyGoal = {
       ...quarterlyGoal,
       keyElementsAttributes: quarterlyGoal.keyElements,
+      milestonesAttributes: quarterlyGoal.milestones,
     };
 
     return this.client.patch(`/quarterly_goals/${quarterlyGoal.id}`, parsedQuarterlyGoal);

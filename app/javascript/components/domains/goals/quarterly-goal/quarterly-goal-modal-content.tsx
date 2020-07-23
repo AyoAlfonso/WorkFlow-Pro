@@ -46,6 +46,8 @@ export const QuarterlyGoalModalContent = observer(
       return <> Loading... </>;
     }
 
+    const editable = currentUser.id == quarterlyGoal.ownedById;
+
     const allMilestones = quarterlyGoal.milestones;
     const activeMilestones = quarterlyGoal.activeMilestones;
 
@@ -55,7 +57,7 @@ export const QuarterlyGoalModalContent = observer(
           <TitleContainer>
             <StyledContentEditable
               html={quarterlyGoal.description}
-              disabled={currentUser.id != quarterlyGoal.ownedById}
+              disabled={!editable}
               onChange={e => {
                 quarterlyGoalStore.updateModelField("description", e.target.value);
               }}
@@ -111,7 +113,14 @@ export const QuarterlyGoalModalContent = observer(
                 Week of{" "}
                 <WeekOfTextValue>{moment(milestone.weekOf).format("MMMM D")}</WeekOfTextValue>
               </WeekOfText>
-              <MilestoneDescriptionText>{milestone.description}</MilestoneDescriptionText>
+              <MilestoneContentEditable
+                html={milestone.description}
+                disabled={!editable}
+                onChange={e => {
+                  quarterlyGoalStore.updateMilestoneDescription(milestone.id, e.target.value);
+                }}
+                onBlur={() => quarterlyGoalStore.update()}
+              />
             </MilestoneDetails>
             <IndividualVerticalStatusBlockColorIndicator milestone={milestone} />
           </MilestoneContainer>
@@ -261,11 +270,6 @@ const WeekOfTextValue = styled.span`
   font-weight: bold;
 `;
 
-const MilestoneDescriptionText = styled(Text)`
-  margin-top: 8px;
-  margin-bottom: 8px;
-`;
-
 const MilestonesHeaderContainer = styled.div`
   display: flex;
 `;
@@ -291,6 +295,13 @@ const ShowPastWeeksContainer = styled.div`
 const StyledContentEditable = styled(ContentEditable)`
   font-weight: bold;
   font-size: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+`;
+
+const MilestoneContentEditable = styled(ContentEditable)`
+  margin-top: 8px;
+  margin-bottom: 8px;
   padding-top: 5px;
   padding-bottom: 5px;
 `;
