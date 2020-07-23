@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { color, layout, space, variant } from "styled-system";
-import { buildRepeatingLinearGradient } from "../../utils/css-utils";
+import { buildRepeatingLinearGradient } from "~/utils/css-utils";
 
 const ProgressBarContainer = styled.div`
   ${color}

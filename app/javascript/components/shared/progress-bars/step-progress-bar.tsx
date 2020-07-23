@@ -2,13 +2,14 @@ import * as React from "react";
 import "react-step-progress-bar/styles.css";
 import { ProgressBar, Step } from "react-step-progress-bar";
 import { StepProgressBarIcon } from "./step-progress-bar-icon";
-import { baseTheme } from "../../themes";
+import { baseTheme } from "~/themes";
 import ReactTooltip from "react-tooltip";
 
+export type TStepProgressBarStep = typeof Step;
 export interface IStepProgressBar {
-  percent?: number;
-  backgroundColor?: string;
-  steps: Array<IStepProgressBarStep>;
+  progressBarProps?: typeof ProgressBar;
+  steps: Array<TStepProgressBarStep>;
+  timed?: boolean;
 }
 
 const defaultStepProgressBarProps = {
@@ -16,22 +17,15 @@ const defaultStepProgressBarProps = {
   filledBackground: baseTheme.colors.grey100,
 };
 
-export interface IStepProgressBarStep {
-  accomplished: boolean;
-  position?: number;
-  index: number;
-  children: () => JSX.Element;
-  title: string;
-  transition?: string;
-  transitionDuration?: string;
-}
-
 const defaultStepProgressBarStepProps = {
   transition: "scale",
 };
 // TODO: Needs correct icon assets
-export const StepProgressBar = (props): JSX.Element => {
-  const { steps } = props;
+export const StepProgressBar = ({
+  progressBarProps,
+  steps,
+  timed,
+}: IStepProgressBar): JSX.Element => {
   const accomplishedIcon = (
     <StepProgressBarIcon iconProps={{ color: "grey100", icon: "Priority-High" }} />
   );
@@ -61,7 +55,11 @@ export const StepProgressBar = (props): JSX.Element => {
   return (
     <>
       <ReactTooltip />
-      <ProgressBar {...defaultStepProgressBarProps} percent={calculatePercent()} {...props}>
+      <ProgressBar
+        {...defaultStepProgressBarProps}
+        percent={!timed && calculatePercent()}
+        {...progressBarProps}
+      >
         {renderSteps}
         {/* A Final Default Completed Step is needed so that calculatePercentage calculates properly */}
         <Step key={"last-step"}>
