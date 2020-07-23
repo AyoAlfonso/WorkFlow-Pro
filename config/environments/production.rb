@@ -91,7 +91,8 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.hosts << "herokuapp.com"
+  config.hosts << "lynchpyn-qa.herokuapp.com"
+  config.hosts << "lynchpyn.herokuapp.com"
   config.hosts << "lynchpyn.com"
 
   # Inserts middleware to perform automatic connection switching.
