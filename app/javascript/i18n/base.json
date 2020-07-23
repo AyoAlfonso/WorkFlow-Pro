@@ -20,8 +20,9 @@
         "loginForm": {
           "email": "E-mail",
           "password": "Password",
-          "login": "Login",
-          "forgot": "Forgot your password? (To be added)"
+          "login": "Log in",
+          "forgot": "Forgot your password? (To be added)",
+          "currentlyLoggedIn": "You are logged in."
         },
         "profileUpdateForm": {
           "email": "E-mail",

@@ -12,7 +12,7 @@ export const LoadingScreen = (): JSX.Element => (
     }}
   >
     <Box sx={{ margin: "auto", border: "1", alignItems: "center" }}>
-      <img src={"/assets/LynchPyn-Logo_Horizontal-Blue_300x300"} width="120"></img>
+      <img src={"/assets/LynchPyn-Logo-Blue_300x300"} width="120"></img>
       <LoadingContainer>
         <Loading />
       </LoadingContainer>
