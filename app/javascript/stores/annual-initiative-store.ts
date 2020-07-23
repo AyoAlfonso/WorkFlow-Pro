@@ -24,7 +24,7 @@ export const AnnualInitiativeStoreModel = types
         // error messaging handled by API monitor
       }
     }),
-    updateAnnualInitiative: flow(function* () {
+    update: flow(function* () {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.updateAnnualInitiative(self.annualInitiative);
@@ -56,11 +56,11 @@ export const AnnualInitiativeStoreModel = types
         ? (keyElements[keyElementIndex].completedAt = moment().toString())
         : (keyElements[keyElementIndex].completedAt = "");
       self.annualInitiative.keyElements = keyElements;
-      self.updateAnnualInitiative();
+      self.update();
     },
     updateOwnedBy(userId) {
       self.annualInitiative.ownedById = userId;
-      self.updateAnnualInitiative();
+      self.update();
     },
   }));
 

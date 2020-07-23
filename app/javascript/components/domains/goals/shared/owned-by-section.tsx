@@ -4,15 +4,26 @@ import { Text } from "../../../shared/text";
 import { UserDefaultIcon } from "~/components/shared/user-default-icon";
 import { UserType } from "~/types/user";
 import { useMst } from "~/setup/root";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface IOwnedBySectionProps {
   ownedBy: UserType;
+  type: string;
 }
 
-export const OwnedBySection = ({ ownedBy }: IOwnedBySectionProps): JSX.Element => {
-  const { userStore, sessionStore, annualInitiativeStore } = useMst();
+export const OwnedBySection = ({ ownedBy, type }: IOwnedBySectionProps): JSX.Element => {
+  const { userStore, sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
+  const [store, setStore] = useState<any>(null);
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (type == "annualInitiative") {
+      setStore(annualInitiativeStore);
+    } else if (type == "quarterlyGoal") {
+      setStore(quarterlyGoalStore);
+    }
+  });
+
   const companyUsers = userStore.users;
   const currentUser = sessionStore.profile;
   const editable = ownedBy.id == currentUser.id;
@@ -20,7 +31,7 @@ export const OwnedBySection = ({ ownedBy }: IOwnedBySectionProps): JSX.Element =
   const renderUserOptions = (): Array<JSX.Element> => {
     return companyUsers.map((user, index) => {
       return (
-        <UserOption key={index} onClick={() => annualInitiativeStore.updateOwnedBy(user.id)}>
+        <UserOption key={index} onClick={() => store.updateOwnedBy(user.id)}>
           <UserDefaultIcon
             firstName={user.firstName}
             lastName={user.lastName}

@@ -12,6 +12,8 @@ import { useMst } from "~/setup/root";
 import ContentEditable from "react-contenteditable";
 import * as R from "ramda";
 import { KeyElement } from "./key-element";
+import { Button } from "~/components/shared/button";
+import { Icon } from "~/components/shared/icon";
 
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;
@@ -48,21 +50,21 @@ export const ContextTabs = ({ object, type }: IContextTabsProps): JSX.Element =>
           html={object.importance[0]}
           disabled={!editable}
           onChange={e => updateImportance(0, e.target.value)}
-          onBlur={() => store.updateAnnualInitiative()}
+          onBlur={() => store.update()}
         />
         <SubHeaderText> What are the consequences if missed?</SubHeaderText>
         <StyledContentEditable
           html={object.importance[1]}
           disabled={!editable}
           onChange={e => updateImportance(1, e.target.value)}
-          onBlur={() => store.updateAnnualInitiative()}
+          onBlur={() => store.update()}
         />
         <SubHeaderText> How will we celebrate if achieved?</SubHeaderText>
         <StyledContentEditable
           html={object.importance[2]}
           disabled={!editable}
           onChange={e => updateImportance(2, e.target.value)}
-          onBlur={() => store.updateAnnualInitiative()}
+          onBlur={() => store.update()}
         />
       </ContextImportanceContainer>
     );
@@ -74,7 +76,7 @@ export const ContextTabs = ({ object, type }: IContextTabsProps): JSX.Element =>
         html={object.contextDescription}
         disabled={!editable}
         onChange={e => store.updateModelField("contextDescription", e.target.value)}
-        onBlur={() => store.updateAnnualInitiative()}
+        onBlur={() => store.update()}
       />
     );
   };
@@ -112,7 +114,23 @@ export const ContextTabs = ({ object, type }: IContextTabsProps): JSX.Element =>
         <TabPanelContainer hideContent={hideContent}>
           <StyledTabPanel>{renderContextImportance()}</StyledTabPanel>
           <StyledTabPanel>{renderContextDescription()}</StyledTabPanel>
-          <StyledTabPanel>{renderKeyElements()}</StyledTabPanel>
+          <StyledTabPanel>
+            {renderKeyElements()}
+            {editable && (
+              <ButtonContainer>
+                <StyledButton
+                  small
+                  variant={"primaryOutline"}
+                  onClick={() => {
+                    store.createKeyElement();
+                  }}
+                >
+                  <Icon icon={"Plus"} size={"20px"} />
+                  <AddKeyElementText>Add Key Element</AddKeyElementText>
+                </StyledButton>
+              </ButtonContainer>
+            )}
+          </StyledTabPanel>
         </TabPanelContainer>
       </Tabs>
     </Container>
@@ -120,11 +138,6 @@ export const ContextTabs = ({ object, type }: IContextTabsProps): JSX.Element =>
 };
 
 const Container = styled.div``;
-
-const ContextContainer = styled(HomeContainerBorders)`
-  padding-left: 16px;
-  padding-right: 16px;
-`;
 
 const SubHeaderText = styled(Text)`
   font-size: 16px;
@@ -190,15 +203,6 @@ const KeyElementContainer = styled.div`
   margin-bottom: 8px;
 `;
 
-const KeyElementContextContainer = styled(ContextContainer)`
-  width: 100%;
-`;
-
-const KeyElementText = styled(Text)`
-  margin-top: 4px;
-  margin-bottom: 4px;
-`;
-
 const CheckboxContainer = styled.div`
   display: flex;
   margin-top: auto;
@@ -217,4 +221,18 @@ const StyledContentEditable = styled(ContentEditable)`
 
 const KeyElementStyledContentEditable = styled(StyledContentEditable)`
   width: 100%;
+`;
+
+const ButtonContainer = styled.div`
+  margin-top: 24px;
+`;
+
+const StyledButton = styled(Button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const AddKeyElementText = styled.p`
+  margin-left: 16px;
 `;

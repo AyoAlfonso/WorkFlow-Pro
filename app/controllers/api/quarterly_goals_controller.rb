@@ -1,5 +1,5 @@
 class Api::QuarterlyGoalsController < Api::ApplicationController
-  before_action :set_quarterly_goal, only: [:show, :update, :destroy]
+  before_action :set_quarterly_goal, only: [:show, :update, :destroy, :create_key_element]
 
   respond_to :json
 
@@ -21,7 +21,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
   def update
     @quarterly_goal.update!(quarterly_goal_params)
-    render json: { quarterly_goal: @quarterly_goal, status: :ok }
+    render json: { quarterly_goal: @quarterly_goal.as_json(include: [:milestones, :owned_by]), status: :ok }
   end
 
   def destroy
@@ -29,10 +29,15 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     render json: { quarterly_goal: @quarterly_goal.id, status: :ok }
   end
 
+  def create_key_element
+    key_element = KeyElement.create!(elementable: @quarterly_goal)
+    render json: { key_element: key_element, status: :ok }
+  end
+
   private
 
   def quarterly_goal_params
-    params.permit(:created_by_id, :owned_by_id, :annual_initiative_id, :description, :key_elements => [], :importance => [])
+    params.permit(:id, :created_by_id, :owned_by_id, :context_description, :annual_initiative_id, :description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value], :importance => [])
   end
 
   def set_quarterly_goal

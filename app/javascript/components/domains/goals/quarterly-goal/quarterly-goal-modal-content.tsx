@@ -11,6 +11,8 @@ import { ContextTabs } from "../shared/context-tabs";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { IndividualVerticalStatusBlockColorIndicator } from "../shared/individual-vertical-status-block-color-indicator";
 import * as moment from "moment";
+import ContentEditable from "react-contenteditable";
+import { observer } from "mobx-react";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -20,138 +22,149 @@ interface IQuarterlyGoalModalContentProps {
   setAnnualInitiativeId: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const QuarterlyGoalModalContent = ({
-  quarterlyGoalId,
-  setQuarterlyGoalModalOpen,
-  annualInitiativeDescription,
-  setAnnualInitiativeModalOpen,
-  setAnnualInitiativeId,
-}: IQuarterlyGoalModalContentProps): JSX.Element => {
-  const { quarterlyGoalStore } = useMst();
-  const [quarterlyGoal, setQuarterlyGoal] = useState<any>(null);
-  const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
+export const QuarterlyGoalModalContent = observer(
+  ({
+    quarterlyGoalId,
+    setQuarterlyGoalModalOpen,
+    annualInitiativeDescription,
+    setAnnualInitiativeModalOpen,
+    setAnnualInitiativeId,
+  }: IQuarterlyGoalModalContentProps): JSX.Element => {
+    const { quarterlyGoalStore, sessionStore } = useMst();
+    const currentUser = sessionStore.profile;
+    const [quarterlyGoal, setQuarterlyGoal] = useState<any>(null);
+    const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
 
-  useEffect(() => {
-    quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
-      setQuarterlyGoal(quarterlyGoalStore.quarterlyGoal);
-    });
-  }, []);
+    useEffect(() => {
+      quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
+        setQuarterlyGoal(quarterlyGoalStore.quarterlyGoal);
+      });
+    }, []);
 
-  if (quarterlyGoal == null) {
-    return <> Loading... </>;
-  }
+    if (quarterlyGoal == null) {
+      return <> Loading... </>;
+    }
 
-  const allMilestones = quarterlyGoal.milestones;
-  const activeMilestones = quarterlyGoal.activeMilestones;
+    const allMilestones = quarterlyGoal.milestones;
+    const activeMilestones = quarterlyGoal.activeMilestones;
 
-  const renderHeader = (): JSX.Element => {
-    return (
-      <HeaderContainer>
-        <TitleContainer>
-          <DescriptionText>{quarterlyGoal.description}</DescriptionText>
-          <GoalText>
-            driving{" "}
-            <UnderlinedGoalText
-              onClick={() => {
-                setQuarterlyGoalModalOpen(false);
-                setAnnualInitiativeId(quarterlyGoal.annualInitiativeId);
-                setAnnualInitiativeModalOpen(true);
-              }}
-            >
-              {annualInitiativeDescription}
-            </UnderlinedGoalText>
-          </GoalText>
-        </TitleContainer>
-        <AnnualInitiativeActionContainer>
-          <EditIconContainer>
-            <Icon icon={"Edit-2"} size={"25px"} iconColor={"grey80"} />
-          </EditIconContainer>
-          <CloseIconContainer onClick={() => setQuarterlyGoalModalOpen(false)}>
-            <Icon icon={"Close"} size={"25px"} iconColor={"grey80"} />
-          </CloseIconContainer>
-        </AnnualInitiativeActionContainer>
-      </HeaderContainer>
-    );
-  };
-
-  const renderContext = (): JSX.Element => {
-    return (
-      <InfoSectionContainer>
-        <ContextSectionContainer>
-          <SubHeaderContainer>
-            <SubHeaderText> Context</SubHeaderText>
-          </SubHeaderContainer>
-          <ContextTabs object={quarterlyGoal} type={"quarterlyGoal"} />
-        </ContextSectionContainer>
-        <OwnedBySection ownedBy={quarterlyGoal.ownedBy} />
-      </InfoSectionContainer>
-    );
-  };
-
-  const renderWeeklyMilestones = (): JSX.Element => {
-    const milestonesToShow = showInactiveMilestones ? allMilestones : activeMilestones;
-    return milestonesToShow.map((milestone, index) => {
-      const unstarted = milestone.status == "unstarted";
+    const renderHeader = (): JSX.Element => {
       return (
-        <MilestoneContainer key={index}>
-          <MilestoneDetails unstarted={unstarted}>
-            <WeekOfText unstarted={unstarted}>
-              Week of <WeekOfTextValue>{moment(milestone.weekOf).format("MMMM D")}</WeekOfTextValue>
-            </WeekOfText>
-            <MilestoneDescriptionText>{milestone.description}</MilestoneDescriptionText>
-          </MilestoneDetails>
-          <IndividualVerticalStatusBlockColorIndicator milestone={milestone} />
-        </MilestoneContainer>
-      );
-    });
-  };
-
-  return (
-    <Container>
-      <StatusBlockColorIndicator
-        milestones={quarterlyGoal.milestones}
-        indicatorWidth={80}
-        marginBottom={16}
-      />
-
-      <QuarterlyGoalBodyContainer>
-        {renderHeader()}
-        <SectionContainer>{renderContext()}</SectionContainer>
-        <SectionContainer>
-          <MilestonesHeaderContainer>
-            <SubHeaderContainer>
-              <SubHeaderText> Weekly Milestones</SubHeaderText>
-            </SubHeaderContainer>
-            <ShowPastWeeksContainer>
-              <Button
-                small
-                variant={"primaryOutline"}
-                onClick={() => setShowInactiveMilestones(!showInactiveMilestones)}
+        <HeaderContainer>
+          <TitleContainer>
+            <StyledContentEditable
+              html={quarterlyGoal.description}
+              disabled={currentUser.id != quarterlyGoal.ownedById}
+              onChange={e => {
+                quarterlyGoalStore.updateModelField("description", e.target.value);
+              }}
+              onBlur={() => quarterlyGoalStore.update()}
+            />
+            <GoalText>
+              driving{" "}
+              <UnderlinedGoalText
+                onClick={() => {
+                  setQuarterlyGoalModalOpen(false);
+                  setAnnualInitiativeId(quarterlyGoal.annualInitiativeId);
+                  setAnnualInitiativeModalOpen(true);
+                }}
               >
-                {showInactiveMilestones
-                  ? "Show Upcoming"
-                  : `Show Past Weeks (${allMilestones.length - activeMilestones.length})`}
-              </Button>
-            </ShowPastWeeksContainer>
-          </MilestonesHeaderContainer>
-          {renderWeeklyMilestones()}
-        </SectionContainer>
-        <SectionContainer>
-          <SubHeaderContainer>
-            <SubHeaderText> Comments</SubHeaderText>
-          </SubHeaderContainer>
-          <ContextContainer>PLACEHOLDER FOR COMMENTS</ContextContainer>
-        </SectionContainer>
-        <SectionContainer>
-          <SubHeaderContainer>
-            <SubHeaderText> Attachments</SubHeaderText>
-          </SubHeaderContainer>
-          <ContextContainer>PLACEHOLDER FOR ATTACHMENTS</ContextContainer>
-        </SectionContainer>
-      </QuarterlyGoalBodyContainer>
-    </Container>
-  );
-};
+                {annualInitiativeDescription}
+              </UnderlinedGoalText>
+            </GoalText>
+          </TitleContainer>
+          <AnnualInitiativeActionContainer>
+            <EditIconContainer>
+              <Icon icon={"Edit-2"} size={"25px"} iconColor={"grey80"} />
+            </EditIconContainer>
+            <CloseIconContainer onClick={() => setQuarterlyGoalModalOpen(false)}>
+              <Icon icon={"Close"} size={"25px"} iconColor={"grey80"} />
+            </CloseIconContainer>
+          </AnnualInitiativeActionContainer>
+        </HeaderContainer>
+      );
+    };
+
+    const renderContext = (): JSX.Element => {
+      return (
+        <InfoSectionContainer>
+          <ContextSectionContainer>
+            <SubHeaderContainer>
+              <SubHeaderText> Context</SubHeaderText>
+            </SubHeaderContainer>
+            <ContextTabs object={quarterlyGoal} type={"quarterlyGoal"} />
+          </ContextSectionContainer>
+          <OwnedBySection ownedBy={quarterlyGoal.ownedBy} type={"quarterlyGoal"} />
+        </InfoSectionContainer>
+      );
+    };
+
+    const renderWeeklyMilestones = (): JSX.Element => {
+      const milestonesToShow = showInactiveMilestones ? allMilestones : activeMilestones;
+      return milestonesToShow.map((milestone, index) => {
+        const unstarted = milestone.status == "unstarted";
+        return (
+          <MilestoneContainer key={index}>
+            <MilestoneDetails unstarted={unstarted}>
+              <WeekOfText unstarted={unstarted}>
+                Week of{" "}
+                <WeekOfTextValue>{moment(milestone.weekOf).format("MMMM D")}</WeekOfTextValue>
+              </WeekOfText>
+              <MilestoneDescriptionText>{milestone.description}</MilestoneDescriptionText>
+            </MilestoneDetails>
+            <IndividualVerticalStatusBlockColorIndicator milestone={milestone} />
+          </MilestoneContainer>
+        );
+      });
+    };
+
+    return (
+      <Container>
+        <StatusBlockColorIndicator
+          milestones={quarterlyGoal.milestones}
+          indicatorWidth={80}
+          marginBottom={16}
+        />
+
+        <QuarterlyGoalBodyContainer>
+          {renderHeader()}
+          <SectionContainer>{renderContext()}</SectionContainer>
+          <SectionContainer>
+            <MilestonesHeaderContainer>
+              <SubHeaderContainer>
+                <SubHeaderText> Weekly Milestones</SubHeaderText>
+              </SubHeaderContainer>
+              <ShowPastWeeksContainer>
+                <Button
+                  small
+                  variant={"primaryOutline"}
+                  onClick={() => setShowInactiveMilestones(!showInactiveMilestones)}
+                >
+                  {showInactiveMilestones
+                    ? "Show Upcoming"
+                    : `Show Past Weeks (${allMilestones.length - activeMilestones.length})`}
+                </Button>
+              </ShowPastWeeksContainer>
+            </MilestonesHeaderContainer>
+            {renderWeeklyMilestones()}
+          </SectionContainer>
+          <SectionContainer>
+            <SubHeaderContainer>
+              <SubHeaderText> Comments</SubHeaderText>
+            </SubHeaderContainer>
+            <ContextContainer>PLACEHOLDER FOR COMMENTS</ContextContainer>
+          </SectionContainer>
+          <SectionContainer>
+            <SubHeaderContainer>
+              <SubHeaderText> Attachments</SubHeaderText>
+            </SubHeaderContainer>
+            <ContextContainer>PLACEHOLDER FOR ATTACHMENTS</ContextContainer>
+          </SectionContainer>
+        </QuarterlyGoalBodyContainer>
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
   min-width: 240px;
@@ -283,4 +296,11 @@ const ShowPastWeeksContainer = styled.div`
   margin-left: auto;
   margin-top: auto;
   margin-bottom: auto;
+`;
+
+const StyledContentEditable = styled(ContentEditable)`
+  font-weight: bold;
+  font-size: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 `;

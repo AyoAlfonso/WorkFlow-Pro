@@ -91,7 +91,7 @@ export const AnnualInitiativeModalContent = observer(
               onChange={e => {
                 annualInitiativeStore.updateModelField("description", e.target.value);
               }}
-              onBlur={() => annualInitiativeStore.updateAnnualInitiative()}
+              onBlur={() => annualInitiativeStore.update()}
             />
             <GoalText>
               In order to{" "}
@@ -119,7 +119,7 @@ export const AnnualInitiativeModalContent = observer(
             </SubHeaderContainer>
             <ContextTabs object={annualInitiative} type={"annualInitiative"} />
           </ContextSectionContainer>
-          <OwnedBySection ownedBy={annualInitiative.ownedBy} />
+          <OwnedBySection ownedBy={annualInitiative.ownedBy} type={"annualInitiative"} />
         </InfoSectionContainer>
       );
     };

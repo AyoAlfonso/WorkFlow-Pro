@@ -108,5 +108,18 @@ export class Api {
     return this.client.get(`/quarterly_goals/${id}`);
   }
 
+  async updateQuarterlyGoal(quarterlyGoal) {
+    const parsedQuarterlyGoal = {
+      ...quarterlyGoal,
+      keyElementsAttributes: quarterlyGoal.keyElements,
+    };
+
+    return this.client.patch(`/quarterly_goals/${quarterlyGoal.id}`, parsedQuarterlyGoal);
+  }
+
+  async createQuarterlyGoalKeyElement(id) {
+    return this.client.post(`/quarterly_goals/create_key_element/${id}`);
+  }
+
   //async setJWT(jwt) {}
 }
