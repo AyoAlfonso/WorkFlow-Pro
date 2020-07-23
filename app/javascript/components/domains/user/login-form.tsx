@@ -38,7 +38,7 @@ export const LoginForm = observer(
       >
         <Box
           sx={{
-            width: "480",
+            width: "480px",
             margin: "auto",
             border: "1",
             padding: "32px",
@@ -61,12 +61,14 @@ export const LoginForm = observer(
               <Button
                 small
                 variant={"primary"}
-                style={{ width: "100%" }}
+                style={{ width: "100%", marginTop: "15px", marginBottom: "15px" }}
                 onClick={() => sessionStore.login(email, password)}
               >
                 {t("profile.loginForm.login")}
               </Button>
-              <div>{t("profile.loginForm.forgot")}</div>
+              <Text color={"greyActive"} fontSize={1}>
+                {t("profile.loginForm.forgot")}
+              </Text>
             </>
           )}
         </Box>
