@@ -22,11 +22,12 @@ import { ModalProvider } from "styled-react-modal";
 import { Toaster } from "./shared/toaster";
 
 import { AccountabilityChart } from "./domains/company/accountability-chart";
+import { StrategicPlan } from "./domains/company/strategic-plan";
 
 import { AccountSettings } from "./domains/account/account-settings";
 
 import { HeaderBar } from "./domains/nav/header-bar";
-import { SideNav } from "./domains/nav/side-nav";
+import { SideNav } from "./domains/nav";
 import { Placeholder } from "./shared/placeholder";
 
 const Container = styled.div`
@@ -77,9 +78,15 @@ export const App = observer(
                     }}
                   />
                   <Route
-                    path={"/company"}
+                    path={"/company/accountability"}
                     render={() => {
                       return <AccountabilityChart />;
+                    }}
+                  />
+                  <Route
+                    path={"/company/strategic_plan"}
+                    render={() => {
+                      return <StrategicPlan />;
                     }}
                   />
                   <Route

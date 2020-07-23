@@ -1,15 +1,16 @@
-import * as React from "react";
+import React from "react";
 import styled from "styled-components";
-import { useMst } from "../../../setup/root";
-import { Box } from "rebass";
-import { Icon } from "../../../components/shared/icon";
-import { Text } from "../../../components/shared/text";
-import { NavLink, Link } from "react-router-dom";
-import { space, color } from "styled-system";
+import { useMst } from "../../../../setup/root";
+import { Icon } from "../../../shared/icon";
+import { Text } from "../../../shared/text";
+import { NavLink } from "react-router-dom";
+import { color } from "styled-system";
 import { matchPath } from "react-router";
 
 import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react";
+import { SideNavChildLink } from "./side-nav-child-link";
+import { SideNavChildPopup } from "./side-nav-child-popup";
 
 const StyledSideNav = styled.div`
   position: fixed; /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
@@ -18,7 +19,8 @@ const StyledSideNav = styled.div`
   z-index: 1; /* Stay on top of everything */
   top: 0em; /* Stay at the top */
   background-color: white; /* White */
-  overflow-x: hidden; /* Disable horizontal scroll */
+  // Disable hidden x-overflow to allow nested menu items
+  // overflow-x: hidden; /* Disable horizontal scroll*/
   box-shadow: 0px 0px 0px 2px #f5f5f5;
   display: flex;
   flex-direction: column;
@@ -37,7 +39,6 @@ const SideBarElement = styled.div<SideBarElementType>`
 
 const StyledNavLink = styled(NavLink)`
   ${color}
-  text-align: center;
   align-item: center;
   text-decoration: none;
   margin: 16px;
@@ -64,6 +65,30 @@ interface StyledNavLinkChildrenActiveProps {
   disabled?: boolean;
   currentPathName: string;
 }
+
+const NavMenuIconText = styled(Text)`
+  text-align: center;
+`;
+interface INavMenuIconProps {
+  active?: boolean;
+  icon: string;
+}
+
+const NavMenuIcon: React.FunctionComponent<INavMenuIconProps> = ({
+  active = false,
+  children,
+  icon,
+}) => {
+  return (
+    <>
+      <IconBorder>
+        <Icon icon={icon} size={"2em"} iconColor={active ? "primary100" : "grey40"} m={"auto"} />
+      </IconBorder>
+      <NavMenuIconText>{children}</NavMenuIconText>
+    </>
+  );
+};
+
 const StyledNavLinkChildrenActive = ({
   to,
   icon,
@@ -71,24 +96,19 @@ const StyledNavLinkChildrenActive = ({
   disabled,
   currentPathName,
 }: StyledNavLinkChildrenActiveProps): JSX.Element => {
-  var pathMatch = matchPath(currentPathName, to);
-  var isActive = pathMatch ? (to == "/" ? pathMatch.isExact : true) : false;
-
-  return isActive ? (
+  const isActive = isNavMenuIconActive(currentPathName, to);
+  return (
     <StyledNavLink to={to} disabled={disabled}>
-      <IconBorder>
-        <Icon icon={icon} size={"2em"} iconColor={"primary100"} m={"auto"} />
-      </IconBorder>
-      <Text>{children}</Text>
-    </StyledNavLink>
-  ) : (
-    <StyledNavLink to={to} disabled={disabled}>
-      <IconBorder>
-        <Icon icon={icon} size={"2em"} iconColor={"grey40"} m={"auto"} />
-      </IconBorder>
-      <Text color={"grey40"}>{children}</Text>
+      <NavMenuIcon active={isActive} icon={icon}>
+        {children}
+      </NavMenuIcon>
     </StyledNavLink>
   );
+};
+
+const isNavMenuIconActive = (currentPath: string, to: string): boolean => {
+  const pathMatch = matchPath(currentPath, to);
+  return pathMatch ? (to == "/" ? pathMatch.isExact : true) : false;
 };
 
 export const SideNavNoMst = (currentPathName: string): JSX.Element => {
@@ -107,10 +127,19 @@ export const SideNavNoMst = (currentPathName: string): JSX.Element => {
         {t("navigation.team")}
       </StyledNavLinkChildrenActive>
 
-      <StyledNavLinkChildrenActive to="/company" icon={"Company"} currentPathName={currentPathName}>
-        {t("navigation.company")}
-      </StyledNavLinkChildrenActive>
-
+      <SideNavChildPopup
+        trigger={
+          <NavMenuIcon icon={"Company"} active={isNavMenuIconActive(currentPathName, "/company")}>
+            {t("navigation.company")}
+          </NavMenuIcon>
+        }
+      >
+        <SideNavChildLink
+          to="/company/accountability"
+          linkText={t("company.accountabilityChart")}
+        />
+        <SideNavChildLink to="/company/strategic_plan" linkText={t("company.strategicPlan")} />
+      </SideNavChildPopup>
       <StyledNavLinkChildrenActive to="/goals" icon={"Stats"} currentPathName={currentPathName}>
         {t("navigation.goals")}
       </StyledNavLinkChildrenActive>
