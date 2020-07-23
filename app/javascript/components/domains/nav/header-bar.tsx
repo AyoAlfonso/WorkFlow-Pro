@@ -110,7 +110,7 @@ export const HeaderBar = (): JSX.Element => {
     return showAccountActions ? (
       <ActionDropdownContainer>
         <AccountOption>
-          <Link to="/account" style={{ textDecoration: "none" }}>
+          <Link to="/account" style={{ textDecoration: "none", padding: "0" }}>
             <AccountOptionText>{t("profile.account")}</AccountOptionText>
           </Link>
         </AccountOption>
@@ -328,6 +328,7 @@ const AccountOptionText = styled(Text)`
 `;
 
 const AccountOption = styled.div`
+  display: flex;
   &:hover {
     background-color: ${props => props.theme.colors.primary100};
   }
