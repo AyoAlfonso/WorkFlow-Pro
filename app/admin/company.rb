@@ -31,8 +31,8 @@ ActiveAdmin.register Company do
   show do
     h1 company.name
     attributes_table do
-      row :avatar do |company|
-        image_tag url_for(company.logo)
+      row :logo do |company|
+        company.try(:logo).try(:url) ? image_tag(url_for(company.logo)) : "No Company Logo Set"
       end
       row :address
       row :contact_email
