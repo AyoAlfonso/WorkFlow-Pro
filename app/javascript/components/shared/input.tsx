@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { Input as RebassInput, Label as RebassLabel } from "@rebass/forms";
+import { Input as RebassInput, Label as RebassLabel, Select as RebassSelect } from "@rebass/forms";
 
 export const Input = props => <StyledInput {...props}>{props.children}</StyledInput>;
 
@@ -31,3 +31,5 @@ const StyledInput = styled.input`
   box-sizing: border-box;
   appearance: none;
 `;
+
+export const Select = RebassSelect;

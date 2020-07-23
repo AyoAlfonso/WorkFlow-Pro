@@ -1,4 +1,5 @@
 class Api::UsersController < Api::ApplicationController
+  helper ApplicationHelper
   before_action :set_user, only: [:show, :update]
   before_action :skip_authorization, only: :profile
   respond_to :json
@@ -13,7 +14,7 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def profile
-    render json: current_user.serializable_hash(methods: [:avatar_url])
+    render json: current_user.serializable_hash(methods: [:avatar_url, :role]).merge(static_data: view_context.static_data)
   end
 
   def update_avatar

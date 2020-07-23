@@ -3,11 +3,11 @@ import { RoleAdministrator, RoleCEO, RoleNormalUser } from "~/lib/constants";
 
 export const rules = {
   [RoleAdministrator]: {
-    static: [],
+    static: ["update-company-details"],
     dynamic: [],
   },
   [RoleCEO]: {
-    static: [],
+    static: ["update-company-details"],
     dynamic: [],
   },
   [RoleNormalUser]: {

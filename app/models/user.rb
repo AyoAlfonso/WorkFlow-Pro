@@ -33,6 +33,10 @@ class User < ApplicationRecord
     avatar.present? ? Rails.application.routes.url_helpers.rails_blob_url(avatar, host: ENV["ASSETS_HOST_URL"] || ENV["HOST_URL"]) : nil
   end
 
+  def role
+    user_role.name
+  end
+
   def get_timezone
     self.timezone.present? ? self.timezone : company_timezone
   end

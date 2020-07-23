@@ -4,6 +4,7 @@ import { withRootStore } from "../lib/with-root-store";
 import * as R from "ramda";
 
 import { UserModel } from "../models/user";
+import { StaticModel } from "../models/static";
 
 export const SessionStoreModel = types
   .model("SessionStoreModel")
@@ -12,6 +13,7 @@ export const SessionStoreModel = types
     loggedIn: types.boolean,
     //profile details added as a profile model
     profile: types.maybeNull(UserModel),
+    staticData: types.maybeNull(StaticModel),
   })
   .extend(withRootStore())
   .extend(withEnvironment())
@@ -25,6 +27,7 @@ export const SessionStoreModel = types
         if (response.ok) {
           //add details to user model
           self.profile = response.data;
+          self.staticData = response.data.staticData;
           self.loggedIn = true;
         }
       } catch {
