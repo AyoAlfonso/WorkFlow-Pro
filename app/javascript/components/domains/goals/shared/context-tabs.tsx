@@ -121,12 +121,12 @@ export const ContextTabs = observer(
                 <ButtonContainer>
                   <StyledButton
                     small
-                    variant={"primaryOutline"}
+                    variant={"grey"}
                     onClick={() => {
                       store.createKeyElement();
                     }}
                   >
-                    <Icon icon={"Plus"} size={"20px"} />
+                    <Icon icon={"Plus"} size={"20px"} style={{ marginTop: "3px" }} />
                     <AddKeyElementText>Add Key Element</AddKeyElementText>
                   </StyledButton>
                 </ButtonContainer>
@@ -194,18 +194,6 @@ const ContextImportanceContainer = styled.div`
   margin-top: -8px;
 `;
 
-const KeyElementContainer = styled.div`
-  display: flex;
-  margin-top: 8px;
-  margin-bottom: 8px;
-`;
-
-const CheckboxContainer = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
-`;
-
 const StyledContentEditable = styled(ContentEditable)`
   padding-top: 5px;
   padding-bottom: 5px;
@@ -216,10 +204,6 @@ const StyledContentEditable = styled(ContentEditable)`
   padding-right: 16px;
 `;
 
-const KeyElementStyledContentEditable = styled(StyledContentEditable)`
-  width: 100%;
-`;
-
 const ButtonContainer = styled.div`
   margin-top: 24px;
 `;
@@ -228,6 +212,9 @@ const StyledButton = styled(Button)`
   display: flex;
   justify-content: center;
   align-items: center;
+  &: hover {
+    color: ${props => props.theme.colors.primary100};
+  }
 `;
 
 const AddKeyElementText = styled.p`
