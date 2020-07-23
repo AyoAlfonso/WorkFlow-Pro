@@ -31,24 +31,16 @@ export const AccountProfile = observer(
         <BodyContainer>
           <PersonalInfoContainer>
             <Box>
-              <StyledLabel htmlFor="email">{t("profile.profileUpdateForm.email")}</StyledLabel>
-              <StyledInput name="email" onChange={e => setEmail(e.target.value)} value={email} />
-              <StyledLabel htmlFor="firstName">
-                {t("profile.profileUpdateForm.firstName")}
-              </StyledLabel>
-              <StyledInput
+              <Label htmlFor="email">{t("profile.profileUpdateForm.email")}</Label>
+              <Input name="email" onChange={e => setEmail(e.target.value)} value={email} />
+              <Label htmlFor="firstName">{t("profile.profileUpdateForm.firstName")}</Label>
+              <Input
                 name="firstName"
                 onChange={e => setFirstName(e.target.value)}
                 value={firstName}
               />
-              <StyledLabel htmlFor="lastName">
-                {t("profile.profileUpdateForm.lastName")}
-              </StyledLabel>
-              <StyledInput
-                name="lastName"
-                onChange={e => setLastName(e.target.value)}
-                value={lastName}
-              />
+              <Label htmlFor="lastName">{t("profile.profileUpdateForm.lastName")}</Label>
+              <Input name="lastName" onChange={e => setLastName(e.target.value)} value={lastName} />
             </Box>
           </PersonalInfoContainer>
           <ProfilePhotoSection>
@@ -120,16 +112,6 @@ const HeaderText = styled(Text)`
 
 const PhotoContainer = styled.div`
   text-align: center;
-`;
-
-const StyledLabel = styled(Label)`
-  font-size: 16px;
-  font-weight: bold;
-`;
-
-const StyledInput = styled(Input)`
-  border-color: ${props => props.theme.colors.grey40} !important;
-  border-radius: 5px;
 `;
 
 const PhotoModificationButtonsSection = styled.div`

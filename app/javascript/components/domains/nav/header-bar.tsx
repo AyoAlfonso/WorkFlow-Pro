@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as R from "ramda";
 import { HomeContainerBorders } from "../home/shared-components";
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
