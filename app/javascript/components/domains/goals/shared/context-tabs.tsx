@@ -1,11 +1,9 @@
 import * as React from "react";
-import { HomeContainerBorders } from "../../home/shared-components";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
 import { useState, useEffect } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import { Checkbox, Label } from "@rebass/forms";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
 import { QuarterlyGoalType } from "~/types/quarterly-goal";
 import { useMst } from "~/setup/root";
@@ -15,6 +13,7 @@ import { KeyElement } from "./key-element";
 import { Button } from "~/components/shared/button";
 import { Icon } from "~/components/shared/icon";
 import { observer } from "mobx-react";
+import { SubHeaderText } from "~/components/shared/sub-header-text";
 
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;
@@ -47,21 +46,21 @@ export const ContextTabs = observer(
     const renderContextImportance = () => {
       return (
         <ContextImportanceContainer>
-          <SubHeaderText> Why is it important?</SubHeaderText>
+          <SubHeaderText text={"Why is it important?"} />
           <StyledContentEditable
             html={object.importance[0]}
             disabled={!editable}
             onChange={e => updateImportance(0, e.target.value)}
             onBlur={() => store.update()}
           />
-          <SubHeaderText> What are the consequences if missed?</SubHeaderText>
+          <SubHeaderText text={"What are the consequences if missed?"} />
           <StyledContentEditable
             html={object.importance[1]}
             disabled={!editable}
             onChange={e => updateImportance(1, e.target.value)}
             onBlur={() => store.update()}
           />
-          <SubHeaderText> How will we celebrate if achieved?</SubHeaderText>
+          <SubHeaderText text={"How will we celebrate if achieved?"} />
           <StyledContentEditable
             html={object.importance[2]}
             disabled={!editable}
@@ -141,11 +140,6 @@ export const ContextTabs = observer(
 );
 
 const Container = styled.div``;
-
-const SubHeaderText = styled(Text)`
-  font-size: 16px;
-  font-weight: bold;
-`;
 
 type TabPanelContainerType = {
   hideContent: boolean;

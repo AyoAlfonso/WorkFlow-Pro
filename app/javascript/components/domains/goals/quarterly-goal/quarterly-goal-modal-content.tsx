@@ -13,6 +13,7 @@ import { IndividualVerticalStatusBlockColorIndicator } from "../shared/individua
 import * as moment from "moment";
 import ContentEditable from "react-contenteditable";
 import { observer } from "mobx-react";
+import { SubHeaderText } from "~/components/shared/sub-header-text";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -90,7 +91,7 @@ export const QuarterlyGoalModalContent = observer(
         <InfoSectionContainer>
           <ContextSectionContainer>
             <SubHeaderContainer>
-              <SubHeaderText> Context</SubHeaderText>
+              <SubHeaderText text={"Context"} />
             </SubHeaderContainer>
             <ContextTabs object={quarterlyGoal} type={"quarterlyGoal"} />
           </ContextSectionContainer>
@@ -132,7 +133,7 @@ export const QuarterlyGoalModalContent = observer(
           <SectionContainer>
             <MilestonesHeaderContainer>
               <SubHeaderContainer>
-                <SubHeaderText> Weekly Milestones</SubHeaderText>
+                <SubHeaderText text={"Weekly Milestones"} />
               </SubHeaderContainer>
               <ShowPastWeeksContainer>
                 <Button
@@ -150,13 +151,13 @@ export const QuarterlyGoalModalContent = observer(
           </SectionContainer>
           <SectionContainer>
             <SubHeaderContainer>
-              <SubHeaderText> Comments</SubHeaderText>
+              <SubHeaderText text={"Comments"} />
             </SubHeaderContainer>
             <ContextContainer>PLACEHOLDER FOR COMMENTS</ContextContainer>
           </SectionContainer>
           <SectionContainer>
             <SubHeaderContainer>
-              <SubHeaderText> Attachments</SubHeaderText>
+              <SubHeaderText text={"Attachments"} />
             </SubHeaderContainer>
             <ContextContainer>PLACEHOLDER FOR ATTACHMENTS</ContextContainer>
           </SectionContainer>
@@ -187,12 +188,6 @@ const HeaderContainer = styled.div`
 `;
 
 const TitleContainer = styled.div``;
-
-const DescriptionText = styled(Text)`
-  font-weight: bold;
-  font-size: 20px;
-  margin-top: 0;
-`;
 
 const GoalText = styled(Text)`
   font-size: 15px;
@@ -232,11 +227,6 @@ const SectionContainer = styled.div`
 const ContextContainer = styled(HomeContainerBorders)`
   padding-left: 16px;
   padding-right: 16px;
-`;
-
-const SubHeaderText = styled(Text)`
-  font-size: 16px;
-  font-weight: bold;
 `;
 
 const MilestoneContainer = styled.div`

@@ -13,6 +13,7 @@ import { ContextTabs } from "../shared/context-tabs";
 import { OwnedBySection } from "../shared/owned-by-section";
 import ContentEditable from "react-contenteditable";
 import { observer } from "mobx-react";
+import { SubHeaderText } from "~/components/shared/sub-header-text";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -115,7 +116,7 @@ export const AnnualInitiativeModalContent = observer(
         <InfoSectionContainer>
           <ContextSectionContainer>
             <SubHeaderContainer>
-              <SubHeaderText> Context</SubHeaderText>
+              <SubHeaderText text={"Context"} />
             </SubHeaderContainer>
             <ContextTabs object={annualInitiative} type={"annualInitiative"} />
           </ContextSectionContainer>
@@ -129,7 +130,7 @@ export const AnnualInitiativeModalContent = observer(
       return (
         <>
           <SubHeaderContainer>
-            <SubHeaderText> Quarterly Goals</SubHeaderText>
+            <SubHeaderText text={"Quarterly Goals"} />
             <ShowPastGoalsContainer>
               <Button small variant={"primaryOutline"} onClick={() => {}}>
                 Show Past Goals (2)
@@ -148,13 +149,13 @@ export const AnnualInitiativeModalContent = observer(
         <SectionContainer>{renderGoals()}</SectionContainer>
         <SectionContainer>
           <SubHeaderContainer>
-            <SubHeaderText> Comments</SubHeaderText>
+            <SubHeaderText text={"Comments"} />
           </SubHeaderContainer>
           <ContextContainer>PLACEHOLDER FOR COMMENTS</ContextContainer>
         </SectionContainer>
         <SectionContainer>
           <SubHeaderContainer>
-            <SubHeaderText> Attachments</SubHeaderText>
+            <SubHeaderText text={"Attachments"} />
           </SubHeaderContainer>
           <ContextContainer>PLACEHOLDER FOR ATTACHMENTS</ContextContainer>
         </SectionContainer>
@@ -192,13 +193,6 @@ const AnnualInitiativeActionContainer = styled.div`
   margin-left: auto;
 `;
 
-const EditIconContainer = styled.div`
-  margin-right: 16px;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 const CloseIconContainer = styled.div`
   &:hover {
     cursor: pointer;
@@ -212,11 +206,6 @@ const SectionContainer = styled.div`
 const ContextContainer = styled(HomeContainerBorders)`
   padding-left: 16px;
   padding-right: 16px;
-`;
-
-const SubHeaderText = styled(Text)`
-  font-size: 16px;
-  font-weight: bold;
 `;
 
 const QuarterlyGoalsContainer = styled.div`

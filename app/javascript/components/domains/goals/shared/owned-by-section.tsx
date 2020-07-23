@@ -5,6 +5,7 @@ import { UserDefaultIcon } from "~/components/shared/user-default-icon";
 import { UserType } from "~/types/user";
 import { useMst } from "~/setup/root";
 import { useState, useEffect } from "react";
+import { SubHeaderText } from "~/components/shared/sub-header-text";
 
 interface IOwnedBySectionProps {
   ownedBy: UserType;
@@ -63,7 +64,7 @@ export const OwnedBySection = ({ ownedBy, type }: IOwnedBySectionProps): JSX.Ele
       }}
     >
       <OwnedBySubHeaderContainer>
-        <SubHeaderText> Owned By</SubHeaderText>
+        <SubHeaderText text={"Owned By"} />
       </OwnedBySubHeaderContainer>
       <UserDefaultIcon
         firstName={ownedBy.firstName}
@@ -86,11 +87,6 @@ const Container = styled.div<ContainerType>`
   &:hover {
     cursor: ${props => props.editable && "pointer"};
   }
-`;
-
-const SubHeaderText = styled(Text)`
-  font-size: 16px;
-  font-weight: bold;
 `;
 
 const SubHeaderContainer = styled.div`
