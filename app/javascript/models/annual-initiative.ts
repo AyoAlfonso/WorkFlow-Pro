@@ -7,7 +7,7 @@ export const AnnualInitiativeModel = types
   .model("AnnualInitiativeModel")
   .props({
     id: types.identifierNumber,
-    companyId: types.number,
+    companyId: types.maybeNull(types.number),
     createdById: types.number,
     importance: types.array(types.string),
     description: types.string,

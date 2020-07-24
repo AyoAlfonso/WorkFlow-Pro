@@ -24,7 +24,7 @@ if Rails.env.development?
 
   AdminUser.where(email: "admin@example.com").first_or_create(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
   u1 = User.where(email: "sunny@laterolabs.com").first_or_create(first_name: 'Sunny', last_name: 'To', email: 'sunny@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur1.id)
-  User.where(email: "christopher@laterolabs.com").first_or_create(first_name: 'Christopher', last_name: 'Pang', email: 'christopher@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur2.id)
+  u2 = User.where(email: "christopher@laterolabs.com").first_or_create(first_name: 'Christopher', last_name: 'Pang', email: 'christopher@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur2.id)
   User.where(email: "kyle@laterolabs.com").first_or_create(first_name: 'Kyle', last_name: 'So', email: 'kyle@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur2.id)
   User.where(email: "derek@laterolabs.com").first_or_create(first_name: 'Derek', last_name: 'Yau', email: 'derek@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur1.id)
   User.where(email: "laurel@laterolabs.com").first_or_create(first_name: 'Laurel', last_name: 'Olsen', email: 'laurel@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id)
@@ -32,28 +32,112 @@ if Rails.env.development?
   User.where(email: "allen@laterolabs.com").first_or_create(first_name: 'Allen', last_name: 'Greer', email: 'allen@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id)
   User.where(email: "shaun@laterolabs.com").first_or_create(first_name: 'Shaun', last_name: 'Schwartz', email: 'shaun@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id)
   
-  AnnualInitiative.where(company_id: c1.id, description: "this is the first initiative").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["this is important"], description: "this is the first initiative", key_elements_attributes: [
-    {value: "this is a key element"}, {value: "as is this"}
-  ], company_id: c1.id)
-  QuarterlyGoal.where(description: "descriptive description").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["important"], description: "descriptive description", key_elements_attributes: [
-    {value: "key"}, {value: "element"}
-  ], annual_initiative_id: AnnualInitiative.first.id)
-  Milestone.where(created_by: User.where(id: 1)).first_or_create(created_by_id: u1.id, description: "some text", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.first.id)
-  Milestone.where(description: "some different").first_or_create(created_by_id: u1.id, description: "some different", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.first.id)
-  QuarterlyGoal.where(description: "this is the description").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["something important"], description: "this is the description", key_elements_attributes: [
-    {value: "thing"}, {value: "another thing"}
-  ], annual_initiative_id: AnnualInitiative.first.id)
-  Milestone.where(description: "some milestone text").first_or_create(created_by_id: u1.id, description: "some milestone text", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.find(2).id)
-  Milestone.where(description: "some different milestone text").first_or_create(created_by_id: u1.id, description: "some different milestone text", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.find(2).id)
+  ai_1 = AnnualInitiative.where(description: "Purchase company vehicles for transportation").first_or_create(
+    company_id: c1.id, 
+    created_by_id: u1.id, 
+    owned_by_id: u1.id, 
+    importance: ["So we don't need to use 3rd party services", "We will have to spend a lot more money", "Day off for everyone!"], 
+    description: "Purchase company vehicles for transportation", 
+    key_elements_attributes: [{value: "Check out Toyota"}, {value: "Check out Mercedes Benz"}],
+    context_description: "Choose a nice fleet!"
+  )
 
-  AnnualInitiative.where(company_id: c1.id, description: "this is the second initiative").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["this is important"], description: "this is the second initiative", key_elements_attributes: [
-    {value: "key"}, {value: "element"}
-  ], company_id: c1.id)
-  QuarterlyGoal.where(description: "quarterly goal description").first_or_create(created_by_id: u1.id, owned_by_id: u1.id, importance: ["important"], description: "quarterly goal description", key_elements_attributes: [
-    {value: "key"}, {value: "element"}
-  ], annual_initiative_id: AnnualInitiative.find(2).id)
-  Milestone.where(description: "new milestone text").first_or_create(created_by_id: u1.id, description: "new milestone text", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.find(3).id)
-  Milestone.where(description: "some more new milestone text").first_or_create(created_by_id: u1.id, description: "some more new milestone text", week: Time.now.strftime("%U").to_i, status: 0, quarterly_goal_id: QuarterlyGoal.find(3).id)
+  qg1 = QuarterlyGoal.where(description: "Visit Toyota Dealerships").first_or_create(
+    created_by_id: u1.id, 
+    owned_by_id: u1.id,
+    annual_initiative_id: ai_1.id,
+    importance: ["So we don't need to use 3rd party services", "We will have to spend a lot more money", "Day off for everyone!"], 
+    description: "Visit Toyota Dealerships",
+    status: 0,
+    context_description: "Check out the SUVs",
+    quarter: 1
+  )
+
+  m1 = Milestone.where(description: "Get brochures and pricing", quarterly_goal_id: qg1.id).first_or_create(
+    created_by_id: u1.id, 
+    description: "Get brochures and pricing", 
+    week: Time.now.strftime("%U").to_i, 
+    status: 0, 
+    quarterly_goal_id: qg1.id,
+    week_of: "2020-07-16"
+  )
+
+  m2 = Milestone.where(description: "Test drive the vehicles", quarterly_goal_id: qg1.id).first_or_create(
+    created_by_id: u1.id, 
+    description: "Test drive the vehicles", 
+    week: Time.now.strftime("%U").to_i, 
+    status: 0, 
+    quarterly_goal_id: qg1.id,
+    week_of: "2020-07-23"
+  )
+
+  qg2 = QuarterlyGoal.where(description: "Visit Mercedes Benz Dealerships").first_or_create(
+    created_by_id: u1.id, 
+    owned_by_id: u2.id,
+    annual_initiative_id: ai_1.id,
+    importance: ["So we don't need to use 3rd party services", "We will have to spend a lot more money", "Day off for everyone!"], 
+    description: "Visit Mercedes Benz Dealerships",
+    status: 0,
+    context_description: "Check out the SUVs",
+    quarter: 1
+  )
+
+  m3 = Milestone.where(description: "Get brochures and pricing", quarterly_goal_id: qg2.id).first_or_create(
+    created_by_id: u1.id, 
+    description: "Get brochures and pricing", 
+    week: Time.now.strftime("%U").to_i, 
+    status: 0, 
+    quarterly_goal_id: qg2.id,
+    week_of: "2020-07-16"
+  )
+
+  m4 = Milestone.where(description: "Test drive the vehicles", quarterly_goal_id: qg2.id).first_or_create(
+    created_by_id: u1.id, 
+    description: "Test drive the vehicles", 
+    week: Time.now.strftime("%U").to_i, 
+    status: 0, 
+    quarterly_goal_id: qg2.id,
+    week_of: "2020-07-23"
+  )
+
+  ai_2 = AnnualInitiative.where(description: "Find a good city to expand our office").first_or_create(
+    company_id: c1.id, 
+    created_by_id: u1.id, 
+    owned_by_id: u2.id, 
+    importance: ["More people can work for us", "Won't be able to maximize our profits", "Throw a huge party!"], 
+    description: "Find a good city to expand our office", 
+    key_elements_attributes: [{value: "Research Kelowna"}, {value: "Research Edmonton"}],
+    context_description: "Find a good city!"
+  )
+
+  qg3 = QuarterlyGoal.where(description: "Fly to Kelowna and do some research").first_or_create(
+    created_by_id: u1.id, 
+    owned_by_id: u2.id,
+    annual_initiative_id: ai_2.id,
+    importance: ["More people can work for us", "Won't be able to maximize our profits", "Throw a huge party!"], 
+    description: "Fly to Kelowna and do some research",
+    status: 0,
+    context_description: "See if there are any nice offices",
+    quarter: 1
+  )
+
+  m5 = Milestone.where(description: "Accessbility of the city", quarterly_goal_id: qg2.id).first_or_create(
+    created_by_id: u1.id, 
+    description: "Accessbility of the city", 
+    week: Time.now.strftime("%U").to_i, 
+    status: 0, 
+    quarterly_goal_id: qg3.id,
+    week_of: "2020-07-16"
+  )
+
+  m6 = Milestone.where(description: "Number of good restaurants", quarterly_goal_id: qg2.id).first_or_create(
+    created_by_id: u1.id, 
+    description: "Number of good restaurants", 
+    week: Time.now.strftime("%U").to_i, 
+    status: 0, 
+    quarterly_goal_id: qg3.id,
+    week_of: "2020-07-23"
+  )
   
   c1.users.each{|u| u.confirm}
 end
