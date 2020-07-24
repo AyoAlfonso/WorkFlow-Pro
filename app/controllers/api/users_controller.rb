@@ -5,7 +5,7 @@ class Api::UsersController < Api::ApplicationController
   respond_to :json
 
   def index
-    @users = policy_scope(User).all
+    @users = policy_scope(User)
     render json: @users
   end
 
