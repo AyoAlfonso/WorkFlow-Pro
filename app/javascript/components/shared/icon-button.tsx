@@ -49,6 +49,7 @@ const Button = styled.button<IIconButtonProps>`
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100%;
   align-items: center;
   justify-content: center;
   text-align: center;
