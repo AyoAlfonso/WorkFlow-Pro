@@ -1,4 +1,6 @@
-import { types } from "mobx-state-tree";
+import { types, flow, getEnv } from "mobx-state-tree";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 export const UserModel = types
   .model("UserModel")
@@ -17,6 +19,20 @@ export const UserModel = types
     setAvatarUrl: avatarUrl => {
       self.avatarUrl = avatarUrl;
     },
+    update: flow(function* (fieldsAndValues) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.updateProfile(
+          Object.assign(fieldsAndValues, { id: self.id }),
+        );
+        if (response.ok) {
+          self = response.data;
+          yield showToast("User updated", ToastMessageConstants.SUCCESS);
+        }
+      } catch {
+        // error messaging handled by API monitor
+      }
+    }),
   }));
 
 type UserModelType = typeof UserModel.Type;

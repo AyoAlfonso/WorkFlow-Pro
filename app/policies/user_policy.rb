@@ -28,8 +28,12 @@ class UserPolicy < ApplicationPolicy
   class Scope
     attr_reader :user, :scope
 
+    def initialize(user, scope)
+      @user = user
+      @scope = scope
+    end
+
     def resolve
-      #replace with scoping based on the company
       scope.where(company: user.company)
     end
   end

@@ -1,4 +1,4 @@
-import { types, flow } from "mobx-state-tree";
+import { types, flow, getEnv } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { UserModel } from "../models/user";
 //import { ApiResponse } from "apisauce";
@@ -7,40 +7,34 @@ export const UserStoreModel = types
   .model("UserStoreModel")
   .props({
     users: types.array(UserModel),
-    count: types.number
+    count: types.number,
   })
   .extend(withEnvironment())
   .views(self => ({}))
   .actions(self => ({
-    fetchUsers: flow(function*() {
-      self.users = [
-        {
-          id: 1,
-          email: "test@gmail.com"
+    fetchUsers: flow(function* () {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.getUsers();
+        if (response.ok) {
+          self.users = response.data;
+          self.count = self.users.length;
         }
-      ] as any;
-      // const response: ApiResponse<any> = yield self.environment.api.getUsers();
-      // if (response.ok) {
-      //   //self.users = response.data;
-      //   self.users = [
-      //     {
-      //       id: 1,
-      //       email: "test@gmail.com"
-      //     }
-      //   ] as any;
-      // }
-    })
+      } catch {
+        // error messaging handled by API monitor
+      }
+    }),
   }))
   .actions(self => ({
     reset() {
       self.users = [] as any;
-    }
+    },
   }))
   .actions(self => ({
-    load: flow(function*() {
+    load: flow(function* () {
       self.reset();
       yield self.fetchUsers();
-    })
+    }),
   }));
 
 type UserStoreType = typeof UserStoreModel.Type;

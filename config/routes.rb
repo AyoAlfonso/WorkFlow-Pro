@@ -24,10 +24,10 @@ Rails.application.routes.draw do
 
 
   scope module: :api, path: :api do
-    resources :users, only: [:index, :show]
+    resources :users, only: [:index, :show, :update]
     get '/profile', to: 'users#profile'
     put '/avatar', to: 'users#update_avatar'
-    resources :companies, only: [:show]
+    resources :companies, only: [:show, :update]
 
     # issues
     resources :issues, only: [:index, :create, :update, :destroy]

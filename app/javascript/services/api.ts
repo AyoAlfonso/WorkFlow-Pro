@@ -49,12 +49,20 @@ export class Api {
     return this.client.get("/profile");
   }
 
+  async updateProfile(formData) {
+    return this.client.put(`/users/${formData.id}`, formData);
+  }
+
   async updateAvatar(formData) {
     return this.client.put("/avatar", formData);
   }
 
   async getCompany(companyId) {
     return this.client.get(`/companies/${companyId}`);
+  }
+
+  async updateCompany(formData) {
+    return this.client.put(`/companies/${formData.id}`, formData);
   }
 
   async signOut() {

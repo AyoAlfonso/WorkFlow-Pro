@@ -10,6 +10,18 @@ import { Text } from "~/components/shared/text";
 import { FileInput } from "./file-input";
 import { observer } from "mobx-react";
 
+import {
+  Container,
+  BodyContainer,
+  PersonalInfoContainer,
+  ProfilePhotoSection,
+  HeaderContainer,
+  HeaderText,
+  PhotoContainer,
+  PhotoModificationButtonsSection,
+  SaveButtonContainer,
+} from "./container-styles";
+
 export const AccountProfile = observer(
   (): JSX.Element => {
     const { sessionStore } = useMst();
@@ -23,6 +35,14 @@ export const AccountProfile = observer(
       form.append("avatar", files[0]);
       await sessionStore.updateAvatar(form);
     };
+
+    const save = () =>
+      sessionStore.profile.update({
+        email,
+        firstName,
+        lastName,
+      });
+
     return (
       <Container>
         <HeaderContainer>
@@ -30,18 +50,16 @@ export const AccountProfile = observer(
         </HeaderContainer>
         <BodyContainer>
           <PersonalInfoContainer>
-            <Box>
-              <Label htmlFor="email">{t("profile.profileUpdateForm.email")}</Label>
-              <Input name="email" onChange={e => setEmail(e.target.value)} value={email} />
-              <Label htmlFor="firstName">{t("profile.profileUpdateForm.firstName")}</Label>
-              <Input
-                name="firstName"
-                onChange={e => setFirstName(e.target.value)}
-                value={firstName}
-              />
-              <Label htmlFor="lastName">{t("profile.profileUpdateForm.lastName")}</Label>
-              <Input name="lastName" onChange={e => setLastName(e.target.value)} value={lastName} />
-            </Box>
+            <Label htmlFor="email">{t("profile.profileUpdateForm.email")}</Label>
+            <Input name="email" onChange={e => setEmail(e.target.value)} value={email} />
+            <Label htmlFor="firstName">{t("profile.profileUpdateForm.firstName")}</Label>
+            <Input
+              name="firstName"
+              onChange={e => setFirstName(e.target.value)}
+              value={firstName}
+            />
+            <Label htmlFor="lastName">{t("profile.profileUpdateForm.lastName")}</Label>
+            <Input name="lastName" onChange={e => setLastName(e.target.value)} value={lastName} />
           </PersonalInfoContainer>
           <ProfilePhotoSection>
             <PhotoContainer>
@@ -64,7 +82,7 @@ export const AccountProfile = observer(
           <Button
             small
             variant={"primary"}
-            onClick={() => {}}
+            onClick={save}
             style={{
               marginLeft: "auto",
               marginTop: "auto",
@@ -79,49 +97,3 @@ export const AccountProfile = observer(
     );
   },
 );
-
-const Container = styled.div`
-  width: 100%;
-  height: 600px;
-`;
-
-const BodyContainer = styled.div`
-  display: flex;
-  padding: 16px;
-`;
-
-const PersonalInfoContainer = styled.div`
-  width: 70%;
-  padding-right: 30px;
-`;
-
-const ProfilePhotoSection = styled.div`
-  width: 30%;
-`;
-
-const HeaderContainer = styled.div`
-  padding: 16px;
-  border-bottom: 1px solid #e3e3e3;
-`;
-
-const HeaderText = styled(Text)`
-  font-size: 20px;
-  font-weight: bold;
-  margin: 0;
-`;
-
-const PhotoContainer = styled.div`
-  text-align: center;
-`;
-
-const PhotoModificationButtonsSection = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 16px;
-`;
-
-const SaveButtonContainer = styled.div`
-  display: flex;
-  margin-top: 120px;
-  margin-right: 20px;
-`;
