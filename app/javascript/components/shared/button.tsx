@@ -12,6 +12,9 @@ const StyledButton = styled.button`
   border-style: solid;
   &:hover {
     cursor: pointer;
+    opacity: ${props => (props.variant.includes("Outline") || props.disabled ? "1.0" : "0.85")};
+    background: ${props =>
+      props.variant.includes("Outline") && !props.disabled ? "rgba(0, 0, 0, 0.02)" : null};
   }
   &:focus {
     outline: 0

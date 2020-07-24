@@ -11,8 +11,8 @@ import {
   TypographyProps,
 } from "styled-system";
 import { Text } from "./text";
-import IcoMoon from "react-icomoon";
 import { baseTheme } from "../../themes/base";
+import IcoMoon from "react-icomoon";
 const iconSet = require("../../assets/icons/selection.json");
 
 type StyledSystemProps = ColorProps & LayoutProps & SpaceProps & TypographyProps;
@@ -37,6 +37,8 @@ const Button = styled.button<IIconButtonProps>`
   box-shadow: ${props => (props.shadow ? "1px 3px 4px 2px rgba(0, 0, 0, .1)" : "0")};
   &:hover {
     cursor: pointer;
+    opacity: ${props => (props.bg ? "0.85" : "1.0")};
+    background: ${props => (props.bg === "white" ? "rgba(0, 0, 0, 0.02)" : props.bg)}
   }
   &:active {
     box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, .2);

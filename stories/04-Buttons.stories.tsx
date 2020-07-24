@@ -117,7 +117,7 @@ export const BaseButtonVariants = () => (
       </ButtonDiv>
       <HeightDisplay size={"32px"} />
       <ButtonDiv mr={"20px"}>
-        <Button variant={"primary"} onClick={null} small>
+        <Button variant={"primary"} onClick={actionFn} small>
           Small
         </Button>
       </ButtonDiv>
