@@ -302,12 +302,12 @@ export const IconButton = () => {
       <IconButtonComponent
         width={"288px"}
         mb={"15px"}
-        bg={select("bg", baseTheme.colors, baseTheme.colors.poppySunrise)}
+        bg={select("bg", baseTheme.colors, baseTheme.colors.bali)}
         iconName={select("iconName", iconList(iconSet), "Settings")}
-        iconSize={text("size", "2em")}
-        iconColor={select("color", baseTheme.colors, baseTheme.colors.white)}
+        iconSize={text("iconSize", "2em")}
+        iconColor={select("iconColor", baseTheme.colors, baseTheme.colors.cautionYellow)}
         text={text("text", "Some Button Text")}
-        textColor={select("color", baseTheme.colors, baseTheme.colors.white)}
+        textColor={select("textColor", baseTheme.colors, baseTheme.colors.white)}
         shadow={boolean("shadow", true)}
         onClick={() => actionFn()}
       />

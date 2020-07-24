@@ -210,12 +210,14 @@ export interface ISurveyBotProps {
   endFn?: Dispatch<SetStateAction<string>>;
 }
 
+const botAvatarPath = require("../../assets/images/LynchPyn-Logo-Blue_300x300.png");
+
 export const SurveyBot = observer(
   (props: ISurveyBotProps): JSX.Element => {
     const { sessionStore } = useMst();
     return (
       <ChatBot
-        botAvatar={require("../../assets/images/LynchPyn-Logo-Blue_300x300.png")}
+        botAvatar={botAvatarPath}
         botDelay={1000}
         headerComponent={<SurveyHeader title={variants[props.variant].title} />}
         steps={variants[props.variant].steps}
@@ -223,12 +225,13 @@ export const SurveyBot = observer(
         userAvatar={sessionStore.profile.avatarUrl || undefined}
         contentStyle={{ height: "206px" }}
         // header and footer are 120px total
+        // these hard-coded values are required to make the chatbot fit inside the Journal widget :(
         style={{ height: "326px" }}
         enableSmoothScroll={true}
         userDelay={200}
-        handleEnd={data => {
-          // console.log("RENDERED STEPS: ", renderedSteps);
-          // console.log("STEPS: ", steps);
+        handleEnd={({ renderedSteps, steps, values }) => {
+          // @TODO -> need some kind of util here that parses and maps answers to questions
+          // and then makes an api call to persist to the database
           if (typeof props.endFn === "function") {
             setTimeout(() => {
               props.endFn("");
@@ -240,13 +243,14 @@ export const SurveyBot = observer(
   },
 );
 
+const userAvatarUrlForStorybook =
+  "https://image.freepik.com/free-vector/woman-avatar-profile-round-icon_24640-14042.jpg";
+
 export const SurveyBotNoMst = (props: ISurveyBotProps): JSX.Element => {
   return (
     <ChatBot
-      botAvatar={require("../../assets/images/LynchPyn-Logo-Blue_300x300.png")}
-      userAvatar={
-        "https://image.freepik.com/free-vector/woman-avatar-profile-round-icon_24640-14042.jpg"
-      }
+      botAvatar={botAvatarPath}
+      userAvatar={userAvatarUrlForStorybook}
       botDelay={1000}
       headerComponent={<SurveyHeader title={variants[props.variant].title} />}
       steps={variants[props.variant].steps}

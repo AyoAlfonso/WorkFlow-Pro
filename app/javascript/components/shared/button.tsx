@@ -1,8 +1,29 @@
 import * as React from "react";
 import styled from "styled-components";
-import { color, layout, space, typography, variant } from "styled-system";
+import {
+  color,
+  ColorProps,
+  layout,
+  LayoutProps,
+  space,
+  SpaceProps,
+  typography,
+  TypographyProps,
+  variant,
+} from "styled-system";
 
-const StyledButton = styled.button`
+type StyledSystemProps = ColorProps & LayoutProps & SpaceProps & TypographyProps;
+
+interface IButtonProps extends StyledSystemProps {
+  variant?: string;
+  onClick: () => void | void;
+  disabled?: boolean;
+  children?: any;
+  small?: boolean;
+  style?: object;
+}
+
+const StyledButton = styled.button<IButtonProps>`
   ${color}
   ${layout}
   ${space}
@@ -46,7 +67,7 @@ const StyledButton = styled.button`
     })}
 `;
 
-export const Button = props => {
+export const Button = (props: IButtonProps) => {
   const { onClick, disabled, small, ...restProps } = props;
   return (
     <StyledButton
