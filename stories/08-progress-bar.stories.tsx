@@ -1,10 +1,9 @@
-import * as React from "react";
 import { number, select, text, withKnobs } from "@storybook/addon-knobs";
+import * as React from "react";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
-import { layout, space, typography } from "styled-system";
-import { CodeBlockDiv, ContainerDiv, Divider, PropsList, RowDiv } from "./shared";
-import { StripedProgressBar as ProgressBar } from "../app/javascript/components/shared/striped-progress-bar";
 import { StepProgressBar as StProgressBar } from "../app/javascript/components/shared";
+import { StripedProgressBar as ProgressBar } from "../app/javascript/components/shared/striped-progress-bar";
+import { CodeBlockDiv, ContainerDiv, PropsList, RowDiv } from "./shared";
 
 export default { title: "Progress Bars", decorators: [withKnobs] };
 

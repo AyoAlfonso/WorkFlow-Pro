@@ -7,6 +7,7 @@ import { layout, space, typography } from "styled-system";
 import { Button } from "../app/javascript/components/shared/button";
 import { Icon } from "../app/javascript/components/shared/icon";
 import { RoundButton as RoundButtonComponent } from "../app/javascript/components/shared/round-button";
+import { IconButton as IconButtonComponent } from "../app/javascript/components/shared/icon-button";
 import { CodeBlockDiv, ContainerDiv, Divider, PropsList, RowDiv } from "./shared";
 
 export default { title: "Buttons", decorators: [withKnobs] };
@@ -212,6 +213,24 @@ export const RoundButton = () => {
           />
         </RoundButtonComponent>
       </FlexDiv>
+    </ContainerDiv>
+  );
+};
+
+export const IconButton = () => {
+  return (
+    <ContainerDiv>
+      <h1>Icon Button</h1>
+      <IconButtonComponent
+        width={"200px"}
+        bg={"white"}
+        iconName={"AM-Check-in"}
+        iconSize={28}
+        iconColor={"cautionYellow"}
+        text={"Create My Day"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
     </ContainerDiv>
   );
 };

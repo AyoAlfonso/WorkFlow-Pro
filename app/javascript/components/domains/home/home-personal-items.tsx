@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { IssuesContainer } from "../issues/issues-container";
 import { KeyActivitiesContainer } from "../key-activities/key-activities-container";
 import { TodaysPrioritiesHeader } from "../todays-priorities/todays-priorities-header";
+import { Journal } from "../journal/journal";
 
 export const HomePersonalItems = (): JSX.Element => {
   const renderProritiesContainer = () => {
@@ -24,7 +25,11 @@ export const HomePersonalItems = (): JSX.Element => {
   };
 
   const renderJournalContainer = () => {
-    return <NonPrioritiesEndContainer>Journal</NonPrioritiesEndContainer>;
+    return (
+      <NonPrioritiesEndContainer>
+        <Journal />
+      </NonPrioritiesEndContainer>
+    );
   };
 
   const renderIssuesContainer = () => {
@@ -61,6 +66,8 @@ const PrioritiesContainer = styled(HomeContainerBorders)`
 const NonPrioritiesEndContainer = styled(HomeContainerBorders)`
   width: 20%;
   min-width: 240px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const NonPrioritiesContainer = styled(NonPrioritiesEndContainer)`
