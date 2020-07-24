@@ -86,11 +86,24 @@ export const GoalsIndex = observer(
               small
               variant={"primary"}
               onClick={() => {
-                //annualInitiativeStore.create("personal");
+                annualInitiativeStore.create(type, createAnnualInitaitiveDescription);
               }}
             >
               <AddInitiativeText>Add Initiative</AddInitiativeText>
             </AddInitiativeButton>
+            <CloseIconContainer
+              onClick={() => {
+                setShowCreateAnnualInitiative(false);
+                setCreateAnnualInitiativeDescription("");
+              }}
+            >
+              <Icon
+                icon={"Close"}
+                size={"20px"}
+                style={{ marginTop: "3px" }}
+                iconColor={"grey60"}
+              />
+            </CloseIconContainer>
           </ActionsContainer>
         </CreateAnnualInitiativeCardContainer>
       ) : (
@@ -146,16 +159,7 @@ export const GoalsIndex = observer(
             <CreateAnnualInitiativeContainer
               marginLeft={personalGoals.goals.length > 0 ? "15px" : "0px"}
             >
-              <StyledButton
-                small
-                variant={"grey"}
-                onClick={() => {
-                  //annualInitiativeStore.create("personal");
-                }}
-              >
-                <Icon icon={"Plus"} size={"20px"} style={{ marginTop: "3px" }} />
-                <AddGoalText>Add an Annual Initiative</AddGoalText>
-              </StyledButton>
+              {renderCreateCompanyAnnualInitiativeSection("personal")}
             </CreateAnnualInitiativeContainer>
           </InitiativesContainer>
         </PersonalVisionContainer>
@@ -260,9 +264,19 @@ const AddInitiativeButton = styled(Button)`
   padding: 0;
   &: hover {
     font-weight: bold;
+    background-color: ${props => props.theme.colors.primaryActive};
   }
 `;
 const AddInitiativeText = styled.p`
   margin: 0;
   font-size: 14px;
+`;
+
+const CloseIconContainer = styled.div`
+  margin-left: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
+  &:hover {
+    cursor: pointer;
+  }
 `;

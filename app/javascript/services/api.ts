@@ -104,8 +104,8 @@ export class Api {
     return this.client.patch(`/annual_initiatives/${annualInitiative.id}`, parsedAnnualInitiative);
   }
 
-  async createAnnualInitiative(type) {
-    return this.client.post(`/annual_initiatives`, type);
+  async createAnnualInitiative(annualInitiativeObject) {
+    return this.client.post(`/annual_initiatives`, annualInitiativeObject);
   }
 
   async createAnnualInitiativeKeyElement(id) {
