@@ -67,12 +67,7 @@ export const HeaderBar = observer(
             }}
           >
             <SelectionIconContainer>
-              <SelectionIcon
-                icon={"Alert"}
-                size={20}
-                iconColor={baseTheme.colors.white}
-                disableFill={true}
-              />
+              <SelectionIcon icon={"Alert"} size={20} disableFill={true} />
             </SelectionIconContainer>
             <SelectionText style={{ marginTop: 0, marginBottom: 0 }}>Add Issue</SelectionText>
           </SelectionContainer>
@@ -83,24 +78,14 @@ export const HeaderBar = observer(
             }}
           >
             <SelectionIconContainer>
-              <SelectionIcon
-                icon={"Tasks"}
-                size={20}
-                iconColor={baseTheme.colors.white}
-                disableFill={true}
-              />
+              <SelectionIcon icon={"Tasks"} size={20} disableFill={true} />
             </SelectionIconContainer>
             <SelectionText style={{ marginTop: 0, marginBottom: 0 }}>Create Task</SelectionText>
           </SelectionContainer>
 
           <SelectionContainer>
             <SelectionIconContainer>
-              <SelectionIcon
-                icon={"New-User"}
-                size={20}
-                iconColor={baseTheme.colors.white}
-                disableFill={true}
-              />
+              <SelectionIcon icon={"New-User"} size={20} disableFill={true} />
             </SelectionIconContainer>
             <SelectionText style={{ marginTop: 0, marginBottom: 0 }}>Send Invite</SelectionText>
           </SelectionContainer>
@@ -172,11 +157,7 @@ export const HeaderBar = observer(
               <ProfileActionContainer>
                 <ProfileFirstName>{sessionStore.profile.firstName}</ProfileFirstName>
                 <IconContainer>
-                  <ProfileDropdownIcon
-                    icon={"Chevron-Down"}
-                    size={15}
-                    iconColor={baseTheme.colors.primary100}
-                  />
+                  <ProfileDropdownIcon icon={"Chevron-Down"} size={15} />
                 </IconContainer>
               </ProfileActionContainer>
             </PersonalInfoDisplayContainer>
@@ -248,7 +229,9 @@ const RefContainer = styled.div`
   display: flex;
 `;
 
-const SelectionIcon = styled(Icon)``;
+const SelectionIcon = styled(Icon)`
+  color: white;
+`;
 
 const SelectionContainer = styled.div`
   ${color}
@@ -289,7 +272,9 @@ const IconContainer = styled.div`
   margin-top: 2px;
 `;
 
-const ProfileDropdownIcon = styled(Icon)``;
+const ProfileDropdownIcon = styled(Icon)`
+  color: ${props => props.theme.colors.primary100};
+`;
 
 const ProfileActionContainer = styled.div`
   display: flex;

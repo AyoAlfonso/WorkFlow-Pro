@@ -21,6 +21,10 @@ export const PopupTriggerContainer = styled.div`
   }
 `;
 
+const Container = styled.div`
+  margin: 16px;
+`;
+
 const popupStyle: CSSProperties = {
   borderRadius: 8,
   border: "none",
@@ -36,7 +40,7 @@ export const SideNavChildPopup: React.FunctionComponent<ISideNavChildPopupProps>
 }) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   return (
-    <>
+    <Container>
       <SideNavDrawer isOpen={drawerIsOpen} />
       <Popup
         arrow={false}
@@ -65,6 +69,6 @@ export const SideNavChildPopup: React.FunctionComponent<ISideNavChildPopupProps>
           )}
         </PopupContainer>
       </Popup>
-    </>
+    </Container>
   );
 };

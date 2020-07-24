@@ -23,12 +23,14 @@ export const addLoggingMonitor = api => {
   }
 };
 
-export const addErrorToastMonitor = api => {
+export const addErrorToastMonitor = (api, loggedIn) => {
   api.addMonitor(response => {
-    if (response.status !== 200 || response.problem !== null) {
+    if ((response.status !== 200 && response.status !== 201) || response.problem !== null) {
       switch (response.problem) {
         case CLIENT_ERROR:
-          showToast("A client error occurred", ToastMessageConstants.ERROR);
+          if (loggedIn || response.config.url.includes("sign_in")) {
+            showToast("A client error occurred", ToastMessageConstants.ERROR);
+          }
           break;
         case CONNECTION_ERROR:
           showToast("A connection error occurred", ToastMessageConstants.ERROR);
