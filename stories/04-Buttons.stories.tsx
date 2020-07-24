@@ -3,7 +3,7 @@ import { text, select, boolean, withKnobs } from "@storybook/addon-knobs";
 import * as React from "react";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import styled from "styled-components";
-import { layout, space, typography } from "styled-system";
+import { layout, LayoutProps, space, SpaceProps, typography, TypographyProps } from "styled-system";
 import { Button } from "../app/javascript/components/shared/button";
 import { Icon } from "../app/javascript/components/shared/icon";
 import { RoundButton as RoundButtonComponent } from "../app/javascript/components/shared/round-button";
@@ -17,11 +17,11 @@ export default { title: "Buttons", decorators: [withKnobs] };
 
 const actionFn = action("Button was clicked!");
 
-const ButtonDiv = styled.div`
+const ButtonDiv = styled.div<SpaceProps>`
   ${space}
 `;
 
-const HeightDiv = styled.div`
+const HeightDiv = styled.div<SpaceProps & LayoutProps>`
   ${space}
   ${layout}
   display: flex;
@@ -39,7 +39,7 @@ const HeightLine = styled.div`
   margin-left: 3px;
 `;
 
-const HeightText = styled.p`
+const HeightText = styled.p<TypographyProps>`
   ${typography}
 `;
 
@@ -302,11 +302,12 @@ export const IconButton = () => {
       <IconButtonComponent
         width={"288px"}
         mb={"15px"}
-        bg={select("bg", baseTheme.colors, baseTheme.colors.white)}
+        bg={select("bg", baseTheme.colors, baseTheme.colors.poppySunrise)}
         iconName={select("iconName", iconList(iconSet), "Settings")}
-        iconSize={text("size", "3em")}
-        iconColor={select("color", baseTheme.colors, baseTheme.colors.primary100)}
+        iconSize={text("size", "2em")}
+        iconColor={select("color", baseTheme.colors, baseTheme.colors.white)}
         text={text("text", "Some Button Text")}
+        textColor={select("color", baseTheme.colors, baseTheme.colors.white)}
         shadow={boolean("shadow", true)}
         onClick={() => actionFn()}
       />
@@ -400,4 +401,3 @@ export const IconButton = () => {
     </ContainerDiv>
   );
 };
-//select("icon", iconList(iconSet), "Emotion-A")

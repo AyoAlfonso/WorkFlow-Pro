@@ -12,7 +12,15 @@ const StyledButton = styled.button`
   border-style: solid;
   &:hover {
     cursor: pointer;
-  };
+  }
+  &:focus {
+    outline: 0
+  }
+  &:active {
+    box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, .1);
+    transform: translate(1px, 1px)
+  }
+  transition: all ease 0.1s;
   ${props =>
     variant({
       variants: {

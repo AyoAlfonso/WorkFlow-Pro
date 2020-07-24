@@ -38,6 +38,14 @@ const Button = styled.button<IIconButtonProps>`
   &:hover {
     cursor: pointer;
   }
+  &:active {
+    box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, .2);
+    transform: translate(1px, 1px)
+  }
+  &:focus {
+    outline: 0
+  }
+  transition: all ease 0.1s;
   font-family: Lato;
   font-size: 15px;
   display: flex;
