@@ -4,7 +4,7 @@ import { Avatar } from "./avatar";
 import { Text } from "./text";
 
 export const UserCard = ({ firstName, lastName, avatarUrl }: UserCardProps): JSX.Element => (
-  <Card>
+  <Card sx={{ width: "150px" }}>
     <Text fontSize={2}>{`${firstName} ${lastName}`}</Text>
     <Avatar firstName={firstName} lastName={lastName} avatarUrl={avatarUrl} />
   </Card>

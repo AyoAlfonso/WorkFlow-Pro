@@ -5,6 +5,9 @@ import { observer } from "mobx-react";
 import { UserCard } from "~/components/shared/user-card";
 import { useMst } from "~/setup/root";
 
+import { Container, BodyContainer } from "./container-styles";
+import { Box } from "rebass";
+
 export const Users = observer(
   (): JSX.Element => {
     const {
@@ -12,7 +15,12 @@ export const Users = observer(
     } = useMst();
 
     return (
-      <div>
+      <Box
+        sx={{
+          display: "grid",
+          gridGap: 3, // theme.space[3]
+        }}
+      >
         {R.map(
           user => (
             <UserCard
@@ -23,7 +31,7 @@ export const Users = observer(
           ),
           users,
         )}
-      </div>
+      </Box>
     );
   },
 );

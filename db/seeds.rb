@@ -14,9 +14,9 @@ c2 = Company.where(name: "Lynchpyn").first_or_create(name: 'Lynchpyn', address: 
 CoreFour.where(company: c2).first_or_create(core_1: 'The First Core', core_2: 'The Second Core', core_3: 'The Third Core', core_4: 'The Fourth Core', company_id: c2.id)
 User.create!(first_name: 'Parham', last_name: 'Chinikar', email: 'parham@lynchpyn.com', phone_number: '647-631-1996', password: 'password', password_confirmation: 'password', company_id: c2.id)
 
-ur1 = UserRole.where(name: "ceo").first_or_create(name: "ceo")
-ur2 = UserRole.where(name: "admin").first_or_create(name: "admin")
-ur3 = UserRole.where(name: "normal_user").first_or_create(name: "normal_user")
+ur1 = UserRole.where(name: UserRole::CEO).first_or_create(name: UserRole::CEO)
+ur2 = UserRole.where(name: UserRole::ADMIN).first_or_create(name: UserRole::ADMIN)
+ur3 = UserRole.where(name: UserRole::NORMAL).first_or_create(name: UserRole::NORMAL)
 
 if Rails.env.development?
   c1 = Company.where(name: "Latero Labs").first_or_create(name: 'Latero Labs', address: '601-510 W Hastings St, Vancouver, BC V6B 1L8', contact_email: 'inquiries@laterolabs.com', phone_number: '604-933-5091', rallying_cry: 'Some rallying cry!')

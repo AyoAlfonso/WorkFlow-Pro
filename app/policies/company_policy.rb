@@ -5,6 +5,6 @@ class CompanyPolicy < ApplicationPolicy
   end
 
   def update?
-    current_admin_user.present?
+    user.company == record && (user.role == UserRole::CEO || user.role == UserRole::ADMIN) #current_admin_user.present?
   end
 end

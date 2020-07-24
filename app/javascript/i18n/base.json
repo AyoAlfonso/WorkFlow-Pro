@@ -17,6 +17,7 @@
         "users": "Users",
         "company": "Company",
         "editProfile": "Edit Profile",
+        "companyDetails": "Company Details",
         "loginForm": {
           "email": "E-mail",
           "password": "Password",
