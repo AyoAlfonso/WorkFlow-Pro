@@ -269,6 +269,31 @@ export const IconButton = () => {
   return (
     <ContainerDiv>
       <h1>Icon Button</h1>
+      <CodeBlockDiv mb={"20px"}>
+        <CopyBlock
+          text={`
+      import * as React from "react";
+      import { IconButton } from "../components/shared/icon-button"
+
+      const onClickAction = () => {}
+
+      const MyButtonComponent = () => (
+        <IconButton
+          width={"250px"}
+          bg={"white"}
+          iconName={"AM-Check-in"}
+          iconSize={28}
+          iconColor={"cautionYellow"}
+          text={"Some Button Text"}
+          shadow={true}
+          onClick={onClickAction}
+        />   
+      )
+      `}
+          language={"tsx"}
+          theme={atomOneLight}
+        />
+      </CodeBlockDiv>
       <PropsList
         propsList={iconButtonPropsList}
         styledSystemProps={["color", "layout", "space", "typography"]}
@@ -350,7 +375,7 @@ export const IconButton = () => {
         width={"160px"}
         height={"40px"}
         mb={"20px"}
-        bg={"#FFF8E6"}
+        bg={"backgroundYellow"}
         iconName={"Half-Day"}
         iconSize={28}
         iconColor={"cautionYellow"}
