@@ -1,5 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { text, withKnobs } from "@storybook/addon-knobs";
+import { text, select, boolean, withKnobs } from "@storybook/addon-knobs";
 import * as React from "react";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import styled from "styled-components";
@@ -9,6 +9,9 @@ import { Icon } from "../app/javascript/components/shared/icon";
 import { RoundButton as RoundButtonComponent } from "../app/javascript/components/shared/round-button";
 import { IconButton as IconButtonComponent } from "../app/javascript/components/shared/icon-button";
 import { CodeBlockDiv, ContainerDiv, Divider, PropsList, RowDiv } from "./shared";
+import { baseTheme } from "../app/javascript/themes/base";
+import { iconList } from "react-icomoon";
+const iconSet = require("../app/javascript/assets/icons/selection.json");
 
 export default { title: "Buttons", decorators: [withKnobs] };
 
@@ -217,12 +220,75 @@ export const RoundButton = () => {
   );
 };
 
+const iconButtonPropsList = [
+  {
+    name: "iconName",
+    type: "string",
+    required: true,
+    description: "the name of the icon",
+  },
+  {
+    name: "iconSize",
+    type: "string | number",
+    required: true,
+    description: "the size of the icon",
+  },
+  {
+    name: "iconColor",
+    type: "string",
+    required: false,
+    description: "the color of the icon",
+  },
+  {
+    name: "text",
+    type: "string",
+    required: false,
+    description: "the text inside of the button",
+  },
+  {
+    name: "textColor",
+    type: "string",
+    required: false,
+    description: "the color of the button text",
+  },
+  {
+    name: "shadow",
+    type: "boolean",
+    required: false,
+    description: "if true, adds box-shadow",
+  },
+  {
+    name: "onClick",
+    type: "function",
+    required: true,
+    description: "the function to execute when the button is clicked",
+  },
+];
+
 export const IconButton = () => {
   return (
     <ContainerDiv>
       <h1>Icon Button</h1>
+      <PropsList
+        propsList={iconButtonPropsList}
+        styledSystemProps={["color", "layout", "space", "typography"]}
+      />
+      <h3>Example</h3>
       <IconButtonComponent
-        width={"200px"}
+        width={"288px"}
+        mb={"15px"}
+        bg={select("bg", baseTheme.colors, baseTheme.colors.white)}
+        iconName={select("iconName", iconList(iconSet), "Settings")}
+        iconSize={text("size", "3em")}
+        iconColor={select("color", baseTheme.colors, baseTheme.colors.primary100)}
+        text={text("text", "Some Button Text")}
+        shadow={boolean("shadow", true)}
+        onClick={() => actionFn()}
+      />
+      <h3>Journal Buttons</h3>
+      <IconButtonComponent
+        width={"288px"}
+        mb={"20px"}
         bg={"white"}
         iconName={"AM-Check-in"}
         iconSize={28}
@@ -231,6 +297,82 @@ export const IconButton = () => {
         shadow={true}
         onClick={() => actionFn()}
       />
+      <IconButtonComponent
+        width={"288px"}
+        mb={"20px"}
+        bg={"white"}
+        iconName={"Negative-Thoughts"}
+        iconSize={28}
+        iconColor={"warningRed"}
+        text={"Thought Challenge"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
+      <IconButtonComponent
+        width={"288px"}
+        mb={"20px"}
+        bg={"white"}
+        iconName={"Check-in"}
+        iconSize={28}
+        iconColor={"primary20"}
+        text={"Evening Reflection"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
+      <h3>Status Buttons</h3>
+      <IconButtonComponent
+        width={"160px"}
+        height={"40px"}
+        mb={"20px"}
+        bg={"fadedSuccess"}
+        iconName={"In-Office"}
+        iconSize={28}
+        iconColor={"finePine"}
+        text={"Working"}
+        textColor={"finePine"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
+      <IconButtonComponent
+        width={"160px"}
+        height={"40px"}
+        mb={"20px"}
+        bg={"primary40"}
+        iconName={"WFH"}
+        iconSize={28}
+        iconColor={"primary100"}
+        text={"WFH"}
+        textColor={"primary100"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
+      <IconButtonComponent
+        width={"160px"}
+        height={"40px"}
+        mb={"20px"}
+        bg={"#FFF8E6"}
+        iconName={"Half-Day"}
+        iconSize={28}
+        iconColor={"cautionYellow"}
+        text={"Half-Day"}
+        textColor={"cautionYellow"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
+      <IconButtonComponent
+        width={"160px"}
+        height={"40px"}
+        mb={"20px"}
+        bg={"fadedRed"}
+        iconName={"No-Check-in"}
+        iconSize={28}
+        iconColor={"warningRed"}
+        text={"I'm Off"}
+        textColor={"warningRed"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
     </ContainerDiv>
   );
 };
+//select("icon", iconList(iconSet), "Emotion-A")
