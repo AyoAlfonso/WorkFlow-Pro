@@ -18,7 +18,6 @@ interface IButtonProps extends StyledSystemProps {
   variant?: string;
   onClick: () => void | void;
   disabled?: boolean;
-  children?: any;
   small?: boolean;
   style?: object;
 }
@@ -67,8 +66,13 @@ const StyledButton = styled.button<IButtonProps>`
     })}
 `;
 
-export const Button = (props: IButtonProps) => {
-  const { onClick, disabled, small, ...restProps } = props;
+export const Button: React.FunctionComponent<IButtonProps> = ({
+  onClick,
+  disabled,
+  small,
+  children,
+  ...restProps
+}): JSX.Element => {
   return (
     <StyledButton
       {...restProps}
@@ -79,7 +83,7 @@ export const Button = (props: IButtonProps) => {
       onClick={disabled ? null : onClick}
       height={small ? "32px" : "40px"}
     >
-      {props.children}
+      {children}
     </StyledButton>
   );
 };

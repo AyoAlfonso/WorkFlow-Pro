@@ -66,8 +66,16 @@ const TextContainer = styled.div`
   width: 100%;
 `;
 
-export const IconButton = (props: IIconButtonProps) => {
-  const { iconName, iconSize, iconColor, text, textColor, shadow, onClick, ...restProps } = props;
+export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
+  iconName,
+  iconSize,
+  iconColor,
+  text,
+  textColor,
+  shadow,
+  onClick,
+  ...restProps
+}): JSX.Element => {
   return (
     <Button shadow={shadow} onClick={onClick} {...restProps}>
       <IcoMoon
