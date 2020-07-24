@@ -55,8 +55,9 @@ export const AnnualInitiativeStoreModel = types
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createAnnualInitiative({ type, description });
-        self.annualInitiative = response.data;
-        return response.data;
+        const { goalStore } = getRoot(self);
+        goalStore.mergeAnnualInitiatives(type, response.data.annualInitiative);
+        return response.data.annualInitiative;
       } catch {
         console.log("is there an error?????????");
         // error messaging handled by API monitor

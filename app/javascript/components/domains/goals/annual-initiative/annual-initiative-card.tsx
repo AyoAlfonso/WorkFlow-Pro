@@ -69,7 +69,7 @@ export const AnnualInitiativeCard = ({
 
 const Container = styled(HomeContainerBorders)`
   height: 100px;
-  width: 20%;
+  width: calc(20% - 15px);
   min-width: 240px;
   margin-right: ${props => props["margin-right"] || "0px"};
   height: fit-content;

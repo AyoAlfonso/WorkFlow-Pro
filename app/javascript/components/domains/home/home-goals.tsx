@@ -117,8 +117,11 @@ const Container = styled.div`
 `;
 
 const InitiativesContainer = styled.div`
-  display: flex;
+  display: -webkit-box;
   margin-top: 15px;
+  white-space: nowrap;
+  overflow-x: auto;
+  padding-bottom: 15px;
 `;
 
 const PersonalVisionContainer = styled.div`

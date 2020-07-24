@@ -9,7 +9,8 @@ class Api::AnnualInitiativesController < Api::ApplicationController
       owned_by: current_user, 
       description: params[:description], 
       company_id: params[:type] == "company" ? current_user.company_id : nil,
-      context_description: ""
+      context_description: "",
+      importance: ["", "", ""]
     })
     authorize @annual_initiative
     @annual_initiative.save!

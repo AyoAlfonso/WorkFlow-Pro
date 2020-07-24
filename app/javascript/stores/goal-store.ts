@@ -33,6 +33,15 @@ export const GoalStoreModel = types
       );
       goalObject.goals[goalsAnnualInitiativeIndex] = annualInitiative;
     },
+    mergeAnnualInitiatives(type, annualInitiative) {
+      if (type == "company") {
+        const updatedAnnualInitiatives = [...self.companyGoals.goals, annualInitiative];
+        self.companyGoals.goals = updatedAnnualInitiatives as any;
+      } else {
+        const updatedAnnualInitiatives = [...self.personalGoals.goals, annualInitiative];
+        self.personalGoals.goals = updatedAnnualInitiatives as any;
+      }
+    },
   }));
 
 type GoalStoreType = typeof GoalStoreModel.Type;
