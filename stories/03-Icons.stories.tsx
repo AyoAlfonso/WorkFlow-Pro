@@ -80,7 +80,7 @@ export const Icons = () => (
           iconColor={select("color", baseTheme.colors, baseTheme.colors.finePine)}
           disableFill={boolean("disableFill", false)}
           removeInlineStyle={boolean("removeInlineStyle", false)}
-          style={object("style", { backgroundColor: "grey" })}
+          style={object("style", { backgroundColor: "lightgrey" })}
         />
       </CenteredColumnDiv>
     </RowDiv>

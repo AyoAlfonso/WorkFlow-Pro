@@ -1,28 +1,32 @@
 import * as React from "react";
 import styled from "styled-components";
-import { color, layout, space } from "styled-system";
+import { color, ColorProps, layout, LayoutProps, space, SpaceProps } from "styled-system";
 import { baseTheme } from "../../app/javascript/themes/base";
 
-export const ContainerDiv = styled.div`
+type SpaceLayoutProps = LayoutProps & SpaceProps;
+
+export const ContainerDiv = styled.div<SpaceLayoutProps>`
+  ${space}
+  ${layout}
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
   padding-left: 40px;
-  ${space}
-  ${layout}
 `;
 
-export const RowDiv = styled.div`
+export const RowDiv = styled.div<SpaceLayoutProps>`
+  ${space}
+  ${layout}
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: row;
-  ${space}
-  ${layout}
 `;
 
-export const CenteredColumnDiv = styled.div`
+export const CenteredColumnDiv = styled.div<SpaceLayoutProps>`
+  ${space}
+  ${layout}
   height: 100px;
   width: 110px;
   display: flex;
@@ -30,8 +34,6 @@ export const CenteredColumnDiv = styled.div`
   justify-content: space-around;
   align-items: center;
   align-content: space-between;
-  ${space}
-  ${layout}
 `;
 
 export const Divider = styled.div`
@@ -40,7 +42,7 @@ export const Divider = styled.div`
   background-color: lightgrey;
 `;
 
-export const ColorText = styled.span`
+export const ColorText = styled.span<ColorProps>`
   ${color}
   color: ${props => props.color};
 `;
@@ -108,7 +110,7 @@ export const PropsList = ({ propsList, styledSystemProps }: IPropsListProps) => 
   );
 };
 
-export const CodeBlockDiv = styled.div`
+export const CodeBlockDiv = styled.div<SpaceLayoutProps>`
   ${layout}
   ${space}
   width: 60%;

@@ -1,23 +1,27 @@
 import { action } from "@storybook/addon-actions";
-import { text, withKnobs } from "@storybook/addon-knobs";
+import { text, select, boolean, withKnobs } from "@storybook/addon-knobs";
 import * as React from "react";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import styled from "styled-components";
-import { layout, space, typography } from "styled-system";
+import { layout, LayoutProps, space, SpaceProps, typography, TypographyProps } from "styled-system";
 import { Button } from "../app/javascript/components/shared/button";
 import { Icon } from "../app/javascript/components/shared/icon";
 import { RoundButton as RoundButtonComponent } from "../app/javascript/components/shared/round-button";
+import { IconButton as IconButtonComponent } from "../app/javascript/components/shared/icon-button";
 import { CodeBlockDiv, ContainerDiv, Divider, PropsList, RowDiv } from "./shared";
+import { baseTheme } from "../app/javascript/themes/base";
+import { iconList } from "react-icomoon";
+const iconSet = require("../app/javascript/assets/icons/selection.json");
 
 export default { title: "Buttons", decorators: [withKnobs] };
 
 const actionFn = action("Button was clicked!");
 
-const ButtonDiv = styled.div`
+const ButtonDiv = styled.div<SpaceProps>`
   ${space}
 `;
 
-const HeightDiv = styled.div`
+const HeightDiv = styled.div<SpaceProps & LayoutProps>`
   ${space}
   ${layout}
   display: flex;
@@ -35,7 +39,7 @@ const HeightLine = styled.div`
   margin-left: 3px;
 `;
 
-const HeightText = styled.p`
+const HeightText = styled.p<TypographyProps>`
   ${typography}
 `;
 
@@ -113,7 +117,7 @@ export const BaseButtonVariants = () => (
       </ButtonDiv>
       <HeightDisplay size={"32px"} />
       <ButtonDiv mr={"20px"}>
-        <Button variant={"primary"} onClick={null} small>
+        <Button variant={"primary"} onClick={actionFn} small>
           Small
         </Button>
       </ButtonDiv>
@@ -212,6 +216,188 @@ export const RoundButton = () => {
           />
         </RoundButtonComponent>
       </FlexDiv>
+    </ContainerDiv>
+  );
+};
+
+const iconButtonPropsList = [
+  {
+    name: "iconName",
+    type: "string",
+    required: true,
+    description: "the name of the icon",
+  },
+  {
+    name: "iconSize",
+    type: "string | number",
+    required: true,
+    description: "the size of the icon",
+  },
+  {
+    name: "iconColor",
+    type: "string",
+    required: false,
+    description: "the color of the icon",
+  },
+  {
+    name: "text",
+    type: "string",
+    required: false,
+    description: "the text inside of the button",
+  },
+  {
+    name: "textColor",
+    type: "string",
+    required: false,
+    description: "the color of the button text",
+  },
+  {
+    name: "shadow",
+    type: "boolean",
+    required: false,
+    description: "if true, adds box-shadow",
+  },
+  {
+    name: "onClick",
+    type: "function",
+    required: true,
+    description: "the function to execute when the button is clicked",
+  },
+];
+
+export const IconButton = () => {
+  return (
+    <ContainerDiv>
+      <h1>Icon Button</h1>
+      <CodeBlockDiv mb={"20px"}>
+        <CopyBlock
+          text={`
+      import * as React from "react";
+      import { IconButton } from "../components/shared/icon-button"
+
+      const onClickAction = () => {}
+
+      const MyButtonComponent = () => (
+        <IconButton
+          width={"250px"}
+          bg={"white"}
+          iconName={"AM-Check-in"}
+          iconSize={28}
+          iconColor={"cautionYellow"}
+          text={"Some Button Text"}
+          shadow={true}
+          onClick={onClickAction}
+        />   
+      )
+      `}
+          language={"tsx"}
+          theme={atomOneLight}
+        />
+      </CodeBlockDiv>
+      <PropsList
+        propsList={iconButtonPropsList}
+        styledSystemProps={["color", "layout", "space", "typography"]}
+      />
+      <h3>Example</h3>
+      <IconButtonComponent
+        width={"288px"}
+        mb={"15px"}
+        bg={select("bg", baseTheme.colors, baseTheme.colors.bali)}
+        iconName={select("iconName", iconList(iconSet), "Settings")}
+        iconSize={text("iconSize", "2em")}
+        iconColor={select("iconColor", baseTheme.colors, baseTheme.colors.cautionYellow)}
+        text={text("text", "Some Button Text")}
+        textColor={select("textColor", baseTheme.colors, baseTheme.colors.white)}
+        shadow={boolean("shadow", true)}
+        onClick={() => actionFn()}
+      />
+      <h3>Journal Buttons</h3>
+      <IconButtonComponent
+        width={"288px"}
+        mb={"20px"}
+        bg={"white"}
+        iconName={"AM-Check-in"}
+        iconSize={28}
+        iconColor={"cautionYellow"}
+        text={"Create My Day"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
+      <IconButtonComponent
+        width={"288px"}
+        mb={"20px"}
+        bg={"white"}
+        iconName={"Negative-Thoughts"}
+        iconSize={28}
+        iconColor={"warningRed"}
+        text={"Thought Challenge"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
+      <IconButtonComponent
+        width={"288px"}
+        mb={"20px"}
+        bg={"white"}
+        iconName={"Check-in"}
+        iconSize={28}
+        iconColor={"primary20"}
+        text={"Evening Reflection"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
+      <h3>Status Buttons</h3>
+      <IconButtonComponent
+        width={"160px"}
+        height={"40px"}
+        mb={"20px"}
+        bg={"fadedSuccess"}
+        iconName={"In-Office"}
+        iconSize={28}
+        iconColor={"finePine"}
+        text={"Working"}
+        textColor={"finePine"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
+      <IconButtonComponent
+        width={"160px"}
+        height={"40px"}
+        mb={"20px"}
+        bg={"primary40"}
+        iconName={"WFH"}
+        iconSize={28}
+        iconColor={"primary100"}
+        text={"WFH"}
+        textColor={"primary100"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
+      <IconButtonComponent
+        width={"160px"}
+        height={"40px"}
+        mb={"20px"}
+        bg={"backgroundYellow"}
+        iconName={"Half-Day"}
+        iconSize={28}
+        iconColor={"cautionYellow"}
+        text={"Half-Day"}
+        textColor={"cautionYellow"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
+      <IconButtonComponent
+        width={"160px"}
+        height={"40px"}
+        mb={"20px"}
+        bg={"fadedRed"}
+        iconName={"No-Check-in"}
+        iconSize={28}
+        iconColor={"warningRed"}
+        text={"I'm Off"}
+        textColor={"warningRed"}
+        shadow={true}
+        onClick={() => actionFn()}
+      />
     </ContainerDiv>
   );
 };

@@ -1,8 +1,28 @@
 import * as React from "react";
 import styled from "styled-components";
-import { color, layout, space, typography, variant } from "styled-system";
+import {
+  color,
+  ColorProps,
+  layout,
+  LayoutProps,
+  space,
+  SpaceProps,
+  typography,
+  TypographyProps,
+  variant,
+} from "styled-system";
 
-const StyledButton = styled.button`
+type StyledSystemProps = ColorProps & LayoutProps & SpaceProps & TypographyProps;
+
+interface IButtonProps extends StyledSystemProps {
+  variant?: string;
+  onClick: () => void | void;
+  disabled?: boolean;
+  small?: boolean;
+  style?: object;
+}
+
+const StyledButton = styled.button<IButtonProps>`
   ${color}
   ${layout}
   ${space}
@@ -12,7 +32,18 @@ const StyledButton = styled.button`
   border-style: solid;
   &:hover {
     cursor: pointer;
-  };
+    opacity: ${props => (props.variant.includes("Outline") || props.disabled ? "1.0" : "0.85")};
+    background: ${props =>
+      props.variant.includes("Outline") && !props.disabled ? "rgba(0, 0, 0, 0.02)" : null};
+  }
+  &:focus {
+    outline: 0
+  }
+  &:active {
+    box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, .1);
+    transform: translate(1px, 1px)
+  }
+  transition: all ease 0.1s;
   ${props =>
     variant({
       variants: {
@@ -35,8 +66,13 @@ const StyledButton = styled.button`
     })}
 `;
 
-export const Button = props => {
-  const { onClick, disabled, small, ...restProps } = props;
+export const Button: React.FunctionComponent<IButtonProps> = ({
+  onClick,
+  disabled,
+  small,
+  children,
+  ...restProps
+}): JSX.Element => {
   return (
     <StyledButton
       {...restProps}
@@ -47,7 +83,7 @@ export const Button = props => {
       onClick={disabled ? null : onClick}
       height={small ? "32px" : "40px"}
     >
-      {props.children}
+      {children}
     </StyledButton>
   );
 };
