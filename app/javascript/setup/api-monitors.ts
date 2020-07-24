@@ -29,7 +29,10 @@ export const addErrorToastMonitor = (api, loggedIn) => {
       switch (response.problem) {
         case CLIENT_ERROR:
           if (loggedIn || response.config.url.includes("sign_in")) {
-            showToast(response.error || `A client error occurred`, ToastMessageConstants.ERROR);
+            showToast(
+              R.path(["data", "error"], response) || `A client error occurred`,
+              ToastMessageConstants.ERROR,
+            );
           }
           break;
         case CONNECTION_ERROR:
