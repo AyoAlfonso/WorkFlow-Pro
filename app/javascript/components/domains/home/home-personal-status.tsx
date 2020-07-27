@@ -1,42 +1,70 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { path } from "ramda";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
 import { useTranslation } from "react-i18next";
+import Popup from "reactjs-popup";
 
 export const HomePersonalStatus = observer(
   (): JSX.Element => {
     const { sessionStore } = useMst();
     const { t } = useTranslation();
     const name = path(["profile", "firstName"], sessionStore) || "User";
+    const [selectedOption, setSelectedOption] = useState<string>(null);
+    const options = {
+      work_from_home: "WFH",
+      working: "Working",
+      half_day: "Half-day",
+      day_off: "I'm Off",
+    };
+
+    const renderOptions = Object.keys(options).map(key => (
+      <div key={key} onClick={() => setSelectedOption(key)}>
+        {options[key]}
+      </div>
+    ));
     return (
       <Container>
-        <GreetingText>{t("profile.greeting", { name })}</GreetingText>
-        <DropdownContainer>Status Dropdown</DropdownContainer>
+        <GreetingContainer>
+          <GreetingText>{t("profile.greeting", { name })}</GreetingText>
+        </GreetingContainer>
+        <DropdownContainer>
+          <Popup
+            arrow={false}
+            closeOnDocumentClick
+            on="click"
+            position="bottom center"
+            trigger={<div className="menu-item">{options[selectedOption] || "Work Status"}</div>}
+            offsetX={-50}
+          >
+            <div>{renderOptions}</div>
+          </Popup>
+        </DropdownContainer>
       </Container>
     );
   },
 );
 
 const Container = styled.div`
+  align-items: center;
   display: flex;
+  justify-content: flex-start;
 `;
 
-const GreetingText = styled.p`
+const GreetingContainer = styled.div`
+  flex: 0.2;
   font-size: 40pt;
   font-family: Exo;
   font-weight: 300;
-  margin-top: 32px;
-  margin-bottom: 32px;
 `;
 
+const GreetingText = styled.p``;
+
 const DropdownContainer = styled.div`
-  margin-left: 50px;
-  margin-top: auto;
-  margin-bottom: auto;
-  border-radius: 10px;
-  border: 1px solid #e3e3e3;
-  height: 20px;
-  padding: 5px;
+  flex: 0.2;
 `;
+
+const selectContainerStyles = {
+  width: "50%",
+};
