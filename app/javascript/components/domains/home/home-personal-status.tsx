@@ -1,12 +1,22 @@
 import React, { useState } from "react";
+import CSS from "csstype";
 import { path } from "ramda";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
 import { useTranslation } from "react-i18next";
 import Popup from "reactjs-popup";
-import { Icon } from "~/components/shared/icon";
+import { Icon, IIconProps } from "~/components/shared/icon";
 
+interface IWorkStatus {
+  containerProps: CSS.Properties;
+  iconProps: IIconProps;
+  label: string;
+}
+
+interface IWorkStatusOptions {
+  [key: string]: IWorkStatus;
+}
 interface IHomePersonalStatusState {
   menuOpen: boolean;
   selectedStatus: string | null;
@@ -24,7 +34,7 @@ export const HomePersonalStatus = observer(
       IHomePersonalStatusState
     >(defaultHomePersonalStatusState);
     const { menuOpen, selectedStatus } = homePersonalStatusState;
-    const options = {
+    const options: IWorkStatusOptions = {
       work_from_home: {
         containerProps: {
           backgroundColor: "backgroundBlue",
@@ -71,7 +81,15 @@ export const HomePersonalStatus = observer(
       },
     };
 
-    const renderDropDownMenuItem = item => (
+    const renderChevron = (): JSX.Element => (
+      <Icon
+        icon={menuOpen ? "Chevron-Up" : "Chevron-Down"}
+        size={15}
+        style={{ paddingRight: "15px" }}
+      />
+    );
+
+    const renderDropDownMenuItem = (item, rightIcon?: () => JSX.Element) => (
       <DropdownMenuItem
         key={item}
         {...options[item].containerProps}
@@ -79,10 +97,10 @@ export const HomePersonalStatus = observer(
           setHomePersonalStatusState({ ...homePersonalStatusState, selectedStatus: item })
         }
       >
-        <Icon {...options[item].iconProps} margin={"0px 10px"} size={25} />
+        <Icon {...options[item].iconProps} margin={"0px 10px"} />
         <div>{options[item].label}</div>
         {/* Empty div to even out spacing */}
-        <div></div>
+        {rightIcon ? rightIcon() : <div></div>}
       </DropdownMenuItem>
     );
     const renderOptions = Object.keys(options).map(key => renderDropDownMenuItem(key));
@@ -97,15 +115,23 @@ export const HomePersonalStatus = observer(
               arrow={false}
               closeOnDocumentClick
               contentStyle={{
+                border: "none",
                 borderRadius: "6px",
                 overflow: "hidden",
                 padding: 0,
+                width: "250px",
               }}
-              open={menuOpen}
               on="click"
+              onClose={() =>
+                setHomePersonalStatusState({ ...homePersonalStatusState, menuOpen: false })
+              }
+              onOpen={() =>
+                setHomePersonalStatusState({ ...homePersonalStatusState, menuOpen: true })
+              }
+              open={menuOpen}
               position="bottom center"
-              trigger={renderDropDownMenuItem(selectedStatus)}
-              offsetX={-50}
+              trigger={<div>{renderDropDownMenuItem(selectedStatus, renderChevron)}</div>}
+              // offsetX={-50}
             >
               <div>{renderOptions}</div>
             </Popup>
@@ -123,7 +149,6 @@ const Container = styled.div`
 `;
 
 const GreetingContainer = styled.div`
-  flex: 0.2;
   font-size: 40pt;
   font-family: Exo;
   font-weight: 300;
@@ -134,11 +159,11 @@ const GreetingText = styled.p``;
 const DropdownContainer = styled.div`
   border-radius: 6px;
   display: flex;
-  flex: 0.15;
   flex-direction: column;
   justify-content: center;
-  margin: auto 0px;
+  margin: auto 50px;
   overflow: hidden;
+  width: 250px;
 `;
 
 const DropdownMenu = styled.div``;
