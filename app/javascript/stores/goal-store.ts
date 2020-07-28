@@ -1,6 +1,7 @@
 import { types, flow, getEnv } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { GoalModel } from "../models/goal";
+import { letterSpacing } from "styled-system";
 //import { ApiResponse } from "apisauce";
 
 export const GoalStoreModel = types
@@ -40,6 +41,25 @@ export const GoalStoreModel = types
       } else {
         const updatedAnnualInitiatives = [...self.personalGoals.goals, annualInitiative];
         self.personalGoals.goals = updatedAnnualInitiatives as any;
+      }
+    },
+    mergeQuarterlyGoals(quarterlyGoal) {
+      let companyGoalAI = self.companyGoals.goals.find(
+        annualInitiative => annualInitiative.id == quarterlyGoal.annualInitiativeId,
+      );
+      let personalGoalAI = self.personalGoals.goals.find(
+        annualInitiative => annualInitiative.id == quarterlyGoal.annualInitiativeId,
+      );
+
+      if (companyGoalAI) {
+        companyGoalAI.quarterlyGoals = [...companyGoalAI.quarterlyGoals, quarterlyGoal] as any;
+        let goals = self.companyGoals.goals;
+        const goalIndex = goals.findIndex(goal => goal.id == companyGoalAI.id);
+        goals[goalIndex] = companyGoalAI;
+        self.companyGoals.goals = goals;
+      } else if (personalGoalAI) {
+        personalGoalAI.quarterlyGoals = [...personalGoalAI.quarterlyGoals, quarterlyGoal] as any;
+        self.personalGoals.goals = personalGoalAI as any;
       }
     },
   }));

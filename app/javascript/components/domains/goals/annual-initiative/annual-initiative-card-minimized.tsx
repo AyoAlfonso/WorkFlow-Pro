@@ -58,6 +58,7 @@ const Container = styled.div`
   display: flex;
   padding-left: 16px;
   padding-right: 16px;
+  position: relative;
 `;
 
 type QuarterlyGoalIndicatorType = {

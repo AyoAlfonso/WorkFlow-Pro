@@ -130,5 +130,13 @@ export class Api {
     return this.client.post(`/quarterly_goals/create_key_element/${id}`);
   }
 
+  async createQuarterlyGoal(quarterlyGoalObject) {
+    return this.client.post(`/quarterly_goals`, quarterlyGoalObject);
+  }
+
+  async createMilestones(quarterlyGoalId) {
+    return this.client.post(`/quarterly_goals/create_milestones/${quarterlyGoalId}`);
+  }
+
   //async setJWT(jwt) {}
 }

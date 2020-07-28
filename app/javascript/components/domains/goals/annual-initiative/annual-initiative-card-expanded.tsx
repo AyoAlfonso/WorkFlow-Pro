@@ -5,6 +5,9 @@ import { Icon } from "../../../shared/icon";
 import { UserDefaultIcon } from "../../../shared/user-default-icon";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
+import { CreateGoalSection } from "../shared/create-goal-section";
+import { useState } from "react";
+import { useMst } from "~/setup/root";
 
 interface IAnnualInitiativeCardExpandedProps {
   annualInitiative: AnnualInitiativeType;
@@ -12,6 +15,7 @@ interface IAnnualInitiativeCardExpandedProps {
   setQuarterlyGoalId: React.Dispatch<React.SetStateAction<number>>;
   setQuarterlyGoalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedAnnualInitiativeDescription: React.Dispatch<React.SetStateAction<string>>;
+  showCreateQuarterlyGoal: boolean;
 }
 
 export const AnnualInitiativeCardExpanded = (
@@ -23,7 +27,11 @@ export const AnnualInitiativeCardExpanded = (
     setQuarterlyGoalId,
     setQuarterlyGoalModalOpen,
     setSelectedAnnualInitiativeDescription,
+    showCreateQuarterlyGoal,
   } = props;
+
+  const { quarterlyGoalStore } = useMst();
+  const [createQuarterlyGoalArea, setCreateQuarterlyGoalArea] = useState<boolean>(false);
 
   const renderQuarterlyGoals = () => {
     return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
@@ -58,9 +66,26 @@ export const AnnualInitiativeCardExpanded = (
     });
   };
 
+  const renderCreateGoal = () => {
+    return (
+      <CreateGoalContainer>
+        <CreateGoalSection
+          placeholder={"Enter Quarterly Goal Title..."}
+          addButtonText={"Add a Quarterly Goal"}
+          createButtonText={"Add Goal"}
+          showCreateGoal={createQuarterlyGoalArea}
+          setShowCreateGoal={setCreateQuarterlyGoalArea}
+          createAction={quarterlyGoalStore.create}
+          annualInitiativeId={annualInitiative.id}
+        />
+      </CreateGoalContainer>
+    );
+  };
+
   return (
     <Container>
       {renderQuarterlyGoals()}
+      {showCreateQuarterlyGoal && renderCreateGoal()}
       <MinimizeIconContainer onClick={() => setShowMinimizedCard(true)}>
         <Icon icon={"Chevron-Up"} size={"15px"} iconColor={"grey60"} />
       </MinimizeIconContainer>
@@ -82,6 +107,7 @@ const Container = styled.div`
 const StyledText = styled(Text)`
   padding-left: 16px;
   padding-right: 16px;
+  white-space: normal;
 `;
 
 const QuarterlyGoalContainer = styled.div`
@@ -116,4 +142,9 @@ const MinimizeIconContainer = styled.div`
   &: hover {
     cursor: pointer;
   }
+`;
+
+const CreateGoalContainer = styled.div`
+  margin-bottom: 16px;
+  background-color: white;
 `;

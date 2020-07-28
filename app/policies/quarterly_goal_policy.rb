@@ -30,6 +30,10 @@ class QuarterlyGoalPolicy < ApplicationPolicy
     @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user
   end
 
+  def create_milestones?
+    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user
+  end
+
   class Scope
     attr_reader :user, :scope
 

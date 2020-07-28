@@ -13,9 +13,8 @@ import { TitleContainer } from "./shared/title-container";
 import { RallyingCry } from "./shared/rallying-cry";
 import { PersonalVision } from "./shared/personal-vision";
 import { Button } from "~/components/shared/button";
-import { Icon } from "~/components/shared/icon";
-import { TextInput } from "~/components/shared/text-input";
 import { HomeContainerBorders } from "../home/shared-components";
+import { CreateGoalSection } from "./shared/create-goal-section";
 
 export const GoalsIndex = observer(
   (): JSX.Element => {
@@ -37,14 +36,6 @@ export const GoalsIndex = observer(
     const [showCreatePersonalAnnualInitiative, setShowCreatePersonalAnnualInitiative] = useState<
       boolean
     >(false);
-    const [
-      createCompanyAnnualInitaitiveDescription,
-      setCreateCompanyAnnualInitiativeDescription,
-    ] = useState<string>("");
-    const [
-      createPersonalAnnualInitaitiveDescription,
-      setCreatePersonalAnnualInitiativeDescription,
-    ] = useState<string>("");
 
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
@@ -65,55 +56,17 @@ export const GoalsIndex = observer(
         type == "company"
           ? setShowCreateCompanyAnnualInitiative
           : setShowCreatePersonalAnnualInitiative;
-      const createAnnualInitaitiveDescription =
-        type == "company"
-          ? createCompanyAnnualInitaitiveDescription
-          : createPersonalAnnualInitaitiveDescription;
-      const setCreateAnnualInitiativeDescription =
-        type == "company"
-          ? setCreateCompanyAnnualInitiativeDescription
-          : setCreatePersonalAnnualInitiativeDescription;
 
-      return showCreateAnnualInitiative ? (
-        <CreateAnnualInitiativeCardContainer>
-          <TextInput
-            textValue={createAnnualInitaitiveDescription}
-            setTextValue={setCreateAnnualInitiativeDescription}
-            placeholder={"Enter Annual Initiative Title..."}
-          />
-          <ActionsContainer>
-            <AddInitiativeButton
-              small
-              variant={"primary"}
-              onClick={() => {
-                annualInitiativeStore.create(type, createAnnualInitaitiveDescription).then(() => {
-                  setShowCreateAnnualInitiative(false);
-                  setCreateAnnualInitiativeDescription("");
-                });
-              }}
-            >
-              <AddInitiativeText>Add Initiative</AddInitiativeText>
-            </AddInitiativeButton>
-            <CloseIconContainer
-              onClick={() => {
-                setShowCreateAnnualInitiative(false);
-                setCreateAnnualInitiativeDescription("");
-              }}
-            >
-              <Icon
-                icon={"Close"}
-                size={"20px"}
-                style={{ marginTop: "3px" }}
-                iconColor={"grey60"}
-              />
-            </CloseIconContainer>
-          </ActionsContainer>
-        </CreateAnnualInitiativeCardContainer>
-      ) : (
-        <StyledButton small variant={"grey"} onClick={() => setShowCreateAnnualInitiative(true)}>
-          <Icon icon={"Plus"} size={"20px"} style={{ marginTop: "3px" }} />
-          <AddGoalText>Add an Annual Initiative</AddGoalText>
-        </StyledButton>
+      return (
+        <CreateGoalSection
+          type={type}
+          placeholder={"Enter Annual Initiative Title..."}
+          addButtonText={"Add an Annual Initiative"}
+          createButtonText={"Add Initiative"}
+          showCreateGoal={showCreateAnnualInitiative}
+          setShowCreateGoal={setShowCreateAnnualInitiative}
+          createAction={annualInitiativeStore.create}
+        />
       );
     };
 
@@ -131,6 +84,7 @@ export const GoalsIndex = observer(
             setQuarterlyGoalId={setQuarterlyGoalId}
             setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
             setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
+            showCreateQuarterlyGoal={true}
           />
         );
       });
@@ -190,6 +144,7 @@ export const GoalsIndex = observer(
             setAnnualInitiativeId={setAnnualInitiativeId}
             annualInitiativeDescription={annualInitiativeDescription}
             setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+            showCreateMilestones={true}
           />
         </StyledModal>
       </Container>
@@ -236,53 +191,4 @@ type CreateAnnualInitiativeContainerProps = {
 const CreateAnnualInitiativeContainer = styled.div<CreateAnnualInitiativeContainerProps>`
   margin-left: ${props => props.marginLeft || "0px"};
   width: 20%;
-`;
-
-const StyledButton = styled(Button)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 240px;
-  width: -webkit-fill-available;
-  &: hover {
-    color: ${props => props.theme.colors.primary100};
-  }
-`;
-
-const AddGoalText = styled.p`
-  margin-left: 16px;
-`;
-
-const CreateAnnualInitiativeCardContainer = styled(HomeContainerBorders)`
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 16px;
-  padding-right: 16px;
-`;
-
-const ActionsContainer = styled.div`
-  display: flex;
-  margin-top: 16px;
-`;
-
-const AddInitiativeButton = styled(Button)`
-  width: 120px;
-  padding: 0;
-  &: hover {
-    font-weight: bold;
-    background-color: ${props => props.theme.colors.primaryActive};
-  }
-`;
-const AddInitiativeText = styled.p`
-  margin: 0;
-  font-size: 14px;
-`;
-
-const CloseIconContainer = styled.div`
-  margin-left: 16px;
-  margin-top: auto;
-  margin-bottom: auto;
-  &:hover {
-    cursor: pointer;
-  }
 `;

@@ -53,6 +53,7 @@ export const HomeGoals = observer(
             setQuarterlyGoalId={setQuarterlyGoalId}
             setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
             setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
+            showCreateQuarterlyGoal={false}
           />
         );
       });
@@ -105,6 +106,7 @@ export const HomeGoals = observer(
             setAnnualInitiativeId={setAnnualInitiativeId}
             annualInitiativeDescription={annualInitiativeDescription}
             setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+            showCreateMilestones={false}
           />
         </StyledModal>
       </Container>

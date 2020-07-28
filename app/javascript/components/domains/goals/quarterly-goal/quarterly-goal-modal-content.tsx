@@ -21,6 +21,7 @@ interface IQuarterlyGoalModalContentProps {
   annualInitiativeDescription: string;
   setAnnualInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setAnnualInitiativeId: React.Dispatch<React.SetStateAction<number>>;
+  showCreateMilestones: boolean;
 }
 
 export const QuarterlyGoalModalContent = observer(
@@ -30,6 +31,7 @@ export const QuarterlyGoalModalContent = observer(
     annualInitiativeDescription,
     setAnnualInitiativeModalOpen,
     setAnnualInitiativeId,
+    showCreateMilestones,
   }: IQuarterlyGoalModalContentProps): JSX.Element => {
     const { quarterlyGoalStore, sessionStore } = useMst();
     const currentUser = sessionStore.profile;
@@ -128,6 +130,19 @@ export const QuarterlyGoalModalContent = observer(
       });
     };
 
+    const renderMilestoneCreateButton = (): JSX.Element => {
+      return (
+        <StyledButton
+          small
+          variant={"grey"}
+          onClick={() => quarterlyGoalStore.createMilestones(quarterlyGoalId)}
+        >
+          <Icon icon={"Plus"} size={"20px"} style={{ marginTop: "3px" }} />
+          <AddMilestoneText> Add a 13-Week Plan </AddMilestoneText>
+        </StyledButton>
+      );
+    };
+
     return (
       <Container>
         <StatusBlockColorIndicator
@@ -157,6 +172,10 @@ export const QuarterlyGoalModalContent = observer(
               </ShowPastWeeksContainer>
             </MilestonesHeaderContainer>
             {renderWeeklyMilestones()}
+            {showCreateMilestones &&
+              editable &&
+              allMilestones.length == 0 &&
+              renderMilestoneCreateButton()}
           </SectionContainer>
           <SectionContainer>
             <SubHeaderContainer>
@@ -304,4 +323,18 @@ const MilestoneContentEditable = styled(ContentEditable)`
   margin-bottom: 8px;
   padding-top: 5px;
   padding-bottom: 5px;
+`;
+
+const StyledButton = styled(Button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 280px;
+  &: hover {
+    color: ${props => props.theme.colors.primary100};
+  }
+`;
+
+const AddMilestoneText = styled.p`
+  margin-left: 16px;
 `;
