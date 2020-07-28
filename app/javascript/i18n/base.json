@@ -4,7 +4,8 @@
       "general": {
         "save": "Save",
         "remove": "Remove",
-        "upload": "Upload"
+        "upload": "Upload",
+        "submit": "Submit"
       },
       "profile": {
         "account": "Account",
@@ -29,6 +30,17 @@
           "email": "E-mail",
           "firstName": "First Name",
           "lastName": "Last Name"
+        },
+        "habits": {
+          "title": "Habits",
+          "form": {
+            "inputs": {
+              "name": "Name",
+              "frequency": "Frequency (times per week)",
+              "color": "Color"
+            }
+          }
+
         }
       },
       "company": {

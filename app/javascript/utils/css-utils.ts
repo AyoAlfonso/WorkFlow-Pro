@@ -53,3 +53,5 @@ export const buildRepeatingLinearGradient = (hex, deg, width, widthUnit, offset)
     offset,
   )} ${width}${widthUnit}, ${adjustBrightnessHSL(hexToHSL(hex), offset)} ${width * 2}${widthUnit})`;
 };
+
+export const genRandomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`;
