@@ -1,6 +1,7 @@
 import { types, flow, getEnv } from "mobx-state-tree";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import { DailyLogModel } from "~/models";
 
 export const UserModel = types
   .model("UserModel")
@@ -12,6 +13,7 @@ export const UserModel = types
     personalVision: types.maybeNull(types.string),
     avatarUrl: types.maybeNull(types.string),
     role: types.maybeNull(types.string),
+    currentDailyLog: types.maybeNull(DailyLogModel),
     //add avatarurl2x
   })
   .views(self => ({}))
@@ -19,7 +21,7 @@ export const UserModel = types
     setAvatarUrl: avatarUrl => {
       self.avatarUrl = avatarUrl;
     },
-    update: flow(function* (fieldsAndValues) {
+    update: flow(function*(fieldsAndValues) {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.updateProfile(
@@ -27,7 +29,7 @@ export const UserModel = types
         );
         if (response.ok) {
           self = response.data;
-          yield showToast("User updated", ToastMessageConstants.SUCCESS);
+          showToast("User updated", ToastMessageConstants.SUCCESS);
         }
       } catch {
         // error messaging handled by API monitor

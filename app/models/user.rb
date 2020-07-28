@@ -19,10 +19,13 @@ class User < ApplicationRecord
   has_many :owned_annual_initiatives, :foreign_key => 'owned_by_id', :class_name => 'AnnualInitiative'
   has_many :weekly_meetings, :foreign_key => 'created_by_id', :class_name => 'User'
   has_many :meeting_ratings
+  has_many :daily_logs
   has_one_attached :avatar
   belongs_to :user_role
 
   validates :first_name, :last_name, presence: true
+
+  accepts_nested_attributes_for :daily_logs
 
 
   def full_name
@@ -39,6 +42,10 @@ class User < ApplicationRecord
 
   def get_timezone
     self.timezone.present? ? self.timezone : company_timezone
+  end
+
+  def current_daily_log
+    daily_logs.select(:id, :work_status).first_or_create(log_date: Date.today)
   end
 
   # def on_jwt_dispatch(token, payload)

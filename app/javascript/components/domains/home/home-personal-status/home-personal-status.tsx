@@ -11,29 +11,43 @@ import { Icon } from "~/components/shared/icon";
 
 interface IHomePersonalStatusState {
   menuOpen: boolean;
-  selectedStatus: string;
 }
 const defaultHomePersonalStatusState: IHomePersonalStatusState = {
   menuOpen: false,
-  selectedStatus: "in_office",
 };
 export const HomePersonalStatus = observer(
   (): JSX.Element => {
-    const { sessionStore } = useMst();
+    const {
+      sessionStore: {
+        profile,
+        profile: {
+          firstName,
+          currentDailyLog,
+          currentDailyLog: { workStatus },
+        },
+      },
+    } = useMst();
     const { t } = useTranslation();
-    const name = path(["profile", "firstName"], sessionStore) || "User";
+    const name = firstName || "User";
     const [homePersonalStatusState, setHomePersonalStatusState] = useState<
       IHomePersonalStatusState
     >(defaultHomePersonalStatusState);
-    const { menuOpen, selectedStatus } = homePersonalStatusState;
+    const { menuOpen } = homePersonalStatusState;
 
     const renderOptions = Object.keys(options).map(key => (
       <HomePersonalStatusDropdownMenuItem
         key={key}
         menuItem={options[key]}
-        onSelect={() =>
-          setHomePersonalStatusState({ ...homePersonalStatusState, selectedStatus: key })
-        }
+        onSelect={async () => {
+          await profile.update({
+            dailyLogsAttributes: [
+              {
+                ...currentDailyLog,
+                workStatus: key,
+              },
+            ],
+          });
+        }}
       />
     ));
 
@@ -66,13 +80,8 @@ export const HomePersonalStatus = observer(
               trigger={
                 <div>
                   <HomePersonalStatusDropdownMenuItem
-                    menuItem={options[selectedStatus]}
-                    onSelect={() =>
-                      setHomePersonalStatusState({
-                        ...homePersonalStatusState,
-                        selectedStatus: selectedStatus,
-                      })
-                    }
+                    menuItem={options[workStatus]}
+                    onSelect={() => null}
                     rightIcon={
                       <Icon
                         icon={menuOpen ? "Chevron-Up" : "Chevron-Down"}

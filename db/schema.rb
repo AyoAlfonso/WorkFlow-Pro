@@ -146,7 +146,7 @@ ActiveRecord::Schema.define(version: 2020_07_27_173155) do
   create_table "daily_logs", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.date "log_date"
-    t.integer "work_status"
+    t.integer "work_status", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_daily_logs_on_user_id"
