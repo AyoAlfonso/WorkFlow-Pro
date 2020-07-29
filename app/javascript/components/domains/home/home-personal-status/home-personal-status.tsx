@@ -18,8 +18,8 @@ const defaultHomePersonalStatusState: IHomePersonalStatusState = {
 export const HomePersonalStatus = observer(
   (): JSX.Element => {
     const {
+      sessionStore,
       sessionStore: {
-        profile,
         profile: {
           firstName,
           currentDailyLog,
@@ -39,7 +39,7 @@ export const HomePersonalStatus = observer(
         key={key}
         menuItem={options[key]}
         onSelect={async () => {
-          await profile.update({
+          await sessionStore.updateUser({
             dailyLogsAttributes: [
               {
                 ...currentDailyLog,

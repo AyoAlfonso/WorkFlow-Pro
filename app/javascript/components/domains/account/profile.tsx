@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { useMst } from "~/setup/root";
-import styled from "styled-components";
-import { Box } from "rebass";
 import { Label, Input } from "~/components/shared/input";
 import { Button } from "~/components/shared/button";
 import { Avatar } from "~/components/shared/avatar";
 import { useTranslation } from "react-i18next";
-import { Text } from "~/components/shared/text";
 import { FileInput } from "./file-input";
 import { observer } from "mobx-react";
 
@@ -29,7 +26,6 @@ export const AccountProfile = observer(
     const [firstName, setFirstName] = useState(sessionStore.profile.firstName);
     const [lastName, setLastName] = useState(sessionStore.profile.lastName);
     const { t } = useTranslation();
-    // TODO: image is not re-rendering when profile changes, so avatar isn't updating until page refresh
     const submitAvatar = async (files: FileList) => {
       const form = new FormData();
       form.append("avatar", files[0]);
@@ -37,7 +33,7 @@ export const AccountProfile = observer(
     };
 
     const save = () =>
-      sessionStore.profile.update({
+      sessionStore.updateUser({
         email,
         firstName,
         lastName,
