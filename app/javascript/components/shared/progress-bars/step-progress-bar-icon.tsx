@@ -1,9 +1,9 @@
 import * as React from "react";
 import IcoMoon from "react-icomoon";
 import styled from "styled-components";
-import { baseTheme } from "../../themes/base";
-import { IconContainer } from "./icon";
-const iconSet = require("../../assets/icons/selection.json");
+import { baseTheme } from "~/themes/base";
+import { IconContainer } from "../icon";
+const iconSet = require("~/assets/icons/selection.json");
 
 interface IStepProgressBarIconProps {
   iconContainerProps?: typeof IconContainer;

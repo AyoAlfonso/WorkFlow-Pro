@@ -1,9 +1,11 @@
 import { number, select, text, withKnobs } from "@storybook/addon-knobs";
 import * as React from "react";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
-import { StepProgressBar as StProgressBar } from "../app/javascript/components/shared";
-import { StripedProgressBar as ProgressBar } from "../app/javascript/components/shared/striped-progress-bar";
 import { CodeBlockDiv, ContainerDiv, PropsList, RowDiv } from "./shared";
+import {
+  StripedProgressBar as ProgressBar,
+  StepProgressBar as StProgressBar,
+} from "~/components/shared";
 
 export default { title: "Progress Bars", decorators: [withKnobs] };
 
@@ -80,6 +82,23 @@ export const StepProgressBar = () => (
         { accomplished: false, title: "Step #3" },
         { accomplished: false, title: "Step #4" },
       ]}
+    />
+  </ContainerDiv>
+);
+export const TimedStepProgressBar = () => (
+  <ContainerDiv marginTop={250} marginLeft={25} width={"80%"}>
+    <StProgressBar
+      progressBarProps={{
+        stepPositions: [25, 30, 45, 60, 100],
+        percent: 55,
+      }}
+      steps={[
+        { accomplished: true, title: "Step #1" },
+        { accomplished: true, title: "Step #2" },
+        { accomplished: false, title: "Step #3" },
+        { accomplished: false, title: "Step #4" },
+      ]}
+      timed={true}
     />
   </ContainerDiv>
 );
