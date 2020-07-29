@@ -32,8 +32,9 @@ import { Placeholder } from "./shared/placeholder";
 
 const Container = styled.div`
   margin-left: 168px;
-  width: 85%;
+  margin-right: 40px;
   margin-bottom: 50px;
+  padding-top: 120px;
 `;
 
 export interface IAppProps {
