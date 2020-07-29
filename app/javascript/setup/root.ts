@@ -9,7 +9,6 @@ const initialState = {
   router: environment.router,
   userStore: {
     users: [],
-    count: 5,
   },
   issueStore: {
     issues: [],

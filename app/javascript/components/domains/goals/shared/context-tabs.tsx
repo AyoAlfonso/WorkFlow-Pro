@@ -2,70 +2,86 @@ import * as React from "react";
 import { HomeContainerBorders } from "../../home/shared-components";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { Checkbox, Label } from "@rebass/forms";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
 import { QuarterlyGoalType } from "~/types/quarterly-goal";
+import { useMst } from "~/setup/root";
+import ContentEditable from "react-contenteditable";
+import * as R from "ramda";
+import { KeyElement } from "./key-element";
 
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;
+  type: string;
 }
 
-export const ContextTabs = ({ object }: IContextTabsProps): JSX.Element => {
+export const ContextTabs = ({ object, type }: IContextTabsProps): JSX.Element => {
+  const { sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
+  const currentUser = sessionStore.profile;
   const [selectedContextTab, setSelectedContextTab] = useState<number>(1);
   const [hideContent, setHideContent] = useState<boolean>(false);
+  const [store, setStore] = useState<any>(null);
+  const editable = currentUser.id == object.ownedById;
+
+  useEffect(() => {
+    if (type == "annualInitiative") {
+      setStore(annualInitiativeStore);
+    } else if (type == "quarterlyGoal") {
+      setStore(quarterlyGoalStore);
+    }
+  });
+
+  const updateImportance = (index: number, value: string): void => {
+    let objectToBeModified = R.clone(object);
+    objectToBeModified.importance[index] = value;
+    store.updateModelField("importance", objectToBeModified.importance);
+  };
 
   const renderContextImportance = () => {
     return (
       <ContextImportanceContainer>
         <SubHeaderText> Why is it important?</SubHeaderText>
-        <ContextContainer>
-          <Text>{object.importance[0]}</Text>
-        </ContextContainer>
+        <StyledContentEditable
+          html={object.importance[0]}
+          disabled={!editable}
+          onChange={e => updateImportance(0, e.target.value)}
+          onBlur={() => store.updateAnnualInitiative()}
+        />
         <SubHeaderText> What are the consequences if missed?</SubHeaderText>
-        <ContextContainer>
-          <Text>{object.importance[1]}</Text>
-        </ContextContainer>
+        <StyledContentEditable
+          html={object.importance[1]}
+          disabled={!editable}
+          onChange={e => updateImportance(1, e.target.value)}
+          onBlur={() => store.updateAnnualInitiative()}
+        />
         <SubHeaderText> How will we celebrate if achieved?</SubHeaderText>
-        <ContextContainer>
-          <Text>{object.importance[2]}</Text>
-        </ContextContainer>
+        <StyledContentEditable
+          html={object.importance[2]}
+          disabled={!editable}
+          onChange={e => updateImportance(2, e.target.value)}
+          onBlur={() => store.updateAnnualInitiative()}
+        />
       </ContextImportanceContainer>
     );
   };
 
   const renderContextDescription = () => {
     return (
-      <ContextContainer>
-        <Text>{object.contextDescription}</Text>
-      </ContextContainer>
+      <StyledContentEditable
+        html={object.contextDescription}
+        disabled={!editable}
+        onChange={e => store.updateModelField("contextDescription", e.target.value)}
+        onBlur={() => store.updateAnnualInitiative()}
+      />
     );
   };
 
   const renderKeyElements = () => {
     return object.keyElements.map((element, index) => {
-      return (
-        <KeyElementContainer key={index}>
-          <CheckboxContainer>
-            <Label>
-              <Checkbox
-                id={index}
-                name={index}
-                // checked={element["completedAt"] ? true : false}
-                // onChange={e => {
-                //   console.log("e", e.target.checked);
-                // }}
-              />
-            </Label>
-          </CheckboxContainer>
-
-          <KeyElementContextContainer>
-            <KeyElementText>{element.value}</KeyElementText>
-          </KeyElementContextContainer>
-        </KeyElementContainer>
-      );
+      return <KeyElement element={element} store={store} editable={editable} key={index} />;
     });
   };
 
@@ -187,4 +203,18 @@ const CheckboxContainer = styled.div`
   display: flex;
   margin-top: auto;
   margin-bottom: auto;
+`;
+
+const StyledContentEditable = styled(ContentEditable)`
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 10px;
+  border: 1px solid #e3e3e3;
+  box-shadow: 0px 3px 6px #f5f5f5;
+  padding-left: 16px;
+  padding-right: 16px;
+`;
+
+const KeyElementStyledContentEditable = styled(StyledContentEditable)`
+  width: 100%;
 `;

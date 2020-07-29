@@ -19,11 +19,11 @@ class AnnualInitiativePolicy < ApplicationPolicy
   end
 
   def update?
-    @annual_initiative.created_by == @user
+    @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user
   end
 
   def destroy?
-    @annual_initiative.created_by == @user
+    @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user
   end
 
   class Scope

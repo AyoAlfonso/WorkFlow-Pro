@@ -15,8 +15,8 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   end
 
   def update
-    @annual_initiative.update(annual_initiative_params)
-    render json: { annual_initiative: @annual_initiative, status: :ok }
+    @annual_initiative.update!(annual_initiative_params)
+    render json: { annual_initiative: @annual_initiative.as_json(include: [:owned_by, { quarterly_goals: { include:[:milestones, :owned_by] } }]), status: :ok }
   end
 
   def destroy
@@ -27,7 +27,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   private 
 
   def annual_initiative_params
-    params.permit(:id, :created_by_id, :owned_by_id, :importance, :description, :key_elements, :company_id)
+    params.permit(:id, :created_by_id, :owned_by_id, :description, :company_id, :context_description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value], :importance => [])
   end
   
   def set_annual_initiative
