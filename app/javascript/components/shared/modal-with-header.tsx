@@ -25,7 +25,7 @@ export const ModalWithHeader = (props: IModalWithHeaderProps): JSX.Element => {
           <Icon icon={"Close"} size={18} iconColor="grey60" />
         </CloseIconContainer>
       </HeaderContainer>
-      {...children}
+      {children}
     </StyledModal>
   );
 };
