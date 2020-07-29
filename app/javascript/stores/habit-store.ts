@@ -2,6 +2,7 @@ import { types, flow } from "mobx-state-tree";
 import { withEnvironment } from "~/lib/with-environment";
 import { HabitModel } from "~/models";
 import { ApiResponse } from "apisauce";
+import { color } from "@storybook/addon-knobs";
 
 export const HabitStoreModel = types
   .model("HabitStoreModel")
@@ -11,9 +12,14 @@ export const HabitStoreModel = types
   .extend(withEnvironment())
   .views(self => ({}))
   .actions(self => ({
+    createHabit: flow(function*(habitData) {
+      const response = yield self.environment.api.createHabit(habitData);
+      if (response.ok) {
+        self.habits.push(response.data);
+      }
+    }),
     fetchHabits: flow(function*() {
       const response: ApiResponse<any> = yield self.environment.api.getHabits();
-      console.log(response);
       if (response.ok) {
         self.habits = response.data;
       }

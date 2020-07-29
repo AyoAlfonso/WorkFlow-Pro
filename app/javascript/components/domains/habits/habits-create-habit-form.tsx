@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import { useMst } from "~/setup/root";
 import { Button, Input, Label } from "~/components/shared";
 import { genRandomColor } from "~/utils";
 
@@ -18,6 +19,7 @@ const defaultCreateHabitFormState = {
   color: genRandomColor(),
 };
 export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.Element => {
+  const { habitStore } = useMst();
   const [createHabitFormState, setCreateHabitFormState] = useState<ICreateHabitFormState>(
     defaultCreateHabitFormState,
   );
@@ -25,7 +27,7 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
   const { t } = useTranslation();
 
   const submitHabit = () => {
-    // TODO: Call HabitStore to submit form to server
+    habitStore.createHabit(createHabitFormState);
   };
   return (
     <StyledForm>

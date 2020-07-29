@@ -4,8 +4,10 @@ export const HabitModel = types
   .model("HabitModel")
   .props({
     id: types.maybeNull(types.number),
+    color: types.maybeNull(types.string),
     name: types.maybeNull(types.string),
     frequency: types.maybeNull(types.number),
+    userId: types.maybeNull(types.number),
   })
   .views(self => ({}))
   .actions(self => ({}));

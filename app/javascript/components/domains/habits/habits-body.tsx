@@ -1,29 +1,35 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 
-export const HabitsBody = (): JSX.Element => {
-  const { t } = useTranslation();
-  const {
-    habitStore,
-    habitStore: { habits },
-  } = useMst();
-  useEffect(() => {
-    habitStore.fetchHabits();
-  }, habitStore.habits);
-  return (
-    <>
-      <Container></Container>
-    </>
-  );
-};
+export const HabitsBody = observer(
+  (): JSX.Element => {
+    const { t } = useTranslation();
+    const {
+      habitStore,
+      habitStore: { habits },
+    } = useMst();
+    useEffect(() => {
+      habitStore.fetchHabits();
+    }, habitStore.habits);
+    const renderHabits = habits.map((hab, ind) => (
+      <div>{`${hab.name} | ${hab.id} | ${hab.color}`}</div>
+    ));
+    return (
+      <>
+        <Container>{renderHabits}</Container>
+      </>
+    );
+  },
+);
 
 const Container = styled.div`
   align-items: center;
   border-bottom: 1px solid #e3e3e3;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   padding-left: 10px;
   padding-right: 10px;
 `;

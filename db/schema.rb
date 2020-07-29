@@ -155,6 +155,7 @@ ActiveRecord::Schema.define(version: 2020_07_29_202611) do
   create_table "habits", force: :cascade do |t|
     t.integer "frequency"
     t.string "name"
+    t.string "color"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

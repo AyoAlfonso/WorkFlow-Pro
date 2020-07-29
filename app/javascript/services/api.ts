@@ -138,7 +138,11 @@ export class Api {
     return this.client.post(`/quarterly_goals/create_key_element/${id}`);
   }
   async getHabits() {
-    return await this.client.get("/habits");
+    return this.client.get("/habits");
+  }
+
+  async createHabit(habitData) {
+    return this.client.post("/habits", habitData);
   }
 
   async createQuarterlyGoal(quarterlyGoalObject) {
