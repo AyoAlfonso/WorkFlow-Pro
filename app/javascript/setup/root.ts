@@ -34,6 +34,9 @@ const initialState = {
   quarterlyGoalStore: {
     quarterlyGoal: null,
   },
+  habitStore: {
+    habits: [],
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);

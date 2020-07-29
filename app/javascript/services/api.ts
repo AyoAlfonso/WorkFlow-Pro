@@ -137,6 +137,9 @@ export class Api {
   async createQuarterlyGoalKeyElement(id) {
     return this.client.post(`/quarterly_goals/create_key_element/${id}`);
   }
+  async getHabits() {
+    return await this.client.get("/habits");
+  }
 
   async createQuarterlyGoal(quarterlyGoalObject) {
     return this.client.post(`/quarterly_goals`, quarterlyGoalObject);

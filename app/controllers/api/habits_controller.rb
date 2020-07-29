@@ -4,8 +4,8 @@ class Api::HabitsController < Api::ApplicationController
   respond_to :json
 
   def index
-    @key_activities = policy_scope(KeyActivity).sort_by_priority_and_created_at_date
-    render json: @key_activities
+    @habits = Habit.all
+    render json: @habits
   end
 
   def create
@@ -31,8 +31,8 @@ class Api::HabitsController < Api::ApplicationController
     params.require(:habit).permit(:frequency, :id, :name, :user_id)
   end
 
-  def set_key_activity
-    @habit = policy_scope(Habit).find(params[:id])
+  def set_habit
+    @habit = policy_scope(Habit)
     authorize @habit
   end
 end
