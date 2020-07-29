@@ -88,6 +88,7 @@ type SideNavChildPopupContainerType = {
 };
 
 const SideNavChildPopupContainer = styled.div<SideNavChildPopupContainerType>`
+  margin-bottom: 16px;
   &:hover ${StyledIcon} {
     color: ${props => !props.active && props.theme.colors.greyActive};
   }
@@ -156,7 +157,7 @@ export const SideNavNoMst = (currentPathName: string): JSX.Element => {
         {t("navigation.home")}
       </StyledNavLinkChildrenActive>
 
-      <StyledNavLinkChildrenActive to="/team" icon={"User"} currentPathName={currentPathName}>
+      <StyledNavLinkChildrenActive to="/team" icon={"Team"} currentPathName={currentPathName}>
         {t("navigation.team")}
       </StyledNavLinkChildrenActive>
 
