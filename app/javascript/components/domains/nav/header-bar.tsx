@@ -113,67 +113,71 @@ export const HeaderBar = observer(
     };
 
     return (
-      <Container>
-        <HeaderItemsContainer>
-          <ActionsContainer>
-            <RefContainer ref={dropdownRef}>
+      <Wrapper>
+        <Container>
+          <HeaderItemsContainer>
+            <ActionsContainer>
+              <RefContainer ref={dropdownRef}>
+                <RoundButton
+                  style={{ marginLeft: "12px", zIndex: openCreateDropdown ? 2 : 0 }}
+                  backgroundColor={openCreateDropdown ? "white" : "primary100"}
+                  onClick={() => {
+                    setOpenLynchPynDropdown(false);
+                    setOpenCreateDropdown(!openCreateDropdown);
+                  }}
+                  rotate={openCreateDropdown}
+                >
+                  {renderHeaderIcon("Plus")}
+                </RoundButton>
+                {openCreateDropdown && renderCreateDropdownModal()}
+              </RefContainer>
               <RoundButton
-                style={{ marginLeft: "12px", zIndex: openCreateDropdown ? 2 : 0 }}
-                backgroundColor={openCreateDropdown ? "white" : "primary100"}
-                onClick={() => {
-                  setOpenLynchPynDropdown(false);
-                  setOpenCreateDropdown(!openCreateDropdown);
-                }}
-                rotate={openCreateDropdown}
+                style={{ marginLeft: "12px", zIndex: openLynchPynDropdown ? 2 : 0 }}
+                backgroundColor={openLynchPynDropdown ? "white" : "primary100"}
+                onClick={() => setOpenLynchPynDropdown(!openLynchPynDropdown)}
               >
-                {renderHeaderIcon("Plus")}
+                {renderHeaderIcon("Logo")}
               </RoundButton>
-              {openCreateDropdown && renderCreateDropdownModal()}
-            </RefContainer>
-            <RoundButton
-              style={{ marginLeft: "12px", zIndex: openLynchPynDropdown ? 2 : 0 }}
-              backgroundColor={openLynchPynDropdown ? "white" : "primary100"}
-              onClick={() => setOpenLynchPynDropdown(!openLynchPynDropdown)}
-            >
-              {renderHeaderIcon("Logo")}
-            </RoundButton>
-          </ActionsContainer>
-          <LogoContainer>
-            {R.isNil(companyStore.company) ? (
-              <></>
-            ) : (
-              companyStore.company.logoUrl && <LogoImage src={`${companyStore.company.logoUrl}`} />
-            )}
-          </LogoContainer>
-          <PersonalInfoContainer ref={accountActionRef}>
-            <PersonalInfoDisplayContainer
-              onClick={() => setShowAccountActions(!showAccountActions)}
-            >
-              <Avatar
-                firstName={sessionStore.profile.firstName}
-                lastName={sessionStore.profile.lastName}
-                avatarUrl={sessionStore.profile.avatarUrl}
-              />
-              <ProfileActionContainer>
-                <ProfileFirstName>{sessionStore.profile.firstName}</ProfileFirstName>
-                <IconContainer>
-                  <ProfileDropdownIcon icon={"Chevron-Down"} size={15} />
-                </IconContainer>
-              </ProfileActionContainer>
-            </PersonalInfoDisplayContainer>
-            {renderActionDropdown()}
-          </PersonalInfoContainer>
-        </HeaderItemsContainer>
+            </ActionsContainer>
+            <LogoContainer>
+              {R.isNil(companyStore.company) ? (
+                <></>
+              ) : (
+                companyStore.company.logoUrl && (
+                  <LogoImage src={`${companyStore.company.logoUrl}`} />
+                )
+              )}
+            </LogoContainer>
+            <PersonalInfoContainer ref={accountActionRef}>
+              <PersonalInfoDisplayContainer
+                onClick={() => setShowAccountActions(!showAccountActions)}
+              >
+                <Avatar
+                  firstName={sessionStore.profile.firstName}
+                  lastName={sessionStore.profile.lastName}
+                  avatarUrl={sessionStore.profile.avatarUrl}
+                />
+                <ProfileActionContainer>
+                  <ProfileFirstName>{sessionStore.profile.firstName}</ProfileFirstName>
+                  <IconContainer>
+                    <ProfileDropdownIcon icon={"Chevron-Down"} size={15} />
+                  </IconContainer>
+                </ProfileActionContainer>
+              </PersonalInfoDisplayContainer>
+              {renderActionDropdown()}
+            </PersonalInfoContainer>
+          </HeaderItemsContainer>
 
-        <CreateIssueModal
-          createIssueModalOpen={createIssueModalOpen}
-          setCreateIssueModalOpen={setCreateIssueModalOpen}
-        />
-        <CreateKeyActivityModal
-          createKeyActivityModalOpen={createKeyActivityModalOpen}
-          setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
-        />
-      </Container>
+          <CreateIssueModal
+            createIssueModalOpen={createIssueModalOpen}
+            setCreateIssueModalOpen={setCreateIssueModalOpen}
+          />
+          <CreateKeyActivityModal
+            createKeyActivityModalOpen={createKeyActivityModalOpen}
+            setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+          />
+        </Container>
+      </Wrapper>
     );
   },
 );
@@ -198,10 +202,17 @@ const HeaderItemsContainer = styled.div`
 `;
 
 const Container = styled(HomeContainerBorders)`
-  margin-top: 40px;
   height: 80px;
-  width: 85%;
+`;
+
+const Wrapper = styled.div`
+  background-color: white;
+  padding-top: 40px;
   margin-left: 168px;
+  margin-top: -20px;
+  height: 90px;
+  position: fixed;
+  width: calc(100% - 208px);
 `;
 
 const ActionsContainer = styled.div`
