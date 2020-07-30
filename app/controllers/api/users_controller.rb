@@ -10,16 +10,16 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def show
-    render json: @user
+    render json: @user.as_json(include: [:current_daily_log])
   end
 
   def profile
-    render json: current_user.serializable_hash(methods: [:avatar_url, :role]).merge(static_data: view_context.static_data)
+    render json: current_user.serializable_hash(methods: [:avatar_url, :role, :current_daily_log]).merge(static_data: view_context.static_data)
   end
 
   def update
     @user.update!(user_params)
-    render json: @user
+    render json: @user.as_json(include: [:current_daily_log])
   end
 
   def update_avatar
@@ -30,8 +30,9 @@ class Api::UsersController < Api::ApplicationController
 
   private
 
+  # TODO: This was not expecting user: { } before, it probably always should or always should not
   def user_params
-    params.permit(:first_name, :last_name, :email) #, :timezone, :company_id, :user_role_id)
+    params.require(:user).permit(:id, :first_name, :last_name, :email, daily_logs_attributes: [:id, :work_status])
   end
 
   def set_user

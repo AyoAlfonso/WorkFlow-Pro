@@ -6,10 +6,10 @@ import { baseTheme } from "../../themes/base";
 const iconSet = require("../../assets/icons/selection.json");
 
 type StyledSystemProps = LayoutProps & SpaceProps;
-interface IIconProps extends StyledSystemProps {
+export interface IIconProps extends StyledSystemProps {
   icon: string;
   iconColor?: string;
-  size: string | number;
+  size?: string | number;
   style?: object;
   disableFill?: boolean;
   removeInlineStyle?: boolean;
@@ -21,7 +21,7 @@ export const IconContainer = styled.div<IIconProps>`
 `;
 
 export const Icon = (props: IIconProps) => {
-  const { icon, iconColor, size, disableFill, removeInlineStyle, ...restProps } = props;
+  const { icon, iconColor, size = "25px", disableFill, removeInlineStyle, ...restProps } = props;
   return (
     <IconContainer {...restProps}>
       <IcoMoon

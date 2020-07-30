@@ -1,10 +1,11 @@
-import { types, getEnv, flow, getRoot } from "mobx-state-tree";
-import { withEnvironment } from "../lib/with-environment";
-import { withRootStore } from "../lib/with-root-store";
 import * as R from "ramda";
-
-import { UserModel } from "../models/user";
-import { StaticModel } from "../models/static";
+import { types, getEnv, flow, getRoot } from "mobx-state-tree";
+import { withEnvironment } from "~/lib/with-environment";
+import { withRootStore } from "~/lib/with-root-store";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
+import { UserModel } from "~/models/user";
+import { StaticModel } from "~/models/static";
 
 export const SessionStoreModel = types
   .model("SessionStoreModel")
@@ -19,7 +20,7 @@ export const SessionStoreModel = types
   .extend(withEnvironment())
   .views(self => ({}))
   .actions(self => ({
-    loadProfile: flow(function* () {
+    loadProfile: flow(function*() {
       self.loading = true;
       const env = getEnv(self);
       try {
@@ -35,7 +36,22 @@ export const SessionStoreModel = types
       }
       self.loading = false;
     }),
-    updateAvatar: flow(function* (formData) {
+    updateUser: flow(function*(fieldsAndValues) {
+      self.loading = true;
+      const env = getEnv(self);
+      try {
+        const response = yield env.api.updateProfile(
+          Object.assign(fieldsAndValues, { id: self.profile.id }),
+        );
+        if (response.ok) {
+          self.profile = response.data;
+          showToast("User updated", ToastMessageConstants.SUCCESS);
+        }
+      } catch {
+        // error messaging handled by API monitor
+      }
+    }),
+    updateAvatar: flow(function*(formData) {
       self.loading = true;
       const env = getEnv(self);
       try {
@@ -50,7 +66,7 @@ export const SessionStoreModel = types
     }),
   }))
   .actions(self => ({
-    login: flow(function* (email, password) {
+    login: flow(function*(email, password) {
       self.loading = true;
       //may want to show a loading modal here
       const env = getEnv(self);
@@ -87,7 +103,7 @@ export const SessionStoreModel = types
     // yield self.environment.api.logout();
     // self.loggedIn = false;
     // }),
-    logoutRequest: flow(function* () {
+    logoutRequest: flow(function*() {
       const env = getEnv(self);
       const response: any = yield env.api.signOut();
       if (response.ok) {
