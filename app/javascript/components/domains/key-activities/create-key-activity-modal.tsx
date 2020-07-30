@@ -20,6 +20,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
   const { createKeyActivityModalOpen, setCreateKeyActivityModalOpen } = props;
   const [KeyActivityDescription, setKeyActivityDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
+  const [weeklyList, setWeeklyList] = useState<boolean>(true);
 
   return (
     <ModalWithHeader
@@ -48,11 +49,14 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                 .createKeyActivity({
                   description: KeyActivityDescription,
                   priority: selectedPriority,
+                  weeklyList: weeklyList,
                 })
                 .then(result => {
                   if (result) {
                     setKeyActivityDescription("");
                     setCreateKeyActivityModalOpen(false);
+                    setSelectedPriority(0);
+                    setWeeklyList(true);
                   }
                 })
             }
@@ -60,6 +64,9 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             Save
           </StyledButton>
           <PriorityContainer>
+            <MasterListButton active={!weeklyList} onClick={() => setWeeklyList(!weeklyList)}>
+              Master
+            </MasterListButton>
             <IconContainer onClick={() => setSelectedPriority(selectedPriority == 1 ? 0 : 1)}>
               <Icon
                 icon={"Priority-High"}
@@ -115,11 +122,17 @@ const StyledButton = styled(Button)`
   width: 130px;
 `;
 
-const UserImageContainer = styled.div`
-  background-color: ${baseTheme.colors.grey20};
-  margin-left: auto;
-  margin-right: 20px;
-  border-radius: 50px;
-  height: 55px;
-  width: 55px;
+type MasterListButtonType = {
+  active: boolean;
+};
+
+const MasterListButton = styled(Button)<MasterListButtonType>`
+  margin-top: -4px !important;
+  background-color: ${props =>
+    props.active ? baseTheme.colors.primary100 : baseTheme.colors.grey60};
+  color: white !important;
+  border-color: ${baseTheme.colors.primary100} !important;
+  &: hover {
+    cursor: pointer;
+  }
 `;
