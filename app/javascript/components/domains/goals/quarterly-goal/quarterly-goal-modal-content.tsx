@@ -124,7 +124,10 @@ export const QuarterlyGoalModalContent = observer(
                 onBlur={() => quarterlyGoalStore.update()}
               />
             </MilestoneDetails>
-            <IndividualVerticalStatusBlockColorIndicator milestone={milestone} />
+            <IndividualVerticalStatusBlockColorIndicator
+              milestone={milestone}
+              milestoneStatus={milestone.status}
+            />
           </MilestoneContainer>
         );
       });

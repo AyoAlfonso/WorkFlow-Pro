@@ -100,6 +100,13 @@ export const QuarterlyGoalStoreModel = types
       milestones[milestoneIndex].description = value;
       self.quarterlyGoal.milestones = milestones;
     },
+    updateMilestoneStatus(id, status) {
+      let milestones = self.quarterlyGoal.milestones;
+      let milestoneIndex = milestones.findIndex(milestone => milestone.id == id);
+      milestones[milestoneIndex].status = status;
+      self.quarterlyGoal.milestones = milestones;
+      self.update();
+    },
   }));
 
 type QuarterlyGoalStoreType = typeof QuarterlyGoalStoreModel.Type;

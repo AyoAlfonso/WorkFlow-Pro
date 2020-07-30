@@ -25,8 +25,8 @@ export const QuarterlyGoalModel = types
     get activeMilestones() {
       return self.milestones.filter(
         milestone =>
-          moment(milestone.weekOf).isSame(moment(), "day") ||
-          moment(milestone.weekOf).isAfter(moment(), "day"),
+          moment(milestone.weekOf).isSame(moment(), "week") ||
+          moment(milestone.weekOf).isAfter(moment(), "week"),
       );
     },
   }))
