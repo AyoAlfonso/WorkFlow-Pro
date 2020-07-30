@@ -5,4 +5,8 @@ class HabitLog < ApplicationRecord
     where("log_date >= ?", Date.current_week_start).
     where("log_date <= ?", Date.current_week_end)
   }
+
+  def as_json
+    super(except: [:created_at, :updated_at])
+  end
 end

@@ -24,6 +24,18 @@ export const HabitStoreModel = types
         self.habits = response.data;
       }
     }),
+    updateHabitLog: flow(function*(habitId, logDate) {
+      const response = yield self.environment.api.updateHabitLog(habitId, logDate);
+      if (response.ok) {
+        const habitIndex = self.habits.findIndex(habit => habit.id === response.data.habitId);
+        const habitLogIndex = self.habits[habitIndex].weeklyLogs.findIndex(
+          log => log.logDate === response.data.logDate,
+        );
+        const newHabits: Array<any> = [...self.habits];
+        newHabits[habitIndex].weeklyLogs[habitLogIndex] = response.data;
+        // self.habits = newHabits;
+      }
+    }),
     // updateIssueStatus: flow(function*(issue, value) {
     //   const response: ApiResponse<any> = yield self.environment.api.updateIssueStatus(issue, value);
     //   if (response.ok) {

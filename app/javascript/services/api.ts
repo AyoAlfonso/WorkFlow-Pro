@@ -153,5 +153,9 @@ export class Api {
     return this.client.post(`/quarterly_goals/create_milestones/${quarterlyGoalId}`);
   }
 
+  async updateHabitLog(habitId: number, logDate: string) {
+    return this.client.put(`/habits/${habitId}/habit_logs/${logDate}`);
+  }
+
   //async setJWT(jwt) {}
 }

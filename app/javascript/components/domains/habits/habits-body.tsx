@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
+import { HabitsHabitTracker } from "./habits-habit-tracker";
 
 export const HabitsBody = observer(
   (): JSX.Element => {
-    const { t } = useTranslation();
     const {
       habitStore,
       habitStore: { habits },
@@ -14,12 +14,17 @@ export const HabitsBody = observer(
     useEffect(() => {
       habitStore.fetchHabits();
     }, habitStore.habits);
-    const renderHabits = habits.map((hab, ind) => (
-      <div>{`${hab.name} | ${hab.id} | ${hab.color}`}</div>
-    ));
+    const renderHabits = () =>
+      habits.map((habit, index) => (
+        <HabitsHabitTracker
+          key={`${habit.id}-${index}`}
+          habit={habit}
+          onUpdate={(habitId, logDate) => habitStore.updateHabitLog(habitId, logDate)}
+        />
+      ));
     return (
       <>
-        <Container>{renderHabits}</Container>
+        <Container>{renderHabits()}</Container>
       </>
     );
   },
