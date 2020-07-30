@@ -45,7 +45,7 @@ class User < ApplicationRecord
   end
 
   def current_daily_log
-    daily_logs.select(:id, :work_status).first_or_create(log_date: Date.today)
+    daily_logs.select(:id, :work_status).where(log_date: Date.today).first_or_create
   end
 
   # def on_jwt_dispatch(token, payload)
