@@ -62,6 +62,11 @@ const StyledButton = styled.button<IButtonProps>`
           color: props.disabled ? "fadedRed" : "warningRed",
           borderColor: props.disabled ? "fadedRed" : "warningRed",
         },
+        grey: {
+          bg: "backgroundGrey",
+          color: "grey80",
+          borderColor: "backgroundGrey",
+        },
       },
     })}
 `;

@@ -19,11 +19,15 @@ class QuarterlyGoalPolicy < ApplicationPolicy
   end
 
   def update?
-    @quarterly_goal.created_by == @user
+    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user
   end
 
   def destroy?
-    @quarterly_goal.created_by == @user
+    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user
+  end
+
+  def create_key_element?
+    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user
   end
 
   class Scope

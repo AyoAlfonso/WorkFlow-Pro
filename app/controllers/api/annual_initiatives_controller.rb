@@ -1,5 +1,5 @@
 class Api::AnnualInitiativesController < Api::ApplicationController
-  before_action :set_annual_initiative, only: [:show, :update, :destroy]
+  before_action :set_annual_initiative, only: [:show, :update, :destroy, :create_key_element]
 
   respond_to :json
 
@@ -22,6 +22,11 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   def destroy
     @annual_initiative.destroy!
     render json: { annual_initiative_id: @annual_initiative.id, status: :ok }
+  end
+
+  def create_key_element
+    key_element = KeyElement.create!(elementable: @annual_initiative, value: "")
+    render json: { key_element: key_element, status: :ok }
   end
 
   private 

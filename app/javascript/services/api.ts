@@ -104,8 +104,26 @@ export class Api {
     return this.client.patch(`/annual_initiatives/${annualInitiative.id}`, parsedAnnualInitiative);
   }
 
+  async createAnnualInitiativeKeyElement(id) {
+    return this.client.post(`/annual_initiatives/create_key_element/${id}`);
+  }
+
   async getQuarterlyGoal(id) {
     return this.client.get(`/quarterly_goals/${id}`);
+  }
+
+  async updateQuarterlyGoal(quarterlyGoal) {
+    const parsedQuarterlyGoal = {
+      ...quarterlyGoal,
+      keyElementsAttributes: quarterlyGoal.keyElements,
+      milestonesAttributes: quarterlyGoal.milestones,
+    };
+
+    return this.client.patch(`/quarterly_goals/${quarterlyGoal.id}`, parsedQuarterlyGoal);
+  }
+
+  async createQuarterlyGoalKeyElement(id) {
+    return this.client.post(`/quarterly_goals/create_key_element/${id}`);
   }
 
   //async setJWT(jwt) {}

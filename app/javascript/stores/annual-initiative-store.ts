@@ -24,7 +24,7 @@ export const AnnualInitiativeStoreModel = types
         // error messaging handled by API monitor
       }
     }),
-    updateAnnualInitiative: flow(function* () {
+    update: flow(function* () {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.updateAnnualInitiative(self.annualInitiative);
@@ -33,6 +33,19 @@ export const AnnualInitiativeStoreModel = types
         const { goalStore } = getRoot(self);
         goalStore.updateAnnualInitiative(responseAnnualInitiative);
         return responseAnnualInitiative;
+      } catch {
+        console.log("is there an error?????????");
+        // error messaging handled by API monitor
+      }
+    }),
+    createKeyElement: flow(function* () {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createAnnualInitiativeKeyElement(
+          self.annualInitiative.id,
+        );
+        const updatedKeyElements = [...self.annualInitiative.keyElements, response.data.keyElement];
+        self.annualInitiative.keyElements = updatedKeyElements as any;
       } catch {
         console.log("is there an error?????????");
         // error messaging handled by API monitor
@@ -56,11 +69,11 @@ export const AnnualInitiativeStoreModel = types
         ? (keyElements[keyElementIndex].completedAt = moment().toString())
         : (keyElements[keyElementIndex].completedAt = "");
       self.annualInitiative.keyElements = keyElements;
-      self.updateAnnualInitiative();
+      self.update();
     },
     updateOwnedBy(userId) {
       self.annualInitiative.ownedById = userId;
-      self.updateAnnualInitiative();
+      self.update();
     },
   }));
 
