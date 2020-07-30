@@ -12,10 +12,10 @@ RSpec.describe Habit, type: :model do
   )}
   describe "getting weekly logs" do
     it "should get only completed logs for current week" do
-      expect(habit.current_weekly_logs.count).to eq(3)
+      expect(habit.complete_weekly_logs.count).to eq(3)
     end
     it "should build logs for days that aren't complete for current week" do
-      expect(habit.weekly_logs_with_incomplete.count).to eq(7)
+      expect(habit.weekly_logs.count).to eq(7)
     end
   end
 end

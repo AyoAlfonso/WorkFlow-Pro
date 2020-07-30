@@ -4,20 +4,21 @@ class Api::HabitsController < Api::ApplicationController
   respond_to :json
 
   def index
-    @habits = Habit.select(:id, :frequency, :name, :color, :user_id).all
+    @habits = Habit.all
     render json: @habits
   end
 
   def create
-    @habit = Habit.select(:id, :frequency, :name, :color, :user_id).new(
-      user: current_user,
-      name: habit_params[:name],
-      frequency: habit_params[:frequency],
-      color: habit_params[:color]
-    )
+    @habit = Habit.
+              select(:id, :frequency, :name, :color, :user_id).
+                new(
+                  user: current_user,
+                  name: habit_params[:name],
+                  frequency: habit_params[:frequency],
+                  color: habit_params[:color]
+                )
     authorize @habit
     @habit.save!
-
     render json: @habit
   end
 
