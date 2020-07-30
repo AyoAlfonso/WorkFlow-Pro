@@ -11,20 +11,20 @@ export const KeyActivityStoreModel = types
   .extend(withEnvironment())
   .views(self => ({
     get weeklyKeyActivities() {
-      return self.keyActivities.filter(issue => issue.weeklyList == true);
+      return self.keyActivities.filter(issue => issue.weeklyList && !issue.completedAt);
     },
     get masterKeyActivities() {
-      return self.keyActivities;
+      return self.keyActivities.filter(issue => !issue.weeklyList || issue.completedAt);
     },
   }))
   .actions(self => ({
-    fetchKeyActivities: flow(function* () {
+    fetchKeyActivities: flow(function*() {
       const response: ApiResponse<any> = yield self.environment.api.getKeyActivities();
       if (response.ok) {
         self.keyActivities = response.data;
       }
     }),
-    updateKeyActivityStatus: flow(function* (keyActivity, value) {
+    updateKeyActivityStatus: flow(function*(keyActivity, value) {
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivityStatus(
         keyActivity,
         value,
@@ -36,7 +36,7 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
-    createKeyActivity: flow(function* (keyActivityObject) {
+    createKeyActivity: flow(function*(keyActivityObject) {
       const response: ApiResponse<any> = yield self.environment.api.createKeyActivity(
         keyActivityObject,
       );
@@ -54,7 +54,7 @@ export const KeyActivityStoreModel = types
     },
   }))
   .actions(self => ({
-    load: flow(function* () {
+    load: flow(function*() {
       self.reset();
       yield self.fetchKeyActivities();
     }),
