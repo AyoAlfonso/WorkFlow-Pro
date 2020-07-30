@@ -3,7 +3,7 @@ class Company < ApplicationRecord
   has_many :annual_initiatives
   has_one_attached :logo
   
-  has_one :core_four
+  has_one :core_four, dependent: :destroy
   accepts_nested_attributes_for :core_four
   has_rich_text :accountability_chart
   has_rich_text :strategic_plan
