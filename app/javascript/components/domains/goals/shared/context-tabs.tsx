@@ -35,7 +35,7 @@ export const ContextTabs = observer(
       } else if (type == "quarterlyGoal") {
         setStore(quarterlyGoalStore);
       }
-    });
+    }, []);
 
     const updateImportance = (index: number, value: string): void => {
       let objectToBeModified = R.clone(object);

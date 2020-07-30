@@ -23,7 +23,7 @@ export const OwnedBySection = ({ ownedBy, type }: IOwnedBySectionProps): JSX.Ele
     } else if (type == "quarterlyGoal") {
       setStore(quarterlyGoalStore);
     }
-  });
+  }, []);
 
   const companyUsers = userStore.users;
   const currentUser = sessionStore.profile;
