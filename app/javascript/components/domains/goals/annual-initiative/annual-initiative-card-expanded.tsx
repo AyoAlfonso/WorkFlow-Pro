@@ -77,6 +77,7 @@ export const AnnualInitiativeCardExpanded = (
           setShowCreateGoal={setCreateQuarterlyGoalArea}
           createAction={quarterlyGoalStore.create}
           annualInitiativeId={annualInitiative.id}
+          buttonWidth={"160px"}
         />
       </CreateGoalContainer>
     );
@@ -146,5 +147,5 @@ const MinimizeIconContainer = styled.div`
 
 const CreateGoalContainer = styled.div`
   margin-bottom: 16px;
-  background-color: white;
+  margin-left: 16px;
 `;

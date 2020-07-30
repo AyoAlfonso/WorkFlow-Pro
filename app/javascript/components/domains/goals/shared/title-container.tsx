@@ -9,6 +9,7 @@ interface ITitleContainerProps {
   setShowMinimizedCards: React.Dispatch<React.SetStateAction<boolean>>;
   showCompanyGoals: boolean;
   setShowCompanyGoals: React.Dispatch<React.SetStateAction<boolean>>;
+  largeHomeTitle?: boolean;
 }
 
 export const TitleContainer = ({
@@ -16,6 +17,7 @@ export const TitleContainer = ({
   setShowMinimizedCards,
   showCompanyGoals,
   setShowCompanyGoals,
+  largeHomeTitle,
 }: ITitleContainerProps): JSX.Element => {
   const renderExpandAnnualInitiativesIcon = (): JSX.Element => {
     return showMinimizedCards ? (
@@ -31,7 +33,12 @@ export const TitleContainer = ({
 
   return (
     <Container>
-      <HomeTitle> Goals </HomeTitle>
+      {largeHomeTitle ? (
+        <EnlargedHomeTitle> Goals </EnlargedHomeTitle>
+      ) : (
+        <HomeTitle> Goals </HomeTitle>
+      )}
+
       <ExpandAnnualInitiativesButton
         showMinimizedCards={showMinimizedCards}
         onClick={() => setShowMinimizedCards(!showMinimizedCards)}
@@ -76,6 +83,14 @@ const ExpandAnnualInitiativesButton = styled.div<ExpandAnnualInitiativesButtonTy
 
 const Container = styled.div`
   display: flex;
+`;
+
+const EnlargedHomeTitle = styled.div`
+  font-family: Exo;
+  font-size: 20pt;
+  font-weight: 600;
+  margin-top: auto;
+  margin-bottom: auto;
 `;
 
 type IconContainerType = {

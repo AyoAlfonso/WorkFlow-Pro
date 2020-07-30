@@ -92,12 +92,12 @@ export const GoalsIndex = observer(
 
     return (
       <Container>
-        <HeaderText> Goals </HeaderText>
         <TitleContainer
           showMinimizedCards={showMinimizedCards}
           setShowMinimizedCards={setShowMinimizedCards}
           showCompanyGoals={showCompanyGoals}
           setShowCompanyGoals={setShowCompanyGoals}
+          largeHomeTitle={true}
         />
 
         <RallyingCry rallyingCry={companyGoals.rallyingCry} />
@@ -174,14 +174,6 @@ const StyledModal = Modal.styled`
   min-height: 100px;
   border-radius: 10px;
   background-color: ${props => props.theme.colors.white};
-`;
-
-const HeaderText = styled.p`
-  font-size: 40pt;
-  font-family: Exo;
-  font-weight: 300;
-  margin-top: 32px;
-  margin-bottom: 48px;
 `;
 
 type CreateAnnualInitiativeContainerProps = {

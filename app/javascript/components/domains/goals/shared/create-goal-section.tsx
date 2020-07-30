@@ -15,6 +15,7 @@ interface ICreateGoalSectionProps {
   setShowCreateGoal: React.Dispatch<React.SetStateAction<boolean>>;
   createAction: any;
   annualInitiativeId?: string | number;
+  buttonWidth?: string;
 }
 
 export const CreateGoalSection = ({
@@ -26,6 +27,7 @@ export const CreateGoalSection = ({
   setShowCreateGoal,
   createAction,
   annualInitiativeId,
+  buttonWidth,
 }: ICreateGoalSectionProps): JSX.Element => {
   const [description, setDescription] = useState<string>("");
 
@@ -61,19 +63,28 @@ export const CreateGoalSection = ({
       </ActionsContainer>
     </CreateAnnualInitiativeCardContainer>
   ) : (
-    <StyledButton small variant={"grey"} onClick={() => setShowCreateGoal(true)}>
+    <StyledButton
+      small
+      variant={"grey"}
+      onClick={() => setShowCreateGoal(true)}
+      width={buttonWidth}
+    >
       <Icon icon={"Plus"} size={"20px"} style={{ marginTop: "3px" }} />
       <AddGoalText>{addButtonText}</AddGoalText>
     </StyledButton>
   );
 };
 
-const StyledButton = styled(Button)`
+type StyledButtonType = {
+  width?: string;
+};
+
+const StyledButton = styled(Button)<StyledButtonType>`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 240px;
-  width: -webkit-fill-available;
+  min-width: ${props => !props.width && "240px"};
+  width: ${props => (props.width ? props.width : "-webkit-fill-available")};
   &: hover {
     color: ${props => props.theme.colors.primary100};
   }

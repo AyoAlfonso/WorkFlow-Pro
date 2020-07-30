@@ -23,8 +23,20 @@ interface IContextTabsProps {
 export const ContextTabs = observer(
   ({ object, type }: IContextTabsProps): JSX.Element => {
     const { sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
+
+    const tabDefaultIndex = () => {
+      if (
+        (type == "annualInitiative" && R.length(R.path(["quarterlyGoals"], object)) == 0) ||
+        (type == "quarterlyGoal" && R.length(R.path(["milestones"], object)) == 0)
+      ) {
+        return 2;
+      } else {
+        return 0;
+      }
+    };
+
     const currentUser = sessionStore.profile;
-    const [selectedContextTab, setSelectedContextTab] = useState<number>(1);
+    const [selectedContextTab, setSelectedContextTab] = useState<number>(tabDefaultIndex() + 1);
     const [hideContent, setHideContent] = useState<boolean>(false);
     const [store, setStore] = useState<any>(null);
     const editable = currentUser.id == object.ownedById;
@@ -99,7 +111,7 @@ export const ContextTabs = observer(
 
     return (
       <Container>
-        <Tabs>
+        <Tabs defaultIndex={tabDefaultIndex()}>
           <StyledTabList>
             <StyledTab onClick={() => tabClicked(1)}>
               <StyledTabTitle tabSelected={selectedContextTab == 1}>Importance </StyledTabTitle>
