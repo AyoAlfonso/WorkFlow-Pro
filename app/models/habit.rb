@@ -1,3 +1,17 @@
 class Habit < ApplicationRecord
   belongs_to :user
+  has_many :habit_logs
+
+  delegate :current_weekly_logs, to: :habit_logs
+
+  # Builds weekly log objects for days of the week that don't have log
+  def weekly_logs_with_incomplete
+    (0..6).map do |day_int|
+      current_weekly_logs.find { |wl| wl.log_date.wday == day_int} ||
+      HabitLog.new(
+        habit: self,
+        log_date: Date.current_week_start.next_day(day_int)
+      )
+    end
+  end
 end

@@ -1,7 +1,8 @@
 FactoryBot.define do
   factory :habit do
+    user
     frequency { 1 }
     name { "MyString" }
-    user { nil }
+
   end
 end
