@@ -17,6 +17,7 @@ User.create!(first_name: 'Parham', last_name: 'Chinikar', email: 'parham@lynchpy
 ur1 = UserRole.where(name: UserRole::CEO).first_or_create(name: UserRole::CEO)
 ur2 = UserRole.where(name: UserRole::ADMIN).first_or_create(name: UserRole::ADMIN)
 ur3 = UserRole.where(name: UserRole::NORMAL).first_or_create(name: UserRole::NORMAL)
+ur4 = UserRole.where(name: UserRole::NORMAL).first_or_create(name: UserRole::LEADERSHIP)
 
 if Rails.env.development?
   c1 = Company.where(name: "Latero Labs").first_or_create(name: 'Latero Labs', address: '601-510 W Hastings St, Vancouver, BC V6B 1L8', contact_email: 'inquiries@laterolabs.com', phone_number: '604-933-5091', rallying_cry: 'Some rallying cry!')

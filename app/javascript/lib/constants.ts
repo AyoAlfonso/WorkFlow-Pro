@@ -2,3 +2,4 @@
 export const RoleAdministrator = "administrator";
 export const RoleCEO = "ceo";
 export const RoleNormalUser = "normal_user";
+export const RoleLeadership = "leadership";

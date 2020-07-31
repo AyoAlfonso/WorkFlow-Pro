@@ -5,4 +5,5 @@ class UserRole < ApplicationRecord
   CEO = "ceo"
   ADMIN = "admin"
   NORMAL = "normal_user"
+  LEADERSHIP = "leadership"
 end

@@ -57,12 +57,20 @@ export class Api {
     return this.client.put("/avatar", formData);
   }
 
+  async deleteAvatar() {
+    return this.client.delete("/avatar");
+  }
+
   async getCompany(companyId) {
     return this.client.get(`/companies/${companyId}`);
   }
 
   async updateCompany(formData) {
     return this.client.put(`/companies/${formData.id}`, formData);
+  }
+
+  async deleteLogo(companyId) {
+    return this.client.delete(`/companies/${companyId}/logo`);
   }
 
   async signOut() {

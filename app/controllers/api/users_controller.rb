@@ -9,8 +9,13 @@ class Api::UsersController < Api::ApplicationController
     render json: @users
   end
 
+  def create
+    #generate a random password
+    @user = current_user.company.users.create(user_creation_params)
+  end
+
   def show
-    render json: @user.as_json(include: [:current_daily_log])
+    render json: @user.as_json(include: [:current_daily_log], methods: [:avatar_url, :role])
   end
 
   def profile
@@ -18,8 +23,8 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def update
-    @user.update!(user_params)
-    render json: @user.as_json(include: [:current_daily_log])
+    @user.update!(user_update_params)
+    render json: @user.as_json(include: [:current_daily_log], methods: [:avatar_url, :role])
   end
 
   def update_avatar
@@ -28,10 +33,19 @@ class Api::UsersController < Api::ApplicationController
     render json: { avatar_url: current_user.avatar_url }
   end
 
+  def delete_avatar
+    authorize current_user
+    current_user.avatar.purge_later
+    render json: { avatar_url: nil }
+  end
+
   private
 
-  # TODO: This was not expecting user: { } before, it probably always should or always should not
-  def user_params
+  def user_creation_params
+    params.permit(:first_name, :last_name, :email, :timezone, :user_role_id)
+  end
+
+  def user_update_params
     params.require(:user).permit(:id, :first_name, :last_name, :email, daily_logs_attributes: [:id, :work_status])
   end
 

@@ -24,18 +24,29 @@ import {
 export const Company = observer(
   (): JSX.Element => {
     const {
-      companyStore: { company },
+      companyStore,
       sessionStore: { staticData },
     } = useMst();
+    const { company } = companyStore;
     const [name, setName] = useState(company.name);
     const [timezone, setTimezone] = useState(company.timezone);
     const { t } = useTranslation();
 
     const save = () =>
-      company.update({
+      companyStore.updateCompany({
         name,
         timezone,
       });
+
+    const submitLogo = async (files: FileList) => {
+      const form = new FormData();
+      form.append("logo", files[0]);
+      await companyStore.updateCompany(form);
+    };
+
+    const removeLogo = () => {
+      companyStore.deleteCompanyLogo();
+    };
 
     return (
       <Container>
@@ -114,10 +125,16 @@ export const Company = observer(
                     {company.logoUrl ? <img src={company.logoUrl}></img> : "No Company Logo set"}
                   </PhotoContainer>
                   <PhotoModificationButtonsSection>
-                    <Button small variant={"redOutline"} onClick={() => {}} mr={2}>
+                    <Button
+                      small
+                      variant={"redOutline"}
+                      onClick={removeLogo}
+                      mr={2}
+                      style={{ width: "150px" }}
+                    >
                       {t("general.remove")}
                     </Button>
-                    <FileInput labelText={t("general.upload")} onChange={() => {}} />
+                    <FileInput labelText={t("general.upload")} onChange={submitLogo} />
                   </PhotoModificationButtonsSection>
                 </ProfilePhotoSection>
               </BodyContainer>
