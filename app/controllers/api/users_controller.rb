@@ -15,7 +15,7 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def show
-    render json: @user.as_json(include: [:current_daily_log])
+    render json: @user.as_json(include: [:current_daily_log], methods: [:avatar_url, :role])
   end
 
   def profile
@@ -24,7 +24,7 @@ class Api::UsersController < Api::ApplicationController
 
   def update
     @user.update!(user_update_params)
-    render json: @user.as_json(include: [:current_daily_log])
+    render json: @user.as_json(include: [:current_daily_log], methods: [:avatar_url, :role])
   end
 
   def update_avatar
