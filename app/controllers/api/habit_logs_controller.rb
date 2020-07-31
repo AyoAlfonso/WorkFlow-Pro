@@ -11,7 +11,7 @@ class Api::HabitLogsController < Api::ApplicationController
     if @habit_log.present?
       @habit_log.destroy
     else
-      new_habit_log.save
+      new_habit_log.save!
     end
     render json: new_habit_log.as_json
   end
@@ -24,6 +24,7 @@ class Api::HabitLogsController < Api::ApplicationController
 
   def set_habit
     @habit = Habit.find(params[:habit_id])
+    authorize @habit
     # first_or_initialize not working here I think because the deleted object might still be in memory
     @habit_log = @habit.habit_logs.where(log_date: params[:log_date]).first
     # authorize @habit

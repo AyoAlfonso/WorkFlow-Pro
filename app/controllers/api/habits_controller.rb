@@ -4,7 +4,7 @@ class Api::HabitsController < Api::ApplicationController
   respond_to :json
 
   def index
-    @habits = Habit.all
+    @habits = policy_scope(Habit)
     render json: @habits
   end
 
@@ -18,6 +18,7 @@ class Api::HabitsController < Api::ApplicationController
                   color: habit_params[:color]
                 )
     authorize @habit
+
     @habit.save!
     render json: @habit
   end

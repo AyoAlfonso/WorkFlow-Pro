@@ -2,6 +2,7 @@ class Habit < ApplicationRecord
   belongs_to :user
   has_many :habit_logs
 
+  scope :owned_by_user, -> (user) { where(user: user) }
   delegate :complete_weekly_logs, to: :habit_logs
 
   def as_json(options = [])

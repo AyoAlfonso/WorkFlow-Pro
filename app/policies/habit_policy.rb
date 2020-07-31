@@ -31,7 +31,7 @@ class HabitPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.created_by_user(User.first)
+      scope.owned_by_user(@user)
     end
   end
 end
