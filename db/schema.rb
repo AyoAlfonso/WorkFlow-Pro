@@ -240,49 +240,6 @@ ActiveRecord::Schema.define(version: 2020_08_05_172622) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "rapidfire_answers", force: :cascade do |t|
-    t.bigint "attempt_id"
-    t.bigint "question_id"
-    t.text "answer_text"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["attempt_id"], name: "index_rapidfire_answers_on_attempt_id"
-    t.index ["question_id"], name: "index_rapidfire_answers_on_question_id"
-  end
-
-  create_table "rapidfire_attempts", force: :cascade do |t|
-    t.bigint "survey_id"
-    t.string "user_type"
-    t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["survey_id"], name: "index_rapidfire_attempts_on_survey_id"
-    t.index ["user_id", "user_type"], name: "index_rapidfire_attempts_on_user_id_and_user_type"
-    t.index ["user_type", "user_id"], name: "index_rapidfire_attempts_on_user_type_and_user_id"
-  end
-
-  create_table "rapidfire_questions", force: :cascade do |t|
-    t.bigint "survey_id"
-    t.string "type"
-    t.string "question_text"
-    t.string "default_text"
-    t.string "placeholder"
-    t.integer "position"
-    t.text "answer_options"
-    t.text "validation_rules"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["survey_id"], name: "index_rapidfire_questions_on_survey_id"
-  end
-
-  create_table "rapidfire_surveys", force: :cascade do |t|
-    t.string "name"
-    t.text "introduction"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.text "after_survey_content"
-  end
-
   create_table "user_roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false

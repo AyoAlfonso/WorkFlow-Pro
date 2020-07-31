@@ -5,19 +5,16 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-
+ur1 = UserRole.where(name: UserRole::CEO).first_or_create(name: UserRole::CEO)
+ur2 = UserRole.where(name: UserRole::ADMIN).first_or_create(name: UserRole::ADMIN)
+ur3 = UserRole.where(name: UserRole::NORMAL).first_or_create(name: UserRole::NORMAL)
 
 c1 = Company.where(name: "Latero Labs").first_or_create(name: 'Latero Labs', address: '601-510 W Hastings St, Vancouver, BC V6B 1L8', contact_email: 'inquiries@laterolabs.com', phone_number: '604-933-5091', rallying_cry: 'Some rallying cry!', fiscal_year_start: Date.new(2020,01,01), timezone: "(GMT-08:00) Pacific Time (US & Canada)")
 CoreFour.where(company: c1).first_or_create(core_1: 'The First Core', core_2: 'The Second Core', core_3: 'The Third Core', core_4: 'The Fourth Core', company: c1)
 
-c2 = Company.where(name: "Lynchpyn").first_or_create(name: 'Lynchpyn', address: 'Toronto', contact_email: 'parham@lynchpyn.com', phone_number: '647-631-1996', rallying_cry: 'Some rallying cry!')
+c2 = Company.where(name: "Lynchpyn").first_or_create(name: 'Lynchpyn', address: 'Toronto', contact_email: 'parham@lynchpyn.com', phone_number: '647-631-1996', rallying_cry: 'Some rallying cry!', fiscal_year_start: Date.new(2020,01,01), timezone: "(GMT-05:00) Eastern Time (US & Canada)")
 CoreFour.where(company: c2).first_or_create(core_1: 'The First Core', core_2: 'The Second Core', core_3: 'The Third Core', core_4: 'The Fourth Core', company_id: c2.id)
-User.create!(first_name: 'Parham', last_name: 'Chinikar', email: 'parham@lynchpyn.com', phone_number: '647-631-1996', password: 'password', password_confirmation: 'password', company_id: c2.id)
-
-ur1 = UserRole.where(name: UserRole::CEO).first_or_create(name: UserRole::CEO)
-ur2 = UserRole.where(name: UserRole::ADMIN).first_or_create(name: UserRole::ADMIN)
-ur3 = UserRole.where(name: UserRole::NORMAL).first_or_create(name: UserRole::NORMAL)
-ur4 = UserRole.where(name: UserRole::NORMAL).first_or_create(name: UserRole::LEADERSHIP)
+User.create!(first_name: 'Parham', last_name: 'Chinikar', email: 'parham@lynchpyn.com', phone_number: '647-631-1996', password: 'password', password_confirmation: 'password', company_id: c2.id, user_role_id: ur2.id)
 
 if Rails.env.development?
   c1 = Company.where(name: "Latero Labs").first_or_create(name: 'Latero Labs', address: '601-510 W Hastings St, Vancouver, BC V6B 1L8', contact_email: 'inquiries@laterolabs.com', phone_number: '604-933-5091', rallying_cry: 'Some rallying cry!')
@@ -143,3 +140,202 @@ if Rails.env.development?
   c1.users.each{|u| u.confirm}
 end
 
+Questionnaire.where(name: "Create My Day").first_or_create(name: "Create My Day", 
+  steps: [
+    {
+      id: 1,
+      message: "What are you grateful for?",
+      trigger: "2"
+    },
+    {
+      id: 2,
+      user: true,
+      trigger: "3"
+    },
+    {
+      id: 3,
+      message:
+        "How do you want to feel today? What does your life look like when you are feeling that way?",
+      trigger: "4"
+    },
+    {
+      id: 4,
+      user: true,
+      trigger: "5"
+    },
+    {
+      id: 5,
+      message: "What frog will you eat today?",
+      trigger: "6"
+    },
+    {
+      id: 6,
+      options: [
+        { value: "SEO Optimization", label: "SEO Optimization", trigger: "7" },
+        { value: "Setup WebMaster", label: "Setup WebMaster", trigger: "7" },
+        {
+          value: "Have a Follow-Up with Patrick",
+          label: "Have a Follow-Up with Patrick",
+          trigger: "7",
+        },
+      ]
+    },
+    {
+      id: 7,
+      message: "What is your daily affirmation today?",
+      trigger: "8"
+    },
+    {
+      id: 8,
+      user: true,
+      trigger: "9"
+    },
+    {
+      id: 9,
+      message: "What are your thoughts and reflections for today?",
+      trigger: "10"
+    },
+    {
+      id: 10,
+      user: true,
+      end: true
+    }
+  ]
+)
+
+Questionnaire.where(name: "Thought Challenge").first_or_create(name: "Thought Challenge", 
+  steps: [
+    {
+      id: 1,
+      message: "What negative thoughts do you have?",
+      trigger: "2"
+    },
+    {
+      id: 2,
+      user: true,
+      trigger: "3"
+    },
+    {
+      id: 3,
+      message: "Which cognitive distortions apply to you?",
+      trigger: "4"
+    },
+    {
+      id: 4,
+      options: [
+        { value: "All-or-Nothing Thinking", label: "All-or-Nothing Thinking", trigger: "5" },
+        { value: "Overgeneralization", label: "Overgeneralization", trigger: "5" },
+        { value: "Filtering Out Positives", label: "Filtering Out Positives", trigger: "5" },
+        { value: "Jumping to Conclusions", label: "Jumping to Conclusions", trigger: "5" }
+      ]
+    },
+    {
+      id: 5,
+      message: "How can you challenge your negative thoughts?",
+      trigger: "6"
+    },
+    {
+      id: 6,
+      user: true,
+      trigger: "7"
+    },
+    {
+      id: 7,
+      message: "What is another way of interpreting the situation?",
+      trigger: "8"
+    },
+    {
+      id: 8,
+      user: true,
+      trigger: "9"
+    },
+    {
+      id: 9,
+      message: "How are you feeling now?",
+      trigger: "10"
+    },
+    {
+      id: 10,
+      options: [
+        { value: "Worse than before!", label: "Worse than before!", trigger: "11" },
+        { value: "About the Same", label: "About the Same", trigger: "12" },
+        { value: "Better than before!", label: "Better than before!", trigger: "12" }
+      ]
+    },
+    {
+      id: 11,
+      message: "Sorry to hear that...",
+      end: true
+    },
+    {
+      id: 12,
+      message: "Got it. You can always try something relaxing and come back to this later.",
+      end: true
+    },
+    {
+      id: 13,
+      message: "Glad to hear that!",
+      end: true
+    },
+  ]
+)
+
+Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening Reflection", 
+  steps: [
+    {
+      id: 1,
+      message: "How are you feeling?",
+      trigger: "2"
+    },
+    {
+      id: 2,
+      options: [
+        { value: "Terrible", label: "Terrible", trigger: "3" },
+        { value: "Bad", label: "Bad", trigger: "3" },
+        { value: "Okay", label: "Okay", trigger: "3" },
+        { value: "Good", label: "Good!", trigger: "3" },
+        { value: "Great!", label: "Great!", trigger: "3" },
+      ]
+    },
+    {
+      id: 3,
+      message: "What did you feel?",
+      trigger: "4"
+    },
+    {
+      id: 4,
+      user: true,
+      trigger: "5"
+    },
+    {
+      id: 5,
+      message: "Reflect and celebrate",
+      trigger: "6"
+    },
+    {
+      id: 6,
+      user: true,
+      trigger: "7"
+    },
+    {
+      id: 7,
+      message: "Daily affirmations",
+      trigger: "8"
+    },
+    {
+      id: 8,
+      user: true,
+      trigger: "9"
+    },
+    {
+      id: 9,
+      message: "Thoughts and reflections",
+      trigger: "10"
+    },
+    {
+      id: 10,
+      user: true,
+      end: true
+    },
+  ]
+)
