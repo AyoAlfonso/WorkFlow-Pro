@@ -12,7 +12,6 @@ class User < ApplicationRecord
   delegate :name, to: :user_role, prefix: true, allow_nil: true
   has_many :issues
   has_many :key_activities
-  has_many :personal_reflections
   has_many :created_quarterly_goals, :foreign_key => 'created_by_id', :class_name => 'QuarterlyGoal'
   has_many :owned_quarterly_goals, :foreign_key => 'owned_by_id', :class_name => 'QuarterlyGoal'
   has_many :created_annual_initiatives, :foreign_key => 'created_by_id', :class_name => 'AnnualInitiative'
