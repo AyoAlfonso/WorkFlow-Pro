@@ -233,6 +233,19 @@ ActiveRecord::Schema.define(version: 2020_08_05_172622) do
     t.index ["owned_by_id"], name: "index_quarterly_goals_on_owned_by_id"
   end
 
+  create_table "questionnaire_attempts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "questionnaire_id", null: false
+    t.text "answers"
+    t.text "steps"
+    t.text "rendered_steps"
+    t.datetime "completed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["questionnaire_id"], name: "index_questionnaire_attempts_on_questionnaire_id"
+    t.index ["user_id"], name: "index_questionnaire_attempts_on_user_id"
+  end
+
   create_table "questionnaires", force: :cascade do |t|
     t.string "name"
     t.text "steps"
@@ -324,6 +337,8 @@ ActiveRecord::Schema.define(version: 2020_08_05_172622) do
   add_foreign_key "meeting_ratings", "weekly_meetings"
   add_foreign_key "milestones", "quarterly_goals"
   add_foreign_key "quarterly_goals", "annual_initiatives"
+  add_foreign_key "questionnaire_attempts", "questionnaires"
+  add_foreign_key "questionnaire_attempts", "users"
   add_foreign_key "users", "companies"
   add_foreign_key "users", "user_roles"
 end

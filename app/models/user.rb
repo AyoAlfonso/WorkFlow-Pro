@@ -20,6 +20,7 @@ class User < ApplicationRecord
   has_many :meeting_ratings
   has_many :daily_logs
   has_one_attached :avatar
+  has_many :questionnaire_attempts
   belongs_to :user_role
   has_many :habits
 
