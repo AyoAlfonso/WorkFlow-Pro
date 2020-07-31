@@ -134,17 +134,6 @@ ActiveRecord::Schema.define(version: 2020_08_05_172622) do
     t.index ["company_id"], name: "index_core_fours_on_company_id"
   end
 
-  create_table "create_my_days", force: :cascade do |t|
-    t.text "i_am_grateful_for"
-    t.text "how_do_i_want_to_feel"
-    t.string "frog_type"
-    t.integer "frog_id"
-    t.text "daily_affirmation"
-    t.text "thoughts_and_reflections"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "daily_logs", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.date "log_date"
@@ -227,16 +216,6 @@ ActiveRecord::Schema.define(version: 2020_08_05_172622) do
     t.index ["quarterly_goal_id"], name: "index_milestones_on_quarterly_goal_id"
   end
 
-  create_table "personal_reflections", force: :cascade do |t|
-    t.string "how_are_you_feeling"
-    t.text "what_do_you_feel"
-    t.text "reflect_and_celebrate"
-    t.text "daily_affirmations"
-    t.text "thoughts_and_reflections"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "quarterly_goals", force: :cascade do |t|
     t.bigint "created_by_id"
     t.bigint "owned_by_id"
@@ -254,13 +233,54 @@ ActiveRecord::Schema.define(version: 2020_08_05_172622) do
     t.index ["owned_by_id"], name: "index_quarterly_goals_on_owned_by_id"
   end
 
-  create_table "thought_challenges", force: :cascade do |t|
-    t.text "negative_thoughts"
-    t.integer "cognitive_distortions", default: 0
-    t.text "how_to_challenge_negative_thoughts"
-    t.text "another_way_to_interpret"
+  create_table "questionnaires", force: :cascade do |t|
+    t.string "name"
+    t.json "steps"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "rapidfire_answers", force: :cascade do |t|
+    t.bigint "attempt_id"
+    t.bigint "question_id"
+    t.text "answer_text"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["attempt_id"], name: "index_rapidfire_answers_on_attempt_id"
+    t.index ["question_id"], name: "index_rapidfire_answers_on_question_id"
+  end
+
+  create_table "rapidfire_attempts", force: :cascade do |t|
+    t.bigint "survey_id"
+    t.string "user_type"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["survey_id"], name: "index_rapidfire_attempts_on_survey_id"
+    t.index ["user_id", "user_type"], name: "index_rapidfire_attempts_on_user_id_and_user_type"
+    t.index ["user_type", "user_id"], name: "index_rapidfire_attempts_on_user_type_and_user_id"
+  end
+
+  create_table "rapidfire_questions", force: :cascade do |t|
+    t.bigint "survey_id"
+    t.string "type"
+    t.string "question_text"
+    t.string "default_text"
+    t.string "placeholder"
+    t.integer "position"
+    t.text "answer_options"
+    t.text "validation_rules"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["survey_id"], name: "index_rapidfire_questions_on_survey_id"
+  end
+
+  create_table "rapidfire_surveys", force: :cascade do |t|
+    t.string "name"
+    t.text "introduction"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.text "after_survey_content"
   end
 
   create_table "user_roles", force: :cascade do |t|
@@ -310,6 +330,17 @@ ActiveRecord::Schema.define(version: 2020_08_05_172622) do
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by_type_and_invited_by_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["user_role_id"], name: "index_users_on_user_role_id"
+  end
+
+  create_table "versions", force: :cascade do |t|
+    t.string "item_type", null: false
+    t.bigint "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.datetime "created_at"
+    t.text "object_changes"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
   create_table "weekly_meetings", force: :cascade do |t|

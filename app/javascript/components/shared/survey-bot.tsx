@@ -39,9 +39,13 @@ const variants = {
       {
         id: "6",
         options: [
-          { value: "1", label: "SEO Optimization", trigger: "7" },
-          { value: "2", label: "Setup WebMaster", trigger: "7" },
-          { value: "3", label: "Have a Follow-Up with Patrick", trigger: "7" },
+          { value: "SEO Optimization", label: "SEO Optimization", trigger: "7" },
+          { value: "Setup WebMaster", label: "Setup WebMaster", trigger: "7" },
+          {
+            value: "Have a Follow-Up with Patrick",
+            label: "Have a Follow-Up with Patrick",
+            trigger: "7",
+          },
         ],
       },
       {
@@ -87,10 +91,10 @@ const variants = {
       {
         id: 4,
         options: [
-          { value: "1", label: "All-or-Nothing Thinking", trigger: "5" },
-          { value: "2", label: "Overgeneralization", trigger: "5" },
-          { value: "3", label: "Filtering Out Positives", trigger: "5" },
-          { value: "4", label: "Jumping to Conclusions", trigger: "5" },
+          { value: "All-or-Nothing Thinking", label: "All-or-Nothing Thinking", trigger: "5" },
+          { value: "Overgeneralization", label: "Overgeneralization", trigger: "5" },
+          { value: "Filtering Out Positives", label: "Filtering Out Positives", trigger: "5" },
+          { value: "Jumping to Conclusions", label: "Jumping to Conclusions", trigger: "5" },
         ],
       },
       {
@@ -121,9 +125,9 @@ const variants = {
       {
         id: 10,
         options: [
-          { value: "Worse", label: "Worse than before!", trigger: "11" },
-          { value: "Same", label: "About the Same", trigger: "12" },
-          { value: "Better", label: "Better than before!", trigger: "12" },
+          { value: "Worse than before!", label: "Worse than before!", trigger: "11" },
+          { value: "About the Same", label: "About the Same", trigger: "12" },
+          { value: "Better than before!", label: "Better than before!", trigger: "12" },
         ],
       },
       {
@@ -232,6 +236,9 @@ export const SurveyBot = observer(
         handleEnd={({ renderedSteps, steps, values }) => {
           // @TODO -> need some kind of util here that parses and maps answers to questions
           // and then makes an api call to persist to the database
+          console.log("RENDERED STEPS: ", renderedSteps);
+          console.log("STEPS: ", steps);
+          console.log("VALUES: ", values);
           if (typeof props.endFn === "function") {
             setTimeout(() => {
               props.endFn("");
