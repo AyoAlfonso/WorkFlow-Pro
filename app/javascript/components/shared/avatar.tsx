@@ -14,9 +14,16 @@ interface AvatarProps {
   lastName: string;
   avatarUrl?: string;
   size?: number;
+  marginRight?: string;
 }
 
-export const Avatar = ({ firstName, lastName, avatarUrl, size }: AvatarProps): JSX.Element =>
+export const Avatar = ({
+  firstName,
+  lastName,
+  avatarUrl,
+  size,
+  marginRight,
+}: AvatarProps): JSX.Element =>
   avatarUrl ? (
     <Image
       sx={{
@@ -27,5 +34,10 @@ export const Avatar = ({ firstName, lastName, avatarUrl, size }: AvatarProps): J
       src={avatarUrl}
     />
   ) : (
-    <UserDefaultIcon size={size || 48} firstName={firstName} lastName={lastName} />
+    <UserDefaultIcon
+      size={size || 48}
+      firstName={firstName}
+      lastName={lastName}
+      marginRight={marginRight}
+    />
   );

@@ -68,10 +68,17 @@ export const AccountProfile = observer(
                 lastName={sessionStore.profile.lastName}
                 avatarUrl={sessionStore.profile.avatarUrl}
                 size={256}
+                marginRight={"auto"}
               />
             </PhotoContainer>
             <PhotoModificationButtonsSection>
-              <Button small variant={"redOutline"} onClick={deleteAvatar} mr={2}>
+              <Button
+                small
+                variant={"redOutline"}
+                onClick={deleteAvatar}
+                mr={2}
+                style={{ width: "150px" }}
+              >
                 {t("general.remove")}
               </Button>
               <FileInput labelText={t("general.upload")} onChange={submitAvatar} />

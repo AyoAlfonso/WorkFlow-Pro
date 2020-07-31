@@ -9,15 +9,16 @@ interface IUserDefaultIconProps {
   lastName: string;
   size?: number;
   marginLeft?: string;
+  marginRight?: string;
 }
 
 export const UserDefaultIcon = (props: IUserDefaultIconProps) => {
-  const { firstName, lastName, size, marginLeft } = props;
+  const { firstName, lastName, size, marginLeft, marginRight } = props;
 
   const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`;
 
   return (
-    <Container size={size} marginLeft={marginLeft}>
+    <Container size={size} marginLeft={marginLeft} marginRight={marginRight}>
       <StyledText> {initials.toUpperCase()} </StyledText>
     </Container>
   );
@@ -26,11 +27,13 @@ export const UserDefaultIcon = (props: IUserDefaultIconProps) => {
 type ContainerProps = {
   size?: number;
   marginLeft?: string;
+  marginRight?: string;
 };
 
 const Container = styled.div<ContainerProps>`
   background-color: ${baseTheme.colors.bali};
   margin-left: ${props => props.marginLeft || "auto"};
+  margin-right: ${props => props.marginRight};
   border-radius: 9999px;
   height: ${props => props.size || 55}px;
   width: ${props => props.size || 55}px;

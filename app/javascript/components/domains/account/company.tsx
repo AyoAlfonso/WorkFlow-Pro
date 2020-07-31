@@ -125,7 +125,13 @@ export const Company = observer(
                     {company.logoUrl ? <img src={company.logoUrl}></img> : "No Company Logo set"}
                   </PhotoContainer>
                   <PhotoModificationButtonsSection>
-                    <Button small variant={"redOutline"} onClick={removeLogo} mr={2}>
+                    <Button
+                      small
+                      variant={"redOutline"}
+                      onClick={removeLogo}
+                      mr={2}
+                      style={{ width: "150px" }}
+                    >
                       {t("general.remove")}
                     </Button>
                     <FileInput labelText={t("general.upload")} onChange={submitLogo} />
