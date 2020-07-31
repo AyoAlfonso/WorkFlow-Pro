@@ -56,6 +56,16 @@
         "team": "Team",
         "company": "Company",
         "goals": "Goals"
+      },
+      "annualInitiative": {
+        "enterTitle": "Enter Annual Initiative Title...",
+        "add": "Add an Annual Initiative",
+        "addInitiative": "Add Initiative"
+      },
+      "quarterlyGoal": {
+        "enterTitle": "Enter Quarterly Goal Title...",
+        "add": "Add a Quarterly Goal",
+        "addGoal": "Add Goal"
       }
     }
   }

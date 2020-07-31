@@ -104,6 +104,10 @@ export class Api {
     return this.client.patch(`/annual_initiatives/${annualInitiative.id}`, parsedAnnualInitiative);
   }
 
+  async createAnnualInitiative(annualInitiativeObject) {
+    return this.client.post(`/annual_initiatives`, annualInitiativeObject);
+  }
+
   async createAnnualInitiativeKeyElement(id) {
     return this.client.post(`/annual_initiatives/create_key_element/${id}`);
   }
@@ -124,6 +128,14 @@ export class Api {
 
   async createQuarterlyGoalKeyElement(id) {
     return this.client.post(`/quarterly_goals/create_key_element/${id}`);
+  }
+
+  async createQuarterlyGoal(quarterlyGoalObject) {
+    return this.client.post(`/quarterly_goals`, quarterlyGoalObject);
+  }
+
+  async createMilestones(quarterlyGoalId) {
+    return this.client.post(`/quarterly_goals/create_milestones/${quarterlyGoalId}`);
   }
 
   //async setJWT(jwt) {}

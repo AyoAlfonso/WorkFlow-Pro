@@ -3,19 +3,21 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { useState, useEffect } from "react";
-import { AnnualInitiativeCard } from "../goals/annual-initiative/annual-initiative-card";
+import { AnnualInitiativeCard } from "./annual-initiative/annual-initiative-card";
 import { Loading } from "../../shared/loading";
 import Modal from "styled-react-modal";
-import { AnnualInitiativeModalContent } from "../goals/annual-initiative/annual-initiative-modal-content";
-import { QuarterlyGoalModalContent } from "../goals/quarterly-goal/quarterly-goal-modal-content";
+import { AnnualInitiativeModalContent } from "./annual-initiative/annual-initiative-modal-content";
+import { QuarterlyGoalModalContent } from "./quarterly-goal/quarterly-goal-modal-content";
 import { observer } from "mobx-react";
-import { TitleContainer } from "../goals/shared/title-container";
-import { RallyingCry } from "../goals/shared/rallying-cry";
-import { PersonalVision } from "../goals/shared/personal-vision";
+import { TitleContainer } from "./shared/title-container";
+import { RallyingCry } from "./shared/rallying-cry";
+import { PersonalVision } from "./shared/personal-vision";
+import { CreateGoalSection } from "./shared/create-goal-section";
+import { useTranslation } from "react-i18next";
 
-export const HomeGoals = observer(
+export const GoalsIndex = observer(
   (): JSX.Element => {
-    const { goalStore } = useMst();
+    const { goalStore, annualInitiativeStore } = useMst();
 
     const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(true);
     const [showMinimizedCards, setShowMinimizedCards] = useState<boolean>(true);
@@ -27,6 +29,14 @@ export const HomeGoals = observer(
     const [annualInitiativeDescription, setSelectedAnnualInitiativeDescription] = useState<string>(
       "",
     );
+    const [showCreateCompanyAnnualInitiative, setShowCreateCompanyAnnualInitiative] = useState<
+      boolean
+    >(false);
+    const [showCreatePersonalAnnualInitiative, setShowCreatePersonalAnnualInitiative] = useState<
+      boolean
+    >(false);
+
+    const { t } = useTranslation();
 
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
@@ -38,6 +48,28 @@ export const HomeGoals = observer(
 
     const companyGoals = goalStore.companyGoals;
     const personalGoals = goalStore.personalGoals;
+    const goalsToShow = showCompanyGoals ? companyGoals.goals : companyGoals.myAnnualInitiatives;
+
+    const renderCreateCompanyAnnualInitiativeSection = (type): JSX.Element => {
+      const showCreateAnnualInitiative =
+        type == "company" ? showCreateCompanyAnnualInitiative : showCreatePersonalAnnualInitiative;
+      const setShowCreateAnnualInitiative =
+        type == "company"
+          ? setShowCreateCompanyAnnualInitiative
+          : setShowCreatePersonalAnnualInitiative;
+
+      return (
+        <CreateGoalSection
+          type={type}
+          placeholder={t("annualInitiative.enterTitle")}
+          addButtonText={t("annualInitiative.add")}
+          createButtonText={t("annualInitiative.addGoal")}
+          showCreateGoal={showCreateAnnualInitiative}
+          setShowCreateGoal={setShowCreateAnnualInitiative}
+          createAction={annualInitiativeStore.create}
+        />
+      );
+    };
 
     const renderAnnualInitiatives = (annualInitiatives): JSX.Element => {
       return annualInitiatives.map((annualInitiative, index) => {
@@ -53,7 +85,7 @@ export const HomeGoals = observer(
             setQuarterlyGoalId={setQuarterlyGoalId}
             setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
             setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
-            showCreateQuarterlyGoal={false}
+            showCreateQuarterlyGoal={true}
           />
         );
       });
@@ -66,20 +98,27 @@ export const HomeGoals = observer(
           setShowMinimizedCards={setShowMinimizedCards}
           showCompanyGoals={showCompanyGoals}
           setShowCompanyGoals={setShowCompanyGoals}
+          largeHomeTitle={true}
         />
 
         <RallyingCry rallyingCry={companyGoals.rallyingCry} />
 
         <InitiativesContainer>
-          {renderAnnualInitiatives(
-            showCompanyGoals ? companyGoals.goals : companyGoals.myAnnualInitiatives,
-          )}
+          {renderAnnualInitiatives(goalsToShow)}
+          <CreateAnnualInitiativeContainer marginLeft={goalsToShow.length > 0 ? "15px" : "0px"}>
+            {renderCreateCompanyAnnualInitiativeSection("company")}
+          </CreateAnnualInitiativeContainer>
         </InitiativesContainer>
 
         <PersonalVisionContainer>
           <PersonalVision personalVision={personalGoals.personalVision} />
           <InitiativesContainer>
             {renderAnnualInitiatives(personalGoals.goals)}
+            <CreateAnnualInitiativeContainer
+              marginLeft={personalGoals.goals.length > 0 ? "15px" : "0px"}
+            >
+              {renderCreateCompanyAnnualInitiativeSection("personal")}
+            </CreateAnnualInitiativeContainer>
           </InitiativesContainer>
         </PersonalVisionContainer>
 
@@ -106,7 +145,7 @@ export const HomeGoals = observer(
             setAnnualInitiativeId={setAnnualInitiativeId}
             annualInitiativeDescription={annualInitiativeDescription}
             setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
-            showCreateMilestones={false}
+            showCreateMilestones={true}
           />
         </StyledModal>
       </Container>
@@ -136,4 +175,13 @@ const StyledModal = Modal.styled`
   min-height: 100px;
   border-radius: 10px;
   background-color: ${props => props.theme.colors.white};
+`;
+
+type CreateAnnualInitiativeContainerProps = {
+  marginLeft: string;
+};
+
+const CreateAnnualInitiativeContainer = styled.div<CreateAnnualInitiativeContainerProps>`
+  margin-left: ${props => props.marginLeft || "0px"};
+  width: 20%;
 `;

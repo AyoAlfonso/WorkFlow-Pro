@@ -1,5 +1,5 @@
 class Api::QuarterlyGoalsController < Api::ApplicationController
-  before_action :set_quarterly_goal, only: [:show, :update, :destroy, :create_key_element]
+  before_action :set_quarterly_goal, only: [:show, :update, :destroy, :create_key_element, :create_milestones]
 
   respond_to :json
 
@@ -9,10 +9,18 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def create
-    @quarterly_goal = QuarterlyGoal.new(quarterly_goal_params)
+    @quarterly_goal = QuarterlyGoal.new({
+      created_by: current_user, 
+      owned_by: current_user, 
+      annual_initiative_id: params[:annual_initiative_id],
+      description: params[:description],
+      context_description: "",
+      importance: ["", "", ""],
+      quarter: current_user.company.current_fiscal_quarter #CHRIS' NOTES: Talked to Parham about this. He wants to restrict to only being able to create quarterly goals in the current quarter for now. 
+    })
     authorize @quarterly_goal
     @quarterly_goal.save!
-    render json: { quarterly_goal: @quarterly_goal, status: :ok }
+    render json: { quarterly_goal: @quarterly_goal.as_json(include: [:milestones, :owned_by]), status: :ok }
   end
 
   def show
@@ -34,10 +42,15 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     render json: { key_element: key_element, status: :ok }
   end
 
+  def create_milestones
+    @quarterly_goal.create_milestones_for_quarterly_goal(current_user)
+    render json: { quarterly_goal: @quarterly_goal.as_json(include: [:milestones, :owned_by]), status: :ok }
+  end
+
   private
 
   def quarterly_goal_params
-    params.permit(:id, :created_by_id, :owned_by_id, :context_description, :annual_initiative_id, :description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value], milestones_attributes: [:id, :description], :importance => [])
+    params.permit(:id, :created_by_id, :owned_by_id, :context_description, :annual_initiative_id, :description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value], milestones_attributes: [:id, :description, :status], :importance => [])
   end
 
   def set_quarterly_goal

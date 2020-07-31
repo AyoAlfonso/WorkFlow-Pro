@@ -1,4 +1,4 @@
-import { types, flow, getEnv } from "mobx-state-tree";
+import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { QuarterlyGoalModel } from "../models/quarterly-goal";
 import moment from "moment";
@@ -45,6 +45,31 @@ export const QuarterlyGoalStoreModel = types
         // error messaging handled by API monitor
       }
     }),
+    create: flow(function* (quarterlyGoalObject) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createQuarterlyGoal(quarterlyGoalObject);
+        const { goalStore, annualInitiativeStore } = getRoot(self);
+        goalStore.mergeQuarterlyGoals(response.data.quarterlyGoal);
+        annualInitiativeStore.updateAnnualInitiativeAfterAddingQuarterlyGoal(
+          response.data.quarterlyGoal,
+        );
+        return response.data.quarterlyGoal;
+      } catch {
+        console.log("ERROR OCCURED IN QUARTERLY GOAL STORE CREATE");
+        // error messaging handled by API monitor
+      }
+    }),
+    createMilestones: flow(function* (quarterlyGoalId) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createMilestones(quarterlyGoalId);
+        self.quarterlyGoal = response.data.quarterlyGoal;
+      } catch {
+        console.log("ERROR OCCURED IN CREATING MILESTONES");
+        // error messaging handled by API monitor
+      }
+    }),
   }))
   .actions(self => ({
     updateModelField(field, value) {
@@ -74,6 +99,13 @@ export const QuarterlyGoalStoreModel = types
       let milestoneIndex = milestones.findIndex(milestone => milestone.id == id);
       milestones[milestoneIndex].description = value;
       self.quarterlyGoal.milestones = milestones;
+    },
+    updateMilestoneStatus(id, status) {
+      let milestones = self.quarterlyGoal.milestones;
+      let milestoneIndex = milestones.findIndex(milestone => milestone.id == id);
+      milestones[milestoneIndex].status = status;
+      self.quarterlyGoal.milestones = milestones;
+      self.update();
     },
   }));
 

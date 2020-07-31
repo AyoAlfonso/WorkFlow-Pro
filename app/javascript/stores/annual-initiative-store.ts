@@ -51,6 +51,21 @@ export const AnnualInitiativeStoreModel = types
         // error messaging handled by API monitor
       }
     }),
+    create: flow(function* (annualInitiativeObject) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createAnnualInitiative(annualInitiativeObject);
+        const { goalStore } = getRoot(self);
+        goalStore.mergeAnnualInitiatives(
+          annualInitiativeObject.type,
+          response.data.annualInitiative,
+        );
+        return response.data.annualInitiative;
+      } catch {
+        console.log("is there an error?????????");
+        // error messaging handled by API monitor
+      }
+    }),
   }))
   .actions(self => ({
     updateModelField(field, value) {
@@ -74,6 +89,14 @@ export const AnnualInitiativeStoreModel = types
     updateOwnedBy(userId) {
       self.annualInitiative.ownedById = userId;
       self.update();
+    },
+    updateAnnualInitiativeAfterAddingQuarterlyGoal(quarterlyGoal) {
+      if (self.annualInitiative.id) {
+        self.annualInitiative.quarterlyGoals = [
+          ...self.annualInitiative.quarterlyGoals,
+          quarterlyGoal,
+        ] as any;
+      }
     },
   }));
 

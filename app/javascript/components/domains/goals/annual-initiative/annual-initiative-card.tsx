@@ -16,6 +16,7 @@ interface IAnnualInitiativeCardProps {
   setQuarterlyGoalId: React.Dispatch<React.SetStateAction<number>>;
   setQuarterlyGoalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedAnnualInitiativeDescription: React.Dispatch<React.SetStateAction<string>>;
+  showCreateQuarterlyGoal: boolean;
 }
 
 export const AnnualInitiativeCard = ({
@@ -28,6 +29,7 @@ export const AnnualInitiativeCard = ({
   setQuarterlyGoalId,
   setQuarterlyGoalModalOpen,
   setSelectedAnnualInitiativeDescription,
+  showCreateQuarterlyGoal,
 }: IAnnualInitiativeCardProps): JSX.Element => {
   const [showMinimizedCard, setShowMinimizedCard] = useState<boolean>(showMinimizedCards);
 
@@ -61,6 +63,7 @@ export const AnnualInitiativeCard = ({
           setQuarterlyGoalId={setQuarterlyGoalId}
           setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
           setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
+          showCreateQuarterlyGoal={showCreateQuarterlyGoal}
         />
       )}
     </Container>
@@ -69,7 +72,7 @@ export const AnnualInitiativeCard = ({
 
 const Container = styled(HomeContainerBorders)`
   height: 100px;
-  width: 20%;
+  width: calc(20% - 15px);
   min-width: 240px;
   margin-right: ${props => props["margin-right"] || "0px"};
   height: fit-content;

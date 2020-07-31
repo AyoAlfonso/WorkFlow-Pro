@@ -2,7 +2,7 @@ import * as React from "react";
 import { HomeContainerBorders } from "../../home/shared-components";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
 import * as R from "ramda";
@@ -14,6 +14,8 @@ import { OwnedBySection } from "../shared/owned-by-section";
 import ContentEditable from "react-contenteditable";
 import { observer } from "mobx-react";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
+import { CreateGoalSection } from "../shared/create-goal-section";
+import { useTranslation } from "react-i18next";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -31,8 +33,12 @@ export const AnnualInitiativeModalContent = observer(
     setSelectedAnnualInitiativeDescription,
     setQuarterlyGoalId,
   }: IAnnualInitiativeModalContentProps): JSX.Element => {
-    const { annualInitiativeStore, companyStore, sessionStore } = useMst();
+    const { annualInitiativeStore, companyStore, sessionStore, quarterlyGoalStore } = useMst();
     const currentUser = sessionStore.profile;
+
+    const [showCreateQuarterlyGoal, setShowCreateQuarterlyGoal] = useState<boolean>(false);
+
+    const { t } = useTranslation();
 
     useEffect(() => {
       annualInitiativeStore.getAnnualInitiative(annualInitiativeId);
@@ -43,6 +49,8 @@ export const AnnualInitiativeModalContent = observer(
     if (annualInitiative == null) {
       return <> Loading... </>;
     }
+
+    const editable = currentUser.id == annualInitiative.ownedById;
 
     const renderQuarterlyGoals = () => {
       return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
@@ -88,7 +96,7 @@ export const AnnualInitiativeModalContent = observer(
           <TitleContainer>
             <StyledContentEditable
               html={annualInitiative.description}
-              disabled={currentUser.id != annualInitiative.ownedById}
+              disabled={!editable}
               onChange={e => {
                 annualInitiativeStore.updateModelField("description", e.target.value);
               }}
@@ -137,7 +145,22 @@ export const AnnualInitiativeModalContent = observer(
               </Button>
             </ShowPastGoalsContainer>
           </SubHeaderContainer>
-          <QuarterlyGoalsContainer>{renderQuarterlyGoals()}</QuarterlyGoalsContainer>
+          <QuarterlyGoalsContainer>
+            {renderQuarterlyGoals()}
+            {editable && (
+              <CreateGoalContainer>
+                <CreateGoalSection
+                  placeholder={t("quarterlyGoal.enterTitle")}
+                  addButtonText={t("quarterlyGoal.add")}
+                  createButtonText={t("quarterlyGoal.addGoal")}
+                  showCreateGoal={showCreateQuarterlyGoal}
+                  setShowCreateGoal={setShowCreateQuarterlyGoal}
+                  createAction={quarterlyGoalStore.create}
+                  annualInitiativeId={annualInitiative.id}
+                />
+              </CreateGoalContainer>
+            )}
+          </QuarterlyGoalsContainer>
         </>
       );
     };
@@ -267,4 +290,8 @@ const StyledContentEditable = styled(ContentEditable)`
   font-size: 20px;
   padding-top: 5px;
   padding-bottom: 5px;
+`;
+
+const CreateGoalContainer = styled.div`
+  width: 280px;
 `;
