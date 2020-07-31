@@ -9,7 +9,9 @@ export const HomeContainerBorders = styled.div`
 `;
 
 export const HomeTitle = styled.div`
-  font-size: 30pt;
-  font-weight: 500;
+  font-size: 16pt;
+  font-weight: 600;
   font-family: Exo;
+  margin-top: auto;
+  margin-bottom: auto;
 `;

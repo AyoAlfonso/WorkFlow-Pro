@@ -88,6 +88,7 @@ export const AnnualInitiativeCardExpanded = (
 
   return (
     <Container>
+      <QuarterlyGoalsText>Quarterly Goals</QuarterlyGoalsText>
       {renderQuarterlyGoals()}
       {showCreateQuarterlyGoal && renderCreateGoal()}
       <MinimizeIconContainer onClick={() => setShowMinimizedCard(true)}>
@@ -106,6 +107,13 @@ const Container = styled.div`
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   padding: 8px;
+`;
+
+const QuarterlyGoalsText = styled.p`
+  font-size: 15px;
+  color: ${props => props.theme.colors.greyActive};
+  padding-bottom: 8px;
+  margin-left: 5px;
 `;
 
 const StyledText = styled(Text)`

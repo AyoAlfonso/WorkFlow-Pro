@@ -19,6 +19,6 @@ const JournalText = styled.h4`
   justify-content: center;
   align-items: center;
   line-height: 20px;
-  font-size: 14pt;
-  font-weight: 400;
+  font-size: 13pt;
+  font-weight: 600;
 `;

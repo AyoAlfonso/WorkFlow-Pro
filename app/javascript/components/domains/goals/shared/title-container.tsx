@@ -115,7 +115,7 @@ type FilterOptionsType = {
 const FilterOptions = styled.p<FilterOptionsType>`
   ${space}
   ${color}
-  font-size: 12pt;
+  font-size: 11pt;
   font-weight: 400;
   cursor: pointer;
   margin-left: 16px;
