@@ -27,7 +27,13 @@ Rails.application.routes.draw do
     resources :users, only: [:index, :show, :update]
     get '/profile', to: 'users#profile'
     put '/avatar', to: 'users#update_avatar'
-    resources :companies, only: [:show, :update]
+    delete '/avatar', to: 'users#delete_avatar'
+
+    resources :companies, only: [:show, :update] do
+      member do
+        delete 'logo', to: 'companies#delete_logo'
+      end
+    end
 
     # issues
     resources :issues, only: [:index, :create, :update, :destroy]

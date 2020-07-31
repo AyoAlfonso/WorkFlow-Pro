@@ -32,6 +32,10 @@ export const AccountProfile = observer(
       await sessionStore.updateAvatar(form);
     };
 
+    const deleteAvatar = async () => {
+      await sessionStore.deleteAvatar();
+    };
+
     const save = () =>
       sessionStore.updateUser({
         email,
@@ -67,7 +71,7 @@ export const AccountProfile = observer(
               />
             </PhotoContainer>
             <PhotoModificationButtonsSection>
-              <Button small variant={"redOutline"} onClick={() => {}} mr={2}>
+              <Button small variant={"redOutline"} onClick={deleteAvatar} mr={2}>
                 {t("general.remove")}
               </Button>
               <FileInput labelText={t("general.upload")} onChange={submitAvatar} />

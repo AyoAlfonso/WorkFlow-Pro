@@ -24,7 +24,11 @@ class UserPolicy < ApplicationPolicy
 
   # TODO: Needs logic here
   def update_avatar?
-    true
+    record == user
+  end
+
+  def delete_avatar?
+    update_avatar?
   end
 
   def destroy?
