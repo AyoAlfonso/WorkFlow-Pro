@@ -14,6 +14,6 @@ class Api::ApplicationController < ActionController::API
   private
 
   def user_not_authorized
-    render json: { status: 403, message: I18n.t("unauthorized") }
+    render json: { message: I18n.t("unauthorized") }, status: 403
   end
 end
