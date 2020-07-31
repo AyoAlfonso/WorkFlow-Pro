@@ -69,6 +69,10 @@ export class Api {
     return this.client.put(`/companies/${formData.id}`, formData);
   }
 
+  async deleteLogo(companyId) {
+    return this.client.delete(`/companies/${companyId}/logo`);
+  }
+
   async signOut() {
     return this.client.delete("/users/sign_out");
   }
