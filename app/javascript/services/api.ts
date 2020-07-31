@@ -95,6 +95,10 @@ export class Api {
     });
   }
 
+  async updateKeyActivity(keyActivityObject) {
+    return this.client.patch(`/key_activities/${keyActivityObject.id}`, keyActivityObject);
+  }
+
   async getAllGoals() {
     return this.client.get("/goals");
   }

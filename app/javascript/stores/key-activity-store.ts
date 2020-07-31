@@ -2,6 +2,7 @@ import { types, flow } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { KeyActivityModel } from "../models/key-activity";
 import { ApiResponse } from "apisauce";
+import { localeData } from "moment";
 
 export const KeyActivityStoreModel = types
   .model("KeyActivityStoreModel")
@@ -47,8 +48,26 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
+    updateKeyActivity: flow(function*(id) {
+      let keyActivityObject = self.keyActivities.find(ka => ka.id == id);
+      const response: ApiResponse<any> = yield self.environment.api.updateKeyActivity(
+        keyActivityObject,
+      );
+      if (response.ok) {
+        self.keyActivities = response.data;
+        return true;
+      } else {
+        return false;
+      }
+    }),
   }))
   .actions(self => ({
+    updateKeyActivityState(id, field, value) {
+      let keyActivities = self.keyActivities;
+      let keyActivityIndex = keyActivities.findIndex(ka => ka.id == id);
+      keyActivities[keyActivityIndex][field] = value;
+      self.keyActivities = keyActivities;
+    },
     reset() {
       self.keyActivities = [] as any;
     },
