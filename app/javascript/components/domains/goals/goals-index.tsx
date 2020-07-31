@@ -12,9 +12,8 @@ import { observer } from "mobx-react";
 import { TitleContainer } from "./shared/title-container";
 import { RallyingCry } from "./shared/rallying-cry";
 import { PersonalVision } from "./shared/personal-vision";
-import { Button } from "~/components/shared/button";
-import { HomeContainerBorders } from "../home/shared-components";
 import { CreateGoalSection } from "./shared/create-goal-section";
+import { useTranslation } from "react-i18next";
 
 export const GoalsIndex = observer(
   (): JSX.Element => {
@@ -36,6 +35,8 @@ export const GoalsIndex = observer(
     const [showCreatePersonalAnnualInitiative, setShowCreatePersonalAnnualInitiative] = useState<
       boolean
     >(false);
+
+    const { t } = useTranslation();
 
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
@@ -60,9 +61,9 @@ export const GoalsIndex = observer(
       return (
         <CreateGoalSection
           type={type}
-          placeholder={"Enter Annual Initiative Title..."}
-          addButtonText={"Add an Annual Initiative"}
-          createButtonText={"Add Initiative"}
+          placeholder={t("annualInitiative.enterTitle")}
+          addButtonText={t("annualInitiative.add")}
+          createButtonText={t("annualInitiative.addGoal")}
           showCreateGoal={showCreateAnnualInitiative}
           setShowCreateGoal={setShowCreateAnnualInitiative}
           createAction={annualInitiativeStore.create}

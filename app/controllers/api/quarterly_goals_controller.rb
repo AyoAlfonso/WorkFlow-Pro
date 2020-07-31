@@ -16,7 +16,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
       description: params[:description],
       context_description: "",
       importance: ["", "", ""],
-      quarter: current_user.company.current_fiscal_quarter
+      quarter: current_user.company.current_fiscal_quarter #CHRIS' NOTES: Talked to Parham about this. He wants to restrict to only being able to create quarterly goals in the current quarter for now. 
     })
     authorize @quarterly_goal
     @quarterly_goal.save!
@@ -43,19 +43,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def create_milestones
-    company = current_user.company
-    current_fiscal_quarter = company.current_fiscal_quarter
-    fiscal_quarter_start_date = company.fiscal_year_start + (13.weeks * (current_fiscal_quarter-1))
-    13.times do |index|
-      Milestone.create!(
-        quarterly_goal_id: params[:id], 
-        description: "Enter Description", 
-        status: 0, 
-        week: index + 1, 
-        week_of: fiscal_quarter_start_date + (1.week * index),
-        created_by: current_user
-      )
-    end
+    @quarterly_goal.create_milestones_for_quarterly_goal(current_user)
     render json: { quarterly_goal: @quarterly_goal.as_json(include: [:milestones, :owned_by]), status: :ok }
   end
 

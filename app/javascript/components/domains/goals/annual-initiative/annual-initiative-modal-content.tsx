@@ -15,6 +15,7 @@ import ContentEditable from "react-contenteditable";
 import { observer } from "mobx-react";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
 import { CreateGoalSection } from "../shared/create-goal-section";
+import { useTranslation } from "react-i18next";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -36,6 +37,8 @@ export const AnnualInitiativeModalContent = observer(
     const currentUser = sessionStore.profile;
 
     const [showCreateQuarterlyGoal, setShowCreateQuarterlyGoal] = useState<boolean>(false);
+
+    const { t } = useTranslation();
 
     useEffect(() => {
       annualInitiativeStore.getAnnualInitiative(annualInitiativeId);
@@ -147,9 +150,9 @@ export const AnnualInitiativeModalContent = observer(
             {editable && (
               <CreateGoalContainer>
                 <CreateGoalSection
-                  placeholder={"Enter Quarterly Goal Title..."}
-                  addButtonText={"Add a Quarterly Goal"}
-                  createButtonText={"Add Goal"}
+                  placeholder={t("quarterlyGoal.enterTitle")}
+                  addButtonText={t("quarterlyGoal.add")}
+                  createButtonText={t("quarterlyGoal.addGoal")}
                   showCreateGoal={showCreateQuarterlyGoal}
                   setShowCreateGoal={setShowCreateQuarterlyGoal}
                   createAction={quarterlyGoalStore.create}

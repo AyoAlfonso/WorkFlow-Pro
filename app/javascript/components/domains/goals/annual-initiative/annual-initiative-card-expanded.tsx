@@ -8,6 +8,7 @@ import { StatusBlockColorIndicator } from "../shared/status-block-color-indicato
 import { CreateGoalSection } from "../shared/create-goal-section";
 import { useState } from "react";
 import { useMst } from "~/setup/root";
+import { useTranslation } from "react-i18next";
 
 interface IAnnualInitiativeCardExpandedProps {
   annualInitiative: AnnualInitiativeType;
@@ -32,6 +33,8 @@ export const AnnualInitiativeCardExpanded = (
 
   const { quarterlyGoalStore } = useMst();
   const [createQuarterlyGoalArea, setCreateQuarterlyGoalArea] = useState<boolean>(false);
+
+  const { t } = useTranslation();
 
   const renderQuarterlyGoals = () => {
     return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
@@ -70,9 +73,9 @@ export const AnnualInitiativeCardExpanded = (
     return (
       <CreateGoalContainer>
         <CreateGoalSection
-          placeholder={"Enter Quarterly Goal Title..."}
-          addButtonText={"Add a Quarterly Goal"}
-          createButtonText={"Add Goal"}
+          placeholder={t("quarterlyGoal.enterTitle")}
+          addButtonText={t("quarterlyGoal.add")}
+          createButtonText={t("quarterlyGoal.addGoal")}
           showCreateGoal={createQuarterlyGoalArea}
           setShowCreateGoal={setCreateQuarterlyGoalArea}
           createAction={quarterlyGoalStore.create}
