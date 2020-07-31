@@ -1,4 +1,4 @@
-import { RoleAdministrator, RoleCEO, RoleNormalUser } from "~/lib/constants";
+import { RoleAdministrator, RoleCEO, RoleNormalUser, RoleLeadership } from "~/lib/constants";
 // Reference: https://auth0.com/blog/role-based-access-control-rbac-and-react-apps/#Role-Based-Access-Control-Example-in-React-Apps
 
 export const rules = {
@@ -11,6 +11,10 @@ export const rules = {
     dynamic: [],
   },
   [RoleNormalUser]: {
+    static: [],
+    dynamic: [],
+  },
+  [RoleLeadership]: {
     static: [],
     dynamic: [],
   },
