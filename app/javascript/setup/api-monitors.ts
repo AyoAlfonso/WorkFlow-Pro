@@ -33,6 +33,11 @@ export const addErrorToastMonitor = (api, loggedIn) => {
               R.path(["data", "error"], response) || `A client error occurred`,
               ToastMessageConstants.ERROR,
             );
+          } else {
+            showToast(
+              R.path(["data", "message"], response) || "Something went wrong",
+              ToastMessageConstants.ERROR,
+            );
           }
           break;
         case CONNECTION_ERROR:
@@ -45,7 +50,10 @@ export const addErrorToastMonitor = (api, loggedIn) => {
           showToast("A timeout error occurred", ToastMessageConstants.ERROR);
           break;
         default:
-          showToast("Something went wrong", ToastMessageConstants.ERROR);
+          showToast(
+            R.path(["data", "message"], response) || "Something went wrong",
+            ToastMessageConstants.ERROR,
+          );
       }
     } else if (response.status === 403) {
       showToast("An authorization error occurred", ToastMessageConstants.ERROR);
