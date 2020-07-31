@@ -8,6 +8,7 @@ import { useMst } from "~/setup/root";
 import { homePersonalStatusOptions as options } from "./home-personal-status-options";
 import { HomePersonalStatusDropdownMenuItem } from "./home-personal-status-dropdown-menu-item";
 import { Icon } from "~/components/shared/icon";
+import * as moment from "moment";
 
 interface IHomePersonalStatusState {
   menuOpen: boolean;
@@ -51,10 +52,24 @@ export const HomePersonalStatus = observer(
       />
     ));
 
+    const getGreetingTime = currentTime => {
+      const splitAfternoon = 12; // 24hr time to split the afternoon
+      const splitEvening = 18; // 24hr time to split the evening
+      const currentHour = parseFloat(currentTime.format("HH"));
+      if (currentHour >= splitAfternoon && currentHour <= splitEvening) {
+        return "Good Afternoon";
+      } else if (currentHour >= splitEvening) {
+        return "Good Evening";
+      }
+      return "Good Morning";
+    };
+
     return (
       <Container>
         <GreetingContainer>
-          <GreetingText>{t("profile.greeting", { name })}</GreetingText>
+          <GreetingText>
+            {getGreetingTime(moment())} {name}
+          </GreetingText>
         </GreetingContainer>
         <DropdownContainer>
           <DropdownMenu>
@@ -109,9 +124,9 @@ const Container = styled.div`
 `;
 
 const GreetingContainer = styled.div`
-  font-size: 40pt;
+  font-size: 20pt;
+  font-weight: 600;
   font-family: Exo;
-  font-weight: 300;
 `;
 
 const GreetingText = styled.p``;

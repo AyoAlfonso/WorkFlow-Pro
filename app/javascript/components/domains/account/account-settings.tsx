@@ -59,9 +59,9 @@ export const AccountSettings = (): JSX.Element => {
 const Container = styled.div``;
 
 const Header = styled.p`
-  font-size: 40pt;
+  font-size: 20pt;
+  font-weight: 600;
   font-family: Exo;
-  font-weight: 300;
   margin-top: 32px;
   margin-bottom: 48px;
 `;
