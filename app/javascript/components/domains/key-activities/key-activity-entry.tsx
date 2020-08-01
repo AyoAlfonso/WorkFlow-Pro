@@ -116,6 +116,9 @@ const KeyActivityPriorityContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 10px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const StyledContentEditable = styled(ContentEditable)`

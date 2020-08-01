@@ -85,6 +85,10 @@ export class Api {
     return this.client.patch(`/issues/${issue.id}`, { completed: value });
   }
 
+  async updateIssue(issueObject) {
+    return this.client.patch(`/issues/${issueObject.id}`, issueObject);
+  }
+
   async createKeyActivity(keyActivityObject) {
     return this.client.post("/key_activities", keyActivityObject);
   }

@@ -8,6 +8,7 @@ import { color } from "styled-system";
 import { observer } from "mobx-react";
 import { CreateIssueModal } from "./create-issue-modal";
 import { baseTheme } from "../../../themes/base";
+import { IssueEntry } from "./issue-entry";
 
 interface IIssuesBodyProps {
   showOpenIssues: boolean;
@@ -55,20 +56,7 @@ export const IssuesBody = observer(
       const issues = showOpenIssues ? openIssues : closedIssues;
       return issues.map((issue, index) => (
         <IssueContainer key={issue["id"]}>
-          <CheckboxContainer key={issue["id"]}>
-            <Checkbox
-              key={issue["id"]}
-              checked={issue["completedAt"] ? true : false}
-              onChange={e => {
-                issueStore.updateIssueStatus(issue, e.target.checked);
-              }}
-            />
-          </CheckboxContainer>
-
-          <IssueText text-decoration={issue.completedAt && "line-through"}>
-            {issue.description}
-          </IssueText>
-          <IssuePriorityContainer>{renderPriorityIcon(issue.priority)}</IssuePriorityContainer>
+          <IssueEntry issue={issue} />
         </IssueContainer>
       ));
     };
@@ -128,12 +116,7 @@ const IssuesContainer = styled.div`
   height: 260px;
 `;
 
-const IssueContainer = styled.div`
-  display: flex;
-  font-size: 14px;
-  width: inherit;
-  padding: 12px 0px 12px 0px;
-`;
+const IssueContainer = styled.div``;
 
 const IssueText = styled.p`
   font-size: 14pt;
