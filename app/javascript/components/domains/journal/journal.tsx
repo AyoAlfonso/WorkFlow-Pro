@@ -1,18 +1,19 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { JournalHeader } from "./journal-header";
 import { SurveyBot } from "../../shared/survey-bot";
 import { IconButton } from "../../shared/icon-button";
+import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
 
 export const Journal = (): JSX.Element => {
-  const [surveyVariant, setSurveyVariant] = useState<string>("");
+  const [questionnaireVariant, setQuestionnaireVariant] = useState<string>("");
 
   return (
     <JournalContainer>
       <JournalHeader />
-      {surveyVariant !== "" ? (
-        <SurveyBot variant={surveyVariant} endFn={setSurveyVariant} />
+      {questionnaireVariant !== "" ? (
+        <SurveyBot variant={questionnaireVariant} endFn={setQuestionnaireVariant} />
       ) : (
         <ButtonContainer>
           <IconButton
@@ -26,7 +27,7 @@ export const Journal = (): JSX.Element => {
             iconColor={"cautionYellow"}
             text={"Create My Day"}
             shadow={true}
-            onClick={() => setSurveyVariant("createMyDay")}
+            onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay)}
           />
           <IconButton
             width={"100%"}
@@ -39,7 +40,7 @@ export const Journal = (): JSX.Element => {
             iconColor={"warningRed"}
             text={"Thought Challenge"}
             shadow={true}
-            onClick={() => setSurveyVariant("thoughtChallenge")}
+            onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.thoughtChallenge)}
           />
           <IconButton
             width={"100%"}
@@ -52,7 +53,7 @@ export const Journal = (): JSX.Element => {
             iconColor={"primary40"}
             text={"Evening Reflection"}
             shadow={true}
-            onClick={() => setSurveyVariant("eveningReflection")}
+            onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.eveningReflection)}
           />
         </ButtonContainer>
       )}
