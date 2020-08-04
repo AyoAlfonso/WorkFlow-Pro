@@ -4,12 +4,13 @@ import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { HabitsHabitTracker } from "./habits-habit-tracker";
 import { baseTheme } from "~/themes/base";
+import * as moment from "moment";
 
 export const HabitsBody = observer(
   (): JSX.Element => {
     const {
       habitStore,
-      habitStore: { habits },
+      habitStore: { habits, lastFourDays },
     } = useMst();
     useEffect(() => {
       habitStore.fetchHabits();
@@ -23,15 +24,13 @@ export const HabitsBody = observer(
           />
         </HabitsTableRow>
       ));
-    const dayNames = ["M", "T", "W", "T", "F", "S", "S"].map((dName, index) => (
+    const dayNames = lastFourDays.map((day, index) => (
       <HabitsTableHeaderCell fontWeight={"normal"} key={index}>
-        {dName}
+        {day.format("ddd")}
       </HabitsTableHeaderCell>
     ));
-    const dayDates = habits[0]?.weeklyLogs.map(({ logDate }, index) => (
-      <HabitsTableHeaderCell key={index}>
-        {logDate.substr(logDate.length - 2)}
-      </HabitsTableHeaderCell>
+    const dayDates = lastFourDays.map((day, index) => (
+      <HabitsTableHeaderCell key={index}>{day.format("DD")}</HabitsTableHeaderCell>
     ));
     return (
       <HabitsTable>

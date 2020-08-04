@@ -14,7 +14,7 @@ interface IHabitsHabitTrackerProps {
 export const HabitsHabitTracker = observer(
   ({ habit, onUpdate }: IHabitsHabitTrackerProps): JSX.Element => {
     const renderHabitLogs = () =>
-      habit.weeklyLogs.map(log => (
+      habit.recentLogs.map(log => (
         <HabitsTableDataCell
           key={`${habit.id}-${log.logDate}`}
           onClick={() => {

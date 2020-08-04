@@ -1,5 +1,6 @@
 import { types } from "mobx-state-tree";
 import { HabitLogModel } from "./habit-log";
+import * as R from "ramda";
 
 export const HabitModel = types
   .model("HabitModel")
@@ -9,16 +10,20 @@ export const HabitModel = types
     id: types.maybeNull(types.number),
     name: types.maybeNull(types.string),
     userId: types.maybeNull(types.number),
-    weeklyLogs: types.array(HabitLogModel),
+    currentWeekLogs: types.array(HabitLogModel),
+    previousWeekLogs: types.array(HabitLogModel),
   })
   .views(self => ({
-    get completedLogs() {
-      return self.weeklyLogs.filter(log => !!log.id);
+    get completedCurrentWeekLogs() {
+      return self.currentWeekLogs.filter(log => !!log.id);
+    },
+    get recentLogs() {
+      return [...R.reverse(self.currentWeekLogs), ...R.reverse(self.previousWeekLogs)].slice(0, 4);
     },
   }))
   .views(self => ({
     get percentageWeeklyLogsCompleted() {
-      return (self.completedLogs.length / self.frequency) * 100;
+      return (self.completedCurrentWeekLogs.length / self.frequency) * 100;
     },
   }))
   .actions(self => ({}));

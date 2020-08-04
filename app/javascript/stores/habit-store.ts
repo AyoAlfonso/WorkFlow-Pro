@@ -3,6 +3,7 @@ import { withEnvironment } from "~/lib/with-environment";
 import { HabitModel } from "~/models";
 import { ApiResponse } from "apisauce";
 import { color } from "@storybook/addon-knobs";
+import * as moment from "moment";
 
 export const HabitStoreModel = types
   .model("HabitStoreModel")
@@ -10,7 +11,11 @@ export const HabitStoreModel = types
     habits: types.array(HabitModel),
   })
   .extend(withEnvironment())
-  .views(self => ({}))
+  .views(self => ({
+    get lastFourDays() {
+      return [0, 1, 2, 3].map(dayInt => moment().subtract(dayInt, "days"));
+    },
+  }))
   .actions(self => ({
     createHabit: flow(function*(habitData) {
       const response = yield self.environment.api.createHabit(habitData);
@@ -28,12 +33,19 @@ export const HabitStoreModel = types
       const response = yield self.environment.api.updateHabitLog(habitId, logDate);
       if (response.ok) {
         const habitIndex = self.habits.findIndex(habit => habit.id === response.data.habitId);
-        const habitLogIndex = self.habits[habitIndex].weeklyLogs.findIndex(
+        let weekToUpdate = "currentWeekLogs";
+        let habitLogIndex = self.habits[habitIndex].currentWeekLogs.findIndex(
           log => log.logDate === response.data.logDate,
         );
+        // If log wasn't found in current week then use previous week
+        if (habitLogIndex == -1) {
+          weekToUpdate = "previousWeekLogs";
+          habitLogIndex = self.habits[habitIndex].previousWeekLogs.findIndex(
+            log => log.logDate === response.data.logDate,
+          );
+        }
         const newHabits: Array<any> = [...self.habits];
-        newHabits[habitIndex].weeklyLogs[habitLogIndex] = response.data;
-        // self.habits = newHabits;
+        newHabits[habitIndex][weekToUpdate][habitLogIndex] = response.data;
       }
     }),
     // updateIssueStatus: flow(function*(issue, value) {
