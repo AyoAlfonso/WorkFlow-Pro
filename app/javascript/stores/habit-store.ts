@@ -48,34 +48,6 @@ export const HabitStoreModel = types
         newHabits[habitIndex][weekToUpdate][habitLogIndex] = response.data;
       }
     }),
-    // updateIssueStatus: flow(function*(issue, value) {
-    //   const response: ApiResponse<any> = yield self.environment.api.updateIssueStatus(issue, value);
-    //   if (response.ok) {
-    //     self.issues = response.data;
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // }),
-    // createIssue: flow(function*(issueObject) {
-    //   const response: ApiResponse<any> = yield self.environment.api.createIssue(issueObject);
-    //   if (response.ok) {
-    //     self.issues = response.data;
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // }),
-  }))
-  .actions(self => ({
-    // reset() {
-    //   self.issues = [] as any;
-    // },
-  }))
-  .actions(self => ({
-    // load: flow(function*() {
-    //   self.reset();
-    //   yield self.fetchIssues();
   }));
 
 type HabitStoreType = typeof HabitStoreModel.Type;
