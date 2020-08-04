@@ -100,16 +100,32 @@ export const KeyActivityEntry = observer(
           style={{ textDecoration: keyActivity.completedAt && "line-through" }}
           onBlur={() => keyActivityStore.updateKeyActivity(keyActivity.id)}
         />
+        <DeleteButtonContainer onClick={() => keyActivityStore.destroyKeyActivity(keyActivity.id)}>
+          <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
+        </DeleteButtonContainer>
       </Container>
     );
   },
 );
+
+const DeleteButtonContainer = styled.div`
+  margin: auto;
+  color: ${props => props.theme.colors.grey60};
+  display: none;
+  &: hover {
+    cursor: pointer;
+    color: ${props => props.theme.colors.greyActive};
+  }
+`;
 
 const Container = styled.div`
   display: flex;
   font-size: 14px;
   width: inherit;
   padding: 12px 0px 12px 0px;
+  &:hover ${DeleteButtonContainer} {
+    display: block;
+  }
 `;
 
 const KeyActivityPriorityContainer = styled.div`

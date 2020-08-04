@@ -89,6 +89,10 @@ export class Api {
     return this.client.patch(`/issues/${issueObject.id}`, issueObject);
   }
 
+  async destroyIssue(id) {
+    return this.client.delete(`/issues/${id}`);
+  }
+
   async createKeyActivity(keyActivityObject) {
     return this.client.post("/key_activities", keyActivityObject);
   }
@@ -101,6 +105,10 @@ export class Api {
 
   async updateKeyActivity(keyActivityObject) {
     return this.client.patch(`/key_activities/${keyActivityObject.id}`, keyActivityObject);
+  }
+
+  async destroyKeyActivity(id) {
+    return this.client.delete(`/key_activities/${id}`);
   }
 
   async getAllGoals() {

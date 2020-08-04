@@ -22,7 +22,7 @@ class Api::IssuesController < Api::ApplicationController
 
   def destroy
     @issue.destroy!
-    render json: { issue_id: @issue.id, status: :ok }
+    render json: policy_scope(Issue).sort_by_priority_and_created_at_and_completed_at
   end
 
   private

@@ -22,7 +22,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def destroy
     @key_activity.destroy!
-    render json: { key_activity_id: @key_activity.id, status: :ok }
+    render json: KeyActivity.sort_by_priority_and_created_at_date
   end
 
   private 

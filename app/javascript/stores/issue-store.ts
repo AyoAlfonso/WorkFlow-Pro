@@ -52,6 +52,15 @@ export const IssueStoreModel = types
         return false;
       }
     }),
+    destroyIssue: flow(function*(id) {
+      const response: ApiResponse<any> = yield self.environment.api.destroyIssue(id);
+      if (response.ok) {
+        self.issues = response.data;
+        return true;
+      } else {
+        return false;
+      }
+    }),
   }))
   .actions(self => ({
     updateIssueState(id, field, value) {

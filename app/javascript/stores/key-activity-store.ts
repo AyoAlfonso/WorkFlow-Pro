@@ -60,6 +60,15 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
+    destroyKeyActivity: flow(function*(id) {
+      const response: ApiResponse<any> = yield self.environment.api.destroyKeyActivity(id);
+      if (response.ok) {
+        self.keyActivities = response.data;
+        return true;
+      } else {
+        return false;
+      }
+    }),
   }))
   .actions(self => ({
     updateKeyActivityState(id, field, value) {

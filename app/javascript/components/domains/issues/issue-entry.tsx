@@ -81,16 +81,38 @@ export const IssueEntry = observer(
           style={{ textDecoration: issue.completedAt && "line-through" }}
           onBlur={() => issueStore.updateIssue(issue.id)}
         />
+        <ActionContainer>
+          <DeleteButtonContainer onClick={() => issueStore.destroyIssue(issue.id)}>
+            <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
+          </DeleteButtonContainer>
+        </ActionContainer>
       </Container>
     );
   },
 );
+
+const ActionContainer = styled.div`
+  display: none;
+  margin: auto;
+`;
+
+const DeleteButtonContainer = styled.div`
+  margin: auto;
+  color: ${props => props.theme.colors.grey60};
+  &: hover {
+    cursor: pointer;
+    color: ${props => props.theme.colors.greyActive};
+  }
+`;
 
 const Container = styled.div`
   display: flex;
   font-size: 14px;
   width: inherit;
   padding: 12px 0px 12px 0px;
+  &:hover ${ActionContainer} {
+    display: block;
+  }
 `;
 
 const IssuePriorityContainer = styled.div`
