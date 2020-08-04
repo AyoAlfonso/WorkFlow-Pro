@@ -7,8 +7,8 @@ import { Icon } from "../../shared/icon";
 import { Button } from "rebass";
 import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";
-import { UserDefaultIcon } from "../../shared/user-default-icon";
 import * as R from "ramda";
+import { Avatar } from "~/components/shared/avatar";
 
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
@@ -34,14 +34,24 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
             textValue={issueDescription}
             setTextValue={setIssueDescription}
             width={"75%"}
+            style={{
+              height: "35px",
+              marginTop: "auto",
+              marginBottom: "auto",
+              paddingTop: "4px",
+              paddingBottom: "4px",
+            }}
           />
-          <UserDefaultIcon
+          <Avatar
+            avatarUrl={R.path(["profile", "avatarUrl"], sessionStore)}
             firstName={R.path(["profile", "firstName"], sessionStore)}
             lastName={R.path(["profile", "lastName"], sessionStore)}
+            size={55}
           />
         </FlexContainer>
         <FlexContainer>
           <StyledButton
+            disabled={issueDescription.length == 0}
             onClick={() =>
               issueStore
                 .createIssue({
@@ -102,15 +112,15 @@ const IconContainer = styled.div`
   margin-left: 10px;
 `;
 
-const StyledButton = styled(Button)`
-  background-color: ${baseTheme.colors.primary100};
-  width: 130px;
-`;
+type StyledButtonType = {
+  disabled: boolean;
+};
 
-const UserImageContainer = styled.div`
-  background-color: ${baseTheme.colors.grey20};
-  margin-left: auto;
-  border-radius: 50px;
-  height: 55px;
-  width: 55px;
+const StyledButton = styled(Button)<StyledButtonType>`
+  background-color: ${props =>
+    props.disabled ? baseTheme.colors.grey60 : baseTheme.colors.primary100};
+  width: 130px;
+  &: hover {
+    cursor: ${props => !props.disabled && "pointer"};
+  }
 `;
