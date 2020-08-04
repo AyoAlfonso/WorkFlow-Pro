@@ -11,7 +11,16 @@ export const HabitModel = types
     userId: types.maybeNull(types.number),
     weeklyLogs: types.array(HabitLogModel),
   })
-  .views(self => ({}))
+  .views(self => ({
+    get completedLogs() {
+      return self.weeklyLogs.filter(log => !!log.id);
+    },
+  }))
+  .views(self => ({
+    get percentageWeeklyLogsCompleted() {
+      return (self.completedLogs.length / self.frequency) * 100;
+    },
+  }))
   .actions(self => ({}));
 
 type HabitModelType = typeof HabitModel.Type;

@@ -35,3 +35,5 @@ export const Icon = (props: IIconProps) => {
     </IconContainer>
   );
 };
+
+export const RawIcon = (props: IcoMoon) => <IcoMoon iconSet={iconSet} {...props} />;

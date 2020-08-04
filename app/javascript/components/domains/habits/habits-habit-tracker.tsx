@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { IHabit } from "~/models";
 import { observer } from "mobx-react";
+import { IHabit } from "~/models";
+import { RawIcon } from "~/components/shared";
+import { HabitsTableDataCell } from "./habits-body";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 interface IHabitsHabitTrackerProps {
   habit: IHabit;
@@ -10,47 +14,62 @@ interface IHabitsHabitTrackerProps {
 export const HabitsHabitTracker = observer(
   ({ habit, onUpdate }: IHabitsHabitTrackerProps): JSX.Element => {
     const renderHabitLogs = () =>
-      habit.weeklyLogs.map((log, index) => (
-        <HabitsDailyLog
+      habit.weeklyLogs.map(log => (
+        <HabitsTableDataCell
           key={`${habit.id}-${log.logDate}`}
           onClick={() => {
             onUpdate(habit.id, log.logDate);
           }}
         >
-          {log.id ? `T` : `X`}
-        </HabitsDailyLog>
+          {log.id ? (
+            <RawIcon icon={"Tasks"} color={habit.color} size={16} />
+          ) : (
+            <RawIcon icon={"Close"} color={habit.color} size={16} />
+          )}
+        </HabitsTableDataCell>
       ));
 
     return (
-      <Container>
-        <PieContainer />
-        <NameContainer>{`${habit.name}`}</NameContainer>
+      <>
+        <HabitsTableDataCell>
+          <HabitsTableCircularProgressBar
+            color={habit.color}
+            value={habit.percentageWeeklyLogsCompleted}
+          />
+        </HabitsTableDataCell>
+        <HabitsTableDataCell fontWeight={600}>
+          <NameContainer color={habit.color}>{`${habit.name}`}</NameContainer>
+        </HabitsTableDataCell>
         {renderHabitLogs()}
-      </Container>
+      </>
     );
   },
 );
 
-const Container = styled.div`
-  align-items: center;
-  border-bottom: 1px solid #e3e3e3;
-  display: flex;
-  flex-direction: row;
-  padding-left: 10px;
-  padding-right: 10px;
-`;
-
-const PieContainer = styled.div``;
-
 const NameContainer = styled.div`
-  width: 50px;
+  color: ${props => props.color};
 `;
 
-const IconContainer = styled.div``;
-
-const HabitsDailyLog = styled.div`
-  padding: 0px 5px;
-  :hover {
-    cursor: pointer;
-  }
-`;
+interface IHabitsTableCircularProgressBar {
+  color: string;
+  value: number;
+}
+const HabitsTableCircularProgressBar = ({ color, value }: IHabitsTableCircularProgressBar) => (
+  <CircularProgressbar
+    value={value}
+    strokeWidth={25}
+    styles={{
+      root: {
+        height: "25px",
+        width: "25px",
+      },
+      path: {
+        stroke: color,
+        strokeLinecap: "butt",
+      },
+      trail: {
+        stroke: "none",
+      },
+    }}
+  />
+);
