@@ -3,6 +3,10 @@ ActiveAdmin.register User do
 
   config.sort_order = 'last_name_asc'
 
+  member_action :resend_confirmation do
+    resource.send_confirmation_instructions
+    redirect_to resource_path, notice: 'Confirmation e-mail resent!'
+  end
   index do
     selectable_column
     id_column
@@ -17,6 +21,10 @@ ActiveAdmin.register User do
     column :sign_in_count
     column :created_at
     actions
+    column :confirmed_at
+    actions defaults: true do |user|
+      link_to("Re-send confirmation", resend_confirmation_admin_user_path(user), class: 'member_link' ) if !user.confirmed? && !user.invited_to_sign_up?
+    end
   end
 
   filter :email
@@ -43,6 +51,7 @@ ActiveAdmin.register User do
       row :last_sign_in_at
       row :sign_in_count
       row :created_at
+      row :confirmed_at
     end
   end
   form do |f|
