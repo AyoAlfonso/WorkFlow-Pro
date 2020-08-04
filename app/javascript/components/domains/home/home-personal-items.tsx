@@ -5,7 +5,7 @@ import { IssuesContainer } from "../issues/issues-container";
 import { KeyActivitiesContainer } from "../key-activities/key-activities-container";
 import { TodaysPrioritiesHeader } from "../todays-priorities/todays-priorities-header";
 import { Journal } from "../journal/journal";
-import { HabitsHeader } from "../habits";
+import { HabitsBody, HabitsHeader } from "../habits";
 
 export const HomePersonalItems = (): JSX.Element => {
   const renderProritiesContainer = () => {
@@ -25,6 +25,7 @@ export const HomePersonalItems = (): JSX.Element => {
     return (
       <NonPrioritiesContainer>
         <HabitsHeader />
+        <HabitsBody />
       </NonPrioritiesContainer>
     );
   };

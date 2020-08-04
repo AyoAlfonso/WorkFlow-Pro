@@ -137,6 +137,13 @@ export class Api {
   async createQuarterlyGoalKeyElement(id) {
     return this.client.post(`/quarterly_goals/create_key_element/${id}`);
   }
+  async getHabits() {
+    return this.client.get("/habits");
+  }
+
+  async createHabit(habitData) {
+    return this.client.post("/habits", habitData);
+  }
 
   async createQuarterlyGoal(quarterlyGoalObject) {
     return this.client.post(`/quarterly_goals`, quarterlyGoalObject);
@@ -144,6 +151,10 @@ export class Api {
 
   async createMilestones(quarterlyGoalId) {
     return this.client.post(`/quarterly_goals/create_milestones/${quarterlyGoalId}`);
+  }
+
+  async updateHabitLog(habitId: number, logDate: string) {
+    return this.client.put(`/habits/${habitId}/habit_logs/${logDate}`);
   }
 
   //async setJWT(jwt) {}

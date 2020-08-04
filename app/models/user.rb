@@ -22,6 +22,7 @@ class User < ApplicationRecord
   has_many :daily_logs
   has_one_attached :avatar
   belongs_to :user_role
+  has_many :habits
 
   validates :first_name, :last_name, presence: true
 
