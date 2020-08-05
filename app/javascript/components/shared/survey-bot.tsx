@@ -45,10 +45,10 @@ export const SurveyBot = observer(
         steps={steps}
         width={"100%"}
         userAvatar={sessionStore.profile.avatarUrl || undefined}
-        contentStyle={{ height: "206px" }}
+        contentStyle={{ height: "226px" }}
         // header and footer are 120px total
         // these hard-coded values are required to make the chatbot fit inside the Journal widget :(
-        style={{ height: "326px" }}
+        style={{ height: "346px" }}
         enableSmoothScroll={true}
         userDelay={200}
         handleEnd={({ renderedSteps, steps, values }) => {
