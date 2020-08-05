@@ -65,8 +65,8 @@ class User < ApplicationRecord
   end
 
   # devise_invitable invite! method overriden
-  def invite!
-    super
+  def invite!(*args)
+    super(*args)
     self.confirmed_at = nil
     self.save
   end
