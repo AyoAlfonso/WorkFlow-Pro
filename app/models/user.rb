@@ -65,8 +65,8 @@ class User < ApplicationRecord
   end
 
   # devise_invitable invite! method overriden
-  def invite!(invite_params, current_inviter, &block)
-    super(invite_params, current_inviter, &block)
+  def invite!
+    super
     self.confirmed_at = nil
     self.save
   end
