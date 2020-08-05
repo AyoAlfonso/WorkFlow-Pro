@@ -7,8 +7,8 @@ import { Icon } from "../../shared/icon";
 import { Button } from "rebass";
 import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";
-import { UserDefaultIcon } from "../../shared/user-default-icon";
 import * as R from "ramda";
+import { Avatar } from "~/components/shared/avatar";
 
 interface ICreateKeyActivityModalProps {
   createKeyActivityModalOpen: boolean;
@@ -18,7 +18,7 @@ interface ICreateKeyActivityModalProps {
 export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX.Element => {
   const { keyActivityStore, sessionStore } = useMst();
   const { createKeyActivityModalOpen, setCreateKeyActivityModalOpen } = props;
-  const [KeyActivityDescription, setKeyActivityDescription] = useState<string>("");
+  const [keyActivityDescription, setKeyActivityDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
   const [weeklyList, setWeeklyList] = useState<boolean>(true);
 
@@ -32,22 +32,32 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
       <Container>
         <FlexContainer>
           <TextInput
-            textValue={KeyActivityDescription}
+            textValue={keyActivityDescription}
             setTextValue={setKeyActivityDescription}
             width={"75%"}
             placeholder={"e.g. Review revenue projections"}
+            style={{
+              height: "35px",
+              marginTop: "auto",
+              marginBottom: "auto",
+              paddingTop: "4px",
+              paddingBottom: "4px",
+            }}
           />
-          <UserDefaultIcon
+          <Avatar
+            avatarUrl={R.path(["profile", "avatarUrl"], sessionStore)}
             firstName={R.path(["profile", "firstName"], sessionStore)}
             lastName={R.path(["profile", "lastName"], sessionStore)}
+            size={55}
           />
         </FlexContainer>
         <FlexContainer>
           <StyledButton
+            disabled={keyActivityDescription.length == 0}
             onClick={() =>
               keyActivityStore
                 .createKeyActivity({
-                  description: KeyActivityDescription,
+                  description: keyActivityDescription,
                   priority: selectedPriority,
                   weeklyList: weeklyList,
                 })
@@ -117,9 +127,17 @@ const IconContainer = styled.div`
   margin-left: 10px;
 `;
 
-const StyledButton = styled(Button)`
-  background-color: ${baseTheme.colors.primary100};
+type StyledButtonType = {
+  disabled: boolean;
+};
+
+const StyledButton = styled(Button)<StyledButtonType>`
+  background-color: ${props =>
+    props.disabled ? baseTheme.colors.grey60 : baseTheme.colors.primary100};
   width: 130px;
+  &: hover {
+    cursor: ${props => !props.disabled && "pointer"};
+  }
 `;
 
 type MasterListButtonType = {

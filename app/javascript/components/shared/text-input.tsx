@@ -8,10 +8,11 @@ interface ITextInputProps {
   setTextValue: React.Dispatch<React.SetStateAction<string>>;
   width?: string;
   placeholder?: string;
+  style?: any;
 }
 
 export const TextInput = (props: ITextInputProps) => {
-  const { textValue, setTextValue, width, placeholder } = props;
+  const { textValue, setTextValue, width, placeholder, style } = props;
 
   return (
     <StyledInput
@@ -19,6 +20,7 @@ export const TextInput = (props: ITextInputProps) => {
       value={textValue}
       sx={{ border: `1px solid ${baseTheme.colors.grey40}`, width: `${width}` }}
       onChange={e => setTextValue(e.target.value)}
+      style={style}
     />
   );
 };
