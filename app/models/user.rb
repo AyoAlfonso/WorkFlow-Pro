@@ -48,24 +48,28 @@ class User < ApplicationRecord
     daily_logs.select(:id, :work_status).where(log_date: Date.today).first_or_create
   end
 
-    # devise confirm! method overriden
-    # def confirm!
-    #   UserMailer.welcome_message(self).deliver
-    #   super
-    # end
+  def company_admin?
+    role == UserRole::CEO || role == UserRole::ADMIN
+  end
   
-    # devise_invitable accept_invitation! method overriden
-    def accept_invitation!
-      self.confirm
-      super
-    end
-  
-    # devise_invitable invite! method overriden
-    def invite!(invite_params, current_inviter, &block)
-      super(invite_params, current_inviter, &block)
-      self.confirmed_at = nil
-      self.save
-    end
+  # devise confirm! method overriden
+  # def confirm!
+  #   UserMailer.welcome_message(self).deliver
+  #   super
+  # end
+
+  # devise_invitable accept_invitation! method overriden
+  def accept_invitation!
+    self.confirm
+    super
+  end
+
+  # devise_invitable invite! method overriden
+  def invite!(invite_params, current_inviter, &block)
+    super(invite_params, current_inviter, &block)
+    self.confirmed_at = nil
+    self.save
+  end
 
   # def on_jwt_dispatch(token, payload)
   #   super
