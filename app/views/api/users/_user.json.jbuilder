@@ -1,0 +1,1 @@
+json.extract! user, :id, :first_name, :last_name, :email, :role, :avatar_url, :current_daily_log, :confirmed_at, :invitation_sent_at, :timezone, :phone_number

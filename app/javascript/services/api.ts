@@ -73,6 +73,10 @@ export class Api {
     return this.client.delete(`/companies/${companyId}/logo`);
   }
 
+  async resendConfirmation(userId) {
+    return this.client.post(`/confirmation`, { user: { id: userId } });
+  }
+
   async signOut() {
     return this.client.delete("/users/sign_out");
   }

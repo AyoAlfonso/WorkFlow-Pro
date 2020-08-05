@@ -2,10 +2,10 @@ class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::Allowlist
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable, :confirmable, #:invitable,
+  devise :database_authenticatable, :registerable, :confirmable, :invitable,
          :recoverable, :rememberable, :trackable,
          :validatable,
-         :jwt_authenticatable, jwt_revocation_strategy: self
+         :jwt_authenticatable, jwt_revocation_strategy: self, validate_on_invite: true
 
   belongs_to :company
   delegate :name, :timezone, to: :company, prefix: true, allow_nil: true
@@ -47,6 +47,25 @@ class User < ApplicationRecord
   def current_daily_log
     daily_logs.select(:id, :work_status).where(log_date: Date.today).first_or_create
   end
+
+    # devise confirm! method overriden
+    # def confirm!
+    #   UserMailer.welcome_message(self).deliver
+    #   super
+    # end
+  
+    # devise_invitable accept_invitation! method overriden
+    def accept_invitation!
+      self.confirm
+      super
+    end
+  
+    # devise_invitable invite! method overriden
+    def invite!(invite_params, current_inviter, &block)
+      super(invite_params, current_inviter, &block)
+      self.confirmed_at = nil
+      self.save
+    end
 
   # def on_jwt_dispatch(token, payload)
   #   super

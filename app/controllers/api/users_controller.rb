@@ -6,25 +6,28 @@ class Api::UsersController < Api::ApplicationController
 
   def index
     @users = policy_scope(User)
-    render json: @users
+    render '/api/users/index'
   end
 
   def create
     #generate a random password
     @user = current_user.company.users.create(user_creation_params)
+    render '/api/users/show'
   end
 
   def show
-    render json: @user.as_json(include: [:current_daily_log], methods: [:avatar_url, :role])
+    render '/api/users/show'
   end
 
   def profile
-    render json: current_user.serializable_hash(methods: [:avatar_url, :role, :current_daily_log]).merge(static_data: view_context.static_data)
+    @user = current_user
+    @static_data = view_context.static_data
+    render '/api/users/profile'
   end
 
   def update
     @user.update!(user_update_params)
-    render json: @user.as_json(include: [:current_daily_log], methods: [:avatar_url, :role])
+    render 'api/users/show'
   end
 
   def update_avatar
