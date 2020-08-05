@@ -1,6 +1,6 @@
 class Api::UsersController < Api::ApplicationController
   helper ApplicationHelper
-  before_action :set_user, only: [:show, :update]
+  before_action :set_user, only: [:show, :update, :resend_invite]
   before_action :skip_authorization, only: :profile
   respond_to :json
 
@@ -10,8 +10,9 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def create
-    #generate a random password
-    @user = current_user.company.users.create(user_creation_params)
+    authorize User.new
+    #@user = current_user.company.users.create(user_creation_params)
+    @user = User.invite!(user_creation_params.merge(company: current_user.company))
     render '/api/users/show'
   end
 
@@ -19,15 +20,20 @@ class Api::UsersController < Api::ApplicationController
     render '/api/users/show'
   end
 
+  def update
+    @user.update!(user_update_params)
+    render 'api/users/show'
+  end
+
+  def resend_invitation
+    @user.invite!
+    render 'api/users/show'
+  end
+
   def profile
     @user = current_user
     @static_data = view_context.static_data
     render '/api/users/profile'
-  end
-
-  def update
-    @user.update!(user_update_params)
-    render 'api/users/show'
   end
 
   def update_avatar
