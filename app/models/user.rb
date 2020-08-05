@@ -19,7 +19,7 @@ class User < ApplicationRecord
   has_many :owned_annual_initiatives, :foreign_key => 'owned_by_id', :class_name => 'AnnualInitiative'
   has_many :weekly_meetings, :foreign_key => 'created_by_id', :class_name => 'User'
   has_many :meeting_ratings
-  has_many :daily_logs
+  has_many :daily_logs, dependent: :destroy
   has_one_attached :avatar
   belongs_to :user_role
 

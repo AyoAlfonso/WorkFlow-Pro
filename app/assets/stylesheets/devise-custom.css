@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'Lato';
+  src: local('Lato'), local('Lato-Regular'),
+  url('https://fonts.googleapis.com/css2?family=Lato&display=swap') format('woff'), url('https://fonts.gstatic.com/s/exo/v11/4UaZrEtFpBI4f1ZSIK9d4LjJ4lM3OwpmOw.woff2') format('woff2'),
+  url('https://fonts.googleapis.com/css2?family=Lato&display=swap') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
 .devise-body-div {
   display: block; 
   align-items: center; 
@@ -26,13 +35,14 @@
   padding: 32px; 
   border-radius: 10px; 
   background-color: #FFFFFF;
+  margin: auto;
 }
 
 .devise-form-panel label {
   width: 100%;
   font-size: 16px;
   margin-bottom: 15px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .devise-form-panel input {
