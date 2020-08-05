@@ -22,7 +22,7 @@ export const ModalWithHeader = (props: IModalWithHeaderProps): JSX.Element => {
           {headerText}
         </Heading>
         <CloseIconContainer onClick={() => setModalOpen(false)}>
-          <Icon icon={"Close"} size={18} iconColor="grey60" />
+          <StyledIcon icon={"Close"} size={18} />
         </CloseIconContainer>
       </HeaderContainer>
       {children}
@@ -30,11 +30,16 @@ export const ModalWithHeader = (props: IModalWithHeaderProps): JSX.Element => {
   );
 };
 
+const StyledIcon = styled(Icon)`
+  color: ${props => props.theme.colors.grey60};
+`;
+
 const StyledModal = Modal.styled`
   width: 30rem;
   min-height: 100px;
   border-radius: 5px;
   background-color: ${props => props.theme.colors.white};
+
 `;
 
 const HeaderContainer = styled.div`
@@ -48,4 +53,7 @@ const CloseIconContainer = styled.div`
   margin-right: 16px;
   margin-top: 14px;
   cursor: pointer;
+  &:hover ${StyledIcon} {
+    color: ${props => props.theme.colors.greyActive};
+  }
 `;

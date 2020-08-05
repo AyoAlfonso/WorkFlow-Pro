@@ -1,11 +1,14 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
-import { Checkbox, Label } from "@rebass/forms";
+import { Checkbox, Label, Select } from "@rebass/forms";
 import { Icon } from "../../shared/icon";
 import { observer } from "mobx-react";
 import { baseTheme } from "../../../themes/base";
 import ContentEditable from "react-contenteditable";
+import { useState } from "react";
+import { Text } from "~/components/shared/text";
+import { HomeContainerBorders } from "../home/shared-components";
 
 interface IIssueEntryProps {
   issue: any;
@@ -15,6 +18,8 @@ export const IssueEntry = observer(
   (props: IIssueEntryProps): JSX.Element => {
     const { issueStore } = useMst();
     const { issue } = props;
+
+    const [showShareModal, setShowShareModal] = useState<boolean>(false);
 
     const renderPriorityIcon = (priority: string) => {
       switch (priority) {
@@ -85,6 +90,24 @@ export const IssueEntry = observer(
           <DeleteButtonContainer onClick={() => issueStore.destroyIssue(issue.id)}>
             <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
           </DeleteButtonContainer>
+          <ShareButtonContainer>
+            <Icon icon={"Forward"} size={24} style={{ marginTop: "2px" }} />
+            {showShareModal && (
+              <ShareIssueContainer>
+                <ShareIssueText>Share Issue</ShareIssueText>
+                <DestinationContainer>
+                  <SendDestinationContainer>
+                    <DestinationText>Destination</DestinationText>
+                    <Select id="country" name="country" defaultValue={1}>
+                      {[1, 2, 3].map((value, key) => (
+                        <option key={key}>{value}</option>
+                      ))}
+                    </Select>
+                  </SendDestinationContainer>
+                </DestinationContainer>
+              </ShareIssueContainer>
+            )}
+          </ShareButtonContainer>
         </ActionContainer>
       </Container>
     );
@@ -97,12 +120,22 @@ const ActionContainer = styled.div`
 `;
 
 const DeleteButtonContainer = styled.div`
-  margin: auto;
   color: ${props => props.theme.colors.grey60};
+  padding-right: 3px;
   &: hover {
     cursor: pointer;
     color: ${props => props.theme.colors.greyActive};
   }
+`;
+
+const ShareButtonContainer = styled.div`
+  color: ${props => props.theme.colors.grey60};
+  padding-left: 3px;
+  &: hover {
+    cursor: pointer;
+    color: ${props => props.theme.colors.greyActive};
+  }
+  margin-right: 8px;
 `;
 
 const Container = styled.div`
@@ -111,7 +144,7 @@ const Container = styled.div`
   width: inherit;
   padding: 12px 0px 12px 0px;
   &:hover ${ActionContainer} {
-    display: block;
+    display: flex;
   }
 `;
 
@@ -139,6 +172,33 @@ const StyledContentEditable = styled(ContentEditable)`
 const EmptyIconContainer = styled.div`
   width: 24px;
   height: 24px;
+`;
+
+const ShareIssueContainer = styled(HomeContainerBorders)`
+  position: absolute;
+  background: white;
+  color: black;
+  width: 200px;
+`;
+
+const ShareIssueText = styled(Text)`
+  size: 15px;
+  font-weight: bold;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+`;
+
+const DestinationText = styled(Text)``;
+
+const DestinationContainer = styled.div`
+  border-top: 1px solid ${props => props.theme.colors.grey40};
+`;
+
+const SendDestinationContainer = styled.div`
+  padding-left: 8px;
+  padding-right: 8px;
 `;
 
 const CheckboxContainer = props => (
