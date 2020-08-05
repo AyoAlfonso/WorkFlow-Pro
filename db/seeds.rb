@@ -141,6 +141,7 @@ if Rails.env.development?
 end
 
 Questionnaire.where(name: "Create My Day").first_or_create(name: "Create My Day", 
+  daily_limit: true,
   steps: [
     {
       id: 1,
@@ -204,6 +205,7 @@ Questionnaire.where(name: "Create My Day").first_or_create(name: "Create My Day"
 )
 
 Questionnaire.where(name: "Thought Challenge").first_or_create(name: "Thought Challenge", 
+  daily_limit: false,
   steps: [
     {
       id: 1,
@@ -281,6 +283,7 @@ Questionnaire.where(name: "Thought Challenge").first_or_create(name: "Thought Ch
 )
 
 Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening Reflection", 
+  daily_limit: true,
   steps: [
     {
       id: 1,

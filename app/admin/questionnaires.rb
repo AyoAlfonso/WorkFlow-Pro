@@ -11,6 +11,15 @@ ActiveAdmin.register Questionnaire do
 
   filter :name
 
+  controller do
+    def update 
+      @questionnaire = Questionnaire.find(params[:id])
+      @questionnaire.steps = params[:questionnaire][:steps_raw].split(/[\r\n]+/).map { |row| row.squish }
+      @questionnaire.save!
+      redirect_to admin_questionnaire_path, notice: "Questionnaire Updated"
+    end
+  end
+
   show do
     h1 questionnaire.name
     attributes_table do
@@ -23,7 +32,7 @@ ActiveAdmin.register Questionnaire do
   form do |f|
     h1 f.object.name
     f.inputs "Steps" do
-      f.input :steps
+      f.input :steps_raw, as: :text
       f.actions
     end
   end
