@@ -10,7 +10,7 @@ ActiveAdmin.register Company do
                 :strategic_plan,
                 :timezone,
                 core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4]
-                
+
   index do
     selectable_column
     id_column
@@ -109,10 +109,12 @@ ActiveAdmin.register Company do
         end
       end
     end
-    h2 'Accountability Chart'
-    f.rich_text_area :accountability_chart
-    h2 'Strategic Plan'
-    f.rich_text_area :strategic_plan
+    f.label :accountability_chart
+    f.rich_text_area :accountability_chart, label: "Accountability Chart Rich Text"
+    f.input :accountability_chart_embed, label: "Accountability Chart Embed Link", input_html: { rows: 5 }
+    f.label :strategic_plan
+    f.rich_text_area :strategic_plan, label: "Strategic Plan Rich Text"
+    f.input :strategic_plan_embed, label: "Strategic Plan Embed Link", input_html: { rows: 5 }
     f.actions
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_30_160756) do
+ActiveRecord::Schema.define(version: 2020_08_05_172622) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,8 @@ ActiveRecord::Schema.define(version: 2020_07_30_160756) do
     t.datetime "updated_at", precision: 6, null: false
     t.date "fiscal_year_start"
     t.string "timezone"
+    t.text "accountability_chart_embed"
+    t.text "strategic_plan_embed"
   end
 
   create_table "conversation_starters", force: :cascade do |t|
@@ -151,7 +153,7 @@ ActiveRecord::Schema.define(version: 2020_07_30_160756) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_daily_logs_on_user_id"
   end
-  
+
   create_table "habit_logs", force: :cascade do |t|
     t.date "log_date"
     t.bigint "habit_id", null: false
