@@ -85,6 +85,7 @@ const DescriptionContainer = styled.div`
 const StyledText = styled(Text)`
   padding-left: 16px;
   padding-right: 16px;
+  white-space: normal;
   &:hover {
     cursor: pointer;
     font-weight: bold;
