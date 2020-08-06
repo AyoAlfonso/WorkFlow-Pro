@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import { baseTheme } from "../../themes";
 
 import { Input as RebassInput, Label as RebassLabel, Select as RebassSelect } from "@rebass/forms";
 
@@ -32,4 +33,15 @@ const StyledInput = styled.input`
   appearance: none;
 `;
 
-export const Select = RebassSelect;
+export const Select = props => (
+  <RebassSelect
+    {...props}
+    sx={{
+      marginBottom: 15,
+      borderRadius: 5,
+      border: `1px solid ${baseTheme.colors.grey40}`,
+    }}
+  >
+    {props.children}
+  </RebassSelect>
+);

@@ -6,6 +6,12 @@ export const Container = styled.div`
   height: 600px;
 `;
 
+export const StretchContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  min-height: 600px;
+`;
+
 export const BodyContainer = styled.div`
   display: flex;
   padding: 16px;

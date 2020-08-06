@@ -37,7 +37,7 @@ class User < ApplicationRecord
   end
 
   def role
-    user_role.name
+    user_role&.name
   end
 
   def get_timezone
@@ -45,7 +45,9 @@ class User < ApplicationRecord
   end
 
   def current_daily_log
-    daily_logs.select(:id, :work_status).where(log_date: Date.today).first_or_create
+    if self.persisted?
+      daily_logs.select(:id, :work_status).where(log_date: Date.today).first_or_create
+    end
   end
 
   def company_admin?

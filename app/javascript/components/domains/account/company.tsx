@@ -115,7 +115,9 @@ export const Company = observer(
                   >
                     {R.map(
                       (zone: string) => (
-                        <option key={zone}>{zone}</option>
+                        <option key={zone} value={zone}>
+                          {zone}
+                        </option>
                       ),
                       staticData.timezones,
                     )}

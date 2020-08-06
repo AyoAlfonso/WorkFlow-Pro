@@ -31,7 +31,8 @@
           "firstName": "First Name",
           "lastName": "Last Name",
           "role": "Role",
-          "invite": "Invite to Company"
+          "invite": "Invite to Company",
+          "resend": "Resend"
         },
         "habits": {
           "title": "Habits",

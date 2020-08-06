@@ -1,6 +1,6 @@
 class Api::UsersController < Api::ApplicationController
   helper ApplicationHelper
-  before_action :set_user, only: [:show, :update, :resend_invite]
+  before_action :set_user, only: [:show, :update, :resend_invitation]
   before_action :skip_authorization, only: :profile
   respond_to :json
 
@@ -10,10 +10,18 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def create
-    authorize User.new
-    #@user = current_user.company.users.create(user_creation_params)
-    @user = User.invite!(user_creation_params.merge(company: current_user.company))
-    render '/api/users/show'
+    authorize current_user.company.users.new
+    if User.find_by_email(user_creation_params[:email]).present?
+      render json: {message: "User already created."}, status: :unprocessable_entity
+      return
+    end
+
+    @user = User.invite!(user_creation_params.merge(company_id: current_user.company.id))
+    if @user.valid? && @user.persisted?
+      render '/api/users/show'
+    else
+      render json: {message: "Failed to invite user"}, status: :unprocessable_entity
+    end
   end
 
   def show
@@ -51,7 +59,7 @@ class Api::UsersController < Api::ApplicationController
   private
 
   def user_creation_params
-    params.permit(:first_name, :last_name, :email, :timezone, :user_role_id)
+    params.require(:user).permit(:first_name, :last_name, :email, :timezone, :user_role_id)
   end
 
   def user_update_params

@@ -3,11 +3,11 @@ import { RoleAdministrator, RoleCEO, RoleNormalUser, RoleLeadership } from "~/li
 
 export const rules = {
   [RoleAdministrator]: {
-    static: ["update-company-details"],
+    static: ["update-company-details", "create-user"],
     dynamic: [],
   },
   [RoleCEO]: {
-    static: ["update-company-details"],
+    static: ["update-company-details", "create-user"],
     dynamic: [],
   },
   [RoleNormalUser]: {

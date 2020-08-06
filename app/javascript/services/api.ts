@@ -50,11 +50,11 @@ export class Api {
   }
 
   async updateProfile(formData) {
-    return this.client.put(`/users/${formData.id}`, formData);
+    return this.client.patch(`/users/${formData.id}`, formData);
   }
 
   async updateAvatar(formData) {
-    return this.client.put("/avatar", formData);
+    return this.client.patch("/avatar", formData);
   }
 
   async deleteAvatar() {
@@ -66,11 +66,15 @@ export class Api {
   }
 
   async updateCompany(formData) {
-    return this.client.put(`/companies/${formData.id}`, formData);
+    return this.client.patch(`/companies/${formData.id}`, formData);
   }
 
   async deleteLogo(companyId) {
     return this.client.delete(`/companies/${companyId}/logo`);
+  }
+
+  async inviteUser(formData) {
+    return this.client.post(`/users`, formData);
   }
 
   async resendInvitation(userId) {
