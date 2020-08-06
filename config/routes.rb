@@ -63,6 +63,9 @@ Rails.application.routes.draw do
 
     #questionnaire_attempts
     resources :questionnaire_attempts, only: [:create]
+    
+    #teams
+    resources :teams, only: [:index]
   end
 
 

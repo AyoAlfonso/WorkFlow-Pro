@@ -1,6 +1,7 @@
 class Company < ApplicationRecord
   has_many :users
   has_many :annual_initiatives
+  has_many :teams
   has_one_attached :logo
   
   has_one :core_four, dependent: :destroy

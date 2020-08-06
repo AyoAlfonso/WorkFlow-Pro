@@ -187,5 +187,9 @@ export class Api {
     return this.client.post(`/questionnaire_attempts`, questionnaireAttemptObject);
   }
 
+  async getTeams() {
+    return this.client.get(`/teams`);
+  }
+
   //async setJWT(jwt) {}
 }
