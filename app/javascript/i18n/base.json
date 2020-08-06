@@ -15,6 +15,11 @@
         "profile": "Profile",
         "notifications": "Notifications",
         "security": "Security",
+        "notificationsTable": {
+          "type": "Type",
+          "rule": "Scheduling Rule",
+          "email": "Email"
+        },
         "meeting": "Meeting",
         "users": "Users",
         "teams": "Teams",
