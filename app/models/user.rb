@@ -23,6 +23,8 @@ class User < ApplicationRecord
   has_many :questionnaire_attempts
   belongs_to :user_role
   has_many :habits
+  has_many :team_user_enablements
+  has_many :teams, through: :team_user_enablements
 
   validates :first_name, :last_name, presence: true
 

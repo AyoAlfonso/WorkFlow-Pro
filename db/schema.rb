@@ -168,6 +168,8 @@ ActiveRecord::Schema.define(version: 2020_08_06_235409) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "priority", default: 0
+    t.bigint "team_id"
+    t.index ["team_id"], name: "index_issues_on_team_id"
     t.index ["user_id"], name: "index_issues_on_user_id"
   end
 
@@ -255,6 +257,30 @@ ActiveRecord::Schema.define(version: 2020_08_06_235409) do
     t.boolean "daily_limit"
   end
 
+  create_table "team_user_enablements", force: :cascade do |t|
+    t.bigint "team_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["team_id"], name: "index_team_user_enablements_on_team_id"
+    t.index ["user_id"], name: "index_team_user_enablements_on_user_id"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.bigint "company_id", null: false
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["company_id"], name: "index_teams_on_company_id"
+  end
+
+  create_table "thought_challenges", force: :cascade do |t|
+    t.text "negative_thoughts"
+    t.integer "cognitive_distortions", default: 0
+    t.text "how_to_challenge_negative_thoughts"
+    t.text "another_way_to_interpret"
+  end
+
   create_table "user_roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -339,8 +365,14 @@ ActiveRecord::Schema.define(version: 2020_08_06_235409) do
   add_foreign_key "meeting_ratings", "weekly_meetings"
   add_foreign_key "milestones", "quarterly_goals"
   add_foreign_key "quarterly_goals", "annual_initiatives"
+<<<<<<< HEAD
   add_foreign_key "questionnaire_attempts", "questionnaires"
   add_foreign_key "questionnaire_attempts", "users"
+=======
+  add_foreign_key "team_user_enablements", "teams"
+  add_foreign_key "team_user_enablements", "users"
+  add_foreign_key "teams", "companies"
+>>>>>>> created tables for teams and its relationships
   add_foreign_key "users", "companies"
   add_foreign_key "users", "user_roles"
 end
