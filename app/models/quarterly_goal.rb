@@ -32,6 +32,6 @@ class QuarterlyGoal < ApplicationRecord
 
   private
   def sanitize_description
-    self.description = sanitize(description)
+    self.description = strip_tags(description)
   end
 end
