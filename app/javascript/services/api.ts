@@ -78,7 +78,7 @@ export class Api {
   }
 
   async resendInvitation(userId) {
-    return this.client.post(`/users/${userId}/resend_invitation`);
+    return this.client.patch(`/users/${userId}/resend_invitation`);
   }
 
   async signOut() {
