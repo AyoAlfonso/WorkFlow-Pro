@@ -22,9 +22,10 @@
   height:100%; 
   box-sizing: border-box; 
   margin: 0; 
-  display: flex; 
   display: -webkit-box; 
   display: -webkit-flex; 
+  display: -ms-flexbox;
+  display: flex; 
   ms-flex-align: center; 
   line-height: 1.15;
 }
@@ -35,6 +36,7 @@
   padding: 32px; 
   border-radius: 10px; 
   background-color: #FFFFFF;
+  box-sizing: border-box;
   margin: auto;
 }
 
@@ -43,6 +45,7 @@
   font-size: 16px;
   margin-bottom: 15px;
   font-weight: 600;
+  display: block;
 }
 
 .devise-form-panel input {
@@ -53,6 +56,8 @@
   border: 1px solid #CED1DD;
   background-color: transparent;
   padding: 8px;
+  display: block;
+  box-sizing : border-box;
 }
 
 
@@ -63,7 +68,7 @@
 }
 
 .devise-submit {
-  margin-top: 15px;
+  margin-top: 30px;
   margin-bottom: 15px;
   width: 100%;
   border-color: #005FFE !important;
@@ -74,5 +79,5 @@
   font-size: 16px;
   height: 32px;
   padding-left: 32px !important;
-  padding-right: 32px !important; 
+  padding-right: 32px !important;
 }
