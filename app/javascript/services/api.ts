@@ -183,7 +183,6 @@ export class Api {
       answers: questionnaireAttemptData.values,
       rendered_steps: questionnaireAttemptData.renderedSteps,
       steps: questionnaireAttemptData.steps,
-      completed_at: Date.now(),
     };
     return this.client.post(`/questionnaire_attempts`, questionnaireAttemptObject);
   }
