@@ -1,6 +1,9 @@
 class QuarterlyGoal < ApplicationRecord
   include HasCreator
   include HasOwner
+  include ActionView::Helpers::SanitizeHelper
+
+  before_save :sanitize_description
 
   enum status: { incomplete: 0, in_progress: 1, completed: 2 }
 
@@ -25,5 +28,10 @@ class QuarterlyGoal < ApplicationRecord
         created_by: current_user
       )
     end
+  end
+
+  private
+  def sanitize_description
+    self.description = sanitize(description)
   end
 end

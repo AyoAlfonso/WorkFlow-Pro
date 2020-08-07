@@ -274,13 +274,6 @@ ActiveRecord::Schema.define(version: 2020_08_06_235409) do
     t.index ["company_id"], name: "index_teams_on_company_id"
   end
 
-  create_table "thought_challenges", force: :cascade do |t|
-    t.text "negative_thoughts"
-    t.integer "cognitive_distortions", default: 0
-    t.text "how_to_challenge_negative_thoughts"
-    t.text "another_way_to_interpret"
-  end
-
   create_table "user_roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -365,14 +358,11 @@ ActiveRecord::Schema.define(version: 2020_08_06_235409) do
   add_foreign_key "meeting_ratings", "weekly_meetings"
   add_foreign_key "milestones", "quarterly_goals"
   add_foreign_key "quarterly_goals", "annual_initiatives"
-<<<<<<< HEAD
   add_foreign_key "questionnaire_attempts", "questionnaires"
   add_foreign_key "questionnaire_attempts", "users"
-=======
   add_foreign_key "team_user_enablements", "teams"
   add_foreign_key "team_user_enablements", "users"
   add_foreign_key "teams", "companies"
->>>>>>> created tables for teams and its relationships
   add_foreign_key "users", "companies"
   add_foreign_key "users", "user_roles"
 end
