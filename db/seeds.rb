@@ -178,9 +178,13 @@ Questionnaire.where(name: "Create My Day").first_or_create(name: "Create My Day"
         {
           value: "Have a Follow-Up with Patrick",
           label: "Have a Follow-Up with Patrick",
-          trigger: "7",
+          trigger: "7"
         },
-      ]
+      ],
+      metadata: {
+        frog_selector: true,
+        trigger: 7
+      }
     },
     {
       id: 7,

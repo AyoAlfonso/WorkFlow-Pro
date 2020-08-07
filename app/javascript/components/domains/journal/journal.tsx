@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import { JournalHeader } from "./journal-header";
-import { SurveyBot } from "../../shared/survey-bot";
+import { SurveyBot } from "./survey-bot";
 import { IconButton } from "../../shared/icon-button";
 import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
 
