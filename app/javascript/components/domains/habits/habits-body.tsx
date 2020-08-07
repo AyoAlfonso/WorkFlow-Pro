@@ -25,7 +25,7 @@ export const HabitsBody = observer(
         </HabitsTableRow>
       ));
     const dayNames = lastFourDays.map((day, index) => (
-      <HabitsTableHeaderCell fontWeight={"normal"} key={index}>
+      <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"12%"}>
         {day.format("ddd")}
       </HabitsTableHeaderCell>
     ));
@@ -63,10 +63,16 @@ const HabitsTableBody = styled.tbody``;
 
 const HabitsTableRow = styled.tr``;
 
-const HabitsTableHeaderCell = styled.th`
+type HabitsTableHeaderCellType = {
+  fontWeight: string;
+  width?: string;
+};
+
+const HabitsTableHeaderCell = styled.th<HabitsTableHeaderCellType>`
   color: ${baseTheme.colors.greyInactive};
   font-weight: ${props => props.fontWeight};
   height: 25px;
+  width: ${props => props.width};
 `;
 
 export const HabitsTableDataCell = styled.td`
