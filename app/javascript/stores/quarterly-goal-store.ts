@@ -12,7 +12,7 @@ export const QuarterlyGoalStoreModel = types
   .extend(withEnvironment())
   .views(self => ({}))
   .actions(self => ({
-    getQuarterlyGoal: flow(function* (id) {
+    getQuarterlyGoal: flow(function*(id) {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.getQuarterlyGoal(id);
@@ -22,7 +22,7 @@ export const QuarterlyGoalStoreModel = types
         // error messaging handled by API monitor
       }
     }),
-    update: flow(function* () {
+    update: flow(function*() {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
@@ -34,7 +34,7 @@ export const QuarterlyGoalStoreModel = types
         // error messaging handled by API monitor
       }
     }),
-    createKeyElement: flow(function* () {
+    createKeyElement: flow(function*() {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createQuarterlyGoalKeyElement(self.quarterlyGoal.id);
@@ -45,7 +45,7 @@ export const QuarterlyGoalStoreModel = types
         // error messaging handled by API monitor
       }
     }),
-    create: flow(function* (quarterlyGoalObject) {
+    create: flow(function*(quarterlyGoalObject) {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createQuarterlyGoal(quarterlyGoalObject);
@@ -60,7 +60,7 @@ export const QuarterlyGoalStoreModel = types
         // error messaging handled by API monitor
       }
     }),
-    createMilestones: flow(function* (quarterlyGoalId) {
+    createMilestones: flow(function*(quarterlyGoalId) {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createMilestones(quarterlyGoalId);

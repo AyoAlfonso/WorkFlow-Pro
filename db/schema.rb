@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_05_172622) do
+ActiveRecord::Schema.define(version: 2020_08_06_235409) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -134,17 +134,6 @@ ActiveRecord::Schema.define(version: 2020_08_05_172622) do
     t.index ["company_id"], name: "index_core_fours_on_company_id"
   end
 
-  create_table "create_my_days", force: :cascade do |t|
-    t.text "i_am_grateful_for"
-    t.text "how_do_i_want_to_feel"
-    t.string "frog_type"
-    t.integer "frog_id"
-    t.text "daily_affirmation"
-    t.text "thoughts_and_reflections"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "daily_logs", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.date "log_date"
@@ -227,16 +216,6 @@ ActiveRecord::Schema.define(version: 2020_08_05_172622) do
     t.index ["quarterly_goal_id"], name: "index_milestones_on_quarterly_goal_id"
   end
 
-  create_table "personal_reflections", force: :cascade do |t|
-    t.string "how_are_you_feeling"
-    t.text "what_do_you_feel"
-    t.text "reflect_and_celebrate"
-    t.text "daily_affirmations"
-    t.text "thoughts_and_reflections"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "quarterly_goals", force: :cascade do |t|
     t.bigint "created_by_id"
     t.bigint "owned_by_id"
@@ -254,13 +233,26 @@ ActiveRecord::Schema.define(version: 2020_08_05_172622) do
     t.index ["owned_by_id"], name: "index_quarterly_goals_on_owned_by_id"
   end
 
-  create_table "thought_challenges", force: :cascade do |t|
-    t.text "negative_thoughts"
-    t.integer "cognitive_distortions", default: 0
-    t.text "how_to_challenge_negative_thoughts"
-    t.text "another_way_to_interpret"
+  create_table "questionnaire_attempts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "questionnaire_id", null: false
+    t.text "answers"
+    t.text "steps"
+    t.text "rendered_steps"
+    t.datetime "completed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "json_representation"
+    t.index ["questionnaire_id"], name: "index_questionnaire_attempts_on_questionnaire_id"
+    t.index ["user_id"], name: "index_questionnaire_attempts_on_user_id"
+  end
+
+  create_table "questionnaires", force: :cascade do |t|
+    t.string "name"
+    t.text "steps"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "daily_limit"
   end
 
   create_table "user_roles", force: :cascade do |t|
@@ -312,6 +304,17 @@ ActiveRecord::Schema.define(version: 2020_08_05_172622) do
     t.index ["user_role_id"], name: "index_users_on_user_role_id"
   end
 
+  create_table "versions", force: :cascade do |t|
+    t.string "item_type", null: false
+    t.bigint "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.datetime "created_at"
+    t.text "object_changes"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
   create_table "weekly_meetings", force: :cascade do |t|
     t.bigint "created_by_id"
     t.string "emotions_img"
@@ -336,6 +339,8 @@ ActiveRecord::Schema.define(version: 2020_08_05_172622) do
   add_foreign_key "meeting_ratings", "weekly_meetings"
   add_foreign_key "milestones", "quarterly_goals"
   add_foreign_key "quarterly_goals", "annual_initiatives"
+  add_foreign_key "questionnaire_attempts", "questionnaires"
+  add_foreign_key "questionnaire_attempts", "users"
   add_foreign_key "users", "companies"
   add_foreign_key "users", "user_roles"
 end

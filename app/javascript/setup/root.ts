@@ -37,6 +37,10 @@ const initialState = {
   habitStore: {
     habits: [],
   },
+  questionnaireStore: {
+    questionnaires: [],
+    questionnaireAttempt: null,
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);

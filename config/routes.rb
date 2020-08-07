@@ -52,9 +52,17 @@ Rails.application.routes.draw do
     resources :quarterly_goals, only: [:index, :create, :show, :update, :destroy]
     post '/quarterly_goals/create_key_element/:id', to: 'quarterly_goals#create_key_element'
     post '/quarterly_goals/create_milestones/:id', to: 'quarterly_goals#create_milestones'
+
+    #habits
     resources :habits, only: [:index, :create, :update, :destroy] do
       resources :habit_logs, only: [:update], param: :log_date
     end
+
+    #questionnaires
+    resources :questionnaires, only: [:index]
+
+    #questionnaire_attempts
+    resources :questionnaire_attempts, only: [:create]
   end
 
 

@@ -173,5 +173,19 @@ export class Api {
     return this.client.put(`/habits/${habitId}/habit_logs/${logDate}`);
   }
 
+  async getQuestionnaires() {
+    return this.client.get(`/questionnaires`);
+  }
+
+  async createQuestionnaireAttempt(questionnaireId, questionnaireAttemptData) {
+    const questionnaireAttemptObject = {
+      questionnaire_id: questionnaireId,
+      answers: questionnaireAttemptData.values,
+      rendered_steps: questionnaireAttemptData.renderedSteps,
+      steps: questionnaireAttemptData.steps,
+    };
+    return this.client.post(`/questionnaire_attempts`, questionnaireAttemptObject);
+  }
+
   //async setJWT(jwt) {}
 }

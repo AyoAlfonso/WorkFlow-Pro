@@ -36,6 +36,7 @@ gem 'devise_invitable'
 gem 'devise-jwt', '0.7.0'
 gem 'warden-jwt_auth', '~> 0.4.2' #https://github.com/waiting-for-dev/devise-jwt/issues/56
 gem 'pundit', '~> 2.1.0'
+gem 'paper_trail'
 
 gem "aws-sdk-s3", require: false
 gem 'rack-cors'
