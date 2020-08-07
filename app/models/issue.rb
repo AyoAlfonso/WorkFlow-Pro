@@ -1,6 +1,7 @@
 class Issue < ApplicationRecord
   enum priority: { low: 0, medium: 1, high: 2 }
   belongs_to :user
+  belongs_to :team, optional: true
 
   scope :created_by_user, -> (user) { where(user: user) }
   scope :sort_by_priority, -> { order(priority: :desc) }

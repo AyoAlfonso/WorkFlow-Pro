@@ -9,6 +9,9 @@ import ContentEditable from "react-contenteditable";
 import { useState } from "react";
 import { Text } from "~/components/shared/text";
 import { HomeContainerBorders } from "../home/shared-components";
+import { Button } from "rebass";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 interface IIssueEntryProps {
   issue: any;
@@ -16,10 +19,13 @@ interface IIssueEntryProps {
 
 export const IssueEntry = observer(
   (props: IIssueEntryProps): JSX.Element => {
-    const { issueStore } = useMst();
+    const { issueStore, teamStore } = useMst();
     const { issue } = props;
 
+    const teams = teamStore.teams;
+
     const [showShareModal, setShowShareModal] = useState<boolean>(false);
+    const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
 
     const renderPriorityIcon = (priority: string) => {
       switch (priority) {
@@ -66,7 +72,7 @@ export const IssueEntry = observer(
     };
 
     return (
-      <Container>
+      <Container onMouseEnter={() => setShowShareModal(false)}>
         <CheckboxContainer key={issue["id"]}>
           <Checkbox
             key={issue["id"]}
@@ -87,22 +93,51 @@ export const IssueEntry = observer(
           onBlur={() => issueStore.updateIssue(issue.id)}
         />
         <ActionContainer>
-          <DeleteButtonContainer onClick={() => issueStore.destroyIssue(issue.id)}>
+          <DeleteButtonContainer
+            onClick={() => issueStore.destroyIssue(issue.id)}
+            onMouseEnter={() => setShowShareModal(false)}
+          >
             <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
           </DeleteButtonContainer>
-          <ShareButtonContainer>
-            <Icon icon={"Forward"} size={24} style={{ marginTop: "2px" }} />
+          <ShareButtonContainer onMouseEnter={() => setShowShareModal(true)}>
+            <Icon icon={"Forward"} size={24} style={{ marginTop: "5px" }} />
             {showShareModal && (
               <ShareIssueContainer>
                 <ShareIssueText>Share Issue</ShareIssueText>
                 <DestinationContainer>
                   <SendDestinationContainer>
                     <DestinationText>Destination</DestinationText>
-                    <Select id="country" name="country" defaultValue={1}>
-                      {[1, 2, 3].map((value, key) => (
-                        <option key={key}>{value}</option>
+                    <Select
+                      id="country"
+                      name="country"
+                      value={selectedTeamId}
+                      onChange={e => setSelectedTeamId(parseInt(e.target.value))}
+                      style={{
+                        borderRadius: "5px",
+                        border: `1px solid ${baseTheme.colors.grey60}`,
+                      }}
+                    >
+                      {[{ id: null, name: "" }, ...teams].map((value, key) => (
+                        <option key={key} value={value.id}>
+                          {value.name}
+                        </option>
                       ))}
                     </Select>
+                    <ButtonContainer>
+                      <StyledButton
+                        disabled={!selectedTeamId}
+                        onClick={() => {
+                          issueStore.updateIssueState(issue.id, "teamId", selectedTeamId);
+                          issueStore.updateIssue(issue.id).then(result => {
+                            if (result) {
+                              showToast("Issue shared with team.", ToastMessageConstants.SUCCESS);
+                            }
+                          });
+                        }}
+                      >
+                        Share
+                      </StyledButton>
+                    </ButtonContainer>
                   </SendDestinationContainer>
                 </DestinationContainer>
               </ShareIssueContainer>
@@ -145,6 +180,8 @@ const Container = styled.div`
   padding: 12px 0px 12px 0px;
   &:hover ${ActionContainer} {
     display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
@@ -184,8 +221,8 @@ const ShareIssueContainer = styled(HomeContainerBorders)`
 const ShareIssueText = styled(Text)`
   size: 15px;
   font-weight: bold;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 12px;
+  padding-right: 12px;
   margin-top: 8px;
   margin-bottom: 8px;
 `;
@@ -197,8 +234,26 @@ const DestinationContainer = styled.div`
 `;
 
 const SendDestinationContainer = styled.div`
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 12px;
+  padding-right: 12px;
+`;
+
+type StyledButtonType = {
+  disabled: boolean;
+};
+
+const StyledButton = styled(Button)<StyledButtonType>`
+  background-color: ${props =>
+    props.disabled ? props.theme.colors.grey60 : props.theme.colors.primary100};
+  width: 100px;
+  &: hover {
+    cursor: ${props => !props.disabled && "pointer"};
+  }
+`;
+
+const ButtonContainer = styled.div`
+  margin-top: 16px;
+  margin-bottom: 16px;
 `;
 
 const CheckboxContainer = props => (

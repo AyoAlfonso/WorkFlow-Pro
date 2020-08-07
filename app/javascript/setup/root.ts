@@ -41,6 +41,9 @@ const initialState = {
     questionnaires: [],
     questionnaireAttempt: null,
   },
+  teamStore: {
+    teams: [],
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);

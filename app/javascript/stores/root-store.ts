@@ -10,6 +10,7 @@ import { AnnualInitiativeStoreModel, IAnnualInitiativeStore } from "./annual-ini
 import { QuarterlyGoalStoreModel, IQuarterlyGoalStore } from "./quarterly-goal-store";
 import { HabitStoreModel } from "./habit-store";
 import { QuestionnaireStoreModel, IQuestionnaireStore } from "./questionnaire-store";
+import { TeamStoreModel, ITeamStore } from "./team-store";
 
 export const RootStoreModel = types
   .model("RootStoreModel")
@@ -25,15 +26,17 @@ export const RootStoreModel = types
     quarterlyGoalStore: QuarterlyGoalStoreModel,
     habitStore: HabitStoreModel,
     questionnaireStore: QuestionnaireStoreModel,
+    teamStore: TeamStoreModel,
   })
   .views(self => ({}))
   .actions(self => ({
-    startup: flow(function*() {
+    startup: flow(function* () {
       //check if there is a cookie, if so try to call the profile endpoint and set logged into true
       self.sessionStore.loadProfile();
       self.companyStore.load();
       // do some API calls
       self.userStore.load();
+      self.teamStore.load();
     }),
   }))
   .actions(self => ({
@@ -52,4 +55,5 @@ export interface IRootStore extends IStateTreeNode {
   annualInitiativeStore: IAnnualInitiativeStore;
   quarterlyGoalStore: IQuarterlyGoalStore;
   questionnaireStore: IQuestionnaireStore;
+  teamStore: ITeamStore;
 }
