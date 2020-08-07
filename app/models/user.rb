@@ -43,8 +43,8 @@ class User < ApplicationRecord
     user_role&.name
   end
 
-  def get_timezone
-    self.timezone.present? ? self.timezone : company_timezone
+  def timezone
+    super || company_timezone
   end
 
   def current_daily_log
