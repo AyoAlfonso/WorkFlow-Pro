@@ -2,12 +2,12 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
   respond_to :json
 
   def create
-    #do not use strong params here since the answers, steps, rendered steps are free form objects
     json_representation = {
       answers: params[:answers],
       steps: params[:steps],
-      renderd_steps: params[:rendered_steps]
+      rendered_steps: params[:rendered_steps]
     }.to_json
+    #do not use strong params here since the answers, steps, rendered steps are free form objects
     @questionnaire_attempt = QuestionnaireAttempt.new({
       user_id: current_user.id,
       questionnaire_id: params[:questionnaire_id],
