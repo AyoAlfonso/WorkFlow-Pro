@@ -82,6 +82,7 @@ type StyledButtonType = {
 const StyledButton = styled(Button)<StyledButtonType>`
   display: flex;
   justify-content: center;
+  margin-left: 8px;
   align-items: center;
   min-width: ${props => !props.width && "240px"};
   width: ${props => (props.width ? props.width : "-webkit-fill-available")};
@@ -99,6 +100,7 @@ const CreateAnnualInitiativeCardContainer = styled(HomeContainerBorders)`
   padding-bottom: 8px;
   padding-left: 16px;
   padding-right: 16px;
+  background-color: white;
 `;
 
 const ActionsContainer = styled.div`

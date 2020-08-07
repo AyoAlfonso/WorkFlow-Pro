@@ -158,5 +158,6 @@ const MinimizeIconContainer = styled.div`
 
 const CreateGoalContainer = styled.div`
   margin-bottom: 16px;
-  margin-left: 16px;
+  margin-left: 8px;
+  margin-right: 8px;
 `;
