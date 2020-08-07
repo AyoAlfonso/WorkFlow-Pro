@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useMst } from "~/setup/root";
-import { Label, Input } from "~/components/shared/input";
+import * as R from "ramda";
+import { Label, Input, Select } from "~/components/shared/input";
 import { Button } from "~/components/shared/button";
 import { Avatar } from "~/components/shared/avatar";
 import { useTranslation } from "react-i18next";
@@ -22,9 +23,11 @@ import {
 export const AccountProfile = observer(
   (): JSX.Element => {
     const { sessionStore } = useMst();
+    const { staticData } = sessionStore;
     const [email, setEmail] = useState(sessionStore.profile.email);
     const [firstName, setFirstName] = useState(sessionStore.profile.firstName);
     const [lastName, setLastName] = useState(sessionStore.profile.lastName);
+    const [timezone, setTimezone] = useState(sessionStore.profile.timezone);
     const { t } = useTranslation();
     const submitAvatar = async (files: FileList) => {
       const form = new FormData();
@@ -41,6 +44,7 @@ export const AccountProfile = observer(
         email,
         firstName,
         lastName,
+        timezone,
       });
 
     return (
@@ -60,6 +64,23 @@ export const AccountProfile = observer(
             />
             <Label htmlFor="lastName">{t("profile.profileUpdateForm.lastName")}</Label>
             <Input name="lastName" onChange={e => setLastName(e.target.value)} value={lastName} />
+            <Label htmlFor="timezone">{t("profile.profileUpdateForm.timezone")}</Label>
+            <Select
+              name="timezone"
+              onChange={e => {
+                setTimezone(e.target.value);
+              }}
+              value={timezone}
+            >
+              {R.map(
+                (zone: string) => (
+                  <option key={zone} value={zone}>
+                    {zone}
+                  </option>
+                ),
+                staticData.timezones,
+              )}
+            </Select>
           </PersonalInfoContainer>
           <ProfilePhotoSection>
             <PhotoContainer>

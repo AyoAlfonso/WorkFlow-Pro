@@ -32,7 +32,8 @@
           "lastName": "Last Name",
           "role": "Role",
           "invite": "Invite to Company",
-          "resend": "Resend"
+          "resend": "Resend",
+          "timezone": "Location/Time Zone"
         },
         "habits": {
           "title": "Habits",

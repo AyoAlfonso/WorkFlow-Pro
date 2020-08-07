@@ -44,7 +44,7 @@ class User < ApplicationRecord
   end
 
   def timezone
-    super || company_timezone
+    read_attribute(:timezone).present? ? read_attribute(:timezone) : company_timezone
   end
 
   def current_daily_log
