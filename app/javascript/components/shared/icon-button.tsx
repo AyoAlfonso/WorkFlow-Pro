@@ -53,7 +53,7 @@ const Button = styled.button<IIconButtonProps>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding-left: 20px;
+  justify-content: center;
 `;
 
 const TextContainer = styled.div`
@@ -76,8 +76,8 @@ export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
   onClick,
   ...restProps
 }): JSX.Element => {
-  return (
-    <Button shadow={shadow} onClick={onClick} {...restProps}>
+  return text ? (
+    <Button shadow={shadow} onClick={onClick} {...restProps} pl={"20px"}>
       <IcoMoon
         icon={iconName}
         iconSet={iconSet}
@@ -87,6 +87,15 @@ export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
       <TextContainer>
         <Text color={textColor || "black"}>{text}</Text>
       </TextContainer>
+    </Button>
+  ) : (
+    <Button shadow={shadow} onClick={onClick} {...restProps} p={0}>
+      <IcoMoon
+        icon={iconName}
+        iconSet={iconSet}
+        color={`${iconColor in baseTheme.colors ? baseTheme.colors[iconColor] : iconColor}`}
+        size={iconSize}
+      />
     </Button>
   );
 };

@@ -39,11 +39,14 @@ const FrogSelectContainer = styled.div`
 const FrogButton = styled.button<ColorProps>`
   ${color}
   color: white;
-  background-color: ${props => props.theme.colors.frog};
+  background-color: ${props => props.theme.colors.primary80};
+  border: 0px solid white;
   border-radius: 5px;
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
+  font-family: Lato;
+  font-size: 12px;
   margin-bottom: 4px;
   padding: 4px;
-  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   &:hover {
     cursor: pointer;
     opacity: 0.85;

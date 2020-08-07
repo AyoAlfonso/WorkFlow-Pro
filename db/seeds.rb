@@ -172,15 +172,7 @@ Questionnaire.where(name: "Create My Day").first_or_create(name: "Create My Day"
     },
     {
       id: 6,
-      options: [
-        { value: "SEO Optimization", label: "SEO Optimization", trigger: "7" },
-        { value: "Setup WebMaster", label: "Setup WebMaster", trigger: "7" },
-        {
-          value: "Have a Follow-Up with Patrick",
-          label: "Have a Follow-Up with Patrick",
-          trigger: "7"
-        },
-      ],
+      options: [],
       metadata: {
         frog_selector: true,
         trigger: 7
@@ -263,24 +255,28 @@ Questionnaire.where(name: "Thought Challenge").first_or_create(name: "Thought Ch
     },
     {
       id: 10,
-      options: [
-        { value: "Worse than before!", label: "Worse than before!", trigger: "11" },
-        { value: "About the Same", label: "About the Same", trigger: "12" },
-        { value: "Better than before!", label: "Better than before!", trigger: "12" }
-      ]
+      options: [],
+      metadata: {
+        emotion_selector: true,
+        emotions: [
+            {icon: "Emotion-D", color: "cautionYellow", value: "Worse than before!", trigger: 12},
+            {icon: "Emotion-C", color: "grey60", value: "About the Same", trigger: 13},
+            {icon: "Emotion-B", color: "successGreen", value: "Better than before!", trigger: 14}
+        ]
+      }
     },
     {
-      id: 11,
+      id: 12,
       message: "Sorry to hear that...",
       end: true
     },
     {
-      id: 12,
+      id: 13,
       message: "Got it. You can always try something relaxing and come back to this later.",
       end: true
     },
     {
-      id: 13,
+      id: 14,
       message: "Glad to hear that!",
       end: true
     },
@@ -297,13 +293,17 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
     },
     {
       id: 2,
-      options: [
-        { value: "Terrible", label: "Terrible", trigger: "3" },
-        { value: "Bad", label: "Bad", trigger: "3" },
-        { value: "Okay", label: "Okay", trigger: "3" },
-        { value: "Good", label: "Good!", trigger: "3" },
-        { value: "Great!", label: "Great!", trigger: "3" },
-      ]
+      options: [],
+      metadata: {
+        emotion_selector: true,
+        emotions: [
+          {icon: "Emotion-E", color: "warningRed", value: "Terrible", trigger: 3},
+          {icon: "Emotion-D", color: "cautionYellow", value: "Bad", trigger: 3},
+          {icon: "Emotion-C", color: "grey60", value: "Okay", trigger: 3},
+          {icon: "Emotion-B", color: "successGreen", value: "Good", trigger: 3},
+          {icon: "Emotion-A", color: "finePine", value: "Great", trigger: 3}
+        ]
+      }
     },
     {
       id: 3,

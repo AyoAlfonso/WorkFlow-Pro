@@ -345,6 +345,69 @@ export const IconButton = () => {
         shadow={true}
         onClick={() => actionFn()}
       />
+      <h3>Emotion Buttons</h3>
+      <RowDiv>
+        <IconButtonComponent
+          width={"30px"}
+          height={"30px"}
+          mb={"20px"}
+          mr={"3px"}
+          bg={"white"}
+          iconName={"Emotion-E"}
+          iconSize={"30px"}
+          iconColor={"warningRed"}
+          shadow={true}
+          onClick={() => actionFn()}
+        />
+        <IconButtonComponent
+          width={"30px"}
+          height={"30px"}
+          mb={"20px"}
+          mr={"2px"}
+          bg={"white"}
+          iconName={"Emotion-D"}
+          iconSize={"30px"}
+          iconColor={"cautionYellow"}
+          shadow={true}
+          onClick={() => actionFn()}
+        />
+        <IconButtonComponent
+          width={"30px"}
+          height={"30px"}
+          mb={"20px"}
+          mr={"2px"}
+          bg={"white"}
+          iconName={"Emotion-C"}
+          iconSize={"30px"}
+          iconColor={"grey80"}
+          shadow={true}
+          onClick={() => actionFn()}
+        />
+        <IconButtonComponent
+          width={"30px"}
+          height={"30px"}
+          mb={"20px"}
+          mr={"2px"}
+          bg={"white"}
+          iconName={"Emotion-B"}
+          iconSize={"30px"}
+          iconColor={"successGreen"}
+          shadow={true}
+          onClick={() => actionFn()}
+        />
+        <IconButtonComponent
+          width={"30px"}
+          height={"30px"}
+          mb={"20px"}
+          mr={"2px"}
+          bg={"white"}
+          iconName={"Emotion-A"}
+          iconSize={"30px"}
+          iconColor={"finePine"}
+          shadow={true}
+          onClick={() => actionFn()}
+        />
+      </RowDiv>
       <h3>Status Buttons</h3>
       <IconButtonComponent
         width={"160px"}
