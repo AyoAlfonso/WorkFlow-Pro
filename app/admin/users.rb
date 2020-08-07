@@ -3,6 +3,33 @@ ActiveAdmin.register User do
 
   config.sort_order = 'last_name_asc'
 
+  member_action :resend_confirmation, method: :post do
+    resource.send_confirmation_instructions
+    redirect_to resource_path, notice: 'Confirmation e-mail resent!'
+  end
+
+  member_action :resend_invitation, method: :post do
+    resource.invite!
+    redirect_to resource_path, notice: 'Invitation e-mail resent!'
+  end
+
+  controller do
+    def create
+      if User.find_by_email(permitted_params.dig(:user, :email)).present?
+        @user = User.create(permitted_params[:user])
+        render 'new', errors: @user.errors.full_messages
+        return
+      end
+
+      @user = User.invite!(permitted_params[:user])
+      if @user.valid?
+        redirect_to resource_path(@user), notice: "User created!"
+      else
+        render 'new', errors: @user.errors.full_messages
+      end
+    end
+  end
+
   index do
     selectable_column
     id_column
@@ -16,7 +43,15 @@ ActiveAdmin.register User do
     column :current_sign_in_at
     column :sign_in_count
     column :created_at
-    actions
+    column :confirmed_at
+    column :invitation_sent_at
+    actions defaults: true do |user|
+      if (!user.confirmed? && user.invited_to_sign_up?)
+        link_to("Re-send invitation", resend_invitation_admin_user_path(user), method: :post, format: :json, class: 'member_link' )
+      elsif (!user.confirmed? && !user.invited_to_sign_up?)
+        link_to("Re-send confirmation", resend_confirmation_admin_user_path(user), method: :post, format: :json, class: 'member_link' )
+      end
+    end
   end
 
   filter :email
@@ -43,15 +78,18 @@ ActiveAdmin.register User do
       row :last_sign_in_at
       row :sign_in_count
       row :created_at
+      row :confirmed_at
+      row :invitation_sent_at
     end
   end
+
   form do |f|
     f.inputs do
       f.input :first_name
       f.input :last_name
       f.input :email
-      f.input :password
-      f.input :password_confirmation
+      # f.input :password
+      # f.input :password_confirmation
       f.input :company, as: :select, collection: Company.all
       f.input :user_role, as: :select, collection: UserRole.all
       f.input :timezone, as: :select, collection: timezones

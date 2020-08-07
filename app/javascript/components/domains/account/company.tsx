@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { Label, Input, Select } from "~/components/shared/input";
+import { Text } from "~/components/shared/text";
 import { useMst } from "~/setup/root";
 import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react";
@@ -114,11 +115,17 @@ export const Company = observer(
                   >
                     {R.map(
                       (zone: string) => (
-                        <option key={zone}>{zone}</option>
+                        <option key={zone} value={zone}>
+                          {zone}
+                        </option>
                       ),
                       staticData.timezones,
                     )}
                   </Select>
+                  <Text color={"greyActive"} fontSize={1}>
+                    To modify Core Four, Accountability Chart, or Strategic Plan, please contact
+                    Lynchpyn support.
+                  </Text>
                 </PersonalInfoContainer>
                 <ProfilePhotoSection>
                   <PhotoContainer>

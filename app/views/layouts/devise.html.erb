@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lynchpyn</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application.css' %>
+  </head>
+
+  <body>
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+
+
+
+    <div class="devise-body-div">
+      <div class="devise-outer-container">
+        <div class="devise-form-panel">
+          <img src="/assets/LynchPyn-Logo_Horizontal-Blue" width="120" />
+          <%= yield %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

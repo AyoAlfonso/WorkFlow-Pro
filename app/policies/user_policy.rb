@@ -15,11 +15,15 @@ class UserPolicy < ApplicationPolicy
   end
 
   def create?
-    @user = @record.company_admin? #current_admin_user.present?
+    @user.company == @record.company && @user.company_admin? #current_admin_user.present?
   end
 
   def update?
     @record == @user || current_admin_user.present? # || user = record.company_admin?
+  end
+
+  def resend_invitation?
+    create?
   end
 
   # TODO: Needs logic here

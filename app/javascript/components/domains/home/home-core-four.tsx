@@ -56,5 +56,5 @@ const Container = styled.div`
 `;
 
 const ValuesContainer = styled(HomeContainerBorders)`
-  height: 120px;
+  height: 100%;
 `;

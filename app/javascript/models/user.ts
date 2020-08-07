@@ -12,9 +12,18 @@ export const UserModel = types
     avatarUrl: types.maybeNull(types.string),
     role: types.maybeNull(types.string),
     currentDailyLog: types.maybeNull(DailyLogModel),
+    confirmedAt: types.maybeNull(types.string),
+    invitationSentAt: types.maybeNull(types.string),
+    timezone: types.maybeNull(types.string),
+    phoneNumber: types.maybeNull(types.string),
     //add avatarurl2x
   })
-  .views(self => ({}))
+  .views(self => ({
+    get confirmedAtTz() {
+      //use rails timezone to convert to confirmed at
+      return self.confirmedAt;
+    },
+  }))
   .actions(self => ({
     setAvatarUrl: avatarUrl => {
       self.avatarUrl = avatarUrl;

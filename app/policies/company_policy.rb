@@ -5,7 +5,7 @@ class CompanyPolicy < ApplicationPolicy
   end
 
   def update?
-    user.company == record && (user.role == UserRole::CEO || user.role == UserRole::ADMIN) #current_admin_user.present?
+    user.company == record && user.company_admin? #current_admin_user.present?
   end
 
   def delete_logo?

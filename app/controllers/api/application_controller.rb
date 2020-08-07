@@ -6,7 +6,7 @@ class Api::ApplicationController < ActionController::API
   after_action :verify_policy_scoped, only: :index, unless: :skip_pundit?
 
   #precedence highest when delcared last for rescue_from
-  rescue_from StandardError, with: :fallback_error
+  # rescue_from StandardError, with: :fallback_error
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   def skip_pundit?
@@ -20,6 +20,6 @@ class Api::ApplicationController < ActionController::API
   end
 
   def fallback_error(exception)
-    render json: { message: exception.to_s}, status: :bad_request #:unprocessed_entity
+    render json: { message: exception.to_s}, status: :bad_request #:unprocessable_entity
   end
 end

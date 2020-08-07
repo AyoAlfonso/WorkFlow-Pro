@@ -24,9 +24,13 @@ Rails.application.routes.draw do
 
 
   scope module: :api, path: :api do
-    resources :users, only: [:index, :show, :update]
+    resources :users, only: [:index, :create, :show, :update] do
+      member do
+        patch '/resend_invitation', to: "users#resend_invitation"
+      end
+    end
     get '/profile', to: 'users#profile'
-    put '/avatar', to: 'users#update_avatar'
+    patch '/avatar', to: 'users#update_avatar'
     delete '/avatar', to: 'users#delete_avatar'
 
     resources :companies, only: [:show, :update] do

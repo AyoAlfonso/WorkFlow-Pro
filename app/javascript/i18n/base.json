@@ -29,7 +29,10 @@
         "profileUpdateForm": {
           "email": "E-mail",
           "firstName": "First Name",
-          "lastName": "Last Name"
+          "lastName": "Last Name",
+          "role": "Role",
+          "invite": "Invite to Company",
+          "resend": "Resend"
         },
         "habits": {
           "title": "Habits",
