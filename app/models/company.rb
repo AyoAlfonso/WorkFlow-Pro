@@ -37,7 +37,7 @@ class Company < ApplicationRecord
     date.strftime("%m/%d")
   end
 
-  #private
+  private
   def calculate_current_fiscal_quarter
     current_date = format_month_and_day(Date.today)
     if current_date.between?(format_fiscal_year_start, format_month_and_day(second_quarter_start_date()))
