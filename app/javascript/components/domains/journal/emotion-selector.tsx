@@ -1,10 +1,11 @@
 import * as React from "react";
-import * as R from "ramda";
+import { useState } from "react";
 import styled from "styled-components";
-import { color, ColorProps } from "styled-system";
 import { IconButton } from "../../shared/icon-button";
+import { baseTheme } from "../../../themes/base";
 
 export const EmotionSelector = (props): JSX.Element => {
+  const [disabled, setDisabled] = useState<boolean>(false);
   return (
     <EmotionButtonsContainer>
       {props.step.metadata.emotions.map((emotion, index) => (
@@ -17,14 +18,16 @@ export const EmotionSelector = (props): JSX.Element => {
           bg={"white"}
           iconName={emotion.icon}
           iconSize={"30px"}
-          iconColor={emotion.color}
+          iconColor={disabled ? baseTheme.colors.grey20 : emotion.color}
           shadow={true}
           onClick={() => {
             props.triggerNextStep({
               value: emotion.value,
               trigger: emotion.trigger,
             });
+            setDisabled(true);
           }}
+          disabled={disabled}
         />
       ))}
     </EmotionButtonsContainer>

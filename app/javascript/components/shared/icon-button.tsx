@@ -25,6 +25,7 @@ export interface IIconButtonProps extends StyledSystemProps {
   textColor?: string;
   shadow?: boolean;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 const Button = styled.button<IIconButtonProps>`
@@ -74,10 +75,11 @@ export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
   textColor,
   shadow,
   onClick,
+  disabled,
   ...restProps
 }): JSX.Element => {
   return text ? (
-    <Button shadow={shadow} onClick={onClick} {...restProps} pl={"20px"}>
+    <Button shadow={shadow} onClick={onClick} {...restProps} pl={"20px"} disabled={disabled}>
       <IcoMoon
         icon={iconName}
         iconSet={iconSet}
@@ -89,7 +91,7 @@ export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
       </TextContainer>
     </Button>
   ) : (
-    <Button shadow={shadow} onClick={onClick} {...restProps} p={0}>
+    <Button shadow={shadow} onClick={onClick} {...restProps} p={0} disabled={disabled}>
       <IcoMoon
         icon={iconName}
         iconSet={iconSet}
