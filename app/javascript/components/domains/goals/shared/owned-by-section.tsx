@@ -6,13 +6,19 @@ import { UserType } from "~/types/user";
 import { useMst } from "~/setup/root";
 import { useState, useEffect } from "react";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
+import { Avatar } from "~/components/shared/avatar";
 
 interface IOwnedBySectionProps {
   ownedBy: UserType;
   type: string;
+  userIconBorder?: string;
 }
 
-export const OwnedBySection = ({ ownedBy, type }: IOwnedBySectionProps): JSX.Element => {
+export const OwnedBySection = ({
+  ownedBy,
+  type,
+  userIconBorder,
+}: IOwnedBySectionProps): JSX.Element => {
   const { userStore, sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
   const [store, setStore] = useState<any>(null);
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
@@ -33,12 +39,14 @@ export const OwnedBySection = ({ ownedBy, type }: IOwnedBySectionProps): JSX.Ele
     return companyUsers.map((user, index) => {
       return (
         <UserOption key={index} onClick={() => store.updateOwnedBy(user.id)}>
-          <UserDefaultIcon
+          <Avatar
+            avatarUrl={user.avatarUrl}
             firstName={user.firstName}
             lastName={user.lastName}
             size={45}
             marginLeft={"0px"}
           />
+
           <UserOptionText> {`${user.firstName} ${user.lastName}`}</UserOptionText>
         </UserOption>
       );
@@ -58,7 +66,6 @@ export const OwnedBySection = ({ ownedBy, type }: IOwnedBySectionProps): JSX.Ele
       editable={editable}
       onClick={() => {
         if (editable) {
-          console.log("can edit!");
           setShowUsersList(!showUsersList);
         }
       }}
@@ -66,11 +73,13 @@ export const OwnedBySection = ({ ownedBy, type }: IOwnedBySectionProps): JSX.Ele
       <OwnedBySubHeaderContainer>
         <SubHeaderText text={"Owned By"} />
       </OwnedBySubHeaderContainer>
-      <UserDefaultIcon
+      <Avatar
+        avatarUrl={ownedBy.avatarUrl}
         firstName={ownedBy.firstName}
         lastName={ownedBy.lastName}
         size={45}
         marginLeft={"0px"}
+        border={userIconBorder}
       />
       {renderUserSelectionList()}
     </Container>

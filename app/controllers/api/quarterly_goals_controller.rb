@@ -5,7 +5,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
   def index
     @quarterly_goals = policy_scope(QuarterlyGoal).owned_by_user(current_user).sort_by_created_date
-    render json: { quarterly_goals: @quarterly_goals, status: :ok }
+    render json: { quarterly_goals: @quarterly_goals.as_json(include: [owned_by: {methods: [:avatar_url]}]), status: :ok }
   end
 
   def create
@@ -20,16 +20,16 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     })
     authorize @quarterly_goal
     @quarterly_goal.save!
-    render json: { quarterly_goal: @quarterly_goal.as_json(include: [:milestones, :owned_by]), status: :ok }
+    render json: { quarterly_goal: @quarterly_goal.as_json(include: [:milestones, owned_by: {methods: [:avatar_url]}]), status: :ok }
   end
 
   def show
-    render json: @quarterly_goal.as_json(include: [:milestones, :owned_by])
+    render json: @quarterly_goal.as_json(include: [:milestones, owned_by: {methods: [:avatar_url]}])
   end
 
   def update
     @quarterly_goal.update!(quarterly_goal_params)
-    render json: { quarterly_goal: @quarterly_goal.as_json(include: [:milestones, :owned_by]), status: :ok }
+    render json: { quarterly_goal: @quarterly_goal.as_json(include: [:milestones, owned_by: {methods: [:avatar_url]}]), status: :ok }
   end
 
   def destroy
@@ -44,7 +44,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
   def create_milestones
     @quarterly_goal.create_milestones_for_quarterly_goal(current_user)
-    render json: { quarterly_goal: @quarterly_goal.as_json(include: [:milestones, :owned_by]), status: :ok }
+    render json: { quarterly_goal: @quarterly_goal.as_json(include: [:milestones, owned_by: {methods: [:avatar_url]}]), status: :ok }
   end
 
   private

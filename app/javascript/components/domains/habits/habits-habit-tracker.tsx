@@ -22,9 +22,9 @@ export const HabitsHabitTracker = observer(
           }}
         >
           {log.id ? (
-            <RawIcon icon={"Tasks"} color={habit.color} size={16} />
+            <RawIcon icon={"Tasks"} color={habit.color} size={12} />
           ) : (
-            <RawIcon icon={"Close"} color={habit.color} size={16} />
+            <RawIcon icon={"Close"} color={habit.color} size={12} />
           )}
         </HabitsTableDataCell>
       ));
@@ -57,7 +57,7 @@ interface IHabitsTableCircularProgressBar {
 const HabitsTableCircularProgressBar = ({ color, value }: IHabitsTableCircularProgressBar) => (
   <CircularProgressbar
     value={value}
-    strokeWidth={25}
+    strokeWidth={18}
     styles={{
       root: {
         height: "25px",

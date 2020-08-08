@@ -62,17 +62,6 @@ export const HeaderBar = observer(
         <DropdownContainer>
           <SelectionContainer
             onClick={() => {
-              setCreateIssueModalOpen(true);
-              setOpenCreateDropdown(false);
-            }}
-          >
-            <SelectionIconContainer>
-              <SelectionIcon icon={"Alert"} size={20} disableFill={true} />
-            </SelectionIconContainer>
-            <SelectionText style={{ marginTop: 0, marginBottom: 0 }}>Add Issue</SelectionText>
-          </SelectionContainer>
-          <SelectionContainer
-            onClick={() => {
               setCreateKeyActivityModalOpen(true);
               setOpenCreateDropdown(false);
             }}
@@ -80,14 +69,26 @@ export const HeaderBar = observer(
             <SelectionIconContainer>
               <SelectionIcon icon={"Tasks"} size={20} disableFill={true} />
             </SelectionIconContainer>
-            <SelectionText style={{ marginTop: 0, marginBottom: 0 }}>Create Task</SelectionText>
+            <SelectionText>Key Activity</SelectionText>
+          </SelectionContainer>
+
+          <SelectionContainer
+            onClick={() => {
+              setCreateIssueModalOpen(true);
+              setOpenCreateDropdown(false);
+            }}
+          >
+            <SelectionIconContainer>
+              <SelectionIcon icon={"Alert"} size={20} disableFill={true} />
+            </SelectionIconContainer>
+            <SelectionText>Issue</SelectionText>
           </SelectionContainer>
 
           <SelectionContainer>
             <SelectionIconContainer>
               <SelectionIcon icon={"New-User"} size={20} disableFill={true} />
             </SelectionIconContainer>
-            <SelectionText style={{ marginTop: 0, marginBottom: 0 }}>Send Invite</SelectionText>
+            <SelectionText>Invite</SelectionText>
           </SelectionContainer>
         </DropdownContainer>
       );
@@ -235,7 +236,11 @@ const DropdownContainer = styled.div`
   padding-top: 60px;
 `;
 
-const SelectionText = styled(Text)``;
+const SelectionText = styled(Text)`
+  margin-left: 8px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+`;
 
 const RefContainer = styled.div`
   display: flex;

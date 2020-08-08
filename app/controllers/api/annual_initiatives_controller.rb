@@ -18,12 +18,12 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   end
 
   def show
-    render json: @annual_initiative.as_json(include: [:owned_by, { quarterly_goals: { include:[:milestones, :owned_by] } }])
+    render json: @annual_initiative.as_json(include: [{owned_by: {methods: [:avatar_url]}}, { quarterly_goals: { include: [:milestones, owned_by: {methods: [:avatar_url]}] } }])
   end
 
   def update
     @annual_initiative.update!(annual_initiative_params)
-    render json: { annual_initiative: @annual_initiative.as_json(include: [:owned_by, { quarterly_goals: { include:[:milestones, :owned_by] } }]), status: :ok }
+    render json: { annual_initiative: @annual_initiative.as_json(include: [{owned_by: {methods: [:avatar_url]}}, { quarterly_goals: { include:[:milestones, owned_by: {methods: [:avatar_url]}] }}]), status: :ok }
   end
 
   def destroy
