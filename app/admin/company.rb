@@ -1,13 +1,15 @@
 ActiveAdmin.register Company do
-  permit_params :accountability_chart,
-                :address,
+  permit_params :address,
                 :contact_email,
                 :fiscal_year_start,
                 :name,
                 :logo,
                 :phone_number,
                 :rallying_cry,
-                :strategic_plan,
+                # :accountability_chart,
+                :accountability_chart_embed,
+                # :strategic_plan,
+                :strategic_plan_embed,
                 :timezone,
                 core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4]
 
@@ -74,14 +76,18 @@ ActiveAdmin.register Company do
     panel 'Accountability Chart' do
       attributes_table_for company do
         row :accountability_chart do |c|
-          c.accountability_chart.body
+          if c.accountability_chart_embed.present?
+            raw(c.accountability_chart_embed)
+          end
         end
       end
     end
     panel 'Strategic Plan' do
       attributes_table_for company do
         row :strategic_plan do |c|
-          c.strategic_plan.body
+          if c.strategic_plan_embed.present?
+            raw(c.strategic_plan_embed)
+          end
         end
       end
     end
@@ -110,11 +116,9 @@ ActiveAdmin.register Company do
       end
     end
     f.label :accountability_chart
-    f.rich_text_area :accountability_chart, label: "Accountability Chart Rich Text"
-    f.input :accountability_chart_embed, label: "Accountability Chart Embed Link", input_html: { rows: 5 }
+    f.input :accountability_chart_embed, input_html: { rows: 5 }
     f.label :strategic_plan
-    f.rich_text_area :strategic_plan, label: "Strategic Plan Rich Text"
-    f.input :strategic_plan_embed, label: "Strategic Plan Embed Link", input_html: { rows: 5 }
+    f.input :strategic_plan_embed, input_html: { rows: 5 }
     f.actions
   end
 end

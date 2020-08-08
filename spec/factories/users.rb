@@ -6,7 +6,7 @@ FactoryBot.define do
     last_name { 'LastName' }
     password { 'password' }
     phone_number { '123-456-7890'}
-    email { 'user@example.com' }
+    sequence(:email) {|n| "user#{n}@example.com" }
 
   end
 end

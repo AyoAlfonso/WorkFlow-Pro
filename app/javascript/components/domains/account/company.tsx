@@ -123,8 +123,8 @@ export const Company = observer(
                     )}
                   </Select>
                   <Text color={"greyActive"} fontSize={1}>
-                    To modify Core Four, Accountability Chart, or Strategic Plan, please contact
-                    Lynchpyn support.
+                    To modify Fiscal Start Date, Core Four, Accountability Chart, or Strategic Plan,
+                    please contact Lynchpyn support.
                   </Text>
                 </PersonalInfoContainer>
                 <ProfilePhotoSection>

@@ -67,9 +67,7 @@ ActiveAdmin.register User do
       row :last_name
       row :email
       row :phone_number
-      row :timezone do |u|
-        u.get_timezone
-      end
+      row :timezone
       row :avatar do |user|
         user.try(:avatar_url) ? image_tag(user.avatar_url) : "No Avatar Set"
       end

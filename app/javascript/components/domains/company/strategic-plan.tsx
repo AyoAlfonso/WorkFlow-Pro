@@ -13,7 +13,7 @@ export const StrategicPlan = observer(
       <div>
         {company ? (
           <>
-            <Heading type={"h3"} color={"black"}>
+            <Heading type={"h1"} color={"black"}>
               Strategic Plan
             </Heading>
             <div

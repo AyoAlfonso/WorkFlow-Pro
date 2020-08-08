@@ -13,7 +13,7 @@ export const AccountabilityChart = observer(
       <div>
         {company ? (
           <>
-            <Heading type={"h3"} color={"black"}>
+            <Heading type={"h1"} color={"black"}>
               Accountability Chart
             </Heading>
             <div
