@@ -14,30 +14,50 @@ interface AvatarProps {
   lastName: string;
   avatarUrl?: string;
   size?: number;
+  marginLeft?: string;
   marginRight?: string;
+  border?: string;
 }
+
+type ImageContainerProps = {
+  border?: string;
+  size?: number;
+};
+
+const ImageContainer = styled.div<ImageContainerProps>`
+  border: ${props => props.border};
+  border-radius: 9999px;
+  width: ${props => props.size || 48}px;
+  height: ${props => props.size || 48}px;
+`;
 
 export const Avatar = ({
   firstName,
   lastName,
   avatarUrl,
   size,
+  marginLeft,
   marginRight,
+  border,
 }: AvatarProps): JSX.Element =>
   avatarUrl ? (
-    <Image
-      sx={{
-        width: size || 48,
-        height: size || 48,
-        borderRadius: 9999,
-      }}
-      src={avatarUrl}
-    />
+    <ImageContainer border={border} size={size}>
+      <Image
+        style={{
+          width: size || 48,
+          height: size || 48,
+          borderRadius: 9999,
+        }}
+        src={avatarUrl}
+      />
+    </ImageContainer>
   ) : (
     <UserDefaultIcon
       size={size || 48}
       firstName={firstName}
       lastName={lastName}
+      marginLeft={marginLeft}
       marginRight={marginRight}
+      border={border}
     />
   );

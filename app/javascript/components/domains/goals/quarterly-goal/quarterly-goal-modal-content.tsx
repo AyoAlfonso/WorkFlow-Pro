@@ -14,6 +14,7 @@ import * as moment from "moment";
 import ContentEditable from "react-contenteditable";
 import { observer } from "mobx-react";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
+import { UserIconBorder } from "../shared/user-icon-border";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -91,6 +92,17 @@ export const QuarterlyGoalModalContent = observer(
     };
 
     const renderContext = (): JSX.Element => {
+      const startedMilestones = quarterlyGoal.milestones.filter(
+        milestone => milestone.status != "unstarted",
+      );
+
+      let userIconBorder = "";
+
+      if (startedMilestones.length > 0) {
+        const lastStartedMilestone = startedMilestones[startedMilestones.length - 1];
+        userIconBorder = UserIconBorder(lastStartedMilestone.status);
+      }
+
       return (
         <InfoSectionContainer>
           <ContextSectionContainer>
@@ -99,7 +111,11 @@ export const QuarterlyGoalModalContent = observer(
             </SubHeaderContainer>
             <ContextTabs object={quarterlyGoal} type={"quarterlyGoal"} />
           </ContextSectionContainer>
-          <OwnedBySection ownedBy={quarterlyGoal.ownedBy} type={"quarterlyGoal"} />
+          <OwnedBySection
+            userIconBorder={userIconBorder}
+            ownedBy={quarterlyGoal.ownedBy}
+            type={"quarterlyGoal"}
+          />
         </InfoSectionContainer>
       );
     };

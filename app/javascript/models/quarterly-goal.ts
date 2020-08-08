@@ -29,6 +29,12 @@ export const QuarterlyGoalModel = types
           moment(milestone.weekOf).isAfter(moment(), "week"),
       );
     },
+    get lastStartedMilestoneStatus() {
+      const startedMilestones = self.milestones.filter(
+        milestone => milestone.status != "unstarted",
+      );
+      return startedMilestones[startedMilestones.length - 1];
+    },
   }))
   .actions(self => ({}));
 

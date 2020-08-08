@@ -9,6 +9,9 @@ import { CreateGoalSection } from "../shared/create-goal-section";
 import { useState } from "react";
 import { useMst } from "~/setup/root";
 import { useTranslation } from "react-i18next";
+import { UserIconBorder } from "../shared/user-icon-border";
+import { Avatar } from "~/components/shared/avatar";
+import * as R from "ramda";
 
 interface IAnnualInitiativeCardExpandedProps {
   annualInitiative: AnnualInitiativeType;
@@ -38,6 +41,17 @@ export const AnnualInitiativeCardExpanded = (
 
   const renderQuarterlyGoals = () => {
     return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
+      const startedMilestones = quarterlyGoal.milestones.filter(
+        milestone => milestone.status != "unstarted",
+      );
+
+      let userIconBorder = "";
+
+      if (startedMilestones.length > 0) {
+        const lastStartedMilestone = startedMilestones[startedMilestones.length - 1];
+        userIconBorder = UserIconBorder(lastStartedMilestone.status);
+      }
+
       return (
         <QuarterlyGoalContainer
           key={index}
@@ -57,10 +71,12 @@ export const AnnualInitiativeCardExpanded = (
           </RowContainer>
           <RowContainer>
             <IconContainer>
-              <UserDefaultIcon
+              <Avatar
+                avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
+                firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
+                lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
                 size={40}
-                firstName={quarterlyGoal.ownedBy.firstName}
-                lastName={quarterlyGoal.ownedBy.lastName}
+                border={userIconBorder}
               />
             </IconContainer>
           </RowContainer>

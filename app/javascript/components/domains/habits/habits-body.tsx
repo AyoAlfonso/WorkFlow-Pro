@@ -64,7 +64,7 @@ const HabitsTableBody = styled.tbody``;
 const HabitsTableRow = styled.tr``;
 
 type HabitsTableHeaderCellType = {
-  fontWeight: string;
+  fontWeight?: string;
   width?: string;
 };
 
