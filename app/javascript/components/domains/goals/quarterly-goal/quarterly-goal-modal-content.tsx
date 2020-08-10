@@ -335,6 +335,9 @@ const StyledContentEditable = styled(ContentEditable)`
   font-size: 20px;
   padding-top: 5px;
   padding-bottom: 5px;
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-right: -4px;
 `;
 
 const MilestoneContentEditable = styled(ContentEditable)`

@@ -1,12 +1,12 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
-import { UserDefaultIcon } from "~/components/shared/user-default-icon";
 import { UserType } from "~/types/user";
 import { useMst } from "~/setup/root";
 import { useState, useEffect } from "react";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
 import { Avatar } from "~/components/shared/avatar";
+import { RoleAdministrator, RoleCEO } from "~/lib/constants";
 
 interface IOwnedBySectionProps {
   ownedBy: UserType;
@@ -33,7 +33,10 @@ export const OwnedBySection = ({
 
   const companyUsers = userStore.users;
   const currentUser = sessionStore.profile;
-  const editable = ownedBy.id == currentUser.id;
+  const editable =
+    ownedBy.id == currentUser.id ||
+    currentUser.role == RoleCEO ||
+    currentUser.role == RoleAdministrator;
 
   const renderUserOptions = (): Array<JSX.Element> => {
     return companyUsers.map((user, index) => {

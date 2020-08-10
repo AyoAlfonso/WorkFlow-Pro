@@ -16,6 +16,7 @@ import { observer } from "mobx-react";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
 import { CreateGoalSection } from "../shared/create-goal-section";
 import { useTranslation } from "react-i18next";
+import { NavLink } from "react-router-dom";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -103,14 +104,13 @@ export const AnnualInitiativeModalContent = observer(
               onBlur={() => annualInitiativeStore.update()}
             />
             <GoalText>
-              In order to{" "}
-              <UnderlinedGoalText> {companyStore.company.rallyingCry} </UnderlinedGoalText>
+              Driving{"  "}
+              <StyledNavLink to={"/company/strategic_plan"}>
+                {companyStore.company.rallyingCry}
+              </StyledNavLink>
             </GoalText>
           </TitleContainer>
           <AnnualInitiativeActionContainer>
-            {/* <EditIconContainer>
-            <Icon icon={"Edit-2"} size={"25px"} iconColor={"grey80"} />
-          </EditIconContainer> */}
             <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
               <Icon icon={"Close"} size={"25px"} iconColor={"grey80"} />
             </CloseIconContainer>
@@ -290,8 +290,19 @@ const StyledContentEditable = styled(ContentEditable)`
   font-size: 20px;
   padding-top: 5px;
   padding-bottom: 5px;
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-right: -4px;
 `;
 
 const CreateGoalContainer = styled.div`
   width: 280px;
+`;
+
+const StyledNavLink = styled(NavLink)`
+  font-weight: bold;
+  text-decoration: underline;
+  &:visited {
+    color: ${props => props.theme.colors.grey80};
+  }
 `;
