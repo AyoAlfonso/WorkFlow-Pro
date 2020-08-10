@@ -41,7 +41,7 @@ export const SessionStoreModel = types
       const env = getEnv(self);
       try {
         const response = yield env.api.updateProfile(
-          Object.assign(fieldsAndValues, { id: self.profile.id }),
+          Object.assign({ user: fieldsAndValues }, { id: self.profile.id }),
         );
         if (response.ok) {
           self.profile = response.data;
