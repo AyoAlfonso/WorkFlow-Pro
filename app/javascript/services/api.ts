@@ -66,7 +66,6 @@ export class Api {
   }
 
   async updateCompany(formData) {
-    console.log("form daata", formData);
     return this.client.patch(`/companies/${formData.id}`, formData);
   }
 
