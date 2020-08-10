@@ -35,7 +35,9 @@ export const addErrorToastMonitor = (api, loggedIn) => {
             );
           } else {
             showToast(
-              R.path(["data", "message"], response) || "Something went wrong",
+              R.path(["data", "message"], response) ||
+                R.path(["data", "error"], response) ||
+                "Something went wrong",
               ToastMessageConstants.ERROR,
             );
           }
