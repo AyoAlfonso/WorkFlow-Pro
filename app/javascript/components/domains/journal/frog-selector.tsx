@@ -11,7 +11,7 @@ export const FrogSelector = observer(
   (props): JSX.Element => {
     const [disabled, setDisabled] = useState<boolean>(false);
     const { keyActivityStore } = useMst();
-    const frogs = toJS(keyActivityStore.keyActivities);
+    const frogs = toJS(keyActivityStore.keyActivities).slice(0, 3);
     return (
       <FrogSelectContainer>
         {frogs.map(frog => (
