@@ -6,6 +6,7 @@ import { Text } from "~/components/shared/text";
 import { AccountProfile } from "./profile";
 import { HomeContainerBorders } from "../home/shared-components";
 import { Notifications } from "./notifications";
+import { Security } from "./security";
 import { Meeting } from "./meeting";
 import { Users } from "./users";
 import { Company } from "./company";
@@ -34,6 +35,8 @@ export const AccountSettings = (): JSX.Element => {
         return <Users />;
       case "company":
         return <Company />;
+      case "security":
+        return <Security />;
       default:
         return <AccountProfile />;
     }
@@ -49,6 +52,7 @@ export const AccountSettings = (): JSX.Element => {
           {renderOption("meeting")}
           {renderOption("users")}
           {renderOption("company")}
+          {renderOption("security")}
         </SelectionTabsContainer>
       </SelectionContainer>
       <DisplayBoxContainer>{renderDisplayBox()}</DisplayBoxContainer>

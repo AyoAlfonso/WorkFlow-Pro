@@ -14,6 +14,7 @@
         "accountSettings": "Account Settings",
         "profile": "Profile",
         "notifications": "Notifications",
+        "security": "Security",
         "meeting": "Meeting",
         "users": "Users",
         "company": "Company",
@@ -34,6 +35,11 @@
           "invite": "Invite to Company",
           "resend": "Resend",
           "timezone": "Location/Time Zone"
+        },
+        "securityForm": {
+          "password": "Password",
+          "passwordConfirmation": "Password Confirmation",
+          "updatePw": "Update Password"
         },
         "habits": {
           "title": "Habits",
