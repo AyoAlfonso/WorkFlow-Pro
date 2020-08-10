@@ -72,7 +72,7 @@ export const ContextTabs = observer(
             onChange={e => updateImportance(1, e.target.value)}
             onBlur={() => store.update()}
           />
-          <SubHeaderText text={"How will we celebrate if achieved?"} />
+          <SubHeaderText text={"How will we celebrate when achieved?"} />
           <StyledContentEditable
             html={object.importance[2]}
             disabled={!editable}

@@ -10,11 +10,12 @@ import { observer } from "mobx-react";
 interface IIndividualVerticalStatusBlockColorIndicatorProps {
   milestone: MilestoneType;
   milestoneStatus: string;
+  editable: boolean;
 }
 
 export const IndividualVerticalStatusBlockColorIndicator = observer(
   (props: IIndividualVerticalStatusBlockColorIndicatorProps): JSX.Element => {
-    const { milestone, milestoneStatus } = props;
+    const { milestone, milestoneStatus, editable } = props;
     const { quarterlyGoalStore } = useMst();
 
     const colorChangable =
@@ -45,16 +46,16 @@ export const IndividualVerticalStatusBlockColorIndicator = observer(
       let statusValue = "";
       switch (milestone.status) {
         case "unstarted":
-          statusValue = "incomplete";
-          break;
-        case "incomplete":
-          statusValue = "in_progress";
-          break;
-        case "in_progress":
           statusValue = "completed";
           break;
-        case "completed":
+        case "incomplete":
           statusValue = "unstarted";
+          break;
+        case "in_progress":
+          statusValue = "incomplete";
+          break;
+        case "completed":
+          statusValue = "in_progress";
           break;
         default:
           statusValue = "";
@@ -67,7 +68,7 @@ export const IndividualVerticalStatusBlockColorIndicator = observer(
         backgroundColor={statusColor}
         colorChangable={colorChangable}
         onClick={() => {
-          if (colorChangable) {
+          if (colorChangable && editable) {
             updateStatus();
           }
         }}
