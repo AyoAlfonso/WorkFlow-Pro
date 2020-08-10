@@ -15,19 +15,19 @@ class AnnualInitiativePolicy < ApplicationPolicy
   end
 
   def show?
-    @annual_initiative.company_id == @user.company_id || @annual_initiative.owned_by == @user
+    @annual_initiative.company_id == @user.company_id || @annual_initiative.owned_by == @user 
   end
 
   def update?
-    @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user
+    @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user || @user.company_admin?
   end
 
   def destroy?
-    @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user
+    @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user || @user.company_admin?
   end
 
   def create_key_element?
-    @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user
+    @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user || @user.company_admin?
   end
 
   class Scope

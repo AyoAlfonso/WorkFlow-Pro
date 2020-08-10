@@ -38,6 +38,7 @@ export const KeyElement = ({ element, store, editable }: IKeyElementProps): JSX.
         disabled={!editable}
         onChange={e => store.updateKeyElementValue(element.id, e.target.value)}
         onBlur={() => store.update()}
+        completed={checkboxValue}
       />
     </KeyElementContainer>
   );
@@ -65,6 +66,13 @@ const StyledContentEditable = styled(ContentEditable)`
   padding-right: 16px;
 `;
 
-const KeyElementStyledContentEditable = styled(StyledContentEditable)`
+type KeyElementStyledContentEditableType = {
+  completed: boolean;
+};
+
+const KeyElementStyledContentEditable = styled(StyledContentEditable)<
+  KeyElementStyledContentEditableType
+>`
   width: 100%;
+  text-decoration: ${props => props.completed && "line-through"};
 `;

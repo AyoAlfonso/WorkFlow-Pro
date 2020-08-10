@@ -19,19 +19,19 @@ class QuarterlyGoalPolicy < ApplicationPolicy
   end
 
   def update?
-    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user
+    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user || @user.company_admin?
   end
 
   def destroy?
-    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user
+    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user || @user.company_admin?
   end
 
   def create_key_element?
-    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user
+    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user || @user.company_admin?
   end
 
   def create_milestones?
-    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user
+    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user || @user.company_admin?
   end
 
   class Scope
