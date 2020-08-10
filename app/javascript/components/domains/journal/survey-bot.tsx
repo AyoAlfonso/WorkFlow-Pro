@@ -10,6 +10,7 @@ import { toJS } from "mobx";
 import { Loading } from "../../shared/loading";
 import { FrogSelector } from "./frog-selector";
 import { EmotionSelector } from "./emotion-selector";
+import * as humps from "humps";
 
 export interface ISurveyBotProps {
   variant: string;
@@ -22,7 +23,13 @@ export const SurveyBot = observer(
   (props: ISurveyBotProps): JSX.Element => {
     const [loading, setLoading] = useState<boolean>(true);
 
-    const { sessionStore, questionnaireStore } = useMst();
+    const {
+      sessionStore,
+      sessionStore: {
+        profile: { currentDailyLog },
+      },
+      questionnaireStore,
+    } = useMst();
 
     useEffect(() => {
       questionnaireStore.load().then(() => {
@@ -62,12 +69,26 @@ export const SurveyBot = observer(
         style={{ height: "346px" }}
         enableSmoothScroll={true}
         userDelay={200}
-        handleEnd={({ renderedSteps, steps, values }) => {
-          questionnaireStore.createQuestionnaireAttempt(questionnaireVariant.id, {
+        handleEnd={async ({ renderedSteps, steps, values }) => {
+          await questionnaireStore.createQuestionnaireAttempt(questionnaireVariant.id, {
             renderedSteps,
             steps,
             values,
           });
+          if (
+            questionnaireVariant.name === "Create My Day" ||
+            questionnaireVariant.name === "Evening Reflection"
+          ) {
+            await sessionStore.updateUser({
+              dailyLogsAttributes: [
+                {
+                  ...currentDailyLog,
+                  [`${humps.camelize(questionnaireVariant.name)}`]: true,
+                },
+              ],
+            });
+          }
+
           if (typeof props.endFn === "function") {
             setTimeout(() => {
               props.endFn("");

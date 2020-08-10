@@ -140,8 +140,8 @@ ActiveRecord::Schema.define(version: 2020_08_10_165107) do
     t.integer "work_status", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "create_my_day"
-    t.boolean "evening_reflection"
+    t.boolean "create_my_day", default: false
+    t.boolean "evening_reflection", default: false
     t.index ["user_id"], name: "index_daily_logs_on_user_id"
   end
 

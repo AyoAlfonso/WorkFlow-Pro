@@ -42,8 +42,13 @@ const Button = styled.button<IIconButtonProps>`
     background: ${props => (props.bg === "white" ? "rgba(0, 0, 0, 0.02)" : props.bg)}
   }
   &:active {
-    box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, .2);
-    transform: translate(1px, 1px)
+    box-shadow: ${props =>
+      !props.disabled
+        ? "1px 3px 3px 1px rgba(0, 0, 0, .2)"
+        : props.shadow
+        ? "1px 3px 4px 2px rgba(0, 0, 0, .1)"
+        : "0"};
+    transform: ${props => (props.disabled ? "none" : "translate(1px, 1px)")}
   }
   &:focus {
     outline: 0;
@@ -87,7 +92,7 @@ export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
         size={iconSize}
       />
       <TextContainer>
-        <Text color={textColor || "black"}>{text}</Text>
+        <Text color={disabled ? "lightgrey" : textColor || "black"}>{text}</Text>
       </TextContainer>
     </Button>
   ) : (

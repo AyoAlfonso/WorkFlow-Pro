@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as R from "ramda";
 import { useState } from "react";
 import styled from "styled-components";
 import { JournalHeader } from "./journal-header";
@@ -13,7 +14,7 @@ export const Journal = observer(
   (props): JSX.Element => {
     const [questionnaireVariant, setQuestionnaireVariant] = useState<string>("");
 
-    // const {} = useMst();
+    const { sessionStore } = useMst();
 
     return (
       <JournalContainer>
@@ -34,6 +35,7 @@ export const Journal = observer(
               text={"Create My Day"}
               shadow={true}
               onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay)}
+              disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
             />
             <IconButton
               width={"100%"}
@@ -60,6 +62,7 @@ export const Journal = observer(
               text={"Evening Reflection"}
               shadow={true}
               onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.eveningReflection)}
+              disabled={R.path(["profile", "currentDailyLog", "eveningReflection"], sessionStore)}
             />
           </ButtonContainer>
         )}
