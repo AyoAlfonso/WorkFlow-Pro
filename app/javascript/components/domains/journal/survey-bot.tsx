@@ -83,8 +83,8 @@ const userAvatarUrlForStorybook =
   "https://image.freepik.com/free-vector/woman-avatar-profile-round-icon_24640-14042.jpg";
 
 const exampleSteps = [
-  { id: 1, message: "Hello!", trigger: 2 },
-  { id: 2, user: true, end: true },
+  { id: 1, message: "I'm the Chat Bot and I'm talking to you!", trigger: 2 },
+  { id: 2, user: true, trigger: 1 },
 ];
 
 export const SurveyBotNoMst = (props: ISurveyBotProps): JSX.Element => {

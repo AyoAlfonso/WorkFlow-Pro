@@ -37,9 +37,9 @@ export const SurveyBot = () => (
       import { SurveyBot } from "~/shared/survey-bot";
 
       const MyComponent = () => (
-        <SurveyContainer width={"400px"}>
+        <div width={"400px"}>
           <SurveyBot variant={"createMyDay"} />  
-        <SurveyContainer>
+        <div>
       )
       `}
         language={"tsx"}

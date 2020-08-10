@@ -14,6 +14,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
       answers: params[:answers],
       steps: params[:steps],
       rendered_steps: params[:rendered_steps],
+      completed_at: Date.today,
       json_representation: json_representation
     })
     authorize @questionnaire_attempt

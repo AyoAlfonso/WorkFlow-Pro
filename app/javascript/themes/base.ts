@@ -23,7 +23,6 @@ export const baseTheme = {
     cautionYellow: "#FFCC57",
     warningRed: "#EB221B",
     successGreen: "#00C3B3",
-    successGreenOpaque: "#00C3B326",
     fuschiaBlue: "#6554C0",
     finePine: "#36B37E",
     bali: "#00B8D9",
@@ -45,6 +44,7 @@ export const baseTheme = {
     backgroundGrey: "#F7F8FA",
     backgroundYellow: "#FFF8E6",
     backgroundRed: "#FCDEDD",
+    backgroundGreen: "#00C3B326",
   },
 
   fonts: {

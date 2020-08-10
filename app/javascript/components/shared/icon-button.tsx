@@ -46,7 +46,7 @@ const Button = styled.button<IIconButtonProps>`
     transform: translate(1px, 1px)
   }
   &:focus {
-    outline: 0
+    outline: 0;
   }
   transition: all ease 0.1s;
   font-family: Lato;

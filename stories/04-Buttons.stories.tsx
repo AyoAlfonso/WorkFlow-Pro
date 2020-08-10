@@ -413,7 +413,7 @@ export const IconButton = () => {
         width={"160px"}
         height={"40px"}
         mb={"20px"}
-        bg={"fadedSuccess"}
+        bg={"backgroundGreen"}
         iconName={"In-Office"}
         iconSize={28}
         iconColor={"finePine"}
@@ -426,7 +426,7 @@ export const IconButton = () => {
         width={"160px"}
         height={"40px"}
         mb={"20px"}
-        bg={"primary40"}
+        bg={"primary20"}
         iconName={"WFH"}
         iconSize={28}
         iconColor={"primary100"}

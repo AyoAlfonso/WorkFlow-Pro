@@ -25,7 +25,7 @@ export const homePersonalStatusOptions: IWorkStatusOptions = {
   },
   in_office: {
     containerProps: {
-      backgroundColor: "successGreenOpaque",
+      backgroundColor: "backgroundGreen",
       color: "finePine",
     },
     iconProps: {

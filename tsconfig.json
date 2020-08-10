@@ -18,7 +18,7 @@
       "~/*": ["app/javascript/*"]
     }
   },
-  "include": ["app/javascript", "stories", "typings"],
+  "include": ["app/javascript", "stories", "typings", "styled.d.ts"],
   "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],
   "compileOnSave": false
 }
