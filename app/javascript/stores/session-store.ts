@@ -83,12 +83,11 @@ export const SessionStoreModel = types
       self.loading = true;
       //may want to show a loading modal here
       const env = getEnv(self);
-      const { companyStore } = getRoot(self);
+      const { companyStore, teamStore, userStore } = getRoot(self);
       try {
         const response: any = yield env.api.login(email, password);
         if (response.ok) {
           //save credentials
-          console.log(response);
           const newJWT = R.path(["headers", "authorization"], response);
 
           if (newJWT && newJWT.startsWith("Bearer")) {
@@ -105,6 +104,8 @@ export const SessionStoreModel = types
             //env.api.setJWT(newJWT);
             self.loadProfile();
             companyStore.load();
+            userStore.load();
+            teamStore.load();
           }
         }
       } catch {

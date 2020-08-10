@@ -25,7 +25,7 @@ export const addLoggingMonitor = api => {
 
 export const addErrorToastMonitor = (api, loggedIn) => {
   api.addMonitor(response => {
-    if ((response.status !== 200 && response.status !== 201) || response.problem !== null) {
+    if ((response.status < 200 && response.status >= 300) || response.problem !== null) {
       switch (response.problem) {
         case CLIENT_ERROR:
           if (loggedIn || response.config.url.includes("sign_in")) {
@@ -33,6 +33,8 @@ export const addErrorToastMonitor = (api, loggedIn) => {
               R.path(["data", "error"], response) || `A client error occurred`,
               ToastMessageConstants.ERROR,
             );
+          } else if (response.config.url.includes("profile")) {
+            //handle the error manually at try catch
           } else {
             showToast(
               R.path(["data", "message"], response) ||
