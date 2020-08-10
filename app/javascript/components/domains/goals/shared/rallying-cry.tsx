@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { color } from "styled-system";
 import { useMst } from "~/setup/root";
 import ContentEditable from "react-contenteditable";
+import { RoleAdministrator, RoleCEO } from "~/lib/constants";
 
 interface IRallyingCryProps {
   rallyingCry: string;
@@ -12,7 +13,7 @@ interface IRallyingCryProps {
 export const RallyingCry = ({ rallyingCry }: IRallyingCryProps): JSX.Element => {
   const { sessionStore, companyStore } = useMst();
   const profile = sessionStore.profile;
-  const editable = profile.role == "ceo" || profile.role == "admin";
+  const editable = profile.role == RoleCEO || profile.role == RoleAdministrator;
 
   return (
     <VisionContainer>
