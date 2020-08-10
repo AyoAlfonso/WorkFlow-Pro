@@ -48,7 +48,9 @@ export const GoalsIndex = observer(
 
     const companyGoals = goalStore.companyGoals;
     const personalGoals = goalStore.personalGoals;
-    const goalsToShow = showCompanyGoals ? companyGoals.goals : companyGoals.myAnnualInitiatives;
+    const goalsToShow = showCompanyGoals
+      ? companyGoals.goals
+      : companyGoals.onlyShowMyQuarterlyGoals;
 
     const renderCreateCompanyAnnualInitiativeSection = (type): JSX.Element => {
       const showCreateAnnualInitiative =

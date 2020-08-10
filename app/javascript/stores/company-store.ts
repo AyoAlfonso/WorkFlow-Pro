@@ -49,6 +49,14 @@ export const CompanyStoreModel = types
         // error messaging handled by API monitor
       }
     }),
+  }))
+  .actions(self => ({
+    updateModelField(field, value) {
+      self.company[field] = value;
+    },
+    updateCompanyFromModel() {
+      self.updateCompany(self.company);
+    },
   }));
 
 type CompanyStoreType = typeof CompanyStoreModel.Type;

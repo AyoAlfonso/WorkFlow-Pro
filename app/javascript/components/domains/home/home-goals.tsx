@@ -72,7 +72,7 @@ export const HomeGoals = observer(
 
         <InitiativesContainer>
           {renderAnnualInitiatives(
-            showCompanyGoals ? companyGoals.goals : companyGoals.myAnnualInitiatives,
+            showCompanyGoals ? companyGoals.goals : companyGoals.onlyShowMyQuarterlyGoals,
           )}
         </InitiativesContainer>
 

@@ -1,4 +1,4 @@
-import { types } from "mobx-state-tree";
+import { types, getRoot } from "mobx-state-tree";
 import { QuarterlyGoalModel } from "./quarterly-goal";
 import { KeyElementModel } from "./key-element";
 import { UserModel } from "./user";
@@ -17,7 +17,12 @@ export const AnnualInitiativeModel = types
     contextDescription: types.string,
     ownedBy: types.maybeNull(UserModel),
   })
-  .views(self => ({}))
+  .views(self => ({
+    get myQuarterlyGoals() {
+      const { sessionStore } = getRoot(self);
+      return self.quarterlyGoals.filter(qg => qg.ownedById == sessionStore.profile.id);
+    },
+  }))
   .actions(self => ({}));
 
 type AnnualInitiativeModelType = typeof AnnualInitiativeModel.Type;

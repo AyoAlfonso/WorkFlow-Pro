@@ -1,4 +1,8 @@
 class Company < ApplicationRecord
+  include ActionView::Helpers::SanitizeHelper
+
+  before_save :sanitize_rallying_cry
+
   has_many :users
   has_many :annual_initiatives
   has_many :teams
@@ -68,5 +72,9 @@ class Company < ApplicationRecord
 
   def fourth_quarter_start_date
     third_quarter_start_date + 13.weeks
+  end
+
+  def sanitize_rallying_cry
+    self.rallying_cry = strip_tags(rallying_cry)
   end
 end
