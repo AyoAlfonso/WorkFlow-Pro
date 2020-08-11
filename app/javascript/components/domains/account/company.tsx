@@ -9,9 +9,10 @@ import { observer } from "mobx-react";
 import { Can } from "~/components/shared/auth/can";
 import { Button } from "~/components/shared/button";
 import { FileInput } from "./file-input";
+import { TrixEditor } from "react-trix";
 
 import {
-  Container,
+  StretchContainer,
   BodyContainer,
   PersonalInfoContainer,
   ProfilePhotoSection,
@@ -31,14 +32,27 @@ export const Company = observer(
     const { company } = companyStore;
     const [name, setName] = useState(company.name);
     const [timezone, setTimezone] = useState(company.timezone);
+    const [rallyingCry, setRallyingCry] = useState(company.rallyingCry);
+    const [core1Content, setCore1Content] = useState(company.coreFour.core1Content);
+    const [core2Content, setCore2Content] = useState(company.coreFour.core2Content);
+    const [core3Content, setCore3Content] = useState(company.coreFour.core3Content);
+    const [core4Content, setCore4Content] = useState(company.coreFour.core4Content);
     const { t } = useTranslation();
 
-    const save = () =>
+    const save = () => {
+      console.log(core1Content);
       companyStore.updateCompany({
         name,
         timezone,
+        rallyingCry,
+        coreFourAttributes: {
+          core_1: core1Content,
+          core_2: core2Content,
+          core_3: core3Content,
+          core_4: core4Content,
+        },
       });
-
+    };
     const submitLogo = async (files: FileList) => {
       const form = new FormData();
       form.append("logo", files[0]);
@@ -50,7 +64,7 @@ export const Company = observer(
     };
 
     return (
-      <Container>
+      <StretchContainer>
         <HeaderContainer>
           <HeaderText>{t("profile.companyDetails")}</HeaderText>
         </HeaderContainer>
@@ -62,20 +76,20 @@ export const Company = observer(
             <BodyContainer>
               <PersonalInfoContainer>
                 <Label htmlFor="name">{t("company.name")}</Label>
-                <Input disabled={true} name="name" onChange={() => {}} value={company.name} />
-
-                <Label htmlFor="fiscal_year_start">{t("company.fiscalYearStartDate")}</Label>
                 <Input
                   disabled={true}
-                  name="fiscal_year_start"
-                  onChange={() => {}}
-                  value={company.fiscalYearStart}
+                  name="name"
+                  onChange={e => setName(e.target.value)}
+                  value={company.name}
                 />
+
+                <Label htmlFor="fiscal_year_start">{t("company.fiscalYearStartDate")}</Label>
+                <Input disabled={true} name="fiscal_year_start" value={company.fiscalYearStart} />
                 <Label htmlFor="timezone">{t("company.timezone")}</Label>
                 <Input
                   disabled={true}
                   name="timezone"
-                  onChange={() => {}}
+                  onChange={e => setTimezone(e.target.value)}
                   value={company.timezone}
                 />
               </PersonalInfoContainer>
@@ -123,9 +137,95 @@ export const Company = observer(
                     )}
                   </Select>
                   <Text color={"greyActive"} fontSize={1}>
-                    To modify Fiscal Start Date, Core Four, Accountability Chart, or Strategic Plan,
-                    please contact Lynchpyn support.
+                    To modify Fiscal Start Date, Accountability Chart, or Strategic Plan, please
+                    contact Lynchpyn support.
                   </Text>
+
+                  <Label htmlFor="rallying">Rallying Cry</Label>
+                  <Input
+                    name="rallyingCry"
+                    onChange={e => {
+                      setRallyingCry(e.target.value);
+                    }}
+                    value={rallyingCry}
+                  />
+                  <Label htmlFor="core1Content">Core 1</Label>
+                  <TrixEditor
+                    className="custom-css-class"
+                    autoFocus={true}
+                    placeholder="Please enter Why Do We Exist?"
+                    value={core1Content}
+                    // uploadURL="https://domain.com/imgupload/receiving/post"
+                    // uploadData={{ key1: "value", key2: "value" }}
+                    //fileParamName="blob"
+                    mergeTags={[]}
+                    onChange={(html, text) => {
+                      setCore1Content(html);
+                    }}
+                    onEditorReady={editor => {
+                      editor.element.addEventListener("trix-file-accept", event => {
+                        event.preventDefault();
+                      });
+                    }}
+                  />
+                  <Label htmlFor="core_2">Core 2</Label>
+                  <TrixEditor
+                    className="custom-css-class"
+                    autoFocus={true}
+                    placeholder="Please enter How Do We Behave?"
+                    value={core2Content}
+                    // uploadURL="https://domain.com/imgupload/receiving/post"
+                    // uploadData={{ key1: "value", key2: "value" }}
+                    //fileParamName="blob"
+                    mergeTags={[]}
+                    onChange={(html, text) => {
+                      setCore2Content(html);
+                    }}
+                    onEditorReady={editor => {
+                      editor.element.addEventListener("trix-file-accept", event => {
+                        event.preventDefault();
+                      });
+                    }}
+                  />
+                  <Label htmlFor="core_3">Core 3</Label>
+                  <TrixEditor
+                    className="custom-css-class"
+                    autoFocus={true}
+                    placeholder="Please enter How Do We Behave?"
+                    value={core3Content}
+                    // uploadURL="https://domain.com/imgupload/receiving/post"
+                    // uploadData={{ key1: "value", key2: "value" }}
+                    //fileParamName="blob"
+                    mergeTags={[]}
+                    onChange={(html, text) => {
+                      setCore3Content(html);
+                    }}
+                    onEditorReady={editor => {
+                      editor.element.addEventListener("trix-file-accept", event => {
+                        event.preventDefault();
+                      });
+                    }}
+                  />
+                  <Label htmlFor="core_4">Core 4</Label>
+                  <TrixEditor
+                    className="custom-css-class"
+                    autoFocus={true}
+                    placeholder="Please enter 
+                    How Do We Succeed?"
+                    value={core4Content}
+                    // uploadURL="https://domain.com/imgupload/receiving/post"
+                    // uploadData={{ key1: "value", key2: "value" }}
+                    //fileParamName="blob"
+                    mergeTags={[]}
+                    onChange={(html, text) => {
+                      setCore4Content(html);
+                    }}
+                    onEditorReady={editor => {
+                      editor.element.addEventListener("trix-file-accept", event => {
+                        event.preventDefault();
+                      });
+                    }}
+                  />
                 </PersonalInfoContainer>
                 <ProfilePhotoSection>
                   <PhotoContainer>
@@ -163,7 +263,7 @@ export const Company = observer(
             </>
           }
         />
-      </Container>
+      </StretchContainer>
     );
   },
 );

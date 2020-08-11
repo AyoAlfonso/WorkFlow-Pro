@@ -28,7 +28,7 @@ export const CompanyStoreModel = types
       const env = getEnv(self);
       try {
         const response: any = yield env.api.updateCompany(
-          Object.assign(fieldsAndValues, { id: self.company.id }),
+          Object.assign({ company: fieldsAndValues }, { id: self.company.id }),
         );
         if (response.ok) {
           self.company = response.data;
