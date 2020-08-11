@@ -6,6 +6,8 @@ class QuestionnaireAttempt < ApplicationRecord
   serialize :steps, Array
   serialize :rendered_steps, Array
 
+  validates_with QuestionnaireAttemptValidator
+
   def get_questionnaire_version_when_completed
     self.questionnaire.paper_trail.version_at(self.completed_at)
   end

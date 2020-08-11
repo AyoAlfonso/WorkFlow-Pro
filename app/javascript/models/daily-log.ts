@@ -5,6 +5,8 @@ export const DailyLogModel = types
   .props({
     id: types.identifierNumber,
     workStatus: types.maybeNull(types.string),
+    createMyDay: types.boolean,
+    eveningReflection: types.boolean,
   })
   .views(self => ({}))
   .actions(self => ({

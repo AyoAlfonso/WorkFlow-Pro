@@ -1,6 +1,9 @@
 import * as React from "react";
-import { SurveyBotNoMst, SurveyHeader } from "../app/javascript/components/shared/survey-bot";
-import { CodeBlockDiv, ContainerDiv, PropsList, RowDiv } from "./shared";
+import {
+  SurveyBotNoMst,
+  SurveyHeader,
+} from "../app/javascript/components/domains/journal/survey-bot";
+import { CodeBlockDiv, ContainerDiv, PropsList } from "./shared";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import styled from "styled-components";
 import { layout, LayoutProps } from "styled-system";
@@ -34,9 +37,9 @@ export const SurveyBot = () => (
       import { SurveyBot } from "~/shared/survey-bot";
 
       const MyComponent = () => (
-        <SurveyContainer width={"400px"}>
+        <div width={"400px"}>
           <SurveyBot variant={"createMyDay"} />  
-        <SurveyContainer>
+        <div>
       )
       `}
         language={"tsx"}

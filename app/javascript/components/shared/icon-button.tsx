@@ -25,6 +25,7 @@ export interface IIconButtonProps extends StyledSystemProps {
   textColor?: string;
   shadow?: boolean;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 const Button = styled.button<IIconButtonProps>`
@@ -41,11 +42,16 @@ const Button = styled.button<IIconButtonProps>`
     background: ${props => (props.bg === "white" ? "rgba(0, 0, 0, 0.02)" : props.bg)}
   }
   &:active {
-    box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, .2);
-    transform: translate(1px, 1px)
+    box-shadow: ${props =>
+      !props.disabled
+        ? "1px 3px 3px 1px rgba(0, 0, 0, .2)"
+        : props.shadow
+        ? "1px 3px 4px 2px rgba(0, 0, 0, .1)"
+        : "0"};
+    transform: ${props => (props.disabled ? "none" : "translate(1px, 1px)")}
   }
   &:focus {
-    outline: 0
+    outline: 0;
   }
   transition: all ease 0.1s;
   font-family: Lato;
@@ -53,7 +59,7 @@ const Button = styled.button<IIconButtonProps>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding-left: 20px;
+  justify-content: center;
 `;
 
 const TextContainer = styled.div`
@@ -74,10 +80,11 @@ export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
   textColor,
   shadow,
   onClick,
+  disabled,
   ...restProps
 }): JSX.Element => {
-  return (
-    <Button shadow={shadow} onClick={onClick} {...restProps}>
+  return text ? (
+    <Button shadow={shadow} onClick={onClick} {...restProps} pl={"20px"} disabled={disabled}>
       <IcoMoon
         icon={iconName}
         iconSet={iconSet}
@@ -85,8 +92,17 @@ export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
         size={iconSize}
       />
       <TextContainer>
-        <Text color={textColor || "black"}>{text}</Text>
+        <Text color={disabled ? "lightgrey" : textColor || "black"}>{text}</Text>
       </TextContainer>
+    </Button>
+  ) : (
+    <Button shadow={shadow} onClick={onClick} {...restProps} p={0} disabled={disabled}>
+      <IcoMoon
+        icon={iconName}
+        iconSet={iconSet}
+        color={`${iconColor in baseTheme.colors ? baseTheme.colors[iconColor] : iconColor}`}
+        size={iconSize}
+      />
     </Button>
   );
 };

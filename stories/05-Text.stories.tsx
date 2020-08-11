@@ -24,7 +24,12 @@ export const Text = () => (
     <CodeBlockDiv mt={4}>
       <CopyBlock
         text={`
-    <Text color={"primary100"} fontSize={2} fontWeight={'bold'} letterSpacing='0.5em'>
+    <Text 
+      color={"primary100"} 
+      fontSize={2} 
+      fontWeight={'bold'} 
+      letterSpacing='0.5em'
+    >
       This is a paragraph element
     </Text>
         `}
@@ -63,7 +68,12 @@ export const Heading = () => (
     <CodeBlockDiv mt={4}>
       <CopyBlock
         text={`
-    <Heading type={"h4"} color={"warningRed"} fontSize={2} letterSpacing="0.3em">
+    <Heading 
+      type={"h4"} 
+      color={"warningRed"} 
+      fontSize={2} 
+      letterSpacing="0.3em"
+    >
       This is an h4 element
     </Heading>`}
         language={"tsx"}

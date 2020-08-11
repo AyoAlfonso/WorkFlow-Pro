@@ -53,7 +53,7 @@ class User < ApplicationRecord
 
   def current_daily_log
     if self.persisted?
-      daily_logs.select(:id, :work_status).where(log_date: Date.today).first_or_create
+      daily_logs.select(:id, :work_status, :create_my_day, :evening_reflection).where(log_date: Date.today).first_or_create
     end
   end
 
