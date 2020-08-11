@@ -20,7 +20,7 @@ export const SessionStoreModel = types
   .extend(withEnvironment())
   .views(self => ({}))
   .actions(self => ({
-    loadProfile: flow(function* () {
+    loadProfile: flow(function*() {
       self.loading = true;
       const env = getEnv(self);
       try {
@@ -36,7 +36,7 @@ export const SessionStoreModel = types
       }
       self.loading = false;
     }),
-    updateUser: flow(function* (fieldsAndValues) {
+    updateUser: flow(function*(fieldsAndValues) {
       self.loading = true;
       const env = getEnv(self);
       try {
@@ -51,7 +51,7 @@ export const SessionStoreModel = types
         // error messaging handled by API monitor
       }
     }),
-    updateAvatar: flow(function* (formData) {
+    updateAvatar: flow(function*(formData) {
       self.loading = true;
       const env = getEnv(self);
       try {
@@ -64,7 +64,7 @@ export const SessionStoreModel = types
       }
       self.loading = false;
     }),
-    deleteAvatar: flow(function* () {
+    deleteAvatar: flow(function*() {
       self.loading = true;
       const env = getEnv(self);
       try {
@@ -79,7 +79,7 @@ export const SessionStoreModel = types
     }),
   }))
   .actions(self => ({
-    login: flow(function* (email, password) {
+    login: flow(function*(email, password) {
       self.loading = true;
       //may want to show a loading modal here
       const env = getEnv(self);
@@ -117,7 +117,7 @@ export const SessionStoreModel = types
     // yield self.environment.api.logout();
     // self.loggedIn = false;
     // }),
-    logoutRequest: flow(function* () {
+    logoutRequest: flow(function*() {
       const env = getEnv(self);
       const response: any = yield env.api.signOut();
       if (response.ok) {
