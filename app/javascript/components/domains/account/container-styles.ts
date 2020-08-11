@@ -19,7 +19,7 @@ export const BodyContainer = styled.div`
 
 export const PersonalInfoContainer = styled.div`
   width: 70%;
-  padding-right: 30px;
+  padding-right: 10%;
 `;
 
 export const ProfilePhotoSection = styled.div`
@@ -45,6 +45,7 @@ export const PhotoModificationButtonsSection = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 16px;
+  width: 250px;
 `;
 
 export const SaveButtonContainer = styled.div`
