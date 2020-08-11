@@ -50,7 +50,7 @@ const FrogButton = styled.button<ColorProps>`
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   font-family: Lato;
   font-size: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 7px;
   padding: 4px;
   &:hover {
     cursor: pointer;
