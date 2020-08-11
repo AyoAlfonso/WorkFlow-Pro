@@ -11,7 +11,6 @@ export type QuarterlyGoalType = {
   keyElements: Array<KeyElementType>;
   ownedById: number;
   ownedBy: UserType;
-  status: string;
   description: string;
   milestones: Array<MilestoneType>;
   contextDescription: string;

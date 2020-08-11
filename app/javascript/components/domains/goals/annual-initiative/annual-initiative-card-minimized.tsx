@@ -17,18 +17,27 @@ export const AnnualInitiativeCardMinimized = (
 
   const renderStatusSquares = () => {
     return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
-      const { warningRed, cautionYellow, finePine } = baseTheme.colors;
-      let backgroundColor;
-      switch (quarterlyGoal.status) {
-        case "incomplete":
-          backgroundColor = warningRed;
-          break;
-        case "in_progress":
-          backgroundColor = cautionYellow;
-          break;
-        case "completed":
-          backgroundColor = finePine;
-          break;
+      const { warningRed, cautionYellow, finePine, grey40 } = baseTheme.colors;
+
+      const startedMilestones = quarterlyGoal.milestones.filter(
+        milestone => milestone.status != "unstarted",
+      );
+
+      let backgroundColor = grey40;
+
+      if (startedMilestones.length > 0) {
+        const lastStartedMilestone = startedMilestones[startedMilestones.length - 1];
+        switch (lastStartedMilestone.status) {
+          case "incomplete":
+            backgroundColor = warningRed;
+            break;
+          case "in_progress":
+            backgroundColor = cautionYellow;
+            break;
+          case "completed":
+            backgroundColor = finePine;
+            break;
+        }
       }
       return <QuarterlyGoalIndicator key={index} backgroundColor={backgroundColor} />;
     });
@@ -51,7 +60,7 @@ export const AnnualInitiativeCardMinimized = (
 
 const Container = styled.div`
   ${color}
-  height: 25px;
+  height: 50px;
   background-color: ${props => props.theme.colors.backgroundGrey};
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
@@ -85,6 +94,7 @@ const MaximizeIconContainer = styled.div`
   justify-content: center;
   text-align: center;
   margin: auto;
+  margin-bottom: 3px;
   &: hover {
     cursor: pointer;
   }

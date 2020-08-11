@@ -229,7 +229,6 @@ ActiveRecord::Schema.define(version: 2020_08_12_000506) do
     t.string "key_elements", default: [], array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "status", default: 0
     t.string "context_description"
     t.integer "quarter"
     t.index ["annual_initiative_id"], name: "index_quarterly_goals_on_annual_initiative_id"

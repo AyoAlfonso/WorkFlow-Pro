@@ -15,7 +15,6 @@ export const QuarterlyGoalModel = types
     keyElements: types.array(KeyElementModel),
     ownedById: types.number,
     ownedBy: types.maybeNull(UserModel),
-    status: types.string,
     description: types.string,
     milestones: types.array(MilestoneModel),
     contextDescription: types.string,

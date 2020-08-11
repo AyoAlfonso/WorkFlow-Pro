@@ -5,8 +5,6 @@ class QuarterlyGoal < ApplicationRecord
 
   before_save :sanitize_description
 
-  enum status: { incomplete: 0, in_progress: 1, completed: 2 }
-
   belongs_to :annual_initiative
   has_many :milestones, dependent: :destroy
   has_many :key_elements, as: :elementable
