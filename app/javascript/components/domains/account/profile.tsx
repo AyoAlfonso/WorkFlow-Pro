@@ -98,7 +98,7 @@ export const AccountProfile = observer(
                 variant={"redOutline"}
                 onClick={deleteAvatar}
                 mr={2}
-                style={{ width: "150px" }}
+                style={{ width: "120px" }}
               >
                 {t("general.remove")}
               </Button>

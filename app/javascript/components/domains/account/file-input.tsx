@@ -16,6 +16,9 @@ const StyledFileInputLabel = styled.label`
   flex: 1;
   padding-top: 5px;
   text-align: center;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const StyledFileInput = styled.input`
