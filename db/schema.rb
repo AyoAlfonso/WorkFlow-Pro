@@ -223,10 +223,10 @@ ActiveRecord::Schema.define(version: 2020_08_12_000506) do
     t.integer "key_activities_done"
     t.float "average_team_mood"
     t.float "goal_progress"
-    t.bigint "meeting_id", null: false
+    t.bigint "meeting_template_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["meeting_id"], name: "index_meetings_on_meeting_id"
+    t.index ["meeting_template_id"], name: "index_meetings_on_meeting_template_id"
   end
 
   create_table "milestones", force: :cascade do |t|
@@ -401,7 +401,7 @@ ActiveRecord::Schema.define(version: 2020_08_12_000506) do
   add_foreign_key "meeting_ratings", "users"
   add_foreign_key "meeting_ratings", "weekly_meetings"
   add_foreign_key "meeting_templates", "teams"
-  add_foreign_key "meetings", "meetings"
+  add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "milestones", "quarterly_goals"
   add_foreign_key "quarterly_goals", "annual_initiatives"
   add_foreign_key "questionnaire_attempts", "questionnaires"

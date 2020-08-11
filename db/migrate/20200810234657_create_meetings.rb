@@ -6,7 +6,7 @@ class CreateMeetings < ActiveRecord::Migration[6.0]
       t.integer :key_activities_done
       t.float :average_team_mood
       t.float :goal_progress
-      t.references :meeting, null: false, foreign_key: true
+      t.references :meeting_template, null: false, foreign_key: true
 
       t.timestamps
     end
