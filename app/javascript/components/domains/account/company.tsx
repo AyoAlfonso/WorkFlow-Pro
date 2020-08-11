@@ -40,7 +40,6 @@ export const Company = observer(
     const { t } = useTranslation();
 
     const save = () => {
-      console.log(core1Content);
       companyStore.updateCompany({
         name,
         timezone,
