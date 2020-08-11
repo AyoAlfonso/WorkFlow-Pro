@@ -106,7 +106,7 @@ const HeaderDiv = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
 `;
 
-const SurveyHeader = ({ title }) => {
+export const SurveyHeader = ({ title }) => {
   return (
     <HeaderDiv>
       <Text color={"grey100"} fontSize={2}>
