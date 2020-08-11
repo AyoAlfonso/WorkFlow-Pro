@@ -13,7 +13,7 @@ export const AnnualInitiativeStoreModel = types
   .views(self => ({}))
 
   .actions(self => ({
-    getAnnualInitiative: flow(function* (id) {
+    getAnnualInitiative: flow(function*(id) {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.getAnnualInitiative(id);
@@ -24,7 +24,7 @@ export const AnnualInitiativeStoreModel = types
         // error messaging handled by API monitor
       }
     }),
-    update: flow(function* () {
+    update: flow(function*() {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.updateAnnualInitiative(self.annualInitiative);
@@ -38,7 +38,7 @@ export const AnnualInitiativeStoreModel = types
         // error messaging handled by API monitor
       }
     }),
-    createKeyElement: flow(function* () {
+    createKeyElement: flow(function*() {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createAnnualInitiativeKeyElement(
@@ -51,7 +51,7 @@ export const AnnualInitiativeStoreModel = types
         // error messaging handled by API monitor
       }
     }),
-    create: flow(function* (annualInitiativeObject) {
+    create: flow(function*(annualInitiativeObject) {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createAnnualInitiative(annualInitiativeObject);
@@ -96,6 +96,11 @@ export const AnnualInitiativeStoreModel = types
           ...self.annualInitiative.quarterlyGoals,
           quarterlyGoal,
         ] as any;
+      }
+    },
+    updateRecordIfOpened(annualInitiative) {
+      if (self.annualInitiative.id == annualInitiative.id) {
+        self.annualInitiative = annualInitiative;
       }
     },
   }));

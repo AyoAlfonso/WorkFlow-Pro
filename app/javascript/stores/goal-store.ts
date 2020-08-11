@@ -11,7 +11,7 @@ export const GoalStoreModel = types
   .extend(withEnvironment())
   .views(self => ({}))
   .actions(self => ({
-    load: flow(function* () {
+    load: flow(function*() {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.getAllGoals();
@@ -62,6 +62,11 @@ export const GoalStoreModel = types
         goals[goalIndex] = personalGoalAI;
         self.personalGoals.goals = goals;
       }
+    },
+    updateGoalAnnualInitiative(goal, index, annualInitiative) {
+      let goals = self[goal]["goals"];
+      goals[index] = annualInitiative;
+      self[goal]["goals"] = goals;
     },
   }));
 
