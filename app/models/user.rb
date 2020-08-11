@@ -2,11 +2,15 @@ class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::Allowlist
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, :trackable and :omniauthable
+  include ActionView::Helpers::SanitizeHelper
+
+
   devise :database_authenticatable, :registerable, :confirmable, :invitable,
          :recoverable, :rememberable, :trackable,
          :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: self, validate_on_invite: true
 
+  before_save :sanitize_personal_vision
   belongs_to :company
   delegate :name, :timezone, to: :company, prefix: true, allow_nil: true
   delegate :name, to: :user_role, prefix: true, allow_nil: true
@@ -80,4 +84,10 @@ class User < ApplicationRecord
   #   super
   #   #do_something(token, payload)
   # end
+
+
+  private
+  def sanitize_personal_vision
+    self.personal_vision = strip_tags(personal_vision)
+  end
 end

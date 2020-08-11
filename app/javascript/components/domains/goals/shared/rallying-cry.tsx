@@ -2,16 +2,30 @@ import * as React from "react";
 import { HomeContainerBorders } from "../../home/shared-components";
 import styled from "styled-components";
 import { color } from "styled-system";
+import { useMst } from "~/setup/root";
+import ContentEditable from "react-contenteditable";
+import { RoleAdministrator, RoleCEO } from "~/lib/constants";
 
 interface IRallyingCryProps {
   rallyingCry: string;
 }
 
 export const RallyingCry = ({ rallyingCry }: IRallyingCryProps): JSX.Element => {
+  const { sessionStore, companyStore } = useMst();
+  const profile = sessionStore.profile;
+  const editable = profile.role == RoleCEO || profile.role == RoleAdministrator;
+
   return (
     <VisionContainer>
       <VisionTitle>Rallying Cry</VisionTitle>
-      <VisionText> {rallyingCry} </VisionText>
+      <StyledContentEditable
+        html={rallyingCry}
+        disabled={!editable}
+        onChange={e => {
+          companyStore.updateModelField("rallyingCry", e.target.value);
+        }}
+        onBlur={() => companyStore.updateCompanyFromModel()}
+      />
     </VisionContainer>
   );
 };
@@ -34,10 +48,11 @@ const VisionTitle = styled.p`
   position: absolute;
 `;
 
-const VisionText = styled.p`
+const StyledContentEditable = styled(ContentEditable)`
   font-size: 15px;
   margin-left: auto;
   margin-right: auto;
   margin-top: auto;
   margin-bottom: auto;
+  padding: 5px;
 `;

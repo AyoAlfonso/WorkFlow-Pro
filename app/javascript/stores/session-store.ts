@@ -124,6 +124,14 @@ export const SessionStoreModel = types
       }
       self.loggedIn = false;
     }),
+  }))
+  .actions(self => ({
+    updateProfileModelField(field, value) {
+      self.profile[field] = value;
+    },
+    updateProfileFromModel() {
+      self.updateUser(self.profile);
+    },
   }));
 
 type SessionStoreType = typeof SessionStoreModel.Type;

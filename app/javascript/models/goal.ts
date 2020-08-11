@@ -16,6 +16,13 @@ export const GoalModel = types
       const currentUserId = sessionStore.profile.id;
       return self.goals.filter(annualInitiative => annualInitiative.ownedById == currentUserId);
     },
+    get onlyShowMyQuarterlyGoals() {
+      let goals = self.goals;
+      let filteredQuarterlyGoals = goals.map((ai, index) => {
+        return { ...ai, quarterlyGoals: ai.myQuarterlyGoals };
+      });
+      return filteredQuarterlyGoals;
+    },
   }))
   .actions(self => ({}));
 

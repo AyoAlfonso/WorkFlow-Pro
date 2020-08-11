@@ -49,14 +49,12 @@ export const TitleContainer = ({
         <FilterOptions
           onClick={() => setShowCompanyGoals(false)}
           color={!showCompanyGoals ? "primary100" : "grey40"}
-          style={!showCompanyGoals ? { textDecoration: "underline" } : {}}
         >
           Me
         </FilterOptions>
         <FilterOptions
           onClick={() => setShowCompanyGoals(true)}
           color={showCompanyGoals ? "primary100" : "grey40"}
-          style={showCompanyGoals ? { textDecoration: "underline" } : {}}
         >
           Company
         </FilterOptions>
@@ -100,6 +98,9 @@ type IconContainerType = {
 const IconContainer = styled.div<IconContainerType>`
   text-align: center;
   margin-top: ${props => props.marginTop || "6px"};
+  &: hover {
+    cursor: pointer;
+  }
 `;
 
 const FilterContainer = styled.div`
