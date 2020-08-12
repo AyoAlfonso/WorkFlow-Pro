@@ -29,6 +29,7 @@ class User < ApplicationRecord
   has_many :habits
   has_many :team_user_enablements
   has_many :teams, through: :team_user_enablements
+  has_many :team_leads
 
   validates :first_name, :last_name, presence: true
 
@@ -55,6 +56,10 @@ class User < ApplicationRecord
     if self.persisted?
       daily_logs.select(:id, :work_status, :create_my_day, :evening_reflection).where(log_date: Date.today).first_or_create
     end
+  end
+
+  def team_lead?(team_id)
+    TeamLead.where(user_id: self.id).where(team_id: team_id).present?
   end
 
   def company_admin?
