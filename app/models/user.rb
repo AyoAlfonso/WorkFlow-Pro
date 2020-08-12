@@ -58,8 +58,8 @@ class User < ApplicationRecord
     end
   end
 
-  def team_lead?(team_id)
-    TeamLead.where(user_id: self.id).where(team_id: team_id).present?
+  def team_lead_for?(team)
+    team.team_lead.user == self
   end
 
   def company_admin?
