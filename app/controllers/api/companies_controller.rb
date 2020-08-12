@@ -27,7 +27,7 @@ class Api::CompaniesController < Api::ApplicationController
   private
 
   def company_params
-    params.permit(:name, :timezone, :logo, :rallying_cry)
+    params.require(:company).permit(:name, :timezone, :logo, :rallying_cry, core_four_attributes: [:core_1, :core_2, :core_3, :core_4])
   end
 
   def set_company

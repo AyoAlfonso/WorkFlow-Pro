@@ -33,7 +33,13 @@ export const Users = observer(
       R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)),
     );
 
-    const inviteUser = () => userStore.inviteUser({ email, firstName, lastName, userRoleId });
+    const inviteUser = () => {
+      userStore.inviteUser({ email, firstName, lastName, userRoleId });
+      setEmail("");
+      setFirstName("");
+      setLastName("");
+      setUserRole(R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)));
+    };
 
     const resend = userId => userStore.resendInvitation(userId);
 
