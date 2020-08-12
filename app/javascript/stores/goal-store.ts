@@ -1,6 +1,8 @@
 import { types, flow, getEnv } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { GoalModel } from "../models/goal";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 export const GoalStoreModel = types
   .model("GoalStoreModel")
@@ -20,7 +22,7 @@ export const GoalStoreModel = types
           self.personalGoals = response.data.user;
         }
       } catch {
-        // error messaging handled by API monitor
+        showToast("There was an error loading goals", ToastMessageConstants.ERROR);
       }
     }),
   }))
