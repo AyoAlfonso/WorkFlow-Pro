@@ -35,12 +35,14 @@ ActiveAdmin.register Team do
     f.inputs do
       f.input :company
       f.input :name
-      f.has_many :team_user_enablements, allow_destroy: true do |tu|
-        if tu.object.persisted?
-          tu.input :user, as: :select, collection: [tu.object.user], input_html: {disabled: true}
-        else
-          tu.input :user, as: :select, collection: f.object.company.users.where.not(id: f.object.users), input_html: {disabled: tu.object.persisted?}
-        end
+      if f.object.persisted?
+        f.has_many :team_user_enablements, allow_destroy: true do |tu|
+          if tu.object.persisted?
+            tu.input :user, as: :select, collection: [tu.object.user], input_html: {disabled: true}
+          else
+            tu.input :user, as: :select, collection: f.object.company.users.where.not(id: f.object.users), input_html: {disabled: tu.object.persisted?}
+          end
+        end 
       end
     end
     f.actions
