@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_10_165107) do
+ActiveRecord::Schema.define(version: 2020_08_12_000506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -259,6 +259,15 @@ ActiveRecord::Schema.define(version: 2020_08_10_165107) do
     t.boolean "daily_limit"
   end
 
+  create_table "team_leads", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "team_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["team_id"], name: "index_team_leads_on_team_id"
+    t.index ["user_id"], name: "index_team_leads_on_user_id"
+  end
+
   create_table "team_user_enablements", force: :cascade do |t|
     t.bigint "team_id", null: false
     t.bigint "user_id", null: false
@@ -362,6 +371,8 @@ ActiveRecord::Schema.define(version: 2020_08_10_165107) do
   add_foreign_key "quarterly_goals", "annual_initiatives"
   add_foreign_key "questionnaire_attempts", "questionnaires"
   add_foreign_key "questionnaire_attempts", "users"
+  add_foreign_key "team_leads", "teams"
+  add_foreign_key "team_leads", "users"
   add_foreign_key "team_user_enablements", "teams"
   add_foreign_key "team_user_enablements", "users"
   add_foreign_key "teams", "companies"
