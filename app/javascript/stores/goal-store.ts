@@ -1,8 +1,6 @@
 import { types, flow, getEnv } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { GoalModel } from "../models/goal";
-import { letterSpacing } from "styled-system";
-//import { ApiResponse } from "apisauce";
 
 export const GoalStoreModel = types
   .model("GoalStoreModel")
@@ -59,7 +57,10 @@ export const GoalStoreModel = types
         self.companyGoals.goals = goals;
       } else if (personalGoalAI) {
         personalGoalAI.quarterlyGoals = [...personalGoalAI.quarterlyGoals, quarterlyGoal] as any;
-        self.personalGoals.goals = personalGoalAI as any;
+        let goals = self.personalGoals.goals;
+        const goalIndex = goals.findIndex(goal => goal.id == personalGoalAI.id);
+        goals[goalIndex] = personalGoalAI;
+        self.personalGoals.goals = goals;
       }
     },
   }));

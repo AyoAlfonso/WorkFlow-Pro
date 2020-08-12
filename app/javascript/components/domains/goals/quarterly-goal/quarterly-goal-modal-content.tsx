@@ -143,6 +143,7 @@ export const QuarterlyGoalModalContent = observer(
             <IndividualVerticalStatusBlockColorIndicator
               milestone={milestone}
               milestoneStatus={milestone.status}
+              editable={editable}
             />
           </MilestoneContainer>
         );
