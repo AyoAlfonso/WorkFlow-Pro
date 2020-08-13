@@ -74,7 +74,7 @@ ActiveAdmin.register MeetingTemplate do
       step.input :order_index
       step.input :duration, label: "Duration (in minutes)"
       step.input :instructions, input_html: { rows: 3 }
-      step.input :component_to_render
+      step.input :component_to_render # @TODO this eventually needs to be changed to a select of the possible components that can be rendered
       step.input :image, as: :file, hint: (step.object.try(:image_url) ? image_tag(step.object.image_url, style: "max-height: 150px;") : "No Image Selected")
     end
     f.actions
