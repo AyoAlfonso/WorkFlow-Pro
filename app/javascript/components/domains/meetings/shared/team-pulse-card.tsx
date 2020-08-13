@@ -7,17 +7,11 @@ import * as moment from "moment";
 
 const { warningRed, cautionYellow, successGreen, finePine, greyInactive } = baseTheme.colors;
 
-export const TeamPulseCard = (): JSX.Element => {
-  const data = [
-    { x: new Date("2020-08-15"), y: 4 },
-    { x: new Date("2020-08-14"), y: 1 },
-    { x: new Date("2020-08-13"), y: 2 },
-    { x: new Date("2020-08-12"), y: 5 },
-    { x: new Date("2020-08-11"), y: 1 },
-    { x: new Date("2020-08-10"), y: 3 },
-    { x: new Date("2020-08-09"), y: 5 },
-  ];
+interface ITeamPulseCardProps {
+  data: any;
+}
 
+export const TeamPulseCard = ({ data }: ITeamPulseCardProps): JSX.Element => {
   const parsedData = () => {
     return data.map(data => {
       return {

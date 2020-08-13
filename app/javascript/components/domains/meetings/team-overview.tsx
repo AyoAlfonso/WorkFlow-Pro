@@ -24,6 +24,16 @@ export const TeamOverview = (props: ITeamOverviewProps): JSX.Element => {
 
   const user = sessionStore.profile;
 
+  const teamPulseData = [
+    { x: new Date("2020-08-15"), y: 4 },
+    { x: new Date("2020-08-14"), y: 1 },
+    { x: new Date("2020-08-13"), y: 2 },
+    { x: new Date("2020-08-12"), y: 5 },
+    { x: new Date("2020-08-11"), y: 1 },
+    { x: new Date("2020-08-10"), y: 3 },
+    { x: new Date("2020-08-09"), y: 5 },
+  ];
+
   const renderCardSubHeader = (text: string): JSX.Element => {
     return (
       <SubHeaderTextContainer>
@@ -131,7 +141,9 @@ export const TeamOverview = (props: ITeamOverviewProps): JSX.Element => {
         <RightContainer>
           <TeamPulseContainer>
             {renderCardSubHeader("Team's Pulse")}
-            <TeamPulseCard />
+            <TeamPulseBody>
+              <TeamPulseCard data={teamPulseData} />
+            </TeamPulseBody>
           </TeamPulseContainer>
           <TeamIssuesContainer>{renderCardSubHeader("Team's Issues")}</TeamIssuesContainer>
         </RightContainer>
@@ -266,6 +278,10 @@ const PriorityIconContainer = styled.div`
   margin-left: auto;
   margin-top: auto;
   margin-bottom: auto;
+`;
+
+const TeamPulseBody = styled.div`
+  display: flex;
 `;
 
 const CheckboxContainer = props => (
