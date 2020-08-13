@@ -16,24 +16,28 @@ ActiveAdmin.register MeetingTemplate do
 
   controller do
     def create
-      @meeting_template = MeetingTemplate.new({
-        name: params[:meeting_template][:name],
-        meeting_type: params[:meeting_template][:meeting_type],
-        duration: params[:meeting_template][:duration]
+      @meeting_template_params = params[:meeting_template]
+      binding.pry
+      @meeting_template = MeetingTemplate.create!({
+        name: @meeting_template_params[:name],
+        meeting_type: @meeting_template_params[:meeting_type],
+        duration: @meeting_template_params[:duration]
       })
-      @meeting_template.save!
-      @steps = params[:meeting_template][:steps_attributes].values
-      @steps.each do |step|
-        Step.create!({
-          step_type: step[:step_type],
-          order_index: step[:order_index],
-          name: step[:name],
-          instructions: step[:instructions],
-          duration: step[:duration],
-          component_to_render: step[:component_to_render],
-          meeting_template_id: @meeting_template.id,
-          image: step[:image]
-        })
+      @step_atrributes = params[:meeting_template][:steps_attributes]
+      if @step_atrributes.present?
+        @steps = @step_atrributes.values
+        @steps.each do |step|
+          Step.create!({
+            step_type: step[:step_type],
+            order_index: step[:order_index],
+            name: step[:name],
+            instructions: step[:instructions],
+            duration: step[:duration],
+            component_to_render: step[:component_to_render],
+            meeting_template_id: @meeting_template.id,
+            image: step[:image]
+          })
+        end
       end
       redirect_to admin_meeting_template_path(@meeting_template), notice: "Meeting Template Created"
     end
@@ -43,13 +47,19 @@ ActiveAdmin.register MeetingTemplate do
     h1 meeting_template.name
     attributes_table do
       row :name
-      row :meeting_type
-      row "Duration (in minutes)", :duration
+      row "Meeting Type" do
+        meeting_template.meeting_type.humanize.titleize
+      end
+      row "Duration (in minutes)" do
+        meeting_template.duration
+      end 
     end
     panel "Steps" do
       table_for meeting_template.steps do
         column :name
-        column :step_type
+        column :step_type do |step|
+          step.step_type.humanize.titleize
+        end
         column :order_index
         column "Duration (in minutes)", :duration
         column :instructions
@@ -66,11 +76,11 @@ ActiveAdmin.register MeetingTemplate do
   form do |f|
     h1 object.name
     f.input :name
-    f.input :meeting_type, as: :select, collection: MeetingTemplate.meeting_types.keys
+    f.input :meeting_type, as: :select, collection: MeetingTemplate.meeting_types.map { |mt| [mt[0].humanize.titleize, mt[0]] }
     f.input :duration, label: "Duration (in minutes)"
     f.has_many :steps, allow_destroy: true do |step|
       step.input :name
-      step.input :step_type, as: :select, collection: Step.step_types.keys
+      step.input :step_type, as: :select, collection: Step.step_types.map { |st| [st[0].humanize.titleize, st[0]]}
       step.input :order_index
       step.input :duration, label: "Duration (in minutes)"
       step.input :instructions, input_html: { rows: 3 }
