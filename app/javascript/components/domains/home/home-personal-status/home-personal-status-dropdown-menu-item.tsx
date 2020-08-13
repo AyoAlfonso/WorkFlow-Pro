@@ -7,14 +7,21 @@ export interface IHomePersonalStatusDropdownMenuItemProps {
   menuItem: IHomePersonalStatusOption;
   onSelect: () => void;
   rightIcon?: JSX.Element;
+  style?: any;
 }
 export const HomePersonalStatusDropdownMenuItem = ({
   menuItem,
   onSelect,
   rightIcon,
+  style,
 }: IHomePersonalStatusDropdownMenuItemProps): JSX.Element => {
   return (
-    <DropdownMenuItem {...menuItem.containerProps} onClick={() => onSelect()}>
+    <DropdownMenuItem
+      {...menuItem.containerProps}
+      style={style}
+      onClick={() => onSelect()}
+      rightIcon={rightIcon}
+    >
       <Icon {...menuItem.iconProps} margin={"0px 10px"} />
       <div>{menuItem.label}</div>
       {/* Empty div is to even out spacing */}
@@ -23,7 +30,12 @@ export const HomePersonalStatusDropdownMenuItem = ({
   );
 };
 
-const DropdownMenuItem = styled.div`
+type DropdownMenuItemType = {
+  backgroundColor?: any;
+  rightIcon?: any;
+};
+
+const DropdownMenuItem = styled.div<DropdownMenuItemType>`
   align-items: center;
   background-color: ${props => props.theme.colors[props.backgroundColor]};
   color: ${props => props.theme.colors[props.color]};
@@ -31,7 +43,8 @@ const DropdownMenuItem = styled.div`
   height: 32px;
   justify-content: space-between;
   padding: 5px;
-  :hover {
-    border: solid 2px ${props => props.theme.colors[props.color]};
+  :& hover {
+    border: ${props => props.rightIcon && `solid 2px ${props => props.theme.colors[props.color]}`};
+    cursor: pointer;
   }
 `;
