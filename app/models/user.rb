@@ -29,7 +29,6 @@ class User < ApplicationRecord
   has_many :habits
   has_many :team_user_enablements
   has_many :teams, through: :team_user_enablements
-  has_many :team_leads
 
   validates :first_name, :last_name, presence: true
 
