@@ -31,14 +31,14 @@ if Rails.env.development?
   u7 = User.where(email: "allen@laterolabs.com").first_or_create(first_name: 'Allen', last_name: 'Greer', email: 'allen@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id)
   u8 = User.where(email: "shaun@laterolabs.com").first_or_create(first_name: 'Shaun', last_name: 'Schwartz', email: 'shaun@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id)
 
-  TeamUserEnablement.where(user_id: u1.id).first_or_create(team_id: t1.id, user_id: u1.id)
-  TeamUserEnablement.where(user_id: u2.id).first_or_create(team_id: t1.id, user_id: u2.id)
-  TeamUserEnablement.where(user_id: u3.id).first_or_create(team_id: t1.id, user_id: u3.id)
-  TeamUserEnablement.where(user_id: u4.id).first_or_create(team_id: t2.id, user_id: u4.id)
-  TeamUserEnablement.where(user_id: u5.id).first_or_create(team_id: t2.id, user_id: u5.id)
-  TeamUserEnablement.where(user_id: u6.id).first_or_create(team_id: t2.id, user_id: u6.id)
-  TeamUserEnablement.where(user_id: u7.id).first_or_create(team_id: t2.id, user_id: u7.id)
-  TeamUserEnablement.where(user_id: u8.id).first_or_create(team_id: t2.id, user_id: u8.id)
+  TeamUserEnablement.where(user_id: u1.id).first_or_create(team_id: t1.id, user_id: u1.id, role: "team_lead")
+  TeamUserEnablement.where(user_id: u2.id).first_or_create(team_id: t1.id, user_id: u2.id, role: "team_member")
+  TeamUserEnablement.where(user_id: u3.id).first_or_create(team_id: t1.id, user_id: u3.id, role: "team_member")
+  TeamUserEnablement.where(user_id: u4.id).first_or_create(team_id: t2.id, user_id: u4.id, role: "team_lead")
+  TeamUserEnablement.where(user_id: u5.id).first_or_create(team_id: t2.id, user_id: u5.id, role: "team_member")
+  TeamUserEnablement.where(user_id: u6.id).first_or_create(team_id: t2.id, user_id: u6.id, role: "team_member")
+  TeamUserEnablement.where(user_id: u7.id).first_or_create(team_id: t2.id, user_id: u7.id, role: "team_member")
+  TeamUserEnablement.where(user_id: u8.id).first_or_create(team_id: t2.id, user_id: u8.id, role: "team_member")
 
   ai_1 = AnnualInitiative.where(description: "Purchase company vehicles for transportation").first_or_create(
     company_id: c1.id, 
