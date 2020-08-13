@@ -1,17 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
-import { Text } from "../../../shared/text";
 import { Icon } from "../../../shared/icon";
-import { UserDefaultIcon } from "../../../shared/user-default-icon";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
-import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
 import { CreateGoalSection } from "../shared/create-goal-section";
 import { useState } from "react";
 import { useMst } from "~/setup/root";
 import { useTranslation } from "react-i18next";
-import { UserIconBorder } from "../shared/user-icon-border";
-import { Avatar } from "~/components/shared/avatar";
-import * as R from "ramda";
+import { QuarterlyGoalCard } from "../quarterly-goal/quarterly-goal-card";
+import { observer } from "mobx-react";
 
 interface IAnnualInitiativeCardExpandedProps {
   annualInitiative: AnnualInitiativeType;
@@ -22,101 +18,66 @@ interface IAnnualInitiativeCardExpandedProps {
   showCreateQuarterlyGoal: boolean;
 }
 
-export const AnnualInitiativeCardExpanded = (
-  props: IAnnualInitiativeCardExpandedProps,
-): JSX.Element => {
-  const {
-    annualInitiative,
-    setShowMinimizedCard,
-    setQuarterlyGoalId,
-    setQuarterlyGoalModalOpen,
-    setSelectedAnnualInitiativeDescription,
-    showCreateQuarterlyGoal,
-  } = props;
+export const AnnualInitiativeCardExpanded = observer(
+  (props: IAnnualInitiativeCardExpandedProps): JSX.Element => {
+    const {
+      annualInitiative,
+      setShowMinimizedCard,
+      setQuarterlyGoalId,
+      setQuarterlyGoalModalOpen,
+      setSelectedAnnualInitiativeDescription,
+      showCreateQuarterlyGoal,
+    } = props;
 
-  const { quarterlyGoalStore } = useMst();
-  const [createQuarterlyGoalArea, setCreateQuarterlyGoalArea] = useState<boolean>(false);
+    const { quarterlyGoalStore } = useMst();
+    const [createQuarterlyGoalArea, setCreateQuarterlyGoalArea] = useState<boolean>(false);
 
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  const renderQuarterlyGoals = () => {
-    return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
-      const startedMilestones = quarterlyGoal.milestones.filter(
-        milestone => milestone.status != "unstarted",
-      );
+    const renderQuarterlyGoals = () => {
+      return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
+        return (
+          <QuarterlyGoalCard
+            key={index}
+            quarterlyGoal={quarterlyGoal}
+            setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
+            setQuarterlyGoalId={setQuarterlyGoalId}
+            setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
+            annualInitiativeDescription={annualInitiative.description}
+          />
+        );
+      });
+    };
 
-      let userIconBorder = "";
-
-      if (startedMilestones.length > 0) {
-        const lastStartedMilestone = startedMilestones[startedMilestones.length - 1];
-        userIconBorder = UserIconBorder(lastStartedMilestone.status);
-      }
-
+    const renderCreateGoal = () => {
       return (
-        <QuarterlyGoalContainer
-          key={index}
-          onClick={() => {
-            setQuarterlyGoalModalOpen(true);
-            setQuarterlyGoalId(quarterlyGoal.id);
-            setSelectedAnnualInitiativeDescription(annualInitiative.description);
-          }}
-        >
-          <StatusBlockColorIndicator milestones={quarterlyGoal.milestones} indicatorWidth={25} />
-
-          <RowContainer>
-            <StyledText> {quarterlyGoal.description} </StyledText>
-            <IconContainer>
-              <Icon icon={"Options"} size={"25px"} iconColor={"grey60"} />
-            </IconContainer>
-          </RowContainer>
-          <RowContainer>
-            <IconContainer>
-              <Avatar
-                avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
-                firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
-                lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
-                size={40}
-                border={userIconBorder}
-              />
-            </IconContainer>
-          </RowContainer>
-        </QuarterlyGoalContainer>
+        <CreateGoalContainer>
+          <CreateGoalSection
+            placeholder={t("quarterlyGoal.enterTitle")}
+            addButtonText={t("quarterlyGoal.add")}
+            createButtonText={t("quarterlyGoal.addGoal")}
+            showCreateGoal={createQuarterlyGoalArea}
+            setShowCreateGoal={setCreateQuarterlyGoalArea}
+            createAction={quarterlyGoalStore.create}
+            annualInitiativeId={annualInitiative.id}
+            buttonWidth={"160px"}
+          />
+        </CreateGoalContainer>
       );
-    });
-  };
+    };
 
-  const renderCreateGoal = () => {
     return (
-      <CreateGoalContainer>
-        <CreateGoalSection
-          placeholder={t("quarterlyGoal.enterTitle")}
-          addButtonText={t("quarterlyGoal.add")}
-          createButtonText={t("quarterlyGoal.addGoal")}
-          showCreateGoal={createQuarterlyGoalArea}
-          setShowCreateGoal={setCreateQuarterlyGoalArea}
-          createAction={quarterlyGoalStore.create}
-          annualInitiativeId={annualInitiative.id}
-          buttonWidth={"160px"}
-        />
-      </CreateGoalContainer>
+      <Container>
+        <QuarterlyGoalsText>Quarterly Goals</QuarterlyGoalsText>
+        {renderQuarterlyGoals()}
+        {showCreateQuarterlyGoal && renderCreateGoal()}
+        <MinimizeIconContainer onClick={() => setShowMinimizedCard(true)}>
+          <Icon icon={"Chevron-Up"} size={"15px"} iconColor={"grey60"} />
+        </MinimizeIconContainer>
+      </Container>
     );
-  };
-
-  return (
-    <Container>
-      <QuarterlyGoalsText>Quarterly Goals</QuarterlyGoalsText>
-      {renderQuarterlyGoals()}
-      {showCreateQuarterlyGoal && renderCreateGoal()}
-      <MinimizeIconContainer onClick={() => setShowMinimizedCard(true)}>
-        <Icon icon={"Chevron-Up"} size={"15px"} iconColor={"grey60"} />
-      </MinimizeIconContainer>
-    </Container>
-  );
-};
-
-const RowContainer = styled.div`
-  display: flex;
-`;
+  },
+);
 
 const Container = styled.div`
   background-color: ${props => props.theme.colors.backgroundGrey};
@@ -130,30 +91,6 @@ const QuarterlyGoalsText = styled.p`
   color: ${props => props.theme.colors.greyActive};
   padding-bottom: 8px;
   margin-left: 5px;
-`;
-
-const StyledText = styled(Text)`
-  padding-left: 16px;
-  padding-right: 16px;
-  white-space: normal;
-`;
-
-const QuarterlyGoalContainer = styled.div`
-  background-color: white;
-  border-radius: 10px;
-  margin-bottom: 16px;
-  padding-bottom: 8px;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const IconContainer = styled.div`
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: auto;
-  margin-right: 16px;
-  display: flex;
 `;
 
 const MinimizeIconContainer = styled.div`

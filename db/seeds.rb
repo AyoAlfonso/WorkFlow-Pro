@@ -56,7 +56,6 @@ if Rails.env.development?
     annual_initiative_id: ai_1.id,
     importance: ["So we don't need to use 3rd party services", "We will have to spend a lot more money", "Day off for everyone!"], 
     description: "Visit Toyota Dealerships",
-    status: 0,
     context_description: "Check out the SUVs",
     quarter: 1
   )
@@ -85,7 +84,6 @@ if Rails.env.development?
     annual_initiative_id: ai_1.id,
     importance: ["So we don't need to use 3rd party services", "We will have to spend a lot more money", "Day off for everyone!"], 
     description: "Visit Mercedes Benz Dealerships",
-    status: 0,
     context_description: "Check out the SUVs",
     quarter: 1
   )
@@ -124,7 +122,6 @@ if Rails.env.development?
     annual_initiative_id: ai_2.id,
     importance: ["More people can work for us", "Won't be able to maximize our profits", "Throw a huge party!"], 
     description: "Fly to Kelowna and do some research",
-    status: 0,
     context_description: "See if there are any nice offices",
     quarter: 1
   )

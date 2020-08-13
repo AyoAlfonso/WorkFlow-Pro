@@ -17,6 +17,7 @@ import { SubHeaderText } from "~/components/shared/sub-header-text";
 import { CreateGoalSection } from "../shared/create-goal-section";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
+import { RecordOptions } from "../shared/record-options";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -74,7 +75,7 @@ export const AnnualInitiativeModalContent = observer(
                 {quarterlyGoal.description}
               </QuarterlyGoalDescription>
               <QuarterlyGoalOptionContainer>
-                <Icon icon={"Options"} size={"20px"} iconColor={"grey80"} />
+                <RecordOptions quarterlyGoalId={quarterlyGoal.id} />
               </QuarterlyGoalOptionContainer>
             </TopRowContainer>
             <BottomRowContainer>
@@ -191,7 +192,7 @@ const Container = styled.div`
   min-width: 240px;
   margin-right: ${props => props["margin-right"] || "0px"};
   height: fit-content;
-  padding: 36px;
+  padding: 48px;
   overflow: auto;
 `;
 

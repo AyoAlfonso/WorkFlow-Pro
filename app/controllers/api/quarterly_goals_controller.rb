@@ -33,8 +33,9 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def destroy
+    annual_initiative = @quarterly_goal.annual_initiative
     @quarterly_goal.destroy!
-    render json: { quarterly_goal: @quarterly_goal.id, status: :ok }
+    render json: annual_initiative.as_json(include: [{owned_by: {methods: [:avatar_url]}}, { quarterly_goals: { include: [:milestones, owned_by: {methods: [:avatar_url]}] } }])
   end
 
   def create_key_element

@@ -60,6 +60,39 @@ export const QuarterlyGoalStoreModel = types
         // error messaging handled by API monitor
       }
     }),
+    delete: flow(function*(quarterlyGoalId) {
+      const env = getEnv(self);
+
+      try {
+        const response: any = yield env.api.deleteQuarterlyGoal(quarterlyGoalId);
+        const { goalStore, annualInitiativeStore } = getRoot(self);
+
+        const annualInitiative = response.data;
+
+        let companyGoalIndex = goalStore.companyGoals.goals.findIndex(
+          ai => ai.id == annualInitiative.id,
+        );
+
+        let personalGoalIndex = goalStore.personalGoals.goals.findIndex(
+          ai => ai.id == annualInitiative.id,
+        );
+
+        if (companyGoalIndex > -1) {
+          goalStore.updateGoalAnnualInitiative("companyGoals", companyGoalIndex, annualInitiative);
+        } else if (personalGoalIndex > -1) {
+          goalStore.updateGoalAnnualInitiative(
+            "personalGoals",
+            personalGoalIndex,
+            annualInitiative,
+          );
+        }
+        annualInitiativeStore.updateRecordIfOpened(annualInitiative);
+        return annualInitiative;
+      } catch {
+        console.log("ERROR OCCURED IN QUARTERLY GOAL STORE DELETE");
+        // error messaging handled by API monitor
+      }
+    }),
     createMilestones: flow(function*(quarterlyGoalId) {
       const env = getEnv(self);
       try {
