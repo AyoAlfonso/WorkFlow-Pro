@@ -231,9 +231,12 @@ const TableHeaderContainer = styled.div`
   padding-bottom: 8px;
 `;
 
+//TODO: do not display border bottom if last record of users
 const UserRecordContainer = styled.div`
   display: flex;
   padding-top: 16px;
+  padding-bottom: 16px;
+  border-bottom: ${props => `1px solid ${props.theme.colors.grey40}`};
 `;
 
 const TeamMemberInfoContainer = styled.div`
