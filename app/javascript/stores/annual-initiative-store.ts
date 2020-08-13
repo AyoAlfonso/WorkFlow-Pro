@@ -2,7 +2,8 @@ import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { AnnualInitiativeModel } from "../models/annual-initiative";
 import moment from "moment";
-//import { ApiResponse } from "apisauce";
+import { ToastMessageConstants } from "~/constants/toast-types";
+import { showToast } from "~/utils/toast-message";
 
 export const AnnualInitiativeStoreModel = types
   .model("AnnualInitiativeModel")
@@ -11,7 +12,6 @@ export const AnnualInitiativeStoreModel = types
   })
   .extend(withEnvironment())
   .views(self => ({}))
-
   .actions(self => ({
     getAnnualInitiative: flow(function*(id) {
       const env = getEnv(self);
@@ -20,8 +20,7 @@ export const AnnualInitiativeStoreModel = types
         self.annualInitiative = response.data;
         return response.data;
       } catch {
-        console.log("is there an error?????????");
-        // error messaging handled by API monitor
+        showToast("There was an error fetching the annual initiative", ToastMessageConstants.ERROR);
       }
     }),
     update: flow(function*() {
@@ -32,10 +31,10 @@ export const AnnualInitiativeStoreModel = types
         self.annualInitiative = responseAnnualInitiative;
         const { goalStore } = getRoot(self);
         goalStore.updateAnnualInitiative(responseAnnualInitiative);
+        showToast("Annual initiative updated", ToastMessageConstants.SUCCESS);
         return responseAnnualInitiative;
       } catch {
-        console.log("is there an error?????????");
-        // error messaging handled by API monitor
+        showToast("There was an error updating the annual initiative", ToastMessageConstants.ERROR);
       }
     }),
     createKeyElement: flow(function*() {
@@ -47,8 +46,7 @@ export const AnnualInitiativeStoreModel = types
         const updatedKeyElements = [...self.annualInitiative.keyElements, response.data.keyElement];
         self.annualInitiative.keyElements = updatedKeyElements as any;
       } catch {
-        console.log("is there an error?????????");
-        // error messaging handled by API monitor
+        showToast("There was an error creating the key element", ToastMessageConstants.ERROR);
       }
     }),
     create: flow(function*(annualInitiativeObject) {
@@ -60,10 +58,10 @@ export const AnnualInitiativeStoreModel = types
           annualInitiativeObject.type,
           response.data.annualInitiative,
         );
+        showToast("An initiative created", ToastMessageConstants.SUCCESS);
         return response.data.annualInitiative;
       } catch {
-        console.log("is there an error?????????");
-        // error messaging handled by API monitor
+        showToast("There was an error creating the annual initiative", ToastMessageConstants.ERROR);
       }
     }),
   }))

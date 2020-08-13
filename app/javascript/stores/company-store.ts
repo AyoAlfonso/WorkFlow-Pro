@@ -1,7 +1,6 @@
 import { types, flow, getEnv } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { CompanyModel } from "../models/company";
-//import { ApiResponse } from "apisauce";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 
@@ -21,7 +20,7 @@ export const CompanyStoreModel = types
           self.company = response.data;
         }
       } catch {
-        // error messaging handled by API monitor
+        showToast("There was an error loading the company", ToastMessageConstants.ERROR);
       }
     }),
     updateCompany: flow(function*(fieldsAndValues) {
@@ -35,7 +34,7 @@ export const CompanyStoreModel = types
           showToast("Company updated", ToastMessageConstants.SUCCESS);
         }
       } catch {
-        // error messaging handled by API monitor
+        showToast("There was an error updating the company", ToastMessageConstants.ERROR);
       }
     }),
     deleteCompanyLogo: flow(function*() {
@@ -46,7 +45,7 @@ export const CompanyStoreModel = types
           self.company.setLogoUrl(response.data.logoUrl);
         }
       } catch {
-        // error messaging handled by API monitor
+        showToast("There was an error removing the company logo", ToastMessageConstants.ERROR);
       }
     }),
   }))
