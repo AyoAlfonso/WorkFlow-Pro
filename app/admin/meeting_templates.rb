@@ -42,28 +42,29 @@ ActiveAdmin.register MeetingTemplate do
   show do
     h1 meeting_template.name
     attributes_table do
+      row :name
       row :meeting_type
-      row :duration
+      row "Duration (in minutes)", :duration
     end
     panel "Steps" do
       table_for meeting_template.steps do
         column :name
         column :step_type
         column :order_index
-        column :duration
+        column "Duration (in minutes)", :duration
         column :instructions
         column :component_to_render do |step|
           step.component_to_render.blank? ? "No Component to Render" : step.component_to_render
         end
         column :image do |step|
-          step.try(:image_url) ? image_tag(step.image_url, style: "max-height: 80px;") : "No Image Set"
+          step.try(:image_url) ? image_tag(step.image_url, style: "max-height: 80px;") : "No Image Selected"
         end
       end
     end
   end
 
   form do |f|
-    h1 "New Meeting Template"
+    h1 object.name
     f.input :name
     f.input :meeting_type, as: :select, collection: MeetingTemplate.meeting_types.keys
     f.input :duration, label: "Duration (in minutes)"
@@ -74,7 +75,7 @@ ActiveAdmin.register MeetingTemplate do
       step.input :duration, label: "Duration (in minutes)"
       step.input :instructions, input_html: { rows: 3 }
       step.input :component_to_render
-      step.input :image, as: :file
+      step.input :image, as: :file, hint: (step.object.try(:image_url) ? image_tag(step.object.image_url, style: "max-height: 150px;") : "No Image Selected")
     end
     f.actions
   end
