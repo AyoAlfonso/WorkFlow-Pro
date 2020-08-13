@@ -30,9 +30,9 @@ export const TeamPulseCard = ({ data }: ITeamPulseCardProps): JSX.Element => {
       case 3:
         return greyInactive;
       case 4:
-        return finePine;
-      case 5:
         return successGreen;
+      case 5:
+        return finePine;
     }
   };
 
@@ -226,5 +226,5 @@ const renderTickIcon = (value, index) => {
 };
 
 const Container = styled.div`
-  padding: 36px;
+  padding-left: 36px;
 `;

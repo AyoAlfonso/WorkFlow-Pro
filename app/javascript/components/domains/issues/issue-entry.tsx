@@ -12,20 +12,24 @@ import { HomeContainerBorders } from "../home/shared-components";
 import { Button } from "rebass";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 
 interface IIssueEntryProps {
   issue: any;
+  meeting?: boolean;
+  pageEnd?: boolean;
 }
 
 export const IssueEntry = observer(
   (props: IIssueEntryProps): JSX.Element => {
     const { issueStore, teamStore } = useMst();
-    const { issue } = props;
+    const { issue, meeting, pageEnd } = props;
 
     const teams = teamStore.teams;
 
     const [showShareModal, setShowShareModal] = useState<boolean>(false);
     const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
+    const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
     const renderPriorityIcon = (priority: string) => {
       switch (priority) {
@@ -73,6 +77,11 @@ export const IssueEntry = observer(
 
     return (
       <Container onMouseEnter={() => setShowShareModal(false)}>
+        <CreateKeyActivityModal
+          createKeyActivityModalOpen={createKeyActivityModalOpen}
+          setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+        />
+
         <CheckboxContainer key={issue["id"]}>
           <Checkbox
             key={issue["id"]}
@@ -102,7 +111,7 @@ export const IssueEntry = observer(
           <ShareButtonContainer onMouseEnter={() => setShowShareModal(true)}>
             <Icon icon={"Forward"} size={24} style={{ marginTop: "5px" }} />
             {showShareModal && (
-              <ShareIssueContainer>
+              <ShareIssueContainer pageEnd={pageEnd}>
                 <ShareIssueText>Share Issue</ShareIssueText>
                 <DestinationContainer>
                   <SendDestinationContainer>
@@ -143,6 +152,14 @@ export const IssueEntry = observer(
               </ShareIssueContainer>
             )}
           </ShareButtonContainer>
+          {meeting && (
+            <CreateKeyActivityButtonContainer
+              onMouseEnter={() => setShowShareModal(false)}
+              onClick={() => setCreateKeyActivityModalOpen(true)}
+            >
+              <Icon icon={"Tasks"} size={20} style={{ marginTop: "2px" }} />
+            </CreateKeyActivityButtonContainer>
+          )}
         </ActionContainer>
       </Container>
     );
@@ -151,7 +168,10 @@ export const IssueEntry = observer(
 
 const ActionContainer = styled.div`
   display: none;
-  margin: auto;
+  margin-left: auto;
+  margin-right: 8px;
+  margin-top: auto;
+  margin-bottom: auto;
 `;
 
 const DeleteButtonContainer = styled.div`
@@ -164,6 +184,16 @@ const DeleteButtonContainer = styled.div`
 `;
 
 const ShareButtonContainer = styled.div`
+  color: ${props => props.theme.colors.grey60};
+  padding-left: 3px;
+  &: hover {
+    cursor: pointer;
+    color: ${props => props.theme.colors.greyActive};
+  }
+  margin-right: 8px;
+`;
+
+const CreateKeyActivityButtonContainer = styled.div`
   color: ${props => props.theme.colors.grey60};
   padding-left: 3px;
   &: hover {
@@ -211,11 +241,16 @@ const EmptyIconContainer = styled.div`
   height: 24px;
 `;
 
-const ShareIssueContainer = styled(HomeContainerBorders)`
+type ShareIssueContainerType = {
+  pageEnd?: boolean;
+};
+
+const ShareIssueContainer = styled(HomeContainerBorders)<ShareIssueContainerType>`
   position: absolute;
   background: white;
   color: black;
   width: 200px;
+  margin-left: ${props => props.pageEnd && "-180px"};
 `;
 
 const ShareIssueText = styled(Text)`

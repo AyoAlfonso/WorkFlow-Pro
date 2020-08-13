@@ -6,14 +6,15 @@ import { space, color } from "styled-system";
 interface IssuesHeaderProps {
   showOpenIssues: boolean;
   setShowOpenIssues: React.Dispatch<React.SetStateAction<boolean>>;
+  issuesText?: string;
 }
 
 export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
-  const { showOpenIssues, setShowOpenIssues } = props;
+  const { showOpenIssues, setShowOpenIssues, issuesText } = props;
 
   return (
     <Container>
-      <IssuesText> Issues </IssuesText>
+      <IssuesText> {issuesText || "Issues"} </IssuesText>
       <FilterContainer>
         <FilterOptions
           onClick={() => setShowOpenIssues(true)}

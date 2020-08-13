@@ -22,6 +22,7 @@ interface AvatarProps {
 type ImageContainerProps = {
   border?: string;
   size?: number;
+  marginLeft?: string;
 };
 
 const ImageContainer = styled.div<ImageContainerProps>`
@@ -29,6 +30,7 @@ const ImageContainer = styled.div<ImageContainerProps>`
   border-radius: 9999px;
   width: ${props => props.size || 48}px;
   height: ${props => props.size || 48}px;
+  margin-left: ${props => props.marginLeft};
 `;
 
 export const Avatar = ({
@@ -41,7 +43,7 @@ export const Avatar = ({
   border,
 }: AvatarProps): JSX.Element =>
   avatarUrl ? (
-    <ImageContainer border={border} size={size}>
+    <ImageContainer border={border} size={size} marginLeft={marginLeft}>
       <Image
         style={{
           width: size || 48,

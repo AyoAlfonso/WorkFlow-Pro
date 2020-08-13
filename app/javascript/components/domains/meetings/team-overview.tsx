@@ -16,6 +16,8 @@ import { HomePersonalStatusDropdownMenuItem } from "../home/home-personal-status
 import { Checkbox, Label } from "@rebass/forms";
 import { KeyActivityPriorityIcon } from "../key-activities/key-activity-priority-icon";
 import { TeamPulseCard } from "./shared/team-pulse-card";
+import { OverallTeamPulse } from "./shared/overall-team-pulse";
+import { TeamIssuesContainer } from "./shared/team-issues-container";
 
 interface ITeamOverviewProps {}
 
@@ -142,10 +144,13 @@ export const TeamOverview = (props: ITeamOverviewProps): JSX.Element => {
           <TeamPulseContainer>
             {renderCardSubHeader("Team's Pulse")}
             <TeamPulseBody>
+              <OverallTeamPulse value={3.4} />
               <TeamPulseCard data={teamPulseData} />
             </TeamPulseBody>
           </TeamPulseContainer>
-          <TeamIssuesContainer>{renderCardSubHeader("Team's Issues")}</TeamIssuesContainer>
+          <TeamIssuesWrapper>
+            <TeamIssuesContainer />
+          </TeamIssuesWrapper>
         </RightContainer>
       </BodyContainer>
     </Container>
@@ -189,10 +194,12 @@ const BodyContainer = styled.div`
 const LeftContainer = styled.div`
   width: 60%;
   margin-right: 10px;
+  min-width: 715px;
 `;
 
 const RightContainer = styled.div`
   width: 40%;
+  min-width: 610px;
   margin-left: 10px;
 `;
 
@@ -205,7 +212,7 @@ const TeamSnapshotContainer = styled(HomeContainerBorders)``;
 
 const TeamPulseContainer = styled(HomeContainerBorders)``;
 
-const TeamIssuesContainer = styled(HomeContainerBorders)``;
+const TeamIssuesWrapper = styled(HomeContainerBorders)``;
 
 const SubHeaderTextContainer = styled.div`
   padding-top: 8px;
@@ -282,6 +289,8 @@ const PriorityIconContainer = styled.div`
 
 const TeamPulseBody = styled.div`
   display: flex;
+  padding-top: 36px;
+  padding-bottom: 36px;
 `;
 
 const CheckboxContainer = props => (

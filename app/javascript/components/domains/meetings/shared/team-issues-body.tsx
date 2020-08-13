@@ -1,22 +1,24 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useMst } from "../../../setup/root";
 import { useEffect, useState } from "react";
-import { Icon } from "../../shared/icon";
 import { color } from "styled-system";
 import { observer } from "mobx-react";
-import { CreateIssueModal } from "./create-issue-modal";
-import { IssueEntry } from "./issue-entry";
+import { CreateIssueModal } from "../../issues/create-issue-modal";
+import { Icon } from "~/components/shared";
+import { IssueEntry } from "../../issues/issue-entry";
+import { useMst } from "~/setup/root";
 
-interface IIssuesBodyProps {
+interface ITeamIssuesBodyProps {
   showOpenIssues: boolean;
 }
 
-export const IssuesBody = observer(
-  (props: IIssuesBodyProps): JSX.Element => {
+export const TeamIssuesBody = observer(
+  (props: ITeamIssuesBodyProps): JSX.Element => {
     const { issueStore } = useMst();
     const { showOpenIssues } = props;
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
+
+    //@TODO: REPLACE WITH REAL TEAM DATA.
 
     const openIssues = issueStore.openIssues;
     const closedIssues = issueStore.closedIssues;
@@ -29,7 +31,7 @@ export const IssuesBody = observer(
       const issues = showOpenIssues ? openIssues : closedIssues;
       return issues.map((issue, index) => (
         <IssueContainer key={issue["id"]}>
-          <IssueEntry issue={issue} />
+          <IssueEntry issue={issue} meeting={true} pageEnd={true} />
         </IssueContainer>
       ));
     };
