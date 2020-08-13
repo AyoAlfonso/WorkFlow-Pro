@@ -3,9 +3,9 @@ class Company < ApplicationRecord
 
   before_save :sanitize_rallying_cry
 
-  has_many :users
-  has_many :annual_initiatives
-  has_many :teams
+  has_many :users, dependent: :restrict_with_error
+  has_many :annual_initiatives, dependent: :restrict_with_error
+  has_many :teams, dependent: :restrict_with_error
   has_one_attached :logo
   
   has_one :core_four, dependent: :destroy
