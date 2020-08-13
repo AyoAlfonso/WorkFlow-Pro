@@ -70,6 +70,10 @@ Rails.application.routes.draw do
     
     #teams
     resources :teams, only: [:index]
+
+    #meetings
+    resources :meetings, only: [:create]
+
   end
 
 
