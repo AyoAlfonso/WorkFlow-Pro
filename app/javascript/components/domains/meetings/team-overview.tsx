@@ -15,6 +15,7 @@ import { homePersonalStatusOptions as options } from "../home/home-personal-stat
 import { HomePersonalStatusDropdownMenuItem } from "../home/home-personal-status/home-personal-status-dropdown-menu-item";
 import { Checkbox, Label } from "@rebass/forms";
 import { KeyActivityPriorityIcon } from "../key-activities/key-activity-priority-icon";
+import { TeamPulseCard } from "./shared/team-pulse-card";
 
 interface ITeamOverviewProps {}
 
@@ -128,7 +129,10 @@ export const TeamOverview = (props: ITeamOverviewProps): JSX.Element => {
           </TeamSnapshotContainer>
         </LeftContainer>
         <RightContainer>
-          <TeamPulseContainer>{renderCardSubHeader("Team's Pulse")}</TeamPulseContainer>
+          <TeamPulseContainer>
+            {renderCardSubHeader("Team's Pulse")}
+            <TeamPulseCard />
+          </TeamPulseContainer>
           <TeamIssuesContainer>{renderCardSubHeader("Team's Issues")}</TeamIssuesContainer>
         </RightContainer>
       </BodyContainer>
