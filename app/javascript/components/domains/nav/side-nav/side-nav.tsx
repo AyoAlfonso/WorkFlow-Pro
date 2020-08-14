@@ -47,7 +47,7 @@ export const StyledIcon = styled(Icon)<StyledIconType>`
 `;
 
 type StyledNavLinkType = {
-  active: boolean;
+  active: string;
 };
 
 const StyledNavLink = styled(NavLink)<StyledNavLinkType>`
@@ -60,7 +60,7 @@ const StyledNavLink = styled(NavLink)<StyledNavLinkType>`
     color: ${props => props.theme.colors.text};
   }
   &:hover ${StyledIcon} {
-    color: ${props => !props.active && props.theme.colors.greyActive};
+    color: ${props => props.active == "false" && props.theme.colors.greyActive};
   }
 `;
 
@@ -125,8 +125,9 @@ const StyledNavLinkChildrenActive = ({
   currentPathName,
 }: StyledNavLinkChildrenActiveProps): JSX.Element => {
   const isActive = isNavMenuIconActive(currentPathName, to);
+  // CHRIS' NOTE: CANT PASS BOOLEAN TO STYLED COMPONENTS, HENCE THE TOSTRING()
   return (
-    <StyledNavLink to={to} disabled={disabled} active={isActive}>
+    <StyledNavLink to={to} disabled={disabled} active={isActive.toString()}>
       <NavMenuIcon active={isActive} icon={icon}>
         {children}
       </NavMenuIcon>

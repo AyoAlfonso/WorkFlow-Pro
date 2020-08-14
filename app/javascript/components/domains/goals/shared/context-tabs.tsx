@@ -39,6 +39,7 @@ export const ContextTabs = observer(
     const [selectedContextTab, setSelectedContextTab] = useState<number>(tabDefaultIndex() + 1);
     const [hideContent, setHideContent] = useState<boolean>(false);
     const [store, setStore] = useState<any>(null);
+    const [focusOnLastInput, setFocusOnLastInput] = useState<boolean>(false);
     const editable = currentUser.id == object.ownedById;
 
     useEffect(() => {
@@ -96,11 +97,23 @@ export const ContextTabs = observer(
 
     const renderKeyElements = () => {
       return object.keyElements.map((element, index) => {
-        return <KeyElement element={element} store={store} editable={editable} key={index} />;
+        const lastKeyElement = index == object.keyElements.length - 1;
+        return (
+          <KeyElement
+            element={element}
+            store={store}
+            editable={editable}
+            key={index}
+            lastKeyElement={lastKeyElement}
+            focusOnLastInput={focusOnLastInput}
+            setFocusOnLastInput={setFocusOnLastInput}
+          />
+        );
       });
     };
 
     const tabClicked = (index: number): void => {
+      setFocusOnLastInput(false);
       if (index == selectedContextTab) {
         setHideContent(!hideContent);
       } else {
@@ -135,7 +148,9 @@ export const ContextTabs = observer(
                     small
                     variant={"grey"}
                     onClick={() => {
-                      store.createKeyElement();
+                      store.createKeyElement().then(() => {
+                        setFocusOnLastInput(true);
+                      });
                     }}
                   >
                     <Icon icon={"Plus"} size={"20px"} style={{ marginTop: "3px" }} />

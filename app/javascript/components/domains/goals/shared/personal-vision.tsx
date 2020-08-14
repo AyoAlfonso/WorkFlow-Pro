@@ -16,7 +16,7 @@ export const PersonalVision = ({ personalVision }: IPersonalVisionProps): JSX.El
     <VisionContainer>
       <VisionTitle>Personal Vision</VisionTitle>
       <StyledContentEditable
-        html={personalVision}
+        html={personalVision || ""}
         disabled={false}
         onChange={e => {
           sessionStore.updateProfileModelField("personalVision", e.target.value);
