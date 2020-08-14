@@ -214,6 +214,7 @@ const Wrapper = styled.div`
   height: 90px;
   position: fixed;
   width: calc(100% - 208px);
+  z-index: 1000;
 `;
 
 const ActionsContainer = styled.div`
