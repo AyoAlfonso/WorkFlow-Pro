@@ -26,23 +26,26 @@ export const HeaderBar = observer(
 
     const { sessionStore, companyStore } = useMst();
     const dropdownRef = useRef(null);
+    const lynchPynDropdownRef = useRef(null);
     const accountActionRef = useRef(null);
 
     useEffect(() => {
       const handleClickOutside = event => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
           setOpenCreateDropdown(false);
-          setOpenLynchPynDropdown(false);
         }
         if (accountActionRef.current && !accountActionRef.current.contains(event.target)) {
           setShowAccountActions(false);
+        }
+        if (lynchPynDropdownRef.current && !lynchPynDropdownRef.current.contains(event.target)) {
+          setOpenLynchPynDropdown(false);
         }
       };
       document.addEventListener("mousedown", handleClickOutside);
       return () => {
         document.removeEventListener("mousedown", handleClickOutside);
       };
-    }, [dropdownRef]);
+    }, [dropdownRef, lynchPynDropdownRef]);
     const { t } = useTranslation();
 
     const renderHeaderIcon = (iconName: string) => {
@@ -94,6 +97,16 @@ export const HeaderBar = observer(
       );
     };
 
+    const renderLynchPynDropdownModal = () => {
+      return (
+        <DropdownContainer width={"230px"} height={"50px"}>
+          <SelectionContainer paddingBottom={"10px"} onClick={() => {}}>
+            <SelectionText>Weekly Personal Planning</SelectionText>
+          </SelectionContainer>
+        </DropdownContainer>
+      );
+    };
+
     const renderActionDropdown = (): JSX.Element => {
       return showAccountActions ? (
         <ActionDropdownContainer>
@@ -132,13 +145,19 @@ export const HeaderBar = observer(
                 </RoundButton>
                 {openCreateDropdown && renderCreateDropdownModal()}
               </RefContainer>
-              <RoundButton
-                style={{ marginLeft: "12px", zIndex: openLynchPynDropdown ? 2 : 0 }}
-                backgroundColor={openLynchPynDropdown ? "white" : "primary100"}
-                onClick={() => setOpenLynchPynDropdown(!openLynchPynDropdown)}
-              >
-                {renderHeaderIcon("Logo")}
-              </RoundButton>
+              <RefContainer ref={lynchPynDropdownRef}>
+                <RoundButton
+                  style={{ marginLeft: "12px", zIndex: openLynchPynDropdown ? 2 : 0 }}
+                  backgroundColor={openLynchPynDropdown ? "white" : "primary100"}
+                  onClick={() => {
+                    setOpenLynchPynDropdown(!openLynchPynDropdown);
+                    setOpenCreateDropdown(false);
+                  }}
+                >
+                  {renderHeaderIcon("Logo")}
+                </RoundButton>
+                {openLynchPynDropdown && renderLynchPynDropdownModal()}
+              </RefContainer>
             </ActionsContainer>
             <LogoContainer>
               {R.isNil(companyStore.company) ? (
@@ -221,10 +240,15 @@ const ActionsContainer = styled.div`
   padding-left: 10px;
 `;
 
-const DropdownContainer = styled.div`
+type DropdownContainerType = {
+  width?: string;
+  height?: string;
+};
+
+const DropdownContainer = styled.div<DropdownContainerType>`
   ${color}
-  width: 170px;
-  height: 120px;
+  width: ${props => props.width || "170px"};
+  height: ${props => props.height || "120px"};
   background-color: ${props => props.theme.colors.primary100};
   z-index: 1;
   position: absolute;
@@ -249,12 +273,16 @@ const SelectionIcon = styled(Icon)`
   color: white;
 `;
 
-const SelectionContainer = styled.div`
+type SelectionContainerType = {
+  paddingBottom?: string;
+};
+
+const SelectionContainer = styled.div<SelectionContainerType>`
   ${color}
   display: flex;
   color: white;
   padding-top: 10px;
-  padding-bottom: 5px;
+  padding-bottom: ${props => props.paddingBottom || "5px"};
   padding-left: 15px;
   &:hover {
     cursor: pointer;
