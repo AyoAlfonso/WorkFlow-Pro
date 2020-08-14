@@ -55,7 +55,7 @@ export const AccountSettings = (): JSX.Element => {
           {renderOption("security")}
         </SelectionTabsContainer>
       </SelectionContainer>
-      <DisplayBoxContainer>{renderDisplayBox()}</DisplayBoxContainer>
+      <DisplayBoxContainer selectedTab={selectedTab}>{renderDisplayBox()}</DisplayBoxContainer>
     </Container>
   );
 };
@@ -100,11 +100,14 @@ const OptionText = styled(Text)`
   padding-right: 4px;
 `;
 
-const DisplayBoxContainer = styled(HomeContainerBorders)`
+type DisplayBoxContainerType = {
+  selectedTab?: string;
+};
+const DisplayBoxContainer = styled(HomeContainerBorders)<DisplayBoxContainerType>`
   display: flex;
   margin-left: auto;
   margin-right: auto;
   width: 70%;
   margin-top: 10px;
-  min-width: 950px;
+  min-width: ${props => (props.selectedTab == "company" ? "1200px" : "950px")};
 `;
