@@ -58,7 +58,7 @@ class User < ApplicationRecord
   end
 
   def team_lead_for?(team)
-    team.team_lead.user == self
+    team.is_lead?(self)
   end
 
   def company_admin?
