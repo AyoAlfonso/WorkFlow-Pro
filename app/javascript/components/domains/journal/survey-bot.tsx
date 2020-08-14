@@ -42,7 +42,11 @@ export const SurveyBot = observer(
     );
 
     if (loading || R.isNil(questionnaireStore.questionnaires) || R.isNil(questionnaireVariant)) {
-      return <Loading />;
+      return (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      );
     }
 
     const steps = R.map(step => {
@@ -100,6 +104,34 @@ export const SurveyBot = observer(
   },
 );
 
+const HeaderDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+`;
+
+export const SurveyHeader = ({ title }) => {
+  return (
+    <HeaderDiv>
+      <Text color={"grey100"} fontSize={2}>
+        {title}
+      </Text>
+    </HeaderDiv>
+  );
+};
+
+const LoadingContainer = styled.div`
+  display: flex;
+  width: 100%;
+  height: 346px;
+  justify-content: center;
+  align-items: center;
+`;
+
 const userAvatarUrlForStorybook =
   "https://image.freepik.com/free-vector/woman-avatar-profile-round-icon_24640-14042.jpg";
 
@@ -123,25 +155,5 @@ export const SurveyBotNoMst = (props: ISurveyBotProps): JSX.Element => {
       enableSmoothScroll={true}
       userDelay={200}
     />
-  );
-};
-
-const HeaderDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 20px;
-  padding-right: 20px;
-  border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
-`;
-
-export const SurveyHeader = ({ title }) => {
-  return (
-    <HeaderDiv>
-      <Text color={"grey100"} fontSize={2}>
-        {title}
-      </Text>
-    </HeaderDiv>
   );
 };
