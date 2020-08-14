@@ -76,6 +76,9 @@
         "enterTitle": "Enter Quarterly Goal Title...",
         "add": "Add a Quarterly Goal",
         "addGoal": "Add Goal"
+      },
+      "meeting": {
+        "conversationStarter": "Conversation Starter"
       }
     }
   }
