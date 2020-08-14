@@ -5,7 +5,9 @@ ActiveAdmin.register MeetingTemplate do
     selectable_column
     id_column
     column :name
-    column :meeting_type
+    column :meeting_type do |mt|
+      mt.meeting_type.humanize.titleize
+    end
     column :duration
     actions
   end
@@ -17,7 +19,6 @@ ActiveAdmin.register MeetingTemplate do
   controller do
     def create
       @meeting_template_params = params[:meeting_template]
-      binding.pry
       @meeting_template = MeetingTemplate.create!({
         name: @meeting_template_params[:name],
         meeting_type: @meeting_template_params[:meeting_type],
