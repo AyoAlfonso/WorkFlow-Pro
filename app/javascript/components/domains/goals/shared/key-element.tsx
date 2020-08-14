@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import "react-tabs/style/react-tabs.css";
 import { Checkbox, Label } from "@rebass/forms";
 import ContentEditable from "react-contenteditable";
@@ -10,12 +10,30 @@ interface IKeyElementProps {
   element: KeyElementType;
   store: any;
   editable: boolean;
+  lastKeyElement: boolean;
+  focusOnLastInput: boolean;
+  setFocusOnLastInput: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const KeyElement = ({ element, store, editable }: IKeyElementProps): JSX.Element => {
+export const KeyElement = ({
+  element,
+  store,
+  editable,
+  lastKeyElement,
+  focusOnLastInput,
+  setFocusOnLastInput,
+}: IKeyElementProps): JSX.Element => {
   const [checkboxValue, setCheckboxValue] = useState<boolean>(
     element["completedAt"] ? true : false,
   );
+
+  const keyElementRef = useRef(null);
+
+  useEffect(() => {
+    if (lastKeyElement && editable && focusOnLastInput) {
+      keyElementRef.current.focus();
+    }
+  }, [focusOnLastInput]);
 
   return (
     <KeyElementContainer>
@@ -34,11 +52,23 @@ export const KeyElement = ({ element, store, editable }: IKeyElementProps): JSX.
       </CheckboxContainer>
 
       <KeyElementStyledContentEditable
+        innerRef={keyElementRef}
         html={element.value}
         disabled={!editable}
-        onChange={e => store.updateKeyElementValue(element.id, e.target.value)}
+        onChange={e => {
+          if (!e.target.value.includes("<div>")) {
+            store.updateKeyElementValue(element.id, e.target.value);
+          }
+        }}
+        onKeyDown={key => {
+          if (key.keyCode == 13) {
+            store.createKeyElement().then(() => {
+              setFocusOnLastInput(true);
+            });
+          }
+        }}
         onBlur={() => store.update()}
-        completed={checkboxValue}
+        completed={checkboxValue.toString()} //CHRIS' NOTE: YOU CANT PASS A BOOLEAN VALUE INTO STYLED COMPONENTS.
       />
     </KeyElementContainer>
   );
@@ -67,12 +97,12 @@ const StyledContentEditable = styled(ContentEditable)`
 `;
 
 type KeyElementStyledContentEditableType = {
-  completed: boolean;
+  completed: string;
 };
 
 const KeyElementStyledContentEditable = styled(StyledContentEditable)<
   KeyElementStyledContentEditableType
 >`
   width: 100%;
-  text-decoration: ${props => props.completed && "line-through"};
+  text-decoration: ${props => (props.completed == "true" ? "line-through" : "")};
 `;
