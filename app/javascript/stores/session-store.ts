@@ -70,6 +70,8 @@ export const SessionStoreModel = types
         const response = yield env.api.updateAvatar(formData);
         if (response.ok) {
           self.profile.setAvatarUrl(response.data.avatarUrl);
+          const { userStore } = getRoot(self);
+          userStore.fetchUsers();
         }
       } catch {
         // error messaging handled by API monitor
@@ -83,6 +85,8 @@ export const SessionStoreModel = types
         const response = yield env.api.deleteAvatar();
         if (response.ok) {
           self.profile.setAvatarUrl(response.data.avatarUrl);
+          const { userStore } = getRoot(self);
+          userStore.fetchUsers();
         }
       } catch {
         // error messaging handled by API monitor

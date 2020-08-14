@@ -63,3 +63,7 @@ export const SaveButtonContainer = styled.div`
   margin-top: 120px;
   margin-right: 20px;
 `;
+
+export const AvatarsContainer = styled.div`
+  display: flex;
+`;

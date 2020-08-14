@@ -6,4 +6,9 @@ class Team < ApplicationRecord
   has_many :meetings
 
   accepts_nested_attributes_for :team_user_enablements, allow_destroy: true
+
+  def active
+    #eventually add deactivation rules and items
+    true
+  end
 end

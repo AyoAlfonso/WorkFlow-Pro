@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 export const UserCard = ({
   firstName,
   lastName,
+  email,
   avatarUrl,
   confirmedAt,
   invitationSentAt,
@@ -18,34 +19,46 @@ export const UserCard = ({
 }: UserCardProps): JSX.Element => {
   const { t } = useTranslation();
   return (
-    <Card sx={{ width: "200px", height: "200px" }}>
-      <Text fontSize={2}>{`${firstName} ${lastName}`}</Text>
-      {R.isNil(confirmedAt) ? (
-        <Can
-          action={"create-user"}
-          data={null}
-          no={<Text fontSize={1}>{`Invited: ${invitationSentAt}`}</Text>}
-          yes={
-            <>
-              <Text fontSize={1}>{`Invited: ${invitationSentAt}`}</Text>
-              <Button
-                small
-                variant={"primary"}
-                onClick={() => {
-                  if (resend) {
-                    resend(id);
-                  }
-                }}
-              >
-                {t("profile.profileUpdateForm.resend")}
-              </Button>
-            </>
-          }
-        />
-      ) : (
-        <Text fontSize={1}>{`Joined: ${confirmedAt}`}</Text>
-      )}
-      <Avatar firstName={firstName} lastName={lastName} avatarUrl={avatarUrl} />
+    <Card sx={{ width: "200px", height: "100%" }}>
+      <Avatar
+        firstName={firstName}
+        lastName={lastName}
+        avatarUrl={avatarUrl}
+        marginLeft={"inherit"}
+      />
+      <>
+        <Text fontSize={1}>{`${firstName} ${lastName}`}</Text>
+        <Text fontSize={1}>{`${email}`}</Text>
+        {R.isNil(confirmedAt) ? (
+          <Can
+            action={"create-user"}
+            data={null}
+            no={<Text fontSize={1}>{`Invited on ${invitationSentAt}`}</Text>}
+            yes={
+              <>
+                <Text fontSize={1}>{`Invited on ${invitationSentAt}`}</Text>
+                {resend ? (
+                  <Button
+                    small
+                    variant={"primary"}
+                    onClick={() => {
+                      if (resend) {
+                        resend(id);
+                      }
+                    }}
+                  >
+                    {t("profile.profileUpdateForm.resend")}
+                  </Button>
+                ) : (
+                  <></>
+                )}
+              </>
+            }
+          />
+        ) : (
+          <></>
+        )}
+      </>
     </Card>
   );
 };
@@ -54,6 +67,7 @@ interface UserCardProps {
   id: number;
   firstName: string;
   lastName: string;
+  email: string;
   avatarUrl?: string;
   confirmedAt: string;
   invitationSentAt: string;

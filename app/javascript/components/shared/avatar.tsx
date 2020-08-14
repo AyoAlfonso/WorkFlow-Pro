@@ -23,6 +23,7 @@ type ImageContainerProps = {
   border?: string;
   size?: number;
   marginLeft?: string;
+  marginRight?: string;
 };
 
 const ImageContainer = styled.div<ImageContainerProps>`
@@ -30,7 +31,8 @@ const ImageContainer = styled.div<ImageContainerProps>`
   border-radius: 9999px;
   width: ${props => props.size || 48}px;
   height: ${props => props.size || 48}px;
-  margin-left: ${props => props.marginLeft};
+  margin-left: ${props => props.marginLeft || "auto"};
+  margin-right: ${props => props.marginRight};
 `;
 
 export const Avatar = ({
@@ -43,7 +45,7 @@ export const Avatar = ({
   border,
 }: AvatarProps): JSX.Element =>
   avatarUrl ? (
-    <ImageContainer border={border} size={size} marginLeft={marginLeft}>
+    <ImageContainer border={border} size={size} marginLeft={marginLeft || "auto"}>
       <Image
         style={{
           width: size || 48,
