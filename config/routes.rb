@@ -44,6 +44,7 @@ Rails.application.routes.draw do
 
     #key activities
     resources :key_activities, only: [:index, :create, :update, :destroy]
+    get '/key_activities/created_in_meeting', to: "key_activities#created_in_meeting"
 
     #goals
     get '/goals', to: 'goals#index'

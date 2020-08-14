@@ -119,6 +119,12 @@ export class Api {
     return this.client.delete(`/key_activities/${id}`);
   }
 
+  async getKeyActivitiesFromMeeting(meeting_id) {
+    return this.client.get(`/key_activities/created_in_meeting/`, {
+      meeting_id: meeting_id,
+    });
+  }
+
   async getAllGoals() {
     return this.client.get("/goals");
   }
