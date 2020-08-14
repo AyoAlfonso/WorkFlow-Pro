@@ -2,19 +2,18 @@ import * as React from "react";
 import { HomeContainerBorders } from "../../home/shared-components";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
 import { Button } from "~/components/shared/button";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
 import { ContextTabs } from "../shared/context-tabs";
 import { OwnedBySection } from "../shared/owned-by-section";
-import { IndividualVerticalStatusBlockColorIndicator } from "../shared/individual-vertical-status-block-color-indicator";
-import * as moment from "moment";
 import ContentEditable from "react-contenteditable";
 import { observer } from "mobx-react";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
 import { UserIconBorder } from "../shared/user-icon-border";
+import { MilestoneCard } from "../milestone/milestone-card";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -39,6 +38,8 @@ export const QuarterlyGoalModalContent = observer(
     const [quarterlyGoal, setQuarterlyGoal] = useState<any>(null);
     const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
 
+    const descriptionRef = useRef(null);
+
     useEffect(() => {
       quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
         setQuarterlyGoal(quarterlyGoalStore.quarterlyGoal);
@@ -59,10 +60,18 @@ export const QuarterlyGoalModalContent = observer(
         <HeaderContainer>
           <TitleContainer>
             <StyledContentEditable
+              innerRef={descriptionRef}
               html={quarterlyGoal.description}
               disabled={!editable}
               onChange={e => {
-                quarterlyGoalStore.updateModelField("description", e.target.value);
+                if (!e.target.value.includes("<div>")) {
+                  quarterlyGoalStore.updateModelField("description", e.target.value);
+                }
+              }}
+              onKeyDown={key => {
+                if (key.keyCode == 13) {
+                  descriptionRef.current.blur();
+                }
               }}
               onBlur={() => quarterlyGoalStore.update()}
             />
@@ -125,27 +134,12 @@ export const QuarterlyGoalModalContent = observer(
       return milestonesToShow.map((milestone, index) => {
         const unstarted = milestone.status == "unstarted";
         return (
-          <MilestoneContainer key={index}>
-            <MilestoneDetails unstarted={unstarted}>
-              <WeekOfText unstarted={unstarted}>
-                Week of{" "}
-                <WeekOfTextValue>{moment(milestone.weekOf).format("MMMM D")}</WeekOfTextValue>
-              </WeekOfText>
-              <MilestoneContentEditable
-                html={milestone.description}
-                disabled={!editable}
-                onChange={e => {
-                  quarterlyGoalStore.updateMilestoneDescription(milestone.id, e.target.value);
-                }}
-                onBlur={() => quarterlyGoalStore.update()}
-              />
-            </MilestoneDetails>
-            <IndividualVerticalStatusBlockColorIndicator
-              milestone={milestone}
-              milestoneStatus={milestone.status}
-              editable={editable}
-            />
-          </MilestoneContainer>
+          <MilestoneCard
+            key={index}
+            milestone={milestone}
+            unstarted={unstarted}
+            editable={editable}
+          />
         );
       });
     };
@@ -277,38 +271,6 @@ const ContextContainer = styled(HomeContainerBorders)`
   padding-right: 16px;
 `;
 
-const MilestoneContainer = styled.div`
-  display: flex;
-`;
-
-type MilestoneDetailsType = {
-  unstarted: boolean;
-};
-
-const MilestoneDetails = styled(HomeContainerBorders)<MilestoneDetailsType>`
-  padding: 8px;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  width: 90%;
-  border: ${props => !props.unstarted && `1px solid ${props.theme.colors.primary100}`};
-  color: ${props => props.unstarted && props.theme.colors.grey60};
-`;
-
-type WeekOfTextType = {
-  unstarted: boolean;
-};
-
-const WeekOfText = styled(Text)<WeekOfTextType>`
-  color: ${props => (props.unstarted ? props.theme.colors.grey60 : props.theme.colors.primary100)};
-  margin-top: 8px;
-  margin-bottom: 8px;
-`;
-
-const WeekOfTextValue = styled.span`
-  text-decoration: underline;
-  font-weight: bold;
-`;
-
 const MilestonesHeaderContainer = styled.div`
   display: flex;
 `;
@@ -339,13 +301,6 @@ const StyledContentEditable = styled(ContentEditable)`
   padding-left: 4px;
   padding-right: 4px;
   margin-right: -4px;
-`;
-
-const MilestoneContentEditable = styled(ContentEditable)`
-  margin-top: 8px;
-  margin-bottom: 8px;
-  padding-top: 5px;
-  padding-bottom: 5px;
 `;
 
 const StyledButton = styled(Button)`

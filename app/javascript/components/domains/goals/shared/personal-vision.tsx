@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { color } from "styled-system";
 import { useMst } from "~/setup/root";
 import ContentEditable from "react-contenteditable";
+import { useRef } from "react";
 
 interface IPersonalVisionProps {
   personalVision: string;
@@ -11,15 +12,24 @@ interface IPersonalVisionProps {
 
 export const PersonalVision = ({ personalVision }: IPersonalVisionProps): JSX.Element => {
   const { sessionStore } = useMst();
+  const personalVisionRef = useRef(null);
 
   return (
     <VisionContainer>
       <VisionTitle>Personal Vision</VisionTitle>
       <StyledContentEditable
+        innerRef={personalVisionRef}
         html={personalVision || ""}
         disabled={false}
         onChange={e => {
-          sessionStore.updateProfileModelField("personalVision", e.target.value);
+          if (!e.target.value.includes("<div>")) {
+            sessionStore.updateProfileModelField("personalVision", e.target.value);
+          }
+        }}
+        onKeyDown={key => {
+          if (key.keyCode == 13) {
+            personalVisionRef.current.blur();
+          }
         }}
         onBlur={() => sessionStore.updateProfileFromModel()}
       />

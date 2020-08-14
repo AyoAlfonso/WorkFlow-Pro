@@ -6,7 +6,7 @@ import { Icon } from "../../shared/icon";
 import { observer } from "mobx-react";
 import { baseTheme } from "../../../themes/base";
 import ContentEditable from "react-contenteditable";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Text } from "~/components/shared/text";
 import { HomeContainerBorders } from "../home/shared-components";
 import { Button } from "rebass";
@@ -30,6 +30,8 @@ export const IssueEntry = observer(
     const [showShareModal, setShowShareModal] = useState<boolean>(false);
     const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
+
+    const issueRef = useRef(null);
 
     const renderPriorityIcon = (priority: string) => {
       switch (priority) {
@@ -96,8 +98,18 @@ export const IssueEntry = observer(
           {renderPriorityIcon(issue.priority)}
         </IssuePriorityContainer>
         <StyledContentEditable
+          innerRef={issueRef}
           html={issue.description}
-          onChange={e => issueStore.updateIssueState(issue["id"], "description", e.target.value)}
+          onChange={e => {
+            if (!e.target.value.includes("<div>")) {
+              issueStore.updateIssueState(issue["id"], "description", e.target.value);
+            }
+          }}
+          onKeyDown={key => {
+            if (key.keyCode == 13) {
+              issueRef.current.blur();
+            }
+          }}
           style={{ textDecoration: issue.completedAt && "line-through" }}
           onBlur={() => issueStore.updateIssue(issue.id)}
         />

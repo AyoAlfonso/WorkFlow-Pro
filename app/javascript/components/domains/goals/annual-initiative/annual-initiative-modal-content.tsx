@@ -2,7 +2,7 @@ import * as React from "react";
 import { HomeContainerBorders } from "../../home/shared-components";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
 import * as R from "ramda";
@@ -41,6 +41,7 @@ export const AnnualInitiativeModalContent = observer(
     const [showCreateQuarterlyGoal, setShowCreateQuarterlyGoal] = useState<boolean>(false);
 
     const { t } = useTranslation();
+    const descriptionRef = useRef(null);
 
     useEffect(() => {
       annualInitiativeStore.getAnnualInitiative(annualInitiativeId);
@@ -97,10 +98,18 @@ export const AnnualInitiativeModalContent = observer(
         <HeaderContainer>
           <TitleContainer>
             <StyledContentEditable
+              innerRef={descriptionRef}
               html={annualInitiative.description}
               disabled={!editable}
               onChange={e => {
-                annualInitiativeStore.updateModelField("description", e.target.value);
+                if (!e.target.value.includes("<div>")) {
+                  annualInitiativeStore.updateModelField("description", e.target.value);
+                }
+              }}
+              onKeyDown={key => {
+                if (key.keyCode == 13) {
+                  descriptionRef.current.blur();
+                }
               }}
               onBlur={() => annualInitiativeStore.update()}
             />

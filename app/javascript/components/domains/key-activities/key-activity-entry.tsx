@@ -7,6 +7,7 @@ import { observer } from "mobx-react";
 import { baseTheme } from "../../../themes/base";
 import ContentEditable from "react-contenteditable";
 import { KeyActivityPriorityIcon } from "./key-activity-priority-icon";
+import { useRef } from "react";
 
 interface IKeyActivityEntryProps {
   keyActivity: any;
@@ -16,6 +17,8 @@ export const KeyActivityEntry = observer(
   ({ keyActivity }: IKeyActivityEntryProps): JSX.Element => {
     const { keyActivityStore } = useMst();
     const { colors } = baseTheme;
+
+    const keyActivityRef = useRef(null);
 
     const updatePriority = () => {
       let priority = "";
@@ -56,14 +59,22 @@ export const KeyActivityEntry = observer(
         </KeyActivityPriorityContainer>
 
         <StyledContentEditable
+          innerRef={keyActivityRef}
           html={keyActivity.description}
-          onChange={e =>
-            keyActivityStore.updateKeyActivityState(
-              keyActivity["id"],
-              "description",
-              e.target.value,
-            )
-          }
+          onChange={e => {
+            if (!e.target.value.includes("<div>")) {
+              keyActivityStore.updateKeyActivityState(
+                keyActivity["id"],
+                "description",
+                e.target.value,
+              );
+            }
+          }}
+          onKeyDown={key => {
+            if (key.keyCode == 13) {
+              keyActivityRef.current.blur();
+            }
+          }}
           style={{ textDecoration: keyActivity.completedAt && "line-through" }}
           onBlur={() => keyActivityStore.updateKeyActivity(keyActivity.id)}
         />
