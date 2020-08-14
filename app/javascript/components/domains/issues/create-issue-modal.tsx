@@ -47,6 +47,7 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
             firstName={R.path(["profile", "firstName"], sessionStore)}
             lastName={R.path(["profile", "lastName"], sessionStore)}
             size={55}
+            marginLeft={"auto"}
           />
         </FlexContainer>
         <FlexContainer>

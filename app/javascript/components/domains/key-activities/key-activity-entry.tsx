@@ -6,6 +6,7 @@ import { Icon } from "../../shared/icon";
 import { observer } from "mobx-react";
 import { baseTheme } from "../../../themes/base";
 import ContentEditable from "react-contenteditable";
+import { KeyActivityPriorityIcon } from "./key-activity-priority-icon";
 
 interface IKeyActivityEntryProps {
   keyActivity: any;
@@ -38,40 +39,6 @@ export const KeyActivityEntry = observer(
       keyActivityStore.updateKeyActivity(keyActivity.id);
     };
 
-    const renderPriorityIcon = (priority: string) => {
-      switch (priority) {
-        case "medium":
-          return (
-            <Icon
-              icon={"Priority-High"}
-              size={24}
-              iconColor={colors.cautionYellow}
-              style={{ marginTop: "2px" }}
-            />
-          );
-        case "high":
-          return (
-            <Icon
-              icon={"Priority-Urgent"}
-              size={24}
-              iconColor={colors.warningRed}
-              style={{ marginTop: "2px" }}
-            />
-          );
-        case "frog":
-          return (
-            <Icon
-              icon={"Priority-Frog"}
-              size={24}
-              iconColor={colors.frog}
-              style={{ marginTop: "2px" }}
-            />
-          );
-        default:
-          return <EmptyIconContainer />;
-      }
-    };
-
     return (
       <Container>
         <CheckboxContainer key={keyActivity["id"]}>
@@ -85,7 +52,7 @@ export const KeyActivityEntry = observer(
         </CheckboxContainer>
 
         <KeyActivityPriorityContainer onClick={() => updatePriority()}>
-          {renderPriorityIcon(keyActivity.priority)}
+          <KeyActivityPriorityIcon priority={keyActivity.priority} />
         </KeyActivityPriorityContainer>
 
         <StyledContentEditable
@@ -147,11 +114,6 @@ const StyledContentEditable = styled(ContentEditable)`
   width: 160px;
   margin-top: auto;
   margin-bottom: auto;
-`;
-
-const EmptyIconContainer = styled.div`
-  width: 24px;
-  height: 24px;
 `;
 
 const CheckboxContainer = props => (

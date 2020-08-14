@@ -30,6 +30,7 @@ import { HeaderBar } from "./domains/nav/header-bar";
 import { SideNav } from "./domains/nav";
 import { Placeholder } from "./shared/placeholder";
 import { GoalsIndex } from "./domains/goals/goals-index";
+import { TeamOverview } from "./domains/meetings/team-overview";
 
 const Container = styled.div`
   margin-left: 168px;
@@ -70,7 +71,7 @@ export const App = observer(
                   <Route
                     path={"/team"}
                     render={() => {
-                      return <Placeholder />;
+                      return <TeamOverview />;
                     }}
                   />
                   <Route

@@ -49,6 +49,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             firstName={R.path(["profile", "firstName"], sessionStore)}
             lastName={R.path(["profile", "lastName"], sessionStore)}
             size={55}
+            marginLeft={"auto"}
           />
         </FlexContainer>
         <FlexContainer>
