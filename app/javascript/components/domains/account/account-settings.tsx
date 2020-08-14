@@ -106,4 +106,5 @@ const DisplayBoxContainer = styled(HomeContainerBorders)`
   margin-right: auto;
   width: 70%;
   margin-top: 10px;
+  min-width: 950px;
 `;
