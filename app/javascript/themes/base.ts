@@ -52,7 +52,7 @@ export const baseTheme = {
     heading: "Exo, sans-serif",
   },
 
-  fontSizes: [15, 16, 20, 30],
+  fontSizes: [15, 16, 20, 30, 36, 48],
 
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
 };

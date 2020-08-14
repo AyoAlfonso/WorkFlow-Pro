@@ -9,7 +9,7 @@ const StyledText = styled.p`
 `;
 
 export const Text = props => (
-  <StyledText {...props} fontFamily={"Lato"}>
+  <StyledText {...props} fontFamily={props.fontFamily ? props.fontFamily : "Lato"}>
     {props.children}
   </StyledText>
 );
