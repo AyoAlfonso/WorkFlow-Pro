@@ -7,12 +7,11 @@ import { SideNavDrawer } from "./side-nav-drawer";
 export const PopupContainer = styled.div`
   background-color: white;
   display: flex;
-  left: -8px;
   flex-direction: column;
-  margin-left: 6px;
+  margin-left: 16px;
   overflow-x: hidden;
   position: absolute;
-  width: 215px;
+  width: 200px;
 `;
 
 export const PopupTriggerContainer = styled.div`
