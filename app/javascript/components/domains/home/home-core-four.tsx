@@ -19,36 +19,36 @@ export const HomeCoreFour = observer(
           <ValuesContainer>
             <Flex>
               <Box width={1 / 4} sx={{ padding: 16 }}>
-                <Text fontSize={2} color={"primary100"}>
+                <CoreFourHeaderText fontSize={2} color={"primary100"}>
                   Why Do We Exist?
-                </Text>
+                </CoreFourHeaderText>
                 <div
                   className="trix-content"
                   dangerouslySetInnerHTML={{ __html: company.coreFour.core1Content }}
                 ></div>
               </Box>
               <Box width={1 / 4} sx={{ padding: 16 }}>
-                <Text fontSize={2} color={"primary100"}>
+                <CoreFourHeaderText fontSize={2} color={"primary100"}>
                   How Do We Behave?
-                </Text>
+                </CoreFourHeaderText>
                 <div
                   className="trix-content"
                   dangerouslySetInnerHTML={{ __html: company.coreFour.core2Content }}
                 ></div>
               </Box>
               <Box width={1 / 4} sx={{ padding: 16 }}>
-                <Text fontSize={2} color={"primary100"}>
+                <CoreFourHeaderText fontSize={2} color={"primary100"}>
                   What Do We Do?
-                </Text>
+                </CoreFourHeaderText>
                 <div
                   className="trix-content"
                   dangerouslySetInnerHTML={{ __html: company.coreFour.core3Content }}
                 ></div>
               </Box>
               <Box width={1 / 4} sx={{ padding: 16 }}>
-                <Text fontSize={2} color={"primary100"}>
+                <CoreFourHeaderText fontSize={2} color={"primary100"}>
                   How Do We Succeed?
-                </Text>
+                </CoreFourHeaderText>
                 <div
                   className="trix-content"
                   dangerouslySetInnerHTML={{ __html: company.coreFour.core4Content }}
@@ -70,4 +70,8 @@ const Container = styled.div`
 
 const ValuesContainer = styled(HomeContainerBorders)`
   height: 100%;
+`;
+
+const CoreFourHeaderText = styled(Text)`
+  margin-top: 0;
 `;
