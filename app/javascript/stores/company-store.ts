@@ -37,6 +37,17 @@ export const CompanyStoreModel = types
         showToast("There was an error updating the company", ToastMessageConstants.ERROR);
       }
     }),
+    updateCompanyLogo: flow(function*(formData) {
+      const env = getEnv(self);
+      try {
+        const response = yield env.api.updateCompanyLogo(self.company.id, formData);
+        if (response.ok) {
+          self.company.setLogoUrl(response.data.logoUrl);
+        }
+      } catch {
+        showToast("There was an error adding the company logo", ToastMessageConstants.ERROR);
+      }
+    }),
     deleteCompanyLogo: flow(function*() {
       const env = getEnv(self);
       try {

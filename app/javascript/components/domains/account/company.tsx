@@ -55,7 +55,7 @@ export const Company = observer(
     const submitLogo = async (files: FileList) => {
       const form = new FormData();
       form.append("logo", files[0]);
-      await companyStore.updateCompany(form);
+      await companyStore.updateCompanyLogo(form);
     };
 
     const removeLogo = () => {

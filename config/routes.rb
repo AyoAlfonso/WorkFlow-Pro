@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     resources :companies, only: [:show, :update] do
       member do
         delete 'logo', to: 'companies#delete_logo'
+        patch 'logo', to: 'companies#update_logo'
       end
     end
 
