@@ -12,17 +12,6 @@ export interface IWorkStatusOptions {
 }
 
 export const homePersonalStatusOptions: IWorkStatusOptions = {
-  work_from_home: {
-    containerProps: {
-      backgroundColor: "backgroundBlue",
-      color: "primary100",
-    },
-    iconProps: {
-      icon: "WFH",
-      iconColor: "primary100",
-    },
-    label: "WFH",
-  },
   in_office: {
     containerProps: {
       backgroundColor: "backgroundGreen",
@@ -33,6 +22,17 @@ export const homePersonalStatusOptions: IWorkStatusOptions = {
       iconColor: "finePine",
     },
     label: "In-Office",
+  },
+  work_from_home: {
+    containerProps: {
+      backgroundColor: "backgroundBlue",
+      color: "primary100",
+    },
+    iconProps: {
+      icon: "WFH",
+      iconColor: "primary100",
+    },
+    label: "WFH",
   },
   half_day: {
     containerProps: {
