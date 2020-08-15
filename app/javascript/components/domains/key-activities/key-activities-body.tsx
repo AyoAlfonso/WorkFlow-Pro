@@ -7,6 +7,7 @@ import { color } from "styled-system";
 import { observer } from "mobx-react";
 import { CreateKeyActivityModal } from "./create-key-activity-modal";
 import { KeyActivityEntry } from "./key-activity-entry";
+import { baseTheme } from "~/themes";
 
 interface IKeyActivitiesBodyProps {
   showAllKeyActivities: boolean;
@@ -21,13 +22,56 @@ export const KeyActivitiesBody = observer(
     const weeklyKeyActivities = keyActivityStore.weeklyKeyActivities;
     const masterKeyActivities = keyActivityStore.masterKeyActivities;
 
+    const outstandingMasterActivities = masterKeyActivities.filter(
+      keyActivity => !keyActivity.completedAt,
+    );
+    const completedMasterActivities = masterKeyActivities.filter(
+      keyActivity => keyActivity.completedAt,
+    );
+
     useEffect(() => {
       keyActivityStore.fetchKeyActivities();
     }, []);
 
-    const renderKeyActivitiesList = (): Array<JSX.Element> => {
-      const keyActivities = showAllKeyActivities ? masterKeyActivities : weeklyKeyActivities;
-      return keyActivities.map((keyActivity, index) => (
+    const renderKeyActivitiesList = (): any => {
+      if (showAllKeyActivities) {
+        return (
+          <>
+            {renderOutstandingMasterActivitiesList()}
+            {renderCompletedMasterActivitiesList()}
+          </>
+        );
+      } else {
+        return weeklyKeyActivities.map((keyActivity, index) => (
+          <KeyActivityContainer key={keyActivity["id"]}>
+            <KeyActivityEntry keyActivity={keyActivity} />
+          </KeyActivityContainer>
+        ));
+      }
+    };
+
+    const renderOutstandingMasterActivitiesList = (): Array<JSX.Element> => {
+      const completedMasterActivitiesPresent = completedMasterActivities.length > 0;
+      return outstandingMasterActivities.map((keyActivity, index) => {
+        const lastElement = index == outstandingMasterActivities.length - 1;
+
+        return (
+          <KeyActivityContainer
+            key={keyActivity["id"]}
+            borderBottom={
+              completedMasterActivitiesPresent &&
+              lastElement &&
+              `1px solid ${baseTheme.colors.grey40}`
+            }
+          >
+            <KeyActivityEntry keyActivity={keyActivity} />
+          </KeyActivityContainer>
+        );
+      });
+    };
+
+    const renderCompletedMasterActivitiesList = (): Array<JSX.Element> => {
+      return completedMasterActivities.map((keyActivity, index) => (
         <KeyActivityContainer key={keyActivity["id"]}>
           <KeyActivityEntry keyActivity={keyActivity} />
         </KeyActivityContainer>
@@ -91,4 +135,10 @@ const KeyActivitiesContainer = styled.div`
   height: 260px;
 `;
 
-const KeyActivityContainer = styled.div``;
+type KeyActivityContainerType = {
+  borderBottom?: string;
+};
+const KeyActivityContainer = styled.div<KeyActivityContainerType>`
+  border-bottom: ${props => props.borderBottom};
+  margin-right: ${props => (props.borderBottom ? "8px" : "")};
+`;
