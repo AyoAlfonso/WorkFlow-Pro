@@ -1,6 +1,6 @@
 class Api::CompaniesController < Api::ApplicationController
   respond_to :json
-  before_action :set_company, only: [:show, :update, :delete_logo]
+  before_action :set_company, only: [:show, :update, :update_logo, :delete_logo]
 
   def show
     render json: @company.as_json(only: ['id', 'name', 'phone_number', 'rallying_cry', 'fiscal_year_start', 'timezone'],
@@ -17,6 +17,11 @@ class Api::CompaniesController < Api::ApplicationController
     include: {
       core_four: {methods: ['core_1_content', 'core_2_content', 'core_3_content', 'core_4_content']}
     })
+  end
+
+  def update_logo
+    @company.logo.attach(params[:logo])
+    render json: { logo_url: @company.logo_url }
   end
 
   def delete_logo

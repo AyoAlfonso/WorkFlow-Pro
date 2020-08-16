@@ -69,6 +69,10 @@ export class Api {
     return this.client.patch(`/companies/${formData.id}`, formData);
   }
 
+  async updateCompanyLogo(companyId, formData) {
+    return this.client.patch(`/companies/${companyId}/logo`, formData);
+  }
+
   async deleteLogo(companyId) {
     return this.client.delete(`/companies/${companyId}/logo`);
   }

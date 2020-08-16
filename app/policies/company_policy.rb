@@ -11,4 +11,8 @@ class CompanyPolicy < ApplicationPolicy
   def delete_logo?
     update?
   end
+
+  def update_logo?
+    update?
+  end
 end
