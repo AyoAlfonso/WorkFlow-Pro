@@ -9,6 +9,8 @@ import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";
 import * as R from "ramda";
 import { Avatar } from "~/components/shared/avatar";
+import Switch from "react-switch";
+import { Text } from "~/components/shared/text";
 
 interface ICreateKeyActivityModalProps {
   createKeyActivityModalOpen: boolean;
@@ -75,9 +77,15 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             Save
           </StyledButton>
           <PriorityContainer>
-            <MasterListButton active={!weeklyList} onClick={() => setWeeklyList(!weeklyList)}>
-              Master
-            </MasterListButton>
+            <StyledSwitch
+              checked={!weeklyList}
+              onChange={e => setWeeklyList(!weeklyList)}
+              onColor={baseTheme.colors.primary100}
+              uncheckedIcon={false}
+              checkedIcon={false}
+              width={48}
+            />
+            <MasterListText>Master</MasterListText>
             <IconContainer onClick={() => setSelectedPriority(selectedPriority == 1 ? 0 : 1)}>
               <Icon
                 icon={"Priority-High"}
@@ -141,17 +149,12 @@ const StyledButton = styled(Button)<StyledButtonType>`
   }
 `;
 
-type MasterListButtonType = {
-  active: boolean;
-};
+const StyledSwitch = styled(Switch)``;
 
-const MasterListButton = styled(Button)<MasterListButtonType>`
-  margin-top: -4px !important;
-  background-color: ${props =>
-    props.active ? baseTheme.colors.primary100 : baseTheme.colors.grey60};
-  color: white !important;
-  border-color: ${baseTheme.colors.primary100} !important;
-  &: hover {
-    cursor: pointer;
-  }
+const MasterListText = styled(Text)`
+  color: ${props => props.theme.colors.grey60};
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 5px;
+  font-size: 14px;
 `;
