@@ -3,6 +3,7 @@ import { withEnvironment } from "../lib/with-environment";
 import { GoalModel } from "../models/goal";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import * as R from "ramda";
 
 export const GoalStoreModel = types
   .model("GoalStoreModel")
@@ -69,6 +70,28 @@ export const GoalStoreModel = types
       let goals = self[goal]["goals"];
       goals[index] = annualInitiative;
       self[goal]["goals"] = goals;
+    },
+    removeDeletedAnnualInitiative(annualInitiativeId) {
+      let companyGoalAI = self.companyGoals.goals.find(
+        annualInitiative => annualInitiative.id == annualInitiativeId,
+      );
+      let personalGoalAI = self.personalGoals.goals.find(
+        annualInitiative => annualInitiative.id == annualInitiativeId,
+      );
+
+      if (companyGoalAI) {
+        const updatedAI = R.filter(
+          annualInitiative => annualInitiative.id != annualInitiativeId,
+          self.companyGoals.goals,
+        );
+        self.companyGoals.goals = updatedAI;
+      } else if (personalGoalAI) {
+        const updatedAI = R.filter(
+          annualInitiative => annualInitiative.id != annualInitiativeId,
+          self.personalGoals.goals,
+        );
+        self.personalGoals.goals = updatedAI;
+      }
     },
   }));
 

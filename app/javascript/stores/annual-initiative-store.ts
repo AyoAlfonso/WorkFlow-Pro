@@ -58,10 +58,22 @@ export const AnnualInitiativeStoreModel = types
           annualInitiativeObject.type,
           response.data.annualInitiative,
         );
-        showToast("An initiative created", ToastMessageConstants.SUCCESS);
+        showToast("Annual initiative created", ToastMessageConstants.SUCCESS);
         return response.data.annualInitiative;
       } catch {
         showToast("There was an error creating the annual initiative", ToastMessageConstants.ERROR);
+      }
+    }),
+    delete: flow(function*(annualInitiativeId) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.deleteAnnualInitiative(annualInitiativeId);
+        const { goalStore } = getRoot(self);
+        goalStore.removeDeletedAnnualInitiative(annualInitiativeId);
+        showToast("Annual Initiative Deleted", ToastMessageConstants.SUCCESS);
+        return response.data.annualInitiativeId;
+      } catch {
+        showToast("There was an error deleting the annual initiative", ToastMessageConstants.ERROR);
       }
     }),
   }))

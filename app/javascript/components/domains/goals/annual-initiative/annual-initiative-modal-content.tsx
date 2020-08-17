@@ -121,6 +121,18 @@ export const AnnualInitiativeModalContent = observer(
             </GoalText>
           </TitleContainer>
           <AnnualInitiativeActionContainer>
+            <DeleteIconContainer
+              onClick={() => {
+                if (confirm("Are you sure you want to delete this annual initiative?")) {
+                  annualInitiativeStore.delete(annualInitiativeId).then(() => {
+                    setAnnualInitiativeModalOpen(false);
+                  });
+                }
+              }}
+            >
+              <Icon icon={"Delete"} size={"25px"} iconColor={"grey80"} />
+            </DeleteIconContainer>
+
             <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
               <Icon icon={"Close"} size={"25px"} iconColor={"grey80"} />
             </CloseIconContainer>
@@ -230,6 +242,10 @@ const CloseIconContainer = styled.div`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const DeleteIconContainer = styled(CloseIconContainer)`
+  margin-right: 16px;
 `;
 
 const SectionContainer = styled.div`
