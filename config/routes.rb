@@ -69,13 +69,16 @@ Rails.application.routes.draw do
 
     #questionnaire_attempts
     resources :questionnaire_attempts, only: [:create]
-    
+
     #teams
     resources :teams, only: [:index]
 
     #meetings
     resources :meetings, only: [:create, :index, :update, :destroy]
     get '/meetings/team_meetings/:id', to: 'meetings#team_meetings'
+
+    #notifications
+    resources :notifications, only: [:index, :update]
 
   end
 
