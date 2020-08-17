@@ -22,6 +22,10 @@ class KeyActivityPolicy < ApplicationPolicy
     @key_activity.user == @user
   end
 
+  def created_in_meeting?
+    current_user.company == key_activity.user.company
+  end
+
   class Scope
     attr_reader :user, :scope
 

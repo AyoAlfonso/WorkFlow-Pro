@@ -8,6 +8,7 @@ export const KeyActivityStoreModel = types
   .model("KeyActivityStoreModel")
   .props({
     keyActivities: types.array(KeyActivityModel),
+    keyActivitiesFromMeeting: types.array(KeyActivityModel),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -64,6 +65,19 @@ export const KeyActivityStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.destroyKeyActivity(id);
       if (response.ok) {
         self.keyActivities = response.data;
+        return true;
+      } else {
+        return false;
+      }
+    }),
+  }))
+  .actions(self => ({
+    fetchKeyActivitiesFromMeeting: flow(function*(meeting_id) {
+      const response: ApiResponse<any> = yield self.environment.api.getKeyActivitiesFromMeeting(
+        meeting_id,
+      );
+      if (response.ok) {
+        self.keyActivitiesFromMeeting = response.data;
         return true;
       } else {
         return false;

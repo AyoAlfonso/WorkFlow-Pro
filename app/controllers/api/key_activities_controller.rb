@@ -25,6 +25,12 @@ class Api::KeyActivitiesController < Api::ApplicationController
     render json: KeyActivity.sort_by_priority_and_created_at_date
   end
 
+  def created_in_meeting
+    @key_activities = policy_scope(KeyActivity).created_in_meeting(params[:meeting_id])
+    authorize @key_activities
+    render json: @key_activities
+  end
+
   private 
 
   def key_activity_params
