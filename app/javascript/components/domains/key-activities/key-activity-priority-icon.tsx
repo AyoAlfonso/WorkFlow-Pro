@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "styled-components";
 import { Icon } from "../../shared/icon";
 import { baseTheme } from "../../../themes/base";
 
@@ -42,14 +41,16 @@ export const KeyActivityPriorityIcon = ({
           />
         );
       default:
-        return <EmptyIconContainer />;
+        return (
+          <Icon
+            icon={"Priority-Empty"}
+            size={24}
+            iconColor={colors.primary100}
+            style={{ marginTop: "2px" }}
+          />
+        );
     }
   };
 
   return renderPriorityIcon();
 };
-
-const EmptyIconContainer = styled.div`
-  width: 24px;
-  height: 24px;
-`;

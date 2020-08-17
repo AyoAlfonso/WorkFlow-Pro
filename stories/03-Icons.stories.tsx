@@ -291,6 +291,14 @@ export const Icons = () => (
         <Icon icon={"Notification-PU"} size={"2em"} iconColor={"primary100"} />
         <TextCenteredDiv>Notification-PU</TextCenteredDiv>
       </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Plan"} size={"2em"} />
+        <TextCenteredDiv>Plan</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Checkmark"} size={"2em"} />
+        <TextCenteredDiv>Checkmark</TextCenteredDiv>
+      </CenteredColumnDiv>
     </RowDiv>
     <Divider />
     <RowDiv>
@@ -305,6 +313,10 @@ export const Icons = () => (
       <CenteredColumnDiv>
         <Icon icon={"Priority-Frog"} size={"2em"} iconColor={"frog"} />
         <TextCenteredDiv>Frog-Priority</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Priority-Empty"} size={"2em"} />
+        <TextCenteredDiv>Priority-Empty</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"AM-Check-in"} size={"2em"} iconColor={"cautionYellow"} />

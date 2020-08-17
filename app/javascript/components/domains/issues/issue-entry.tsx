@@ -54,7 +54,14 @@ export const IssueEntry = observer(
             />
           );
         default:
-          return <EmptyIconContainer />;
+          return (
+            <Icon
+              icon={"Priority-Empty"}
+              size={24}
+              iconColor={baseTheme.colors.primary100}
+              style={{ marginTop: "2px" }}
+            />
+          );
       }
     };
 
@@ -246,11 +253,6 @@ const StyledContentEditable = styled(ContentEditable)`
   width: 160px;
   margin-top: auto;
   margin-bottom: auto;
-`;
-
-const EmptyIconContainer = styled.div`
-  width: 24px;
-  height: 24px;
 `;
 
 type ShareIssueContainerType = {
