@@ -23,7 +23,7 @@ class KeyActivityPolicy < ApplicationPolicy
   end
 
   def created_in_meeting?
-    true
+    current_user.company == key_activity.user.company
   end
 
   class Scope
