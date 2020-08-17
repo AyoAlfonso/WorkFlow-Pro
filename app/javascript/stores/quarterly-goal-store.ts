@@ -121,8 +121,8 @@ export const QuarterlyGoalStoreModel = types
       self.quarterlyGoal.keyElements = keyElements;
       self.update();
     },
-    updateOwnedBy(userId) {
-      self.quarterlyGoal.ownedById = userId;
+    updateOwnedBy(user) {
+      self.quarterlyGoal.ownedById = user.id;
       self.update();
     },
     updateMilestoneDescription(id, value) {
