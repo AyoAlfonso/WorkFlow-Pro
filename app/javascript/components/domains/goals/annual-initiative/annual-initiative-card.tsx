@@ -76,6 +76,10 @@ const Container = styled(HomeContainerBorders)`
   min-width: 240px;
   margin-right: ${props => props["margin-right"] || "0px"};
   height: fit-content;
+  &: hover {
+    background: rgba(0, 0, 0, 0.02);
+    opacity: 0.85;
+  }
 `;
 
 const DescriptionContainer = styled.div`

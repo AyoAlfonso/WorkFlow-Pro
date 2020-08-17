@@ -86,6 +86,8 @@ const Container = styled.div`
   padding-bottom: 8px;
   &:hover {
     cursor: pointer;
+    background: rgba(0, 0, 0, 0.02);
+    opacity: 0.85;
   }
 `;
 
