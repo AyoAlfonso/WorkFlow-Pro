@@ -1,13 +1,8 @@
 import * as React from "react";
-import { ModalWithHeader } from "../../shared/modal-with-header";
-import { useState } from "react";
-import { TextInput } from "../../shared/text-input";
 import styled from "styled-components";
 import { Icon } from "../../shared/icon";
 import { Button } from "~/components/shared/button";
-import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";
-import * as R from "ramda";
 import { Avatar } from "~/components/shared/avatar";
 import { Text } from "~/components/shared/text";
 import { HomeContainerBorders } from "../home/shared-components";
