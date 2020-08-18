@@ -1,5 +1,5 @@
 class Api::MeetingsController < Api::ApplicationController
-  response_to :json
+  respond_to :json
 
   def create
     @meeting = Meeting.new(meeting_params)
