@@ -34,6 +34,7 @@ export const Teams = observer(
         teams.map(team => [
           <div style={{ display: "flex", flexDirection: "row" }}>
             <Avatar
+              defaultAvatarColor={team.defaultAvatarColor}
               firstName={team.name}
               lastName={""}
               size={48}
@@ -57,11 +58,13 @@ export const Teams = observer(
                 user ? (
                   <Avatar
                     key={user.id}
+                    defaultAvatarColor={R.path(["defaultAvatarColor"], user)}
                     avatarUrl={R.path(["avatarUrl"], user)}
                     firstName={R.path(["firstName"], user)}
                     lastName={R.path(["lastName"], user)}
                     size={32}
                     marginLeft={"inherit"}
+                    marginRight={"8px"}
                   />
                 ) : (
                   <></>

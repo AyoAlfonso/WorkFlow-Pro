@@ -175,6 +175,7 @@ export const HeaderBar = observer(
                 <Avatar
                   firstName={sessionStore.profile.firstName}
                   lastName={sessionStore.profile.lastName}
+                  defaultAvatarColor={sessionStore.profile.defaultAvatarColor}
                   avatarUrl={sessionStore.profile.avatarUrl}
                 />
                 <ProfileActionContainer>

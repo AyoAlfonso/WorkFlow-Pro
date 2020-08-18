@@ -87,6 +87,7 @@ export const AccountProfile = observer(
             <ProfilePhotoWrapper>
               <PhotoContainer>
                 <Avatar
+                  defaultAvatarColor={sessionStore.profile.defaultAvatarColor}
                   firstName={sessionStore.profile.firstName}
                   lastName={sessionStore.profile.lastName}
                   avatarUrl={sessionStore.profile.avatarUrl}

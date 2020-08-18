@@ -311,6 +311,7 @@ ActiveRecord::Schema.define(version: 2020_08_17_163221) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "default_avatar_color"
     t.index ["company_id"], name: "index_teams_on_company_id"
   end
 
@@ -352,6 +353,7 @@ ActiveRecord::Schema.define(version: 2020_08_17_163221) do
     t.bigint "company_id", null: false
     t.string "timezone"
     t.bigint "user_role_id"
+    t.string "default_avatar_color"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

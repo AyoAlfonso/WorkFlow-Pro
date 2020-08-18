@@ -8,6 +8,7 @@ import { Button } from "~/components/shared/button";
 import { Label, Input, Select } from "~/components/shared/input";
 import { Can } from "~/components/shared/auth/can";
 import { useTranslation } from "react-i18next";
+import { Text } from "~/components/shared/text";
 
 import { Flex, Box } from "rebass";
 import { StretchContainer, BodyContainer, PersonalInfoContainer } from "./container-styles";
@@ -112,6 +113,35 @@ export const Users = observer(
             user => (
               <Box p={3} key={user.id}>
                 <UserCard {...user} resend={resend} />
+                {R.isNil(user.confirmedAt) ? (
+                  <Can
+                    action={"create-user"}
+                    data={null}
+                    no={<Text fontSize={1}>{`Invited on ${user.invitationSentAt}`}</Text>}
+                    yes={
+                      <>
+                        <Text fontSize={1}>{`Invited on ${user.invitationSentAt}`}</Text>
+                        {resend ? (
+                          <Button
+                            small
+                            variant={"primary"}
+                            onClick={() => {
+                              if (resend) {
+                                resend(user.id);
+                              }
+                            }}
+                          >
+                            {t("profile.profileUpdateForm.resend")}
+                          </Button>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
               </Box>
             ),
             users,

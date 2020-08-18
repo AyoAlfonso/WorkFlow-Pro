@@ -84,6 +84,7 @@ export const AnnualInitiativeModalContent = observer(
                 <UserDefaultIcon
                   firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
                   lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
+                  defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
                   size={40}
                 />
               </QuarterlyGoalOwnerContainer>

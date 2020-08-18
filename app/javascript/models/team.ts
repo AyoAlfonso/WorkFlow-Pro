@@ -8,6 +8,7 @@ export const TeamModel = types
     companyId: types.number,
     active: types.boolean,
     teamUserEnablements: types.array(types.frozen()),
+    defaultAvatarColor: types.maybeNull(types.string),
   })
   .views(self => ({
     get teamLeadIds() {

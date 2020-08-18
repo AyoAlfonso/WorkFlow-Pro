@@ -58,6 +58,7 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
         <IconContainer>
           <Avatar
             avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
+            defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
             firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
             lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
             size={40}

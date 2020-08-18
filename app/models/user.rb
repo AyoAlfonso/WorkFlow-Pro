@@ -3,6 +3,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, :trackable and :omniauthable
   include ActionView::Helpers::SanitizeHelper
+  include HasDefaultAvatarColor
 
 
   devise :database_authenticatable, :registerable, :confirmable, :invitable,

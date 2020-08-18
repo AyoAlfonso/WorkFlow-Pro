@@ -60,6 +60,7 @@ export const OwnedBySection = ({
         <SubHeaderText text={"Owned By"} />
       </OwnedBySubHeaderContainer>
       <Avatar
+        defaultAvatarColor={ownedBy.defaultAvatarColor}
         avatarUrl={ownedBy.avatarUrl}
         firstName={ownedBy.firstName}
         lastName={ownedBy.lastName}

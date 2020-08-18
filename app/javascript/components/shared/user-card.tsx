@@ -3,8 +3,7 @@ import * as R from "ramda";
 import { Card } from "rebass";
 import { Avatar } from "./avatar";
 import { Text } from "./text";
-import { Can } from "~/components/shared/auth/can";
-import { Button } from "~/components/shared/button";
+
 import { useTranslation } from "react-i18next";
 
 export const UserCard = ({
@@ -12,6 +11,7 @@ export const UserCard = ({
   lastName,
   email,
   avatarUrl,
+  defaultAvatarColor,
   confirmedAt,
   invitationSentAt,
   resend,
@@ -19,46 +19,19 @@ export const UserCard = ({
 }: UserCardProps): JSX.Element => {
   const { t } = useTranslation();
   return (
-    <Card sx={{ width: "200px", height: "100%" }}>
+    <Card sx={{ width: "200px", height: "100%", display: "flex", flexDirection: "row" }}>
       <Avatar
+        defaultAvatarColor={defaultAvatarColor}
         firstName={firstName}
         lastName={lastName}
         avatarUrl={avatarUrl}
         marginLeft={"inherit"}
+        marginRight={"8px"}
       />
-      <>
-        <Text fontSize={1}>{`${firstName} ${lastName}`}</Text>
+      <div>
+        <Text fontSize={1} fontWeight={"bold"}>{`${firstName} ${lastName}`}</Text>
         <Text fontSize={1}>{`${email}`}</Text>
-        {R.isNil(confirmedAt) ? (
-          <Can
-            action={"create-user"}
-            data={null}
-            no={<Text fontSize={1}>{`Invited on ${invitationSentAt}`}</Text>}
-            yes={
-              <>
-                <Text fontSize={1}>{`Invited on ${invitationSentAt}`}</Text>
-                {resend ? (
-                  <Button
-                    small
-                    variant={"primary"}
-                    onClick={() => {
-                      if (resend) {
-                        resend(id);
-                      }
-                    }}
-                  >
-                    {t("profile.profileUpdateForm.resend")}
-                  </Button>
-                ) : (
-                  <></>
-                )}
-              </>
-            }
-          />
-        ) : (
-          <></>
-        )}
-      </>
+      </div>
     </Card>
   );
 };
@@ -72,4 +45,5 @@ interface UserCardProps {
   confirmedAt: string;
   invitationSentAt: string;
   resend?: any;
+  defaultAvatarColor?: string;
 }
