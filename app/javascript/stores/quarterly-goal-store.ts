@@ -44,15 +44,17 @@ export const QuarterlyGoalStoreModel = types
         showToast("There was an error creating the key element", ToastMessageConstants.ERROR);
       }
     }),
-    create: flow(function*(quarterlyGoalObject) {
+    create: flow(function*(quarterlyGoalObject, inAnnualInitiative) {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createQuarterlyGoal(quarterlyGoalObject);
         const { goalStore, annualInitiativeStore } = getRoot(self);
         goalStore.mergeQuarterlyGoals(response.data.quarterlyGoal);
-        annualInitiativeStore.updateAnnualInitiativeAfterAddingQuarterlyGoal(
-          response.data.quarterlyGoal,
-        );
+        if (inAnnualInitiative) {
+          annualInitiativeStore.updateAnnualInitiativeAfterAddingQuarterlyGoal(
+            response.data.quarterlyGoal,
+          );
+        }
         showToast("Quarterly goal created", ToastMessageConstants.SUCCESS);
         return response.data.quarterlyGoal;
       } catch {

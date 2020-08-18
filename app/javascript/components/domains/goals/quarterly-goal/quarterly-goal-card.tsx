@@ -51,7 +51,7 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
           {quarterlyGoal.description}
         </StyledText>
         <IconContainer>
-          <RecordOptions quarterlyGoalId={quarterlyGoal.id} />
+          <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} />
         </IconContainer>
       </RowContainer>
       <RowContainer onClick={() => openQuarterlyGoalModal()}>

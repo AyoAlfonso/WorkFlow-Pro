@@ -61,6 +61,7 @@ export const AnnualInitiativeCardExpanded = observer(
             createAction={quarterlyGoalStore.create}
             annualInitiativeId={annualInitiative.id}
             buttonWidth={"160px"}
+            inAnnualInitiative={false}
           />
         </CreateGoalContainer>
       );

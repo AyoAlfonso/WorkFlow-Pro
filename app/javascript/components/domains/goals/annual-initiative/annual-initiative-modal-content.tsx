@@ -76,7 +76,7 @@ export const AnnualInitiativeModalContent = observer(
                 {quarterlyGoal.description}
               </QuarterlyGoalDescription>
               <QuarterlyGoalOptionContainer>
-                <RecordOptions quarterlyGoalId={quarterlyGoal.id} />
+                <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} />
               </QuarterlyGoalOptionContainer>
             </TopRowContainer>
             <BottomRowContainer>
@@ -179,6 +179,7 @@ export const AnnualInitiativeModalContent = observer(
                   setShowCreateGoal={setShowCreateQuarterlyGoal}
                   createAction={quarterlyGoalStore.create}
                   annualInitiativeId={annualInitiative.id}
+                  inAnnualInitiative={true}
                 />
               </CreateGoalContainer>
             )}
