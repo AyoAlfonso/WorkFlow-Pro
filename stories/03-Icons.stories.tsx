@@ -63,7 +63,7 @@ export const Icons = () => (
       const MyComponentWithIcon = () => (
         <div>
           <Icon icon={"Arrow"} size={"2em"} iconColor={"red"}/>
-        </div>    
+        </div>
       )
       `}
         language={"tsx"}
@@ -272,7 +272,7 @@ export const Icons = () => (
         <TextCenteredDiv>Emotion-E</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Success-PU"} size={"2em"} iconColor={"finePine"} />
+        <Icon icon={"Success-PO"} size={"2em"} iconColor={"finePine"} />
         <TextCenteredDiv>Success</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>

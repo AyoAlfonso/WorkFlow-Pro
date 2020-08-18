@@ -2,11 +2,15 @@ import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { ApiResponse } from "apisauce";
 import { NotificationModel } from "~/models/notification";
+import * as R from "ramda";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 export const NotificationStoreModel = types
   .model("NotificationStoreModel")
   .props({
     notifications: types.maybeNull(types.array(NotificationModel)),
+    notificationToEdit: types.maybeNull(NotificationModel),
   })
   .extend(withEnvironment())
   .views(self => ({}))
@@ -17,10 +21,14 @@ export const NotificationStoreModel = types
         self.notifications = response.data;
       }
     }),
-  }))
-  .actions(self => ({
     reset() {
       self.notifications = [] as any;
+    },
+    setNotificationToEdit(notification) {
+      self.notificationToEdit = R.clone(notification);
+    },
+    resetNotificationToEdit() {
+      self.notificationToEdit = null;
     },
   }))
   .actions(self => ({
@@ -34,6 +42,7 @@ export const NotificationStoreModel = types
       );
       if (response.ok) {
         self.notifications = response.data;
+        showToast("Notification updated", ToastMessageConstants.SUCCESS);
       }
     }),
   }));

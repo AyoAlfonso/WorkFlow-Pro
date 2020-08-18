@@ -13,7 +13,7 @@ export const showToast = (message, variant) => {
           heading={heading}
           message={message}
           color={baseTheme.colors.finePine}
-          iconName={"Success-PU"}
+          iconName={"Success-PO"}
         />,
       );
       break;

@@ -243,11 +243,8 @@ export class Api {
   }
 
   async updateNotification(notification) {
-    const updatedNotification = {
-      method: notification.method,
-    };
     return this.client.put(`/notifications/${notification.id}`, {
-      notification: updatedNotification,
+      notification: notification,
     });
   }
   //async setJWT(jwt) {}

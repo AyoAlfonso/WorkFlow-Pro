@@ -1,17 +1,25 @@
 import { types } from "mobx-state-tree";
+import { NotificationRule, NotificationValidation } from "./";
 
 export const NotificationModel = types
   .model("NotificationModel")
   .props({
     id: types.identifierNumber,
     notificationType: types.string,
-    rule: types.string,
+    rules: types.array(NotificationRule),
+    validations: types.array(NotificationValidation),
     method: types.string,
   })
   .views(self => ({}))
   .actions(self => ({
     changeMethod: method => {
       self.method = method;
+    },
+    changeTimeOfDay: timeOfDay => {
+      self.validations[0].timeOfDay = timeOfDay;
+    },
+    changeDayOfWeek: dayOfWeek => {
+      self.validations[0].dayOfWeek = dayOfWeek;
     },
   }));
 

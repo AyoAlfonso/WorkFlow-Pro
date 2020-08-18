@@ -16,9 +16,12 @@
         "notifications": "Notifications",
         "security": "Security",
         "notificationsTable": {
-          "type": "Type",
-          "rule": "Scheduling Rule",
+          "reminder": "Reminder",
+          "repeat": "Repeat",
           "email": "Email"
+        },
+        "editNotification": {
+          "reminder": "Reminder"
         },
         "meeting": "Meeting",
         "users": "Users",

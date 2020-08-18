@@ -50,3 +50,20 @@ export const Option = styled.div`
     background-color: ${props => props.theme.colors.primary100};
   }
 `;
+
+export const NotificationEditTableColumn = styled.div<FlexboxProps & LayoutProps & SpaceProps>`
+  ${flexbox}
+  ${layout}
+  ${space}
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 16px 16px 0 16px;
+`;
+
+export const IconContainer = styled.div<SpaceProps>`
+  ${space}
+  &:hover {
+    cursor: pointer;
+  }
+`;
