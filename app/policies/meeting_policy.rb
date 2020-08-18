@@ -1,9 +1,9 @@
 class MeetingPolicy < ApplicationPolicy
   attr_reader :user, :meeting_template
 
-  def initialize(user, meeting_template)
+  def initialize(user, meeting)
     @user = user
-    @meeting_template = meeting_template
+    @meeting = meeting
   end
 
   def index?
@@ -22,6 +22,14 @@ class MeetingPolicy < ApplicationPolicy
     @user.company_admin?
   end
 
+  def show?
+    @user.company_admin?
+  end
+
+  def current_team_meetings_in_progress?
+    @user.teams.ids.include?(@meeting.team_id)
+  end
+  
   class Scope
     attr_reader :user, :scope
 

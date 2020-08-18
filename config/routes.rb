@@ -74,7 +74,8 @@ Rails.application.routes.draw do
     resources :teams, only: [:index]
 
     #meetings
-    resources :meetings, only: [:create]
+    resources :meetings, only: [:create, :index, :update, :destroy]
+    get '/meetings/current_team_meetings_in_progress', to: 'meetings#current_team_meetings_in_progress'
 
   end
 
