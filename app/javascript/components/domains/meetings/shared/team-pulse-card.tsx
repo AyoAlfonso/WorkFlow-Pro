@@ -1,6 +1,5 @@
 import * as React from "react";
 import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineMarkSeries } from "react-vis";
-import "../../../../../../node_modules/react-vis/dist/style.css";
 import styled from "styled-components";
 import { baseTheme } from "~/themes";
 import * as moment from "moment";
