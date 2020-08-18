@@ -1,6 +1,6 @@
 import { types, flow } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
-import { MeetingModel } from "../models/meeting";
+import { MeetingModel, IMeeting } from "../models/meeting";
 import { ApiResponse } from "apisauce";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
@@ -59,3 +59,11 @@ export const MeetingStoreModel = types
       }
     }),
   }));
+
+type MeetingStoreType = typeof MeetingStoreModel.Type;
+
+export interface IMeetingStore extends MeetingStoreType {
+  currentMeeting: any;
+  meetings: any;
+  teamMeetings: any;
+}

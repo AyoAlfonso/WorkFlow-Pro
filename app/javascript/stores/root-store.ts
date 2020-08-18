@@ -11,6 +11,7 @@ import { QuarterlyGoalStoreModel, IQuarterlyGoalStore } from "./quarterly-goal-s
 import { HabitStoreModel } from "./habit-store";
 import { QuestionnaireStoreModel, IQuestionnaireStore } from "./questionnaire-store";
 import { TeamStoreModel, ITeamStore } from "./team-store";
+import { MeetingStoreModel, IMeetingStore } from "./meeting-store";
 
 export const RootStoreModel = types
   .model("RootStoreModel")
@@ -27,6 +28,7 @@ export const RootStoreModel = types
     habitStore: HabitStoreModel,
     questionnaireStore: QuestionnaireStoreModel,
     teamStore: TeamStoreModel,
+    meetingStore: MeetingStoreModel,
   })
   .views(self => ({}))
   .actions(self => ({
@@ -58,4 +60,5 @@ export interface IRootStore extends IStateTreeNode {
   quarterlyGoalStore: IQuarterlyGoalStore;
   questionnaireStore: IQuestionnaireStore;
   teamStore: ITeamStore;
+  meetingStore: IMeetingStore;
 }
