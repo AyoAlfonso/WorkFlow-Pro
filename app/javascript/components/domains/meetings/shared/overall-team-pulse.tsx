@@ -1,5 +1,4 @@
 import * as React from "react";
-import "react-vis/dist/style.css";
 import styled from "styled-components";
 import { Icon } from "~/components/shared";
 import { Text } from "~/components/shared/text";

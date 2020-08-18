@@ -3,6 +3,7 @@ import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineMarkSeries } from "react
 import styled from "styled-components";
 import { baseTheme } from "~/themes";
 import * as moment from "moment";
+import "react-vis/dist/style.css";
 
 const { warningRed, cautionYellow, successGreen, finePine, greyInactive } = baseTheme.colors;
 
