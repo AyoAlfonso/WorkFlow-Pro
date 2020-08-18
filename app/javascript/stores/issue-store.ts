@@ -2,6 +2,8 @@ import { types, flow } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { IssueModel } from "../models/issue";
 import { ApiResponse } from "apisauce";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 export const IssueStoreModel = types
   .model("IssueStoreModel")
@@ -37,8 +39,10 @@ export const IssueStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.createIssue(issueObject);
       if (response.ok) {
         self.issues = response.data;
+        showToast("Issue created.", ToastMessageConstants.SUCCESS);
         return true;
       } else {
+        showToast("There was a problem creating the issue", ToastMessageConstants.ERROR);
         return false;
       }
     }),

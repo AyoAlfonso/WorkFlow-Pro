@@ -81,7 +81,7 @@ export const HomePersonalStatus = observer(
                 borderRadius: "6px",
                 overflow: "hidden",
                 padding: 0,
-                width: "250px",
+                width: "175px",
               }}
               on="click"
               onClose={() =>
@@ -138,7 +138,7 @@ const DropdownContainer = styled.div`
   justify-content: center;
   margin: auto 50px;
   overflow: hidden;
-  width: 250px;
+  width: 175px;
 `;
 
 const DropdownMenu = styled.div``;

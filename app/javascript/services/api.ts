@@ -150,6 +150,10 @@ export class Api {
     return this.client.post(`/annual_initiatives`, annualInitiativeObject);
   }
 
+  async deleteAnnualInitiative(id) {
+    return this.client.delete(`/annual_initiatives/${id}`);
+  }
+
   async createAnnualInitiativeKeyElement(id) {
     return this.client.post(`/annual_initiatives/create_key_element/${id}`);
   }

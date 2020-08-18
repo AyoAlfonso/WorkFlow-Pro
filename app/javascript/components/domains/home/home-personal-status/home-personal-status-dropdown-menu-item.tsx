@@ -43,7 +43,7 @@ const DropdownMenuItem = styled.div<DropdownMenuItemType>`
   height: 32px;
   justify-content: space-between;
   padding: 5px;
-  :& hover {
+  &: hover {
     border: ${props => props.rightIcon && `solid 2px ${props => props.theme.colors[props.color]}`};
     cursor: pointer;
   }

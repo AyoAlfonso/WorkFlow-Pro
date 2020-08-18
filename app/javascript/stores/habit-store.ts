@@ -15,6 +15,9 @@ export const HabitStoreModel = types
     get lastFourDays() {
       return [0, 1, 2, 3].map(dayInt => moment().subtract(dayInt, "days"));
     },
+    get lastFiveDays() {
+      return [0, 1, 2, 3, 4].map(dayInt => moment().subtract(dayInt, "days"));
+    },
   }))
   .actions(self => ({
     createHabit: flow(function*(habitData) {

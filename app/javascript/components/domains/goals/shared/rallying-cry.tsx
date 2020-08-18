@@ -5,6 +5,7 @@ import { color } from "styled-system";
 import { useMst } from "~/setup/root";
 import ContentEditable from "react-contenteditable";
 import { RoleAdministrator, RoleCEO } from "~/lib/constants";
+import { useRef } from "react";
 
 interface IRallyingCryProps {
   rallyingCry: string;
@@ -14,15 +15,24 @@ export const RallyingCry = ({ rallyingCry }: IRallyingCryProps): JSX.Element => 
   const { sessionStore, companyStore } = useMst();
   const profile = sessionStore.profile;
   const editable = profile.role == RoleCEO || profile.role == RoleAdministrator;
+  const rallyingCryRef = useRef(null);
 
   return (
     <VisionContainer>
       <VisionTitle>Rallying Cry</VisionTitle>
       <StyledContentEditable
+        innerRef={rallyingCryRef}
         html={rallyingCry}
         disabled={!editable}
         onChange={e => {
-          companyStore.updateModelField("rallyingCry", e.target.value);
+          if (!e.target.value.includes("<div>")) {
+            companyStore.updateModelField("rallyingCry", e.target.value);
+          }
+        }}
+        onKeyDown={key => {
+          if (key.keyCode == 13) {
+            rallyingCryRef.current.blur();
+          }
         }}
         onBlur={() => companyStore.updateCompanyFromModel()}
       />

@@ -92,7 +92,7 @@ export const Company = observer(
                   value={company.timezone}
                 />
               </PersonalInfoContainer>
-              <ProfilePhotoSection>
+              <ProfilePhotoSection display={"block"}>
                 <PhotoContainer>
                   {company.logoUrl ? <img src={company.logoUrl}></img> : "No Company Logo set"}
                 </PhotoContainer>
@@ -226,7 +226,7 @@ export const Company = observer(
                     }}
                   />
                 </PersonalInfoContainer>
-                <ProfilePhotoSection>
+                <ProfilePhotoSection display={"block"}>
                   <PhotoContainer>
                     {company.logoUrl ? <img src={company.logoUrl}></img> : "No Company Logo set"}
                   </PhotoContainer>
@@ -236,7 +236,7 @@ export const Company = observer(
                       variant={"redOutline"}
                       onClick={removeLogo}
                       mr={2}
-                      style={{ width: "150px" }}
+                      style={{ width: "120px" }}
                     >
                       {t("general.remove")}
                     </Button>

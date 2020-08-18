@@ -10,7 +10,7 @@ export const HabitsBody = observer(
   (): JSX.Element => {
     const {
       habitStore,
-      habitStore: { habits, lastFourDays },
+      habitStore: { habits, lastFourDays, lastFiveDays },
     } = useMst();
     useEffect(() => {
       habitStore.fetchHabits();
@@ -24,12 +24,20 @@ export const HabitsBody = observer(
           />
         </HabitsTableRow>
       ));
-    const dayNames = lastFourDays.map((day, index) => (
+    // const dayNames = lastFourDays.map((day, index) => (
+    //   <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"12%"}>
+    //     {day.format("ddd")}
+    //   </HabitsTableHeaderCell>
+    // ));
+    // const dayDates = lastFourDays.map((day, index) => (
+    //   <HabitsTableHeaderCell key={index}>{day.format("DD")}</HabitsTableHeaderCell>
+    // ));
+    const dayNames = lastFiveDays.map((day, index) => (
       <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"12%"}>
         {day.format("ddd")}
       </HabitsTableHeaderCell>
     ));
-    const dayDates = lastFourDays.map((day, index) => (
+    const dayDates = lastFiveDays.map((day, index) => (
       <HabitsTableHeaderCell key={index}>{day.format("DD")}</HabitsTableHeaderCell>
     ));
     return (

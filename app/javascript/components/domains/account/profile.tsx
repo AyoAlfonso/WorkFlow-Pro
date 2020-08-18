@@ -13,6 +13,7 @@ import {
   BodyContainer,
   PersonalInfoContainer,
   ProfilePhotoSection,
+  ProfilePhotoWrapper,
   HeaderContainer,
   HeaderText,
   PhotoContainer,
@@ -83,27 +84,29 @@ export const AccountProfile = observer(
             </Select>
           </PersonalInfoContainer>
           <ProfilePhotoSection>
-            <PhotoContainer>
-              <Avatar
-                firstName={sessionStore.profile.firstName}
-                lastName={sessionStore.profile.lastName}
-                avatarUrl={sessionStore.profile.avatarUrl}
-                size={256}
-                marginRight={"auto"}
-              />
-            </PhotoContainer>
-            <PhotoModificationButtonsSection>
-              <Button
-                small
-                variant={"redOutline"}
-                onClick={deleteAvatar}
-                mr={2}
-                style={{ width: "120px" }}
-              >
-                {t("general.remove")}
-              </Button>
-              <FileInput labelText={t("general.upload")} onChange={submitAvatar} />
-            </PhotoModificationButtonsSection>
+            <ProfilePhotoWrapper>
+              <PhotoContainer>
+                <Avatar
+                  firstName={sessionStore.profile.firstName}
+                  lastName={sessionStore.profile.lastName}
+                  avatarUrl={sessionStore.profile.avatarUrl}
+                  size={256}
+                  marginRight={"auto"}
+                />
+              </PhotoContainer>
+              <PhotoModificationButtonsSection>
+                <Button
+                  small
+                  variant={"redOutline"}
+                  onClick={deleteAvatar}
+                  mr={2}
+                  style={{ width: "120px" }}
+                >
+                  {t("general.remove")}
+                </Button>
+                <FileInput labelText={t("general.upload")} onChange={submitAvatar} />
+              </PhotoModificationButtonsSection>
+            </ProfilePhotoWrapper>
           </ProfilePhotoSection>
         </BodyContainer>
         <SaveButtonContainer>

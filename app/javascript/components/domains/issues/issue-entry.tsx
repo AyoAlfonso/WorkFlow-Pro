@@ -6,7 +6,7 @@ import { Icon } from "../../shared/icon";
 import { observer } from "mobx-react";
 import { baseTheme } from "../../../themes/base";
 import ContentEditable from "react-contenteditable";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Text } from "~/components/shared/text";
 import { HomeContainerBorders } from "../home/shared-components";
 import { Button } from "rebass";
@@ -31,6 +31,8 @@ export const IssueEntry = observer(
     const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
+    const issueRef = useRef(null);
+
     const renderPriorityIcon = (priority: string) => {
       switch (priority) {
         case "medium":
@@ -52,7 +54,14 @@ export const IssueEntry = observer(
             />
           );
         default:
-          return <EmptyIconContainer />;
+          return (
+            <Icon
+              icon={"Priority-Empty"}
+              size={24}
+              iconColor={baseTheme.colors.primary100}
+              style={{ marginTop: "2px" }}
+            />
+          );
       }
     };
 
@@ -96,8 +105,18 @@ export const IssueEntry = observer(
           {renderPriorityIcon(issue.priority)}
         </IssuePriorityContainer>
         <StyledContentEditable
+          innerRef={issueRef}
           html={issue.description}
-          onChange={e => issueStore.updateIssueState(issue["id"], "description", e.target.value)}
+          onChange={e => {
+            if (!e.target.value.includes("<div>")) {
+              issueStore.updateIssueState(issue["id"], "description", e.target.value);
+            }
+          }}
+          onKeyDown={key => {
+            if (key.keyCode == 13) {
+              issueRef.current.blur();
+            }
+          }}
           style={{ textDecoration: issue.completedAt && "line-through" }}
           onBlur={() => issueStore.updateIssue(issue.id)}
         />
@@ -234,11 +253,6 @@ const StyledContentEditable = styled(ContentEditable)`
   width: 160px;
   margin-top: auto;
   margin-bottom: auto;
-`;
-
-const EmptyIconContainer = styled.div`
-  width: 24px;
-  height: 24px;
 `;
 
 type ShareIssueContainerType = {

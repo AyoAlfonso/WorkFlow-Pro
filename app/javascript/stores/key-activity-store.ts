@@ -3,6 +3,8 @@ import { withEnvironment } from "../lib/with-environment";
 import { KeyActivityModel } from "../models/key-activity";
 import { ApiResponse } from "apisauce";
 import { localeData } from "moment";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 export const KeyActivityStoreModel = types
   .model("KeyActivityStoreModel")
@@ -13,10 +15,14 @@ export const KeyActivityStoreModel = types
   .extend(withEnvironment())
   .views(self => ({
     get weeklyKeyActivities() {
-      return self.keyActivities.filter(issue => issue.weeklyList && !issue.completedAt);
+      return self.keyActivities.filter(
+        keyActivity => keyActivity.weeklyList && !keyActivity.completedAt,
+      );
     },
     get masterKeyActivities() {
-      return self.keyActivities.filter(issue => !issue.weeklyList || issue.completedAt);
+      return self.keyActivities.filter(
+        keyActivity => !keyActivity.weeklyList || keyActivity.completedAt,
+      );
     },
   }))
   .actions(self => ({
@@ -44,8 +50,10 @@ export const KeyActivityStoreModel = types
       );
       if (response.ok) {
         self.keyActivities = response.data;
+        showToast("Key activity created.", ToastMessageConstants.SUCCESS);
         return true;
       } else {
+        showToast("There was a problem creating the key activity.", ToastMessageConstants.ERROR);
         return false;
       }
     }),

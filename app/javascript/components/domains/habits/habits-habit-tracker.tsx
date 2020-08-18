@@ -6,6 +6,7 @@ import { RawIcon } from "~/components/shared";
 import { HabitsTableDataCell } from "./habits-body";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { baseTheme } from "~/themes";
 
 interface IHabitsHabitTrackerProps {
   habit: IHabit;
@@ -14,7 +15,7 @@ interface IHabitsHabitTrackerProps {
 export const HabitsHabitTracker = observer(
   ({ habit, onUpdate }: IHabitsHabitTrackerProps): JSX.Element => {
     const renderHabitLogs = () =>
-      habit.recentLogs.map(log => (
+      habit.recentLogsFiveDays.map(log => (
         <HabitsTableDataCell
           key={`${habit.id}-${log.logDate}`}
           onClick={() => {
@@ -22,9 +23,9 @@ export const HabitsHabitTracker = observer(
           }}
         >
           {log.id ? (
-            <RawIcon icon={"Tasks"} color={habit.color} size={12} />
+            <RawIcon icon={"Checkmark"} color={habit.color} size={12} />
           ) : (
-            <RawIcon icon={"Close"} color={habit.color} size={12} />
+            <RawIcon icon={"Close"} color={baseTheme.colors.greyInactive} size={12} />
           )}
         </HabitsTableDataCell>
       ));
@@ -32,14 +33,18 @@ export const HabitsHabitTracker = observer(
     return (
       <>
         <HabitsTableDataCell>
-          <HabitsTableCircularProgressBar
-            color={habit.color}
-            value={habit.percentageWeeklyLogsCompleted}
-          />
+          {habit.percentageWeeklyLogsCompleted == 0 ? (
+            <HabitsTableCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
+          ) : (
+            <HabitsTableCircularProgressBar
+              color={habit.color}
+              value={habit.percentageWeeklyLogsCompleted}
+            />
+          )}
         </HabitsTableDataCell>
-        <HabitsTableDataCell fontWeight={600}>
+        <HabitsTextContainer>
           <NameContainer color={habit.color}>{`${habit.name}`}</NameContainer>
-        </HabitsTableDataCell>
+        </HabitsTextContainer>
         {renderHabitLogs()}
       </>
     );
@@ -48,6 +53,12 @@ export const HabitsHabitTracker = observer(
 
 const NameContainer = styled.div`
   color: ${props => props.color};
+`;
+
+export const HabitsTextContainer = styled.td`
+  font-weight: 600;
+  height: 35px;
+  margin-left: 10px;
 `;
 
 interface IHabitsTableCircularProgressBar {

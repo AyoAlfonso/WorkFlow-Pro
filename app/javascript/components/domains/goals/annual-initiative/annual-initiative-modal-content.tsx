@@ -2,7 +2,7 @@ import * as React from "react";
 import { HomeContainerBorders } from "../../home/shared-components";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
 import * as R from "ramda";
@@ -41,6 +41,7 @@ export const AnnualInitiativeModalContent = observer(
     const [showCreateQuarterlyGoal, setShowCreateQuarterlyGoal] = useState<boolean>(false);
 
     const { t } = useTranslation();
+    const descriptionRef = useRef(null);
 
     useEffect(() => {
       annualInitiativeStore.getAnnualInitiative(annualInitiativeId);
@@ -75,7 +76,7 @@ export const AnnualInitiativeModalContent = observer(
                 {quarterlyGoal.description}
               </QuarterlyGoalDescription>
               <QuarterlyGoalOptionContainer>
-                <RecordOptions quarterlyGoalId={quarterlyGoal.id} />
+                <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} />
               </QuarterlyGoalOptionContainer>
             </TopRowContainer>
             <BottomRowContainer>
@@ -97,10 +98,18 @@ export const AnnualInitiativeModalContent = observer(
         <HeaderContainer>
           <TitleContainer>
             <StyledContentEditable
+              innerRef={descriptionRef}
               html={annualInitiative.description}
               disabled={!editable}
               onChange={e => {
-                annualInitiativeStore.updateModelField("description", e.target.value);
+                if (!e.target.value.includes("<div>")) {
+                  annualInitiativeStore.updateModelField("description", e.target.value);
+                }
+              }}
+              onKeyDown={key => {
+                if (key.keyCode == 13) {
+                  descriptionRef.current.blur();
+                }
               }}
               onBlur={() => annualInitiativeStore.update()}
             />
@@ -112,6 +121,18 @@ export const AnnualInitiativeModalContent = observer(
             </GoalText>
           </TitleContainer>
           <AnnualInitiativeActionContainer>
+            <DeleteIconContainer
+              onClick={() => {
+                if (confirm("Are you sure you want to delete this annual initiative?")) {
+                  annualInitiativeStore.delete(annualInitiativeId).then(() => {
+                    setAnnualInitiativeModalOpen(false);
+                  });
+                }
+              }}
+            >
+              <Icon icon={"Delete"} size={"25px"} iconColor={"grey80"} />
+            </DeleteIconContainer>
+
             <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
               <Icon icon={"Close"} size={"25px"} iconColor={"grey80"} />
             </CloseIconContainer>
@@ -158,6 +179,7 @@ export const AnnualInitiativeModalContent = observer(
                   setShowCreateGoal={setShowCreateQuarterlyGoal}
                   createAction={quarterlyGoalStore.create}
                   annualInitiativeId={annualInitiative.id}
+                  inAnnualInitiative={true}
                 />
               </CreateGoalContainer>
             )}
@@ -221,6 +243,10 @@ const CloseIconContainer = styled.div`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const DeleteIconContainer = styled(CloseIconContainer)`
+  margin-right: 16px;
 `;
 
 const SectionContainer = styled.div`

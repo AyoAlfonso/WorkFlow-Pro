@@ -6,6 +6,7 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { UserModel } from "~/models/user";
 import { StaticModel } from "~/models/static";
+import { homePersonalStatusOptions as options } from "~/components/domains/home/home-personal-status/home-personal-status-options";
 
 export const SessionStoreModel = types
   .model("SessionStoreModel")
@@ -43,9 +44,20 @@ export const SessionStoreModel = types
         const response = yield env.api.updateProfile(
           Object.assign({ user: fieldsAndValues }, { id: self.profile.id }),
         );
+
         if (response.ok) {
+          let responseMessage = "";
           self.profile = response.data;
-          showToast("User updated", ToastMessageConstants.SUCCESS);
+          if (fieldsAndValues["dailyLogsAttributes"]) {
+            const workStatus = R.path(["dailyLogsAttributes", 0, "workStatus"], fieldsAndValues);
+            const humanizedWorkStatus = R.path([workStatus, "label"], options);
+            responseMessage = humanizedWorkStatus
+              ? `You successfully changed your status to ${humanizedWorkStatus}`
+              : "Status Updated";
+          } else {
+            responseMessage = "User updated";
+          }
+          showToast(responseMessage, ToastMessageConstants.SUCCESS);
         }
       } catch {
         // error messaging handled by API monitor

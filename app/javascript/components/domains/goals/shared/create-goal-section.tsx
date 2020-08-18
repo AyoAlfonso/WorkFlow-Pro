@@ -16,6 +16,7 @@ interface ICreateGoalSectionProps {
   createAction: any;
   annualInitiativeId?: string | number;
   buttonWidth?: string;
+  inAnnualInitiative?: boolean;
 }
 
 export const CreateGoalSection = ({
@@ -28,6 +29,7 @@ export const CreateGoalSection = ({
   createAction,
   annualInitiativeId,
   buttonWidth,
+  inAnnualInitiative,
 }: ICreateGoalSectionProps): JSX.Element => {
   const [description, setDescription] = useState<string>("");
 
@@ -44,10 +46,18 @@ export const CreateGoalSection = ({
               : annualInitiativeId
               ? { annualInitiativeId, description }
               : { description };
-            createAction(variables).then(() => {
-              setShowCreateGoal(false);
-              setDescription("");
-            });
+
+            if (annualInitiativeId) {
+              createAction(variables, inAnnualInitiative).then(() => {
+                setShowCreateGoal(false);
+                setDescription("");
+              });
+            } else {
+              createAction(variables).then(() => {
+                setShowCreateGoal(false);
+                setDescription("");
+              });
+            }
           }}
         >
           <AddInitiativeText>{createButtonText}</AddInitiativeText>

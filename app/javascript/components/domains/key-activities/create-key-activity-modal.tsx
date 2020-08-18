@@ -1,14 +1,16 @@
 import * as React from "react";
 import { ModalWithHeader } from "../../shared/modal-with-header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TextInput } from "../../shared/text-input";
 import styled from "styled-components";
 import { Icon } from "../../shared/icon";
 import { Button } from "rebass";
 import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";
-import * as R from "ramda";
 import { Avatar } from "~/components/shared/avatar";
+import Switch from "react-switch";
+import { Text } from "~/components/shared/text";
+import { UserSelectionDropdownList } from "~/components/shared/user-selection-dropdown-list";
 
 interface ICreateKeyActivityModalProps {
   createKeyActivityModalOpen: boolean;
@@ -16,11 +18,27 @@ interface ICreateKeyActivityModalProps {
 }
 
 export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX.Element => {
-  const { keyActivityStore, sessionStore } = useMst();
+  const { keyActivityStore, sessionStore, userStore } = useMst();
   const { createKeyActivityModalOpen, setCreateKeyActivityModalOpen } = props;
   const [keyActivityDescription, setKeyActivityDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
   const [weeklyList, setWeeklyList] = useState<boolean>(true);
+  const [showUsersList, setShowUsersList] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+
+  useEffect(() => {
+    setSelectedUser(sessionStore.profile);
+  }, []);
+
+  const companyUsers = userStore.users;
+
+  const renderUserSelectionList = (): JSX.Element => {
+    return showUsersList ? (
+      <UserSelectionDropdownList userList={companyUsers} onUserSelect={setSelectedUser} />
+    ) : (
+      <></>
+    );
+  };
 
   return (
     <ModalWithHeader
@@ -44,13 +62,18 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
               paddingBottom: "4px",
             }}
           />
-          <Avatar
-            avatarUrl={R.path(["profile", "avatarUrl"], sessionStore)}
-            firstName={R.path(["profile", "firstName"], sessionStore)}
-            lastName={R.path(["profile", "lastName"], sessionStore)}
-            size={55}
-            marginLeft={"auto"}
-          />
+          {selectedUser && (
+            <AvatarContainer onClick={() => setShowUsersList(!showUsersList)}>
+              <Avatar
+                avatarUrl={selectedUser.avatarUrl}
+                firstName={selectedUser.firstName}
+                lastName={selectedUser.lastName}
+                size={32}
+                marginLeft={"auto"}
+              />
+              {renderUserSelectionList()}
+            </AvatarContainer>
+          )}
         </FlexContainer>
         <FlexContainer>
           <StyledButton
@@ -61,6 +84,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                   description: keyActivityDescription,
                   priority: selectedPriority,
                   weeklyList: weeklyList,
+                  userId: selectedUser.id,
                 })
                 .then(result => {
                   if (result) {
@@ -75,9 +99,15 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             Save
           </StyledButton>
           <PriorityContainer>
-            <MasterListButton active={!weeklyList} onClick={() => setWeeklyList(!weeklyList)}>
-              Master
-            </MasterListButton>
+            <StyledSwitch
+              checked={!weeklyList}
+              onChange={e => setWeeklyList(!weeklyList)}
+              onColor={baseTheme.colors.primary100}
+              uncheckedIcon={false}
+              checkedIcon={false}
+              width={48}
+            />
+            <MasterListText>Master</MasterListText>
             <IconContainer onClick={() => setSelectedPriority(selectedPriority == 1 ? 0 : 1)}>
               <Icon
                 icon={"Priority-High"}
@@ -141,16 +171,18 @@ const StyledButton = styled(Button)<StyledButtonType>`
   }
 `;
 
-type MasterListButtonType = {
-  active: boolean;
-};
+const StyledSwitch = styled(Switch)``;
 
-const MasterListButton = styled(Button)<MasterListButtonType>`
-  margin-top: -4px !important;
-  background-color: ${props =>
-    props.active ? baseTheme.colors.primary100 : baseTheme.colors.grey60};
-  color: white !important;
-  border-color: ${baseTheme.colors.primary100} !important;
+const MasterListText = styled(Text)`
+  color: ${props => props.theme.colors.grey60};
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 5px;
+  font-size: 14px;
+`;
+
+const AvatarContainer = styled.div`
+  margin-left: auto;
   &: hover {
     cursor: pointer;
   }

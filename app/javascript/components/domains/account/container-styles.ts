@@ -22,9 +22,17 @@ export const PersonalInfoContainer = styled.div`
   padding-right: 10%;
 `;
 
-export const ProfilePhotoSection = styled.div`
+type ProfilePhotoSectionType = {
+  display?: string;
+};
+export const ProfilePhotoSection = styled.div<ProfilePhotoSectionType>`
   width: 30%;
+  display: ${props => props.display || "flex"};
+  justify-content: center;
+  align-items: center;
 `;
+
+export const ProfilePhotoWrapper = styled.div``;
 
 export const HeaderContainer = styled.div`
   padding: 16px;
@@ -46,6 +54,8 @@ export const PhotoModificationButtonsSection = styled.div`
   justify-content: center;
   margin-top: 16px;
   width: 250px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 export const SaveButtonContainer = styled.div`

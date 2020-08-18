@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
@@ -42,6 +42,11 @@ export const ContextTabs = observer(
     const [focusOnLastInput, setFocusOnLastInput] = useState<boolean>(false);
     const editable = currentUser.id == object.ownedById;
 
+    const firstImportanceRef = useRef(null);
+    const secondImportanceRef = useRef(null);
+    const thirdImportanceRef = useRef(null);
+    const descriptionRef = useRef(null);
+
     useEffect(() => {
       if (type == "annualInitiative") {
         setStore(annualInitiativeStore);
@@ -56,29 +61,69 @@ export const ContextTabs = observer(
       store.updateModelField("importance", objectToBeModified.importance);
     };
 
+    const updateContentEditable = () => {
+      //CHRIS' NOTE: We need to use a separate function with the if statement below because when ref is calling blur, the local states get reset and store is now empty.
+      //             Hence the need to use a separate function to update the store.
+      if (type == "annualInitiative") {
+        annualInitiativeStore.update();
+      } else if (type == "quarterlyGoal") {
+        quarterlyGoalStore.update();
+      }
+    };
+
     const renderContextImportance = () => {
       return (
         <ContextImportanceContainer>
           <SubHeaderText text={"Why is it important?"} />
           <StyledContentEditable
+            innerRef={firstImportanceRef}
             html={object.importance[0]}
             disabled={!editable}
-            onChange={e => updateImportance(0, e.target.value)}
-            onBlur={() => store.update()}
+            onChange={e => {
+              if (!e.target.value.includes("<div>")) {
+                updateImportance(0, e.target.value);
+              }
+            }}
+            onKeyDown={key => {
+              if (key.keyCode == 13) {
+                firstImportanceRef.current.blur();
+              }
+            }}
+            onBlur={() => updateContentEditable()}
           />
           <SubHeaderText text={"What are the consequences if missed?"} />
           <StyledContentEditable
+            innerRef={secondImportanceRef}
             html={object.importance[1]}
             disabled={!editable}
-            onChange={e => updateImportance(1, e.target.value)}
-            onBlur={() => store.update()}
+            onChange={e => {
+              if (!e.target.value.includes("<div>")) {
+                updateImportance(1, e.target.value);
+              }
+            }}
+            onKeyDown={key => {
+              if (key.keyCode == 13) {
+                secondImportanceRef.current.blur();
+              }
+            }}
+            onBlur={() => updateContentEditable()}
           />
           <SubHeaderText text={"How will we celebrate when achieved?"} />
           <StyledContentEditable
+            innerRef={thirdImportanceRef}
             html={object.importance[2]}
             disabled={!editable}
-            onChange={e => updateImportance(2, e.target.value)}
-            onBlur={() => store.update()}
+            onChange={e => {
+              if (!e.target.value.includes("<div>")) {
+                updateImportance(2, e.target.value);
+              }
+            }}
+            onKeyDown={key => {
+              if (key.keyCode == 13) {
+                thirdImportanceRef.current.blur();
+              }
+            }}
+            onBlur={() => updateContentEditable()}
           />
         </ContextImportanceContainer>
       );
@@ -87,10 +132,20 @@ export const ContextTabs = observer(
     const renderContextDescription = () => {
       return (
         <StyledContentEditable
+          innerRef={descriptionRef}
           html={object.contextDescription}
           disabled={!editable}
-          onChange={e => store.updateModelField("contextDescription", e.target.value)}
-          onBlur={() => store.update()}
+          onChange={e => {
+            if (!e.target.value.includes("<div>")) {
+              store.updateModelField("contextDescription", e.target.value);
+            }
+          }}
+          onKeyDown={key => {
+            if (key.keyCode == 13) {
+              descriptionRef.current.blur();
+            }
+          }}
+          onBlur={() => updateContentEditable()}
         />
       );
     };

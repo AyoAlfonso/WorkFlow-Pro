@@ -20,6 +20,9 @@ export const HabitModel = types
     get recentLogs() {
       return [...R.reverse(self.currentWeekLogs), ...R.reverse(self.previousWeekLogs)].slice(0, 4);
     },
+    get recentLogsFiveDays() {
+      return [...R.reverse(self.currentWeekLogs), ...R.reverse(self.previousWeekLogs)].slice(0, 5);
+    },
   }))
   .views(self => ({
     get percentageWeeklyLogsCompleted() {

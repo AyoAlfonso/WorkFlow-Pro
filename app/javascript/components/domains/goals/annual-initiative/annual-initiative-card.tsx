@@ -5,6 +5,7 @@ import { Text } from "../../../shared/text";
 import { AnnualInitiativeCardMinimized } from "./annual-initiative-card-minimized";
 import { AnnualInitiativeCardExpanded } from "./annual-initiative-card-expanded";
 import { useState, useEffect } from "react";
+import { RecordOptions } from "../shared/record-options";
 
 interface IAnnualInitiativeCardProps {
   annualInitiative: any;
@@ -42,14 +43,19 @@ export const AnnualInitiativeCard = ({
       key={index}
       margin-right={index + 1 == totalNumberOfAnnualInitiatives ? "0px" : "15px"}
     >
-      <DescriptionContainer
-        onClick={() => {
-          setAnnualInitiativeModalOpen(true);
-          setAnnualInitiativeId(annualInitiative.id);
-        }}
-      >
-        <StyledText> {annualInitiative.description} </StyledText>
-      </DescriptionContainer>
+      <HeaderContainer>
+        <DescriptionContainer
+          onClick={() => {
+            setAnnualInitiativeModalOpen(true);
+            setAnnualInitiativeId(annualInitiative.id);
+          }}
+        >
+          <StyledText> {annualInitiative.description} </StyledText>
+        </DescriptionContainer>
+        <IconContainer>
+          <RecordOptions type={"annualInitiative"} id={annualInitiative.id} marginLeft={"-70px"} />
+        </IconContainer>
+      </HeaderContainer>
 
       {showMinimizedCard ? (
         <AnnualInitiativeCardMinimized
@@ -76,6 +82,10 @@ const Container = styled(HomeContainerBorders)`
   min-width: 240px;
   margin-right: ${props => props["margin-right"] || "0px"};
   height: fit-content;
+  &: hover {
+    background: rgba(0, 0, 0, 0.02);
+    opacity: 0.85;
+  }
 `;
 
 const DescriptionContainer = styled.div`
@@ -91,4 +101,16 @@ const StyledText = styled(Text)`
     font-weight: bold;
     text-decoration: underline;
   }
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+`;
+
+const IconContainer = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: 16px;
+  display: flex;
 `;

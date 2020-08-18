@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
 import { Avatar } from "~/components/shared/avatar";
 import { RoleAdministrator, RoleCEO } from "~/lib/constants";
+import { UserSelectionDropdownList } from "~/components/shared/user-selection-dropdown-list";
 
 interface IOwnedBySectionProps {
   ownedBy: UserType;
@@ -38,27 +39,9 @@ export const OwnedBySection = ({
     currentUser.role == RoleCEO ||
     currentUser.role == RoleAdministrator;
 
-  const renderUserOptions = (): Array<JSX.Element> => {
-    return companyUsers.map((user, index) => {
-      return (
-        <UserOption key={index} onClick={() => store.updateOwnedBy(user.id)}>
-          <Avatar
-            avatarUrl={user.avatarUrl}
-            firstName={user.firstName}
-            lastName={user.lastName}
-            size={45}
-            marginLeft={"0px"}
-          />
-
-          <UserOptionText> {`${user.firstName} ${user.lastName}`}</UserOptionText>
-        </UserOption>
-      );
-    });
-  };
-
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
-      <ActionDropdownContainer>{renderUserOptions()}</ActionDropdownContainer>
+      <UserSelectionDropdownList userList={companyUsers} onUserSelect={store.updateOwnedBy} />
     ) : (
       <></>
     );
@@ -107,38 +90,4 @@ const SubHeaderContainer = styled.div`
 
 const OwnedBySubHeaderContainer = styled(SubHeaderContainer)`
   margin-bottom: 20px;
-`;
-
-const ActionDropdownContainer = styled.div`
-  position: absolute;
-  background-color: ${props => props.theme.colors.backgroundBlue};
-  margin-left: -10px;
-  margin-top: 5px;
-  border-radius: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-`;
-
-const UserOptionText = styled(Text)`
-  color: ${props => props.theme.colors.primary100};
-  cursor: pointer;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 12px;
-`;
-
-const UserOption = styled.div`
-  display: flex;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  &:hover {
-    background-color: ${props => props.theme.colors.primary100};
-  }
-  &:hover ${UserOptionText} {
-    color: white;
-  }
 `;

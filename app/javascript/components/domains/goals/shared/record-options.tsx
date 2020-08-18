@@ -7,12 +7,14 @@ import { useMst } from "~/setup/root";
 import { useRef, useState, useEffect } from "react";
 
 interface IRecordOptionsProps {
-  quarterlyGoalId: string | number;
+  type: string;
+  id: string | number;
+  marginLeft?: string;
 }
 
 export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
-  const { quarterlyGoalId } = props;
-  const { quarterlyGoalStore } = useMst();
+  const { type, id, marginLeft } = props;
+  const { quarterlyGoalStore, annualInitiativeStore } = useMst();
 
   const optionsRef = useRef(null);
 
@@ -30,6 +32,24 @@ export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
     };
   }, [optionsRef]);
 
+  const deleteRecord = () => {
+    let store;
+    let stringValue = "";
+    if (type == "quarterlyGoal") {
+      store = quarterlyGoalStore;
+      stringValue = "quarterly goal";
+    } else if (type == "annualInitiative") {
+      store = annualInitiativeStore;
+      stringValue = "annual initiative";
+    }
+
+    if (confirm(`Are you sure you want to delete this ${stringValue}?`)) {
+      store.delete(id).then(() => {
+        setShowOptions(false);
+      });
+    }
+  };
+
   return (
     <Container ref={optionsRef}>
       <IconWrapper onClick={() => setShowOptions(!showOptions)}>
@@ -37,16 +57,8 @@ export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
       </IconWrapper>
 
       {showOptions && (
-        <OptionsContainer>
-          <Option
-            onClick={() => {
-              if (confirm("Are you sure you want to delete this quarterly goal?")) {
-                quarterlyGoalStore.delete(quarterlyGoalId).then(() => {
-                  setShowOptions(false);
-                });
-              }
-            }}
-          >
+        <OptionsContainer marginLeft={marginLeft}>
+          <Option onClick={() => deleteRecord()}>
             <StyledIcon icon={"Delete"} size={20} />
             <OptionText> Delete </OptionText>
           </Option>
@@ -60,12 +72,17 @@ const Container = styled.div`
   position: relative;
 `;
 
-const OptionsContainer = styled(HomeContainerBorders)`
+type OptionsContainerProps = {
+  marginLeft?: string;
+};
+
+const OptionsContainer = styled(HomeContainerBorders)<OptionsContainerProps>`
   position: absolute;
   background: white;
   color: black;
   width: 100px;
-  margin-left: -10px;
+  margin-left: ${props => props.marginLeft || "-10px"};
+  z-index: 2;
 `;
 
 const OptionText = styled(Text)`
@@ -90,6 +107,7 @@ const Option = styled.div`
   &:hover {
     background-color: ${props => props.theme.colors.primary100};
     border-radius: 10px;
+    z-index: 2;
   }
   &:hover ${OptionText} {
     color: white;
