@@ -104,6 +104,7 @@ export const TeamOverview = (props: ITeamOverviewProps): JSX.Element => {
               firstName={user.firstName}
               lastName={user.lastName}
               size={45}
+              marginLeft={"0px"}
             />
             <TeamMemberName>
               {user.firstName} {user.lastName}
