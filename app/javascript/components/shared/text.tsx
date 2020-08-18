@@ -13,3 +13,17 @@ export const Text = props => (
     {props.children}
   </StyledText>
 );
+
+const StyledTextNoMargin = styled.p`
+  ${color}
+  ${space}
+  ${typography}
+  margin-top: 0px;
+  margin-bottom: 0px;
+`;
+
+export const TextNoMargin = props => (
+  <StyledTextNoMargin {...props} fontFamily={props.fontFamily ? props.fontFamily : "Lato"}>
+    {props.children}
+  </StyledTextNoMargin>
+);

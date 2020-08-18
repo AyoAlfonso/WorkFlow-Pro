@@ -2,7 +2,7 @@ import * as React from "react";
 import * as R from "ramda";
 import { Card } from "rebass";
 import { Avatar } from "./avatar";
-import { Text } from "./text";
+import { TextNoMargin } from "./text";
 
 import { useTranslation } from "react-i18next";
 
@@ -19,7 +19,15 @@ export const UserCard = ({
 }: UserCardProps): JSX.Element => {
   const { t } = useTranslation();
   return (
-    <Card sx={{ width: "200px", height: "100%", display: "flex", flexDirection: "row" }}>
+    <Card
+      sx={{
+        width: "200px",
+        height: "100%",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+      }}
+    >
       <Avatar
         defaultAvatarColor={defaultAvatarColor}
         firstName={firstName}
@@ -29,8 +37,12 @@ export const UserCard = ({
         marginRight={"8px"}
       />
       <div>
-        <Text fontSize={1} fontWeight={"bold"}>{`${firstName} ${lastName}`}</Text>
-        <Text fontSize={1}>{`${email}`}</Text>
+        <TextNoMargin
+          letterSpacing={"0em"}
+          fontSize={1}
+          fontWeight={"bold"}
+        >{`${firstName} ${lastName}`}</TextNoMargin>
+        <TextNoMargin letterSpacing={"0em"} fontSize={1}>{`${email}`}</TextNoMargin>
       </div>
     </Card>
   );

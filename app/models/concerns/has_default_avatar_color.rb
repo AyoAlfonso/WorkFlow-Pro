@@ -16,6 +16,6 @@ module HasDefaultAvatarColor
 
 
   def set_default_avatar_color
-    self.update_attributes(default_avatar_color: POSSIBLE_COLORS.sample)
+    self.update(default_avatar_color: POSSIBLE_COLORS.sample)
   end
 end

@@ -4,7 +4,7 @@ import * as R from "ramda";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { useTranslation } from "react-i18next";
-import { Text } from "~/components/shared/text";
+import { TextNoMargin } from "~/components/shared/text";
 import { Status } from "~/components/shared/status";
 import { Avatar } from "~/components/shared/avatar";
 import { UserCard } from "~/components/shared/user-card";
@@ -32,7 +32,7 @@ export const Teams = observer(
     const teamsData = R.flatten(
       [].concat(
         teams.map(team => [
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
             <Avatar
               defaultAvatarColor={team.defaultAvatarColor}
               firstName={team.name}
@@ -41,9 +41,9 @@ export const Teams = observer(
               marginLeft={"inherit"}
               marginRight={"8px"}
             />
-            <Text fontSize={1} color={"black"} key={`team-${team.id}-name`}>
+            <TextNoMargin fontSize={1} color={"black"} key={`team-${team.id}-name`}>
               {team.name}
-            </Text>
+            </TextNoMargin>
           </div>,
           <AvatarsContainer>
             {users

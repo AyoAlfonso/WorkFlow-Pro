@@ -1,6 +1,16 @@
 import * as React from "react";
 import { Flex, Box } from "rebass";
-import { Text } from "~/components/shared/text";
+import { TextNoMargin } from "~/components/shared/text";
+
+import styled from "styled-components";
+
+export const Divider = styled.div`
+  height: 1px;
+  width: 100%;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  background-color: lightgrey;
+`;
 
 export const Table = ({ columns, headers, data }) => (
   <Box width={[1, 1, 1]} sx={{ minWidth: 480 }}>
@@ -8,17 +18,21 @@ export const Table = ({ columns, headers, data }) => (
       {headers.map((item, index) => {
         return (
           <Box key={`header-${index}`} px={2} width={1 / columns}>
-            <Text fontSize={2} color={"black"}>
+            <TextNoMargin fontSize={2} color={"black"}>
               {item}
-            </Text>
+            </TextNoMargin>
           </Box>
         );
       })}
+      <Divider />
       {data.map((item, index) => {
         return (
-          <Box key={`data-${index}`} px={2} width={1 / columns}>
-            {item}
-          </Box>
+          <>
+            <Box key={`data-${index}`} px={2} width={1 / columns}>
+              {item}
+            </Box>
+            {(index + 1) % 4 == 0 ? <Divider /> : <></>}
+          </>
         );
       })}
     </Flex>
