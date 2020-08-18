@@ -2,10 +2,10 @@ class Meeting < ApplicationRecord
   belongs_to :team
   belongs_to :meeting_template
 
-  scope :team_meetings_for_user, -> (user) { where(team_id: user.team_user_enablements.map {|tue| tue.team_id} ) }
   scope :in_progress, -> { where("start_time >= ? AND start_time < ?", Date.today.beginning_of_day.utc, DateTime.now) }
+  scope :team_meetings, -> (team_id) { where(team_id: team_id) }
 
-  def self.team_meetings_in_progress_for_user(user)
-    self.team_meetings_for_user(user).in_progress
+  def self.team_meetings_in_progress(team_id)
+    self.team_meetings(team_id).in_progress
   end
 end

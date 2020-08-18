@@ -222,8 +222,8 @@ export class Api {
     return this.client.get(`/meetings`);
   }
 
-  async getCurrentTeamMeetingsInProgress() {
-    return this.client.get(`/meetings/current_team_meetings_in_progress`);
+  async getTeamMeetings(id) {
+    return this.client.get(`/meetings/team_meetings/${id}`);
   }
 
   async createMeeting(meeting) {

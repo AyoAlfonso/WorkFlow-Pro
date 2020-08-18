@@ -26,7 +26,7 @@ class MeetingPolicy < ApplicationPolicy
     @user.company_admin?
   end
 
-  def current_team_meetings_in_progress?
+  def team_meetings?
     @user.teams.ids.include?(@meeting.team_id)
   end
   

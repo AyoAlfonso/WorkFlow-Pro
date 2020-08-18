@@ -10,7 +10,7 @@ export const MeetingStoreModel = types
   .props({
     currentMeeting: types.maybeNull(MeetingModel),
     meetings: types.array(MeetingModel),
-    teamMeetingsInProgress: types.array(MeetingModel),
+    teamMeetings: types.array(MeetingModel),
   })
   .extend(withEnvironment())
   .views(self => ({}))
@@ -23,13 +23,13 @@ export const MeetingStoreModel = types
         showToast("There was an error retrieving meetings", ToastMessageConstants.ERROR);
       }
     }),
-    fetchTeamMeetingsInProgress: flow(function*() {
+    fetchTeamMeetings: flow(function*(teamId) {
       try {
-        const response: ApiResponse<any> = yield self.environment.api.getCurrentTeamMeetingsInProgress();
-        self.teamMeetingsInProgress = response.data;
+        const response: ApiResponse<any> = yield self.environment.api.getTeamMeetings(teamId);
+        self.teamMeetings = response.data;
       } catch {
         showToast(
-          "There was an error retrieving current team meetings in progress",
+          "There was an error retrieving meetings for the selected team",
           ToastMessageConstants.ERROR,
         );
       }

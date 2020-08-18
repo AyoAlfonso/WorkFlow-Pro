@@ -25,8 +25,8 @@ class Api::MeetingsController < Api::ApplicationController
     render json: { meeting_id: @meeting.id, status: :ok }
   end
 
-  def current_team_meetings_in_progress
-    @meetings = Meeting.team_meetings_in_progress_for_user(current_user)
+  def team_meetings
+    @meetings = Meeting.team_meetings(params[:id])
     render json: { current_team_meetings: @meetings.as_json(include : { meeting_template: { include: :steps }}) }
   end
 
@@ -38,6 +38,6 @@ class Api::MeetingsController < Api::ApplicationController
   end
 
   def meeting_params
-    params.require(:meeting).permit(:id, :meeting_template_id, :average_rating, :issues_done, :key_activities_done, :average_team_mood, :goal_progress)
+    params.require(:meeting).permit(:id, :team_id, :meeting_template_id, :average_rating, :issues_done, :key_activities_done, :average_team_mood, :goal_progress)
   end
 end
