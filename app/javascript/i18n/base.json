@@ -89,6 +89,11 @@
       },
       "meeting": {
         "conversationStarter": "Conversation Starter"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "pending": "Pending"
       }
     }
   }

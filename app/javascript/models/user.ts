@@ -1,5 +1,6 @@
 import { types } from "mobx-state-tree";
 import { DailyLogModel } from "~/models";
+import * as R from "ramda";
 
 export const UserModel = types
   .model("UserModel")
@@ -17,6 +18,8 @@ export const UserModel = types
     invitationSentAt: types.maybeNull(types.string),
     timezone: types.maybeNull(types.string),
     phoneNumber: types.maybeNull(types.string),
+    title: types.maybeNull(types.string),
+    status: types.string,
     //add avatarurl2x
   })
   .views(self => ({

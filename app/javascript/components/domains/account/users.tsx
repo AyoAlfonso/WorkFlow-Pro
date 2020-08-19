@@ -8,12 +8,21 @@ import { Button } from "~/components/shared/button";
 import { Label, Input, Select } from "~/components/shared/input";
 import { Can } from "~/components/shared/auth/can";
 import { useTranslation } from "react-i18next";
-import { TextNoMargin } from "~/components/shared/text";
+import { TextNoMargin, Text } from "~/components/shared/text";
 
 import { Flex, Box } from "rebass";
-import { StretchContainer, BodyContainer, PersonalInfoContainer } from "./container-styles";
+import {
+  StretchContainer,
+  BodyContainer,
+  HeaderContainer,
+  HeaderText,
+  LeftAlignedTableContainer,
+  CenteredTableContainer,
+} from "./container-styles";
 import { UserStoreModel } from "~/stores/user-store";
 import { RoleNormalUser } from "~/lib/constants";
+import { Table } from "~/components/shared/table";
+import { Status } from "~/components/shared/status";
 
 export const Users = observer(
   (): JSX.Element => {
@@ -44,15 +53,62 @@ export const Users = observer(
 
     const resend = userId => userStore.resendInvitation(userId);
 
+    const usersData = R.flatten(
+      [].concat(
+        users.map(user => [
+          <UserCard {...user} resend={resend} />,
+          <LeftAlignedTableContainer>
+            <Text>{user.title || ""}</Text>
+          </LeftAlignedTableContainer>,
+          <LeftAlignedTableContainer>
+            <Text>Teams</Text>
+          </LeftAlignedTableContainer>,
+          <LeftAlignedTableContainer>
+            <Status status={user.status} />
+            {user.status == "pending" ? (
+              <Can
+                action={"create-user"}
+                data={null}
+                no={
+                  <TextNoMargin fontSize={1}>{`Invited on ${user.invitationSentAt}`}</TextNoMargin>
+                }
+                yes={
+                  <>
+                    {resend ? (
+                      <Button
+                        small
+                        variant={"primaryOutline"}
+                        onClick={() => {
+                          if (resend) {
+                            resend(user.id);
+                          }
+                        }}
+                      >
+                        {t("profile.profileUpdateForm.resend")}
+                      </Button>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                }
+              />
+            ) : (
+              <></>
+            )}
+          </LeftAlignedTableContainer>,
+        ]),
+      ),
+    );
     return (
       <StretchContainer>
-        <BodyContainer>
+        <HeaderContainer>
+          <HeaderText>{t("profile.teamsManagement.header")}</HeaderText>
           <Can
             action={"create-user"}
             data={null}
             no={<></>}
             yes={
-              <PersonalInfoContainer>
+              <>
                 <Label htmlFor="email">{t("profile.profileUpdateForm.email")}</Label>
                 <Input name="email" onChange={e => setEmail(e.target.value)} value={email} />
                 <Label htmlFor="firstName">{t("profile.profileUpdateForm.firstName")}</Label>
@@ -103,56 +159,13 @@ export const Users = observer(
                 >
                   {t("profile.profileUpdateForm.invite")}
                 </Button>
-              </PersonalInfoContainer>
+              </>
             }
           />
+        </HeaderContainer>
+        <BodyContainer>
+          <Table columns={4} headers={["User", "Title", "Team", "Status"]} data={usersData} />
         </BodyContainer>
-
-        <Flex flexWrap="wrap">
-          {R.map(
-            user => (
-              <Box p={3} key={user.id}>
-                <UserCard {...user} resend={resend} />
-                {R.isNil(user.confirmedAt) ? (
-                  <Can
-                    action={"create-user"}
-                    data={null}
-                    no={
-                      <TextNoMargin
-                        fontSize={1}
-                      >{`Invited on ${user.invitationSentAt}`}</TextNoMargin>
-                    }
-                    yes={
-                      <>
-                        <TextNoMargin
-                          fontSize={1}
-                        >{`Invited on ${user.invitationSentAt}`}</TextNoMargin>
-                        {resend ? (
-                          <Button
-                            small
-                            variant={"primary"}
-                            onClick={() => {
-                              if (resend) {
-                                resend(user.id);
-                              }
-                            }}
-                          >
-                            {t("profile.profileUpdateForm.resend")}
-                          </Button>
-                        ) : (
-                          <></>
-                        )}
-                      </>
-                    }
-                  />
-                ) : (
-                  <></>
-                )}
-              </Box>
-            ),
-            users,
-          )}
-        </Flex>
       </StretchContainer>
     );
   },
