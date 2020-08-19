@@ -1,15 +1,25 @@
 const path = require("path");
 module.exports = {
-  webpackFinal: config => ({
-    ...config,
-    resolve: {
-      ...config.resolve,
-      alias: {
-        ...config.resolve.alias,
-        "~": path.resolve(__dirname, "../app/javascript"),
+  webpackFinal: async config => {
+    const faultyPluginName = "plugin-transform-react-constant-elements";
+    const javaScriptFilesRule = config.module.rules.find(rule =>
+      rule.test.toString().includes("js"),
+    );
+    const babelLoader = javaScriptFilesRule.use.find(usage => usage.loader === "babel-loader");
+    babelLoader.options.plugins = babelLoader.options.plugins.filter(
+      plugin => typeof plugin !== "string" || !plugin.includes(faultyPluginName),
+    );
+    return {
+      ...config,
+      resolve: {
+        ...config.resolve,
+        alias: {
+          ...config.resolve.alias,
+          "~": path.resolve(__dirname, "../app/javascript"),
+        },
       },
-    },
-  }),
+    };
+  },
   addons: [
     {
       name: "@storybook/preset-typescript",
