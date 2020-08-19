@@ -20,7 +20,7 @@ export const MeetingStoreModel = types
         const response: ApiResponse<any> = yield self.environment.api.getMeetings();
         self.meetings = response.data;
       } catch {
-        showToast("There was an error retrieving meetings", ToastMessageConstants.ERROR);
+        // caught bv Api Monitor
       }
     }),
     fetchTeamMeetings: flow(function*(teamId) {
@@ -28,10 +28,7 @@ export const MeetingStoreModel = types
         const response: ApiResponse<any> = yield self.environment.api.getTeamMeetings(teamId);
         self.teamMeetings = response.data;
       } catch {
-        showToast(
-          "There was an error retrieving meetings for the selected team",
-          ToastMessageConstants.ERROR,
-        );
+        // caught bv Api Monitor
       }
     }),
     createMeeting: flow(function*(meetingObj) {
@@ -39,7 +36,7 @@ export const MeetingStoreModel = types
         const response: ApiResponse<any> = yield self.environment.api.createMeeting(meetingObj);
         self.currentMeeting = response.data;
       } catch {
-        showToast("There was an error creating the meeting", ToastMessageConstants.ERROR);
+        // caught bv Api Monitor
       }
     }),
     updateCurrentMeeting: flow(function*(meetingObj) {
@@ -47,7 +44,7 @@ export const MeetingStoreModel = types
         const response: ApiResponse<any> = yield self.environment.api.updateMeeting(meetingObj);
         self.currentMeeting = response.data;
       } catch {
-        showToast("There was an error updating the meeting", ToastMessageConstants.ERROR);
+        // caught bv Api Monitor
       }
     }),
     deleteMeeting: flow(function*(meetingId) {
@@ -55,7 +52,7 @@ export const MeetingStoreModel = types
         const response: ApiResponse<any> = yield self.environment.api.deleteMeeting(meetingId);
         return response.data;
       } catch {
-        showToast("There was an error deleting the meeting", ToastMessageConstants.ERROR);
+        // caught bv Api Monitor
       }
     }),
   }));

@@ -22,12 +22,8 @@ class MeetingPolicy < ApplicationPolicy
     @user.company_admin?
   end
 
-  def show?
-    @user.company_admin?
-  end
-
   def team_meetings?
-    @user.teams.ids.include?(@meeting.team_id)
+    @user.is_in_team?(@meeting.team_id)
   end
   
   class Scope
