@@ -9,7 +9,7 @@ class Api::TeamsController < Api::ApplicationController
   def user_teams
     @teams = Team.for_user(current_user)
     authorize @teams
-    render json: @teams
+    render 'api/teams/user_teams'
   end
 
 end

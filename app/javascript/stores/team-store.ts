@@ -15,15 +15,13 @@ export const TeamStoreModel = types
     fetchTeams: flow(function*() {
       const response: ApiResponse<any> = yield self.environment.api.getTeams();
       if (response.ok) {
-        self.teams = response.data;
+        self.teams = response.data as any;
       }
     }),
     fetchUserTeams: flow(function*() {
-      try {
-        const response: ApiResponse<any> = yield self.environment.api.getUserTeams();
-        self.userTeams = response.data;
-      } catch {
-        // handled by api monitor
+      const response: ApiResponse<any> = yield self.environment.api.getUserTeams();
+      if (response.ok) {
+        self.userTeams = response.data as any;
       }
     }),
   }))

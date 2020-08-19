@@ -1,9 +1,10 @@
 import * as React from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Icon } from "../../shared/icon";
 import { Button } from "~/components/shared/button";
+import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
-import { toJS } from "mobx";
 import * as R from "ramda";
 import { Avatar } from "~/components/shared/avatar";
 import { Text } from "~/components/shared/text";
@@ -15,157 +16,175 @@ import { KeyActivityPriorityIcon } from "../key-activities/key-activity-priority
 import { TeamPulseCard } from "./shared/team-pulse-card";
 import { OverallTeamPulse } from "./shared/overall-team-pulse";
 import { TeamIssuesContainer } from "./shared/team-issues-container";
+import { Loading } from "~/components/shared/loading";
+import { TeamMeeting } from "./team-meeting";
 
 interface ITeamOverviewProps {}
 
-export const TeamOverview = (props: ITeamOverviewProps): JSX.Element => {
-  const [meetingInProgress, setMeetingInProgress] = useState<boolean>(false);
-  const { sessionStore, meetingStore, teamStore } = useMst();
-  const [teamId] = window.location.href.split("/").slice(-1);
+export const TeamOverview = observer(
+  (props: ITeamOverviewProps): JSX.Element => {
+    const [meetingInProgress, setMeetingInProgress] = useState<boolean>(false);
+    const { sessionStore, teamStore } = useMst();
+    const [teamId] = window.location.href.split("/").slice(-1);
 
-  const user = sessionStore.profile;
+    const user = sessionStore.profile;
+    const currentTeam = teamStore.teams.find(team => team.id === parseInt(teamId));
 
-  const teamPulseData = [
-    { x: new Date("2020-08-15"), y: 4 },
-    { x: new Date("2020-08-14"), y: 1 },
-    { x: new Date("2020-08-13"), y: 2 },
-    { x: new Date("2020-08-12"), y: 5 },
-    { x: new Date("2020-08-11"), y: 1 },
-    { x: new Date("2020-08-10"), y: 3 },
-    { x: new Date("2020-08-09"), y: 5 },
-  ];
-
-  const renderCardSubHeader = (text: string): JSX.Element => {
-    return (
-      <SubHeaderTextContainer>
-        <SubHeaderText>{text}</SubHeaderText>
-      </SubHeaderTextContainer>
-    );
-  };
-
-  const renderUserSnapshotTable = (): JSX.Element => {
-    return (
-      <TableContainer>
-        <TableHeaderContainer>
-          <TeamMemberContainer />
-          <StatusContainer>Status</StatusContainer>
-          <TodaysPrioritiesContainer>Today's Priorities</TodaysPrioritiesContainer>
-        </TableHeaderContainer>
-        {renderUserRecords()}
-      </TableContainer>
-    );
-  };
-
-  const renderUserPriorities = (): JSX.Element => {
-    return (
-      <>
-        <PriorityContainer>
-          <CheckboxContainer key={1}>
-            <Checkbox
-              key={1}
-              checked={true}
-              // onChange={e => {
-              //   keyActivityStore.updateKeyActivityStatus(keyActivity, e.target.checked);
-              // }}
-            />
-          </CheckboxContainer>
-          <PriorityText>SEO Optimization</PriorityText>
-          <PriorityIconContainer>
-            <KeyActivityPriorityIcon priority={"medium"} />
-          </PriorityIconContainer>
-        </PriorityContainer>
-        <PriorityContainer>
-          <CheckboxContainer key={2}>
-            <Checkbox
-              key={2}
-              checked={true}
-              // onChange={e => {
-              //   keyActivityStore.updateKeyActivityStatus(keyActivity, e.target.checked);
-              // }}
-            />
-          </CheckboxContainer>
-          <PriorityText>Feed the fish</PriorityText>
-          <PriorityIconContainer>
-            <KeyActivityPriorityIcon priority={"high"} />
-          </PriorityIconContainer>
-        </PriorityContainer>
-      </>
-    );
-  };
-
-  const renderUserRecords = () => {
-    return (
-      <UserRecordContainer>
-        <TeamMemberContainer>
-          <TeamMemberInfoContainer>
-            <Avatar
-              defaultAvatarColor={user.defaultAvatarColor}
-              avatarUrl={user.avatarUrl}
-              firstName={user.firstName}
-              lastName={user.lastName}
-              size={45}
-              marginLeft={"0px"}
-            />
-            <TeamMemberName>
-              {user.firstName} {user.lastName}
-            </TeamMemberName>
-          </TeamMemberInfoContainer>
-        </TeamMemberContainer>
-        <StatusContainer>
-          <HomePersonalStatusDropdownMenuItem
-            style={{ width: "170px", borderRadius: "5px", marginTop: "5px" }}
-            menuItem={options[user.currentDailyLog.workStatus]}
-            onSelect={() => null}
-          />
-        </StatusContainer>
-        <TodaysPrioritiesContainer>{renderUserPriorities()}</TodaysPrioritiesContainer>
-      </UserRecordContainer>
-    );
-  };
-
-  return (
-    <Container>
-      {meetingInProgress ? (
-        <>
-          <HeaderContainer></HeaderContainer>
-          <BodyContainer></BodyContainer>
-        </>
-      ) : (
-        <>
-          <HeaderContainer>
-            <Title>Leadership Team Overview</Title>
-            <TeamMeetingButton small variant={"primary"} onClick={() => {}}>
-              <ButtonTextContainer>
-                <Icon icon={"Team"} size={"20px"} />
-                <TeamMeetingText>Team Meeting</TeamMeetingText>
-              </ButtonTextContainer>
-            </TeamMeetingButton>
-          </HeaderContainer>
+    if (R.isEmpty(teamStore.teams)) {
+      return (
+        <Container>
           <BodyContainer>
-            <LeftContainer>
-              <TeamSnapshotContainer>
-                {renderCardSubHeader("Team Snapshot")}
-                {renderUserSnapshotTable()}
-              </TeamSnapshotContainer>
-            </LeftContainer>
-            <RightContainer>
-              <TeamPulseContainer>
-                {renderCardSubHeader("Team's Pulse")}
-                <TeamPulseBody>
-                  <OverallTeamPulse value={3.4} />
-                  <TeamPulseCard data={teamPulseData} />
-                </TeamPulseBody>
-              </TeamPulseContainer>
-              <TeamIssuesWrapper>
-                <TeamIssuesContainer />
-              </TeamIssuesWrapper>
-            </RightContainer>
+            <Loading />
           </BodyContainer>
+        </Container>
+      );
+    }
+
+    const teamPulseData = [
+      { x: new Date("2020-08-15"), y: 4 },
+      { x: new Date("2020-08-14"), y: 1 },
+      { x: new Date("2020-08-13"), y: 2 },
+      { x: new Date("2020-08-12"), y: 5 },
+      { x: new Date("2020-08-11"), y: 1 },
+      { x: new Date("2020-08-10"), y: 3 },
+      { x: new Date("2020-08-09"), y: 5 },
+    ];
+
+    const renderCardSubHeader = (text: string): JSX.Element => {
+      return (
+        <SubHeaderTextContainer>
+          <SubHeaderText>{text}</SubHeaderText>
+        </SubHeaderTextContainer>
+      );
+    };
+
+    const renderUserSnapshotTable = (): JSX.Element => {
+      return (
+        <TableContainer>
+          <TableHeaderContainer>
+            <TeamMemberContainer />
+            <StatusContainer>Status</StatusContainer>
+            <TodaysPrioritiesContainer>Today's Priorities</TodaysPrioritiesContainer>
+          </TableHeaderContainer>
+          {renderUserRecords()}
+        </TableContainer>
+      );
+    };
+
+    const renderUserPriorities = (): JSX.Element => {
+      return (
+        <>
+          <PriorityContainer>
+            <CheckboxContainer key={1}>
+              <Checkbox
+                key={1}
+                checked={true}
+                // onChange={e => {
+                //   keyActivityStore.updateKeyActivityStatus(keyActivity, e.target.checked);
+                // }}
+              />
+            </CheckboxContainer>
+            <PriorityText>SEO Optimization</PriorityText>
+            <PriorityIconContainer>
+              <KeyActivityPriorityIcon priority={"medium"} />
+            </PriorityIconContainer>
+          </PriorityContainer>
+          <PriorityContainer>
+            <CheckboxContainer key={2}>
+              <Checkbox
+                key={2}
+                checked={true}
+                // onChange={e => {
+                //   keyActivityStore.updateKeyActivityStatus(keyActivity, e.target.checked);
+                // }}
+              />
+            </CheckboxContainer>
+            <PriorityText>Feed the fish</PriorityText>
+            <PriorityIconContainer>
+              <KeyActivityPriorityIcon priority={"high"} />
+            </PriorityIconContainer>
+          </PriorityContainer>
         </>
-      )}
-    </Container>
-  );
-};
+      );
+    };
+
+    const renderUserRecords = () => {
+      return (
+        <UserRecordContainer>
+          <TeamMemberContainer>
+            <TeamMemberInfoContainer>
+              <Avatar
+                // defaultAvatarColor={user.defaultAvatarColor}
+                avatarUrl={user.avatarUrl}
+                firstName={user.firstName}
+                lastName={user.lastName}
+                size={45}
+                marginLeft={"0px"}
+              />
+              <TeamMemberName>
+                {user.firstName} {user.lastName}
+              </TeamMemberName>
+            </TeamMemberInfoContainer>
+          </TeamMemberContainer>
+          <StatusContainer>
+            <HomePersonalStatusDropdownMenuItem
+              style={{ width: "170px", borderRadius: "5px", marginTop: "5px" }}
+              menuItem={options[user.currentDailyLog.workStatus]}
+              onSelect={() => null}
+            />
+          </StatusContainer>
+          <TodaysPrioritiesContainer>{renderUserPriorities()}</TodaysPrioritiesContainer>
+        </UserRecordContainer>
+      );
+    };
+
+    return (
+      <Container>
+        {meetingInProgress ? (
+          <TeamMeeting team={currentTeam} />
+        ) : (
+          <>
+            <HeaderContainer>
+              <Title>{`${currentTeam.name} Overview`}</Title>
+              <TeamMeetingButton
+                small
+                variant={"primary"}
+                onClick={() => {
+                  setMeetingInProgress(true);
+                }}
+              >
+                <ButtonTextContainer>
+                  <Icon icon={"Team"} size={"20px"} />
+                  <TeamMeetingText>Team Meeting</TeamMeetingText>
+                </ButtonTextContainer>
+              </TeamMeetingButton>
+            </HeaderContainer>
+            <BodyContainer>
+              <LeftContainer>
+                <TeamSnapshotContainer>
+                  {renderCardSubHeader("Team Snapshot")}
+                  {renderUserSnapshotTable()}
+                </TeamSnapshotContainer>
+              </LeftContainer>
+              <RightContainer>
+                <TeamPulseContainer>
+                  {renderCardSubHeader("Team's Pulse")}
+                  <TeamPulseBody>
+                    <OverallTeamPulse value={3.4} />
+                    <TeamPulseCard data={teamPulseData} />
+                  </TeamPulseBody>
+                </TeamPulseContainer>
+                <TeamIssuesWrapper>
+                  <TeamIssuesContainer />
+                </TeamIssuesWrapper>
+              </RightContainer>
+            </BodyContainer>
+          </>
+        )}
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
   padding: 20px;
