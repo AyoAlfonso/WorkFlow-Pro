@@ -43,6 +43,7 @@ const initialState = {
   },
   teamStore: {
     teams: [],
+    userTeams: [],
   },
   meetingStore: {
     currentMeeting: null,

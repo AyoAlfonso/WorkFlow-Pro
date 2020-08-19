@@ -82,6 +82,7 @@ Rails.application.routes.draw do
 
     #teams
     resources :teams, only: [:index]
+    get '/teams/user_teams', to: 'teams#user_teams'
 
     #meetings
     resources :meetings, only: [:create, :index, :update, :destroy]

@@ -7,6 +7,7 @@ export const TeamStoreModel = types
   .model("TeamStoreModel")
   .props({
     teams: types.array(TeamModel),
+    userTeams: types.array(TeamModel),
   })
   .extend(withEnvironment())
   .views(self => ({}))
@@ -15,6 +16,14 @@ export const TeamStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.getTeams();
       if (response.ok) {
         self.teams = response.data;
+      }
+    }),
+    fetchUserTeams: flow(function*() {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getUserTeams();
+        self.userTeams = response.data;
+      } catch {
+        // handled by api monitor
       }
     }),
   }))
@@ -27,10 +36,12 @@ export const TeamStoreModel = types
     load: flow(function*() {
       self.reset();
       yield self.fetchTeams();
+      yield self.fetchUserTeams();
     }),
   }));
 
 type TeamStoreType = typeof TeamStoreModel.Type;
 export interface ITeamStore extends TeamStoreType {
   teams: any;
+  userTeams: any;
 }

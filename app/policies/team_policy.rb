@@ -10,6 +10,10 @@ class TeamPolicy < ApplicationPolicy
     true
   end
 
+  def user_teams?
+    @record.company = @user.company
+  end
+
   class Scope
     attr_reader :user, :scope
 

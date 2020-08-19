@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Icon } from "../../shared/icon";
 import { Button } from "~/components/shared/button";
 import { useMst } from "../../../setup/root";
+import { toJS } from "mobx";
+import * as R from "ramda";
 import { Avatar } from "~/components/shared/avatar";
 import { Text } from "~/components/shared/text";
 import { HomeContainerBorders } from "../home/shared-components";
@@ -17,7 +19,9 @@ import { TeamIssuesContainer } from "./shared/team-issues-container";
 interface ITeamOverviewProps {}
 
 export const TeamOverview = (props: ITeamOverviewProps): JSX.Element => {
-  const { sessionStore } = useMst();
+  const [meetingInProgress, setMeetingInProgress] = useState<boolean>(false);
+  const { sessionStore, meetingStore, teamStore } = useMst();
+  const [teamId] = window.location.href.split("/").slice(-1);
 
   const user = sessionStore.profile;
 
@@ -121,35 +125,44 @@ export const TeamOverview = (props: ITeamOverviewProps): JSX.Element => {
 
   return (
     <Container>
-      <HeaderContainer>
-        <Title>Leadership Team Overview</Title>
-        <TeamMeetingButton small variant={"primary"} onClick={() => {}}>
-          <ButtonTextContainer>
-            <Icon icon={"Team"} size={"20px"} />
-            <TeamMeetingText>Team Meeting</TeamMeetingText>
-          </ButtonTextContainer>
-        </TeamMeetingButton>
-      </HeaderContainer>
-      <BodyContainer>
-        <LeftContainer>
-          <TeamSnapshotContainer>
-            {renderCardSubHeader("Team Snapshot")}
-            {renderUserSnapshotTable()}
-          </TeamSnapshotContainer>
-        </LeftContainer>
-        <RightContainer>
-          <TeamPulseContainer>
-            {renderCardSubHeader("Team's Pulse")}
-            <TeamPulseBody>
-              <OverallTeamPulse value={3.4} />
-              <TeamPulseCard data={teamPulseData} />
-            </TeamPulseBody>
-          </TeamPulseContainer>
-          <TeamIssuesWrapper>
-            <TeamIssuesContainer />
-          </TeamIssuesWrapper>
-        </RightContainer>
-      </BodyContainer>
+      {meetingInProgress ? (
+        <>
+          <HeaderContainer></HeaderContainer>
+          <BodyContainer></BodyContainer>
+        </>
+      ) : (
+        <>
+          <HeaderContainer>
+            <Title>Leadership Team Overview</Title>
+            <TeamMeetingButton small variant={"primary"} onClick={() => {}}>
+              <ButtonTextContainer>
+                <Icon icon={"Team"} size={"20px"} />
+                <TeamMeetingText>Team Meeting</TeamMeetingText>
+              </ButtonTextContainer>
+            </TeamMeetingButton>
+          </HeaderContainer>
+          <BodyContainer>
+            <LeftContainer>
+              <TeamSnapshotContainer>
+                {renderCardSubHeader("Team Snapshot")}
+                {renderUserSnapshotTable()}
+              </TeamSnapshotContainer>
+            </LeftContainer>
+            <RightContainer>
+              <TeamPulseContainer>
+                {renderCardSubHeader("Team's Pulse")}
+                <TeamPulseBody>
+                  <OverallTeamPulse value={3.4} />
+                  <TeamPulseCard data={teamPulseData} />
+                </TeamPulseBody>
+              </TeamPulseContainer>
+              <TeamIssuesWrapper>
+                <TeamIssuesContainer />
+              </TeamIssuesWrapper>
+            </RightContainer>
+          </BodyContainer>
+        </>
+      )}
     </Container>
   );
 };
