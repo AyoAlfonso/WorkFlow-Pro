@@ -23,7 +23,7 @@ class MeetingPolicy < ApplicationPolicy
   end
 
   def team_meetings?
-    @user.is_in_team?(@meeting.team_id)
+    @user.is_in_team?(@meeting.team)
   end
   
   class Scope

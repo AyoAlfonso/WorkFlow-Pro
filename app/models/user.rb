@@ -62,8 +62,8 @@ class User < ApplicationRecord
     team.team_lead.user == self
   end
 
-  def is_in_team?(team_id)
-    self.teams.ids.include?(team_id)
+  def is_in_team?(team)
+    self.teams.include?(team)
   end
 
   def company_admin?
