@@ -14,6 +14,10 @@ class HabitPolicy < ApplicationPolicy
     true
   end
 
+  def show?
+    @habit.user == @user
+  end
+
   def update?
     @habit.user == @user
   end
