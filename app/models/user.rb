@@ -3,6 +3,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, :trackable and :omniauthable
   include ActionView::Helpers::SanitizeHelper
+  include HasDefaultAvatarColor
 
 
   devise :database_authenticatable, :registerable, :confirmable, :invitable,
@@ -29,7 +30,6 @@ class User < ApplicationRecord
   has_many :habits
   has_many :team_user_enablements
   has_many :teams, through: :team_user_enablements
-  has_many :team_leads
 
   validates :first_name, :last_name, presence: true
 
@@ -59,7 +59,7 @@ class User < ApplicationRecord
   end
 
   def team_lead_for?(team)
-    team.team_lead.user == self
+    team.is_lead?(self)
   end
 
   def company_admin?

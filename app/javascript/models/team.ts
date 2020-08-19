@@ -6,8 +6,18 @@ export const TeamModel = types
     id: types.identifierNumber,
     name: types.maybeNull(types.string),
     companyId: types.number,
+    active: types.boolean,
+    teamUserEnablements: types.array(types.frozen()),
+    defaultAvatarColor: types.maybeNull(types.string),
   })
-  .views(self => ({}))
+  .views(self => ({
+    get teamLeadIds() {
+      return self.teamUserEnablements.filter(ue => ue.role == "team_lead").map(ue => ue.userId);
+    },
+    get nonLeadMemberIds() {
+      return self.teamUserEnablements.filter(ue => ue.role != "team_lead").map(ue => ue.userId);
+    },
+  }))
   .actions(self => ({}));
 
 type TeamModelType = typeof TeamModel.Type;

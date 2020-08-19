@@ -4,4 +4,5 @@ export type UserType = {
   firstName: string;
   lastName: string;
   avatarUrl: string;
+  defaultAvatarColor?: string;
 };

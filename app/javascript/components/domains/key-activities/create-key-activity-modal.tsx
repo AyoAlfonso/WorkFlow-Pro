@@ -65,6 +65,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
           {selectedUser && (
             <AvatarContainer onClick={() => setShowUsersList(!showUsersList)}>
               <Avatar
+                defaultAvatarColor={selectedUser.defaultAvatarColor}
                 avatarUrl={selectedUser.avatarUrl}
                 firstName={selectedUser.firstName}
                 lastName={selectedUser.lastName}

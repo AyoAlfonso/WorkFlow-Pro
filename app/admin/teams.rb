@@ -1,6 +1,6 @@
 ActiveAdmin.register Team do
 
-  permit_params :company_id, :name, team_user_enablements_attributes: [:id, :user_id, :_destroy]
+  permit_params :company_id, :name, team_user_enablements_attributes: [:id, :user_id, :role, :_destroy]
   #
   # or
   #
@@ -42,6 +42,7 @@ ActiveAdmin.register Team do
           else
             tu.input :user, as: :select, collection: f.object.company.users.where.not(id: f.object.users), input_html: {disabled: tu.object.persisted?}
           end
+          tu.input :role
         end 
       end
     end

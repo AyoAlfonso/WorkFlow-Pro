@@ -17,6 +17,7 @@
         "security": "Security",
         "meeting": "Meeting",
         "users": "Users",
+        "teams": "Teams",
         "company": "Company",
         "editProfile": "Edit Profile",
         "companyDetails": "Company Details",
@@ -40,6 +41,9 @@
           "password": "Password",
           "passwordConfirmation": "Password Confirmation",
           "updatePw": "Update Password"
+        },
+        "teamsManagement": {
+          "header": "Manage Teams"
         },
         "habits": {
           "title": "Habits",

@@ -18,6 +18,7 @@ export const UserSelectionDropdownList = ({
       return (
         <UserOption key={index} onClick={() => onUserSelect(user)}>
           <Avatar
+            defaultAvatarColor={user.defaultAvatarColor}
             avatarUrl={user.avatarUrl}
             firstName={user.firstName}
             lastName={user.lastName}

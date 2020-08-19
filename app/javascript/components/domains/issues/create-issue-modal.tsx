@@ -43,6 +43,7 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
             }}
           />
           <Avatar
+            defaultAvatarColor={R.path(["profile", "defaultAvatarColor"], sessionStore)}
             avatarUrl={R.path(["profile", "avatarUrl"], sessionStore)}
             firstName={R.path(["profile", "firstName"], sessionStore)}
             lastName={R.path(["profile", "lastName"], sessionStore)}

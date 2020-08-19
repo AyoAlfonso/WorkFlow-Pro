@@ -2,15 +2,16 @@ import * as React from "react";
 import * as R from "ramda";
 import { Card } from "rebass";
 import { Avatar } from "./avatar";
-import { Text } from "./text";
-import { Can } from "~/components/shared/auth/can";
-import { Button } from "~/components/shared/button";
+import { TextNoMargin } from "./text";
+
 import { useTranslation } from "react-i18next";
 
 export const UserCard = ({
   firstName,
   lastName,
+  email,
   avatarUrl,
+  defaultAvatarColor,
   confirmedAt,
   invitationSentAt,
   resend,
@@ -18,34 +19,31 @@ export const UserCard = ({
 }: UserCardProps): JSX.Element => {
   const { t } = useTranslation();
   return (
-    <Card sx={{ width: "200px", height: "200px" }}>
-      <Text fontSize={2}>{`${firstName} ${lastName}`}</Text>
-      {R.isNil(confirmedAt) ? (
-        <Can
-          action={"create-user"}
-          data={null}
-          no={<Text fontSize={1}>{`Invited: ${invitationSentAt}`}</Text>}
-          yes={
-            <>
-              <Text fontSize={1}>{`Invited: ${invitationSentAt}`}</Text>
-              <Button
-                small
-                variant={"primary"}
-                onClick={() => {
-                  if (resend) {
-                    resend(id);
-                  }
-                }}
-              >
-                {t("profile.profileUpdateForm.resend")}
-              </Button>
-            </>
-          }
-        />
-      ) : (
-        <Text fontSize={1}>{`Joined: ${confirmedAt}`}</Text>
-      )}
-      <Avatar firstName={firstName} lastName={lastName} avatarUrl={avatarUrl} />
+    <Card
+      sx={{
+        width: "200px",
+        height: "100%",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+      }}
+    >
+      <Avatar
+        defaultAvatarColor={defaultAvatarColor}
+        firstName={firstName}
+        lastName={lastName}
+        avatarUrl={avatarUrl}
+        marginLeft={"inherit"}
+        marginRight={"8px"}
+      />
+      <div>
+        <TextNoMargin
+          letterSpacing={"0em"}
+          fontSize={1}
+          fontWeight={"bold"}
+        >{`${firstName} ${lastName}`}</TextNoMargin>
+        <TextNoMargin letterSpacing={"0em"} fontSize={1}>{`${email}`}</TextNoMargin>
+      </div>
     </Card>
   );
 };
@@ -54,8 +52,10 @@ interface UserCardProps {
   id: number;
   firstName: string;
   lastName: string;
+  email: string;
   avatarUrl?: string;
   confirmedAt: string;
   invitationSentAt: string;
   resend?: any;
+  defaultAvatarColor?: string;
 }

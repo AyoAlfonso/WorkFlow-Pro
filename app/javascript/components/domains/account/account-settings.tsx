@@ -9,6 +9,7 @@ import { Notifications } from "./notifications";
 import { Security } from "./security";
 import { Meeting } from "./meeting";
 import { Users } from "./users";
+import { Teams } from "./teams";
 import { Company } from "./company";
 
 export const AccountSettings = (): JSX.Element => {
@@ -33,6 +34,8 @@ export const AccountSettings = (): JSX.Element => {
         return <Meeting />;
       case "users":
         return <Users />;
+      case "teams":
+        return <Teams />;
       case "company":
         return <Company />;
       case "security":
@@ -51,6 +54,7 @@ export const AccountSettings = (): JSX.Element => {
           {renderOption("notifications")}
           {renderOption("meeting")}
           {renderOption("users")}
+          {renderOption("teams")}
           {renderOption("company")}
           {renderOption("security")}
         </SelectionTabsContainer>

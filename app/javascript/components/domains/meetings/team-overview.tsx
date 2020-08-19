@@ -95,6 +95,7 @@ export const TeamOverview = (props: ITeamOverviewProps): JSX.Element => {
         <TeamMemberContainer>
           <TeamMemberInfoContainer>
             <Avatar
+              defaultAvatarColor={user.defaultAvatarColor}
               avatarUrl={user.avatarUrl}
               firstName={user.firstName}
               lastName={user.lastName}

@@ -3,7 +3,7 @@ class Api::TeamsController < Api::ApplicationController
 
   def index
     @teams = policy_scope(Team)
-    render json: @teams
+    render 'api/teams/index'
   end
 
 end
