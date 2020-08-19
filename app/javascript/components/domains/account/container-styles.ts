@@ -64,6 +64,14 @@ export const SaveButtonContainer = styled.div`
   margin-right: 20px;
 `;
 
-export const AvatarsContainer = styled.div`
+export const CenteredTableContainer = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const LeftAlignedTableContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;

@@ -15,7 +15,8 @@ import {
   PersonalInfoContainer,
   HeaderContainer,
   HeaderText,
-  AvatarsContainer,
+  LeftAlignedTableContainer,
+  CenteredTableContainer,
 } from "./container-styles";
 
 import { Table } from "~/components/shared/table";
@@ -32,7 +33,7 @@ export const Teams = observer(
     const teamsData = R.flatten(
       [].concat(
         teams.map(team => [
-          <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+          <LeftAlignedTableContainer>
             <Avatar
               defaultAvatarColor={team.defaultAvatarColor}
               firstName={team.name}
@@ -44,14 +45,14 @@ export const Teams = observer(
             <TextNoMargin fontSize={1} color={"black"} key={`team-${team.id}-name`}>
               {team.name}
             </TextNoMargin>
-          </div>,
-          <AvatarsContainer>
+          </LeftAlignedTableContainer>,
+          <LeftAlignedTableContainer>
             {users
               .filter(user => R.contains(user.id, team.teamLeadIds))
               .map(user => (user ? <UserCard key={user.id} {...user} /> : <></>))}
-          </AvatarsContainer>,
+          </LeftAlignedTableContainer>,
           <Status key={`team-${team.id}-active`} active={team.active} />,
-          <AvatarsContainer>
+          <CenteredTableContainer>
             {users
               .filter(user => R.contains(user.id, team.nonLeadMemberIds))
               .map(user =>
@@ -70,7 +71,7 @@ export const Teams = observer(
                   <></>
                 ),
               )}
-          </AvatarsContainer>,
+          </CenteredTableContainer>,
         ]),
       ),
     );
@@ -85,6 +86,7 @@ export const Teams = observer(
             columns={4}
             headers={["Team", "Team Leader", "Status", "Members"]}
             data={teamsData}
+            styling={{ widths: [2, 2, 1, 2] }}
           ></Table>
         </BodyContainer>
       </StretchContainer>

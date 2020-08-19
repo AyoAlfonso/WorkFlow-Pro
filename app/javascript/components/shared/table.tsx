@@ -12,29 +12,45 @@ export const Divider = styled.div`
   background-color: lightgrey;
 `;
 
-export const Table = ({ columns, headers, data }) => (
-  <Box width={[1, 1, 1]} sx={{ minWidth: 480 }}>
-    <Flex flexWrap="wrap">
-      {headers.map((item, index) => {
-        return (
-          <Box key={`header-${index}`} px={2} width={1 / columns}>
-            <TextNoMargin fontSize={2} color={"black"}>
-              {item}
-            </TextNoMargin>
-          </Box>
-        );
-      })}
-      <Divider />
-      {data.map((item, index) => {
-        return (
-          <>
-            <Box key={`data-${index}`} px={2} width={1 / columns}>
-              {item}
+interface TableProps {
+  columns: number;
+  headers: Array<string>;
+  data: Array<JSX.Element>;
+  styling?: any;
+}
+
+export const Table = (props: TableProps) => {
+  const { columns, headers, data, styling } = props;
+  //if styling widths is passed in [2, 2, 1, 2]
+  let widthCalc = index => 1 / columns;
+  if (styling && styling.widths) {
+    widthCalc = index => styling.widths[index] / styling.widths.reduce((a, b) => a + b);
+  }
+
+  return (
+    <Box width={[1, 1, 1]} sx={{ minWidth: 480 }}>
+      <Flex flexWrap="wrap">
+        {headers.map((item, index) => {
+          return (
+            <Box key={`header-${index}`} px={2} width={widthCalc(index % columns)}>
+              <TextNoMargin fontSize={2} color={"black"}>
+                {item}
+              </TextNoMargin>
             </Box>
-            {(index + 1) % 4 == 0 ? <Divider /> : <></>}
-          </>
-        );
-      })}
-    </Flex>
-  </Box>
-);
+          );
+        })}
+        <Divider />
+        {data.map((item, index) => {
+          return (
+            <>
+              <Box key={`data-${index}`} px={2} width={widthCalc(index % columns)}>
+                {item}
+              </Box>
+              {(index + 1) % 4 == 0 ? <Divider /> : <></>}
+            </>
+          );
+        })}
+      </Flex>
+    </Box>
+  );
+};
