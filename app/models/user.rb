@@ -105,12 +105,31 @@ class User < ApplicationRecord
       )
       unless notification.persisted?
         notification.attributes = {
-          rule: Notification.send("default_#{k}_rule"),
+          rule: IceCube::DefaultRules.send("default_#{k}_rule"),
           method: :disabled
         }
         notification.save
       end
     end
+  end
+
+  def team_meetings
+    Meeting.where(team_id: teams.pluck(:id))
+  end
+
+  def time_in_user_timezone(time = nil)
+    user_timezone = get_timezone_name(self.timezone)
+    if time.nil?
+      Time.current.in_time_zone(user_timezone)
+    elsif time == 'noon'
+      Time.current.in_time_zone(user_timezone).at_noon
+    end
+  end
+
+  def get_timezone_name(timezone)
+    # user.timezone looks like "(GMT-08:00) Pacific Time (US & Canada)"
+    # we need everything after "(GMT-08:00) "
+    timezone[/(?<=\(GMT.\d{2}:\d{2}\)\s).*$/]
   end
 
   private

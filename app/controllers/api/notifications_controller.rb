@@ -8,14 +8,14 @@ class Api::NotificationsController < Api::ApplicationController
   end
 
   def update
-    @notification.update!(notification_params)
+    @notification.update_notification(notification_params)
     set_notifications
     render '/api/notifications/index'
   end
 
   private
   def set_notifications
-    @notifications = policy_scope(Notification).owned_by_user(current_user)
+    @notifications = policy_scope(Notification).owned_by_user(current_user).order(:id)
   end
 
   def set_notification
@@ -24,6 +24,6 @@ class Api::NotificationsController < Api::ApplicationController
   end
 
   def notification_params
-    params.require(:notification).permit(:rule, :method, :active)
+    params.require(:notification).permit(:method, validations: [:time_of_day, :day_of_week])
   end
 end

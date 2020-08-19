@@ -38,16 +38,18 @@ gem 'ice_cube', '~>  0.16.3'
 gem 'migration_data', '~> 0.6.0'
 gem 'pundit', '~> 2.1.0'
 gem 'paper_trail'
+gem 'sidekiq', '~> 6.0.2'
+gem 'sidekiq-scheduler', '~> 3.0.1'
+gem 'tod', '~> 2.2.0'
 gem 'warden-jwt_auth', '~> 0.4.2' #https://github.com/waiting-for-dev/devise-jwt/issues/56
 
 gem "aws-sdk-s3", require: false
 gem 'rack-cors'
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'factory_bot_rails'
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 4.0.0'
-  gem 'factory_bot_rails'
 end
 
 group :development do
