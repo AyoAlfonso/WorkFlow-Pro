@@ -218,5 +218,24 @@ export class Api {
     return this.client.get(`/teams`);
   }
 
+  async getMeetings() {
+    return this.client.get(`/meetings`);
+  }
+
+  async getTeamMeetings(id) {
+    return this.client.get(`/meetings/team_meetings/${id}`);
+  }
+
+  async createMeeting(meeting) {
+    return this.client.post(`/meetings`, meeting);
+  }
+
+  async updateMeeting(meeting) {
+    return this.client.patch(`/meetings/${meeting.id}`, meeting);
+  }
+
+  async deleteMeeting(id) {
+    return this.client.delete(`/meetings/${id}`);
+  }
   //async setJWT(jwt) {}
 }

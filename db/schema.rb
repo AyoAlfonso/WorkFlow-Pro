@@ -227,6 +227,9 @@ ActiveRecord::Schema.define(version: 2020_08_18_181300) do
     t.bigint "team_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "start_time"
+    t.integer "current_step"
+    t.string "host_name"
     t.index ["meeting_template_id"], name: "index_meetings_on_meeting_template_id"
     t.index ["team_id"], name: "index_meetings_on_team_id"
   end

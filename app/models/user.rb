@@ -62,6 +62,10 @@ class User < ApplicationRecord
     team.is_lead?(self)
   end
 
+  def is_in_team?(team)
+    self.teams.include?(team)
+  end
+
   def company_admin?
     role == UserRole::CEO || role == UserRole::ADMIN
   end

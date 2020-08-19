@@ -44,6 +44,11 @@ const initialState = {
   teamStore: {
     teams: [],
   },
+  meetingStore: {
+    currentMeeting: null,
+    meetings: [],
+    teamMeetings: [],
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);
