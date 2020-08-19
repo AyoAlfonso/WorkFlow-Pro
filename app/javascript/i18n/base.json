@@ -57,6 +57,12 @@
 
         }
       },
+      "core": {
+        "core1": "Why Do We Exist?",
+        "core2": "How Do We Behave?",
+        "core3": "What Do We Do?",
+        "core4": "How Do We Succeed?"
+      },
       "company": {
         "accountabilityChart": "Accountability Chart",
         "name": "Company Name",

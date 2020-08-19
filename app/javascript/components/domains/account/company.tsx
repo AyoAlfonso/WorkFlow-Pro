@@ -148,7 +148,7 @@ export const Company = observer(
                     }}
                     value={rallyingCry}
                   />
-                  <Label htmlFor="core1Content">Core 1</Label>
+                  <Label htmlFor="core1Content">{t("core.core1")}</Label>
                   <TrixEditor
                     className="custom-css-class"
                     autoFocus={true}
@@ -167,7 +167,7 @@ export const Company = observer(
                       });
                     }}
                   />
-                  <Label htmlFor="core_2">Core 2</Label>
+                  <Label htmlFor="core_2">{t("core.core2")}</Label>
                   <TrixEditor
                     className="custom-css-class"
                     autoFocus={true}
@@ -186,7 +186,7 @@ export const Company = observer(
                       });
                     }}
                   />
-                  <Label htmlFor="core_3">Core 3</Label>
+                  <Label htmlFor="core_3">{t("core.core3")}</Label>
                   <TrixEditor
                     className="custom-css-class"
                     autoFocus={true}
@@ -205,7 +205,7 @@ export const Company = observer(
                       });
                     }}
                   />
-                  <Label htmlFor="core_4">Core 4</Label>
+                  <Label htmlFor="core_4">{t("core.core4")}</Label>
                   <TrixEditor
                     className="custom-css-class"
                     autoFocus={true}
