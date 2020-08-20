@@ -248,6 +248,17 @@ ActiveRecord::Schema.define(version: 2020_08_19_222001) do
     t.index ["quarterly_goal_id"], name: "index_milestones_on_quarterly_goal_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "notification_type"
+    t.jsonb "rule"
+    t.integer "method"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id", "notification_type"], name: "index_notifications_on_user_id_and_notification_type", unique: true
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
   create_table "quarterly_goals", force: :cascade do |t|
     t.bigint "created_by_id"
     t.bigint "owned_by_id"
@@ -406,6 +417,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_222001) do
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
   add_foreign_key "milestones", "quarterly_goals"
+  add_foreign_key "notifications", "users"
   add_foreign_key "quarterly_goals", "annual_initiatives"
   add_foreign_key "questionnaire_attempts", "questionnaires"
   add_foreign_key "questionnaire_attempts", "users"

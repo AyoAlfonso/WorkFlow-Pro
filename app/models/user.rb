@@ -12,6 +12,7 @@ class User < ApplicationRecord
          :jwt_authenticatable, jwt_revocation_strategy: self, validate_on_invite: true
 
   before_save :sanitize_personal_vision
+  after_create :create_default_notifications
   belongs_to :company
   delegate :name, :timezone, to: :company, prefix: true, allow_nil: true
   delegate :name, to: :user_role, prefix: true, allow_nil: true
@@ -30,6 +31,8 @@ class User < ApplicationRecord
   has_many :habits
   has_many :team_user_enablements
   has_many :teams, through: :team_user_enablements
+  has_many :team_leads
+  has_many :notifications
 
   validates :first_name, :last_name, presence: true
 
@@ -69,7 +72,7 @@ class User < ApplicationRecord
   def company_admin?
     role == UserRole::CEO || role == UserRole::ADMIN
   end
-  
+
   # devise confirm! method overriden
   # def confirm!
   #   UserMailer.welcome_message(self).deliver
@@ -94,6 +97,40 @@ class User < ApplicationRecord
   #   #do_something(token, payload)
   # end
 
+  def create_default_notifications
+    Notification.notification_types.each do |k,v|
+      notification = Notification.find_or_initialize_by(
+        user_id: self.id,
+        notification_type: v
+      )
+      unless notification.persisted?
+        notification.attributes = {
+          rule: IceCube::DefaultRules.send("default_#{k}_rule"),
+          method: :disabled
+        }
+        notification.save
+      end
+    end
+  end
+
+  def team_meetings
+    Meeting.where(team_id: teams.pluck(:id))
+  end
+
+  def time_in_user_timezone(time = nil)
+    user_timezone = get_timezone_name(self.timezone)
+    if time.nil?
+      Time.current.in_time_zone(user_timezone)
+    elsif time == 'noon'
+      Time.current.in_time_zone(user_timezone).at_noon
+    end
+  end
+
+  def get_timezone_name(timezone)
+    # user.timezone looks like "(GMT-08:00) Pacific Time (US & Canada)"
+    # we need everything after "(GMT-08:00) "
+    timezone[/(?<=\(GMT.\d{2}:\d{2}\)\s).*$/]
+  end
 
   private
   def sanitize_personal_vision

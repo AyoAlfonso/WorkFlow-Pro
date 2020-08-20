@@ -15,6 +15,14 @@
         "profile": "Profile",
         "notifications": "Notifications",
         "security": "Security",
+        "notificationsTable": {
+          "reminder": "Reminder",
+          "repeat": "Repeat",
+          "email": "Email"
+        },
+        "editNotification": {
+          "reminder": "Reminder"
+        },
         "meeting": "Meeting",
         "users": "Users",
         "teams": "Teams",

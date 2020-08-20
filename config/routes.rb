@@ -21,7 +21,17 @@ Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-
+  require 'sidekiq/web'
+  require 'sidekiq-scheduler/web'
+  Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+    ActiveSupport::SecurityUtils.secure_compare(
+      ::Digest::SHA256.hexdigest(username), ::Digest::SHA256.hexdigest(ENV['SIDEKIQ_USERNAME'])
+    ) &
+    ActiveSupport::SecurityUtils.secure_compare(
+      ::Digest::SHA256.hexdigest(password), ::Digest::SHA256.hexdigest(ENV['SIDEKIQ_PASSWORD'])
+    )
+  end if Rails.env.production?
+  mount Sidekiq::Web => '/sidekiq'
 
   scope module: :api, path: :api do
     resources :users, only: [:index, :create, :show, :update] do
@@ -69,13 +79,16 @@ Rails.application.routes.draw do
 
     #questionnaire_attempts
     resources :questionnaire_attempts, only: [:create]
-    
+
     #teams
     resources :teams, only: [:index]
 
     #meetings
     resources :meetings, only: [:create, :index, :update, :destroy]
     get '/meetings/team_meetings/:id', to: 'meetings#team_meetings'
+
+    #notifications
+    resources :notifications, only: [:index, :update]
 
   end
 

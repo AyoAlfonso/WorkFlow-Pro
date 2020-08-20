@@ -237,5 +237,15 @@ export class Api {
   async deleteMeeting(id) {
     return this.client.delete(`/meetings/${id}`);
   }
+
+  async getNotifications() {
+    return this.client.get(`/notifications`);
+  }
+
+  async updateNotification(notification) {
+    return this.client.put(`/notifications/${notification.id}`, {
+      notification: notification,
+    });
+  }
   //async setJWT(jwt) {}
 }

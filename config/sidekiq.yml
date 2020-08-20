@@ -1,0 +1,9 @@
+:queues:
+  - default
+  - mailers
+
+:schedule:
+  notification_batch_job:
+    # At 00 and 30 minutes past every hour.
+    cron: '00/30 * * * *'
+    class: NotificationBatchJob

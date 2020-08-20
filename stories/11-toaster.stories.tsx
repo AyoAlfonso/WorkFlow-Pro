@@ -58,7 +58,7 @@ export const ToastMessages = () => (
       const MyButtonComponent = () => (
         <Button variant={"primary"} onClick={onClickAction}>
           Show Toast!
-        </Button>    
+        </Button>
       )
       `}
         language={"tsx"}
@@ -93,7 +93,7 @@ export const ToastMessages = () => (
         heading={"Success"}
         message={"You did it!"}
         color={baseTheme.colors.finePine}
-        iconName={"Success-PU"}
+        iconName={"Success-PO"}
       />
       <CloseButton closeToast={() => {}} />
     </ToastBox>

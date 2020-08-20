@@ -32,3 +32,12 @@
 en:
   hello: "Hello world"
   unauthorized: "You are not authorized to perform this action"
+  notification_rules:
+    every: "Every Day"
+    sunday: "Sunday"
+    monday: "Monday"
+    tuesday: "Tuesday"
+    wednesday: "Wednesday"
+    thursday: "Thursday"
+    friday: "Friday"
+    saturday: "Saturday"
