@@ -1,9 +1,9 @@
 import * as React from "react";
-import { useState } from "react";
 import styled from "styled-components";
 import { Icon } from "../../shared/icon";
 import { Button } from "~/components/shared/button";
 import { observer } from "mobx-react";
+import { useParams, useHistory } from "react-router-dom";
 import { useMst } from "../../../setup/root";
 import * as R from "ramda";
 import { Avatar } from "~/components/shared/avatar";
@@ -17,18 +17,24 @@ import { TeamPulseCard } from "./shared/team-pulse-card";
 import { OverallTeamPulse } from "./shared/overall-team-pulse";
 import { TeamIssuesContainer } from "./shared/team-issues-container";
 import { Loading } from "~/components/shared/loading";
-import { TeamMeeting } from "./team-meeting";
 
-interface ITeamOverviewProps {}
+interface ITeamPageProps {}
 
-export const TeamOverview = observer(
-  (props: ITeamOverviewProps): JSX.Element => {
-    const [meetingInProgress, setMeetingInProgress] = useState<boolean>(false);
+type TURLSearchParams = typeof URLSearchParams;
+
+export const Team = observer(
+  (props: ITeamPageProps): JSX.Element => {
     const { sessionStore, teamStore } = useMst();
-    const [teamId] = window.location.href.split("/").slice(-1);
+
+    const { id } = useParams(); // reading url params for team id
+
+    const handleMeetingClick = meetingType => {
+      useHistory().push(`/team/${id}/meeting?meeting_type=${meetingType}`);
+    };
+    // use NavLink instead?
 
     const user = sessionStore.profile;
-    const currentTeam = teamStore.teams.find(team => team.id === parseInt(teamId));
+    const currentTeam = teamStore.teams.find(team => team.id === parseInt(id));
 
     if (R.isEmpty(teamStore.teams)) {
       return (
@@ -140,47 +146,41 @@ export const TeamOverview = observer(
 
     return (
       <Container>
-        {meetingInProgress ? (
-          <TeamMeeting team={currentTeam} />
-        ) : (
-          <>
-            <HeaderContainer>
-              <Title>{`${currentTeam.name} Overview`}</Title>
-              <TeamMeetingButton
-                small
-                variant={"primary"}
-                onClick={() => {
-                  setMeetingInProgress(true);
-                }}
-              >
-                <ButtonTextContainer>
-                  <Icon icon={"Team"} size={"20px"} />
-                  <TeamMeetingText>Team Meeting</TeamMeetingText>
-                </ButtonTextContainer>
-              </TeamMeetingButton>
-            </HeaderContainer>
-            <BodyContainer>
-              <LeftContainer>
-                <TeamSnapshotContainer>
-                  {renderCardSubHeader("Team Snapshot")}
-                  {renderUserSnapshotTable()}
-                </TeamSnapshotContainer>
-              </LeftContainer>
-              <RightContainer>
-                <TeamPulseContainer>
-                  {renderCardSubHeader("Team's Pulse")}
-                  <TeamPulseBody>
-                    <OverallTeamPulse value={3.4} />
-                    <TeamPulseCard data={teamPulseData} />
-                  </TeamPulseBody>
-                </TeamPulseContainer>
-                <TeamIssuesWrapper>
-                  <TeamIssuesContainer />
-                </TeamIssuesWrapper>
-              </RightContainer>
-            </BodyContainer>
-          </>
-        )}
+        <HeaderContainer>
+          <Title>{`${currentTeam.name} Overview`}</Title>
+          <TeamMeetingButton
+            small
+            variant={"primary"}
+            onClick={() => {
+              handleMeetingClick("team_weekly");
+            }}
+          >
+            <ButtonTextContainer>
+              <Icon icon={"Team"} size={"20px"} />
+              <TeamMeetingText>Team Meeting</TeamMeetingText>
+            </ButtonTextContainer>
+          </TeamMeetingButton>
+        </HeaderContainer>
+        <BodyContainer>
+          <LeftContainer>
+            <TeamSnapshotContainer>
+              {renderCardSubHeader("Team Snapshot")}
+              {renderUserSnapshotTable()}
+            </TeamSnapshotContainer>
+          </LeftContainer>
+          <RightContainer>
+            <TeamPulseContainer>
+              {renderCardSubHeader("Team's Pulse")}
+              <TeamPulseBody>
+                <OverallTeamPulse value={3.4} />
+                <TeamPulseCard data={teamPulseData} />
+              </TeamPulseBody>
+            </TeamPulseContainer>
+            <TeamIssuesWrapper>
+              <TeamIssuesContainer />
+            </TeamIssuesWrapper>
+          </RightContainer>
+        </BodyContainer>
       </Container>
     );
   },
