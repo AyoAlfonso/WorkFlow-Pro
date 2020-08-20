@@ -12,12 +12,12 @@ class Api::MeetingsController < Api::ApplicationController
     @meeting = Meeting.new(meeting_params)
     authorize @meeting
     @meeting.save!
-    render json: { meeting: @meeting.as_json(include: { meeting_template: { include: :steps } })}
+    render json: { meeting: @meeting.as_json(include: { meeting_template: { include: :steps } }) }
   end
 
   def update
     @meeting.update!(meeting_params)
-    render json: { meeting: @meeting.as_json(include: { meeting_template: { include: :steps } })}
+    render json: { meeting: @meeting.as_json(include: { meeting_template: { include: :steps } }) }
   end
 
   def destroy

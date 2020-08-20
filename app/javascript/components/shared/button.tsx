@@ -28,6 +28,8 @@ const StyledButton = styled.button<IButtonProps>`
   ${layout}
   ${space}
   ${typography}
+  display: flex;
+  align-items: center;
   border-radius: 5px;
   border-width: 1px;
   border-style: solid;

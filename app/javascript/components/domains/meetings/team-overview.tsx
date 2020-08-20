@@ -28,8 +28,9 @@ export const Team = observer(
 
     const { id } = useParams(); // reading url params for team id
 
+    const history = useHistory();
     const handleMeetingClick = meetingType => {
-      useHistory().push(`/team/${id}/meeting?meeting_type=${meetingType}`);
+      history.push(`/team/${id}/meeting?meeting_type=${meetingType}`);
     };
     // use NavLink instead?
 
