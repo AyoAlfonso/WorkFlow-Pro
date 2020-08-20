@@ -61,9 +61,8 @@ export const QuarterlyGoalStoreModel = types
         showToast("There was an error creating the quarterly goal", ToastMessageConstants.ERROR);
       }
     }),
-    delete: flow(function*(quarterlyGoalId) {
+    delete: flow(function*(updateAnnualInitiative = true, quarterlyGoalId) {
       const env = getEnv(self);
-
       try {
         const response: any = yield env.api.deleteQuarterlyGoal(quarterlyGoalId);
         const { goalStore, annualInitiativeStore } = getRoot(self);
@@ -87,7 +86,10 @@ export const QuarterlyGoalStoreModel = types
             annualInitiative,
           );
         }
-        annualInitiativeStore.updateRecordIfOpened(annualInitiative);
+        if (updateAnnualInitiative) {
+          annualInitiativeStore.updateRecordIfOpened(annualInitiative);
+        }
+
         showToast("Quarterly goal deleted", ToastMessageConstants.SUCCESS);
         return annualInitiative;
       } catch {

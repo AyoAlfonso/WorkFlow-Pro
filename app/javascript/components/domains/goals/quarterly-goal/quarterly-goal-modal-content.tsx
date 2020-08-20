@@ -89,9 +89,19 @@ export const QuarterlyGoalModalContent = observer(
             </GoalText>
           </TitleContainer>
           <AnnualInitiativeActionContainer>
-            {/* <EditIconContainer>
-              <Icon icon={"Edit-2"} size={"25px"} iconColor={"grey80"} />
-            </EditIconContainer> */}
+            {editable && (
+              <DeleteIconContainer
+                onClick={() => {
+                  if (confirm("Are you sure you want to delete this quarterly goal?")) {
+                    quarterlyGoalStore.delete(false, quarterlyGoalId).then(() => {
+                      setQuarterlyGoalModalOpen(false);
+                    });
+                  }
+                }}
+              >
+                <Icon icon={"Delete"} size={"25px"} iconColor={"grey80"} />
+              </DeleteIconContainer>
+            )}
             <CloseIconContainer onClick={() => setQuarterlyGoalModalOpen(false)}>
               <Icon icon={"Close"} size={"25px"} iconColor={"grey80"} />
             </CloseIconContainer>
@@ -249,17 +259,14 @@ const AnnualInitiativeActionContainer = styled.div`
   margin-left: auto;
 `;
 
-const EditIconContainer = styled.div`
-  margin-right: 16px;
+const CloseIconContainer = styled.div`
   &:hover {
     cursor: pointer;
   }
 `;
 
-const CloseIconContainer = styled.div`
-  &:hover {
-    cursor: pointer;
-  }
+const DeleteIconContainer = styled(CloseIconContainer)`
+  margin-right: 16px;
 `;
 
 const SectionContainer = styled.div`
