@@ -11,9 +11,17 @@ import { baseTheme } from "~/themes";
 interface IHabitsHabitTrackerProps {
   habit: IHabit;
   onUpdate: any;
+  setShowIndividualHabit: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedHabitId: React.Dispatch<React.SetStateAction<number>>;
 }
+
 export const HabitsHabitTracker = observer(
-  ({ habit, onUpdate }: IHabitsHabitTrackerProps): JSX.Element => {
+  ({
+    habit,
+    onUpdate,
+    setShowIndividualHabit,
+    setSelectedHabitId,
+  }: IHabitsHabitTrackerProps): JSX.Element => {
     const renderHabitLogs = () =>
       habit.recentLogsFiveDays.map(log => (
         <HabitsTableDataCell
@@ -42,7 +50,12 @@ export const HabitsHabitTracker = observer(
             />
           )}
         </HabitsTableDataCell>
-        <HabitsTextContainer>
+        <HabitsTextContainer
+          onClick={() => {
+            setSelectedHabitId(habit.id);
+            setShowIndividualHabit(true);
+          }}
+        >
           <NameContainer color={habit.color}>{`${habit.name}`}</NameContainer>
         </HabitsTextContainer>
         {renderHabitLogs()}
@@ -59,6 +72,9 @@ export const HabitsTextContainer = styled.td`
   font-weight: 600;
   height: 35px;
   margin-left: 10px;
+  &: hover {
+    cursor: pointer;
+  }
 `;
 
 interface IHabitsTableCircularProgressBar {

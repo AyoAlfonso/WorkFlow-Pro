@@ -29,7 +29,7 @@ class Api::HabitsController < Api::ApplicationController
 
   def update
     @habit.update!(habit_params)
-    render json: KeyActivity.sort_by_priority_and_created_at_date
+    render json: @habit
   end
 
   def destroy

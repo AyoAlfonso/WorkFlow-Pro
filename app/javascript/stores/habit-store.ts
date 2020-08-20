@@ -2,13 +2,16 @@ import { types, flow } from "mobx-state-tree";
 import { withEnvironment } from "~/lib/with-environment";
 import { HabitModel } from "~/models";
 import { ApiResponse } from "apisauce";
-import { color } from "@storybook/addon-knobs";
+import * as R from "ramda";
 import * as moment from "moment";
+import { ToastMessageConstants } from "~/constants/toast-types";
+import { showToast } from "~/utils/toast-message";
 
 export const HabitStoreModel = types
   .model("HabitStoreModel")
   .props({
     habits: types.array(HabitModel),
+    habit: types.maybeNull(HabitModel),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -51,6 +54,33 @@ export const HabitStoreModel = types
         newHabits[habitIndex][weekToUpdate][habitLogIndex] = response.data;
       }
     }),
+    getHabit: flow(function*(id) {
+      const response = yield self.environment.api.getHabit(id);
+      if (response.ok) {
+        self.habit = response.data;
+        return response.data;
+      }
+    }),
+    updateCurrentHabit: flow(function*() {
+      const response = yield self.environment.api.updateHabit(self.habit);
+      if (response.ok) {
+        const modifiedHabitIndex = self.habits.findIndex(habit => habit.id == self.habit.id);
+        self.habits[modifiedHabitIndex] = response.data;
+      }
+    }),
+    deleteHabit: flow(function*() {
+      const response = yield self.environment.api.deleteHabit(self.habit.id);
+      if (response.ok) {
+        const updatedHabits = R.filter(habit => habit.id != self.habit.id, self.habits);
+        self.habits = updatedHabits;
+        showToast("Habit deleted", ToastMessageConstants.SUCCESS);
+      }
+    }),
+  }))
+  .actions(self => ({
+    updateHabitField(field, value) {
+      self.habit[field] = value;
+    },
   }));
 
 type HabitStoreType = typeof HabitStoreModel.Type;

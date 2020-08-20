@@ -193,6 +193,10 @@ export const Icons = () => (
         <Icon icon={"Chevron-Down"} size={"2em"} />
         <TextCenteredDiv>Chevron-Down</TextCenteredDiv>
       </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Chevron-Left"} size={"2em"} />
+        <TextCenteredDiv>Chevron-Left</TextCenteredDiv>
+      </CenteredColumnDiv>
     </RowDiv>
     <Divider />
     <RowDiv>

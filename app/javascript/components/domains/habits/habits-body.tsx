@@ -5,6 +5,7 @@ import { useMst } from "~/setup/root";
 import { HabitsHabitTracker } from "./habits-habit-tracker";
 import { baseTheme } from "~/themes/base";
 import * as moment from "moment";
+import { EditHabit } from "./edit-habit";
 
 export const HabitsBody = observer(
   (): JSX.Element => {
@@ -26,6 +27,8 @@ export const HabitsBody = observer(
           <HabitsHabitTracker
             habit={habit}
             onUpdate={(habitId, logDate) => habitStore.updateHabitLog(habitId, logDate)}
+            setShowIndividualHabit={setShowIndividualHabit}
+            setSelectedHabitId={setSelectedHabitId}
           />
         </HabitsTableRow>
       ));
@@ -48,7 +51,11 @@ export const HabitsBody = observer(
     ));
 
     return showIndividualHabit ? (
-      <> HELLO WORLD </>
+      <EditHabit
+        selectedHabitId={selectedHabitId}
+        setSelectedHabitId={setSelectedHabitId}
+        setShowIndividualHabit={setShowIndividualHabit}
+      />
     ) : (
       <HabitsTable>
         <HabitsTableHead>
