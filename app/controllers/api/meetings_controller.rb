@@ -27,6 +27,7 @@ class Api::MeetingsController < Api::ApplicationController
 
   def team_meetings
     @meetings = Meeting.team_meetings(params[:id])
+    authorize @meetings
     render json: { team_meetings: @meetings.as_json(include: { meeting_template: { include: :steps }}) }
   end
 

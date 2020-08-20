@@ -26,7 +26,7 @@ export const MeetingStoreModel = types
     fetchTeamMeetings: flow(function*(teamId) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getTeamMeetings(teamId);
-        self.teamMeetings = response.data;
+        self.teamMeetings = response.data.teamMeetings;
       } catch {
         // caught bv Api Monitor
       }
@@ -54,6 +54,18 @@ export const MeetingStoreModel = types
       } catch {
         // caught bv Api Monitor
       }
+    }),
+  }))
+  .actions(self => ({
+    reset() {
+      self.meetings = [] as any;
+      self.teamMeetings = [] as any;
+    },
+  }))
+  .actions(self => ({
+    load: flow(function*() {
+      self.reset();
+      self.fetchMeetings();
     }),
   }));
 

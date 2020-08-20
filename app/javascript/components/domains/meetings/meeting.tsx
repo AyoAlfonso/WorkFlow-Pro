@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Heading } from "~/components/shared/heading";
 import { Button } from "~/components/shared/button";
-import { IconButton } from "~/components/shared/icon-button";
 import { StepProgressBar } from "~/components/shared/progress-bars/step-progress-bar";
 import { Text } from "~/components/shared/text";
 import { observer } from "mobx-react";
@@ -16,6 +15,7 @@ import MeetingTypes from "../../../constants/meeting-types";
 import { Icon } from "~/components/shared/icon";
 import { TextNoMargin } from "~/components/shared/text";
 import { Loading } from "~/components/shared/loading";
+import { toJS } from "mobx";
 
 export interface ITeamMeetingProps {}
 
@@ -23,25 +23,26 @@ export const Meeting = observer(
   (props: ITeamMeetingProps): JSX.Element => {
     const [meetingStarted, setMeetingStarted] = useState<boolean>(false);
     const { teamStore, meetingStore } = useMst();
-    const { id } = useParams();
+    const { id } = useParams(); // team id from url params
     const useQuery = () => queryString.parse(useLocation().search);
     const query = useQuery();
 
+    const meetings = toJS(meetingStore.teamMeetings);
     useEffect(() => {
-      meetingStore.fetchMeetings();
+      meetingStore.fetchTeamMeetings(id);
     }, []);
-
-    if (R.isEmpty(meetingStore.meetings)) {
-      <Container>
-        <BodyContainer>
-          <Loading />
-        </BodyContainer>
-      </Container>;
+    console.log(meetings);
+    if (R.isEmpty(toJS(meetings))) {
+      return (
+        <Container>
+          <BodyContainer>
+            <Loading />
+          </BodyContainer>
+        </Container>
+      );
     }
 
     const team = teamStore.teams.find(team => team.id === parseInt(id));
-    const meetings = meetingStore.meetings;
-    console.log(meetings);
 
     const StopMeetingButton = () => {
       return (

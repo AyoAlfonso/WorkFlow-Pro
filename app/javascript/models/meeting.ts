@@ -3,7 +3,7 @@ import { types } from "mobx-state-tree";
 export const MeetingModel = types
   .model("MeetingModel")
   .props({
-    id: types.optional(types.number, 0),
+    id: types.identifierNumber,
     averageRating: types.maybeNull(types.number),
     issuesDone: types.maybeNull(types.number),
     keyActivitiesDone: types.maybeNull(types.number),
@@ -11,6 +11,11 @@ export const MeetingModel = types
     goalProgress: types.maybeNull(types.number),
     meetingTemplateId: types.maybeNull(types.number),
     teamId: types.maybeNull(types.number),
+    meetingTemplate: types.frozen(),
+    scheduledStartTime: types.maybeNull(types.string),
+    startTime: types.maybeNull(types.string),
+    hostName: types.maybeNull(types.string),
+    currentStep: types.maybeNull(types.number),
   })
   .views(self => ({}))
   .actions(self => ({}));

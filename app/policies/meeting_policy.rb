@@ -23,7 +23,7 @@ class MeetingPolicy < ApplicationPolicy
   end
 
   def team_meetings?
-    @user.is_in_team?(@meeting.team)
+    @user.teams_intersect?(@meeting.map { |m| m.team })
   end
   
   class Scope

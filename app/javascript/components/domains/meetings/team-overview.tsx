@@ -20,8 +20,6 @@ import { Loading } from "~/components/shared/loading";
 
 interface ITeamPageProps {}
 
-type TURLSearchParams = typeof URLSearchParams;
-
 export const Team = observer(
   (props: ITeamPageProps): JSX.Element => {
     const { sessionStore, teamStore } = useMst();
