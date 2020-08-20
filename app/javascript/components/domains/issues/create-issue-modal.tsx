@@ -64,6 +64,7 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
                   if (result) {
                     setIssueDescription("");
                     setCreateIssueModalOpen(false);
+                    setSelectedPriority(0);
                   }
                 })
             }
