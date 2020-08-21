@@ -22,6 +22,12 @@ export const AnnualInitiativeModel = types
       const { sessionStore } = getRoot(self);
       return self.quarterlyGoals.filter(qg => qg.ownedById == sessionStore.profile.id);
     },
+    get activeQuarterlyGoals() {
+      const { companyStore } = getRoot(self);
+      return self.quarterlyGoals.filter(
+        qg => companyStore.company.currentFiscalQuarter == qg.quarter,
+      );
+    },
   }))
   .actions(self => ({}));
 
