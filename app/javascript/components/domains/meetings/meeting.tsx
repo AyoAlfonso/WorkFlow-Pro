@@ -27,12 +27,11 @@ export const Meeting = observer(
     const useQuery = () => queryString.parse(useLocation().search);
     const query = useQuery();
 
-    const meetings = toJS(meetingStore.teamMeetings);
     useEffect(() => {
       meetingStore.fetchTeamMeetings(id);
     }, []);
-    console.log("meetings: ", meetings);
-    if (R.isEmpty(toJS(meetings))) {
+
+    if (R.isEmpty(toJS(meetingStore.teamMeetings))) {
       return (
         <Container>
           <BodyContainer>
@@ -43,7 +42,21 @@ export const Meeting = observer(
     }
 
     const team = teamStore.teams.find(team => team.id === parseInt(id));
-    const steps = R.path([], meetings);
+    const [meeting] = toJS(meetingStore.teamMeetings.slice(-1));
+    const steps = R.path(["steps"], meeting);
+
+    const progressBarSteps = steps.map((currentStep, index, stepsArray) => {
+      const accumulatedPosition = stepsArray
+        .slice(0, index)
+        .reduce((acc, curr) => acc + (curr.duration / meeting.duration) * 100, 0);
+      return {
+        accomplished: false,
+        position: accumulatedPosition,
+        index: currentStep.orderIndex,
+        title: currentStep.name,
+      };
+    });
+    const stepPositions = R.map(step => step.position, progressBarSteps).concat([100]);
 
     const StopMeetingButton = () => {
       return (
@@ -93,15 +106,10 @@ export const Meeting = observer(
             <>
               <StepProgressBar
                 progressBarProps={{
-                  stepPositions: [25, 30, 45, 60, 100],
+                  stepPositions: stepPositions,
                   percent: 55,
                 }}
-                steps={[
-                  { accomplished: true, title: "Step #1" },
-                  { accomplished: true, title: "Step #2" },
-                  { accomplished: false, title: "Step #3" },
-                  { accomplished: false, title: "Step #4" },
-                ]}
+                steps={progressBarSteps}
                 timed={true}
               />
             </>
