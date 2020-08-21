@@ -18,7 +18,7 @@ export const HabitsHeader = (): JSX.Element => {
       <ModalWithHeader
         modalOpen={habitsModalOpen}
         setModalOpen={setHabitsModalOpen}
-        headerText={t("profile.habits.title")}
+        headerText={t("profile.habits.new")}
         width={"35rem"}
       >
         <HabitsCreateHabitForm onSubmit={() => setHabitsModalOpen(false)} />
