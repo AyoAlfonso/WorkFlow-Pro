@@ -1,9 +1,7 @@
 import { types, flow } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
-import { MeetingModel, IMeeting } from "../models/meeting";
+import { MeetingModel } from "../models/meeting";
 import { ApiResponse } from "apisauce";
-import { showToast } from "~/utils/toast-message";
-import { ToastMessageConstants } from "~/constants/toast-types";
 
 export const MeetingStoreModel = types
   .model("MeetingStoreModel")
@@ -26,7 +24,7 @@ export const MeetingStoreModel = types
     fetchTeamMeetings: flow(function*(teamId) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getTeamMeetings(teamId);
-        self.teamMeetings = response.data.teamMeetings;
+        self.teamMeetings = response.data;
       } catch {
         // caught bv Api Monitor
       }

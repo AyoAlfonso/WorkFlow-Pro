@@ -9,13 +9,16 @@ export const MeetingModel = types
     keyActivitiesDone: types.maybeNull(types.number),
     averageTeamMood: types.maybeNull(types.number),
     goalProgress: types.maybeNull(types.number),
-    meetingTemplateId: types.maybeNull(types.number),
     teamId: types.maybeNull(types.number),
-    meetingTemplate: types.frozen(),
     scheduledStartTime: types.maybeNull(types.string),
     startTime: types.maybeNull(types.string),
     hostName: types.maybeNull(types.string),
     currentStep: types.maybeNull(types.number),
+    steps: types.array(types.frozen()),
+    name: types.string,
+    duration: types.number,
+    meetingType: types.string,
+    createdAt: types.string,
   })
   .views(self => ({}))
   .actions(self => ({}));

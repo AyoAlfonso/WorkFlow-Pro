@@ -31,7 +31,7 @@ export const Meeting = observer(
     useEffect(() => {
       meetingStore.fetchTeamMeetings(id);
     }, []);
-    console.log(meetings);
+    console.log("meetings: ", meetings);
     if (R.isEmpty(toJS(meetings))) {
       return (
         <Container>
@@ -43,6 +43,7 @@ export const Meeting = observer(
     }
 
     const team = teamStore.teams.find(team => team.id === parseInt(id));
+    const steps = R.path([], meetings);
 
     const StopMeetingButton = () => {
       return (
