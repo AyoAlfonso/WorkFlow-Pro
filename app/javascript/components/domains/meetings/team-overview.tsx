@@ -119,7 +119,7 @@ export const Team = observer(
           <TeamMemberContainer>
             <TeamMemberInfoContainer>
               <Avatar
-                // defaultAvatarColor={user.defaultAvatarColor}
+                defaultAvatarColor={user.defaultAvatarColor}
                 avatarUrl={user.avatarUrl}
                 firstName={user.firstName}
                 lastName={user.lastName}
