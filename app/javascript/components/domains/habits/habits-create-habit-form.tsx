@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
 import { Button, Input, Label } from "~/components/shared";
 import { genRandomColor } from "~/utils";
+import { Text } from "~/components/shared/text";
 
 interface ICreateHabitFormProps {
   onSubmit: () => void;
@@ -31,35 +32,21 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
   };
   return (
     <StyledForm>
-      <Label>
-        {`${t("profile.habits.form.inputs.name")}:`}
-        <StyledInput
-          type={"text"}
-          value={name}
-          onChange={({ target: { value } }: React.ChangeEvent<HTMLInputElement>) =>
-            setCreateHabitFormState({ ...createHabitFormState, name: value })
-          }
-        />
-      </Label>
-      <Label>
-        {`${t("profile.habits.form.inputs.frequency")}:`}
-        <StyledInput
-          type={"number"}
-          onChange={({ target: { value } }: React.ChangeEvent<HTMLInputElement>) =>
-            setCreateHabitFormState({
-              ...createHabitFormState,
-              frequency: Number(value) > 0 ? Number(value) : null,
-            })
-          }
-          value={frequency}
-        />
-      </Label>
-      {/* Styling inline here as there seems to be a trick to styling height and width in
+      <NameAndColorContainer>
+        <NameInputContainer>
+          <StyledInput
+            type={"text"}
+            value={name}
+            placeholder={t("profile.habits.form.placeholder")}
+            onChange={({ target: { value } }: React.ChangeEvent<HTMLInputElement>) =>
+              setCreateHabitFormState({ ...createHabitFormState, name: value })
+            }
+          />
+        </NameInputContainer>
+        {/* Styling inline here as there seems to be a trick to styling height and width in
       styled-components. Avoiding that complication here. */}
-      <Label style={{ width: 50 }}>
-        {`${t("profile.habits.form.inputs.color")}:`}
         <StyledInput
-          style={{ height: 50, width: 50 }}
+          style={{ height: 50, width: 50, marginTop: "auto", marginBottom: "auto" }}
           type={"color"}
           onChange={({ target: { value } }: React.ChangeEvent<HTMLInputElement>) =>
             setCreateHabitFormState({
@@ -69,7 +56,22 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
           }
           value={color}
         />
-      </Label>
+      </NameAndColorContainer>
+
+      <FrequencyContainer>
+        <SectionText> Repeat </SectionText>
+        <FrequencyInput
+          type={"number"}
+          onChange={({ target: { value } }: React.ChangeEvent<HTMLInputElement>) =>
+            setCreateHabitFormState({
+              ...createHabitFormState,
+              frequency: Number(value) > 0 ? Number(value) : null,
+            })
+          }
+          value={frequency}
+        />
+        <FrequencyTextTime>times each week</FrequencyTextTime>
+      </FrequencyContainer>
       <Button
         onClick={() => {
           submitHabit();
@@ -84,10 +86,44 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
 };
 
 const StyledForm = styled.form`
-  margin: 25px;
-  padding: 15px;
+  margin-left: 28px;
+  margin-right: 28px;
+  margin-top: 10px;
+  margin-bottom: 25px;
 `;
 
 const StyledInput = styled(Input)`
   margin-top: 10px;
+`;
+
+const NameAndColorContainer = styled.div`
+  display: flex;
+`;
+
+const NameInputContainer = styled.div`
+  margin-right: 16px;
+  width: 90%;
+`;
+
+const FrequencyContainer = styled.div`
+  display: flex;
+  margin-top: 20px;
+`;
+
+const SectionText = styled(Text)`
+  margin-top: auto;
+  margin-bottom: auto;
+  font-weight: bold;
+`;
+
+const FrequencyTextTime = styled(Text)`
+  margin-top: auto;
+  margin-bottom: auto;
+`;
+
+const FrequencyInput = styled(Input)`
+  width: 50px;
+  margin-bottom: 0;
+  margin-left: 8px;
+  margin-right: 8px;
 `;

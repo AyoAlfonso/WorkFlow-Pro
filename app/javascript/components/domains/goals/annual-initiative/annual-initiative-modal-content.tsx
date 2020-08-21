@@ -39,6 +39,7 @@ export const AnnualInitiativeModalContent = observer(
     const currentUser = sessionStore.profile;
 
     const [showCreateQuarterlyGoal, setShowCreateQuarterlyGoal] = useState<boolean>(false);
+    const [showAllQuarterlyGoals, setShowAllQuarterlyGoals] = useState<boolean>(false);
 
     const { t } = useTranslation();
     const descriptionRef = useRef(null);
@@ -55,8 +56,14 @@ export const AnnualInitiativeModalContent = observer(
 
     const editable = currentUser.id == annualInitiative.ownedById;
 
+    const activeQuarterlyGoals = annualInitiative.activeQuarterlyGoals;
+    const allQuarterlyGoals = annualInitiative.quarterlyGoals;
+
     const renderQuarterlyGoals = () => {
-      return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
+      const quarterlyGoalsToDisplay = showAllQuarterlyGoals
+        ? allQuarterlyGoals
+        : activeQuarterlyGoals;
+      return quarterlyGoalsToDisplay.map((quarterlyGoal, index) => {
         return (
           <QuarterlyGoalContainer key={index}>
             <StatusBlockColorIndicator
@@ -122,17 +129,19 @@ export const AnnualInitiativeModalContent = observer(
             </GoalText>
           </TitleContainer>
           <AnnualInitiativeActionContainer>
-            <DeleteIconContainer
-              onClick={() => {
-                if (confirm("Are you sure you want to delete this annual initiative?")) {
-                  annualInitiativeStore.delete(annualInitiativeId).then(() => {
-                    setAnnualInitiativeModalOpen(false);
-                  });
-                }
-              }}
-            >
-              <Icon icon={"Delete"} size={"25px"} iconColor={"grey80"} />
-            </DeleteIconContainer>
+            {editable && (
+              <DeleteIconContainer
+                onClick={() => {
+                  if (confirm("Are you sure you want to delete this annual initiative?")) {
+                    annualInitiativeStore.delete(annualInitiativeId).then(() => {
+                      setAnnualInitiativeModalOpen(false);
+                    });
+                  }
+                }}
+              >
+                <Icon icon={"Delete"} size={"25px"} iconColor={"grey80"} />
+              </DeleteIconContainer>
+            )}
 
             <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
               <Icon icon={"Close"} size={"25px"} iconColor={"grey80"} />
@@ -157,14 +166,19 @@ export const AnnualInitiativeModalContent = observer(
     };
 
     const renderGoals = (): JSX.Element => {
-      //TODO: ONLY SHOW GOALS THAT ARE IN THE CURRENT QUARTER. WE NEED TO WAIT FOR FISCAL YEAR TO BE COMPLETED BEFORE WE CAN IMPLEMENT THIS FUNCTIONALITY
       return (
         <>
           <SubHeaderContainer>
             <SubHeaderText text={"Quarterly Goals"} />
             <ShowPastGoalsContainer>
-              <Button small variant={"primaryOutline"} onClick={() => {}}>
-                Show Past Goals (2)
+              <Button
+                small
+                variant={"primaryOutline"}
+                onClick={() => setShowAllQuarterlyGoals(!showAllQuarterlyGoals)}
+              >
+                {showAllQuarterlyGoals
+                  ? `Show Active (${activeQuarterlyGoals.length})`
+                  : `Show Past Goals (${allQuarterlyGoals.length - activeQuarterlyGoals.length})`}
               </Button>
             </ShowPastGoalsContainer>
           </SubHeaderContainer>

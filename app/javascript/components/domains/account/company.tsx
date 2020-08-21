@@ -94,7 +94,11 @@ export const Company = observer(
               </PersonalInfoContainer>
               <ProfilePhotoSection display={"block"}>
                 <PhotoContainer>
-                  {company.logoUrl ? <img src={company.logoUrl}></img> : "No Company Logo set"}
+                  {company.logoUrl ? (
+                    <img style={{ maxHeight: 256, maxWidth: 256 }} src={company.logoUrl}></img>
+                  ) : (
+                    "No Company Logo set"
+                  )}
                 </PhotoContainer>
               </ProfilePhotoSection>
             </BodyContainer>
@@ -228,7 +232,11 @@ export const Company = observer(
                 </PersonalInfoContainer>
                 <ProfilePhotoSection display={"block"}>
                   <PhotoContainer>
-                    {company.logoUrl ? <img src={company.logoUrl}></img> : "No Company Logo set"}
+                    {company.logoUrl ? (
+                      <img style={{ maxHeight: 256, maxWidth: 256 }} src={company.logoUrl}></img>
+                    ) : (
+                      "No Company Logo set"
+                    )}
                   </PhotoContainer>
                   <PhotoModificationButtonsSection>
                     <Button

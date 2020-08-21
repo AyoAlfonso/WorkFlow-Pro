@@ -55,12 +55,14 @@
         },
         "habits": {
           "title": "Habits",
+          "new": "New Habit",
           "form": {
             "inputs": {
               "name": "Name",
               "frequency": "Frequency (times per week)",
               "color": "Color"
-            }
+            },
+            "placeholder": "Add a specific, achievable habit i.e. meditate for 5 minutes"
           }
 
         }
