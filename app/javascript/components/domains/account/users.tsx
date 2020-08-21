@@ -95,7 +95,7 @@ export const Users = observer(
                   // iconName={"New-User"}
                   onClick={() => setEditUserModalOpen(true)}
                 >
-                  {t("company.createUserForm.addButton")}
+                  {t("company.createUser.addButton")}
                 </Button>
                 <EditUserModal
                   editUserModalOpen={editUserModalOpen}

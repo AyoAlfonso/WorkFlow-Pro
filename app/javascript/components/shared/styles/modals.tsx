@@ -1,5 +1,6 @@
 import styled from "styled-components";
-
+import { Button } from "~/components/shared/button";
+import { baseTheme } from "~/themes/base";
 export const Container = styled.div`
   padding: 20px;
   padding-bottom: 0;
@@ -21,3 +22,17 @@ export const PriorityContainer = styled.div`
 export const IconContainer = styled.div`
   margin-left: 10px;
 `;
+
+//CONTEXT ISSUE, CANNOT USE SHARED STYLD BUTTON
+// type StyledButtonType = {
+//   disabled: boolean;
+// };
+
+// export const StyledButton = styled(Button)<StyledButtonType>`
+//   background-color: ${props =>
+//     props.disabled ? baseTheme.colors.grey60 : baseTheme.colors.primary100};
+//   width: 130px;
+//   &: hover {
+//     cursor: ${props => !props.disabled && "pointer"};
+//   }
+// `;

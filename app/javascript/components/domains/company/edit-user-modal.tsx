@@ -2,14 +2,10 @@ import * as React from "react";
 import * as R from "ramda";
 import { ModalWithHeader } from "~/components/shared/modal-with-header";
 import { useState } from "react";
-import styled from "styled-components";
-import { Icon } from "~/components/shared/icon";
-import { Button } from "rebass";
-import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";
 
 import { useTranslation } from "react-i18next";
-import { Label, Input, Select, FormContainer } from "~/components/shared/input";
+import { Label, Input, Select, FormContainer, Button } from "~/components/shared";
 import { RoleNormalUser } from "~/lib/constants";
 import { Can } from "~/components/shared/auth/can";
 
@@ -52,7 +48,7 @@ export const EditUserModal = ({
     <ModalWithHeader
       modalOpen={editUserModalOpen}
       setModalOpen={setEditUserModalOpen}
-      headerText={t("company.createUserForm.addButton")}
+      headerText={t("company.createUser.addButton")}
       width="35rem"
     >
       <Container>
@@ -96,22 +92,17 @@ export const EditUserModal = ({
                 </Select>
                 <Button
                   small
-                  variant={"primary"}
                   onClick={inviteUser}
+                  width={"200px"}
                   disabled={
                     email.length == 0 ||
                     firstName.length == 0 ||
                     lastName.length == 0 ||
                     R.isNil(userRoleId)
                   }
-                  style={{
-                    marginLeft: "auto",
-                    marginTop: "auto",
-                    marginBottom: "24px",
-                    marginRight: "24px",
-                  }}
+                  variant={"primary"}
                 >
-                  {t("profile.profileUpdateForm.invite")}
+                  {t("profile.profileUpdateForm.save")}
                 </Button>
               </FormContainer>
             }
@@ -121,16 +112,3 @@ export const EditUserModal = ({
     </ModalWithHeader>
   );
 };
-
-type StyledButtonType = {
-  disabled: boolean;
-};
-
-const StyledButton = styled(Button)<StyledButtonType>`
-  background-color: ${props =>
-    props.disabled ? baseTheme.colors.grey60 : baseTheme.colors.primary100};
-  width: 130px;
-  &: hover {
-    cursor: ${props => !props.disabled && "pointer"};
-  }
-`;

@@ -33,6 +33,7 @@
           "firstName": "First Name",
           "lastName": "Last Name",
           "role": "Role",
+          "save": "Save",
           "invite": "Invite to Company",
           "resend": "Resend",
           "timezone": "Location/Time Zone"
@@ -70,7 +71,7 @@
         "fiscalYearStartDate": "Fiscal Year Start Date",
         "strategicPlan": "The Plan",
         "timezone": "Location/Time Zone",
-        "createUserForm": {
+        "createUser": {
           "addButton": "Create New User"
         }
       },
