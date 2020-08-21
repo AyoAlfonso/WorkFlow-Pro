@@ -9,6 +9,12 @@ import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";
 import * as R from "ramda";
 import { Avatar } from "~/components/shared/avatar";
+import {
+  Container,
+  FlexContainer,
+  PriorityContainer,
+  IconContainer,
+} from "~/components/shared/styles/modals";
 
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
@@ -91,28 +97,6 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
     </ModalWithHeader>
   );
 };
-
-const Container = styled.div`
-  padding: 20px;
-  padding-bottom: 0;
-`;
-
-const FlexContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 20px;
-`;
-
-const PriorityContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-left: auto;
-  margin-top: 5px;
-`;
-
-const IconContainer = styled.div`
-  margin-left: 10px;
-`;
 
 type StyledButtonType = {
   disabled: boolean;

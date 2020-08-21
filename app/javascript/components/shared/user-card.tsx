@@ -12,9 +12,6 @@ export const UserCard = ({
   email,
   avatarUrl,
   defaultAvatarColor,
-  confirmedAt,
-  invitationSentAt,
-  resend,
   id,
 }: UserCardProps): JSX.Element => {
   const { t } = useTranslation();
@@ -54,8 +51,5 @@ interface UserCardProps {
   lastName: string;
   email: string;
   avatarUrl?: string;
-  confirmedAt: string;
-  invitationSentAt: string;
-  resend?: any;
   defaultAvatarColor?: string;
 }

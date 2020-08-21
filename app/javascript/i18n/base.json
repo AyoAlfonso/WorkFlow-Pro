@@ -69,7 +69,10 @@
         "logo": "Company Logo",
         "fiscalYearStartDate": "Fiscal Year Start Date",
         "strategicPlan": "The Plan",
-        "timezone": "Location/Time Zone"
+        "timezone": "Location/Time Zone",
+        "createUserForm": {
+          "addButton": "Create New User"
+        }
       },
       "navigation": {
         "home": "Home",

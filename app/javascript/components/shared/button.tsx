@@ -20,6 +20,7 @@ interface IButtonProps extends StyledSystemProps {
   disabled?: boolean;
   small?: boolean;
   style?: object;
+  fontOverride?: string;
 }
 
 const StyledButton = styled.button<IButtonProps>`
@@ -67,6 +68,13 @@ const StyledButton = styled.button<IButtonProps>`
           color: "grey80",
           borderColor: "backgroundGrey",
         },
+        noOutline: {
+          bg: "transparent",
+          borderWidth: "0px",
+          color: props.disabled ? "primary60" : "primary100",
+          paddingLeft: "6px",
+          paddingRight: "6px",
+        },
       },
     })}
 `;
@@ -76,13 +84,14 @@ export const Button: React.FunctionComponent<IButtonProps> = ({
   disabled,
   small,
   children,
+  fontOverride,
   ...restProps
 }): JSX.Element => {
   return (
     <StyledButton
       {...restProps}
       fontFamily={"Lato"}
-      fontSize={small ? 1 : 2}
+      fontSize={fontOverride ? fontOverride : small ? 1 : 2}
       px={4}
       disabled={disabled}
       onClick={disabled ? null : onClick}
