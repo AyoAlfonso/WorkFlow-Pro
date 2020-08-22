@@ -3,6 +3,7 @@ import { DailyLogModel } from "~/models";
 import { TeamModel } from "~/models/team";
 import * as R from "ramda";
 import { Teams } from "~/components/domains/account/teams";
+import { KeyActivityModel } from "./key-activity";
 
 export const UserModel = types
   .model("UserModel")
@@ -23,6 +24,7 @@ export const UserModel = types
     title: types.maybeNull(types.string),
     status: types.maybeNull(types.string),
     // teams: types.array(types.reference(TeamModel)), THIS ONLY WORKS IF TEAMS IS LOADED BEFORE USERS
+    todaysPriorities: types.maybeNull(types.array(KeyActivityModel)),
     //add avatarurl2x
   })
   .views(self => ({

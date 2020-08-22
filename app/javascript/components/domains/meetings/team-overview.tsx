@@ -101,71 +101,57 @@ export const TeamOverview = observer(
       );
     };
 
-    const renderUserPriorities = (): JSX.Element => {
-      return (
-        <>
-          <PriorityContainer>
-            <CheckboxContainer key={1}>
+    const renderUserPriorities = (keyActivities): JSX.Element => {
+      return keyActivities.map((keyActivity, index) => {
+        return (
+          <PriorityContainer key={index}>
+            <CheckboxContainer>
               <Checkbox
-                key={1}
-                checked={true}
-                // onChange={e => {
-                //   keyActivityStore.updateKeyActivityStatus(keyActivity, e.target.checked);
-                // }}
+                key={`checkbox-${index}`}
+                checked={keyActivity.completedAt ? true : false}
               />
             </CheckboxContainer>
-            <PriorityText>SEO Optimization</PriorityText>
+            <PriorityText>{keyActivity.description}</PriorityText>
             <PriorityIconContainer>
-              <KeyActivityPriorityIcon priority={"medium"} />
+              <KeyActivityPriorityIcon priority={keyActivity.priority} />
             </PriorityIconContainer>
           </PriorityContainer>
-          <PriorityContainer>
-            <CheckboxContainer key={2}>
-              <Checkbox
-                key={2}
-                checked={true}
-                // onChange={e => {
-                //   keyActivityStore.updateKeyActivityStatus(keyActivity, e.target.checked);
-                // }}
-              />
-            </CheckboxContainer>
-            <PriorityText>Feed the fish</PriorityText>
-            <PriorityIconContainer>
-              <KeyActivityPriorityIcon priority={"high"} />
-            </PriorityIconContainer>
-          </PriorityContainer>
-        </>
-      );
+        );
+      });
     };
 
     const renderUserRecords = () => {
-      return (
-        <UserRecordContainer>
-          <TeamMemberContainer>
-            <TeamMemberInfoContainer>
-              <Avatar
-                defaultAvatarColor={user.defaultAvatarColor}
-                avatarUrl={user.avatarUrl}
-                firstName={user.firstName}
-                lastName={user.lastName}
-                size={45}
-                marginLeft={"0px"}
+      return currentTeam.users.map((user, index) => {
+        return (
+          <UserRecordContainer key={index}>
+            <TeamMemberContainer>
+              <TeamMemberInfoContainer>
+                <Avatar
+                  defaultAvatarColor={user.defaultAvatarColor}
+                  avatarUrl={user.avatarUrl}
+                  firstName={user.firstName}
+                  lastName={user.lastName}
+                  size={45}
+                  marginLeft={"0px"}
+                />
+                <TeamMemberName>
+                  {user.firstName} {user.lastName}
+                </TeamMemberName>
+              </TeamMemberInfoContainer>
+            </TeamMemberContainer>
+            <StatusContainer>
+              <HomePersonalStatusDropdownMenuItem
+                style={{ width: "170px", borderRadius: "5px", marginTop: "5px" }}
+                menuItem={options[user.currentDailyLog.workStatus]}
+                onSelect={() => null}
               />
-              <TeamMemberName>
-                {user.firstName} {user.lastName}
-              </TeamMemberName>
-            </TeamMemberInfoContainer>
-          </TeamMemberContainer>
-          <StatusContainer>
-            <HomePersonalStatusDropdownMenuItem
-              style={{ width: "170px", borderRadius: "5px", marginTop: "5px" }}
-              menuItem={options[user.currentDailyLog.workStatus]}
-              onSelect={() => null}
-            />
-          </StatusContainer>
-          <TodaysPrioritiesContainer>{renderUserPriorities()}</TodaysPrioritiesContainer>
-        </UserRecordContainer>
-      );
+            </StatusContainer>
+            <TodaysPrioritiesContainer>
+              {renderUserPriorities(user.todaysPriorities)}
+            </TodaysPrioritiesContainer>
+          </UserRecordContainer>
+        );
+      });
     };
 
     return (

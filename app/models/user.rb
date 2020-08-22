@@ -77,6 +77,10 @@ class User < ApplicationRecord
     role == UserRole::CEO || role == UserRole::ADMIN
   end
 
+  def todays_priorities
+    self.key_activities.where(todays_priority: true).limit(3)
+  end
+  
   # devise confirm! method overriden
   # def confirm!
   #   UserMailer.welcome_message(self).deliver
