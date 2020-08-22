@@ -20,6 +20,7 @@ export interface ITeamMeetingProps {}
 export const Meeting = observer(
   (props: ITeamMeetingProps): JSX.Element => {
     const [meetingStarted, setMeetingStarted] = useState<boolean>(false);
+    const [meetingEnded, setMeetingEnded] = useState<boolean>(false);
     const { teamStore, meetingStore } = useMst();
     const { team_id, meeting_id } = useParams(); // team id from url params
 
@@ -35,6 +36,12 @@ export const Meeting = observer(
       </Container>
     );
 
+    const renderMeetingEnded = () => (
+      <Container>
+        <BodyContainer>This meeting has ended // meeting summary?</BodyContainer>
+      </Container>
+    );
+
     if (R.isEmpty(toJS(meetingStore.teamMeetings))) {
       return renderLoading();
     }
@@ -47,16 +54,10 @@ export const Meeting = observer(
     }
 
     if (!R.isNil(meeting.endTime)) {
-      return (
-        <Container>
-          <BodyContainer>This meeting has ended</BodyContainer>
-        </Container>
-      );
+      renderMeetingEnded();
     }
 
-    const steps = R.path(["steps"], meeting);
-
-    const progressBarSteps = steps.map((currentStep, index, stepsArray) => {
+    const progressBarSteps = meeting.steps.map((currentStep, index, stepsArray) => {
       const accumulatedPosition = stepsArray
         .slice(0, index)
         .reduce((acc, curr) => acc + (curr.duration / meeting.duration) * 100, 0);
@@ -76,24 +77,6 @@ export const Meeting = observer(
     const hasStartTime = () => !R.isNil(meeting.startTime);
     const hasEndTime = () => !R.isNil(meeting.endTime);
 
-    const StopMeetingButton = () => {
-      return (
-        <Button
-          variant={"redOutline"}
-          onClick={() => {
-            setMeetingStarted(false);
-            updateMeeting(R.merge(meeting, { endTime: new Date().toUTCString() }));
-          }}
-          small
-          ml={"25px"}
-          disabled={hasStartTime() || hasEndTime()}
-        >
-          <Icon icon={"_Stop"} iconColor={"warningRed"} size={"13px"} />
-          <TextNoMargin ml={"10px"}>Stop Meeting</TextNoMargin>
-        </Button>
-      );
-    };
-
     const StartMeetingButton = () => {
       return (
         <Button
@@ -104,41 +87,66 @@ export const Meeting = observer(
           }}
           small
           ml={"25px"}
-          disabled={hasEndTime()}
         >
           <Icon icon={"Start"} iconColor={"white"} size={"13px"} />
-          <TextNoMargin ml={"10px"}>Start Meeting</TextNoMargin>
+          <TextNoMargin ml={"10px"}>
+            {meetingStarted || hasStartTime() ? "Continue Meeting" : "Start Meeting"}
+          </TextNoMargin>
+        </Button>
+      );
+    };
+
+    const StopMeetingButton = () => {
+      return (
+        <Button
+          variant={"redOutline"}
+          onClick={() => {
+            setMeetingEnded(true);
+            updateMeeting(R.merge(meeting, { endTime: new Date().toUTCString() }));
+          }}
+          small
+          ml={"25px"}
+          disabled={meetingEnded}
+        >
+          <Icon icon={"_Stop"} iconColor={"warningRed"} size={"13px"} />
+          <TextNoMargin ml={"10px"}>Stop Meeting</TextNoMargin>
         </Button>
       );
     };
 
     return (
       <Container>
-        <HeaderContainer>
-          <Text fontSize={"36px"}>{`${team.name} Meeting`}</Text>
-          <DateAndButtonContainer>
-            <Heading type={"h3"} fontSize={"32px"} fontWeight={400}>
-              {moment().format("dddd, MMMM Do")}
-            </Heading>
-            {meetingStarted ? <StopMeetingButton /> : <StartMeetingButton />}
-          </DateAndButtonContainer>
-        </HeaderContainer>
-        <BodyContainer>
-          {meetingStarted ? (
-            <>
-              <StepProgressBar
-                progressBarProps={{
-                  stepPositions: stepPositions,
-                  percent: 55,
-                }}
-                steps={progressBarSteps}
-                timed={true}
-              />
-            </>
-          ) : (
-            <>some meeting summary overview?</>
-          )}
-        </BodyContainer>
+        {meetingEnded || hasEndTime() ? (
+          renderMeetingEnded()
+        ) : (
+          <>
+            <HeaderContainer>
+              <Text fontSize={"36px"}>{`${team.name} Meeting`}</Text>
+              <DateAndButtonContainer>
+                <Heading type={"h3"} fontSize={"32px"} fontWeight={400}>
+                  {moment().format("dddd, MMMM Do")}
+                </Heading>
+                {meetingStarted ? <StopMeetingButton /> : <StartMeetingButton />}
+              </DateAndButtonContainer>
+            </HeaderContainer>
+            <BodyContainer>
+              {meetingStarted ? (
+                <>
+                  <StepProgressBar
+                    progressBarProps={{
+                      stepPositions: stepPositions,
+                      percent: 55,
+                    }}
+                    steps={progressBarSteps}
+                    timed={true}
+                  />
+                </>
+              ) : (
+                <>some meeting summary overview?</>
+              )}
+            </BodyContainer>
+          </>
+        )}
       </Container>
     );
   },

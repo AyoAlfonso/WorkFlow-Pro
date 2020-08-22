@@ -20,10 +20,10 @@ import { TeamIssuesContainer } from "./shared/team-issues-container";
 import { Loading } from "~/components/shared/loading";
 import MeetingTypes from "~/constants/meeting-types";
 
-interface ITeamPageProps {}
+interface ITeamOverviewProps {}
 
 export const TeamOverview = observer(
-  (props: ITeamPageProps): JSX.Element => {
+  (props: ITeamOverviewProps): JSX.Element => {
     const { sessionStore, teamStore, meetingStore } = useMst();
 
     const { team_id } = useParams();

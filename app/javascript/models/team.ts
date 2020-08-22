@@ -1,5 +1,4 @@
 import { types } from "mobx-state-tree";
-import { UserModel } from "./user";
 
 export const TeamModel = types
   .model("TeamModel")

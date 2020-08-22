@@ -6,4 +6,7 @@ class MeetingTemplate < ApplicationRecord
   accepts_nested_attributes_for :steps, allow_destroy: true
 
   scope :with_name, -> (name) { where(name: name) }
+  #TODO: embedded link may be a setting on the user's components for meetings
+  #each company may have a separate embedded link.
+
 end
