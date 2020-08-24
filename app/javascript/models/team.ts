@@ -17,6 +17,9 @@ export const TeamModel = types
     get nonLeadMemberIds() {
       return self.teamUserEnablements.filter(ue => ue.role != "team_lead").map(ue => ue.userId);
     },
+    get allTeamUserIds() {
+      return self.teamUserEnablements.map(ue => ue.userId);
+    },
   }))
   .actions(self => ({}));
 

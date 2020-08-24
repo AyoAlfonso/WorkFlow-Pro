@@ -35,8 +35,12 @@ export const ProfilePhotoSection = styled.div<ProfilePhotoSectionType>`
 export const ProfilePhotoWrapper = styled.div``;
 
 export const HeaderContainer = styled.div`
+  align-items: center;
   padding: 16px;
   border-bottom: 1px solid #e3e3e3;
+  display: flex;
+  justify-content: space-between;
+  height: 30px;
 `;
 
 export const HeaderText = styled(Text)`
@@ -68,6 +72,7 @@ export const CenteredTableContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
 `;
 
 export const LeftAlignedTableContainer = styled.div`

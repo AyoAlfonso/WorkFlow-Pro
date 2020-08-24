@@ -11,6 +11,12 @@ import { Avatar } from "~/components/shared/avatar";
 import Switch from "react-switch";
 import { Text } from "~/components/shared/text";
 import { UserSelectionDropdownList } from "~/components/shared/user-selection-dropdown-list";
+import {
+  Container,
+  FlexContainer,
+  PriorityContainer,
+  IconContainer,
+} from "~/components/shared/styles/modals";
 
 interface ICreateKeyActivityModalProps {
   createKeyActivityModalOpen: boolean;
@@ -136,28 +142,6 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
     </ModalWithHeader>
   );
 };
-
-const Container = styled.div`
-  padding: 20px;
-  padding-bottom: 0;
-`;
-
-const FlexContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 20px;
-`;
-
-const PriorityContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-left: auto;
-  margin-top: 5px;
-`;
-
-const IconContainer = styled.div`
-  margin-left: 10px;
-`;
 
 type StyledButtonType = {
   disabled: boolean;

@@ -38,6 +38,10 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :daily_logs
 
+  def status
+    #todo add inactive
+    confirmed_at.present? ? "active" : "pending"
+  end
 
   def full_name
     ([first_name, last_name] - ['']).compact.join(' ')

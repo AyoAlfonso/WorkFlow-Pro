@@ -45,3 +45,10 @@ export const Select = props => (
     {props.children}
   </RebassSelect>
 );
+
+export const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  width: 100%;
+`;

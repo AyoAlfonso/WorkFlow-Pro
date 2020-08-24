@@ -1,5 +1,8 @@
-import { types } from "mobx-state-tree";
+import { types, getRoot } from "mobx-state-tree";
 import { DailyLogModel } from "~/models";
+import { TeamModel } from "~/models/team";
+import * as R from "ramda";
+import { Teams } from "~/components/domains/account/teams";
 
 export const UserModel = types
   .model("UserModel")
@@ -17,6 +20,9 @@ export const UserModel = types
     invitationSentAt: types.maybeNull(types.string),
     timezone: types.maybeNull(types.string),
     phoneNumber: types.maybeNull(types.string),
+    title: types.maybeNull(types.string),
+    status: types.string,
+    // teams: types.array(types.reference(TeamModel)), THIS ONLY WORKS IF TEAMS IS LOADED BEFORE USERS
     //add avatarurl2x
   })
   .views(self => ({
@@ -24,7 +30,27 @@ export const UserModel = types
       //use rails timezone to convert to confirmed at
       return self.confirmedAt;
     },
+    get teams() {
+      const {
+        teamStore: { teams },
+      } = getRoot(self);
+      return teams.filter(team => R.contains(self.id, team.allTeamUserIds));
+    },
+    get teamNames() {
+      const {
+        teamStore: { teams },
+      } = getRoot(self);
+      return R.join(
+        ", ",
+        teams.filter(team => R.contains(self.id, team.allTeamUserIds)).map(team => team.name),
+      );
+    },
   }))
+  // .views(self => ({
+  //   get teamsNames() {
+  //     return self.teams.map(team => team.name);
+  //   },
+  // }))
   .actions(self => ({
     setAvatarUrl: avatarUrl => {
       self.avatarUrl = avatarUrl;

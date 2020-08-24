@@ -369,6 +369,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_222001) do
     t.string "timezone"
     t.bigint "user_role_id"
     t.string "default_avatar_color"
+    t.string "title"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

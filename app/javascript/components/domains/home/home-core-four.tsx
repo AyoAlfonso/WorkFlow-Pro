@@ -6,12 +6,14 @@ import { useMst } from "../../../setup/root";
 import { Loading } from "../../shared/loading";
 import { Flex, Box } from "rebass";
 import { Text } from "~/components/shared/text";
+import { useTranslation } from "react-i18next";
 
 export const HomeCoreFour = observer(
   (): JSX.Element => {
     const {
       companyStore: { company },
     } = useMst();
+    const { t } = useTranslation();
     return (
       <Container>
         <HomeTitle> Core Four </HomeTitle>
@@ -20,7 +22,7 @@ export const HomeCoreFour = observer(
             <Flex>
               <Box width={1 / 4} sx={{ padding: 16 }}>
                 <CoreFourHeaderText fontSize={2} color={"primary100"}>
-                  Why Do We Exist?
+                  {t("core.core1")}
                 </CoreFourHeaderText>
                 <div
                   className="trix-content"
@@ -29,7 +31,7 @@ export const HomeCoreFour = observer(
               </Box>
               <Box width={1 / 4} sx={{ padding: 16 }}>
                 <CoreFourHeaderText fontSize={2} color={"primary100"}>
-                  How Do We Behave?
+                  {t("core.core2")}
                 </CoreFourHeaderText>
                 <div
                   className="trix-content"
@@ -38,7 +40,7 @@ export const HomeCoreFour = observer(
               </Box>
               <Box width={1 / 4} sx={{ padding: 16 }}>
                 <CoreFourHeaderText fontSize={2} color={"primary100"}>
-                  What Do We Do?
+                  {t("core.core3")}
                 </CoreFourHeaderText>
                 <div
                   className="trix-content"
@@ -47,7 +49,7 @@ export const HomeCoreFour = observer(
               </Box>
               <Box width={1 / 4} sx={{ padding: 16 }}>
                 <CoreFourHeaderText fontSize={2} color={"primary100"}>
-                  How Do We Succeed?
+                  {t("core.core4")}
                 </CoreFourHeaderText>
                 <div
                   className="trix-content"

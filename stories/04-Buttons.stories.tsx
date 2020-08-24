@@ -75,6 +75,12 @@ const propsList = [
     required: false,
     description: "optional prop to use the smaller variant of the button",
   },
+  {
+    name: "fontOverride",
+    type: "string",
+    required: false,
+    description: "optional prop to override font sizes",
+  },
 ];
 
 export const BaseButtonVariants = () => (
@@ -171,6 +177,40 @@ export const BaseButtonVariants = () => (
       </ButtonDiv>
       <ButtonDiv mr={"20px"}>
         <Button variant={"redOutline"} onClick={null} disabled small>
+          Disabled
+        </Button>
+      </ButtonDiv>
+    </RowDiv>
+    <Divider />
+    <h3>No Outline</h3>
+    <RowDiv mb={4}>
+      <ButtonDiv mr={"20px"}>
+        <Button variant={"noOutline"} onClick={actionFn}>
+          Normal
+        </Button>
+      </ButtonDiv>
+      <ButtonDiv mr={"20px"}>
+        <Button variant={"noOutline"} onClick={null} disabled>
+          Disabled
+        </Button>
+      </ButtonDiv>
+      <ButtonDiv mr={"20px"}>
+        <Button variant={"noOutline"} onClick={actionFn} small>
+          Small
+        </Button>
+      </ButtonDiv>
+      <ButtonDiv mr={"20px"}>
+        <Button variant={"noOutline"} onClick={null} disabled small>
+          Disabled
+        </Button>
+      </ButtonDiv>
+      <ButtonDiv mr={"20px"}>
+        <Button variant={"noOutline"} onClick={actionFn} fontOverride={"12px"}>
+          OverridenFontSize
+        </Button>
+      </ButtonDiv>
+      <ButtonDiv mr={"20px"}>
+        <Button variant={"noOutline"} onClick={null} disabled fontOverride={"12px"}>
           Disabled
         </Button>
       </ButtonDiv>

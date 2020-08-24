@@ -41,6 +41,7 @@
           "firstName": "First Name",
           "lastName": "Last Name",
           "role": "Role",
+          "save": "Save",
           "invite": "Invite to Company",
           "resend": "Resend",
           "timezone": "Location/Time Zone"
@@ -67,13 +68,22 @@
 
         }
       },
+      "core": {
+        "core1": "Why Do We Exist?",
+        "core2": "How Do We Behave?",
+        "core3": "What Do We Do?",
+        "core4": "How Do We Succeed?"
+      },
       "company": {
         "accountabilityChart": "Accountability Chart",
         "name": "Company Name",
         "logo": "Company Logo",
         "fiscalYearStartDate": "Fiscal Year Start Date",
         "strategicPlan": "The Plan",
-        "timezone": "Location/Time Zone"
+        "timezone": "Location/Time Zone",
+        "createUser": {
+          "addButton": "Create New User"
+        }
       },
       "navigation": {
         "home": "Home",
@@ -93,6 +103,11 @@
       },
       "meeting": {
         "conversationStarter": "Conversation Starter"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "pending": "Pending"
       }
     }
   }

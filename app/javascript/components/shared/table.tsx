@@ -46,7 +46,7 @@ export const Table = (props: TableProps) => {
               <Box key={`data-${index}`} px={2} width={widthCalc(index % columns)}>
                 {item}
               </Box>
-              {(index + 1) % 4 == 0 ? <Divider /> : <></>}
+              {(index + 1) % columns == 0 ? <Divider /> : <></>}
             </>
           );
         })}
