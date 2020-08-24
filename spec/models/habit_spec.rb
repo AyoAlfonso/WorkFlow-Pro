@@ -42,4 +42,10 @@ RSpec.describe Habit, type: :model do
     end
   end
 
+  describe "weekly logs completion difference" do
+    it "should expect there to be a 40% decrease on the weekly log differences" do
+      expect(habit_w_logs.weekly_logs_completion_difference).to eq("-40.0%")
+    end
+  end
+
 end
