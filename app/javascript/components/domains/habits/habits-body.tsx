@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { HabitsHabitTracker } from "./habits-habit-tracker";
 import { baseTheme } from "~/themes/base";
 import * as moment from "moment";
+import { EditHabit } from "./edit-habit";
 
 export const HabitsBody = observer(
   (): JSX.Element => {
@@ -12,15 +13,22 @@ export const HabitsBody = observer(
       habitStore,
       habitStore: { habits, lastFourDays, lastFiveDays },
     } = useMst();
+
     useEffect(() => {
       habitStore.fetchHabits();
-    }, habitStore.habits);
+    }, [habitStore.habits]);
+
+    const [showIndividualHabit, setShowIndividualHabit] = useState<boolean>(false);
+    const [selectedHabitId, setSelectedHabitId] = useState<number>(null);
+
     const renderHabits = () =>
       habits.map((habit, index) => (
         <HabitsTableRow key={`${habit.id}-${index}`}>
           <HabitsHabitTracker
             habit={habit}
             onUpdate={(habitId, logDate) => habitStore.updateHabitLog(habitId, logDate)}
+            setShowIndividualHabit={setShowIndividualHabit}
+            setSelectedHabitId={setSelectedHabitId}
           />
         </HabitsTableRow>
       ));
@@ -37,10 +45,18 @@ export const HabitsBody = observer(
         {day.format("ddd")}
       </HabitsTableHeaderCell>
     ));
+
     const dayDates = lastFiveDays.map((day, index) => (
       <HabitsTableHeaderCell key={index}>{day.format("DD")}</HabitsTableHeaderCell>
     ));
-    return (
+
+    return showIndividualHabit ? (
+      <EditHabit
+        selectedHabitId={selectedHabitId}
+        setSelectedHabitId={setSelectedHabitId}
+        setShowIndividualHabit={setShowIndividualHabit}
+      />
+    ) : (
       <HabitsTable>
         <HabitsTableHead>
           <HabitsTableRow>

@@ -188,6 +188,18 @@ export class Api {
     return this.client.post("/habits", habitData);
   }
 
+  async getHabit(id) {
+    return this.client.get(`/habits/${id}`);
+  }
+
+  async updateHabit(habitObject) {
+    return this.client.patch(`/habits/${habitObject.id}`, habitObject);
+  }
+
+  async deleteHabit(id) {
+    return this.client.delete(`/habits/${id}`);
+  }
+
   async createQuarterlyGoal(quarterlyGoalObject) {
     return this.client.post(`/quarterly_goals`, quarterlyGoalObject);
   }

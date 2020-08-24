@@ -23,15 +23,19 @@ class Api::HabitsController < Api::ApplicationController
     render json: @habit
   end
 
-  # def update
-  #   @key_activity.update(key_activity_params.merge(completed_at: params[:completed] ? Time.now : nil))
-  #   render json: KeyActivity.sort_by_priority_and_created_at_date
-  # end
+  def show
+    render json: @habit
+  end
 
-  # def destroy
-  #   @key_activity.destroy!
-  #   render json: { key_activity_id: @key_activity.id, status: :ok }
-  # end
+  def update
+    @habit.update!(habit_params)
+    render json: @habit
+  end
+
+  def destroy
+    @habit.destroy!
+    render json: { habit_id: @habit.id, status: :ok}
+  end
 
   private
 
@@ -40,7 +44,7 @@ class Api::HabitsController < Api::ApplicationController
   end
 
   def set_habit
-    @habit = policy_scope(Habit)
+    @habit = policy_scope(Habit).find(params[:id])
     authorize @habit
   end
 end

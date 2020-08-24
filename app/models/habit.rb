@@ -1,6 +1,6 @@
 class Habit < ApplicationRecord
   belongs_to :user
-  has_many :habit_logs
+  has_many :habit_logs, dependent: :destroy
 
   scope :owned_by_user, -> (user) { where(user: user) }
   delegate  :complete_current_week_logs,
@@ -9,6 +9,7 @@ class Habit < ApplicationRecord
 
   def as_json(options = [])
     super({
+      methods: [:weekly_logs_completion_difference],
       except: [:created_at, :updated_at],
       include: [
                 current_week_logs: {
@@ -39,6 +40,24 @@ class Habit < ApplicationRecord
         habit: self,
         log_date: Date.previous_week_start.next_day(day_int)
       )
+    end
+  end
+
+  def weekly_logs_completion_difference
+    current_week_completion_count = self.current_week_logs.count
+    previous_week_completion_count = self.previous_week_logs.count
+
+    if current_week_completion_count >= previous_week_completion_count
+      difference = previous_week_completion_count == 0 ? 
+                    current_week_completion_count * 100 : 
+                    ((current_week_completion_count - previous_week_completion_count).to_f / previous_week_completion_count.to_f) * 100
+
+      "+#{difference}%"
+    else
+      difference = current_week_completion_count == 0 ? 
+                    previous_week_completion_count * 100 : 
+                    ((previous_week_completion_count - current_week_completion_count).to_f / current_week_completion_count.to_f) * 100
+      "-#{difference}%"
     end
   end
 end
