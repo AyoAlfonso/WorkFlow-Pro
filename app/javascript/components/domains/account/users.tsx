@@ -106,7 +106,12 @@ export const Users = observer(
           />
         </HeaderContainer>
         <BodyContainer>
-          <Table columns={4} headers={["User", "Title", "Team", "Status"]} data={usersData} />
+          <Table
+            columns={4}
+            headers={["User", "Title", "Team", "Status"]}
+            data={usersData}
+            styling={{ widths: [2, 1, 1, 1] }}
+          />
         </BodyContainer>
       </StretchContainer>
     );
