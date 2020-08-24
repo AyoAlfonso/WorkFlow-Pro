@@ -30,7 +30,7 @@ import { HeaderBar } from "./domains/nav/header-bar";
 import { SideNav } from "./domains/nav";
 import { Placeholder } from "./shared/placeholder";
 import { GoalsIndex } from "./domains/goals/goals-index";
-import { Team } from "./domains/meetings/team-overview";
+import { TeamOverview } from "./domains/meetings/team-overview";
 import { Meeting } from "./domains/meetings/meeting";
 
 const Container = styled.div`
@@ -70,15 +70,15 @@ export const App = observer(
                     }}
                   />
                   <Route
-                    path={"/team/:id/meeting"}
+                    path={"/team/:team_id/meeting/:meeting_id"}
                     render={() => {
                       return <Meeting />;
                     }}
                   />
                   <Route
-                    path={"/team/:id"}
+                    path={"/team/:team_id"}
                     render={() => {
-                      return <Team />;
+                      return <TeamOverview />;
                     }}
                   />
                   <Route

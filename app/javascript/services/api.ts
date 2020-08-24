@@ -234,6 +234,10 @@ export class Api {
     return this.client.get(`/teams/user_teams`);
   }
 
+  async getMeetingTemplates() {
+    return this.client.get(`/meeting_templates`);
+  }
+
   async getMeetings() {
     return this.client.get(`/meetings`);
   }

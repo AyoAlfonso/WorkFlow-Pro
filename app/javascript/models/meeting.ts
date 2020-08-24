@@ -1,4 +1,5 @@
 import { types } from "mobx-state-tree";
+import { maybeNull } from "mobx-state-tree/dist/internal";
 
 export const MeetingModel = types
   .model("MeetingModel")
@@ -12,6 +13,7 @@ export const MeetingModel = types
     teamId: types.maybeNull(types.number),
     scheduledStartTime: types.maybeNull(types.string),
     startTime: types.maybeNull(types.string),
+    endTime: types.maybeNull(types.string),
     hostName: types.maybeNull(types.string),
     currentStep: types.maybeNull(types.number),
     steps: types.array(types.frozen()),

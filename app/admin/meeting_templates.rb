@@ -1,5 +1,5 @@
 ActiveAdmin.register MeetingTemplate do
-  permit_params :name, :meeting_type, :duration, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image]
+  permit_params :name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image]
 
   index do
     selectable_column
@@ -22,7 +22,8 @@ ActiveAdmin.register MeetingTemplate do
       @meeting_template = MeetingTemplate.create!({
         name: @meeting_template_params[:name],
         meeting_type: @meeting_template_params[:meeting_type],
-        duration: @meeting_template_params[:duration]
+        duration: @meeting_template_params[:duration],
+        description: @meeting_template_params[:description]
       })
       @step_atrributes = params[:meeting_template][:steps_attributes]
       if @step_atrributes.present?
@@ -54,6 +55,7 @@ ActiveAdmin.register MeetingTemplate do
       row "Duration (in minutes)" do
         meeting_template.duration
       end 
+      row :description
     end
     panel "Steps" do
       table_for meeting_template.steps do
@@ -79,6 +81,7 @@ ActiveAdmin.register MeetingTemplate do
     f.input :name
     f.input :meeting_type, as: :select, collection: MeetingTemplate.meeting_types.map { |mt| [mt[0].humanize.titleize, mt[0]] }
     f.input :duration, label: "Duration (in minutes)"
+    f.input :description, input_html: { rows: 5 }
     f.has_many :steps, allow_destroy: true do |step|
       step.input :name
       step.input :step_type, as: :select, collection: Step.step_types.map { |st| [st[0].humanize.titleize, st[0]]}

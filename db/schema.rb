@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_19_222001) do
+ActiveRecord::Schema.define(version: 2020_08_21_232506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,6 +215,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_222001) do
     t.float "duration"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "description"
   end
 
   create_table "meetings", force: :cascade do |t|
@@ -230,6 +231,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_222001) do
     t.datetime "start_time"
     t.integer "current_step"
     t.string "host_name"
+    t.datetime "end_time"
     t.datetime "scheduled_start_time"
     t.index ["meeting_template_id"], name: "index_meetings_on_meeting_template_id"
     t.index ["team_id"], name: "index_meetings_on_team_id"
@@ -246,6 +248,17 @@ ActiveRecord::Schema.define(version: 2020_08_19_222001) do
     t.date "week_of"
     t.index ["created_by_id"], name: "index_milestones_on_created_by_id"
     t.index ["quarterly_goal_id"], name: "index_milestones_on_quarterly_goal_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "notification_type"
+    t.jsonb "rule"
+    t.integer "method"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id", "notification_type"], name: "index_notifications_on_user_id_and_notification_type", unique: true
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "quarterly_goals", force: :cascade do |t|
@@ -297,6 +310,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_222001) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "link_embed"
+    t.string "section_name"
     t.index ["meeting_template_id"], name: "index_steps_on_meeting_template_id"
   end
 
@@ -407,6 +421,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_222001) do
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
   add_foreign_key "milestones", "quarterly_goals"
+  add_foreign_key "notifications", "users"
   add_foreign_key "quarterly_goals", "annual_initiatives"
   add_foreign_key "questionnaire_attempts", "questionnaires"
   add_foreign_key "questionnaire_attempts", "users"

@@ -1,5 +1,5 @@
 class MeetingPolicy < ApplicationPolicy
-  attr_reader :user, :meeting_template
+  attr_reader :user, :meeting
 
   def initialize(user, meeting)
     @user = user

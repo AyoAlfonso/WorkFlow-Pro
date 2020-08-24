@@ -5,6 +5,7 @@ import { Button } from "~/components/shared/button";
 import { observer } from "mobx-react";
 import { useParams, useHistory } from "react-router-dom";
 import { useMst } from "../../../setup/root";
+import { toJS } from "mobx";
 import * as R from "ramda";
 import { Avatar } from "~/components/shared/avatar";
 import { Text } from "~/components/shared/text";
@@ -17,23 +18,41 @@ import { TeamPulseCard } from "./shared/team-pulse-card";
 import { OverallTeamPulse } from "./shared/overall-team-pulse";
 import { TeamIssuesContainer } from "./shared/team-issues-container";
 import { Loading } from "~/components/shared/loading";
+import MeetingTypes from "~/constants/meeting-types";
 
 interface ITeamPageProps {}
 
-export const Team = observer(
+export const TeamOverview = observer(
   (props: ITeamPageProps): JSX.Element => {
-    const { sessionStore, teamStore } = useMst();
+    const { sessionStore, teamStore, meetingStore } = useMst();
 
-    const { id } = useParams(); // reading url params for team id
+    const { team_id } = useParams();
 
     const history = useHistory();
-    const handleMeetingClick = meetingType => {
-      history.push(`/team/${id}/meeting?meeting_type=${meetingType}`);
+    const handleMeetingClick = () => {
+      const meetingTemplate = toJS(meetingStore.meetingTemplates).find(
+        mt => mt.meetingType === MeetingTypes.TEAM_WEEKLY,
+      );
+
+      meetingStore
+        .createMeeting({
+          teamId: team_id,
+          // startTime: new Date().toUTCString(),
+          hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
+          currentStep: 0,
+          meetingTemplateId: meetingTemplate.id,
+        })
+        .then(() => {
+          history.push(
+            `/team/${team_id}/meeting/${meetingStore.currentMeeting.id}`,
+            // `/team/${id}/meeting/${meetingStore.currentMeeting.id}?meeting_type=${meetingTemplate.meetingType}`,
+          );
+        });
     };
     // use NavLink instead?
 
     const user = sessionStore.profile;
-    const currentTeam = teamStore.teams.find(team => team.id === parseInt(id));
+    const currentTeam = teamStore.teams.find(team => team.id === parseInt(team_id));
 
     if (R.isEmpty(teamStore.teams)) {
       return (
@@ -151,7 +170,7 @@ export const Team = observer(
             small
             variant={"primary"}
             onClick={() => {
-              handleMeetingClick("team_weekly");
+              handleMeetingClick();
             }}
           >
             <ButtonTextContainer>

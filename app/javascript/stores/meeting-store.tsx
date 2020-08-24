@@ -1,17 +1,29 @@
 import { types, flow } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { MeetingModel } from "../models/meeting";
+import { MeetingTemplateModel } from "../models/meeting-template";
 import { ApiResponse } from "apisauce";
 
 export const MeetingStoreModel = types
   .model("MeetingStoreModel")
   .props({
+    meetingTemplates: types.array(MeetingTemplateModel),
     currentMeeting: types.maybeNull(MeetingModel),
     meetings: types.array(MeetingModel),
     teamMeetings: types.array(MeetingModel),
   })
   .extend(withEnvironment())
   .views(self => ({}))
+  .actions(self => ({
+    fetchMeetingTemplates: flow(function*() {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getMeetingTemplates();
+        self.meetingTemplates = response.data;
+      } catch {
+        // caught by Api Monitor
+      }
+    }),
+  }))
   .actions(self => ({
     fetchMeetings: flow(function*() {
       try {
@@ -37,7 +49,7 @@ export const MeetingStoreModel = types
         // caught bv Api Monitor
       }
     }),
-    updateCurrentMeeting: flow(function*(meetingObj) {
+    updateMeeting: flow(function*(meetingObj) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.updateMeeting(meetingObj);
         self.currentMeeting = response.data;
@@ -63,6 +75,7 @@ export const MeetingStoreModel = types
   .actions(self => ({
     load: flow(function*() {
       self.reset();
+      self.fetchMeetingTemplates();
       self.fetchMeetings();
     }),
   }));

@@ -9,9 +9,7 @@ import { StepProgressBar } from "~/components/shared/progress-bars/step-progress
 import { Text } from "~/components/shared/text";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
-import { useParams, useLocation } from "react-router-dom";
-import queryString from "query-string";
-import MeetingTypes from "../../../constants/meeting-types";
+import { useParams } from "react-router-dom";
 import { Icon } from "~/components/shared/icon";
 import { TextNoMargin } from "~/components/shared/text";
 import { Loading } from "~/components/shared/loading";
@@ -23,26 +21,39 @@ export const Meeting = observer(
   (props: ITeamMeetingProps): JSX.Element => {
     const [meetingStarted, setMeetingStarted] = useState<boolean>(false);
     const { teamStore, meetingStore } = useMst();
-    const { id } = useParams(); // team id from url params
-    const useQuery = () => queryString.parse(useLocation().search);
-    const query = useQuery();
+    const { team_id, meeting_id } = useParams(); // team id from url params
 
     useEffect(() => {
-      meetingStore.fetchTeamMeetings(id);
+      meetingStore.fetchTeamMeetings(team_id);
     }, []);
 
+    const renderLoading = () => (
+      <Container>
+        <BodyContainer>
+          <Loading />
+        </BodyContainer>
+      </Container>
+    );
+
     if (R.isEmpty(toJS(meetingStore.teamMeetings))) {
+      return renderLoading();
+    }
+
+    const team = teamStore.teams.find(team => team.id === parseInt(team_id));
+    const meeting = toJS(meetingStore.teamMeetings).find(tm => tm.id === parseInt(meeting_id));
+
+    if (R.isNil(meeting)) {
+      return renderLoading();
+    }
+
+    if (!R.isNil(meeting.endTime)) {
       return (
         <Container>
-          <BodyContainer>
-            <Loading />
-          </BodyContainer>
+          <BodyContainer>This meeting has ended</BodyContainer>
         </Container>
       );
     }
 
-    const team = teamStore.teams.find(team => team.id === parseInt(id));
-    const [meeting] = toJS(meetingStore.teamMeetings.slice(-1));
     const steps = R.path(["steps"], meeting);
 
     const progressBarSteps = steps.map((currentStep, index, stepsArray) => {
@@ -58,15 +69,24 @@ export const Meeting = observer(
     });
     const stepPositions = R.map(step => step.position, progressBarSteps).concat([100]);
 
+    const updateMeeting = keysAndValues => {
+      meetingStore.updateMeeting(keysAndValues);
+    };
+
+    const hasStartTime = () => !R.isNil(meeting.startTime);
+    const hasEndTime = () => !R.isNil(meeting.endTime);
+
     const StopMeetingButton = () => {
       return (
         <Button
           variant={"redOutline"}
           onClick={() => {
             setMeetingStarted(false);
+            updateMeeting(R.merge(meeting, { endTime: new Date().toUTCString() }));
           }}
           small
           ml={"25px"}
+          disabled={hasStartTime() || hasEndTime()}
         >
           <Icon icon={"_Stop"} iconColor={"warningRed"} size={"13px"} />
           <TextNoMargin ml={"10px"}>Stop Meeting</TextNoMargin>
@@ -80,9 +100,11 @@ export const Meeting = observer(
           variant={"primary"}
           onClick={() => {
             setMeetingStarted(true);
+            updateMeeting(R.merge(meeting, { startTime: new Date().toUTCString() }));
           }}
           small
           ml={"25px"}
+          disabled={hasEndTime()}
         >
           <Icon icon={"Start"} iconColor={"white"} size={"13px"} />
           <TextNoMargin ml={"10px"}>Start Meeting</TextNoMargin>
