@@ -36,7 +36,17 @@ class Team < ApplicationRecord
       }
       results_array << average_score_hash
     end
-    results_array
+    results_array.reverse!
+  end
+
+  def team_average_weekly_emotion_score
+    average_user_score = weekly_average_users_emotion_score
+    if average_user_score.size == 0
+      0
+    else
+      sum_of_scores = average_user_score.pluck(:average_score).sum
+      sum_of_scores / average_user_score.size
+    end
   end
 
 end

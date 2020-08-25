@@ -57,7 +57,6 @@ export const TeamOverview = observer(
     };
     // use NavLink instead?
 
-    const user = sessionStore.profile;
     const currentTeam = teamStore.teams.find(team => team.id === parseInt(team_id));
 
     if (R.isEmpty(teamStore.teams)) {
@@ -69,16 +68,6 @@ export const TeamOverview = observer(
         </Container>
       );
     }
-
-    const teamPulseData = [
-      { x: new Date("2020-08-15"), y: 4 },
-      { x: new Date("2020-08-14"), y: 1 },
-      { x: new Date("2020-08-13"), y: 2 },
-      { x: new Date("2020-08-12"), y: 5 },
-      { x: new Date("2020-08-11"), y: 1 },
-      { x: new Date("2020-08-10"), y: 3 },
-      { x: new Date("2020-08-09"), y: 5 },
-    ];
 
     const renderCardSubHeader = (text: string): JSX.Element => {
       return (
@@ -182,8 +171,8 @@ export const TeamOverview = observer(
             <TeamPulseContainer>
               {renderCardSubHeader("Team's Pulse")}
               <TeamPulseBody>
-                <OverallTeamPulse value={3.4} />
-                <TeamPulseCard data={teamPulseData} />
+                <OverallTeamPulse value={currentTeam.averageTeamEmotionScore} />
+                <TeamPulseCard data={toJS(currentTeam.formattedAverageWeeklyUserEmotions)} />
               </TeamPulseBody>
             </TeamPulseContainer>
             <TeamIssuesWrapper>

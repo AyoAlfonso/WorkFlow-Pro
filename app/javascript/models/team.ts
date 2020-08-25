@@ -1,4 +1,5 @@
 import { types } from "mobx-state-tree";
+import { UserModel } from "./user";
 
 export const TeamModel = types
   .model("TeamModel")
@@ -10,6 +11,8 @@ export const TeamModel = types
     teamUserEnablements: types.array(types.frozen()),
     defaultAvatarColor: types.maybeNull(types.string),
     users: types.maybeNull(types.array(UserModel)),
+    averageWeeklyUserEmotions: types.maybeNull(types.array(types.frozen())),
+    averageTeamEmotionScore: types.maybeNull(types.number),
   })
   .views(self => ({
     get teamLeadIds() {
@@ -20,6 +23,11 @@ export const TeamModel = types
     },
     get allTeamUserIds() {
       return self.teamUserEnablements.map(ue => ue.userId);
+    },
+    get formattedAverageWeeklyUserEmotions() {
+      return self.averageWeeklyUserEmotions.map(averages => {
+        return { x: new Date(averages.date), y: averages.averageScore };
+      });
     },
   }))
   .actions(self => ({}));
