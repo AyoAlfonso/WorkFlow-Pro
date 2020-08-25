@@ -6,8 +6,8 @@ export const MeetingTemplateModel = types
     id: types.identifierNumber,
     name: types.string,
     meetingType: types.string,
-    duration: types.number,
-    description: types.string,
+    totalDuration: types.number,
+    description: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));

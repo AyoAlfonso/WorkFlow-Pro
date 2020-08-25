@@ -19,6 +19,8 @@ import { OverallTeamPulse } from "./shared/overall-team-pulse";
 import { TeamIssuesContainer } from "./shared/team-issues-container";
 import { Loading } from "~/components/shared/loading";
 import MeetingTypes from "~/constants/meeting-types";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 interface ITeamOverviewProps {}
 
@@ -34,20 +36,24 @@ export const TeamOverview = observer(
         mt => mt.meetingType === MeetingTypes.TEAM_WEEKLY,
       );
 
-      meetingStore
-        .createMeeting({
-          teamId: team_id,
-          // startTime: new Date().toUTCString(),
-          hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
-          currentStep: 0,
-          meetingTemplateId: meetingTemplate.id,
-        })
-        .then(() => {
-          history.push(
-            `/team/${team_id}/meeting/${meetingStore.currentMeeting.id}`,
-            // `/team/${id}/meeting/${meetingStore.currentMeeting.id}?meeting_type=${meetingTemplate.meetingType}`,
-          );
-        });
+      if (meetingTemplate) {
+        meetingStore
+          .createMeeting({
+            teamId: team_id,
+            // startTime: new Date().toUTCString(),
+            hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
+            currentStep: 0,
+            meetingTemplateId: meetingTemplate.id,
+          })
+          .then(() => {
+            history.push(
+              `/team/${team_id}/meeting/${meetingStore.currentMeeting.id}`,
+              // `/team/${id}/meeting/${meetingStore.currentMeeting.id}?meeting_type=${meetingTemplate.meetingType}`,
+            );
+          });
+      } else {
+        showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
+      }
     };
     // use NavLink instead?
 

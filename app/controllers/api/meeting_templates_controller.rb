@@ -3,6 +3,6 @@ class Api::MeetingTemplatesController < Api::ApplicationController
 
   def index 
     @meeting_templates = policy_scope(MeetingTemplate.all)
-    render json: @meeting_templates
+    render json: @meeting_templates.as_json(only: [:id, :name, :meeting_type, :description], methods: [:total_duration])
   end
 end

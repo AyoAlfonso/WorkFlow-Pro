@@ -9,4 +9,8 @@ class MeetingTemplate < ApplicationRecord
   #TODO: embedded link may be a setting on the user's components for meetings
   #each company may have a separate embedded link.
 
+  def total_duration
+    #for now fetch duration, if not sum duration from steps, if not default to 60 
+    duration || (steps.sum(:duration) > 0 ? steps.sum(:duration) : 60)
+  end
 end
