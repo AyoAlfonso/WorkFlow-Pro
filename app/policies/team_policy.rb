@@ -23,7 +23,7 @@ class TeamPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.all
+      scope.for_company(@user.company)
     end
   end
 end
