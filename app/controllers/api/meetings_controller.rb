@@ -1,7 +1,7 @@
 class Api::MeetingsController < Api::ApplicationController
   before_action :set_meeting, only: [:update, :destroy]
 
-  response_to :json
+  respond_to :json
 
   def index 
     @meetings = policy_scope(Meeting).all
@@ -27,7 +27,7 @@ class Api::MeetingsController < Api::ApplicationController
 
   def team_meetings
     @meetings = Meeting.team_meetings(params[:id])
-    render json: { current_team_meetings: @meetings.as_json(include : { meeting_template: { include: :steps }}) }
+    render json: { current_team_meetings: @meetings.as_json(include: { meeting_template: { include: :steps }}) }
   end
 
   private
