@@ -202,7 +202,12 @@ export const SideNavNoMst = (currentPathName: string, teams: any): JSX.Element =
 
 export const SideNav = observer(
   (): JSX.Element => {
-    const { router, teamStore } = useMst();
-    return SideNavNoMst(router.location.pathname, toJS(teamStore.teams));
+    const {
+      router,
+      teamStore,
+      sessionStore: { profile },
+    } = useMst();
+
+    return SideNavNoMst(router.location.pathname, toJS(profile.teams));
   },
 );

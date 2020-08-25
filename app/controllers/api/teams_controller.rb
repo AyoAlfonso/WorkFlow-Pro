@@ -7,9 +7,4 @@ class Api::TeamsController < Api::ApplicationController
     render 'api/teams/index'
   end
 
-  def user_teams
-    @teams = policy_scope(Team).for_user(current_user)
-    render 'api/teams/user_teams'
-  end
-
 end
