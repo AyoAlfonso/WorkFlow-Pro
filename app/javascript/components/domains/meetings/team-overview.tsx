@@ -1,6 +1,5 @@
 import * as React from "react";
 import styled from "styled-components";
-import { Icon } from "../../shared/icon";
 import { Button } from "~/components/shared/button";
 import { observer } from "mobx-react";
 import { useParams, useHistory } from "react-router-dom";
@@ -21,6 +20,7 @@ import { Loading } from "~/components/shared/loading";
 import MeetingTypes from "~/constants/meeting-types";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import { FutureTeamMeetingsContainer } from "./shared/future-team-meetings-container";
 
 interface ITeamOverviewProps {}
 
@@ -147,18 +147,6 @@ export const TeamOverview = observer(
       <Container>
         <HeaderContainer>
           <Title>{`${currentTeam.name} Overview`}</Title>
-          <TeamMeetingButton
-            small
-            variant={"primary"}
-            onClick={() => {
-              handleMeetingClick();
-            }}
-          >
-            <ButtonTextContainer>
-              <Icon icon={"Team"} size={"20px"} />
-              <TeamMeetingText>Team Meeting</TeamMeetingText>
-            </ButtonTextContainer>
-          </TeamMeetingButton>
         </HeaderContainer>
         <BodyContainer>
           <LeftContainer>
@@ -168,6 +156,15 @@ export const TeamOverview = observer(
             </TeamSnapshotContainer>
           </LeftContainer>
           <RightContainer>
+            <TeamMeetingInfoContainer>
+              <FutureTeamMeetingsWrapper>
+                <FutureTeamMeetingsContainer handleMeetingClick={handleMeetingClick} />
+              </FutureTeamMeetingsWrapper>
+              <TeamIssuesWrapper>
+                <TeamIssuesContainer />
+              </TeamIssuesWrapper>
+            </TeamMeetingInfoContainer>
+
             <TeamPulseContainer>
               {renderCardSubHeader("Team's Pulse")}
               <TeamPulseBody>
@@ -175,9 +172,6 @@ export const TeamOverview = observer(
                 <TeamPulseCard data={toJS(currentTeam.formattedAverageWeeklyUserEmotions)} />
               </TeamPulseBody>
             </TeamPulseContainer>
-            <TeamIssuesWrapper>
-              <TeamIssuesContainer />
-            </TeamIssuesWrapper>
           </RightContainer>
         </BodyContainer>
       </Container>
@@ -198,23 +192,6 @@ const Title = styled(Text)`
   font-size: 36px;
 `;
 
-const TeamMeetingButton = styled(Button)`
-  display: flex;
-  width: 220px;
-  margin-left: auto;
-  margin-top: auto;
-  margin-bottom: auto;
-`;
-
-const TeamMeetingText = styled(Text)`
-  margin-top: 0;
-  margin-bottom: 0;
-  margin-left: 15px;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-`;
-
 const BodyContainer = styled.div`
   display: flex;
 `;
@@ -231,16 +208,18 @@ const RightContainer = styled.div`
   margin-left: 10px;
 `;
 
-const ButtonTextContainer = styled.div`
-  margin: auto;
-  display: flex;
-`;
-
 const TeamSnapshotContainer = styled(HomeContainerBorders)``;
 
 const TeamPulseContainer = styled(HomeContainerBorders)``;
 
-const TeamIssuesWrapper = styled(HomeContainerBorders)``;
+const TeamIssuesWrapper = styled(HomeContainerBorders)`
+  width: 50%;
+`;
+
+const FutureTeamMeetingsWrapper = styled(HomeContainerBorders)`
+  width: 50%;
+  margin-right: 15px;
+`;
 
 const SubHeaderTextContainer = styled.div`
   padding-top: 8px;
@@ -319,6 +298,10 @@ const TeamPulseBody = styled.div`
   display: flex;
   padding-top: 36px;
   padding-bottom: 36px;
+`;
+
+const TeamMeetingInfoContainer = styled.div`
+  display: flex;
 `;
 
 const CheckboxContainer = props => (
