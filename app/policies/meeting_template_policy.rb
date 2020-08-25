@@ -1,15 +1,8 @@
-class TeamPolicy < ApplicationPolicy
-  attr_reader :user, :record
-
-  def initialize(user, record)
-    @user = user
-    @record = record
-  end
-
+class MeetingTemplatePolicy < ApplicationPolicy
   def index?
     true
   end
-
+  
   class Scope
     attr_reader :user, :scope
 
@@ -19,7 +12,8 @@ class TeamPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.for_company(@user.company)
+      scope.all
     end
   end
+
 end

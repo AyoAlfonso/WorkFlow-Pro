@@ -69,8 +69,8 @@ class User < ApplicationRecord
     team.is_lead?(self)
   end
 
-  def is_in_team?(team)
-    self.teams.include?(team)
+  def teams_intersect?(teams)
+    self.teams.any? { |team| teams.include?(team) }
   end
 
   def company_admin?

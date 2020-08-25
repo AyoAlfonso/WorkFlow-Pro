@@ -31,6 +31,7 @@ import { SideNav } from "./domains/nav";
 import { Placeholder } from "./shared/placeholder";
 import { GoalsIndex } from "./domains/goals/goals-index";
 import { TeamOverview } from "./domains/meetings/team-overview";
+import { Meeting } from "./domains/meetings/meeting";
 
 const Container = styled.div`
   margin-left: 168px;
@@ -69,7 +70,13 @@ export const App = observer(
                     }}
                   />
                   <Route
-                    path={"/team"}
+                    path={"/team/:team_id/meeting/:meeting_id"}
+                    render={() => {
+                      return <Meeting />;
+                    }}
+                  />
+                  <Route
+                    path={"/team/:team_id"}
                     render={() => {
                       return <TeamOverview />;
                     }}

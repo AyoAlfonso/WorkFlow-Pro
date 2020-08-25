@@ -9,12 +9,11 @@ export const TeamStoreModel = types
     teams: types.array(TeamModel),
   })
   .extend(withEnvironment())
-  .views(self => ({}))
   .actions(self => ({
     fetchTeams: flow(function*() {
       const response: ApiResponse<any> = yield self.environment.api.getTeams();
       if (response.ok) {
-        self.teams = response.data;
+        self.teams = response.data as any;
       }
     }),
   }))

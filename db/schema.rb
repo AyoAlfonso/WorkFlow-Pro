@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_19_222001) do
+ActiveRecord::Schema.define(version: 2020_08_21_232506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,6 +215,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_222001) do
     t.float "duration"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "description"
   end
 
   create_table "meetings", force: :cascade do |t|
@@ -230,6 +231,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_222001) do
     t.datetime "start_time"
     t.integer "current_step"
     t.string "host_name"
+    t.datetime "end_time"
     t.datetime "scheduled_start_time"
     t.index ["meeting_template_id"], name: "index_meetings_on_meeting_template_id"
     t.index ["team_id"], name: "index_meetings_on_team_id"
@@ -308,6 +310,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_222001) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "link_embed"
+    t.string "section_name"
     t.index ["meeting_template_id"], name: "index_steps_on_meeting_template_id"
   end
 

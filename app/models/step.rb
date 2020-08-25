@@ -7,4 +7,17 @@ class Step < ApplicationRecord
   def image_url
     image.present? ? Rails.application.routes.url_helpers.rails_blob_url(image, host: ENV["ASSETS_HOST_URL"] || ENV["HOST_URL"]) : nil
   end
+
+  MEETING_STEP_COMPONENTS = [
+    "ConversationStarter",
+    "TeamPulse",
+    "Goals",
+    "KeyActivities",
+    "Issues",
+    "Recap",
+    "MeetingRating",
+    "WeeklyReflection",
+    "Milestones",
+    "DailyPlanning"
+  ]
 end

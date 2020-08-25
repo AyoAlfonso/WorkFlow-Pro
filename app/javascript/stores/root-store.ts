@@ -43,6 +43,7 @@ export const RootStoreModel = types
         self.userStore.load();
         self.teamStore.load();
         self.notificationStore.load();
+        self.meetingStore.load();
       }
     }),
   }))

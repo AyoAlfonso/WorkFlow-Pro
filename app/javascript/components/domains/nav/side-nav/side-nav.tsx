@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useMst } from "../../../../setup/root";
+import { toJS } from "mobx";
 import { Icon } from "../../../shared/icon";
 import { Text } from "../../../shared/text";
 import { NavLink } from "react-router-dom";
@@ -140,7 +141,7 @@ const isNavMenuIconActive = (currentPath: string, to: string): boolean => {
   return pathMatch ? (to == "/" ? pathMatch.isExact : true) : false;
 };
 
-export const SideNavNoMst = (currentPathName: string): JSX.Element => {
+export const SideNavNoMst = (currentPathName: string, teams: any): JSX.Element => {
   const { t } = useTranslation();
   return (
     <StyledSideNav>
@@ -158,9 +159,19 @@ export const SideNavNoMst = (currentPathName: string): JSX.Element => {
         {t("navigation.home")}
       </StyledNavLinkChildrenActive>
 
-      <StyledNavLinkChildrenActive to="/team" icon={"Team"} currentPathName={currentPathName}>
-        {t("navigation.team")}
-      </StyledNavLinkChildrenActive>
+      <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/team")}>
+        <SideNavChildPopup
+          trigger={
+            <NavMenuIcon icon={"Team"} active={isNavMenuIconActive(currentPathName, "/team")}>
+              {t("navigation.team")}
+            </NavMenuIcon>
+          }
+        >
+          {teams.map((team, index) => (
+            <SideNavChildLink key={index} to={`/team/${team.id}`} linkText={team.name} />
+          ))}
+        </SideNavChildPopup>
+      </SideNavChildPopupContainer>
 
       <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/company")}>
         <SideNavChildPopup
@@ -191,7 +202,12 @@ export const SideNavNoMst = (currentPathName: string): JSX.Element => {
 
 export const SideNav = observer(
   (): JSX.Element => {
-    const { router } = useMst();
-    return SideNavNoMst(router.location.pathname);
+    const {
+      router,
+      teamStore,
+      sessionStore: { profile },
+    } = useMst();
+
+    return SideNavNoMst(router.location.pathname, toJS(profile.teams));
   },
 );

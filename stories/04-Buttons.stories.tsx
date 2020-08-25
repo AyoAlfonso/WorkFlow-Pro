@@ -343,6 +343,8 @@ export const IconButton = () => {
         width={"288px"}
         mb={"15px"}
         bg={select("bg", baseTheme.colors, baseTheme.colors.bali)}
+        px={"10px"}
+        py={"5px"}
         iconName={select("iconName", iconList(iconSet), "Settings")}
         iconSize={text("iconSize", "2em")}
         iconColor={select("iconColor", baseTheme.colors, baseTheme.colors.cautionYellow)}
@@ -356,6 +358,8 @@ export const IconButton = () => {
         width={"288px"}
         mb={"20px"}
         bg={"white"}
+        px={"10px"}
+        py={"5px"}
         iconName={"AM-Check-in"}
         iconSize={28}
         iconColor={"cautionYellow"}
@@ -367,6 +371,8 @@ export const IconButton = () => {
         width={"288px"}
         mb={"20px"}
         bg={"white"}
+        px={"10px"}
+        py={"5px"}
         iconName={"Negative-Thoughts"}
         iconSize={28}
         iconColor={"warningRed"}
@@ -378,6 +384,8 @@ export const IconButton = () => {
         width={"288px"}
         mb={"20px"}
         bg={"white"}
+        px={"10px"}
+        py={"5px"}
         iconName={"Check-in"}
         iconSize={28}
         iconColor={"primary20"}
@@ -451,9 +459,11 @@ export const IconButton = () => {
       <h3>Status Buttons</h3>
       <IconButtonComponent
         width={"160px"}
-        height={"40px"}
+        height={"30px"}
         mb={"20px"}
         bg={"backgroundGreen"}
+        px={"10px"}
+        py={"5px"}
         iconName={"In-Office"}
         iconSize={28}
         iconColor={"finePine"}
@@ -464,9 +474,11 @@ export const IconButton = () => {
       />
       <IconButtonComponent
         width={"160px"}
-        height={"40px"}
+        height={"30px"}
         mb={"20px"}
         bg={"primary20"}
+        px={"10px"}
+        py={"5px"}
         iconName={"WFH"}
         iconSize={28}
         iconColor={"primary100"}
@@ -477,9 +489,11 @@ export const IconButton = () => {
       />
       <IconButtonComponent
         width={"160px"}
-        height={"40px"}
+        height={"30px"}
         mb={"20px"}
         bg={"backgroundYellow"}
+        px={"10px"}
+        py={"5px"}
         iconName={"Half-Day"}
         iconSize={28}
         iconColor={"cautionYellow"}
@@ -490,9 +504,11 @@ export const IconButton = () => {
       />
       <IconButtonComponent
         width={"160px"}
-        height={"40px"}
+        height={"30px"}
         mb={"20px"}
         bg={"fadedRed"}
+        px={"10px"}
+        py={"5px"}
         iconName={"No-Check-in"}
         iconSize={28}
         iconColor={"warningRed"}

@@ -10,7 +10,7 @@ import {
   typography,
   TypographyProps,
 } from "styled-system";
-import { Text } from "./text";
+import { TextNoMargin } from "./text";
 import { baseTheme } from "../../themes/base";
 import IcoMoon from "react-icomoon";
 const iconSet = require("../../assets/icons/selection.json");
@@ -28,7 +28,7 @@ export interface IIconButtonProps extends StyledSystemProps {
   disabled?: boolean;
 }
 
-const Button = styled.button<IIconButtonProps>`
+const Button = styled.div<IIconButtonProps>`
   ${color}
   ${layout}
   ${space}
@@ -59,7 +59,7 @@ const Button = styled.button<IIconButtonProps>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 `;
 
 const TextContainer = styled.div`
@@ -70,6 +70,7 @@ const TextContainer = styled.div`
   justify-content: center;
   text-align: center;
   width: 100%;
+  margin-left: 5px;
 `;
 
 export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
@@ -84,7 +85,7 @@ export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
   ...restProps
 }): JSX.Element => {
   return text ? (
-    <Button shadow={shadow} onClick={onClick} {...restProps} pl={"20px"} disabled={disabled}>
+    <Button shadow={shadow} onClick={onClick} {...restProps} disabled={disabled}>
       <IcoMoon
         icon={iconName}
         iconSet={iconSet}
@@ -92,7 +93,7 @@ export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
         size={iconSize}
       />
       <TextContainer>
-        <Text color={disabled ? "lightgrey" : textColor || "black"}>{text}</Text>
+        <TextNoMargin color={disabled ? "lightgrey" : textColor || "black"}>{text}</TextNoMargin>
       </TextContainer>
     </Button>
   ) : (

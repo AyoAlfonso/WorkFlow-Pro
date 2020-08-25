@@ -25,10 +25,11 @@ export const Journal = observer(
           <ButtonContainer>
             <IconButton
               width={"100%"}
-              height={"64px"}
+              height={"48px"}
               bg={"white"}
               mt={"20px"}
               mx={"15px"}
+              pl={"15px"}
               iconName={"AM-Check-in"}
               iconSize={28}
               iconColor={"cautionYellow"}
@@ -39,10 +40,11 @@ export const Journal = observer(
             />
             <IconButton
               width={"100%"}
-              height={"64px"}
+              height={"48px"}
               bg={"white"}
               mt={"15px"}
               mx={"15px"}
+              pl={"15px"}
               iconName={"Negative-Thoughts"}
               iconSize={28}
               iconColor={"warningRed"}
@@ -52,10 +54,11 @@ export const Journal = observer(
             />
             <IconButton
               width={"100%"}
-              height={"64px"}
+              height={"48px"}
               bg={"white"}
               mt={"15px"}
               mx={"15px"}
+              pl={"15px"}
               iconName={"Check-in"}
               iconSize={28}
               iconColor={"primary40"}
