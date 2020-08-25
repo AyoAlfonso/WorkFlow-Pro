@@ -21,7 +21,7 @@ export const UserModel = types
     timezone: types.maybeNull(types.string),
     phoneNumber: types.maybeNull(types.string),
     title: types.maybeNull(types.string),
-    status: types.string,
+    status: types.maybeNull(types.string),
     // teams: types.array(types.reference(TeamModel)), THIS ONLY WORKS IF TEAMS IS LOADED BEFORE USERS
     //add avatarurl2x
   })
