@@ -1,9 +1,9 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { Card, CardBody } from "../../shared/card";
-import { Text } from "../../shared/text";
-import { Heading } from "../../shared/heading";
+import { Card, CardBody } from "../../../shared/card";
+import { Text } from "../../../shared/text";
+import { Heading } from "../../../shared/heading";
 import { useMst } from "~/setup/root";
 
 export const ConversationStarter = (): JSX.Element => {

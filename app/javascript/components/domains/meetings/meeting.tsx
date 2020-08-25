@@ -14,6 +14,9 @@ import { Icon } from "~/components/shared/icon";
 import { TextNoMargin } from "~/components/shared/text";
 import { Loading } from "~/components/shared/loading";
 import { toJS } from "mobx";
+import { MeetingStep } from "./meeting-step";
+import { MeetingAgenda } from "./meeting-agenda";
+import { HomeCoreFour } from "~/components/domains/home/home-core-four";
 
 export interface ITeamMeetingProps {}
 
@@ -47,14 +50,17 @@ export const Meeting = observer(
     }
 
     const team = teamStore.teams.find(team => team.id === parseInt(team_id));
-    const meeting = toJS(meetingStore.teamMeetings).find(tm => tm.id === parseInt(meeting_id));
+    meetingStore.setCurrentMeeting(
+      toJS(meetingStore.teamMeetings).find(tm => tm.id === parseInt(meeting_id)),
+    );
+    const meeting = meetingStore.currentMeeting;
 
     if (R.isNil(meeting)) {
       return renderLoading();
     }
 
     if (!R.isNil(meeting.endTime)) {
-      renderMeetingEnded();
+      return renderMeetingEnded();
     }
 
     const progressBarSteps = meeting.steps.map((currentStep, index, stepsArray) => {
@@ -62,7 +68,7 @@ export const Meeting = observer(
         .slice(0, index)
         .reduce((acc, curr) => acc + (curr.duration / meeting.duration) * 100, 0);
       return {
-        accomplished: false,
+        accomplished: currentStep.orderIndex < meeting.currentStep,
         position: accumulatedPosition,
         index: currentStep.orderIndex,
         title: currentStep.name,
@@ -71,7 +77,11 @@ export const Meeting = observer(
     const stepPositions = R.map(step => step.position, progressBarSteps).concat([100]);
 
     const updateMeeting = keysAndValues => {
-      meetingStore.updateMeeting(keysAndValues);
+      meetingStore.updateMeeting(R.merge(meeting, keysAndValues));
+    };
+
+    const onStepClick = stepIndex => {
+      updateMeeting({ currentStep: stepIndex });
     };
 
     const hasStartTime = () => !R.isNil(meeting.startTime);
@@ -83,7 +93,7 @@ export const Meeting = observer(
           variant={"primary"}
           onClick={() => {
             setMeetingStarted(true);
-            updateMeeting(R.merge(meeting, { startTime: new Date().toUTCString() }));
+            updateMeeting({ startTime: new Date().toUTCString() });
           }}
           small
           ml={"25px"}
@@ -102,7 +112,7 @@ export const Meeting = observer(
           variant={"redOutline"}
           onClick={() => {
             setMeetingEnded(true);
-            updateMeeting(R.merge(meeting, { endTime: new Date().toUTCString() }));
+            updateMeeting({ endTime: new Date().toUTCString() });
           }}
           small
           ml={"25px"}
@@ -130,7 +140,7 @@ export const Meeting = observer(
               </DateAndButtonContainer>
             </HeaderContainer>
             <BodyContainer>
-              {meetingStarted ? (
+              {meetingStarted ? ( //#TODO: IF YOU ARE NOT THE HOST RENDER JUST THE AGENDA
                 <>
                   <StepProgressBar
                     progressBarProps={{
@@ -139,10 +149,15 @@ export const Meeting = observer(
                     }}
                     steps={progressBarSteps}
                     timed={true}
+                    onStepClick={onStepClick}
                   />
+                  <MeetingStep meeting={meetingStore.currentMeeting}></MeetingStep>
                 </>
               ) : (
-                <>some meeting summary overview?</>
+                <>
+                  <MeetingAgenda />
+                  <HomeCoreFour />
+                </>
               )}
             </BodyContainer>
           </>
