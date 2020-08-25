@@ -4,23 +4,23 @@ import { maybeNull } from "mobx-state-tree/dist/internal";
 export const MeetingModel = types
   .model("MeetingModel")
   .props({
-    id: types.identifierNumber,
     averageRating: types.maybeNull(types.number),
+    averageTeamMood: types.maybeNull(types.number),
+    createdAt: types.string,
+    currentStep: types.maybeNull(types.number),
+    duration: types.number,
+    endTime: types.maybeNull(types.string),
+    goalProgress: types.maybeNull(types.number),
+    hostName: types.maybeNull(types.string),
+    id: types.identifierNumber,
     issuesDone: types.maybeNull(types.number),
     keyActivitiesDone: types.maybeNull(types.number),
-    averageTeamMood: types.maybeNull(types.number),
-    goalProgress: types.maybeNull(types.number),
-    teamId: types.maybeNull(types.number),
+    meetingType: types.string,
+    name: types.string,
     scheduledStartTime: types.maybeNull(types.string),
     startTime: types.maybeNull(types.string),
-    endTime: types.maybeNull(types.string),
-    hostName: types.maybeNull(types.string),
-    currentStep: types.maybeNull(types.number),
     steps: types.array(types.frozen()),
-    name: types.string,
-    duration: types.number,
-    meetingType: types.string,
-    createdAt: types.string,
+    teamId: types.maybeNull(types.number),
   })
   .views(self => ({}))
   .actions(self => ({}));

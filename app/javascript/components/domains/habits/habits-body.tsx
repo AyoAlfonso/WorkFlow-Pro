@@ -6,6 +6,7 @@ import { HabitsHabitTracker } from "./habits-habit-tracker";
 import { baseTheme } from "~/themes/base";
 import * as moment from "moment";
 import { EditHabit } from "./edit-habit";
+import { typography, TypographyProps } from "styled-system";
 
 export const HabitsBody = observer(
   (): JSX.Element => {
@@ -88,19 +89,18 @@ const HabitsTableBody = styled.tbody``;
 const HabitsTableRow = styled.tr``;
 
 type HabitsTableHeaderCellType = {
-  fontWeight?: string;
   width?: string;
 };
 
-const HabitsTableHeaderCell = styled.th<HabitsTableHeaderCellType>`
+const HabitsTableHeaderCell = styled.th<HabitsTableHeaderCellType & TypographyProps>`
+  ${typography}  
   color: ${baseTheme.colors.greyInactive};
-  font-weight: ${props => props.fontWeight};
   height: 25px;
   width: ${props => props.width};
 `;
 
-export const HabitsTableDataCell = styled.td`
-  font-weight: ${props => props.fontWeight};
+export const HabitsTableDataCell = styled.td<TypographyProps>`
+  ${typography}
   height: 35px;
   text-align: center;
   :hover {

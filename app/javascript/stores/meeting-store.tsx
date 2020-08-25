@@ -52,7 +52,12 @@ export const MeetingStoreModel = types
     updateMeeting: flow(function*(meetingObj) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.updateMeeting(meetingObj);
-        self.currentMeeting = response.data;
+        let teamMeetings = self.teamMeetings;
+        let meetingToUpdateIndex = teamMeetings.findIndex(
+          meeting => meeting.id == response.data.id,
+        );
+        teamMeetings[meetingToUpdateIndex] = response.data;
+        self.teamMeetings = teamMeetings;
       } catch {
         // caught bv Api Monitor
       }
@@ -65,6 +70,11 @@ export const MeetingStoreModel = types
         // caught bv Api Monitor
       }
     }),
+  }))
+  .actions(self => ({
+    setCurrentMeeting(meeting) {
+      self.currentMeeting = meeting;
+    },
   }))
   .actions(self => ({
     reset() {

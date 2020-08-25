@@ -24,7 +24,7 @@ class Api::MeetingsController < Api::ApplicationController
 
   def update
     @meeting.update!(meeting_params)
-    render json: { meeting: @meeting.as_json(include: { meeting_template: { include: :steps } }) }
+    render 'api/meetings/update'
   end
 
   def destroy
