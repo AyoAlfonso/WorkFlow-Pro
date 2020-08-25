@@ -1,5 +1,6 @@
 import { types } from "mobx-state-tree";
 import { maybeNull } from "mobx-state-tree/dist/internal";
+import { StepModel } from "./step";
 
 export const MeetingModel = types
   .model("MeetingModel")
@@ -19,11 +20,14 @@ export const MeetingModel = types
     name: types.string,
     scheduledStartTime: types.maybeNull(types.string),
     startTime: types.maybeNull(types.string),
-    steps: types.array(types.frozen()),
+    steps: types.array(StepModel),
     teamId: types.maybeNull(types.number),
   })
-  .views(self => ({}))
-  .actions(self => ({}));
+  .views(self => ({
+    get currentStepDetails() {
+      return self.steps.find(step => step.orderIndex == self.currentStep);
+    },
+  }));
 
 type MeetingModelType = typeof MeetingModel.Type;
 type MeetingModelDataType = typeof MeetingModel.CreationType;

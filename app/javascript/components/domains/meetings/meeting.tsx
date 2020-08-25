@@ -14,6 +14,9 @@ import { Icon } from "~/components/shared/icon";
 import { TextNoMargin } from "~/components/shared/text";
 import { Loading } from "~/components/shared/loading";
 import { toJS } from "mobx";
+import { MeetingStep } from "./meeting-step";
+import { MeetingAgenda } from "./meeting-agenda";
+import { HomeCoreFour } from "~/components/domains/home/home-core-four";
 
 export interface ITeamMeetingProps {}
 
@@ -137,7 +140,7 @@ export const Meeting = observer(
               </DateAndButtonContainer>
             </HeaderContainer>
             <BodyContainer>
-              {meetingStarted ? (
+              {meetingStarted ? ( //#TODO: IF YOU ARE NOT THE HOST RENDER JUST THE AGENDA
                 <>
                   <StepProgressBar
                     progressBarProps={{
@@ -148,9 +151,13 @@ export const Meeting = observer(
                     timed={true}
                     onStepClick={onStepClick}
                   />
+                  <MeetingStep meeting={meetingStore.currentMeeting}></MeetingStep>
                 </>
               ) : (
-                <>some meeting summary overview?</>
+                <>
+                  <MeetingAgenda />
+                  <HomeCoreFour />
+                </>
               )}
             </BodyContainer>
           </>

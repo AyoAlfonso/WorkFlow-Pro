@@ -231,8 +231,8 @@ ActiveRecord::Schema.define(version: 2020_08_21_232506) do
     t.datetime "start_time"
     t.integer "current_step"
     t.string "host_name"
-    t.datetime "end_time"
     t.datetime "scheduled_start_time"
+    t.datetime "end_time"
     t.index ["meeting_template_id"], name: "index_meetings_on_meeting_template_id"
     t.index ["team_id"], name: "index_meetings_on_team_id"
   end
