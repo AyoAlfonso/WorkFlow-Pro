@@ -45,8 +45,16 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
         </NameInputContainer>
         {/* Styling inline here as there seems to be a trick to styling height and width in
       styled-components. Avoiding that complication here. */}
-        <StyledInput
-          style={{ height: 50, width: 50, marginTop: "auto", marginBottom: "auto" }}
+        <StyledColorInput
+          style={{
+            height: 60,
+            width: 60,
+            marginTop: "auto",
+            marginBottom: "auto",
+            border: "none",
+            paddingTop: 5,
+            paddingBottom: 11,
+          }}
           type={"color"}
           onChange={({ target: { value } }: React.ChangeEvent<HTMLInputElement>) =>
             setCreateHabitFormState({
@@ -79,7 +87,7 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
         }}
         variant={"primary"}
       >
-        {t("general.submit")}
+        {t("general.save")}
       </Button>
     </StyledForm>
   );
@@ -96,6 +104,12 @@ const StyledInput = styled(Input)`
   margin-top: 10px;
 `;
 
+const StyledColorInput = styled(StyledInput)`
+  &: focus {
+    outline: none;
+  }
+`;
+
 const NameAndColorContainer = styled.div`
   display: flex;
 `;
@@ -107,7 +121,7 @@ const NameInputContainer = styled.div`
 
 const FrequencyContainer = styled.div`
   display: flex;
-  margin-top: 20px;
+  margin-bottom: 20px;
 `;
 
 const SectionText = styled(Text)`

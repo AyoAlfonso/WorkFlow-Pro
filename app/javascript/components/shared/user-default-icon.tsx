@@ -27,7 +27,7 @@ export const UserDefaultIcon = (props: IUserDefaultIconProps) => {
       border={border}
       defaultAvatarColor={defaultAvatarColor}
     >
-      <StyledText> {initials.toUpperCase()} </StyledText>
+      <StyledText size={size}> {initials.toUpperCase()} </StyledText>
     </Container>
   );
 };
@@ -55,8 +55,12 @@ const Container = styled.div<ContainerProps>`
   border: ${props => props.border};
 `;
 
-const StyledText = styled(Text)`
+type StyledTextProps = {
+  size?: number;
+};
+
+const StyledText = styled(Text)<StyledTextProps>`
   text-align: center;
-  font-size: 16pt;
+  font-size: ${props => (props.size ? props.size / 3 : 16)}pt;
   color: ${baseTheme.colors.white};
 `;

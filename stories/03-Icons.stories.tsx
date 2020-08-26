@@ -350,6 +350,19 @@ export const Icons = () => (
         <Icon icon={"Add-User-Circle"} size={"2em"} />
         <TextCenteredDiv>Add-User-Circle</TextCenteredDiv>
       </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"LynchPyn-Iconography_Check-in"} size={"2em"} />
+        <TextCenteredDiv>LynchPyn-Iconography_Check-in</TextCenteredDiv>
+      </CenteredColumnDiv>
+
+      <CenteredColumnDiv>
+        <Icon icon={"PynBot"} size={"2em"} />
+        <TextCenteredDiv>PynBot</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Priority-MIP"} size={"2em"} />
+        <TextCenteredDiv>Priority-MIP</TextCenteredDiv>
+      </CenteredColumnDiv>
     </RowDiv>
   </ContainerDiv>
 );
