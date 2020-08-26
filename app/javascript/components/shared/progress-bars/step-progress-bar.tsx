@@ -61,7 +61,7 @@ export const StepProgressBar = ({
 
   const allStepsCompleted = steps.every(st => st.accomplished === true);
   return (
-    <>
+    <Container>
       <ReactTooltip />
       <ProgressBar
         {...defaultStepProgressBarProps}
@@ -78,7 +78,7 @@ export const StepProgressBar = ({
           )}
         </Step>
       </ProgressBar>
-    </>
+    </Container>
   );
 };
 
@@ -95,4 +95,8 @@ const StepDiv = styled.div`
     transform: translate(1px, 1px);
   }
   transition: all ease 0.1s;
+`;
+
+const Container = styled.div`
+  width: 100%;
 `;

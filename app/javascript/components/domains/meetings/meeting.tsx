@@ -17,6 +17,7 @@ import { toJS } from "mobx";
 import { MeetingStep } from "./meeting-step";
 import { MeetingAgenda } from "./meeting-agenda";
 import { HomeCoreFour } from "~/components/domains/home/home-core-four";
+import { Timer } from "~/components/shared/timer";
 
 export interface ITeamMeetingProps {}
 
@@ -24,12 +25,35 @@ export const Meeting = observer(
   (props: ITeamMeetingProps): JSX.Element => {
     const [meetingStarted, setMeetingStarted] = useState<boolean>(false);
     const [meetingEnded, setMeetingEnded] = useState<boolean>(false);
+    const [secondsElapsed, setSecondsElapsed] = useState<number>(0);
+
     const { teamStore, meetingStore } = useMst();
     const { team_id, meeting_id } = useParams(); // team id from url params
 
     useEffect(() => {
-      meetingStore.fetchTeamMeetings(team_id);
+      const load = async () => {
+        await meetingStore.fetchTeamMeetings(team_id);
+        meetingStore.setCurrentMeeting(
+          toJS(meetingStore.teamMeetings).find(tm => tm.id === parseInt(meeting_id)),
+        );
+        const currentTime = Math.round(Date.now() / 1000);
+        const startTime = new Date(meetingStore.currentMeeting.startTime).getTime() / 1000;
+        setSecondsElapsed(currentTime - startTime);
+      };
+      load();
     }, []);
+
+    useEffect(() => {
+      let interval = null;
+      if (meetingStarted) {
+        interval = setInterval(() => {
+          setSecondsElapsed(sec => sec + 1);
+        }, 1000);
+      } else if (!meetingStarted && secondsElapsed !== 0) {
+        clearInterval(interval);
+      }
+      return () => clearInterval(interval);
+    }, [meetingStarted, secondsElapsed]);
 
     const renderLoading = () => (
       <Container>
@@ -50,10 +74,10 @@ export const Meeting = observer(
     }
 
     const team = teamStore.teams.find(team => team.id === parseInt(team_id));
+    const meeting = meetingStore.currentMeeting;
     meetingStore.setCurrentMeeting(
       toJS(meetingStore.teamMeetings).find(tm => tm.id === parseInt(meeting_id)),
     );
-    const meeting = meetingStore.currentMeeting;
 
     if (R.isNil(meeting)) {
       return renderLoading();
@@ -93,7 +117,7 @@ export const Meeting = observer(
           variant={"primary"}
           onClick={() => {
             setMeetingStarted(true);
-            updateMeeting({ startTime: new Date().toUTCString() });
+            hasStartTime() ? null : updateMeeting({ startTime: new Date().toUTCString() });
           }}
           small
           ml={"25px"}
@@ -118,7 +142,7 @@ export const Meeting = observer(
           ml={"25px"}
           disabled={meetingEnded}
         >
-          <Icon icon={"_Stop"} iconColor={"warningRed"} size={"13px"} />
+          <Icon icon={"Stop"} iconColor={"warningRed"} size={"13px"} />
           <TextNoMargin ml={"10px"}>Stop Meeting</TextNoMargin>
         </Button>
       );
@@ -142,15 +166,19 @@ export const Meeting = observer(
             <BodyContainer>
               {meetingStarted ? ( //#TODO: IF YOU ARE NOT THE HOST RENDER JUST THE AGENDA
                 <>
-                  <StepProgressBar
-                    progressBarProps={{
-                      stepPositions: stepPositions,
-                      percent: 55,
-                    }}
-                    steps={progressBarSteps}
-                    timed={true}
-                    onStepClick={onStepClick}
-                  />
+                  <ProgressBarTimerContainer>
+                    <StepProgressBar
+                      progressBarProps={{
+                        stepPositions: stepPositions,
+                        percent: (secondsElapsed / (meeting.duration * 60)) * 100,
+                      }}
+                      steps={progressBarSteps}
+                      timed={true}
+                      onStepClick={onStepClick}
+                    />
+                    <Timer secondsElapsed={secondsElapsed} ml={"30px"} />
+                  </ProgressBarTimerContainer>
+
                   <MeetingStep meeting={meetingStore.currentMeeting}></MeetingStep>
                 </>
               ) : (
@@ -181,6 +209,12 @@ const DateAndButtonContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const ProgressBarTimerContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
 `;
 
 const BodyContainer = styled.div``;
