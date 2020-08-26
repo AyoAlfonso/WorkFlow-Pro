@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as R from "ramda";
 import "react-step-progress-bar/styles.css";
 import { ProgressBar, Step } from "react-step-progress-bar";
 import { StepProgressBarIcon } from "./step-progress-bar-icon";
@@ -12,6 +13,7 @@ export interface IStepProgressBar {
   steps: Array<TStepProgressBarStep>;
   timed?: boolean;
   onStepClick: (args: any) => void;
+  currentStep: number;
 }
 
 // TODO: Needs correct icon assets
@@ -20,21 +22,26 @@ export const StepProgressBar = ({
   steps,
   timed,
   onStepClick,
+  currentStep,
 }: IStepProgressBar): JSX.Element => {
   const renderIcon = (color, iconName) => (
     <StepProgressBarIcon iconBackgroundColor={color} iconName={iconName} />
   );
 
-  const accomplishedIndex = steps.filter(step => step.accomplished === true).length - 1;
-  const accumulatedPosition = steps.slice(0, accomplishedIndex - 1).reduce((acc, curr) => {
-    return acc + curr.position;
-  }, 0);
-  const isOverTime = accumulatedPosition < progressBarProps.percent;
+  const isOverTime = () => {
+    if (currentStep === steps[steps.length - 1].index) {
+      return false;
+    } else if (steps[currentStep + 1].position < progressBarProps.percent) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const defaultStepProgressBarProps = {
     percent: 0,
     filledBackground: `linear-gradient(to right, ${baseTheme.colors.grey80}, ${
-      isOverTime ? baseTheme.colors.warningRed : baseTheme.colors.primary80
+      isOverTime() ? baseTheme.colors.warningRed : baseTheme.colors.primary80
     }`,
   };
   const defaultStepProgressBarStepProps = {
@@ -55,7 +62,7 @@ export const StepProgressBar = ({
           >
             {step.accomplished
               ? renderIcon("grey100", "Checkmark")
-              : isOverTime && index === accomplishedIndex + 1
+              : isOverTime() && index === currentStep
               ? renderIcon("warningRed", "Chevron-Left")
               : renderIcon("primary100", "Chevron-Left")}
           </StepDiv>

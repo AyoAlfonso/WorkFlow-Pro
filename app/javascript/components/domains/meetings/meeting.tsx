@@ -192,6 +192,7 @@ export const Meeting = observer(
                       steps={progressBarSteps}
                       timed={true}
                       onStepClick={onStepClick}
+                      currentStep={meeting.currentStep}
                     />
                     <Timer secondsElapsed={secondsElapsed} ml={"30px"} />
                   </ProgressBarTimerContainer>
