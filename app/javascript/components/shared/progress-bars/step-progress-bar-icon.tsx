@@ -1,31 +1,35 @@
 import * as React from "react";
-import IcoMoon from "react-icomoon";
 import styled from "styled-components";
-import { baseTheme } from "~/themes/base";
-import { IconContainer } from "../icon";
-const iconSet = require("~/assets/icons/selection.json");
+import { Icon } from "~/components/shared/icon";
+import { color, ColorProps } from "styled-system";
 
-interface IStepProgressBarIconProps {
-  iconContainerProps?: typeof IconContainer;
-  iconProps?: typeof IcoMoon;
+export interface IStepBarProgressIconProps {
+  iconBackgroundColor: string;
+  iconName: string;
 }
 
-const StepProgressBarIconContainer = styled(IconContainer)`
-  background-color: ${props => props.theme.colors.white};
-  border-radius: 100%;
-`;
-
 export const StepProgressBarIcon = ({
-  iconContainerProps,
-  iconProps,
-  iconProps: { color },
-}: IStepProgressBarIconProps) => (
-  <StepProgressBarIconContainer {...iconContainerProps}>
-    <IcoMoon
-      iconSet={iconSet}
-      size={"25px"}
-      {...iconProps}
-      color={`${baseTheme.colors[color] ? baseTheme.colors[color] : color}`}
-    />
-  </StepProgressBarIconContainer>
-);
+  iconBackgroundColor,
+  iconName,
+}: IStepBarProgressIconProps): JSX.Element => {
+  return (
+    <Container bg={iconBackgroundColor} iconName={iconName}>
+      <Icon icon={iconName} iconColor={"white"} size={"16px"} />
+    </Container>
+  );
+};
+
+interface IContainerProps extends ColorProps {
+  iconName: string;
+}
+
+const Container = styled.div<IContainerProps>`
+  ${color}
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transform: ${props => (props.iconName === "Chevron-Left" ? "scaleX(-1)" : null)};
+`;

@@ -28,17 +28,21 @@ export const Meeting = observer(
     const [secondsElapsed, setSecondsElapsed] = useState<number>(0);
 
     const { teamStore, meetingStore } = useMst();
-    const { team_id, meeting_id } = useParams(); // team id from url params
+    const { team_id, meeting_id } = useParams();
+
+    const currentTimeInSeconds = Math.round(Date.now() / 1000);
 
     useEffect(() => {
       const load = async () => {
         await meetingStore.fetchTeamMeetings(team_id);
-        meetingStore.setCurrentMeeting(
-          toJS(meetingStore.teamMeetings).find(tm => tm.id === parseInt(meeting_id)),
+        const currentMeeting = toJS(meetingStore.teamMeetings).find(
+          tm => tm.id === parseInt(meeting_id),
         );
-        const currentTime = Math.round(Date.now() / 1000);
-        const startTime = new Date(meetingStore.currentMeeting.startTime).getTime() / 1000;
-        setSecondsElapsed(currentTime - startTime);
+        await meetingStore.setCurrentMeeting(currentMeeting);
+        if (!R.isNil(currentMeeting.startTime)) {
+          const startTime = new Date(currentMeeting.startTime).getTime() / 1000;
+          setSecondsElapsed(currentTimeInSeconds - startTime);
+        }
       };
       load();
     }, []);
@@ -47,9 +51,12 @@ export const Meeting = observer(
       let interval = null;
       if (meetingStarted) {
         interval = setInterval(() => {
-          setSecondsElapsed(sec => sec + 1);
+          setSecondsElapsed(sec => {
+            let seconds = sec < 0 ? 0 : sec;
+            return seconds + 1;
+          });
         }, 1000);
-      } else if (!meetingStarted && secondsElapsed !== 0) {
+      } else if (meetingEnded && secondsElapsed !== 0) {
         clearInterval(interval);
       }
       return () => clearInterval(interval);
@@ -75,9 +82,6 @@ export const Meeting = observer(
 
     const team = teamStore.teams.find(team => team.id === parseInt(team_id));
     const meeting = meetingStore.currentMeeting;
-    meetingStore.setCurrentMeeting(
-      toJS(meetingStore.teamMeetings).find(tm => tm.id === parseInt(meeting_id)),
-    );
 
     if (R.isNil(meeting)) {
       return renderLoading();
@@ -100,9 +104,8 @@ export const Meeting = observer(
     });
     const stepPositions = R.map(step => step.position, progressBarSteps).concat([100]);
 
-    const updateMeeting = keysAndValues => {
+    const updateMeeting = keysAndValues =>
       meetingStore.updateMeeting(R.merge(meeting, keysAndValues));
-    };
 
     const onStepClick = stepIndex => {
       updateMeeting({ currentStep: stepIndex });
@@ -115,9 +118,21 @@ export const Meeting = observer(
       return (
         <Button
           variant={"primary"}
-          onClick={() => {
+          onClick={async () => {
             setMeetingStarted(true);
-            hasStartTime() ? null : updateMeeting({ startTime: new Date().toUTCString() });
+            if (hasStartTime()) {
+              setSecondsElapsed(
+                currentTimeInSeconds - new Date(meeting.startTime).getTime() / 1000,
+              );
+            } else {
+              const newMeetingStartTime = new Date().toUTCString();
+              const updatedMeeting = await updateMeeting({ startTime: newMeetingStartTime });
+              const updatedMeetingStartTimeInSeconds =
+                new Date(updatedMeeting.startTime).getTime() / 1000;
+              const timeDifference = updatedMeetingStartTimeInSeconds - currentTimeInSeconds;
+              const startTime = timeDifference < 0 ? 0 : timeDifference;
+              setSecondsElapsed(startTime);
+            }
           }}
           small
           ml={"25px"}
@@ -148,6 +163,8 @@ export const Meeting = observer(
       );
     };
 
+    const calculatedPercentage = (secondsElapsed / (meeting.duration * 60)) * 100;
+
     return (
       <Container>
         {meetingEnded || hasEndTime() ? (
@@ -170,7 +187,7 @@ export const Meeting = observer(
                     <StepProgressBar
                       progressBarProps={{
                         stepPositions: stepPositions,
-                        percent: (secondsElapsed / (meeting.duration * 60)) * 100,
+                        percent: calculatedPercentage > 100 ? 100 : calculatedPercentage,
                       }}
                       steps={progressBarSteps}
                       timed={true}

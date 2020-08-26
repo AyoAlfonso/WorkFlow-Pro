@@ -58,6 +58,8 @@ export const MeetingStoreModel = types
         );
         teamMeetings[meetingToUpdateIndex] = response.data;
         self.teamMeetings = teamMeetings;
+        self.currentMeeting = response.data;
+        return self.currentMeeting;
       } catch {
         // caught bv Api Monitor
       }

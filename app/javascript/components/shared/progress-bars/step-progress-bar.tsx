@@ -14,14 +14,6 @@ export interface IStepProgressBar {
   onStepClick: (args: any) => void;
 }
 
-const defaultStepProgressBarProps = {
-  percent: 0,
-  filledBackground: baseTheme.colors.grey100,
-};
-
-const defaultStepProgressBarStepProps = {
-  transition: "scale",
-};
 // TODO: Needs correct icon assets
 export const StepProgressBar = ({
   progressBarProps,
@@ -29,12 +21,26 @@ export const StepProgressBar = ({
   timed,
   onStepClick,
 }: IStepProgressBar): JSX.Element => {
-  const accomplishedIcon = (
-    <StepProgressBarIcon iconProps={{ color: "grey100", icon: "Priority-High" }} />
+  const renderIcon = (color, iconName) => (
+    <StepProgressBarIcon iconBackgroundColor={color} iconName={iconName} />
   );
-  const unaccomplishedIcon = (
-    <StepProgressBarIcon iconProps={{ color: "primary100", icon: "Priority-Urgent" }} />
-  );
+
+  const accomplishedIndex = steps.filter(step => step.accomplished === true).length - 1;
+  const accumulatedPosition = steps.slice(0, accomplishedIndex - 1).reduce((acc, curr) => {
+    return acc + curr.position;
+  }, 0);
+  const isOverTime = accumulatedPosition < progressBarProps.percent;
+
+  const defaultStepProgressBarProps = {
+    percent: 0,
+    filledBackground: `linear-gradient(to right, ${baseTheme.colors.grey80}, ${
+      isOverTime ? baseTheme.colors.warningRed : baseTheme.colors.primary80
+    }`,
+  };
+  const defaultStepProgressBarStepProps = {
+    transition: "scale",
+  };
+
   const renderSteps: JSX.Element[] = steps.map((step, index) => (
     <Step key={index} {...defaultStepProgressBarStepProps} {...step}>
       {progressStep => {
@@ -47,7 +53,11 @@ export const StepProgressBar = ({
               onStepClick(index);
             }}
           >
-            {step.accomplished ? accomplishedIcon : unaccomplishedIcon}
+            {step.accomplished
+              ? renderIcon("grey100", "Checkmark")
+              : isOverTime && index === accomplishedIndex + 1
+              ? renderIcon("warningRed", "Chevron-Left")
+              : renderIcon("primary100", "Chevron-Left")}
           </StepDiv>
         );
       }}
@@ -73,7 +83,12 @@ export const StepProgressBar = ({
         <Step key={"last-step"}>
           {progressStep => (
             <div data-tip={"End Meeting"}>
-              {allStepsCompleted ? accomplishedIcon : unaccomplishedIcon}
+              {allStepsCompleted
+                ? renderIcon("grey100", "Chechmark")
+                : renderIcon(
+                    calculatePercent() >= 100 ? "warningRed" : "primary100",
+                    "Chevron-Left",
+                  )}
             </div>
           )}
         </Step>
@@ -86,7 +101,6 @@ const StepDiv = styled.div`
   border-radius: 50%;
   &:hover {
     cursor: pointer;
-    opacity: 0.85;
   }
   &:focus {
     outline: 0;
