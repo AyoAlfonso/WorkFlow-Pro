@@ -23,4 +23,30 @@ class Team < ApplicationRecord
     true
   end
 
+  def weekly_average_users_emotion_score
+    q_attempts = QuestionnaireAttempt.where(user: self.users)
+                                      .where("emotion_score IS NOT NULL AND completed_at <= ? AND completed_at >= ?", 1.day.ago, 1.week.ago)
+                                      .select(:id, :completed_at, :emotion_score)
+                                      .group_by{|qa| qa.completed_at}
+    results_array = []
+    q_attempts.map do |qa|
+      average_score_hash = {
+        date: qa[0].to_date,
+        average_score: qa[1].pluck(:emotion_score).inject(:+).to_f / qa[1].size
+      }
+      results_array << average_score_hash
+    end
+    results_array.reverse!
+  end
+
+  def team_average_weekly_emotion_score
+    average_user_score = weekly_average_users_emotion_score
+    if average_user_score.size == 0
+      0
+    else
+      sum_of_scores = average_user_score.pluck(:average_score).sum
+      sum_of_scores / average_user_score.size
+    end
+  end
+
 end

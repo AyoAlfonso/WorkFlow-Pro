@@ -10,6 +10,7 @@ export const QuestionnaireAttemptModel = types
     steps: types.array(types.frozen<object>()),
     renderedSteps: types.array(types.frozen<object>()),
     completed_at: types.string,
+    emotionScore: types.maybeNull(types.number),
   })
   .views(self => ({}))
   .actions(self => ({}));

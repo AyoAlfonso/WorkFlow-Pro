@@ -38,7 +38,13 @@ export const TeamPulseCard = ({ data }: ITeamPulseCardProps): JSX.Element => {
 
   return (
     <Container>
-      <XYPlot height={225} width={425} margin={{ top: 40, bottom: 20 }} xType="ordinal">
+      <XYPlot
+        height={225}
+        width={425}
+        margin={{ top: 40, bottom: 20 }}
+        xType="ordinal"
+        yDomain={[1, 5]}
+      >
         <HorizontalGridLines />
         <XAxis
           orientation="top"

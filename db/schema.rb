@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_21_232506) do
+ActiveRecord::Schema.define(version: 2020_08_22_212220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -185,6 +185,7 @@ ActiveRecord::Schema.define(version: 2020_08_21_232506) do
     t.boolean "weekly_list"
     t.integer "priority", default: 0
     t.bigint "meeting_id"
+    t.boolean "todays_priority"
     t.index ["meeting_id"], name: "index_key_activities_on_meeting_id"
     t.index ["user_id"], name: "index_key_activities_on_user_id"
   end
@@ -287,6 +288,7 @@ ActiveRecord::Schema.define(version: 2020_08_21_232506) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "json_representation"
+    t.integer "emotion_score"
     t.index ["questionnaire_id"], name: "index_questionnaire_attempts_on_questionnaire_id"
     t.index ["user_id"], name: "index_questionnaire_attempts_on_user_id"
   end

@@ -1,6 +1,5 @@
 import * as React from "react";
 import styled from "styled-components";
-import { Icon } from "../../shared/icon";
 import { Button } from "~/components/shared/button";
 import { observer } from "mobx-react";
 import { useParams, useHistory } from "react-router-dom";
@@ -21,6 +20,7 @@ import { Loading } from "~/components/shared/loading";
 import MeetingTypes from "~/constants/meeting-types";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import { FutureTeamMeetingsContainer } from "./shared/future-team-meetings-container";
 
 interface ITeamOverviewProps {}
 
@@ -57,7 +57,6 @@ export const TeamOverview = observer(
     };
     // use NavLink instead?
 
-    const user = sessionStore.profile;
     const currentTeam = teamStore.teams.find(team => team.id === parseInt(team_id));
 
     if (R.isEmpty(teamStore.teams)) {
@@ -69,16 +68,6 @@ export const TeamOverview = observer(
         </Container>
       );
     }
-
-    const teamPulseData = [
-      { x: new Date("2020-08-15"), y: 4 },
-      { x: new Date("2020-08-14"), y: 1 },
-      { x: new Date("2020-08-13"), y: 2 },
-      { x: new Date("2020-08-12"), y: 5 },
-      { x: new Date("2020-08-11"), y: 1 },
-      { x: new Date("2020-08-10"), y: 3 },
-      { x: new Date("2020-08-09"), y: 5 },
-    ];
 
     const renderCardSubHeader = (text: string): JSX.Element => {
       return (
@@ -101,89 +90,63 @@ export const TeamOverview = observer(
       );
     };
 
-    const renderUserPriorities = (): JSX.Element => {
-      return (
-        <>
-          <PriorityContainer>
-            <CheckboxContainer key={1}>
+    const renderUserPriorities = (keyActivities): JSX.Element => {
+      return keyActivities.map((keyActivity, index) => {
+        return (
+          <PriorityContainer key={index}>
+            <CheckboxContainer>
               <Checkbox
-                key={1}
-                checked={true}
-                // onChange={e => {
-                //   keyActivityStore.updateKeyActivityStatus(keyActivity, e.target.checked);
-                // }}
+                key={`checkbox-${index}`}
+                checked={keyActivity.completedAt ? true : false}
               />
             </CheckboxContainer>
-            <PriorityText>SEO Optimization</PriorityText>
+            <PriorityText>{keyActivity.description}</PriorityText>
             <PriorityIconContainer>
-              <KeyActivityPriorityIcon priority={"medium"} />
+              <KeyActivityPriorityIcon priority={keyActivity.priority} />
             </PriorityIconContainer>
           </PriorityContainer>
-          <PriorityContainer>
-            <CheckboxContainer key={2}>
-              <Checkbox
-                key={2}
-                checked={true}
-                // onChange={e => {
-                //   keyActivityStore.updateKeyActivityStatus(keyActivity, e.target.checked);
-                // }}
-              />
-            </CheckboxContainer>
-            <PriorityText>Feed the fish</PriorityText>
-            <PriorityIconContainer>
-              <KeyActivityPriorityIcon priority={"high"} />
-            </PriorityIconContainer>
-          </PriorityContainer>
-        </>
-      );
+        );
+      });
     };
 
     const renderUserRecords = () => {
-      return (
-        <UserRecordContainer>
-          <TeamMemberContainer>
-            <TeamMemberInfoContainer>
-              <Avatar
-                defaultAvatarColor={user.defaultAvatarColor}
-                avatarUrl={user.avatarUrl}
-                firstName={user.firstName}
-                lastName={user.lastName}
-                size={45}
-                marginLeft={"0px"}
+      return currentTeam.users.map((user, index) => {
+        return (
+          <UserRecordContainer key={index}>
+            <TeamMemberContainer>
+              <TeamMemberInfoContainer>
+                <Avatar
+                  defaultAvatarColor={user.defaultAvatarColor}
+                  avatarUrl={user.avatarUrl}
+                  firstName={user.firstName}
+                  lastName={user.lastName}
+                  size={45}
+                  marginLeft={"0px"}
+                />
+                <TeamMemberName>
+                  {user.firstName} {user.lastName}
+                </TeamMemberName>
+              </TeamMemberInfoContainer>
+            </TeamMemberContainer>
+            <StatusContainer>
+              <HomePersonalStatusDropdownMenuItem
+                style={{ width: "170px", borderRadius: "5px", marginTop: "5px" }}
+                menuItem={options[user.currentDailyLog.workStatus]}
+                onSelect={() => null}
               />
-              <TeamMemberName>
-                {user.firstName} {user.lastName}
-              </TeamMemberName>
-            </TeamMemberInfoContainer>
-          </TeamMemberContainer>
-          <StatusContainer>
-            <HomePersonalStatusDropdownMenuItem
-              style={{ width: "170px", borderRadius: "5px", marginTop: "5px" }}
-              menuItem={options[user.currentDailyLog.workStatus]}
-              onSelect={() => null}
-            />
-          </StatusContainer>
-          <TodaysPrioritiesContainer>{renderUserPriorities()}</TodaysPrioritiesContainer>
-        </UserRecordContainer>
-      );
+            </StatusContainer>
+            <TodaysPrioritiesContainer>
+              {renderUserPriorities(user.todaysPriorities)}
+            </TodaysPrioritiesContainer>
+          </UserRecordContainer>
+        );
+      });
     };
 
     return (
       <Container>
         <HeaderContainer>
           <Title>{`${currentTeam.name} Overview`}</Title>
-          <TeamMeetingButton
-            small
-            variant={"primary"}
-            onClick={() => {
-              handleMeetingClick();
-            }}
-          >
-            <ButtonTextContainer>
-              <Icon icon={"Team"} size={"20px"} />
-              <TeamMeetingText>Team Meeting</TeamMeetingText>
-            </ButtonTextContainer>
-          </TeamMeetingButton>
         </HeaderContainer>
         <BodyContainer>
           <LeftContainer>
@@ -193,16 +156,22 @@ export const TeamOverview = observer(
             </TeamSnapshotContainer>
           </LeftContainer>
           <RightContainer>
+            <TeamMeetingInfoContainer>
+              <FutureTeamMeetingsWrapper>
+                <FutureTeamMeetingsContainer handleMeetingClick={handleMeetingClick} />
+              </FutureTeamMeetingsWrapper>
+              <TeamIssuesWrapper>
+                <TeamIssuesContainer />
+              </TeamIssuesWrapper>
+            </TeamMeetingInfoContainer>
+
             <TeamPulseContainer>
               {renderCardSubHeader("Team's Pulse")}
               <TeamPulseBody>
-                <OverallTeamPulse value={3.4} />
-                <TeamPulseCard data={teamPulseData} />
+                <OverallTeamPulse value={currentTeam.averageTeamEmotionScore} />
+                <TeamPulseCard data={toJS(currentTeam.formattedAverageWeeklyUserEmotions)} />
               </TeamPulseBody>
             </TeamPulseContainer>
-            <TeamIssuesWrapper>
-              <TeamIssuesContainer />
-            </TeamIssuesWrapper>
           </RightContainer>
         </BodyContainer>
       </Container>
@@ -223,23 +192,6 @@ const Title = styled(Text)`
   font-size: 36px;
 `;
 
-const TeamMeetingButton = styled(Button)`
-  display: flex;
-  width: 220px;
-  margin-left: auto;
-  margin-top: auto;
-  margin-bottom: auto;
-`;
-
-const TeamMeetingText = styled(Text)`
-  margin-top: 0;
-  margin-bottom: 0;
-  margin-left: 15px;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-`;
-
 const BodyContainer = styled.div`
   display: flex;
 `;
@@ -256,16 +208,18 @@ const RightContainer = styled.div`
   margin-left: 10px;
 `;
 
-const ButtonTextContainer = styled.div`
-  margin: auto;
-  display: flex;
-`;
-
 const TeamSnapshotContainer = styled(HomeContainerBorders)``;
 
 const TeamPulseContainer = styled(HomeContainerBorders)``;
 
-const TeamIssuesWrapper = styled(HomeContainerBorders)``;
+const TeamIssuesWrapper = styled(HomeContainerBorders)`
+  width: 50%;
+`;
+
+const FutureTeamMeetingsWrapper = styled(HomeContainerBorders)`
+  width: 50%;
+  margin-right: 15px;
+`;
 
 const SubHeaderTextContainer = styled.div`
   padding-top: 8px;
@@ -344,6 +298,10 @@ const TeamPulseBody = styled.div`
   display: flex;
   padding-top: 36px;
   padding-bottom: 36px;
+`;
+
+const TeamMeetingInfoContainer = styled.div`
+  display: flex;
 `;
 
 const CheckboxContainer = props => (

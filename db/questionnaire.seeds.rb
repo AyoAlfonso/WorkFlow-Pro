@@ -154,11 +154,11 @@ steps: [
     metadata: {
       emotion_selector: true,
       emotions: [
-        {icon: "Emotion-E", color: "warningRed", value: "Terrible", trigger: 3},
-        {icon: "Emotion-D", color: "cautionYellow", value: "Bad", trigger: 3},
-        {icon: "Emotion-C", color: "grey60", value: "Okay", trigger: 3},
-        {icon: "Emotion-B", color: "successGreen", value: "Good", trigger: 3},
-        {icon: "Emotion-A", color: "finePine", value: "Great", trigger: 3}
+        {icon: "Emotion-E", color: "warningRed", value: 1, trigger: 3},
+        {icon: "Emotion-D", color: "cautionYellow", value: 2, trigger: 3},
+        {icon: "Emotion-C", color: "grey60", value: 3, trigger: 3},
+        {icon: "Emotion-B", color: "successGreen", value: 4, trigger: 3},
+        {icon: "Emotion-A", color: "finePine", value: 5, trigger: 3}
       ]
     }
   },
