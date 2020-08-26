@@ -45,6 +45,7 @@ export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
 
     if (confirm(`Are you sure you want to delete this ${stringValue}?`)) {
       type == "quarterlyGoal" ? store.delete(false, id) : store.delete(id);
+      setShowOptions(false);
     }
   };
 

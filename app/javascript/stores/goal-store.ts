@@ -30,29 +30,42 @@ export const GoalStoreModel = types
     }),
     getTeamGoals: flow(function*(teamId) {
       const env = getEnv(self);
-      const response: any = yield env.api.getTeamGoals(teamId);
-      if (response.ok) {
-        console.log("response", response);
-        self.teamGoals = response.data;
+      try {
+        const response: any = yield env.api.getTeamGoals(teamId);
+        if (response.ok) {
+          self.teamGoals = response.data;
+        }
+      } catch {
+        showToast("There was an error loading goals", ToastMessageConstants.ERROR);
       }
-      // try {
-      //   const response: any = yield env.api.getTeamGoals(teamId);
-      //   if (response.ok) {
-      //     console.log("response", response);
-      //     self.teamGoals = response.data;
-      //   }
-      // } catch {
-      //   showToast("There was an error loading goals", ToastMessageConstants.ERROR);
-      // }
     }),
   }))
   .actions(self => ({
     updateAnnualInitiative(annualInitiative) {
-      const goalObject = annualInitiative.companyId ? self.companyGoals : self.personalGoals;
-      const goalsAnnualInitiativeIndex = self.companyGoals.goals.findIndex(
-        ai => ai.id == annualInitiative.id,
-      );
-      goalObject.goals[goalsAnnualInitiativeIndex] = annualInitiative;
+      if (self.companyGoals) {
+        let companyGoalAIIndex = self.companyGoals.goals.findIndex(
+          ai => ai.id == annualInitiative.id,
+        );
+        if (companyGoalAIIndex > -1) {
+          self.companyGoals.goals[companyGoalAIIndex] = annualInitiative;
+        }
+      }
+
+      if (self.personalGoals) {
+        let personalGoalAIIndex = self.personalGoals.goals.findIndex(
+          ai => ai.id == annualInitiative.id,
+        );
+        if (personalGoalAIIndex > -1) {
+          self.personalGoals.goals[personalGoalAIIndex] = annualInitiative;
+        }
+      }
+
+      if (self.teamGoals) {
+        let teamGoalAIIndex = self.teamGoals.findIndex(ai => ai.id == annualInitiative.id);
+        if (teamGoalAIIndex > -1) {
+          self.teamGoals[teamGoalAIIndex] = annualInitiative;
+        }
+      }
     },
     mergeAnnualInitiatives(type, annualInitiative) {
       if (type == "company") {
@@ -64,52 +77,97 @@ export const GoalStoreModel = types
       }
     },
     mergeQuarterlyGoals(quarterlyGoal) {
-      let companyGoalAI = self.companyGoals.goals.find(
-        annualInitiative => annualInitiative.id == quarterlyGoal.annualInitiativeId,
-      );
-      let personalGoalAI = self.personalGoals.goals.find(
-        annualInitiative => annualInitiative.id == quarterlyGoal.annualInitiativeId,
-      );
+      if (self.companyGoals) {
+        let companyGoalAI = self.companyGoals.goals.find(
+          annualInitiative => annualInitiative.id == quarterlyGoal.annualInitiativeId,
+        );
+        if (companyGoalAI) {
+          companyGoalAI.quarterlyGoals = [...companyGoalAI.quarterlyGoals, quarterlyGoal] as any;
+          let goals = self.companyGoals.goals;
+          const goalIndex = goals.findIndex(goal => goal.id == companyGoalAI.id);
+          goals[goalIndex] = companyGoalAI;
+          self.companyGoals.goals = goals;
+        }
+      }
 
-      if (companyGoalAI) {
-        companyGoalAI.quarterlyGoals = [...companyGoalAI.quarterlyGoals, quarterlyGoal] as any;
-        let goals = self.companyGoals.goals;
-        const goalIndex = goals.findIndex(goal => goal.id == companyGoalAI.id);
-        goals[goalIndex] = companyGoalAI;
-        self.companyGoals.goals = goals;
-      } else if (personalGoalAI) {
-        personalGoalAI.quarterlyGoals = [...personalGoalAI.quarterlyGoals, quarterlyGoal] as any;
-        let goals = self.personalGoals.goals;
-        const goalIndex = goals.findIndex(goal => goal.id == personalGoalAI.id);
-        goals[goalIndex] = personalGoalAI;
-        self.personalGoals.goals = goals;
+      if (self.personalGoals) {
+        let personalGoalAI = self.personalGoals.goals.find(
+          annualInitiative => annualInitiative.id == quarterlyGoal.annualInitiativeId,
+        );
+        if (personalGoalAI) {
+          personalGoalAI.quarterlyGoals = [...personalGoalAI.quarterlyGoals, quarterlyGoal] as any;
+          let goals = self.personalGoals.goals;
+          const goalIndex = goals.findIndex(goal => goal.id == personalGoalAI.id);
+          goals[goalIndex] = personalGoalAI;
+          self.personalGoals.goals = goals;
+        }
+      }
+
+      if (self.teamGoals) {
+        let teamGoalAI = self.teamGoals.find(
+          annualInitiative => annualInitiative.id == quarterlyGoal.annualInitiativeId,
+        );
+
+        if (teamGoalAI) {
+          teamGoalAI.quarterlyGoals = [...teamGoalAI.quarterlyGoals, quarterlyGoal] as any;
+          let goals = self.teamGoals;
+          const goalIndex = goals.findIndex(goal => goal.id == teamGoalAI.id);
+          goals[goalIndex] = teamGoalAI;
+          self.teamGoals = goals;
+        }
       }
     },
     updateGoalAnnualInitiative(goal, index, annualInitiative) {
-      let goals = self[goal]["goals"];
-      goals[index] = annualInitiative;
-      self[goal]["goals"] = goals;
+      if (goal == "teamGoals") {
+        let goals = self.teamGoals;
+        goals[index] = annualInitiative;
+        self.teamGoals = goals;
+      } else {
+        let goals = self[goal]["goals"];
+        goals[index] = annualInitiative;
+        self[goal]["goals"] = goals;
+      }
     },
     removeDeletedAnnualInitiative(annualInitiativeId) {
-      let companyGoalAI = self.companyGoals.goals.find(
-        annualInitiative => annualInitiative.id == annualInitiativeId,
-      );
-      let personalGoalAI = self.personalGoals.goals.find(
-        annualInitiative => annualInitiative.id == annualInitiativeId,
-      );
+      if (self.companyGoals) {
+        let companyGoalAI = self.companyGoals.goals.find(
+          annualInitiative => annualInitiative.id == annualInitiativeId,
+        );
+        if (companyGoalAI) {
+          const updatedAI = R.filter(
+            annualInitiative => annualInitiative.id != annualInitiativeId,
+            self.companyGoals.goals,
+          );
+          self.companyGoals.goals = updatedAI;
+        }
+      }
 
-      if (companyGoalAI) {
-        const updatedAI = R.filter(
-          annualInitiative => annualInitiative.id != annualInitiativeId,
-          self.companyGoals.goals,
+      if (self.personalGoals) {
+        let personalGoalAI = self.personalGoals.goals.find(
+          annualInitiative => annualInitiative.id == annualInitiativeId,
         );
-        self.companyGoals.goals = updatedAI;
-      } else if (personalGoalAI) {
-        const updatedAI = R.filter(
-          annualInitiative => annualInitiative.id != annualInitiativeId,
-          self.personalGoals.goals,
+
+        if (personalGoalAI) {
+          const updatedAI = R.filter(
+            annualInitiative => annualInitiative.id != annualInitiativeId,
+            self.personalGoals.goals,
+          );
+          self.personalGoals.goals = updatedAI;
+        }
+      }
+
+      if (self.teamGoals) {
+        let teamGoalAI = self.teamGoals.find(
+          annualInitiative => annualInitiative.id == annualInitiativeId,
         );
-        self.personalGoals.goals = updatedAI;
+
+        if (teamGoalAI) {
+          const updatedAI = R.filter(
+            annualInitiative => annualInitiative.id != annualInitiativeId,
+            self.teamGoals,
+          );
+          self.teamGoals = updatedAI;
+        }
       }
     },
   }));

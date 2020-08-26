@@ -69,23 +69,40 @@ export const QuarterlyGoalStoreModel = types
 
         const annualInitiative = response.data;
 
-        let companyGoalIndex = goalStore.companyGoals.goals.findIndex(
-          ai => ai.id == annualInitiative.id,
-        );
-
-        let personalGoalIndex = goalStore.personalGoals.goals.findIndex(
-          ai => ai.id == annualInitiative.id,
-        );
-
-        if (companyGoalIndex > -1) {
-          goalStore.updateGoalAnnualInitiative("companyGoals", companyGoalIndex, annualInitiative);
-        } else if (personalGoalIndex > -1) {
-          goalStore.updateGoalAnnualInitiative(
-            "personalGoals",
-            personalGoalIndex,
-            annualInitiative,
+        if (goalStore.companyGoals) {
+          let companyGoalIndex = goalStore.companyGoals.goals.findIndex(
+            ai => ai.id == annualInitiative.id,
           );
+          if (companyGoalIndex > -1) {
+            goalStore.updateGoalAnnualInitiative(
+              "companyGoals",
+              companyGoalIndex,
+              annualInitiative,
+            );
+          }
         }
+
+        if (goalStore.personalGoals) {
+          let personalGoalIndex = goalStore.personalGoals.goals.findIndex(
+            ai => ai.id == annualInitiative.id,
+          );
+          if (personalGoalIndex > -1) {
+            goalStore.updateGoalAnnualInitiative(
+              "personalGoals",
+              personalGoalIndex,
+              annualInitiative,
+            );
+          }
+        }
+
+        if (goalStore.teamGoals) {
+          let teamGoalIndex = goalStore.teamGoals.findIndex(ai => ai.id == annualInitiative.id);
+
+          if (teamGoalIndex > -1) {
+            goalStore.updateGoalAnnualInitiative("teamGoals", teamGoalIndex, annualInitiative);
+          }
+        }
+
         if (updateAnnualInitiative) {
           annualInitiativeStore.updateRecordIfOpened(annualInitiative);
         }
