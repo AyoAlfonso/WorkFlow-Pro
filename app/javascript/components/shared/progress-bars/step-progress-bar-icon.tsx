@@ -13,17 +13,15 @@ export const StepProgressBarIcon = ({
   iconName,
 }: IStepBarProgressIconProps): JSX.Element => {
   return (
-    <Container bg={iconBackgroundColor} iconName={iconName}>
-      <Icon icon={iconName} iconColor={"white"} size={"16px"} />
+    <Container bg={iconBackgroundColor}>
+      <IconContainer iconName={iconName}>
+        <Icon icon={iconName} iconColor={"white"} size={"16px"} />
+      </IconContainer>
     </Container>
   );
 };
 
-interface IContainerProps extends ColorProps {
-  iconName: string;
-}
-
-const Container = styled.div<IContainerProps>`
+const Container = styled.div<ColorProps>`
   ${color}
   width: 32px;
   height: 32px;
@@ -31,5 +29,13 @@ const Container = styled.div<IContainerProps>`
   justify-content: center;
   align-items: center;
   border-radius: 50%;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
+`;
+
+interface IIconContainerProps {
+  iconName: string;
+}
+
+const IconContainer = styled.div<IIconContainerProps>`
   transform: ${props => (props.iconName === "Chevron-Left" ? "scaleX(-1)" : null)};
 `;
