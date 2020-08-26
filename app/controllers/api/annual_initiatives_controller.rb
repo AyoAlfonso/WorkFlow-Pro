@@ -36,6 +36,13 @@ class Api::AnnualInitiativesController < Api::ApplicationController
     render json: { key_element: key_element, status: :ok }
   end
 
+  def team
+    @team_id = params[:team_id]
+    @annual_initiatives = AnnualInitiative.where(company_id: current_user.company_id)
+    authorize @annual_initiatives
+    render 'api/annual_initiatives/team'
+  end
+
   private 
 
   def annual_initiative_params

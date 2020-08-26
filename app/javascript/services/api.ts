@@ -272,5 +272,9 @@ export class Api {
       notification: notification,
     });
   }
+
+  async getTeamGoals(teamId) {
+    return this.client.get(`/annual_initiatives/team/${teamId}`);
+  }
   //async setJWT(jwt) {}
 }

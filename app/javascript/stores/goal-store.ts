@@ -4,12 +4,14 @@ import { GoalModel } from "../models/goal";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import * as R from "ramda";
+import { AnnualInitiativeModel } from "~/models/annual-initiative";
 
 export const GoalStoreModel = types
   .model("GoalStoreModel")
   .props({
     companyGoals: types.maybeNull(GoalModel),
     personalGoals: types.maybeNull(GoalModel),
+    teamGoals: types.maybeNull(types.array(AnnualInitiativeModel)),
   })
   .extend(withEnvironment())
   .views(self => ({}))
@@ -26,6 +28,23 @@ export const GoalStoreModel = types
         showToast("There was an error loading goals", ToastMessageConstants.ERROR);
       }
     }),
+    getTeamGoals: flow(function*(teamId) {
+      const env = getEnv(self);
+      const response: any = yield env.api.getTeamGoals(teamId);
+      if (response.ok) {
+        console.log("response", response);
+        self.teamGoals = response.data;
+      }
+      // try {
+      //   const response: any = yield env.api.getTeamGoals(teamId);
+      //   if (response.ok) {
+      //     console.log("response", response);
+      //     self.teamGoals = response.data;
+      //   }
+      // } catch {
+      //   showToast("There was an error loading goals", ToastMessageConstants.ERROR);
+      // }
+    }),
   }))
   .actions(self => ({
     updateAnnualInitiative(annualInitiative) {
@@ -39,7 +58,7 @@ export const GoalStoreModel = types
       if (type == "company") {
         const updatedAnnualInitiatives = [...self.companyGoals.goals, annualInitiative];
         self.companyGoals.goals = updatedAnnualInitiatives as any;
-      } else {
+      } else if (type == "personal") {
         const updatedAnnualInitiatives = [...self.personalGoals.goals, annualInitiative];
         self.personalGoals.goals = updatedAnnualInitiatives as any;
       }

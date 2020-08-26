@@ -12,6 +12,7 @@ class QuarterlyGoal < ApplicationRecord
 
   scope :sort_by_created_date, -> { order(created_at: :asc) }
   scope :owned_by_user, -> (user) { where(owned_by_id: user.id) }
+  scope :filter_by_team_id, -> (team_id) {}
 
   def create_milestones_for_quarterly_goal(current_user)
     company = current_user.company
@@ -26,6 +27,11 @@ class QuarterlyGoal < ApplicationRecord
         created_by: current_user
       )
     end
+  end
+
+  def filter_by_team_id(team_id)
+    user_ids = Team.find(team_id).users.pluck(:id)
+    self.where(user_id: user_ids)
   end
 
   private

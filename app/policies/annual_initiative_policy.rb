@@ -30,6 +30,10 @@ class AnnualInitiativePolicy < ApplicationPolicy
     @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user || @user.company_admin?
   end
 
+  def team?
+    true
+  end
+
   class Scope
     attr_reader :user, :scope
 
