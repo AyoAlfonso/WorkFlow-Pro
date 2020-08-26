@@ -18,6 +18,7 @@ import { MeetingStep } from "./meeting-step";
 import { MeetingAgenda } from "./meeting-agenda";
 import { HomeCoreFour } from "~/components/domains/home/home-core-four";
 import { Timer } from "~/components/shared/timer";
+import { dateStringToSeconds, nowAsUTCString, nowInSeconds } from "~/utils/date-time";
 
 export interface ITeamMeetingProps {}
 
@@ -30,7 +31,7 @@ export const Meeting = observer(
     const { teamStore, meetingStore } = useMst();
     const { team_id, meeting_id } = useParams();
 
-    const currentTimeInSeconds = Math.round(Date.now() / 1000);
+    const currentTimeInSeconds = nowInSeconds();
 
     useEffect(() => {
       const load = async () => {
@@ -40,7 +41,7 @@ export const Meeting = observer(
         );
         await meetingStore.setCurrentMeeting(currentMeeting);
         if (!R.isNil(currentMeeting.startTime)) {
-          const startTime = new Date(currentMeeting.startTime).getTime() / 1000;
+          const startTime = dateStringToSeconds(currentMeeting.startTime);
           setSecondsElapsed(currentTimeInSeconds - startTime);
         }
       };
@@ -122,14 +123,13 @@ export const Meeting = observer(
           onClick={async () => {
             setMeetingStarted(true);
             if (hasStartTime()) {
-              setSecondsElapsed(
-                currentTimeInSeconds - new Date(meeting.startTime).getTime() / 1000,
-              );
+              setSecondsElapsed(currentTimeInSeconds - dateStringToSeconds(meeting.startTime));
             } else {
-              const newMeetingStartTime = new Date().toUTCString();
+              const newMeetingStartTime = nowAsUTCString();
               const updatedMeeting = await updateMeeting({ startTime: newMeetingStartTime });
-              const updatedMeetingStartTimeInSeconds =
-                new Date(updatedMeeting.startTime).getTime() / 1000;
+              const updatedMeetingStartTimeInSeconds = dateStringToSeconds(
+                updatedMeeting.startTime,
+              );
               const timeDifference = updatedMeetingStartTimeInSeconds - currentTimeInSeconds;
               const startTime = timeDifference < 0 ? 0 : timeDifference;
               setSecondsElapsed(startTime);
@@ -152,7 +152,7 @@ export const Meeting = observer(
           variant={"redOutline"}
           onClick={() => {
             setMeetingEnded(true);
-            updateMeeting({ endTime: new Date().toUTCString() });
+            updateMeeting({ endTime: nowAsUTCString() });
           }}
           small
           ml={"25px"}
