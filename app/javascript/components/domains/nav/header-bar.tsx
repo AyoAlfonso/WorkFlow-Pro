@@ -154,7 +154,7 @@ export const HeaderBar = observer(
                     setOpenCreateDropdown(false);
                   }}
                 >
-                  {renderHeaderIcon("Logo")}
+                  {renderHeaderIcon("Priority-MIP")}
                 </RoundButton>
                 {openLynchPynDropdown && renderLynchPynDropdownModal()}
               </RefContainer>
