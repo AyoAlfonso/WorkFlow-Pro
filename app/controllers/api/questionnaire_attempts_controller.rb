@@ -18,7 +18,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
       rendered_steps: params[:rendered_steps],
       completed_at: Time.now,
       json_representation: json_representation,
-      emotion_score: questionnaire.name == "Evening Reflection" ? emotion_to_score_conversion(params[:answers].first) : nil
+      emotion_score: questionnaire.name == "Evening Reflection" ? params[:answers].first : nil
     })
     authorize @questionnaire_attempt
     @questionnaire_attempt.save!
@@ -31,20 +31,4 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
     params.permit(:id, :user_id, :questionnaire_id, :answers, :steps, :rendered_steps, :completed_at)
   end
 
-  def emotion_to_score_conversion(emotion)
-    case emotion
-    when "Terrible"
-      1
-    when "Bad"
-      2
-    when "Okay"
-      3
-    when "Good"
-      4
-    when "Great"
-      5
-    else
-      nil
-    end
-  end
 end
