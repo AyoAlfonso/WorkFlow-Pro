@@ -3,13 +3,14 @@ import * as R from "ramda";
 
 import { Heading } from "~/components/shared/heading";
 import { Button } from "~/components/shared/button";
-import { ConversationStarter } from "./components/conversation-starter";
+import { ConversationStarter } from "./shared/conversation-starter";
 import { Text } from "~/components/shared/text";
 import { observer } from "mobx-react";
 import { IMeeting } from "~/models/meeting";
 import { IStep } from "~/models/step";
 import meetingTypes from "~/constants/meeting-types";
 import { Loading } from "~/components/shared/loading";
+import { ImageStep } from "~/components/domains/meetings/shared/image-step";
 
 export interface IMeetingStepProps {
   meeting: IMeeting;
@@ -19,7 +20,6 @@ const StepComponent = (step: IStep) => {
   if (R.isNil(step)) {
     return <Loading />;
   }
-
   switch (step.stepType) {
     case "component":
       switch (step.componentToRender) {
@@ -30,7 +30,7 @@ const StepComponent = (step: IStep) => {
       }
       break;
     case "image":
-      return <Text>Image step type has not been configured</Text>;
+      return <ImageStep step={step} />;
       break;
     case "embedded_link":
       return <Text>Embedded step type has not been configured</Text>;
