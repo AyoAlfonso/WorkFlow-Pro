@@ -11,30 +11,45 @@ export type TStepProgressBarStep = typeof Step;
 export interface IStepProgressBar {
   progressBarProps?: typeof ProgressBar;
   steps: Array<TStepProgressBarStep>;
-  timed?: boolean;
   onStepClick: (args: any) => void;
-  currentStep: number;
+  currentStepIndex: number;
 }
 
 // TODO: Needs correct icon assets
 export const StepProgressBar = ({
   progressBarProps,
   steps,
-  timed,
   onStepClick,
-  currentStep,
+  currentStepIndex,
 }: IStepProgressBar): JSX.Element => {
-  const renderIcon = (color, iconName) => (
-    <StepProgressBarIcon iconBackgroundColor={color} iconName={iconName} />
+  const renderIcon = (iconColor, bgColor, iconName) => (
+    <StepProgressBarIcon iconBackgroundColor={bgColor} iconName={iconName} iconColor={iconColor} />
   );
 
+  const totalDuration = steps.reduce((acc, curr) => acc + curr.duration, 0);
+
   const isOverTime = () => {
-    if (currentStep === steps[steps.length - 1].index) {
+    if (currentStepIndex === steps[steps.length - 1].index) {
       return false;
-    } else if (steps[currentStep + 1].position < progressBarProps.percent) {
+    } else if (steps[currentStepIndex + 1].position < progressBarProps.percent) {
       return true;
     } else {
       return false;
+    }
+  };
+
+  const calculatePercent = () => {
+    const currentPosition = steps[currentStepIndex].position;
+    return progressBarProps.percent > currentPosition ? progressBarProps.percent : currentPosition;
+  };
+
+  const isOneMinuteUntilNextStep = () => {
+    const currentStepPosInSec = (calculatePercent() * totalDuration) / 100;
+    if (currentStepIndex === steps[steps.length - 1].index) {
+      return totalDuration - currentStepPosInSec <= 60;
+    } else {
+      const nextStepPosInSec = (steps[currentStepIndex + 1].position * totalDuration) / 100;
+      return nextStepPosInSec - currentStepPosInSec <= 60;
     }
   };
 
@@ -61,20 +76,17 @@ export const StepProgressBar = ({
             }}
           >
             {step.accomplished
-              ? renderIcon("grey100", "Checkmark")
-              : isOverTime() && index === currentStep
-              ? renderIcon("warningRed", "Chevron-Left")
-              : renderIcon("primary100", "Chevron-Left")}
+              ? renderIcon("white", "grey100", "Checkmark")
+              : isOverTime() && index === currentStepIndex
+              ? renderIcon("white", "warningRed", "Chevron-Left")
+              : isOneMinuteUntilNextStep() && index === currentStepIndex
+              ? renderIcon("cautionYellow", "primary100", "Chevron-Left")
+              : renderIcon("white", "primary100", "Chevron-Left")}
           </StepDiv>
         );
       }}
     </Step>
   ));
-
-  const calculatePercent = () => {
-    const accomplishedTasks = steps.filter(st => st.accomplished === true);
-    return (accomplishedTasks.length / steps.length) * 100;
-  };
 
   const allStepsCompleted = steps.every(st => st.accomplished === true);
   return (
@@ -82,8 +94,8 @@ export const StepProgressBar = ({
       <ReactTooltip />
       <ProgressBar
         {...defaultStepProgressBarProps}
-        percent={!timed && calculatePercent()}
-        {...progressBarProps}
+        percent={calculatePercent()}
+        stepPositions={progressBarProps.stepPositions}
       >
         {renderSteps}
         {/* A Final Default Completed Step is needed so that calculatePercentage calculates properly */}
@@ -91,8 +103,9 @@ export const StepProgressBar = ({
           {progressStep => (
             <div data-tip={"End Meeting"}>
               {allStepsCompleted
-                ? renderIcon("grey100", "Chechmark")
+                ? renderIcon("white", "grey100", "Chechmark")
                 : renderIcon(
+                    "white",
                     calculatePercent() >= 100 ? "warningRed" : "primary100",
                     "Chevron-Left",
                   )}

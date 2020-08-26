@@ -83,7 +83,7 @@ export const StepProgressBar = () => (
         { accomplished: false, title: "Step #4" },
       ]}
       onStepClick={() => {}}
-      currentStep={1}
+      currentStepIndex={1}
     />
   </ContainerDiv>
 );
@@ -100,9 +100,8 @@ export const TimedStepProgressBar = () => (
         { accomplished: false, title: "Step #3" },
         { accomplished: false, title: "Step #4" },
       ]}
-      timed={true}
       onStepClick={() => {}}
-      currentStep={1}
+      currentStepIndex={1}
     />
   </ContainerDiv>
 );

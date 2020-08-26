@@ -5,17 +5,19 @@ import { color, ColorProps } from "styled-system";
 
 export interface IStepBarProgressIconProps {
   iconBackgroundColor: string;
+  iconColor: string;
   iconName: string;
 }
 
 export const StepProgressBarIcon = ({
   iconBackgroundColor,
+  iconColor,
   iconName,
 }: IStepBarProgressIconProps): JSX.Element => {
   return (
     <Container bg={iconBackgroundColor}>
       <IconContainer iconName={iconName}>
-        <Icon icon={iconName} iconColor={"white"} size={"16px"} />
+        <Icon icon={iconName} iconColor={iconColor} size={"17px"} />
       </IconContainer>
     </Container>
   );
@@ -37,5 +39,7 @@ interface IIconContainerProps {
 }
 
 const IconContainer = styled.div<IIconContainerProps>`
+  padding-top: 3px;
+  padding-right: ${props => (props.iconName === "Chevron-Left" ? "2px" : null)};
   transform: ${props => (props.iconName === "Chevron-Left" ? "scaleX(-1)" : null)};
 `;

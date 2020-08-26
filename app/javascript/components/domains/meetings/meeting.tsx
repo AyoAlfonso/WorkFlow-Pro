@@ -100,6 +100,7 @@ export const Meeting = observer(
         position: accumulatedPosition,
         index: currentStep.orderIndex,
         title: currentStep.name,
+        duration: currentStep.duration * 60,
       };
     });
     const stepPositions = R.map(step => step.position, progressBarSteps).concat([100]);
@@ -190,9 +191,8 @@ export const Meeting = observer(
                         percent: calculatedPercentage > 100 ? 100 : calculatedPercentage,
                       }}
                       steps={progressBarSteps}
-                      timed={true}
                       onStepClick={onStepClick}
-                      currentStep={meeting.currentStep}
+                      currentStepIndex={meeting.currentStep}
                     />
                     <Timer secondsElapsed={secondsElapsed} ml={"30px"} />
                   </ProgressBarTimerContainer>
