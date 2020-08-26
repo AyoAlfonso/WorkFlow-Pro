@@ -4,6 +4,8 @@ import * as R from "ramda";
 import { Heading } from "~/components/shared/heading";
 import { Button } from "~/components/shared/button";
 import { ConversationStarter } from "./components/conversation-starter";
+import { PersonalGoals } from "./components/personal-goals";
+import { DailyPlanning } from "./components/daily-planning";
 import { Text } from "~/components/shared/text";
 import { observer } from "mobx-react";
 import { IMeeting } from "~/models/meeting";
@@ -26,6 +28,10 @@ const StepComponent = (step: IStep) => {
       switch (step.componentToRender) {
         case "ConversationStarter":
           return <ConversationStarter />;
+        case "PersonalGoals":
+          return <PersonalGoals />;
+        case "DailyPlanning":
+          return <DailyPlanning />;
         default:
           return <Text>This custom component has not been configured</Text>;
       }

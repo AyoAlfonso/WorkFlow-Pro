@@ -22,6 +22,10 @@ import { MeetingAgenda } from "./meeting-agenda";
 import { HomeCoreFour } from "~/components/domains/home/home-core-four";
 import { Timer } from "~/components/shared/timer";
 import { dateStringToSeconds, nowAsUTCString, nowInSeconds } from "~/utils/date-time";
+import {
+  progressBarStepsForMeeting,
+  stepPositionsForMeeting,
+} from "./shared/progress-transform-helper";
 
 export interface ITeamMeetingProps {}
 
@@ -95,19 +99,8 @@ export const Meeting = observer(
       return renderMeetingEnded();
     }
 
-    const progressBarSteps = meeting.steps.map((currentStep, index, stepsArray) => {
-      const accumulatedPosition = stepsArray
-        .slice(0, index)
-        .reduce((acc, curr) => acc + (curr.duration / meeting.duration) * 100, 0);
-      return {
-        accomplished: currentStep.orderIndex < meeting.currentStep,
-        position: accumulatedPosition,
-        index: currentStep.orderIndex,
-        title: currentStep.name,
-        duration: currentStep.duration * 60,
-      };
-    });
-    const stepPositions = R.map(step => step.position, progressBarSteps).concat([100]);
+    const progressBarSteps = progressBarStepsForMeeting(meeting);
+    const stepPositions = stepPositionsForMeeting(meeting, progressBarSteps);
 
     const updateMeeting = keysAndValues =>
       meetingStore.updateMeeting(R.merge(meeting, keysAndValues));
@@ -167,7 +160,7 @@ export const Meeting = observer(
       );
     };
 
-    const calculatedPercentage = (secondsElapsed / (meeting.duration * 60)) * 100;
+    const calculatedPercentage = (secondsElapsed / (meeting.totalDuration * 60)) * 100;
 
     return (
       <Container>

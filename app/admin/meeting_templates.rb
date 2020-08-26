@@ -53,7 +53,7 @@ ActiveAdmin.register MeetingTemplate do
         meeting_template.meeting_type.humanize.titleize
       end
       row "Duration (in minutes)" do
-        meeting_template.duration
+        meeting_template.total_duration
       end 
       row :description
     end

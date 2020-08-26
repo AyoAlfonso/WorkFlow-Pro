@@ -32,6 +32,7 @@ import { Placeholder } from "./shared/placeholder";
 import { GoalsIndex } from "./domains/goals/goals-index";
 import { TeamOverview } from "./domains/meetings/team-overview";
 import { Meeting } from "./domains/meetings/meeting";
+import { PersonalPlanning } from "./domains/meetings/personal-planning";
 
 const Container = styled.div`
   margin-left: 168px;
@@ -67,6 +68,12 @@ export const App = observer(
                     path={"/"}
                     render={() => {
                       return <HomeContainer />;
+                    }}
+                  />
+                  <Route
+                    path={"/personal_planning/:meeting_id"}
+                    render={() => {
+                      return <PersonalPlanning />;
                     }}
                   />
                   <Route

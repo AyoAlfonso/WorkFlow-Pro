@@ -101,34 +101,40 @@ mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Person
       name: "Goals",
       step_type: :component,
       instructions: "Review the Core Four and what the Goals are.",
-      component_to_render: "Goals"
+      component_to_render: "PersonalGoals",
+      duration: 5
     },
     {
       order_index: 1,
       name: "Weekly Reflection",
       step_type: :component,
       instructions: "Review your performance from this week and use the prompts to reflect on this week.",
-      component_to_render: "WeeklyReflection"
+      component_to_render: "WeeklyReflection",
+      duration: 5
     },
     {
       order_index: 2,
       name: "Milestones",
       step_type: :component,
       instructions: "Review your list of upcoming Milestones. What must you accomplish this week to drive your Milestones? Create Key Activities for each one.",
-      component_to_render: "Milestones"
+      component_to_render: "Milestones",
+      duration: 5
     },
     {
       order_index: 3,
       name: "Key Activities",
       step_type: :image,
       instructions: "What else must you accomplish this week? Add new Key Activities or move them from your Master List to the Weekly List. Review your email and calendar to add anything else you need to account for this week."
+      component_to_render: "PersonalKeyActivities",
+      duration: 5
     },
     {
       order_index: 4,
       name: "Daily Planning",
       step_type: :component,
       instructions: "What are the top 3 things you must accomplish tomorrow? Move them over to Today’s Priority.",
-      component_to_render: "DailyPlanning"
+      component_to_render: "DailyPlanning",
+      duration: 5
     }
   ],
 

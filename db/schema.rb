@@ -226,7 +226,7 @@ ActiveRecord::Schema.define(version: 2020_08_22_212220) do
     t.float "average_team_mood"
     t.float "goal_progress"
     t.bigint "meeting_template_id", null: false
-    t.bigint "team_id", null: false
+    t.bigint "team_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "start_time"
@@ -234,6 +234,8 @@ ActiveRecord::Schema.define(version: 2020_08_22_212220) do
     t.string "host_name"
     t.datetime "scheduled_start_time"
     t.datetime "end_time"
+    t.bigint "hosted_by_id"
+    t.index ["hosted_by_id"], name: "index_meetings_on_hosted_by_id"
     t.index ["meeting_template_id"], name: "index_meetings_on_meeting_template_id"
     t.index ["team_id"], name: "index_meetings_on_team_id"
   end
@@ -422,6 +424,7 @@ ActiveRecord::Schema.define(version: 2020_08_22_212220) do
   add_foreign_key "meeting_ratings", "weekly_meetings"
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
+  add_foreign_key "meetings", "users", column: "hosted_by_id"
   add_foreign_key "milestones", "quarterly_goals"
   add_foreign_key "notifications", "users"
   add_foreign_key "quarterly_goals", "annual_initiatives"

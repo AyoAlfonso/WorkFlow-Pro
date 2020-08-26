@@ -3,7 +3,7 @@ import * as R from "ramda";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { color } from "styled-system";
 import { useMst } from "../../../setup/root";
@@ -16,6 +16,8 @@ import { HomeContainerBorders } from "../home/shared-components";
 import { CreateIssueModal } from "../issues/create-issue-modal";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 
+import MeetingTypes from "~/constants/meeting-types";
+
 export const HeaderBar = observer(
   (): JSX.Element => {
     const [openCreateDropdown, setOpenCreateDropdown] = useState<boolean>(false);
@@ -24,10 +26,12 @@ export const HeaderBar = observer(
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
     const [showAccountActions, setShowAccountActions] = useState<boolean>(false);
 
-    const { sessionStore, companyStore } = useMst();
+    const { sessionStore, companyStore, meetingStore } = useMst();
     const dropdownRef = useRef(null);
     const lynchPynDropdownRef = useRef(null);
     const accountActionRef = useRef(null);
+
+    const history = useHistory();
 
     useEffect(() => {
       const handleClickOutside = event => {
@@ -100,7 +104,31 @@ export const HeaderBar = observer(
     const renderLynchPynDropdownModal = () => {
       return (
         <DropdownContainer width={"230px"} height={"50px"}>
-          <SelectionContainer paddingBottom={"10px"} onClick={() => {}}>
+          <SelectionContainer
+            paddingBottom={"10px"}
+            onClick={() => {
+              //create meeting
+              //psuh to meeting path if successful
+
+              const meetingTemplatePersonal = meetingStore.meetingTemplates.find(
+                mt => mt.meetingType === MeetingTypes.PERSONAL_WEEKLY,
+              );
+
+              if (meetingTemplatePersonal) {
+                meetingStore
+                  .createPersonalMeeting({
+                    hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
+                    currentStep: 0,
+                    meetingTemplateId: meetingTemplatePersonal.id,
+                  })
+                  .then(() => {
+                    if (meetingStore.currentPersonalPlanning) {
+                      history.push(`/personal_planning/${meetingStore.currentPersonalPlanning.id}`);
+                    }
+                  });
+              }
+            }}
+          >
             <SelectionText>Weekly Personal Planning</SelectionText>
           </SelectionContainer>
         </DropdownContainer>
