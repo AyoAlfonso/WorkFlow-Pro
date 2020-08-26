@@ -4,15 +4,16 @@ import { maybeNull } from "mobx-state-tree/dist/internal";
 export const StepModel = types
   .model("StepModel")
   .props({
-    id: types.identifierNumber,
-    stepType: types.string,
-    sectionName: types.maybeNull(types.string),
-    name: types.string,
-    instructions: types.maybeNull(types.string),
-    duration: types.number,
     componentToRender: types.maybeNull(types.string),
+    duration: types.number,
+    id: types.identifierNumber,
+    imageUrl: types.maybeNull(types.string),
+    instructions: types.maybeNull(types.string),
     linkEmbed: types.maybeNull(types.string),
+    name: types.string,
     orderIndex: types.number,
+    sectionName: types.maybeNull(types.string),
+    stepType: types.string,
   })
   .views(self => ({}))
   .actions(self => ({}));
