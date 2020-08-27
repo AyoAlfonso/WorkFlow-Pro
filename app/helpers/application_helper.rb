@@ -6,7 +6,8 @@ module ApplicationHelper
   def static_data #MAY WANT TO REFACTOR THIS AWAY AS A SEPARATE SERVICE SOMETIME
     {
       timezones: timezones,
-      user_roles: UserRole.all
+      user_roles: UserRole.all,
+      conversation_starters: ConversationStarter.all
     }
   end
 end
