@@ -1,5 +1,4 @@
 import { types } from "mobx-state-tree";
-import { maybeNull } from "mobx-state-tree/dist/internal";
 import { StepModel } from "./step";
 
 export const MeetingModel = types
@@ -22,11 +21,18 @@ export const MeetingModel = types
     startTime: types.maybeNull(types.string),
     steps: types.array(StepModel),
     teamId: types.maybeNull(types.number),
-    //previousMeetingAverageTeamMood:
+    currentWeekAverageUserEmotions: types.maybeNull(types.array(types.frozen())),
+    currentWeekAverageTeamEmotions: types.maybeNull(types.number),
+    emotionScorePercentageDifference: types.maybeNull(types.string),
   })
   .views(self => ({
     get currentStepDetails() {
       return self.steps.find(step => step.orderIndex == self.currentStep);
+    },
+    get formattedAverageWeeklyUserEmotions() {
+      return self.currentWeekAverageUserEmotions.map(averages => {
+        return { x: new Date(averages.date), y: averages.averageScore };
+      });
     },
   }));
 
