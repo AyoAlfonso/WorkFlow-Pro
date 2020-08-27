@@ -1,4 +1,4 @@
-MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
+mt1 = MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
   meeting_type: :team_weekly,
   name: "Weekly Meeting",
   duration: 90,
@@ -41,7 +41,7 @@ MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
       name: "Dashboard",
       step_type: :embedded_link,
       duration: 5,
-      instructions: "Review the Key Metrics from this week."
+      instructions: "Review the Key Metrics from this week.",
       link_embed: "https://public.datapine.com/#board/pGEtHxIopXJN4hJmpqlN1"
     },
     {
@@ -87,8 +87,11 @@ MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
   ]
 )
 
+mt1.steps.where(name: "How Are You Feeling?").first.image.attach(io: File.open("app/assets/images/mood-board.png"), filename: "mood-board.png", content_type: 'image/png')
+mt1.steps.where(name: "Updates").first.image.attach(io: File.open("app/assets/images/updates.png"), filename: "mood-board.png", content_type: 'image/png')
 
-MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Personal Planning").first_or_create(
+
+mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Personal Planning").first_or_create(
   meeting_type: :personal_weekly,
   name: "Weekly Personal Planning",
   #description: ""
