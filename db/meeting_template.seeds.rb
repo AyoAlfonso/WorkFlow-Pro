@@ -42,6 +42,7 @@ MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
       step_type: :embedded_link,
       duration: 5,
       instructions: "Review the Key Metrics from this week."
+      link_embed: "https://public.datapine.com/#board/pGEtHxIopXJN4hJmpqlN1"
     },
     {
       order_index: 5,
