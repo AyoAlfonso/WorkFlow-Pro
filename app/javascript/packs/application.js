@@ -10,6 +10,7 @@ require("channels");
 require("trix");
 require("@rails/actiontext");
 import "react-toastify/dist/ReactToastify.css";
+import "react-step-progress-bar/styles.css";
 import "react-vis/dist/style.css";
 
 // Uncomment to copy all static images under ../images to the output folder and reference
