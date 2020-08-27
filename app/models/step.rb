@@ -16,8 +16,10 @@ class Step < ApplicationRecord
     "Issues",
     "Recap",
     "MeetingRating",
+    "PersonalGoals",
     "WeeklyReflection",
     "Milestones",
+    "PersonalKeyActivities",
     "DailyPlanning"
   ]
 end

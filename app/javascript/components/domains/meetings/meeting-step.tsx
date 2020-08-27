@@ -1,9 +1,15 @@
 import * as React from "react";
 import * as R from "ramda";
-
+import styled from "styled-components";
+import { HomeContainerBorders, HomeTitle } from "../home/shared-components";
 import { Heading } from "~/components/shared/heading";
 import { Button } from "~/components/shared/button";
 import { ConversationStarter } from "./components/conversation-starter";
+import { PersonalGoals } from "./components/personal-goals";
+import { DailyPlanning } from "./components/daily-planning";
+import { Milestones } from "./components/milestones";
+import { PersonalKeyActivities } from "./components/personal-key-activities";
+import { WeeklyReflection } from "./components/weekly-reflection";
 import { Text } from "~/components/shared/text";
 import { observer } from "mobx-react";
 import { IMeeting } from "~/models/meeting";
@@ -26,6 +32,16 @@ const StepComponent = (step: IStep) => {
       switch (step.componentToRender) {
         case "ConversationStarter":
           return <ConversationStarter />;
+        case "PersonalGoals":
+          return <PersonalGoals />;
+        case "WeeklyReflection":
+          return <WeeklyReflection />;
+        case "Milestones":
+          return <Milestones />;
+        case "PersonalKeyActivities":
+          return <PersonalKeyActivities />;
+        case "DailyPlanning":
+          return <DailyPlanning />;
         default:
           return <Text>This custom component has not been configured</Text>;
       }
@@ -47,11 +63,35 @@ export const MeetingStep = observer(
       return <Loading />;
     }
     return (
-      <>
-        <Text>{meeting.currentStepDetails.name}</Text>
-        <Text>{meeting.currentStepDetails.instructions}</Text>
-        {StepComponent(meeting.currentStepDetails)}
-      </>
+      <BodyContainer>
+        <LeftContainer>
+          <LeftContainerBorder>
+            <HomeTitle>{meeting.currentStepDetails.name}</HomeTitle>
+            <Text fontSize={1}>{meeting.currentStepDetails.instructions}</Text>
+          </LeftContainerBorder>
+        </LeftContainer>
+        <RightContainer>{StepComponent(meeting.currentStepDetails)}</RightContainer>
+      </BodyContainer>
     );
   },
 );
+
+const LeftContainerBorder = styled(HomeContainerBorders)`
+  padding: 10px;
+`;
+
+const BodyContainer = styled.div`
+  display: flex;
+`;
+
+const LeftContainer = styled.div`
+  width: 20%;
+  margin-right: 10px;
+  min-width: 320px;
+`;
+
+const RightContainer = styled.div`
+  width: 80%;
+  min-width: 320p;
+  margin-left: 10px;
+`;

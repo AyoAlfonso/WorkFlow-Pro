@@ -4,18 +4,25 @@ class Api::MeetingsController < Api::ApplicationController
   respond_to :json
 
   def index 
-    @meetings = policy_scope(Meeting).all
-    render json: @meetings
+    @meetings = policy_scope(Meeting).personal_recent_or_incomplete_for_user(current_user)
+    render 'api/meetings/index'
   end
 
-  def create
-    incomplete_meetings_for_today = Meeting.with_template(params[:meeting_template_id]).for_day(Date.today).incomplete
+  def create 
+    #TODO: replaec scope with for week or for month, etc. based on type
+    incomplete_meetings_for_today = Meeting.with_template(params[:meeting_template_id]).for_day(Date.today).incomplete #TODO: VERIFY THIS WORKS OVER MIDNIGHT IN DIFFERENT TIMEZONES
+    
+    # @meeting = incomplete_meetings_for_today.first_or_create(meeting_params.merge({hosted_by: current_user}))
+    # authorize @meeting
+    # render 'api/meetings/create'
+
     if incomplete_meetings_for_today.incomplete.present?
       @meeting = incomplete_meetings_for_today.first
       authorize @meeting
-      render 'api/meetings/create'
+      render 'api/meetings/create'  
     else
       @meeting = Meeting.new(meeting_params)
+      @meeting.hosted_by_id = current_user.id
       authorize @meeting
       @meeting.save!
       render 'api/meetings/create'
@@ -33,7 +40,7 @@ class Api::MeetingsController < Api::ApplicationController
   end
 
   def team_meetings
-    @meetings = Meeting.team_meetings(params[:id])
+    @meetings = Meeting.team_meetings(params[:id]).sort_by_creation_date
     authorize @meetings
     render 'api/meetings/team_meetings'
   end

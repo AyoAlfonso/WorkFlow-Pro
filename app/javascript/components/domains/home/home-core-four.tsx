@@ -8,60 +8,55 @@ import { Flex, Box } from "rebass";
 import { Text } from "~/components/shared/text";
 import { useTranslation } from "react-i18next";
 
-export const HomeCoreFour = observer(
+export const CoreFourValues = observer(
   (): JSX.Element => {
     const {
       companyStore: { company },
     } = useMst();
     const { t } = useTranslation();
-    return (
-      <Container>
-        <HomeTitle> Core Four </HomeTitle>
-        {company ? (
-          <ValuesContainer>
-            <Flex>
-              <Box width={1 / 4} sx={{ padding: 16 }}>
-                <CoreFourHeaderText fontSize={2} color={"primary100"}>
-                  {t("core.core1")}
-                </CoreFourHeaderText>
-                <div
-                  className="trix-content"
-                  dangerouslySetInnerHTML={{ __html: company.coreFour.core1Content }}
-                ></div>
-              </Box>
-              <Box width={1 / 4} sx={{ padding: 16 }}>
-                <CoreFourHeaderText fontSize={2} color={"primary100"}>
-                  {t("core.core2")}
-                </CoreFourHeaderText>
-                <div
-                  className="trix-content"
-                  dangerouslySetInnerHTML={{ __html: company.coreFour.core2Content }}
-                ></div>
-              </Box>
-              <Box width={1 / 4} sx={{ padding: 16 }}>
-                <CoreFourHeaderText fontSize={2} color={"primary100"}>
-                  {t("core.core3")}
-                </CoreFourHeaderText>
-                <div
-                  className="trix-content"
-                  dangerouslySetInnerHTML={{ __html: company.coreFour.core3Content }}
-                ></div>
-              </Box>
-              <Box width={1 / 4} sx={{ padding: 16 }}>
-                <CoreFourHeaderText fontSize={2} color={"primary100"}>
-                  {t("core.core4")}
-                </CoreFourHeaderText>
-                <div
-                  className="trix-content"
-                  dangerouslySetInnerHTML={{ __html: company.coreFour.core4Content }}
-                ></div>
-              </Box>
-            </Flex>
-          </ValuesContainer>
-        ) : (
-          <Loading />
-        )}
-      </Container>
+    return company ? (
+      <ValuesContainer key="core-four">
+        <Flex>
+          <Box width={1 / 4} sx={{ padding: 16 }}>
+            <CoreFourHeaderText fontSize={2} color={"primary100"}>
+              {t("core.core1")}
+            </CoreFourHeaderText>
+            <div
+              className="trix-content"
+              dangerouslySetInnerHTML={{ __html: company.coreFour.core1Content }}
+            ></div>
+          </Box>
+          <Box width={1 / 4} sx={{ padding: 16 }}>
+            <CoreFourHeaderText fontSize={2} color={"primary100"}>
+              {t("core.core2")}
+            </CoreFourHeaderText>
+            <div
+              className="trix-content"
+              dangerouslySetInnerHTML={{ __html: company.coreFour.core2Content }}
+            ></div>
+          </Box>
+          <Box width={1 / 4} sx={{ padding: 16 }}>
+            <CoreFourHeaderText fontSize={2} color={"primary100"}>
+              {t("core.core3")}
+            </CoreFourHeaderText>
+            <div
+              className="trix-content"
+              dangerouslySetInnerHTML={{ __html: company.coreFour.core3Content }}
+            ></div>
+          </Box>
+          <Box width={1 / 4} sx={{ padding: 16 }}>
+            <CoreFourHeaderText fontSize={2} color={"primary100"}>
+              {t("core.core4")}
+            </CoreFourHeaderText>
+            <div
+              className="trix-content"
+              dangerouslySetInnerHTML={{ __html: company.coreFour.core4Content }}
+            ></div>
+          </Box>
+        </Flex>
+      </ValuesContainer>
+    ) : (
+      <Loading key="core-four" />
     );
   },
 );
@@ -77,3 +72,16 @@ const ValuesContainer = styled(HomeContainerBorders)`
 const CoreFourHeaderText = styled(Text)`
   margin-top: 0;
 `;
+
+export const HomeCoreFour = (): JSX.Element => (
+  <Container>
+    <HomeTitle> Core Four </HomeTitle>
+    <CoreFourValues />
+  </Container>
+);
+
+export const CoreFourOnly = (): JSX.Element => (
+  <Container>
+    <CoreFourValues />
+  </Container>
+);

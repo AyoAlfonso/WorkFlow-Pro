@@ -48,6 +48,7 @@ const initialState = {
     currentMeeting: null,
     meetings: [],
     teamMeetings: [],
+    currentPersonalPlanning: null,
   },
   notificationStore: {
     notifications: null,

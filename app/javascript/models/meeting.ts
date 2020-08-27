@@ -9,7 +9,7 @@ export const MeetingModel = types
     averageTeamMood: types.maybeNull(types.number),
     createdAt: types.string,
     currentStep: types.maybeNull(types.number),
-    duration: types.number,
+    totalDuration: types.number,
     endTime: types.maybeNull(types.string),
     goalProgress: types.maybeNull(types.number),
     hostName: types.maybeNull(types.string),
