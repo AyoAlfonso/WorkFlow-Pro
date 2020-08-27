@@ -1,33 +1,52 @@
-import { types, flow } from "mobx-state-tree";
+import { ApiResponse } from "apisauce";
+import { flow, types } from "mobx-state-tree";
+import { ToastMessageConstants } from "~/constants/toast-types";
+import { showToast } from "~/utils/toast-message";
 import { withEnvironment } from "../lib/with-environment";
 import { KeyActivityModel } from "../models/key-activity";
-import { ApiResponse } from "apisauce";
-import { localeData } from "moment";
-import { showToast } from "~/utils/toast-message";
-import { ToastMessageConstants } from "~/constants/toast-types";
 
 export const KeyActivityStoreModel = types
   .model("KeyActivityStoreModel")
   .props({
     keyActivities: types.array(KeyActivityModel),
     keyActivitiesFromMeeting: types.array(KeyActivityModel),
+    loading: types.maybeNull(types.boolean),
+    loadingList: types.maybeNull(types.string),
   })
   .extend(withEnvironment())
   .views(self => ({
     get weeklyKeyActivities() {
       return self.keyActivities.filter(
-        keyActivity => keyActivity.weeklyList && !keyActivity.completedAt,
+        keyActivity =>
+          keyActivity.weeklyList && !keyActivity.completedAt && !keyActivity.todaysPriority,
       );
     },
     get masterKeyActivities() {
       return self.keyActivities.filter(
-        keyActivity => !keyActivity.weeklyList || keyActivity.completedAt,
+        keyActivity =>
+          (!keyActivity.weeklyList && !keyActivity.todaysPriority) || keyActivity.completedAt,
       );
+    },
+    get todaysPriorities() {
+      return self.keyActivities.filter(
+        keyActivity => keyActivity.todaysPriority && !keyActivity.completedAt,
+      );
+    },
+  }))
+  .actions(self => ({
+    startLoading(loadingList = null) {
+      self.loading = true;
+      self.loadingList = loadingList;
+    },
+    finishLoading() {
+      self.loading = false;
+      self.loadingList = null;
     },
   }))
   .actions(self => ({
     fetchKeyActivities: flow(function*() {
       const response: ApiResponse<any> = yield self.environment.api.getKeyActivities();
+      self.finishLoading();
       if (response.ok) {
         self.keyActivities = response.data;
       }
@@ -62,6 +81,7 @@ export const KeyActivityStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivity(
         keyActivityObject,
       );
+      self.finishLoading();
       if (response.ok) {
         self.keyActivities = response.data;
         return true;
