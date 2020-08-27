@@ -3,7 +3,7 @@ import * as R from "ramda";
 
 import { Heading } from "~/components/shared/heading";
 import { Button } from "~/components/shared/button";
-import { ConversationStarter } from "./shared/conversation-starter";
+import { ConversationStarter } from "./components/conversation-starter";
 import { Text } from "~/components/shared/text";
 import { observer } from "mobx-react";
 import { IMeeting } from "~/models/meeting";
