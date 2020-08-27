@@ -31,6 +31,8 @@ export const StepProgressBar = ({
   const isOverTime = () => {
     if (currentStepIndex === steps[steps.length - 1].index) {
       return false;
+    } else if (currentStepIndex === steps[steps.length - 2].index) {
+      return progressBarProps.percent === 100 ? true : false;
     } else if (steps[currentStepIndex + 1].position < progressBarProps.percent) {
       return true;
     } else {
@@ -46,7 +48,7 @@ export const StepProgressBar = ({
   const isOneMinuteUntilNextStep = () => {
     const currentStepPosInSec = (calculatePercent() * totalDuration) / 100;
     if (currentStepIndex === steps[steps.length - 1].index) {
-      return totalDuration - currentStepPosInSec <= 60;
+      return false;
     } else {
       const nextStepPosInSec = (steps[currentStepIndex + 1].position * totalDuration) / 100;
       return nextStepPosInSec - currentStepPosInSec <= 60;
@@ -88,7 +90,6 @@ export const StepProgressBar = ({
     </Step>
   ));
 
-  const allStepsCompleted = steps.every(st => st.accomplished === true);
   return (
     <Container>
       <ReactTooltip />
@@ -98,20 +99,6 @@ export const StepProgressBar = ({
         stepPositions={progressBarProps.stepPositions}
       >
         {renderSteps}
-        {/* A Final Default Completed Step is needed so that calculatePercentage calculates properly */}
-        <Step key={"last-step"}>
-          {progressStep => (
-            <div data-tip={"End Meeting"}>
-              {allStepsCompleted
-                ? renderIcon("white", "grey100", "Chechmark")
-                : renderIcon(
-                    "white",
-                    calculatePercent() >= 100 ? "warningRed" : "primary100",
-                    "Chevron-Left",
-                  )}
-            </div>
-          )}
-        </Step>
       </ProgressBar>
     </Container>
   );

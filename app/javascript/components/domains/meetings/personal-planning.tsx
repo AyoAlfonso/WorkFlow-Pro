@@ -49,7 +49,7 @@ export const PersonalPlanning = observer(
     }
 
     const progressBarSteps = progressBarStepsForMeeting(meeting);
-    const stepPositions = stepPositionsForMeeting(meeting, progressBarSteps);
+    const stepPositions = stepPositionsForMeeting(progressBarSteps);
 
     const onStepClick = stepIndex => {
       meetingStore.updatePersonalMeeting(R.merge(meeting, { currentStep: stepIndex }));
