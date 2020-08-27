@@ -169,7 +169,7 @@ export const Meeting = observer(
         ) : (
           <>
             <HeaderContainer>
-              <Text fontSize={"36px"}>{`${team.name} Meeting`}</Text>
+              <Text fontSize={"36px"}>{`${R.path(["name"], team)} Meeting`}</Text>
               <DateAndButtonContainer>
                 <Heading type={"h3"} fontSize={"32px"} fontWeight={400}>
                   {moment().format("dddd, MMMM Do")}
