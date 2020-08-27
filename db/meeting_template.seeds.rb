@@ -124,7 +124,7 @@ mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Person
       order_index: 3,
       name: "Key Activities",
       step_type: :image,
-      instructions: "What else must you accomplish this week? Add new Key Activities or move them from your Master List to the Weekly List. Review your email and calendar to add anything else you need to account for this week."
+      instructions: "What else must you accomplish this week? Add new Key Activities or move them from your Master List to the Weekly List. Review your email and calendar to add anything else you need to account for this week.",
       component_to_render: "PersonalKeyActivities",
       duration: 5
     },

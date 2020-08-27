@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_22_212220) do
+ActiveRecord::Schema.define(version: 2020_08_27_164303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -315,7 +315,9 @@ ActiveRecord::Schema.define(version: 2020_08_22_212220) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "link_embed"
     t.string "section_name"
+    t.index ["meeting_template_id", "order_index"], name: "index_steps_on_meeting_template_id_and_order_index"
     t.index ["meeting_template_id"], name: "index_steps_on_meeting_template_id"
+    t.index ["order_index"], name: "index_steps_on_order_index"
   end
 
   create_table "team_user_enablements", force: :cascade do |t|

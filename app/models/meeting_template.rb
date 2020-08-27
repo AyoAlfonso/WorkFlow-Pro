@@ -1,5 +1,5 @@
 class MeetingTemplate < ApplicationRecord
-  has_many :steps, -> {order(order_index: :asc)}
+  has_many :steps
   has_many :meetings
 
   enum meeting_type: { team_weekly: 0, personal_weekly: 1}
