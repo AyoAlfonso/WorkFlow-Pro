@@ -277,23 +277,23 @@ export const Icons = () => (
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Success-PO"} size={"2em"} iconColor={"finePine"} />
-        <TextCenteredDiv>Success</TextCenteredDiv>
+        <TextCenteredDiv>Success-PO</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Error-PU"} size={"2em"} iconColor={"warningRed"} />
-        <TextCenteredDiv>Error-PU</TextCenteredDiv>
+        <Icon icon={"Error-PO"} size={"2em"} iconColor={"warningRed"} />
+        <TextCenteredDiv>Error-PO</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Warning-PU"} size={"2em"} iconColor={"cautionYellow"} />
-        <TextCenteredDiv>Warning-PU</TextCenteredDiv>
+        <Icon icon={"Warning-PO"} size={"2em"} iconColor={"cautionYellow"} />
+        <TextCenteredDiv>Warning-PO</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Info-PU"} size={"2em"} iconColor={"fuschiaBlue"} />
-        <TextCenteredDiv>Info-PU</TextCenteredDiv>
+        <Icon icon={"Info-PO"} size={"2em"} iconColor={"fuschiaBlue"} />
+        <TextCenteredDiv>Info-PO</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Notification-PU"} size={"2em"} iconColor={"primary100"} />
-        <TextCenteredDiv>Notification-PU</TextCenteredDiv>
+        <Icon icon={"Notification-PO"} size={"2em"} iconColor={"primary100"} />
+        <TextCenteredDiv>Notification-PO</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Plan"} size={"2em"} />
@@ -302,6 +302,10 @@ export const Icons = () => (
       <CenteredColumnDiv>
         <Icon icon={"Checkmark"} size={"2em"} />
         <TextCenteredDiv>Checkmark</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"PynBot"} size={"2em"} iconColor={"primary80"} />
+        <TextCenteredDiv>PynBot</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
     <Divider />
@@ -319,7 +323,7 @@ export const Icons = () => (
         <TextCenteredDiv>Frog-Priority</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Priority-Empty"} size={"2em"} />
+        <Icon icon={"Priority-Empty"} size={"2em"} iconColor={"primary80"} />
         <TextCenteredDiv>Priority-Empty</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>

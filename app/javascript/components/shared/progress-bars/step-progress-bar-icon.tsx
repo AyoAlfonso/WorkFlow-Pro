@@ -1,31 +1,45 @@
 import * as React from "react";
-import IcoMoon from "react-icomoon";
 import styled from "styled-components";
-import { baseTheme } from "~/themes/base";
-import { IconContainer } from "../icon";
-const iconSet = require("~/assets/icons/selection.json");
+import { Icon } from "~/components/shared/icon";
+import { color, ColorProps } from "styled-system";
 
-interface IStepProgressBarIconProps {
-  iconContainerProps?: typeof IconContainer;
-  iconProps?: typeof IcoMoon;
+export interface IStepBarProgressIconProps {
+  iconBackgroundColor: string;
+  iconColor: string;
+  iconName: string;
 }
 
-const StepProgressBarIconContainer = styled(IconContainer)`
-  background-color: ${props => props.theme.colors.white};
-  border-radius: 100%;
+export const StepProgressBarIcon = ({
+  iconBackgroundColor,
+  iconColor,
+  iconName,
+}: IStepBarProgressIconProps): JSX.Element => {
+  return (
+    <Container bg={iconBackgroundColor}>
+      <IconContainer iconName={iconName}>
+        <Icon icon={iconName} iconColor={iconColor} size={"17px"} />
+      </IconContainer>
+    </Container>
+  );
+};
+
+const Container = styled.div<ColorProps>`
+  ${color}
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
 `;
 
-export const StepProgressBarIcon = ({
-  iconContainerProps,
-  iconProps,
-  iconProps: { color },
-}: IStepProgressBarIconProps) => (
-  <StepProgressBarIconContainer {...iconContainerProps}>
-    <IcoMoon
-      iconSet={iconSet}
-      size={"25px"}
-      {...iconProps}
-      color={`${baseTheme.colors[color] ? baseTheme.colors[color] : color}`}
-    />
-  </StepProgressBarIconContainer>
-);
+interface IIconContainerProps {
+  iconName: string;
+}
+
+const IconContainer = styled.div<IIconContainerProps>`
+  padding-top: 3px;
+  padding-right: ${props => (props.iconName === "Chevron-Left" ? "2px" : null)};
+  transform: ${props => (props.iconName === "Chevron-Left" ? "scaleX(-1)" : null)};
+`;

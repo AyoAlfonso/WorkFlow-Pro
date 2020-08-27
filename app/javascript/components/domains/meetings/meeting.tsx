@@ -20,6 +20,8 @@ import { Loading } from "~/components/shared/loading";
 import { MeetingStep } from "./meeting-step";
 import { MeetingAgenda } from "./meeting-agenda";
 import { HomeCoreFour } from "~/components/domains/home/home-core-four";
+import { Timer } from "~/components/shared/timer";
+import { dateStringToSeconds, nowAsUTCString, nowInSeconds } from "~/utils/date-time";
 
 export interface ITeamMeetingProps {}
 
@@ -27,12 +29,42 @@ export const Meeting = observer(
   (props: ITeamMeetingProps): JSX.Element => {
     const [meetingStarted, setMeetingStarted] = useState<boolean>(false);
     const [meetingEnded, setMeetingEnded] = useState<boolean>(false);
+    const [secondsElapsed, setSecondsElapsed] = useState<number>(0);
+
     const { teamStore, meetingStore } = useMst();
-    const { team_id, meeting_id } = useParams(); // team id from url params
+    const { team_id, meeting_id } = useParams();
+
+    const currentTimeInSeconds = nowInSeconds();
 
     useEffect(() => {
-      meetingStore.fetchTeamMeetings(team_id);
+      const load = async () => {
+        await meetingStore.fetchTeamMeetings(team_id);
+        const currentMeeting = toJS(meetingStore.teamMeetings).find(
+          tm => tm.id === parseInt(meeting_id),
+        );
+        await meetingStore.setCurrentMeeting(currentMeeting);
+        if (!R.isNil(currentMeeting.startTime)) {
+          const startTime = dateStringToSeconds(currentMeeting.startTime);
+          setSecondsElapsed(currentTimeInSeconds - startTime);
+        }
+      };
+      load();
     }, []);
+
+    useEffect(() => {
+      let interval = null;
+      if (meetingStarted) {
+        interval = setInterval(() => {
+          setSecondsElapsed(sec => {
+            let seconds = sec < 0 ? 0 : sec;
+            return seconds + 1;
+          });
+        }, 1000);
+      } else if (meetingEnded && secondsElapsed !== 0) {
+        clearInterval(interval);
+      }
+      return () => clearInterval(interval);
+    }, [meetingStarted, secondsElapsed]);
 
     const renderLoading = () => (
       <Container>
@@ -53,9 +85,6 @@ export const Meeting = observer(
     }
 
     const team = teamStore.teams.find(team => team.id === parseInt(team_id));
-    meetingStore.setCurrentMeeting(
-      toJS(meetingStore.teamMeetings).find(tm => tm.id === parseInt(meeting_id)),
-    );
     const meeting = meetingStore.currentMeeting;
 
     if (R.isNil(meeting)) {
@@ -75,13 +104,13 @@ export const Meeting = observer(
         position: accumulatedPosition,
         index: currentStep.orderIndex,
         title: currentStep.name,
+        duration: currentStep.duration * 60,
       };
     });
     const stepPositions = R.map(step => step.position, progressBarSteps).concat([100]);
 
-    const updateMeeting = keysAndValues => {
+    const updateMeeting = keysAndValues =>
       meetingStore.updateMeeting(R.merge(meeting, keysAndValues));
-    };
 
     const onStepClick = stepIndex => {
       updateMeeting({ currentStep: stepIndex });
@@ -94,9 +123,20 @@ export const Meeting = observer(
       return (
         <Button
           variant={"primary"}
-          onClick={() => {
+          onClick={async () => {
             setMeetingStarted(true);
-            updateMeeting({ startTime: new Date().toUTCString() });
+            if (hasStartTime()) {
+              setSecondsElapsed(currentTimeInSeconds - dateStringToSeconds(meeting.startTime));
+            } else {
+              const newMeetingStartTime = nowAsUTCString();
+              const updatedMeeting = await updateMeeting({ startTime: newMeetingStartTime });
+              const updatedMeetingStartTimeInSeconds = dateStringToSeconds(
+                updatedMeeting.startTime,
+              );
+              const timeDifference = updatedMeetingStartTimeInSeconds - currentTimeInSeconds;
+              const startTime = timeDifference < 0 ? 0 : timeDifference;
+              setSecondsElapsed(startTime);
+            }
           }}
           small
           ml={"25px"}
@@ -115,7 +155,7 @@ export const Meeting = observer(
           variant={"redOutline"}
           onClick={() => {
             setMeetingEnded(true);
-            updateMeeting({ endTime: new Date().toUTCString() });
+            updateMeeting({ endTime: nowAsUTCString() });
           }}
           small
           ml={"25px"}
@@ -126,6 +166,8 @@ export const Meeting = observer(
         </Button>
       );
     };
+
+    const calculatedPercentage = (secondsElapsed / (meeting.duration * 60)) * 100;
 
     return (
       <Container>
@@ -145,15 +187,19 @@ export const Meeting = observer(
             <BodyContainer>
               {meetingStarted ? ( //#TODO: IF YOU ARE NOT THE HOST RENDER JUST THE AGENDA
                 <>
-                  <StepProgressBar
-                    progressBarProps={{
-                      stepPositions: stepPositions,
-                      percent: 55,
-                    }}
-                    steps={progressBarSteps}
-                    timed={true}
-                    onStepClick={onStepClick}
-                  />
+                  <ProgressBarTimerContainer>
+                    <StepProgressBar
+                      progressBarProps={{
+                        stepPositions: stepPositions,
+                        percent: calculatedPercentage > 100 ? 100 : calculatedPercentage,
+                      }}
+                      steps={progressBarSteps}
+                      onStepClick={onStepClick}
+                      currentStepIndex={meeting.currentStep}
+                    />
+                    <Timer secondsElapsed={secondsElapsed} ml={"30px"} />
+                  </ProgressBarTimerContainer>
+
                   <MeetingStep meeting={meetingStore.currentMeeting}></MeetingStep>
                 </>
               ) : (
@@ -184,6 +230,12 @@ const DateAndButtonContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const ProgressBarTimerContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
 `;
 
 const BodyContainer = styled.div``;
