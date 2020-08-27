@@ -16,14 +16,11 @@ export const ImageStep = ({ step }: IImageStepProps): JSX.Element => {
   }
   let cardWidth;
   switch (step.name) {
-    case "How Are You Feeling?":
-      cardWidth = "1400px";
-      break;
     case "Updates":
       cardWidth = "500px";
       break;
     default:
-      cardWidth = "800px";
+      cardWidth = "100%";
   }
   return (
     <Container>
@@ -45,6 +42,7 @@ export const ImageStep = ({ step }: IImageStepProps): JSX.Element => {
 };
 
 const Container = styled.div`
+  width: 100%;
   max-height: 700px;
 `;
 
