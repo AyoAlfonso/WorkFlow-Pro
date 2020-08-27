@@ -25,7 +25,11 @@ export const CardBody = styled.div<LayoutProps>`
   padding: 15px 15px 15px 15px;
 `;
 
-const CardContainer = styled.div<StyledProps>`
+interface ICardContainerProps extends StyledProps {
+  alignment?: string;
+}
+
+const CardContainer = styled.div<ICardContainerProps>`
   ${layout}
   ${space}
   border: 1px solid ${props => props.theme.colors.borderGrey};

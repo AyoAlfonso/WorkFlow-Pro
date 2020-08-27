@@ -4,6 +4,7 @@ import { Loading } from "~/components/shared/loading";
 import { IStep } from "~/models/step";
 import { Text } from "~/components/shared/text";
 import styled from "styled-components";
+import { Card, CardBody } from "~/components/shared/card";
 
 export interface IImageStepProps {
   step: IStep;
@@ -11,17 +12,40 @@ export interface IImageStepProps {
 
 export const ImageStep = ({ step }: IImageStepProps): JSX.Element => {
   if (R.isNil(step.imageUrl)) {
-    return <Text>This URL for the image is either missing</Text>;
+    return <Text>This URL for the image is missing</Text>;
+  }
+  let cardWidth;
+  switch (step.name) {
+    case "How Are You Feeling?":
+      cardWidth = "1400px";
+      break;
+    case "Updates":
+      cardWidth = "500px";
+      break;
+    default:
+      cardWidth = "800px";
   }
   return (
     <Container>
-      <Image src={step.imageUrl} alt={step.name} />
+      <Card
+        width={cardWidth}
+        alignment={"left"}
+        headerComponent={
+          <Text fontSize={"12px"} fontWeight={"bold"}>
+            {step.name}
+          </Text>
+        }
+      >
+        <CardBody>
+          <Image src={step.imageUrl} alt={step.name} />
+        </CardBody>
+      </Card>
     </Container>
   );
 };
 
 const Container = styled.div`
-  height: 600px;
+  max-height: 700px;
 `;
 
 const Image = styled.img`

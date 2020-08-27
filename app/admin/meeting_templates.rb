@@ -1,5 +1,5 @@
 ActiveAdmin.register MeetingTemplate do
-  permit_params :name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image]
+  permit_params :name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed]
 
   index do
     selectable_column
