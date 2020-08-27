@@ -1,5 +1,5 @@
 class Api::MeetingsController < Api::ApplicationController
-  before_action :set_meeting, only: [:update, :destroy]
+  before_action :set_meeting, only: [:update, :destroy, :show]
 
   respond_to :json
 
@@ -27,6 +27,15 @@ class Api::MeetingsController < Api::ApplicationController
       @meeting.save!
       render 'api/meetings/create'
     end
+  end
+
+  def show
+    @team = Team.find(@meeting.team_id)
+    @current_week_average_user_emotions = @team.weekly_average_users_emotion_score(1.week.ago, 1.day.ago)
+    @current_week_average_team_emotions = @team.team_average_weekly_emotion_score(1.week.ago, 1.day.ago)
+    @previous_meeting = Meeting.where(team_id: @team.id, meeting_template_id: @meeting.meeting_template_id).second_to_last
+    @emotion_score_percentage_difference = @team.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
+    render 'api/meetings/show'
   end
 
   def update

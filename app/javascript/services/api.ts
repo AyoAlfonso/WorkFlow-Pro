@@ -230,6 +230,10 @@ export class Api {
     return this.client.get(`/teams`);
   }
 
+  async getTeam(id) {
+    return this.client.get(`/teams/${id}`);
+  }
+
   async getMeetingTemplates() {
     return this.client.get(`/meeting_templates`);
   }
@@ -240,6 +244,10 @@ export class Api {
 
   async getTeamMeetings(id) {
     return this.client.get(`/meetings/team_meetings/${id}`);
+  }
+
+  async getMeeting(id) {
+    return this.client.get(`/meetings/${id}`);
   }
 
   async createMeeting(meeting) {

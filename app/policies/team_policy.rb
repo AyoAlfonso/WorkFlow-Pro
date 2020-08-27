@@ -10,6 +10,11 @@ class TeamPolicy < ApplicationPolicy
     true
   end
 
+  def show?
+    team_ids = @user.team_user_enablements.pluck(:team_id)
+    team_ids.include?(record.id)
+  end
+
   class Scope
     attr_reader :user, :scope
 

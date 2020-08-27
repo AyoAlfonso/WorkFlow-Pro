@@ -22,6 +22,7 @@ export const MeetingModel = types
     startTime: types.maybeNull(types.string),
     steps: types.array(StepModel),
     teamId: types.maybeNull(types.number),
+    //previousMeetingAverageTeamMood:
   })
   .views(self => ({
     get currentStepDetails() {

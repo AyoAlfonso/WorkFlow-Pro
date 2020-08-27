@@ -81,10 +81,10 @@ Rails.application.routes.draw do
     resources :questionnaire_attempts, only: [:create]
 
     #teams
-    resources :teams, only: [:index]
+    resources :teams, only: [:index, :show]
     
     #meetings
-    resources :meetings, only: [:create, :index, :update, :destroy]
+    resources :meetings, only: [:create, :index, :update, :destroy, :show]
     get '/meetings/team_meetings/:id', to: 'meetings#team_meetings'
 
     #meeting_templates

@@ -75,6 +75,17 @@ export const MeetingStoreModel = types
         // caught bv Api Monitor
       }
     }),
+    getMeeting: flow(function*(meetingId) {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getMeeting(meetingId);
+        self.currentMeeting = response.data;
+        return response.data;
+      } catch {
+        //caught by Api Monitor
+      }
+    }),
+  }))
+  .actions(self => ({
     setCurrentMeeting(meeting) {
       self.currentMeeting = meeting;
     },

@@ -21,6 +21,7 @@ import MeetingTypes from "~/constants/meeting-types";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { FutureTeamMeetingsContainer } from "./shared/future-team-meetings-container";
+import { useState, useEffect } from "react";
 
 interface ITeamOverviewProps {}
 
@@ -29,6 +30,12 @@ export const TeamOverview = observer(
     const { sessionStore, teamStore, meetingStore } = useMst();
 
     const { team_id } = useParams();
+
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+      teamStore.getTeam(team_id).then(() => setLoading(false));
+    }, []);
 
     const history = useHistory();
     const handleMeetingClick = () => {
@@ -57,9 +64,9 @@ export const TeamOverview = observer(
     };
     // use NavLink instead?
 
-    const currentTeam = teamStore.teams.find(team => team.id === parseInt(team_id));
+    const currentTeam = teamStore.currentTeam;
 
-    if (R.isEmpty(teamStore.teams)) {
+    if (!currentTeam || loading) {
       return (
         <Container>
           <BodyContainer>

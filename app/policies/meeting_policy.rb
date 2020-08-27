@@ -10,6 +10,11 @@ class MeetingPolicy < ApplicationPolicy
     true
   end
 
+  def show?
+    team_ids = @user.team_user_enablements.pluck(:team_id)
+    team_ids.include?(meeting.team_id)
+  end
+
   def create?
     @user.company_admin?
   end
