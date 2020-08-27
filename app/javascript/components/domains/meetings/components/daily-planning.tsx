@@ -26,7 +26,7 @@ const Container = styled.div`
 `;
 
 const PrioritiesContainer = styled(HomeContainerBorders)`
-  width: 40%;
+  width: 80%;
   min-width: 480px;
   margin-right: 20px;
   margin-left: 5px;
