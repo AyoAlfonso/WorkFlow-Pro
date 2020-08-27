@@ -5,6 +5,7 @@ export const StaticModel = types
   .props({
     timezones: types.maybeNull(types.array(types.string)),
     userRoles: types.maybeNull(types.array(types.frozen())),
+    conversationStarters: types.maybeNull(types.array(types.frozen())),
   })
   .views(self => ({}))
   .actions(self => ({}));

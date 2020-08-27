@@ -3,42 +3,44 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { Card, CardBody } from "../../../shared/card";
 import { Text } from "../../../shared/text";
-import { Heading } from "../../../shared/heading";
 import { useMst } from "~/setup/root";
+import { observer } from "mobx-react";
+import { toJS } from "mobx";
 
-export const ConversationStarter = (): JSX.Element => {
-  const { t } = useTranslation();
-  // @TODO connect to meetingStore that fetches conversation starters
-  // const { meetingStore } = useMst();
+export const ConversationStarter = observer(
+  (): JSX.Element => {
+    const { t } = useTranslation();
+    const { sessionStore } = useMst();
+    const convoStarters = toJS(sessionStore.staticData.conversationStarters);
+    const randomConvoStarter =
+      convoStarters.length > 0
+        ? convoStarters[(convoStarters.length * Math.random()) | 0]
+        : { body: "What's the most interesting thing you've done lately?" };
 
-  return (
-    <Container>
-      <HeadingDiv>
-        <Heading type={"h3"} color={"black"} fontWeight={500} fontSize={3}>
-          {t("meeting.conversationStarter")}
-        </Heading>
-      </HeadingDiv>
-      <BodyDiv>
-        <Card
-          width={"640px"}
-          alignment={"left"}
-          headerComponent={
-            <Text fontSize={"12px"} fontWeight={"bold"}>
-              Today's Topic
-            </Text>
-          }
-          my={"30px"}
-        >
-          <CardBody height={"120px"}>
-            <Text fontFamily={"Exo"} fontSize={4} mt={"15px"} textAlign={"center"}>
-              What's the most interesting thing you've done lately?
-            </Text>
-          </CardBody>
-        </Card>
-      </BodyDiv>
-    </Container>
-  );
-};
+    return (
+      <Container>
+        <BodyDiv>
+          <Card
+            width={"640px"}
+            alignment={"left"}
+            headerComponent={
+              <Text fontSize={"12px"} fontWeight={"bold"}>
+                Today's Topic
+              </Text>
+            }
+            my={"30px"}
+          >
+            <CardBody height={"120px"}>
+              <Text fontFamily={"Exo"} fontSize={4} mt={"15px"} textAlign={"center"}>
+                {randomConvoStarter.body}
+              </Text>
+            </CardBody>
+          </Card>
+        </BodyDiv>
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
   display: flex;
