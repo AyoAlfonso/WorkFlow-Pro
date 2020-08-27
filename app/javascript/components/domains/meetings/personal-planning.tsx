@@ -31,7 +31,7 @@ export const PersonalPlanning = observer(
     const history = useHistory();
 
     useEffect(() => {
-      meetingStore.fetchMeetings();
+      meetingStore.getPersonalMeeting(meeting_id);
     }, []);
 
     const renderLoading = () => (
@@ -42,13 +42,6 @@ export const PersonalPlanning = observer(
       </Container>
     );
 
-    if (R.isEmpty(toJS(meetingStore.meetings))) {
-      return renderLoading();
-    }
-
-    meetingStore.setCurrentPersonalPlanning(
-      toJS(meetingStore.meetings).find(tm => tm.id === parseInt(meeting_id)),
-    );
     const meeting = meetingStore.currentPersonalPlanning;
 
     if (R.isNil(meeting)) {
@@ -61,8 +54,6 @@ export const PersonalPlanning = observer(
     const onStepClick = stepIndex => {
       meetingStore.updatePersonalMeeting(R.merge(meeting, { currentStep: stepIndex }));
     };
-
-    const hasEndTime = () => !R.isNil(meeting.endTime);
 
     const StopMeetingButton = () => {
       return (
@@ -94,24 +85,18 @@ export const PersonalPlanning = observer(
           </DateAndButtonContainer>
         </HeaderContainer>
         <BodyContainer>
-          {hasEndTime() ? (
-            <Text fontSize={2}>Planning completed.</Text>
-          ) : (
-            <>
-              <ProgressBarTimerContainer>
-                <StepProgressBar
-                  progressBarProps={{
-                    stepPositions: stepPositions,
-                    percent: 0,
-                  }}
-                  steps={progressBarSteps}
-                  onStepClick={onStepClick}
-                  currentStepIndex={meeting.currentStep}
-                />
-              </ProgressBarTimerContainer>
-              <MeetingStep meeting={meetingStore.currentPersonalPlanning}></MeetingStep>
-            </>
-          )}
+          <ProgressBarTimerContainer>
+            <StepProgressBar
+              progressBarProps={{
+                stepPositions: stepPositions,
+                percent: 0,
+              }}
+              steps={progressBarSteps}
+              onStepClick={onStepClick}
+              currentStepIndex={meeting.currentStep}
+            />
+          </ProgressBarTimerContainer>
+          <MeetingStep meeting={meetingStore.currentPersonalPlanning}></MeetingStep>
         </BodyContainer>
       </Container>
     );

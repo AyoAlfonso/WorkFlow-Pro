@@ -30,18 +30,14 @@ class Api::MeetingsController < Api::ApplicationController
   end
 
   def show
-    @team = Team.find(@meeting.team_id)
-    one_week_ago_timezone = (current_user.time_in_user_timezone.to_date) - 1.week
-    one_day_ago_timezone = (current_user.time_in_user_timezone.to_date) - 1.day
-    @current_week_average_user_emotions = @team.weekly_average_users_emotion_score(one_week_ago_timezone, one_day_ago_timezone)
-    @current_week_average_team_emotions = @team.team_average_weekly_emotion_score(one_week_ago_timezone, one_day_ago_timezone)
-    @previous_meeting = Meeting.where(team_id: @team.id, meeting_template_id: @meeting.meeting_template_id).second_to_last
-    @emotion_score_percentage_difference = @team.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
+    @team = @meeting.team_id ? Team.find(@meeting.team_id) : nil
+    set_additional_data
     render 'api/meetings/show'
   end
 
   def update
     @meeting.update!(meeting_params)
+    set_additional_data
     render 'api/meetings/update'
   end
 
@@ -57,6 +53,22 @@ class Api::MeetingsController < Api::ApplicationController
   end
 
   private
+
+  def set_additional_data
+    if @team.present?
+      @current_week_average_user_emotions = @team.weekly_average_users_emotion_score(1.week.ago, 1.day.ago)
+      @current_week_average_team_emotions = @team.team_average_weekly_emotion_score(1.week.ago, 1.day.ago)
+      @previous_meeting = Meeting.where(team_id: @team.id, meeting_template_id: @meeting.meeting_template_id).second_to_last
+      @emotion_score_percentage_difference = @team.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
+      @milestones = nil
+    else
+      @current_week_average_user_emotions = nil
+      @current_week_average_team_emotions = nil
+      @previous_meeting = nil
+      @emotion_score_percentage_difference = nil
+      @milestones = nil
+    end
+  end
 
   def set_meeting
     @meeting = policy_scope(Meeting).find(params[:id])

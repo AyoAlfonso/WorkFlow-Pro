@@ -11,8 +11,12 @@ class MeetingPolicy < ApplicationPolicy
   end
 
   def show?
-    team_ids = @user.team_user_enablements.pluck(:team_id)
-    team_ids.include?(meeting.team_id)
+    if (meeting.team_id)
+      team_ids = @user.team_user_enablements.pluck(:team_id)
+      team_ids.include?(meeting.team_id)
+    else
+      meeting.hosted_by == @user
+    end
   end
 
   def create?

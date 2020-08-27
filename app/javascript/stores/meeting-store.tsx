@@ -109,9 +109,19 @@ export const MeetingStoreModel = types
           let meetingToUpdateIndex = meetings.findIndex(meeting => meeting.id == response.data.id);
           meetings[meetingToUpdateIndex] = response.data;
           self.meetings = meetings;
+          self.currentPersonalPlanning = response.data;
         }
       } catch {
         // caught bv Api Monitor
+      }
+    }),
+    getPersonalMeeting: flow(function*(meetingId) {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getMeeting(meetingId);
+        self.currentPersonalPlanning = response.data;
+        return response.data;
+      } catch {
+        //caught by Api Monitor
       }
     }),
     setCurrentPersonalPlanning(meeting) {
