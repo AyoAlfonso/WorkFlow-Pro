@@ -14,6 +14,7 @@ export const PersonalKeyActivities = (props: {}): JSX.Element => {
       </IndividualContainer>
       <IndividualContainer>
         <KeyActivitiesHeader title={"Master Activity List"} />
+        <Text>Master list add is not working at the moment.</Text>
         <KeyActivitiesBody showAllKeyActivities={true} />
       </IndividualContainer>
     </Container>
