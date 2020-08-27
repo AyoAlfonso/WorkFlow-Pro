@@ -48,10 +48,9 @@ const CardContainer = styled.div<ICardContainerProps>`
 const CardHeader = styled.div<TypographyProps>`
   ${typography}
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
-  display: flex;
+  display: inline-block;
   font-family: Lato;
   align-items: center;
   padding-left: 15px;
   padding-right: 15px;
-  height: 40px;
 `;

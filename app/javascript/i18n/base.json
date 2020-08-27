@@ -102,7 +102,8 @@
         "addGoal": "Add Goal"
       },
       "meeting": {
-        "conversationStarter": "Conversation Starter"
+        "conversationStarter": "Conversation Starter",
+        "meetingRating": "Rate the Meeting"
       },
       "status": {
         "active": "Active",
