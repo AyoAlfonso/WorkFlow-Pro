@@ -9,8 +9,10 @@ class Api::TeamsController < Api::ApplicationController
   end
 
   def show
-    @average_weekly_user_emotions = @team.weekly_average_users_emotion_score(1.week.ago, 1.day.ago)
-    @average_team_emotion_score = @team.team_average_weekly_emotion_score(1.week.ago, 1.day.ago)
+    one_week_ago_timezone = (current_user.time_in_user_timezone.to_date) - 1.week
+    one_day_ago_timezone = (current_user.time_in_user_timezone.to_date) - 1.day
+    @average_weekly_user_emotions = @team.weekly_average_users_emotion_score(one_week_ago_timezone, one_day_ago_timezone)
+    @average_team_emotion_score = @team.team_average_weekly_emotion_score(one_week_ago_timezone, one_day_ago_timezone)
     render 'api/teams/show'
   end
 

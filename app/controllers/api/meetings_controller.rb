@@ -31,8 +31,10 @@ class Api::MeetingsController < Api::ApplicationController
 
   def show
     @team = Team.find(@meeting.team_id)
-    @current_week_average_user_emotions = @team.weekly_average_users_emotion_score(1.week.ago, 1.day.ago)
-    @current_week_average_team_emotions = @team.team_average_weekly_emotion_score(1.week.ago, 1.day.ago)
+    one_week_ago_timezone = (current_user.time_in_user_timezone.to_date) - 1.week
+    one_day_ago_timezone = (current_user.time_in_user_timezone.to_date) - 1.day
+    @current_week_average_user_emotions = @team.weekly_average_users_emotion_score(one_week_ago_timezone, one_day_ago_timezone)
+    @current_week_average_team_emotions = @team.team_average_weekly_emotion_score(one_week_ago_timezone, one_day_ago_timezone)
     @previous_meeting = Meeting.where(team_id: @team.id, meeting_template_id: @meeting.meeting_template_id).second_to_last
     @emotion_score_percentage_difference = @team.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
     render 'api/meetings/show'
