@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as R from "ramda";
-
+import styled from "styled-components";
+import { HomeContainerBorders, HomeTitle } from "../home/shared-components";
 import { Heading } from "~/components/shared/heading";
 import { Button } from "~/components/shared/button";
 import { ConversationStarter } from "./components/conversation-starter";
@@ -53,11 +54,35 @@ export const MeetingStep = observer(
       return <Loading />;
     }
     return (
-      <>
-        <Text>{meeting.currentStepDetails.name}</Text>
-        <Text>{meeting.currentStepDetails.instructions}</Text>
-        {StepComponent(meeting.currentStepDetails)}
-      </>
+      <BodyContainer>
+        <LeftContainer>
+          <LeftContainerBorder>
+            <HomeTitle>{meeting.currentStepDetails.name}</HomeTitle>
+            <Text fontSize={1}>{meeting.currentStepDetails.instructions}</Text>
+          </LeftContainerBorder>
+        </LeftContainer>
+        <RightContainer>{StepComponent(meeting.currentStepDetails)}</RightContainer>
+      </BodyContainer>
     );
   },
 );
+
+const LeftContainerBorder = styled(HomeContainerBorders)`
+  padding: 10px;
+`;
+
+const BodyContainer = styled.div`
+  display: flex;
+`;
+
+const LeftContainer = styled.div`
+  width: 20%;
+  margin-right: 10px;
+  min-width: 320px;
+`;
+
+const RightContainer = styled.div`
+  width: 80%;
+  min-width: 320p;
+  margin-left: 10px;
+`;
