@@ -90,7 +90,7 @@ export const Meeting = observer(
     }
 
     const progressBarSteps = progressBarStepsForMeeting(meeting);
-    const stepPositions = stepPositionsForMeeting(meeting, progressBarSteps);
+    const stepPositions = stepPositionsForMeeting(progressBarSteps);
 
     const updateMeeting = keysAndValues =>
       meetingStore.updateMeeting(R.merge(meeting, keysAndValues));

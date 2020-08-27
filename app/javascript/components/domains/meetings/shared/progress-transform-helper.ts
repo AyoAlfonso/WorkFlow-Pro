@@ -7,11 +7,12 @@ export const progressBarStepsForMeeting = meeting =>
       .reduce((acc, curr) => acc + (curr.duration / meeting.totalDuration) * 100, 0);
     return {
       accomplished: currentStep.orderIndex < meeting.currentStep,
-      position: accumulatedPosition,
+      position: index === stepsArray.length - 1 ? 100 : accumulatedPosition,
       index: currentStep.orderIndex,
       title: currentStep.name,
       duration: currentStep.duration * 60,
     };
   });
-export const stepPositionsForMeeting = (meeting, progressBarStepsInstance) =>
-  R.map(step => step.position, progressBarStepsInstance).concat([100]);
+
+export const stepPositionsForMeeting = progressBarStepsInstance =>
+  R.map(step => step.position, progressBarStepsInstance);
