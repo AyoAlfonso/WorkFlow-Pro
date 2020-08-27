@@ -66,7 +66,7 @@ export const PersonalPlanning = observer(
           ml={"25px"}
           disabled={false}
         >
-          <Icon icon={"_Stop"} iconColor={"warningRed"} size={"13px"} />
+          <Icon icon={"Stop"} iconColor={"warningRed"} size={"13px"} />
           <TextNoMargin ml={"10px"}>End Planning</TextNoMargin>
         </Button>
       );
