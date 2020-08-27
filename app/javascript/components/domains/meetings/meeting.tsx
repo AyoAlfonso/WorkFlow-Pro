@@ -41,18 +41,12 @@ export const Meeting = observer(
     const currentTimeInSeconds = nowInSeconds();
 
     useEffect(() => {
-      const load = async () => {
-        await meetingStore.fetchTeamMeetings(team_id);
-        const currentMeeting = toJS(meetingStore.teamMeetings).find(
-          tm => tm.id === parseInt(meeting_id),
-        );
-        await meetingStore.setCurrentMeeting(currentMeeting);
-        if (!R.isNil(currentMeeting.startTime)) {
-          const startTime = dateStringToSeconds(currentMeeting.startTime);
+      meetingStore.getMeeting(meeting_id).then(meeting => {
+        if (!R.isNil(meeting.startTime)) {
+          const startTime = dateStringToSeconds(meeting.startTime);
           setSecondsElapsed(currentTimeInSeconds - startTime);
         }
-      };
-      load();
+      });
     }, []);
 
     useEffect(() => {
@@ -84,12 +78,8 @@ export const Meeting = observer(
       </Container>
     );
 
-    if (R.isEmpty(toJS(meetingStore.teamMeetings))) {
-      return renderLoading();
-    }
-
-    const team = teamStore.teams.find(team => team.id === parseInt(team_id));
     const meeting = meetingStore.currentMeeting;
+    const team = teamStore.teams.find(team => team.id === parseInt(team_id));
 
     if (R.isNil(meeting)) {
       return renderLoading();

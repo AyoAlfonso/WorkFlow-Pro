@@ -1,6 +1,6 @@
 class Meeting < ApplicationRecord
   belongs_to :team, optional: true #a meeting with no team is a personal meeting
-  belongs_to :hosted_by, foreign_key: :user_id, optional: true
+  belongs_to :hosted_by, class_name: "User", optional: true
   belongs_to :meeting_template
 
   delegate :steps, to: :meeting_template

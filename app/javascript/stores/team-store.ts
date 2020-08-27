@@ -7,6 +7,7 @@ export const TeamStoreModel = types
   .model("TeamStoreModel")
   .props({
     teams: types.array(TeamModel),
+    currentTeam: types.maybeNull(TeamModel),
   })
   .extend(withEnvironment())
   .actions(self => ({
@@ -14,6 +15,12 @@ export const TeamStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.getTeams();
       if (response.ok) {
         self.teams = response.data as any;
+      }
+    }),
+    getTeam: flow(function*(id) {
+      const response: ApiResponse<any> = yield self.environment.api.getTeam(id);
+      if (response.ok) {
+        self.currentTeam = response.data;
       }
     }),
   }))
