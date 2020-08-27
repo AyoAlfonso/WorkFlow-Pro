@@ -224,6 +224,7 @@ export const HeaderBar = observer(
           <CreateKeyActivityModal
             createKeyActivityModalOpen={createKeyActivityModalOpen}
             setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+            defaultTypeAsWeekly={true}
           />
         </Container>
       </Wrapper>

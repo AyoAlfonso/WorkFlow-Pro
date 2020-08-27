@@ -94,6 +94,7 @@ export const TeamKeyActivities = observer(
             createKeyActivityModalOpen={createKeyActivityModalOpen}
             setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
             meetingId={meetingStore.currentMeeting.id}
+            defaultTypeAsWeekly={true}
           />
           <AddNewKeyActivityContainer onClick={() => setCreateKeyActivityModalOpen(true)}>
             <AddNewKeyActivityPlus>

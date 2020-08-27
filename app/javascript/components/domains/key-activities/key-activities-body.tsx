@@ -103,6 +103,7 @@ export const KeyActivitiesBody = observer(
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+          defaultTypeAsWeekly={!showAllKeyActivities}
         />
         <AddNewKeyActivityContainer onClick={() => setCreateKeyActivityModalOpen(true)}>
           <AddNewKeyActivityPlus>
