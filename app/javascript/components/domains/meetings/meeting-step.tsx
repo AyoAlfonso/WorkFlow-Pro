@@ -11,6 +11,7 @@ import { IStep } from "~/models/step";
 import meetingTypes from "~/constants/meeting-types";
 import { Loading } from "~/components/shared/loading";
 import { ImageStep } from "~/components/domains/meetings/shared/image-step";
+import { EmbedStep } from "~/components/domains/meetings/shared/embed-step";
 
 export interface IMeetingStepProps {
   meeting: IMeeting;
@@ -33,7 +34,7 @@ const StepComponent = (step: IStep) => {
       return <ImageStep step={step} />;
       break;
     case "embedded_link":
-      return <Text>Embedded step type has not been configured</Text>;
+      return <EmbedStep step={step} />;
       break;
     default:
       return <Text>This meeting step type has not been configured</Text>;
