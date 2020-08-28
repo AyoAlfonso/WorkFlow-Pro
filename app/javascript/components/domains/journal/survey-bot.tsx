@@ -37,9 +37,7 @@ export const SurveyBot = observer(
       });
     }, []);
 
-    const questionnaireVariant = toJS(
-      questionnaireStore.questionnaires.find(q => q.name === props.variant),
-    );
+    const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
 
     if (loading || R.isNil(questionnaireStore.questionnaires) || R.isNil(questionnaireVariant)) {
       return (

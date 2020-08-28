@@ -11,7 +11,11 @@ export const QuestionnaireStoreModel = types
     questionnaireAttempt: types.maybeNull(QuestionnaireAttemptModel),
   })
   .extend(withEnvironment())
-  .views(self => ({}))
+  .views(self => ({
+    getQuestionnaireByVariant(variant) {
+      return self.questionnaires.find(q => q.name === variant);
+    },
+  }))
   .actions(self => ({
     fetchQuestionnaires: flow(function*() {
       const response: ApiResponse<any> = yield self.environment.api.getQuestionnaires();

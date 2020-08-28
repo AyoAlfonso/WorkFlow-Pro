@@ -204,3 +204,72 @@ steps: [
   },
 ]
 )
+
+Questionnaire.where(name: "Weekly Reflection").first_or_create(name: "Weekly Reflection", 
+daily_limit: false,
+steps: [
+  {
+    id: 1,
+    message: "Weekly Rating",
+    metadata: [
+      questionnaireTitle: true
+    ]
+    trigger: 2,
+  },
+  {
+    id: 2,
+    message: "On a scale of 1-10, how well did I progress towards my goals this week?",
+    trigger: 3,
+  },
+  {
+    id: 3,
+    options: [
+      { label: "1", value: 1, trigger: 4 },
+      { label: "2", value: 2, trigger: 4 },
+      { label: "3", value: 3, trigger: 4 },
+      { label: "4", value: 4, trigger: 4 },
+      { label: "5", value: 5, trigger: 4 },
+      { label: "6", value: 6, trigger: 4 },
+      { label: "7", value: 7, trigger: 4 },
+      { label: "8", value: 8, trigger: 4 },
+      { label: "9", value: 9, trigger: 4 },
+      { label: "10", value: 10, trigger: 4 },
+    ],
+  },
+  {
+    id: 4,
+    message: "My Biggest Wins",
+    metadata: [
+      questionnaireTitle: true
+    ]
+    trigger: 5,
+  },
+  {
+    id: 5,
+    message: "What went well?  Any wins (big or little) this week? (up to 5)",
+    trigger: 6,
+  },
+  {
+    id: 6,
+    user: true,
+    placeholder: "Write something...",
+    trigger: 7,
+  },
+  {
+    id: 7,
+    message: "What did I learn from these wins and how can I double down on them?",
+    trigger: 8,
+  },
+  {
+    id: 8,
+    user: true,
+    placeholder: "Write something...",
+    trigger: 9,
+  },
+  {
+    id: 9,
+    user: true,
+    end: true
+  },
+]
+)
