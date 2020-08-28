@@ -64,6 +64,7 @@ class Api::MeetingsController < Api::ApplicationController
       @emotion_score_percentage_difference = @team.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
       @milestones = nil
       @stats_for_week = nil
+      @my_current_milestones = nil
     else
       @current_week_average_user_emotions = current_user.weekly_average_users_emotion_score(1.week.ago, 1.day.ago)
       @current_week_average_team_emotions = current_user.team_average_weekly_emotion_score(1.week.ago, 1.day.ago)
@@ -87,6 +88,7 @@ class Api::MeetingsController < Api::ApplicationController
           statistic_change: 150
         }
       ]
+      @my_current_milestones = Milestone.current_week_for_user(current_user)
     end
   end
 

@@ -11,6 +11,7 @@ export const MilestoneModel = types
     description: types.string,
     week: types.number,
     weekOf: types.string,
+    quarterlyGoalDescription: types.maybeNull(types.string), //only for my current milestones
   })
   .views(self => ({}))
   .actions(self => ({}));

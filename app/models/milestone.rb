@@ -10,4 +10,6 @@ class Milestone < ApplicationRecord
   scope :current_week_for_user, -> (user) { created_by(user).where(
     'week_of >=? AND week_of <= ?', user.time_in_user_timezone().beginning_of_week.to_date, user.time_in_user_timezone().end_of_week.to_date
   ) }
+
+  delegate :description, to: :quarterly_goal, prefix: true
 end
