@@ -96,14 +96,14 @@ const HandleContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 14px;
+  height: 13px;
   margin-top: auto;
   margin-bottom: auto;
 `;
 
 const Handle = styled.div`
   width: 10px;
-  height: 2px;
+  height: 3px;
   background-color: ${props => props.theme.colors.grey80};
   border-radius: 4px;
 `;
