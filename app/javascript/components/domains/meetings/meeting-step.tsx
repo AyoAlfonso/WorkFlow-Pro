@@ -10,6 +10,7 @@ import { DailyPlanning } from "./components/daily-planning";
 import { Milestones } from "./components/milestones";
 import { PersonalKeyActivities } from "./components/personal-key-activities";
 import { WeeklyReflection } from "./components/weekly-reflection";
+import { MeetingRating } from "./components/meeting-rating";
 import { Text } from "~/components/shared/text";
 import { observer } from "mobx-react";
 import { IMeeting } from "~/models/meeting";
@@ -45,6 +46,8 @@ const StepComponent = (step: IStep) => {
           return <DailyPlanning />;
         case "TeamPulse":
           return <TeamPulse />;
+        case "MeetingRating":
+          return <MeetingRating />;
         default:
           return <Text>This custom component has not been configured</Text>;
       }
