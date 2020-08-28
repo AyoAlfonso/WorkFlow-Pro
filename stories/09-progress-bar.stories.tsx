@@ -1,4 +1,4 @@
-import { number, select, text, withKnobs } from "@storybook/addon-knobs";
+import { number, select, text, boolean, withKnobs } from "@storybook/addon-knobs";
 import * as React from "react";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import { CodeBlockDiv, ContainerDiv, PropsList, RowDiv } from "./shared";
@@ -119,6 +119,9 @@ export const SemiCircleGauge = () => {
         text={`${percentage}%`}
         textColor="text"
         tickCount={10}
+        hasTicks={boolean("hasTicks", true)}
+        hasLabels={boolean("hasLabels", true)}
+        hasLine={boolean("hasLine", true)}
       />
     </ContainerDiv>
   );

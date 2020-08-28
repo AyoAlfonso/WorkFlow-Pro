@@ -12,6 +12,9 @@ export interface ISemiCircleGaugeProps extends StyledProps {
   text: string;
   textColor: string;
   tickCount: number;
+  hasTicks?: boolean;
+  hasLabels?: boolean;
+  hasLine?: boolean;
 }
 
 export const SemiCircleGauge = ({
@@ -20,6 +23,9 @@ export const SemiCircleGauge = ({
   text,
   textColor,
   tickCount,
+  hasTicks,
+  hasLabels,
+  hasLine,
   ...styledProps
 }: ISemiCircleGaugeProps): JSX.Element => {
   const fill = baseTheme.colors[fillColor] ? baseTheme.colors[fillColor] : fillColor;
@@ -32,15 +38,17 @@ export const SemiCircleGauge = ({
   };
   return (
     <Container {...styledProps}>
-      <MeterCircle>
-        {tickPositions().map((tick, index) => (
-          <Tick key={index} degrees={tick} />
-        ))}
-        {tickPositions().map((tick, index) => (
-          <TickLabelContainer key={index} degrees={tick}>
-            <TickLabel degrees={tick}>{index * 10}</TickLabel>
-          </TickLabelContainer>
-        ))}
+      <MeterCircle hasLine={hasLine}>
+        {hasTicks
+          ? tickPositions().map((tick, index) => <Tick key={index} degrees={tick} />)
+          : null}
+        {hasLabels
+          ? tickPositions().map((tick, index) => (
+              <TickLabelContainer key={index} degrees={tick}>
+                <TickLabel degrees={tick}>{index * 10}</TickLabel>
+              </TickLabelContainer>
+            ))
+          : null}
         <div>
           <SemiCircleChart percentage={percentage} fill={fill}>
             <Text color={textColor} fontFamily={"Exo"} fontSize={"24px"} fontWeight={400}>
@@ -123,7 +131,11 @@ const SemiCircleChart = styled.div<ISemiCircleChartProps>`
   }
 `;
 
-const MeterCircle = styled.div`
+interface IMeterCircleProps {
+  hasLine?: boolean;
+}
+
+const MeterCircle = styled.div<IMeterCircleProps>`
   height: 180px;
   width: 360px;
   border-top-left-radius: 360px;
@@ -134,7 +146,8 @@ const MeterCircle = styled.div`
   align-items: flex-end;
   justify-content: center;
   box-sizing: border-box;
-  border-top: 1px solid ${props => props.theme.colors.grey20};
+  // border-top: 1px solid ${props => props.theme.colors.grey20};
+  border-top: ${props => (props.hasLine ? "1px solid " + props.theme.colors.grey20 : null)}
 `;
 
 interface IDegreeProps {
