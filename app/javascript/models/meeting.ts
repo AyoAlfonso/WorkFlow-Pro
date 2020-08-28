@@ -24,8 +24,9 @@ export const MeetingModel = types
     teamId: types.maybeNull(types.number),
     currentWeekAverageUserEmotions: types.maybeNull(types.array(types.frozen())),
     currentWeekAverageTeamEmotions: types.maybeNull(types.number),
-    emotionScorePercentageDifference: types.maybeNull(types.string),
+    emotionScorePercentageDifference: types.maybeNull(types.number),
     teamKeyActivities: types.maybeNull(types.array(KeyActivityModel)),
+    statsForWeek: types.maybeNull(types.array(types.frozen())),
   })
   .views(self => ({
     get currentStepDetails() {

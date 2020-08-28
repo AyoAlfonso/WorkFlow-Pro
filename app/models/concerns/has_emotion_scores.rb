@@ -32,13 +32,11 @@ module HasEmotionScores
       difference = previous == 0 ? 
                     current * 100 : 
                     ((current - previous).to_f / previous.to_f) * 100
-
-      "+#{difference}%"
     else
       difference = current == 0 ? 
                     previous * 100 : 
                     ((previous - current).to_f / current.to_f) * 100
-      "-#{difference}%"
     end
   end
+  
 end
