@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 //import { RouterModel } from "mst-react-router";
 import { Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
+import { DragDropContext } from "react-beautiful-dnd";
 
 // stores
 import { IUserStore } from "../stores/user-store";
@@ -51,75 +52,102 @@ export const App = observer(
   (props: IAppProps): JSX.Element => {
     const { sessionStore } = useMst();
     const loggedIn = sessionStore.loggedIn; //if logged in show switch
-    return (
-      <ThemeProvider theme={baseTheme}>
-        <ModalProvider>
-          <GlobalStyles />
-          <Toaster position="bottom-right" />
-          {loggedIn ? (
-            <>
-              <SideNav />
-              <HeaderBar />
+    const { keyActivityStore } = useMst();
+    const onDragEnd = result => {
+      const { destination, source } = result;
+      if (!result.destination) {
+        return;
+      }
 
-              <Container>
-                <Switch>
-                  <Route
-                    exact
-                    path={"/"}
-                    render={() => {
-                      return <HomeContainer />;
-                    }}
-                  />
-                  <Route
-                    path={"/personal_planning/:meeting_id"}
-                    render={() => {
-                      return <PersonalPlanning />;
-                    }}
-                  />
-                  <Route
-                    path={"/team/:team_id/meeting/:meeting_id"}
-                    render={() => {
-                      return <Meeting />;
-                    }}
-                  />
-                  <Route
-                    path={"/team/:team_id"}
-                    render={() => {
-                      return <TeamOverview />;
-                    }}
-                  />
-                  <Route
-                    path={"/account"}
-                    render={() => {
-                      return <AccountSettings />;
-                    }}
-                  />
-                  <Route
-                    path={"/company/accountability"}
-                    render={() => {
-                      return <AccountabilityChart />;
-                    }}
-                  />
-                  <Route
-                    path={"/company/strategic_plan"}
-                    render={() => {
-                      return <StrategicPlan />;
-                    }}
-                  />
-                  <Route
-                    path={"/goals"}
-                    render={() => {
-                      return <GoalsIndex />;
-                    }}
-                  />
-                </Switch>
-              </Container>
-            </>
-          ) : (
-            <LoginForm />
-          )}
-        </ModalProvider>
-      </ThemeProvider>
+      let newPosition = destination.index;
+      if (newPosition === source.index && destination.droppableId === source.droppableId) {
+        return;
+      }
+
+      const keyActivityId = result.draggableId;
+      keyActivityStore.updateKeyActivityState(keyActivityId, "position", newPosition + 1);
+      if (destination.droppableId === "weekly-activities") {
+        keyActivityStore.startLoading("weekly-activities");
+        keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", true);
+        keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", false);
+      } else if (destination.droppableId === "todays-priorities") {
+        keyActivityStore.startLoading("todays-priorities");
+        keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
+        keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", true);
+      }
+      keyActivityStore.updateKeyActivity(keyActivityId);
+    };
+    return (
+      <DragDropContext onDragEnd={onDragEnd}>
+        <ThemeProvider theme={baseTheme}>
+          <ModalProvider>
+            <GlobalStyles />
+            <Toaster position="bottom-right" />
+            {loggedIn ? (
+              <>
+                <SideNav />
+                <HeaderBar />
+
+                <Container>
+                  <Switch>
+                    <Route
+                      exact
+                      path={"/"}
+                      render={() => {
+                        return <HomeContainer />;
+                      }}
+                    />
+                    <Route
+                      path={"/personal_planning/:meeting_id"}
+                      render={() => {
+                        return <PersonalPlanning />;
+                      }}
+                    />
+                    <Route
+                      path={"/team/:team_id/meeting/:meeting_id"}
+                      render={() => {
+                        return <Meeting />;
+                      }}
+                    />
+                    <Route
+                      path={"/team/:team_id"}
+                      render={() => {
+                        return <TeamOverview />;
+                      }}
+                    />
+                    <Route
+                      path={"/account"}
+                      render={() => {
+                        return <AccountSettings />;
+                      }}
+                    />
+                    <Route
+                      path={"/company/accountability"}
+                      render={() => {
+                        return <AccountabilityChart />;
+                      }}
+                    />
+                    <Route
+                      path={"/company/strategic_plan"}
+                      render={() => {
+                        return <StrategicPlan />;
+                      }}
+                    />
+                    <Route
+                      path={"/goals"}
+                      render={() => {
+                        return <GoalsIndex />;
+                      }}
+                    />
+                  </Switch>
+                </Container>
+              </>
+            ) : (
+              <LoginForm />
+            )}
+          </ModalProvider>
+        </ThemeProvider>
+      </DragDropContext>
     );
   },
 );
