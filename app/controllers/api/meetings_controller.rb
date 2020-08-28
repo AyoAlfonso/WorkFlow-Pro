@@ -60,12 +60,14 @@ class Api::MeetingsController < Api::ApplicationController
       @current_week_average_team_emotions = @team.team_average_weekly_emotion_score(1.week.ago, 1.day.ago)
       @previous_meeting = Meeting.where(team_id: @team.id, meeting_template_id: @meeting.meeting_template_id).second_to_last
       @emotion_score_percentage_difference = @team.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
+      @team_key_activities = KeyActivities.filter_by_team_meeting(@team.id)
       @milestones = nil
     else
       @current_week_average_user_emotions = nil
       @current_week_average_team_emotions = nil
       @previous_meeting = nil
       @emotion_score_percentage_difference = nil
+      @team_key_activities = nil
       @milestones = nil
     end
   end
