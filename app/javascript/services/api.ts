@@ -93,16 +93,22 @@ export class Api {
     return this.client.post("/issues", issueObject);
   }
 
-  async updateIssueStatus(issue, value) {
-    return this.client.patch(`/issues/${issue.id}`, { completed: value });
+  async updateIssueStatus(issue, value, fromTeamMeeting) {
+    return this.client.patch(`/issues/${issue.id}`, { completed: value, fromTeamMeeting });
   }
 
   async updateIssue(issueObject) {
     return this.client.patch(`/issues/${issueObject.id}`, issueObject);
   }
 
-  async destroyIssue(id) {
-    return this.client.delete(`/issues/${id}`);
+  async destroyIssue(issueObject) {
+    return this.client.delete(`/issues/${issueObject.id}`, issueObject);
+  }
+
+  async getIssuesForMeeting(meetingId) {
+    return this.client.get(`/issues/issues_for_meeting`, {
+      meetingId: meetingId,
+    });
   }
 
   async createKeyActivity(keyActivityObject) {

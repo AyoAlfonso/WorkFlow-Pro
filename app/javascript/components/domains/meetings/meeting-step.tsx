@@ -22,6 +22,7 @@ import { EmbedStep } from "~/components/domains/meetings/shared/embed-step";
 import { TeamPulse } from "./components/team-pulse";
 import { TeamKeyActivities } from "./components/team-key-activities";
 import { MeetingGoals } from "./components/meeting-goals";
+import { TeamIssues } from "./components/team-issues";
 
 export interface IMeetingStepProps {
   meeting: IMeeting;
@@ -54,6 +55,8 @@ const StepComponent = (step: IStep) => {
           return <TeamKeyActivities />;
         case "Goals":
           return <MeetingGoals />;
+        case "Issues":
+          return <TeamIssues />;
         default:
           return <Text>This custom component has not been configured</Text>;
       }

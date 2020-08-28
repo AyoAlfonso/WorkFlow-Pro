@@ -19,11 +19,12 @@ import {
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
   setCreateIssueModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  teamId?: number | string;
 }
 
 export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => {
   const { issueStore, sessionStore } = useMst();
-  const { createIssueModalOpen, setCreateIssueModalOpen } = props;
+  const { createIssueModalOpen, setCreateIssueModalOpen, teamId } = props;
   const [issueDescription, setIssueDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
 
@@ -65,6 +66,7 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
                 .createIssue({
                   description: issueDescription,
                   priority: selectedPriority,
+                  teamId: teamId,
                 })
                 .then(result => {
                   if (result) {
