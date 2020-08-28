@@ -1,7 +1,5 @@
 import * as React from "react";
-import { DragDropContext } from "react-beautiful-dnd";
 import styled from "styled-components";
-import { useMst } from "../../../setup/root";
 import { HabitsBody, HabitsHeader } from "../habits";
 import { IssuesContainer } from "../issues/issues-container";
 import { Journal } from "../journal/journal";
@@ -10,42 +8,14 @@ import { TodaysPrioritiesContainer } from "../todays-priorities/todays-prioritie
 import { HomeContainerBorders } from "./shared-components";
 
 export const HomePersonalItems = (): JSX.Element => {
-  const { keyActivityStore } = useMst();
-  const onDragEnd = result => {
-    const { destination, source } = result;
-    if (!result.destination) {
-      return;
-    }
-
-    let newPosition = destination.index;
-    if (newPosition === source.index && destination.droppableId === source.droppableId) {
-      return;
-    }
-
-    const keyActivityId = result.draggableId;
-    keyActivityStore.updateKeyActivityState(keyActivityId, "position", newPosition + 1);
-    if (destination.droppableId === "weekly-activities") {
-      keyActivityStore.startLoading("weekly-activities");
-      keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", true);
-      keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", false);
-    } else if (destination.droppableId === "todays-priorities") {
-      keyActivityStore.startLoading("todays-priorities");
-      keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
-      keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", true);
-    }
-    keyActivityStore.updateKeyActivity(keyActivityId);
-  };
-
   const renderProritiesContainer = () => {
     return (
-      <DragDropContext onDragEnd={onDragEnd}>
-        <PrioritiesContainer>
-          <PrioritiesHeaderContainer>
-            <TodaysPrioritiesContainer />
-            <KeyActivitiesContainer />
-          </PrioritiesHeaderContainer>
-        </PrioritiesContainer>
-      </DragDropContext>
+      <PrioritiesContainer>
+        <PrioritiesHeaderContainer>
+          <TodaysPrioritiesContainer />
+          <KeyActivitiesContainer />
+        </PrioritiesHeaderContainer>
+      </PrioritiesContainer>
     );
   };
 
