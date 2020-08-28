@@ -30,7 +30,6 @@ class Api::MeetingsController < Api::ApplicationController
   end
 
   def show
-    @team = @meeting.team_id ? Team.find(@meeting.team_id) : nil
     set_additional_data
     render 'api/meetings/show'
   end
@@ -55,6 +54,7 @@ class Api::MeetingsController < Api::ApplicationController
   private
 
   def set_additional_data
+    @team = @meeting.team_id ? Team.find(@meeting.team_id) : nil
     if @team.present?
       @current_week_average_user_emotions = @team.weekly_average_users_emotion_score(1.week.ago, 1.day.ago)
       @current_week_average_team_emotions = @team.team_average_weekly_emotion_score(1.week.ago, 1.day.ago)

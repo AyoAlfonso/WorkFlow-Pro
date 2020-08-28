@@ -11,10 +11,11 @@ import { KeyActivityPriorityIcon } from "./key-activity-priority-icon";
 interface IKeyActivityEntryProps {
   keyActivity: any;
   dragHandleProps?: any;
+  meetingId?: string | number;
 }
 
 export const KeyActivityEntry = observer(
-  ({ keyActivity, dragHandleProps }: IKeyActivityEntryProps): JSX.Element => {
+  ({ keyActivity, dragHandleProps, meetingId }: IKeyActivityEntryProps): JSX.Element => {
     const { keyActivityStore } = useMst();
     const { colors } = baseTheme;
 
@@ -39,7 +40,7 @@ export const KeyActivityEntry = observer(
           priority = "";
       }
       keyActivityStore.updateKeyActivityState(keyActivity.id, "priority", priority);
-      keyActivityStore.updateKeyActivity(keyActivity.id);
+      keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false);
     };
 
     const handleDescriptionChange = e => {
@@ -49,13 +50,18 @@ export const KeyActivityEntry = observer(
     };
 
     return (
-      <Container>
+      <Container dragHandleProps={dragHandleProps}>
         <CheckboxContainer key={keyActivity["id"]}>
           <Checkbox
             key={keyActivity["id"]}
             checked={keyActivity["completedAt"] ? true : false}
             onChange={e => {
-              keyActivityStore.updateKeyActivityStatus(keyActivity, e.target.checked);
+              console.log("meeting id", meetingId);
+              keyActivityStore.updateKeyActivityStatus(
+                keyActivity,
+                e.target.checked,
+                meetingId ? true : false,
+              );
             }}
           />
         </CheckboxContainer>
@@ -82,9 +88,15 @@ export const KeyActivityEntry = observer(
             }
           }}
           style={{ textDecoration: keyActivity.completedAt && "line-through" }}
-          onBlur={() => keyActivityStore.updateKeyActivity(keyActivity.id)}
+          onBlur={() =>
+            keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false)
+          }
         />
-        <DeleteButtonContainer onClick={() => keyActivityStore.destroyKeyActivity(keyActivity.id)}>
+        <DeleteButtonContainer
+          onClick={() =>
+            keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
+          }
+        >
           <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
         </DeleteButtonContainer>
       </Container>
@@ -109,7 +121,10 @@ const Handle = styled.div`
 `;
 
 const DeleteButtonContainer = styled.div`
-  margin: auto;
+  margin-left: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 30px;
   color: ${props => props.theme.colors.grey60};
   display: none;
   &: hover {
@@ -118,7 +133,11 @@ const DeleteButtonContainer = styled.div`
   }
 `;
 
-const Container = styled.div`
+type ContainerProps = {
+  dragHandleProps?: any;
+};
+
+const Container = styled.div<ContainerProps>`
   display: flex;
   font-size: 14px;
   width: inherit;
@@ -127,7 +146,7 @@ const Container = styled.div`
     display: block;
   }
   &:active {
-    background-color: ${props => props.theme.colors.grey20};
+    background-color: ${props => props.dragHandleProps && props.theme.colors.grey20};
   }
 `;
 

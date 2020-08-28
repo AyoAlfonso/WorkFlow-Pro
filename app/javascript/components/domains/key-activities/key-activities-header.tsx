@@ -6,14 +6,15 @@ import { space, color } from "styled-system";
 interface KeyActivitiesHeaderProps {
   showAllKeyActivities: boolean;
   setShowAllKeyActivities: React.Dispatch<React.SetStateAction<boolean>>;
+  title?: string;
 }
 
 export const KeyActivitiesHeader = (props: KeyActivitiesHeaderProps): JSX.Element => {
-  const { showAllKeyActivities, setShowAllKeyActivities } = props;
+  const { showAllKeyActivities, setShowAllKeyActivities, title } = props;
 
   return (
     <Container>
-      <KeyActivitiesText> Key Activities </KeyActivitiesText>
+      <KeyActivitiesText> {title || "Key Activities"} </KeyActivitiesText>
       <FilterContainer>
         <FilterOptions
           onClick={() => setShowAllKeyActivities(false)}

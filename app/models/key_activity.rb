@@ -19,4 +19,13 @@ class KeyActivity < ApplicationRecord
   def self.sort_by_position_priority_and_created_at
     self.sort_by_position.sort_by_priority.sort_by_created_date
   end
+
+  def self.sort_by_priority_and_created_at
+    self.sort_by_priority.sort_by_created_date
+  end
+
+  def self.filter_by_team_meeting(meeting_template_id, team_id)
+    meeting_ids = Meeting.where(meeting_template_id: meeting_template_id, team_id: team_id).pluck(:id)
+    self.where(meeting_id: meeting_ids)
+  end
 end
