@@ -118,6 +118,7 @@ export const SemiCircleGauge = () => {
         fillColor={select("color", baseTheme.colors, baseTheme.colors.successGreen)}
         text={`${percentage}%`}
         textColor="text"
+        tickCount={10}
       />
     </ContainerDiv>
   );
