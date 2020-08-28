@@ -4,7 +4,7 @@ class User < ApplicationRecord
   # :lockable, :timeoutable, :trackable and :omniauthable
   include ActionView::Helpers::SanitizeHelper
   include HasDefaultAvatarColor
-
+  include HasEmotionScores
 
   devise :database_authenticatable, :registerable, :confirmable, :invitable,
          :recoverable, :rememberable, :trackable,
@@ -139,6 +139,15 @@ class User < ApplicationRecord
     # we need everything after "(GMT-08:00) "
     timezone[/(?<=\(GMT.\d{2}:\d{2}\)\s).*$/]
   end
+
+  def weekly_average_users_emotion_score(from_date, to_date)
+    daily_average_users_emotion_score(self, from_date, to_date)
+  end
+
+  def team_average_weekly_emotion_score(from_date, to_date)
+    overall_average_weekly_emotion_score(self, from_date, to_date)
+  end
+
 
   private
   def sanitize_personal_vision
