@@ -5,7 +5,9 @@ import { CodeBlockDiv, ContainerDiv, PropsList, RowDiv } from "./shared";
 import {
   StripedProgressBar as ProgressBar,
   StepProgressBar as StProgressBar,
+  SemiCircleGauge as SCGauge,
 } from "~/components/shared";
+import { baseTheme } from "../app/javascript/themes/base";
 
 export default { title: "Progress Bars", decorators: [withKnobs] };
 
@@ -87,6 +89,7 @@ export const StepProgressBar = () => (
     />
   </ContainerDiv>
 );
+
 export const TimedStepProgressBar = () => (
   <ContainerDiv marginTop={250} marginLeft={25} width={"80%"}>
     <StProgressBar
@@ -105,3 +108,17 @@ export const TimedStepProgressBar = () => (
     />
   </ContainerDiv>
 );
+
+export const SemiCircleGauge = () => {
+  const percentage = number("completed", 60, { range: true, min: 0, max: 100, step: 0.1 });
+  return (
+    <ContainerDiv marginTop={250} marginLeft={25} width={"80%"}>
+      <SCGauge
+        percentage={percentage}
+        fillColor={select("color", baseTheme.colors, baseTheme.colors.successGreen)}
+        text={`${percentage}%`}
+        textColor="text"
+      />
+    </ContainerDiv>
+  );
+};
