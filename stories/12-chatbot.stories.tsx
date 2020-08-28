@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as R from "ramda";
 import {
   SurveyBotNoMst,
   SurveyHeader,
@@ -9,6 +10,7 @@ import styled from "styled-components";
 import { layout, LayoutProps } from "styled-system";
 import ChatBot from "react-simple-chatbot";
 import { Text } from "../app/javascript/components/shared/text";
+import { QuestionnaireTitle } from "~/components/shared/questionnaire/questionnaire-title";
 
 const botAvatarPath = require("../app/javascript/assets/images/LynchPyn-Logo-Blue_300x300.png");
 
@@ -69,13 +71,11 @@ const HeaderDiv = styled.div`
 const weeklySteps = [
   {
     id: 1,
-    component: (
-      <HeaderDiv>
-        <Text color={"black"} fontSize={2} fontWeight={"regular"} py={0} my={0}>
-          Weekly Rating
-        </Text>
-      </HeaderDiv>
-    ),
+    options: [],
+    metadata: {
+      questionnaireTitle: true,
+      message: "Weekly Rating",
+    },
     trigger: 2,
   },
   {
@@ -100,13 +100,11 @@ const weeklySteps = [
   },
   {
     id: 4,
-    component: (
-      <HeaderDiv>
-        <Text color={"black"} fontSize={2} fontWeight={"regular"} py={0} my={0}>
-          My Biggest Wins
-        </Text>
-      </HeaderDiv>
-    ),
+    options: [],
+    metadata: {
+      questionnaireTitle: true,
+      message: "My Biggest Wins",
+    },
     trigger: 5,
   },
   {
@@ -129,20 +127,36 @@ const weeklySteps = [
     id: 8,
     user: true,
     placeholder: "Write something...",
-    trigger: 1,
+    trigger: 9,
+  },
+  {
+    id: 9,
+    user: true,
+    end: true,
   },
 ];
+
+const steps = R.map(step => {
+  if (R.hasPath(["metadata", "questionnaireTitle"], step)) {
+    return R.pipe(
+      R.assoc("component", <QuestionnaireTitle title={step.metadata.message} />),
+      R.dissoc("options"),
+    )(step);
+  } else {
+    return step;
+  }
+}, R.clone(weeklySteps));
 
 export const WeeklyReflectionBot = () => (
   <ContainerDiv mt={4}>
     <h1>Weekly Reflection Bot</h1>
     <SurveyContainer width={"768px"}>
       <ChatBot
-        botAvatar={botAvatarPath}
-        userAvatar={userAvatarUrlForStorybook}
+        hideBotAvatar={true}
+        hideUserAvatar={true}
         botDelay={1000}
         headerComponent={<SurveyHeader title={"Weekly Reflection"} />}
-        steps={weeklySteps}
+        steps={steps}
         width={"100%"}
         contentStyle={{ height: "400px" }}
         // header and footer are 120px total

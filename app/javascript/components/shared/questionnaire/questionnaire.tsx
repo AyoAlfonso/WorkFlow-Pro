@@ -11,67 +11,64 @@ import { Loading } from "~/components/shared/loading";
 import { QuestionnaireTitle } from "./questionnaire-title";
 import * as humps from "humps";
 
-export interface ISurveyBotProps {
+export interface IQuestionnaireProps {
   variant: string;
   endFn?: Dispatch<SetStateAction<string>>;
 }
 
-const botAvatarPath = require("../../../assets/images/LynchPyn-Logo-Blue_300x300.png");
+export const Questionnaire = (props: IQuestionnaireProps): JSX.Element => {
+  const [loading, setLoading] = useState<boolean>(true);
 
-export const Questionnaire = observer(
-  (props: ISurveyBotProps): JSX.Element => {
-    const [loading, setLoading] = useState<boolean>(true);
+  const { meetingStore, questionnaireStore } = useMst();
 
-    const { meetingStore, questionnaireStore } = useMst();
+  useEffect(() => {
+    questionnaireStore.load().then(() => {
+      setLoading(false);
+    });
+  }, []);
 
-    useEffect(() => {
-      questionnaireStore.load().then(() => {
-        setLoading(false);
-      });
-    }, []);
+  const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
 
-    const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
-
-    if (loading || R.isNil(questionnaireStore.questionnaires) || R.isNil(questionnaireVariant)) {
-      return (
-        <LoadingContainer>
-          <Loading />
-        </LoadingContainer>
-      );
-    }
-
-    const steps = R.map(step => {
-      if (R.hasPath(["metadata", "questionnaireTitle"], step)) {
-        return R.pipe(
-          R.assoc("component", <QuestionnaireTitle title={R.path(["message"], step)} />),
-          R.dissoc("options"),
-        )(step);
-        // } else if (R.hasPath(["metadata", "frogSelector"], step)) {
-        //   return R.pipe(R.assoc("component", <FrogSelector />), R.dissoc("options"))(step);
-        // } else if (R.hasPath(["metadata", "emotionSelector"], step)) {
-        //   return R.pipe(R.assoc("component", <EmotionSelector />), R.dissoc("options"))(step);
-      } else {
-        return step;
-      }
-    }, R.clone(questionnaireVariant.steps));
-
+  if (loading || R.isNil(questionnaireStore.questionnaires) || R.isNil(questionnaireVariant)) {
     return (
-      <ChatBot
-        botAvatar={botAvatarPath}
-        userAvatar={null}
-        botDelay={1000}
-        headerComponent={<SurveyHeader title={"Weekly Reflection"} />}
-        steps={steps}
-        width={"100%"}
-        contentStyle={{ height: "400px" }}
-        // header and footer are 120px total
-        style={{ height: "520px" }}
-        enableSmoothScroll={true}
-        userDelay={200}
-      />
+      <LoadingContainer>
+        <Loading />
+      </LoadingContainer>
     );
-  },
-);
+  }
+
+  const steps = R.map(step => {
+    console.log(step);
+    if (R.hasPath(["metadata", "questionnaireTitle"], step)) {
+      return R.pipe(
+        R.assoc("component", <QuestionnaireTitle title={step.metadata.message} />),
+        R.dissoc("options"),
+      )(step);
+      // } else if (R.hasPath(["metadata", "frogSelector"], step)) {
+      //   return R.pipe(R.assoc("component", <FrogSelector />), R.dissoc("options"))(step);
+      // } else if (R.hasPath(["metadata", "emotionSelector"], step)) {
+      //   return R.pipe(R.assoc("component", <EmotionSelector />), R.dissoc("options"))(step);
+    } else {
+      return step;
+    }
+  }, R.clone(questionnaireVariant.steps));
+
+  return (
+    <ChatBot
+      hideBotAvatar={true}
+      hideUserAvatar={true}
+      botDelay={1000}
+      headerComponent={<SurveyHeader title={"Weekly Reflection"} />}
+      steps={steps}
+      width={"100%"}
+      contentStyle={{ height: "400px" }}
+      // header and footer are 120px total
+      style={{ height: "520px" }}
+      enableSmoothScroll={true}
+      userDelay={200}
+    />
+  );
+};
 
 const LoadingContainer = styled.div`
   display: flex;

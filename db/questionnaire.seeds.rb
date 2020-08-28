@@ -150,7 +150,6 @@ steps: [
   },
   {
     id: 2,
-    options: [],
     metadata: {
       emotion_selector: true,
       emotions: [
@@ -210,10 +209,11 @@ daily_limit: false,
 steps: [
   {
     id: 1,
-    message: "Weekly Rating",
-    metadata: [
-      questionnaireTitle: true
-    ]
+    options: [],
+    metadata: {
+      questionnaire_title: true,
+      message: "Weekly Rating"
+    },
     trigger: 2,
   },
   {
@@ -238,10 +238,11 @@ steps: [
   },
   {
     id: 4,
-    message: "My Biggest Wins",
-    metadata: [
-      questionnaireTitle: true
-    ]
+    options: [],
+    metadata: {
+      questionnaire_title: true,
+      message: "My Biggest Wins"
+    },
     trigger: 5,
   },
   {
