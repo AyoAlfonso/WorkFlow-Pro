@@ -10,8 +10,7 @@ import { StepProgressBar } from "~/components/shared/progress-bars/step-progress
 import { Text } from "~/components/shared/text";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
-import { toJS } from "mobx";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useHistory } from "react-router-dom";
 import queryString from "query-string";
 import MeetingTypes from "../../../constants/meeting-types";
 import { Icon } from "~/components/shared/icon";
@@ -37,6 +36,7 @@ export const Meeting = observer(
 
     const { teamStore, meetingStore } = useMst();
     const { team_id, meeting_id } = useParams();
+    const history = useHistory();
 
     const currentTimeInSeconds = nowInSeconds();
 
@@ -72,18 +72,28 @@ export const Meeting = observer(
       </Container>
     );
 
-    const renderMeetingEnded = () => (
-      <Container>
-        <BodyContainer>This meeting has ended // meeting summary?</BodyContainer>
-      </Container>
-    );
-
     const meeting = meetingStore.currentMeeting;
     const team = teamStore.teams.find(team => team.id === parseInt(team_id));
 
     if (R.isNil(meeting)) {
       return renderLoading();
     }
+
+    const renderMeetingEnded = () => (
+      <Container>
+        <HeaderContainer>
+          <Text fontSize={"36px"}>{`${R.path(["name"], team)} Meeting`}</Text>
+          <DateAndButtonContainer>
+            <Heading type={"h3"} fontSize={"32px"} fontWeight={400}>
+              {moment(meeting.endTime).format("dddd, MMMM Do")}
+            </Heading>
+          </DateAndButtonContainer>
+        </HeaderContainer>
+        <BodyContainer>
+          <Text fontSize={2}>This meeting has already been completed.</Text>
+        </BodyContainer>
+      </Container>
+    );
 
     if (!R.isNil(meeting.endTime)) {
       return renderMeetingEnded();
@@ -100,7 +110,6 @@ export const Meeting = observer(
     };
 
     const hasStartTime = () => !R.isNil(meeting.startTime);
-    const hasEndTime = () => !R.isNil(meeting.endTime);
 
     const StartMeetingButton = () => {
       return (
@@ -139,6 +148,7 @@ export const Meeting = observer(
           onClick={() => {
             setMeetingEnded(true);
             updateMeeting({ endTime: nowAsUTCString() });
+            history.push(`/`);
           }}
           small
           ml={"25px"}
@@ -154,46 +164,40 @@ export const Meeting = observer(
 
     return (
       <Container>
-        {meetingEnded || hasEndTime() ? (
-          renderMeetingEnded()
-        ) : (
-          <>
-            <HeaderContainer>
-              <Text fontSize={"36px"}>{`${R.path(["name"], team)} Meeting`}</Text>
-              <DateAndButtonContainer>
-                <Heading type={"h3"} fontSize={"32px"} fontWeight={400}>
-                  {moment().format("dddd, MMMM Do")}
-                </Heading>
-                {meetingStarted ? <StopMeetingButton /> : <StartMeetingButton />}
-              </DateAndButtonContainer>
-            </HeaderContainer>
-            <BodyContainer>
-              {meetingStarted ? ( //#TODO: IF YOU ARE NOT THE HOST RENDER JUST THE AGENDA
-                <>
-                  <ProgressBarTimerContainer>
-                    <StepProgressBar
-                      progressBarProps={{
-                        stepPositions: stepPositions,
-                        percent: calculatedPercentage > 100 ? 100 : calculatedPercentage,
-                      }}
-                      steps={progressBarSteps}
-                      onStepClick={onStepClick}
-                      currentStepIndex={meeting.currentStep}
-                    />
-                    <Timer secondsElapsed={secondsElapsed} ml={"30px"} />
-                  </ProgressBarTimerContainer>
+        <HeaderContainer>
+          <Text fontSize={"36px"}>{`${R.path(["name"], team)} Meeting`}</Text>
+          <DateAndButtonContainer>
+            <Heading type={"h3"} fontSize={"32px"} fontWeight={400}>
+              {moment().format("dddd, MMMM Do")}
+            </Heading>
+            {meetingStarted ? <StopMeetingButton /> : <StartMeetingButton />}
+          </DateAndButtonContainer>
+        </HeaderContainer>
+        <BodyContainer>
+          {meetingStarted ? ( //#TODO: IF YOU ARE NOT THE HOST RENDER JUST THE AGENDA
+            <>
+              <ProgressBarTimerContainer>
+                <StepProgressBar
+                  progressBarProps={{
+                    stepPositions: stepPositions,
+                    percent: calculatedPercentage > 100 ? 100 : calculatedPercentage,
+                  }}
+                  steps={progressBarSteps}
+                  onStepClick={onStepClick}
+                  currentStepIndex={meeting.currentStep}
+                />
+                <Timer secondsElapsed={secondsElapsed} ml={"30px"} />
+              </ProgressBarTimerContainer>
 
-                  <MeetingStep meeting={meetingStore.currentMeeting}></MeetingStep>
-                </>
-              ) : (
-                <>
-                  <MeetingAgenda />
-                  <HomeCoreFour />
-                </>
-              )}
-            </BodyContainer>
-          </>
-        )}
+              <MeetingStep meeting={meetingStore.currentMeeting}></MeetingStep>
+            </>
+          ) : (
+            <>
+              <MeetingAgenda />
+              <HomeCoreFour />
+            </>
+          )}
+        </BodyContainer>
       </Container>
     );
   },
