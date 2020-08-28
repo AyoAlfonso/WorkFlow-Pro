@@ -1,5 +1,6 @@
 import { types } from "mobx-state-tree";
 import { StepModel } from "./step";
+import { KeyActivityModel } from "./key-activity";
 
 export const MeetingModel = types
   .model("MeetingModel")
@@ -24,6 +25,7 @@ export const MeetingModel = types
     currentWeekAverageUserEmotions: types.maybeNull(types.array(types.frozen())),
     currentWeekAverageTeamEmotions: types.maybeNull(types.number),
     emotionScorePercentageDifference: types.maybeNull(types.string),
+    teamKeyActivities: types.maybeNull(types.array(KeyActivityModel)),
   })
   .views(self => ({
     get currentStepDetails() {

@@ -109,9 +109,10 @@ export class Api {
     return this.client.post("/key_activities", keyActivityObject);
   }
 
-  async updateKeyActivityStatus(keyActivity, value) {
+  async updateKeyActivityStatus(keyActivity, value, fromTeamMeeting) {
     return this.client.patch(`/key_activities/${keyActivity.id}`, {
       completed: value,
+      fromTeamMeeting,
     });
   }
 
@@ -119,8 +120,8 @@ export class Api {
     return this.client.patch(`/key_activities/${keyActivityObject.id}`, keyActivityObject);
   }
 
-  async destroyKeyActivity(id) {
-    return this.client.delete(`/key_activities/${id}`);
+  async destroyKeyActivity(keyActivityObject) {
+    return this.client.delete(`/key_activities/${keyActivityObject.id}`, keyActivityObject);
   }
 
   async getKeyActivitiesFromMeeting(meeting_id) {

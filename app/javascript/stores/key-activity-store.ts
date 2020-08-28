@@ -1,5 +1,5 @@
 import { ApiResponse } from "apisauce";
-import { flow, types } from "mobx-state-tree";
+import { flow, types, getRoot } from "mobx-state-tree";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { showToast } from "~/utils/toast-message";
 import { withEnvironment } from "../lib/with-environment";
@@ -51,10 +51,11 @@ export const KeyActivityStoreModel = types
         self.keyActivities = response.data;
       }
     }),
-    updateKeyActivityStatus: flow(function*(keyActivity, value) {
+    updateKeyActivityStatus: flow(function*(keyActivity, value, fromTeamMeeting = false) {
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivityStatus(
         keyActivity,
         value,
+        fromTeamMeeting,
       );
       if (response.ok) {
         self.keyActivities = response.data;
@@ -76,11 +77,12 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
-    updateKeyActivity: flow(function*(id) {
+    updateKeyActivity: flow(function*(id, fromTeamMeeting = false) {
       let keyActivityObject = self.keyActivities.find(ka => ka.id == id);
-      const response: ApiResponse<any> = yield self.environment.api.updateKeyActivity(
-        keyActivityObject,
-      );
+      const response: ApiResponse<any> = yield self.environment.api.updateKeyActivity({
+        ...keyActivityObject,
+        fromTeamMeeting,
+      });
       self.finishLoading();
       if (response.ok) {
         self.keyActivities = response.data;
@@ -89,8 +91,11 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
-    destroyKeyActivity: flow(function*(id) {
-      const response: ApiResponse<any> = yield self.environment.api.destroyKeyActivity(id);
+    destroyKeyActivity: flow(function*(id, fromTeamMeeting = false) {
+      const response: ApiResponse<any> = yield self.environment.api.destroyKeyActivity({
+        id,
+        fromTeamMeeting,
+      });
       if (response.ok) {
         self.keyActivities = response.data;
         return true;
@@ -105,7 +110,7 @@ export const KeyActivityStoreModel = types
         meeting_id,
       );
       if (response.ok) {
-        self.keyActivitiesFromMeeting = response.data;
+        self.keyActivities = response.data;
         return true;
       } else {
         return false;

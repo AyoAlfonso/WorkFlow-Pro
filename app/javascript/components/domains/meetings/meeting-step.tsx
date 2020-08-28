@@ -101,6 +101,6 @@ const LeftContainer = styled.div`
 
 const RightContainer = styled.div`
   width: 80%;
-  min-width: 320p;
+  min-width: 320px;
   margin-left: 10px;
 `;
