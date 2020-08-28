@@ -9,6 +9,8 @@ export const KeyActivityModel = types
     priority: types.maybeNull(types.string),
     weeklyList: types.maybeNull(types.boolean),
     meetingId: types.maybeNull(types.number),
+    position: types.maybeNull(types.number),
+    todaysPriority: types.maybeNull(types.boolean),
   })
   .views(self => ({}))
   .actions(self => ({}));

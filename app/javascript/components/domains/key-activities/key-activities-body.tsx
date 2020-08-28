@@ -1,13 +1,15 @@
-import * as React from "react";
-import styled from "styled-components";
-import { useMst } from "../../../setup/root";
-import { useEffect, useState } from "react";
-import { Icon } from "../../shared/icon";
-import { color } from "styled-system";
 import { observer } from "mobx-react";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { Draggable, Droppable } from "react-beautiful-dnd";
+import styled from "styled-components";
+import { color } from "styled-system";
+import { baseTheme } from "~/themes";
+import { useMst } from "../../../setup/root";
+import { Loading } from "../../shared";
+import { Icon } from "../../shared/icon";
 import { CreateKeyActivityModal } from "./create-key-activity-modal";
 import { KeyActivityEntry } from "./key-activity-entry";
-import { baseTheme } from "~/themes";
 
 interface IKeyActivitiesBodyProps {
   showAllKeyActivities: boolean;
@@ -34,7 +36,10 @@ export const KeyActivitiesBody = observer(
     }, []);
 
     const renderKeyActivitiesList = (): any => {
-      if (showAllKeyActivities) {
+      const { loading, loadingList } = keyActivityStore;
+      if (loading && loadingList === "weekly-activities") {
+        return <Loading />;
+      } else if (showAllKeyActivities) {
         return (
           <>
             {renderOutstandingMasterActivitiesList()}
@@ -43,9 +48,24 @@ export const KeyActivitiesBody = observer(
         );
       } else {
         return weeklyKeyActivities.map((keyActivity, index) => (
-          <KeyActivityContainer key={keyActivity["id"]}>
-            <KeyActivityEntry keyActivity={keyActivity} />
-          </KeyActivityContainer>
+          <Draggable
+            draggableId={keyActivity["id"].toString()}
+            index={index}
+            key={keyActivity["id"]}
+          >
+            {provided => (
+              <KeyActivityContainer
+                key={keyActivity["id"]}
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+              >
+                <KeyActivityEntry
+                  keyActivity={keyActivity}
+                  dragHandleProps={...provided.dragHandleProps}
+                />
+              </KeyActivityContainer>
+            )}
+          </Draggable>
         ));
       }
     };
@@ -90,7 +110,17 @@ export const KeyActivitiesBody = observer(
           </AddNewKeyActivityPlus>
           <AddNewKeyActivityText> Add New Key Activity</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
-        <KeyActivitiesContainer>{renderKeyActivitiesList()}</KeyActivitiesContainer>
+        <Droppable droppableId="weekly-activities">
+          {(provided, snapshot) => (
+            <KeyActivitiesContainer
+              ref={provided.innerRef}
+              isDraggingOver={snapshot.isDraggingOver}
+            >
+              {renderKeyActivitiesList()}
+              {provided.placeholder}
+            </KeyActivitiesContainer>
+          )}
+        </Droppable>
       </Container>
     );
   },
@@ -130,15 +160,22 @@ const AddNewKeyActivityContainer = styled.div`
   }
 `;
 
-const KeyActivitiesContainer = styled.div`
+const KeyActivitiesContainer = styled.div<KeyActivitiesContainerType>`
+  background-color: ${props =>
+    props.isDraggingOver ? props.theme.colors.backgroundBlue : "white"};
   overflow-y: auto;
   height: 260px;
 `;
 
-type KeyActivityContainerType = {
-  borderBottom?: string;
-};
 const KeyActivityContainer = styled.div<KeyActivityContainerType>`
   border-bottom: ${props => props.borderBottom};
   margin-right: ${props => (props.borderBottom ? "8px" : "")};
 `;
+
+type KeyActivitiesContainerType = {
+  isDraggingOver?: any;
+};
+
+type KeyActivityContainerType = {
+  borderBottom?: string;
+};

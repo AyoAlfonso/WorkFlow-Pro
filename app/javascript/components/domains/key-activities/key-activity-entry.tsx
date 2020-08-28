@@ -1,20 +1,20 @@
-import * as React from "react";
+import { Checkbox, Label } from "@rebass/forms";
+import { observer } from "mobx-react";
+import React, { useRef } from "react";
+import ContentEditable from "react-contenteditable";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
-import { Checkbox, Label } from "@rebass/forms";
-import { Icon } from "../../shared/icon";
-import { observer } from "mobx-react";
 import { baseTheme } from "../../../themes/base";
-import ContentEditable from "react-contenteditable";
+import { Icon } from "../../shared/icon";
 import { KeyActivityPriorityIcon } from "./key-activity-priority-icon";
-import { useRef } from "react";
 
 interface IKeyActivityEntryProps {
   keyActivity: any;
+  dragHandleProps?: any;
 }
 
 export const KeyActivityEntry = observer(
-  ({ keyActivity }: IKeyActivityEntryProps): JSX.Element => {
+  ({ keyActivity, dragHandleProps }: IKeyActivityEntryProps): JSX.Element => {
     const { keyActivityStore } = useMst();
     const { colors } = baseTheme;
 
@@ -42,6 +42,12 @@ export const KeyActivityEntry = observer(
       keyActivityStore.updateKeyActivity(keyActivity.id);
     };
 
+    const handleDescriptionChange = e => {
+      if (!e.target.value.includes("<div>")) {
+        keyActivityStore.updateKeyActivityState(keyActivity["id"], "description", e.target.value);
+      }
+    };
+
     return (
       <Container>
         <CheckboxContainer key={keyActivity["id"]}>
@@ -58,18 +64,18 @@ export const KeyActivityEntry = observer(
           <KeyActivityPriorityIcon priority={keyActivity.priority} />
         </KeyActivityPriorityContainer>
 
+        {dragHandleProps && (
+          <HandleContainer {...dragHandleProps}>
+            <Handle />
+            <Handle />
+            <Handle />
+          </HandleContainer>
+        )}
+
         <StyledContentEditable
           innerRef={keyActivityRef}
           html={keyActivity.description}
-          onChange={e => {
-            if (!e.target.value.includes("<div>")) {
-              keyActivityStore.updateKeyActivityState(
-                keyActivity["id"],
-                "description",
-                e.target.value,
-              );
-            }
-          }}
+          onChange={e => handleDescriptionChange(e)}
           onKeyDown={key => {
             if (key.keyCode == 13) {
               keyActivityRef.current.blur();
@@ -85,6 +91,22 @@ export const KeyActivityEntry = observer(
     );
   },
 );
+
+const HandleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 13px;
+  margin-top: auto;
+  margin-bottom: auto;
+`;
+
+const Handle = styled.div`
+  width: 10px;
+  height: 3px;
+  background-color: ${props => props.theme.colors.grey80};
+  border-radius: 4px;
+`;
 
 const DeleteButtonContainer = styled.div`
   margin: auto;
@@ -104,12 +126,15 @@ const Container = styled.div`
   &:hover ${DeleteButtonContainer} {
     display: block;
   }
+  &:active {
+    background-color: ${props => props.theme.colors.grey20};
+  }
 `;
 
 const KeyActivityPriorityContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
-  margin-right: 10px;
+  margin-right: 8px;
   &:hover {
     cursor: pointer;
   }

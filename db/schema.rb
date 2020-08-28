@@ -182,10 +182,11 @@ ActiveRecord::Schema.define(version: 2020_08_27_164303) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "complete"
-    t.boolean "weekly_list"
+    t.boolean "weekly_list", default: false
     t.integer "priority", default: 0
     t.bigint "meeting_id"
-    t.boolean "todays_priority"
+    t.boolean "todays_priority", default: false
+    t.integer "position"
     t.index ["meeting_id"], name: "index_key_activities_on_meeting_id"
     t.index ["user_id"], name: "index_key_activities_on_user_id"
   end
