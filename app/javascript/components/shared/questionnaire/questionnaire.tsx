@@ -38,7 +38,6 @@ export const Questionnaire = (props: IQuestionnaireProps): JSX.Element => {
   }
 
   const steps = R.map(step => {
-    console.log(step);
     if (R.hasPath(["metadata", "questionnaireTitle"], step)) {
       return R.pipe(
         R.assoc("component", <QuestionnaireTitle title={step.metadata.message} />),

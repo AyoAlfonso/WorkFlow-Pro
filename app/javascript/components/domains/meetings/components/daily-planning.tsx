@@ -3,15 +3,13 @@ import { HomeContainerBorders } from "~/components/domains/home/shared-component
 import styled from "styled-components";
 import { Text } from "~/components/shared/text";
 import { KeyActivitiesContainer } from "~/components/domains/key-activities/key-activities-container";
-import { TodaysPrioritiesHeader } from "~/components/domains/todays-priorities/todays-priorities-header";
+import { TodaysPrioritiesContainer } from "~/components/domains/todays-priorities/todays-priorities-container";
 
 export const DailyPlanning = (props: {}): JSX.Element => {
   return (
     <PrioritiesContainer>
       <PrioritiesHeaderContainer>
-        <TodayPrioritiesHeaderContainer>
-          <TodaysPrioritiesHeader />
-        </TodayPrioritiesHeaderContainer>
+        <TodaysPrioritiesContainer />
         <KeyActivitiesContainer />
       </PrioritiesHeaderContainer>
     </PrioritiesContainer>
