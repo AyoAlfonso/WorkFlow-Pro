@@ -13,12 +13,13 @@ import { KeyActivityEntry } from "./key-activity-entry";
 
 interface IKeyActivitiesBodyProps {
   showAllKeyActivities: boolean;
+  borderLeft?: string;
 }
 
 export const KeyActivitiesBody = observer(
   (props: IKeyActivitiesBodyProps): JSX.Element => {
     const { keyActivityStore } = useMst();
-    const { showAllKeyActivities } = props;
+    const { showAllKeyActivities, borderLeft } = props;
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
     const weeklyKeyActivities = keyActivityStore.weeklyKeyActivities;
@@ -99,7 +100,7 @@ export const KeyActivitiesBody = observer(
     };
 
     return (
-      <Container>
+      <Container borderLeft={borderLeft}>
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
@@ -127,10 +128,14 @@ export const KeyActivitiesBody = observer(
   },
 );
 
-const Container = styled.div`
+type ContainerProps = {
+  borderLeft?: string;
+};
+
+const Container = styled.div<ContainerProps>`
   ${color}
   padding: 0px 0px 6px 10px;
-  border-left: ${props => `1px solid ${props.theme.colors.grey40}`};
+  border-left: ${props => props.borderLeft || `1px solid ${props.theme.colors.grey40}`};
 `;
 
 const AddNewKeyActivityPlus = styled.div`

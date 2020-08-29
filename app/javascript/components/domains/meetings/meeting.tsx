@@ -18,13 +18,14 @@ import { TextNoMargin } from "~/components/shared/text";
 import { Loading } from "~/components/shared/loading";
 import { MeetingStep } from "./meeting-step";
 import { MeetingAgenda } from "./meeting-agenda";
-import { HomeCoreFour } from "~/components/domains/home/home-core-four";
+import { HomeCoreFour, CoreFourOnly } from "~/components/domains/home/home-core-four";
 import { Timer } from "~/components/shared/timer";
 import { dateStringToSeconds, nowAsUTCString, nowInSeconds } from "~/utils/date-time";
 import {
   progressBarStepsForMeeting,
   stepPositionsForMeeting,
 } from "./shared/progress-transform-helper";
+import { HomeTitle, HomeContainerBorders } from "../home/shared-components";
 
 export interface ITeamMeetingProps {}
 
@@ -192,10 +193,17 @@ export const Meeting = observer(
               <MeetingStep meeting={meetingStore.currentMeeting}></MeetingStep>
             </>
           ) : (
-            <>
-              <MeetingAgenda />
-              <HomeCoreFour />
-            </>
+            <ContentsContainer>
+              <AgendaContainer>
+                <AgendaHeaderContainer>
+                  <HomeTitle>Core Four</HomeTitle>
+                  <Text fontSize={1}>Review the Core Four as a team.</Text>
+                </AgendaHeaderContainer>
+              </AgendaContainer>
+              <CoreFourWrapper>
+                <CoreFourOnly />
+              </CoreFourWrapper>
+            </ContentsContainer>
           )}
         </BodyContainer>
       </Container>
@@ -226,3 +234,27 @@ const ProgressBarTimerContainer = styled.div`
 `;
 
 const BodyContainer = styled.div``;
+
+const AgendaContainer = styled(HomeContainerBorders)`
+  width: 20%;
+  margin-right: 10px;
+  min-width: 320px;
+  margin-top: 35px;
+  padding: 16px;
+  min-height: 500px;
+`;
+
+const ContentsContainer = styled.div`
+  display: flex;
+`;
+
+const CoreFourWrapper = styled.div`
+  width: 100%;
+  margin-left: 20px;
+  margin-top: 30px;
+`;
+
+const AgendaHeaderContainer = styled.div`
+  border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  padding-bottom: 10px;
+`;

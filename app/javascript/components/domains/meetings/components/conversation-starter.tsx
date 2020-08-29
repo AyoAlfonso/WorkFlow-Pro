@@ -28,7 +28,8 @@ export const ConversationStarter = observer(
                 Today's Topic
               </Text>
             }
-            my={"30px"}
+            mr={"auto"}
+            ml={"15px"}
           >
             <CardBody height={"120px"}>
               <Text fontFamily={"Exo"} fontSize={4} mt={"15px"} textAlign={"center"}>

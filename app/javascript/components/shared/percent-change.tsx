@@ -41,6 +41,7 @@ type PercentageChangeTextProps = {
 const PercentageChangeText = styled(Text)<PercentageChangeTextProps>`
   color: ${props => props.color};
   font-weight: bold;
+  margin-left: 5px;
 `;
 
 const ComparedToLastWeekText = styled(Text)`

@@ -33,6 +33,7 @@ const StepComponent = (step: IStep) => {
   if (R.isNil(step)) {
     return <Loading />;
   }
+
   switch (step.stepType) {
     case "component":
       switch (step.componentToRender) {
@@ -63,13 +64,10 @@ const StepComponent = (step: IStep) => {
         default:
           return <Text>This custom component has not been configured</Text>;
       }
-      break;
     case "image":
       return <ImageStep step={step} />;
-      break;
     case "embedded_link":
       return <EmbedStep step={step} />;
-      break;
     default:
       return <Text>This meeting step type has not been configured</Text>;
   }
@@ -84,8 +82,10 @@ export const MeetingStep = observer(
       <BodyContainer>
         <LeftContainer>
           <LeftContainerBorder>
-            <HomeTitle>{meeting.currentStepDetails.name}</HomeTitle>
-            <Text fontSize={1}>{meeting.currentStepDetails.instructions}</Text>
+            <AgendaHeaderContainer>
+              <HomeTitle>{meeting.currentStepDetails.name}</HomeTitle>
+              <Text fontSize={1}>{meeting.currentStepDetails.instructions}</Text>
+            </AgendaHeaderContainer>
           </LeftContainerBorder>
         </LeftContainer>
         <RightContainer>{StepComponent(meeting.currentStepDetails)}</RightContainer>
@@ -95,7 +95,8 @@ export const MeetingStep = observer(
 );
 
 const LeftContainerBorder = styled(HomeContainerBorders)`
-  padding: 10px;
+  padding: 16px;
+  height: 100%;
 `;
 
 const BodyContainer = styled.div`
@@ -107,10 +108,17 @@ const LeftContainer = styled.div`
   width: 20%;
   margin-right: 10px;
   min-width: 320px;
+  min-height: 500px;
 `;
 
 const RightContainer = styled.div`
   width: 80%;
   min-width: 320px;
   margin-left: 10px;
+  margin-top: 5px;
+`;
+
+const AgendaHeaderContainer = styled.div`
+  border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  padding-bottom: 10px;
 `;

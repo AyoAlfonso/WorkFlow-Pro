@@ -5,7 +5,7 @@ export const StepModel = types
   .model("StepModel")
   .props({
     componentToRender: types.maybeNull(types.string),
-    duration: types.number,
+    duration: types.maybeNull(types.number),
     id: types.identifierNumber,
     imageUrl: types.maybeNull(types.string),
     instructions: types.maybeNull(types.string),

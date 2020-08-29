@@ -196,7 +196,7 @@ export const SemiCircleGauge = () => {
       <RowDiv width={"300px"} mt={"50px"}>
         <SCGauge
           percentage={percentage}
-          fillColor={select("color", {null, ...baseTheme.colors}, null)}
+          fillColor={select("color", { null: null, ...baseTheme.colors }, null)}
           text={`${percentage}%`}
           textColor="text"
           tickCount={number("tickCount", 10, { range: true, min: 0, max: 20, step: 1 })}

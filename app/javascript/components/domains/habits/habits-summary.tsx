@@ -28,7 +28,10 @@ export const HabitsSummary = observer(
 
     const renderHabits = () =>
       habits.map((habit, index) => (
-        <HabitsTableRow key={`${habit.id}-${index}`}>
+        <HabitsTableRow
+          key={`${habit.id}-${index}`}
+          borderBottom={index == habits.length - 1 && `1px solid ${baseTheme.colors.grey20} `}
+        >
           <HabitsTableDataCell>
             {habit.percentageWeeklyLogsCompleted == 0 ? (
               <HabitsTableCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
@@ -105,7 +108,6 @@ export const HabitsSummary = observer(
         </HabitsTableHead>
         <HabitsTableBody>
           {renderHabits()}
-          <Divider />
           {renderOverall}
         </HabitsTableBody>
       </HabitsTable>

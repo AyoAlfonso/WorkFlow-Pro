@@ -12,7 +12,12 @@ export const HabitsTableHead = styled.thead``;
 
 export const HabitsTableBody = styled.tbody``;
 
-export const HabitsTableRow = styled.tr``;
+type HabitsTableRowProps = {
+  borderBottom?: string;
+};
+export const HabitsTableRow = styled.tr<HabitsTableRowProps>`
+  border-bottom: ${props => props.borderBottom};
+`;
 
 type HabitsTableHeaderCellType = {
   width?: string;
@@ -28,8 +33,7 @@ export const HabitsTableHeaderCell = styled.th<HabitsTableHeaderCellType & Typog
 export const HabitsTableDataCell = styled.td<TypographyProps>`
   ${typography}
   height: 35px;
-  text-align: center;
-  :hover {
-    cursor: pointer;
-  }
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2px;
 `;

@@ -18,6 +18,7 @@ export const TeamPulse = (): JSX.Element => {
 
 const Container = styled(HomeContainerBorders)`
   width: 650px;
-  margin-left: auto;
+  margin-left: 15px;
   margin-right: auto;
+  margin-top: 0;
 `;

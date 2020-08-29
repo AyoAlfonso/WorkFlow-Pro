@@ -20,6 +20,5 @@ export const PersonalHabitSummary = (props: IPersonalHabitProps): JSX.Element =>
 };
 
 const Container = styled(HomeContainerBorders)`
-  min-width: 240px;
-  width: 40%;
+  min-width: 325px;
 `;
