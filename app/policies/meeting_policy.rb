@@ -34,6 +34,10 @@ class MeetingPolicy < ApplicationPolicy
   def team_meetings?
     @user.teams_intersect?(@meeting.map { |m| m.team })
   end
+
+  def meeting_recap?
+    @user.teams_intersect?(@meeting.map { |m| m.team })
+  end
   
   class Scope
     attr_reader :user, :scope

@@ -11,6 +11,7 @@ import { Milestones } from "./components/milestones";
 import { PersonalKeyActivities } from "./components/personal-key-activities";
 import { WeeklyReflection } from "./components/weekly-reflection";
 import { MeetingRating } from "./components/meeting-rating";
+import { Recap } from "./components/recap";
 import { Text } from "~/components/shared/text";
 import { observer } from "mobx-react";
 import { IMeeting } from "~/models/meeting";
@@ -57,6 +58,8 @@ const StepComponent = (step: IStep) => {
           return <MeetingGoals />;
         case "Issues":
           return <TeamIssues />;
+        case "Recap":
+          return <Recap />;
         default:
           return <Text>This custom component has not been configured</Text>;
       }
@@ -97,6 +100,7 @@ const LeftContainerBorder = styled(HomeContainerBorders)`
 
 const BodyContainer = styled.div`
   display: flex;
+  margin-top: 50px;
 `;
 
 const LeftContainer = styled.div`

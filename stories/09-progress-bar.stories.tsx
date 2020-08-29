@@ -1,11 +1,13 @@
-import { number, select, text, withKnobs } from "@storybook/addon-knobs";
+import { number, select, text, boolean, withKnobs } from "@storybook/addon-knobs";
 import * as React from "react";
 import { atomOneLight, CopyBlock } from "react-code-blocks";
 import { CodeBlockDiv, ContainerDiv, PropsList, RowDiv } from "./shared";
 import {
   StripedProgressBar as ProgressBar,
   StepProgressBar as StProgressBar,
+  SemiCircleGauge as SCGauge,
 } from "~/components/shared";
+import { baseTheme } from "../app/javascript/themes/base";
 
 export default { title: "Progress Bars", decorators: [withKnobs] };
 
@@ -87,6 +89,7 @@ export const StepProgressBar = () => (
     />
   </ContainerDiv>
 );
+
 export const TimedStepProgressBar = () => (
   <ContainerDiv marginTop={250} marginLeft={25} width={"80%"}>
     <StProgressBar
@@ -105,3 +108,103 @@ export const TimedStepProgressBar = () => (
     />
   </ContainerDiv>
 );
+
+const SCGaugePropsList = [
+  {
+    name: "percentage",
+    type: "number",
+    required: true,
+    description: "The percentage complete, from 0-100",
+  },
+  {
+    name: "text",
+    type: "string",
+    required: false,
+    description: "The number or text to display in the center of the gauge",
+  },
+  {
+    name: "textColor",
+    type: "string",
+    required: false,
+    description: "The color of the text",
+  },
+  {
+    name: "fillColor",
+    type: "string",
+    required: false,
+    description:
+      "The color of the gauge.  If this prop is not supplied, the gauge changes colors depending on the percentage",
+  },
+  {
+    name: "tickCount",
+    type: "number",
+    required: false,
+    description:
+      "The number of ticks to be displayed around the outside of the gauge.  These will only appear if hasTicks={true}",
+  },
+  {
+    name: "hasTicks",
+    type: "boolean",
+    required: false,
+    description: "Whether or not to display the ticks",
+  },
+  {
+    name: "hasLabels",
+    type: "boolean",
+    required: false,
+    description: "If true, will display labels for the ticks in increments of 10",
+  },
+  {
+    name: "hasLine",
+    type: "boolean",
+    required: false,
+    description: "If true, draws an extra line around the gauge, through the labels",
+  },
+];
+
+export const SemiCircleGauge = () => {
+  const percentage = number("completed", 60, { range: true, min: 0, max: 100, step: 0.1 });
+  return (
+    <ContainerDiv mat={"25px"} ml={"25px"} width={"100%"}>
+      <h1>Semi Circle Gauge</h1>
+      <CodeBlockDiv mb={"20px"}>
+        <CopyBlock
+          text={`
+      import * as React from "react";
+      import { SemiCircleGauge } from "../components/shared/semi-circle-gauge"
+
+      const MyComponent = () => (
+        <div>
+          <SCGauge
+            percentage={60}
+            fillColor={"blue"}
+            text={"60%"}
+            textColor="text"
+            tickCount={10}
+            hasTicks={true}
+            hasLabels={true}
+            hasLine={false}
+          />
+        </div>
+      )
+      `}
+          language={"tsx"}
+          theme={atomOneLight}
+        />
+      </CodeBlockDiv>
+      <PropsList propsList={SCGaugePropsList} styledSystemProps={["color", "layout", "space"]} />
+      <RowDiv width={"300px"} mt={"50px"}>
+        <SCGauge
+          percentage={percentage}
+          fillColor={select("color", {null, ...baseTheme.colors}, null)}
+          text={`${percentage}%`}
+          textColor="text"
+          tickCount={number("tickCount", 10, { range: true, min: 0, max: 20, step: 1 })}
+          hasTicks={boolean("hasTicks", true)}
+          hasLabels={boolean("hasLabels", true)}
+          hasLine={boolean("hasLine", true)}
+        />
+      </RowDiv>
+    </ContainerDiv>
+  );
+};

@@ -12,4 +12,10 @@ class Milestone < ApplicationRecord
   ) }
 
   delegate :description, to: :quarterly_goal, prefix: true
+  scope :completed, -> { where(status: "completed") }
+
+  def self.for_users_in_team(team_id)
+    quarterly_goal_ids = QuarterlyGoal.filter_by_team_id(team_id).pluck(:id)
+    self.where(quarterly_goal_id: quarterly_goal_ids)
+  end
 end
