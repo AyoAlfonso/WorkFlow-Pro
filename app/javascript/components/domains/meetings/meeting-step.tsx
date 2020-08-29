@@ -34,8 +34,6 @@ const StepComponent = (step: IStep) => {
     return <Loading />;
   }
 
-  console.log("step", step);
-
   switch (step.stepType) {
     case "component":
       switch (step.componentToRender) {

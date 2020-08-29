@@ -72,8 +72,6 @@ export const PersonalPlanning = observer(
       );
     };
 
-    console.log("lprogressBarSteps", progressBarSteps);
-
     return (
       <Container>
         <HeaderContainer>
