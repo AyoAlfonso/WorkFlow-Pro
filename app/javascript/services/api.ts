@@ -269,6 +269,10 @@ export class Api {
     return this.client.delete(`/meetings/${id}`);
   }
 
+  async getMeetingRecap(teamId, meetingId) {
+    return this.client.get(`teams/${teamId}/meetings/${meetingId}/meeting_recap`);
+  }
+
   async getNotifications() {
     return this.client.get(`/notifications`);
   }

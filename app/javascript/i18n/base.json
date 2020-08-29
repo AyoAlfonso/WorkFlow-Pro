@@ -102,7 +102,10 @@
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",
-        "meetingRating": "Rate the Meeting"
+        "meetingRating": "Rate the Meeting",
+        "goalProgress": "Goal Progress",
+        "tasksCompleted": "Tasks Completed",
+        "issuesAddressed": "Issues Addressed"
       },
       "status": {
         "active": "Active",

@@ -53,6 +53,16 @@ class Api::MeetingsController < Api::ApplicationController
     render 'api/meetings/team_meetings'
   end
 
+  def meeting_recap
+    @meeting = Meeting.find(params[:id])
+    @milestones = Milestone.for_users_in_team(params[:team_id])
+    @key_activities = KeyActivity.filter_by_team_meeting(@meeting.meeting_template_id, params[:team_id])
+    authorize @key_activities
+    @issues = Issue.where(team_id: params[:team_id])
+    authorize @issues
+    render json: { milestones: @milestones, key_activities: @key_activities, issues: @issues }
+  end
+
   private
 
   def set_additional_data

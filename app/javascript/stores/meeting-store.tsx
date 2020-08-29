@@ -12,6 +12,7 @@ export const MeetingStoreModel = types
     currentMeeting: types.maybeNull(MeetingModel),
     meetings: types.array(MeetingModel),
     teamMeetings: types.array(MeetingModel),
+    meetingRecap: types.maybeNull(types.frozen()),
   })
   .extend(withEnvironment())
   .views(self => ({}))
@@ -81,7 +82,19 @@ export const MeetingStoreModel = types
         self.currentMeeting = response.data;
         return response.data;
       } catch {
-        //caught by Api Monitor
+        // caught by Api Monitor
+      }
+    }),
+    getMeetingRecap: flow(function*(teamId, meetingId) {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getMeetingRecap(
+          teamId,
+          meetingId,
+        );
+        self.meetingRecap = response.data as any;
+        return response.data;
+      } catch {
+        // caught by Api Monitor
       }
     }),
   }))

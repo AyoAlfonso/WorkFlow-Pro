@@ -3,6 +3,8 @@ class Meeting < ApplicationRecord
   belongs_to :hosted_by, class_name: "User", optional: true
   belongs_to :meeting_template
 
+  has_many :key_activities
+
   delegate :steps, to: :meeting_template
   delegate :total_duration, :duration, to: :meeting_template
   delegate :name, to: :meeting_template

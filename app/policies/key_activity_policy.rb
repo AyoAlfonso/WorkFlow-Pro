@@ -26,6 +26,10 @@ class KeyActivityPolicy < ApplicationPolicy
     true
   end
 
+  def meeting_recap?
+    true
+  end
+
   class Scope
     attr_reader :user, :scope
 
