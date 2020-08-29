@@ -54,7 +54,7 @@ export const Recap = observer(
       {
         title: t("meeting.goalProgress"),
         percentage: goalProgress,
-        text: `${goalProgress}%`,
+        text: `${goalProgress.toFixed(2)}%`,
       },
       {
         title: t("meeting.tasksCompleted"),
