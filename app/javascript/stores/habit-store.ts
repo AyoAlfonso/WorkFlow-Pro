@@ -21,6 +21,17 @@ export const HabitStoreModel = types
     get lastFiveDays() {
       return [0, 1, 2, 3, 4].map(dayInt => moment().subtract(dayInt, "days"));
     },
+    get totalFrequency() {
+      return self.habits.reduce((sum, habit) => sum + (habit.frequency || 0), 0);
+    },
+    get totalCompleted() {
+      return self.habits.reduce((sum, habit) => sum + (habit.completedCount || 0), 0);
+    },
+  }))
+  .views(self => ({
+    get totalPercentageCompleted() {
+      return (self.totalCompleted / self.totalFrequency) * 100;
+    },
   }))
   .actions(self => ({
     createHabit: flow(function*(habitData) {

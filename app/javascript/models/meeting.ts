@@ -1,3 +1,4 @@
+import * as R from "ramda";
 import { types } from "mobx-state-tree";
 import { StepModel } from "./step";
 import { KeyActivityModel } from "./key-activity";
@@ -24,17 +25,22 @@ export const MeetingModel = types
     teamId: types.maybeNull(types.number),
     currentWeekAverageUserEmotions: types.maybeNull(types.array(types.frozen())),
     currentWeekAverageTeamEmotions: types.maybeNull(types.number),
-    emotionScorePercentageDifference: types.maybeNull(types.string),
+    emotionScorePercentageDifference: types.maybeNull(types.number),
     teamKeyActivities: types.maybeNull(types.array(KeyActivityModel)),
+    statsForWeek: types.maybeNull(types.array(types.frozen())),
   })
   .views(self => ({
     get currentStepDetails() {
       return self.steps.find(step => step.orderIndex == self.currentStep);
     },
     get formattedAverageWeeklyUserEmotions() {
-      return self.currentWeekAverageUserEmotions.map(averages => {
-        return { x: new Date(averages.date), y: averages.averageScore };
-      });
+      if (!R.isNil(self.currentWeekAverageUserEmotions)) {
+        return self.currentWeekAverageUserEmotions.map(averages => {
+          return { x: new Date(averages.date), y: averages.averageScore };
+        });
+      } else {
+        [];
+      }
     },
   }));
 

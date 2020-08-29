@@ -55,7 +55,6 @@
           "header": "Manage Teams"
         },
         "habits": {
-          "title": "Habits",
           "new": "New Habit",
           "form": {
             "inputs": {
@@ -109,6 +108,26 @@
         "active": "Active",
         "inactive": "Inactive",
         "pending": "Pending"
+      },
+      "habits": {
+        "title": "Habits",
+        "reviewTitle": "Your Habits"
+      },
+      "issues": {
+        "title": "Issues"
+      },
+      "journals": {
+        "title": "Journal"
+      },
+      "keyActivities": {
+        "prioritiesTitle": "Today's Priorities",
+        "title": "Key Activities"
+      },
+      "teams": {
+        "teamMeetingsTitle": "Team Meetings",
+        "teamIssuesTitle": "Team's Issues",
+        "teamsPulseTitle": "Team's Pulse",
+        "teamSnapshotTitle": "Team Snapshot"
       }
     }
   }

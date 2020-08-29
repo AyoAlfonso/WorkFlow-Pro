@@ -1,12 +1,15 @@
 import * as React from "react";
 import styled from "styled-components";
 import { TodaysPrioritiesBody } from "./todays-priorities-body";
-import { TodaysPrioritiesHeader } from "./todays-priorities-header";
+import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
+import { useTranslation } from "react-i18next";
 
 export const TodaysPrioritiesContainer = (): JSX.Element => {
+  const { t } = useTranslation();
+
   return (
     <TodayPrioritiesHeaderContainer>
-      <TodaysPrioritiesHeader />
+      <ContainerHeaderWithText text={t("keyActivities.prioritiesTitle")} />
       <TodaysPrioritiesBody />
     </TodayPrioritiesHeaderContainer>
   );

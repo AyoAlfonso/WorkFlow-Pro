@@ -161,7 +161,8 @@ export const EditHabit = observer(
             </ScoreContainer>
             <ScoreContainer>
               <PercentageText color={habit.color}>
-                {habit.weeklyLogsCompletionDifference}
+                {habit.weeklyLogsCompletionDifference >= 0 ? "+" : ""}
+                {habit.weeklyLogsCompletionDifference.toFixed(0)}%
               </PercentageText>
               <DescriptionText>Week</DescriptionText>
             </ScoreContainer>

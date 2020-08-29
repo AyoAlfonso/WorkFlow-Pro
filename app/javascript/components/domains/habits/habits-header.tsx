@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { Icon, ModalWithHeader } from "~/components/shared";
 import { HabitsCreateHabitForm } from "./habits-create-habit-form";
+import { HeaderContainer, HeaderText } from "~/components/shared/styles/container-header";
 
 export const HabitsHeader = (): JSX.Element => {
   const [habitsModalOpen, setHabitsModalOpen] = useState<boolean>(false);
@@ -10,7 +11,7 @@ export const HabitsHeader = (): JSX.Element => {
   return (
     <>
       <Container>
-        <HabitsText> {t("profile.habits.title")} </HabitsText>
+        <HeaderText> {t("habits.title")} </HeaderText>
         <IconContainer onClick={() => setHabitsModalOpen(true)}>
           <Icon iconColor={"primary100"} icon={"Plus"} paddingTop={"2px"} size={16} />
         </IconContainer>
@@ -27,24 +28,11 @@ export const HabitsHeader = (): JSX.Element => {
   );
 };
 
-const Container = styled.div`
+const Container = styled(HeaderContainer)`
   align-items: center;
-  border-bottom: 1px solid #e3e3e3;
-  display: flex;
   justify-content: space-between;
-  padding-left: 10px;
-  padding-right: 10px;
 `;
 
 const IconContainer = styled.div`
   padding-right: 10px;
-`;
-
-const HabitsText = styled.h4`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  line-height: 20px;
-  font-size: 13pt;
-  font-weight: 600;
 `;

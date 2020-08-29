@@ -51,13 +51,10 @@ class Habit < ApplicationRecord
       difference = previous_week_completion_count == 0 ? 
                     current_week_completion_count * 100 : 
                     ((current_week_completion_count - previous_week_completion_count).to_f / previous_week_completion_count.to_f) * 100
-
-      "+#{difference}%"
     else
       difference = current_week_completion_count == 0 ? 
                     previous_week_completion_count * 100 : 
                     ((previous_week_completion_count - current_week_completion_count).to_f / current_week_completion_count.to_f) * 100
-      "-#{difference}%"
     end
   end
 end

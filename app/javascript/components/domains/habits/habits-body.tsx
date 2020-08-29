@@ -3,10 +3,16 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { HabitsHabitTracker } from "./habits-habit-tracker";
-import { baseTheme } from "~/themes/base";
 import * as moment from "moment";
 import { EditHabit } from "./edit-habit";
-import { typography, TypographyProps } from "styled-system";
+
+import {
+  HabitsTable,
+  HabitsTableHead,
+  HabitsTableBody,
+  HabitsTableRow,
+  HabitsTableHeaderCell,
+} from "./habits-styles";
 
 export const HabitsBody = observer(
   (): JSX.Element => {
@@ -76,34 +82,3 @@ export const HabitsBody = observer(
     );
   },
 );
-
-const HabitsTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-`;
-
-const HabitsTableHead = styled.thead``;
-
-const HabitsTableBody = styled.tbody``;
-
-const HabitsTableRow = styled.tr``;
-
-type HabitsTableHeaderCellType = {
-  width?: string;
-};
-
-const HabitsTableHeaderCell = styled.th<HabitsTableHeaderCellType & TypographyProps>`
-  ${typography}  
-  color: ${baseTheme.colors.greyInactive};
-  height: 25px;
-  width: ${props => props.width};
-`;
-
-export const HabitsTableDataCell = styled.td<TypographyProps>`
-  ${typography}
-  height: 35px;
-  text-align: center;
-  :hover {
-    cursor: pointer;
-  }
-`;

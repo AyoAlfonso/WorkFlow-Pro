@@ -81,7 +81,7 @@ export const HomeCoreFour = (): JSX.Element => (
 );
 
 export const CoreFourOnly = (): JSX.Element => (
-  <Container>
+  <div>
     <CoreFourValues />
-  </Container>
+  </div>
 );

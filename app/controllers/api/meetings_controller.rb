@@ -18,14 +18,16 @@ class Api::MeetingsController < Api::ApplicationController
 
     if incomplete_meetings_for_today.incomplete.present?
       @meeting = incomplete_meetings_for_today.first
+      set_additional_data
       authorize @meeting
-      render 'api/meetings/create'  
+      render 'api/meetings/show'  
     else
       @meeting = Meeting.new(meeting_params)
       @meeting.hosted_by_id = current_user.id
+      set_additional_data
       authorize @meeting
       @meeting.save!
-      render 'api/meetings/create'
+      render 'api/meetings/show'
     end
   end
 
@@ -61,12 +63,30 @@ class Api::MeetingsController < Api::ApplicationController
       @previous_meeting = Meeting.where(team_id: @team.id, meeting_template_id: @meeting.meeting_template_id).second_to_last
       @emotion_score_percentage_difference = @team.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
       @milestones = nil
+      @stats_for_week = nil
     else
-      @current_week_average_user_emotions = nil
-      @current_week_average_team_emotions = nil
-      @previous_meeting = nil
-      @emotion_score_percentage_difference = nil
+      @current_week_average_user_emotions = current_user.weekly_average_users_emotion_score(1.week.ago, 1.day.ago)
+      @current_week_average_team_emotions = current_user.team_average_weekly_emotion_score(1.week.ago, 1.day.ago)
+      @previous_meeting = Meeting.where(hosted_by: current_user, team_id: nil, meeting_template_id: @meeting.meeting_template_id).second_to_last
+      @emotion_score_percentage_difference = current_user.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
       @milestones = nil
+      @stats_for_week = [
+        {
+          statistic_name: "Tasks Created",
+          statistic_number: 24,
+          statistic_change: 33,
+        }, 
+        {
+          statistic_name: "Tasks Completed",
+          statistic_number: 20,
+          statistic_change: 25
+        },
+        {
+          statistic_name: "Issues Created",
+          statistic_number: 3,
+          statistic_change: 150
+        }
+      ]
     end
   end
 
