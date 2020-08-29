@@ -11,6 +11,7 @@ import { Text } from "../../../shared/text";
 import { useParams } from "react-router-dom";
 import { Loading } from "~/components/shared/loading";
 import { observer } from "mobx-react";
+import { TeamKeyActivities } from "~/components/domains/meetings/components/team-key-activities";
 
 export interface IRecapProps {}
 
@@ -97,7 +98,9 @@ export const Recap = observer(
 
     return (
       <Container>
-        <KeyActivityContainer></KeyActivityContainer>
+        <KeyActivityContainer>
+          <TeamKeyActivities />
+        </KeyActivityContainer>
         <GraphContainer>{renderGraphCards()}</GraphContainer>
       </Container>
     );

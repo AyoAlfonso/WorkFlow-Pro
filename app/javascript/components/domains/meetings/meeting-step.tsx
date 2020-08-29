@@ -100,6 +100,7 @@ const LeftContainerBorder = styled(HomeContainerBorders)`
 
 const BodyContainer = styled.div`
   display: flex;
+  margin-top: 50px;
 `;
 
 const LeftContainer = styled.div`
