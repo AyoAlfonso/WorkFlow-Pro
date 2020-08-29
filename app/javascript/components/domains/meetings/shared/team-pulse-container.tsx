@@ -7,38 +7,26 @@ import { TeamPulseCard } from "../shared/team-pulse-card";
 import { toJS } from "mobx";
 import { IMeeting } from "~/models/meeting";
 import { PercentChange } from "~/components/shared/percent-change";
-
+import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
+import { useTranslation } from "react-i18next";
 export interface ITeamPulseProps {
   meeting: IMeeting;
   title?: string;
 }
 
 export const TeamPulseContainer = ({ meeting, title }: ITeamPulseProps): JSX.Element => {
+  const { t } = useTranslation();
   return (
     <>
-      <HeaderTextContainer>
-        <HeaderText>{title ? title : `Team Pulse`}</HeaderText>
-      </HeaderTextContainer>
+      <ContainerHeaderWithText text={title ? title : t("teams.teamsPulseTitle")} />
       <TeamPulseBody>
         <OverallTeamPulse value={meeting.currentWeekAverageTeamEmotions} />
-        <TeamPulseCard data={toJS(meeting.formattedAverageWeeklyUserEmotions)} />
+        <TeamPulseCard data={toJS(meeting.formattedAverageWeeklyUserEmotions || [])} />
       </TeamPulseBody>
       <PercentChange percentChange={meeting.emotionScorePercentageDifference} />
     </>
   );
 };
-
-const HeaderTextContainer = styled.div`
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 16px;
-  border-bottom: ${props => `1px solid ${props.theme.colors.grey40}`};
-`;
-
-const HeaderText = styled(Text)`
-  font-size: 20px;
-  font-weight: bold;
-`;
 
 const TeamPulseBody = styled.div`
   display: flex;

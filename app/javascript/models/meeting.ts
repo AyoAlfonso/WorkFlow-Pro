@@ -1,3 +1,4 @@
+import * as R from "ramda";
 import { types } from "mobx-state-tree";
 import { StepModel } from "./step";
 import { KeyActivityModel } from "./key-activity";
@@ -33,9 +34,13 @@ export const MeetingModel = types
       return self.steps.find(step => step.orderIndex == self.currentStep);
     },
     get formattedAverageWeeklyUserEmotions() {
-      return self.currentWeekAverageUserEmotions.map(averages => {
-        return { x: new Date(averages.date), y: averages.averageScore };
-      });
+      if (!R.isNil(self.currentWeekAverageUserEmotions)) {
+        return self.currentWeekAverageUserEmotions.map(averages => {
+          return { x: new Date(averages.date), y: averages.averageScore };
+        });
+      } else {
+        [];
+      }
     },
   }));
 

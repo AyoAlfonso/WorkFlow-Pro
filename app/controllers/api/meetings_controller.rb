@@ -18,14 +18,16 @@ class Api::MeetingsController < Api::ApplicationController
 
     if incomplete_meetings_for_today.incomplete.present?
       @meeting = incomplete_meetings_for_today.first
+      set_additional_data
       authorize @meeting
-      render 'api/meetings/create'  
+      render 'api/meetings/show'  
     else
       @meeting = Meeting.new(meeting_params)
       @meeting.hosted_by_id = current_user.id
+      set_additional_data
       authorize @meeting
       @meeting.save!
-      render 'api/meetings/create'
+      render 'api/meetings/show'
     end
   end
 

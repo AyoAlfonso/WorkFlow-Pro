@@ -171,7 +171,7 @@ export const TeamOverview = observer(
               <ContainerHeaderWithText text={t("teams.teamsPulseTitle")} />
               <TeamPulseBody>
                 <OverallTeamPulse value={currentTeam.averageTeamEmotionScore} />
-                <TeamPulseCard data={toJS(currentTeam.formattedAverageWeeklyUserEmotions)} />
+                <TeamPulseCard data={toJS(currentTeam.formattedAverageWeeklyUserEmotions) || []} />
               </TeamPulseBody>
             </TeamPulseContainer>
           </RightContainer>

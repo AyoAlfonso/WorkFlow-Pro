@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { IHabit } from "~/models";
 import { RawIcon } from "~/components/shared";
-import { HabitsTableDataCell } from "./habits-body";
+import { HabitsTableDataCell } from "./habits-styles";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { baseTheme } from "~/themes";

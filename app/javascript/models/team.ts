@@ -1,3 +1,4 @@
+import * as R from "ramda";
 import { types } from "mobx-state-tree";
 import { UserModel } from "./user";
 
@@ -25,9 +26,13 @@ export const TeamModel = types
       return self.teamUserEnablements.map(ue => ue.userId);
     },
     get formattedAverageWeeklyUserEmotions() {
-      return self.averageWeeklyUserEmotions.map(averages => {
-        return { x: new Date(averages.date), y: averages.averageScore };
-      });
+      if (!R.isNil(self.averageWeeklyUserEmotions)) {
+        return self.averageWeeklyUserEmotions.map(averages => {
+          return { x: new Date(averages.date), y: averages.averageScore };
+        });
+      } else {
+        [];
+      }
     },
   }))
   .actions(self => ({}));

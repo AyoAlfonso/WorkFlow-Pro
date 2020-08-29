@@ -24,7 +24,7 @@ export const WeeklyReflection = (props: {}): JSX.Element => {
   return (
     <>
       <RowContainer>
-        {meeting.statsForWeek.map(statObj => (
+        {(meeting.statsForWeek || []).map(statObj => (
           <StatCard {...statObj} />
         ))}
       </RowContainer>
