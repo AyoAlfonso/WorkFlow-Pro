@@ -22,14 +22,20 @@ interface ICreateKeyActivityModalProps {
   createKeyActivityModalOpen: boolean;
   setCreateKeyActivityModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   meetingId?: string | number;
+  defaultTypeAsWeekly: boolean;
 }
 
 export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX.Element => {
   const { keyActivityStore, sessionStore, userStore } = useMst();
-  const { createKeyActivityModalOpen, setCreateKeyActivityModalOpen, meetingId } = props;
+  const {
+    createKeyActivityModalOpen,
+    setCreateKeyActivityModalOpen,
+    meetingId,
+    defaultTypeAsWeekly,
+  } = props;
   const [keyActivityDescription, setKeyActivityDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
-  const [weeklyList, setWeeklyList] = useState<boolean>(true);
+  const [weeklyList, setWeeklyList] = useState<boolean>(defaultTypeAsWeekly);
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
 

@@ -2,6 +2,7 @@ import * as R from "ramda";
 import { types } from "mobx-state-tree";
 import { StepModel } from "./step";
 import { KeyActivityModel } from "./key-activity";
+import { MilestoneModel } from "./milestone";
 
 export const MeetingModel = types
   .model("MeetingModel")
@@ -28,6 +29,7 @@ export const MeetingModel = types
     emotionScorePercentageDifference: types.maybeNull(types.number),
     teamKeyActivities: types.maybeNull(types.array(KeyActivityModel)),
     statsForWeek: types.maybeNull(types.array(types.frozen())),
+    myCurrentMilestones: types.maybeNull(types.array(MilestoneModel)),
   })
   .views(self => ({
     get currentStepDetails() {

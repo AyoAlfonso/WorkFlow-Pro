@@ -90,6 +90,7 @@ export const IssueEntry = observer(
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+          defaultTypeAsWeekly={true}
         />
 
         <CheckboxContainer key={issue["id"]}>
