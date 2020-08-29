@@ -5,6 +5,7 @@ import { Text } from "~/components/shared/text";
 import { PercentChange } from "~/components/shared/percent-change";
 import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
 import { useTranslation } from "react-i18next";
+import { HabitsSummary } from "~/components/domains/habits/habits-summary";
 export interface IPersonalHabitProps {}
 
 export const PersonalHabitSummary = (props: IPersonalHabitProps): JSX.Element => {
@@ -12,7 +13,7 @@ export const PersonalHabitSummary = (props: IPersonalHabitProps): JSX.Element =>
   return (
     <Container>
       <ContainerHeaderWithText text={t("habits.reviewTitle")} />
-
+      <HabitsSummary />
       <PercentChange percentChange={0} />
     </Container>
   );

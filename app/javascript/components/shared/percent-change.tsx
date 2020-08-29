@@ -20,7 +20,7 @@ export const PercentChange = ({ percentChange }: IPercentChangeProps): JSX.Eleme
   return (
     <PercentageChangeContainer>
       <PercentageChangeText color={selectColor(percentChange)}>
-        {percentChange >= 0 ? "+" : "-"}
+        {percentChange >= 0 ? "+" : ""}
         {Math.round(percentChange)}%
       </PercentageChangeText>
       <ComparedToLastWeekText>Compared to last week</ComparedToLastWeekText>

@@ -81,7 +81,10 @@ interface IHabitsTableCircularProgressBar {
   color: string;
   value: number;
 }
-const HabitsTableCircularProgressBar = ({ color, value }: IHabitsTableCircularProgressBar) => (
+export const HabitsTableCircularProgressBar = ({
+  color,
+  value,
+}: IHabitsTableCircularProgressBar) => (
   <CircularProgressbar
     value={value}
     strokeWidth={18}
