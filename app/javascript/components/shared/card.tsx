@@ -7,11 +7,12 @@ type StyledProps = LayoutProps & SpaceProps;
 export interface ICardProps extends StyledProps {
   children?: any;
   alignment?: string;
+  border?: string;
   headerComponent?: any;
 }
 
 export const Card = (props: ICardProps): JSX.Element => {
-  const { children, alignment, headerComponent, ...restProps } = props;
+  const { children, alignment, headerComponent, border, ...restProps } = props;
   return (
     <CardContainer {...restProps}>
       {headerComponent ? <CardHeader>{headerComponent}</CardHeader> : null}
@@ -27,12 +28,13 @@ export const CardBody = styled.div<LayoutProps>`
 
 interface ICardContainerProps extends StyledProps {
   alignment?: string;
+  border?: string;
 }
 
 const CardContainer = styled.div<ICardContainerProps>`
   ${layout}
   ${space}
-  border: 1px solid ${props => props.theme.colors.borderGrey};
+  border: ${props => props.border || `1px solid ${props => props.theme.colors.borderGrey}`};
   border-radius: 10px;
   display: flex;
   flex-direction: column;

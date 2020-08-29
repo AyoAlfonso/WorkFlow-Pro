@@ -121,10 +121,11 @@ export const TeamKeyActivities = observer(
 );
 
 const Container = styled(HomeContainerBorders)`
-  margin-left: auto;
+  margin-left: 15px;
   margin-right: auto;
-  min-width: 500px;
+  min-width: 550px;
   width: 50%;
+  margin-top: 0;
 `;
 
 const KeyActivityBodyContainer = styled.div`

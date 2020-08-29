@@ -65,9 +65,7 @@ const Container = styled.div`
   margin-top: 30px;
 `;
 
-const ValuesContainer = styled(HomeContainerBorders)`
-  height: 100%;
-`;
+const ValuesContainer = styled(HomeContainerBorders)``;
 
 const CoreFourHeaderText = styled(Text)`
   margin-top: 0;
