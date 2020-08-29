@@ -123,7 +123,7 @@ export const TeamKeyActivities = observer(
 const Container = styled(HomeContainerBorders)`
   margin-left: 15px;
   margin-right: auto;
-  min-width: 550px;
+  min-width: 525px;
   width: 50%;
   margin-top: 0;
 `;

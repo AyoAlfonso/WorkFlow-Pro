@@ -44,4 +44,5 @@ const RatingText = styled(Text)`
   font-size: 40px;
   margin-top: 10px;
   font-weight: bold;
+  text-align: center;
 `;

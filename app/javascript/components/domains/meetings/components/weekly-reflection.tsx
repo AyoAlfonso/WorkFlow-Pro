@@ -22,7 +22,7 @@ export const WeeklyReflection = (props: {}): JSX.Element => {
   }
 
   return (
-    <>
+    <Container>
       <RowContainer>
         {(meeting.statsForWeek || []).map(statObj => (
           <StatCard {...statObj} />
@@ -35,16 +35,21 @@ export const WeeklyReflection = (props: {}): JSX.Element => {
         <PersonalHabitSummary />
       </RowContainer>
       <Questionnaire variant={QuestionnaireTypeConstants.weeklyReflection} />
-    </>
+    </Container>
   );
 };
 
+const Container = styled.div`
+  margin-top: -5px;
+`;
+
 const TeamPulseBorder = styled(HomeContainerBorders)`
-  width: 650px;
+  min-width: 670px;
   margin-right: 20px;
 `;
 
 const RowContainer = styled.div`
   display: flex;
   flex-direction: row;
+  margin-bottom: 10px;
 `;

@@ -10,11 +10,11 @@ export const PersonalKeyActivities = (props: {}): JSX.Element => {
     <Container>
       <IndividualContainer>
         <KeyActivitiesHeader title={"Weekly Activity List"} />
-        <KeyActivitiesBody showAllKeyActivities={false} />
+        <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"} />
       </IndividualContainer>
       <IndividualContainer>
         <KeyActivitiesHeader title={"Master Activity List"} />
-        <KeyActivitiesBody showAllKeyActivities={true} />
+        <KeyActivitiesBody showAllKeyActivities={true} borderLeft={"none"} />
       </IndividualContainer>
     </Container>
   );
@@ -25,6 +25,7 @@ const Container = styled.div`
   height: 420px;
   overflow-x: auto;
   overflow-y: hidden;
+  margin-top: -5px;
 `;
 
 const IndividualContainer = styled(HomeContainerBorders)`
@@ -32,5 +33,6 @@ const IndividualContainer = styled(HomeContainerBorders)`
   min-width: 240px;
   display: flex;
   flex-direction: column;
-  margin-right: 10px;
+  margin-right: 15px;
+  margin-left: 5px;
 `;

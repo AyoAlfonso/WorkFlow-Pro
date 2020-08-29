@@ -59,7 +59,7 @@ export const Questionnaire = (props: IQuestionnaireProps): JSX.Element => {
       botDelay={1000}
       headerComponent={<SurveyHeader title={"Weekly Reflection"} />}
       steps={steps}
-      width={"100%"}
+      width={"1020px"}
       contentStyle={{ height: "400px" }}
       // header and footer are 120px total
       style={{ height: "520px" }}

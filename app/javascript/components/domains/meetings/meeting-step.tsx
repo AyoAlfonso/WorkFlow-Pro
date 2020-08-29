@@ -33,6 +33,9 @@ const StepComponent = (step: IStep) => {
   if (R.isNil(step)) {
     return <Loading />;
   }
+
+  console.log("step", step);
+
   switch (step.stepType) {
     case "component":
       switch (step.componentToRender) {
@@ -63,13 +66,10 @@ const StepComponent = (step: IStep) => {
         default:
           return <Text>This custom component has not been configured</Text>;
       }
-      break;
     case "image":
       return <ImageStep step={step} />;
-      break;
     case "embedded_link":
       return <EmbedStep step={step} />;
-      break;
     default:
       return <Text>This meeting step type has not been configured</Text>;
   }

@@ -31,7 +31,7 @@ export const StatCard = ({
 const Container = styled(HomeContainerBorders)`
   padding: 5px;
   margin-right: 20px;
-  min-width: 240px;
+  min-width: 315px;
 `;
 
 const RatingText = styled.div`

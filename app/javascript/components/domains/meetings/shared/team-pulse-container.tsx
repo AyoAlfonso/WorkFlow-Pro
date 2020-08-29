@@ -23,7 +23,9 @@ export const TeamPulseContainer = ({ meeting, title }: ITeamPulseProps): JSX.Ele
         <OverallTeamPulse value={meeting.currentWeekAverageTeamEmotions} />
         <TeamPulseCard data={toJS(meeting.formattedAverageWeeklyUserEmotions || [])} />
       </TeamPulseBody>
-      <PercentChange percentChange={meeting.emotionScorePercentageDifference} />
+      <PercentChangeContainer>
+        <PercentChange percentChange={meeting.emotionScorePercentageDifference} />
+      </PercentChangeContainer>
     </>
   );
 };
@@ -32,4 +34,8 @@ const TeamPulseBody = styled.div`
   display: flex;
   padding-top: 36px;
   padding-bottom: 36px;
+`;
+
+const PercentChangeContainer = styled.div`
+  margin-left: 25px;
 `;

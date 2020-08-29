@@ -98,7 +98,7 @@ mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Person
   steps_attributes: [
     {
       order_index: 0,
-      name: "Goals",
+      name: "Personal Goals",
       step_type: :component,
       instructions: "Review the Core Four and what the Goals are.",
       component_to_render: "PersonalGoals",
@@ -122,7 +122,7 @@ mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Person
     },
     {
       order_index: 3,
-      name: "Key Activities",
+      name: "Personal Key Activities",
       step_type: :component,
       instructions: "What else must you accomplish this week? Add new Key Activities or move them from your Master List to the Weekly List. Review your email and calendar to add anything else you need to account for this week.",
       component_to_render: "PersonalKeyActivities",
