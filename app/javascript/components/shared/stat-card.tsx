@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 import { Text } from "~/components/shared/text";
 import { PercentChange } from "./percent-change";
+import { HeaderText, HeaderContainerNoBorder } from "~/components/shared/styles/container-header";
 
 export interface IPercentChangeProps {
   statisticName: string;
@@ -17,8 +18,11 @@ export const StatCard = ({
 }: IPercentChangeProps): JSX.Element => {
   return (
     <Container>
-      <Text>{statisticName}</Text>
-      <Text fontSize={3}>{statisticNumber}</Text>
+      <HeaderContainerNoBorder>
+        <HeaderText>{statisticName}</HeaderText>
+      </HeaderContainerNoBorder>
+
+      <RatingText fontSize={3}>{statisticNumber}</RatingText>
       <PercentChange percentChange={statisticChange} />
     </Container>
   );
@@ -26,4 +30,13 @@ export const StatCard = ({
 
 const Container = styled(HomeContainerBorders)`
   padding: 5px;
+  margin-right: 20px;
+  min-width: 240px;
+`;
+
+const RatingText = styled.div`
+  font-size: 40px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: bold;
 `;

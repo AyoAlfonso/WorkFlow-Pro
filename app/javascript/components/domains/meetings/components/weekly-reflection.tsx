@@ -41,6 +41,7 @@ export const WeeklyReflection = (props: {}): JSX.Element => {
 
 const TeamPulseBorder = styled(HomeContainerBorders)`
   width: 650px;
+  margin-right: 20px;
 `;
 
 const RowContainer = styled.div`

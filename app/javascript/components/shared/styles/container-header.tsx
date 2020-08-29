@@ -17,6 +17,12 @@ export const HeaderContainer = styled.div`
   padding-right: 10px;
 `;
 
+export const HeaderContainerNoBorder = styled.div`
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
+`;
+
 export const HeaderText = styled.h4`
   display: flex;
   justify-content: center;
