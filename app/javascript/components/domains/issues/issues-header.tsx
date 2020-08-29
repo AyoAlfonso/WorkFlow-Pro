@@ -2,7 +2,8 @@ import * as React from "react";
 import styled from "styled-components";
 import { space, color } from "styled-system";
 //import Icon from "../../shared/icon";
-
+import { HeaderContainer, HeaderText } from "~/components/shared/styles/container-header";
+import { useTranslation } from "react-i18next";
 interface IssuesHeaderProps {
   showOpenIssues: boolean;
   setShowOpenIssues: React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,10 +12,11 @@ interface IssuesHeaderProps {
 
 export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
   const { showOpenIssues, setShowOpenIssues, issuesText } = props;
+  const { t } = useTranslation();
 
   return (
-    <Container>
-      <IssuesText> {issuesText || "Issues"} </IssuesText>
+    <HeaderContainer>
+      <HeaderText> {issuesText || t("issues.title") || "Issues"} </HeaderText>
       <FilterContainer>
         <FilterOptions
           onClick={() => setShowOpenIssues(true)}
@@ -42,25 +44,9 @@ export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
           </ChevronDownContainer>
         </SortingChevronContainer> */}
       </FilterContainer>
-    </Container>
+    </HeaderContainer>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  border-bottom: 1px solid #e3e3e3;
-  padding-left: 20px;
-  padding-right: 20px;
-`;
-
-const IssuesText = styled.h4`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  line-height: 20px;
-  font-size: 13pt;
-  font-weight: 600;
-`;
 
 const FilterContainer = styled.div`
   display: flex;

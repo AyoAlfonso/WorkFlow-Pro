@@ -22,6 +22,8 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { FutureTeamMeetingsContainer } from "./shared/future-team-meetings-container";
 import { useState, useEffect } from "react";
+import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
+import { useTranslation } from "react-i18next";
 
 interface ITeamOverviewProps {}
 
@@ -30,6 +32,7 @@ export const TeamOverview = observer(
     const { sessionStore, teamStore, meetingStore } = useMst();
 
     const { team_id } = useParams();
+    const { t } = useTranslation();
 
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -75,14 +78,6 @@ export const TeamOverview = observer(
         </Container>
       );
     }
-
-    const renderCardSubHeader = (text: string): JSX.Element => {
-      return (
-        <SubHeaderTextContainer>
-          <SubHeaderText>{text}</SubHeaderText>
-        </SubHeaderTextContainer>
-      );
-    };
 
     const renderUserSnapshotTable = (): JSX.Element => {
       return (
@@ -158,7 +153,7 @@ export const TeamOverview = observer(
         <BodyContainer>
           <LeftContainer>
             <TeamSnapshotContainer>
-              {renderCardSubHeader("Team Snapshot")}
+              <ContainerHeaderWithText text={t("teams.teamSnapshotTitle")} />
               {renderUserSnapshotTable()}
             </TeamSnapshotContainer>
           </LeftContainer>
@@ -173,7 +168,7 @@ export const TeamOverview = observer(
             </TeamMeetingInfoContainer>
 
             <TeamPulseContainer>
-              {renderCardSubHeader("Team's Pulse")}
+              <ContainerHeaderWithText text={t("teams.teamsPulseTitle")} />
               <TeamPulseBody>
                 <OverallTeamPulse value={currentTeam.averageTeamEmotionScore} />
                 <TeamPulseCard data={toJS(currentTeam.formattedAverageWeeklyUserEmotions)} />

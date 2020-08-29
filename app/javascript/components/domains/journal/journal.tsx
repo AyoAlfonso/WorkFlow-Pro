@@ -2,23 +2,24 @@ import * as React from "react";
 import * as R from "ramda";
 import { useState } from "react";
 import styled from "styled-components";
-import { JournalHeader } from "./journal-header";
+import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
 import { SurveyBot } from "./survey-bot";
 import { IconButton } from "../../shared/icon-button";
 import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
 import { toJS } from "mobx";
+import { useTranslation } from "react-i18next";
 
 export const Journal = observer(
   (props): JSX.Element => {
     const [questionnaireVariant, setQuestionnaireVariant] = useState<string>("");
-
+    const { t } = useTranslation();
     const { sessionStore } = useMst();
 
     return (
       <JournalContainer>
-        <JournalHeader />
+        <ContainerHeaderWithText text={t("journals.title")} />
         {questionnaireVariant !== "" ? (
           <SurveyBot variant={questionnaireVariant} endFn={setQuestionnaireVariant} />
         ) : (
