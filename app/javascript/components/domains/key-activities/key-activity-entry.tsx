@@ -56,7 +56,6 @@ export const KeyActivityEntry = observer(
             key={keyActivity["id"]}
             checked={keyActivity["completedAt"] ? true : false}
             onChange={e => {
-              console.log("meeting id", meetingId);
               keyActivityStore.updateKeyActivityStatus(
                 keyActivity,
                 e.target.checked,

@@ -26,8 +26,12 @@ export const IssueStoreModel = types
         self.issues = response.data;
       }
     }),
-    updateIssueStatus: flow(function*(issue, value) {
-      const response: ApiResponse<any> = yield self.environment.api.updateIssueStatus(issue, value);
+    updateIssueStatus: flow(function*(issue, value, fromTeamMeeting = false) {
+      const response: ApiResponse<any> = yield self.environment.api.updateIssueStatus(
+        issue,
+        value,
+        fromTeamMeeting,
+      );
       if (response.ok) {
         self.issues = response.data;
         return true;
@@ -46,9 +50,12 @@ export const IssueStoreModel = types
         return false;
       }
     }),
-    updateIssue: flow(function*(id) {
+    updateIssue: flow(function*(id, fromTeamMeeting = false) {
       let issueObject = self.issues.find(issue => issue.id == id);
-      const response: ApiResponse<any> = yield self.environment.api.updateIssue(issueObject);
+      const response: ApiResponse<any> = yield self.environment.api.updateIssue({
+        ...issueObject,
+        fromTeamMeeting,
+      });
       if (response.ok) {
         self.issues = response.data;
         return true;
@@ -56,8 +63,20 @@ export const IssueStoreModel = types
         return false;
       }
     }),
-    destroyIssue: flow(function*(id) {
-      const response: ApiResponse<any> = yield self.environment.api.destroyIssue(id);
+    destroyIssue: flow(function*(id, fromTeamMeeting = false) {
+      const response: ApiResponse<any> = yield self.environment.api.destroyIssue({
+        id,
+        fromTeamMeeting,
+      });
+      if (response.ok) {
+        self.issues = response.data;
+        return true;
+      } else {
+        return false;
+      }
+    }),
+    fetchIssuesForMeeting: flow(function*(meetingId) {
+      const response: ApiResponse<any> = yield self.environment.api.getIssuesForMeeting(meetingId);
       if (response.ok) {
         self.issues = response.data;
         return true;

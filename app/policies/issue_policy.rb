@@ -22,6 +22,10 @@ class IssuePolicy < ApplicationPolicy
     @issue.user == @user
   end
 
+  def issues_for_meeting?
+    true
+  end
+
   class Scope
     attr_reader :user, :scope
 

@@ -18,12 +18,13 @@ interface IIssueEntryProps {
   issue: any;
   meeting?: boolean;
   pageEnd?: boolean;
+  meetingId?: number | string;
 }
 
 export const IssueEntry = observer(
   (props: IIssueEntryProps): JSX.Element => {
     const { issueStore, teamStore } = useMst();
-    const { issue, meeting, pageEnd } = props;
+    const { issue, meeting, pageEnd, meetingId } = props;
 
     const teams = teamStore.teams;
 
@@ -81,7 +82,7 @@ export const IssueEntry = observer(
           priority = "";
       }
       issueStore.updateIssueState(issue.id, "priority", priority);
-      issueStore.updateIssue(issue.id);
+      issueStore.updateIssue(issue.id, meetingId ? true : false);
     };
 
     return (
@@ -96,7 +97,7 @@ export const IssueEntry = observer(
             key={issue["id"]}
             checked={issue["completedAt"] ? true : false}
             onChange={e => {
-              issueStore.updateIssueStatus(issue, e.target.checked);
+              issueStore.updateIssueStatus(issue, e.target.checked, meetingId ? true : false);
             }}
           />
         </CheckboxContainer>
@@ -118,11 +119,11 @@ export const IssueEntry = observer(
             }
           }}
           style={{ textDecoration: issue.completedAt && "line-through" }}
-          onBlur={() => issueStore.updateIssue(issue.id)}
+          onBlur={() => issueStore.updateIssue(issue.id, meetingId ? true : false)}
         />
         <ActionContainer>
           <DeleteButtonContainer
-            onClick={() => issueStore.destroyIssue(issue.id)}
+            onClick={() => issueStore.destroyIssue(issue.id, meetingId ? true : false)}
             onMouseEnter={() => setShowShareModal(false)}
           >
             <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
