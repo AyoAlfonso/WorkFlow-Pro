@@ -283,8 +283,17 @@ export class Api {
     });
   }
 
+  async updateMilestone(milestone) {
+    return this.client.patch(`/milestones/${milestone.id}`, milestone);
+  }
+
+  async getMilestonesForPersonalMeeting() {
+    return this.client.get(`/milestones/milestones_for_meeting`);
+  }
+
   async getTeamGoals(teamId) {
     return this.client.get(`/annual_initiatives/team/${teamId}`);
   }
+
   //async setJWT(jwt) {}
 }

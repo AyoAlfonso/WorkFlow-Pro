@@ -11,12 +11,13 @@ interface IIndividualVerticalStatusBlockColorIndicatorProps {
   milestone: MilestoneType;
   milestoneStatus: string;
   editable: boolean;
+  fromMeeting?: boolean;
 }
 
 export const IndividualVerticalStatusBlockColorIndicator = observer(
   (props: IIndividualVerticalStatusBlockColorIndicatorProps): JSX.Element => {
-    const { milestone, milestoneStatus, editable } = props;
-    const { quarterlyGoalStore } = useMst();
+    const { milestone, milestoneStatus, editable, fromMeeting } = props;
+    const { quarterlyGoalStore, milestoneStore } = useMst();
 
     const colorChangable =
       moment(milestone.weekOf).isSame(moment(), "week") ||
@@ -60,7 +61,12 @@ export const IndividualVerticalStatusBlockColorIndicator = observer(
         default:
           statusValue = "";
       }
-      quarterlyGoalStore.updateMilestoneStatus(milestone.id, statusValue);
+
+      if (fromMeeting) {
+        milestoneStore.updateStatusFromPersonalMeeting(milestone.id, statusValue);
+      } else {
+        quarterlyGoalStore.updateMilestoneStatus(milestone.id, statusValue);
+      }
     };
 
     return (

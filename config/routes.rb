@@ -98,6 +98,10 @@ Rails.application.routes.draw do
     #notifications
     resources :notifications, only: [:index, :update]
 
+    #milestones
+    resources :milestones, only: [:update]
+    get '/milestones/milestones_for_meeting', to: "milestones#milestones_for_meeting"
+
   end
 
 
