@@ -53,6 +53,9 @@ const initialState = {
   notificationStore: {
     notifications: null,
   },
+  milestoneStore: {
+    milestonesForPersonalMeeting: null,
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);

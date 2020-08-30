@@ -13,6 +13,7 @@ import { QuestionnaireStoreModel, IQuestionnaireStore } from "./questionnaire-st
 import { TeamStoreModel, ITeamStore } from "./team-store";
 import { MeetingStoreModel, IMeetingStore } from "./meeting-store";
 import { NotificationStoreModel, INotificationStore } from "./notification-store";
+import { MilestoneStoreModel, IMilestoneStore } from "./milestone-store";
 
 export const RootStoreModel = types
   .model("RootStoreModel")
@@ -31,6 +32,7 @@ export const RootStoreModel = types
     teamStore: TeamStoreModel,
     meetingStore: MeetingStoreModel,
     notificationStore: NotificationStoreModel,
+    milestoneStore: MilestoneStoreModel,
   })
   .views(self => ({}))
   .actions(self => ({
@@ -66,4 +68,5 @@ export interface IRootStore extends IStateTreeNode {
   teamStore: ITeamStore;
   meetingStore: IMeetingStore;
   notificationStore: INotificationStore;
+  milestoneStore: IMilestoneStore;
 }

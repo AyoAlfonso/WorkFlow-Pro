@@ -14,14 +14,16 @@ interface IMilestoneCardProps {
   milestone: MilestoneType;
   unstarted: boolean;
   editable: boolean;
+  fromMeeting?: boolean;
 }
 
 export const MilestoneCard = ({
   milestone,
   unstarted,
   editable,
+  fromMeeting,
 }: IMilestoneCardProps): JSX.Element => {
-  const { quarterlyGoalStore } = useMst();
+  const { quarterlyGoalStore, milestoneStore } = useMst();
 
   const descriptionRef = useRef(null);
 
@@ -37,7 +39,11 @@ export const MilestoneCard = ({
           disabled={!editable}
           onChange={e => {
             if (!e.target.value.includes("<div>")) {
-              quarterlyGoalStore.updateMilestoneDescription(milestone.id, e.target.value);
+              if (fromMeeting) {
+                milestoneStore.updateDescriptionFromPersonalMeeting(milestone.id, e.target.value);
+              } else {
+                quarterlyGoalStore.updateMilestoneDescription(milestone.id, e.target.value);
+              }
             }
           }}
           onKeyDown={key => {
@@ -45,13 +51,20 @@ export const MilestoneCard = ({
               descriptionRef.current.blur();
             }
           }}
-          onBlur={() => quarterlyGoalStore.update()}
+          onBlur={() => {
+            if (fromMeeting) {
+              milestoneStore.updateMilestoneFromPersonalMeeting(milestone.id);
+            } else {
+              quarterlyGoalStore.update();
+            }
+          }}
         />
       </MilestoneDetails>
       <IndividualVerticalStatusBlockColorIndicator
         milestone={milestone}
         milestoneStatus={milestone.status}
         editable={editable}
+        fromMeeting={fromMeeting}
       />
     </MilestoneContainer>
   );
