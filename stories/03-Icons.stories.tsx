@@ -18,9 +18,9 @@ const iconSet = require("../app/javascript/assets/icons/selection.json");
 export default { title: "Iconography", decorators: [withKnobs] };
 
 const propsList = [
-  { name: "icon", type: "string", required: false, description: "the name of the icon" },
+  { name: "icon", type: "string", required: true, description: "the name of the icon" },
   {
-    name: "color",
+    name: "iconColor",
     type: "string",
     required: false,
     description: "the color of the icon (RGB, HEX, named color)",

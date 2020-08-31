@@ -15,9 +15,12 @@ export interface IIconProps extends StyledSystemProps {
   removeInlineStyle?: boolean;
 }
 
-export const IconContainer = styled.div<IIconProps>`
+export const IconContainer = styled.div<StyledSystemProps>`
   ${layout}
   ${space}
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Icon = (props: IIconProps) => {
