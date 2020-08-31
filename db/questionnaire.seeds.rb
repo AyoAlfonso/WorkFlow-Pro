@@ -3,57 +3,240 @@ daily_limit: true,
 steps: [
   {
     id: 1,
-    message: "What are you grateful for?",
-    trigger: "2"
+    message: "Good morning {userName}!",
+    metadata: {
+      username: true
+    },
+    trigger: 2
   },
   {
     id: 2,
-    user: true,
-    trigger: "3"
+    message: "It is a new day, let's get started.",
+    delay: 1500,
+    trigger: 3
   },
   {
     id: 3,
-    message:
-      "How do you want to feel today? What does your life look like when you are feeling that way?",
-    trigger: "4"
+    message: "Take a deep breath and focus on the wonderful things in your life. They are right here. Give them your attention.",
+    delay: 1500,
+    trigger: 4
   },
   {
     id: 4,
-    user: true,
-    trigger: "5"
+    message: "And now I want you to complete this sentence",
+    delay: 2500,
+    trigger: 5
   },
   {
     id: 5,
-    message: "What MIPs will you eat today?",
-    trigger: "6"
+    message: "I am grateful for...",
+    delay: 1500,
+    trigger: "gratitude-am"
   },
   {
-    id: 6,
-    options: [],
+    id: "gratitude-am",
+    user: true,
     metadata: {
-      frog_selector: true,
-      trigger: 7
-    }
+      validatorType: "string"
+    },
+    trigger: 7
   },
   {
     id: 7,
-    message: "What is your daily affirmation today?",
-    trigger: "8"
+    message: "How do you need to feel today?",
+    trigger: 8
   },
   {
     id: 8,
     user: true,
-    trigger: "9"
+    metadata: {
+      validatorType: "string"
+    },
+    trigger: 9
   },
   {
     id: 9,
-    message: "What are your thoughts and reflections for today?",
-    trigger: "10"
+    message: "That is great! You need to hold on to that as the day progresses.",
+    trigger: 10
   },
   {
     id: 10,
+    options: [
+      {label: "Continue with the questions", value: "Continue with the questions", trigger: 11},
+      {label: "Skip to setting up my day", value: "Skip to setting up my day", end: true}
+    ]
+  },
+  {
+    id: 11,
+    message: "Alright, let's move on. Growth occurs outside of our comfort zone, so I need you to think about your day and what you can do today that will push you outside of your comfort zone.",
+    trigger: 12
+  },
+  {
+    id: 12,
+    message: 'How can you be courageous or as I like to say, "how will you lean in today?"',
+    delay: 1000,
+    trigger: 13
+  },
+  {
+    id: 13,
     user: true,
+    metadata: {
+      validatorType: "string"
+    },
+    trigger: 14
+  },
+  {
+    id: 14,
+    message: "Look at you go! That's great.",
+    trigger: 15
+  },
+  {
+    id: 15,
+    message: "Did you pick your Most Important Pyns (MIPs) last night?",
+    trigger: 16
+  },
+  {
+    id: 16,
+    options: [
+      {label: "Yes", value: "Yes", trigger: 19},
+      {label: "No", value: "No", trigger: 17}
+    ]
+  },
+  {
+    id: 17,
+    message: "What are the Most Important Pyns (MIPs) you have to accomplish tomorrow? You can select three from your top 10 Pyns based on priority.",
+    trigger: "select-mips"
+  },
+  {
+    id: "select-mips",
+    options: [],
+    metadata: {
+      frog_selector: true,
+      trigger: 18
+    }
+  },
+  {
+    id: 18,
+    message: "That's great {userName}. Congrats on taking the first step to owning your day.",
+    metadata: {
+      username: true
+    },
+    trigger: 21
+  },
+  {
+    id: 19,
+    message: "Last night you said these are your MIPs for the day. Take a moment to review them.",
+    trigger: "display-mips"
+  },
+  {
+    id: "display-mips",
+    options: [],
+    metadata: {
+      display_mips: true,
+      trigger: 21
+    }
+  },
+  {
+    id: 21,
+    message: "p.s. You can always edit your MIPs in the Pyns widget.",
+    trigger: 22
+  },
+  {
+    id: 22,
+    options: [{label: "Thanks, I got it.", value: "Thanks, I got it.", trigger: 23}]
+  },
+  {
+    id: 23,
+    message: "Before you get going, let's do a little more",
+    trigger: 24
+  }, 
+  {
+    id: 24,
+    options: [
+      { label: "For sure!", value: "For sure!", trigger: 27 },
+      { label: "I gotta go...", value: "I gotta go...", trigger: 25}
+    ]
+  },
+  {
+    id: 25,
+    message: "Maybe next time. Have an amazing day!",
+    trigger: 26
+  },
+  {
+    id: 26, 
     end: true
+  },
+  {
+    id: 27,
+    message: "You are awesome, you really get the power of reflection. So let's take a moment and capture some of your thoughts in your journal. Remember you can write anything here.",
+    trigger: 28
+  },
+  {
+    id: 28,
+    user: true,
+    metadata: {
+      validatorType: "string"
+    },
+    trigger: 29
+  },
+  {
+    id: 29,
+    message: "Nice!",
+    trigger: 30
+  },
+  {
+    id: 30,
+    message: "Just one more thing before we wrap up today. Jot down a mantra or words of affirmation that you can hold for today.",
+    trigger: 31
+  },
+  {
+    id: 31, 
+    message: "It can be even as simple as filling in the blank:",
+    trigger: 32
+  },
+  {
+    id: 32,
+    message: "I can...",
+    trigger: 33
+  }, 
+  {
+    id: 33,
+    message: "I will...",
+    trigger: 34
+  },
+  {
+    id: 34,
+    message: "I am...",
+    trigger: 35
+  },
+  {
+    id: 35,
+    user: true,
+    metadata: {
+      validatorType: "string"
+    },
+    trigger: 36
+  },
+  {
+    id: 36,
+    message: "Amazing. You make this look easy, {userName}.",
+    metadata: {
+      username: true
+    },
+    trigger: 37
+  }, 
+  {
+    id: 37,
+    message: "Go get your day!",
+    trigger: 38
+  },
+  {
+    id: 38,
+    options: [
+      { label: "YEAH!", value: "YEAH!", trigger: 26 },
+      { label: "Can't wait to start!", value: "Can't wait to start!", trigger: 26},
+      { label: "Thanks PynBot!", value: "Thanks PynBot!", trigger: 26}
+    ]
   }
 ]
 )
@@ -64,17 +247,17 @@ steps: [
   {
     id: 1,
     message: "What negative thoughts do you have?",
-    trigger: "2"
+    trigger: 2
   },
   {
     id: 2,
     user: true,
-    trigger: "3"
+    trigger: 3
   },
   {
     id: 3,
     message: "Which cognitive distortions apply to you?",
-    trigger: "4"
+    trigger: 4
   },
   {
     id: 4,

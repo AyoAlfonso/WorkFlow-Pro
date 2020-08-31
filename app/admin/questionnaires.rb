@@ -14,7 +14,9 @@ ActiveAdmin.register Questionnaire do
   controller do
     def update 
       @questionnaire = Questionnaire.find(params[:id])
-      @questionnaire.steps = params[:questionnaire][:steps_raw].split(/[\r\n]+/).map { |row| row.squish }
+      # @questionnaire.steps = params[:questionnaire][:steps_raw].split(/[\r\n]+/).map { |row| row.squish }
+      binding.pry
+      @questionnaire.steps = JSON.parse(params[:questionnaire][:steps_raw])
       @questionnaire.save!
       redirect_to admin_questionnaire_path, notice: "Questionnaire Updated"
     end
@@ -25,7 +27,9 @@ ActiveAdmin.register Questionnaire do
     attributes_table do
       row :created_at
       row :updated_at
-      row :steps
+      row :steps do |q|
+        JSON.generate(q.steps)
+      end
     end
   end
 

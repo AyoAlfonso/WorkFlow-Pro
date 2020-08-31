@@ -26,7 +26,7 @@ export const SurveyBot = observer(
     const {
       sessionStore,
       sessionStore: {
-        profile: { currentDailyLog },
+        profile: { currentDailyLog, firstName },
       },
       questionnaireStore,
     } = useMst();
@@ -47,11 +47,17 @@ export const SurveyBot = observer(
       );
     }
 
+    const stringValidator = value => (value ? true : "Write just a little bit!");
+
     const steps = R.map(step => {
       if (R.hasPath(["metadata", "frogSelector"], step)) {
         return R.pipe(R.assoc("component", <FrogSelector />), R.dissoc("options"))(step);
       } else if (R.hasPath(["metadata", "emotionSelector"], step)) {
         return R.pipe(R.assoc("component", <EmotionSelector />), R.dissoc("options"))(step);
+      } else if (R.hasPath(["metadata", "username"], step)) {
+        return R.assoc("message", R.replace("{userName}", firstName, step.message))(step);
+      } else if (R.hasPath(["metadata", "validatorType"], step)) {
+        return R.assoc("validator", stringValidator, step);
       } else {
         return step;
       }
@@ -59,12 +65,12 @@ export const SurveyBot = observer(
 
     return (
       <ChatBot
-        botAvatar={botAvatarPath}
         botDelay={1000}
         headerComponent={<SurveyHeader title={questionnaireVariant.name} />}
         steps={steps}
         width={"100%"}
-        userAvatar={sessionStore.profile.avatarUrl || undefined}
+        hideBotAvatar={true}
+        hideUserAvatar={true}
         contentStyle={{ height: "226px" }}
         // header and footer are 120px total
         // these hard-coded values are required to make the chatbot fit inside the Journal widget :(

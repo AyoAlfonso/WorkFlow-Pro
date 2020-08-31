@@ -5,6 +5,6 @@ class Questionnaire < ApplicationRecord
   has_paper_trail
 
   def steps_raw
-    self.steps.join("\n") unless self.steps.nil?
+    self.steps.to_json unless self.steps.nil?
   end
 end
