@@ -81,6 +81,7 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
         <FrequencyTextTime>times each week</FrequencyTextTime>
       </FrequencyContainer>
       <Button
+        disabled={!createHabitFormState["name"]}
         onClick={() => {
           submitHabit();
           onSubmit && onSubmit();
