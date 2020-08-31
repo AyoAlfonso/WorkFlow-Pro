@@ -105,8 +105,9 @@ const AddNewIssueText = styled.p`
 const AddNewIssueContainer = styled.div`
   display: flex;
   cursor: pointer;
-  margin-left: 4px;
+  margin-left: 8px;
   margin-bottom: -5px;
+  padding-left: 4px;
   &:hover ${AddNewIssueText} {
     color: ${props => props.theme.colors.black};
     font-weight: bold;

@@ -82,7 +82,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                 avatarUrl={selectedUser.avatarUrl}
                 firstName={selectedUser.firstName}
                 lastName={selectedUser.lastName}
-                size={32}
+                size={34}
                 marginLeft={"auto"}
               />
               {renderUserSelectionList()}
@@ -121,6 +121,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
               uncheckedIcon={false}
               checkedIcon={false}
               width={48}
+              height={25}
             />
             <MasterListText>Master</MasterListText>
             <IconContainer onClick={() => setSelectedPriority(selectedPriority == 1 ? 0 : 1)}>

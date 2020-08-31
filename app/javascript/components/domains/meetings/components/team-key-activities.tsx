@@ -149,8 +149,9 @@ const AddNewKeyActivityText = styled.p`
 const AddNewKeyActivityContainer = styled.div`
   display: flex;
   cursor: pointer;
-  margin-left: 4px;
+  margin-left: 8px;
   margin-bottom: -5px;
+  padding-left: 4px;
   &:hover ${AddNewKeyActivityText} {
     color: ${props => props.theme.colors.black};
     font-weight: bold;

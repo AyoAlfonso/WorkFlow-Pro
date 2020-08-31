@@ -53,7 +53,7 @@ export const IssuesBody = observer(
 );
 
 const Container = styled.div`
-  padding: 0px 0px 15px 10px;
+  padding: 0px 0px 15px 0px;
 `;
 
 const AddNewIssuePlus = styled.div`
@@ -73,7 +73,9 @@ const AddNewIssueText = styled.p`
 const AddNewIssueContainer = styled.div`
   display: flex;
   cursor: pointer;
-  margin-left: 4px;
+  margin-left: 8px;
+  margin-right: 8px;
+  padding-left: 4px;
   margin-bottom: -5px;
   &:hover ${AddNewIssueText} {
     color: ${props => props.theme.colors.black};

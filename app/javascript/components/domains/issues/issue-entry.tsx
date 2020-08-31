@@ -191,7 +191,6 @@ export const IssueEntry = observer(
 const ActionContainer = styled.div`
   display: none;
   margin-left: auto;
-  margin-right: 8px;
   margin-top: auto;
   margin-bottom: auto;
 `;
@@ -229,6 +228,8 @@ const Container = styled.div`
   font-size: 14px;
   width: inherit;
   padding: 12px 0px 12px 0px;
+  margin-left: 8px;
+  margin-right: 8px;
   &:hover ${ActionContainer} {
     display: flex;
     justify-content: center;

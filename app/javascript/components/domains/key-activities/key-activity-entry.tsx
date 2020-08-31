@@ -123,7 +123,7 @@ const DeleteButtonContainer = styled.div`
   margin-left: auto;
   margin-top: auto;
   margin-bottom: auto;
-  margin-right: 15px;
+  margin-right: 8px;
   color: ${props => props.theme.colors.grey60};
   display: none;
   &: hover {
@@ -144,6 +144,8 @@ const Container = styled.div<ContainerProps>`
   &:hover ${DeleteButtonContainer} {
     display: block;
   }
+  margin-left: 8px;
+  margin-right: 8px;
   &:active {
     background-color: ${props => props.dragHandleProps && props.theme.colors.grey20};
   }

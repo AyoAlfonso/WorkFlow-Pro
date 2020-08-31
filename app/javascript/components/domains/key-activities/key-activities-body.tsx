@@ -134,7 +134,7 @@ type ContainerProps = {
 
 const Container = styled.div<ContainerProps>`
   ${color}
-  padding: 0px 0px 6px 10px;
+  padding: 0px 0px 6px 0px;
   border-left: ${props => props.borderLeft || `1px solid ${props.theme.colors.grey40}`};
 `;
 
@@ -155,8 +155,9 @@ const AddNewKeyActivityText = styled.p`
 const AddNewKeyActivityContainer = styled.div`
   display: flex;
   cursor: pointer;
-  margin-left: 4px;
   margin-bottom: -5px;
+  margin-left: 8px;
+  padding-left: 4px;
   &:hover ${AddNewKeyActivityText} {
     color: ${props => props.theme.colors.black};
     font-weight: bold;
