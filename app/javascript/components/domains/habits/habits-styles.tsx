@@ -28,6 +28,7 @@ export const HabitsTableHeaderCell = styled.th<HabitsTableHeaderCellType & Typog
   color: ${baseTheme.colors.greyInactive};
   height: 25px;
   width: ${props => props.width};
+  font-size: 12px;
 `;
 
 export const HabitsTableDataCell = styled.td<TypographyProps>`
