@@ -6,19 +6,47 @@ import { useMst } from "../../../setup/root";
 
 import { useTranslation } from "react-i18next";
 import { Label, Input, Select, FormContainer, Button } from "~/components/shared";
-import { RoleNormalUser } from "~/lib/constants";
 import { Can } from "~/components/shared/auth/can";
+import { RoleNormalUser } from "~/lib/constants";
 
 import { Container, FlexContainer } from "~/components/shared/styles/modals";
+import { maybeNull } from "mobx-state-tree/dist/internal";
 
 interface IEditUserModal {
   editUserModalOpen: boolean;
   setEditUserModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  userId: number;
+  setUserId: React.Dispatch<React.SetStateAction<number>>;
+  email: string;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
+  firstName: string;
+  setFirstName: React.Dispatch<React.SetStateAction<string>>;
+  lastName: string;
+  setLastName: React.Dispatch<React.SetStateAction<string>>;
+  title: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
+  userRoleId: number;
+  setUserRole: React.Dispatch<React.SetStateAction<number>>;
 }
+
+export const getUserRoleIdFrom = (userRoleName, userRoles) =>
+  R.path(["id"], R.find(R.propEq("name", userRoleName), userRoles));
 
 export const EditUserModal = ({
   editUserModalOpen,
   setEditUserModalOpen,
+  userId,
+  setUserId,
+  email,
+  setEmail,
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
+  title,
+  setTitle,
+  userRoleId,
+  setUserRole,
 }: IEditUserModal): JSX.Element => {
   const {
     userStore,
@@ -29,19 +57,33 @@ export const EditUserModal = ({
 
   const { t } = useTranslation();
 
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [userRoleId, setUserRole] = useState(
-    R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)),
-  );
+  // const [email, setEmail] = useState("");
+  // const [firstName, setFirstName] = useState("");
+  // const [lastName, setLastName] = useState("");
+  // const [userRoleId, setUserRole] = useState(
+  //   R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)),
+  // );
 
-  const inviteUser = () => {
-    userStore.inviteUser({ email, firstName, lastName, userRoleId });
+  const resetUser = () => {
+    //reset to new user
+    setUserId(null);
     setEmail("");
     setFirstName("");
     setLastName("");
-    setUserRole(R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)));
+    setTitle("");
+    setUserRole(getUserRoleIdFrom(RoleNormalUser, userRoles));
+  };
+
+  const inviteNewUser = () => {
+    userStore.inviteUser({ email, firstName, lastName, title, userRoleId });
+    resetUser();
+  };
+
+  const updateUser = () => {
+    if (!R.isNil(userId)) {
+      userStore.updateUser({ id: userId, email, firstName, lastName, title, userRoleId });
+      // resetUser();
+    }
   };
 
   return (
@@ -73,6 +115,8 @@ export const EditUserModal = ({
                   onChange={e => setLastName(e.target.value)}
                   value={lastName}
                 />
+                <Label htmlFor="title">{t("profile.profileUpdateForm.title")}</Label>
+                <Input name="title" onChange={e => setTitle(e.target.value)} value={title} />
                 <Label htmlFor="userRole">{t("profile.profileUpdateForm.role")}</Label>
                 <Select
                   name="userRole"
@@ -92,12 +136,13 @@ export const EditUserModal = ({
                 </Select>
                 <Button
                   small
-                  onClick={inviteUser}
+                  onClick={userId ? updateUser : inviteNewUser}
                   width={"200px"}
                   disabled={
                     email.length == 0 ||
                     firstName.length == 0 ||
                     lastName.length == 0 ||
+                    title.length == 0 ||
                     R.isNil(userRoleId)
                   }
                   variant={"primary"}

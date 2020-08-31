@@ -49,7 +49,7 @@ export class Api {
     return this.client.get("/profile");
   }
 
-  async updateProfile(formData) {
+  async updateUser(formData) {
     return this.client.patch(`/users/${formData.id}`, formData);
   }
 

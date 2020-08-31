@@ -2,11 +2,11 @@ import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { useMst } from "~/setup/root";
 import { useTranslation } from "react-i18next";
-import { BodyContainer, IconContainer, NotificationEditTableColumn } from "./notification-styles";
+import { BodyContainer, NotificationEditTableColumn } from "./notification-styles";
 import { Button, Icon, Input, Text } from "~/components/shared";
 import { Label, Select } from "~/components/shared/input";
 import * as R from "ramda";
-import { Container, HeaderContainer, HeaderText } from "../container-styles";
+import { Container, HeaderContainer, HeaderText, IconContainer } from "../container-styles";
 import { TimePicker } from "./";
 import styled from "styled-components";
 

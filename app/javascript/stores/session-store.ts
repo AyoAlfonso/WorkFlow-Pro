@@ -1,4 +1,5 @@
 import * as R from "ramda";
+import { toJS } from "mobx";
 import { types, getEnv, flow, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "~/lib/with-environment";
 import { withRootStore } from "~/lib/with-root-store";
@@ -21,6 +22,9 @@ export const SessionStoreModel = types
   .extend(withEnvironment())
   .views(self => ({}))
   .actions(self => ({
+    setProfileData(updatedData) {
+      self.profile = { ...toJS(self.profile), ...updatedData }; //fields to be updated should be filtered
+    },
     loadProfile: flow(function*() {
       self.loading = true;
       const env = getEnv(self);
@@ -39,9 +43,9 @@ export const SessionStoreModel = types
     }),
     updateUser: flow(function*(fieldsAndValues) {
       self.loading = true;
-      const env = getEnv(self);
+      const { userStore } = getRoot(self);
       try {
-        const response = yield env.api.updateProfile(
+        const response = yield self.environment.api.updateUser(
           Object.assign({ user: fieldsAndValues }, { id: self.profile.id }),
         );
 
@@ -57,6 +61,9 @@ export const SessionStoreModel = types
           } else {
             responseMessage = "User updated";
           }
+
+          userStore.setUserInUsers(response.data);
+
           showToast(responseMessage, ToastMessageConstants.SUCCESS);
         }
       } catch {

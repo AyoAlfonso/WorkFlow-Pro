@@ -1,4 +1,4 @@
-import { types, flow, getEnv } from "mobx-state-tree";
+import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import * as R from "ramda";
 import { withEnvironment } from "../lib/with-environment";
 import { UserModel } from "../models/user";
@@ -41,11 +41,36 @@ export const UserStoreModel = types
         }
       } catch {}
     }),
+    setUserInUsers(updatedData) {
+      let updatedUsers = self.users;
+      updatedUsers[self.users.findIndex(user => user.id == updatedData.id)] = updatedData;
+      self.users = updatedUsers;
+    },
   }))
   .actions(self => ({
     load: flow(function*() {
       self.reset();
       yield self.fetchUsers();
+    }),
+    updateUser: flow(function*(formData) {
+      try {
+        const response: any = yield self.environment.api.updateUser({
+          user: formData,
+          id: formData.id,
+        });
+        if (response.ok) {
+          const { sessionStore } = getRoot(self);
+          //if user updated is self, update profile as well
+          if (sessionStore.profile.id == response.data.id) {
+            sessionStore.setProfileData(response.data);
+          }
+
+          self.setUserInUsers(response.data);
+
+          //may need to refetch teams when that is set up
+          showToast("User updated", ToastMessageConstants.SUCCESS);
+        }
+      } catch {}
     }),
   }));
 

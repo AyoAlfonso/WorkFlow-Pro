@@ -59,11 +59,11 @@ class Api::UsersController < Api::ApplicationController
   private
 
   def user_creation_params
-    params.require(:user).permit(:first_name, :last_name, :email, :timezone, :user_role_id)
+    params.require(:user).permit(:first_name, :last_name, :email, :timezone, :user_role_id, :title)
   end
 
   def user_update_params
-    params.require(:user).permit(:id, :password, :password_confirmation, :first_name, :last_name, :personal_vision, :email, :timezone, daily_logs_attributes: [:id, :work_status, :create_my_day, :evening_reflection])
+    params.require(:user).permit(:id, :password, :password_confirmation, :first_name, :last_name, :personal_vision, :email, :timezone, :user_role_id, :title, daily_logs_attributes: [:id, :work_status, :create_my_day, :evening_reflection, :title])
   end
 
   def set_user

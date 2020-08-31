@@ -4,10 +4,11 @@ import * as R from "ramda";
 import { observer } from "mobx-react";
 import { UserCard } from "~/components/shared/user-card";
 import { useMst } from "~/setup/root";
-import { Button } from "~/components/shared/button";
+import { Icon, Button } from "~/components/shared";
 import { Can } from "~/components/shared/auth/can";
 import { useTranslation } from "react-i18next";
 import { TextNoMargin, Text } from "~/components/shared/text";
+import { RoleNormalUser } from "~/lib/constants";
 
 import {
   StretchContainer,
@@ -15,18 +16,33 @@ import {
   HeaderContainer,
   HeaderText,
   LeftAlignedTableContainer,
-  CenteredTableContainer,
+  SpacedTableContainer,
+  IconContainer,
 } from "./container-styles";
 import { Table } from "~/components/shared/table";
 import { Status } from "~/components/shared/status";
 
-import { EditUserModal } from "~/components/domains/company/edit-user-modal";
+import { EditUserModal, getUserRoleIdFrom } from "~/components/domains/company/edit-user-modal";
 
 export const Users = observer(
   (): JSX.Element => {
-    const { userStore } = useMst();
+    const {
+      userStore,
+      sessionStore: {
+        staticData: { userRoles },
+      },
+    } = useMst();
     const { users } = userStore;
     const [editUserModalOpen, setEditUserModalOpen] = useState<boolean>(false);
+
+    const [userId, setUserId] = useState(null);
+    const [email, setEmail] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [userRoleId, setUserRole] = useState(
+      R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)),
+    );
+    const [title, setTitle] = useState("");
 
     const { t } = useTranslation();
 
@@ -42,7 +58,7 @@ export const Users = observer(
           <LeftAlignedTableContainer>
             <Text>{user.teamNames}</Text>
           </LeftAlignedTableContainer>,
-          <LeftAlignedTableContainer>
+          <SpacedTableContainer>
             <Status status={user.status} />
             {user.status == "pending" ? (
               <Can
@@ -75,7 +91,27 @@ export const Users = observer(
             ) : (
               <></>
             )}
-          </LeftAlignedTableContainer>,
+            <Can
+              action={"create-user"}
+              data={null}
+              no={<></>}
+              yes={
+                <IconContainer
+                  onClick={() => {
+                    setUserId(user.id);
+                    setEmail(user.email || "");
+                    setFirstName(user.firstName || "");
+                    setLastName(user.lastName || "");
+                    setUserRole(getUserRoleIdFrom(user.role, userRoles));
+                    setTitle(user.title || "");
+                    setEditUserModalOpen(true);
+                  }}
+                >
+                  <Icon icon={"Edit-2"} size={"15px"} iconColor={"grey80"} />
+                </IconContainer>
+              }
+            />
+          </SpacedTableContainer>,
         ]),
       ),
     );
@@ -93,13 +129,35 @@ export const Users = observer(
                   variant={"primaryOutline"}
                   small
                   // iconName={"New-User"}
-                  onClick={() => setEditUserModalOpen(true)}
+                  onClick={() => {
+                    setUserId(null);
+                    setEmail("");
+                    setFirstName("");
+                    setLastName("");
+                    setUserRole(
+                      R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)),
+                    );
+                    setTitle("");
+                    setEditUserModalOpen(true);
+                  }}
                 >
                   {t("company.createUser.addButton")}
                 </Button>
                 <EditUserModal
                   editUserModalOpen={editUserModalOpen}
                   setEditUserModalOpen={setEditUserModalOpen}
+                  userId={userId}
+                  setUserId={setUserId}
+                  email={email}
+                  setEmail={setEmail}
+                  firstName={firstName}
+                  setFirstName={setFirstName}
+                  lastName={lastName}
+                  setLastName={setLastName}
+                  title={title}
+                  setTitle={setTitle}
+                  userRoleId={userRoleId}
+                  setUserRole={setUserRole}
                 />
               </>
             }

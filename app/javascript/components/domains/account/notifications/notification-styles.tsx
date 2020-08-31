@@ -60,10 +60,3 @@ export const NotificationEditTableColumn = styled.div<FlexboxProps & LayoutProps
   width: 50%;
   padding: 16px 16px 0 16px;
 `;
-
-export const IconContainer = styled.div<SpaceProps>`
-  ${space}
-  &:hover {
-    cursor: pointer;
-  }
-`;
