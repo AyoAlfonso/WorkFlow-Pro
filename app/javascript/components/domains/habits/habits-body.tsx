@@ -64,21 +64,29 @@ export const HabitsBody = observer(
         setShowIndividualHabit={setShowIndividualHabit}
       />
     ) : (
-      <HabitsTable>
-        <HabitsTableHead>
-          <HabitsTableRow>
-            <HabitsTableHeaderCell />
-            <HabitsTableHeaderCell />
-            {dayNames}
-          </HabitsTableRow>
-          <HabitsTableRow>
-            <HabitsTableHeaderCell />
-            <HabitsTableHeaderCell />
-            {dayDates}
-          </HabitsTableRow>
-        </HabitsTableHead>
-        <HabitsTableBody>{renderHabits()}</HabitsTableBody>
-      </HabitsTable>
+      <Container>
+        <HabitsTable>
+          <HabitsTableHead>
+            <HabitsTableRow>
+              <HabitsTableHeaderCell />
+              <HabitsTableHeaderCell />
+              {dayNames}
+            </HabitsTableRow>
+            <HabitsTableRow>
+              <HabitsTableHeaderCell />
+              <HabitsTableHeaderCell />
+              {dayDates}
+            </HabitsTableRow>
+          </HabitsTableHead>
+          <HabitsTableBody>{renderHabits()}</HabitsTableBody>
+        </HabitsTable>
+      </Container>
     );
   },
 );
+
+const Container = styled.div`
+  padding: 8px;
+  overflow-y: auto;
+  margin-bottom: 8px;
+`;

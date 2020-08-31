@@ -4,7 +4,7 @@ import { baseTheme } from "~/themes/base";
 import { typography, TypographyProps } from "styled-system";
 
 export const HabitsTable = styled.table`
-  width: 100%;
+  width: auto;
   border-collapse: collapse;
 `;
 
@@ -33,7 +33,6 @@ export const HabitsTableHeaderCell = styled.th<HabitsTableHeaderCellType & Typog
 export const HabitsTableDataCell = styled.td<TypographyProps>`
   ${typography}
   height: 35px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-right: 15px;
   padding-top: 2px;
 `;
