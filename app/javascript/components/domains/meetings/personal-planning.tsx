@@ -93,6 +93,7 @@ export const PersonalPlanning = observer(
               steps={progressBarSteps}
               onStepClick={onStepClick}
               currentStepIndex={meeting.currentStep}
+              fromPersonalPlanning={true}
             />
           </ProgressBarTimerContainer>
           <MeetingStep meeting={meetingStore.currentPersonalPlanning}></MeetingStep>

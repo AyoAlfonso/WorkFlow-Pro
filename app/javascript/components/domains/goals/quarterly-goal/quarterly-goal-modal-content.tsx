@@ -201,18 +201,18 @@ export const QuarterlyGoalModalContent = observer(
               allMilestones.length == 0 &&
               renderMilestoneCreateButton()}
           </SectionContainer>
-          <SectionContainer>
-            <SubHeaderContainer>
-              <SubHeaderText text={"Comments"} />
-            </SubHeaderContainer>
-            <ContextContainer>PLACEHOLDER FOR COMMENTS</ContextContainer>
-          </SectionContainer>
-          <SectionContainer>
-            <SubHeaderContainer>
-              <SubHeaderText text={"Attachments"} />
-            </SubHeaderContainer>
-            <ContextContainer>PLACEHOLDER FOR ATTACHMENTS</ContextContainer>
-          </SectionContainer>
+          {/* <SectionContainer>
+              <SubHeaderContainer>
+                <SubHeaderText text={"Comments"} />
+              </SubHeaderContainer>
+              <ContextContainer>PLACEHOLDER FOR COMMENTS</ContextContainer>
+            </SectionContainer>
+            <SectionContainer>
+              <SubHeaderContainer>
+                <SubHeaderText text={"Attachments"} />
+              </SubHeaderContainer>
+              <ContextContainer>PLACEHOLDER FOR ATTACHMENTS</ContextContainer>
+            </SectionContainer> */}
         </QuarterlyGoalBodyContainer>
       </Container>
     );

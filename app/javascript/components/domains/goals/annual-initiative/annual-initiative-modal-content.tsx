@@ -208,7 +208,7 @@ export const AnnualInitiativeModalContent = observer(
         {renderHeader()}
         <SectionContainer>{renderContext()}</SectionContainer>
         <SectionContainer>{renderGoals()}</SectionContainer>
-        <SectionContainer>
+        {/* <SectionContainer>
           <SubHeaderContainer>
             <SubHeaderText text={"Comments"} />
           </SubHeaderContainer>
@@ -219,7 +219,7 @@ export const AnnualInitiativeModalContent = observer(
             <SubHeaderText text={"Attachments"} />
           </SubHeaderContainer>
           <ContextContainer>PLACEHOLDER FOR ATTACHMENTS</ContextContainer>
-        </SectionContainer>
+        </SectionContainer> */}
       </Container>
     );
   },

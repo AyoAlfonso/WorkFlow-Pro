@@ -78,6 +78,7 @@ const NonPrioritiesEndContainer = styled(HomeContainerBorders)`
 
 const NonPrioritiesContainer = styled(NonPrioritiesEndContainer)`
   margin-right: 20px;
+  min-width: 260px;
 `;
 
 const PrioritiesHeaderContainer = styled.div`
