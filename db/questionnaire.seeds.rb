@@ -246,80 +246,204 @@ daily_limit: false,
 steps: [
   {
     id: 1,
-    message: "What negative thoughts do you have?",
+    message: "Hi {userName}!",
+    metadata: {
+      username: true
+    },
     trigger: 2
   },
   {
     id: 2,
-    user: true,
-    trigger: 3
+    message: "How are you right now?",
+    trigger: "mood"
   },
   {
-    id: 3,
-    message: "Which cognitive distortions apply to you?",
-    trigger: 4
-  },
-  {
-    id: 4,
+    id: "mood",
     options: [
-      { value: "All-or-Nothing Thinking", label: "All-or-Nothing Thinking", trigger: "5" },
-      { value: "Overgeneralization", label: "Overgeneralization", trigger: "5" },
-      { value: "Filtering Out Positives", label: "Filtering Out Positives", trigger: "5" },
-      { value: "Jumping to Conclusions", label: "Jumping to Conclusions", trigger: "5" }
+      { label: "Low Energy & Unpleasant", value: "Low Energy & Unpleasant", trigger: "lu-feeling"},
+      { label: "High Energy & Unpleasant", value: "High Energy & Unpleasant", trigger: "hu-feeling"},
+      { label: "Low Energy & Pleasant", value: "Low Energy & Pleasant", trigger: "lp-feeling"},
+      { label: "High Energy & Pleasant", value: "High Energy & Pleasant", trigger: "hp-feeling"}
     ]
   },
   {
-    id: 5,
-    message: "How can you challenge your negative thoughts?",
-    trigger: "6"
+    id: "lu-feeling",
+    options: [
+      { label: 'Alone', value: 'Alone', trigger: 3 },
+      { label: 'Down', value: 'Down', trigger: 3 },
+      { label: 'Bored', value: 'Bored', trigger: 3 },
+      { label: 'Tired', value: 'Tired', trigger: 3 },
+      { label: 'Embarrassed', value: 'Embarrassed', trigger: 3 },
+      { label: 'Excluded', value: 'Excluded', trigger: 3 },
+      { label: 'Timid', value: 'Timid', trigger: 3 },
+      { label: 'Drained', value: 'Drained', trigger: 3 },
+      { label: 'Mortified', value: 'Mortified', trigger: 3 },
+      { label: 'Alienated', value: 'Alienated', trigger: 3 },
+      { label: 'Mopey', value: 'Mopey', trigger: 3 },
+      { label: 'Apathetic', value: 'Apathetic', trigger: 3 },
+      { label: ' Disgusted', value: ' Disgusted', trigger: 3 },
+      { label: 'Disappointed', value: 'Disappointed', trigger: 3 },
+      { label: 'Glum', value: 'Glum', trigger: 3 },
+      { label: 'Ashamed', value: 'Ashamed', trigger: 3 }
+    ]
   },
   {
-    id: 6,
-    user: true,
-    trigger: "7"
+    id: "hu-feeling",
+    options: [
+      { label: 'Enraged', value: 'Enraged', trigger: 3 },
+      { label: 'Furious', value: 'Furious', trigger: 3 },
+      { label: 'Frustrated', value: 'Frustrated', trigger: 3 },
+      { label: 'Shocked', value: 'Shocked', trigger: 3 },
+      { label: 'Livid', value: 'Livid', trigger: 3 },
+      { label: 'Freightened', value: 'Freightened', trigger: 3 },
+      { label: 'Nervous', value: 'Nervous', trigger: 3 },
+      { label: 'Restless', value: 'Restless', trigger: 3 },
+      { label: 'Fuming', value: 'Fuming', trigger: 3 },
+      { label: 'Apprehensive', value: 'Apprehensive', trigger: 3 },
+      { label: ' Worried', value: ' Worried', trigger: 3 },
+      { label: 'Annoyed', value: 'Annoyed', trigger: 3 },
+      { label: 'Repulsed', value: 'Repulsed', trigger: 3 },
+      { label: 'Troubled', value: 'Troubled', trigger: 3 },
+      { label: 'Uneasy', value: 'Uneasy', trigger: 3 },
+      { label: 'Peeved', value: 'Peeved', trigger: 3 }
+    ]
   },
   {
-    id: 7,
-    message: "What is another way of interpreting the situation?",
-    trigger: "8"
+    id: "lp-feeling",
+    options: [
+      { label: 'Enraged', value: 'Enraged', trigger: 3 },
+      { label: 'Furious', value: 'Furious', trigger: 3 },
+      { label: 'Frustrated', value: 'Frustrated', trigger: 3 },
+      { label: 'Shocked', value: 'Shocked', trigger: 3 },
+      { label: 'Livid', value: 'Livid', trigger: 3 },
+      { label: 'Freightened', value: 'Freightened', trigger: 3 },
+      { label: 'Nervous', value: 'Nervous', trigger: 3 },
+      { label: 'Restless', value: 'Restless', trigger: 3 },
+      { label: 'Fuming', value: 'Fuming', trigger: 3 },
+      { label: 'Apprehensive', value: 'Apprehensive', trigger: 3 },
+      { label: 'Worried', value: 'Worried', trigger: 3 },
+      { label: 'Annoyed', value: 'Annoyed', trigger: 3 },
+      { label: 'Repulsed', value: 'Repulsed', trigger: 3 },
+      { label: 'Troubled', value: 'Troubled', trigger: 3 },
+      { label: 'Uneasy', value: 'Uneasy', trigger: 3 },
+      { label: 'Peeved', value: 'Peeved', trigger: 3 }
+    ]
   },
   {
-    id: 8,
-    user: true,
-    trigger: "9"
+    id: "hp-feeling",
+    options: [
+      { label: 'Enraged', value: 'Enraged', trigger: 3 },
+      { label: 'Furious', value: 'Furious', trigger: 3 },
+      { label: 'Frustrated', value: 'Frustrated', trigger: 3 },
+      { label: 'Shocked', value: 'Shocked', trigger: 3 },
+      { label: 'Livid', value: 'Livid', trigger: 3 },
+      { label: 'Freightened', value: 'Freightened', trigger: 3 },
+      { label: 'Nervous', value: 'Nervous', trigger: 3 },
+      { label: 'Restless', value: 'Restless', trigger: 3 },
+      { label: 'Fuming', value: 'Fuming', trigger: 3 },
+      { label: 'Apprehensive', value: 'Apprehensive', trigger: 3 },
+      { label: 'Worried', value: 'Worried', trigger: 3 },
+      { label: 'Annoyed', value: 'Annoyed', trigger: 3 },
+      { label: 'Repulsed', value: 'Repulsed', trigger: 3 },
+      { label: 'Troubled', value: 'Troubled', trigger: 3 },
+      { label: 'Uneasy', value: 'Uneasy', trigger: 3 },
+      { label: 'Peeved', value: 'Peeved', trigger: 3 }
+    ]
   },
   {
-    id: 9,
-    message: "How are you feeling now?",
-    trigger: "10"
+    id: 3, 
+    message: "Thanks. Understanding what you are feeling helps you better address and learn from it.", 
+    trigger: 4
   },
   {
-    id: 10,
-    options: [],
+    id: 4, 
+    message: "Do you want to explore this a little more?", 
+    trigger: 5
+  },
+  {
+    id: 5, 
+    options: [
+      {value: true, label: "Yes", trigger: "6"}, 
+      {value: false, label: "No", trigger: "end-short"}
+    ]
+  },
+  {
+    id: "end-short", 
+    message: "Okay. Great effort, {userName}. Remember to check in often, see you soon!", 
     metadata: {
-      emotion_selector: true,
-      emotions: [
-          {icon: "Emotion-D", color: "cautionYellow", value: "Worse than before!", trigger: 12},
-          {icon: "Emotion-C", color: "grey60", value: "About the Same", trigger: 13},
-          {icon: "Emotion-B", color: "successGreen", value: "Better than before!", trigger: 14}
-      ]
-    }
+      username: true
+    },
+    end: true,
   },
   {
-    id: 12,
-    message: "Sorry to hear that...",
-    end: true
+    id: 6, 
+    message: "Did something happen or did you have a thought that triggered what you're feeling?", 
+    trigger: 7
   },
   {
-    id: 13,
-    message: "Got it. You can always try something relaxing and come back to this later.",
-    end: true
+    id: 7, 
+    user: true, 
+    metadata: {
+      validatorType: "string"
+    },
+    trigger: 8
   },
   {
-    id: 14,
-    message: "Glad to hear that!",
-    end: true
+    id: 8, 
+    message: "Thanks for sharing, {userName}. Being aware of what triggered your emotion is very important", 
+    metadata: {
+      username: true
+    },
+    trigger: 9
   },
+  {
+    id: 9, 
+    message: "Given your current Pyns and what you have to get done, do you want to maintain your emotion or shift?", 
+    trigger: 10
+  },
+  {
+    id: 10, 
+    options: [
+      {value: "Shift", label: "Shift", trigger: 11}, 
+      {value: "Stay", label: "Stay", trigger: "end-short"}
+    ]
+  },
+  {
+    id: 11, 
+    message: "Ok, so thinking of what you need to do, what emotion would serve you best?", 
+    trigger: 12
+  },
+  {
+    id: 12, 
+    user: true, 
+    metadata: {
+      validatorType: "string"
+    },
+    trigger: 13
+  },
+  {
+    id: 13, 
+    message: "What can you do to get yourself in that state?", 
+    trigger: 14
+  },
+  {
+    id: 14, 
+    user: true, 
+    metadata: {
+      validatorType: "string"
+    },
+    trigger: 15
+  },
+  {
+    id: 15, 
+    message: "Awesome! I think you know just what you have to do.", 
+    trigger: "end"
+  },
+  { 
+    id: "end", 
+    message: "Remember to check in often, see you soon!", 
+    end: true
+  }
 ]
 )
 
