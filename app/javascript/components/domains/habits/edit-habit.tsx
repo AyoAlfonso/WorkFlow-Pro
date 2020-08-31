@@ -130,7 +130,13 @@ export const EditHabit = observer(
         <ColorContainer>
           <SectionText> Color </SectionText>
           <ColorInput
-            style={{ height: 50, width: 50 }}
+            style={{
+              height: 60,
+              width: 60,
+              marginTop: "auto",
+              marginBottom: "auto",
+              border: "none",
+            }}
             type={"color"}
             onChange={({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
               setHabitColor(value);
