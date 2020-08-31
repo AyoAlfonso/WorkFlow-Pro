@@ -132,7 +132,7 @@ export const AnnualInitiativeModalContent = observer(
             {editable && (
               <DeleteIconContainer
                 onClick={() => {
-                  if (confirm("Are you sure you want to delete this annual initiative?")) {
+                  if (confirm("Are you sure you want to delete this annual goal?")) {
                     annualInitiativeStore.delete(annualInitiativeId).then(() => {
                       setAnnualInitiativeModalOpen(false);
                     });
@@ -169,7 +169,7 @@ export const AnnualInitiativeModalContent = observer(
       return (
         <>
           <SubHeaderContainer>
-            <SubHeaderText text={"Quarterly Goals"} />
+            <SubHeaderText text={"Quarterly Objective"} />
             <ShowPastGoalsContainer>
               <Button
                 small

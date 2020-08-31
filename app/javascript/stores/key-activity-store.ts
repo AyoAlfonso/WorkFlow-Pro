@@ -70,10 +70,10 @@ export const KeyActivityStoreModel = types
       );
       if (response.ok) {
         self.keyActivities = response.data;
-        showToast("Key activity created.", ToastMessageConstants.SUCCESS);
+        showToast("Pyn created.", ToastMessageConstants.SUCCESS);
         return true;
       } else {
-        showToast("There was a problem creating the key activity.", ToastMessageConstants.ERROR);
+        showToast("There was a problem creating the pyn.", ToastMessageConstants.ERROR);
         return false;
       }
     }),

@@ -54,10 +54,10 @@ mt1 = MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
     },
     {
       order_index: 6,
-      name: "Key Activities",
+      name: "Pyns",
       step_type: :component,
       duration: 5,
-      instructions: "Review Key Activites list and discuss why they weren’t completed if there are any items outstanding.",
+      instructions: "Review Pyns list and discuss why they weren’t completed if there are any items outstanding.",
       component_to_render: "KeyActivities"
     },
     {
@@ -73,7 +73,7 @@ mt1 = MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
       name: "Recap",
       step_type: :component,
       duration: 5,
-      instructions: "Quick recap of today’s meeting. Review the newly added Key Activites and make sure everyone knows what they’re responsible for.",
+      instructions: "Quick recap of today’s meeting. Review the newly added Pyns and make sure everyone knows what they’re responsible for.",
       component_to_render: "Recap"
     },
     {
@@ -116,15 +116,15 @@ mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Person
       order_index: 2,
       name: "Milestones",
       step_type: :component,
-      instructions: "Review your list of upcoming Milestones. What must you accomplish this week to drive your Milestones? Create Key Activities for each one.",
+      instructions: "Review your list of upcoming Milestones. What must you accomplish this week to drive your Milestones? Create Pyns for each one.",
       component_to_render: "Milestones",
       duration: 5
     },
     {
       order_index: 3,
-      name: "Personal Key Activities",
+      name: "Personal Pyns",
       step_type: :component,
-      instructions: "What else must you accomplish this week? Add new Key Activities or move them from your Master List to the Weekly List. Review your email and calendar to add anything else you need to account for this week.",
+      instructions: "What else must you accomplish this week? Add new Pyns or move them from your Master List to the Weekly List. Review your email and calendar to add anything else you need to account for this week.",
       component_to_render: "PersonalKeyActivities",
       duration: 5
     },

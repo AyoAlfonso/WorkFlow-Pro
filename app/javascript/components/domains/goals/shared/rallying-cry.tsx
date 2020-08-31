@@ -19,7 +19,7 @@ export const RallyingCry = ({ rallyingCry }: IRallyingCryProps): JSX.Element => 
 
   return (
     <VisionContainer>
-      <VisionTitle>Rallying Cry</VisionTitle>
+      <VisionTitle>LynchPyn Goal</VisionTitle>
       <StyledContentEditable
         innerRef={rallyingCryRef}
         html={rallyingCry}

@@ -73,7 +73,7 @@ ActiveAdmin.register Company do
         column :created_at
       end
     end
-    panel 'Accountability Chart' do
+    panel 'Accountability Matrix' do
       attributes_table_for company do
         row :accountability_chart do |c|
           if c.accountability_chart_embed.present?

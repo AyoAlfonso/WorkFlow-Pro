@@ -20,7 +20,7 @@ export const AnnualInitiativeStoreModel = types
         self.annualInitiative = response.data;
         return response.data;
       } catch {
-        showToast("There was an error fetching the annual initiative", ToastMessageConstants.ERROR);
+        showToast("There was an error fetching the annual goal", ToastMessageConstants.ERROR);
       }
     }),
     update: flow(function*() {
@@ -31,10 +31,10 @@ export const AnnualInitiativeStoreModel = types
         self.annualInitiative = responseAnnualInitiative;
         const { goalStore } = getRoot(self);
         goalStore.updateAnnualInitiative(responseAnnualInitiative);
-        showToast("Annual initiative updated", ToastMessageConstants.SUCCESS);
+        showToast("Annual goal updated", ToastMessageConstants.SUCCESS);
         return responseAnnualInitiative;
       } catch {
-        showToast("There was an error updating the annual initiative", ToastMessageConstants.ERROR);
+        showToast("There was an error updating the annual goal", ToastMessageConstants.ERROR);
       }
     }),
     createKeyElement: flow(function*() {
@@ -58,10 +58,10 @@ export const AnnualInitiativeStoreModel = types
           annualInitiativeObject.type,
           response.data.annualInitiative,
         );
-        showToast("Annual initiative created", ToastMessageConstants.SUCCESS);
+        showToast("Annual goal created", ToastMessageConstants.SUCCESS);
         return response.data.annualInitiative;
       } catch {
-        showToast("There was an error creating the annual initiative", ToastMessageConstants.ERROR);
+        showToast("There was an error creating the annual goal", ToastMessageConstants.ERROR);
       }
     }),
     delete: flow(function*(annualInitiativeId) {
@@ -70,10 +70,10 @@ export const AnnualInitiativeStoreModel = types
         const response: any = yield env.api.deleteAnnualInitiative(annualInitiativeId);
         const { goalStore } = getRoot(self);
         goalStore.removeDeletedAnnualInitiative(annualInitiativeId);
-        showToast("Annual Initiative Deleted", ToastMessageConstants.SUCCESS);
+        showToast("Annual goal deleted", ToastMessageConstants.SUCCESS);
         return response.data.annualInitiativeId;
       } catch {
-        showToast("There was an error deleting the annual initiative", ToastMessageConstants.ERROR);
+        showToast("There was an error deleting the annual goal", ToastMessageConstants.ERROR);
       }
     }),
   }))

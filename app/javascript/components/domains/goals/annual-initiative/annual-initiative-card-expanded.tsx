@@ -69,7 +69,7 @@ export const AnnualInitiativeCardExpanded = observer(
 
     return (
       <Container>
-        <QuarterlyGoalsText>Quarterly Goals</QuarterlyGoalsText>
+        <QuarterlyGoalsText>Quarterly Objective</QuarterlyGoalsText>
         {renderQuarterlyGoals()}
         {showCreateQuarterlyGoal && renderCreateGoal()}
         <MinimizeIconContainer onClick={() => setShowMinimizedCard(true)}>

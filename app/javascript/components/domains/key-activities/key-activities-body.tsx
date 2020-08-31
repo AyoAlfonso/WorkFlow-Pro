@@ -110,7 +110,7 @@ export const KeyActivitiesBody = observer(
           <AddNewKeyActivityPlus>
             <Icon icon={"Plus"} size={16} />
           </AddNewKeyActivityPlus>
-          <AddNewKeyActivityText> Add New Key Activity</AddNewKeyActivityText>
+          <AddNewKeyActivityText> Add New Pyn</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
         <Droppable droppableId="weekly-activities">
           {(provided, snapshot) => (

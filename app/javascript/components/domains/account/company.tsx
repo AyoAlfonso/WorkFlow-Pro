@@ -140,11 +140,11 @@ export const Company = observer(
                     )}
                   </Select>
                   <Text color={"greyActive"} fontSize={1}>
-                    To modify Fiscal Start Date, Accountability Chart, or Strategic Plan, please
+                    To modify Fiscal Start Date, Accountability Matrix, or Strategic Plan, please
                     contact Lynchpyn support.
                   </Text>
 
-                  <Label htmlFor="rallying">Rallying Cry</Label>
+                  <Label htmlFor="rallying">LynchPyn Goal</Label>
                   <Input
                     name="rallyingCry"
                     onChange={e => {

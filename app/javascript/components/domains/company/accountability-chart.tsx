@@ -14,7 +14,7 @@ export const AccountabilityChart = observer(
         {company ? (
           <>
             <Heading type={"h1"} color={"black"}>
-              Accountability Chart
+              Accountability Matrix
             </Heading>
             <div
               className="trix-content"

@@ -19,7 +19,10 @@ export const QuarterlyGoalStoreModel = types
         const response: any = yield env.api.getQuarterlyGoal(id);
         self.quarterlyGoal = response.data;
       } catch {
-        showToast("There was an error retrieving the quarterly goal", ToastMessageConstants.ERROR);
+        showToast(
+          "There was an error retrieving the quarterly objective",
+          ToastMessageConstants.ERROR,
+        );
       }
     }),
     update: flow(function*() {
@@ -28,10 +31,13 @@ export const QuarterlyGoalStoreModel = types
         const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
         const responseQuarterlyGoal = response.data.quarterlyGoal;
         self.quarterlyGoal = responseQuarterlyGoal;
-        showToast("Quarterly goal updated", ToastMessageConstants.SUCCESS);
+        showToast("Quarterly objective updated", ToastMessageConstants.SUCCESS);
         return responseQuarterlyGoal;
       } catch {
-        showToast("There was an error updating the quarterly goal", ToastMessageConstants.ERROR);
+        showToast(
+          "There was an error updating the quarterly objective",
+          ToastMessageConstants.ERROR,
+        );
       }
     }),
     createKeyElement: flow(function*() {
@@ -55,10 +61,13 @@ export const QuarterlyGoalStoreModel = types
             response.data.quarterlyGoal,
           );
         }
-        showToast("Quarterly goal created", ToastMessageConstants.SUCCESS);
+        showToast("Quarterly objective created", ToastMessageConstants.SUCCESS);
         return response.data.quarterlyGoal;
       } catch {
-        showToast("There was an error creating the quarterly goal", ToastMessageConstants.ERROR);
+        showToast(
+          "There was an error creating the quarterly objective",
+          ToastMessageConstants.ERROR,
+        );
       }
     }),
     delete: flow(function*(updateAnnualInitiative = true, quarterlyGoalId) {
@@ -107,10 +116,13 @@ export const QuarterlyGoalStoreModel = types
           annualInitiativeStore.updateRecordIfOpened(annualInitiative);
         }
 
-        showToast("Quarterly goal deleted", ToastMessageConstants.SUCCESS);
+        showToast("Quarterly objective deleted", ToastMessageConstants.SUCCESS);
         return annualInitiative;
       } catch {
-        showToast("There was an error deleting the quarterly goal", ToastMessageConstants.ERROR);
+        showToast(
+          "There was an error deleting the quarterly objective",
+          ToastMessageConstants.ERROR,
+        );
       }
     }),
     createMilestones: flow(function*(quarterlyGoalId) {

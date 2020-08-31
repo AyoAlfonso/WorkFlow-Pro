@@ -24,7 +24,7 @@ steps: [
   },
   {
     id: 5,
-    message: "What frog will you eat today?",
+    message: "What MIPs will you eat today?",
     trigger: "6"
   },
   {

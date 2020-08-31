@@ -100,7 +100,7 @@ export const TeamKeyActivities = observer(
             <AddNewKeyActivityPlus>
               <Icon icon={"Plus"} size={16} />
             </AddNewKeyActivityPlus>
-            <AddNewKeyActivityText> Add New Key Activity</AddNewKeyActivityText>
+            <AddNewKeyActivityText> Add New Pyn</AddNewKeyActivityText>
           </AddNewKeyActivityContainer>
           <KeyActivitiesContainer>{renderKeyActivitiesList()}</KeyActivitiesContainer>
         </KeyActivityBodyContainer>
@@ -112,7 +112,7 @@ export const TeamKeyActivities = observer(
         <KeyActivitiesHeader
           showAllKeyActivities={showAllKeyActivities}
           setShowAllKeyActivities={setShowAllKeyActivities}
-          title={"Team's Key Activities"}
+          title={"Team's Pyns"}
         />
         {renderKeyActivityBody()}
       </Container>

@@ -76,7 +76,7 @@ export const HeaderBar = observer(
             <SelectionIconContainer>
               <SelectionIcon icon={"Tasks"} size={20} disableFill={true} />
             </SelectionIconContainer>
-            <SelectionText>Key Activity</SelectionText>
+            <SelectionText>Pyn</SelectionText>
           </SelectionContainer>
 
           <SelectionContainer
@@ -129,7 +129,7 @@ export const HeaderBar = observer(
               }
             }}
           >
-            <SelectionText>Weekly Personal Planning</SelectionText>
+            <SelectionText>Weekly Personal R&P</SelectionText>
           </SelectionContainer>
         </DropdownContainer>
       );

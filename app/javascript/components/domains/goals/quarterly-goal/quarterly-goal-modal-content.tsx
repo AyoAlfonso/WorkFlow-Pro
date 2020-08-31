@@ -92,7 +92,7 @@ export const QuarterlyGoalModalContent = observer(
             {editable && (
               <DeleteIconContainer
                 onClick={() => {
-                  if (confirm("Are you sure you want to delete this quarterly goal?")) {
+                  if (confirm("Are you sure you want to delete this quarterly objective?")) {
                     quarterlyGoalStore.delete(false, quarterlyGoalId).then(() => {
                       setQuarterlyGoalModalOpen(false);
                     });

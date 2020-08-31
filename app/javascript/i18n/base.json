@@ -74,7 +74,7 @@
         "core4": "How Do We Succeed?"
       },
       "company": {
-        "accountabilityChart": "Accountability Chart",
+        "accountabilityChart": "Accountability Matrix",
         "name": "Company Name",
         "logo": "Company Logo",
         "fiscalYearStartDate": "Fiscal Year Start Date",
@@ -91,14 +91,14 @@
         "goals": "Goals"
       },
       "annualInitiative": {
-        "enterTitle": "Enter Annual Initiative Title...",
-        "add": "Add an Annual Initiative",
-        "addInitiative": "Add Initiative"
+        "enterTitle": "Enter Annual Goal Title...",
+        "add": "Add an Annual Goal",
+        "addInitiative": "Add Goal"
       },
       "quarterlyGoal": {
-        "enterTitle": "Enter Quarterly Goal Title...",
-        "add": "Add a Quarterly Goal",
-        "addGoal": "Add Goal"
+        "enterTitle": "Enter Quarterly Objective Title...",
+        "add": "Add a Quarterly Objective",
+        "addGoal": "Add Objective"
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",
@@ -124,7 +124,7 @@
       },
       "keyActivities": {
         "prioritiesTitle": "Today's Priorities",
-        "title": "Key Activities"
+        "title": "Pyns"
       },
       "teams": {
         "teamMeetingsTitle": "Team Meetings",

@@ -37,10 +37,10 @@ export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
     let stringValue = "";
     if (type == "quarterlyGoal") {
       store = quarterlyGoalStore;
-      stringValue = "quarterly goal";
+      stringValue = "quarterly objective";
     } else if (type == "annualInitiative") {
       store = annualInitiativeStore;
-      stringValue = "annual initiative";
+      stringValue = "annual goal";
     }
 
     if (confirm(`Are you sure you want to delete this ${stringValue}?`)) {

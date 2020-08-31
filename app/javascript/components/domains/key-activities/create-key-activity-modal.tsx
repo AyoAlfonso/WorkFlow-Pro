@@ -57,7 +57,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
     <ModalWithHeader
       modalOpen={createKeyActivityModalOpen}
       setModalOpen={setCreateKeyActivityModalOpen}
-      headerText="Key Activity"
+      headerText="Pyn"
       width="35rem"
     >
       <Container>
