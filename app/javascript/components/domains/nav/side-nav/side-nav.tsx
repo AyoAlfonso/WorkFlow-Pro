@@ -89,14 +89,15 @@ type SideNavChildPopupContainerType = {
 };
 
 const SideNavChildPopupContainer = styled.div<SideNavChildPopupContainerType>`
-  margin-bottom: 16px;
   &:hover ${StyledIcon} {
     color: ${props => !props.active && props.theme.colors.greyActive};
   }
 `;
 
-const NavMenuIconText = styled(Text)`
+const NavMenuIconText = styled.h4`
   text-align: center;
+  margin-top: 12px;
+  margin-bottom: 0;
 `;
 interface INavMenuIconProps {
   active?: boolean;
