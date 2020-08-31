@@ -121,6 +121,7 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
 
 const Container = styled.div`
   width: 100%;
+  margin-left: 15px;
 `;
 
 const BodyContainer = styled.div`

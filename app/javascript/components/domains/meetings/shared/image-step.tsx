@@ -4,7 +4,7 @@ import { Loading } from "~/components/shared/loading";
 import { IStep } from "~/models/step";
 import { Text } from "~/components/shared/text";
 import styled from "styled-components";
-import { Card, CardBody } from "~/components/shared/card";
+import { Card, CardBody, CardHeaderText } from "~/components/shared/card";
 
 export interface IImageStepProps {
   step: IStep;
@@ -28,11 +28,7 @@ export const ImageStep = ({ step }: IImageStepProps): JSX.Element => {
         width={cardWidth}
         alignment={"left"}
         border={"none"}
-        headerComponent={
-          <Text fontSize={"12px"} fontWeight={"bold"}>
-            {step.name}
-          </Text>
-        }
+        headerComponent={<CardHeaderText>{step.name}</CardHeaderText>}
       >
         <CardBody>
           <Image src={step.imageUrl} alt={step.name} />
@@ -45,6 +41,7 @@ export const ImageStep = ({ step }: IImageStepProps): JSX.Element => {
 const Container = styled.div`
   width: 100%;
   max-height: 700px;
+  margin-left: 15px;
 `;
 
 const Image = styled.img`

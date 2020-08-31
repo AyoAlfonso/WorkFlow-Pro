@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { Card, CardBody } from "../../../shared/card";
+import { Card, CardBody, CardHeaderText } from "../../../shared/card";
 import { Text } from "../../../shared/text";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
@@ -23,11 +23,7 @@ export const ConversationStarter = observer(
           <Card
             width={"640px"}
             alignment={"left"}
-            headerComponent={
-              <Text fontSize={"12px"} fontWeight={"bold"}>
-                Today's Topic
-              </Text>
-            }
+            headerComponent={<CardHeaderText>Today's Topic</CardHeaderText>}
             mr={"auto"}
             ml={"15px"}
           >
