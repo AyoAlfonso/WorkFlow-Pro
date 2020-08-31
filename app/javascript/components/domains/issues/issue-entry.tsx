@@ -108,6 +108,7 @@ export const IssueEntry = observer(
         </IssuePriorityContainer>
         <StyledContentEditable
           innerRef={issueRef}
+          meeting={meeting}
           html={issue.description}
           onChange={e => {
             if (!e.target.value.includes("<div>")) {
@@ -130,7 +131,7 @@ export const IssueEntry = observer(
             <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
           </DeleteButtonContainer>
           <ShareButtonContainer onMouseEnter={() => setShowShareModal(true)}>
-            <Icon icon={"Forward"} size={24} style={{ marginTop: "5px" }} />
+            <Icon icon={"Forward"} size={24} style={{ marginTop: "3px" }} />
             {showShareModal && (
               <ShareIssueContainer pageEnd={pageEnd}>
                 <ShareIssueText>Share Issue</ShareIssueText>
@@ -211,7 +212,6 @@ const ShareButtonContainer = styled.div`
     cursor: pointer;
     color: ${props => props.theme.colors.greyActive};
   }
-  margin-right: 8px;
 `;
 
 const CreateKeyActivityButtonContainer = styled.div`
@@ -245,14 +245,18 @@ const IssuePriorityContainer = styled.div`
   }
 `;
 
-const StyledContentEditable = styled(ContentEditable)`
+type StyledContentEditableProps = {
+  meeting?: boolean;
+};
+
+const StyledContentEditable = styled(ContentEditable)<StyledContentEditableProps>`
   padding-top: 5px;
   padding-bottom: 5px;
   font-size: 14pt;
   font-weight: 400;
   line-height: 20px;
   margin-left: 10px;
-  width: 160px;
+  width: ${props => (props.meeting ? "115px" : "125px")};
   margin-top: auto;
   margin-bottom: auto;
 `;

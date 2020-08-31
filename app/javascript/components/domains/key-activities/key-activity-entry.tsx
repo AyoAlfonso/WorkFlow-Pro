@@ -123,7 +123,7 @@ const DeleteButtonContainer = styled.div`
   margin-left: auto;
   margin-top: auto;
   margin-bottom: auto;
-  margin-right: 30px;
+  margin-right: 15px;
   color: ${props => props.theme.colors.grey60};
   display: none;
   &: hover {
@@ -165,7 +165,7 @@ const StyledContentEditable = styled(ContentEditable)`
   font-weight: 400;
   line-height: 20px;
   margin-left: 10px;
-  width: 160px;
+  width: 125px;
   margin-top: auto;
   margin-bottom: auto;
 `;
