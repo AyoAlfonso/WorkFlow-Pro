@@ -85,7 +85,7 @@ const Container = styled.div`
 
 const EnlargedHomeTitle = styled.div`
   font-family: Exo;
-  font-size: 20pt;
+  font-size: 24px;
   font-weight: 600;
   margin-top: auto;
   margin-bottom: auto;
