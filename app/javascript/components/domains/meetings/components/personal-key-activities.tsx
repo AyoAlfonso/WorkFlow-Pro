@@ -10,11 +10,11 @@ export const PersonalKeyActivities = (props: {}): JSX.Element => {
     <Container>
       <IndividualContainer>
         <KeyActivitiesHeader title={"Weekly Activity List"} />
-        <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"} />
+        <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"} disableDrag={true} />
       </IndividualContainer>
       <IndividualContainer>
         <KeyActivitiesHeader title={"Master Activity List"} />
-        <KeyActivitiesBody showAllKeyActivities={true} borderLeft={"none"} />
+        <KeyActivitiesBody showAllKeyActivities={true} borderLeft={"none"} disableDrag={true} />
       </IndividualContainer>
     </Container>
   );

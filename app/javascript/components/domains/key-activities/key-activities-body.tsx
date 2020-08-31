@@ -14,6 +14,7 @@ import { KeyActivityEntry } from "./key-activity-entry";
 interface IKeyActivitiesBodyProps {
   showAllKeyActivities: boolean;
   borderLeft?: string;
+  disableDrag?: boolean;
 }
 
 export const KeyActivitiesBody = observer(
@@ -48,26 +49,32 @@ export const KeyActivitiesBody = observer(
           </>
         );
       } else {
-        return weeklyKeyActivities.map((keyActivity, index) => (
-          <Draggable
-            draggableId={keyActivity["id"].toString()}
-            index={index}
-            key={keyActivity["id"]}
-          >
-            {provided => (
-              <KeyActivityContainer
-                key={keyActivity["id"]}
-                ref={provided.innerRef}
-                {...provided.draggableProps}
-              >
-                <KeyActivityEntry
-                  keyActivity={keyActivity}
-                  dragHandleProps={...provided.dragHandleProps}
-                />
-              </KeyActivityContainer>
-            )}
-          </Draggable>
-        ));
+        return weeklyKeyActivities.map((keyActivity, index) =>
+          props.disableDrag ? (
+            <KeyActivityContainer key={keyActivity["id"]}>
+              <KeyActivityEntry keyActivity={keyActivity} />
+            </KeyActivityContainer>
+          ) : (
+            <Draggable
+              draggableId={keyActivity["id"].toString()}
+              index={index}
+              key={keyActivity["id"]}
+            >
+              {provided => (
+                <KeyActivityContainer
+                  key={keyActivity["id"]}
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                >
+                  <KeyActivityEntry
+                    keyActivity={keyActivity}
+                    dragHandleProps={...provided.dragHandleProps}
+                  />
+                </KeyActivityContainer>
+              )}
+            </Draggable>
+          ),
+        );
       }
     };
 
