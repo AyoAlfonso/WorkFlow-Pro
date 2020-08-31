@@ -8,7 +8,7 @@ class Issue < ApplicationRecord
   scope :sort_by_created_date, -> { order(created_at: :asc) }
   scope :sort_by_completed_date, -> { order(completed_at: :asc)}
   
-  scope :created_between, -> (date_start, date_end) { where("created_at < ? AND created_at >= ?", date_start, date_end) }
+  scope :created_between, -> (date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
   scope :user_created_between, -> (user, date_start, date_end) { created_by_user(user).created_between(date_start, date_end) }
 
   validates :description, presence: true
