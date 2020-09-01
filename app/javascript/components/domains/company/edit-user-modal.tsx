@@ -102,7 +102,7 @@ export const EditUserModal = ({
             yes={
               <FormContainer>
                 <Label htmlFor="email">{t("profile.profileUpdateForm.email")}</Label>
-                <Input name="email" onChange={e => setEmail(e.target.value)} value={email} />
+                <Input name="email" value={email} disabled={true} />
                 <Label htmlFor="firstName">{t("profile.profileUpdateForm.firstName")}</Label>
                 <Input
                   name="firstName"
