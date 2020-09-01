@@ -32,15 +32,21 @@ const popupStyle: CSSProperties = {
 
 interface ISideNavChildPopupProps {
   trigger: JSX.Element;
+  navOpen: boolean;
+  setNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOtherNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export const SideNavChildPopup: React.FunctionComponent<ISideNavChildPopupProps> = ({
   children,
   trigger,
+  navOpen,
+  setNavOpen,
+  setOtherNavOpen,
 }) => {
-  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+  //const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   return (
     <Container>
-      <SideNavDrawer isOpen={drawerIsOpen} />
+      <SideNavDrawer isOpen={navOpen} />
       <Popup
         arrow={false}
         closeOnDocumentClick
@@ -51,9 +57,12 @@ export const SideNavChildPopup: React.FunctionComponent<ISideNavChildPopupProps>
         mouseEnterDelay={0}
         offsetY={-50}
         on={"click"}
-        open={drawerIsOpen}
-        onClose={() => setDrawerIsOpen(false)}
-        onOpen={() => setDrawerIsOpen(true)}
+        open={navOpen}
+        onClose={() => setNavOpen(false)}
+        onOpen={() => {
+          setNavOpen(true);
+          setOtherNavOpen(false);
+        }}
         position={"right center"}
         trigger={<PopupTriggerContainer>{trigger}</PopupTriggerContainer>}
       >
@@ -62,7 +71,7 @@ export const SideNavChildPopup: React.FunctionComponent<ISideNavChildPopupProps>
             //@ts-ignore
             React.cloneElement(child, {
               onClick: () => {
-                setDrawerIsOpen(false);
+                setNavOpen(false);
               },
             }),
           )}
