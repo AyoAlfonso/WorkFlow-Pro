@@ -67,6 +67,7 @@ export const KeyActivitiesBody = observer(
                   key={keyActivity["id"]}
                   ref={provided.innerRef}
                   {...provided.draggableProps}
+                  {...provided.dragHandleProps}
                 >
                   <KeyActivityEntry
                     keyActivity={keyActivity}
