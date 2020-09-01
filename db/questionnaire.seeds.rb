@@ -448,67 +448,312 @@ steps: [
 )
 
 Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening Reflection", 
-daily_limit: true,
-steps: [
-  {
-    id: 1,
-    message: "How are you feeling?",
-    trigger: "2"
-  },
-  {
-    id: 2,
-    metadata: {
-      emotion_selector: true,
-      emotions: [
-        {icon: "Emotion-E", color: "warningRed", value: 1, trigger: 3},
-        {icon: "Emotion-D", color: "cautionYellow", value: 2, trigger: 3},
-        {icon: "Emotion-C", color: "grey60", value: 3, trigger: 3},
-        {icon: "Emotion-B", color: "successGreen", value: 4, trigger: 3},
-        {icon: "Emotion-A", color: "finePine", value: 5, trigger: 3}
+  daily_limit: true,
+  steps: [
+    {
+      id: 1, 
+      message: "Good evening, {userName}! Great to see you.",
+      metadata: {
+        username: true
+      },
+      trigger: 2
+    },
+    {
+      id: 2, 
+      message: "You achieved {completedPynCount} out of {totalPynCount} Pyns today",
+      metadata: {
+        pynCount: true
+      },
+      trigger: 3
+    },
+    {
+      id: 3, 
+      message: "I know you did more than that! Tell me what else happened today?", 
+      trigger: "what-happened"
+    },
+    {
+      id: "what-happened", 
+      user: true,
+      metadata: {
+        validatorType: "string"
+      },
+      trigger: 5
+    },
+    {
+      id: 5, 
+      message: "Cool!", 
+      trigger: 6
+    },
+    {
+      id: 6, 
+      message: "How would you say your day was?", 
+      trigger: "rating"
+    },
+    {
+      id: "rating",
+      options: [],
+      metadata: {
+        emotion_selector: true,
+        emotions: [
+          {icon: "Emotion-E", color: "warningRed", value: "Emotion-E", trigger: 8},
+          {icon: "Emotion-D", color: "cautionYellow", value: "Emotion-D", trigger: 8},
+          {icon: "Emotion-C", color: "grey60", value: "Emotion-C", trigger: 8},
+          {icon: "Emotion-B", color: "successGreen", value: "Emotion-B", trigger: 8},
+          {icon: "Emotion-A", color: "finePine", value: "Emotion-A", trigger: 8}
+        ]
+      }
+    },
+    {
+      id: 8, 
+      message: "Got it.", 
+      trigger: 9
+    },
+    {
+      id: 9, 
+      message: "It is important to acknowledge our wins, even if we think they are no big deal.", 
+      trigger: 10
+    },
+    {
+      id: 10, 
+      message: "Can you tell me what were your top three wins for today?", 
+      trigger: "wins"
+    },
+    {
+      id: "wins", 
+      user: true, 
+      metadata: {
+        validatorType: "string"
+      },
+      trigger: 12
+    },
+    {
+      id: 12, 
+      message: "Way to go!", 
+      trigger: 13
+    },
+    {
+      id: 13, 
+      options: [
+        {value: "Yes", label: "Yes", trigger: 16}, 
+        {value: "No", label: "No", trigger: 15},
+        {value: "Skip", label: "Don't have time to talk now...", trigger: 14}
       ]
+    },
+    {
+      id: 14, 
+      message: "No worries!", 
+      trigger: 32
+    },
+    {
+      id: 15, 
+      message: "The magic happens when you step out of your comfort zone. Challenge yourself tomorrow to push past your comfort zone.",
+      trigger: 18
+    },
+    {
+      id: 16, 
+      message: "Awesome, what did you do?", 
+      trigger: "comfort-zone"
+    },
+    {
+      id: "comfort-zone", 
+      user: true, 
+      metadata: {
+        validatorType: "string"
+      },
+      trigger: 17
+    },
+    {
+      id: 17, 
+      message: "Way to go {userName}! You clearly understand that growth happens outside of our comfort zone. I am proud of you!",
+      metadata: {
+        username: true
+      },
+      trigger: 18
+    },
+    {
+      id: 18, 
+      message: "Where did you spend time on today that wasn't for your highest good?", 
+      trigger: "highest-good"
+    },
+    {
+      id: "highest-good", 
+      user: true,
+      metadata: {
+        validatorType: "string"
+      },
+      trigger: 20
+    },
+    {
+      id: 20, 
+      message: "Got it, Thanks.", 
+      trigger: 21
+    },
+    {
+      id: 21, 
+      message: "So {userName}, what was one lesson you learned today?",
+      metadata: {
+        username: true
+      },
+      trigger: "lessons"
+    },
+    {
+      id: "lessons", 
+      user: true, 
+      metadata: {
+        validatorType: "string"
+      },
+      trigger: 23
+    },
+    {
+      id: 23, 
+      message: "We need to keep building on these learning and you will see this again at your weekly R&P.", 
+      trigger: 24
+    },
+    {
+      id: 24, 
+      message: "Okay, now let's shift a little. Complete the following sentence", 
+      trigger: 25
+    },
+    {
+      id: 25, 
+      message: "I could have made today better if...", 
+      trigger: "improvements"
+    },
+    {
+      id: "improvements", 
+      user: true,
+      metadata: {
+        validatorType: "string"
+      },
+      trigger: 27
+    },
+    {
+      id: 27, 
+      message: "Sounds like something to remember for tomorrow. You've had quite the day, {userName}!",
+      metadata: {
+        username: true
+      },
+      trigger: 28
+    },
+    {
+      id: 28, 
+      options: [
+        {value: "Yeah, it was", label: "Yeah, it was", trigger: 29}, 
+        {value: "It was okay", label: "It was okay", trigger: 29}, 
+        {value: "No big deal", label: "No big deal", trigger: 29}
+      ]
+    },
+    {
+      id: 29, 
+      message: "So before we shift to thinking about tomorrow, what are you most grateful for today?", 
+      trigger: "gratitude-pm"
+    },
+    {
+      id: "gratitude-pm", 
+      user: true,
+      metadata: {
+        validatorType: "string"
+      },
+      trigger: 31
+    },
+    {
+      id: 31, 
+      message: "Nice :O)", 
+      trigger: 32
+    },
+    {
+      id: 32, 
+      message: "I know you know this {userName}; A good tomorrow starts right now. So I want you to think about what you need to do tomorrow.",
+      metadata: {
+        username: true
+      }, 
+      trigger: 33
+    },
+    {
+      id: 33, 
+      message: "What are the Most Important Pyns (MIPs) you have to accomplish tomorrow? You can select three from your top 10 Pyns based on priority.", 
+      trigger: "mips"
+    },
+    {
+      id: "mips", 
+      options: [],
+      metadata: {
+        frog_selector: true,
+        trigger: 34
+      }
+    },
+    {
+      id: 34, 
+      message: "Fantastic, you have planted the seeds for a great day!", 
+      trigger: 35
+    },
+    {
+      id: 35, 
+      options: [
+        {value: "Yeah, PynBot!", label: "Yeah, PynBot!", trigger: 36}
+      ]
+    },
+    {
+      id: 36, 
+      message: "Before you go, it is always a good practice to stop and reflect on the day. This is where you can write freely.", 
+      trigger: 37
+    },
+    {
+      id: 37, 
+      message: "Is there anything you would like to capture or reflect upon your day?", 
+      trigger: 38
+    },
+    {
+      id: 38, 
+      options: [
+        {value: "Yes", label: "Yes", trigger: 41}, 
+        {value: "No", label: "No", trigger: 39}
+      ]
+    },
+    {
+      id: 39, 
+      message: "Thank you for showing up {userName}, I'm looking forward to talking with you tomorrow!",
+      metadata: {
+        username: true
+      }, 
+      trigger: 40
+    },
+    {
+      id: 40, 
+      options: [
+        {value: "Thanks, PynBot!", label: "Thanks, PynBot!"}
+      ],
+      end: true
+    },
+    {
+      id: 41, 
+      message: "Great, this is your space--go for it!", 
+      trigger: "reflection"
+    },
+    {
+      id: "reflection", 
+      user: true,
+      metadata: {
+        validatorType: "string"
+      },
+      trigger: 43
+    },
+    {
+      id: 43, 
+      message: "Your future self will value that! Have a great evening {userName}, I'm excited to talk with you tomorrow morning.",
+      metadata: {
+        username: true
+      }, 
+      trigger: 44
+    },
+    {
+      id: 44, 
+      options: [
+        { value: "Thanks, PynBot!", label: "Thanks, PynBot!" }
+      ],
+      end: true
     }
-  },
-  {
-    id: 3,
-    message: "What did you feel?",
-    trigger: "4"
-  },
-  {
-    id: 4,
-    user: true,
-    trigger: "5"
-  },
-  {
-    id: 5,
-    message: "Reflect and celebrate",
-    trigger: "6"
-  },
-  {
-    id: 6,
-    user: true,
-    trigger: "7"
-  },
-  {
-    id: 7,
-    message: "Daily affirmations",
-    trigger: "8"
-  },
-  {
-    id: 8,
-    user: true,
-    trigger: "9"
-  },
-  {
-    id: 9,
-    message: "Thoughts and reflections",
-    trigger: "10"
-  },
-  {
-    id: 10,
-    user: true,
-    end: true
-  },
-]
+  ]
 )
 
 Questionnaire.where(name: "Weekly Reflection").first_or_create(name: "Weekly Reflection", 
