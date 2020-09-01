@@ -44,7 +44,8 @@
           "save": "Save",
           "invite": "Invite to Company",
           "resend": "Resend",
-          "timezone": "Location/Time Zone"
+          "timezone": "Location/Time Zone",
+          "title": "Title"
         },
         "securityForm": {
           "password": "Password",

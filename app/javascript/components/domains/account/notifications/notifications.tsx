@@ -4,11 +4,11 @@ import { useMst } from "~/setup/root";
 import { useTranslation } from "react-i18next";
 import {
   BodyContainer,
-  IconContainer,
   NotificationTableRowContainer,
   NotificationTableRowColumn,
   NotificationTableHeaderContainer,
 } from "./notification-styles";
+import { IconContainer } from "../container-styles";
 import { Icon, Text } from "~/components/shared";
 import { Container, HeaderContainer, HeaderText } from "../container-styles";
 import { observer } from "mobx-react";

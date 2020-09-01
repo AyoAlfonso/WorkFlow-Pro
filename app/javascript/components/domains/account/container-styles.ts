@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Text } from "~/components/shared/text";
+import { space, SpaceProps } from "styled-system";
 
 export const Container = styled.div`
   width: 100%;
@@ -75,8 +76,22 @@ export const CenteredTableContainer = styled.div`
   height: 100%;
 `;
 
+export const SpacedTableContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+`;
+
 export const LeftAlignedTableContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+`;
+
+export const IconContainer = styled.div<SpaceProps>`
+  ${space}
+  &:hover {
+    cursor: pointer;
+  }
 `;
