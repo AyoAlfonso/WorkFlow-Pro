@@ -82,7 +82,8 @@
         "timezone": "Location/Time Zone",
         "createUser": {
           "addButton": "Create New User"
-        }
+        },
+        "rallyingCry": "Lynchpyn Goal"
       },
       "navigation": {
         "home": "Home",
@@ -93,12 +94,15 @@
       "annualInitiative": {
         "enterTitle": "Enter Annual Goal Title...",
         "add": "Add an Annual Goal",
-        "addInitiative": "Add Goal"
+        "addInitiative": "Add Goal",
+        "messageText": "annual goal"
       },
       "quarterlyGoal": {
         "enterTitle": "Enter Quarterly Objective Title...",
         "add": "Add a Quarterly Objective",
-        "addGoal": "Add Objective"
+        "addGoal": "Add Objective",
+        "title": "Quarterly Objectives",
+        "messageText": "annual objective"
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",
@@ -124,7 +128,8 @@
       },
       "keyActivities": {
         "prioritiesTitle": "Today's Priorities",
-        "title": "Pyns"
+        "title": "Pyns",
+        "addTitle": "Add New Pyn"
       },
       "teams": {
         "teamMeetingsTitle": "Team Meetings",

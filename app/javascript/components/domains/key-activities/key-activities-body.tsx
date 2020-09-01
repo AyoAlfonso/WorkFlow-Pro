@@ -10,6 +10,7 @@ import { Loading } from "../../shared";
 import { Icon } from "../../shared/icon";
 import { CreateKeyActivityModal } from "./create-key-activity-modal";
 import { KeyActivityEntry } from "./key-activity-entry";
+import { useTranslation } from "react-i18next";
 
 interface IKeyActivitiesBodyProps {
   showAllKeyActivities: boolean;
@@ -19,6 +20,7 @@ interface IKeyActivitiesBodyProps {
 export const KeyActivitiesBody = observer(
   (props: IKeyActivitiesBodyProps): JSX.Element => {
     const { keyActivityStore } = useMst();
+    const { t } = useTranslation();
     const { showAllKeyActivities, borderLeft } = props;
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
@@ -110,7 +112,7 @@ export const KeyActivitiesBody = observer(
           <AddNewKeyActivityPlus>
             <Icon icon={"Plus"} size={16} />
           </AddNewKeyActivityPlus>
-          <AddNewKeyActivityText> Add New Pyn</AddNewKeyActivityText>
+          <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
         <Droppable droppableId="weekly-activities">
           {(provided, snapshot) => (

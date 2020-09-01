@@ -4,6 +4,7 @@ import { Text } from "../../../shared/text";
 import { Icon } from "../../../shared/icon";
 import { HomeContainerBorders } from "../../home/shared-components";
 import { useMst } from "~/setup/root";
+import { useTranslation } from "react-i18next";
 import { useRef, useState, useEffect } from "react";
 
 interface IRecordOptionsProps {
@@ -17,6 +18,7 @@ export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
   const { quarterlyGoalStore, annualInitiativeStore } = useMst();
 
   const optionsRef = useRef(null);
+  const { t } = useTranslation();
 
   const [showOptions, setShowOptions] = useState<boolean>(false);
 
@@ -37,10 +39,10 @@ export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
     let stringValue = "";
     if (type == "quarterlyGoal") {
       store = quarterlyGoalStore;
-      stringValue = "quarterly objective";
+      stringValue = t("quarterlyGoal.messageText");
     } else if (type == "annualInitiative") {
       store = annualInitiativeStore;
-      stringValue = "annual goal";
+      stringValue = t("annualInitiative.messageText");
     }
 
     if (confirm(`Are you sure you want to delete this ${stringValue}?`)) {

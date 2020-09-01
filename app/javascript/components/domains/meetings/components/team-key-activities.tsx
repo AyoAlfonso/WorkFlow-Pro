@@ -11,6 +11,7 @@ import { color } from "styled-system";
 import { KeyActivityEntry } from "../../key-activities/key-activity-entry";
 import { baseTheme } from "~/themes";
 import { Loading } from "~/components/shared/loading";
+import { useTranslation } from "react-i18next";
 
 export const TeamKeyActivities = observer(
   (props: {}): JSX.Element => {
@@ -19,6 +20,7 @@ export const TeamKeyActivities = observer(
     const [loading, setLoading] = useState<boolean>(true);
 
     const { meetingStore, keyActivityStore } = useMst();
+    const { t } = useTranslation();
 
     useEffect(() => {
       keyActivityStore.fetchKeyActivitiesFromMeeting(meetingStore.currentMeeting.id).then(() => {
@@ -100,7 +102,7 @@ export const TeamKeyActivities = observer(
             <AddNewKeyActivityPlus>
               <Icon icon={"Plus"} size={16} />
             </AddNewKeyActivityPlus>
-            <AddNewKeyActivityText> Add New Pyn</AddNewKeyActivityText>
+            <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
           </AddNewKeyActivityContainer>
           <KeyActivitiesContainer>{renderKeyActivitiesList()}</KeyActivitiesContainer>
         </KeyActivityBodyContainer>
