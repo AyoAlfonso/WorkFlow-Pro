@@ -2,7 +2,11 @@ import * as React from "react";
 import * as R from "ramda";
 import { useState } from "react";
 import styled from "styled-components";
-import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
+import {
+  ContainerHeaderWithText,
+  HeaderContainer,
+  HeaderText,
+} from "~/components/shared/styles/container-header";
 import { SurveyBot } from "./survey-bot";
 import { IconButton } from "../../shared/icon-button";
 import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
@@ -37,7 +41,14 @@ export const Journal = observer(
 
     return (
       <JournalContainer>
-        <ContainerHeaderWithText text={t("journals.title")} />
+        <HeaderContainer>
+          <HeaderText>{t("journals.title")}</HeaderText>
+          <EndButtonContainer>
+            {questionnaireVariant ? (
+              <EndButton onClick={() => setQuestionnaireVariant("")}>Quit Journal</EndButton>
+            ) : null}
+          </EndButtonContainer>
+        </HeaderContainer>
         {questionnaireVariant !== "" ? (
           <SurveyBot variant={questionnaireVariant} endFn={setQuestionnaireVariant} />
         ) : (
@@ -135,4 +146,18 @@ const SpeechBubble = styled.div`
   font-family: Lato;
   font-size: 15px;
   padding: 15px;
+`;
+
+const EndButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+`;
+
+const EndButton = styled.div`
+  color: ${props => props.theme.colors.primary100};
+  font-size: 11pt;
+  font-weight: 400;
+  cursor: pointer;
 `;

@@ -160,11 +160,7 @@ steps: [
   {
     id: 25,
     message: "Maybe next time. Have an amazing day!",
-    trigger: 26
-  },
-  {
-    id: 26, 
-    end: true
+  end: true
   },
   {
     id: 27,
@@ -233,10 +229,11 @@ steps: [
   {
     id: 38,
     options: [
-      { label: "YEAH!", value: "YEAH!", trigger: 26 },
-      { label: "Can't wait to start!", value: "Can't wait to start!", trigger: 26},
-      { label: "Thanks PynBot!", value: "Thanks PynBot!", trigger: 26}
-    ]
+      { label: "YEAH!", value: "YEAH!" },
+      { label: "Can't wait to start!", value: "Can't wait to start!" },
+      { label: "Thanks PynBot!", value: "Thanks PynBot!" }
+    ],
+    end: true
   }
 ]
 )
