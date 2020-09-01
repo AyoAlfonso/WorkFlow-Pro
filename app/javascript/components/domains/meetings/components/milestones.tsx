@@ -5,6 +5,7 @@ import { Text } from "~/components/shared/text";
 import { MilestoneCard } from "~/components/domains/goals/milestone/milestone-card";
 import { Loading } from "~/components/shared/loading";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 
 export const Milestones = observer(
   (): JSX.Element => {
@@ -25,7 +26,7 @@ export const Milestones = observer(
     const renderWeeklyMilestones = (): JSX.Element[] => {
       return milestoneStore.milestonesForPersonalMeeting.map((milestone, index) => (
         <div key={index}>
-          <Text fontSize={2}>{`${milestone.quarterlyGoalDescription || ""}`}</Text>
+          <StyledText>{`${milestone.quarterlyGoalDescription || ""}`}</StyledText>
           <MilestoneCard
             key={index}
             milestone={milestone}
@@ -40,3 +41,9 @@ export const Milestones = observer(
     return <> {renderWeeklyMilestones()} </>;
   },
 );
+
+const StyledText = styled.h4`
+  font-size: 20px;
+  margin-bottom: 8px;
+  margin-top: 0;
+`;

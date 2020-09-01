@@ -122,17 +122,22 @@ export const AnnualInitiativeModalContent = observer(
               onBlur={() => annualInitiativeStore.update()}
             />
             <GoalText>
-              Driving{"  "}
+              Driving The{"  "}
               <StyledNavLink to={"/company/strategic_plan"}>
-                {companyStore.company.rallyingCry}
-              </StyledNavLink>
+                {companyStore.company.name}
+              </StyledNavLink>{" "}
+              Plan
             </GoalText>
           </TitleContainer>
           <AnnualInitiativeActionContainer>
             {editable && (
               <DeleteIconContainer
                 onClick={() => {
-                  if (confirm("Are you sure you want to delete this annual initiative?")) {
+                  if (
+                    confirm(
+                      `Are you sure you want to delete this ${t("annualInitiative.messageText")}`,
+                    )
+                  ) {
                     annualInitiativeStore.delete(annualInitiativeId).then(() => {
                       setAnnualInitiativeModalOpen(false);
                     });
@@ -169,7 +174,7 @@ export const AnnualInitiativeModalContent = observer(
       return (
         <>
           <SubHeaderContainer>
-            <SubHeaderText text={"Quarterly Goals"} />
+            <SubHeaderText text={t("quarterlyGoal.title")} />
             <ShowPastGoalsContainer>
               <Button
                 small
@@ -208,7 +213,7 @@ export const AnnualInitiativeModalContent = observer(
         {renderHeader()}
         <SectionContainer>{renderContext()}</SectionContainer>
         <SectionContainer>{renderGoals()}</SectionContainer>
-        <SectionContainer>
+        {/* <SectionContainer>
           <SubHeaderContainer>
             <SubHeaderText text={"Comments"} />
           </SubHeaderContainer>
@@ -219,7 +224,7 @@ export const AnnualInitiativeModalContent = observer(
             <SubHeaderText text={"Attachments"} />
           </SubHeaderContainer>
           <ContextContainer>PLACEHOLDER FOR ATTACHMENTS</ContextContainer>
-        </SectionContainer>
+        </SectionContainer> */}
       </Container>
     );
   },

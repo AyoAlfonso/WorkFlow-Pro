@@ -14,7 +14,7 @@ export const KeyActivitiesHeader = (props: KeyActivitiesHeaderProps): JSX.Elemen
 
   return (
     <Container>
-      <KeyActivitiesText> {title || "Key Activities"} </KeyActivitiesText>
+      <KeyActivitiesText> {title || "Pyns"} </KeyActivitiesText>
       <FilterContainer>
         <FilterOptions
           onClick={() => setShowAllKeyActivities(false)}

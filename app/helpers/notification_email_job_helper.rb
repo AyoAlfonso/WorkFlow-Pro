@@ -27,7 +27,7 @@ module NotificationEmailJobHelper
     UserMailer.with(
       user: @user,
       subject: notification_type,
-      message: "Hi #{@user&.first_name}, \n Just a quick reminder to start your weekly planning meeting"
+      message: "Hi #{@user&.first_name}, \n Just a quick reminder to start your weekly R&P meeting"
     ).notification_email.deliver_later
   end
 end

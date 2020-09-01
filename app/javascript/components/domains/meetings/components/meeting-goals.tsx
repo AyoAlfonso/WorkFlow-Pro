@@ -95,6 +95,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   margin-top: -5px;
+  margin-left: 15px;
 `;
 
 const AnnualInitiativesContainer = styled.div`

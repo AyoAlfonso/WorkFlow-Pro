@@ -75,7 +75,7 @@
         "core4": "How Do We Succeed?"
       },
       "company": {
-        "accountabilityChart": "Accountability Chart",
+        "accountabilityChart": "Accountability Matrix",
         "name": "Company Name",
         "logo": "Company Logo",
         "fiscalYearStartDate": "Fiscal Year Start Date",
@@ -83,7 +83,8 @@
         "timezone": "Location/Time Zone",
         "createUser": {
           "addButton": "Create New User"
-        }
+        },
+        "rallyingCry": "Lynchpyn Goal"
       },
       "navigation": {
         "home": "Home",
@@ -92,14 +93,17 @@
         "goals": "Goals"
       },
       "annualInitiative": {
-        "enterTitle": "Enter Annual Initiative Title...",
-        "add": "Add an Annual Initiative",
-        "addInitiative": "Add Initiative"
+        "enterTitle": "Enter Annual Goal Title...",
+        "add": "Add an Annual Goal",
+        "addInitiative": "Add Goal",
+        "messageText": "annual goal"
       },
       "quarterlyGoal": {
-        "enterTitle": "Enter Quarterly Goal Title...",
-        "add": "Add a Quarterly Goal",
-        "addGoal": "Add Goal"
+        "enterTitle": "Enter Quarterly Objective Title...",
+        "add": "Add a Quarterly Objective",
+        "addGoal": "Add Objective",
+        "title": "Quarterly Objectives",
+        "messageText": "annual objective"
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",
@@ -125,7 +129,8 @@
       },
       "keyActivities": {
         "prioritiesTitle": "Today's Priorities",
-        "title": "Key Activities"
+        "title": "Pyns",
+        "addTitle": "Add New Pyn"
       },
       "teams": {
         "teamMeetingsTitle": "Team Meetings",

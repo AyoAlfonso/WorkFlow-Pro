@@ -61,7 +61,7 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
             defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
             firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
             lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
-            size={40}
+            size={36}
             border={userIconBorder}
           />
         </IconContainer>
@@ -96,6 +96,6 @@ const IconContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   margin-left: auto;
-  margin-right: 16px;
+  margin-right: 8px;
   display: flex;
 `;

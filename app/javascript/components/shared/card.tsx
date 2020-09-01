@@ -21,6 +21,10 @@ export const Card = (props: ICardProps): JSX.Element => {
   );
 };
 
+export const CardHeaderText = styled.h4`
+  font-size: 13pt;
+`;
+
 export const CardBody = styled.div<LayoutProps>`
   ${layout}
   padding: 15px 15px 15px 15px;

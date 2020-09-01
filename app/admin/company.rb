@@ -20,7 +20,7 @@ ActiveAdmin.register Company do
     column :address
     column :contact_email
     column :phone_number
-    column :rallying_cry
+    column "#{t("rallying_cry")}", :rallying_cry
     actions
   end
 
@@ -28,7 +28,6 @@ ActiveAdmin.register Company do
   filter :address
   filter :contact_email
   filter :phone_number
-  filter :rallying_cry
 
   show do
     h1 company.name
@@ -39,14 +38,14 @@ ActiveAdmin.register Company do
       row :address
       row :contact_email
       row :phone_number
-      row :rallying_cry
+      row "#{t("rallying_cry")}", :rallying_cry
       row :fiscal_year_start do |c|
         c.format_fiscal_year_start
       end
       row :timezone
     end
     br
-    panel 'Core Four' do
+    panel "#{I18n.t('core_four')}" do
       attributes_table_for company.core_four do
         row :core_1 do |cf|
           cf.core_1.body
@@ -73,7 +72,7 @@ ActiveAdmin.register Company do
         column :created_at
       end
     end
-    panel 'Accountability Chart' do
+    panel "#{I18n.t('accountability_chart')}" do
       attributes_table_for company do
         row :accountability_chart do |c|
           if c.accountability_chart_embed.present?
@@ -101,7 +100,7 @@ ActiveAdmin.register Company do
       f.input :address
       f.input :contact_email
       f.input :phone_number
-      f.input :rallying_cry, input_html: { rows: 5 }
+      f.input :rallying_cry, input_html: { rows: 5 }, label: "#{t("rallying_cry")}"
       f.input :fiscal_year_start, order: [:month, :day]
       f.input :timezone, as: :select, collection: timezones
     end
@@ -115,7 +114,7 @@ ActiveAdmin.register Company do
         end
       end
     end
-    f.label :accountability_chart
+    f.label "#{t(:accountability_chart)}"
     f.input :accountability_chart_embed, input_html: { rows: 5 }
     f.label :strategic_plan
     f.input :strategic_plan_embed, input_html: { rows: 5 }

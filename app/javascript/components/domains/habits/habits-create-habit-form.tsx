@@ -52,8 +52,8 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
             marginTop: "auto",
             marginBottom: "auto",
             border: "none",
-            paddingTop: 5,
-            paddingBottom: 11,
+            paddingTop: 7,
+            paddingBottom: 12,
           }}
           type={"color"}
           onChange={({ target: { value } }: React.ChangeEvent<HTMLInputElement>) =>
@@ -81,6 +81,7 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
         <FrequencyTextTime>times each week</FrequencyTextTime>
       </FrequencyContainer>
       <Button
+        disabled={!createHabitFormState["name"]}
         onClick={() => {
           submitHabit();
           onSubmit && onSubmit();

@@ -140,11 +140,11 @@ export const Company = observer(
                     )}
                   </Select>
                   <Text color={"greyActive"} fontSize={1}>
-                    To modify Fiscal Start Date, Accountability Chart, or Strategic Plan, please
-                    contact Lynchpyn support.
+                    To modify Fiscal Start Date, {t("company.accountabilityChart")}, or{" "}
+                    {t("company.strategicPlan")}, please contact Lynchpyn support.
                   </Text>
 
-                  <Label htmlFor="rallying">Rallying Cry</Label>
+                  <Label htmlFor="rallying">{t("company.rallyingCry")}</Label>
                   <Input
                     name="rallyingCry"
                     onChange={e => {
@@ -154,7 +154,7 @@ export const Company = observer(
                   />
                   <Label htmlFor="core1Content">{t("core.core1")}</Label>
                   <TrixEditor
-                    className="custom-css-class"
+                    className="custom-trix-class"
                     autoFocus={true}
                     placeholder="Please enter Why Do We Exist?"
                     value={core1Content}
@@ -173,7 +173,7 @@ export const Company = observer(
                   />
                   <Label htmlFor="core_2">{t("core.core2")}</Label>
                   <TrixEditor
-                    className="custom-css-class"
+                    className="custom-trix-class"
                     autoFocus={true}
                     placeholder="Please enter How Do We Behave?"
                     value={core2Content}
@@ -192,7 +192,7 @@ export const Company = observer(
                   />
                   <Label htmlFor="core_3">{t("core.core3")}</Label>
                   <TrixEditor
-                    className="custom-css-class"
+                    className="custom-trix-class"
                     autoFocus={true}
                     placeholder="Please enter How Do We Behave?"
                     value={core3Content}
@@ -211,7 +211,7 @@ export const Company = observer(
                   />
                   <Label htmlFor="core_4">{t("core.core4")}</Label>
                   <TrixEditor
-                    className="custom-css-class"
+                    className="custom-trix-class"
                     autoFocus={true}
                     placeholder="Please enter 
                     How Do We Succeed?"

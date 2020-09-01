@@ -24,7 +24,7 @@ export const HabitsHabitTracker = observer(
   }: IHabitsHabitTrackerProps): JSX.Element => {
     const renderHabitLogs = () =>
       habit.recentLogsFiveDays.map(log => (
-        <HabitsTableDataCell
+        <SelectionCell
           key={`${habit.id}-${log.logDate}`}
           onClick={() => {
             onUpdate(habit.id, log.logDate);
@@ -35,7 +35,7 @@ export const HabitsHabitTracker = observer(
           ) : (
             <RawIcon icon={"Close"} color={baseTheme.colors.greyInactive} size={12} />
           )}
-        </HabitsTableDataCell>
+        </SelectionCell>
       ));
 
     return (
@@ -87,11 +87,11 @@ export const HabitsTableCircularProgressBar = ({
 }: IHabitsTableCircularProgressBar) => (
   <CircularProgressbar
     value={value}
-    strokeWidth={18}
+    strokeWidth={36}
     styles={{
       root: {
-        height: "25px",
-        width: "25px",
+        height: "16px",
+        width: "16px",
       },
       path: {
         stroke: color,
@@ -103,3 +103,9 @@ export const HabitsTableCircularProgressBar = ({
     }}
   />
 );
+
+const SelectionCell = styled(HabitsTableDataCell)`
+  padding-right: 5px;
+  padding-left: 5px;
+  text-align: center;
+`;

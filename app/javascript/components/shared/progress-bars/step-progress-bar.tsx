@@ -13,6 +13,7 @@ export interface IStepProgressBar {
   steps: Array<TStepProgressBarStep>;
   onStepClick: (args: any) => void;
   currentStepIndex: number;
+  fromPersonalPlanning?: boolean;
 }
 
 // TODO: Needs correct icon assets
@@ -21,6 +22,7 @@ export const StepProgressBar = ({
   steps,
   onStepClick,
   currentStepIndex,
+  fromPersonalPlanning,
 }: IStepProgressBar): JSX.Element => {
   const renderIcon = (iconColor, bgColor, iconName) => (
     <StepProgressBarIcon iconBackgroundColor={bgColor} iconName={iconName} iconColor={iconColor} />
@@ -91,7 +93,7 @@ export const StepProgressBar = ({
   ));
 
   return (
-    <Container>
+    <Container fromPersonalPlanning={fromPersonalPlanning}>
       <ReactTooltip />
       <ProgressBar
         {...defaultStepProgressBarProps}
@@ -118,6 +120,13 @@ const StepDiv = styled.div`
   transition: all ease 0.1s;
 `;
 
-const Container = styled.div`
-  width: 100%;
+type ContainerProps = {
+  fromPersonalPlanning?: boolean;
+};
+
+const Container = styled.div<ContainerProps>`
+  width: ${props => (props.fromPersonalPlanning ? "60%" : "100%")};
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 800px;
 `;

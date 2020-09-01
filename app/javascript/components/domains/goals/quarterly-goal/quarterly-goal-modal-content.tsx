@@ -92,7 +92,7 @@ export const QuarterlyGoalModalContent = observer(
             {editable && (
               <DeleteIconContainer
                 onClick={() => {
-                  if (confirm("Are you sure you want to delete this quarterly goal?")) {
+                  if (confirm("Are you sure you want to delete this quarterly objective?")) {
                     quarterlyGoalStore.delete(false, quarterlyGoalId).then(() => {
                       setQuarterlyGoalModalOpen(false);
                     });
@@ -201,18 +201,18 @@ export const QuarterlyGoalModalContent = observer(
               allMilestones.length == 0 &&
               renderMilestoneCreateButton()}
           </SectionContainer>
-          <SectionContainer>
-            <SubHeaderContainer>
-              <SubHeaderText text={"Comments"} />
-            </SubHeaderContainer>
-            <ContextContainer>PLACEHOLDER FOR COMMENTS</ContextContainer>
-          </SectionContainer>
-          <SectionContainer>
-            <SubHeaderContainer>
-              <SubHeaderText text={"Attachments"} />
-            </SubHeaderContainer>
-            <ContextContainer>PLACEHOLDER FOR ATTACHMENTS</ContextContainer>
-          </SectionContainer>
+          {/* <SectionContainer>
+              <SubHeaderContainer>
+                <SubHeaderText text={"Comments"} />
+              </SubHeaderContainer>
+              <ContextContainer>PLACEHOLDER FOR COMMENTS</ContextContainer>
+            </SectionContainer>
+            <SectionContainer>
+              <SubHeaderContainer>
+                <SubHeaderText text={"Attachments"} />
+              </SubHeaderContainer>
+              <ContextContainer>PLACEHOLDER FOR ATTACHMENTS</ContextContainer>
+            </SectionContainer> */}
         </QuarterlyGoalBodyContainer>
       </Container>
     );

@@ -75,7 +75,7 @@ export const PersonalPlanning = observer(
     return (
       <Container>
         <HeaderContainer>
-          <Text fontSize={"36px"}>{`Personal Planning Meeting`}</Text>
+          <Text fontSize={"36px"}>{`Personal R&P Meeting`}</Text>
           <DateAndButtonContainer>
             <Heading type={"h3"} fontSize={"32px"} fontWeight={400}>
               {moment().format("dddd, MMMM Do")}
@@ -93,6 +93,7 @@ export const PersonalPlanning = observer(
               steps={progressBarSteps}
               onStepClick={onStepClick}
               currentStepIndex={meeting.currentStep}
+              fromPersonalPlanning={true}
             />
           </ProgressBarTimerContainer>
           <MeetingStep meeting={meetingStore.currentPersonalPlanning}></MeetingStep>
