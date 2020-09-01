@@ -85,7 +85,9 @@ export const TeamOverview = observer(
           <TableHeaderContainer>
             <TeamMemberContainer />
             <StatusContainer>Status</StatusContainer>
-            <TodaysPrioritiesContainer>Today's Priorities</TodaysPrioritiesContainer>
+            <TodaysPrioritiesContainer>
+              {t("keyActivities.prioritiesTitle")}
+            </TodaysPrioritiesContainer>
           </TableHeaderContainer>
           {renderUserRecords()}
         </TableContainer>

@@ -69,13 +69,13 @@ export const KeyActivityEntry = observer(
           <KeyActivityPriorityIcon priority={keyActivity.priority} />
         </KeyActivityPriorityContainer>
 
-        {dragHandleProps && (
+        {/* {dragHandleProps && (
           <HandleContainer {...dragHandleProps}>
             <Handle />
             <Handle />
             <Handle />
           </HandleContainer>
-        )}
+        )} */}
 
         <StyledContentEditable
           innerRef={keyActivityRef}
