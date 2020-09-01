@@ -141,7 +141,7 @@ const SpeechBubble = styled.div`
   width: 70%;
   height: 2em;
   text-align: center;
-  border-radius: 10px;
+  border-radius: 0 20px 20px 20px;
   box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.1);
   font-family: Lato;
   font-size: 15px;
