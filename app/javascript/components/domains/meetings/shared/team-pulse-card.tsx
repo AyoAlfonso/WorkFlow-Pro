@@ -22,16 +22,16 @@ export const TeamPulseCard = ({ data }: ITeamPulseCardProps): JSX.Element => {
   };
 
   const colorParser = value => {
-    switch (value) {
-      case 1:
+    switch (true) {
+      case value < 2:
         return warningRed;
-      case 2:
+      case value < 3:
         return cautionYellow;
-      case 3:
+      case value < 4:
         return greyInactive;
-      case 4:
+      case value < 5:
         return successGreen;
-      case 5:
+      case value == 5:
         return finePine;
     }
   };

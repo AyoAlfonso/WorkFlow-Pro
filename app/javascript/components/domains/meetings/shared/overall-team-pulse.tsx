@@ -4,21 +4,21 @@ import { Icon } from "~/components/shared";
 import { Text } from "~/components/shared/text";
 
 interface IOverallTeamPulseProps {
-  value: string | number;
+  value: number;
 }
 
 export const OverallTeamPulse = ({ value }: IOverallTeamPulseProps): JSX.Element => {
   const renderIcon = () => {
     switch (true) {
-      case value <= 1:
+      case value < 2:
         return <Icon icon={"Emotion-E"} size={"110px"} iconColor={"warningRed"} />;
-      case value <= 2:
+      case value < 3:
         return <Icon icon={"Emotion-D"} size={"110px"} iconColor={"cautionYellow"} />;
-      case value <= 3:
+      case value < 4:
         return <Icon icon={"Emotion-C"} size={"110px"} iconColor={"greyInactive"} />;
-      case value <= 4:
+      case value < 5:
         return <Icon icon={"Emotion-B"} size={"110px"} iconColor={"successGreen"} />;
-      case value <= 5:
+      case value == 5:
         return <Icon icon={"Emotion-A"} size={"110px"} iconColor={"finePine"} />;
     }
   };
@@ -27,7 +27,7 @@ export const OverallTeamPulse = ({ value }: IOverallTeamPulseProps): JSX.Element
     <Container>
       {renderIcon()}
       <RatingContainer>
-        <RatingText>{value} / 5</RatingText>
+        <RatingText>{value.toFixed(1)} / 5</RatingText>
       </RatingContainer>
     </Container>
   );

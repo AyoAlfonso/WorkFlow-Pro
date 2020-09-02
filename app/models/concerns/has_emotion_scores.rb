@@ -5,7 +5,7 @@ module HasEmotionScores
     q_attempts = QuestionnaireAttempt.where(user: users)
                                       .where("emotion_score IS NOT NULL AND completed_at <= ? AND completed_at >= ?", to_date, from_date)
                                       .select(:id, :completed_at, :emotion_score)
-                                      .group_by{|qa| qa.completed_at}
+                                      .group_by{|qa| qa.completed_at.to_date}
     results_array = []
     q_attempts.map do |qa|
       average_score_hash = {
