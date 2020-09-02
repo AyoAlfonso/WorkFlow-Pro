@@ -12,25 +12,21 @@ steps: [
   {
     id: 2,
     message: "It is a new day, let's get started.",
-    delay: 1500,
     trigger: 3
   },
   {
     id: 3,
     message: "Take a deep breath and focus on the wonderful things in your life. They are right here. Give them your attention.",
-    delay: 1500,
     trigger: 4
   },
   {
     id: 4,
     message: "And now I want you to complete this sentence",
-    delay: 2500,
     trigger: 5
   },
   {
     id: 5,
     message: "I am grateful for...",
-    delay: 1500,
     trigger: "gratitude-am"
   },
   {
@@ -74,7 +70,6 @@ steps: [
   {
     id: 12,
     message: 'How can you be courageous or as I like to say, "how will you lean in today?"',
-    delay: 1000,
     trigger: 13
   },
   {

@@ -9,6 +9,8 @@ import { Text } from "../../shared/text";
 import { toJS } from "mobx";
 import { Loading } from "../../shared/loading";
 import { FrogSelector } from "./frog-selector";
+import { MIPSelector } from "./mip-selector";
+import { MIPDisplay } from "./mip-display";
 import { EmotionSelector } from "./emotion-selector";
 import * as humps from "humps";
 
@@ -51,7 +53,9 @@ export const SurveyBot = observer(
 
     const steps = R.map(step => {
       if (R.hasPath(["metadata", "frogSelector"], step)) {
-        return R.pipe(R.assoc("component", <FrogSelector />), R.dissoc("options"))(step);
+        return R.pipe(R.assoc("component", <MIPSelector />), R.dissoc("options"))(step);
+      } else if (R.hasPath(["metadata", "displayMips"], step)) {
+        return R.pipe(R.assoc("component", <MIPDisplay />), R.dissoc("options"))(step);
       } else if (R.hasPath(["metadata", "emotionSelector"], step)) {
         return R.pipe(R.assoc("component", <EmotionSelector />), R.dissoc("options"))(step);
       } else if (R.hasPath(["metadata", "username"], step)) {

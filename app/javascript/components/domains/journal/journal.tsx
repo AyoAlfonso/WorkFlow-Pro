@@ -1,24 +1,21 @@
-import * as React from "react";
-import * as R from "ramda";
-import { useState } from "react";
-import styled from "styled-components";
-import {
-  ContainerHeaderWithText,
-  HeaderContainer,
-  HeaderText,
-} from "~/components/shared/styles/container-header";
-import { SurveyBot } from "./survey-bot";
-import { IconButton } from "../../shared/icon-button";
-import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
 import { observer } from "mobx-react";
-import { useMst } from "../../../setup/root";
+import * as R from "ramda";
+import * as React from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import styled from "styled-components";
 import { Icon } from "~/components/shared/icon";
+import { HeaderContainer, HeaderText } from "~/components/shared/styles/container-header";
 import { TextNoMargin } from "~/components/shared/text";
+import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
+import { useMst } from "../../../setup/root";
+import { IconButton } from "../../shared/icon-button";
+import { SurveyBot } from "./survey-bot";
 
 export const Journal = observer(
   (props): JSX.Element => {
     const [questionnaireVariant, setQuestionnaireVariant] = useState<string>("");
+
     const { t } = useTranslation();
     const { sessionStore } = useMst();
 
@@ -101,63 +98,66 @@ const JournalContainer = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  width: 90%;
+  align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   margin: auto;
   padding: 15px;
+  width: 90%;
 `;
 
 const PynBotSpeechContainer = styled.div`
   display: flex;
-  width: 100%;
   margin: 0;
   padding: 0;
+  width: 100%;
 `;
 
 const PynBotContainer = styled.div`
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   width: 30%;
 `;
 
 const PynBotIconContainer = styled.div`
-  display: inline-flex;
   align-content: center;
-  justify-content: center;
-  width: 64px;
-  height: 64px;
   border-radius: 50%;
   box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  height: 64px;
+  justify-content: center;
   margin-bottom: 10px;
+  width: 64px;
 `;
 
 const SpeechBubble = styled.div`
-  display: inline-block;
-  width: 70%;
-  height: 2em;
-  text-align: center;
   border-radius: 0 20px 20px 20px;
   box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.1);
+  display: inline-block;
   font-family: Lato;
   font-size: 15px;
+  line-height: 1em;
+  max-height: 2em;
+  overflow: hidden;
   padding: 15px;
+  text-align: center;
+  text-overflow: ellipsis;
+  width: 70%;
 `;
 
 const EndButtonContainer = styled.div`
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: flex-end;
   width: 100%;
 `;
 
 const EndButton = styled.div`
   color: ${props => props.theme.colors.primary100};
+  cursor: pointer;
   font-size: 11pt;
   font-weight: 400;
-  cursor: pointer;
 `;
