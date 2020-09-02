@@ -314,7 +314,7 @@ const StyledButton = styled(Button)`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 280px;
+  width: 300px;
   &: hover {
     color: ${props => props.theme.colors.primary100};
   }

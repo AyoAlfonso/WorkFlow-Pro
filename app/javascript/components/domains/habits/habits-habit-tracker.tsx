@@ -72,6 +72,7 @@ export const HabitsTextContainer = styled.td`
   font-weight: 600;
   height: 35px;
   margin-left: 10px;
+  width: 40%;
   &: hover {
     cursor: pointer;
   }

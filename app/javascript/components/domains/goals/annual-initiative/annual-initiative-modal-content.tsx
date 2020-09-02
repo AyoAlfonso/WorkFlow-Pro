@@ -343,7 +343,7 @@ const StyledContentEditable = styled(ContentEditable)`
 `;
 
 const CreateGoalContainer = styled.div`
-  width: 280px;
+  width: 300px;
 `;
 
 const StyledNavLink = styled(NavLink)`

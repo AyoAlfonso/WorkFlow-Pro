@@ -32,7 +32,7 @@ export const HabitsSummary = observer(
           key={`${habit.id}-${index}`}
           borderBottom={index == habits.length - 1 && `1px solid ${baseTheme.colors.grey20} `}
         >
-          <HabitsTableDataCell>
+          <StyledHabitsTableCenterCell>
             {habit.percentageWeeklyLogsCompleted == 0 ? (
               <HabitsTableCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
             ) : (
@@ -41,26 +41,26 @@ export const HabitsSummary = observer(
                 value={habit.percentageWeeklyLogsCompleted}
               />
             )}
-          </HabitsTableDataCell>
-          <HabitsTableDataCell>
+          </StyledHabitsTableCenterCell>
+          <StyledHabitsTableDataCell>
             <HabitsTextContainer color={habit.color}>{`${habit.name}`}</HabitsTextContainer>
-          </HabitsTableDataCell>
-          <HabitsTableDataCell>
+          </StyledHabitsTableDataCell>
+          <StyledHabitsTableCenterCell>
             <HabitsTextContainer color={habit.color}>
               {habit.percentageWeeklyLogsCompleted.toFixed(0)}%
             </HabitsTextContainer>
-          </HabitsTableDataCell>
-          <HabitsTableDataCell>
+          </StyledHabitsTableCenterCell>
+          <StyledHabitsTableCenterCell>
             <HabitsTextContainer color={habit.color}>
               {habit.weeklyLogsCompletionDifference >= 0 ? "+" : ""}
               {habit.weeklyLogsCompletionDifference.toFixed(0)}%
             </HabitsTextContainer>
-          </HabitsTableDataCell>
-          <HabitsTableDataCell>
+          </StyledHabitsTableCenterCell>
+          <StyledHabitsTableCenterCell>
             <HabitsTextContainer color={habit.color}>
               {habit.completedCount}/{habit.frequency}
             </HabitsTextContainer>
-          </HabitsTableDataCell>
+          </StyledHabitsTableCenterCell>
         </HabitsTableRow>
       ));
 
@@ -73,27 +73,27 @@ export const HabitsSummary = observer(
     const overallColor = baseTheme.colors.primary100;
     const renderOverall = (
       <HabitsTableRow key={`habit-overall}`}>
-        <HabitsTableDataCell>
+        <StyledHabitsTableDataCell>
           {totalCompleted == 0 ? (
             <HabitsTableCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
           ) : (
             <HabitsTableCircularProgressBar color={overallColor} value={totalPercentageCompleted} />
           )}
-        </HabitsTableDataCell>
-        <HabitsTableDataCell>
+        </StyledHabitsTableDataCell>
+        <StyledHabitsTableDataCell>
           <HabitsTextContainer>Test</HabitsTextContainer>
-        </HabitsTableDataCell>
-        <HabitsTableDataCell>
+        </StyledHabitsTableDataCell>
+        <StyledHabitsTableDataCell>
           <HabitsTextContainer color={overallColor}>
             {totalCompleted}/{totalFrequency}
           </HabitsTextContainer>
-        </HabitsTableDataCell>
-        <HabitsTableDataCell></HabitsTableDataCell>
-        <HabitsTableDataCell>
+        </StyledHabitsTableDataCell>
+        <StyledHabitsTableDataCell></StyledHabitsTableDataCell>
+        <StyledHabitsTableDataCell>
           <HabitsTextContainer color={overallColor}>
             {totalCompleted}/{totalFrequency}
           </HabitsTextContainer>
-        </HabitsTableDataCell>
+        </StyledHabitsTableDataCell>
       </HabitsTableRow>
     );
 
@@ -115,11 +115,12 @@ export const HabitsSummary = observer(
   },
 );
 
-export const HabitsTextContainer = styled.td`
+export const HabitsTextContainer = styled.p`
   color: ${props => props.color};
   font-weight: 600;
-  height: 35px;
   margin-left: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   &: hover {
     cursor: pointer;
   }
@@ -131,4 +132,12 @@ export const Divider = styled.div`
   margin-top: 4px;
   margin-bottom: 4px;
   background-color: lightgrey;
+`;
+
+const StyledHabitsTableDataCell = styled(HabitsTableDataCell)`
+  padding-right: 5px;
+`;
+
+const StyledHabitsTableCenterCell = styled(StyledHabitsTableDataCell)`
+  text-align: center;
 `;
