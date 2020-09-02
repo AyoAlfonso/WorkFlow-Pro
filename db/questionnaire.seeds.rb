@@ -87,142 +87,123 @@ steps: [
   },
   {
     id: 15,
-    message: "Did you pick your Most Important Pyns (MIPs) last night?",
-    trigger: 16
-  },
-  {
-    id: 16,
-    options: [
-      {label: "Yes", value: "Yes", trigger: 19},
-      {label: "No", value: "No", trigger: 17}
-    ]
-  },
-  {
-    id: 17,
-    message: "What are the Most Important Pyns (MIPs) you have to accomplish tomorrow? You can select three from your top 10 Pyns based on priority.",
+    message: "{mipCheck}",
+    metadata: {
+      mip_check: {
+        no_mips: "you haven’t picked your Most Important Pyns for today yet but here are your top priority Pyns. Select your Most Important Pyns for the day:",
+        has_mips: "these are your Most Important Pyns for the day. Take a moment to review them:"
+      }
+    },
     trigger: "select-mips"
   },
   {
     id: "select-mips",
     options: [],
     metadata: {
-      frog_selector: true,
-      trigger: 18
+      mip_selector: true,
+      trigger: 16
     }
   },
   {
-    id: 18,
+    id: 16,
     message: "That's great {userName}. Congrats on taking the first step to owning your day.",
     metadata: {
       username: true
     },
-    trigger: 21
+    trigger: 17
+  },
+  {
+    id: 17,
+    message: "p.s. You can always edit your MIPs in the Pyns widget.",
+    trigger: 18
+  },
+  {
+    id: 18,
+    options: [{label: "Thanks, I got it.", value: "Thanks, I got it.", trigger: 19}]
   },
   {
     id: 19,
-    message: "Last night you said these are your MIPs for the day. Take a moment to review them.",
-    trigger: "display-mips"
-  },
-  {
-    id: "display-mips",
-    options: [],
-    metadata: {
-      display_mips: true,
-      trigger: 21
-    }
-  },
-  {
-    id: 21,
-    message: "p.s. You can always edit your MIPs in the Pyns widget.",
-    trigger: 22
-  },
-  {
-    id: 22,
-    options: [{label: "Thanks, I got it.", value: "Thanks, I got it.", trigger: 23}]
-  },
-  {
-    id: 23,
     message: "Before you get going, let's do a little more",
-    trigger: 24
+    trigger: 20
   }, 
   {
-    id: 24,
+    id: 20,
     options: [
-      { label: "For sure!", value: "For sure!", trigger: 27 },
-      { label: "I gotta go...", value: "I gotta go...", trigger: 25}
+      { label: "For sure!", value: "For sure!", trigger: 22 },
+      { label: "I gotta go...", value: "I gotta go...", trigger: 21}
     ]
   },
   {
-    id: 25,
+    id: 21,
     message: "Maybe next time. Have an amazing day!",
-  end: true
+    end: true
   },
   {
-    id: 27,
+    id: 22,
     message: "You are awesome, you really get the power of reflection. So let's take a moment and capture some of your thoughts in your journal. Remember you can write anything here.",
-    trigger: 28
+    trigger: 23
   },
   {
-    id: 28,
+    id: 23,
     user: true,
     metadata: {
       validatorType: "string"
     },
+    trigger: 24
+  },
+  {
+    id: 24,
+    message: "Nice!",
+    trigger: 25
+  },
+  {
+    id: 25,
+    message: "Just one more thing before we wrap up today. Jot down a mantra or words of affirmation that you can hold for today.",
+    trigger: 26
+  },
+  {
+    id: 26, 
+    message: "It can be even as simple as filling in the blank:",
+    trigger: 27
+  },
+  {
+    id: 27,
+    message: "I can...",
+    trigger: 28
+  }, 
+  {
+    id: 28,
+    message: "I will...",
     trigger: 29
   },
   {
     id: 29,
-    message: "Nice!",
+    message: "I am...",
     trigger: 30
   },
   {
     id: 30,
-    message: "Just one more thing before we wrap up today. Jot down a mantra or words of affirmation that you can hold for today.",
-    trigger: 31
-  },
-  {
-    id: 31, 
-    message: "It can be even as simple as filling in the blank:",
-    trigger: 32
-  },
-  {
-    id: 32,
-    message: "I can...",
-    trigger: 33
-  }, 
-  {
-    id: 33,
-    message: "I will...",
-    trigger: 34
-  },
-  {
-    id: 34,
-    message: "I am...",
-    trigger: 35
-  },
-  {
-    id: 35,
     user: true,
     metadata: {
       validatorType: "string"
     },
-    trigger: 36
+    trigger: 31
   },
   {
-    id: 36,
+    id: 31,
     message: "Amazing. You make this look easy, {userName}.",
     metadata: {
       username: true
     },
-    trigger: 37
+    trigger: 32
   }, 
   {
-    id: 37,
+    id: 32,
     message: "Go get your day!",
-    trigger: 38
+    trigger: 33
   },
   {
-    id: 38,
+    id: 33,
     options: [
       { label: "YEAH!", value: "YEAH!" },
       { label: "Can't wait to start!", value: "Can't wait to start!" },
@@ -520,7 +501,7 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
     },
     {
       id: 12, 
-      message: "Way to go!", 
+      message: "Way to go!  Would you like to continue?", 
       trigger: 13
     },
     {
@@ -663,14 +644,21 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
     },
     {
       id: 33, 
-      message: "What are the Most Important Pyns (MIPs) you have to accomplish tomorrow? You can select three from your top 10 Pyns based on priority.", 
+      message: "{mipCheck}",
+      metadata: {
+        mip_check: {
+          no_mips: "you haven’t picked your Most Important Pyns for tomorrow yet but here are your top priority Pyns. Select your Most Important Pyns for tomorrow:",
+          has_mips: "these are your Most Important Pyns for tomorrow. Take a moment to review them:"
+        }
+      },
       trigger: "mips"
     },
     {
       id: "mips", 
       options: [],
+      delay: 1500,
       metadata: {
-        frog_selector: true,
+        mip_selector: true,
         trigger: 34
       }
     },

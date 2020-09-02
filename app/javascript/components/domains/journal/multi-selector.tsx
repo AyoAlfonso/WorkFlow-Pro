@@ -3,17 +3,20 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Checkbox, Label } from "@rebass/forms";
 import { baseTheme } from "~/themes/base";
-import { TextNoMargin } from "~/components/shared/text";
 
 export interface IMultiSelectorProps {
+  checkboxColor?: string;
+  checkedLimit?: number;
+  disabled?: boolean;
   options: Array<any>;
   optionsChecked: Array<any>;
   setOptionsChecked: React.Dispatch<React.SetStateAction<any>>;
-  checkedLimit?: number;
 }
 
 export const MultiSelector = ({
+  checkboxColor,
   checkedLimit,
+  disabled,
   options,
   optionsChecked,
   setOptionsChecked,
@@ -27,13 +30,22 @@ export const MultiSelector = ({
           setOptionsChecked={setOptionsChecked}
           optionsChecked={optionsChecked}
           checkedLimit={checkedLimit}
+          checkboxColor={checkboxColor}
+          disabled={disabled}
         />
       ))}
     </Container>
   );
 };
 
-const CheckboxComponent = ({ checkedLimit, option, optionsChecked, setOptionsChecked }) => {
+const CheckboxComponent = ({
+  checkboxColor,
+  checkedLimit,
+  disabled,
+  option,
+  optionsChecked,
+  setOptionsChecked,
+}) => {
   const isChecked = optionsChecked.includes(option);
   const [checked, setChecked] = useState<boolean>(isChecked);
 
@@ -54,8 +66,10 @@ const CheckboxComponent = ({ checkedLimit, option, optionsChecked, setOptionsChe
       // this is bad for accessibility to not have labels for the checkboxes, but for whatever reason labels
       // completely break the styling for the chatbot and cause it to do some weird things
       onClick={() => {
-        toggleChecked();
-        setOptionsChecked(option);
+        if (!disabled) {
+          toggleChecked();
+          setOptionsChecked(option);
+        }
       }}
     >
       <Checkbox
@@ -63,7 +77,11 @@ const CheckboxComponent = ({ checkedLimit, option, optionsChecked, setOptionsChe
         name={option.description}
         checked={checked}
         onChange={() => {}}
-        sx={{ color: baseTheme.colors.primary100 }}
+        sx={{
+          color: Object.keys(baseTheme.colors).includes(checkboxColor)
+            ? baseTheme.colors[checkboxColor]
+            : checkboxColor,
+        }}
       />
       {option.description}
     </CheckBoxContainer>

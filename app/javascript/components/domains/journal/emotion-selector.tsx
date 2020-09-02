@@ -6,6 +6,8 @@ import { baseTheme } from "../../../themes/base";
 
 export const EmotionSelector = (props): JSX.Element => {
   const [disabled, setDisabled] = useState<boolean>(false);
+  const [selected, setSelected] = useState<string>("");
+
   return (
     <EmotionButtonsContainer>
       {props.step.metadata.emotions.map((emotion, index) => (
@@ -18,13 +20,20 @@ export const EmotionSelector = (props): JSX.Element => {
           bg={"white"}
           iconName={emotion.icon}
           iconSize={"30px"}
-          iconColor={disabled ? baseTheme.colors.grey20 : emotion.color}
+          iconColor={
+            selected === emotion.value
+              ? emotion.color
+              : disabled
+              ? baseTheme.colors.grey20
+              : emotion.color
+          }
           shadow={true}
           onClick={() => {
             props.triggerNextStep({
               value: emotion.value,
               trigger: emotion.trigger,
             });
+            setSelected(emotion.value);
             setDisabled(true);
           }}
           disabled={disabled}

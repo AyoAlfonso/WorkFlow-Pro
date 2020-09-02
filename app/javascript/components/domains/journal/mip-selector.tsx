@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
+import { color, ColorProps } from "styled-system";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
 import { MultiSelector } from "~/components/domains/journal/multi-selector";
@@ -22,14 +23,16 @@ export const MIPSelector = observer(
     }
 
     const [optionsChecked, setOptionsChecked] = useState<Array<any>>(todaysPriorities);
+    const [completed, setCompleted] = useState<boolean>(false);
 
-    const keyActivityOptions = optionsChecked
-      .concat(
+    const keyActivityOptions = R.pipe(
+      R.concat(
         weeklyKeyActivities.length > 0
           ? weeklyKeyActivities.slice(0, 10)
           : masterKeyActivities.slice(0, 10),
-      )
-      .sort();
+      ),
+      R.sortBy(R.prop("createdAt")),
+    )(optionsChecked);
 
     const CHECKED_LIMIT = 3;
 
@@ -47,7 +50,6 @@ export const MIPSelector = observer(
       }
       keyActivityStore.updateKeyActivity(option.id);
     };
-
     return (
       <Container>
         <MultiSelectContainer>
@@ -59,18 +61,24 @@ export const MIPSelector = observer(
             optionsChecked={optionsChecked}
             setOptionsChecked={updateOptionsChecked}
             checkedLimit={CHECKED_LIMIT}
+            checkboxColor={completed ? "grey40" : "primary100"}
+            disabled={completed}
           />
         </MultiSelectContainer>
         <NextStepContainer>
           <NextStepButton
+            color={completed ? "grey40" : "primary100"}
             onClick={() => {
-              props.triggerNextStep({
-                trigger: R.path(["step", "metadata", "trigger"], props),
-                value: optionsChecked,
-              });
+              if (!completed) {
+                setCompleted(true);
+                props.triggerNextStep({
+                  trigger: R.path(["step", "metadata", "trigger"], props),
+                  value: optionsChecked,
+                });
+              }
             }}
           >
-            Done
+            Continue
           </NextStepButton>
         </NextStepContainer>
       </Container>
@@ -92,8 +100,8 @@ const MultiSelectContainer = styled.div`
   width: 100%;
 `;
 
-const NextStepButton = styled.div`
-  color: ${props => props.theme.colors.primary100};
+const NextStepButton = styled.div<ColorProps>`
+  ${color}
   cursor: pointer;
   font-size: 12px;
 `;

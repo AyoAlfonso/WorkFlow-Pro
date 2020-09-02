@@ -11,6 +11,7 @@ export const KeyActivityModel = types
     meetingId: types.maybeNull(types.number),
     position: types.maybeNull(types.number),
     todaysPriority: types.maybeNull(types.boolean),
+    createdAt: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));
