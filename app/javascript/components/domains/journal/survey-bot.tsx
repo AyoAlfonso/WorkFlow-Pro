@@ -61,6 +61,14 @@ export const SurveyBot = observer(
         return R.pipe(R.assoc("component", <EmotionSelector />), R.dissoc("options"))(step);
       } else if (R.hasPath(["metadata", "username"], step)) {
         return R.assoc("message", R.replace("{userName}", firstName, step.message))(step);
+      } else if (R.hasPath(["metadata", "pynCount"], step)) {
+        const totalPynCount = currentDailyLog.startingMipCount;
+        const completedPynCount = totalPynCount - keyActivityStore.todaysPriorities.length;
+        const newMessage = R.pipe(
+          R.replace("{completedMIPCount}", `${completedPynCount}`),
+          R.replace("{totalMIPCount}", `${totalPynCount}`),
+        )(step.message);
+        return R.assoc("message", newMessage)(step);
       } else if (R.hasPath(["metadata", "mipCheck"], step)) {
         const mipCheck =
           `Hey ${firstName}, ` +

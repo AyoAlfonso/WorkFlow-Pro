@@ -134,7 +134,7 @@ const PynBotIconContainer = styled.div`
 `;
 
 const SpeechBubble = styled.div`
-  border-radius: 0 20px 20px 20px;
+  border-radius: 20px 20px 20px 0;
   box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.1);
   display: inline-block;
   font-family: Lato;

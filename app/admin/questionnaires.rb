@@ -14,8 +14,6 @@ ActiveAdmin.register Questionnaire do
   controller do
     def update 
       @questionnaire = Questionnaire.find(params[:id])
-      # @questionnaire.steps = params[:questionnaire][:steps_raw].split(/[\r\n]+/).map { |row| row.squish }
-      binding.pry
       @questionnaire.steps = JSON.parse(params[:questionnaire][:steps_raw])
       @questionnaire.save!
       redirect_to admin_questionnaire_path, notice: "Questionnaire Updated"

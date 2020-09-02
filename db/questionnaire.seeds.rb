@@ -433,7 +433,7 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
     },
     {
       id: 2, 
-      message: "You achieved {completedPynCount} out of {totalPynCount} Pyns today",
+      message: "You achieved {completedMIPCount} out of {totalMIPCount} Most Important Pyns today",
       metadata: {
         pynCount: true
       },
