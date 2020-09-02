@@ -23,7 +23,7 @@ export const MultiSelector = ({
       {options.map((option, index) => (
         <CheckboxComponent
           option={option}
-          key={index}
+          key={option.id}
           setOptionsChecked={setOptionsChecked}
           optionsChecked={optionsChecked}
           checkedLimit={checkedLimit}
@@ -34,11 +34,10 @@ export const MultiSelector = ({
 };
 
 const CheckboxComponent = ({ checkedLimit, option, optionsChecked, setOptionsChecked }) => {
-  const [checked, setChecked] = useState<boolean>(false);
+  const isChecked = optionsChecked.includes(option);
+  const [checked, setChecked] = useState<boolean>(isChecked);
 
   const toggleChecked = () => {
-    console.log("CHECKED: ", checked);
-    console.log(optionsChecked);
     if (checkedLimit) {
       if (optionsChecked.length < checkedLimit) {
         setChecked(!checked);
