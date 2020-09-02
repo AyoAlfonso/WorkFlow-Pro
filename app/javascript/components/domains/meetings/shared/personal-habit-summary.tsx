@@ -6,15 +6,19 @@ import { PercentChange } from "~/components/shared/percent-change";
 import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
 import { useTranslation } from "react-i18next";
 import { HabitsSummary } from "~/components/domains/habits/habits-summary";
-export interface IPersonalHabitProps {}
+export interface IPersonalHabitProps {
+  meeting: any;
+}
 
 export const PersonalHabitSummary = (props: IPersonalHabitProps): JSX.Element => {
+  const { meeting } = props;
   const { t } = useTranslation();
+
   return (
     <Container>
       <ContainerHeaderWithText text={t("habits.reviewTitle")} />
       <HabitsSummary />
-      <PercentChange percentChange={0} />
+      <PercentChange percentChange={meeting.habitsPercentageIncreaseFromPreviousWeek} />
     </Container>
   );
 };

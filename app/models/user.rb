@@ -148,6 +148,13 @@ class User < ApplicationRecord
     overall_average_weekly_emotion_score(self, from_date, to_date)
   end
 
+  def habits_percentage_increase_from_previous_week
+    differences = self.habits.map do |habit|
+      habit.weekly_logs_completion_difference
+    end
+    (differences.reduce(:+).to_f / differences.size).round(1)
+  end
+
 
   private
   def sanitize_personal_vision

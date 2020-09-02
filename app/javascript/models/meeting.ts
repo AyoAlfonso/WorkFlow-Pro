@@ -30,6 +30,7 @@ export const MeetingModel = types
     teamKeyActivities: types.maybeNull(types.array(KeyActivityModel)),
     statsForWeek: types.maybeNull(types.array(types.frozen())),
     myCurrentMilestones: types.maybeNull(types.array(MilestoneModel)),
+    habitsPercentageIncreaseFromPreviousWeek: types.maybeNull(types.number),
   })
   .views(self => ({
     get currentStepDetails() {

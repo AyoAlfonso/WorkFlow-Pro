@@ -32,7 +32,7 @@ export const WeeklyReflection = (props: {}): JSX.Element => {
         <TeamPulseBorder>
           <TeamPulseContainer meeting={meeting} title={"Your Mood"} />
         </TeamPulseBorder>
-        <PersonalHabitSummary />
+        <PersonalHabitSummary meeting={meeting} />
       </RowContainer>
       <Questionnaire variant={QuestionnaireTypeConstants.weeklyReflection} />
     </Container>

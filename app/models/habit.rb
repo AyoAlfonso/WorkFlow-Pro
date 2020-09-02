@@ -44,9 +44,9 @@ class Habit < ApplicationRecord
   end
 
   def weekly_logs_completion_difference
-    current_week_completion_count = self.current_week_logs.count
-    previous_week_completion_count = self.previous_week_logs.count
-
+    current_week_completion_count = self.complete_current_week_logs.count
+    previous_week_completion_count = self.complete_previous_week_logs.count
+    
     if current_week_completion_count >= previous_week_completion_count
       difference = previous_week_completion_count == 0 ? 
                     current_week_completion_count * 100 : 

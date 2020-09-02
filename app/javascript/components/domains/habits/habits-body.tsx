@@ -69,12 +69,12 @@ export const HabitsBody = observer(
           <HabitsTableHead>
             <HabitsTableRow>
               <HabitsTableHeaderCell />
-              <HabitsTableHeaderCell />
+              <HabitsTableHeaderCellWide />
               {dayNames}
             </HabitsTableRow>
             <HabitsTableRow>
               <HabitsTableHeaderCell />
-              <HabitsTableHeaderCell />
+              <HabitsTableHeaderCellWide />
               {dayDates}
             </HabitsTableRow>
           </HabitsTableHead>
@@ -89,4 +89,8 @@ const Container = styled.div`
   padding: 8px;
   overflow-y: auto;
   margin-bottom: 8px;
+`;
+
+const HabitsTableHeaderCellWide = styled(HabitsTableHeaderCell)`
+  width: 40%;
 `;

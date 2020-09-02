@@ -70,46 +70,16 @@ export const HabitsSummary = observer(
       </HabitsTableHeaderCell>
     ));
 
-    const overallColor = baseTheme.colors.primary100;
-    const renderOverall = (
-      <HabitsTableRow key={`habit-overall}`}>
-        <StyledHabitsTableDataCell>
-          {totalCompleted == 0 ? (
-            <HabitsTableCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
-          ) : (
-            <HabitsTableCircularProgressBar color={overallColor} value={totalPercentageCompleted} />
-          )}
-        </StyledHabitsTableDataCell>
-        <StyledHabitsTableDataCell>
-          <HabitsTextContainer>Test</HabitsTextContainer>
-        </StyledHabitsTableDataCell>
-        <StyledHabitsTableDataCell>
-          <HabitsTextContainer color={overallColor}>
-            {totalCompleted}/{totalFrequency}
-          </HabitsTextContainer>
-        </StyledHabitsTableDataCell>
-        <StyledHabitsTableDataCell></StyledHabitsTableDataCell>
-        <StyledHabitsTableDataCell>
-          <HabitsTextContainer color={overallColor}>
-            {totalCompleted}/{totalFrequency}
-          </HabitsTextContainer>
-        </StyledHabitsTableDataCell>
-      </HabitsTableRow>
-    );
-
     return (
       <HabitsTable>
         <HabitsTableHead>
           <HabitsTableRow>
             <HabitsTableHeaderCell />
-            <HabitsTableHeaderCell />
+            <HabitsTableHeaderCellWide />
             {titleElements}
           </HabitsTableRow>
         </HabitsTableHead>
-        <HabitsTableBody>
-          {renderHabits()}
-          {renderOverall}
-        </HabitsTableBody>
+        <HabitsTableBody>{renderHabits()}</HabitsTableBody>
       </HabitsTable>
     );
   },
@@ -140,4 +110,8 @@ const StyledHabitsTableDataCell = styled(HabitsTableDataCell)`
 
 const StyledHabitsTableCenterCell = styled(StyledHabitsTableDataCell)`
   text-align: center;
+`;
+
+const HabitsTableHeaderCellWide = styled(HabitsTableHeaderCell)`
+  width: 65%;
 `;

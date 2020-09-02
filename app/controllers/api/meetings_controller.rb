@@ -73,6 +73,7 @@ class Api::MeetingsController < Api::ApplicationController
       @previous_meeting = Meeting.where(team_id: @team.id, meeting_template_id: @meeting.meeting_template_id).second_to_last
       @emotion_score_percentage_difference = @team.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
       @milestones = nil
+      @habits_percentage_increase_from_previous_week = nil
       @stats_for_week = nil
       @my_current_milestones = nil
     else
@@ -81,7 +82,7 @@ class Api::MeetingsController < Api::ApplicationController
       @previous_meeting = Meeting.where(hosted_by: current_user, team_id: nil, meeting_template_id: @meeting.meeting_template_id).second_to_last
       @emotion_score_percentage_difference = current_user.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
       @milestones = nil
-
+      @habits_percentage_increase_from_previous_week = current_user.habits_percentage_increase_from_previous_week
       @stats_for_week = calculate_stats_for_week
       @my_current_milestones = Milestone.current_week_for_user(current_user)
     end
