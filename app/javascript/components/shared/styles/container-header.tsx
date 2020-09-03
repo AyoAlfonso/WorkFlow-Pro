@@ -28,6 +28,6 @@ export const HeaderText = styled.h4`
   justify-content: center;
   align-items: center;
   line-height: 20px;
-  font-size: 13pt;
+  font-size: 16px;
   font-weight: 600;
 `;

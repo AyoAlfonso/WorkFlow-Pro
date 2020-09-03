@@ -46,6 +46,8 @@ const Container = styled.div`
 const TeamPulseBorder = styled(HomeContainerBorders)`
   min-width: 670px;
   margin-right: 20px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const RowContainer = styled.div`

@@ -58,7 +58,7 @@ const KeyActivitiesText = styled.h4`
   justify-content: center;
   align-items: center;
   line-height: 20px;
-  font-size: 13pt;
+  font-size: 16px;
   font-weight: 600;
 `;
 
@@ -76,7 +76,7 @@ type FilterOptionsType = {
 const FilterOptions = styled.p<FilterOptionsType>`
   ${space}
   ${color}
-  font-size: 11pt;
+  font-size: 12px;
   font-weight: 400;
   cursor: pointer;
 `;

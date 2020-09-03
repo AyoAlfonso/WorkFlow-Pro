@@ -58,7 +58,7 @@ const FilterContainer = styled.div`
 const FilterOptions = styled.p`
   ${space}
   ${color}
-  font-size: 11pt;
+  font-size: 12px;
   font-weight: 400;
   cursor: pointer;
 `;

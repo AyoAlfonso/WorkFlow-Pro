@@ -21,7 +21,7 @@ class Api::IssuesController < Api::ApplicationController
 
   def update
     @issue.update(issue_params.merge(completed_at: params[:completed] ? Time.now : nil))
-    if params[:from_team_meeting]
+    if params[:from_team_meeting] == "true"
       render json: team_meeting_issues(@issue.team_id)
     else
       render json: policy_scope(Issue).sort_by_priority_and_created_at_and_completed_at
@@ -31,7 +31,7 @@ class Api::IssuesController < Api::ApplicationController
   def destroy
     team_id = @issue.team_id
     @issue.destroy!
-    if params[:from_team_meeting]
+    if params[:from_team_meeting] == "true"
       render json: team_meeting_issues(team_id)
     else
       render json: policy_scope(Issue).sort_by_priority_and_created_at_and_completed_at

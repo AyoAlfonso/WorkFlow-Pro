@@ -28,10 +28,7 @@ export const HabitsSummary = observer(
 
     const renderHabits = () =>
       habits.map((habit, index) => (
-        <HabitsTableRow
-          key={`${habit.id}-${index}`}
-          borderBottom={index == habits.length - 1 && `1px solid ${baseTheme.colors.grey20} `}
-        >
+        <HabitsTableRow key={`${habit.id}-${index}`}>
           <StyledHabitsTableCenterCell>
             {habit.percentageWeeklyLogsCompleted == 0 ? (
               <HabitsTableCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
