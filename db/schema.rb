@@ -142,7 +142,7 @@ ActiveRecord::Schema.define(version: 2020_09_02_223251) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "create_my_day", default: false
     t.boolean "evening_reflection", default: false
-    t.integer "starting_mip_count"
+    t.integer "mip_count"
     t.index ["user_id"], name: "index_daily_logs_on_user_id"
   end
 

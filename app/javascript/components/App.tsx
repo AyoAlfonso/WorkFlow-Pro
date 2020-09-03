@@ -50,9 +50,21 @@ export interface IAppProps {
 
 export const App = observer(
   (props: IAppProps): JSX.Element => {
-    const { sessionStore } = useMst();
+    const { keyActivityStore, sessionStore } = useMst();
     const loggedIn = sessionStore.loggedIn; //if logged in show switch
-    const { keyActivityStore } = useMst();
+
+    const updateMipCount = count => {
+      const currentDailyLog = sessionStore.profile.currentDailyLog;
+      sessionStore.updateUser({
+        dailyLogsAttributes: [
+          {
+            ...currentDailyLog,
+            mipCount: currentDailyLog.mipCount + count,
+          },
+        ],
+      });
+    };
+
     const onDragEnd = result => {
       const { destination, source } = result;
       if (!result.destination) {
@@ -70,10 +82,12 @@ export const App = observer(
         keyActivityStore.startLoading("weekly-activities");
         keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", true);
         keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", false);
+        updateMipCount(-1);
       } else if (destination.droppableId === "todays-priorities") {
         keyActivityStore.startLoading("todays-priorities");
         keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
         keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", true);
+        updateMipCount(1);
       }
       keyActivityStore.updateKeyActivity(keyActivityId);
     };

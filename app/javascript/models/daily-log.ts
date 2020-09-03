@@ -7,7 +7,7 @@ export const DailyLogModel = types
     workStatus: types.maybeNull(types.string),
     createMyDay: types.boolean,
     eveningReflection: types.boolean,
-    startingMipCount: types.maybeNull(types.number),
+    mipCount: types.maybeNull(types.number),
   })
   .views(self => ({}))
   .actions(self => ({
