@@ -368,5 +368,12 @@ export const Icons = () => (
         <TextCenteredDiv>Priority-MIP</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
+    <Divider />
+    <RowDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Plan"} size={"2em"} />
+        <TextCenteredDiv>Plan</TextCenteredDiv>
+      </CenteredColumnDiv>
+    </RowDiv>
   </ContainerDiv>
 );

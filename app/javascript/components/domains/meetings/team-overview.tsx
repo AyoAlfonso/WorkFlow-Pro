@@ -193,7 +193,6 @@ export const TeamOverview = observer(
 );
 
 const Container = styled.div`
-  padding: 20px;
   padding-bottom: 0;
 `;
 
