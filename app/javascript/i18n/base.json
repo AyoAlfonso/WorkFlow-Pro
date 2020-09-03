@@ -33,7 +33,7 @@
           "email": "E-mail",
           "password": "Password",
           "login": "Log in",
-          "forgot": "Forgot your password? (To be added)",
+          "forgot": "Forgot your password?",
           "currentlyLoggedIn": "You are logged in."
         },
         "profileUpdateForm": {

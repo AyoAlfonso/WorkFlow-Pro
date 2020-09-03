@@ -9,11 +9,15 @@ import { Button } from "../../shared/button";
 import { Icon } from "../../shared/icon";
 import { Flex, Box } from "rebass";
 import { Label, Input } from "../../shared/input";
-import { Text } from "~/components/shared/text";
+import { TextNoMargin, Text } from "~/components/shared/text";
 
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { LoadingScreen } from "./loading-screen";
+
+import { color, typography } from "styled-system";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 const LogoHeaderDiv = styled.div`
   text-align: center;
@@ -25,6 +29,14 @@ export const LoginForm = observer(
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { t } = useTranslation();
+
+    const resetPasswordFlow = () => {
+      if (email.length > 0) {
+        sessionStore.resetPassword(email);
+      } else {
+        showToast("Please enter an email for the reset password", ToastMessageConstants.ERROR);
+      }
+    };
 
     if (sessionStore.loading) return <LoadingScreen />;
     return (
@@ -66,9 +78,9 @@ export const LoginForm = observer(
               >
                 {t("profile.loginForm.login")}
               </Button>
-              <Text color={"greyActive"} fontSize={1}>
+              <TextInlineContainer color={"greyActive"} fontSize={1} onClick={resetPasswordFlow}>
                 {t("profile.loginForm.forgot")}
-              </Text>
+              </TextInlineContainer>
             </>
           )}
         </Box>
@@ -76,3 +88,11 @@ export const LoginForm = observer(
     );
   },
 );
+
+const TextInlineContainer = styled.div`
+  ${typography}
+  ${color}
+  &:hover {
+    cursor: pointer;
+  }
+`;

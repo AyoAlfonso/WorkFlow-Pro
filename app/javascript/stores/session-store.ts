@@ -27,9 +27,8 @@ export const SessionStoreModel = types
     },
     loadProfile: flow(function*() {
       self.loading = true;
-      const env = getEnv(self);
       try {
-        const response: any = yield env.api.profile();
+        const response: any = yield self.environment.api.profile();
         if (response.ok) {
           //add details to user model
           self.profile = response.data;
@@ -72,9 +71,8 @@ export const SessionStoreModel = types
     }),
     updateAvatar: flow(function*(formData) {
       self.loading = true;
-      const env = getEnv(self);
       try {
-        const response = yield env.api.updateAvatar(formData);
+        const response = yield self.environment.api.updateAvatar(formData);
         if (response.ok) {
           self.profile.setAvatarUrl(response.data.avatarUrl);
           const { userStore } = getRoot(self);
@@ -87,9 +85,8 @@ export const SessionStoreModel = types
     }),
     deleteAvatar: flow(function*() {
       self.loading = true;
-      const env = getEnv(self);
       try {
-        const response = yield env.api.deleteAvatar();
+        const response = yield self.environment.api.deleteAvatar();
         if (response.ok) {
           self.profile.setAvatarUrl(response.data.avatarUrl);
           const { userStore } = getRoot(self);
@@ -141,11 +138,19 @@ export const SessionStoreModel = types
     // self.loggedIn = false;
     // }),
     logoutRequest: flow(function*() {
-      const env = getEnv(self);
-      const response: any = yield env.api.signOut();
+      const response: any = yield self.environment.api.signOut();
       if (response.ok) {
       }
       self.loggedIn = false;
+    }),
+    resetPassword: flow(function*(email) {
+      const response: any = yield self.environment.api.resetPassword(email);
+      if (response.ok) {
+        showToast(
+          "Please check your email for password reset instructions.",
+          ToastMessageConstants.SUCCESS,
+        );
+      }
     }),
   }))
   .actions(self => ({

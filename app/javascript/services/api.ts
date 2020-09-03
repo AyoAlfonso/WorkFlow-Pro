@@ -45,6 +45,10 @@ export class Api {
     return this.client.post("/users/sign_in", { user: { email, password } });
   }
 
+  async resetPassword(email) {
+    return this.client.patch("/users/reset_password", { email: email });
+  }
+
   async profile() {
     return this.client.get("/profile");
   }

@@ -1,7 +1,8 @@
 class Api::UsersController < Api::ApplicationController
   helper ApplicationHelper
   before_action :set_user, only: [:show, :update, :resend_invitation]
-  before_action :skip_authorization, only: :profile
+  skip_before_action :authenticate_user!, only: [:reset_password]
+  before_action :skip_authorization, only: [:profile, :reset_password]
   respond_to :json
 
   def index
@@ -36,6 +37,14 @@ class Api::UsersController < Api::ApplicationController
   def resend_invitation
     @user.invite!
     render 'api/users/show'
+  end
+
+  def reset_password
+    @user = User.find_by_email!(params[:email]) #for security reasons do not let user know if they are not found in database.
+    if @user.present?
+      @user.send_reset_password_instructions
+      render json: {message: "An email has been sent to reset your password, please check it there."}
+    end
   end
 
   def profile
