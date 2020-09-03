@@ -71,7 +71,7 @@ const RenderNotificationTimeOptions = (): JSX.Element => {
           handleTimeOfDayChange(e.target.value);
         }}
         defaultValue={notificationToEdit.validations[0].timeOfDay}
-        disabled={notificationToEdit.notificationType === "End Of Week Stats"}
+        disabled={notificationToEdit.notificationType === "Weekly Report"}
       />
     </>
   );
@@ -100,7 +100,7 @@ const RenderNotificationDayOptions = (): JSX.Element => {
       value={notificationDay}
       defaultValue={dayOfWeek}
       disabled={
-        dayOfWeek === "Every Day" || notificationToEdit.notificationType === "End Of Week Stats"
+        dayOfWeek === "Every Day" || notificationToEdit.notificationType === "Weekly Report"
       }
     >
       {R.map(

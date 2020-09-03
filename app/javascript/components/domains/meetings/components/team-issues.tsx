@@ -56,7 +56,7 @@ export const TeamIssues = observer(
             <AddNewIssuePlus>
               <Icon icon={"Plus"} size={16} />
             </AddNewIssuePlus>
-            <AddNewIssueText> Add New Issue</AddNewIssueText>
+            <AddNewIssueText> Add a New Issue</AddNewIssueText>
           </AddNewIssueContainer>
           <IssuesContainer>{renderIssuesList()}</IssuesContainer>
         </IssuesBodyContainer>

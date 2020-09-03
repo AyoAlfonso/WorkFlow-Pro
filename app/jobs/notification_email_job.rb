@@ -11,13 +11,13 @@ class NotificationEmailJob
     notification_type = human_type(notification.notification_type)
     # The job runs at top and bottom of each hour. There's a -10 and +5 minute buffer in case the job starts early or late.
     if schedule.occurs_between?(@user.time_in_user_timezone - 10.minutes, @user.time_in_user_timezone + 5.minutes)
-      if notification_type == "Daily Personal Planning" && user_has_not_set_status
+      if notification_type == "Create My Day" && user_has_not_set_status
         send_person_planning_reminder_email(@user, notification_type)
-      elsif notification_type == "End Of Week Stats"
+      elsif notification_type == "Weekly Report"
         send_end_of_week_stats_email(@user, notification_type)
-      elsif notification_type == "Sync Meeting" && meeting_should_have_started('team_weekly')
+      elsif notification_type == "Weekly Alignment Meeting" && meeting_should_have_started('team_weekly')
         send_sync_meeting_email(@user, notification_type)
-      elsif notification_type == "Weekly Personal Planning" && meeting_should_have_started('personal_weekly')
+      elsif notification_type == "Weekly Planning" && meeting_should_have_started('personal_weekly')
         send_weekly_planning_meeting_email(@user, notification_type)
       end
     end

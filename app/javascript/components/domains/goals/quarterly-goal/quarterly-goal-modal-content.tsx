@@ -162,7 +162,7 @@ export const QuarterlyGoalModalContent = observer(
           onClick={() => quarterlyGoalStore.createMilestones(quarterlyGoalId)}
         >
           <Icon icon={"Plus"} size={"20px"} style={{ marginTop: "3px" }} />
-          <AddMilestoneText> Add a 13-Week Plan </AddMilestoneText>
+          <AddMilestoneText> Add Weekly Milestones </AddMilestoneText>
         </StyledButton>
       );
     };
@@ -181,7 +181,7 @@ export const QuarterlyGoalModalContent = observer(
           <SectionContainer>
             <MilestonesHeaderContainer>
               <SubHeaderContainer>
-                <SubHeaderText text={"Weekly Milestones"} />
+                <SubHeaderText text={"Milestones"} />
               </SubHeaderContainer>
               <ShowPastWeeksContainer>
                 <Button

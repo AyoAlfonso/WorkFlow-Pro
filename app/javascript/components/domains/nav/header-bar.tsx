@@ -129,7 +129,7 @@ export const HeaderBar = observer(
               }
             }}
           >
-            <SelectionText>Weekly Personal R&P</SelectionText>
+            <SelectionText>Weekly Planning</SelectionText>
           </SelectionContainer>
         </DropdownContainer>
       );
