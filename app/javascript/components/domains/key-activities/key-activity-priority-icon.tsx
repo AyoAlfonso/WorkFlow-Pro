@@ -45,7 +45,7 @@ export const KeyActivityPriorityIcon = ({
           <Icon
             icon={"Priority-Empty"}
             size={24}
-            iconColor={colors.primary100}
+            iconColor={colors.greyInactive}
             style={{ marginTop: "2px" }}
           />
         );

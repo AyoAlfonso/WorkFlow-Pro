@@ -55,6 +55,9 @@ export const KeyActivityEntry = observer(
           <Checkbox
             key={keyActivity["id"]}
             checked={keyActivity["completedAt"] ? true : false}
+            sx={{
+              color: baseTheme.colors.primary100,
+            }}
             onChange={e => {
               keyActivityStore.updateKeyActivityStatus(
                 keyActivity,
@@ -123,7 +126,6 @@ const DeleteButtonContainer = styled.div`
   margin-left: auto;
   margin-top: auto;
   margin-bottom: auto;
-  margin-right: 8px;
   color: ${props => props.theme.colors.grey60};
   display: none;
   &: hover {
@@ -167,7 +169,8 @@ const StyledContentEditable = styled(ContentEditable)`
   font-weight: 400;
   line-height: 20px;
   margin-left: 10px;
-  width: 125px;
+  min-width: 125px;
+  width: 55%;
   margin-top: auto;
   margin-bottom: auto;
 `;

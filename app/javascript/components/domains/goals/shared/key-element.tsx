@@ -5,6 +5,7 @@ import "react-tabs/style/react-tabs.css";
 import { Checkbox, Label } from "@rebass/forms";
 import ContentEditable from "react-contenteditable";
 import { KeyElementType } from "~/types/key-element";
+import { baseTheme } from "~/themes";
 
 interface IKeyElementProps {
   element: KeyElementType;
@@ -46,6 +47,9 @@ export const KeyElement = ({
             onChange={e => {
               setCheckboxValue(e.target.checked);
               store.updateKeyElementStatus(element.id, e.target.checked);
+            }}
+            sx={{
+              color: baseTheme.colors.primary100,
             }}
           />
         </Label>
