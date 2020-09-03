@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useMst } from "../../../../setup/root";
 import { toJS } from "mobx";
@@ -144,6 +144,10 @@ const isNavMenuIconActive = (currentPath: string, to: string): boolean => {
 
 export const SideNavNoMst = (currentPathName: string, teams: any): JSX.Element => {
   const { t } = useTranslation();
+
+  const [teamNavChildOpen, setTeamNavChildOpen] = useState<boolean>(false);
+  const [companyNavChildOpen, setCompanyNavChildOpen] = useState<boolean>(false);
+
   return (
     <StyledSideNav>
       <SideBarElement marginTop={"48px"}>
@@ -167,6 +171,9 @@ export const SideNavNoMst = (currentPathName: string, teams: any): JSX.Element =
               {t("navigation.team")}
             </NavMenuIcon>
           }
+          navOpen={teamNavChildOpen}
+          setNavOpen={setTeamNavChildOpen}
+          setOtherNavOpen={setCompanyNavChildOpen}
         >
           {teams.map((team, index) => (
             <SideNavChildLink key={index} to={`/team/${team.id}`} linkText={team.name} />
@@ -181,6 +188,9 @@ export const SideNavNoMst = (currentPathName: string, teams: any): JSX.Element =
               {t("navigation.company")}
             </NavMenuIcon>
           }
+          navOpen={companyNavChildOpen}
+          setNavOpen={setCompanyNavChildOpen}
+          setOtherNavOpen={setTeamNavChildOpen}
         >
           <SideNavChildLink
             to="/company/accountability"

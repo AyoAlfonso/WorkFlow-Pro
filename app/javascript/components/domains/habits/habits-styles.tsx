@@ -6,6 +6,10 @@ import { typography, TypographyProps } from "styled-system";
 export const HabitsTable = styled.table`
   width: auto;
   border-collapse: collapse;
+  display: block;
+  overflow-y: auto;
+  height: 320px;
+}
 `;
 
 export const HabitsTableHead = styled.thead``;

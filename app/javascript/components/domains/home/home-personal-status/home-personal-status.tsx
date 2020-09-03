@@ -124,7 +124,7 @@ const Container = styled.div`
 `;
 
 const GreetingContainer = styled.div`
-  font-size: 20pt;
+  font-size: 24px;
   font-weight: 600;
   font-family: Exo;
 `;

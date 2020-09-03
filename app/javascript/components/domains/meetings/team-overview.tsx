@@ -24,6 +24,7 @@ import { FutureTeamMeetingsContainer } from "./shared/future-team-meetings-conta
 import { useState, useEffect } from "react";
 import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
 import { useTranslation } from "react-i18next";
+import { NoMoodRatings } from "~/components/shared/no-mood-ratings";
 
 interface ITeamOverviewProps {}
 
@@ -171,10 +172,18 @@ export const TeamOverview = observer(
 
             <TeamPulseContainer>
               <ContainerHeaderWithText text={t("teams.teamsPulseTitle")} />
-              <TeamPulseBody>
-                <OverallTeamPulse value={currentTeam.averageTeamEmotionScore} />
-                <TeamPulseCard data={toJS(currentTeam.formattedAverageWeeklyUserEmotions) || []} />
-              </TeamPulseBody>
+              {currentTeam.averageTeamEmotionScore > 0 ? (
+                <TeamPulseBody>
+                  <OverallTeamPulse value={currentTeam.averageTeamEmotionScore} />
+                  <TeamPulseCard
+                    data={toJS(currentTeam.formattedAverageWeeklyUserEmotions) || []}
+                  />
+                </TeamPulseBody>
+              ) : (
+                <NoMoodWrapper>
+                  <NoMoodRatings />
+                </NoMoodWrapper>
+              )}
             </TeamPulseContainer>
           </RightContainer>
         </BodyContainer>
@@ -320,3 +329,8 @@ const CheckboxContainer = props => (
     {props.children}
   </Label>
 );
+
+const NoMoodWrapper = styled.div`
+  padding-top: 40px;
+  padding-bottom: 40px;
+`;

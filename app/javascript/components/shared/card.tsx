@@ -22,7 +22,7 @@ export const Card = (props: ICardProps): JSX.Element => {
 };
 
 export const CardHeaderText = styled.h4`
-  font-size: 13pt;
+  font-size: 16px;
 `;
 
 export const CardBody = styled.div<LayoutProps>`

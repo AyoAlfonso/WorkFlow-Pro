@@ -17,12 +17,25 @@ export const PersonalHabitSummary = (props: IPersonalHabitProps): JSX.Element =>
   return (
     <Container>
       <ContainerHeaderWithText text={t("habits.reviewTitle")} />
-      <HabitsSummary />
-      <PercentChange percentChange={meeting.habitsPercentageIncreaseFromPreviousWeek} />
+      <HabitsContainer>
+        <HabitsSummary />
+      </HabitsContainer>
+
+      <PercentageChangeContainer>
+        <PercentChange percentChange={meeting.habitsPercentageIncreaseFromPreviousWeek} />
+      </PercentageChangeContainer>
     </Container>
   );
 };
 
 const Container = styled(HomeContainerBorders)`
   min-width: 325px;
+`;
+
+const HabitsContainer = styled.div`
+  max-height: 500px;
+`;
+
+const PercentageChangeContainer = styled.div`
+  border-top: 1px solid ${props => props.theme.colors.borderGrey};
 `;

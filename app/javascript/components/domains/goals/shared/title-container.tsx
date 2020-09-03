@@ -85,7 +85,7 @@ const Container = styled.div`
 
 const EnlargedHomeTitle = styled.div`
   font-family: Exo;
-  font-size: 20pt;
+  font-size: 24px;
   font-weight: 600;
   margin-top: auto;
   margin-bottom: auto;
@@ -116,7 +116,7 @@ type FilterOptionsType = {
 const FilterOptions = styled.p<FilterOptionsType>`
   ${space}
   ${color}
-  font-size: 11pt;
+  font-size: 12px;
   font-weight: 400;
   cursor: pointer;
   margin-left: 16px;

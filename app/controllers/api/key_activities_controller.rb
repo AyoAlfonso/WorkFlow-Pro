@@ -22,7 +22,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def update
     @key_activity.update!(key_activity_params.merge(completed_at: params[:completed] ? Time.now : nil))
-    if params[:from_team_meeting]
+    if params[:from_team_meeting] == "true"
       render json: team_meeting_activities(@key_activity.meeting_id)
     else
       render json: KeyActivity.owned_by_user(current_user).sort_by_position_priority_and_created_at
@@ -30,9 +30,9 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def destroy
-    meeting_id = @key_activity.meeting_id
     @key_activity.destroy!
-    if params[:from_team_meeting]
+    if params[:from_team_meeting] == "true"
+      meeting_id = @key_activity.meeting_id
       render json: team_meeting_activities(meeting_id)
     else
       render json: KeyActivity.owned_by_user(current_user).sort_by_position_priority_and_created_at
@@ -62,4 +62,6 @@ class Api::KeyActivitiesController < Api::ApplicationController
     meeting = Meeting.find(meeting_id)
     KeyActivity.filter_by_team_meeting(meeting.meeting_template_id, meeting.team_id).sort_by_position_priority_and_created_at
   end
+
+
 end
