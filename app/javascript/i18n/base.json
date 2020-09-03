@@ -130,7 +130,8 @@
         "eveningReflection": "I want to reflect on my day",
         "title": "Journal",
         "pynBotName": "PynBot",
-        "pynBotGreeting": "Hey {userName}, what can I help you with?"
+        "pynBotGreeting": "Hey {userName}, what can I help you with?",
+        "confirmQuit": "Are you sure you want to quit?  Your journal entry will be lost"
       },
       "keyActivities": {
         "prioritiesTitle": "Today's Priorities",

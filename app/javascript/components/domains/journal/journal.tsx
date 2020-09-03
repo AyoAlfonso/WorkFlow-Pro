@@ -42,7 +42,15 @@ export const Journal = observer(
           <HeaderText>{t("journals.title")}</HeaderText>
           <EndButtonContainer>
             {questionnaireVariant ? (
-              <EndButton onClick={() => setQuestionnaireVariant("")}>Quit Journal</EndButton>
+              <EndButton
+                onClick={() => {
+                  if (confirm(t("journals.confirmQuit"))) {
+                    setQuestionnaireVariant("");
+                  }
+                }}
+              >
+                Quit Journal
+              </EndButton>
             ) : null}
           </EndButtonContainer>
         </HeaderContainer>
