@@ -27,13 +27,7 @@ export const Milestones = observer(
       return milestoneStore.milestonesForPersonalMeeting.map((milestone, index) => (
         <div key={index}>
           <StyledText>{`${milestone.quarterlyGoalDescription || ""}`}</StyledText>
-          <MilestoneCard
-            key={index}
-            milestone={milestone}
-            unstarted={milestone.status == "unstarted"}
-            editable={true}
-            fromMeeting={true}
-          />
+          <MilestoneCard key={index} milestone={milestone} editable={true} fromMeeting={true} />
         </div>
       ));
     };

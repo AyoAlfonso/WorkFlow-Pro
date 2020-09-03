@@ -142,15 +142,7 @@ export const QuarterlyGoalModalContent = observer(
     const renderWeeklyMilestones = (): JSX.Element => {
       const milestonesToShow = showInactiveMilestones ? allMilestones : activeMilestones;
       return milestonesToShow.map((milestone, index) => {
-        const unstarted = milestone.status == "unstarted";
-        return (
-          <MilestoneCard
-            key={index}
-            milestone={milestone}
-            unstarted={unstarted}
-            editable={editable}
-          />
-        );
+        return <MilestoneCard key={index} milestone={milestone} editable={editable} />;
       });
     };
 
