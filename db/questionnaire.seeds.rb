@@ -768,7 +768,7 @@ steps: [
   },
   {
     id: 4, 
-    option: [],
+    options: [],
     metadata: {
       summary: "wins",
       message: "My wins:"

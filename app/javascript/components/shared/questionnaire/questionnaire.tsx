@@ -9,7 +9,7 @@ import { Text } from "~/components/shared/text";
 import { toJS } from "mobx";
 import { Loading } from "~/components/shared/loading";
 import { QuestionnaireTitle } from "./questionnaire-title";
-import * as humps from "humps";
+import { SummaryDisplay } from "./sumnmary-display";
 
 export interface IQuestionnaireProps {
   variant: string;
@@ -37,16 +37,21 @@ export const Questionnaire = (props: IQuestionnaireProps): JSX.Element => {
     );
   }
 
+  const summaryData = meetingStore.personalPlanningSummary;
+
   const steps = R.map(step => {
-    if (R.hasPath(["metadata", "questionnaireTitle"], step)) {
+    if (R.hasPath(["metadata", "summary"], step)) {
       return R.pipe(
-        R.assoc("component", <QuestionnaireTitle title={step.metadata.message} />),
+        R.assoc(
+          "component",
+          <SummaryDisplay
+            summaryData={summaryData}
+            variant={R.path(["metadata", "summary"], step)}
+            title={R.path(["metadata", "message"], step)}
+          />,
+        ),
         R.dissoc("options"),
       )(step);
-      // } else if (R.hasPath(["metadata", "frogSelector"], step)) {
-      //   return R.pipe(R.assoc("component", <FrogSelector />), R.dissoc("options"))(step);
-      // } else if (R.hasPath(["metadata", "emotionSelector"], step)) {
-      //   return R.pipe(R.assoc("component", <EmotionSelector />), R.dissoc("options"))(step);
     } else {
       return step;
     }
