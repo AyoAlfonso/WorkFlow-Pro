@@ -1,5 +1,4 @@
 import { types } from "mobx-state-tree";
-import { UserModel } from "~/models/user";
 
 export const KeyActivityModel = types
   .model("KeyActivityModel")

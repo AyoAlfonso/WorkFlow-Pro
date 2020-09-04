@@ -7,6 +7,7 @@ import { useMst } from "../../../setup/root";
 import { baseTheme } from "../../../themes/base";
 import { Icon } from "../../shared/icon";
 import { KeyActivityPriorityIcon } from "./key-activity-priority-icon";
+import { Avatar } from "~/components/shared";
 
 interface IKeyActivityEntryProps {
   keyActivity: any;
@@ -96,6 +97,17 @@ export const KeyActivityEntry = observer(
             keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false)
           }
         />
+
+        <AvatarContainer>
+          <Avatar
+            defaultAvatarColor={keyActivity.user.defaultAvatarColor}
+            firstName={keyActivity.user.firstName}
+            lastName={keyActivity.user.lastName}
+            avatarUrl={keyActivity.user.avatarUrl}
+            size={25}
+          />
+        </AvatarContainer>
+
         <DeleteButtonContainer
           onClick={() =>
             keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
@@ -189,3 +201,9 @@ const CheckboxContainer = props => (
     {props.children}
   </Label>
 );
+
+const AvatarContainer = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: auto;
+`;

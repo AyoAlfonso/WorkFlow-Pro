@@ -8,6 +8,7 @@ export const IssueModel = types
     priority: types.maybeNull(types.string),
     completedAt: types.maybeNull(types.string),
     teamId: types.maybeNull(types.number),
+    user: types.maybeNull(types.frozen()),
   })
   .views(self => ({}))
   .actions(self => ({}));

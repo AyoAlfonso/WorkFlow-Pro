@@ -13,6 +13,7 @@ import { Button } from "rebass";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
+import { Avatar } from "~/components/shared";
 
 interface IIssueEntryProps {
   issue: any;
@@ -126,6 +127,17 @@ export const IssueEntry = observer(
           style={{ textDecoration: issue.completedAt && "line-through" }}
           onBlur={() => issueStore.updateIssue(issue.id, meetingId ? true : false)}
         />
+
+        <AvatarContainer>
+          <Avatar
+            defaultAvatarColor={issue.user.defaultAvatarColor}
+            firstName={issue.user.firstName}
+            lastName={issue.user.lastName}
+            avatarUrl={issue.user.avatarUrl}
+            size={25}
+          />
+        </AvatarContainer>
+
         <ActionContainer>
           <DeleteButtonContainer
             onClick={() => issueStore.destroyIssue(issue.id, meetingId ? true : false)}
@@ -196,6 +208,7 @@ const ActionContainer = styled.div`
   margin-left: auto;
   margin-top: auto;
   margin-bottom: auto;
+  padding-left: 4px;
 `;
 
 const DeleteButtonContainer = styled.div`
@@ -327,3 +340,9 @@ const CheckboxContainer = props => (
     {props.children}
   </Label>
 );
+
+const AvatarContainer = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: auto;
+`;
