@@ -4,16 +4,18 @@ import styled from "styled-components";
 import { Text } from "~/components/shared/text";
 import { KeyActivitiesBody } from "~/components/domains/key-activities/key-activities-body";
 import { KeyActivitiesHeader } from "~/components/domains/key-activities/key-activities-header-no-filter";
+import { useTranslation } from "react-i18next";
 
 export const PersonalKeyActivities = (props: {}): JSX.Element => {
+  const { t } = useTranslation();
   return (
     <Container>
       <IndividualContainer>
-        <KeyActivitiesHeader title={"Weekly Activity List"} />
+        <KeyActivitiesHeader title={`${t("keyActivities.title")}: Weekly List`} />
         <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"} disableDrag={true} />
       </IndividualContainer>
       <IndividualContainer>
-        <KeyActivitiesHeader title={"Master Activity List"} />
+        <KeyActivitiesHeader title={`${t("keyActivities.title")}: Master List`} />
         <KeyActivitiesBody showAllKeyActivities={true} borderLeft={"none"} disableDrag={true} />
       </IndividualContainer>
     </Container>
