@@ -2,6 +2,8 @@ import { types, flow, getEnv } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { ApiResponse } from "apisauce";
 import { TeamModel } from "~/models/team";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 export const TeamStoreModel = types
   .model("TeamStoreModel")
@@ -21,6 +23,13 @@ export const TeamStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.getTeam(id);
       if (response.ok) {
         self.currentTeam = response.data;
+      }
+    }),
+    updateTeam: flow(function*(formData) {
+      const response: ApiResponse<any> = yield self.environment.api.updateTeam(formData);
+      if (response.ok) {
+        self.currentTeam = response.data;
+        showToast("Updated team settings", ToastMessageConstants.SUCCESS);
       }
     }),
   }))

@@ -1,5 +1,5 @@
 ActiveAdmin.register MeetingTemplate do
-  permit_params :name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed]
+  permit_params :name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed, :override_key]
 
   index do
     selectable_column
@@ -37,7 +37,8 @@ ActiveAdmin.register MeetingTemplate do
             duration: step[:duration],
             component_to_render: step[:component_to_render],
             meeting_template_id: @meeting_template.id,
-            image: step[:image]
+            image: step[:image],
+            override_key: step[:override_key]
           })
         end
       end
@@ -82,7 +83,7 @@ ActiveAdmin.register MeetingTemplate do
     f.input :meeting_type, as: :select, collection: MeetingTemplate.meeting_types.map { |mt| [mt[0].humanize.titleize, mt[0]] }
     f.input :duration, label: "Duration (in minutes)"
     f.input :description, input_html: { rows: 5 }
-    f.has_many :steps, allow_destroy: true do |step|
+    f.has_many :steps, heading: "Steps", allow_destroy: true do |step|
       step.input :name
       step.input :step_type, as: :select, collection: Step.step_types.map { |st| [st[0].humanize.titleize, st[0]]}
       step.input :order_index
@@ -90,6 +91,7 @@ ActiveAdmin.register MeetingTemplate do
       step.input :instructions, input_html: { rows: 3 }
       step.input :component_to_render, as: :select, collection: Step::MEETING_STEP_COMPONENTS
       step.input :link_embed, input_html: { rows: 2 }
+      step.input :override_key, input_html: { rows: 1 }
       step.input :image, as: :file, hint: (step.object.try(:image_url) ? image_tag(step.object.image_url, style: "max-height: 150px;") : "No Image Selected")
     end
     f.actions

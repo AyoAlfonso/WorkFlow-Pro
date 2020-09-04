@@ -6,6 +6,8 @@ class Step < ApplicationRecord
 
   default_scope { order(meeting_template_id: :asc).order(order_index: :asc) }
 
+  #override steps and meetings via override_key
+
   def image_url
     image.present? ? Rails.application.routes.url_helpers.rails_blob_url(image, host: ENV["ASSETS_HOST_URL"] || ENV["HOST_URL"]) : nil
   end

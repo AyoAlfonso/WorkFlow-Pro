@@ -55,6 +55,9 @@
         "teamsManagement": {
           "header": "Manage Teams"
         },
+        "meetingsManagement": {
+          "header": "Meetings"
+        },
         "habits": {
           "new": "Habit",
           "form": {

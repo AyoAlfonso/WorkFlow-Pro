@@ -12,6 +12,7 @@ export const TeamModel = types
     teamUserEnablements: types.array(types.frozen()),
     defaultAvatarColor: types.maybeNull(types.string),
     users: types.maybeNull(types.array(UserModel)),
+    settings: types.maybeNull(types.frozen()),
     averageWeeklyUserEmotions: types.maybeNull(types.array(types.frozen())),
     averageTeamEmotionScore: types.maybeNull(types.number),
   })
@@ -33,6 +34,14 @@ export const TeamModel = types
       } else {
         [];
       }
+    },
+  }))
+  .views(self => ({
+    isALead(user) {
+      return R.contains(user.id, self.teamLeadIds);
+    },
+    isANonLead(user) {
+      return R.contains(user.id, self.nonLeadMemberIds);
     },
   }))
   .actions(self => ({}));

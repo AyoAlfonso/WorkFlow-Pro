@@ -87,7 +87,7 @@ Rails.application.routes.draw do
     get 'questionnaire_attempts/personal_planning_summary', to: 'questionnaire_attempts#personal_planning'
 
     #teams
-    resources :teams, only: [:index, :show]
+    resources :teams, only: [:index, :show, :update]
     
     #meetings
     resources :meetings, only: [:create, :index, :update, :destroy, :show]
