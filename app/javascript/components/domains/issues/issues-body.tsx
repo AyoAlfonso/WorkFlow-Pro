@@ -10,6 +10,7 @@ import { CreateIssueModal } from "./create-issue-modal";
 import { IssueEntry } from "./issue-entry";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { Loading } from "../../shared";
+import { sortByPosition } from "~/utils/sorting";
 
 interface IIssuesBodyProps {
   showOpenIssues: boolean;
@@ -34,7 +35,7 @@ export const IssuesBody = observer(
 
     const renderIssuesList = (): Array<JSX.Element> => {
       const issues = showOpenIssues ? openIssues : closedIssues;
-      return issues.map((issue, index) => (
+      return sortByPosition(issues).map((issue, index) => (
         <Draggable draggableId={`issue-${issue.id}`} index={index} key={issue.id} type={"issue"}>
           {provided => (
             <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
