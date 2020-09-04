@@ -10,7 +10,7 @@ class Api::MeetingsController < Api::ApplicationController
 
   def create 
     #TODO: replaec scope with for week or for month, etc. based on type
-    incomplete_meetings_for_today = Meeting.with_template(params[:meeting_template_id]).for_day(Date.today).incomplete #TODO: VERIFY THIS WORKS OVER MIDNIGHT IN DIFFERENT TIMEZONES
+    incomplete_meetings_for_today = Meeting.team_meetings(params[:team_id]).with_template(params[:meeting_template_id]).for_day(Date.today).incomplete #TODO: VERIFY THIS WORKS OVER MIDNIGHT IN DIFFERENT TIMEZONES
     
     # @meeting = incomplete_meetings_for_today.first_or_create(meeting_params.merge({hosted_by: current_user}))
     # authorize @meeting
