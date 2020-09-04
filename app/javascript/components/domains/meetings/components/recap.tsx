@@ -98,9 +98,7 @@ export const Recap = observer(
 
     return (
       <Container>
-        <KeyActivityContainer>
-          <TeamKeyActivities />
-        </KeyActivityContainer>
+        <TeamKeyActivities />
         <GraphContainer>{renderGraphCards()}</GraphContainer>
       </Container>
     );
@@ -112,12 +110,7 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const KeyActivityContainer = styled.div`
-  width: 45%;
-`;
-
 const GraphContainer = styled.div`
-  width: 55%;
   display: flex;
   flex-wrap: wrap;
 `;
