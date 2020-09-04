@@ -373,9 +373,9 @@ export const IconButton = () => {
         bg={"white"}
         px={"10px"}
         py={"5px"}
-        iconName={"Negative-Thoughts"}
+        iconName={"Check-in"}
         iconSize={28}
-        iconColor={"warningRed"}
+        iconColor={"successGreen"}
         text={"Thought Challenge"}
         shadow={true}
         onClick={() => actionFn()}

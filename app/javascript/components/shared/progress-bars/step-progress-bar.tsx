@@ -60,7 +60,11 @@ export const StepProgressBar = ({
   const defaultStepProgressBarProps = {
     percent: 0,
     filledBackground: `linear-gradient(to right, ${baseTheme.colors.grey80}, ${
-      isOverTime() ? baseTheme.colors.warningRed : baseTheme.colors.primary80
+      isOverTime()
+        ? baseTheme.colors.warningRed
+        : isOneMinuteUntilNextStep()
+        ? baseTheme.colors.cautionYellow
+        : baseTheme.colors.primary80
     }`,
   };
   const defaultStepProgressBarStepProps = {
@@ -84,8 +88,12 @@ export const StepProgressBar = ({
               : isOverTime() && index === currentStepIndex
               ? renderIcon("white", "warningRed", "Chevron-Left")
               : isOneMinuteUntilNextStep() && index === currentStepIndex
-              ? renderIcon("cautionYellow", "primary100", "Chevron-Left")
-              : renderIcon("white", "primary100", "Chevron-Left")}
+              ? renderIcon("white", "cautionYellow", "Chevron-Left")
+              : index === currentStepIndex
+              ? renderIcon("white", "primaryActive", "Chevron-Down")
+              : index === currentStepIndex + 1
+              ? renderIcon("white", "primary100", "Chevron-Left")
+              : renderIcon("white", "grey100", "Chevron-Left")}
           </StepDiv>
         );
       }}
@@ -128,5 +136,5 @@ const Container = styled.div<ContainerProps>`
   width: ${props => (props.fromPersonalPlanning ? "60%" : "100%")};
   margin-left: auto;
   margin-right: auto;
-  min-width: 800px;
+  min-width: 400px;
 `;

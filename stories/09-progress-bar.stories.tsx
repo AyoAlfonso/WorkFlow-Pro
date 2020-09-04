@@ -78,23 +78,8 @@ export const StripedProgressBar = () => (
 export const StepProgressBar = () => (
   <ContainerDiv marginTop={250} marginLeft={25} width={"80%"}>
     <StProgressBar
-      steps={[
-        { accomplished: true, title: "Step #1" },
-        { accomplished: true, title: "Step #2" },
-        { accomplished: false, title: "Step #3" },
-        { accomplished: false, title: "Step #4" },
-      ]}
-      onStepClick={() => {}}
-      currentStepIndex={1}
-    />
-  </ContainerDiv>
-);
-
-export const TimedStepProgressBar = () => (
-  <ContainerDiv marginTop={250} marginLeft={25} width={"80%"}>
-    <StProgressBar
       progressBarProps={{
-        stepPositions: [25, 30, 45, 60, 100],
+        stepPositions: [0, 30, 85, 100],
         percent: 55,
       }}
       steps={[
@@ -165,7 +150,7 @@ const SCGaugePropsList = [
 export const SemiCircleGauge = () => {
   const percentage = number("completed", 60, { range: true, min: 0, max: 100, step: 0.1 });
   return (
-    <ContainerDiv mat={"25px"} ml={"25px"} width={"100%"}>
+    <ContainerDiv mt={"25px"} ml={"25px"} width={"100%"}>
       <h1>Semi Circle Gauge</h1>
       <CodeBlockDiv mb={"20px"}>
         <CopyBlock
