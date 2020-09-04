@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ModalWithHeader } from "../../shared/modal-with-header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TextInput } from "../../shared/text-input";
 import styled from "styled-components";
 import { Icon } from "../../shared/icon";
@@ -15,6 +15,7 @@ import {
   PriorityContainer,
   IconContainer,
 } from "~/components/shared/styles/modals";
+import { UserSelectionDropdownList } from "~/components/shared";
 
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
@@ -23,10 +24,26 @@ interface ICreateIssueModalProps {
 }
 
 export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => {
-  const { issueStore, sessionStore } = useMst();
+  const { issueStore, sessionStore, userStore } = useMst();
   const { createIssueModalOpen, setCreateIssueModalOpen, teamId } = props;
   const [issueDescription, setIssueDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
+  const [showUsersList, setShowUsersList] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+
+  useEffect(() => {
+    setSelectedUser(sessionStore.profile);
+  }, []);
+
+  const companyUsers = userStore.users;
+
+  const renderUserSelectionList = (): JSX.Element => {
+    return showUsersList ? (
+      <UserSelectionDropdownList userList={companyUsers} onUserSelect={setSelectedUser} />
+    ) : (
+      <></>
+    );
+  };
 
   return (
     <ModalWithHeader
@@ -49,14 +66,19 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
               paddingBottom: "4px",
             }}
           />
-          <Avatar
-            defaultAvatarColor={R.path(["profile", "defaultAvatarColor"], sessionStore)}
-            avatarUrl={R.path(["profile", "avatarUrl"], sessionStore)}
-            firstName={R.path(["profile", "firstName"], sessionStore)}
-            lastName={R.path(["profile", "lastName"], sessionStore)}
-            size={34}
-            marginLeft={"auto"}
-          />
+          {selectedUser && (
+            <AvatarContainer onClick={() => setShowUsersList(!showUsersList)}>
+              <Avatar
+                defaultAvatarColor={selectedUser.defaultAvatarColor}
+                avatarUrl={selectedUser.avatarUrl}
+                firstName={selectedUser.firstName}
+                lastName={selectedUser.lastName}
+                size={34}
+                marginLeft={"auto"}
+              />
+              {renderUserSelectionList()}
+            </AvatarContainer>
+          )}
         </FlexContainer>
         <FlexContainer>
           <StyledButton
@@ -67,6 +89,7 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
                   description: issueDescription,
                   priority: selectedPriority,
                   teamId: teamId,
+                  userId: selectedUser.id,
                 })
                 .then(result => {
                   if (result) {
@@ -111,5 +134,12 @@ const StyledButton = styled(Button)<StyledButtonType>`
   width: 130px;
   &: hover {
     cursor: ${props => !props.disabled && "pointer"};
+  }
+`;
+
+const AvatarContainer = styled.div`
+  margin-left: auto;
+  &: hover {
+    cursor: pointer;
   }
 `;
