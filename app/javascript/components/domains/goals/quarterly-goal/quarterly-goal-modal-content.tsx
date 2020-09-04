@@ -142,15 +142,7 @@ export const QuarterlyGoalModalContent = observer(
     const renderWeeklyMilestones = (): JSX.Element => {
       const milestonesToShow = showInactiveMilestones ? allMilestones : activeMilestones;
       return milestonesToShow.map((milestone, index) => {
-        const unstarted = milestone.status == "unstarted";
-        return (
-          <MilestoneCard
-            key={index}
-            milestone={milestone}
-            unstarted={unstarted}
-            editable={editable}
-          />
-        );
+        return <MilestoneCard key={index} milestone={milestone} editable={editable} />;
       });
     };
 
@@ -162,7 +154,7 @@ export const QuarterlyGoalModalContent = observer(
           onClick={() => quarterlyGoalStore.createMilestones(quarterlyGoalId)}
         >
           <Icon icon={"Plus"} size={"20px"} style={{ marginTop: "3px" }} />
-          <AddMilestoneText> Add a 13-Week Plan </AddMilestoneText>
+          <AddMilestoneText> Add Weekly Milestones </AddMilestoneText>
         </StyledButton>
       );
     };
@@ -181,7 +173,7 @@ export const QuarterlyGoalModalContent = observer(
           <SectionContainer>
             <MilestonesHeaderContainer>
               <SubHeaderContainer>
-                <SubHeaderText text={"Weekly Milestones"} />
+                <SubHeaderText text={"Milestones"} />
               </SubHeaderContainer>
               <ShowPastWeeksContainer>
                 <Button

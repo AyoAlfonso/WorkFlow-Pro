@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
-import * as moment from "moment";
-import { EditHabit } from "./edit-habit";
-
 import {
   HabitsTable,
   HabitsTableHead,
@@ -19,23 +16,19 @@ import { baseTheme } from "~/themes";
 export const HabitsSummary = observer(
   (): JSX.Element => {
     const {
-      habitStore,
-      habitStore: { habits, totalFrequency, totalCompleted, totalPercentageCompleted },
+      habitStore: { habits },
     } = useMst();
-    useEffect(() => {
-      habitStore.fetchHabits();
-    }, [habitStore.habits]);
 
     const renderHabits = () =>
       habits.map((habit, index) => (
         <HabitsTableRow key={`${habit.id}-${index}`}>
           <StyledHabitsTableCenterCell>
-            {habit.percentageWeeklyLogsCompleted == 0 ? (
+            {habit.weeklyCompletionPercentage == 0 ? (
               <HabitsTableCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
             ) : (
               <HabitsTableCircularProgressBar
                 color={habit.color}
-                value={habit.percentageWeeklyLogsCompleted}
+                value={habit.weeklyCompletionPercentage}
               />
             )}
           </StyledHabitsTableCenterCell>
@@ -44,18 +37,18 @@ export const HabitsSummary = observer(
           </StyledHabitsTableDataCell>
           <StyledHabitsTableCenterCell>
             <HabitsTextContainer color={habit.color}>
-              {habit.percentageWeeklyLogsCompleted.toFixed(0)}%
+              {habit.weeklyCompletionPercentage.toFixed(0)}%
             </HabitsTextContainer>
           </StyledHabitsTableCenterCell>
           <StyledHabitsTableCenterCell>
             <HabitsTextContainer color={habit.color}>
-              {habit.weeklyLogsCompletionDifference >= 0 ? "+" : ""}
-              {habit.weeklyLogsCompletionDifference.toFixed(0)}%
+              {habit.weeklyDifference >= 0 ? "+" : "-"}
+              {habit.weeklyDifference.toFixed(0)}%
             </HabitsTextContainer>
           </StyledHabitsTableCenterCell>
           <StyledHabitsTableCenterCell>
             <HabitsTextContainer color={habit.color}>
-              {habit.completedCount}/{habit.frequency}
+              {habit.weeklyCompletionFraction}
             </HabitsTextContainer>
           </StyledHabitsTableCenterCell>
         </HabitsTableRow>

@@ -11,7 +11,7 @@ module NotificationEmailJobHelper
     UserMailer.with(
       user: @user,
       subject: notification_type,
-      message: "Hi #{@user&.first_name}, \n Here are your end of week stats"
+      message: "Hi #{@user&.first_name}, \n Here is your weekly report"
     ).notification_email.deliver_later
   end
 
@@ -19,7 +19,7 @@ module NotificationEmailJobHelper
     UserMailer.with(
       user: @user,
       subject: notification_type,
-      message: "Hi #{@user&.first_name}, \n Just a quick reminder to start your sync meeting"
+      message: "Hi #{@user&.first_name}, \n Just a quick reminder to start your Weekly Alignment Meeting"
     ).notification_email.deliver_later
   end
 
@@ -27,7 +27,7 @@ module NotificationEmailJobHelper
     UserMailer.with(
       user: @user,
       subject: notification_type,
-      message: "Hi #{@user&.first_name}, \n Just a quick reminder to start your weekly R&P meeting"
+      message: "Hi #{@user&.first_name}, \n Just a quick reminder to start your weekly planning meeting"
     ).notification_email.deliver_later
   end
 end

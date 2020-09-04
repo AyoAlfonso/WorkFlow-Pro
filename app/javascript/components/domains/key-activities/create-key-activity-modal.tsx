@@ -140,9 +140,9 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             </IconContainer>
             <IconContainer onClick={() => setSelectedPriority(selectedPriority == 3 ? 0 : 3)}>
               <Icon
-                icon={"Priority-Frog"}
+                icon={"Priority-MIP"}
                 size={"25px"}
-                iconColor={selectedPriority == 3 ? "frog" : "grey60"}
+                iconColor={selectedPriority == 3 ? "mipBlue" : "grey60"}
               />
             </IconContainer>
           </PriorityContainer>
@@ -169,9 +169,9 @@ const StyledSwitch = styled(Switch)``;
 
 const MasterListText = styled(Text)`
   color: ${props => props.theme.colors.grey60};
-  margin-top: auto;
-  margin-bottom: auto;
+  margin-top: 5px;
   margin-left: 5px;
+  margin-bottom: auto;
   font-size: 14px;
 `;
 

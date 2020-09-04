@@ -140,8 +140,8 @@ export const Company = observer(
                     )}
                   </Select>
                   <Text color={"greyActive"} fontSize={1}>
-                    To modify Fiscal Start Date, {t("company.accountabilityChart")}, or{" "}
-                    {t("company.strategicPlan")}, please contact Lynchpyn support.
+                    To modify Fiscal Start Date, {t("company.accountabilityChart")}, or The{" "}
+                    {company.name} Plan, please contact Lynchpyn support.
                   </Text>
 
                   <Label htmlFor="rallying">{t("company.rallyingCry")}</Label>

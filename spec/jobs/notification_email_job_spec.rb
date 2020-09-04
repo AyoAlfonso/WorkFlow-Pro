@@ -3,9 +3,9 @@ include NotificationsHelper
 include NotificationsSpecHelper
 
 RSpec.describe NotificationEmailJob, type: :job do
-  context 'perform with daily_personal_planning notification type' do
+  context 'perform with create_my_day notification type' do
     let(:notification_email_job) { NotificationEmailJob.new }
-    let(:notification_type) { 'daily_personal_planning' }
+    let(:notification_type) { 'create_my_day' }
     # Notifications are created when the user is created
     Timecop.freeze('2020-08-10 5:30:00 -0700') do
       let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
@@ -28,7 +28,7 @@ RSpec.describe NotificationEmailJob, type: :job do
     end
   end
 
-  context 'perform with daily_personal_planning notification type afer completing the daily log' do
+  context 'perform with create_my_day notification type afer completing the daily log' do
     let(:notification_email_job) { NotificationEmailJob.new }
     Timecop.freeze('2020-08-19 5:30:00 -0700') do
       let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
@@ -38,7 +38,7 @@ RSpec.describe NotificationEmailJob, type: :job do
     before :each do
       Timecop.freeze('2020-08-20 12:00:00 -0700') do
         Sidekiq::Testing.inline! do
-          notification = user.notifications.find_by(notification_type: 'daily_personal_planning')
+          notification = user.notifications.find_by(notification_type: 'create_my_day')
           update_start_time_to_be_in_past(notification)
           notification_email_job.perform(notification.id)
         end
@@ -51,7 +51,7 @@ RSpec.describe NotificationEmailJob, type: :job do
     end
   end
 
-  context 'perform with daily_personal_planning notification type before noon' do
+  context 'perform with create_my_day notification type before noon' do
     let(:notification_email_job) { NotificationEmailJob.new }
     Timecop.freeze('2020-08-19 5:30:00 -0700') do
       let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
@@ -61,7 +61,7 @@ RSpec.describe NotificationEmailJob, type: :job do
     before :each do
       Timecop.freeze('2020-08-20 10:00:00 -0700') do
         Sidekiq::Testing.inline! do
-          notification = user.notifications.find_by(notification_type: 'daily_personal_planning')
+          notification = user.notifications.find_by(notification_type: 'create_my_day')
           update_start_time_to_be_in_past(notification)
           notification_email_job.perform(notification.id)
         end
@@ -74,9 +74,9 @@ RSpec.describe NotificationEmailJob, type: :job do
     end
   end
 
-  context 'perform with end_of_week_stats notification' do
+  context 'perform with weekly_report notification' do
     let(:notification_email_job) { NotificationEmailJob.new }
-    let(:notification_type) { 'end_of_week_stats' }
+    let(:notification_type) { 'weekly_report' }
     Timecop.freeze('2020-08-19 5:30:00 -0700') do
       let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
     end
@@ -98,9 +98,9 @@ RSpec.describe NotificationEmailJob, type: :job do
     end
   end
 
-  context 'perform with sync_meeting type' do
+  context 'perform with weekly_alignment_meeting type' do
     let(:notification_email_job) { NotificationEmailJob.new }
-    let(:notification_type) { 'sync_meeting' }
+    let(:notification_type) { 'weekly_alignment_meeting' }
     Timecop.freeze('2020-08-19 5:30:00 -0700') do
       let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
       let!(:team) { create(:team) }
@@ -127,9 +127,9 @@ RSpec.describe NotificationEmailJob, type: :job do
     end
   end
 
-  context 'perform with weekly_personal_planning type' do
+  context 'perform with weekly_planning type' do
     let(:notification_email_job) { NotificationEmailJob.new }
-    let(:notification_type) { 'weekly_personal_planning' }
+    let(:notification_type) { 'weekly_planning' }
     Timecop.freeze('2020-08-12 5:30:00 -0700') do
       let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
       let!(:team) { create(:team) }

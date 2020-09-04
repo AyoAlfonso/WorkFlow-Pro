@@ -56,7 +56,7 @@
           "header": "Manage Teams"
         },
         "habits": {
-          "new": "New Habit",
+          "new": "Habit",
           "form": {
             "inputs": {
               "name": "Name",
@@ -130,12 +130,12 @@
       "keyActivities": {
         "prioritiesTitle": "Today's Priorities",
         "title": "Pyns",
-        "addTitle": "Add New Pyn"
+        "addTitle": "Add a New Pyn"
       },
       "teams": {
         "teamMeetingsTitle": "Team Meetings",
-        "teamIssuesTitle": "Team's Issues",
-        "teamsPulseTitle": "Team's Pulse",
+        "teamIssuesTitle": "Team Issues",
+        "teamsPulseTitle": "Team Pulse",
         "teamSnapshotTitle": "Team Snapshot"
       }
     }

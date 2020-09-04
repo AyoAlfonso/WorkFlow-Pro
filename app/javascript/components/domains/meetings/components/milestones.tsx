@@ -25,22 +25,20 @@ export const Milestones = observer(
 
     const renderWeeklyMilestones = (): JSX.Element[] => {
       return milestoneStore.milestonesForPersonalMeeting.map((milestone, index) => (
-        <div key={index}>
+        <Container key={index}>
           <StyledText>{`${milestone.quarterlyGoalDescription || ""}`}</StyledText>
-          <MilestoneCard
-            key={index}
-            milestone={milestone}
-            unstarted={milestone.status == "unstarted"}
-            editable={true}
-            fromMeeting={true}
-          />
-        </div>
+          <MilestoneCard key={index} milestone={milestone} editable={true} fromMeeting={true} />
+        </Container>
       ));
     };
 
     return <> {renderWeeklyMilestones()} </>;
   },
 );
+
+const Container = styled.div`
+  margin-bottom: 16px;
+`;
 
 const StyledText = styled.h4`
   font-size: 20px;

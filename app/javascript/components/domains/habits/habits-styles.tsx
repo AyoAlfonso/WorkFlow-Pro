@@ -9,6 +9,8 @@ export const HabitsTable = styled.table`
   display: block;
   overflow-y: auto;
   height: 320px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 `;
 

@@ -14,7 +14,7 @@ class HabitPolicy < ApplicationPolicy
     true
   end
 
-  def show?
+  def show_habit?
     @habit.user == @user
   end
 
@@ -24,6 +24,10 @@ class HabitPolicy < ApplicationPolicy
 
   def destroy?
     @habit.user == @user
+  end
+
+  def habits_for_personal_planning?
+    true
   end
 
   class Scope

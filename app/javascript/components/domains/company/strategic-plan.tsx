@@ -14,7 +14,7 @@ export const StrategicPlan = observer(
         {company ? (
           <>
             <Heading type={"h1"} color={"black"}>
-              Strategic Plan
+              The {company.name} Plan
             </Heading>
             <div
               className="trix-content"

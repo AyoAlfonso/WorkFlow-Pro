@@ -59,7 +59,7 @@ export const IssueEntry = observer(
             <Icon
               icon={"Priority-Empty"}
               size={24}
-              iconColor={baseTheme.colors.primary100}
+              iconColor={baseTheme.colors.greyInactive}
               style={{ marginTop: "2px" }}
             />
           );
@@ -99,6 +99,9 @@ export const IssueEntry = observer(
             checked={issue["completedAt"] ? true : false}
             onChange={e => {
               issueStore.updateIssueStatus(issue, e.target.checked, meetingId ? true : false);
+            }}
+            sx={{
+              color: baseTheme.colors.primary100,
             }}
           />
         </CheckboxContainer>
@@ -240,7 +243,6 @@ const Container = styled.div`
 const IssuePriorityContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
-  margin-right: 10px;
   &:hover {
     cursor: pointer;
   }
@@ -257,9 +259,10 @@ const StyledContentEditable = styled(ContentEditable)<StyledContentEditableProps
   font-weight: 400;
   line-height: 20px;
   margin-left: 10px;
-  width: ${props => (props.meeting ? "115px" : "125px")};
+  min-width: ${props => (props.meeting ? "115px" : "125px")};
   margin-top: auto;
   margin-bottom: auto;
+  width: 50%;
 `;
 
 type ShareIssueContainerType = {

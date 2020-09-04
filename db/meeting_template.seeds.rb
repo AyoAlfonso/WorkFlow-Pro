@@ -91,9 +91,9 @@ mt1.steps.where(name: "How Are You Feeling?").first.image.attach(io: File.open("
 mt1.steps.where(name: "Updates").first.image.attach(io: File.open("app/assets/images/updates.png"), filename: "mood-board.png", content_type: 'image/png')
 
 
-mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Personal Planning").first_or_create(
+mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Planning").first_or_create(
   meeting_type: :personal_weekly,
-  name: "Weekly Personal Planning",
+  name: "Weekly Planning",
   #description: ""
   steps_attributes: [
     {
@@ -130,7 +130,7 @@ mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Person
     },
     {
       order_index: 4,
-      name: "Daily Planning",
+      name: "Create My Day",
       step_type: :component,
       instructions: "What are the top 3 things you must accomplish tomorrow? Move them over to Today’s Priority.",
       component_to_render: "DailyPlanning",

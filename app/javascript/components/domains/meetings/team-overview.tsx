@@ -25,6 +25,7 @@ import { useState, useEffect } from "react";
 import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
 import { useTranslation } from "react-i18next";
 import { NoMoodRatings } from "~/components/shared/no-mood-ratings";
+import { baseTheme } from "~/themes";
 
 interface ITeamOverviewProps {}
 
@@ -103,6 +104,9 @@ export const TeamOverview = observer(
               <Checkbox
                 key={`checkbox-${index}`}
                 checked={keyActivity.completedAt ? true : false}
+                sx={{
+                  color: baseTheme.colors.primary100,
+                }}
               />
             </CheckboxContainer>
             <PriorityText>{keyActivity.description}</PriorityText>
@@ -193,7 +197,6 @@ export const TeamOverview = observer(
 );
 
 const Container = styled.div`
-  padding: 20px;
   padding-bottom: 0;
 `;
 

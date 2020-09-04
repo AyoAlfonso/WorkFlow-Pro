@@ -209,7 +209,7 @@ export const ContextTabs = observer(
                     }}
                   >
                     <Icon icon={"Plus"} size={"20px"} style={{ marginTop: "3px" }} />
-                    <AddKeyElementText>Add Key Element</AddKeyElementText>
+                    <AddKeyElementText>Add a Key Element</AddKeyElementText>
                   </StyledButton>
                 </ButtonContainer>
               )}

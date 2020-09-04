@@ -1,5 +1,5 @@
 class Api::HabitsController < Api::ApplicationController
-  before_action :set_habit, except: [:create, :index]
+  before_action :set_habit, except: [:create, :index, :habits_for_personal_planning]
 
   respond_to :json
 
@@ -23,7 +23,7 @@ class Api::HabitsController < Api::ApplicationController
     render json: @habit
   end
 
-  def show
+  def show_habit
     render json: @habit
   end
 
@@ -35,6 +35,14 @@ class Api::HabitsController < Api::ApplicationController
   def destroy
     @habit.destroy!
     render json: { habit_id: @habit.id, status: :ok}
+  end
+
+  def habits_for_personal_planning
+    @habits = policy_scope(Habit)
+    authorize @habits
+    @beginning_of_last_week = Date.today.prev_week
+    @end_of_last_week = @beginning_of_last_week + 6.days
+    render 'api/habits/habits_for_personal_planning'
   end
 
   private

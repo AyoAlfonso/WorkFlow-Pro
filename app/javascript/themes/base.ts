@@ -46,6 +46,7 @@ export const baseTheme = {
     backgroundYellow: "#FFF8E6",
     backgroundRed: "#FCDEDD",
     backgroundGreen: "#00C3B326",
+    mipBlue: "#022F7B",
   },
 
   fonts: {

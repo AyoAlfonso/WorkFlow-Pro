@@ -6,7 +6,7 @@ export const NoMoodRatings = (): JSX.Element => {
   return (
     <Container>
       <StyledIcon icon={"Emotion-C"} size={"110px"} iconColor={"greyInactive"} />
-      <TextContainer>There are no recorded ratings yet.</TextContainer>
+      <TextContainer>No Data Available</TextContainer>
     </Container>
   );
 };

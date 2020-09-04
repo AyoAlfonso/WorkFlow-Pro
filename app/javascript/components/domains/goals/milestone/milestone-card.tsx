@@ -12,14 +12,12 @@ import { MilestoneType } from "~/types/milestone";
 
 interface IMilestoneCardProps {
   milestone: MilestoneType;
-  unstarted: boolean;
   editable: boolean;
   fromMeeting?: boolean;
 }
 
 export const MilestoneCard = ({
   milestone,
-  unstarted,
   editable,
   fromMeeting,
 }: IMilestoneCardProps): JSX.Element => {
@@ -27,9 +25,12 @@ export const MilestoneCard = ({
 
   const descriptionRef = useRef(null);
 
+  const unstarted = milestone.status == "unstarted";
+  const currentWeek = moment(milestone.weekOf).isSame(moment(), "week");
+
   return (
     <MilestoneContainer>
-      <MilestoneDetails unstarted={unstarted}>
+      <MilestoneDetails unstarted={unstarted} currentWeek={currentWeek}>
         <WeekOfText unstarted={unstarted}>
           Week of <WeekOfTextValue>{moment(milestone.weekOf).format("MMMM D")}</WeekOfTextValue>
         </WeekOfText>
@@ -76,6 +77,7 @@ const MilestoneContainer = styled.div`
 
 type MilestoneDetailsType = {
   unstarted: boolean;
+  currentWeek: boolean;
 };
 
 const MilestoneDetails = styled(HomeContainerBorders)<MilestoneDetailsType>`
@@ -83,7 +85,8 @@ const MilestoneDetails = styled(HomeContainerBorders)<MilestoneDetailsType>`
   margin-top: 8px;
   margin-bottom: 8px;
   width: 90%;
-  border: ${props => !props.unstarted && `1px solid ${props.theme.colors.primary100}`};
+  border: ${props =>
+    (!props.unstarted || props.currentWeek) && `1px solid ${props.theme.colors.primary100}`};
   color: ${props => props.unstarted && props.theme.colors.grey60};
 `;
 

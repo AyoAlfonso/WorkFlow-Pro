@@ -27,6 +27,13 @@ export const HabitStoreModel = types
     get totalCompleted() {
       return self.habits.reduce((sum, habit) => sum + (habit.completedCount || 0), 0);
     },
+    get weeklyDifferenceForPersonalMeeting() {
+      let differencesPercentage = 0;
+      self.habits.forEach(habit => {
+        differencesPercentage += habit.weeklyDifference;
+      });
+      return differencesPercentage / self.habits.length;
+    },
   }))
   .views(self => ({
     get totalPercentageCompleted() {
@@ -42,6 +49,12 @@ export const HabitStoreModel = types
     }),
     fetchHabits: flow(function*() {
       const response: ApiResponse<any> = yield self.environment.api.getHabits();
+      if (response.ok) {
+        self.habits = response.data;
+      }
+    }),
+    fetchHabitsForPersonalPlanning: flow(function*() {
+      const response: ApiResponse<any> = yield self.environment.api.getHabitsForPersonalPlanning();
       if (response.ok) {
         self.habits = response.data;
       }

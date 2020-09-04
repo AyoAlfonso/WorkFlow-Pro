@@ -34,9 +34,9 @@ export const KeyActivityPriorityIcon = ({
       case "frog":
         return (
           <Icon
-            icon={"Priority-Frog"}
+            icon={"Priority-MIP"}
             size={24}
-            iconColor={colors.frog}
+            iconColor={colors.mipBlue}
             style={{ marginTop: "2px" }}
           />
         );
@@ -45,7 +45,7 @@ export const KeyActivityPriorityIcon = ({
           <Icon
             icon={"Priority-Empty"}
             size={24}
-            iconColor={colors.primary100}
+            iconColor={colors.greyInactive}
             style={{ marginTop: "2px" }}
           />
         );
