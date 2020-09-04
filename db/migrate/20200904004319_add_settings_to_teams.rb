@@ -1,6 +1,5 @@
 class AddSettingsToTeams < ActiveRecord::Migration[6.0]
   def change
-    enable_extension 'hstore' unless extension_enabled?('hstore')
-    add_column :teams, :settings, :hstore, default: {}
+    add_column :teams, :settings, :json, default: {}
   end
 end

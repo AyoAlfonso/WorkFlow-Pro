@@ -344,7 +344,7 @@ ActiveRecord::Schema.define(version: 2020_09_02_223251) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "default_avatar_color"
-    t.hstore "settings", default: {}
+    t.json "settings", default: {}
     t.index ["company_id"], name: "index_teams_on_company_id"
   end
 

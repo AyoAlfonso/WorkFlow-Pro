@@ -7,11 +7,7 @@ class Team < ApplicationRecord
   has_many :issues
   has_many :meetings
 
-  store :settings, accessors: [:weekly_meeting_dashboard_link_embed] #, coder: HStore
-
-  # def settings
-  #   {weekly_meeting_dashboard_link_embed: "https://google.ca"}
-  # end
+  store :settings, accessors: [:weekly_meeting_dashboard_link_embed], coder: JSON
 
   accepts_nested_attributes_for :team_user_enablements, allow_destroy: true
 
