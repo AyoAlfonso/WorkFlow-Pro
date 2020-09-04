@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as R from "ramda";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { useEffect, useState } from "react";
@@ -7,6 +8,8 @@ import { color } from "styled-system";
 import { observer } from "mobx-react";
 import { CreateIssueModal } from "./create-issue-modal";
 import { IssueEntry } from "./issue-entry";
+import { Draggable, Droppable } from "react-beautiful-dnd";
+import { Loading } from "../../shared";
 
 interface IIssuesBodyProps {
   showOpenIssues: boolean;
@@ -25,12 +28,20 @@ export const IssuesBody = observer(
       issueStore.fetchIssues();
     }, []);
 
+    if (R.isNil(issueStore.issues)) {
+      return <Loading />;
+    }
+
     const renderIssuesList = (): Array<JSX.Element> => {
       const issues = showOpenIssues ? openIssues : closedIssues;
       return issues.map((issue, index) => (
-        <IssueContainer key={issue["id"]}>
-          <IssueEntry issue={issue} />
-        </IssueContainer>
+        <Draggable draggableId={`issue-${issue.id}`} index={index} key={issue.id} type={"issue"}>
+          {provided => (
+            <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
+              <IssueEntry issue={issue} dragHandleProps={...provided.dragHandleProps} />
+            </IssueContainer>
+          )}
+        </Draggable>
       ));
     };
 
@@ -46,7 +57,14 @@ export const IssuesBody = observer(
           </AddNewIssuePlus>
           <AddNewIssueText> Add a New Issue</AddNewIssueText>
         </AddNewIssueContainer>
-        <IssuesContainer>{renderIssuesList()}</IssuesContainer>
+        <Droppable droppableId={"issues-container"} type={"issue"}>
+          {(provided, snapshot) => (
+            <IssuesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
+              {renderIssuesList()}
+              {provided.placeholder}
+            </IssuesContainer>
+          )}
+        </Droppable>
       </Container>
     );
   },
@@ -86,9 +104,15 @@ const AddNewIssueContainer = styled.div`
   }
 `;
 
-const IssuesContainer = styled.div`
+type TIssuesContainerType = {
+  isDraggingOver?: any;
+};
+
+const IssuesContainer = styled.div<TIssuesContainerType>`
   overflow-y: auto;
   height: 260px;
+  background-color: ${props =>
+    props.isDraggingOver ? props.theme.colors.backgroundBlue : "white"};
 `;
 
 const IssueContainer = styled.div``;

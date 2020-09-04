@@ -58,9 +58,10 @@ export const KeyActivitiesBody = observer(
             </KeyActivityContainer>
           ) : (
             <Draggable
-              draggableId={keyActivity["id"].toString()}
+              draggableId={`keyActivity-${keyActivity.id}`}
               index={index}
               key={keyActivity["id"]}
+              type={"keyActivity"}
             >
               {provided => (
                 <KeyActivityContainer
@@ -122,7 +123,7 @@ export const KeyActivitiesBody = observer(
           </AddNewKeyActivityPlus>
           <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
-        <Droppable droppableId="weekly-activities">
+        <Droppable droppableId="weekly-activities" type={"keyActivity"}>
           {(provided, snapshot) => (
             <KeyActivitiesContainer
               ref={provided.innerRef}
