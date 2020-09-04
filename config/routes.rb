@@ -9,12 +9,18 @@ Rails.application.routes.draw do
   },
   controllers: {
     sessions: 'sessions'
-  }, skip: [:confirmations]
+  }, skip: [:confirmations, :passwords]
 
   devise_scope :user do
     get '/confirmation/new', to: 'confirmations#new', format: :html, as: :new_user_confirmation
     get '/confirmation', to: 'confirmations#show', format: :html, as: :user_confirmation
     post '/confirmation', to: 'confirmations#create', format: :html, as: nil
+
+
+    get '/passwords/edit', to: 'devise/passwords#edit', format: :html, as: :edit_user_password
+    patch '/password', to: 'devise/passwords#update', format: :html, as: :user_password
+    put '/password', to: 'devise/passwords#update', format: :html, as: nil
+    post '/password', to: 'devise/passwords#create', format: :html, as: nil
   end
 
 
@@ -35,10 +41,14 @@ Rails.application.routes.draw do
 
   scope module: :api, path: :api do
     resources :users, only: [:index, :create, :show, :update] do
+      collection do
+        patch '/reset_password', to: "users#reset_password"
+      end
       member do
         patch '/resend_invitation', to: "users#resend_invitation"
       end
     end
+    
     get '/profile', to: 'users#profile'
     patch '/avatar', to: 'users#update_avatar'
     delete '/avatar', to: 'users#delete_avatar'

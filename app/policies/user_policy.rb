@@ -26,6 +26,10 @@ class UserPolicy < ApplicationPolicy
     create?
   end
 
+  def reset_password?
+    true
+  end
+
   # TODO: Needs logic here
   def update_avatar?
     record == user
