@@ -40,22 +40,23 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
     summary = {what_happened: [], improvements: [], highest_good: [], wins: [], lessons: [], gratitude_am: [], gratitude_pm: []}
 
     @questionnaire_attempts.each do |qa|
+      day_of_the_week = qa.completed_at.strftime('%A')
       qa.rendered_steps.each do |rs|
         case rs[:id]
         when "what-happened"
-          summary[:what_happened].push(rs[:value])
+          summary[:what_happened].push({value: rs[:value], day: day_of_the_week})
         when "improvements"
-          summary[:improvements].push(rs[:value])
+          summary[:improvements].push({value: rs[:value], day: day_of_the_week})
         when "highest-good"
-          summary[:highest_good].push(rs[:value])
+          summary[:highest_good].push({value: rs[:value], day: day_of_the_week})
         when "wins"
-          summary[:wins].push(rs[:value])
+          summary[:wins].push({value: rs[:value], day: day_of_the_week})
         when "lessons"
-          summary[:lessons].push(rs[:value])
+          summary[:lessons].push({value: rs[:value], day: day_of_the_week})
         when "gratitude-am"
-          summary[:gratitude_am].push(rs[:value])
+          summary[:gratitude_am].push({value: rs[:value], day: day_of_the_week})
         when "gratitude-pm"
-          summary[:gratitude_pm].push(rs[:value])
+          summary[:gratitude_pm].push({value: rs[:value], day: day_of_the_week})
         end
       end
     end
