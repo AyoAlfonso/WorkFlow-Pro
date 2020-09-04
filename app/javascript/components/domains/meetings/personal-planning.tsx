@@ -31,6 +31,7 @@ export const PersonalPlanning = observer(
 
     useEffect(() => {
       meetingStore.getPersonalMeeting(meeting_id);
+      meetingStore.getPersonalPlanningSummary();
     }, []);
 
     const renderLoading = () => (
@@ -42,8 +43,9 @@ export const PersonalPlanning = observer(
     );
 
     const meeting = meetingStore.currentPersonalPlanning;
+    const personalPlanningSummary = meetingStore.personalPlanningSummary;
 
-    if (R.isNil(meeting)) {
+    if (R.isNil(meeting) || R.isNil(personalPlanningSummary)) {
       return renderLoading();
     }
 

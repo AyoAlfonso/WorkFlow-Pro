@@ -295,6 +295,10 @@ export class Api {
     return this.client.get(`/milestones/milestones_for_meeting`);
   }
 
+  async getSummaryForPersonalMeeting() {
+    return this.client.get(`questionnaire_attempts/personal_planning_summary`);
+  }
+
   async getTeamGoals(teamId) {
     return this.client.get(`/annual_initiatives/team/${teamId}`);
   }

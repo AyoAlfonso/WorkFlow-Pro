@@ -8,6 +8,15 @@ class QuestionnaireAttempt < ApplicationRecord
 
   validates_with QuestionnaireAttemptValidator
 
+  scope :within_last_week, -> (current_time) { where(completed_at: current_time.last_week.beginning_of_week..current_time.last_week.end_of_week) }
+  scope :within_current_week, -> (current_time) { where(completed_at: current_time.beginning_of_week..current_time.end_of_week) }
+  scope :of_questionnaire_type, -> (questionnaire_name) { joins(:questionnaire).where(questionnaires: { name: questionnaire_name }) }
+  scope :for_user, -> (user) { where(user_id: user.id) }
+
+  def find_answer_by_id_string(string)
+    self.rendered_steps.detect { |rs| rs[:id] == string }
+  end
+
   def get_questionnaire_version_when_completed
     self.questionnaire.paper_trail.version_at(self.completed_at)
   end

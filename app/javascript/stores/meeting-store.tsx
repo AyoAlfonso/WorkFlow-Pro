@@ -13,6 +13,7 @@ export const MeetingStoreModel = types
     meetings: types.array(MeetingModel),
     teamMeetings: types.array(MeetingModel),
     meetingRecap: types.maybeNull(types.frozen()),
+    personalPlanningSummary: types.maybeNull(types.frozen()),
   })
   .extend(withEnvironment())
   .views(self => ({}))
@@ -92,6 +93,15 @@ export const MeetingStoreModel = types
           meetingId,
         );
         self.meetingRecap = response.data as any;
+        return response.data;
+      } catch {
+        // caught by Api Monitor
+      }
+    }),
+    getPersonalPlanningSummary: flow(function*() {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getSummaryForPersonalMeeting();
+        self.personalPlanningSummary = response.data as any;
         return response.data;
       } catch {
         // caught by Api Monitor

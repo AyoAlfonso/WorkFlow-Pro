@@ -84,6 +84,7 @@ Rails.application.routes.draw do
 
     #questionnaire_attempts
     resources :questionnaire_attempts, only: [:create]
+    get 'questionnaire_attempts/personal_planning_summary', to: 'questionnaire_attempts#personal_planning'
 
     #teams
     resources :teams, only: [:index, :show]
@@ -91,7 +92,7 @@ Rails.application.routes.draw do
     #meetings
     resources :meetings, only: [:create, :index, :update, :destroy, :show]
     get '/meetings/team_meetings/:id', to: 'meetings#team_meetings'
-
+    
     #meeting recap for team
     get '/teams/:team_id/meetings/:id/meeting_recap', to: 'meetings#meeting_recap'
 
