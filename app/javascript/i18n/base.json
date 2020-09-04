@@ -34,7 +34,8 @@
           "password": "Password",
           "login": "Log in",
           "forgot": "Forgot your password?",
-          "currentlyLoggedIn": "You are logged in."
+          "currentlyLoggedIn": "You are logged in.",
+          "termsDescription": "By clicking Log In you agree to our "
         },
         "profileUpdateForm": {
           "email": "E-mail",

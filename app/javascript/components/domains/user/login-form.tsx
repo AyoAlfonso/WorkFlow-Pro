@@ -81,6 +81,11 @@ export const LoginForm = observer(
               <TextInlineContainer color={"greyActive"} fontSize={1} onClick={resetPasswordFlow}>
                 {t("profile.loginForm.forgot")}
               </TextInlineContainer>
+              <Text color={"greyInactive"}>
+                {t("profile.loginForm.termsDescription")}
+                <a href="https://lynchpyn.com/terms-of-use/">Terms of Use</a> and{" "}
+                <a href="https://lynchpyn.com/privacy-policy/">Privacy Policy</a>
+              </Text>
             </>
           )}
         </Box>
