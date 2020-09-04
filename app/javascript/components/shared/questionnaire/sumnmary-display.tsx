@@ -28,7 +28,7 @@ export const SummaryDisplay = ({
         {summaryData[humps.camelize(variant)].map((summaryDataEl, index) => (
           <DataRowContainer key={index}>
             <Bullet />
-            <TextNoMargin mr={"10px"} {...rowTextProps}>{`[${summaryDataEl.day}]:`}</TextNoMargin>
+            <TextNoMargin mr={"8px"} {...rowTextProps}>{`${summaryDataEl.day}:`}</TextNoMargin>
             <TextNoMargin {...rowTextProps}>{summaryDataEl.value}</TextNoMargin>
           </DataRowContainer>
         ))}
