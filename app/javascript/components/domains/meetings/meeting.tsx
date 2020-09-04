@@ -73,11 +73,24 @@ export const Meeting = observer(
       </Container>
     );
 
+    const renderNoPermissions = () => (
+      <Container>
+        <BodyContainer>
+          <Text fontSize={2}>
+            This meeting is not for this team, please go back to the team overview page and click
+            start meeting.
+          </Text>
+        </BodyContainer>
+      </Container>
+    );
+
     const meeting = meetingStore.currentMeeting;
     const team = teamStore.teams.find(team => team.id === parseInt(team_id));
 
     if (R.isNil(meeting)) {
       return renderLoading();
+    } else if (meeting.teamId != team_id) {
+      return renderNoPermissions();
     }
 
     const renderMeetingEnded = () => (
