@@ -9,6 +9,7 @@ export const IssueModel = types
     completedAt: types.maybeNull(types.string),
     teamId: types.maybeNull(types.number),
     user: types.maybeNull(types.frozen()),
+    position: types.maybeNull(types.number),
   })
   .views(self => ({}))
   .actions(self => ({}));

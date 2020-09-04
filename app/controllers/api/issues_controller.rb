@@ -4,7 +4,7 @@ class Api::IssuesController < Api::ApplicationController
   respond_to :json
 
   def index
-    @issues = policy_scope(Issue).sort_by_priority_and_created_at_and_completed_at
+    @issues = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
     render "api/issues/index"
   end
 
@@ -15,7 +15,7 @@ class Api::IssuesController < Api::ApplicationController
     if params[:team_id]
       @issues_to_render = team_meeting_issues(params[:team_id])
     else
-      @issues_to_render = policy_scope(Issue).sort_by_priority_and_created_at_and_completed_at
+      @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
     end
     render "api/issues/create"
   end
@@ -25,7 +25,7 @@ class Api::IssuesController < Api::ApplicationController
     if params[:from_team_meeting] == "true"
       @issues_to_render = team_meeting_issues(@issue.team_id)
     else
-      @issues_to_render = policy_scope(Issue).sort_by_priority_and_created_at_and_completed_at
+      @issues_to_render = policy_scope(Issue).ssort_by_position_and_priority_and_created_at_and_completed_at
     end
     render "api/issues/update"
   end
@@ -36,7 +36,7 @@ class Api::IssuesController < Api::ApplicationController
     if params[:from_team_meeting] == "true"
       @issues_to_render = team_meeting_issues(team_id)
     else
-      @issues_to_render = policy_scope(Issue).sort_by_priority_and_created_at_and_completed_at
+      @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
     end
     render "api/issues/destroy"
   end
@@ -51,7 +51,7 @@ class Api::IssuesController < Api::ApplicationController
   private
 
   def issue_params
-    params.permit(:user_id, :description, :completed_at, :priority, :team_id)
+    params.permit(:user_id, :description, :completed_at, :priority, :team_id, :position)
   end
 
   def set_issue
@@ -60,6 +60,6 @@ class Api::IssuesController < Api::ApplicationController
   end
 
   def team_meeting_issues(team_id)
-    policy_scope(Issue).where(team_id: team_id).sort_by_priority_and_created_at_and_completed_at
+    policy_scope(Issue).where(team_id: team_id).sort_by_position_and_priority_and_created_at_and_completed_at
   end
 end

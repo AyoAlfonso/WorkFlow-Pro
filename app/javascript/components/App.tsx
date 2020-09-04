@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as R from "ramda";
 import { observer } from "mobx-react";
 //import { RouterModel } from "mst-react-router";
 import { Route, Switch } from "react-router-dom";
@@ -50,7 +51,7 @@ export interface IAppProps {
 
 export const App = observer(
   (props: IAppProps): JSX.Element => {
-    const { keyActivityStore, sessionStore } = useMst();
+    const { issueStore, keyActivityStore, sessionStore } = useMst();
     const loggedIn = sessionStore.loggedIn; //if logged in show switch
 
     const updateMipCount = count => {
@@ -66,7 +67,8 @@ export const App = observer(
     };
 
     const onDragEnd = result => {
-      const { destination, source } = result;
+      const { destination, source, draggableId } = result;
+
       if (!result.destination) {
         return;
       }
@@ -76,20 +78,25 @@ export const App = observer(
         return;
       }
 
-      const keyActivityId = result.draggableId;
-      keyActivityStore.updateKeyActivityState(keyActivityId, "position", newPosition + 1);
-      if (destination.droppableId === "weekly-activities") {
-        keyActivityStore.startLoading("weekly-activities");
-        keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", true);
-        keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", false);
-        updateMipCount(-1);
-      } else if (destination.droppableId === "todays-priorities") {
-        keyActivityStore.startLoading("todays-priorities");
-        keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
-        keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", true);
-        updateMipCount(1);
+      if (R.includes("keyActivity", draggableId)) {
+        const keyActivityId = parseInt(R.replace("keyActivity-", "", draggableId));
+        keyActivityStore.updateKeyActivityState(keyActivityId, "position", newPosition + 1);
+        if (destination.droppableId === "weekly-activities") {
+          keyActivityStore.startLoading("weekly-activities");
+          keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", true);
+          keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", false);
+          updateMipCount(-1);
+        } else if (destination.droppableId === "todays-priorities") {
+          keyActivityStore.startLoading("todays-priorities");
+          keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
+          keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", true);
+          updateMipCount(1);
+        }
+        keyActivityStore.updateKeyActivity(keyActivityId);
+      } else if (R.includes("issue", draggableId)) {
+        const issueId = parseInt(R.replace("issue-", "", draggableId));
+        issueStore.updateIssuePosition(issueId, newPosition);
       }
-      keyActivityStore.updateKeyActivity(keyActivityId);
     };
     return (
       <DragDropContext onDragEnd={onDragEnd}>

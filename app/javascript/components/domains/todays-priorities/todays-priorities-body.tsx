@@ -19,9 +19,10 @@ export const TodaysPrioritiesBody = observer(
       } else {
         return todaysPriorities.map((keyActivity, index) => (
           <Draggable
-            draggableId={keyActivity["id"].toString()}
+            draggableId={`keyActivity-${keyActivity.id}`}
             index={index}
             key={keyActivity["id"]}
+            type={"keyActivity"}
           >
             {provided => (
               <KeyActivityContainer
@@ -43,7 +44,7 @@ export const TodaysPrioritiesBody = observer(
 
     return (
       <Container>
-        <Droppable droppableId="todays-priorities">
+        <Droppable droppableId="todays-priorities" type={"keyActivity"}>
           {(provided, snapshot) => (
             <TodaysPriotitiesContainer
               ref={provided.innerRef}

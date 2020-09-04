@@ -20,12 +20,13 @@ interface IIssueEntryProps {
   meeting?: boolean;
   pageEnd?: boolean;
   meetingId?: number | string;
+  dragHandleProps?: any;
 }
 
 export const IssueEntry = observer(
   (props: IIssueEntryProps): JSX.Element => {
     const { issueStore, teamStore } = useMst();
-    const { issue, meeting, pageEnd, meetingId } = props;
+    const { issue, meeting, pageEnd, meetingId, dragHandleProps } = props;
 
     const teams = teamStore.teams;
 
@@ -87,7 +88,7 @@ export const IssueEntry = observer(
     };
 
     return (
-      <Container onMouseEnter={() => setShowShareModal(false)}>
+      <Container onMouseEnter={() => setShowShareModal(false)} {...dragHandleProps}>
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
@@ -250,6 +251,9 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  &:active {
+    background-color: ${props => props.theme.colors.grey20};
   }
 `;
 

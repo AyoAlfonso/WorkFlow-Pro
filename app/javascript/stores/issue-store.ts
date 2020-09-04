@@ -63,6 +63,23 @@ export const IssueStoreModel = types
         return false;
       }
     }),
+    updateIssuePosition: flow(function*(id, newPosition, fromTeamMeeting = false) {
+      let issueObject = self.issues.find(issue => issue.id == id);
+      const newIssueObject = {
+        ...issueObject,
+        position: newPosition,
+      };
+      const response: ApiResponse<any> = yield self.environment.api.updateIssue({
+        ...newIssueObject,
+        fromTeamMeeting,
+      });
+      if (response.ok) {
+        self.issues = response.data;
+        return true;
+      } else {
+        return false;
+      }
+    }),
     destroyIssue: flow(function*(id, fromTeamMeeting = false) {
       const response: ApiResponse<any> = yield self.environment.api.destroyIssue({
         id,

@@ -11,6 +11,7 @@ import { Icon } from "../../shared/icon";
 import { CreateKeyActivityModal } from "./create-key-activity-modal";
 import { KeyActivityEntry } from "./key-activity-entry";
 import { useTranslation } from "react-i18next";
+import { sortByPosition } from "~/utils/sorting";
 
 interface IKeyActivitiesBodyProps {
   showAllKeyActivities: boolean;
@@ -51,16 +52,17 @@ export const KeyActivitiesBody = observer(
           </>
         );
       } else {
-        return weeklyKeyActivities.map((keyActivity, index) =>
+        return sortByPosition(weeklyKeyActivities).map((keyActivity, index) =>
           props.disableDrag ? (
             <KeyActivityContainer key={keyActivity["id"]}>
               <KeyActivityEntry keyActivity={keyActivity} />
             </KeyActivityContainer>
           ) : (
             <Draggable
-              draggableId={keyActivity["id"].toString()}
+              draggableId={`keyActivity-${keyActivity.id}`}
               index={index}
               key={keyActivity["id"]}
+              type={"keyActivity"}
             >
               {provided => (
                 <KeyActivityContainer
@@ -83,7 +85,7 @@ export const KeyActivitiesBody = observer(
 
     const renderOutstandingMasterActivitiesList = (): Array<JSX.Element> => {
       const completedMasterActivitiesPresent = completedMasterActivities.length > 0;
-      return outstandingMasterActivities.map((keyActivity, index) => {
+      return sortByPosition(outstandingMasterActivities).map((keyActivity, index) => {
         const lastElement = index == outstandingMasterActivities.length - 1;
 
         return (
@@ -102,7 +104,7 @@ export const KeyActivitiesBody = observer(
     };
 
     const renderCompletedMasterActivitiesList = (): Array<JSX.Element> => {
-      return completedMasterActivities.map((keyActivity, index) => (
+      return sortByPosition(completedMasterActivities).map((keyActivity, index) => (
         <KeyActivityContainer key={keyActivity["id"]}>
           <KeyActivityEntry keyActivity={keyActivity} />
         </KeyActivityContainer>
@@ -122,7 +124,7 @@ export const KeyActivitiesBody = observer(
           </AddNewKeyActivityPlus>
           <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
-        <Droppable droppableId="weekly-activities">
+        <Droppable droppableId="weekly-activities" type={"keyActivity"}>
           {(provided, snapshot) => (
             <KeyActivitiesContainer
               ref={provided.innerRef}
