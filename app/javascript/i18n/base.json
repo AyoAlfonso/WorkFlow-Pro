@@ -125,7 +125,13 @@
         "title": "Issues"
       },
       "journals": {
-        "title": "Journal"
+        "createMyDay": "Let's create my day",
+        "thoughtChallenge": "I want to check-in",
+        "eveningReflection": "I want to reflect on my day",
+        "title": "Journal",
+        "pynBotName": "PynBot",
+        "pynBotGreeting": "Hey {userName}, what can I help you with?",
+        "confirmQuit": "Are you sure you want to quit?  Your journal entry will be lost"
       },
       "keyActivities": {
         "prioritiesTitle": "Today's Priorities",

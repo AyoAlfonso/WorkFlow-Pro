@@ -6,9 +6,8 @@ import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
 import styled from "styled-components";
 import { Text } from "../../shared/text";
-import { toJS } from "mobx";
 import { Loading } from "../../shared/loading";
-import { FrogSelector } from "./frog-selector";
+import { MIPSelector } from "./mip-selector";
 import { EmotionSelector } from "./emotion-selector";
 import * as humps from "humps";
 
@@ -26,9 +25,10 @@ export const SurveyBot = observer(
     const {
       sessionStore,
       sessionStore: {
-        profile: { currentDailyLog },
+        profile: { currentDailyLog, firstName },
       },
       questionnaireStore,
+      keyActivityStore,
     } = useMst();
 
     useEffect(() => {
@@ -39,7 +39,12 @@ export const SurveyBot = observer(
 
     const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
 
-    if (loading || R.isNil(questionnaireStore.questionnaires) || R.isNil(questionnaireVariant)) {
+    if (
+      loading ||
+      R.isNil(questionnaireStore.questionnaires) ||
+      R.isNil(questionnaireVariant) ||
+      R.isNil(keyActivityStore.todaysPriorities)
+    ) {
       return (
         <LoadingContainer>
           <Loading />
@@ -47,11 +52,32 @@ export const SurveyBot = observer(
       );
     }
 
+    const stringValidator = value => (value ? true : "Write just a little bit!");
+
     const steps = R.map(step => {
-      if (R.hasPath(["metadata", "frogSelector"], step)) {
-        return R.pipe(R.assoc("component", <FrogSelector />), R.dissoc("options"))(step);
+      if (R.hasPath(["metadata", "mipSelector"], step)) {
+        return R.pipe(R.assoc("component", <MIPSelector />), R.dissoc("options"))(step);
       } else if (R.hasPath(["metadata", "emotionSelector"], step)) {
         return R.pipe(R.assoc("component", <EmotionSelector />), R.dissoc("options"))(step);
+      } else if (R.hasPath(["metadata", "username"], step)) {
+        return R.assoc("message", R.replace("{userName}", firstName, step.message))(step);
+      } else if (R.hasPath(["metadata", "pynCount"], step)) {
+        const totalPynCount = currentDailyLog.mipCount;
+        const completedPynCount = totalPynCount - keyActivityStore.todaysPriorities.length;
+        const newMessage = R.pipe(
+          R.replace("{completedMIPCount}", `${completedPynCount}`),
+          R.replace("{totalMIPCount}", `${totalPynCount}`),
+        )(step.message);
+        return R.assoc("message", newMessage)(step);
+      } else if (R.hasPath(["metadata", "mipCheck"], step)) {
+        const mipCheck =
+          `Hey ${firstName}, ` +
+          (keyActivityStore.todaysPriorities.length > 0
+            ? R.path(["metadata", "mipCheck", "hasMips"], step)
+            : R.path(["metadata", "mipCheck", "noMips"], step));
+        return R.assoc("message", R.replace("{mipCheck}", mipCheck, step.message))(step);
+      } else if (R.hasPath(["metadata", "validatorType"], step)) {
+        return R.assoc("validator", stringValidator, step);
       } else {
         return step;
       }
@@ -59,12 +85,12 @@ export const SurveyBot = observer(
 
     return (
       <ChatBot
-        botAvatar={botAvatarPath}
         botDelay={1000}
         headerComponent={<SurveyHeader title={questionnaireVariant.name} />}
         steps={steps}
         width={"100%"}
-        userAvatar={sessionStore.profile.avatarUrl || undefined}
+        hideBotAvatar={true}
+        hideUserAvatar={true}
         contentStyle={{ height: "226px" }}
         // header and footer are 120px total
         // these hard-coded values are required to make the chatbot fit inside the Journal widget :(
