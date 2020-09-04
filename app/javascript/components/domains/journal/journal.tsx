@@ -79,14 +79,14 @@ export const Journal = observer(
             />
             <IconButton
               {...defaultJournalButtonProps}
-              iconName={"LynchPyn-Iconography_Check-in"}
+              iconName={"Check-in"}
               iconColor={"successGreen"}
               text={t("journals.thoughtChallenge")}
               onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.thoughtChallenge)}
             />
             <IconButton
               {...defaultJournalButtonProps}
-              iconName={"Check-in"}
+              iconName={"PM-Check-in"}
               iconColor={"primary40"}
               text={t("journals.eveningReflection")}
               onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.eveningReflection)}

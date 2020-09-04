@@ -129,7 +129,7 @@
       "properties": {
         "order": 161,
         "id": 98,
-        "name": "LynchPyn-Iconography_Check-in",
+        "name": "Check-in",
         "prevSize": 32
       },
       "setIdx": 0,
@@ -1138,7 +1138,7 @@
       "properties": {
         "order": 79,
         "id": 64,
-        "name": "Check-in",
+        "name": "PM-Check-in",
         "prevSize": 32
       },
       "setIdx": 0,

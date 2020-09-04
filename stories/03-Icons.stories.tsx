@@ -213,10 +213,6 @@ export const Icons = () => (
         <TextCenteredDiv>Stats</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Negative-Thoughts"} size={"2em"} />
-        <TextCenteredDiv>Negative-Thoughts</TextCenteredDiv>
-      </CenteredColumnDiv>
-      <CenteredColumnDiv>
         <Icon icon={"Empty-Pockets"} size={"2em"} />
         <TextCenteredDiv>Empty-Pockets</TextCenteredDiv>
       </CenteredColumnDiv>
@@ -319,8 +315,8 @@ export const Icons = () => (
         <TextCenteredDiv>Priority-Urgent</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Priority-Frog"} size={"2em"} iconColor={"frog"} />
-        <TextCenteredDiv>Frog-Priority</TextCenteredDiv>
+        <Icon icon={"Priority-MIP"} size={"2em"} iconColor={"primary100"} />
+        <TextCenteredDiv>Priority-MIP</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"Priority-Empty"} size={"2em"} iconColor={"primary80"} />
@@ -331,8 +327,12 @@ export const Icons = () => (
         <TextCenteredDiv>AM-Check-in</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
-        <Icon icon={"Check-in"} size={"2em"} iconColor={"primary40"} />
+        <Icon icon={"Check-in"} size={"2em"} iconColor={"successGreen"} />
         <TextCenteredDiv>Check-in</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"PM-Check-in"} size={"2em"} iconColor={"primary40"} />
+        <TextCenteredDiv>PM-Check-in</TextCenteredDiv>
       </CenteredColumnDiv>
       <CenteredColumnDiv>
         <Icon icon={"In-Office"} size={"2em"} iconColor={"finePine"} />
@@ -354,22 +354,6 @@ export const Icons = () => (
         <Icon icon={"Add-User-Circle"} size={"2em"} />
         <TextCenteredDiv>Add-User-Circle</TextCenteredDiv>
       </CenteredColumnDiv>
-      <CenteredColumnDiv>
-        <Icon icon={"LynchPyn-Iconography_Check-in"} size={"2em"} />
-        <TextCenteredDiv>LynchPyn-Iconography_Check-in</TextCenteredDiv>
-      </CenteredColumnDiv>
-
-      <CenteredColumnDiv>
-        <Icon icon={"PynBot"} size={"2em"} />
-        <TextCenteredDiv>PynBot</TextCenteredDiv>
-      </CenteredColumnDiv>
-      <CenteredColumnDiv>
-        <Icon icon={"Priority-MIP"} size={"2em"} />
-        <TextCenteredDiv>Priority-MIP</TextCenteredDiv>
-      </CenteredColumnDiv>
-    </RowDiv>
-    <Divider />
-    <RowDiv>
       <CenteredColumnDiv>
         <Icon icon={"Plan"} size={"2em"} />
         <TextCenteredDiv>Plan</TextCenteredDiv>

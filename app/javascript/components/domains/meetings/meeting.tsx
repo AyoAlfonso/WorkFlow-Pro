@@ -179,33 +179,32 @@ export const Meeting = observer(
     return (
       <Container>
         <HeaderContainer>
-          <Text fontSize={"36px"}>{`${R.path(["name"], team)} Meeting`}</Text>
+          <Heading type={"h1"} fontSize={"24px"}>{`${R.path(["name"], team)} Meeting`}</Heading>
           <DateAndButtonContainer>
-            <Heading type={"h3"} fontSize={"32px"} fontWeight={400}>
+            <Heading type={"h3"} fontSize={"18px"} fontWeight={400}>
               {moment().format("dddd, MMMM Do")}
             </Heading>
             {meetingStarted ? <StopMeetingButton /> : <StartMeetingButton />}
           </DateAndButtonContainer>
         </HeaderContainer>
-        <BodyContainer>
-          {meetingStarted ? ( //#TODO: IF YOU ARE NOT THE HOST RENDER JUST THE AGENDA
-            <>
-              <ProgressBarTimerContainer>
-                <StepProgressBar
-                  progressBarProps={{
-                    stepPositions: stepPositions,
-                    percent: calculatedPercentage > 100 ? 100 : calculatedPercentage,
-                  }}
-                  steps={progressBarSteps}
-                  onStepClick={onStepClick}
-                  currentStepIndex={meeting.currentStep}
-                />
-                <Timer secondsElapsed={secondsElapsed} ml={"30px"} />
-              </ProgressBarTimerContainer>
-
-              <MeetingStep meeting={meetingStore.currentMeeting}></MeetingStep>
-            </>
-          ) : (
+        {meetingStarted ? ( //#TODO: IF YOU ARE NOT THE HOST RENDER JUST THE AGENDA
+          <BodyContainer>
+            <ProgressBarTimerContainer>
+              <StepProgressBar
+                progressBarProps={{
+                  stepPositions: stepPositions,
+                  percent: calculatedPercentage > 100 ? 100 : calculatedPercentage,
+                }}
+                steps={progressBarSteps}
+                onStepClick={onStepClick}
+                currentStepIndex={meeting.currentStep}
+              />
+              <Timer secondsElapsed={secondsElapsed} ml={"30px"} />
+            </ProgressBarTimerContainer>
+            <MeetingStep meeting={meetingStore.currentMeeting}></MeetingStep>
+          </BodyContainer>
+        ) : (
+          <BodyContainer>
             <ContentsContainer>
               <AgendaContainer>
                 <AgendaHeaderContainer>
@@ -217,15 +216,15 @@ export const Meeting = observer(
                 <CoreFourOnly />
               </CoreFourWrapper>
             </ContentsContainer>
-          )}
-        </BodyContainer>
+          </BodyContainer>
+        )}
       </Container>
     );
   },
 );
 
 const Container = styled.div`
-  padding: 20px 20px 0 20px;
+  padding-top: 20px;
 `;
 
 const HeaderContainer = styled.div`
@@ -243,10 +242,14 @@ const DateAndButtonContainer = styled.div`
 const ProgressBarTimerContainer = styled.div`
   display: flex;
   align-items: center;
-  width: 100%;
+  padding-left: 16px;
 `;
 
-const BodyContainer = styled.div``;
+const BodyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+`;
 
 const AgendaContainer = styled(HomeContainerBorders)`
   width: 20%;
