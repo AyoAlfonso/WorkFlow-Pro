@@ -1,7 +1,6 @@
 import * as React from "react";
 import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 import styled from "styled-components";
-import { Text } from "~/components/shared/text";
 import { KeyActivitiesContainer } from "~/components/domains/key-activities/key-activities-container";
 import { TodaysPrioritiesContainer } from "~/components/domains/todays-priorities/todays-priorities-container";
 
@@ -15,19 +14,12 @@ export const DailyPlanning = (props: {}): JSX.Element => {
     </PrioritiesContainer>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  height: 420px;
-  overflow-x: auto;
-  overflow-y: hidden;
-`;
-
 const PrioritiesContainer = styled(HomeContainerBorders)`
   width: 80%;
   min-width: 480px;
   margin-right: 20px;
   margin-left: 5px;
+  margin-top: 0px;
 `;
 
 const NonPrioritiesEndContainer = styled(HomeContainerBorders)`
@@ -38,15 +30,7 @@ const NonPrioritiesEndContainer = styled(HomeContainerBorders)`
   margin-right: 5px;
 `;
 
-const NonPrioritiesContainer = styled(NonPrioritiesEndContainer)`
-  margin-right: 20px;
-`;
-
 const PrioritiesHeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
-`;
-
-const TodayPrioritiesHeaderContainer = styled.div`
-  width: 50%;
 `;
