@@ -5,7 +5,8 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def index
     @key_activities = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_position_priority_and_created_at
-    render json: @key_activities
+    render "api/key_activities/index"
+    #render json: @key_activities
   end
 
   def create

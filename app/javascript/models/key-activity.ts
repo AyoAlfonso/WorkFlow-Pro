@@ -1,4 +1,5 @@
 import { types } from "mobx-state-tree";
+import { UserModel } from "~/models/user";
 
 export const KeyActivityModel = types
   .model("KeyActivityModel")
@@ -10,6 +11,7 @@ export const KeyActivityModel = types
     weeklyList: types.maybeNull(types.boolean),
     meetingId: types.maybeNull(types.number),
     position: types.maybeNull(types.number),
+    user: types.maybeNull(types.frozen()),
     todaysPriority: types.maybeNull(types.boolean),
   })
   .views(self => ({}))

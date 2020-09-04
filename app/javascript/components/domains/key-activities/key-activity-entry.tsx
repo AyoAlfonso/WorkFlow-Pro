@@ -19,6 +19,8 @@ export const KeyActivityEntry = observer(
     const { keyActivityStore } = useMst();
     const { colors } = baseTheme;
 
+    console.log("key activity", keyActivity);
+
     const keyActivityRef = useRef(null);
 
     const updatePriority = () => {

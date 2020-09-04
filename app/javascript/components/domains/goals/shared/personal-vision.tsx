@@ -16,7 +16,7 @@ export const PersonalVision = ({ personalVision }: IPersonalVisionProps): JSX.El
 
   return (
     <VisionContainer>
-      <VisionTitle>Personal Vision</VisionTitle>
+      <VisionTitle>Future Self</VisionTitle>
       <StyledContentEditable
         innerRef={personalVisionRef}
         html={personalVision || ""}
