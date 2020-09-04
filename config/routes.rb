@@ -72,9 +72,12 @@ Rails.application.routes.draw do
     post '/quarterly_goals/create_milestones/:id', to: 'quarterly_goals#create_milestones'
 
     #habits
-    resources :habits, only: [:index, :create, :show, :update, :destroy] do
+    resources :habits, only: [:index, :create, :update, :destroy] do
       resources :habit_logs, only: [:update], param: :log_date
     end
+    get '/habits/show_habit/:id', to: 'habits#show_habit'
+    get '/habits/habits_for_personal_planning', to: 'habits#habits_for_personal_planning'
+   
 
     #questionnaires
     resources :questionnaires, only: [:index]

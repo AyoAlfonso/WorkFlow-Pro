@@ -13,6 +13,9 @@ export const HabitModel = types
     currentWeekLogs: types.array(HabitLogModel),
     previousWeekLogs: types.array(HabitLogModel),
     weeklyLogsCompletionDifference: types.maybeNull(types.number),
+    weeklyCompletionPercentage: types.maybeNull(types.number),
+    weeklyDifference: types.maybeNull(types.number),
+    weeklyCompletionFraction: types.maybeNull(types.string),
   })
   .views(self => ({
     get completedCurrentWeekLogs() {

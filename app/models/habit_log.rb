@@ -10,7 +10,12 @@ class HabitLog < ApplicationRecord
     where("log_date <= ?", Date.previous_week_end)
   }
 
+  scope :completed_logs_by_date_range, -> (start_date, end_date) {
+    where("log_date >= ? AND log_date <= ?", start_date, end_date)
+  }
+
   def as_json
     super(except: [:created_at, :updated_at])
   end
+
 end

@@ -191,12 +191,16 @@ export class Api {
     return this.client.get("/habits");
   }
 
+  async getHabitsForPersonalPlanning() {
+    return this.client.get("/habits/habits_for_personal_planning");
+  }
+
   async createHabit(habitData) {
     return this.client.post("/habits", habitData);
   }
 
   async getHabit(id) {
-    return this.client.get(`/habits/${id}`);
+    return this.client.get(`/habits/show_habit/${id}`);
   }
 
   async updateHabit(habitObject) {

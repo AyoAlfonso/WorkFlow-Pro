@@ -5,6 +5,7 @@ class Habit < ApplicationRecord
   scope :owned_by_user, -> (user) { where(user: user) }
   delegate  :complete_current_week_logs,
             :complete_previous_week_logs,
+            :completed_logs_by_date_range,
             to: :habit_logs
 
   def as_json(options = [])
@@ -56,5 +57,28 @@ class Habit < ApplicationRecord
                     previous_week_completion_count * 100 : 
                     ((previous_week_completion_count - current_week_completion_count).to_f / current_week_completion_count.to_f) * 100
     end
+  end
+
+  def weekly_completion_percentage_by_date_range(start_date, end_date)
+    completed_logs_count = get_previous_week_completion(start_date, end_date).count
+    (completed_logs_count.to_f / self.frequency.to_f) * 100
+  end
+
+  def weekly_completion_fraction_by_date_range(start_date, end_date)
+    completed_logs_count = get_previous_week_completion(start_date, end_date).count
+    "#{completed_logs_count}/#{self.frequency}"
+  end
+
+  def weekly_difference_for_the_previous_week
+    beginning_of_last_week = Date.today.prev_week
+    beginning_of_two_weeks_before = beginning_of_last_week.prev_week
+    previous_week_completed_log_percentage = weekly_completion_percentage_by_date_range(beginning_of_last_week, beginning_of_last_week + 6.days)
+    two_weeks_before_completed_log_percentage = weekly_completion_percentage_by_date_range(beginning_of_two_weeks_before, beginning_of_two_weeks_before + 6.days)
+    previous_week_completed_log_percentage - two_weeks_before_completed_log_percentage
+  end
+
+  private
+  def get_previous_week_completion(start_date, end_date)
+    self.completed_logs_by_date_range(start_date, end_date)
   end
 end
