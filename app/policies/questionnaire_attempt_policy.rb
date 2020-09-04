@@ -3,6 +3,10 @@ class QuestionnaireAttemptPolicy < ApplicationPolicy
     true
   end
 
+  def personal_planning?
+    true
+  end
+
   class Scope
     attr_reader :user, :scope
 

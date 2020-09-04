@@ -743,66 +743,153 @@ steps: [
     id: 1,
     options: [],
     metadata: {
-      questionnaire_title: true,
-      message: "Weekly Rating"
+      summary: "what-happened",
+      message: "What happened this week:"
     },
-    trigger: 2,
+    trigger: 2
   },
   {
     id: 2,
-    message: "On a scale of 1-10, how well did I progress towards my goals this week?",
-    trigger: 3,
+    options: [],
+    metadata: {
+      summary: "improvements",
+      message: "Ideas to make my days better:"
+    },
+    trigger: 3
   },
   {
     id: 3,
-    options: [
-      { label: "1", value: 1, trigger: 4 },
-      { label: "2", value: 2, trigger: 4 },
-      { label: "3", value: 3, trigger: 4 },
-      { label: "4", value: 4, trigger: 4 },
-      { label: "5", value: 5, trigger: 4 },
-      { label: "6", value: 6, trigger: 4 },
-      { label: "7", value: 7, trigger: 4 },
-      { label: "8", value: 8, trigger: 4 },
-      { label: "9", value: 9, trigger: 4 },
-      { label: "10", value: 10, trigger: 4 },
-    ],
-  },
-  {
-    id: 4,
     options: [],
     metadata: {
-      questionnaire_title: true,
-      message: "My Biggest Wins"
+      summary: "highest-good",
+      message: "Areas where I spent time that wasn't for my highest good:"
     },
-    trigger: 5,
+    trigger: 4
+  },
+  {
+    id: 4, 
+    options: [],
+    metadata: {
+      summary: "wins",
+      message: "My wins:"
+    },
+    trigger: 5
   },
   {
     id: 5,
-    message: "What went well?  Any wins (big or little) this week? (up to 5)",
-    trigger: 6,
+    message: "What was my biggest win from this week?",
+    trigger: "biggest-wins"
   },
   {
-    id: 6,
+    id: "biggest-wins",
     user: true,
-    placeholder: "Write something...",
-    trigger: 7,
+    trigger: 7
   },
   {
     id: 7,
-    message: "What did I learn from these wins and how can I double down on them?",
-    trigger: 8,
+    options: [],
+    metadata: {
+      summary: "lessons",
+      message: "My lessons learned:"
+    },
+    trigger: 8
   },
   {
     id: 8,
-    user: true,
-    placeholder: "Write something...",
-    trigger: 9,
+    message: "What was my biggest lessons learned from this week?",
+    trigger: "biggest-lesson"
   },
   {
-    id: 9,
+    id: "biggest-lesson",
     user: true,
-    end: true
+    trigger: 10
   },
+  {
+    id: 10,
+    message: "What's my takeaway from the information above and what can I leverage from it going forward?",
+    trigger: "takeaway"
+  },
+  {
+    id: "takeaway",
+    user: true,
+    trigger: 12
+  },
+  {
+    id: 12,
+    message: "Who had the greatest influence on me this week?  How did they influence me?",
+    trigger: "influence"
+  },
+  {
+    id: "influence",
+    user: true,
+    trigger: 14
+  },
+  {
+    id: 14,
+    options: [],
+    metadata: {
+      summary: "gratitude",
+      message: {
+        am: "Morning",
+        pm: "Evening"
+      }
+    },
+    trigger: 15
+  },
+  {
+    id: 15,
+    message: "What am I most grateful for this week?",
+    trigger: "grateful"
+  },
+  {
+    id: "grateful",
+    user: true,
+    trigger: 17
+  },
+  {
+    id: 17,
+    message: "Thoughts and reflections on this week:",
+    trigger: "thoughts-reflections"
+  },
+  {
+    id: "thoughts-reflections",
+    user: true,
+    trigger: 19
+  },
+  {
+    id: 19,
+    message: "What is happening next week that I need to account for in my plans?",
+    trigger: "account-for"
+  },
+  {
+    id: "account-for",
+    user: true,
+    trigger: 21
+  },
+  {
+    id: 21,
+    message: "What could stand in the way?",
+    trigger: "stand"
+  },
+  {
+    id: "stand",
+    user: true,
+    trigger: 23
+  },
+  {
+    id: 23, 
+    message: "How can I overcome this?",
+    trigger: "overcome"
+  },
+  {
+    id: "overcome",
+    user: true,
+    trigger: 25
+  },
+  {
+    id: 25,
+    message: "Great job!  It's time to move onto planning for your week",
+    end: true
+  }
 ]
 )
