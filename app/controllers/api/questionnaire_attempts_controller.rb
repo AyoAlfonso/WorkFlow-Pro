@@ -30,7 +30,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
   end
 
   def personal_planning
-    if [1, 2, 3].include? current_user.time_in_user_timezone.wday # Monday to Wednesday
+    if [1, 2, 3].include? current_user.time_in_user_timezone.wday && current_user.time_in_user_timezone < Time.current.in_time_zone(current_user.get_timezone_name(current_user.timezone)).at_noon # Monday to Wednesday before noon
       @questionnaire_attempts = policy_scope(QuestionnaireAttempt).for_user(current_user).within_last_week(current_user.time_in_user_timezone)
     elsif [0, 5, 6].include? current_user.time_in_user_timezone.wday # Friday to Sunday
       @questionnaire_attempts = policy_scope(QuestionnaireAttempt).for_user(current_user).within_current_week(current_user.time_in_user_timezone)
