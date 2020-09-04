@@ -10,7 +10,7 @@ ur2 = UserRole.where(name: UserRole::ADMIN).first_or_create(name: UserRole::ADMI
 ur3 = UserRole.where(name: UserRole::NORMAL).first_or_create(name: UserRole::NORMAL)
 ur4 = UserRole.where(name: UserRole::LEADERSHIP).first_or_create(name: UserRole::LEADERSHIP)
 
-c2 = Company.where(name: "Lynchpyn").first_or_create(name: 'Lynchpyn', address: 'Toronto', contact_email: 'parham@lynchpyn.com', phone_number: '647-631-1996', rallying_cry: 'LynchPyn Goal!', fiscal_year_start: Date.new(2020,01,01), timezone: "(GMT-05:00) Eastern Time (US & Canada)")
+c2 = Company.where(name: "LynchPyn").first_or_create(name: 'LynchPyn', address: 'Toronto', contact_email: 'parham@lynchpyn.com', phone_number: '647-631-1996', rallying_cry: 'LynchPyn Goal!', fiscal_year_start: Date.new(2020,01,01), timezone: "(GMT-05:00) Eastern Time (US & Canada)")
 CoreFour.where(company: c2).first_or_create(core_1: 'The First Core', core_2: 'The Second Core', core_3: 'The Third Core', core_4: 'The Fourth Core', company_id: c2.id)
 User.where(email: "parham@lynchpyn.com").first_or_create!(first_name: 'Parham', last_name: 'Chinikar', email: 'parham@lynchpyn.com', phone_number: '647-631-1996', password: 'password', password_confirmation: 'password', company_id: c2.id, user_role_id: ur2.id, title: "CPO")
 

@@ -5,7 +5,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def index
     @key_activities = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_position_priority_and_created_at
-    render json: @key_activities
+    render "api/key_activities/index"
   end
 
   def create
@@ -14,36 +14,39 @@ class Api::KeyActivitiesController < Api::ApplicationController
     @key_activity.save!
 
     if params[:meeting_id]
-      render json: team_meeting_activities(params[:meeting_id])
+      @key_activities_to_render = team_meeting_activities(params[:meeting_id])
     else
-      render json: KeyActivity.owned_by_user(current_user).sort_by_priority_and_created_at
+      @key_activities_to_render = KeyActivity.owned_by_user(current_user).sort_by_priority_and_created_at
     end
+    render "api/key_activities/create"
   end
 
   def update
     @key_activity.update!(key_activity_params.merge(completed_at: params[:completed] ? Time.now : nil))
     if params[:from_team_meeting] == "true"
-      render json: team_meeting_activities(@key_activity.meeting_id)
+      @key_activities_to_render = team_meeting_activities(@key_activity.meeting_id)
     else
-      render json: KeyActivity.owned_by_user(current_user).sort_by_position_priority_and_created_at
+      @key_activities_to_render = KeyActivity.owned_by_user(current_user).sort_by_position_priority_and_created_at
     end
+    render "api/key_activities/update"
   end
 
   def destroy
     @key_activity.destroy!
     if params[:from_team_meeting] == "true"
       meeting_id = @key_activity.meeting_id
-      render json: team_meeting_activities(meeting_id)
+      @key_activities_to_render = team_meeting_activities(meeting_id)
     else
-      render json: KeyActivity.owned_by_user(current_user).sort_by_position_priority_and_created_at
+      @key_activities_to_render = KeyActivity.owned_by_user(current_user).sort_by_position_priority_and_created_at
     end
+    render "api/key_activities/destroy"
   end
 
   def created_in_meeting
     meeting = Meeting.find(params[:meeting_id])
     @key_activities = policy_scope(KeyActivity).filter_by_team_meeting(meeting.meeting_template_id, meeting.team_id)
     authorize @key_activities
-    render json: @key_activities
+    render "api/key_activities/created_in_meeting"
   end
 
   private

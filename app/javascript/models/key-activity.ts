@@ -10,6 +10,7 @@ export const KeyActivityModel = types
     weeklyList: types.maybeNull(types.boolean),
     meetingId: types.maybeNull(types.number),
     position: types.maybeNull(types.number),
+    user: types.maybeNull(types.frozen()),
     todaysPriority: types.maybeNull(types.boolean),
     createdAt: types.maybeNull(types.string),
   })
