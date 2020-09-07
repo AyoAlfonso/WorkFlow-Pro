@@ -36,7 +36,5 @@ export const check = (role: string, action: string, data: any): boolean => {
 export const Can = ({ action, data, no, yes }: CanProps): JSX.Element => {
   const { sessionStore } = useMst();
   const { role } = sessionStore.profile;
-  console.log(role, action, data);
-  console.log(check(role, action, data));
   return check(role, action, data) ? yes : no;
 };
