@@ -19,13 +19,14 @@ export const SummaryDisplay = ({
     fontSize: "12px",
     color: "text",
   };
+  const dataForDisplay = summaryData[humps.camelize(variant)];
   return (
     <Container>
       <Text fontSize={"16px"} fontWeight={600}>
         {title}
       </Text>
       <DataContainer>
-        {summaryData[humps.camelize(variant)].map((summaryDataEl, index) => (
+        {(dataForDisplay || []).map((summaryDataEl, index) => (
           <DataRowContainer key={index}>
             <Bullet />
             <TextNoMargin mr={"8px"} {...rowTextProps}>{`${summaryDataEl.day}:`}</TextNoMargin>

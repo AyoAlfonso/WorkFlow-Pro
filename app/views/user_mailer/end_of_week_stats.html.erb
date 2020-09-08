@@ -1,0 +1,7 @@
+<%= simple_format(@message) %>
+
+<% calculate_stats_for_week(@user).each do |stat| %>
+  <div>
+  <%= "#{stat[:statistic_name]}: #{stat[:statistic_number]} / #{stat[:statistic_change]}%" %>
+  </div>
+<% end %>
