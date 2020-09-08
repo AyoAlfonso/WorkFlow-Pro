@@ -292,6 +292,7 @@ const ShareIssueContainer = styled(HomeContainerBorders)<ShareIssueContainerType
   color: black;
   width: 200px;
   margin-left: ${props => props.pageEnd && "-180px"};
+  z-index: 2;
 `;
 
 const ShareIssueText = styled(Text)`
