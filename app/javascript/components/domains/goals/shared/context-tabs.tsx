@@ -284,6 +284,9 @@ const StyledContentEditable = styled(ContentEditable)`
   box-shadow: 0px 3px 6px #f5f5f5;
   padding-left: 16px;
   padding-right: 16px;
+  &:hover {
+    cursor: ${props => (props.editable ? "text" : "default")};
+  }
 `;
 
 const ButtonContainer = styled.div`
