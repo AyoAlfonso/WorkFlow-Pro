@@ -109,4 +109,7 @@ const SelectionCell = styled(HabitsTableDataCell)`
   padding-right: 5px;
   padding-left: 5px;
   text-align: center;
+  &:hover {
+    cursor: pointer;
+  }
 `;

@@ -35,4 +35,7 @@ const Container = styled(HeaderContainer)`
 
 const IconContainer = styled.div`
   padding-right: 10px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
