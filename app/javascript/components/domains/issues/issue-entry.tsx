@@ -129,17 +129,19 @@ export const IssueEntry = observer(
           onBlur={() => issueStore.updateIssue(issue.id, meetingId ? true : false)}
         />
 
-        <AvatarContainer>
-          <Avatar
-            defaultAvatarColor={issue.user.defaultAvatarColor}
-            firstName={issue.user.firstName}
-            lastName={issue.user.lastName}
-            avatarUrl={issue.user.avatarUrl}
-            size={25}
-          />
-        </AvatarContainer>
-
         <ActionContainer>
+          {(meetingId || meeting) && (
+            <AvatarContainer>
+              <Avatar
+                defaultAvatarColor={issue.user.defaultAvatarColor}
+                firstName={issue.user.firstName}
+                lastName={issue.user.lastName}
+                avatarUrl={issue.user.avatarUrl}
+                size={25}
+              />
+            </AvatarContainer>
+          )}
+
           <DeleteButtonContainer
             onClick={() => issueStore.destroyIssue(issue.id, meetingId ? true : false)}
             onMouseEnter={() => setShowShareModal(false)}
@@ -272,14 +274,14 @@ type StyledContentEditableProps = {
 const StyledContentEditable = styled(ContentEditable)<StyledContentEditableProps>`
   padding-top: 5px;
   padding-bottom: 5px;
-  font-size: 14pt;
+  font-size: 16px;
   font-weight: 400;
   line-height: 20px;
   margin-left: 10px;
-  min-width: ${props => (props.meeting ? "115px" : "125px")};
+  min-width: ${props => (props.meeting ? "95px" : "105px")};
   margin-top: auto;
   margin-bottom: auto;
-  width: 50%;
+  width: ${props => (props.meeting ? "35%" : "45%")};
 `;
 
 type ShareIssueContainerType = {
@@ -349,5 +351,5 @@ const CheckboxContainer = props => (
 const AvatarContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
-  margin-left: auto;
+  margin-right: 8px;
 `;

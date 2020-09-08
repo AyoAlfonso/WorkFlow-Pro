@@ -99,11 +99,11 @@ export const QuarterlyGoalModalContent = observer(
                   }
                 }}
               >
-                <Icon icon={"Delete"} size={"25px"} iconColor={"grey80"} />
+                <Icon icon={"Delete"} size={"16px"} iconColor={"grey80"} />
               </DeleteIconContainer>
             )}
             <CloseIconContainer onClick={() => setQuarterlyGoalModalOpen(false)}>
-              <Icon icon={"Close"} size={"25px"} iconColor={"grey80"} />
+              <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
             </CloseIconContainer>
           </AnnualInitiativeActionContainer>
         </HeaderContainer>

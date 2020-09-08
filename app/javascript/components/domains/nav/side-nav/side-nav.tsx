@@ -17,7 +17,7 @@ import { Image } from "rebass";
 const StyledSideNav = styled.div`
   position: fixed; /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
   height: 100%;
-  width: 128px; /* Set the width of the sidebar */
+  width: 96px; /* Set the width of the sidebar */
   z-index: 4; /* Stay on top of everything */
   top: 0em; /* Stay at the top */
   background-color: white; /* White */
@@ -35,7 +35,7 @@ type SideBarElementType = {
 const SideBarElement = styled.div<SideBarElementType>`
   text-align: center;
   align-items: center;
-  margin: ${props => props.margin || "32px"};
+  margin: ${props => props.margin || "16px"};
   margin-top: ${props => props.marginTop || "32px"};
 `;
 

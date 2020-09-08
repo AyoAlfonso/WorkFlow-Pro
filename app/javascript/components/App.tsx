@@ -37,7 +37,7 @@ import { Meeting } from "./domains/meetings/meeting";
 import { PersonalPlanning } from "./domains/meetings/personal-planning";
 
 const Container = styled.div`
-  margin-left: 168px;
+  margin-left: 136px;
   margin-right: 40px;
   margin-bottom: 50px;
   padding-top: 120px;

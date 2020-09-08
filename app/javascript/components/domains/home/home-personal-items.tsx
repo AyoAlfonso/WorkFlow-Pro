@@ -62,15 +62,15 @@ const Container = styled.div`
 `;
 
 const PrioritiesContainer = styled(HomeContainerBorders)`
-  width: 40%;
-  min-width: 480px;
+  width: 39.2%;
+  min-width: 448px;
   margin-right: 20px;
   margin-left: 5px;
 `;
 
 const NonPrioritiesEndContainer = styled(HomeContainerBorders)`
-  width: 20%;
-  min-width: 240px;
+  width: 19.6%;
+  min-width: 224px;
   display: flex;
   flex-direction: column;
   margin-right: 5px;
@@ -78,7 +78,7 @@ const NonPrioritiesEndContainer = styled(HomeContainerBorders)`
 
 const NonPrioritiesContainer = styled(NonPrioritiesEndContainer)`
   margin-right: 20px;
-  min-width: 260px;
+  min-width: 244px;
 `;
 
 const PrioritiesHeaderContainer = styled.div`

@@ -234,7 +234,7 @@ const TeamIssuesWrapper = styled(HomeContainerBorders)`
 
 const FutureTeamMeetingsWrapper = styled(HomeContainerBorders)`
   width: 50%;
-  margin-right: 15px;
+  margin-right: 20px;
 `;
 
 const SubHeaderTextContainer = styled.div`

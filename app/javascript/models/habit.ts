@@ -21,7 +21,7 @@ export const HabitModel = types
     get completedCurrentWeekLogs() {
       return self.currentWeekLogs.filter(log => !!log.id);
     },
-    get recentLogs() {
+    get recentLogsFourDays() {
       return [...R.reverse(self.currentWeekLogs), ...R.reverse(self.previousWeekLogs)].slice(0, 4);
     },
     get recentLogsFiveDays() {

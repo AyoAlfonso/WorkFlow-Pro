@@ -25,8 +25,26 @@ export const HabitsBody = observer(
       habitStore.fetchHabits();
     }, [habitStore.habits]);
 
+    const getWindowDimensions = () => {
+      const { innerWidth: width, innerHeight: height } = window;
+      return {
+        width,
+        height,
+      };
+    };
+
     const [showIndividualHabit, setShowIndividualHabit] = useState<boolean>(false);
     const [selectedHabitId, setSelectedHabitId] = useState<number>(null);
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+    useEffect(() => {
+      const handleResize = () => {
+        setWindowDimensions(getWindowDimensions());
+      };
+
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     const renderHabits = () =>
       habits.map((habit, index) => (
@@ -36,24 +54,20 @@ export const HabitsBody = observer(
             onUpdate={(habitId, logDate) => habitStore.updateHabitLog(habitId, logDate)}
             setShowIndividualHabit={setShowIndividualHabit}
             setSelectedHabitId={setSelectedHabitId}
+            showFourDays={!(windowDimensions.width > 1500)}
           />
         </HabitsTableRow>
       ));
-    // const dayNames = lastFourDays.map((day, index) => (
-    //   <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"12%"}>
-    //     {day.format("ddd")}
-    //   </HabitsTableHeaderCell>
-    // ));
-    // const dayDates = lastFourDays.map((day, index) => (
-    //   <HabitsTableHeaderCell key={index}>{day.format("DD")}</HabitsTableHeaderCell>
-    // ));
-    const dayNames = lastFiveDays.map((day, index) => (
+
+    const daysToRender = windowDimensions.width > 1500 ? lastFiveDays : lastFourDays;
+
+    const dayNames = daysToRender.map((day, index) => (
       <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"12%"}>
         {day.format("ddd")}
       </HabitsTableHeaderCell>
     ));
 
-    const dayDates = lastFiveDays.map((day, index) => (
+    const dayDates = daysToRender.map((day, index) => (
       <HabitsTableHeaderCell key={index}>{day.format("DD")}</HabitsTableHeaderCell>
     ));
 
@@ -87,7 +101,6 @@ export const HabitsBody = observer(
 
 const Container = styled.div`
   padding: 8px;
-  overflow-y: auto;
   margin-bottom: 8px;
 `;
 

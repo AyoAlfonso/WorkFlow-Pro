@@ -83,7 +83,7 @@ const AddNewIssuePlus = styled.div`
 
 const AddNewIssueText = styled.p`
   ${color}
-  font-size: 14pt;
+  font-size: 16px;
   margin-left: 21px;
   color: ${props => props.theme.colors.grey80};
   line-height: 20pt;

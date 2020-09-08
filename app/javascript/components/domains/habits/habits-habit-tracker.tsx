@@ -13,6 +13,7 @@ interface IHabitsHabitTrackerProps {
   onUpdate: any;
   setShowIndividualHabit: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedHabitId: React.Dispatch<React.SetStateAction<number>>;
+  showFourDays: boolean;
 }
 
 export const HabitsHabitTracker = observer(
@@ -21,9 +22,12 @@ export const HabitsHabitTracker = observer(
     onUpdate,
     setShowIndividualHabit,
     setSelectedHabitId,
+    showFourDays,
   }: IHabitsHabitTrackerProps): JSX.Element => {
+    const habitsToRender = showFourDays ? habit.recentLogsFourDays : habit.recentLogsFiveDays;
+
     const renderHabitLogs = () =>
-      habit.recentLogsFiveDays.map(log => (
+      habitsToRender.map(log => (
         <SelectionCell
           key={`${habit.id}-${log.logDate}`}
           onClick={() => {
