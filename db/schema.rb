@@ -12,7 +12,6 @@
 
 ActiveRecord::Schema.define(version: 2020_09_04_210954) do
 
-  # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "action_text_rich_texts", force: :cascade do |t|
@@ -322,6 +321,7 @@ ActiveRecord::Schema.define(version: 2020_09_04_210954) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "link_embed"
     t.string "section_name"
+    t.string "override_key"
     t.index ["meeting_template_id", "order_index"], name: "index_steps_on_meeting_template_id_and_order_index"
     t.index ["meeting_template_id"], name: "index_steps_on_meeting_template_id"
     t.index ["order_index"], name: "index_steps_on_order_index"
@@ -343,6 +343,7 @@ ActiveRecord::Schema.define(version: 2020_09_04_210954) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "default_avatar_color"
+    t.json "settings", default: {}
     t.index ["company_id"], name: "index_teams_on_company_id"
   end
 

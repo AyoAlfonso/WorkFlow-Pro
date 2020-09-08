@@ -48,7 +48,7 @@ export const Teams = observer(
           </LeftAlignedTableContainer>,
           <LeftAlignedTableContainer>
             {users
-              .filter(user => R.contains(user.id, team.teamLeadIds))
+              .filter(user => team.isALead(user))
               .map(user => (user ? <UserCard key={user.id} {...user} /> : <></>))}
           </LeftAlignedTableContainer>,
           <Status key={`team-${team.id}-active`} status={team.active ? "active" : "inactive"} />,

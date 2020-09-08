@@ -33,8 +33,8 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
   }
 
   const currentTeam = teams.find(team => team.id === parseInt(team_id));
-  const teamLeads = users.filter(user => R.contains(user.id, currentTeam.teamLeadIds));
-  const teamMembers = users.filter(user => R.contains(user.id, currentTeam.nonLeadMemberIds));
+  const teamLeads = users.filter(user => currentTeam.isALead(user));
+  const teamMembers = users.filter(user => currentTeam.isANonLead(user));
 
   const saveScores = () => {
     const averageScore = (

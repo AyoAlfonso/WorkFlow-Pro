@@ -21,7 +21,6 @@ export const check = (role: string, action: string, data: any): boolean => {
   if (staticPermissions && staticPermissions.includes(action)) {
     return true;
   }
-
   const dynamicPermissions = permissions.dynamic;
   if (dynamicPermissions) {
     const permissionCondition = dynamicPermissions[action];
@@ -37,5 +36,7 @@ export const check = (role: string, action: string, data: any): boolean => {
 export const Can = ({ action, data, no, yes }: CanProps): JSX.Element => {
   const { sessionStore } = useMst();
   const { role } = sessionStore.profile;
+  console.log(role, action, data);
+  console.log(check(role, action, data));
   return check(role, action, data) ? yes : no;
 };

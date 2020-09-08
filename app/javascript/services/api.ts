@@ -249,6 +249,10 @@ export class Api {
     return this.client.get(`/teams/${id}`);
   }
 
+  async updateTeam(formData) {
+    return this.client.patch(`/teams/${formData.id}`, formData);
+  }
+
   async getMeetingTemplates() {
     return this.client.get(`/meeting_templates`);
   }
