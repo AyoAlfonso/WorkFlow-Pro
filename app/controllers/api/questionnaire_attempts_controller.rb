@@ -37,7 +37,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
     elsif [0, 5, 6].include? current_user.time_in_user_timezone.wday # Friday to Sunday
       @questionnaire_attempts = policy_scope(QuestionnaireAttempt).for_user(current_user).within_current_week(current_user.time_in_user_timezone)
     else
-      render json: { error: "You can't do your Weekly Personal Planning at this time", status: 500 }
+      render json: { error: "You can't do your Weekly Personal Planning at this time", status: 412 }
     end
     authorize @questionnaire_attempts
 
