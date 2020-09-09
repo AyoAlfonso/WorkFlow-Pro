@@ -19,4 +19,9 @@ class Issue < ApplicationRecord
   def self.sort_by_position_and_priority_and_created_at_and_completed_at
     self.sort_by_position.sort_by_priority.sort_by_created_date.sort_by_completed_date
   end
+
+  def self.owned_by_users_team_members(user)
+    team_member_ids = TeamUserEnablement.where(team_id: user.team_ids).pluck(:user_id)
+    self.where(user_id: team_member_ids)
+  end
 end

@@ -258,11 +258,11 @@ const Container = styled(HomeContainerBorders)`
 const Wrapper = styled.div`
   background-color: white;
   padding-top: 40px;
-  margin-left: 168px;
+  margin-left: 136px;
   margin-top: -20px;
   height: 90px;
   position: fixed;
-  width: calc(100% - 208px);
+  width: calc(100% - 176px);
   z-index: 3;
 `;
 

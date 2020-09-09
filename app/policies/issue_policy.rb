@@ -15,11 +15,13 @@ class IssuePolicy < ApplicationPolicy
   end
 
   def update?
-    @issue.user == @user
+    team_ids = @user.team_user_enablements.pluck(:team_id)
+    @issue.user == @user || (team_ids & @issue.user.team_ids).length > 0
   end
 
   def destroy?
-    @issue.user == @user
+    team_ids = @user.team_user_enablements.pluck(:team_id)
+    @issue.user == @user || (team_ids & @issue.user.team_ids).length > 0
   end
 
   def issues_for_meeting?
@@ -39,7 +41,7 @@ class IssuePolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.created_by_user(@user)
+      scope.owned_by_users_team_members(@user)
     end
   end
 end

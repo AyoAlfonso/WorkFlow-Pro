@@ -15,7 +15,6 @@ import { useTranslation } from "react-i18next";
 
 export const TeamKeyActivities = observer(
   (props: {}): JSX.Element => {
-    const [showAllKeyActivities, setShowAllKeyActivities] = useState<boolean>(false);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -32,31 +31,10 @@ export const TeamKeyActivities = observer(
       return <Loading />;
     }
 
-    const weeklyKeyActivities = keyActivityStore.weeklyKeyActivities;
-    const masterKeyActivities = keyActivityStore.masterKeyActivities;
+    const masterKeyActivities = keyActivityStore.keyActivities;
 
     const outstandingMasterActivities = masterKeyActivities.filter(ka => !ka.completedAt);
     const completedMasterActivities = masterKeyActivities.filter(ka => ka.completedAt);
-
-    const renderKeyActivitiesList = (): any => {
-      if (showAllKeyActivities) {
-        return (
-          <>
-            {renderOutstandingMasterActivitiesList()}
-            {renderCompletedMasterActivitiesList()}
-          </>
-        );
-      } else {
-        return weeklyKeyActivities.map(keyActivity => (
-          <KeyActivityContainer key={keyActivity["id"]}>
-            <KeyActivityEntry
-              keyActivity={keyActivity}
-              meetingId={meetingStore.currentMeeting.id}
-            />
-          </KeyActivityContainer>
-        ));
-      }
-    };
 
     const renderOutstandingMasterActivitiesList = (): Array<JSX.Element> => {
       const completedMasterActivitiesPresent = completedMasterActivities.length > 0;
@@ -104,18 +82,17 @@ export const TeamKeyActivities = observer(
             </AddNewKeyActivityPlus>
             <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
           </AddNewKeyActivityContainer>
-          <KeyActivitiesContainer>{renderKeyActivitiesList()}</KeyActivitiesContainer>
+          <KeyActivitiesContainer>
+            {renderOutstandingMasterActivitiesList()}
+            {renderCompletedMasterActivitiesList()}
+          </KeyActivitiesContainer>
         </KeyActivityBodyContainer>
       );
     };
 
     return (
       <Container>
-        <KeyActivitiesHeader
-          showAllKeyActivities={showAllKeyActivities}
-          setShowAllKeyActivities={setShowAllKeyActivities}
-          title={"Team's Pyns"}
-        />
+        <KeyActivitiesHeader hideFilter={true} title={"Team's Pyns"} />
         {renderKeyActivityBody()}
       </Container>
     );
@@ -142,7 +119,7 @@ const AddNewKeyActivityPlus = styled.div`
 
 const AddNewKeyActivityText = styled.p`
   ${color}
-  font-size: 14pt;
+  font-size: 16px;
   margin-left: 21px;
   color: ${props => props.theme.colors.grey80};
   line-height: 20pt;
@@ -170,7 +147,6 @@ const KeyActivitiesContainer = styled.div`
 
 const KeyActivityContainer = styled.div<KeyActivityContainerType>`
   border-bottom: ${props => props.borderBottom};
-  margin-right: ${props => (props.borderBottom ? "8px" : "")};
 `;
 
 type KeyActivityContainerType = {

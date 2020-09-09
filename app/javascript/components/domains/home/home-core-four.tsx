@@ -21,37 +21,45 @@ export const CoreFourValues = observer(
             <CoreFourHeaderText fontSize={2} color={"primary100"}>
               {t("core.core1")}
             </CoreFourHeaderText>
-            <div
-              className="trix-content"
-              dangerouslySetInnerHTML={{ __html: company.coreFour.core1Content }}
-            ></div>
+            <CoreFourBodyTextContainer>
+              <div
+                className="trix-content"
+                dangerouslySetInnerHTML={{ __html: company.coreFour.core1Content }}
+              ></div>
+            </CoreFourBodyTextContainer>
           </Box>
           <Box width={1 / 4} sx={{ padding: 16 }}>
             <CoreFourHeaderText fontSize={2} color={"primary100"}>
               {t("core.core2")}
             </CoreFourHeaderText>
-            <div
-              className="trix-content"
-              dangerouslySetInnerHTML={{ __html: company.coreFour.core2Content }}
-            ></div>
+            <CoreFourBodyTextContainer>
+              <div
+                className="trix-content"
+                dangerouslySetInnerHTML={{ __html: company.coreFour.core2Content }}
+              ></div>
+            </CoreFourBodyTextContainer>
           </Box>
           <Box width={1 / 4} sx={{ padding: 16 }}>
             <CoreFourHeaderText fontSize={2} color={"primary100"}>
               {t("core.core3")}
             </CoreFourHeaderText>
-            <div
-              className="trix-content"
-              dangerouslySetInnerHTML={{ __html: company.coreFour.core3Content }}
-            ></div>
+            <CoreFourBodyTextContainer>
+              <div
+                className="trix-content"
+                dangerouslySetInnerHTML={{ __html: company.coreFour.core3Content }}
+              ></div>
+            </CoreFourBodyTextContainer>
           </Box>
           <Box width={1 / 4} sx={{ padding: 16 }}>
             <CoreFourHeaderText fontSize={2} color={"primary100"}>
               {t("core.core4")}
             </CoreFourHeaderText>
-            <div
-              className="trix-content"
-              dangerouslySetInnerHTML={{ __html: company.coreFour.core4Content }}
-            ></div>
+            <CoreFourBodyTextContainer>
+              <div
+                className="trix-content"
+                dangerouslySetInnerHTML={{ __html: company.coreFour.core4Content }}
+              ></div>
+            </CoreFourBodyTextContainer>
           </Box>
         </Flex>
       </ValuesContainer>
@@ -69,6 +77,10 @@ const ValuesContainer = styled(HomeContainerBorders)``;
 
 const CoreFourHeaderText = styled(Text)`
   margin-top: 0;
+`;
+
+const CoreFourBodyTextContainer = styled.div`
+  font-size: 16px;
 `;
 
 export const HomeCoreFour = (): JSX.Element => (

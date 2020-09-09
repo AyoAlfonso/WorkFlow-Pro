@@ -46,10 +46,12 @@ const BodyContainer = styled.div`
 
 const TeamMeetingButton = styled(Button)`
   display: flex;
-  width: 220px;
+  width: 190px;
   margin-left: auto;
   margin-top: auto;
   margin-bottom: auto;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 
 const TeamMeetingText = styled(Text)`

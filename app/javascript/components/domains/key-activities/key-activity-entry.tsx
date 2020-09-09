@@ -19,7 +19,6 @@ export const KeyActivityEntry = observer(
   ({ keyActivity, dragHandleProps, meetingId }: IKeyActivityEntryProps): JSX.Element => {
     const { keyActivityStore } = useMst();
     const { colors } = baseTheme;
-
     const keyActivityRef = useRef(null);
 
     const updatePriority = () => {
@@ -96,23 +95,27 @@ export const KeyActivityEntry = observer(
           }
         />
 
-        <AvatarContainer>
-          <Avatar
-            defaultAvatarColor={keyActivity.user.defaultAvatarColor}
-            firstName={keyActivity.user.firstName}
-            lastName={keyActivity.user.lastName}
-            avatarUrl={keyActivity.user.avatarUrl}
-            size={25}
-          />
-        </AvatarContainer>
+        <ActionContainer>
+          {meetingId && (
+            <AvatarContainer>
+              <Avatar
+                defaultAvatarColor={keyActivity.user.defaultAvatarColor}
+                firstName={keyActivity.user.firstName}
+                lastName={keyActivity.user.lastName}
+                avatarUrl={keyActivity.user.avatarUrl}
+                size={25}
+              />
+            </AvatarContainer>
+          )}
 
-        <DeleteButtonContainer
-          onClick={() =>
-            keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
-          }
-        >
-          <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
-        </DeleteButtonContainer>
+          <DeleteButtonContainer
+            onClick={() =>
+              keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
+            }
+          >
+            <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
+          </DeleteButtonContainer>
+        </ActionContainer>
       </Container>
     );
   },
@@ -135,7 +138,6 @@ const Handle = styled.div`
 `;
 
 const DeleteButtonContainer = styled.div`
-  margin-left: auto;
   margin-top: auto;
   margin-bottom: auto;
   color: ${props => props.theme.colors.grey60};
@@ -177,12 +179,12 @@ const KeyActivityPriorityContainer = styled.div`
 const StyledContentEditable = styled(ContentEditable)`
   padding-top: 5px;
   padding-bottom: 5px;
-  font-size: 14pt;
+  font-size: 16px;
   font-weight: 400;
   line-height: 20px;
   margin-left: 10px;
-  min-width: 125px;
-  width: 55%;
+  min-width: 105px;
+  width: 50%;
   margin-top: auto;
   margin-bottom: auto;
 `;
@@ -203,5 +205,11 @@ const CheckboxContainer = props => (
 const AvatarContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
+  margin-left: 4px;
+  margin-right: 4px;
+`;
+
+const ActionContainer = styled.div`
+  display: flex;
   margin-left: auto;
 `;

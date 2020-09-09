@@ -28,4 +28,9 @@ class KeyActivity < ApplicationRecord
     meeting_ids = Meeting.where(meeting_template_id: meeting_template_id, team_id: team_id).pluck(:id)
     self.where(meeting_id: meeting_ids)
   end
+
+  def self.owned_by_users_team_members(user)
+    team_member_ids = TeamUserEnablement.where(team_id: user.team_ids).pluck(:user_id)
+    self.where(user_id: team_member_ids)
+  end
 end

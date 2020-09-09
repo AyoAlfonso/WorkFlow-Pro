@@ -4,33 +4,35 @@ import { space, color } from "styled-system";
 //import Icon from "../../shared/icon";
 
 interface KeyActivitiesHeaderProps {
-  showAllKeyActivities: boolean;
-  setShowAllKeyActivities: React.Dispatch<React.SetStateAction<boolean>>;
+  hideFilter?: boolean;
+  showAllKeyActivities?: boolean;
+  setShowAllKeyActivities?: React.Dispatch<React.SetStateAction<boolean>>;
   title?: string;
 }
 
 export const KeyActivitiesHeader = (props: KeyActivitiesHeaderProps): JSX.Element => {
-  const { showAllKeyActivities, setShowAllKeyActivities, title } = props;
+  const { showAllKeyActivities, setShowAllKeyActivities, title, hideFilter } = props;
 
   return (
     <Container>
       <KeyActivitiesText> {title || "Pyns"} </KeyActivitiesText>
-      <FilterContainer>
-        <FilterOptions
-          onClick={() => setShowAllKeyActivities(false)}
-          mr={"15px"}
-          color={!showAllKeyActivities ? "primary100" : "grey40"}
-        >
-          Week
-        </FilterOptions>
-        <FilterOptions
-          onClick={() => setShowAllKeyActivities(true)}
-          color={showAllKeyActivities ? "primary100" : "grey40"}
-        >
-          Master
-        </FilterOptions>
+      {!hideFilter && (
+        <FilterContainer>
+          <FilterOptions
+            onClick={() => setShowAllKeyActivities(false)}
+            mr={"15px"}
+            color={!showAllKeyActivities ? "primary100" : "grey40"}
+          >
+            Week
+          </FilterOptions>
+          <FilterOptions
+            onClick={() => setShowAllKeyActivities(true)}
+            color={showAllKeyActivities ? "primary100" : "grey40"}
+          >
+            Master
+          </FilterOptions>
 
-        {/* 
+          {/* 
           COMMENT FROM PARHAM JUNE 19 2020: WE MIGHT NOT NEED THIS IF WE CAN AUTOSORT KeyActivities WHENEVER THEY ARE BEING ADDED
 
           <SortingChevronContainer>
@@ -41,7 +43,8 @@ export const KeyActivitiesHeader = (props: KeyActivitiesHeaderProps): JSX.Elemen
             <Icon icon={"Chevron-Down"} size={10} color="grey40" />
           </ChevronDownContainer>
         </SortingChevronContainer> */}
-      </FilterContainer>
+        </FilterContainer>
+      )}
     </Container>
   );
 };
