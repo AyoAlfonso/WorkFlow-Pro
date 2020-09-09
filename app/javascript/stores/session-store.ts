@@ -97,6 +97,25 @@ export const SessionStoreModel = types
       }
       self.loading = false;
     }),
+    updatePassword: flow(function*(fieldsAndValues) {
+      self.loading = true;
+      try {
+        const response = yield self.environment.api.updateUser(
+          Object.assign({ user: fieldsAndValues }, { id: self.profile.id }),
+        );
+
+        if (response.ok) {
+          self.loggedIn = false;
+          showToast(
+            "Password has been changed.  Please enter it again.",
+            ToastMessageConstants.SUCCESS,
+          );
+        }
+      } catch {
+        // error messaging handled by API monitor
+      }
+      self.loading = false;
+    }),
   }))
   .actions(self => ({
     login: flow(function*(email, password) {

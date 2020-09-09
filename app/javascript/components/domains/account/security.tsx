@@ -23,7 +23,7 @@ export const Security = (): JSX.Element => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const changePassword = () =>
-    sessionStore.updateUser({
+    sessionStore.updatePassword({
       password,
       passwordConfirmation,
     });
@@ -50,6 +50,7 @@ export const Security = (): JSX.Element => {
             onChange={e => setPasswordConfirmation(e.target.value)}
             value={passwordConfirmation}
           />
+          <Text fontSize={1}>{t("profile.securityForm.warningText")}</Text>
           <SaveButtonContainer>
             <Button
               small
