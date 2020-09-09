@@ -20,7 +20,11 @@ class MeetingPolicy < ApplicationPolicy
   end
 
   def create?
-    @user.company_admin?
+    if (meeting.meeting_type == "team_weekly")
+      @user.company_admin?
+    else
+      true
+    end
   end
 
   def update?

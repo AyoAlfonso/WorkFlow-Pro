@@ -15,6 +15,9 @@ import { Text } from "../../shared/text";
 import { HomeContainerBorders } from "../home/shared-components";
 import { CreateIssueModal } from "../issues/create-issue-modal";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
+import { nowInSeconds, noonTodayInSeconds } from "~/utils/date-time";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 import MeetingTypes from "~/constants/meeting-types";
 
@@ -25,6 +28,7 @@ export const HeaderBar = observer(
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
     const [showAccountActions, setShowAccountActions] = useState<boolean>(false);
+    const [withinTimeRange, setWithinTimeRange] = useState<boolean>(false);
 
     const { sessionStore, companyStore, meetingStore } = useMst();
     const dropdownRef = useRef(null);
@@ -32,6 +36,24 @@ export const HeaderBar = observer(
     const accountActionRef = useRef(null);
 
     const history = useHistory();
+
+    const isWithinPermittedTimeRange = () => {
+      const dayOfWeek = new Date().getDay();
+      if ([0, 1, 2, 5, 6].includes(dayOfWeek)) {
+        // Sunday, Monday, Tuesday, Friday, Saturday
+        return true;
+      } else if (dayOfWeek === 3 && nowInSeconds() < noonTodayInSeconds()) {
+        // Wednesday before noon
+        return true;
+      } else {
+        // Wednesday after noon, Thursday
+        return false;
+      }
+    };
+
+    useEffect(() => {
+      setWithinTimeRange(isWithinPermittedTimeRange());
+    }, []);
 
     useEffect(() => {
       const handleClickOutside = event => {
@@ -106,26 +128,32 @@ export const HeaderBar = observer(
         <DropdownContainer width={"230px"} height={"50px"}>
           <SelectionContainer
             paddingBottom={"10px"}
+            disabled={!withinTimeRange}
             onClick={() => {
               //create meeting
               //psuh to meeting path if successful
+              if (withinTimeRange) {
+                const meetingTemplatePersonal = meetingStore.meetingTemplates.find(
+                  mt => mt.meetingType === MeetingTypes.PERSONAL_WEEKLY,
+                );
 
-              const meetingTemplatePersonal = meetingStore.meetingTemplates.find(
-                mt => mt.meetingType === MeetingTypes.PERSONAL_WEEKLY,
-              );
-
-              if (meetingTemplatePersonal) {
-                meetingStore
-                  .createPersonalMeeting({
-                    hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
-                    currentStep: 0,
-                    meetingTemplateId: meetingTemplatePersonal.id,
-                  })
-                  .then(() => {
-                    if (meetingStore.currentPersonalPlanning) {
-                      history.push(`/personal_planning/${meetingStore.currentPersonalPlanning.id}`);
-                    }
-                  });
+                if (meetingTemplatePersonal) {
+                  meetingStore
+                    .createPersonalMeeting({
+                      hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
+                      currentStep: 0,
+                      meetingTemplateId: meetingTemplatePersonal.id,
+                    })
+                    .then(() => {
+                      if (meetingStore.currentPersonalPlanning) {
+                        history.push(
+                          `/personal_planning/${meetingStore.currentPersonalPlanning.id}`,
+                        );
+                      }
+                    });
+                }
+              } else {
+                showToast("Weekly Planning unavailable", ToastMessageConstants.ERROR);
               }
             }}
           >
@@ -181,6 +209,8 @@ export const HeaderBar = observer(
                     setOpenLynchPynDropdown(!openLynchPynDropdown);
                     setOpenCreateDropdown(false);
                   }}
+                  rotate={openLynchPynDropdown}
+                  rotation={60}
                 >
                   {renderHeaderIcon("Plan")}
                 </RoundButton>
@@ -306,15 +336,17 @@ const SelectionIcon = styled(Icon)`
 
 type SelectionContainerType = {
   paddingBottom?: string;
+  disabled?: boolean;
 };
 
 const SelectionContainer = styled.div<SelectionContainerType>`
   ${color}
   display: flex;
-  color: white;
   padding-top: 10px;
   padding-bottom: ${props => props.paddingBottom || "5px"};
   padding-left: 15px;
+
+  color: ${props => (props.disabled ? props.theme.colors.grey40 : "white")};
   &:hover {
     cursor: pointer;
     background-color: white;
@@ -322,11 +354,11 @@ const SelectionContainer = styled.div<SelectionContainerType>`
   }
 
   &:hover ${SelectionText} {
-    color: ${props => props.theme.colors.primary100};
+    color: ${props => (props.disabled ? props.theme.colors.grey40 : props.theme.colors.primary100)};
   }
 
   &:hover ${SelectionIcon} {
-    color: ${props => props.theme.colors.primary100};
+    color: ${props => (props.disabled ? props.theme.colors.grey40 : props.theme.colors.primary100)};
   }
 `;
 

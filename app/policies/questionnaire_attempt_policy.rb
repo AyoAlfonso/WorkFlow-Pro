@@ -16,7 +16,7 @@ class QuestionnaireAttemptPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.all
+      scope.for_user(@user)
     end
   end
 end
