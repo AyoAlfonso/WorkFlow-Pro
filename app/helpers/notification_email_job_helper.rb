@@ -12,7 +12,7 @@ module NotificationEmailJobHelper
       user: @user,
       subject: notification_type,
       message: "Hi #{@user&.first_name}, \n Here is your weekly report"
-    ).notification_email.deliver_later
+    ).end_of_week_stats.deliver_later
   end
 
   def send_sync_meeting_email(user, notification_type)
