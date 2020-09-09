@@ -23,7 +23,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def update
     @key_activity.update!(key_activity_params.merge(completed_at: params[:completed] ? Time.now : nil))
-    if params[:from_team_meeting] == "true"
+    if params[:from_team_meeting] == true
       @key_activities_to_render = team_meeting_activities(@key_activity.meeting_id)
     else
       @key_activities_to_render = KeyActivity.owned_by_user(current_user).sort_by_position_priority_and_created_at
@@ -44,7 +44,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def created_in_meeting
     meeting = Meeting.find(params[:meeting_id])
-    @key_activities = policy_scope(KeyActivity).filter_by_team_meeting(meeting.meeting_template_id, meeting.team_id)
+    @key_activities = team_meeting_activities(meeting.id)
     authorize @key_activities
     render "api/key_activities/created_in_meeting"
   end

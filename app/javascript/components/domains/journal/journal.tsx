@@ -111,7 +111,7 @@ const ButtonContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   margin: auto;
-  padding: 15px;
+  padding: 16px;
   width: 90%;
 `;
 
@@ -150,7 +150,7 @@ const SpeechBubble = styled.div`
   line-height: 1em;
   max-height: 2em;
   overflow: hidden;
-  padding: 15px;
+  padding: 16px;
   text-align: center;
   text-overflow: ellipsis;
   width: 70%;

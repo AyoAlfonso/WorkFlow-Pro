@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
 import { Loading } from "~/components/shared/loading";
 import { Heading } from "~/components/shared/heading";
+import styled from "styled-components";
 
 export const StrategicPlan = observer(
   (): JSX.Element => {
@@ -13,9 +14,9 @@ export const StrategicPlan = observer(
       <div>
         {company ? (
           <>
-            <Heading type={"h1"} color={"black"}>
+            <HeaderText type={"h1"} color={"black"}>
               The {company.name} Plan
-            </Heading>
+            </HeaderText>
             <div
               className="trix-content"
               dangerouslySetInnerHTML={{ __html: company.strategicPlanContent }}
@@ -28,3 +29,9 @@ export const StrategicPlan = observer(
     );
   },
 );
+
+const HeaderText = styled.p`
+  font-size: 24px;
+  font-weight: 600;
+  font-family: Exo;
+`;

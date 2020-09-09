@@ -131,6 +131,7 @@ export class Api {
   }
 
   async destroyKeyActivity(keyActivityObject) {
+    console.log("key activity object", keyActivityObject);
     return this.client.delete(`/key_activities/${keyActivityObject.id}`, keyActivityObject);
   }
 

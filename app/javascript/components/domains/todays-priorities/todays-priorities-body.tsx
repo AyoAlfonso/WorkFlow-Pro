@@ -62,7 +62,6 @@ export const TodaysPrioritiesBody = observer(
 
 const Container = styled.div`
   ${color}
-  padding: 0px 0px 6px 10px;
 `;
 
 const TodaysPriotitiesContainer = styled.div<TodaysPriotitiesContainerType>`

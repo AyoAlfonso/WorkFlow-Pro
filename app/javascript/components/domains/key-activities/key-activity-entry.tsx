@@ -205,7 +205,8 @@ const CheckboxContainer = props => (
 const AvatarContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
-  margin-right: 8px;
+  margin-left: 4px;
+  margin-right: 4px;
 `;
 
 const ActionContainer = styled.div`

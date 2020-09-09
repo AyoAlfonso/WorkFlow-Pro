@@ -22,7 +22,7 @@ class Api::IssuesController < Api::ApplicationController
 
   def update
     @issue.update(issue_params.merge(completed_at: params[:completed] ? Time.now : nil))
-    if params[:from_team_meeting] == "true"
+    if params[:from_team_meeting] == true
       @issues_to_render = team_meeting_issues(@issue.team_id)
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at

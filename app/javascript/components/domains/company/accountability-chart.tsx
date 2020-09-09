@@ -4,6 +4,7 @@ import { useMst } from "../../../setup/root";
 import { useTranslation } from "react-i18next";
 import { Loading } from "~/components/shared/loading";
 import { Heading } from "~/components/shared/heading";
+import styled from "styled-components";
 
 export const AccountabilityChart = observer(
   (): JSX.Element => {
@@ -15,9 +16,9 @@ export const AccountabilityChart = observer(
       <div>
         {company ? (
           <>
-            <Heading type={"h1"} color={"black"}>
+            <HeaderText type={"h1"} color={"black"}>
               {t("company.accountabilityChart")}
-            </Heading>
+            </HeaderText>
             <div
               className="trix-content"
               dangerouslySetInnerHTML={{ __html: company.accountabilityChartContent }}
@@ -30,3 +31,9 @@ export const AccountabilityChart = observer(
     );
   },
 );
+
+const HeaderText = styled.p`
+  font-size: 24px;
+  font-weight: 600;
+  font-family: Exo;
+`;
