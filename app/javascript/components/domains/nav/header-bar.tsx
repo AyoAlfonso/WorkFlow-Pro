@@ -20,6 +20,7 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 
 import MeetingTypes from "~/constants/meeting-types";
+import { InviteUserModal } from "~/components/shared/invite-user-modal";
 
 export const HeaderBar = observer(
   (): JSX.Element => {
@@ -29,6 +30,7 @@ export const HeaderBar = observer(
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
     const [showAccountActions, setShowAccountActions] = useState<boolean>(false);
     const [withinTimeRange, setWithinTimeRange] = useState<boolean>(false);
+    const [inviteUserModalOpen, setInviteUserModalOpen] = useState<boolean>(false);
 
     const { sessionStore, companyStore, meetingStore } = useMst();
     const dropdownRef = useRef(null);
@@ -113,7 +115,12 @@ export const HeaderBar = observer(
             <SelectionText>Issue</SelectionText>
           </SelectionContainer>
 
-          <SelectionContainer>
+          <SelectionContainer
+            onClick={() => {
+              setInviteUserModalOpen(true);
+              setOpenCreateDropdown(false);
+            }}
+          >
             <SelectionIconContainer>
               <SelectionIcon icon={"New-User"} size={20} disableFill={true} />
             </SelectionIconContainer>
@@ -256,6 +263,12 @@ export const HeaderBar = observer(
             setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
             defaultTypeAsWeekly={true}
           />
+          {inviteUserModalOpen && (
+            <InviteUserModal
+              inviteUserModalOpen={inviteUserModalOpen}
+              setInviteUserModalOpen={setInviteUserModalOpen}
+            />
+          )}
         </Container>
       </Wrapper>
     );

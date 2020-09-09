@@ -152,7 +152,9 @@ export const EditUserModal = ({
                   }
                   variant={"primary"}
                 >
-                  {t("profile.profileUpdateForm.save")}
+                  {userId
+                    ? t("profile.profileUpdateForm.save")
+                    : t("profile.profileUpdateForm.inviteUser")}
                 </Button>
               </FormContainer>
             }
