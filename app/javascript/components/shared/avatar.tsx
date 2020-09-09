@@ -48,7 +48,7 @@ export const Avatar = ({
   defaultAvatarColor,
 }: AvatarProps): JSX.Element =>
   avatarUrl ? (
-    <ImageContainer border={border} size={size} marginLeft={marginLeft || "auto"}>
+    <ImageContainer border={border} size={size} marginLeft={marginLeft} marginRight={marginRight}>
       <Image
         style={{
           width: size || 48,
