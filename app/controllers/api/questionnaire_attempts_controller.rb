@@ -1,6 +1,8 @@
 class Api::QuestionnaireAttemptsController <  Api::ApplicationController 
   respond_to :json
 
+  before_action :skip_authorization, only: [:personal_planning]
+
   def create
     json_representation = {
       answers: params[:answers],
@@ -31,15 +33,15 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
 
   def personal_planning
     if [1, 2].include? current_user.time_in_user_timezone.wday # Monday or Tuesday
-      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).for_user(current_user).within_last_week(current_user.time_in_user_timezone)
+      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).within_last_week(current_user.time_in_user_timezone)
     elsif current_user.time_in_user_timezone.wday == 3 && current_user.time_in_user_timezone < Time.current.in_time_zone(current_user.get_timezone_name(current_user.timezone)).at_noon # Wednesday before noon
-      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).for_user(current_user).within_last_week(current_user.time_in_user_timezone)
+      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).within_last_week(current_user.time_in_user_timezone)
     elsif [0, 5, 6].include? current_user.time_in_user_timezone.wday # Friday to Sunday
-      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).for_user(current_user).within_current_week(current_user.time_in_user_timezone)
+      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).within_current_week(current_user.time_in_user_timezone)
     else
       render json: { error: "You can't do your Weekly Personal Planning at this time", status: 412 }
+      return
     end
-    authorize @questionnaire_attempts
 
     summary = {what_happened: [], improvements: [], highest_good: [], wins: [], lessons: [], gratitude_am: [], gratitude_pm: []}
 
