@@ -51,7 +51,8 @@
         "securityForm": {
           "password": "Password",
           "passwordConfirmation": "Password Confirmation",
-          "updatePw": "Update Password"
+          "updatePw": "Update Password",
+          "warningText": "Changing your password will log you out of all sessions Lynchpyn."
         },
         "teamsManagement": {
           "header": "Manage Teams"
