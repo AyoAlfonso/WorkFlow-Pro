@@ -18,7 +18,7 @@ import { CreateKeyActivityModal } from "../key-activities/create-key-activity-mo
 import { nowInSeconds, noonTodayInSeconds } from "~/utils/date-time";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
-
+import { RoleAdministrator, RoleCEO } from "~/lib/constants";
 import MeetingTypes from "~/constants/meeting-types";
 import { InviteUserModal } from "~/components/shared/invite-user-modal";
 
@@ -52,6 +52,9 @@ export const HeaderBar = observer(
         return false;
       }
     };
+
+    const userCanInvite =
+      sessionStore.profile.role == RoleAdministrator || sessionStore.profile.role == RoleCEO;
 
     useEffect(() => {
       setWithinTimeRange(isWithinPermittedTimeRange());
@@ -116,9 +119,14 @@ export const HeaderBar = observer(
           </SelectionContainer>
 
           <SelectionContainer
+            disabled={!userCanInvite}
             onClick={() => {
-              setInviteUserModalOpen(true);
-              setOpenCreateDropdown(false);
+              if (userCanInvite) {
+                setInviteUserModalOpen(true);
+                setOpenCreateDropdown(false);
+              } else {
+                showToast("You are not permitted to invite new users", ToastMessageConstants.ERROR);
+              }
             }}
           >
             <SelectionIconContainer>
