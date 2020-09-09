@@ -2,6 +2,19 @@
 
 <% calculate_stats_for_week(@user).each do |stat| %>
   <div>
-  <%= "#{stat[:statistic_name]}: #{stat[:statistic_number]} / #{stat[:statistic_change]}%" %>
+  <%= "#{stat[:statistic_name]}: #{stat[:statistic_number]}  /  #{stat[:statistic_change] > 0 ? "+": ""}#{stat[:statistic_change]}% compared to last week" %>
   </div>
 <% end %>
+
+<div>
+<%= "Milestones Progress: #{milestone_progress(@user).round(0)}%" %>
+</div>
+
+<div>
+<%= "Average mood this week: #{average_weekly_emotion_score_over_last_week(@user)} / 5" %>
+<%= "Previous week average mood: #{average_weekly_emotion_score_over_last_week_previous_week(@user)} / 5" %>
+</div>
+
+<p>
+Link To Meeting If Possible
+</p>

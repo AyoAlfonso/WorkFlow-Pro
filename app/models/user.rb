@@ -140,7 +140,7 @@ class User < ApplicationRecord
     timezone[/(?<=\(GMT.\d{2}:\d{2}\)\s).*$/]
   end
 
-  def weekly_average_users_emotion_score(from_date, to_date)
+  def daily_average_users_emotion_scores_over_week(from_date, to_date)
     daily_average_users_emotion_score(self, from_date, to_date)
   end
 

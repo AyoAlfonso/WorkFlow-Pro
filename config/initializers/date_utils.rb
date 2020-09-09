@@ -1,6 +1,7 @@
 class Date
   # Returns the date of most recent Sunday
   def self.current_week_start
+    #TODO REFACTOR TO USE current_user data
     Date.today.days_ago(Date.today.wday)
   end
   # Returns the date of most recent Sunday of a date instance
@@ -31,4 +32,5 @@ class Date
   def previous_week_end
     week_start.days_ago(1)
   end
+
 end

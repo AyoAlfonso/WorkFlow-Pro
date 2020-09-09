@@ -56,7 +56,7 @@ class Api::MeetingsController < Api::ApplicationController
 
   def meeting_recap
     @meeting = Meeting.find(params[:id])
-    @milestones = Milestone.for_users_in_team(params[:team_id])
+    @milestones = Milestone.for_users_in_team(params[:team_id], current_user.company.current_fiscal_quarter)
     @key_activities = KeyActivity.filter_by_team_meeting(@meeting.meeting_template_id, params[:team_id])
     authorize @key_activities
     @issues = Issue.where(team_id: params[:team_id])
@@ -69,7 +69,7 @@ class Api::MeetingsController < Api::ApplicationController
   def set_additional_data
     @team = @meeting.team_id ? Team.find(@meeting.team_id) : nil
     if @team.present?
-      @current_week_average_user_emotions = @team.weekly_average_users_emotion_score(1.week.ago, 1.day.ago)
+      @current_week_average_user_emotions = @team.daily_average_users_emotion_scores_over_week(1.week.ago, 1.day.ago)
       @current_week_average_team_emotions = @team.team_average_weekly_emotion_score(1.week.ago, 1.day.ago)
       @previous_meeting = Meeting.where(team_id: @team.id, meeting_template_id: @meeting.meeting_template_id).second_to_last
       @emotion_score_percentage_difference = @team.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
@@ -78,8 +78,9 @@ class Api::MeetingsController < Api::ApplicationController
       @stats_for_week = nil
       @my_current_milestones = nil
     else
-      @current_week_average_user_emotions = current_user.weekly_average_users_emotion_score(1.week.ago, 1.day.ago)
-      @current_week_average_team_emotions = current_user.team_average_weekly_emotion_score(1.week.ago, 1.day.ago)
+      #if it's Monday or Tuesday, 
+      @current_week_average_user_emotions = daily_average_users_emotion_scores_over_last_week(current_user)
+      @current_week_average_team_emotions = average_weekly_emotion_score_over_last_week(current_user)
       @previous_meeting = Meeting.where(hosted_by: current_user, team_id: nil, meeting_template_id: @meeting.meeting_template_id).second_to_last
       @emotion_score_percentage_difference = current_user.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
       @milestones = nil

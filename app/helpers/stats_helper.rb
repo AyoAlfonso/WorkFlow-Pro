@@ -1,7 +1,40 @@
 module StatsHelper
+  
+  def milestone_progress(current_user)
+    current_quarter = current_user.company.current_fiscal_quarter
+    #TODO: NEED TO ADD THE CURRENT YEAR HERE
+    #milestones for this week and in team
+    Milestone.for_user_on_quarter(current_user, current_quarter).completed.count / Milestone.for_user_on_quarter(current_user, current_quarter).count * 100
+  end
+
+  def get_beginning_of_last_or_current_work_week_date(current_time)
+    if [1,2,3].include? (current_time.wday)
+      current_time.beginning_of_week.weeks_ago(1)
+    else
+      current_time.beginning_of_week
+    end
+  end
+
+  def daily_average_users_emotion_scores_over_last_week(current_user)
+    previous_week_end = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
+    previous_week_start = previous_week_end.weeks_ago(1)
+    current_user.daily_average_users_emotion_scores_over_week(previous_week_start, previous_week_end)
+  end
+
+  def average_weekly_emotion_score_over_last_week(current_user)
+    previous_week_end = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
+    previous_week_start = previous_week_end.weeks_ago(1)
+    current_user.team_average_weekly_emotion_score(previous_week_start, previous_week_end)
+  end
+
+  def average_weekly_emotion_score_over_last_week_previous_week(current_user)
+    previous_week_end = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone).weeks_ago(1)
+    previous_week_start = previous_week_end.weeks_ago(1)
+    current_user.team_average_weekly_emotion_score(previous_week_start, previous_week_end)
+  end
 
   def calculate_stats_for_week(current_user)
-    previous_week_end = current_user.time_in_user_timezone.beginning_of_week
+    previous_week_end = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
     previous_week_start = previous_week_end.weeks_ago(1)
     previous_2_week_start = previous_week_end.weeks_ago(2)
     ka_created_last_week = KeyActivity.user_created_between(current_user, previous_week_start, previous_week_end).count

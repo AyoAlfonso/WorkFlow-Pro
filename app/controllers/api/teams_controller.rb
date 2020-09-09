@@ -23,7 +23,7 @@ class Api::TeamsController < Api::ApplicationController
   def fetch_additional_data
     one_week_ago_timezone = (current_user.time_in_user_timezone.to_date) - 1.week
     one_day_ago_timezone = (current_user.time_in_user_timezone.to_date) - 1.day
-    @average_weekly_user_emotions = @team.weekly_average_users_emotion_score(one_week_ago_timezone, one_day_ago_timezone)
+    @average_weekly_user_emotions = @team.daily_average_users_emotion_scores_over_week(one_week_ago_timezone, one_day_ago_timezone)
     @average_team_emotion_score = @team.team_average_weekly_emotion_score(one_week_ago_timezone, one_day_ago_timezone)
   end
 
