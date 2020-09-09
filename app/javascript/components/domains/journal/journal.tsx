@@ -26,11 +26,11 @@ export const Journal = observer(
     );
 
     const defaultJournalButtonProps = {
-      width: "100%",
+      width: "90%",
       height: "48px",
       bg: "white",
       mt: "20px",
-      mx: "15px",
+      mx: "16px",
       pl: "15px",
       iconSize: 28,
       shadow: true,
@@ -61,7 +61,7 @@ export const Journal = observer(
             <PynBotSpeechContainer>
               <PynBotContainer>
                 <PynBotIconContainer>
-                  <Icon icon={"PynBot"} iconColor={"primary80"} size={"42px"} width={"100%"} />
+                  <Icon icon={"PynBot"} iconColor={"primary80"} size={"42px"} width={"90%"} />
                 </PynBotIconContainer>
                 <TextNoMargin fontSize={"12px"} fontWeight={600}>
                   PynBot
@@ -112,7 +112,6 @@ const ButtonContainer = styled.div`
   justify-content: center;
   margin: auto;
   padding: 16px;
-  width: 90%;
 `;
 
 const PynBotSpeechContainer = styled.div`
