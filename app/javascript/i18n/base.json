@@ -46,7 +46,8 @@
           "invite": "Invite to Company",
           "resend": "Resend",
           "timezone": "Location/Time Zone",
-          "title": "Title"
+          "title": "Title",
+          "inviteUser": "Invite User"
         },
         "securityForm": {
           "password": "Password",
