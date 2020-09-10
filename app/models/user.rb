@@ -32,7 +32,7 @@ class User < ApplicationRecord
   has_many :team_user_enablements
   has_many :teams, through: :team_user_enablements
   has_many :team_leads
-  has_many :notifications
+  has_many :notifications, dependent: :destroy
 
   validates :first_name, :last_name, presence: true
 
