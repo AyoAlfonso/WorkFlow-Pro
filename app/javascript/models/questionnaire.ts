@@ -6,6 +6,7 @@ export const QuestionnaireModel = types
     id: types.identifierNumber,
     name: types.string,
     steps: types.array(types.frozen<object>()),
+    title: types.string,
   })
   .views(self => ({}))
   .actions(self => ({}));

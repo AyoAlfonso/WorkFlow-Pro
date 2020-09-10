@@ -1,5 +1,6 @@
 Questionnaire.where(name: "Create My Day").first_or_create(name: "Create My Day", 
 daily_limit: true,
+title: "Create My Day",
 steps: [
   {
     id: 1,
@@ -216,6 +217,7 @@ steps: [
 
 Questionnaire.where(name: "Thought Challenge").first_or_create(name: "Thought Challenge", 
 daily_limit: false,
+title: "Check-in",
 steps: [
   {
     id: 1,
@@ -422,6 +424,7 @@ steps: [
 
 Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening Reflection", 
   daily_limit: true,
+  title: "Evening Reflection",
   steps: [
     {
       id: 1, 
