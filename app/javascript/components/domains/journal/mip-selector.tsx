@@ -8,6 +8,7 @@ import { useMst } from "../../../setup/root";
 import { MultiSelector } from "~/components/domains/journal/multi-selector";
 import { Text } from "~/components/shared/text";
 import { Loading } from "~/components/shared/loading";
+import { sortByPosition } from "~/utils/sorting";
 
 export interface IMIPSelectorProps {}
 
@@ -37,6 +38,11 @@ export const MIPSelector = observer(
     const CHECKED_LIMIT = 3;
 
     const updateOptionsChecked = option => {
+      const lastPosition =
+        optionsChecked.length > 0
+          ? sortByPosition(optionsChecked)[optionsChecked.length - 1].position + 1
+          : option.position;
+      keyActivityStore.updateKeyActivityState(option.id, "position", lastPosition);
       if (optionsChecked.includes(option)) {
         keyActivityStore.startLoading("weekly-activities");
         keyActivityStore.updateKeyActivityState(option.id, "weeklyList", true);

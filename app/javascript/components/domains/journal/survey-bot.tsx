@@ -10,6 +10,7 @@ import { Loading } from "../../shared/loading";
 import { MIPSelector } from "./mip-selector";
 import { EmotionSelector } from "./emotion-selector";
 import * as humps from "humps";
+import { QuestionnaireTypeConstants } from "~/constants/questionnaire-types";
 
 export interface ISurveyBotProps {
   variant: string;
@@ -65,16 +66,15 @@ export const SurveyBot = observer(
         const totalPynCount = currentDailyLog.mipCount;
         const completedPynCount = totalPynCount - keyActivityStore.todaysPriorities.length;
         const newMessage = R.pipe(
-          R.replace("{completedMIPCount}", `${completedPynCount}`),
+          R.replace("{completedMIPCount}", `${completedPynCount < 0 ? 0 : completedPynCount}`),
           R.replace("{totalMIPCount}", `${totalPynCount}`),
         )(step.message);
         return R.assoc("message", newMessage)(step);
       } else if (R.hasPath(["metadata", "mipCheck"], step)) {
         const mipCheck =
-          `Hey ${firstName}, ` +
-          (keyActivityStore.todaysPriorities.length > 0
+          keyActivityStore.todaysPriorities.length > 0
             ? R.path(["metadata", "mipCheck", "hasMips"], step)
-            : R.path(["metadata", "mipCheck", "noMips"], step));
+            : R.path(["metadata", "mipCheck", "noMips"], step);
         return R.assoc("message", R.replace("{mipCheck}", mipCheck, step.message))(step);
       } else if (R.hasPath(["metadata", "validatorType"], step)) {
         return R.assoc("validator", stringValidator, step);
@@ -86,7 +86,7 @@ export const SurveyBot = observer(
     return (
       <ChatBot
         botDelay={1000}
-        headerComponent={<SurveyHeader title={questionnaireVariant.name} />}
+        headerComponent={<SurveyHeader title={questionnaireVariant.title} />}
         steps={steps}
         width={"100%"}
         hideBotAvatar={true}
@@ -104,8 +104,8 @@ export const SurveyBot = observer(
             values,
           });
           if (
-            questionnaireVariant.name === "Create My Day" ||
-            questionnaireVariant.name === "Evening Reflection"
+            questionnaireVariant.name === QuestionnaireTypeConstants.createMyDay ||
+            questionnaireVariant.name === QuestionnaireTypeConstants.eveningReflection
           ) {
             await sessionStore.updateUser({
               dailyLogsAttributes: [
