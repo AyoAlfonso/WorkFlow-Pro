@@ -2,7 +2,17 @@
 
 <p><%= t("devise.mailer.invitation_instructions.someone_invited_you", url: root_url) %></p>
 
-<p><%= link_to t("devise.mailer.invitation_instructions.accept"), accept_invitation_url(@resource, invitation_token: @token, format: :html) %></p>
+<div style="
+  background-color: #005ffe;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-weight: 500;
+  padding: 14px 19px;
+  width: 175px;
+  text-align: center;
+">
+  <%= link_to t("devise.mailer.invitation_instructions.accept"), accept_invitation_url(@resource, invitation_token: @token, format: :html), {:style => "text-decoration: none; color: #FFFFFF"} %>
+</div>
 
 <% if @resource.invitation_due_at %>
   <p><%= t("devise.mailer.invitation_instructions.accept_until", due_date: l(@resource.invitation_due_at, format: :'devise.mailer.invitation_instructions.accept_until_format')) %></p>
