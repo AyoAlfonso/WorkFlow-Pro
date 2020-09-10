@@ -68,7 +68,7 @@ const TodaysPriotitiesContainer = styled.div<TodaysPriotitiesContainerType>`
   background-color: ${props =>
     props.isDraggingOver ? props.theme.colors.backgroundBlue : "white"};
   overflow-y: auto;
-  height: 260px;
+  height: 320px;
 `;
 
 const KeyActivityContainer = styled.div<KeyActivityContainerType>`
