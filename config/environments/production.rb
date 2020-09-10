@@ -108,6 +108,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.hosts << "lynchpyn-qa.herokuapp.com"
+  config.hosts << "qa-app.lynchpyn.com"
   config.hosts << "lynchpyn.herokuapp.com"
   config.hosts << "app.lynchpyn.com"
 
