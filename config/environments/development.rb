@@ -45,19 +45,6 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.perform_deliveries = true
 
-  # config.action_mailer.delivery_method = :smtp
-  # config.action_mailer.smtp_settings = {
-  #   address:              ENV["MAILER_ADDRESS"],
-  #   user_name:            ENV['MAILER_USERNAME'],
-  #   password:             ENV['MAILER_PASSWORD'],
-  #   port:                 ENV["MAILER_PORT"] || 587,
-  #   domain:               ENV["MAILER_DOMAIN"] || 'lynchpyn.com',
-  #   authentication:       ENV["MAILER_AUTHTYPE"] || 'login',
-  #   enable_starttls_auto: true
-  # }
-  # config.action_mailer.perform_deliveries = true
-  # Rails.application.routes.default_url_options[:host] = ENV['HOST_URL']
-
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
