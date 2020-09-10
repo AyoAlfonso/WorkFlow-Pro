@@ -115,6 +115,7 @@
         "conversationStarter": "Conversation Starter",
         "meetingRating": "Rate the Meeting",
         "goalProgress": "Goal Progress",
+        "milestoneProgress": "Milestone Progress",
         "tasksCompleted": "Tasks Completed",
         "issuesAddressed": "Issues Addressed"
       },
