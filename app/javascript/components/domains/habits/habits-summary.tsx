@@ -42,7 +42,7 @@ export const HabitsSummary = observer(
           </StyledHabitsTableCenterCell>
           <StyledHabitsTableCenterCell>
             <HabitsTextContainer color={habit.color}>
-              {habit.weeklyDifference >= 0 ? "+" : "-"}
+              {habit.weeklyDifference >= 0 ? "+" : ""}
               {habit.weeklyDifference.toFixed(0)}%
             </HabitsTextContainer>
           </StyledHabitsTableCenterCell>
