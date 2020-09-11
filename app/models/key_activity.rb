@@ -29,8 +29,8 @@ class KeyActivity < ApplicationRecord
     self.where(meeting_id: meeting_ids)
   end
 
-  def self.owned_by_users_team_members(user)
+  def self.owned_by_self_or_team_members(user)
     team_member_ids = TeamUserEnablement.where(team_id: user.team_ids).pluck(:user_id)
-    self.where(user_id: team_member_ids)
+    self.where(user_id: [team_member_ids, user.id])
   end
 end
