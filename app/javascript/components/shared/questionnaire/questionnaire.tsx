@@ -40,7 +40,26 @@ export const Questionnaire = (props: IQuestionnaireProps): JSX.Element => {
   const summaryData = meetingStore.personalPlanningSummary;
 
   const steps = R.map(step => {
-    if (R.hasPath(["metadata", "summary"], step)) {
+    if (R.path(["metadata", "summary"], step) === "gratitude") {
+      return R.pipe(
+        R.assoc(
+          "component",
+          <>
+            <SummaryDisplay
+              summaryData={summaryData}
+              variant={`${R.path(["metadata", "summary"], step)}AM`}
+              title={R.path(["metadata", "message", "am"], step)}
+            />
+            <SummaryDisplay
+              summaryData={summaryData}
+              variant={`${R.path(["metadata", "summary"], step)}PM`}
+              title={R.path(["metadata", "message", "pm"], step)}
+            />
+          </>,
+        ),
+        R.dissoc("options"),
+      )(step);
+    } else if (R.hasPath(["metadata", "summary"], step)) {
       return R.pipe(
         R.assoc(
           "component",
