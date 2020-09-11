@@ -37,13 +37,13 @@ export const HabitsSummary = observer(
           </StyledHabitsTableDataCell>
           <StyledHabitsTableCenterCell>
             <HabitsTextContainer color={habit.color}>
-              {habit.weeklyCompletionPercentage.toFixed(0)}%
+              {habit.weeklyCompletionPercentage ? habit.weeklyCompletionPercentage.toFixed(0) : 0}%
             </HabitsTextContainer>
           </StyledHabitsTableCenterCell>
           <StyledHabitsTableCenterCell>
             <HabitsTextContainer color={habit.color}>
               {habit.weeklyDifference >= 0 ? "+" : ""}
-              {habit.weeklyDifference.toFixed(0)}%
+              {habit.weeklyDifference ? habit.weeklyDifference.toFixed(0) : 0}%
             </HabitsTextContainer>
           </StyledHabitsTableCenterCell>
           <StyledHabitsTableCenterCell>
