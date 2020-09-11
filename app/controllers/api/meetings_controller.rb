@@ -4,21 +4,22 @@ class Api::MeetingsController < Api::ApplicationController
 
   respond_to :json
 
-  def index 
-    @meetings = policy_scope(Meeting).personal_recent_or_incomplete_for_user(current_user)
+  def index
+    week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
+    @meetings = policy_scope(Meeting).personal_recent_or_incomplete_for_user(current_user).for_week_of_date(week_to_review_start_time)
     render 'api/meetings/index'
   end
 
   def create 
-    #TODO: replaec scope with for week or for month, etc. based on type
-    incomplete_meetings_for_today = Meeting.team_meetings(params[:team_id]).with_template(params[:meeting_template_id]).for_day(Date.today).incomplete #TODO: VERIFY THIS WORKS OVER MIDNIGHT IN DIFFERENT TIMEZONES
-    
+    #scope differs if team (assume you can only have one incomplete meeting, allow you to create another one for week if required)
+    week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
+    @meetings_already_present_for_week = params[:team_id] ? Meeting.team_meetings(params[:team_id]).with_template(params[:meeting_template_id]).for_week_of_date(week_to_review_start_time).incomplete : Meeting.personal_meetings.hosted_by_user(current_user).for_week_of_date(week_to_review_start_time)
     # @meeting = incomplete_meetings_for_today.first_or_create(meeting_params.merge({hosted_by: current_user}))
     # authorize @meeting
     # render 'api/meetings/create'
 
-    if incomplete_meetings_for_today.incomplete.present?
-      @meeting = incomplete_meetings_for_today.first
+    if @meetings_already_present_for_week.present?
+      @meeting = @meetings_already_present_for_week.first
       set_additional_data
       authorize @meeting
       render 'api/meetings/show'  
