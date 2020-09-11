@@ -36,6 +36,7 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
   }, []);
 
   const companyUsers = userStore.users;
+  const issues = issueStore.openIssues;
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
@@ -44,6 +45,8 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
       <></>
     );
   };
+
+  const newIssuePosition = issues.length > 0 ? issues[issues.length - 1].position + 1 : 0;
 
   return (
     <ModalWithHeader
@@ -90,6 +93,7 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
                   priority: selectedPriority,
                   teamId: teamId,
                   userId: selectedUser.id,
+                  position: newIssuePosition,
                 })
                 .then(result => {
                   if (result) {

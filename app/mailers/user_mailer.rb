@@ -14,6 +14,8 @@ class UserMailer < ApplicationMailer
     @user = params[:user]
     @subject = "Weekly Report"
     @message = params[:message]
+    week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)
+    @meeting = Meeting.first_or_create_for_weekly_planning_on_email(current_user, week_to_review_start_time)
     mail(to: @user.email, subject: @subject)
   end
 end
