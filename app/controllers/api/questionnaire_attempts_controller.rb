@@ -32,9 +32,9 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
   end
 
   def personal_planning
-    if [0, 1].include? current_user.time_in_user_timezone.wday # Monday or Tuesday
+    if current_user.time_in_user_timezone.wday == 1 # Monday or Tuesday
       @questionnaire_attempts = policy_scope(QuestionnaireAttempt).within_last_week(current_user.time_in_user_timezone)
-    elsif [5, 6].include? current_user.time_in_user_timezone.wday # Friday to Sunday
+    elsif [0, 5, 6].include? current_user.time_in_user_timezone.wday # Friday to Sunday
       @questionnaire_attempts = policy_scope(QuestionnaireAttempt).within_current_week(current_user.time_in_user_timezone)
     else
       render json: { error: "You can't do your Weekly Personal Planning at this time", status: 412 }
