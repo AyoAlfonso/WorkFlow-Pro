@@ -22,20 +22,20 @@ module StatsHelper
   end
 
   def daily_average_users_emotion_scores_over_last_week(current_user)
-    previous_week_end = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
-    previous_week_start = previous_week_end.weeks_ago(1)
+    previous_week_start = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
+    previous_week_end = previous_week_start + 6.days
     current_user.daily_average_users_emotion_scores_over_week(previous_week_start, previous_week_end)
   end
 
   def average_weekly_emotion_score_over_last_week(current_user)
-    previous_week_end = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
-    previous_week_start = previous_week_end.weeks_ago(1)
+    previous_week_start = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
+    previous_week_end = previous_week_start + 6.days
     current_user.team_average_weekly_emotion_score(previous_week_start, previous_week_end)
   end
 
   def average_weekly_emotion_score_over_last_week_previous_week(current_user)
-    previous_week_end = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone).weeks_ago(1)
-    previous_week_start = previous_week_end.weeks_ago(1)
+    previous_week_start = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone).weeks_ago(1)
+    previous_week_end = previous_week_start + 6.days
     current_user.team_average_weekly_emotion_score(previous_week_start, previous_week_end)
   end
 
@@ -99,6 +99,7 @@ module StatsHelper
       difference = current_week_value == 0 ? 
                     previous_week_value * 100 : 
                     ((previous_week_value - current_week_value).to_f / current_week_value.to_f) * 100
+      -difference
     end
   end
 
