@@ -33,7 +33,8 @@ class Meeting < ApplicationRecord
     self.personal_meetings.hosted_by_user(user).for_week_of_date(week_to_review_start_time).first_or_create(
       meeting_template_id: MeetingTemplate.personal_weekly.first.id,
       hosted_by_id: user.id,
-      host_name: user.full_name
+      host_name: user.full_name,
+      current_step: 0
       #start time automatically set for personal meetings
     )
   end

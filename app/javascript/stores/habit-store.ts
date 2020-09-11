@@ -32,7 +32,11 @@ export const HabitStoreModel = types
       self.habits.forEach(habit => {
         differencesPercentage += habit.weeklyDifference;
       });
-      return differencesPercentage / self.habits.length;
+      if (self.habits.length == 0) {
+        return 0;
+      } else {
+        return differencesPercentage / self.habits.length;
+      }
     },
   }))
   .views(self => ({
