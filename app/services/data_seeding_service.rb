@@ -6,7 +6,7 @@ class DataSeedingService
 
   def initialize(file, logOutput = false)
     @logOutput = logOutput
-    # DataSeedingService.new(Dir["db/seeds/files/lynchpyn_seeding_v1.xlsx"].first, true).load_data
+    #DataSeedingService.new(Dir["db/seeds/files/dnd_seeding.xlsx"].first, true).load_data
     @file = file
     @errors_summary = []
   end
