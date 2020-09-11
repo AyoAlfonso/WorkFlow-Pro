@@ -89,16 +89,31 @@ export const KeyActivitiesBody = observer(
         const lastElement = index == outstandingMasterActivities.length - 1;
 
         return (
-          <KeyActivityContainer
+          <Draggable
+            draggableId={`keyActivity-${keyActivity.id}`}
+            index={index}
             key={keyActivity["id"]}
-            borderBottom={
-              completedMasterActivitiesPresent &&
-              lastElement &&
-              `1px solid ${baseTheme.colors.grey40}`
-            }
+            type={"keyActivity"}
           >
-            <KeyActivityEntry keyActivity={keyActivity} />
-          </KeyActivityContainer>
+            {provided => (
+              <KeyActivityContainer
+                key={keyActivity["id"]}
+                borderBottom={
+                  completedMasterActivitiesPresent &&
+                  lastElement &&
+                  `1px solid ${baseTheme.colors.grey40}`
+                }
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+              >
+                <KeyActivityEntry
+                  keyActivity={keyActivity}
+                  dragHandleProps={...provided.dragHandleProps}
+                />
+              </KeyActivityContainer>
+            )}
+          </Draggable>
         );
       });
     };
@@ -124,7 +139,11 @@ export const KeyActivitiesBody = observer(
           </AddNewKeyActivityPlus>
           <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
-        <Droppable droppableId="weekly-activities" type={"keyActivity"}>
+
+        <Droppable
+          droppableId={showAllKeyActivities ? "master-activities" : "weekly-activities"}
+          type={"keyActivity"}
+        >
           {(provided, snapshot) => (
             <KeyActivitiesContainer
               ref={provided.innerRef}

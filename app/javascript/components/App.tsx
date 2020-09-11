@@ -86,6 +86,11 @@ export const App = observer(
           keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", true);
           keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", false);
           updateMipCount(-1);
+        } else if (destination.droppableId === "master-activities") {
+          keyActivityStore.startLoading("master-activities");
+          keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
+          keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", false);
+          updateMipCount(-1);
         } else if (destination.droppableId === "todays-priorities") {
           keyActivityStore.startLoading("todays-priorities");
           keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
@@ -95,7 +100,7 @@ export const App = observer(
         keyActivityStore.updateKeyActivity(keyActivityId);
       } else if (R.includes("issue", draggableId)) {
         const issueId = parseInt(R.replace("issue-", "", draggableId));
-        issueStore.updateIssuePosition(issueId, newPosition);
+        issueStore.updateIssuePosition(issueId, newPosition + 1);
       }
     };
     return (
