@@ -25,6 +25,19 @@ class Meeting < ApplicationRecord
 
   before_create :start_meeting_if_weekly_planning
 
+  #TO USE
+  #week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
+  #Meeting.first_or_create_for_weekly_planning_on_email(current_user, week_to_review_start_time)
+
+  def self.first_or_create_for_weekly_planning_on_email(user, week_to_review_start_time)
+    self.personal_meetings.hosted_by_user(user).for_week_of_date(week_to_review_start_time).first_or_create(
+      meeting_template_id: MeetingTemplate.personal_weekly.first.id,
+      hosted_by_id: user.id,
+      host_name: user.full_name
+      #start time automatically set for personal meetings
+    )
+  end
+
   private
   def start_meeting_if_weekly_planning
     if self.meeting_type == "personal_weekly"
