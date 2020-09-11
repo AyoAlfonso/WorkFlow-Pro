@@ -41,16 +41,8 @@ export const HeaderBar = observer(
 
     const isWithinPermittedTimeRange = () => {
       const dayOfWeek = new Date().getDay();
-      if ([0, 1, 2, 5, 6].includes(dayOfWeek)) {
-        // Sunday, Monday, Tuesday, Friday, Saturday
-        return true;
-      } else if (dayOfWeek === 3 && nowInSeconds() < noonTodayInSeconds()) {
-        // Wednesday before noon
-        return true;
-      } else {
-        // Wednesday after noon, Thursday
-        return false;
-      }
+      // Sunday, Monday, Friday, Saturday
+      return [0, 1, 5, 6].includes(dayOfWeek);
     };
 
     const userCanInvite =
@@ -168,7 +160,7 @@ export const HeaderBar = observer(
                     });
                 }
               } else {
-                showToast("Weekly Planning unavailable", ToastMessageConstants.ERROR);
+                showToast("Weekly Planning is available Fri-Mon", ToastMessageConstants.INFO);
               }
             }}
           >
