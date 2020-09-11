@@ -21,7 +21,7 @@ export const homePersonalStatusOptions: IWorkStatusOptions = {
       icon: "In-Office",
       iconColor: "finePine",
     },
-    label: "In-Office",
+    label: "In Office",
   },
   work_from_home: {
     containerProps: {
