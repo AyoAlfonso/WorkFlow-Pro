@@ -56,12 +56,16 @@ class Api::MeetingsController < Api::ApplicationController
 
   def meeting_recap
     @meeting = Meeting.find(params[:id])
-    @milestones = Milestone.for_users_in_team(params[:team_id], current_user.company.current_fiscal_quarter)
+    @milestone_progress_averages = @meeting.team.users.map do |user|
+      milestones = Milestone.current_week_for_user(user)
+      completed_milestones = milestones.inject(0) { |sum, m| m[:status] == "completed" ? sum + 1 : sum }
+      milestones.length == 0 ? 0 : completed_milestones.fdiv(milestones.length)
+    end
     @key_activities = KeyActivity.filter_by_team_meeting(@meeting.meeting_template_id, params[:team_id])
     authorize @key_activities
     @issues = Issue.where(team_id: params[:team_id])
     authorize @issues
-    render json: { milestones: @milestones, key_activities: @key_activities, issues: @issues }
+    render json: { milestone_progress_averages: @milestone_progress_averages, key_activities: @key_activities, issues: @issues }
   end
 
   private

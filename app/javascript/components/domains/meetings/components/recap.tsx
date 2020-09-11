@@ -29,11 +29,13 @@ export const Recap = observer(
       return <Loading />;
     }
 
-    const { milestones, keyActivities, issues } = meetingStore.meetingRecap;
+    const { milestoneProgressAverages, keyActivities, issues } = meetingStore.meetingRecap;
 
-    // milestones that belong to the quarterly goals that belong to the users of the team
-    const completedMilestonesCount = milestones.filter(ms => ms.status === "completed").length;
-    const goalProgress = (completedMilestonesCount / milestones.length) * 100;
+    // the average completed percentage of milestones that belong to the quarterly goals that belong to the users of the team for the current week
+    const goalProgress =
+      (milestoneProgressAverages.reduce((acc, curr) => acc + curr, 0) /
+        milestoneProgressAverages.length) *
+      100;
 
     // key activities that belong to the current meeting's meeting_template and team
     const tasksCompletedCount = keyActivities.filter(ka => ka.completedAt !== null).length;
@@ -52,7 +54,7 @@ export const Recap = observer(
 
     const graphProps = [
       {
-        title: t("meeting.goalProgress"),
+        title: t("meeting.milestoneProgress"),
         percentage: goalProgress,
         text: `${goalProgress.toFixed(2)}%`,
       },
