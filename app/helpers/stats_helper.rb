@@ -8,10 +8,10 @@ module StatsHelper
   end
 
   def get_beginning_of_last_or_current_work_week_date(current_time)
-    if [1,2,3].include? (current_time.wday)
-      current_time.beginning_of_week.weeks_ago(1)
-    else
+    if [0,5,6].include? (current_time.wday)
       current_time.beginning_of_week
+    else
+      current_time.beginning_of_week.weeks_ago(1)
     end
   end
 
