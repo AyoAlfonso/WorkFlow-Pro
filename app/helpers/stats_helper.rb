@@ -44,7 +44,7 @@ module StatsHelper
   end
 
   def habits_for_the_previous_week(current_user)
-    beginning_of_last_week = Date.today.prev_week
+    beginning_of_last_week = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
     end_of_last_week = beginning_of_last_week + 6.days
     habits = current_user.habits.map do |habit|
       {
@@ -63,13 +63,13 @@ module StatsHelper
     previous_2_week_start = previous_week_end.weeks_ago(2)
     ka_created_last_week = KeyActivity.user_created_between(current_user, previous_week_start, previous_week_end).count
     ka_created_2_weeks = KeyActivity.user_created_between(current_user, previous_2_week_start, previous_week_start).count
-    ka_created_change = ka_created_2_weeks != 0 ? (ka_created_last_week / ka_created_2_weeks)*100 : 0
+    ka_created_change = difference_between_values(ka_created_last_week, ka_created_2_weeks)
     ka_completed_last_week = KeyActivity.user_completed_between(current_user, previous_week_start, previous_week_end).count
     ka_completed_2_weeks = KeyActivity.user_completed_between(current_user, previous_2_week_start, previous_week_start).count
-    ka_completed_change = ka_completed_2_weeks != 0 ? (ka_completed_last_week / ka_completed_2_weeks)*100 : 0
+    ka_completed_change = difference_between_values(ka_completed_last_week, ka_completed_2_weeks)
     issues_created_last_week = Issue.user_created_between(current_user, previous_week_start, previous_week_end).count
     issues_created_2_weeks = Issue.user_created_between(current_user, previous_2_week_start, previous_week_start).count
-    issues_created_change = issues_created_2_weeks != 0 ? (issues_created_last_week / issues_created_2_weeks)*100 : 0
+    issues_created_change = difference_between_values(issues_created_last_week, issues_created_2_weeks)
 
     [
       {
@@ -88,6 +88,18 @@ module StatsHelper
         statistic_change: issues_created_change
       }
     ]
+  end
+
+  def difference_between_values(current_week_value, previous_week_value)
+    if current_week_value >= previous_week_value
+      difference = previous_week_value == 0 ? 
+                    current_week_value * 100 : 
+                    ((current_week_value - previous_week_value).to_f / previous_week_value.to_f) * 100
+    else
+      difference = current_week_value == 0 ? 
+                    previous_week_value * 100 : 
+                    ((previous_week_value - current_week_value).to_f / current_week_value.to_f) * 100
+    end
   end
 
 end

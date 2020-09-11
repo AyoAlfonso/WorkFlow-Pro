@@ -18,6 +18,7 @@ import { CreateGoalSection } from "../shared/create-goal-section";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import { RecordOptions } from "../shared/record-options";
+import { Loading } from "~/components/shared";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -51,7 +52,7 @@ export const AnnualInitiativeModalContent = observer(
     const annualInitiative = annualInitiativeStore.annualInitiative;
 
     if (annualInitiative == null) {
-      return <> Loading... </>;
+      return <Loading />;
     }
 
     const editable = currentUser.id == annualInitiative.ownedById;

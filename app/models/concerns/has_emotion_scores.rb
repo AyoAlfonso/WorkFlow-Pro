@@ -1,5 +1,6 @@
 module HasEmotionScores
   extend ActiveSupport::Concern
+  include StatsHelper
   
   def daily_average_users_emotion_score(users, from_date, to_date)
     q_attempts = QuestionnaireAttempt.where(user: users)
@@ -27,16 +28,8 @@ module HasEmotionScores
     end
   end
 
-  def compare_weekly_emotion_score(current, previous)
-    if current >= previous
-      difference = previous == 0 ? 
-                    current * 100 : 
-                    ((current - previous).to_f / previous.to_f) * 100
-    else
-      difference = current == 0 ? 
-                    previous * 100 : 
-                    ((previous - current).to_f / current.to_f) * 100
-    end
+  def compare_weekly_emotion_score(current_value, previous_value)
+    difference_between_values(current_value, previous_value)
   end
   
 end

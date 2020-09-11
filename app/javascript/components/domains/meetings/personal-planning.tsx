@@ -77,9 +77,11 @@ export const PersonalPlanning = observer(
     return (
       <Container>
         <HeaderContainer>
-          <Text fontSize={"36px"}>{`Personal Planning`}</Text>
+          <Heading type={"h1"} fontSize={"24px"}>
+            Personal Planning
+          </Heading>
           <DateAndButtonContainer>
-            <Heading type={"h3"} fontSize={"32px"} fontWeight={400}>
+            <Heading type={"h3"} fontSize={"18px"} fontWeight={400}>
               {moment().format("dddd, MMMM Do")}
             </Heading>
             <StopMeetingButton />
