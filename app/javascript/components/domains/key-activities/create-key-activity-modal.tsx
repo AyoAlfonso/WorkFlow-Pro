@@ -66,7 +66,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             textValue={keyActivityDescription}
             setTextValue={setKeyActivityDescription}
             width={"75%"}
-            placeholder={"e.g. Review revenue projections"}
+            placeholder={"e.g. Prep for team meeting"}
             style={{
               height: "35px",
               marginTop: "auto",

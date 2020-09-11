@@ -4,7 +4,13 @@ module StatsHelper
     current_quarter = current_user.company.current_fiscal_quarter
     #TODO: NEED TO ADD THE CURRENT YEAR HERE
     #milestones for this week and in team
-    Milestone.for_user_on_quarter(current_user, current_quarter).completed.count / Milestone.for_user_on_quarter(current_user, current_quarter).count * 100
+    completed_milestones = Milestone.for_user_on_quarter(current_user, current_quarter).completed.count
+    total_milestones = Milestone.for_user_on_quarter(current_user, current_quarter).count
+    if total_milestones == 0
+      0
+    else
+      completed_milestones / total_milestones * 100
+    end
   end
 
   def get_beginning_of_last_or_current_work_week_date(current_time)
@@ -31,6 +37,24 @@ module StatsHelper
     previous_week_end = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone).weeks_ago(1)
     previous_week_start = previous_week_end.weeks_ago(1)
     current_user.team_average_weekly_emotion_score(previous_week_start, previous_week_end)
+  end
+
+  def average_weekly_emotion_score_difference(current_user)
+    average_weekly_emotion_score_over_last_week(current_user) - average_weekly_emotion_score_over_last_week_previous_week(current_user)
+  end
+
+  def habits_for_the_previous_week(current_user)
+    beginning_of_last_week = Date.today.prev_week
+    end_of_last_week = beginning_of_last_week + 6.days
+    habits = current_user.habits.map do |habit|
+      {
+        habit: habit,
+        weekly_completion_percentage: habit.weekly_completion_percentage_by_date_range(beginning_of_last_week, end_of_last_week),
+        weekly_difference: habit.weekly_difference_for_the_previous_week,
+        weekly_completion_fraction: habit.weekly_completion_fraction_by_date_range(beginning_of_last_week, end_of_last_week)
+      }
+    end
+    habits
   end
 
   def calculate_stats_for_week(current_user)
