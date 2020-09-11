@@ -1,7 +1,6 @@
 mt1 = MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
   meeting_type: :team_weekly,
   name: "Weekly Meeting",
-  duration: 90,
   #description: "Weekly Sync 75-minute meeting for the leadership team. This meeting drives accountability and allows the team to use their collective intelligence to remove any roadblocks impeding progress."
   steps_attributes: [
     {
@@ -138,5 +137,4 @@ mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Planni
       duration: 5
     }
   ],
-
 )
