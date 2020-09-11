@@ -20,19 +20,28 @@ export const SummaryDisplay = ({
     color: "text",
   };
   const dataForDisplay = summaryData[humps.camelize(variant)];
+
   return (
     <Container>
       <Text fontSize={"16px"} fontWeight={600}>
         {title}
       </Text>
       <DataContainer>
-        {(dataForDisplay || []).map((summaryDataEl, index) => (
-          <DataRowContainer key={index}>
-            <Bullet />
-            <TextNoMargin mr={"8px"} {...rowTextProps}>{`${summaryDataEl.day}:`}</TextNoMargin>
-            <TextNoMargin {...rowTextProps}>{summaryDataEl.value}</TextNoMargin>
-          </DataRowContainer>
-        ))}
+        {R.isEmpty(dataForDisplay) || R.isNil(dataForDisplay) ? (
+          <Text fontSize={"12px"} fontWeight={400}>
+            No Data
+          </Text>
+        ) : (
+          dataForDisplay.map((summaryDataEl, index) => {
+            return (
+              <DataRowContainer key={index}>
+                <Bullet />
+                <TextNoMargin mr={"8px"} {...rowTextProps}>{`${summaryDataEl.day}:`}</TextNoMargin>
+                <TextNoMargin {...rowTextProps}>{`${summaryDataEl.value}`}</TextNoMargin>
+              </DataRowContainer>
+            );
+          })
+        )}
       </DataContainer>
     </Container>
   );
