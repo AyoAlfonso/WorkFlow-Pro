@@ -95,7 +95,7 @@ export const App = observer(
         keyActivityStore.updateKeyActivity(keyActivityId);
       } else if (R.includes("issue", draggableId)) {
         const issueId = parseInt(R.replace("issue-", "", draggableId));
-        issueStore.updateIssuePosition(issueId, newPosition);
+        issueStore.updateIssuePosition(issueId, newPosition + 1);
       }
     };
     return (
