@@ -47,10 +47,12 @@ export const MeetingStoreModel = types
         const response: ApiResponse<any> = yield self.environment.api.createMeeting(meetingObj);
         if (response.ok) {
           self.currentMeeting = response.data;
+          return { meeting: self.currentMeeting };
         }
       } catch {
         // caught bv Api Monitor
       }
+      return { meeting: null };
     }),
     updateMeeting: flow(function*(meetingObj) {
       try {
@@ -115,14 +117,16 @@ export const MeetingStoreModel = types
   }))
   .actions(self => ({
     createPersonalMeeting: flow(function*(meetingObj) {
-      // try {
-      const response: ApiResponse<any> = yield self.environment.api.createMeeting(meetingObj);
-      if (response.ok) {
-        self.currentPersonalPlanning = response.data;
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.createMeeting(meetingObj);
+        if (response.ok) {
+          self.currentPersonalPlanning = response.data;
+          return { meeting: self.currentPersonalPlanning };
+        }
+      } catch {
+        // caught bv Api Monitor
       }
-      // } catch {
-      //   // caught bv Api Monitor
-      // }
+      return { meeting: null };
     }),
     updatePersonalMeeting: flow(function*(meetingObj) {
       try {

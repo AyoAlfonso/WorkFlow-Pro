@@ -57,11 +57,10 @@ export const TeamOverview = observer(
             currentStep: 0,
             meetingTemplateId: meetingTemplate.id,
           })
-          .then(() => {
-            history.push(
-              `/team/${team_id}/meeting/${meetingStore.currentMeeting.id}`,
-              // `/team/${id}/meeting/${meetingStore.currentMeeting.id}?meeting_type=${meetingTemplate.meetingType}`,
-            );
+          .then(({ meeting }) => {
+            if (!R.isNil(meeting)) {
+              history.push(`/team/${team_id}/meeting/${meeting.id}`);
+            }
           });
       } else {
         showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);

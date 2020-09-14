@@ -151,11 +151,9 @@ export const HeaderBar = observer(
                       currentStep: 0,
                       meetingTemplateId: meetingTemplatePersonal.id,
                     })
-                    .then(() => {
-                      if (meetingStore.currentPersonalPlanning) {
-                        history.push(
-                          `/personal_planning/${meetingStore.currentPersonalPlanning.id}`,
-                        );
+                    .then(({ meeting }) => {
+                      if (!R.isNil(meeting)) {
+                        history.push(`/personal_planning/${meeting.id}`);
                       }
                     });
                 }
