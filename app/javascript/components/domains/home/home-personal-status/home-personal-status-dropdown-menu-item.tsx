@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import * as R from "ramda";
 import { Icon } from "~/components/shared/icon";
 import { IHomePersonalStatusOption } from "./home-personal-status-options";
 
@@ -22,7 +23,11 @@ export const HomePersonalStatusDropdownMenuItem = ({
       onClick={() => onSelect()}
       rightIcon={rightIcon}
     >
-      <Icon {...menuItem.iconProps} margin={"0px 10px"} />
+      {R.isEmpty(menuItem.iconProps.icon) ? (
+        <div></div>
+      ) : (
+        <Icon {...menuItem.iconProps} margin={"0px 10px"} />
+      )}
       <div>{menuItem.label}</div>
       {/* Empty div is to even out spacing */}
       {rightIcon ? rightIcon : <div></div>}

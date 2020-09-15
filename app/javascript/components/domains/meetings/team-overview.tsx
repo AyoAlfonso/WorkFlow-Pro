@@ -26,6 +26,7 @@ import { ContainerHeaderWithText } from "~/components/shared/styles/container-he
 import { useTranslation } from "react-i18next";
 import { NoMoodRatings } from "~/components/shared/no-mood-ratings";
 import { baseTheme } from "~/themes";
+import { typography, TypographyProps } from "styled-system";
 
 interface ITeamOverviewProps {}
 
@@ -85,8 +86,8 @@ export const TeamOverview = observer(
         <TableContainer>
           <TableHeaderContainer>
             <TeamMemberContainer />
-            <StatusContainer>Status</StatusContainer>
-            <TodaysPrioritiesContainer>
+            <StatusContainer fontSize={"16px"}>Status</StatusContainer>
+            <TodaysPrioritiesContainer fontSize={"16px"}>
               {t("keyActivities.prioritiesTitle")}
             </TodaysPrioritiesContainer>
           </TableHeaderContainer>
@@ -136,14 +137,14 @@ export const TeamOverview = observer(
                 </TeamMemberName>
               </TeamMemberInfoContainer>
             </TeamMemberContainer>
-            <StatusContainer>
+            <StatusContainer fontSize={"20px"}>
               <HomePersonalStatusDropdownMenuItem
                 style={{ width: "170px", borderRadius: "5px", marginTop: "5px" }}
                 menuItem={options[user.currentDailyLog.workStatus]}
                 onSelect={() => null}
               />
             </StatusContainer>
-            <TodaysPrioritiesContainer>
+            <TodaysPrioritiesContainer fontSize={"20px"}>
               {renderUserPriorities(user.todaysPriorities)}
             </TodaysPrioritiesContainer>
           </UserRecordContainer>
@@ -252,14 +253,14 @@ const TeamMemberContainer = styled.div`
   width: 30%;
 `;
 
-const StatusContainer = styled.div`
+const StatusContainer = styled.div<TypographyProps>`
+  ${typography}
   width: 30%;
-  font-size: 20px;
 `;
 
-const TodaysPrioritiesContainer = styled.div`
+const TodaysPrioritiesContainer = styled.div<TypographyProps>`
+  ${typography}
   width: 40%;
-  font-size: 20px;
 `;
 
 const TableContainer = styled.div`
