@@ -12,6 +12,17 @@ export interface IWorkStatusOptions {
 }
 
 export const homePersonalStatusOptions: IWorkStatusOptions = {
+  status_not_set: {
+    containerProps: {
+      backgroundColor: "grey20",
+      color: "grey60",
+    },
+    iconProps: {
+      icon: "",
+      iconColor: "",
+    },
+    label: "Status Not Set",
+  },
   in_office: {
     containerProps: {
       backgroundColor: "backgroundGreen",
