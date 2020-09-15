@@ -12,11 +12,11 @@ export const PersonalKeyActivities = (props: {}): JSX.Element => {
     <Container>
       <IndividualContainer>
         <KeyActivitiesHeader title={`${t("keyActivities.title")}: Weekly List`} />
-        <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"} disableDrag={true} />
+        <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"} />
       </IndividualContainer>
       <IndividualContainer>
         <KeyActivitiesHeader title={`${t("keyActivities.title")}: Master List`} />
-        <KeyActivitiesBody showAllKeyActivities={true} borderLeft={"none"} disableDrag={true} />
+        <KeyActivitiesBody showAllKeyActivities={true} borderLeft={"none"} />
       </IndividualContainer>
     </Container>
   );
