@@ -1,9 +1,6 @@
 @font-face {
   font-family: 'Lato';
-  src: local('Lato'), local('Lato-Regular'),
-  url('https://fonts.googleapis.com/css2?family=Lato&display=swap') format('woff'), url('https://fonts.gstatic.com/s/exo/v11/4UaZrEtFpBI4f1ZSIK9d4LjJ4lM3OwpmOw.woff2') format('woff2'),
-  url('https://fonts.googleapis.com/css2?family=Lato&display=swap') format('woff');
-  font-weight: 400;
+  src: url('lato-v14-latin-regular.woff2') format('woff2');
   font-style: normal;
 }
 
@@ -12,8 +9,8 @@
   align-items: center; 
   height: 100vh; 
   width: 100%; 
-  background-color: #F7F8FA; 
-  font-family: Lato;
+  background-color: #F7F8FA;
+  font-family: 'Lato';
 }
 
 .devise-outer-container {
@@ -68,7 +65,6 @@
 }
 
 .devise-submit {
-  margin-top: 30px;
   margin-bottom: 15px;
   width: 100%;
   border-color: #005FFE !important;
