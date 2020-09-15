@@ -50,6 +50,12 @@ export const SessionStoreModel = types
 
         if (response.ok) {
           let responseMessage = "";
+          if (
+            R.path(["dailyLogsAttributes", 0, "mipCount"], fieldsAndValues) !==
+            R.path(["profile", "currentDailyLog", "mipCount"], self)
+          ) {
+            return;
+          }
           self.profile = response.data;
           if (fieldsAndValues["dailyLogsAttributes"]) {
             const workStatus = R.path(["dailyLogsAttributes", 0, "workStatus"], fieldsAndValues);
