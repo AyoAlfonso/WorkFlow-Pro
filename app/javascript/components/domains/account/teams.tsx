@@ -17,6 +17,7 @@ import {
   HeaderText,
   LeftAlignedTableContainer,
   CenteredTableContainer,
+  LeftAlignedColumnListTableContainer,
 } from "./container-styles";
 
 import { Table } from "~/components/shared/table";
@@ -46,11 +47,11 @@ export const Teams = observer(
               {team.name}
             </TextNoMargin>
           </LeftAlignedTableContainer>,
-          <LeftAlignedTableContainer>
+          <LeftAlignedColumnListTableContainer>
             {users
               .filter(user => team.isALead(user))
               .map(user => (user ? <UserCard key={user.id} {...user} /> : <></>))}
-          </LeftAlignedTableContainer>,
+          </LeftAlignedColumnListTableContainer>,
           <Status key={`team-${team.id}-active`} status={team.active ? "active" : "inactive"} />,
           <LeftAlignedTableContainer>
             {users

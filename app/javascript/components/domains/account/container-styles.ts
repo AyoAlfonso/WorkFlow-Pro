@@ -89,6 +89,12 @@ export const LeftAlignedTableContainer = styled.div`
   align-items: center;
 `;
 
+export const LeftAlignedColumnListTableContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+`;
+
 export const IconContainer = styled.div<SpaceProps>`
   ${space}
   &:hover {
