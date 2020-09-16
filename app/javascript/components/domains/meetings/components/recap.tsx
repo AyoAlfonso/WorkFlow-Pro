@@ -77,7 +77,7 @@ export const Recap = observer(
           <Card
             {...cardProps}
             headerComponent={
-              <Text fontSize={"20px"} fontWeight={"bold"}>
+              <Text fontSize={"16px"} fontWeight={"bold"}>
                 {title}
               </Text>
             }
