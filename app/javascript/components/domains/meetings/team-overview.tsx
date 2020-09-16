@@ -137,14 +137,14 @@ export const TeamOverview = observer(
                 </TeamMemberName>
               </TeamMemberInfoContainer>
             </TeamMemberContainer>
-            <StatusContainer fontSize={"20px"}>
+            <StatusContainer fontSize={"16px"}>
               <HomePersonalStatusDropdownMenuItem
-                style={{ width: "170px", borderRadius: "5px", marginTop: "5px" }}
+                style={{ height: "32px", width: "165px", borderRadius: "5px", marginTop: "5px" }}
                 menuItem={options[user.currentDailyLog.workStatus]}
                 onSelect={() => null}
               />
             </StatusContainer>
-            <TodaysPrioritiesContainer fontSize={"20px"}>
+            <TodaysPrioritiesContainer fontSize={"16px"}>
               {renderUserPriorities(user.todaysPriorities)}
             </TodaysPrioritiesContainer>
           </UserRecordContainer>
