@@ -1,32 +1,32 @@
-import * as React from "react";
-import styled from "styled-components";
-import { Button } from "~/components/shared/button";
-import { observer } from "mobx-react";
-import { useParams, useHistory } from "react-router-dom";
-import { useMst } from "../../../setup/root";
-import { toJS } from "mobx";
-import * as R from "ramda";
-import { Avatar } from "~/components/shared/avatar";
-import { Text } from "~/components/shared/text";
-import { HomeContainerBorders } from "../home/shared-components";
-import { homePersonalStatusOptions as options } from "../home/home-personal-status/home-personal-status-options";
-import { HomePersonalStatusDropdownMenuItem } from "../home/home-personal-status/home-personal-status-dropdown-menu-item";
 import { Checkbox, Label } from "@rebass/forms";
+import { toJS } from "mobx";
+import { observer } from "mobx-react";
+import * as R from "ramda";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useHistory, useParams } from "react-router-dom";
+import styled from "styled-components";
+import { typography, TypographyProps } from "styled-system";
+import { Avatar } from "~/components/shared/avatar";
+import { Heading } from "~/components/shared/heading";
+import { Loading } from "~/components/shared/loading";
+import { NoMoodRatings } from "~/components/shared/no-mood-ratings";
+import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
+import { Text } from "~/components/shared/text";
+import MeetingTypes from "~/constants/meeting-types";
+import { ToastMessageConstants } from "~/constants/toast-types";
+import { baseTheme } from "~/themes";
+import { showToast } from "~/utils/toast-message";
+import { useMst } from "../../../setup/root";
+import { HomePersonalStatusDropdownMenuItem } from "../home/home-personal-status/home-personal-status-dropdown-menu-item";
+import { homePersonalStatusOptions as options } from "../home/home-personal-status/home-personal-status-options";
+import { HomeContainerBorders } from "../home/shared-components";
 import { KeyActivityPriorityIcon } from "../key-activities/key-activity-priority-icon";
-import { TeamPulseCard } from "./shared/team-pulse-card";
+import { FutureTeamMeetingsContainer } from "./shared/future-team-meetings-container";
 import { OverallTeamPulse } from "./shared/overall-team-pulse";
 import { TeamIssuesContainer } from "./shared/team-issues-container";
-import { Loading } from "~/components/shared/loading";
-import MeetingTypes from "~/constants/meeting-types";
-import { showToast } from "~/utils/toast-message";
-import { ToastMessageConstants } from "~/constants/toast-types";
-import { FutureTeamMeetingsContainer } from "./shared/future-team-meetings-container";
-import { useState, useEffect } from "react";
-import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
-import { useTranslation } from "react-i18next";
-import { NoMoodRatings } from "~/components/shared/no-mood-ratings";
-import { baseTheme } from "~/themes";
-import { typography, TypographyProps } from "styled-system";
+import { TeamPulseCard } from "./shared/team-pulse-card";
 
 interface ITeamOverviewProps {}
 
@@ -155,7 +155,7 @@ export const TeamOverview = observer(
     return (
       <Container>
         <HeaderContainer>
-          <Title>{`${currentTeam.name} Overview`}</Title>
+          <Heading type={"h1"} fontSize={"24px"}>{`${currentTeam.name} Overview`}</Heading>
         </HeaderContainer>
         <BodyContainer>
           <LeftContainer>
@@ -204,10 +204,6 @@ const HeaderContainer = styled.div`
   display: flex;
 `;
 
-const Title = styled(Text)`
-  font-size: 36px;
-`;
-
 const BodyContainer = styled.div`
   display: flex;
 `;
@@ -235,18 +231,6 @@ const TeamIssuesWrapper = styled(HomeContainerBorders)`
 const FutureTeamMeetingsWrapper = styled(HomeContainerBorders)`
   width: 50%;
   margin-right: 20px;
-`;
-
-const SubHeaderTextContainer = styled.div`
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 16px;
-  border-bottom: ${props => `1px solid ${props.theme.colors.grey40}`};
-`;
-
-const SubHeaderText = styled(Text)`
-  font-size: 20px;
-  font-weight: bold;
 `;
 
 const TeamMemberContainer = styled.div`
