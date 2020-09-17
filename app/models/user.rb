@@ -78,7 +78,7 @@ class User < ApplicationRecord
   end
 
   def todays_priorities
-    self.key_activities.where(todays_priority: true).incomplete.sort_by_priority_and_created_at.limit(3)
+    self.key_activities.where(todays_priority: true).incomplete.sort_by_priority_and_created_at
   end
   
   # devise confirm! method overriden

@@ -22,7 +22,14 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def update
-    @key_activity.update!(key_activity_params.merge(completed_at: params[:completed] ? Time.now : nil))
+    # items retain their position when completed and need to be set to some huge number to fix drag and drop bug 
+    # with acts as taggable list re-ordering
+    if params[:completed]
+      @key_activity.update!(key_activity_params.merge(completed_at: Time.now, position: 1000000))
+    else
+      @key_activity.update!(key_activity_params)
+    end
+
     if params[:from_team_meeting] == true
       @key_activities_to_render = team_meeting_activities(@key_activity.meeting_id)
     else
