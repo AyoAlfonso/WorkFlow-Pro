@@ -27,7 +27,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
     if params[:completed]
       @key_activity.update!(key_activity_params.merge(completed_at: Time.now, position: 1000000))
     else
-      @key_activity.update!(key_activity_params)
+      @key_activity.update!(key_activity_params.merge(completed_at: nil))
     end
 
     if params[:from_team_meeting] == true
