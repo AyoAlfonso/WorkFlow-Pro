@@ -120,6 +120,7 @@ export const TeamOverview = observer(
 
     const renderUserRecords = () => {
       return currentTeam.users.map((user, index) => {
+        const prioritiesToRender = user.todaysPriorities.concat(user.todaysCompletedActivities);
         return (
           <UserRecordContainer key={index}>
             <TeamMemberContainer>
@@ -145,7 +146,7 @@ export const TeamOverview = observer(
               />
             </StatusContainer>
             <TodaysPrioritiesContainer fontSize={"16px"}>
-              {renderUserPriorities(user.todaysPriorities)}
+              {renderUserPriorities(prioritiesToRender)}
             </TodaysPrioritiesContainer>
           </UserRecordContainer>
         );
