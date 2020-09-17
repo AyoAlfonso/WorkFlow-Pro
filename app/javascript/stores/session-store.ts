@@ -51,25 +51,23 @@ export const SessionStoreModel = types
         if (response.ok) {
           let responseMessage = "";
           if (
-            R.path(["dailyLogsAttributes", 0, "mipCount"], fieldsAndValues) !==
+            R.path(["dailyLogsAttributes", 0, "mipCount"], fieldsAndValues) ===
             R.path(["profile", "currentDailyLog", "mipCount"], self)
           ) {
-            return;
+            if (fieldsAndValues["dailyLogsAttributes"]) {
+              const workStatus = R.path(["dailyLogsAttributes", 0, "workStatus"], fieldsAndValues);
+              const humanizedWorkStatus = R.path([workStatus, "label"], options);
+              responseMessage = humanizedWorkStatus
+                ? `You successfully changed your status to ${humanizedWorkStatus}`
+                : "Status Updated";
+              showToast(responseMessage, ToastMessageConstants.SUCCESS);
+            } else {
+              responseMessage = "User updated";
+              showToast(responseMessage, ToastMessageConstants.SUCCESS);
+            }
           }
           self.profile = response.data;
-          if (fieldsAndValues["dailyLogsAttributes"]) {
-            const workStatus = R.path(["dailyLogsAttributes", 0, "workStatus"], fieldsAndValues);
-            const humanizedWorkStatus = R.path([workStatus, "label"], options);
-            responseMessage = humanizedWorkStatus
-              ? `You successfully changed your status to ${humanizedWorkStatus}`
-              : "Status Updated";
-          } else {
-            responseMessage = "User updated";
-          }
-
           userStore.setUserInUsers(response.data);
-
-          showToast(responseMessage, ToastMessageConstants.SUCCESS);
         }
       } catch {
         // error messaging handled by API monitor

@@ -17,7 +17,9 @@ export const MIPSelector = observer(
     const { keyActivityStore } = useMst();
     const todaysPriorities = keyActivityStore.todaysPriorities;
     const weeklyKeyActivities = keyActivityStore.weeklyKeyActivities;
-    const masterKeyActivities = keyActivityStore.masterKeyActivities;
+    const masterKeyActivities = keyActivityStore.masterKeyActivities.filter(
+      mka => mka.completedAt === null,
+    );
 
     if (R.isNil(todaysPriorities) || R.isNil(weeklyKeyActivities) || R.isNil(masterKeyActivities)) {
       return <Loading />;
