@@ -82,7 +82,7 @@ class User < ApplicationRecord
   end
 
   def todays_completed_activities
-    self.key_activities.completed_today
+    self.key_activities.completed_today(self)
   end
   
   # devise confirm! method overriden
