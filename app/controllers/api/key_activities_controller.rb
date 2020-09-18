@@ -25,7 +25,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
     # items retain their position when completed and need to be set to some huge number to fix drag and drop bug 
     # with acts as taggable list re-ordering
     if params[:completed]
-      @key_activity.update!(key_activity_params.merge(completed_at: Time.now, position: 1000000))
+      @key_activity.update!(key_activity_params.merge(completed_at: Time.now, todays_priority: false, weekly_list: false))
     else
       @key_activity.update!(key_activity_params.merge(completed_at: nil))
     end
