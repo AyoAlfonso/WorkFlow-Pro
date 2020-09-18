@@ -12,6 +12,7 @@ class KeyActivity < ApplicationRecord
   scope :created_in_meeting, -> (meeting_id) { where(meeting_id: meeting_id) }
   scope :weekly_list, -> { where(weekly_list: true) }
   scope :todays_priority, -> { where(todays_priority: true) }
+  scope :master_list, -> { where(weekly_list: false).where(todays_priority: false) }
   scope :incomplete, -> { where(completed_at: nil) }
   
   scope :created_between, -> (date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
