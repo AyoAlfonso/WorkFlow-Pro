@@ -22,7 +22,7 @@ class KeyActivity < ApplicationRecord
   scope :completed_today, -> (user) { where("completed_at BETWEEN '#{user.time_in_user_timezone.beginning_of_day}' AND '#{user.time_in_user_timezone.end_of_day}'") }
 
   scope :sort_by_priority_and_created_at, -> {sort_by_priority.sort_by_created_date}
-  #scope :sort_by_position_priority_and_created_at, -> { sort_by_position.sort_by_priority.sort_by_created_date }
+  scope :sort_by_position_priority_and_created_at, -> { sort_by_position.sort_by_priority.sort_by_created_date }
   scope :sort_by_todays_priority_weekly_list_position, -> { order(todays_priority: :desc).order(weekly_list: :desc).sort_by_position}
 
 
