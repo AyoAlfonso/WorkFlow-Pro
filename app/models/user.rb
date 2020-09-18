@@ -80,6 +80,10 @@ class User < ApplicationRecord
   def todays_priorities
     self.key_activities.where(todays_priority: true).incomplete.sort_by_priority_and_created_at
   end
+
+  def todays_completed_activities
+    self.key_activities.completed_today(self)
+  end
   
   # devise confirm! method overriden
   # def confirm!
