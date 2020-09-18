@@ -10,7 +10,11 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def create
     @key_activity = KeyActivity.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], weekly_list: params[:weekly_list], meeting_id: params[:meeting_id] })
-    #TODO: if its a master list acitivity item, insert after the last noncompleted item
+    # if its a master list acitivity item, insert after the last noncompleted item
+    if params[:weekly_list] == false
+      last_incomplete_position = KeyActivity.owned_by_user(current_user).incomplete.sort_by_todays_priority_weekly_list_position.last.position
+      @key_activity.insert_at(last_incomplete_position + 1)
+    end
     authorize @key_activity
     @key_activity.save!
 
@@ -23,11 +27,10 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def update
-    # items retain their position when completed and need to be set to some huge number to fix drag and drop bug 
-    # with acts as taggable list re-ordering
     if params[:completed]
-      #TODO: if we complete an item on the master list, it should move it to the end
+      # if we complete an item on the master list, it should move it to the end
       @key_activity.update!(key_activity_params.merge(completed_at: Time.now, todays_priority: false, weekly_list: false))
+      @key_activity.move_to_bottom
     else
       @key_activity.update!(key_activity_params.merge(completed_at: nil))
     end
