@@ -4,12 +4,17 @@ class Api::KeyActivitiesController < Api::ApplicationController
   respond_to :json
 
   def index
-    @key_activities = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_position_priority_and_created_at
+    @key_activities = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_todays_priority_weekly_list_position
     render "api/key_activities/index"
   end
 
   def create
     @key_activity = KeyActivity.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], weekly_list: params[:weekly_list], meeting_id: params[:meeting_id] })
+    # if its a master list acitivity item, insert after the last noncompleted item
+    if params[:weekly_list] == false
+      last_incomplete_position = KeyActivity.owned_by_user(current_user).master_list.incomplete.sort_by_todays_priority_weekly_list_position.last.position
+      @key_activity.insert_at(last_incomplete_position + 1)
+    end
     authorize @key_activity
     @key_activity.save!
 
@@ -22,10 +27,10 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def update
-    # items retain their position when completed and need to be set to some huge number to fix drag and drop bug 
-    # with acts as taggable list re-ordering
     if params[:completed]
-      @key_activity.update!(key_activity_params.merge(completed_at: Time.now, position: 1000000))
+      # if we complete an item on the master list, it should move it to the end
+      @key_activity.update!(key_activity_params.merge(completed_at: Time.now, todays_priority: false, weekly_list: false))
+      @key_activity.move_to_bottom
     else
       @key_activity.update!(key_activity_params.merge(completed_at: nil))
     end
@@ -33,7 +38,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
     if params[:from_team_meeting] == true
       @key_activities_to_render = team_meeting_activities(@key_activity.meeting_id)
     else
-      @key_activities_to_render = KeyActivity.owned_by_user(current_user).sort_by_position_priority_and_created_at
+      @key_activities_to_render = KeyActivity.owned_by_user(current_user).sort_by_todays_priority_weekly_list_position
     end
     render "api/key_activities/update"
   end
@@ -44,7 +49,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
       meeting_id = @key_activity.meeting_id
       @key_activities_to_render = team_meeting_activities(meeting_id)
     else
-      @key_activities_to_render = KeyActivity.owned_by_user(current_user).sort_by_position_priority_and_created_at
+      @key_activities_to_render = KeyActivity.owned_by_user(current_user).sort_by_todays_priority_weekly_list_position
     end
     render "api/key_activities/destroy"
   end
@@ -70,7 +75,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def team_meeting_activities(meeting_id)
     meeting = Meeting.find(meeting_id)
-    KeyActivity.filter_by_team_meeting(meeting.meeting_template_id, meeting.team_id).sort_by_position_priority_and_created_at
+    KeyActivity.filter_by_team_meeting(meeting.meeting_template_id, meeting.team_id).sort_by_todays_priority_weekly_list_position
   end
 
 
