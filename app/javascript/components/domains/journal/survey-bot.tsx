@@ -26,7 +26,7 @@ export const SurveyBot = observer(
     const {
       sessionStore,
       sessionStore: {
-        profile: { currentDailyLog, firstName, todaysPriorities, todaysCompletedActivities },
+        profile: { currentDailyLog, firstName },
       },
       questionnaireStore,
       keyActivityStore,
@@ -63,8 +63,8 @@ export const SurveyBot = observer(
       } else if (R.hasPath(["metadata", "username"], step)) {
         return R.assoc("message", R.replace("{userName}", firstName, step.message))(step);
       } else if (R.hasPath(["metadata", "pynCount"], step)) {
-        const totalPynCount = todaysPriorities.length + todaysCompletedActivities.length;
-        const completedPynCount = todaysCompletedActivities.length;
+        const completedPynCount = keyActivityStore.completedToday.length;
+        const totalPynCount = keyActivityStore.todaysPriorities.length + completedPynCount;
         const newMessage = R.pipe(
           R.replace("{completedMIPCount}", `${completedPynCount < 0 ? 0 : completedPynCount}`),
           R.replace("{totalMIPCount}", `${totalPynCount}`),

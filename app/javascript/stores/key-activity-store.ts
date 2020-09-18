@@ -32,6 +32,12 @@ export const KeyActivityStoreModel = types
         keyActivity => keyActivity.todaysPriority && !keyActivity.completedAt,
       );
     },
+    get completedToday() {
+      const today = new Date();
+      return self.keyActivities.filter(
+        keyActivity => new Date(keyActivity.completedAt).getDate() === today.getDate(),
+      );
+    },
   }))
   .actions(self => ({
     startLoading(loadingList = null) {
