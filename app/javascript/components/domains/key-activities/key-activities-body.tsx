@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { color } from "styled-system";
-import { baseTheme } from "~/themes";
 import { useMst } from "../../../setup/root";
 import { Loading } from "../../shared";
 import { Icon } from "../../shared/icon";
@@ -45,10 +44,21 @@ export const KeyActivitiesBody = observer(
       if (loading && loadingList === "weekly-activities") {
         return <Loading />;
       } else if (showAllKeyActivities) {
+        const completedMasterActivitiesPresent = completedMasterActivities.length > 0;
+        const outstandingMasterActivitiesContainerHeight = outstandingMasterActivities.length * 54;
         return (
           <>
-            {renderOutstandingMasterActivitiesList()}
-            {renderCompletedMasterActivitiesList()}
+            <OutstandingMAsterActivitiesListContainer
+              height={outstandingMasterActivitiesContainerHeight}
+            >
+              {renderOutstandingMasterActivitiesList()}
+            </OutstandingMAsterActivitiesListContainer>
+
+            <CompletedMasterActivitiesListContainer
+              completedMasterActivitiesPresent={completedMasterActivitiesPresent}
+            >
+              {renderCompletedMasterActivitiesList()}
+            </CompletedMasterActivitiesListContainer>
           </>
         );
       } else {
@@ -84,10 +94,7 @@ export const KeyActivitiesBody = observer(
     };
 
     const renderOutstandingMasterActivitiesList = (): Array<JSX.Element> => {
-      const completedMasterActivitiesPresent = completedMasterActivities.length > 0;
       return sortByPosition(outstandingMasterActivities).map((keyActivity, index) => {
-        const lastElement = index == outstandingMasterActivities.length - 1;
-
         return (
           <Draggable
             draggableId={`keyActivity-${keyActivity.id}`}
@@ -98,11 +105,6 @@ export const KeyActivitiesBody = observer(
             {provided => (
               <KeyActivityContainer
                 key={keyActivity["id"]}
-                borderBottom={
-                  completedMasterActivitiesPresent &&
-                  lastElement &&
-                  `1px solid ${baseTheme.colors.grey40}`
-                }
                 ref={provided.innerRef}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
@@ -217,3 +219,24 @@ type KeyActivitiesContainerType = {
 type KeyActivityContainerType = {
   borderBottom?: string;
 };
+
+type CompletedMasterActivitiesListContainerType = {
+  completedMasterActivitiesPresent: boolean;
+};
+
+const CompletedMasterActivitiesListContainer = styled.div<
+  CompletedMasterActivitiesListContainerType
+>`
+  border-top: ${props =>
+    props.completedMasterActivitiesPresent && `1px solid ${props.theme.colors.grey40}`};
+`;
+
+type OutstandingMAsterActivitiesListContainerType = {
+  height: number;
+};
+
+const OutstandingMAsterActivitiesListContainer = styled.div<
+  OutstandingMAsterActivitiesListContainerType
+>`
+  height: ${props => props.height}px;
+`;
