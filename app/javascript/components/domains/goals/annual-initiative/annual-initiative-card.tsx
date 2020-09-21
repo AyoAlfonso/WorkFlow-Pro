@@ -77,20 +77,18 @@ export const AnnualInitiativeCard = ({
 };
 
 const Container = styled(HomeContainerBorders)`
-  height: 100px;
   width: calc(20% - 15px);
   min-width: 240px;
   margin-right: ${props => props["margin-right"] || "0px"};
-  height: fit-content;
+  display: flex;
+  flex-direction: column;
   &: hover {
     background: rgba(0, 0, 0, 0.02);
     opacity: 0.85;
   }
 `;
 
-const DescriptionContainer = styled.div`
-  height: 59px;
-`;
+const DescriptionContainer = styled.div``;
 
 const StyledText = styled(Text)`
   padding-left: 16px;
@@ -105,11 +103,11 @@ const StyledText = styled(Text)`
 
 const HeaderContainer = styled.div`
   display: flex;
+  flex-grow: 1;
 `;
 
 const IconContainer = styled.div`
-  margin-top: auto;
-  margin-bottom: auto;
+  margin-top: 17px;
   margin-left: auto;
   margin-right: 16px;
   display: flex;
