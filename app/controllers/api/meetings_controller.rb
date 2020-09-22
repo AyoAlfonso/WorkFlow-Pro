@@ -74,8 +74,10 @@ class Api::MeetingsController < Api::ApplicationController
   def set_additional_data
     @team = @meeting.team_id ? Team.find(@meeting.team_id) : nil
     if @team.present?
-      @current_week_average_user_emotions = @team.daily_average_users_emotion_scores_over_week(1.week.ago, 1.day.ago)
-      @current_week_average_team_emotions = @team.team_average_weekly_emotion_score(1.week.ago, 1.day.ago)
+      previous_week_start = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
+      previous_week_end = previous_week_start + 6.days
+      @current_week_average_user_emotions = @team.daily_average_users_emotion_scores_over_week(previous_week_start, previous_week_end)
+      @current_week_average_team_emotions = @team.team_average_weekly_emotion_score(previous_week_start, previous_week_end)
       @previous_meeting = Meeting.where(team_id: @team.id, meeting_template_id: @meeting.meeting_template_id).second_to_last
       @emotion_score_percentage_difference = @team.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
       @milestones = nil
