@@ -22,9 +22,13 @@ export const Notifications = observer(
     const { notifications } = notificationStore;
 
     const renderNotificationRows = () => {
-      return notifications.map(notification => (
-        <NotificationTableRow key={notification.id} notification={notification} />
-      ));
+      if (notifications) {
+        return notifications.map(notification => (
+          <NotificationTableRow key={notification.id} notification={notification} />
+        ));
+      } else {
+        return <></>;
+      }
     };
 
     if (notificationStore.notificationToEdit !== null) {
