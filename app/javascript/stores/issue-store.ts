@@ -101,6 +101,15 @@ export const IssueStoreModel = types
         return false;
       }
     }),
+    fetchIssuesForTeam: flow(function*(teamId) {
+      const response: ApiResponse<any> = yield self.environment.api.getIssuesForTeam(teamId);
+      if (response.ok) {
+        self.issues = response.data;
+        return true;
+      } else {
+        return false;
+      }
+    }),
   }))
   .actions(self => ({
     updateIssueState(id, field, value) {

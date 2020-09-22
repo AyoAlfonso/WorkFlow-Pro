@@ -48,6 +48,12 @@ class Api::IssuesController < Api::ApplicationController
     render "api/issues/issues_for_meeting"
   end
 
+  def issues_for_team
+    @issues = team_meeting_issues(params[:team_id])
+    authorize @issues
+    render "api/issues/issues_for_team"
+  end
+
   private
 
   def issue_params

@@ -171,7 +171,7 @@ export const TeamOverview = observer(
                 <FutureTeamMeetingsContainer handleMeetingClick={handleMeetingClick} />
               </FutureTeamMeetingsWrapper>
               <TeamIssuesWrapper>
-                <TeamIssuesContainer />
+                <TeamIssuesContainer teamId={team_id} />
               </TeamIssuesWrapper>
             </TeamMeetingInfoContainer>
 

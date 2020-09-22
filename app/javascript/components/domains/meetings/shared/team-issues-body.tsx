@@ -10,12 +10,13 @@ import { useMst } from "~/setup/root";
 
 interface ITeamIssuesBodyProps {
   showOpenIssues: boolean;
+  teamId: number | string;
 }
 
 export const TeamIssuesBody = observer(
   (props: ITeamIssuesBodyProps): JSX.Element => {
     const { issueStore } = useMst();
-    const { showOpenIssues } = props;
+    const { showOpenIssues, teamId } = props;
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
 
     //@TODO: REPLACE WITH REAL TEAM DATA.
@@ -24,7 +25,7 @@ export const TeamIssuesBody = observer(
     const closedIssues = issueStore.closedIssues;
 
     useEffect(() => {
-      issueStore.fetchIssues();
+      issueStore.fetchIssuesForTeam(teamId);
     }, []);
 
     const renderIssuesList = (): Array<JSX.Element> => {

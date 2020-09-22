@@ -27,6 +27,10 @@ class IssuePolicy < ApplicationPolicy
   def issues_for_meeting?
     true
   end
+
+  def issues_for_team?
+    true
+  end
   
   def meeting_recap?
     true
