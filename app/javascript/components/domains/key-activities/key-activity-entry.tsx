@@ -51,26 +51,28 @@ export const KeyActivityEntry = observer(
 
     return (
       <Container dragHandleProps={dragHandleProps}>
-        <CheckboxContainer key={keyActivity["id"]}>
-          <Checkbox
-            key={keyActivity["id"]}
-            checked={keyActivity["completedAt"] ? true : false}
-            sx={{
-              color: baseTheme.colors.primary100,
-            }}
-            onChange={e => {
-              keyActivityStore.updateKeyActivityStatus(
-                keyActivity,
-                e.target.checked,
-                meetingId ? true : false,
-              );
-            }}
-          />
-        </CheckboxContainer>
+        <LeftActionsContainer>
+          <CheckboxContainer key={keyActivity["id"]}>
+            <Checkbox
+              key={keyActivity["id"]}
+              checked={keyActivity["completedAt"] ? true : false}
+              sx={{
+                color: baseTheme.colors.primary100,
+              }}
+              onChange={e => {
+                keyActivityStore.updateKeyActivityStatus(
+                  keyActivity,
+                  e.target.checked,
+                  meetingId ? true : false,
+                );
+              }}
+            />
+          </CheckboxContainer>
 
-        <KeyActivityPriorityContainer onClick={() => updatePriority()}>
-          <KeyActivityPriorityIcon priority={keyActivity.priority} />
-        </KeyActivityPriorityContainer>
+          <KeyActivityPriorityContainer onClick={() => updatePriority()}>
+            <KeyActivityPriorityIcon priority={keyActivity.priority} />
+          </KeyActivityPriorityContainer>
+        </LeftActionsContainer>
 
         {/* {dragHandleProps && (
           <HandleContainer {...dragHandleProps}>
@@ -89,32 +91,34 @@ export const KeyActivityEntry = observer(
               keyActivityRef.current.blur();
             }
           }}
-          style={{ textDecoration: keyActivity.completedAt && "line-through" }}
+          style={{ textDecoration: keyActivity.completedAt && "line-through", cursor: "text" }}
           onBlur={() =>
             keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false)
           }
         />
 
         <ActionContainer>
-          {meetingId && (
-            <AvatarContainer>
-              <Avatar
-                defaultAvatarColor={keyActivity.user.defaultAvatarColor}
-                firstName={keyActivity.user.firstName}
-                lastName={keyActivity.user.lastName}
-                avatarUrl={keyActivity.user.avatarUrl}
-                size={25}
-              />
-            </AvatarContainer>
-          )}
+          <ActionSubContainer>
+            {meetingId && (
+              <AvatarContainer>
+                <Avatar
+                  defaultAvatarColor={keyActivity.user.defaultAvatarColor}
+                  firstName={keyActivity.user.firstName}
+                  lastName={keyActivity.user.lastName}
+                  avatarUrl={keyActivity.user.avatarUrl}
+                  size={25}
+                />
+              </AvatarContainer>
+            )}
 
-          <DeleteButtonContainer
-            onClick={() =>
-              keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
-            }
-          >
-            <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
-          </DeleteButtonContainer>
+            <DeleteButtonContainer
+              onClick={() =>
+                keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
+              }
+            >
+              <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
+            </DeleteButtonContainer>
+          </ActionSubContainer>
         </ActionContainer>
       </Container>
     );
@@ -184,7 +188,7 @@ const StyledContentEditable = styled(ContentEditable)`
   line-height: 20px;
   margin-left: 10px;
   min-width: 105px;
-  width: 50%;
+  width: 90%;
   margin-top: auto;
   margin-bottom: auto;
 `;
@@ -209,7 +213,17 @@ const AvatarContainer = styled.div`
   margin-right: 4px;
 `;
 
+const LeftActionsContainer = styled.div`
+  display: flex;
+`;
+
 const ActionContainer = styled.div`
   display: flex;
   margin-left: auto;
+  width: 60px;
+`;
+
+const ActionSubContainer = styled.div`
+  margin-left: auto;
+  display: flex;
 `;
