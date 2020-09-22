@@ -79,7 +79,7 @@ export const CreateGoalSection = ({
       onClick={() => setShowCreateGoal(true)}
       width={buttonWidth}
     >
-      <Icon icon={"Plus"} size={"20px"} style={{ marginTop: "3px" }} />
+      <Icon icon={"Plus"} size={"20px"} />
       <AddGoalText>{addButtonText}</AddGoalText>
     </StyledButton>
   );
@@ -101,7 +101,7 @@ const StyledButton = styled(Button)<StyledButtonType>`
   }
 `;
 
-const AddGoalText = styled.p`
+const AddGoalText = styled.div`
   margin-left: 16px;
 `;
 
