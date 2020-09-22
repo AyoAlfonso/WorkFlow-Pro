@@ -201,9 +201,9 @@
     <div style="display: flex;
                 margin-bottom: 5px;
                 margin-left: 5px;">
-      <p style="font-weight: bold; margin-left: 5px;"> 
+      <p style="font-weight: bold; margin-left: 5px;">
         <%= "#{habits_for_the_previous_week(@user).map{|habit| habit[:weekly_difference].round}.sum > 0 ? "+" : ""}"%>
-        <%= "#{habits_for_the_previous_week(@user).map{|habit| habit[:weekly_difference].round}.sum.to_f / habits_for_the_previous_week(@user).count.to_f}%" %>
+        <%= "#{habits_for_the_previous_week(@user).map{|habit| habit[:weekly_difference].round}.sum.to_f / (habits_for_the_previous_week(@user).count.to_f > 0 ? habits_for_the_previous_week(@user).count.to_f : 1)}%" %>
       </p>
       <p style="font-size: 14px;
                 color: #B6BACC;
