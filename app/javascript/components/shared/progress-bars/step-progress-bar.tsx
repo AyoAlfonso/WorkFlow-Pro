@@ -133,7 +133,7 @@ type ContainerProps = {
 };
 
 const Container = styled.div<ContainerProps>`
-  width: ${props => (props.fromPersonalPlanning ? "60%" : "100%")};
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   min-width: 400px;

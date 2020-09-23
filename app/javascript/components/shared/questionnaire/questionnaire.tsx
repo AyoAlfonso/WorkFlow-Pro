@@ -77,19 +77,21 @@ export const Questionnaire = (props: IQuestionnaireProps): JSX.Element => {
   }, R.clone(questionnaireVariant.steps));
 
   return (
-    <ChatBot
-      hideBotAvatar={true}
-      hideUserAvatar={true}
-      botDelay={1000}
-      headerComponent={<SurveyHeader title={"Weekly Reflection"} />}
-      steps={steps}
-      width={"1020px"}
-      contentStyle={{ height: "400px" }}
-      // header and footer are 120px total
-      style={{ height: "520px" }}
-      enableSmoothScroll={true}
-      userDelay={200}
-    />
+    <Container>
+      <ChatBot
+        hideBotAvatar={true}
+        hideUserAvatar={true}
+        botDelay={1000}
+        headerComponent={<SurveyHeader title={"Weekly Reflection"} />}
+        steps={steps}
+        width={"100%"}
+        contentStyle={{ height: "400px" }}
+        // header and footer are 120px total
+        style={{ height: "520px" }}
+        enableSmoothScroll={true}
+        userDelay={200}
+      />
+    </Container>
   );
 };
 
@@ -109,6 +111,10 @@ const HeaderDiv = styled.div`
   padding-left: 20px;
   padding-right: 20px;
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+`;
+
+const Container = styled.div`
+  width: 67%;
 `;
 
 export const SurveyHeader = ({ title }) => {

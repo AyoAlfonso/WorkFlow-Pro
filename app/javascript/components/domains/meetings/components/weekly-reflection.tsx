@@ -32,9 +32,14 @@ export const WeeklyReflection = (props: {}): JSX.Element => {
         <TeamPulseBorder>
           <TeamPulseContainer meeting={meeting} title={"Your Mood"} />
         </TeamPulseBorder>
-        <PersonalHabitSummary meeting={meeting} />
+        <PersonalHabitsContainer>
+          <PersonalHabitSummary meeting={meeting} />
+        </PersonalHabitsContainer>
       </RowContainer>
-      <Questionnaire variant={QuestionnaireTypeConstants.weeklyReflection} />
+      <RowContainer>
+        <Questionnaire variant={QuestionnaireTypeConstants.weeklyReflection} />
+        <Placeholder />
+      </RowContainer>
     </Container>
   );
 };
@@ -45,13 +50,26 @@ const Container = styled.div`
 
 const TeamPulseBorder = styled(HomeContainerBorders)`
   min-width: 670px;
-  margin-right: 20px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 67%;
 `;
 
 const RowContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   margin-bottom: 10px;
+  width: 100%;
+  gap: 20px;
+`;
+
+const PersonalHabitsContainer = styled.div`
+  width: 33%;
+`;
+
+const Placeholder = styled.div`
+  width: 33%;
 `;

@@ -88,18 +88,21 @@ export const PersonalPlanning = observer(
           </DateAndButtonContainer>
         </HeaderContainer>
         <BodyContainer>
-          <ProgressBarTimerContainer>
-            <StepProgressBar
-              progressBarProps={{
-                stepPositions: stepPositions,
-                percent: 0,
-              }}
-              steps={progressBarSteps}
-              onStepClick={onStepClick}
-              currentStepIndex={meeting.currentStep}
-              fromPersonalPlanning={true}
-            />
-          </ProgressBarTimerContainer>
+          <ProgressContainer>
+            <ProgressBarSpacer />
+            <ProgressBarContainer>
+              <StepProgressBar
+                progressBarProps={{
+                  stepPositions: stepPositions,
+                  percent: 0,
+                }}
+                steps={progressBarSteps}
+                onStepClick={onStepClick}
+                currentStepIndex={meeting.currentStep}
+                fromPersonalPlanning={true}
+              />
+            </ProgressBarContainer>
+          </ProgressContainer>
           <MeetingStep meeting={meetingStore.currentPersonalPlanning}></MeetingStep>
         </BodyContainer>
       </Container>
@@ -123,10 +126,19 @@ const DateAndButtonContainer = styled.div`
   justify-content: center;
 `;
 
-const ProgressBarTimerContainer = styled.div`
-  display: flex;
-  align-items: center;
+const ProgressContainer = styled.div`
   width: 100%;
+  display: flex;
+  margin-top: 20px;
+`;
+
+const ProgressBarContainer = styled.div`
+  width: 80%;
+`;
+
+const ProgressBarSpacer = styled.div`
+  width: 20%;
+  margin-right: 20px;
 `;
 
 const BodyContainer = styled.div``;
