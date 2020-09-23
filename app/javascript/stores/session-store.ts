@@ -49,12 +49,12 @@ export const SessionStoreModel = types
         );
 
         if (response.ok) {
-          let responseMessage = "";
-          if (
-            R.path(["dailyLogsAttributes", 0, "mipCount"], fieldsAndValues) ===
-            R.path(["profile", "currentDailyLog", "mipCount"], self)
-          ) {
-            if (fieldsAndValues["dailyLogsAttributes"]) {
+          if (fieldsAndValues["dailyLogsAttributes"]) {
+            if (
+              R.path(["dailyLogsAttributes", 0, "workStatus"], fieldsAndValues) !==
+              R.path(["profile", "currentDailyLog", "workStatus"], self)
+            ) {
+              let responseMessage = "";
               const workStatus = R.path(["dailyLogsAttributes", 0, "workStatus"], fieldsAndValues);
               const humanizedWorkStatus = R.path([workStatus, "label"], options);
               responseMessage = humanizedWorkStatus
@@ -62,10 +62,12 @@ export const SessionStoreModel = types
                 : "Status Updated";
               showToast(responseMessage, ToastMessageConstants.SUCCESS);
             } else {
-              responseMessage = "User updated";
-              showToast(responseMessage, ToastMessageConstants.SUCCESS);
+              showToast("Journal Complete", ToastMessageConstants.SUCCESS);
             }
+          } else {
+            showToast("User updated", ToastMessageConstants.SUCCESS);
           }
+
           self.profile = response.data;
           userStore.setUserInUsers(response.data);
         }
