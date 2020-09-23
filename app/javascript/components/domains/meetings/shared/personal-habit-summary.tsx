@@ -40,6 +40,7 @@ export const PersonalHabitSummary = observer(
 
 const Container = styled(HomeContainerBorders)`
   min-width: 325px;
+  width: 100%;
 `;
 
 const HabitsContainer = styled.div`

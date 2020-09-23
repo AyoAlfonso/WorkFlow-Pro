@@ -30,8 +30,8 @@ export const StatCard = ({
 
 const Container = styled(HomeContainerBorders)`
   padding: 5px;
-  margin-right: 20px;
   min-width: 315px;
+  width: 33.33%;
 `;
 
 const RatingText = styled.div`

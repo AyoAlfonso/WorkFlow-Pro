@@ -16,10 +16,11 @@ export interface ITeamPulseProps {
 export const TeamPulseContainer = ({ meeting, title }: ITeamPulseProps): JSX.Element => {
   const { t } = useTranslation();
   return (
-    <>
+    <Container>
       <ContainerHeaderWithText text={title ? title : t("teams.teamsPulseTitle")} />
+
       {meeting.currentWeekAverageTeamEmotions > 0 ? (
-        <>
+        <BodyContainer>
           <TeamPulseBody>
             <OverallTeamPulse value={meeting.currentWeekAverageTeamEmotions} />
             <TeamPulseCard data={toJS(meeting.formattedAverageWeeklyUserEmotions || [])} />
@@ -27,15 +28,29 @@ export const TeamPulseContainer = ({ meeting, title }: ITeamPulseProps): JSX.Ele
           <PercentChangeContainer>
             <PercentChange percentChange={meeting.emotionScorePercentageDifference} />
           </PercentChangeContainer>
-        </>
+        </BodyContainer>
       ) : (
-        <NoMoodWrapper>
-          <NoMoodRatings />
-        </NoMoodWrapper>
+        <BodyContainer>
+          <NoMoodWrapper>
+            <NoMoodRatings />
+          </NoMoodWrapper>
+        </BodyContainer>
       )}
-    </>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  width: 100%;
+`;
+
+const BodyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
 
 const TeamPulseBody = styled.div`
   display: flex;
@@ -44,6 +59,9 @@ const TeamPulseBody = styled.div`
 `;
 
 const PercentChangeContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
   margin-left: 25px;
 `;
 
