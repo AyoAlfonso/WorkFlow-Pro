@@ -98,6 +98,9 @@ export const App = observer(
           updateMipCount(1);
         }
         keyActivityStore.updateKeyActivity(keyActivityId);
+      } else if (R.includes("team-issue", draggableId)) {
+        const issueId = parseInt(R.replace("team-issue-", "", draggableId));
+        issueStore.updateIssuePosition(issueId, newPosition + 1);
       } else if (R.includes("issue", draggableId)) {
         const issueId = parseInt(R.replace("issue-", "", draggableId));
         issueStore.updateIssuePosition(issueId, newPosition + 1);

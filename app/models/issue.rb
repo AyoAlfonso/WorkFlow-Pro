@@ -3,7 +3,7 @@ class Issue < ApplicationRecord
   belongs_to :user
   belongs_to :team, optional: true
 
-  acts_as_list scope: [:user_id]
+  acts_as_list scope: [:user_id, team_id: nil]
 
   scope :created_by_user, -> (user) { where(user: user) }
   scope :sort_by_priority, -> { order(priority: :desc) }

@@ -14,6 +14,7 @@ import { Loading } from "~/components/shared/loading";
 import { IssuesHeader } from "../../issues/issues-header";
 import { CreateIssueModal } from "../../issues/create-issue-modal";
 import { IssueEntry } from "../../issues/issue-entry";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 
 export const TeamIssues = observer(
   (props: {}): JSX.Element => {
@@ -38,9 +39,22 @@ export const TeamIssues = observer(
     const renderIssuesList = (): Array<JSX.Element> => {
       const issues = showOpenIssues ? openIssues : closedIssues;
       return issues.map((issue, index) => (
-        <IssueContainer key={issue["id"]}>
-          <IssueEntry issue={issue} meetingId={meetingStore.currentMeeting.id} />
-        </IssueContainer>
+        <Draggable
+          draggableId={`team-issue-${issue.id}`}
+          index={index}
+          key={issue["id"]}
+          type={"team-issue"}
+        >
+          {provided => (
+            <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
+              <IssueEntry
+                issue={issue}
+                meetingId={meetingStore.currentMeeting.id}
+                dragHandleProps={...provided.dragHandleProps}
+              />
+            </IssueContainer>
+          )}
+        </Draggable>
       ));
     };
 
@@ -58,7 +72,14 @@ export const TeamIssues = observer(
             </AddNewIssuePlus>
             <AddNewIssueText> Add a New Issue</AddNewIssueText>
           </AddNewIssueContainer>
-          <IssuesContainer>{renderIssuesList()}</IssuesContainer>
+          <Droppable droppableId={"team-issues-container"} type={"team-issue"}>
+            {(provided, snapshot) => (
+              <IssuesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
+                {renderIssuesList()}
+                {provided.placeholder}
+              </IssuesContainer>
+            )}
+          </Droppable>
         </IssuesBodyContainer>
       );
     };
