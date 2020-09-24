@@ -18,8 +18,8 @@ export const QuestionnaireStoreModel = types
   }))
   .actions(self => ({
     fetchQuestionnaires: flow(function*() {
-      const response: ApiResponse<any> = yield self.environment.api.getQuestionnaires();
       try {
+        const response: ApiResponse<any> = yield self.environment.api.getQuestionnaires();
         self.questionnaires = response.data;
       } catch {
         // error messaging handled by API monitor
@@ -28,13 +28,19 @@ export const QuestionnaireStoreModel = types
   }))
   .actions(self => ({
     createQuestionnaireAttempt: flow(function*(questionnaireId, questionnaireAttemptData) {
-      const env = getEnv(self);
+      const { sessionStore } = getRoot(self);
       try {
-        const response: ApiResponse<any> = yield env.api.createQuestionnaireAttempt(
+        const response: ApiResponse<any> = yield self.environment.api.createQuestionnaireAttempt(
           questionnaireId,
           questionnaireAttemptData,
         );
-        self.questionnaireAttempt = response.data;
+        sessionStore.updateUser({
+          dailyLogsAttributes: [
+            {
+              ...response.data,
+            },
+          ],
+        });
       } catch {
         // error messaging handled by API monitor
       }

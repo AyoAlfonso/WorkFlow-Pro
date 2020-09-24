@@ -27,8 +27,12 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
       emotion_score: questionnaire.name == "Evening Reflection" ? emotion_to_score_conversion(params[:answers].first) : nil
     })
     authorize @questionnaire_attempt
-    @questionnaire_attempt.save!
-    render json: @questionnaire_attempt
+    if @questionnaire_attempt.save!
+      @current_daily_log = DailyLog.find(current_user.current_daily_log.id)
+      @current_daily_log[questionnaire.name.delete(' ').underscore] = true unless questionnaire.name == "Thought Challenge"
+      @current_daily_log.save!
+    end
+    render json: @current_daily_log
   end
 
   def personal_planning

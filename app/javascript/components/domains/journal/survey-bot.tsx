@@ -104,20 +104,6 @@ export const SurveyBot = observer(
             steps,
             values,
           });
-          if (
-            questionnaireVariant.name === QuestionnaireTypeConstants.createMyDay ||
-            questionnaireVariant.name === QuestionnaireTypeConstants.eveningReflection
-          ) {
-            await sessionStore.updateUser({
-              dailyLogsAttributes: [
-                {
-                  ...currentDailyLog,
-                  [`${humps.camelize(questionnaireVariant.name)}`]: true,
-                },
-              ],
-            });
-          }
-
           if (typeof props.endFn === "function") {
             setTimeout(() => {
               props.endFn("");

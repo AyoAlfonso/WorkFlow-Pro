@@ -138,7 +138,9 @@
         "title": "Journal",
         "pynBotName": "PynBot",
         "pynBotGreeting": "Hey {userName}, what can I help you with?",
-        "confirmQuit": "Are you sure you want to quit?  Your journal entry will be lost"
+        "confirmQuit": "Are you sure you want to quit?  Your journal entry will be lost",
+        "weeklyReflectionTitle": "Weekly Reflection",
+        "weeklyReflectionCompleted": "You've completed your weekly reflection. Go to the next step to start planning for the week ahead!"
       },
       "keyActivities": {
         "prioritiesTitle": "Today's Priorities",
