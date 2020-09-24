@@ -7,9 +7,9 @@ class ChangeDailyLimitOnQuestionnairesToEnum < ActiveRecord::Migration[6.0]
   def data
     Questionnaire.all.each do |q|
       if q.name == "Create My Day" or q.name == "Evening Reflection"
-        q.limit = 1
+        q.limit_type = 1
       elsif q.name == "Weekly Reflection"
-        q.limit = 2
+        q.limit_type = 2
       end
       q.save!
     end
