@@ -63,6 +63,7 @@ Rails.application.routes.draw do
     # issues
     resources :issues, only: [:index, :create, :update, :destroy]
     get '/issues/issues_for_meeting', to: "issues#issues_for_meeting"
+    get '/issues/issues_for_team', to: "issues#issues_for_team"
 
     #key activities
     resources :key_activities, only: [:index, :create, :update, :destroy]

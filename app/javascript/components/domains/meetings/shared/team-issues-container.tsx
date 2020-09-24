@@ -4,7 +4,11 @@ import { IssuesHeader } from "../../issues/issues-header";
 import { TeamIssuesBody } from "./team-issues-body";
 import { useTranslation } from "react-i18next";
 
-export const TeamIssuesContainer = (): JSX.Element => {
+interface TeamIssuesContainerProps {
+  teamId: number | string;
+}
+
+export const TeamIssuesContainer = ({ teamId }: TeamIssuesContainerProps): JSX.Element => {
   const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
   const { t } = useTranslation();
 
@@ -15,7 +19,7 @@ export const TeamIssuesContainer = (): JSX.Element => {
         setShowOpenIssues={setShowOpenIssues}
         issuesText={t("teams.teamIssuesTitle")}
       />
-      <TeamIssuesBody showOpenIssues={showOpenIssues} />
+      <TeamIssuesBody showOpenIssues={showOpenIssues} teamId={teamId} />
     </>
   );
 };

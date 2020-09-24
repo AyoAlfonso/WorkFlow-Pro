@@ -115,6 +115,12 @@ export class Api {
     });
   }
 
+  async getIssuesForTeam(teamId) {
+    return this.client.get(`/issues/issues_for_team`, {
+      teamId: teamId,
+    });
+  }
+
   async createKeyActivity(keyActivityObject) {
     return this.client.post("/key_activities", keyActivityObject);
   }
