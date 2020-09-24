@@ -76,6 +76,7 @@ export const EditUserModal = ({
 
   const inviteNewUser = () => {
     userStore.inviteUser({ email, firstName, lastName, title, userRoleId });
+    setEditUserModalOpen(false);
     resetUser();
   };
 
