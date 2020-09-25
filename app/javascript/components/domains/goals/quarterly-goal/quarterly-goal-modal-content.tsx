@@ -15,6 +15,7 @@ import { SubHeaderText } from "~/components/shared/sub-header-text";
 import { UserIconBorder } from "../shared/user-icon-border";
 import { MilestoneCard } from "../milestone/milestone-card";
 import { Loading } from "~/components/shared";
+import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -51,7 +52,10 @@ export const QuarterlyGoalModalContent = observer(
       return <Loading />;
     }
 
-    const editable = currentUser.id == quarterlyGoal.ownedById;
+    const editable =
+      currentUser.id == quarterlyGoal.ownedById ||
+      currentUser.role == RoleCEO ||
+      currentUser.role == RoleAdministrator;
 
     const allMilestones = quarterlyGoal.milestones;
     const activeMilestones = quarterlyGoal.activeMilestones;

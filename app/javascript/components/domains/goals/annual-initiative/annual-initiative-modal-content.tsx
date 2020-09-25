@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import { RecordOptions } from "../shared/record-options";
 import { Loading } from "~/components/shared";
+import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -55,7 +56,10 @@ export const AnnualInitiativeModalContent = observer(
       return <Loading />;
     }
 
-    const editable = currentUser.id == annualInitiative.ownedById;
+    const editable =
+      currentUser.id == annualInitiative.ownedById ||
+      currentUser.role == RoleCEO ||
+      currentUser.role == RoleAdministrator;
 
     const activeQuarterlyGoals = annualInitiative.activeQuarterlyGoals;
     const allQuarterlyGoals = annualInitiative.quarterlyGoals;
