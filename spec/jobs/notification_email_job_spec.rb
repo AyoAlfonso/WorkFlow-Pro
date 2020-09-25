@@ -80,6 +80,7 @@ RSpec.describe NotificationEmailJob, type: :job do
     Timecop.freeze('2020-08-19 5:30:00 -0700') do
       let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
     end
+    let!(:meeting_template) { create(:meeting_template, meeting_type: :personal_weekly) }
     let!(:daily_log) { create(:daily_log, user_id: user.id) }
 
     before :each do
@@ -94,7 +95,7 @@ RSpec.describe NotificationEmailJob, type: :job do
 
     it 'should send an email at 5:00 PM on Fridays' do
       expect(ActionMailer::Base.deliveries.length).to eq(2) # user confirmation email and notification email
-      expect(ActionMailer::Base.deliveries.last.subject.to_s).to eq("Notification - #{human_type(notification_type)}")
+      expect(ActionMailer::Base.deliveries.last.subject.to_s).to eq("#{human_type(notification_type)}")
     end
   end
 
