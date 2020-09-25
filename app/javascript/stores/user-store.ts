@@ -30,8 +30,10 @@ export const UserStoreModel = types
           self.users = R.concat(self.users, [response.data]);
           //may need to refetch teams when that is set up
           showToast("User invited", ToastMessageConstants.SUCCESS);
+          return true;
         }
       } catch {}
+      return false;
     }),
     resendInvitation: flow(function*(userId) {
       try {
