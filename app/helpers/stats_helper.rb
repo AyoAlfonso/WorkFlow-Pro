@@ -58,33 +58,38 @@ module StatsHelper
   end
 
   def calculate_stats_for_week(current_user)
-    previous_week_end = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
-    previous_week_start = previous_week_end.weeks_ago(1)
-    previous_2_week_start = previous_week_end.weeks_ago(2)
+    current_week_start = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
+    current_week_end = current_user.time_in_user_timezone
+
+    previous_week_start = current_week_start.weeks_ago(1)
+    previous_week_end = previous_week_start.end_of_week
+
+    ka_created_this_week = KeyActivity.user_created_between(current_user, current_week_start, current_week_end).count
     ka_created_last_week = KeyActivity.user_created_between(current_user, previous_week_start, previous_week_end).count
-    ka_created_2_weeks = KeyActivity.user_created_between(current_user, previous_2_week_start, previous_week_start).count
-    ka_created_change = difference_between_values(ka_created_last_week, ka_created_2_weeks)
+    ka_created_change = difference_between_values(ka_created_this_week, ka_created_last_week)
+
+    ka_completed_this_week = KeyActivity.user_completed_between(current_user, current_week_start, current_week_end).count
     ka_completed_last_week = KeyActivity.user_completed_between(current_user, previous_week_start, previous_week_end).count
-    ka_completed_2_weeks = KeyActivity.user_completed_between(current_user, previous_2_week_start, previous_week_start).count
-    ka_completed_change = difference_between_values(ka_completed_last_week, ka_completed_2_weeks)
+    ka_completed_change = difference_between_values(ka_completed_this_week, ka_completed_last_week)
+
+    issues_created_this_week = Issue.user_created_between(current_user, current_week_start, current_week_end).count
     issues_created_last_week = Issue.user_created_between(current_user, previous_week_start, previous_week_end).count
-    issues_created_2_weeks = Issue.user_created_between(current_user, previous_2_week_start, previous_week_start).count
-    issues_created_change = difference_between_values(issues_created_last_week, issues_created_2_weeks)
+    issues_created_change = difference_between_values(issues_created_this_week, issues_created_last_week)
 
     [
       {
         statistic_name: "#{I18n.t('key_activities')} Created",
-        statistic_number: ka_created_last_week,
+        statistic_number: ka_created_this_week,
         statistic_change: ka_created_change,
       }, 
       {
         statistic_name: "#{I18n.t('key_activities')} Completed",
-        statistic_number: ka_completed_last_week,
+        statistic_number: ka_completed_this_week,
         statistic_change: ka_completed_change
       },
       {
         statistic_name: "#{I18n.t('issues')} Created",
-        statistic_number: issues_created_last_week,
+        statistic_number: issues_created_this_week,
         statistic_change: issues_created_change
       }
     ]
