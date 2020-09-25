@@ -46,7 +46,12 @@ export const TeamOverview = observer(
     const history = useHistory();
     const currentTeam = teamStore.currentTeam;
 
-    if (!currentTeam || loading || R.isNil(meetingStore)) {
+    if (
+      !currentTeam ||
+      loading ||
+      R.isNil(meetingStore) ||
+      R.isNil(R.isNil(meetingStore.meetingTemplates))
+    ) {
       return (
         <Container>
           <BodyContainer>
