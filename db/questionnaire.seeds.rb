@@ -471,11 +471,11 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
       metadata: {
         emotion_selector: true,
         emotions: [
-          {icon: "Emotion-E", color: "warningRed", value: "Emotion-E", trigger: 8},
-          {icon: "Emotion-D", color: "cautionYellow", value: "Emotion-D", trigger: 8},
-          {icon: "Emotion-C", color: "grey60", value: "Emotion-C", trigger: 8},
-          {icon: "Emotion-B", color: "successGreen", value: "Emotion-B", trigger: 8},
-          {icon: "Emotion-A", color: "finePine", value: "Emotion-A", trigger: 8}
+          {icon: "Emotion-E", color: "warningRed", value: 1, trigger: 8},
+          {icon: "Emotion-D", color: "cautionYellow", value: 2, trigger: 8},
+          {icon: "Emotion-C", color: "grey60", value: 3, trigger: 8},
+          {icon: "Emotion-B", color: "successGreen", value: 4, trigger: 8},
+          {icon: "Emotion-A", color: "finePine", value: 5, trigger: 8}
         ]
       }
     },
