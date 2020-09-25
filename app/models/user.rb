@@ -88,7 +88,7 @@ class User < ApplicationRecord
   def todays_completed_activities
     self.key_activities.completed_today(self)
   end
-  
+
   # devise confirm! method overriden
   # def confirm!
   #   UserMailer.welcome_message(self).deliver
@@ -134,18 +134,17 @@ class User < ApplicationRecord
   end
 
   def time_in_user_timezone(time = nil)
-    user_timezone = get_timezone_name(self.timezone)
     if time.nil?
-      Time.current.in_time_zone(user_timezone)
+      Time.current.in_time_zone(users_timezone_name)
     elsif time == 'noon'
-      Time.current.in_time_zone(user_timezone).at_noon
+      Time.current.in_time_zone(users_timezone_name).at_noon
     end
   end
 
-  def get_timezone_name(timezone)
+  def users_timezone_name
     # user.timezone looks like "(GMT-08:00) Pacific Time (US & Canada)"
     # we need everything after "(GMT-08:00) "
-    timezone[/(?<=\(GMT.\d{2}:\d{2}\)\s).*$/]
+    self.timezone[/(?<=\(GMT.\d{2}:\d{2}\)\s).*$/]
   end
 
   def daily_average_users_emotion_scores_over_week(from_date, to_date)
