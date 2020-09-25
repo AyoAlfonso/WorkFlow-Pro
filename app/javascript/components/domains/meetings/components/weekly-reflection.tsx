@@ -1,14 +1,13 @@
 import * as React from "react";
 import * as R from "ramda";
 import styled from "styled-components";
-import { Text } from "~/components/shared/text";
-import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 import { Questionnaire } from "~/components/shared/questionnaire/questionnaire";
 import { QuestionnaireTypeConstants } from "~/constants/questionnaire-types";
 import { TeamPulseContainer } from "../shared/team-pulse-container";
 import { Loading } from "~/components/shared/loading";
 import { StatCard } from "~/components/shared/stat-card";
 import { PersonalHabitSummary } from "~/components/domains/meetings/shared/personal-habit-summary";
+import { Card } from "~/components/shared/card";
 
 import { useMst } from "~/setup/root";
 
@@ -29,9 +28,9 @@ export const WeeklyReflection = (props: {}): JSX.Element => {
         ))}
       </RowContainer>
       <RowContainer>
-        <TeamPulseBorder>
+        <Card width={"67%"} alignment={"left"} my={"5px"} minWidth={"670px"}>
           <TeamPulseContainer meeting={meeting} title={"Your Mood"} />
-        </TeamPulseBorder>
+        </Card>
         <PersonalHabitsContainer>
           <PersonalHabitSummary meeting={meeting} />
         </PersonalHabitsContainer>
@@ -46,15 +45,6 @@ export const WeeklyReflection = (props: {}): JSX.Element => {
 
 const Container = styled.div`
   margin-top: -5px;
-`;
-
-const TeamPulseBorder = styled(HomeContainerBorders)`
-  min-width: 670px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 67%;
 `;
 
 const RowContainer = styled.div`
