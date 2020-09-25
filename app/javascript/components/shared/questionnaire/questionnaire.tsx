@@ -137,6 +137,7 @@ const HeaderDiv = styled.div`
 
 const Container = styled.div`
   width: 67%;
+  min-width: 670px;
 `;
 
 export const SurveyHeader = ({ title }) => {
