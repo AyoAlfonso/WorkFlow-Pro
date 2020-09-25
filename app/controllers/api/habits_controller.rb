@@ -1,4 +1,5 @@
 class Api::HabitsController < Api::ApplicationController
+  include StatsHelper
   before_action :set_habit, except: [:create, :index, :habits_for_personal_planning]
 
   respond_to :json
@@ -40,8 +41,8 @@ class Api::HabitsController < Api::ApplicationController
   def habits_for_personal_planning
     @habits = policy_scope(Habit)
     authorize @habits
-    @beginning_of_last_week = Date.today.prev_week
-    @end_of_last_week = @beginning_of_last_week + 6.days
+    @current_week_start = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
+    @current_week_end = current_user.time_in_user_timezone
     render 'api/habits/habits_for_personal_planning'
   end
 
