@@ -44,6 +44,23 @@ export const TeamOverview = observer(
     }, []);
 
     const history = useHistory();
+    const currentTeam = teamStore.currentTeam;
+
+    if (
+      !currentTeam ||
+      loading ||
+      R.isNil(meetingStore) ||
+      R.isNil(R.isNil(meetingStore.meetingTemplates))
+    ) {
+      return (
+        <Container>
+          <BodyContainer>
+            <Loading />
+          </BodyContainer>
+        </Container>
+      );
+    }
+
     const handleMeetingClick = () => {
       const meetingTemplate = toJS(meetingStore.meetingTemplates).find(
         mt => mt.meetingType === MeetingTypes.TEAM_WEEKLY,
@@ -67,19 +84,6 @@ export const TeamOverview = observer(
         showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
       }
     };
-    // use NavLink instead?
-
-    const currentTeam = teamStore.currentTeam;
-
-    if (!currentTeam || loading) {
-      return (
-        <Container>
-          <BodyContainer>
-            <Loading />
-          </BodyContainer>
-        </Container>
-      );
-    }
 
     const renderUserSnapshotTable = (): JSX.Element => {
       return (
