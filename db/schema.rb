@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_23_162013) do
+ActiveRecord::Schema.define(version: 2020_09_28_183757) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -328,6 +328,16 @@ ActiveRecord::Schema.define(version: 2020_09_23_162013) do
     t.index ["meeting_template_id", "order_index"], name: "index_steps_on_meeting_template_id_and_order_index"
     t.index ["meeting_template_id"], name: "index_steps_on_meeting_template_id"
     t.index ["order_index"], name: "index_steps_on_order_index"
+  end
+
+  create_table "team_issues", force: :cascade do |t|
+    t.bigint "issue_id"
+    t.bigint "team_id"
+    t.integer "position"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["issue_id"], name: "index_team_issues_on_issue_id"
+    t.index ["team_id"], name: "index_team_issues_on_team_id"
   end
 
   create_table "team_user_enablements", force: :cascade do |t|
