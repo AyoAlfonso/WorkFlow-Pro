@@ -90,7 +90,6 @@ export const PersonalPlanning = observer(
         </HeaderContainer>
         <BodyContainer>
           <ProgressContainer>
-            <ProgressBarSpacer />
             <ProgressBarContainer>
               <StepProgressBar
                 progressBarProps={{
@@ -134,12 +133,8 @@ const ProgressContainer = styled.div`
 `;
 
 const ProgressBarContainer = styled.div`
-  width: 80%;
-`;
-
-const ProgressBarSpacer = styled.div`
-  width: 20%;
-  margin-right: 20px;
+  width: 60%;
+  margin: auto;
 `;
 
 const BodyContainer = styled.div``;
