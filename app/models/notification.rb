@@ -11,6 +11,8 @@ class Notification < ApplicationRecord
   scope :owned_by_user, -> (user) { where(user: user) }
   scope :enabled, -> { where.not(method: "disabled") }
 
+  before_update :set_start_time_to_be_in_past
+
   def update_notification(params)
     method = params[:method]
     validation_rule = params[:validations].first
@@ -21,5 +23,15 @@ class Notification < ApplicationRecord
       rule: IceCube::RuleHelper.construct_rule(day_as_int, hour_as_int, minute_as_int),
       method: method
     )
+  end
+
+  # When a rule notification is updated the IceCube rule's start_time is too.
+  # If the day from the start_time is today any notifications that should run today, won't run
+  # This is a known bug https://github.com/seejohnrun/ice_cube/issues/442
+  # Setting the start_time like this this also helps assure the start_time is in UTC across all systems
+  # The notification (aka occurrence) time timezone is based on the start_time's zone
+  def set_start_time_to_be_in_past
+    current_rule = self.rule
+    current_rule['start_time'] = (Time.current - 7.days).to_s
   end
 end

@@ -7,10 +7,10 @@ class NotificationEmailJob
     notification = Notification.find(notification_id)
     @user = notification.user
     @users_time = @user.time_in_user_timezone
-    schedule = IceCube::Schedule.from_hash(notification.rule)
+    @schedule = IceCube::Schedule.from_hash(notification.rule)
     notification_type = human_type(notification.notification_type)
     # The job runs at top and bottom of each hour. There's a -10 and +5 minute buffer in case the job starts early or late.
-    if schedule.occurs_between?(@user.time_in_user_timezone - 10.minutes, @user.time_in_user_timezone + 5.minutes)
+    if schedule_occurs_between?(@user.time_in_user_timezone - 10.minutes, @user.time_in_user_timezone + 5.minutes)
       if notification_type == "Create My Day" && user_has_not_set_status
         send_person_planning_reminder_email(@user, notification_type)
       elsif notification_type == "Weekly Report"
@@ -23,9 +23,26 @@ class NotificationEmailJob
     end
   end
 
+  def schedule_occurs_between?(earlier_time, later_time)
+    # previous_occurrence in 10 minutes is really the 'current' notification occurrence
+    notify_time = @schedule.previous_occurrence(Time.current + 10.minutes).try(:to_datetime)
+    return unless notify_time
+    # asctime.in_time_zone changes the zone - not the time so instead of the notification
+    # being scheduled for 17:00 +00:00 it'll be 17:00 -07:00 for example
+    notify_time_in_users_timezone = notify_time.asctime.in_time_zone(@user.users_timezone_name)
+    notify_time_in_users_timezone > earlier_time && notify_time_in_users_timezone < later_time
+  end
+
   def user_has_not_set_status
     most_recent_daily_log = @user.daily_logs.order(:created_at).last
-    if most_recent_daily_log.log_date < Date.today && @users_time >= @user.time_in_user_timezone('noon')
+    #return true if most_recent_daily_log.blank?
+
+    #if the last daily log's log date is less than today, status not set
+    #if the daily log's log date is today in the user's timezone and the status is not set send it.  
+    # (It doesn't do a noon time check in case you want to set the notifcation) - @users_time >= @user.time_in_user_timezone('noon')
+    if most_recent_daily_log && most_recent_daily_log.log_date == @user.time_in_user_timezone.to_date && most_recent_daily_log.work_status != "status_not_set"
+      return false
+    else
       return true
     end
   end

@@ -3,14 +3,14 @@ include NotificationsHelper
 include NotificationsSpecHelper
 
 RSpec.describe NotificationEmailJob, type: :job do
-  context 'perform with create_my_day notification type' do
+  context 'perform with create_my_day notification type when no daily log for the day' do
     let(:notification_email_job) { NotificationEmailJob.new }
     let(:notification_type) { 'create_my_day' }
     # Notifications are created when the user is created
     Timecop.freeze('2020-08-10 5:30:00 -0700') do
       let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
     end
-    let!(:daily_log) { create(:daily_log, user_id: user.id) }
+    let!(:daily_log) { create(:daily_log, user_id: user.id) } #status not set
 
     before :each do
       Timecop.freeze('2020-08-13 12:00:00 -0700') do
@@ -28,12 +28,37 @@ RSpec.describe NotificationEmailJob, type: :job do
     end
   end
 
-  context 'perform with create_my_day notification type afer completing the daily log' do
+  context 'perform with create_my_day notification type when daily log is status not set' do
     let(:notification_email_job) { NotificationEmailJob.new }
-    Timecop.freeze('2020-08-19 5:30:00 -0700') do
+    let(:notification_type) { 'create_my_day' }
+    # Notifications are created when the user is created
+    Timecop.freeze('2020-08-13 5:30:00 -0700') do
       let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
     end
-    let!(:daily_log) { create(:daily_log, user_id: user.id, log_date: '2020-08-20') }
+    let!(:daily_log) { create(:daily_log, user_id: user.id, work_status: 4) } #status not set
+
+    before :each do
+      Timecop.freeze('2020-08-13 12:00:00 -0700') do
+        Sidekiq::Testing.inline! do
+          notification = user.notifications.find_by(notification_type: notification_type)
+          update_start_time_to_be_in_past(notification)
+          notification_email_job.perform(notification.id)
+        end
+      end
+    end
+
+    it 'should send an email' do
+      expect(ActionMailer::Base.deliveries.length).to eq(2) # user confirmation email and notification email
+      expect(ActionMailer::Base.deliveries.last.subject).to eq("Notification - #{human_type(notification_type)}")
+    end
+  end
+
+  context 'perform with create_my_day notification type afer setting the status' do
+    let(:notification_email_job) { NotificationEmailJob.new }
+    Timecop.freeze('2020-08-20 5:30:00 -0700') do
+      let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
+    end
+    let!(:daily_log) { create(:daily_log, user_id: user.id, log_date: '2020-08-20', work_status: 0) } # in office
 
     before :each do
       Timecop.freeze('2020-08-20 12:00:00 -0700') do
@@ -51,28 +76,29 @@ RSpec.describe NotificationEmailJob, type: :job do
     end
   end
 
-  context 'perform with create_my_day notification type before noon' do
-    let(:notification_email_job) { NotificationEmailJob.new }
-    Timecop.freeze('2020-08-19 5:30:00 -0700') do
-      let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
-    end
-    let!(:daily_log) { create(:daily_log, user_id: user.id) }
+  #NOON is based on the setting of the notification
+  # context 'perform with create_my_day notification type before noon' do
+  #   let(:notification_email_job) { NotificationEmailJob.new }
+  #   Timecop.freeze('2020-08-19 5:30:00 -0700') do
+  #     let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
+  #   end
+  #   let!(:daily_log) { create(:daily_log, user_id: user.id) }
 
-    before :each do
-      Timecop.freeze('2020-08-20 10:00:00 -0700') do
-        Sidekiq::Testing.inline! do
-          notification = user.notifications.find_by(notification_type: 'create_my_day')
-          update_start_time_to_be_in_past(notification)
-          notification_email_job.perform(notification.id)
-        end
-      end
-    end
+  #   before :each do
+  #     Timecop.freeze('2020-08-20 10:00:00 -0700') do
+  #       Sidekiq::Testing.inline! do
+  #         notification = user.notifications.find_by(notification_type: 'create_my_day')
+  #         update_start_time_to_be_in_past(notification)
+  #         notification_email_job.perform(notification.id)
+  #       end
+  #     end
+  #   end
 
-    it 'should send not send an email' do
-      expect(ActionMailer::Base.deliveries.length).to eq(1) # user confirmation email
-      expect(ActionMailer::Base.deliveries.last.subject.to_s).to eq(I18n.t 'devise.mailer.confirmation_instructions.subject')
-    end
-  end
+  #   it 'should send not send an email' do
+  #     expect(ActionMailer::Base.deliveries.length).to eq(1) # user confirmation email
+  #     expect(ActionMailer::Base.deliveries.last.subject.to_s).to eq(I18n.t 'devise.mailer.confirmation_instructions.subject')
+  #   end
+  # end
 
   context 'perform with weekly_report notification' do
     let(:notification_email_job) { NotificationEmailJob.new }
@@ -80,6 +106,7 @@ RSpec.describe NotificationEmailJob, type: :job do
     Timecop.freeze('2020-08-19 5:30:00 -0700') do
       let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
     end
+    let!(:meeting_template) { create(:meeting_template, meeting_type: :personal_weekly) }
     let!(:daily_log) { create(:daily_log, user_id: user.id) }
 
     before :each do
@@ -94,7 +121,7 @@ RSpec.describe NotificationEmailJob, type: :job do
 
     it 'should send an email at 5:00 PM on Fridays' do
       expect(ActionMailer::Base.deliveries.length).to eq(2) # user confirmation email and notification email
-      expect(ActionMailer::Base.deliveries.last.subject.to_s).to eq("Notification - #{human_type(notification_type)}")
+      expect(ActionMailer::Base.deliveries.last.subject.to_s).to eq("#{human_type(notification_type)}")
     end
   end
 

@@ -1,9 +1,11 @@
 :queues:
   - default
   - mailers
+  - active_storage_purge
+  - active_storage_analysis
 
 :schedule:
   notification_batch_job:
-    # At 00 and 30 minutes past every hour.
-    cron: '00/30 * * * *'
+    # At 0 and 30 minutes past every hour.
+    cron: '0,30 * * * *'
     class: NotificationBatchJob

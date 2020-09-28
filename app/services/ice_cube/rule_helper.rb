@@ -63,13 +63,13 @@ class IceCube::RuleHelper
   end
 
   def self.construct_daily_rule(hour, minute)
-    schedule = IceCube::Schedule.new
+    schedule = IceCube::Schedule.new(Time.current - 7.days)
     schedule.add_recurrence_rule(IceCube::Rule.daily.hour_of_day(hour).minute_of_hour(minute))
     schedule.to_h
   end
 
   def self.construct_weekly_rule(day, hour, minute)
-    schedule = IceCube::Schedule.new
+    schedule = IceCube::Schedule.new(Time.current - 7.days)
     schedule.add_recurrence_rule(IceCube::Rule.weekly.day(day).hour_of_day(hour).minute_of_hour(minute))
     schedule.to_h
   end
