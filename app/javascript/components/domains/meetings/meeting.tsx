@@ -26,7 +26,6 @@ import {
   stepPositionsForMeeting,
 } from "./shared/progress-transform-helper";
 import { HomeTitle, HomeContainerBorders } from "../home/shared-components";
-import { HeaderDateParser } from "./shared/header-date-parser";
 
 export interface ITeamMeetingProps {}
 
@@ -183,7 +182,7 @@ export const Meeting = observer(
           <Heading type={"h1"} fontSize={"24px"}>{`${R.path(["name"], team)} Meeting`}</Heading>
           <DateAndButtonContainer>
             <Heading type={"h3"} fontSize={"18px"} fontWeight={400}>
-              <HeaderDateParser />
+              {meeting.title}
             </Heading>
             {meetingStarted ? <StopMeetingButton /> : <StartMeetingButton />}
           </DateAndButtonContainer>

@@ -39,6 +39,17 @@ class Meeting < ApplicationRecord
     )
   end
 
+  def title
+    if ["team_weekly", "personal_weekly"].include? meeting_type
+      time_for_title = start_time || scheduled_start_time || hosted_by.time_in_user_timezone
+      return "" if time_for_title.blank?
+      date_for_title = time_for_title.beginning_of_week.to_date.strftime("%B %-d")
+      "Week of #{date_for_title}"
+    else
+      ""
+    end
+  end
+
   private
   def start_meeting_if_weekly_planning
     if self.meeting_type == "personal_weekly"
