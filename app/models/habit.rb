@@ -78,7 +78,7 @@ class Habit < ApplicationRecord
   end
 
   def current_week_end
-    self.user.time_in_user_timezone
+    self.user.time_in_user_timezone.end_of_week
   end
 
   def previous_week_start
