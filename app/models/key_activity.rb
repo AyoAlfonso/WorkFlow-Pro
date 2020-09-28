@@ -17,7 +17,7 @@ class KeyActivity < ApplicationRecord
   
   scope :created_between, -> (date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
   scope :user_created_between, -> (user, date_start, date_end) { created_by_user(user).created_between(date_start, date_end) }
-  scope :completed_between, -> (date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
+  scope :completed_between, -> (date_start, date_end) { where("completed_at >= ? AND completed_at <= ?", date_start, date_end) }
   scope :user_completed_between, -> (user, date_start, date_end) { owned_by_user(user).completed_between(date_start, date_end) }
   scope :completed_today, -> (user) { where("completed_at BETWEEN '#{user.time_in_user_timezone.beginning_of_day}' AND '#{user.time_in_user_timezone.end_of_day}'") }
 

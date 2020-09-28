@@ -12,8 +12,12 @@ class Api::KeyActivitiesController < Api::ApplicationController
     @key_activity = KeyActivity.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], weekly_list: params[:weekly_list], meeting_id: params[:meeting_id] })
     # if its a master list acitivity item, insert after the last noncompleted item
     if params[:weekly_list] == false
-      last_incomplete_position = KeyActivity.owned_by_user(current_user).master_list.incomplete.sort_by_todays_priority_weekly_list_position.last.position
-      @key_activity.insert_at(last_incomplete_position + 1)
+      list_of_key_activities = KeyActivity.owned_by_user(current_user).master_list.incomplete.sort_by_todays_priority_weekly_list_position
+      if list_of_key_activities.length == 0
+        @key_activity.insert_at(1)
+      else
+        @key_activity.insert_at(list_of_key_activities.last.position + 1)
+      end
     end
     authorize @key_activity
     @key_activity.save!
