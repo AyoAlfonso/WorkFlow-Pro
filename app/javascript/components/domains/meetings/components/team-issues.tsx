@@ -38,10 +38,13 @@ export const TeamIssues = observer(
       return <Loading />;
     }
 
-    const openIssues = issueStore.teamIssues.map(teamIssue =>
-      issueStore.openIssues.find(issue => issue.id === teamIssue.issueId),
-    );
-    const closedIssues = issueStore.closedIssues;
+    const teamIssues = issueStore.teamIssues;
+    const openIssues = teamIssues
+      .filter(teamIssue => R.isNil(teamIssue.completedAt))
+      .map(teamIssue => issueStore.openIssues.find(issue => issue.id === teamIssue.issueId));
+    const closedIssues = teamIssues
+      .filter(teamIssue => !R.isNil(teamIssue.completedAt))
+      .map(teamIssue => issueStore.closedIssues.find(issue => issue.id === teamIssue.issueId));
 
     const renderIssuesList = (): Array<JSX.Element> => {
       const issues = showOpenIssues ? openIssues : closedIssues;

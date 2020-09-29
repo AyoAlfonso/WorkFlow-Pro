@@ -7,6 +7,7 @@ export const TeamIssueModel = types
     teamId: types.maybeNull(types.number),
     issueId: types.maybeNull(types.number),
     position: types.maybeNull(types.number),
+    completedAt: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));

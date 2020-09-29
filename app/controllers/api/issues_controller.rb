@@ -24,6 +24,7 @@ class Api::IssuesController < Api::ApplicationController
 
   def update
     @issue.update(issue_params.merge(completed_at: params[:completed] ? Time.now : nil))
+    TeamIssue.update({completed_at: @issue.completed_at})
     if params[:from_team_meeting] == true
       @issues_to_render = team_meeting_issues(@issue.team_id)
     else

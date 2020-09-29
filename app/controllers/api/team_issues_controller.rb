@@ -9,8 +9,8 @@ class Api::TeamIssuesController < Api::ApplicationController
 
   def update
     @team_issue = TeamIssue.find(params[:id])
-    authorize @team_issue
     @team_issue.insert_at(params[:position])
+    authorize @team_issue
     @team_issue.save!
     @team_issues = TeamIssue.for_team(@team_issue.team_id).sort_by_position
     render "api/team_issues/update"

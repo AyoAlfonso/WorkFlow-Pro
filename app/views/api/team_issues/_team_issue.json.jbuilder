@@ -1,1 +1,1 @@
-json.extract! team_issue, :id, :issue_id, :team_id, :position
+json.extract! team_issue, :id, :issue_id, :team_id, :position, :completed_at
