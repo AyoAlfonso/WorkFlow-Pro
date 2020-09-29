@@ -31,9 +31,13 @@ class Habit < ApplicationRecord
       complete_current_week_logs.find { |wl| wl.log_date.wday == day_int} ||
       HabitLog.new(
         habit: self,
-        log_date: Date.current_week_start.next_day(day_int)
+        log_date: current_week_start_date.next_day(day_int)
       )
     end
+  end
+
+  def complete_current_week_logs
+    completed_logs_by_date_range(current_week_start_date, current_week_end_date)
   end
 
   def previous_week_logs
@@ -41,14 +45,18 @@ class Habit < ApplicationRecord
       complete_previous_week_logs.find { |wl| wl.log_date.wday == day_int} ||
       HabitLog.new(
         habit: self,
-        log_date: Date.previous_week_start.next_day(day_int)
+        log_date: previous_week_start_date.next_day(day_int)
       )
     end
   end
 
+  def complete_previous_week_logs
+    completed_logs_by_date_range(previous_week_start_date, previous_week_end_date)
+  end
+
   def weekly_logs_completion_difference
-    current_week_completion_count = self.completed_logs_by_date_range(current_week_start, current_week_end).count
-    previous_week_completion_count = self.completed_logs_by_date_range(previous_week_start, previous_week_end).count
+    current_week_completion_count = self.completed_logs_by_date_range(current_week_start_date, current_week_end_date).count
+    previous_week_completion_count = self.completed_logs_by_date_range(previous_week_start_date, previous_week_end_date).count
     difference_between_values(current_week_completion_count, previous_week_completion_count)
   end
 
@@ -73,19 +81,19 @@ class Habit < ApplicationRecord
     self.completed_logs_by_date_range(start_date, end_date)
   end
 
-  def current_week_start
-    get_beginning_of_last_or_current_work_week_date(self.user.time_in_user_timezone)
+  def current_week_start_date
+    get_beginning_of_last_or_current_work_week_date(self.user.time_in_user_timezone).to_date
   end
 
-  def current_week_end
-    self.user.time_in_user_timezone.end_of_week
+  def current_week_end_date
+    self.user.time_in_user_timezone.end_of_week.to_date
   end
 
-  def previous_week_start
-    current_week_start.weeks_ago(1)
+  def previous_week_start_date
+    current_week_start_date.weeks_ago(1).to_date
   end
 
-  def previous_week_end
-    previous_week_start.end_of_week
+  def previous_week_end_date
+    previous_week_start_date.end_of_week.to_date
   end
 end

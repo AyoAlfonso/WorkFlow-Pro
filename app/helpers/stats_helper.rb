@@ -103,8 +103,7 @@ module StatsHelper
     else
       difference = current_week_value == 0 ? 
                     previous_week_value * 100 : 
-                    ((previous_week_value - current_week_value).to_f / current_week_value.to_f) * 100
-      -difference
+                    ((current_week_value - previous_week_value).to_f / previous_week_value.to_f) * 100
     end
   end
 

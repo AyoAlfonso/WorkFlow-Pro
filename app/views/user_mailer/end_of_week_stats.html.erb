@@ -57,7 +57,7 @@
     <%= image_tag image_path('Emotion-A'), height: 100, width: 100 %>
   <% end %>
   <div style="font-size: 30px; margin-top: 10px; color: #151515">
-    <%= average_weekly_emotion_score_over_last_week(@user) %> / 5
+    <%= average_weekly_emotion_score_over_last_week(@user).round(1) %> / 5
   </div>
 
   <div style="margin-top: 20px">
