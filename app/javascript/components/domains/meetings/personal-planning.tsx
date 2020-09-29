@@ -20,7 +20,6 @@ import {
   progressBarStepsForMeeting,
   stepPositionsForMeeting,
 } from "./shared/progress-transform-helper";
-import { HeaderDateParser } from "./shared/header-date-parser";
 
 export interface ITeamMeetingProps {}
 
@@ -83,7 +82,7 @@ export const PersonalPlanning = observer(
           </Heading>
           <DateAndButtonContainer>
             <Heading type={"h3"} fontSize={"18px"} fontWeight={400}>
-              <HeaderDateParser />
+              {meeting.title}
             </Heading>
             <StopMeetingButton />
           </DateAndButtonContainer>
@@ -103,7 +102,7 @@ export const PersonalPlanning = observer(
               />
             </ProgressBarContainer>
           </ProgressContainer>
-          <MeetingStep meeting={meetingStore.currentPersonalPlanning}></MeetingStep>
+          <MeetingStep meeting={meeting}></MeetingStep>
         </BodyContainer>
       </Container>
     );

@@ -125,7 +125,7 @@ RSpec.describe NotificationEmailJob, type: :job do
     end
   end
 
-  context 'perform with weekly_alignment_meeting type' do
+  context 'perform with weekly_alignment_meeting (team_weekly) type' do
     let(:notification_email_job) { NotificationEmailJob.new }
     let(:notification_type) { 'weekly_alignment_meeting' }
     Timecop.freeze('2020-08-19 5:30:00 -0700') do
@@ -134,52 +134,98 @@ RSpec.describe NotificationEmailJob, type: :job do
       let!(:team_user_enablement) { create(:team_user_enablement, team_id: team.id, user_id: user.id, role: 'team_lead') }
     end
     let!(:meeting_template) { create(:meeting_template, meeting_type: 'team_weekly') }
-    let!(:meeting) do
-      create(:meeting, meeting_template_id: meeting_template.id, scheduled_start_time: '2020-08-24 10:00 -0700', team_id: team.id)
-    end
 
-    before :each do
-      Timecop.freeze('2020-08-24 10:00 -0700') do
-        Sidekiq::Testing.inline! do
-          notification = user.notifications.find_by(notification_type: notification_type)
-          update_start_time_to_be_in_past(notification)
-          notification_email_job.perform(notification.id)
+    context "a meeting that has started" do
+      let!(:meeting) do
+        create(:meeting, meeting_template_id: meeting_template.id, hosted_by: user, start_time: '2020-08-23 9:45 -0700', team_id: team.id)
+      end
+      before :each do
+        Timecop.freeze('2020-08-24 10:00 -0700') do
+          Sidekiq::Testing.inline! do
+            notification = user.notifications.find_by(notification_type: notification_type)
+            update_start_time_to_be_in_past(notification)
+            notification_email_job.perform(notification.id)
+          end
         end
+      end
+      it "should not send an email" do
+        expect(ActionMailer::Base.deliveries.length).to eq(1) # user confirmation email and notification email
+        expect(ActionMailer::Base.deliveries.last.subject).to_not eq("Notification - #{human_type(notification_type)}")
       end
     end
 
-    it 'should send an email if the notification is scheduled during the job run time' do
-      expect(ActionMailer::Base.deliveries.length).to eq(2) # user confirmation email and notification email
-      expect(ActionMailer::Base.deliveries.last.subject).to eq("Notification - #{human_type(notification_type)}")
+    context "a meeting that has not started" do
+      #team weekly meetings may have a start time within the range of this week based on the current day
+      let!(:meeting) do
+        #create(:meeting, meeting_template_id: meeting_template.id, scheduled_start_time: '2020-08-24 10:00 -0700', team_id: team.id)
+        create(:meeting, meeting_template_id: meeting_template.id, hosted_by: user, start_time: nil, team_id: team.id)
+      end
+      before :each do
+        Timecop.freeze('2020-08-24 10:00 -0700') do
+          Sidekiq::Testing.inline! do
+            notification = user.notifications.find_by(notification_type: notification_type)
+            update_start_time_to_be_in_past(notification)
+            notification_email_job.perform(notification.id)
+          end
+        end
+      end
+      it 'should send an email if the notification is scheduled during the job run time' do
+        expect(ActionMailer::Base.deliveries.length).to eq(2) # user confirmation email and notification email
+        expect(ActionMailer::Base.deliveries.last.subject).to eq("Notification - #{human_type(notification_type)}")
+      end
     end
   end
 
-  context 'perform with weekly_planning type' do
+  context 'perform with weekly_planning (personal_weekly) type' do
     let(:notification_email_job) { NotificationEmailJob.new }
     let(:notification_type) { 'weekly_planning' }
-    Timecop.freeze('2020-08-12 5:30:00 -0700') do
+    Timecop.freeze('2020-08-19 5:30:00 -0700') do
       let!(:user) { create(:user, timezone: '(GMT-08:00) Pacific Time (US & Canada)')}
-      let!(:team) { create(:team) }
-      let!(:team_user_enablement) { create(:team_user_enablement, team_id: team.id, user_id: user.id, role: 'team_lead') }
     end
-    let!(:meeting_template) { create(:meeting_template, meeting_type: 'team_weekly') }
-    let!(:meeting) do
-      create(:meeting, meeting_template_id: meeting_template.id, scheduled_start_time: '2020-08-24 10:00 -0700', team_id: team.id)
-    end
+    let!(:meeting_template) { create(:meeting_template, meeting_type: 'personal_weekly') }
 
-    before :each do
-      Timecop.freeze('2020-08-17 10:00 -0700') do
-        Sidekiq::Testing.inline! do
-          notification = user.notifications.find_by(notification_type: notification_type)
-          update_start_time_to_be_in_past(notification)
-          notification_email_job.perform(notification.id)
+    context "a meeting that has started" do
+      #team weekly meetings may have a start time within the range of this week based on the current day
+      let!(:meeting) do
+        #create(:meeting, meeting_template_id: meeting_template.id, scheduled_start_time: '2020-08-24 10:00 -0700')
+        create(:meeting, meeting_template_id: meeting_template.id, hosted_by: user, start_time: '2020-08-23 9:45 -0700')
+      end
+
+      before :each do
+        Timecop.freeze('2020-08-24 10:00 -0700') do
+          meeting.update(start_time: '2020-08-23 9:45 -0700')
+          Sidekiq::Testing.inline! do
+            notification = user.notifications.find_by(notification_type: notification_type)
+            update_start_time_to_be_in_past(notification)
+            notification_email_job.perform(notification.id)
+          end
         end
+      end
+
+      it 'should send an email if the notification is scheduled during the job run time' do
+        expect(ActionMailer::Base.deliveries.length).to eq(1) # user confirmation email and notification email
+        expect(ActionMailer::Base.deliveries.last.subject).to_not eq("Notification - #{human_type(notification_type)}")
       end
     end
 
-    it 'should send an email if the notification is scheduled during the job run time' do
-      expect(ActionMailer::Base.deliveries.length).to eq(2) # user confirmation email and notification email
-      expect(ActionMailer::Base.deliveries.last.subject).to eq("Notification - #{human_type(notification_type)}")
+    context "a meeting that has not started" do
+
+      before :each do
+        Timecop.freeze('2020-08-24 10:00 -0700') do
+          Sidekiq::Testing.inline! do
+            notification = user.notifications.find_by(notification_type: notification_type)
+            update_start_time_to_be_in_past(notification)
+            notification_email_job.perform(notification.id)
+          end
+        end
+      end
+
+      #team weekly meetings may have a start time within the range of this week based on the current day
+      it 'should send an email if the notification is scheduled during the job run time' do
+        expect(ActionMailer::Base.deliveries.length).to eq(2) # user confirmation email and notification email
+        expect(ActionMailer::Base.deliveries.last.subject).to eq("Notification - #{human_type(notification_type)}")
+      end
     end
+
   end
 end

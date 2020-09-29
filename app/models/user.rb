@@ -22,7 +22,6 @@ class User < ApplicationRecord
   has_many :owned_quarterly_goals, :foreign_key => 'owned_by_id', :class_name => 'QuarterlyGoal'
   has_many :created_annual_initiatives, :foreign_key => 'created_by_id', :class_name => 'AnnualInitiative'
   has_many :owned_annual_initiatives, :foreign_key => 'owned_by_id', :class_name => 'AnnualInitiative'
-  has_many :weekly_meetings, :foreign_key => 'created_by_id', :class_name => 'User'
   has_many :meeting_ratings
   has_many :daily_logs, dependent: :destroy
   has_one_attached :avatar
@@ -33,6 +32,7 @@ class User < ApplicationRecord
   has_many :teams, through: :team_user_enablements
   has_many :team_leads
   has_many :notifications, dependent: :destroy
+  has_many :meetings, :foreign_key => 'hosted_by_id'
 
   validates :first_name, :last_name, presence: true
 

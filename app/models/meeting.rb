@@ -8,6 +8,7 @@ class Meeting < ApplicationRecord
   # scope :in_progress, -> { where("start_time >= ? AND start_time < ?", Date.today.beginning_of_day.utc, DateTime.now) }
   # scope :for_day, -> (day) { where("Date(created_at) = ?", day) }
   scope :for_week_of_date, -> (start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_week, start_time.end_of_week)}
+  scope :for_week_of_date_started_only, -> (start_time) { where("(start_time >= ? AND start_time <= ?)", start_time.beginning_of_week, start_time.end_of_week)}
   scope :team_meetings, -> (team_id) { where(team_id: team_id) }
   scope :sort_by_creation_date, -> { order(created_at: :desc)}
   scope :incomplete, -> { where(end_time: nil) }
@@ -15,6 +16,7 @@ class Meeting < ApplicationRecord
   scope :with_template, -> (meeting_template_id) { where(meeting_template_id: meeting_template_id) }
   
   scope :hosted_by_user, -> (user) { where(hosted_by_id: user.id)}
+  scope :team_weekly_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :team_weekly})}
   scope :personal_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :personal_weekly})}
   
   #TODO: modify scope to fetch completed meetings if recent, sort by 'type', 'incomplete', and 'date created' to show most recent ones
@@ -37,6 +39,17 @@ class Meeting < ApplicationRecord
       current_step: 0
       #start time automatically set for personal meetings
     )
+  end
+
+  def title
+    if ["team_weekly", "personal_weekly"].include? meeting_type
+      time_for_title = start_time || scheduled_start_time || hosted_by.time_in_user_timezone
+      return "" if time_for_title.blank?
+      date_for_title = time_for_title.beginning_of_week.to_date.strftime("%B %-d")
+      "Planning for Week of #{date_for_title}"
+    else
+      ""
+    end
   end
 
   private
