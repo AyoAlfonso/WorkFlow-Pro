@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as R from "ramda";
 import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 import styled from "styled-components";
 import { KeyActivitiesHeader } from "~/components/domains/key-activities/key-activities-header";
@@ -33,7 +34,7 @@ export const TeamIssues = observer(
       });
     }, []);
 
-    if (loading) {
+    if (loading || R.isNil(issueStore.teamIssues) || R.isNil(issueStore.issues)) {
       return <Loading />;
     }
 
