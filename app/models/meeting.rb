@@ -46,7 +46,7 @@ class Meeting < ApplicationRecord
       time_for_title = start_time || scheduled_start_time || hosted_by.time_in_user_timezone
       return "" if time_for_title.blank?
       date_for_title = time_for_title.beginning_of_week.to_date.strftime("%B %-d")
-      "Week of #{date_for_title}"
+      "Planning for Week of #{date_for_title}"
     else
       ""
     end
