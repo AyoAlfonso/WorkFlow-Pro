@@ -9,6 +9,13 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def create
+    company = current_user.company
+    next_fiscal_quarter_start_date = company.next_fiscal_quarter_start_date
+
+    binding.pry
+    
+
+
     @quarterly_goal = QuarterlyGoal.new({
       created_by: current_user, 
       owned_by: current_user, 
