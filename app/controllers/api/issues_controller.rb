@@ -13,6 +13,8 @@ class Api::IssuesController < Api::ApplicationController
     authorize @issue
     @issue.save!
     if params[:team_id]
+      TeamIssue.create!(issue_id: @issue.id, team_id: params[:team_id])
+      @team_issues = TeamIssue.for_team(params[:team_id]).sort_by_position
       @issues_to_render = team_meeting_issues(params[:team_id])
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
@@ -27,6 +29,7 @@ class Api::IssuesController < Api::ApplicationController
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
     end
+    @team_issues = TeamIssue.for_team(@issue.team_id).sort_by_position
     render "api/issues/update"
   end
 
@@ -38,6 +41,7 @@ class Api::IssuesController < Api::ApplicationController
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
     end
+    @team_issues = TeamIssue.for_team(team_id).sort_by_position
     render "api/issues/destroy"
   end
 

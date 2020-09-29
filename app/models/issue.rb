@@ -2,6 +2,7 @@ class Issue < ApplicationRecord
   enum priority: { low: 0, medium: 1, high: 2 }
   belongs_to :user
   belongs_to :team, optional: true
+  has_one :team_issue, dependent: :destroy
 
   acts_as_list scope: [:user_id, team_id: nil]
 

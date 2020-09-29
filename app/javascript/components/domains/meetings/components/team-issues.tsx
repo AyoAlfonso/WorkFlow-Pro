@@ -15,6 +15,7 @@ import { IssuesHeader } from "../../issues/issues-header";
 import { CreateIssueModal } from "../../issues/create-issue-modal";
 import { IssueEntry } from "../../issues/issue-entry";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+import { useParams } from "react-router-dom";
 
 export const TeamIssues = observer(
   (props: {}): JSX.Element => {
@@ -23,7 +24,10 @@ export const TeamIssues = observer(
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
     const { meetingStore, issueStore } = useMst();
 
+    const { team_id } = useParams();
+
     useEffect(() => {
+      issueStore.fetchTeamIssues(team_id);
       issueStore.fetchIssuesForMeeting(meetingStore.currentMeeting.id).then(() => {
         setLoading(false);
       });
@@ -33,14 +37,16 @@ export const TeamIssues = observer(
       return <Loading />;
     }
 
-    const openIssues = issueStore.openIssues;
+    const openIssues = issueStore.teamIssues.map(teamIssue =>
+      issueStore.openIssues.find(issue => issue.id === teamIssue.issueId),
+    );
     const closedIssues = issueStore.closedIssues;
 
     const renderIssuesList = (): Array<JSX.Element> => {
       const issues = showOpenIssues ? openIssues : closedIssues;
       return issues.map((issue, index) => (
         <Draggable
-          draggableId={`team-issue-${issue.id}`}
+          draggableId={`team_issue-${issue.id}`}
           index={index}
           key={issue["id"]}
           type={"team-issue"}
