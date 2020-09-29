@@ -18,7 +18,7 @@ interface IIssuesBodyProps {
 
 export const IssuesBody = observer(
   (props: IIssuesBodyProps): JSX.Element => {
-    const { issueStore } = useMst();
+    const { issueStore, sessionStore } = useMst();
     const { showOpenIssues } = props;
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
 
@@ -29,21 +29,23 @@ export const IssuesBody = observer(
       issueStore.fetchIssues();
     }, []);
 
-    if (R.isNil(issueStore.issues)) {
+    if (R.isNil(issueStore.issues) || R.isNil(sessionStore.profile)) {
       return <Loading />;
     }
 
     const renderIssuesList = (): Array<JSX.Element> => {
       const issues = showOpenIssues ? openIssues : closedIssues;
-      return sortByPosition(issues).map((issue, index) => (
-        <Draggable draggableId={`issue-${issue.id}`} index={index} key={issue.id} type={"issue"}>
-          {provided => (
-            <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
-              <IssueEntry issue={issue} dragHandleProps={...provided.dragHandleProps} />
-            </IssueContainer>
-          )}
-        </Draggable>
-      ));
+      return sortByPosition(issues.filter(issue => issue.user.id === sessionStore.profile.id)).map(
+        (issue, index) => (
+          <Draggable draggableId={`issue-${issue.id}`} index={index} key={issue.id} type={"issue"}>
+            {provided => (
+              <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
+                <IssueEntry issue={issue} dragHandleProps={...provided.dragHandleProps} />
+              </IssueContainer>
+            )}
+          </Draggable>
+        ),
+      );
     };
 
     return (

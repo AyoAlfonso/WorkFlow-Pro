@@ -4,7 +4,7 @@ class Issue < ApplicationRecord
   belongs_to :team, optional: true
   has_one :team_issue, dependent: :destroy
 
-  acts_as_list scope: [:user_id, team_id: nil]
+  acts_as_list scope: :user_id
 
   scope :created_by_user, -> (user) { where(user: user) }
   scope :sort_by_priority, -> { order(priority: :desc) }
