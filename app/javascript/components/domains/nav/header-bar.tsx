@@ -29,7 +29,6 @@ export const HeaderBar = observer(
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
     const [showAccountActions, setShowAccountActions] = useState<boolean>(false);
-    const [withinTimeRange, setWithinTimeRange] = useState<boolean>(false);
     const [inviteUserModalOpen, setInviteUserModalOpen] = useState<boolean>(false);
 
     const { sessionStore, companyStore, meetingStore } = useMst();
@@ -39,18 +38,8 @@ export const HeaderBar = observer(
 
     const history = useHistory();
 
-    const isWithinPermittedTimeRange = () => {
-      const dayOfWeek = new Date().getDay();
-      // Sunday, Monday, Friday, Saturday
-      return [0, 1, 5, 6].includes(dayOfWeek);
-    };
-
     const userCanInvite =
       sessionStore.profile.role == RoleAdministrator || sessionStore.profile.role == RoleCEO;
-
-    useEffect(() => {
-      setWithinTimeRange(isWithinPermittedTimeRange());
-    }, []);
 
     useEffect(() => {
       const handleClickOutside = event => {
@@ -135,30 +124,27 @@ export const HeaderBar = observer(
         <DropdownContainer width={"230px"} height={"50px"}>
           <SelectionContainer
             paddingBottom={"10px"}
-            disabled={!withinTimeRange}
+            disabled={false}
             onClick={() => {
               //create meeting
               //psuh to meeting path if successful
-              if (withinTimeRange) {
-                const meetingTemplatePersonal = meetingStore.meetingTemplates.find(
-                  mt => mt.meetingType === MeetingTypes.PERSONAL_WEEKLY,
-                );
 
-                if (meetingTemplatePersonal) {
-                  meetingStore
-                    .createPersonalMeeting({
-                      hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
-                      currentStep: 0,
-                      meetingTemplateId: meetingTemplatePersonal.id,
-                    })
-                    .then(({ meeting }) => {
-                      if (!R.isNil(meeting)) {
-                        history.push(`/personal_planning/${meeting.id}`);
-                      }
-                    });
-                }
-              } else {
-                showToast("Weekly Planning is available Fri-Mon", ToastMessageConstants.INFO);
+              const meetingTemplatePersonal = meetingStore.meetingTemplates.find(
+                mt => mt.meetingType === MeetingTypes.PERSONAL_WEEKLY,
+              );
+
+              if (meetingTemplatePersonal) {
+                meetingStore
+                  .createPersonalMeeting({
+                    hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
+                    currentStep: 0,
+                    meetingTemplateId: meetingTemplatePersonal.id,
+                  })
+                  .then(({ meeting }) => {
+                    if (!R.isNil(meeting)) {
+                      history.push(`/personal_planning/${meeting.id}`);
+                    }
+                  });
               }
             }}
           >
