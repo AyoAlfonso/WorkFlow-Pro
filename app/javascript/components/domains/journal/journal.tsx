@@ -92,6 +92,7 @@ export const Journal = observer(
               textColor={"grey20"}
               fontStyle={"italic"}
               onClick={() => {}}
+              disabled={true}
             />
             <IconButton
               {...defaultJournalButtonProps}
