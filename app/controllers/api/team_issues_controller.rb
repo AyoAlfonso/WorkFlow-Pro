@@ -9,11 +9,21 @@ class Api::TeamIssuesController < Api::ApplicationController
 
   def update
     @team_issue = TeamIssue.find(params[:id])
-    @team_issue.insert_at(params[:position])
+    if @team_issue.issue.completed_at.present? && !@team_issue.completed_at.present?
+      @team_issue.update!(team_issue_params.merge(completed_at: @team_issue.issue.completed_at))
+      @team_issue.move_to_bottom
+    else
+      @team_issue.update!(team_issue_params)
+    end
     authorize @team_issue
-    @team_issue.save!
     @team_issues = TeamIssue.for_team(@team_issue.team_id).sort_by_position
     render "api/team_issues/update"
+  end
+
+  private
+
+  def team_issue_params
+    params.require(:team_issue).permit(:id, :team_id, :issue_id, :position, :cpmpleted_at)
   end
 
 end

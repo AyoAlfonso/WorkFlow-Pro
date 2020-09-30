@@ -23,7 +23,7 @@ class TeamIssuePolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.all
+      scope.owned_by_self_or_team_members(@user)
     end
   end
 end

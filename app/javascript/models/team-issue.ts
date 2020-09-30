@@ -1,4 +1,5 @@
 import { types } from "mobx-state-tree";
+import { IssueModel } from "./issue";
 
 export const TeamIssueModel = types
   .model("TeamIssueModel")
@@ -8,6 +9,7 @@ export const TeamIssueModel = types
     issueId: types.maybeNull(types.number),
     position: types.maybeNull(types.number),
     completedAt: types.maybeNull(types.string),
+    issue: IssueModel,
   })
   .views(self => ({}))
   .actions(self => ({}));

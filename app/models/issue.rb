@@ -2,7 +2,10 @@ class Issue < ApplicationRecord
   enum priority: { low: 0, medium: 1, high: 2 }
   belongs_to :user
   belongs_to :team, optional: true
-  has_one :team_issue, dependent: :destroy
+  has_one :team_issue, dependent: :destroy, autosave: true
+  accepts_nested_attributes_for :team_issue
+
+  before_save :create_or_update_team_issue
 
   acts_as_list scope: [:user_id, :completed_at]
 
@@ -26,5 +29,14 @@ class Issue < ApplicationRecord
   def self.owned_by_self_or_team_members(user)
     team_member_ids = TeamUserEnablement.where(team_id: user.team_ids).pluck(:user_id)
     self.where(user_id: [*team_member_ids, user.id].uniq)
+  end
+
+  def create_or_update_team_issue
+    if self.team_id
+      team_issue_to_update = team_issue || build_team_issue
+      team_issue_to_update.team_id = self.team_id
+      team_issue_to_update.completed_at = self.completed_at
+    #there is no else case, because you cannot unshare it from the team, bu tyou can switch the team for issue
+    end
   end
 end

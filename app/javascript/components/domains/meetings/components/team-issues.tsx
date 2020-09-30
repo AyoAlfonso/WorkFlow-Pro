@@ -38,27 +38,22 @@ export const TeamIssues = observer(
       return <Loading />;
     }
 
-    const teamIssues = issueStore.teamIssues;
-    const openIssues = teamIssues
-      .filter(teamIssue => R.isNil(teamIssue.completedAt))
-      .map(teamIssue => issueStore.openIssues.find(issue => issue.id === teamIssue.issueId));
-    const closedIssues = teamIssues
-      .filter(teamIssue => !R.isNil(teamIssue.completedAt))
-      .map(teamIssue => issueStore.closedIssues.find(issue => issue.id === teamIssue.issueId));
+    const openTeamIssues = issueStore.openTeamIssues;
+    const closedTeamIssues = issueStore.closedTeamIssues;
 
     const renderIssuesList = (): Array<JSX.Element> => {
-      const issues = showOpenIssues ? openIssues : closedIssues;
-      return issues.map((issue, index) => (
+      const teamIssues = showOpenIssues ? openTeamIssues : closedTeamIssues;
+      return teamIssues.map((teamIssue, index) => (
         <Draggable
-          draggableId={`team_issue-${issue.id}`}
+          draggableId={`team_issue-${teamIssue.id}`}
           index={index}
-          key={issue["id"]}
+          key={teamIssue["id"]}
           type={"team-issue"}
         >
           {provided => (
             <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
               <IssueEntry
-                issue={issue}
+                issue={teamIssue.issue}
                 meetingId={meetingStore.currentMeeting.id}
                 dragHandleProps={...provided.dragHandleProps}
               />

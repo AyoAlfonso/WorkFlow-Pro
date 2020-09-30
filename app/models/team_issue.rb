@@ -8,4 +8,8 @@ class TeamIssue < ApplicationRecord
   scope :sort_by_position, -> { order(position: :asc) }
   scope :complete, -> { where.not(completed_at: nil) }
   scope :incomplete, -> { where(completed_at: nil) }
+  scope :owned_by_self_or_team_members, -> (user) do
+    team_member_ids = TeamUserEnablement.where(team_id: user.team_ids).pluck(:user_id)
+    joins(:issue).where(issues: { user_id: [*team_member_ids, user.id].uniq })
+  end
 end

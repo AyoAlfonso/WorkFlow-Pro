@@ -15,10 +15,16 @@ export const IssueStoreModel = types
   .extend(withEnvironment())
   .views(self => ({
     get openIssues() {
-      return self.issues.filter(issue => issue.completedAt == null);
+      return self.issues.filter(issue => issue.completedAt === null);
     },
     get closedIssues() {
-      return self.issues.filter(issue => issue.completedAt != null);
+      return self.issues.filter(issue => issue.completedAt !== null);
+    },
+    get openTeamIssues() {
+      return self.teamIssues.filter(teamIssue => teamIssue.completedAt === null);
+    },
+    get closedTeamIssues() {
+      return self.teamIssues.filter(teamIssue => teamIssue.completedAt !== null);
     },
   }))
   .actions(self => ({
