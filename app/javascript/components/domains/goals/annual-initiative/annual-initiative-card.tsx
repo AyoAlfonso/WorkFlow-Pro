@@ -82,6 +82,7 @@ const Container = styled(HomeContainerBorders)`
   margin-right: ${props => props["margin-right"] || "0px"};
   display: flex;
   flex-direction: column;
+  height: 100%;
   &: hover {
     background: rgba(0, 0, 0, 0.02);
     opacity: 0.85;

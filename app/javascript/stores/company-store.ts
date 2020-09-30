@@ -3,6 +3,7 @@ import { withEnvironment } from "../lib/with-environment";
 import { CompanyModel } from "../models/company";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import * as moment from "moment";
 
 export const CompanyStoreModel = types
   .model("CompanyStoreModel")
@@ -10,7 +11,18 @@ export const CompanyStoreModel = types
     company: types.maybeNull(CompanyModel),
   })
   .extend(withEnvironment())
-  .views(self => ({}))
+  .views(self => ({
+    get creatingQuarterlyGoalForQuarter() {
+      const nextQuarterStartDay = moment(self.company.nextFiscalQuarterStartDate);
+      const quarterCutoff = moment(self.company.fiscalYearCutoffForCreatingItems);
+
+      if (moment().isBetween(quarterCutoff, nextQuarterStartDay)) {
+        return self.company.currentFiscalQuarter + 1;
+      } else {
+        return self.company.currentFiscalQuarter;
+      }
+    },
+  }))
   .actions(self => ({
     load: flow(function*() {
       const env = getEnv(self);

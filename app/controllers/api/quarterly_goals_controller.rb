@@ -4,11 +4,19 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   respond_to :json
 
   def index
-    @quarterly_goals = policy_scope(QuarterlyGoal).owned_by_user(current_user).sort_by_created_date
+    company_current_quarter = current_user.company.current_fiscal_quarter
+    @quarterly_goals = policy_scope(QuarterlyGoal).owned_by_user(current_user).present_or_future(company_current_quarter).sort_by_created_date
     render json: { quarterly_goals: @quarterly_goals.as_json(include: [owned_by: {methods: [:avatar_url]}]), status: :ok }
   end
 
   def create
+    company = current_user.company
+    quarter = company.current_fiscal_quarter
+
+    if Date.today.between?(company.fiscal_year_cutoff_for_creating_items, company.next_fiscal_quarter_start_date)
+      quarter = quarter + 1
+    end
+
     @quarterly_goal = QuarterlyGoal.new({
       created_by: current_user, 
       owned_by: current_user, 
@@ -16,7 +24,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
       description: params[:description],
       context_description: "",
       importance: ["", "", ""],
-      quarter: current_user.company.current_fiscal_quarter #CHRIS' NOTES: Talked to Parham about this. He wants to restrict to only being able to create quarterly goals in the current quarter for now. 
+      quarter: quarter
     })
     authorize @quarterly_goal
     @quarterly_goal.save!

@@ -4,7 +4,7 @@ class Api::CompaniesController < Api::ApplicationController
 
   def show
     render json: @company.as_json(only: ['id', 'name', 'phone_number', 'rallying_cry', 'fiscal_year_start', 'timezone'],
-    methods: ['accountability_chart_content', 'strategic_plan_content', 'logo_url', 'current_fiscal_quarter'], 
+    methods: ['accountability_chart_content', 'strategic_plan_content', 'logo_url', 'current_fiscal_quarter', 'next_fiscal_quarter_start_date', 'fiscal_year_cutoff_for_creating_items'], 
     include: {
       core_four: {methods: ['core_1_content', 'core_2_content', 'core_3_content', 'core_4_content']}
     })
@@ -13,7 +13,7 @@ class Api::CompaniesController < Api::ApplicationController
   def update
     @company.update!(company_params)
     render json: @company.as_json(only: ['id', 'name', 'phone_number', 'rallying_cry', 'fiscal_year_start', 'timezone'],
-    methods: ['accountability_chart_content', 'strategic_plan_content', 'logo_url', 'current_fiscal_quarter'], 
+    methods: ['accountability_chart_content', 'strategic_plan_content', 'logo_url', 'current_fiscal_quarter', 'next_fiscal_quarter_start_date', 'fiscal_year_cutoff_for_creating_items'], 
     include: {
       core_four: {methods: ['core_1_content', 'core_2_content', 'core_3_content', 'core_4_content']}
     })

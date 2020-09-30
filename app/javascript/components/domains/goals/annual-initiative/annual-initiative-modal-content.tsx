@@ -197,7 +197,9 @@ export const AnnualInitiativeModalContent = observer(
               <CreateGoalContainer>
                 <CreateGoalSection
                   placeholder={t("quarterlyGoal.enterTitle")}
-                  addButtonText={t("quarterlyGoal.add")}
+                  addButtonText={`${t("quarterlyGoal.add")} (Q${
+                    companyStore.creatingQuarterlyGoalForQuarter
+                  })`}
                   createButtonText={t("quarterlyGoal.addGoal")}
                   showCreateGoal={showCreateQuarterlyGoal}
                   setShowCreateGoal={setShowCreateQuarterlyGoal}

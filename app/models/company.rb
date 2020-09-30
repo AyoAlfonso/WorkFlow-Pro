@@ -44,6 +44,14 @@ class Company < ApplicationRecord
     date.strftime("%m/%d")
   end
 
+  def next_fiscal_quarter_start_date
+    self.fiscal_year_start + (13.weeks * (current_fiscal_quarter))
+  end
+
+  def fiscal_year_cutoff_for_creating_items
+    next_fiscal_quarter_start_date - 4.weeks
+  end
+
   private
   def calculate_current_fiscal_quarter
     current_date = format_month_and_day(Date.today)
