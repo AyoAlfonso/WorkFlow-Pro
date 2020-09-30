@@ -49,12 +49,12 @@ export const Questionnaire = observer(
             <>
               <SummaryDisplay
                 summaryData={summaryData}
-                variant={`${R.path(["metadata", "summary"], step)}AM`}
+                variant={`${R.path(["metadata", "summary"], step)}Am`}
                 title={R.path(["metadata", "message", "am"], step)}
               />
               <SummaryDisplay
                 summaryData={summaryData}
-                variant={`${R.path(["metadata", "summary"], step)}PM`}
+                variant={`${R.path(["metadata", "summary"], step)}Pm`}
                 title={R.path(["metadata", "message", "pm"], step)}
               />
             </>,
