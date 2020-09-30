@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as R from "ramda";
 import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 import styled from "styled-components";
 import { KeyActivitiesHeader } from "~/components/domains/key-activities/key-activities-header";
@@ -14,6 +15,8 @@ import { Loading } from "~/components/shared/loading";
 import { IssuesHeader } from "../../issues/issues-header";
 import { CreateIssueModal } from "../../issues/create-issue-modal";
 import { IssueEntry } from "../../issues/issue-entry";
+import { Draggable, Droppable } from "react-beautiful-dnd";
+import { useParams } from "react-router-dom";
 
 export const TeamIssues = observer(
   (props: {}): JSX.Element => {
@@ -22,25 +25,41 @@ export const TeamIssues = observer(
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
     const { meetingStore, issueStore } = useMst();
 
+    const { team_id } = useParams();
+
     useEffect(() => {
+      issueStore.fetchTeamIssues(team_id);
       issueStore.fetchIssuesForMeeting(meetingStore.currentMeeting.id).then(() => {
         setLoading(false);
       });
     }, []);
 
-    if (loading) {
+    if (loading || R.isNil(issueStore.teamIssues) || R.isNil(issueStore.issues)) {
       return <Loading />;
     }
 
-    const openIssues = issueStore.openIssues;
-    const closedIssues = issueStore.closedIssues;
+    const openTeamIssues = issueStore.openTeamIssues;
+    const closedTeamIssues = issueStore.closedTeamIssues;
 
     const renderIssuesList = (): Array<JSX.Element> => {
-      const issues = showOpenIssues ? openIssues : closedIssues;
-      return issues.map((issue, index) => (
-        <IssueContainer key={issue["id"]}>
-          <IssueEntry issue={issue} meetingId={meetingStore.currentMeeting.id} />
-        </IssueContainer>
+      const teamIssues = showOpenIssues ? openTeamIssues : closedTeamIssues;
+      return teamIssues.map((teamIssue, index) => (
+        <Draggable
+          draggableId={`team_issue-${teamIssue.id}`}
+          index={index}
+          key={teamIssue["id"]}
+          type={"team-issue"}
+        >
+          {provided => (
+            <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
+              <IssueEntry
+                issue={teamIssue.issue}
+                meetingId={meetingStore.currentMeeting.id}
+                dragHandleProps={...provided.dragHandleProps}
+              />
+            </IssueContainer>
+          )}
+        </Draggable>
       ));
     };
 
@@ -58,7 +77,14 @@ export const TeamIssues = observer(
             </AddNewIssuePlus>
             <AddNewIssueText> Add a New Issue</AddNewIssueText>
           </AddNewIssueContainer>
-          <IssuesContainer>{renderIssuesList()}</IssuesContainer>
+          <Droppable droppableId={"team-issues-container"} type={"team-issue"}>
+            {(provided, snapshot) => (
+              <IssuesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
+                {renderIssuesList()}
+                {provided.placeholder}
+              </IssuesContainer>
+            )}
+          </Droppable>
         </IssuesBodyContainer>
       );
     };

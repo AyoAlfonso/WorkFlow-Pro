@@ -121,6 +121,14 @@ export class Api {
     });
   }
 
+  async getTeamIssues(teamId) {
+    return this.client.get(`/team_issues`, { teamId: teamId });
+  }
+
+  async updateTeamIssuePosition(teamIssueId, position) {
+    return this.client.patch(`/team_issues/${teamIssueId}`, { position: position });
+  }
+
   async createKeyActivity(keyActivityObject) {
     return this.client.post("/key_activities", keyActivityObject);
   }

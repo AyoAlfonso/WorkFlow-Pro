@@ -1,6 +1,7 @@
 import { types, flow } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { IssueModel } from "../models/issue";
+import { TeamIssueModel } from "../models/team-issue";
 import { ApiResponse } from "apisauce";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
@@ -9,14 +10,21 @@ export const IssueStoreModel = types
   .model("IssueStoreModel")
   .props({
     issues: types.array(IssueModel),
+    teamIssues: types.array(TeamIssueModel),
   })
   .extend(withEnvironment())
   .views(self => ({
     get openIssues() {
-      return self.issues.filter(issue => issue.completedAt == null);
+      return self.issues.filter(issue => issue.completedAt === null);
     },
     get closedIssues() {
-      return self.issues.filter(issue => issue.completedAt != null);
+      return self.issues.filter(issue => issue.completedAt !== null);
+    },
+    get openTeamIssues() {
+      return self.teamIssues.filter(teamIssue => teamIssue.completedAt === null);
+    },
+    get closedTeamIssues() {
+      return self.teamIssues.filter(teamIssue => teamIssue.completedAt !== null);
     },
   }))
   .actions(self => ({
@@ -33,7 +41,8 @@ export const IssueStoreModel = types
         fromTeamMeeting,
       );
       if (response.ok) {
-        self.issues = response.data;
+        self.issues = response.data.issues;
+        self.teamIssues = response.data.teamIssues;
         return true;
       } else {
         return false;
@@ -42,7 +51,8 @@ export const IssueStoreModel = types
     createIssue: flow(function*(issueObject) {
       const response: ApiResponse<any> = yield self.environment.api.createIssue(issueObject);
       if (response.ok) {
-        self.issues = response.data;
+        self.issues = response.data.issues;
+        self.teamIssues = response.data.teamIssues;
         showToast("Issue created.", ToastMessageConstants.SUCCESS);
         return true;
       } else {
@@ -57,7 +67,8 @@ export const IssueStoreModel = types
         fromTeamMeeting,
       });
       if (response.ok) {
-        self.issues = response.data;
+        self.issues = response.data.issues;
+        self.teamIssues = response.data.teamIssues;
         return true;
       } else {
         return false;
@@ -74,7 +85,8 @@ export const IssueStoreModel = types
         fromTeamMeeting,
       });
       if (response.ok) {
-        self.issues = response.data;
+        self.issues = response.data.issues;
+        self.teamIssues = response.data.teamIssues;
         return true;
       } else {
         return false;
@@ -86,7 +98,8 @@ export const IssueStoreModel = types
         fromTeamMeeting,
       });
       if (response.ok) {
-        self.issues = response.data;
+        self.issues = response.data.issues;
+        self.teamIssues = response.data.teamIssues;
         return true;
       } else {
         return false;
@@ -121,6 +134,29 @@ export const IssueStoreModel = types
     reset() {
       self.issues = [] as any;
     },
+  }))
+  .actions(self => ({
+    fetchTeamIssues: flow(function*(teamId) {
+      const response: ApiResponse<any> = yield self.environment.api.getTeamIssues(teamId);
+      if (response.ok) {
+        self.teamIssues = response.data;
+        return true;
+      } else {
+        return false;
+      }
+    }),
+    updateTeamIssuePosition: flow(function*(teamIssueId, position) {
+      const response: ApiResponse<any> = yield self.environment.api.updateTeamIssuePosition(
+        teamIssueId,
+        position,
+      );
+      if (response.ok) {
+        self.teamIssues = response.data;
+        return true;
+      } else {
+        return false;
+      }
+    }),
   }))
   .actions(self => ({
     load: flow(function*() {

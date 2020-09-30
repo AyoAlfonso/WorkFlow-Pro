@@ -65,6 +65,9 @@ Rails.application.routes.draw do
     get '/issues/issues_for_meeting', to: "issues#issues_for_meeting"
     get '/issues/issues_for_team', to: "issues#issues_for_team"
 
+    # team_issues
+    resources :team_issues, only: [:index, :update]
+
     #key activities
     resources :key_activities, only: [:index, :create, :update, :destroy]
     get '/key_activities/created_in_meeting', to: "key_activities#created_in_meeting"

@@ -67,7 +67,7 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2, >= 2.2.2)
-    acts_as_list (1.0.1)
+    acts_as_list (1.0.2)
       activerecord (>= 4.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
@@ -401,7 +401,7 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin (~> 2.7.0)
-  acts_as_list (~> 1.0.1)
+  acts_as_list (~> 1.0.2)
   arctic_admin (~> 3.2.0)
   aws-sdk-s3
   bootsnap (>= 1.4.2)
