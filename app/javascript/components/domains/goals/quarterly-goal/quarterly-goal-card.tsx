@@ -7,6 +7,7 @@ import { Avatar } from "~/components/shared/avatar";
 import * as R from "ramda";
 import { QuarterlyGoalType } from "~/types/quarterly-goal";
 import { RecordOptions } from "../shared/record-options";
+import { useMst } from "~/setup/root";
 
 interface IQuarterlyGoalCardProps {
   quarterlyGoal: QuarterlyGoalType;
@@ -25,6 +26,9 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
     annualInitiativeDescription,
   } = props;
 
+  const { companyStore } = useMst();
+
+  console.log("qg", quarterlyGoal);
   const startedMilestones = quarterlyGoal.milestones.filter(
     milestone => milestone.status != "unstarted",
   );
@@ -42,6 +46,16 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
     setSelectedAnnualInitiativeDescription(annualInitiativeDescription);
   };
 
+  const renderQuarterDisplay = () => {
+    if (companyStore.company.currentFiscalQuarter != quarterlyGoal.quarter) {
+      return (
+        <QuarterContainer>
+          <QuarterText> Q{quarterlyGoal.quarter} Goal </QuarterText>
+        </QuarterContainer>
+      );
+    }
+  };
+
   return (
     <Container>
       <StatusBlockColorIndicator milestones={quarterlyGoal.milestones} indicatorWidth={25} />
@@ -55,6 +69,7 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
         </IconContainer>
       </RowContainer>
       <RowContainer onClick={() => openQuarterlyGoalModal()}>
+        {renderQuarterDisplay()}
         <IconContainer>
           <Avatar
             avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
@@ -98,4 +113,18 @@ const IconContainer = styled.div`
   margin-left: auto;
   margin-right: 8px;
   display: flex;
+`;
+
+const QuarterContainer = styled.div`
+  background-color: ${props => props.theme.colors.primary100};
+  border-radius: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-left: 8px;
+`;
+
+const QuarterText = styled(Text)`
+  color: white;
+  margin-top: 8px;
+  margin-bottom: 8px;
 `;
