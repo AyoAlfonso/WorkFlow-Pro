@@ -28,7 +28,6 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
 
   const { companyStore } = useMst();
 
-  console.log("qg", quarterlyGoal);
   const startedMilestones = quarterlyGoal.milestones.filter(
     milestone => milestone.status != "unstarted",
   );
