@@ -71,8 +71,8 @@ class Habit < ApplicationRecord
   end
 
   def weekly_difference_for_the_previous_week
-    current_week_completed_log_percentage = weekly_completion_percentage_by_date_range(current_week_start, current_week_end)
-    previous_week_completed_log_percentage = weekly_completion_percentage_by_date_range(previous_week_start, previous_week_end)
+    current_week_completed_log_percentage = weekly_completion_percentage_by_date_range(current_week_start_date, current_week_end_date)
+    previous_week_completed_log_percentage = weekly_completion_percentage_by_date_range(previous_week_start_date, previous_week_end_date)
     current_week_completed_log_percentage - previous_week_completed_log_percentage
   end
 
