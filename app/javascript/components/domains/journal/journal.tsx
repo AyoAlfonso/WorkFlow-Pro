@@ -77,12 +77,22 @@ export const Journal = observer(
               onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay)}
               disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
             />
-            <IconButton
+            {/* <IconButton
               {...defaultJournalButtonProps}
               iconName={"Check-in"}
               iconColor={"successGreen"}
               text={t("journals.thoughtChallenge")}
               onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.thoughtChallenge)}
+            /> */}
+            <IconButton
+              {...defaultJournalButtonProps}
+              iconName={"Check-in"}
+              iconColor={"successGreen"}
+              text={"Coming soon"}
+              textColor={"grey20"}
+              fontStyle={"italic"}
+              onClick={() => {}}
+              disabled={true}
             />
             <IconButton
               {...defaultJournalButtonProps}
