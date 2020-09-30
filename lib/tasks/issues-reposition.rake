@@ -9,11 +9,13 @@ namespace :issues do
         issue.update_column :position, index + 1
       end
     end
-    TeamIssue.complete.each_with_index do |team_issue, index|
-      team_issue.update_column :position, index + 1
-    end
-    TeamIssue.incomplete.each_with_index do |team_issue, index|
-      team_issue.update_column :position, index + 1
+    Team.all.each do |team|
+      TeamIssue.for_team(team.id).complete.each_with_index do |team_issue, index|
+        team_issue.update_column :position, index + 1
+      end
+      TeamIssue.for_team(team.id).incomplete.each_with_index do |team_issue, index|
+        team_issue.update_column :position, index + 1
+      end
     end
   end
 end
