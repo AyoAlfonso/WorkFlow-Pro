@@ -36,7 +36,7 @@ class Issue < ApplicationRecord
       team_issue_to_update = team_issue || build_team_issue
       team_issue_to_update.team_id = self.team_id
       team_issue_to_update.completed_at = self.completed_at
-    #there is no else case, because you cannot unshare it from the team, bu tyou can switch the team for issue
+    # there is no else case because you cannot unshare an issue from the team, but you can switch which team it's associated with
     end
   end
 end
