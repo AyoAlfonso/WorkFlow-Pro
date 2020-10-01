@@ -143,7 +143,11 @@ const AddNewIssueContainer = styled.div`
   }
 `;
 
-const IssuesContainer = styled.div`
+type IssuesContainerType = {
+  isDraggingOver: boolean;
+};
+
+const IssuesContainer = styled.div<IssuesContainerType>`
   overflow-y: auto;
   height: 260px;
 `;

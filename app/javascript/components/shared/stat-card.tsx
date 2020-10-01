@@ -23,7 +23,7 @@ export const StatCard = ({
       </HeaderContainerNoBorder>
 
       <RatingText fontSize={3}>{statisticNumber}</RatingText>
-      <PercentChange percentChange={statisticChange} />
+      <PercentChange percentChange={statisticChange} showLineIfZeroOrLess={statisticNumber == 0} />
     </Container>
   );
 };
@@ -34,7 +34,11 @@ const Container = styled(HomeContainerBorders)`
   width: 33.33%;
 `;
 
-const RatingText = styled.div`
+type RatingTextType = {
+  fontSize?: number;
+};
+
+const RatingText = styled.div<RatingTextType>`
   font-size: 40px;
   padding-left: 10px;
   padding-right: 10px;
