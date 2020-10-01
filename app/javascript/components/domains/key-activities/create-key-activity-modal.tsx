@@ -106,7 +106,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                     setKeyActivityDescription("");
                     setCreateKeyActivityModalOpen(false);
                     setSelectedPriority(0);
-                    setWeeklyList(true);
+                    setWeeklyList(defaultTypeAsWeekly);
                   }
                 })
             }
