@@ -31,7 +31,12 @@ export const Questionnaire = observer(
 
     const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
 
-    if (loading || R.isNil(questionnaireStore.questionnaires) || R.isNil(questionnaireVariant)) {
+    if (
+      loading ||
+      R.isNil(questionnaireStore.questionnaires) ||
+      R.isNil(questionnaireVariant) ||
+      R.isNil(sessionStore.profile)
+    ) {
       return (
         <LoadingContainer>
           <Loading />
@@ -40,6 +45,7 @@ export const Questionnaire = observer(
     }
 
     const summaryData = meetingStore.personalPlanningSummary;
+    const userFirstName = sessionStore.profile.firstName;
 
     const steps = R.map(step => {
       if (R.path(["metadata", "summary"], step) === "gratitude") {
@@ -79,17 +85,19 @@ export const Questionnaire = observer(
     }, R.clone(questionnaireVariant.steps));
 
     return R.path(["profile", "currentDailyLog", "weeklyReflection"], sessionStore) ? (
-      <Card
-        width={"100%"}
-        alignment={"left"}
-        headerComponent={<CardHeaderText>{t("journals.weeklyReflectionTitle")}</CardHeaderText>}
-      >
-        <CardBody>
-          <Text fontFamily={"Lato"} fontSize={"14px"} mt={"15px"} textAlign={"center"}>
-            {t("journals.weeklyReflectionCompleted")}
-          </Text>
-        </CardBody>
-      </Card>
+      <Container>
+        <Card
+          width={"100%"}
+          alignment={"left"}
+          headerComponent={<CardHeaderText>{t("journals.weeklyReflectionTitle")}</CardHeaderText>}
+        >
+          <CardBody>
+            <Text fontFamily={"Lato"} fontSize={"14px"} mt={"15px"} textAlign={"center"}>
+              {R.replace("{userName}", userFirstName, t("journals.weeklyReflectionCompleted"))}
+            </Text>
+          </CardBody>
+        </Card>
+      </Container>
     ) : (
       <Container>
         <ChatBot
