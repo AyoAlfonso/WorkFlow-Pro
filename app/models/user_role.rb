@@ -2,8 +2,8 @@ class UserRole < ApplicationRecord
   has_many :users
   validates :name, presence: true
 
-  CEO = "ceo"
-  ADMIN = "admin"
-  NORMAL = "normal_user"
-  LEADERSHIP = "leadership"
+  CEO = "CEO"
+  ADMIN = "Admin"
+  NORMAL = "Employee"
+  LEADERSHIP = "Leadership Team"
 end
