@@ -6,7 +6,7 @@ class QuestionnaireAttempt < ApplicationRecord
   serialize :steps, Array
   serialize :rendered_steps, Array
 
-  validates_with QuestionnaireAttemptValidator
+  validates_with QuestionnaireAttemptValidator, on: :create
 
   scope :within_last_week, -> (current_time) { where(completed_at: current_time.last_week.beginning_of_week..current_time.last_week.end_of_week) }
   scope :within_current_week, -> (current_time) { where(completed_at: current_time.beginning_of_week..current_time.end_of_week) }
