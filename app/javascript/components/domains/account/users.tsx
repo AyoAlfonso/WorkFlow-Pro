@@ -35,6 +35,7 @@ export const Users = observer(
     const { users } = userStore;
     const [editUserModalOpen, setEditUserModalOpen] = useState<boolean>(false);
 
+    const [deactivated, setUserDeactivated] = useState(true);
     const [userId, setUserId] = useState(null);
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -98,6 +99,7 @@ export const Users = observer(
               yes={
                 <IconContainer
                   onClick={() => {
+                    setUserDeactivated(user.status == "inactive");
                     setUserId(user.id);
                     setEmail(user.email || "");
                     setFirstName(user.firstName || "");
@@ -130,6 +132,7 @@ export const Users = observer(
                   small
                   // iconName={"New-User"}
                   onClick={() => {
+                    setUserDeactivated(false);
                     setUserId(null);
                     setEmail("");
                     setFirstName("");
@@ -158,6 +161,7 @@ export const Users = observer(
                   setTitle={setTitle}
                   userRoleId={userRoleId}
                   setUserRole={setUserRole}
+                  deactivated={deactivated}
                 />
               </>
             }

@@ -1,6 +1,6 @@
 class Api::UsersController < Api::ApplicationController
   helper ApplicationHelper
-  before_action :set_user, only: [:show, :update, :resend_invitation]
+  before_action :set_user, only: [:show, :update, :destroy, :resend_invitation]
   skip_before_action :authenticate_user!, only: [:reset_password]
   before_action :skip_authorization, only: [:profile, :reset_password]
   respond_to :json
@@ -31,6 +31,11 @@ class Api::UsersController < Api::ApplicationController
 
   def update
     @user.update!(user_update_params)
+    render 'api/users/show'
+  end
+
+  def destroy
+    @user.soft_delete
     render 'api/users/show'
   end
 

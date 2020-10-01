@@ -39,7 +39,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :daily_logs
 
   def status
-    #todo add inactive
+    return "inactive" if deleted_at.present?
     confirmed_at.present? ? "active" : "pending"
   end
 
@@ -162,6 +162,21 @@ class User < ApplicationRecord
     (differences.reduce(:+).to_f / differences.size).round(1)
   end
 
+
+  #https://github.com/heartcombo/devise/wiki/How-to:-Soft-delete-a-user-when-user-deletes-account
+  def soft_delete  
+    update_attribute(:deleted_at, Time.current)  
+  end  
+  
+  # ensure user account is active  
+  def active_for_authentication?  
+    super && !deleted_at  
+  end  
+  
+  # provide a custom message for a deleted account   
+  def inactive_message   
+    !deleted_at ? super : :deleted_account  
+  end  
 
   private
   def sanitize_personal_vision

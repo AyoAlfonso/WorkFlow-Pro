@@ -45,6 +45,7 @@ export const InviteUserModal = ({
       setTitle={setTitle}
       userRoleId={userRoleId}
       setUserRole={setUserRole}
+      deactivated={false}
     />
   );
 };

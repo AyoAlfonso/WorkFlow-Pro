@@ -22,6 +22,10 @@ class UserPolicy < ApplicationPolicy
     @record == @user || (@user.company_admin? && @user.company == @record.company)
   end
 
+  def destroy? #only company admin can destroy, and destroy is a soft delete in this case
+    @user.company_admin? && @user.company == @record.company
+  end
+
   def resend_invitation?
     create?
   end
@@ -37,10 +41,6 @@ class UserPolicy < ApplicationPolicy
 
   def delete_avatar?
     update_avatar?
-  end
-
-  def destroy?
-    false #admin does destruction
   end
 
   class Scope
