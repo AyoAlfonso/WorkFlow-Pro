@@ -85,7 +85,12 @@ export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
   ...restProps
 }): JSX.Element => {
   return text ? (
-    <Button shadow={shadow} onClick={onClick} {...restProps} disabled={disabled}>
+    <Button
+      shadow={shadow}
+      onClick={disabled ? () => {} : onClick}
+      {...restProps}
+      disabled={disabled}
+    >
       <IcoMoon
         icon={iconName}
         iconSet={iconSet}
@@ -97,7 +102,13 @@ export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
       </TextContainer>
     </Button>
   ) : (
-    <Button shadow={shadow} onClick={onClick} {...restProps} p={0} disabled={disabled}>
+    <Button
+      shadow={shadow}
+      onClick={disabled ? () => {} : onClick}
+      {...restProps}
+      p={0}
+      disabled={disabled}
+    >
       <IcoMoon
         icon={iconName}
         iconSet={iconSet}
