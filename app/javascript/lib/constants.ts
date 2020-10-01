@@ -1,5 +1,5 @@
 // For RBAC rules, change these to whatever is applicable for the app
-export const RoleAdministrator = "admin";
-export const RoleCEO = "ceo";
-export const RoleNormalUser = "normal_user";
-export const RoleLeadership = "leadership";
+export const RoleAdministrator = "Admin";
+export const RoleCEO = "CEO";
+export const RoleNormalUser = "Employee";
+export const RoleLeadership = "Leadership Team";
