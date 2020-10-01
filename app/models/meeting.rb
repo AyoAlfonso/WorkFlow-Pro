@@ -42,11 +42,14 @@ class Meeting < ApplicationRecord
   end
 
   def title
-    if ["team_weekly", "personal_weekly"].include? meeting_type
+    if meeting_type = "personal_weekly"
       time_for_title = start_time || scheduled_start_time || hosted_by.time_in_user_timezone
       return "" if time_for_title.blank?
       date_for_title = time_for_title.beginning_of_week.to_date.strftime("%B %-d")
       "Planning for Week of #{date_for_title}"
+    elsif meeting_type = "team_weekly"
+      time_for_title = start_time || hosted_by.time_in_user_timezone
+      time_for_title.strftime("%A, %B %-d")
     else
       ""
     end
