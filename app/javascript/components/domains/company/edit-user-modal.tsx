@@ -102,7 +102,7 @@ export const EditUserModal = ({
     <ModalWithHeader
       modalOpen={editUserModalOpen}
       setModalOpen={setEditUserModalOpen}
-      headerText={t("company.createUser.addButton")}
+      headerText={userId ? t("company.editUser.title") : t("company.createUser.addButton")}
       width="35rem"
     >
       <Container>

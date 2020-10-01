@@ -90,6 +90,9 @@
         "createUser": {
           "addButton": "Create New User"
         },
+        "editUser": {
+          "title": "Edit User"
+        },
         "rallyingCry": "LynchPyn Goal"
       },
       "navigation": {
