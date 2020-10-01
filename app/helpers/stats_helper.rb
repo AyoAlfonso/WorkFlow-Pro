@@ -66,6 +66,7 @@ module StatsHelper
 
     ka_created_this_week = KeyActivity.user_created_between(current_user, current_week_start, current_week_end).count
     ka_created_last_week = KeyActivity.user_created_between(current_user, previous_week_start, previous_week_end).count
+
     ka_created_change = difference_between_values(ka_created_this_week, ka_created_last_week)
 
     ka_completed_this_week = KeyActivity.user_completed_between(current_user, current_week_start, current_week_end).count
@@ -102,7 +103,7 @@ module StatsHelper
                     ((current_week_value - previous_week_value).to_f / previous_week_value.to_f) * 100
     else
       difference = current_week_value == 0 ? 
-                    previous_week_value * 100 : 
+                    -previous_week_value * 100 : 
                     ((current_week_value - previous_week_value).to_f / previous_week_value.to_f) * 100
     end
   end

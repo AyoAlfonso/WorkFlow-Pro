@@ -5,9 +5,13 @@ import { Text } from "~/components/shared/text";
 
 export interface IPercentChangeProps {
   percentChange: number;
+  showLineIfZeroOrLess?: boolean;
 }
 
-export const PercentChange = ({ percentChange }: IPercentChangeProps): JSX.Element => {
+export const PercentChange = ({
+  percentChange,
+  showLineIfZeroOrLess,
+}: IPercentChangeProps): JSX.Element => {
   const selectColor = percentChange => {
     if (percentChange >= 0) {
       return baseTheme.colors.successGreen;
@@ -19,10 +23,14 @@ export const PercentChange = ({ percentChange }: IPercentChangeProps): JSX.Eleme
   };
   return (
     <PercentageChangeContainer>
-      <PercentageChangeText color={selectColor(percentChange)}>
-        {percentChange >= 0 ? "+" : ""}
-        {Math.round(percentChange)}%
-      </PercentageChangeText>
+      {showLineIfZeroOrLess ? (
+        <DisabledLine>--</DisabledLine>
+      ) : (
+        <PercentageChangeText color={selectColor(percentChange)}>
+          {percentChange >= 0 ? "+" : ""}
+          {Math.round(percentChange)}%
+        </PercentageChangeText>
+      )}
       <ComparedToLastWeekText>Compared to last week</ComparedToLastWeekText>
     </PercentageChangeContainer>
   );
@@ -50,4 +58,11 @@ const ComparedToLastWeekText = styled(Text)`
   margin-left: 10px;
   margin-top: auto;
   margin-bottom: auto;
+`;
+
+const DisabledLine = styled(Text)`
+  color: ${props => props.theme.colors.grey60};
+  font-weight: bold;
+  margin-left: 5px;
+  margin-top: 14px;
 `;
