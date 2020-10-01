@@ -11,6 +11,7 @@ import { RoleNormalUser } from "~/lib/constants";
 
 import { Container, FlexContainer } from "~/components/shared/styles/modals";
 import { maybeNull } from "mobx-state-tree/dist/internal";
+import { ModalButtonsContainer } from "~/components/domains/account/container-styles";
 
 interface IEditUserModal {
   editUserModalOpen: boolean;
@@ -27,6 +28,7 @@ interface IEditUserModal {
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   userRoleId: number;
   setUserRole: React.Dispatch<React.SetStateAction<number>>;
+  deactivated: boolean;
 }
 
 export const getUserRoleIdFrom = (userRoleName, userRoles) =>
@@ -47,6 +49,7 @@ export const EditUserModal = ({
   setTitle,
   userRoleId,
   setUserRole,
+  deactivated,
 }: IEditUserModal): JSX.Element => {
   const {
     userStore,
@@ -83,8 +86,8 @@ export const EditUserModal = ({
         title,
         userRoleId,
       })
-      .then(inviteSuccess => {
-        if (inviteSuccess == true) {
+      .then(success => {
+        if (success == true) {
           setEditUserModalOpen(false);
           resetUser();
         }
@@ -95,6 +98,17 @@ export const EditUserModal = ({
     if (!R.isNil(userId)) {
       userStore.updateUser({ id: userId, email, firstName, lastName, title, userRoleId });
       // resetUser();
+    }
+  };
+
+  const deactivateUser = () => {
+    if (!R.isNil(userId)) {
+      userStore.deactivateUser(userId).then(success => {
+        if (success == true) {
+          setEditUserModalOpen(false);
+          resetUser();
+        }
+      });
     }
   };
 
@@ -151,23 +165,40 @@ export const EditUserModal = ({
                     userRoles,
                   )}
                 </Select>
-                <Button
-                  small
-                  onClick={userId ? updateUser : inviteNewUser}
-                  width={"200px"}
-                  disabled={
-                    email.length == 0 ||
-                    firstName.length == 0 ||
-                    lastName.length == 0 ||
-                    title.length == 0 ||
-                    R.isNil(userRoleId)
-                  }
-                  variant={"primary"}
-                >
-                  {userId
-                    ? t("profile.profileUpdateForm.save")
-                    : t("profile.profileUpdateForm.inviteUser")}
-                </Button>
+
+                {deactivated ? (
+                  <Label>
+                    This user is deactivated. Please contact Lynchpyn support to reactivate them.
+                  </Label>
+                ) : (
+                  <ModalButtonsContainer>
+                    <Button
+                      small
+                      onClick={userId ? updateUser : inviteNewUser}
+                      width={"200px"}
+                      disabled={
+                        email.length == 0 ||
+                        firstName.length == 0 ||
+                        lastName.length == 0 ||
+                        title.length == 0 ||
+                        R.isNil(userRoleId)
+                      }
+                      variant={"primary"}
+                    >
+                      {userId
+                        ? t("profile.profileUpdateForm.save")
+                        : t("profile.profileUpdateForm.inviteUser")}
+                    </Button>
+
+                    {userId ? (
+                      <Button small variant={"redOutline"} onClick={deactivateUser} width={"200px"}>
+                        {t("profile.profileUpdateForm.deactivate")}
+                      </Button>
+                    ) : (
+                      <></>
+                    )}
+                  </ModalButtonsContainer>
+                )}
               </FormContainer>
             }
           />

@@ -47,7 +47,8 @@
           "resend": "Resend",
           "timezone": "Location/Time Zone",
           "title": "Title",
-          "inviteUser": "Invite User"
+          "inviteUser": "Invite User",
+          "deactivate": "Deactivate"
         },
         "securityForm": {
           "password": "Password",

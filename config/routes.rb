@@ -8,7 +8,8 @@ Rails.application.routes.draw do
     sign_out: 'api/users/sign_out'
   },
   controllers: {
-    sessions: 'sessions'
+    sessions: 'sessions',
+    registrations: 'registrations'
   }, skip: [:confirmations, :passwords]
 
   devise_scope :user do
@@ -40,7 +41,7 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
 
   scope module: :api, path: :api do
-    resources :users, only: [:index, :create, :show, :update] do
+    resources :users, only: [:index, :create, :show, :update, :destroy] do
       collection do
         patch '/reset_password', to: "users#reset_password"
       end

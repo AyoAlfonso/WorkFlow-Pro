@@ -85,6 +85,10 @@ export class Api {
     return this.client.post(`/users`, formData);
   }
 
+  async deactivateUser(userId) {
+    return this.client.delete(`/users/${userId}`);
+  }
+
   async resendInvitation(userId) {
     return this.client.patch(`/users/${userId}/resend_invitation`);
   }

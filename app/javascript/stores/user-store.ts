@@ -44,9 +44,9 @@ export const UserStoreModel = types
       } catch {}
     }),
     setUserInUsers(updatedData) {
-      let updatedUsers = self.users;
-      updatedUsers[self.users.findIndex(user => user.id == updatedData.id)] = updatedData;
-      self.users = updatedUsers;
+      if (self.users) {
+        self.users[self.users.findIndex(user => user.id == updatedData.id)] = updatedData;
+      }
     },
   }))
   .actions(self => ({
@@ -73,6 +73,18 @@ export const UserStoreModel = types
           showToast("User updated", ToastMessageConstants.SUCCESS);
         }
       } catch {}
+    }),
+    deactivateUser: flow(function*(userId) {
+      try {
+        const response: any = yield self.environment.api.deactivateUser(userId);
+        //update the user in the array
+        self.setUserInUsers(response.data);
+        if (response.ok) {
+          showToast("User deactivated", ToastMessageConstants.SUCCESS);
+          return true;
+        }
+      } catch {}
+      return false;
     }),
   }));
 

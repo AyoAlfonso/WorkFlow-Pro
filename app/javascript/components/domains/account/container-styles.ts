@@ -69,6 +69,11 @@ export const SaveButtonContainer = styled.div`
   margin-right: 20px;
 `;
 
+export const ModalButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 export const CenteredTableContainer = styled.div`
   display: flex;
   justify-content: center;
