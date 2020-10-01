@@ -93,7 +93,6 @@ export const MeetingGoals = (): JSX.Element => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
   margin-top: -5px;
   margin-left: 15px;
 `;
