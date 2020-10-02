@@ -126,26 +126,13 @@ export const HeaderBar = observer(
             paddingBottom={"10px"}
             disabled={false}
             onClick={() => {
-              //create meeting
-              //psuh to meeting path if successful
-
-              const meetingTemplatePersonal = meetingStore.meetingTemplates.find(
-                mt => mt.meetingType === MeetingTypes.PERSONAL_WEEKLY,
-              );
-
-              if (meetingTemplatePersonal) {
-                meetingStore
-                  .createPersonalMeeting({
-                    hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
-                    currentStep: 0,
-                    meetingTemplateId: meetingTemplatePersonal.id,
-                  })
-                  .then(({ meeting }) => {
-                    if (!R.isNil(meeting)) {
-                      history.push(`/personal_planning/${meeting.id}`);
-                    }
-                  });
-              }
+              meetingStore.createPersonalMeeting().then(({ meeting }) => {
+                if (!R.isNil(meeting)) {
+                  history.push(`/personal_planning/${meeting.id}`);
+                } else {
+                  showToast("MMeeting templates not set up properly.", ToastMessageConstants.ERROR);
+                }
+              });
             }}
           >
             <SelectionText>Weekly Planning</SelectionText>
