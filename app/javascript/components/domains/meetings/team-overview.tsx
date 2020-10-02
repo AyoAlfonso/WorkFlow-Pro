@@ -62,27 +62,13 @@ export const TeamOverview = observer(
     }
 
     const handleMeetingClick = () => {
-      const meetingTemplate = toJS(meetingStore.meetingTemplates).find(
-        mt => mt.meetingType === MeetingTypes.TEAM_WEEKLY,
-      );
-
-      if (meetingTemplate) {
-        meetingStore
-          .createMeeting({
-            teamId: team_id,
-            // startTime: new Date().toUTCString(),
-            hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
-            currentStep: 0,
-            meetingTemplateId: meetingTemplate.id,
-          })
-          .then(({ meeting }) => {
-            if (!R.isNil(meeting)) {
-              history.push(`/team/${team_id}/meeting/${meeting.id}`);
-            }
-          });
-      } else {
-        showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
-      }
+      meetingStore.createMeeting(team_id).then(({ meeting }) => {
+        if (!R.isNil(meeting)) {
+          history.push(`/team/${team_id}/meeting/${meeting.id}`);
+        } else {
+          showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
+        }
+      });
     };
 
     const renderUserSnapshotTable = (): JSX.Element => {

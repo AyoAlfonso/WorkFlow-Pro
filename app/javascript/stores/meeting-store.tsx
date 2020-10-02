@@ -1,8 +1,11 @@
-import { types, flow } from "mobx-state-tree";
+import { types, flow, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { MeetingModel } from "../models/meeting";
 import { MeetingTemplateModel } from "../models/meeting-template";
 import { ApiResponse } from "apisauce";
+import MeetingTypes from "~/constants/meeting-types";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 export const MeetingStoreModel = types
   .model("MeetingStoreModel")
@@ -41,18 +44,6 @@ export const MeetingStoreModel = types
       } catch {
         // caught bv Api Monitor
       }
-    }),
-    createMeeting: flow(function*(meetingObj) {
-      try {
-        const response: ApiResponse<any> = yield self.environment.api.createMeeting(meetingObj);
-        if (response.ok) {
-          self.currentMeeting = response.data;
-          return { meeting: self.currentMeeting };
-        }
-      } catch {
-        // caught bv Api Monitor
-      }
-      return { meeting: null };
     }),
     updateMeeting: flow(function*(meetingObj) {
       try {
@@ -116,18 +107,6 @@ export const MeetingStoreModel = types
     },
   }))
   .actions(self => ({
-    createPersonalMeeting: flow(function*(meetingObj) {
-      try {
-        const response: ApiResponse<any> = yield self.environment.api.createMeeting(meetingObj);
-        if (response.ok) {
-          self.currentPersonalPlanning = response.data;
-          return { meeting: self.currentPersonalPlanning };
-        }
-      } catch {
-        // caught bv Api Monitor
-      }
-      return { meeting: null };
-    }),
     updatePersonalMeeting: flow(function*(meetingObj) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.updateMeeting(meetingObj);
@@ -166,6 +145,69 @@ export const MeetingStoreModel = types
       self.reset();
       self.fetchMeetingTemplates();
       self.fetchMeetings();
+    }),
+  }))
+  .actions(self => ({
+    createMeeting: flow(function*(teamId) {
+      try {
+        const meetingTemplate = self.meetingTemplates.find(
+          mt => mt.meetingType === MeetingTypes.TEAM_WEEKLY,
+        );
+
+        if (!meetingTemplate) {
+          showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
+          self.load();
+          return { meeting: null };
+        }
+
+        const { sessionStore } = getRoot(self);
+
+        const response: ApiResponse<any> = yield self.environment.api.createMeeting({
+          teamId: teamId,
+          hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
+          currentStep: 0,
+          meetingTemplateId: meetingTemplate.id,
+        });
+
+        if (response.ok) {
+          self.currentMeeting = response.data;
+          return { meeting: self.currentMeeting };
+        } else {
+          return { meeting: null };
+        }
+      } catch {
+        // caught bv Api Monitor
+      }
+      return { meeting: null };
+    }),
+    createPersonalMeeting: flow(function*() {
+      try {
+        const meetingTemplatePersonal = self.meetingTemplates.find(
+          mt => mt.meetingType === MeetingTypes.PERSONAL_WEEKLY,
+        );
+
+        if (!meetingTemplatePersonal) {
+          showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
+          self.load();
+          return { meeting: null };
+        }
+
+        const { sessionStore } = getRoot(self);
+
+        const response: ApiResponse<any> = yield self.environment.api.createMeeting({
+          hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
+          currentStep: 0,
+          meetingTemplateId: meetingTemplatePersonal.id,
+        });
+        if (response.ok) {
+          self.currentPersonalPlanning = response.data;
+          return { meeting: self.currentPersonalPlanning };
+        } else {
+          return { meeting: null };
+        }
+      } catch {
+        // caught bv Api Monitor
+      }
     }),
   }));
 

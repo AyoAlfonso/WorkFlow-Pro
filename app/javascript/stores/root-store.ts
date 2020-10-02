@@ -43,9 +43,9 @@ export const RootStoreModel = types
         self.companyStore.load();
         // do some API calls
         self.userStore.load();
+        self.meetingStore.load();
         self.teamStore.load();
         self.notificationStore.load();
-        self.meetingStore.load();
       }
     }),
   }))
