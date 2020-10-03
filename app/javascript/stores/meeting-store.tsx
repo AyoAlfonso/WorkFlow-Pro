@@ -6,6 +6,7 @@ import { ApiResponse } from "apisauce";
 import MeetingTypes from "~/constants/meeting-types";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import * as R from "ramda";
 
 export const MeetingStoreModel = types
   .model("MeetingStoreModel")
@@ -150,11 +151,21 @@ export const MeetingStoreModel = types
   .actions(self => ({
     createMeeting: flow(function*(teamId) {
       try {
-        const meetingTemplate = self.meetingTemplates.find(
+        let meetingTemplate = self.meetingTemplates.find(
           mt => mt.meetingType === MeetingTypes.TEAM_WEEKLY,
         );
 
-        if (!meetingTemplate) {
+        if (R.isNil(meetingTemplate)) {
+          const responseTemplate: ApiResponse<any> = yield self.environment.api.getMeetingTemplates();
+          if (responseTemplate.ok) {
+            self.meetingTemplates = responseTemplate.data;
+            meetingTemplate = self.meetingTemplates.find(
+              mt => mt.meetingType === MeetingTypes.TEAM_WEEKLY,
+            );
+          }
+        }
+
+        if (R.isNil(meetingTemplate)) {
           showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
           self.load();
           return { meeting: null };
@@ -182,11 +193,21 @@ export const MeetingStoreModel = types
     }),
     createPersonalMeeting: flow(function*() {
       try {
-        const meetingTemplatePersonal = self.meetingTemplates.find(
+        let meetingTemplate = self.meetingTemplates.find(
           mt => mt.meetingType === MeetingTypes.PERSONAL_WEEKLY,
         );
 
-        if (!meetingTemplatePersonal) {
+        if (R.isNil(meetingTemplate)) {
+          const responseTemplate: ApiResponse<any> = yield self.environment.api.getMeetingTemplates();
+          if (responseTemplate.ok) {
+            self.meetingTemplates = responseTemplate.data;
+            meetingTemplate = self.meetingTemplates.find(
+              mt => mt.meetingType === MeetingTypes.TEAM_WEEKLY,
+            );
+          }
+        }
+
+        if (R.isNil(meetingTemplate)) {
           showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
           self.load();
           return { meeting: null };
@@ -197,7 +218,7 @@ export const MeetingStoreModel = types
         const response: ApiResponse<any> = yield self.environment.api.createMeeting({
           hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
           currentStep: 0,
-          meetingTemplateId: meetingTemplatePersonal.id,
+          meetingTemplateId: meetingTemplate.id,
         });
         if (response.ok) {
           self.currentPersonalPlanning = response.data;
