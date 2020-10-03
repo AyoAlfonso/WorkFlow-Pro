@@ -26,6 +26,7 @@ import {
   stepPositionsForMeeting,
 } from "./shared/progress-transform-helper";
 import { HomeTitle, HomeContainerBorders } from "../home/shared-components";
+import { MeetingSideOptions } from "./meeting-side-options";
 
 export interface ITeamMeetingProps {}
 
@@ -211,6 +212,7 @@ export const Meeting = observer(
                   <HomeTitle>Core Four</HomeTitle>
                   <Text fontSize={1}>Review the Core Four as a team.</Text>
                 </AgendaHeaderContainer>
+                <MeetingSideOptions teamId={meeting.teamId} meetingId={meeting.id} />
               </AgendaContainer>
               <CoreFourWrapper>
                 <CoreFourOnly />

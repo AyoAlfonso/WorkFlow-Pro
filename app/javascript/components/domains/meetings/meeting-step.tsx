@@ -2,8 +2,6 @@ import * as React from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { HomeContainerBorders, HomeTitle } from "../home/shared-components";
-import { Heading } from "~/components/shared/heading";
-import { Button } from "~/components/shared/button";
 import { ConversationStarter } from "./components/conversation-starter";
 import { PersonalGoals } from "./components/personal-goals";
 import { DailyPlanning } from "./components/daily-planning";
@@ -16,7 +14,6 @@ import { Text } from "~/components/shared/text";
 import { observer } from "mobx-react";
 import { IMeeting } from "~/models/meeting";
 import { IStep } from "~/models/step";
-import meetingTypes from "~/constants/meeting-types";
 import { Loading } from "~/components/shared/loading";
 import { ImageStep } from "~/components/domains/meetings/shared/image-step";
 import { EmbedStep } from "~/components/domains/meetings/shared/embed-step";
@@ -24,6 +21,7 @@ import { TeamPulse } from "./components/team-pulse";
 import { TeamKeyActivities } from "./components/team-key-activities";
 import { MeetingGoals } from "./components/meeting-goals";
 import { TeamIssues } from "./components/team-issues";
+import { MeetingSideOptions } from "./meeting-side-options";
 
 export interface IMeetingStepProps {
   meeting: IMeeting;
@@ -86,6 +84,7 @@ export const MeetingStep = observer(
               <HomeTitle>{meeting.currentStepDetails.name}</HomeTitle>
               <Text fontSize={1}>{meeting.currentStepDetails.instructions}</Text>
             </AgendaHeaderContainer>
+            <MeetingSideOptions teamId={meeting.teamId} meetingId={meeting.id} />
           </LeftContainerBorder>
         </LeftContainer>
         <RightContainer>{StepComponent(meeting.currentStepDetails)}</RightContainer>
@@ -96,7 +95,7 @@ export const MeetingStep = observer(
 
 const LeftContainerBorder = styled(HomeContainerBorders)`
   padding: 16px;
-  height: 100%;
+  min-height: 500px;
 `;
 
 const BodyContainer = styled.div`

@@ -244,6 +244,7 @@ const DeleteButtonContainer = styled.div`
 const ShareButtonContainer = styled.div`
   color: ${props => props.theme.colors.grey60};
   padding-left: 3px;
+  position: relative;
   &: hover {
     cursor: pointer;
     color: ${props => props.theme.colors.greyActive};
@@ -308,6 +309,7 @@ type ShareIssueContainerType = {
 };
 
 const ShareIssueContainer = styled(HomeContainerBorders)<ShareIssueContainerType>`
+  display: block;
   position: absolute;
   background: white;
   color: black;

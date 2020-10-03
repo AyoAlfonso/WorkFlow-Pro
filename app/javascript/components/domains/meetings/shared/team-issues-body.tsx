@@ -11,28 +11,31 @@ import { useMst } from "~/setup/root";
 interface ITeamIssuesBodyProps {
   showOpenIssues: boolean;
   teamId: number | string;
+  meetingId?: number | string;
 }
 
 export const TeamIssuesBody = observer(
   (props: ITeamIssuesBodyProps): JSX.Element => {
     const { issueStore } = useMst();
-    const { showOpenIssues, teamId } = props;
+    const { showOpenIssues, teamId, meetingId } = props;
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
-
-    //@TODO: REPLACE WITH REAL TEAM DATA.
 
     const openIssues = issueStore.openIssues;
     const closedIssues = issueStore.closedIssues;
 
     useEffect(() => {
-      issueStore.fetchIssuesForTeam(teamId);
+      if (teamId) {
+        issueStore.fetchIssuesForTeam(teamId);
+      } else {
+        issueStore.fetchIssues();
+      }
     }, []);
 
     const renderIssuesList = (): Array<JSX.Element> => {
       const issues = showOpenIssues ? openIssues : closedIssues;
       return issues.map((issue, index) => (
         <IssueContainer key={issue["id"]}>
-          <IssueEntry issue={issue} meeting={true} pageEnd={true} />
+          <IssueEntry issue={issue} meeting={true} pageEnd={true} meetingId={meetingId} />
         </IssueContainer>
       ));
     };
@@ -42,6 +45,7 @@ export const TeamIssuesBody = observer(
         <CreateIssueModal
           createIssueModalOpen={createIssueModalOpen}
           setCreateIssueModalOpen={setCreateIssueModalOpen}
+          teamId={teamId}
         />
         <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
           <AddNewIssuePlus>
