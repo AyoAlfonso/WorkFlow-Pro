@@ -15,14 +15,21 @@ class Api::IssuesController < Api::ApplicationController
     if params[:team_id]
       # USE HOOK TO CREATE A TEAM ISSUE IF IT DOESNT EXIST FOR @ISSUE
       @team_issues = TeamIssue.for_team(params[:team_id]).sort_by_position
+      @issues_to_render = team_meeting_issues(params[:team_id])
+    else
+      @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
     end
-    @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
+    
     render "api/issues/create"
   end
 
   def update
     @issue.update!(issue_params.merge(completed_at: params[:completed] ? Time.now : nil))
-    @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
+    if params[:from_team_meeting]
+      @issues_to_render = team_meeting_issues(@issue.team_id)
+    else
+      @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
+    end
     @team_issues = TeamIssue.for_team(@issue.team_id).sort_by_position
     render "api/issues/update"
   end
@@ -30,7 +37,11 @@ class Api::IssuesController < Api::ApplicationController
   def destroy
     team_id = @issue.team_id
     @issue.destroy!
-    @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
+    if params[:from_team_meeting] == "true"
+      @issues_to_render = team_meeting_issues(@issue.team_id)
+    else
+      @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
+    end
     @team_issues = TeamIssue.for_team(team_id).sort_by_position
     render "api/issues/destroy"
   end

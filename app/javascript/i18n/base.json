@@ -121,7 +121,13 @@
         "goalProgress": "Goal Progress",
         "milestoneProgress": "Milestone Progress",
         "tasksCompleted": "Tasks Completed",
-        "issuesAddressed": "Issues Addressed"
+        "issuesAddressed": "Issues Addressed",
+        "sideOptions": {
+          "agenda": "Agenda",
+          "issues": "Issues",
+          "tasks": "Tasks",
+          "notes": "Notes"
+        }
       },
       "status": {
         "active": "Active",
