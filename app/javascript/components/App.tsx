@@ -35,6 +35,7 @@ import { GoalsIndex } from "./domains/goals/goals-index";
 import { TeamOverview } from "./domains/meetings/team-overview";
 import { Meeting } from "./domains/meetings/meeting";
 import { PersonalPlanning } from "./domains/meetings/personal-planning";
+import { JournalIndex } from "~/components/domains/journal-index";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -151,6 +152,12 @@ export const App = observer(
                       path={"/goals"}
                       render={() => {
                         return <GoalsIndex />;
+                      }}
+                    />
+                    <Route
+                      path={"/journals"}
+                      render={() => {
+                        return <JournalIndex />;
                       }}
                     />
                   </Switch>
