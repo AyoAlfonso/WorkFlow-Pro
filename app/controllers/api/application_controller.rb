@@ -8,7 +8,8 @@ class Api::ApplicationController < ActionController::API
   #precedence highest when delcared last for rescue_from
   rescue_from StandardError, with: :fallback_error
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-  rescue_from Pundit::AuthorizationNotPerformedError, Pundit::PolicyScopingNotPerformedError, with: :developer_review_error
+  rescue_from Pundit::AuthorizationNotPerformedError, with: :authorization_not_performed_error
+  rescue_from Pundit::PolicyScopingNotPerformedError, with: :policy_scoping_not_performed_error
   
   def skip_pundit?
     false
@@ -16,8 +17,12 @@ class Api::ApplicationController < ActionController::API
 
   private
 
-  def developer_review_error
-    raise "Developer should review Authorization scope"
+  def policy_scoping_not_performed_error
+    raise "Policy scope not performed"
+  end
+
+  def authorization_not_performed_error
+    raise "Authorization not performed"
   end
 
   def user_not_authorized

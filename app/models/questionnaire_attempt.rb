@@ -13,6 +13,8 @@ class QuestionnaireAttempt < ApplicationRecord
   scope :of_questionnaire_type, -> (questionnaire_name) { joins(:questionnaire).where(questionnaires: { name: questionnaire_name }) }
   scope :for_user, -> (user) { where(user_id: user.id) }
 
+  scope :sort_by_completed_at, -> { order(completed_at: :desc) }
+
   def find_answer_by_id_string(string)
     self.rendered_steps.detect { |rs| rs[:id] == string }
   end

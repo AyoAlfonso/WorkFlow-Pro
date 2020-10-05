@@ -249,6 +249,10 @@ export class Api {
     return this.client.get(`/questionnaires`);
   }
 
+  async getQuestionnaireAttempts() {
+    return this.client.get(`/questionnaire_attempts`);
+  }
+
   async createQuestionnaireAttempt(questionnaireId, questionnaireAttemptData) {
     const questionnaireAttemptObject = {
       questionnaire_id: questionnaireId,

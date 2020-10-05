@@ -1,9 +1,10 @@
 import { observer } from "mobx-react";
 import * as R from "ramda";
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
+import moment from "moment";
 
 import {
   ActionButtonsContainer,
@@ -25,27 +26,40 @@ import { Heading } from "~/components/shared/heading";
 import { Text } from "~/components/shared/text";
 import { Icon } from "~/components/shared/icon";
 import { Avatar } from "~/components/shared/avatar";
+import { Loading } from "~/components/shared";
 
 export interface IJournalIndexProps {}
 
 export const JournalIndex = observer(
   (props: IJournalIndexProps): JSX.Element => {
     const [selected, setSelected] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(true);
     const { questionnaireStore, sessionStore } = useMst();
     const { t } = useTranslation();
 
+    useEffect(() => {
+      questionnaireStore.getQuestionnaireAttempts().then(() => setLoading(false));
+    }, []);
+
+    const questionnaireAttemptsData = questionnaireStore.questionnaireAttemptsData;
+
+    if (loading || R.isNil(questionnaireAttemptsData)) {
+      return <Loading />;
+    }
+
     const renderItems = () =>
-      itemDates.map(date => (
+      questionnaireAttemptsData.map((item, index) => (
         <>
-          <Text fontSize={"12px"} fontWeight={600}>
-            {date}
+          <Text key={index} fontSize={"12px"} fontWeight={600}>
+            {item.date}
           </Text>
-          {itemData.map(jd => (
+          {item.items.map((qa, qaIndex) => (
             <ItemCard
-              titleText={jd.time}
-              bodyText={jd.body}
-              onClick={() => setSelected(jd.id)}
-              selected={selected === jd.id}
+              key={qaIndex}
+              titleText={moment(qa.completedAt).format("LT")}
+              bodyText={qa.questionnaireType}
+              onClick={() => setSelected(`${qa.id}`)}
+              selected={selected === `${qa.id}`}
             />
           ))}
         </>
@@ -100,15 +114,15 @@ export const JournalIndex = observer(
         }
       >
         <EntryBodyCard>
-          {entryData.renderedSteps.map(step => (
-            <>
+          {entryData.renderedSteps.map((step, index) => (
+            <div key={index}>
               <Text fontSize={"12px"} fontWeight={600}>
                 {step.question}
               </Text>
               <Text fontSize={"12px"} fontWeight={400}>
                 {step.answer}
               </Text>
-            </>
+            </div>
           ))}
         </EntryBodyCard>
       </Card>

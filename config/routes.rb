@@ -98,7 +98,7 @@ Rails.application.routes.draw do
     resources :questionnaires, only: [:index]
 
     #questionnaire_attempts
-    resources :questionnaire_attempts, only: [:create]
+    resources :questionnaire_attempts, only: [:index, :create]
     get 'questionnaire_attempts/personal_planning_summary', to: 'questionnaire_attempts#personal_planning'
 
     #teams
