@@ -4,6 +4,8 @@ import { Text } from "~/components/shared/text";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TeamIssuesBody } from "./shared/team-issues-body";
+import { TeamKeyActivitiesBody } from "./shared/team-key-activities-body";
+import { KeyActivitiesBody } from "../key-activities/key-activities-body";
 
 interface IMeetingSideOptionsProps {
   teamId: string | number;
@@ -31,12 +33,20 @@ export const MeetingSideOptions = ({
       case "issues":
         return <TeamIssuesBody showOpenIssues={true} teamId={teamId} meetingId={meetingId} />;
       case "tasks":
-        return <>Tasks</>;
+        return renderDisplayIssues();
       case "notes":
         return <>Notes</>;
       default:
         return <>Agenda</>;
     }
+  };
+
+  const renderDisplayIssues = (): JSX.Element => {
+    return teamId ? (
+      <TeamKeyActivitiesBody />
+    ) : (
+      <KeyActivitiesBody showAllKeyActivities={false} disableDrag={true} borderLeft={"none"} />
+    );
   };
 
   return (
