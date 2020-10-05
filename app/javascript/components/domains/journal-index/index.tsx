@@ -41,7 +41,7 @@ export const JournalIndex = observer(
     const { t } = useTranslation();
 
     useEffect(() => {
-      questionnaireStore.getQuestionnaireAttempts().then(() => setLoading(false));
+      questionnaireStore.getQuestionnaireAttempts(null).then(() => setLoading(false));
     }, []);
 
     const questionnaireAttemptsData = questionnaireStore.questionnaireAttemptsData;
