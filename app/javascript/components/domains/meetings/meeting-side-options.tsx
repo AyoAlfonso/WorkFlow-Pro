@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { TeamIssuesBody } from "./shared/team-issues-body";
 import { TeamKeyActivitiesBody } from "./shared/team-key-activities-body";
 import { KeyActivitiesBody } from "../key-activities/key-activities-body";
+import { Notes } from "./components/notes";
 
 interface IMeetingSideOptionsProps {
   teamId: string | number;
@@ -35,7 +36,7 @@ export const MeetingSideOptions = ({
       case "tasks":
         return renderDisplayIssues();
       case "notes":
-        return <>Notes</>;
+        return <Notes />;
       default:
         return <>Agenda</>;
     }
