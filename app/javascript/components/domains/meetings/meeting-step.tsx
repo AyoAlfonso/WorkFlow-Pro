@@ -84,7 +84,7 @@ export const MeetingStep = observer(
               <HomeTitle>{meeting.currentStepDetails.name}</HomeTitle>
               <Text fontSize={1}>{meeting.currentStepDetails.instructions}</Text>
             </AgendaHeaderContainer>
-            <MeetingSideOptions teamId={meeting.teamId} meetingId={meeting.id} />
+            <MeetingSideOptions teamId={meeting.teamId} meeting={meeting} />
           </LeftContainerBorder>
         </LeftContainer>
         <RightContainer>{StepComponent(meeting.currentStepDetails)}</RightContainer>

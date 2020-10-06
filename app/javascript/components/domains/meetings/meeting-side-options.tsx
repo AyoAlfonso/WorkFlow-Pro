@@ -10,13 +10,10 @@ import { Notes } from "./components/notes";
 
 interface IMeetingSideOptionsProps {
   teamId: string | number;
-  meetingId: string | number;
+  meeting: any;
 }
 
-export const MeetingSideOptions = ({
-  teamId,
-  meetingId,
-}: IMeetingSideOptionsProps): JSX.Element => {
+export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps): JSX.Element => {
   const { t } = useTranslation();
 
   const [selectedTab, setSelectedTab] = useState<string>("agenda");
@@ -32,11 +29,11 @@ export const MeetingSideOptions = ({
   const renderDisplayContent = (): JSX.Element => {
     switch (selectedTab) {
       case "issues":
-        return <TeamIssuesBody showOpenIssues={true} teamId={teamId} meetingId={meetingId} />;
+        return <TeamIssuesBody showOpenIssues={true} teamId={teamId} meetingId={meeting.id} />;
       case "tasks":
         return renderDisplayIssues();
       case "notes":
-        return <Notes meetingId={meetingId} />;
+        return <Notes meeting={meeting} />;
       default:
         return <>Agenda</>;
     }

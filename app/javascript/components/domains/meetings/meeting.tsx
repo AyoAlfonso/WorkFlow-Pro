@@ -212,7 +212,7 @@ export const Meeting = observer(
                   <HomeTitle>Core Four</HomeTitle>
                   <Text fontSize={1}>Review the Core Four as a team.</Text>
                 </AgendaHeaderContainer>
-                <MeetingSideOptions teamId={meeting.teamId} meetingId={meeting.id} />
+                <MeetingSideOptions teamId={meeting.teamId} meeting={meeting} />
               </AgendaContainer>
               <CoreFourWrapper>
                 <CoreFourOnly />

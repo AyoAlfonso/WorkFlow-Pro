@@ -1,19 +1,20 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import ContentEditable from "react-contenteditable";
 import { Heading } from "~/components/shared";
 import { useMst } from "~/setup/root";
+import MeetingTypes from "~/constants/meeting-types";
 
 interface NotesProps {
-  meetingId: string | number;
+  meeting: any;
 }
 
-export const Notes = ({ meetingId }: NotesProps): JSX.Element => {
+export const Notes = ({ meeting }: NotesProps): JSX.Element => {
   const notesRef = useRef(null);
-  const [notesContent, setNotesContent] = useState<string>("");
-
   const { meetingStore } = useMst();
+
+  const meetingType = meeting.meetingType;
 
   return (
     <Container>
@@ -22,11 +23,22 @@ export const Notes = ({ meetingId }: NotesProps): JSX.Element => {
       </Heading>
       <StyledContentEditable
         innerRef={notesRef}
-        html={notesContent}
+        html={meeting.notes}
         onChange={e => {
-          setNotesContent(e.target.value);
+          if (meetingType == MeetingTypes.PERSONAL_WEEKLY) {
+            meetingStore.updatePersonalPlanningField("notes", e.target.value);
+          } else if (meetingType == MeetingTypes.TEAM_WEEKLY) {
+            meetingStore.updateMeetingField("notes", e.target.value);
+          }
         }}
-        onBlur={() => meetingStore.updateMeeting({ id: meetingId, notes: notesContent })}
+        onBlur={() => {
+          const meetingObj = { id: meeting.id, notes: meeting.notes };
+          if (meetingType == MeetingTypes.PERSONAL_WEEKLY) {
+            meetingStore.updatePersonalMeeting(meetingObj);
+          } else if (meetingType == MeetingTypes.TEAM_WEEKLY) {
+            meetingStore.updateMeeting(meetingObj);
+          }
+        }}
       />
     </Container>
   );

@@ -106,6 +106,12 @@ export const MeetingStoreModel = types
     setCurrentMeeting(meeting) {
       self.currentMeeting = meeting;
     },
+    updatePersonalPlanningField(field, value) {
+      self.currentPersonalPlanning[field] = value;
+    },
+    updateMeetingField(field, value) {
+      self.currentMeeting[field] = value;
+    },
   }))
   .actions(self => ({
     updatePersonalMeeting: flow(function*(meetingObj) {
