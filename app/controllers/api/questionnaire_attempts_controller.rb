@@ -1,10 +1,11 @@
 class Api::QuestionnaireAttemptsController <  Api::ApplicationController 
   respond_to :json
 
-  before_action :skip_authorization, only: [:index, :personal_planning]
+  before_action :skip_authorization, only: [:personal_planning]
 
   def index
     @questionnaire_attempts = policy_scope(QuestionnaireAttempt).sort_by_completed_at
+    authorize @questionnaire_attempts
     @dates = @questionnaire_attempts.map{ |qa| qa.completed_at.strftime("%a, %b%e") }.uniq
     @data = @dates.map{ |date| {date: date, items: @questionnaire_attempts.select { |qa| qa.completed_at.strftime("%a, %b%e") == date } } }
     render json: @data

@@ -70,8 +70,8 @@ export const JournalIndex = observer(
 
     const renderItems = () =>
       questionnaireAttemptsData.map((item, index) => (
-        <>
-          <Text key={index} fontSize={"12px"} fontWeight={600}>
+        <div key={index}>
+          <Text fontSize={"12px"} fontWeight={600}>
             {item.date}
           </Text>
           {item.items.map((qa, qaIndex) => (
@@ -83,7 +83,7 @@ export const JournalIndex = observer(
               selected={!R.isNil(selectedItem) ? selectedItem.id === qa.id : false}
             />
           ))}
-        </>
+        </div>
       ));
 
     const renderSelectedEntryHeading = selectedEntry => {
