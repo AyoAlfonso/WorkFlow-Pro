@@ -1,8 +1,9 @@
 import * as React from "react";
-import * as R from "ramda";
 import styled from "styled-components";
-import { color, ColorProps, layout, LayoutProps, space, SpaceProps } from "styled-system";
-import { boolean } from "@storybook/addon-knobs";
+import { useTranslation } from "react-i18next";
+import { layout, LayoutProps, space, SpaceProps } from "styled-system";
+import { Text } from "~/components/shared/text";
+import { Icon } from "~/components/shared/icon";
 
 export const MainContainer = styled.div`
   display: flex;
@@ -25,14 +26,14 @@ export const BodyContainer = styled.div`
 export const FilterContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 70vh;
+  max-height: 60vh;
   padding: 15px 0px 15px 0px;
 `;
 
 export const ItemListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  max-eight: 70vh;
+  max-height: 60vh;
   padding: 15px 25px 15px 25px;
   overflow-y: auto;
 `;
@@ -40,7 +41,7 @@ export const ItemListContainer = styled.div`
 export const EntryContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 70vh;
+  max-height: 60vh;
   padding: 15px 5px 15px 5px;
   overflow-y: auto;
 `;
@@ -59,8 +60,9 @@ export const ItemCardContainer = styled.div<IItemContainerProps>`
   justify-content: flex-start;
   border-radius: 10px;
   box-shadow: 1px 3px 6px 1px rgba(0, 0, 0, 0.1);
-  color: ${props =>
-    props.selected ? props.theme.colors.primary100 : props.theme.colors.greyActive};
+  color: ${props => (props.selected ? props.theme.colors.primary100 : props.theme.colors.grey100)};
+  background: ${props =>
+    props.selected ? props.theme.colors.backgroundBlue : props.theme.colors.white};
   margin-bottom: 12px;
   padding: 8px 12px 12px 12px;
 
@@ -72,11 +74,11 @@ export const ItemCardContainer = styled.div<IItemContainerProps>`
   &:active {
     box-shadow: 1px 3px 6px 1px rgba(0, 0, 0, 0.2);
     transform: translate(1px, 1px);
+    background: ${props => props.theme.colors.backgroundBlue};
   }
 
   &:focus {
     outline: 0;
-    background-color: ${props => props.theme.colors.backgroundBlue};
   }
 `;
 
@@ -88,6 +90,7 @@ const ItemTitleContainer = styled.div`
 
 const ItemBodyContainer = styled.div`
   color: inherit;
+  font-weight: 600;
 `;
 
 interface IItemCardProps {
@@ -145,7 +148,7 @@ const IconContainer = styled.div`
   color: ${props => props.theme.colors.grey40};
   &: hover {
     cursor: pointer;
-    color: ${props => props.theme.colors.greyActive};
+    color: ${props => props.theme.colors.grey100};
   }
   &: focus {
     outline: 0;
@@ -172,3 +175,32 @@ export const AvatarContainer = styled.div`
   align-items: center;
   justify-content: flex-start;
 `;
+
+export const NoEntrySelectedContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export interface INoSelectedItems {
+  text: string;
+}
+
+export const NoSelectedItems = ({ text }: INoSelectedItems): JSX.Element => {
+  const { t } = useTranslation();
+  return (
+    <NoEntrySelectedContainer>
+      <Icon icon={"Empty-Pockets"} size={"86px"} iconColor={"grey40"} mb={"20px"} />
+      <Text fontSize={"18px"} fontWeight={600} fontFamily={"Exo"}>
+        {t("journals.selectEntry")}
+      </Text>
+      <Text fontSize={"12px"} fontWeight={400} color={"grey40"}>
+        {t("journals.emptyList")}
+      </Text>
+      <Text fontSize={"12px"} fontWeight={400} color={"grey40"}>
+        {text}
+      </Text>
+    </NoEntrySelectedContainer>
+  );
+};
