@@ -20,7 +20,6 @@ namespace :questionnaire_attempts do
         end
         qa.save!
       end
-      end
     end
   end
 end
