@@ -3,7 +3,7 @@ namespace :questionnaire_attempts do
   task emotion_score: :environment do
     QuestionnaireAttempt.joins(:questionnaire).where(questionnaires: { name: "Evening Reflection" }).each do |qa|
       if qa.rendered_steps.present?
-        rating_value = case qa.rendered_steps.detect { |rs| rs["id"] == "rating" }["value"]
+        rating_value = qa.rendered_steps.detect { |rs| rs["id"] == "rating" }["value"]
         qa.emotion_score = case rating_value
           when "Emotion-A"
             1
