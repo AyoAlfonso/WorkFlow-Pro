@@ -1,39 +1,47 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useState, useRef } from "react";
-import { observer } from "mobx-react";
-import { CreateKeyActivityModal } from "../../key-activities/create-key-activity-modal";
-import { useMst } from "~/setup/root";
-import { Icon } from "~/components/shared";
-import { color } from "styled-system";
-import { KeyActivityEntry } from "../../key-activities/key-activity-entry";
-import { baseTheme } from "~/themes";
-import { useTranslation } from "react-i18next";
 import ContentEditable from "react-contenteditable";
+import { Heading } from "~/components/shared";
+import { useMst } from "~/setup/root";
 
-export const Notes = (props: {}): JSX.Element => {
+interface NotesProps {
+  meetingId: string | number;
+}
+
+export const Notes = ({ meetingId }: NotesProps): JSX.Element => {
   const notesRef = useRef(null);
   const [notesContent, setNotesContent] = useState<string>("");
 
+  const { meetingStore } = useMst();
+
   return (
-    <StyledContentEditable
-      innerRef={notesRef}
-      html={notesContent}
-      onChange={e => {
-        setNotesContent(e.target.value);
-      }}
-      onBlur={() => console.log("on blur save")}
-    />
+    <Container>
+      <Heading type={"h5"} fontSize={"16px"} fontWeight={400} mt={10} mb={10}>
+        Enter your notes below
+      </Heading>
+      <StyledContentEditable
+        innerRef={notesRef}
+        html={notesContent}
+        onChange={e => {
+          setNotesContent(e.target.value);
+        }}
+        onBlur={() => meetingStore.updateMeeting({ id: meetingId, notes: notesContent })}
+      />
+    </Container>
   );
 };
 
+const Container = styled.div``;
+
 const StyledContentEditable = styled(ContentEditable)`
-  font-weight: bold;
-  font-size: 20px;
+  font-size: 16px;
   padding-top: 5px;
   padding-bottom: 5px;
   padding-left: 4px;
   padding-right: 4px;
   margin-right: -4px;
-  height: 150px;
+  height: 300px;
+  overflow-y: auto;
+  border: ${props => `1px solid ${props.theme.colors.borderGrey}`};
 `;

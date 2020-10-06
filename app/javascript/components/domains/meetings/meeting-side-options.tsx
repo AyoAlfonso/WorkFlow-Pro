@@ -36,7 +36,7 @@ export const MeetingSideOptions = ({
       case "tasks":
         return renderDisplayIssues();
       case "notes":
-        return <Notes />;
+        return <Notes meetingId={meetingId} />;
       default:
         return <>Agenda</>;
     }
