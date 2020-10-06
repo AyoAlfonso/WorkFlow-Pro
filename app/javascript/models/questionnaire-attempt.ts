@@ -7,9 +7,9 @@ export const QuestionnaireAttemptModel = types
     userId: types.number,
     questionnaireId: types.number,
     questionnaireType: types.string,
-    answers: types.array(types.frozen<object>()),
-    steps: types.array(types.frozen<object>()),
-    renderedSteps: types.array(types.frozen<object>()),
+    answers: types.maybeNull(types.array(types.frozen<object>())),
+    steps: types.maybeNull(types.array(types.frozen<object>())),
+    renderedSteps: types.maybeNull(types.array(types.frozen<object>())),
     completedAt: types.string,
     emotionScore: types.maybeNull(types.number),
   })
