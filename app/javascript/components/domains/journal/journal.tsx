@@ -56,12 +56,12 @@ export const Journal = observer(
             <Link to="/journals" style={{ textDecoration: "none", padding: "0" }}>
               <EndButton
                 onClick={() => {
-                  if (confirm(t("journals.confirmQuit"))) {
+                  if (questionnaireVariant !== "" && confirm(t("journals.confirmQuit"))) {
                     setQuestionnaireVariant("");
                   }
                 }}
               >
-                View Entries
+                {t("journals.viewEntries")}
               </EndButton>
             </Link>
           </EndButtonContainer>
