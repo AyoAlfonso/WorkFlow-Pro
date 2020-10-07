@@ -4,7 +4,7 @@ class Api::IssuesController < Api::ApplicationController
   respond_to :json
 
   def index
-    @issues = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
+    @issues = policy_scope(Issue).where(user_id: current_user.id).sort_by_position_and_priority_and_created_at_and_completed_at
     render "api/issues/index"
   end
 
