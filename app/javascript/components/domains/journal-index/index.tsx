@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
 import moment, { fn } from "moment";
 import { toJS } from "mobx";
-import { DateRange, DefinedRange } from "react-date-range";
+import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import {
@@ -49,11 +49,16 @@ export interface IJournalIndexProps {}
 
 export const JournalIndex = observer(
   (props: IJournalIndexProps): JSX.Element => {
+    const { t } = useTranslation();
+
+    const [loading, setLoading] = useState<boolean>(true);
     const [selectedItem, setSelectedItem] = useState<IQuestionnaireAttempt>(null);
-    const [selectedDateFilter, setSelectedDateFilter] = useState<string>("");
+    const [selectedDateFilter, setSelectedDateFilter] = useState<string>(
+      t("dateFilters.lastThirtyDays"),
+    );
     const [dateFilter, setDateFilter] = useState<any>({
       selection: {
-        startDate: new Date(),
+        startDate: addDays(new Date(), -30),
         endDate: new Date(),
         key: "selection",
       },
@@ -64,9 +69,7 @@ export const JournalIndex = observer(
       },
     });
 
-    const [loading, setLoading] = useState<boolean>(true);
     const { questionnaireStore, userStore } = useMst();
-    const { t } = useTranslation();
 
     useEffect(() => {
       questionnaireStore.getQuestionnaireAttempts(null).then(() => setLoading(false));
@@ -198,32 +201,32 @@ export const JournalIndex = observer(
         label: t("dateFilters.today"),
         selection: {
           startDate: new Date(),
-          key: "selection",
           endDate: new Date(),
+          key: "selection",
         },
       },
       {
-        label: t("dateFilters.yesterday"),
+        label: t("dateFilters.lastSevenDays"),
         selection: {
-          startDate: addDays(new Date(), -1),
+          startDate: addDays(new Date(), -7),
+          endDate: new Date(),
           key: "selection",
-          endDate: addDays(new Date(), -1),
         },
       },
       {
-        label: t("dateFilters.lastWeek"),
+        label: t("dateFilters.lastThirtyDays"),
         selection: {
-          startDate: startOfWeek(addWeeks(new Date(), -1)),
+          startDate: addDays(new Date(), -30),
+          endDate: new Date(),
           key: "selection",
-          endDate: endOfWeek(addWeeks(new Date(), -1)),
         },
       },
       {
-        label: t("dateFilters.lastMonth"),
+        label: t("dateFilters.lastNinetyDays"),
         selection: {
-          startDate: startOfMonth(addMonths(new Date(), -1)),
+          startDate: addDays(new Date(), -90),
+          endDate: new Date(),
           key: "selection",
-          endDate: endOfMonth(addMonths(new Date(), -1)),
         },
       },
     ];

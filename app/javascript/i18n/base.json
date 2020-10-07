@@ -172,9 +172,9 @@
       },
       "dateFilters": {
         "today": "Today",
-        "yesterday": "Yesterday",
-        "lastWeek": "Last Week",
-        "lastMonth": "Last Month"
+        "lastSevenDays": "Last 7 Days",
+        "lastThirtyDays": "Last 30 Days",
+        "lastNinetyDays": "Last 90 Days"
       }
     }
   }

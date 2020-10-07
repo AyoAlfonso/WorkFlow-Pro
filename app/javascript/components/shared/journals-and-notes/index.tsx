@@ -64,7 +64,7 @@ export const ItemCardContainer = styled.div<IItemContainerProps>`
   background: ${props =>
     props.selected ? props.theme.colors.backgroundBlue : props.theme.colors.white};
   margin-bottom: 12px;
-  padding: 4px 8px 4px 8px;
+  padding: 8px 8px 8px 8px;
 
   &:hover {
     cursor: pointer;
