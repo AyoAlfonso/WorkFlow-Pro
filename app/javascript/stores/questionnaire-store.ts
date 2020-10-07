@@ -54,9 +54,11 @@ export const QuestionnaireStoreModel = types
         // error messaging handled by API monitor
       }
     }),
-    getQuestionnaireAttempts: flow(function*() {
+    getQuestionnaireAttempts: flow(function*(dateFilterObj) {
       try {
-        const response: ApiResponse<any> = yield self.environment.api.getQuestionnaireAttempts();
+        const response: ApiResponse<any> = yield self.environment.api.getQuestionnaireAttempts(
+          dateFilterObj,
+        );
         self.questionnaireAttemptsData = response.data;
       } catch {
         // caught by Api monitor

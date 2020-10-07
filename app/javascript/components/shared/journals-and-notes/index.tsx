@@ -19,7 +19,7 @@ export const HeadingContainer = styled.div`
 
 export const BodyContainer = styled.div`
   display: grid;
-  grid-template-columns: 20% 20% 60%;
+  grid-template-columns: minmax(370px, auto) minmax(205px, 1fr) minmax(440px, 3fr);
   width: 100%;
 `;
 
@@ -64,7 +64,7 @@ export const ItemCardContainer = styled.div<IItemContainerProps>`
   background: ${props =>
     props.selected ? props.theme.colors.backgroundBlue : props.theme.colors.white};
   margin-bottom: 12px;
-  padding: 8px 12px 12px 12px;
+  padding: 4px 8px 4px 8px;
 
   &:hover {
     cursor: pointer;
@@ -85,11 +85,13 @@ export const ItemCardContainer = styled.div<IItemContainerProps>`
 const ItemTitleContainer = styled.div`
   color: inherit;
   height: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  font-size: 12px;
 `;
 
 const ItemBodyContainer = styled.div`
   color: inherit;
+  font-size: 12px;
   font-weight: 600;
 `;
 

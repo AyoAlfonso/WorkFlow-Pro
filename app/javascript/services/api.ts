@@ -249,8 +249,8 @@ export class Api {
     return this.client.get(`/questionnaires`);
   }
 
-  async getQuestionnaireAttempts() {
-    return this.client.get(`/questionnaire_attempts`);
+  async getQuestionnaireAttempts(dateFilterObj) {
+    return this.client.get(`/questionnaire_attempts`, dateFilterObj);
   }
 
   async createQuestionnaireAttempt(questionnaireId, questionnaireAttemptData) {

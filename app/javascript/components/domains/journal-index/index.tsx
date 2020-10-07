@@ -6,6 +6,19 @@ import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
 import moment, { fn } from "moment";
 import { toJS } from "mobx";
+import { DateRange, DefinedRange } from "react-date-range";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import {
+  addDays,
+  addWeeks,
+  endOfWeek,
+  startOfWeek,
+  addMonths,
+  endOfMonth,
+  startOfMonth,
+} from "date-fns";
+import { baseTheme } from "~/themes/base";
 
 import {
   ActionButtonsContainer,
@@ -38,6 +51,19 @@ export const JournalIndex = observer(
   (props: IJournalIndexProps): JSX.Element => {
     const [selectedItem, setSelectedItem] = useState<IQuestionnaireAttempt>(null);
     const [selectedDateFilter, setSelectedDateFilter] = useState<string>("");
+    const [dateFilter, setDateFilter] = useState<any>({
+      selection: {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: "selection",
+      },
+      compare: {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: "compare",
+      },
+    });
+
     const [loading, setLoading] = useState<boolean>(true);
     const { questionnaireStore, userStore } = useMst();
     const { t } = useTranslation();
@@ -169,16 +195,36 @@ export const JournalIndex = observer(
 
     const filterOptions = [
       {
-        label: "Today",
+        label: t("dateFilters.today"),
+        selection: {
+          startDate: new Date(),
+          key: "selection",
+          endDate: new Date(),
+        },
       },
       {
-        label: "Yesterday",
+        label: t("dateFilters.yesterday"),
+        selection: {
+          startDate: addDays(new Date(), -1),
+          key: "selection",
+          endDate: addDays(new Date(), -1),
+        },
       },
       {
-        label: "Last Week",
+        label: t("dateFilters.lastWeek"),
+        selection: {
+          startDate: startOfWeek(addWeeks(new Date(), -1)),
+          key: "selection",
+          endDate: endOfWeek(addWeeks(new Date(), -1)),
+        },
       },
       {
-        label: "Last Month",
+        label: t("dateFilters.lastMonth"),
+        selection: {
+          startDate: startOfMonth(addMonths(new Date(), -1)),
+          key: "selection",
+          endDate: endOfMonth(addMonths(new Date(), -1)),
+        },
       },
     ];
 
@@ -188,13 +234,24 @@ export const JournalIndex = observer(
           {filterOptions.map((option, index) => (
             <FilterOption
               key={index}
-              onClick={() => setSelectedDateFilter(option.label)}
+              onClick={() => {
+                setSelectedDateFilter(option.label);
+                handleDateSelect({ selection: { ...option.selection } });
+              }}
               option={option}
               selected={selectedDateFilter === option.label}
             />
           ))}
         </>
       );
+    };
+
+    const handleDateSelect = ranges => {
+      setDateFilter({
+        ...ranges,
+      });
+      setLoading(true);
+      questionnaireStore.getQuestionnaireAttempts(ranges.selection).then(() => setLoading(false));
     };
 
     return (
@@ -208,6 +265,25 @@ export const JournalIndex = observer(
           <FilterContainer>
             <Card headerComponent={<CardHeaderText>Filter</CardHeaderText>}>
               {renderDateFilterOptions()}
+              <DateRange
+                showDateDisplay={false}
+                showMonthAndYearPickers={false}
+                ranges={[...Object.values(dateFilter)]}
+                onChange={ranges => {
+                  setSelectedDateFilter("");
+                  handleDateSelect(ranges);
+                }}
+                showSelectionPreview={true}
+                direction={"vertical"}
+                minDate={addDays(new Date(), -90)}
+                maxDate={new Date()}
+                scroll={{
+                  enabled: true,
+                  calendarWidth: 320,
+                  monthWidth: 320,
+                }}
+                rangeColors={[baseTheme.colors.primary80]}
+              />
             </Card>
           </FilterContainer>
           <ItemListContainer>{renderItems()}</ItemListContainer>
