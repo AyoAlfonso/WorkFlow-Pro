@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_01_160520) do
+ActiveRecord::Schema.define(version: 2020_10_07_010441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -243,6 +243,7 @@ ActiveRecord::Schema.define(version: 2020_10_01_160520) do
     t.datetime "scheduled_start_time"
     t.datetime "end_time"
     t.bigint "hosted_by_id"
+    t.text "notes", default: ""
     t.index ["hosted_by_id"], name: "index_meetings_on_hosted_by_id"
     t.index ["meeting_template_id"], name: "index_meetings_on_meeting_template_id"
     t.index ["team_id"], name: "index_meetings_on_team_id"
@@ -299,6 +300,8 @@ ActiveRecord::Schema.define(version: 2020_10_01_160520) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "json_representation"
     t.integer "emotion_score"
+    t.string "questionnaire_type"
+    t.index ["completed_at"], name: "index_questionnaire_attempts_on_completed_at"
     t.index ["questionnaire_id"], name: "index_questionnaire_attempts_on_questionnaire_id"
     t.index ["user_id"], name: "index_questionnaire_attempts_on_user_id"
   end

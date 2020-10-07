@@ -48,6 +48,7 @@ export const MeetingStoreModel = types
     }),
     updateMeeting: flow(function*(meetingObj) {
       try {
+        console.log("meeting object", meetingObj);
         const response: ApiResponse<any> = yield self.environment.api.updateMeeting(meetingObj);
         if (response.ok) {
           let teamMeetings = self.teamMeetings;
@@ -105,6 +106,12 @@ export const MeetingStoreModel = types
   .actions(self => ({
     setCurrentMeeting(meeting) {
       self.currentMeeting = meeting;
+    },
+    updatePersonalPlanningField(field, value) {
+      self.currentPersonalPlanning[field] = value;
+    },
+    updateMeetingField(field, value) {
+      self.currentMeeting[field] = value;
     },
   }))
   .actions(self => ({
