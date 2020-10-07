@@ -25,6 +25,10 @@ export const KeyActivitiesBody = observer(
     const { showAllKeyActivities, borderLeft } = props;
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
+    useEffect(() => {
+      keyActivityStore.fetchKeyActivities();
+    }, []);
+
     const weeklyKeyActivities = keyActivityStore.weeklyKeyActivities;
     const masterKeyActivities = keyActivityStore.masterKeyActivities;
 
@@ -35,10 +39,6 @@ export const KeyActivitiesBody = observer(
       keyActivity => keyActivity.completedAt,
     );
 
-    useEffect(() => {
-      keyActivityStore.fetchKeyActivities();
-    }, []);
-
     const renderKeyActivitiesList = (): any => {
       const { loading, loadingList } = keyActivityStore;
       if (loading && loadingList === "weekly-activities") {
@@ -48,11 +48,11 @@ export const KeyActivitiesBody = observer(
         const outstandingMasterActivitiesContainerHeight = outstandingMasterActivities.length * 54;
         return (
           <>
-            <OutstandingMAsterActivitiesListContainer
+            <OutstandingMasterActivitiesListContainer
               height={outstandingMasterActivitiesContainerHeight}
             >
               {renderOutstandingMasterActivitiesList()}
-            </OutstandingMAsterActivitiesListContainer>
+            </OutstandingMasterActivitiesListContainer>
 
             <CompletedMasterActivitiesListContainer
               completedMasterActivitiesPresent={completedMasterActivitiesPresent}
@@ -231,12 +231,12 @@ const CompletedMasterActivitiesListContainer = styled.div<
     props.completedMasterActivitiesPresent && `1px solid ${props.theme.colors.grey40}`};
 `;
 
-type OutstandingMAsterActivitiesListContainerType = {
+type OutstandingMasterActivitiesListContainerType = {
   height: number;
 };
 
-const OutstandingMAsterActivitiesListContainer = styled.div<
-  OutstandingMAsterActivitiesListContainerType
+const OutstandingMasterActivitiesListContainer = styled.div<
+  OutstandingMasterActivitiesListContainerType
 >`
   height: ${props => props.height}px;
 `;
