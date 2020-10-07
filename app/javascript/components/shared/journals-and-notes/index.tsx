@@ -204,3 +204,58 @@ export const NoSelectedItems = ({ text }: INoSelectedItems): JSX.Element => {
     </NoEntrySelectedContainer>
   );
 };
+
+const FilterOptionContainer = styled.div`
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  padding: 8px;
+
+  &:hover {
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  &:active {
+    transform: translate(1px, 1px);
+    background: ${props => props.theme.colors.backgroundBlue};
+  }
+
+  &:focus {
+    outline: 0;
+  }
+`;
+
+interface IFilterOptionLabelContainerProps {
+  selected?: boolean;
+  children: any;
+}
+
+const FilterOptionLabelContainer = styled.div<IFilterOptionLabelContainerProps>`
+  color: ${props => (props.selected ? props.theme.colors.primary100 : props.theme.colors.text)};
+  background: ${props =>
+    props.selected ? props.theme.colors.backgroundBlue : props.theme.colors.white};
+  font-family: Lato;
+  font-size: 12px;
+  padding: 2px 4px 2px 4px;
+`;
+
+export interface IFilterOptionProps {
+  onClick?: () => void;
+  selected?: boolean;
+  option: {
+    label: string;
+  };
+}
+
+export const FilterOption = ({
+  onClick,
+  selected,
+  option: { label },
+}: IFilterOptionProps): JSX.Element => {
+  return (
+    <FilterOptionContainer onClick={onClick}>
+      <FilterOptionLabelContainer selected={selected}>{label}</FilterOptionLabelContainer>
+    </FilterOptionContainer>
+  );
+};

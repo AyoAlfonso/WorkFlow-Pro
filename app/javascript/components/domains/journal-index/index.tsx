@@ -4,7 +4,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
-import moment from "moment";
+import moment, { fn } from "moment";
 import { toJS } from "mobx";
 
 import {
@@ -16,6 +16,7 @@ import {
   EntryCardHeaderContainer,
   EntryHeadingContainer,
   FilterContainer,
+  FilterOption,
   HeadingContainer,
   IconButtonContainer,
   ItemListContainer,
@@ -36,6 +37,7 @@ export interface IJournalIndexProps {}
 export const JournalIndex = observer(
   (props: IJournalIndexProps): JSX.Element => {
     const [selectedItem, setSelectedItem] = useState<IQuestionnaireAttempt>(null);
+    const [selectedDateFilter, setSelectedDateFilter] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
     const { questionnaireStore, userStore } = useMst();
     const { t } = useTranslation();
@@ -165,6 +167,36 @@ export const JournalIndex = observer(
       );
     };
 
+    const filterOptions = [
+      {
+        label: "Today",
+      },
+      {
+        label: "Yesterday",
+      },
+      {
+        label: "Last Week",
+      },
+      {
+        label: "Last Month",
+      },
+    ];
+
+    const renderDateFilterOptions = () => {
+      return (
+        <>
+          {filterOptions.map((option, index) => (
+            <FilterOption
+              key={index}
+              onClick={() => setSelectedDateFilter(option.label)}
+              option={option}
+              selected={selectedDateFilter === option.label}
+            />
+          ))}
+        </>
+      );
+    };
+
     return (
       <MainContainer>
         <HeadingContainer>
@@ -174,7 +206,9 @@ export const JournalIndex = observer(
         </HeadingContainer>
         <BodyContainer>
           <FilterContainer>
-            <Card headerComponent={<CardHeaderText>Filter</CardHeaderText>}>some other stuff</Card>
+            <Card headerComponent={<CardHeaderText>Filter</CardHeaderText>}>
+              {renderDateFilterOptions()}
+            </Card>
           </FilterContainer>
           <ItemListContainer>{renderItems()}</ItemListContainer>
           <EntryContainer>{renderSelectedEntry()}</EntryContainer>
