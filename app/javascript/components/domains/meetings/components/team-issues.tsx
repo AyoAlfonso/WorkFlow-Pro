@@ -52,6 +52,8 @@ export const TeamIssues = observer(
                 issue={teamIssue.issue}
                 meetingId={meetingStore.currentMeeting.id}
                 dragHandleProps={...provided.dragHandleProps}
+                meeting={true}
+                leftShareContainer={true}
               />
             </IssueContainer>
           )}

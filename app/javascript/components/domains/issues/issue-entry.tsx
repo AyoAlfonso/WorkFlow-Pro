@@ -21,12 +21,13 @@ interface IIssueEntryProps {
   pageEnd?: boolean;
   meetingId?: number | string;
   dragHandleProps?: any;
+  leftShareContainer?: boolean;
 }
 
 export const IssueEntry = observer(
   (props: IIssueEntryProps): JSX.Element => {
     const { issueStore, teamStore } = useMst();
-    const { issue, meeting, pageEnd, meetingId, dragHandleProps } = props;
+    const { issue, meeting, pageEnd, meetingId, dragHandleProps, leftShareContainer } = props;
 
     const teams = teamStore.teams;
 
@@ -160,7 +161,7 @@ export const IssueEntry = observer(
               <ShareButtonContainer onMouseEnter={() => setShowShareModal(true)}>
                 <Icon icon={"Forward"} size={24} style={{ marginTop: "3px" }} />
                 {showShareModal && (
-                  <ShareIssueContainer pageEnd={pageEnd}>
+                  <ShareIssueContainer pageEnd={pageEnd} leftShareContainer={leftShareContainer}>
                     <ShareIssueText>Share Issue</ShareIssueText>
                     <DestinationContainer>
                       <SendDestinationContainer>
@@ -306,6 +307,7 @@ const StyledContentEditable = styled(ContentEditable)<StyledContentEditableProps
 
 type ShareIssueContainerType = {
   pageEnd?: boolean;
+  leftShareContainer?: boolean;
 };
 
 const ShareIssueContainer = styled(HomeContainerBorders)<ShareIssueContainerType>`
@@ -316,6 +318,7 @@ const ShareIssueContainer = styled(HomeContainerBorders)<ShareIssueContainerType
   width: 200px;
   margin-left: ${props => props.pageEnd && "-180px"};
   z-index: 2;
+  right: ${props => props.leftShareContainer && "5px"};
 `;
 
 const ShareIssueText = styled(Text)`

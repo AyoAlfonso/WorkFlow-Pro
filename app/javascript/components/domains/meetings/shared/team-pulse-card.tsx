@@ -71,6 +71,8 @@ export const TeamPulseCard = ({ data }: ITeamPulseCardProps): JSX.Element => {
 };
 
 const renderDateOfWeek = date => {
+  console.log("date", date);
+  console.log("moment date", moment(date));
   return (
     <tspan>
       <tspan x="0" dy="1em">
