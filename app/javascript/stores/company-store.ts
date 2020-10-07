@@ -11,18 +11,7 @@ export const CompanyStoreModel = types
     company: types.maybeNull(CompanyModel),
   })
   .extend(withEnvironment())
-  .views(self => ({
-    get creatingQuarterlyGoalForQuarter() {
-      const nextQuarterStartDay = moment(self.company.nextFiscalQuarterStartDate);
-      const quarterCutoff = moment(self.company.fiscalYearCutoffForCreatingItems);
-
-      if (moment().isBetween(quarterCutoff, nextQuarterStartDay)) {
-        return self.company.currentFiscalQuarter + 1;
-      } else {
-        return self.company.currentFiscalQuarter;
-      }
-    },
-  }))
+  .views(self => ({}))
   .actions(self => ({
     load: flow(function*() {
       const env = getEnv(self);
