@@ -15,14 +15,6 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
     render json: @data
   end
 
-  def index
-    @questionnaire_attempts = policy_scope(QuestionnaireAttempt).sort_by_completed_at
-    authorize @questionnaire_attempts
-    @dates = @questionnaire_attempts.map{ |qa| qa.completed_at.strftime("%a, %b%e") }.uniq
-    @data = @dates.map{ |date| {date: date, items: @questionnaire_attempts.select { |qa| qa.completed_at.strftime("%a, %b%e") == date } } }
-    render json: @data
-  end
-
   def create
     json_representation = {
       answers: params[:answers],
