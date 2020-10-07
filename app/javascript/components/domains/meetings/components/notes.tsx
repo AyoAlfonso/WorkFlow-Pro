@@ -1,49 +1,31 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useRef, useState } from "react";
-import ContentEditable from "react-contenteditable";
-import { Heading } from "~/components/shared";
+import { useState } from "react";
 import { useMst } from "~/setup/root";
 import MeetingTypes from "~/constants/meeting-types";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
 
 interface NotesProps {
   meeting: any;
 }
 
 export const Notes = ({ meeting }: NotesProps): JSX.Element => {
-  const notesRef = useRef(null);
   const { meetingStore } = useMst();
 
   const meetingType = meeting.meetingType;
 
-  const [editorText, setEditorText] = useState<any>(meeting.notes);
+  const convertedMeetingNotes = htmlToDraft(meeting.notes);
+  const contentState = ContentState.createFromBlockArray(convertedMeetingNotes.contentBlocks);
+  const editorState = EditorState.createWithContent(contentState);
+
+  const [editorText, setEditorText] = useState<any>(editorState || EditorState.createEmpty());
 
   return (
     <Container>
-      <Heading type={"h5"} fontSize={"16px"} fontWeight={400} mt={10} mb={10}>
-        Enter your notes below
-      </Heading>
-      {/* <StyledContentEditable
-        innerRef={notesRef}
-        html={meeting.notes}
-        onChange={e => {
-          if (meetingType == MeetingTypes.PERSONAL_WEEKLY) {
-            meetingStore.updatePersonalPlanningField("notes", e.target.value);
-          } else if (meetingType == MeetingTypes.TEAM_WEEKLY) {
-            meetingStore.updateMeetingField("notes", e.target.value);
-          }
-        }}
-        onBlur={() => {
-          const meetingObj = { id: meeting.id, notes: meeting.notes };
-          if (meetingType == MeetingTypes.PERSONAL_WEEKLY) {
-            meetingStore.updatePersonalMeeting(meetingObj);
-          } else if (meetingType == MeetingTypes.TEAM_WEEKLY) {
-            meetingStore.updateMeeting(meetingObj);
-          }
-        }}
-      /> */}
       <EditorWrapper>
         <Editor
           toolbar={{
@@ -55,10 +37,13 @@ export const Notes = ({ meeting }: NotesProps): JSX.Element => {
               options: ["unordered", "ordered"],
             },
           }}
-          //editorState={editorText}
-          onChange={e => setEditorText(e)}
+          editorState={editorText}
+          onEditorStateChange={e => setEditorText(e)}
           onBlur={() => {
-            const meetingObj = { id: meeting.id, notes: editorText };
+            const meetingObj = {
+              id: meeting.id,
+              notes: draftToHtml(convertToRaw(editorText.getCurrentContent())),
+            };
             if (meetingType == MeetingTypes.PERSONAL_WEEKLY) {
               meetingStore.updatePersonalMeeting(meetingObj);
             } else if (meetingType == MeetingTypes.TEAM_WEEKLY) {
