@@ -126,7 +126,8 @@
           "agenda": "Agenda",
           "issues": "Issues",
           "tasks": "Tasks",
-          "notes": "Notes"
+          "notes": "Notes",
+          "pyns": "Pyns"
         }
       },
       "status": {

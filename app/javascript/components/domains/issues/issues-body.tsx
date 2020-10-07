@@ -40,7 +40,11 @@ export const IssuesBody = observer(
           <Draggable draggableId={`issue-${issue.id}`} index={index} key={issue.id} type={"issue"}>
             {provided => (
               <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
-                <IssueEntry issue={issue} dragHandleProps={...provided.dragHandleProps} />
+                <IssueEntry
+                  issue={issue}
+                  dragHandleProps={...provided.dragHandleProps}
+                  leftShareContainer={true}
+                />
               </IssueContainer>
             )}
           </Draggable>

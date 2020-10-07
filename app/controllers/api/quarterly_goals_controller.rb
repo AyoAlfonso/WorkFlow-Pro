@@ -11,11 +11,6 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
   def create
     company = current_user.company
-    quarter = company.current_fiscal_quarter
-
-    if Date.today.between?(company.fiscal_year_cutoff_for_creating_items, company.next_fiscal_quarter_start_date)
-      quarter = quarter + 1
-    end
 
     @quarterly_goal = QuarterlyGoal.new({
       created_by: current_user, 
@@ -24,7 +19,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
       description: params[:description],
       context_description: "",
       importance: ["", "", ""],
-      quarter: quarter
+      quarter: company.quarter_for_creating_quarterly_goals
     })
     authorize @quarterly_goal
     @quarterly_goal.save!

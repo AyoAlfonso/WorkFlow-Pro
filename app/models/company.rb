@@ -44,12 +44,21 @@ class Company < ApplicationRecord
     date.strftime("%m/%d")
   end
 
-  def next_fiscal_quarter_start_date
-    self.fiscal_year_start + (13.weeks * (current_fiscal_quarter))
-  end
-
-  def fiscal_year_cutoff_for_creating_items
-    next_fiscal_quarter_start_date - 4.weeks
+  def quarter_for_creating_quarterly_goals
+    current_date = format_month_and_day(Date.today)
+    if current_date.between?(format_fiscal_year_start, format_month_and_day(second_quarter_start_date()))
+      within_4_weeks_range(second_quarter_start_date()) ? 2 : 1
+    elsif current_date.between?(format_month_and_day(second_quarter_start_date()), format_month_and_day(third_quarter_start_date()))
+      within_4_weeks_range(third_quarter_start_date()) ? 3 : 2
+    elsif current_date.between?(format_month_and_day(third_quarter_start_date()), format_month_and_day(fourth_quarter_start_date()))
+      within_4_weeks_range(fourth_quarter_start_date()) ? 4 : 3
+    else
+      if self.fiscal_year_start > Date.today
+        self.fiscal_year_start - 4.weeks <= Date.today && within_4_weeks_range(self.fiscal_year_start) ? 1 : 4
+      else
+        self.fiscal_year_start - 4.weeks >= Date.today && within_4_weeks_range(self.fiscal_year_start) ? 1 : 4
+      end
+    end
   end
 
   private
@@ -84,5 +93,9 @@ class Company < ApplicationRecord
 
   def sanitize_rallying_cry
     self.rallying_cry = strip_tags(rallying_cry)
+  end
+
+  def within_4_weeks_range(end_date)
+    Date.today + 4.weeks >= end_date
   end
 end

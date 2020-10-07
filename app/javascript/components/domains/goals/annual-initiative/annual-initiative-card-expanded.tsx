@@ -55,7 +55,7 @@ export const AnnualInitiativeCardExpanded = observer(
           <CreateGoalSection
             placeholder={t("quarterlyGoal.enterTitle")}
             addButtonText={`${t("quarterlyGoal.add")} (Q${
-              companyStore.creatingQuarterlyGoalForQuarter
+              companyStore.company.quarterForCreatingQuarterlyGoals
             })`}
             createButtonText={t("quarterlyGoal.addGoal")}
             showCreateGoal={createQuarterlyGoalArea}

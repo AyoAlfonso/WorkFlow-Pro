@@ -45,7 +45,7 @@ export const MeetingSideOptions = ({
         <SelectionTabsContainer>
           {renderOption("agenda")}
           {renderOption("issues")}
-          {renderOption("tasks")}
+          {renderOption("pyns")}
           {renderOption("notes")}
         </SelectionTabsContainer>
       </SelectionContainer>
