@@ -11,9 +11,9 @@ class NotificationEmailJob
     @schedule = IceCube::Schedule.from_hash(notification.rule)
     notification_type = human_type(notification.notification_type)
     # The job runs at top and bottom of each hour. There's a -10 and +5 minute buffer in case the job starts early or late.
-    return if is_weekend?
     if schedule_occurs_between?(@user.time_in_user_timezone - 10.minutes, @user.time_in_user_timezone + 5.minutes)
       if notification_type == "Create My Day" && user_has_not_set_status
+        return if is_weekend?
         send_person_planning_reminder_email(@user, notification_type)
       elsif notification_type == "Weekly Report"
         send_end_of_week_stats_email(@user, notification_type)
