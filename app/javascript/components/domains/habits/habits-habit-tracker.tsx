@@ -45,13 +45,10 @@ export const HabitsHabitTracker = observer(
     return (
       <>
         <HabitsTableDataCell>
-          {habit.percentageWeeklyLogsCompleted == 0 ? (
+          {habit.score < 1 ? (
             <HabitsTableCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
           ) : (
-            <HabitsTableCircularProgressBar
-              color={habit.color}
-              value={habit.percentageWeeklyLogsCompleted}
-            />
+            <HabitsTableCircularProgressBar color={habit.color} value={habit.score} />
           )}
         </HabitsTableDataCell>
         <HabitsTextContainer

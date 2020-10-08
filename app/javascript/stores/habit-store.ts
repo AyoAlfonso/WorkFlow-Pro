@@ -30,7 +30,7 @@ export const HabitStoreModel = types
     get weeklyDifferenceForPersonalMeeting() {
       let differencesPercentage = 0;
       self.habits.forEach(habit => {
-        differencesPercentage += habit.weeklyDifference;
+        differencesPercentage += habit.weeklyScoreDifference;
       });
       if (self.habits.length == 0) {
         return 0;

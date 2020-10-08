@@ -23,13 +23,10 @@ export const HabitsSummary = observer(
       habits.map((habit, index) => (
         <HabitsTableRow key={`${habit.id}-${index}`}>
           <StyledHabitsTableCenterCell>
-            {habit.weeklyCompletionPercentage == 0 ? (
+            {habit.score < 1 ? (
               <HabitsTableCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
             ) : (
-              <HabitsTableCircularProgressBar
-                color={habit.color}
-                value={habit.weeklyCompletionPercentage}
-              />
+              <HabitsTableCircularProgressBar color={habit.color} value={habit.score} />
             )}
           </StyledHabitsTableCenterCell>
           <StyledHabitsTableDataCell>
@@ -37,13 +34,13 @@ export const HabitsSummary = observer(
           </StyledHabitsTableDataCell>
           <StyledHabitsTableCenterCell>
             <HabitsTextContainer color={habit.color}>
-              {habit.weeklyCompletionPercentage ? habit.weeklyCompletionPercentage.toFixed(0) : 0}%
+              {habit.score ? habit.score.toFixed(0) : 0}%
             </HabitsTextContainer>
           </StyledHabitsTableCenterCell>
           <StyledHabitsTableCenterCell>
             <HabitsTextContainer color={habit.color}>
-              {habit.weeklyDifference >= 0 ? "+" : ""}
-              {habit.weeklyDifference ? habit.weeklyDifference.toFixed(0) : 0}%
+              {habit.weeklyScoreDifference >= 0 ? "+" : ""}
+              {habit.weeklyScoreDifference ? habit.weeklyScoreDifference.toFixed(0) : 0}%
             </HabitsTextContainer>
           </StyledHabitsTableCenterCell>
           <StyledHabitsTableCenterCell>

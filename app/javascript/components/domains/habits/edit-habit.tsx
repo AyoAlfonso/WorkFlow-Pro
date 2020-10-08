@@ -151,24 +151,30 @@ export const EditHabit = observer(
         <OverviewContainer>
           <SectionText> Overview </SectionText>
           <OverviewDetailsContainer>
-            {habit.percentageWeeklyLogsCompleted == 0 ? (
-              <HabitCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
-            ) : (
-              <HabitCircularProgressBar
-                color={habit.color}
-                value={habit.percentageWeeklyLogsCompleted}
-              />
-            )}
+            <CircularProgressBarContainer>
+              {habit.score == 0 ? (
+                <HabitCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
+              ) : (
+                <HabitCircularProgressBar color={habit.color} value={habit.score} />
+              )}
+              <BoldedDescriptionText>Score</BoldedDescriptionText>
+            </CircularProgressBarContainer>
+
             <ScoreContainer>
-              <PercentageText color={habit.color}>
-                {habit.percentageWeeklyLogsCompleted.toFixed(0)}%
-              </PercentageText>
+              <PercentageText color={habit.color}>{habit.score.toFixed(0)}%</PercentageText>
               <DescriptionText>Score</DescriptionText>
             </ScoreContainer>
             <ScoreContainer>
               <PercentageText color={habit.color}>
-                {habit.weeklyLogsCompletionDifference >= 0 ? "+" : ""}
-                {habit.weeklyLogsCompletionDifference.toFixed(0)}%
+                {habit.monthlyScoreDifference >= 0 ? "+" : ""}
+                {habit.monthlyScoreDifference.toFixed(0)}%
+              </PercentageText>
+              <DescriptionText>Month</DescriptionText>
+            </ScoreContainer>
+            <ScoreContainer>
+              <PercentageText color={habit.color}>
+                {habit.weeklyScoreDifference >= 0 ? "+" : ""}
+                {habit.weeklyScoreDifference.toFixed(0)}%
               </PercentageText>
               <DescriptionText>Week</DescriptionText>
             </ScoreContainer>
@@ -287,4 +293,15 @@ const PercentageText = styled(Text)<PercentageTextType>`
 const DescriptionText = styled(Text)`
   margin-top: 4px;
   margin-bottom: 0;
+`;
+
+const CircularProgressBarContainer = styled.div`
+  margin-right: 5px;
+`;
+
+const BoldedDescriptionText = styled(Text)`
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
 `;

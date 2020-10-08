@@ -12,7 +12,7 @@ class Habit < ApplicationRecord
 
   def as_json(options = [])
     super({
-      methods: [:weekly_logs_completion_difference],
+      methods: [:score, :monthly_score_difference, :weekly_score_difference],
       except: [:created_at, :updated_at],
       include: [
                 current_week_logs: {
@@ -76,17 +76,31 @@ class Habit < ApplicationRecord
     current_week_completed_log_percentage - previous_week_completed_log_percentage
   end
 
+  def score
+    calculate_score_for_date(user_current_date)
+  end
+
+  def monthly_score_difference
+    previous_month_date = user_current_date.prev_month
+    difference_between_values(calculate_score_for_date(user_current_date), calculate_score_for_date(previous_month_date))
+  end
+
+  def weekly_score_difference
+    previous_week_date = user_current_date.prev_week
+    difference_between_values(calculate_score_for_date(user_current_date), calculate_score_for_date(previous_week_date))
+  end
+
   private
   def get_previous_week_completion(start_date, end_date)
     self.completed_logs_by_date_range(start_date, end_date)
   end
 
   def current_week_start_date
-    get_beginning_of_last_or_current_work_week_date(self.user.time_in_user_timezone).to_date
+    get_beginning_of_last_or_current_work_week_date(self.user.time_in_user_timezone).prev_day.to_date
   end
 
   def current_week_end_date
-    self.user.time_in_user_timezone.end_of_week.to_date
+    user_current_date.end_of_week.prev_day.to_date
   end
 
   def previous_week_start_date
@@ -94,6 +108,31 @@ class Habit < ApplicationRecord
   end
 
   def previous_week_end_date
-    previous_week_start_date.end_of_week.to_date
+    current_week_end_date.weeks_ago(1).to_date
+  end
+
+  def user_current_date
+    self.user.time_in_user_timezone
+  end
+
+  def calculate_score_for_date(date)
+    #PARHAM'S EQUATION
+    # w ~ Weekly average from the past 4 weeks
+    # g ~ Weekly goal/target
+    # a ~ Aggregate from the past 256 days (set to 66 if above 66)
+    # t ~ Avg target for building a habit (66)
+
+    # Habit Score = Frequency x Stability
+    # ---
+    # Frequency = log(w/g + 1) / log(2)
+    # Stability = a/t
+    # Habit Score = (log(w/g + 1) / log(2)) x (a/t)
+
+    weekly_average_from_past_4_weeks = self.habit_logs.where("log_date >= ?", date - 4.weeks).count.to_f / 4
+    weekly_goal = self.frequency
+    aggregate_from_past_256_days_count = self.habit_logs.where("log_date >= ?", date - 256.days).count
+    aggregate_value = aggregate_from_past_256_days_count < 66 ? aggregate_from_past_256_days_count : 66
+    average_target = 66
+    ((Math.log((weekly_average_from_past_4_weeks.to_f / weekly_goal.to_f) + 1) / Math.log(2)) * (aggregate_value.to_f / average_target.to_f)) * 100
   end
 end

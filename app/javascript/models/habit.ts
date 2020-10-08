@@ -12,10 +12,12 @@ export const HabitModel = types
     userId: types.maybeNull(types.number),
     currentWeekLogs: types.array(HabitLogModel),
     previousWeekLogs: types.array(HabitLogModel),
-    weeklyLogsCompletionDifference: types.maybeNull(types.number),
     weeklyCompletionPercentage: types.maybeNull(types.number),
     weeklyDifference: types.maybeNull(types.number),
     weeklyCompletionFraction: types.maybeNull(types.string),
+    score: types.maybeNull(types.number),
+    monthlyScoreDifference: types.maybeNull(types.number),
+    weeklyScoreDifference: types.maybeNull(types.number),
   })
   .views(self => ({
     get completedCurrentWeekLogs() {
@@ -29,12 +31,6 @@ export const HabitModel = types
     },
   }))
   .views(self => ({
-    get percentageWeeklyLogsCompleted() {
-      if (self.frequency == 0) {
-        return 0;
-      }
-      return (self.completedCurrentWeekLogs.length / self.frequency) * 100;
-    },
     get completedCount() {
       return self.completedCurrentWeekLogs.length;
     },
