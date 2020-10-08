@@ -64,17 +64,17 @@ module StatsHelper
     previous_week_start = current_week_start.weeks_ago(1)
     previous_week_end = previous_week_start.end_of_week
 
-    ka_created_this_week = KeyActivity.user_created_between(current_user, current_week_start, current_week_end).count
-    ka_created_last_week = KeyActivity.user_created_between(current_user, previous_week_start, previous_week_end).count
+    ka_created_this_week = KeyActivity.optimized.user_created_between(current_user, current_week_start, current_week_end).count
+    ka_created_last_week = KeyActivity.optimized.user_created_between(current_user, previous_week_start, previous_week_end).count
 
     ka_created_change = difference_between_values(ka_created_this_week, ka_created_last_week)
 
-    ka_completed_this_week = KeyActivity.user_completed_between(current_user, current_week_start, current_week_end).count
-    ka_completed_last_week = KeyActivity.user_completed_between(current_user, previous_week_start, previous_week_end).count
+    ka_completed_this_week = KeyActivity.optimized.user_completed_between(current_user, current_week_start, current_week_end).count
+    ka_completed_last_week = KeyActivity.optimized.user_completed_between(current_user, previous_week_start, previous_week_end).count
     ka_completed_change = difference_between_values(ka_completed_this_week, ka_completed_last_week)
 
-    issues_created_this_week = Issue.user_created_between(current_user, current_week_start, current_week_end).count
-    issues_created_last_week = Issue.user_created_between(current_user, previous_week_start, previous_week_end).count
+    issues_created_this_week = Issue.optimized.user_created_between(current_user, current_week_start, current_week_end).count
+    issues_created_last_week = Issue.optimized.user_created_between(current_user, previous_week_start, previous_week_end).count
     issues_created_change = difference_between_values(issues_created_this_week, issues_created_last_week)
 
     [

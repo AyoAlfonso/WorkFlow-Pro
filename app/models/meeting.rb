@@ -5,6 +5,8 @@ class Meeting < ApplicationRecord
 
   delegate :steps, :total_duration, :duration, :name, :meeting_type, to: :meeting_template
 
+  scope :optimized, -> { includes([meeting_template: {steps: :image_attachment}]) }
+
   # scope :in_progress, -> { where("start_time >= ? AND start_time < ?", Date.today.beginning_of_day.utc, DateTime.now) }
   # scope :for_day, -> (day) { where("Date(created_at) = ?", day) }
   scope :for_week_of_date, -> (start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_week, start_time.end_of_week)}

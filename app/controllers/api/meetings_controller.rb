@@ -13,7 +13,7 @@ class Api::MeetingsController < Api::ApplicationController
   def create 
     #scope differs if team (assume you can only have one incomplete meeting, allow you to create another one for week if required)
     week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
-    @meetings_already_present_for_week = params[:team_id] ? Meeting.team_meetings(params[:team_id]).with_template(params[:meeting_template_id]).for_week_of_date(week_to_review_start_time).incomplete : Meeting.personal_meetings.hosted_by_user(current_user).for_week_of_date(week_to_review_start_time)
+    @meetings_already_present_for_week = params[:team_id] ? policy_scope(Meeting).team_meetings(params[:team_id]).with_template(params[:meeting_template_id]).for_week_of_date(week_to_review_start_time).incomplete : policy_scope(Meeting).personal_meetings.hosted_by_user(current_user).for_week_of_date(week_to_review_start_time)
     # @meeting = incomplete_meetings_for_today.first_or_create(meeting_params.merge({hosted_by: current_user}))
     # authorize @meeting
     # render 'api/meetings/create'
