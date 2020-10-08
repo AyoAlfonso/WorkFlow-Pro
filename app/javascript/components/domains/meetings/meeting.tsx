@@ -17,7 +17,6 @@ import { Icon } from "~/components/shared/icon";
 import { TextNoMargin } from "~/components/shared/text";
 import { Loading } from "~/components/shared/loading";
 import { MeetingStep } from "./meeting-step";
-import { MeetingAgenda } from "./meeting-agenda";
 import { HomeCoreFour, CoreFourOnly } from "~/components/domains/home/home-core-four";
 import { Timer } from "~/components/shared/timer";
 import { dateStringToSeconds, nowAsUTCString, nowInSeconds } from "~/utils/date-time";

@@ -7,6 +7,7 @@ import { TeamIssuesBody } from "./shared/team-issues-body";
 import { TeamKeyActivitiesBody } from "./shared/team-key-activities-body";
 import { KeyActivitiesBody } from "../key-activities/key-activities-body";
 import { Notes } from "./components/notes";
+import { MeetingAgenda } from "./components/meeting-agenda";
 
 interface IMeetingSideOptionsProps {
   teamId: string | number;
@@ -35,7 +36,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
       case "notes":
         return <Notes meeting={meeting} />;
       default:
-        return <>Agenda</>;
+        return <MeetingAgenda steps={meeting.steps} currentStep={meeting.currentStep} />;
     }
   };
 
