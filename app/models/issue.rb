@@ -9,6 +9,8 @@ class Issue < ApplicationRecord
 
   acts_as_list scope: [:user_id, :completed_at]
 
+  scope :optimized, -> { includes([:user]) }
+
   scope :created_by_user, -> (user) { where(user: user) }
   scope :sort_by_priority, -> { order(priority: :desc) }
   scope :sort_by_created_date, -> { order(created_at: :asc) }

@@ -52,7 +52,7 @@ class MeetingPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.all
+      scope.optimized
     end
   end
 

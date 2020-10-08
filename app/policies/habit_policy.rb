@@ -39,7 +39,7 @@ class HabitPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.owned_by_user(@user)
+      scope.includes([:user]).owned_by_user(@user)
     end
   end
 end
