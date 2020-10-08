@@ -11,7 +11,7 @@ class NotificationEmailJob
     @schedule = IceCube::Schedule.from_hash(notification.rule)
     notification_type = human_type(notification.notification_type)
     # The job runs at top and bottom of each hour. There's a -10 and +5 minute buffer in case the job starts early or late.
-
+    return if is_weekend?
     if schedule_occurs_between?(@user.time_in_user_timezone - 10.minutes, @user.time_in_user_timezone + 5.minutes)
       if notification_type == "Create My Day" && user_has_not_set_status
         send_person_planning_reminder_email(@user, notification_type)
@@ -23,6 +23,10 @@ class NotificationEmailJob
         send_weekly_planning_meeting_email(@user, notification_type)
       end
     end
+  end
+
+  def is_weekend?
+    ['Saturday', 'Sunday'].include?(@users_time.strftime('%A'))
   end
 
   def schedule_occurs_between?(earlier_time, later_time)
@@ -37,10 +41,7 @@ class NotificationEmailJob
 
   def user_has_not_set_status
     most_recent_daily_log = @user.daily_logs.order(:created_at).last
-    #return true if most_recent_daily_log.blank?
-
-    #if the last daily log's log date is less than today, status not set
-    #if the daily log's log date is today in the user's timezone and the status is not set send it.  
+    #if the daily log's log date is today in the user's timezone and the status is not set send it.
     # (It doesn't do a noon time check in case you want to set the notifcation) - @users_time >= @user.time_in_user_timezone('noon')
     if most_recent_daily_log && most_recent_daily_log.log_date == @user.time_in_user_timezone.to_date && most_recent_daily_log.work_status != "status_not_set"
       return false
@@ -50,13 +51,6 @@ class NotificationEmailJob
   end
 
   def meeting_did_not_start_this_period(meeting_type)
-    # meetings that should have started in the last 30 minutes but haven't
-    
-    #TODO scheduled start tiems to be added in beta
-    # meetings = @user.team_meetings
-    #             .where(start_time: nil)
-    #             .where("scheduled_start_time < ?", @users_time)
-    #             .where("scheduled_start_time > ?", @users_time - 30.minutes)
     case meeting_type
     when "personal_weekly"
       Meeting.personal_meeting_for_week_on_user(@user, get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)).blank?
