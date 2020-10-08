@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_07_010441) do
+ActiveRecord::Schema.define(version: 2020_10_08_203855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(version: 2020_10_07_010441) do
     t.bigint "team_id"
     t.integer "position"
     t.index ["team_id"], name: "index_issues_on_team_id"
+    t.index ["user_id", "position", "completed_at"], name: "index_issues_on_user_id_and_position_and_completed_at"
     t.index ["user_id"], name: "index_issues_on_user_id"
   end
 
@@ -189,12 +190,12 @@ ActiveRecord::Schema.define(version: 2020_10_07_010441) do
     t.boolean "todays_priority", default: false
     t.integer "position"
     t.index ["completed_at", "position", "priority"], name: "index_key_activities_on_completed_at_and_position_and_priority"
-    t.index ["completed_at"], name: "index_key_activities_on_completed_at"
     t.index ["created_at", "position", "priority"], name: "index_key_activities_on_created_at_and_position_and_priority"
-    t.index ["created_at"], name: "index_key_activities_on_created_at"
     t.index ["meeting_id"], name: "index_key_activities_on_meeting_id"
     t.index ["user_id", "completed_at"], name: "index_key_activities_on_user_id_and_completed_at"
     t.index ["user_id", "created_at"], name: "index_key_activities_on_user_id_and_created_at"
+    t.index ["user_id", "weekly_list", "todays_priority", "completed_at", "position"], name: "index_key_activities_scoped_position"
+    t.index ["user_id", "weekly_list", "todays_priority", "completed_at", "priority"], name: "index_key_activities_scoped_priority"
     t.index ["user_id"], name: "index_key_activities_on_user_id"
   end
 
@@ -300,8 +301,6 @@ ActiveRecord::Schema.define(version: 2020_10_07_010441) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "json_representation"
     t.integer "emotion_score"
-    t.string "questionnaire_type"
-    t.index ["completed_at"], name: "index_questionnaire_attempts_on_completed_at"
     t.index ["questionnaire_id"], name: "index_questionnaire_attempts_on_questionnaire_id"
     t.index ["user_id"], name: "index_questionnaire_attempts_on_user_id"
   end
@@ -341,6 +340,8 @@ ActiveRecord::Schema.define(version: 2020_10_07_010441) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["issue_id"], name: "index_team_issues_on_issue_id"
+    t.index ["team_id", "position", "completed_at", "issue_id"], name: "index_team_issues_sort_with_issue_id"
+    t.index ["team_id", "position", "completed_at"], name: "index_team_issues_on_team_id_and_position_and_completed_at"
     t.index ["team_id"], name: "index_team_issues_on_team_id"
   end
 
