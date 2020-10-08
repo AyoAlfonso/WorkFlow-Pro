@@ -1,14 +1,12 @@
 mt1 = MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
   meeting_type: :team_weekly,
   name: "Weekly Meeting",
-  #description: "Weekly Sync 75-minute meeting for the leadership team. This meeting drives accountability and allows the team to use their collective intelligence to remove any roadblocks impeding progress."
   steps_attributes: [
     {
       order_index: 0,
       name: "How Are You Feeling?",
       step_type: :image,
       duration: 5,
-      # section_name: "Section",
       instructions: "Go beyond the obvious to identify exactly what you're feeling"
     },
     {
@@ -33,7 +31,6 @@ mt1 = MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
       step_type: :image,
       duration: 5,
       instructions: "Provide personal or work-related updates. You can also use this time to give shoutouts."
-      #"Do you have anything to share with the team? It can be personal, about work, or simply a shoutout!"
     },
     {
       order_index: 4,
@@ -87,14 +84,16 @@ mt1 = MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
   ]
 )
 
-mt1.steps.where(name: "How Are You Feeling?").first.image.attach(io: File.open("app/assets/images/mood-board.png"), filename: "mood-board.png", content_type: 'image/png')
-mt1.steps.where(name: "Updates").first.image.attach(io: File.open("app/assets/images/updates.png"), filename: "mood-board.png", content_type: 'image/png')
+step1 = mt1.steps.where(name: "How Are You Feeling?").first
+step1.image.attach(io: File.open("app/assets/images/mood-board.png"), filename: "mood-board.png", content_type: 'image/png') if step1.present? 
+
+step2 = mt1.steps.where(name: "Updates").first
+step2.image.attach(io: File.open("app/assets/images/updates.png"), filename: "updates.png", content_type: 'image/png') if step2.present?
 
 
 mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Planning").first_or_create(
   meeting_type: :personal_weekly,
   name: "Weekly Planning",
-  #description: ""
   steps_attributes: [
     {
       order_index: 0,
