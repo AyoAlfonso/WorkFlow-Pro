@@ -2,6 +2,7 @@ import { types, flow, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { MeetingModel } from "../models/meeting";
 import { MeetingTemplateModel } from "../models/meeting-template";
+import { MeetingNotesDataModel } from "../models/meeting-notes-data";
 import { ApiResponse } from "apisauce";
 import MeetingTypes from "~/constants/meeting-types";
 import { showToast } from "~/utils/toast-message";
@@ -18,6 +19,7 @@ export const MeetingStoreModel = types
     teamMeetings: types.array(MeetingModel),
     meetingRecap: types.maybeNull(types.frozen()),
     personalPlanningSummary: types.maybeNull(types.frozen()),
+    meetingNotes: types.maybeNull(types.array(MeetingNotesDataModel)),
   })
   .extend(withEnvironment())
   .views(self => ({}))
@@ -88,6 +90,14 @@ export const MeetingStoreModel = types
         );
         self.meetingRecap = response.data as any;
         return response.data;
+      } catch {
+        // caught by Api Monitor
+      }
+    }),
+    getMeetingNotes: flow(function*(filterObj) {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getMeetingNotes(filterObj);
+        self.meetingNotes = response.data as any;
       } catch {
         // caught by Api Monitor
       }

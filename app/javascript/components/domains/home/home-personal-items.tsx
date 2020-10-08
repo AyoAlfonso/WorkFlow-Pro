@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { HabitsBody, HabitsHeader } from "../habits";
 import { IssuesContainer } from "../issues/issues-container";
-import { Journal } from "../journal/journal";
+import { Journal } from "../journal/journal-widget";
 import { KeyActivitiesContainer } from "../key-activities/key-activities-container";
 import { TodaysPrioritiesContainer } from "../todays-priorities/todays-priorities-container";
 import { HomeContainerBorders } from "./shared-components";

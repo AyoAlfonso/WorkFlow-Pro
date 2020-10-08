@@ -26,7 +26,6 @@ export const Card = (props: ICardProps): JSX.Element => {
 
 export const CardHeaderText = styled.h4<TypographyProps>`
   ${typography}
-  font-size: 16px;
 `;
 
 export const CardBody = styled.div<LayoutProps>`
@@ -62,7 +61,7 @@ interface ICardHeaderProps extends TypographyProps {
 const CardHeader = styled.div<ICardHeaderProps>`
   ${typography}
   border-bottom: ${props =>
-    props.noHeaderBorder ? 0 : "1px solid " + props.theme.colors.borderGrey};
+    props.noHeaderBorder ? "none" : "1px solid " + props.theme.colors.borderGrey};
   display: inline-block;
   font-family: Lato;
   align-items: center;

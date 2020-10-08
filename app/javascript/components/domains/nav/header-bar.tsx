@@ -155,6 +155,11 @@ export const HeaderBar = observer(
             </Link>
           </AccountOption>
           <AccountOption>
+            <Link to="/notes" style={{ textDecoration: "none", padding: "0" }}>
+              <AccountOptionText>{t("notes.headerNavTitle")}</AccountOptionText>
+            </Link>
+          </AccountOption>
+          <AccountOption>
             <AccountOptionText onClick={() => sessionStore.logoutRequest()}>
               {t("profile.logout")}
             </AccountOptionText>

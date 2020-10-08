@@ -13,7 +13,7 @@ export const MainContainer = styled.div`
 `;
 
 export const HeadingContainer = styled.div`
-  margin: 32px 0px 32px 0px;
+  margin: 20px 0px 20px 0px;
   width: 100%;
 `;
 
@@ -26,14 +26,15 @@ export const BodyContainer = styled.div`
 export const FilterContainer = styled.div`
   display: flex;
   flex-direction: column;
-  max-height: 60vh;
+  max-height: 70vh;
   padding: 15px 0px 15px 0px;
+  // overflow-y: auto;
 `;
 
 export const ItemListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  max-height: 60vh;
+  max-height: 70vh;
   padding: 15px 25px 15px 25px;
   overflow-y: auto;
 `;
@@ -41,18 +42,20 @@ export const ItemListContainer = styled.div`
 export const EntryContainer = styled.div`
   display: flex;
   flex-direction: column;
-  max-height: 60vh;
+  max-height: 70vh;
   padding: 15px 5px 15px 5px;
   overflow-y: auto;
 `;
 
 type SpaceLayoutProps = LayoutProps & SpaceProps;
 
-interface IItemContainerProps extends SpaceLayoutProps {
+export const ItemContainer = styled.div``;
+
+interface IItemCardContainerProps extends SpaceLayoutProps {
   selected?: boolean;
 }
 
-export const ItemCardContainer = styled.div<IItemContainerProps>`
+export const ItemCardContainer = styled.div<IItemCardContainerProps>`
   ${layout}
   ${space}
   display: flex;
@@ -115,6 +118,8 @@ export const ItemCard = ({
     </ItemCardContainer>
   );
 };
+
+export const EntryBodyContainer = styled.div``;
 
 export const EntryHeadingContainer = styled.div`
   display: flex;
@@ -247,16 +252,28 @@ export interface IFilterOptionProps {
   selected?: boolean;
   option: {
     label: string;
+    filters?: {
+      userId?: number;
+      teamId?: number;
+    };
+    selection?: {
+      startDate?: Date;
+      endDate?: Date;
+      key?: string;
+    };
+    avatar?: React.FunctionComponent;
   };
 }
 
 export const FilterOption = ({
   onClick,
   selected,
-  option: { label },
+  option: { label, avatar },
 }: IFilterOptionProps): JSX.Element => {
+  const Avatar = avatar;
   return (
     <FilterOptionContainer onClick={onClick}>
+      {avatar ? <Avatar /> : null}
       <FilterOptionLabelContainer selected={selected}>{label}</FilterOptionLabelContainer>
     </FilterOptionContainer>
   );

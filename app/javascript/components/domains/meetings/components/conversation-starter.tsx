@@ -23,7 +23,7 @@ export const ConversationStarter = observer(
           <Card
             width={"640px"}
             alignment={"left"}
-            headerComponent={<CardHeaderText>Today's Topic</CardHeaderText>}
+            headerComponent={<CardHeaderText fontSize={"16px"}>Today's Topic</CardHeaderText>}
             mr={"auto"}
             ml={"15px"}
           >

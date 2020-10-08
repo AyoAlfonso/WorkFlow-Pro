@@ -35,7 +35,8 @@ import { GoalsIndex } from "./domains/goals/goals-index";
 import { TeamOverview } from "./domains/meetings/team-overview";
 import { Meeting } from "./domains/meetings/meeting";
 import { PersonalPlanning } from "./domains/meetings/personal-planning";
-import { JournalIndex } from "~/components/domains/journal-index";
+import { JournalIndex } from "~/components/domains/journal/journal-index";
+import { NotesIndex } from "~/components/domains/notes/notes-index";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -158,6 +159,12 @@ export const App = observer(
                       path={"/journals"}
                       render={() => {
                         return <JournalIndex />;
+                      }}
+                    />
+                    <Route
+                      path={"/notes"}
+                      render={() => {
+                        return <NotesIndex />;
                       }}
                     />
                   </Switch>

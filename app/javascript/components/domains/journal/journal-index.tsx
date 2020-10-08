@@ -4,20 +4,12 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
-import moment, { fn } from "moment";
+import moment from "moment";
 import { toJS } from "mobx";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import {
-  addDays,
-  addWeeks,
-  endOfWeek,
-  startOfWeek,
-  addMonths,
-  endOfMonth,
-  startOfMonth,
-} from "date-fns";
+import { addDays } from "date-fns";
 import { baseTheme } from "~/themes/base";
 
 import {
@@ -25,6 +17,7 @@ import {
   AvatarContainer,
   BodyContainer,
   EntryBodyCard,
+  EntryBodyContainer,
   EntryContainer,
   EntryCardHeaderContainer,
   EntryHeadingContainer,
@@ -32,8 +25,9 @@ import {
   FilterOption,
   HeadingContainer,
   IconButtonContainer,
-  ItemListContainer,
   ItemCard,
+  ItemContainer,
+  ItemListContainer,
   MainContainer,
   NoSelectedItems,
 } from "~/components/shared/journals-and-notes";
@@ -77,10 +71,11 @@ export const JournalIndex = observer(
 
     const questionnaireAttemptsData = questionnaireStore.questionnaireAttemptsData;
 
-    if (loading || R.isNil(questionnaireAttemptsData) || R.isNil(userStore.users)) {
+    if (R.isNil(userStore.users)) {
       return <Loading />;
     }
 
+    // find all steps with journalQuestion in their metadata, and map the questions and answers together
     const parseRenderedSteps = renderedSteps =>
       R.pipe(
         R.filter(R.hasPath(["metadata", "journalQuestion"])),
@@ -100,22 +95,26 @@ export const JournalIndex = observer(
       )(renderedSteps);
 
     const renderItems = () =>
-      questionnaireAttemptsData.map((item, index) => (
-        <div key={index}>
-          <Text fontSize={"12px"} fontWeight={600}>
-            {item.date}
-          </Text>
-          {item.items.map((qa, qaIndex) => (
-            <ItemCard
-              key={qaIndex}
-              titleText={moment(qa.completedAt).format("LT")}
-              bodyText={qa.questionnaireType}
-              onClick={() => setSelectedItem({ ...qa })}
-              selected={!R.isNil(selectedItem) ? selectedItem.id === qa.id : false}
-            />
-          ))}
-        </div>
-      ));
+      loading || R.isNil(questionnaireAttemptsData) ? (
+        <Loading />
+      ) : (
+        questionnaireAttemptsData.map((item, index) => (
+          <ItemContainer key={index}>
+            <Text fontSize={"12px"} fontWeight={600}>
+              {item.date}
+            </Text>
+            {item.items.map((qa, qaIndex) => (
+              <ItemCard
+                key={qaIndex}
+                titleText={moment(qa.completedAt).format("LT")}
+                bodyText={qa.questionnaireType}
+                onClick={() => setSelectedItem({ ...qa })}
+                selected={!R.isNil(selectedItem) ? selectedItem.id === qa.id : false}
+              />
+            ))}
+          </ItemContainer>
+        ))
+      );
 
     const renderSelectedEntryHeading = selectedEntry => {
       const { avatarUrl, defaultAvatarColor, firstName, lastName } = userStore.users.find(
@@ -169,9 +168,9 @@ export const JournalIndex = observer(
                   {t("journals.journalEntry")}
                 </Text>
                 <ActionButtonsContainer>
-                  <IconButtonContainer onClick={() => {}}>
+                  {/* <IconButtonContainer onClick={() => {}}>
                     <Icon icon={"Edit-2"} size={"16px"} mr={"16px"} />
-                  </IconButtonContainer>
+                  </IconButtonContainer> */}
                   <IconButtonContainer onClick={() => {}}>
                     <Icon icon={"Delete"} size={"16px"} />
                   </IconButtonContainer>
@@ -181,14 +180,14 @@ export const JournalIndex = observer(
           >
             <EntryBodyCard>
               {questionsAnswers.map((step, index) => (
-                <div key={index}>
+                <EntryBodyContainer key={index}>
                   <Text fontSize={"12px"} fontWeight={600} mb={"20px"}>
                     {step.question}
                   </Text>
                   <Text fontSize={"12px"} fontWeight={400} mb={"20px"}>
                     {step.answer}
                   </Text>
-                </div>
+                </EntryBodyContainer>
               ))}
             </EntryBodyCard>
           </Card>
@@ -231,28 +230,24 @@ export const JournalIndex = observer(
       },
     ];
 
-    const renderDateFilterOptions = () => {
-      return (
-        <>
-          {filterOptions.map((option, index) => (
-            <FilterOption
-              key={index}
-              onClick={() => {
-                setSelectedDateFilter(option.label);
-                handleDateSelect({ selection: { ...option.selection } });
-              }}
-              option={option}
-              selected={selectedDateFilter === option.label}
-            />
-          ))}
-        </>
-      );
-    };
+    const renderDateFilterOptions = () =>
+      filterOptions.map((option, index) => (
+        <FilterOption
+          key={index}
+          onClick={() => {
+            setSelectedDateFilter(option.label);
+            handleDateSelect({ selection: { ...option.selection } });
+          }}
+          option={option}
+          selected={selectedDateFilter === option.label}
+        />
+      ));
 
     const handleDateSelect = ranges => {
       setDateFilter({
         ...ranges,
       });
+      setSelectedItem(null);
       setLoading(true);
       questionnaireStore.getQuestionnaireAttempts(ranges.selection).then(() => setLoading(false));
     };
@@ -260,13 +255,13 @@ export const JournalIndex = observer(
     return (
       <MainContainer>
         <HeadingContainer>
-          <Heading type={"h1"} fontSize={"24px"}>
-            Journal Entries
+          <Heading type={"h1"} fontSize={"18px"}>
+            {t("journals.indexTitle")}
           </Heading>
         </HeadingContainer>
         <BodyContainer>
           <FilterContainer>
-            <Card headerComponent={<CardHeaderText>Filter</CardHeaderText>}>
+            <Card headerComponent={<CardHeaderText fontSize={"12px"}>Filter</CardHeaderText>}>
               {renderDateFilterOptions()}
               <DateRange
                 showDateDisplay={false}

@@ -107,6 +107,9 @@ Rails.application.routes.draw do
     #meetings
     resources :meetings, only: [:create, :index, :update, :destroy, :show]
     get '/meetings/team_meetings/:id', to: 'meetings#team_meetings'
+
+    #notes
+    get '/notes', to: 'meetings#notes'
     
     #meeting recap for team
     get '/teams/:team_id/meetings/:id/meeting_recap', to: 'meetings#meeting_recap'

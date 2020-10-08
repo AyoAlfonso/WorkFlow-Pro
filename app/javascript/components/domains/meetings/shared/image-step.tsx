@@ -28,7 +28,7 @@ export const ImageStep = ({ step }: IImageStepProps): JSX.Element => {
         width={cardWidth}
         alignment={"left"}
         border={"none"}
-        headerComponent={<CardHeaderText>{step.name}</CardHeaderText>}
+        headerComponent={<CardHeaderText fontSize={"16px"}>{step.name}</CardHeaderText>}
       >
         <CardBody>
           <Image src={step.imageUrl} alt={step.name} />

@@ -148,6 +148,7 @@
         "eveningReflection": "I want to reflect on my day",
         "title": "Journal",
         "headerNavTitle": "Journals",
+        "indexTitle": "Journal Entries",
         "pynBotName": "PynBot",
         "pynBotGreeting": "Hey {userName}, what can I help you with?",
         "confirmQuit": "Are you sure you want to quit?  Your journal entry will be lost",
@@ -158,6 +159,15 @@
         "emptyList": "Empty list?",
         "startAdding": "Start adding to your journal by talking to Pynbot, your virtual coach!",
         "viewEntries": "View Entries"
+      },
+      "notes": {
+        "headerNavTitle": "Notes",
+        "indexTitle": "Notes",
+        "allNotes": "All Notes",
+        "myNotes": "My Notes",
+        "teamNotes": "{teamName} Notes",
+        "startAdding": "Use the meeting function with your team or personal planning wizards.",
+        "meetingNotes": "Meeting Notes"
       },
       "keyActivities": {
         "prioritiesTitle": "Today's Priorities",
