@@ -99,11 +99,15 @@ export const SurveyBot = observer(
         userDelay={200}
         zIndex={1}
         handleEnd={async ({ renderedSteps, steps, values }) => {
-          await questionnaireStore.createQuestionnaireAttempt(questionnaireVariant.id, {
-            renderedSteps,
-            steps,
-            values,
-          });
+          await questionnaireStore.createQuestionnaireAttempt(
+            questionnaireVariant.id,
+            {
+              renderedSteps,
+              steps,
+              values,
+            },
+            questionnaireVariant.title,
+          );
           if (typeof props.endFn === "function") {
             setTimeout(() => {
               props.endFn("");

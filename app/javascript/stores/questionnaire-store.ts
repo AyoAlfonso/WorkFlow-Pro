@@ -27,20 +27,27 @@ export const QuestionnaireStoreModel = types
     }),
   }))
   .actions(self => ({
-    createQuestionnaireAttempt: flow(function*(questionnaireId, questionnaireAttemptData) {
+    createQuestionnaireAttempt: flow(function*(
+      questionnaireId,
+      questionnaireAttemptData,
+      questionnaireTitle: string,
+    ) {
       const { sessionStore } = getRoot(self);
       try {
         const response: ApiResponse<any> = yield self.environment.api.createQuestionnaireAttempt(
           questionnaireId,
           questionnaireAttemptData,
         );
-        sessionStore.updateUser({
-          dailyLogsAttributes: [
-            {
-              ...response.data,
-            },
-          ],
-        });
+        sessionStore.updateUser(
+          {
+            dailyLogsAttributes: [
+              {
+                ...response.data,
+              },
+            ],
+          },
+          `${questionnaireTitle} Complete`,
+        );
       } catch {
         // error messaging handled by API monitor
       }

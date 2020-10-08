@@ -54,18 +54,6 @@ export const App = observer(
     const { issueStore, keyActivityStore, sessionStore } = useMst();
     const loggedIn = sessionStore.loggedIn; //if logged in show switch
 
-    const updateMipCount = count => {
-      const currentDailyLog = sessionStore.profile.currentDailyLog;
-      sessionStore.updateUser({
-        dailyLogsAttributes: [
-          {
-            ...currentDailyLog,
-            mipCount: currentDailyLog.mipCount + count,
-          },
-        ],
-      });
-    };
-
     const onDragEnd = result => {
       const { destination, source, draggableId } = result;
 
@@ -85,17 +73,14 @@ export const App = observer(
           keyActivityStore.startLoading("weekly-activities");
           keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", true);
           keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", false);
-          updateMipCount(-1);
         } else if (destination.droppableId === "master-activities") {
           keyActivityStore.startLoading("master-activities");
           keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
           keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", false);
-          updateMipCount(-1);
         } else if (destination.droppableId === "todays-priorities") {
           keyActivityStore.startLoading("todays-priorities");
           keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
           keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", true);
-          updateMipCount(1);
         }
         keyActivityStore.updateKeyActivity(keyActivityId);
       } else if (R.includes("team_issue", draggableId)) {

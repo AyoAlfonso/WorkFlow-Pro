@@ -40,7 +40,7 @@ export const SessionStoreModel = types
       }
       self.loading = false;
     }),
-    updateUser: flow(function*(fieldsAndValues) {
+    updateUser: flow(function*(fieldsAndValues, successMessageOverride = null) {
       self.loading = true;
       const { userStore } = getRoot(self);
       try {
@@ -50,19 +50,8 @@ export const SessionStoreModel = types
 
         if (response.ok) {
           if (fieldsAndValues["dailyLogsAttributes"]) {
-            if (
-              R.path(["dailyLogsAttributes", 0, "workStatus"], fieldsAndValues) !==
-              R.path(["profile", "currentDailyLog", "workStatus"], self)
-            ) {
-              let responseMessage = "";
-              const workStatus = R.path(["dailyLogsAttributes", 0, "workStatus"], fieldsAndValues);
-              const humanizedWorkStatus = R.path([workStatus, "label"], options);
-              responseMessage = humanizedWorkStatus
-                ? `You successfully changed your status to ${humanizedWorkStatus}`
-                : "Status Updated";
-              showToast(responseMessage, ToastMessageConstants.SUCCESS);
-            } else {
-              showToast("Journal Complete", ToastMessageConstants.SUCCESS);
+            if (!R.isNil(successMessageOverride)) {
+              showToast(successMessageOverride, ToastMessageConstants.SUCCESS);
             }
           } else {
             showToast("User updated", ToastMessageConstants.SUCCESS);

@@ -9,6 +9,7 @@ import { homePersonalStatusOptions as options } from "./home-personal-status-opt
 import { HomePersonalStatusDropdownMenuItem } from "./home-personal-status-dropdown-menu-item";
 import { Icon } from "~/components/shared/icon";
 import * as moment from "moment";
+import * as R from "ramda";
 
 interface IHomePersonalStatusState {
   menuOpen: boolean;
@@ -40,14 +41,17 @@ export const HomePersonalStatus = observer(
         key={key}
         menuItem={options[key]}
         onSelect={async () => {
-          await sessionStore.updateUser({
-            dailyLogsAttributes: [
-              {
-                ...currentDailyLog,
-                workStatus: key,
-              },
-            ],
-          });
+          await sessionStore.updateUser(
+            {
+              dailyLogsAttributes: [
+                {
+                  ...currentDailyLog,
+                  workStatus: key,
+                },
+              ],
+            },
+            `You successfully changed your status to ${R.path([key, "label"], options)}`,
+          );
         }}
       />
     ));

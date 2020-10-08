@@ -113,11 +113,15 @@ export const Questionnaire = observer(
           enableSmoothScroll={true}
           userDelay={200}
           handleEnd={async ({ renderedSteps, steps, values }) => {
-            await questionnaireStore.createQuestionnaireAttempt(questionnaireVariant.id, {
-              renderedSteps,
-              steps,
-              values,
-            });
+            await questionnaireStore.createQuestionnaireAttempt(
+              questionnaireVariant.id,
+              {
+                renderedSteps,
+                steps,
+                values,
+              },
+              questionnaireVariant.title,
+            );
           }}
         />
       </Container>
