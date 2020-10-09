@@ -9,6 +9,23 @@
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_pack_tag 'application.css' %>
     <%= favicon_link_tag asset_path('LynchPyn-Logo_Favicon.png') %>
+
+    <script>
+    var ps_config = {
+        'productId': "<%= ENV['PRODUCT_STASH_PRODUCT_ID']%>"
+    };
+    </script>
+    <script type="text/javascript" src="https://app.productstash.io/js/productstash-embed.js" defer="defer"></script>
+
+    <script>
+        window.fwSettings={
+          'widget_id': <%= ENV['FRESHDESK_WIDGET_ID']%>
+        };
+        !function(){if("function"!=typeof window.FreshworksWidget){var n=function(){n.q.push(arguments)};n.q=[],window.FreshworksWidget=n}}() 
+    </script>
+    <script type='text/javascript' src=`https://widget.freshworks.com/widgets/<%= ENV['FRESHDESK_WIDGET_ID']%>.js` async defer></script>
+
+
   </head>
 
   <body>
