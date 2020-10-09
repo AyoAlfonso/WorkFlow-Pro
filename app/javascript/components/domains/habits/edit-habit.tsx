@@ -9,6 +9,7 @@ import { Loading } from "~/components/shared/loading";
 import { Icon, Input } from "~/components/shared";
 import { Text } from "~/components/shared/text";
 import ContentEditable from "react-contenteditable";
+import { HabitScoreLineChart } from "./habit-score-line-chart";
 
 interface IHabitsTableCircularProgressBar {
   color: string;
@@ -180,6 +181,7 @@ export const EditHabit = observer(
             </ScoreContainer>
           </OverviewDetailsContainer>
         </OverviewContainer>
+        <HabitScoreLineChart habit={habit} />
       </Container>
     );
   },

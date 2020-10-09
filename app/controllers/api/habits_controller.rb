@@ -25,7 +25,8 @@ class Api::HabitsController < Api::ApplicationController
   end
 
   def show_habit
-    render json: @habit
+    #render json: @habit
+    render 'api/habits/show_habit'
   end
 
   def update
