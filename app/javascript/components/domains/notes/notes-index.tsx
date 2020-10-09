@@ -85,22 +85,26 @@ export const NotesIndex = observer(
 
     const renderItems = (meetings, templates) =>
       meetings.length > 0 && templates.length > 0
-        ? meetings.map((meeting, index) => (
-            <ItemContainer key={index}>
-              <Text fontSize={"12px"} fontWeight={600}>
-                {meeting.date}
-              </Text>
-              {meeting.items.map((item, idx) => (
-                <ItemCard
-                  key={idx}
-                  titleText={moment(item.startTime).format("LT")}
-                  bodyText={templates.find(mt => mt.id === item.meetingTemplateId).name}
-                  onClick={() => setSelectedItem({ ...item })}
-                  selected={!R.isNil(selectedItem) ? selectedItem.id === item.id : false}
-                />
-              ))}
-            </ItemContainer>
-          ))
+        ? meetings.map((meeting, index) => {
+            return (
+              <ItemContainer key={index}>
+                <Text fontSize={"12px"} fontWeight={600}>
+                  {meeting.date}
+                </Text>
+                {meeting.items.map((item, idx) => {
+                  return (
+                    <ItemCard
+                      key={idx}
+                      titleText={moment(item.startTime).format("LT")}
+                      bodyText={templates.find(mt => mt.id === item.meetingTemplateId).name}
+                      onClick={() => setSelectedItem({ ...item })}
+                      selected={!R.isNil(selectedItem) ? selectedItem.id === item.id : false}
+                    />
+                  );
+                })}
+              </ItemContainer>
+            );
+          })
         : null;
 
     const filterNoteTypeOptions = [

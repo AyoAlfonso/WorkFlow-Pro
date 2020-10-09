@@ -69,25 +69,6 @@ class Api::MeetingsController < Api::ApplicationController
     render json: { milestone_progress_averages: @milestone_progress_averages, key_activities: @key_activities, issues: @issues }
   end
 
-  def notes
-    if params[:filters].present?
-      filters = JSON.parse(params[:filters])
-      if filters["team_id"].present?
-        @meetings = policy_scope(Meeting).where(team_id: filters["team_id"]).where(start_time: filters["start_date"].to_date.beginning_of_day..filters["end_date"].to_date.end_of_day).sort_by_start_time
-      elsif filters["user_id"].present?
-        @meetings = policy_scope(Meeting).where(hosted_by_id: filters["user_id"]).where(start_time: filters["start_date"].to_date.beginning_of_day..filters["end_date"].to_date.end_of_day).sort_by_start_time
-      else
-        @meetings = policy_scope(Meeting).where(start_time: filters["start_date"].to_date.beginning_of_day..filters["end_date"].to_date.end_of_day).sort_by_start_time
-      end
-    else
-      @meetings = policy_scope(Meeting).sort_by_start_time
-    end
-    authorize @meetings
-    @dates = @meetings.map{ |meeting| meeting.start_time.strftime("%a, %b%e") }.uniq
-    @data = @dates.map{ |date| {date: date, items: @meetings.select { |meeting| meeting.start_time.strftime("%a, %b%e") == date } } }
-    render json: @data
-  end
-
   private
 
   def set_additional_data

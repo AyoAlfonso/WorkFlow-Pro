@@ -93,12 +93,11 @@ Rails.application.routes.draw do
     get '/habits/show_habit/:id', to: 'habits#show_habit'
     get '/habits/habits_for_personal_planning', to: 'habits#habits_for_personal_planning'
    
-
     #questionnaires
     resources :questionnaires, only: [:index]
 
     #questionnaire_attempts
-    resources :questionnaire_attempts, only: [:index, :create]
+    resources :questionnaire_attempts, only: [:create]
     get 'questionnaire_attempts/personal_planning_summary', to: 'questionnaire_attempts#personal_planning'
 
     #teams
@@ -107,9 +106,6 @@ Rails.application.routes.draw do
     #meetings
     resources :meetings, only: [:create, :index, :update, :destroy, :show]
     get '/meetings/team_meetings/:id', to: 'meetings#team_meetings'
-
-    #notes
-    get '/notes', to: 'meetings#notes'
     
     #meeting recap for team
     get '/teams/:team_id/meetings/:id/meeting_recap', to: 'meetings#meeting_recap'
@@ -123,6 +119,10 @@ Rails.application.routes.draw do
     #milestones
     resources :milestones, only: [:update]
     get '/milestones/milestones_for_meeting', to: "milestones#milestones_for_meeting"
+
+    #summaries
+    get '/journals', to: 'summaries#questionnaire_attempts_by_date'
+    get '/notes', to: 'summaries#meetings_by_date'
 
   end
 

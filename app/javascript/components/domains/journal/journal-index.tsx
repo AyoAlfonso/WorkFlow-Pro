@@ -66,10 +66,10 @@ export const JournalIndex = observer(
     const { questionnaireStore, userStore } = useMst();
 
     useEffect(() => {
-      questionnaireStore.getQuestionnaireAttempts(null).then(() => setLoading(false));
+      questionnaireStore.getQuestionnaireAttemptsSummary(null).then(() => setLoading(false));
     }, []);
 
-    const questionnaireAttemptsData = questionnaireStore.questionnaireAttemptsData;
+    const questionnaireAttemptsSummary = questionnaireStore.questionnaireAttemptsSummary;
 
     if (R.isNil(userStore.users)) {
       return <Loading />;
@@ -95,10 +95,10 @@ export const JournalIndex = observer(
       )(renderedSteps);
 
     const renderItems = () =>
-      loading || R.isNil(questionnaireAttemptsData) ? (
+      loading || R.isNil(questionnaireAttemptsSummary) ? (
         <Loading />
       ) : (
-        questionnaireAttemptsData.map((item, index) => (
+        questionnaireAttemptsSummary.map((item, index) => (
           <ItemContainer key={index}>
             <Text fontSize={"12px"} fontWeight={600}>
               {item.date}
@@ -249,7 +249,9 @@ export const JournalIndex = observer(
       });
       setSelectedItem(null);
       setLoading(true);
-      questionnaireStore.getQuestionnaireAttempts(ranges.selection).then(() => setLoading(false));
+      questionnaireStore
+        .getQuestionnaireAttemptsSummary(ranges.selection)
+        .then(() => setLoading(false));
     };
 
     return (

@@ -3,18 +3,6 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
 
   before_action :skip_authorization, only: [:personal_planning]
 
-  def index
-    if params[:start_date].present? && params[:end_date].present?
-      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).where(completed_at: params[:start_date].to_date.beginning_of_day..params[:end_date].to_date.end_of_day).sort_by_completed_at
-    else
-      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).sort_by_completed_at
-    end
-    authorize @questionnaire_attempts
-    @dates = @questionnaire_attempts.map{ |qa| qa.completed_at.strftime("%a, %b%e") }.uniq
-    @data = @dates.map{ |date| {date: date, items: @questionnaire_attempts.select { |qa| qa.completed_at.strftime("%a, %b%e") == date } } }
-    render json: @data
-  end
-
   def create
     json_representation = {
       answers: params[:answers],

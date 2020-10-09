@@ -303,6 +303,8 @@ ActiveRecord::Schema.define(version: 2020_10_08_212648) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "json_representation"
     t.integer "emotion_score"
+    t.string "questionnaire_type"
+    t.index ["completed_at"], name: "index_questionnaire_attempts_on_completed_at"
     t.index ["questionnaire_id"], name: "index_questionnaire_attempts_on_questionnaire_id"
     t.index ["user_id"], name: "index_questionnaire_attempts_on_user_id"
   end

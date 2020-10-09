@@ -1,13 +1,13 @@
 class QuestionnaireAttemptPolicy < ApplicationPolicy
-  def index?
-    true
-  end
-
   def create?
     true
   end
 
   def personal_planning?
+    true
+  end
+
+  def questionnaire_attempts_by_date?
     true
   end
 

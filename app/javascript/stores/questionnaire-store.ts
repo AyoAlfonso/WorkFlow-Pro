@@ -10,7 +10,7 @@ export const QuestionnaireStoreModel = types
   .props({
     questionnaires: types.array(QuestionnaireModel),
     questionnaireAttempt: types.maybeNull(QuestionnaireAttemptModel),
-    questionnaireAttemptsData: types.array(QuestionnaireAttemptsDataModel),
+    questionnaireAttemptsSummary: types.array(QuestionnaireAttemptsDataModel),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -54,12 +54,12 @@ export const QuestionnaireStoreModel = types
         // error messaging handled by API monitor
       }
     }),
-    getQuestionnaireAttempts: flow(function*(dateFilterObj) {
+    getQuestionnaireAttemptsSummary: flow(function*(dateFilterObj) {
       try {
-        const response: ApiResponse<any> = yield self.environment.api.getQuestionnaireAttempts(
+        const response: ApiResponse<any> = yield self.environment.api.getQuestionnaireAttemptsSummary(
           dateFilterObj,
         );
-        self.questionnaireAttemptsData = response.data;
+        self.questionnaireAttemptsSummary = response.data;
       } catch {
         // caught by Api monitor
       }
@@ -81,5 +81,5 @@ type QuestionnaireStoreType = typeof QuestionnaireStoreModel.Type;
 export interface IQuestionnaireStore extends QuestionnaireStoreType {
   questionnaires: any;
   questionnaireAttempt: any;
-  questionnaireAttemptsData: any;
+  questionnaireAttemptsSummary: any;
 }

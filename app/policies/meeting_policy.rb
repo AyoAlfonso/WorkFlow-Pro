@@ -43,7 +43,7 @@ class MeetingPolicy < ApplicationPolicy
     @user.teams_intersect?(@meeting.map { |m| m.team })
   end
 
-  def notes?
+  def meetings_by_date?
     true
   end
   
