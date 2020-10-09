@@ -92,7 +92,7 @@ class Habit < ApplicationRecord
 
   def score_data_for_line_graph
     #show each week up to today.
-    week_start_date_records = (0..9).map do |number|
+    week_start_date_records = (0..7).map do |number|
       current_week_start_date - number.weeks
     end
 
@@ -104,16 +104,16 @@ class Habit < ApplicationRecord
       calculate_score_for_date_range(date, date + 6.days)
     end
 
-    #show last 10 months.
-    first_day_of_last_10_months = (0..9).map do |number|
+    #show last 6 months.
+    first_day_of_last_6_months = (0..5).map do |number|
       user_current_date.beginning_of_month - number.months
     end
 
-    monthly_score_labels = first_day_of_last_10_months.map do |date|
+    monthly_score_labels = first_day_of_last_6_months.map do |date|
       date.strftime("%b")
     end
 
-    monthly_score_results = first_day_of_last_10_months.map do |date|
+    monthly_score_results = first_day_of_last_6_months.map do |date|
       calculate_score_for_date_range(date, date.end_of_month)
     end
 
@@ -153,14 +153,17 @@ class Habit < ApplicationRecord
 
     {
       weekly_stats:{
+        label: "weekly",
         data: weekly_score_results.reverse,
         labels: weekly_score_labels.reverse
       },
       monthly_stats: {
+        label: "monthly",
         data: monthly_score_results.reverse,
         labels: monthly_score_labels.reverse
       },
       quarterly_stats: {
+        label: "quarterly",
         data: quarterly_score_results.reverse, 
         labels: quarterly_score_labels
       }
@@ -241,6 +244,6 @@ class Habit < ApplicationRecord
     # Habit Score = (log(w/g + 1) / log(2)) x (a/t)
     average_target = 66
     aggregate_value = aggregate_from_past_256_days_count < 66 ? aggregate_from_past_256_days_count : 66
-    ((Math.log((weekly_average.to_f / weekly_goal.to_f) + 1) / Math.log(2)) * (aggregate_value.to_f / average_target.to_f)) * 100
+    (((Math.log((weekly_average.to_f / weekly_goal.to_f) + 1) / Math.log(2)) * (aggregate_value.to_f / average_target.to_f)) * 100).round(2)
   end
 end

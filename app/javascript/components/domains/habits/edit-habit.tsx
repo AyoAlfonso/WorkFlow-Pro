@@ -181,7 +181,10 @@ export const EditHabit = observer(
             </ScoreContainer>
           </OverviewDetailsContainer>
         </OverviewContainer>
-        <HabitScoreLineChart habit={habit} />
+        <HabitScoreLineChart
+          habitId={habit.id}
+          scoreDataForLineGraph={habit.scoreDataForLineGraph}
+        />
       </Container>
     );
   },
@@ -196,6 +199,7 @@ const Container = styled.div`
   padding-right: 8px;
   padding-top: 16px;
   padding-bottom: 16px;
+  overflow-y: auto;
 `;
 
 const SubHeaderContainer = styled.div`

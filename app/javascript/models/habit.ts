@@ -18,6 +18,8 @@ export const HabitModel = types
     score: types.maybeNull(types.number),
     monthlyScoreDifference: types.maybeNull(types.number),
     weeklyScoreDifference: types.maybeNull(types.number),
+    scoreDataForLineGraph: types.maybeNull(types.frozen()),
+    frequencyDataForBarGraph: types.maybeNull(types.frozen()),
   })
   .views(self => ({
     get completedCurrentWeekLogs() {
