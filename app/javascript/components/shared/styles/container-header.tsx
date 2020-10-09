@@ -17,6 +17,10 @@ export const HeaderContainer = styled.div`
   padding-right: 10px;
 `;
 
+export const HeaderContainerWithActions = styled(HeaderContainer)`
+  justify-content: space-between;
+`;
+
 export const HeaderContainerNoBorder = styled.div`
   display: flex;
   padding-left: 10px;

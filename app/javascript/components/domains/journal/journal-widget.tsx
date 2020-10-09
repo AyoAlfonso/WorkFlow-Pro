@@ -5,13 +5,17 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { Icon } from "~/components/shared/icon";
-import { HeaderContainer, HeaderText } from "~/components/shared/styles/container-header";
+import {
+  HeaderContainerWithActions,
+  HeaderText,
+} from "~/components/shared/styles/container-header";
 import { TextNoMargin } from "~/components/shared/text";
 import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
 import { useMst } from "../../../setup/root";
 import { IconButton } from "../../shared/icon-button";
 import { SurveyBot } from "./survey-bot";
 import { Link } from "react-router-dom";
+import Modal from "styled-react-modal";
 
 export const Journal = observer(
   (props): JSX.Element => {
@@ -39,24 +43,13 @@ export const Journal = observer(
 
     return (
       <JournalContainer>
-        <HeaderContainer>
+        <HeaderContainerWithActions>
           <HeaderText>{t("journals.title")}</HeaderText>
           <EndButtonContainer>
-            {questionnaireVariant ? (
-              <EndButton
-                onClick={() => {
-                  if (confirm(t("journals.confirmQuit"))) {
-                    setQuestionnaireVariant("");
-                  }
-                }}
-              >
-                Quit
-              </EndButton>
-            ) : null}
             <Link to="/journals" style={{ textDecoration: "none", padding: "0" }}>
               <EndButton
                 onClick={() => {
-                  if (questionnaireVariant !== "" && confirm(t("journals.confirmQuit"))) {
+                  if (questionnaireVariant !== "") {
                     setQuestionnaireVariant("");
                   }
                 }}
@@ -65,57 +58,78 @@ export const Journal = observer(
               </EndButton>
             </Link>
           </EndButtonContainer>
-        </HeaderContainer>
-        {questionnaireVariant !== "" ? (
-          <SurveyBot variant={questionnaireVariant} endFn={setQuestionnaireVariant} />
-        ) : (
-          <ButtonContainer>
-            <PynBotSpeechContainer>
-              <PynBotContainer>
-                <PynBotIconContainer>
-                  <Icon icon={"PynBot"} iconColor={"primary80"} size={"42px"} width={"90%"} />
-                </PynBotIconContainer>
-                <TextNoMargin fontSize={"12px"} fontWeight={600}>
-                  PynBot
-                </TextNoMargin>
-              </PynBotContainer>
-              <SpeechBubble>{pynBotGreeting}</SpeechBubble>
-            </PynBotSpeechContainer>
-            <IconButton
-              {...defaultJournalButtonProps}
-              iconName={"AM-Check-in"}
-              iconColor={"cautionYellow"}
-              text={t("journals.createMyDay")}
-              onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay)}
-              disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
+        </HeaderContainerWithActions>
+        <StyledModal isOpen={questionnaireVariant !== ""} transitionSpeed={1000}>
+          {questionnaireVariant !== "" ? (
+            <SurveyBot
+              variant={questionnaireVariant}
+              endFn={setQuestionnaireVariant}
+              optionalActionsComponent={
+                <EndButtonContainer>
+                  {questionnaireVariant ? (
+                    <EndButton
+                      onClick={() => {
+                        if (confirm(t("journals.confirmQuit"))) {
+                          setQuestionnaireVariant("");
+                        }
+                      }}
+                    >
+                      Quit Journal
+                    </EndButton>
+                  ) : null}
+                </EndButtonContainer>
+              }
             />
-            {/* <IconButton
+          ) : (
+            <></>
+          )}
+        </StyledModal>
+        <ButtonContainer>
+          <PynBotSpeechContainer>
+            <PynBotContainer>
+              <PynBotIconContainer>
+                <Icon icon={"PynBot"} iconColor={"primary80"} size={"42px"} width={"90%"} />
+              </PynBotIconContainer>
+              <TextNoMargin fontSize={"12px"} fontWeight={600}>
+                PynBot
+              </TextNoMargin>
+            </PynBotContainer>
+            <SpeechBubble>{pynBotGreeting}</SpeechBubble>
+          </PynBotSpeechContainer>
+          <IconButton
+            {...defaultJournalButtonProps}
+            iconName={"AM-Check-in"}
+            iconColor={"cautionYellow"}
+            text={t("journals.createMyDay")}
+            onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay)}
+            disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
+          />
+          {/* <IconButton
               {...defaultJournalButtonProps}
               iconName={"Check-in"}
               iconColor={"successGreen"}
               text={t("journals.thoughtChallenge")}
               onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.thoughtChallenge)}
             /> */}
-            <IconButton
-              {...defaultJournalButtonProps}
-              iconName={"Check-in"}
-              iconColor={"successGreen"}
-              text={"Coming soon"}
-              textColor={"grey20"}
-              fontStyle={"italic"}
-              onClick={() => {}}
-              disabled={true}
-            />
-            <IconButton
-              {...defaultJournalButtonProps}
-              iconName={"PM-Check-in"}
-              iconColor={"primary40"}
-              text={t("journals.eveningReflection")}
-              onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.eveningReflection)}
-              disabled={R.path(["profile", "currentDailyLog", "eveningReflection"], sessionStore)}
-            />
-          </ButtonContainer>
-        )}
+          <IconButton
+            {...defaultJournalButtonProps}
+            iconName={"Check-in"}
+            iconColor={"successGreen"}
+            text={"Coming soon"}
+            textColor={"grey20"}
+            fontStyle={"italic"}
+            onClick={() => {}}
+            disabled={true}
+          />
+          <IconButton
+            {...defaultJournalButtonProps}
+            iconName={"PM-Check-in"}
+            iconColor={"primary40"}
+            text={t("journals.eveningReflection")}
+            onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.eveningReflection)}
+            disabled={R.path(["profile", "currentDailyLog", "eveningReflection"], sessionStore)}
+          />
+        </ButtonContainer>
       </JournalContainer>
     );
   },
@@ -181,7 +195,6 @@ const EndButtonContainer = styled.div`
   align-items: center;
   display: flex;
   justify-content: flex-end;
-  width: 100%;
 `;
 
 const EndButton = styled.div`
@@ -189,5 +202,15 @@ const EndButton = styled.div`
   cursor: pointer;
   font-size: 11pt;
   font-weight: 400;
-  margin-left: 20px;
+`;
+
+const StyledModal = Modal.styled`
+  width: 30rem;
+  min-width: 30rem;
+  height: 100%;
+  border-radius: 10px;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  background-color: ${props => props.theme.colors.white};
 `;

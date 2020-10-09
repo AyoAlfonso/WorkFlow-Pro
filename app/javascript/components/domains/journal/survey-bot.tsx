@@ -15,6 +15,7 @@ import { QuestionnaireTypeConstants } from "~/constants/questionnaire-types";
 export interface ISurveyBotProps {
   variant: string;
   endFn?: Dispatch<SetStateAction<string>>;
+  optionalActionsComponent?: JSX.Element;
 }
 
 const botAvatarPath = require("../../../assets/images/LynchPyn-Logo-Blue_300x300.png");
@@ -86,15 +87,20 @@ export const SurveyBot = observer(
     return (
       <ChatBot
         botDelay={1000}
-        headerComponent={<SurveyHeader title={questionnaireVariant.title} />}
+        headerComponent={
+          <SurveyHeader
+            title={questionnaireVariant.title}
+            optionalActionsComponent={props.optionalActionsComponent}
+          />
+        }
         steps={steps}
         width={"100%"}
         hideBotAvatar={true}
         hideUserAvatar={true}
-        contentStyle={{ height: "226px" }}
+        contentStyle={{ height: window.innerHeight - 120 }}
         // header and footer are 120px total
         // these hard-coded values are required to make the chatbot fit inside the Journal widget :(
-        style={{ height: "346px" }}
+        style={{ height: window.innerHeight }}
         enableSmoothScroll={true}
         userDelay={200}
         zIndex={1}
@@ -129,12 +135,13 @@ const HeaderDiv = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
 `;
 
-export const SurveyHeader = ({ title }) => {
+export const SurveyHeader = ({ title, optionalActionsComponent = undefined }) => {
   return (
     <HeaderDiv>
       <Text color={"grey100"} fontSize={2}>
         {title}
       </Text>
+      {optionalActionsComponent ? optionalActionsComponent : <></>}
     </HeaderDiv>
   );
 };
@@ -161,7 +168,9 @@ export const SurveyBotNoMst = (props: ISurveyBotProps): JSX.Element => {
       botAvatar={botAvatarPath}
       userAvatar={userAvatarUrlForStorybook}
       botDelay={1000}
-      headerComponent={<SurveyHeader title={"Survey"} />}
+      headerComponent={
+        <SurveyHeader title={"Survey"} optionalActionsComponent={props.optionalActionsComponent} />
+      }
       steps={exampleSteps}
       width={"100%"}
       contentStyle={{ height: "300px" }}
