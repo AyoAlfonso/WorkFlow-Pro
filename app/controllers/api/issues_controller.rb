@@ -59,6 +59,13 @@ class Api::IssuesController < Api::ApplicationController
     render "api/issues/issues_for_team"
   end
 
+  def resort_index
+    @issues = policy_scope(Issue).where(user_id: current_user.id).sort_by_priority.sort_by_created_date
+    authorize @issues
+    reset_positions(@issues)
+    render "api/issues/index"
+  end
+
   private
 
   def issue_params
@@ -72,5 +79,16 @@ class Api::IssuesController < Api::ApplicationController
 
   def team_meeting_issues(team_id)
     policy_scope(Issue).where(team_id: team_id).sort_by_position_and_priority_and_created_at_and_completed_at
+  end
+
+  def reset_positions(issues)
+    issues.complete.each_with_index do |issue, index|
+      issue.position = index + 1
+      issue.save!
+    end
+    issues.incomplete.each_with_index do |issue, index|
+      issue.position = index + 1
+      issue.save!
+    end
   end
 end

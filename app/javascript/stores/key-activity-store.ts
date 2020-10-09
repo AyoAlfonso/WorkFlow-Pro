@@ -109,6 +109,15 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
+    resortKeyActivities: flow(function*(sortParams) {
+      const response: ApiResponse<any> = yield self.environment.api.resortKeyActivities(sortParams);
+      if (response.ok) {
+        self.keyActivities = response.data as any;
+        return true;
+      } else {
+        return false;
+      }
+    }),
   }))
   .actions(self => ({
     fetchKeyActivitiesFromMeeting: flow(function*(meeting_id) {
