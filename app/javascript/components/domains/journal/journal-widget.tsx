@@ -11,6 +11,7 @@ import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-typ
 import { useMst } from "../../../setup/root";
 import { IconButton } from "../../shared/icon-button";
 import { SurveyBot } from "./survey-bot";
+import { Link } from "react-router-dom";
 
 export const Journal = observer(
   (props): JSX.Element => {
@@ -49,9 +50,20 @@ export const Journal = observer(
                   }
                 }}
               >
-                Quit Journal
+                Quit
               </EndButton>
             ) : null}
+            <Link to="/journals" style={{ textDecoration: "none", padding: "0" }}>
+              <EndButton
+                onClick={() => {
+                  if (questionnaireVariant !== "" && confirm(t("journals.confirmQuit"))) {
+                    setQuestionnaireVariant("");
+                  }
+                }}
+              >
+                {t("journals.viewEntries")}
+              </EndButton>
+            </Link>
           </EndButtonContainer>
         </HeaderContainer>
         {questionnaireVariant !== "" ? (
@@ -177,4 +189,5 @@ const EndButton = styled.div`
   cursor: pointer;
   font-size: 11pt;
   font-weight: 400;
+  margin-left: 20px;
 `;

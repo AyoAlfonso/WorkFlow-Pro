@@ -1,7 +1,6 @@
-Questionnaire.where(name: "Create My Day").first_or_create(name: "Create My Day", 
+Questionnaire.where(name: "Create My Day", 
 limit_type: 1,
-title: "Create My Day",
-steps: [
+title: "Create My Day").first_or_initialize.update(steps: [
   {
     id: 1,
     message: "Good morning {userName}!",
@@ -34,20 +33,22 @@ steps: [
     id: "gratitude-am",
     user: true,
     metadata: {
-      validatorType: "string"
+      validatorType: "string",
+      journalQuestion: "Gratitude:"
     },
     trigger: 7
   },
   {
     id: 7,
     message: "How do you need to feel today?",
-    trigger: 8
+    trigger: "feel"
   },
   {
-    id: 8,
+    id: "feel",
     user: true,
     metadata: {
-      validatorType: "string"
+      validatorType: "string",
+      journalQuestion: "How I need to feel today:"
     },
     trigger: 9
   },
@@ -71,13 +72,14 @@ steps: [
   {
     id: 12,
     message: 'How can you be courageous or as I like to say, "how will you lean in today?"',
-    trigger: 13
+    trigger: "lean-in"
   },
   {
-    id: 13,
+    id: "lean-in",
     user: true,
     metadata: {
-      validatorType: "string"
+      validatorType: "string",
+      journalQuestion: "How I will lean in today:"
     },
     trigger: 14
   },
@@ -142,13 +144,14 @@ steps: [
   {
     id: 22,
     message: "You are awesome, you really get the power of reflection. So let's take a moment and capture some of your thoughts in your journal. Remember you can write anything here.",
-    trigger: 23
+    trigger: "reflection-am"
   },
   {
-    id: 23,
+    id: "reflection-am",
     user: true,
     metadata: {
-      validatorType: "string"
+      validatorType: "string",
+      journalQuestion: "Morning reflection:"
     },
     trigger: 24
   },
@@ -180,13 +183,14 @@ steps: [
   {
     id: 29,
     message: "I am...",
-    trigger: 30
+    trigger: "mantra"
   },
   {
-    id: 30,
+    id: "mantra",
     user: true,
     metadata: {
-      validatorType: "string"
+      validatorType: "string",
+      journalQuestion: "Mantra:"
     },
     trigger: 31
   },
@@ -212,13 +216,11 @@ steps: [
     ],
     end: true
   }
-]
-)
+])
 
-Questionnaire.where(name: "Thought Challenge").first_or_create(name: "Thought Challenge", 
-limit_type: 0,
-title: "Check-in",
-steps: [
+Questionnaire.where(name: "Thought Challenge", 
+  limit_type: 0,
+  title: "Check-in").first_or_initialize.update!(steps: [
   {
     id: 1,
     message: "Hi {userName}!",
@@ -419,13 +421,11 @@ steps: [
     message: "Remember to check in often, see you soon!", 
     end: true
   }
-]
-)
+])
 
-Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening Reflection", 
+Questionnaire.where(name: "Evening Reflection", 
   limit_type: 1,
-  title: "Evening Reflection",
-  steps: [
+  title: "Evening Reflection").first_or_initialize.update(steps: [
     {
       id: 1, 
       message: "Good evening, {userName}! Great to see you.",
@@ -451,7 +451,8 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
       id: "what-happened", 
       user: true,
       metadata: {
-        validatorType: "string"
+        validatorType: "string",
+        journalQuestion: "What happened today:"
       },
       trigger: 5
     },
@@ -476,7 +477,8 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
           {icon: "Emotion-C", color: "grey60", value: 3, trigger: 8},
           {icon: "Emotion-B", color: "successGreen", value: 4, trigger: 8},
           {icon: "Emotion-A", color: "finePine", value: 5, trigger: 8}
-        ]
+        ],
+        journalQuestion: "My rating for today:"
       }
     },
     {
@@ -498,7 +500,8 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
       id: "wins", 
       user: true, 
       metadata: {
-        validatorType: "string"
+        validatorType: "string",
+        journalQuestion: "My three wins from today:"
       },
       trigger: 12
     },
@@ -534,7 +537,8 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
       id: "comfort-zone", 
       user: true, 
       metadata: {
-        validatorType: "string"
+        validatorType: "string",
+        journalQuestion: "How I stepped out of my comfort zone:"
       },
       trigger: 17
     },
@@ -555,7 +559,8 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
       id: "highest-good", 
       user: true,
       metadata: {
-        validatorType: "string"
+        validatorType: "string",
+        journalQuestion: "Areas where I spent time that wasn't for my highest good:"
       },
       trigger: 20
     },
@@ -576,7 +581,8 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
       id: "lessons", 
       user: true, 
       metadata: {
-        validatorType: "string"
+        validatorType: "string",
+        journalQuestion: "One lesson learned today:"
       },
       trigger: 23
     },
@@ -599,7 +605,8 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
       id: "improvements", 
       user: true,
       metadata: {
-        validatorType: "string"
+        validatorType: "string",
+        journalQuestion: "What could have made today better:"
       },
       trigger: 27
     },
@@ -628,7 +635,8 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
       id: "gratitude-pm", 
       user: true,
       metadata: {
-        validatorType: "string"
+        validatorType: "string",
+        journalQuestion: "Gratitude"
       },
       trigger: 31
     },
@@ -717,7 +725,8 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
       id: "reflection", 
       user: true,
       metadata: {
-        validatorType: "string"
+        validatorType: "string",
+        journalQuestion: "Evening reflection:"
       },
       trigger: 43
     },
@@ -739,10 +748,9 @@ Questionnaire.where(name: "Evening Reflection").first_or_create(name: "Evening R
   ]
 )
 
-Questionnaire.where(name: "Weekly Reflection").first_or_create(name: "Weekly Reflection", 
+Questionnaire.where(name: "Weekly Reflection", 
 limit_type: 2,
-title: "Weekly Reflection",
-steps: [
+title: "Weekly Reflection").first_or_initialize.update(steps: [
   {
     id: 1,
     options: [],
@@ -787,6 +795,9 @@ steps: [
   {
     id: "biggest-wins",
     user: true,
+    metadata: {
+      journalQuestion: "Biggest win from this week:"
+    },
     trigger: 7
   },
   {
@@ -806,6 +817,9 @@ steps: [
   {
     id: "biggest-lesson",
     user: true,
+    metadata: {
+      journalQuestion: "Biggest lesson learned from this week:"
+    },
     trigger: 10
   },
   {
@@ -816,6 +830,9 @@ steps: [
   {
     id: "takeaway",
     user: true,
+    metadata: {
+      journalQuestion: "My weekly takeaway and what I can take from this week that will help me in the future:"
+    },
     trigger: 12
   },
   {
@@ -826,6 +843,9 @@ steps: [
   {
     id: "influence",
     user: true,
+    metadata: {
+      journalQuestion: "Greatest influence this week:"
+    },
     trigger: 14
   },
   {
@@ -848,6 +868,9 @@ steps: [
   {
     id: "grateful",
     user: true,
+    metadata: {
+      journalQuestion: "Gratitude:"
+    },
     trigger: 17
   },
   {
@@ -858,6 +881,9 @@ steps: [
   {
     id: "thoughts-reflections",
     user: true,
+    metadata: {
+      journalQuestion: "Weekly reflection"
+    },
     trigger: 19
   },
   {
@@ -868,6 +894,9 @@ steps: [
   {
     id: "account-for",
     user: true,
+    metadata: {
+      journalQuestion: "What I have to account for in the next week:"
+    },
     trigger: 21
   },
   {
@@ -878,6 +907,9 @@ steps: [
   {
     id: "stand",
     user: true,
+    metadata: {
+      journalQuestion: "What could stand in the way:"
+    },
     trigger: 23
   },
   {
@@ -888,6 +920,9 @@ steps: [
   {
     id: "overcome",
     user: true,
+    metadata: {
+      journalQuestion: "How I will overcome this:"
+    },
     trigger: 25
   },
   {

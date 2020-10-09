@@ -89,7 +89,9 @@ export const Questionnaire = observer(
         <Card
           width={"100%"}
           alignment={"left"}
-          headerComponent={<CardHeaderText>{t("journals.weeklyReflectionTitle")}</CardHeaderText>}
+          headerComponent={
+            <CardHeaderText fontSize={"16px"}>{t("journals.weeklyReflectionTitle")}</CardHeaderText>
+          }
         >
           <CardBody>
             <Text fontFamily={"Lato"} fontSize={"14px"} mt={"15px"} textAlign={"center"}>

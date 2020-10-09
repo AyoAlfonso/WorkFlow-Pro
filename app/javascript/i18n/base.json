@@ -147,11 +147,27 @@
         "thoughtChallenge": "I want to check-in",
         "eveningReflection": "I want to reflect on my day",
         "title": "Journal",
+        "headerNavTitle": "Journals",
+        "indexTitle": "Journal Entries",
         "pynBotName": "PynBot",
         "pynBotGreeting": "Hey {userName}, what can I help you with?",
         "confirmQuit": "Are you sure you want to quit?  Your journal entry will be lost",
         "weeklyReflectionTitle": "Weekly Reflection",
-        "weeklyReflectionCompleted": "Great job {userName}, You've completed your weekly reflection. Go to the next step to start planning for the week ahead!"
+        "weeklyReflectionCompleted": "Great job {userName}, You've completed your weekly reflection. Go to the next step to start planning for the week ahead!",
+        "journalEntry": "Journal Entry",
+        "selectEntry": "Select an entry to see your records",
+        "emptyList": "Empty list?",
+        "startAdding": "Start adding to your journal by talking to Pynbot, your virtual coach!",
+        "viewEntries": "View Entries"
+      },
+      "notes": {
+        "headerNavTitle": "Notes",
+        "indexTitle": "Notes",
+        "allNotes": "All Notes",
+        "myNotes": "My Notes",
+        "teamNotes": "{teamName} Notes",
+        "startAdding": "Use the meeting function with your team or personal planning wizards.",
+        "meetingNotes": "Meeting Notes"
       },
       "keyActivities": {
         "prioritiesTitle": "Today's Priorities",
@@ -163,6 +179,12 @@
         "teamIssuesTitle": "Team Issues",
         "teamsPulseTitle": "Team Pulse",
         "teamSnapshotTitle": "Team Snapshot"
+      },
+      "dateFilters": {
+        "today": "Today",
+        "lastSevenDays": "Last 7 Days",
+        "lastThirtyDays": "Last 30 Days",
+        "lastNinetyDays": "Last 90 Days"
       }
     }
   }

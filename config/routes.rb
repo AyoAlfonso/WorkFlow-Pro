@@ -93,7 +93,6 @@ Rails.application.routes.draw do
     get '/habits/show_habit/:id', to: 'habits#show_habit'
     get '/habits/habits_for_personal_planning', to: 'habits#habits_for_personal_planning'
    
-
     #questionnaires
     resources :questionnaires, only: [:index]
 
@@ -120,6 +119,10 @@ Rails.application.routes.draw do
     #milestones
     resources :milestones, only: [:update]
     get '/milestones/milestones_for_meeting', to: "milestones#milestones_for_meeting"
+
+    #summaries
+    get '/journals', to: 'summaries#questionnaire_attempts_by_date'
+    get '/notes', to: 'summaries#meetings_by_date'
 
   end
 

@@ -19,6 +19,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
     @questionnaire_attempt = QuestionnaireAttempt.new({
       user_id: current_user.id,
       questionnaire_id: params[:questionnaire_id],
+      questionnaire_type: questionnaire.name,
       answers: params[:answers],
       steps: steps,
       rendered_steps: rendered_steps,

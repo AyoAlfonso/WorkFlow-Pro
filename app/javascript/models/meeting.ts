@@ -33,6 +33,7 @@ export const MeetingModel = types
     habitsPercentageIncreaseFromPreviousWeek: types.maybeNull(types.number),
     title: types.maybeNull(types.string),
     notes: types.maybeNull(types.string),
+    meetingTemplateId: types.maybeNull(types.number),
   })
   .views(self => ({
     get currentStepDetails() {

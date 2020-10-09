@@ -4,12 +4,13 @@ export const QuestionnaireAttemptModel = types
   .model("QuestionnaireAttemptModel")
   .props({
     id: types.identifierNumber,
-    user_id: types.number,
-    questionnaire_id: types.number,
-    answers: types.array(types.frozen<object>()),
-    steps: types.array(types.frozen<object>()),
-    renderedSteps: types.array(types.frozen<object>()),
-    completed_at: types.string,
+    userId: types.number,
+    questionnaireId: types.number,
+    questionnaireType: types.string,
+    answers: types.maybeNull(types.array(types.frozen<object>())),
+    steps: types.maybeNull(types.array(types.frozen<object>())),
+    renderedSteps: types.maybeNull(types.array(types.frozen<object>())),
+    completedAt: types.string,
     emotionScore: types.maybeNull(types.number),
   })
   .views(self => ({}))

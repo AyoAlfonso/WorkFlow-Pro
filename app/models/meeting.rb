@@ -12,7 +12,6 @@ class Meeting < ApplicationRecord
   scope :for_week_of_date, -> (start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_week, start_time.end_of_week)}
   scope :for_week_of_date_started_only, -> (start_time) { where("(start_time >= ? AND start_time <= ?)", start_time.beginning_of_week, start_time.end_of_week)}
   scope :team_meetings, -> (team_id) { where(team_id: team_id) }
-  scope :sort_by_creation_date, -> { order(created_at: :desc)}
   scope :incomplete, -> { where(end_time: nil) }
   scope :with_name, -> (name) { joins(:meeting_template).where(meeting_templates: { name: name}) }
   scope :with_template, -> (meeting_template_id) { where(meeting_template_id: meeting_template_id) }
@@ -23,15 +22,22 @@ class Meeting < ApplicationRecord
   
   #TODO: modify scope to fetch completed meetings if recent, sort by 'type', 'incomplete', and 'date created' to show most recent ones
   scope :personal_recent_or_incomplete_for_user, ->(user) { personal_meetings.hosted_by_user(user).incomplete}
-  
-  
   scope :personal_meeting_for_week_on_user, -> (user, for_week_of_date) { personal_meetings.hosted_by_user(user).for_week_of_date(for_week_of_date) }
+  scope :from_user_teams, -> (user) { where(team_id: user.teams.ids) }
+  scope :hosted_by, -> (user) { where(hosted_by_id: user.id) }
+  
+  scope :sort_by_creation_date, -> { order(created_at: :desc) }
+  scope :sort_by_start_time, -> { order(start_time: :desc) }
 
   before_create :start_meeting_if_weekly_planning
 
   #TO USE
   #week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
   #Meeting.first_or_create_for_weekly_planning_on_email(current_user, week_to_review_start_time)
+
+  def self.from_user_teams_or_hosted_by_user(user)
+    self.from_user_teams(user).or(self.hosted_by(user))
+  end
 
   def self.first_or_create_for_weekly_planning_on_email(user, week_to_review_start_time)
     self.personal_meetings.hosted_by_user(user).for_week_of_date(week_to_review_start_time).first_or_create(

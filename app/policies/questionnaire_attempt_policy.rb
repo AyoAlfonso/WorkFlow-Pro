@@ -7,6 +7,10 @@ class QuestionnaireAttemptPolicy < ApplicationPolicy
     true
   end
 
+  def questionnaire_attempts_by_date?
+    true
+  end
+
   class Scope
     attr_reader :user, :scope
 

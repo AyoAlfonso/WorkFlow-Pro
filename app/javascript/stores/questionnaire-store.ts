@@ -1,6 +1,7 @@
 import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { QuestionnaireAttemptModel } from "../models/questionnaire-attempt";
+import { QuestionnaireAttemptsDataModel } from "../models/questionnaire-attempts-data";
 import { QuestionnaireModel } from "../models/questionnaire";
 import { ApiResponse } from "apisauce";
 
@@ -9,6 +10,7 @@ export const QuestionnaireStoreModel = types
   .props({
     questionnaires: types.array(QuestionnaireModel),
     questionnaireAttempt: types.maybeNull(QuestionnaireAttemptModel),
+    questionnaireAttemptsSummary: types.array(QuestionnaireAttemptsDataModel),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -52,6 +54,16 @@ export const QuestionnaireStoreModel = types
         // error messaging handled by API monitor
       }
     }),
+    getQuestionnaireAttemptsSummary: flow(function*(dateFilterObj) {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getQuestionnaireAttemptsSummary(
+          dateFilterObj,
+        );
+        self.questionnaireAttemptsSummary = response.data;
+      } catch {
+        // caught by Api monitor
+      }
+    }),
   }))
   .actions(self => ({
     reset() {
@@ -69,4 +81,5 @@ type QuestionnaireStoreType = typeof QuestionnaireStoreModel.Type;
 export interface IQuestionnaireStore extends QuestionnaireStoreType {
   questionnaires: any;
   questionnaireAttempt: any;
+  questionnaireAttemptsSummary: any;
 }

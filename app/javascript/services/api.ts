@@ -249,6 +249,10 @@ export class Api {
     return this.client.get(`/questionnaires`);
   }
 
+  async getQuestionnaireAttemptsSummary(dateFilterObj) {
+    return this.client.get(`/journals`, dateFilterObj);
+  }
+
   async createQuestionnaireAttempt(questionnaireId, questionnaireAttemptData) {
     const questionnaireAttemptObject = {
       questionnaire_id: questionnaireId,
@@ -299,8 +303,12 @@ export class Api {
     return this.client.delete(`/meetings/${id}`);
   }
 
+  async getMeetingNotes(filterObj) {
+    return this.client.get(`/notes`, filterObj);
+  }
+
   async getMeetingRecap(teamId, meetingId) {
-    return this.client.get(`teams/${teamId}/meetings/${meetingId}/meeting_recap`);
+    return this.client.get(`/teams/${teamId}/meetings/${meetingId}/meeting_recap`);
   }
 
   async getNotifications() {

@@ -42,6 +42,10 @@ class MeetingPolicy < ApplicationPolicy
   def meeting_recap?
     @user.teams_intersect?(@meeting.map { |m| m.team })
   end
+
+  def meetings_by_date?
+    true
+  end
   
   class Scope
     attr_reader :user, :scope
@@ -52,7 +56,7 @@ class MeetingPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.optimized
+      scope.optimized.from_user_teams_or_hosted_by_user(@user)
     end
   end
 
