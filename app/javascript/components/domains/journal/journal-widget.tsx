@@ -206,6 +206,7 @@ const EndButton = styled.div`
 
 const StyledModal = Modal.styled`
   width: 30rem;
+  min-width: 30rem;
   height: 100%;
   border-radius: 10px;
   bottom: 0;
