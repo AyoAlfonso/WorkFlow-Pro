@@ -10,6 +10,7 @@ import { Icon, Input } from "~/components/shared";
 import { Text } from "~/components/shared/text";
 import ContentEditable from "react-contenteditable";
 import { HabitScoreLineChart } from "./habit-score-line-chart";
+import { HabitFrequencyBarGraph } from "./habit-frequency-bar-graph";
 
 interface IHabitsTableCircularProgressBar {
   color: string;
@@ -184,6 +185,10 @@ export const EditHabit = observer(
         <HabitScoreLineChart
           habitId={habit.id}
           scoreDataForLineGraph={habit.scoreDataForLineGraph}
+        />
+        <HabitFrequencyBarGraph
+          habitId={habit.id}
+          frequencyDataForBarGraph={habit.frequencyDataForBarGraph}
         />
       </Container>
     );

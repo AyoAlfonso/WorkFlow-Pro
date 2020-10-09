@@ -17,6 +17,19 @@ class Company < ApplicationRecord
     calculate_current_fiscal_quarter
   end
 
+  def next_fiscal_start_date
+    case self.current_fiscal_quarter
+    when 1
+      self.second_quarter_start_date
+    when 2
+      self.third_quarter_start_date
+    when 3
+      self.fourth_quarter_start_date
+    else
+      self.current_year_fiscal_year_start + 1.year
+    end
+  end
+
   def current_year_fiscal_year_start
     current_year = Time.now.year
     fiscal_start_month = self.fiscal_year_start.month
