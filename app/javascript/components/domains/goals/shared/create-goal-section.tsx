@@ -5,6 +5,7 @@ import { Button } from "~/components/shared/button";
 import { Icon } from "~/components/shared/icon";
 import { TextInput } from "~/components/shared/text-input";
 import { HomeContainerBorders } from "../../home/shared-components";
+import { Text } from "~/components/shared/text";
 
 interface ICreateGoalSectionProps {
   type?: string;
@@ -101,8 +102,9 @@ const StyledButton = styled(Button)<StyledButtonType>`
   }
 `;
 
-const AddGoalText = styled.div`
+const AddGoalText = styled(Text)`
   margin-left: 16px;
+  white-space: break-spaces;
 `;
 
 const CreateAnnualInitiativeCardContainer = styled(HomeContainerBorders)`
