@@ -9,6 +9,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def create
+    binding.pry
     @key_activity = KeyActivity.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], weekly_list: params[:weekly_list], meeting_id: params[:meeting_id], due_date: params[:due_date] })
     # if its a master list acitivity item, insert after the last noncompleted item
     if params[:weekly_list] == false
