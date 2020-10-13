@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_09_232830) do
+ActiveRecord::Schema.define(version: 2020_10_13_185333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(version: 2020_10_09_232830) do
     t.date "due_date"
     t.index ["completed_at", "position", "priority"], name: "index_key_activities_on_completed_at_and_position_and_priority"
     t.index ["created_at", "position", "priority"], name: "index_key_activities_on_created_at_and_position_and_priority"
+    t.index ["due_date"], name: "index_key_activities_on_due_date"
     t.index ["meeting_id"], name: "index_key_activities_on_meeting_id"
     t.index ["user_id", "completed_at"], name: "index_key_activities_on_user_id_and_completed_at"
     t.index ["user_id", "created_at"], name: "index_key_activities_on_user_id_and_created_at"
