@@ -185,6 +185,10 @@
         "lastSevenDays": "Last 7 Days",
         "lastThirtyDays": "Last 30 Days",
         "lastNinetyDays": "Last 90 Days"
+      },
+      "datePicker": {
+        "dueDate": "Due Date",
+        "clearDate": "Clear Date"
       }
     }
   }
