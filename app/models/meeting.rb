@@ -1,4 +1,5 @@
 class Meeting < ApplicationRecord
+  include StatsHelper
   belongs_to :team, optional: true #a meeting with no team is a personal meeting
   belongs_to :hosted_by, class_name: "User", optional: true
   belongs_to :meeting_template
@@ -51,12 +52,14 @@ class Meeting < ApplicationRecord
 
   def title
     if self.meeting_type == "personal_weekly"
-      time_for_title = start_time || scheduled_start_time || hosted_by.time_in_user_timezone
+      start_set = start_time || scheduled_start_time
+      time_for_title = hosted_by.convert_to_users_timezone(start_set)
       return "" if time_for_title.blank?
-      date_for_title = time_for_title.beginning_of_week.to_date.strftime("%B %-d")
+
+      date_for_title = get_next_week_or_current_week_date(time_for_title).to_date.strftime("%B %-d")
       "Planning for Week of #{date_for_title}"
     elsif self.meeting_type == "team_weekly"
-      time_for_title = start_time || hosted_by.time_in_user_timezone
+      time_for_title = hosted_by.convert_to_users_timezone(start_time)
       time_for_title.strftime("%A, %B %-d")
     else
       ""

@@ -21,6 +21,14 @@ module StatsHelper
     end
   end
 
+  def get_next_week_or_current_week_date(current_time)
+    if [1].include? (current_time.wday)
+      current_time.beginning_of_week
+    else
+      current_time.beginning_of_week.next_week
+    end
+  end
+
   def daily_average_users_emotion_scores_over_last_week(current_user)
     previous_week_start = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
     previous_week_end = previous_week_start + 6.days

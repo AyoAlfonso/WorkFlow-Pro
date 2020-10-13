@@ -141,6 +141,15 @@ class User < ApplicationRecord
     end
   end
 
+  def convert_to_users_timezone(time = nil)
+    if time.present? && time.respond_to?(:strftime)
+      return time.in_time_zone(users_timezone_name)
+    elsif time.blank?
+      return Time.current.in_time_zone(users_timezone_name)
+    end
+    raise "User has no timezone error for conversion"
+  end
+
   def users_timezone_name
     # user.timezone looks like "(GMT-08:00) Pacific Time (US & Canada)"
     # we need everything after "(GMT-08:00) "
