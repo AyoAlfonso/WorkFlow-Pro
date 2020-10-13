@@ -19,7 +19,6 @@ class Milestone < ApplicationRecord
   scope :for_user_on_quarter, -> (user, quarter) { joins(:quarterly_goal).where(quarterly_goals: {owned_by: user, quarter: quarter}) }
 
   delegate :description, to: :quarterly_goal, prefix: true
-  scope :completed, -> { where(status: "completed") }
 
 
   def self.for_users_in_team_and_quarter(team_id, quarter)
