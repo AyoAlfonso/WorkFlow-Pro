@@ -67,17 +67,10 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def resort_index
     if params[:sort].present?
-      case params[:sort]
-      when "by_priority"
-        @key_activities = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_priority.sort_by_created_date
-      when "by_due_date"
-        @key_activities = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_due_date.sort_by_created_date
-      when "by_priority_and_due_date"
-        @key_activities = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_priority.sort_by_due_date.sort_by_created_date
-      end
-      reset_positions(@key_activities)
+      key_activities = policy_scope(KeyActivity).owned_by_user(current_user)
+      @key_activities = KeyActivityResortService.call(key_activities, params[:sort])
     else
-      @key_activities = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_todays_priority_weekly_list
+      raise "No Sort Type Given"
     end
     authorize @key_activities
     render "api/key_activities/index"
@@ -98,20 +91,5 @@ class Api::KeyActivitiesController < Api::ApplicationController
   def team_meeting_activities(meeting_id)
     meeting = Meeting.find(meeting_id)
     KeyActivity.optimized.filter_by_team_meeting(meeting.meeting_template_id, meeting.team_id).sort_by_todays_priority_weekly_list_position
-  end
-
-  def reset_positions(key_activities)
-    key_activities.todays_priority.sort_by_priority_and_created_at.each_with_index do |ka, idx|
-      ka.position = idx + 1
-      ka.save!
-    end
-    key_activities.weekly_list.sort_by_priority_and_created_at.each_with_index do |ka, idx|
-      ka.position = idx + 1
-      ka.save!
-    end
-    key_activities.master_list.sort_by_priority_and_created_at.each_with_index do |ka, idx|
-      ka.position = idx + 1
-      ka.save!
-    end
   end
 end

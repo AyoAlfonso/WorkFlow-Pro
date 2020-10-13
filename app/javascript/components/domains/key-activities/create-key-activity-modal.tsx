@@ -23,6 +23,7 @@ import { baseTheme } from "../../../themes";
 import { Icon } from "../../shared/icon";
 import { ModalWithHeader } from "../../shared/modal-with-header";
 import { TextInput } from "../../shared/text-input";
+import moment from "moment";
 
 interface ICreateKeyActivityModalProps {
   createKeyActivityModalOpen: boolean;
@@ -46,7 +47,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-  const [selectedDueDate, setSelectedDueDate] = useState<any>(null);
+  const [selectedDueDate, setSelectedDueDate] = useState<Date>(null);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
@@ -86,7 +87,9 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             dateSelected={!R.isNil(selectedDueDate)}
           >
             <Icon icon={"Deadline-Calendar"} iconColor={"inherit"} size={"16px"} mr={"8px"} />
-            {t("datePicker.dueDate")}
+            {R.isNil(selectedDueDate)
+              ? t("datePicker.dueDate")
+              : moment(selectedDueDate).format("MMM Do, YYYY")}
           </DueDateButtonContainer>
         }
       >
@@ -96,6 +99,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             showMonthAndYearPickers={false}
             showSelectionPreview={true}
             direction={"vertical"}
+            shownDate={new Date()}
             minDate={new Date()}
             maxDate={addDays(new Date(), 30)}
             scroll={{
@@ -178,6 +182,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                 .then(result => {
                   if (result) {
                     setKeyActivityDescription("");
+                    setSelectedDueDate(null);
                     setCreateKeyActivityModalOpen(false);
                     setSelectedPriority(0);
                     setWeeklyList(defaultTypeAsWeekly);

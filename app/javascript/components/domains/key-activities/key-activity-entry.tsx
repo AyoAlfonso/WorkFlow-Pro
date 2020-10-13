@@ -62,11 +62,11 @@ export const KeyActivityEntry = observer(
 
     const checkDueDate = () => {
       const dueDate = keyActivity.dueDate;
-      const parsedDate = parseISO(keyActivity.dueDate);
+      const parsedDate = parseISO(dueDate);
       const { cautionYellow, greyActive, warningRed, successGreen } = baseTheme.colors;
 
       if (R.isNil(dueDate)) {
-        return { text: "No Due Date", color: greyActive };
+        return { text: "", color: greyActive };
       } else if (isToday(parsedDate)) {
         return { text: "Today", color: cautionYellow };
       } else if (isTomorrow(parsedDate)) {
@@ -74,7 +74,7 @@ export const KeyActivityEntry = observer(
       } else if (isBefore(parsedDate, new Date())) {
         return { text: "Overdue", color: warningRed };
       } else {
-        return { text: moment(Date.parse(dueDate)).format("MMM Do, YYYY"), color: greyActive };
+        return { text: moment(parsedDate).format("MMM Do, YYYY"), color: greyActive };
       }
     };
 
@@ -152,6 +152,7 @@ export const KeyActivityEntry = observer(
                   <DateButton
                     onClick={() => {
                       setShowDatePicker(true);
+                      setSelectedDueDate(new Date(parseISO(keyActivity.dueDate)));
                     }}
                     text={dueDateObj.text}
                     displayColor={dueDateObj.color}
@@ -165,6 +166,7 @@ export const KeyActivityEntry = observer(
                   showMonthAndYearPickers={false}
                   showSelectionPreview={true}
                   direction={"vertical"}
+                  shownDate={new Date()}
                   minDate={new Date()}
                   maxDate={addDays(new Date(), 30)}
                   scroll={{
@@ -240,7 +242,7 @@ const Container = styled.div<ContainerProps>`
   display: flex;
   font-size: 14px;
   width: inherit;
-  padding: 12px 0px 12px 0px;
+  padding: 4px 0px 4px 0px;
   &:hover ${DeleteButtonContainer} {
     display: block;
   }
