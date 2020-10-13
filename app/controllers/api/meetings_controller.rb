@@ -58,7 +58,7 @@ class Api::MeetingsController < Api::ApplicationController
   def meeting_recap
     @meeting = Meeting.find(params[:id])
     @milestone_progress_averages = @meeting.team.users.map do |user|
-      milestones = Milestone.current_week_for_user(user)
+      milestones = Milestone.current_week_for_user(get_beginning_of_last_or_current_work_week_date(user.time_in_user_timezone), user)
       completed_milestones = milestones.inject(0) { |sum, m| m[:status] == "completed" ? sum + 1 : sum }
       milestones.length == 0 ? 0 : completed_milestones.fdiv(milestones.length)
     end
@@ -93,7 +93,7 @@ class Api::MeetingsController < Api::ApplicationController
       @milestones = nil
       @habits_percentage_increase_from_previous_week = current_user.habits_percentage_increase_from_previous_week
       @stats_for_week = calculate_stats_for_week(current_user)
-      @my_current_milestones = Milestone.current_week_for_user(current_user)
+      @my_current_milestones = Milestone.current_week_for_user(get_next_week_or_current_week_date(current_user.time_in_user_timezone), current_user)
     end
   end
 

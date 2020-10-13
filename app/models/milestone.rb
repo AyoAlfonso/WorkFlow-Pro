@@ -7,8 +7,8 @@ class Milestone < ApplicationRecord
   default_scope { order(id: :asc) }
 
   scope :sort_by_created_at_date, -> { order(created_at: :asc) }
-  scope :current_week_for_user, -> (user) { joins(:quarterly_goal).where(quarterly_goals: {owned_by: user}).where(
-    'week_of >=? AND week_of < ?', user.time_in_user_timezone().beginning_of_week.to_date, user.time_in_user_timezone().end_of_week.to_date
+  scope :current_week_for_user, -> (week_start, user) { joins(:quarterly_goal).where(quarterly_goals: {owned_by: user}).where(
+    'week_of >=? AND week_of < ?', week_start.to_date, week_start.end_of_week.to_date
   ) }
 
   scope :by_start_and_end_date, -> (start_date, end_date) {

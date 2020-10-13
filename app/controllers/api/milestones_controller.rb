@@ -1,4 +1,5 @@
 class Api::MilestonesController < Api::ApplicationController
+  include StatsHelper
   respond_to :json
   before_action :set_milestone, only: [:update]
 
@@ -8,7 +9,7 @@ class Api::MilestonesController < Api::ApplicationController
   end
 
   def milestones_for_meeting
-    @my_current_milestones = Milestone.current_week_for_user(current_user)
+    @my_current_milestones = Milestone.current_week_for_user(get_next_week_or_current_week_date(current_user.time_in_user_timezone), current_user)
     authorize @my_current_milestones
     render '/api/milestones/milestones_for_meeting'
   end
