@@ -17,6 +17,7 @@ class AnnualInitiative < ApplicationRecord
   scope :sort_by_created_date, -> { order(created_at: :asc) }
   scope :owned_by_user, -> (user) { where(owned_by_id: user.id).where(company_id: nil) }
   scope :for_users_company, -> (user) { where(company_id: user.company_id ) }
+  scope :for_company_current_year, -> (current_fiscal_year_start) {where("created_at >= ? AND created_at < ?", current_fiscal_year_start, current_fiscal_year_start + 1.year)}
 
   private
   def sanitize_description

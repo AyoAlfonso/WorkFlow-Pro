@@ -17,6 +17,26 @@ class Company < ApplicationRecord
     calculate_current_fiscal_quarter
   end
 
+  def next_fiscal_start_date
+    case self.current_fiscal_quarter
+    when 1
+      self.second_quarter_start_date
+    when 2
+      self.third_quarter_start_date
+    when 3
+      self.fourth_quarter_start_date
+    else
+      self.current_year_fiscal_year_start + 1.year
+    end
+  end
+
+  def current_year_fiscal_year_start
+    current_year = Time.now.year
+    fiscal_start_month = self.fiscal_year_start.month
+    fiscal_start_day = self.fiscal_year_start.day
+    Date.parse("#{current_year}-#{fiscal_start_month}-#{fiscal_start_day}")
+  end
+
   def core_four
     super || build_core_four
   end
@@ -61,6 +81,21 @@ class Company < ApplicationRecord
     end
   end
 
+  def second_quarter_start_date
+    # CHRIS' COMMENT: 
+    # The reason we do + 13.weeks instead of .next_quarter is because for LynchPyn each quarter
+    # is a fixed 13 weeks. Rails does next_quarter by + 3.months (which is not what we want)
+    self.current_year_fiscal_year_start + 13.weeks
+  end
+
+  def third_quarter_start_date
+    second_quarter_start_date + 13.weeks
+  end
+
+  def fourth_quarter_start_date
+    third_quarter_start_date + 13.weeks
+  end
+
   private
   def calculate_current_fiscal_quarter
     current_date = format_month_and_day(Date.today)
@@ -73,22 +108,6 @@ class Company < ApplicationRecord
     else
       return 4
     end
-  end
-
-
-  def second_quarter_start_date
-    # CHRIS' COMMENT: 
-    # The reason we do + 13.weeks instead of .next_quarter is because for LynchPyn each quarter
-    # is a fixed 13 weeks. Rails does next_quarter by + 3.months (which is not what we want)
-    self.fiscal_year_start + 13.weeks
-  end
-
-  def third_quarter_start_date
-    second_quarter_start_date + 13.weeks
-  end
-
-  def fourth_quarter_start_date
-    third_quarter_start_date + 13.weeks
   end
 
   def sanitize_rallying_cry

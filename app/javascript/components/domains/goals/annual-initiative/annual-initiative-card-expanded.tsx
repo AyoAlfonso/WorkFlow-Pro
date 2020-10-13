@@ -62,7 +62,7 @@ export const AnnualInitiativeCardExpanded = observer(
             setShowCreateGoal={setCreateQuarterlyGoalArea}
             createAction={quarterlyGoalStore.create}
             annualInitiativeId={annualInitiative.id}
-            buttonWidth={"200px"}
+            buttonWidth={"220px"}
             inAnnualInitiative={false}
           />
         </CreateGoalContainer>
@@ -114,6 +114,5 @@ const MinimizeIconContainer = styled.div`
 
 const CreateGoalContainer = styled.div`
   margin-bottom: 16px;
-  margin-left: 30px;
   margin-right: 8px;
 `;

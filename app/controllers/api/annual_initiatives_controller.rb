@@ -40,7 +40,8 @@ class Api::AnnualInitiativesController < Api::ApplicationController
 
   def team
     @team_id = params[:team_id]
-    @annual_initiatives = AnnualInitiative.where(company_id: current_user.company_id)
+    @company = current_user.company
+    @annual_initiatives = AnnualInitiative.where(company_id: current_user.company_id).for_company_current_year(@company.current_fiscal_year_start)
     authorize @annual_initiatives
     render 'api/annual_initiatives/team'
   end
