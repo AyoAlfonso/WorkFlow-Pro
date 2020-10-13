@@ -92,6 +92,7 @@ export const LeftAlignedTableContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  height: 100%;
 `;
 
 export const LeftAlignedColumnListTableContainer = styled.div`

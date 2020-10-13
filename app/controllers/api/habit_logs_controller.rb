@@ -4,16 +4,20 @@ class Api::HabitLogsController < Api::ApplicationController
 
   # If HabitLog exists then delete it, else create one
   def update
-    new_habit_log = HabitLog.new(
+    @new_habit_log = HabitLog.new(
       habit: @habit,
       log_date: params[:log_date]
     )
     if @habit_log.present?
       @habit_log.destroy
     else
-      new_habit_log.save!
+      @new_habit_log.save!
     end
-    render json: new_habit_log.as_json
+
+    render json: {
+      habit_log: @new_habit_log,
+      habit: @habit.reload
+    }.as_json
   end
 
   private
