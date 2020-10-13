@@ -6,6 +6,7 @@ import { AnnualInitiativeCardMinimized } from "./annual-initiative-card-minimize
 import { AnnualInitiativeCardExpanded } from "./annual-initiative-card-expanded";
 import { useState, useEffect } from "react";
 import { RecordOptions } from "../shared/record-options";
+import { useMst } from "~/setup/root";
 
 interface IAnnualInitiativeCardProps {
   annualInitiative: any;
@@ -34,9 +35,21 @@ export const AnnualInitiativeCard = ({
 }: IAnnualInitiativeCardProps): JSX.Element => {
   const [showMinimizedCard, setShowMinimizedCard] = useState<boolean>(showMinimizedCards);
 
+  const { companyStore } = useMst();
+
   useEffect(() => {
     setShowMinimizedCard(showMinimizedCards);
   }, [showMinimizedCards]);
+
+  const renderYearDisplay = () => {
+    if (companyStore.company.currentFiscalYear != annualInitiative.fiscalYear) {
+      return (
+        <YearContainer>
+          <YearText> {annualInitiative.fiscalYear} Goal </YearText>
+        </YearContainer>
+      );
+    }
+  };
 
   return (
     <Container
@@ -56,6 +69,8 @@ export const AnnualInitiativeCard = ({
           <RecordOptions type={"annualInitiative"} id={annualInitiative.id} marginLeft={"-70px"} />
         </IconContainer>
       </HeaderContainer>
+
+      <YearDisplayContainer>{renderYearDisplay()}</YearDisplayContainer>
 
       {showMinimizedCard ? (
         <AnnualInitiativeCardMinimized
@@ -112,4 +127,27 @@ const IconContainer = styled.div`
   margin-left: auto;
   margin-right: 16px;
   display: flex;
+`;
+
+const YearContainer = styled.div`
+  background-color: ${props => props.theme.colors.primary100};
+  border-radius: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  margin-left: 8px;
+`;
+
+const YearText = styled(Text)`
+  color: white;
+  margin-top: 8px;
+  margin-bottom: 8px;
+`;
+
+const YearDisplayContainer = styled.div`
+  width: 100px;
+  margin-left: 14px;
+  text-align: center;
+  margin-bottom: 8px;
 `;

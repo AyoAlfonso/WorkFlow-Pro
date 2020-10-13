@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 
 export const GoalsIndex = observer(
   (): JSX.Element => {
-    const { goalStore, annualInitiativeStore } = useMst();
+    const { goalStore, annualInitiativeStore, companyStore } = useMst();
 
     const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(true);
     const [showMinimizedCards, setShowMinimizedCards] = useState<boolean>(true);
@@ -64,7 +64,9 @@ export const GoalsIndex = observer(
         <CreateGoalSection
           type={type}
           placeholder={t("annualInitiative.enterTitle")}
-          addButtonText={t("annualInitiative.add")}
+          addButtonText={`${t("annualInitiative.add")} (${
+            companyStore.company.yearForCreatingAnnualInitiatives
+          })`}
           createButtonText={t("annualInitiative.addInitiative")}
           showCreateGoal={showCreateAnnualInitiative}
           setShowCreateGoal={setShowCreateAnnualInitiative}

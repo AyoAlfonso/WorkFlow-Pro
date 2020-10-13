@@ -17,6 +17,11 @@ class Company < ApplicationRecord
     calculate_current_fiscal_quarter
   end
 
+  def current_fiscal_year
+    current_year = Time.now.year
+    Time.now >= current_year_fiscal_year_start ? current_year : current_year - 1
+  end
+
   def next_fiscal_start_date
     case self.current_fiscal_quarter
     when 1
@@ -62,6 +67,14 @@ class Company < ApplicationRecord
 
   def format_month_and_day(date)
     date.strftime("%m/%d")
+  end
+
+  def year_for_creating_annual_initiatives
+    if self.fiscal_year_start > Date.today
+      within_4_weeks_range(current_year_fiscal_year_start) ? current_fiscal_year + 1 : current_fiscal_year
+    else
+      within_4_weeks_range(current_year_fiscal_year_start + 1.year) ? current_fiscal_year + 1 : current_fiscal_year
+    end
   end
 
   def quarter_for_creating_quarterly_goals
