@@ -109,7 +109,7 @@ export const PersonalPlanning = observer(
 );
 
 const Container = styled.div`
-  padding: 20px 20px 0 20px;
+  padding-top: 20px;
 `;
 
 const HeaderContainer = styled.div`
