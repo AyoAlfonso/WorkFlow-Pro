@@ -23,7 +23,7 @@ export const HabitsSummary = observer(
       habits.map((habit, index) => (
         <HabitsTableRow key={`${habit.id}-${index}`}>
           <StyledHabitsTableCenterCell>
-            {habit.score < 1 ? (
+            {habit.score == 0 ? (
               <HabitsTableCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
             ) : (
               <HabitsTableCircularProgressBar color={habit.color} value={habit.score} />

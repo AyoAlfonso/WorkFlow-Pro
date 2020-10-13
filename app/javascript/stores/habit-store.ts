@@ -66,20 +66,23 @@ export const HabitStoreModel = types
     updateHabitLog: flow(function*(habitId, logDate) {
       const response = yield self.environment.api.updateHabitLog(habitId, logDate);
       if (response.ok) {
-        const habitIndex = self.habits.findIndex(habit => habit.id === response.data.habitId);
+        const habitIndex = self.habits.findIndex(
+          habit => habit.id === response.data.habitLog.habitId,
+        );
+        self.habits[habitIndex] = response.data.habit;
         let weekToUpdate = "currentWeekLogs";
         let habitLogIndex = self.habits[habitIndex].currentWeekLogs.findIndex(
-          log => log.logDate === response.data.logDate,
+          log => log.logDate === response.data.habitLog.logDate,
         );
         // If log wasn't found in current week then use previous week
         if (habitLogIndex == -1) {
           weekToUpdate = "previousWeekLogs";
           habitLogIndex = self.habits[habitIndex].previousWeekLogs.findIndex(
-            log => log.logDate === response.data.logDate,
+            log => log.logDate === response.data.habitLog.logDate,
           );
         }
         const newHabits: Array<any> = [...self.habits];
-        newHabits[habitIndex][weekToUpdate][habitLogIndex] = response.data;
+        newHabits[habitIndex][weekToUpdate][habitLogIndex] = response.data.habitLog;
       }
     }),
     getHabit: flow(function*(id) {
