@@ -1,5 +1,6 @@
 class Company < ApplicationRecord
   include ActionView::Helpers::SanitizeHelper
+  include HasTimezone
 
   before_save :sanitize_rallying_cry
 
@@ -17,6 +18,11 @@ class Company < ApplicationRecord
     calculate_current_fiscal_quarter
   end
 
+  def current_fiscal_year
+    current_time = self.convert_to_their_timezone
+    Time.now >= current_year_fiscal_year_start ? current_time.year + 1 : current_time.year
+  end
+
   def next_fiscal_start_date
     case self.current_fiscal_quarter
     when 1
@@ -31,7 +37,7 @@ class Company < ApplicationRecord
   end
 
   def current_year_fiscal_year_start
-    current_year = Time.now.year
+    current_year = self.convert_to_their_timezone.year
     fiscal_start_month = self.fiscal_year_start.month
     fiscal_start_day = self.fiscal_year_start.day
     Date.parse("#{current_year}-#{fiscal_start_month}-#{fiscal_start_day}")
@@ -64,6 +70,14 @@ class Company < ApplicationRecord
     date.strftime("%m/%d")
   end
 
+  def year_for_creating_annual_initiatives
+    if current_year_fiscal_year_start > Date.today
+      within_4_weeks_range(current_year_fiscal_year_start) ? current_fiscal_year + 1 : current_fiscal_year
+    else
+      within_4_weeks_range(current_year_fiscal_year_start + 1.year) ? current_fiscal_year + 1 : current_fiscal_year
+    end
+  end
+
   def quarter_for_creating_quarterly_goals
     current_date = format_month_and_day(Date.today)
     if current_date.between?(format_fiscal_year_start, format_month_and_day(second_quarter_start_date()))
@@ -73,10 +87,10 @@ class Company < ApplicationRecord
     elsif current_date.between?(format_month_and_day(third_quarter_start_date()), format_month_and_day(fourth_quarter_start_date()))
       within_4_weeks_range(fourth_quarter_start_date()) ? 4 : 3
     else
-      if self.fiscal_year_start > Date.today
-        self.fiscal_year_start - 4.weeks <= Date.today && within_4_weeks_range(self.fiscal_year_start) ? 1 : 4
+      if self.current_year_fiscal_year_start > Date.today
+        self.current_year_fiscal_year_start - 4.weeks <= Date.today && within_4_weeks_range(self.current_year_fiscal_year_start) ? 1 : 4
       else
-        self.fiscal_year_start - 4.weeks >= Date.today && within_4_weeks_range(self.fiscal_year_start) ? 1 : 4
+        self.current_year_fiscal_year_start - 4.weeks >= Date.today && within_4_weeks_range(self.current_year_fiscal_year_start) ? 1 : 4
       end
     end
   end

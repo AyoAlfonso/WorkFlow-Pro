@@ -15,6 +15,8 @@ export const CompanyModel = types
     timezone: types.maybeNull(types.string),
     currentFiscalQuarter: types.maybeNull(types.number),
     quarterForCreatingQuarterlyGoals: types.maybeNull(types.number),
+    currentFiscalYear: types.maybeNull(types.number),
+    yearForCreatingAnnualInitiatives: types.maybeNull(types.number),
   })
   .views(self => ({}))
   .actions(self => ({

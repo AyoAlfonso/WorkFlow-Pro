@@ -16,6 +16,7 @@ export const AnnualInitiativeModel = types
     quarterlyGoals: types.array(QuarterlyGoalModel),
     contextDescription: types.string,
     ownedBy: types.maybeNull(UserModel),
+    fiscalYear: types.maybeNull(types.number),
   })
   .views(self => ({
     get myQuarterlyGoals() {

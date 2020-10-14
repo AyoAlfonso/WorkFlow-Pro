@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_08_212648) do
+ActiveRecord::Schema.define(version: 2020_10_13_195244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 2020_10_08_212648) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "company_id"
     t.string "context_description"
+    t.integer "fiscal_year"
     t.index ["company_id"], name: "index_annual_initiatives_on_company_id"
     t.index ["created_by_id"], name: "index_annual_initiatives_on_created_by_id"
     t.index ["owned_by_id"], name: "index_annual_initiatives_on_owned_by_id"
@@ -244,7 +245,7 @@ ActiveRecord::Schema.define(version: 2020_10_08_212648) do
     t.datetime "scheduled_start_time"
     t.datetime "end_time"
     t.bigint "hosted_by_id"
-    t.text "notes", default: ""
+    t.text "notes"
     t.index ["created_at"], name: "index_meetings_on_created_at"
     t.index ["hosted_by_id"], name: "index_meetings_on_hosted_by_id"
     t.index ["meeting_template_id"], name: "index_meetings_on_meeting_template_id"

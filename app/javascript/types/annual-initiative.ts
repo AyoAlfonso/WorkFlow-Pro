@@ -11,4 +11,5 @@ export type AnnualInitiativeType = {
   ownedById: number;
   quarterlyGoals: Array<QuarterlyGoalType>;
   contextDescription: string;
+  fiscalYear?: number;
 };

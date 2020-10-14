@@ -35,7 +35,7 @@ class NotificationEmailJob
     return unless notify_time
     # asctime.in_time_zone changes the zone - not the time so instead of the notification
     # being scheduled for 17:00 +00:00 it'll be 17:00 -07:00 for example
-    notify_time_in_users_timezone = notify_time.asctime.in_time_zone(@user.users_timezone_name)
+    notify_time_in_users_timezone = notify_time.asctime.in_time_zone(@user.timezone_name)
     notify_time_in_users_timezone > earlier_time && notify_time_in_users_timezone < later_time
   end
 

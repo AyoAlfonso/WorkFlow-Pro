@@ -97,6 +97,9 @@ const StyledButton = styled(Button)<StyledButtonType>`
   align-items: center;
   min-width: ${props => !props.width && "240px"};
   width: ${props => (props.width ? props.width : "-webkit-fill-available")};
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
   &: hover {
     color: ${props => props.theme.colors.primary100};
   }
@@ -122,6 +125,8 @@ const ActionsContainer = styled.div`
 
 const AddInitiativeButton = styled(Button)`
   width: 120px;
+  padding-right: 0;
+  width: 100%;
   padding: 0;
   &: hover {
     font-weight: bold;
