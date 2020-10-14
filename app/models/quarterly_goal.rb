@@ -19,13 +19,14 @@ class QuarterlyGoal < ApplicationRecord
   def create_milestones_for_quarterly_goal(current_user)
     company = current_user.company
     fiscal_quarter_start_date = company.fiscal_year_start + (13.weeks * (self.quarter-1))
+    fiscal_quarter_start_date_closest_monday = fiscal_quarter_start_date.monday? ? fiscal_quarter_start_date : fiscal_year_start.next_occurring(:monday)
     13.times do |index|
       Milestone.create!(
         quarterly_goal_id: self.id, 
         description: "Enter Description", 
         status: 0, 
         week: index + 1, 
-        week_of: fiscal_quarter_start_date + (1.week * index),
+        week_of: fiscal_quarter_start_date_closest_monday + (1.week * index),
         created_by: current_user
       )
     end
