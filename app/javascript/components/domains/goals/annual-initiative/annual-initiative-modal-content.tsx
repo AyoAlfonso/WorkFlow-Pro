@@ -126,12 +126,14 @@ export const AnnualInitiativeModalContent = observer(
               }}
               onBlur={() => annualInitiativeStore.update()}
             />
-            <GoalText>
-              driving {"  "}
-              <StyledNavLink to={"/company/strategic_plan"}>
-                The {companyStore.company.name} Plan
-              </StyledNavLink>
-            </GoalText>
+            {R.isNil(annualInitiative.companyId) ? null : (
+              <GoalText>
+                driving {"  "}
+                <StyledNavLink to={"/company/strategic_plan"}>
+                  The {companyStore.company.name} Plan
+                </StyledNavLink>
+              </GoalText>
+            )}
           </TitleContainer>
           <AnnualInitiativeActionContainer>
             {editable && (
