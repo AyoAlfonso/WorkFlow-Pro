@@ -50,3 +50,17 @@ en:
   issues_addressed: "Issues Addressed"
   rallying_cry: "LynchPyn Goal"
   quarterly_goals: "Quarterly Initiative"
+  activerecord:
+    models:
+      key_activity:
+        one: Pyn
+        other: Pyns
+      quarterly_goal:
+        one: Quarterly Initiative
+        other: Quarterly Initiatives
+      annual_initiative:
+        one: Annual Goal
+        other: Annual Goals
+      core_four:
+        one: Foundational Four
+        other: Foundational Four
