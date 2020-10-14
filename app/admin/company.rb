@@ -101,7 +101,7 @@ ActiveAdmin.register Company do
       f.input :contact_email
       f.input :phone_number
       f.input :rallying_cry, input_html: { rows: 5 }, label: "#{t("rallying_cry")}"
-      f.input :fiscal_year_start, order: [:month, :day]
+      f.input :fiscal_year_start, order: [:month, :day, :year], end_year: Date.current.year + 1
       f.input :timezone, as: :select, collection: timezones
     end
     h2 'Core Four '

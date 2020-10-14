@@ -5,6 +5,7 @@ class User < ApplicationRecord
   include ActionView::Helpers::SanitizeHelper
   include HasDefaultAvatarColor
   include HasEmotionScores
+  include HasTimezone
 
   devise :database_authenticatable, :registerable, :confirmable, :invitable,
          :recoverable, :rememberable, :trackable,
@@ -135,25 +136,10 @@ class User < ApplicationRecord
 
   def time_in_user_timezone(time = nil)
     if time.nil?
-      Time.current.in_time_zone(users_timezone_name)
+      Time.current.in_time_zone(timezone_name)
     elsif time == 'noon'
-      Time.current.in_time_zone(users_timezone_name).at_noon
+      Time.current.in_time_zone(timezone_name).at_noon
     end
-  end
-
-  def convert_to_users_timezone(time = nil)
-    if time.present? && time.respond_to?(:strftime)
-      return time.in_time_zone(users_timezone_name)
-    elsif time.blank?
-      return Time.current.in_time_zone(users_timezone_name)
-    end
-    raise "User has no timezone error for conversion"
-  end
-
-  def users_timezone_name
-    # user.timezone looks like "(GMT-08:00) Pacific Time (US & Canada)"
-    # we need everything after "(GMT-08:00) "
-    self.timezone[/(?<=\(GMT.\d{2}:\d{2}\)\s).*$/]
   end
 
   def daily_average_users_emotion_scores_over_week(from_date, to_date)

@@ -53,13 +53,13 @@ class Meeting < ApplicationRecord
   def title
     if self.meeting_type == "personal_weekly"
       start_set = start_time || scheduled_start_time
-      time_for_title = hosted_by.convert_to_users_timezone(start_set)
+      time_for_title = hosted_by.convert_to_their_timezone(start_set)
       return "" if time_for_title.blank?
 
       date_for_title = get_next_week_or_current_week_date(time_for_title).to_date.strftime("%B %-d")
       "Planning for Week of #{date_for_title}"
     elsif self.meeting_type == "team_weekly"
-      time_for_title = hosted_by.convert_to_users_timezone(start_time)
+      time_for_title = hosted_by.convert_to_their_timezone(start_time)
       time_for_title.strftime("%A, %B %-d")
     else
       ""
