@@ -1,11 +1,11 @@
 module NotificationEmailJobHelper
-  def send_person_planning_reminder_email(user, notification_type)
-    UserMailer.with(
-      user: @user,
-      subject: notification_type,
-      message: "Hi #{@user&.first_name}, \n \n Just a quick reminder to set your status."
-    ).notification_email.deliver_later
-  end
+  # def send_person_planning_reminder_email(user, notification_type)
+  #   UserMailer.with(
+  #     user: @user,
+  #     subject: notification_type,
+  #     message: "Hi #{@user&.first_name}, \n \n Just a quick reminder to set your status."
+  #   ).notification_email.deliver_later
+  # end
 
   def send_end_of_week_stats_email(user, notification_type)
     UserMailer.with(

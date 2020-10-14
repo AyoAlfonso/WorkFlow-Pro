@@ -23,7 +23,7 @@ class NotificationPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.all
+      scope.remove_deprecated
     end
   end
 
