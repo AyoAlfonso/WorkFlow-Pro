@@ -16,6 +16,7 @@ import { UserIconBorder } from "../shared/user-icon-border";
 import { MilestoneCard } from "../milestone/milestone-card";
 import { Loading } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
+import { useTranslation } from "react-i18next";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -35,6 +36,7 @@ export const QuarterlyGoalModalContent = observer(
     setAnnualInitiativeId,
     showCreateMilestones,
   }: IQuarterlyGoalModalContentProps): JSX.Element => {
+    const { t } = useTranslation();
     const { quarterlyGoalStore, sessionStore } = useMst();
     const currentUser = sessionStore.profile;
     const [quarterlyGoal, setQuarterlyGoal] = useState<any>(null);
@@ -97,7 +99,7 @@ export const QuarterlyGoalModalContent = observer(
             {editable && (
               <DeleteIconContainer
                 onClick={() => {
-                  if (confirm("Are you sure you want to delete this quarterly objective?")) {
+                  if (confirm(t("quarterlyGoal.confirmDelete"))) {
                     quarterlyGoalStore.delete(false, quarterlyGoalId).then(() => {
                       setQuarterlyGoalModalOpen(false);
                     });

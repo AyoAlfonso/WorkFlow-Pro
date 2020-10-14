@@ -20,7 +20,7 @@ export const QuarterlyGoalStoreModel = types
         self.quarterlyGoal = response.data;
       } catch {
         showToast(
-          "There was an error retrieving the quarterly objective",
+          "There was an error retrieving the quarterly initiative",
           ToastMessageConstants.ERROR,
         );
       }
@@ -31,11 +31,11 @@ export const QuarterlyGoalStoreModel = types
         const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
         const responseQuarterlyGoal = response.data.quarterlyGoal;
         self.quarterlyGoal = responseQuarterlyGoal;
-        showToast("Quarterly objective updated", ToastMessageConstants.SUCCESS);
+        showToast("quarterly initiative updated", ToastMessageConstants.SUCCESS);
         return responseQuarterlyGoal;
       } catch {
         showToast(
-          "There was an error updating the quarterly objective",
+          "There was an error updating the quarterly initiative",
           ToastMessageConstants.ERROR,
         );
       }
@@ -61,11 +61,11 @@ export const QuarterlyGoalStoreModel = types
             response.data.quarterlyGoal,
           );
         }
-        showToast("Quarterly objective created", ToastMessageConstants.SUCCESS);
+        showToast("quarterly initiative created", ToastMessageConstants.SUCCESS);
         return response.data.quarterlyGoal;
       } catch {
         showToast(
-          "There was an error creating the quarterly objective",
+          "There was an error creating the quarterly initiative",
           ToastMessageConstants.ERROR,
         );
       }
@@ -116,11 +116,11 @@ export const QuarterlyGoalStoreModel = types
           annualInitiativeStore.updateRecordIfOpened(annualInitiative);
         }
 
-        showToast("Quarterly objective deleted", ToastMessageConstants.SUCCESS);
+        showToast("quarterly initiative deleted", ToastMessageConstants.SUCCESS);
         return annualInitiative;
       } catch {
         showToast(
-          "There was an error deleting the quarterly objective",
+          "There was an error deleting the quarterly initiative",
           ToastMessageConstants.ERROR,
         );
       }

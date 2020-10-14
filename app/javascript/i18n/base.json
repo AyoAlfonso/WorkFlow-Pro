@@ -109,11 +109,12 @@
         "messageText": "annual goal"
       },
       "quarterlyGoal": {
-        "enterTitle": "Enter Quarterly Objective Title...",
-        "add": "Add a Quarterly Objective",
-        "addGoal": "Add Objective",
-        "title": "Quarterly Objectives",
-        "messageText": "annual objective"
+        "enterTitle": "Enter Quarterly Initiative Title...",
+        "add": "Add a Quarterly Initiative",
+        "addGoal": "Add Initiative",
+        "title": "Quarterly Initiatives",
+        "messageText": "quarterly initiative",
+        "confirmDelete": "Are you sure you want to delete this quarterly objective?"
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",
