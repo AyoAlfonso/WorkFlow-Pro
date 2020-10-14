@@ -50,23 +50,31 @@ export const AnnualInitiativeCardExpanded = observer(
     };
 
     const renderCreateGoal = () => {
-      return (
-        <CreateGoalContainer>
-          <CreateGoalSection
-            placeholder={t("quarterlyGoal.enterTitle")}
-            addButtonText={`${t("quarterlyGoal.add")} (Q${
-              companyStore.company.quarterForCreatingQuarterlyGoals
-            })`}
-            createButtonText={t("quarterlyGoal.addGoal")}
-            showCreateGoal={createQuarterlyGoalArea}
-            setShowCreateGoal={setCreateQuarterlyGoalArea}
-            createAction={quarterlyGoalStore.create}
-            annualInitiativeId={annualInitiative.id}
-            buttonWidth={"220px"}
-            inAnnualInitiative={false}
-          />
-        </CreateGoalContainer>
-      );
+      if (
+        !(
+          annualInitiative.fiscalYear == companyStore.company.currentFiscalYear &&
+          companyStore.company.currentFiscalQuarter == 4 &&
+          companyStore.company.quarterForCreatingQuarterlyGoals == 1
+        )
+      ) {
+        return (
+          <CreateGoalContainer>
+            <CreateGoalSection
+              placeholder={t("quarterlyGoal.enterTitle")}
+              addButtonText={`${t("quarterlyGoal.add")} (Q${
+                companyStore.company.quarterForCreatingQuarterlyGoals
+              })`}
+              createButtonText={t("quarterlyGoal.addGoal")}
+              showCreateGoal={createQuarterlyGoalArea}
+              setShowCreateGoal={setCreateQuarterlyGoalArea}
+              createAction={quarterlyGoalStore.create}
+              annualInitiativeId={annualInitiative.id}
+              buttonWidth={"220px"}
+              inAnnualInitiative={false}
+            />
+          </CreateGoalContainer>
+        );
+      }
     };
 
     return (
