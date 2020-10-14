@@ -104,7 +104,7 @@ ActiveAdmin.register Company do
       f.input :fiscal_year_start, order: [:month, :day, :year], end_year: Date.current.year + 1
       f.input :timezone, as: :select, collection: timezones
     end
-    h2 'Core Four '
+    h2 'Foundational Four '
     f.inputs do
       # Some hackery because trix editor was only displaying one field otherwise in the has_many
       [:core_1, :core_2, :core_3, :core_4].each_with_index do |cf_field|

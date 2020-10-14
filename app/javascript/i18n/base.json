@@ -109,11 +109,20 @@
         "messageText": "annual goal"
       },
       "quarterlyGoal": {
-        "enterTitle": "Enter Quarterly Objective Title...",
-        "add": "Add a Quarterly Objective",
-        "addGoal": "Add Objective",
-        "title": "Quarterly Objectives",
-        "messageText": "annual objective"
+        "enterTitle": "Enter Quarterly Initiative Title...",
+        "add": "Add a Quarterly Initiative",
+        "addGoal": "Add Initiative",
+        "title": "Quarterly Initiatives",
+        "messageText": "quarterly initiative",
+        "confirmDelete": "Are you sure you want to delete this quarterly objective?",
+        "created": "Quarterly initiative created",
+        "updated": "Quarterly initiative updated",
+        "deleted": "Quarterly initiative deleted",
+        "creationError": "There was an error creating the quarterly initiative",
+        "retrievalError": "There was an error retrieving the quarterly initiative",
+        "deletionError": "There was an error deleting the quarterly initiative",
+        "keyElementCreationError": "There was an error creating the key element",
+        "milestoneCreationError": "There was an error creating milestones"
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",
@@ -128,7 +137,11 @@
           "tasks": "Tasks",
           "notes": "Notes",
           "pyns": "Pyns"
-        }
+        },
+        "noPermissions": "This meeting is not for this team, please go back to the team overview page and click start meeting.",
+        "meetingComplete": "This meeting has already been completed.",
+        "reviewCoreFour": "Review the Foundational Four as a team.",
+        "coreFourTitle": "Foundational Four"
       },
       "status": {
         "active": "Active",

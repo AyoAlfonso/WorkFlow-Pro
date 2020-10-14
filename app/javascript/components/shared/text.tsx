@@ -22,6 +22,17 @@ const StyledTextNoMargin = styled.p`
   margin-bottom: 0px;
 `;
 
+const StyledTextDiv = styled.div`
+  ${color}
+  ${space}
+  ${typography}
+`;
+export const TextDiv = props => (
+  <StyledTextDiv {...props} fontFamily={props.fontFamily ? props.fontFamily : "Lato"}>
+    {props.children}
+  </StyledTextDiv>
+);
+
 export const TextNoMargin = props => (
   <StyledTextNoMargin {...props} fontFamily={props.fontFamily ? props.fontFamily : "Lato"}>
     {props.children}

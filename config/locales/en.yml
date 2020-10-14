@@ -33,7 +33,7 @@ en:
   hello: "Hello world"
   unauthorized: "You are not authorized to perform this action"
   accountability_chart: "Accountability Matrix"
-  core_four: "Cour Four"
+  core_four: "Foundational Four"
   strategic_plan: "Strategic Plan"
   rallying_cry: "Lynchpyn Goal"
   notification_rules:
@@ -45,7 +45,22 @@ en:
     thursday: "Thursday"
     friday: "Friday"
     saturday: "Saturday"
-  key_activities: "Pyns"
-  issues: "Issues"
+  key_activities_created: "Pyns Created"
+  key_activities_completed: "Pyns Completed"
+  issues_addressed: "Issues Addressed"
   rallying_cry: "LynchPyn Goal"
-  quarterly_goals: "Quarterly Objective"
+  quarterly_goals: "Quarterly Initiative"
+  activerecord:
+    models:
+      key_activity:
+        one: Pyn
+        other: Pyns
+      quarterly_goal:
+        one: Quarterly Initiative
+        other: Quarterly Initiatives
+      annual_initiative:
+        one: Annual Goal
+        other: Annual Goals
+      core_four:
+        one: Foundational Four
+        other: Foundational Four

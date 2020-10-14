@@ -5,7 +5,7 @@ import { Button } from "~/components/shared/button";
 import { Icon } from "~/components/shared/icon";
 import { TextInput } from "~/components/shared/text-input";
 import { HomeContainerBorders } from "../../home/shared-components";
-import { Text } from "~/components/shared/text";
+import { TextDiv } from "~/components/shared/text";
 
 interface ICreateGoalSectionProps {
   type?: string;
@@ -103,9 +103,10 @@ const StyledButton = styled(Button)<StyledButtonType>`
   &: hover {
     color: ${props => props.theme.colors.primary100};
   }
+  height: 100%;
 `;
 
-const AddGoalText = styled(Text)`
+const AddGoalText = styled(TextDiv)`
   margin-left: 16px;
   white-space: break-spaces;
 `;

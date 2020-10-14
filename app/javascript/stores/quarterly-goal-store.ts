@@ -4,6 +4,7 @@ import { QuarterlyGoalModel } from "../models/quarterly-goal";
 import moment from "moment";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import il8n from "i18next";
 
 export const QuarterlyGoalStoreModel = types
   .model("QuarterlyGoalModel")
@@ -19,10 +20,7 @@ export const QuarterlyGoalStoreModel = types
         const response: any = yield env.api.getQuarterlyGoal(id);
         self.quarterlyGoal = response.data;
       } catch {
-        showToast(
-          "There was an error retrieving the quarterly objective",
-          ToastMessageConstants.ERROR,
-        );
+        showToast(il8n.t("quarterlyGoal.retrievalError"), ToastMessageConstants.ERROR);
       }
     }),
     update: flow(function*() {
@@ -31,13 +29,10 @@ export const QuarterlyGoalStoreModel = types
         const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
         const responseQuarterlyGoal = response.data.quarterlyGoal;
         self.quarterlyGoal = responseQuarterlyGoal;
-        showToast("Quarterly objective updated", ToastMessageConstants.SUCCESS);
+        showToast(il8n.t("quarterlyGoal.updated"), ToastMessageConstants.SUCCESS);
         return responseQuarterlyGoal;
       } catch {
-        showToast(
-          "There was an error updating the quarterly objective",
-          ToastMessageConstants.ERROR,
-        );
+        showToast(il8n.t("quarterlyGoal.retrievalError"), ToastMessageConstants.ERROR);
       }
     }),
     createKeyElement: flow(function*() {
@@ -47,7 +42,7 @@ export const QuarterlyGoalStoreModel = types
         const updatedKeyElements = [...self.quarterlyGoal.keyElements, response.data.keyElement];
         self.quarterlyGoal.keyElements = updatedKeyElements as any;
       } catch {
-        showToast("There was an error creating the key element", ToastMessageConstants.ERROR);
+        showToast(il8n.t("quarterlyGoal.keyElementCreationError"), ToastMessageConstants.ERROR);
       }
     }),
     create: flow(function*(quarterlyGoalObject, inAnnualInitiative) {
@@ -61,13 +56,10 @@ export const QuarterlyGoalStoreModel = types
             response.data.quarterlyGoal,
           );
         }
-        showToast("Quarterly objective created", ToastMessageConstants.SUCCESS);
+        showToast(il8n.t("quarterlyGoal.created"), ToastMessageConstants.SUCCESS);
         return response.data.quarterlyGoal;
       } catch {
-        showToast(
-          "There was an error creating the quarterly objective",
-          ToastMessageConstants.ERROR,
-        );
+        showToast(il8n.t("quarterlyGoal.creationError"), ToastMessageConstants.ERROR);
       }
     }),
     delete: flow(function*(updateAnnualInitiative = true, quarterlyGoalId) {
@@ -116,13 +108,10 @@ export const QuarterlyGoalStoreModel = types
           annualInitiativeStore.updateRecordIfOpened(annualInitiative);
         }
 
-        showToast("Quarterly objective deleted", ToastMessageConstants.SUCCESS);
+        showToast(il8n.t("quarterlyGoal.deleted"), ToastMessageConstants.SUCCESS);
         return annualInitiative;
       } catch {
-        showToast(
-          "There was an error deleting the quarterly objective",
-          ToastMessageConstants.ERROR,
-        );
+        showToast(il8n.t("quarterlyGoal.deletionError"), ToastMessageConstants.ERROR);
       }
     }),
     createMilestones: flow(function*(quarterlyGoalId) {
@@ -131,7 +120,7 @@ export const QuarterlyGoalStoreModel = types
         const response: any = yield env.api.createMilestones(quarterlyGoalId);
         self.quarterlyGoal = response.data.quarterlyGoal;
       } catch {
-        showToast("There was an error creating milestones", ToastMessageConstants.ERROR); // error messaging handled by API monitor
+        showToast(il8n.t("quarterlyGoal.milestoneCreationError"), ToastMessageConstants.ERROR); // error messaging handled by API monitor
       }
     }),
   }))
