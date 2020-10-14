@@ -139,7 +139,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
           <TextInput
             textValue={keyActivityDescription}
             setTextValue={setKeyActivityDescription}
-            width={"75%"}
+            width={"100%"}
             placeholder={"e.g. Prep for team meeting"}
             style={{
               height: "35px",
@@ -263,6 +263,8 @@ const AvatarContainer = styled.div`
 
 const DueDateSelectionContainer = styled.div`
   border-radius: 6px;
+  margin-left: 15px;
+  width: 150px;
 `;
 interface IDueDateButtonProps {
   onClick?: () => void;
@@ -288,5 +290,4 @@ const CircleButtonsContainer = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  width: 100%;
 `;
