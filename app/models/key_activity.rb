@@ -26,6 +26,8 @@ class KeyActivity < ApplicationRecord
   scope :sort_by_priority_and_created_at, -> {sort_by_priority.sort_by_created_date}
   scope :sort_by_position_priority_and_created_at, -> { sort_by_position.sort_by_priority.sort_by_created_date }
   scope :sort_by_todays_priority_weekly_list_position, -> { order(todays_priority: :desc).order(weekly_list: :desc).sort_by_position}
+  scope :sort_by_todays_priority_weekly_list, -> { order(todays_priority: :desc).order(weekly_list: :desc) }
+  scope :sort_by_due_date, -> { order(due_date: :asc) }
 
 
   validates :description, presence: true

@@ -133,6 +133,10 @@ export class Api {
     return this.client.patch(`/team_issues/${teamIssueId}`, { position: position });
   }
 
+  async resortIssues(sortParams) {
+    return this.client.patch(`issues`, sortParams);
+  }
+
   async createKeyActivity(keyActivityObject) {
     return this.client.post("/key_activities", keyActivityObject);
   }
@@ -156,6 +160,10 @@ export class Api {
     return this.client.get(`/key_activities/created_in_meeting/`, {
       meeting_id: meeting_id,
     });
+  }
+
+  async resortKeyActivities(sortParams) {
+    return this.client.patch(`key_activities`, sortParams);
   }
 
   async getAllGoals() {

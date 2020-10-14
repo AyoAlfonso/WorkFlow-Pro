@@ -1,6 +1,9 @@
 import * as React from "react";
+import { useState } from "react";
+import { useMst } from "~/setup/root";
 import styled from "styled-components";
 import { space, color } from "styled-system";
+import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 //import Icon from "../../shared/icon";
 
 interface KeyActivitiesHeaderProps {
@@ -12,6 +15,29 @@ interface KeyActivitiesHeaderProps {
 
 export const KeyActivitiesHeader = (props: KeyActivitiesHeaderProps): JSX.Element => {
   const { showAllKeyActivities, setShowAllKeyActivities, title, hideFilter } = props;
+  const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
+
+  const { keyActivityStore } = useMst();
+
+  const sortMenuOptions = [
+    {
+      label: "Sort by Priority",
+      value: "by_priority",
+    },
+    {
+      label: "Sort by Due Date",
+      value: "by_due_date",
+    },
+    {
+      label: "Sort by Priority and Due Date",
+      value: "by_priority_and_due_date",
+    },
+  ];
+
+  const handleSortMenuItemClick = value => {
+    setSortOptionsOpen(false);
+    keyActivityStore.resortKeyActivities({ sort: value });
+  };
 
   return (
     <Container>
@@ -31,18 +57,13 @@ export const KeyActivitiesHeader = (props: KeyActivitiesHeaderProps): JSX.Elemen
           >
             Master
           </FilterOptions>
-
-          {/* 
-          COMMENT FROM PARHAM JUNE 19 2020: WE MIGHT NOT NEED THIS IF WE CAN AUTOSORT KeyActivities WHENEVER THEY ARE BEING ADDED
-
-          <SortingChevronContainer>
-          <ChevronUpContainer>
-            <Icon icon={"Chevron-Up"} size={10} color="grey40" />
-          </ChevronUpContainer>
-          <ChevronDownContainer>
-            <Icon icon={"Chevron-Down"} size={10} color="grey40" />
-          </ChevronDownContainer>
-        </SortingChevronContainer> */}
+          <WidgetHeaderSortButtonMenu
+            onButtonClick={setSortOptionsOpen}
+            onMenuItemClick={handleSortMenuItemClick}
+            menuOpen={sortOptionsOpen}
+            menuOptions={sortMenuOptions}
+            ml={"15px"}
+          />
         </FilterContainer>
       )}
     </Container>
@@ -83,16 +104,3 @@ const FilterOptions = styled.p<FilterOptionsType>`
   font-weight: 400;
   cursor: pointer;
 `;
-
-// const SortingChevronContainer = styled.div`
-//   margin-right: 0;
-//   margin-top: -3px;
-// `;
-
-// const ChevronUpContainer = styled.div`
-//   margin-bottom: -5px;
-// `;
-
-// const ChevronDownContainer = styled.div`
-//   margin-top: -5px;
-// `;

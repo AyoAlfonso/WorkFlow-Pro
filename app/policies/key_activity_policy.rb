@@ -32,6 +32,10 @@ class KeyActivityPolicy < ApplicationPolicy
     true
   end
 
+  def resort_index?
+    true
+  end
+
   class Scope
     attr_reader :user, :scope
 

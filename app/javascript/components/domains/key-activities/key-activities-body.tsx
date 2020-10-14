@@ -45,7 +45,11 @@ export const KeyActivitiesBody = observer(
         return <Loading />;
       } else if (showAllKeyActivities) {
         const completedMasterActivitiesPresent = completedMasterActivities.length > 0;
-        const outstandingMasterActivitiesContainerHeight = outstandingMasterActivities.length * 54;
+        // this const for explicitly setting the container height of outstanding keyActivities is to prevent items from overlapping during drag and drop
+        // because the container shrinks when the item is being dragged (each key activity entry is 78px in height)
+        const outstandingMasterActivitiesContainerHeight = outstandingMasterActivities.length * 78;
+        // currently broken on screen resize and when text wraps due to the description being long, causing the key activity entry to be taller than 78px
+        // need a hook to listen to screen resizing, and to dynamically calculate the list height
         return (
           <>
             <OutstandingMasterActivitiesListContainer

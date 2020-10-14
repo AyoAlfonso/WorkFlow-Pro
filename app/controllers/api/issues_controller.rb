@@ -59,6 +59,12 @@ class Api::IssuesController < Api::ApplicationController
     render "api/issues/issues_for_team"
   end
 
+  def resort_index
+    @issues = IssueResortService.call(policy_scope(Issue).where(user_id: current_user.id))
+    authorize @issues
+    render "api/issues/index"
+  end
+
   private
 
   def issue_params

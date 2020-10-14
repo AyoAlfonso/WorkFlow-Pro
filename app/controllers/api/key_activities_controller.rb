@@ -9,7 +9,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def create
-    @key_activity = KeyActivity.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], weekly_list: params[:weekly_list], meeting_id: params[:meeting_id] })
+    @key_activity = KeyActivity.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], weekly_list: params[:weekly_list], meeting_id: params[:meeting_id], due_date: params[:due_date] })
     # if its a master list acitivity item, insert after the last noncompleted item
     if params[:weekly_list] == false
       list_of_key_activities = KeyActivity.owned_by_user(current_user).master_list.incomplete.sort_by_todays_priority_weekly_list_position
@@ -65,11 +65,22 @@ class Api::KeyActivitiesController < Api::ApplicationController
     render "api/key_activities/created_in_meeting"
   end
 
+  def resort_index
+    if params[:sort].present?
+      key_activities = policy_scope(KeyActivity).owned_by_user(current_user)
+      @key_activities = KeyActivityResortService.call(key_activities, params[:sort])
+    else
+      raise "No Sort Type Given"
+    end
+    authorize @key_activities
+    render "api/key_activities/index"
+  end
+
   private
 
   def key_activity_params
     params.permit(:id, :user_id, :description, :completed_at, :priority, :complete,
-      :weekly_list, :todays_priority, :position, :meeting_id)
+      :weekly_list, :todays_priority, :position, :meeting_id, :due_date)
   end
 
   def set_key_activity
@@ -81,6 +92,4 @@ class Api::KeyActivitiesController < Api::ApplicationController
     meeting = Meeting.find(meeting_id)
     KeyActivity.optimized.filter_by_team_meeting(meeting.meeting_template_id, meeting.team_id).sort_by_todays_priority_weekly_list_position
   end
-
-
 end

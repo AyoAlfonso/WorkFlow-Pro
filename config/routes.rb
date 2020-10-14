@@ -65,6 +65,7 @@ Rails.application.routes.draw do
     resources :issues, only: [:index, :create, :update, :destroy]
     get '/issues/issues_for_meeting', to: "issues#issues_for_meeting"
     get '/issues/issues_for_team', to: "issues#issues_for_team"
+    patch '/issues', to: "issues#resort_index"
 
     # team_issues
     resources :team_issues, only: [:index, :update]
@@ -72,6 +73,7 @@ Rails.application.routes.draw do
     #key activities
     resources :key_activities, only: [:index, :create, :update, :destroy]
     get '/key_activities/created_in_meeting', to: "key_activities#created_in_meeting"
+    patch '/key_activities', to: "key_activities#resort_index"
 
     #goals
     get '/goals', to: 'goals#index'

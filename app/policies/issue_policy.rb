@@ -36,6 +36,10 @@ class IssuePolicy < ApplicationPolicy
     true
   end
 
+  def resort_index?
+    true
+  end
+
   class Scope
     attr_reader :user, :scope
 

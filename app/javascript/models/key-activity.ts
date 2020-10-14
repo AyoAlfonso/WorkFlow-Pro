@@ -13,6 +13,7 @@ export const KeyActivityModel = types
     user: types.maybeNull(types.frozen()),
     todaysPriority: types.maybeNull(types.boolean),
     createdAt: types.maybeNull(types.string),
+    dueDate: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));
