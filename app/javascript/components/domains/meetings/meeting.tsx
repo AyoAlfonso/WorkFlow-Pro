@@ -26,6 +26,7 @@ import {
 } from "./shared/progress-transform-helper";
 import { HomeTitle, HomeContainerBorders } from "../home/shared-components";
 import { MeetingSideOptions } from "./meeting-side-options";
+import { useTranslation } from "react-i18next";
 
 export interface ITeamMeetingProps {}
 
@@ -35,6 +36,7 @@ export const Meeting = observer(
     const [meetingEnded, setMeetingEnded] = useState<boolean>(false);
     const [secondsElapsed, setSecondsElapsed] = useState<number>(0);
 
+    const { t } = useTranslation();
     const { teamStore, meetingStore } = useMst();
     const { team_id, meeting_id } = useParams();
     const history = useHistory();
@@ -76,10 +78,7 @@ export const Meeting = observer(
     const renderNoPermissions = () => (
       <Container>
         <BodyContainer>
-          <Text fontSize={2}>
-            This meeting is not for this team, please go back to the team overview page and click
-            start meeting.
-          </Text>
+          <Text fontSize={2}>{t("meeting.noPermissions")}</Text>
         </BodyContainer>
       </Container>
     );
@@ -104,7 +103,7 @@ export const Meeting = observer(
           </DateAndButtonContainer>
         </HeaderContainer>
         <BodyContainer>
-          <Text fontSize={2}>This meeting has already been completed.</Text>
+          <Text fontSize={2}>{t("meeting.meetingComplete")}</Text>
         </BodyContainer>
       </Container>
     );
@@ -208,8 +207,8 @@ export const Meeting = observer(
             <ContentsContainer>
               <AgendaContainer>
                 <AgendaHeaderContainer>
-                  <HomeTitle>Core Four</HomeTitle>
-                  <Text fontSize={1}>Review the Core Four as a team.</Text>
+                  <HomeTitle>{t("meeting.coreFourTitle")}</HomeTitle>
+                  <Text fontSize={1}>{t("meeting.reviewCoreFour")}</Text>
                 </AgendaHeaderContainer>
                 <MeetingSideOptions teamId={meeting.teamId} meeting={meeting} />
               </AgendaContainer>
