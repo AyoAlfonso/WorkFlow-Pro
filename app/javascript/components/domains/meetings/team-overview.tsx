@@ -130,7 +130,7 @@ export const TeamOverview = observer(
             </TeamMemberContainer>
             <StatusContainer fontSize={"16px"}>
               <HomePersonalStatusDropdownMenuItem
-                style={{ height: "32px", width: "165px", borderRadius: "5px", marginTop: "5px" }}
+                style={{ height: "32px", width: "135px", borderRadius: "5px", marginTop: "5px" }}
                 menuItem={options[user.currentDailyLog.workStatus]}
                 onSelect={() => null}
               />
@@ -200,14 +200,14 @@ const BodyContainer = styled.div`
 `;
 
 const LeftContainer = styled.div`
-  width: 60%;
+  width: 55%;
   margin-right: 10px;
-  min-width: 715px;
+  min-width: 555px;
 `;
 
 const RightContainer = styled.div`
-  width: 40%;
-  min-width: 610px;
+  width: 45%;
+  min-width: 510px;
   margin-left: 10px;
 `;
 
