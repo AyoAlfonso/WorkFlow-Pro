@@ -30,6 +30,8 @@ class Meeting < ApplicationRecord
   scope :sort_by_creation_date, -> { order(created_at: :desc) }
   scope :sort_by_start_time, -> { order(start_time: :desc) }
 
+  scope :has_notes, -> { where.not(notes: [nil, ""]) }
+
   before_create :start_meeting_if_weekly_planning
 
   #TO USE
