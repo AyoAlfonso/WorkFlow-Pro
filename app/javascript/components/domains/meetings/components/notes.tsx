@@ -37,6 +37,7 @@ export const Notes = ({ meeting }: NotesProps): JSX.Element => {
               options: ["unordered", "ordered"],
             },
           }}
+          placeholder={"You can enter your notes here..."}
           editorState={editorText}
           onEditorStateChange={e => setEditorText(e)}
           onBlur={() => {

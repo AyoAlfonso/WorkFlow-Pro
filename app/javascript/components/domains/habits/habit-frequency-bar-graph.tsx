@@ -10,17 +10,20 @@ import { Bar } from "react-chartjs-2";
 interface IHabitScoreLineChartProps {
   habitId: number | string;
   frequencyDataForBarGraph: any;
+  color: string;
 }
 
 export const HabitFrequencyBarGraph = ({
   habitId,
   frequencyDataForBarGraph,
+  color,
 }: IHabitScoreLineChartProps): JSX.Element => {
   const [dataFilter, setDataFilter] = useState<string>("weeklyStats");
 
   const dataToShow = frequencyDataForBarGraph[dataFilter];
 
   const { successGreen } = baseTheme.colors;
+  const displayColor = color || successGreen;
 
   const data = {
     labels: dataToShow["labels"],
@@ -29,17 +32,17 @@ export const HabitFrequencyBarGraph = ({
         label: "Score",
         fill: false,
         lineTension: 0.1,
-        backgroundColor: successGreen,
-        borderColor: successGreen,
+        backgroundColor: displayColor,
+        borderColor: displayColor,
         borderCapStyle: "butt",
         borderDash: [],
         borderDashOffset: 0.0,
         borderJoinStyle: "miter",
-        pointBorderColor: successGreen,
-        pointBackgroundColor: successGreen,
+        pointBorderColor: displayColor,
+        pointBackgroundColor: displayColor,
         pointBorderWidth: 1,
         pointHoverRadius: 5,
-        pointHoverBackgroundColor: successGreen,
+        pointHoverBackgroundColor: displayColor,
         pointHoverBorderColor: "rgba(220,220,220,1)",
         pointHoverBorderWidth: 2,
         pointRadius: 3,
@@ -82,7 +85,18 @@ export const HabitFrequencyBarGraph = ({
       <Bar
         data={data}
         key={`${dataToShow["label"]}-${habitId}`}
-        options={{ legend: { display: false } }}
+        options={{
+          legend: { display: false },
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  precision: 0,
+                },
+              },
+            ],
+          },
+        }}
       />
     </Container>
   );
