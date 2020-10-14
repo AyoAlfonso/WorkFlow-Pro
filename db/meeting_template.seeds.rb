@@ -99,7 +99,7 @@ mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Planni
       order_index: 0,
       name: "Personal Goals",
       step_type: :component,
-      instructions: "Review the Core Four and what the Goals are.",
+      instructions: "Review the Foundational Four and what the Goals are.",
       component_to_render: "PersonalGoals",
       duration: 5
     },

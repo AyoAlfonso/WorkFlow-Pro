@@ -87,17 +87,17 @@ module StatsHelper
 
     [
       {
-        statistic_name: "#{I18n.t('key_activities')} Created",
+        statistic_name: "#{I18n.t('key_activities_created')}",
         statistic_number: ka_created_this_week,
         statistic_change: ka_created_change,
       }, 
       {
-        statistic_name: "#{I18n.t('key_activities')} Completed",
+        statistic_name: "#{I18n.t('key_activities_completed')}",
         statistic_number: ka_completed_this_week,
         statistic_change: ka_completed_change
       },
       {
-        statistic_name: "#{I18n.t('issues')} Created",
+        statistic_name: "#{I18n.t('issues_addressed')}",
         statistic_number: issues_created_this_week,
         statistic_change: issues_created_change
       }
