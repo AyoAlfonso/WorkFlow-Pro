@@ -141,7 +141,8 @@
         "noPermissions": "This meeting is not for this team, please go back to the team overview page and click start meeting.",
         "meetingComplete": "This meeting has already been completed.",
         "reviewCoreFour": "Review the Foundational Four as a team.",
-        "coreFourTitle": "Foundational Four"
+        "coreFourTitle": "Foundational Four",
+        "saveRatings": "Save Ratings"
       },
       "status": {
         "active": "Active",
