@@ -15,6 +15,7 @@ import { Calendar } from "react-date-range";
 import { Button } from "~/components/shared/button";
 import { useTranslation } from "react-i18next";
 import { parseKeyActivityDueDate } from "~/utils/date-time";
+import moment from "moment";
 
 interface IKeyActivityEntryProps {
   keyActivity: any;
@@ -61,7 +62,11 @@ export const KeyActivityEntry = observer(
     const dueDateObj = parseKeyActivityDueDate(keyActivity);
 
     const updateDueDate = date => {
-      keyActivityStore.updateKeyActivityState(keyActivity["id"], "dueDate", date.toString());
+      keyActivityStore.updateKeyActivityState(
+        keyActivity["id"],
+        "dueDate",
+        moment(date).format("YYYY-MM-DD"),
+      );
       keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false);
     };
 
