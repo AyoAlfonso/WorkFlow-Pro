@@ -11,7 +11,7 @@ import { Text } from "../../../shared/text";
 import { useParams } from "react-router-dom";
 import { Loading } from "~/components/shared/loading";
 import { observer } from "mobx-react";
-import { TeamKeyActivities } from "~/components/domains/meetings/components/team-key-activities";
+import { TeamKeyActivitiesRecap } from "~/components/domains/meetings/components/team-key-activities-recap";
 
 export interface IRecapProps {}
 
@@ -43,7 +43,7 @@ export const Recap = observer(
 
     // issues that belong to this team
     const issuesCompletedCount = issues.filter(issue => issue.completedAt !== null).length;
-    const totalIssuesCount = issues.length;
+    const ISSUES_TARGET_PER_WEEK = 3;
 
     const cardProps = {
       width: "320px",
@@ -65,8 +65,13 @@ export const Recap = observer(
       },
       {
         title: t("meeting.issuesAddressed"),
-        percentage: (issuesCompletedCount / totalIssuesCount) * 100,
-        text: `${issuesCompletedCount} / ${totalIssuesCount}`,
+        percentage:
+          ((issuesCompletedCount <= ISSUES_TARGET_PER_WEEK
+            ? issuesCompletedCount
+            : ISSUES_TARGET_PER_WEEK) /
+            ISSUES_TARGET_PER_WEEK) *
+          100,
+        text: `${issuesCompletedCount}`,
       },
     ];
 
@@ -100,7 +105,7 @@ export const Recap = observer(
 
     return (
       <Container>
-        <TeamKeyActivities />
+        <TeamKeyActivitiesRecap />
         <GraphContainer>{renderGraphCards()}</GraphContainer>
       </Container>
     );
