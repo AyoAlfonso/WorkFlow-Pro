@@ -103,7 +103,6 @@ const StyledButton = styled(Button)<StyledButtonType>`
   &: hover {
     color: ${props => props.theme.colors.primary100};
   }
-  height: 100%;
 `;
 
 const AddGoalText = styled(TextDiv)`
