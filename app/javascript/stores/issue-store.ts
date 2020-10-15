@@ -160,7 +160,6 @@ export const IssueStoreModel = types
   }))
   .actions(self => ({
     sortIssuesByPriority: flow(function*(sortParams) {
-      console.log(sortParams);
       const response: ApiResponse<any> = yield self.environment.api.resortIssues(sortParams);
       if (response.ok) {
         self.issues = response.data as any;
