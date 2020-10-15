@@ -37,7 +37,6 @@ export const Select = props => (
   <RebassSelect
     {...props}
     sx={{
-      marginBottom: 15,
       borderRadius: 5,
       border: `1px solid ${baseTheme.colors.grey40}`,
     }}

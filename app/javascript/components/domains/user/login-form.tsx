@@ -15,7 +15,7 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { LoadingScreen } from "./loading-screen";
 
-import { color, typography } from "styled-system";
+import { color, ColorProps, typography, TypographyProps } from "styled-system";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 
@@ -94,7 +94,7 @@ export const LoginForm = observer(
   },
 );
 
-const TextInlineContainer = styled.div`
+const TextInlineContainer = styled.div<ColorProps & TypographyProps>`
   ${typography}
   ${color}
   &:hover {
