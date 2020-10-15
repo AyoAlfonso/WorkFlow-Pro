@@ -9,13 +9,12 @@ import { Icon } from "../../shared/icon";
 import { KeyActivityPriorityIcon } from "./key-activity-priority-icon";
 import { Avatar } from "~/components/shared";
 import { DateButton } from "~/components/shared/date-selection/date-button";
-import { addDays, isToday, isTomorrow, isBefore, parseISO } from "date-fns";
-import moment from "moment";
-import * as R from "ramda";
+import { addDays, parseISO } from "date-fns";
 import Popup from "reactjs-popup";
 import { Calendar } from "react-date-range";
 import { Button } from "~/components/shared/button";
 import { useTranslation } from "react-i18next";
+import { parseKeyActivityDueDate } from "~/utils/date-time";
 
 interface IKeyActivityEntryProps {
   keyActivity: any;
@@ -26,7 +25,6 @@ interface IKeyActivityEntryProps {
 export const KeyActivityEntry = observer(
   ({ keyActivity, dragHandleProps, meetingId }: IKeyActivityEntryProps): JSX.Element => {
     const { keyActivityStore } = useMst();
-    const { colors } = baseTheme;
     const keyActivityRef = useRef(null);
     const { t } = useTranslation();
     const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
@@ -60,25 +58,7 @@ export const KeyActivityEntry = observer(
       }
     };
 
-    const checkDueDate = () => {
-      const dueDate = keyActivity.dueDate;
-      const parsedDate = parseISO(dueDate);
-      const { cautionYellow, greyActive, warningRed, successGreen } = baseTheme.colors;
-
-      if (R.isNil(dueDate)) {
-        return { text: "", color: greyActive };
-      } else if (isToday(parsedDate)) {
-        return { text: "Today", color: cautionYellow };
-      } else if (isTomorrow(parsedDate)) {
-        return { text: "Tomorrow", color: successGreen };
-      } else if (isBefore(parsedDate, new Date())) {
-        return { text: "Overdue", color: warningRed };
-      } else {
-        return { text: moment(parsedDate).format("MMM Do, YYYY"), color: greyActive };
-      }
-    };
-
-    const dueDateObj = checkDueDate();
+    const dueDateObj = parseKeyActivityDueDate(keyActivity);
 
     const updateDueDate = date => {
       keyActivityStore.updateKeyActivityState(keyActivity["id"], "dueDate", date.toString());
@@ -269,7 +249,7 @@ const DateContainer = styled.div`
 
 const DateButtonDiv = styled.div``;
 
-const KeyActivityPriorityContainer = styled.div`
+export const KeyActivityPriorityContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 8px;
@@ -305,7 +285,7 @@ const CheckboxContainer = props => (
   </Label>
 );
 
-const AvatarContainer = styled.div`
+export const AvatarContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 4px;
@@ -322,7 +302,7 @@ const ActionContainer = styled.div`
   width: 60px;
 `;
 
-const ActionSubContainer = styled.div`
+export const ActionSubContainer = styled.div`
   margin-left: auto;
   display: flex;
 `;

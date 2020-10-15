@@ -16,6 +16,7 @@ class KeyActivity < ApplicationRecord
   scope :todays_priority, -> { where(todays_priority: true) }
   scope :master_list, -> { where(weekly_list: false).where(todays_priority: false) }
   scope :incomplete, -> { where(completed_at: nil) }
+  scope :has_due_date, -> { where.not(due_date: nil) }
   
   scope :created_between, -> (date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
   scope :user_created_between, -> (user, date_start, date_end) { created_by_user(user).created_between(date_start, date_end) }

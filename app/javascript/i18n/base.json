@@ -129,12 +129,12 @@
         "meetingRating": "Rate the Meeting",
         "goalProgress": "Goal Progress",
         "milestoneProgress": "Milestone Progress",
-        "tasksCompleted": "Tasks Completed",
+        "tasksCompleted": "Pyns Completed",
         "issuesAddressed": "Issues Addressed",
         "sideOptions": {
           "agenda": "Agenda",
           "issues": "Issues",
-          "tasks": "Tasks",
+          "tasks": "Pyns",
           "notes": "Notes",
           "pyns": "Pyns"
         },
