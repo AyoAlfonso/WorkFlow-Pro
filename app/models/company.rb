@@ -20,7 +20,8 @@ class Company < ApplicationRecord
 
   def current_fiscal_year
     current_time = self.convert_to_their_timezone
-    Time.now >= current_year_fiscal_year_start ? current_time.year + 1 : current_time.year
+    #if the year start is the first of january it means the year end will be this calendar year 
+    ( Time.now >= current_year_fiscal_year_start && current_year_fiscal_year_start != Date.parse("#{current_time.year}-01-01") ) ? current_time.year + 1 : current_time.year
   end
 
   def next_fiscal_start_date
