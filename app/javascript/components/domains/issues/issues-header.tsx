@@ -11,10 +11,17 @@ interface IssuesHeaderProps {
   showOpenIssues: boolean;
   setShowOpenIssues: React.Dispatch<React.SetStateAction<boolean>>;
   issuesText?: string;
+  teamId?: number | string;
+  meetingId?: number | string;
 }
 
-export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
-  const { showOpenIssues, setShowOpenIssues, issuesText } = props;
+export const IssuesHeader = ({
+  showOpenIssues,
+  setShowOpenIssues,
+  issuesText,
+  meetingId,
+  teamId,
+}: IssuesHeaderProps): JSX.Element => {
   const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
 
   const { issueStore } = useMst();
@@ -30,7 +37,7 @@ export const IssuesHeader = (props: IssuesHeaderProps): JSX.Element => {
 
   const handleSortMenuItemClick = value => {
     setSortOptionsOpen(false);
-    issueStore.sortIssuesByPriority({ sort: value });
+    issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });
   };
 
   return (

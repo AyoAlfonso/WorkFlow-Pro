@@ -60,9 +60,17 @@ class Api::IssuesController < Api::ApplicationController
   end
 
   def resort_index
-    @issues = IssueResortService.call(policy_scope(Issue).where(user_id: current_user.id))
+    if params[:meeting_id].present?
+      team_id = Meeting.find(params[:meeting_id]).team_id
+      @issues = team_meeting_issues(team_id)
+      @team_issues = TeamIssueResortService.call(TeamIssue.for_team(team_id))
+    elsif params[:team_id].present? && params[:meeting_id].blank?
+      @issues = IssueResortService.call(policy_scope(Issue).where(team_id: params[:team_id]))
+    else
+      @issues = IssueResortService.call(policy_scope(Issue).where(user_id: current_user.id))
+    end
     authorize @issues
-    render "api/issues/index"
+    render "api/issues/resort"
   end
 
   private

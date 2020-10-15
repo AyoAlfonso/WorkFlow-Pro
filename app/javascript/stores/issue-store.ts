@@ -162,7 +162,8 @@ export const IssueStoreModel = types
     sortIssuesByPriority: flow(function*(sortParams) {
       const response: ApiResponse<any> = yield self.environment.api.resortIssues(sortParams);
       if (response.ok) {
-        self.issues = response.data as any;
+        self.issues = response.data.issues as any;
+        self.teamIssues = response.data.teamIssues as any;
         return true;
       } else {
         return false;

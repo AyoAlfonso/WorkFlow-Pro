@@ -93,6 +93,8 @@ export const TeamIssues = observer(
           showOpenIssues={showOpenIssues}
           setShowOpenIssues={setShowOpenIssues}
           issuesText={"Team's Issues"}
+          teamId={team_id}
+          meetingId={meetingStore.currentMeeting.id}
         />
         {renderIssuesBody()}
       </Container>

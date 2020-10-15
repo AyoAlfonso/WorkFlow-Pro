@@ -18,6 +18,7 @@ export const TeamIssuesContainer = ({ teamId }: TeamIssuesContainerProps): JSX.E
         showOpenIssues={showOpenIssues}
         setShowOpenIssues={setShowOpenIssues}
         issuesText={t("teams.teamIssuesTitle")}
+        teamId={teamId}
       />
       <TeamIssuesBody showOpenIssues={showOpenIssues} teamId={teamId} />
     </>
