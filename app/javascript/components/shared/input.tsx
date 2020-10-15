@@ -2,13 +2,12 @@ import * as React from "react";
 import styled from "styled-components";
 import { baseTheme } from "../../themes";
 
-import { Input as RebassInput, Label as RebassLabel, Select as RebassSelect } from "@rebass/forms";
+import { Select as RebassSelect } from "@rebass/forms";
 
 export const Input = props => <StyledInput {...props}>{props.children}</StyledInput>;
 
 export const Label = props => <StyledLabel {...props}>{props.children}</StyledLabel>;
 
-// const StyledLabel = styled(RebassLabel)`
 const StyledLabel = styled.label`
   display: block;
   width: 100%;
