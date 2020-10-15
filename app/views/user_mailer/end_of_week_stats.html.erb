@@ -1,4 +1,21 @@
 <%= simple_format(@message) %>
+
+
+<%# <div style="
+  color: #005FFE;
+  font-size: 22px;"> 
+  Weekly round up for LynchPyn
+</div> %>
+
+<div style="
+  color: #005FFE;
+  font-size: 18px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+">
+  Here is your week in numbers for:
+</div>
+
 <p style="font-size: 14px; margin-bottom: 10px;">
   <%= get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone).strftime("%B %-d")%> 
     - 
@@ -7,31 +24,26 @@
 
 <div style="
   color: #005FFE;
-  font-size: 22px;"> 
-  Weekly round up for LynchPyn
-</div>
-
-<div style="
-  color: #005FFE;
   font-size: 18px;
   margin-top: 30px;
   margin-bottom: 20px;
+  font-weight: bold;
 ">
-  Your week in numbers
+  Overall Statistics
 </div>
 
 <div style="display: flex; justify-content: center">
   <% calculate_stats_for_week(@user).each do |stat| %>
     <div style="margin-left: 30px; margin-right: 30px">
       <p style="text-align: center"> <%= stat[:statistic_number] %> </p>
-      <p style="text-align: center"> <%= stat[:statistic_name] %> </p>
-      <p style="text-align: center"> <%= "#{stat[:statistic_change] > 0 ? "+": ""}#{stat[:statistic_change]}%"%></p>
+      <p style="text-align: center; font-weight: bold;"> <%= stat[:statistic_name] %> </p>
+      <p style="text-align: center; color: <%= stat[:statistic_change] >= 0 ? "#00C3B3" : "#EB221B" %>"> <%= "#{stat[:statistic_change] > 0 ? "+": ""}#{stat[:statistic_change]}%"%></p>
     </div>
   <% end %>
 
   <div style="margin-left: 30px; margin-right: 30px">
     <p style="text-align: center"> <%= "#{milestone_progress(@user).round(0)}%"%><p>
-    <p style="text-align: center"> Milestones Progress </p>
+    <p style="text-align: center; font-weight: bold;"> Milestones Progress </p>
   </div>
 </div>
 
@@ -40,6 +52,7 @@
   font-size: 18px;
   margin-top: 30px;
   margin-bottom: 20px;
+  font-weight: bold;
 ">
   Average mood for the week
 </div>
@@ -60,8 +73,12 @@
     <%= average_weekly_emotion_score_over_last_week(@user).round(1) %> / 5
   </div>
 
-  <div style="margin-top: 20px">
-    <%= "#{average_weekly_emotion_score_difference(@user) > 0 ? "+": ""}#{average_weekly_emotion_score_difference(@user).round()}%"%> Compared to last week
+  <% @average_weekly_emotion_score_difference = average_weekly_emotion_score_difference(@user)%>
+
+  <div style="margin-top: 20px; ">
+    <span style="color: <%= @average_weekly_emotion_score_difference >= 0 ? "#00C3B3" : "#EB221B" %>">
+      <%= "#{@average_weekly_emotion_score_difference > 0 ? "+": ""}#{@average_weekly_emotion_score_difference.round()}%"%> 
+    </span> Compared to last week
   </div>
 </div>
 
@@ -70,8 +87,9 @@
   font-size: 18px;
   margin-top: 30px;
   margin-bottom: 20px;
+  font-weight: bold;
 ">
-  Habit tracker
+  Your Habits
 </div>
 
 <div class="container" style="
@@ -201,9 +219,10 @@
     <div style="display: flex;
                 margin-bottom: 5px;
                 margin-left: 5px;">
-      <p style="font-weight: bold; margin-left: 5px;">
-        <%= "#{habits_for_the_previous_week(@user).map{|habit| habit[:weekly_difference].round}.sum > 0 ? "+" : ""}"%>
-        <%= "#{habits_for_the_previous_week(@user).map{|habit| habit[:weekly_difference].round}.sum.to_f / (habits_for_the_previous_week(@user).count.to_f > 0 ? habits_for_the_previous_week(@user).count.to_f : 1)}%" %>
+      <% @habit_sum = habits_for_the_previous_week(@user).map{|habit| habit[:weekly_difference].round}.sum %>
+      <p style="font-weight: bold; margin-left: 5px; color: <%= @habit_sum >= 0 ? "#00C3B3" : "#EB221B" %>">
+        <%= "#{@habit_sum > 0 ? "+" : ""}"%>
+        <%= "#{@habit_sum.to_f / (habits_for_the_previous_week(@user).count.to_f > 0 ? habits_for_the_previous_week(@user).count.to_f : 1)}%" %>
       </p>
       <p style="font-size: 14px;
                 color: #B6BACC;
