@@ -6,7 +6,7 @@ class UserMailer < ApplicationMailer
 
   def notification_email
     @user = params[:user]
-    @subject = "#{@user.first_name}, Your Upcoming #{params[:subject}"
+    @subject = "#{@user.first_name}, Your Upcoming #{params[:subject]}"
     @message = params[:message]
     mail(to: @user.email, subject: @subject)
   end
