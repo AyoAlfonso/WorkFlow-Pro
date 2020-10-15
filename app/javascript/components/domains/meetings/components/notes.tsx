@@ -18,7 +18,7 @@ export const Notes = ({ meeting }: NotesProps): JSX.Element => {
 
   const meetingType = meeting.meetingType;
 
-  const convertedMeetingNotes = htmlToDraft(meeting.notes);
+  const convertedMeetingNotes = htmlToDraft(meeting.notes ? meeting.notes : "");
   const contentState = ContentState.createFromBlockArray(convertedMeetingNotes.contentBlocks);
   const editorState = EditorState.createWithContent(contentState);
 
@@ -37,6 +37,7 @@ export const Notes = ({ meeting }: NotesProps): JSX.Element => {
               options: ["unordered", "ordered"],
             },
           }}
+          placeholder={"You can enter your notes here..."}
           editorState={editorText}
           onEditorStateChange={e => setEditorText(e)}
           onBlur={() => {

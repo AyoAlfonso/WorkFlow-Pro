@@ -242,5 +242,5 @@ type OutstandingMasterActivitiesListContainerType = {
 const OutstandingMasterActivitiesListContainer = styled.div<
   OutstandingMasterActivitiesListContainerType
 >`
-  height: ${props => props.height}px;
+  height: 105%;
 `;

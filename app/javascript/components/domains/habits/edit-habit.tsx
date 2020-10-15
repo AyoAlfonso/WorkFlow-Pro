@@ -159,7 +159,6 @@ export const EditHabit = observer(
               ) : (
                 <HabitCircularProgressBar color={habit.color} value={habit.score} />
               )}
-              <BoldedDescriptionText>Score</BoldedDescriptionText>
             </CircularProgressBarContainer>
 
             <ScoreContainer>
@@ -185,10 +184,12 @@ export const EditHabit = observer(
         <HabitScoreLineChart
           habitId={habit.id}
           scoreDataForLineGraph={habit.scoreDataForLineGraph}
+          color={habit.color}
         />
         <HabitFrequencyBarGraph
           habitId={habit.id}
           frequencyDataForBarGraph={habit.frequencyDataForBarGraph}
+          color={habit.color}
         />
       </Container>
     );

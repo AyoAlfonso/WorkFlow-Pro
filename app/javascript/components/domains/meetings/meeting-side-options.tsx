@@ -31,7 +31,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
     switch (selectedTab) {
       case "issues":
         return <TeamIssuesBody showOpenIssues={true} teamId={teamId} meetingId={meeting.id} />;
-      case "tasks":
+      case "pyns":
         return renderDisplayIssues();
       case "notes":
         return <Notes meeting={meeting} />;

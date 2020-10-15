@@ -286,8 +286,9 @@ const Wrapper = styled.div`
   margin-top: -20px;
   height: 90px;
   position: fixed;
-  width: calc(100% - 176px);
   z-index: 3;
+  width: -webkit-fill-available;
+  padding-right: 38px;
 `;
 
 const ActionsContainer = styled.div`

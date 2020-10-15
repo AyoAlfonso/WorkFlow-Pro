@@ -289,6 +289,7 @@ const StyledContentEditable = styled(ContentEditable)`
   width: 90%;
   margin-top: auto;
   margin-bottom: auto;
+  word-break: break-word;
 `;
 
 const CheckboxContainer = props => (
