@@ -11,11 +11,11 @@ class IssueResortService < ApplicationService
   end
 
   def reset_positions(issues)
-    issues.complete.each_with_index do |issue, index|
+    issues.incomplete.each_with_index do |issue, index|
       issue.position = index + 1
       issue.save!
     end
-    issues.incomplete.each_with_index do |issue, index|
+    issues.complete.each_with_index do |issue, index|
       issue.position = index + 1
       issue.save!
     end
