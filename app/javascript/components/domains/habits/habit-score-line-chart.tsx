@@ -104,4 +104,5 @@ const HeaderContainer = styled.div`
 const SelectContainer = styled.div`
   margin-top: 16px;
   margin-left: auto;
+  width: 120px;
 `;

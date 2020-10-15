@@ -42,7 +42,7 @@ const Container = styled.div`
   margin-left: 136px;
   margin-right: 40px;
   margin-bottom: 50px;
-  padding-top: 120px;
+  padding-top: 96px;
 `;
 
 export interface IAppProps {

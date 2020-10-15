@@ -42,7 +42,10 @@ export const AnnualInitiativeCard = ({
   }, [showMinimizedCards]);
 
   const renderYearDisplay = () => {
-    if (companyStore.company.currentFiscalYear != annualInitiative.fiscalYear) {
+    if (
+      companyStore.company.currentFiscalYear != annualInitiative.fiscalYear &&
+      annualInitiative.fiscalYear
+    ) {
       return (
         <YearContainer>
           <YearText> {annualInitiative.fiscalYear} Goal </YearText>

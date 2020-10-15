@@ -281,7 +281,7 @@ const Container = styled(HomeContainerBorders)`
 
 const Wrapper = styled.div`
   background-color: white;
-  padding-top: 40px;
+  padding-top: 16px;
   margin-left: 136px;
   margin-top: -20px;
   height: 90px;

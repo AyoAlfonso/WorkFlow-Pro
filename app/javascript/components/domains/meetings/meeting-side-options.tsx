@@ -32,7 +32,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
       case "issues":
         return <TeamIssuesBody showOpenIssues={true} teamId={teamId} meetingId={meeting.id} />;
       case "pyns":
-        return renderDisplayIssues();
+        return renderDisplayKeyActivities();
       case "notes":
         return <Notes meeting={meeting} />;
       default:
@@ -40,7 +40,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
     }
   };
 
-  const renderDisplayIssues = (): JSX.Element => {
+  const renderDisplayKeyActivities = (): JSX.Element => {
     return teamId ? (
       <TeamKeyActivitiesBody />
     ) : (

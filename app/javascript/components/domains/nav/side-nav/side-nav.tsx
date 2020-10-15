@@ -158,7 +158,7 @@ export const SideNavNoMst = (currentPathName: string, teams: any): JSX.Element =
 
   return (
     <StyledSideNav>
-      <SideBarElement marginTop={"48px"}>
+      <SideBarElement marginTop={"29px"}>
         <Image
           sx={{
             width: 60,
