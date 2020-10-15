@@ -17,8 +17,13 @@ import { ToastMessageConstants } from "~/constants/toast-types";
 
 export interface IMeetingRatingProps {}
 
+interface IScore {
+  userId: number;
+  value: string;
+}
+
 export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
-  const [scores, setScores] = useState<Array<any>>([]);
+  const [scores, setScores] = useState<Array<IScore>>([]);
 
   const { t } = useTranslation();
   const { team_id, meeting_id } = useParams();
@@ -35,63 +40,78 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
   const currentTeam = teams.find(team => team.id === parseInt(team_id));
   const teamLeads = users.filter(user => currentTeam.isALead(user));
   const teamMembers = users.filter(user => currentTeam.isANonLead(user));
-  const MEETING_MAX_RATING = 7;
+  const MEETING_MAX_RATING = "7";
 
   const saveScores = () => {
-    const averageScore = (
-      scores.reduce((acc, curr) => acc + curr.value, 0) / scores.length
-    ).toFixed(1);
+    const averageScore = Number(
+      R.pipe(
+        R.filter(score => score.value !== ""),
+        R.reduce((acc, curr) => acc + parseInt(curr.value), 0),
+        R.divide(R.__, scores.length),
+      )(scores).toFixed(1),
+    );
     updateMeeting({ id: meeting_id, averageRating: averageScore }).then(meeting => {
       meeting ? showToast("Meeting ratings updated!", ToastMessageConstants.SUCCESS) : null;
     });
   };
 
-  const renderUserRows = users =>
-    users.map((user, index) => (
-      <RowDiv key={index}>
-        <AvatarNameContainer>
-          <Avatar
-            avatarUrl={user.avatarUrl ? user.avatarUrl : null}
-            defaultAvatarColor={user.defaultAvatarColor}
-            firstName={user.firstName}
-            lastName={user.lastName}
-            size={48}
-            marginLeft={"inherit"}
-          />
-          <Text fontSize={"15px"} fontWeight={"regular"} ml={"20px"}>
-            {`${user.firstName} ${user.lastName}`}
-          </Text>
-        </AvatarNameContainer>
-        <ScoreContainer>
-          <InputContainer>
-            <Input
-              maxLength={1}
-              style={{
-                border: `1px dashed ${baseTheme.colors.grey20}`,
-                textAlign: "center",
-                borderRadius: "10px",
-              }}
-              onChange={e =>
-                setScores(
-                  R.pipe(
-                    R.reject(score => score.userId === user.id),
-                    R.append({ userId: user.id, value: parseInt(e.target.value) }),
-                  )(scores),
-                )
-              }
+  const handleScoreChange = (user, value) => {
+    setScores(
+      R.pipe(
+        R.reject(score => score.userId === user.id),
+        R.append({
+          userId: user.id,
+          value: parseInt(value) > parseInt(MEETING_MAX_RATING) ? MEETING_MAX_RATING : value,
+        }),
+      )(scores),
+    );
+  };
+
+  const renderUserRows = users => {
+    return users.map((user, index) => {
+      const score = scores.find(score => score.userId === user.id);
+      const inputValue = R.isNil(score) ? "" : score.value;
+      return (
+        <RowDiv key={index}>
+          <AvatarNameContainer>
+            <Avatar
+              avatarUrl={user.avatarUrl ? user.avatarUrl : null}
+              defaultAvatarColor={user.defaultAvatarColor}
+              firstName={user.firstName}
+              lastName={user.lastName}
+              size={48}
+              marginLeft={"inherit"}
             />
-          </InputContainer>
-          <ScoreDivider />
-          <InputContainer>
-            <PlaceHolderInputDiv>
-              <Text color={"grey40"} fontSize={"15px"} fontWeight={"regular"}>
-                {`${MEETING_MAX_RATING}`}
-              </Text>
-            </PlaceHolderInputDiv>
-          </InputContainer>
-        </ScoreContainer>
-      </RowDiv>
-    ));
+            <Text fontSize={"15px"} fontWeight={"regular"} ml={"20px"}>
+              {`${user.firstName} ${user.lastName}`}
+            </Text>
+          </AvatarNameContainer>
+          <ScoreContainer>
+            <InputContainer>
+              <Input
+                maxLength={1}
+                style={{
+                  border: `1px dashed ${baseTheme.colors.grey20}`,
+                  textAlign: "center",
+                  borderRadius: "10px",
+                }}
+                value={inputValue}
+                onChange={e => handleScoreChange(user, e.target.value)}
+              />
+            </InputContainer>
+            <ScoreDivider />
+            <InputContainer>
+              <PlaceHolderInputDiv>
+                <Text color={"grey40"} fontSize={"15px"} fontWeight={"regular"}>
+                  {MEETING_MAX_RATING}
+                </Text>
+              </PlaceHolderInputDiv>
+            </InputContainer>
+          </ScoreContainer>
+        </RowDiv>
+      );
+    });
+  };
 
   return (
     <Container>
