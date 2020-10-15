@@ -35,6 +35,7 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
   const currentTeam = teams.find(team => team.id === parseInt(team_id));
   const teamLeads = users.filter(user => currentTeam.isALead(user));
   const teamMembers = users.filter(user => currentTeam.isANonLead(user));
+  const MEETING_MAX_RATING = 7;
 
   const saveScores = () => {
     const averageScore = (
@@ -84,7 +85,7 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
           <InputContainer>
             <PlaceHolderInputDiv>
               <Text color={"grey40"} fontSize={"15px"} fontWeight={"regular"}>
-                5
+                {`${MEETING_MAX_RATING}`}
               </Text>
             </PlaceHolderInputDiv>
           </InputContainer>
@@ -110,7 +111,7 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
           </BodyContainer>
           <ButtonDiv>
             <Button variant={"primaryOutline"} onClick={saveScores} small>
-              Save Ratings
+              {t("meeting.saveRatings")}
             </Button>
           </ButtonDiv>
         </CardBody>
