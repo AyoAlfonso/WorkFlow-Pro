@@ -1,10 +1,10 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { observer } from "mobx-react";
 import { CreateKeyActivityModal } from "../../key-activities/create-key-activity-modal";
 import { useMst } from "~/setup/root";
-import { Icon } from "~/components/shared";
+import { Icon, Loading } from "~/components/shared";
 import { color } from "styled-system";
 import { KeyActivityEntry } from "../../key-activities/key-activity-entry";
 import { baseTheme } from "~/themes";
@@ -12,10 +12,21 @@ import { useTranslation } from "react-i18next";
 
 export const TeamKeyActivitiesBody = observer(
   (props: {}): JSX.Element => {
+    const [loading, setLoading] = useState<boolean>(true);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
     const { meetingStore, keyActivityStore } = useMst();
     const { t } = useTranslation();
+
+    useEffect(() => {
+      keyActivityStore.fetchKeyActivitiesFromMeeting(meetingStore.currentMeeting.id).then(() => {
+        setLoading(false);
+      });
+    }, []);
+
+    if (loading) {
+      return <Loading />;
+    }
 
     const masterKeyActivities = keyActivityStore.keyActivities;
 
