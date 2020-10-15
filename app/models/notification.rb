@@ -2,12 +2,13 @@ class Notification < ApplicationRecord
   belongs_to :user
   enum notification_type: {
     create_my_day: 0,
-    weekly_planning: 1,
+    weekly_planning: 1, #removed, no longer used
     weekly_report: 2,
     weekly_alignment_meeting: 3
   }
   enum method: { disabled: 0, email: 1 }
 
+  scope :remove_deprecated, -> { where.not(notification_type: 1) }
   scope :owned_by_user, -> (user) { where(user: user) }
   scope :enabled, -> { where.not(method: "disabled") }
 

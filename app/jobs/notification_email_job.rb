@@ -19,8 +19,10 @@ class NotificationEmailJob
         send_end_of_week_stats_email(@user, notification_type)
       elsif notification_type == "Weekly Alignment Meeting" && meeting_did_not_start_this_period('team_weekly')
         send_sync_meeting_email(@user, notification_type)
-      elsif notification_type == "Weekly Planning" && meeting_did_not_start_this_period('personal_weekly')
-        send_weekly_planning_meeting_email(@user, notification_type)
+
+      #DEPRECATED:
+      # elsif notification_type == "Weekly Planning" && meeting_did_not_start_this_period('personal_weekly')
+      #   send_weekly_planning_meeting_email(@user, notification_type)
       end
     end
   end
