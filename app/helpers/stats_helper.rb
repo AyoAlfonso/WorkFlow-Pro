@@ -1,8 +1,18 @@
 module StatsHelper
 
 
-  def weekly_milestone_progress(current_user)
-    
+  def weekly_milestone_progress(user)
+    milestones = Milestone.current_week_for_user(get_beginning_of_last_or_current_work_week_date(user.time_in_user_timezone), user)
+    completed_milestone_scores = milestones.map do |m|
+      if m[:status] == "completed"
+        1
+      elsif m[:status] == "in_progress"
+        0.5
+      else
+        0
+      end
+    end
+    average_completed_milestone_scores = completed_milestone_scores.length == 0 ? 0 : completed_milestone_scores.sum.to_f / completed_milestone_scores.length
   end
   
   def quarterly_milestone_progress(current_user)
