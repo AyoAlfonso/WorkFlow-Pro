@@ -257,7 +257,7 @@ export const JournalIndex = observer(
     return (
       <MainContainer>
         <HeadingContainer>
-          <Heading type={"h1"} fontSize={"18px"}>
+          <Heading type={"h1"} fontSize={"24px"}>
             {t("journals.indexTitle")}
           </Heading>
         </HeadingContainer>

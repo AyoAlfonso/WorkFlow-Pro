@@ -326,7 +326,7 @@ export const NotesIndex = observer(
     return (
       <MainContainer>
         <HeadingContainer>
-          <Heading type={"h1"} fontSize={"18px"}>
+          <Heading type={"h1"} fontSize={"24px"}>
             {t("notes.indexTitle")}
           </Heading>
         </HeadingContainer>
