@@ -11,7 +11,9 @@ class Api::IssuesController < Api::ApplicationController
   def create 
     @issue = Issue.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], team_id: params[:team_id], position: params[:position] })
     authorize @issue
+    @issue.insert_at(1)
     @issue.save!
+    
     if params[:team_id]
       # USE HOOK TO CREATE A TEAM ISSUE IF IT DOESNT EXIST FOR @ISSUE
       @team_issues = TeamIssue.for_team(params[:team_id]).sort_by_position
