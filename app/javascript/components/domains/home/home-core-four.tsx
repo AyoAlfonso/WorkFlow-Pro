@@ -83,12 +83,15 @@ const CoreFourBodyTextContainer = styled.div`
   font-size: 16px;
 `;
 
-export const HomeCoreFour = (): JSX.Element => (
-  <Container>
-    <HomeTitle> Core Four </HomeTitle>
-    <CoreFourValues />
-  </Container>
-);
+export const HomeCoreFour = (): JSX.Element => {
+  const { t } = useTranslation();
+  return (
+    <Container>
+      <HomeTitle>{t("core.homeTitle")}</HomeTitle>
+      <CoreFourValues />
+    </Container>
+  );
+};
 
 export const CoreFourOnly = (): JSX.Element => (
   <div>
