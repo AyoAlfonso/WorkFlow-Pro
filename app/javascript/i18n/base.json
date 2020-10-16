@@ -182,7 +182,8 @@
         "myNotes": "My Notes",
         "teamNotes": "{teamName} Notes",
         "startAdding": "Use the meeting function with your team or personal planning wizards.",
-        "meetingNotes": "Meeting Notes"
+        "meetingNotes": "Meeting Notes",
+        "deleteNote": "Are you sure you want to delete this note?"
       },
       "keyActivities": {
         "prioritiesTitle": "Today's Priorities",

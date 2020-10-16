@@ -7,7 +7,7 @@ class Api::SummariesController < Api::ApplicationController
       @questionnaire_attempts = policy_scope(QuestionnaireAttempt).sort_by_completed_at
     end
     authorize @questionnaire_attempts
-    @dates = @questionnaire_attempts.map{ |qa| qa.completed_at.strftime("%a, %b%e") }.uniq
+    @dates = @questionnaire_attempts.map{ |qa| qa.completed_at.strftime("%a, %b %e") }.uniq
     render "api/summaries/questionnaire_attempts_by_date"
   end
   
@@ -25,7 +25,7 @@ class Api::SummariesController < Api::ApplicationController
       @meetings = policy_scope(Meeting).has_notes.sort_by_start_time
     end
     authorize @meetings
-    @dates = @meetings.map{ |meeting| meeting.start_time.strftime("%a, %b%e") }.uniq
+    @dates = @meetings.map{ |meeting| meeting.start_time.strftime("%a, %b %e") }.uniq
     render "api/summaries/meetings_by_date"
   end
 end
