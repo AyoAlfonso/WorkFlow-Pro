@@ -37,10 +37,6 @@ export const Recap = observer(
     } = meetingStore.meetingRecap;
 
     // the average completed percentage of milestones that belong to the quarterly goals that belong to the users of the team for the current week
-    // const goalProgress =
-    //   (milestoneProgressAverages.reduce((acc, curr) => acc + curr, 0) /
-    //     milestoneProgressAverages.length) *
-    //   100;
     const goalProgress = averageMilestoneProcessPercentage;
 
     // key activities that belong to the current meeting's meeting_template and team
