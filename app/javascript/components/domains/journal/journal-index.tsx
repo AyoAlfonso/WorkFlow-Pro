@@ -100,7 +100,7 @@ export const JournalIndex = observer(
       ) : (
         questionnaireAttemptsSummary.map((item, index) => (
           <ItemContainer key={index}>
-            <Text fontSize={"12px"} fontWeight={600}>
+            <Text fontSize={"16px"} fontWeight={600}>
               {item.date}
             </Text>
             {item.items.map((qa, qaIndex) => (
@@ -122,7 +122,7 @@ export const JournalIndex = observer(
       );
       return (
         <>
-          <Text fontSize={"12px"} fontWeight={600}>
+          <Text fontSize={"16px"} fontWeight={600}>
             {selectedEntry.questionnaireType}
           </Text>
           <Text fontSize={"12px"} fontWeight={400} color={"grey100"}>
@@ -138,10 +138,10 @@ export const JournalIndex = observer(
               marginRight={"10px"}
               defaultAvatarColor={defaultAvatarColor}
             />
-            <Text fontSize={"9px"} fontWeight={400} color={"grey100"} marginRight={"3px"}>
+            <Text fontSize={"12px"} fontWeight={400} color={"grey100"} marginRight={"3px"}>
               {firstName}
             </Text>
-            <Text fontSize={"9px"} fontWeight={400} color={"grey100"}>
+            <Text fontSize={"12px"} fontWeight={400} color={"grey100"}>
               {lastName}
             </Text>
           </AvatarContainer>
@@ -171,9 +171,9 @@ export const JournalIndex = observer(
                   {/* <IconButtonContainer onClick={() => {}}>
                     <Icon icon={"Edit-2"} size={"16px"} mr={"16px"} />
                   </IconButtonContainer> */}
-                  <IconButtonContainer onClick={() => {}}>
+                  {/* <IconButtonContainer onClick={() => {}}>
                     <Icon icon={"Delete"} size={"16px"} />
-                  </IconButtonContainer>
+                  </IconButtonContainer> */}
                 </ActionButtonsContainer>
               </EntryCardHeaderContainer>
             }
@@ -257,13 +257,13 @@ export const JournalIndex = observer(
     return (
       <MainContainer>
         <HeadingContainer>
-          <Heading type={"h1"} fontSize={"18px"}>
+          <Heading type={"h1"} fontSize={"24px"}>
             {t("journals.indexTitle")}
           </Heading>
         </HeadingContainer>
         <BodyContainer>
           <FilterContainer>
-            <Card headerComponent={<CardHeaderText fontSize={"12px"}>Filter</CardHeaderText>}>
+            <Card headerComponent={<CardHeaderText fontSize={"16px"}>Filter</CardHeaderText>}>
               {renderDateFilterOptions()}
               <DateRange
                 showDateDisplay={false}

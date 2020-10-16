@@ -88,7 +88,7 @@ export const NotesIndex = observer(
         ? meetings.map((meeting, index) => {
             return (
               <ItemContainer key={index}>
-                <Text fontSize={"12px"} fontWeight={600}>
+                <Text fontSize={"16px"} fontWeight={600}>
                   {meeting.date}
                 </Text>
                 {meeting.items.map((item, idx) => {
@@ -173,10 +173,10 @@ export const NotesIndex = observer(
 
       return (
         <>
-          <Text fontSize={"12px"} fontWeight={600}>
+          <Text fontSize={"16px"} fontWeight={600}>
             {template.name}
           </Text>
-          <Text fontSize={"12px"} fontWeight={400} color={"grey100"}>
+          <Text fontSize={"16px"} fontWeight={400} color={"grey100"}>
             {moment(selectedEntry.startTime).format("dddd, MMMM Do, h:mm a")}
           </Text>
           <AvatarContainer>
@@ -189,10 +189,10 @@ export const NotesIndex = observer(
               marginRight={"10px"}
               defaultAvatarColor={avatarColor}
             />
-            <Text fontSize={"9px"} fontWeight={400} color={"grey100"} marginRight={"3px"}>
+            <Text fontSize={"12px"} fontWeight={400} color={"grey100"} marginRight={"3px"}>
               {firstName}
             </Text>
-            <Text fontSize={"9px"} fontWeight={400} color={"grey100"}>
+            <Text fontSize={"12px"} fontWeight={400} color={"grey100"}>
               {lastName}
             </Text>
           </AvatarContainer>
@@ -219,7 +219,19 @@ export const NotesIndex = observer(
                   {/* <IconButtonContainer onClick={() => {}}>
                     <Icon icon={"Edit-2"} size={"16px"} mr={"16px"} />
                   </IconButtonContainer> */}
-                  <IconButtonContainer onClick={() => {}}>
+                  <IconButtonContainer
+                    onClick={async () => {
+                      if (confirm(t("notes.deleteNote"))) {
+                        await meetingStore.updateMeeting({ ...selectedItem, notes: "" });
+                        setSelectedItem(null);
+                        meetingStore
+                          .getMeetingNotes({
+                            filters: { ...dateFilter.selection, ...noteTypeFilter },
+                          })
+                          .then(() => setLoading(false));
+                      }
+                    }}
+                  >
                     <Icon icon={"Delete"} size={"16px"} />
                   </IconButtonContainer>
                 </ActionButtonsContainer>
@@ -314,7 +326,7 @@ export const NotesIndex = observer(
     return (
       <MainContainer>
         <HeadingContainer>
-          <Heading type={"h1"} fontSize={"18px"}>
+          <Heading type={"h1"} fontSize={"24px"}>
             {t("notes.indexTitle")}
           </Heading>
         </HeadingContainer>
