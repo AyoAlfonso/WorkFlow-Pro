@@ -1,6 +1,11 @@
 module StatsHelper
+
+
+  def weekly_milestone_progress(current_user)
+    
+  end
   
-  def milestone_progress(current_user)
+  def quarterly_milestone_progress(current_user)
     current_quarter = current_user.company.current_fiscal_quarter
     #TODO: NEED TO ADD THE CURRENT YEAR HERE
     #milestones for this week and in team

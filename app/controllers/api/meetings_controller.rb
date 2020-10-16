@@ -63,6 +63,25 @@ class Api::MeetingsController < Api::ApplicationController
       milestones.length == 0 ? 0 : completed_milestones.fdiv(milestones.length)
     end
 
+    @milestone_progress_percentage_array = @meeting.team.users.map do |user|
+      milestones = Milestone.current_week_for_user(get_beginning_of_last_or_current_work_week_date(user.time_in_user_timezone), user)
+      completed_milestone_scores = milestones do |m|
+        if m[:status] == "completed"
+          value = 1
+        elsif m[:status] == "in_progress"
+          value = 0.5
+        else
+          value = 0
+        end
+      end 
+      average_completed_milestone_scores = completed_milestone_scores.to_f / milestones.size
+      
+      
+      
+      { |sum, m| m[:status] == "completed" ? sum + 1 : sum }
+      milestones.length == 0 ? 0 : completed_milestones.fdiv(milestones.length)
+    end
+
     last_meeting_end_time = Meeting.team_meetings(@meeting.team_id).sort_by_start_time.second.end_time
     @key_activities = KeyActivity.filter_by_team_meeting(@meeting.meeting_template_id, params[:team_id]).has_due_date.where(due_date: last_meeting_end_time..current_user.time_in_user_timezone.end_of_day)
     authorize @key_activities
