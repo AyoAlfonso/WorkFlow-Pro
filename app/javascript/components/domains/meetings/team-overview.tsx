@@ -207,7 +207,7 @@ const LeftContainer = styled.div`
 
 const RightContainer = styled.div`
   width: 45%;
-  min-width: 510px;
+  min-width: 610px;
   margin-left: 10px;
 `;
 

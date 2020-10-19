@@ -63,13 +63,17 @@ class Api::MeetingsController < Api::ApplicationController
       milestones.length == 0 ? 0 : completed_milestones.fdiv(milestones.length)
     end
 
+    @milestone_progress_percentage_array = @meeting.team.users.map do |user|
+      weekly_milestone_progress(user)
+    end
+    @average_milestone_process_percentage = @milestone_progress_percentage_array.length == 0 ? 0 : (@milestone_progress_percentage_array.sum.to_f / @milestone_progress_percentage_array.length) * 100
     last_meeting_end_time = Meeting.team_meetings(@meeting.team_id).sort_by_start_time.second.end_time
     @key_activities = KeyActivity.filter_by_team_meeting(@meeting.meeting_template_id, params[:team_id]).has_due_date.where(due_date: last_meeting_end_time..current_user.time_in_user_timezone.end_of_day)
     authorize @key_activities
 
     @issues = Issue.where(team_id: params[:team_id]).where(completed_at: current_user.time_in_user_timezone.beginning_of_day..current_user.time_in_user_timezone.end_of_day)
     authorize @issues
-    render json: { milestone_progress_averages: @milestone_progress_averages, key_activities: @key_activities, issues: @issues }
+    render json: { milestone_progress_averages: @milestone_progress_averages, key_activities: @key_activities, issues: @issues, average_milestone_process_percentage: @average_milestone_process_percentage }
   end
 
   private
