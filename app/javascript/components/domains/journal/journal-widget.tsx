@@ -200,7 +200,7 @@ const EndButtonContainer = styled.div`
 const EndButton = styled.div`
   color: ${props => props.theme.colors.primary100};
   cursor: pointer;
-  font-size: 11pt;
+  font-size: 12px;
   font-weight: 400;
 `;
 
