@@ -2,9 +2,10 @@ import * as React from "react";
 import { useState } from "react";
 import { useMst } from "~/setup/root";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 import { space, color } from "styled-system";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
-//import Icon from "../../shared/icon";
+import KeyActivitySortConstants from "~/constants/key-activity-sort-types";
 
 interface KeyActivitiesHeaderProps {
   hideFilter?: boolean;
@@ -16,21 +17,22 @@ interface KeyActivitiesHeaderProps {
 export const KeyActivitiesHeader = (props: KeyActivitiesHeaderProps): JSX.Element => {
   const { showAllKeyActivities, setShowAllKeyActivities, title, hideFilter } = props;
   const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   const { keyActivityStore } = useMst();
 
   const sortMenuOptions = [
     {
-      label: "Sort by Priority",
-      value: "by_priority",
+      label: t("keyActivities.sortByPriority"),
+      value: KeyActivitySortConstants.BY_PRIORITY,
     },
     {
-      label: "Sort by Due Date",
-      value: "by_due_date",
+      label: t("keyActivities.sortByDueDate"),
+      value: KeyActivitySortConstants.BY_DUE_DATE,
     },
     {
-      label: "Sort by Priority and Due Date",
-      value: "by_priority_and_due_date",
+      label: t("keyActivities.sortByDueDateAndPriority"),
+      value: KeyActivitySortConstants.BY_DUE_DATE_AND_PRIORITY,
     },
   ];
 
