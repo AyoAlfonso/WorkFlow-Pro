@@ -1,4 +1,5 @@
-json.extract! annual_initiative, :id, :created_by_id, :owned_by_id, :importance, :description, :key_elements, :company_id, :context_description, :fiscal_year
+json.extract! annual_initiative, :id, :created_by_id, :owned_by_id, :importance, :key_elements, :company_id, :context_description, :fiscal_year
+json.description CGI::unescapeHTML(annual_initiative.description)
 json.owned_by do
   json.partial! annual_initiative.owned_by, partial: "api/users/user", as: :user
 end
