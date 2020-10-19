@@ -188,7 +188,10 @@
       "keyActivities": {
         "prioritiesTitle": "Today's Priorities",
         "title": "Pyns",
-        "addTitle": "Add a New Pyn"
+        "addTitle": "Add a New Pyn",
+        "sortByPriority": "Sort By Priority",
+        "sortByDueDate": "Sort by Due Date",
+        "sortByDueDateAndPriority": "Sort by Due Date and Priority"
       },
       "teams": {
         "teamMeetingsTitle": "Team Meetings",
