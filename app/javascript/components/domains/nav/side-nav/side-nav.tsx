@@ -145,16 +145,16 @@ const isNavMenuIconActive = (currentPath: string, to: string): boolean => {
 export const SideNavNoMst = (currentPathName: string, teams: any): JSX.Element => {
   const { t } = useTranslation();
 
-  const {
-    companyStore: { company },
-  } = useMst();
+  // const {
+  //   companyStore: { company },
+  // } = useMst();
 
   const [teamNavChildOpen, setTeamNavChildOpen] = useState<boolean>(false);
   const [companyNavChildOpen, setCompanyNavChildOpen] = useState<boolean>(false);
 
-  if (!company) {
-    return <></>;
-  }
+  // if (!company) {
+  //   return <></>;
+  // }
 
   return (
     <StyledSideNav>
@@ -204,7 +204,8 @@ export const SideNavNoMst = (currentPathName: string, teams: any): JSX.Element =
             to="/company/accountability"
             linkText={t("company.accountabilityChart")}
           />
-          <SideNavChildLink to="/company/strategic_plan" linkText={`The ${company.name} Plan`} />
+          {/* <SideNavChildLink to="/company/strategic_plan" linkText={`The ${company.name} Plan`} /> */}
+          <SideNavChildLink to="/company/strategic_plan" linkText={`The Lynchpyn Plan`} />
         </SideNavChildPopup>
       </SideNavChildPopupContainer>
 
