@@ -33,7 +33,11 @@ class Company < ApplicationRecord
     when 3
       self.fourth_quarter_start_date
     else
-      self.current_year_fiscal_year_start + 1.year
+      current_time = self.convert_to_their_timezone
+      (current_time < self.current_year_fiscal_year_start &&
+      current_year_fiscal_year_start != Date.parse("#{current_time.year}-01-01")) ? 
+      current_year_fiscal_year_start : 
+      current_year_fiscal_year_start + 1.year
     end
   end
 
