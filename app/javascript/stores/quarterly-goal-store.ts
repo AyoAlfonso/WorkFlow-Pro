@@ -27,7 +27,7 @@ export const QuarterlyGoalStoreModel = types
       const env = getEnv(self);
       try {
         const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
-        const responseQuarterlyGoal = response.data.quarterlyGoal;
+        const responseQuarterlyGoal = response.data;
         self.quarterlyGoal = responseQuarterlyGoal;
         showToast(il8n.t("quarterlyGoal.updated"), ToastMessageConstants.SUCCESS);
         return responseQuarterlyGoal;
@@ -50,14 +50,12 @@ export const QuarterlyGoalStoreModel = types
       try {
         const response: any = yield env.api.createQuarterlyGoal(quarterlyGoalObject);
         const { goalStore, annualInitiativeStore } = getRoot(self);
-        goalStore.mergeQuarterlyGoals(response.data.quarterlyGoal);
+        goalStore.mergeQuarterlyGoals(response.data);
         if (inAnnualInitiative) {
-          annualInitiativeStore.updateAnnualInitiativeAfterAddingQuarterlyGoal(
-            response.data.quarterlyGoal,
-          );
+          annualInitiativeStore.updateAnnualInitiativeAfterAddingQuarterlyGoal(response.data);
         }
         showToast(il8n.t("quarterlyGoal.created"), ToastMessageConstants.SUCCESS);
-        return response.data.quarterlyGoal;
+        return response.data;
       } catch {
         showToast(il8n.t("quarterlyGoal.creationError"), ToastMessageConstants.ERROR);
       }
@@ -118,7 +116,7 @@ export const QuarterlyGoalStoreModel = types
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createMilestones(quarterlyGoalId);
-        self.quarterlyGoal = response.data.quarterlyGoal;
+        self.quarterlyGoal = response.data;
       } catch {
         showToast(il8n.t("quarterlyGoal.milestoneCreationError"), ToastMessageConstants.ERROR); // error messaging handled by API monitor
       }
