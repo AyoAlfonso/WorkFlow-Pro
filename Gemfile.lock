@@ -342,6 +342,8 @@ GEM
       rack (~> 2.0)
       rack-protection (>= 2.0.0)
       redis (>= 4.1.0)
+    sidekiq-failures (1.0.0)
+      sidekiq (>= 4.0.0)
     sidekiq-scheduler (3.0.1)
       e2mmap
       redis (>= 3, < 5)
@@ -437,6 +439,7 @@ DEPENDENCIES
   selenium-webdriver
   shoulda-matchers (~> 4.0)
   sidekiq (~> 6.0.2)
+  sidekiq-failures (~> 1.0.0)
   sidekiq-scheduler (~> 3.0.1)
   spring
   spring-watcher-listen (~> 2.0.0)
