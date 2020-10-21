@@ -99,7 +99,9 @@ export const TeamOverview = observer(
                 }}
               />
             </CheckboxContainer>
-            <PriorityText>{keyActivity.description}</PriorityText>
+            <PriorityTextContainer>
+              <PriorityText>{keyActivity.description}</PriorityText>
+            </PriorityTextContainer>
             <PriorityIconContainer>
               <KeyActivityPriorityIcon priority={keyActivity.priority} />
             </PriorityIconContainer>
@@ -275,6 +277,10 @@ const TeamMemberName = styled(Text)`
 const PriorityContainer = styled.div`
   display: flex;
   margin-top: -10px;
+`;
+
+const PriorityTextContainer = styled.div`
+  width: 100%;
 `;
 
 const PriorityText = styled(Text)``;
