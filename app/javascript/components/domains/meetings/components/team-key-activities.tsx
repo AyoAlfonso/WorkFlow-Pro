@@ -3,11 +3,13 @@ import { HomeContainerBorders } from "~/components/domains/home/shared-component
 import styled from "styled-components";
 import { KeyActivitiesHeader } from "~/components/domains/key-activities/key-activities-header";
 import { TeamKeyActivitiesBody } from "../shared/team-key-activities-body";
+import { useTranslation } from "react-i18next";
 
 export const TeamKeyActivities = (props: {}): JSX.Element => {
+  const { t } = useTranslation();
   return (
     <Container>
-      <KeyActivitiesHeader hideFilter={true} title={"Team's Pyns"} />
+      <KeyActivitiesHeader hideFilter={true} title={t("meeting.teamsPyns")} />
       <TeamKeyActivitiesBody />
     </Container>
   );
