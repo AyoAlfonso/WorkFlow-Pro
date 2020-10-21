@@ -245,6 +245,7 @@ const Container = styled.div<ContainerProps>`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   font-size: 14px;
   padding: 4px 0px 4px 0px;
 `;
@@ -275,7 +276,7 @@ const StyledContentEditable = styled(ContentEditable)`
   line-height: 20px;
   margin-left: 10px;
   min-width: 105px;
-  width: 90%;
+  width: 100%;
   margin-top: auto;
   margin-bottom: auto;
   word-break: break-word;
