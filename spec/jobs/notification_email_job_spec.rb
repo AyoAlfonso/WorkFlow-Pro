@@ -24,7 +24,7 @@ RSpec.describe NotificationEmailJob, type: :job do
 
     it 'should send an email' do
       expect(ActionMailer::Base.deliveries.length).to eq(2) # user confirmation email and notification email
-      expect(ActionMailer::Base.deliveries.last.subject).to eq("FirstName, Your Upcoming Create My Day")
+      expect(ActionMailer::Base.deliveries.last.subject).to eq("FirstName, Create Your Day")
     end
   end
 
@@ -49,7 +49,7 @@ RSpec.describe NotificationEmailJob, type: :job do
 
     it 'should send an email' do
       expect(ActionMailer::Base.deliveries.length).to eq(2) # user confirmation email and notification email
-      expect(ActionMailer::Base.deliveries.last.subject).to eq("FirstName, Your Upcoming Create My Day")
+      expect(ActionMailer::Base.deliveries.last.subject).to eq("FirstName, Create Your Day")
     end
   end
 

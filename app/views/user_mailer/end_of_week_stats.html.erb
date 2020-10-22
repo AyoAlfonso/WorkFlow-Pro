@@ -1,22 +1,13 @@
 <%= simple_format(@message) %>
 
 
-<%# <div style="
-  color: #005FFE;
-  font-size: 22px;"> 
-  Weekly round up for LynchPyn
-</div> %>
 
-<div style="
-  color: #005FFE;
-  font-size: 18px;
-  margin-top: 30px;
-  margin-bottom: 20px;
-">
-  Here is your week in numbers for:
-</div>
 
 <p style="font-size: 14px; margin-bottom: 10px;">
+  Here is your week in numbers for:
+  </p>
+
+<p style="font-size: 14px; margin-bottom: 10px; font-weight: bold;">
   <%= get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone).strftime("%B %-d")%> 
     - 
   <%= (get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone) + 6.days).strftime("%B %-d")%>
@@ -37,7 +28,7 @@
     <div style="margin-left: 30px; margin-right: 30px">
       <p style="text-align: center"> <%= stat[:statistic_number] %> </p>
       <p style="text-align: center; font-weight: bold;"> <%= stat[:statistic_name] %> </p>
-      <p style="text-align: center; color: <%= stat[:statistic_change] >= 0 ? "#00C3B3" : "#EB221B" %>"> <%= "#{stat[:statistic_change] > 0 ? "+": ""}#{stat[:statistic_change]}%"%></p>
+      <p style="text-align: center; color: <%= stat[:statistic_change] >= 0 ? "#00C3B3" : "#EB221B" %>"> <%= "#{stat[:statistic_change] > 0 ? "+": ""}#{'%.1f' % stat[:statistic_change]}%"%></p>
     </div>
   <% end %>
 

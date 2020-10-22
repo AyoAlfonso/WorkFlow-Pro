@@ -6,17 +6,32 @@ class UserMailer < ApplicationMailer
 
   def notification_email
     @user = params[:user]
-    @subject = "#{@user.first_name}, Your Upcoming #{params[:subject]}"
+    @subject = params[:subject]
     @message = params[:message]
+    @greeting = params[:greeting]
+    @cta_text = params[:cta_text]
+    @cta_url = params[:cta_url]
     mail(to: @user.email, subject: @subject)
   end
 
   def end_of_week_stats
     @user = params[:user]
-    @subject = "#{@user.first_name}, Time to Plan for Next Week"
+    @subject = params[:subject]
+    @greeting = params[:greeting]
     @message = params[:message]
     week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)
     @meeting = Meeting.first_or_create_for_weekly_planning_on_email(@user, week_to_review_start_time)
+    mail(to: @user.email, subject: @subject)
+  end
+
+  def team_meeting_email
+    @user = params[:user]
+    @team = params[:team]
+    @subject = params[:subject]
+    @greeting = params[:greeting]
+    @message = params[:message]
+    @cta_text = "Start Meeting"
+    @cta_url = "/team/#{@team.id}"
     mail(to: @user.email, subject: @subject)
   end
 end
