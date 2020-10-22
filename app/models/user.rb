@@ -31,7 +31,6 @@ class User < ApplicationRecord
   has_many :habits
   has_many :team_user_enablements
   has_many :teams, through: :team_user_enablements
-  has_many :team_leads
   has_many :notifications, dependent: :destroy
   has_many :meetings, :foreign_key => 'hosted_by_id'
 
