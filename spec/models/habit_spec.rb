@@ -23,25 +23,11 @@ RSpec.describe Habit, type: :model do
     let!(:habit_no_logs) { create(:habit, user: user) }
 
     describe "weekly logs" do
-
-      it "completed should get only completed logs for current week" do
-        expect(habit_w_logs.complete_current_week_logs.count).to eq(3)
-      end
       it "should get all logs for the current week" do
         expect(habit_w_logs.current_week_logs.count).to eq(5)
       end
-  
     end
-  
-    describe "previous logs" do
-      it "should have 7 entries for previous week logs" do
-        expect(habit_no_logs.previous_week_logs.count).to eq(7)
-      end
-      it "completed should have entries based on previous logs" do
-        expect(habit_no_logs.complete_previous_week_logs.count).to eq(0)
-        expect(habit_w_logs.complete_previous_week_logs.count).to eq(1)
-      end
-    end
+
   
     describe "weekly logs completion difference" do
       it "should expect there to be a 200% decrease on the weekly log differences" do
