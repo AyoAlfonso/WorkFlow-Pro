@@ -6,7 +6,7 @@ class Api::HabitsController < Api::ApplicationController
 
   def index
     @habits = policy_scope(Habit)
-    render json: @habits
+    render json: { habits: @habits, last_five_days:  last_five_days }
   end
 
   def create
@@ -56,4 +56,11 @@ class Api::HabitsController < Api::ApplicationController
     @habit = policy_scope(Habit).find(params[:id])
     authorize @habit
   end
+
+  def last_five_days
+    (0..4).map do |index|
+      (current_user.convert_to_their_timezone - index.days).to_date
+    end
+  end
 end
+

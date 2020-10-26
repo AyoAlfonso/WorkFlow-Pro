@@ -60,15 +60,15 @@ export const HabitsBody = observer(
       ));
 
     const daysToRender = windowDimensions.width > 1500 ? lastFiveDays : lastFourDays;
-
+    
     const dayNames = daysToRender.map((day, index) => (
       <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"12%"}>
-        {day.format("ddd")}
+        {moment(day).format("ddd")}
       </HabitsTableHeaderCell>
     ));
 
     const dayDates = daysToRender.map((day, index) => (
-      <HabitsTableHeaderCell key={index}>{day.format("DD")}</HabitsTableHeaderCell>
+      <HabitsTableHeaderCell key={index}>{moment(day).format("DD")}</HabitsTableHeaderCell>
     ));
 
     return showIndividualHabit ? (

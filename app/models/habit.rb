@@ -5,10 +5,7 @@ class Habit < ApplicationRecord
   has_many :habit_logs, dependent: :destroy
 
   scope :owned_by_user, -> (user) { where(user: user) }
-  delegate  :complete_current_week_logs,
-            :complete_previous_week_logs,
-            :completed_logs_by_date_range,
-            to: :habit_logs
+  delegate  :completed_logs_by_date_range, to: :habit_logs
 
   def as_json(options = [])
     super({
@@ -18,41 +15,21 @@ class Habit < ApplicationRecord
                 current_week_logs: {
                   except: [:created_at, :updated_at]
                 },
-                previous_week_logs: {
-                  except: [:created_at, :updated_at]
-                }
               ]
     })
   end
 
   # Builds weekly log objects for days of the week that don't have log
   def current_week_logs
-    (0..Date.today.wday).map do |day_int|
-      complete_current_week_logs.find { |wl| wl.log_date.wday == day_int} ||
-      HabitLog.new(
-        habit: self,
-        log_date: current_week_start_date.next_day(day_int)
-      )
+    (0..4).map do |index|
+      date = (self.user.convert_to_their_timezone - index.days).to_date
+      self.habit_logs.find { |wl| wl.log_date == date} ||
+        HabitLog.new(
+          habit: self,
+          log_date: date
+        )
     end
-  end
-
-  def complete_current_week_logs
-    completed_logs_by_date_range(current_week_start_date, current_week_end_date)
-  end
-
-  def previous_week_logs
-    (0..6).map do |day_int|
-      complete_previous_week_logs.find { |wl| wl.log_date.wday == day_int} ||
-      HabitLog.new(
-        habit: self,
-        log_date: previous_week_start_date.next_day(day_int)
-      )
-    end
-  end
-
-  def complete_previous_week_logs
-    completed_logs_by_date_range(previous_week_start_date, previous_week_end_date)
-  end
+  end 
 
   def weekly_logs_completion_difference
     current_week_completion_count = self.completed_logs_by_date_range(current_week_start_date, current_week_end_date).count
@@ -174,10 +151,6 @@ class Habit < ApplicationRecord
   end
 
   def current_week_start_date
-    get_beginning_of_last_or_current_work_week_date(self.user.time_in_user_timezone).prev_day.to_date
-  end
-
-  def current_week_start_date_for_habit_score_calculation
     self.user.time_in_user_timezone.beginning_of_week
   end
 
@@ -228,7 +201,7 @@ class Habit < ApplicationRecord
 
   def week_start_date_records
     (0..7).map do |number|
-      current_week_start_date_for_habit_score_calculation - number.weeks
+      current_week_start_date - number.weeks
     end
   end
 

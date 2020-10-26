@@ -12,14 +12,12 @@ export const HabitStoreModel = types
   .props({
     habits: types.array(HabitModel),
     habit: types.maybeNull(HabitModel),
+    lastFiveDays: types.array(types.frozen()),
   })
   .extend(withEnvironment())
   .views(self => ({
     get lastFourDays() {
-      return [0, 1, 2, 3].map(dayInt => moment().subtract(dayInt, "days"));
-    },
-    get lastFiveDays() {
-      return [0, 1, 2, 3, 4].map(dayInt => moment().subtract(dayInt, "days"));
+      return self.lastFiveDays.slice(0, 4);
     },
     get totalFrequency() {
       return self.habits.reduce((sum, habit) => sum + (habit.frequency || 0), 0);
@@ -54,7 +52,8 @@ export const HabitStoreModel = types
     fetchHabits: flow(function*() {
       const response: ApiResponse<any> = yield self.environment.api.getHabits();
       if (response.ok) {
-        self.habits = response.data;
+        self.habits = response.data.habits;
+        self.lastFiveDays = response.data.lastFiveDays;
       }
     }),
     fetchHabitsForPersonalPlanning: flow(function*() {
@@ -70,19 +69,11 @@ export const HabitStoreModel = types
           habit => habit.id === response.data.habitLog.habitId,
         );
         self.habits[habitIndex] = response.data.habit;
-        let weekToUpdate = "currentWeekLogs";
         let habitLogIndex = self.habits[habitIndex].currentWeekLogs.findIndex(
           log => log.logDate === response.data.habitLog.logDate,
         );
-        // If log wasn't found in current week then use previous week
-        if (habitLogIndex == -1) {
-          weekToUpdate = "previousWeekLogs";
-          habitLogIndex = self.habits[habitIndex].previousWeekLogs.findIndex(
-            log => log.logDate === response.data.habitLog.logDate,
-          );
-        }
         const newHabits: Array<any> = [...self.habits];
-        newHabits[habitIndex][weekToUpdate][habitLogIndex] = response.data.habitLog;
+        newHabits[habitIndex]["currentWeekLogs"][habitLogIndex] = response.data.habitLog;
       }
     }),
     getHabit: flow(function*(id) {

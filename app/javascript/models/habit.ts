@@ -11,7 +11,6 @@ export const HabitModel = types
     name: types.maybeNull(types.string),
     userId: types.maybeNull(types.number),
     currentWeekLogs: types.array(HabitLogModel),
-    previousWeekLogs: types.array(HabitLogModel),
     weeklyCompletionPercentage: types.maybeNull(types.number),
     weeklyDifference: types.maybeNull(types.number),
     weeklyCompletionFraction: types.maybeNull(types.string),
@@ -26,10 +25,10 @@ export const HabitModel = types
       return self.currentWeekLogs.filter(log => !!log.id);
     },
     get recentLogsFourDays() {
-      return [...R.reverse(self.currentWeekLogs), ...R.reverse(self.previousWeekLogs)].slice(0, 4);
+      return self.currentWeekLogs.slice(0, 4);
     },
     get recentLogsFiveDays() {
-      return [...R.reverse(self.currentWeekLogs), ...R.reverse(self.previousWeekLogs)].slice(0, 5);
+      return self.currentWeekLogs;
     },
   }))
   .views(self => ({
