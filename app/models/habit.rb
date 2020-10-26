@@ -177,6 +177,10 @@ class Habit < ApplicationRecord
     get_beginning_of_last_or_current_work_week_date(self.user.time_in_user_timezone).prev_day.to_date
   end
 
+  def current_week_start_date_for_habit_score_calculation
+    self.user.time_in_user_timezone.beginning_of_week
+  end
+
   def current_week_end_date
     user_current_date.end_of_week.prev_day.to_date
   end
@@ -224,7 +228,7 @@ class Habit < ApplicationRecord
 
   def week_start_date_records
     (0..7).map do |number|
-      current_week_start_date - number.weeks
+      current_week_start_date_for_habit_score_calculation - number.weeks
     end
   end
 
