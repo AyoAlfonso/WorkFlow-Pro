@@ -63,19 +63,20 @@ class Habit < ApplicationRecord
   end
 
   def weekly_score_difference
-    previous_week_date = user_current_date.prev_week
-    difference_between_values(calculate_score_for_date(user_current_date), calculate_score_for_date(previous_week_date))
+    end_of_this_week = (user_current_date.end_of_week).beginning_of_day
+    end_of_previous_week = (end_of_this_week - 7.days).beginning_of_day
+    difference_between_values(calculate_score_for_date(end_of_this_week), calculate_score_for_date(end_of_previous_week))
   end
 
   def score_data_for_line_graph
     #show each week up to today.
     weekly_score_results = week_start_date_records.map do |date|
-      calculate_score_for_date_range(date, (date + 6.days).end_of_day)
+      calculate_score_for_date((date + 6.days).end_of_day)
     end
 
     #show last 6 months.
     monthly_score_results = first_day_of_last_6_months.map do |date|
-      calculate_score_for_date_range(date, date.end_of_month)
+      calculate_score_for_date(date.end_of_month)
     end
   
     # show each quarter (4)
@@ -171,14 +172,14 @@ class Habit < ApplicationRecord
   end
 
   def calculate_score_for_date(date)
-    weekly_average_from_past_4_weeks = self.habit_logs.where("log_date >= ?", date - 4.weeks).count.to_f / 4
-    aggregate_from_past_256_days_count = self.habit_logs.where("log_date >= ?", date - 256.days).count
+    weekly_average_from_past_4_weeks = self.habit_logs.where("log_date >= ? AND log_date <= ?", date - 4.weeks, date).count.to_f / 4 
+    aggregate_from_past_256_days_count = self.habit_logs.where("log_date >= ? AND log_date <= ?", date - 256.days, date).count
     parhams_equation_for_score(weekly_average_from_past_4_weeks, self.frequency, aggregate_from_past_256_days_count)
   end
 
   def calculate_score_for_date_range(start_date, end_date)
     weekly_average_from_date_range = self.habit_logs.where("log_date >= ? AND log_date <= ?", start_date, end_date).count.to_f / 4
-    aggregate_from_past_256_days_count = self.habit_logs.where("log_date >= ?", end_date - 256.days).count
+    aggregate_from_past_256_days_count = self.habit_logs.where("log_date >= ? AND log_date <= ?", end_date - 256.days, end_date).count
     parhams_equation_for_score(weekly_average_from_date_range, self.frequency, aggregate_from_past_256_days_count)
   end
 
