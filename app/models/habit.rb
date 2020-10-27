@@ -70,7 +70,7 @@ class Habit < ApplicationRecord
   def score_data_for_line_graph
     #show each week up to today.
     weekly_score_results = week_start_date_records.map do |date|
-      calculate_score_for_date_range(date, date + 6.days)
+      calculate_score_for_date_range(date, (date + 6.days).end_of_day)
     end
 
     #show last 6 months.
