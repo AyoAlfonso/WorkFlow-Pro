@@ -53,7 +53,6 @@ export const KeyActivitiesBody = observer(
         return (
           <>
             <OutstandingMasterActivitiesListContainer
-              height={outstandingMasterActivitiesContainerHeight}
             >
               {renderOutstandingMasterActivitiesList()}
             </OutstandingMasterActivitiesListContainer>
@@ -236,11 +235,9 @@ const CompletedMasterActivitiesListContainer = styled.div<
 `;
 
 type OutstandingMasterActivitiesListContainerType = {
-  height: number;
 };
 
 const OutstandingMasterActivitiesListContainer = styled.div<
   OutstandingMasterActivitiesListContainerType
 >`
-  height: 105%;
 `;
