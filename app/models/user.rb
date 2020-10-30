@@ -60,7 +60,7 @@ class User < ApplicationRecord
   end
 
   def weekly_reflection_complete
-    QuestionnaireAttempt.of_questionnaire_type("Weekly Reflection").where(completed_at: self.time_in_user_timezone.beginning_of_week..self.time_in_user_timezone.end_of_week).present?
+    QuestionnaireAttempt.of_questionnaire_type("Weekly Reflection").where(completed_at: (self.time_in_user_timezone.beginning_of_week + 1.days)..(self.time_in_user_timezone.end_of_week + 1.days)).present?
   end
 
   def current_daily_log

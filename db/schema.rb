@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_13_195244) do
+ActiveRecord::Schema.define(version: 2020_10_30_212048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -309,7 +309,10 @@ ActiveRecord::Schema.define(version: 2020_10_13_195244) do
     t.text "json_representation"
     t.integer "emotion_score"
     t.string "questionnaire_type"
+    t.string "questionnaire_attemptable_type"
+    t.bigint "questionnaire_attemptable_id"
     t.index ["completed_at"], name: "index_questionnaire_attempts_on_completed_at"
+    t.index ["questionnaire_attemptable_type", "questionnaire_attemptable_id"], name: "index_on_questionnaire_attemptable_id_and_type"
     t.index ["questionnaire_id"], name: "index_questionnaire_attempts_on_questionnaire_id"
     t.index ["user_id"], name: "index_questionnaire_attempts_on_user_id"
   end

@@ -264,9 +264,7 @@ export class Api {
   async createQuestionnaireAttempt(questionnaireId, questionnaireAttemptData) {
     const questionnaireAttemptObject = {
       questionnaire_id: questionnaireId,
-      answers: questionnaireAttemptData.values,
-      rendered_steps: questionnaireAttemptData.renderedSteps,
-      steps: questionnaireAttemptData.steps,
+      ...questionnaireAttemptData,
     };
     return this.client.post(`/questionnaire_attempts`, questionnaireAttemptObject);
   }

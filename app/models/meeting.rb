@@ -1,5 +1,7 @@
 class Meeting < ApplicationRecord
   include StatsHelper
+  include QuestionnaireAttemptable
+  
   belongs_to :team, optional: true #a meeting with no team is a personal meeting
   belongs_to :hosted_by, class_name: "User", optional: true
   belongs_to :meeting_template

@@ -33,12 +33,13 @@ export const QuestionnaireStoreModel = types
       questionnaireId,
       questionnaireAttemptData,
       questionnaireTitle: string,
+      optionalParams = {},
     ) {
       const { sessionStore } = getRoot(self);
       try {
         const response: ApiResponse<any> = yield self.environment.api.createQuestionnaireAttempt(
           questionnaireId,
-          questionnaireAttemptData,
+          { ...questionnaireAttemptData, ...optionalParams },
         );
         sessionStore.updateUser(
           {

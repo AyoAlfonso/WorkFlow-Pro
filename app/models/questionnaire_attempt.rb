@@ -1,6 +1,7 @@
 class QuestionnaireAttempt < ApplicationRecord
   belongs_to :user
   belongs_to :questionnaire
+  belongs_to :questionnaire_attemptable, polymorphic: true, optional: true
 
   serialize :answers, Array
   serialize :steps, Array

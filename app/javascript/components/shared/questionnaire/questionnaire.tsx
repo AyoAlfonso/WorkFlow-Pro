@@ -46,6 +46,7 @@ export const Questionnaire = observer(
 
     const summaryData = meetingStore.personalPlanningSummary;
     const userFirstName = sessionStore.profile.firstName;
+    const currentPersonalPlanning = meetingStore.currentPersonalPlanning;
 
     const steps = R.map(step => {
       if (R.path(["metadata", "summary"], step) === "gratitude") {
@@ -114,15 +115,19 @@ export const Questionnaire = observer(
           style={{ height: "520px" }}
           enableSmoothScroll={true}
           userDelay={200}
-          handleEnd={async ({ renderedSteps, steps, values }) => {
+          handleEnd={async ({ renderedSteps, steps, values: answers }) => {
             await questionnaireStore.createQuestionnaireAttempt(
               questionnaireVariant.id,
               {
                 renderedSteps,
                 steps,
-                values,
+                answers,
               },
               questionnaireVariant.title,
+              {
+                questionnaireAttemptableId: currentPersonalPlanning.id,
+                questionnaireAttemptableType: "Meeting",
+              },
             );
           }}
         />
