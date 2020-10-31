@@ -104,13 +104,13 @@ export const SurveyBot = observer(
         enableSmoothScroll={true}
         userDelay={200}
         zIndex={1}
-        handleEnd={async ({ renderedSteps, steps, values }) => {
+        handleEnd={async ({ renderedSteps, steps, values: answers }) => {
           await questionnaireStore.createQuestionnaireAttempt(
             questionnaireVariant.id,
             {
               renderedSteps,
               steps,
-              values,
+              answers,
             },
             questionnaireVariant.title,
           );

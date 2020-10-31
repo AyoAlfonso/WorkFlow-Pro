@@ -15,7 +15,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
 
     steps = permit_array_param_and_convert_to_hash(params[:steps])
     rendered_steps = permit_array_param_and_convert_to_hash(params[:rendered_steps])
-
+    
     @questionnaire_attempt = QuestionnaireAttempt.new({
       user_id: current_user.id,
       questionnaire_id: params[:questionnaire_id],
@@ -25,7 +25,9 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
       rendered_steps: rendered_steps,
       completed_at: Time.now,
       json_representation: json_representation,
-      emotion_score: questionnaire.name == "Evening Reflection" ? emotion_to_score_conversion(rendered_steps) : nil
+      emotion_score: questionnaire.name == "Evening Reflection" ? emotion_to_score_conversion(rendered_steps) : nil,
+      questionnaire_attemptable_id: params[:questionnaire_attemptable_id],
+      questionnaire_attemptable_type: params[:questionnaire_attemptable_type]
     })
     authorize @questionnaire_attempt
     if @questionnaire_attempt.save!
@@ -76,7 +78,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
   private
 
   def questionnaire_attempt_params
-    params.permit(:id, :user_id, :questionnaire_id, :completed_at, :answers => [], :steps => [], :rendered_steps => [])
+    params.permit(:id, :user_id, :questionnaire_id, :completed_at, :questionnaire_attemptable_id, :questionnaire_attemptable_type, :answers => [], :steps => [], :rendered_steps => [])
   end
 
   def permit_array_param_and_convert_to_hash(array)
