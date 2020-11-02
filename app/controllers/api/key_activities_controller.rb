@@ -4,7 +4,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
   respond_to :json
 
   def index
-    @key_activities = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_todays_priority_weekly_list_position
+    @key_activities = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_position
     render "api/key_activities/index"
   end
 
@@ -17,7 +17,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
     if params[:meeting_id]
       @key_activities_to_render = team_meeting_activities(params[:meeting_id])
     else
-      @key_activities_to_render = KeyActivity.optimized.owned_by_user(current_user).sort_by_priority_and_created_at
+      @key_activities_to_render = KeyActivity.optimized.owned_by_user(current_user).sort_by_position
     end
     render "api/key_activities/create"
   end
@@ -34,7 +34,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
     if params[:from_team_meeting] == true
       @key_activities_to_render = team_meeting_activities(@key_activity.meeting_id)
     else
-      @key_activities_to_render = KeyActivity.optimized.owned_by_user(current_user).sort_by_todays_priority_weekly_list_position
+      @key_activities_to_render = KeyActivity.optimized.owned_by_user(current_user).sort_by_position
     end
     render "api/key_activities/update"
   end
@@ -45,7 +45,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
       meeting_id = @key_activity.meeting_id
       @key_activities_to_render = team_meeting_activities(meeting_id)
     else
-      @key_activities_to_render = KeyActivity.optimized.owned_by_user(current_user).sort_by_todays_priority_weekly_list_position
+      @key_activities_to_render = KeyActivity.optimized.owned_by_user(current_user).sort_by_position
     end
     render "api/key_activities/destroy"
   end
