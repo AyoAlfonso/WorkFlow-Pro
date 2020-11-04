@@ -15,7 +15,7 @@ module HasEmotionScores
       }
       results_array << average_score_hash
     end
-    results_array.reverse!
+    results_array
   end
 
   def overall_average_weekly_emotion_score(users, from_date, to_date)

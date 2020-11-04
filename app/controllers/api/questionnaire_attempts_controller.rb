@@ -23,7 +23,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
       answers: params[:answers],
       steps: steps,
       rendered_steps: rendered_steps,
-      completed_at: Time.now,
+      completed_at: current_user.time_in_user_timezone,
       json_representation: json_representation,
       emotion_score: questionnaire.name == "Evening Reflection" ? emotion_to_score_conversion(rendered_steps) : nil,
       questionnaire_attemptable_id: params[:questionnaire_attemptable_id],
