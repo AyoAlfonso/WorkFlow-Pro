@@ -1,8 +1,10 @@
 class Habit < ApplicationRecord
   include StatsHelper
+  include ActionView::Helpers::SanitizeHelper
 
   belongs_to :user
   has_many :habit_logs, dependent: :destroy
+  before_save :sanitize_name
 
   scope :owned_by_user, -> (user) { where(user: user) }
   delegate  :completed_logs_by_date_range, to: :habit_logs
@@ -246,6 +248,7 @@ class Habit < ApplicationRecord
     self.user.company
   end
 
-
-
+  def sanitize_name
+    self.name = strip_tags(name)
+  end
 end
