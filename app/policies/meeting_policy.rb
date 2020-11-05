@@ -28,7 +28,11 @@ class MeetingPolicy < ApplicationPolicy
   end
 
   def update?
-    meeting.hosted_by == @user
+    if (meeting.meeting_type == "team_weekly")
+      meeting.hosted_by == @user || @user.team_lead_for?(meeting.team)
+    else
+      meeting.hosted_by == @user
+    end
   end
 
   def destroy?
