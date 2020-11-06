@@ -15,11 +15,19 @@ module HasEmotionScores
       }
       results_array << average_score_hash
     end
-    results_array
+
+    record_dates = results_array.pluck(:date).map do |date|
+      date.strftime("%a-%-d")
+    end
+
+    {
+      emotion_scores: results_array,
+      record_dates: record_dates
+    }
   end
 
   def overall_average_weekly_emotion_score(users, from_date, to_date)
-    average_user_score = daily_average_users_emotion_score(users, from_date, to_date)
+    average_user_score = daily_average_users_emotion_score(users, from_date, to_date)[:emotion_scores]
     if average_user_score.size == 0
       0
     else
