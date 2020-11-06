@@ -8,6 +8,7 @@ import { ToastMessageConstants } from "~/constants/toast-types";
 import { UserModel } from "~/models/user";
 import { StaticModel } from "~/models/static";
 import { homePersonalStatusOptions as options } from "~/components/domains/home/home-personal-status/home-personal-status-options";
+import { registerIdentity } from "~/components/shared/analytics";
 
 export const SessionStoreModel = types
   .model("SessionStoreModel")
@@ -34,6 +35,15 @@ export const SessionStoreModel = types
           self.profile = response.data;
           self.staticData = response.data.staticData;
           self.loggedIn = true;
+
+          //data and company name are not stored on user model
+          registerIdentity(
+            response.data.id,
+            response.data.email,
+            `${response.data.firstName} ${response.data.lastName}`,
+            response.data.companyId,
+            response.data.companyName,
+          );
         }
       } catch {
         // error messaging handled by API monitor

@@ -3,6 +3,7 @@ import * as R from "ramda";
 import { observer } from "mobx-react";
 //import { RouterModel } from "mst-react-router";
 import { Route, Switch } from "react-router-dom";
+import { usePageViews } from "~/components/shared/analytics";
 import { ThemeProvider } from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 
@@ -53,6 +54,7 @@ export interface IAppProps {
 
 export const App = observer(
   (props: IAppProps): JSX.Element => {
+    usePageViews();
     const { issueStore, keyActivityStore, sessionStore } = useMst();
     const loggedIn = sessionStore.loggedIn; //if logged in show switch
 
