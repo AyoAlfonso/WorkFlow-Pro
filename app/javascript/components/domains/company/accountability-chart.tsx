@@ -16,9 +16,7 @@ export const AccountabilityChart = observer(
       <div>
         {company ? (
           <>
-            <HeaderText type={"h1"} color={"black"}>
-              {t("company.accountabilityChart")}
-            </HeaderText>
+            <HeaderText color={"black"}>{t("company.accountabilityChart")}</HeaderText>
             <div
               className="trix-content"
               dangerouslySetInnerHTML={{ __html: company.accountabilityChartContent }}

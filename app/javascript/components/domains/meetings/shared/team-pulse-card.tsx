@@ -71,13 +71,14 @@ export const TeamPulseCard = ({ data }: ITeamPulseCardProps): JSX.Element => {
 };
 
 const renderDateOfWeek = date => {
+  const splittedDate = date.split("-");
   return (
     <tspan>
       <tspan x="0" dy="1em">
-        {moment(date).format("D")}
+        {splittedDate[1]}
       </tspan>
       <tspan x="0" dy="1.4em">
-        {moment(date).format("ddd")}
+        {splittedDate[0]}
       </tspan>
     </tspan>
   );

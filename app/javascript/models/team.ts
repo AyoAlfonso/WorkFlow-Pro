@@ -13,7 +13,7 @@ export const TeamModel = types
     defaultAvatarColor: types.maybeNull(types.string),
     users: types.maybeNull(types.array(UserModel)),
     settings: types.maybeNull(types.frozen()),
-    averageWeeklyUserEmotions: types.maybeNull(types.array(types.frozen())),
+    averageWeeklyUserEmotions: types.maybeNull(types.frozen()),
     averageTeamEmotionScore: types.maybeNull(types.number),
   })
   .views(self => ({
@@ -28,8 +28,8 @@ export const TeamModel = types
     },
     get formattedAverageWeeklyUserEmotions() {
       if (!R.isNil(self.averageWeeklyUserEmotions)) {
-        return self.averageWeeklyUserEmotions.map(averages => {
-          return { x: new Date(averages.date), y: averages.averageScore };
+        return self.averageWeeklyUserEmotions["emotionScores"].map((averages, index) => {
+          return { x: self.averageWeeklyUserEmotions["recordDates"][index], y: averages.averageScore };
         });
       } else {
         [];

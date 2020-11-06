@@ -24,7 +24,7 @@ export const MeetingModel = types
     startTime: types.maybeNull(types.string),
     steps: types.array(StepModel),
     teamId: types.maybeNull(types.number),
-    currentWeekAverageUserEmotions: types.maybeNull(types.array(types.frozen())),
+    currentWeekAverageUserEmotions: types.maybeNull(types.frozen()),
     currentWeekAverageTeamEmotions: types.maybeNull(types.number),
     emotionScorePercentageDifference: types.maybeNull(types.number),
     teamKeyActivities: types.maybeNull(types.array(KeyActivityModel)),
@@ -41,8 +41,8 @@ export const MeetingModel = types
     },
     get formattedAverageWeeklyUserEmotions() {
       if (!R.isNil(self.currentWeekAverageUserEmotions)) {
-        return self.currentWeekAverageUserEmotions.map(averages => {
-          return { x: new Date(averages.date), y: averages.averageScore };
+        return self.currentWeekAverageUserEmotions["emotionScores"].map((averages, index) => {
+          return { x: self.currentWeekAverageUserEmotions["recordDates"][index], y: averages.averageScore };
         });
       } else {
         [];
