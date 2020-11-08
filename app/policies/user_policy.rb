@@ -52,7 +52,7 @@ class UserPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes([:company, :avatar_attachment, :user_role]).where(company: @user.company)
+      scope.includes([:company, :user_role, avatar_attachment: :blob]).where(company: @user.company)
     end
   end
 end
