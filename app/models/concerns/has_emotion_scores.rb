@@ -6,8 +6,9 @@ module HasEmotionScores
     q_attempts = QuestionnaireAttempt.where(user: users)
                                       .where("emotion_score IS NOT NULL AND completed_at <= ? AND completed_at >= ?", to_date, from_date)
                                       .select(:id, :completed_at, :emotion_score)
-                                      .group_by{|qa| qa.completed_at}
+                                      .group_by{|qa| qa.completed_at.strftime("%a-%-d")}
     results_array = []
+
     q_attempts.map do |qa|
       average_score_hash = {
         date: qa[0],
@@ -17,12 +18,12 @@ module HasEmotionScores
     end
 
     record_dates = results_array.pluck(:date).map do |date|
-      date.strftime("%a-%-d")
+      date
     end
     
     {
-      emotion_scores: results_array,
-      record_dates: record_dates
+      emotion_scores: results_array.reverse,
+      record_dates: record_dates.reverse
     }
   end
 
