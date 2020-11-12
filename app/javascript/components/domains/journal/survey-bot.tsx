@@ -14,7 +14,7 @@ import { QuestionnaireTypeConstants } from "~/constants/questionnaire-types";
 
 export interface ISurveyBotProps {
   variant: string;
-  endFn?: Dispatch<SetStateAction<string>>;
+  endFn?: () => void | void;
   optionalActionsComponent?: JSX.Element;
 }
 
@@ -37,6 +37,7 @@ export const SurveyBot = observer(
       questionnaireStore.load().then(() => {
         setLoading(false);
       });
+      window.closeWidget();
     }, []);
 
     const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
@@ -124,7 +125,7 @@ export const SurveyBot = observer(
           );
           if (typeof props.endFn === "function") {
             setTimeout(() => {
-              props.endFn("");
+              props.endFn();
             }, 2000);
           }
         }}

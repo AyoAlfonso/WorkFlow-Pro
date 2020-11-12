@@ -17,6 +17,13 @@ import { SurveyBot } from "./survey-bot";
 import { Link } from "react-router-dom";
 import Modal from "styled-react-modal";
 
+declare global {
+  interface Window {
+    closeWidget: () => void | void;
+    openWidget: () => void | void;
+  }
+}
+
 export const Journal = observer(
   (props): JSX.Element => {
     const [questionnaireVariant, setQuestionnaireVariant] = useState<string>("");
@@ -41,6 +48,11 @@ export const Journal = observer(
       shadow: true,
     };
 
+    const handleChatbotEnd = () => {
+      setQuestionnaireVariant("");
+      window.openWidget();
+    };
+
     return (
       <JournalContainer>
         <HeaderContainerWithActions>
@@ -63,14 +75,14 @@ export const Journal = observer(
           {questionnaireVariant !== "" ? (
             <SurveyBot
               variant={questionnaireVariant}
-              endFn={setQuestionnaireVariant}
+              endFn={handleChatbotEnd}
               optionalActionsComponent={
                 <EndButtonContainer>
                   {questionnaireVariant ? (
                     <EndButton
                       onClick={() => {
                         if (confirm(t("journals.confirmQuit"))) {
-                          setQuestionnaireVariant("");
+                          handleChatbotEnd();
                         }
                       }}
                     >
