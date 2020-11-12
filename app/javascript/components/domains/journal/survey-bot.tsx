@@ -9,8 +9,7 @@ import { Text } from "../../shared/text";
 import { Loading } from "../../shared/loading";
 import { MIPSelector } from "./mip-selector";
 import { EmotionSelector } from "./emotion-selector";
-import * as humps from "humps";
-import { QuestionnaireTypeConstants } from "~/constants/questionnaire-types";
+import { baseTheme } from "~/themes/base";
 
 export interface ISurveyBotProps {
   variant: string;
@@ -96,6 +95,12 @@ export const SurveyBot = observer(
     return (
       <ChatBot
         botDelay={1000}
+        bubbleOptionStyle={{
+          backgroundColor: baseTheme.colors.primary100,
+          color: "white",
+          boxShadow: "2px 2px 2px rgba(0, 0, 0, 0.3)",
+          cursor: "pointer",
+        }}
         headerComponent={
           <SurveyHeader
             title={questionnaireVariant.title}
