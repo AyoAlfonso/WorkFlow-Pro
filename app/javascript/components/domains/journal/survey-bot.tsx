@@ -84,6 +84,14 @@ export const SurveyBot = observer(
       }
     }, R.clone(questionnaireVariant.steps));
 
+    if (R.isNil(steps)) {
+      return (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      );
+    }
+
     return (
       <ChatBot
         botDelay={1000}
