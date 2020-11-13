@@ -11898,9 +11898,9 @@ react-select@^3.0.8:
     react-input-autosize "^2.2.2"
     react-transition-group "^4.3.0"
 
-"react-simple-chatbot@github:laterolabs/react-simple-chatbot#master":
+"react-simple-chatbot@github:laterolabs/react-simple-chatbot#bd80585ee052072750c20cf17540cc6c4eb9f77e":
   version "0.6.1"
-  resolved "https://codeload.github.com/laterolabs/react-simple-chatbot/tar.gz/30045adb2f71f7e11ba79679b1344aa8186fe089"
+  resolved "https://codeload.github.com/laterolabs/react-simple-chatbot/tar.gz/bd80585ee052072750c20cf17540cc6c4eb9f77e"
   dependencies:
     eslint-config-prettier "^4.1.0"
     eslint-plugin-prettier "^3.0.1"
