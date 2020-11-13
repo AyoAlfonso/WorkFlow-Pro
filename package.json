@@ -57,7 +57,7 @@
     "react-i18next": "^11.7.0",
     "react-icomoon": "^2.1.3",
     "react-router-dom": "^5.2.0",
-    "react-simple-chatbot": "github:laterolabs/react-simple-chatbot#b7779d557ecdc96d51aea0cef8eba93a89c803f7",
+    "react-simple-chatbot": "github:laterolabs/react-simple-chatbot#c2be2324237149b12527f4fc76d80509747b79cd",
     "react-spinners": "^0.9.0",
     "react-step-progress-bar": "^1.0.3",
     "react-switch": "^5.0.1",
