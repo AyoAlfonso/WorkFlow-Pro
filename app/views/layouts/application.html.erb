@@ -18,6 +18,12 @@
     <script type="text/javascript" src="https://app.productstash.io/js/productstash-embed.js" defer="defer"></script>
 
     <script>
+        function openWidget() {
+          FreshworksWidget('show', 'launcher');
+        };
+        function closeWidget() {
+          FreshworksWidget('hide', 'launcher');
+        };
         window.fwSettings={
           'widget_id': <%= ENV['FRESHDESK_WIDGET_ID']%>
         };
