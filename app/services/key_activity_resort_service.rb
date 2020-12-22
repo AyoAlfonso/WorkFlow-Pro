@@ -20,18 +20,22 @@ class KeyActivityResortService < ApplicationService
   end
 
   def reset_positions(key_activities)
-    key_activities.todays_priority.each_with_index do |ka, idx|
+    ka_1 = key_activities.todays_priority.each_with_index.map do |ka, idx|
       ka.position = idx + 1
-      ka.save!
+      ka.as_json
     end
-    key_activities.weekly_list.each_with_index do |ka, idx|
+
+    ka_2 = key_activities.weekly_list.each_with_index.map do |ka, idx|
       ka.position = idx + 1
-      ka.save!
+      ka.as_json
     end
-    key_activities.master_list.each_with_index do |ka, idx|
+
+    ka_3 = key_activities.master_list.each_with_index.map do |ka, idx|
       ka.position = idx + 1
-      ka.save!
+      ka.as_json
     end
+
+    KeyActivity.upsert_all(ka_1 + ka_2 + ka_3)
     key_activities
   end
 end
