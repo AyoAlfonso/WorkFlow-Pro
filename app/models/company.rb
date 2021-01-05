@@ -24,7 +24,12 @@ class Company < ApplicationRecord
     ( Time.now >= current_year_fiscal_year_start && current_year_fiscal_year_start != Date.parse("#{current_time.year}-01-01") ) ? current_time.year + 1 : current_time.year
   end
 
-  def next_fiscal_start_date
+  def current_fiscal_start_date
+    current_time = self.convert_to_their_timezone
+    current_time <= current_year_fiscal_year_start ? current_year_fiscal_year_start - 1.year : current_year_fiscal_year_start
+  end
+
+  def next_quarter_start_date
     case self.current_fiscal_quarter
     when 1
       self.second_quarter_start_date
@@ -34,10 +39,10 @@ class Company < ApplicationRecord
       self.fourth_quarter_start_date
     else
       current_time = self.convert_to_their_timezone
-      (current_time < self.current_year_fiscal_year_start &&
-      current_year_fiscal_year_start != Date.parse("#{current_time.year}-01-01")) ? 
-      current_year_fiscal_year_start : 
-      current_year_fiscal_year_start + 1.year
+      (current_time < self.current_fiscal_start_date &&
+      current_fiscal_start_date != Date.parse("#{current_time.year}-01-01")) ? 
+      current_fiscal_start_date : 
+      current_fiscal_start_date + 1.year
     end
   end
 
@@ -76,7 +81,8 @@ class Company < ApplicationRecord
   end
 
   def year_for_creating_annual_initiatives
-    if current_year_fiscal_year_start > Date.today
+    current_date = self.convert_to_their_timezone
+    if current_year_fiscal_year_start > current_date
       within_4_weeks_range(current_year_fiscal_year_start) ? current_fiscal_year + 1 : current_fiscal_year
     else
       within_4_weeks_range(current_year_fiscal_year_start + 1.year) ? current_fiscal_year + 1 : current_fiscal_year
@@ -84,18 +90,18 @@ class Company < ApplicationRecord
   end
 
   def quarter_for_creating_quarterly_goals
-    current_date = format_month_and_day(Date.today)
-    if current_date.between?(format_fiscal_year_start, format_month_and_day(second_quarter_start_date()))
+    current_date = self.convert_to_their_timezone
+    if current_date.between?(current_fiscal_start_date, format_month_and_day(second_quarter_start_date()))
       within_4_weeks_range(second_quarter_start_date()) ? 2 : 1
     elsif current_date.between?(format_month_and_day(second_quarter_start_date()), format_month_and_day(third_quarter_start_date()))
       within_4_weeks_range(third_quarter_start_date()) ? 3 : 2
     elsif current_date.between?(format_month_and_day(third_quarter_start_date()), format_month_and_day(fourth_quarter_start_date()))
       within_4_weeks_range(fourth_quarter_start_date()) ? 4 : 3
     else
-      if self.current_year_fiscal_year_start > Date.today
-        self.current_year_fiscal_year_start - 4.weeks <= Date.today && within_4_weeks_range(self.current_year_fiscal_year_start) ? 1 : 4
+      if current_fiscal_start_date > current_date
+        current_fiscal_start_date - 4.weeks <= current_date && within_4_weeks_range(self.current_year_fiscal_year_start) ? 1 : 4
       else
-        self.current_year_fiscal_year_start - 4.weeks >= Date.today && within_4_weeks_range(self.current_year_fiscal_year_start) ? 1 : 4
+        current_fiscal_start_date - 4.weeks >= current_date && within_4_weeks_range(self.current_year_fiscal_year_start) ? 1 : 4
       end
     end
   end
@@ -104,25 +110,25 @@ class Company < ApplicationRecord
     # CHRIS' COMMENT: 
     # The reason we do + 13.weeks instead of .next_quarter is because for LynchPyn each quarter
     # is a fixed 13 weeks. Rails does next_quarter by + 3.months (which is not what we want)
-    self.current_year_fiscal_year_start + 13.weeks
+    current_fiscal_start_date + 13.weeks
   end
 
   def third_quarter_start_date
-    second_quarter_start_date + 13.weeks
+    current_fiscal_start_date + 26.weeks
   end
 
   def fourth_quarter_start_date
-    third_quarter_start_date + 13.weeks
+    current_fiscal_start_date + 39.weeks
   end
 
   private
   def calculate_current_fiscal_quarter
-    current_date = format_month_and_day(Date.today)
-    if current_date.between?(format_fiscal_year_start, format_month_and_day(second_quarter_start_date()))
+    current_date = self.convert_to_their_timezone
+    if current_date.between?(current_fiscal_start_date, second_quarter_start_date())
       return 1
-    elsif current_date.between?(format_month_and_day(second_quarter_start_date()), format_month_and_day(third_quarter_start_date()))
+    elsif current_date.between?(second_quarter_start_date(), third_quarter_start_date())
       return 2
-    elsif current_date.between?(format_month_and_day(third_quarter_start_date()), format_month_and_day(fourth_quarter_start_date()))
+    elsif current_date.between?(third_quarter_start_date(), fourth_quarter_start_date())
       return 3
     else
       return 4
@@ -134,6 +140,6 @@ class Company < ApplicationRecord
   end
 
   def within_4_weeks_range(end_date)
-    Date.today + 4.weeks >= end_date
+    self.convert_to_their_timezone + 4.weeks >= end_date
   end
 end

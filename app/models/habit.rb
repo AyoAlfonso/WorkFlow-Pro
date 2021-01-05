@@ -82,11 +82,11 @@ class Habit < ApplicationRecord
     end
   
     # show each quarter (4)
-    next_fiscal_start_date = habit_user_company.next_fiscal_start_date
+    next_quarter_start_date = habit_user_company.next_quarter_start_date
 
     quarterly_score_results = (0..3).map do |number|
-      first_day_of_quarter = next_fiscal_start_date - ((number + 1) * 13.weeks)
-      last_day_of_quarter = next_fiscal_start_date - 1.day - (number * 13.weeks)
+      first_day_of_quarter = next_quarter_start_date - ((number + 1) * 13.weeks)
+      last_day_of_quarter = next_quarter_start_date - 1.day - (number * 13.weeks)
       calculate_score_for_date_range(first_day_of_quarter, last_day_of_quarter)
     end
 
@@ -121,11 +121,11 @@ class Habit < ApplicationRecord
     end
   
     # show each quarter (4)
-    next_fiscal_start_date = habit_user_company.next_fiscal_start_date
+    next_quarter_start_date = habit_user_company.next_quarter_start_date
 
     quarterly_frequency_results = (0..3).map do |number|
-      first_day_of_quarter = next_fiscal_start_date - ((number + 1) * 13.weeks)
-      last_day_of_quarter = next_fiscal_start_date - 1.day - (number * 13.weeks)
+      first_day_of_quarter = next_quarter_start_date - ((number + 1) * 13.weeks)
+      last_day_of_quarter = next_quarter_start_date - 1.day - (number * 13.weeks)
       self.habit_logs.where("log_date >= ? AND log_date <= ?", first_day_of_quarter, last_day_of_quarter).count
     end
 
@@ -230,7 +230,7 @@ class Habit < ApplicationRecord
     company = habit_user_company
     current_fiscal_quarter = company.current_fiscal_quarter
     current_fiscal_year = company.current_year_fiscal_year_start.year
-    next_fiscal_start_date = company.next_fiscal_start_date
+    next_quarter_start_date = company.next_quarter_start_date
     
     quarterly_score_labels = case current_fiscal_quarter
                           when 1
