@@ -1,5 +1,5 @@
 class Issue < ApplicationRecord
-  enum priority: { low: 0, medium: 1, high: 2 }
+  enum priority: { low: 0, medium: 1, high: 2, frog: 3 }
   belongs_to :user
   belongs_to :team, optional: true
   has_one :team_issue, dependent: :destroy, autosave: true

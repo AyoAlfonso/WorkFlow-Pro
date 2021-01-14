@@ -57,6 +57,15 @@ export const IssueEntry = observer(
               style={{ marginTop: "2px" }}
             />
           );
+        case "frog":
+          return (
+            <Icon
+              icon={"Priority-MIP"}
+              size={24}
+              iconColor={baseTheme.colors.mipBlue}
+              style={{ marginTop: "2px" }}
+            />
+          );
         default:
           return (
             <Icon
@@ -79,6 +88,9 @@ export const IssueEntry = observer(
           priority = "high";
           break;
         case "high":
+          priority = "frog";
+          break;
+        case "frog":
           priority = "low";
           break;
         default:
