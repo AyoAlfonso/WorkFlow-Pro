@@ -1,4 +1,4 @@
-export interface ILabel {
-  id: number
-  name: string
+export type LabelType = {
+  id: number;
+  name: string;
 }

@@ -384,7 +384,7 @@ export class Api {
   }
 
   async getLabels() {
-    return this.client.get(`/labels`);
+    return this.client.get(`/tags`);
   }
 
   //async setJWT(jwt) {}

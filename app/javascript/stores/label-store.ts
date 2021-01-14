@@ -1,12 +1,12 @@
 import { types, flow } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
-import { ILabel } from "../types";
+import { LabelType } from "../types/label";
 import { ApiResponse } from "apisauce";
 
 export const LabelStoreModel = types
   .model("LabelStoreModel")
   .props({
-    labels: types.array(types.frozen<ILabel>())
+    labels: types.array(types.frozen<LabelType>())
   })
   .extend(withEnvironment())
   .views(self => ({
