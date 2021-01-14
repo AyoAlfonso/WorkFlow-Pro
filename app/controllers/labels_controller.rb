@@ -13,4 +13,5 @@ class LabelsController < ApplicationController
     def label_serializer
       LabelSerializer
     end
+    
 end
