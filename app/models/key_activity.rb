@@ -6,6 +6,8 @@ class KeyActivity < ApplicationRecord
 
   acts_as_list scope: [:company_id, :user_id, :weekly_list, :todays_priority]
 
+  acts_as_taggable_on :labels
+
   scope :optimized, -> { includes([:user]) }
   scope :user_current_company, -> (company_id) {where(company_id: company_id)}
 

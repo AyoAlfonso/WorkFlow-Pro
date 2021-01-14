@@ -30,6 +30,7 @@ gem 'image_processing', '~> 1.2'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'activeadmin', '~> 2.7.0'
+gem 'active_model_serializers', '~> 0.10.11'
 gem 'acts_as_list', '~> 1.0.2'
 gem 'arctic_admin', '~> 3.2.0'
 gem 'devise', '~> 4.7.2'
