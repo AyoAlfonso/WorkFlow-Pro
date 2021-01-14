@@ -59,7 +59,7 @@ export const IssueEntry = observer(
           );
         case "frog":
           return (
-            <Icon 
+            <Icon
               icon={"Priority-MIP"}
               size={24}
               iconColor={baseTheme.colors.mipBlue}
@@ -88,10 +88,11 @@ export const IssueEntry = observer(
           priority = "high";
           break;
         case "high":
-          priority = "low";
+          priority = "frog";
           break;
         case "frog":
-          priority = "frog";
+          priority = "low";
+          break;
         default:
           priority = "";
       }
