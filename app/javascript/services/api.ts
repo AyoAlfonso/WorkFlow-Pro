@@ -383,5 +383,9 @@ export class Api {
     return this.client.get(`questionnaire_attempts/questionnaire_summary?questionnaire_id=${questionnaireId}`)
   }
 
+  async getLabels() {
+    return this.client.get(`/labels`);
+  }
+
   //async setJWT(jwt) {}
 }
