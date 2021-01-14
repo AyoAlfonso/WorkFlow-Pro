@@ -4,16 +4,16 @@ import { LabelType } from "~/types/label";
 import { Text } from "./text";
 
 interface ILabelSelectionDropdownListProps {
-  labelList: Array<LabelType>;
+  labelsList: Array<LabelType>;
   onLabelSelect: any;
 }
 
 export const LabelSelectionDropdownList = ({
-  labelList,
+  labelsList,
   onLabelSelect,
 }: ILabelSelectionDropdownListProps): JSX.Element => {
   const renderLabelOptions = (): Array<JSX.Element> => {
-    return labelList.map((label, index) => {
+    return labelsList.map((label, index) => {
       return (
         <LabelOption key={index} onClick={() => onLabelSelect(label)}>
           <LabelOptionText> {`${label.name}`}</LabelOptionText>

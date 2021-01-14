@@ -15,7 +15,11 @@ import {
   PriorityContainer,
   IconContainer,
 } from "~/components/shared/styles/modals";
-import { UserSelectionDropdownList, Loading } from "~/components/shared";
+import {
+  UserSelectionDropdownList,
+  LabelSelectionDropdownList,
+  Loading,
+} from "~/components/shared";
 
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
@@ -32,15 +36,17 @@ export const CreateIssueModal = ({
   meetingId,
   meetingEnabled = false,
 }: ICreateIssueModalProps): JSX.Element => {
-  const { issueStore, sessionStore, userStore, companyStore } = useMst();
-
+  const { issueStore, sessionStore, userStore, companyStore, labelStore } = useMst();
   const [issueDescription, setIssueDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
+  const [selectedLabel, setSelectedLabel] = useState<any>(null);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
+    labelStore.fetchLabels();
   }, []);
 
   if (!companyStore.company) {
@@ -50,10 +56,19 @@ export const CreateIssueModal = ({
   const companyUsers = userStore.users;
   const issues = issueStore.openIssues;
   const itemName = companyStore.company.displayFormat == "Forum" ? "Parking Lot Item" : "Issue";
+  const labelsList = labelStore.labelsList;
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
       <UserSelectionDropdownList userList={companyUsers} onUserSelect={setSelectedUser} />
+    ) : (
+      <></>
+    );
+  };
+
+  const renderLabelSelectionList = (): JSX.Element => {
+    return showLabelsList ? (
+      <LabelSelectionDropdownList labelsList={labelsList} onLabelSelect={setSelectedLabel} />
     ) : (
       <></>
     );
@@ -121,6 +136,11 @@ export const CreateIssueModal = ({
           >
             Save
           </StyledButton>
+          {selectedLabel && (
+            <AvatarContainer onClick={() => setShowLabelsList(!showLabelsList)}>
+              {renderLabelSelectionList()}
+            </AvatarContainer>
+          )}
           <PriorityContainer>
             <IconContainer onClick={() => setSelectedPriority(selectedPriority == 1 ? 0 : 1)}>
               <Icon

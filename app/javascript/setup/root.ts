@@ -13,6 +13,9 @@ const initialState = {
   issueStore: {
     issues: [],
   },
+  labelStore: {
+    labelsList: [],
+  },
   sessionStore: {
     loading: true,
     loggedIn: false,

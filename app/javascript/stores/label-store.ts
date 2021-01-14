@@ -6,19 +6,20 @@ import { ApiResponse } from "apisauce";
 export const LabelStoreModel = types
   .model("LabelStoreModel")
   .props({
-    labels: types.array(types.frozen<LabelType>())
+    labelsList: types.array(types.frozen<LabelType>())
   })
   .extend(withEnvironment())
   .views(self => ({
     get labels() {
-      return self.labels;
+      return self.labelsList;
     }
   }))
   .actions(self => ({
     fetchLabels: flow(function*() {
       const response: ApiResponse<any> = yield self.environment.api.getLabels();
       if (response.ok) {
-        self.labels = response.data;
+        console.log(response)
+        self.labelsList = response.data;
       }
     }),
   }));
