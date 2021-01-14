@@ -121,6 +121,13 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
                 iconColor={selectedPriority == 2 ? "warningRed" : "grey60"}
               />
             </IconContainer>
+            <IconContainer onClick={() => setSelectedPriority(selectedPriority == 3 ? 0 : 3)}>
+              <Icon
+                icon={"Priority-MIP"}
+                size={"25px"}
+                iconColor={selectedPriority == 3 ? "mipBlue" : "grey60"}
+              />
+            </IconContainer>
           </PriorityContainer>
         </FlexContainer>
       </Container>
