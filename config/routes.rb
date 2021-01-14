@@ -79,6 +79,9 @@ Rails.application.routes.draw do
     get '/key_activities/created_in_meeting', to: "key_activities#created_in_meeting"
     patch '/key_activities', to: "key_activities#resort_index"
 
+    #labels
+    resource :labels, only: [:index]
+
     #goals
     get '/goals', to: 'goals#index'
 
