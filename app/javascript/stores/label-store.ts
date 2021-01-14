@@ -16,7 +16,7 @@ export const LabelStoreModel = types
   }))
   .actions(self => ({
     fetchLabels: flow(function*() {
-      const response: ApiResponse<any> = yield self.environment.api.getlLabels();
+      const response: ApiResponse<any> = yield self.environment.api.getLabels();
       if (response.ok) {
         self.labels = response.data;
       }
