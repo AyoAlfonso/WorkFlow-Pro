@@ -21,3 +21,4 @@ export * from "./user-card";
 export * from "./user-default-icon";
 export * from "./user-selection-dropdown-list";
 export * from "./label-selection-dropdown-list";
+export * from "./label-selection";

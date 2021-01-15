@@ -1,10 +1,10 @@
 import * as React from "react";
 import styled from "styled-components";
-import { LabelType } from "~/types/label";
 import { Text } from "./text";
+import { Icon } from "./";
 
 interface ILabelSelectionDropdownListProps {
-  labelsList: Array<LabelType>;
+  labelsList: any;
   onLabelSelect: any;
 }
 
@@ -16,6 +16,11 @@ export const LabelSelectionDropdownList = ({
     return labelsList.map((label, index) => {
       return (
         <LabelOption key={index} onClick={() => onLabelSelect(label)}>
+          <Icon
+            icon={"Priority-Empty"}
+            size={"25px"}
+            iconColor={label.color ? label.color : "grey60"}
+          />
           <LabelOptionText> {`${label.name}`}</LabelOptionText>
         </LabelOption>
       );
@@ -27,7 +32,8 @@ export const LabelSelectionDropdownList = ({
 
 const ActionDropdownContainer = styled.div`
   position: absolute;
-  background-color: ${props => props.theme.colors.backgroundBlue};
+  background-color: ${props => props.theme.colors.white};
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   margin-left: -10px;
   margin-top: 5px;
   border-radius: 10px;
@@ -43,16 +49,18 @@ const LabelOptionText = styled(Text)`
   cursor: pointer;
   margin-top: 0;
   margin-bottom: 0;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   padding-left: 12px;
+  padding-right: 18px;
 `;
 
 const LabelOption = styled.div`
   display: flex;
+  flex-direction: row;
   padding-top: 5px;
   padding-bottom: 5px;
-  padding-left: 10px;
+  padding-left: 5px;
   padding-right: 10px;
   &:hover {
     background-color: ${props => props.theme.colors.primary100};

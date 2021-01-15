@@ -7,19 +7,14 @@ import { Icon } from "../../shared/icon";
 import { Button } from "rebass";
 import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";
-import * as R from "ramda";
 import { Avatar } from "~/components/shared/avatar";
 import {
   Container,
   FlexContainer,
-  PriorityContainer,
+  IssuePynModalContainer,
   IconContainer,
 } from "~/components/shared/styles/modals";
-import {
-  UserSelectionDropdownList,
-  LabelSelectionDropdownList,
-  Loading,
-} from "~/components/shared";
+import { UserSelectionDropdownList, Loading, LabelSelection } from "~/components/shared";
 
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
@@ -42,7 +37,6 @@ export const CreateIssueModal = ({
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
-  const [selectedLabel, setSelectedLabel] = useState<any>(null);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
@@ -57,18 +51,11 @@ export const CreateIssueModal = ({
   const issues = issueStore.openIssues;
   const itemName = companyStore.company.displayFormat == "Forum" ? "Parking Lot Item" : "Issue";
   const labelsList = labelStore.labelsList;
+  const selectedLabelObj = labelStore.selectedLabelObj;
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
       <UserSelectionDropdownList userList={companyUsers} onUserSelect={setSelectedUser} />
-    ) : (
-      <></>
-    );
-  };
-
-  const renderLabelSelectionList = (): JSX.Element => {
-    return showLabelsList ? (
-      <LabelSelectionDropdownList labelsList={labelsList} onLabelSelect={setSelectedLabel} />
     ) : (
       <></>
     );
@@ -124,30 +111,21 @@ export const CreateIssueModal = ({
                   position: newIssuePosition,
                   meetingId: meetingId,
                   meetingEnabled: meetingEnabled,
-                  label: selectedLabel,
+                  label: selectedLabelObj,
                 })
                 .then(result => {
                   if (result) {
                     setIssueDescription("");
                     setCreateIssueModalOpen(false);
                     setSelectedPriority(0);
-                    setSelectedLabel(null);
                   }
                 })
             }
           >
             Save
           </StyledButton>
-          {selectedLabel && (
-            <AvatarContainer onClick={() => setShowLabelsList(!showLabelsList)}>
-              {renderLabelSelectionList()}
-            </AvatarContainer>
-          )}
-          <PriorityContainer>
-            <LabelContainer onClick={() => setShowLabelsList(!showLabelsList)}>
-              <Icon icon={"Priority-Empty"} size={"25px"} iconColor={"grey60"} />
-              {renderLabelSelectionList()}
-            </LabelContainer>
+          <IssuePynModalContainer>
+            <LabelSelection onLabelClick={setShowLabelsList} showLabelsList={showLabelsList} />
             <IconContainer onClick={() => setSelectedPriority(selectedPriority == 1 ? 0 : 1)}>
               <Icon
                 icon={"Priority-High"}
@@ -169,7 +147,7 @@ export const CreateIssueModal = ({
                 iconColor={selectedPriority == 3 ? "mipBlue" : "grey60"}
               />
             </IconContainer>
-          </PriorityContainer>
+          </IssuePynModalContainer>
         </FlexContainer>
       </Container>
     </ModalWithHeader>
@@ -184,22 +162,13 @@ const StyledButton = styled(Button)<StyledButtonType>`
   background-color: ${props =>
     props.disabled ? baseTheme.colors.grey60 : baseTheme.colors.primary100};
   width: 130px;
+  height: 35px;
   &: hover {
     cursor: ${props => !props.disabled && "pointer"};
   }
 `;
 
 const AvatarContainer = styled.div`
-  margin-left: auto;
-  &: hover {
-    cursor: pointer;
-  }
-`;
-
-const LabelContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
   margin-left: auto;
   &: hover {
     cursor: pointer;

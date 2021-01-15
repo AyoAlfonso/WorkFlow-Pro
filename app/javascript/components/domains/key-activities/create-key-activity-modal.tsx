@@ -14,13 +14,11 @@ import {
   Container,
   FlexContainer,
   IconContainer,
-  PriorityContainer,
+  IssuePynModalContainer,
 } from "~/components/shared/styles/modals";
 import { Text } from "~/components/shared/text";
-import { 
-  UserSelectionDropdownList,
-  LabelSelectionDropdownList, 
-} from "~/components/shared";
+import { UserSelectionDropdownList } from "~/components/shared";
+import { LabelSelection } from '~/components/shared';
 import { useMst } from "../../../setup/root";
 import { baseTheme } from "../../../themes";
 import { Icon } from "../../shared/icon";
@@ -52,16 +50,15 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [selectedDueDate, setSelectedDueDate] = useState<Date>(null);
   const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
-  const [selectedLabel, setSelectedLabel] = useState<any>(null);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
     labelStore.fetchLabels();
   }, []);
-
+  
   const companyUsers = userStore.users;
-  const labelsList = labelStore.labelsList;
-
+  const selectedLabelObj = labelStore.selectedLabelObj;
+  
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
       <UserSelectionDropdownList userList={companyUsers} onUserSelect={setSelectedUser} />
@@ -69,14 +66,6 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
       <></>
     );
   };
-
-  const renderLabelSelectionList = (): JSX.Element => {
-    return showLabelsList ? (
-      <LabelSelectionDropdownList labelsList={labelsList} onLabelSelect={setSelectedLabel} />
-    ) : (
-      <></>
-    );
-  }
 
   const renderDueDateSelector = () => (
     <DueDateSelectionContainer>
@@ -193,7 +182,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                   userId: selectedUser.id,
                   meetingId: meetingId,
                   dueDate: selectedDueDate,
-                  label: selectedLabel,
+                  label: selectedLabelObj,
                 })
                 .then(result => {
                   if (result) {
@@ -202,22 +191,17 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                     setCreateKeyActivityModalOpen(false);
                     setSelectedPriority(0);
                     setWeeklyList(defaultTypeAsWeekly);
-                    setSelectedLabel(null)
                   }
                 })
             }
           >
             Save
           </StyledButton>
-          <PriorityContainer>
-            <LabelContainer onClick={() => setShowLabelsList(!showLabelsList)} >
-              <Icon
-                icon={"Priority-Empty"} 
-                size={"25px"}
-                iconColor={"grey60"}
-              />
-              {renderLabelSelectionList()}
-            </LabelContainer>
+          <IssuePynModalContainer>
+            <LabelSelection 
+              onLabelClick={setShowLabelsList}
+              showLabelsList={showLabelsList}
+            />
             <StyledSwitch
               checked={!weeklyList}
               onChange={e => setWeeklyList(!weeklyList)}
@@ -249,7 +233,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                 iconColor={selectedPriority == 3 ? "mipBlue" : "grey60"}
               />
             </IconContainer>
-          </PriorityContainer>
+          </IssuePynModalContainer>
         </FlexContainer>
       </Container>
     </ModalWithHeader>
@@ -264,6 +248,7 @@ const StyledButton = styled(RebassButton)<StyledButtonType>`
   background-color: ${props =>
     props.disabled ? baseTheme.colors.grey60 : baseTheme.colors.primary100};
   width: 130px;
+  height: 35px;
   &: hover {
     cursor: ${props => !props.disabled && "pointer"};
   }
@@ -273,9 +258,9 @@ const StyledSwitch = styled(Switch)``;
 
 const MasterListText = styled(Text)`
   color: ${props => props.theme.colors.grey60};
-  margin-top: 5px;
-  margin-left: 5px;
-  margin-bottom: auto;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
   font-size: 14px;
 `;
 
@@ -316,15 +301,3 @@ const CircleButtonsContainer = styled.div`
   justify-content: flex-end;
   align-items: center;
 `;
-
-const LabelContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-right: 10px;
-  margin-left: auto;
-    &: hover {
-      cursor: pointer;
-    }
-`;
-
