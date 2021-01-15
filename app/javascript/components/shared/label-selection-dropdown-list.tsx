@@ -34,7 +34,7 @@ const ActionDropdownContainer = styled.div`
   padding-top: 10px;
   padding-bottom: 10px;
   z-index: 2;
-  height: 40%;
+  height: auto;
   overflow: auto;
 `;
 

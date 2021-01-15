@@ -17,7 +17,10 @@ import {
   PriorityContainer,
 } from "~/components/shared/styles/modals";
 import { Text } from "~/components/shared/text";
-import { UserSelectionDropdownList } from "~/components/shared/user-selection-dropdown-list";
+import { 
+  UserSelectionDropdownList,
+  LabelSelectionDropdownList, 
+} from "~/components/shared";
 import { useMst } from "../../../setup/root";
 import { baseTheme } from "../../../themes";
 import { Icon } from "../../shared/icon";
@@ -33,7 +36,7 @@ interface ICreateKeyActivityModalProps {
 }
 
 export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX.Element => {
-  const { keyActivityStore, sessionStore, userStore } = useMst();
+  const { keyActivityStore, sessionStore, userStore, labelStore } = useMst();
   const { t } = useTranslation();
   const {
     createKeyActivityModalOpen,
@@ -48,12 +51,16 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [selectedDueDate, setSelectedDueDate] = useState<Date>(null);
+  const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
+  const [selectedLabel, setSelectedLabel] = useState<any>(null);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
+    labelStore.fetchLabels();
   }, []);
 
   const companyUsers = userStore.users;
+  const labelsList = labelStore.labelsList;
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
@@ -62,6 +69,14 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
       <></>
     );
   };
+
+  const renderLabelSelectionList = (): JSX.Element => {
+    return showLabelsList ? (
+      <LabelSelectionDropdownList labelsList={labelsList} onLabelSelect={setSelectedLabel} />
+    ) : (
+      <></>
+    );
+  }
 
   const renderDueDateSelector = () => (
     <DueDateSelectionContainer>
@@ -178,6 +193,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                   userId: selectedUser.id,
                   meetingId: meetingId,
                   dueDate: selectedDueDate,
+                  label: selectedLabel,
                 })
                 .then(result => {
                   if (result) {
@@ -186,6 +202,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                     setCreateKeyActivityModalOpen(false);
                     setSelectedPriority(0);
                     setWeeklyList(defaultTypeAsWeekly);
+                    setSelectedLabel(null)
                   }
                 })
             }
@@ -193,6 +210,14 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             Save
           </StyledButton>
           <PriorityContainer>
+            <LabelContainer onClick={() => setShowLabelsList(!showLabelsList)} >
+              <Icon
+                icon={"Priority-Empty"} 
+                size={"25px"}
+                iconColor={"grey60"}
+              />
+              {renderLabelSelectionList()}
+            </LabelContainer>
             <StyledSwitch
               checked={!weeklyList}
               onChange={e => setWeeklyList(!weeklyList)}
@@ -291,3 +316,15 @@ const CircleButtonsContainer = styled.div`
   justify-content: flex-end;
   align-items: center;
 `;
+
+const LabelContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 10px;
+  margin-left: auto;
+    &: hover {
+      cursor: pointer;
+    }
+`;
+

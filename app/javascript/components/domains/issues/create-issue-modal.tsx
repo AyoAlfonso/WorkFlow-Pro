@@ -124,12 +124,14 @@ export const CreateIssueModal = ({
                   position: newIssuePosition,
                   meetingId: meetingId,
                   meetingEnabled: meetingEnabled,
+                  label: selectedLabel,
                 })
                 .then(result => {
                   if (result) {
                     setIssueDescription("");
                     setCreateIssueModalOpen(false);
                     setSelectedPriority(0);
+                    setSelectedLabel(null);
                   }
                 })
             }
@@ -142,6 +144,10 @@ export const CreateIssueModal = ({
             </AvatarContainer>
           )}
           <PriorityContainer>
+            <LabelContainer onClick={() => setShowLabelsList(!showLabelsList)}>
+              <Icon icon={"Priority-Empty"} size={"25px"} iconColor={"grey60"} />
+              {renderLabelSelectionList()}
+            </LabelContainer>
             <IconContainer onClick={() => setSelectedPriority(selectedPriority == 1 ? 0 : 1)}>
               <Icon
                 icon={"Priority-High"}
@@ -184,6 +190,16 @@ const StyledButton = styled(Button)<StyledButtonType>`
 `;
 
 const AvatarContainer = styled.div`
+  margin-left: auto;
+  &: hover {
+    cursor: pointer;
+  }
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   margin-left: auto;
   &: hover {
     cursor: pointer;
