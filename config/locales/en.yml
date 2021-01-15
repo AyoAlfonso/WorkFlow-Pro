@@ -64,3 +64,6 @@ en:
       core_four:
         one: Foundational Four
         other: Foundational Four
+      acts_as_taggable_on_tag:
+        one: Label
+        other: Labels
