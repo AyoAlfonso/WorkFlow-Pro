@@ -80,7 +80,7 @@ Rails.application.routes.draw do
     patch '/key_activities', to: "key_activities#resort_index"
 
     #labels
-    resources :tags,as: :labels, only: [:index]
+    resources :labels, only: [:index]
 
     #goals
     get '/goals', to: 'goals#index'

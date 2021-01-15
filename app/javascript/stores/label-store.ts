@@ -18,7 +18,6 @@ export const LabelStoreModel = types
     fetchLabels: flow(function*() {
       const response: ApiResponse<any> = yield self.environment.api.getLabels();
       if (response.ok) {
-        console.log(response)
         self.labelsList = response.data;
       }
     }),
