@@ -83,7 +83,7 @@ const Container = styled.div`
   display: flex;
 `;
 
-const EnlargedHomeTitle = styled.div`
+export const EnlargedHomeTitle = styled.div`
   font-family: Exo;
   font-size: 24px;
   font-weight: 600;
