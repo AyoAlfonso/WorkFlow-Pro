@@ -397,6 +397,15 @@ ActiveRecord::Schema.define(version: 2021_01_25_193451) do
     t.index ["company_id"], name: "index_teams_on_company_id"
   end
 
+  create_table "user_company_enablements", force: :cascade do |t|
+    t.bigint "company_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["company_id"], name: "index_user_company_enablements_on_company_id"
+    t.index ["user_id"], name: "index_user_company_enablements_on_user_id"
+  end
+
   create_table "user_roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -484,6 +493,8 @@ ActiveRecord::Schema.define(version: 2021_01_25_193451) do
   add_foreign_key "team_user_enablements", "teams"
   add_foreign_key "team_user_enablements", "users"
   add_foreign_key "teams", "companies"
+  add_foreign_key "user_company_enablements", "companies"
+  add_foreign_key "user_company_enablements", "users"
   add_foreign_key "users", "companies"
   add_foreign_key "users", "user_roles"
 end

@@ -33,6 +33,10 @@ class User < ApplicationRecord
   has_many :teams, through: :team_user_enablements
   has_many :notifications, dependent: :destroy
   has_many :meetings, :foreign_key => 'hosted_by_id'
+  has_many :user_company_enablements
+  has_many :companies, through: :user_company_enablements
+
+
 
   validates :first_name, :last_name, presence: true
 
