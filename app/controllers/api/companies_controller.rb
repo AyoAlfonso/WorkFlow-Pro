@@ -3,7 +3,7 @@ class Api::CompaniesController < Api::ApplicationController
   before_action :set_company, only: [:show, :update, :update_logo, :delete_logo]
 
   def show
-    render json: @company.as_json(only: ['id', 'name', 'phone_number', 'rallying_cry', 'fiscal_year_start', 'timezone'],
+    render json: @company.as_json(only: ['id', 'name', 'phone_number', 'rallying_cry', 'fiscal_year_start', 'timezone', 'display_format'],
     methods: ['accountability_chart_content', 'strategic_plan_content', 'logo_url', 'current_fiscal_quarter', 'quarter_for_creating_quarterly_goals', 'current_fiscal_year', 'year_for_creating_annual_initiatives'], 
     include: {
       core_four: {methods: ['core_1_content', 'core_2_content', 'core_3_content', 'core_4_content']}
@@ -12,7 +12,7 @@ class Api::CompaniesController < Api::ApplicationController
 
   def update
     @company.update!(company_params)
-    render json: @company.as_json(only: ['id', 'name', 'phone_number', 'rallying_cry', 'fiscal_year_start', 'timezone'],
+    render json: @company.as_json(only: ['id', 'name', 'phone_number', 'rallying_cry', 'fiscal_year_start', 'timezone', 'display_format'],
     methods: ['accountability_chart_content', 'strategic_plan_content', 'logo_url', 'current_fiscal_quarter', 'quarter_for_creating_quarterly_goals', 'current_fiscal_year', 'year_for_creating_annual_initiatives'], 
     include: {
       core_four: {methods: ['core_1_content', 'core_2_content', 'core_3_content', 'core_4_content']}
@@ -32,8 +32,14 @@ class Api::CompaniesController < Api::ApplicationController
   private
 
   def company_params
+    #user should not be allowed to update the display_format once created
     params.require(:company).permit(:name, :timezone, :logo, :rallying_cry, core_four_attributes: [:core_1, :core_2, :core_3, :core_4])
   end
+
+  # def new_company_params
+  #   when creating the company, allow the creation of a display_format
+  #   company_params
+  # end
 
   def set_company
     @company = params[:id] == "default" ? current_user.company : Company.find(params[:id])
