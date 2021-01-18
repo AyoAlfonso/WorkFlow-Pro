@@ -13,6 +13,7 @@ import { observer } from "mobx-react";
 import { SideNavChildLink } from "./side-nav-child-link";
 import { SideNavChildPopup } from "./side-nav-child-popup";
 import { Image } from "rebass";
+import { ICompany } from "~/models/company";
 
 const StyledSideNav = styled.div`
   position: fixed; /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
@@ -142,19 +143,15 @@ const isNavMenuIconActive = (currentPath: string, to: string): boolean => {
   return pathMatch ? (to == "/" ? pathMatch.isExact : true) : false;
 };
 
-export const SideNavNoMst = (currentPathName: string, teams: any): JSX.Element => {
+export const SideNavNoMst = (
+  currentPathName: string,
+  teams: any,
+  company?: ICompany,
+): JSX.Element => {
   const { t } = useTranslation();
-
-  // const {
-  //   companyStore: { company },
-  // } = useMst();
 
   const [teamNavChildOpen, setTeamNavChildOpen] = useState<boolean>(false);
   const [companyNavChildOpen, setCompanyNavChildOpen] = useState<boolean>(false);
-
-  // if (!company) {
-  //   return <></>;
-  // }
 
   return (
     <StyledSideNav>
@@ -172,42 +169,65 @@ export const SideNavNoMst = (currentPathName: string, teams: any): JSX.Element =
         {t("navigation.home")}
       </StyledNavLinkChildrenActive>
 
-      <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/team")}>
-        <SideNavChildPopup
-          trigger={
-            <NavMenuIcon icon={"Team"} active={isNavMenuIconActive(currentPathName, "/team")}>
-              {t("navigation.team")}
-            </NavMenuIcon>
-          }
-          navOpen={teamNavChildOpen}
-          setNavOpen={setTeamNavChildOpen}
-          setOtherNavOpen={setCompanyNavChildOpen}
-        >
-          {teams.map((team, index) => (
-            <SideNavChildLink key={index} to={`/team/${team.id}`} linkText={team.name} />
-          ))}
-        </SideNavChildPopup>
-      </SideNavChildPopupContainer>
+      {company && company.accessCompany ? (
+        <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/team")}>
+          <SideNavChildPopup
+            trigger={
+              <NavMenuIcon icon={"Team"} active={isNavMenuIconActive(currentPathName, "/team")}>
+                {t("navigation.team")}
+              </NavMenuIcon>
+            }
+            navOpen={teamNavChildOpen}
+            setNavOpen={setTeamNavChildOpen}
+            setOtherNavOpen={setCompanyNavChildOpen}
+          >
+            {teams.map((team, index) => (
+              <SideNavChildLink key={index} to={`/team/${team.id}`} linkText={team.name} />
+            ))}
+          </SideNavChildPopup>
+        </SideNavChildPopupContainer>
+      ) : (
+        <> </>
+      )}
 
-      <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/company")}>
-        <SideNavChildPopup
-          trigger={
-            <NavMenuIcon icon={"Company"} active={isNavMenuIconActive(currentPathName, "/company")}>
-              {t("navigation.company")}
-            </NavMenuIcon>
-          }
-          navOpen={companyNavChildOpen}
-          setNavOpen={setCompanyNavChildOpen}
-          setOtherNavOpen={setTeamNavChildOpen}
+      {company && company.accessCompany ? (
+        <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/company")}>
+          <SideNavChildPopup
+            trigger={
+              <NavMenuIcon
+                icon={"Company"}
+                active={isNavMenuIconActive(currentPathName, "/company")}
+              >
+                {t("navigation.company")}
+              </NavMenuIcon>
+            }
+            navOpen={companyNavChildOpen}
+            setNavOpen={setCompanyNavChildOpen}
+            setOtherNavOpen={setTeamNavChildOpen}
+          >
+            <SideNavChildLink
+              to="/company/accountability"
+              linkText={t("company.accountabilityChart")}
+            />
+            {/* <SideNavChildLink to="/company/strategic_plan" linkText={`The ${company.name} Plan`} /> */}
+            <SideNavChildLink to="/company/strategic_plan" linkText={`The Lynchpyn Plan`} />
+          </SideNavChildPopup>
+        </SideNavChildPopupContainer>
+      ) : (
+        <> </>
+      )}
+
+      {/* {company && company.accessForum && teams[0] ? (
+        <StyledNavLinkChildrenActive
+          to={`/team/${teams[0].id}`}
+          icon={"Goals"}
+          currentPathName={currentPathName}
         >
-          <SideNavChildLink
-            to="/company/accountability"
-            linkText={t("company.accountabilityChart")}
-          />
-          {/* <SideNavChildLink to="/company/strategic_plan" linkText={`The ${company.name} Plan`} /> */}
-          <SideNavChildLink to="/company/strategic_plan" linkText={`The Lynchpyn Plan`} />
-        </SideNavChildPopup>
-      </SideNavChildPopupContainer>
+          {t("navigation.forum")}
+        </StyledNavLinkChildrenActive>
+      ) : (
+        <> </>
+      )} */}
 
       <StyledNavLinkChildrenActive to="/goals" icon={"Goals"} currentPathName={currentPathName}>
         {t("navigation.goals")}
@@ -226,8 +246,9 @@ export const SideNav = observer(
       router,
       teamStore,
       sessionStore: { profile },
+      companyStore: { company },
     } = useMst();
 
-    return SideNavNoMst(router.location.pathname, toJS(profile.teams));
+    return SideNavNoMst(router.location.pathname, toJS(profile.teams), company);
   },
 );

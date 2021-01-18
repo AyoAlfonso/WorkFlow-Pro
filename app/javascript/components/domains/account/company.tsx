@@ -74,6 +74,11 @@ export const Company = observer(
           no={
             <BodyContainer>
               <PersonalInfoContainer>
+                {company.displayFormat !== "Company" ? (
+                  <Text>This is a {company.displayFormat} type of company.</Text>
+                ) : (
+                  <></>
+                )}
                 <Label htmlFor="name">{t("company.name")}</Label>
                 <Input
                   disabled={true}
@@ -107,6 +112,11 @@ export const Company = observer(
             <>
               <BodyContainer>
                 <PersonalInfoContainer>
+                  {company.displayFormat !== "Company" ? (
+                    <Text>This is a {company.displayFormat} type of company.</Text>
+                  ) : (
+                    <></>
+                  )}
                   <Label htmlFor="name">{t("company.name")}</Label>
                   <Input
                     name="name"

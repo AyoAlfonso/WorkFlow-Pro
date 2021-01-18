@@ -101,7 +101,8 @@
         "home": "Home",
         "team": "Team",
         "company": "Company",
-        "goals": "Goals"
+        "goals": "Goals",
+        "forum": "Forum"
       },
       "annualInitiative": {
         "enterTitle": "Enter Annual Goal Title...",

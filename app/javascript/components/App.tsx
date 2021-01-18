@@ -169,6 +169,24 @@ export const App = observer(
                         return <NotesIndex />;
                       }}
                     />
+                    <Route
+                      path={"/meetings/agenda"}
+                      render={() => {
+                        return <Placeholder />;
+                      }}
+                    />
+                    <Route
+                      path={"/meetings/section_1"}
+                      render={() => {
+                        return <Placeholder />;
+                      }}
+                    />
+                    <Route
+                      path={"/meetings/section_2"}
+                      render={() => {
+                        return <Placeholder />;
+                      }}
+                    />
                   </Switch>
                 </Container>
               </>
