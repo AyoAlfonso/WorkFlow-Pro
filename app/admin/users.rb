@@ -28,6 +28,14 @@ ActiveAdmin.register User do
         render 'new', errors: @user.errors.full_messages
       end
     end
+
+    def update
+      @user = User.find(params[:id])
+      if @user.update!(params.require(:user).permit(:first_name, :last_name, :email, :user_role, :timezone, company_ids: []))
+        render 'show', errors: @user.errors.full_messages
+      end
+    end
+
   end
 
   index do
@@ -38,7 +46,7 @@ ActiveAdmin.register User do
     column :email
     column :phone_number
     column :company_name do |user|
-      user.company_name
+      user.companies.first
     end
     column :current_sign_in_at
     column :sign_in_count
@@ -79,6 +87,16 @@ ActiveAdmin.register User do
       row :confirmed_at
       row :invitation_sent_at
     end
+
+    panel 'Companies' do
+      table_for user.companies do
+        column("Name") { |company| link_to company.name, admin_company_path(company) }
+        column :contact_email
+        column :phone_number
+        column :display_format
+      end
+    end
+
   end
 
   form do |f|
@@ -88,9 +106,9 @@ ActiveAdmin.register User do
       f.input :email
       # f.input :password
       # f.input :password_confirmation
-      f.input :company, as: :select, collection: Company.all
       f.input :user_role, as: :select, collection: UserRole.all
       f.input :timezone, as: :select, collection: timezones
+      f.input :companies, as: :select, collection: Company.all.map { |cp| [cp.name, cp.id] }, input_html: { class: "select2" }
     end
     f.actions
   end

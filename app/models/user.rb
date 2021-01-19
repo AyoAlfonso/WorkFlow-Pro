@@ -35,8 +35,7 @@ class User < ApplicationRecord
   has_many :meetings, :foreign_key => 'hosted_by_id'
   has_many :user_company_enablements
   has_many :companies, through: :user_company_enablements
-
-
+  accepts_nested_attributes_for :companies, :allow_destroy => true
 
   validates :first_name, :last_name, presence: true
 
