@@ -7,8 +7,8 @@ class Step < ApplicationRecord
   default_scope { order(meeting_template_id: :asc).order(order_index: :asc) }
   
   include RichTextHelper
-  has_rich_text :description_text_field
-  rich_text_content_render :description_text_field
+  has_rich_text :description_text
+  rich_text_content_render :description_text
 
   #override steps and meetings via override_key
 

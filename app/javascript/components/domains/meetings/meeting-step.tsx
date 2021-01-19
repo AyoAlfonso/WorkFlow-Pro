@@ -67,7 +67,7 @@ const StepComponent = (step: IStep) => {
       return <ImageStep step={step} />;
     case "embedded_link":
       return <EmbedStep step={step} />;
-    case "text":
+    case "description_text":
       return <TextStep step={step} />;
     default:
       return <Text>This meeting step type has not been configured</Text>;

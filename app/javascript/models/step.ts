@@ -14,7 +14,7 @@ export const StepModel = types
     orderIndex: types.number,
     sectionName: types.maybeNull(types.string),
     stepType: types.string,
-    descriptionTextField: types.maybeNull(types.string),
+    descriptionTextContent: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));

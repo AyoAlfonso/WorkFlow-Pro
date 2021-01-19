@@ -12,7 +12,7 @@ export interface ITextStepProps {
 }
 
 export const TextStep = ({ step }: ITextStepProps): JSX.Element => {
-  if (R.isNil(step.descriptionTextField)) {
+  if (R.isNil(step.descriptionTextContent)) {
     return <Text>This text for the step is missing</Text>;
   }
   let cardWidth;
@@ -32,9 +32,7 @@ export const TextStep = ({ step }: ITextStepProps): JSX.Element => {
         headerComponent={<CardHeaderText fontSize={"16px"}>{step.name}</CardHeaderText>}
       >
         <CardBody>
-          <DescriptionTextField>
-            {step.descriptionTextField}
-          </DescriptionTextField>
+          <DescriptionTextField>{step.descriptionTextContent}</DescriptionTextField>
         </CardBody>
       </Card>
     </Container>

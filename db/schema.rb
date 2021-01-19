@@ -340,7 +340,6 @@ ActiveRecord::Schema.define(version: 2021_01_19_173554) do
     t.text "link_embed"
     t.string "section_name"
     t.string "override_key"
-    t.text "description_text_field"
     t.index ["meeting_template_id", "order_index"], name: "index_steps_on_meeting_template_id_and_order_index"
     t.index ["meeting_template_id"], name: "index_steps_on_meeting_template_id"
     t.index ["order_index"], name: "index_steps_on_order_index"
