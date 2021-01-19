@@ -42,7 +42,7 @@ class Api::CompaniesController < Api::ApplicationController
   # end
 
   def set_company
-    @company = params[:id] == "default" ? current_user.company : Company.find(params[:id])
+    @company = params[:id] == "default" ? current_user.current_selected_company : Company.find(params[:id])
     authorize @company
   end
 

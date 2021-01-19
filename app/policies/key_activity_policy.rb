@@ -45,7 +45,7 @@ class KeyActivityPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.optimized.owned_by_self_or_team_members(@user)
+      scope.optimized.user_current_company(@user).owned_by_self_or_team_members(@user)
     end
   end
 end

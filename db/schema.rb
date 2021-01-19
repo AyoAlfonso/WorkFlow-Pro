@@ -175,6 +175,8 @@ ActiveRecord::Schema.define(version: 2021_01_25_193451) do
     t.integer "priority", default: 0
     t.bigint "team_id"
     t.integer "position"
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_issues_on_company_id"
     t.index ["team_id"], name: "index_issues_on_team_id"
     t.index ["user_id", "position", "completed_at"], name: "index_issues_on_user_id_and_position_and_completed_at"
     t.index ["user_id"], name: "index_issues_on_user_id"
@@ -192,6 +194,8 @@ ActiveRecord::Schema.define(version: 2021_01_25_193451) do
     t.boolean "todays_priority", default: false
     t.integer "position"
     t.date "due_date"
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_key_activities_on_company_id"
     t.index ["completed_at", "position", "priority"], name: "index_key_activities_on_completed_at_and_position_and_priority"
     t.index ["created_at", "position", "priority"], name: "index_key_activities_on_created_at_and_position_and_priority"
     t.index ["due_date"], name: "index_key_activities_on_due_date"
@@ -447,8 +451,10 @@ ActiveRecord::Schema.define(version: 2021_01_25_193451) do
     t.string "default_avatar_color"
     t.string "title"
     t.datetime "deleted_at"
+    t.bigint "current_selected_company_id"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["current_selected_company_id"], name: "index_users_on_current_selected_company_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"
@@ -477,7 +483,9 @@ ActiveRecord::Schema.define(version: 2021_01_25_193451) do
   add_foreign_key "daily_logs", "users"
   add_foreign_key "habit_logs", "habits"
   add_foreign_key "habits", "users"
+  add_foreign_key "issues", "companies"
   add_foreign_key "issues", "users"
+  add_foreign_key "key_activities", "companies"
   add_foreign_key "key_activities", "meetings"
   add_foreign_key "key_activities", "users"
   add_foreign_key "meetings", "meeting_templates"
@@ -497,4 +505,5 @@ ActiveRecord::Schema.define(version: 2021_01_25_193451) do
   add_foreign_key "user_company_enablements", "users"
   add_foreign_key "users", "companies"
   add_foreign_key "users", "user_roles"
+  add_foreign_key "users", "users", column: "current_selected_company_id"
 end
