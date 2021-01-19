@@ -359,5 +359,56 @@ export const Icons = () => (
         <TextCenteredDiv>Plan</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
+    <Divider />
+    <RowDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Reminder"} size={"2em"} />
+        <TextCenteredDiv>Reminder</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Sort"} size={"2em"} />
+        <TextCenteredDiv>Sort</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Label"} size={"2em"} />
+        <TextCenteredDiv>Label</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Lock"} size={"2em"} />
+        <TextCenteredDiv>Lock</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Notepad"} size={"2em"} />
+        <TextCenteredDiv>Notepad</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Priority-None"} size={"2em"} />
+        <TextCenteredDiv>Priority-None</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Sub_initiative"} size={"2em"} />
+        <TextCenteredDiv>Sub_initiative</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Hide_Show_L"} size={"2em"} />
+        <TextCenteredDiv>Hide_Show_L</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Hide_Show_R"} size={"2em"} />
+        <TextCenteredDiv>Hide_Show_R</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Initiative"} size={"2em"} />
+        <TextCenteredDiv>Initiative</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Master"} size={"2em"} />
+        <TextCenteredDiv>Master</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"New-Goals"} size={"2em"} />
+        <TextCenteredDiv>New-Goals</TextCenteredDiv>
+      </CenteredColumnDiv>
+    </RowDiv>
   </ContainerDiv>
 );
