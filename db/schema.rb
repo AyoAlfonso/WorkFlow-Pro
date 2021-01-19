@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_18_153623) do
+ActiveRecord::Schema.define(version: 2021_01_19_173554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -340,6 +340,7 @@ ActiveRecord::Schema.define(version: 2021_01_18_153623) do
     t.text "link_embed"
     t.string "section_name"
     t.string "override_key"
+    t.text "description_text_field"
     t.index ["meeting_template_id", "order_index"], name: "index_steps_on_meeting_template_id_and_order_index"
     t.index ["meeting_template_id"], name: "index_steps_on_meeting_template_id"
     t.index ["order_index"], name: "index_steps_on_order_index"

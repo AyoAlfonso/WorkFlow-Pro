@@ -17,6 +17,7 @@ import { IStep } from "~/models/step";
 import { Loading } from "~/components/shared/loading";
 import { ImageStep } from "~/components/domains/meetings/shared/image-step";
 import { EmbedStep } from "~/components/domains/meetings/shared/embed-step";
+import { TextStep } from "~/components/domains/meetings/shared/text-step";
 import { TeamPulse } from "./components/team-pulse";
 import { TeamKeyActivities } from "./components/team-key-activities";
 import { MeetingGoals } from "./components/meeting-goals";
@@ -66,6 +67,8 @@ const StepComponent = (step: IStep) => {
       return <ImageStep step={step} />;
     case "embedded_link":
       return <EmbedStep step={step} />;
+    case "text":
+      return <TextStep step={step} />;
     default:
       return <Text>This meeting step type has not been configured</Text>;
   }

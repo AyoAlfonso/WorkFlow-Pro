@@ -1,10 +1,14 @@
 class Step < ApplicationRecord
   belongs_to :meeting_template
 
-  enum step_type: { image: 0, component: 1, embedded_link: 2 }
+  enum step_type: { image: 0, component: 1, embedded_link: 2, description_text: 3 }
   has_one_attached :image
 
   default_scope { order(meeting_template_id: :asc).order(order_index: :asc) }
+  
+  include RichTextHelper
+  has_rich_text :description_text_field
+  rich_text_content_render :description_text_field
 
   #override steps and meetings via override_key
 
