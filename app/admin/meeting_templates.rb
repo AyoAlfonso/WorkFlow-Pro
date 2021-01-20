@@ -1,5 +1,5 @@
 ActiveAdmin.register MeetingTemplate do
-  permit_params :name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed, :override_key]
+  permit_params :name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed, :override_key, :description_text]
 
   index do
     selectable_column
@@ -38,7 +38,8 @@ ActiveAdmin.register MeetingTemplate do
             component_to_render: step[:component_to_render],
             meeting_template_id: @meeting_template.id,
             image: step[:image],
-            override_key: step[:override_key]
+            override_key: step[:override_key],
+            description_text: step[:description_text],
           })
         end
       end
@@ -73,6 +74,9 @@ ActiveAdmin.register MeetingTemplate do
         column :image do |step|
           step.try(:image_url) ? image_tag(step.image_url, style: "max-height: 80px;") : "No Image Selected"
         end
+        column :description_text do |step|
+          step.description_text_content
+        end
       end
     end
   end
@@ -83,6 +87,8 @@ ActiveAdmin.register MeetingTemplate do
     f.input :meeting_type, as: :select, collection: MeetingTemplate.meeting_types.map { |mt| [mt[0].humanize.titleize, mt[0]] }
     f.input :duration, label: "Duration (in minutes)"
     f.input :description, input_html: { rows: 5 }
+
+
     f.has_many :steps, heading: "Steps", allow_destroy: true do |step|
       step.input :name
       step.input :step_type, as: :select, collection: Step.step_types.map { |st| [st[0].humanize.titleize, st[0]]}
@@ -92,6 +98,11 @@ ActiveAdmin.register MeetingTemplate do
       step.input :component_to_render, as: :select, collection: Step::MEETING_STEP_COMPONENTS
       step.input :link_embed, input_html: { rows: 2 }
       step.input :override_key, input_html: { rows: 1 }
+
+      step.input :description_text, as: :text, input_html: {rows: 3, value: step.object.description_text.to_plain_text}
+      #rich_text_area does not work with has_many at the moement
+      # step.rich_text_area :description_text 
+
       step.input :image, as: :file, hint: (step.object.try(:image_url) ? image_tag(step.object.image_url, style: "max-height: 150px;") : "No Image Selected")
     end
     f.actions

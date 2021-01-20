@@ -28,9 +28,10 @@ mt1 = MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
     {
       order_index: 3,
       name: "Updates",
-      step_type: :image,
+      step_type: :description_text,
       duration: 5,
       instructions: "Provide personal or work-related updates. You can also use this time to give shoutouts."
+      description_text: "Do you have anything to share with the team? It can be personal, about work, or simply a shoutout!"
     },
     {
       order_index: 4,
