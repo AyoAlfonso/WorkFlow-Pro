@@ -36,11 +36,14 @@ class User < ApplicationRecord
   has_many :user_company_enablements
   has_many :companies, through: :user_company_enablements
   accepts_nested_attributes_for :companies, :allow_destroy => true
-  has_one :current_selected_company, :class_name => 'Company', :foreign_key => "id"
 
   validates :first_name, :last_name, presence: true
 
   accepts_nested_attributes_for :daily_logs
+
+  def current_selected_company
+    Company.find(self.current_selected_company_id)
+  end
 
   def status
     return "inactive" if deleted_at.present?

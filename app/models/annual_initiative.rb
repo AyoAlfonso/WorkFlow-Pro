@@ -15,6 +15,7 @@ class AnnualInitiative < ApplicationRecord
   default_scope { order(id: :asc) }
 
   scope :sort_by_created_date, -> { order(created_at: :asc) }
+  scope :user_current_company, -> (user) {where(company_id: user.current_selected_company_id)}
   scope :owned_by_user, -> (user) { where(owned_by_id: user.id).where(company_id: nil) }
   scope :for_users_company, -> (user) { where(company_id: user.company_id ) }
   scope :for_company_current_year_and_future, -> (company_current_fiscal_year) {where("fiscal_year >= ?", company_current_fiscal_year)}

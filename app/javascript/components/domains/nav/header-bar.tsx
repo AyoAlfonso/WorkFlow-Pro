@@ -3,7 +3,7 @@ import * as R from "ramda";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { color } from "styled-system";
 import { useMst } from "../../../setup/root";
@@ -15,12 +15,11 @@ import { Text } from "../../shared/text";
 import { HomeContainerBorders } from "../home/shared-components";
 import { CreateIssueModal } from "../issues/create-issue-modal";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
-import { nowInSeconds, noonTodayInSeconds } from "~/utils/date-time";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { RoleAdministrator, RoleCEO } from "~/lib/constants";
-import MeetingTypes from "~/constants/meeting-types";
 import { InviteUserModal } from "~/components/shared/invite-user-modal";
+import { toJS } from "mobx";
 
 export const HeaderBar = observer(
   (): JSX.Element => {
@@ -30,13 +29,15 @@ export const HeaderBar = observer(
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
     const [showAccountActions, setShowAccountActions] = useState<boolean>(false);
     const [inviteUserModalOpen, setInviteUserModalOpen] = useState<boolean>(false);
+    const [showCompanyOptions, setShowCompanyOptions] = useState<boolean>(false);
 
-    const { sessionStore, companyStore, meetingStore } = useMst();
+    const { sessionStore, companyStore, meetingStore, userStore } = useMst();
     const dropdownRef = useRef(null);
     const lynchPynDropdownRef = useRef(null);
     const accountActionRef = useRef(null);
 
     const history = useHistory();
+    const location = useLocation();
 
     const userCanInvite =
       sessionStore.profile.role == RoleAdministrator || sessionStore.profile.role == RoleCEO;
@@ -48,6 +49,7 @@ export const HeaderBar = observer(
         }
         if (accountActionRef.current && !accountActionRef.current.contains(event.target)) {
           setShowAccountActions(false);
+          setShowCompanyOptions(false);
         }
         if (lynchPynDropdownRef.current && !lynchPynDropdownRef.current.contains(event.target)) {
           setOpenLynchPynDropdown(false);
@@ -141,6 +143,28 @@ export const HeaderBar = observer(
       );
     };
 
+    const renderCompanyOptions = (): Array<JSX.Element> => {
+      const parsedProfile = toJS(sessionStore.profile);
+      return parsedProfile.companyProfiles.map((company, index) => {
+        return (
+          <AccountOption
+            key={index}
+            onClick={() =>
+              userStore
+                .updateUser({ id: parsedProfile.id, currentSelectedCompanyId: company.id })
+                .then(() => {
+                  location.pathname == "/" ? window.location.reload() : history.push("/");
+                })
+            }
+          >
+            <SwitchAccountContainer>
+              <AccountOptionText>{company.name}</AccountOptionText>
+            </SwitchAccountContainer>
+          </AccountOption>
+        );
+      });
+    };
+
     const renderActionDropdown = (): JSX.Element => {
       return showAccountActions ? (
         <ActionDropdownContainer>
@@ -160,10 +184,18 @@ export const HeaderBar = observer(
             </Link>
           </AccountOption>
           <AccountOption>
+            <AccountOptionText onClick={() => setShowCompanyOptions(!showCompanyOptions)}>
+              {t("profile.switchCompanies")}
+            </AccountOptionText>
+          </AccountOption>
+          <AccountOption>
             <AccountOptionText onClick={() => sessionStore.logoutRequest()}>
               {t("profile.logout")}
             </AccountOptionText>
           </AccountOption>
+          {showCompanyOptions && (
+            <CompanyDropdownContainer>{renderCompanyOptions()}</CompanyDropdownContainer>
+          )}
         </ActionDropdownContainer>
       ) : (
         <></>
@@ -216,7 +248,10 @@ export const HeaderBar = observer(
             </LogoContainer>
             <PersonalInfoContainer ref={accountActionRef}>
               <PersonalInfoDisplayContainer
-                onClick={() => setShowAccountActions(!showAccountActions)}
+                onClick={() => {
+                  setShowAccountActions(!showAccountActions);
+                  setShowCompanyOptions(false);
+                }}
               >
                 <Avatar
                   firstName={sessionStore.profile.firstName}
@@ -450,3 +485,11 @@ const AccountOption = styled.div`
     color: white;
   }
 `;
+
+const CompanyDropdownContainer = styled(ActionDropdownContainer)`
+  margin-left: -120px;
+  margin-top: -80px;
+  margin-right: 0;
+`;
+
+const SwitchAccountContainer = styled.div``;
