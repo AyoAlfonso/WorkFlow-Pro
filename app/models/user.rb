@@ -35,23 +35,14 @@ class User < ApplicationRecord
   has_many :user_company_enablements
   has_many :companies, through: :user_company_enablements
   accepts_nested_attributes_for :companies, :allow_destroy => true
-<<<<<<< HEAD
   accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
-=======
->>>>>>> [ch26392] - Switching mechanism working on front end. Updating the user's current selected company
 
   validates :first_name, :last_name, presence: true
 
   accepts_nested_attributes_for :daily_logs
 
-<<<<<<< HEAD
   belongs_to :company #to be removed after we finalize rake, etc.
   belongs_to :default_selected_company, class_name: "Company"
-=======
-  def current_selected_company
-    Company.find(self.current_selected_company_id)
-  end
->>>>>>> [ch26392] - Switching mechanism working on front end. Updating the user's current selected company
 
   def status
     return "inactive" if deleted_at.present?
