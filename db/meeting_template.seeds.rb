@@ -30,7 +30,7 @@ mt1 = MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
       name: "Updates",
       step_type: :description_text,
       duration: 5,
-      instructions: "Provide personal or work-related updates. You can also use this time to give shoutouts."
+      instructions: "Provide personal or work-related updates. You can also use this time to give shoutouts.",
       description_text: "Do you have anything to share with the team? It can be personal, about work, or simply a shoutout!"
     },
     {
@@ -148,7 +148,7 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
       name: "One Word Opener",
       step_type: :image,
       duration: 5,
-      instructions: "Find an emotion that describes how you are feeling right now",
+      instructions: "Find an emotion that describes how you are feeling right now"
     },
     {
       order_index: 1,
@@ -156,7 +156,7 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
       step_type: :description_text,
       duration: 5,
       instructions: "Use the promport and discuss as a group",
-      description_text: "Any near misses with respect to forum members' confidentiality?",
+      description_text: "Any near misses with respect to forum members' confidentiality?"
     },
     {
       order_index: 2,
@@ -164,7 +164,7 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
       step_type: :description_text,
       duration: 5,
       instructions: "Provide personal or work-related updates. You can also use this time to give shout-outs.",
-      description_text: "Is there anything that needs to be said so that you can be an active, engaged participant in today's meeting?",
+      description_text: "Is there anything that needs to be said so that you can be an active, engaged participant in today's meeting?"
     },
     {
       order_index: 3,
@@ -172,7 +172,7 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
       step_type: :description_text,
       duration: 5,
       instructions: "Use the prompt below and have a conversation as a team.",
-      component_to_render: "What's the most interesting you've read lately?",
+      component_to_render: "What's the most interesting you've read lately?"
     },
     {
       order_index: 4,
@@ -180,7 +180,7 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
       step_type: :component,
       duration: 5,
       instructions: "Review the team pulse form the past week.",
-      component_to_render: "TeamPulse",
+      component_to_render: "TeamPulse"
     },
     {
       order_index: 5,
@@ -188,7 +188,7 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
       step_type: :description_text,
       duration: 20,
       instructions: "Share your monthly 5% reflection and other significant updates with the group",
-      description_text: "Share your 5% monthly reflection and any other significant or important updates with the group (3-5 minutes each).",
+      description_text: "Share your 5% monthly reflection and any other significant or important updates with the group (3-5 minutes each)."
     },
     {
       order_index: 6,
@@ -196,7 +196,7 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
       step_type: :component,
       duration: 10,
       instructions: "Review the parking lot; is there anything you need to add based on the conversations you've had?",
-      component_to_render: "ParkingLot",
+      component_to_render: "ParkingLot"
     },
     {
       order_index: 7,
@@ -204,7 +204,7 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
       step_type: :component,
       duration: 60,
       instructions: "The scheduled exploration topic for this month.",
-      component_to_render: "ExplorationTopic",
+      component_to_render: "ExplorationTopic"
     },
     {
       order_index: 8,
@@ -212,7 +212,7 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
       step_type: :component,
       duration: 60,
       instructions: "Use the time remaining to tackle as many scheduled/non-scheduled parking lot topics as you can, on the basis of priority.",
-      component_to_render: "ParkingLot",
+      component_to_render: "ParkingLot"
     },
     {
       order_index: 9,
@@ -220,7 +220,7 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
       step_type: :description_text,
       duration: 10,
       instructions: "Follow the instructions for closing rituals.",
-      description_text_conent: "- What is public knowledge? - Is there anything left unsaid? - What worked and how could we have made it even better? - Confirm next meeting. - Appreciation and committments.",
+      description_text: "- What is public knowledge? - Is there anything left unsaid? - What worked and how could we have made it even better? - Confirm next meeting. - Appreciation and committments."
     },
     {
       order_index: 10,
@@ -228,7 +228,7 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
       step_type: :component,
       duration: 5,
       instructions: "Rate the meeting out of 7. How did we run today's meeting?",
-      component_to_render: "MeetingRating",
+      component_to_render: "MeetingRating"
     },
   ]
 )
