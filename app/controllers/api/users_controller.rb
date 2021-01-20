@@ -17,7 +17,7 @@ class Api::UsersController < Api::ApplicationController
       return
     end
 
-    @user = User.invite!(user_creation_params.merge(company_id: current_user.company.id))
+    @user = User.invite!(user_creation_params.merge(company_id: current_user.current_selected_company_id))
     if @user.valid? && @user.persisted?
       render '/api/users/show'
     else

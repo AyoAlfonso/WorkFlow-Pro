@@ -16,7 +16,7 @@ class TeamPolicy < ApplicationPolicy
   end
 
   def update?
-    (@user.company_admin? || @record.is_lead?(@user)) && record.company == @user.company
+    (@user.company_admin? || @record.is_lead?(@user)) && @user.companies.include?(record.company)
   end
 
   class Scope
@@ -28,7 +28,7 @@ class TeamPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes([:team_user_enablements]).for_company(@user.company)
+      scope.includes([:team_user_enablements]).for_company(@user.current_selected_company)
     end
   end
 end

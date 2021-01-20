@@ -59,7 +59,8 @@ class User < ApplicationRecord
   end
 
   def role
-    user_role&.name
+    selected_user_company_enablement = self.user_company_enablements.find_by_company_id(self.current_selected_company_id)
+    selected_user_company_enablement&.user_role&.name
   end
 
   def timezone

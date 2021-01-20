@@ -8,7 +8,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
       created_by: current_user, 
       owned_by: current_user, 
       description: params[:description], 
-      company_id: params[:type] == "company" ? current_user.company_id : nil,
+      company_id: params[:type] == "company" ? current_user.current_selected_company_id : nil,
       context_description: "",
       importance: ["", "", ""],
       fiscal_year: current_user.company.year_for_creating_annual_initiatives
@@ -42,7 +42,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   def team
     @team_id = params[:team_id]
     @company = current_user.company
-    @annual_initiatives = AnnualInitiative.where(company_id: current_user.company_id).for_company_current_year_and_future(@company.current_fiscal_year)
+    @annual_initiatives = AnnualInitiative.where(company_id: current_user.current_selected_company_id).for_company_current_year_and_future(@company.current_fiscal_year)
     authorize @annual_initiatives
     render 'api/annual_initiatives/team'
   end
