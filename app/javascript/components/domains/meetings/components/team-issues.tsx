@@ -13,6 +13,7 @@ import { CreateIssueModal } from "../../issues/create-issue-modal";
 import { IssueEntry } from "../../issues/issue-entry";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
+import MeetingTypes from "~/constants/meeting-types";
 
 export const TeamIssues = observer(
   (props: {}): JSX.Element => {
@@ -73,7 +74,7 @@ export const TeamIssues = observer(
             <AddNewIssuePlus>
               <Icon icon={"Plus"} size={16} />
             </AddNewIssuePlus>
-            <AddNewIssueText> Add a New Issue</AddNewIssueText>
+            <AddNewIssueText> Add a New { (meetingStore.currentMeeting.meetingType === MeetingTypes.FORUM_MONTHLY) ? "Topic" : "Issue"}</AddNewIssueText>
           </AddNewIssueContainer>
           <Droppable droppableId={"team-issues-container"} type={"team-issue"}>
             {(provided, snapshot) => (
@@ -92,7 +93,7 @@ export const TeamIssues = observer(
         <IssuesHeader
           showOpenIssues={showOpenIssues}
           setShowOpenIssues={setShowOpenIssues}
-          issuesText={"Team's Issues"}
+          issuesText={(meetingStore.currentMeeting.meetingType === MeetingTypes.FORUM_MONTHLY) ? "Parking Lot" : "Team's Issues"}
           teamId={team_id}
           meetingId={meetingStore.currentMeeting.id}
         />

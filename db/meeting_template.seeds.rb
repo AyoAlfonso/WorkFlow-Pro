@@ -172,7 +172,7 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
       step_type: :description_text,
       duration: 5,
       instructions: "Use the prompt below and have a conversation as a team.",
-      component_to_render: "What's the most interesting you've read lately?"
+      description_text: "What's the most interesting you've read lately?"
     },
     {
       order_index: 4,

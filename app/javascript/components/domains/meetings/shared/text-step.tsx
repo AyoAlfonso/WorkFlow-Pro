@@ -5,7 +5,6 @@ import { IStep } from "~/models/step";
 import { Text } from "~/components/shared/text";
 import styled from "styled-components";
 import { Card, CardBody, CardHeaderText } from "~/components/shared/card";
-import { TextDiv } from "~/components/shared/text";
 
 export interface ITextStepProps {
   step: IStep;
@@ -32,7 +31,10 @@ export const TextStep = ({ step }: ITextStepProps): JSX.Element => {
         headerComponent={<CardHeaderText fontSize={"16px"}>{step.name}</CardHeaderText>}
       >
         <CardBody>
-          <DescriptionTextField>{step.descriptionTextContent}</DescriptionTextField>
+          <div
+            className="trix-content"
+            dangerouslySetInnerHTML={{ __html: step.descriptionTextContent }}
+          ></div>
         </CardBody>
       </Card>
     </Container>
@@ -42,11 +44,4 @@ export const TextStep = ({ step }: ITextStepProps): JSX.Element => {
 const Container = styled.div`
   max-height: 700px;
   margin-left: 15px;
-`;
-
-const DescriptionTextField = styled(TextDiv)`
-  width: 100%;
-  display: block;
-  margin: auto;
-  object-fit: contain;
 `;

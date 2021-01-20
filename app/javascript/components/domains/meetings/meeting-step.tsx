@@ -60,6 +60,10 @@ const StepComponent = (step: IStep) => {
           return <TeamIssues />;
         case "Recap":
           return <Recap />;
+        case "ParkingLot":
+          return <TeamIssues />;
+        case "ExplorationTopic":
+          return <Text>This is where Exploration Topic component would be</Text>;
         default:
           return <Text>This custom component has not been configured</Text>;
       }
