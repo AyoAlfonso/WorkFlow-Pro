@@ -234,4 +234,4 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
 )
 
 step1 = mt3.steps.where(name: "One Word Opener").first
-step1.image.attach(io: File.open("app/assets/images/mood-board.png"), filename: "mood-board.png", content_type: 'image/png') if step1.present? 
+step1.image.attach(io: File.open("app/assets/images/mood-meter.png"), filename: "mood-meter.png", content_type: 'image/png') if step1.present? 
