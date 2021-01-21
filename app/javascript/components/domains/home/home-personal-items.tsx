@@ -60,7 +60,6 @@ export const HomePersonalItems = (): JSX.Element => {
 
 const Container = styled.div`
   display: flex;
-  height: 420px;
   overflow-x: auto;
   overflow-y: hidden;
 `;
@@ -74,13 +73,14 @@ const PrioritiesContainer = styled(HomeContainerBorders)`
 
 const TodaysContainer = styled.div`
   display: flex;
+  height: 420px;
   width: 75%;
 `;
 
 const ToolsContainer = styled.div`
   flex-direction: column;
   min-width: 25%;
-  overflow-y: auto;
+  margin-right: 20px;
 `;
 
 const NonPrioritiesEndContainer = styled(HomeContainerBorders)`
