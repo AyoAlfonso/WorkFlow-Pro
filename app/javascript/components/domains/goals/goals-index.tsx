@@ -14,6 +14,7 @@ import { RallyingCry } from "./shared/rallying-cry";
 import { PersonalVision } from "./shared/personal-vision";
 import { CreateGoalSection } from "./shared/create-goal-section";
 import { useTranslation } from "react-i18next";
+import { GoalsCoreFour } from "./goals-core-four";
 
 export const GoalsIndex = observer(
   (): JSX.Element => {
@@ -97,6 +98,8 @@ export const GoalsIndex = observer(
 
     return (
       <Container>
+        <GoalsCoreFour />
+
         <TitleContainer
           showMinimizedCards={showMinimizedCards}
           setShowMinimizedCards={setShowMinimizedCards}

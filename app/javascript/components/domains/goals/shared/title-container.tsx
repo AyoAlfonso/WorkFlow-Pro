@@ -2,6 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { space, color } from "styled-system";
 import { HomeTitle } from "../../home/shared-components";
+import { EnlargedHomeTitle } from "./enlarged-home-title";
 import { Icon } from "~/components/shared/icon";
 
 interface ITitleContainerProps {
@@ -81,14 +82,6 @@ const ExpandAnnualInitiativesButton = styled.div<ExpandAnnualInitiativesButtonTy
 
 const Container = styled.div`
   display: flex;
-`;
-
-const EnlargedHomeTitle = styled.div`
-  font-family: Exo;
-  font-size: 24px;
-  font-weight: 600;
-  margin-top: auto;
-  margin-bottom: auto;
 `;
 
 type IconContainerType = {

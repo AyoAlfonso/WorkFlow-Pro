@@ -1,12 +1,13 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import styled from "styled-components";
-import { HomeContainerBorders, HomeTitle } from "./shared-components";
 import { useMst } from "../../../setup/root";
 import { Loading } from "../../shared/loading";
 import { Flex, Box } from "rebass";
 import { Text } from "~/components/shared/text";
 import { useTranslation } from "react-i18next";
+import { HomeContainerBorders } from "../home/shared-components";
+import { EnlargedHomeTitle } from "./shared/enlarged-home-title";
 
 export const CoreFourValues = observer(
   (): JSX.Element => {
@@ -15,7 +16,7 @@ export const CoreFourValues = observer(
     } = useMst();
     const { t } = useTranslation();
     return company ? (
-      <ValuesContainer key="core-four">
+      <HomeContainerBorders key="core-four">
         <Flex>
           <Box width={1 / 4} sx={{ padding: 16 }}>
             <CoreFourHeaderText fontSize={2} color={"primary100"}>
@@ -62,7 +63,7 @@ export const CoreFourValues = observer(
             </CoreFourBodyTextContainer>
           </Box>
         </Flex>
-      </ValuesContainer>
+      </HomeContainerBorders>
     ) : (
       <Loading key="core-four" />
     );
@@ -71,23 +72,28 @@ export const CoreFourValues = observer(
 
 const Container = styled.div`
   margin-top: 30px;
+  margin-bottom: 32px;
 `;
 
-const ValuesContainer = styled(HomeContainerBorders)``;
-
 const CoreFourHeaderText = styled(Text)`
-  margin-top: 0;
+  margin-top: 16px;
+  margin-bottom: 24px;
 `;
 
 const CoreFourBodyTextContainer = styled.div`
   font-size: 16px;
 `;
 
-export const HomeCoreFour = (): JSX.Element => {
+const CoreFourTitle = styled(EnlargedHomeTitle)`
+  margin-top: 32px;
+  margin-bottom: 16px;
+`;
+
+export const GoalsCoreFour = (): JSX.Element => {
   const { t } = useTranslation();
   return (
     <Container>
-      <HomeTitle>{t("core.homeTitle")}</HomeTitle>
+      <CoreFourTitle>{t("core.goalsTitle")}</CoreFourTitle>
       <CoreFourValues />
     </Container>
   );
