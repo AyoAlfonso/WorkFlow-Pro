@@ -5,12 +5,21 @@ import { Icon, ModalWithHeader } from "~/components/shared";
 import { HabitsCreateHabitForm } from "./habits-create-habit-form";
 import { ToolsHeaderContainer, HeaderText } from "~/components/shared/styles/container-header";
 
-export const HabitsHeader = (): JSX.Element => {
+interface IHabitsHeaderProps {
+  expanded: string | false;
+}
+
+export const HabitsHeader = ({ expanded }: IHabitsHeaderProps): JSX.Element => {
   const [habitsModalOpen, setHabitsModalOpen] = useState<boolean>(false);
   const { t } = useTranslation();
   return (
     <>
       <Container>
+        <Icon
+          icon={expanded === "panel1" ? "Chevron-Up" : "Chevron-Down"}
+          size={15}
+          style={{ paddingRight: "15px" }}
+        />
         <HeaderText> {t("habits.title")} </HeaderText>
         <IconContainer onClick={() => setHabitsModalOpen(true)}>
           <Icon iconColor={"primary100"} icon={"Plus"} paddingTop={"2px"} size={16} />

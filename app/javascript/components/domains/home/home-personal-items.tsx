@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { HabitsBody, HabitsHeader } from "../habits";
 import { IssuesContainer } from "../issues/issues-container";
@@ -6,8 +7,13 @@ import { Journal } from "../journal/journal-widget";
 import { KeyActivitiesContainer } from "../key-activities/key-activities-container";
 import { TodaysPrioritiesContainer } from "../todays-priorities/todays-priorities-container";
 import { HomeContainerBorders } from "./shared-components";
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 
 export const HomePersonalItems = (): JSX.Element => {
+  const [expanded, setExpanded] = useState<string | false>(false);
+
   const renderProritiesContainer = () => {
     return (
       <PrioritiesContainer>
@@ -20,28 +26,32 @@ export const HomePersonalItems = (): JSX.Element => {
   };
 
   const renderHabitsContainer = () => {
-    return (
-      <NonPrioritiesContainer>
-        <HabitsHeader />
-        <HabitsBody />
-      </NonPrioritiesContainer>
+  return (
+      <HabitsAccordionContainer expanded={expanded === "panel1"} onChange={handleChange("panel1")} >
+        <HabitsAccordionSummary>
+          <HabitsHeader expanded={expanded} />
+        </HabitsAccordionSummary>
+        <HabitsAccordionDetails>
+          <HabitsBody />
+        </HabitsAccordionDetails>
+      </HabitsAccordionContainer>
     );
   };
 
   const renderJournalContainer = () => {
     return (
-      <NonPrioritiesEndContainer>
-        <Journal />
-      </NonPrioritiesEndContainer>
+      <Journal expanded={expanded} handleChange={handleChange} />
     );
   };
 
   const renderIssuesContainer = () => {
     return (
-      <NonPrioritiesContainer>
-        <IssuesContainer />
-      </NonPrioritiesContainer>
+      <IssuesContainer expanded={expanded} handleChange={handleChange} />
     );
+  };
+
+  const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false)
   };
 
   return (
@@ -80,20 +90,7 @@ const TodaysContainer = styled.div`
 const ToolsContainer = styled.div`
   flex-direction: column;
   min-width: 25%;
-  margin-right: 20px;
-`;
-
-const NonPrioritiesEndContainer = styled(HomeContainerBorders)`
-  width: 100%;
-  min-width: 224px;
-  display: flex;
-  flex-direction: column;
   margin-right: 5px;
-`;
-
-const NonPrioritiesContainer = styled(NonPrioritiesEndContainer)`
-  margin-right: 20px;
-  min-width: 244px;
 `;
 
 const PrioritiesHeaderContainer = styled.div`
@@ -103,4 +100,35 @@ const PrioritiesHeaderContainer = styled.div`
 
 const TodayPrioritiesHeaderContainer = styled.div`
   width: 50%;
+`;
+
+const HabitsAccordionContainer = styled(Accordion)`
+  width: 100%;
+  min-width: 224px;
+  display: flex;
+  flex-direction: column;
+`
+
+const HabitsAccordionSummary = styled(AccordionSummary)`
+  border-radius: 10px;
+  border: 0px solid white;
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  margin-bottom: 5px;
+  min-width: 224px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const HabitsAccordionDetails = styled(AccordionDetails)`
+  border-radius: 10px;
+  border: 0px solid white;
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  margin-bottom: 5px;
+  min-width: 224px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 `;

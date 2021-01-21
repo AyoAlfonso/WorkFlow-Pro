@@ -16,6 +16,10 @@ import { IconButton } from "../../shared/icon-button";
 import { SurveyBot } from "./survey-bot";
 import { Link } from "react-router-dom";
 import Modal from "styled-react-modal";
+import { HomeContainerBorders } from "../home/shared-components";
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 
 declare global {
   interface Window {
@@ -24,10 +28,18 @@ declare global {
   }
 }
 
-export const Journal = observer(
-  (props): JSX.Element => {
-    const [questionnaireVariant, setQuestionnaireVariant] = useState<string>("");
+interface IJournalProps {
+  expanded: string | false;
+  handleChange: any;
+}
 
+export const Journal = observer(
+  ({
+    expanded,
+    handleChange
+  }: IJournalProps): JSX.Element => {
+    const [questionnaireVariant, setQuestionnaireVariant] = useState<string>("");
+    
     const { t } = useTranslation();
     const { sessionStore } = useMst();
 
@@ -54,103 +66,144 @@ export const Journal = observer(
     };
 
     return (
-      <JournalContainer>
-        <ToolsHeaderContainer>
-          <HeaderText>{t("journals.title")}</HeaderText>
-          <EndButtonContainer>
-            <Link to="/journals" style={{ textDecoration: "none", padding: "0" }}>
-              <EndButton
-                onClick={() => {
-                  if (questionnaireVariant !== "") {
-                    setQuestionnaireVariant("");
-                  }
-                }}
-              >
-                {t("journals.viewEntries")}
-              </EndButton>
-            </Link>
-          </EndButtonContainer>
-        </ToolsHeaderContainer>
-        <StyledModal isOpen={questionnaireVariant !== ""} transitionSpeed={1000}>
-          {questionnaireVariant !== "" ? (
-            <SurveyBot
-              variant={questionnaireVariant}
-              endFn={handleChatbotEnd}
-              optionalActionsComponent={
-                <EndButtonContainer>
-                  {questionnaireVariant ? (
-                    <EndButton
+      <JournalContainer expanded={expanded === "panel0"} onChange={handleChange("panel0")} >
+        <JournalHeaderContainer>
+          <ToolsHeaderContainer>
+            <Icon
+              icon={expanded === "panel0" ? "Chevron-Up" : "Chevron-Down"}
+              size={15}
+              style={{ paddingRight: "15px" }}
+            />
+            <HeaderText> {t("journals.title")} </HeaderText>
+            <EndButtonContainer>
+              <Link to="/journals" style={{ textDecoration: "none", padding: "0" }}>
+                <EndButton
+                  onClick={() => {
+                    if (questionnaireVariant !== "") {
+                      setQuestionnaireVariant("");
+                    }
+                  }}
+                >
+                  {t("journals.viewEntries")}
+                </EndButton>
+              </Link>
+            </EndButtonContainer>
+          </ToolsHeaderContainer>
+          <StyledModal isOpen={questionnaireVariant !== ""} transitionSpeed={1000}>
+            {questionnaireVariant !== "" ? (
+              <SurveyBot
+                variant={questionnaireVariant}
+                endFn={handleChatbotEnd}
+                optionalActionsComponent={
+                  <EndButtonContainer>
+                    {questionnaireVariant ? (
+                      <EndButton
                       onClick={() => {
                         if (confirm(t("journals.confirmQuit"))) {
                           handleChatbotEnd();
                         }
                       }}
-                    >
-                      Quit Journal
-                    </EndButton>
-                  ) : null}
-                </EndButtonContainer>
-              }
-            />
-          ) : (
-            <></>
-          )}
-        </StyledModal>
-        <ButtonContainer>
-          <PynBotSpeechContainer>
-            <PynBotContainer>
-              <PynBotIconContainer>
-                <Icon icon={"PynBot"} iconColor={"primary80"} size={"42px"} width={"90%"} />
-              </PynBotIconContainer>
-              <TextNoMargin fontSize={"12px"} fontWeight={600}>
-                PynBot
-              </TextNoMargin>
-            </PynBotContainer>
-            <SpeechBubble>{pynBotGreeting}</SpeechBubble>
-          </PynBotSpeechContainer>
-          <IconButton
-            {...defaultJournalButtonProps}
-            iconName={"AM-Check-in"}
-            iconColor={"cautionYellow"}
-            text={t("journals.createMyDay")}
-            onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay)}
-            disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
-          />
-          {/* <IconButton
-              {...defaultJournalButtonProps}
-              iconName={"Check-in"}
-              iconColor={"successGreen"}
-              text={t("journals.thoughtChallenge")}
-              onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.thoughtChallenge)}
-            /> */}
-          <IconButton
-            {...defaultJournalButtonProps}
-            iconName={"Check-in"}
-            iconColor={"successGreen"}
-            text={"Coming soon"}
-            textColor={"grey20"}
-            fontStyle={"italic"}
-            onClick={() => {}}
-            disabled={true}
-          />
-          <IconButton
-            {...defaultJournalButtonProps}
-            iconName={"PM-Check-in"}
-            iconColor={"primary40"}
-            text={t("journals.eveningReflection")}
-            onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.eveningReflection)}
-            disabled={R.path(["profile", "currentDailyLog", "eveningReflection"], sessionStore)}
-          />
-        </ButtonContainer>
+                      >
+                        Quit Journal
+                      </EndButton>
+                    ) : null}
+                  </EndButtonContainer>
+                }
+                />
+                ) : (
+                  <></>
+                  )}
+          </StyledModal>
+        </JournalHeaderContainer>
+        <JournalBodyContainer>
+            <ButtonContainer>
+              <PynBotSpeechContainer>
+                <PynBotContainer>
+                  <PynBotIconContainer>
+                    <Icon icon={"PynBot"} iconColor={"primary80"} size={"42px"} width={"90%"} />
+                  </PynBotIconContainer>
+                  <TextNoMargin fontSize={"12px"} fontWeight={600}>
+                    PynBot
+                  </TextNoMargin>
+                </PynBotContainer>
+                <SpeechBubble>{pynBotGreeting}</SpeechBubble>
+              </PynBotSpeechContainer>
+              <IconButton
+                {...defaultJournalButtonProps}
+                iconName={"AM-Check-in"}
+                iconColor={"cautionYellow"}
+                text={t("journals.createMyDay")}
+                onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay)}
+                disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
+              />
+              {/* <IconButton
+                  {...defaultJournalButtonProps}
+                  iconName={"Check-in"}
+                  iconColor={"successGreen"}
+                  text={t("journals.thoughtChallenge")}
+                  onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.thoughtChallenge)}
+                /> */}
+              <IconButton
+                {...defaultJournalButtonProps}
+                iconName={"Check-in"}
+                iconColor={"successGreen"}
+                text={"Coming soon"}
+                textColor={"grey20"}
+                fontStyle={"italic"}
+                onClick={() => {}}
+                disabled={true}
+              />
+              <IconButton
+                {...defaultJournalButtonProps}
+                iconName={"PM-Check-in"}
+                iconColor={"primary40"}
+                text={t("journals.eveningReflection")}
+                onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.eveningReflection)}
+                disabled={R.path(["profile", "currentDailyLog", "eveningReflection"], sessionStore)}
+              />
+            </ButtonContainer>
+        </JournalBodyContainer>
       </JournalContainer>
     );
   },
 );
 
-const JournalContainer = styled.div`
+const JournalContainer = styled(Accordion)`
+  border-radius: 10px;
+  border: 0px solid white;
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 100%;
+  min-width: 224px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const JournalHeaderContainer = styled(AccordionSummary)`
+  border-radius: 10px;
+  border: 0px solid white;
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  margin-bottom: 5px;
   display: flex;
   flex-direction: column;
   width: 100%;
+  min-width: 224px;
+  margin-right: 20px;
+`;
+
+const JournalBodyContainer = styled(AccordionDetails)`
+  border-radius: 10px;
+  border: 0px solid white;
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 224px;
+  margin-right: 20px;
 `;
 
 const ButtonContainer = styled.div`

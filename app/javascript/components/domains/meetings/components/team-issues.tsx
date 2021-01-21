@@ -8,7 +8,7 @@ import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared";
 import { color } from "styled-system";
 import { Loading } from "~/components/shared/loading";
-import { IssuesHeader } from "../../issues/issues-header";
+import { TeamIssuesHeader } from "../shared/team-issues-header";
 import { CreateIssueModal } from "../../issues/create-issue-modal";
 import { IssueEntry } from "../../issues/issue-entry";
 import { Draggable, Droppable } from "react-beautiful-dnd";
@@ -89,7 +89,7 @@ export const TeamIssues = observer(
 
     return (
       <Container>
-        <IssuesHeader
+        <TeamIssuesHeader
           showOpenIssues={showOpenIssues}
           setShowOpenIssues={setShowOpenIssues}
           issuesText={"Team's Issues"}

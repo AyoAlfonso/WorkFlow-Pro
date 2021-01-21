@@ -1,85 +1,76 @@
 import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { space, SpaceProps, color, ColorProps } from "styled-system";
-import { useMst } from "~/setup/root";
+import { color } from "styled-system";
 import { Icon } from "../../shared/icon";
 import { ToolsHeaderContainer, HeaderText } from "~/components/shared/styles/container-header";
-import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { useTranslation } from "react-i18next";
+import { CreateIssueModal } from "./create-issue-modal";
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+
 interface IssuesHeaderProps {
-  showOpenIssues: boolean;
-  setShowOpenIssues: React.Dispatch<React.SetStateAction<boolean>>;
   issuesText?: string;
-  teamId?: number | string;
-  meetingId?: number | string;
+  expanded: string | false;
 }
 
 export const IssuesHeader = ({
-  showOpenIssues,
-  setShowOpenIssues,
   issuesText,
-  meetingId,
-  teamId,
+  expanded,
 }: IssuesHeaderProps): JSX.Element => {
-  const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
-
-  const { issueStore } = useMst();
+  const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
 
   const { t } = useTranslation();
 
-  const sortMenuOptions = [
-    {
-      label: "Sort by Priority",
-      value: "by_priority",
-    },
-  ];
-
-  const handleSortMenuItemClick = value => {
-    setSortOptionsOpen(false);
-    issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });
-  };
-
   return (
-    <ToolsHeaderContainer>
-      <HeaderText> {issuesText || t("issues.title") || "Issues"} </HeaderText>
-      <FilterContainer>
-        <FilterOptions
-          onClick={() => setShowOpenIssues(true)}
-          mr={"15px"}
-          color={showOpenIssues ? "primary100" : "grey40"}
-        >
-          Open
-        </FilterOptions>
-        <FilterOptions
-          onClick={() => setShowOpenIssues(false)}
-          color={!showOpenIssues ? "primary100" : "grey40"}
-        >
-          Closed
-        </FilterOptions>
-        <WidgetHeaderSortButtonMenu
-          onButtonClick={setSortOptionsOpen}
-          onMenuItemClick={handleSortMenuItemClick}
-          menuOpen={sortOptionsOpen}
-          menuOptions={sortMenuOptions}
-          ml={"15px"}
+    <IssuesHeaderContainer>
+      <CreateIssueModal
+        createIssueModalOpen={createIssueModalOpen}
+        setCreateIssueModalOpen={setCreateIssueModalOpen}
         />
-      </FilterContainer>
-    </ToolsHeaderContainer>
+        <Icon
+          icon={expanded === "panel2" ? "Chevron-Up" : "Chevron-Down"}
+          size={15}
+          style={{ paddingRight: "15px" }}
+        />
+        <ToolsHeaderContainer>
+          <HeaderText> 
+            {issuesText || t("issues.title") || "Issues"} 
+          </HeaderText>
+        </ToolsHeaderContainer>
+        <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
+          <AddNewIssuePlus>
+            <Icon icon={"Plus"} size={16} />
+          </AddNewIssuePlus>
+        </AddNewIssueContainer>
+    </IssuesHeaderContainer>
   );
 };
 
-const FilterContainer = styled.div`
+const IssuesHeaderContainer = styled(AccordionSummary)`
+  border-radius: 10px;
+  border: 0px solid white;
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  margin-bottom: 5px;
   display: flex;
-  margin-left: auto;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 224px;
+  margin-right: 20px;
 `;
 
-const FilterOptions = styled.p<ColorProps & SpaceProps>`
-  ${space}
-  ${color}
-  font-size: 12px;
-  font-weight: 400;
+const AddNewIssuePlus = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
+  color: ${props => props.theme.colors.primary100};
+`;
+
+const AddNewIssueContainer = styled.div`
+  display: flex;
   cursor: pointer;
+  margin-left: 8px;
+  margin-right: 8px;
+  padding-left: 4px;
+  margin-bottom: -5px;
 `;
