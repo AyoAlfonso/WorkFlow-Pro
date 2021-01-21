@@ -97,12 +97,18 @@
         },
         "rallyingCry": "LynchPyn Goal"
       },
+      "forum": {
+        "section1": "Section 1",
+        "section2": "Section 2",
+        "agenda": "Meeting Agenda"
+      },
       "navigation": {
         "home": "Home",
         "team": "Team",
         "company": "Company",
         "goals": "Goals",
-        "forum": "Forum"
+        "forum": "Forum",
+        "meetings": "Meetings"
       },
       "annualInitiative": {
         "enterTitle": "Enter Annual Goal Title...",

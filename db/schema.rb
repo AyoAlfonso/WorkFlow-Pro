@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_19_173554) do
+ActiveRecord::Schema.define(version: 2021_01_19_200520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,16 +215,6 @@ ActiveRecord::Schema.define(version: 2021_01_19_173554) do
     t.index ["elementable_type", "elementable_id"], name: "index_key_elements_on_elementable_type_and_elementable_id"
   end
 
-  create_table "meeting_ratings", force: :cascade do |t|
-    t.float "score"
-    t.bigint "user_id", null: false
-    t.bigint "weekly_meeting_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_meeting_ratings_on_user_id"
-    t.index ["weekly_meeting_id"], name: "index_meeting_ratings_on_weekly_meeting_id"
-  end
-
   create_table "meeting_templates", force: :cascade do |t|
     t.string "name"
     t.integer "meeting_type"
@@ -345,6 +335,34 @@ ActiveRecord::Schema.define(version: 2021_01_19_173554) do
     t.index ["order_index"], name: "index_steps_on_order_index"
   end
 
+  create_table "taggings", id: :serial, force: :cascade do |t|
+    t.integer "tag_id"
+    t.string "taggable_type"
+    t.integer "taggable_id"
+    t.string "tagger_type"
+    t.integer "tagger_id"
+    t.string "context", limit: 128
+    t.datetime "created_at"
+    t.index ["context"], name: "index_taggings_on_context"
+    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_id", "taggable_type", "context"], name: "taggings_taggable_context_idx"
+    t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy"
+    t.index ["taggable_id"], name: "index_taggings_on_taggable_id"
+    t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
+    t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
+    t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
+  end
+
+  create_table "tags", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.string "color"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer "taggings_count", default: 0
+    t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
   create_table "team_issues", force: :cascade do |t|
     t.bigint "issue_id"
     t.bigint "team_id"
@@ -441,16 +459,6 @@ ActiveRecord::Schema.define(version: 2021_01_19_173554) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
-  create_table "weekly_meetings", force: :cascade do |t|
-    t.bigint "created_by_id"
-    t.string "emotions_img"
-    t.integer "conversation_starter_id"
-    t.float "average_rating"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["created_by_id"], name: "index_weekly_meetings_on_created_by_id"
-  end
-
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
   add_foreign_key "annual_initiatives", "companies"
@@ -462,8 +470,6 @@ ActiveRecord::Schema.define(version: 2021_01_19_173554) do
   add_foreign_key "issues", "users"
   add_foreign_key "key_activities", "meetings"
   add_foreign_key "key_activities", "users"
-  add_foreign_key "meeting_ratings", "users"
-  add_foreign_key "meeting_ratings", "weekly_meetings"
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"
@@ -473,6 +479,7 @@ ActiveRecord::Schema.define(version: 2021_01_19_173554) do
   add_foreign_key "questionnaire_attempts", "questionnaires"
   add_foreign_key "questionnaire_attempts", "users"
   add_foreign_key "steps", "meeting_templates"
+  add_foreign_key "taggings", "tags"
   add_foreign_key "team_user_enablements", "teams"
   add_foreign_key "team_user_enablements", "users"
   add_foreign_key "teams", "companies"

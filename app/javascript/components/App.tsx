@@ -39,6 +39,9 @@ import { PersonalPlanning } from "./domains/meetings/personal-planning";
 import { JournalIndex } from "~/components/domains/journal/journal-index";
 import { NotesIndex } from "~/components/domains/notes/notes-index";
 
+import { Section1 } from "./domains/meetings-forum/section-1";
+import { ForumNotSetup } from "./domains/meetings-forum/not-setup";
+
 const Container = styled.div`
   margin-left: 136px;
   margin-right: 40px;
@@ -169,6 +172,20 @@ export const App = observer(
                         return <NotesIndex />;
                       }}
                     />
+
+                    <Route
+                      exact
+                      path={"/forum/"}
+                      render={() => {
+                        return <ForumNotSetup />;
+                      }}
+                    />
+                    <Route
+                      path={"/forum/:team_id"}
+                      render={() => {
+                        return <TeamOverview />;
+                      }}
+                    />
                     <Route
                       path={"/meetings/agenda"}
                       render={() => {
@@ -178,7 +195,7 @@ export const App = observer(
                     <Route
                       path={"/meetings/section_1"}
                       render={() => {
-                        return <Placeholder />;
+                        return <Section1 />;
                       }}
                     />
                     <Route

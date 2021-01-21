@@ -34,7 +34,7 @@ interface ISideNavChildPopupProps {
   trigger: JSX.Element;
   navOpen: boolean;
   setNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setOtherNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOtherNavOpen: Array<React.Dispatch<React.SetStateAction<boolean>>>;
 }
 export const SideNavChildPopup: React.FunctionComponent<ISideNavChildPopupProps> = ({
   children,
@@ -61,7 +61,7 @@ export const SideNavChildPopup: React.FunctionComponent<ISideNavChildPopupProps>
         onClose={() => setNavOpen(false)}
         onOpen={() => {
           setNavOpen(true);
-          setOtherNavOpen(false);
+          setOtherNavOpen.forEach(setOpen => setOpen(false));
         }}
         position={"right center"}
         trigger={<PopupTriggerContainer>{trigger}</PopupTriggerContainer>}

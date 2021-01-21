@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as R from "ramda";
 import styled from "styled-components";
 import { useMst } from "../../../../setup/root";
 import { toJS } from "mobx";
@@ -152,6 +153,51 @@ export const SideNavNoMst = (
 
   const [teamNavChildOpen, setTeamNavChildOpen] = useState<boolean>(false);
   const [companyNavChildOpen, setCompanyNavChildOpen] = useState<boolean>(false);
+  const [meetingsNavChildOpen, setMeetingsNavChildOpen] = useState<boolean>(false);
+
+  const renderForum = teamLength => {
+    switch (teamLength) {
+      case 0:
+        return (
+          <StyledNavLinkChildrenActive
+            to={`/forum/`}
+            icon={"Forum"}
+            currentPathName={currentPathName}
+          >
+            {t("navigation.forum")}
+          </StyledNavLinkChildrenActive>
+        );
+      case 1:
+        return (
+          <StyledNavLinkChildrenActive
+            to={`/forum/${R.path(["0", "id"], teams) || ""}`}
+            icon={"Forum"}
+            currentPathName={currentPathName}
+          >
+            {t("navigation.forum")}
+          </StyledNavLinkChildrenActive>
+        );
+      default:
+        return (
+          <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/team")}>
+            <SideNavChildPopup
+              trigger={
+                <NavMenuIcon icon={"Forum"} active={isNavMenuIconActive(currentPathName, "/team")}>
+                  {t("navigation.forum")}
+                </NavMenuIcon>
+              }
+              navOpen={teamNavChildOpen}
+              setNavOpen={setTeamNavChildOpen}
+              setOtherNavOpen={[setCompanyNavChildOpen, setMeetingsNavChildOpen]}
+            >
+              {teams.map((team, index) => (
+                <SideNavChildLink key={index} to={`/forum/${team.id}`} linkText={team.name} />
+              ))}
+            </SideNavChildPopup>
+          </SideNavChildPopupContainer>
+        );
+    }
+  };
 
   return (
     <StyledSideNav>
@@ -179,7 +225,7 @@ export const SideNavNoMst = (
             }
             navOpen={teamNavChildOpen}
             setNavOpen={setTeamNavChildOpen}
-            setOtherNavOpen={setCompanyNavChildOpen}
+            setOtherNavOpen={[setCompanyNavChildOpen, setMeetingsNavChildOpen]}
           >
             {teams.map((team, index) => (
               <SideNavChildLink key={index} to={`/team/${team.id}`} linkText={team.name} />
@@ -203,7 +249,7 @@ export const SideNavNoMst = (
             }
             navOpen={companyNavChildOpen}
             setNavOpen={setCompanyNavChildOpen}
-            setOtherNavOpen={setTeamNavChildOpen}
+            setOtherNavOpen={[setTeamNavChildOpen, setMeetingsNavChildOpen]}
           >
             <SideNavChildLink
               to="/company/accountability"
@@ -217,17 +263,31 @@ export const SideNavNoMst = (
         <> </>
       )}
 
-      {/* {company && company.accessForum && teams[0] ? (
-        <StyledNavLinkChildrenActive
-          to={`/team/${teams[0].id}`}
-          icon={"Goals"}
-          currentPathName={currentPathName}
-        >
-          {t("navigation.forum")}
-        </StyledNavLinkChildrenActive>
+      {company && company.accessForum ? renderForum(R.path(["length"], teams) || 0) : <> </>}
+
+      {company && company.accessForum && !R.isNil(R.path(["0", "id"], teams)) ? (
+        <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/company")}>
+          <SideNavChildPopup
+            trigger={
+              <NavMenuIcon
+                icon={"Meetings"}
+                active={isNavMenuIconActive(currentPathName, "/meetings")}
+              >
+                {t("navigation.meetings")}
+              </NavMenuIcon>
+            }
+            navOpen={meetingsNavChildOpen}
+            setNavOpen={setMeetingsNavChildOpen}
+            setOtherNavOpen={[setTeamNavChildOpen, setCompanyNavChildOpen]}
+          >
+            <SideNavChildLink to="/meetings/section_1" linkText={t("forum.section1")} />
+            <SideNavChildLink to="/meetings/section_2" linkText={t("forum.section2")} />
+            <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")} />
+          </SideNavChildPopup>
+        </SideNavChildPopupContainer>
       ) : (
         <> </>
-      )} */}
+      )}
 
       <StyledNavLinkChildrenActive to="/goals" icon={"Goals"} currentPathName={currentPathName}>
         {t("navigation.goals")}
