@@ -49,9 +49,11 @@ export const Section1 = observer(
         <HomeTitle>{forumStore.currentForumYear}</HomeTitle>
 
         {forumStore.forumYearMeetings.map(meeting => {
-          <div>
-            {meeting.id} - {meeting.scheduledStartTime}
-          </div>;
+          return (
+            <div>
+              {meeting.id} - {meeting.scheduledStartTime}
+            </div>
+          );
         })}
 
         {forumStore.forumYearMeetings.length < 12 ? (
