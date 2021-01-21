@@ -31,7 +31,7 @@ ActiveAdmin.register User do
 
     def update
       @user = User.find(params[:id])
-      if @user.update!(params.require(:user).permit(:first_name, :last_name, :email, :user_role, :timezone, company_ids: []))
+      if @user.update!(params.require(:user).permit(:first_name, :last_name, :email, :user_role, :timezone, user_company_enablements_attributes: [:id, :company_id, :user_role_id, :user_title, :_destroy]))
         render 'show', errors: @user.errors.full_messages
       end
     end
@@ -89,12 +89,12 @@ ActiveAdmin.register User do
     end
 
     panel 'Companies' do
-      table_for user.companies do
-        column("Name") { |company| link_to company.name, admin_company_path(company) }
-        column :contact_email
-        column :phone_number
-        column :display_format
+      table_for user.user_company_enablements, label: "Companies" do
+        column("Name") { |uce| link_to uce.company.name, admin_company_path(uce.company) }
+        column("User Role") { |uce| uce.user_role&.name }
+        column("User Title")  { |uce| uce.user_title }
       end
+
     end
 
   end
@@ -108,7 +108,16 @@ ActiveAdmin.register User do
       # f.input :password_confirmation
       f.input :user_role, as: :select, collection: UserRole.all
       f.input :timezone, as: :select, collection: timezones
-      f.input :companies, as: :select, collection: Company.all.map { |cp| [cp.name, cp.id] }, input_html: { class: "select2" }
+
+      f.has_many :user_company_enablements, allow_destroy: true do |uce|
+        if uce.object&.persisted?
+          uce.input :company, as: :select, collection: Company.all, input_html: {disabled: true}
+        else
+          uce.input :company, as: :select, collection: Company.all
+        end
+        uce.input :user_role, as: :select, collection: UserRole.all
+        uce.input :user_title
+      end
     end
     f.actions
   end

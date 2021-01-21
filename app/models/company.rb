@@ -17,6 +17,8 @@ class Company < ApplicationRecord
   has_many :user_company_enablements
   has_many :users, through: :user_company_enablements
 
+  accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
+
   validates :name, :timezone, :display_format, presence: true
   validate :display_format_not_changed, on: :update
 
