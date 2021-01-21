@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { space, SpaceProps, color, ColorProps } from "styled-system";
 import { useMst } from "~/setup/root";
 import { Icon } from "../../shared/icon";
-import { HeaderContainer, HeaderText } from "~/components/shared/styles/container-header";
+import { ToolsHeaderContainer, HeaderText } from "~/components/shared/styles/container-header";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { useTranslation } from "react-i18next";
 interface IssuesHeaderProps {
@@ -41,7 +41,7 @@ export const IssuesHeader = ({
   };
 
   return (
-    <HeaderContainer>
+    <ToolsHeaderContainer>
       <HeaderText> {issuesText || t("issues.title") || "Issues"} </HeaderText>
       <FilterContainer>
         <FilterOptions
@@ -65,7 +65,7 @@ export const IssuesHeader = ({
           ml={"15px"}
         />
       </FilterContainer>
-    </HeaderContainer>
+    </ToolsHeaderContainer>
   );
 };
 

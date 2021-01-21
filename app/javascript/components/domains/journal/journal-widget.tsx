@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { Icon } from "~/components/shared/icon";
 import {
-  HeaderContainerWithActions,
+  ToolsHeaderContainer,
   HeaderText,
 } from "~/components/shared/styles/container-header";
 import { TextNoMargin } from "~/components/shared/text";
@@ -55,7 +55,7 @@ export const Journal = observer(
 
     return (
       <JournalContainer>
-        <HeaderContainerWithActions>
+        <ToolsHeaderContainer>
           <HeaderText>{t("journals.title")}</HeaderText>
           <EndButtonContainer>
             <Link to="/journals" style={{ textDecoration: "none", padding: "0" }}>
@@ -70,7 +70,7 @@ export const Journal = observer(
               </EndButton>
             </Link>
           </EndButtonContainer>
-        </HeaderContainerWithActions>
+        </ToolsHeaderContainer>
         <StyledModal isOpen={questionnaireVariant !== ""} transitionSpeed={1000}>
           {questionnaireVariant !== "" ? (
             <SurveyBot

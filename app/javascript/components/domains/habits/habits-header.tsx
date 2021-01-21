@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { Icon, ModalWithHeader } from "~/components/shared";
 import { HabitsCreateHabitForm } from "./habits-create-habit-form";
-import { HeaderContainer, HeaderText } from "~/components/shared/styles/container-header";
+import { ToolsHeaderContainer, HeaderText } from "~/components/shared/styles/container-header";
 
 export const HabitsHeader = (): JSX.Element => {
   const [habitsModalOpen, setHabitsModalOpen] = useState<boolean>(false);
@@ -28,7 +28,7 @@ export const HabitsHeader = (): JSX.Element => {
   );
 };
 
-const Container = styled(HeaderContainer)`
+const Container = styled(ToolsHeaderContainer)`
   align-items: center;
   justify-content: space-between;
 `;
