@@ -15,7 +15,6 @@ class Api::MeetingsController < Api::ApplicationController
   def search
     #allow year and meeting type 
     @meetings = MeetingSearch.new(policy_scope(Meeting), search_meeting_params).search
-    # @meetings = policy_scope(Meeting).all
     render 'api/meetings/index'
   end
 

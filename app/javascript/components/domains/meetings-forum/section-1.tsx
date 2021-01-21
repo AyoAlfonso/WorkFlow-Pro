@@ -27,7 +27,7 @@ export const Section1 = observer(
       if (teamId && companyId) {
         forumStore.load(teamId, company.currentFiscalYear);
       }
-    }, [companyId, teams, teamId, forumStore.currentForumYear]);
+    }, [companyId, teams, teamId]); //neeed to deal with swtiching year later
 
     // console.log(teamId, companyId, teams);
     if (!teamId || R.isNil(companyId)) {

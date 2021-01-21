@@ -20,14 +20,15 @@ class ForumMeetingSetupService
     meeting_template_id = MeetingTemplate.forum_monthly.first.try(:id)
     raise "No forum monthly template seeded" if meeting_template_id.blank?
     new_meetings = months_requiring_meetings.map do |meeting_date|
-      Meeting.new({
+      Meeting.create({
         meeting_template_id: meeting_template_id, 
-        scheduled_start_time: meeting_date.to_datetime,
-        hosted_by_id: user.id,
-        host_name: user.full_name,
+        scheduled_start_time: (meeting_date+1.day).to_datetime,
+        hosted_by_id: creator.id,
+        team_id: team.id,
+        host_name: creator.full_name,
         current_step: 0})
     end
-    Meeting.upsert_all(new_meetings)
+    #Meeting.upsert_all(new_meetings)
     #upsert the new meetings in place
   end
 
