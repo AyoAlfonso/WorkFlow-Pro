@@ -17,6 +17,11 @@ class Company < ApplicationRecord
   validates :name, :timezone, :display_format, presence: true
   validate :display_format_not_changed, on: :update
 
+  scope :with_team, -> (team_id) { joins(:teams).where({teams: {id: team_id}})}
+  def self.find_first_with_team(team_id)
+    with_team(team_id).first
+  end
+
   def core_four
     super || build_core_four
   end

@@ -14,7 +14,7 @@ module HasFiscalYear
   def current_fiscal_year
     current_time = self.convert_to_their_timezone
     #if the year start is the first of january it means the year end will be this calendar year 
-    ( Time.now >= current_year_fiscal_year_start && current_year_fiscal_year_start != Date.parse("#{current_time.year}-01-01") ) ? current_time.year + 1 : current_time.year
+    ( current_time >= current_year_fiscal_year_start && current_year_fiscal_year_start != Date.parse("#{current_time.year}-01-01") ) ? current_time.year + 1 : current_time.year
   end
 
   def current_fiscal_start_date
@@ -41,9 +41,13 @@ module HasFiscalYear
 
   def current_year_fiscal_year_start
     current_year = self.convert_to_their_timezone.year
+    date_for_start_on(current_year)
+  end
+
+  def date_for_start_on(year)
     fiscal_start_month = self.fiscal_year_start.month
     fiscal_start_day = self.fiscal_year_start.day
-    Date.parse("#{current_year}-#{fiscal_start_month}-#{fiscal_start_day}")
+    Date.parse("#{year}-#{fiscal_start_month}-#{fiscal_start_day}")
   end
 
 
@@ -110,5 +114,12 @@ module HasFiscalYear
     else
       return 4
     end
+  end
+
+  def fiscal_year_range
+    #can select from initial fiscal year start date to present year + next year
+    (fiscal_year_start.year..(self.current_fiscal_year + 1)).to_a.map{ |year|
+      {year: year, start_date: date_for_start_on(year)}
+    }
   end
 end

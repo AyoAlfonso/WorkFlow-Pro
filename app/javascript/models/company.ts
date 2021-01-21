@@ -20,6 +20,7 @@ export const CompanyModel = types
     coreFour: CoreFourModel,
     accountabilityChartContent: types.maybeNull(types.string),
     strategicPlanContent: types.maybeNull(types.string),
+    fiscalYearRange: types.maybeNull(types.array(types.frozen())),
   })
   .views(self => ({
     get accessCompany() {

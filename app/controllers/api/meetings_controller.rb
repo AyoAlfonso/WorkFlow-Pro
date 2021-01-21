@@ -1,12 +1,21 @@
 class Api::MeetingsController < Api::ApplicationController
   include StatsHelper
   before_action :set_meeting, only: [:update, :destroy, :show]
+  after_action :verify_authorized, except: [:index, :search], unless: :skip_pundit?
+  after_action :verify_policy_scoped, only: [:index, :search], unless: :skip_pundit?
 
   respond_to :json
 
   def index
     week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
     @meetings = policy_scope(Meeting).personal_recent_or_incomplete_for_user(current_user).for_week_of_date(week_to_review_start_time)
+    render 'api/meetings/index'
+  end
+
+  def search
+    #allow year and meeting type 
+    @meetings = MeetingSearch.new(policy_scope(Meeting), search_meeting_params).search
+    # @meetings = policy_scope(Meeting).all
     render 'api/meetings/index'
   end
 
@@ -113,5 +122,9 @@ class Api::MeetingsController < Api::ApplicationController
 
   def meeting_params
     params.require(:meeting).permit(:id, :team_id, :meeting_template_id, :average_rating, :issues_done, :key_activities_done, :average_team_mood, :goal_progress, :start_time, :end_time, :start_time, :current_step, :host_name, :name, :notes)
+  end
+
+  def search_meeting_params
+    params.permit(:team_id, :meeting_type, :fiscal_year)
   end
 end
