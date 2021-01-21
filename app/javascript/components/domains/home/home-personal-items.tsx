@@ -46,10 +46,14 @@ export const HomePersonalItems = (): JSX.Element => {
 
   return (
     <Container>
-      {renderProritiesContainer()}
-      {renderHabitsContainer()}
-      {renderIssuesContainer()}
-      {renderJournalContainer()}
+      <TodaysContainer>
+        {renderProritiesContainer()}
+      </TodaysContainer>
+      <ToolsContainer>
+        {renderJournalContainer()}
+        {renderHabitsContainer()}
+        {renderIssuesContainer()}
+      </ToolsContainer>
     </Container>
   );
 };
@@ -62,14 +66,25 @@ const Container = styled.div`
 `;
 
 const PrioritiesContainer = styled(HomeContainerBorders)`
-  width: 39.2%;
+  width: 100%;
   min-width: 448px;
   margin-right: 20px;
   margin-left: 5px;
 `;
 
+const TodaysContainer = styled.div`
+  display: flex;
+  width: 75%;
+`;
+
+const ToolsContainer = styled.div`
+  flex-direction: column;
+  min-width: 25%;
+  overflow-y: auto;
+`;
+
 const NonPrioritiesEndContainer = styled(HomeContainerBorders)`
-  width: 19.6%;
+  width: 100%;
   min-width: 224px;
   display: flex;
   flex-direction: column;
