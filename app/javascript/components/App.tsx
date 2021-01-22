@@ -41,6 +41,7 @@ import { NotesIndex } from "~/components/domains/notes/notes-index";
 
 import { Section1 } from "./domains/meetings-forum/section-1";
 import { ForumNotSetup } from "./domains/meetings-forum/not-setup";
+import { ForumAgenda } from "./domains/meetings-forum/forum-agenda";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -189,7 +190,7 @@ export const App = observer(
                     <Route
                       path={"/meetings/agenda"}
                       render={() => {
-                        return <Placeholder />;
+                        return <ForumAgenda />;
                       }}
                     />
                     <Route
