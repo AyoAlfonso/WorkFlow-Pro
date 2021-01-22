@@ -45,6 +45,7 @@ export const JournalHeader = ({
             icon={expanded === "panel0" ? "Chevron-Up" : "Chevron-Down"}
             size={15}
             style={{ paddingRight: "15px" }}
+            iconColor={expanded === "panel0" ? "primary100" : "grey60" }
           />
           <HeaderText> {t("journals.title")} </HeaderText>
         </ToolsHeaderContainer>
@@ -98,7 +99,7 @@ const EndButtonContainer = styled.div`
 `;
 
 const EndButton = styled.div`
-  color: ${props => props.theme.colors.primary100};
+  color: ${props => props.theme.colors.grey60};
   cursor: pointer;
   font-size: 12px;
   font-weight: 400;

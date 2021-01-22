@@ -32,11 +32,12 @@ export const HabitsHeader = ({ expanded }: IHabitsHeaderProps): JSX.Element => {
             icon={expanded === "panel1" ? "Chevron-Up" : "Chevron-Down"}
             size={15}
             style={{ paddingRight: "15px" }}
+            iconColor={expanded === "panel1" ? "primary100" : "grey60" }
           />
           <HeaderText> {t("habits.title")} </HeaderText>
         </ToolsHeaderContainer>
         <IconContainer onClick={() => setHabitsModalOpen(true)}>
-          <Icon iconColor={"primary100"} icon={"Plus"} paddingTop={"2px"} size={16} />
+          <Icon iconColor={"grey60"} icon={"Plus"} paddingTop={"2px"} size={16} />
         </IconContainer>
       </AccordionSummary>
     </>

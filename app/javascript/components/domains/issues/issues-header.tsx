@@ -35,6 +35,7 @@ export const IssuesHeader = ({
             icon={expanded === "panel2" ? "Chevron-Up" : "Chevron-Down"}
             size={15}
             style={{ paddingRight: "15px" }}
+            iconColor={expanded === "panel2" ? "primary100" : "grey60" }
           />
           <HeaderText> 
             {issuesText || t("issues.title") || "Issues"} 
@@ -53,7 +54,7 @@ export const IssuesHeader = ({
 const AddNewIssuePlus = styled.div`
   margin-top: auto;
   margin-bottom: auto;
-  color: ${props => props.theme.colors.primary100};
+  color: ${props => props.theme.colors.grey60};
 `;
 
 const AddNewIssueContainer = styled.div`
