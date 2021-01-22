@@ -28,12 +28,11 @@ export const AccordionSummary = withStyles({
     }
   },
   content: {
-    "& div": {
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      justifyConent: "space-between",
-    },
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginRight: 5,
   },
   expanded: {},
 })(MuiAccordionSummary)
