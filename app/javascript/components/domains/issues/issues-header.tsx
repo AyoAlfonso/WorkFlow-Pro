@@ -6,7 +6,7 @@ import { Icon } from "../../shared/icon";
 import { ToolsHeaderContainer, HeaderText } from "~/components/shared/styles/container-header";
 import { useTranslation } from "react-i18next";
 import { CreateIssueModal } from "./create-issue-modal";
-import AccordionSummary from '@material-ui/core/AccordionSummary';
+import { AccordionSummary } from '~/components/shared/accordion';
 
 interface IssuesHeaderProps {
   issuesText?: string;

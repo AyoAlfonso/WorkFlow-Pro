@@ -5,6 +5,7 @@ import { useMst } from "~/setup/root";
 import { HabitsHabitTracker } from "./habits-habit-tracker";
 import * as moment from "moment";
 import { EditHabit } from "./edit-habit";
+import { AccordionDetails } from "~/components/shared/accordion";
 
 import {
   HabitsTable,
@@ -78,7 +79,7 @@ export const HabitsBody = observer(
         setShowIndividualHabit={setShowIndividualHabit}
       />
     ) : (
-      <Container>
+      <HabitsBodyContainer>
         <HabitsTable>
           <HabitsTableHead>
             <HabitsTableRow>
@@ -94,12 +95,21 @@ export const HabitsBody = observer(
           </HabitsTableHead>
           <HabitsTableBody>{renderHabits()}</HabitsTableBody>
         </HabitsTable>
-      </Container>
+      </HabitsBodyContainer>
     );
   },
 );
 
-const Container = styled.div`
+const HabitsBodyContainer = styled(AccordionDetails)`
+  border-radius: 10px;
+  border: 0px solid white;
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  margin-bottom: 5px;
+  min-width: 224px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   padding: 8px;
   margin-bottom: 8px;
 `;

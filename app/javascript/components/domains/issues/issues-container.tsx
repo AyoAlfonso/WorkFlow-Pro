@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { IssuesHeader } from "./issues-header";
 import { IssuesBody } from "./issues-body";
 import { useState } from "react";
-import Accordion from "@material-ui/core/Accordion"
+import { Accordion } from '~/components/shared/accordion';
 
 interface IIssuesContainerProps {
   expanded: string | false;
@@ -17,7 +17,11 @@ export const Issues = ({
   const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
 
   return (
-    <IssuesAccordion expanded={expanded === "panel2"} onChange={handleChange("panel2")} >
+    <IssuesAccordion 
+      expanded={expanded === "panel2"} 
+      onChange={handleChange("panel2")} 
+      elevation={0}
+    >
       <IssuesHeader expanded={expanded} />
       <IssuesBody showOpenIssues={showOpenIssues} setShowOpenIssues={setShowOpenIssues} />
     </IssuesAccordion>

@@ -7,7 +7,7 @@ import { TextNoMargin } from "~/components/shared/text";
 import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
 import { useMst } from "../../../setup/root";
 import { IconButton } from "../../shared/icon-button";
-import AccordionDetails from '@material-ui/core/AccordionDetails';
+import { AccordionDetails } from '~/components/shared/accordion';
 
 interface IJournalBodyProps {
   setQuestionnaireVariant: any;
@@ -91,7 +91,6 @@ export const JournalBody = ({
 }
 
 const JournalBodyContainer = styled(AccordionDetails)`
-  border-radius: 10px;
   border: 0px solid white;
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   margin-top: 5px;
