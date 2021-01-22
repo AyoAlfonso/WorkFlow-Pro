@@ -28,6 +28,8 @@ class Step < ApplicationRecord
     "WeeklyReflection",
     "Milestones",
     "PersonalKeyActivities",
-    "DailyPlanning"
+    "DailyPlanning",
+    "ParkingLot",
+    "ExplorationTopic",
   ]
 end

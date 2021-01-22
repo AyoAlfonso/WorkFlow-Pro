@@ -30,6 +30,8 @@ if Rails.env.development?
   u6 = User.where(email: "jeremy@laterolabs.com").first_or_create(first_name: 'Jeremy', last_name: 'Paterson', email: 'jeremy@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur2.id, title: "Placeholder")
   u7 = User.where(email: "allen@laterolabs.com").first_or_create(first_name: 'Allen', last_name: 'Greer', email: 'allen@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id, title: "Placeholder")
   u8 = User.where(email: "shaun@laterolabs.com").first_or_create(first_name: 'Shaun', last_name: 'Schwartz', email: 'shaun@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id, title: "Placeholder")
+  u9 = User.where(email: "mani@laterolabs.com").first_or_create(first_name: 'Mani', last_name: 'Jafari', email: 'mani@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id, title: "Placeholder")
+
 
   TeamUserEnablement.where(user_id: u1.id).first_or_create(team_id: t1.id, user_id: u1.id, role: "team_lead")
   TeamUserEnablement.where(user_id: u2.id).first_or_create(team_id: t1.id, user_id: u2.id, role: "team_member")

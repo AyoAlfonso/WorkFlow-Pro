@@ -22,6 +22,7 @@ class Meeting < ApplicationRecord
   scope :hosted_by_user, -> (user) { where(hosted_by_id: user.id)}
   scope :team_weekly_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :team_weekly})}
   scope :personal_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :personal_weekly})}
+  scope :forum_monthly_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :forum_monthly})}
   
   #TODO: modify scope to fetch completed meetings if recent, sort by 'type', 'incomplete', and 'date created' to show most recent ones
   scope :personal_recent_or_incomplete_for_user, ->(user) { personal_meetings.hosted_by_user(user).incomplete}
@@ -63,6 +64,9 @@ class Meeting < ApplicationRecord
       date_for_title = get_next_week_or_current_week_date(time_for_title).to_date.strftime("%B %-d")
       "Planning for Week of #{date_for_title}"
     elsif self.meeting_type == "team_weekly"
+      time_for_title = hosted_by.convert_to_their_timezone(start_time)
+      time_for_title.strftime("%A, %B %-d")
+    elsif self.meeting_type == "forum_monthly"
       time_for_title = hosted_by.convert_to_their_timezone(start_time)
       time_for_title.strftime("%A, %B %-d")
     else
