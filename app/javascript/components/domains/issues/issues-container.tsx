@@ -10,7 +10,7 @@ interface IIssuesContainerProps {
   handleChange: any;
 }
 
-export const IssuesContainer = ({ 
+export const Issues = ({ 
   expanded, 
   handleChange, 
 }: IIssuesContainerProps): JSX.Element => {
