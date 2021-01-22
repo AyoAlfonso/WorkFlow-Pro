@@ -11,6 +11,7 @@ import { NavHeader } from "~/components/domains/nav/nav-header";
 import { HomeTitle } from "~/components/domains/home/shared-components";
 import { Icon } from "~/components/shared/icon";
 import { Button } from "~/components/shared/button";
+import { Section1MeetingDetails } from "./components/section-1-meeting-details";
 
 export const Section1 = observer(
   (): JSX.Element => {
@@ -20,7 +21,6 @@ export const Section1 = observer(
       teamStore: { teams },
       forumStore,
     } = useMst();
-    // console.log(teams);
     const teamId = forumStore.currentForumTeamId || (teams && teams[0] && teams[0].id);
     const companyId = R.path(["id"], company);
     useEffect(() => {
@@ -40,7 +40,8 @@ export const Section1 = observer(
         </Container>
       );
     }
-    //will remove nave header when we do the header section
+    //TODO: will remove nave header when we do the header section
+    //TODO: need to sort by scheduled start time from view?
     return (
       <Container>
         <HeaderContainer>
@@ -49,11 +50,7 @@ export const Section1 = observer(
         <HomeTitle>{forumStore.currentForumYear}</HomeTitle>
 
         {forumStore.forumYearMeetings.map(meeting => {
-          return (
-            <div>
-              {meeting.id} - {meeting.scheduledStartTime}
-            </div>
-          );
+          return <Section1MeetingDetails meeting={meeting} />;
         })}
 
         {forumStore.forumYearMeetings.length < 12 ? (
