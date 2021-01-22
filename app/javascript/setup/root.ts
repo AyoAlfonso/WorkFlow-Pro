@@ -24,6 +24,11 @@ const initialState = {
   companyStore: {
     company: null,
   },
+  forumStore: {
+    currentForumTeam: null,
+    currentForumYear: null,
+    forumYearMeetings: [],
+  },
   goalStore: {
     companyGoals: null,
     personalGoals: null,

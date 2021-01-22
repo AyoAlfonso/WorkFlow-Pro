@@ -5,6 +5,7 @@ import { IssueStoreModel, IIssueStore } from "./issue-store";
 import { KeyActivityStoreModel, IKeyActivityStore } from "./key-activity-store";
 import { SessionStoreModel, ISessionStore } from "./session-store";
 import { CompanyStoreModel, ICompanyStore } from "./company-store";
+import { ForumStoreModel, IForumStore } from "./forum-store";
 import { GoalStoreModel, IGoalStore } from "./goal-store";
 import { AnnualInitiativeStoreModel, IAnnualInitiativeStore } from "./annual-initiative-store";
 import { QuarterlyGoalStoreModel, IQuarterlyGoalStore } from "./quarterly-goal-store";
@@ -24,6 +25,7 @@ export const RootStoreModel = types
     keyActivityStore: KeyActivityStoreModel,
     sessionStore: SessionStoreModel,
     companyStore: CompanyStoreModel,
+    forumStore: ForumStoreModel,
     goalStore: GoalStoreModel,
     annualInitiativeStore: AnnualInitiativeStoreModel,
     quarterlyGoalStore: QuarterlyGoalStoreModel,

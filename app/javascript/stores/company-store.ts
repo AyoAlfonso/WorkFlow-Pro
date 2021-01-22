@@ -1,4 +1,4 @@
-import { types, flow, getEnv } from "mobx-state-tree";
+import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { CompanyModel } from "../models/company";
 import { showToast } from "~/utils/toast-message";

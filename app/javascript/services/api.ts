@@ -289,6 +289,10 @@ export class Api {
     return this.client.get(`/meetings`);
   }
 
+  async searchMeetings(params = {}) {
+    return this.client.get(`/meetings/search`, params);
+  }
+
   async getTeamMeetings(id) {
     return this.client.get(`/meetings/team_meetings/${id}`);
   }
@@ -341,6 +345,10 @@ export class Api {
 
   async getTeamGoals(teamId) {
     return this.client.get(`/annual_initiatives/team/${teamId}`);
+  }
+
+  async createForumMeetingsForYear(teamId, fiscalYear) {
+    return this.client.post("/forum/create_meetings_for_year", { teamId, fiscalYear });
   }
 
   //async setJWT(jwt) {}

@@ -106,8 +106,13 @@ Rails.application.routes.draw do
     resources :teams, only: [:index, :show, :update]
     
     #meetings
-    resources :meetings, only: [:create, :index, :update, :destroy, :show]
+    resources :meetings, only: [:create, :index, :update, :destroy, :show] do
+      get :search, on: :collection
+    end
     get '/meetings/team_meetings/:id', to: 'meetings#team_meetings'
+  
+    #forum-specific functions
+    post '/forum/create_meetings_for_year', to: 'forums#create_meetings_for_year'
     
     #meeting recap for team
     get '/teams/:team_id/meetings/:id/meeting_recap', to: 'meetings#meeting_recap'

@@ -10,6 +10,10 @@ class MeetingPolicy < ApplicationPolicy
     true
   end
 
+  def search?
+    true
+  end
+
   def show?
     if (meeting.team_id)
       team_ids = @user.team_user_enablements.pluck(:team_id)

@@ -20,9 +20,13 @@ class Meeting < ApplicationRecord
   scope :with_template, -> (meeting_template_id) { where(meeting_template_id: meeting_template_id) }
   
   scope :hosted_by_user, -> (user) { where(hosted_by_id: user.id)}
+  
   scope :team_weekly_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :team_weekly})}
   scope :personal_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :personal_weekly})}
   scope :forum_monthly_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :forum_monthly})}
+  scope :for_type, -> (meeting_type){ joins(:meeting_template).where(meeting_templates: {meeting_type: MeetingTemplate.meeting_types[meeting_type.to_sym]})}
+  
+  scope :for_scheduled_start_date_range, -> (start_date_time, end_date_time){where("meetings.scheduled_start_time >= ? AND meetings.scheduled_start_time <= ?", start_date_time, end_date_time)}
   
   #TODO: modify scope to fetch completed meetings if recent, sort by 'type', 'incomplete', and 'date created' to show most recent ones
   scope :personal_recent_or_incomplete_for_user, ->(user) { personal_meetings.hosted_by_user(user).incomplete}
@@ -32,6 +36,7 @@ class Meeting < ApplicationRecord
   
   scope :sort_by_creation_date, -> { order(created_at: :desc) }
   scope :sort_by_start_time, -> { order(start_time: :desc) }
+  scope :sort_by_scheduled_start_time_asc, -> { order(start_time: :asc) }
 
   scope :has_notes, -> { where.not(notes: [nil, ""]) }
 
@@ -41,6 +46,7 @@ class Meeting < ApplicationRecord
   #week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
   #Meeting.first_or_create_for_weekly_planning_on_email(current_user, week_to_review_start_time)
 
+  # scope :from_user_teams_or_hosted_by_user, -> (user) {from_user_teams(user).or(hosted_by(user)}
   def self.from_user_teams_or_hosted_by_user(user)
     self.from_user_teams(user).or(self.hosted_by(user))
   end
