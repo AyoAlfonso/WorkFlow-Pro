@@ -1,15 +1,15 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import {
-  ToolsHeaderContainer,
-  HeaderText,
-} from "~/components/shared/styles/container-header";
 import { SurveyBot } from "./survey-bot";
 import { Link } from "react-router-dom";
 import { Icon } from "~/components/shared";
 import Modal from "styled-react-modal";
 import { AccordionSummary } from '~/components/shared/accordion';
+import {
+  HeaderText,
+  ToolsHeaderContainer,
+} from "~/components/shared/styles/container-header";
 
 declare global {
   interface Window {
@@ -38,14 +38,16 @@ export const JournalHeader = ({
   };
 
   return (
-    <JournalHeaderContainer>
-      <ToolsHeaderContainer>
-        <Icon
-          icon={expanded === "panel0" ? "Chevron-Up" : "Chevron-Down"}
-          size={15}
-          style={{ paddingRight: "15px" }}
-        />
-        <HeaderText> {t("journals.title")} </HeaderText>
+    <>
+      <AccordionSummary>
+        <ToolsHeaderContainer>
+          <Icon
+            icon={expanded === "panel0" ? "Chevron-Up" : "Chevron-Down"}
+            size={15}
+            style={{ paddingRight: "15px" }}
+          />
+          <HeaderText> {t("journals.title")} </HeaderText>
+        </ToolsHeaderContainer>
         <EndButtonContainer>
           <Link to="/journals" style={{ textDecoration: "none", padding: "0" }}>
             <EndButton
@@ -59,7 +61,7 @@ export const JournalHeader = ({
             </EndButton>
           </Link>
         </EndButtonContainer>
-      </ToolsHeaderContainer>
+      </AccordionSummary>
       <StyledModal isOpen={questionnaireVariant !== ""} transitionSpeed={1000}>
         {questionnaireVariant !== "" ? (
           <SurveyBot
@@ -85,20 +87,9 @@ export const JournalHeader = ({
               <></>
               )}
       </StyledModal>
-    </JournalHeaderContainer>
+    </>
   );
 };
-
-const JournalHeaderContainer = styled(AccordionSummary)`
-  border: 0px solid white;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-width: 224px;
-  margin-right: 20px;
-`;
 
 const EndButtonContainer = styled.div`
   align-items: center;

@@ -1,12 +1,14 @@
 import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { color } from "styled-system";
 import { Icon } from "../../shared/icon";
-import { ToolsHeaderContainer, HeaderText } from "~/components/shared/styles/container-header";
 import { useTranslation } from "react-i18next";
 import { CreateIssueModal } from "./create-issue-modal";
 import { AccordionSummary } from '~/components/shared/accordion';
+import { 
+  HeaderText, 
+  ToolsHeaderContainer, 
+} from "~/components/shared/styles/container-header";
 
 interface IssuesHeaderProps {
   issuesText?: string;
@@ -22,17 +24,18 @@ export const IssuesHeader = ({
   const { t } = useTranslation();
 
   return (
-    <IssuesHeaderContainer>
+    <>    
       <CreateIssueModal
         createIssueModalOpen={createIssueModalOpen}
         setCreateIssueModalOpen={setCreateIssueModalOpen}
-        />
-        <Icon
-          icon={expanded === "panel2" ? "Chevron-Up" : "Chevron-Down"}
-          size={15}
-          style={{ paddingRight: "15px" }}
-        />
+      />
+      <AccordionSummary>
         <ToolsHeaderContainer>
+          <Icon
+            icon={expanded === "panel2" ? "Chevron-Up" : "Chevron-Down"}
+            size={15}
+            style={{ paddingRight: "15px" }}
+          />
           <HeaderText> 
             {issuesText || t("issues.title") || "Issues"} 
           </HeaderText>
@@ -42,23 +45,10 @@ export const IssuesHeader = ({
             <Icon icon={"Plus"} size={16} />
           </AddNewIssuePlus>
         </AddNewIssueContainer>
-    </IssuesHeaderContainer>
+      </AccordionSummary>
+    </>
   );
 };
-
-const IssuesHeaderContainer = styled(AccordionSummary)`
-  border-radius: 10px;
-  border: 0px solid white;
-  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
-  margin-top: 5px;
-  margin-bottom: 5px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  min-width: 224px;
-  margin-right: 20px;
-`;
 
 const AddNewIssuePlus = styled.div`
   margin-top: auto;

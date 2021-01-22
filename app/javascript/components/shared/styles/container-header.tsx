@@ -21,7 +21,7 @@ export const HeaderContainerWithActions = styled(HeaderContainer)`
   justify-content: space-between;
 `;
 
-export const ToolsHeaderContainer = styled(HeaderContainerWithActions)`
+export const ToolsHeaderContainer = styled(HeaderContainer)`
   border-bottom: 0;
 `;
 

@@ -17,6 +17,7 @@ export const Accordion = withStyles({
 
 export const AccordionSummary = withStyles({
   root: {
+    border: "0px solid white",
     borderRadius: 10,
     padding: 0,
     height: 56,
@@ -28,8 +29,11 @@ export const AccordionSummary = withStyles({
   },
   content: {
     "& div": {
-
-    }
+      width: "100%",
+      display: "flex",
+      alignItems: "center",
+      justifyConent: "space-between",
+    },
   },
   expanded: {},
 })(MuiAccordionSummary)
