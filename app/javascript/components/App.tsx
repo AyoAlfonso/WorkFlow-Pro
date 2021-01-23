@@ -40,6 +40,7 @@ import { JournalIndex } from "~/components/domains/journal/journal-index";
 import { NotesIndex } from "~/components/domains/notes/notes-index";
 
 import { Section1 } from "./domains/meetings-forum/section-1";
+import { Section2 } from "./domains/meetings-forum/section-2";
 import { ForumNotSetup } from "./domains/meetings-forum/not-setup";
 import { ForumAgenda } from "./domains/meetings-forum/forum-agenda";
 import { WizardLayout } from "./layouts/wizard-layout";
@@ -210,7 +211,7 @@ export const App = observer(
                     <Route
                       path={"/meetings/section_2/:team_id"}
                       render={() => {
-                        return <Placeholder />;
+                        return <Section2 />;
                       }}
                     />
                   </Switch>
