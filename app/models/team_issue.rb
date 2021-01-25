@@ -2,6 +2,9 @@ class TeamIssue < ApplicationRecord
   belongs_to :team
   belongs_to :issue
 
+  has_many :team_issue_meeting_enablements, dependent: :destroy
+  has_many :team_meetings, through: :team_issue_meeting_enablements, source: :meeting
+
   acts_as_list scope: [:team_id, :completed_at], add_new_at: :top
   
   scope :for_team, -> (team_id) { where(team_id: team_id) }

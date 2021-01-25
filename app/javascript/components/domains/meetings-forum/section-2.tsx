@@ -7,6 +7,7 @@ import { useMst } from "~/setup/root";
 import { useTranslation } from "react-i18next";
 import { NavHeader } from "~/components/domains/nav/nav-header";
 import { HomeTitle } from "~/components/domains/home/shared-components";
+import { ParkingLot } from "~/components/domains/meetings-forum/components/parking-lot";
 
 export const Section2 = observer((): JSX.Element => {
   const { t } = useTranslation();
@@ -41,7 +42,7 @@ export const Section2 = observer((): JSX.Element => {
         <NavHeader>{t("forum.section2")}</NavHeader>
       </HeaderContainer>
       <HomeTitle>{forumStore.currentForumYear}</HomeTitle>
-
+      <ParkingLot />
     </Container>
   )
 })
