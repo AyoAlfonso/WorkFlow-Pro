@@ -25,7 +25,8 @@ const initialState = {
     company: null,
   },
   forumStore: {
-    currentForumTeam: null,
+    error: false,
+    currentForumTeamId: null,
     currentForumYear: null,
     forumYearMeetings: [],
   },
