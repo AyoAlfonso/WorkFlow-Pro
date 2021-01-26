@@ -13,6 +13,7 @@ import { ToastMessageConstants } from "~/constants/toast-types";
 export const ForumStoreModel = types
   .model("ForumStoreModel")
   .props({
+    error: types.boolean,
     currentForumTeamId: types.maybeNull(types.integer),
     currentForumYear: types.maybeNull(types.integer),
     forumYearMeetings: types.maybeNull(types.array(MeetingModel)),
@@ -22,7 +23,7 @@ export const ForumStoreModel = types
   .actions(self => ({
     load: flow(function*(teamId, year) {
       if (teamId) {
-        console.log(teamId);
+        self.error = false;
         try {
           self.currentForumTeamId = teamId;
           // const responseT: ApiResponse<any> = yield self.environment.api.getTeam(teamId);
@@ -37,10 +38,13 @@ export const ForumStoreModel = types
           if (responseM.ok) {
             self.currentForumYear = year;
             self.forumYearMeetings = responseM.data as any;
+          } else {
+            self.error = true;
           }
-        } catch {
+        } catch (e) {
           //show error
-          showToast("Error fetching forum data", ToastMessageConstants.ERROR);
+          self.error = true;
+          showToast(`Error fetching forum data: ${e.message}`, ToastMessageConstants.ERROR);
         }
 
         //assumes you know what the initial year is when you load
@@ -59,6 +63,22 @@ export const ForumStoreModel = types
       } catch {
         //show error
         showToast("Error creating forum meetings", ToastMessageConstants.ERROR);
+      }
+    }),
+    updateMeetingTopic: flow(function*(meetingObj) {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.updateMeeting(meetingObj);
+        if (response.ok) {
+          let forumYearMeetings = self.forumYearMeetings;
+          let meetingToUpdateIndex = forumYearMeetings.findIndex(
+            meeting => meeting.id == response.data.id,
+          );
+          forumYearMeetings[meetingToUpdateIndex] = response.data;
+          self.forumYearMeetings = forumYearMeetings;
+          //may need to merge like updateMeeting in meetingStore
+        }
+      } catch {
+        //caught by Api Monitor
       }
     }),
   }));

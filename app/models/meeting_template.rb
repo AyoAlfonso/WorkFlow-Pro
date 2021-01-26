@@ -11,6 +11,8 @@ class MeetingTemplate < ApplicationRecord
   #each company may have a separate embedded link.
 
   def total_duration
+    #TODO: ADD CONDITIONAL TO LOOK FOR ANY OVERRIDE SETTINGS AND +/- THE DURATION
+    #THIS NEEDS TO HAPPEN ON THE INDIVIDUAL STEP TOO (IN JBUILDER DECORATOR)
     steps.sum(:duration)
   end
 end

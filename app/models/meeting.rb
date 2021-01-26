@@ -5,6 +5,7 @@ class Meeting < ApplicationRecord
   belongs_to :team, optional: true #a meeting with no team is a personal meeting
   belongs_to :hosted_by, class_name: "User", optional: true
   belongs_to :meeting_template
+  store :settings, accessors: [:forum_exploration_topic, :forum_exploration_topic_owner_id], prefix: true
 
   delegate :steps, :total_duration, :duration, :name, :meeting_type, to: :meeting_template
 
@@ -36,7 +37,7 @@ class Meeting < ApplicationRecord
   
   scope :sort_by_creation_date, -> { order(created_at: :desc) }
   scope :sort_by_start_time, -> { order(start_time: :desc) }
-  scope :sort_by_scheduled_start_time_asc, -> { order(start_time: :asc) }
+  scope :sort_by_scheduled_start_time_asc, -> { order(scheduled_start_time: :asc) }
 
   scope :has_notes, -> { where.not(notes: [nil, ""]) }
 

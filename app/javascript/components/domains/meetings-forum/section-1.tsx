@@ -1,12 +1,14 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as R from "ramda";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
+import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { NavHeader } from "~/components/domains/nav/nav-header";
+import { Loading } from "~/components/shared/loading";
 
 import { HomeTitle } from "~/components/domains/home/shared-components";
 import { Icon } from "~/components/shared/icon";
@@ -21,24 +23,32 @@ export const Section1 = observer(
       teamStore: { teams },
       forumStore,
     } = useMst();
-    const teamId = forumStore.currentForumTeamId || (teams && teams[0] && teams[0].id);
-    const companyId = R.path(["id"], company);
-    useEffect(() => {
-      if (teamId && companyId) {
-        forumStore.load(teamId, company.currentFiscalYear);
-      }
-    }, [companyId, teams, teamId]); //neeed to deal with swtiching year later
 
-    // console.log(teamId, companyId, teams);
-    if (!teamId || R.isNil(companyId)) {
+    // if there is a no team id, get the first team
+    const { team_id } = useParams();
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+      const teamId =
+        (team_id && parseInt(team_id)) ||
+        forumStore.currentForumTeamId ||
+        (teams && teams[0] && teams[0].id);
+      if (loading && teamId && company) {
+        forumStore.load(teamId, company.currentFiscalYear).then(() => setLoading(false));
+      }
+    }, [company, teams.map(t => t.id), team_id]); //neeed to deal with swtiching year later
+
+    if (loading) {
       return (
         <Container>
           <HeaderContainer>
             <NavHeader>{t("forum.section1")}</NavHeader>
           </HeaderContainer>
-          Loading
+          <Loading />
         </Container>
       );
+    } else if (forumStore.error) {
+      return <></>;
     }
     //TODO: will remove nave header when we do the header section
     //TODO: need to sort by scheduled start time from view?
@@ -50,7 +60,7 @@ export const Section1 = observer(
         <HomeTitle>{forumStore.currentForumYear}</HomeTitle>
 
         {forumStore.forumYearMeetings.map(meeting => {
-          return <Section1MeetingDetails meeting={meeting} />;
+          return <Section1MeetingDetails key={`meeting-${meeting.id}`} meeting={meeting} />;
         })}
 
         {forumStore.forumYearMeetings.length < 12 ? (
