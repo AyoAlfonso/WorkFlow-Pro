@@ -167,6 +167,12 @@
         "teamsPyns": "Team's Pyns",
         "meetingAgenda": "Meeting Agenda"
       },
+      "meetingForum": {
+        "parkingLotIssues": {
+          "title": "Parking Lot",
+          "subTitle": "Topics members have shared"
+        }
+      },
       "status": {
         "active": "Active",
         "inactive": "Inactive",

@@ -16,13 +16,16 @@ export const ForumStoreModel = types
     error: types.boolean,
     currentForumTeamId: types.maybeNull(types.integer),
     currentForumYear: types.maybeNull(types.integer),
-    upcomingForumMeeting: types.maybeNull(types.integer),
     forumYearMeetings: types.maybeNull(types.array(MeetingModel)),
     searchedForumMeetings: types.maybeNull(types.array(MeetingModel)),
     currentSelectedForumMeeting: types.maybeNull(MeetingModel),
   })
   .extend(withEnvironment())
-  .views(self => ({}))
+  .views(self => ({
+    get upcomingForumMeeting() {
+      return self.forumYearMeetings[0];
+    },
+  }))
   .actions(self => ({
     load: flow(function*(teamId, year) {
       if (teamId) {
@@ -41,7 +44,6 @@ export const ForumStoreModel = types
           if (responseM.ok) {
             self.currentForumYear = year;
             self.forumYearMeetings = responseM.data as any;
-            self.upcomingForumMeeting = year;
           } else {
             self.error = true;
           }

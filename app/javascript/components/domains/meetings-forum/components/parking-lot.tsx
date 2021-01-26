@@ -1,13 +1,12 @@
 import * as React from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { TeamIssuesContainer } from "~/components/domains/meetings/shared/team-issues-container";
-import { ScheduledIssuesContainer } from "~/components/domains/meetings-forum/components/scheduled-issues";
-import { HomeContainerBorders } from "~/components/domains/home/shared-components"
+import { ScheduledIssues } from "~/components/domains/meetings-forum/components/scheduled-issues";
+import { ParkingLotIssues } from "~/components/domains/meetings-forum/components/parking-lot-issues";
 
 interface IParkingLotProps {
   teamId: number;
-  upcomingForumMeeting: number;
+  upcomingForumMeeting: any;
 };
 
 export const ParkingLot = observer(({
@@ -17,10 +16,10 @@ export const ParkingLot = observer(({
   return (
     <Container>
       <LeftContainer>
-        <ScheduledIssuesContainer upcomingForumMeeting={upcomingForumMeeting} />
+        <ScheduledIssues upcomingForumMeeting={upcomingForumMeeting} />
       </LeftContainer>
       <RightContainer>
-        <TeamIssuesContainer teamId={teamId} />
+        <ParkingLotIssues teamId={teamId}  upcomingForumMeeting={upcomingForumMeeting} />
       </RightContainer>
     </Container>
   )
@@ -31,17 +30,19 @@ const Container = styled.div`
   flex-direction: row;
 `;
 
-const LeftContainer = styled(HomeContainerBorders)`
+const LeftContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 50%;
-  box-shadow: none;
+  margin-top: 5px;
+  margin-bottom: 5px;
 `;
 
-const RightContainer = styled(HomeContainerBorders)`
+const RightContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 50%;
-  box-shadow: none;
+  margin-top: 5px;
+  margin-bottom: 5px;
 `;
 
