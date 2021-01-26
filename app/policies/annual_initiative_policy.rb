@@ -1,8 +1,9 @@
 class AnnualInitiativePolicy < ApplicationPolicy
-  attr_reader :user, :annual_initiative
+  attr_reader :user, :company, :annual_initiative
 
-  def initialize(user, annual_initiative)
+  def initialize(user, company, annual_initiative)
     @user = user
+    @company = company
     @annual_initiative = annual_initiative
   end
 
@@ -15,7 +16,7 @@ class AnnualInitiativePolicy < ApplicationPolicy
   end
 
   def show?
-    @annual_initiative.company_id == @user.current_selected_company_id || @annual_initiative.owned_by == @user 
+    @user.companies.pluck(:id).include?(@annual_initiative.company_id) || @annual_initiative.owned_by == @user 
   end
 
   def update?
@@ -35,10 +36,11 @@ class AnnualInitiativePolicy < ApplicationPolicy
   end
 
   class Scope
-    attr_reader :user, :scope
+    attr_reader :user, :company, :scope
 
-    def initialize(user, scope)
+    def initialize(user, company, scope)
       @user = user
+      @company = company
       @scope = scope
     end
 

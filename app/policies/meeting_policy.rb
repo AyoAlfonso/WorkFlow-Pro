@@ -1,8 +1,9 @@
 class MeetingPolicy < ApplicationPolicy
-  attr_reader :user, :meeting
+  attr_reader :user, :company, :meeting
 
-  def initialize(user, meeting)
+  def initialize(user, company, meeting)
     @user = user
+    @company = company
     @meeting = meeting
   end
 

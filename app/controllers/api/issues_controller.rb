@@ -9,7 +9,7 @@ class Api::IssuesController < Api::ApplicationController
   end
 
   def create 
-    @issue = Issue.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], team_id: params[:team_id], position: params[:position], company_id: current_user.current_selected_company_id })
+    @issue = Issue.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], team_id: params[:team_id], position: params[:position], company_id: current_company.id })
     authorize @issue
     @issue.insert_at(1)
     @issue.save!

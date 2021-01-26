@@ -15,7 +15,7 @@ class QuarterlyGoalPolicy < ApplicationPolicy
   end
 
   def show?
-    @quarterly_goal.annual_initiative.company_id == @user.current_selected_company_id || @quarterly_goal.owned_by == @user
+    @user.companies.pluck(:id).include?(@quarterly_goal.annual_initiative.company_id) || @quarterly_goal.owned_by == @user
   end
 
   def update?

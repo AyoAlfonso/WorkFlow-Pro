@@ -1,7 +1,18 @@
+class CurrentContext
+  attr_reader :user, :company
+
+  def initialize(user, company)
+    @user = user
+    @company = company
+  end
+end
+
+
 class Api::ApplicationController < ActionController::API
   include Pundit
 
   before_action :authenticate_user!
+  before_action :set_current_company
   after_action :verify_authorized, except: :index, unless: :skip_pundit?
   after_action :verify_policy_scoped, only: :index, unless: :skip_pundit?
 
@@ -10,12 +21,29 @@ class Api::ApplicationController < ActionController::API
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from Pundit::AuthorizationNotPerformedError, with: :authorization_not_performed_error
   rescue_from Pundit::PolicyScopingNotPerformedError, with: :policy_scoping_not_performed_error
+
+  helper_method :current_company
+
+  def pundit_user
+    CurrentContext.new(current_user, current_company)
+  end
   
   def skip_pundit?
     false
   end
 
+  def current_company
+    @current_company
+  end
+
+  def update_current_company(company_id)
+    @current_company = Company.find(company_id)
+  end
+
   private
+  def set_current_company
+    @current_company ||= request.headers["HTTP_CURRENT_COMPANY_ID"].present? ? Company.find(request.headers["HTTP_CURRENT_COMPANY_ID"]) : Company.find(current_user.current_selected_company_id) if current_user.present?
+  end
 
   def policy_scoping_not_performed_error
     raise "Policy scope not performed"
