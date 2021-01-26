@@ -17,6 +17,7 @@ export const Section2 = observer((): JSX.Element => {
     forumStore,
   } = useMst();
   const teamId = forumStore.currentForumTeamId || (teams && teams[0] && teams[0].id);
+  const upcomingForumMeeting = forumStore.upcomingForumMeeting;
   const companyId = R.path(["id"], company);
 
   useEffect(() => {
@@ -42,7 +43,7 @@ export const Section2 = observer((): JSX.Element => {
         <NavHeader>{t("forum.section2")}</NavHeader>
       </HeaderContainer>
       <HomeTitle>{forumStore.currentForumYear}</HomeTitle>
-      <ParkingLot />
+      <ParkingLot teamId={teamId} upcomingForumMeeting={upcomingForumMeeting} />
     </Container>
   )
 })

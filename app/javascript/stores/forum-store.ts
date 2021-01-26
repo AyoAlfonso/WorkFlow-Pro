@@ -16,6 +16,7 @@ export const ForumStoreModel = types
     error: types.boolean,
     currentForumTeamId: types.maybeNull(types.integer),
     currentForumYear: types.maybeNull(types.integer),
+    upcomingForumMeeting: types.maybeNull(types.integer),
     forumYearMeetings: types.maybeNull(types.array(MeetingModel)),
     searchedForumMeetings: types.maybeNull(types.array(MeetingModel)),
     currentSelectedForumMeeting: types.maybeNull(MeetingModel),
@@ -40,6 +41,7 @@ export const ForumStoreModel = types
           if (responseM.ok) {
             self.currentForumYear = year;
             self.forumYearMeetings = responseM.data as any;
+            self.upcomingForumMeeting = year;
           } else {
             self.error = true;
           }
