@@ -13,6 +13,8 @@ class Api::MeetingsController < Api::ApplicationController
   end
 
   def search
+    #if its for a forum, it should authorize the search if you can access the team_id in the params
+    authorize Team.find(params[:team_id]), :show?, policy_class: TeamPolicy
     #allow year and meeting type 
     @meetings = MeetingSearch.new(policy_scope(Meeting), search_meeting_params).search
     render 'api/meetings/index'
