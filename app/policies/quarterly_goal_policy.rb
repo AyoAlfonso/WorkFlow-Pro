@@ -1,10 +1,4 @@
 class QuarterlyGoalPolicy < ApplicationPolicy
-  attr_reader :user, :quarterly_goal
-
-  def initialize(user, quarterly_goal)
-    @user = user
-    @quarterly_goal = quarterly_goal
-  end
 
   def index?
     true
@@ -15,30 +9,30 @@ class QuarterlyGoalPolicy < ApplicationPolicy
   end
 
   def show?
-    @user.companies.pluck(:id).include?(@quarterly_goal.annual_initiative.company_id) || @quarterly_goal.owned_by == @user
+    @user.companies.pluck(:id).include?(@record.annual_initiative.company_id) || @record.owned_by == @user
   end
 
   def update?
-    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
   end
 
   def destroy?
-    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
   end
 
   def create_key_element?
-    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
   end
 
   def create_milestones?
-    @quarterly_goal.created_by == @user || @quarterly_goal.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
   end
 
   class Scope
     attr_reader :user, :scope
 
-    def initialize(user, scope)
-      @user = user
+    def initialize(context, scope)
+      @user = context.user
       @scope = scope
     end
 

@@ -153,7 +153,10 @@ export const HeaderBar = observer(
               userStore
                 .updateUser({ id: parsedProfile.id, currentSelectedCompanyId: company.id })
                 .then(() => {
-                  location.pathname == "/" ? window.location.reload() : history.push("/");
+                  if (location.pathname !== "/") {
+                    history.replace("/");
+                  }
+                  window.location.reload();
                 })
             }
           >

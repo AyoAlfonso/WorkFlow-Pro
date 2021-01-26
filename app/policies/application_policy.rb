@@ -1,9 +1,9 @@
 class ApplicationPolicy
   attr_reader :user, :company, :record
 
-  def initialize(user, company, record)
-    @user = user
-    @company = company
+  def initialize(context, record)
+    @user = context.user
+    @company = context.company
     @record = record
   end
 
@@ -38,9 +38,9 @@ class ApplicationPolicy
   class Scope
     attr_reader :user, :company, :scope
 
-    def initialize(user, company, scope)
-      @user = user
-      @company = company
+    def initialize(context, scope)
+      @user = context.user
+      @company = context.company
       @scope = scope
     end
 

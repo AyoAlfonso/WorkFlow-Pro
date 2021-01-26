@@ -7,7 +7,7 @@ class KeyActivity < ApplicationRecord
   acts_as_list scope: [:user_id, :weekly_list, :todays_priority]
 
   scope :optimized, -> { includes([:user]) }
-  scope :user_current_company, -> (user) {where(company_id: user.current_selected_company_id)}
+  scope :user_current_company, -> (company_id) {where(company_id: company_id)}
 
   scope :created_by_user, -> (user) { where(user: user) }
   scope :sort_by_priority, -> { order(priority: :desc) }
