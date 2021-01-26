@@ -1,0 +1,24 @@
+import styled from "styled-components";
+
+export const MonthContainer = styled.div`
+  width: 216px;
+  margin: 16px;
+`;
+
+export const ColumnContainer = styled.div`
+  width: 50%;
+  min-width: 240px;
+  margin: 16px;
+`;
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+`;
+
+export const Divider = styled.div`
+  height: 1px;
+  width: 100%;
+  background-color: lightgrey;
+`;

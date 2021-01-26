@@ -61,6 +61,22 @@ export const ForumStoreModel = types
         showToast("Error creating forum meetings", ToastMessageConstants.ERROR);
       }
     }),
+    updateMeetingTopic: flow(function*(meetingObj) {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.updateMeeting(meetingObj);
+        if (response.ok) {
+          let forumYearMeetings = self.forumYearMeetings;
+          let meetingToUpdateIndex = forumYearMeetings.findIndex(
+            meeting => meeting.id == response.data.id,
+          );
+          forumYearMeetings[meetingToUpdateIndex] = response.data;
+          self.forumYearMeetings = forumYearMeetings;
+          //may need to merge like updateMeeting in meetingStore
+        }
+      } catch {
+        //caught by Api Monitor
+      }
+    }),
   }));
 
 type ForumStoreType = typeof ForumStoreModel.Type;

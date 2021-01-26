@@ -120,7 +120,7 @@ class Api::MeetingsController < Api::ApplicationController
   end
 
   def meeting_params
-    params.require(:meeting).permit(:id, :team_id, :meeting_template_id, :average_rating, :issues_done, :key_activities_done, :average_team_mood, :goal_progress, :start_time, :end_time, :start_time, :current_step, :host_name, :name, :notes)
+    params.require(:meeting).permit(:id, :team_id, :meeting_template_id, :average_rating, :issues_done, :key_activities_done, :average_team_mood, :goal_progress, :start_time, :end_time, :start_time, :current_step, :host_name, :name, :notes, :settings_forum_exploration_topic, :settings_forum_exploration_topic_owner_id)
   end
 
   def search_meeting_params

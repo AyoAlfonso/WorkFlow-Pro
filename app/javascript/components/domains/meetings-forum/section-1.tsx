@@ -50,7 +50,7 @@ export const Section1 = observer(
         <HomeTitle>{forumStore.currentForumYear}</HomeTitle>
 
         {forumStore.forumYearMeetings.map(meeting => {
-          return <Section1MeetingDetails meeting={meeting} />;
+          return <Section1MeetingDetails key={`meeting-${meeting.id}`} meeting={meeting} />;
         })}
 
         {forumStore.forumYearMeetings.length < 12 ? (

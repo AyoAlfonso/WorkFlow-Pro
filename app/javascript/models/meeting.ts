@@ -34,6 +34,7 @@ export const MeetingModel = types
     title: types.maybeNull(types.string),
     notes: types.maybeNull(types.string),
     meetingTemplateId: types.maybeNull(types.number),
+    settings: types.maybeNull(types.frozen()),
   })
   .views(self => ({
     get currentStepDetails() {
