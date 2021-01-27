@@ -18,6 +18,7 @@ import {
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
 import { IUser } from "~/models/user";
+import { UserSelectionDropdownList } from "~/components/shared";
 
 //input is meeting
 //render Month, ScheduledTime, Who, Topic
@@ -39,6 +40,8 @@ export const Section1MeetingDetails = observer(
     const [explorationTopicOwnerId, setExplorationTopicOwnerId] = useState(
       R.path(["forumExplorationTopicId"], meeting.settings) || "",
     );
+
+    const [userSelectionOpen, setUserSelectionOpen] = useState<boolean>(false);
 
     //https://github.com/lovasoa/react-contenteditable/issues/161
     const handleChangeExplorationTopic = useRefCallback(e => {
@@ -69,16 +72,28 @@ export const Section1MeetingDetails = observer(
           </MonthContainer>
           <SectionContainer>
             <ColumnContainer>
-              <Avatar
-                firstName={hostedBy.firstName}
-                lastName={hostedBy.lastName}
-                defaultAvatarColor={hostedBy.defaultAvatarColor}
-                avatarUrl={hostedBy.avatarUrl}
-                size={48}
-                marginLeft={"inherit"}
-                marginRight={"inherit"}
-              />
-              <Text>{`${hostedBy.firstName} ${hostedBy.lastName}`}</Text>
+              <HostedByContainer onClick={() => setUserSelectionOpen(!userSelectionOpen)}>
+                <Avatar
+                  firstName={hostedBy.firstName}
+                  lastName={hostedBy.lastName}
+                  defaultAvatarColor={hostedBy.defaultAvatarColor}
+                  avatarUrl={hostedBy.avatarUrl}
+                  size={48}
+                  marginLeft={"inherit"}
+                  marginRight={"inherit"}
+                />
+                <HostedByName>{`${hostedBy.firstName} ${hostedBy.lastName}`}</HostedByName>
+              </HostedByContainer>
+
+              {userSelectionOpen && (
+                <UserSelectionContainer>
+                  <UserSelectionDropdownList
+                    userList={teamMembers}
+                    onUserSelect={() => console.log("hello world")}
+                  />
+                </UserSelectionContainer>
+              )}
+
               {/* <UserSelectionDropdownList userList={companyUsers} onUserSelect={() => console.log('hello world')} /> */}
             </ColumnContainer>
             <ColumnContainer>
@@ -119,4 +134,17 @@ const StyledContentEditable = styled(ContentEditable)`
   &:hover {
     cursor: ${props => (!props.disabled ? "text" : "default")};
   }
+`;
+
+const UserSelectionContainer = styled.div``;
+
+const HostedByContainer = styled.div`
+  display: flex;
+  &: hover {
+    cursor: pointer;
+  }
+`;
+
+const HostedByName = styled(Text)`
+  margin-left: 15px;
 `;
