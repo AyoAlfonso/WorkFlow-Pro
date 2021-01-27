@@ -7,6 +7,8 @@ class Issue < ApplicationRecord
   has_one :team_issue, dependent: :destroy, autosave: true
   accepts_nested_attributes_for :team_issue
 
+  has_many :team_issue_meeting_enablements, through: :team_issue
+
   before_save :create_or_update_team_issue
 
   acts_as_list scope: [:company_id, :user_id, :completed_at]

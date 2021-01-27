@@ -8,7 +8,7 @@ class Meeting < ApplicationRecord
   store :settings, accessors: [:forum_exploration_topic, :forum_exploration_topic_owner_id, :forum_location], prefix: true, coder: JSON
 
   has_many :team_issue_meeting_enablements, dependent: :destroy
-  has_many :team_issues, through: :team_issue_meeting_enablement
+  has_many :team_issues, through: :team_issue_meeting_enablements
 
   accepts_nested_attributes_for :team_issue_meeting_enablements, allow_destroy: true
 

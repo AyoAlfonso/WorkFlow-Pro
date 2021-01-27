@@ -11,8 +11,12 @@ class Api::TeamIssueMeetingEnablementsController < Api::ApplicationController
   end
 
   def index
-    @team_issue_meeting_enablements = policy_scope(TeamIssueMeetingEnablement).for_team(params[:team_id])
-    authorize @team_issue_meeting_enablements
+    @issues = policy_scope(Issue
+                            .joins(:team_issue)
+                            .joins(:team_issue_meeting_enablements)
+                            .where(team_issue_meeting_enablements: {meeting_id: params[:meeting_id]}))
+    authorize @issues
+
     render "api/team_issue_meeting_enablements/index"
   end
 

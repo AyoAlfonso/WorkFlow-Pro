@@ -22,14 +22,12 @@ export const ScheduledIssues = observer(
   const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
   const { teamId, upcomingForumMeeting } = props;
   const { issueStore } = useMst();
-  const openIssues = issueStore.openIssues;
+  const openForumTeamIssues = issueStore.openForumTeamIssues;
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (teamId) {
-      issueStore.fetchIssuesForTeam(teamId);
-    } else {
-      issueStore.fetchIssues();
+    if (upcomingForumMeeting) {
+      issueStore.fetchTeamIssueMeetingEnablements(upcomingForumMeeting.id);
     }
   }, []);
 
@@ -46,7 +44,7 @@ export const ScheduledIssues = observer(
   };
 
   const renderIssuesList = (): Array<JSX.Element> => {
-    return openIssues.map((issue, index) => (
+    return openForumTeamIssues.map((issue, index) => (
       <IssueContainer key={issue["id"]}>
         <IssueEntry issue={issue} meeting={true} pageEnd={true} meetingId={upcomingForumMeeting.id} />
       </IssueContainer>

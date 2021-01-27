@@ -11,8 +11,7 @@ export const IssueStoreModel = types
   .props({
     issues: types.array(IssueModel),
     teamIssues: types.array(TeamIssueModel),
-    teamIssueMeetingEnablement: TeamIssueModel,
-    teamIssueMeetingEnablements: types.array(TeamIssueModel),
+    forumTeamIssues: types.array(TeamIssueModel),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -28,6 +27,12 @@ export const IssueStoreModel = types
     get closedTeamIssues() {
       return self.teamIssues.filter(teamIssue => teamIssue.completedAt !== null);
     },
+    get openForumTeamIssues() {
+      return self.forumTeamIssues.filter(forumTeamIssue => forumTeamIssue.completedAt === null)
+    },
+    get closedForumTeamIssues() {
+      return self.forumTeamIssues.filter(forumTeamIssue => forumTeamIssue.completedAt !== null)
+    }
   }))
   .actions(self => ({
     fetchIssues: flow(function*() {
@@ -128,7 +133,7 @@ export const IssueStoreModel = types
     createTeamIssueMeetingEnablement: flow(function*(meetingId, teamIssueId) {
       const response: ApiResponse<any> = yield self.environment.api.createTeamIssueMeetingEnablement(meetingId, teamIssueId);
       if (response.ok) {
-        self.teamIssueMeetingEnablement = response.data
+        self.forumTeamIssues = response.data
         showToast("Topic Scheduled.", ToastMessageConstants.SUCCESS);
         return true;
       } else {
@@ -136,10 +141,10 @@ export const IssueStoreModel = types
         return false;
       }
     }),
-    fetchTeamIssueMeetingEnablement: flow(function*() {
-      const response: ApiResponse<any> = yield self.environment.api.getTeamIssueMeetingEnablements();
+    fetchTeamIssueMeetingEnablements: flow(function*(meetingId) {
+      const response: ApiResponse<any> = yield self.environment.api.getTeamIssueMeetingEnablements(meetingId);
       if (response.ok) {
-        self.teamIssueMeetingEnablements = response.data
+        self.forumTeamIssues = response.data
         return true;
       } else {
         return false;

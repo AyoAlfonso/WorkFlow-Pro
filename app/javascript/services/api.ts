@@ -132,19 +132,19 @@ export class Api {
       teamId: teamId,
     });
   }
-
-  async getTeamIssueMeetingEnablements() {
-    return this.client.get(`/team_issue_meeting_enablements`);
-  }
-
-  async createTeamIssueMeetingEnablement(meeting_id, team_issue_id) {
-    return this.client.post("/team_issue_meeting_enablements", { meeting_id, team_issue_id });
-  }
-
+  
   async getTeamIssues(teamId) {
     return this.client.get(`/team_issues`, { teamId: teamId });
   }
 
+  async getTeamIssueMeetingEnablements(meetingId) {
+    return this.client.get(`/team_issue_meeting_enablements`, { meetingId });
+  }
+
+  async createTeamIssueMeetingEnablement(meetingId, teamIssueId) {
+    return this.client.post("/team_issue_meeting_enablements", { meetingId, teamIssueId });
+  }
+  
   async updateTeamIssuePosition(teamIssueId, position) {
     return this.client.patch(`/team_issues/${teamIssueId}`, { position: position });
   }

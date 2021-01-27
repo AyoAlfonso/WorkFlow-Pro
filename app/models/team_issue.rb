@@ -5,6 +5,8 @@ class TeamIssue < ApplicationRecord
   has_many :team_issue_meeting_enablements, dependent: :destroy
   has_many :team_meetings, through: :team_issue_meeting_enablements, source: :meeting
 
+  accepts_nested_attributes_for :team_issue_meeting_enablements, allow_destroy: true
+  
   acts_as_list scope: [:team_id, :completed_at], add_new_at: :top
   
   scope :for_team, -> (team_id) { where(team_id: team_id) }
