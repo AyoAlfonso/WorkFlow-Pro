@@ -133,6 +133,14 @@ export class Api {
     });
   }
 
+  async getTeamIssueMeetingEnablements() {
+    return this.client.get(`/team_issue_meeting_enablements`);
+  }
+
+  async createTeamIssueMeetingEnablement(meeting_id, team_issue_id) {
+    return this.client.post("/team_issue_meeting_enablements", { meeting_id, team_issue_id });
+  }
+
   async getTeamIssues(teamId) {
     return this.client.get(`/team_issues`, { teamId: teamId });
   }

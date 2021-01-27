@@ -11,6 +11,8 @@ export const IssueStoreModel = types
   .props({
     issues: types.array(IssueModel),
     teamIssues: types.array(TeamIssueModel),
+    teamIssueMeetingEnablement: TeamIssueModel,
+    teamIssueMeetingEnablements: types.array(TeamIssueModel),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -118,6 +120,26 @@ export const IssueStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.getIssuesForTeam(teamId);
       if (response.ok) {
         self.issues = response.data;
+        return true;
+      } else {
+        return false;
+      }
+    }),
+    createTeamIssueMeetingEnablement: flow(function*(meetingId, teamIssueId) {
+      const response: ApiResponse<any> = yield self.environment.api.createTeamIssueMeetingEnablement(meetingId, teamIssueId);
+      if (response.ok) {
+        self.teamIssueMeetingEnablement = response.data
+        showToast("Topic Scheduled.", ToastMessageConstants.SUCCESS);
+        return true;
+      } else {
+        showToast("There was a problem creating this scheduled topic.", ToastMessageConstants.ERROR);
+        return false;
+      }
+    }),
+    fetchTeamIssueMeetingEnablement: flow(function*() {
+      const response: ApiResponse<any> = yield self.environment.api.getTeamIssueMeetingEnablements();
+      if (response.ok) {
+        self.teamIssueMeetingEnablements = response.data
         return true;
       } else {
         return false;
