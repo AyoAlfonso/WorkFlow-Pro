@@ -30,7 +30,7 @@ export const StrategicPlan = observer(
   },
 );
 
-const HeaderText = styled.p`
+const HeaderText = styled(Heading)`
   font-size: 24px;
   font-weight: 600;
   font-family: Exo;

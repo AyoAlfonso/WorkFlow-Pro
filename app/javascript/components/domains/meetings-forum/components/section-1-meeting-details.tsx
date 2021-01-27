@@ -9,9 +9,15 @@ import { IMeeting } from "~/models/meeting";
 import { Avatar } from "~/components/shared/avatar";
 import ContentEditable from "react-contenteditable";
 import { useRefCallback } from "~/components/shared/content-editable-hooks";
-import { MonthContainer, ColumnContainer, Container, Divider } from "./row-style";
+import {
+  MonthContainer,
+  ColumnContainer,
+  Container as SectionContainer,
+  Divider,
+} from "./row-style";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
+import { IUser } from "~/models/user";
 
 //input is meeting
 //render Month, ScheduledTime, Who, Topic
@@ -19,10 +25,11 @@ import { observer } from "mobx-react";
 
 export interface ISection1MeetingDetailsProps {
   meeting: IMeeting;
+  teamMembers: Array<IUser>;
 }
 
 export const Section1MeetingDetails = observer(
-  ({ meeting }: ISection1MeetingDetailsProps): JSX.Element => {
+  ({ meeting, teamMembers }: ISection1MeetingDetailsProps): JSX.Element => {
     // const { t } = useTranslation();
     const { forumStore } = useMst();
 
@@ -52,23 +59,27 @@ export const Section1MeetingDetails = observer(
     const topicRef = useRef(null);
     const topicOwnerRef = useRef(null);
 
+    const hostedBy = meeting.hostedBy;
+
     return (
-      <>
-        <Container>
+      <Container>
+        <SectionContainer>
           <MonthContainer>
-            <Heading type={"h4"}>{moment(meeting.scheduledStartTime).format("MMMM")}</Heading>
-            <Text>{moment(meeting.scheduledStartTime).format("Do hh:mm a")}</Text>
+            <Heading type={"h3"}>{moment(meeting.scheduledStartTime).format("MMMM")}</Heading>
           </MonthContainer>
-          <Container>
+          <SectionContainer>
             <ColumnContainer>
               <Avatar
-                firstName={"sample"}
-                lastName={"sample"}
+                firstName={hostedBy.firstName}
+                lastName={hostedBy.lastName}
+                defaultAvatarColor={hostedBy.defaultAvatarColor}
+                avatarUrl={hostedBy.avatarUrl}
                 size={48}
                 marginLeft={"inherit"}
                 marginRight={"inherit"}
               />
-              <Text>Sample sample</Text>
+              <Text>{`${hostedBy.firstName} ${hostedBy.lastName}`}</Text>
+              {/* <UserSelectionDropdownList userList={companyUsers} onUserSelect={() => console.log('hello world')} /> */}
             </ColumnContainer>
             <ColumnContainer>
               <StyledContentEditable
@@ -86,13 +97,15 @@ export const Section1MeetingDetails = observer(
                 onBlur={handleBlurExplorationTopic}
               />
             </ColumnContainer>
-          </Container>
-        </Container>
+          </SectionContainer>
+        </SectionContainer>
         <Divider />
-      </>
+      </Container>
     );
   },
 );
+
+const Container = styled.div``;
 
 const StyledContentEditable = styled(ContentEditable)`
   padding-top: 5px;
@@ -102,6 +115,7 @@ const StyledContentEditable = styled(ContentEditable)`
   box-shadow: 0px 3px 6px #f5f5f5;
   padding-left: 16px;
   padding-right: 16px;
+  width: 100%;
   &:hover {
     cursor: ${props => (!props.disabled ? "text" : "default")};
   }

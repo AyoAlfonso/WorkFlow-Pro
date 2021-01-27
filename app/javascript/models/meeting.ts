@@ -3,6 +3,7 @@ import { types } from "mobx-state-tree";
 import { StepModel } from "./step";
 import { KeyActivityModel } from "./key-activity";
 import { MilestoneModel } from "./milestone";
+import { UserModel } from "./user";
 
 export const MeetingModel = types
   .model("MeetingModel")
@@ -35,6 +36,7 @@ export const MeetingModel = types
     notes: types.maybeNull(types.string),
     meetingTemplateId: types.maybeNull(types.number),
     settings: types.maybeNull(types.frozen()),
+    hostedBy: types.maybeNull(UserModel)
   })
   .views(self => ({
     get currentStepDetails() {

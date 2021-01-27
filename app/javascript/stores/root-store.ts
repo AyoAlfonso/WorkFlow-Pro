@@ -71,4 +71,5 @@ export interface IRootStore extends IStateTreeNode {
   meetingStore: IMeetingStore;
   notificationStore: INotificationStore;
   milestoneStore: IMilestoneStore;
+  forumStore: IForumStore;
 }

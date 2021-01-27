@@ -13,3 +13,9 @@
  *= require_tree .
  *= require_self
  */
+
+ [contenteditable=true]:empty:before {
+  content: attr(placeholder);
+  display: block;
+  color: #aaa;
+}
