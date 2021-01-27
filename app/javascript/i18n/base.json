@@ -171,6 +171,10 @@
         "parkingLotIssues": {
           "title": "Parking Lot",
           "subTitle": "Topics members have shared"
+        },
+        "scheduledIssues": {
+          "title": "Scheduled",
+          "subTitle": "Add topics you want to discuss in the section 2 of your next meeting"
         }
       },
       "status": {

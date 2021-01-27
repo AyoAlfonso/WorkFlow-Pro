@@ -16,7 +16,7 @@ export const ParkingLot = observer(({
   return (
     <Container>
       <LeftContainer>
-        <ScheduledIssues upcomingForumMeeting={upcomingForumMeeting} />
+        <ScheduledIssues teamId={teamId} upcomingForumMeeting={upcomingForumMeeting} />
       </LeftContainer>
       <RightContainer>
         <ParkingLotIssues teamId={teamId}  upcomingForumMeeting={upcomingForumMeeting} />
@@ -36,6 +36,7 @@ const LeftContainer = styled.div`
   width: 50%;
   margin-top: 5px;
   margin-bottom: 5px;
+  margin-right: 4px;
 `;
 
 const RightContainer = styled.div`
@@ -44,5 +45,6 @@ const RightContainer = styled.div`
   width: 50%;
   margin-top: 5px;
   margin-bottom: 5px;
+  margin-left: 4px;
 `;
 
