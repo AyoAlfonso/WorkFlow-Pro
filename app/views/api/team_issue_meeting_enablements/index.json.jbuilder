@@ -1,1 +1,3 @@
-json.array! @issues, partial: "api/issues/issue", as: :forum_team_issues
+json.array! @issues do |issue|
+  json.partial! 'api/issues/issue', issue: issue
+end

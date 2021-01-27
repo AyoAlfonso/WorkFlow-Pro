@@ -11,7 +11,7 @@ export const IssueStoreModel = types
   .props({
     issues: types.array(IssueModel),
     teamIssues: types.array(TeamIssueModel),
-    forumTeamIssues: types.array(TeamIssueModel),
+    forumTeamIssues: types.array(IssueModel),
   })
   .extend(withEnvironment())
   .views(self => ({
