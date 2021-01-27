@@ -1,1 +1,0 @@
-json.partial! @team_issue_meeting_enablement, partial: "api/team_issue_meeting_enablements/team_issue_meeting_enablement", as: :team_issue_meeting_enablement

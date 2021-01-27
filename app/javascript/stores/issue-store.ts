@@ -11,7 +11,7 @@ export const IssueStoreModel = types
   .props({
     issues: types.array(IssueModel),
     teamIssues: types.array(TeamIssueModel),
-    forumTeamIssues: types.array(IssueModel),
+    forumMeetingTeamIssues: types.array(IssueModel),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -27,11 +27,11 @@ export const IssueStoreModel = types
     get closedTeamIssues() {
       return self.teamIssues.filter(teamIssue => teamIssue.completedAt !== null);
     },
-    get openForumTeamIssues() {
-      return self.forumTeamIssues.filter(forumTeamIssue => forumTeamIssue.completedAt === null)
+    get openForumMeetingTeamIssues() {
+      return self.forumMeetingTeamIssues.filter(forumMeetingTeamIssue => forumMeetingTeamIssue.completedAt === null)
     },
-    get closedForumTeamIssues() {
-      return self.forumTeamIssues.filter(forumTeamIssue => forumTeamIssue.completedAt !== null)
+    get closedForumMeetingTeamIssues() {
+      return self.forumMeetingTeamIssues.filter(forumMeetingTeamIssue => forumMeetingTeamIssue.completedAt !== null)
     }
   }))
   .actions(self => ({
@@ -60,6 +60,7 @@ export const IssueStoreModel = types
       if (response.ok) {
         self.issues = response.data.issues;
         self.teamIssues = response.data.teamIssues;
+        self.forumMeetingTeamIssues = response.data.forumMeetingTeamIssues;
         showToast("Issue created.", ToastMessageConstants.SUCCESS);
         return true;
       } else {
@@ -130,21 +131,10 @@ export const IssueStoreModel = types
         return false;
       }
     }),
-    createTeamIssueMeetingEnablement: flow(function*(meetingId, teamIssueId) {
-      const response: ApiResponse<any> = yield self.environment.api.createTeamIssueMeetingEnablement(meetingId, teamIssueId);
-      if (response.ok) {
-        self.forumTeamIssues = response.data
-        showToast("Topic Scheduled.", ToastMessageConstants.SUCCESS);
-        return true;
-      } else {
-        showToast("There was a problem creating this scheduled topic.", ToastMessageConstants.ERROR);
-        return false;
-      }
-    }),
     fetchTeamIssueMeetingEnablements: flow(function*(meetingId) {
       const response: ApiResponse<any> = yield self.environment.api.getTeamIssueMeetingEnablements(meetingId);
       if (response.ok) {
-        self.forumTeamIssues = response.data
+        self.forumMeetingTeamIssues = response.data
         return true;
       } else {
         return false;

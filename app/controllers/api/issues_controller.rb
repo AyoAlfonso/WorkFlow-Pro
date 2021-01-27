@@ -13,11 +13,14 @@ class Api::IssuesController < Api::ApplicationController
     authorize @issue
     @issue.insert_at(1)
     @issue.save!
-    
+
     if params[:team_id]
       # USE HOOK TO CREATE A TEAM ISSUE IF IT DOESNT EXIST FOR @ISSUE
       @team_issues = TeamIssue.for_team(params[:team_id]).sort_by_position
       @issues_to_render = team_meeting_issues(params[:team_id])
+      if params[:meeting_id]
+        @forum_meeting_team_issues = TeamIssueMeetingEnablementsService.call(@issue, params)
+      end
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
     end

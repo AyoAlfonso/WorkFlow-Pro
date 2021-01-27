@@ -22,7 +22,7 @@ export const ScheduledIssues = observer(
   const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
   const { teamId, upcomingForumMeeting } = props;
   const { issueStore } = useMst();
-  const openForumTeamIssues = issueStore.openForumTeamIssues;
+  const openForumMeetingTeamIssues = issueStore.openForumMeetingTeamIssues;
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export const ScheduledIssues = observer(
   };
 
   const renderIssuesList = (): Array<JSX.Element> => {
-    return openForumTeamIssues.map((issue, index) => (
+    return openForumMeetingTeamIssues.map((issue, index) => (
       <IssueContainer key={issue["id"]}>
         <IssueEntry issue={issue} meeting={true} pageEnd={true} meetingId={upcomingForumMeeting.id} />
       </IssueContainer>
@@ -71,6 +71,7 @@ export const ScheduledIssues = observer(
           createIssueModalOpen={createIssueModalOpen}
           setCreateIssueModalOpen={setCreateIssueModalOpen}
           teamId={teamId}
+          upcomingForumMeetingId={upcomingForumMeeting.id}
         />
         <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
           <AddNewIssuePlus>
