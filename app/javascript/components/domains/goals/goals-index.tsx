@@ -61,13 +61,21 @@ export const GoalsIndex = observer(
           ? setShowCreateCompanyAnnualInitiative
           : setShowCreatePersonalAnnualInitiative;
 
+      const createGoalYearString =
+        companyStore.company.currentFiscalYear ==
+        companyStore.company.yearForCreatingAnnualInitiatives
+          ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+          : `FY${companyStore.company.currentFiscalYear
+              .toString()
+              .slice(-2)}/${companyStore.company.yearForCreatingAnnualInitiatives
+              .toString()
+              .slice(-2)}`;
+
       return (
         <CreateGoalSection
           type={type}
           placeholder={t("annualInitiative.enterTitle")}
-          addButtonText={`${t("annualInitiative.add")} (${
-            companyStore.company.yearForCreatingAnnualInitiatives
-          })`}
+          addButtonText={`${t("annualInitiative.add")} (${createGoalYearString})`}
           createButtonText={t("annualInitiative.addInitiative")}
           showCreateGoal={showCreateAnnualInitiative}
           setShowCreateGoal={setShowCreateAnnualInitiative}

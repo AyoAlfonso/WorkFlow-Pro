@@ -41,6 +41,13 @@ export const AnnualInitiativeCard = ({
     setShowMinimizedCard(showMinimizedCards);
   }, [showMinimizedCards]);
 
+  const goalYearString =
+    companyStore.company.currentFiscalYear == annualInitiative.fiscalYear
+      ? `FY${annualInitiative.fiscalYear.toString().slice(-2)}`
+      : `FY${companyStore.company.currentFiscalYear
+          .toString()
+          .slice(-2)}/${annualInitiative.fiscalYear.toString().slice(-2)}`;
+
   const renderYearDisplay = () => {
     if (
       companyStore.company.currentFiscalYear != annualInitiative.fiscalYear &&
@@ -48,7 +55,7 @@ export const AnnualInitiativeCard = ({
     ) {
       return (
         <YearContainer>
-          <YearText> {annualInitiative.fiscalYear} Goal </YearText>
+          <YearText> {goalYearString} Goal </YearText>
         </YearContainer>
       );
     }
