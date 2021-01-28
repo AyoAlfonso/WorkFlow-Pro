@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import moment from "moment";
@@ -61,6 +61,19 @@ export const Section1MeetingDetails = observer(
 
     const topicRef = useRef(null);
     const topicOwnerRef = useRef(null);
+    const userDropdownRef = useRef(null);
+
+    useEffect(() => {
+      const handleClickOutside = event => {
+        if (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) {
+          setUserSelectionOpen(false);
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [userDropdownRef]);
 
     const hostedBy = meeting.hostedBy;
 
@@ -86,7 +99,7 @@ export const Section1MeetingDetails = observer(
               </HostedByContainer>
 
               {userSelectionOpen && (
-                <UserSelectionContainer>
+                <UserSelectionContainer ref={userDropdownRef}>
                   <UserSelectionDropdownList
                     userList={teamMembers}
                     onUserSelect={() => console.log("hello world")}
@@ -136,7 +149,10 @@ const StyledContentEditable = styled(ContentEditable)`
   }
 `;
 
-const UserSelectionContainer = styled.div``;
+const UserSelectionContainer = styled.div`
+  margin-left: 25px;
+  margin-top: -10px;
+`;
 
 const HostedByContainer = styled.div`
   display: flex;
