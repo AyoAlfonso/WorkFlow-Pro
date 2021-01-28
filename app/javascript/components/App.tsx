@@ -97,8 +97,15 @@ export const App = observer(
         const teamIssueId = parseInt(R.replace("team_issue-", "", draggableId));
         issueStore.updateTeamIssuePosition(teamIssueId, newPosition + 1);
       } else if (R.includes("issue", draggableId)) {
-        const issueId = parseInt(R.replace("issue-", "", draggableId));
-        issueStore.updateIssuePosition(issueId, newPosition + 1);
+        const draggableIdList = draggableId.split("_")
+        const issueId = parseInt(R.replace("issue-", "", draggableIdList[0]));
+        const meetingId = parseInt(R.replace("forumMeetingId-", "", draggableIdList[1]))
+        if (destination.droppableId === "issues-container") {
+          issueStore.updateIssuePosition(issueId, newPosition + 1);
+        }
+        else if (destination.droppableId === "scheduled-issues") { 
+          issueStore.createTeamIssueMeetingEnablement(issueId, meetingId);
+        }
       }
     };
     return (

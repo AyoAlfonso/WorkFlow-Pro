@@ -10,6 +10,7 @@ import { CreateIssueModal } from "../../issues/create-issue-modal";
 import { Icon } from "~/components/shared";
 import { IssueEntry } from "../../issues/issue-entry";
 import { HomeContainerBorders } from "~/components/domains/home/shared-components";
+import { Droppable } from "react-beautiful-dnd";
 
 interface ScheduledIssuesProps {
   teamId: number | string;
@@ -79,7 +80,17 @@ export const ScheduledIssues = observer(
           </AddNewIssuePlus>
           <AddNewIssueText> Add a Topic</AddNewIssueText>
         </AddNewIssueContainer>
-        <IssuesContainer>{renderIssuesList()}</IssuesContainer>
+        <Droppable droppableId="scheduled-issues" key={"issue"} >
+          {(provided, snapshot) => (
+            <IssuesContainer
+              ref={provided.innerRef}
+              isDraggingOver={snapshot.isDraggingOver}
+            >
+              {renderIssuesList()}
+              {provided.placeholder}
+            </IssuesContainer>
+          )}
+        </Droppable>
       </Container>
     </>
   );
@@ -143,8 +154,10 @@ const AddNewIssueContainer = styled(HomeContainerBorders)`
   }
 `;
 
-const IssuesContainer = styled.div`
+const IssuesContainer = styled.div<IssuesContainerType>`
   overflow-y: auto;
+  background-color: ${props => 
+    props.isDraggingOver ? props.theme.colors.backgroundBlue : "white"};
 `;
 
 const IssueContainer = styled(HomeContainerBorders)`
@@ -152,5 +165,6 @@ const IssueContainer = styled(HomeContainerBorders)`
   margin: 8px 5px 8px 5px;
 `;
 
-
-
+type IssuesContainerType = {
+  isDraggingOver?: any;
+};

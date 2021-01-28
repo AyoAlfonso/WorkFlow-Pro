@@ -131,10 +131,19 @@ export const IssueStoreModel = types
         return false;
       }
     }),
+    createTeamIssueMeetingEnablement: flow(function*(teamIssueId, meetingId) {
+      const response: ApiResponse<any> = yield self.environment.api.createTeamIssueMeetingEnablement(teamIssueId, meetingId);
+      if (response.ok) {
+        self.forumMeetingTeamIssues = response.data;
+        return true;
+      } else {
+        return false;
+      }
+    }),
     fetchTeamIssueMeetingEnablements: flow(function*(meetingId) {
       const response: ApiResponse<any> = yield self.environment.api.getTeamIssueMeetingEnablements(meetingId);
       if (response.ok) {
-        self.forumMeetingTeamIssues = response.data
+        self.forumMeetingTeamIssues = response.data;
         return true;
       } else {
         return false;

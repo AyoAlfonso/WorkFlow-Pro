@@ -6,6 +6,10 @@ class TeamIssueMeetingEnablementPolicy < ApplicationPolicy
     @team_issue_meeting_enablement = team_issue_meeting_enablement
   end
 
+  def create?
+    true
+  end
+
   def index?
     true
   end

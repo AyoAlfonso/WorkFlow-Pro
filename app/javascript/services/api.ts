@@ -137,12 +137,12 @@ export class Api {
     return this.client.get(`/team_issues`, { teamId: teamId });
   }
 
-  async getTeamIssueMeetingEnablements(meetingId) {
-    return this.client.get(`/team_issue_meeting_enablements`, { meetingId });
+  async createTeamIssueMeetingEnablement(teamIssueId, meetingId) {
+    return this.client.post(`team_issue_meeting_enablements`, { teamIssueId, meetingId })
   }
 
-  async createTeamIssueMeetingEnablement(meetingId, teamIssueId) {
-    return this.client.post("/team_issue_meeting_enablements", { meetingId, teamIssueId });
+  async getTeamIssueMeetingEnablements(meetingId) {
+    return this.client.get(`/team_issue_meeting_enablements`, { meetingId });
   }
   
   async updateTeamIssuePosition(teamIssueId, position) {

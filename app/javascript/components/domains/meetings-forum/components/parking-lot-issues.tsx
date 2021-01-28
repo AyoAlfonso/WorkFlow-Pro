@@ -10,6 +10,7 @@ import { CreateIssueModal } from "../../issues/create-issue-modal";
 import { Icon } from "~/components/shared";
 import { IssueEntry } from "../../issues/issue-entry";
 import { HomeContainerBorders } from "~/components/domains/home/shared-components";
+import { Draggable } from "react-beautiful-dnd";
 
 interface ParkingLotIssuesProps {
   teamId: number | string;
@@ -47,9 +48,29 @@ export const ParkingLotIssues = observer(
 
   const renderIssuesList = (): Array<JSX.Element> => {
     return openIssues.map((issue, index) => (
-      <IssueContainer key={issue["id"]}>
-        <IssueEntry issue={issue} meeting={true} pageEnd={true} meetingId={upcomingForumMeeting.id} />
-      </IssueContainer>
+      <Draggable
+        draggableId={`issue-${issue.id}_forumMeetingId-${upcomingForumMeeting.id}`}
+        index={index}
+        key={issue["id"]}
+        type={"issue"}
+      >
+        {provided => (
+          <IssueContainer 
+            key={issue["id"]}
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            <IssueEntry 
+              issue={issue} 
+              meeting={true} 
+              pageEnd={true} 
+              meetingId={upcomingForumMeeting.id} 
+              dragHandleProps={...provided.dragHandleProps}
+            />
+          </IssueContainer>
+        )}
+      </Draggable>
     ));
   };
 
