@@ -5,10 +5,7 @@ import { Icon } from "../../shared/icon";
 import { useTranslation } from "react-i18next";
 import { CreateIssueModal } from "./create-issue-modal";
 import { AccordionSummary } from '~/components/shared/accordion-components';
-import { 
-  HeaderText, 
-  HeaderContainerNoBorder, 
-} from "~/components/shared/styles/container-header";
+import { HeaderContainerNoBorder } from "~/components/shared/styles/container-header";
 
 interface IssuesHeaderProps {
   issuesText?: string;
@@ -37,7 +34,9 @@ export const IssuesHeader = ({
             style={{ paddingRight: "15px" }}
             iconColor={expanded === "panel2" ? "primary100" : "grey60" }
           />
-          <HeaderText> 
+          <HeaderText
+            expanded={expanded}
+          > 
             {issuesText || t("issues.title") || "Issues"} 
           </HeaderText>
         </HeaderContainerNoBorder>
@@ -50,6 +49,21 @@ export const IssuesHeader = ({
     </>
   );
 };
+
+type HeaderTextType = {
+  expanded?: string;
+};
+
+export const HeaderText = styled.h4<HeaderTextType>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: ${props => 
+    props.expanded === "panel2" ? props.theme.colors.black : props.theme.colors.grey60};
+`;
 
 const AddNewIssuePlus = styled.div`
   margin-top: auto;

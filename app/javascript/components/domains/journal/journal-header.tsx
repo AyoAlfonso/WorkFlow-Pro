@@ -6,10 +6,7 @@ import { Link } from "react-router-dom";
 import { Icon } from "~/components/shared";
 import Modal from "styled-react-modal";
 import { AccordionSummary } from '~/components/shared/accordion-components';
-import {
-  HeaderText,
-  HeaderContainerNoBorder,
-} from "~/components/shared/styles/container-header";
+import { HeaderContainerNoBorder } from "~/components/shared/styles/container-header";
 
 declare global {
   interface Window {
@@ -47,7 +44,9 @@ export const JournalHeader = ({
             style={{ paddingRight: "15px" }}
             iconColor={expanded === "panel0" ? "primary100" : "grey60" }
           />
-          <HeaderText> {t("journals.title")} </HeaderText>
+          <HeaderText
+            expanded={expanded}
+          > {t("journals.title")} </HeaderText>
         </HeaderContainerNoBorder>
         <EndButtonContainer>
           <Link to="/journals" style={{ textDecoration: "none", padding: "0" }}>
@@ -91,6 +90,21 @@ export const JournalHeader = ({
     </>
   );
 };
+
+type HeaderTextType = {
+  expanded?: string;
+};
+
+export const HeaderText = styled.h4<HeaderTextType>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: ${props => 
+    props.expanded === "panel0" ? props.theme.colors.black : props.theme.colors.grey60};
+`;
 
 const EndButtonContainer = styled.div`
   align-items: center;
