@@ -7,7 +7,7 @@ import { JournalBody } from "./journal-body";
 import { Accordion } from '~/components/shared/accordion-components';
 
 interface IJournalProps {
-  expanded: string | false;
+  expanded: string;
   handleChange: any;
 }
 

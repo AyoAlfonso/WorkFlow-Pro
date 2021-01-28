@@ -9,7 +9,7 @@ import { TodaysPrioritiesContainer } from "../todays-priorities/todays-prioritie
 import { HomeContainerBorders } from "./shared-components";
 
 export const HomePersonalItems = (): JSX.Element => {
-  const [expanded, setExpanded] = useState<string | false>(false);
+  const [expanded, setExpanded] = useState<string>("");
 
   const renderProritiesContainer = () => {
     return (
@@ -41,7 +41,7 @@ export const HomePersonalItems = (): JSX.Element => {
   };
 
   const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
-    setExpanded(isExpanded ? panel : false)
+    setExpanded(isExpanded ? panel : "")
   };
 
   return (

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Accordion } from '~/components/shared/accordion-components';
 
 interface IIssuesContainerProps {
-  expanded: string | false;
+  expanded: string;
   handleChange: any;
 }
 

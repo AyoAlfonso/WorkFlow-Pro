@@ -4,7 +4,7 @@ import { HabitsHeader, HabitsBody } from "./";
 import { Accordion } from '~/components/shared/accordion-components';
 
 interface IHabitsProps {
-  expanded: string | false;
+  expanded: string;
   handleChange: any;
 }
 
