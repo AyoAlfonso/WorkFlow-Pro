@@ -154,6 +154,12 @@
         "saveRatings": "Save Ratings",
         "teamsPyns": "Team's Pyns"
       },
+      "meetingForum": {
+        "explorationTopic": {
+          "whoTitle": "Who",
+          "topicTitle": "Topic"
+        }
+      },
       "status": {
         "active": "Active",
         "inactive": "Inactive",
