@@ -10,7 +10,7 @@ import { CreateIssueModal } from "../../issues/create-issue-modal";
 import { Icon } from "~/components/shared";
 import { IssueEntry } from "../../issues/issue-entry";
 import { HomeContainerBorders } from "~/components/domains/home/shared-components";
-import { Draggable } from "react-beautiful-dnd";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 
 interface ParkingLotIssuesProps {
   teamId: number | string;
@@ -23,12 +23,12 @@ export const ParkingLotIssues = observer(
   const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
   const { teamId, upcomingForumMeeting } = props;
   const { issueStore } = useMst();
-  const openIssues = issueStore.openIssues;
+  const openTeamIssues = issueStore.openTeamIssues;
   const { t } = useTranslation();
 
   useEffect(() => {
     if (teamId) {
-      issueStore.fetchIssuesForTeam(teamId);
+      issueStore.fetchTeamIssues(teamId);
     } else {
       issueStore.fetchIssues();
     }
@@ -47,26 +47,25 @@ export const ParkingLotIssues = observer(
   };
 
   const renderIssuesList = (): Array<JSX.Element> => {
-    return openIssues.map((issue, index) => (
+    return openTeamIssues.map((teamIssue, index) => (
       <Draggable
-        draggableId={`issue-${issue.id}_forumMeetingId-${upcomingForumMeeting.id}`}
+        draggableId={`issue-${teamIssue.id}_forumMeetingId-${upcomingForumMeeting.id}`}
         index={index}
-        key={issue["id"]}
+        key={teamIssue["id"]}
         type={"issue"}
       >
         {provided => (
           <IssueContainer 
-            key={issue["id"]}
+            key={teamIssue["id"]}
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
             <IssueEntry 
-              issue={issue} 
+              issue={teamIssue.issue} 
               meeting={true} 
               pageEnd={true} 
-              meetingId={upcomingForumMeeting.id} 
-              dragHandleProps={...provided.dragHandleProps}
+              meetingId={upcomingForumMeeting.id}
             />
           </IssueContainer>
         )}
@@ -101,7 +100,17 @@ export const ParkingLotIssues = observer(
           </AddNewIssuePlus>
           <AddNewIssueText> Add a Topic</AddNewIssueText>
         </AddNewIssueContainer>
-        <IssuesContainer>{renderIssuesList()}</IssuesContainer>
+        <Droppable droppableId="scheduled-issues" key={"issue"} >
+          {(provided, snapshot) => (
+            <IssuesContainer
+              ref={provided.innerRef}
+              isDraggingOver={snapshot.isDraggingOver}
+            >
+              {renderIssuesList()}
+              {provided.placeholder}
+            </IssuesContainer>
+          )}
+        </Droppable>
       </Container>
     </>
   );
@@ -165,8 +174,10 @@ const AddNewIssueContainer = styled(HomeContainerBorders)`
   }
 `;
 
-const IssuesContainer = styled.div`
+const IssuesContainer = styled.div<IssuesContainerType>`
   overflow-y: auto;
+  background-color: ${props => 
+    props.isDraggingOver ? props.theme.colors.backgroundBlue : "white"};
 `;
 
 const IssueContainer = styled(HomeContainerBorders)`
@@ -174,5 +185,6 @@ const IssueContainer = styled(HomeContainerBorders)`
   margin: 8px 5px 8px 5px;
 `;
 
-
-
+type IssuesContainerType = {
+  isDraggingOver?: any;
+};
