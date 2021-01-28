@@ -454,10 +454,10 @@ ActiveRecord::Schema.define(version: 2021_01_25_193451) do
     t.string "default_avatar_color"
     t.string "title"
     t.datetime "deleted_at"
-    t.bigint "current_selected_company_id"
+    t.bigint "default_selected_company_id"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
-    t.index ["current_selected_company_id"], name: "index_users_on_current_selected_company_id"
+    t.index ["default_selected_company_id"], name: "index_users_on_default_selected_company_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"
@@ -509,5 +509,5 @@ ActiveRecord::Schema.define(version: 2021_01_25_193451) do
   add_foreign_key "user_company_enablements", "users"
   add_foreign_key "users", "companies"
   add_foreign_key "users", "user_roles"
-  add_foreign_key "users", "users", column: "current_selected_company_id"
+  add_foreign_key "users", "users", column: "default_selected_company_id"
 end

@@ -1,1 +1,1 @@
-json.extract! user, :id, :first_name, :last_name, :email, :role, :avatar_url, :confirmed_at, :invitation_sent_at, :timezone, :phone_number, :default_avatar_color, :title, :status, :current_selected_company_id
+json.extract! user, :id, :first_name, :last_name, :email, :role, :avatar_url, :confirmed_at, :invitation_sent_at, :timezone, :phone_number, :default_avatar_color, :title, :status, :default_selected_company_id

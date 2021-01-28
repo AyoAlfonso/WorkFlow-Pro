@@ -1,13 +1,3 @@
-class CurrentContext
-  attr_reader :user, :company
-
-  def initialize(user, company)
-    @user = user
-    @company = company
-  end
-end
-
-
 class Api::ApplicationController < ActionController::API
   include Pundit
 
@@ -42,7 +32,7 @@ class Api::ApplicationController < ActionController::API
 
   private
   def set_current_company
-    @current_company ||= request.headers["HTTP_CURRENT_COMPANY_ID"].present? ? Company.find(request.headers["HTTP_CURRENT_COMPANY_ID"]) : Company.find(current_user.current_selected_company_id) if current_user.present?
+    @current_company ||= request.headers["HTTP_CURRENT_COMPANY_ID"].present? ? Company.find(request.headers["HTTP_CURRENT_COMPANY_ID"]) : current_user.default_selected_company if current_user.present?
   end
 
   def policy_scoping_not_performed_error

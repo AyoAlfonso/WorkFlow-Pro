@@ -14,7 +14,6 @@ class User < ApplicationRecord
 
   before_save :sanitize_personal_vision
   after_create :create_default_notifications
-  belongs_to :company
   delegate :name, :timezone, to: :company, prefix: true, allow_nil: true
   delegate :name, to: :user_role, prefix: true, allow_nil: true
   has_many :issues
@@ -42,9 +41,8 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :daily_logs
 
-  def current_selected_company
-    Company.find(self.current_selected_company_id)
-  end
+  belongs_to :company #to be removed after we finalize rake, etc.
+  belongs_to :default_selected_company, class_name: "Company"
 
   def status
     return "inactive" if deleted_at.present?
@@ -190,6 +188,6 @@ class User < ApplicationRecord
   end
 
   def selected_user_company_enablement
-    self.user_company_enablements.find_by_company_id(self.current_selected_company_id)
+    self.user_company_enablements.find_by_company_id(self.default_selected_company_id)
   end
 end

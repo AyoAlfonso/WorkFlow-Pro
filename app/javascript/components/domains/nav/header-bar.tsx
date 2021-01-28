@@ -243,10 +243,10 @@ export const HeaderBar = observer(
             <LogoContainer>
               {R.isNil(companyStore.company) ? (
                 <></>
+              ) : companyStore.company.logoUrl ? (
+                <LogoImage src={`${companyStore.company.logoUrl}`} />
               ) : (
-                companyStore.company.logoUrl && (
-                  <LogoImage src={`${companyStore.company.logoUrl}`} />
-                )
+                <Text>{companyStore.company.name}</Text>
               )}
             </LogoContainer>
             <PersonalInfoContainer ref={accountActionRef}>

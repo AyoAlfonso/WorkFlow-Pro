@@ -46,7 +46,7 @@ ActiveAdmin.register User do
     column :email
     column :phone_number
     column :company_name do |user|
-      user.companies.first
+      user.companies.map{|c|c.name}.join(",")
     end
     column :current_sign_in_at
     column :sign_in_count
