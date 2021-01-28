@@ -5,7 +5,7 @@ class Meeting < ApplicationRecord
   belongs_to :team, optional: true #a meeting with no team is a personal meeting
   belongs_to :hosted_by, class_name: "User", optional: true
   belongs_to :meeting_template
-  store :settings, accessors: [:forum_exploration_topic, :forum_exploration_topic_owner_id], prefix: true
+  store :settings, accessors: [:forum_exploration_topic, :forum_exploration_topic_owner_id], prefix: true, coder: JSON
 
   delegate :steps, :total_duration, :duration, :name, :meeting_type, to: :meeting_template
 
