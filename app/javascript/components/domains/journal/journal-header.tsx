@@ -5,7 +5,7 @@ import { SurveyBot } from "./survey-bot";
 import { Link } from "react-router-dom";
 import { Icon } from "~/components/shared";
 import Modal from "styled-react-modal";
-import { AccordionSummary } from '~/components/shared/accordion';
+import { AccordionSummary } from '~/components/shared/accordion-components';
 import {
   HeaderText,
   ToolsHeaderContainer,

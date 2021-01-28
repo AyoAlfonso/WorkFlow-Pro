@@ -7,7 +7,7 @@ import { TextNoMargin } from "~/components/shared/text";
 import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
 import { useMst } from "../../../setup/root";
 import { IconButton } from "../../shared/icon-button";
-import { AccordionDetails } from '~/components/shared/accordion';
+import { AccordionDetails } from '~/components/shared/accordion-components';
 
 interface IJournalBodyProps {
   setQuestionnaireVariant: any;

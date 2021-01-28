@@ -4,7 +4,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { JournalHeader } from "./journal-header";
 import { JournalBody } from "./journal-body";
-import { Accordion } from '~/components/shared/accordion';
+import { Accordion } from '~/components/shared/accordion-components';
 
 interface IJournalProps {
   expanded: string | false;

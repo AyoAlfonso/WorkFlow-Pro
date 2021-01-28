@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { IssuesHeader } from "./issues-header";
 import { IssuesBody } from "./issues-body";
 import { useState } from "react";
-import { Accordion } from '~/components/shared/accordion';
+import { Accordion } from '~/components/shared/accordion-components';
 
 interface IIssuesContainerProps {
   expanded: string | false;

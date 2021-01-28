@@ -7,7 +7,7 @@ import {
   HeaderText, 
   ToolsHeaderContainer,
 } from "~/components/shared/styles/container-header";
-import { AccordionSummary } from '~/components/shared/accordion';
+import { AccordionSummary } from '~/components/shared/accordion-components';
 
 interface IHabitsHeaderProps {
   expanded: string | false;

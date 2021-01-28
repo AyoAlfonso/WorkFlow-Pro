@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { HabitsHeader, HabitsBody } from "./";
-import { Accordion } from '~/components/shared/accordion';
+import { Accordion } from '~/components/shared/accordion-components';
 
 interface IHabitsProps {
   expanded: string | false;

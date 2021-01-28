@@ -13,7 +13,7 @@ import { Loading } from "../../shared";
 import { sortByPosition } from "~/utils/sorting";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { HomeContainerBorders } from "../home/shared-components";
-import { AccordionDetails } from '~/components/shared/accordion';
+import { AccordionDetails } from '~/components/shared/accordion-components';
 
 interface IIssuesBodyProps {
   showOpenIssues: boolean;

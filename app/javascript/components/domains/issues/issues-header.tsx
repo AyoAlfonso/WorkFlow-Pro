@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Icon } from "../../shared/icon";
 import { useTranslation } from "react-i18next";
 import { CreateIssueModal } from "./create-issue-modal";
-import { AccordionSummary } from '~/components/shared/accordion';
+import { AccordionSummary } from '~/components/shared/accordion-components';
 import { 
   HeaderText, 
   ToolsHeaderContainer, 

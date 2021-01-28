@@ -5,7 +5,7 @@ import { useMst } from "~/setup/root";
 import { HabitsHabitTracker } from "./habits-habit-tracker";
 import * as moment from "moment";
 import { EditHabit } from "./edit-habit";
-import { AccordionDetails } from "~/components/shared/accordion";
+import { AccordionDetails } from "~/components/shared/accordion-components";
 
 import {
   HabitsTable,
