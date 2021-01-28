@@ -151,7 +151,7 @@ export const HeaderBar = observer(
             key={index}
             onClick={() =>
               userStore
-                .updateUser({ id: parsedProfile.id, currentSelectedCompanyId: company.id })
+                .updateUser({ id: parsedProfile.id, defaultSelectedCompanyId: company.id })
                 .then(() => {
                   if (location.pathname !== "/") {
                     history.replace("/");
