@@ -2,11 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import moment from "moment";
-import { useTranslation } from "react-i18next";
-import { Text } from "~/components/shared/text";
-import { Heading } from "~/components/shared/heading";
 import { IMeeting } from "~/models/meeting";
-import { Avatar } from "~/components/shared/avatar";
 import ContentEditable from "react-contenteditable";
 import { useRefCallback } from "~/components/shared/content-editable-hooks";
 import {
@@ -18,27 +14,20 @@ import {
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
 import { IUser } from "~/models/user";
-import { UserSelectionDropdownList } from "~/components/shared";
-
-//input is meeting
-//render Month, ScheduledTime, Who, Topic
-//WHO AND TOPIC plugin still  needs to be done
+import { Icon, Text, Heading, UserSelectionDropdownList, Avatar } from "~/components/shared";
 
 export interface ISection1MeetingDetailsProps {
   meeting: IMeeting;
   teamMembers: Array<IUser>;
+  disabled?: boolean;
 }
 
 export const Section1MeetingDetails = observer(
-  ({ meeting, teamMembers }: ISection1MeetingDetailsProps): JSX.Element => {
-    // const { t } = useTranslation();
+  ({ meeting, teamMembers, disabled }: ISection1MeetingDetailsProps): JSX.Element => {
     const { forumStore } = useMst();
 
     const [explorationTopic, setExplorationTopic] = useState(
       R.path(["forumExplorationTopic"], meeting.settings) || "",
-    );
-    const [explorationTopicOwnerId, setExplorationTopicOwnerId] = useState(
-      R.path(["forumExplorationTopicId"], meeting.settings) || "",
     );
 
     const [userSelectionOpen, setUserSelectionOpen] = useState<boolean>(false);
@@ -59,8 +48,17 @@ export const Section1MeetingDetails = observer(
       });
     }, [explorationTopic]);
 
+    const handleChangeExplorationTopicOwnerId = user => {
+      setUserSelectionOpen(false);
+      forumStore.updateMeetingTopic({
+        id: meeting.id,
+        meeting: {
+          settingsForumExplorationTopicOwnerId: user.id,
+        },
+      });
+    };
+
     const topicRef = useRef(null);
-    const topicOwnerRef = useRef(null);
     const userDropdownRef = useRef(null);
 
     useEffect(() => {
@@ -75,7 +73,37 @@ export const Section1MeetingDetails = observer(
       };
     }, [userDropdownRef]);
 
-    const hostedBy = meeting.hostedBy;
+    const topicOwner = teamMembers.find(
+      member => member.id == R.path(["forumExplorationTopicOwnerId"], meeting.settings),
+    );
+
+    const renderUserAvatar = () => {
+      if (topicOwner) {
+        return (
+          <>
+            <Avatar
+              firstName={topicOwner.firstName}
+              lastName={topicOwner.lastName}
+              defaultAvatarColor={topicOwner.defaultAvatarColor}
+              avatarUrl={topicOwner.avatarUrl}
+              size={48}
+              marginLeft={"inherit"}
+              marginRight={"inherit"}
+            />
+            <HostedByName>{`${topicOwner.firstName} ${topicOwner.lastName}`}</HostedByName>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <ImageContainer>
+              <Icon icon={"New-User"} size={"30px"} iconColor={"grey80"} />
+            </ImageContainer>
+            <AddMemberText>Add a member</AddMemberText>
+          </>
+        );
+      }
+    };
 
     return (
       <Container>
@@ -85,29 +113,24 @@ export const Section1MeetingDetails = observer(
           </MonthContainer>
           <SectionContainer>
             <ColumnContainer>
-              <HostedByContainer onClick={() => setUserSelectionOpen(!userSelectionOpen)}>
-                <Avatar
-                  firstName={hostedBy.firstName}
-                  lastName={hostedBy.lastName}
-                  defaultAvatarColor={hostedBy.defaultAvatarColor}
-                  avatarUrl={hostedBy.avatarUrl}
-                  size={48}
-                  marginLeft={"inherit"}
-                  marginRight={"inherit"}
-                />
-                <HostedByName>{`${hostedBy.firstName} ${hostedBy.lastName}`}</HostedByName>
+              <HostedByContainer
+                onClick={() => {
+                  if (!disabled) {
+                    setUserSelectionOpen(!userSelectionOpen);
+                  }
+                }}
+              >
+                {renderUserAvatar()}
               </HostedByContainer>
 
               {userSelectionOpen && (
                 <UserSelectionContainer ref={userDropdownRef}>
                   <UserSelectionDropdownList
                     userList={teamMembers}
-                    onUserSelect={() => console.log("hello world")}
+                    onUserSelect={handleChangeExplorationTopicOwnerId}
                   />
                 </UserSelectionContainer>
               )}
-
-              {/* <UserSelectionDropdownList userList={companyUsers} onUserSelect={() => console.log('hello world')} /> */}
             </ColumnContainer>
             <ColumnContainer>
               <StyledContentEditable
@@ -123,6 +146,7 @@ export const Section1MeetingDetails = observer(
                   }
                 }}
                 onBlur={handleBlurExplorationTopic}
+                disabled={disabled}
               />
             </ColumnContainer>
           </SectionContainer>
@@ -139,7 +163,7 @@ const StyledContentEditable = styled(ContentEditable)`
   padding-top: 5px;
   padding-bottom: 5px;
   border-radius: 10px;
-  border: 1px solid #e3e3e3;
+  border: ${props => `1px solid ${props.theme.colors.borderGrey}`};
   box-shadow: 0px 3px 6px #f5f5f5;
   padding-left: 16px;
   padding-right: 16px;
@@ -163,4 +187,18 @@ const HostedByContainer = styled.div`
 
 const HostedByName = styled(Text)`
   margin-left: 15px;
+`;
+
+const ImageContainer = styled.div`
+  border-radius: 9999px;
+  border: ${props => `3px solid ${props.theme.colors.grey80}`};
+  width: 42px;
+  height: 42px;
+  display: flex;
+  justify-content: center;
+`;
+
+const AddMemberText = styled(HostedByName)`
+  font-style: italic;
+  color: ${props => props.theme.colors.grey80};
 `;

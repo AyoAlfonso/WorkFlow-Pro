@@ -17,6 +17,12 @@ import { Button } from "~/components/shared/button";
 import { Section1MeetingDetails } from "./components/section-1-meeting-details";
 import { Text } from "~/components/shared/text";
 
+import {
+  MonthContainer,
+  ColumnContainer,
+  Container as SectionContainer,
+} from "./components/row-style";
+
 export const Section1 = observer(
   (): JSX.Element => {
     const { t } = useTranslation();
@@ -63,7 +69,15 @@ export const Section1 = observer(
         <HeaderContainer>
           <NavHeader>{t("forum.section1")}</NavHeader>
         </HeaderContainer>
-        <StyledHomeTitle>{forumStore.currentForumYear}</StyledHomeTitle>
+        <SubHeaderContainer>
+          <MonthContainer>
+            <StyledHomeTitle>{forumStore.currentForumYear}</StyledHomeTitle>
+          </MonthContainer>
+          <SectionContainer>
+            <ColumnContainer>Who</ColumnContainer>
+            <ColumnContainer>Topic</ColumnContainer>
+          </SectionContainer>
+        </SubHeaderContainer>
 
         {forumStore.forumYearMeetings.map(meeting => {
           return (
@@ -119,4 +133,8 @@ const ButtonText = styled(Text)`
 const StyledHomeTitle = styled(HomeTitle)`
   margin-top: 25px;
   margin-bottom: 10px;
+`;
+
+const SubHeaderContainer = styled.div`
+  display: flex;
 `;

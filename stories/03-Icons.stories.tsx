@@ -362,6 +362,10 @@ export const Icons = () => (
     <Divider />
     <RowDiv>
       <CenteredColumnDiv>
+        <Icon icon={"Meeting"} size={"2em"} />
+        <TextCenteredDiv>Meeting</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
         <Icon icon={"Reminder"} size={"2em"} />
         <TextCenteredDiv>Reminder</TextCenteredDiv>
       </CenteredColumnDiv>
