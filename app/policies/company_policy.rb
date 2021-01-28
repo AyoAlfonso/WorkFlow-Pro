@@ -1,7 +1,7 @@
 class CompanyPolicy < ApplicationPolicy
 
   def show?
-    user.company == record
+    user.companies.pluck(:id).include?(record.id)
   end
 
   def update?

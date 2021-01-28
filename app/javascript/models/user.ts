@@ -1,9 +1,8 @@
 import { types, getRoot } from "mobx-state-tree";
 import { DailyLogModel } from "~/models";
-import { TeamModel } from "~/models/team";
 import * as R from "ramda";
-import { Teams } from "~/components/domains/account/teams";
 import { KeyActivityModel } from "./key-activity";
+import { CompanyModel } from "./company";
 
 export const UserModel = types
   .model("UserModel")
@@ -23,6 +22,8 @@ export const UserModel = types
     phoneNumber: types.maybeNull(types.string),
     title: types.maybeNull(types.string),
     status: types.maybeNull(types.string),
+    currentSelectedProfileId: types.maybeNull(types.number),
+    companyProfiles: types.maybeNull(types.array(CompanyModel)),
     // teams: types.array(types.reference(TeamModel)), THIS ONLY WORKS IF TEAMS IS LOADED BEFORE USERS
     todaysPriorities: types.maybeNull(types.array(KeyActivityModel)),
     todaysCompletedActivities: types.maybeNull(types.array(KeyActivityModel)),

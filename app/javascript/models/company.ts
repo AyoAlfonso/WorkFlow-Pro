@@ -17,7 +17,7 @@ export const CompanyModel = types
     quarterForCreatingQuarterlyGoals: types.maybeNull(types.number),
     currentFiscalYear: types.maybeNull(types.number),
     yearForCreatingAnnualInitiatives: types.maybeNull(types.number),
-    coreFour: CoreFourModel,
+    coreFour: types.maybeNull(CoreFourModel),
     accountabilityChartContent: types.maybeNull(types.string),
     strategicPlanContent: types.maybeNull(types.string),
     fiscalYearRange: types.maybeNull(types.array(types.frozen())),

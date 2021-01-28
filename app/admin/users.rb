@@ -28,6 +28,14 @@ ActiveAdmin.register User do
         render 'new', errors: @user.errors.full_messages
       end
     end
+
+    def update
+      @user = User.find(params[:id])
+      if @user.update!(params.require(:user).permit(:first_name, :last_name, :email, :user_role, :timezone, user_company_enablements_attributes: [:id, :company_id, :user_role_id, :user_title, :_destroy]))
+        render 'show', errors: @user.errors.full_messages
+      end
+    end
+
   end
 
   index do
@@ -38,7 +46,7 @@ ActiveAdmin.register User do
     column :email
     column :phone_number
     column :company_name do |user|
-      user.company_name
+      user.companies.map{|c|c.name}.join(",")
     end
     column :current_sign_in_at
     column :sign_in_count
@@ -79,6 +87,16 @@ ActiveAdmin.register User do
       row :confirmed_at
       row :invitation_sent_at
     end
+
+    panel 'Companies' do
+      table_for user.user_company_enablements, label: "Companies" do
+        column("Name") { |uce| link_to uce.company.name, admin_company_path(uce.company) }
+        column("User Role") { |uce| uce.user_role&.name }
+        column("User Title")  { |uce| uce.user_title }
+      end
+
+    end
+
   end
 
   form do |f|
@@ -88,9 +106,18 @@ ActiveAdmin.register User do
       f.input :email
       # f.input :password
       # f.input :password_confirmation
-      f.input :company, as: :select, collection: Company.all
       f.input :user_role, as: :select, collection: UserRole.all
       f.input :timezone, as: :select, collection: timezones
+
+      f.has_many :user_company_enablements, allow_destroy: true do |uce|
+        if uce.object&.persisted?
+          uce.input :company, as: :select, collection: Company.all, input_html: {disabled: true}
+        else
+          uce.input :company, as: :select, collection: Company.all
+        end
+        uce.input :user_role, as: :select, collection: UserRole.all
+        uce.input :user_title
+      end
     end
     f.actions
   end

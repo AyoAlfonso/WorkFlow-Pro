@@ -1,11 +1,4 @@
 class KeyActivityPolicy < ApplicationPolicy
-  attr_reader :user, :key_activity
-
-  def initialize(user, key_activity)
-    @user = user
-    @key_activity = key_activity
-  end
-
   def index?
     true
   end
@@ -16,12 +9,12 @@ class KeyActivityPolicy < ApplicationPolicy
 
   def update?
     team_ids = @user.team_user_enablements.pluck(:team_id)
-    @key_activity.user == @user || (team_ids & @key_activity.user.team_ids).length > 0
+    @record.user == @user || (team_ids & @record.user.team_ids).length > 0
   end
 
   def destroy?
     team_ids = @user.team_user_enablements.pluck(:team_id)
-    @key_activity.user == @user || (team_ids & @key_activity.user.team_ids).length > 0
+    @record.user == @user || (team_ids & @record.user.team_ids).length > 0
   end
 
   def created_in_meeting?
@@ -39,13 +32,14 @@ class KeyActivityPolicy < ApplicationPolicy
   class Scope
     attr_reader :user, :scope
 
-    def initialize(user, scope)
-      @user = user
+    def initialize(context, scope)
+      @user = context.user
+      @company = context.company
       @scope = scope
     end
 
     def resolve
-      scope.optimized.owned_by_self_or_team_members(@user)
+      scope.optimized.user_current_company(@company.id).owned_by_self_or_team_members(@user)
     end
   end
 end

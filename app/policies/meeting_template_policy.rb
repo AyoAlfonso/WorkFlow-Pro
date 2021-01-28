@@ -6,8 +6,8 @@ class MeetingTemplatePolicy < ApplicationPolicy
   class Scope
     attr_reader :user, :scope
 
-    def initialize(user, scope)
-      @user = user
+    def initialize(context, scope)
+      @user = context.user
       @scope = scope
     end
 

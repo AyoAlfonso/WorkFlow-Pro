@@ -1,11 +1,4 @@
 class UserPolicy < ApplicationPolicy
-  attr_reader :user, :record
-
-  def initialize(user, record)
-    @user = user
-    @record = record
-  end
-
   def index?
     true
   end
@@ -44,15 +37,16 @@ class UserPolicy < ApplicationPolicy
   end
 
   class Scope
-    attr_reader :user, :scope
+    attr_reader :user, :company, :scope
 
-    def initialize(user, scope)
-      @user = user
+    def initialize(context, scope)
+      @user = context.user
+      @company = context.company
       @scope = scope
     end
 
     def resolve
-      scope.includes([:company, :user_role, avatar_attachment: :blob]).where(company: @user.company)
+      scope.includes([:company, :user_role, avatar_attachment: :blob]).where(company: @company)
     end
   end
 end

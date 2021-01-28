@@ -6,4 +6,5 @@ export type UserType = {
   avatarUrl: string;
   defaultAvatarColor?: string;
   title?: string;
+  companyProfiles?: Array<any>;
 };

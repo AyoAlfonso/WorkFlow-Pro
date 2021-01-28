@@ -1,11 +1,4 @@
 class TeamPolicy < ApplicationPolicy
-  attr_reader :user, :record
-
-  def initialize(user, record)
-    @user = user
-    @record = record
-  end
-
   def index?
     true
   end
@@ -16,19 +9,20 @@ class TeamPolicy < ApplicationPolicy
   end
 
   def update?
-    (@user.company_admin? || @record.is_lead?(@user)) && record.company == @user.company
+    (@user.company_admin? || @record.is_lead?(@user)) && @user.companies.include?(@record.company)
   end
 
   class Scope
-    attr_reader :user, :scope
+    attr_reader :context, :scope
 
-    def initialize(user, scope)
-      @user = user
+    def initialize(context, scope)
+      @user = context.user
+      @company = context.company
       @scope = scope
     end
 
     def resolve
-      scope.includes([:team_user_enablements]).for_company(@user.company)
+      scope.includes([:team_user_enablements]).for_company(@company)
     end
   end
 end

@@ -1,10 +1,4 @@
 class AnnualInitiativePolicy < ApplicationPolicy
-  attr_reader :user, :annual_initiative
-
-  def initialize(user, annual_initiative)
-    @user = user
-    @annual_initiative = annual_initiative
-  end
 
   def index? 
     true
@@ -15,19 +9,19 @@ class AnnualInitiativePolicy < ApplicationPolicy
   end
 
   def show?
-    @annual_initiative.company_id == @user.company_id || @annual_initiative.owned_by == @user 
+    @user.companies.pluck(:id).include?(@record.company_id) || @record.owned_by == @user 
   end
 
   def update?
-    @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
   end
 
   def destroy?
-    @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
   end
 
   def create_key_element?
-    @annual_initiative.created_by == @user || @annual_initiative.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
   end
 
   def team?
@@ -35,15 +29,16 @@ class AnnualInitiativePolicy < ApplicationPolicy
   end
 
   class Scope
-    attr_reader :user, :scope
+    attr_reader :user, :company, :scope
 
-    def initialize(user, scope)
-      @user = user
+    def initialize(context, scope)
+      @user = context.user
+      @company = context.company
       @scope = scope
     end
 
     def resolve
-      scope.includes([:key_elements, {owned_by: [:user_role, :avatar_attachment, :company]}]).all
+      scope.includes([:key_elements, {owned_by: [:user_role, :avatar_attachment, :company]}]).user_current_company(@company.id)
     end
   end
 end

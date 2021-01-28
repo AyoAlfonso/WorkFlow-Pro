@@ -1,9 +1,11 @@
 import { create, ApisauceInstance } from "apisauce";
 import { camelizeResponse, decamelizeRequest } from "../utils";
+import * as R from "ramda";
 
 export class Api {
   client: ApisauceInstance;
   token: string;
+
 
   constructor() {
     this.client = create({
@@ -24,6 +26,7 @@ export class Api {
       request.params = decamelizeRequest(request.params);
     });
   }
+
 
   addMonitor(monitor) {
     this.client.addMonitor(monitor);
@@ -50,7 +53,9 @@ export class Api {
   }
 
   async profile() {
-    return this.client.get("/profile");
+    const response = await this.client.get("/profile");
+    this.client.setHeaders({"Current-Company-ID": R.path(["data", "sessionCompanyProfileId"], response) || ""})
+    return response;
   }
 
   async updateUser(formData) {

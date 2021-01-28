@@ -15,6 +15,7 @@
         "profile": "Profile",
         "notifications": "Notifications",
         "security": "Security",
+        "switchCompanies": "Switch Companies",
         "notificationsTable": {
           "reminder": "Reminder",
           "repeat": "Repeat",

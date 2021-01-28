@@ -14,6 +14,11 @@ class Company < ApplicationRecord
   has_one :core_four, dependent: :destroy
   accepts_nested_attributes_for :core_four
 
+  has_many :user_company_enablements
+  has_many :users, through: :user_company_enablements
+
+  accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
+
   validates :name, :timezone, :display_format, presence: true
   validate :display_format_not_changed, on: :update
 

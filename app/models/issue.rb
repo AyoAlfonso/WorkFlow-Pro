@@ -2,6 +2,8 @@ class Issue < ApplicationRecord
   enum priority: { low: 0, medium: 1, high: 2, frog: 3 }
   belongs_to :user
   belongs_to :team, optional: true
+  belongs_to :company
+
   has_one :team_issue, dependent: :destroy, autosave: true
   accepts_nested_attributes_for :team_issue
 
@@ -10,6 +12,7 @@ class Issue < ApplicationRecord
   acts_as_list scope: [:user_id, :completed_at]
 
   scope :optimized, -> { includes([:user]) }
+  scope :user_current_company, -> (company_id) {where(company_id: company_id)}
 
   scope :created_by_user, -> (user) { where(user: user) }
   scope :sort_by_priority, -> { order(priority: :desc) }

@@ -1,10 +1,4 @@
 class HabitPolicy < ApplicationPolicy
-  attr_reader :user, :habit
-
-  def initialize(user, habit)
-    @user = user
-    @habit = habit
-  end
 
   def index?
     true
@@ -15,15 +9,15 @@ class HabitPolicy < ApplicationPolicy
   end
 
   def show_habit?
-    @habit.user == @user
+    @record.user == @user
   end
 
   def update?
-    @habit.user == @user
+    @record.user == @user
   end
 
   def destroy?
-    @habit.user == @user
+    @record.user == @user
   end
 
   def habits_for_personal_planning?
@@ -33,8 +27,8 @@ class HabitPolicy < ApplicationPolicy
   class Scope
     attr_reader :user, :scope
 
-    def initialize(user, scope)
-      @user = user
+    def initialize(context, scope)
+      @user = context.user
       @scope = scope
     end
 

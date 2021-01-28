@@ -17,7 +17,7 @@ class Api::UsersController < Api::ApplicationController
       return
     end
 
-    @user = User.invite!(user_creation_params.merge(company_id: current_user.company.id))
+    @user = User.invite!(user_creation_params.merge(company_id: current_company.id))
     if @user.valid? && @user.persisted?
       render '/api/users/show'
     else
@@ -54,6 +54,7 @@ class Api::UsersController < Api::ApplicationController
 
   def profile
     @user = current_user
+    @session_company_id = current_company.id
     @static_data = view_context.static_data
     render '/api/users/profile'
   end
@@ -77,7 +78,7 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def user_update_params
-    params.require(:user).permit(:id, :password, :password_confirmation, :first_name, :last_name, :personal_vision, :email, :timezone, :user_role_id, :title, daily_logs_attributes: [:id, :work_status, :create_my_day, :evening_reflection, :title, :mip_count, :weekly_reflection])
+    params.require(:user).permit(:id, :password, :password_confirmation, :first_name, :last_name, :personal_vision, :email, :timezone, :user_role_id, :default_selected_company_id, :title, daily_logs_attributes: [:id, :work_status, :create_my_day, :evening_reflection, :title, :mip_count, :weekly_reflection])
   end
 
   def set_user

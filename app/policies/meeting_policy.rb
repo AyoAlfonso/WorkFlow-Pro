@@ -1,11 +1,4 @@
 class MeetingPolicy < ApplicationPolicy
-  attr_reader :user, :meeting
-
-  def initialize(user, meeting)
-    @user = user
-    @meeting = meeting
-  end
-
   def index?
     true
   end
@@ -15,27 +8,27 @@ class MeetingPolicy < ApplicationPolicy
   end
 
   def show?
-    if (meeting.team_id)
+    if (@record.team_id)
       team_ids = @user.team_user_enablements.pluck(:team_id)
-      team_ids.include?(meeting.team_id)
+      team_ids.include?(@record.team_id)
     else
-      meeting.hosted_by == @user
+      @record.hosted_by == @user
     end
   end
 
   def create?
-    if (meeting.meeting_type == "team_weekly")
-      @user.team_lead_for?(meeting.team)
+    if (@record.meeting_type == "team_weekly")
+      @user.team_lead_for?(@record.team)
     else
       true
     end
   end
 
   def update?
-    if (meeting.meeting_type == "team_weekly")
-      meeting.hosted_by == @user || @user.team_lead_for?(meeting.team)
+    if (@record.meeting_type == "team_weekly")
+      @record.hosted_by == @user || @user.team_lead_for?(@record.team)
     else
-      meeting.hosted_by == @user
+      @record.hosted_by == @user
     end
   end
 
@@ -44,11 +37,11 @@ class MeetingPolicy < ApplicationPolicy
   end
 
   def team_meetings?
-    @user.teams_intersect?(@meeting.map { |m| m.team })
+    @user.teams_intersect?(@record.map { |m| m.team })
   end
 
   def meeting_recap?
-    @user.teams_intersect?(@meeting.map { |m| m.team })
+    @user.teams_intersect?(@record.map { |m| m.team })
   end
 
   def meetings_by_date?
@@ -58,8 +51,8 @@ class MeetingPolicy < ApplicationPolicy
   class Scope
     attr_reader :user, :scope
 
-    def initialize(user, scope)
-      @user = user
+    def initialize(context, scope)
+      @user = context.user
       @scope = scope
     end
 

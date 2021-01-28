@@ -14,7 +14,6 @@ class User < ApplicationRecord
 
   before_save :sanitize_personal_vision
   after_create :create_default_notifications
-  belongs_to :company
   delegate :name, :timezone, to: :company, prefix: true, allow_nil: true
   delegate :name, to: :user_role, prefix: true, allow_nil: true
   has_many :issues
@@ -33,10 +32,17 @@ class User < ApplicationRecord
   has_many :teams, through: :team_user_enablements
   has_many :notifications, dependent: :destroy
   has_many :meetings, :foreign_key => 'hosted_by_id'
+  has_many :user_company_enablements
+  has_many :companies, through: :user_company_enablements
+  accepts_nested_attributes_for :companies, :allow_destroy => true
+  accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
 
   validates :first_name, :last_name, presence: true
 
   accepts_nested_attributes_for :daily_logs
+
+  belongs_to :company #to be removed after we finalize rake, etc.
+  belongs_to :default_selected_company, class_name: "Company"
 
   def status
     return "inactive" if deleted_at.present?
@@ -52,7 +58,11 @@ class User < ApplicationRecord
   end
 
   def role
-    user_role&.name
+    selected_user_company_enablement&.user_role&.name
+  end
+
+  def title
+    selected_user_company_enablement&.user_title
   end
 
   def timezone
@@ -175,5 +185,9 @@ class User < ApplicationRecord
   private
   def sanitize_personal_vision
     self.personal_vision = strip_tags(personal_vision)
+  end
+
+  def selected_user_company_enablement
+    self.user_company_enablements.find_by_company_id(self.default_selected_company_id)
   end
 end
