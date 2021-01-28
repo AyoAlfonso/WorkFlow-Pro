@@ -14,7 +14,12 @@ class QuarterlyGoal < ApplicationRecord
   scope :owned_by_user, -> (user) { where(owned_by_id: user.id) }
   scope :for_quarter, -> (quarter) { where(quarter: quarter)}
   scope :filter_by_team_id, -> (team_id) {where(owned_by_id: Team.find(team_id).users.pluck(:id))}
-  scope :present_or_future, -> (quarter) {where("quarter >= ?", quarter)}
+  scope :present_or_future, -> (company) {
+    joins(:annual_initiative)
+    .where("(annual_initiatives.fiscal_year = ? AND quarter >= ?) OR annual_initiatives.fiscal_year > ?", 
+      company.current_fiscal_year, company.current_fiscal_quarter, company.current_fiscal_year
+      )
+    }
 
   def create_milestones_for_quarterly_goal(current_user)
     company = current_user.company
