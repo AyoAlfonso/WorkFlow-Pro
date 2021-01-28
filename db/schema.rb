@@ -416,14 +416,7 @@ ActiveRecord::Schema.define(version: 2021_01_29_011046) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_role_id"
-<<<<<<< HEAD
-<<<<<<< HEAD
     t.string "user_title"
-=======
->>>>>>> [ch26392] - Fetching the user's role in the company based on which selected company they are on
-=======
-    t.string "user_title"
->>>>>>> [ch26392] - Setting user title for each company
     t.index ["company_id"], name: "index_user_company_enablements_on_company_id"
     t.index ["user_id"], name: "index_user_company_enablements_on_user_id"
     t.index ["user_role_id"], name: "index_user_company_enablements_on_user_role_id"
