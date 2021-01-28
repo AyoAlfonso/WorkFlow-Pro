@@ -29,7 +29,7 @@ export const HomePersonalItems = (): JSX.Element => {
   };
 
   const renderHabitsContainer = () => {
-  return (
+    return (
       <Habits expanded={expanded} handleChange={handleChange} />
     );
   };
@@ -46,9 +46,9 @@ export const HomePersonalItems = (): JSX.Element => {
 
   return (
     <Container>
-      <TodaysContainer>
+      <PrioritiesWrapper>
         {renderProritiesContainer()}
-      </TodaysContainer>
+      </PrioritiesWrapper>
       <ToolsContainer>
         {renderJournalContainer()}
         {renderHabitsContainer()}
@@ -71,7 +71,7 @@ const PrioritiesContainer = styled(HomeContainerBorders)`
   margin-left: 5px;
 `;
 
-const TodaysContainer = styled.div`
+const PrioritiesWrapper = styled.div`
   display: flex;
   height: 420px;
   width: 75%;
