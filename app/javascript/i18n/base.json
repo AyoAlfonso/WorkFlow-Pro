@@ -175,7 +175,8 @@
         "scheduledIssues": {
           "title": "Scheduled",
           "subTitle": "Add topics you want to discuss in the section 2 of your next meeting"
-        }
+        },
+        "noUpcomingMeetingScheduled": "Scheduled meeting must be created in order to organize items onto it."
       },
       "status": {
         "active": "Active",

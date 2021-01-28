@@ -1,8 +1,10 @@
 import * as React from "react";
 import styled from "styled-components";
+import * as R from "ramda";
 import { observer } from "mobx-react";
 import { ScheduledIssues } from "~/components/domains/meetings-forum/components/scheduled-issues";
 import { ParkingLotIssues } from "~/components/domains/meetings-forum/components/parking-lot-issues";
+import { NoUpcomingMeeting } from "~/components/domains/meetings-forum/components/no-upcoming-meeting";
 
 interface IParkingLotProps {
   teamId: number;
@@ -13,6 +15,11 @@ export const ParkingLot = observer(({
   teamId,
   upcomingForumMeeting,
 }: IParkingLotProps): JSX.Element => {
+
+  if (R.isNil(upcomingForumMeeting)) {
+    return <NoUpcomingMeeting />
+  }
+
   return (
     <Container>
       <LeftContainer>
