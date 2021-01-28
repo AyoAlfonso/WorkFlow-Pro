@@ -21,10 +21,6 @@ export const HeaderContainerWithActions = styled(HeaderContainer)`
   justify-content: space-between;
 `;
 
-export const ToolsHeaderContainer = styled(HeaderContainer)`
-  border-bottom: 0;
-`;
-
 export const HeaderContainerNoBorder = styled.div`
   display: flex;
   padding-left: 10px;

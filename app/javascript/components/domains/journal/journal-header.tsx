@@ -8,7 +8,7 @@ import Modal from "styled-react-modal";
 import { AccordionSummary } from '~/components/shared/accordion-components';
 import {
   HeaderText,
-  ToolsHeaderContainer,
+  HeaderContainerNoBorder,
 } from "~/components/shared/styles/container-header";
 
 declare global {
@@ -40,7 +40,7 @@ export const JournalHeader = ({
   return (
     <>
       <AccordionSummary>
-        <ToolsHeaderContainer>
+        <HeaderContainerNoBorder>
           <Icon
             icon={expanded === "panel0" ? "Chevron-Up" : "Chevron-Down"}
             size={15}
@@ -48,7 +48,7 @@ export const JournalHeader = ({
             iconColor={expanded === "panel0" ? "primary100" : "grey60" }
           />
           <HeaderText> {t("journals.title")} </HeaderText>
-        </ToolsHeaderContainer>
+        </HeaderContainerNoBorder>
         <EndButtonContainer>
           <Link to="/journals" style={{ textDecoration: "none", padding: "0" }}>
             <EndButton

@@ -5,7 +5,7 @@ import { Icon, ModalWithHeader } from "~/components/shared";
 import { HabitsCreateHabitForm } from "./habits-create-habit-form";
 import { 
   HeaderText, 
-  ToolsHeaderContainer,
+  HeaderContainerNoBorder,
 } from "~/components/shared/styles/container-header";
 import { AccordionSummary } from '~/components/shared/accordion-components';
 
@@ -27,7 +27,7 @@ export const HabitsHeader = ({ expanded }: IHabitsHeaderProps): JSX.Element => {
         <HabitsCreateHabitForm onSubmit={() => setHabitsModalOpen(false)} />
       </ModalWithHeader>
       <AccordionSummary>
-        <ToolsHeaderContainer>
+        <HeaderContainerNoBorder>
           <Icon
             icon={expanded === "panel1" ? "Chevron-Up" : "Chevron-Down"}
             size={15}
@@ -35,7 +35,7 @@ export const HabitsHeader = ({ expanded }: IHabitsHeaderProps): JSX.Element => {
             iconColor={expanded === "panel1" ? "primary100" : "grey60" }
           />
           <HeaderText> {t("habits.title")} </HeaderText>
-        </ToolsHeaderContainer>
+        </HeaderContainerNoBorder>
         <IconContainer onClick={() => setHabitsModalOpen(true)}>
           <Icon iconColor={"grey60"} icon={"Plus"} paddingTop={"2px"} size={16} />
         </IconContainer>

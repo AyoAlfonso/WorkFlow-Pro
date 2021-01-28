@@ -7,7 +7,7 @@ import { CreateIssueModal } from "./create-issue-modal";
 import { AccordionSummary } from '~/components/shared/accordion-components';
 import { 
   HeaderText, 
-  ToolsHeaderContainer, 
+  HeaderContainerNoBorder, 
 } from "~/components/shared/styles/container-header";
 
 interface IssuesHeaderProps {
@@ -30,7 +30,7 @@ export const IssuesHeader = ({
         setCreateIssueModalOpen={setCreateIssueModalOpen}
       />
       <AccordionSummary>
-        <ToolsHeaderContainer>
+        <HeaderContainerNoBorder>
           <Icon
             icon={expanded === "panel2" ? "Chevron-Up" : "Chevron-Down"}
             size={15}
@@ -40,7 +40,7 @@ export const IssuesHeader = ({
           <HeaderText> 
             {issuesText || t("issues.title") || "Issues"} 
           </HeaderText>
-        </ToolsHeaderContainer>
+        </HeaderContainerNoBorder>
         <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
           <AddNewIssuePlus>
             <Icon icon={"Plus"} size={16} />
