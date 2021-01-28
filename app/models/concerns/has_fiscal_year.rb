@@ -73,7 +73,7 @@ module HasFiscalYear
 
   def quarter_for_creating_quarterly_goals
     current_date = self.convert_to_their_timezone
-    if current_date.between?(current_fiscal_start_date, format_month_and_day(second_quarter_start_date()))
+    if current_date.between?(format_month_and_day(current_fiscal_start_date), format_month_and_day(second_quarter_start_date()))
       within_4_weeks_range(second_quarter_start_date()) ? 2 : 1
     elsif current_date.between?(format_month_and_day(second_quarter_start_date()), format_month_and_day(third_quarter_start_date()))
       within_4_weeks_range(third_quarter_start_date()) ? 3 : 2
@@ -83,7 +83,7 @@ module HasFiscalYear
       if current_fiscal_start_date > current_date
         current_fiscal_start_date - 4.weeks <= current_date && within_4_weeks_range(self.current_year_fiscal_year_start) ? 1 : 4
       else
-        current_fiscal_start_date - 4.weeks >= current_date && within_4_weeks_range(self.current_year_fiscal_year_start) ? 1 : 4
+        current_fiscal_start_date + 1.year - 4.weeks <= current_date && within_4_weeks_range(self.current_year_fiscal_year_start) ? 1 : 4
       end
     end
   end
