@@ -54,7 +54,7 @@ export class Api {
 
   async profile() {
     const response = await this.client.get("/profile");
-    this.client.setHeaders({"Current-Company-ID": R.path(["data", "sessionCompanyProfileId"], response)})
+    this.client.setHeaders({"Current-Company-ID": R.path(["data", "sessionCompanyProfileId"], response) || ""})
     return response;
   }
 

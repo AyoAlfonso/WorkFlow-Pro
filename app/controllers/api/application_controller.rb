@@ -26,10 +26,6 @@ class Api::ApplicationController < ActionController::API
     @current_company
   end
 
-  def update_current_company(company_id)
-    @current_company = Company.find(company_id)
-  end
-
   private
   def set_current_company
     @current_company ||= request.headers["HTTP_CURRENT_COMPANY_ID"].present? ? Company.find(request.headers["HTTP_CURRENT_COMPANY_ID"]) : current_user.default_selected_company if current_user.present?
