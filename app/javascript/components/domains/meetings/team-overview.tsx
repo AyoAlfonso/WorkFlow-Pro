@@ -31,8 +31,16 @@ import { TeamPulseCard } from "./shared/team-pulse-card";
 interface ITeamOverviewProps {}
 
 export const TeamOverview = observer(
-  (props: ITeamOverviewProps): JSX.Element => {
-    const { sessionStore, teamStore, meetingStore } = useMst();
+  ({}: ITeamOverviewProps): JSX.Element => {
+    const {
+      sessionStore,
+      companyStore: { company },
+      teamStore,
+      meetingStore,
+      forumStore,
+    } = useMst();
+    const overviewType = company.accessForum ? "forum" : "teams";
+    //based on
 
     const { team_id } = useParams();
     const { t } = useTranslation();
@@ -60,6 +68,8 @@ export const TeamOverview = observer(
         </Container>
       );
     }
+
+    const handleForumMeetingClick = () => {};
 
     const handleMeetingClick = () => {
       meetingStore.createMeeting(team_id).then(({ meeting }) => {
@@ -153,22 +163,31 @@ export const TeamOverview = observer(
         <BodyContainer>
           <LeftContainer>
             <TeamSnapshotContainer>
-              <ContainerHeaderWithText text={t("teams.teamSnapshotTitle")} />
+              <ContainerHeaderWithText text={t(`${overviewType}.teamSnapshotTitle`)} />
               {renderUserSnapshotTable()}
             </TeamSnapshotContainer>
           </LeftContainer>
           <RightContainer>
             <TeamMeetingInfoContainer>
               <FutureTeamMeetingsWrapper>
-                <FutureTeamMeetingsContainer handleMeetingClick={handleMeetingClick} />
+                {overviewType === "teams" && (
+                  <FutureTeamMeetingsContainer
+                    titleText={t(`${overviewType}.teamMeetingsTitle`)}
+                    buttonText={"Team Meeting"}
+                    handleMeetingClick={handleMeetingClick}
+                  />
+                )}
               </FutureTeamMeetingsWrapper>
               <TeamIssuesWrapper>
-                <TeamIssuesContainer teamId={team_id} />
+                <TeamIssuesContainer
+                  teamId={team_id}
+                  title={t(`${overviewType}.teamIssuesTitle`)}
+                />
               </TeamIssuesWrapper>
             </TeamMeetingInfoContainer>
 
             <TeamPulseContainer>
-              <ContainerHeaderWithText text={t("teams.teamsPulseTitle")} />
+              <ContainerHeaderWithText text={t(`${overviewType}.teamsPulseTitle`)} />
               {currentTeam.averageTeamEmotionScore > 0 ? (
                 <TeamPulseBody>
                   <OverallTeamPulse value={currentTeam.averageTeamEmotionScore} />

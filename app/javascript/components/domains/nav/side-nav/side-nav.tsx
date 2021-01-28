@@ -161,7 +161,7 @@ export const SideNavNoMst = (
         return (
           <StyledNavLinkChildrenActive
             to={`/forum/`}
-            icon={"Forum"}
+            icon={"Team"}
             currentPathName={currentPathName}
           >
             {t("navigation.forum")}
