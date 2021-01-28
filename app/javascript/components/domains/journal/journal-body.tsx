@@ -39,7 +39,7 @@ export const JournalBody = ({
   };
 
   return (
-    <JournalBodyContainer>
+    <AccordionDetailsContainer>
       <ButtonContainer>
         <PynBotSpeechContainer>
           <PynBotContainer>
@@ -86,11 +86,11 @@ export const JournalBody = ({
           disabled={R.path(["profile", "currentDailyLog", "eveningReflection"], sessionStore)}
         />
       </ButtonContainer>
-    </JournalBodyContainer>
+    </AccordionDetailsContainer>
   )
 }
 
-const JournalBodyContainer = styled(AccordionDetails)`
+const AccordionDetailsContainer = styled(AccordionDetails)`
   border: 0px solid white;
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   margin-top: 5px;

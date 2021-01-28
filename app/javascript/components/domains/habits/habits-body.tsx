@@ -79,7 +79,7 @@ export const HabitsBody = observer(
         setShowIndividualHabit={setShowIndividualHabit}
       />
     ) : (
-      <HabitsBodyContainer>
+      <AccordionDetailsContainer>
         <HabitsTable>
           <HabitsTableHead>
             <HabitsTableRow>
@@ -95,12 +95,12 @@ export const HabitsBody = observer(
           </HabitsTableHead>
           <HabitsTableBody>{renderHabits()}</HabitsTableBody>
         </HabitsTable>
-      </HabitsBodyContainer>
+      </AccordionDetailsContainer>
     );
   },
 );
 
-const HabitsBodyContainer = styled(AccordionDetails)`
+const AccordionDetailsContainer = styled(AccordionDetails)`
   border-radius: 10px;
   border: 0px solid white;
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);

@@ -75,7 +75,7 @@ export const IssuesBody = observer(({
   };
 
   return (
-    <Container>
+    <AccordionDetailsContainer>
       <CreateIssueModal
         createIssueModalOpen={createIssueModalOpen}
         setCreateIssueModalOpen={setCreateIssueModalOpen}
@@ -118,11 +118,11 @@ export const IssuesBody = observer(({
           </IssuesBodyContainer>
         )}
       </Droppable>
-    </Container>
+    </AccordionDetailsContainer>
   );
 });
 
-const Container = styled(AccordionDetails)`
+const AccordionDetailsContainer = styled(AccordionDetails)`
   padding: 0px 0px 15px 0px;
   display: flex;
   flex-direction: column;
