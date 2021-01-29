@@ -151,6 +151,7 @@ const StyledContentEditable = styled(ContentEditable)`
   padding-left: 16px;
   padding-right: 16px;
   width: 100%;
+  min-height: 31px;
   &:hover {
     cursor: ${props => (!props.disabled ? "text" : "default")};
   }

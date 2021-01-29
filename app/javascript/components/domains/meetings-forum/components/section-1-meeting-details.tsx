@@ -10,7 +10,7 @@ import {
 import { observer } from "mobx-react";
 import { IUser } from "~/models/user";
 import { Heading } from "~/components/shared";
-import { ForumTopics } from "./forum-topics";
+import { ForumTopic } from "./forum-topic";
 
 export interface ISection1MeetingDetailsProps {
   meeting: IMeeting;
@@ -26,7 +26,7 @@ export const Section1MeetingDetails = observer(
           <MonthContainer>
             <Heading type={"h3"}>{moment(meeting.scheduledStartTime).format("MMMM")}</Heading>
           </MonthContainer>
-          <ForumTopics disabled={false} teamMembers={teamMembers} meeting={meeting} />
+          <ForumTopic disabled={false} teamMembers={teamMembers} meeting={meeting} />
         </SectionContainer>
         <Divider />
       </Container>

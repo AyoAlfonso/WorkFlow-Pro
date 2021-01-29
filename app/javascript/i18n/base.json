@@ -157,9 +157,7 @@
       "meetingForum": {
         "explorationTopic": {
           "whoTitle": "Who",
-          "topicTitle": "Topic",
-          "noTopic": "No Topic has been assigned yet.",
-          "noTopicOwner": "No team member assigned yet."
+          "topicTitle": "Topic"
         }
       },
       "status": {

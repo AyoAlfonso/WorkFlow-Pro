@@ -7,7 +7,7 @@ import { Container as SectionContainer } from "./row-style";
 import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
-import { ForumTopics } from "./forum-topics";
+import { ForumTopic } from "./forum-topic";
 
 export const ExplorationTopic = observer((): JSX.Element => {
   const { t } = useTranslation();
@@ -27,7 +27,7 @@ export const ExplorationTopic = observer((): JSX.Element => {
         <HeaderTextContent>{t("meetingForum.explorationTopic.topicTitle")}</HeaderTextContent>
       </HeaderContainer>
       <SectionContainer>
-        <ForumTopics disabled={true} meeting={currentMeeting} teamMembers={currentTeam.users} />
+        <ForumTopic disabled={true} meeting={currentMeeting} teamMembers={currentTeam.users} />
       </SectionContainer>
     </Container>
   );
