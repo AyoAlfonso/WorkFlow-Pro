@@ -35,7 +35,7 @@ export const AccordionSummary = withStyles({
     marginRight: 5,
     "&$expanded": {
       marginRight: 5, 
-    }
+    },
   },
   expanded: {},
 })(MuiAccordionSummary)

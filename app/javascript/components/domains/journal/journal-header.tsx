@@ -110,6 +110,7 @@ const EndButtonContainer = styled.div`
   align-items: center;
   display: flex;
   justify-content: flex-end;
+  padding-right: 10px;
 `;
 
 const EndButton = styled.div`
@@ -117,7 +118,6 @@ const EndButton = styled.div`
   cursor: pointer;
   font-size: 12px;
   font-weight: 400;
-  padding-right: 10px;
 `;
 
 const StyledModal = Modal.styled`

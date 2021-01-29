@@ -5,6 +5,7 @@ import { Icon, ModalWithHeader } from "~/components/shared";
 import { HabitsCreateHabitForm } from "./habits-create-habit-form";
 import { HeaderContainerNoBorder } from "~/components/shared/styles/container-header";
 import { AccordionSummary } from '~/components/shared/accordion-components';
+import { IconContainerWithPadding } from "~/components/shared/icon";
 
 interface IHabitsHeaderProps {
   expanded: string;
@@ -35,9 +36,14 @@ export const HabitsHeader = ({ expanded }: IHabitsHeaderProps): JSX.Element => {
             expanded={expanded}
           > {t("habits.title")} </HeaderText>
         </HeaderContainerNoBorder>
-        <IconContainer onClick={() => setHabitsModalOpen(true)}>
+        <IconContainerWithPadding 
+          onClick={(e) => {
+            e.stopPropagation(); 
+            setHabitsModalOpen(true);
+          }}
+        >
           <Icon iconColor={"grey60"} icon={"Plus"} paddingTop={"2px"} size={16} />
-        </IconContainer>
+        </IconContainerWithPadding>
       </AccordionSummary>
     </>
   );
@@ -56,11 +62,4 @@ export const HeaderText = styled.h4<HeaderTextType>`
   font-weight: 600;
   color: ${props => 
     props.expanded === "panel1" ? props.theme.colors.black : props.theme.colors.grey60};
-`;
-
-const IconContainer = styled.div`
-  padding-right: 10px;
-  &:hover {
-    cursor: pointer;
-  }
 `;

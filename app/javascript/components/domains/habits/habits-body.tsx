@@ -6,6 +6,7 @@ import { HabitsHabitTracker } from "./habits-habit-tracker";
 import * as moment from "moment";
 import { EditHabit } from "./edit-habit";
 import { AccordionDetails } from "~/components/shared/accordion-components";
+import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 
 import {
   HabitsTable,
@@ -73,11 +74,13 @@ export const HabitsBody = observer(
     ));
 
     return showIndividualHabit ? (
-      <EditHabit
-        selectedHabitId={selectedHabitId}
-        setSelectedHabitId={setSelectedHabitId}
-        setShowIndividualHabit={setShowIndividualHabit}
-      />
+      <HomeContainerBorders>
+        <EditHabit
+          selectedHabitId={selectedHabitId}
+          setSelectedHabitId={setSelectedHabitId}
+          setShowIndividualHabit={setShowIndividualHabit}
+        />
+      </HomeContainerBorders>
     ) : (
       <AccordionDetailsContainer>
         <HabitsTable>

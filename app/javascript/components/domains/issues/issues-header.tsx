@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { CreateIssueModal } from "./create-issue-modal";
 import { AccordionSummary } from '~/components/shared/accordion-components';
 import { HeaderContainerNoBorder } from "~/components/shared/styles/container-header";
+import { IconContainerWithPadding } from "~/components/shared/icon";
 
 interface IssuesHeaderProps {
   issuesText?: string;
@@ -40,11 +41,15 @@ export const IssuesHeader = ({
             {issuesText || t("issues.title") || "Issues"} 
           </HeaderText>
         </HeaderContainerNoBorder>
-        <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
-          <AddNewIssuePlus>
+        <IconContainerWithPadding 
+          onClick={(e) => {
+            e.stopPropagation(); 
+            setCreateIssueModalOpen(true);
+          }}
+        >
+
             <Icon icon={"Plus"} size={16} />
-          </AddNewIssuePlus>
-        </AddNewIssueContainer>
+        </IconContainerWithPadding>
       </AccordionSummary>
     </>
   );
@@ -63,19 +68,4 @@ export const HeaderText = styled.h4<HeaderTextType>`
   font-weight: 600;
   color: ${props => 
     props.expanded === "panel2" ? props.theme.colors.black : props.theme.colors.grey60};
-`;
-
-const AddNewIssuePlus = styled.div`
-  margin-top: auto;
-  margin-bottom: auto;
-  color: ${props => props.theme.colors.grey60};
-`;
-
-const AddNewIssueContainer = styled.div`
-  display: flex;
-  cursor: pointer;
-  margin-left: 8px;
-  margin-right: 8px;
-  padding-left: 4px;
-  margin-bottom: -5px;
 `;
