@@ -91,7 +91,7 @@ export const ForumTopic = observer(
       return (
         <>
           <ImageContainer>
-            <Icon icon={"New-User"} size={"30px"} iconColor={"grey80"} />
+            <Icon icon={disabled ? "User" : "New-User"} size={"30px"} iconColor={"grey80"} />
           </ImageContainer>
           <AddMemberText>Add a member</AddMemberText>
         </>
