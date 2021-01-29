@@ -101,7 +101,11 @@
       "forum": {
         "section1": "Section 1",
         "section2": "Section 2",
-        "agenda": "Meeting Agenda"
+        "agenda": "Meeting Agenda",
+        "explorationTopic": {
+          "whoTitle": "Who",
+          "topicTitle": "Topic"
+        }
       },
       "navigation": {
         "home": "Home",
@@ -153,12 +157,6 @@
         "coreFourTitle": "Foundational Four",
         "saveRatings": "Save Ratings",
         "teamsPyns": "Team's Pyns"
-      },
-      "meetingForum": {
-        "explorationTopic": {
-          "whoTitle": "Who",
-          "topicTitle": "Topic"
-        }
       },
       "status": {
         "active": "Active",
