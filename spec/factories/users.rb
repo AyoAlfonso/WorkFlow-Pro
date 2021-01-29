@@ -8,6 +8,6 @@ FactoryBot.define do
     timezone {"(GMT-08:00) Pacific Time (US & Canada)"}
     phone_number { '123-456-7890'}
     sequence(:email) {|n| "user#{n}@example.com" }
-
+    default_selected_company factory: :company
   end
 end

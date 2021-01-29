@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_25_193451) do
+ActiveRecord::Schema.define(version: 2021_01_29_011046) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -244,7 +244,7 @@ ActiveRecord::Schema.define(version: 2021_01_25_193451) do
     t.datetime "scheduled_start_time"
     t.datetime "end_time"
     t.bigint "hosted_by_id"
-    t.text "notes", default: ""
+    t.text "notes"
     t.json "settings"
     t.index ["created_at"], name: "index_meetings_on_created_at"
     t.index ["hosted_by_id"], name: "index_meetings_on_hosted_by_id"
@@ -366,6 +366,15 @@ ActiveRecord::Schema.define(version: 2021_01_25_193451) do
     t.datetime "updated_at"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
+  create_table "team_issue_meeting_enablements", force: :cascade do |t|
+    t.bigint "meeting_id", null: false
+    t.bigint "team_issue_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["meeting_id"], name: "index_team_issue_meeting_enablements_on_meeting_id"
+    t.index ["team_issue_id"], name: "index_team_issue_meeting_enablements_on_team_issue_id"
   end
 
   create_table "team_issues", force: :cascade do |t|
@@ -501,6 +510,8 @@ ActiveRecord::Schema.define(version: 2021_01_25_193451) do
   add_foreign_key "questionnaire_attempts", "users"
   add_foreign_key "steps", "meeting_templates"
   add_foreign_key "taggings", "tags"
+  add_foreign_key "team_issue_meeting_enablements", "meetings"
+  add_foreign_key "team_issue_meeting_enablements", "team_issues"
   add_foreign_key "team_user_enablements", "teams"
   add_foreign_key "team_user_enablements", "users"
   add_foreign_key "teams", "companies"
@@ -508,6 +519,6 @@ ActiveRecord::Schema.define(version: 2021_01_25_193451) do
   add_foreign_key "user_company_enablements", "user_roles"
   add_foreign_key "user_company_enablements", "users"
   add_foreign_key "users", "companies"
+  add_foreign_key "users", "companies", column: "default_selected_company_id"
   add_foreign_key "users", "user_roles"
-  add_foreign_key "users", "users", column: "default_selected_company_id"
 end
