@@ -360,5 +360,9 @@ export class Api {
     return this.client.post("/forum/create_meetings_for_year", { teamId, fiscalYear });
   }
 
+  async searchForumMeetingsByDateRange(startDate, endDate, teamId) {
+    return this.client.get("/forum/search_meetings_by_date_range", { startDate, endDate, teamId })
+  }
+
   //async setJWT(jwt) {}
 }

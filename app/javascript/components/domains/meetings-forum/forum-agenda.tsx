@@ -1,31 +1,35 @@
 import * as React from "react";
-import { color, space, typography } from "styled-system";
 import styled from "styled-components";
-import {
-  MainContainer,
-  HeadingContainer,
-  EntryContainer,
-  ItemListContainer,
-} from "~/components/shared/journals-and-notes";
-import { Heading } from "~/components/shared";
+import { EntryContainer, ItemListContainer } from "~/components/shared/journals-and-notes";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
-import { IQuestionnaireAttempt } from "~/models/questionnaire-attempt";
+import { useState, useEffect } from "react";
 import { addDays } from "date-fns";
 import { CalendarFilter } from "~/components/shared/journals-and-notes/calendar-filter";
+import { useMst } from "~/setup/root";
+import * as R from "ramda";
+import { toJS } from "mobx";
+import { observer } from "mobx-react";
 
-export const ForumAgenda = props => {
+export const ForumAgenda = observer(props => {
   const { t } = useTranslation();
+  const {
+    forumStore,
+    teamStore: { teams },
+  } = useMst();
 
-  const [loading, setLoading] = useState<boolean>(true);
-  const [selectedItem, setSelectedItem] = useState<IQuestionnaireAttempt>(null);
   const [selectedDateFilter, setSelectedDateFilter] = useState<string>(
     t("dateFilters.lastThirtyDays"),
   );
+
+  const teamId = forumStore.currentForumTeamId || R.path([0, "id"], toJS(teams));
+
+  const defaultStartDate = addDays(new Date(), -15);
+  const defaultEndDate = new Date();
+
   const [dateFilter, setDateFilter] = useState<any>({
     selection: {
-      startDate: addDays(new Date(), -15),
-      endDate: new Date(),
+      startDate: defaultStartDate,
+      endDate: defaultEndDate,
       key: "selection",
     },
     compare: {
@@ -35,8 +39,21 @@ export const ForumAgenda = props => {
     },
   });
 
+  useEffect(() => {
+    fetchMeetings(defaultStartDate, defaultEndDate);
+  }, [teamId]);
+
+  const fetchMeetings = (startDate, endDate) => {
+    if (teamId) {
+      forumStore.searchForMeetingsByDateRange(startDate, endDate, teamId);
+    }
+  };
+
   const dateSelectedAction = ranges => {
-    console.log("ranges", ranges);
+    const { startDate, endDate } = ranges;
+    if (startDate.getDate() != endDate.getDate()) {
+      fetchMeetings(startDate, endDate);
+    }
   };
 
   const renderSelectedEntry = () => {
@@ -53,17 +70,15 @@ export const ForumAgenda = props => {
         header={t("meeting.meetingAgenda")}
         dateFilter={dateFilter}
         setDateFilter={setDateFilter}
-        setSelectedItem={setSelectedItem}
         selectedDateFilter={selectedDateFilter}
         setSelectedDateFilter={setSelectedDateFilter}
-        setLoading={setLoading}
         dateSelectAction={dateSelectedAction}
         additionalBodyComponents={<EntryContainer>{renderSelectedEntry()}</EntryContainer>}
       />
       <ItemListContainer>{renderItems()}</ItemListContainer>
     </Container>
   );
-};
+});
 
 const Container = styled.div``;
 

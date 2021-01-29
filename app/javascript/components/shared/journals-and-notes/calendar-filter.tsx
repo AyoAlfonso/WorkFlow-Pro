@@ -17,10 +17,10 @@ interface ICalendarFilterProps {
   header: string;
   dateFilter: any;
   setDateFilter: React.Dispatch<React.SetStateAction<any>>;
-  setSelectedItem: React.Dispatch<React.SetStateAction<IQuestionnaireAttempt>>;
+  setSelectedItem?: React.Dispatch<React.SetStateAction<IQuestionnaireAttempt>>;
   selectedDateFilter: string;
   setSelectedDateFilter: React.Dispatch<React.SetStateAction<string>>;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>;
   dateSelectAction: any;
   additionalBodyComponents?: JSX.Element;
 }
@@ -77,8 +77,12 @@ export const CalendarFilter = ({
     setDateFilter({
       ...ranges,
     });
-    setSelectedItem(null);
-    setLoading(true);
+    if (setSelectedItem) {
+      setSelectedItem(null);
+    }
+    if (setLoading) {
+      setLoading(true);
+    }
     dateSelectAction(ranges.selection);
   };
 

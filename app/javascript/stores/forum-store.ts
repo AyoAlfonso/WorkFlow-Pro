@@ -82,6 +82,16 @@ export const ForumStoreModel = types
         //caught by Api Monitor
       }
     }),
+    searchForMeetingsByDateRange: flow(function*(startDate, endDate, teamId){
+      const response: ApiResponse<any> = yield self.environment.api.searchForumMeetingsByDateRange(
+        startDate, endDate, teamId
+      );
+      if (response.ok) {
+        self.searchedForumMeetings = response.data
+      } else {
+        self.error = true;
+      }
+    })
   }));
 
 type ForumStoreType = typeof ForumStoreModel.Type;
