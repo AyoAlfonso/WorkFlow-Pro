@@ -1,109 +1,24 @@
-import React, { useState, useRef, useEffect } from "react";
-import * as R from "ramda";
+import * as React from "react";
 import styled from "styled-components";
 import moment from "moment";
 import { IMeeting } from "~/models/meeting";
-import ContentEditable from "react-contenteditable";
-import { useRefCallback } from "~/components/shared/content-editable-hooks";
 import {
   MonthContainer,
-  ColumnContainer,
   Container as SectionContainer,
   Divider,
 } from "./row-style";
-import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
 import { IUser } from "~/models/user";
-import { Icon, Text, Heading, UserSelectionDropdownList, Avatar } from "~/components/shared";
+import { Heading } from "~/components/shared";
+import { ForumTopics } from "./forum-topics";
 
 export interface ISection1MeetingDetailsProps {
   meeting: IMeeting;
   teamMembers: Array<IUser>;
-  disabled?: boolean;
 }
 
 export const Section1MeetingDetails = observer(
-  ({ meeting, teamMembers, disabled }: ISection1MeetingDetailsProps): JSX.Element => {
-    const { forumStore } = useMst();
-
-    const [explorationTopic, setExplorationTopic] = useState(
-      R.path(["forumExplorationTopic"], meeting.settings) || "",
-    );
-
-    const [userSelectionOpen, setUserSelectionOpen] = useState<boolean>(false);
-
-    //https://github.com/lovasoa/react-contenteditable/issues/161
-    const handleChangeExplorationTopic = useRefCallback(e => {
-      if (!e.target.value.includes("<div>")) {
-        setExplorationTopic(e.target.value);
-      }
-    }, []);
-
-    const handleBlurExplorationTopic = useRefCallback(() => {
-      forumStore.updateMeetingTopic({
-        id: meeting.id,
-        meeting: {
-          settingsForumExplorationTopic: explorationTopic,
-        },
-      });
-    }, [explorationTopic]);
-
-    const handleChangeExplorationTopicOwnerId = user => {
-      setUserSelectionOpen(false);
-      forumStore.updateMeetingTopic({
-        id: meeting.id,
-        meeting: {
-          settingsForumExplorationTopicOwnerId: user.id,
-        },
-      });
-    };
-
-    const topicRef = useRef(null);
-    const userDropdownRef = useRef(null);
-
-    useEffect(() => {
-      const handleClickOutside = event => {
-        if (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) {
-          setUserSelectionOpen(false);
-        }
-      };
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [userDropdownRef]);
-
-    const topicOwner = teamMembers.find(
-      member => member.id == R.path(["forumExplorationTopicOwnerId"], meeting.settings),
-    );
-
-    const renderUserAvatar = () => {
-      if (topicOwner) {
-        return (
-          <>
-            <Avatar
-              firstName={topicOwner.firstName}
-              lastName={topicOwner.lastName}
-              defaultAvatarColor={topicOwner.defaultAvatarColor}
-              avatarUrl={topicOwner.avatarUrl}
-              size={48}
-              marginLeft={"inherit"}
-              marginRight={"inherit"}
-            />
-            <HostedByName>{`${topicOwner.firstName} ${topicOwner.lastName}`}</HostedByName>
-          </>
-        );
-      } else {
-        return (
-          <>
-            <ImageContainer>
-              <Icon icon={"New-User"} size={"30px"} iconColor={"grey80"} />
-            </ImageContainer>
-            <AddMemberText>Add a member</AddMemberText>
-          </>
-        );
-      }
-    };
+  ({ meeting, teamMembers }: ISection1MeetingDetailsProps): JSX.Element => {
 
     return (
       <Container>
@@ -111,45 +26,7 @@ export const Section1MeetingDetails = observer(
           <MonthContainer>
             <Heading type={"h3"}>{moment(meeting.scheduledStartTime).format("MMMM")}</Heading>
           </MonthContainer>
-          <SectionContainer>
-            <ColumnContainer>
-              <HostedByContainer
-                onClick={() => {
-                  if (!disabled) {
-                    setUserSelectionOpen(!userSelectionOpen);
-                  }
-                }}
-              >
-                {renderUserAvatar()}
-              </HostedByContainer>
-
-              {userSelectionOpen && (
-                <UserSelectionContainer ref={userDropdownRef}>
-                  <UserSelectionDropdownList
-                    userList={teamMembers}
-                    onUserSelect={handleChangeExplorationTopicOwnerId}
-                  />
-                </UserSelectionContainer>
-              )}
-            </ColumnContainer>
-            <ColumnContainer>
-              <StyledContentEditable
-                innerRef={topicRef}
-                placeholder={
-                  "Add a topic - e.g. How do we improve productivity while we go remote?"
-                }
-                html={explorationTopic || ""}
-                onChange={handleChangeExplorationTopic}
-                onKeyDown={key => {
-                  if (key.keyCode == 13) {
-                    topicRef.current.blur();
-                  }
-                }}
-                onBlur={handleBlurExplorationTopic}
-                disabled={disabled}
-              />
-            </ColumnContainer>
-          </SectionContainer>
+          <ForumTopics disabled={false} teamMembers={teamMembers} meeting={meeting} />
         </SectionContainer>
         <Divider />
       </Container>
@@ -158,47 +35,3 @@ export const Section1MeetingDetails = observer(
 );
 
 const Container = styled.div``;
-
-const StyledContentEditable = styled(ContentEditable)`
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-radius: 10px;
-  border: ${props => `1px solid ${props.theme.colors.borderGrey}`};
-  box-shadow: 0px 3px 6px #f5f5f5;
-  padding-left: 16px;
-  padding-right: 16px;
-  width: 100%;
-  &:hover {
-    cursor: ${props => (!props.disabled ? "text" : "default")};
-  }
-`;
-
-const UserSelectionContainer = styled.div`
-  margin-left: 25px;
-  margin-top: -10px;
-`;
-
-const HostedByContainer = styled.div`
-  display: flex;
-  &: hover {
-    cursor: pointer;
-  }
-`;
-
-const HostedByName = styled(Text)`
-  margin-left: 15px;
-`;
-
-const ImageContainer = styled.div`
-  border-radius: 9999px;
-  border: ${props => `3px solid ${props.theme.colors.grey80}`};
-  width: 42px;
-  height: 42px;
-  display: flex;
-  justify-content: center;
-`;
-
-const AddMemberText = styled(HostedByName)`
-  font-style: italic;
-  color: ${props => props.theme.colors.grey80};
-`;
