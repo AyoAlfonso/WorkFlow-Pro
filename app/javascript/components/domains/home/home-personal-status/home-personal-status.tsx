@@ -70,52 +70,55 @@ export const HomePersonalStatus = observer(
 
     return (
       <Container>
-        <GreetingContainer>
-          <GreetingText>
-            {getGreetingTime(moment())} {name}
-          </GreetingText>
-        </GreetingContainer>
-        <DropdownContainer>
-          <DropdownMenu>
-            <Popup
-              arrow={false}
-              closeOnDocumentClick
-              contentStyle={{
-                border: "none",
-                borderRadius: "6px",
-                overflow: "hidden",
-                padding: 0,
-                width: "175px",
-              }}
-              on="click"
-              onClose={() =>
-                setHomePersonalStatusState({ ...homePersonalStatusState, menuOpen: false })
-              }
-              onOpen={() =>
-                setHomePersonalStatusState({ ...homePersonalStatusState, menuOpen: true })
-              }
-              open={menuOpen}
-              position="bottom center"
-              trigger={
-                <div>
-                  <HomePersonalStatusDropdownMenuItem
-                    menuItem={options[workStatus]}
-                    onSelect={() => null}
-                    rightIcon={
-                      <Icon
-                        icon={menuOpen ? "Chevron-Up" : "Chevron-Down"}
-                        size={15}
-                        style={{ paddingRight: "15px" }}
-                      />
-                    }
-                  />
-                </div>
-              }
-            >
-              <div>{renderOptions}</div>
-            </Popup>
-          </DropdownMenu>
-        </DropdownContainer>
+        <GreetingsStatusContainer>
+          <GreetingContainer>
+            <GreetingText>
+              {getGreetingTime(moment())} {name}
+            </GreetingText>
+          </GreetingContainer>
+          <DropdownContainer>
+            <DropdownMenu>
+              <Popup
+                arrow={false}
+                closeOnDocumentClick
+                contentStyle={{
+                  border: "none",
+                  borderRadius: "6px",
+                  overflow: "hidden",
+                  padding: 0,
+                  width: "175px",
+                }}
+                on="click"
+                onClose={() =>
+                  setHomePersonalStatusState({ ...homePersonalStatusState, menuOpen: false })
+                }
+                onOpen={() =>
+                  setHomePersonalStatusState({ ...homePersonalStatusState, menuOpen: true })
+                }
+                open={menuOpen}
+                position="bottom center"
+                trigger={
+                  <div>
+                    <HomePersonalStatusDropdownMenuItem
+                      menuItem={options[workStatus]}
+                      onSelect={() => null}
+                      rightIcon={
+                        <Icon
+                          icon={menuOpen ? "Chevron-Up" : "Chevron-Down"}
+                          size={15}
+                          style={{ paddingRight: "15px" }}
+                        />
+                      }
+                    />
+                  </div>
+                }
+              >
+                <div>{renderOptions}</div>
+              </Popup>
+            </DropdownMenu>
+          </DropdownContainer>
+        </GreetingsStatusContainer>
+        <ToolsHeader>{t("tools.title")}</ToolsHeader>
       </Container>
     );
   },
@@ -124,6 +127,12 @@ export const HomePersonalStatus = observer(
 const Container = styled.div`
   align-items: center;
   display: flex;
+  justify-content: space-between;
+`;
+
+const GreetingsStatusContainer = styled.div`
+  display: flex;
+  align-items: center;
   justify-content: flex-start;
 `;
 
@@ -143,6 +152,14 @@ const DropdownContainer = styled.div`
   margin: auto 50px;
   overflow: hidden;
   width: 175px;
+`;
+
+const ToolsHeader = styled(Container)`
+  width: 25%;
+  margin-left: 50px;
+  font-size: 24px;
+  font-weight: 600;
+  font-family: Exo;
 `;
 
 const DropdownMenu = styled.div``;

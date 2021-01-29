@@ -49,11 +49,11 @@ export const HomePersonalItems = (): JSX.Element => {
       <PrioritiesWrapper>
         {renderProritiesContainer()}
       </PrioritiesWrapper>
-      <ToolsContainer>
+      <ToolsWrapper>
         {renderJournalContainer()}
         {renderHabitsContainer()}
         {renderIssuesContainer()}
-      </ToolsContainer>
+      </ToolsWrapper>
     </Container>
   );
 };
@@ -77,7 +77,7 @@ const PrioritiesWrapper = styled.div`
   width: 75%;
 `;
 
-const ToolsContainer = styled.div`
+const ToolsWrapper = styled.div`
   flex-direction: column;
   width: 25%;
   margin-left: 50px;
