@@ -3,9 +3,12 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { Icon, ModalWithHeader } from "~/components/shared";
 import { HabitsCreateHabitForm } from "./habits-create-habit-form";
-import { HeaderContainerNoBorder } from "~/components/shared/styles/container-header";
 import { AccordionSummary } from '~/components/shared/accordion-components';
 import { IconContainerWithPadding } from "~/components/shared/icon";
+import { 
+  HeaderContainerNoBorder,
+  AccordionHeaderText,
+} from "~/components/shared/styles/container-header";
 
 interface IHabitsHeaderProps {
   expanded: string;
@@ -32,9 +35,10 @@ export const HabitsHeader = ({ expanded }: IHabitsHeaderProps): JSX.Element => {
             style={{ paddingRight: "15px" }}
             iconColor={expanded === "panel1" ? "primary100" : "grey60" }
           />
-          <HeaderText
+          <AccordionHeaderText
             expanded={expanded}
-          > {t("habits.title")} </HeaderText>
+            accordionPanel={"panel1"}
+          > {t("habits.title")} </AccordionHeaderText>
         </HeaderContainerNoBorder>
         <IconContainerWithPadding 
           onClick={(e) => {
@@ -48,18 +52,3 @@ export const HabitsHeader = ({ expanded }: IHabitsHeaderProps): JSX.Element => {
     </>
   );
 };
-
-type HeaderTextType = {
-  expanded?: string;
-};
-
-export const HeaderText = styled.h4<HeaderTextType>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  line-height: 20px;
-  font-size: 16px;
-  font-weight: 600;
-  color: ${props => 
-    props.expanded === "panel1" ? props.theme.colors.black : props.theme.colors.grey60};
-`;

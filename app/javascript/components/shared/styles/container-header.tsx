@@ -35,3 +35,19 @@ export const HeaderText = styled.h4`
   font-size: 16px;
   font-weight: 600;
 `;
+
+type AccordionHeaderTextType = {
+  expanded?: string;
+  accordionPanel: string;
+};
+
+export const AccordionHeaderText = styled.h4<AccordionHeaderTextType>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: ${props => 
+    props.expanded === props.accordionPanel ? props.theme.colors.black : props.theme.colors.grey60};
+`;
