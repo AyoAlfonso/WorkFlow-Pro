@@ -23,6 +23,7 @@ import { TeamKeyActivities } from "./components/team-key-activities";
 import { MeetingGoals } from "./components/meeting-goals";
 import { TeamIssues } from "./components/team-issues";
 import { MeetingSideOptions } from "./meeting-side-options";
+import { ExplorationTopic } from "~/components/domains/meetings-forum/components/exploration-topic";
 
 export interface IMeetingStepProps {
   meeting: IMeeting;
@@ -63,7 +64,7 @@ const StepComponent = (step: IStep) => {
         case "ParkingLot":
           return <TeamIssues />;
         case "ExplorationTopic":
-          return <Text>This is where Exploration Topic component would be</Text>;
+          return <ExplorationTopic />;
         default:
           return <Text>This custom component has not been configured</Text>;
       }

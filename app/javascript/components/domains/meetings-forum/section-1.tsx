@@ -74,8 +74,8 @@ export const Section1 = observer(
             <StyledHomeTitle>{forumStore.currentForumYear}</StyledHomeTitle>
           </MonthContainer>
           <SectionContainer>
-            <ColumnContainer>Who</ColumnContainer>
-            <ColumnContainer>Topic</ColumnContainer>
+            <ColumnContainer>{t("forum.explorationTopic.whoTitle")}</ColumnContainer>
+            <ColumnContainer>{t("forum.explorationTopic.topicTitle")}</ColumnContainer>
           </SectionContainer>
         </SubHeaderContainer>
 
