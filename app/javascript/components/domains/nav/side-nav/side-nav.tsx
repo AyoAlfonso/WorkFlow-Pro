@@ -171,7 +171,7 @@ export const SideNavNoMst = (
         return (
           <StyledNavLinkChildrenActive
             to={`/forum/${R.path(["0", "id"], teams) || ""}`}
-            icon={"Forum"}
+            icon={"Team"}
             currentPathName={currentPathName}
           >
             {t("navigation.forum")}
@@ -182,7 +182,7 @@ export const SideNavNoMst = (
           <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/team")}>
             <SideNavChildPopup
               trigger={
-                <NavMenuIcon icon={"Forum"} active={isNavMenuIconActive(currentPathName, "/team")}>
+                <NavMenuIcon icon={"Team"} active={isNavMenuIconActive(currentPathName, "/team")}>
                   {t("navigation.forum")}
                 </NavMenuIcon>
               }
@@ -270,7 +270,7 @@ export const SideNavNoMst = (
           <SideNavChildPopup
             trigger={
               <NavMenuIcon
-                icon={"Meetings"}
+                icon={"Meeting"}
                 active={isNavMenuIconActive(currentPathName, "/meetings")}
               >
                 {t("navigation.meetings")}
