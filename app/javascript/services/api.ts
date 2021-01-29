@@ -6,7 +6,6 @@ export class Api {
   client: ApisauceInstance;
   token: string;
 
-
   constructor() {
     this.client = create({
       baseURL: "/api",
@@ -26,7 +25,6 @@ export class Api {
       request.params = decamelizeRequest(request.params);
     });
   }
-
 
   addMonitor(monitor) {
     this.client.addMonitor(monitor);
@@ -54,7 +52,9 @@ export class Api {
 
   async profile() {
     const response = await this.client.get("/profile");
-    this.client.setHeaders({"Current-Company-ID": R.path(["data", "sessionCompanyProfileId"], response) || ""})
+    this.client.setHeaders({
+      "Current-Company-ID": R.path(["data", "sessionCompanyProfileId"], response) || "",
+    });
     return response;
   }
 
@@ -308,6 +308,10 @@ export class Api {
 
   async createMeeting(meeting) {
     return this.client.post(`/meetings`, meeting);
+  }
+
+  async startNextForMeeting(params) {
+    return this.client.patch("/meetings/start_next_for", params);
   }
 
   async updateMeeting(meeting) {

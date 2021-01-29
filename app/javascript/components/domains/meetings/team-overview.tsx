@@ -31,8 +31,14 @@ import { TeamPulseCard } from "./shared/team-pulse-card";
 interface ITeamOverviewProps {}
 
 export const TeamOverview = observer(
-  (props: ITeamOverviewProps): JSX.Element => {
-    const { sessionStore, teamStore, meetingStore } = useMst();
+  ({}: ITeamOverviewProps): JSX.Element => {
+    const {
+      sessionStore,
+      companyStore: { company },
+      teamStore,
+      meetingStore,
+      forumStore,
+    } = useMst();
 
     const { team_id } = useParams();
     const { t } = useTranslation();
@@ -47,6 +53,7 @@ export const TeamOverview = observer(
     const currentTeam = teamStore.currentTeam;
 
     if (
+      R.isNil(company) ||
       !currentTeam ||
       loading ||
       R.isNil(meetingStore) ||
@@ -60,13 +67,23 @@ export const TeamOverview = observer(
         </Container>
       );
     }
+    const overviewType = company.accessForum ? "forum" : "teams";
+    //based on
+
+    const handleForumMeetingClick = () => {
+      meetingStore.startNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
+        if (!R.isNil(meeting)) {
+          history.push(`/team/${team_id}/meeting/${meeting.id}`);
+        }
+      });
+    };
 
     const handleMeetingClick = () => {
       meetingStore.createMeeting(team_id).then(({ meeting }) => {
         if (!R.isNil(meeting)) {
           history.push(`/team/${team_id}/meeting/${meeting.id}`);
         } else {
-          showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
+          showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
         }
       });
     };
@@ -153,22 +170,38 @@ export const TeamOverview = observer(
         <BodyContainer>
           <LeftContainer>
             <TeamSnapshotContainer>
-              <ContainerHeaderWithText text={t("teams.teamSnapshotTitle")} />
+              <ContainerHeaderWithText text={t(`${overviewType}.teamSnapshotTitle`)} />
               {renderUserSnapshotTable()}
             </TeamSnapshotContainer>
           </LeftContainer>
           <RightContainer>
             <TeamMeetingInfoContainer>
               <FutureTeamMeetingsWrapper>
-                <FutureTeamMeetingsContainer handleMeetingClick={handleMeetingClick} />
+                {overviewType === "teams" && (
+                  <FutureTeamMeetingsContainer
+                    titleText={t(`${overviewType}.teamMeetingsTitle`)}
+                    buttonText={"Team Meeting"}
+                    handleMeetingClick={handleMeetingClick}
+                  />
+                )}
+                {overviewType === "forum" && (
+                  <FutureTeamMeetingsContainer
+                    titleText={t(`${overviewType}.teamMeetingsTitle`)}
+                    buttonText={"Forum Meeting"}
+                    handleMeetingClick={handleForumMeetingClick}
+                  />
+                )}
               </FutureTeamMeetingsWrapper>
               <TeamIssuesWrapper>
-                <TeamIssuesContainer teamId={team_id} />
+                <TeamIssuesContainer
+                  teamId={team_id}
+                  title={t(`${overviewType}.teamIssuesTitle`)}
+                />
               </TeamIssuesWrapper>
             </TeamMeetingInfoContainer>
 
             <TeamPulseContainer>
-              <ContainerHeaderWithText text={t("teams.teamsPulseTitle")} />
+              <ContainerHeaderWithText text={t(`${overviewType}.teamsPulseTitle`)} />
               {currentTeam.averageTeamEmotionScore > 0 ? (
                 <TeamPulseBody>
                   <OverallTeamPulse value={currentTeam.averageTeamEmotionScore} />

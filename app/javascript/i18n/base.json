@@ -105,7 +105,11 @@
         "explorationTopic": {
           "whoTitle": "Who",
           "topicTitle": "Topic"
-        }
+        },
+        "teamMeetingsTitle": "Forum Meetings",
+        "teamIssuesTitle": "Forum Issues",
+        "teamsPulseTitle": "Forum Pulse",
+        "teamSnapshotTitle": "Forum Snapshot"
       },
       "navigation": {
         "home": "Home",

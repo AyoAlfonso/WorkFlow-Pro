@@ -9,6 +9,9 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import * as R from "ramda";
 
+//TODO: refactor meetings / teamMeetings (& forum) to utilize same array with different views?
+//a FORUM meeting is type of TEAM meeting
+
 export const MeetingStoreModel = types
   .model("MeetingStoreModel")
   .props({
@@ -40,6 +43,8 @@ export const MeetingStoreModel = types
     }),
     fetchTeamMeetings: flow(function*(teamId) {
       try {
+        //currently gets meetings for this week
+        //should it try to get upcoming meetings?
         const response: ApiResponse<any> = yield self.environment.api.getTeamMeetings(teamId);
         if (response.ok) {
           self.teamMeetings = response.data;
@@ -113,17 +118,6 @@ export const MeetingStoreModel = types
     }),
   }))
   .actions(self => ({
-    setCurrentMeeting(meeting) {
-      self.currentMeeting = meeting;
-    },
-    updatePersonalPlanningField(field, value) {
-      self.currentPersonalPlanning[field] = value;
-    },
-    updateMeetingField(field, value) {
-      self.currentMeeting[field] = value;
-    },
-  }))
-  .actions(self => ({
     updatePersonalMeeting: flow(function*(meetingObj) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.updateMeeting(meetingObj);
@@ -147,9 +141,6 @@ export const MeetingStoreModel = types
         //caught by Api Monitor
       }
     }),
-    setCurrentPersonalPlanning(meeting) {
-      self.currentPersonalPlanning = meeting;
-    },
   }))
   .actions(self => ({
     reset() {
@@ -245,6 +236,23 @@ export const MeetingStoreModel = types
       } catch {
         // caught bv Api Monitor
       }
+    }),
+    startNextMeeting: flow(function*(teamId, meetingType) {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.startNextForMeeting({
+          teamId,
+          meetingType,
+        });
+        if (response.ok) {
+          self.currentMeeting = response.data;
+          return { meeting: self.currentMeeting };
+        } else {
+          return { meeting: null };
+        }
+      } catch {
+        //caught by Api Monitor
+      }
+      return { meeting: null };
     }),
   }));
 

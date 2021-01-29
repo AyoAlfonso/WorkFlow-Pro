@@ -7,15 +7,19 @@ import { ContainerHeaderWithText } from "~/components/shared/styles/container-he
 import { useTranslation } from "react-i18next";
 interface IFutureTeamMeetingsContainerProps {
   handleMeetingClick: any;
+  titleText?: string;
+  buttonText?: string;
 }
 
 export const FutureTeamMeetingsContainer = ({
   handleMeetingClick,
+  titleText,
+  buttonText = "Team Meeting",
 }: IFutureTeamMeetingsContainerProps): JSX.Element => {
   const { t } = useTranslation();
   return (
     <Container>
-      <ContainerHeaderWithText text={t("teams.teamMeetingsTitle")} />
+      <ContainerHeaderWithText text={titleText} />
       <BodyContainer>
         <ButtonContainer>
           <TeamMeetingButton
@@ -27,7 +31,7 @@ export const FutureTeamMeetingsContainer = ({
           >
             <ButtonTextContainer>
               <Icon icon={"Team"} size={"20px"} />
-              <TeamMeetingText>Team Meeting</TeamMeetingText>
+              <TeamMeetingText>{buttonText}</TeamMeetingText>
             </ButtonTextContainer>
           </TeamMeetingButton>
         </ButtonContainer>

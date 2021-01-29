@@ -43,6 +43,24 @@ class Api::MeetingsController < Api::ApplicationController
     end
   end
 
+  def start_next_for
+    #takes in team and meeting type to see if there is one in range
+    @meeting = case(params[:meeting_type])
+    when "forum_monthly"
+      policy_scope(Meeting).team_meetings(params[:team_id]).for_type(params[:meeting_type]).for_scheduled_start_date_range(current_user.convert_to_their_timezone.beginning_of_month, current_user.convert_to_their_timezone.end_of_month).first
+    else
+      nil
+    end
+
+    if @meeting.blank?
+      #raise error
+      raise "No meeting has created beforehand for this period, please do that."
+    else
+      authorize @meeting, :update?
+      render 'api/meetings/show'
+    end
+  end
+
   def show
     set_additional_data
     render 'api/meetings/show'
@@ -59,7 +77,7 @@ class Api::MeetingsController < Api::ApplicationController
     render json: { meeting_id: @meeting.id, status: :ok }
   end
 
-  def team_meetings
+  def team_meetings #id is team_id in this case
     @meetings = Meeting.team_meetings(params[:id]).sort_by_creation_date
     authorize @meetings
     render 'api/meetings/team_meetings'
