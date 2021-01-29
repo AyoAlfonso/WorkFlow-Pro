@@ -9,15 +9,14 @@ class MeetingPolicy < ApplicationPolicy
 
   def show?
     if (@record.team_id)
-      team_ids = @user.team_user_enablements.pluck(:team_id)
-      team_ids.include?(@record.team_id)
+      @user.team_user_enablements.pluck(:team_id).include?(@record.team_id)
     else
       @record.hosted_by == @user
     end
   end
 
   def create?
-    if (@record.meeting_type == "team_weekly")
+    if (@record.meeting_type == "team_weekly" || "forum_monthly")
       @user.team_lead_for?(@record.team)
     else
       true
@@ -27,6 +26,8 @@ class MeetingPolicy < ApplicationPolicy
   def update?
     if (@record.meeting_type == "team_weekly")
       @record.hosted_by == @user || @user.team_lead_for?(@record.team)
+    elsif (@record.meeting_type == "forum_monthly")
+      @user.team_user_enablements.pluck(:team_id).include?(@record.team_id)
     else
       @record.hosted_by == @user
     end

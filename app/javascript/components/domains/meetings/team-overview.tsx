@@ -39,8 +39,6 @@ export const TeamOverview = observer(
       meetingStore,
       forumStore,
     } = useMst();
-    const overviewType = company.accessForum ? "forum" : "teams";
-    //based on
 
     const { team_id } = useParams();
     const { t } = useTranslation();
@@ -55,6 +53,7 @@ export const TeamOverview = observer(
     const currentTeam = teamStore.currentTeam;
 
     if (
+      R.isNil(company) ||
       !currentTeam ||
       loading ||
       R.isNil(meetingStore) ||
@@ -68,15 +67,23 @@ export const TeamOverview = observer(
         </Container>
       );
     }
+    const overviewType = company.accessForum ? "forum" : "teams";
+    //based on
 
-    const handleForumMeetingClick = () => {};
+    const handleForumMeetingClick = () => {
+      meetingStore.startNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
+        if (!R.isNil(meeting)) {
+          history.push(`/team/${team_id}/meeting/${meeting.id}`);
+        }
+      });
+    };
 
     const handleMeetingClick = () => {
       meetingStore.createMeeting(team_id).then(({ meeting }) => {
         if (!R.isNil(meeting)) {
           history.push(`/team/${team_id}/meeting/${meeting.id}`);
         } else {
-          showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
+          showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
         }
       });
     };
@@ -175,6 +182,13 @@ export const TeamOverview = observer(
                     titleText={t(`${overviewType}.teamMeetingsTitle`)}
                     buttonText={"Team Meeting"}
                     handleMeetingClick={handleMeetingClick}
+                  />
+                )}
+                {overviewType === "forum" && (
+                  <FutureTeamMeetingsContainer
+                    titleText={t(`${overviewType}.teamMeetingsTitle`)}
+                    buttonText={"Forum Meeting"}
+                    handleMeetingClick={handleForumMeetingClick}
                   />
                 )}
               </FutureTeamMeetingsWrapper>

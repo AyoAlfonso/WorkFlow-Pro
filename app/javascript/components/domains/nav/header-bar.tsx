@@ -132,7 +132,7 @@ export const HeaderBar = observer(
                 if (!R.isNil(meeting)) {
                   history.push(`/personal_planning/${meeting.id}`);
                 } else {
-                  showToast("MMeeting templates not set up properly.", ToastMessageConstants.ERROR);
+                  showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
                 }
               });
             }}
