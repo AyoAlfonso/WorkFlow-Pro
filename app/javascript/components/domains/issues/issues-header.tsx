@@ -9,7 +9,7 @@ import { HeaderContainerNoBorder } from "~/components/shared/styles/container-he
 
 interface IssuesHeaderProps {
   issuesText?: string;
-  expanded: string | false;
+  expanded: string;
 }
 
 export const IssuesHeader = ({

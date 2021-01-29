@@ -16,7 +16,7 @@ declare global {
 }
 
 interface IJournalHeaderProps {
-  expanded: string | false;
+  expanded: string;
   questionnaireVariant: string;
   setQuestionnaireVariant: any;
 }

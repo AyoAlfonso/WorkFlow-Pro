@@ -7,7 +7,7 @@ import { HeaderContainerNoBorder } from "~/components/shared/styles/container-he
 import { AccordionSummary } from '~/components/shared/accordion-components';
 
 interface IHabitsHeaderProps {
-  expanded: string | false;
+  expanded: string;
 }
 
 export const HabitsHeader = ({ expanded }: IHabitsHeaderProps): JSX.Element => {
