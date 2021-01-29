@@ -79,7 +79,7 @@ const PrioritiesWrapper = styled.div`
 
 const ToolsContainer = styled.div`
   flex-direction: column;
-  min-width: 25%;
+  width: 25%;
   margin-left: 50px;
   margin-right: 5px;
 `;

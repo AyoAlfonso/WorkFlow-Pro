@@ -56,12 +56,12 @@ export const HabitsBody = observer(
             onUpdate={(habitId, logDate) => habitStore.updateHabitLog(habitId, logDate)}
             setShowIndividualHabit={setShowIndividualHabit}
             setSelectedHabitId={setSelectedHabitId}
-            showFourDays={!(windowDimensions.width > 1500)}
+            showFourDays={!(windowDimensions.width > 1000)}
           />
         </HabitsTableRow>
       ));
 
-    const daysToRender = windowDimensions.width > 1500 ? lastFiveDays : lastFourDays;
+    const daysToRender = windowDimensions.width > 1000 ? lastFiveDays : lastFourDays;
     
     const dayNames = daysToRender.map((day, index) => (
       <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"12%"}>
