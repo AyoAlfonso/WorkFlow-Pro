@@ -10,14 +10,14 @@ import { IUser } from "~/models/user";
 import { IMeeting } from "~/models/meeting";
 import { Icon, Text, UserSelectionDropdownList, Avatar } from "~/components/shared";
 
-interface IForumTopics {
+interface IForumTopic {
   teamMembers: Array<IUser>;
   meeting: IMeeting;
   disabled: boolean;
 };
 
-export const ForumTopics = observer(
-  ({teamMembers, meeting, disabled}: IForumTopics): JSX.Element => {
+export const ForumTopic = observer(
+  ({teamMembers, meeting, disabled}: IForumTopic): JSX.Element => {
   const { forumStore } = useMst();
 
   const [explorationTopic, setExplorationTopic] = useState(
