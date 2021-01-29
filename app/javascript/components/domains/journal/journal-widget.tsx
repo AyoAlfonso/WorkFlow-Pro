@@ -1,228 +1,45 @@
 import { observer } from "mobx-react";
-import * as R from "ramda";
 import * as React from "react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { Icon } from "~/components/shared/icon";
-import {
-  HeaderContainerWithActions,
-  HeaderText,
-} from "~/components/shared/styles/container-header";
-import { TextNoMargin } from "~/components/shared/text";
-import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
-import { useMst } from "../../../setup/root";
-import { IconButton } from "../../shared/icon-button";
-import { SurveyBot } from "./survey-bot";
-import { Link } from "react-router-dom";
-import Modal from "styled-react-modal";
+import { JournalHeader } from "./journal-header";
+import { JournalBody } from "./journal-body";
+import { Accordion } from '~/components/shared/accordion-components';
 
-declare global {
-  interface Window {
-    closeWidget: () => void | void;
-    openWidget: () => void | void;
-  }
+interface IJournalProps {
+  expanded: string;
+  handleChange: any;
 }
 
 export const Journal = observer(
-  (props): JSX.Element => {
+  ({
+    expanded,
+    handleChange
+  }: IJournalProps): JSX.Element => {
     const [questionnaireVariant, setQuestionnaireVariant] = useState<string>("");
 
-    const { t } = useTranslation();
-    const { sessionStore } = useMst();
-
-    const pynBotGreeting = R.replace(
-      "{userName}",
-      sessionStore.profile.firstName,
-      t("journals.pynBotGreeting"),
-    );
-
-    const defaultJournalButtonProps = {
-      width: "90%",
-      height: "48px",
-      bg: "white",
-      mt: "20px",
-      mx: "16px",
-      pl: "15px",
-      iconSize: 28,
-      shadow: true,
-    };
-
-    const handleChatbotEnd = () => {
-      setQuestionnaireVariant("");
-      window.openWidget();
-    };
-
     return (
-      <JournalContainer>
-        <HeaderContainerWithActions>
-          <HeaderText>{t("journals.title")}</HeaderText>
-          <EndButtonContainer>
-            <Link to="/journals" style={{ textDecoration: "none", padding: "0" }}>
-              <EndButton
-                onClick={() => {
-                  if (questionnaireVariant !== "") {
-                    setQuestionnaireVariant("");
-                  }
-                }}
-              >
-                {t("journals.viewEntries")}
-              </EndButton>
-            </Link>
-          </EndButtonContainer>
-        </HeaderContainerWithActions>
-        <StyledModal isOpen={questionnaireVariant !== ""} transitionSpeed={1000}>
-          {questionnaireVariant !== "" ? (
-            <SurveyBot
-              variant={questionnaireVariant}
-              endFn={handleChatbotEnd}
-              optionalActionsComponent={
-                <EndButtonContainer>
-                  {questionnaireVariant ? (
-                    <EndButton
-                      onClick={() => {
-                        if (confirm(t("journals.confirmQuit"))) {
-                          handleChatbotEnd();
-                        }
-                      }}
-                    >
-                      Quit Journal
-                    </EndButton>
-                  ) : null}
-                </EndButtonContainer>
-              }
-            />
-          ) : (
-            <></>
-          )}
-        </StyledModal>
-        <ButtonContainer>
-          <PynBotSpeechContainer>
-            <PynBotContainer>
-              <PynBotIconContainer>
-                <Icon icon={"PynBot"} iconColor={"primary80"} size={"42px"} width={"90%"} />
-              </PynBotIconContainer>
-              <TextNoMargin fontSize={"12px"} fontWeight={600}>
-                PynBot
-              </TextNoMargin>
-            </PynBotContainer>
-            <SpeechBubble>{pynBotGreeting}</SpeechBubble>
-          </PynBotSpeechContainer>
-          <IconButton
-            {...defaultJournalButtonProps}
-            iconName={"AM-Check-in"}
-            iconColor={"cautionYellow"}
-            text={t("journals.createMyDay")}
-            onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay)}
-            disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
-          />
-          {/* <IconButton
-              {...defaultJournalButtonProps}
-              iconName={"Check-in"}
-              iconColor={"successGreen"}
-              text={t("journals.thoughtChallenge")}
-              onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.thoughtChallenge)}
-            /> */}
-          <IconButton
-            {...defaultJournalButtonProps}
-            iconName={"Check-in"}
-            iconColor={"successGreen"}
-            text={"Coming soon"}
-            textColor={"grey20"}
-            fontStyle={"italic"}
-            onClick={() => {}}
-            disabled={true}
-          />
-          <IconButton
-            {...defaultJournalButtonProps}
-            iconName={"PM-Check-in"}
-            iconColor={"primary40"}
-            text={t("journals.eveningReflection")}
-            onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.eveningReflection)}
-            disabled={R.path(["profile", "currentDailyLog", "eveningReflection"], sessionStore)}
-          />
-        </ButtonContainer>
-      </JournalContainer>
+      <JournalAccordion
+        expanded={expanded === "panel0"} 
+        onChange={handleChange("panel0")} 
+        elevation={0} 
+      >
+        <JournalHeader 
+          expanded={expanded} 
+          questionnaireVariant={questionnaireVariant}
+          setQuestionnaireVariant={setQuestionnaireVariant} 
+        />
+        <JournalBody
+          setQuestionnaireVariant={setQuestionnaireVariant} 
+        />
+      </JournalAccordion>
     );
   },
 );
 
-const JournalContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+const JournalAccordion = styled(Accordion)`
   width: 100%;
-`;
-
-const ButtonContainer = styled.div`
-  align-items: center;
+  min-width: 224px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  margin: auto;
-  padding: 16px;
-`;
-
-const PynBotSpeechContainer = styled.div`
-  display: flex;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-`;
-
-const PynBotContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 30%;
-`;
-
-const PynBotIconContainer = styled.div`
-  align-content: center;
-  border-radius: 50%;
-  box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.1);
-  display: inline-flex;
-  height: 64px;
-  justify-content: center;
-  margin-bottom: 10px;
-  width: 64px;
-`;
-
-const SpeechBubble = styled.div`
-  border-radius: 20px 20px 20px 0;
-  box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.1);
-  display: inline-block;
-  font-family: Lato;
-  font-size: 15px;
-  line-height: 1em;
-  max-height: 2em;
-  overflow: hidden;
-  padding: 16px;
-  text-align: center;
-  text-overflow: ellipsis;
-  width: 70%;
-`;
-
-const EndButtonContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: flex-end;
-`;
-
-const EndButton = styled.div`
-  color: ${props => props.theme.colors.primary100};
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 400;
-`;
-
-const StyledModal = Modal.styled`
-  width: 30rem;
-  min-width: 30rem;
-  height: 100%;
-  border-radius: 10px;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  background-color: ${props => props.theme.colors.white};
 `;

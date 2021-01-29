@@ -1,84 +1,131 @@
 import * as React from "react";
 import * as R from "ramda";
 import styled from "styled-components";
+import { space, SpaceProps, color, ColorProps } from "styled-system";
 import { useMst } from "../../../setup/root";
 import { useEffect, useState } from "react";
 import { Icon } from "../../shared/icon";
-import { color } from "styled-system";
 import { observer } from "mobx-react";
 import { CreateIssueModal } from "./create-issue-modal";
 import { IssueEntry } from "./issue-entry";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { Loading } from "../../shared";
 import { sortByPosition } from "~/utils/sorting";
+import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
+import { HomeContainerBorders } from "../home/shared-components";
+import { AccordionDetails } from '~/components/shared/accordion-components';
 
 interface IIssuesBodyProps {
   showOpenIssues: boolean;
+  setShowOpenIssues: React.Dispatch<React.SetStateAction<boolean>>;
+  teamId?: number | string;
+  meetingId?: number | string;
 }
 
-export const IssuesBody = observer(
-  (props: IIssuesBodyProps): JSX.Element => {
-    const { issueStore, sessionStore } = useMst();
-    const { showOpenIssues } = props;
-    const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
+export const IssuesBody = observer(({
+    showOpenIssues,
+    setShowOpenIssues,
+    meetingId,
+    teamId,
+  }: IIssuesBodyProps): JSX.Element => {
+  const { issueStore, sessionStore } = useMst();
+  const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
+  const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
 
-    const openIssues = issueStore.openIssues;
-    const closedIssues = issueStore.closedIssues;
+  const openIssues = issueStore.openIssues;
+  const closedIssues = issueStore.closedIssues;
 
-    useEffect(() => {
-      issueStore.fetchIssues();
-    }, []);
+  useEffect(() => {
+    issueStore.fetchIssues();
+  }, []);
 
-    if (R.isNil(issueStore.issues) || R.isNil(sessionStore.profile)) {
-      return <Loading />;
-    }
+  if (R.isNil(issueStore.issues) || R.isNil(sessionStore.profile)) {
+    return <Loading />;
+  }
 
-    const renderIssuesList = (): Array<JSX.Element> => {
-      const issues = showOpenIssues ? openIssues : closedIssues;
-      return sortByPosition(issues.filter(issue => issue.user.id === sessionStore.profile.id)).map(
-        (issue, index) => (
-          <Draggable draggableId={`issue-${issue.id}`} index={index} key={issue.id} type={"issue"}>
-            {provided => (
-              <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
-                <IssueEntry
-                  issue={issue}
-                  dragHandleProps={...provided.dragHandleProps}
-                  leftShareContainer={true}
-                />
-              </IssueContainer>
-            )}
-          </Draggable>
-        ),
-      );
-    };
+  const sortMenuOptions = [
+    {
+      label: "Sort by Priority",
+      value: "by_priority",
+    },
+  ];
 
-    return (
-      <Container>
-        <CreateIssueModal
-          createIssueModalOpen={createIssueModalOpen}
-          setCreateIssueModalOpen={setCreateIssueModalOpen}
+  const handleSortMenuItemClick = value => {
+    setSortOptionsOpen(false);
+    issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });
+  };
+
+  const renderIssuesList = (): Array<JSX.Element> => {
+    const issues = showOpenIssues ? openIssues : closedIssues;
+    return sortByPosition(issues.filter(issue => issue.user.id === sessionStore.profile.id)).map(
+      (issue, index) => (
+        <Draggable draggableId={`issue-${issue.id}`} index={index} key={issue.id} type={"issue"}>
+          {provided => (
+            <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
+              <IssueEntry
+                issue={issue}
+                dragHandleProps={...provided.dragHandleProps}
+                leftShareContainer={true}
+              />
+            </IssueContainer>
+          )}
+        </Draggable>
+      ),
+    );
+  };
+
+  return (
+    <AccordionDetailsContainer>
+      <CreateIssueModal
+        createIssueModalOpen={createIssueModalOpen}
+        setCreateIssueModalOpen={setCreateIssueModalOpen}
+      />
+      <FilterContainer>
+        <FilterOptions
+          onClick={() => setShowOpenIssues(true)}
+          mr={"15px"}
+          color={showOpenIssues ? "primary100" : "grey40"}
+        >
+          Open
+        </FilterOptions>
+        <FilterOptions
+          onClick={() => setShowOpenIssues(false)}
+          color={!showOpenIssues ? "primary100" : "grey40"}
+        >
+          Closed
+        </FilterOptions>
+        <WidgetHeaderSortButtonMenu
+          onButtonClick={setSortOptionsOpen}
+          onMenuItemClick={handleSortMenuItemClick}
+          menuOpen={sortOptionsOpen}
+          menuOptions={sortMenuOptions}
+          ml={"15px"}
         />
-        <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
-          <AddNewIssuePlus>
-            <Icon icon={"Plus"} size={16} />
-          </AddNewIssuePlus>
-          <AddNewIssueText> Add a New Issue</AddNewIssueText>
-        </AddNewIssueContainer>
-        <Droppable droppableId={"issues-container"} type={"issue"}>
-          {(provided, snapshot) => (
+      </FilterContainer>
+      <Droppable droppableId={"issues-container"} type={"issue"}>
+        {(provided, snapshot) => (
+          <IssuesBodyContainer>
+            <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
+              <AddNewIssuePlus>
+                <Icon icon={"Plus"} size={16} />
+              </AddNewIssuePlus>
+              <AddNewIssueText> Add a New Issue</AddNewIssueText>
+            </AddNewIssueContainer>
             <IssuesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
               {renderIssuesList()}
               {provided.placeholder}
             </IssuesContainer>
-          )}
-        </Droppable>
-      </Container>
-    );
-  },
-);
+          </IssuesBodyContainer>
+        )}
+      </Droppable>
+    </AccordionDetailsContainer>
+  );
+});
 
-const Container = styled.div`
+const AccordionDetailsContainer = styled(AccordionDetails)`
   padding: 0px 0px 15px 0px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const AddNewIssuePlus = styled.div`
@@ -117,9 +164,33 @@ type TIssuesContainerType = {
 
 const IssuesContainer = styled.div<TIssuesContainerType>`
   overflow-y: auto;
+  margin-bottom: 8px;
   height: 260px;
   background-color: ${props =>
     props.isDraggingOver ? props.theme.colors.backgroundBlue : "white"};
 `;
 
 const IssueContainer = styled.div``;
+
+const IssuesBodyContainer = styled(HomeContainerBorders)`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 224px;
+  margin-right: 20px;
+`;
+
+const FilterContainer = styled.div`
+  display: flex;
+  margin-left: auto;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+const FilterOptions = styled.p<ColorProps & SpaceProps>`
+  ${space}
+  ${color}
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+`;

@@ -5,6 +5,8 @@ import { useMst } from "~/setup/root";
 import { HabitsHabitTracker } from "./habits-habit-tracker";
 import * as moment from "moment";
 import { EditHabit } from "./edit-habit";
+import { AccordionDetails } from "~/components/shared/accordion-components";
+import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 
 import {
   HabitsTable,
@@ -54,12 +56,12 @@ export const HabitsBody = observer(
             onUpdate={(habitId, logDate) => habitStore.updateHabitLog(habitId, logDate)}
             setShowIndividualHabit={setShowIndividualHabit}
             setSelectedHabitId={setSelectedHabitId}
-            showFourDays={!(windowDimensions.width > 1500)}
+            showFourDays={!(windowDimensions.width > 1000)}
           />
         </HabitsTableRow>
       ));
 
-    const daysToRender = windowDimensions.width > 1500 ? lastFiveDays : lastFourDays;
+    const daysToRender = windowDimensions.width > 1000 ? lastFiveDays : lastFourDays;
     
     const dayNames = daysToRender.map((day, index) => (
       <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"12%"}>
@@ -72,13 +74,15 @@ export const HabitsBody = observer(
     ));
 
     return showIndividualHabit ? (
-      <EditHabit
-        selectedHabitId={selectedHabitId}
-        setSelectedHabitId={setSelectedHabitId}
-        setShowIndividualHabit={setShowIndividualHabit}
-      />
+      <HomeContainerBorders>
+        <EditHabit
+          selectedHabitId={selectedHabitId}
+          setSelectedHabitId={setSelectedHabitId}
+          setShowIndividualHabit={setShowIndividualHabit}
+        />
+      </HomeContainerBorders>
     ) : (
-      <Container>
+      <AccordionDetailsContainer>
         <HabitsTable>
           <HabitsTableHead>
             <HabitsTableRow>
@@ -94,12 +98,21 @@ export const HabitsBody = observer(
           </HabitsTableHead>
           <HabitsTableBody>{renderHabits()}</HabitsTableBody>
         </HabitsTable>
-      </Container>
+      </AccordionDetailsContainer>
     );
   },
 );
 
-const Container = styled.div`
+const AccordionDetailsContainer = styled(AccordionDetails)`
+  border-radius: 10px;
+  border: 0px solid white;
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  margin-bottom: 5px;
+  min-width: 224px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   padding: 8px;
   margin-bottom: 8px;
 `;

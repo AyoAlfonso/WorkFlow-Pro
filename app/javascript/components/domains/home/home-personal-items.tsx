@@ -1,13 +1,16 @@
 import * as React from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import { HabitsBody, HabitsHeader } from "../habits";
-import { IssuesContainer } from "../issues/issues-container";
+import { Habits } from "../habits/habits-widget";
+import { Issues } from "../issues/issues-container";
 import { Journal } from "../journal/journal-widget";
 import { KeyActivitiesContainer } from "../key-activities/key-activities-container";
 import { TodaysPrioritiesContainer } from "../todays-priorities/todays-priorities-container";
 import { HomeContainerBorders } from "./shared-components";
 
 export const HomePersonalItems = (): JSX.Element => {
+  const [expanded, setExpanded] = useState<string>("");
+
   const renderProritiesContainer = () => {
     return (
       <PrioritiesContainer>
@@ -18,67 +21,67 @@ export const HomePersonalItems = (): JSX.Element => {
       </PrioritiesContainer>
     );
   };
-
-  const renderHabitsContainer = () => {
+  
+  const renderJournalContainer = () => {
     return (
-      <NonPrioritiesContainer>
-        <HabitsHeader />
-        <HabitsBody />
-      </NonPrioritiesContainer>
+      <Journal expanded={expanded} handleChange={handleChange} />
     );
   };
 
-  const renderJournalContainer = () => {
+  const renderHabitsContainer = () => {
     return (
-      <NonPrioritiesEndContainer>
-        <Journal />
-      </NonPrioritiesEndContainer>
+      <Habits expanded={expanded} handleChange={handleChange} />
     );
   };
 
   const renderIssuesContainer = () => {
     return (
-      <NonPrioritiesContainer>
-        <IssuesContainer />
-      </NonPrioritiesContainer>
+      <Issues expanded={expanded} handleChange={handleChange} />
     );
+  };
+
+  const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : "")
   };
 
   return (
     <Container>
-      {renderProritiesContainer()}
-      {renderHabitsContainer()}
-      {renderIssuesContainer()}
-      {renderJournalContainer()}
+      <PrioritiesWrapper>
+        {renderProritiesContainer()}
+      </PrioritiesWrapper>
+      <ToolsWrapper>
+        {renderJournalContainer()}
+        {renderHabitsContainer()}
+        {renderIssuesContainer()}
+      </ToolsWrapper>
     </Container>
   );
 };
 
 const Container = styled.div`
   display: flex;
-  height: 420px;
   overflow-x: auto;
   overflow-y: hidden;
 `;
 
 const PrioritiesContainer = styled(HomeContainerBorders)`
-  width: 39.2%;
+  width: 100%;
   min-width: 448px;
   margin-right: 20px;
   margin-left: 5px;
 `;
 
-const NonPrioritiesEndContainer = styled(HomeContainerBorders)`
-  width: 19.6%;
-  min-width: 224px;
+const PrioritiesWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  margin-right: 5px;
+  height: 420px;
+  width: 75%;
 `;
 
-const NonPrioritiesContainer = styled(NonPrioritiesEndContainer)`
-  margin-right: 20px;
-  min-width: 244px;
+const ToolsWrapper = styled.div`
+  flex-direction: column;
+  width: 25%;
+  margin-left: 50px;
+  margin-right: 5px;
 `;
 
 const PrioritiesHeaderContainer = styled.div`

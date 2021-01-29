@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import { IssuesHeader } from "../../issues/issues-header";
+import { TeamIssuesHeader } from "./team-issues-header";
 import { TeamIssuesBody } from "./team-issues-body";
 import { useTranslation } from "react-i18next";
 
@@ -15,7 +15,7 @@ export const TeamIssuesContainer = ({ teamId, title }: TeamIssuesContainerProps)
 
   return (
     <>
-      <IssuesHeader
+      <TeamIssuesHeader
         showOpenIssues={showOpenIssues}
         setShowOpenIssues={setShowOpenIssues}
         issuesText={title}

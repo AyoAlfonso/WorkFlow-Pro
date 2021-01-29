@@ -167,6 +167,9 @@
         "inactive": "Inactive",
         "pending": "Pending"
       },
+      "tools": {
+        "title": "Tools"
+      },
       "habits": {
         "title": "Habits",
         "reviewTitle": "Your Habits"

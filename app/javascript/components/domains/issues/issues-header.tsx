@@ -1,85 +1,60 @@
 import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { space, SpaceProps, color, ColorProps } from "styled-system";
-import { useMst } from "~/setup/root";
 import { Icon } from "../../shared/icon";
-import { HeaderContainer, HeaderText } from "~/components/shared/styles/container-header";
-import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { useTranslation } from "react-i18next";
+import { CreateIssueModal } from "./create-issue-modal";
+import { AccordionSummary } from '~/components/shared/accordion-components';
+import { IconContainerWithPadding } from "~/components/shared/icon";
+import { 
+  HeaderContainerNoBorder,
+  AccordionHeaderText,
+} from "~/components/shared/styles/container-header";
+
 interface IssuesHeaderProps {
-  showOpenIssues: boolean;
-  setShowOpenIssues: React.Dispatch<React.SetStateAction<boolean>>;
   issuesText?: string;
-  teamId?: number | string;
-  meetingId?: number | string;
+  expanded: string;
 }
 
 export const IssuesHeader = ({
-  showOpenIssues,
-  setShowOpenIssues,
   issuesText,
-  meetingId,
-  teamId,
+  expanded,
 }: IssuesHeaderProps): JSX.Element => {
-  const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
-
-  const { issueStore } = useMst();
+  const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
 
   const { t } = useTranslation();
 
-  const sortMenuOptions = [
-    {
-      label: "Sort by Priority",
-      value: "by_priority",
-    },
-  ];
-
-  const handleSortMenuItemClick = value => {
-    setSortOptionsOpen(false);
-    issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });
-  };
-
   return (
-    <HeaderContainer>
-      <HeaderText> {issuesText || t("issues.title") || "Issues"} </HeaderText>
-      <FilterContainer>
-        <FilterOptions
-          onClick={() => setShowOpenIssues(true)}
-          mr={"15px"}
-          color={showOpenIssues ? "primary100" : "grey40"}
+    <>    
+      <CreateIssueModal
+        createIssueModalOpen={createIssueModalOpen}
+        setCreateIssueModalOpen={setCreateIssueModalOpen}
+      />
+      <AccordionSummary>
+        <HeaderContainerNoBorder>
+          <Icon
+            icon={expanded === "panel2" ? "Chevron-Up" : "Chevron-Down"}
+            size={15}
+            style={{ paddingRight: "15px" }}
+            iconColor={expanded === "panel2" ? "primary100" : "grey60" }
+          />
+          <AccordionHeaderText
+            expanded={expanded}
+            accordionPanel={"panel2"}
+          > 
+            {issuesText || t("issues.title") || "Issues"} 
+          </AccordionHeaderText>
+        </HeaderContainerNoBorder>
+        <IconContainerWithPadding 
+          onClick={(e) => {
+            e.stopPropagation(); 
+            setCreateIssueModalOpen(true);
+          }}
         >
-          Open
-        </FilterOptions>
-        <FilterOptions
-          onClick={() => setShowOpenIssues(false)}
-          color={!showOpenIssues ? "primary100" : "grey40"}
-        >
-          Closed
-        </FilterOptions>
-        <WidgetHeaderSortButtonMenu
-          onButtonClick={setSortOptionsOpen}
-          onMenuItemClick={handleSortMenuItemClick}
-          menuOpen={sortOptionsOpen}
-          menuOptions={sortMenuOptions}
-          ml={"15px"}
-        />
-      </FilterContainer>
-    </HeaderContainer>
+
+            <Icon icon={"Plus"} size={16} />
+        </IconContainerWithPadding>
+      </AccordionSummary>
+    </>
   );
 };
-
-const FilterContainer = styled.div`
-  display: flex;
-  margin-left: auto;
-  justify-content: center;
-  align-items: center;
-`;
-
-const FilterOptions = styled.p<ColorProps & SpaceProps>`
-  ${space}
-  ${color}
-  font-size: 12px;
-  font-weight: 400;
-  cursor: pointer;
-`;
