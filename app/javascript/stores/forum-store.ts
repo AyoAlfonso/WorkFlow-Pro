@@ -17,6 +17,7 @@ export const ForumStoreModel = types
     currentForumTeamId: types.maybeNull(types.integer),
     currentForumYear: types.maybeNull(types.integer),
     forumYearMeetings: types.maybeNull(types.array(MeetingModel)),
+    searchedForumMeetings: types.maybeNull(types.array(MeetingModel))
   })
   .extend(withEnvironment())
   .views(self => ({}))

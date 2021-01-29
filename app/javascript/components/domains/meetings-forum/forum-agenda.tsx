@@ -24,7 +24,7 @@ export const ForumAgenda = props => {
   );
   const [dateFilter, setDateFilter] = useState<any>({
     selection: {
-      startDate: addDays(new Date(), -30),
+      startDate: addDays(new Date(), -15),
       endDate: new Date(),
       key: "selection",
     },
@@ -36,7 +36,7 @@ export const ForumAgenda = props => {
   });
 
   const dateSelectedAction = ranges => {
-    console.log("ranges");
+    console.log("ranges", ranges);
   };
 
   const renderSelectedEntry = () => {
