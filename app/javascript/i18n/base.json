@@ -109,7 +109,9 @@
         "teamMeetingsTitle": "Forum Meetings",
         "teamIssuesTitle": "Forum Issues",
         "teamsPulseTitle": "Forum Pulse",
-        "teamSnapshotTitle": "Forum Snapshot"
+        "teamSnapshotTitle": "Forum Snapshot",
+        "forumMeeting": "Forum Meeting",
+        "emptyMeetingEntries": "Start creating meetings on the meetings page!"
       },
       "navigation": {
         "home": "Home",

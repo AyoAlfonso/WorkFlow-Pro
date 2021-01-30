@@ -22,7 +22,9 @@ interface ICalendarFilterProps {
   setSelectedDateFilter: React.Dispatch<React.SetStateAction<string>>;
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>;
   dateSelectAction: any;
+  additionalComponentsBelow?: JSX.Element;
   additionalBodyComponents?: JSX.Element;
+  width?: string;
 }
 
 export const CalendarFilter = ({
@@ -34,7 +36,9 @@ export const CalendarFilter = ({
   setSelectedDateFilter,
   setLoading,
   dateSelectAction,
+  additionalComponentsBelow,
   additionalBodyComponents,
+  width,
 }: ICalendarFilterProps) => {
   const { t } = useTranslation();
 
@@ -100,7 +104,7 @@ export const CalendarFilter = ({
     ));
 
   return (
-    <Container>
+    <Container width={width}>
       <HeadingContainer>
         <Heading type={"h1"} fontSize={"24px"}>
           {header}
@@ -130,6 +134,7 @@ export const CalendarFilter = ({
               rangeColors={[baseTheme.colors.primary80]}
             />
           </Card>
+          {additionalComponentsBelow}
         </FilterContainer>
         {additionalBodyComponents}
       </BodyContainer>
@@ -137,4 +142,10 @@ export const CalendarFilter = ({
   );
 };
 
-const Container = styled.div``;
+type ContainerProps = {
+  width?: string;
+};
+
+const Container = styled.div<ContainerProps>`
+  width: ${props => props.width};
+`;
