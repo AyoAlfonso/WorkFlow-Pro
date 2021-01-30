@@ -933,16 +933,69 @@ title: "Weekly Reflection").first_or_initialize.update(steps: [
 ]
 )
 
+Questionnaire.where(name: "Monthly Reflection", 
+limit_type: 3,
+title: "Monthly Reflection").first_or_initialize.update(steps: [
+  {
+    id: 1,
+    options: [],
+    metadata: {
+      summary: "improvements",
+      message: "Ideas to make my days better:"
+    },
+    trigger: 2
+  },
+  {
+    id: 2,
+    options: [],
+    metadata: {
+      summary: "highest-good",
+      message: "Areas where I spent time that wasn't for my highest good:"
+    },
+    trigger: 3
+  },
+  {
+    id: 3, 
+    options: [],
+    metadata: {
+      summary: "wins",
+      message: "My wins:"
+    },
+    trigger: 4
+  },
+  {
+    id: 4,
+    message: "What was my biggest win from this month?",
+    trigger: "biggest-wins"
+  },
+  {
+    id: "biggest-wins",
+    user: true,
+    metadata: {
+      journalQuestion: "Biggest win from this month:"
+    },
+    trigger: 6
+  }
+]
+)
+
 if Rails.env.development?
   7.times.each do |number|
     sunny = User.find_by_email("sunny@laterolabs.com")
     chris = User.find_by_email("christopher@laterolabs.com")
     kyle = User.find_by_email("kyle@laterolabs.com")
+    mani = User.find_by_email("mani@laterolabs.com")
     
     questionnaire = Questionnaire.find_by_name("Evening Reflection")
+    questionnaire2 = Questionnaire.find_by_name("Monthly Reflection")
   
     QuestionnaireAttempt.create!(questionnaire_id: questionnaire.id, completed_at: Time.now - 2.day - number.day, emotion_score: rand(1..5), user: sunny)
     QuestionnaireAttempt.create!(questionnaire_id: questionnaire.id, completed_at: Time.now - 2.day - number.day, emotion_score: rand(1..5), user: chris)
     QuestionnaireAttempt.create!(questionnaire_id: questionnaire.id, completed_at: Time.now - 2.day - number.day, emotion_score: rand(1..5), user: kyle)
+    QuestionnaireAttempt.create!(questionnaire_id: questionnaire.id, completed_at: Time.now - 2.day - number.day, emotion_score: rand[1..5], user: mani)
+    QuestionnaireAttempt.create!(questionnaire_id: questionnaire2.id, completed_at: Time.now - 7.day - number.day, emotion_score: rand(1..5), user: sunny)
+    QuestionnaireAttempt.create!(questionnaire_id: questionnaire2.id, completed_at: Time.now - 7.day - number.day, emotion_score: rand(1..5), user: chris)
+    QuestionnaireAttempt.create!(questionnaire_id: questionnaire2.id, completed_at: Time.now - 7.day - number.day, emotion_score: rand(1..5), user: kyle)
+    QuestionnaireAttempt.create!(questionnaire_id: questionnaire2.id, completed_at: Time.now - 7.day - number.day, emotion_score: rand[1..5], user: mani)
   end
 end
