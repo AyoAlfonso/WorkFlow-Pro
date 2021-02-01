@@ -9,7 +9,7 @@ class Issue < ApplicationRecord
 
   before_save :create_or_update_team_issue
 
-  acts_as_list scope: [:user_id, :completed_at]
+  acts_as_list scope: [:company_id, :user_id, :completed_at]
 
   scope :optimized, -> { includes([:user]) }
   scope :user_current_company, -> (company_id) {where(company_id: company_id)}
