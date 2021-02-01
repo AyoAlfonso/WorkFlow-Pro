@@ -35,6 +35,7 @@
     "framer-motion": "^1.11.1",
     "history": "4.10.1",
     "html-to-draftjs": "^1.5.0",
+    "humanize-string": "^2.1.0",
     "humps": "^2.0.1",
     "i18next": "^19.5.3",
     "immutable": "^4.0.0-rc.12",

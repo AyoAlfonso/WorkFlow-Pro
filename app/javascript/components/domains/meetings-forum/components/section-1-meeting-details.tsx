@@ -2,11 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import moment from "moment";
 import { IMeeting } from "~/models/meeting";
-import {
-  MonthContainer,
-  Container as SectionContainer,
-  Divider,
-} from "./row-style";
+import { MonthContainer, Container as SectionContainer, Divider } from "./row-style";
 import { observer } from "mobx-react";
 import { IUser } from "~/models/user";
 import { Heading } from "~/components/shared";
@@ -19,7 +15,6 @@ export interface ISection1MeetingDetailsProps {
 
 export const Section1MeetingDetails = observer(
   ({ meeting, teamMembers }: ISection1MeetingDetailsProps): JSX.Element => {
-
     return (
       <Container>
         <SectionContainer>

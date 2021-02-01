@@ -109,7 +109,9 @@
         "teamMeetingsTitle": "Forum Meetings",
         "teamIssuesTitle": "Forum Issues",
         "teamsPulseTitle": "Forum Pulse",
-        "teamSnapshotTitle": "Forum Snapshot"
+        "teamSnapshotTitle": "Forum Snapshot",
+        "forumMeeting": "Forum Meeting",
+        "emptyMeetingEntries": "Start creating meetings on the meetings page!"
       },
       "navigation": {
         "home": "Home",
@@ -160,7 +162,8 @@
         "reviewCoreFour": "Review the Foundational Four as a team.",
         "coreFourTitle": "Foundational Four",
         "saveRatings": "Save Ratings",
-        "teamsPyns": "Team's Pyns"
+        "teamsPyns": "Team's Pyns",
+        "meetingAgenda": "Meeting Agenda"
       },
       "status": {
         "active": "Active",

@@ -6,38 +6,30 @@ import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
 import moment from "moment";
 import { toJS } from "mobx";
-import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { addDays } from "date-fns";
-import { baseTheme } from "~/themes/base";
 
 import {
   ActionButtonsContainer,
   AvatarContainer,
-  BodyContainer,
   EntryBodyCard,
   EntryBodyContainer,
   EntryContainer,
   EntryCardHeaderContainer,
   EntryHeadingContainer,
-  FilterContainer,
-  FilterOption,
-  HeadingContainer,
-  IconButtonContainer,
   ItemCard,
   ItemContainer,
   ItemListContainer,
   MainContainer,
   NoSelectedItems,
 } from "~/components/shared/journals-and-notes";
-import { Card, CardHeaderText } from "~/components/shared/card";
-import { Heading } from "~/components/shared/heading";
+import { Card } from "~/components/shared/card";
 import { Text } from "~/components/shared/text";
-import { Icon } from "~/components/shared/icon";
 import { Avatar } from "~/components/shared/avatar";
 import { Loading } from "~/components/shared";
 import { IQuestionnaireAttempt } from "~/models/questionnaire-attempt";
+import { CalendarFilter } from "~/components/shared/journals-and-notes/calendar-filter";
 
 export interface IJournalIndexProps {}
 
@@ -195,60 +187,7 @@ export const JournalIndex = observer(
       );
     };
 
-    const filterOptions = [
-      {
-        label: t("dateFilters.today"),
-        selection: {
-          startDate: new Date(),
-          endDate: new Date(),
-          key: "selection",
-        },
-      },
-      {
-        label: t("dateFilters.lastSevenDays"),
-        selection: {
-          startDate: addDays(new Date(), -7),
-          endDate: new Date(),
-          key: "selection",
-        },
-      },
-      {
-        label: t("dateFilters.lastThirtyDays"),
-        selection: {
-          startDate: addDays(new Date(), -30),
-          endDate: new Date(),
-          key: "selection",
-        },
-      },
-      {
-        label: t("dateFilters.lastNinetyDays"),
-        selection: {
-          startDate: addDays(new Date(), -90),
-          endDate: new Date(),
-          key: "selection",
-        },
-      },
-    ];
-
-    const renderDateFilterOptions = () =>
-      filterOptions.map((option, index) => (
-        <FilterOption
-          key={index}
-          onClick={() => {
-            setSelectedDateFilter(option.label);
-            handleDateSelect({ selection: { ...option.selection } });
-          }}
-          option={option}
-          selected={selectedDateFilter === option.label}
-        />
-      ));
-
-    const handleDateSelect = ranges => {
-      setDateFilter({
-        ...ranges,
-      });
-      setSelectedItem(null);
-      setLoading(true);
+    const dateSelectedAction = ranges => {
       questionnaireStore
         .getQuestionnaireAttemptsSummary(ranges.selection)
         .then(() => setLoading(false));
@@ -256,39 +195,22 @@ export const JournalIndex = observer(
 
     return (
       <MainContainer>
-        <HeadingContainer>
-          <Heading type={"h1"} fontSize={"24px"}>
-            {t("journals.indexTitle")}
-          </Heading>
-        </HeadingContainer>
-        <BodyContainer>
-          <FilterContainer>
-            <Card headerComponent={<CardHeaderText fontSize={"16px"}>Filter</CardHeaderText>}>
-              {renderDateFilterOptions()}
-              <DateRange
-                showDateDisplay={false}
-                showMonthAndYearPickers={false}
-                ranges={[...Object.values(dateFilter)]}
-                onChange={ranges => {
-                  setSelectedDateFilter("");
-                  handleDateSelect(ranges);
-                }}
-                showSelectionPreview={true}
-                direction={"vertical"}
-                minDate={addDays(new Date(), -90)}
-                maxDate={new Date()}
-                scroll={{
-                  enabled: true,
-                  calendarWidth: 320,
-                  monthWidth: 320,
-                }}
-                rangeColors={[baseTheme.colors.primary80]}
-              />
-            </Card>
-          </FilterContainer>
-          <ItemListContainer>{renderItems()}</ItemListContainer>
-          <EntryContainer>{renderSelectedEntry()}</EntryContainer>
-        </BodyContainer>
+        <CalendarFilter
+          header={t("journals.indexTitle")}
+          dateFilter={dateFilter}
+          setDateFilter={setDateFilter}
+          setSelectedItem={setSelectedItem}
+          selectedDateFilter={selectedDateFilter}
+          setSelectedDateFilter={setSelectedDateFilter}
+          setLoading={setLoading}
+          dateSelectAction={dateSelectedAction}
+          additionalBodyComponents={
+            <>
+              <ItemListContainer>{renderItems()}</ItemListContainer>
+              <EntryContainer>{renderSelectedEntry()}</EntryContainer>
+            </>
+          }
+        />
       </MainContainer>
     );
   },

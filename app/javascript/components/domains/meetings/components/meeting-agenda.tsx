@@ -1,14 +1,38 @@
 import * as React from "react";
 import styled from "styled-components";
-import { StepProgressBarIcon } from "~/components/shared";
+import { StepProgressBarIcon, Avatar } from "~/components/shared";
 import { Text } from "~/components/shared/text";
+import { UserType } from "~/types/user";
 
 interface MeetingAgendaProps {
   steps: any;
   currentStep: number;
+  topicOwner?: UserType;
 }
 
-export const MeetingAgenda = ({ steps, currentStep }: MeetingAgendaProps): JSX.Element => {
+export const MeetingAgenda = ({
+  steps,
+  currentStep,
+  topicOwner,
+}: MeetingAgendaProps): JSX.Element => {
+  const renderExplorationTopicOwner = (step): JSX.Element => {
+    if (step.componentToRender == "ExplorationTopic" && topicOwner) {
+      return (
+        <ExplorationTopicOwnerContainer>
+          <Avatar
+            defaultAvatarColor={topicOwner.defaultAvatarColor}
+            firstName={topicOwner.firstName}
+            lastName={topicOwner.lastName}
+            avatarUrl={topicOwner.avatarUrl}
+            size={25}
+            marginLeft={"20px"}
+          />
+          <TopicOwnerName>{`${topicOwner.firstName} ${topicOwner.lastName}`}</TopicOwnerName>
+        </ExplorationTopicOwnerContainer>
+      );
+    }
+  };
+
   const renderMeetingSteps = (): Array<JSX.Element> => {
     return steps.map((step, index) => {
       let iconBackgroundColor;
@@ -28,9 +52,12 @@ export const MeetingAgenda = ({ steps, currentStep }: MeetingAgendaProps): JSX.E
             iconColor={"white"}
             iconName={"Chevron-Left"}
           />
-          <StyledText>
-            {step.name} ({step.duration} minutes)
-          </StyledText>
+          <StepTopicContainer>
+            <StyledText>
+              {step.name} ({step.duration} minutes)
+            </StyledText>
+            {renderExplorationTopicOwner(step)}
+          </StepTopicContainer>
         </StepContainer>
       );
     });
@@ -55,9 +82,16 @@ const StyledText = styled(Text)`
   margin-left: 10px;
 `;
 
-const EditorWrapper = styled.div`
-  height: 300px;
-  overflow-y: auto;
-  border: ${props => `1px solid ${props.theme.colors.borderGrey}`};
-  padding: 8px;
+const ExplorationTopicOwnerContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
+
+const TopicOwnerName = styled(Text)`
+  color: ${props => props.theme.colors.grey80};
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 5px;
+`;
+
+const StepTopicContainer = styled.div``;

@@ -17,6 +17,8 @@ export const ForumStoreModel = types
     currentForumTeamId: types.maybeNull(types.integer),
     currentForumYear: types.maybeNull(types.integer),
     forumYearMeetings: types.maybeNull(types.array(MeetingModel)),
+    searchedForumMeetings: types.maybeNull(types.array(MeetingModel)),
+    currentSelectedForumMeeting: types.maybeNull(MeetingModel),
   })
   .extend(withEnvironment())
   .views(self => ({}))
@@ -65,7 +67,7 @@ export const ForumStoreModel = types
         showToast("Error creating forum meetings", ToastMessageConstants.ERROR);
       }
     }),
-    updateMeetingTopic: flow(function*(meetingObj) {
+    updateMeeting: flow(function*(meetingObj) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.updateMeeting(meetingObj);
         if (response.ok) {
@@ -81,6 +83,25 @@ export const ForumStoreModel = types
         //caught by Api Monitor
       }
     }),
+    searchForMeetingsByDateRange: flow(function*(startDate, endDate, teamId){
+      const response: ApiResponse<any> = yield self.environment.api.searchForumMeetingsByDateRange(
+        startDate, endDate, teamId
+      );
+      if (response.ok) {
+        self.searchedForumMeetings = response.data
+      } else {
+        self.error = true;
+      }
+    }),
+    searchForForumMeeting: flow(function*(meetingId){
+      const response: ApiResponse<any> = yield self.environment.api.getMeeting(meetingId);
+      if (response.ok) {
+        self.currentSelectedForumMeeting = response.data
+      } else {
+        self.error = true;
+      }
+    })
+
   }));
 
 type ForumStoreType = typeof ForumStoreModel.Type;
