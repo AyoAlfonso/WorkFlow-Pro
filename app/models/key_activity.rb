@@ -4,7 +4,7 @@ class KeyActivity < ApplicationRecord
   belongs_to :meeting, optional: true
   belongs_to :company
 
-  acts_as_list scope: [:user_id, :weekly_list, :todays_priority]
+  acts_as_list scope: [:company_id, :user_id, :weekly_list, :todays_priority]
 
   scope :optimized, -> { includes([:user]) }
   scope :user_current_company, -> (company_id) {where(company_id: company_id)}
