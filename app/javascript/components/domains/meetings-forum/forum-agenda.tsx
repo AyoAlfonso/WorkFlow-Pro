@@ -115,6 +115,7 @@ export const ForumAgenda = observer(() => {
           <StyledItemListContainer>{renderItems()}</StyledItemListContainer>
         }
         width={"400px"}
+        maxDate={addDays(new Date(), 365)}
       />
       <StyledEntryContainer>{renderSelectedEntry()}</StyledEntryContainer>
     </Container>

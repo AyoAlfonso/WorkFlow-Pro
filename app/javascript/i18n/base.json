@@ -111,7 +111,9 @@
         "teamsPulseTitle": "Forum Pulse",
         "teamSnapshotTitle": "Forum Snapshot",
         "forumMeeting": "Forum Meeting",
-        "emptyMeetingEntries": "Start creating meetings on the meetings page!"
+        "emptyMeetingEntries": "Start creating meetings on the meetings page!",
+        "scheduledStartTime": "Scheduled Start Time",
+        "actualStartTime": "Actual Start Time"
       },
       "navigation": {
         "home": "Home",

@@ -25,6 +25,8 @@ interface ICalendarFilterProps {
   additionalComponentsBelow?: JSX.Element;
   additionalBodyComponents?: JSX.Element;
   width?: string;
+  minDate?: any;
+  maxDate?: any;
 }
 
 export const CalendarFilter = ({
@@ -39,6 +41,8 @@ export const CalendarFilter = ({
   additionalComponentsBelow,
   additionalBodyComponents,
   width,
+  minDate,
+  maxDate,
 }: ICalendarFilterProps) => {
   const { t } = useTranslation();
 
@@ -124,8 +128,8 @@ export const CalendarFilter = ({
               }}
               showSelectionPreview={true}
               direction={"vertical"}
-              minDate={addDays(new Date(), -90)}
-              maxDate={new Date()}
+              minDate={minDate || addDays(new Date(), -90)}
+              maxDate={maxDate || new Date()}
               scroll={{
                 enabled: true,
                 calendarWidth: 320,
