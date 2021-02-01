@@ -62,6 +62,8 @@ export const HeaderBar = observer(
     }, [dropdownRef, lynchPynDropdownRef]);
     const { t } = useTranslation();
 
+    const parsedProfile = toJS(sessionStore.profile);
+
     const renderHeaderIcon = (iconName: string) => {
       const dropdownValue = iconName == "Plus" ? openCreateDropdown : openLynchPynDropdown;
       return (
@@ -144,21 +146,26 @@ export const HeaderBar = observer(
     };
 
     const renderCompanyOptions = (): Array<JSX.Element> => {
-      const parsedProfile = toJS(sessionStore.profile);
       return parsedProfile.companyProfiles.map((company, index) => {
         return (
           <AccountOption
             key={index}
-            onClick={() =>
-              userStore
-                .updateUser({ id: parsedProfile.id, defaultSelectedCompanyId: company.id })
-                .then(() => {
-                  if (location.pathname !== "/") {
-                    history.replace("/");
-                  }
-                  window.location.reload();
-                })
-            }
+            onClick={() => {
+              if (parsedProfile.defaultSelectedCompanyId != company.id) {
+                userStore
+                  .updateUser({ id: parsedProfile.id, defaultSelectedCompanyId: company.id })
+                  .then(() => {
+                    if (location.pathname !== "/") {
+                      history.replace("/");
+                    }
+                    window.location.reload();
+                  });
+              } else {
+                setShowAccountActions(false);
+                setShowCompanyOptions(false);
+                showToast(`You are already on ${company.name}`, ToastMessageConstants.INFO);
+              }
+            }}
           >
             <SwitchAccountContainer>
               <AccountOptionText>{company.name}</AccountOptionText>
@@ -166,6 +173,18 @@ export const HeaderBar = observer(
           </AccountOption>
         );
       });
+    };
+
+    const renderSwitchCompanyOptions = (): JSX.Element => {
+      if (parsedProfile.companyProfiles.length > 0) {
+        return (
+          <AccountOption>
+            <AccountOptionText onClick={() => setShowCompanyOptions(!showCompanyOptions)}>
+              {t("profile.switchCompanies")}
+            </AccountOptionText>
+          </AccountOption>
+        );
+      }
     };
 
     const renderActionDropdown = (): JSX.Element => {
@@ -186,11 +205,7 @@ export const HeaderBar = observer(
               <AccountOptionText>{t("notes.headerNavTitle")}</AccountOptionText>
             </Link>
           </AccountOption>
-          <AccountOption>
-            <AccountOptionText onClick={() => setShowCompanyOptions(!showCompanyOptions)}>
-              {t("profile.switchCompanies")}
-            </AccountOptionText>
-          </AccountOption>
+          {renderSwitchCompanyOptions()}
           <AccountOption>
             <AccountOptionText onClick={() => sessionStore.logoutRequest()}>
               {t("profile.logout")}
