@@ -43,6 +43,7 @@ class Api::IssuesController < Api::ApplicationController
     team_id = @issue.team_id
     @issue.destroy!
     if params[:from_team_meeting] == "true"
+      #TODO: ensure enablements destroyed here as well
       @issues_to_render = team_meeting_issues(@issue.team_id)
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
@@ -54,12 +55,14 @@ class Api::IssuesController < Api::ApplicationController
   def issues_for_meeting
     team_id = Meeting.find(params[:meeting_id]).team_id
     @issues = team_meeting_issues(team_id)
+    @team_issues = TeamIssue.for_team(team_id).sort_by_position
     authorize @issues
     render "api/issues/issues_for_meeting"
   end
 
   def issues_for_team
     @issues = team_meeting_issues(params[:team_id])
+    @team_issues = TeamIssue.for_team(params[:team_id]).sort_by_position
     authorize @issues
     render "api/issues/issues_for_team"
   end
