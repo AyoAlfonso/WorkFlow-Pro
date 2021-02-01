@@ -16,7 +16,7 @@ class MeetingPolicy < ApplicationPolicy
   end
 
   def create?
-    if (@record.meeting_type == "team_weekly" || "forum_monthly")
+    if (@record.meeting_type == "team_weekly" || @record.meeting_type == "forum_monthly")
       @user.team_lead_for?(@record.team)
     else
       true
