@@ -29,8 +29,17 @@ export const SelectedMeetingAgendaEntry = observer(
         <MeetingHeader>
           <Heading type={"h3"}>{t("forum.forumMeeting")}</Heading>
           <MeetingTimeText>
-            {moment(selectedMeeting.scheduledStartTime).format("dddd, MMMM D, LT")}
+            {`${t("forum.scheduledStartTime")}: ${moment(selectedMeeting.scheduledStartTime).format(
+              "dddd, MMMM D, LT",
+            )}`}
           </MeetingTimeText>
+          {selectedMeeting.startTime && (
+            <MeetingTimeText>
+              {`${t("forum.actualStartTime")}: ${moment(selectedMeeting.startTime).format(
+                "dddd, MMMM D, LT",
+              )}`}
+            </MeetingTimeText>
+          )}
         </MeetingHeader>
         <MeetingAgenda steps={selectedMeeting.steps} currentStep={999} topicOwner={topicOwner} />
       </Container>
