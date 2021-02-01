@@ -10,6 +10,7 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 // import * as moment from "moment";
 
+// we can piggy back off the teamStore's currentMeeting instead of upcoming meeting
 export const ForumStoreModel = types
   .model("ForumStoreModel")
   .props({
@@ -21,11 +22,7 @@ export const ForumStoreModel = types
     currentSelectedForumMeeting: types.maybeNull(MeetingModel),
   })
   .extend(withEnvironment())
-  .views(self => ({
-    get upcomingForumMeeting() {
-      return self.forumYearMeetings[0];
-    },
-  }))
+  .views(self => ({}))
   .actions(self => ({
     load: flow(function*(teamId, year) {
       if (teamId) {

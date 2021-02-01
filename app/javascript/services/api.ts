@@ -321,7 +321,7 @@ export class Api {
     return this.client.post(`/meetings`, meeting);
   }
 
-  async startNextForMeeting(params) {
+  async getNextMeetingFor(params) {
     return this.client.patch("/meetings/start_next_for", params);
   }
 

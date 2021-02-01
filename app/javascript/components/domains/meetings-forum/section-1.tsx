@@ -37,9 +37,7 @@ export const Section1 = observer(
     const [loading, setLoading] = useState<boolean>(true);
 
     const teamId =
-      (team_id && parseInt(team_id)) ||
-      forumStore.currentForumTeamId ||
-      (teams && teams[0] && teams[0].id);
+      (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
 
     useEffect(() => {
       if (loading && teamId && company) {

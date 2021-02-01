@@ -216,6 +216,13 @@ export const App = observer(
                       }}
                     />
                     <Route
+                      exact
+                      path={"/meetings/section_2"}
+                      render={() => {
+                        return <Section2 />;
+                      }}
+                    />
+                    <Route
                       path={"/meetings/section_2/:team_id"}
                       render={() => {
                         return <Section2 />;

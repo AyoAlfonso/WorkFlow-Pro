@@ -1,36 +1,48 @@
 import * as React from "react";
+import { useEffect } from "react";
+import { useMst } from "~/setup/root";
 import styled from "styled-components";
 import * as R from "ramda";
 import { observer } from "mobx-react";
 import { ScheduledIssues } from "~/components/domains/meetings-forum/components/scheduled-issues";
 import { ParkingLotIssues } from "~/components/domains/meetings-forum/components/parking-lot-issues";
 import { NoUpcomingMeeting } from "~/components/domains/meetings-forum/components/no-upcoming-meeting";
+import { IMeeting } from "~/models/meeting";
 
 interface IParkingLotProps {
-  teamId: number;
-  upcomingForumMeeting: any;
-};
+  upcomingForumMeeting: IMeeting;
+}
 
-export const ParkingLot = observer(({
-  teamId,
-  upcomingForumMeeting,
-}: IParkingLotProps): JSX.Element => {
+export const ParkingLot = observer(
+  ({ upcomingForumMeeting }: IParkingLotProps): JSX.Element => {
+    const { teamId } = upcomingForumMeeting;
+    const { issueStore } = useMst(); //use meetingStore to infer upcomingmeeting instead?
+    //use effect called when this component is loaded to fetch all issues
+    useEffect(() => {
+      issueStore.fetchTeamIssues(teamId); //ASSUMPTIONS: must have team id for parking lot
 
-  if (R.isNil(upcomingForumMeeting)) {
-    return <NoUpcomingMeeting />
-  }
+      //TODO: should we just include the meeting_ids with the team_issues themselves?
+      if (upcomingForumMeeting) {
+        issueStore.fetchTeamIssueMeetingEnablements(upcomingForumMeeting.id);
+      }
+    }, [teamId]);
 
-  return (
-    <Container>
-      <LeftContainer>
-        <ScheduledIssues teamId={teamId} upcomingForumMeeting={upcomingForumMeeting} />
-      </LeftContainer>
-      <RightContainer>
-        <ParkingLotIssues teamId={teamId}  upcomingForumMeeting={upcomingForumMeeting} />
-      </RightContainer>
-    </Container>
-  )
-})
+    if (R.isNil(upcomingForumMeeting)) {
+      return <NoUpcomingMeeting />;
+    }
+
+    return (
+      <Container>
+        <LeftContainer>
+          <ScheduledIssues teamId={teamId} upcomingForumMeeting={upcomingForumMeeting} />
+        </LeftContainer>
+        <RightContainer>
+          <ParkingLotIssues teamId={teamId} upcomingForumMeeting={upcomingForumMeeting} />
+        </RightContainer>
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
   display: flex;
@@ -54,4 +66,3 @@ const RightContainer = styled.div`
   margin-bottom: 5px;
   margin-left: 4px;
 `;
-

@@ -1,52 +1,64 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as R from "ramda";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
+import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import MeetingTypes from "~/constants/meeting-types";
+
 import { NavHeader } from "~/components/domains/nav/nav-header";
-import { HomeTitle } from "~/components/domains/home/shared-components";
+import { Loading } from "~/components/shared/loading";
+
 import { ParkingLot } from "~/components/domains/meetings-forum/components/parking-lot";
 
-export const Section2 = observer((): JSX.Element => {
-  const { t } = useTranslation();
-  const {
-    companyStore: { company },
-    teamStore: { teams },
-    forumStore,
-  } = useMst();
-  const teamId = forumStore.currentForumTeamId || (teams && teams[0] && teams[0].id);
-  const upcomingForumMeeting = forumStore.upcomingForumMeeting;
-  const companyId = R.path(["id"], company);
+export const Section2 = observer(
+  (): JSX.Element => {
+    const { t } = useTranslation();
+    const {
+      companyStore: { company },
+      teamStore: { teams },
+      meetingStore,
+      issueStore,
+      forumStore,
+    } = useMst();
+    const { currentMeeting: upcomingForumMeeting } = meetingStore;
 
-  useEffect(() => {
-    if (teamId && companyId) {
-      forumStore.load(teamId, company.currentFiscalYear);
+    const { team_id } = useParams();
+    const [loading, setLoading] = useState<boolean>(true);
+    const teamId =
+      (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
+
+    useEffect(() => {
+      if (loading && teamId && company) {
+        meetingStore
+          .fetchNextMeeting(teamId, MeetingTypes.FORUM_MONTHLY)
+          .then(() => issueStore.fetchIssuesForTeam(teamId).then(() => setLoading(false)));
+      }
+    }, [company, teams.map(t => t.id), team_id]);
+
+    if (loading || R.isNil(upcomingForumMeeting) || upcomingForumMeeting.teamId != teamId) {
+      return (
+        <Container>
+          <HeaderContainer>
+            <NavHeader>{t("forum.section2")}</NavHeader>
+          </HeaderContainer>
+          <Loading />
+        </Container>
+      );
     }
-  }, [companyId, teams, teamId]);
 
-  if (!teamId || R.isNil(companyId)) {
     return (
       <Container>
         <HeaderContainer>
           <NavHeader>{t("forum.section2")}</NavHeader>
         </HeaderContainer>
-        Loading
+        <ParkingLot upcomingForumMeeting={upcomingForumMeeting} />
       </Container>
     );
-  }
-
-  return (
-    <Container>
-      <HeaderContainer>
-        <NavHeader>{t("forum.section2")}</NavHeader>
-      </HeaderContainer>
-      <HomeTitle>{forumStore.currentForumYear}</HomeTitle>
-      <ParkingLot teamId={teamId} upcomingForumMeeting={upcomingForumMeeting} />
-    </Container>
-  )
-})
+  },
+);
 
 const Container = styled.div``;
 
