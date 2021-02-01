@@ -22,7 +22,7 @@ export const UserModel = types
     phoneNumber: types.maybeNull(types.string),
     title: types.maybeNull(types.string),
     status: types.maybeNull(types.string),
-    currentSelectedProfileId: types.maybeNull(types.number),
+    defaultSelectedCompanyId: types.maybeNull(types.number),
     companyProfiles: types.maybeNull(types.array(CompanyModel)),
     // teams: types.array(types.reference(TeamModel)), THIS ONLY WORKS IF TEAMS IS LOADED BEFORE USERS
     todaysPriorities: types.maybeNull(types.array(KeyActivityModel)),
