@@ -176,7 +176,7 @@ export const HeaderBar = observer(
     };
 
     const renderSwitchCompanyOptions = (): JSX.Element => {
-      if (parsedProfile.companyProfiles.length > 0) {
+      if (parsedProfile.companyProfiles.length > 1) {
         return (
           <AccountOption>
             <AccountOptionText onClick={() => setShowCompanyOptions(!showCompanyOptions)}>
