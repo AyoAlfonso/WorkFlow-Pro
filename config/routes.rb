@@ -71,7 +71,7 @@ Rails.application.routes.draw do
     resources :team_issues, only: [:index, :update]
 
     # team_issue_meeting_enablements
-    resources :team_issue_meeting_enablements, only: [:create, :index]
+    resources :team_issue_meeting_enablements, only: [:index]
 
     #key activities
     resources :key_activities, only: [:index, :create, :update, :destroy]

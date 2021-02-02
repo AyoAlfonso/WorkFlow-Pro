@@ -17,5 +17,5 @@ export const TeamIssueModel = types
 type TeamIssueModelType = typeof TeamIssueModel.Type;
 type TeamIssueModelDataType = typeof TeamIssueModel.CreationType;
 
-export interface IIssue extends TeamIssueModelType {}
-export interface IIssueData extends TeamIssueModelDataType {}
+export interface ITeamIssue extends TeamIssueModelType {}
+export interface ITeamIssueData extends TeamIssueModelDataType {}

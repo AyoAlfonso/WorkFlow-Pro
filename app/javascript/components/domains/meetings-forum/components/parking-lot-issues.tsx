@@ -18,142 +18,132 @@ interface ParkingLotIssuesProps {
 }
 
 export const ParkingLotIssues = observer(
-  (props: ParkingLotIssuesProps): JSX.Element => {
-  const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
-  const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
-  const { teamId, upcomingForumMeeting } = props;
-  const { issueStore } = useMst();
-  const openTeamIssues = issueStore.openTeamIssues;
-  const { t } = useTranslation();
+  ({ teamId, upcomingForumMeeting }: ParkingLotIssuesProps): JSX.Element => {
+    const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
+    const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
+    const { issueStore } = useMst();
+    const { t } = useTranslation();
 
-  useEffect(() => {
-    if (teamId) {
-      issueStore.fetchTeamIssues(teamId);
-    } else {
-      issueStore.fetchIssues();
-    }
-  }, []);
+    const sortMenuOptions = [
+      {
+        label: "Sort by Priority",
+        value: "by_priority",
+      },
+    ];
 
-  const sortMenuOptions = [
-    {
-      label: "Sort by Priority",
-      value: "by_priority",
-    },
-  ];
+    const handleSortMenuItemClick = value => {
+      setSortOptionsOpen(false);
+      issueStore.sortIssuesByPriority({
+        sort: value,
+        teamId: teamId,
+        meetingId: upcomingForumMeeting.id,
+      });
+    };
 
-  const handleSortMenuItemClick = value => {
-    setSortOptionsOpen(false);
-    issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: upcomingForumMeeting.id });
-  };
-
-  const renderIssuesList = (): Array<JSX.Element> => {
-    return openTeamIssues.map((teamIssue, index) => (
-      <Draggable
-        draggableId={`issue-${teamIssue.id}_forumMeetingId-${upcomingForumMeeting.id}`}
-        index={index}
-        key={teamIssue["id"]}
-        type={"issue"}
-      >
-        {provided => (
-          <IssueContainer 
-            key={teamIssue["id"]}
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
-            <IssueEntry 
-              issue={teamIssue.issue} 
-              meeting={true} 
-              pageEnd={true} 
-              meetingId={upcomingForumMeeting.id}
-            />
-          </IssueContainer>
-        )}
-      </Draggable>
-    ));
-  };
-
-  return (
-    <>
-      <HeaderContainer>
-        <HeaderText> {t("meetingForum.parkingLotIssues.title")} </HeaderText>
-      </HeaderContainer>
-      <FilterContainer>
-        <SubHeaderText> {t("meetingForum.parkingLotIssues.subTitle")} </SubHeaderText>
-        <WidgetHeaderSortButtonMenu
-          onButtonClick={setSortOptionsOpen}
-          onMenuItemClick={handleSortMenuItemClick}
-          menuOpen={sortOptionsOpen}
-          menuOptions={sortMenuOptions}
-          ml={"15px"}
-        />
-      </FilterContainer>
-      <Container>
-        <CreateIssueModal
-          createIssueModalOpen={createIssueModalOpen}
-          setCreateIssueModalOpen={setCreateIssueModalOpen}
-          teamId={teamId}
-        />
-        <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
-          <AddNewIssuePlus>
-            <Icon icon={"Plus"} size={16} />
-          </AddNewIssuePlus>
-          <AddNewIssueText> Add a Topic</AddNewIssueText>
-        </AddNewIssueContainer>
-        <Droppable droppableId="scheduled-issues" key={"issue"} >
-          {(provided, snapshot) => (
-            <IssuesContainer
-              ref={provided.innerRef}
-              isDraggingOver={snapshot.isDraggingOver}
-            >
-              {renderIssuesList()}
-              {provided.placeholder}
-            </IssuesContainer>
+    const renderIssuesList = (): Array<JSX.Element> => {
+      const startIndex = issueStore.openMeetingScheduledTeamIssues.length;
+      return issueStore.openMeetingParkingLotTeamIssues.map((teamIssue, index) => (
+        <Draggable
+          draggableId={`team_issue-${teamIssue.id}:meeting_id-${upcomingForumMeeting.id}`}
+          index={startIndex + index}
+          key={teamIssue["id"]}
+          type={"team-issue"}
+        >
+          {provided => (
+            <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
+              <IssueEntry
+                issue={teamIssue.issue}
+                meetingId={upcomingForumMeeting.id}
+                dragHandleProps={...provided.dragHandleProps}
+                pageEnd={true}
+              />
+            </IssueContainer>
           )}
-        </Droppable>
-      </Container>
-    </>
-  );
-});
+        </Draggable>
+      ));
+    };
 
-const HeaderContainer = styled.div`
+    return (
+      <>
+        <HeaderContainer>
+          <HeaderText> {t("meetingForum.parkingLotIssues.title")} </HeaderText>
+        </HeaderContainer>
+        <FilterContainer>
+          <SubHeaderText> {t("meetingForum.parkingLotIssues.subTitle")} </SubHeaderText>
+          <Count>{issueStore.openMeetingParkingLotTeamIssues.length}</Count>
+          <WidgetHeaderSortButtonMenu
+            onButtonClick={setSortOptionsOpen}
+            onMenuItemClick={handleSortMenuItemClick}
+            menuOpen={sortOptionsOpen}
+            menuOptions={sortMenuOptions}
+            ml={"15px"}
+          />
+        </FilterContainer>
+        <Container>
+          <CreateIssueModal
+            createIssueModalOpen={createIssueModalOpen}
+            setCreateIssueModalOpen={setCreateIssueModalOpen}
+            teamId={teamId}
+            meetingId={upcomingForumMeeting.id}
+          />
+          <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
+            <AddNewIssuePlus>
+              <Icon icon={"Plus"} size={16} />
+            </AddNewIssuePlus>
+            <AddNewIssueText> Add a Topic</AddNewIssueText>
+          </AddNewIssueContainer>
+          <Droppable droppableId="team-parking-lot-issues" key={"issue"}>
+            {(provided, snapshot) => (
+              <IssuesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
+                {renderIssuesList()}
+                {provided.placeholder}
+              </IssuesContainer>
+            )}
+          </Droppable>
+        </Container>
+      </>
+    );
+  },
+);
+
+export const HeaderContainer = styled.div`
   display: flex;
 `;
 
-const HeaderText = styled.h2`
+export const HeaderText = styled.h2`
   display: flex;
   justify-content: center;
-  alignItems: center;
+  alignitems: center;
   font-size: 20px;
   font-weight: 600;
 `;
 
-const SubHeaderText = styled.h6`
+export const SubHeaderText = styled.h6`
   display: flex;
   justify-content: center;
-  alignItems: center;
+  alignitems: center;
   font-size: 16px;
   color: ${props => props.theme.colors.grey60};
 `;
 
-const FilterContainer = styled.div`
+export const FilterContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
-const Container = styled.div`
+export const Container = styled.div`
   padding: 0px 0px 15px 0px;
 `;
 
-const AddNewIssuePlus = styled.div`
+export const AddNewIssuePlus = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 5px;
   color: ${props => props.theme.colors.grey80};
 `;
 
-const AddNewIssueText = styled.p`
+export const AddNewIssueText = styled.p`
   ${color}
   font-size: 16px;
   margin-left: 21px;
@@ -161,7 +151,7 @@ const AddNewIssueText = styled.p`
   line-height: 20pt;
 `;
 
-const AddNewIssueContainer = styled(HomeContainerBorders)`
+export const AddNewIssueContainer = styled(HomeContainerBorders)`
   display: flex;
   margin: 8px 5px 8px 5px;
   cursor: pointer;
@@ -174,17 +164,23 @@ const AddNewIssueContainer = styled(HomeContainerBorders)`
   }
 `;
 
-const IssuesContainer = styled.div<IssuesContainerType>`
+export const IssuesContainer = styled.div<IssuesContainerType>`
   overflow-y: auto;
-  background-color: ${props => 
+  background-color: ${props =>
     props.isDraggingOver ? props.theme.colors.backgroundBlue : "white"};
+  min-height: 320px;
 `;
 
-const IssueContainer = styled(HomeContainerBorders)`
+export const IssueContainer = styled(HomeContainerBorders)`
   display: flex;
   margin: 8px 5px 8px 5px;
 `;
 
-type IssuesContainerType = {
+export type IssuesContainerType = {
   isDraggingOver?: any;
 };
+
+//currently count is a hack to get MST to rerender on changes to the open / scheduled filter
+export const Count = styled.div`
+  display: none;
+`;

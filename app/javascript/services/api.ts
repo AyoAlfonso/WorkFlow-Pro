@@ -132,21 +132,17 @@ export class Api {
       teamId: teamId,
     });
   }
-  
+
   async getTeamIssues(teamId) {
     return this.client.get(`/team_issues`, { teamId: teamId });
-  }
-
-  async createTeamIssueMeetingEnablement(teamIssueId, meetingId) {
-    return this.client.post(`team_issue_meeting_enablements`, { teamIssueId, meetingId })
   }
 
   async getTeamIssueMeetingEnablements(meetingId) {
     return this.client.get(`/team_issue_meeting_enablements`, { meetingId });
   }
-  
-  async updateTeamIssuePosition(teamIssueId, position) {
-    return this.client.patch(`/team_issues/${teamIssueId}`, { position: position });
+
+  async updateTeamIssuePosition(teamIssueId, params) {
+    return this.client.patch(`/team_issues/${teamIssueId}`, params);
   }
 
   async resortIssues(sortParams) {

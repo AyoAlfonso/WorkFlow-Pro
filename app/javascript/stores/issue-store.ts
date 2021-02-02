@@ -1,3 +1,4 @@
+import * as R from "ramda";
 import { types, flow } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { IssueModel } from "../models/issue";
@@ -11,7 +12,7 @@ export const IssueStoreModel = types
   .props({
     issues: types.array(IssueModel),
     teamIssues: types.array(TeamIssueModel),
-    forumMeetingTeamIssues: types.array(IssueModel),
+    meetingTeamIssues: types.array(IssueModel),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -27,12 +28,26 @@ export const IssueStoreModel = types
     get closedTeamIssues() {
       return self.teamIssues.filter(teamIssue => teamIssue.completedAt !== null);
     },
-    get openForumMeetingTeamIssues() {
-      return self.forumMeetingTeamIssues.filter(forumMeetingTeamIssue => forumMeetingTeamIssue.completedAt === null)
+    get meetingTeamIssueIds() {
+      return self.meetingTeamIssues.map(issue => issue.id);
     },
-    get closedForumMeetingTeamIssues() {
-      return self.forumMeetingTeamIssues.filter(forumMeetingTeamIssue => forumMeetingTeamIssue.completedAt !== null)
-    }
+  }))
+  .views(self => ({
+    get openMeetingParkingLotTeamIssues() {
+      return self.teamIssues.filter(
+        teamIssue => !R.includes(teamIssue.issueId, self.meetingTeamIssueIds),
+      );
+    },
+    get openMeetingScheduledTeamIssues() {
+      return self.teamIssues.filter(teamIssue =>
+        R.includes(teamIssue.issueId, self.meetingTeamIssueIds),
+      );
+    },
+    // get closedMeetingTeamIssues() {
+    //   return self.meetingTeamIssues.filter(
+    //     meetingTeamIssue => meetingTeamIssue.completedAt !== null,
+    //   );
+    // },
   }))
   .actions(self => ({
     fetchIssues: flow(function*() {
@@ -60,7 +75,7 @@ export const IssueStoreModel = types
       if (response.ok) {
         self.issues = response.data.issues;
         self.teamIssues = response.data.teamIssues;
-        self.forumMeetingTeamIssues = response.data.forumMeetingTeamIssues;
+        self.meetingTeamIssues = response.data.meetingTeamIssues;
         showToast("Issue created.", ToastMessageConstants.SUCCESS);
         return true;
       } else {
@@ -116,7 +131,8 @@ export const IssueStoreModel = types
     fetchIssuesForMeeting: flow(function*(meetingId) {
       const response: ApiResponse<any> = yield self.environment.api.getIssuesForMeeting(meetingId);
       if (response.ok) {
-        self.issues = response.data;
+        self.issues = response.data.issues;
+        self.teamIssues = response.data.teamIssues;
         return true;
       } else {
         return false;
@@ -125,25 +141,30 @@ export const IssueStoreModel = types
     fetchIssuesForTeam: flow(function*(teamId) {
       const response: ApiResponse<any> = yield self.environment.api.getIssuesForTeam(teamId);
       if (response.ok) {
-        self.issues = response.data;
+        self.issues = response.data.issues;
         return true;
       } else {
         return false;
       }
     }),
-    createTeamIssueMeetingEnablement: flow(function*(teamIssueId, meetingId) {
-      const response: ApiResponse<any> = yield self.environment.api.createTeamIssueMeetingEnablement(teamIssueId, meetingId);
-      if (response.ok) {
-        self.forumMeetingTeamIssues = response.data;
-        return true;
-      } else {
-        return false;
-      }
-    }),
+    // createTeamIssueMeetingEnablement: flow(function*(teamIssueId, meetingId) {
+    //   const response: ApiResponse<any> = yield self.environment.api.createTeamIssueMeetingEnablement(
+    //     teamIssueId,
+    //     meetingId,
+    //   );
+    //   if (response.ok) {
+    //     self.meetingTeamIssues = response.data;
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // }),
     fetchTeamIssueMeetingEnablements: flow(function*(meetingId) {
-      const response: ApiResponse<any> = yield self.environment.api.getTeamIssueMeetingEnablements(meetingId);
+      const response: ApiResponse<any> = yield self.environment.api.getTeamIssueMeetingEnablements(
+        meetingId,
+      );
       if (response.ok) {
-        self.forumMeetingTeamIssues = response.data;
+        self.meetingTeamIssues = response.data;
         return true;
       } else {
         return false;
@@ -171,13 +192,16 @@ export const IssueStoreModel = types
         return false;
       }
     }),
-    updateTeamIssuePosition: flow(function*(teamIssueId, position) {
+    updateTeamIssuePosition: flow(function*(teamIssueId, position, options = {}) {
+      //TODO: refactor out fromTeamMeeting completely from all flows
+      console.log("****", teamIssueId, position, options);
       const response: ApiResponse<any> = yield self.environment.api.updateTeamIssuePosition(
         teamIssueId,
-        position,
+        Object.assign({ position }, options),
       );
       if (response.ok) {
-        self.teamIssues = response.data;
+        self.teamIssues = response.data.teamIssues;
+        self.meetingTeamIssues = response.data.meetingTeamIssues;
         return true;
       } else {
         return false;

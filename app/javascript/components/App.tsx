@@ -94,18 +94,37 @@ export const App = observer(
         }
         keyActivityStore.updateKeyActivity(keyActivityId);
       } else if (R.includes("team_issue", draggableId)) {
-        const teamIssueId = parseInt(R.replace("team_issue-", "", draggableId));
-        issueStore.updateTeamIssuePosition(teamIssueId, newPosition + 1);
+        //something to handle team issue meeting enablement creation / deletion depnding on droppable type
+        //in the create simply create it
+        //in the delete simply remove it
+
+        if (destination.droppableId == "team-parking-lot-issues") {
+          const draggableIdList = draggableId.split(":");
+          const teamIssueId = parseInt(R.replace("team_issue-", "", draggableIdList[0]));
+          const meetingId = parseInt(R.replace("meeting_id-", "", draggableIdList[1]));
+
+          issueStore.updateTeamIssuePosition(teamIssueId, newPosition + 1, {
+            meetingId,
+            meetingEnabled: false,
+          });
+        } else if (destination.droppableId == "team-scheduled-issues") {
+          const draggableIdList = draggableId.split(":");
+          const teamIssueId = parseInt(R.replace("team_issue-", "", draggableIdList[0]));
+          const meetingId = parseInt(R.replace("meeting_id-", "", draggableIdList[1]));
+          //meetingId is used to determine if a team issue meeting enablement is or not created
+          issueStore.updateTeamIssuePosition(teamIssueId, newPosition + 1, {
+            meetingId,
+            meetingEnabled: true,
+          });
+        } else {
+          //standard team issue functionality. Used in companies.
+          //Technically assumes meetingEnabled is not a thing in this case.
+          const teamIssueId = parseInt(R.replace("team_issue-", "", draggableId));
+          issueStore.updateTeamIssuePosition(teamIssueId, newPosition + 1);
+        }
       } else if (R.includes("issue", draggableId)) {
-        const draggableIdList = draggableId.split("_")
-        const issueId = parseInt(R.replace("issue-", "", draggableIdList[0]));
-        const meetingId = parseInt(R.replace("forumMeetingId-", "", draggableIdList[1]))
-        if (destination.droppableId === "issues-container") {
-          issueStore.updateIssuePosition(issueId, newPosition + 1);
-        }
-        else if (destination.droppableId === "scheduled-issues") { 
-          issueStore.createTeamIssueMeetingEnablement(issueId, meetingId);
-        }
+        const issueId = parseInt(R.replace("issue-", "", draggableId));
+        issueStore.updateIssuePosition(issueId, newPosition + 1);
       }
     };
     return (

@@ -32,9 +32,10 @@ export const Section2 = observer(
 
     useEffect(() => {
       if (loading && teamId && company) {
-        meetingStore
-          .fetchNextMeeting(teamId, MeetingTypes.FORUM_MONTHLY)
-          .then(() => issueStore.fetchIssuesForTeam(teamId).then(() => setLoading(false)));
+        meetingStore.fetchNextMeeting(teamId, MeetingTypes.FORUM_MONTHLY).then(() => {
+          issueStore.fetchIssuesForTeam(teamId);
+          issueStore.fetchTeamIssues(teamId).then(() => setLoading(false));
+        });
       }
     }, [company, teams.map(t => t.id), team_id]);
 

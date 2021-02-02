@@ -47,7 +47,7 @@ export const TeamOverview = observer(
     useEffect(() => {
       teamStore
         .getTeam(team_id)
-        .then(() => issueStore.fetchIssuesForTeam(team_id).then(() => setLoading(false)));
+        .then(() => issueStore.fetchTeamIssues(team_id).then(() => setLoading(false)));
     }, [team_id]);
 
     const history = useHistory();

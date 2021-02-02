@@ -43,7 +43,7 @@ export const TeamIssuesBody = observer(
       const issues = showOpenIssues ? openIssues : closedIssues;
       return issues.map((issue, index) => (
         <IssueContainer key={issue["id"]}>
-          <IssueEntry issue={issue} meeting={true} pageEnd={true} meetingId={meetingId} />
+          <IssueEntry issue={issue} pageEnd={true} meetingId={meetingId} />
         </IssueContainer>
       ));
     };
