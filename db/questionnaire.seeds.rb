@@ -755,8 +755,8 @@ title: "Weekly Reflection").first_or_initialize.update(steps: [
     id: 1,
     options: [],
     metadata: {
-      summary: "what-happened",
-      message: "What happened this week:"
+      summary: "improvements",
+      message: "Ideas to make my days better:"
     },
     trigger: 2
   },
@@ -764,31 +764,22 @@ title: "Weekly Reflection").first_or_initialize.update(steps: [
     id: 2,
     options: [],
     metadata: {
-      summary: "improvements",
-      message: "Ideas to make my days better:"
+      summary: "highest-good",
+      message: "Areas where I spent time that wasn't for my highest good:"
     },
     trigger: 3
   },
   {
-    id: 3,
-    options: [],
-    metadata: {
-      summary: "highest-good",
-      message: "Areas where I spent time that wasn't for my highest good:"
-    },
-    trigger: 4
-  },
-  {
-    id: 4, 
+    id: 3, 
     options: [],
     metadata: {
       summary: "wins",
       message: "My wins:"
     },
-    trigger: 5
+    trigger: 4
   },
   {
-    id: 5,
+    id: 4,
     message: "What was my biggest win from this week?",
     trigger: "biggest-wins"
   },
@@ -798,19 +789,19 @@ title: "Weekly Reflection").first_or_initialize.update(steps: [
     metadata: {
       journalQuestion: "Biggest win from this week:"
     },
-    trigger: 7
+    trigger: 6
   },
   {
-    id: 7,
+    id: 6,
     options: [],
     metadata: {
       summary: "lessons",
       message: "My lessons learned:"
     },
-    trigger: 8
+    trigger: 7
   },
   {
-    id: 8,
+    id: 7,
     message: "What was my biggest lessons learned from this week?",
     trigger: "biggest-lesson"
   },
@@ -820,10 +811,10 @@ title: "Weekly Reflection").first_or_initialize.update(steps: [
     metadata: {
       journalQuestion: "Biggest lesson learned from this week:"
     },
-    trigger: 10
+    trigger: 9
   },
   {
-    id: 10,
+    id: 9,
     message: "What's my takeaway from the information above and what can I leverage from it going forward?",
     trigger: "takeaway"
   },
@@ -833,10 +824,10 @@ title: "Weekly Reflection").first_or_initialize.update(steps: [
     metadata: {
       journalQuestion: "My weekly takeaway and what I can take from this week that will help me in the future:"
     },
-    trigger: 12
+    trigger: 11
   },
   {
-    id: 12,
+    id: 11,
     message: "Who had the greatest influence on me this week?  How did they influence me?",
     trigger: "influence"
   },
@@ -846,10 +837,10 @@ title: "Weekly Reflection").first_or_initialize.update(steps: [
     metadata: {
       journalQuestion: "Greatest influence this week:"
     },
-    trigger: 14
+    trigger: 13
   },
   {
-    id: 14,
+    id: 13,
     options: [],
     metadata: {
       summary: "gratitude",
@@ -858,10 +849,10 @@ title: "Weekly Reflection").first_or_initialize.update(steps: [
         pm: "Evening"
       }
     },
-    trigger: 15
+    trigger: 14
   },
   {
-    id: 15,
+    id: 14,
     message: "What am I most grateful for this week?",
     trigger: "grateful"
   },
@@ -871,24 +862,59 @@ title: "Weekly Reflection").first_or_initialize.update(steps: [
     metadata: {
       journalQuestion: "Gratitude:"
     },
+    trigger: 16
+  },
+  {
+    id: 16,
+    options: [],
+    metadata: {
+      summary: "what-happened",
+      message: "What happened this week:"
+    },
     trigger: 17
   },
   {
     id: 17,
-    message: "Thoughts and reflections on this week:",
-    trigger: "thoughts-reflections"
+    message: "Looking back, what was the most signifact thing that happened this week? (in one sentence)",
+    trigger: "significant-happening"
   },
   {
-    id: "thoughts-reflections",
+    id: "significant-happening",
     user: true,
     metadata: {
-      journalQuestion: "Weekly reflection"
+      journalQuestion: "Significant happening this week:"
     },
     trigger: 19
   },
   {
     id: 19,
-    message: "What is happening next week that I need to account for in my plans?",
+    message: "How did this make me feel? (3-5 emotions)",
+    trigger: "weekly-emotions"
+  },
+  {
+    id: "weekly-emotions",
+    user: true,
+    metadata: {
+      journalQuestion: "Weekly emotions:"
+    },
+    trigger: 21
+  },
+  {
+    id: 21,
+    message: "Why is this signifact or imporant to me? (Keep asking why until you get to the root of it)",
+    trigger: "weekly-importance"
+  },
+  {
+    id: "weekly-importance",
+    user: true,
+    metadata: {
+      journalQuestion: "Important/significant things that happened this week:"
+    },
+    trigger: 23
+  },
+  {
+    id: 23,
+    message: "Looking forward now, what is happening next week that I need to account for in my plans?",
     trigger: "account-for"
   },
   {
@@ -897,10 +923,10 @@ title: "Weekly Reflection").first_or_initialize.update(steps: [
     metadata: {
       journalQuestion: "What I have to account for in the next week:"
     },
-    trigger: 21
+    trigger: 25
   },
   {
-    id: 21,
+    id: 25,
     message: "What could stand in the way?",
     trigger: "stand"
   },
@@ -910,10 +936,10 @@ title: "Weekly Reflection").first_or_initialize.update(steps: [
     metadata: {
       journalQuestion: "What could stand in the way:"
     },
-    trigger: 23
+    trigger: 27
   },
   {
-    id: 23, 
+    id: 27, 
     message: "How can I overcome this?",
     trigger: "overcome"
   },
@@ -923,11 +949,11 @@ title: "Weekly Reflection").first_or_initialize.update(steps: [
     metadata: {
       journalQuestion: "How I will overcome this:"
     },
-    trigger: 25
+    trigger: 29
   },
   {
-    id: 25,
-    message: "Great job!  It's time to move onto planning for your week",
+    id: 29,
+    message: "Weekly Reflection is complete!",
     end: true
   }
 ]
@@ -959,22 +985,297 @@ title: "Monthly Reflection").first_or_initialize.update(steps: [
     options: [],
     metadata: {
       summary: "wins",
-      message: "My wins:"
+      message: "My wins from this week:"
     },
     trigger: 4
   },
   {
     id: 4,
-    message: "What was my biggest win from this month?",
-    trigger: "biggest-wins"
+    message: "What was my biggest win from this week?",
+    trigger: "biggest-wins-this-week"
   },
   {
-    id: "biggest-wins",
+    id: "biggest-wins-this-week",
+    user: true,
+    metadata: {
+      journalQuestion: "Biggest win from this week:"
+    },
+    trigger: 6
+  },
+  {
+    id: 6, 
+    options: [],
+    metadata: {
+      summary: "wins-month",
+      message: "My wins from this month:"
+    },
+    trigger: 7
+  },
+  {
+    id: 7,
+    message: "What was my biggest win from this month?",
+    trigger: "biggest-win-this-month"
+  },
+  {
+    id: "biggest-wins-this-month",
     user: true,
     metadata: {
       journalQuestion: "Biggest win from this month:"
     },
-    trigger: 6
+    trigger: 9
+  },
+  {
+    id: 9,
+    options: [],
+    metadata: {
+      summary: "lessons",
+      message: "My lessons learned this week:"
+    },
+    trigger: 10
+  },
+  {
+    id: 10,
+    message: "What was my biggest lessons learned from this week?",
+    trigger: "biggest-lesson-this-week"
+  },
+  {
+    id: "biggest-lesson-this-week",
+    user: true,
+    metadata: {
+      journalQuestion: "Biggest lesson learned from this week:"
+    },
+    trigger: 10
+  },
+  {
+    id: 10,
+    options: [],
+    metadata: {
+      summary: "lessons-month",
+      message: "My lessons learned this month:"
+    },
+    trigger: 11
+  },
+  {
+    id: 11,
+    message: "What was my biggest lessons learned from this week?",
+    trigger: "biggest-lession-this-month",
+  },
+  {
+    id: "biggest-lesson-this-month",
+    user: true,
+    metadata: {
+      journalQuestion: "Biggest lesson learned from this month:"
+    },
+    trigger: 13
+  },
+  {
+    id: 13,
+    message: "What's my takeaway from the information above and what can I leverage from it going forward?",
+    trigger: "weekly-takeaway"
+  },
+  {
+    id: "weekly-takeaway",
+    user: true,
+    metadata: {
+      journalQuestion: "My weekly takeaway and what I can take from this week that will help me in the future:"
+    },
+    trigger: 15
+  },
+  {
+    id: 15,
+    options: [],
+    metadata: {
+      summary: "monthly-takeaways",
+      message: "My takeaways from this month:"
+    },
+    trigger: 16
+  },
+  {
+    id: 16,
+    message: "What's my biggest takeaway this month?",
+    trigger: "monthly-takeaway"
+  },
+  {
+    id: "monthly-takeaway",
+    user: true,
+    metadata: {
+      journalQuestion: "My monthly takeaway and what I can take from this month that will help me in the future:"
+    },
+    trigger: 18
+  },
+  {
+    id: 18,
+    message: "Who had the greatest influence on me this week?  How did they influence me?",
+    trigger: "influence"
+  },
+  {
+    id: "influence",
+    user: true,
+    metadata: {
+      journalQuestion: "Greatest influence this week:"
+    },
+    trigger: 20
+  },
+  {
+    id: 20,
+    options: [],
+    metadata: {
+      summary: "gratitude",
+      message: {
+        am: "Morning",
+        pm: "Evening"
+      }
+    },
+    trigger: 21
+  },
+  {
+    id: 21,
+    message: "What am I most grateful for this week?",
+    trigger: "weekly-grateful"
+  },
+  {
+    id: "weekly-grateful",
+    user: true,
+    metadata: {
+      journalQuestion: "Weekly Gratitude:"
+    },
+    trigger: 23
+  },
+  {
+    id: 23,
+    options: [],
+    metadata: {
+      summary: "gratitude-month",
+      message: "My gratitude from this month"
+    },
+    trigger: 24
+  },
+  {
+    id: 24,
+    message: "What am I most grateful for this month?",
+    trigger: "monthly-grateful"
+  },
+  {
+    id: "monthly-grateful",
+    user: true,
+    metadata: {
+      journalQuestion: "Monthly Gratitude:"
+    },
+    trigger: 26
+  },
+  {
+    id: 26,
+    options: [],
+    metadata: {
+      summary: "what-happened",
+      message: "What happened this week:"
+    },
+    trigger: 27
+  },
+  {
+    id: 27,
+    message: "Looking back, what was the most signifact thing that happened this week? (in one sentence)",
+    trigger: "significant-happening"
+  },
+  {
+    id: "significant-happening",
+    user: true,
+    metadata: {
+      journalQuestion: "Significant happening this week:"
+    },
+    trigger: 29
+  },
+  {
+    id: 29,
+    message: "How did this make me feel? (3-5 emotions)",
+    trigger: "weekly-emotions"
+  },
+  {
+    id: "weekly-emotions",
+    user: true,
+    metadata: {
+      journalQuestion: "Weekly emotions:"
+    },
+    trigger: 31
+  },
+  {
+    id: 31,
+    message: "Why is this signifact or imporant to me? (Keep asking why until you get to the root of it)",
+    trigger: "weekly-importance"
+  },
+  {
+    id: "weekly-importance",
+    user: true,
+    metadata: {
+      journalQuestion: "Important/significant things that happened this week:"
+    },
+    trigger: 33
+  },
+  {
+    id: 33,
+    options: [],
+    metadata: {
+      summary: "what-happened-month",
+      message: "These are the important things that happened this month:"
+    },
+    trigger: 34
+  },
+  {
+    id: 34,
+    message: "What is the one imporant thing that happened this month that I want to share?",
+    trigger: "most-important-this-month"
+  },
+  {
+    id: "most-important-this-month",
+    user: true,
+    metadata: {
+      journalQuestion: "Most Important/significant thing that happened this month that I want to share:"
+    },
+    trigger: 36
+  },
+  {
+    id: 36,
+    message: "Looking forward now, what is happening next week that I need to account for in my plans?",
+    trigger: "account-for"
+  },
+  {
+    id: "account-for",
+    user: true,
+    metadata: {
+      journalQuestion: "What I have to account for in the next week:"
+    },
+    trigger: 38
+  },
+  {
+    id: 38,
+    message: "What could stand in the way?",
+    trigger: "stand"
+  },
+  {
+    id: "stand",
+    user: true,
+    metadata: {
+      journalQuestion: "What could stand in the way:"
+    },
+    trigger: 40
+  },
+  {
+    id: 40, 
+    message: "How can I overcome this?",
+    trigger: "overcome"
+  },
+  {
+    id: "overcome",
+    user: true,
+    metadata: {
+      journalQuestion: "How I will overcome this:"
+    },
+    trigger: 42
+  },
+  {
+    id: 25,
+    message: "Monthly Reflection is complete!",
+    end: true
   }
 ]
 )
