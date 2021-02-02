@@ -19,7 +19,9 @@ export const Section1MeetingDetails = observer(
       <Container>
         <SectionContainer>
           <MonthContainer>
-            <Heading type={"h3"}>{moment(meeting.scheduledStartTime).format("MMMM")}</Heading>
+            <Heading type={"h3"} mt={"auto"} mb={"auto"}>
+              {moment(meeting.scheduledStartTime).format("MMMM")}
+            </Heading>
           </MonthContainer>
           <ForumTopic disabled={false} teamMembers={teamMembers} meeting={meeting} />
         </SectionContainer>

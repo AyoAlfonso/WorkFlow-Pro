@@ -89,12 +89,12 @@ export const ForumTopic = observer(
         );
       } else {
         return (
-          <>
+          <TopicOwnerContainer>
             <ImageContainer>
-              <Icon icon={disabled ? "User" : "New-User"} size={"30px"} iconColor={"grey80"} />
+              <StyledIcon icon={disabled ? "User" : "New-User"} size={"30px"} />
             </ImageContainer>
             <AddMemberText>Add a member</AddMemberText>
-          </>
+          </TopicOwnerContainer>
         );
       }
     };
@@ -173,7 +173,7 @@ const HostedByName = styled(Text)`
 
 const ImageContainer = styled.div`
   border-radius: 9999px;
-  border: ${props => `3px solid ${props.theme.colors.grey80}`};
+  border: ${props => `3px solid ${props.theme.colors.greyInactive}`};
   width: 42px;
   height: 42px;
   display: flex;
@@ -182,5 +182,22 @@ const ImageContainer = styled.div`
 
 const AddMemberText = styled(HostedByName)`
   font-style: italic;
-  color: ${props => props.theme.colors.grey80};
+  color: ${props => props.theme.colors.greyActive};
+`;
+
+const StyledIcon = styled(Icon)`
+  color: ${props => props.theme.colors.greyInactive};
+`;
+
+const TopicOwnerContainer = styled.div`
+  display: flex;
+  &:hover ${AddMemberText} {
+    font-weight: bold;
+  }
+  &:hover ${StyledIcon} {
+    color: ${props => props.theme.colors.greyActive};
+  }
+  &:hover ${ImageContainer} {
+    border-color: ${props => props.theme.colors.greyActive};
+  }
 `;
