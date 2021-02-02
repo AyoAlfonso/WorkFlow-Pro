@@ -4,7 +4,7 @@ class Api::ForumsController < Api::ApplicationController
   def create_meetings_for_year
     @team = Team.find(params[:team_id])
     authorize @team, policy_class: ForumTeamPolicy
-    service = ForumMeetingSetupService.new(current_user, @team, params[:fiscal_year])
+    service = ForumMeetingSetupService.new(current_user, @team, @team.company.current_fiscal_start_date.year)
     service.call
     
     @meetings = service.fetch_meetings_for_year

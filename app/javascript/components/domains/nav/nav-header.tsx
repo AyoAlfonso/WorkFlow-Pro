@@ -6,7 +6,7 @@ import { Text } from "~/components/shared/text";
 }
 
 export const NavHeader = styled(Text)`
-  font-size: 20px;
+  font-size: 32px;
   font-weight: bold;
   margin: 0;
 `;

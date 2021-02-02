@@ -69,42 +69,44 @@ export const Section1 = observer(
         <HeaderContainer>
           <NavHeader>{t("forum.section1")}</NavHeader>
         </HeaderContainer>
-        <SubHeaderContainer>
-          <MonthContainer>
-            <StyledHomeTitle>{forumStore.currentForumYear}</StyledHomeTitle>
-          </MonthContainer>
-          <SectionContainer>
-            <ColumnContainer>{t("forum.explorationTopic.whoTitle")}</ColumnContainer>
-            <ColumnContainer>{t("forum.explorationTopic.topicTitle")}</ColumnContainer>
-          </SectionContainer>
-        </SubHeaderContainer>
-
-        {forumStore.forumYearMeetings.map(meeting => {
-          return (
-            <Section1MeetingDetails
-              key={`meeting-${meeting.id}`}
-              meeting={meeting}
-              teamMembers={toJS(currentTeam.users)}
-            />
-          );
-        })}
 
         {forumStore.forumYearMeetings.length < 12 ? (
           <StyledButton
             small
             variant={"grey"}
             onClick={() => {
-              forumStore.createMeetingsForYear(
-                forumStore.currentForumTeamId,
-                forumStore.currentForumYear,
-              );
+              forumStore.createMeetingsForYear(forumStore.currentForumTeamId);
             }}
           >
             <Icon icon={"Plus"} size={"20px"} />
             <ButtonText>Create forum meetings</ButtonText>
           </StyledButton>
         ) : (
-          <></>
+          <>
+            <SubHeaderContainer>
+              <YearPlanContainer>
+                <StyledHomeTitle>{forumStore.currentForumYear} Plan</StyledHomeTitle>
+              </YearPlanContainer>
+              <SectionContainer>
+                <ColumnContainer>
+                  <SubHeaderText>{t("forum.explorationTopic.whoTitle")}</SubHeaderText>
+                </ColumnContainer>
+                <ColumnContainer>
+                  <SubHeaderText>{t("forum.explorationTopic.topicTitle")}</SubHeaderText>
+                </ColumnContainer>
+              </SectionContainer>
+            </SubHeaderContainer>
+
+            {forumStore.forumYearMeetings.map(meeting => {
+              return (
+                <Section1MeetingDetails
+                  key={`meeting-${meeting.id}`}
+                  meeting={meeting}
+                  teamMembers={toJS(currentTeam.users)}
+                />
+              );
+            })}
+          </>
         )}
       </Container>
     );
@@ -130,11 +132,27 @@ const ButtonText = styled(Text)`
   margin-left: 15px;
 `;
 
-const StyledHomeTitle = styled(HomeTitle)`
+const StyledHomeTitle = styled.div`
   margin-top: 25px;
   margin-bottom: 10px;
+  font-size: 20pt;
+  font-weight: 600;
+  font-family: Exo;
+  margin-top: auto;
+  margin-bottom: auto;
 `;
 
 const SubHeaderContainer = styled.div`
   display: flex;
+  height: 50px;
+  margin-bottom: 20px;
+`;
+
+const SubHeaderText = styled(Text)`
+  font-weight: bold;
+`;
+
+const YearPlanContainer = styled.div`
+  width: 216px;
+  margin-top: auto;
 `;
