@@ -87,16 +87,16 @@ export const JournalBody = ({
         />
         <IconButton
           {...defaultJournalButtonProps}
-          iconName={"PM-Check-in"}
-          iconColor={"primary40"}
+          iconName={"Weekly"}
+          iconColor={"primaryActive"}
           text={t("journals.weeklyReflectionTitle")}
           onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.weeklyReflection)}
           disabled={R.path(["profile", "currentDailyLog", "weeklyReflection"], sessionStore)}
         />
         <IconButton
           {...defaultJournalButtonProps}
-          iconName={"PM-Check-in"}
-          iconColor={"primary40"}
+          iconName={"EoM"}
+          iconColor={"fuschiaBlue"}
           text={t("journals.monthlyReflection")}
           onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.monthlyReflection)}
           disabled={R.path(["profile", "currentDailyLog", "monthlyReflection"], sessionStore)}
