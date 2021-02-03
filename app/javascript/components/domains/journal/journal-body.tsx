@@ -178,7 +178,7 @@ const SpeechBubble = styled.div`
 const FooterText = styled(TextDiv)`
   display: flex;
   flex-direction: row;
-  justify-content: start;
+  justify-content: flex-start;
   font-size: 9px;
   margin-top: 16px;
 `;

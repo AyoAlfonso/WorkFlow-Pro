@@ -74,9 +74,13 @@ class User < ApplicationRecord
     QuestionnaireAttempt.of_questionnaire_type("Weekly Reflection").where(completed_at: (self.time_in_user_timezone.beginning_of_week + 1.days)..(self.time_in_user_timezone.end_of_week + 1.days)).present?
   end
 
+  def monthly_reflection_complete
+    QuestionnaireAttempt.of_questionnaire_type("Monthly Reflection").where(completed_at: (self.time_in_user_timezone.beginning_of_week + 1.days)..(self.time_in_user_timezone.end_of_week + 1.days)).present?
+  end
+
   def current_daily_log
     if self.persisted?
-      daily_logs.select(:id, :work_status, :create_my_day, :evening_reflection, :mip_count, :weekly_reflection).where(log_date: self.time_in_user_timezone).first_or_create(mip_count: self.todays_priorities.count, weekly_reflection: self.weekly_reflection_complete)
+      daily_logs.select(:id, :work_status, :create_my_day, :evening_reflection, :mip_count, :weekly_reflection, :monthly_reflection).where(log_date: self.time_in_user_timezone).first_or_create(mip_count: self.todays_priorities.count, weekly_reflection: self.weekly_reflection_complete, monthly_reflection: self.monthly_reflection_complete)
     end
   end
 

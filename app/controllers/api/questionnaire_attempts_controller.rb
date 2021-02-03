@@ -69,7 +69,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
         when "happenings"
           summary[:happenings].push({value: rs[:value], day: day_of_the_week})
         when "weekly-happenings"
-          summary[:weekly_happenings].push({value: rs[:value], week: week_of_the_month})
+          summary[:weekly_happenings].push({value: rs[:value], week: how_many_weeks_ago})
         when "improvements"
           summary[:improvements].push({value: rs[:value], day: day_of_the_week})
         when "highest-good"
@@ -77,17 +77,17 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
         when "wins"
           summary[:wins].push({value: rs[:value], day: day_of_the_week})
         when "weekly-wins"
-          summary[:weekly_wins].push({value: rs[:value], week: week_of_the_month})
+          summary[:weekly_wins].push({value: rs[:value], week: how_many_weeks_ago})
         when "lessons"
           summary[:lessons].push({value: rs[:value], day: day_of_the_week})
         when "weekly-lessons"
-          summary[:weekly_lessons].push({value: rs[:value], week: week_of_the_month})
+          summary[:weekly_lessons].push({value: rs[:value], week: how_many_weeks_ago})
         when "gratitudes-am"
           summary[:gratitudes_am].push({value: rs[:value], day: day_of_the_week})
         when "gratitudes-pm"
           summary[:gratitudes_pm].push({value: rs[:value], day: day_of_the_week})
         when "weekly-gratitudes"
-          summary[:weekly_gratitudes].push({value: rs[:value], week: week_of_the_month})
+          summary[:weekly_gratitudes].push({value: rs[:value], week: how_many_weeks_ago})
         end
       end
     end

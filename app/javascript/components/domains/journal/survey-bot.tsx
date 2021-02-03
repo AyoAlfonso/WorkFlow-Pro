@@ -85,7 +85,7 @@ export const SurveyBot = observer(
         return R.assoc("message", R.replace("{mipCheck}", mipCheck, step.message))(step);
       } else if (R.hasPath(["metadata", "validatorType"], step)) {
         return R.assoc("validator", stringValidator, step);
-      } else if (R.path(["metadata", "summary"], step) === "gratitude") {
+      } else if (R.path(["metadata", "summary"], step) === "gratitudes") {
         return R.pipe(
           R.assoc(
             "component",

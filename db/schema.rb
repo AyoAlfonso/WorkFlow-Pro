@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_29_011046) do
+ActiveRecord::Schema.define(version: 2021_02_03_202724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(version: 2021_01_29_011046) do
     t.boolean "evening_reflection", default: false
     t.integer "mip_count"
     t.boolean "weekly_reflection", default: false
+    t.boolean "monthly_reflection", default: false
     t.index ["user_id"], name: "index_daily_logs_on_user_id"
   end
 

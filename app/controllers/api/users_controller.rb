@@ -88,7 +88,7 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def user_update_params
-    params.require(:user).permit(:id, :password, :password_confirmation, :first_name, :last_name, :personal_vision, :email, :timezone, :user_role_id, :default_selected_company_id, :title, daily_logs_attributes: [:id, :work_status, :create_my_day, :evening_reflection, :title, :mip_count, :weekly_reflection])
+    params.require(:user).permit(:id, :password, :password_confirmation, :first_name, :last_name, :personal_vision, :email, :timezone, :user_role_id, :default_selected_company_id, :title, daily_logs_attributes: [:id, :work_status, :create_my_day, :evening_reflection, :title, :mip_count, :weekly_reflection, :monthly_reflection])
   end
 
   def set_user
