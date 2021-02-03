@@ -228,7 +228,10 @@
         "today": "Today",
         "lastSevenDays": "Last 7 Days",
         "lastThirtyDays": "Last 30 Days",
-        "lastNinetyDays": "Last 90 Days"
+        "lastNinetyDays": "Last 90 Days",
+        "thisWeek": "This Week",
+        "thisMonth": "This Month",
+        "thisQuarter": "This Quarter"
       },
       "datePicker": {
         "dueDate": "Due Date",

@@ -22,6 +22,19 @@ module HasFiscalYear
     current_time <= current_year_fiscal_year_start ? current_year_fiscal_year_start - 1.year : current_year_fiscal_year_start
   end
 
+  def current_quarter_start_date
+    case self.current_fiscal_quarter
+    when 1
+      current_fiscal_start_date
+    when 2
+      self.second_quarter_start_date
+    when 3
+      self.third_quarter_start_date
+    else
+      self.fourth_quarter_start_date
+    end
+  end
+
   def next_quarter_start_date
     case self.current_fiscal_quarter
     when 1
@@ -122,4 +135,6 @@ module HasFiscalYear
       {year: year, start_date: date_for_start_on(year)}
     }
   end
+
+  
 end

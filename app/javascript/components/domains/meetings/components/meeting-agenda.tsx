@@ -94,4 +94,7 @@ const TopicOwnerName = styled(Text)`
   margin-left: 5px;
 `;
 
-const StepTopicContainer = styled.div``;
+const StepTopicContainer = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
+`;

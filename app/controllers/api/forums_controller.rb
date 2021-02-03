@@ -22,7 +22,7 @@ class Api::ForumsController < Api::ApplicationController
         AND scheduled_start_time <= ?               
         AND meeting_templates.meeting_type = ?",
         params[:team_id], params[:start_date].to_date(), params[:end_date].to_date(), 2
-    )
+      ).order(:scheduled_start_time)
     render 'api/meetings/index'
   end
 end
