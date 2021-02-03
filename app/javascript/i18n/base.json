@@ -195,9 +195,10 @@
         "title": "Issues"
       },
       "journals": {
-        "createMyDay": "Let's create my day",
+        "createMyDay": "Morning Routine",
         "thoughtChallenge": "I want to check-in",
-        "eveningReflection": "I want to reflect on my day",
+        "eveningReflection": "Evening Reflection",
+        "monthlyReflection": "Monthly Reflection",
         "title": "Journal",
         "headerNavTitle": "Journals",
         "indexTitle": "Journal Entries",

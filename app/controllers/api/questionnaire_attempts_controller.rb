@@ -48,7 +48,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
       return
     end
 
-    summary = {what_happened: [], improvements: [], highest_good: [], wins: [], lessons: [], gratitude_am: [], gratitude_pm: []}
+    summary = {what_happened: [], improvements: [], highest_good: [], wins: [], weekly_wins: [], lessons: [], weekly_lessons: [], gratitude_am: [], gratitude_pm: []}
 
     @questionnaire_attempts.each do |qa|
       day_of_the_week = qa.completed_at.strftime('%A')
@@ -62,8 +62,12 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
           summary[:highest_good].push({value: rs[:value], day: day_of_the_week})
         when "wins"
           summary[:wins].push({value: rs[:value], day: day_of_the_week})
+        when "weekly-wins"
+          summary[:weekly_wins].push({value: rs[:value], week: week_of_the_month})
         when "lessons"
           summary[:lessons].push({value: rs[:value], day: day_of_the_week})
+        when "weekly-lessons"
+          summary[:weekly_lessons].push({value: rs[:value], week: week_of_the_month})
         when "gratitude-am"
           summary[:gratitude_am].push({value: rs[:value], day: day_of_the_week})
         when "gratitude-pm"

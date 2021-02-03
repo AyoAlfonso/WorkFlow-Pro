@@ -67,7 +67,7 @@ export const JournalBody = ({
             text={t("journals.thoughtChallenge")}
             onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.thoughtChallenge)}
           /> */}
-        <IconButton
+        {/* <IconButton
           {...defaultJournalButtonProps}
           iconName={"Check-in"}
           iconColor={"successGreen"}
@@ -76,7 +76,7 @@ export const JournalBody = ({
           fontStyle={"italic"}
           onClick={() => {}}
           disabled={true}
-        />
+        /> */}
         <IconButton
           {...defaultJournalButtonProps}
           iconName={"PM-Check-in"}
@@ -84,6 +84,22 @@ export const JournalBody = ({
           text={t("journals.eveningReflection")}
           onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.eveningReflection)}
           disabled={R.path(["profile", "currentDailyLog", "eveningReflection"], sessionStore)}
+        />
+        <IconButton
+          {...defaultJournalButtonProps}
+          iconName={"PM-Check-in"}
+          iconColor={"primary40"}
+          text={t("journals.weeklyReflectionTitle")}
+          onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.weeklyReflection)}
+          disabled={R.path(["profile", "currentDailyLog", "weeklyReflection"], sessionStore)}
+        />
+        <IconButton
+          {...defaultJournalButtonProps}
+          iconName={"PM-Check-in"}
+          iconColor={"primary40"}
+          text={t("journals.monthlyReflection")}
+          onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.monthlyReflection)}
+          disabled={R.path(["profile", "currentDailyLog", "monthlyReflection"], sessionStore)}
         />
       </ButtonContainer>
     </AccordionDetailsContainer>
