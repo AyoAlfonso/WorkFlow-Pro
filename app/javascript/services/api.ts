@@ -99,6 +99,9 @@ export class Api {
   }
 
   async signOut() {
+    this.client.setHeaders({
+      "Current-Company-ID": "",
+    });
     return this.client.delete("/users/sign_out");
   }
 
