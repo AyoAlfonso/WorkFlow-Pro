@@ -8,19 +8,24 @@ import { useTranslation } from "react-i18next";
 interface ITeamMeetingButtonProps {
   handleMeetingClick: any;
   buttonText?: string;
+  disabled?: boolean;
 }
 
 export const TeamMeetingButton = ({
   handleMeetingClick,
   buttonText = "Team Meeting",
+  disabled = false,
 }: ITeamMeetingButtonProps): JSX.Element => {
   const { t } = useTranslation();
   return (
     <Container
       small
       variant={"primary"}
+      disabled={disabled}
       onClick={() => {
-        handleMeetingClick();
+        if (!disabled) {
+          handleMeetingClick();
+        }
       }}
     >
       <ButtonTextContainer>

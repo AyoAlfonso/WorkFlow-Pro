@@ -12,16 +12,20 @@ import ContentEditable from "react-contenteditable";
 import { useRef, useState, useEffect } from "react";
 import { useRefCallback } from "~/components/shared/content-editable-hooks";
 interface ISelectedMeetingAgendaEntry {
-  selectedMeeting: any;
+  selectedMeetingId: string | number;
 }
 
 export const SelectedMeetingAgendaEntry = observer(
-  ({ selectedMeeting }: ISelectedMeetingAgendaEntry) => {
+  ({ selectedMeetingId }: ISelectedMeetingAgendaEntry) => {
     const { t } = useTranslation();
     const {
       teamStore: { teams },
       forumStore,
     } = useMst();
+
+    const selectedMeeting = forumStore.searchedForumMeetings.find(
+      meeting => meeting.id == selectedMeetingId,
+    );
 
     const locationRef = useRef(null);
     const [location, setLocation] = useState<string>("");

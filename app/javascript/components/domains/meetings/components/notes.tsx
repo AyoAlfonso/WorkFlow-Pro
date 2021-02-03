@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMst } from "~/setup/root";
 import MeetingTypes from "~/constants/meeting-types";
 import { Editor } from "react-draft-wysiwyg";
@@ -19,11 +19,14 @@ export const Notes = ({ meeting, height }: NotesProps): JSX.Element => {
 
   const meetingType = meeting.meetingType;
 
-  const convertedMeetingNotes = htmlToDraft(meeting.notes ? meeting.notes : "");
-  const contentState = ContentState.createFromBlockArray(convertedMeetingNotes.contentBlocks);
-  const editorState = EditorState.createWithContent(contentState);
+  const [editorText, setEditorText] = useState<any>(null);
 
-  const [editorText, setEditorText] = useState<any>(editorState || EditorState.createEmpty());
+  useEffect(() => {
+    const convertedMeetingNotes = htmlToDraft(meeting.notes ? meeting.notes : "");
+    const contentState = ContentState.createFromBlockArray(convertedMeetingNotes.contentBlocks);
+    const editorState = EditorState.createWithContent(contentState);
+    setEditorText(editorState || EditorState.createEmpty());
+  }, [meeting.notes]);
 
   return (
     <Container>

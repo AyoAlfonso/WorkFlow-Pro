@@ -77,6 +77,12 @@ export const ForumStoreModel = types
           forumYearMeetings[meetingToUpdateIndex] = response.data;
           self.forumYearMeetings = forumYearMeetings;
           //may need to merge like updateMeeting in meetingStore
+          let searchedForumMeetings = self.searchedForumMeetings;
+          let searchedForumMeetingIndex = searchedForumMeetings.findIndex(
+            meeting => meeting.id == response.data.id,
+          );
+          searchedForumMeetings[searchedForumMeetingIndex] = response.data;
+          self.searchedForumMeetings = searchedForumMeetings;
         }
       } catch {
         //caught by Api Monitor
