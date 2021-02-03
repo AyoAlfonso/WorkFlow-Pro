@@ -10,6 +10,7 @@ import { Loading } from "../../shared/loading";
 import { MIPSelector } from "./mip-selector";
 import { EmotionSelector } from "./emotion-selector";
 import { baseTheme } from "~/themes/base";
+import { SummaryDisplay } from "~/components/shared/questionnaire/summary-display";
 
 export interface ISurveyBotProps {
   variant: string;
@@ -30,9 +31,11 @@ export const SurveyBot = observer(
       },
       questionnaireStore,
       keyActivityStore,
+      meetingStore
     } = useMst();
 
     useEffect(() => {
+      meetingStore.getPersonalPlanningSummary();
       questionnaireStore.load().then(() => {
         setLoading(false);
       });
@@ -40,12 +43,15 @@ export const SurveyBot = observer(
     }, []);
 
     const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
-
+    const summaryData = meetingStore.personalPlanningSummary;
+    
     if (
       loading ||
       R.isNil(questionnaireStore.questionnaires) ||
       R.isNil(questionnaireVariant) ||
-      R.isNil(keyActivityStore.todaysPriorities)
+      R.isNil(keyActivityStore.todaysPriorities) ||
+      R.isNil(sessionStore.profile) ||
+      R.isNil(meetingStore.personalPlanningSummary)
     ) {
       return (
         <LoadingContainer>
@@ -79,6 +85,37 @@ export const SurveyBot = observer(
         return R.assoc("message", R.replace("{mipCheck}", mipCheck, step.message))(step);
       } else if (R.hasPath(["metadata", "validatorType"], step)) {
         return R.assoc("validator", stringValidator, step);
+      } else if (R.path(["metadata", "summary"], step) === "gratitude") {
+        return R.pipe(
+          R.assoc(
+            "component",
+            <>
+              <SummaryDisplay
+                summaryData={summaryData}
+                variant={`${R.path(["metadata", "summary"], step)}Am`}
+                title={R.path(["metadata", "message", "am"], step)}
+              />
+              <SummaryDisplay
+                summaryData={summaryData}
+                variant={`${R.path(["metadata", "summary"], step)}Pm`}
+                title={R.path(["metadata", "message", "pm"], step)}
+              />
+            </>,
+          ),
+          R.dissoc("options"),
+        )(step);
+      } else if (R.hasPath(["metadata", "summary"], step)) {
+        return R.pipe(
+          R.assoc(
+            "component",
+            <SummaryDisplay
+              summaryData={summaryData}
+              variant={R.path(["metadata", "summary"], step)}
+              title={R.path(["metadata", "message"], step)}
+            />,
+          ),
+          R.dissoc("options"),
+        )(step);
       } else {
         return step;
       }

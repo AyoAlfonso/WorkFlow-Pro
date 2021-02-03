@@ -48,14 +48,28 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
       return
     end
 
-    summary = {what_happened: [], improvements: [], highest_good: [], wins: [], weekly_wins: [], lessons: [], weekly_lessons: [], gratitude_am: [], gratitude_pm: []}
+    summary = {
+      happenings: [], 
+      weekly_happenings: [], 
+      improvements: [], 
+      highest_good: [], 
+      wins: [], 
+      weekly_wins: [], 
+      lessons: [], 
+      weekly_lessons: [], 
+      gratitudes_am: [], 
+      gratitudes_pm: [],
+      weekly_gratitudes: []
+    }
 
     @questionnaire_attempts.each do |qa|
       day_of_the_week = qa.completed_at.strftime('%A')
       qa.rendered_steps.each do |rs|
         case rs[:id]
-        when "what-happened"
-          summary[:what_happened].push({value: rs[:value], day: day_of_the_week})
+        when "happenings"
+          summary[:happenings].push({value: rs[:value], day: day_of_the_week})
+        when "weekly-happenings"
+          summary[:weekly_happenings].push({value: rs[:value], week: week_of_the_month})
         when "improvements"
           summary[:improvements].push({value: rs[:value], day: day_of_the_week})
         when "highest-good"
@@ -68,10 +82,12 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
           summary[:lessons].push({value: rs[:value], day: day_of_the_week})
         when "weekly-lessons"
           summary[:weekly_lessons].push({value: rs[:value], week: week_of_the_month})
-        when "gratitude-am"
-          summary[:gratitude_am].push({value: rs[:value], day: day_of_the_week})
-        when "gratitude-pm"
-          summary[:gratitude_pm].push({value: rs[:value], day: day_of_the_week})
+        when "gratitudes-am"
+          summary[:gratitudes_am].push({value: rs[:value], day: day_of_the_week})
+        when "gratitudes-pm"
+          summary[:gratitudes_pm].push({value: rs[:value], day: day_of_the_week})
+        when "weekly-gratitudes"
+          summary[:weekly_gratitudes].push({value: rs[:value], week: week_of_the_month})
         end
       end
     end

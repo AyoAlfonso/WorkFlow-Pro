@@ -29,7 +29,7 @@ export const SummaryDisplay = ({
       <DataContainer>
         {R.isEmpty(dataForDisplay) || R.isNil(dataForDisplay) ? (
           <Text fontSize={"12px"} fontWeight={400}>
-            No Data
+            No entries. PynBot can help you each evening to journal better!
           </Text>
         ) : (
           dataForDisplay.map((summaryDataEl, index) => {
