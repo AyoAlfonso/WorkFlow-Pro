@@ -21,6 +21,8 @@ export const CompanyModel = types
     accountabilityChartContent: types.maybeNull(types.string),
     strategicPlanContent: types.maybeNull(types.string),
     fiscalYearRange: types.maybeNull(types.array(types.frozen())),
+    currentQuarterStartDate: types.maybeNull(types.string),
+    nextQuarterStartDate: types.maybeNull(types.string),
   })
   .views(self => ({
     get accessCompany() {

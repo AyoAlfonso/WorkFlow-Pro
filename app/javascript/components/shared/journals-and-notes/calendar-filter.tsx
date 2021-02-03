@@ -27,6 +27,7 @@ interface ICalendarFilterProps {
   width?: string;
   minDate?: any;
   maxDate?: any;
+  customFilterOptions?: any;
 }
 
 export const CalendarFilter = ({
@@ -43,10 +44,11 @@ export const CalendarFilter = ({
   width,
   minDate,
   maxDate,
+  customFilterOptions,
 }: ICalendarFilterProps) => {
   const { t } = useTranslation();
 
-  const filterOptions = [
+  const filterOptions = customFilterOptions || [
     {
       label: t("dateFilters.today"),
       selection: {
@@ -115,7 +117,7 @@ export const CalendarFilter = ({
         </Heading>
       </HeadingContainer>
       <BodyContainer>
-        <FilterContainer>
+        <StyledFilterContainer>
           <Card headerComponent={<CardHeaderText fontSize={"16px"}>Filter</CardHeaderText>}>
             {renderDateFilterOptions()}
             <DateRange
@@ -139,7 +141,7 @@ export const CalendarFilter = ({
             />
           </Card>
           {additionalComponentsBelow}
-        </FilterContainer>
+        </StyledFilterContainer>
         {additionalBodyComponents}
       </BodyContainer>
     </Container>
@@ -152,4 +154,8 @@ type ContainerProps = {
 
 const Container = styled.div<ContainerProps>`
   width: ${props => props.width};
+`;
+
+const StyledFilterContainer = styled(FilterContainer)`
+  overflow-y: auto;
 `;

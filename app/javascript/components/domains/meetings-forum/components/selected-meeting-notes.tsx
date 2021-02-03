@@ -25,7 +25,9 @@ export const SelectedMeetingNotes = ({ selectedMeeting }: ISelectedMeetingNotes)
 const Container = styled(Card)`
   padding-left: 15px;
   padding-right: 15px;
-  width: 500px;
+  width: 50%;
+  min-width: 400px;
+  padding-bottom: 50px;
 `;
 
 const NotesHeader = styled.div``;
