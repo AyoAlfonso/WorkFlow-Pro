@@ -14,3 +14,10 @@
 // For example, to change the default status-tag color:
 //
 //   .status_tag { background: #6090DB; }
+
+.active_admin {
+  form trix-editor {
+    margin-left: 20%;
+    width: calc(80% - 17px);
+  }
+}

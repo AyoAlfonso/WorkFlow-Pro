@@ -99,9 +99,7 @@ ActiveAdmin.register MeetingTemplate do
       step.input :link_embed, input_html: { rows: 2 }
       step.input :override_key, input_html: { rows: 1 }
 
-      step.input :description_text, as: :text, input_html: {rows: 3, value: step.object.description_text.to_plain_text}
-      #rich_text_area does not work with has_many at the moement
-      # step.rich_text_area :description_text 
+      step.input :description_text, as: :action_text 
 
       step.input :image, as: :file, hint: (step.object.try(:image_url) ? image_tag(step.object.image_url, style: "max-height: 150px;") : "No Image Selected")
     end
