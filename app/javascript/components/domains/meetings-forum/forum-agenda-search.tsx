@@ -7,6 +7,7 @@ import {
   NoSelectedItems,
 } from "~/components/shared/journals-and-notes";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { addDays } from "date-fns";
 import { CalendarFilter } from "~/components/shared/journals-and-notes/calendar-filter";
@@ -20,13 +21,16 @@ import { Text } from "~/components/shared/text";
 import { SelectedMeetingAgendaEntry } from "./components/selected-meeting-agenda-entry";
 import { SelectedMeetingNotes } from "./components/selected-meeting-notes";
 import { TeamMeetingButton } from "~/components/shared/team-meeting-button";
+import MeetingTypes from "~/constants/meeting-types";
 
 export const ForumAgendaSearch = observer(() => {
   const { t } = useTranslation();
+  const history = useHistory();
   const {
     forumStore,
     teamStore: { teams },
     companyStore,
+    meetingStore,
   } = useMst();
 
   const teamId = forumStore.currentForumTeamId || R.path([0, "id"], toJS(teams));
@@ -115,22 +119,26 @@ export const ForumAgendaSearch = observer(() => {
   };
 
   const handleMeetingClick = () => {
-    // meetingStore.startNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
-    //   if (!R.isNil(meeting)) {
-    //     history.push(`/team/${team_id}/meeting/${meeting.id}`);
-    //   }
-    // })
-    console.log("hello world");
+    meetingStore
+      .startNextMeeting(selectedMeeting.teamId, MeetingTypes.FORUM_MONTHLY)
+      .then(({ meeting }) => {
+        if (!R.isNil(meeting)) {
+          history.push(`/team/${meeting.teamId}/meeting/${meeting.id}`);
+        }
+      });
   };
 
   const renderSelectedEntry = () => {
     if (selectedMeeting) {
       return (
         <>
-          <TeamMeetingButton handleMeetingClick={handleMeetingClick} />
+          <TeamMeetingButton
+            handleMeetingClick={handleMeetingClick}
+            disabled={!moment(selectedMeeting.scheduledStartTime).isSame(moment(), "month")}
+          />
           <SelectedEntryContainer>
-            <SelectedMeetingAgendaEntry selectedMeeting={selectedMeeting} />
-            <SelectedMeetingNotes selectedMeeting={selectedMeeting} />
+            <SelectedMeetingAgendaEntry selectedMeetingId={selectedMeeting.id} />
+            <SelectedMeetingNotes selectedMeetingId={selectedMeeting.id} />
           </SelectedEntryContainer>
         </>
       );
