@@ -3,7 +3,10 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { Icon } from "~/components/shared/icon";
-import { TextNoMargin } from "~/components/shared/text";
+import { 
+  TextDiv, 
+  TextNoMargin
+} from "~/components/shared/text";
 import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
 import { useMst } from "../../../setup/root";
 import { IconButton } from "../../shared/icon-button";
@@ -101,6 +104,11 @@ export const JournalBody = ({
           onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.monthlyReflection)}
           disabled={R.path(["profile", "currentDailyLog", "monthlyReflection"], sessionStore)}
         />
+        <FooterText 
+          color={"greyActive"} 
+        >
+          {t("journals.footer")}
+        </FooterText>
       </ButtonContainer>
     </AccordionDetailsContainer>
   )
@@ -123,8 +131,7 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: auto;
-  padding: 16px;
+  padding: 8px;
 `;
 
 const PynBotSpeechContainer = styled.div`
@@ -166,4 +173,12 @@ const SpeechBubble = styled.div`
   text-align: center;
   text-overflow: ellipsis;
   width: 70%;
+`;
+
+const FooterText = styled(TextDiv)`
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  font-size: 9px;
+  margin-top: 16px;
 `;

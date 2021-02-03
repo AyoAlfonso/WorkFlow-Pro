@@ -211,7 +211,8 @@
         "selectEntry": "Select an entry to see your records",
         "emptyList": "Empty list?",
         "startAdding": "Start adding to your journal by talking to Pynbot, your virtual coach!",
-        "viewEntries": "View Entries"
+        "viewEntries": "View Entries",
+        "footer": "Your journals entries are encrypted and only available to you."
       },
       "notes": {
         "headerNavTitle": "Notes",
