@@ -2,7 +2,7 @@ class Questionnaire < ApplicationRecord
   serialize :steps, Array
   has_many :questionnaire_attempts
 
-  enum limit_type: { no_limit: 0, once_per_day: 1, once_per_week: 2 }
+  enum limit_type: { no_limit: 0, once_per_day: 1, once_per_week: 2, once_per_month: 3 }
 
   has_paper_trail
 

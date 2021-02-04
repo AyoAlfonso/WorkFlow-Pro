@@ -92,7 +92,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
           summary[:weekly_gratitudes].push({value: rs[:value]})
         when "weekly-emotions"
           summary[:weekly_emotions].push({value: rs[:value]})
-        when "weekl-importances"
+        when "weekly-importances"
           summary[:weekly_importances].push({value: rs[:value]})
         end
       end
