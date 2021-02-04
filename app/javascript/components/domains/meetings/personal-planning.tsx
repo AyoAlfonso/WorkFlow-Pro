@@ -24,13 +24,20 @@ export interface ITeamMeetingProps {}
 
 export const PersonalPlanning = observer(
   (props: ITeamMeetingProps): JSX.Element => {
-    const { meetingStore } = useMst();
+    const [loading, setLoading] = useState<boolean>(true);
+    const { 
+      meetingStore,
+      companyStore 
+    } = useMst();
     const { meeting_id } = useParams(); // team id from url params
     const history = useHistory();
 
     useEffect(() => {
       meetingStore.getPersonalMeeting(meeting_id);
       meetingStore.getPersonalPlanningSummary();
+      companyStore.load().then(() => {
+        setLoading(false);
+      });
     }, []);
 
     const renderLoading = () => (

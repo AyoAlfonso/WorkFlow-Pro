@@ -25,6 +25,7 @@ import { TeamIssues } from "./components/team-issues";
 import { MeetingSideOptions } from "./meeting-side-options";
 import { ParkingLot } from "~/components/domains/meetings-forum/components/parking-lot";
 import { ExplorationTopic } from "~/components/domains/meetings-forum/components/exploration-topic";
+import { MonthlyReflection } from "~/components/domains/meetings-forum/components/monthly-reflection";
 
 export interface IMeetingStepProps {
   meeting: IMeeting;
@@ -66,6 +67,8 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
           return <ParkingLot upcomingForumMeeting={meeting} />;
         case "ExplorationTopic":
           return <ExplorationTopic />;
+        case "MonthlyReflection":
+          return <MonthlyReflection />;
         default:
           return <Text>This custom component has not been configured</Text>;
       }

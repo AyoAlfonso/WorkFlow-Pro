@@ -1,7 +1,7 @@
 class Api::QuestionnaireAttemptsController <  Api::ApplicationController 
   respond_to :json
 
-  before_action :skip_authorization, only: [:personal_planning]
+  before_action :skip_authorization, only: [:questionnaire_summary]
 
   def create
     json_representation = {
@@ -38,16 +38,22 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
     render json: @current_daily_log
   end
 
-  def personal_planning
-    questionnaire = Questionnaire.find(params[:questionnaire_id])
-
-    case questionnaire.name
-    when "Weekly Reflection"
-      questionnaire_attempts_for_weekly
-    when "Monthly Reflection"
-      questionnaire_attempts_for_monthly
+  def questionnaire_summary
+    if params[:questionnaire_id].present?
+      questionnaire = Questionnaire.find(params[:questionnaire])
+      case questionnaire.name
+      when "Weekly Reflection"
+        questionnaire_attempts_for_weekly
+      when "Monthly Reflection"
+        questionnaire_attempts_for_monthly
+      end
+    else
+      if current_company.display_format === "Company"
+        questionnaire_attempts_for_weekly
+      else
+        questionnaire_attempts_for_monthly
+      end
     end
-
     summary = {
       what_happened: [], 
       improvements: [], 

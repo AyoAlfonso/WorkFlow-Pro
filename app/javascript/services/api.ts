@@ -360,7 +360,7 @@ export class Api {
   }
 
   async getSummaryForPersonalMeeting() {
-    return this.client.get(`questionnaire_attempts/personal_planning_summary`);
+    return this.client.get(`questionnaire_attempts/questionnaire_summary`);
   }
 
   async getTeamGoals(teamId) {

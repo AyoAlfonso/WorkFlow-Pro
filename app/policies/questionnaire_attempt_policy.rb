@@ -3,7 +3,7 @@ class QuestionnaireAttemptPolicy < ApplicationPolicy
     true
   end
 
-  def personal_planning?
+  def questionnaire_summary?
     true
   end
 

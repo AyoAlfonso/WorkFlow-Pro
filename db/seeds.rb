@@ -17,7 +17,7 @@ User.where(email: "parham@lynchpyn.com").first_or_create!(first_name: 'Parham', 
 if Rails.env.development?
   c1 = Company.where(name: "Latero Labs").first_or_create(name: 'Latero Labs', address: '601-510 W Hastings St, Vancouver, BC V6B 1L8', contact_email: 'inquiries@laterolabs.com', phone_number: '604-933-5091', rallying_cry: 'LynchPyn Goal!', fiscal_year_start: Date.new(2020,01,01), timezone: "(GMT-08:00) Pacific Time (US & Canada)")
   CoreFour.where(company: c1).first_or_create(core_1: 'The First Core', core_2: 'The Second Core', core_3: 'The Third Core', core_4: 'The Fourth Core', company: c1)
-  c3 = Company.where(name: "Latero Labs Forum").first_or_create(name: 'Latero Labs Forum', address: '601-510 W Hastings St, Vancouver, BC V6B 1L8', contact_email: 'inquiries@laterolabs.com', phone_number: '604-933-5091', rallying_cry: 'LynchPyn Goal!', fiscal_year_start: Date.new(2020,01,01), timezone: "(GMT-08:00) Pacific Time (US & Canada)")
+  c3 = Company.where(name: "Latero Labs Forum").first_or_create(name: 'Latero Labs Forum', address: '601-510 W Hastings St, Vancouver, BC V6B 1L8', contact_email: 'inquiries@laterolabs.com', phone_number: '604-933-5091', rallying_cry: 'LynchPyn Goal!', fiscal_year_start: Date.new(2020,01,01), timezone: "(GMT-08:00) Pacific Time (US & Canada)", display_format: 1)
   CoreFour.where(company: c3).first_or_create(core_1: 'The First Core', core_2: 'The Second Core', core_3: 'The Third Core', core_4: 'The Fourth Core', company: c3)
 
   t1 = Team.where(name: "Development Team").first_or_create(name: "Development Team", company_id: c1.id)
@@ -44,6 +44,26 @@ if Rails.env.development?
   TeamUserEnablement.where(user_id: u7.id).first_or_create(team_id: t2.id, user_id: u7.id, role: "team_member")
   TeamUserEnablement.where(user_id: u8.id).first_or_create(team_id: t2.id, user_id: u8.id, role: "team_member")
   TeamUserEnablement.where(user_id: u9.id).first_or_create(team_id: t1.id, user_id: u9.id, role: "team_lead")
+
+  UserCompanyEnablement.where(user_id: u1.id).first_or_create(user_id: u1.id, company_id: c1.id, user_role_id: ur1.id)
+  UserCompanyEnablement.where(user_id: u2.id).first_or_create(user_id: u2.id, company_id: c1.id, user_role_id: ur2.id)
+  UserCompanyEnablement.where(user_id: u3.id).first_or_create(user_id: u3.id, company_id: c1.id, user_role_id: ur4.id)
+  UserCompanyEnablement.where(user_id: u4.id).first_or_create(user_id: u4.id, company_id: c1.id, user_role_id: ur1.id)
+  UserCompanyEnablement.where(user_id: u5.id).first_or_create(user_id: u5.id, company_id: c1.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u6.id).first_or_create(user_id: u6.id, company_id: c1.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u7.id).first_or_create(user_id: u7.id, company_id: c1.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u8.id).first_or_create(user_id: u8.id, company_id: c1.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u9.id).first_or_create(user_id: u9.id, company_id: c1.id, user_role_id: ur2.id)
+
+  UserCompanyEnablement.where(user_id: u1.id).first_or_create(user_id: u1.id, company_id: c3.id, user_role_id: ur1.id)
+  UserCompanyEnablement.where(user_id: u2.id).first_or_create(user_id: u2.id, company_id: c3.id, user_role_id: ur2.id)
+  UserCompanyEnablement.where(user_id: u3.id).first_or_create(user_id: u3.id, company_id: c3.id, user_role_id: ur4.id)
+  UserCompanyEnablement.where(user_id: u4.id).first_or_create(user_id: u4.id, company_id: c3.id, user_role_id: ur1.id)
+  UserCompanyEnablement.where(user_id: u5.id).first_or_create(user_id: u5.id, company_id: c3.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u6.id).first_or_create(user_id: u6.id, company_id: c3.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u7.id).first_or_create(user_id: u7.id, company_id: c3.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u8.id).first_or_create(user_id: u8.id, company_id: c3.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u9.id).first_or_create(user_id: u9.id, company_id: c3.id, user_role_id: ur2.id)
 
   ai_1 = AnnualInitiative.where(description: "Purchase company vehicles for transportation").first_or_create(
     company_id: c1.id, 
