@@ -65,6 +65,16 @@ export const QuestionnaireStoreModel = types
         // caught by Api monitor
       }
     }),
+    getQuestionnaireAttemptsSummaryForReflections: flow(function*(questionnaireId) {
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.getQuestionnaireAttemptsSummaryForReflections(
+          questionnaireId
+        );
+        self.questionnaireAttemptsSummary = response.data;
+      } catch {
+        // caught by Api Monitor
+      }
+    }),
   }))
   .actions(self => ({
     reset() {

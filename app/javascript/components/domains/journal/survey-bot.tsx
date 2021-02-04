@@ -31,19 +31,18 @@ export const SurveyBot = observer(
       },
       questionnaireStore,
       keyActivityStore,
-      meetingStore
     } = useMst();
 
+    const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
+    
     useEffect(() => {
-      meetingStore.getPersonalPlanningSummary();
       questionnaireStore.load().then(() => {
         setLoading(false);
       });
       window.closeWidget();
     }, []);
-
-    const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
-    const summaryData = meetingStore.personalPlanningSummary;
+    
+    const summaryData = questionnaireStore.questionnaireAttemptsSummary;
     
     if (
       loading ||
@@ -51,14 +50,16 @@ export const SurveyBot = observer(
       R.isNil(questionnaireVariant) ||
       R.isNil(keyActivityStore.todaysPriorities) ||
       R.isNil(sessionStore.profile) ||
-      R.isNil(meetingStore.personalPlanningSummary)
-    ) {
+      R.isNil(summaryData)
+      ) {
       return (
         <LoadingContainer>
           <Loading />
         </LoadingContainer>
       );
     }
+
+    questionnaireStore.getQuestionnaireAttemptsSummaryForReflections(questionnaireVariant.id)
 
     const stringValidator = value => (value ? true : "Write just a little bit!");
 

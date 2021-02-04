@@ -375,5 +375,9 @@ export class Api {
     return this.client.get("/forum/search_meetings_by_date_range", { startDate, endDate, teamId })
   }
 
+  async getQuestionnaireAttemptsSummaryForReflections(questionnaireId) {
+    return this.client.get(`questionnaire_attempts/questionnaire_summary/${questionnaireId}`)
+  }
+
   //async setJWT(jwt) {}
 }

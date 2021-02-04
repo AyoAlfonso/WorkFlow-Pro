@@ -40,7 +40,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
 
   def questionnaire_summary
     if params[:questionnaire_id].present?
-      questionnaire = Questionnaire.find(params[:questionnaire])
+      questionnaire = Questionnaire.find(params[:questionnaire_id])
       case questionnaire.name
       when "Weekly Reflection"
         questionnaire_attempts_for_weekly
@@ -54,6 +54,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
         questionnaire_attempts_for_monthly
       end
     end
+    
     summary = {
       what_happened: [], 
       improvements: [], 
