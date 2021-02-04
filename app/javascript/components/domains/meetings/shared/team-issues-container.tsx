@@ -2,8 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { TeamIssuesHeader } from "./team-issues-header";
 import { TeamIssuesBody } from "./team-issues-body";
-import { useTranslation } from "react-i18next";
-
+import { CardLayout } from "~/components/layouts/card-layout";
 interface TeamIssuesContainerProps {
   teamId: number | string;
   title: string;
@@ -11,17 +10,20 @@ interface TeamIssuesContainerProps {
 
 export const TeamIssuesContainer = ({ teamId, title }: TeamIssuesContainerProps): JSX.Element => {
   const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
-  const { t } = useTranslation();
 
   return (
-    <>
-      <TeamIssuesHeader
-        showOpenIssues={showOpenIssues}
-        setShowOpenIssues={setShowOpenIssues}
-        issuesText={title}
-        teamId={teamId}
-      />
+    <CardLayout
+      customHeader={
+        <TeamIssuesHeader
+          showOpenIssues={showOpenIssues}
+          setShowOpenIssues={setShowOpenIssues}
+          issuesText={title}
+          teamId={teamId}
+        />
+      }
+      height={"100%"}
+    >
       <TeamIssuesBody showOpenIssues={showOpenIssues} teamId={teamId} />
-    </>
+    </CardLayout>
   );
 };
