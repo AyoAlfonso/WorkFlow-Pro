@@ -49,45 +49,51 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
     end
 
     summary = {
-      happenings: [], 
-      weekly_happenings: [], 
+      what_happened: [], 
       improvements: [], 
       highest_good: [], 
       wins: [], 
-      weekly_wins: [], 
       lessons: [], 
+      gratitude_am: [], 
+      gratitude_pm: [],
+      weekly_wins: [], 
       weekly_lessons: [], 
-      gratitudes_am: [], 
-      gratitudes_pm: [],
-      weekly_gratitudes: []
+      weekly_happenings: [],
+      weekly_gratitudes: [],
+      weekly_emotions: [],
+      weekly_importances: []
     }
 
     @questionnaire_attempts.each do |qa|
       day_of_the_week = qa.completed_at.strftime('%A')
       qa.rendered_steps.each do |rs|
         case rs[:id]
-        when "happenings"
-          summary[:happenings].push({value: rs[:value], day: day_of_the_week})
-        when "weekly-happenings"
-          summary[:weekly_happenings].push({value: rs[:value], week: how_many_weeks_ago})
+        when "what-happened"
+          summary[:what_happened].push({value: rs[:value], day: day_of_the_week})
         when "improvements"
           summary[:improvements].push({value: rs[:value], day: day_of_the_week})
         when "highest-good"
           summary[:highest_good].push({value: rs[:value], day: day_of_the_week})
         when "wins"
           summary[:wins].push({value: rs[:value], day: day_of_the_week})
-        when "weekly-wins"
-          summary[:weekly_wins].push({value: rs[:value], week: how_many_weeks_ago})
         when "lessons"
           summary[:lessons].push({value: rs[:value], day: day_of_the_week})
+        when "gratitude-am"
+          summary[:gratitude_am].push({value: rs[:value], day: day_of_the_week})
+        when "gratitude-pm"
+          summary[:gratitude_pm].push({value: rs[:value], day: day_of_the_week})
+        when "weekly-wins"
+          summary[:weekly_wins].push({value: rs[:value]})
         when "weekly-lessons"
-          summary[:weekly_lessons].push({value: rs[:value], week: how_many_weeks_ago})
-        when "gratitudes-am"
-          summary[:gratitudes_am].push({value: rs[:value], day: day_of_the_week})
-        when "gratitudes-pm"
-          summary[:gratitudes_pm].push({value: rs[:value], day: day_of_the_week})
+          summary[:weekly_lessons].push({value: rs[:value]})
+        when "weekly-happenings"
+          summary[:weekly_happenings].push({value: rs[:value]})
         when "weekly-gratitudes"
-          summary[:weekly_gratitudes].push({value: rs[:value], week: how_many_weeks_ago})
+          summary[:weekly_gratitudes].push({value: rs[:value]})
+        when "weekly-emotions"
+          summary[:weekly_emotions].push({value: rs[:value]})
+        when "weekl-importances"
+          summary[:weekly_importances].push({value: rs[:value]})
         end
       end
     end

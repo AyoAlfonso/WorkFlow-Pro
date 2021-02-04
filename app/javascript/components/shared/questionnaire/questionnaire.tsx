@@ -49,7 +49,7 @@ export const Questionnaire = observer(
     const currentPersonalPlanning = meetingStore.currentPersonalPlanning;
 
     const steps = R.map(step => {
-      if (R.path(["metadata", "summary"], step) === "gratitudes") {
+      if (R.path(["metadata", "summary"], step) === "gratitude") {
         return R.pipe(
           R.assoc(
             "component",

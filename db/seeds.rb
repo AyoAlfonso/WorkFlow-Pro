@@ -22,7 +22,7 @@ if Rails.env.development?
 
   t1 = Team.where(name: "Development Team").first_or_create(name: "Development Team", company_id: c1.id)
   t2 = Team.where(name: "Team 2").first_or_create(name: "Team 2", company_id: c1.id)
-  t3 = Team.where(name: "Team 1").first_or_create(name: "Team 1", company_id: c3.id)
+  t3 = Team.where(name: "Team 3").first_or_create(name: "Team 3", company_id: c3.id)
 
   AdminUser.where(email: "admin@example.com").first_or_create(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
   u1 = User.where(email: "sunny@laterolabs.com").first_or_create(first_name: 'Sunny', last_name: 'To', email: 'sunny@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur1.id, title: "Placeholder", default_selected_company_id: c1.id)
@@ -33,7 +33,7 @@ if Rails.env.development?
   u6 = User.where(email: "jeremy@laterolabs.com").first_or_create(first_name: 'Jeremy', last_name: 'Paterson', email: 'jeremy@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur2.id, title: "Placeholder", default_selected_company_id: c1.id)
   u7 = User.where(email: "allen@laterolabs.com").first_or_create(first_name: 'Allen', last_name: 'Greer', email: 'allen@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id, title: "Placeholder", default_selected_company_id: c1.id)
   u8 = User.where(email: "shaun@laterolabs.com").first_or_create(first_name: 'Shaun', last_name: 'Schwartz', email: 'shaun@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id, title: "Placeholder", default_selected_company_id: c1.id)
-  u9 = User.where(email: "mani@laterolabs.com").first_or_create(first_name: 'Mani', last_name: 'Jafari', email: 'mani@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id, title: "Placeholder", default_selected_company_id: c1.id)
+  u9 = User.where(email: "mani@laterolabs.com").first_or_create(first_name: 'Mani', last_name: 'Jafari', email: 'mani@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur2.id, title: "Placeholder", default_selected_company_id: c1.id)
 
   TeamUserEnablement.where(user_id: u1.id).first_or_create(team_id: t1.id, user_id: u1.id, role: "team_lead")
   TeamUserEnablement.where(user_id: u2.id).first_or_create(team_id: t1.id, user_id: u2.id, role: "team_member")
@@ -43,6 +43,7 @@ if Rails.env.development?
   TeamUserEnablement.where(user_id: u6.id).first_or_create(team_id: t2.id, user_id: u6.id, role: "team_member")
   TeamUserEnablement.where(user_id: u7.id).first_or_create(team_id: t2.id, user_id: u7.id, role: "team_member")
   TeamUserEnablement.where(user_id: u8.id).first_or_create(team_id: t2.id, user_id: u8.id, role: "team_member")
+  TeamUserEnablement.where(user_id: u9.id).first_or_create(team_id: t1.id, user_id: u9.id, role: "team_lead")
 
   ai_1 = AnnualInitiative.where(description: "Purchase company vehicles for transportation").first_or_create(
     company_id: c1.id, 
