@@ -1,18 +1,26 @@
 import * as React from "react";
-import { useState, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
-import { space, SpaceProps, color, ColorProps } from "styled-system";
+import { space, SpaceProps } from "styled-system";
 import Popup from "reactjs-popup";
 
 import { baseTheme } from "~/themes/base";
 
 import { Icon } from "~/components/shared/icon";
 
+interface IMenuItemProps {
+  onClick?: () => void;
+  option: any;
+}
+
+const MenuItem = ({ onClick, option }: IMenuItemProps): JSX.Element => {
+  return <MenuItemContainer onClick={onClick}>{option.label}</MenuItemContainer>;
+};
+
 interface IMenuOption {
   label: string;
   value: string;
 }
-
 export interface IWidgetHeaderSortButtonMenuProps extends SpaceProps {
   onButtonClick: Dispatch<SetStateAction<boolean>>;
   onMenuItemClick: (value: any) => void;
@@ -49,12 +57,7 @@ export const WidgetHeaderSortButtonMenu = ({
       position="bottom right"
       trigger={
         <ButtonContainer {...restProps} onClick={() => onButtonClick(!menuOpen)}>
-          <Icon
-            icon={"Sort"}
-            size={16}
-            iconColor="grey40"
-            ml={"5px"}
-          />
+          <Icon icon={"Sort"} size={16} iconColor="grey40" ml={"5px"} />
         </ButtonContainer>
       }
     >
@@ -96,12 +99,3 @@ const MenuItemContainer = styled.div`
     cursor: pointer;
   }
 `;
-
-interface IMenuItemProps {
-  onClick?: () => void;
-  option: any;
-}
-
-const MenuItem = ({ onClick, option }): JSX.Element => {
-  return <MenuItemContainer onClick={onClick}>{option.label}</MenuItemContainer>;
-};

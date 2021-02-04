@@ -10,11 +10,11 @@ class Api::TeamIssuesController < Api::ApplicationController
   def update
     @team_issue = TeamIssue.find(params[:id])
     authorize @team_issue
-
-    if team_meeting_params[:meeting_id] && team_meeting_params[:meeting_enabled]
-      @team_issue.team_issue_meeting_enablements.where(meeting_id: team_meeting_params[:meeting_id]).first_or_create(meeting_id: team_meeting_params[:meeting_id])
-    elsif team_meeting_params[:meeting_id] && !team_meeting_params[:meeting_enabled]
-      @team_issue.team_issue_meeting_enablements.find_by(meeting_id: team_meeting_params[:meeting_id])&.destroy
+    
+    if team_meeting_params[:meeting_id]
+      team_meeting_params[:meeting_enabled] ?
+        @team_issue.team_issue_meeting_enablements.where(meeting_id: team_meeting_params[:meeting_id]).first_or_create(meeting_id: team_meeting_params[:meeting_id]) :
+        @team_issue.team_issue_meeting_enablements.find_by(meeting_id: team_meeting_params[:meeting_id])&.destroy
     end
 
     if @team_issue.issue.completed_at.present? && !@team_issue.completed_at.present?

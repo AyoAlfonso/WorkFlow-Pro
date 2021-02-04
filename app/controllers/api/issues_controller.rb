@@ -92,10 +92,6 @@ class Api::IssuesController < Api::ApplicationController
     params.permit(:user_id, :description, :completed_at, :priority, :team_id, :position)
   end
 
-  def team_meeting_issue_params
-
-  end
-
   def set_issue
     @issue = policy_scope(Issue).find(params[:id])
     authorize @issue

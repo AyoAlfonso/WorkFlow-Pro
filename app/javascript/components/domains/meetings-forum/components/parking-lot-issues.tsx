@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { color } from "styled-system";
 import { useMst } from "~/setup/root";
@@ -79,7 +79,7 @@ export const ParkingLotIssues = observer(
             ml={"15px"}
           />
         </FilterContainer>
-        <Container>
+        <CreateIssueContainer>
           <CreateIssueModal
             createIssueModalOpen={createIssueModalOpen}
             setCreateIssueModalOpen={setCreateIssueModalOpen}
@@ -100,7 +100,7 @@ export const ParkingLotIssues = observer(
               </IssuesContainer>
             )}
           </Droppable>
-        </Container>
+        </CreateIssueContainer>
       </>
     );
   },
@@ -132,7 +132,7 @@ export const FilterContainer = styled.div`
   align-items: center;
 `;
 
-export const Container = styled.div`
+export const CreateIssueContainer = styled.div`
   padding: 0px 0px 15px 0px;
 `;
 

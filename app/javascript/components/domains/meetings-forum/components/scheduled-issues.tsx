@@ -1,7 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { color } from "styled-system";
+import { useState } from "react";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/new-widget-header-sort-button-menu";
@@ -9,22 +7,19 @@ import { useTranslation } from "react-i18next";
 import { CreateIssueModal } from "../../issues/create-issue-modal";
 import { Icon } from "~/components/shared";
 import { IssueEntry } from "../../issues/issue-entry";
-import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import { ITeamIssue } from "~/models/team-issue";
 
 import {
   HeaderContainer,
   HeaderText,
   SubHeaderText,
   FilterContainer,
-  Container,
+  CreateIssueContainer,
   AddNewIssuePlus,
   AddNewIssueText,
   AddNewIssueContainer,
   IssuesContainer,
   IssueContainer,
-  IssuesContainerType,
   Count,
 } from "./parking-lot-issues";
 interface ScheduledIssuesProps {
@@ -55,31 +50,6 @@ export const ScheduledIssues = observer(
         meetingId: upcomingForumMeeting.id,
       });
     };
-
-    // const renderIssue = (teamIssue: ITeamIssue, index: number): JSX.Element => (
-    //   <Draggable
-    //     draggableId={`team_issue-${teamIssue.id}:meeting_id-${upcomingForumMeeting.id}`}
-    //     index={index}
-    //     key={teamIssue["id"]}
-    //     type={"team-issue"}
-    //   >
-    //     {provided => (
-    //       <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
-    //         <IssueEntry
-    //           issue={teamIssue.issue}
-    //           meetingId={upcomingForumMeeting.id}
-    //           dragHandleProps={...provided.dragHandleProps}
-    //           pageEnd={true}
-    //         />
-    //       </IssueContainer>
-    //     )}
-    //   </Draggable>
-    // );
-
-    //sample
-    // {issueStore.openMeetingScheduledTeamIssues.map((teamIssue, index) =>
-    //   renderIssue(teamIssue, index),
-    // )}
 
     const renderIssuesList = (): Array<JSX.Element> => {
       return issueStore.openMeetingScheduledTeamIssues.map((teamIssue, index) => (
@@ -119,7 +89,7 @@ export const ScheduledIssues = observer(
             ml={"15px"}
           />
         </FilterContainer>
-        <Container>
+        <CreateIssueContainer>
           <CreateIssueModal
             createIssueModalOpen={createIssueModalOpen}
             setCreateIssueModalOpen={setCreateIssueModalOpen}
@@ -141,7 +111,7 @@ export const ScheduledIssues = observer(
               </IssuesContainer>
             )}
           </Droppable>
-        </Container>
+        </CreateIssueContainer>
       </>
     );
   },

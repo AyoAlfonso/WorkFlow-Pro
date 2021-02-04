@@ -49,20 +49,18 @@ const Container = styled.div`
   flex-direction: row;
 `;
 
-const LeftContainer = styled.div`
+const SubContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 50%;
   margin-top: 5px;
   margin-bottom: 5px;
+`;
+
+const LeftContainer = styled(SubContainer)`
   margin-right: 4px;
 `;
 
-const RightContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  margin-top: 5px;
-  margin-bottom: 5px;
+const RightContainer = styled(SubContainer)`
   margin-left: 4px;
 `;
