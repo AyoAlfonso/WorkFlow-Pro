@@ -66,6 +66,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
 
     @questionnaire_attempts.each do |qa|
       day_of_the_week = qa.completed_at.strftime('%A')
+      day_of_the_month = qa.completed_at.strftime('%b %-d')
       qa.rendered_steps.each do |rs|
         case rs[:id]
         when "what-happened"
@@ -83,17 +84,17 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
         when "gratitude-pm"
           summary[:gratitude_pm].push({value: rs[:value], day: day_of_the_week})
         when "weekly-wins"
-          summary[:weekly_wins].push({value: rs[:value]})
+          summary[:weekly_wins].push({value: rs[:value], day: day_of_the_month})
         when "weekly-lessons"
-          summary[:weekly_lessons].push({value: rs[:value]})
+          summary[:weekly_lessons].push({value: rs[:value], day: day_of_the_month})
         when "weekly-happenings"
-          summary[:weekly_happenings].push({value: rs[:value]})
+          summary[:weekly_happenings].push({value: rs[:value], day: day_of_the_month})
         when "weekly-gratitudes"
-          summary[:weekly_gratitudes].push({value: rs[:value]})
+          summary[:weekly_gratitudes].push({value: rs[:value], day: day_of_the_month})
         when "weekly-emotions"
-          summary[:weekly_emotions].push({value: rs[:value]})
+          summary[:weekly_emotions].push({value: rs[:value], day: day_of_the_month})
         when "weekly-importances"
-          summary[:weekly_importances].push({value: rs[:value]})
+          summary[:weekly_importances].push({value: rs[:value], day: day_of_the_month})
         end
       end
     end
