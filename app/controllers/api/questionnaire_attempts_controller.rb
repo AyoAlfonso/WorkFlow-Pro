@@ -39,13 +39,13 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
   end
 
   def personal_planning
-    if current_user.time_in_user_timezone.wday == 1 # Monday
-      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).within_last_week(current_user.time_in_user_timezone)
-    elsif [0, 2, 3, 4, 5, 6].include? current_user.time_in_user_timezone.wday # Tuesday to Sunday
-      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).within_current_week(current_user.time_in_user_timezone)
-    else
-      render json: { error: "You can't do your Weekly Personal Planning at this time", status: 412 }
-      return
+    questionnaire = Questionnaire.find(params[:questionnaire_id])
+
+    case questionnaire.name
+    when "Weekly Reflection"
+      questionnaire_attempts_for_weekly
+    when "Monthly Reflection"
+      questionnaire_attempts_for_monthly
     end
 
     summary = {
@@ -116,5 +116,20 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
 
   def emotion_to_score_conversion(rendered_steps)
     rendered_steps.detect { |rs| rs["id"] == "rating" }["value"]
+  end
+
+  def questionnaire_attempts_for_weekly
+    if current_user.time_in_user_timezone.wday == 1 # Monday
+      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).within_last_week(current_user.time_in_user_timezone)
+    elsif [0, 2, 3, 4, 5, 6].include? current_user.time_in_user_timezone.wday # Tuesday to Sunday
+      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).within_current_week(current_user.time_in_user_timezone)
+    else
+      render json: { error: "You can't do your Weekly Personal Planning at this time", status: 412 }
+      return
+    end
+  end
+
+  def questionnaire_attempts_for_monthly
+    @questionnaire_attempts = policy_scope(QuestionnaireAttempt).within_last_four_weeks(current_user.time_in_user_timezone)
   end
 end
