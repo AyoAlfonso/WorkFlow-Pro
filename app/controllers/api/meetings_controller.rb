@@ -144,11 +144,15 @@ class Api::MeetingsController < Api::ApplicationController
     else
       #if it's Monday or Tuesday, 
       @current_week_average_user_emotions = daily_average_users_emotion_scores_over_last_week(current_user)
+      # @current_month_average_user_emotions = daily_average_users_emotion_scores_over_last_month(current_user)
       @current_week_average_team_emotions = average_weekly_emotion_score_over_last_week(current_user)
+      # @current_month_average_team_emotions = average_monthly_emotion_score_over_last_month(current_user)
       @previous_meeting = Meeting.where(hosted_by: current_user, team_id: nil, meeting_template_id: @meeting.meeting_template_id).second_to_last
       @emotion_score_percentage_difference = current_user.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
+      # @emotion_score_percentage_difference_monthly = current_user.compare_monthly_emotion_score(@current_month_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
       @milestones = nil
       @habits_percentage_increase_from_previous_week = current_user.habits_percentage_increase_from_previous_week
+      # @habits_percentage_increase_from_previous_month = current_user.habits_percentage_increase_from_previous_month
       @stats_for_week = calculate_stats_for_week(current_user)
       @stats_for_month = calculate_stats_for_month(current_user)
       @my_current_milestones = Milestone.current_week_for_user(get_next_week_or_current_week_date(current_user.time_in_user_timezone), current_user)

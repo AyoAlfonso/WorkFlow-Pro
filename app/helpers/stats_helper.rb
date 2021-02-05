@@ -48,10 +48,20 @@ module StatsHelper
     current_time.beginning_of_month
   end
 
+  def get_beginning_of_last_month(current_time)
+    current_time.last_month.beginning_of_month
+  end
+
   def daily_average_users_emotion_scores_over_last_week(current_user)
     previous_week_start = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
     previous_week_end = previous_week_start + 6.days
     current_user.daily_average_users_emotion_scores_over_week(previous_week_start, previous_week_end)
+  end
+
+  def daily_average_users_emotion_scores_over_last_month(current_user)
+    previous_month_start = get_beginning_of_last_month(current_user.time_in_user_timezone)
+    previous_month_end = current_user.time_in_user_timezone.last_month.end_of_month
+    current_user.daily_average_users_emotion_scores_over_month(previous_month_start, previous_month_end)
   end
 
   def average_weekly_emotion_score_over_last_week(current_user)

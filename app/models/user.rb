@@ -156,6 +156,10 @@ class User < ApplicationRecord
     daily_average_users_emotion_score(self, from_date, to_date)
   end
 
+  def daily_average_users_emotion_scores_over_month(from_date, to_date)
+    daily_average_users_emotion_score(self, from_date, to_date)
+  end
+
   def team_average_weekly_emotion_score(from_date, to_date)
     overall_average_weekly_emotion_score(self, from_date, to_date)
   end
