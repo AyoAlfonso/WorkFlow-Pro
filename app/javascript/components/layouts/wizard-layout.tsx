@@ -11,6 +11,7 @@ interface IWizardLayoutProps {
   showSkipButton?: boolean;
   leftBodyComponents?: JSX.Element;
   rightBodyComponents?: JSX.Element;
+  steps?: Array<string>;
   currentStep?: number;
 }
 
@@ -20,6 +21,7 @@ export const WizardLayout = ({
   showSkipButton = true,
   leftBodyComponents,
   rightBodyComponents,
+  steps,
   currentStep,
 }: IWizardLayoutProps): JSX.Element => {
   return (
@@ -54,9 +56,9 @@ export const WizardLayout = ({
           <RightBodyContainer> {rightBodyComponents}</RightBodyContainer>
         </BodyContentContainer>
 
-        {currentStep && (
+        {steps && (
           <StepComponentContainer>
-            <SignUpWizardProgressBar currentStep={currentStep} />
+            <SignUpWizardProgressBar stepNames={steps} currentStep={currentStep} />
           </StepComponentContainer>
         )}
       </BodyContainer>

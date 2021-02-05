@@ -237,6 +237,13 @@ export const App = observer(
                         showSkipButton={false}
                         leftBodyComponents={<> Left Component </>}
                         rightBodyComponents={<> Right Component </>}
+                        steps={[
+                          "Tell us more about yourself",
+                          "Your company's Foundation Four \u2122",
+                          "Create your first Goal",
+                          "Add your first Pyn (todo)",
+                          "Add your Team",
+                        ]}
                         currentStep={1}
                       />
                     );

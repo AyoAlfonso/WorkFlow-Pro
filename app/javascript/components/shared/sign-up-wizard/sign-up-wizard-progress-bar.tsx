@@ -6,20 +6,14 @@ import { StepProgressBarIcon } from "../progress-bars";
 import { Text } from "~/components/shared/text";
 
 interface ISignUpWizardProgressBarProps {
+  stepNames: Array<String>;
   currentStep: number;
 }
 
 export const SignUpWizardProgressBar = ({
+  stepNames,
   currentStep,
 }: ISignUpWizardProgressBarProps): JSX.Element => {
-  const stepNames = [
-    "Tell us more about yourself",
-    "Your company's Foundation Four \u2122",
-    "Create your first Goal",
-    "Add your first Pyn (todo)",
-    "Add your Team",
-  ];
-
   const renderIcon = (iconColor, bgColor, iconName) => (
     <IconContainer>
       <StepProgressBarIcon
@@ -50,7 +44,6 @@ export const SignUpWizardProgressBar = ({
                 : renderIcon("white", "grey100", "Chevron-Left")
             }
           </Step>
-          {/* <StepTitle key={index}>{step}</StepTitle> */}
         </StepContainer>
       );
     });
