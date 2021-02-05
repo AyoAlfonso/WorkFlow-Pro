@@ -42,6 +42,7 @@ import { NotesIndex } from "~/components/domains/notes/notes-index";
 import { Section1 } from "./domains/meetings-forum/section-1";
 import { ForumNotSetup } from "./domains/meetings-forum/not-setup";
 import { ForumAgenda } from "./domains/meetings-forum/forum-agenda";
+import { WizardLayout } from "./layouts/wizard-layout";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -216,7 +217,39 @@ export const App = observer(
                 </Container>
               </>
             ) : (
-              <LoginForm />
+              <Switch>
+                <Route
+                  exact
+                  path={"/"}
+                  render={() => {
+                    return <LoginForm />;
+                  }}
+                />
+                <Route
+                  path={"/test_template"}
+                  render={() => {
+                    return (
+                      <WizardLayout
+                        title={"Goals"}
+                        description={
+                          "Goals are things you (and your company) want to achieve in the next 3-12 months."
+                        }
+                        showSkipButton={false}
+                        leftBodyComponents={<> Left Component </>}
+                        rightBodyComponents={<> Right Component </>}
+                        steps={[
+                          "Tell us more about yourself",
+                          "Your company's Foundation Four \u2122",
+                          "Create your first Goal",
+                          "Add your first Pyn (todo)",
+                          "Add your Team",
+                        ]}
+                        currentStep={1}
+                      />
+                    );
+                  }}
+                />
+              </Switch>
             )}
           </ModalProvider>
         </ThemeProvider>

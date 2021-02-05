@@ -14,8 +14,17 @@
  *= require_self
  */
 
+.alert {
+  display: none
+}
+
+.notice {
+  display: none
+}
+
  [contenteditable=true]:empty:before {
   content: attr(placeholder);
   display: block;
   color: #aaa;
 }
+

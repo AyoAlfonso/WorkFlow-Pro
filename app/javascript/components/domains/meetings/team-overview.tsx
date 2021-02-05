@@ -12,7 +12,6 @@ import { Avatar } from "~/components/shared/avatar";
 import { Heading } from "~/components/shared/heading";
 import { Loading } from "~/components/shared/loading";
 import { NoMoodRatings } from "~/components/shared/no-mood-ratings";
-import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
 import { Text } from "~/components/shared/text";
 import MeetingTypes from "~/constants/meeting-types";
 import { ToastMessageConstants } from "~/constants/toast-types";
@@ -21,23 +20,21 @@ import { showToast } from "~/utils/toast-message";
 import { useMst } from "../../../setup/root";
 import { HomePersonalStatusDropdownMenuItem } from "../home/home-personal-status/home-personal-status-dropdown-menu-item";
 import { homePersonalStatusOptions as options } from "../home/home-personal-status/home-personal-status-options";
-import { HomeContainerBorders } from "../home/shared-components";
 import { KeyActivityPriorityIcon } from "../key-activities/key-activity-priority-icon";
 import { FutureTeamMeetingsContainer } from "./shared/future-team-meetings-container";
 import { OverallTeamPulse } from "./shared/overall-team-pulse";
 import { TeamIssuesContainer } from "./shared/team-issues-container";
 import { TeamPulseCard } from "./shared/team-pulse-card";
+import { CardLayout } from "~/components/layouts/card-layout";
 
 interface ITeamOverviewProps {}
 
 export const TeamOverview = observer(
   ({}: ITeamOverviewProps): JSX.Element => {
     const {
-      sessionStore,
       companyStore: { company },
       teamStore,
       meetingStore,
-      forumStore,
     } = useMst();
 
     const { team_id } = useParams();
@@ -169,10 +166,9 @@ export const TeamOverview = observer(
         </HeaderContainer>
         <BodyContainer>
           <LeftContainer>
-            <TeamSnapshotContainer>
-              <ContainerHeaderWithText text={t(`${overviewType}.teamSnapshotTitle`)} />
+            <CardLayout titleText={t(`${overviewType}.teamSnapshotTitle`)}>
               {renderUserSnapshotTable()}
-            </TeamSnapshotContainer>
+            </CardLayout>
           </LeftContainer>
           <RightContainer>
             <TeamMeetingInfoContainer>
@@ -200,8 +196,7 @@ export const TeamOverview = observer(
               </TeamIssuesWrapper>
             </TeamMeetingInfoContainer>
 
-            <TeamPulseContainer>
-              <ContainerHeaderWithText text={t(`${overviewType}.teamsPulseTitle`)} />
+            <CardLayout titleText={t(`${overviewType}.teamsPulseTitle`)}>
               {currentTeam.averageTeamEmotionScore > 0 ? (
                 <TeamPulseBody>
                   <OverallTeamPulse value={currentTeam.averageTeamEmotionScore} />
@@ -214,7 +209,7 @@ export const TeamOverview = observer(
                   <NoMoodRatings />
                 </NoMoodWrapper>
               )}
-            </TeamPulseContainer>
+            </CardLayout>
           </RightContainer>
         </BodyContainer>
       </Container>
@@ -246,15 +241,11 @@ const RightContainer = styled.div`
   margin-left: 10px;
 `;
 
-const TeamSnapshotContainer = styled(HomeContainerBorders)``;
-
-const TeamPulseContainer = styled(HomeContainerBorders)``;
-
-const TeamIssuesWrapper = styled(HomeContainerBorders)`
+const TeamIssuesWrapper = styled.div`
   width: 50%;
 `;
 
-const FutureTeamMeetingsWrapper = styled(HomeContainerBorders)`
+const FutureTeamMeetingsWrapper = styled.div`
   width: 50%;
   margin-right: 20px;
 `;
@@ -332,6 +323,7 @@ const TeamPulseBody = styled.div`
 
 const TeamMeetingInfoContainer = styled.div`
   display: flex;
+  margin-bottom: 20px;
 `;
 
 const CheckboxContainer = props => (

@@ -13,7 +13,7 @@ import { Loading } from "../../shared";
 import { sortByPosition } from "~/utils/sorting";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { HomeContainerBorders } from "../home/shared-components";
-import { AccordionDetails } from '~/components/shared/accordion-components';
+import { AccordionDetails } from "~/components/shared/accordion-components";
 
 interface IIssuesBodyProps {
   showOpenIssues: boolean;
@@ -22,105 +22,108 @@ interface IIssuesBodyProps {
   meetingId?: number | string;
 }
 
-export const IssuesBody = observer(({
-    showOpenIssues,
-    setShowOpenIssues,
-    meetingId,
-    teamId,
-  }: IIssuesBodyProps): JSX.Element => {
-  const { issueStore, sessionStore } = useMst();
-  const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
-  const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
+export const IssuesBody = observer(
+  ({ showOpenIssues, setShowOpenIssues, meetingId, teamId }: IIssuesBodyProps): JSX.Element => {
+    const {
+      issueStore,
+      sessionStore,
+      companyStore: { company },
+    } = useMst();
+    const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
+    const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
 
-  const openIssues = issueStore.openIssues;
-  const closedIssues = issueStore.closedIssues;
+    const openIssues = issueStore.openIssues;
+    const closedIssues = issueStore.closedIssues;
 
-  useEffect(() => {
-    issueStore.fetchIssues();
-  }, []);
+    useEffect(() => {
+      issueStore.fetchIssues();
+    }, []);
 
-  if (R.isNil(issueStore.issues) || R.isNil(sessionStore.profile)) {
-    return <Loading />;
-  }
+    if (R.isNil(issueStore.issues) || R.isNil(sessionStore.profile) || R.isNil(company)) {
+      return <Loading />;
+    }
 
-  const sortMenuOptions = [
-    {
-      label: "Sort by Priority",
-      value: "by_priority",
-    },
-  ];
+    const sortMenuOptions = [
+      {
+        label: "Sort by Priority",
+        value: "by_priority",
+      },
+    ];
 
-  const handleSortMenuItemClick = value => {
-    setSortOptionsOpen(false);
-    issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });
-  };
+    const handleSortMenuItemClick = value => {
+      setSortOptionsOpen(false);
+      issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });
+    };
 
-  const renderIssuesList = (): Array<JSX.Element> => {
-    const issues = showOpenIssues ? openIssues : closedIssues;
-    return sortByPosition(issues.filter(issue => issue.user.id === sessionStore.profile.id)).map(
-      (issue, index) => (
-        <Draggable draggableId={`issue-${issue.id}`} index={index} key={issue.id} type={"issue"}>
-          {provided => (
-            <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
-              <IssueEntry
-                issue={issue}
-                dragHandleProps={...provided.dragHandleProps}
-                leftShareContainer={true}
-              />
-            </IssueContainer>
-          )}
-        </Draggable>
-      ),
-    );
-  };
+    const renderIssuesList = (): Array<JSX.Element> => {
+      const issues = showOpenIssues ? openIssues : closedIssues;
+      return sortByPosition(issues.filter(issue => issue.user.id === sessionStore.profile.id)).map(
+        (issue, index) => (
+          <Draggable draggableId={`issue-${issue.id}`} index={index} key={issue.id} type={"issue"}>
+            {provided => (
+              <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
+                <IssueEntry
+                  issue={issue}
+                  dragHandleProps={...provided.dragHandleProps}
+                  leftShareContainer={true}
+                />
+              </IssueContainer>
+            )}
+          </Draggable>
+        ),
+      );
+    };
 
-  return (
-    <AccordionDetailsContainer>
-      <CreateIssueModal
-        createIssueModalOpen={createIssueModalOpen}
-        setCreateIssueModalOpen={setCreateIssueModalOpen}
-      />
-      <FilterContainer>
-        <FilterOptions
-          onClick={() => setShowOpenIssues(true)}
-          mr={"15px"}
-          color={showOpenIssues ? "primary100" : "grey40"}
-        >
-          Open
-        </FilterOptions>
-        <FilterOptions
-          onClick={() => setShowOpenIssues(false)}
-          color={!showOpenIssues ? "primary100" : "grey40"}
-        >
-          Closed
-        </FilterOptions>
-        <WidgetHeaderSortButtonMenu
-          onButtonClick={setSortOptionsOpen}
-          onMenuItemClick={handleSortMenuItemClick}
-          menuOpen={sortOptionsOpen}
-          menuOptions={sortMenuOptions}
-          ml={"15px"}
+    return (
+      <AccordionDetailsContainer>
+        <CreateIssueModal
+          createIssueModalOpen={createIssueModalOpen}
+          setCreateIssueModalOpen={setCreateIssueModalOpen}
         />
-      </FilterContainer>
-      <Droppable droppableId={"issues-container"} type={"issue"}>
-        {(provided, snapshot) => (
-          <IssuesBodyContainer>
-            <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
-              <AddNewIssuePlus>
-                <Icon icon={"Plus"} size={16} />
-              </AddNewIssuePlus>
-              <AddNewIssueText> Add a New Issue</AddNewIssueText>
-            </AddNewIssueContainer>
-            <IssuesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
-              {renderIssuesList()}
-              {provided.placeholder}
-            </IssuesContainer>
-          </IssuesBodyContainer>
-        )}
-      </Droppable>
-    </AccordionDetailsContainer>
-  );
-});
+        <FilterContainer>
+          <FilterOptions
+            onClick={() => setShowOpenIssues(true)}
+            mr={"15px"}
+            color={showOpenIssues ? "primary100" : "grey40"}
+          >
+            Open
+          </FilterOptions>
+          <FilterOptions
+            onClick={() => setShowOpenIssues(false)}
+            color={!showOpenIssues ? "primary100" : "grey40"}
+          >
+            Closed
+          </FilterOptions>
+          <WidgetHeaderSortButtonMenu
+            onButtonClick={setSortOptionsOpen}
+            onMenuItemClick={handleSortMenuItemClick}
+            menuOpen={sortOptionsOpen}
+            menuOptions={sortMenuOptions}
+            ml={"15px"}
+          />
+        </FilterContainer>
+        <Droppable droppableId={"issues-container"} type={"issue"}>
+          {(provided, snapshot) => (
+            <IssuesBodyContainer>
+              <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
+                <AddNewIssuePlus>
+                  <Icon icon={"Plus"} size={16} />
+                </AddNewIssuePlus>
+                <AddNewIssueText>
+                  {`Add a New ${company.displayFormat == "Forum" ? "Parking Lot" : "Issue"}`}
+                </AddNewIssueText>
+              </AddNewIssueContainer>
+              <IssuesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
+                {renderIssuesList()}
+                {provided.placeholder}
+              </IssuesContainer>
+            </IssuesBodyContainer>
+          )}
+        </Droppable>
+      </AccordionDetailsContainer>
+    );
+  },
+);
 
 const AccordionDetailsContainer = styled(AccordionDetails)`
   padding: 0px 0px 15px 0px;

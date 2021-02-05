@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import { color } from "styled-system";
 import { observer } from "mobx-react";
 import { CreateIssueModal } from "../../issues/create-issue-modal";
-import { Icon } from "~/components/shared";
+import { Icon, Loading } from "~/components/shared";
 import { IssueEntry } from "../../issues/issue-entry";
 import { useMst } from "~/setup/root";
+import * as R from "ramda";
 
 interface ITeamIssuesBodyProps {
   showOpenIssues: boolean;
@@ -16,12 +17,19 @@ interface ITeamIssuesBodyProps {
 
 export const TeamIssuesBody = observer(
   (props: ITeamIssuesBodyProps): JSX.Element => {
-    const { issueStore } = useMst();
+    const {
+      issueStore,
+      companyStore: { company },
+    } = useMst();
     const { showOpenIssues, teamId, meetingId } = props;
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
 
     const openIssues = issueStore.openIssues;
     const closedIssues = issueStore.closedIssues;
+
+    if (R.isNil(company)) {
+      return <Loading />;
+    }
 
     useEffect(() => {
       if (teamId) {
@@ -51,7 +59,9 @@ export const TeamIssuesBody = observer(
           <AddNewIssuePlus>
             <Icon icon={"Plus"} size={16} />
           </AddNewIssuePlus>
-          <AddNewIssueText> Add a New Issue</AddNewIssueText>
+          <AddNewIssueText>
+            {`Add a New ${company.displayFormat == "Forum" ? "Parking Lot" : "Issue"}`}
+          </AddNewIssueText>
         </AddNewIssueContainer>
         <IssuesContainer>{renderIssuesList()}</IssuesContainer>
       </Container>
