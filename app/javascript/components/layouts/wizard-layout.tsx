@@ -69,6 +69,7 @@ export const WizardLayout = ({
 const Container = styled.div`
   display: flex;
   height: 100%;
+  overflow: hidden;
 `;
 
 const DescriptionContainer = styled.div`
