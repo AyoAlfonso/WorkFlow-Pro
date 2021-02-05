@@ -33,24 +33,22 @@ export const SurveyBot = observer(
       keyActivityStore,
     } = useMst();
 
-    const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
     
     useEffect(() => {
-      questionnaireStore.load().then(() => {
+      async function setUp() {
+        await questionnaireStore.load()
+        const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
+        await questionnaireStore.getQuestionnaireAttemptsSummaryForReflections(questionnaireVariant.id)
         setLoading(false);
-      });
-      window.closeWidget();
+        window.closeWidget();
+      }
+      setUp();
     }, []);
-    
-    const summaryData = questionnaireStore.questionnaireAttemptsSummary;
-    
+
     if (
       loading ||
-      R.isNil(questionnaireStore.questionnaires) ||
-      R.isNil(questionnaireVariant) ||
       R.isNil(keyActivityStore.todaysPriorities) ||
-      R.isNil(sessionStore.profile) ||
-      R.isNil(summaryData)
+      R.isNil(sessionStore.profile)
       ) {
       return (
         <LoadingContainer>
@@ -59,8 +57,9 @@ export const SurveyBot = observer(
       );
     }
 
-    questionnaireStore.getQuestionnaireAttemptsSummaryForReflections(questionnaireVariant.id)
-
+    const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
+    const summaryData = questionnaireStore.questionnaireAttemptsSummaryForReflections;
+    
     const stringValidator = value => (value ? true : "Write just a little bit!");
 
     const steps = R.map(step => {

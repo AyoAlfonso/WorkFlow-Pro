@@ -11,6 +11,7 @@ export const QuestionnaireStoreModel = types
     questionnaires: types.array(QuestionnaireModel),
     questionnaireAttempt: types.maybeNull(QuestionnaireAttemptModel),
     questionnaireAttemptsSummary: types.array(QuestionnaireAttemptsDataModel),
+    questionnaireAttemptsSummaryForReflections: types.maybeNull(types.frozen()),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -66,13 +67,15 @@ export const QuestionnaireStoreModel = types
       }
     }),
     getQuestionnaireAttemptsSummaryForReflections: flow(function*(questionnaireId) {
-      try {
-        const response: ApiResponse<any> = yield self.environment.api.getQuestionnaireAttemptsSummaryForReflections(
-          questionnaireId
-        );
-        self.questionnaireAttemptsSummary = response.data;
-      } catch {
-        // caught by Api Monitor
+      const response: ApiResponse<any> = yield self.environment.api.getQuestionnaireAttemptsSummaryForReflections(
+        questionnaireId
+      );
+      
+      if (response.ok) {
+        console.log("From questionnaire store before assigning", response.data)
+        self.questionnaireAttemptsSummaryForReflections = response.data;
+        console.log("From questionnaire store after assigning", self.questionnaireAttemptsSummaryForReflections)
+        return self.questionnaireAttemptsSummaryForReflections;
       }
     }),
   }))
