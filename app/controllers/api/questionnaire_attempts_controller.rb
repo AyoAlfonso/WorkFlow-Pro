@@ -32,7 +32,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
     authorize @questionnaire_attempt
     if @questionnaire_attempt.save!
       @current_daily_log = DailyLog.find(current_user.current_daily_log.id)
-      @current_daily_log[questionnaire.name.delete(' ').underscore] = true unless questionnaire.name == "Thought Challenge"
+      @current_daily_log[questionnaire.name.delete(' ').underscore] = true unless (questionnaire.name == "Thought Challenge" || questionnaire.name == "Monthly Reflection")
       @current_daily_log.save!
     end
     render json: @current_daily_log
@@ -42,6 +42,10 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
     if params[:questionnaire_id].present?
       questionnaire = Questionnaire.find(params[:questionnaire_id])
       case questionnaire.name
+      when "Create My Day"
+        questionnaire_attempts_for_weekly
+      when "Evening Reflection"
+        questionnaire_attempts_for_weekly
       when "Weekly Reflection"
         questionnaire_attempts_for_weekly
       when "Monthly Reflection"
@@ -54,7 +58,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
         questionnaire_attempts_for_monthly
       end
     end
-
+    
     summary = {
       what_happened: [], 
       improvements: [], 
@@ -70,7 +74,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
       weekly_emotions: [],
       weekly_importances: []
     }
-
+    
     @questionnaire_attempts.each do |qa|
       day_of_the_week = qa.completed_at.strftime('%A')
       day_of_the_month = qa.completed_at.strftime('%b %-d')

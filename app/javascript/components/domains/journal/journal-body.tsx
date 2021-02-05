@@ -102,7 +102,6 @@ export const JournalBody = ({
           iconColor={"fuschiaBlue"}
           text={t("journals.monthlyReflection")}
           onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.monthlyReflection)}
-          disabled={R.path(["profile", "currentDailyLog", "monthlyReflection"], sessionStore)}
         />
         <FooterText 
           color={"greyActive"} 
