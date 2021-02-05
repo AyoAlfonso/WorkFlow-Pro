@@ -139,6 +139,7 @@ class Api::MeetingsController < Api::ApplicationController
       @milestones = nil
       @habits_percentage_increase_from_previous_week = nil
       @stats_for_week = nil
+      @stats_for_month = nil
       @my_current_milestones = nil
     else
       #if it's Monday or Tuesday, 
@@ -149,6 +150,7 @@ class Api::MeetingsController < Api::ApplicationController
       @milestones = nil
       @habits_percentage_increase_from_previous_week = current_user.habits_percentage_increase_from_previous_week
       @stats_for_week = calculate_stats_for_week(current_user)
+      @stats_for_month = calculate_stats_for_month(current_user)
       @my_current_milestones = Milestone.current_week_for_user(get_next_week_or_current_week_date(current_user.time_in_user_timezone), current_user)
     end
   end
