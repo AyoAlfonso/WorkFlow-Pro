@@ -23,7 +23,7 @@ export const MonthlyReflection = (props: {}): JSX.Element => {
   return (
     <Container>
       <RowContainer>
-        {(meeting.statsForWeek || []).map((statObj, index) => (
+        {(meeting.statsForMonth || []).map((statObj, index) => (
           <StatCard key={index} {...statObj} />
         ))}
       </RowContainer>

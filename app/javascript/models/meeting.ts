@@ -30,6 +30,7 @@ export const MeetingModel = types
     emotionScorePercentageDifference: types.maybeNull(types.number),
     teamKeyActivities: types.maybeNull(types.array(KeyActivityModel)),
     statsForWeek: types.maybeNull(types.array(types.frozen())),
+    statsForMonth: types.maybeNull(types.array(types.frozen())),
     myCurrentMilestones: types.maybeNull(types.array(MilestoneModel)),
     habitsPercentageIncreaseFromPreviousWeek: types.maybeNull(types.number),
     title: types.maybeNull(types.string),

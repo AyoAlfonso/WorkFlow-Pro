@@ -21,12 +21,15 @@ export const Questionnaire = observer(
     const [loading, setLoading] = useState<boolean>(true);
 
     const { t } = useTranslation();
-    const { meetingStore, questionnaireStore, sessionStore } = useMst();
+    const { meetingStore, questionnaireStore, sessionStore, companyStore } = useMst();
 
     useEffect(() => {
       questionnaireStore.load().then(() => {
         setLoading(false);
       });
+      companyStore.load().then(() => {
+        setLoading(false);
+      })
     }, []);
 
     const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
@@ -47,6 +50,7 @@ export const Questionnaire = observer(
     const summaryData = meetingStore.personalPlanningSummary;
     const userFirstName = sessionStore.profile.firstName;
     const currentPersonalPlanning = meetingStore.currentPersonalPlanning;
+    const companyType = companyStore.company.displayFormat;
 
     const steps = R.map(step => {
       if (R.path(["metadata", "summary"], step) === "gratitude") {
@@ -85,7 +89,7 @@ export const Questionnaire = observer(
       }
     }, R.clone(questionnaireVariant.steps));
 
-    return R.path(["profile", "currentDailyLog", "weeklyReflection"], sessionStore) ? (
+    return (R.path(["profile", "currentDailyLog", "weeklyReflection"], sessionStore) && companyType === "Company") ? (
       <Container>
         <Card
           width={"100%"}
@@ -107,7 +111,8 @@ export const Questionnaire = observer(
           hideBotAvatar={true}
           hideUserAvatar={true}
           botDelay={1000}
-          headerComponent={<SurveyHeader title={t("journals.weeklyReflectionTitle")} />}
+          headerComponent={
+          <SurveyHeader title={companyType === "Company" ? t("journals.weeklyReflectionTitle") : t("journals.monthlyReflection")} />}
           steps={steps}
           width={"100%"}
           contentStyle={{ height: "400px" }}
