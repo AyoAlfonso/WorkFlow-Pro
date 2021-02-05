@@ -72,9 +72,10 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
       weekly_happenings: [],
       weekly_gratitudes: [],
       weekly_emotions: [],
-      weekly_importances: []
+      weekly_importances: [],
+      weekly_takeaways: []
     }
-    
+
     @questionnaire_attempts.each do |qa|
       day_of_the_week = qa.completed_at.strftime('%A')
       day_of_the_month = qa.completed_at.strftime('%b %-d')
@@ -106,6 +107,8 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
           summary[:weekly_emotions].push({value: rs[:value], day: day_of_the_month})
         when "weekly-importances"
           summary[:weekly_importances].push({value: rs[:value], day: day_of_the_month})
+        when "weekly-takeaways"
+          summary[:weekly_takeaways].push({value: rs[:value], day: day_of_the_month})
         end
       end
     end

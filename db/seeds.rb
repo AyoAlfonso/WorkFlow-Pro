@@ -43,7 +43,7 @@ if Rails.env.development?
   TeamUserEnablement.where(user_id: u6.id).first_or_create(team_id: t2.id, user_id: u6.id, role: "team_member")
   TeamUserEnablement.where(user_id: u7.id).first_or_create(team_id: t2.id, user_id: u7.id, role: "team_member")
   TeamUserEnablement.where(user_id: u8.id).first_or_create(team_id: t2.id, user_id: u8.id, role: "team_member")
-  TeamUserEnablement.where(user_id: u9.id).first_or_create(team_id: t1.id, user_id: u9.id, role: "team_lead")
+  TeamUserEnablement.where(user_id: u9.id).first_or_create(team_id: t1.id, user_id: u9.id, role: "team_member")
 
   UserCompanyEnablement.where(user_id: u1.id).first_or_create(user_id: u1.id, company_id: c1.id, user_role_id: ur1.id)
   UserCompanyEnablement.where(user_id: u2.id).first_or_create(user_id: u2.id, company_id: c1.id, user_role_id: ur2.id)

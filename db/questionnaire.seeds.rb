@@ -969,7 +969,7 @@ Questionnaire.where(name: "Monthly Reflection",
       options: [],
       metadata: {
         summary: "improvements",
-        message: "Ideas to make my days better:"
+        message: "Ideas to make my days better from this week:"
       },
       trigger: 2
     },
@@ -978,7 +978,7 @@ Questionnaire.where(name: "Monthly Reflection",
       options: [],
       metadata: {
         summary: "highest-good",
-        message: "Areas where I spent time that wasn't for my highest good:"
+        message: "Areas where I spent time that wasn't for my highest good from this week:"
       },
       trigger: 3
     },
@@ -987,7 +987,7 @@ Questionnaire.where(name: "Monthly Reflection",
       options: [],
       metadata: {
         summary: "wins",
-        message: "My wins:"
+        message: "My wins from this week:"
       },
       trigger: 4
     },
@@ -1031,7 +1031,7 @@ Questionnaire.where(name: "Monthly Reflection",
       options: [],
       metadata: {
         summary: "lessons",
-        message: "My lessons learned:"
+        message: "My lessons learned from this week:"
       },
       trigger: 10
     },
@@ -1215,6 +1215,33 @@ Questionnaire.where(name: "Monthly Reflection",
     },
     {
       id: 34,
+      options: [],
+      metadata: {
+        summary: "weekly-happenings",
+        message: "These are the important things that happened this month:"
+      },
+      trigger: 35
+    },
+    {
+      id: 35,
+      options: [],
+      metadata: {
+        summary: "weekly-emotions",
+        message: "These made me feel:"
+      },
+      trigger: 36
+    },
+    {
+      id: 36,
+      options: [],
+      metadata: {
+        summary: "weekly-importances",
+        message: "They were significant to me because:"
+      },
+      trigger: 37
+    },
+    {
+      id: 37,
       message: "What is the one imporant thing that happened this month that I want to share?",
       trigger: "monthly-happenings"
     },
@@ -1224,10 +1251,10 @@ Questionnaire.where(name: "Monthly Reflection",
       metadata: {
         journalQuestion: "Most important thing that happened this month that I want to share:"
       },
-      trigger: 36
+      trigger: 39
     },
     {
-      id: 36,
+      id: 39,
       message: "What is happening next week that I need to account for in my plans?",
       trigger: "account-for"
     },
@@ -1237,10 +1264,10 @@ Questionnaire.where(name: "Monthly Reflection",
       metadata: {
         journalQuestion: "What I have to account for in the next week:"
       },
-      trigger: 38
+      trigger: 41
     },
     {
-      id: 38,
+      id: 41,
       message: "What could stand in the way?",
       trigger: "stand"
     },
@@ -1250,10 +1277,10 @@ Questionnaire.where(name: "Monthly Reflection",
       metadata: {
         journalQuestion: "What could stand in the way:"
       },
-      trigger: 40
+      trigger: 43
     },
     {
-      id: 40, 
+      id: 43, 
       message: "How can I overcome this?",
       trigger: "overcome"
     },
@@ -1263,10 +1290,10 @@ Questionnaire.where(name: "Monthly Reflection",
       metadata: {
         journalQuestion: "How I will overcome this:"
       },
-      trigger: 42
+      trigger: 45
     },
     {
-      id: 42,
+      id: 45,
       message: "Monthly Reflection is complete!",
       end: true
     }
