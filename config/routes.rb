@@ -103,7 +103,7 @@ Rails.application.routes.draw do
 
     #questionnaire_attempts
     resources :questionnaire_attempts, only: [:create]
-    get 'questionnaire_attempts/questionnaire_summary/:questionnaire_id', to: 'questionnaire_attempts#questionnaire_summary'
+    get 'questionnaire_attempts/questionnaire_summary', to: 'questionnaire_attempts#questionnaire_summary'
 
     #teams
     resources :teams, only: [:index, :show, :update]

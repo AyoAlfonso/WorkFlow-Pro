@@ -376,7 +376,7 @@ export class Api {
   }
 
   async getQuestionnaireAttemptsSummaryForReflections(questionnaireId) {
-    return this.client.get(`questionnaire_attempts/questionnaire_summary/${questionnaireId}`)
+    return this.client.get(`questionnaire_attempts/questionnaire_summary?questionnaire_id=${questionnaireId}`)
   }
 
   //async setJWT(jwt) {}

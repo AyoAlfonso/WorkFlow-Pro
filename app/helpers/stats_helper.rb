@@ -44,6 +44,10 @@ module StatsHelper
     end
   end
 
+  def get_beginning_of_current_month(current_time)
+    current_time.beginning_of_month
+  end
+
   def daily_average_users_emotion_scores_over_last_week(current_user)
     previous_week_start = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
     previous_week_end = previous_week_start + 6.days
@@ -114,6 +118,45 @@ module StatsHelper
       {
         statistic_name: "#{I18n.t('issues_addressed')}",
         statistic_number: issues_created_this_week,
+        statistic_change: issues_created_change
+      }
+    ]
+  end
+
+  def calculate_stats_for_month(current_user)
+    current_month_start = get_beginning_of_current_month(current_user.time_in_user_timezone)
+    current_month_end = current_user.time_in_user_timezone
+
+    previous_month_start = current_month_start.months_ago(1)
+    previous_month_end = previous_month_start.end_of_month
+
+    ka_created_this_month = KeyActivity.optimized.user_created_between(current_user, current_month_start, current_month_end).count
+    ka_created_last_month = KeyActivity.optimized.user_created_between(current_user, previous_month_start, previous_month_end).count
+
+    ka_created_change = difference_between_values(ka_created_this_month, ka_created_last_month)
+
+    ka_completed_this_month = KeyActivity.optimized.user_completed_between(current_user, current_month_start, current_month_end).count
+    ka_completed_last_month = KeyActivity.optimized.user_completed_between(current_user, previous_month_start, previous_month_end).count
+    ka_completed_change = difference_between_values(ka_completed_this_month, ka_completed_last_month)
+
+    issues_created_this_month = Issue.optimized.user_created_between(current_user, current_month_start, current_month_end).count
+    issues_created_last_month = Issue.optimized.user_created_between(current_user, previous_month_start, previous_month_end).count
+    issues_created_change = difference_between_values(issues_created_this_month, issues_created_last_month)
+
+    [
+      {
+        statistic_name: "#{I18n.t('key_activities_created')}",
+        statistic_number: ka_created_this_month,
+        statistic_change: ka_created_change,
+      }, 
+      {
+        statistic_name: "#{I18n.t('key_activities_completed')}",
+        statistic_number: ka_completed_this_month,
+        statistic_change: ka_completed_change
+      },
+      {
+        statistic_name: "#{I18n.t('issues_addressed')}",
+        statistic_number: issues_created_this_month,
         statistic_change: issues_created_change
       }
     ]

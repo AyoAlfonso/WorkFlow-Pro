@@ -962,7 +962,7 @@ Questionnaire.where(name: "Weekly Reflection",
 )
 
 Questionnaire.where(name: "Monthly Reflection", 
-  limit_type: 3,
+  limit_type: 0,
   title: "Monthly Reflection").first_or_initialize.update(steps: [
     {
       id: 1,

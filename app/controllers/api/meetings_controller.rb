@@ -21,25 +21,44 @@ class Api::MeetingsController < Api::ApplicationController
   end
 
   def create 
-    #scope differs if team (assume you can only have one incomplete meeting, allow you to create another one for week if required)
-    week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
-    @meetings_already_present_for_week = params[:team_id] ? policy_scope(Meeting).team_meetings(params[:team_id]).with_template(params[:meeting_template_id]).for_week_of_date(week_to_review_start_time).incomplete : policy_scope(Meeting).personal_meetings.hosted_by_user(current_user).for_week_of_date(week_to_review_start_time)
-    # @meeting = incomplete_meetings_for_today.first_or_create(meeting_params.merge({hosted_by: current_user}))
-    # authorize @meeting
-    # render 'api/meetings/create'
-
-    if @meetings_already_present_for_week.present?
-      @meeting = @meetings_already_present_for_week.first
-      set_additional_data
-      authorize @meeting
-      render 'api/meetings/show'  
-    else
-      @meeting = Meeting.new(meeting_params)
-      @meeting.hosted_by_id = current_user.id
-      set_additional_data
-      authorize @meeting
-      @meeting.save!
-      render 'api/meetings/show'
+    if current_company.display_format === "Company"
+      #scope differs if team (assume you can only have one incomplete meeting, allow you to create another one for week if required)
+      week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
+      @meetings_already_present_for_week = params[:team_id] ? policy_scope(Meeting).team_meetings(params[:team_id]).with_template(params[:meeting_template_id]).for_week_of_date(week_to_review_start_time).incomplete : policy_scope(Meeting).personal_meetings.hosted_by_user(current_user).for_week_of_date(week_to_review_start_time)
+      # @meeting = incomplete_meetings_for_today.first_or_create(meeting_params.merge({hosted_by: current_user}))
+      # authorize @meeting
+      # render 'api/meetings/create'
+      
+      if @meetings_already_present_for_week.present?
+        @meeting = @meetings_already_present_for_week.first
+        set_additional_data
+        authorize @meeting
+        render 'api/meetings/show'  
+      else
+        @meeting = Meeting.new(meeting_params)
+        @meeting.hosted_by_id = current_user.id
+        set_additional_data
+        authorize @meeting
+        @meeting.save!
+        render 'api/meetings/show'
+      end
+    else 
+      month_to_review_start_time = current_user.time_in_user_timezone.beginning_of_month
+      @meetings_already_present_for_month = params[:team_id] ? policy_scope(Meeting).team_meetings(params[:team_id]).with_template(params[:meeting_template_id]).for_month_of_date(month_to_review_start_time).incomplete : policy_scope(Meeting).personal_monthly_meetings.hosted_by_user(current_user).for_month_of_date(month_to_review_start_time)
+    
+      if @meetings_already_present_for_month.present?
+        @meeting = @meetings_already_present_for_month.first
+        set_additional_data
+        authorize @meeting
+        render 'api/meetings/show'  
+      else
+        @meeting = Meeting.new(meeting_params)
+        @meeting.hosted_by_id = current_user.id
+        set_additional_data
+        authorize @meeting
+        @meeting.save!
+        render 'api/meetings/show'
+      end
     end
   end
 

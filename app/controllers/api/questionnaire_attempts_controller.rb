@@ -54,7 +54,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
         questionnaire_attempts_for_monthly
       end
     end
-    
+
     summary = {
       what_happened: [], 
       improvements: [], 
