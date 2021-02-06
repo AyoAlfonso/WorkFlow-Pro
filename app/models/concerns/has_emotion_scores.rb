@@ -29,7 +29,7 @@ module HasEmotionScores
     }
   end
 
-  def overall_average_weekly_emotion_score(users, from_date, to_date)
+  def overall_average_emotion_score(users, from_date, to_date)
     average_user_score = daily_average_users_emotion_score(users, from_date, to_date)[:emotion_scores]
     if average_user_score.size == 0
       0
@@ -39,7 +39,7 @@ module HasEmotionScores
     end
   end
 
-  def compare_weekly_emotion_score(current_value, previous_value)
+  def compare_emotion_score(current_value, previous_value)
     difference_between_values(current_value, previous_value)
   end
   

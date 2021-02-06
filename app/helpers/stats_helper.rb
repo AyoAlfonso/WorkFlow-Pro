@@ -80,6 +80,22 @@ module StatsHelper
     average_weekly_emotion_score_over_last_week(current_user) - average_weekly_emotion_score_over_last_week_previous_week(current_user)
   end
 
+  def average_monthly_emotion_score_over_last_month(current_user)
+    previous_month_start = get_beginning_of_last_month(current_user.time_in_user_timezone)
+    previous_month_end = current_user.time_in_user_timezone.last_month.end_of_month
+    current_user.team_average_monthly_emotion_score(previous_month_start, previous_month_end)
+  end
+
+  def average_monthly_emotion_score_over_last_month_previous_month(current_user)
+    previous_month_start = get_beginning_of_last_month(current_user.time_in_user_timezone).months_ago(1)
+    previous_month_end = current_user.time_in_user_timezone.last_month.end_of_month
+    current_user.team_average_monthly_emotion_score
+  end
+
+  def average_monthly_emotion_score_difference(current_user)
+    average_monthly_emotion_score_over_last_month(current_user) - average_monthly_emotion_score_over_last_month_previous_month(current_user)
+  end
+
   def habits_for_the_previous_week(current_user)
     beginning_of_last_week = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
     end_of_last_week = beginning_of_last_week + 6.days
@@ -172,15 +188,15 @@ module StatsHelper
     ]
   end
 
-  def difference_between_values(current_week_value, previous_week_value)
-    if current_week_value >= previous_week_value
-      difference = previous_week_value == 0 ? 
-                    current_week_value * 100 : 
-                    ((current_week_value - previous_week_value).to_f / previous_week_value.to_f) * 100
+  def difference_between_values(current_value, previous_value)
+    if current_value >= previous_value
+      difference = previous_value == 0 ? 
+                    current_value * 100 : 
+                    ((current_value - previous_value).to_f / previous_value.to_f) * 100
     else
-      difference = current_week_value == 0 ? 
-                    -previous_week_value * 100 : 
-                    ((current_week_value - previous_week_value).to_f / previous_week_value.to_f) * 100
+      difference = current_value == 0 ? 
+                    -previous_value * 100 : 
+                    ((current_value - previous_value).to_f / previous_value.to_f) * 100
     end
   end
 

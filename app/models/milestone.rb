@@ -7,14 +7,19 @@ class Milestone < ApplicationRecord
   default_scope { order(id: :asc) }
 
   scope :sort_by_created_at_date, -> { order(created_at: :asc) }
+  
   scope :current_week_for_user, -> (week_start, user) { joins(:quarterly_goal).where(quarterly_goals: {owned_by: user}).where(
     'week_of >=? AND week_of < ?', week_start.to_date, week_start.end_of_week.to_date
+  ) }
+
+  scope :current_month_for_user, -> (month_start, user) { joins(:quarterly_goal).where(quarterly_goals: {owned_by: user}).where(
+    'month_of >=? AND month_of < ?', month_start.to_date, month_start.end_of_month.to_date
   ) }
 
   scope :by_start_and_end_date, -> (start_date, end_date) {
     where('week_of >=? AND week_of <= ?', start_date, end_date)
   }
-  
+
   #TODO: ADD THE YEAR FOR THE QUARTER AS WELL
   scope :for_user_on_quarter, -> (user, quarter) { joins(:quarterly_goal).where(quarterly_goals: {owned_by: user, quarter: quarter}) }
 

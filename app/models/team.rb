@@ -32,8 +32,15 @@ class Team < ApplicationRecord
   end
 
   def team_average_weekly_emotion_score(from_date, to_date)
-    overall_average_weekly_emotion_score(self.users, from_date, to_date)
+    overall_average_emotion_score(self.users, from_date, to_date)
   end
 
+  def daily_average_users_emotion_scores_over_month(from_date, to_date)
+    daily_average_users_emotion_score(self.users, from_date, to_date)
+  end
+
+  def team_average_monthly_emotion_score(from_date, to_date)
+    overall_average_emotion_score(self.users, from_date, to_date)
+  end
 
 end

@@ -134,8 +134,13 @@ class Api::MeetingsController < Api::ApplicationController
       previous_week_end = previous_week_start + 6.days
       @current_week_average_user_emotions = @team.daily_average_users_emotion_scores_over_week(previous_week_start, previous_week_end)
       @current_week_average_team_emotions = @team.team_average_weekly_emotion_score(previous_week_start, previous_week_end)
+      previous_month_start = get_beginning_of_last_month(current_user.time_in_user_timezone)
+      previous_month_end = previous_month_start.end_of_month
+      @current_month_average_user_emotions = @team.daily_average_users_emotion_scores_over_month(previous_month_start, previous_month_end)
+      @current_month_average_team_emotions = @team.team_average_monthly_emotion_score(previous_month_start, previous_month_end)
       @previous_meeting = Meeting.where(team_id: @team.id, meeting_template_id: @meeting.meeting_template_id).second_to_last
-      @emotion_score_percentage_difference = @team.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
+      @emotion_score_percentage_difference = @team.compare_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
+      @emotion_score_percentage_difference_monthly = @team.compare_emotion_score(@current_month_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
       @milestones = nil
       @habits_percentage_increase_from_previous_week = nil
       @stats_for_week = nil
@@ -144,18 +149,19 @@ class Api::MeetingsController < Api::ApplicationController
     else
       #if it's Monday or Tuesday, 
       @current_week_average_user_emotions = daily_average_users_emotion_scores_over_last_week(current_user)
-      # @current_month_average_user_emotions = daily_average_users_emotion_scores_over_last_month(current_user)
       @current_week_average_team_emotions = average_weekly_emotion_score_over_last_week(current_user)
-      # @current_month_average_team_emotions = average_monthly_emotion_score_over_last_month(current_user)
+      @current_month_average_user_emotions = daily_average_users_emotion_scores_over_last_month(current_user)
+      @current_month_average_team_emotions = average_monthly_emotion_score_over_last_month(current_user)
       @previous_meeting = Meeting.where(hosted_by: current_user, team_id: nil, meeting_template_id: @meeting.meeting_template_id).second_to_last
-      @emotion_score_percentage_difference = current_user.compare_weekly_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
-      # @emotion_score_percentage_difference_monthly = current_user.compare_monthly_emotion_score(@current_month_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
+      @emotion_score_percentage_difference = current_user.compare_emotion_score(@current_week_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
+      @emotion_score_percentage_difference_monthly = current_user.compare_emotion_score(@current_month_average_team_emotions, @previous_meeting.present? && @previous_meeting.average_team_mood.present? ? @previous_meeting.average_team_mood : 0)
       @milestones = nil
       @habits_percentage_increase_from_previous_week = current_user.habits_percentage_increase_from_previous_week
-      # @habits_percentage_increase_from_previous_month = current_user.habits_percentage_increase_from_previous_month
+      @habits_percentage_increase_from_previous_month = current_user.habits_percentage_increase_from_previous_month
       @stats_for_week = calculate_stats_for_week(current_user)
       @stats_for_month = calculate_stats_for_month(current_user)
       @my_current_milestones = Milestone.current_week_for_user(get_next_week_or_current_week_date(current_user.time_in_user_timezone), current_user)
+      @my_current_milestones_monthly = Milestone.current_month_for_user(get_beginning_of_current_month(current_user.time_in_user_timezone), current_user)
     end
   end
 

@@ -39,6 +39,12 @@ class Habit < ApplicationRecord
     difference_between_values(current_week_completion_count, previous_week_completion_count)
   end
 
+  def monthly_logs_completion_difference
+    current_month_completion_count = self.completed_logs_by_date_range(current_month_start_date, current_month_end_date).count
+    previous_month_completion_count = self.completed_logs_by_date_range(previous_month_start_date, previous_month_end_date).count
+    different_between_values(current_month_completion_count, previous_month_completion_count)
+  end
+
   def weekly_completion_percentage_by_date_range(start_date, end_date)
     completed_logs_count = get_previous_week_completion(start_date, end_date).count
     (completed_logs_count.to_f / self.frequency.to_f) * 100
@@ -154,7 +160,7 @@ class Habit < ApplicationRecord
   end
 
   def current_week_start_date
-    self.user.time_in_user_timezone.beginning_of_week
+    user_current_date.beginning_of_week.to_date
   end
 
   def current_week_end_date
@@ -167,6 +173,22 @@ class Habit < ApplicationRecord
 
   def previous_week_end_date
     current_week_end_date.weeks_ago(1).to_date
+  end
+
+  def current_month_start_date
+    user_current_date.beginning_of_month.to_date
+  end
+
+  def current_month_end_date
+    user_current_date.end_of_month.to_date
+  end
+
+  def previous_month_start_date
+    current_month_start_date.months_ago(1).to_date
+  end
+
+  def previous_month_end_date
+    current_month_end_date.months_ago(1).to_date
   end
 
   def user_current_date
