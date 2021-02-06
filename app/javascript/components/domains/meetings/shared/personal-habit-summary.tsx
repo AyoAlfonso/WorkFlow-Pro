@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 import { Text } from "~/components/shared/text";
@@ -7,7 +8,6 @@ import { ContainerHeaderWithText } from "~/components/shared/styles/container-he
 import { useTranslation } from "react-i18next";
 import { HabitsSummary } from "~/components/domains/habits/habits-summary";
 import { useMst } from "~/setup/root";
-import { useEffect } from "react";
 import { observer } from "mobx-react";
 export interface IPersonalHabitProps {
   meeting: any;
@@ -18,10 +18,15 @@ export const PersonalHabitSummary = observer(
     const { meeting } = props;
     const { t } = useTranslation();
 
-    const { habitStore } = useMst();
+    const { 
+      habitStore,
+      companyStore,
+    } = useMst();
+
     useEffect(() => {
       habitStore.fetchHabitsForPersonalPlanning();
-    }, [habitStore.habits]);
+      companyStore.load()
+    }, [habitStore.habits, companyStore.company]);
 
     return (
       <Container>
@@ -29,10 +34,15 @@ export const PersonalHabitSummary = observer(
         <HabitsContainer>
           <HabitsSummary />
         </HabitsContainer>
-
-        <PercentageChangeContainer>
-          <PercentChange percentChange={habitStore.weeklyDifferenceForPersonalMeeting} />
-        </PercentageChangeContainer>
+        { companyStore.company.displayFormat === "Company" ? (
+          <PercentageChangeContainer>
+            <PercentChange percentChange={habitStore.weeklyDifferenceForPersonalMeeting} />
+          </PercentageChangeContainer>
+        ) : (
+          <PercentageChangeContainer>
+            <PercentChange percentChange={habitStore.monthlyDifferenceForPersonalMeeting} />
+          </PercentageChangeContainer>
+        )}
       </Container>
     );
   },

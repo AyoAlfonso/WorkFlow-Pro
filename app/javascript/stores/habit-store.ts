@@ -36,6 +36,17 @@ export const HabitStoreModel = types
         return differencesPercentage / self.habits.length;
       }
     },
+    get monthlyDifferenceForPersonalMeeting() {
+      let differencesPercentage = 0;
+      self.habits.forEach(habit => {
+        differencesPercentage += habit.monthlyScoreDifference;
+      });
+      if (self.habits.length == 0) {
+        return 0;
+      } else {
+        return differencesPercentage / self.habits.length;
+      }
+    },
   }))
   .views(self => ({
     get totalPercentageCompleted() {
