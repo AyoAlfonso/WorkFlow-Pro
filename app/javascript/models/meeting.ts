@@ -27,12 +27,17 @@ export const MeetingModel = types
     teamId: types.maybeNull(types.number),
     currentWeekAverageUserEmotions: types.maybeNull(types.frozen()),
     currentWeekAverageTeamEmotions: types.maybeNull(types.number),
+    currentMonthAverageUserEmotions: types.maybeNull(types.frozen()),
+    currentMonthAverageTeamEmotions: types.maybeNull(types.number),
     emotionScorePercentageDifference: types.maybeNull(types.number),
+    emotionScorePercentageDifferenceMonthly: types.maybeNull(types.number),
     teamKeyActivities: types.maybeNull(types.array(KeyActivityModel)),
     statsForWeek: types.maybeNull(types.array(types.frozen())),
     statsForMonth: types.maybeNull(types.array(types.frozen())),
     myCurrentMilestones: types.maybeNull(types.array(MilestoneModel)),
+    myCurrentMilestonesMonthly: types.maybeNull(types.array(MilestoneModel)),
     habitsPercentageIncreaseFromPreviousWeek: types.maybeNull(types.number),
+    habitsPercentageIncreaseFromPreviousMonth: types.maybeNull(types.number),
     title: types.maybeNull(types.string),
     notes: types.maybeNull(types.string),
     meetingTemplateId: types.maybeNull(types.number),
@@ -48,6 +53,15 @@ export const MeetingModel = types
         return self.currentWeekAverageUserEmotions["emotionScores"].map((averages, index) => {
           return { x: self.currentWeekAverageUserEmotions["recordDates"][index], y: averages.averageScore };
         });
+      } else {
+        [];
+      }
+    },
+    get formattedAverageMonthlyUserEmotions() {
+      if (!R.isNil(self.currentMonthAverageUserEmotions)) {
+        return self.currentMonthAverageUserEmotions["emotionScores"].map((averages, index) => {
+          return { x: self.currentMonthAverageUserEmotions["recordDates"][index], y: averages.averageScore}
+        })
       } else {
         [];
       }
