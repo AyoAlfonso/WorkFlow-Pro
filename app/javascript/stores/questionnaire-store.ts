@@ -72,9 +72,7 @@ export const QuestionnaireStoreModel = types
       );
       
       if (response.ok) {
-        console.log("From questionnaire store before assigning", response.data)
         self.questionnaireAttemptsSummaryForReflections = response.data;
-        console.log("From questionnaire store after assigning", self.questionnaireAttemptsSummaryForReflections)
         return self.questionnaireAttemptsSummaryForReflections;
       }
     }),
