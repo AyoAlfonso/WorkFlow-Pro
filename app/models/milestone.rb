@@ -12,10 +12,6 @@ class Milestone < ApplicationRecord
     'week_of >=? AND week_of < ?', week_start.to_date, week_start.end_of_week.to_date
   ) }
 
-  scope :current_month_for_user, -> (month_start, user) { joins(:quarterly_goal).where(quarterly_goals: {owned_by: user}).where(
-    'month_of >=? AND month_of < ?', month_start.to_date, month_start.end_of_month.to_date
-  ) }
-
   scope :by_start_and_end_date, -> (start_date, end_date) {
     where('week_of >=? AND week_of <= ?', start_date, end_date)
   }

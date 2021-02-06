@@ -8,6 +8,5 @@ json.emotion_score_percentage_difference_monthly @emotion_score_percentage_diffe
 json.stats_for_week @stats_for_week
 json.stats_for_month @stats_for_month
 json.my_current_milestones @my_current_milestones, partial: 'api/meetings/milestone', as: :milestone
-json.my_current_milestones_monthly @my_current_milestones_monthly, partial: 'api/meetings/milestone', as: :milestone
 json.habits_percentage_increase_from_previous_week @habits_percentage_increase_from_previous_week
 json.habits_percentage_increase_from_previous_month @habits_percentage_increase_from_previous_month

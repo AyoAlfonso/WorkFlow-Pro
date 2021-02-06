@@ -35,7 +35,6 @@ export const MeetingModel = types
     statsForWeek: types.maybeNull(types.array(types.frozen())),
     statsForMonth: types.maybeNull(types.array(types.frozen())),
     myCurrentMilestones: types.maybeNull(types.array(MilestoneModel)),
-    myCurrentMilestonesMonthly: types.maybeNull(types.array(MilestoneModel)),
     habitsPercentageIncreaseFromPreviousWeek: types.maybeNull(types.number),
     habitsPercentageIncreaseFromPreviousMonth: types.maybeNull(types.number),
     title: types.maybeNull(types.string),
