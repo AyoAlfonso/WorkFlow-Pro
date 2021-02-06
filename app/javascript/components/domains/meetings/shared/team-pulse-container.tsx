@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import { OverallTeamPulse } from "../shared/overall-team-pulse";
 import { TeamPulseCard } from "../shared/team-pulse-card";
@@ -8,14 +9,23 @@ import { PercentChange } from "~/components/shared/percent-change";
 import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
 import { useTranslation } from "react-i18next";
 import { NoMoodRatings } from "~/components/shared/no-mood-ratings";
+import { observer } from "mobx-react";
+import { useMst } from "~/setup/root";
+
 export interface ITeamPulseProps {
   meeting: IMeeting;
   title?: string;
 }
 
-export const TeamPulseContainer = ({ meeting, title }: ITeamPulseProps): JSX.Element => {
+export const TeamPulseContainer = observer(({ meeting, title }: ITeamPulseProps): JSX.Element => {
   const { t } = useTranslation();
-  return (
+  const { companyStore } = useMst();
+
+  useEffect(() => {
+    companyStore.load()
+  },[])
+
+  return companyStore.company.displayFormat === "Company" ? (
     <Container>
       <ContainerHeaderWithText text={title ? title : t("teams.teamsPulseTitle")} />
 
@@ -37,8 +47,30 @@ export const TeamPulseContainer = ({ meeting, title }: ITeamPulseProps): JSX.Ele
         </BodyContainer>
       )}
     </Container>
+  ) : (
+    <Container>
+    <ContainerHeaderWithText text={title ? title : t("teams.teamsPulseTitle")} />
+
+    {meeting.currentMonthAverageTeamEmotions > 0 ? (
+      <BodyContainer>
+        <TeamPulseBody>
+          <OverallTeamPulse value={meeting.currentMonthAverageTeamEmotions} />
+          <TeamPulseCard data={toJS(meeting.formattedAverageMonthlyUserEmotions || [])} />
+        </TeamPulseBody>
+        <PercentChangeContainer>
+          <PercentChange percentChange={meeting.emotionScorePercentageDifferenceMonthly} />
+        </PercentChangeContainer>
+      </BodyContainer>
+    ) : (
+      <BodyContainer>
+        <NoMoodWrapper>
+          <NoMoodRatings />
+        </NoMoodWrapper>
+      </BodyContainer>
+    )}
+  </Container>
   );
-};
+});
 
 const Container = styled.div`
   width: 100%;
