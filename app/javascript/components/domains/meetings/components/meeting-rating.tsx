@@ -33,7 +33,7 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
     meetingStore: { updateMeeting },
   } = useMst();
 
-  if (R.isNil(teams) || R.isEmpty(users)) {
+  if (R.isNil(teams) || R.isNil(users)) {
     return <Loading />;
   }
 
