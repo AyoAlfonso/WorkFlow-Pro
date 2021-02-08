@@ -21,7 +21,7 @@ export const AccordionSummary = withStyles({
     borderRadius: 10,
     padding: 0,
     height: 56,
-    marginBottom: 5,
+    marginBottom: 16,
     boxShadow: "1px 3px 4px 2px rgba(0, 0, 0, 0.1)",
     "&$expanded": {
       minHeight: 56,
@@ -32,8 +32,12 @@ export const AccordionSummary = withStyles({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
+    marginTop: 0,
+    marginBottom: 0,
     marginRight: 5,
     "&$expanded": {
+      marginTop: 0,
+      marginBottom: 0,
       marginRight: 5, 
     },
   },
