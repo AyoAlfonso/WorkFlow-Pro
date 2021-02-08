@@ -29,11 +29,6 @@ export const Issues = ({
 };
 
 const IssuesAccordion = styled(Accordion)`
-  border-radius: 10px;
-  border: 0px solid white;
-  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
-  margin-top: 5px;
-  margin-bottom: 5px;
   width: 100%;
   min-width: 224px;
   display: flex;
