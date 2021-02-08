@@ -46,7 +46,7 @@ class UserPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes([:company, :user_role, avatar_attachment: :blob]).where(company: @company)
+      scope.joins(:user_company_enablements).includes([:company, :user_role, avatar_attachment: :blob]).where(user_company_enablements: {company: @company})
     end
   end
 end
