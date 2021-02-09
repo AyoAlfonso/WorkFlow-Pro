@@ -7,6 +7,8 @@ class Issue < ApplicationRecord
   has_one :team_issue, dependent: :destroy, autosave: true
   accepts_nested_attributes_for :team_issue
 
+  has_many :team_issue_meeting_enablements, through: :team_issue
+
   before_save :create_or_update_team_issue
 
   acts_as_list scope: [:company_id, :user_id, :completed_at]
@@ -24,6 +26,13 @@ class Issue < ApplicationRecord
   
   scope :created_between, -> (date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
   scope :user_created_between, -> (user, date_start, date_end) { created_by_user(user).created_between(date_start, date_end) }
+
+  #for team issue meetings
+  scope :for_meeting, -> (meeting_id) {
+    joins(:team_issue)
+    .joins(:team_issue_meeting_enablements)
+    .where(team_issue_meeting_enablements: {meeting_id: meeting_id})
+  }
 
   validates :description, presence: true
   

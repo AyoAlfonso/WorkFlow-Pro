@@ -13,11 +13,20 @@ class Api::IssuesController < Api::ApplicationController
     authorize @issue
     @issue.insert_at(1)
     @issue.save!
-    
+
     if params[:team_id]
       # USE HOOK TO CREATE A TEAM ISSUE IF IT DOESNT EXIST FOR @ISSUE
       @team_issues = TeamIssue.for_team(params[:team_id]).sort_by_position
       @issues_to_render = team_meeting_issues(params[:team_id])
+      
+      #additional details to render if its a team
+      if params[:meeting_id]
+        if params[:meeting_enabled]
+          TeamIssueMeetingEnablementsService.call(@issue, params)
+        end
+        @meeting_team_issues = Issue.for_meeting(params[:meeting_id])
+      end
+      
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
     end
@@ -28,6 +37,7 @@ class Api::IssuesController < Api::ApplicationController
   def update
     @issue.update!(issue_params.merge(completed_at: params[:completed] ? Time.now : nil))
     if params[:from_team_meeting]
+      #returns issues only related to the team, not all issues
       @issues_to_render = team_meeting_issues(@issue.team_id)
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
@@ -40,6 +50,7 @@ class Api::IssuesController < Api::ApplicationController
     team_id = @issue.team_id
     @issue.destroy!
     if params[:from_team_meeting] == "true"
+      #TODO: ensure enablements destroyed here as well
       @issues_to_render = team_meeting_issues(@issue.team_id)
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at

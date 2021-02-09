@@ -366,6 +366,13 @@ ActiveRecord::Schema.define(version: 2021_01_29_011046) do
     t.datetime "updated_at"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
+  create_table "team_issue_meeting_enablements", force: :cascade do |t|
+    t.bigint "meeting_id", null: false
+    t.bigint "team_issue_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["meeting_id"], name: "index_team_issue_meeting_enablements_on_meeting_id"
+    t.index ["team_issue_id"], name: "index_team_issue_meeting_enablements_on_team_issue_id"
   end
 
   create_table "team_issue_meeting_enablements", force: :cascade do |t|

@@ -21,11 +21,19 @@ interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
   setCreateIssueModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   teamId?: number | string;
+  meetingId?: number;
+  meetingEnabled?: boolean;
 }
 
-export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => {
+export const CreateIssueModal = ({
+  createIssueModalOpen,
+  setCreateIssueModalOpen,
+  teamId,
+  meetingId,
+  meetingEnabled = false,
+}: ICreateIssueModalProps): JSX.Element => {
   const { issueStore, sessionStore, userStore } = useMst();
-  const { createIssueModalOpen, setCreateIssueModalOpen, teamId } = props;
+
   const [issueDescription, setIssueDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
@@ -94,6 +102,8 @@ export const CreateIssueModal = (props: ICreateIssueModalProps): JSX.Element => 
                   teamId: teamId,
                   userId: selectedUser.id,
                   position: newIssuePosition,
+                  meetingId: meetingId,
+                  meetingEnabled: meetingEnabled,
                 })
                 .then(result => {
                   if (result) {

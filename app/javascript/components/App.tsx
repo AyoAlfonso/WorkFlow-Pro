@@ -40,6 +40,7 @@ import { JournalIndex } from "~/components/domains/journal/journal-index";
 import { NotesIndex } from "~/components/domains/notes/notes-index";
 
 import { Section1 } from "./domains/meetings-forum/section-1";
+import { Section2 } from "./domains/meetings-forum/section-2";
 import { ForumNotSetup } from "./domains/meetings-forum/not-setup";
 import { ForumAgenda } from "./domains/meetings-forum/forum-agenda";
 import { WizardLayout } from "./layouts/wizard-layout";
@@ -93,8 +94,34 @@ export const App = observer(
         }
         keyActivityStore.updateKeyActivity(keyActivityId);
       } else if (R.includes("team_issue", draggableId)) {
-        const teamIssueId = parseInt(R.replace("team_issue-", "", draggableId));
-        issueStore.updateTeamIssuePosition(teamIssueId, newPosition + 1);
+        //something to handle team issue meeting enablement creation / deletion depnding on droppable type
+        //in the create simply create it
+        //in the delete simply remove it
+
+        if (destination.droppableId == "team-parking-lot-issues") {
+          const draggableIdList = draggableId.split(":");
+          const teamIssueId = parseInt(R.replace("team_issue-", "", draggableIdList[0]));
+          const meetingId = parseInt(R.replace("meeting_id-", "", draggableIdList[1]));
+
+          issueStore.updateTeamIssuePosition(teamIssueId, newPosition + 1, {
+            meetingId,
+            meetingEnabled: false,
+          });
+        } else if (destination.droppableId == "team-scheduled-issues") {
+          const draggableIdList = draggableId.split(":");
+          const teamIssueId = parseInt(R.replace("team_issue-", "", draggableIdList[0]));
+          const meetingId = parseInt(R.replace("meeting_id-", "", draggableIdList[1]));
+          //meetingId is used to determine if a team issue meeting enablement is or not created
+          issueStore.updateTeamIssuePosition(teamIssueId, newPosition + 1, {
+            meetingId,
+            meetingEnabled: true,
+          });
+        } else {
+          //standard team issue functionality. Used in companies.
+          //Technically assumes meetingEnabled is not a thing in this case.
+          const teamIssueId = parseInt(R.replace("team_issue-", "", draggableId));
+          issueStore.updateTeamIssuePosition(teamIssueId, newPosition + 1);
+        }
       } else if (R.includes("issue", draggableId)) {
         const issueId = parseInt(R.replace("issue-", "", draggableId));
         issueStore.updateIssuePosition(issueId, newPosition + 1);
@@ -208,9 +235,16 @@ export const App = observer(
                       }}
                     />
                     <Route
+                      exact
+                      path={"/meetings/section_2"}
+                      render={() => {
+                        return <Section2 />;
+                      }}
+                    />
+                    <Route
                       path={"/meetings/section_2/:team_id"}
                       render={() => {
-                        return <Placeholder />;
+                        return <Section2 />;
                       }}
                     />
                   </Switch>

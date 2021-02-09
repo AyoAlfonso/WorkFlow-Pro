@@ -237,9 +237,9 @@ export const MeetingStoreModel = types
         // caught bv Api Monitor
       }
     }),
-    startNextMeeting: flow(function*(teamId, meetingType) {
+    fetchNextMeeting: flow(function*(teamId, meetingType) {
       try {
-        const response: ApiResponse<any> = yield self.environment.api.startNextForMeeting({
+        const response: ApiResponse<any> = yield self.environment.api.getNextMeetingFor({
           teamId,
           meetingType,
         });

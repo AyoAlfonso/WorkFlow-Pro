@@ -137,8 +137,12 @@ export class Api {
     return this.client.get(`/team_issues`, { teamId: teamId });
   }
 
-  async updateTeamIssuePosition(teamIssueId, position) {
-    return this.client.patch(`/team_issues/${teamIssueId}`, { position: position });
+  async getTeamIssueMeetingEnablements(meetingId) {
+    return this.client.get(`/team_issue_meeting_enablements`, { meetingId });
+  }
+
+  async updateTeamIssuePosition(teamIssueId, params) {
+    return this.client.patch(`/team_issues/${teamIssueId}`, params);
   }
 
   async resortIssues(sortParams) {
@@ -313,7 +317,7 @@ export class Api {
     return this.client.post(`/meetings`, meeting);
   }
 
-  async startNextForMeeting(params) {
+  async getNextMeetingFor(params) {
     return this.client.patch("/meetings/start_next_for", params);
   }
 

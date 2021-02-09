@@ -35,6 +35,8 @@ export const TeamOverview = observer(
       companyStore: { company },
       teamStore,
       meetingStore,
+      issueStore,
+      forumStore,
     } = useMst();
 
     const { team_id } = useParams();
@@ -43,7 +45,9 @@ export const TeamOverview = observer(
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-      teamStore.getTeam(team_id).then(() => setLoading(false));
+      teamStore
+        .getTeam(team_id)
+        .then(() => issueStore.fetchTeamIssues(team_id).then(() => setLoading(false)));
     }, [team_id]);
 
     const history = useHistory();
@@ -68,7 +72,7 @@ export const TeamOverview = observer(
     //based on
 
     const handleForumMeetingClick = () => {
-      meetingStore.startNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
+      meetingStore.fetchNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
         if (!R.isNil(meeting)) {
           history.push(`/team/${team_id}/meeting/${meeting.id}`);
         }

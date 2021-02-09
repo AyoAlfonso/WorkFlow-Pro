@@ -1,1 +1,1 @@
-json.array! @issues, partial: "api/issues/issue", as: :issue
+json.issues @issues, partial: "api/issues/issue", as: :issue

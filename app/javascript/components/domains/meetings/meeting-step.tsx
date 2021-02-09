@@ -23,13 +23,14 @@ import { TeamKeyActivities } from "./components/team-key-activities";
 import { MeetingGoals } from "./components/meeting-goals";
 import { TeamIssues } from "./components/team-issues";
 import { MeetingSideOptions } from "./meeting-side-options";
+import { ParkingLot } from "~/components/domains/meetings-forum/components/parking-lot";
 import { ExplorationTopic } from "~/components/domains/meetings-forum/components/exploration-topic";
 
 export interface IMeetingStepProps {
   meeting: IMeeting;
 }
 
-const StepComponent = (step: IStep) => {
+const StepComponent = (step: IStep, meeting: IMeeting) => {
   if (R.isNil(step)) {
     return <Loading />;
   }
@@ -62,7 +63,7 @@ const StepComponent = (step: IStep) => {
         case "Recap":
           return <Recap />;
         case "ParkingLot":
-          return <TeamIssues />;
+          return <ParkingLot upcomingForumMeeting={meeting} />;
         case "ExplorationTopic":
           return <ExplorationTopic />;
         default:
@@ -95,7 +96,7 @@ export const MeetingStep = observer(
             <MeetingSideOptions teamId={meeting.teamId} meeting={meeting} />
           </LeftContainerBorder>
         </LeftContainer>
-        <RightContainer>{StepComponent(meeting.currentStepDetails)}</RightContainer>
+        <RightContainer>{StepComponent(meeting.currentStepDetails, meeting)}</RightContainer>
       </BodyContainer>
     );
   },

@@ -9,21 +9,34 @@ class Api::TeamIssuesController < Api::ApplicationController
 
   def update
     @team_issue = TeamIssue.find(params[:id])
+    authorize @team_issue
+    
+    if team_meeting_params[:meeting_id]
+      team_meeting_params[:meeting_enabled] ?
+        @team_issue.team_issue_meeting_enablements.where(meeting_id: team_meeting_params[:meeting_id]).first_or_create(meeting_id: team_meeting_params[:meeting_id]) :
+        @team_issue.team_issue_meeting_enablements.find_by(meeting_id: team_meeting_params[:meeting_id])&.destroy
+    end
+
     if @team_issue.issue.completed_at.present? && !@team_issue.completed_at.present?
       @team_issue.update!(team_issue_params.merge(completed_at: @team_issue.issue.completed_at))
       @team_issue.move_to_bottom
     else
       @team_issue.update!(team_issue_params)
     end
-    authorize @team_issue
     @team_issues = TeamIssue.for_team(@team_issue.team_id).sort_by_position
+
+    @meeting_team_issues = Issue.for_meeting(params[:meeting_id]) if params[:meeting_id]
     render "api/team_issues/update"
   end
 
   private
 
   def team_issue_params
-    params.require(:team_issue).permit(:id, :team_id, :issue_id, :position, :cpmpleted_at)
+    params.require(:team_issue).permit(:id, :team_id, :issue_id, :position, :completed_at)
+  end
+
+  def team_meeting_params
+    params.permit(:meeting_id, :meeting_enabled)
   end
 
 end

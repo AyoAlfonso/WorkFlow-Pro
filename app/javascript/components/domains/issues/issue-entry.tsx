@@ -17,7 +17,6 @@ import { Avatar } from "~/components/shared";
 
 interface IIssueEntryProps {
   issue: any;
-  meeting?: boolean;
   pageEnd?: boolean;
   meetingId?: number | string;
   dragHandleProps?: any;
@@ -27,7 +26,7 @@ interface IIssueEntryProps {
 export const IssueEntry = observer(
   (props: IIssueEntryProps): JSX.Element => {
     const { issueStore, teamStore } = useMst();
-    const { issue, meeting, pageEnd, meetingId, dragHandleProps, leftShareContainer } = props;
+    const { issue, pageEnd, meetingId, dragHandleProps, leftShareContainer } = props;
 
     const teams = teamStore.teams;
 
@@ -114,11 +113,7 @@ export const IssueEntry = observer(
               key={issue["id"]}
               checked={issue["completedAt"] ? true : false}
               onChange={e => {
-                issueStore.updateIssueStatus(
-                  issue,
-                  e.target.checked,
-                  meetingId || meeting ? true : false,
-                );
+                issueStore.updateIssueStatus(issue, e.target.checked, meetingId ? true : false);
               }}
               sx={{
                 color: baseTheme.colors.primary100,
@@ -133,7 +128,7 @@ export const IssueEntry = observer(
 
         <StyledContentEditable
           innerRef={issueRef}
-          meeting={meeting}
+          inMeetingStyle={meetingId ? true : false}
           html={issue.description}
           onChange={e => {
             if (!e.target.value.includes("<div>")) {
@@ -146,13 +141,13 @@ export const IssueEntry = observer(
             }
           }}
           style={{ textDecoration: issue.completedAt && "line-through", cursor: "text" }}
-          onBlur={() => issueStore.updateIssue(issue.id, meetingId || meeting ? true : false)}
+          onBlur={() => issueStore.updateIssue(issue.id, meetingId ? true : false)}
         />
 
         <ActionContainer>
           <ActionSubContainer>
             <ActionsDisplayContainer>
-              {(meetingId || meeting) && (
+              {meetingId && (
                 <AvatarContainer>
                   <Avatar
                     defaultAvatarColor={issue.user.defaultAvatarColor}
@@ -217,7 +212,7 @@ export const IssueEntry = observer(
                   </ShareIssueContainer>
                 )}
               </ShareButtonContainer>
-              {meeting && (
+              {meetingId && (
                 <CreateKeyActivityButtonContainer
                   onMouseEnter={() => setShowShareModal(false)}
                   onClick={() => setCreateKeyActivityModalOpen(true)}
@@ -277,7 +272,7 @@ const CreateKeyActivityButtonContainer = styled.div`
 const Container = styled.div`
   display: flex;
   font-size: 14px;
-  width: inherit;
+  width: 100%;
   padding: 12px 0px 12px 0px;
   margin-left: 8px;
   margin-right: 8px;
@@ -301,7 +296,7 @@ const IssuePriorityContainer = styled.div`
 `;
 
 type StyledContentEditableProps = {
-  meeting?: boolean;
+  inMeetingStyle?: boolean;
 };
 
 const StyledContentEditable = styled(ContentEditable)<StyledContentEditableProps>`
@@ -311,7 +306,7 @@ const StyledContentEditable = styled(ContentEditable)<StyledContentEditableProps
   font-weight: 400;
   line-height: 20px;
   margin-left: 10px;
-  min-width: ${props => (props.meeting ? "95px" : "105px")};
+  min-width: ${props => (props.inMeetingStyle ? "95px" : "105px")};
   margin-top: auto;
   margin-bottom: auto;
   width: 90%;
