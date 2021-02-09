@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { HabitsSummary } from "~/components/domains/habits/habits-summary";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
+
 export interface IPersonalHabitProps {
   meeting: any;
 }

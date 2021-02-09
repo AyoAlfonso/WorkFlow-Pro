@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
@@ -17,7 +17,12 @@ export const HabitsSummary = observer(
   (): JSX.Element => {
     const {
       habitStore: { habits },
+      companyStore,
     } = useMst();
+
+    useEffect(() => {
+      companyStore.load();
+    })
 
     const renderHabits = () =>
       habits.map((habit, index) => (
@@ -57,13 +62,19 @@ export const HabitsSummary = observer(
       </HabitsTableHeaderCell>
     ));
 
+    const monthTitleElements = ["Score", "Month", "Total"].map((title, index) => {
+      <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"12%"}>
+        {title}
+      </HabitsTableHeaderCell>
+    })
+
     return (
       <HabitsTable>
         <HabitsTableHead>
           <HabitsTableRow>
             <HabitsTableHeaderCell />
             <HabitsTableHeaderCellWide />
-            {titleElements}
+            {companyStore.company.displayFormat === "Company" ? titleElements : monthTitleElements}
           </HabitsTableRow>
         </HabitsTableHead>
         <HabitsTableBody>{renderHabits()}</HabitsTableBody>
