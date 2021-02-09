@@ -22,7 +22,7 @@ export const HabitsSummary = observer(
 
     useEffect(() => {
       companyStore.load();
-    })
+    }, [companyStore.company])
 
     const renderHabits = () =>
       habits.map((habit, index) => (
@@ -62,19 +62,19 @@ export const HabitsSummary = observer(
       </HabitsTableHeaderCell>
     ));
 
-    const monthTitleElements = ["Score", "Month", "Total"].map((title, index) => {
+    const monthTitleElements = ["Score", "Month", "Total"].map((title, index) => (
       <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"12%"}>
         {title}
       </HabitsTableHeaderCell>
-    })
-
+    ));
+    
     return (
       <HabitsTable>
         <HabitsTableHead>
           <HabitsTableRow>
             <HabitsTableHeaderCell />
             <HabitsTableHeaderCellWide />
-            {companyStore.company.displayFormat === "Company" ? titleElements : monthTitleElements}
+            {companyStore.company.displayFormat === "Company" ? (titleElements) : (monthTitleElements)}
           </HabitsTableRow>
         </HabitsTableHead>
         <HabitsTableBody>{renderHabits()}</HabitsTableBody>

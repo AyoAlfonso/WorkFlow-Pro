@@ -26,7 +26,7 @@ export const PersonalHabitSummary = observer(
 
     useEffect(() => {
       habitStore.fetchHabitsForPersonalPlanning();
-      companyStore.load()
+      companyStore.load();
     }, [habitStore.habits, companyStore.company]);
 
     return (
@@ -35,7 +35,7 @@ export const PersonalHabitSummary = observer(
         <HabitsContainer>
           <HabitsSummary />
         </HabitsContainer>
-        { companyStore.company.displayFormat === "Company" ? (
+        {companyStore.company.displayFormat === "Company" ? (
           <PercentageChangeContainer>
             <PercentChange percentChange={habitStore.weeklyDifferenceForPersonalMeeting} />
           </PercentageChangeContainer>
