@@ -42,7 +42,7 @@ class Habit < ApplicationRecord
   def monthly_logs_completion_difference
     current_month_completion_count = self.completed_logs_by_date_range(current_month_start_date, current_month_end_date).count
     previous_month_completion_count = self.completed_logs_by_date_range(previous_month_start_date, previous_month_end_date).count
-    different_between_values(current_month_completion_count, previous_month_completion_count)
+    difference_between_values(current_month_completion_count, previous_month_completion_count)
   end
 
   def weekly_completion_percentage_by_date_range(start_date, end_date)
