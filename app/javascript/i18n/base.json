@@ -49,7 +49,8 @@
           "timezone": "Location/Time Zone",
           "title": "Title",
           "inviteUser": "Invite User",
-          "deactivate": "Deactivate"
+          "deactivate": "Deactivate",
+          "teams": "Teams"
         },
         "securityForm": {
           "password": "Password",

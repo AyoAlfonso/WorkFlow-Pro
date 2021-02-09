@@ -13,6 +13,8 @@ import { Container, FlexContainer } from "~/components/shared/styles/modals";
 import { maybeNull } from "mobx-state-tree/dist/internal";
 import { ModalButtonsContainer } from "~/components/domains/account/container-styles";
 
+import { Select as MaterialSelect } from "@material-ui/core";
+
 interface IEditUserModal {
   editUserModalOpen: boolean;
   setEditUserModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,6 +26,8 @@ interface IEditUserModal {
   setFirstName: React.Dispatch<React.SetStateAction<string>>;
   lastName: string;
   setLastName: React.Dispatch<React.SetStateAction<string>>;
+  teams: any;
+  setTeams: React.Dispatch<React.SetStateAction<any>>;
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   userRoleId: number;
@@ -45,6 +49,8 @@ export const EditUserModal = ({
   setFirstName,
   lastName,
   setLastName,
+  teams,
+  setTeams,
   title,
   setTitle,
   userRoleId,
@@ -165,6 +171,30 @@ export const EditUserModal = ({
                     userRoles,
                   )}
                 </Select>
+
+                <Label htmlFor="teams">{t("profile.profileUpdateForm.teams")}</Label>
+                <MaterialSelect
+                  labelId="demo-mutiple-chip-label"
+                  id="demo-mutiple-chip"
+                  multiple
+                  value={personName}
+                  onChange={handleChange}
+                  input={<Input id="select-multiple-chip" />}
+                  renderValue={selected => (
+                    <div className={classes.chips}>
+                      {selected.map(value => (
+                        <Chip key={value} label={value} className={classes.chip} />
+                      ))}
+                    </div>
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {names.map(name => (
+                    <MenuItem key={name} value={name} style={getStyles(name, personName, theme)}>
+                      {name}
+                    </MenuItem>
+                  ))}
+                </MaterialSelect>
 
                 {deactivated ? (
                   <Label>
