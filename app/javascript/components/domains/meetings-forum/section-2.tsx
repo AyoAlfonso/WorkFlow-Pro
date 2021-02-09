@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import MeetingTypes from "~/constants/meeting-types";
 
-import { NavHeader } from "~/components/domains/nav/nav-header";
+import { HomeTitle } from "~/components/domains/home/shared-components";
 import { Loading } from "~/components/shared/loading";
 
 import { ParkingLot } from "~/components/domains/meetings-forum/components/parking-lot";
@@ -43,7 +43,7 @@ export const Section2 = observer(
       return (
         <Container>
           <HeaderContainer>
-            <NavHeader>{t("forum.section2")}</NavHeader>
+            <HeaderText>{t("forum.section2")}</HeaderText>
           </HeaderContainer>
           <Loading />
         </Container>
@@ -53,7 +53,7 @@ export const Section2 = observer(
     return (
       <Container>
         <HeaderContainer>
-          <NavHeader>{t("forum.section2")}</NavHeader>
+          <HeaderText>{t("forum.section2")}</HeaderText>
         </HeaderContainer>
         <ParkingLot upcomingForumMeeting={upcomingForumMeeting} />
       </Container>
@@ -65,4 +65,10 @@ const Container = styled.div``;
 
 const HeaderContainer = styled.div`
   display: flex;
+`;
+
+export const HeaderText = styled(HomeTitle)`
+  font-size: 20pt;
+  font-weight: bold;
+  margin-left: 5px;
 `;

@@ -11,7 +11,6 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 
 import {
   HeaderContainer,
-  HeaderText,
   SubHeaderText,
   FilterContainer,
   CreateIssueContainer,
@@ -22,6 +21,8 @@ import {
   IssueContainer,
   Count,
 } from "./parking-lot-issues";
+import { HeaderText } from "~/components/domains/meetings-forum/section-2";
+
 interface ScheduledIssuesProps {
   teamId: number | string;
   upcomingForumMeeting: any;
@@ -99,7 +100,7 @@ export const ScheduledIssues = observer(
           />
           <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
             <AddNewIssuePlus>
-              <Icon icon={"Plus"} size={16} />
+              <Icon icon={"Plus"} size={20} />
             </AddNewIssuePlus>
             <AddNewIssueText> Add a Topic</AddNewIssueText>
           </AddNewIssueContainer>

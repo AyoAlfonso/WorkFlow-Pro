@@ -11,6 +11,7 @@ import { Icon } from "~/components/shared";
 import { IssueEntry } from "../../issues/issue-entry";
 import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+import { HeaderText } from "~/components/domains/meetings-forum/section-2";
 
 interface ParkingLotIssuesProps {
   teamId: number | string;
@@ -88,7 +89,7 @@ export const ParkingLotIssues = observer(
           />
           <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
             <AddNewIssuePlus>
-              <Icon icon={"Plus"} size={16} />
+              <Icon icon={"Plus"} size={20} />
             </AddNewIssuePlus>
             <AddNewIssueText> Add a Topic</AddNewIssueText>
           </AddNewIssueContainer>
@@ -110,19 +111,11 @@ export const HeaderContainer = styled.div`
   display: flex;
 `;
 
-export const HeaderText = styled.h2`
+export const SubHeaderText = styled.div`
   display: flex;
   justify-content: center;
   alignitems: center;
-  font-size: 20px;
-  font-weight: 600;
-`;
-
-export const SubHeaderText = styled.h6`
-  display: flex;
-  justify-content: center;
-  alignitems: center;
-  font-size: 16px;
+  font-size: 12px;
   color: ${props => props.theme.colors.grey60};
 `;
 
@@ -130,6 +123,9 @@ export const FilterContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  margin-left: 5px;
 `;
 
 export const CreateIssueContainer = styled.div`
@@ -139,7 +135,7 @@ export const CreateIssueContainer = styled.div`
 export const AddNewIssuePlus = styled.div`
   margin-top: auto;
   margin-bottom: auto;
-  margin-left: 5px;
+  margin-left: 10px;
   color: ${props => props.theme.colors.grey80};
 `;
 
@@ -165,7 +161,6 @@ export const AddNewIssueContainer = styled(HomeContainerBorders)`
 `;
 
 export const IssuesContainer = styled.div<IssuesContainerType>`
-  overflow-y: auto;
   background-color: ${props =>
     props.isDraggingOver ? props.theme.colors.backgroundBlue : "white"};
   min-height: 320px;

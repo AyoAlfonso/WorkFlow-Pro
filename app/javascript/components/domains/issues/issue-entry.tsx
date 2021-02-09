@@ -272,7 +272,7 @@ const CreateKeyActivityButtonContainer = styled.div`
 const Container = styled.div`
   display: flex;
   font-size: 14px;
-  width: inherit;
+  width: 100%;
   padding: 12px 0px 12px 0px;
   margin-left: 8px;
   margin-right: 8px;
