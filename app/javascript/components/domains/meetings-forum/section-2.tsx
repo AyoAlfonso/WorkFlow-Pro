@@ -65,6 +65,7 @@ const Container = styled.div``;
 
 const HeaderContainer = styled.div`
   display: flex;
+  margin-bottom: 15px;
 `;
 
 export const HeaderText = styled(HomeTitle)`
