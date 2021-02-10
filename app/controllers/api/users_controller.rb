@@ -11,14 +11,16 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def create
-    authorize current_user.company.users.new
+    authorize current_user
     if User.find_by_email(user_creation_params[:email]).present?
       render json: {message: "User already created."}, status: :unprocessable_entity
       return
     end
 
-    @user = User.invite!(user_creation_params.merge(company_id: current_company.id, team_user_enablements_attributes: team_user_enablement_attribute_parser(params[:user][:teams])))
+    @user = User.invite!(user_creation_params.merge(company_id: current_company.id, default_selected_company_id: current_company.id))
+
     if @user.valid? && @user.persisted?
+      @user.update!({user_company_enablements_attributes: create_user_company_enablement_attribute_parser, team_user_enablements_attributes: team_user_enablement_attribute_parser(params[:user][:teams])})
       render '/api/users/show'
     else
       render json: {message: "Failed to invite user"}, status: :unprocessable_entity
@@ -84,6 +86,15 @@ class Api::UsersController < Api::ApplicationController
   def set_user
     @user = User.find(params[:id])
     authorize @user
+  end
+
+  def create_user_company_enablement_attribute_parser
+    [{
+      user_id: @user.id, 
+      company_id: current_company.id,
+      user_title: params[:user][:title],
+      user_role_id: params[:user][:user_role_id]
+    }]
   end
 
   def team_user_enablement_attribute_parser(teams)
