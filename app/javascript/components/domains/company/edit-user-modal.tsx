@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as R from "ramda";
 import { ModalWithHeader } from "~/components/shared/modal-with-header";
-import { useState } from "react";
 import { useMst } from "../../../setup/root";
 
 import { useTranslation } from "react-i18next";
@@ -10,11 +9,8 @@ import { Can } from "~/components/shared/auth/can";
 import { RoleNormalUser } from "~/lib/constants";
 
 import { Container, FlexContainer } from "~/components/shared/styles/modals";
-import { maybeNull } from "mobx-state-tree/dist/internal";
 import { ModalButtonsContainer } from "~/components/domains/account/container-styles";
-
-import { Select as MaterialSelect } from "@material-ui/core";
-
+import { SetUserTeams } from "./set-user-teams";
 interface IEditUserModal {
   editUserModalOpen: boolean;
   setEditUserModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -66,13 +62,6 @@ export const EditUserModal = ({
 
   const { t } = useTranslation();
 
-  // const [email, setEmail] = useState("");
-  // const [firstName, setFirstName] = useState("");
-  // const [lastName, setLastName] = useState("");
-  // const [userRoleId, setUserRole] = useState(
-  //   R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)),
-  // );
-
   const resetUser = () => {
     //reset to new user
     setUserId(null);
@@ -80,6 +69,7 @@ export const EditUserModal = ({
     setFirstName("");
     setLastName("");
     setTitle("");
+    setTeams([]);
     setUserRole(getUserRoleIdFrom(RoleNormalUser, userRoles));
   };
 
@@ -89,6 +79,7 @@ export const EditUserModal = ({
         email,
         firstName,
         lastName,
+        teams,
         title,
         userRoleId,
       })
@@ -102,7 +93,7 @@ export const EditUserModal = ({
 
   const updateUser = () => {
     if (!R.isNil(userId)) {
-      userStore.updateUser({ id: userId, email, firstName, lastName, title, userRoleId });
+      userStore.updateUser({ id: userId, email, firstName, lastName, teams, title, userRoleId });
       // resetUser();
     }
   };
@@ -172,29 +163,7 @@ export const EditUserModal = ({
                   )}
                 </Select>
 
-                <Label htmlFor="teams">{t("profile.profileUpdateForm.teams")}</Label>
-                <MaterialSelect
-                  labelId="demo-mutiple-chip-label"
-                  id="demo-mutiple-chip"
-                  multiple
-                  value={personName}
-                  onChange={handleChange}
-                  input={<Input id="select-multiple-chip" />}
-                  renderValue={selected => (
-                    <div className={classes.chips}>
-                      {selected.map(value => (
-                        <Chip key={value} label={value} className={classes.chip} />
-                      ))}
-                    </div>
-                  )}
-                  MenuProps={MenuProps}
-                >
-                  {names.map(name => (
-                    <MenuItem key={name} value={name} style={getStyles(name, personName, theme)}>
-                      {name}
-                    </MenuItem>
-                  ))}
-                </MaterialSelect>
+                <SetUserTeams teams={teams} setTeams={setTeams} />
 
                 {deactivated ? (
                   <Label>

@@ -36,6 +36,7 @@ class User < ApplicationRecord
   has_many :companies, through: :user_company_enablements
   accepts_nested_attributes_for :companies, :allow_destroy => true
   accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
+  accepts_nested_attributes_for :team_user_enablements, :allow_destroy => true
 
   validates :first_name, :last_name, presence: true
 

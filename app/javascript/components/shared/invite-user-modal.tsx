@@ -28,7 +28,7 @@ export const InviteUserModal = ({
     R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)),
   );
   const [title, setTitle] = useState("");
-  const [teams, setTeams] = useState<any>({});
+  const [teams, setTeams] = useState<any>([]);
 
   return (
     <EditUserModal
