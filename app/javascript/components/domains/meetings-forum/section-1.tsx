@@ -22,6 +22,7 @@ import {
   ColumnContainer,
   Container as SectionContainer,
 } from "./components/row-style";
+import Popup from "reactjs-popup";
 
 export const Section1 = observer(
   (): JSX.Element => {
@@ -35,6 +36,7 @@ export const Section1 = observer(
     // if there is a no team id, get the first team
     const { team_id } = useParams();
     const [loading, setLoading] = useState<boolean>(true);
+    const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
     const teamId =
       (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
@@ -44,9 +46,9 @@ export const Section1 = observer(
         forumStore.load(teamId, company.currentFiscalYear).then(() => setLoading(false));
       }
     }, [company, teams.map(t => t.id), team_id]); //neeed to deal with swtiching year later
-
+    
     const currentTeam = teams.find(team => team.id == teamId);
-
+    
     if (loading || !currentTeam) {
       return (
         <Container>
@@ -62,6 +64,17 @@ export const Section1 = observer(
     //TODO: will remove nave header when we do the header section
     //TODO: need to sort by scheduled start time from view?
 
+    const fiscalYearRanges = company.fiscalYearRange;
+    const renderYearOptions = fiscalYearRanges.map((fiscalYear, key) => (
+      <StyledHomeTitle
+        style={{
+          backgroundColor: "grey"
+        }}
+      >
+        {fiscalYear["year"]}
+      </StyledHomeTitle>
+    ));
+      
     return (
       <Container>
         <HeaderContainer>
@@ -83,7 +96,33 @@ export const Section1 = observer(
           <>
             <SubHeaderContainer>
               <YearPlanContainer>
-                <StyledHomeTitle>{forumStore.currentForumYear} Plan</StyledHomeTitle>
+                <Popup
+                  arrow={false}
+                  closeOnDocumentClick
+                  contentStyle={{
+                    border: "none",
+                    borderRadius: "6px",
+                    overflow: "hidden",
+                    padding: 0,
+                    width: "175px",
+                  }}
+                  on="click"
+                  onClose={() =>
+                    setDropdownOpen(false)
+                  }
+                  onOpen={() =>
+                    setDropdownOpen(true)
+                  }
+                  open={dropdownOpen}
+                  position="bottom center"
+                  trigger={
+                    <StyledHomeTitle>{forumStore.currentForumYear}</StyledHomeTitle>
+                  }
+                >
+                  <div>
+                    {renderYearOptions}
+                  </div>
+                </Popup>
               </YearPlanContainer>
               <SectionContainer>
                 <ColumnContainer>
