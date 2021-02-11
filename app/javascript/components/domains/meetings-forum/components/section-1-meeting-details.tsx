@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import styled from "styled-components";
+import * as R from "ramda";
 import moment from "moment";
 import { IMeeting } from "~/models/meeting";
 import { MonthContainer, Container as SectionContainer, Divider } from "./row-style";
@@ -22,7 +22,7 @@ export interface ISection1MeetingDetailsProps {
 export const Section1MeetingDetails = observer(
   ({ meeting, teamMembers }: ISection1MeetingDetailsProps): JSX.Element => {
     const { meetingStore } = useMst();
-    const [newScheduledTime, setNewScheduledTime] = useState<string>(meeting.scheduledStartTime);
+    const [newScheduledStartTime, setNewScheduledStartTime] = useState<string>(meeting.scheduledStartTime);
 
     return (
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -36,11 +36,10 @@ export const Section1MeetingDetails = observer(
                 <TextField {...params} margin="normal" variant="standard" />
               )}
               label=""
-              value={newScheduledTime}
-              onChange={(newDateTime) => {
-                // meetingStore.updateMeeting(newDateTime)
-                console.log(meeting.scheduledStartTime)
-                console.log(newDateTime)
+              value={newScheduledStartTime}
+              onChange={async (newDateTime) => {
+                await meetingStore.updateMeeting(R.merge(meeting, {scheduledStartTime: moment(newDateTime).format()}));
+                setNewScheduledStartTime(newDateTime)
               }}
             />
           </MonthContainer>
