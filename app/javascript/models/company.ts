@@ -23,6 +23,7 @@ export const CompanyModel = types
     fiscalYearRange: types.maybeNull(types.array(types.frozen())),
     currentQuarterStartDate: types.maybeNull(types.string),
     nextQuarterStartDate: types.maybeNull(types.string),
+    forumMeetingsYearRange: types.maybeNull(types.array(types.frozen()))
   })
   .views(self => ({
     get accessCompany() {

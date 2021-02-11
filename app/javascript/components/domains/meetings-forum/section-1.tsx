@@ -16,6 +16,7 @@ import { Icon } from "~/components/shared/icon";
 import { Button } from "~/components/shared/button";
 import { Section1MeetingDetails } from "./components/section-1-meeting-details";
 import { Text } from "~/components/shared/text";
+import { baseTheme } from "../../../themes/base";
 
 import {
   MonthContainer,
@@ -28,6 +29,7 @@ export const Section1 = observer(
   (): JSX.Element => {
     const { t } = useTranslation();
     const {
+      companyStore,
       companyStore: { company },
       teamStore: { teams },
       forumStore,
@@ -37,15 +39,26 @@ export const Section1 = observer(
     const { team_id } = useParams();
     const [loading, setLoading] = useState<boolean>(true);
     const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+    
+    useEffect(() => {
+      async function setUp() {
+        await companyStore.load()
+        setLoading(false)
+      }
+      setUp();
+    })
+
+    const [currentYear, setCurrentYear] = useState<number>(company.currentFiscalYear);
 
     const teamId =
       (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
 
     useEffect(() => {
+      setLoading(true)
       if (loading && teamId && company) {
-        forumStore.load(teamId, company.currentFiscalYear).then(() => setLoading(false));
+        forumStore.load(teamId, currentYear).then(() => setLoading(false));
       }
-    }, [company, teams.map(t => t.id), team_id]); //neeed to deal with swtiching year later
+    }, [company, teams.map(t => t.id), team_id, currentYear]); //neeed to deal with swtiching year later
     
     const currentTeam = teams.find(team => team.id == teamId);
     
@@ -63,12 +76,20 @@ export const Section1 = observer(
     }
     //TODO: will remove nave header when we do the header section
     //TODO: need to sort by scheduled start time from view?
+    
+    const fiscalYearRanges = company.forumMeetingsYearRange;
 
-    const fiscalYearRanges = company.fiscalYearRange;
     const renderYearOptions = fiscalYearRanges.map((fiscalYear, key) => (
       <StyledHomeTitle
+        key={key}
         style={{
-          backgroundColor: "grey"
+          backgroundColor: baseTheme.colors.grey20,
+          color: baseTheme.colors.grey60
+        }}
+        onClick={() => {
+          setLoading(true)
+          setCurrentYear(fiscalYear["year"])
+          setDropdownOpen(false)
         }}
       >
         {fiscalYear["year"]}
@@ -116,12 +137,12 @@ export const Section1 = observer(
                   open={dropdownOpen}
                   position="bottom center"
                   trigger={
-                    <StyledHomeTitle>{forumStore.currentForumYear}</StyledHomeTitle>
+                    <StyledHomeTitle>{currentYear}</StyledHomeTitle>
                   }
                 >
-                  <div>
+                  <>
                     {renderYearOptions}
-                  </div>
+                  </>
                 </Popup>
               </YearPlanContainer>
               <SectionContainer>
