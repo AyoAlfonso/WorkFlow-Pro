@@ -101,13 +101,51 @@ export const Section1 = observer(
         <HeaderContainer>
           <NavHeader>{t("forum.section1")}</NavHeader>
         </HeaderContainer>
-
+        <SubHeaderContainer>
+          <YearPlanContainer>
+            <Popup
+              arrow={false}
+              closeOnDocumentClick
+              contentStyle={{
+                border: "none",
+                borderRadius: "6px",
+                overflow: "hidden",
+                padding: 0,
+                width: "175px",
+              }}
+              on="click"
+              onClose={() =>
+                setDropdownOpen(false)
+              }
+              onOpen={() =>
+                setDropdownOpen(true)
+              }
+              open={dropdownOpen}
+              position="bottom center"
+              trigger={
+                <StyledHomeTitle>{currentYear}</StyledHomeTitle>
+              }
+            >
+              <>
+                {renderYearOptions}
+              </>
+            </Popup>
+          </YearPlanContainer>
+          <SectionContainer>
+            <ColumnContainer>
+              <SubHeaderText>{t("forum.explorationTopic.whoTitle")}</SubHeaderText>
+            </ColumnContainer>
+            <ColumnContainer>
+              <SubHeaderText>{t("forum.explorationTopic.topicTitle")}</SubHeaderText>
+            </ColumnContainer>
+          </SectionContainer>
+        </SubHeaderContainer>
         {forumStore.forumYearMeetings.length < 12 ? (
           <StyledButton
             small
             variant={"grey"}
             onClick={() => {
-              forumStore.createMeetingsForYear(forumStore.currentForumTeamId);
+              forumStore.createMeetingsForYear(forumStore.currentForumTeamId, currentYear);
             }}
           >
             <Icon icon={"Plus"} size={"20px"} />
@@ -115,46 +153,6 @@ export const Section1 = observer(
           </StyledButton>
         ) : (
           <>
-            <SubHeaderContainer>
-              <YearPlanContainer>
-                <Popup
-                  arrow={false}
-                  closeOnDocumentClick
-                  contentStyle={{
-                    border: "none",
-                    borderRadius: "6px",
-                    overflow: "hidden",
-                    padding: 0,
-                    width: "175px",
-                  }}
-                  on="click"
-                  onClose={() =>
-                    setDropdownOpen(false)
-                  }
-                  onOpen={() =>
-                    setDropdownOpen(true)
-                  }
-                  open={dropdownOpen}
-                  position="bottom center"
-                  trigger={
-                    <StyledHomeTitle>{currentYear}</StyledHomeTitle>
-                  }
-                >
-                  <>
-                    {renderYearOptions}
-                  </>
-                </Popup>
-              </YearPlanContainer>
-              <SectionContainer>
-                <ColumnContainer>
-                  <SubHeaderText>{t("forum.explorationTopic.whoTitle")}</SubHeaderText>
-                </ColumnContainer>
-                <ColumnContainer>
-                  <SubHeaderText>{t("forum.explorationTopic.topicTitle")}</SubHeaderText>
-                </ColumnContainer>
-              </SectionContainer>
-            </SubHeaderContainer>
-
             {forumStore.forumYearMeetings.map(meeting => {
               return (
                 <Section1MeetingDetails

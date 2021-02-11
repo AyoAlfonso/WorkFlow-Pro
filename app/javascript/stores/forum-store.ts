@@ -53,11 +53,12 @@ export const ForumStoreModel = types
         //assumes you know what the initial year is when you load
       }
     }),
-    createMeetingsForYear: flow(function*(teamId) {
+    createMeetingsForYear: flow(function*(teamId, currentYear) {
       //should actually go to backend and create initial meetings
       try {
         const response: ApiResponse<any> = yield self.environment.api.createForumMeetingsForYear(
-          teamId
+          teamId,
+          currentYear
         );
         if (response.ok) {
           self.forumYearMeetings = response.data as any;
