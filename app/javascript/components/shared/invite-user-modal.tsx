@@ -28,6 +28,7 @@ export const InviteUserModal = ({
     R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)),
   );
   const [title, setTitle] = useState("");
+  const [teams, setTeams] = useState<any>([]);
 
   return (
     <EditUserModal
@@ -41,6 +42,8 @@ export const InviteUserModal = ({
       setFirstName={setFirstName}
       lastName={lastName}
       setLastName={setLastName}
+      teams={teams}
+      setTeams={setTeams}
       title={title}
       setTitle={setTitle}
       userRoleId={userRoleId}

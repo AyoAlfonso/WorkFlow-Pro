@@ -43,6 +43,9 @@ export const TeamModel = types
     isANonLead(user) {
       return R.contains(user.id, self.nonLeadMemberIds);
     },
+    isAMember(user){
+      return R.contains(user.id, self.allTeamUserIds)
+    }
   }))
   .actions(self => ({}));
 

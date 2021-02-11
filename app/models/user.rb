@@ -27,15 +27,16 @@ class User < ApplicationRecord
   has_one_attached :avatar
   has_many :questionnaire_attempts
   belongs_to :user_role
-  has_many :habits
-  has_many :team_user_enablements
+  has_many :habits, dependent: :destroy
+  has_many :team_user_enablements, dependent: :destroy
   has_many :teams, through: :team_user_enablements
   has_many :notifications, dependent: :destroy
   has_many :meetings, :foreign_key => 'hosted_by_id'
-  has_many :user_company_enablements
+  has_many :user_company_enablements, dependent: :destroy
   has_many :companies, through: :user_company_enablements
   accepts_nested_attributes_for :companies, :allow_destroy => true
   accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
+  accepts_nested_attributes_for :team_user_enablements, :allow_destroy => true
 
   validates :first_name, :last_name, presence: true
 

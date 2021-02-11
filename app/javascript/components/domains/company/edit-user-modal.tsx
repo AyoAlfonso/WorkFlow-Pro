@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as R from "ramda";
 import { ModalWithHeader } from "~/components/shared/modal-with-header";
-import { useState } from "react";
 import { useMst } from "../../../setup/root";
 
 import { useTranslation } from "react-i18next";
@@ -10,9 +9,8 @@ import { Can } from "~/components/shared/auth/can";
 import { RoleNormalUser } from "~/lib/constants";
 
 import { Container, FlexContainer } from "~/components/shared/styles/modals";
-import { maybeNull } from "mobx-state-tree/dist/internal";
 import { ModalButtonsContainer } from "~/components/domains/account/container-styles";
-
+import { SetUserTeams } from "./set-user-teams";
 interface IEditUserModal {
   editUserModalOpen: boolean;
   setEditUserModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,6 +22,8 @@ interface IEditUserModal {
   setFirstName: React.Dispatch<React.SetStateAction<string>>;
   lastName: string;
   setLastName: React.Dispatch<React.SetStateAction<string>>;
+  teams: any;
+  setTeams: React.Dispatch<React.SetStateAction<any>>;
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   userRoleId: number;
@@ -45,6 +45,8 @@ export const EditUserModal = ({
   setFirstName,
   lastName,
   setLastName,
+  teams,
+  setTeams,
   title,
   setTitle,
   userRoleId,
@@ -60,13 +62,6 @@ export const EditUserModal = ({
 
   const { t } = useTranslation();
 
-  // const [email, setEmail] = useState("");
-  // const [firstName, setFirstName] = useState("");
-  // const [lastName, setLastName] = useState("");
-  // const [userRoleId, setUserRole] = useState(
-  //   R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)),
-  // );
-
   const resetUser = () => {
     //reset to new user
     setUserId(null);
@@ -74,6 +69,7 @@ export const EditUserModal = ({
     setFirstName("");
     setLastName("");
     setTitle("");
+    setTeams([]);
     setUserRole(getUserRoleIdFrom(RoleNormalUser, userRoles));
   };
 
@@ -83,6 +79,7 @@ export const EditUserModal = ({
         email,
         firstName,
         lastName,
+        teams,
         title,
         userRoleId,
       })
@@ -96,7 +93,7 @@ export const EditUserModal = ({
 
   const updateUser = () => {
     if (!R.isNil(userId)) {
-      userStore.updateUser({ id: userId, email, firstName, lastName, title, userRoleId });
+      userStore.updateUser({ id: userId, email, firstName, lastName, teams, title, userRoleId });
       // resetUser();
     }
   };
@@ -165,6 +162,8 @@ export const EditUserModal = ({
                     userRoles,
                   )}
                 </Select>
+
+                <SetUserTeams teams={teams} setTeams={setTeams} />
 
                 {deactivated ? (
                   <Label>

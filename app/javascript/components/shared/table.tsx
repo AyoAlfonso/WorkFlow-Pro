@@ -42,12 +42,12 @@ export const Table = (props: TableProps) => {
         <Divider />
         {data.map((item, index) => {
           return (
-            <>
-              <Box key={`data-${index}`} px={2} width={widthCalc(index % columns)}>
+            <React.Fragment key={`data-${index}`}>
+              <Box px={2} width={widthCalc(index % columns)}>
                 {item}
               </Box>
               {(index + 1) % columns == 0 ? <Divider /> : <></>}
-            </>
+            </React.Fragment>
           );
         })}
       </Flex>

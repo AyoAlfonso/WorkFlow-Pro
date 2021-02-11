@@ -4,11 +4,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    @user.company == @record.company
+    @user.companies.pluck(:id).include?(@record.default_selected_company_id)
   end
 
   def create?
-    @user.company == @record.company && (@user.company_admin? && @user.company == @record.company) #current_admin_user.present?
+    true
   end
 
   def update?
@@ -34,6 +34,10 @@ class UserPolicy < ApplicationPolicy
 
   def delete_avatar?
     update_avatar?
+  end
+
+  def update_team_role?
+    true
   end
 
   class Scope

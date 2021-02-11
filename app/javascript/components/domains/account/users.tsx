@@ -44,6 +44,7 @@ export const Users = observer(
       R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)),
     );
     const [title, setTitle] = useState("");
+    const [teams, setTeams] = useState<any>([]);
 
     const { t } = useTranslation();
 
@@ -106,6 +107,7 @@ export const Users = observer(
                     setLastName(user.lastName || "");
                     setUserRole(getUserRoleIdFrom(user.role, userRoles));
                     setTitle(user.title || "");
+                    setTeams(user.teams || []);
                     setEditUserModalOpen(true);
                   }}
                 >
@@ -141,6 +143,7 @@ export const Users = observer(
                       R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)),
                     );
                     setTitle("");
+                    setTeams([]);
                     setEditUserModalOpen(true);
                   }}
                 >
@@ -157,6 +160,8 @@ export const Users = observer(
                   setFirstName={setFirstName}
                   lastName={lastName}
                   setLastName={setLastName}
+                  teams={teams}
+                  setTeams={setTeams}
                   title={title}
                   setTitle={setTitle}
                   userRoleId={userRoleId}

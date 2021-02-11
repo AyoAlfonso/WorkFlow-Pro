@@ -11,14 +11,16 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def create
-    authorize current_user.company.users.new
+    authorize current_user
     if User.find_by_email(user_creation_params[:email]).present?
       render json: {message: "User already created."}, status: :unprocessable_entity
       return
     end
 
-    @user = User.invite!(user_creation_params.merge(company_id: current_company.id))
+    @user = User.invite!(user_creation_params.merge(company_id: current_company.id, default_selected_company_id: current_company.id))
+
     if @user.valid? && @user.persisted?
+      @user.update!({user_company_enablements_attributes: create_user_company_enablement_attribute_parser, team_user_enablements_attributes: team_user_enablement_attribute_parser(params[:user][:teams])})
       render '/api/users/show'
     else
       render json: {message: "Failed to invite user"}, status: :unprocessable_entity
@@ -30,7 +32,7 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def update
-    @user.update!(user_update_params)
+    @user.update!(params[:user][:teams].present? ? user_update_params.merge(team_user_enablements_attributes: team_user_enablement_attribute_parser(params[:user][:teams])) : user_update_params)
     render 'api/users/show'
   end
 
@@ -71,6 +73,14 @@ class Api::UsersController < Api::ApplicationController
     render json: { avatar_url: nil }
   end
 
+  def update_team_role
+    authorize current_user
+    team_user_enablement = TeamUserEnablement.where(user_id: params[:user_id], team_id: params[:team_id]).first
+    team_user_enablement.update!(role: params[:can_edit] ? 1 : 0)
+    @user = User.find(params[:user_id])
+    render 'api/users/show'
+  end
+
   private
 
   def user_creation_params
@@ -84,5 +94,34 @@ class Api::UsersController < Api::ApplicationController
   def set_user
     @user = User.find(params[:id])
     authorize @user
+  end
+
+  def create_user_company_enablement_attribute_parser
+    [{
+      user_id: @user.id, 
+      company_id: current_company.id,
+      user_title: params[:user][:title],
+      user_role_id: params[:user][:user_role_id]
+    }]
+  end
+
+  def team_user_enablement_attribute_parser(teams)
+    tue_list = []
+    teams.each do |team|
+      tue_list.push({
+        team_id: team[:id],
+        user_id: @user.id,
+        role: 0
+      })
+    end
+
+    @user.team_user_enablements.each do |tue|
+      tue_list.push({
+        id: tue.id,
+        _destroy: true
+      }) if !tue_list.any? { |enablement| enablement[:team_id] == tue.team_id && enablement[:user_id] == tue.user_id }
+    end
+
+    tue_list
   end
 end
