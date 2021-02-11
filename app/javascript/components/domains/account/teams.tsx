@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as R from "ramda";
-
+import { Checkbox, Label } from "@rebass/forms";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { useTranslation } from "react-i18next";
@@ -12,25 +12,24 @@ import { UserCard } from "~/components/shared/user-card";
 import {
   StretchContainer,
   BodyContainer,
-  PersonalInfoContainer,
   HeaderContainer,
   HeaderText,
   LeftAlignedTableContainer,
-  CenteredTableContainer,
   LeftAlignedColumnListTableContainer,
 } from "./container-styles";
 
 import { Table } from "~/components/shared/table";
+import styled from "styled-components";
 
 export const Teams = observer(
   (): JSX.Element => {
     const {
       teamStore: { teams },
       userStore: { users },
+      userStore,
     } = useMst();
 
     const { t } = useTranslation();
-    // const teamsData = [];
     const teamsData = R.flatten(
       [].concat(
         teams.map(team => [
@@ -47,32 +46,42 @@ export const Teams = observer(
               {team.name}
             </TextNoMargin>
           </LeftAlignedTableContainer>,
+          <LeftAlignedTableContainer>
+            <Status key={`team-${team.id}-active`} status={team.active ? "active" : "inactive"} />
+          </LeftAlignedTableContainer>,
           <LeftAlignedColumnListTableContainer>
             {users
-              .filter(user => team.isALead(user))
-              .map(user => (user ? <UserCard key={user.id} {...user} /> : <></>))}
-          </LeftAlignedColumnListTableContainer>,
-          <Status key={`team-${team.id}-active`} status={team.active ? "active" : "inactive"} />,
-          <LeftAlignedTableContainer>
-            {users
-              .filter(user => R.contains(user.id, team.nonLeadMemberIds))
-              .map(user =>
-                user ? (
-                  <Avatar
-                    key={user.id}
-                    defaultAvatarColor={R.path(["defaultAvatarColor"], user)}
-                    avatarUrl={R.path(["avatarUrl"], user)}
-                    firstName={R.path(["firstName"], user)}
-                    lastName={R.path(["lastName"], user)}
-                    size={32}
-                    marginLeft={"inherit"}
-                    marginRight={"8px"}
-                  />
-                ) : (
-                  <></>
-                ),
+              .filter(user => team.isAMember(user))
+              .map(
+                user =>
+                  user && (
+                    <UserCardContainer key={user.id}>
+                      <UserCard {...user} />
+                    </UserCardContainer>
+                  ),
               )}
-          </LeftAlignedTableContainer>,
+          </LeftAlignedColumnListTableContainer>,
+
+          <LeftAlignedColumnListTableContainer>
+            {users
+              .filter(user => team.isAMember(user))
+              .map(
+                user =>
+                  user && (
+                    <CheckboxContainer key={user.id}>
+                      <Label>
+                        <Checkbox
+                          id={`${user.id}`}
+                          defaultChecked={team.isALead(user)}
+                          onChange={e => {
+                            userStore.updateUserTeamRole(user.id, team.id, e.target.checked);
+                          }}
+                        />
+                      </Label>
+                    </CheckboxContainer>
+                  ),
+              )}
+          </LeftAlignedColumnListTableContainer>,
         ]),
       ),
     );
@@ -85,12 +94,29 @@ export const Teams = observer(
         <BodyContainer>
           <Table
             columns={4}
-            headers={["Team", "Team Leader", "Status", "Members"]}
+            headers={["Team", "Status", "Team Members", "Start Meetings?"]}
             data={teamsData}
-            styling={{ widths: [2, 2, 1, 2] }}
+            styling={{ widths: [2, 1, 2, 2] }}
           ></Table>
         </BodyContainer>
       </StretchContainer>
     );
   },
 );
+
+const UserCardContainer = styled.div`
+  margin-top: 8px;
+  margin-bottom: 8px;
+`;
+
+const CheckboxContainer = styled.div`
+  height: 48px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  &: hover {
+    cursor: pointer;
+  }
+`;

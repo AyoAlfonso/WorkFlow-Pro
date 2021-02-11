@@ -86,6 +86,15 @@ export const UserStoreModel = types
       } catch {}
       return false;
     }),
+    updateUserTeamRole: flow(function*(userId, teamId, canEdit){
+      const response: any = yield self.environment.api.updateUserTeamRole(userId, teamId, canEdit);
+        if (response.ok) {
+          const userIndex = self.users.findIndex(user => user.id == userId)
+          self.users[userIndex] = response.data
+          showToast("User updated", ToastMessageConstants.SUCCESS);
+          return true;
+        }
+    })
   }));
 
 type UserStoreType = typeof UserStoreModel.Type;

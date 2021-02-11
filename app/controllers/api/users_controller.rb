@@ -32,7 +32,7 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def update
-    @user.update!(user_update_params.merge(team_user_enablements_attributes: team_user_enablement_attribute_parser(params[:user][:teams])))
+    @user.update!(params[:user][:teams].present? ? user_update_params.merge(team_user_enablements_attributes: team_user_enablement_attribute_parser(params[:user][:teams])) : user_update_params)
     render 'api/users/show'
   end
 
@@ -71,6 +71,14 @@ class Api::UsersController < Api::ApplicationController
     authorize current_user
     current_user.avatar.purge_later
     render json: { avatar_url: nil }
+  end
+
+  def update_team_role
+    authorize current_user
+    team_user_enablement = TeamUserEnablement.where(user_id: params[:user_id], team_id: params[:team_id]).first
+    team_user_enablement.update!(role: params[:can_edit] ? 1 : 0)
+    @user = User.find(params[:user_id])
+    render 'api/users/show'
   end
 
   private

@@ -36,6 +36,10 @@ class UserPolicy < ApplicationPolicy
     update_avatar?
   end
 
+  def update_team_role?
+    true
+  end
+
   class Scope
     attr_reader :user, :company, :scope
 

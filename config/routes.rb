@@ -49,7 +49,7 @@ Rails.application.routes.draw do
         patch '/resend_invitation', to: "users#resend_invitation"
       end
     end
-    
+    patch '/update_user_team_role', to: 'users#update_team_role'
     get '/profile', to: 'users#profile'
     patch '/avatar', to: 'users#update_avatar'
     delete '/avatar', to: 'users#delete_avatar'
