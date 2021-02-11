@@ -31,6 +31,7 @@ export const Section1 = observer(
     const {
       companyStore,
       companyStore: { company },
+      companyStore: { company: { currentFiscalYear } },
       teamStore: { teams },
       forumStore,
     } = useMst();
@@ -39,26 +40,24 @@ export const Section1 = observer(
     const { team_id } = useParams();
     const [loading, setLoading] = useState<boolean>(true);
     const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-    
+
     useEffect(() => {
       async function setUp() {
-        await companyStore.load()
-        setLoading(false)
+        await companyStore.load();
       }
       setUp();
-    })
+    }, [currentFiscalYear]);
 
-    const [currentYear, setCurrentYear] = useState<number>(company.currentFiscalYear);
-
+    const [currentYear, setCurrentYear] = useState<number>(currentFiscalYear);
+  
     const teamId =
       (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
 
     useEffect(() => {
-      setLoading(true)
       if (loading && teamId && company) {
         forumStore.load(teamId, currentYear).then(() => setLoading(false));
       }
-    }, [company, teams.map(t => t.id), team_id, currentYear]); //neeed to deal with swtiching year later
+    }, [company, teams.map(t => t.id), team_id]); //neeed to deal with swtiching year later
     
     const currentTeam = teams.find(team => team.id == teamId);
     
