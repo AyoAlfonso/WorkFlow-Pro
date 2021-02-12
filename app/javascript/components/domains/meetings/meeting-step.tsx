@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as R from "ramda";
 import styled from "styled-components";
-import { HomeContainerBorders, HomeTitle } from "../home/shared-components";
 import { ConversationStarter } from "./components/conversation-starter";
 import { PersonalGoals } from "./components/personal-goals";
 import { DailyPlanning } from "./components/daily-planning";
@@ -22,7 +21,6 @@ import { TeamPulse } from "./components/team-pulse";
 import { TeamKeyActivities } from "./components/team-key-activities";
 import { MeetingGoals } from "./components/meeting-goals";
 import { TeamIssues } from "./components/team-issues";
-import { MeetingSideOptions } from "./meeting-side-options";
 import { ParkingLot } from "~/components/domains/meetings-forum/components/parking-lot";
 import { ExplorationTopic } from "~/components/domains/meetings-forum/components/exploration-topic";
 
@@ -87,46 +85,22 @@ export const MeetingStep = observer(
     }
     return (
       <BodyContainer>
-        {/* <LeftContainer>
-          <LeftContainerBorder>
-            <AgendaHeaderContainer>
-              <HomeTitle>{meeting.currentStepDetails.name}</HomeTitle>
-              <Text fontSize={1}>{meeting.currentStepDetails.instructions}</Text>
-            </AgendaHeaderContainer>
-            <MeetingSideOptions teamId={meeting.teamId} meeting={meeting} />
-          </LeftContainerBorder>
-        </LeftContainer> */}
-        <RightContainer>{StepComponent(meeting.currentStepDetails, meeting)}</RightContainer>
+        <StepComponentContainer>
+          {StepComponent(meeting.currentStepDetails, meeting)}
+        </StepComponentContainer>
       </BodyContainer>
     );
   },
 );
-
-const LeftContainerBorder = styled(HomeContainerBorders)`
-  padding: 16px;
-  min-height: 500px;
-`;
 
 const BodyContainer = styled.div`
   display: flex;
   margin-top: 50px;
 `;
 
-const LeftContainer = styled.div`
-  width: 20%;
-  margin-right: 10px;
-  min-width: 320px;
-  min-height: 500px;
-`;
-
-const RightContainer = styled.div`
+const StepComponentContainer = styled.div`
   width: 90%;
   min-width: 320px;
   margin-left: 10px;
   margin-top: 5px;
-`;
-
-const AgendaHeaderContainer = styled.div`
-  border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
-  padding-bottom: 10px;
 `;
