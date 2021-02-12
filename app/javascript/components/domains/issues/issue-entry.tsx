@@ -144,7 +144,7 @@ export const IssueEntry = observer(
           onBlur={() => issueStore.updateIssue(issue.id, meetingId ? true : false)}
         />
 
-        <ActionContainer>
+        <ActionContainer meeting={meetingId ? true : false}>
           <ActionSubContainer>
             <ActionsDisplayContainer>
               {meetingId && (
@@ -228,12 +228,17 @@ export const IssueEntry = observer(
   },
 );
 
-const ActionContainer = styled.div`
+type ActionContainerProps = {
+  meeting: boolean;
+};
+
+const ActionContainer = styled.div<ActionContainerProps>`
   margin-left: auto;
   margin-top: auto;
   margin-bottom: auto;
   padding-left: 4px;
   width: 110px;
+  margin-right: ${props => props.meeting && "4px"};
 `;
 
 const ActionsDisplayContainer = styled.div`

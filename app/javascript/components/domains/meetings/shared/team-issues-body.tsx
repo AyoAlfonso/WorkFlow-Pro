@@ -63,7 +63,7 @@ export const TeamIssuesBody = observer(
             {`Add a New ${company.displayFormat == "Forum" ? "Parking Lot" : "Issue"}`}
           </AddNewIssueText>
         </AddNewIssueContainer>
-        <IssuesContainer>{renderIssuesList()}</IssuesContainer>
+        <IssuesContainer meeting={meetingId ? true : false}>{renderIssuesList()}</IssuesContainer>
       </Container>
     );
   },
@@ -102,9 +102,15 @@ const AddNewIssueContainer = styled.div`
   }
 `;
 
-const IssuesContainer = styled.div`
+type IssuesContainerProps = {
+  meeting: boolean;
+};
+
+const IssuesContainer = styled.div<IssuesContainerProps>`
   overflow-y: auto;
-  height: 260px;
+  height: ${props => !props.meeting && "260px"};
+  max-height: ${props => props.meeting && "65vh"};
+  overflow-x: ${props => props.meeting && "hidden"};
 `;
 
 const IssueContainer = styled.div``;

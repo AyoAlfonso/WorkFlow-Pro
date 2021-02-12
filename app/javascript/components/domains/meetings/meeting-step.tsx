@@ -87,7 +87,7 @@ export const MeetingStep = observer(
     }
     return (
       <BodyContainer>
-        <LeftContainer>
+        {/* <LeftContainer>
           <LeftContainerBorder>
             <AgendaHeaderContainer>
               <HomeTitle>{meeting.currentStepDetails.name}</HomeTitle>
@@ -95,7 +95,7 @@ export const MeetingStep = observer(
             </AgendaHeaderContainer>
             <MeetingSideOptions teamId={meeting.teamId} meeting={meeting} />
           </LeftContainerBorder>
-        </LeftContainer>
+        </LeftContainer> */}
         <RightContainer>{StepComponent(meeting.currentStepDetails, meeting)}</RightContainer>
       </BodyContainer>
     );
@@ -120,7 +120,7 @@ const LeftContainer = styled.div`
 `;
 
 const RightContainer = styled.div`
-  width: 80%;
+  width: 90%;
   min-width: 320px;
   margin-left: 10px;
   margin-top: 5px;

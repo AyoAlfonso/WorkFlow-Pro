@@ -8,22 +8,76 @@ import { SignUpWizardProgressBar } from "../shared/sign-up-wizard/sign-up-wizard
 interface IWizardLayoutProps {
   title: string;
   description: string;
+  customActionButton?: JSX.Element;
   showSkipButton?: boolean;
+  singleComponent?: JSX.Element;
   leftBodyComponents?: JSX.Element;
   rightBodyComponents?: JSX.Element;
   steps?: Array<string>;
   currentStep?: number;
+  customStepsComponent?: JSX.Element;
+  childrenUnderDescription?: JSX.Element;
 }
 
 export const WizardLayout = ({
   title,
   description,
+  customActionButton,
   showSkipButton = true,
+  singleComponent,
   leftBodyComponents,
   rightBodyComponents,
   steps,
   currentStep,
+  customStepsComponent,
+  childrenUnderDescription,
 }: IWizardLayoutProps): JSX.Element => {
+  const renderActionButtons = (): JSX.Element => {
+    if (customActionButton) {
+      return customActionButton;
+    } else {
+      return (
+        <>
+          {showSkipButton && (
+            <SkipButton small variant={"primaryOutline"} onClick={() => console.log("hello world")}>
+              Skip
+            </SkipButton>
+          )}
+          <NextButton small variant={"primary"} onClick={() => console.log("hello world")}>
+            Next
+          </NextButton>
+        </>
+      );
+    }
+  };
+
+  const renderStepsComponent = (): JSX.Element => {
+    if (customStepsComponent) {
+      return customStepsComponent;
+    } else {
+      return (
+        steps && (
+          <StepComponentContainer>
+            <SignUpWizardProgressBar stepNames={steps} currentStep={currentStep} />
+          </StepComponentContainer>
+        )
+      );
+    }
+  };
+
+  const renderBodyComponents = (): JSX.Element => {
+    if (singleComponent) {
+      return singleComponent;
+    } else {
+      return (
+        <>
+          <LeftBodyContainer> {leftBodyComponents}</LeftBodyContainer>
+          <RightBodyContainer> {rightBodyComponents}</RightBodyContainer>
+        </>
+      );
+    }
+  };
+
   return (
     <Container>
       <DescriptionContainer>
@@ -34,33 +88,13 @@ export const WizardLayout = ({
             </Heading>
           </DescriptionTitleContainer>
           <DescriptionText>{description}</DescriptionText>
-          <ButtonsContainer>
-            {showSkipButton && (
-              <SkipButton
-                small
-                variant={"primaryOutline"}
-                onClick={() => console.log("hello world")}
-              >
-                Skip
-              </SkipButton>
-            )}
-            <NextButton small variant={"primary"} onClick={() => console.log("hello world")}>
-              Next
-            </NextButton>
-          </ButtonsContainer>
+          <ButtonsContainer>{renderActionButtons()}</ButtonsContainer>
+          {childrenUnderDescription}
         </DescrptionBody>
       </DescriptionContainer>
       <BodyContainer>
-        <BodyContentContainer>
-          <LeftBodyContainer> {leftBodyComponents}</LeftBodyContainer>
-          <RightBodyContainer> {rightBodyComponents}</RightBodyContainer>
-        </BodyContentContainer>
-
-        {steps && (
-          <StepComponentContainer>
-            <SignUpWizardProgressBar stepNames={steps} currentStep={currentStep} />
-          </StepComponentContainer>
-        )}
+        <BodyContentContainer>{renderBodyComponents()}</BodyContentContainer>
+        {renderStepsComponent()}
       </BodyContainer>
     </Container>
   );
@@ -86,6 +120,7 @@ const DescrptionBody = styled.div`
 
 const BodyContainer = styled.div`
   padding-left: 16px;
+  padding-right: 16px;
   padding-top: 32px;
   width: 75%;
   height: 90%;
@@ -108,6 +143,7 @@ const ButtonsContainer = styled.div`
   margin-left: auto;
   margin-right: auto;
   margin-top: 16px;
+  margin-bottom: 30px;
 `;
 
 const NextButton = styled(Button)`

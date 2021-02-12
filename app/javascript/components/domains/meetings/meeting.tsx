@@ -24,6 +24,7 @@ import {
 import { HomeTitle, HomeContainerBorders } from "../home/shared-components";
 import { MeetingSideOptions } from "./meeting-side-options";
 import { useTranslation } from "react-i18next";
+import { WizardLayout } from "~/components/layouts/wizard-layout";
 
 export interface ITeamMeetingProps {}
 
@@ -123,7 +124,7 @@ export const Meeting = observer(
 
     const StartMeetingButton = () => {
       return (
-        <Button
+        <MeetingControlButton
           variant={"primary"}
           onClick={async () => {
             setMeetingStarted(true);
@@ -147,13 +148,13 @@ export const Meeting = observer(
           <TextNoMargin ml={"10px"}>
             {meetingStarted || hasStartTime() ? "Continue Meeting" : "Start Meeting"}
           </TextNoMargin>
-        </Button>
+        </MeetingControlButton>
       );
     };
 
     const StopMeetingButton = () => {
       return (
-        <Button
+        <MeetingControlButton
           variant={"redOutline"}
           onClick={() => {
             setMeetingEnded(true);
@@ -166,25 +167,24 @@ export const Meeting = observer(
         >
           <Icon icon={"Stop"} iconColor={"warningRed"} size={"13px"} />
           <TextNoMargin ml={"10px"}>Stop Meeting</TextNoMargin>
-        </Button>
+        </MeetingControlButton>
       );
     };
 
     const calculatedPercentage = (secondsElapsed / (meeting.totalDuration * 60)) * 100;
 
-    return (
+    return meetingStarted ? (
       <Container>
-        <HeaderContainer>
-          <Heading type={"h1"} fontSize={"24px"}>{`${R.path(["name"], team)} Meeting`}</Heading>
-          <DateAndButtonContainer>
-            <Heading type={"h3"} fontSize={"18px"} fontWeight={400}>
-              {meeting.title}
-            </Heading>
-            {meetingStarted ? <StopMeetingButton /> : <StartMeetingButton />}
-          </DateAndButtonContainer>
-        </HeaderContainer>
-        {meetingStarted ? ( //#TODO: IF YOU ARE NOT THE HOST RENDER JUST THE AGENDA
-          <BodyContainer>
+        <WizardLayout
+          title={t("meeting.coreFourTitle")}
+          description={t("meeting.reviewCoreFour")}
+          customActionButton={<StopMeetingButton />}
+          childrenUnderDescription={
+            <MeetingSideOptions teamId={meeting.teamId} meeting={meeting} />
+          }
+          showSkipButton={false}
+          singleComponent={<MeetingStep meeting={meetingStore.currentMeeting} />}
+          customStepsComponent={
             <ProgressBarTimerContainer>
               <StepProgressBar
                 progressBarProps={{
@@ -197,31 +197,100 @@ export const Meeting = observer(
               />
               <Timer secondsElapsed={secondsElapsed} ml={"30px"} />
             </ProgressBarTimerContainer>
-            <MeetingStep meeting={meetingStore.currentMeeting}></MeetingStep>
-          </BodyContainer>
-        ) : (
-          <BodyContainer>
-            <ContentsContainer>
-              <AgendaContainer>
-                <AgendaHeaderContainer>
-                  <HomeTitle>{t("meeting.coreFourTitle")}</HomeTitle>
-                  <Text fontSize={1}>{t("meeting.reviewCoreFour")}</Text>
-                </AgendaHeaderContainer>
-                <MeetingSideOptions teamId={meeting.teamId} meeting={meeting} />
-              </AgendaContainer>
-              <CoreFourWrapper>
-                <CoreFourOnly />
-              </CoreFourWrapper>
-            </ContentsContainer>
-          </BodyContainer>
-        )}
+          }
+        />
+      </Container>
+    ) : (
+      <Container>
+        <WizardLayout
+          title={t("meeting.coreFourTitle")}
+          description={t("meeting.reviewCoreFour")}
+          customActionButton={<StartMeetingButton />}
+          childrenUnderDescription={
+            <MeetingSideOptions teamId={meeting.teamId} meeting={meeting} />
+          }
+          showSkipButton={false}
+          singleComponent={
+            <CoreFourWrapper>
+              <CoreFourOnly />
+            </CoreFourWrapper>
+          }
+          customStepsComponent={
+            <ProgressBarTimerContainer>
+              <StepProgressBar
+                progressBarProps={{
+                  stepPositions: stepPositions,
+                  percent: calculatedPercentage > 100 ? 100 : calculatedPercentage,
+                }}
+                steps={progressBarSteps}
+                onStepClick={onStepClick}
+                currentStepIndex={meeting.currentStep}
+              />
+              <Timer secondsElapsed={secondsElapsed} ml={"30px"} />
+            </ProgressBarTimerContainer>
+          }
+        />
       </Container>
     );
+
+    // return (
+    //   <Container>
+    //     <HeaderContainer>
+    //       <Heading type={"h1"} fontSize={"24px"}>{`${R.path(["name"], team)} Meeting`}</Heading>
+    //       <DateAndButtonContainer>
+    //         <Heading type={"h3"} fontSize={"18px"} fontWeight={400}>
+    //           {meeting.title}
+    //         </Heading>
+    //         {meetingStarted ? <StopMeetingButton /> : <StartMeetingButton />}
+    //       </DateAndButtonContainer>
+    //     </HeaderContainer>
+    //     {meetingStarted ? ( //#TODO: IF YOU ARE NOT THE HOST RENDER JUST THE AGENDA
+    //       <BodyContainer>
+    //         <ProgressBarT imerContainer>
+    //           <StepProgressBar
+    //             progressBarProps={{
+    //               stepPositions: stepPositions,
+    //               percent: calculatedPercentage > 100 ? 100 : calculatedPercentage,
+    //             }}
+    //             steps={progressBarSteps}
+    //             onStepClick={onStepClick}
+    //             currentStepIndex={meeting.currentStep}
+    //           />
+    //           <Timer secondsElapsed={secondsElapsed} ml={"30px"} />
+    //         </ProgressBarTimerContainer>
+    //         <MeetingStep meeting={meetingStore.currentMeeting}></MeetingStep>
+    //       </BodyContainer>
+    //     ) : (
+    //       <BodyContainer>
+    //         <ContentsContainer>
+    //           <AgendaContainer>
+    //             <AgendaHeaderContainer>
+    //               <HomeTitle>{t("meeting.coreFourTitle")}</HomeTitle>
+    //               <Text fontSize={1}>{t("meeting.reviewCoreFour")}</Text>
+    //             </AgendaHeaderContainer>
+    //             <MeetingSideOptions teamId={meeting.teamId} meeting={meeting} />
+    //           </AgendaContainer>
+    //           <CoreFourWrapper>
+    //             <CoreFourOnly />
+    //           </CoreFourWrapper>
+    //         </ContentsContainer>
+    //       </BodyContainer>
+    //     )}
+    //   </Container>
+    // );
   },
 );
 
+// const Container = styled.div`
+//   padding-top: 20px;
+// `;
+
 const Container = styled.div`
-  padding-top: 20px;
+  height: 100%;
+`;
+
+const MeetingControlButton = styled(Button)`
+  width: 100%;
 `;
 
 const HeaderContainer = styled.div`

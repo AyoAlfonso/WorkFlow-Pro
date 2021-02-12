@@ -164,6 +164,9 @@ export const MeetingStoreModel = types
 
         if (R.isNil(meetingTemplate)) {
           const responseTemplate: ApiResponse<any> = yield self.environment.api.getMeetingTemplates();
+
+          console.log("response template", responseTemplate);
+
           if (responseTemplate.ok) {
             self.meetingTemplates = responseTemplate.data;
             meetingTemplate = self.meetingTemplates.find(
@@ -186,6 +189,7 @@ export const MeetingStoreModel = types
           currentStep: 0,
           meetingTemplateId: meetingTemplate.id,
         });
+        console.log("response", response);
 
         if (response.ok) {
           self.currentMeeting = response.data;
@@ -194,6 +198,7 @@ export const MeetingStoreModel = types
           return { meeting: null };
         }
       } catch {
+        console.log("does it hit catch create meeting");
         // caught bv Api Monitor
       }
       return { meeting: null };
@@ -243,6 +248,9 @@ export const MeetingStoreModel = types
           teamId,
           meetingType,
         });
+
+        console.log("response", response);
+
         if (response.ok) {
           self.currentMeeting = response.data;
           return { meeting: self.currentMeeting };
@@ -250,6 +258,7 @@ export const MeetingStoreModel = types
           return { meeting: null };
         }
       } catch {
+        console.log("does it hit the catch");
         //caught by Api Monitor
       }
       return { meeting: null };

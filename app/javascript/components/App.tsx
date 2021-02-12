@@ -134,122 +134,115 @@ export const App = observer(
             <GlobalStyles />
             <Toaster position="bottom-right" />
             {loggedIn ? (
-              <>
-                <SideNav />
+              /* <SideNav />
                 <HeaderBar />
 
-                <Container>
-                  <Switch>
-                    <Route
-                      exact
-                      path={"/"}
-                      render={() => {
-                        return <HomeContainer />;
-                      }}
-                    />
-                    <Route
-                      path={"/personal_planning/:meeting_id"}
-                      render={() => {
-                        return <PersonalPlanning />;
-                      }}
-                    />
-                    <Route
-                      path={"/team/:team_id/meeting/:meeting_id"}
-                      render={() => {
-                        return <Meeting />;
-                      }}
-                    />
-                    <Route
-                      path={"/team/:team_id"}
-                      render={() => {
-                        return <TeamOverview />;
-                      }}
-                    />
-                    <Route
-                      path={"/account"}
-                      render={() => {
-                        return <AccountSettings />;
-                      }}
-                    />
-                    <Route
-                      path={"/company/accountability"}
-                      render={() => {
-                        return <AccountabilityChart />;
-                      }}
-                    />
-                    <Route
-                      path={"/company/strategic_plan"}
-                      render={() => {
-                        return <StrategicPlan />;
-                      }}
-                    />
-                    <Route
-                      path={"/goals"}
-                      render={() => {
-                        return <GoalsIndex />;
-                      }}
-                    />
-                    <Route
-                      path={"/journals"}
-                      render={() => {
-                        return <JournalIndex />;
-                      }}
-                    />
-                    <Route
-                      path={"/notes"}
-                      render={() => {
-                        return <NotesIndex />;
-                      }}
-                    />
+                <Switch>
+                  <Route
+                    exact
+                    path={[
+                      "/",
+                      "/wikis/:wikiId",
+                      "/wikis/:wikiId/folders/:folderId",
+                      "/wikis/:wikiId/articles/:articleId",
+                      "/wikis/:wikiId/playlists",
+                      "/wikis/:wikiId/playlists/:playlistId",
+                    ]}
+                  >
+                    <MainLayout>
+                      <Route exact path="/" component={WikiHomeView} />
+                      <Route exact path="/wikis/:wikiId" component={WikiHomeView} />
+                      <Route exact path="/wikis/:wikiId/folders/:folderId" component={FolderCardView} />
+                      <Route exact path="/wikis/:wikiId/articles/:articleId" component={ArticleView} />
+                      <Route exact path="/wikis/:wikiId/playlists" component={PlaylistsView} />
+                      <Route
+                        exact
+                        path="/wikis/:wikiId/playlists/:playlistId"
+                        component={PlaylistDetailsView}
+                      />
+                    </MainLayout>
+                  </Route>
 
-                    <Route
-                      exact
-                      path={"/forum/"}
-                      render={() => {
-                        return <ForumNotSetup />;
-                      }}
-                    />
-                    <Route
-                      path={"/forum/:team_id"}
-                      render={() => {
-                        return <TeamOverview />;
-                      }}
-                    />
-                    <Route
-                      path={"/meetings/agenda"}
-                      render={() => {
-                        return <ForumAgenda />;
-                      }}
-                    />
-                    <Route
-                      exact
-                      path={"/meetings/section_1"}
-                      render={() => {
-                        return <Section1 />;
-                      }}
-                    />
-                    <Route
-                      path={"/meetings/section_1/:team_id"}
-                      render={() => {
-                        return <Section1 />;
-                      }}
-                    />
-                    <Route
-                      exact
-                      path={"/meetings/section_2"}
-                      render={() => {
-                        return <Section2 />;
-                      }}
-                    />
-                    <Route
-                      path={"/meetings/section_2/:team_id"}
-                      render={() => {
-                        return <Section2 />;
-                      }}
-                    />
-                  </Switch>
-                </Container>
-              </>
+                  <Route exact path={["/wikis/:wikiId/playlists/:playlistId/articles/:articleId"]}>
+                    <ReadingLayout>
+                      <Route
+                        exact
+                        path="/wikis/:wikiId/playlists/:playlistId/articles/:articleId"
+                        component={PlaylistReadingView}
+                      />
+                    </ReadingLayout>
+                  </Route>
+
+                  <Route exact path={["/account"]}>
+                    <TopNavLayout>
+                      <Route exact path="/account" component={AccountView} />
+                    </TopNavLayout>
+                  </Route>
+
+                  {/* Handle all other 404 cases  */
+              //   <Route>
+              //     <EmptyLayout>
+              //       <NotFoundView />
+              //     </EmptyLayout>
+              //   </Route>
+              // </Switch> */}
+
+              <Switch>
+                <Route
+                  exact
+                  path={[
+                    "/",
+                    "/personal_planning/:meeting_id",
+                    "/team/:team_id",
+                    "/account",
+                    "/company/accountability",
+                    "/company/strategic_plan",
+                    "/goals",
+                    "/journals",
+                    "/notes",
+                    "/forum",
+                    "/forum/:team_id",
+                    "/meetings/agenda",
+                    "/meetings/section_1",
+                    "/meetings/section_1/:team_id",
+                    "/meetings/section_2",
+                    "/meetings/section_2/:team_id",
+                  ]}
+                >
+                  <>
+                    <SideNav />
+                    <HeaderBar />
+                    <Container>
+                      <Route exact path="/" component={HomeContainer} />
+                      <Route
+                        exact
+                        path="/personal_planning/:meeting_id"
+                        component={PersonalPlanning}
+                      />
+
+                      <Route exact path="/team/:team_id" component={TeamOverview} />
+                      <Route exact path="/account" component={AccountSettings} />
+                      <Route exact path="/company/accountability" component={AccountabilityChart} />
+                      <Route exact path="/company/strategic_plan" component={StrategicPlan} />
+                      <Route exact path="/goals" component={GoalsIndex} />
+                      <Route exact path="/journals" component={JournalIndex} />
+                      <Route exact path="/notes" component={NotesIndex} />
+                      <Route exact path="/forum" component={ForumNotSetup} />
+                      <Route exact path="/forum/:team_id" component={TeamOverview} />
+                      <Route exact path="/meetings/agenda" component={ForumAgenda} />
+                      <Route exact path="/meetings/section_1" component={Section1} />
+                      <Route exact path="/meetings/section_1/:team_id" component={Section1} />
+                      <Route exact path="/meetings/section_2" component={Section2} />
+                      <Route exact path="/meetings/section_2/:team_id" component={Section2} />
+                    </Container>
+                  </>
+                </Route>
+                <Route exact path={["/team/:team_id/meeting/:meeting_id"]}>
+                  <>
+                    <Route exact path="/team/:team_id/meeting/:meeting_id" component={Meeting} />
+                  </>
+                </Route>
+              </Switch>
             ) : (
               <Switch>
                 <Route
