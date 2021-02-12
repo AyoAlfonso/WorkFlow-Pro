@@ -77,8 +77,8 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
     }
 
     @questionnaire_attempts.each do |qa|
-      day_of_the_week = qa.completed_at.strftime('%A')
-      day_of_the_month = qa.completed_at.strftime('%b %-d')
+      day_of_the_week = current_user.convert_to_their_timezone(qa.completed_at).strftime('%A')
+      day_of_the_month = current_user.convert_to_their_timezone(qa.completed_at).strftime('%b %-d')
       qa.rendered_steps.each do |rs|
         case rs[:id]
         when "what-happened"
