@@ -24,7 +24,9 @@ export interface ITeamMeetingProps {}
 
 export const PersonalPlanning = observer(
   (props: ITeamMeetingProps): JSX.Element => {
-    const { meetingStore } = useMst();
+    const { 
+      meetingStore,
+    } = useMst();
     const { meeting_id } = useParams(); // team id from url params
     const history = useHistory();
 

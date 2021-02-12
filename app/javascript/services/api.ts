@@ -360,7 +360,7 @@ export class Api {
   }
 
   async getSummaryForPersonalMeeting() {
-    return this.client.get(`questionnaire_attempts/personal_planning_summary`);
+    return this.client.get(`questionnaire_attempts/questionnaire_summary`);
   }
 
   async getTeamGoals(teamId) {
@@ -373,6 +373,10 @@ export class Api {
 
   async searchForumMeetingsByDateRange(startDate, endDate, teamId) {
     return this.client.get("/forum/search_meetings_by_date_range", { startDate, endDate, teamId })
+  }
+
+  async getQuestionnaireAttemptsSummaryForReflections(questionnaireId) {
+    return this.client.get(`questionnaire_attempts/questionnaire_summary?questionnaire_id=${questionnaireId}`)
   }
 
   //async setJWT(jwt) {}

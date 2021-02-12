@@ -11,6 +11,7 @@ class QuestionnaireAttempt < ApplicationRecord
 
   scope :within_last_week, -> (current_time) { where(completed_at: current_time.last_week.beginning_of_week..current_time.last_week.end_of_week) }
   scope :within_current_week, -> (current_time) { where(completed_at: current_time.beginning_of_week..current_time.end_of_week) }
+  scope :within_last_four_weeks, -> (current_time) { where(completed_at: current_time.beginning_of_week.days_ago(28)..current_time.beginning_of_week) }
   scope :of_questionnaire_type, -> (questionnaire_name) { joins(:questionnaire).where(questionnaires: { name: questionnaire_name }) }
   scope :for_user, -> (user) { where(user_id: user.id) }
 

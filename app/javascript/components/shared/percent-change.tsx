@@ -1,17 +1,26 @@
 import * as React from "react";
+import { useEffect } from "react";
 import { baseTheme } from "~/themes";
 import styled from "styled-components";
 import { Text } from "~/components/shared/text";
+import { observer } from "mobx-react";
+import { useMst } from "~/setup/root";
 
 export interface IPercentChangeProps {
   percentChange: number;
   showLineIfZeroOrLess?: boolean;
 }
 
-export const PercentChange = ({
+export const PercentChange = observer(({
   percentChange,
   showLineIfZeroOrLess,
 }: IPercentChangeProps): JSX.Element => {
+  const { companyStore } = useMst();
+
+  useEffect(() => {
+    companyStore.load()
+  },[]);
+
   const selectColor = percentChange => {
     if (percentChange >= 0) {
       return baseTheme.colors.successGreen;
@@ -31,10 +40,12 @@ export const PercentChange = ({
           {Math.round(percentChange)}%
         </PercentageChangeText>
       )}
-      <ComparedToLastWeekText>Compared to last week</ComparedToLastWeekText>
+      <ComparedToLastWeekText>
+        Compared to last {companyStore.company.displayFormat === "Company" ? "week" : "month"}
+      </ComparedToLastWeekText>
     </PercentageChangeContainer>
   );
-};
+});
 
 const PercentageChangeContainer = styled.div`
   display: flex;

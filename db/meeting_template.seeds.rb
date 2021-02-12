@@ -235,3 +235,50 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
 
 step1 = mt3.steps.where(name: "One Word Opener").first
 step1.image.attach(io: File.open("app/assets/images/mood-meter.png"), filename: "mood-meter.png", content_type: 'image/png') if step1.present? 
+
+mt4 = MeetingTemplate.where(meeting_type: :personal_monthly, name: "Monthly Planning").first_or_create(
+  meeting_type: :personal_monthly,
+  name: "Monthly Planning",
+  steps_attributes: [
+    {
+      order_index: 0,
+      name: "Personal Goals",
+      step_type: :component,
+      instructions: "Review the Foundational Four and what the Goals are.",
+      component_to_render: "PersonalGoals",
+      duration: 5
+    },
+    {
+      order_index: 1,
+      name: "Monthly Reflection",
+      step_type: :component,
+      instructions: "Review your performance from this week and use the prompts to reflect on this week.",
+      component_to_render: "MonthlyReflection",
+      duration: 5
+    },
+    {
+      order_index: 2,
+      name: "Milestones",
+      step_type: :component,
+      instructions: "Review your list of upcoming Milestones. What must you accomplish this week to drive your Milestones? Create Pyns for each one.",
+      component_to_render: "Milestones",
+      duration: 5
+    },
+    {
+      order_index: 3,
+      name: "Personal Pyns",
+      step_type: :component,
+      instructions: "What else must you accomplish this week? Add new Pyns or move them from your Master List to the Weekly List. Review your email and calendar to add anything else you need to account for this week.",
+      component_to_render: "PersonalKeyActivities",
+      duration: 5
+    },
+    {
+      order_index: 4,
+      name: "Create My Day",
+      step_type: :component,
+      instructions: "What are the top 3 things you must accomplish tomorrow? Move them over to Today’s Priority.",
+      component_to_render: "DailyPlanning",
+      duration: 5
+    }
+  ],
+)

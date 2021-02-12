@@ -10,6 +10,7 @@ import { Loading } from "../../shared/loading";
 import { MIPSelector } from "./mip-selector";
 import { EmotionSelector } from "./emotion-selector";
 import { baseTheme } from "~/themes/base";
+import { SummaryDisplay } from "~/components/shared/questionnaire/summary-display";
 
 export interface ISurveyBotProps {
   variant: string;
@@ -32,21 +33,23 @@ export const SurveyBot = observer(
       keyActivityStore,
     } = useMst();
 
+    
     useEffect(() => {
-      questionnaireStore.load().then(() => {
+      async function setUp() {
+        await questionnaireStore.load()
+        const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
+        await questionnaireStore.getQuestionnaireAttemptsSummaryForReflections(questionnaireVariant.id)
         setLoading(false);
-      });
-      window.closeWidget();
+        window.closeWidget();
+      }
+      setUp();
     }, []);
-
-    const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
 
     if (
       loading ||
-      R.isNil(questionnaireStore.questionnaires) ||
-      R.isNil(questionnaireVariant) ||
-      R.isNil(keyActivityStore.todaysPriorities)
-    ) {
+      R.isNil(keyActivityStore.todaysPriorities) ||
+      R.isNil(sessionStore.profile)
+      ) {
       return (
         <LoadingContainer>
           <Loading />
@@ -54,6 +57,9 @@ export const SurveyBot = observer(
       );
     }
 
+    const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
+    const summaryData = questionnaireStore.questionnaireAttemptsSummaryForReflections;
+    
     const stringValidator = value => (value ? true : "Write just a little bit!");
 
     const steps = R.map(step => {
@@ -79,6 +85,37 @@ export const SurveyBot = observer(
         return R.assoc("message", R.replace("{mipCheck}", mipCheck, step.message))(step);
       } else if (R.hasPath(["metadata", "validatorType"], step)) {
         return R.assoc("validator", stringValidator, step);
+      } else if (R.path(["metadata", "summary"], step) === "gratitude") {
+        return R.pipe(
+          R.assoc(
+            "component",
+            <>
+              <SummaryDisplay
+                summaryData={summaryData}
+                variant={`${R.path(["metadata", "summary"], step)}Am`}
+                title={R.path(["metadata", "message", "am"], step)}
+              />
+              <SummaryDisplay
+                summaryData={summaryData}
+                variant={`${R.path(["metadata", "summary"], step)}Pm`}
+                title={R.path(["metadata", "message", "pm"], step)}
+              />
+            </>,
+          ),
+          R.dissoc("options"),
+        )(step);
+      } else if (R.hasPath(["metadata", "summary"], step)) {
+        return R.pipe(
+          R.assoc(
+            "component",
+            <SummaryDisplay
+              summaryData={summaryData}
+              variant={R.path(["metadata", "summary"], step)}
+              title={R.path(["metadata", "message"], step)}
+            />,
+          ),
+          R.dissoc("options"),
+        )(step);
       } else {
         return step;
       }

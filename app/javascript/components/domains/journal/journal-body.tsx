@@ -3,7 +3,10 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { Icon } from "~/components/shared/icon";
-import { TextNoMargin } from "~/components/shared/text";
+import { 
+  TextDiv, 
+  TextNoMargin
+} from "~/components/shared/text";
 import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
 import { useMst } from "../../../setup/root";
 import { IconButton } from "../../shared/icon-button";
@@ -67,7 +70,7 @@ export const JournalBody = ({
             text={t("journals.thoughtChallenge")}
             onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.thoughtChallenge)}
           /> */}
-        <IconButton
+        {/* <IconButton
           {...defaultJournalButtonProps}
           iconName={"Check-in"}
           iconColor={"successGreen"}
@@ -76,7 +79,7 @@ export const JournalBody = ({
           fontStyle={"italic"}
           onClick={() => {}}
           disabled={true}
-        />
+        /> */}
         <IconButton
           {...defaultJournalButtonProps}
           iconName={"PM-Check-in"}
@@ -85,6 +88,26 @@ export const JournalBody = ({
           onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.eveningReflection)}
           disabled={R.path(["profile", "currentDailyLog", "eveningReflection"], sessionStore)}
         />
+        <IconButton
+          {...defaultJournalButtonProps}
+          iconName={"Weekly"}
+          iconColor={"primaryActive"}
+          text={t("journals.weeklyReflectionTitle")}
+          onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.weeklyReflection)}
+          disabled={R.path(["profile", "currentDailyLog", "weeklyReflection"], sessionStore)}
+        />
+        <IconButton
+          {...defaultJournalButtonProps}
+          iconName={"EoM"}
+          iconColor={"fuschiaBlue"}
+          text={t("journals.monthlyReflection")}
+          onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.monthlyReflection)}
+        />
+        <FooterText 
+          color={"greyActive"} 
+        >
+          {t("journals.footer")}
+        </FooterText>
       </ButtonContainer>
     </AccordionDetailsContainer>
   )
@@ -107,8 +130,7 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: auto;
-  padding: 16px;
+  padding: 8px;
 `;
 
 const PynBotSpeechContainer = styled.div`
@@ -150,4 +172,12 @@ const SpeechBubble = styled.div`
   text-align: center;
   text-overflow: ellipsis;
   width: 70%;
+`;
+
+const FooterText = styled(TextDiv)`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  font-size: 9px;
+  margin-top: 16px;
 `;

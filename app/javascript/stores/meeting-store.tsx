@@ -237,7 +237,46 @@ export const MeetingStoreModel = types
         // caught bv Api Monitor
       }
     }),
-    fetchNextMeeting: flow(function*(teamId, meetingType) {
+    createPersonalMonthlyMeeting: flow(function*() {
+      try {
+        let meetingTemplate = self.meetingTemplates.find(
+          mt => mt.meetingType === MeetingTypes.PERSONAL_MONTHLY,
+        );
+
+        if (R.isNil(meetingTemplate)) {
+          const responseTemplate: ApiResponse<any> = yield self.environment.api.getMeetingTemplates();
+          if (responseTemplate.ok) {
+            self.meetingTemplates = responseTemplate.data;
+            meetingTemplate = self.meetingTemplates.find(
+              mt => mt.meetingType === MeetingTypes.PERSONAL_MONTHLY,
+            );
+          }
+        }
+
+        if (R.isNil(meetingTemplate)) {
+          showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
+          self.load();
+          return { meeting: null };
+        }
+
+        const { sessionStore } = getRoot(self);
+
+        const response: ApiResponse<any> = yield self.environment.api.createMeeting({
+          hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
+          currentStep: 0,
+          meetingTemplateId: meetingTemplate.id,
+        });
+        if (response.ok) {
+          self.currentPersonalPlanning = response.data;
+          return { meeting: self.currentPersonalPlanning };
+        } else {
+          return { meeting: null };
+        }
+      } catch {
+        // caught bv Api Monitor
+      }
+    }),
+    startNextMeeting: flow(function*(teamId, meetingType) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getNextMeetingFor({
           teamId,

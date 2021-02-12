@@ -12,26 +12,28 @@ ur4 = UserRole.where(name: UserRole::LEADERSHIP).first_or_create(name: UserRole:
 
 c2 = Company.where(name: "LynchPyn").first_or_create(name: 'LynchPyn', address: 'Toronto', contact_email: 'parham@lynchpyn.com', phone_number: '647-631-1996', rallying_cry: 'LynchPyn Goal!', fiscal_year_start: Date.new(2020,01,01), timezone: "(GMT-05:00) Eastern Time (US & Canada)")
 CoreFour.where(company: c2).first_or_create(core_1: 'The First Core', core_2: 'The Second Core', core_3: 'The Third Core', core_4: 'The Fourth Core', company_id: c2.id)
-User.where(email: "parham@lynchpyn.com").first_or_create!(first_name: 'Parham', last_name: 'Chinikar', email: 'parham@lynchpyn.com', phone_number: '647-631-1996', password: 'password', password_confirmation: 'password', company_id: c2.id, user_role_id: ur2.id, title: "CPO")
+User.where(email: "parham@lynchpyn.com").first_or_create!(first_name: 'Parham', last_name: 'Chinikar', email: 'parham@lynchpyn.com', phone_number: '647-631-1996', password: 'password', password_confirmation: 'password', company_id: c2.id, user_role_id: ur2.id, title: "CPO", default_selected_company_id: c2.id)
 
 if Rails.env.development?
   c1 = Company.where(name: "Latero Labs").first_or_create(name: 'Latero Labs', address: '601-510 W Hastings St, Vancouver, BC V6B 1L8', contact_email: 'inquiries@laterolabs.com', phone_number: '604-933-5091', rallying_cry: 'LynchPyn Goal!', fiscal_year_start: Date.new(2020,01,01), timezone: "(GMT-08:00) Pacific Time (US & Canada)")
   CoreFour.where(company: c1).first_or_create(core_1: 'The First Core', core_2: 'The Second Core', core_3: 'The Third Core', core_4: 'The Fourth Core', company: c1)
+  c3 = Company.where(name: "Latero Labs Forum").first_or_create(name: 'Latero Labs Forum', address: '601-510 W Hastings St, Vancouver, BC V6B 1L8', contact_email: 'inquiries@laterolabs.com', phone_number: '604-933-5091', rallying_cry: 'LynchPyn Goal!', fiscal_year_start: Date.new(2020,01,01), timezone: "(GMT-08:00) Pacific Time (US & Canada)", display_format: 1)
+  CoreFour.where(company: c3).first_or_create(core_1: 'The First Core', core_2: 'The Second Core', core_3: 'The Third Core', core_4: 'The Fourth Core', company: c3)
 
   t1 = Team.where(name: "Development Team").first_or_create(name: "Development Team", company_id: c1.id)
   t2 = Team.where(name: "Team 2").first_or_create(name: "Team 2", company_id: c1.id)
+  t3 = Team.where(name: "Team 3").first_or_create(name: "Team 3", company_id: c3.id)
 
   AdminUser.where(email: "admin@example.com").first_or_create(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
-  u1 = User.where(email: "sunny@laterolabs.com").first_or_create(first_name: 'Sunny', last_name: 'To', email: 'sunny@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur1.id, title: "Placeholder")
-  u2 = User.where(email: "christopher@laterolabs.com").first_or_create(first_name: 'Christopher', last_name: 'Pang', email: 'christopher@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur2.id, title: "Placeholder")
-  u3 = User.where(email: "kyle@laterolabs.com").first_or_create(first_name: 'Kyle', last_name: 'So', email: 'kyle@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur4.id, title: "Placeholder")
-  u4 = User.where(email: "derek@laterolabs.com").first_or_create(first_name: 'Derek', last_name: 'Yau', email: 'derek@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur1.id, title: "Placeholder")
-  u5 = User.where(email: "laurel@laterolabs.com").first_or_create(first_name: 'Laurel', last_name: 'Olsen', email: 'laurel@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id, title: "Placeholder")
-  u6 = User.where(email: "jeremy@laterolabs.com").first_or_create(first_name: 'Jeremy', last_name: 'Paterson', email: 'jeremy@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur2.id, title: "Placeholder")
-  u7 = User.where(email: "allen@laterolabs.com").first_or_create(first_name: 'Allen', last_name: 'Greer', email: 'allen@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id, title: "Placeholder")
-  u8 = User.where(email: "shaun@laterolabs.com").first_or_create(first_name: 'Shaun', last_name: 'Schwartz', email: 'shaun@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id, title: "Placeholder")
-  u9 = User.where(email: "mani@laterolabs.com").first_or_create(first_name: 'Mani', last_name: 'Jafari', email: 'mani@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id, title: "Placeholder")
-
+  u1 = User.where(email: "sunny@laterolabs.com").first_or_create(first_name: 'Sunny', last_name: 'To', email: 'sunny@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur1.id, title: "Placeholder", default_selected_company_id: c1.id)
+  u2 = User.where(email: "christopher@laterolabs.com").first_or_create(first_name: 'Christopher', last_name: 'Pang', email: 'christopher@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur2.id, title: "Placeholder", default_selected_company_id: c1.id)
+  u3 = User.where(email: "kyle@laterolabs.com").first_or_create(first_name: 'Kyle', last_name: 'So', email: 'kyle@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur4.id, title: "Placeholder", default_selected_company_id: c1.id)
+  u4 = User.where(email: "derek@laterolabs.com").first_or_create(first_name: 'Derek', last_name: 'Yau', email: 'derek@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur1.id, title: "Placeholder", default_selected_company_id: c1.id)
+  u5 = User.where(email: "laurel@laterolabs.com").first_or_create(first_name: 'Laurel', last_name: 'Olsen', email: 'laurel@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id, title: "Placeholder", default_selected_company_id: c1.id)
+  u6 = User.where(email: "jeremy@laterolabs.com").first_or_create(first_name: 'Jeremy', last_name: 'Paterson', email: 'jeremy@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur2.id, title: "Placeholder", default_selected_company_id: c1.id)
+  u7 = User.where(email: "allen@laterolabs.com").first_or_create(first_name: 'Allen', last_name: 'Greer', email: 'allen@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id, title: "Placeholder", default_selected_company_id: c1.id)
+  u8 = User.where(email: "shaun@laterolabs.com").first_or_create(first_name: 'Shaun', last_name: 'Schwartz', email: 'shaun@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur3.id, title: "Placeholder", default_selected_company_id: c1.id)
+  u9 = User.where(email: "mani@laterolabs.com").first_or_create(first_name: 'Mani', last_name: 'Jafari', email: 'mani@laterolabs.com', phone_number: '778-998-1234', password: 'password', password_confirmation: 'password', company_id: c1.id, user_role_id: ur2.id, title: "Placeholder", default_selected_company_id: c1.id)
 
   TeamUserEnablement.where(user_id: u1.id).first_or_create(team_id: t1.id, user_id: u1.id, role: "team_lead")
   TeamUserEnablement.where(user_id: u2.id).first_or_create(team_id: t1.id, user_id: u2.id, role: "team_member")
@@ -41,6 +43,27 @@ if Rails.env.development?
   TeamUserEnablement.where(user_id: u6.id).first_or_create(team_id: t2.id, user_id: u6.id, role: "team_member")
   TeamUserEnablement.where(user_id: u7.id).first_or_create(team_id: t2.id, user_id: u7.id, role: "team_member")
   TeamUserEnablement.where(user_id: u8.id).first_or_create(team_id: t2.id, user_id: u8.id, role: "team_member")
+  TeamUserEnablement.where(user_id: u9.id).first_or_create(team_id: t1.id, user_id: u9.id, role: "team_member")
+
+  UserCompanyEnablement.where(user_id: u1.id).first_or_create(user_id: u1.id, company_id: c1.id, user_role_id: ur1.id)
+  UserCompanyEnablement.where(user_id: u2.id).first_or_create(user_id: u2.id, company_id: c1.id, user_role_id: ur2.id)
+  UserCompanyEnablement.where(user_id: u3.id).first_or_create(user_id: u3.id, company_id: c1.id, user_role_id: ur4.id)
+  UserCompanyEnablement.where(user_id: u4.id).first_or_create(user_id: u4.id, company_id: c1.id, user_role_id: ur1.id)
+  UserCompanyEnablement.where(user_id: u5.id).first_or_create(user_id: u5.id, company_id: c1.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u6.id).first_or_create(user_id: u6.id, company_id: c1.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u7.id).first_or_create(user_id: u7.id, company_id: c1.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u8.id).first_or_create(user_id: u8.id, company_id: c1.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u9.id).first_or_create(user_id: u9.id, company_id: c1.id, user_role_id: ur2.id)
+
+  UserCompanyEnablement.where(user_id: u1.id).first_or_create(user_id: u1.id, company_id: c3.id, user_role_id: ur1.id)
+  UserCompanyEnablement.where(user_id: u2.id).first_or_create(user_id: u2.id, company_id: c3.id, user_role_id: ur2.id)
+  UserCompanyEnablement.where(user_id: u3.id).first_or_create(user_id: u3.id, company_id: c3.id, user_role_id: ur4.id)
+  UserCompanyEnablement.where(user_id: u4.id).first_or_create(user_id: u4.id, company_id: c3.id, user_role_id: ur1.id)
+  UserCompanyEnablement.where(user_id: u5.id).first_or_create(user_id: u5.id, company_id: c3.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u6.id).first_or_create(user_id: u6.id, company_id: c3.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u7.id).first_or_create(user_id: u7.id, company_id: c3.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u8.id).first_or_create(user_id: u8.id, company_id: c3.id, user_role_id: ur3.id)
+  UserCompanyEnablement.where(user_id: u9.id).first_or_create(user_id: u9.id, company_id: c3.id, user_role_id: ur2.id)
 
   ai_1 = AnnualInitiative.where(description: "Purchase company vehicles for transportation").first_or_create(
     company_id: c1.id, 

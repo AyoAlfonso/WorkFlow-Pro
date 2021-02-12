@@ -3,4 +3,5 @@ export const QuestionnaireTypeConstants = {
   thoughtChallenge: "Thought Challenge",
   eveningReflection: "Evening Reflection",
   weeklyReflection: "Weekly Reflection",
+  monthlyReflection: "Monthly Reflection",
 };

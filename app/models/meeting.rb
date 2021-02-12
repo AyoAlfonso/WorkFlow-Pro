@@ -19,6 +19,7 @@ class Meeting < ApplicationRecord
   # scope :in_progress, -> { where("start_time >= ? AND start_time < ?", Date.today.beginning_of_day.utc, DateTime.now) }
   # scope :for_day, -> (day) { where("Date(created_at) = ?", day) }
   scope :for_week_of_date, -> (start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_week, start_time.end_of_week)}
+  scope :for_month_of_date, -> (start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_month, start_time.end_of_month) }
   scope :for_week_of_date_started_only, -> (start_time) { where("(start_time >= ? AND start_time <= ?)", start_time.beginning_of_week, start_time.end_of_week)}
   scope :team_meetings, -> (team_id) { where(team_id: team_id) }
   scope :incomplete, -> { where(end_time: nil) }
@@ -29,6 +30,7 @@ class Meeting < ApplicationRecord
   
   scope :team_weekly_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :team_weekly})}
   scope :personal_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :personal_weekly})}
+  scope :personal_monthly_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :personal_monthly})}
   scope :forum_monthly_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :forum_monthly})}
   scope :for_type, -> (meeting_type){ joins(:meeting_template).where(meeting_templates: {meeting_type: MeetingTemplate.meeting_types[meeting_type.to_sym]})}
   

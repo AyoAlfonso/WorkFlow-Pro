@@ -130,16 +130,32 @@ export const HeaderBar = observer(
             paddingBottom={"10px"}
             disabled={false}
             onClick={() => {
-              meetingStore.createPersonalMeeting().then(({ meeting }) => {
-                if (!R.isNil(meeting)) {
-                  history.push(`/personal_planning/${meeting.id}`);
-                } else {
-                  showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
-                }
-              });
+              companyStore.company.displayFormat === "Company" ? (
+                meetingStore.createPersonalMeeting().then(({ meeting }) => {
+                  if (!R.isNil(meeting)) {
+                    history.push(`/personal_planning/${meeting.id}`);
+                  } else {
+                    showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
+                  }
+                })
+              ) : (
+                meetingStore.createPersonalMonthlyMeeting().then(({ meeting }) => {
+                  if (!R.isNil(meeting)) {
+                    history.push(`/personal_planning/${meeting.id}`);
+                  } else {
+                    showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
+                  }
+                })
+              )
             }}
           >
-            <SelectionText>Weekly Planning</SelectionText>
+            <SelectionText>
+              {
+                companyStore.company.displayFormat === "Company" ? 
+                  "Weekly Planning" : 
+                  "Monthly Planning"
+              }
+              </SelectionText>
           </SelectionContainer>
         </DropdownContainer>
       );

@@ -156,8 +156,16 @@ class User < ApplicationRecord
     daily_average_users_emotion_score(self, from_date, to_date)
   end
 
+  def daily_average_users_emotion_scores_over_month(from_date, to_date)
+    daily_average_users_emotion_score(self, from_date, to_date)
+  end
+
   def team_average_weekly_emotion_score(from_date, to_date)
-    overall_average_weekly_emotion_score(self, from_date, to_date)
+    overall_average_emotion_score(self, from_date, to_date)
+  end
+
+  def team_average_monthly_emotion_score(from_date, to_date)
+    overall_average_emotion_score(self, from_date, to_date)
   end
 
   def habits_percentage_increase_from_previous_week
@@ -167,6 +175,12 @@ class User < ApplicationRecord
     (differences.reduce(:+).to_f / differences.size).round(1)
   end
 
+  def habits_percentage_increase_from_previous_month
+    differences = self.habits.map do |habit|
+      habit.monthly_logs_completion_difference
+    end
+    (differences.reduce(:+).to_f / differences.size).round(1)
+  end
 
   #https://github.com/heartcombo/devise/wiki/How-to:-Soft-delete-a-user-when-user-deletes-account
   def soft_delete  
