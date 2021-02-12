@@ -38,10 +38,8 @@ export const Section1MeetingDetails = observer(
               label=""
               value={newScheduledStartTime}
               onChange={async (newDateTime) => {
-                // console.log(moment.utc(newDateTime).format())
-                await meetingStore.updateMeeting(R.merge(meeting, {scheduledStartTime: moment.utc(newDateTime).format()}));
                 setNewScheduledStartTime(newDateTime)
-                // console.log(meeting.scheduledStartTime)
+                await meetingStore.updateMeeting(R.merge(meeting, {scheduledStartTime: moment.utc(newDateTime).format()}));
               }}
             />
           </MonthContainer>
