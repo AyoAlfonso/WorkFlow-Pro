@@ -120,7 +120,7 @@ export const ForumAgendaSearch = observer(() => {
 
   const handleMeetingClick = () => {
     meetingStore
-      .fetchNextMeeting(selectedMeeting.teamId, MeetingTypes.FORUM_MONTHLY)
+      .startNextMeeting(selectedMeeting.teamId, MeetingTypes.FORUM_MONTHLY)
       .then(({ meeting }) => {
         if (!R.isNil(meeting)) {
           history.push(`/team/${meeting.teamId}/meeting/${meeting.id}`);

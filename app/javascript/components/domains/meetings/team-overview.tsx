@@ -72,7 +72,7 @@ export const TeamOverview = observer(
     //based on
 
     const handleForumMeetingClick = () => {
-      meetingStore.fetchNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
+      meetingStore.startNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
         if (!R.isNil(meeting)) {
           history.push(`/team/${team_id}/meeting/${meeting.id}`);
         }
