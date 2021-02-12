@@ -84,6 +84,7 @@ export const MeetingWizardLayout = observer(
           showSkipButton={false}
           singleComponent={meetingComponent()}
           customStepsComponent={stepsComponent}
+          showLynchpynLogo={true}
         />
       </Container>
     );

@@ -17,6 +17,7 @@ interface IWizardLayoutProps {
   currentStep?: number;
   customStepsComponent?: JSX.Element;
   childrenUnderDescription?: JSX.Element;
+  showLynchpynLogo?: boolean;
 }
 
 export const WizardLayout = ({
@@ -31,6 +32,7 @@ export const WizardLayout = ({
   currentStep,
   customStepsComponent,
   childrenUnderDescription,
+  showLynchpynLogo = false,
 }: IWizardLayoutProps): JSX.Element => {
   const renderActionButtons = (): JSX.Element => {
     if (customActionButton) {
@@ -91,6 +93,11 @@ export const WizardLayout = ({
           <ButtonsContainer>{renderActionButtons()}</ButtonsContainer>
           {childrenUnderDescription}
         </DescrptionBody>
+        {showLynchpynLogo && (
+          <LynchpynLogoContainer>
+            <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="200"></img>
+          </LynchpynLogoContainer>
+        )}
       </DescriptionContainer>
       <BodyContainer>
         <BodyContentContainer>{renderBodyComponents()}</BodyContentContainer>
@@ -104,6 +111,7 @@ const Container = styled.div`
   display: flex;
   height: 100%;
   overflow: hidden;
+  position: relative;
 `;
 
 const DescriptionContainer = styled.div`
@@ -116,6 +124,7 @@ const DescrptionBody = styled.div`
   padding-left: 10%;
   padding-right: 10%;
   margin-top: 32px;
+  height: 85%;
 `;
 
 const BodyContainer = styled.div`
@@ -170,4 +179,9 @@ const StepComponentContainer = styled.div`
   margin-left: auto;
   margin-right: auto;
   width: 75%;
+`;
+
+const LynchpynLogoContainer = styled.div`
+  height: 15%;
+  text-align: center;
 `;

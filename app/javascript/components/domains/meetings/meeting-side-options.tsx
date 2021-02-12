@@ -34,7 +34,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
       case "pyns":
         return renderDisplayKeyActivities();
       case "notes":
-        return <Notes meeting={meeting} height={"500px"} />;
+        return <Notes meeting={meeting} height={"inherit"} />;
       default:
         return <MeetingAgenda steps={meeting.steps} currentStep={meeting.currentStep} />;
     }
@@ -42,7 +42,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
 
   const renderDisplayKeyActivities = (): JSX.Element => {
     return teamId ? (
-      <TeamKeyActivitiesBody />
+      <TeamKeyActivitiesBody meeting={meeting ? true : false} />
     ) : (
       <KeyActivitiesBody showAllKeyActivities={false} disableDrag={true} borderLeft={"none"} />
     );
@@ -63,7 +63,9 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
   );
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+  height: inherit;
+`;
 
 const SelectionContainer = styled.div`
   display: flex;
@@ -97,4 +99,6 @@ const OptionText = styled(Text)`
   padding-right: 4px;
 `;
 
-const DisplayContentContainer = styled.div``;
+const DisplayContentContainer = styled.div`
+  height: inherit;
+`;

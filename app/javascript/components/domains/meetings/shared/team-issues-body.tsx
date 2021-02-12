@@ -49,7 +49,7 @@ export const TeamIssuesBody = observer(
     };
 
     return (
-      <Container>
+      <Container meeting={meetingId ? true : false}>
         <CreateIssueModal
           createIssueModalOpen={createIssueModalOpen}
           setCreateIssueModalOpen={setCreateIssueModalOpen}
@@ -69,8 +69,13 @@ export const TeamIssuesBody = observer(
   },
 );
 
-const Container = styled.div`
+type ContainerProps = {
+  meeting: boolean;
+};
+
+const Container = styled.div<ContainerProps>`
   padding: 0px 0px 15px 0px;
+  height: ${props => props.meeting && "inherit"};
 `;
 
 const AddNewIssuePlus = styled.div`
@@ -108,8 +113,7 @@ type IssuesContainerProps = {
 
 const IssuesContainer = styled.div<IssuesContainerProps>`
   overflow-y: auto;
-  height: ${props => !props.meeting && "260px"};
-  max-height: ${props => props.meeting && "65vh"};
+  height: ${props => (props.meeting ? "inherit" : "260px")};
   overflow-x: ${props => props.meeting && "hidden"};
 `;
 
