@@ -114,7 +114,7 @@ type IssuesContainerProps = {
 const IssuesContainer = styled.div<IssuesContainerProps>`
   overflow-y: auto;
   height: ${props => (props.meeting ? "inherit" : "260px")};
-  overflow-x: ${props => props.meeting && "hidden"};
+  overflow-x: hidden;
 `;
 
 const IssueContainer = styled.div``;

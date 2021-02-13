@@ -176,6 +176,7 @@ export const Meeting = observer(
         startMeetingButton={<StartMeetingButton />}
         stopMeetingButton={<StopMeetingButton />}
         onNextButtonClick={onStepClick}
+        numberOfSteps={progressBarSteps.length}
         stepsComponent={
           <ProgressBarTimerContainer>
             <StepProgressBar

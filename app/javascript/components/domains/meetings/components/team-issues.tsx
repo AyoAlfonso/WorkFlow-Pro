@@ -73,7 +73,12 @@ export const TeamIssues = observer(
             <AddNewIssuePlus>
               <Icon icon={"Plus"} size={16} />
             </AddNewIssuePlus>
-            <AddNewIssueText> Add a New { (meetingStore.currentMeeting.meetingType === MeetingTypes.FORUM_MONTHLY) ? "Topic" : "Issue"}</AddNewIssueText>
+            <AddNewIssueText>
+              Add a New
+              {meetingStore.currentMeeting.meetingType === MeetingTypes.FORUM_MONTHLY
+                ? "Topic"
+                : "Issue"}
+            </AddNewIssueText>
           </AddNewIssueContainer>
           <Droppable droppableId={"team-issues-container"} type={"team-issue"}>
             {(provided, snapshot) => (
@@ -92,7 +97,11 @@ export const TeamIssues = observer(
         <TeamIssuesHeader
           showOpenIssues={showOpenIssues}
           setShowOpenIssues={setShowOpenIssues}
-          issuesText={(meetingStore.currentMeeting.meetingType === MeetingTypes.FORUM_MONTHLY) ? "Parking Lot" : "Team's Issues"}
+          issuesText={
+            meetingStore.currentMeeting.meetingType === MeetingTypes.FORUM_MONTHLY
+              ? "Parking Lot"
+              : "Team's Issues"
+          }
           teamId={team_id}
           meetingId={meetingStore.currentMeeting.id}
         />
@@ -150,6 +159,7 @@ type IssuesContainerType = {
 const IssuesContainer = styled.div<IssuesContainerType>`
   overflow-y: auto;
   height: 260px;
+  overflow-x: hidden;
 `;
 
 const IssueContainer = styled.div<IssueContainerType>`

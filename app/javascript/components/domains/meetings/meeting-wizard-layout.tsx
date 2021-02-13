@@ -9,6 +9,7 @@ import { WizardLayout } from "~/components/layouts/wizard-layout";
 import * as R from "ramda";
 import { CoreFourOnly } from "../goals/goals-core-four";
 import { Button } from "~/components/shared/button";
+import { useHistory } from "react-router-dom";
 
 interface ITeamMeetingProps {
   meeting: any;
@@ -17,6 +18,7 @@ interface ITeamMeetingProps {
   stopMeetingButton: JSX.Element;
   onNextButtonClick: any;
   stepsComponent: JSX.Element;
+  numberOfSteps: number;
 }
 
 export const MeetingWizardLayout = observer(
@@ -27,9 +29,11 @@ export const MeetingWizardLayout = observer(
     stopMeetingButton,
     onNextButtonClick,
     stepsComponent,
+    numberOfSteps,
   }: ITeamMeetingProps): JSX.Element => {
     const { t } = useTranslation();
     const { meetingStore } = useMst();
+    const history = useHistory();
 
     const meetingTitle = () => {
       return meetingStarted
@@ -56,13 +60,15 @@ export const MeetingWizardLayout = observer(
     const renderMeetingStartedButtons = () => {
       return (
         <>
-          <NextButton
-            small
-            variant={"primary"}
-            onClick={() => onNextButtonClick(meetingStore.currentMeeting.currentStep + 1)}
-          >
-            Next
-          </NextButton>
+          {meeting.currentStep + 1 < numberOfSteps && (
+            <NextButton
+              small
+              variant={"primary"}
+              onClick={() => onNextButtonClick(meetingStore.currentMeeting.currentStep + 1)}
+            >
+              Next
+            </NextButton>
+          )}
           {stopMeetingButton}
         </>
       );
@@ -70,6 +76,12 @@ export const MeetingWizardLayout = observer(
 
     const actionButtons = () => {
       return meetingStarted ? renderMeetingStartedButtons() : startMeetingButton;
+    };
+
+    const closeButtonClick = () => {
+      if (confirm(`Are you sure you want to exit this meeting?`)) {
+        history.push(`/team/${meeting.teamId}`);
+      }
     };
 
     return (
@@ -85,6 +97,8 @@ export const MeetingWizardLayout = observer(
           singleComponent={meetingComponent()}
           customStepsComponent={stepsComponent}
           showLynchpynLogo={true}
+          showCloseButton={true}
+          onCloseButtonClick={closeButtonClick}
         />
       </Container>
     );

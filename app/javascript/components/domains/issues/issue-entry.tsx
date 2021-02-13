@@ -238,7 +238,7 @@ const ActionContainer = styled.div<ActionContainerProps>`
   margin-bottom: auto;
   padding-left: 4px;
   width: 110px;
-  margin-right: ${props => props.meeting && "4px"};
+  margin-right: 4px;
 `;
 
 const ActionsDisplayContainer = styled.div`

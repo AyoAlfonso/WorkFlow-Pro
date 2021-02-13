@@ -4,7 +4,7 @@ import { Heading } from "../shared";
 import { Text } from "~/components/shared/text";
 import { Button } from "~/components/shared/button";
 import { SignUpWizardProgressBar } from "../shared/sign-up-wizard/sign-up-wizard-progress-bar";
-
+import { Icon } from "~/components/shared/icon";
 interface IWizardLayoutProps {
   title: string;
   description: string;
@@ -18,6 +18,10 @@ interface IWizardLayoutProps {
   customStepsComponent?: JSX.Element;
   childrenUnderDescription?: JSX.Element;
   showLynchpynLogo?: boolean;
+  showCloseButton?: boolean;
+  onCloseButtonClick?: any;
+  onSkipButtonClick?: any;
+  onNextButtonClick?: any;
 }
 
 export const WizardLayout = ({
@@ -33,51 +37,48 @@ export const WizardLayout = ({
   customStepsComponent,
   childrenUnderDescription,
   showLynchpynLogo = false,
+  showCloseButton = false,
+  onCloseButtonClick,
+  onSkipButtonClick,
+  onNextButtonClick,
 }: IWizardLayoutProps): JSX.Element => {
   const renderActionButtons = (): JSX.Element => {
-    if (customActionButton) {
-      return customActionButton;
-    } else {
-      return (
+    return (
+      customActionButton || (
         <>
           {showSkipButton && (
-            <SkipButton small variant={"primaryOutline"} onClick={() => console.log("hello world")}>
+            <SkipButton small variant={"primaryOutline"} onClick={onSkipButtonClick}>
               Skip
             </SkipButton>
           )}
-          <NextButton small variant={"primary"} onClick={() => console.log("hello world")}>
+          <NextButton small variant={"primary"} onClick={onNextButtonClick}>
             Next
           </NextButton>
         </>
-      );
-    }
+      )
+    );
   };
 
   const renderStepsComponent = (): JSX.Element => {
-    if (customStepsComponent) {
-      return customStepsComponent;
-    } else {
-      return (
-        steps && (
-          <StepComponentContainer>
-            <SignUpWizardProgressBar stepNames={steps} currentStep={currentStep} />
-          </StepComponentContainer>
-        )
-      );
-    }
+    return (
+      customStepsComponent ||
+      (steps && (
+        <StepComponentContainer>
+          <SignUpWizardProgressBar stepNames={steps} currentStep={currentStep} />
+        </StepComponentContainer>
+      ))
+    );
   };
 
   const renderBodyComponents = (): JSX.Element => {
-    if (singleComponent) {
-      return singleComponent;
-    } else {
-      return (
+    return (
+      singleComponent || (
         <>
           <LeftBodyContainer> {leftBodyComponents}</LeftBodyContainer>
           <RightBodyContainer> {rightBodyComponents}</RightBodyContainer>
         </>
-      );
-    }
+      )
+    );
   };
 
   return (
@@ -100,6 +101,12 @@ export const WizardLayout = ({
         )}
       </DescriptionContainer>
       <BodyContainer>
+        {showCloseButton && (
+          <CloseButtonContainer onClick={onCloseButtonClick}>
+            <CloseText> Close </CloseText>
+            <Icon icon={"Close"} size={"16px"} iconColor={"greyInactive"} />
+          </CloseButtonContainer>
+        )}
         <BodyContentContainer>{renderBodyComponents()}</BodyContentContainer>
         {renderStepsComponent()}
       </BodyContainer>
@@ -184,4 +191,19 @@ const StepComponentContainer = styled.div`
 const LynchpynLogoContainer = styled.div`
   height: 15%;
   text-align: center;
+`;
+
+const CloseButtonContainer = styled.div`
+  display: flex;
+  margin-right: 20px;
+  &: hover {
+    cursor: pointer;
+  }
+`;
+
+const CloseText = styled(Text)`
+  color: ${props => props.theme.colors.greyInactive};
+  font-size: 12px;
+  margin-left: auto;
+  margin-right: 10px;
 `;
