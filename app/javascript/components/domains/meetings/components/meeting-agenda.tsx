@@ -68,6 +68,8 @@ export const MeetingAgenda = ({
 
 const Container = styled.div`
   padding-top: 5px;
+  height: inherit;
+  overflow: auto;
 `;
 
 const StepContainer = styled.div`

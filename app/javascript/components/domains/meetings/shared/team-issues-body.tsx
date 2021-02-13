@@ -49,7 +49,7 @@ export const TeamIssuesBody = observer(
     };
 
     return (
-      <Container>
+      <Container meeting={meetingId ? true : false}>
         <CreateIssueModal
           createIssueModalOpen={createIssueModalOpen}
           setCreateIssueModalOpen={setCreateIssueModalOpen}
@@ -63,14 +63,19 @@ export const TeamIssuesBody = observer(
             {`Add a New ${company.displayFormat == "Forum" ? "Parking Lot" : "Issue"}`}
           </AddNewIssueText>
         </AddNewIssueContainer>
-        <IssuesContainer>{renderIssuesList()}</IssuesContainer>
+        <IssuesContainer meeting={meetingId ? true : false}>{renderIssuesList()}</IssuesContainer>
       </Container>
     );
   },
 );
 
-const Container = styled.div`
+type ContainerProps = {
+  meeting: boolean;
+};
+
+const Container = styled.div<ContainerProps>`
   padding: 0px 0px 15px 0px;
+  height: ${props => props.meeting && "inherit"};
 `;
 
 const AddNewIssuePlus = styled.div`
@@ -102,9 +107,14 @@ const AddNewIssueContainer = styled.div`
   }
 `;
 
-const IssuesContainer = styled.div`
+type IssuesContainerProps = {
+  meeting: boolean;
+};
+
+const IssuesContainer = styled.div<IssuesContainerProps>`
   overflow-y: auto;
-  height: 260px;
+  height: ${props => (props.meeting ? "inherit" : "260px")};
+  overflow-x: hidden;
 `;
 
 const IssueContainer = styled.div``;

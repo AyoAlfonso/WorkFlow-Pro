@@ -13,17 +13,14 @@ import { useParams, useHistory } from "react-router-dom";
 import { Icon } from "~/components/shared/icon";
 import { TextNoMargin } from "~/components/shared/text";
 import { Loading } from "~/components/shared/loading";
-import { MeetingStep } from "./meeting-step";
-import { CoreFourOnly } from "~/components/domains/goals/goals-core-four";
 import { Timer } from "~/components/shared/timer";
 import { dateStringToSeconds, nowAsUTCString, nowInSeconds } from "~/utils/date-time";
 import {
   progressBarStepsForMeeting,
   stepPositionsForMeeting,
 } from "./shared/progress-transform-helper";
-import { HomeTitle, HomeContainerBorders } from "../home/shared-components";
-import { MeetingSideOptions } from "./meeting-side-options";
 import { useTranslation } from "react-i18next";
+import { MeetingWizardLayout } from "./meeting-wizard-layout";
 
 export interface ITeamMeetingProps {}
 
@@ -123,7 +120,7 @@ export const Meeting = observer(
 
     const StartMeetingButton = () => {
       return (
-        <Button
+        <MeetingControlButton
           variant={"primary"}
           onClick={async () => {
             setMeetingStarted(true);
@@ -147,13 +144,13 @@ export const Meeting = observer(
           <TextNoMargin ml={"10px"}>
             {meetingStarted || hasStartTime() ? "Continue Meeting" : "Start Meeting"}
           </TextNoMargin>
-        </Button>
+        </MeetingControlButton>
       );
     };
 
     const StopMeetingButton = () => {
       return (
-        <Button
+        <MeetingControlButton
           variant={"redOutline"}
           onClick={() => {
             setMeetingEnded(true);
@@ -166,62 +163,46 @@ export const Meeting = observer(
         >
           <Icon icon={"Stop"} iconColor={"warningRed"} size={"13px"} />
           <TextNoMargin ml={"10px"}>Stop Meeting</TextNoMargin>
-        </Button>
+        </MeetingControlButton>
       );
     };
 
     const calculatedPercentage = (secondsElapsed / (meeting.totalDuration * 60)) * 100;
 
     return (
-      <Container>
-        <HeaderContainer>
-          <Heading type={"h1"} fontSize={"24px"}>{`${R.path(["name"], team)} Meeting`}</Heading>
-          <DateAndButtonContainer>
-            <Heading type={"h3"} fontSize={"18px"} fontWeight={400}>
-              {meeting.title}
-            </Heading>
-            {meetingStarted ? <StopMeetingButton /> : <StartMeetingButton />}
-          </DateAndButtonContainer>
-        </HeaderContainer>
-        {meetingStarted ? ( //#TODO: IF YOU ARE NOT THE HOST RENDER JUST THE AGENDA
-          <BodyContainer>
-            <ProgressBarTimerContainer>
-              <StepProgressBar
-                progressBarProps={{
-                  stepPositions: stepPositions,
-                  percent: calculatedPercentage > 100 ? 100 : calculatedPercentage,
-                }}
-                steps={progressBarSteps}
-                onStepClick={onStepClick}
-                currentStepIndex={meeting.currentStep}
-              />
-              <Timer secondsElapsed={secondsElapsed} ml={"30px"} />
-            </ProgressBarTimerContainer>
-            <MeetingStep meeting={meetingStore.currentMeeting}></MeetingStep>
-          </BodyContainer>
-        ) : (
-          <BodyContainer>
-            <ContentsContainer>
-              <AgendaContainer>
-                <AgendaHeaderContainer>
-                  <HomeTitle>{t("meeting.coreFourTitle")}</HomeTitle>
-                  <Text fontSize={1}>{t("meeting.reviewCoreFour")}</Text>
-                </AgendaHeaderContainer>
-                <MeetingSideOptions teamId={meeting.teamId} meeting={meeting} />
-              </AgendaContainer>
-              <CoreFourWrapper>
-                <CoreFourOnly />
-              </CoreFourWrapper>
-            </ContentsContainer>
-          </BodyContainer>
-        )}
-      </Container>
+      <MeetingWizardLayout
+        meeting={meeting}
+        meetingStarted={meetingStarted}
+        startMeetingButton={<StartMeetingButton />}
+        stopMeetingButton={<StopMeetingButton />}
+        onNextButtonClick={onStepClick}
+        numberOfSteps={progressBarSteps.length}
+        stepsComponent={
+          <ProgressBarTimerContainer>
+            <StepProgressBar
+              progressBarProps={{
+                stepPositions: stepPositions,
+                percent: calculatedPercentage > 100 ? 100 : calculatedPercentage,
+              }}
+              steps={progressBarSteps}
+              onStepClick={onStepClick}
+              currentStepIndex={meeting.currentStep}
+            />
+            <Timer secondsElapsed={secondsElapsed} ml={"30px"} />
+          </ProgressBarTimerContainer>
+        }
+      />
     );
   },
 );
 
 const Container = styled.div`
-  padding-top: 20px;
+  height: 100%;
+`;
+
+const MeetingControlButton = styled(Button)`
+  width: 100%;
+  font-size: 14px;
 `;
 
 const HeaderContainer = styled.div`
@@ -246,28 +227,4 @@ const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 8px;
-`;
-
-const AgendaContainer = styled(HomeContainerBorders)`
-  width: 20%;
-  margin-right: 10px;
-  min-width: 320px;
-  margin-top: 35px;
-  padding: 16px;
-  min-height: 500px;
-`;
-
-const ContentsContainer = styled.div`
-  display: flex;
-`;
-
-const CoreFourWrapper = styled.div`
-  width: 100%;
-  margin-left: 20px;
-  margin-top: 30px;
-`;
-
-const AgendaHeaderContainer = styled.div`
-  border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
-  padding-bottom: 10px;
 `;

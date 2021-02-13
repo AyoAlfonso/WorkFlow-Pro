@@ -63,7 +63,9 @@ export const Notes = ({ meeting, height }: NotesProps): JSX.Element => {
   );
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+  height: inherit;
+`;
 
 type EditorWrapperProps = {
   height?: string;

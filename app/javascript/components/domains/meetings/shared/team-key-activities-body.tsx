@@ -10,8 +10,12 @@ import { KeyActivityEntry } from "../../key-activities/key-activity-entry";
 import { baseTheme } from "~/themes";
 import { useTranslation } from "react-i18next";
 
+interface ITeamKeyActivitiesBody {
+  meeting?: boolean;
+}
+
 export const TeamKeyActivitiesBody = observer(
-  (props: {}): JSX.Element => {
+  ({ meeting = false }: ITeamKeyActivitiesBody): JSX.Element => {
     const [loading, setLoading] = useState<boolean>(true);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
@@ -65,7 +69,7 @@ export const TeamKeyActivitiesBody = observer(
     };
 
     return (
-      <KeyActivityBodyContainer>
+      <KeyActivityBodyContainer meeting={meeting}>
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
@@ -78,7 +82,7 @@ export const TeamKeyActivitiesBody = observer(
           </AddNewKeyActivityPlus>
           <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
-        <KeyActivitiesContainer>
+        <KeyActivitiesContainer meeting={meeting}>
           {renderOutstandingMasterActivitiesList()}
           {renderCompletedMasterActivitiesList()}
         </KeyActivitiesContainer>
@@ -87,7 +91,12 @@ export const TeamKeyActivitiesBody = observer(
   },
 );
 
-const KeyActivityBodyContainer = styled.div`
+type KeyActivityBodyContainerProps = {
+  meeting: boolean;
+};
+
+const KeyActivityBodyContainer = styled.div<KeyActivityBodyContainerProps>`
+  height: ${props => props.meeting && "inherit"};
   padding: 0px 0px 6px 10px;
 `;
 
@@ -120,9 +129,13 @@ const AddNewKeyActivityContainer = styled.div`
   }
 `;
 
-const KeyActivitiesContainer = styled.div`
+type KeyActivitiesContainerProps = {
+  meeting: boolean;
+};
+
+const KeyActivitiesContainer = styled.div<KeyActivitiesContainerProps>`
   overflow-y: auto;
-  height: 260px;
+  height: ${props => (props.meeting ? "inherit" : "260px")};
 `;
 
 const KeyActivityContainer = styled.div<KeyActivityContainerType>`
