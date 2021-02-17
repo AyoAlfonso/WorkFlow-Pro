@@ -29,7 +29,9 @@ export const Section1 = observer(
         await companyStore.load();
         setLoading(false);
       }
-      setUp();
+      if (!company) {
+        setUp();
+      }
     }, [company]);
 
     if (loading || !company) {
@@ -46,11 +48,11 @@ export const Section1 = observer(
     }
 
     const teamId =
-    (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
+      (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
 
     //TODO: will remove nave header when we do the header section
     //TODO: need to sort by scheduled start time from view?
-    
+
     return (
       <Container>
         <HeaderContainer>

@@ -5,23 +5,22 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { Loading } from "~/components/shared/loading";
-import { NavHeader } from "~/components/domains/nav/nav-header";
 import { Icon } from "~/components/shared/icon";
 import { Button } from "~/components/shared/button";
 import { Text } from "~/components/shared/text";
 import { Section1MeetingDetails } from "./section-1-meeting-details";
-import { baseTheme } from "../../../../themes/base";
+import { baseTheme } from "~/themes/base";
 import { toJS } from "mobx";
-import { MonthContainer, ColumnContainer, Container as SectionContainer } from "./row-style";
+import { ColumnContainer, Container as SectionContainer } from "./row-style";
 import Popup from "reactjs-popup";
 
-interface ISection1ForumMeetings {
+interface ISection1ForumMeetingsProps {
   company: any;
   teamId: number;
 }
 
 export const Section1ForumMeetings = observer(
-  ({ company, teamId }: ISection1ForumMeetings): JSX.Element => {
+  ({ company, teamId }: ISection1ForumMeetingsProps): JSX.Element => {
     const { t } = useTranslation();
     const {
       teamStore: { teams },
