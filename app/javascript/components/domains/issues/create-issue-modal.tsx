@@ -15,7 +15,7 @@ import {
   PriorityContainer,
   IconContainer,
 } from "~/components/shared/styles/modals";
-import { UserSelectionDropdownList } from "~/components/shared";
+import { UserSelectionDropdownList, Loading } from "~/components/shared";
 
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
@@ -32,7 +32,7 @@ export const CreateIssueModal = ({
   meetingId,
   meetingEnabled = false,
 }: ICreateIssueModalProps): JSX.Element => {
-  const { issueStore, sessionStore, userStore } = useMst();
+  const { issueStore, sessionStore, userStore, companyStore } = useMst();
 
   const [issueDescription, setIssueDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
@@ -43,8 +43,13 @@ export const CreateIssueModal = ({
     setSelectedUser(sessionStore.profile);
   }, []);
 
+  if (!companyStore.company) {
+    return <Loading />;
+  }
+
   const companyUsers = userStore.users;
   const issues = issueStore.openIssues;
+  const itemName = companyStore.company.displayFormat == "Forum" ? "Parking Lot Item" : "Issue";
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
@@ -60,7 +65,7 @@ export const CreateIssueModal = ({
     <ModalWithHeader
       modalOpen={createIssueModalOpen}
       setModalOpen={setCreateIssueModalOpen}
-      headerText="Issue"
+      headerText={itemName}
       width="35rem"
     >
       <Container>

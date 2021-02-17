@@ -181,7 +181,7 @@ export const ForumAgendaSearch = observer(() => {
         additionalComponentsBelow={
           <StyledItemListContainer>{renderItems()}</StyledItemListContainer>
         }
-        width={"400px"}
+        width={"450px"}
         maxDate={addDays(new Date(), 365)}
         customFilterOptions={filterOptions}
       />
@@ -196,13 +196,13 @@ const Container = styled.div`
 
 const SelectedEntryContainer = styled.div`
   margin-left: 50px;
+  padding-right: 5px;
   display: flex;
 `;
 
 const StyledEntryContainer = styled(EntryContainer)`
   width: 100%;
   padding: 0;
-  margin-top: 40px;
   max-height: inherit;
 `;
 

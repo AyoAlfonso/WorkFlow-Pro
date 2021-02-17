@@ -9,4 +9,5 @@ export const NavHeader = styled(Text)`
   font-size: 32px;
   font-weight: bold;
   margin: 0;
+  font-family: Exo;
 `;

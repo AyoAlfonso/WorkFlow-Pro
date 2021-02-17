@@ -40,8 +40,7 @@ const Container = styled(Button)`
   display: flex;
   width: 190px;
   margin-left: auto;
-  margin-top: auto;
-  margin-bottom: auto;
+  margin-bottom: 30px;
   padding-left: 10px;
   padding-right: 10px;
 `;
