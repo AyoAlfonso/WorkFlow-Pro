@@ -367,8 +367,8 @@ export class Api {
     return this.client.get(`/annual_initiatives/team/${teamId}`);
   }
 
-  async createForumMeetingsForYear(teamId) {
-    return this.client.post("/forum/create_meetings_for_year", { teamId });
+  async createForumMeetingsForYear(teamId, currentYear) {
+    return this.client.post("/forum/create_meetings_for_year", { teamId, currentYear });
   }
 
   async searchForumMeetingsByDateRange(startDate, endDate, teamId) {

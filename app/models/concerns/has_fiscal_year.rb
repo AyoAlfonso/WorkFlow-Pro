@@ -136,5 +136,10 @@ module HasFiscalYear
     }
   end
 
+  def forum_meetings_year_range
+    ((self.current_fiscal_year - 1)..(self.current_fiscal_year + 1)).to_a.map{ |year| 
+      {year: year, start_date: date_for_start_on(year)}
+    }
+  end
   
 end

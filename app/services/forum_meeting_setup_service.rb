@@ -14,8 +14,8 @@ class ForumMeetingSetupService
     #finds each month and creates a new meeting for any month that does not contain it
     meetings_this_year = MeetingSearch.new(Meeting, {team_id: team.id, fiscal_year: fiscal_year, meeting_type: :forum_monthly}).search
     already_created_months = meetings_this_year.map{|meeting| meeting.scheduled_start_time.strftime("%B %Y")}.uniq
-    initial_date = company.date_for_start_on(fiscal_year)
-    months_requiring_meetings = 12.times.map{|i| (initial_date+i.months) }.reject{|date| already_created_months.include?(date.strftime("%B %Y"))}
+    date_for_start_on = company.date_for_start_on(fiscal_year)
+    months_requiring_meetings = 12.times.map{|i| (date_for_start_on+i.months) }.reject{|date| already_created_months.include?(date.strftime("%B %Y"))}
     
     meeting_template_id = MeetingTemplate.forum_monthly.first.try(:id)
     raise "No forum monthly template seeded" if meeting_template_id.blank?

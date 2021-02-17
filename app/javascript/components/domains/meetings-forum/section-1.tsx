@@ -6,27 +6,15 @@ import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { toJS } from "mobx";
-
 import { NavHeader } from "~/components/domains/nav/nav-header";
 import { Loading } from "~/components/shared/loading";
-
-import { HomeTitle } from "~/components/domains/home/shared-components";
-import { Icon } from "~/components/shared/icon";
-import { Button } from "~/components/shared/button";
-import { Section1MeetingDetails } from "./components/section-1-meeting-details";
-import { Text } from "~/components/shared/text";
-
-import {
-  MonthContainer,
-  ColumnContainer,
-  Container as SectionContainer,
-} from "./components/row-style";
+import { Section1ForumMeetings } from "./components/section-1-forum-meetings";
 
 export const Section1 = observer(
   (): JSX.Element => {
     const { t } = useTranslation();
     const {
+      companyStore,
       companyStore: { company },
       teamStore: { teams },
       forumStore,
@@ -36,18 +24,17 @@ export const Section1 = observer(
     const { team_id } = useParams();
     const [loading, setLoading] = useState<boolean>(true);
 
-    const teamId =
-      (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
-
     useEffect(() => {
-      if (loading && teamId && company) {
-        forumStore.load(teamId, company.currentFiscalYear).then(() => setLoading(false));
+      async function setUp() {
+        await companyStore.load();
+        setLoading(false);
       }
-    }, [company, teams.map(t => t.id), team_id]); //neeed to deal with swtiching year later
+      if (!company) {
+        setUp();
+      }
+    }, [company]);
 
-    const currentTeam = teams.find(team => team.id == teamId);
-
-    if (loading || !currentTeam) {
+    if (loading || !company) {
       return (
         <Container>
           <HeaderContainer>
@@ -59,6 +46,10 @@ export const Section1 = observer(
     } else if (forumStore.error) {
       return <></>;
     }
+
+    const teamId =
+      (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
+
     //TODO: will remove nave header when we do the header section
     //TODO: need to sort by scheduled start time from view?
 
@@ -67,45 +58,7 @@ export const Section1 = observer(
         <HeaderContainer>
           <NavHeader>{t("forum.section1")}</NavHeader>
         </HeaderContainer>
-
-        {forumStore.forumYearMeetings.length < 12 ? (
-          <StyledButton
-            small
-            variant={"grey"}
-            onClick={() => {
-              forumStore.createMeetingsForYear(forumStore.currentForumTeamId);
-            }}
-          >
-            <Icon icon={"Plus"} size={"20px"} />
-            <ButtonText>Create forum meetings</ButtonText>
-          </StyledButton>
-        ) : (
-          <>
-            <SubHeaderContainer>
-              <YearPlanContainer>
-                <StyledHomeTitle>{forumStore.currentForumYear} Plan</StyledHomeTitle>
-              </YearPlanContainer>
-              <SectionContainer>
-                <ColumnContainer>
-                  <SubHeaderText>{t("forum.explorationTopic.whoTitle")}</SubHeaderText>
-                </ColumnContainer>
-                <ColumnContainer>
-                  <SubHeaderText>{t("forum.explorationTopic.topicTitle")}</SubHeaderText>
-                </ColumnContainer>
-              </SectionContainer>
-            </SubHeaderContainer>
-
-            {forumStore.forumYearMeetings.map(meeting => {
-              return (
-                <Section1MeetingDetails
-                  key={`meeting-${meeting.id}`}
-                  meeting={meeting}
-                  teamMembers={toJS(currentTeam.users)}
-                />
-              );
-            })}
-          </>
-        )}
+        <Section1ForumMeetings company={company} teamId={teamId} />
       </Container>
     );
   },
@@ -116,41 +69,4 @@ const Container = styled.div``;
 const HeaderContainer = styled.div`
   display: flex;
   margin-top: 10px;
-`;
-
-const StyledButton = styled(Button)`
-  display: flex;
-  margin-top: 15px;
-  &: hover {
-    color: ${props => props.theme.colors.primary100};
-  }
-`;
-
-const ButtonText = styled(Text)`
-  margin-left: 15px;
-`;
-
-const StyledHomeTitle = styled.div`
-  margin-top: 25px;
-  margin-bottom: 10px;
-  font-size: 20pt;
-  font-weight: 600;
-  font-family: Exo;
-  margin-top: auto;
-  margin-bottom: auto;
-`;
-
-const SubHeaderContainer = styled.div`
-  display: flex;
-  height: 50px;
-  margin-bottom: 20px;
-`;
-
-const SubHeaderText = styled(Text)`
-  font-weight: bold;
-`;
-
-const YearPlanContainer = styled.div`
-  width: 216px;
-  margin-top: auto;
 `;
