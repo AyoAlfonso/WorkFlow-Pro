@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const MonthContainer = styled.div`
-  width: 216px;
+  width: 300px;
   margin-top: auto;
   margin-bottom: auto;
 `;
@@ -20,7 +20,7 @@ export const Container = styled.div`
   width: 100%;
   margin-top: 16px;
   margin-bottom: 16px;
-  height: 48px;
+  height: 100px;
 `;
 
 export const Divider = styled.div`
