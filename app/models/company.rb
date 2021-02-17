@@ -50,6 +50,10 @@ class Company < ApplicationRecord
     end
     result
   end
+  
+  def forum_intro_video
+    StaticData.find_by_field("forum_introduction")
+  end
 
   private
 

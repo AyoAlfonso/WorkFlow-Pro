@@ -58,6 +58,7 @@ class Api::UsersController < Api::ApplicationController
     @user = current_user
     @session_company_id = current_company.id
     @static_data = view_context.static_data
+    @user_first_access_to_forum = current_company.display_format == "Forum" && current_user.user_company_enablements.find_by_company_id(current_company.id)&.first_time_access
     render '/api/users/profile'
   end
 
@@ -80,6 +81,15 @@ class Api::UsersController < Api::ApplicationController
     @user = User.find(params[:user_id])
     render 'api/users/show'
   end
+
+  def update_company_first_time_access
+    authorize current_user
+    user_company_enablement = current_user.user_company_enablements.find_by_company_id(params[:company_id])
+    user_company_enablement.update!(first_time_access: params[:first_time_access])
+    @user = current_user
+    render '/api/users/profile'
+  end
+
 
   private
 

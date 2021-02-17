@@ -121,6 +121,10 @@ export const SessionStoreModel = types
       }
       self.loading = false;
     }),
+    updateUserCompanyFirstTimeAccess: flow(function*(params){
+      const response: any = yield self.environment.api.updateUserCompanyFirstTimeAccess(params);
+      self.profile = response.data
+    })
   }))
   .actions(self => ({
     login: flow(function*(email, password) {
