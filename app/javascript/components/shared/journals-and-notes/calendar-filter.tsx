@@ -116,7 +116,7 @@ export const CalendarFilter = ({
           {header}
         </Heading>
       </HeadingContainer>
-      <BodyContainer>
+      <StyledBodyContainer>
         <StyledFilterContainer>
           <Card headerComponent={<CardHeaderText fontSize={"16px"}>Filter</CardHeaderText>}>
             {renderDateFilterOptions()}
@@ -143,7 +143,7 @@ export const CalendarFilter = ({
           {additionalComponentsBelow}
         </StyledFilterContainer>
         {additionalBodyComponents}
-      </BodyContainer>
+      </StyledBodyContainer>
     </Container>
   );
 };
@@ -157,5 +157,10 @@ const Container = styled.div<ContainerProps>`
 `;
 
 const StyledFilterContainer = styled(FilterContainer)`
+  max-height: 75vh;
+`;
+
+const StyledBodyContainer = styled(BodyContainer)`
+  display: block;
   overflow-y: auto;
 `;

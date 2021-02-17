@@ -1,5 +1,5 @@
 import * as R from "ramda";
-import { types, flow } from "mobx-state-tree";
+import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { IssueModel } from "../models/issue";
 import { TeamIssueModel } from "../models/team-issue";
@@ -66,15 +66,17 @@ export const IssueStoreModel = types
       }
     }),
     createIssue: flow(function*(issueObject) {
+      const { companyStore } = getRoot(self);
+      const itemName = companyStore.company.displayFormat == "Forum" ? "Parking Lot item" : "Issue"
       const response: ApiResponse<any> = yield self.environment.api.createIssue(issueObject);
       if (response.ok) {
         self.issues = response.data.issues;
         self.teamIssues = response.data.teamIssues;
         self.meetingTeamIssues = response.data.meetingTeamIssues;
-        showToast("Issue created.", ToastMessageConstants.SUCCESS);
+        showToast(`${itemName} created.`, ToastMessageConstants.SUCCESS);
         return true;
       } else {
-        showToast("There was a problem creating the issue", ToastMessageConstants.ERROR);
+        showToast(`There was a problem creating the ${itemName}`, ToastMessageConstants.ERROR);
         return false;
       }
     }),
