@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_29_011046) do
+ActiveRecord::Schema.define(version: 2021_02_16_200844) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -322,6 +322,13 @@ ActiveRecord::Schema.define(version: 2021_01_29_011046) do
     t.integer "limit_type", default: 0
   end
 
+  create_table "static_data", force: :cascade do |t|
+    t.string "field"
+    t.text "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "steps", force: :cascade do |t|
     t.integer "step_type"
     t.integer "order_index"
@@ -366,13 +373,6 @@ ActiveRecord::Schema.define(version: 2021_01_29_011046) do
     t.datetime "updated_at"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
-  create_table "team_issue_meeting_enablements", force: :cascade do |t|
-    t.bigint "meeting_id", null: false
-    t.bigint "team_issue_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["meeting_id"], name: "index_team_issue_meeting_enablements_on_meeting_id"
-    t.index ["team_issue_id"], name: "index_team_issue_meeting_enablements_on_team_issue_id"
   end
 
   create_table "team_issue_meeting_enablements", force: :cascade do |t|
@@ -424,6 +424,7 @@ ActiveRecord::Schema.define(version: 2021_01_29_011046) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_role_id"
     t.string "user_title"
+    t.boolean "first_time_access", default: false
     t.index ["company_id"], name: "index_user_company_enablements_on_company_id"
     t.index ["user_id"], name: "index_user_company_enablements_on_user_id"
     t.index ["user_role_id"], name: "index_user_company_enablements_on_user_role_id"

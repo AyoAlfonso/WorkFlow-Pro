@@ -40,6 +40,10 @@ class UserPolicy < ApplicationPolicy
     true
   end
 
+  def update_company_first_time_access?
+    true
+  end
+
   class Scope
     attr_reader :user, :company, :scope
 
