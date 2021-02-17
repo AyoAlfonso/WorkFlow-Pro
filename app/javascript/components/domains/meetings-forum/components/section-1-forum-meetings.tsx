@@ -12,11 +12,7 @@ import { Text } from "~/components/shared/text";
 import { Section1MeetingDetails } from "./section-1-meeting-details";
 import { baseTheme } from "../../../../themes/base";
 import { toJS } from "mobx";
-import {
-  MonthContainer,
-  ColumnContainer,
-  Container as SectionContainer,
-} from "./row-style";
+import { MonthContainer, ColumnContainer, Container as SectionContainer } from "./row-style";
 import Popup from "reactjs-popup";
 
 interface ISection1ForumMeetings {
@@ -24,132 +20,129 @@ interface ISection1ForumMeetings {
   teamId: number;
 }
 
-export const Section1ForumMeetings = observer(({
-  company,
-  teamId,
-}: ISection1ForumMeetings): JSX.Element => {
-  const { t } = useTranslation();
-  const {
-    teamStore: { teams },
-    forumStore,
-  } = useMst();
-  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [currentYear, setCurrentYear] = useState<number>(company.currentFiscalYear);
+export const Section1ForumMeetings = observer(
+  ({ company, teamId }: ISection1ForumMeetings): JSX.Element => {
+    const { t } = useTranslation();
+    const {
+      teamStore: { teams },
+      forumStore,
+    } = useMst();
+    const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [currentYear, setCurrentYear] = useState<number>(company.currentFiscalYear);
 
-  
-  useEffect(() => {
-    if (loading && teamId && company) {
-      forumStore.load(teamId, currentYear).then(() => setLoading(false));
+    useEffect(() => {
+      if (loading && teamId && company) {
+        forumStore.load(teamId, currentYear).then(() => setLoading(false));
+      }
+    }, [company, teams.map(t => t.id), teamId]); //neeed to deal with swtiching year later
+
+    const currentTeam = teams.find(team => team.id == teamId);
+
+    if (loading || !currentTeam) {
+      return (
+        <Container>
+          <Loading />
+        </Container>
+      );
+    } else if (forumStore.error) {
+      return <></>;
     }
-  }, [company, teams.map(t => t.id), teamId]); //neeed to deal with swtiching year later
-  
-  const currentTeam = teams.find(team => team.id == teamId);
-  
-  if (loading || !currentTeam) {
+
+    const fiscalYearRanges = company.forumMeetingsYearRange;
+    const renderYearOptions = fiscalYearRanges.map((fiscalYear, key) => (
+      <YearOptions
+        key={key}
+        style={{
+          backgroundColor: baseTheme.colors.grey20,
+          color: baseTheme.colors.grey60,
+        }}
+        onClick={() => {
+          setLoading(true);
+          setCurrentYear(fiscalYear["year"]);
+          setDropdownOpen(false);
+        }}
+      >
+        {fiscalYear["year"]}
+      </YearOptions>
+    ));
+
+    const renderCreateMeetingsButton = () => {
+      if (forumStore.forumYearMeetings.length < 12) {
+        if (company.currentFiscalYear <= currentYear) {
+          return (
+            <StyledButton
+              small
+              variant={"grey"}
+              onClick={() => {
+                forumStore.createMeetingsForYear(forumStore.currentForumTeamId, currentYear);
+              }}
+            >
+              <Icon icon={"Plus"} size={"20px"} />
+              <ButtonText>Create forum meetings</ButtonText>
+            </StyledButton>
+          );
+        }
+      } else {
+        return forumStore.forumYearMeetings.map(meeting => {
+          return (
+            <Section1MeetingDetails
+              key={`meeting-${meeting.id}`}
+              meeting={meeting}
+              teamMembers={toJS(currentTeam.users)}
+            />
+          );
+        });
+      }
+    };
+
     return (
       <Container>
-        <Loading />
+        <SubHeaderContainer>
+          <YearPlanContainer>
+            <Popup
+              arrow={false}
+              closeOnDocumentClick
+              contentStyle={{
+                border: "none",
+                borderRadius: "6px",
+                overflow: "hidden",
+                padding: 0,
+                width: "175px",
+              }}
+              on="click"
+              onClose={() => setDropdownOpen(false)}
+              onOpen={() => setDropdownOpen(true)}
+              open={dropdownOpen}
+              position="bottom center"
+              trigger={
+                <DropdownContainer>
+                  <StyledHomeTitle>{currentYear}</StyledHomeTitle>
+                  <Icon
+                    icon={dropdownOpen ? "Chevron-Up" : "Chevron-Down"}
+                    size={15}
+                    style={{ paddingLeft: "15px" }}
+                  />
+                </DropdownContainer>
+              }
+            >
+              <>{renderYearOptions}</>
+            </Popup>
+          </YearPlanContainer>
+          <SectionContainer>
+            <ColumnContainer>
+              <SubHeaderText>{t("forum.explorationTopic.whoTitle")}</SubHeaderText>
+            </ColumnContainer>
+            <ColumnContainer>
+              <SubHeaderText>{t("forum.explorationTopic.topicTitle")}</SubHeaderText>
+            </ColumnContainer>
+          </SectionContainer>
+        </SubHeaderContainer>
+        {renderCreateMeetingsButton()}
       </Container>
     );
-  } else if (forumStore.error) {
-    return <></>;
-  }
-
-
-  const fiscalYearRanges = company.forumMeetingsYearRange;
-  const renderYearOptions = fiscalYearRanges.map((fiscalYear, key) => (
-    <StyledHomeTitle
-      key={key}
-      style={{
-        backgroundColor: baseTheme.colors.grey20,
-        color: baseTheme.colors.grey60
-      }}
-      onClick={() => {
-        setLoading(true)
-        setCurrentYear(fiscalYear["year"])
-        setDropdownOpen(false)
-      }}
-    >
-      {fiscalYear["year"]}
-    </StyledHomeTitle>
-  ));
-
-  return (
-    <Container>
-      <SubHeaderContainer>
-        <YearPlanContainer>
-          <Popup
-            arrow={false}
-            closeOnDocumentClick
-            contentStyle={{
-              border: "none",
-              borderRadius: "6px",
-              overflow: "hidden",
-              padding: 0,
-              width: "175px",
-            }}
-            on="click"
-            onClose={() =>
-              setDropdownOpen(false)
-            }
-            onOpen={() =>
-              setDropdownOpen(true)
-            }
-            open={dropdownOpen}
-            position="bottom center"
-            trigger={
-              <DropdownContainer>
-                <StyledHomeTitle>{currentYear}</StyledHomeTitle>
-                <Icon
-                  icon={dropdownOpen ? "Chevron-Up" : "Chevron-Down"}
-                  size={15}
-                  style={{ paddingLeft: "15px" }}
-                />
-              </DropdownContainer>
-            }
-          >
-            <>
-              {renderYearOptions}
-            </>
-          </Popup>
-        </YearPlanContainer>
-        <SectionContainer>
-          <ColumnContainer>
-            <SubHeaderText>{t("forum.explorationTopic.whoTitle")}</SubHeaderText>
-          </ColumnContainer>
-          <ColumnContainer>
-            <SubHeaderText>{t("forum.explorationTopic.topicTitle")}</SubHeaderText>
-          </ColumnContainer>
-        </SectionContainer>
-      </SubHeaderContainer>
-      {forumStore.forumYearMeetings.length < 12 ? (
-        <StyledButton
-          small
-          variant={"grey"}
-          onClick={() => {
-            forumStore.createMeetingsForYear(forumStore.currentForumTeamId, currentYear);
-          }}
-        >
-          <Icon icon={"Plus"} size={"20px"} />
-          <ButtonText>Create forum meetings</ButtonText>
-        </StyledButton>
-      ) : (
-        <>
-          {forumStore.forumYearMeetings.map(meeting => {
-            return (
-              <Section1MeetingDetails
-                key={`meeting-${meeting.id}`}
-                meeting={meeting}
-                teamMembers={toJS(currentTeam.users)}
-              />
-            );
-          })}
-        </>
-      )}
-    </Container>
-  )
-});
+  },
+);
 
 const Container = styled.div``;
 
@@ -171,8 +164,6 @@ const ButtonText = styled(Text)`
 `;
 
 const StyledHomeTitle = styled.div`
-  margin-top: 25px;
-  margin-bottom: 10px;
   font-size: 20pt;
   font-weight: 600;
   font-family: Exo;
@@ -193,4 +184,12 @@ const SubHeaderText = styled(Text)`
 const YearPlanContainer = styled.div`
   width: 216px;
   margin-top: auto;
+  margin-bottom: -4px;
+`;
+
+const YearOptions = styled(StyledHomeTitle)`
+  padding: 10px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
