@@ -54,10 +54,10 @@ module HasFiscalYear
 
   def current_year_fiscal_year_start
     current_year = self.convert_to_their_timezone.year
-    date_for_start_on(current_year)
+    fiscal_year_date_for_start_on(current_year)
   end
 
-  def date_for_start_on(year)
+  def fiscal_year_date_for_start_on(year)
     fiscal_start_month = self.fiscal_year_start.month
     fiscal_start_day = self.fiscal_year_start.day
     Date.parse("#{year}-#{fiscal_start_month}-#{fiscal_start_day}")
@@ -132,13 +132,13 @@ module HasFiscalYear
   def fiscal_year_range
     #can select from initial fiscal year start date to present year + next year
     (fiscal_year_start.year..(self.current_fiscal_year + 1)).to_a.map{ |year|
-      {year: year, start_date: date_for_start_on(year)}
+      {year: year, start_date: fiscal_year_date_for_start_on(year)}
     }
   end
 
   def forum_meetings_year_range
     ((self.current_fiscal_year - 1)..(self.current_fiscal_year + 1)).to_a.map{ |year| 
-      {year: year, start_date: date_for_start_on(year)}
+      {year: year, start_date: fiscal_year_date_for_start_on(year)}
     }
   end
   
