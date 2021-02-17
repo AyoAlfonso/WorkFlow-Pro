@@ -44,6 +44,7 @@ import { Section2 } from "./domains/meetings-forum/section-2";
 import { ForumNotSetup } from "./domains/meetings-forum/not-setup";
 import { ForumAgenda } from "./domains/meetings-forum/forum-agenda";
 import { WizardLayout } from "./layouts/wizard-layout";
+import { ForumWelcomeModal } from "./shared/forum-welcome-modal";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -212,6 +213,7 @@ export const App = observer(
                   <>
                     <SideNav />
                     <HeaderBar />
+                    <ForumWelcomeModal />
                     <Container>
                       <Route exact path="/" component={HomeContainer} />
                       <Route

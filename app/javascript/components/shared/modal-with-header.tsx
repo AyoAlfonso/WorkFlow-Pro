@@ -10,6 +10,7 @@ interface IModalWithHeaderProps {
   headerText?: string;
   children: any;
   width?: string;
+  onCloseAction?: any;
 }
 
 export const ModalWithHeader = (props: IModalWithHeaderProps): JSX.Element => {
@@ -21,7 +22,12 @@ export const ModalWithHeader = (props: IModalWithHeaderProps): JSX.Element => {
         <Heading type={"h4"} color={"primary100"} m={3} mb={2}>
           {headerText}
         </Heading>
-        <CloseIconContainer onClick={() => setModalOpen(false)}>
+        <CloseIconContainer
+          onClick={() => {
+            setModalOpen(false);
+            props.onCloseAction();
+          }}
+        >
           <StyledIcon icon={"Close"} size={18} />
         </CloseIconContainer>
       </HeaderContainer>

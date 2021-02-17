@@ -53,6 +53,7 @@ Rails.application.routes.draw do
     get '/profile', to: 'users#profile'
     patch '/avatar', to: 'users#update_avatar'
     delete '/avatar', to: 'users#delete_avatar'
+    patch '/update_company_first_time_access', to: 'users#update_company_first_time_access'
 
     resources :companies, only: [:show, :update] do
       member do

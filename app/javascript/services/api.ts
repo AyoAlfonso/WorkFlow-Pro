@@ -66,6 +66,10 @@ export class Api {
     return this.client.patch(`/update_user_team_role`, { userId, teamId, canEdit})
   }
 
+  async updateUserCompanyFirstTimeAccess(params) {
+    return this.client.patch(`/update_company_first_time_access`, params)
+  }
+
   async updateAvatar(formData) {
     return this.client.patch("/avatar", formData);
   }
