@@ -7,11 +7,10 @@ import { observer } from "mobx-react";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/new-widget-header-sort-button-menu";
 import { useTranslation } from "react-i18next";
 import { CreateIssueModal } from "../../issues/create-issue-modal";
-import { Icon } from "~/components/shared";
+import { Icon, Text } from "~/components/shared";
 import { IssueEntry } from "../../issues/issue-entry";
 import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import { HeaderText } from "~/components/domains/meetings-forum/section-2";
 
 interface ParkingLotIssuesProps {
   teamId: number | string;
@@ -22,7 +21,13 @@ export const ParkingLotIssues = observer(
   ({ teamId, upcomingForumMeeting }: ParkingLotIssuesProps): JSX.Element => {
     const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
-    const { issueStore } = useMst();
+    const {
+      issueStore: {
+        openMeetingScheduledTeamIssues,
+        openMeetingParkingLotTeamIssues,
+        sortIssuesByPriority,
+      },
+    } = useMst();
     const { t } = useTranslation();
 
     const sortMenuOptions = [
@@ -34,7 +39,7 @@ export const ParkingLotIssues = observer(
 
     const handleSortMenuItemClick = value => {
       setSortOptionsOpen(false);
-      issueStore.sortIssuesByPriority({
+      sortIssuesByPriority({
         sort: value,
         teamId: teamId,
         meetingId: upcomingForumMeeting.id,
@@ -42,8 +47,8 @@ export const ParkingLotIssues = observer(
     };
 
     const renderIssuesList = (): Array<JSX.Element> => {
-      const startIndex = issueStore.openMeetingScheduledTeamIssues.length;
-      return issueStore.openMeetingParkingLotTeamIssues.map((teamIssue, index) => (
+      const startIndex = openMeetingScheduledTeamIssues.length;
+      return openMeetingParkingLotTeamIssues.map((teamIssue, index) => (
         <Draggable
           draggableId={`team_issue-${teamIssue.id}:meeting_id-${upcomingForumMeeting.id}`}
           index={startIndex + index}
@@ -66,20 +71,17 @@ export const ParkingLotIssues = observer(
 
     return (
       <>
-        <HeaderContainer>
-          <HeaderText> {t("meetingForum.parkingLotIssues.title")} </HeaderText>
-        </HeaderContainer>
-        <FilterContainer>
-          <SubHeaderText> {t("meetingForum.parkingLotIssues.subTitle")} </SubHeaderText>
-          <Count>{issueStore.openMeetingParkingLotTeamIssues.length}</Count>
+        <StyledFilterContainer>
+          <DescriptionText> {t("meetingForum.parkingLotIssues.subTitle")} </DescriptionText>
           <WidgetHeaderSortButtonMenu
             onButtonClick={setSortOptionsOpen}
             onMenuItemClick={handleSortMenuItemClick}
             menuOpen={sortOptionsOpen}
             menuOptions={sortMenuOptions}
             ml={"15px"}
+            mt={"-12px"}
           />
-        </FilterContainer>
+        </StyledFilterContainer>
         <CreateIssueContainer>
           <CreateIssueModal
             createIssueModalOpen={createIssueModalOpen}
@@ -178,4 +180,15 @@ export type IssuesContainerType = {
 //currently count is a hack to get MST to rerender on changes to the open / scheduled filter
 export const Count = styled.div`
   display: none;
+`;
+
+const DescriptionText = styled(Text)`
+  color: ${props => props.theme.colors.greyActive};
+  font-size: 12px;
+  margin-bottom: 25px;
+  margin-left: 0;
+`;
+
+const StyledFilterContainer = styled(FilterContainer)`
+  margin-left: 0;
 `;
