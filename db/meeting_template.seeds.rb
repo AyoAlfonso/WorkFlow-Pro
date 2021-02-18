@@ -1,4 +1,5 @@
-mt1 = MeetingTemplate.where(meeting_type: :team_weekly).first_or_create(
+mt1 = MeetingTemplate.where(meeting_type: :team_weekly).first_or_initialize
+mt1.update!(
   meeting_type: :team_weekly,
   name: "Weekly Meeting",
   steps_attributes: [
@@ -92,7 +93,8 @@ step2 = mt1.steps.where(name: "Updates").first
 step2.image.attach(io: File.open("app/assets/images/updates.png"), filename: "updates.png", content_type: 'image/png') if step2.present?
 
 
-mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Planning").first_or_create(
+mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Planning").first_or_initialize
+mt2.update!(
   meeting_type: :personal_weekly,
   name: "Weekly Planning",
   steps_attributes: [
@@ -139,7 +141,8 @@ mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Planni
   ],
 )
 
-mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly").first_or_create(
+mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly").first_or_initialize
+mt3.update!(
   meeting_type: :forum_monthly,
   name: "Forum Monthly",
   steps_attributes: [
@@ -192,30 +195,14 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
     },
     {
       order_index: 6,
-      name: "Review Parking Lot",
+      name: "Exploration",
       step_type: :component,
-      duration: 10,
+      duration: 60,
       instructions: "Review the parking lot; is there anything you need to add based on the conversations you've had?",
-      component_to_render: "ParkingLot"
+      component_to_render: "Exploration"
     },
     {
       order_index: 7,
-      name: "Exploration Topic",
-      step_type: :component,
-      duration: 60,
-      instructions: "The scheduled exploration topic for this month.",
-      component_to_render: "ExplorationTopic"
-    },
-    {
-      order_index: 8,
-      name: "Parking Lot",
-      step_type: :component,
-      duration: 60,
-      instructions: "Use the time remaining to tackle as many scheduled/non-scheduled parking lot topics as you can, on the basis of priority.",
-      component_to_render: "ParkingLot"
-    },
-    {
-      order_index: 9,
       name: "Closing Rituals",
       step_type: :description_text,
       duration: 10,
@@ -223,7 +210,7 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
       description_text: "- What is public knowledge? - Is there anything left unsaid? - What worked and how could we have made it even better? - Confirm next meeting. - Appreciation and committments."
     },
     {
-      order_index: 10,
+      order_index: 8,
       name: "Meeting Rating",
       step_type: :component,
       duration: 5,
@@ -236,7 +223,8 @@ mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly")
 step1 = mt3.steps.where(name: "One Word Opener").first
 step1.image.attach(io: File.open("app/assets/images/mood-meter.png"), filename: "mood-meter.png", content_type: 'image/png') if step1.present? 
 
-mt4 = MeetingTemplate.where(meeting_type: :personal_monthly, name: "Monthly Planning").first_or_create(
+mt4 = MeetingTemplate.where(meeting_type: :personal_monthly, name: "Monthly Planning").first_or_initialize
+mt4.update!(
   meeting_type: :personal_monthly,
   name: "Monthly Planning",
   steps_attributes: [

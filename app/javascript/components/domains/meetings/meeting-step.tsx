@@ -22,7 +22,7 @@ import { TeamKeyActivities } from "./components/team-key-activities";
 import { MeetingGoals } from "./components/meeting-goals";
 import { TeamIssues } from "./components/team-issues";
 import { ParkingLot } from "~/components/domains/meetings-forum/components/parking-lot";
-import { ExplorationTopic } from "~/components/domains/meetings-forum/components/exploration-topic";
+import { Exploration } from "~/components/domains/meetings-forum/components/exploration";
 import { MonthlyReflection } from "~/components/domains/meetings-forum/components/monthly-reflection";
 
 export interface IMeetingStepProps {
@@ -63,10 +63,10 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
           return <Recap />;
         case "ParkingLot":
           return <ParkingLot upcomingForumMeeting={meeting} />;
-        case "ExplorationTopic":
-          return <ExplorationTopic />;
         case "MonthlyReflection":
           return <MonthlyReflection />;
+        case "Exploration":
+          return <Exploration />;
         default:
           return <Text>This custom component has not been configured</Text>;
       }
@@ -99,10 +99,11 @@ export const MeetingStep = observer(
 const BodyContainer = styled.div`
   display: flex;
   margin-top: 50px;
+  width: -webkit-fill-available;
 `;
 
 const StepComponentContainer = styled.div`
-  width: 90%;
+  width: inherit;
   min-width: 320px;
   margin-left: 10px;
   margin-top: 5px;
