@@ -85,7 +85,12 @@ export const SelectedMeetingAgendaEntry = observer(
             />
           </LocationContainer>
         </MeetingHeader>
-        <MeetingAgenda steps={selectedMeeting.steps} currentStep={999} topicOwner={topicOwner} />
+        <MeetingAgenda
+          steps={selectedMeeting.steps}
+          currentStep={999}
+          topicOwner={topicOwner}
+          meeting={selectedMeeting}
+        />
       </Container>
     );
   },

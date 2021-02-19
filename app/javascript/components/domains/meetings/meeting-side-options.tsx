@@ -36,7 +36,13 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
       case "notes":
         return <Notes meeting={meeting} height={"inherit"} />;
       default:
-        return <MeetingAgenda steps={meeting.steps} currentStep={meeting.currentStep} />;
+        return (
+          <MeetingAgenda
+            steps={meeting.steps}
+            currentStep={meeting.currentStep}
+            meeting={meeting}
+          />
+        );
     }
   };
 

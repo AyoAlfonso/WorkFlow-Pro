@@ -169,6 +169,8 @@ const IssuesContainer = styled.div<TIssuesContainerType>`
   overflow-y: auto;
   margin-bottom: 8px;
   height: 260px;
+  overflow-x: hidden;
+  padding-right: 5px;
   background-color: ${props =>
     props.isDraggingOver ? props.theme.colors.backgroundBlue : "white"};
 `;

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { color } from "styled-system";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/new-widget-header-sort-button-menu";
@@ -11,6 +10,7 @@ import { Icon, Text } from "~/components/shared";
 import { IssueEntry } from "../../issues/issue-entry";
 import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+import { space, SpaceProps, color, ColorProps } from "styled-system";
 
 interface ParkingLotIssuesProps {
   teamId: number | string;
@@ -20,11 +20,14 @@ interface ParkingLotIssuesProps {
 export const ParkingLotIssues = observer(
   ({ teamId, upcomingForumMeeting }: ParkingLotIssuesProps): JSX.Element => {
     const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
+    const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
     const {
       issueStore: {
         openMeetingScheduledTeamIssues,
+        closedMeetingParkingLotTeamIssues,
         openMeetingParkingLotTeamIssues,
+        closedMeetingScheduledTeamIssues,
         sortIssuesByPriority,
       },
     } = useMst();
@@ -47,8 +50,14 @@ export const ParkingLotIssues = observer(
     };
 
     const renderIssuesList = (): Array<JSX.Element> => {
-      const startIndex = openMeetingScheduledTeamIssues.length;
-      return openMeetingParkingLotTeamIssues.map((teamIssue, index) => (
+      const issues = showOpenIssues
+        ? openMeetingParkingLotTeamIssues
+        : closedMeetingParkingLotTeamIssues;
+      const startIndex = showOpenIssues
+        ? openMeetingScheduledTeamIssues.length
+        : closedMeetingScheduledTeamIssues.length;
+
+      return issues.map((teamIssue, index) => (
         <Draggable
           draggableId={`team_issue-${teamIssue.id}:meeting_id-${upcomingForumMeeting.id}`}
           index={startIndex + index}
@@ -73,6 +82,19 @@ export const ParkingLotIssues = observer(
       <>
         <StyledFilterContainer>
           <DescriptionText> {t("meetingForum.parkingLotIssues.subTitle")} </DescriptionText>
+          <FilterOptions
+            onClick={() => setShowOpenIssues(true)}
+            mr={"15px"}
+            color={showOpenIssues ? "primary100" : "grey40"}
+          >
+            Open
+          </FilterOptions>
+          <FilterOptions
+            onClick={() => setShowOpenIssues(false)}
+            color={!showOpenIssues ? "primary100" : "grey40"}
+          >
+            Closed
+          </FilterOptions>
           <WidgetHeaderSortButtonMenu
             onButtonClick={setSortOptionsOpen}
             onMenuItemClick={handleSortMenuItemClick}
@@ -187,8 +209,18 @@ const DescriptionText = styled(Text)`
   font-size: 12px;
   margin-bottom: 25px;
   margin-left: 0;
+  width: 70%;
 `;
 
 const StyledFilterContainer = styled(FilterContainer)`
   margin-left: 0;
+`;
+
+const FilterOptions = styled.p<ColorProps & SpaceProps>`
+  ${space}
+  ${color}
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  margin-top: 0;
 `;
