@@ -3,20 +3,23 @@ import styled from "styled-components";
 import { StepProgressBarIcon, Avatar } from "~/components/shared";
 import { Text } from "~/components/shared/text";
 import { UserType } from "~/types/user";
+import * as R from "ramda";
 
 interface MeetingAgendaProps {
   steps: any;
   currentStep: number;
   topicOwner?: UserType;
+  meeting: any;
 }
 
 export const MeetingAgenda = ({
   steps,
   currentStep,
   topicOwner,
+  meeting,
 }: MeetingAgendaProps): JSX.Element => {
   const renderExplorationTopicOwner = (step): JSX.Element => {
-    if (step.componentToRender == "ExplorationTopic" && topicOwner) {
+    if (step.componentToRender == "Exploration" && topicOwner) {
       return (
         <ExplorationTopicOwnerContainer>
           <Avatar
@@ -27,7 +30,10 @@ export const MeetingAgenda = ({
             size={25}
             marginLeft={"20px"}
           />
-          <TopicOwnerName>{`${topicOwner.firstName} ${topicOwner.lastName}`}</TopicOwnerName>
+          <DetailsContainer>
+            <SubText>{`${topicOwner.firstName} ${topicOwner.lastName}`}</SubText>
+            <SubText> Topic: {R.path(["settings", "forumExplorationTopic"], meeting)}</SubText>
+          </DetailsContainer>
         </ExplorationTopicOwnerContainer>
       );
     }
@@ -89,14 +95,17 @@ const ExplorationTopicOwnerContainer = styled.div`
   align-items: center;
 `;
 
-const TopicOwnerName = styled(Text)`
+const SubText = styled(Text)`
   color: ${props => props.theme.colors.grey80};
   font-size: 12px;
   font-weight: bold;
-  margin-left: 5px;
+  margin: 5px;
+  margin-left: 8px;
 `;
 
 const StepTopicContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `;
+
+const DetailsContainer = styled.div``;

@@ -1,5 +1,5 @@
 import * as R from "ramda";
-import { types, flow, getEnv, getRoot } from "mobx-state-tree";
+import { types, flow, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { IssueModel } from "../models/issue";
 import { TeamIssueModel } from "../models/team-issue";
@@ -35,12 +35,22 @@ export const IssueStoreModel = types
   .views(self => ({
     get openMeetingParkingLotTeamIssues() {
       return self.teamIssues.filter(
-        teamIssue => !R.includes(teamIssue.issueId, self.meetingTeamIssueIds),
+        teamIssue => !R.includes(teamIssue.issueId, self.meetingTeamIssueIds) && teamIssue.completedAt == null
+      );
+    },
+    get closedMeetingParkingLotTeamIssues() {
+      return self.teamIssues.filter(
+        teamIssue => !R.includes(teamIssue.issueId, self.meetingTeamIssueIds) && teamIssue.completedAt !== null
       );
     },
     get openMeetingScheduledTeamIssues() {
       return self.teamIssues.filter(teamIssue =>
-        R.includes(teamIssue.issueId, self.meetingTeamIssueIds),
+        R.includes(teamIssue.issueId, self.meetingTeamIssueIds) && teamIssue.completedAt == null
+      );
+    },
+    get closedMeetingScheduledTeamIssues() {
+      return self.teamIssues.filter(teamIssue =>
+        R.includes(teamIssue.issueId, self.meetingTeamIssueIds) && teamIssue.completedAt !== null
       );
     },
   }))

@@ -9,6 +9,7 @@ import { Icon, Text } from "~/components/shared";
 import { IssueEntry } from "../../issues/issue-entry";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
+import { space, SpaceProps, color, ColorProps } from "styled-system";
 
 import {
   FilterContainer,
@@ -29,9 +30,15 @@ interface ScheduledIssuesProps {
 export const ScheduledIssues = observer(
   ({ teamId, upcomingForumMeeting }: ScheduledIssuesProps): JSX.Element => {
     const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
+    const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
+
     const {
-      issueStore: { sortIssuesByPriority, openMeetingScheduledTeamIssues },
+      issueStore: {
+        sortIssuesByPriority,
+        openMeetingScheduledTeamIssues,
+        closedMeetingScheduledTeamIssues,
+      },
     } = useMst();
     const { t } = useTranslation();
 
@@ -52,7 +59,11 @@ export const ScheduledIssues = observer(
     };
 
     const renderIssuesList = (): Array<JSX.Element> => {
-      return openMeetingScheduledTeamIssues.map((teamIssue, index) => (
+      const issues = showOpenIssues
+        ? openMeetingScheduledTeamIssues
+        : closedMeetingScheduledTeamIssues;
+
+      return issues.map((teamIssue, index) => (
         <Draggable
           draggableId={`team_issue-${teamIssue.id}:meeting_id-${upcomingForumMeeting.id}`}
           index={index}
@@ -77,6 +88,19 @@ export const ScheduledIssues = observer(
       <>
         <StyledFilterContainer>
           <DescriptionText> {t("meetingForum.scheduledIssues.subTitle")} </DescriptionText>
+          <FilterOptions
+            onClick={() => setShowOpenIssues(true)}
+            mr={"15px"}
+            color={showOpenIssues ? "primary100" : "grey40"}
+          >
+            Open
+          </FilterOptions>
+          <FilterOptions
+            onClick={() => setShowOpenIssues(false)}
+            color={!showOpenIssues ? "primary100" : "grey40"}
+          >
+            Closed
+          </FilterOptions>
           <WidgetHeaderSortButtonMenu
             onButtonClick={setSortOptionsOpen}
             onMenuItemClick={handleSortMenuItemClick}
@@ -119,8 +143,18 @@ const DescriptionText = styled(Text)`
   font-size: 12px;
   margin-bottom: 25px;
   margin-left: 0;
+  width: 70%;
 `;
 
 const StyledFilterContainer = styled(FilterContainer)`
   margin-left: 0;
+`;
+
+const FilterOptions = styled.p<ColorProps & SpaceProps>`
+  ${space}
+  ${color}
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  margin-top: 0;
 `;
