@@ -21,9 +21,11 @@ export const ForumWelcomeModal = observer(
       return <Loading />;
     }
 
-    const youtubeVideoString = R.path(["forumIntroVideo", "value"], company).substr(
-      R.path(["forumIntroVideo", "value"], company).length - 11,
-    );
+    const youtubeVideoString = R.path(["forumIntroVideo", "value"], company)
+      ? R.path(["forumIntroVideo", "value"], company).substr(
+          R.path(["forumIntroVideo", "value"], company).length - 11,
+        )
+      : "";
 
     const opts = {
       height: "720",
