@@ -1,34 +1,117 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Text } from "./text";
-import { Icon } from "./";
+import { Icon, Input, Select } from "./";
+import { useState } from "react";
+import { observer } from "mobx-react";
+import { useMst } from "~/setup/root";
+import * as R from "ramda";
 
 interface ILabelSelectionDropdownListProps {
   labelsList: any;
   onLabelSelect: any;
+  itemType: string;
+  selectedItemId?: number | string;
 }
 
-export const LabelSelectionDropdownList = ({
-  labelsList,
-  onLabelSelect,
-}: ILabelSelectionDropdownListProps): JSX.Element => {
-  const renderLabelOptions = (): Array<JSX.Element> => {
-    return labelsList.map((label, index) => {
-      return (
-        <LabelOption key={index} onClick={() => onLabelSelect(label)}>
-          <Icon
-            icon={"Priority-Empty"}
-            size={"25px"}
-            iconColor={label.color ? label.color : "grey60"}
-          />
-          <LabelOptionText> {`${label.name}`}</LabelOptionText>
-        </LabelOption>
-      );
-    });
-  };
+export const LabelSelectionDropdownList = observer(
+  ({
+    labelsList,
+    onLabelSelect,
+    itemType,
+    selectedItemId,
+  }: ILabelSelectionDropdownListProps): JSX.Element => {
+    const {
+      teamStore: { teams },
+      labelStore,
+    } = useMst();
 
-  return <ActionDropdownContainer>{renderLabelOptions()}</ActionDropdownContainer>;
-};
+    const [labelInput, setLabelInput] = useState<string>("");
+    const [selectedTeamId, setSelectedTeamId] = useState<any>(selectedItemId || "");
+
+    const renderLabelOptions = (): Array<JSX.Element> => {
+      return labelsList.map((label, index) => {
+        return (
+          <LabelOption
+            key={index}
+            onClick={() => {
+              onLabelSelect(label);
+              labelStore.setSelectedLabelObj(label);
+            }}
+          >
+            <Icon
+              icon={"Priority-Empty"}
+              size={"25px"}
+              iconColor={label.color ? label.color : "grey60"}
+            />
+            <LabelOptionText> {`${label.name}`}</LabelOptionText>
+          </LabelOption>
+        );
+      });
+    };
+
+    const renderDefaultValue = (): JSX.Element => {
+      return <StyledOption value={""}> </StyledOption>;
+    };
+
+    const renderTeams = (): Array<JSX.Element> => {
+      return teams.map((team, index) => {
+        return (
+          <StyledOption key={index} value={team.id}>
+            {team.name}
+          </StyledOption>
+        );
+      });
+    };
+
+    const createAndSetLabel = () => {
+      labelStore.createLabel(labelInput, selectedTeamId).then(data => {
+        onLabelSelect(data);
+        setLabelInput("");
+      });
+    };
+
+    const renderCustomLabelInput = (): JSX.Element => {
+      return (
+        <CustomLabelOption>
+          <InputContainer>
+            <HelperText> Team </HelperText>
+            <StyledSelect
+              name="teams"
+              onChange={e => {
+                setSelectedTeamId(e.target.value);
+              }}
+              value={selectedTeamId}
+            >
+              {renderDefaultValue()}
+              {renderTeams()}
+            </StyledSelect>
+          </InputContainer>
+
+          <LabelContainer>
+            <HelperText> Label Name</HelperText>
+            <Input
+              onChange={e => setLabelInput(e.target.value)}
+              value={labelInput}
+              onKeyDown={key => {
+                if (key.keyCode == 13) {
+                  createAndSetLabel();
+                }
+              }}
+            />
+          </LabelContainer>
+        </CustomLabelOption>
+      );
+    };
+
+    return (
+      <ActionDropdownContainer>
+        {renderCustomLabelInput()}
+        {renderLabelOptions()}
+      </ActionDropdownContainer>
+    );
+  },
+);
 
 const ActionDropdownContainer = styled.div`
   position: absolute;
@@ -37,8 +120,7 @@ const ActionDropdownContainer = styled.div`
   margin-left: -10px;
   margin-top: 5px;
   border-radius: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 10px;
   z-index: 2;
   height: auto;
   overflow: auto;
@@ -55,6 +137,11 @@ const LabelOptionText = styled(Text)`
   padding-right: 18px;
 `;
 
+const CustomLabelOption = styled.div`
+  padding: 5px;
+  display: flex;
+`;
+
 const LabelOption = styled.div`
   display: flex;
   flex-direction: row;
@@ -68,4 +155,22 @@ const LabelOption = styled.div`
   &:hover ${LabelOptionText} {
     color: white;
   }
+`;
+
+const StyledSelect = styled(Select)`
+  height: 36px;
+  text-overflow: ellipsis;
+`;
+
+const StyledOption = styled.option``;
+
+const InputContainer = styled.div``;
+
+const HelperText = styled(Text)`
+  color: ${props => props.theme.colors.grey60};
+  font-size: 12px;
+`;
+
+const LabelContainer = styled(InputContainer)`
+  margin-left: 10px;
 `;

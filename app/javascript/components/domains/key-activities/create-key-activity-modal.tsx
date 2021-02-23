@@ -18,7 +18,7 @@ import {
 } from "~/components/shared/styles/modals";
 import { Text } from "~/components/shared/text";
 import { UserSelectionDropdownList } from "~/components/shared";
-import { LabelSelection } from '~/components/shared';
+import { LabelSelection } from "~/components/shared";
 import { useMst } from "../../../setup/root";
 import { baseTheme } from "../../../themes";
 import { Icon } from "../../shared/icon";
@@ -55,10 +55,10 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
     setSelectedUser(sessionStore.profile);
     labelStore.fetchLabels();
   }, []);
-  
+
   const companyUsers = userStore.users;
   const selectedLabelObj = labelStore.selectedLabelObj;
-  
+
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
       <UserSelectionDropdownList userList={companyUsers} onUserSelect={setSelectedUser} />
@@ -198,9 +198,10 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             Save
           </StyledButton>
           <IssuePynModalContainer>
-            <LabelSelection 
+            <LabelSelection
               onLabelClick={setShowLabelsList}
               showLabelsList={showLabelsList}
+              itemType={"keyActivity"}
             />
             <StyledSwitch
               checked={!weeklyList}

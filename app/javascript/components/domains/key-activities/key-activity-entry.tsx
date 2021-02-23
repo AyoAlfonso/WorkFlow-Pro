@@ -7,7 +7,7 @@ import { useMst } from "../../../setup/root";
 import { baseTheme } from "../../../themes/base";
 import { Icon } from "../../shared/icon";
 import { KeyActivityPriorityIcon } from "./key-activity-priority-icon";
-import { Avatar } from "~/components/shared";
+import { Avatar, LabelSelection } from "~/components/shared";
 import { DateButton } from "~/components/shared/date-selection/date-button";
 import { addDays, parseISO } from "date-fns";
 import Popup from "reactjs-popup";
@@ -31,6 +31,7 @@ export const KeyActivityEntry = observer(
     const { t } = useTranslation();
     const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
     const [selectedDueDate, setSelectedDueDate] = useState<Date>(new Date(keyActivity.dueDate));
+    const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
 
     const updatePriority = () => {
       let priority = "";
@@ -69,6 +70,26 @@ export const KeyActivityEntry = observer(
         R.isNil(date) ? null : moment(date).format("YYYY-MM-DD"),
       );
       keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false);
+    };
+
+    const updateLabel = labelName => {
+      keyActivityStore.updateLabel(keyActivity.id, labelName);
+    };
+
+    const renderLabel = () => {
+      if (keyActivity.labels.length > 0) {
+        const labelItem = keyActivity.labels[0];
+        return (
+          <LabelSelection
+            onLabelClick={setShowLabelsList}
+            showLabelsList={showLabelsList}
+            itemType={"keyActivity"}
+            selectedItemId={labelItem.id}
+            inlineEdit={true}
+            afterLabelSelectAction={updateLabel}
+          />
+        );
+      }
     };
 
     return (
@@ -181,6 +202,7 @@ export const KeyActivityEntry = observer(
                 </Button>
               </>
             </Popup>
+            {renderLabel()}
           </DateContainer>
         </InputContainer>
 
@@ -315,4 +337,14 @@ const ActionContainer = styled.div`
 export const ActionSubContainer = styled.div`
   margin-left: auto;
   display: flex;
+`;
+
+type LabelContainerProps = {
+  color: string;
+};
+
+const LabelContainer = styled.div<LabelContainerProps>`
+  margin-left: auto;
+  margin-right: 15px;
+  color: ${props => props.color || props.theme.colors.grey60};
 `;

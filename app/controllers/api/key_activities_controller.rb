@@ -9,7 +9,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def create
-    @key_activity = KeyActivity.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], weekly_list: params[:weekly_list], meeting_id: params[:meeting_id], due_date: params[:due_date], company_id: current_company.id, label: params[:label][:name] })
+    @key_activity = KeyActivity.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], weekly_list: params[:weekly_list], meeting_id: params[:meeting_id], due_date: params[:due_date], company_id: current_company.id, label_list: params[:label][:name] })
     authorize @key_activity
     @key_activity.insert_at(1)
     @key_activity.save!
@@ -72,7 +72,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def key_activity_params
     params.permit(:id, :user_id, :description, :completed_at, :priority, :complete,
-      :weekly_list, :todays_priority, :position, :meeting_id, :due_date, :label)
+      :weekly_list, :todays_priority, :position, :meeting_id, :due_date, :label_list)
   end
 
   def set_key_activity

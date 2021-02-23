@@ -387,5 +387,9 @@ export class Api {
     return this.client.get(`/labels`);
   }
 
+  async createLabel(labelObject){
+    return this.client.post(`/labels`, { labelObject })
+  }
+
   //async setJWT(jwt) {}
 }

@@ -164,9 +164,6 @@ export const MeetingStoreModel = types
 
         if (R.isNil(meetingTemplate)) {
           const responseTemplate: ApiResponse<any> = yield self.environment.api.getMeetingTemplates();
-
-          console.log("response template", responseTemplate);
-
           if (responseTemplate.ok) {
             self.meetingTemplates = responseTemplate.data;
             meetingTemplate = self.meetingTemplates.find(
@@ -189,7 +186,6 @@ export const MeetingStoreModel = types
           currentStep: 0,
           meetingTemplateId: meetingTemplate.id,
         });
-        console.log("response", response);
 
         if (response.ok) {
           self.currentMeeting = response.data;
@@ -287,8 +283,6 @@ export const MeetingStoreModel = types
           teamId,
           meetingType,
         });
-
-        console.log("response", response);
 
         if (response.ok) {
           self.currentMeeting = response.data;

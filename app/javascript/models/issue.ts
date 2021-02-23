@@ -1,4 +1,5 @@
 import { types } from "mobx-state-tree";
+import { LabelModel } from "./";
 
 export const IssueModel = types
   .model("IssueModel")
@@ -10,6 +11,7 @@ export const IssueModel = types
     teamId: types.maybeNull(types.number),
     user: types.maybeNull(types.frozen()),
     position: types.maybeNull(types.number),
+    labels: types.maybeNull(types.array(LabelModel)),
   })
   .views(self => ({}))
   .actions(self => ({}));

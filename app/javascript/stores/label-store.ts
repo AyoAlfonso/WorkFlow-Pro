@@ -18,6 +18,16 @@ export const LabelStoreModel = types
         self.labelsList = response.data;
       }
     }),
+    createLabel: flow(function*(label, teamId){
+      const response: ApiResponse<any> = yield self.environment.api.createLabel({label, teamId});
+      if (response.ok) {
+        const labelCreated = response.data.find(resultLabel => resultLabel.name == label)
+        self.labelsList = response.data
+        return labelCreated
+      }
+    }),
+
+   
     setSelectedLabelObj(label) {
       self.selectedLabelObj = { ...label };
     },

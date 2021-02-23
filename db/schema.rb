@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_16_200844) do
+ActiveRecord::Schema.define(version: 2021_02_20_005309) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -372,7 +372,9 @@ ActiveRecord::Schema.define(version: 2021_02_16_200844) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "taggings_count", default: 0
+    t.bigint "team_id"
     t.index ["name"], name: "index_tags_on_name", unique: true
+    t.index ["team_id"], name: "index_tags_on_team_id"
   end
 
   create_table "team_issue_meeting_enablements", force: :cascade do |t|
@@ -518,6 +520,7 @@ ActiveRecord::Schema.define(version: 2021_02_16_200844) do
   add_foreign_key "questionnaire_attempts", "users"
   add_foreign_key "steps", "meeting_templates"
   add_foreign_key "taggings", "tags"
+  add_foreign_key "tags", "teams"
   add_foreign_key "team_issue_meeting_enablements", "meetings"
   add_foreign_key "team_issue_meeting_enablements", "team_issues"
   add_foreign_key "team_user_enablements", "teams"

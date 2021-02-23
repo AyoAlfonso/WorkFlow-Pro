@@ -50,6 +50,7 @@ export const RootStoreModel = types
         self.meetingStore.load();
         self.teamStore.load();
         self.notificationStore.load();
+        self.labelStore.fetchLabels();
       }
     }),
   }))

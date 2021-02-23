@@ -8,8 +8,8 @@ class Api::IssuesController < Api::ApplicationController
     render "api/issues/index"
   end
 
-  def create 
-    @issue = Issue.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], team_id: params[:team_id], position: params[:position], company_id: current_company.id, label: params[:label][:name] })
+  def create
+    @issue = Issue.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], team_id: params[:team_id], position: params[:position], company_id: current_company.id, label_list: params[:label][:name] })
     authorize @issue
     @issue.insert_at(1)
     @issue.save!

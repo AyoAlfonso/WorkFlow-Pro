@@ -7,6 +7,7 @@ export const LabelModel = types
     name: types.maybeNull(types.string),
     color: types.maybeNull(types.string),
     createdAt: types.maybeNull(types.string),
+    teamId: types.maybeNull(types.number),
   })
   .views(self => ({}))
   .actions(self => ({}));

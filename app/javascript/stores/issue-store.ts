@@ -189,7 +189,6 @@ export const IssueStoreModel = types
     }),
     updateTeamIssuePosition: flow(function*(teamIssueId, position, options = {}) {
       //TODO: refactor out fromTeamMeeting completely from all flows
-      console.log("****", teamIssueId, position, options);
       const response: ApiResponse<any> = yield self.environment.api.updateTeamIssuePosition(
         teamIssueId,
         Object.assign({ position }, options),
