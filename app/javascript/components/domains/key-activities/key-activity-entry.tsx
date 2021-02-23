@@ -83,7 +83,6 @@ export const KeyActivityEntry = observer(
           <LabelSelection
             onLabelClick={setShowLabelsList}
             showLabelsList={showLabelsList}
-            itemType={"keyActivity"}
             selectedItemId={labelItem.id}
             inlineEdit={true}
             afterLabelSelectAction={updateLabel}
@@ -94,51 +93,72 @@ export const KeyActivityEntry = observer(
 
     return (
       <Container dragHandleProps={dragHandleProps}>
-        <LeftActionsContainer>
-          <CheckboxContainer key={keyActivity["id"]}>
-            <Checkbox
-              key={keyActivity["id"]}
-              checked={keyActivity["completedAt"] ? true : false}
-              sx={{
-                color: baseTheme.colors.primary100,
-              }}
-              onChange={e => {
-                keyActivityStore.updateKeyActivityStatus(
-                  keyActivity,
-                  e.target.checked,
-                  meetingId ? true : false,
-                );
-              }}
-            />
-          </CheckboxContainer>
+        <RowContainer>
+          <LeftActionsContainer>
+            <CheckboxContainer key={keyActivity["id"]}>
+              <Checkbox
+                key={keyActivity["id"]}
+                checked={keyActivity["completedAt"] ? true : false}
+                sx={{
+                  color: baseTheme.colors.primary100,
+                }}
+                onChange={e => {
+                  keyActivityStore.updateKeyActivityStatus(
+                    keyActivity,
+                    e.target.checked,
+                    meetingId ? true : false,
+                  );
+                }}
+              />
+            </CheckboxContainer>
 
-          <KeyActivityPriorityContainer onClick={() => updatePriority()}>
-            <KeyActivityPriorityIcon priority={keyActivity.priority} />
-          </KeyActivityPriorityContainer>
-        </LeftActionsContainer>
-
-        {/* {dragHandleProps && (
-          <HandleContainer {...dragHandleProps}>
-            <Handle />
-            <Handle />
-            <Handle />
-          </HandleContainer>
-        )} */}
-        <InputContainer>
-          <StyledContentEditable
-            innerRef={keyActivityRef}
-            html={keyActivity.description}
-            onChange={e => handleDescriptionChange(e)}
-            onKeyDown={key => {
-              if (key.keyCode == 13) {
-                keyActivityRef.current.blur();
+            <KeyActivityPriorityContainer onClick={() => updatePriority()}>
+              <KeyActivityPriorityIcon priority={keyActivity.priority} />
+            </KeyActivityPriorityContainer>
+          </LeftActionsContainer>
+          <InputContainer>
+            <StyledContentEditable
+              innerRef={keyActivityRef}
+              html={keyActivity.description}
+              onChange={e => handleDescriptionChange(e)}
+              onKeyDown={key => {
+                if (key.keyCode == 13) {
+                  keyActivityRef.current.blur();
+                }
+              }}
+              style={{ textDecoration: keyActivity.completedAt && "line-through", cursor: "text" }}
+              onBlur={() =>
+                keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false)
               }
-            }}
-            style={{ textDecoration: keyActivity.completedAt && "line-through", cursor: "text" }}
-            onBlur={() =>
-              keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false)
-            }
-          />
+            />
+
+            <ActionContainer>
+              <ActionSubContainer>
+                {meetingId && (
+                  <AvatarContainer>
+                    <Avatar
+                      defaultAvatarColor={keyActivity.user.defaultAvatarColor}
+                      firstName={keyActivity.user.firstName}
+                      lastName={keyActivity.user.lastName}
+                      avatarUrl={keyActivity.user.avatarUrl}
+                      size={25}
+                    />
+                  </AvatarContainer>
+                )}
+
+                <DeleteButtonContainer
+                  onClick={() =>
+                    keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
+                  }
+                >
+                  <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
+                </DeleteButtonContainer>
+              </ActionSubContainer>
+            </ActionContainer>
+          </InputContainer>
+        </RowContainer>
+
+        <BottomRowContainer>
           <DateContainer>
             <Popup
               arrow={false}
@@ -202,33 +222,9 @@ export const KeyActivityEntry = observer(
                 </Button>
               </>
             </Popup>
-            {renderLabel()}
           </DateContainer>
-        </InputContainer>
-
-        <ActionContainer>
-          <ActionSubContainer>
-            {meetingId && (
-              <AvatarContainer>
-                <Avatar
-                  defaultAvatarColor={keyActivity.user.defaultAvatarColor}
-                  firstName={keyActivity.user.firstName}
-                  lastName={keyActivity.user.lastName}
-                  avatarUrl={keyActivity.user.avatarUrl}
-                  size={25}
-                />
-              </AvatarContainer>
-            )}
-
-            <DeleteButtonContainer
-              onClick={() =>
-                keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
-              }
-            >
-              <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
-            </DeleteButtonContainer>
-          </ActionSubContainer>
-        </ActionContainer>
+          {renderLabel()}
+        </BottomRowContainer>
       </Container>
     );
   },
@@ -250,7 +246,6 @@ type ContainerProps = {
 };
 
 const Container = styled.div<ContainerProps>`
-  display: flex;
   font-size: 14px;
   width: inherit;
   padding: 4px 0px 4px 0px;
@@ -266,7 +261,6 @@ const Container = styled.div<ContainerProps>`
 
 const InputContainer = styled.div`
   display: flex;
-  flex-direction: column;
   width: 100%;
   font-size: 14px;
   padding: 4px 0px 4px 0px;
@@ -339,12 +333,11 @@ export const ActionSubContainer = styled.div`
   display: flex;
 `;
 
-type LabelContainerProps = {
-  color: string;
-};
+const RowContainer = styled.div`
+  display: flex;
+`;
 
-const LabelContainer = styled.div<LabelContainerProps>`
-  margin-left: auto;
-  margin-right: 15px;
-  color: ${props => props.color || props.theme.colors.grey60};
+const BottomRowContainer = styled(RowContainer)`
+  margin-left: 65px;
+  margin-top: -10px;
 `;

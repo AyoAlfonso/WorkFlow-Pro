@@ -198,11 +198,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             Save
           </StyledButton>
           <IssuePynModalContainer>
-            <LabelSelection
-              onLabelClick={setShowLabelsList}
-              showLabelsList={showLabelsList}
-              itemType={"keyActivity"}
-            />
+            <LabelSelection onLabelClick={setShowLabelsList} showLabelsList={showLabelsList} />
             <StyledSwitch
               checked={!weeklyList}
               onChange={e => setWeeklyList(!weeklyList)}

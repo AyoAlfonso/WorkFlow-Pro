@@ -125,11 +125,7 @@ export const CreateIssueModal = ({
             Save
           </StyledButton>
           <IssuePynModalContainer>
-            <LabelSelection
-              onLabelClick={setShowLabelsList}
-              showLabelsList={showLabelsList}
-              itemType={"issue"}
-            />
+            <LabelSelection onLabelClick={setShowLabelsList} showLabelsList={showLabelsList} />
             <IconContainer onClick={() => setSelectedPriority(selectedPriority == 1 ? 0 : 1)}>
               <Icon
                 icon={"Priority-High"}

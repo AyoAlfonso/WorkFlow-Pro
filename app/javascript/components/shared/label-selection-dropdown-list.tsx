@@ -10,16 +10,16 @@ import * as R from "ramda";
 interface ILabelSelectionDropdownListProps {
   labelsList: any;
   onLabelSelect: any;
-  itemType: string;
   selectedItemId?: number | string;
+  afterLabelSelectAction?: any;
 }
 
 export const LabelSelectionDropdownList = observer(
   ({
     labelsList,
     onLabelSelect,
-    itemType,
     selectedItemId,
+    afterLabelSelectAction,
   }: ILabelSelectionDropdownListProps): JSX.Element => {
     const {
       teamStore: { teams },
@@ -37,6 +37,9 @@ export const LabelSelectionDropdownList = observer(
             onClick={() => {
               onLabelSelect(label);
               labelStore.setSelectedLabelObj(label);
+              if (afterLabelSelectAction) {
+                afterLabelSelectAction(label.name);
+              }
             }}
           >
             <Icon

@@ -11,7 +11,6 @@ import { baseTheme } from "~/themes";
 interface ILabelSelectionProps {
   onLabelClick: any;
   showLabelsList: boolean;
-  itemType: string;
   selectedItemId?: number | string;
   inlineEdit?: boolean;
   afterLabelSelectAction?: any;
@@ -20,7 +19,6 @@ interface ILabelSelectionProps {
 export const LabelSelection = ({
   onLabelClick,
   showLabelsList,
-  itemType,
   selectedItemId,
   inlineEdit = false,
   afterLabelSelectAction,
@@ -32,17 +30,11 @@ export const LabelSelection = ({
   const { labelsList } = labelStore;
 
   useEffect(() => {
-    //labelStore.fetchLabels();
-    labelStore.setSelectedLabelObj(selectedLabel);
-    if (afterLabelSelectAction && selectedLabel) {
-      afterLabelSelectAction(selectedLabel.name);
-    }
-
     if (selectedItemId && labelsList) {
       const label = labelsList.find(label => label.id == selectedItemId);
       setSelectedLabel(label);
     }
-  }, [selectedLabel]);
+  }, []);
 
   const useOutsideModalCloser = ref => {
     useEffect(() => {
@@ -90,8 +82,8 @@ export const LabelSelection = ({
           <LabelSelectionDropdownList
             labelsList={labelsList}
             onLabelSelect={setSelectedLabel}
-            itemType={itemType}
             selectedItemId={selectedItemId}
+            afterLabelSelectAction={afterLabelSelectAction}
           />
         </div>
       )}
