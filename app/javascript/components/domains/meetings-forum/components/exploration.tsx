@@ -3,7 +3,7 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
-import { Text, Avatar, Loading, Heading } from "~/components/shared";
+import { Text, Avatar, Loading, Heading, Icon } from "~/components/shared";
 import ContentEditable from "react-contenteditable";
 import { ParkingLotIssues } from "./parking-lot-issues";
 import { useEffect } from "react";
@@ -45,12 +45,10 @@ export const Exploration = observer(
       );
     };
 
-    return (
-      <Container>
-        <SectionContainer>
-          <HeaderContainer>{headerText("Scheduled Exploration")}</HeaderContainer>
-          <DescriptionText>Scheduled topic for today</DescriptionText>
-          <HostContainer>
+    const renderUserAvatar = (): JSX.Element => {
+      if (topicOwner) {
+        return (
+          <>
             <Avatar
               firstName={topicOwner.firstName}
               lastName={topicOwner.lastName}
@@ -61,10 +59,29 @@ export const Exploration = observer(
               marginRight={"inherit"}
             />
             <HostedByName>{`${topicOwner.firstName} ${topicOwner.lastName}`}</HostedByName>
-          </HostContainer>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <ImageContainer>
+              <StyledIcon icon={"New-User"} size={"30px"} />
+            </ImageContainer>
+            <NoMemberText>No Member</NoMemberText>
+          </>
+        );
+      }
+    };
+
+    return (
+      <Container>
+        <SectionContainer>
+          <HeaderContainer>{headerText("Scheduled Exploration")}</HeaderContainer>
+          <DescriptionText>Scheduled topic for today</DescriptionText>
+          <HostContainer>{renderUserAvatar()}</HostContainer>
           <StyledContentEditable
-            placeholder={""}
-            html={R.path(["forumExplorationTopic"], currentMeeting.settings)}
+            placeholder={"No Topic"}
+            html={R.path(["forumExplorationTopic"], currentMeeting.settings) || "No Topic"}
             disabled={true}
             onChange={null}
           />
@@ -125,4 +142,22 @@ const StyledContentEditable = styled(ContentEditable)`
   &:hover {
     cursor: ${props => (!props.disabled ? "text" : "default")};
   }
+`;
+
+const ImageContainer = styled.div`
+  border-radius: 9999px;
+  border: ${props => `3px solid ${props.theme.colors.greyInactive}`};
+  width: 42px;
+  height: 42px;
+  display: flex;
+  justify-content: center;
+`;
+
+const StyledIcon = styled(Icon)`
+  color: ${props => props.theme.colors.greyInactive};
+`;
+
+const NoMemberText = styled(HostedByName)`
+  font-style: italic;
+  color: ${props => props.theme.colors.greyActive};
 `;

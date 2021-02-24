@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { NavHeader } from "~/components/domains/nav/nav-header";
 import { Loading } from "~/components/shared/loading";
 import { Section1ForumMeetings } from "./components/section-1-forum-meetings";
+import { toJS } from "mobx";
 
 export const Section1 = observer(
   (): JSX.Element => {
@@ -16,11 +17,10 @@ export const Section1 = observer(
     const {
       companyStore,
       companyStore: { company },
-      teamStore: { teams },
+      teamStore,
       forumStore,
     } = useMst();
 
-    // if there is a no team id, get the first team
     const { team_id } = useParams();
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -29,12 +29,19 @@ export const Section1 = observer(
         await companyStore.load();
         setLoading(false);
       }
-      if (!company) {
-        setUp();
-      }
+      !company ? setUp() : setLoading(false);
     }, [company]);
 
-    if (loading || !company) {
+    // if there is a no team id, get the first team
+    const teamId =
+      (team_id && parseInt(team_id)) ||
+      forumStore.currentForumTeamId ||
+      R.path(["0", "id"], toJS(teamStore.teams));
+
+    //TODO: will remove nave header when we do the header section
+    //TODO: need to sort by scheduled start time from view?
+
+    if (loading || !company || !teamId) {
       return (
         <Container>
           <HeaderContainer>
@@ -43,15 +50,7 @@ export const Section1 = observer(
           <Loading />
         </Container>
       );
-    } else if (forumStore.error) {
-      return <></>;
     }
-
-    const teamId =
-      (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
-
-    //TODO: will remove nave header when we do the header section
-    //TODO: need to sort by scheduled start time from view?
 
     return (
       <Container>
