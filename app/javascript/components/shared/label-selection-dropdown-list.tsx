@@ -29,6 +29,13 @@ export const LabelSelectionDropdownList = observer(
     const [labelInput, setLabelInput] = useState<string>("");
     const [selectedTeamId, setSelectedTeamId] = useState<any>(selectedItemId || "");
 
+    const renderTeamName = label => {
+      if (label.teamId) {
+        const teamName = teams.find(team => team.id == label.teamId).name;
+        return `(${teamName})`;
+      }
+    };
+
     const renderLabelOptions = (): Array<JSX.Element> => {
       return labelsList.map((label, index) => {
         return (
@@ -42,12 +49,10 @@ export const LabelSelectionDropdownList = observer(
               }
             }}
           >
-            <Icon
-              icon={"Priority-Empty"}
-              size={"25px"}
-              iconColor={label.color ? label.color : "grey60"}
-            />
-            <LabelOptionText> {`${label.name}`}</LabelOptionText>
+            <Icon icon={"Label"} size={"25px"} iconColor={label.color ? label.color : "grey60"} />
+            <LabelOptionText>
+              {`${label.name}`} {renderTeamName(label)}
+            </LabelOptionText>
           </LabelOption>
         );
       });

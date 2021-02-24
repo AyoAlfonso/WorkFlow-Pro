@@ -19,6 +19,6 @@ class Api::LabelsController < Api::ApplicationController
   private
   def labels_for_team
     team_ids = @current_company.teams.pluck(:id)
-    ActsAsTaggableOn::Tag.where(team_id: team_ids).or(ActsAsTaggableOn::Tag.where(team_id: nil))
+    ActsAsTaggableOn::Tag.where(team_id: team_ids).or(ActsAsTaggableOn::Tag.where(team_id: nil)).most_used(5)
   end
 end
