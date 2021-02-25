@@ -57,6 +57,8 @@ Rails.application.routes.draw do
     patch '/update_company_first_time_access', to: 'users#update_company_first_time_access'
     post 'invite_users_to_company', to: 'users#invite_users_to_company'
 
+    get '/static_data', to: 'application#load_static_data'
+
     resources :companies, only: [:show, :update] do
       member do
         delete 'logo', to: 'companies#delete_logo'

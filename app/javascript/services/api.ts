@@ -62,12 +62,12 @@ export class Api {
     return this.client.patch(`/users/${formData.id}`, formData);
   }
 
-  async updateUserTeamRole(userId, teamId, canEdit){
-    return this.client.patch(`/update_user_team_role`, { userId, teamId, canEdit})
+  async updateUserTeamRole(userId, teamId, canEdit) {
+    return this.client.patch(`/update_user_team_role`, { userId, teamId, canEdit });
   }
 
   async updateUserCompanyFirstTimeAccess(params) {
-    return this.client.patch(`/update_company_first_time_access`, params)
+    return this.client.patch(`/update_company_first_time_access`, params);
   }
 
   async updateAvatar(formData) {
@@ -384,11 +384,17 @@ export class Api {
   }
 
   async searchForumMeetingsByDateRange(startDate, endDate, teamId) {
-    return this.client.get("/forum/search_meetings_by_date_range", { startDate, endDate, teamId })
+    return this.client.get("/forum/search_meetings_by_date_range", { startDate, endDate, teamId });
   }
 
   async getQuestionnaireAttemptsSummaryForReflections(questionnaireId) {
-    return this.client.get(`questionnaire_attempts/questionnaire_summary?questionnaire_id=${questionnaireId}`)
+    return this.client.get(
+      `questionnaire_attempts/questionnaire_summary?questionnaire_id=${questionnaireId}`,
+    );
+  }
+
+  async getStaticData() {
+    return this.client.get("/static_data");
   }
 
   async getLabels() {

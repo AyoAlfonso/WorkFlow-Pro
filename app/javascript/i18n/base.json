@@ -101,7 +101,8 @@
         "editUser": {
           "title": "Edit User"
         },
-        "rallyingCry": "LynchPyn Goal"
+        "rallyingCry": "LynchPyn Goal",
+        "createCompany": "Create Company"
       },
       "forum": {
         "section1": "Section 1",

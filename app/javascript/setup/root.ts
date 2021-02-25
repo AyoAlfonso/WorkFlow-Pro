@@ -65,6 +65,10 @@ const initialState = {
   milestoneStore: {
     milestonesForPersonalMeeting: null,
   },
+  staticDataStore: {
+    loading: false,
+    timeZones: null,
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);

@@ -1,9 +1,9 @@
 class Api::ApplicationController < ActionController::API
   include Pundit
 
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:load_static_data]
   before_action :set_current_company
-  after_action :verify_authorized, except: :index, unless: :skip_pundit?
+  after_action :verify_authorized, except: [:index, :load_static_data], unless: :skip_pundit?
   after_action :verify_policy_scoped, only: :index, unless: :skip_pundit?
 
   #precedence highest when delcared last for rescue_from
@@ -24,6 +24,11 @@ class Api::ApplicationController < ActionController::API
 
   def current_company
     @current_company
+  end
+
+  def load_static_data
+    @static_data = StaticDataService.call
+    render json: @static_data, status: 200
   end
 
   private

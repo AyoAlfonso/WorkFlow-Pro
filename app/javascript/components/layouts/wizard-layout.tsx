@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as R from "ramda";
 import styled from "styled-components";
 import { Heading } from "../shared";
 import { Text } from "~/components/shared/text";
@@ -9,10 +10,11 @@ interface IWizardLayoutProps {
   title: string;
   description: string;
   customActionButton?: JSX.Element;
+  showBackButton?: boolean;
   showSkipButton?: boolean;
   singleComponent?: JSX.Element;
-  leftBodyComponents?: JSX.Element;
-  rightBodyComponents?: JSX.Element;
+  leftBodyComponents?: Array<JSX.Element>;
+  rightBodyComponents?: Array<JSX.Element>;
   steps?: Array<string>;
   currentStep?: number;
   customStepsComponent?: JSX.Element;
@@ -20,6 +22,7 @@ interface IWizardLayoutProps {
   showLynchpynLogo?: boolean;
   showCloseButton?: boolean;
   onCloseButtonClick?: any;
+  onBackButtonClick?: any;
   onSkipButtonClick?: any;
   onNextButtonClick?: any;
 }
@@ -28,6 +31,7 @@ export const WizardLayout = ({
   title,
   description,
   customActionButton,
+  showBackButton = false,
   showSkipButton = true,
   singleComponent,
   leftBodyComponents,
@@ -39,6 +43,7 @@ export const WizardLayout = ({
   showLynchpynLogo = false,
   showCloseButton = false,
   onCloseButtonClick,
+  onBackButtonClick,
   onSkipButtonClick,
   onNextButtonClick,
 }: IWizardLayoutProps): JSX.Element => {
@@ -46,6 +51,11 @@ export const WizardLayout = ({
     return (
       customActionButton || (
         <>
+          {showBackButton && (
+            <SkipButton small variant={"primaryOutline"} onClick={onBackButtonClick}>
+              Back
+            </SkipButton>
+          )}
           {showSkipButton && (
             <SkipButton small variant={"primaryOutline"} onClick={onSkipButtonClick}>
               Skip
@@ -71,11 +81,16 @@ export const WizardLayout = ({
   };
 
   const renderBodyComponents = (): JSX.Element => {
+    const hasRightBodyComponent = !R.isNil(rightBodyComponents[currentStep]);
     return (
       singleComponent || (
         <>
-          <LeftBodyContainer> {leftBodyComponents}</LeftBodyContainer>
-          <RightBodyContainer> {rightBodyComponents}</RightBodyContainer>
+          <LeftBodyContainer fullWidth={!hasRightBodyComponent}>
+            {leftBodyComponents[currentStep]}
+          </LeftBodyContainer>
+          {hasRightBodyComponent && (
+            <RightBodyContainer> {rightBodyComponents[currentStep]}</RightBodyContainer>
+          )}
         </>
       )
     );
@@ -84,7 +99,7 @@ export const WizardLayout = ({
   return (
     <Container>
       <DescriptionContainer>
-        <DescrptionBody>
+        <DescriptionBody>
           <DescriptionTitleContainer>
             <Heading type={"h2"} fontSize={"20px"} fontWeight={600}>
               {title}
@@ -93,7 +108,7 @@ export const WizardLayout = ({
           <DescriptionText>{description}</DescriptionText>
           <ButtonsContainer>{renderActionButtons()}</ButtonsContainer>
           {childrenUnderDescription}
-        </DescrptionBody>
+        </DescriptionBody>
         {showLynchpynLogo && (
           <LynchpynLogoContainer>
             <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="200"></img>
@@ -127,7 +142,7 @@ const DescriptionContainer = styled.div`
   background-color: ${props => props.theme.colors.backgroundGrey};
 `;
 
-const DescrptionBody = styled.div`
+const DescriptionBody = styled.div`
   padding-left: 10%;
   padding-right: 10%;
   margin-top: 32px;
@@ -144,7 +159,7 @@ const BodyContainer = styled.div`
 
 const BodyContentContainer = styled.div`
   display: flex;
-  height: 95%;
+  height: 85%;
 `;
 
 const DescriptionTitleContainer = styled.div``;
@@ -171,8 +186,8 @@ const SkipButton = styled(Button)`
   margin-right: 10px;
 `;
 
-const LeftBodyContainer = styled.div`
-  width: 50%;
+const LeftBodyContainer = styled.div<{ fullWidth: boolean }>`
+  width: ${({ fullWidth }) => (fullWidth ? "100%" : "50%")};
   margin-right: 16px;
 `;
 
@@ -181,7 +196,7 @@ const RightBodyContainer = styled.div`
 `;
 
 const StepComponentContainer = styled.div`
-  margin-top: auto;
+  margin-top: 48px;
   margin-bottom: 32px;
   margin-left: auto;
   margin-right: auto;
@@ -196,7 +211,7 @@ const LynchpynLogoContainer = styled.div`
 const CloseButtonContainer = styled.div`
   display: flex;
   margin-right: 20px;
-  &: hover {
+  &:hover {
     cursor: pointer;
   }
 `;

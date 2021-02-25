@@ -14,6 +14,7 @@ export * from "./status";
 export * from "./sub-header-text";
 export * from "./table";
 export * from "./text";
+export * from "./text-area";
 export * from "./text-input";
 export * from "./timer";
 export * from "./toaster";

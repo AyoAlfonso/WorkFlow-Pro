@@ -46,6 +46,8 @@ import { ForumAgenda } from "./domains/meetings-forum/forum-agenda";
 import { WizardLayout } from "./layouts/wizard-layout";
 import { ForumWelcomeModal } from "./shared/forum-welcome-modal";
 
+import { Onboarding } from "./domains/onboarding";
+
 const Container = styled.div`
   margin-left: 136px;
   margin-right: 40px;
@@ -182,6 +184,7 @@ export const App = observer(
                     "/meetings/section_1/:team_id",
                     "/meetings/section_2",
                     "/meetings/section_2/:team_id",
+                    "/onboarding",
                   ]}
                 >
                   <>
@@ -210,6 +213,7 @@ export const App = observer(
                       <Route exact path="/meetings/section_1/:team_id" component={Section1} />
                       <Route exact path="/meetings/section_2" component={Section2} />
                       <Route exact path="/meetings/section_2/:team_id" component={Section2} />
+                      <Route exact path="/onboarding" component={Onboarding} />
                     </Container>
                   </>
                 </Route>
@@ -229,27 +233,9 @@ export const App = observer(
                   }}
                 />
                 <Route
-                  path={"/test_template"}
+                  path={"/onboarding"}
                   render={() => {
-                    return (
-                      <WizardLayout
-                        title={"Goals"}
-                        description={
-                          "Goals are things you (and your company) want to achieve in the next 3-12 months."
-                        }
-                        showSkipButton={false}
-                        leftBodyComponents={<> Left Component </>}
-                        rightBodyComponents={<> Right Component </>}
-                        steps={[
-                          "Tell us more about yourself",
-                          "Your company's Foundation Four \u2122",
-                          "Create your first Goal",
-                          "Add your first Pyn (todo)",
-                          "Add your Team",
-                        ]}
-                        currentStep={1}
-                      />
-                    );
+                    return <Onboarding />;
                   }}
                 />
               </Switch>
