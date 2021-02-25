@@ -7,7 +7,14 @@ class Api::LabelsController < Api::ApplicationController
   end
 
   def create
-    record = ActsAsTaggableOn::Tag.where(name: params[:label_object][:label], team_id: params[:label_object][:team_id]).first_or_create
+    label = params[:label_object][:label]
+    if label == "Personal"
+      ActsAsTaggableOn::Tag.where(name: label, user_id: @current_user.id).first_or_create
+    elsif label == "Company"
+      ActsAsTaggableOn::Tag.where(name: label, company_id: @current_company.id).first_or_create
+    else
+      ActsAsTaggableOn::Tag.where(name: label, team_id: params[:label_object][:team_id]).first_or_create
+    end
     @labels = labels_for_team.order('created_at DESC')
     render "api/labels/index"
   end
@@ -19,6 +26,9 @@ class Api::LabelsController < Api::ApplicationController
   private
   def labels_for_team
     team_ids = @current_company.teams.pluck(:id)
-    ActsAsTaggableOn::Tag.where(team_id: team_ids).or(ActsAsTaggableOn::Tag.where(team_id: nil)).most_used(5)
+    ActsAsTaggableOn::Tag.where(team_id: team_ids)
+      .or(ActsAsTaggableOn::Tag.where(company_id: @current_company.id))
+      .or(ActsAsTaggableOn::Tag.where(user_id: @current_user.id))
+      .most_used(5)
   end
 end

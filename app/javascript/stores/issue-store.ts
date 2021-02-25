@@ -201,6 +201,19 @@ export const IssueStoreModel = types
         return false;
       }
     }),
+    updateLabel: flow(function*(issueId, labelName){
+      const response: ApiResponse<any> = yield self.environment.api.updateIssue({
+        id: issueId,
+        labelList: labelName
+      });
+
+      if (response.ok) {
+        self.issues = response.data;
+        return true;
+      } else {
+        return false;
+      }
+    })
   }))
   .actions(self => ({
     sortIssuesByPriority: flow(function*(sortParams) {

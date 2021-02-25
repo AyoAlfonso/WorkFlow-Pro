@@ -14,6 +14,7 @@ interface ILabelSelectionProps {
   selectedItemId?: number | string;
   inlineEdit?: boolean;
   afterLabelSelectAction?: any;
+  marginLeft?: string;
 }
 
 export const LabelSelection = ({
@@ -22,6 +23,7 @@ export const LabelSelection = ({
   selectedItemId,
   inlineEdit = false,
   afterLabelSelectAction,
+  marginLeft,
 }: ILabelSelectionProps): JSX.Element => {
   const { labelStore } = useMst();
   const [selectedLabel, setSelectedLabel] = useState<any>(null);
@@ -61,7 +63,7 @@ export const LabelSelection = ({
   };
 
   return (
-    <LabelContainer onClick={() => onLabelClick(true)}>
+    <LabelContainer onClick={() => onLabelClick(true)} marginLeft={marginLeft}>
       {!R.isNil(selectedLabel) ? (
         <StyledLabel>
           <Icon
@@ -82,7 +84,6 @@ export const LabelSelection = ({
           <LabelSelectionDropdownList
             labelsList={labelsList}
             onLabelSelect={setSelectedLabel}
-            selectedItemId={selectedItemId}
             afterLabelSelectAction={afterLabelSelectAction}
           />
         </div>
@@ -91,14 +92,18 @@ export const LabelSelection = ({
   );
 };
 
-const LabelContainer = styled.div`
+type LabelContainerProps = {
+  marginLeft?: string;
+};
+
+const LabelContainer = styled.div<LabelContainerProps>`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
-  margin-left: auto;
+  margin-left: ${props => props.marginLeft || "auto"};
   margin-right: 12px;
-  height: 35px;
+  height: 20px;
   &: hover {
     cursor: pointer;
   }

@@ -129,6 +129,7 @@ const AccordionDetailsContainer = styled(AccordionDetails)`
   padding: 0px 0px 15px 0px;
   display: flex;
   flex-direction: column;
+  height: 500px;
 `;
 
 const AddNewIssuePlus = styled.div`

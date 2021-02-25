@@ -13,7 +13,7 @@ import { Button } from "rebass";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
-import { Avatar } from "~/components/shared";
+import { Avatar, LabelSelection } from "~/components/shared";
 
 interface IIssueEntryProps {
   issue: any;
@@ -33,6 +33,7 @@ export const IssueEntry = observer(
     const [showShareModal, setShowShareModal] = useState<boolean>(false);
     const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
+    const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
 
     const issueRef = useRef(null);
 
@@ -99,19 +100,22 @@ export const IssueEntry = observer(
       issueStore.updateIssue(issue.id, meetingId ? true : false);
     };
 
+    const updateLabel = labelName => {
+      issueStore.updateLabel(issue.id, labelName);
+    };
+
     const renderLabel = () => {
       if (issue.labels.length > 0) {
         const labelItem = issue.labels[0];
         return (
-          <LabelContainer color={labelItem.color}>
-            <Icon
-              icon={"Label"}
-              size={"12px"}
-              iconColor={labelItem.color ? labelItem.color : "grey60"}
-              style={{ marginRight: "5px" }}
-            />
-            {labelItem.name}
-          </LabelContainer>
+          <LabelSelection
+            onLabelClick={setShowLabelsList}
+            showLabelsList={showLabelsList}
+            selectedItemId={labelItem.id}
+            inlineEdit={true}
+            afterLabelSelectAction={updateLabel}
+            marginLeft={"50px"}
+          />
         );
       }
     };

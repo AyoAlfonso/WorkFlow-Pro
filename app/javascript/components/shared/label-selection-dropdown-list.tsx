@@ -10,7 +10,6 @@ import * as R from "ramda";
 interface ILabelSelectionDropdownListProps {
   labelsList: any;
   onLabelSelect: any;
-  selectedItemId?: number | string;
   afterLabelSelectAction?: any;
 }
 
@@ -18,7 +17,6 @@ export const LabelSelectionDropdownList = observer(
   ({
     labelsList,
     onLabelSelect,
-    selectedItemId,
     afterLabelSelectAction,
   }: ILabelSelectionDropdownListProps): JSX.Element => {
     const {
@@ -27,7 +25,7 @@ export const LabelSelectionDropdownList = observer(
     } = useMst();
 
     const [labelInput, setLabelInput] = useState<string>("");
-    const [selectedTeamId, setSelectedTeamId] = useState<any>(selectedItemId || "");
+    const [selectedGroup, setSelectedGroup] = useState<any>(null);
 
     const renderTeamName = label => {
       if (label.teamId) {
@@ -59,7 +57,12 @@ export const LabelSelectionDropdownList = observer(
     };
 
     const renderDefaultValue = (): JSX.Element => {
-      return <StyledOption value={""}> </StyledOption>;
+      return (
+        <>
+          <StyledOption value={"personal"}> Personal </StyledOption>
+          <StyledOption value={"company"}> Company </StyledOption>
+        </>
+      );
     };
 
     const renderTeams = (): Array<JSX.Element> => {
@@ -73,7 +76,7 @@ export const LabelSelectionDropdownList = observer(
     };
 
     const createAndSetLabel = () => {
-      labelStore.createLabel(labelInput, selectedTeamId).then(data => {
+      labelStore.createLabel(labelInput, selectedGroup).then(data => {
         onLabelSelect(data);
         setLabelInput("");
       });
@@ -87,9 +90,9 @@ export const LabelSelectionDropdownList = observer(
             <StyledSelect
               name="teams"
               onChange={e => {
-                setSelectedTeamId(e.target.value);
+                setSelectedGroup(e.target.value);
               }}
-              value={selectedTeamId}
+              value={selectedGroup}
             >
               {renderDefaultValue()}
               {renderTeams()}
