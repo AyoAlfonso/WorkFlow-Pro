@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_16_200844) do
+ActiveRecord::Schema.define(version: 2021_02_25_192807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,6 +176,7 @@ ActiveRecord::Schema.define(version: 2021_02_16_200844) do
     t.bigint "team_id"
     t.integer "position"
     t.bigint "company_id"
+    t.boolean "personal", default: false
     t.index ["company_id"], name: "index_issues_on_company_id"
     t.index ["team_id"], name: "index_issues_on_team_id"
     t.index ["user_id", "position", "completed_at"], name: "index_issues_on_user_id_and_position_and_completed_at"
@@ -195,6 +196,7 @@ ActiveRecord::Schema.define(version: 2021_02_16_200844) do
     t.integer "position"
     t.date "due_date"
     t.bigint "company_id"
+    t.boolean "personal", default: false
     t.index ["company_id"], name: "index_key_activities_on_company_id"
     t.index ["completed_at", "position", "priority"], name: "index_key_activities_on_completed_at_and_position_and_priority"
     t.index ["created_at", "position", "priority"], name: "index_key_activities_on_created_at_and_position_and_priority"
@@ -372,7 +374,12 @@ ActiveRecord::Schema.define(version: 2021_02_16_200844) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "taggings_count", default: 0
-    t.index ["name"], name: "index_tags_on_name", unique: true
+    t.bigint "team_id"
+    t.bigint "user_id"
+    t.bigint "company_id"
+    t.index ["name", "company_id"], name: "index_tags_on_name_and_company_id", unique: true
+    t.index ["name", "team_id"], name: "index_tags_on_name_and_team_id", unique: true
+    t.index ["name", "user_id"], name: "index_tags_on_name_and_user_id", unique: true
   end
 
   create_table "team_issue_meeting_enablements", force: :cascade do |t|
@@ -518,6 +525,9 @@ ActiveRecord::Schema.define(version: 2021_02_16_200844) do
   add_foreign_key "questionnaire_attempts", "users"
   add_foreign_key "steps", "meeting_templates"
   add_foreign_key "taggings", "tags"
+  add_foreign_key "tags", "companies"
+  add_foreign_key "tags", "teams"
+  add_foreign_key "tags", "users"
   add_foreign_key "team_issue_meeting_enablements", "meetings"
   add_foreign_key "team_issue_meeting_enablements", "team_issues"
   add_foreign_key "team_user_enablements", "teams"

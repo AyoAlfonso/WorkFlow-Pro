@@ -19,6 +19,15 @@ export const PriorityContainer = styled.div`
   margin-top: 5px;
 `;
 
+export const IssuePynModalContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+  align-items: center;
+  margin-top: 0;
+  height: 35px;
+`;
+
 export const IconContainer = styled.div`
   margin-left: 10px;
 `;

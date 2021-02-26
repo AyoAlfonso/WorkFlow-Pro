@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const MonthContainer = styled.div`
-  width: 300px;
+  width: 315px;
   margin-top: auto;
   margin-bottom: auto;
 `;
@@ -19,7 +19,6 @@ export const Container = styled.div`
   flex-direction: row;
   width: 100%;
   margin-top: 16px;
-  margin-bottom: 16px;
   height: 100px;
 `;
 

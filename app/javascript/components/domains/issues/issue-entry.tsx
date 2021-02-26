@@ -6,14 +6,15 @@ import { Icon } from "../../shared/icon";
 import { observer } from "mobx-react";
 import { baseTheme } from "../../../themes/base";
 import ContentEditable from "react-contenteditable";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Text } from "~/components/shared/text";
 import { HomeContainerBorders } from "../home/shared-components";
 import { Button } from "rebass";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
-import { Avatar } from "~/components/shared";
+import { Avatar, LabelSelection } from "~/components/shared";
+import { toJS } from "mobx";
 
 interface IIssueEntryProps {
   issue: any;
@@ -33,6 +34,13 @@ export const IssueEntry = observer(
     const [showShareModal, setShowShareModal] = useState<boolean>(false);
     const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
+    const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
+    const [selectedLabel, setSelectedLabel] = useState<any>(null);
+
+    useEffect(() => {
+      const issueLabels = toJS(issue.labels);
+      setSelectedLabel(issueLabels ? issueLabels[0] : null);
+    }, [issue]);
 
     const issueRef = useRef(null);
 
@@ -99,6 +107,26 @@ export const IssueEntry = observer(
       issueStore.updateIssue(issue.id, meetingId ? true : false);
     };
 
+    const updateLabel = labelName => {
+      issueStore.updateLabel(issue.id, labelName);
+    };
+
+    const renderLabel = () => {
+      if (issue.labels.length > 0) {
+        return (
+          <LabelSelection
+            selectedLabel={selectedLabel}
+            setSelectedLabel={setSelectedLabel}
+            onLabelClick={setShowLabelsList}
+            showLabelsList={showLabelsList}
+            inlineEdit={true}
+            afterLabelSelectAction={updateLabel}
+            marginLeft={"50px"}
+          />
+        );
+      }
+    };
+
     return (
       <Container onMouseEnter={() => setShowShareModal(false)} {...dragHandleProps}>
         <CreateKeyActivityModal
@@ -107,122 +135,130 @@ export const IssueEntry = observer(
           defaultTypeAsWeekly={true}
         />
 
-        <LeftActionsContainer>
-          <CheckboxContainer key={issue["id"]}>
-            <Checkbox
-              key={issue["id"]}
-              checked={issue["completedAt"] ? true : false}
-              onChange={e => {
-                issueStore.updateIssueStatus(issue, e.target.checked, meetingId ? true : false);
-              }}
-              sx={{
-                color: baseTheme.colors.primary100,
-              }}
-            />
-          </CheckboxContainer>
+        <RowWrapper>
+          <LeftActionsContainer>
+            <CheckboxContainer key={issue["id"]}>
+              <Checkbox
+                key={issue["id"]}
+                checked={issue["completedAt"] ? true : false}
+                onChange={e => {
+                  issueStore.updateIssueStatus(issue, e.target.checked, meetingId ? true : false);
+                }}
+                sx={{
+                  color: baseTheme.colors.primary100,
+                }}
+              />
+            </CheckboxContainer>
 
-          <IssuePriorityContainer onClick={() => updatePriority()}>
-            {renderPriorityIcon(issue.priority)}
-          </IssuePriorityContainer>
-        </LeftActionsContainer>
+            <IssuePriorityContainer onClick={() => updatePriority()}>
+              {renderPriorityIcon(issue.priority)}
+            </IssuePriorityContainer>
+          </LeftActionsContainer>
 
-        <StyledContentEditable
-          innerRef={issueRef}
-          inMeetingStyle={meetingId ? true : false}
-          html={issue.description}
-          onChange={e => {
-            if (!e.target.value.includes("<div>")) {
-              issueStore.updateIssueState(issue["id"], "description", e.target.value);
-            }
-          }}
-          onKeyDown={key => {
-            if (key.keyCode == 13) {
-              issueRef.current.blur();
-            }
-          }}
-          style={{ textDecoration: issue.completedAt && "line-through", cursor: "text" }}
-          onBlur={() => issueStore.updateIssue(issue.id, meetingId ? true : false)}
-        />
+          <StyledContentEditable
+            innerRef={issueRef}
+            html={issue.description}
+            onChange={e => {
+              if (!e.target.value.includes("<div>")) {
+                issueStore.updateIssueState(issue["id"], "description", e.target.value);
+              }
+            }}
+            onKeyDown={key => {
+              if (key.keyCode == 13) {
+                issueRef.current.blur();
+              }
+            }}
+            style={{
+              textDecoration: issue.completedAt && "line-through",
+              cursor: "text",
+              minWidth: meetingId ? "95px" : "105px",
+            }}
+            onBlur={() => issueStore.updateIssue(issue.id, meetingId ? true : false)}
+          />
 
-        <ActionContainer meeting={meetingId ? true : false}>
-          <ActionSubContainer>
-            <ActionsDisplayContainer>
-              {meetingId && (
-                <AvatarContainer>
-                  <Avatar
-                    defaultAvatarColor={issue.user.defaultAvatarColor}
-                    firstName={issue.user.firstName}
-                    lastName={issue.user.lastName}
-                    avatarUrl={issue.user.avatarUrl}
-                    size={25}
-                  />
-                </AvatarContainer>
-              )}
+          {issue.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
 
-              <DeleteButtonContainer
-                onClick={() => issueStore.destroyIssue(issue.id, meetingId ? true : false)}
-                onMouseEnter={() => setShowShareModal(false)}
-              >
-                <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
-              </DeleteButtonContainer>
-              <ShareButtonContainer onMouseEnter={() => setShowShareModal(true)}>
-                <Icon icon={"Forward"} size={24} style={{ marginTop: "3px" }} />
-                {showShareModal && (
-                  <ShareIssueContainer pageEnd={pageEnd} leftShareContainer={leftShareContainer}>
-                    <ShareIssueText>Share Issue</ShareIssueText>
-                    <DestinationContainer>
-                      <SendDestinationContainer>
-                        <DestinationText>Destination</DestinationText>
-                        <Select
-                          id="country"
-                          name="country"
-                          value={selectedTeamId}
-                          onChange={e => setSelectedTeamId(parseInt(e.target.value))}
-                          style={{
-                            borderRadius: "5px",
-                            border: `1px solid ${baseTheme.colors.grey60}`,
-                          }}
-                        >
-                          {[{ id: null, name: "" }, ...teams].map((value, key) => (
-                            <option key={key} value={value.id}>
-                              {value.name}
-                            </option>
-                          ))}
-                        </Select>
-                        <ButtonContainer>
-                          <StyledButton
-                            disabled={!selectedTeamId}
-                            onClick={() => {
-                              issueStore.updateIssueState(issue.id, "teamId", selectedTeamId);
-                              issueStore.updateIssue(issue.id).then(result => {
-                                if (result) {
-                                  showToast(
-                                    "Issue shared with team.",
-                                    ToastMessageConstants.SUCCESS,
-                                  );
-                                }
-                              });
+          <ActionContainer meeting={meetingId ? true : false}>
+            <ActionSubContainer>
+              <ActionsDisplayContainer>
+                {meetingId && (
+                  <AvatarContainer>
+                    <Avatar
+                      defaultAvatarColor={issue.user.defaultAvatarColor}
+                      firstName={issue.user.firstName}
+                      lastName={issue.user.lastName}
+                      avatarUrl={issue.user.avatarUrl}
+                      size={25}
+                    />
+                  </AvatarContainer>
+                )}
+
+                <DeleteButtonContainer
+                  onClick={() => issueStore.destroyIssue(issue.id, meetingId ? true : false)}
+                  onMouseEnter={() => setShowShareModal(false)}
+                >
+                  <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
+                </DeleteButtonContainer>
+                <ShareButtonContainer onMouseEnter={() => setShowShareModal(true)}>
+                  <Icon icon={"Forward"} size={24} style={{ marginTop: "3px" }} />
+                  {showShareModal && (
+                    <ShareIssueContainer pageEnd={pageEnd} leftShareContainer={leftShareContainer}>
+                      <ShareIssueText>Share Issue</ShareIssueText>
+                      <DestinationContainer>
+                        <SendDestinationContainer>
+                          <DestinationText>Destination</DestinationText>
+                          <Select
+                            id="country"
+                            name="country"
+                            value={selectedTeamId}
+                            onChange={e => setSelectedTeamId(parseInt(e.target.value))}
+                            style={{
+                              borderRadius: "5px",
+                              border: `1px solid ${baseTheme.colors.grey60}`,
                             }}
                           >
-                            Share
-                          </StyledButton>
-                        </ButtonContainer>
-                      </SendDestinationContainer>
-                    </DestinationContainer>
-                  </ShareIssueContainer>
+                            {[{ id: null, name: "" }, ...teams].map((value, key) => (
+                              <option key={key} value={value.id}>
+                                {value.name}
+                              </option>
+                            ))}
+                          </Select>
+                          <ButtonContainer>
+                            <StyledButton
+                              disabled={!selectedTeamId}
+                              onClick={() => {
+                                issueStore.updateIssueState(issue.id, "teamId", selectedTeamId);
+                                issueStore.updateIssue(issue.id).then(result => {
+                                  if (result) {
+                                    showToast(
+                                      "Issue shared with team.",
+                                      ToastMessageConstants.SUCCESS,
+                                    );
+                                  }
+                                });
+                              }}
+                            >
+                              Share
+                            </StyledButton>
+                          </ButtonContainer>
+                        </SendDestinationContainer>
+                      </DestinationContainer>
+                    </ShareIssueContainer>
+                  )}
+                </ShareButtonContainer>
+                {meetingId && (
+                  <CreateKeyActivityButtonContainer
+                    onMouseEnter={() => setShowShareModal(false)}
+                    onClick={() => setCreateKeyActivityModalOpen(true)}
+                  >
+                    <Icon icon={"Tasks"} size={20} style={{ marginTop: "2px" }} />
+                  </CreateKeyActivityButtonContainer>
                 )}
-              </ShareButtonContainer>
-              {meetingId && (
-                <CreateKeyActivityButtonContainer
-                  onMouseEnter={() => setShowShareModal(false)}
-                  onClick={() => setCreateKeyActivityModalOpen(true)}
-                >
-                  <Icon icon={"Tasks"} size={20} style={{ marginTop: "2px" }} />
-                </CreateKeyActivityButtonContainer>
-              )}
-            </ActionsDisplayContainer>
-          </ActionSubContainer>
-        </ActionContainer>
+              </ActionsDisplayContainer>
+            </ActionSubContainer>
+          </ActionContainer>
+        </RowWrapper>
+        <RowWrapper>{renderLabel()}</RowWrapper>
       </Container>
     );
   },
@@ -275,7 +311,6 @@ const CreateKeyActivityButtonContainer = styled.div`
 `;
 
 const Container = styled.div`
-  display: flex;
   font-size: 14px;
   width: 100%;
   padding: 12px 0px 12px 0px;
@@ -300,18 +335,13 @@ const IssuePriorityContainer = styled.div`
   }
 `;
 
-type StyledContentEditableProps = {
-  inMeetingStyle?: boolean;
-};
-
-const StyledContentEditable = styled(ContentEditable)<StyledContentEditableProps>`
+const StyledContentEditable = styled(ContentEditable)`
   padding-top: 5px;
   padding-bottom: 5px;
   font-size: 16px;
   font-weight: 400;
   line-height: 20px;
   margin-left: 10px;
-  min-width: ${props => (props.inMeetingStyle ? "95px" : "105px")};
   margin-top: auto;
   margin-bottom: auto;
   width: 90%;
@@ -397,4 +427,19 @@ const LeftActionsContainer = styled.div`
 const ActionSubContainer = styled.div`
   margin-left: auto;
   display: flex;
+`;
+
+const RowWrapper = styled.div`
+  display: flex;
+`;
+
+type LabelContainerProps = {
+  color: string;
+};
+
+const LabelContainer = styled.div<LabelContainerProps>`
+  //margin-left: auto;
+  //margin-right: 15px;
+  margin-left: 65px;
+  color: ${props => props.color || props.theme.colors.grey60};
 `;

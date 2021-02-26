@@ -1,4 +1,5 @@
 import { types } from "mobx-state-tree";
+import { LabelModel } from "./";
 
 export const KeyActivityModel = types
   .model("KeyActivityModel")
@@ -14,6 +15,8 @@ export const KeyActivityModel = types
     todaysPriority: types.maybeNull(types.boolean),
     createdAt: types.maybeNull(types.string),
     dueDate: types.maybeNull(types.string),
+    labels: types.maybeNull(types.array(LabelModel)),
+    personal: types.boolean,
   })
   .views(self => ({}))
   .actions(self => ({}));

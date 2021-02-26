@@ -1,13 +1,13 @@
 import { Checkbox, Label } from "@rebass/forms";
 import { observer } from "mobx-react";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import ContentEditable from "react-contenteditable";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { baseTheme } from "../../../themes/base";
 import { Icon } from "../../shared/icon";
 import { KeyActivityPriorityIcon } from "./key-activity-priority-icon";
-import { Avatar } from "~/components/shared";
+import { Avatar, LabelSelection } from "~/components/shared";
 import { DateButton } from "~/components/shared/date-selection/date-button";
 import { addDays, parseISO } from "date-fns";
 import Popup from "reactjs-popup";
@@ -31,6 +31,12 @@ export const KeyActivityEntry = observer(
     const { t } = useTranslation();
     const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
     const [selectedDueDate, setSelectedDueDate] = useState<Date>(new Date(keyActivity.dueDate));
+    const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
+    const [selectedLabel, setSelectedLabel] = useState<any>(null);
+
+    useEffect(() => {
+      setSelectedLabel(keyActivity.labels ? keyActivity.labels[0] : null);
+    }, [keyActivity]);
 
     const updatePriority = () => {
       let priority = "";
@@ -71,53 +77,95 @@ export const KeyActivityEntry = observer(
       keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false);
     };
 
+    const updateLabel = labelName => {
+      keyActivityStore.updateLabel(keyActivity.id, labelName);
+    };
+
+    const renderLabel = () => {
+      if (keyActivity.labels.length > 0) {
+        return (
+          <LabelSelection
+            selectedLabel={selectedLabel}
+            setSelectedLabel={setSelectedLabel}
+            onLabelClick={setShowLabelsList}
+            showLabelsList={showLabelsList}
+            inlineEdit={true}
+            afterLabelSelectAction={updateLabel}
+          />
+        );
+      }
+    };
+
     return (
       <Container dragHandleProps={dragHandleProps}>
-        <LeftActionsContainer>
-          <CheckboxContainer key={keyActivity["id"]}>
-            <Checkbox
-              key={keyActivity["id"]}
-              checked={keyActivity["completedAt"] ? true : false}
-              sx={{
-                color: baseTheme.colors.primary100,
-              }}
-              onChange={e => {
-                keyActivityStore.updateKeyActivityStatus(
-                  keyActivity,
-                  e.target.checked,
-                  meetingId ? true : false,
-                );
-              }}
-            />
-          </CheckboxContainer>
+        <RowContainer>
+          <LeftActionsContainer>
+            <CheckboxContainer key={keyActivity["id"]}>
+              <Checkbox
+                key={keyActivity["id"]}
+                checked={keyActivity["completedAt"] ? true : false}
+                sx={{
+                  color: baseTheme.colors.primary100,
+                }}
+                onChange={e => {
+                  keyActivityStore.updateKeyActivityStatus(
+                    keyActivity,
+                    e.target.checked,
+                    meetingId ? true : false,
+                  );
+                }}
+              />
+            </CheckboxContainer>
 
-          <KeyActivityPriorityContainer onClick={() => updatePriority()}>
-            <KeyActivityPriorityIcon priority={keyActivity.priority} />
-          </KeyActivityPriorityContainer>
-        </LeftActionsContainer>
-
-        {/* {dragHandleProps && (
-          <HandleContainer {...dragHandleProps}>
-            <Handle />
-            <Handle />
-            <Handle />
-          </HandleContainer>
-        )} */}
-        <InputContainer>
-          <StyledContentEditable
-            innerRef={keyActivityRef}
-            html={keyActivity.description}
-            onChange={e => handleDescriptionChange(e)}
-            onKeyDown={key => {
-              if (key.keyCode == 13) {
-                keyActivityRef.current.blur();
+            <KeyActivityPriorityContainer onClick={() => updatePriority()}>
+              <KeyActivityPriorityIcon priority={keyActivity.priority} />
+            </KeyActivityPriorityContainer>
+          </LeftActionsContainer>
+          <InputContainer>
+            <StyledContentEditable
+              innerRef={keyActivityRef}
+              html={keyActivity.description}
+              onChange={e => handleDescriptionChange(e)}
+              onKeyDown={key => {
+                if (key.keyCode == 13) {
+                  keyActivityRef.current.blur();
+                }
+              }}
+              style={{ textDecoration: keyActivity.completedAt && "line-through", cursor: "text" }}
+              onBlur={() =>
+                keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false)
               }
-            }}
-            style={{ textDecoration: keyActivity.completedAt && "line-through", cursor: "text" }}
-            onBlur={() =>
-              keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false)
-            }
-          />
+            />
+
+            {keyActivity.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
+
+            <ActionContainer>
+              <ActionSubContainer>
+                {meetingId && (
+                  <AvatarContainer>
+                    <Avatar
+                      defaultAvatarColor={keyActivity.user.defaultAvatarColor}
+                      firstName={keyActivity.user.firstName}
+                      lastName={keyActivity.user.lastName}
+                      avatarUrl={keyActivity.user.avatarUrl}
+                      size={25}
+                    />
+                  </AvatarContainer>
+                )}
+
+                <DeleteButtonContainer
+                  onClick={() =>
+                    keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
+                  }
+                >
+                  <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
+                </DeleteButtonContainer>
+              </ActionSubContainer>
+            </ActionContainer>
+          </InputContainer>
+        </RowContainer>
+
+        <BottomRowContainer>
           <DateContainer>
             <Popup
               arrow={false}
@@ -182,31 +230,8 @@ export const KeyActivityEntry = observer(
               </>
             </Popup>
           </DateContainer>
-        </InputContainer>
-
-        <ActionContainer>
-          <ActionSubContainer>
-            {meetingId && (
-              <AvatarContainer>
-                <Avatar
-                  defaultAvatarColor={keyActivity.user.defaultAvatarColor}
-                  firstName={keyActivity.user.firstName}
-                  lastName={keyActivity.user.lastName}
-                  avatarUrl={keyActivity.user.avatarUrl}
-                  size={25}
-                />
-              </AvatarContainer>
-            )}
-
-            <DeleteButtonContainer
-              onClick={() =>
-                keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
-              }
-            >
-              <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
-            </DeleteButtonContainer>
-          </ActionSubContainer>
-        </ActionContainer>
+          {renderLabel()}
+        </BottomRowContainer>
       </Container>
     );
   },
@@ -228,7 +253,6 @@ type ContainerProps = {
 };
 
 const Container = styled.div<ContainerProps>`
-  display: flex;
   font-size: 14px;
   width: inherit;
   padding: 4px 0px 4px 0px;
@@ -244,7 +268,6 @@ const Container = styled.div<ContainerProps>`
 
 const InputContainer = styled.div`
   display: flex;
-  flex-direction: column;
   width: 100%;
   font-size: 14px;
   padding: 4px 0px 4px 0px;
@@ -315,4 +338,13 @@ const ActionContainer = styled.div`
 export const ActionSubContainer = styled.div`
   margin-left: auto;
   display: flex;
+`;
+
+const RowContainer = styled.div`
+  display: flex;
+`;
+
+const BottomRowContainer = styled(RowContainer)`
+  margin-left: 65px;
+  margin-top: -10px;
 `;

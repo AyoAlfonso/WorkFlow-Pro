@@ -46,6 +46,7 @@ gem 'tod', '~> 2.2.0'
 gem 'warden-jwt_auth', '~> 0.4.2' #https://github.com/waiting-for-dev/devise-jwt/issues/56
 gem 'scout_apm', '~> 2.6.9'
 gem 'rollbar', '~> 3.0.0'
+gem 'acts-as-taggable-on', '~> 7.0'
 
 gem "aws-sdk-s3", require: false
 gem 'rack-cors'

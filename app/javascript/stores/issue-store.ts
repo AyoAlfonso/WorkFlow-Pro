@@ -189,7 +189,6 @@ export const IssueStoreModel = types
     }),
     updateTeamIssuePosition: flow(function*(teamIssueId, position, options = {}) {
       //TODO: refactor out fromTeamMeeting completely from all flows
-      console.log("****", teamIssueId, position, options);
       const response: ApiResponse<any> = yield self.environment.api.updateTeamIssuePosition(
         teamIssueId,
         Object.assign({ position }, options),
@@ -202,6 +201,20 @@ export const IssueStoreModel = types
         return false;
       }
     }),
+    updateLabel: flow(function*(issueId, labelName){
+      const response: ApiResponse<any> = yield self.environment.api.updateIssue({
+        id: issueId,
+        labelList: labelName
+      });
+
+      if (response.ok) {
+        self.issues = response.data.issues;
+        self.teamIssues = response.data.teamIssues;
+        return true;
+      } else {
+        return false;
+      }
+    })
   }))
   .actions(self => ({
     sortIssuesByPriority: flow(function*(sortParams) {

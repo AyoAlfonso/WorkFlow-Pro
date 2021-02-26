@@ -81,8 +81,6 @@ export const TeamOverview = observer(
 
     const handleMeetingClick = () => {
       meetingStore.createMeeting(team_id).then(({ meeting }) => {
-        console.log("meeting", meeting);
-
         if (!R.isNil(meeting)) {
           history.push(`/team/${team_id}/meeting/${meeting.id}`);
         } else {

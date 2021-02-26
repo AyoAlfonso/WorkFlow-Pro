@@ -13,6 +13,8 @@ class Issue < ApplicationRecord
 
   acts_as_list scope: [:company_id, :user_id, :completed_at]
 
+  acts_as_taggable_on :labels
+
   scope :optimized, -> { includes([:user]) }
   scope :user_current_company, -> (company_id) {where(company_id: company_id)}
 
@@ -44,6 +46,12 @@ class Issue < ApplicationRecord
     team_member_ids = TeamUserEnablement.where(team_id: user.team_ids).pluck(:user_id)
     self.where(user_id: [*team_member_ids, user.id].uniq)
   end
+
+  def self.exclude_personal_for_team(team_id)
+    tag_names = ActsAsTaggableOn::Tag.where(team_id: nil).pluck(:name)
+    self.tagged_with(tag_names, :exclude => true)
+  end
+
 
   def create_or_update_team_issue
     if self.team_id

@@ -7,15 +7,14 @@ import { Icon } from "../../shared/icon";
 import { Button } from "rebass";
 import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";
-import * as R from "ramda";
 import { Avatar } from "~/components/shared/avatar";
 import {
   Container,
   FlexContainer,
-  PriorityContainer,
+  IssuePynModalContainer,
   IconContainer,
 } from "~/components/shared/styles/modals";
-import { UserSelectionDropdownList, Loading } from "~/components/shared";
+import { UserSelectionDropdownList, Loading, LabelSelection } from "~/components/shared";
 
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
@@ -32,12 +31,14 @@ export const CreateIssueModal = ({
   meetingId,
   meetingEnabled = false,
 }: ICreateIssueModalProps): JSX.Element => {
-  const { issueStore, sessionStore, userStore, companyStore } = useMst();
-
+  const { issueStore, sessionStore, userStore, companyStore, labelStore } = useMst();
   const [issueDescription, setIssueDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
+  const [personal, setPersonal] = useState<boolean>(false);
+  const [selectedLabel, setSelectedLabel] = useState<any>(null);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
@@ -50,6 +51,7 @@ export const CreateIssueModal = ({
   const companyUsers = userStore.users;
   const issues = issueStore.openIssues;
   const itemName = companyStore.company.displayFormat == "Forum" ? "Parking Lot Item" : "Issue";
+  const selectedLabelObj = labelStore.selectedLabelObj;
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
@@ -109,19 +111,31 @@ export const CreateIssueModal = ({
                   position: newIssuePosition,
                   meetingId: meetingId,
                   meetingEnabled: meetingEnabled,
+                  label: selectedLabelObj,
+                  personal: personal,
                 })
                 .then(result => {
                   if (result) {
                     setIssueDescription("");
                     setCreateIssueModalOpen(false);
                     setSelectedPriority(0);
+                    setSelectedLabel(null);
                   }
                 })
             }
           >
             Save
           </StyledButton>
-          <PriorityContainer>
+          <IssuePynModalContainer>
+            <LockContainer onClick={() => setPersonal(!personal)}>
+              <Icon icon={"Lock"} size={"25px"} iconColor={personal ? "mipBlue" : "grey60"} />
+            </LockContainer>
+            <LabelSelection
+              selectedLabel={selectedLabel}
+              setSelectedLabel={setSelectedLabel}
+              onLabelClick={setShowLabelsList}
+              showLabelsList={showLabelsList}
+            />
             <IconContainer onClick={() => setSelectedPriority(selectedPriority == 1 ? 0 : 1)}>
               <Icon
                 icon={"Priority-High"}
@@ -143,7 +157,7 @@ export const CreateIssueModal = ({
                 iconColor={selectedPriority == 3 ? "mipBlue" : "grey60"}
               />
             </IconContainer>
-          </PriorityContainer>
+          </IssuePynModalContainer>
         </FlexContainer>
       </Container>
     </ModalWithHeader>
@@ -158,6 +172,7 @@ const StyledButton = styled(Button)<StyledButtonType>`
   background-color: ${props =>
     props.disabled ? baseTheme.colors.grey60 : baseTheme.colors.primary100};
   width: 130px;
+  height: 35px;
   &: hover {
     cursor: ${props => !props.disabled && "pointer"};
   }
@@ -165,6 +180,12 @@ const StyledButton = styled(Button)<StyledButtonType>`
 
 const AvatarContainer = styled.div`
   margin-left: auto;
+  &: hover {
+    cursor: pointer;
+  }
+`;
+
+const LockContainer = styled.div`
   &: hover {
     cursor: pointer;
   }

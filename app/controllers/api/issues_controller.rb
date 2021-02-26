@@ -8,8 +8,8 @@ class Api::IssuesController < Api::ApplicationController
     render "api/issues/index"
   end
 
-  def create 
-    @issue = Issue.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], team_id: params[:team_id], position: params[:position], company_id: current_company.id })
+  def create
+    @issue = Issue.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], team_id: params[:team_id], position: params[:position], company_id: current_company.id, personal: params[:personal], label_list: params[:label] && params[:label][:name] })
     authorize @issue
     @issue.insert_at(1)
     @issue.save!
@@ -61,13 +61,13 @@ class Api::IssuesController < Api::ApplicationController
 
   def issues_for_meeting
     team_id = Meeting.find(params[:meeting_id]).team_id
-    @issues = team_meeting_issues(team_id)
+    @issues = team_meeting_issues(team_id).exclude_personal_for_team(team_id)
     authorize @issues
     render "api/issues/issues_for_meeting"
   end
 
   def issues_for_team
-    @issues = team_meeting_issues(params[:team_id])
+    @issues = team_meeting_issues(params[:team_id]).exclude_personal_for_team(params[:team_id])
     authorize @issues
     render "api/issues/issues_for_team"
   end
@@ -89,7 +89,7 @@ class Api::IssuesController < Api::ApplicationController
   private
 
   def issue_params
-    params.permit(:user_id, :description, :completed_at, :priority, :team_id, :position)
+    params.permit(:user_id, :description, :completed_at, :priority, :team_id, :position, :personal, :label_list)
   end
 
   def set_issue

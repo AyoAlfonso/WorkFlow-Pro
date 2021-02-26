@@ -14,10 +14,11 @@ import {
   Container,
   FlexContainer,
   IconContainer,
-  PriorityContainer,
+  IssuePynModalContainer,
 } from "~/components/shared/styles/modals";
 import { Text } from "~/components/shared/text";
-import { UserSelectionDropdownList } from "~/components/shared/user-selection-dropdown-list";
+import { UserSelectionDropdownList } from "~/components/shared";
+import { LabelSelection } from "~/components/shared";
 import { useMst } from "../../../setup/root";
 import { baseTheme } from "../../../themes";
 import { Icon } from "../../shared/icon";
@@ -33,7 +34,7 @@ interface ICreateKeyActivityModalProps {
 }
 
 export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX.Element => {
-  const { keyActivityStore, sessionStore, userStore } = useMst();
+  const { keyActivityStore, sessionStore, userStore, labelStore } = useMst();
   const { t } = useTranslation();
   const {
     createKeyActivityModalOpen,
@@ -48,6 +49,9 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [selectedDueDate, setSelectedDueDate] = useState<Date>(null);
+  const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
+  const [personal, setPersonal] = useState<boolean>(false);
+  const [selectedLabel, setSelectedLabel] = useState<any>(null);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
@@ -178,6 +182,8 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                   userId: selectedUser.id,
                   meetingId: meetingId,
                   dueDate: selectedDueDate,
+                  label: selectedLabel,
+                  personal: personal,
                 })
                 .then(result => {
                   if (result) {
@@ -186,13 +192,23 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                     setCreateKeyActivityModalOpen(false);
                     setSelectedPriority(0);
                     setWeeklyList(defaultTypeAsWeekly);
+                    setSelectedLabel(null);
                   }
                 })
             }
           >
             Save
           </StyledButton>
-          <PriorityContainer>
+          <IssuePynModalContainer>
+            <LockContainer onClick={() => setPersonal(!personal)}>
+              <Icon icon={"Lock"} size={"25px"} iconColor={personal ? "mipBlue" : "grey60"} />
+            </LockContainer>
+            <LabelSelection
+              selectedLabel={selectedLabel}
+              setSelectedLabel={setSelectedLabel}
+              onLabelClick={setShowLabelsList}
+              showLabelsList={showLabelsList}
+            />
             <StyledSwitch
               checked={!weeklyList}
               onChange={e => setWeeklyList(!weeklyList)}
@@ -224,7 +240,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                 iconColor={selectedPriority == 3 ? "mipBlue" : "grey60"}
               />
             </IconContainer>
-          </PriorityContainer>
+          </IssuePynModalContainer>
         </FlexContainer>
       </Container>
     </ModalWithHeader>
@@ -239,6 +255,7 @@ const StyledButton = styled(RebassButton)<StyledButtonType>`
   background-color: ${props =>
     props.disabled ? baseTheme.colors.grey60 : baseTheme.colors.primary100};
   width: 130px;
+  height: 35px;
   &: hover {
     cursor: ${props => !props.disabled && "pointer"};
   }
@@ -248,9 +265,9 @@ const StyledSwitch = styled(Switch)``;
 
 const MasterListText = styled(Text)`
   color: ${props => props.theme.colors.grey60};
-  margin-top: 5px;
-  margin-left: 5px;
-  margin-bottom: auto;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
   font-size: 14px;
 `;
 
@@ -290,4 +307,10 @@ const CircleButtonsContainer = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
+`;
+
+const LockContainer = styled.div`
+  &: hover {
+    cursor: pointer;
+  }
 `;
