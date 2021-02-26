@@ -1,124 +1,116 @@
 import * as React from "react";
 import styled from "styled-components";
-import { Text } from "./text";
-import { Icon, Input, Select } from "./";
+import { Icon } from "./";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import * as R from "ramda";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete, { createFilterOptions } from "@material-ui/lab/Autocomplete";
+import { toJS } from "mobx";
 
 interface ILabelSelectionDropdownListProps {
   labelsList: any;
-  onLabelSelect: any;
+  setSelectedLabel: any;
   afterLabelSelectAction?: any;
+  closeModal: any;
 }
+
+const filter = createFilterOptions<any>({ limit: 5 });
 
 export const LabelSelectionDropdownList = observer(
   ({
     labelsList,
-    onLabelSelect,
+    setSelectedLabel,
     afterLabelSelectAction,
+    closeModal,
   }: ILabelSelectionDropdownListProps): JSX.Element => {
-    const {
-      teamStore: { teams },
-      labelStore,
-    } = useMst();
+    const { labelStore } = useMst();
 
-    const [labelInput, setLabelInput] = useState<string>("");
-    const [selectedGroup, setSelectedGroup] = useState<any>(null);
+    const [value, setValue] = useState<any>(null);
 
-    const renderTeamName = label => {
-      if (label.teamId) {
-        const teamName = teams.find(team => team.id == label.teamId).name;
-        return `(${teamName})`;
+    const createAndSetLabel = (label, selectedGroup) => {
+      if (label) {
+        const labelName = selectedGroup ? label.inputValue : label.name;
+        labelStore.createLabel(labelName, selectedGroup).then(data => {
+          setSelectedLabel(data);
+        });
       }
-    };
-
-    const renderLabelOptions = (): Array<JSX.Element> => {
-      return labelsList.map((label, index) => {
-        return (
-          <LabelOption
-            key={index}
-            onClick={() => {
-              onLabelSelect(label);
-              labelStore.setSelectedLabelObj(label);
-              if (afterLabelSelectAction) {
-                afterLabelSelectAction(label.name);
-              }
-            }}
-          >
-            <Icon icon={"Label"} size={"25px"} iconColor={label.color ? label.color : "grey60"} />
-            <LabelOptionText>
-              {`${label.name}`} {renderTeamName(label)}
-            </LabelOptionText>
-          </LabelOption>
-        );
-      });
-    };
-
-    const renderDefaultValue = (): JSX.Element => {
-      return (
-        <>
-          <StyledOption value={"personal"}> Personal </StyledOption>
-          <StyledOption value={"company"}> Company </StyledOption>
-        </>
-      );
-    };
-
-    const renderTeams = (): Array<JSX.Element> => {
-      return teams.map((team, index) => {
-        return (
-          <StyledOption key={index} value={team.id}>
-            {team.name}
-          </StyledOption>
-        );
-      });
-    };
-
-    const createAndSetLabel = () => {
-      labelStore.createLabel(labelInput, selectedGroup).then(data => {
-        onLabelSelect(data);
-        setLabelInput("");
-      });
-    };
-
-    const renderCustomLabelInput = (): JSX.Element => {
-      return (
-        <CustomLabelOption>
-          <InputContainer>
-            <HelperText> Team </HelperText>
-            <StyledSelect
-              name="teams"
-              onChange={e => {
-                setSelectedGroup(e.target.value);
-              }}
-              value={selectedGroup}
-            >
-              {renderDefaultValue()}
-              {renderTeams()}
-            </StyledSelect>
-          </InputContainer>
-
-          <LabelContainer>
-            <HelperText> Label Name</HelperText>
-            <Input
-              onChange={e => setLabelInput(e.target.value)}
-              value={labelInput}
-              onKeyDown={key => {
-                if (key.keyCode == 13) {
-                  createAndSetLabel();
-                }
-              }}
-            />
-          </LabelContainer>
-        </CustomLabelOption>
-      );
     };
 
     return (
       <ActionDropdownContainer>
-        {renderCustomLabelInput()}
-        {renderLabelOptions()}
+        <CloseIconContainer onClick={() => closeModal()}>
+          <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
+        </CloseIconContainer>
+        <Autocomplete
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+            if (afterLabelSelectAction) {
+              afterLabelSelectAction(newValue.type ? newValue.inputValue : newValue.name);
+            }
+            if (typeof newValue !== "string" && newValue && newValue.inputValue) {
+              createAndSetLabel(newValue, newValue.type);
+            } else {
+              setSelectedLabel(newValue);
+            }
+            closeModal();
+          }}
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
+            if (params.inputValue !== "") {
+              filtered.push(
+                {
+                  inputValue: params.inputValue,
+                  name: `Add "${params.inputValue}"`,
+                  type: "personal",
+                },
+                {
+                  inputValue: params.inputValue,
+                  name: `Add "${params.inputValue}" for all users`,
+                  type: "company",
+                },
+              );
+            }
+
+            return filtered;
+          }}
+          selectOnFocus
+          clearOnBlur
+          handleHomeEndKeys
+          id="search-for-labels"
+          options={toJS(labelsList)}
+          getOptionLabel={option => {
+            if (typeof option === "string") {
+              return option;
+            }
+            if (option.inputValue) {
+              return option.inputValue;
+            }
+            return option.name;
+          }}
+          renderOption={option => {
+            const iconName = R.length(R.path(["inputValue"], option)) > 0 ? "Plus" : "Label";
+            return (
+              <OptionContainer newLabel={iconName == "Plus"}>
+                <Icon
+                  icon={iconName}
+                  size={"16px"}
+                  iconColor={option.color ? option.color : "grey60"}
+                  mr={2}
+                />
+                {option.name}
+              </OptionContainer>
+            );
+          }}
+          openOnFocus={true}
+          style={{ width: 300, height: "auto" }}
+          freeSolo
+          renderInput={params => (
+            <TextField {...params} label="Search for labels" variant="outlined" />
+          )}
+        />
       </ActionDropdownContainer>
     );
   },
@@ -128,60 +120,26 @@ const ActionDropdownContainer = styled.div`
   position: absolute;
   background-color: ${props => props.theme.colors.white};
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
-  margin-left: -10px;
-  margin-top: 5px;
   border-radius: 10px;
   padding: 10px;
   z-index: 2;
+  margin-left: -80px;
+  margin-top: 5px;
   height: auto;
   overflow: auto;
 `;
 
-const LabelOptionText = styled(Text)`
-  color: ${props => props.theme.colors.primary100};
-  cursor: pointer;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  padding-left: 12px;
-  padding-right: 18px;
+type OptionContainerProps = {
+  newLabel: boolean;
+};
+
+const CloseIconContainer = styled.div`
+  text-align: right;
+  margin-bottom: 5px;
 `;
 
-const CustomLabelOption = styled.div`
-  padding: 5px;
+const OptionContainer = styled.div<OptionContainerProps>`
   display: flex;
-`;
-
-const LabelOption = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 10px;
-  &:hover {
-    background-color: ${props => props.theme.colors.primary100};
-  }
-  &:hover ${LabelOptionText} {
-    color: white;
-  }
-`;
-
-const StyledSelect = styled(Select)`
-  height: 36px;
-  text-overflow: ellipsis;
-`;
-
-const StyledOption = styled.option``;
-
-const InputContainer = styled.div``;
-
-const HelperText = styled(Text)`
-  color: ${props => props.theme.colors.grey60};
   font-size: 12px;
-`;
-
-const LabelContainer = styled(InputContainer)`
-  margin-left: 10px;
+  color: ${props => (props.newLabel ? props.theme.colors.greyActive : props.theme.colors.black)};
 `;

@@ -208,7 +208,8 @@ export const IssueStoreModel = types
       });
 
       if (response.ok) {
-        self.issues = response.data;
+        self.issues = response.data.issues;
+        self.teamIssues = response.data.teamIssues;
         return true;
       } else {
         return false;

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useEffect, useState, useRef } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { Text, TextDiv } from "./";
@@ -9,50 +8,26 @@ import { useMst } from "../../setup/root";
 import { baseTheme } from "~/themes";
 
 interface ILabelSelectionProps {
+  selectedLabel: any;
+  setSelectedLabel: any;
   onLabelClick: any;
   showLabelsList: boolean;
-  selectedItemId?: number | string;
   inlineEdit?: boolean;
   afterLabelSelectAction?: any;
   marginLeft?: string;
 }
 
 export const LabelSelection = ({
+  selectedLabel,
+  setSelectedLabel,
   onLabelClick,
   showLabelsList,
-  selectedItemId,
   inlineEdit = false,
   afterLabelSelectAction,
   marginLeft,
 }: ILabelSelectionProps): JSX.Element => {
   const { labelStore } = useMst();
-  const [selectedLabel, setSelectedLabel] = useState<any>(null);
-  const wrapperRef = useRef(null);
-
   const { labelsList } = labelStore;
-
-  useEffect(() => {
-    if (selectedItemId && labelsList) {
-      const label = labelsList.find(label => label.id == selectedItemId);
-      setSelectedLabel(label);
-    }
-  }, []);
-
-  const useOutsideModalCloser = ref => {
-    useEffect(() => {
-      const handleClickOutside = event => {
-        if (ref.current && !ref.current.contains(event.target)) {
-          onLabelClick(showLabelsList);
-        }
-      };
-
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [ref]);
-  };
-  useOutsideModalCloser(wrapperRef);
 
   const styledLabelTextColor = () => {
     if (inlineEdit) {
@@ -62,8 +37,12 @@ export const LabelSelection = ({
     }
   };
 
+  const closeModal = () => {
+    onLabelClick(false);
+  };
+
   return (
-    <LabelContainer onClick={() => onLabelClick(true)} marginLeft={marginLeft}>
+    <LabelContainer onClick={() => onLabelClick(!showLabelsList)} marginLeft={marginLeft}>
       {!R.isNil(selectedLabel) ? (
         <StyledLabel>
           <Icon
@@ -80,11 +59,12 @@ export const LabelSelection = ({
         </StyledLabel>
       )}
       {showLabelsList && (
-        <div ref={wrapperRef}>
+        <div onClick={e => e.stopPropagation()}>
           <LabelSelectionDropdownList
             labelsList={labelsList}
-            onLabelSelect={setSelectedLabel}
+            setSelectedLabel={setSelectedLabel}
             afterLabelSelectAction={afterLabelSelectAction}
+            closeModal={closeModal}
           />
         </div>
       )}

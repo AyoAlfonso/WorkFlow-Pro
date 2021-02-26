@@ -37,10 +37,11 @@ export const CreateIssueModal = ({
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
+  const [personal, setPersonal] = useState<boolean>(false);
+  const [selectedLabel, setSelectedLabel] = useState<any>(null);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
-    labelStore.fetchLabels();
   }, []);
 
   if (!companyStore.company) {
@@ -50,7 +51,6 @@ export const CreateIssueModal = ({
   const companyUsers = userStore.users;
   const issues = issueStore.openIssues;
   const itemName = companyStore.company.displayFormat == "Forum" ? "Parking Lot Item" : "Issue";
-  const labelsList = labelStore.labelsList;
   const selectedLabelObj = labelStore.selectedLabelObj;
 
   const renderUserSelectionList = (): JSX.Element => {
@@ -112,12 +112,14 @@ export const CreateIssueModal = ({
                   meetingId: meetingId,
                   meetingEnabled: meetingEnabled,
                   label: selectedLabelObj,
+                  personal: personal,
                 })
                 .then(result => {
                   if (result) {
                     setIssueDescription("");
                     setCreateIssueModalOpen(false);
                     setSelectedPriority(0);
+                    setSelectedLabel(null);
                   }
                 })
             }
@@ -125,7 +127,15 @@ export const CreateIssueModal = ({
             Save
           </StyledButton>
           <IssuePynModalContainer>
-            <LabelSelection onLabelClick={setShowLabelsList} showLabelsList={showLabelsList} />
+            <LockContainer onClick={() => setPersonal(!personal)}>
+              <Icon icon={"Lock"} size={"25px"} iconColor={personal ? "mipBlue" : "grey60"} />
+            </LockContainer>
+            <LabelSelection
+              selectedLabel={selectedLabel}
+              setSelectedLabel={setSelectedLabel}
+              onLabelClick={setShowLabelsList}
+              showLabelsList={showLabelsList}
+            />
             <IconContainer onClick={() => setSelectedPriority(selectedPriority == 1 ? 0 : 1)}>
               <Icon
                 icon={"Priority-High"}
@@ -170,6 +180,12 @@ const StyledButton = styled(Button)<StyledButtonType>`
 
 const AvatarContainer = styled.div`
   margin-left: auto;
+  &: hover {
+    cursor: pointer;
+  }
+`;
+
+const LockContainer = styled.div`
   &: hover {
     cursor: pointer;
   }

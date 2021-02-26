@@ -16,6 +16,7 @@ export const KeyActivityModel = types
     createdAt: types.maybeNull(types.string),
     dueDate: types.maybeNull(types.string),
     labels: types.maybeNull(types.array(LabelModel)),
+    personal: types.boolean,
   })
   .views(self => ({}))
   .actions(self => ({}));

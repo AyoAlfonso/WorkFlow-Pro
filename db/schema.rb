@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_24_234247) do
+ActiveRecord::Schema.define(version: 2021_02_25_192807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,6 +176,7 @@ ActiveRecord::Schema.define(version: 2021_02_24_234247) do
     t.bigint "team_id"
     t.integer "position"
     t.bigint "company_id"
+    t.boolean "personal", default: false
     t.index ["company_id"], name: "index_issues_on_company_id"
     t.index ["team_id"], name: "index_issues_on_team_id"
     t.index ["user_id", "position", "completed_at"], name: "index_issues_on_user_id_and_position_and_completed_at"
@@ -195,6 +196,7 @@ ActiveRecord::Schema.define(version: 2021_02_24_234247) do
     t.integer "position"
     t.date "due_date"
     t.bigint "company_id"
+    t.boolean "personal", default: false
     t.index ["company_id"], name: "index_key_activities_on_company_id"
     t.index ["completed_at", "position", "priority"], name: "index_key_activities_on_completed_at_and_position_and_priority"
     t.index ["created_at", "position", "priority"], name: "index_key_activities_on_created_at_and_position_and_priority"

@@ -50,14 +50,14 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [selectedDueDate, setSelectedDueDate] = useState<Date>(null);
   const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
+  const [personal, setPersonal] = useState<boolean>(false);
+  const [selectedLabel, setSelectedLabel] = useState<any>(null);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
-    labelStore.fetchLabels();
   }, []);
 
   const companyUsers = userStore.users;
-  const selectedLabelObj = labelStore.selectedLabelObj;
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
@@ -182,7 +182,8 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                   userId: selectedUser.id,
                   meetingId: meetingId,
                   dueDate: selectedDueDate,
-                  label: selectedLabelObj,
+                  label: selectedLabel,
+                  personal: personal,
                 })
                 .then(result => {
                   if (result) {
@@ -191,6 +192,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                     setCreateKeyActivityModalOpen(false);
                     setSelectedPriority(0);
                     setWeeklyList(defaultTypeAsWeekly);
+                    setSelectedLabel(null);
                   }
                 })
             }
@@ -198,7 +200,15 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             Save
           </StyledButton>
           <IssuePynModalContainer>
-            <LabelSelection onLabelClick={setShowLabelsList} showLabelsList={showLabelsList} />
+            <LockContainer onClick={() => setPersonal(!personal)}>
+              <Icon icon={"Lock"} size={"25px"} iconColor={personal ? "mipBlue" : "grey60"} />
+            </LockContainer>
+            <LabelSelection
+              selectedLabel={selectedLabel}
+              setSelectedLabel={setSelectedLabel}
+              onLabelClick={setShowLabelsList}
+              showLabelsList={showLabelsList}
+            />
             <StyledSwitch
               checked={!weeklyList}
               onChange={e => setWeeklyList(!weeklyList)}
@@ -297,4 +307,10 @@ const CircleButtonsContainer = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
+`;
+
+const LockContainer = styled.div`
+  &: hover {
+    cursor: pointer;
+  }
 `;

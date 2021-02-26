@@ -1,6 +1,6 @@
 import { Checkbox, Label } from "@rebass/forms";
 import { observer } from "mobx-react";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import ContentEditable from "react-contenteditable";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
@@ -32,6 +32,11 @@ export const KeyActivityEntry = observer(
     const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
     const [selectedDueDate, setSelectedDueDate] = useState<Date>(new Date(keyActivity.dueDate));
     const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
+    const [selectedLabel, setSelectedLabel] = useState<any>(null);
+
+    useEffect(() => {
+      setSelectedLabel(keyActivity.labels ? keyActivity.labels[0] : null);
+    }, [keyActivity]);
 
     const updatePriority = () => {
       let priority = "";
@@ -78,12 +83,12 @@ export const KeyActivityEntry = observer(
 
     const renderLabel = () => {
       if (keyActivity.labels.length > 0) {
-        const labelItem = keyActivity.labels[0];
         return (
           <LabelSelection
+            selectedLabel={selectedLabel}
+            setSelectedLabel={setSelectedLabel}
             onLabelClick={setShowLabelsList}
             showLabelsList={showLabelsList}
-            selectedItemId={labelItem.id}
             inlineEdit={true}
             afterLabelSelectAction={updateLabel}
           />
@@ -131,6 +136,8 @@ export const KeyActivityEntry = observer(
                 keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false)
               }
             />
+
+            {keyActivity.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
 
             <ActionContainer>
               <ActionSubContainer>

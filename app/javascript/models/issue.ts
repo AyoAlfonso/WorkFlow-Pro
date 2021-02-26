@@ -12,6 +12,7 @@ export const IssueModel = types
     user: types.maybeNull(types.frozen()),
     position: types.maybeNull(types.number),
     labels: types.maybeNull(types.array(LabelModel)),
+    personal: types.boolean,
   })
   .views(self => ({}))
   .actions(self => ({}));

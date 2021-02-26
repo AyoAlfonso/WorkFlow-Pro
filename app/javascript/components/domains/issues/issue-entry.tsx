@@ -6,7 +6,7 @@ import { Icon } from "../../shared/icon";
 import { observer } from "mobx-react";
 import { baseTheme } from "../../../themes/base";
 import ContentEditable from "react-contenteditable";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Text } from "~/components/shared/text";
 import { HomeContainerBorders } from "../home/shared-components";
 import { Button } from "rebass";
@@ -14,6 +14,7 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 import { Avatar, LabelSelection } from "~/components/shared";
+import { toJS } from "mobx";
 
 interface IIssueEntryProps {
   issue: any;
@@ -34,6 +35,12 @@ export const IssueEntry = observer(
     const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
     const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
+    const [selectedLabel, setSelectedLabel] = useState<any>(null);
+
+    useEffect(() => {
+      const issueLabels = toJS(issue.labels);
+      setSelectedLabel(issueLabels ? issueLabels[0] : null);
+    }, [issue]);
 
     const issueRef = useRef(null);
 
@@ -106,12 +113,12 @@ export const IssueEntry = observer(
 
     const renderLabel = () => {
       if (issue.labels.length > 0) {
-        const labelItem = issue.labels[0];
         return (
           <LabelSelection
+            selectedLabel={selectedLabel}
+            setSelectedLabel={setSelectedLabel}
             onLabelClick={setShowLabelsList}
             showLabelsList={showLabelsList}
-            selectedItemId={labelItem.id}
             inlineEdit={true}
             afterLabelSelectAction={updateLabel}
             marginLeft={"50px"}
@@ -150,7 +157,6 @@ export const IssueEntry = observer(
 
           <StyledContentEditable
             innerRef={issueRef}
-            inMeetingStyle={meetingId ? true : false}
             html={issue.description}
             onChange={e => {
               if (!e.target.value.includes("<div>")) {
@@ -162,9 +168,15 @@ export const IssueEntry = observer(
                 issueRef.current.blur();
               }
             }}
-            style={{ textDecoration: issue.completedAt && "line-through", cursor: "text" }}
+            style={{
+              textDecoration: issue.completedAt && "line-through",
+              cursor: "text",
+              minWidth: meetingId ? "95px" : "105px",
+            }}
             onBlur={() => issueStore.updateIssue(issue.id, meetingId ? true : false)}
           />
+
+          {issue.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
 
           <ActionContainer meeting={meetingId ? true : false}>
             <ActionSubContainer>
@@ -323,18 +335,13 @@ const IssuePriorityContainer = styled.div`
   }
 `;
 
-type StyledContentEditableProps = {
-  inMeetingStyle?: boolean;
-};
-
-const StyledContentEditable = styled(ContentEditable)<StyledContentEditableProps>`
+const StyledContentEditable = styled(ContentEditable)`
   padding-top: 5px;
   padding-bottom: 5px;
   font-size: 16px;
   font-weight: 400;
   line-height: 20px;
   margin-left: 10px;
-  min-width: ${props => (props.inMeetingStyle ? "95px" : "105px")};
   margin-top: auto;
   margin-bottom: auto;
   width: 90%;
