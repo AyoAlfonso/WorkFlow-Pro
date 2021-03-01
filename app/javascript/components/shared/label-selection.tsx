@@ -47,7 +47,7 @@ export const LabelSelection = ({
         <StyledLabel>
           <Icon
             icon={"Label"}
-            size={inlineEdit ? "10px" : "25px"}
+            size={inlineEdit ? "10px" : "16px"}
             iconColor={selectedLabel.color ? selectedLabel.color : "grey60"}
             style={{ marginLeft: "10px" }}
           />
@@ -55,7 +55,7 @@ export const LabelSelection = ({
         </StyledLabel>
       ) : (
         <StyledLabel>
-          <Icon icon={"Label"} size={inlineEdit ? "10px" : "25px"} iconColor={"grey60"} />
+          <Icon icon={"Label"} size={inlineEdit ? "10px" : "16px"} iconColor={"grey60"} />
         </StyledLabel>
       )}
       {showLabelsList && (

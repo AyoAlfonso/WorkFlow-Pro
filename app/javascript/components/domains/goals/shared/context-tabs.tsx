@@ -77,6 +77,7 @@ export const ContextTabs = observer(
           <SubHeaderText text={"Why is it important?"} />
           <StyledContentEditable
             innerRef={firstImportanceRef}
+            placeholder={"Type here..."}
             html={object.importance[0]}
             disabled={!editable}
             onChange={e => {
@@ -95,6 +96,7 @@ export const ContextTabs = observer(
           <StyledContentEditable
             innerRef={secondImportanceRef}
             html={object.importance[1]}
+            placeholder={"Type here..."}
             disabled={!editable}
             onChange={e => {
               if (!e.target.value.includes("<div>")) {
@@ -112,6 +114,7 @@ export const ContextTabs = observer(
           <StyledContentEditable
             innerRef={thirdImportanceRef}
             html={object.importance[2]}
+            placeholder={"Type here..."}
             disabled={!editable}
             onChange={e => {
               if (!e.target.value.includes("<div>")) {
@@ -134,6 +137,7 @@ export const ContextTabs = observer(
         <StyledContentEditable
           innerRef={descriptionRef}
           html={object.contextDescription}
+          placeholder={"Type here..."}
           disabled={!editable}
           onChange={e => {
             if (!e.target.value.includes("<div>")) {

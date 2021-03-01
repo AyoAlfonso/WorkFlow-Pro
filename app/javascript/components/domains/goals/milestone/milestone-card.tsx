@@ -38,6 +38,7 @@ export const MilestoneCard = ({
           innerRef={descriptionRef}
           html={milestone.description}
           disabled={!editable}
+          placeholder={"Enter Description"}
           onChange={e => {
             if (!e.target.value.includes("<div>")) {
               if (fromMeeting) {

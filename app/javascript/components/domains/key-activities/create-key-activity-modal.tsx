@@ -1,19 +1,12 @@
-import { addDays } from "date-fns";
-import * as R from "ramda";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Calendar } from "react-date-range";
-import { useTranslation } from "react-i18next";
 import Switch from "react-switch";
-import Popup from "reactjs-popup";
 import { Button as RebassButton } from "rebass";
 import styled from "styled-components";
 import { Avatar } from "~/components/shared/avatar";
-import { Button } from "~/components/shared/button";
 import {
   Container,
   FlexContainer,
-  IconContainer,
   IssuePynModalContainer,
 } from "~/components/shared/styles/modals";
 import { Text } from "~/components/shared/text";
@@ -24,7 +17,8 @@ import { baseTheme } from "../../../themes";
 import { Icon } from "../../shared/icon";
 import { ModalWithHeader } from "../../shared/modal-with-header";
 import { TextInput } from "../../shared/text-input";
-import moment from "moment";
+import { PrioritySelector } from "~/components/shared/issues-and-key-activities/priority-selector";
+import { DueDateSelector } from "~/components/shared/issues-and-key-activities/due-date-selector";
 
 interface ICreateKeyActivityModalProps {
   createKeyActivityModalOpen: boolean;
@@ -34,8 +28,7 @@ interface ICreateKeyActivityModalProps {
 }
 
 export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX.Element => {
-  const { keyActivityStore, sessionStore, userStore, labelStore } = useMst();
-  const { t } = useTranslation();
+  const { keyActivityStore, sessionStore, userStore } = useMst();
   const {
     createKeyActivityModalOpen,
     setCreateKeyActivityModalOpen,
@@ -47,7 +40,6 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
   const [weeklyList, setWeeklyList] = useState<boolean>(defaultTypeAsWeekly);
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [selectedDueDate, setSelectedDueDate] = useState<Date>(null);
   const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
   const [personal, setPersonal] = useState<boolean>(false);
@@ -67,79 +59,15 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
     );
   };
 
-  const renderDueDateSelector = () => (
-    <DueDateSelectionContainer>
-      <Popup
-        arrow={false}
-        closeOnDocumentClick
-        contentStyle={{
-          border: "none",
-          borderRadius: "6px",
-          padding: 0,
-          width: "auto",
-        }}
-        on="click"
-        onClose={() => {}}
-        onOpen={() => {}}
-        open={showDatePicker}
-        position="bottom right"
-        trigger={
-          <DueDateButtonContainer
-            onClick={() => {
-              setShowDatePicker(!showDatePicker);
-            }}
-            dateSelected={!R.isNil(selectedDueDate)}
-          >
-            <Icon icon={"Deadline-Calendar"} iconColor={"inherit"} size={"16px"} mr={"8px"} />
-            {R.isNil(selectedDueDate)
-              ? t("datePicker.dueDate")
-              : moment(selectedDueDate).format("MMM Do, YYYY")}
-          </DueDateButtonContainer>
-        }
-      >
-        <>
-          <Calendar
-            showDateDisplay={false}
-            showMonthAndYearPickers={false}
-            showSelectionPreview={true}
-            direction={"vertical"}
-            shownDate={new Date()}
-            minDate={new Date()}
-            maxDate={addDays(new Date(), 30)}
-            scroll={{
-              enabled: true,
-              calendarWidth: 320,
-              monthWidth: 320,
-            }}
-            rangeColors={[baseTheme.colors.primary80]}
-            date={selectedDueDate}
-            onChange={date => {
-              setSelectedDueDate(date);
-            }}
-          />
-          <Button
-            variant={"primary"}
-            small
-            onClick={() => setSelectedDueDate(null)}
-            mx={"auto"}
-            my={"8px"}
-          >
-            {t("datePicker.clearDate")}
-          </Button>
-        </>
-      </Popup>
-    </DueDateSelectionContainer>
-  );
-
   return (
     <ModalWithHeader
       modalOpen={createKeyActivityModalOpen}
       setModalOpen={setCreateKeyActivityModalOpen}
       headerText="Pyn"
-      width="35rem"
+      width="640px"
     >
       <Container>
-        <FlexContainer>
+        <TextInputFlexContainer>
           <TextInput
             textValue={keyActivityDescription}
             setTextValue={setKeyActivityDescription}
@@ -153,8 +81,40 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
               paddingBottom: "4px",
             }}
           />
-          <CircleButtonsContainer>
-            {renderDueDateSelector()}
+        </TextInputFlexContainer>
+        <FlexContainer>
+          <PrioritySelector
+            itemPriority={selectedPriority}
+            setSelectedPriority={setSelectedPriority}
+          />
+          <DueDateSelector
+            selectedDueDate={selectedDueDate}
+            setSelectedDueDate={setSelectedDueDate}
+          />
+
+          <OptionsContainer>
+            <IssuePynModalContainer>
+              <LockContainer onClick={() => setPersonal(!personal)}>
+                <Icon icon={"Lock"} size={"18px"} iconColor={personal ? "mipBlue" : "grey60"} />
+              </LockContainer>
+              <LabelSelection
+                selectedLabel={selectedLabel}
+                setSelectedLabel={setSelectedLabel}
+                onLabelClick={setShowLabelsList}
+                showLabelsList={showLabelsList}
+                marginLeft={"5px"}
+              />
+              <StyledSwitch
+                checked={!weeklyList}
+                onChange={e => setWeeklyList(!weeklyList)}
+                onColor={baseTheme.colors.primary100}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                width={48}
+                height={25}
+              />
+              <MasterListText>Master</MasterListText>
+            </IssuePynModalContainer>
             {selectedUser && (
               <AvatarContainer onClick={() => setShowUsersList(!showUsersList)}>
                 <Avatar
@@ -168,8 +128,9 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                 {renderUserSelectionList()}
               </AvatarContainer>
             )}
-          </CircleButtonsContainer>
+          </OptionsContainer>
         </FlexContainer>
+
         <FlexContainer>
           <StyledButton
             disabled={keyActivityDescription.length == 0}
@@ -199,48 +160,6 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
           >
             Save
           </StyledButton>
-          <IssuePynModalContainer>
-            <LockContainer onClick={() => setPersonal(!personal)}>
-              <Icon icon={"Lock"} size={"25px"} iconColor={personal ? "mipBlue" : "grey60"} />
-            </LockContainer>
-            <LabelSelection
-              selectedLabel={selectedLabel}
-              setSelectedLabel={setSelectedLabel}
-              onLabelClick={setShowLabelsList}
-              showLabelsList={showLabelsList}
-            />
-            <StyledSwitch
-              checked={!weeklyList}
-              onChange={e => setWeeklyList(!weeklyList)}
-              onColor={baseTheme.colors.primary100}
-              uncheckedIcon={false}
-              checkedIcon={false}
-              width={48}
-              height={25}
-            />
-            <MasterListText>Master</MasterListText>
-            <IconContainer onClick={() => setSelectedPriority(selectedPriority == 1 ? 0 : 1)}>
-              <Icon
-                icon={"Priority-High"}
-                size={"25px"}
-                iconColor={selectedPriority == 1 ? "cautionYellow" : "grey60"}
-              />
-            </IconContainer>
-            <IconContainer onClick={() => setSelectedPriority(selectedPriority == 2 ? 0 : 2)}>
-              <Icon
-                icon={"Priority-Urgent"}
-                size={"25px"}
-                iconColor={selectedPriority == 2 ? "warningRed" : "grey60"}
-              />
-            </IconContainer>
-            <IconContainer onClick={() => setSelectedPriority(selectedPriority == 3 ? 0 : 3)}>
-              <Icon
-                icon={"Priority-MIP"}
-                size={"25px"}
-                iconColor={selectedPriority == 3 ? "mipBlue" : "grey60"}
-              />
-            </IconContainer>
-          </IssuePynModalContainer>
         </FlexContainer>
       </Container>
     </ModalWithHeader>
@@ -278,39 +197,17 @@ const AvatarContainer = styled.div`
   }
 `;
 
-const DueDateSelectionContainer = styled.div`
-  border-radius: 6px;
-  margin-left: 15px;
-  width: 150px;
-`;
-interface IDueDateButtonProps {
-  onClick?: () => void;
-  dateSelected?: boolean;
-}
-
-const DueDateButtonContainer = styled.div<IDueDateButtonProps>`
-  color: ${props =>
-    props.dateSelected ? props.theme.colors.primary100 : props.theme.colors.grey60};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    color: ${props =>
-      props.dateSelected ? props.theme.colors.primaryActive : props.theme.colors.greyActive};
-    cursor: pointer;
-  }
-`;
-
-const CircleButtonsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
+const TextInputFlexContainer = styled(FlexContainer)`
+  margin-bottom: 10px;
 `;
 
 const LockContainer = styled.div`
   &: hover {
     cursor: pointer;
   }
+`;
+
+const OptionsContainer = styled.div`
+  margin-left: auto;
+  display: flex;
 `;

@@ -29,8 +29,7 @@ class QuarterlyGoal < ApplicationRecord
     13.times do |index|
       Milestone.create!(
         quarterly_goal_id: self.id, 
-        description: "Enter Description", 
-        status: 0, 
+        description: "",
         week: index + 1, 
         week_of: fiscal_quarter_start_date_closest_monday + (1.week * index),
         created_by: current_user
