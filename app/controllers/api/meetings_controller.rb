@@ -1,8 +1,8 @@
 class Api::MeetingsController < Api::ApplicationController
   include StatsHelper
   before_action :set_meeting, only: [:update, :destroy, :show]
-  after_action :verify_authorized, except: [:index, :search], unless: :skip_pundit?
-  after_action :verify_policy_scoped, only: [:index, :search], unless: :skip_pundit?
+  after_action :verify_authorized, except: [:index, :search, :search_section_1_meetings], unless: :skip_pundit?
+  after_action :verify_policy_scoped, only: [:index, :search, :search_section_1_meetings], unless: :skip_pundit?
 
   respond_to :json
 
@@ -17,6 +17,14 @@ class Api::MeetingsController < Api::ApplicationController
     authorize Team.find(params[:team_id]), :show?, policy_class: TeamPolicy
     #allow year and meeting type 
     @meetings = MeetingSearch.new(policy_scope(Meeting), search_meeting_params).search
+    render 'api/meetings/index'
+  end
+
+  def search_section_1_meetings
+    #if its for a forum, it should authorize the search if you can access the team_id in the params
+    authorize Team.find(params[:team_id]), :show?, policy_class: TeamPolicy
+    #allow year and meeting type 
+    @meetings = MeetingSearch.new(policy_scope(Meeting), search_meeting_params).search.where(original_creation: true)
     render 'api/meetings/index'
   end
 

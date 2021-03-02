@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_02_194041) do
+ActiveRecord::Schema.define(version: 2021_03_02_225845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -254,6 +254,7 @@ ActiveRecord::Schema.define(version: 2021_03_02_194041) do
     t.bigint "hosted_by_id"
     t.text "notes"
     t.json "settings"
+    t.boolean "original_creation", default: false
     t.index ["created_at"], name: "index_meetings_on_created_at"
     t.index ["hosted_by_id"], name: "index_meetings_on_hosted_by_id"
     t.index ["meeting_template_id"], name: "index_meetings_on_meeting_template_id"

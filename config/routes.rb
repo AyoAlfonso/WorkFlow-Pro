@@ -115,6 +115,7 @@ Rails.application.routes.draw do
     #meetings
     resources :meetings, only: [:create, :index, :update, :destroy, :show] do
       get :search, on: :collection
+      get :search_section_1_meetings, on: :collection
       patch :start_next_for, on: :collection
     end
     get '/meetings/team_meetings/:id', to: 'meetings#team_meetings'

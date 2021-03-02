@@ -33,7 +33,7 @@ export const ForumStoreModel = types
           // if (responseT.ok) {
           //   self.currentForumTeam = responseT.data as any;
           // }
-          const responseM: ApiResponse<any> = yield self.environment.api.searchMeetings({
+          const responseM: ApiResponse<any> = yield self.environment.api.searchSection1Meetings({
             team_id: teamId,
             meeting_type: MeetingTypes.FORUM_MONTHLY,
             fiscal_year: year,

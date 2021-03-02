@@ -7,6 +7,10 @@ class MeetingPolicy < ApplicationPolicy
     true
   end
 
+  def search_section_1_meetings?
+    true
+  end
+
   def show?
     if (@record.team_id)
       @user.team_user_enablements.pluck(:team_id).include?(@record.team_id)

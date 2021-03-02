@@ -309,8 +309,8 @@ export class Api {
     return this.client.get(`/meetings`);
   }
 
-  async searchMeetings(params = {}) {
-    return this.client.get(`/meetings/search`, params);
+  async searchSection1Meetings(params = {}) {
+    return this.client.get(`/meetings/search_section_1_meetings`, params);
   }
 
   async getTeamMeetings(id) {
