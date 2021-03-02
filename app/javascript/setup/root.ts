@@ -26,6 +26,8 @@ const initialState = {
   },
   companyStore: {
     company: null,
+    onboardingCompany: null,
+    onboardingModalOpen: false,
   },
   forumStore: {
     error: false,
@@ -68,6 +70,8 @@ const initialState = {
   staticDataStore: {
     loading: false,
     timeZones: null,
+    headingsAndDescriptions: {},
+    fieldsAndLabels: {},
   },
 };
 

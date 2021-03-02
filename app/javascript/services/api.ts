@@ -82,6 +82,10 @@ export class Api {
     return this.client.get(`/companies/${companyId}`);
   }
 
+  async createCompany(formData) {
+    return this.client.post(`/companies`, formData);
+  }
+
   async updateCompany(formData) {
     return this.client.patch(`/companies/${formData.id}`, formData);
   }
@@ -92,6 +96,10 @@ export class Api {
 
   async deleteLogo(companyId) {
     return this.client.delete(`/companies/${companyId}/logo`);
+  }
+
+  async getOnboardingCompany() {
+    return this.client.get("/onboarding");
   }
 
   async inviteUser(formData) {

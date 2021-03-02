@@ -31,12 +31,13 @@ interface IFormField {
   value?: any;
 }
 
-interface IOnboardingStepProps {
+interface IFormBuilderProps {
+  step: number;
   formFields?: Array<IFormField>;
   formData?: any;
 }
 
-export const OnboardingStep = ({ formData, formFields }: IOnboardingStepProps): JSX.Element => {
+export const FormBuilder = ({ formData, formFields, step }: IFormBuilderProps): JSX.Element => {
   const formComponent = (formField: IFormField) => {
     const { fieldType, formKey, options, callback, style } = formField;
     switch (fieldType) {
@@ -48,7 +49,7 @@ export const OnboardingStep = ({ formData, formFields }: IOnboardingStepProps): 
               callback(formKey, e.currentTarget.value);
             }}
             style={{ ...style }}
-            value={formData[formKey] || ""}
+            value={R.pathOr("", [step, formKey], formData)}
           />
         );
       case "TEXT_AREA":
@@ -59,12 +60,12 @@ export const OnboardingStep = ({ formData, formFields }: IOnboardingStepProps): 
               callback(formKey, e.currentTarget.value);
             }}
             style={{ ...style }}
-            textValue={formData[formKey] || ""}
+            textValue={R.pathOr("", [step, formKey], formData)}
           />
         );
       case "IMAGE":
         const dropZoneText =
-          R.isNil(formData[formKey]) || R.isEmpty(formData[formKey])
+          R.isNil(R.path([step, formKey], formData)) || R.isEmpty(R.path([step, formKey], formData))
             ? "Drag 'n' drop some files here, or click to select files"
             : "";
         return (
@@ -72,17 +73,18 @@ export const OnboardingStep = ({ formData, formFields }: IOnboardingStepProps): 
             Icon={null}
             acceptedFiles={["image/*"]}
             dropzoneText={dropZoneText}
-            onAlert={(message, variant) => console.log(`${variant}: ${message}`)}
             onAdd={(f: any) => {
-              callback(formKey, f);
+              callback(formKey, f[0]);
             }}
             onDelete={(f: any) => {
-              callback(formKey, []);
+              callback(formKey, null);
             }}
             showPreviewsInDropzone={true}
             filesLimit={1}
             maxFileSize={2000000}
-            fileObjects={formData[formKey]}
+            fileObjects={
+              R.path([step, formKey], formData) ? [R.path([step, formKey], formData)] : []
+            }
           />
         );
       case "SELECT":
@@ -93,7 +95,7 @@ export const OnboardingStep = ({ formData, formFields }: IOnboardingStepProps): 
               callback(formKey, e.currentTarget.value);
             }}
             style={{ ...style }}
-            value={formData[formKey] || ""}
+            value={R.pathOr("", [step, formKey], formData)}
           >
             {!R.isNil(options) &&
               options.map(({ label, value }, index) => (
@@ -106,7 +108,7 @@ export const OnboardingStep = ({ formData, formFields }: IOnboardingStepProps): 
       case "DATE_SELECT":
         return (
           <Calendar
-            date={formData[formKey] || new Date()}
+            date={R.pathOr(null, [step, formKey], formData)}
             onChange={date => {
               callback(formKey, date);
             }}

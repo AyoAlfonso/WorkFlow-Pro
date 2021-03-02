@@ -25,6 +25,7 @@ interface IWizardLayoutProps {
   onBackButtonClick?: any;
   onSkipButtonClick?: any;
   onNextButtonClick?: any;
+  nextButtonDisabled?: boolean;
 }
 
 export const WizardLayout = ({
@@ -46,6 +47,7 @@ export const WizardLayout = ({
   onBackButtonClick,
   onSkipButtonClick,
   onNextButtonClick,
+  nextButtonDisabled,
 }: IWizardLayoutProps): JSX.Element => {
   const renderActionButtons = (): JSX.Element => {
     return (
@@ -61,7 +63,12 @@ export const WizardLayout = ({
               Skip
             </SkipButton>
           )}
-          <NextButton small variant={"primary"} onClick={onNextButtonClick}>
+          <NextButton
+            small
+            variant={"primary"}
+            onClick={onNextButtonClick}
+            disabled={nextButtonDisabled}
+          >
             Next
           </NextButton>
         </>

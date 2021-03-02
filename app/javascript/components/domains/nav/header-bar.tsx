@@ -241,9 +241,9 @@ export const HeaderBar = observer(
           {renderSwitchCompanyOptions()}
           {renderShowHelpdesk()}
           <AccountOption>
-            <Link to="/onboarding" style={{ textDecoration: "none", padding: "0" }}>
-              <AccountOptionText>{t("company.createCompany")}</AccountOptionText>
-            </Link>
+            <AccountOptionText onClick={() => companyStore.openOnboardingModal()}>
+              {t("company.createCompany")}
+            </AccountOptionText>
           </AccountOption>
           <AccountOption>
             <AccountOptionText onClick={() => sessionStore.logoutRequest()}>

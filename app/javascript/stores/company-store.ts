@@ -9,6 +9,8 @@ export const CompanyStoreModel = types
   .model("CompanyStoreModel")
   .props({
     company: types.maybeNull(CompanyModel),
+    onboardingCompany: types.maybeNull(CompanyModel),
+    onboardingModalOpen: types.boolean,
   })
   .extend(withEnvironment())
   .views(self => ({}))
@@ -24,6 +26,19 @@ export const CompanyStoreModel = types
         showToast("There was an error loading the company", ToastMessageConstants.ERROR);
       }
     }),
+    createCompany: flow(function*(formData) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createCompany(formData);
+        if (response.ok) {
+          self.onboardingCompany = response.data;
+          return true;
+        }
+      } catch {
+        showToast("There was an error creating the company", ToastMessageConstants.ERROR);
+        return false;
+      }
+    }),
     updateCompany: flow(function*(fieldsAndValues) {
       const env = getEnv(self);
       try {
@@ -33,9 +48,11 @@ export const CompanyStoreModel = types
         if (response.ok) {
           self.company = response.data;
           showToast("Company updated", ToastMessageConstants.SUCCESS);
+          return true;
         }
       } catch {
         showToast("There was an error updating the company", ToastMessageConstants.ERROR);
+        return false;
       }
     }),
     updateCompanyLogo: flow(function*(formData) {
@@ -66,11 +83,33 @@ export const CompanyStoreModel = types
     })
   }))
   .actions(self => ({
+    getOnboardingCompany: flow(function*() {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.getOnboardingCompany();
+        if (response.ok) {
+          self.onboardingCompany = response.data as any;
+          return true;
+        }
+      } catch {
+        return false;
+      }
+    }),
+  }))
+  .actions(self => ({
     updateModelField(field, value) {
       self.company[field] = value;
     },
     updateCompanyFromModel() {
       self.updateCompany(self.company);
+    },
+  }))
+  .actions(self => ({
+    openOnboardingModal() {
+      self.onboardingModalOpen = true;
+    },
+    closeOnboardingModal() {
+      self.onboardingModalOpen = false;
     },
   }));
 

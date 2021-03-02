@@ -10,6 +10,8 @@ class Company < ApplicationRecord
   has_many :annual_initiatives, dependent: :restrict_with_error
   has_many :teams, dependent: :restrict_with_error
   has_one_attached :logo
+  has_one :sign_up_purpose, dependent: :destroy
+  accepts_nested_attributes_for :sign_up_purpose
   
   has_one :core_four, dependent: :destroy
   accepts_nested_attributes_for :core_four
@@ -21,6 +23,8 @@ class Company < ApplicationRecord
 
   validates :name, :timezone, :display_format, presence: true
   validate :display_format_not_changed, on: :update
+
+  enum onboarding_status: { incomplete: 0, complete: 1 }
 
   scope :with_team, -> (team_id) { joins(:teams).where({teams: {id: team_id}})}
   def self.find_first_with_team(team_id)

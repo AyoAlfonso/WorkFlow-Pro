@@ -1,5 +1,9 @@
 class CompanyPolicy < ApplicationPolicy
 
+  def create?
+    true
+  end
+
   def show?
     user.companies.pluck(:id).include?(record.id)
   end
@@ -14,5 +18,9 @@ class CompanyPolicy < ApplicationPolicy
 
   def update_logo?
     update?
+  end
+
+  def get_onboarding_company?
+    true
   end
 end

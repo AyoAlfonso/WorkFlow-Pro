@@ -59,12 +59,13 @@ Rails.application.routes.draw do
 
     get '/static_data', to: 'application#load_static_data'
 
-    resources :companies, only: [:show, :update] do
+    resources :companies, only: [:create, :show, :update] do
       member do
         delete 'logo', to: 'companies#delete_logo'
         patch 'logo', to: 'companies#update_logo'
       end
     end
+    get '/onboarding', to: "companies#get_onboarding_company"
 
     # issues
     resources :issues, only: [:index, :create, :update, :destroy]

@@ -43,8 +43,8 @@ import { Section1 } from "./domains/meetings-forum/section-1";
 import { Section2 } from "./domains/meetings-forum/section-2";
 import { ForumNotSetup } from "./domains/meetings-forum/not-setup";
 import { ForumAgenda } from "./domains/meetings-forum/forum-agenda";
-import { WizardLayout } from "./layouts/wizard-layout";
 import { ForumWelcomeModal } from "./shared/forum-welcome-modal";
+import { OnboardingModal } from "./domains/onboarding";
 
 import { Onboarding } from "./domains/onboarding";
 
@@ -184,13 +184,13 @@ export const App = observer(
                     "/meetings/section_1/:team_id",
                     "/meetings/section_2",
                     "/meetings/section_2/:team_id",
-                    "/onboarding",
                   ]}
                 >
                   <>
                     <SideNav />
                     <HeaderBar />
                     <ForumWelcomeModal />
+                    <OnboardingModal />
                     <Container>
                       <Route exact path="/" component={HomeContainer} />
                       <Route
@@ -213,7 +213,6 @@ export const App = observer(
                       <Route exact path="/meetings/section_1/:team_id" component={Section1} />
                       <Route exact path="/meetings/section_2" component={Section2} />
                       <Route exact path="/meetings/section_2/:team_id" component={Section2} />
-                      <Route exact path="/onboarding" component={Onboarding} />
                     </Container>
                   </>
                 </Route>
