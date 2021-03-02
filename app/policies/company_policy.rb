@@ -9,7 +9,7 @@ class CompanyPolicy < ApplicationPolicy
   end
 
   def update?
-    user.company == record && user.company_admin? #current_admin_user.present?
+    (user.companies.include? record) && (["CEO", "Admin"].include? UserCompanyEnablement.find_by(company_id: record.id).user_role.name)
   end
 
   def delete_logo?

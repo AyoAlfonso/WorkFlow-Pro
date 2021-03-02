@@ -10,6 +10,7 @@ import { baseTheme } from "~/themes/base";
 
 import { DropzoneAreaBase as MuiDropzoneAreaBase } from "material-ui-dropzone";
 import { withStyles } from "@material-ui/core/styles";
+import { TrixEditor } from "react-trix";
 
 import { Input, Label, Select, TextArea } from "~/components/shared";
 
@@ -19,37 +20,37 @@ export enum EFieldType {
   Image = "IMAGE",
   Select = "SELECT",
   DateSelect = "DATE_SELECT",
+  HtmlEditor = "HTML_EDITOR",
 }
 
 interface IFormField {
   label: string;
   fieldType: EFieldType;
-  formKey?: string;
+  formKeys?: Array<string>;
   options?: Array<{ label: string; value: string }>;
-  callback?: (key: string, val: any) => void;
+  callback?: (keys: Array<string>, val: any) => void;
   style?: any;
   value?: any;
 }
 
 interface IFormBuilderProps {
-  step: number;
   formFields?: Array<IFormField>;
   formData?: any;
 }
 
-export const FormBuilder = ({ formData, formFields, step }: IFormBuilderProps): JSX.Element => {
+export const FormBuilder = ({ formData, formFields }: IFormBuilderProps): JSX.Element => {
   const formComponent = (formField: IFormField) => {
-    const { fieldType, formKey, options, callback, style } = formField;
+    const { fieldType, formKeys, options, callback, style } = formField;
     switch (fieldType) {
       case "TEXT_FIELD":
         return (
           <Input
             onChange={e => {
               e.preventDefault();
-              callback(formKey, e.currentTarget.value);
+              callback(formKeys, e.currentTarget.value);
             }}
             style={{ ...style }}
-            value={R.pathOr("", [step, formKey], formData)}
+            value={R.pathOr("", formKeys, formData)}
           />
         );
       case "TEXT_AREA":
@@ -57,15 +58,15 @@ export const FormBuilder = ({ formData, formFields, step }: IFormBuilderProps): 
           <TextArea
             onChange={e => {
               e.preventDefault();
-              callback(formKey, e.currentTarget.value);
+              callback(formKeys, e.currentTarget.value);
             }}
             style={{ ...style }}
-            textValue={R.pathOr("", [step, formKey], formData)}
+            textValue={R.pathOr("", formKeys, formData)}
           />
         );
       case "IMAGE":
         const dropZoneText =
-          R.isNil(R.path([step, formKey], formData)) || R.isEmpty(R.path([step, formKey], formData))
+          R.isNil(R.path(formKeys, formData)) || R.isEmpty(R.path(formKeys, formData))
             ? "Drag 'n' drop some files here, or click to select files"
             : "";
         return (
@@ -74,17 +75,15 @@ export const FormBuilder = ({ formData, formFields, step }: IFormBuilderProps): 
             acceptedFiles={["image/*"]}
             dropzoneText={dropZoneText}
             onAdd={(f: any) => {
-              callback(formKey, f[0]);
+              callback(formKeys, f[0]);
             }}
             onDelete={(f: any) => {
-              callback(formKey, null);
+              callback(formKeys, null);
             }}
             showPreviewsInDropzone={true}
             filesLimit={1}
             maxFileSize={2000000}
-            fileObjects={
-              R.path([step, formKey], formData) ? [R.path([step, formKey], formData)] : []
-            }
+            fileObjects={R.path(formKeys, formData) ? [R.path(formKeys, formData)] : []}
           />
         );
       case "SELECT":
@@ -92,10 +91,10 @@ export const FormBuilder = ({ formData, formFields, step }: IFormBuilderProps): 
           <Select
             onChange={e => {
               e.preventDefault();
-              callback(formKey, e.currentTarget.value);
+              callback(formKeys, e.currentTarget.value);
             }}
             style={{ ...style }}
-            value={R.pathOr("", [step, formKey], formData)}
+            value={R.pathOr("", formKeys, formData)}
           >
             {!R.isNil(options) &&
               options.map(({ label, value }, index) => (
@@ -108,9 +107,27 @@ export const FormBuilder = ({ formData, formFields, step }: IFormBuilderProps): 
       case "DATE_SELECT":
         return (
           <Calendar
-            date={R.pathOr(null, [step, formKey], formData)}
+            date={R.pathOr(null, formKeys, formData)}
             onChange={date => {
-              callback(formKey, date);
+              callback(formKeys, date);
+            }}
+          />
+        );
+      case "HTML_EDITOR":
+        return (
+          <TrixEditor
+            className="custom-trix-class"
+            autoFocus={true}
+            placeholder="Type here..."
+            value={R.pathOr("", formKeys, formData)}
+            mergeTags={[]}
+            onChange={(html, text) => {
+              callback(formKeys, html);
+            }}
+            onEditorReady={editor => {
+              editor.element.addEventListener("trix-file-accept", event => {
+                event.preventDefault();
+              });
             }}
           />
         );

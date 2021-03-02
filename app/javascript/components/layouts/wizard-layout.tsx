@@ -167,6 +167,7 @@ const BodyContainer = styled.div`
 const BodyContentContainer = styled.div`
   display: flex;
   height: 85%;
+  overflow-y: scroll;
 `;
 
 const DescriptionTitleContainer = styled.div``;

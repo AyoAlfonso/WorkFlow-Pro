@@ -64,7 +64,7 @@ class StaticDataService < ApplicationService
       },
       "2": {
         heading: "Goals",
-        description: "Goals are thjings you (and your company) want to achieve in the next 3-12 months.  By adding your Goals to Lynchpyn, you can communicate and align your team around what really matters.",
+        description: "Goals are things you (and your company) want to achieve in the next 3-12 months.  By adding your Goals to Lynchpyn, you can communicate and align your team around what really matters.",
         stepLabel: "Create your first Goal"
       },
       "3": {

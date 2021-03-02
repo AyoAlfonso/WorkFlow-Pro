@@ -21,8 +21,33 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
     await companyStore.getOnboardingCompany();
     const { onboardingCompany } = companyStore;
     if (!R.isNil(onboardingCompany)) {
-      // @TODO hydrate formData
-      console.log(onboardingCompany);
+      const signUpPurpose = R.path(["signUpPurpose", "purpose"], onboardingCompany);
+      const fiscalYearStart = new Date(R.path(["fiscalYearStart"], onboardingCompany));
+      const coreFours = R.pipe(
+        R.path(["coreFour"]),
+        R.toPairs,
+        R.pipe(
+          R.path(["coreFour"]),
+          R.toPairs,
+          R.map(([key, value]) => {
+            const newKey = R.pipe(
+              R.replace("Content", ""),
+              R.split(""),
+              R.insert(4, "_"),
+              R.join(""),
+            )(key);
+            return [newKey, value];
+          }),
+          R.fromPairs,
+        ),
+      )(onboardingCompany);
+      const state = R.pipe(
+        R.set(R.lens(R.prop("signUpPurpose"), R.assoc("signUpPurpose")), signUpPurpose),
+        R.set(R.lens(R.prop("fiscalYearStart"), R.assoc("fiscalYearStart")), fiscalYearStart),
+        R.set(R.lens(R.prop("coreFourAttributes"), R.assoc("coreFourAttributes")), coreFours),
+        R.dissoc("coreFour"),
+      )(onboardingCompany);
+      setFormData(state);
     }
     setLoading(false);
   }, []);
@@ -31,11 +56,12 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
     loadOnboarding();
   }, [loadOnboarding]);
 
+  const { fieldsAndLabels, headingsAndDescriptions, timeZones } = staticDataStore;
+  const { onboardingCompany } = companyStore;
+
   if (loading) {
     return <Loading />;
   }
-
-  const { fieldsAndLabels, headingsAndDescriptions, timeZones } = staticDataStore;
 
   const timeZonesWithNull = () => {
     const timeZoneList = timeZones.map(tz => ({ label: tz, value: tz }));
@@ -43,18 +69,14 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
     return timeZoneList;
   };
 
-  const setFormState = (key: string, value: any) => {
-    const newFormState = R.set(R.lensPath([currentStep, key]), value, formData);
+  const setFormState = (keys: Array<string>, value: any) => {
+    const newFormState = R.set(R.lensPath(keys), value, formData);
+    console.log(newFormState);
     setFormData(newFormState);
   };
 
   const submitFormState = async () => {
-    const data = R.path([currentStep], formData);
-    // const logoData = R.path(["logo"], data);
-    // if (!R.isNil(logoData) && !R.isEmpty(logoData)) {
-    //   submitLogo(logoData);
-    // }
-    return await companyStore.updateCompany(data);
+    return await companyStore.updateCompany(formData, true);
   };
 
   // const submitLogo = async logoData => {
@@ -64,10 +86,13 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
   // };
 
   const onNextButtonClick = async () => {
-    if (currentStep === 0) {
+    if (currentStep === 0 && R.isNil(onboardingCompany)) {
       // create company
-      const data = R.path([currentStep], formData);
-      companyStore.createCompany(data).then(res => {
+      const form = new FormData();
+      Object.entries(formData).forEach(([key, value]: [string, string | Blob]) => {
+        form.append(key, value);
+      });
+      companyStore.createCompany(form).then(res => {
         if (res === true) {
           setCurrentStep(c => c + 1);
         }
@@ -84,70 +109,71 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
 
   const hasCreationParams = () =>
     R.pipe(
-      R.path("0"),
-      R.props(["name", "logo", "timezone", "fiscal_year_start", "sign_up_purpose"]),
+      R.props(["name", "logo", "timezone", "fiscal_year_start", "sign_up_purpose_attributes"]),
       R.none(R.or(R.isNil, R.isEmpty)),
     )(formData);
 
   const leftBodyComponentProps = [
     {
-      step: 0,
       formFields: [
         {
           label: "Business Name",
           fieldType: EFieldType.TextField,
-          formKey: "name",
+          formKeys: ["name"],
           callback: setFormState,
         },
         {
           label: "Logo (preferably horizontal logos)",
           fieldType: EFieldType.Image,
-          formKey: "logo",
+          formKeys: ["logo"],
           callback: setFormState,
         },
         {
           label: "Timezone",
           fieldType: EFieldType.Select,
-          formKey: "timezone",
+          formKeys: ["timezone"],
           callback: setFormState,
           options: timeZonesWithNull(),
         },
         {
           label: "Why did you decide to sign up for Lynchpyn?",
           fieldType: EFieldType.TextField,
-          formKey: "sign_up_purpose",
+          formKeys: ["sign_up_purpose_attributes", "purpose"],
           callback: setFormState,
         },
       ],
     },
     {
-      step: 1,
       formFields: [
         {
-          label: `Why does {companyName} exist?`,
-          fieldType: EFieldType.TextArea,
-          formKey: "core_1",
+          label: `Why does ${R.pathOr("", ["name"], onboardingCompany)} exist?`,
+          fieldType: EFieldType.HtmlEditor,
+          formKeys: ["core_four_attributes", "core_1"],
           callback: setFormState,
           style: { resize: "vertical" },
         },
         {
-          label: `How do {companyName} employees and leaders behave? (AKA your core values)`,
-          fieldType: EFieldType.TextArea,
-          formKey: "core_2",
+          label: `How do ${R.pathOr(
+            "",
+            ["name"],
+            onboardingCompany,
+          )} employees and leaders behave? (AKA your core values)`,
+          fieldType: EFieldType.HtmlEditor,
+          formKeys: ["core_four_attributes", "core_2"],
           callback: setFormState,
           style: { resize: "vertical" },
         },
         {
-          label: `What does {companyName} do?`,
-          fieldType: EFieldType.TextArea,
-          formKey: "core_3",
+          label: `What does ${R.pathOr("", ["name"], onboardingCompany)} do?`,
+          fieldType: EFieldType.HtmlEditor,
+          formKeys: ["core_four_attributes", "core_3"],
           callback: setFormState,
           style: { resize: "vertical" },
         },
         {
-          label: `What sets {companyName} apart from the rest?`,
-          fieldType: EFieldType.TextArea,
-          formKey: "core_4",
+          label: `What sets ${R.pathOr("", ["name"], onboardingCompany)} apart from the rest?`,
+          fieldType: EFieldType.HtmlEditor,
+          formKeys: ["core_four_attributes", "core_4"],
           callback: setFormState,
           style: { resize: "vertical" },
         },
@@ -157,12 +183,11 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
 
   const rightBodyComponentProps = [
     {
-      step: 0,
       formFields: [
         {
           label: "Fiscal Year Start",
           fieldType: EFieldType.DateSelect,
-          formKey: "fiscal_year_start",
+          formKeys: ["fiscal_year_start"],
           callback: setFormState,
         },
       ],
@@ -170,27 +195,15 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
   ];
 
   const leftBodyComponents = [
-    <FormBuilder
-      step={leftBodyComponentProps[0].step}
-      formFields={leftBodyComponentProps[0].formFields}
-      formData={formData}
-    />,
-    <FormBuilder
-      step={leftBodyComponentProps[1].step}
-      formFields={leftBodyComponentProps[1].formFields}
-      formData={formData}
-    />,
+    <FormBuilder formFields={leftBodyComponentProps[0].formFields} formData={formData} />,
+    <FormBuilder formFields={leftBodyComponentProps[1].formFields} formData={formData} />,
     <div>STEP TWO LEFT</div>,
     <div>STEP THREE LEFT</div>,
     <div>STEP FOUR LEFT</div>,
   ];
 
   const rightBodyComponents = [
-    <FormBuilder
-      step={rightBodyComponentProps[0].step}
-      formFields={rightBodyComponentProps[0].formFields}
-      formData={formData}
-    />,
+    <FormBuilder formFields={rightBodyComponentProps[0].formFields} formData={formData} />,
     <div>STEP ONE RIGHT</div>,
     <div>STEP TWO RIGHT</div>,
     <div>STEP THREE RIGHT</div>,

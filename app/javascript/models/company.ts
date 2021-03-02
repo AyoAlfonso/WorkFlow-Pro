@@ -24,7 +24,8 @@ export const CompanyModel = types
     currentQuarterStartDate: types.maybeNull(types.string),
     nextQuarterStartDate: types.maybeNull(types.string),
     forumMeetingsYearRange: types.maybeNull(types.array(types.frozen())),
-    forumIntroVideo: types.maybeNull(types.frozen())
+    forumIntroVideo: types.maybeNull(types.frozen()),
+    signUpPurpose: types.maybeNull(types.frozen()),
   })
   .views(self => ({
     get accessCompany() {

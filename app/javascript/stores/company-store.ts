@@ -39,19 +39,26 @@ export const CompanyStoreModel = types
         return false;
       }
     }),
-    updateCompany: flow(function*(fieldsAndValues) {
+    updateCompany: flow(function*(fieldsAndValues: any, onboarding: boolean) {
       const env = getEnv(self);
+      const companyId = onboarding ? self.onboardingCompany.id : self.company.id;
       try {
         const response: any = yield env.api.updateCompany(
-          Object.assign({ company: fieldsAndValues }, { id: self.company.id }),
+          Object.assign({ company: fieldsAndValues }, { id: companyId }),
         );
         if (response.ok) {
-          self.company = response.data;
-          showToast("Company updated", ToastMessageConstants.SUCCESS);
+          if (onboarding) {
+            self.onboardingCompany = response.data;
+          } else {
+            self.company = response.data;
+            showToast("Company updated", ToastMessageConstants.SUCCESS);
+          }
           return true;
         }
       } catch {
-        showToast("There was an error updating the company", ToastMessageConstants.ERROR);
+        if (!onboarding) {
+          showToast("There was an error updating the company", ToastMessageConstants.ERROR);
+        }
         return false;
       }
     }),
@@ -101,7 +108,7 @@ export const CompanyStoreModel = types
       self.company[field] = value;
     },
     updateCompanyFromModel() {
-      self.updateCompany(self.company);
+      self.updateCompany(self.company, false);
     },
   }))
   .actions(self => ({

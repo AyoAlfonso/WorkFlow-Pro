@@ -17,7 +17,7 @@ export const TextArea = (props: ITextAreaProps) => {
 
   return (
     <StyledTextarea
-      placeholder={placeholder || "... add text here"}
+      placeholder={placeholder || "Type here..."}
       value={textValue}
       sx={{
         border: `1px solid ${baseTheme.colors.grey40}`,

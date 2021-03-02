@@ -40,17 +40,20 @@ export const Company = observer(
     const { t } = useTranslation();
 
     const save = () => {
-      companyStore.updateCompany({
-        name,
-        timezone,
-        rallyingCry,
-        coreFourAttributes: {
-          core_1: core1Content,
-          core_2: core2Content,
-          core_3: core3Content,
-          core_4: core4Content,
+      companyStore.updateCompany(
+        {
+          name,
+          timezone,
+          rallyingCry,
+          coreFourAttributes: {
+            core_1: core1Content,
+            core_2: core2Content,
+            core_3: core3Content,
+            core_4: core4Content,
+          },
         },
-      });
+        false,
+      );
     };
     const submitLogo = async (files: FileList) => {
       const form = new FormData();
