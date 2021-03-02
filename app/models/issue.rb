@@ -3,6 +3,7 @@ class Issue < ApplicationRecord
   belongs_to :user
   belongs_to :team, optional: true
   belongs_to :company
+  belongs_to :scheduled_group, optional: true
 
   has_one :team_issue, dependent: :destroy, autosave: true
   accepts_nested_attributes_for :team_issue

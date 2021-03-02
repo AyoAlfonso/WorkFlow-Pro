@@ -7,6 +7,7 @@ json.company_id @user.default_selected_company.id
 json.company_name @user.default_selected_company.name
 json.session_company_profile_id @session_company_id
 json.first_access_to_forum @user_first_access_to_forum
+json.scheduled_groups @scheduled_groups
  
 json.company_profiles @user.companies do |company|
   json.extract! company, :id, :name, :display_format

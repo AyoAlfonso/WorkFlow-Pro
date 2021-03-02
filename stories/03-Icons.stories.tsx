@@ -424,6 +424,14 @@ export const Icons = () => (
         <Icon icon={"EoM"} size={"2em"} />
         <TextCenteredDiv>EoM</TextCenteredDiv>
       </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Move2"} size={"2em"} />
+        <TextCenteredDiv>Move2</TextCenteredDiv>
+      </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"List"} size={"2em"} />
+        <TextCenteredDiv>List</TextCenteredDiv>
+      </CenteredColumnDiv>
     </RowDiv>
   </ContainerDiv>
 );

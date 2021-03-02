@@ -3,7 +3,6 @@ import { ModalWithHeader } from "../../shared/modal-with-header";
 import { useState, useEffect } from "react";
 import { TextInput } from "../../shared/text-input";
 import styled from "styled-components";
-import { Icon } from "../../shared/icon";
 import { Button } from "rebass";
 import { baseTheme } from "../../../themes";
 import { useMst } from "../../../setup/root";
@@ -12,9 +11,10 @@ import {
   Container,
   FlexContainer,
   IssuePynModalContainer,
-  IconContainer,
 } from "~/components/shared/styles/modals";
 import { UserSelectionDropdownList, Loading, LabelSelection } from "~/components/shared";
+import { PrioritySelector } from "~/components/shared/issues-and-key-activities/priority-selector";
+import { ScheduledGroupSelector } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
 
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
@@ -37,8 +37,9 @@ export const CreateIssueModal = ({
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
-  const [personal, setPersonal] = useState<boolean>(false);
   const [selectedLabel, setSelectedLabel] = useState<any>(null);
+  const [selectedGroupId, setSelectedGroupId] = useState<number>(null);
+  const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
@@ -68,14 +69,14 @@ export const CreateIssueModal = ({
       modalOpen={createIssueModalOpen}
       setModalOpen={setCreateIssueModalOpen}
       headerText={itemName}
-      width="35rem"
+      width="640px"
     >
       <Container>
-        <FlexContainer>
+        <TextInputFlexContainer>
           <TextInput
             textValue={issueDescription}
             setTextValue={setIssueDescription}
-            width={"75%"}
+            width={"100%"}
             style={{
               height: "35px",
               marginTop: "auto",
@@ -84,19 +85,42 @@ export const CreateIssueModal = ({
               paddingBottom: "4px",
             }}
           />
-          {selectedUser && (
-            <AvatarContainer onClick={() => setShowUsersList(!showUsersList)}>
-              <Avatar
-                defaultAvatarColor={selectedUser.defaultAvatarColor}
-                avatarUrl={selectedUser.avatarUrl}
-                firstName={selectedUser.firstName}
-                lastName={selectedUser.lastName}
-                size={34}
-                marginLeft={"auto"}
+        </TextInputFlexContainer>
+        <FlexContainer>
+          <PrioritySelector
+            itemPriority={selectedPriority}
+            setSelectedPriority={setSelectedPriority}
+          />
+
+          <OptionsContainer>
+            <IssuePynModalContainer>
+              <LabelSelection
+                selectedLabel={selectedLabel}
+                setSelectedLabel={setSelectedLabel}
+                onLabelClick={setShowLabelsList}
+                showLabelsList={showLabelsList}
               />
-              {renderUserSelectionList()}
-            </AvatarContainer>
-          )}
+              <ScheduledGroupSelector
+                selectedGroupId={selectedGroupId}
+                setSelectedGroupId={setSelectedGroupId}
+                selectedTeamId={selectedTeamId}
+                setSelectedTeamId={setSelectedTeamId}
+              />
+            </IssuePynModalContainer>
+            {selectedUser && (
+              <AvatarContainer onClick={() => setShowUsersList(!showUsersList)}>
+                <Avatar
+                  defaultAvatarColor={selectedUser.defaultAvatarColor}
+                  avatarUrl={selectedUser.avatarUrl}
+                  firstName={selectedUser.firstName}
+                  lastName={selectedUser.lastName}
+                  size={34}
+                  marginLeft={"auto"}
+                />
+                {renderUserSelectionList()}
+              </AvatarContainer>
+            )}
+          </OptionsContainer>
         </FlexContainer>
         <FlexContainer>
           <StyledButton
@@ -106,13 +130,12 @@ export const CreateIssueModal = ({
                 .createIssue({
                   description: issueDescription,
                   priority: selectedPriority,
-                  teamId: teamId,
+                  teamId: selectedTeamId || teamId,
                   userId: selectedUser.id,
                   position: newIssuePosition,
                   meetingId: meetingId,
                   meetingEnabled: meetingEnabled,
                   label: selectedLabelObj,
-                  personal: personal,
                 })
                 .then(result => {
                   if (result) {
@@ -126,38 +149,6 @@ export const CreateIssueModal = ({
           >
             Save
           </StyledButton>
-          <IssuePynModalContainer>
-            <LockContainer onClick={() => setPersonal(!personal)}>
-              <Icon icon={"Lock"} size={"25px"} iconColor={personal ? "mipBlue" : "grey60"} />
-            </LockContainer>
-            <LabelSelection
-              selectedLabel={selectedLabel}
-              setSelectedLabel={setSelectedLabel}
-              onLabelClick={setShowLabelsList}
-              showLabelsList={showLabelsList}
-            />
-            <IconContainer onClick={() => setSelectedPriority(selectedPriority == 1 ? 0 : 1)}>
-              <Icon
-                icon={"Priority-High"}
-                size={"25px"}
-                iconColor={selectedPriority == 1 ? "cautionYellow" : "grey60"}
-              />
-            </IconContainer>
-            <IconContainer onClick={() => setSelectedPriority(selectedPriority == 2 ? 0 : 2)}>
-              <Icon
-                icon={"Priority-Urgent"}
-                size={"25px"}
-                iconColor={selectedPriority == 2 ? "warningRed" : "grey60"}
-              />
-            </IconContainer>
-            <IconContainer onClick={() => setSelectedPriority(selectedPriority == 3 ? 0 : 3)}>
-              <Icon
-                icon={"Priority-MIP"}
-                size={"25px"}
-                iconColor={selectedPriority == 3 ? "mipBlue" : "grey60"}
-              />
-            </IconContainer>
-          </IssuePynModalContainer>
         </FlexContainer>
       </Container>
     </ModalWithHeader>
@@ -185,8 +176,11 @@ const AvatarContainer = styled.div`
   }
 `;
 
-const LockContainer = styled.div`
-  &: hover {
-    cursor: pointer;
-  }
+const TextInputFlexContainer = styled(FlexContainer)`
+  margin-bottom: 10px;
+`;
+
+const OptionsContainer = styled.div`
+  margin-left: auto;
+  display: flex;
 `;

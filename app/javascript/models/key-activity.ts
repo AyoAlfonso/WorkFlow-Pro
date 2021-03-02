@@ -17,6 +17,7 @@ export const KeyActivityModel = types
     dueDate: types.maybeNull(types.string),
     labels: types.maybeNull(types.array(LabelModel)),
     personal: types.boolean,
+    scheduledGroupId: types.maybeNull(types.number)
   })
   .views(self => ({}))
   .actions(self => ({}));

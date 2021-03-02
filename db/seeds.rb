@@ -175,6 +175,10 @@ end
 
 StaticData.where(field: "forum_introduction").first_or_create(value: "")
 
+["Today", "Tomorrow", "Weekly List", "Backlog"].each do |group|
+  ScheduledGroup.where(name: group).first_or_create
+end
+
 
 Dir[File.join(Rails.root, 'db', '*.seeds.rb')].sort.each do |seed|
   load seed

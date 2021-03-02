@@ -98,140 +98,145 @@ export const KeyActivityEntry = observer(
 
     return (
       <Container dragHandleProps={dragHandleProps}>
-        <RowContainer>
-          <LeftActionsContainer>
-            <CheckboxContainer key={keyActivity["id"]}>
-              <Checkbox
-                key={keyActivity["id"]}
-                checked={keyActivity["completedAt"] ? true : false}
-                sx={{
-                  color: baseTheme.colors.primary100,
-                }}
-                onChange={e => {
-                  keyActivityStore.updateKeyActivityStatus(
-                    keyActivity,
-                    e.target.checked,
-                    meetingId ? true : false,
-                  );
-                }}
-              />
-            </CheckboxContainer>
-
-            <KeyActivityPriorityContainer onClick={() => updatePriority()}>
-              <KeyActivityPriorityIcon priority={keyActivity.priority} />
-            </KeyActivityPriorityContainer>
-          </LeftActionsContainer>
-          <InputContainer>
-            <StyledContentEditable
-              innerRef={keyActivityRef}
-              html={keyActivity.description}
-              onChange={e => handleDescriptionChange(e)}
-              onKeyDown={key => {
-                if (key.keyCode == 13) {
-                  keyActivityRef.current.blur();
-                }
+        <LeftActionsContainer>
+          <CheckboxContainer key={keyActivity["id"]}>
+            <Checkbox
+              key={keyActivity["id"]}
+              checked={keyActivity["completedAt"] ? true : false}
+              sx={{
+                color: baseTheme.colors.primary100,
               }}
-              style={{ textDecoration: keyActivity.completedAt && "line-through", cursor: "text" }}
-              onBlur={() =>
-                keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false)
-              }
+              onChange={e => {
+                keyActivityStore.updateKeyActivityStatus(
+                  keyActivity,
+                  e.target.checked,
+                  meetingId ? true : false,
+                );
+              }}
             />
+          </CheckboxContainer>
 
-            {keyActivity.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
-
-            <ActionContainer>
-              <ActionSubContainer>
-                {meetingId && (
-                  <AvatarContainer>
-                    <Avatar
-                      defaultAvatarColor={keyActivity.user.defaultAvatarColor}
-                      firstName={keyActivity.user.firstName}
-                      lastName={keyActivity.user.lastName}
-                      avatarUrl={keyActivity.user.avatarUrl}
-                      size={25}
-                    />
-                  </AvatarContainer>
-                )}
-
-                <DeleteButtonContainer
-                  onClick={() =>
-                    keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
+          <KeyActivityPriorityContainer onClick={() => updatePriority()}>
+            <KeyActivityPriorityIcon priority={keyActivity.priority} />
+          </KeyActivityPriorityContainer>
+        </LeftActionsContainer>
+        <RightContainer>
+          <RowContainer>
+            <InputContainer>
+              <StyledContentEditable
+                innerRef={keyActivityRef}
+                html={keyActivity.description}
+                onChange={e => handleDescriptionChange(e)}
+                onKeyDown={key => {
+                  if (key.keyCode == 13) {
+                    keyActivityRef.current.blur();
                   }
-                >
-                  <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
-                </DeleteButtonContainer>
-              </ActionSubContainer>
-            </ActionContainer>
-          </InputContainer>
-        </RowContainer>
+                }}
+                style={{
+                  textDecoration: keyActivity.completedAt && "line-through",
+                  cursor: "text",
+                }}
+                onBlur={() =>
+                  keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false)
+                }
+              />
 
-        <BottomRowContainer>
-          <DateContainer>
-            <Popup
-              arrow={false}
-              closeOnDocumentClick
-              contentStyle={{
-                border: "none",
-                borderRadius: "6px",
-                padding: 0,
-                width: "auto",
-              }}
-              on="click"
-              onClose={() => {}}
-              onOpen={() => {}}
-              open={showDatePicker}
-              position="bottom center"
-              trigger={
-                <DateButtonDiv>
-                  <DateButton
-                    onClick={() => {
-                      setShowDatePicker(true);
-                      setSelectedDueDate(new Date(parseISO(keyActivity.dueDate)));
+              {keyActivity.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
+
+              <ActionContainer>
+                <ActionSubContainer>
+                  {meetingId && (
+                    <AvatarContainer>
+                      <Avatar
+                        defaultAvatarColor={keyActivity.user.defaultAvatarColor}
+                        firstName={keyActivity.user.firstName}
+                        lastName={keyActivity.user.lastName}
+                        avatarUrl={keyActivity.user.avatarUrl}
+                        size={25}
+                      />
+                    </AvatarContainer>
+                  )}
+
+                  <DeleteButtonContainer
+                    onClick={() =>
+                      keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
+                    }
+                  >
+                    <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
+                  </DeleteButtonContainer>
+                </ActionSubContainer>
+              </ActionContainer>
+            </InputContainer>
+          </RowContainer>
+
+          <BottomRowContainer>
+            <DateContainer>
+              <Popup
+                arrow={false}
+                closeOnDocumentClick
+                contentStyle={{
+                  border: "none",
+                  borderRadius: "6px",
+                  padding: 0,
+                  width: "auto",
+                }}
+                on="click"
+                onClose={() => {}}
+                onOpen={() => {}}
+                open={showDatePicker}
+                position="bottom center"
+                trigger={
+                  <DateButtonDiv>
+                    <DateButton
+                      onClick={() => {
+                        setShowDatePicker(true);
+                        setSelectedDueDate(new Date(parseISO(keyActivity.dueDate)));
+                      }}
+                      text={dueDateObj.text}
+                      displayColor={dueDateObj.color}
+                    />
+                  </DateButtonDiv>
+                }
+              >
+                <>
+                  <Calendar
+                    showDateDisplay={false}
+                    showMonthAndYearPickers={false}
+                    showSelectionPreview={true}
+                    direction={"vertical"}
+                    shownDate={new Date()}
+                    minDate={new Date()}
+                    maxDate={addDays(new Date(), 30)}
+                    scroll={{
+                      enabled: true,
+                      calendarWidth: 320,
+                      monthWidth: 320,
                     }}
-                    text={dueDateObj.text}
-                    displayColor={dueDateObj.color}
+                    rangeColors={[baseTheme.colors.primary80]}
+                    date={selectedDueDate}
+                    onChange={date => {
+                      setSelectedDueDate(date);
+                      updateDueDate(date);
+                    }}
                   />
-                </DateButtonDiv>
-              }
-            >
-              <>
-                <Calendar
-                  showDateDisplay={false}
-                  showMonthAndYearPickers={false}
-                  showSelectionPreview={true}
-                  direction={"vertical"}
-                  shownDate={new Date()}
-                  minDate={new Date()}
-                  maxDate={addDays(new Date(), 30)}
-                  scroll={{
-                    enabled: true,
-                    calendarWidth: 320,
-                    monthWidth: 320,
-                  }}
-                  rangeColors={[baseTheme.colors.primary80]}
-                  date={selectedDueDate}
-                  onChange={date => {
-                    setSelectedDueDate(date);
-                    updateDueDate(date);
-                  }}
-                />
-                <Button
-                  variant={"primary"}
-                  small
-                  onClick={() => {
-                    setSelectedDueDate(null);
-                    updateDueDate(null);
-                  }}
-                  mx={"auto"}
-                  my={"8px"}
-                >
-                  {t("datePicker.clearDate")}
-                </Button>
-              </>
-            </Popup>
-          </DateContainer>
-          {renderLabel()}
-        </BottomRowContainer>
+                  <Button
+                    variant={"primary"}
+                    small
+                    onClick={() => {
+                      setSelectedDueDate(null);
+                      updateDueDate(null);
+                    }}
+                    mx={"auto"}
+                    my={"8px"}
+                  >
+                    {t("datePicker.clearDate")}
+                  </Button>
+                </>
+              </Popup>
+            </DateContainer>
+            {renderLabel()}
+          </BottomRowContainer>
+        </RightContainer>
       </Container>
     );
   },
@@ -260,6 +265,7 @@ const Container = styled.div<ContainerProps>`
     display: block;
   }
   margin-left: 8px;
+  display: flex;
   margin-right: 8px;
   &:active {
     background-color: ${props => props.dragHandleProps && props.theme.colors.grey20};
@@ -345,6 +351,9 @@ const RowContainer = styled.div`
 `;
 
 const BottomRowContainer = styled(RowContainer)`
-  margin-left: 65px;
-  margin-top: -10px;
+  margin-top: -5px;
+`;
+
+const RightContainer = styled.div`
+  width: -webkit-fill-available;
 `;
