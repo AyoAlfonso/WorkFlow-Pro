@@ -26,6 +26,7 @@ class ForumMeetingSetupService
         hosted_by_id: creator.id,
         team_id: team.id,
         host_name: creator.full_name,
+        original_creation: true,
         current_step: 0})
     end
     #Meeting.upsert_all(new_meetings)
