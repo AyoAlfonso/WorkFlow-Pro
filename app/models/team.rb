@@ -7,6 +7,7 @@ class Team < ApplicationRecord
   has_many :issues
   has_many :meetings
   has_many :team_issues, dependent: :destroy
+  has_many :key_activities
 
   store :settings, accessors: [:weekly_meeting_dashboard_link_embed], coder: JSON
 

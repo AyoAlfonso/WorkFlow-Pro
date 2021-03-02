@@ -19,6 +19,7 @@ import { ModalWithHeader } from "../../shared/modal-with-header";
 import { TextInput } from "../../shared/text-input";
 import { PrioritySelector } from "~/components/shared/issues-and-key-activities/priority-selector";
 import { DueDateSelector } from "~/components/shared/issues-and-key-activities/due-date-selector";
+import { ScheduledGroupSelector } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
 
 interface ICreateKeyActivityModalProps {
   createKeyActivityModalOpen: boolean;
@@ -44,6 +45,8 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
   const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
   const [personal, setPersonal] = useState<boolean>(false);
   const [selectedLabel, setSelectedLabel] = useState<any>(null);
+  const [selectedGroupId, setSelectedGroupId] = useState<number>(null);
+  const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
@@ -104,16 +107,12 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                 showLabelsList={showLabelsList}
                 marginLeft={"5px"}
               />
-              <StyledSwitch
-                checked={!weeklyList}
-                onChange={e => setWeeklyList(!weeklyList)}
-                onColor={baseTheme.colors.primary100}
-                uncheckedIcon={false}
-                checkedIcon={false}
-                width={48}
-                height={25}
+              <ScheduledGroupSelector
+                selectedGroupId={selectedGroupId}
+                setSelectedGroupId={setSelectedGroupId}
+                selectedTeamId={selectedTeamId}
+                setSelectedTeamId={setSelectedTeamId}
               />
-              <MasterListText>Master</MasterListText>
             </IssuePynModalContainer>
             {selectedUser && (
               <AvatarContainer onClick={() => setShowUsersList(!showUsersList)}>
@@ -145,6 +144,8 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                   dueDate: selectedDueDate,
                   label: selectedLabel,
                   personal: personal,
+                  scheduledGroupId: selectedGroupId,
+                  teamId: selectedTeamId,
                 })
                 .then(result => {
                   if (result) {
@@ -154,11 +155,12 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                     setSelectedPriority(0);
                     setWeeklyList(defaultTypeAsWeekly);
                     setSelectedLabel(null);
+                    setSelectedTeamId(null);
                   }
                 })
             }
           >
-            Save
+            Add Pyn
           </StyledButton>
         </FlexContainer>
       </Container>
@@ -178,16 +180,6 @@ const StyledButton = styled(RebassButton)<StyledButtonType>`
   &: hover {
     cursor: ${props => !props.disabled && "pointer"};
   }
-`;
-
-const StyledSwitch = styled(Switch)``;
-
-const MasterListText = styled(Text)`
-  color: ${props => props.theme.colors.grey60};
-  display: flex;
-  align-items: center;
-  margin-left: 10px;
-  font-size: 14px;
 `;
 
 const AvatarContainer = styled.div`

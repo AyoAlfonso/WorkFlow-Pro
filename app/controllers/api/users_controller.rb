@@ -58,6 +58,7 @@ class Api::UsersController < Api::ApplicationController
     @user = current_user
     @session_company_id = current_company.id
     @static_data = view_context.static_data
+    @scheduled_groups = ScheduledGroup.all
     @user_first_access_to_forum = current_company.display_format == "Forum" && current_user.user_company_enablements.find_by_company_id(current_company.id)&.first_time_access
     render '/api/users/profile'
   end

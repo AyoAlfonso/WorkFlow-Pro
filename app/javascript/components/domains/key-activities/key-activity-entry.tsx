@@ -351,7 +351,7 @@ const RowContainer = styled.div`
 `;
 
 const BottomRowContainer = styled(RowContainer)`
-  margin-top: -10px;
+  margin-top: -5px;
 `;
 
 const RightContainer = styled.div`

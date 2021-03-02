@@ -15,6 +15,7 @@ import { ToastMessageConstants } from "~/constants/toast-types";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 import { Avatar, LabelSelection } from "~/components/shared";
 import { toJS } from "mobx";
+import { InitialsGenerator } from "~/components/shared/issues-and-key-activities/initials-generator";
 
 interface IIssueEntryProps {
   issue: any;
@@ -26,7 +27,11 @@ interface IIssueEntryProps {
 
 export const IssueEntry = observer(
   (props: IIssueEntryProps): JSX.Element => {
-    const { issueStore, teamStore } = useMst();
+    const {
+      issueStore,
+      teamStore,
+      sessionStore: { scheduledGroups },
+    } = useMst();
     const { issue, pageEnd, meetingId, dragHandleProps, leftShareContainer } = props;
 
     const teams = teamStore.teams;
@@ -43,6 +48,10 @@ export const IssueEntry = observer(
     }, [issue]);
 
     const issueRef = useRef(null);
+
+    const currentSelectedItem = issue.scheduledGroupId
+      ? scheduledGroups.find(group => group.id == issue.scheduledGroupId)
+      : teams.find(team => team.id == issue.teamId);
 
     const renderPriorityIcon = (priority: string) => {
       switch (priority) {
@@ -121,7 +130,6 @@ export const IssueEntry = observer(
             showLabelsList={showLabelsList}
             inlineEdit={true}
             afterLabelSelectAction={updateLabel}
-            marginLeft={"50px"}
           />
         );
       }
@@ -176,8 +184,6 @@ export const IssueEntry = observer(
               }}
               onBlur={() => issueStore.updateIssue(issue.id, meetingId ? true : false)}
             />
-
-            {issue.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
 
             <ActionContainer meeting={meetingId ? true : false}>
               <ActionSubContainer>
@@ -262,7 +268,14 @@ export const IssueEntry = observer(
               </ActionSubContainer>
             </ActionContainer>
           </RowWrapper>
-          <RowWrapper>{renderLabel()}</RowWrapper>
+          <RowWrapper>
+            {currentSelectedItem && (
+              <InitialsWrapper>
+                <InitialsGenerator name={currentSelectedItem.name} />
+              </InitialsWrapper>
+            )}
+            {renderLabel()}
+          </RowWrapper>
         </RightContainer>
       </Container>
     );
@@ -439,17 +452,10 @@ const RowWrapper = styled.div`
   display: flex;
 `;
 
-type LabelContainerProps = {
-  color: string;
-};
-
-const LabelContainer = styled.div<LabelContainerProps>`
-  //margin-left: auto;
-  //margin-right: 15px;
-  margin-left: 65px;
-  color: ${props => props.color || props.theme.colors.grey60};
-`;
-
 const RightContainer = styled.div`
   width: -webkit-fill-available;
+`;
+
+const InitialsWrapper = styled.div`
+  margin-left: 12px;
 `;

@@ -82,7 +82,7 @@ const LabelContainer = styled.div<LabelContainerProps>`
   align-items: flex-end;
   justify-content: center;
   margin-left: ${props => props.marginLeft || "auto"};
-  margin-right: 12px;
+  margin-right: 5px;
   height: 20px;
   &: hover {
     cursor: pointer;

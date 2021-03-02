@@ -9,6 +9,7 @@ import { UserModel } from "~/models/user";
 import { StaticModel } from "~/models/static";
 import { homePersonalStatusOptions as options } from "~/components/domains/home/home-personal-status/home-personal-status-options";
 import { registerIdentity } from "~/components/shared/analytics";
+import { ScheduledGroupModel } from "~/models/scheduled-group";
 
 export const SessionStoreModel = types
   .model("SessionStoreModel")
@@ -18,6 +19,7 @@ export const SessionStoreModel = types
     //profile details added as a profile model
     profile: types.maybeNull(UserModel),
     staticData: types.maybeNull(StaticModel),
+    scheduledGroups: types.maybeNull(types.array(ScheduledGroupModel))
   })
   .extend(withRootStore())
   .extend(withEnvironment())
@@ -34,6 +36,7 @@ export const SessionStoreModel = types
           //add details to user model
           self.profile = response.data;
           self.staticData = response.data.staticData;
+          self.scheduledGroups = response.data.scheduledGroups;
           self.loggedIn = true;
 
           //data and company name are not stored on user model

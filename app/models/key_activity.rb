@@ -3,6 +3,8 @@ class KeyActivity < ApplicationRecord
   belongs_to :user
   belongs_to :meeting, optional: true
   belongs_to :company
+  belongs_to :scheduled_group, optional: true
+  belongs_to :team, optional: true
 
   acts_as_list scope: [:company_id, :user_id, :weekly_list, :todays_priority]
 
