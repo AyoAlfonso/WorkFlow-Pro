@@ -51,6 +51,7 @@ export const RootStoreModel = types
         self.teamStore.load();
         self.notificationStore.load();
         self.labelStore.fetchLabels();
+        self.keyActivityStore.load();
       }
     }),
   }))

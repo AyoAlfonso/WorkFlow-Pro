@@ -75,7 +75,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def key_activity_params
     params.permit(:id, :user_id, :description, :completed_at, :priority, :complete,
-      :weekly_list, :todays_priority, :position, :meeting_id, :due_date, :personal, :scheduled_group_id, :label_list)
+      :weekly_list, :todays_priority, :position, :meeting_id, :due_date, :personal, :scheduled_group_id, :team_id, :label_list)
   end
 
   def set_key_activity

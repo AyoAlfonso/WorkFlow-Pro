@@ -84,6 +84,8 @@ const LabelContainer = styled.div<LabelContainerProps>`
   margin-left: ${props => props.marginLeft || "auto"};
   margin-right: 5px;
   height: 20px;
+  margin-top: auto;
+  margin-bottom: auto;
   &: hover {
     cursor: pointer;
   }

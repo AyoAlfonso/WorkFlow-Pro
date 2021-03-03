@@ -15,6 +15,20 @@ export const KeyActivityStoreModel = types
   })
   .extend(withEnvironment())
   .views(self => ({
+    keyActivitiesByScheduledGroupName(scheduledGroupName) {
+      const { sessionStore: {scheduledGroups} } = getRoot(self);
+      const scheduledGroup = scheduledGroups.find(group => group.name == scheduledGroupName);
+      const filteredKeyActivities = self.keyActivities.filter(
+        keyActivity => keyActivity.scheduledGroupId == scheduledGroup.id,
+      );
+      return filteredKeyActivities;
+    },
+    keyActivitiesByTeamId(teamId){
+      const filteredKeyActivities = self.keyActivities.filter(
+        keyActivity => keyActivity.teamId == teamId,
+      );
+      return filteredKeyActivities;
+    },
     get weeklyKeyActivities() {
       return self.keyActivities.filter(
         keyActivity =>
