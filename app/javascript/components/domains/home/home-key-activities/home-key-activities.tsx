@@ -86,10 +86,12 @@ export const HomeKeyActivities = observer(
           </HeaderRowContainer>
           <HeaderRowContainer>
             <SubHeaderContainer>{subText}</SubHeaderContainer>
-            <SortContainer onClick={() => setFilterOpen(!sortFilterOpen)}>
-              <Icon icon={"Sort"} size={12} iconColor="grey100" />
-              {sortFilterOpen && <FilterDropdown setFilterOpen={setFilterOpen} />}
-            </SortContainer>
+            {header != "Today" && (
+              <SortContainer onClick={() => setFilterOpen(!sortFilterOpen)}>
+                <Icon icon={"Sort"} size={12} iconColor="grey100" />
+                {sortFilterOpen && <FilterDropdown setFilterOpen={setFilterOpen} />}
+              </SortContainer>
+            )}
           </HeaderRowContainer>
         </>
       );
