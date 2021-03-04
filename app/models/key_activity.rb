@@ -6,7 +6,7 @@ class KeyActivity < ApplicationRecord
   belongs_to :scheduled_group, optional: true
   belongs_to :team, optional: true
 
-  acts_as_list scope: [:company_id, :user_id, :weekly_list, :todays_priority]
+  acts_as_list scope: [:company_id, :user_id, :weekly_list, :todays_priority, :team_id, :scheduled_group_id]
 
   acts_as_taggable_on :labels
 

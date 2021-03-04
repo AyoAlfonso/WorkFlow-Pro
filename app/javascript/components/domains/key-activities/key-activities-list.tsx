@@ -5,14 +5,29 @@ import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities
 
 interface IKeyActivitiesListProps {
   keyActivities: Array<any>;
+  droppableId: string;
 }
 
-export const KeyActivitiesList = ({ keyActivities }: IKeyActivitiesListProps): JSX.Element => {
+export const KeyActivitiesList = ({
+  keyActivities,
+  droppableId,
+}: IKeyActivitiesListProps): JSX.Element => {
+  const splittedDroppableId = droppableId.split("-");
+  const updateId = splittedDroppableId[splittedDroppableId.length - 1];
+
   const renderKeyActivitiesList = () => {
     return keyActivities.map((keyActivity, index) => {
+      const draggableId = () => {
+        if (isNaN(parseInt(updateId))) {
+          return `keyActivity-${keyActivity.id}`;
+        } else {
+          return `keyActivity-${keyActivity.id}-${updateId}`;
+        }
+      };
+
       return (
         <Draggable
-          draggableId={`keyActivity-${keyActivity.id}`}
+          draggableId={draggableId()}
           index={index}
           key={keyActivity["id"]}
           type={"keyActivity"}
@@ -37,7 +52,7 @@ export const KeyActivitiesList = ({ keyActivities }: IKeyActivitiesListProps): J
 
   return (
     <Container>
-      <Droppable droppableId="team-parking-lot-issues" key={"issue"}>
+      <Droppable droppableId={droppableId} key={"keyActivity"}>
         {(provided, snapshot) => (
           <KeyActivitiesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
             {renderKeyActivitiesList()}
@@ -51,7 +66,7 @@ export const KeyActivitiesList = ({ keyActivities }: IKeyActivitiesListProps): J
 
 const Container = styled.div`
   margin-top: 10px;
-  height: inherit;
+  height: 100%;
 `;
 
 type KeyActivityContainerType = {
@@ -63,4 +78,6 @@ const KeyActivityContainer = styled.div<KeyActivityContainerType>`
   margin-right: ${props => (props.borderBottom ? "8px" : "")};
 `;
 
-const KeyActivitiesContainer = styled.div``;
+const KeyActivitiesContainer = styled.div`
+  height: 100%;
+`;

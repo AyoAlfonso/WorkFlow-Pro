@@ -10,12 +10,16 @@ import { baseTheme } from "~/themes";
 import { CreateKeyActivityModal } from "../../key-activities/create-key-activity-modal";
 import { CreateKeyActivityButton } from "../../key-activities/create-key-activity-button";
 import { KeyActivitiesList } from "../../key-activities/key-activities-list";
+import { FilterDropdown } from "../../key-activities/filter-dropdown";
+import * as R from "ramda";
 
 export const HomeKeyActivities = observer(
   (): JSX.Element => {
     const [selectedFilterGroupName, setSelectedFilterGroupName] = useState<string>("Tomorrow");
     const [selectedFilterTeamId, setSelectedFilterTeamId] = useState<number>(null);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
+    const [todayFilterDropdownOpen, setTodayFilterDropdownOpen] = useState<boolean>(false);
+    const [dynamicFilterDropdownOpen, setDynamicFilterDropdownOpen] = useState<boolean>(false);
 
     const {
       keyActivityStore,
@@ -24,6 +28,10 @@ export const HomeKeyActivities = observer(
     } = useMst();
 
     const todaysKeyActivities = keyActivityStore.keyActivitiesByScheduledGroupName("Today");
+    const selectedFilterGroupId = R.path(
+      ["id"],
+      scheduledGroups.find(group => group.name == selectedFilterGroupName),
+    );
 
     const subHeaderForFilterGroups = (name: string): string => {
       switch (name) {
@@ -49,19 +57,28 @@ export const HomeKeyActivities = observer(
         return renderHeader(
           selectedFilterGroupName,
           subHeaderForFilterGroups(selectedFilterGroupName),
+          dynamicFilterDropdownOpen,
+          setDynamicFilterDropdownOpen,
         );
       } else {
         const teamName = teams.find(team => team.id == selectedFilterTeamId).name;
         return renderHeader(
           teamName,
           "Pyns you are accountable for that are associated with this team.",
+          dynamicFilterDropdownOpen,
+          setDynamicFilterDropdownOpen,
         );
       }
     };
 
-    const renderHeader = (header: string, subText: string): JSX.Element => {
+    const renderHeader = (
+      header: string,
+      subText: string,
+      sortFilterOpen: boolean,
+      setFilterOpen: any,
+    ): JSX.Element => {
       return (
-        <HeaderContainer>
+        <>
           <HeaderRowContainer>
             <StyledHeading type={"h2"} fontSize={"20px"}>
               {header}
@@ -69,11 +86,12 @@ export const HomeKeyActivities = observer(
           </HeaderRowContainer>
           <HeaderRowContainer>
             <SubHeaderContainer>{subText}</SubHeaderContainer>
-            <SortContainer>
+            <SortContainer onClick={() => setFilterOpen(!sortFilterOpen)}>
               <Icon icon={"Sort"} size={12} iconColor="grey100" />
+              {sortFilterOpen && <FilterDropdown setFilterOpen={setFilterOpen} />}
             </SortContainer>
           </HeaderRowContainer>
-        </HeaderContainer>
+        </>
       );
     };
 
@@ -128,18 +146,36 @@ export const HomeKeyActivities = observer(
     return (
       <Container>
         <ListContainer>
-          {renderHeader("Today", moment().format("MMMM D"))}
+          <HeaderContainer>
+            {renderHeader(
+              "Today",
+              moment().format("MMMM D"),
+              todayFilterDropdownOpen,
+              setTodayFilterDropdownOpen,
+            )}
+          </HeaderContainer>
           <KeyActivitiesListContainer>
             <CreateKeyActivityButton onButtonClick={() => setCreateKeyActivityModalOpen(true)} />
-            <KeyActivitiesList keyActivities={todaysKeyActivities} />
+            <KeyActivitiesList
+              keyActivities={todaysKeyActivities}
+              droppableId={`todays-activities-${
+                scheduledGroups.find(group => group.name == "Today").id
+              }`}
+            />
           </KeyActivitiesListContainer>
         </ListContainer>
         <ListContainer>
-          {renderMiddleColumnHeader()}
-
+          <HeaderContainer>{renderMiddleColumnHeader()}</HeaderContainer>
           <KeyActivitiesListContainer>
             <CreateKeyActivityButton onButtonClick={() => setCreateKeyActivityModalOpen(true)} />
-            <KeyActivitiesList keyActivities={filteredKeyActivities()} />
+            <KeyActivitiesList
+              keyActivities={filteredKeyActivities()}
+              droppableId={
+                selectedFilterGroupName
+                  ? `scheduled-group-activities-${selectedFilterGroupId}`
+                  : `team-activities-${selectedFilterTeamId}`
+              }
+            />
           </KeyActivitiesListContainer>
         </ListContainer>
         <FilterContainer>
@@ -213,4 +249,6 @@ const FilterOptionContainer = styled.div<FilterOptionsContainerProps>`
   }
 `;
 
-const KeyActivitiesListContainer = styled.div``;
+const KeyActivitiesListContainer = styled.div`
+  height: 100%;
+`;
