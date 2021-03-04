@@ -17,7 +17,7 @@ class Meeting < ApplicationRecord
   scope :optimized, -> { includes([meeting_template: {steps: :image_attachment}]) }
 
   # scope :in_progress, -> { where("start_time >= ? AND start_time < ?", Date.today.beginning_of_day.utc, DateTime.now) }
-  # scope :for_day, -> (day) { where("Date(created_at) = ?", day) }
+  scope :for_day_of_date, -> (start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_day, start_time.end_of_day) }
   scope :for_week_of_date, -> (start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_week, start_time.end_of_week)}
   scope :for_month_of_date, -> (start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_month, start_time.end_of_month) }
   scope :for_week_of_date_started_only, -> (start_time) { where("(start_time >= ? AND start_time <= ?)", start_time.beginning_of_week, start_time.end_of_week)}

@@ -199,19 +199,15 @@ export const MeetingStoreModel = types
       }
       return { meeting: null };
     }),
-    createPersonalDailyMeeting: flow(function*() {
+    createPersonalMeetingOfType: flow(function*(meetingType) {
       try {
-        let meetingTemplate = self.meetingTemplates.find(
-          mt => mt.meetingType === MeetingTypes.PERSONAL_DAILY,
-        );
+        let meetingTemplate = self.meetingTemplates.find(mt => mt.meetingType === meetingType);
 
         if (R.isNil(meetingTemplate)) {
           const responseTemplate: ApiResponse<any> = yield self.environment.api.getMeetingTemplates();
           if (responseTemplate.ok) {
             self.meetingTemplates = responseTemplate.data;
-            meetingTemplate = self.meetingTemplates.find(
-              mt => mt.meetingType === MeetingTypes.PERSONAL_DAILY,
-            );
+            meetingTemplate = self.meetingTemplates.find(mt => mt.meetingType === meetingType);
           }
         }
 
@@ -237,84 +233,17 @@ export const MeetingStoreModel = types
       } catch {
         // caught bv Api Monitor
       }
+    }),
+  }))
+  .actions(self => ({
+    createPersonalDailyMeeting: flow(function*() {
+      return yield self.createPersonalMeetingOfType(MeetingTypes.PERSONAL_DAILY);
     }),
     createPersonalWeeklyMeeting: flow(function*() {
-      try {
-        let meetingTemplate = self.meetingTemplates.find(
-          mt => mt.meetingType === MeetingTypes.PERSONAL_WEEKLY,
-        );
-
-        if (R.isNil(meetingTemplate)) {
-          const responseTemplate: ApiResponse<any> = yield self.environment.api.getMeetingTemplates();
-          if (responseTemplate.ok) {
-            self.meetingTemplates = responseTemplate.data;
-            meetingTemplate = self.meetingTemplates.find(
-              mt => mt.meetingType === MeetingTypes.PERSONAL_WEEKLY,
-            );
-          }
-        }
-
-        if (R.isNil(meetingTemplate)) {
-          showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
-          self.load();
-          return { meeting: null };
-        }
-
-        const { sessionStore } = getRoot(self);
-
-        const response: ApiResponse<any> = yield self.environment.api.createMeeting({
-          hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
-          currentStep: 0,
-          meetingTemplateId: meetingTemplate.id,
-        });
-        if (response.ok) {
-          self.currentPersonalPlanning = response.data;
-          return { meeting: self.currentPersonalPlanning };
-        } else {
-          return { meeting: null };
-        }
-      } catch {
-        // caught bv Api Monitor
-      }
+      return yield self.createPersonalMeetingOfType(MeetingTypes.PERSONAL_WEEKLY);
     }),
     createPersonalMonthlyMeeting: flow(function*() {
-      try {
-        let meetingTemplate = self.meetingTemplates.find(
-          mt => mt.meetingType === MeetingTypes.PERSONAL_MONTHLY,
-        );
-
-        if (R.isNil(meetingTemplate)) {
-          const responseTemplate: ApiResponse<any> = yield self.environment.api.getMeetingTemplates();
-          if (responseTemplate.ok) {
-            self.meetingTemplates = responseTemplate.data;
-            meetingTemplate = self.meetingTemplates.find(
-              mt => mt.meetingType === MeetingTypes.PERSONAL_MONTHLY,
-            );
-          }
-        }
-
-        if (R.isNil(meetingTemplate)) {
-          showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
-          self.load();
-          return { meeting: null };
-        }
-
-        const { sessionStore } = getRoot(self);
-
-        const response: ApiResponse<any> = yield self.environment.api.createMeeting({
-          hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
-          currentStep: 0,
-          meetingTemplateId: meetingTemplate.id,
-        });
-        if (response.ok) {
-          self.currentPersonalPlanning = response.data;
-          return { meeting: self.currentPersonalPlanning };
-        } else {
-          return { meeting: null };
-        }
-      } catch {
-        // caught bv Api Monitor
-      }
+      return yield self.createPersonalMeetingOfType(MeetingTypes.PERSONAL_MONTHLY);
     }),
     startNextMeeting: flow(function*(teamId, meetingType) {
       try {

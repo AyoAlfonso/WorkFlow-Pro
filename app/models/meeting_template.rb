@@ -2,6 +2,7 @@ class MeetingTemplate < ApplicationRecord
   has_many :steps
   has_many :meetings
 
+  #GOTCHA: Whenever you add a new type, please add it to the meeting_instance_finder service
   enum meeting_type: { 
     team_weekly: 0, 
     personal_weekly: 1, 

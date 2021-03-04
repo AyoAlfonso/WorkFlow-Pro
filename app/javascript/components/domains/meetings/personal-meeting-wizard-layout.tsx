@@ -8,6 +8,8 @@ import { WizardLayout } from "~/components/layouts/wizard-layout";
 import * as R from "ramda";
 import { Button } from "~/components/shared/button";
 import { useHistory } from "react-router-dom";
+import { Icon } from "~/components/shared/icon";
+import { Text } from "~/components/shared/text";
 
 interface ITeamMeetingProps {
   meeting: any;
@@ -33,11 +35,24 @@ export const PersonalMeetingWizardLayout = observer(
 
     const meetingDescription = () => R.path(["currentStepDetails", "instructions"], meeting);
 
+    const childrenUnderDescription = () => (
+      <StepText>{`Step ${meeting.currentStep + 1} / ${numberOfSteps}`}</StepText>
+    );
+
     const meetingComponent = () => <MeetingStep meeting={meeting} />;
 
     const actionButtons = () => {
       return (
         <>
+          {meeting.currentStep > 0 && (
+            <BackButton
+              small
+              variant={"primaryOutline"}
+              onClick={() => onNextButtonClick(meeting.currentStep - 1)}
+            >
+              <Icon icon={"Chevron-Left"} size={"16px"} iconColor={"primary80"} />
+            </BackButton>
+          )}
           {meeting.currentStep + 1 < numberOfSteps && (
             <NextButton
               small
@@ -63,12 +78,12 @@ export const PersonalMeetingWizardLayout = observer(
         <WizardLayout
           title={meetingTitle()}
           description={meetingDescription()}
+          childrenUnderDescription={childrenUnderDescription()}
           customActionButton={actionButtons()}
           showSkipButton={false}
           singleComponent={meetingComponent()}
           showLynchpynLogo={false}
           showCloseButton={true}
-          customStepsComponent={stepsComponent}
           onCloseButtonClick={closeButtonClick}
         />
       </Container>
@@ -82,4 +97,16 @@ const Container = styled.div`
 
 const NextButton = styled(Button)`
   width: 100%;
+`;
+
+const BackButton = styled(Button)`
+  width: 32px;
+  margin-right: 14px;
+  padding: 0px;
+`;
+
+const StepText = styled(Text)`
+  color: ${props => props.theme.colors.greyActive};
+  font-size: 9px;
+  text-align: right;
 `;
