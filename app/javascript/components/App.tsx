@@ -169,7 +169,6 @@ export const App = observer(
                   exact
                   path={[
                     "/",
-                    "/personal_planning/:meeting_id",
                     "/team/:team_id",
                     "/account",
                     "/company/accountability",
@@ -193,11 +192,6 @@ export const App = observer(
                     <OnboardingModal />
                     <Container>
                       <Route exact path="/" component={HomeContainer} />
-                      <Route
-                        exact
-                        path="/personal_planning/:meeting_id"
-                        component={PersonalPlanning}
-                      />
 
                       <Route exact path="/team/:team_id" component={TeamOverview} />
                       <Route exact path="/account" component={AccountSettings} />
@@ -216,8 +210,16 @@ export const App = observer(
                     </Container>
                   </>
                 </Route>
-                <Route exact path={["/team/:team_id/meeting/:meeting_id"]}>
+                <Route
+                  exact
+                  path={["/personal_planning/:meeting_id", "/team/:team_id/meeting/:meeting_id"]}
+                >
                   <>
+                    <Route
+                      exact
+                      path="/personal_planning/:meeting_id"
+                      component={PersonalPlanning}
+                    />
                     <Route exact path="/team/:team_id/meeting/:meeting_id" component={Meeting} />
                   </>
                 </Route>

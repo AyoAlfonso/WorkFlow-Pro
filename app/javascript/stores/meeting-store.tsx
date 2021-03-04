@@ -108,6 +108,7 @@ export const MeetingStoreModel = types
       }
     }),
     getPersonalPlanningSummary: flow(function*() {
+      //fetches summary that defaults to weekly if no questionnaire type
       try {
         const response: ApiResponse<any> = yield self.environment.api.getSummaryForPersonalMeeting();
         self.personalPlanningSummary = response.data as any;
@@ -198,7 +199,46 @@ export const MeetingStoreModel = types
       }
       return { meeting: null };
     }),
-    createPersonalMeeting: flow(function*() {
+    createPersonalDailyMeeting: flow(function*() {
+      try {
+        let meetingTemplate = self.meetingTemplates.find(
+          mt => mt.meetingType === MeetingTypes.PERSONAL_DAILY,
+        );
+
+        if (R.isNil(meetingTemplate)) {
+          const responseTemplate: ApiResponse<any> = yield self.environment.api.getMeetingTemplates();
+          if (responseTemplate.ok) {
+            self.meetingTemplates = responseTemplate.data;
+            meetingTemplate = self.meetingTemplates.find(
+              mt => mt.meetingType === MeetingTypes.PERSONAL_DAILY,
+            );
+          }
+        }
+
+        if (R.isNil(meetingTemplate)) {
+          showToast("Meeting templates not set up properly.", ToastMessageConstants.ERROR);
+          self.load();
+          return { meeting: null };
+        }
+
+        const { sessionStore } = getRoot(self);
+
+        const response: ApiResponse<any> = yield self.environment.api.createMeeting({
+          hostName: `${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`,
+          currentStep: 0,
+          meetingTemplateId: meetingTemplate.id,
+        });
+        if (response.ok) {
+          self.currentPersonalPlanning = response.data;
+          return { meeting: self.currentPersonalPlanning };
+        } else {
+          return { meeting: null };
+        }
+      } catch {
+        // caught bv Api Monitor
+      }
+    }),
+    createPersonalWeeklyMeeting: flow(function*() {
       try {
         let meetingTemplate = self.meetingTemplates.find(
           mt => mt.meetingType === MeetingTypes.PERSONAL_WEEKLY,
@@ -209,7 +249,7 @@ export const MeetingStoreModel = types
           if (responseTemplate.ok) {
             self.meetingTemplates = responseTemplate.data;
             meetingTemplate = self.meetingTemplates.find(
-              mt => mt.meetingType === MeetingTypes.TEAM_WEEKLY,
+              mt => mt.meetingType === MeetingTypes.PERSONAL_WEEKLY,
             );
           }
         }

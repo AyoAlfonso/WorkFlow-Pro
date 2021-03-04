@@ -2,6 +2,7 @@ import * as React from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router-dom";
 import { Icon } from "~/components/shared/icon";
 import { 
   TextDiv, 
@@ -12,15 +13,16 @@ import { useMst } from "../../../setup/root";
 import { IconButton } from "../../shared/icon-button";
 import { AccordionDetails } from '~/components/shared/accordion-components';
 
+import { ToastMessageConstants } from "~/constants/toast-types";
+import { showToast } from "~/utils/toast-message";
+
 interface IJournalBodyProps {
   setQuestionnaireVariant: any;
 }
 
-export const JournalBody = ({
-  setQuestionnaireVariant, 
-}: IJournalBodyProps): JSX.Element => {
-
-  const { sessionStore } = useMst();
+export const JournalBody = ({ setQuestionnaireVariant }: IJournalBodyProps): JSX.Element => {
+  const { sessionStore, meetingStore } = useMst();
+  const history = useHistory();
 
   const { t } = useTranslation();
 
@@ -60,7 +62,15 @@ export const JournalBody = ({
           iconName={"AM-Check-in"}
           iconColor={"cautionYellow"}
           text={t("journals.createMyDay")}
-          onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay)}
+          onClick={() =>
+            meetingStore.createPersonalDailyMeeting().then(({ meeting }) => {
+              if (!R.isNil(meeting)) {
+                history.push(`/personal_planning/${meeting.id}`);
+              } else {
+                showToast("Failed to start planning.", ToastMessageConstants.ERROR);
+              }
+            })
+          }
           disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
         />
         {/* <IconButton
