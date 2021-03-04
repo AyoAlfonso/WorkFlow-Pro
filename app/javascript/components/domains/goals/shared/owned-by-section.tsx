@@ -1,6 +1,5 @@
 import * as React from "react";
 import styled from "styled-components";
-import { Text } from "../../../shared/text";
 import { UserType } from "~/types/user";
 import { useMst } from "~/setup/root";
 import { useState, useEffect } from "react";
@@ -41,7 +40,13 @@ export const OwnedBySection = ({
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
-      <UserSelectionDropdownList userList={companyUsers} onUserSelect={store.updateOwnedBy} />
+      <div onClick={e => e.stopPropagation()}>
+        <UserSelectionDropdownList
+          userList={companyUsers}
+          onUserSelect={store.updateOwnedBy}
+          setShowUsersList={setShowUsersList}
+        />
+      </div>
     ) : (
       <></>
     );
