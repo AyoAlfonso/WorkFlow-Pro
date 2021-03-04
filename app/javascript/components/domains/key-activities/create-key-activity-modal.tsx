@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import Switch from "react-switch";
 import { Button as RebassButton } from "rebass";
 import styled from "styled-components";
 import { Avatar } from "~/components/shared/avatar";
@@ -9,7 +8,6 @@ import {
   FlexContainer,
   IssuePynModalContainer,
 } from "~/components/shared/styles/modals";
-import { Text } from "~/components/shared/text";
 import { UserSelectionDropdownList } from "~/components/shared";
 import { LabelSelection } from "~/components/shared";
 import { useMst } from "../../../setup/root";

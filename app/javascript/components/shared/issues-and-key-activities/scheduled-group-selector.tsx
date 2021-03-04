@@ -156,11 +156,19 @@ const OptionText = styled(TextContainer)`
   margin-left: 8px;
 `;
 
-export const InitialsText = styled.div`
-  font-size: 12px;
+export const StyledIcon = styled(Icon)``;
+
+type InitialsTextProps = {
+  fontSize?: string;
+  fontColor?: string;
+};
+
+export const InitialsText = styled.div<InitialsTextProps>`
+  font-size: ${props => props.fontSize || "12px"};
   font-weight: bold;
   margin-top: auto;
   margin-bottom: auto;
+  color: ${props => props.fontColor};
 `;
 
 const OptionContainer = styled.div`
@@ -180,4 +188,8 @@ const OptionContainer = styled.div`
   &: hover ${InitialsText}{
     color: white;
   }
+  &: hover ${StyledIcon}{
+    color: white;
+  }
+
 `;

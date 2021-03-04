@@ -1,14 +1,21 @@
 import * as React from "react";
-import { Icon } from "../../shared/icon";
-import { InitialsText } from "./scheduled-group-selector";
+import { InitialsText, StyledIcon } from "./scheduled-group-selector";
 
 interface IInitialsGeneratorProps {
   name: string;
+  iconSize?: string;
+  fontSize?: string;
+  fontColor?: string;
 }
 
-export const InitialsGenerator = ({ name }: IInitialsGeneratorProps): JSX.Element => {
+export const InitialsGenerator = ({
+  name,
+  iconSize,
+  fontSize,
+  fontColor,
+}: IInitialsGeneratorProps): JSX.Element => {
   if (name == "Backlog") {
-    return <Icon icon={"Master"} size={"16px"} />;
+    return <StyledIcon icon={"Master"} size={iconSize || "16px"} iconColor={fontColor} />;
   } else {
     const splittedName = name.split(" ");
 
@@ -23,6 +30,10 @@ export const InitialsGenerator = ({ name }: IInitialsGeneratorProps): JSX.Elemen
         .toUpperCase()}`;
     }
 
-    return <InitialsText>{initials}</InitialsText>;
+    return (
+      <InitialsText fontSize={fontSize} fontColor={fontColor}>
+        {initials}
+      </InitialsText>
+    );
   }
 };

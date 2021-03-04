@@ -34,8 +34,11 @@ class KeyActivityResortService < ApplicationService
       ka.position = idx + 1
       ka.as_json
     end
-
-    KeyActivity.upsert_all(ka_1 + ka_2 + ka_3)
+    KeyActivity.upsert_all(reject_label_list(ka_1) + reject_label_list(ka_2) + reject_label_list(ka_3))
     key_activities
+  end
+
+  def reject_label_list(key_activities)
+    key_activities.each{|ka| ka.delete("label_list")}
   end
 end

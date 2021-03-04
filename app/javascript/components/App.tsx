@@ -51,6 +51,7 @@ const Container = styled.div`
   margin-right: 40px;
   margin-bottom: 50px;
   padding-top: 96px;
+  height: inherit;
 `;
 
 export interface IAppProps {
@@ -77,6 +78,8 @@ export const App = observer(
         return;
       }
 
+      const splittedDraggableId = destination.droppableId.split("-");
+
       if (R.includes("keyActivity", draggableId)) {
         const keyActivityId = parseInt(R.replace("keyActivity-", "", draggableId));
         keyActivityStore.updateKeyActivityState(keyActivityId, "position", newPosition + 1);
@@ -92,6 +95,30 @@ export const App = observer(
           keyActivityStore.startLoading("todays-priorities");
           keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
           keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", true);
+        } else if (R.includes("todays-activities", destination.droppableId)) {
+          keyActivityStore.startLoading("home-key-activities");
+          keyActivityStore.updateKeyActivityState(keyActivityId, "teamId", null);
+          keyActivityStore.updateKeyActivityState(
+            keyActivityId,
+            "scheduledGroupId",
+            parseInt(splittedDraggableId[splittedDraggableId.length - 1]),
+          );
+        } else if (R.includes("scheduled-group-activities", destination.droppableId)) {
+          keyActivityStore.startLoading("home-key-activities");
+          keyActivityStore.updateKeyActivityState(keyActivityId, "teamId", null);
+          keyActivityStore.updateKeyActivityState(
+            keyActivityId,
+            "scheduledGroupId",
+            parseInt(splittedDraggableId[splittedDraggableId.length - 1]),
+          );
+        } else if (R.includes("team-activities", destination.droppableId)) {
+          keyActivityStore.startLoading("home-key-activities");
+          keyActivityStore.updateKeyActivityState(
+            keyActivityId,
+            "teamId",
+            parseInt(splittedDraggableId[splittedDraggableId.length - 1]),
+          );
+          keyActivityStore.updateKeyActivityState(keyActivityId, "scheduledGroupId", null);
         }
         keyActivityStore.updateKeyActivity(keyActivityId);
       } else if (R.includes("team_issue", draggableId)) {
@@ -135,59 +162,6 @@ export const App = observer(
             <GlobalStyles />
             <Toaster position="bottom-right" />
             {loggedIn ? (
-              /* <SideNav />
-                <HeaderBar />
-
-                <Switch>
-                  <Route
-                    exact
-                    path={[
-                      "/",
-                      "/wikis/:wikiId",
-                      "/wikis/:wikiId/folders/:folderId",
-                      "/wikis/:wikiId/articles/:articleId",
-                      "/wikis/:wikiId/playlists",
-                      "/wikis/:wikiId/playlists/:playlistId",
-                    ]}
-                  >
-                    <MainLayout>
-                      <Route exact path="/" component={WikiHomeView} />
-                      <Route exact path="/wikis/:wikiId" component={WikiHomeView} />
-                      <Route exact path="/wikis/:wikiId/folders/:folderId" component={FolderCardView} />
-                      <Route exact path="/wikis/:wikiId/articles/:articleId" component={ArticleView} />
-                      <Route exact path="/wikis/:wikiId/playlists" component={PlaylistsView} />
-                      <Route
-                        exact
-                        path="/wikis/:wikiId/playlists/:playlistId"
-                        component={PlaylistDetailsView}
-                      />
-                    </MainLayout>
-                  </Route>
-
-                  <Route exact path={["/wikis/:wikiId/playlists/:playlistId/articles/:articleId"]}>
-                    <ReadingLayout>
-                      <Route
-                        exact
-                        path="/wikis/:wikiId/playlists/:playlistId/articles/:articleId"
-                        component={PlaylistReadingView}
-                      />
-                    </ReadingLayout>
-                  </Route>
-
-                  <Route exact path={["/account"]}>
-                    <TopNavLayout>
-                      <Route exact path="/account" component={AccountView} />
-                    </TopNavLayout>
-                  </Route>
-
-                  {/* Handle all other 404 cases  */
-              //   <Route>
-              //     <EmptyLayout>
-              //       <NotFoundView />
-              //     </EmptyLayout>
-              //   </Route>
-              // </Switch> */}
-
               <Switch>
                 <Route
                   exact
