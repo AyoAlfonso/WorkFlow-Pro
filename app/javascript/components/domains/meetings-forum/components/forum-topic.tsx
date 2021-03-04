@@ -53,20 +53,6 @@ export const ForumTopic = observer(
     };
 
     const topicRef = useRef(null);
-    const userDropdownRef = useRef(null);
-
-    useEffect(() => {
-      const handleClickOutside = event => {
-        if (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) {
-          setUserSelectionOpen(false);
-        }
-      };
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [userDropdownRef]);
-
     const topicOwner = teamMembers.find(
       member => member.id == R.path(["forumExplorationTopicOwnerId"], meeting.settings),
     );
@@ -113,10 +99,11 @@ export const ForumTopic = observer(
           </HostedByContainer>
 
           {userSelectionOpen && (
-            <UserSelectionContainer ref={userDropdownRef}>
+            <UserSelectionContainer onClick={e => e.stopPropagation()}>
               <UserSelectionDropdownList
                 userList={teamMembers}
                 onUserSelect={handleChangeExplorationTopicOwnerId}
+                setShowUsersList={setUserSelectionOpen}
               />
             </UserSelectionContainer>
           )}

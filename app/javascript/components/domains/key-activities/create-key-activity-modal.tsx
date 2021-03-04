@@ -54,7 +54,13 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
-      <UserSelectionDropdownList userList={companyUsers} onUserSelect={setSelectedUser} />
+      <div onClick={e => e.stopPropagation()}>
+        <UserSelectionDropdownList
+          userList={companyUsers}
+          onUserSelect={setSelectedUser}
+          setShowUsersList={setShowUsersList}
+        />
+      </div>
     ) : (
       <></>
     );
