@@ -29,6 +29,7 @@ class Step < ApplicationRecord
     "Milestones",
     "PersonalKeyActivities",
     "DailyPlanning",
+    "CompleteDailyPlanning",
     "ParkingLot",
     "ExplorationTopic",
   ]

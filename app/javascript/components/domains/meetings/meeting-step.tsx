@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { ConversationStarter } from "./components/conversation-starter";
 import { PersonalGoals } from "./components/personal-goals";
 import { DailyPlanning } from "./components/daily-planning";
+import { CompleteDailyPlanning } from "./components/complete-daily-planning";
 import { Milestones } from "./components/milestones";
 import { PersonalKeyActivities } from "./components/personal-key-activities";
 import { WeeklyReflection } from "./components/weekly-reflection";
@@ -49,6 +50,8 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
           return <PersonalKeyActivities />;
         case "DailyPlanning":
           return <DailyPlanning />;
+        case "CompleteDailyPlanning":
+          return <CompleteDailyPlanning />;
         case "TeamPulse":
           return <TeamPulse />;
         case "MeetingRating":

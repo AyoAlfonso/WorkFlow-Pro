@@ -59,8 +59,8 @@ export const PersonalPlanning = observer(
 
     const StopMeetingButton = () => {
       return (
-        <Button
-          variant={"redOutline"}
+        <StopButton
+          variant={"primary"}
           onClick={() => {
             history.push(`/`);
             //TODO: send personal plan ended to back end.  For now do not end it.
@@ -69,9 +69,8 @@ export const PersonalPlanning = observer(
           ml={"25px"}
           disabled={false}
         >
-          <Icon icon={"Stop"} iconColor={"warningRed"} size={"13px"} />
-          <TextNoMargin ml={"10px"}>End Planning</TextNoMargin>
-        </Button>
+          Done
+        </StopButton>
       );
     };
 
@@ -113,4 +112,8 @@ const ProgressBarTimerContainer = styled.div`
   display: flex;
   align-items: center;
   padding-left: 16px;
+`;
+
+const StopButton = styled(Button)`
+  width: 100%;
 `;
