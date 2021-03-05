@@ -33,6 +33,8 @@ class Api::UsersController < Api::ApplicationController
 
   def update
     @user.update!(params[:user][:teams].present? ? user_update_params.merge(team_user_enablements_attributes: team_user_enablement_attribute_parser(params[:user][:teams])) : user_update_params)
+    user_company_enablement = UserCompanyEnablement.where(company_id: current_company.id, user_id: @user.id).first
+    user_company_enablement.update!(title: params[:user][:title])
     render 'api/users/show'
   end
 
@@ -64,7 +66,7 @@ class Api::UsersController < Api::ApplicationController
           email: sanitized_email, 
           company_id: current_company.id, 
           default_selected_company_id: current_company.id,
-          password: ENV["DEFAULT_PASSWORD"]
+          password: ENV["DEFAULT_PASSWORD"] || "password"
         })
         @user.invite!
         @user.assign_attributes({
@@ -124,7 +126,7 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def user_update_params
-    params.require(:user).permit(:id, :password, :password_confirmation, :first_name, :last_name, :personal_vision, :email, :timezone, :user_role_id, :default_selected_company_id, :title, daily_logs_attributes: [:id, :work_status, :create_my_day, :evening_reflection, :title, :mip_count, :weekly_reflection, :monthly_reflection])
+    params.require(:user).permit(:id, :password, :password_confirmation, :first_name, :last_name, :title, :personal_vision, :email, :timezone, :user_role_id, :default_selected_company_id, daily_logs_attributes: [:id, :work_status, :create_my_day, :evening_reflection, :title, :mip_count, :weekly_reflection, :monthly_reflection])
   end
 
   def set_user

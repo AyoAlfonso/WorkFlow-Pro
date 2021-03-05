@@ -78,6 +78,10 @@ const KeyActivityContainer = styled.div<KeyActivityContainerType>`
   margin-right: ${props => (props.borderBottom ? "8px" : "")};
 `;
 
-const KeyActivitiesContainer = styled.div`
+type KeyActivitiesContainerType = {
+  isDraggingOver: any;
+};
+
+const KeyActivitiesContainer = styled.div<KeyActivitiesContainerType>`
   height: 100%;
 `;

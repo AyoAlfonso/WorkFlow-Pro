@@ -121,7 +121,7 @@ export const Teams = observer(
         <BodyContainer>
           <Table
             columns={4}
-            headers={["Team", "Status", "Team Members", "Start Meetings?"]}
+            headers={["Team", "Status", "Team Members", "Meeting Lead"]}
             data={teamsData}
             styling={{ widths: [2, 1, 2, 2] }}
           ></Table>
