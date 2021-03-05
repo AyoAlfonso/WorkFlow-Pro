@@ -90,6 +90,10 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
   //   await companyStore.updateCompanyLogo(form);
   // };
 
+  const onStepClick = stepIndex => {
+    setCurrentStep(stepIndex);
+  };
+
   const onNextButtonClick = async () => {
     if (currentStep === 0 && R.isNil(onboardingCompany)) {
       // create company
@@ -263,6 +267,8 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         steps={stepLabels}
         showLynchpynLogo={true}
         nextButtonDisabled={!hasCreationParams()}
+        onStepClick={onStepClick}
+        stepClickDisabled={currentStep === 0}
       />
     </Container>
   );

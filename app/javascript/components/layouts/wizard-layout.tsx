@@ -26,6 +26,8 @@ interface IWizardLayoutProps {
   onSkipButtonClick?: any;
   onNextButtonClick?: any;
   nextButtonDisabled?: boolean;
+  onStepClick?: (stepIndex: number) => void;
+  stepClickDisabled?: boolean;
 }
 
 export const WizardLayout = ({
@@ -48,6 +50,8 @@ export const WizardLayout = ({
   onSkipButtonClick,
   onNextButtonClick,
   nextButtonDisabled,
+  onStepClick,
+  stepClickDisabled,
 }: IWizardLayoutProps): JSX.Element => {
   const renderActionButtons = (): JSX.Element => {
     return (
@@ -81,7 +85,12 @@ export const WizardLayout = ({
       customStepsComponent ||
       (steps && (
         <StepComponentContainer>
-          <SignUpWizardProgressBar stepNames={steps} currentStep={currentStep} />
+          <SignUpWizardProgressBar
+            stepNames={steps}
+            currentStep={currentStep}
+            onStepClick={onStepClick}
+            clickDisabled={stepClickDisabled}
+          />
         </StepComponentContainer>
       ))
     );

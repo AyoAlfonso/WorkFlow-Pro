@@ -8,11 +8,15 @@ import { Text } from "~/components/shared/text";
 interface ISignUpWizardProgressBarProps {
   stepNames: Array<String>;
   currentStep: number;
+  onStepClick?: (stepIndex: number) => void;
+  clickDisabled?: boolean;
 }
 
 export const SignUpWizardProgressBar = ({
   stepNames,
   currentStep,
+  onStepClick,
+  clickDisabled,
 }: ISignUpWizardProgressBarProps): JSX.Element => {
   const renderIcon = (iconColor, bgColor, iconName) => (
     <IconContainer>
@@ -36,14 +40,19 @@ export const SignUpWizardProgressBar = ({
           <StepTitleContainer titleCharLength={titleCharLength(step)}>
             <StepTitle>{step}</StepTitle>
           </StepTitleContainer>
-
-          <Step transition="scale">
-            {({ accomplished }) =>
-              currentStep >= index
-                ? renderIcon("white", "primary100", "Chevron-Left")
-                : renderIcon("white", "grey100", "Chevron-Left")
-            }
-          </Step>
+          <StepDiv
+            onClick={() => {
+              if (!clickDisabled) onStepClick(index);
+            }}
+          >
+            <Step transition="scale">
+              {({ accomplished }) =>
+                currentStep >= index
+                  ? renderIcon("white", "primary100", "Chevron-Left")
+                  : renderIcon("white", "grey100", "Chevron-Left")
+              }
+            </Step>
+          </StepDiv>
         </StepContainer>
       );
     });
@@ -56,7 +65,9 @@ export const SignUpWizardProgressBar = ({
   );
 };
 
-const StepContainer = styled.div``;
+const StepContainer = styled.div`
+  background-color: red;
+`;
 
 const StepTitle = styled(Text)`
   font-size: 9px;
@@ -72,8 +83,21 @@ type StepTitleContainerProps = {
 };
 
 const StepTitleContainer = styled.div<StepTitleContainerProps>`
-  width: 20%;
+  width: ${props => `${props.titleCharLength}em`};
   position: absolute;
   margin-top: -60px;
   margin-left: ${props => `-${props.titleCharLength * 2.1}px`};
+`;
+
+const StepDiv = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+  &:focus {
+    outline: 0;
+  }
+  &:active {
+    transform: translate(1px, 1px);
+  }
+  transition: all ease 0.1s;
 `;
