@@ -121,7 +121,10 @@ class User < ApplicationRecord
     self.save
   end
 
-  
+  # devise_invitable send_confirmation_notification?
+  def send_confirmation_notification?
+    false
+  end
 
   # def on_jwt_dispatch(token, payload)
   #   super

@@ -9,7 +9,8 @@ Rails.application.routes.draw do
   },
   controllers: {
     sessions: 'sessions',
-    registrations: 'registrations'
+    registrations: 'registrations',
+    invitations: 'invitations'
   }, skip: [:confirmations, :passwords]
 
   devise_scope :user do

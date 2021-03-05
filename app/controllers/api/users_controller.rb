@@ -67,12 +67,11 @@ class Api::UsersController < Api::ApplicationController
           password: ENV["DEFAULT_PASSWORD"]
         })
         @user.invite!
-        if @user.valid? && @user.persisted?
-          @user.update!({
-            user_company_enablements_attributes: create_user_company_enablement_attribute_parser, 
-            team_user_enablements_attributes: team_user_enablement_attribute_parser(team)
-          })
-        end
+        @user.assign_attributes({
+          user_company_enablements_attributes: create_user_company_enablement_attribute_parser, 
+          team_user_enablements_attributes: team_user_enablement_attribute_parser(team)
+        })
+        @user.save(validate: false)
       end
     end
     authorize current_user

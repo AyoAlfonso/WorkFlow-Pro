@@ -22,6 +22,7 @@ export const HomeKeyActivities = observer(
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
     const [todayFilterDropdownOpen, setTodayFilterDropdownOpen] = useState<boolean>(false);
     const [dynamicFilterDropdownOpen, setDynamicFilterDropdownOpen] = useState<boolean>(false);
+    const [todayModalClicked, setTodayModalClicked] = useState<boolean>(false);
 
     const {
       keyActivityStore,
@@ -34,6 +35,7 @@ export const HomeKeyActivities = observer(
       ["id"],
       scheduledGroups.find(group => group.name == selectedFilterGroupName),
     );
+    const todayFilterGroupId = scheduledGroups.find(group => group.name == "Today").id;
 
     const selectedFilterGroupIdToday = R.path(
       ["id"],
@@ -205,19 +207,27 @@ export const HomeKeyActivities = observer(
             )}
           </HeaderContainer>
           <KeyActivitiesListContainer>
-            <CreateKeyActivityButton onButtonClick={() => setCreateKeyActivityModalOpen(true)} />
+            <CreateKeyActivityButton
+              onButtonClick={() => {
+                setTodayModalClicked(true);
+                setCreateKeyActivityModalOpen(true);
+              }}
+            />
             <KeyActivitiesList
               keyActivities={todaysKeyActivities}
-              droppableId={`todays-activities-${
-                scheduledGroups.find(group => group.name == "Today").id
-              }`}
+              droppableId={`todays-activities-${todayFilterGroupId}`}
             />
           </KeyActivitiesListContainer>
         </ListContainer>
         <ListContainer>
           <HeaderContainer>{renderMiddleColumnHeader()}</HeaderContainer>
           <KeyActivitiesListContainer>
-            <CreateKeyActivityButton onButtonClick={() => setCreateKeyActivityModalOpen(true)} />
+            <CreateKeyActivityButton
+              onButtonClick={() => {
+                setCreateKeyActivityModalOpen(true);
+                setTodayModalClicked(false);
+              }}
+            />
             <KeyActivitiesList
               keyActivities={filteredKeyActivities()}
               droppableId={
@@ -236,7 +246,11 @@ export const HomeKeyActivities = observer(
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+          todayModalClicked={todayModalClicked}
+          defaultSelectedGroupId={selectedFilterGroupId}
+          defaultSelectedTeamId={selectedFilterTeamId}
           defaultTypeAsWeekly={true}
+          todayFilterGroupId={todayFilterGroupId}
         />
       </Container>
     );

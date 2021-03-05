@@ -24,6 +24,10 @@ interface ICreateKeyActivityModalProps {
   setCreateKeyActivityModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   meetingId?: string | number;
   defaultTypeAsWeekly: boolean;
+  todayModalClicked?: boolean;
+  defaultSelectedGroupId?: number;
+  defaultSelectedTeamId?: number;
+  todayFilterGroupId?: number;
 }
 
 export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX.Element => {
@@ -48,7 +52,20 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
-  }, []);
+    if (props.todayModalClicked) {
+      setSelectedGroupId(props.todayFilterGroupId);
+    } else {
+      if (props.defaultSelectedGroupId && !props.defaultSelectedTeamId) {
+        setSelectedGroupId(props.defaultSelectedGroupId);
+        setSelectedTeamId(null);
+      }
+
+      if (!props.defaultSelectedGroupId && props.defaultSelectedTeamId) {
+        setSelectedTeamId(props.defaultSelectedTeamId);
+        setSelectedGroupId(null);
+      }
+    }
+  }, [props.todayModalClicked, props.defaultSelectedGroupId, props.defaultSelectedTeamId]);
 
   const companyUsers = userStore.users;
 
