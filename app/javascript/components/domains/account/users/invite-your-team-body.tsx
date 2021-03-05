@@ -9,9 +9,12 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import { Button } from "~/components/shared/button";
+interface IInviteYourTeamBodyProps {
+  setModalOpen: any;
+}
 
 export const InviteYourTeamBody = observer(
-  (): JSX.Element => {
+  ({ setModalOpen }: IInviteYourTeamBodyProps): JSX.Element => {
     const {
       teamStore: { teams },
       companyStore,
@@ -31,8 +34,9 @@ export const InviteYourTeamBody = observer(
     };
 
     const inviteUsersToCompany = () => {
-      companyStore.inviteUsersToCompany(emailAddresses, selectedTeamId);
-      //TODO: CLOSE THE MODAL
+      companyStore.inviteUsersToCompany(emailAddresses, selectedTeamId).then(() => {
+        setModalOpen(false);
+      });
     };
 
     return (

@@ -22,7 +22,7 @@ export const InviteYourTeamModal = ({
       subHeaderText={"Each member will get a link to set up their account"}
       width="480px"
     >
-      <InviteYourTeamBody />
+      <InviteYourTeamBody setModalOpen={setModalOpen} />
     </ModalWithHeader>
   );
 };
