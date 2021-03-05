@@ -7,6 +7,7 @@ import { useMst } from "~/setup/root";
 import { WizardLayout } from "~/components/layouts/wizard-layout";
 import { Loading } from "~/components/shared";
 import { EFieldType, FormBuilder } from "~/components/shared/form-builder";
+import { BulletedList } from "~/components/shared/bulleted-list";
 
 interface IOnboardingProps {}
 
@@ -21,7 +22,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
     await companyStore.getOnboardingCompany();
     const { onboardingCompany } = companyStore;
     if (!R.isNil(onboardingCompany)) {
-      const signUpPurpose = R.path(["signUpPurpose", "purpose"], onboardingCompany);
+      const signUpPurpose = R.path(["signUpPurpose"], onboardingCompany);
       const fiscalYearStart = new Date(R.path(["fiscalYearStart"], onboardingCompany));
       const coreFours = R.pipe(
         R.path(["coreFour"]),
@@ -42,10 +43,14 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         ),
       )(onboardingCompany);
       const state = R.pipe(
-        R.set(R.lens(R.prop("signUpPurpose"), R.assoc("signUpPurpose")), signUpPurpose),
+        R.set(
+          R.lens(R.prop("signUpPurposeAttributes"), R.assoc("signUpPurposeAttributes")),
+          signUpPurpose,
+        ),
         R.set(R.lens(R.prop("fiscalYearStart"), R.assoc("fiscalYearStart")), fiscalYearStart),
         R.set(R.lens(R.prop("coreFourAttributes"), R.assoc("coreFourAttributes")), coreFours),
         R.dissoc("coreFour"),
+        R.dissoc("signUpPurpose"),
       )(onboardingCompany);
       setFormData(state);
     }
@@ -109,7 +114,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
 
   const hasCreationParams = () =>
     R.pipe(
-      R.props(["name", "logo", "timezone", "fiscal_year_start", "sign_up_purpose_attributes"]),
+      R.props(["name", "logo", "timezone", "fiscalYearStart", "signUpPurposeAttributes"]),
       R.none(R.or(R.isNil, R.isEmpty)),
     )(formData);
 
@@ -138,7 +143,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         {
           label: "Why did you decide to sign up for Lynchpyn?",
           fieldType: EFieldType.TextField,
-          formKeys: ["sign_up_purpose_attributes", "purpose"],
+          formKeys: ["signUpPurposeAttributes", "purpose"],
           callback: setFormState,
         },
       ],
@@ -148,7 +153,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         {
           label: `Why does ${R.pathOr("", ["name"], onboardingCompany)} exist?`,
           fieldType: EFieldType.HtmlEditor,
-          formKeys: ["core_four_attributes", "core_1"],
+          formKeys: ["coreFourAttributes", "core_1"],
           callback: setFormState,
           style: { resize: "vertical" },
         },
@@ -159,21 +164,21 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
             onboardingCompany,
           )} employees and leaders behave? (AKA your core values)`,
           fieldType: EFieldType.HtmlEditor,
-          formKeys: ["core_four_attributes", "core_2"],
+          formKeys: ["coreFourAttributes", "core_2"],
           callback: setFormState,
           style: { resize: "vertical" },
         },
         {
           label: `What does ${R.pathOr("", ["name"], onboardingCompany)} do?`,
           fieldType: EFieldType.HtmlEditor,
-          formKeys: ["core_four_attributes", "core_3"],
+          formKeys: ["coreFourAttributes", "core_3"],
           callback: setFormState,
           style: { resize: "vertical" },
         },
         {
           label: `What sets ${R.pathOr("", ["name"], onboardingCompany)} apart from the rest?`,
           fieldType: EFieldType.HtmlEditor,
-          formKeys: ["core_four_attributes", "core_4"],
+          formKeys: ["coreFourAttributes", "core_4"],
           callback: setFormState,
           style: { resize: "vertical" },
         },
@@ -187,7 +192,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         {
           label: "Fiscal Year Start",
           fieldType: EFieldType.DateSelect,
-          formKeys: ["fiscal_year_start"],
+          formKeys: ["fiscalYearStart"],
           callback: setFormState,
         },
       ],
@@ -196,15 +201,42 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
 
   const leftBodyComponents = [
     <FormBuilder formFields={leftBodyComponentProps[0].formFields} formData={formData} />,
-    <FormBuilder formFields={leftBodyComponentProps[1].formFields} formData={formData} />,
+    <FormBuilder
+      formFields={leftBodyComponentProps[1].formFields}
+      formData={formData}
+      formContainerStyle={{ height: "175px" }}
+    />,
     <div>STEP TWO LEFT</div>,
     <div>STEP THREE LEFT</div>,
     <div>STEP FOUR LEFT</div>,
   ];
 
+  const bulletContainerStyle = { height: "175px", marginBottom: "24px", marginTop: "18px" };
+
   const rightBodyComponents = [
     <FormBuilder formFields={rightBodyComponentProps[0].formFields} formData={formData} />,
-    <div>STEP ONE RIGHT</div>,
+    <>
+      <BulletedList
+        heading={"e.g. Southwest Airline"}
+        listItems={["Democratize Air Travel"]}
+        containerStyle={bulletContainerStyle}
+      />
+      <BulletedList
+        heading={"e.g. Southwest Airline"}
+        listItems={["Warrior Spirit", "Servant's Heart", "Fun Loving"]}
+        containerStyle={bulletContainerStyle}
+      />
+      <BulletedList
+        heading={"e.g. Southwest Airline"}
+        listItems={["No frill, point-to-point short-haul flights"]}
+        containerStyle={bulletContainerStyle}
+      />
+      <BulletedList
+        heading={"e.g. Southwest Airline"}
+        listItems={["Warrior Spirit", "Servant's Heart", "Fun Loving"]}
+        containerStyle={bulletContainerStyle}
+      />
+    </>,
     <div>STEP TWO RIGHT</div>,
     <div>STEP THREE RIGHT</div>,
     <div>STEP FOUR RIGHT</div>,

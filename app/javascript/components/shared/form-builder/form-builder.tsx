@@ -36,9 +36,14 @@ interface IFormField {
 interface IFormBuilderProps {
   formFields?: Array<IFormField>;
   formData?: any;
+  formContainerStyle?: any;
 }
 
-export const FormBuilder = ({ formData, formFields }: IFormBuilderProps): JSX.Element => {
+export const FormBuilder = ({
+  formContainerStyle,
+  formData,
+  formFields,
+}: IFormBuilderProps): JSX.Element => {
   const formComponent = (formField: IFormField) => {
     const { fieldType, formKeys, options, callback, style } = formField;
     switch (fieldType) {
@@ -139,7 +144,7 @@ export const FormBuilder = ({ formData, formFields }: IFormBuilderProps): JSX.El
       {formFields
         ? formFields.map((formField: IFormField, index: number) => {
             return (
-              <FormContainer key={index}>
+              <FormContainer key={index} style={formContainerStyle}>
                 <Label>{formField.label}</Label>
                 {formComponent(formField)}
               </FormContainer>

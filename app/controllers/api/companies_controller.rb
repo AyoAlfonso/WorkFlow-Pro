@@ -14,7 +14,7 @@ class Api::CompaniesController < Api::ApplicationController
     @company.save!
     # @TODO investigate why file not attaching properly
     # @company.logo.attach(params[:logo])
-    SignUpPurpose.create(company_id: @company[:id], purpose: params[:sign_up_purpose])
+    SignUpPurpose.create(company_id: @company[:id], purpose: params[:sign_up_purpose_attributes][:purpose])
     @user_role = UserRole.find_by(name: "CEO")
     UserCompanyEnablement.create(user_id: current_user.id, company_id: @company.id, user_role_id: @user_role.id)
     render json: @company.as_json(only: ['id', 'name', 'phone_number', 'rallying_cry', 'fiscal_year_start', 'timezone', 'display_format'],
@@ -69,7 +69,7 @@ class Api::CompaniesController < Api::ApplicationController
 
   def company_params
     #user should not be allowed to update the display_format once created
-    params.require(:company).permit(:name, :timezone, :logo, :fiscal_year_start, :rallying_cry, core_four_attributes: [:core_1, :core_2, :core_3, :core_4])
+    params.require(:company).permit(:name, :timezone, :logo, :fiscal_year_start, :rallying_cry, sign_up_purpose_attributes: [:purpose], core_four_attributes: [:core_1, :core_2, :core_3, :core_4])
   end
 
   # def new_company_params
