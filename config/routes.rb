@@ -54,6 +54,7 @@ Rails.application.routes.draw do
     patch '/avatar', to: 'users#update_avatar'
     delete '/avatar', to: 'users#delete_avatar'
     patch '/update_company_first_time_access', to: 'users#update_company_first_time_access'
+    post 'invite_users_to_company', to: 'users#invite_users_to_company'
 
     resources :companies, only: [:show, :update] do
       member do
@@ -111,6 +112,7 @@ Rails.application.routes.draw do
 
     #teams
     resources :teams, only: [:index, :show, :update]
+    post '/create_team_and_invite_users', to: 'teams#create_team_and_invite_users'
     
     #meetings
     resources :meetings, only: [:create, :index, :update, :destroy, :show] do

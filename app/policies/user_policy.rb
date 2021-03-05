@@ -27,6 +27,10 @@ class UserPolicy < ApplicationPolicy
     true
   end
 
+  def invite_users_to_company?
+    true
+  end
+
   # TODO: Needs logic here
   def update_avatar?
     record == user

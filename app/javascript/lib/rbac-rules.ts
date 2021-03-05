@@ -3,7 +3,7 @@ import { RoleAdministrator, RoleCEO, RoleNormalUser, RoleLeadership } from "~/li
 
 export const rules = {
   [RoleAdministrator]: {
-    static: ["update-company-details", "create-user"],
+    static: ["update-company-details", "create-user", "create-team"],
     dynamic: {
       "edit-team-settings": ({ team, user }) => {
         return team.isALead(user);
@@ -11,7 +11,7 @@ export const rules = {
     },
   },
   [RoleCEO]: {
-    static: ["update-company-details", "create-user"],
+    static: ["update-company-details", "create-user", "create-team"],
     dynamic: {
       "edit-team-settings": ({ team, user }) => {
         return team.isALead(user);

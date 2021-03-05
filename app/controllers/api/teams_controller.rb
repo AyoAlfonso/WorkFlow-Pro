@@ -3,7 +3,7 @@ class Api::TeamsController < Api::ApplicationController
 
   respond_to :json
   before_action :set_team, only: [:show, :update]
-  after_action :verify_policy_scoped, only: [:index, :user_teams], unless: :skip_pundit?
+  after_action :verify_policy_scoped, only: [:index, :user_teams, :create_team_and_invite_users], unless: :skip_pundit?
 
   def index
     @teams = policy_scope(Team).all
@@ -19,6 +19,18 @@ class Api::TeamsController < Api::ApplicationController
     @team.update!(team_settings_params)
     fetch_additional_data
     render 'api/teams/show'
+  end
+
+  def create_team_and_invite_users
+    @team = Team.create!(company_id: current_company.id, name: params[:team_name], settings: {})
+    @team.set_default_avatar_color
+    authorize @team
+    params[:users].each do |user|
+      user_record = user.second
+      TeamUserEnablement.create!(team_id: @team.id, user_id: user_record["user_id"], role: user_record["meeting_lead"])
+    end
+    @teams = policy_scope(Team).all
+    render 'api/teams/index'
   end
 
   private

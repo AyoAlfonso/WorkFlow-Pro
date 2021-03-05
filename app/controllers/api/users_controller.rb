@@ -54,6 +54,32 @@ class Api::UsersController < Api::ApplicationController
     end
   end
 
+  def invite_users_to_company
+    team = Team.where(id: params[:team_id])
+    email_addresses = params[:email_addresses].split(',')
+    email_addresses.each do |email|
+      sanitized_email = email.strip
+      if User.find_by_email(sanitized_email).blank?
+        @user = User.create!({
+          email: sanitized_email, 
+          company_id: current_company.id, 
+          default_selected_company_id: current_company.id,
+          password: ENV["DEFAULT_PASSWORD"]
+        })
+        @user.invite!
+        if @user.valid? && @user.persisted?
+          @user.update!({
+            user_company_enablements_attributes: create_user_company_enablement_attribute_parser, 
+            team_user_enablements_attributes: team_user_enablement_attribute_parser(team)
+          })
+        end
+      end
+    end
+    authorize current_user
+    @users = policy_scope(User)
+    render '/api/users/index'
+  end
+
   def profile
     @user = current_user
     @session_company_id = current_company.id
@@ -112,7 +138,7 @@ class Api::UsersController < Api::ApplicationController
       user_id: @user.id, 
       company_id: current_company.id,
       user_title: params[:user][:title],
-      user_role_id: params[:user][:user_role_id]
+      user_role_id: params[:user] && params[:user][:user_role_id] ? params[:user][:user_role_id] : UserRole.find_by_name("Employee").id
     }]
   end
 

@@ -23,6 +23,7 @@ import { Table } from "~/components/shared/table";
 import { Status } from "~/components/shared/status";
 
 import { EditUserModal, getUserRoleIdFrom } from "~/components/domains/company/edit-user-modal";
+import { InviteYourTeamModal } from "./users/invite-your-team-modal";
 
 export const Users = observer(
   (): JSX.Element => {
@@ -34,6 +35,7 @@ export const Users = observer(
     } = useMst();
     const { users } = userStore;
     const [editUserModalOpen, setEditUserModalOpen] = useState<boolean>(false);
+    const [inviteTeamModalOpen, setInviteTeamModalOpen] = useState<boolean>(false);
 
     const [deactivated, setUserDeactivated] = useState(true);
     const [userId, setUserId] = useState(null);
@@ -132,23 +134,16 @@ export const Users = observer(
                 <Button
                   variant={"primaryOutline"}
                   small
-                  // iconName={"New-User"}
                   onClick={() => {
-                    setUserDeactivated(false);
-                    setUserId(null);
-                    setEmail("");
-                    setFirstName("");
-                    setLastName("");
-                    setUserRole(
-                      R.path(["id"], R.find(R.propEq("name", RoleNormalUser), userRoles)),
-                    );
-                    setTitle("");
-                    setTeams([]);
-                    setEditUserModalOpen(true);
+                    setInviteTeamModalOpen(true);
                   }}
                 >
-                  {t("company.createUser.addButton")}
+                  {t("company.createUser.inviteYourTeam")}
                 </Button>
+                <InviteYourTeamModal
+                  modalOpen={inviteTeamModalOpen}
+                  setModalOpen={setInviteTeamModalOpen}
+                />
                 <EditUserModal
                   editUserModalOpen={editUserModalOpen}
                   setEditUserModalOpen={setEditUserModalOpen}

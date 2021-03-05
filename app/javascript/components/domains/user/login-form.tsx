@@ -43,7 +43,7 @@ export const LoginForm = observer(
       <Flex
         sx={{
           alignItems: "center",
-          height: "100%",
+          height: "100vh",
           width: "100%",
           backgroundColor: baseTheme.colors.backgroundGrey,
         }}

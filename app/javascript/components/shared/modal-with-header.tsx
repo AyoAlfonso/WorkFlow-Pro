@@ -8,28 +8,44 @@ interface IModalWithHeaderProps {
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   headerText?: string;
+  subHeaderText?: string;
   children: any;
   width?: string;
   onCloseAction?: any;
 }
 
-export const ModalWithHeader = (props: IModalWithHeaderProps): JSX.Element => {
-  const { modalOpen, setModalOpen, headerText, children, width } = props;
-
+export const ModalWithHeader = ({
+  modalOpen,
+  setModalOpen,
+  headerText,
+  children,
+  width,
+  subHeaderText,
+  onCloseAction,
+}: IModalWithHeaderProps): JSX.Element => {
   return (
     <StyledModal isOpen={modalOpen} style={{ width: width || "30rem" }}>
       <HeaderContainer>
-        <Heading type={"h4"} color={"primary100"} m={3} mb={2}>
-          {headerText}
-        </Heading>
-        <CloseIconContainer
-          onClick={() => {
-            setModalOpen(false);
-            props.onCloseAction();
-          }}
-        >
-          <StyledIcon icon={"Close"} size={18} />
-        </CloseIconContainer>
+        <RowWrapper>
+          <StyledHeading type={"h3"} color={"black"} fontSize={"16px"}>
+            {headerText}
+          </StyledHeading>
+          <CloseIconContainer
+            onClick={() => {
+              setModalOpen(false);
+              if (onCloseAction) {
+                onCloseAction();
+              }
+            }}
+          >
+            <StyledIcon icon={"Close"} size={18} />
+          </CloseIconContainer>
+        </RowWrapper>
+        {subHeaderText && (
+          <RowWrapper>
+            <SubHeaderText>{subHeaderText}</SubHeaderText>
+          </RowWrapper>
+        )}
       </HeaderContainer>
       {children}
     </StyledModal>
@@ -45,13 +61,12 @@ const StyledModal = Modal.styled`
   min-height: 100px;
   border-radius: 5px;
   background-color: ${props => props.theme.colors.white};
-
+  max-height: 660px;
+  overflow: auto;
 `;
 
 const HeaderContainer = styled.div`
   border-bottom ${props => `1px solid ${props.theme.colors.grey20}`};
-  display: flex;
-  flex-direction: row;
 `;
 
 const CloseIconContainer = styled.div`
@@ -62,4 +77,22 @@ const CloseIconContainer = styled.div`
   &:hover ${StyledIcon} {
     color: ${props => props.theme.colors.greyActive};
   }
+`;
+
+const RowWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-left: 16px;
+`;
+
+const SubHeaderText = styled.p`
+  color: ${props => props.theme.colors.grey100};
+  font-size: 12px;
+  margin-top: 0;
+`;
+
+const StyledHeading = styled(Heading)`
+  font-family: Lato;
+  margin-bottom: 8px;
+  font-weight: bold;
 `;
