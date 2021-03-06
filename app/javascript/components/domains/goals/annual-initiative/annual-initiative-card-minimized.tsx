@@ -4,6 +4,7 @@ import { color } from "styled-system";
 import { baseTheme } from "../../../../themes";
 import { Icon } from "../../../shared/icon";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
+import * as moment from "moment";
 
 interface IAnnualInitiativeCardMinimizedProps {
   annualInitiative: AnnualInitiativeType;
@@ -19,15 +20,14 @@ export const AnnualInitiativeCardMinimized = (
     return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
       const { warningRed, cautionYellow, finePine, grey40 } = baseTheme.colors;
 
-      const startedMilestones = quarterlyGoal.milestones.filter(
-        milestone => milestone.status != "unstarted",
+      const currentMilestone = quarterlyGoal.milestones.find(milestone =>
+        moment(milestone.weekOf).isSame(moment(), "week"),
       );
 
       let backgroundColor = grey40;
 
-      if (startedMilestones.length > 0) {
-        const lastStartedMilestone = startedMilestones[startedMilestones.length - 1];
-        switch (lastStartedMilestone.status) {
+      if (currentMilestone) {
+        switch (currentMilestone.status) {
           case "incomplete":
             backgroundColor = warningRed;
             break;
