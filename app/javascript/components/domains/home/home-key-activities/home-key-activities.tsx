@@ -33,6 +33,11 @@ export const HomeKeyActivities = observer(
       scheduledGroups.find(group => group.name == selectedFilterGroupName),
     );
 
+    const selectedFilterGroupIdToday = R.path(
+      ["id"],
+      scheduledGroups.find(group => group.name == "Today"),
+    );
+
     const subHeaderForFilterGroups = (name: string): string => {
       switch (name) {
         case "Weekly List":
@@ -59,6 +64,7 @@ export const HomeKeyActivities = observer(
           subHeaderForFilterGroups(selectedFilterGroupName),
           dynamicFilterDropdownOpen,
           setDynamicFilterDropdownOpen,
+          selectedFilterGroupId,
         );
       } else {
         const teamName = teams.find(team => team.id == selectedFilterTeamId).name;
@@ -76,6 +82,7 @@ export const HomeKeyActivities = observer(
       subText: string,
       sortFilterOpen: boolean,
       setFilterOpen: any,
+      scheduledGroupId?: number,
     ): JSX.Element => {
       return (
         <>
@@ -86,10 +93,15 @@ export const HomeKeyActivities = observer(
           </HeaderRowContainer>
           <HeaderRowContainer>
             <SubHeaderContainer>{subText}</SubHeaderContainer>
-            {header != "Today" && (
+            {!R.isNil(scheduledGroupId) && (
               <SortContainer onClick={() => setFilterOpen(!sortFilterOpen)}>
                 <Icon icon={"Sort"} size={12} iconColor="grey100" />
-                {sortFilterOpen && <FilterDropdown setFilterOpen={setFilterOpen} />}
+                {sortFilterOpen && (
+                  <FilterDropdown
+                    setFilterOpen={setFilterOpen}
+                    scheduledGroupId={scheduledGroupId}
+                  />
+                )}
               </SortContainer>
             )}
           </HeaderRowContainer>
@@ -154,6 +166,7 @@ export const HomeKeyActivities = observer(
               moment().format("MMMM D"),
               todayFilterDropdownOpen,
               setTodayFilterDropdownOpen,
+              selectedFilterGroupIdToday,
             )}
           </HeaderContainer>
           <KeyActivitiesListContainer>
