@@ -28,6 +28,14 @@ class AnnualInitiativePolicy < ApplicationPolicy
     true
   end
 
+  def create_or_update_onboarding_goals?
+    true
+  end
+
+  def get_onboarding_goals?
+    true
+  end
+
   class Scope
     attr_reader :user, :company, :scope
 

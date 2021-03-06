@@ -10,6 +10,7 @@ export const CompanyStoreModel = types
   .props({
     company: types.maybeNull(CompanyModel),
     onboardingCompany: types.maybeNull(CompanyModel),
+    onboardingCompanyGoals: types.maybeNull(types.frozen()),
     onboardingModalOpen: types.boolean,
   })
   .extend(withEnvironment())
@@ -92,10 +93,36 @@ export const CompanyStoreModel = types
   .actions(self => ({
     getOnboardingCompany: flow(function*() {
       const env = getEnv(self);
+      // try {
+      const response: any = yield env.api.getOnboardingCompany();
+      if (response.ok) {
+        self.onboardingCompany = response.data as any;
+        return true;
+      } else {
+        return false;
+      }
+      // } catch {
+      //   return false;
+      // }
+    }),
+    getOnboardingCompanyGoals: flow(function*(companyId) {
+      const env = getEnv(self);
       try {
-        const response: any = yield env.api.getOnboardingCompany();
+        const response: any = yield env.api.getOnboardingCompanyGoals(companyId);
         if (response.ok) {
-          self.onboardingCompany = response.data as any;
+          self.onboardingCompanyGoals = response.data as any;
+          return true;
+        }
+      } catch {
+        return false;
+      }
+    }),
+    updateOnboardingCompanyGoals: flow(function*(companyId, goalData) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.updateOnboardingCompanyGoals(companyId, goalData);
+        if (response.ok) {
+          self.onboardingCompanyGoals = response.data as any;
           return true;
         }
       } catch {

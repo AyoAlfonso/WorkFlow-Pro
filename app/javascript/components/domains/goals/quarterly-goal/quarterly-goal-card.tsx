@@ -11,9 +11,9 @@ import { useMst } from "~/setup/root";
 
 interface IQuarterlyGoalCardProps {
   quarterlyGoal: QuarterlyGoalType;
-  setQuarterlyGoalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setQuarterlyGoalId: React.Dispatch<React.SetStateAction<number>>;
-  setSelectedAnnualInitiativeDescription: React.Dispatch<React.SetStateAction<string>>;
+  setQuarterlyGoalModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setQuarterlyGoalId?: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedAnnualInitiativeDescription?: React.Dispatch<React.SetStateAction<string>>;
   annualInitiativeDescription: string;
 }
 

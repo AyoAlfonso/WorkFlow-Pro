@@ -23,4 +23,12 @@ class CompanyPolicy < ApplicationPolicy
   def get_onboarding_company?
     true
   end
+
+  def create_or_update_onboarding_goals?
+    true
+  end
+
+  def get_onboarding_goals?
+    true
+  end
 end

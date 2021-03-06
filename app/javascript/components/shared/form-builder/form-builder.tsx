@@ -12,7 +12,7 @@ import { DropzoneAreaBase as MuiDropzoneAreaBase } from "material-ui-dropzone";
 import { withStyles } from "@material-ui/core/styles";
 import { TrixEditor } from "react-trix";
 
-import { Input, Label, Select, TextArea } from "~/components/shared";
+import { Input, Label, Select, TextArea, TextDiv } from "~/components/shared";
 
 export enum EFieldType {
   TextField = "TEXT_FIELD",
@@ -31,18 +31,21 @@ interface IFormField {
   callback?: (keys: Array<string>, val: any) => void;
   style?: any;
   value?: any;
+  subText?: string;
 }
 
 interface IFormBuilderProps {
-  formFields?: Array<IFormField>;
-  formData?: any;
+  formFields: Array<IFormField>;
+  formData: any;
   formContainerStyle?: any;
+  stepwise: boolean;
 }
 
 export const FormBuilder = ({
   formContainerStyle,
   formData,
   formFields,
+  stepwise,
 }: IFormBuilderProps): JSX.Element => {
   const formComponent = (formField: IFormField) => {
     const { fieldType, formKeys, options, callback, style } = formField;
@@ -139,16 +142,35 @@ export const FormBuilder = ({
     }
   };
 
+  const isPreviousStepComplete = (index: number) => {
+    if (index === 0 || stepwise === false) {
+      return true;
+    } else {
+      const keyPathOfPreviousStep = R.path(["formKeys"], formFields[index - 1]);
+      const previousStepData = R.path(keyPathOfPreviousStep, formData);
+      if (R.isNil(previousStepData) || R.isEmpty(previousStepData)) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  };
+
   return (
     <Container>
       {formFields
         ? formFields.map((formField: IFormField, index: number) => {
-            return (
+            return isPreviousStepComplete(index) ? (
               <FormContainer key={index} style={formContainerStyle}>
                 <Label>{formField.label}</Label>
                 {formComponent(formField)}
+                {formField.subText && (
+                  <TextDiv fontSize={"9px"} color={"grey100"}>
+                    {formField.subText}
+                  </TextDiv>
+                )}
               </FormContainer>
-            );
+            ) : null;
           })
         : null}
     </Container>

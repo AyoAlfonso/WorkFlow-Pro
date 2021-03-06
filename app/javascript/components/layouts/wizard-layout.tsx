@@ -73,7 +73,7 @@ export const WizardLayout = ({
             onClick={onNextButtonClick}
             disabled={nextButtonDisabled}
           >
-            Next
+            {currentStep === steps.length - 1 ? "Send Invites and Complete" : "Next"}
           </NextButton>
         </>
       )

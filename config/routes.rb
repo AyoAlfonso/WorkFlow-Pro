@@ -66,6 +66,8 @@ Rails.application.routes.draw do
       end
     end
     get '/onboarding', to: "companies#get_onboarding_company"
+    get 'onboarding/goals/:company_id', to: "companies#get_onboarding_goals"
+    post '/onboarding/goals/:company_id', to: "companies#create_or_update_onboarding_goals"
 
     # issues
     resources :issues, only: [:index, :create, :update, :destroy]

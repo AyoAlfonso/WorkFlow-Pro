@@ -8,14 +8,16 @@ import { WizardLayout } from "~/components/layouts/wizard-layout";
 import { Loading } from "~/components/shared";
 import { EFieldType, FormBuilder } from "~/components/shared/form-builder";
 import { BulletedList } from "~/components/shared/bulleted-list";
+import { GoalSummary } from "./goal-summary";
 
 interface IOnboardingProps {}
 
 export const Onboarding: React.FC = (props: IOnboardingProps) => {
-  const { companyStore, staticDataStore } = useMst();
+  const { companyStore, sessionStore, staticDataStore } = useMst();
   const [loading, setLoading] = useState<boolean>(true);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [formData, setFormData] = useState<any>({});
+  const [goalData, setGoalData] = useState<any>({});
 
   const loadOnboarding = useCallback(async () => {
     await staticDataStore.load();
@@ -53,6 +55,8 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         R.dissoc("signUpPurpose"),
       )(onboardingCompany);
       setFormData(state);
+      await companyStore.getOnboardingCompanyGoals(onboardingCompany.id);
+      setGoalData(companyStore.onboardingCompanyGoals);
     }
     setLoading(false);
   }, []);
@@ -63,8 +67,9 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
 
   const { fieldsAndLabels, headingsAndDescriptions, timeZones } = staticDataStore;
   const { onboardingCompany } = companyStore;
+  const { profile } = sessionStore;
 
-  if (loading) {
+  if (loading || R.isNil(profile)) {
     return <Loading />;
   }
 
@@ -76,12 +81,20 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
 
   const setFormState = (keys: Array<string>, value: any) => {
     const newFormState = R.set(R.lensPath(keys), value, formData);
-    console.log(newFormState);
     setFormData(newFormState);
+  };
+
+  const setGoalDataState = (keys: Array<string>, value: any) => {
+    const newGoalDataState = R.set(R.lensPath(keys), value, goalData);
+    setGoalData(newGoalDataState);
   };
 
   const submitFormState = async () => {
     return await companyStore.updateCompany(formData, true);
+  };
+
+  const submitGoalData = async () => {
+    return await companyStore.updateOnboardingCompanyGoals(onboardingCompany.id, goalData);
   };
 
   // const submitLogo = async logoData => {
@@ -94,6 +107,10 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
     setCurrentStep(stepIndex);
   };
 
+  const incrementStep = () => {
+    setCurrentStep(c => c + 1);
+  };
+
   const onNextButtonClick = async () => {
     if (currentStep === 0 && R.isNil(onboardingCompany)) {
       // create company
@@ -103,14 +120,20 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
       });
       companyStore.createCompany(form).then(res => {
         if (res === true) {
-          setCurrentStep(c => c + 1);
+          incrementStep();
         }
       });
-    } else {
+    } else if (currentStep < 2) {
       // updateCompany
       submitFormState().then(res => {
         if (res === true) {
-          setCurrentStep(c => c + 1);
+          incrementStep();
+        }
+      });
+    } else if (currentStep === 2) {
+      submitGoalData().then(res => {
+        if (res === true) {
+          incrementStep();
         }
       });
     }
@@ -188,6 +211,50 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         },
       ],
     },
+    {
+      formFields: [
+        {
+          label:
+            "What's the most important thing your company has to achieve in the upcoming year?",
+          fieldType: EFieldType.TextField,
+          formKeys: ["rallyingCry"],
+          callback: setGoalDataState,
+          subText: `Awesome ${profile.firstName}! This is what we call your Lynchpyn Goal. This is the ultimate filter when the company is making any strategic decisions until it's achieved`,
+        },
+        {
+          label:
+            "What's a specific Goal you can set for the next year to achieve your Lynchpyn Goal? This can be specific to your team.",
+          fieldType: EFieldType.TextField,
+          formKeys: ["annualInitiative", "description"],
+          callback: setGoalDataState,
+          subText: `Nice going.  This is your Annual Goal.  By adding an Annual Goal you can start a "lane" where Quarterly Initiatives can be added`,
+        },
+        {
+          label: `What would be an Initiative you can take on this quarter towards "${R.pathOr(
+            "",
+            ["annualInitiative", "description"],
+            goalData,
+          )}"`,
+          fieldType: EFieldType.TextField,
+          formKeys: ["annualInitiative", "quarterlyGoals", "0", "description"],
+          callback: setGoalDataState,
+          subText:
+            "Almost there!  You have your Quarterly Initiative now, just one more thing left.",
+        },
+        {
+          label: `What would be an achievable milestone for this week to move you closer to "${R.pathOr(
+            "",
+            ["annualInitiative", "quarterlyGoals", "0", "description"],
+            goalData,
+          )}"`,
+          fieldType: EFieldType.TextField,
+          formKeys: ["annualInitiative", "quarterlyGoals", "0", "milestones", "0", "description"],
+          callback: setGoalDataState,
+          subText:
+            "You're all done. Weekly Milestones are the final piece in the Goals and Initiatives puzzle. Click next to see how this helps you prioritize each day.",
+        },
+      ],
+    },
   ];
 
   const rightBodyComponentProps = [
@@ -204,13 +271,23 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
   ];
 
   const leftBodyComponents = [
-    <FormBuilder formFields={leftBodyComponentProps[0].formFields} formData={formData} />,
+    <FormBuilder
+      formFields={leftBodyComponentProps[0].formFields}
+      formData={formData}
+      stepwise={false}
+    />,
     <FormBuilder
       formFields={leftBodyComponentProps[1].formFields}
       formData={formData}
       formContainerStyle={{ height: "175px" }}
+      stepwise={false}
     />,
-    <div>STEP TWO LEFT</div>,
+    <FormBuilder
+      formFields={leftBodyComponentProps[2].formFields}
+      formData={goalData}
+      formContainerStyle={{ height: "140px" }}
+      stepwise={true}
+    />,
     <div>STEP THREE LEFT</div>,
     <div>STEP FOUR LEFT</div>,
   ];
@@ -218,7 +295,11 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
   const bulletContainerStyle = { height: "175px", marginBottom: "24px", marginTop: "18px" };
 
   const rightBodyComponents = [
-    <FormBuilder formFields={rightBodyComponentProps[0].formFields} formData={formData} />,
+    <FormBuilder
+      formFields={rightBodyComponentProps[0].formFields}
+      formData={formData}
+      stepwise={false}
+    />,
     <>
       <BulletedList
         heading={"e.g. Southwest Airline"}
@@ -241,7 +322,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         containerStyle={bulletContainerStyle}
       />
     </>,
-    <div>STEP TWO RIGHT</div>,
+    <GoalSummary formData={goalData} />,
     <div>STEP THREE RIGHT</div>,
     <div>STEP FOUR RIGHT</div>,
   ];

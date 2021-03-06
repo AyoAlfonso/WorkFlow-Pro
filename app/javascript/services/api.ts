@@ -102,6 +102,14 @@ export class Api {
     return this.client.get("/onboarding");
   }
 
+  async getOnboardingCompanyGoals(companyId) {
+    return this.client.get(`/onboarding/goals/${companyId}`);
+  }
+
+  async updateOnboardingCompanyGoals(companyId, goalData) {
+    return this.client.post(`/onboarding/goals/${companyId}`, goalData);
+  }
+
   async inviteUser(formData) {
     return this.client.post(`/users`, formData);
   }

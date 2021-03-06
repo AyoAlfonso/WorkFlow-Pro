@@ -47,7 +47,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def create_milestones
-    @quarterly_goal.create_milestones_for_quarterly_goal(current_user)
+    @quarterly_goal.create_milestones_for_quarterly_goal(current_user, current_user.company)
     render "api/quarterly_goals/create_milestones"
   end
 

@@ -13,16 +13,18 @@ interface IAnnualInitiativeCardProps {
   index: number;
   totalNumberOfAnnualInitiatives: number;
   showMinimizedCards: boolean;
-  setAnnualInitiativeId: React.Dispatch<React.SetStateAction<number>>;
-  setAnnualInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setQuarterlyGoalId: React.Dispatch<React.SetStateAction<number>>;
-  setQuarterlyGoalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedAnnualInitiativeDescription: React.Dispatch<React.SetStateAction<string>>;
+  setAnnualInitiativeId?: React.Dispatch<React.SetStateAction<number>>;
+  setAnnualInitiativeModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setQuarterlyGoalId?: React.Dispatch<React.SetStateAction<number>>;
+  setQuarterlyGoalModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedAnnualInitiativeDescription?: React.Dispatch<React.SetStateAction<string>>;
   showCreateQuarterlyGoal: boolean;
+  disableOpen?: boolean;
 }
 
 export const AnnualInitiativeCard = ({
   annualInitiative,
+  disableOpen,
   index,
   totalNumberOfAnnualInitiatives,
   showMinimizedCards,
@@ -86,6 +88,7 @@ export const AnnualInitiativeCard = ({
         <AnnualInitiativeCardMinimized
           annualInitiative={annualInitiative}
           setShowMinimizedCard={setShowMinimizedCard}
+          disableOpen={disableOpen}
         />
       ) : (
         <AnnualInitiativeCardExpanded
