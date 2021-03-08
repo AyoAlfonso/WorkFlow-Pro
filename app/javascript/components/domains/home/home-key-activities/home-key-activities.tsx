@@ -12,11 +12,13 @@ import { CreateKeyActivityButton } from "../../key-activities/create-key-activit
 import { KeyActivitiesList } from "../../key-activities/key-activities-list";
 import { FilterDropdown } from "../../key-activities/filter-dropdown";
 import * as R from "ramda";
+import { StyledIcon } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
 
 export const HomeKeyActivities = observer(
   (): JSX.Element => {
     const [selectedFilterGroupName, setSelectedFilterGroupName] = useState<string>("Tomorrow");
     const [selectedFilterTeamId, setSelectedFilterTeamId] = useState<number>(null);
+    const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
     const [todayFilterDropdownOpen, setTodayFilterDropdownOpen] = useState<boolean>(false);
     const [dynamicFilterDropdownOpen, setDynamicFilterDropdownOpen] = useState<boolean>(false);
@@ -52,13 +54,25 @@ export const HomeKeyActivities = observer(
     };
 
     const filteredKeyActivities = () => {
-      return selectedFilterGroupName
-        ? keyActivityStore.keyActivitiesByScheduledGroupName(selectedFilterGroupName)
-        : keyActivityStore.keyActivitiesByTeamId(selectedFilterTeamId);
+      if (showCompletedItems) {
+        return keyActivityStore.completedActivities;
+      } else if (selectedFilterGroupName) {
+        return keyActivityStore.keyActivitiesByScheduledGroupName(selectedFilterGroupName);
+      } else {
+        return keyActivityStore.keyActivitiesByTeamId(selectedFilterTeamId);
+      }
     };
 
     const renderMiddleColumnHeader = () => {
-      if (selectedFilterGroupName) {
+      if (showCompletedItems) {
+        return renderHeader(
+          "Completed Pyns",
+          "A list of your completed pyns.",
+          dynamicFilterDropdownOpen,
+          setDynamicFilterDropdownOpen,
+          selectedFilterGroupId,
+        );
+      } else if (selectedFilterGroupName) {
         return renderHeader(
           selectedFilterGroupName,
           subHeaderForFilterGroups(selectedFilterGroupName),
@@ -120,6 +134,7 @@ export const HomeKeyActivities = observer(
               onClick={() => {
                 setSelectedFilterTeamId(null);
                 setSelectedFilterGroupName(group.name);
+                setShowCompletedItems(false);
               }}
             >
               <InitialsGenerator
@@ -144,6 +159,7 @@ export const HomeKeyActivities = observer(
             onClick={() => {
               setSelectedFilterGroupName(null);
               setSelectedFilterTeamId(team.id);
+              setShowCompletedItems(false);
             }}
           >
             <InitialsGenerator
@@ -155,6 +171,25 @@ export const HomeKeyActivities = observer(
           </FilterOptionContainer>
         );
       });
+    };
+
+    const renderFilterCompletedOption = (): JSX.Element => {
+      return (
+        <FilterOptionContainer
+          currentSelectedItem={showCompletedItems}
+          onClick={() => {
+            setSelectedFilterTeamId(null);
+            setSelectedFilterGroupName("");
+            setShowCompletedItems(true);
+          }}
+        >
+          <StyledIcon
+            icon={"Checkmark"}
+            size={"18px"}
+            iconColor={showCompletedItems ? baseTheme.colors.black : baseTheme.colors.grey100}
+          />
+        </FilterOptionContainer>
+      );
     };
 
     return (
@@ -195,6 +230,7 @@ export const HomeKeyActivities = observer(
         </ListContainer>
         <FilterContainer>
           {renderFilterGroupOptions()}
+          {renderFilterCompletedOption()}
           {renderFilterTeamOptions()}
         </FilterContainer>
         <CreateKeyActivityModal
