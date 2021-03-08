@@ -7,9 +7,13 @@ import { useMst } from "~/setup/root";
 
 interface IFilterDropdownProps {
   setFilterOpen: any;
+  scheduledGroupId: number;
 }
 
-export const FilterDropdown = ({ setFilterOpen }: IFilterDropdownProps): JSX.Element => {
+export const FilterDropdown = ({
+  setFilterOpen,
+  scheduledGroupId,
+}: IFilterDropdownProps): JSX.Element => {
   const { t } = useTranslation();
   const optionsRef = useRef(null);
   const { keyActivityStore } = useMst();
@@ -48,7 +52,7 @@ export const FilterDropdown = ({ setFilterOpen }: IFilterDropdownProps): JSX.Ele
           key={index}
           onClick={() => {
             setFilterOpen(false);
-            keyActivityStore.resortKeyActivities({ sort: option.value });
+            keyActivityStore.resortKeyActivities({ sort: option.value, scheduledGroupId });
           }}
         >
           <OptionTextContainer>{option.label}</OptionTextContainer>

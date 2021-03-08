@@ -12,11 +12,13 @@ import { CreateKeyActivityButton } from "../../key-activities/create-key-activit
 import { KeyActivitiesList } from "../../key-activities/key-activities-list";
 import { FilterDropdown } from "../../key-activities/filter-dropdown";
 import * as R from "ramda";
+import { StyledIcon } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
 
 export const HomeKeyActivities = observer(
   (): JSX.Element => {
     const [selectedFilterGroupName, setSelectedFilterGroupName] = useState<string>("Tomorrow");
     const [selectedFilterTeamId, setSelectedFilterTeamId] = useState<number>(null);
+    const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
     const [todayFilterDropdownOpen, setTodayFilterDropdownOpen] = useState<boolean>(false);
     const [dynamicFilterDropdownOpen, setDynamicFilterDropdownOpen] = useState<boolean>(false);
@@ -33,6 +35,11 @@ export const HomeKeyActivities = observer(
       scheduledGroups.find(group => group.name == selectedFilterGroupName),
     );
 
+    const selectedFilterGroupIdToday = R.path(
+      ["id"],
+      scheduledGroups.find(group => group.name == "Today"),
+    );
+
     const subHeaderForFilterGroups = (name: string): string => {
       switch (name) {
         case "Weekly List":
@@ -47,18 +54,31 @@ export const HomeKeyActivities = observer(
     };
 
     const filteredKeyActivities = () => {
-      return selectedFilterGroupName
-        ? keyActivityStore.keyActivitiesByScheduledGroupName(selectedFilterGroupName)
-        : keyActivityStore.keyActivitiesByTeamId(selectedFilterTeamId);
+      if (showCompletedItems) {
+        return keyActivityStore.completedActivities;
+      } else if (selectedFilterGroupName) {
+        return keyActivityStore.keyActivitiesByScheduledGroupName(selectedFilterGroupName);
+      } else {
+        return keyActivityStore.keyActivitiesByTeamId(selectedFilterTeamId);
+      }
     };
 
     const renderMiddleColumnHeader = () => {
-      if (selectedFilterGroupName) {
+      if (showCompletedItems) {
+        return renderHeader(
+          "Completed Pyns",
+          "A list of your completed pyns.",
+          dynamicFilterDropdownOpen,
+          setDynamicFilterDropdownOpen,
+          selectedFilterGroupId,
+        );
+      } else if (selectedFilterGroupName) {
         return renderHeader(
           selectedFilterGroupName,
           subHeaderForFilterGroups(selectedFilterGroupName),
           dynamicFilterDropdownOpen,
           setDynamicFilterDropdownOpen,
+          selectedFilterGroupId,
         );
       } else {
         const teamName = teams.find(team => team.id == selectedFilterTeamId).name;
@@ -76,6 +96,7 @@ export const HomeKeyActivities = observer(
       subText: string,
       sortFilterOpen: boolean,
       setFilterOpen: any,
+      scheduledGroupId?: number,
     ): JSX.Element => {
       return (
         <>
@@ -86,10 +107,15 @@ export const HomeKeyActivities = observer(
           </HeaderRowContainer>
           <HeaderRowContainer>
             <SubHeaderContainer>{subText}</SubHeaderContainer>
-            {header != "Today" && (
+            {!R.isNil(scheduledGroupId) && (
               <SortContainer onClick={() => setFilterOpen(!sortFilterOpen)}>
                 <Icon icon={"Sort"} size={12} iconColor="grey100" />
-                {sortFilterOpen && <FilterDropdown setFilterOpen={setFilterOpen} />}
+                {sortFilterOpen && (
+                  <FilterDropdown
+                    setFilterOpen={setFilterOpen}
+                    scheduledGroupId={scheduledGroupId}
+                  />
+                )}
               </SortContainer>
             )}
           </HeaderRowContainer>
@@ -108,6 +134,7 @@ export const HomeKeyActivities = observer(
               onClick={() => {
                 setSelectedFilterTeamId(null);
                 setSelectedFilterGroupName(group.name);
+                setShowCompletedItems(false);
               }}
             >
               <InitialsGenerator
@@ -132,6 +159,7 @@ export const HomeKeyActivities = observer(
             onClick={() => {
               setSelectedFilterGroupName(null);
               setSelectedFilterTeamId(team.id);
+              setShowCompletedItems(false);
             }}
           >
             <InitialsGenerator
@@ -145,6 +173,25 @@ export const HomeKeyActivities = observer(
       });
     };
 
+    const renderFilterCompletedOption = (): JSX.Element => {
+      return (
+        <FilterOptionContainer
+          currentSelectedItem={showCompletedItems}
+          onClick={() => {
+            setSelectedFilterTeamId(null);
+            setSelectedFilterGroupName("");
+            setShowCompletedItems(true);
+          }}
+        >
+          <StyledIcon
+            icon={"Checkmark"}
+            size={"18px"}
+            iconColor={showCompletedItems ? baseTheme.colors.black : baseTheme.colors.grey100}
+          />
+        </FilterOptionContainer>
+      );
+    };
+
     return (
       <Container>
         <ListContainer>
@@ -154,6 +201,7 @@ export const HomeKeyActivities = observer(
               moment().format("MMMM D"),
               todayFilterDropdownOpen,
               setTodayFilterDropdownOpen,
+              selectedFilterGroupIdToday,
             )}
           </HeaderContainer>
           <KeyActivitiesListContainer>
@@ -182,6 +230,7 @@ export const HomeKeyActivities = observer(
         </ListContainer>
         <FilterContainer>
           {renderFilterGroupOptions()}
+          {renderFilterCompletedOption()}
           {renderFilterTeamOptions()}
         </FilterContainer>
         <CreateKeyActivityModal

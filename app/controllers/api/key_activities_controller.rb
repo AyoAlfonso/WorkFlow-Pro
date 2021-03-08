@@ -26,7 +26,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
   def update
     if params[:completed]
       # if we complete an item on the master list, it should move it to the end
-      @key_activity.update!(key_activity_params.merge(completed_at: Time.now, todays_priority: false, weekly_list: false))
+      @key_activity.update!(key_activity_params.merge(completed_at: Time.now, scheduled_group: ScheduledGroup.find_by_name("Backlog")))
       @key_activity.move_to_bottom
     else
       @key_activity.update!(key_activity_params.merge(completed_at: nil))
@@ -61,9 +61,10 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def resort_index
-    if params[:sort].present?
+    #currently you cannot sort if it is for a team so a scheudled group id must be present
+    if params[:sort].present? && params[:scheduled_group_id].present?
       key_activities = policy_scope(KeyActivity).owned_by_user(current_user)
-      @key_activities = KeyActivityResortService.call(key_activities, params[:sort])
+      @key_activities = KeyActivityResortService.call(key_activities, params[:sort], params[:scheduled_group_id])
     else
       raise "No Sort Type Given"
     end
@@ -85,6 +86,6 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def team_meeting_activities(meeting_id)
     meeting = Meeting.find(meeting_id)
-    KeyActivity.optimized.filter_by_team_meeting(meeting.meeting_template_id, meeting.team_id).sort_by_todays_priority_weekly_list_position
+    KeyActivity.optimized.filter_by_team_meeting(meeting.meeting_template_id, meeting.team_id).sort_by_progressing_non_backlog_position
   end
 end

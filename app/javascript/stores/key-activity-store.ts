@@ -29,6 +29,11 @@ export const KeyActivityStoreModel = types
       );
       return filteredKeyActivities;
     },
+    get completedActivities() {
+      return self.keyActivities.filter(
+        keyActivity => keyActivity.completedAt
+      )
+    },
     get weeklyKeyActivities() {
       return self.keyActivities.filter(
         keyActivity =>

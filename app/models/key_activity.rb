@@ -1,4 +1,6 @@
 class KeyActivity < ApplicationRecord
+  include HasOrderByRelatedId
+
   enum priority: { low: 0, medium: 1, high: 2, frog: 3 }
   belongs_to :user
   belongs_to :meeting, optional: true
@@ -6,7 +8,7 @@ class KeyActivity < ApplicationRecord
   belongs_to :scheduled_group, optional: true
   belongs_to :team, optional: true
 
-  acts_as_list scope: [:company_id, :user_id, :weekly_list, :todays_priority, :team_id, :scheduled_group_id]
+  acts_as_list scope: [:company_id, :user_id, :team_id, :scheduled_group_id]
 
   acts_as_taggable_on :labels
 
@@ -19,9 +21,9 @@ class KeyActivity < ApplicationRecord
   scope :owned_by_user, -> (user) { where(user: user) }
   scope :sort_by_position, -> { order(:position) }
   scope :created_in_meeting, -> (meeting_id) { where(meeting_id: meeting_id) }
-  scope :weekly_list, -> { where(weekly_list: true) }
-  scope :todays_priority, -> { where(todays_priority: true) }
-  scope :master_list, -> { where(weekly_list: false).where(todays_priority: false) }
+
+  scope :is_in_scheduled_group_id, -> (scheduled_group_id) { where(scheduled_group_id: scheduled_group_id)}
+
   scope :incomplete, -> { where(completed_at: nil) }
   scope :has_due_date, -> { where.not(due_date: nil) }
   
@@ -33,10 +35,13 @@ class KeyActivity < ApplicationRecord
 
   scope :sort_by_priority_and_created_at, -> {sort_by_priority.sort_by_created_date}
   scope :sort_by_position_priority_and_created_at, -> { sort_by_position.sort_by_priority.sort_by_created_date }
-  scope :sort_by_todays_priority_weekly_list_position, -> { order(todays_priority: :desc).order(weekly_list: :desc).sort_by_position}
-  scope :sort_by_todays_priority_weekly_list, -> { order(todays_priority: :desc).order(weekly_list: :desc) }
+  scope :sort_by_progressing_non_backlog_position, -> { order_by_related_ids('scheduled_group_id', [
+    ScheduledGroup.find_by_name("Today").id, 
+    ScheduledGroup.find_by_name("Tomorrow").id,
+    ScheduledGroup.find_by_name("Weekly List").id,
+    ScheduledGroup.find_by_name("Backlog").id
+    ]).sort_by_position}
   scope :sort_by_due_date, -> { order(due_date: :asc) }
-
 
   validates :description, presence: true
 

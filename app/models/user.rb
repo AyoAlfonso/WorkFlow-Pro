@@ -93,10 +93,12 @@ class User < ApplicationRecord
   end
 
   def todays_priorities
-    self.key_activities.where(todays_priority: true).incomplete.sort_by_priority_and_created_at
+    #TODO CHANGE
+    self.key_activities.where(scheduled_group: ScheduledGroup.find_by_name("Today")).incomplete.sort_by_priority_and_created_at
   end
 
   def todays_completed_activities
+    #TODO CHANGE
     self.key_activities.completed_today(self)
   end
 
@@ -118,6 +120,8 @@ class User < ApplicationRecord
     self.confirmed_at = nil
     self.save
   end
+
+  
 
   # def on_jwt_dispatch(token, payload)
   #   super
