@@ -1,8 +1,8 @@
 class Api::CompaniesController < Api::ApplicationController
   respond_to :json
   before_action :set_company, only: [:show, :update, :update_logo, :delete_logo]
-  before_action :set_onboarding_company, only: [:create_or_update_onboarding_goals, :get_onboarding_goals]
-  skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals]
+  before_action :set_onboarding_company, only: [:create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities]
+  skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities]
 
   def create
     @company = Company.new({
@@ -13,8 +13,13 @@ class Api::CompaniesController < Api::ApplicationController
     })
     authorize @company
     @company.save!
-    # @TODO investigate why file not attaching properly
-    # @company.logo.attach(params[:logo])
+    if params[:logo].present?
+      decoded_image = Base64.decode64(params[:logo][0][:data].split(',')[1])
+      image_io = StringIO.new(decoded_image)
+      @company.logo.attach(io: image_io, filename: params[:logo][0][:file][:path], content_type: 'image/jpeg')
+    elsif params[:logo].blank? && @company.logo_url.present?
+      @company.logo.purge 
+    end
     SignUpPurpose.create(company_id: @company[:id], purpose: params[:sign_up_purpose_attributes][:purpose])
     @user_role = UserRole.find_by(name: "CEO")
     UserCompanyEnablement.create(user_id: current_user.id, company_id: @company.id, user_role_id: @user_role.id)
@@ -37,6 +42,16 @@ class Api::CompaniesController < Api::ApplicationController
 
   def update
     @company.update!(company_params)
+    if params[:company][:logo].present?
+      # if @company.logo_url.present?
+      #   @company.logo.purge
+      # end
+      decoded_image = Base64.decode64(params[:company][:logo][0][:data].split(',')[1])
+      image_io = StringIO.new(decoded_image)
+      @company.logo.attach(io: image_io, filename: params[:company][:logo][0][:file][:path], content_type: 'image/jpeg') if params[:company][:logo][0][:file][:path].present?
+    elsif params[:company][:logo].blank?
+      @company.logo.purge 
+    end
     render json: @company.as_json(only: ['id', 'name', 'phone_number', 'rallying_cry', 'fiscal_year_start', 'timezone', 'display_format'],
     methods: ['accountability_chart_content', 'strategic_plan_content', 'logo_url', 'current_fiscal_quarter', 'quarter_for_creating_quarterly_goals', 'current_fiscal_year', 'year_for_creating_annual_initiatives', 'fiscal_year_range', 'current_quarter_start_date', 'next_quarter_start_date', 'forum_meetings_year_range', 'forum_intro_video'], 
     include: {
@@ -111,6 +126,23 @@ class Api::CompaniesController < Api::ApplicationController
     render json: {annual_initiative: @annual_initiative, rallying_cry: @rallying_cry}
   end
 
+  def create_or_update_onboarding_key_activities
+    params[:key_activities].each do |ka|
+      if ka[:id].present?
+        KeyActivity.find(ka[:id]).update!(description: ka[:description])
+      else
+        KeyActivity.create(user_id: current_user.id, company_id: @onboarding_company.id,description: ka[:description])
+      end
+    end
+    @key_activities = KeyActivity.where(company_id: @onboarding_company.id, user_id: current_user.id) 
+    render json: @key_activities.as_json(only: [:id, :description])
+  end
+
+  def get_onboarding_key_activities
+    @key_activities = KeyActivity.where(company_id: @onboarding_company.id, user_id: current_user.id)
+    render json: @key_activities.as_json(only: [:id, :description])
+  end
+
   def update_logo
     @company.logo.attach(params[:logo])
     render json: { logo_url: @company.logo_url }
@@ -125,7 +157,7 @@ class Api::CompaniesController < Api::ApplicationController
 
   def company_params
     #user should not be allowed to update the display_format once created
-    params.require(:company).permit(:name, :timezone, :logo, :fiscal_year_start, :rallying_cry, sign_up_purpose_attributes: [:purpose], core_four_attributes: [:core_1, :core_2, :core_3, :core_4])
+    params.require(:company).permit(:name, :timezone, :fiscal_year_start, :rallying_cry, sign_up_purpose_attributes: [:purpose], core_four_attributes: [:core_1, :core_2, :core_3, :core_4])
   end
 
   # def new_company_params
@@ -141,6 +173,10 @@ class Api::CompaniesController < Api::ApplicationController
   def set_onboarding_company
     @onboarding_company = Company.find(params[:company_id])
     authorize @onboarding_company
+  end
+
+  def decode_logo
+    
   end
 
 end

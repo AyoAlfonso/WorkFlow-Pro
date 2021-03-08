@@ -28,9 +28,9 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
 
   const { companyStore } = useMst();
 
-  const startedMilestones = quarterlyGoal.milestones.filter(
-    milestone => milestone.status != "unstarted",
-  );
+  const startedMilestones = quarterlyGoal.milestones
+    ? quarterlyGoal.milestones.filter(milestone => milestone.status != "unstarted")
+    : [];
 
   let userIconBorder = "";
 
@@ -47,9 +47,11 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
 
   const renderQuarterDisplay = () => {
     if (companyStore.company.currentFiscalQuarter != quarterlyGoal.quarter) {
+      const quarter =
+        quarterlyGoal.quarter || companyStore.onboardingCompany.quarterForCreatingQuarterlyGoals;
       return (
         <QuarterContainer>
-          <QuarterText> Q{quarterlyGoal.quarter} Goal </QuarterText>
+          <QuarterText> Q{quarter} Goal </QuarterText>
         </QuarterContainer>
       );
     }
@@ -57,7 +59,7 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
 
   return (
     <Container>
-      <StatusBlockColorIndicator milestones={quarterlyGoal.milestones} indicatorWidth={25} />
+      <StatusBlockColorIndicator milestones={quarterlyGoal.milestones || []} indicatorWidth={25} />
 
       <RowContainer>
         <StyledText onClick={() => openQuarterlyGoalModal()}>
@@ -69,16 +71,18 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
       </RowContainer>
       <RowContainer onClick={() => openQuarterlyGoalModal()}>
         {renderQuarterDisplay()}
-        <IconContainer>
-          <Avatar
-            avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
-            defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
-            firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
-            lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
-            size={36}
-            border={userIconBorder}
-          />
-        </IconContainer>
+        {quarterlyGoal.ownedBy && (
+          <IconContainer>
+            <Avatar
+              avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
+              defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
+              firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
+              lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
+              size={36}
+              border={userIconBorder}
+            />
+          </IconContainer>
+        )}
       </RowContainer>
     </Container>
   );

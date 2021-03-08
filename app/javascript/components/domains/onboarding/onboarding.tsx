@@ -3,12 +3,15 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { useCallback, useEffect, useState } from "react";
 import { useMst } from "~/setup/root";
+import { convertUrlToFile } from "~/utils/image-to-file";
 
 import { WizardLayout } from "~/components/layouts/wizard-layout";
 import { Loading } from "~/components/shared";
 import { EFieldType, FormBuilder } from "~/components/shared/form-builder";
 import { BulletedList } from "~/components/shared/bulleted-list";
 import { GoalSummary } from "./goal-summary";
+import { AddPyns } from "./add-pyns";
+import { PynsSummary } from "./pyns-summary";
 
 interface IOnboardingProps {}
 
@@ -18,6 +21,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [formData, setFormData] = useState<any>({});
   const [goalData, setGoalData] = useState<any>({});
+  const [pynsData, setPynsData] = useState<any>({});
 
   const loadOnboarding = useCallback(async () => {
     await staticDataStore.load();
@@ -26,23 +30,18 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
     if (!R.isNil(onboardingCompany)) {
       const signUpPurpose = R.path(["signUpPurpose"], onboardingCompany);
       const fiscalYearStart = new Date(R.path(["fiscalYearStart"], onboardingCompany));
-      const coreFours = R.pipe(
+      const logoUrl = R.path(["logoUrl"], onboardingCompany);
+      const logoFiles = R.isNil(logoUrl) ? [] : [await convertUrlToFile(logoUrl)];
+      const coreFour = R.pipe(
         R.path(["coreFour"]),
         R.toPairs,
-        R.pipe(
-          R.path(["coreFour"]),
-          R.toPairs,
-          R.map(([key, value]) => {
-            const newKey = R.pipe(
-              R.replace("Content", ""),
-              R.split(""),
-              R.insert(4, "_"),
-              R.join(""),
-            )(key);
-            return [newKey, value];
-          }),
-          R.fromPairs,
-        ),
+        R.map(([key, value]) => {
+          return [
+            R.pipe(R.replace("Content", ""), R.split(""), R.insert(4, "_"), R.join(""))(key),
+            value,
+          ];
+        }),
+        R.fromPairs,
       )(onboardingCompany);
       const state = R.pipe(
         R.set(
@@ -50,13 +49,16 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
           signUpPurpose,
         ),
         R.set(R.lens(R.prop("fiscalYearStart"), R.assoc("fiscalYearStart")), fiscalYearStart),
-        R.set(R.lens(R.prop("coreFourAttributes"), R.assoc("coreFourAttributes")), coreFours),
+        R.set(R.lens(R.prop("coreFourAttributes"), R.assoc("coreFourAttributes")), coreFour),
         R.dissoc("coreFour"),
         R.dissoc("signUpPurpose"),
+        R.set(R.lens(R.prop("logo"), R.assoc("logo")), logoFiles),
       )(onboardingCompany);
       setFormData(state);
       await companyStore.getOnboardingCompanyGoals(onboardingCompany.id);
       setGoalData(companyStore.onboardingCompanyGoals);
+      await companyStore.getOnboardingKeyActivities(onboardingCompany.id);
+      setPynsData(companyStore.onboardingKeyActivities);
     }
     setLoading(false);
   }, []);
@@ -89,15 +91,28 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
     setGoalData(newGoalDataState);
   };
 
+  const setPynsDataState = (keys: Array<string>, value: any) => {
+    const newPynsDataState = R.set(R.lensPath(keys), value, pynsData);
+    setPynsData(newPynsDataState);
+  };
+
   const submitFormState = async () => {
-    return await companyStore.updateCompany(formData, true);
+    let purgedFormData = formData;
+    if (!formData.coreFourAttributes["core_1"]) {
+      purgedFormData = R.omit(["coreFourAttributes"], purgedFormData);
+    }
+    return await companyStore.updateCompany(purgedFormData, true);
   };
 
   const submitGoalData = async () => {
     return await companyStore.updateOnboardingCompanyGoals(onboardingCompany.id, goalData);
   };
 
-  // const submitLogo = async logoData => {
+  const submitPynsData = async () => {
+    return await companyStore.updateOnboardingKeyActivities(onboardingCompany.id, pynsData);
+  };
+
+  // const addLogo = async (keys, logoData) => {
   //   const form = new FormData();
   //   form.append("logo", logoData[0]);
   //   await companyStore.updateCompanyLogo(form);
@@ -113,12 +128,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
 
   const onNextButtonClick = async () => {
     if (currentStep === 0 && R.isNil(onboardingCompany)) {
-      // create company
-      const form = new FormData();
-      Object.entries(formData).forEach(([key, value]: [string, string | Blob]) => {
-        form.append(key, value);
-      });
-      companyStore.createCompany(form).then(res => {
+      companyStore.createCompany(formData).then(res => {
         if (res === true) {
           incrementStep();
         }
@@ -132,6 +142,12 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
       });
     } else if (currentStep === 2) {
       submitGoalData().then(res => {
+        if (res === true) {
+          incrementStep();
+        }
+      });
+    } else if (currentStep === 3) {
+      submitPynsData().then(res => {
         if (res === true) {
           incrementStep();
         }
@@ -288,7 +304,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
       formContainerStyle={{ height: "140px" }}
       stepwise={true}
     />,
-    <div>STEP THREE LEFT</div>,
+    <AddPyns formData={pynsData} goalData={goalData} setPynsDataState={setPynsDataState} />,
     <div>STEP FOUR LEFT</div>,
   ];
 
@@ -323,7 +339,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
       />
     </>,
     <GoalSummary formData={goalData} />,
-    <div>STEP THREE RIGHT</div>,
+    <PynsSummary goalData={goalData} />,
     <div>STEP FOUR RIGHT</div>,
   ];
 

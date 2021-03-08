@@ -68,6 +68,8 @@ Rails.application.routes.draw do
     get '/onboarding', to: "companies#get_onboarding_company"
     get 'onboarding/goals/:company_id', to: "companies#get_onboarding_goals"
     post '/onboarding/goals/:company_id', to: "companies#create_or_update_onboarding_goals"
+    get '/onboarding/key_activities/:company_id', to: "companies#get_onboarding_key_activities"
+    post '/onboarding/key_activities/:company_id', to: "companies#create_or_update_onboarding_key_activities"
 
     # issues
     resources :issues, only: [:index, :create, :update, :destroy]

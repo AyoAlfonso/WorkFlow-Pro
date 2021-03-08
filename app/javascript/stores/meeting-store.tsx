@@ -186,7 +186,6 @@ export const MeetingStoreModel = types
           currentStep: 0,
           meetingTemplateId: meetingTemplate.id,
         });
-
         if (response.ok) {
           self.currentMeeting = response.data;
           return { meeting: self.currentMeeting };

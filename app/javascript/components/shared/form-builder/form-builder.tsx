@@ -14,6 +14,8 @@ import { TrixEditor } from "react-trix";
 
 import { Input, Label, Select, TextArea, TextDiv } from "~/components/shared";
 
+import * as moment from "moment";
+
 export enum EFieldType {
   TextField = "TEXT_FIELD",
   TextArea = "TEXT_AREA",
@@ -83,15 +85,15 @@ export const FormBuilder = ({
             acceptedFiles={["image/*"]}
             dropzoneText={dropZoneText}
             onAdd={(f: any) => {
-              callback(formKeys, f[0]);
+              callback(formKeys, f);
             }}
             onDelete={(f: any) => {
-              callback(formKeys, null);
+              callback(formKeys, []);
             }}
             showPreviewsInDropzone={true}
             filesLimit={1}
             maxFileSize={2000000}
-            fileObjects={R.path(formKeys, formData) ? [R.path(formKeys, formData)] : []}
+            fileObjects={R.path(formKeys, formData) ? R.path(formKeys, formData) : []}
           />
         );
       case "SELECT":
@@ -115,7 +117,9 @@ export const FormBuilder = ({
       case "DATE_SELECT":
         return (
           <Calendar
-            date={R.pathOr(null, formKeys, formData)}
+            date={
+              new Date(moment.utc(R.pathOr(null, formKeys, formData)).format("YYYY-MM-DD HH:mm:ss"))
+            }
             onChange={date => {
               callback(formKeys, date);
             }}

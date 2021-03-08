@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import { position, PositionProps } from "styled-system";
 import { ProgressBar, Step } from "react-step-progress-bar";
 import { baseTheme } from "~/themes";
 import { StepProgressBarIcon } from "../progress-bars";
@@ -38,7 +39,9 @@ export const SignUpWizardProgressBar = ({
       return (
         <StepContainer key={index}>
           <StepTitleContainer titleCharLength={titleCharLength(step)}>
-            <StepTitle>{step}</StepTitle>
+            <StepTitle index={index} currentStep={currentStep}>
+              {step}
+            </StepTitle>
           </StepTitleContainer>
           <StepDiv
             onClick={() => {
@@ -46,10 +49,18 @@ export const SignUpWizardProgressBar = ({
             }}
           >
             <Step transition="scale">
-              {({ accomplished }) =>
-                currentStep >= index
-                  ? renderIcon("white", "primary100", "Chevron-Left")
-                  : renderIcon("white", "grey100", "Chevron-Left")
+              {({ accomplished }) => {
+                if (currentStep === index) {
+                  return renderIcon("white", "primary100", "Chevron-Left");
+                } else if (currentStep > index) {
+                  return renderIcon("white", "grey100", "Checkmark");
+                } else {
+                  return <IncompleteStep />;
+                }
+              }
+              // currentStep > index
+              // ? renderIcon("white", "primary100", "Chevron-Left")
+              // : renderIcon("white", "grey100", "Chevron-Left")
               }
             </Step>
           </StepDiv>
@@ -65,13 +76,12 @@ export const SignUpWizardProgressBar = ({
   );
 };
 
-const StepContainer = styled.div`
-  background-color: red;
-`;
+const StepContainer = styled.div``;
 
-const StepTitle = styled(Text)`
+const StepTitle = styled(Text)<{ currentStep; index }>`
   font-size: 9px;
-  color: ${props => props.theme.colors.greyActive};
+  color: ${({ currentStep, index, theme: { colors } }) =>
+    currentStep === index ? colors.primary100 : colors.greyActive};
 `;
 
 const IconContainer = styled.div`
@@ -101,3 +111,30 @@ const StepDiv = styled.div`
   }
   transition: all ease 0.1s;
 `;
+
+interface ICircleProps extends PositionProps {
+  bgColor: string;
+  size: string;
+}
+
+const Circle = styled.div<ICircleProps>`
+  ${position}
+  border-radius: 50%;
+  height: ${({ size }) => size};
+  width: ${({ size }) => size};
+  background-color: ${({ bgColor }) => bgColor};
+`;
+
+const IncompleteStep = () => {
+  return (
+    <Circle
+      size={"24px"}
+      bgColor={baseTheme.colors.greyInactive}
+      position={"absolute"}
+      top={"-12px"}
+      left={"-12px"}
+    >
+      <Circle size={"12px"} bgColor={"white"} position={"absolute"} top={"6px"} left={"6px"} />
+    </Circle>
+  );
+};

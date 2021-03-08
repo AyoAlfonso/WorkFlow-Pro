@@ -170,13 +170,14 @@ const BodyContainer = styled.div`
   padding-right: 16px;
   padding-top: 32px;
   width: 75%;
-  height: 90%;
+  height: 100%;
+  position: relative;
 `;
 
 const BodyContentContainer = styled.div`
   display: flex;
   height: 85%;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 const DescriptionTitleContainer = styled.div``;
@@ -226,6 +227,9 @@ const LynchpynLogoContainer = styled.div`
 `;
 
 const CloseButtonContainer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
   display: flex;
   margin-right: 20px;
   &:hover {
