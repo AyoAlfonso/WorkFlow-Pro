@@ -14,7 +14,6 @@ import {
 } from "~/components/shared/styles/modals";
 import { UserSelectionDropdownList, Loading, LabelSelection } from "~/components/shared";
 import { PrioritySelector } from "~/components/shared/issues-and-key-activities/priority-selector";
-import { ScheduledGroupSelector } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
 
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
@@ -38,8 +37,6 @@ export const CreateIssueModal = ({
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
   const [selectedLabel, setSelectedLabel] = useState<any>(null);
-  const [selectedGroupId, setSelectedGroupId] = useState<number>(null);
-  const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
@@ -106,12 +103,6 @@ export const CreateIssueModal = ({
                 onLabelClick={setShowLabelsList}
                 showLabelsList={showLabelsList}
               />
-              <ScheduledGroupSelector
-                selectedGroupId={selectedGroupId}
-                setSelectedGroupId={setSelectedGroupId}
-                selectedTeamId={selectedTeamId}
-                setSelectedTeamId={setSelectedTeamId}
-              />
             </IssuePynModalContainer>
             {selectedUser && (
               <AvatarContainer onClick={() => setShowUsersList(!showUsersList)}>
@@ -136,7 +127,6 @@ export const CreateIssueModal = ({
                 .createIssue({
                   description: issueDescription,
                   priority: selectedPriority,
-                  teamId: selectedTeamId || teamId,
                   userId: selectedUser.id,
                   position: newIssuePosition,
                   meetingId: meetingId,
