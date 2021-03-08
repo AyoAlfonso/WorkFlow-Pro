@@ -60,6 +60,10 @@ export const CompanyStoreModel = types
         showToast("There was an error removing the company logo", ToastMessageConstants.ERROR);
       }
     }),
+    inviteUsersToCompany: flow(function*(emailAddresses, teamId) {
+      const env = getEnv(self);
+      const response = yield env.api.inviteUsersToCompany(emailAddresses, teamId);
+    })
   }))
   .actions(self => ({
     updateModelField(field, value) {

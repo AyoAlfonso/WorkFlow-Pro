@@ -26,7 +26,7 @@ class User < ApplicationRecord
   has_many :daily_logs, dependent: :destroy
   has_one_attached :avatar
   has_many :questionnaire_attempts
-  belongs_to :user_role
+  belongs_to :user_role, optional: true
   has_many :habits, dependent: :destroy
   has_many :team_user_enablements, dependent: :destroy
   has_many :teams, through: :team_user_enablements
@@ -38,7 +38,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
   accepts_nested_attributes_for :team_user_enablements, :allow_destroy => true
 
-  validates :first_name, :last_name, presence: true
+  validates :first_name, :last_name, presence: true, on: :update
 
   accepts_nested_attributes_for :daily_logs
 
@@ -121,7 +121,10 @@ class User < ApplicationRecord
     self.save
   end
 
-  
+  # devise_invitable send_confirmation_notification?
+  def send_confirmation_notification?
+    false
+  end
 
   # def on_jwt_dispatch(token, payload)
   #   super

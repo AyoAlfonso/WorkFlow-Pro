@@ -58,6 +58,7 @@ export const EditUserModal = ({
     sessionStore: {
       staticData: { userRoles },
     },
+    teamStore,
   } = useMst();
 
   const { t } = useTranslation();
@@ -93,8 +94,11 @@ export const EditUserModal = ({
 
   const updateUser = () => {
     if (!R.isNil(userId)) {
-      userStore.updateUser({ id: userId, email, firstName, lastName, teams, title, userRoleId });
-      // resetUser();
+      userStore
+        .updateUser({ id: userId, email, firstName, lastName, teams, title, userRoleId })
+        .then(() => {
+          teamStore.fetchTeams();
+        });
     }
   };
 

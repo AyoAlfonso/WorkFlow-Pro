@@ -92,7 +92,11 @@
         "strategicPlan": "The Plan",
         "timezone": "Location/Time Zone",
         "createUser": {
-          "addButton": "Create New User"
+          "addButton": "Create New User",
+          "inviteYourTeam": "Invite your team"
+        },
+        "createTeam": {
+          "addButton": "Create a new team"
         },
         "editUser": {
           "title": "Edit User"

@@ -20,6 +20,9 @@ import {
 
 import { Table } from "~/components/shared/table";
 import styled from "styled-components";
+import { Can } from "~/components/shared/auth/can";
+import { Button } from "~/components/shared";
+import { CreateNewTeamModal } from "./teams/create-new-team-modal";
 
 export const Teams = observer(
   (): JSX.Element => {
@@ -28,6 +31,8 @@ export const Teams = observer(
       userStore: { users },
       userStore,
     } = useMst();
+
+    const [createTeamModalOpen, setCreateTeamModalOpen] = useState<boolean>(false);
 
     const { t } = useTranslation();
     const teamsData = R.flatten(
@@ -90,11 +95,33 @@ export const Teams = observer(
       <StretchContainer>
         <HeaderContainer>
           <HeaderText>{t("profile.teamsManagement.header")}</HeaderText>
+          <Can
+            action={"create-team"}
+            data={null}
+            no={<></>}
+            yes={
+              <>
+                <Button
+                  variant={"primaryOutline"}
+                  small
+                  onClick={() => {
+                    setCreateTeamModalOpen(true);
+                  }}
+                >
+                  {t("company.createTeam.addButton")}
+                </Button>
+                <CreateNewTeamModal
+                  modalOpen={createTeamModalOpen}
+                  setModalOpen={setCreateTeamModalOpen}
+                />
+              </>
+            }
+          />
         </HeaderContainer>
         <BodyContainer>
           <Table
             columns={4}
-            headers={["Team", "Status", "Team Members", "Start Meetings?"]}
+            headers={["Team", "Status", "Team Members", "Meeting Lead"]}
             data={teamsData}
             styling={{ widths: [2, 1, 2, 2] }}
           ></Table>

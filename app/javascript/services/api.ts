@@ -391,5 +391,13 @@ export class Api {
     return this.client.post(`/labels`, { labelObject })
   }
 
+  async inviteUsersToCompany(emailAddresses, teamId){
+    return this.client.post(`/invite_users_to_company`, { emailAddresses, teamId })
+  }
+
+  async createTeamAndInviteUsers(teamName, users){
+    return this.client.post(`/create_team_and_invite_users`, { teamName, users })
+  }
+
   //async setJWT(jwt) {}
 }

@@ -33,6 +33,8 @@ class Api::UsersController < Api::ApplicationController
 
   def update
     @user.update!(params[:user][:teams].present? ? user_update_params.merge(team_user_enablements_attributes: team_user_enablement_attribute_parser(params[:user][:teams])) : user_update_params)
+    user_company_enablement = UserCompanyEnablement.where(company_id: current_company.id, user_id: @user.id).first
+    user_company_enablement.update!(title: params[:user][:title])
     render 'api/users/show'
   end
 
@@ -52,6 +54,31 @@ class Api::UsersController < Api::ApplicationController
       @user.send_reset_password_instructions
       render json: {message: "An email has been sent to reset your password, please check it there."}
     end
+  end
+
+  def invite_users_to_company
+    team = Team.where(id: params[:team_id])
+    email_addresses = params[:email_addresses].split(',')
+    email_addresses.each do |email|
+      sanitized_email = email.strip
+      if User.find_by_email(sanitized_email).blank?
+        @user = User.create!({
+          email: sanitized_email, 
+          company_id: current_company.id, 
+          default_selected_company_id: current_company.id,
+          password: ENV["DEFAULT_PASSWORD"] || "password"
+        })
+        @user.invite!
+        @user.assign_attributes({
+          user_company_enablements_attributes: create_user_company_enablement_attribute_parser, 
+          team_user_enablements_attributes: team_user_enablement_attribute_parser(team)
+        })
+        @user.save(validate: false)
+      end
+    end
+    authorize current_user
+    @users = policy_scope(User)
+    render '/api/users/index'
   end
 
   def profile
@@ -99,7 +126,7 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def user_update_params
-    params.require(:user).permit(:id, :password, :password_confirmation, :first_name, :last_name, :personal_vision, :email, :timezone, :user_role_id, :default_selected_company_id, :title, daily_logs_attributes: [:id, :work_status, :create_my_day, :evening_reflection, :title, :mip_count, :weekly_reflection, :monthly_reflection])
+    params.require(:user).permit(:id, :password, :password_confirmation, :first_name, :last_name, :title, :personal_vision, :email, :timezone, :user_role_id, :default_selected_company_id, daily_logs_attributes: [:id, :work_status, :create_my_day, :evening_reflection, :title, :mip_count, :weekly_reflection, :monthly_reflection])
   end
 
   def set_user
@@ -112,7 +139,7 @@ class Api::UsersController < Api::ApplicationController
       user_id: @user.id, 
       company_id: current_company.id,
       user_title: params[:user][:title],
-      user_role_id: params[:user][:user_role_id]
+      user_role_id: params[:user] && params[:user][:user_role_id] ? params[:user][:user_role_id] : UserRole.find_by_name("Employee").id
     }]
   end
 
