@@ -21,6 +21,12 @@ import { RoleAdministrator, RoleCEO } from "~/lib/constants";
 import { InviteUserModal } from "~/components/shared/invite-user-modal";
 import { toJS } from "mobx";
 
+declare global {
+  interface Window {
+    FreshworksWidget: any;
+  }
+}
+
 export const HeaderBar = observer(
   (): JSX.Element => {
     const [openCreateDropdown, setOpenCreateDropdown] = useState<boolean>(false);
@@ -130,32 +136,28 @@ export const HeaderBar = observer(
             paddingBottom={"10px"}
             disabled={false}
             onClick={() => {
-              companyStore.company.displayFormat === "Company" ? (
-                meetingStore.createPersonalMeeting().then(({ meeting }) => {
-                  if (!R.isNil(meeting)) {
-                    history.push(`/personal_planning/${meeting.id}`);
-                  } else {
-                    showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
-                  }
-                })
-              ) : (
-                meetingStore.createPersonalMonthlyMeeting().then(({ meeting }) => {
-                  if (!R.isNil(meeting)) {
-                    history.push(`/personal_planning/${meeting.id}`);
-                  } else {
-                    showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
-                  }
-                })
-              )
+              companyStore.company.displayFormat === "Company"
+                ? meetingStore.createPersonalMeeting().then(({ meeting }) => {
+                    if (!R.isNil(meeting)) {
+                      history.push(`/personal_planning/${meeting.id}`);
+                    } else {
+                      showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
+                    }
+                  })
+                : meetingStore.createPersonalMonthlyMeeting().then(({ meeting }) => {
+                    if (!R.isNil(meeting)) {
+                      history.push(`/personal_planning/${meeting.id}`);
+                    } else {
+                      showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
+                    }
+                  });
             }}
           >
             <SelectionText>
-              {
-                companyStore.company.displayFormat === "Company" ? 
-                  "Weekly Planning" : 
-                  "Monthly Planning"
-              }
-              </SelectionText>
+              {companyStore.company.displayFormat === "Company"
+                ? "Weekly Planning"
+                : "Monthly Planning"}
+            </SelectionText>
           </SelectionContainer>
         </DropdownContainer>
       );
@@ -203,6 +205,21 @@ export const HeaderBar = observer(
       }
     };
 
+    const renderShowHelpdesk = (): JSX.Element => {
+      return (
+        <AccountOption>
+          <AccountOptionText
+            onClick={() => {
+              window.FreshworksWidget("open");
+              setShowAccountActions(false);
+            }}
+          >
+            Show Helpdesk
+          </AccountOptionText>
+        </AccountOption>
+      );
+    };
+
     const renderActionDropdown = (): JSX.Element => {
       return showAccountActions ? (
         <ActionDropdownContainer>
@@ -222,6 +239,7 @@ export const HeaderBar = observer(
             </Link>
           </AccountOption>
           {renderSwitchCompanyOptions()}
+          {renderShowHelpdesk()}
           <AccountOption>
             <AccountOptionText onClick={() => sessionStore.logoutRequest()}>
               {t("profile.logout")}
@@ -495,7 +513,7 @@ const PersonalInfoContainer = styled.div`
 const ActionDropdownContainer = styled.div`
   position: absolute;
   background-color: ${props => props.theme.colors.backgroundBlue};
-  width: 120px;
+  width: 130px;
   margin-left: 50px;
   margin-top: -5px;
 `;
