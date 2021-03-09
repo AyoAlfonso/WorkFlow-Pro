@@ -8,6 +8,8 @@ import { TextNoMargin } from "~/components/shared/text";
 import { Status } from "~/components/shared/status";
 import { Avatar } from "~/components/shared/avatar";
 import { UserCard } from "~/components/shared/user-card";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 import {
   StretchContainer,
@@ -29,6 +31,7 @@ export const Teams = observer(
   (): JSX.Element => {
     const {
       teamStore: { teams },
+      teamStore,
       userStore: { users },
       userStore,
     } = useMst();
@@ -96,14 +99,27 @@ export const Teams = observer(
               data={null}
               no={<></>}
               yes={
-                <StyledIconContainer
-                  onClick={() => {
-                    setSelectedEditTeam(team);
-                    setEditTeamModalOpen(true);
-                  }}
-                >
-                  <Icon icon={"Edit-2"} size={"15px"} iconColor={"grey80"} />
-                </StyledIconContainer>
+                <ActionsContainer>
+                  <StyledIconContainer
+                    onClick={() => {
+                      setSelectedEditTeam(team);
+                      setEditTeamModalOpen(true);
+                    }}
+                  >
+                    <Icon icon={"Edit-2"} size={"15px"} iconColor={"grey80"} />
+                  </StyledIconContainer>
+                  <StyledIconContainer
+                    onClick={() => {
+                      if (confirm("Are you sure you want to delete this team?")) {
+                        teamStore.deleteTeam(team.id).then(() => {
+                          showToast("Team deleted", ToastMessageConstants.SUCCESS);
+                        });
+                      }
+                    }}
+                  >
+                    <Icon icon={"Delete"} size={"15px"} iconColor={"grey80"} />
+                  </StyledIconContainer>
+                </ActionsContainer>
               }
             />
           </LeftAlignedColumnListTableContainer>,
@@ -175,7 +191,13 @@ const CheckboxContainer = styled.div`
 
 const StyledIconContainer = styled(IconContainer)`
   margin-top: 16px;
+  margin-left: 8px;
+  margin-right: 8px;
   &: hover {
     cursor: pointer;
   }
+`;
+
+const ActionsContainer = styled.div`
+  display: flex;
 `;

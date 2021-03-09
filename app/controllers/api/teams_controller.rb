@@ -2,7 +2,7 @@ class Api::TeamsController < Api::ApplicationController
   include StatsHelper
 
   respond_to :json
-  before_action :set_team, only: [:show, :update]
+  before_action :set_team, only: [:show, :update, :destroy]
   after_action :verify_policy_scoped, only: [:index, :user_teams, :create_team_and_invite_users], unless: :skip_pundit?
 
   def index
@@ -34,6 +34,12 @@ class Api::TeamsController < Api::ApplicationController
       user_record = user.second
       TeamUserEnablement.create!(team_id: @team.id, user_id: user_record["user_id"], role: user_record["meeting_lead"])
     end
+    @teams = policy_scope(Team).all
+    render 'api/teams/index'
+  end
+
+  def destroy
+    @team.destroy!
     @teams = policy_scope(Team).all
     render 'api/teams/index'
   end

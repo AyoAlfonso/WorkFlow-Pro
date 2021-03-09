@@ -46,6 +46,12 @@ export const TeamStoreModel = types
       if (response.ok) {
         self.teams = response.data as any;
       }
+    }),
+    deleteTeam: flow(function*(teamId){
+      const response: ApiResponse<any> = yield self.environment.api.deleteTeam(teamId);
+      if (response.ok) {
+        self.teams = response.data as any;
+      }
     })
   }))
   .actions(self => ({

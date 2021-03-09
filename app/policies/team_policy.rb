@@ -13,7 +13,11 @@ class TeamPolicy < ApplicationPolicy
   end
 
   def create_team_and_invite_users?
-    true
+    (@user.company_admin? || @record.is_lead?(@user)) && @user.companies.include?(@record.company)
+  end
+
+  def destroy?
+    (@user.company_admin? || @record.is_lead?(@user)) && @user.companies.include?(@record.company)
   end
 
   class Scope

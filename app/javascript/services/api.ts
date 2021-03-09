@@ -305,6 +305,10 @@ export class Api {
     return this.client.patch(`/teams/${formData.id}`, formData);
    }
 
+   async deleteTeam(id) {
+    return this.client.delete(`/teams/${id}`);
+  }
+
   async getMeetingTemplates() {
     return this.client.get(`/meeting_templates`);
   }

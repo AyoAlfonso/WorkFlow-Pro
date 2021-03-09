@@ -54,7 +54,7 @@ export const ModifyTeamBody = observer(
     };
 
     const updateTeam = () => {
-      if (team.id) {
+      if (team) {
         teamStore.updateTeam(team.id, teamName, memberListState).then(() => {
           showToast("Team updated", ToastMessageConstants.SUCCESS);
           setModalOpen(false);
@@ -101,7 +101,7 @@ export const ModifyTeamBody = observer(
         </AddNewUserContainer>
 
         <SaveButton small variant={"primary"} disabled={!teamName} onClick={() => updateTeam()}>
-          {team.id ? "Update Team" : "Send Invite"}
+          {team ? "Update Team" : "Send Invite"}
         </SaveButton>
       </Container>
     );
