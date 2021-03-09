@@ -25,7 +25,7 @@ export const ParkingLot = observer(
       if (upcomingForumMeeting) {
         issueStore.fetchTeamIssueMeetingEnablements(upcomingForumMeeting.id);
       }
-    }, [teamId]);
+    }, [upcomingForumMeeting]);
 
     if (R.isNil(upcomingForumMeeting)) {
       return <NoUpcomingMeeting />;

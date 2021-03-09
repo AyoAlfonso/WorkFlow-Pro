@@ -74,9 +74,11 @@ class Api::IssuesController < Api::ApplicationController
 
   def resort_index
     if params[:meeting_id].present?
-      team_id = Meeting.find(params[:meeting_id]).team_id
-      @issues = team_meeting_issues(team_id)
-      @team_issues = TeamIssueResortService.call(TeamIssue.for_team(team_id))
+      meeting = Meeting.find(params[:meeting_id])
+      team_id = meeting.team_id
+      @issues = team_meeting_issues(team_id).exclude_personal_for_team(params[:team_id])
+      @team_issues = TeamIssueResortService.call(TeamIssue.for_team(team_id), meeting)
+      @meeting_team_issues = Issue.for_meeting(params[:meeting_id]).exclude_personal_for_team(params[:team_id])
     elsif params[:team_id].present? && params[:meeting_id].blank?
       @issues = IssueResortService.call(policy_scope(Issue).where(team_id: params[:team_id]))
     else
