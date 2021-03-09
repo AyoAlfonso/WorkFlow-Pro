@@ -32,7 +32,7 @@ export const TeamSettings = ({ team }: ITeamSettings): JSX.Element => {
   );
 
   const saveSettings = () => {
-    teamStore.updateTeam({
+    teamStore.updateTeamSettings({
       id: team.id,
       settings: {
         weekly_meeting_dashboard_link_embed: teamSettingWeeklyDashboard,

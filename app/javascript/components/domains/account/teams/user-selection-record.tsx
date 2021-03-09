@@ -20,9 +20,12 @@ export const UserSelectionRecord = observer(
     const {
       userStore: { users },
     } = useMst();
-
-    const [selectedUserId, setSelectedUserId] = useState<any>("");
-    const [meetingLead, setMeetingLead] = useState<any>("");
+    const [selectedUserId, setSelectedUserId] = useState<any>(
+      memberListState[index] ? memberListState[index]["userId"] : "",
+    );
+    const [meetingLead, setMeetingLead] = useState<any>(
+      memberListState[index] ? memberListState[index]["meetingLead"] : "",
+    );
 
     const renderUserSelections = (): Array<JSX.Element> => {
       return users.map((user, index) => {

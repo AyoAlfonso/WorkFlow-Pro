@@ -2,23 +2,25 @@ import * as React from "react";
 import { ModalWithHeader } from "~/components/shared/modal-with-header";
 import { ModifyTeamBody } from "./modify-team-body";
 
-interface ICreateNewTeamModalProps {
+interface IEditTeamModalProps {
+  team: any;
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const CreateNewTeamModal = ({
+export const EditTeamModal = ({
+  team,
   modalOpen,
   setModalOpen,
-}: ICreateNewTeamModalProps): JSX.Element => {
+}: IEditTeamModalProps): JSX.Element => {
   return (
     <ModalWithHeader
       modalOpen={modalOpen}
       setModalOpen={setModalOpen}
-      headerText={"New Team"}
+      headerText={"Modify Team"}
       width="480px"
     >
-      <ModifyTeamBody setModalOpen={setModalOpen} />
+      <ModifyTeamBody team={team} setModalOpen={setModalOpen} />
     </ModalWithHeader>
   );
 };

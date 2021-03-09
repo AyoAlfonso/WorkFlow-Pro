@@ -112,7 +112,7 @@ Rails.application.routes.draw do
     get 'questionnaire_attempts/questionnaire_summary', to: 'questionnaire_attempts#questionnaire_summary'
 
     #teams
-    resources :teams, only: [:index, :show, :update]
+    resources :teams, only: [:index, :show, :update, :destroy]
     post '/create_team_and_invite_users', to: 'teams#create_team_and_invite_users'
     
     #meetings

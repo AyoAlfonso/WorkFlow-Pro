@@ -2,7 +2,7 @@ class Api::TeamsController < Api::ApplicationController
   include StatsHelper
 
   respond_to :json
-  before_action :set_team, only: [:show, :update]
+  before_action :set_team, only: [:show, :update, :destroy]
   after_action :verify_policy_scoped, only: [:index, :user_teams, :create_team_and_invite_users], unless: :skip_pundit?
 
   def index
@@ -16,9 +16,14 @@ class Api::TeamsController < Api::ApplicationController
   end
 
   def update
-    @team.update!(team_settings_params)
+    if params[:users]
+      @team.update!({name: params[:team_name], team_user_enablements_attributes: team_user_enablement_attribute_parser(params[:users])})
+    else
+      @team.update!(team_settings_params)
+    end
+    @teams = policy_scope(Team).all
     fetch_additional_data
-    render 'api/teams/show'
+    render 'api/teams/update'
   end
 
   def create_team_and_invite_users
@@ -29,6 +34,12 @@ class Api::TeamsController < Api::ApplicationController
       user_record = user.second
       TeamUserEnablement.create!(team_id: @team.id, user_id: user_record["user_id"], role: user_record["meeting_lead"])
     end
+    @teams = policy_scope(Team).all
+    render 'api/teams/index'
+  end
+
+  def destroy
+    @team.destroy!
     @teams = policy_scope(Team).all
     render 'api/teams/index'
   end
@@ -50,4 +61,17 @@ class Api::TeamsController < Api::ApplicationController
     params.require(:team).permit(:id, settings: [:weekly_meeting_dashboard_link_embed])
   end
 
+  def team_user_enablement_attribute_parser(users)
+    @team.team_user_enablements.destroy_all
+    users_list = []
+    users.each do |user_object|
+      user = user_object.second
+      users_list.push({
+        team_id: @team.id,
+        user_id: user[:user_id],
+        role: user[:meeting_lead]
+      })
+    end
+    users_list
+  end
 end

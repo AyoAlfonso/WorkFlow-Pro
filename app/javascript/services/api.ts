@@ -297,8 +297,16 @@ export class Api {
     return this.client.get(`/teams/${id}`);
   }
 
-  async updateTeam(formData) {
+  async updateTeam(teamId, teamName, users) {
+    return this.client.patch(`/teams/${teamId}`, { teamName, users });
+  }
+
+   async updateTeamSettings(formData){
     return this.client.patch(`/teams/${formData.id}`, formData);
+   }
+
+   async deleteTeam(id) {
+    return this.client.delete(`/teams/${id}`);
   }
 
   async getMeetingTemplates() {

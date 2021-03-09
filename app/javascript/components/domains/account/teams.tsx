@@ -8,6 +8,8 @@ import { TextNoMargin } from "~/components/shared/text";
 import { Status } from "~/components/shared/status";
 import { Avatar } from "~/components/shared/avatar";
 import { UserCard } from "~/components/shared/user-card";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 import {
   StretchContainer,
@@ -21,18 +23,22 @@ import {
 import { Table } from "~/components/shared/table";
 import styled from "styled-components";
 import { Can } from "~/components/shared/auth/can";
-import { Button } from "~/components/shared";
+import { Button, IconContainer, Icon } from "~/components/shared";
 import { CreateNewTeamModal } from "./teams/create-new-team-modal";
+import { EditTeamModal } from "./teams/edit-team-modal";
 
 export const Teams = observer(
   (): JSX.Element => {
     const {
       teamStore: { teams },
+      teamStore,
       userStore: { users },
       userStore,
     } = useMst();
 
     const [createTeamModalOpen, setCreateTeamModalOpen] = useState<boolean>(false);
+    const [editTeamModalOpen, setEditTeamModalOpen] = useState<boolean>(false);
+    const [selectedEditTeam, setSelectedEditTeam] = useState<any>({});
 
     const { t } = useTranslation();
     const teamsData = R.flatten(
@@ -87,6 +93,36 @@ export const Teams = observer(
                   ),
               )}
           </LeftAlignedColumnListTableContainer>,
+          <LeftAlignedColumnListTableContainer>
+            <Can
+              action={"create-team"}
+              data={null}
+              no={<></>}
+              yes={
+                <ActionsContainer>
+                  <StyledIconContainer
+                    onClick={() => {
+                      setSelectedEditTeam(team);
+                      setEditTeamModalOpen(true);
+                    }}
+                  >
+                    <Icon icon={"Edit-2"} size={"15px"} iconColor={"grey80"} />
+                  </StyledIconContainer>
+                  <StyledIconContainer
+                    onClick={() => {
+                      if (confirm("Are you sure you want to delete this team?")) {
+                        teamStore.deleteTeam(team.id).then(() => {
+                          showToast("Team deleted", ToastMessageConstants.SUCCESS);
+                        });
+                      }
+                    }}
+                  >
+                    <Icon icon={"Delete"} size={"15px"} iconColor={"grey80"} />
+                  </StyledIconContainer>
+                </ActionsContainer>
+              }
+            />
+          </LeftAlignedColumnListTableContainer>,
         ]),
       ),
     );
@@ -117,13 +153,18 @@ export const Teams = observer(
               </>
             }
           />
+          <EditTeamModal
+            team={selectedEditTeam}
+            modalOpen={editTeamModalOpen}
+            setModalOpen={setEditTeamModalOpen}
+          />
         </HeaderContainer>
         <BodyContainer>
           <Table
-            columns={4}
-            headers={["Team", "Status", "Team Members", "Meeting Lead"]}
+            columns={5}
+            headers={["Team", "Status", "Team Members", "Meeting Lead", ""]}
             data={teamsData}
-            styling={{ widths: [2, 1, 2, 2] }}
+            styling={{ widths: [2, 1, 2, 2, 1] }}
           ></Table>
         </BodyContainer>
       </StretchContainer>
@@ -146,4 +187,17 @@ const CheckboxContainer = styled.div`
   &: hover {
     cursor: pointer;
   }
+`;
+
+const StyledIconContainer = styled(IconContainer)`
+  margin-top: 16px;
+  margin-left: 8px;
+  margin-right: 8px;
+  &: hover {
+    cursor: pointer;
+  }
+`;
+
+const ActionsContainer = styled.div`
+  display: flex;
 `;
