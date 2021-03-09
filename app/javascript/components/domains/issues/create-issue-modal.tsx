@@ -12,7 +12,7 @@ import {
   FlexContainer,
   IssuePynModalContainer,
 } from "~/components/shared/styles/modals";
-import { UserSelectionDropdownList, Loading, LabelSelection } from "~/components/shared";
+import { UserSelectionDropdownList, Loading, LabelSelection, Icon } from "~/components/shared";
 import { PrioritySelector } from "~/components/shared/issues-and-key-activities/priority-selector";
 
 interface ICreateIssueModalProps {
@@ -37,6 +37,7 @@ export const CreateIssueModal = ({
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
   const [selectedLabel, setSelectedLabel] = useState<any>(null);
+  const [personal, setPersonal] = useState<boolean>(false);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
@@ -97,6 +98,9 @@ export const CreateIssueModal = ({
 
           <OptionsContainer>
             <IssuePynModalContainer>
+              <LockContainer onClick={() => setPersonal(!personal)}>
+                <Icon icon={"Lock"} size={"18px"} iconColor={personal ? "mipBlue" : "grey60"} />
+              </LockContainer>
               <LabelSelection
                 selectedLabel={selectedLabel}
                 setSelectedLabel={setSelectedLabel}
@@ -132,6 +136,8 @@ export const CreateIssueModal = ({
                   meetingId: meetingId,
                   meetingEnabled: meetingEnabled,
                   label: selectedLabelObj,
+                  personal: personal,
+                  teamId: teamId,
                 })
                 .then(result => {
                   if (result) {
@@ -139,6 +145,7 @@ export const CreateIssueModal = ({
                     setCreateIssueModalOpen(false);
                     setSelectedPriority(0);
                     setSelectedLabel(null);
+                    setPersonal(false);
                   }
                 })
             }
@@ -179,4 +186,10 @@ const TextInputFlexContainer = styled(FlexContainer)`
 const OptionsContainer = styled.div`
   margin-left: auto;
   display: flex;
+`;
+
+const LockContainer = styled.div`
+  &: hover {
+    cursor: pointer;
+  }
 `;

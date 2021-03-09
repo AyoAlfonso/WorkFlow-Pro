@@ -12,6 +12,9 @@ class TeamIssue < ApplicationRecord
   scope :for_team, -> (team_id) { where(team_id: team_id) }
   scope :complete, -> { where.not(completed_at: nil) }
   scope :incomplete, -> { where(completed_at: nil) }
+  
+  scope :sort_by_completed_date, -> { order(completed_at: :desc)}
+
   scope :owned_by_self_or_team_members, -> (user) do
     team_member_ids = TeamUserEnablement.where(team_id: user.team_ids).pluck(:user_id)
     joins(:issue).where(issues: { user_id: [*team_member_ids, user.id].uniq })
@@ -19,4 +22,9 @@ class TeamIssue < ApplicationRecord
   
   scope :sort_by_position, -> { order(position: :asc) }
   scope :sort_by_issue_priority, -> { joins(:issue).merge(Issue.order(priority: :desc)) }
+
+  def self.exclude_personal_for_team
+    self.joins(:issue).where(issues: { personal: false }).or(where(issues: { personal: nil }))
+  end
+
 end

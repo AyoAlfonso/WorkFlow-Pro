@@ -16,15 +16,15 @@ class Api::IssuesController < Api::ApplicationController
 
     if params[:team_id]
       # USE HOOK TO CREATE A TEAM ISSUE IF IT DOESNT EXIST FOR @ISSUE
-      @team_issues = TeamIssue.for_team(params[:team_id]).sort_by_position
-      @issues_to_render = team_meeting_issues(params[:team_id])
+      @team_issues = TeamIssue.for_team(params[:team_id]).sort_by_position.exclude_personal_for_team
+      @issues_to_render = team_meeting_issues(params[:team_id]).exclude_personal_for_team
       
       #additional details to render if its a team
       if params[:meeting_id]
         if params[:meeting_enabled]
           TeamIssueMeetingEnablementsService.call(@issue, params)
         end
-        @meeting_team_issues = Issue.for_meeting(params[:meeting_id])
+        @meeting_team_issues = Issue.for_meeting(params[:meeting_id]).exclude_personal_for_team
       end
       
     else
@@ -38,7 +38,7 @@ class Api::IssuesController < Api::ApplicationController
     @issue.update!(issue_params.merge(completed_at: params[:completed] ? Time.now : nil))
     if params[:from_team_meeting]
       #returns issues only related to the team, not all issues
-      @issues_to_render = team_meeting_issues(@issue.team_id)
+      @issues_to_render = team_meeting_issues(@issue.team_id).exclude_personal_for_team
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
     end
@@ -61,24 +61,26 @@ class Api::IssuesController < Api::ApplicationController
 
   def issues_for_meeting
     team_id = Meeting.find(params[:meeting_id]).team_id
-    @issues = team_meeting_issues(team_id).exclude_personal_for_team(team_id)
+    @issues = team_meeting_issues(team_id).exclude_personal_for_team
     authorize @issues
     render "api/issues/issues_for_meeting"
   end
 
   def issues_for_team
-    @issues = team_meeting_issues(params[:team_id]).exclude_personal_for_team(params[:team_id])
+    @issues = team_meeting_issues(params[:team_id]).exclude_personal_for_team
     authorize @issues
     render "api/issues/issues_for_team"
   end
 
   def resort_index
     if params[:meeting_id].present?
-      team_id = Meeting.find(params[:meeting_id]).team_id
-      @issues = team_meeting_issues(team_id)
-      @team_issues = TeamIssueResortService.call(TeamIssue.for_team(team_id))
+      meeting = Meeting.find(params[:meeting_id])
+      team_id = meeting.team_id
+      @issues = team_meeting_issues(team_id).exclude_personal_for_team
+      @team_issues = TeamIssueResortService.call(TeamIssue.for_team(team_id), meeting)
+      @meeting_team_issues = Issue.for_meeting(params[:meeting_id]).exclude_personal_for_team
     elsif params[:team_id].present? && params[:meeting_id].blank?
-      @issues = IssueResortService.call(policy_scope(Issue).where(team_id: params[:team_id]))
+      @issues = IssueResortService.call(policy_scope(Issue).where(team_id: params[:team_id])).exclude_personal_for_team
     else
       @issues = IssueResortService.call(policy_scope(Issue).where(user_id: current_user.id))
     end

@@ -177,6 +177,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                     setWeeklyList(defaultTypeAsWeekly);
                     setSelectedLabel(null);
                     setSelectedTeamId(null);
+                    setPersonal(false);
                   }
                 })
             }

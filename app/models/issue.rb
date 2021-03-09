@@ -48,9 +48,8 @@ class Issue < ApplicationRecord
     self.where(user_id: [*team_member_ids, user.id].uniq)
   end
 
-  def self.exclude_personal_for_team(team_id)
-    tag_names = ActsAsTaggableOn::Tag.where(team_id: nil).pluck(:name)
-    self.tagged_with(tag_names, :exclude => true)
+  def self.exclude_personal_for_team
+    self.where(personal: false).or(self.where(personal: nil))
   end
 
 
