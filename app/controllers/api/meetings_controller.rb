@@ -33,17 +33,12 @@ class Api::MeetingsController < Api::ApplicationController
       #scope differs if team (assume you can only have one incomplete meeting, allow you to create another one for week if required)
       
       #scope to look for what's present depending on meeting type - daily, weekly, monthly, etc.
-      @meetings_already_present = params[:team_id] ? 
-        MeetingInstanceFinderService.call(
-          policy_scope(Meeting).team_meetings(params[:team_id]).incomplete,
-          params[:meeting_template_id],
-          current_user.time_in_user_timezone
-         ) :
-        MeetingInstanceFinderService.call(
-          policy_scope(Meeting).personal_meetings.hosted_by_user(current_user),
-          params[:meeting_template_id],
-          current_user.time_in_user_timezone
-        )
+      #personal meetings have no team ids
+      MeetingInstanceFinderService.call(
+        policy_scope(Meeting).team_meetings(params[:team_id]).incomplete,
+        params[:meeting_template_id],
+        current_user.time_in_user_timezone
+      )
 
       # @meeting = incomplete_meetings_for_today.first_or_create(meeting_params.merge({hosted_by: current_user}))
       # authorize @meeting
