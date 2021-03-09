@@ -185,6 +185,8 @@ export const IssueEntry = observer(
               onBlur={() => issueStore.updateIssue(issue.id, meetingId ? true : false)}
             />
 
+            {issue.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
+
             <ActionContainer meeting={meetingId ? true : false}>
               <ActionSubContainer>
                 <ActionsDisplayContainer>
