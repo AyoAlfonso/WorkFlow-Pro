@@ -26,10 +26,18 @@ export const TeamStoreModel = types
         self.currentTeam = response.data;
       }
     }),
-    updateTeam: flow(function*(formData) {
-      const response: ApiResponse<any> = yield self.environment.api.updateTeam(formData);
+    updateTeam: flow(function*(teamId, teamName, users) {
+      const response: ApiResponse<any> = yield self.environment.api.updateTeam(teamId, teamName, users);
       if (response.ok) {
-        self.currentTeam = response.data;
+        self.currentTeam = response.data.team;
+        self.teams = response.data.teams
+        showToast("Updated team", ToastMessageConstants.SUCCESS);
+      }
+    }),
+    updateTeamSettings: flow(function*(formData){
+      const response: ApiResponse<any> = yield self.environment.api.updateTeamSettings(formData);
+      if (response.ok) {
+        self.currentTeam = response.data.team;
         showToast("Updated team settings", ToastMessageConstants.SUCCESS);
       }
     }),

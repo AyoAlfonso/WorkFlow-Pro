@@ -10,17 +10,34 @@ import { UserSelectionRecord } from "./user-selection-record";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 
-interface ICreateNewTeamBodyProps {
+interface IModifyTeamBodyProps {
+  team?: any;
   setModalOpen: any;
 }
 
-export const CreateNewTeamBody = observer(
-  ({ setModalOpen }: ICreateNewTeamBodyProps): JSX.Element => {
+export const ModifyTeamBody = observer(
+  ({ team, setModalOpen }: IModifyTeamBodyProps): JSX.Element => {
     const { teamStore } = useMst();
 
-    const [teamName, setTeamName] = useState<string>("");
-    const [numberOfUserRecords, setNumberOfUserRecords] = useState<number>(5);
-    const [memberListState, setMemberListState] = useState<any>({});
+    const formatMemberListState = teamUserEnablements => {
+      let membersListItem = {};
+
+      teamUserEnablements.forEach((tue, index) => {
+        membersListItem[index] = {
+          userId: tue.userId,
+          meetingLead: tue.role == "team_lead" ? 1 : 0,
+        };
+      });
+      return membersListItem;
+    };
+
+    const [teamName, setTeamName] = useState<string>(team ? team.name : "");
+    const [numberOfUserRecords, setNumberOfUserRecords] = useState<number>(
+      team ? team.users.length : 5,
+    );
+    const [memberListState, setMemberListState] = useState<any>(
+      team ? formatMemberListState(team.teamUserEnablements) : {},
+    );
 
     const renderMembersList = () => {
       return [...Array(numberOfUserRecords)].map((e, index) => {
@@ -36,11 +53,18 @@ export const CreateNewTeamBody = observer(
       });
     };
 
-    const createTeamAndInviteUsers = () => {
-      teamStore.createTeamAndInviteUsers(teamName, memberListState).then(() => {
-        showToast("Team created", ToastMessageConstants.SUCCESS);
-        setModalOpen(false);
-      });
+    const updateTeam = () => {
+      if (team.id) {
+        teamStore.updateTeam(team.id, teamName, memberListState).then(() => {
+          showToast("Team updated", ToastMessageConstants.SUCCESS);
+          setModalOpen(false);
+        });
+      } else {
+        teamStore.createTeamAndInviteUsers(teamName, memberListState).then(() => {
+          showToast("Team created", ToastMessageConstants.SUCCESS);
+          setModalOpen(false);
+        });
+      }
     };
 
     const headerText = (text: string): JSX.Element => {
@@ -76,13 +100,8 @@ export const CreateNewTeamBody = observer(
           <TextContainer> Add another user</TextContainer>
         </AddNewUserContainer>
 
-        <SaveButton
-          small
-          variant={"primary"}
-          disabled={!teamName}
-          onClick={() => createTeamAndInviteUsers()}
-        >
-          Send Invite
+        <SaveButton small variant={"primary"} disabled={!teamName} onClick={() => updateTeam()}>
+          {team.id ? "Update Team" : "Send Invite"}
         </SaveButton>
       </Container>
     );

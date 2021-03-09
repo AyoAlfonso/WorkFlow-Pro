@@ -21,8 +21,9 @@ import {
 import { Table } from "~/components/shared/table";
 import styled from "styled-components";
 import { Can } from "~/components/shared/auth/can";
-import { Button } from "~/components/shared";
+import { Button, IconContainer, Icon } from "~/components/shared";
 import { CreateNewTeamModal } from "./teams/create-new-team-modal";
+import { EditTeamModal } from "./teams/edit-team-modal";
 
 export const Teams = observer(
   (): JSX.Element => {
@@ -33,6 +34,8 @@ export const Teams = observer(
     } = useMst();
 
     const [createTeamModalOpen, setCreateTeamModalOpen] = useState<boolean>(false);
+    const [editTeamModalOpen, setEditTeamModalOpen] = useState<boolean>(false);
+    const [selectedEditTeam, setSelectedEditTeam] = useState<any>({});
 
     const { t } = useTranslation();
     const teamsData = R.flatten(
@@ -87,6 +90,23 @@ export const Teams = observer(
                   ),
               )}
           </LeftAlignedColumnListTableContainer>,
+          <LeftAlignedColumnListTableContainer>
+            <Can
+              action={"create-team"}
+              data={null}
+              no={<></>}
+              yes={
+                <StyledIconContainer
+                  onClick={() => {
+                    setSelectedEditTeam(team);
+                    setEditTeamModalOpen(true);
+                  }}
+                >
+                  <Icon icon={"Edit-2"} size={"15px"} iconColor={"grey80"} />
+                </StyledIconContainer>
+              }
+            />
+          </LeftAlignedColumnListTableContainer>,
         ]),
       ),
     );
@@ -117,13 +137,18 @@ export const Teams = observer(
               </>
             }
           />
+          <EditTeamModal
+            team={selectedEditTeam}
+            modalOpen={editTeamModalOpen}
+            setModalOpen={setEditTeamModalOpen}
+          />
         </HeaderContainer>
         <BodyContainer>
           <Table
-            columns={4}
-            headers={["Team", "Status", "Team Members", "Meeting Lead"]}
+            columns={5}
+            headers={["Team", "Status", "Team Members", "Meeting Lead", ""]}
             data={teamsData}
-            styling={{ widths: [2, 1, 2, 2] }}
+            styling={{ widths: [2, 1, 2, 2, 1] }}
           ></Table>
         </BodyContainer>
       </StretchContainer>
@@ -143,6 +168,13 @@ const CheckboxContainer = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
+  &: hover {
+    cursor: pointer;
+  }
+`;
+
+const StyledIconContainer = styled(IconContainer)`
+  margin-top: 16px;
   &: hover {
     cursor: pointer;
   }
