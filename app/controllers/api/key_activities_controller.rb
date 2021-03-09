@@ -16,7 +16,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
     if params[:meeting_id]
       meeting = Meeting.find(params[:meeting_id])
-      @key_activities_to_render = team_meeting_activities(params[:meeting_id]).exclude_personal_for_team(meeting.team_id)
+      @key_activities_to_render = team_meeting_activities(params[:meeting_id]).exclude_personal_for_team
     else
       @key_activities_to_render = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_position
     end
@@ -34,7 +34,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
     if params[:from_team_meeting] == true
       meeting = Meeting.find(@key_activity.meeting_id)
-      @key_activities_to_render = team_meeting_activities(@key_activity.meeting_id).exclude_personal_for_team(meeting.team_id)
+      @key_activities_to_render = team_meeting_activities(@key_activity.meeting_id).exclude_personal_for_team
     else
       @key_activities_to_render = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_position
     end
@@ -46,7 +46,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
     if params[:from_team_meeting] == "true"
       meeting_id = @key_activity.meeting_id
       meeting = Meeting.find(meeting_id)
-      @key_activities_to_render = team_meeting_activities(meeting_id).exclude_personal_for_team(meeting.team_id)
+      @key_activities_to_render = team_meeting_activities(meeting_id).exclude_personal_for_team
     else
       @key_activities_to_render = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_position
     end
@@ -55,7 +55,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def created_in_meeting
     meeting = Meeting.find(params[:meeting_id])
-    @key_activities = team_meeting_activities(meeting.id).exclude_personal_for_team(meeting.team_id)
+    @key_activities = team_meeting_activities(meeting.id).exclude_personal_for_team
     authorize @key_activities
     render "api/key_activities/created_in_meeting"
   end

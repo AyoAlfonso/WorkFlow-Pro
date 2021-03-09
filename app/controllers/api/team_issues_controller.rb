@@ -2,7 +2,7 @@ class Api::TeamIssuesController < Api::ApplicationController
   respond_to :json
 
   def index
-    @team_issues = policy_scope(TeamIssue).for_team(params[:team_id]).sort_by_position
+    @team_issues = policy_scope(TeamIssue).for_team(params[:team_id]).sort_by_position.exclude_personal_for_team
     authorize @team_issues
     render "api/team_issues/index"
   end
@@ -23,9 +23,12 @@ class Api::TeamIssuesController < Api::ApplicationController
     else
       @team_issue.update!(team_issue_params)
     end
-    @team_issues = TeamIssue.for_team(@team_issue.team_id).sort_by_position
-
-    @meeting_team_issues = Issue.for_meeting(params[:meeting_id]) if params[:meeting_id]
+    if params[:meeting_id]
+      @team_issues = TeamIssue.for_team(@team_issue.team_id).sort_by_position.exclude_personal_for_team
+      @meeting_team_issues = Issue.for_meeting(params[:meeting_id]).exclude_personal_for_team
+    else
+      @team_issues = TeamIssue.for_team(@team_issue.team_id).sort_by_position
+    end
     render "api/team_issues/update"
   end
 
