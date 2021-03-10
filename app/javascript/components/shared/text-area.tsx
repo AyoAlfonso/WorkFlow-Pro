@@ -10,10 +10,11 @@ interface ITextAreaProps {
   width?: string;
   placeholder?: string;
   style?: any;
+  rows?: number;
 }
 
 export const TextArea = (props: ITextAreaProps) => {
-  const { onChange, height, width, placeholder, style, textValue } = props;
+  const { onChange, height, width, placeholder, style, textValue, rows } = props;
 
   return (
     <StyledTextarea
@@ -26,6 +27,7 @@ export const TextArea = (props: ITextAreaProps) => {
       }}
       onChange={onChange}
       style={style}
+      rows={rows ? rows : 5}
     />
   );
 };

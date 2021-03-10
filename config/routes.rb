@@ -66,11 +66,11 @@ Rails.application.routes.draw do
       end
     end
     get '/onboarding', to: "companies#get_onboarding_company"
-    get 'onboarding/goals/:company_id', to: "companies#get_onboarding_goals"
-    post '/onboarding/goals/:company_id', to: "companies#create_or_update_onboarding_goals"
-    get '/onboarding/key_activities/:company_id', to: "companies#get_onboarding_key_activities"
-    post '/onboarding/key_activities/:company_id', to: "companies#create_or_update_onboarding_key_activities"
-
+    get 'onboarding/:company_id/goals', to: "companies#get_onboarding_goals"
+    post '/onboarding/:company_id/goals', to: "companies#create_or_update_onboarding_goals"
+    get '/onboarding/:company_id/key_activities/', to: "companies#get_onboarding_key_activities"
+    post '/onboarding/:company_id/key_activities', to: "companies#create_or_update_onboarding_key_activities"
+    post '/onboarding/:company_id/team', to: "companies#create_or_update_onboarding_team"
     # issues
     resources :issues, only: [:index, :create, :update, :destroy]
     get '/issues/issues_for_meeting', to: "issues#issues_for_meeting"

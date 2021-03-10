@@ -615,9 +615,9 @@ const SwitchAccountContainer = styled.div``;
 
 const CompanyCreationSelectionContainer = styled.div`
   position: absolute;
-  right: 120px;
+  right: 130px;
   top: 0;
-  width: 200px;
+  width: 130px;
   color: ${({ theme: { colors } }) => colors.primary100};
   background-color: ${({ theme: { colors } }) => colors.backgroundBlue};
 `;

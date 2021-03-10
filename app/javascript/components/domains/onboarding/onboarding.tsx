@@ -23,6 +23,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
   const [formData, setFormData] = useState<any>({});
   const [goalData, setGoalData] = useState<any>({});
   const [pynsData, setPynsData] = useState<any>({});
+  const [teamData, setTeamData] = useState<string>("");
 
   const loadOnboarding = useCallback(async () => {
     const { onboardingDisplayFormat, onboardingCompany } = companyStore;
@@ -96,6 +97,11 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
     setPynsData(newPynsDataState);
   };
 
+  const setTeamDataState = (keys: Array<string>, value: any) => {
+    const newTeamDataState = R.set(R.lensPath(keys), value, teamData);
+    setTeamData(newTeamDataState);
+  };
+
   const submitFormState = async () => {
     let purgedFormData = formData;
     if (!formData.coreFourAttributes["core_1"]) {
@@ -113,6 +119,10 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
 
   const submitPynsData = async () => {
     return await companyStore.updateOnboardingKeyActivities(onboardingCompany.id, pynsData);
+  };
+
+  const submitTeamDataAndComplete = async () => {
+    return await companyStore.createOnboardingTeamAndInviteUsers(onboardingCompany.id, teamData);
   };
 
   const onStepClick = stepIndex => {
@@ -148,6 +158,10 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         if (res === true) {
           incrementStep();
         }
+      });
+    } else if (currentStep === 4) {
+      submitTeamDataAndComplete().then(res => {
+        companyStore.closeOnboardingModal();
       });
     }
   };
@@ -196,6 +210,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
           formKeys: ["coreFourAttributes", "core_1"],
           callback: setFormState,
           style: { resize: "vertical" },
+          placeholder: "Type here...",
         },
         {
           label: `How do ${R.pathOr(
@@ -207,6 +222,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
           formKeys: ["coreFourAttributes", "core_2"],
           callback: setFormState,
           style: { resize: "vertical" },
+          placeholder: "Type here...",
         },
         {
           label: `What does ${R.pathOr("", ["name"], onboardingCompany)} do?`,
@@ -214,6 +230,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
           formKeys: ["coreFourAttributes", "core_3"],
           callback: setFormState,
           style: { resize: "vertical" },
+          placeholder: "Type here...",
         },
         {
           label: `What sets ${R.pathOr("", ["name"], onboardingCompany)} apart from the rest?`,
@@ -221,6 +238,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
           formKeys: ["coreFourAttributes", "core_4"],
           callback: setFormState,
           style: { resize: "vertical" },
+          placeholder: "Type here...",
         },
       ],
     },
@@ -268,6 +286,28 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         },
       ],
     },
+    {
+      formFields: [
+        {
+          label: "What team do you belong to? (create one, you can add others later)",
+          fieldType: EFieldType.TextField,
+          formKeys: ["teamName"],
+          callback: setTeamDataState,
+          subText: "Each member will get a link to set up their account",
+          placeholder: "e.g. Leadership Team",
+        },
+        {
+          label: "Email Addresses",
+          fieldType: EFieldType.TextArea,
+          formKeys: ["emails"],
+          callback: setTeamDataState,
+          subText: "Use commas to separate different emails",
+          placeholder: "e.g. steven@redbottlecoffee.com,janice@redbottlecoffee.com",
+          style: { resize: "vertical", marginBottom: "16px" },
+          rows: 8,
+        },
+      ],
+    },
   ];
 
   const rightBodyComponentProps = [
@@ -302,7 +342,12 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
       stepwise={true}
     />,
     <AddPyns formData={pynsData} goalData={goalData} setPynsDataState={setPynsDataState} />,
-    <div>STEP FOUR LEFT</div>,
+    <FormBuilder
+      formFields={leftBodyComponentProps[3].formFields}
+      formData={teamData}
+      formContainerStyle={{ marginBottom: "48px" }}
+      stepwise={false}
+    />,
   ];
 
   const bulletContainerStyle = { height: "175px", marginBottom: "24px", marginTop: "18px" };
@@ -337,7 +382,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
     </>,
     <GoalSummary formData={goalData} />,
     <PynsSummary goalData={goalData} />,
-    <div>STEP FOUR RIGHT</div>,
+    <></>,
   ];
 
   const headingsAndDescriptionsWithOnboardingDisplayFormat = R.mapObjIndexed(

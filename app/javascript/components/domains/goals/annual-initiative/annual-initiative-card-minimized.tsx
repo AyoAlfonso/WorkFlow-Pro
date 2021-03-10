@@ -21,15 +21,13 @@ export const AnnualInitiativeCardMinimized = ({
     return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
       const { warningRed, cautionYellow, finePine, grey40 } = baseTheme.colors;
 
-      const currentMilestone = quarterlyGoal.milestones
-        ? quarterlyGoal.milestones.find(milestone =>
-            moment(milestone.weekOf).isSame(moment(), "week"),
-          )
-        : {};
+      const currentMilestone = quarterlyGoal.milestones.find(milestone =>
+        moment(milestone.weekOf).isSame(moment(), "week"),
+      );
 
       let backgroundColor = grey40;
 
-      if (currentMilestone) {
+      if (currentMilestone && currentMilestone.status) {
         switch (currentMilestone.status) {
           case "incomplete":
             backgroundColor = warningRed;

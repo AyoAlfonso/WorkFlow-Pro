@@ -103,19 +103,23 @@ export class Api {
   }
 
   async getOnboardingCompanyGoals(companyId) {
-    return this.client.get(`/onboarding/goals/${companyId}`);
+    return this.client.get(`/onboarding/${companyId}/goals`);
   }
 
   async updateOnboardingCompanyGoals(companyId, goalData) {
-    return this.client.post(`/onboarding/goals/${companyId}`, goalData);
+    return this.client.post(`/onboarding/${companyId}/goals/`, goalData);
   }
 
   async getOnboardingKeyActivities(companyId) {
-    return this.client.get(`/onboarding/key_activities/${companyId}`);
+    return this.client.get(`/onboarding/${companyId}/key_activities`);
   }
 
   async updateOnboardingKeyActivities(companyId, keyActivityData) {
-    return this.client.post(`/onboarding/key_activities/${companyId}`, keyActivityData);
+    return this.client.post(`/onboarding/${companyId}/key_activities`, keyActivityData);
+  }
+
+  async createOnboardingTeamAndInviteUsers(companyId, teamData) {
+    return this.client.post(`/onboarding/${companyId}/team`, teamData);
   }
 
   async inviteUser(formData) {
@@ -325,11 +329,11 @@ export class Api {
     return this.client.patch(`/teams/${teamId}`, { teamName, users });
   }
 
-   async updateTeamSettings(formData){
+  async updateTeamSettings(formData) {
     return this.client.patch(`/teams/${formData.id}`, formData);
-   }
+  }
 
-   async deleteTeam(id) {
+  async deleteTeam(id) {
     return this.client.delete(`/teams/${id}`);
   }
 
@@ -425,16 +429,16 @@ export class Api {
     return this.client.get(`/labels`);
   }
 
-  async createLabel(labelObject){
-    return this.client.post(`/labels`, { labelObject })
+  async createLabel(labelObject) {
+    return this.client.post(`/labels`, { labelObject });
   }
 
-  async inviteUsersToCompany(emailAddresses, teamId){
-    return this.client.post(`/invite_users_to_company`, { emailAddresses, teamId })
+  async inviteUsersToCompany(emailAddresses, teamId) {
+    return this.client.post(`/invite_users_to_company`, { emailAddresses, teamId });
   }
 
-  async createTeamAndInviteUsers(teamName, users){
-    return this.client.post(`/create_team_and_invite_users`, { teamName, users })
+  async createTeamAndInviteUsers(teamName, users) {
+    return this.client.post(`/create_team_and_invite_users`, { teamName, users });
   }
 
   //async setJWT(jwt) {}

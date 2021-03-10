@@ -39,4 +39,8 @@ class CompanyPolicy < ApplicationPolicy
   def get_onboarding_key_activities?
     true
   end
+
+  def create_or_update_onboarding_team?
+    true
+  end
 end

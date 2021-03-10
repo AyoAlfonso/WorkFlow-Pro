@@ -1,8 +1,9 @@
 class Api::CompaniesController < Api::ApplicationController
+  include TeamUserEnablementAttributeParser
   respond_to :json
   before_action :set_company, only: [:show, :update, :update_logo, :delete_logo]
-  before_action :set_onboarding_company, only: [:create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities]
-  skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities]
+  before_action :set_onboarding_company, only: [:create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
+  skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
 
   def create
     @company = Company.new({
@@ -156,6 +157,40 @@ class Api::CompaniesController < Api::ApplicationController
   def get_onboarding_key_activities
     @key_activities = KeyActivity.where(company_id: @onboarding_company.id, user_id: current_user.id)
     render json: @key_activities.as_json(only: [:id, :description])
+  end
+
+  def create_or_update_onboarding_team
+    @team = Team.create!(company_id: @onboarding_company.id, name: params[:team_name], settings: {})
+    @team.set_default_avatar_color
+    authorize @team
+    if params[:email_addresses].present?
+      @email_addresses = params[:email_addresses].split(',')
+      @email_addresses.each do |email|
+        sanitized_email = email.strip
+        if User.find_by_email(sanitized_email).blank?
+          @user = User.create!({
+            email: sanitized_email, 
+            company_id: @onboarding_company.id, 
+            default_selected_company_id: @onboarding_company.id,
+            title: "",
+            password: ENV["DEFAULT_PASSWORD"] || "password"
+          })
+          @user.invite!
+          @user.assign_attributes({
+            user_company_enablements_attributes: [{
+              user_id: @user.id,
+              company_id: @onboarding_company.id,
+              user_title: @user.title,
+              user_role_id: UserRole.find_by_name("Employee").id
+            }],
+            team_user_enablements_attributes: team_user_enablement_attribute_parser([@team], @user)
+          })
+          @user.save(validate: false)
+        end
+      end
+    end
+    @onboarding_company.update!(onboarding_status: "complete")
+    render json: @team
   end
 
   def update_logo

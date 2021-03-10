@@ -34,6 +34,8 @@ interface IFormField {
   style?: any;
   value?: any;
   subText?: string;
+  placeholder?: string;
+  rows?: number;
 }
 
 interface IFormBuilderProps {
@@ -50,7 +52,7 @@ export const FormBuilder = ({
   stepwise,
 }: IFormBuilderProps): JSX.Element => {
   const formComponent = (formField: IFormField) => {
-    const { fieldType, formKeys, options, callback, style } = formField;
+    const { fieldType, formKeys, options, callback, style, placeholder, rows } = formField;
     switch (fieldType) {
       case "TEXT_FIELD":
         return (
@@ -61,6 +63,7 @@ export const FormBuilder = ({
             }}
             style={{ ...style }}
             value={R.pathOr("", formKeys, formData)}
+            placeholder={placeholder ? placeholder : ""}
           />
         );
       case "TEXT_AREA":
@@ -72,6 +75,8 @@ export const FormBuilder = ({
             }}
             style={{ ...style }}
             textValue={R.pathOr("", formKeys, formData)}
+            placeholder={placeholder ? placeholder : ""}
+            rows={rows ? rows : 5}
           />
         );
       case "IMAGE":
@@ -130,7 +135,7 @@ export const FormBuilder = ({
           <TrixEditor
             className="custom-trix-class"
             autoFocus={true}
-            placeholder="Type here..."
+            placeholder={placeholder ? placeholder : ""}
             value={R.pathOr("", formKeys, formData)}
             mergeTags={[]}
             onChange={(html, text) => {

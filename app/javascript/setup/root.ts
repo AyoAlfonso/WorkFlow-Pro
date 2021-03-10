@@ -27,6 +27,10 @@ const initialState = {
   companyStore: {
     company: null,
     onboardingCompany: null,
+    onboardingDisplayFormat: "",
+    onboardingCompanyGoals: null,
+    onboardingKeyActivities: null,
+    onboardingTeam: null,
     onboardingModalOpen: false,
   },
   forumStore: {

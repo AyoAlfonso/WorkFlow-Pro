@@ -20,6 +20,10 @@ class TeamPolicy < ApplicationPolicy
     (@user.company_admin? || @record.is_lead?(@user)) && @user.companies.include?(@record.company)
   end
 
+  def create_or_update_onboarding_team? 
+    true
+  end
+
   class Scope
     attr_reader :context, :scope
 

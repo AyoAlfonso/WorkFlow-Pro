@@ -48,6 +48,10 @@ class UserPolicy < ApplicationPolicy
     true
   end
 
+  def create_or_update_onboarding_team?
+    true
+  end
+
   class Scope
     attr_reader :user, :company, :scope
 

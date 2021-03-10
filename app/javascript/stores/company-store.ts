@@ -13,6 +13,7 @@ export const CompanyStoreModel = types
     onboardingDisplayFormat: types.maybeNull(types.string),
     onboardingCompanyGoals: types.maybeNull(types.frozen()),
     onboardingKeyActivities: types.maybeNull(types.frozen()),
+    onboardingTeam: types.maybeNull(types.frozen()),
     onboardingModalOpen: types.boolean,
   })
   .extend(withEnvironment())
@@ -90,7 +91,7 @@ export const CompanyStoreModel = types
     inviteUsersToCompany: flow(function*(emailAddresses, teamId) {
       const env = getEnv(self);
       const response = yield env.api.inviteUsersToCompany(emailAddresses, teamId);
-    })
+    }),
   }))
   .actions(self => ({
     getOnboardingCompany: flow(function*() {
@@ -152,6 +153,19 @@ export const CompanyStoreModel = types
         );
         if (response.ok) {
           self.onboardingKeyActivities = response.data as any;
+          return true;
+        }
+      } catch {
+        return false;
+      }
+    }),
+    createOnboardingTeamAndInviteUsers: flow(function*(companyId, teamData) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createOnboardingTeamAndInviteUsers(companyId, teamData);
+        if (response.ok) {
+          self.onboardingTeam = response.data;
+          self.onboardingCompany = null;
           return true;
         }
       } catch {

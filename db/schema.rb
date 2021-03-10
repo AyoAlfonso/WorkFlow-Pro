@@ -253,7 +253,7 @@ ActiveRecord::Schema.define(version: 2021_03_05_190350) do
     t.datetime "scheduled_start_time"
     t.datetime "end_time"
     t.bigint "hosted_by_id"
-    t.text "notes"
+    t.text "notes", default: ""
     t.json "settings"
     t.boolean "original_creation", default: false
     t.index ["created_at"], name: "index_meetings_on_created_at"
@@ -337,7 +337,7 @@ ActiveRecord::Schema.define(version: 2021_03_05_190350) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
-    
+
   create_table "sign_up_purposes", force: :cascade do |t|
     t.bigint "company_id", null: false
     t.string "purpose"
@@ -453,7 +453,7 @@ ActiveRecord::Schema.define(version: 2021_03_05_190350) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_role_id"
     t.string "user_title"
-    t.boolean "first_time_access", default: false
+    t.boolean "first_time_access", default: true
     t.index ["company_id"], name: "index_user_company_enablements_on_company_id"
     t.index ["user_id"], name: "index_user_company_enablements_on_user_id"
     t.index ["user_role_id"], name: "index_user_company_enablements_on_user_role_id"
