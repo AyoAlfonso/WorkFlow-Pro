@@ -3,6 +3,8 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { space, SpaceProps } from "styled-system";
 
+import { parseAnnualInitiative } from "./annual-initiative-parser";
+
 import { AnnualInitiativeCard } from "~/components/domains/goals/annual-initiative/annual-initiative-card";
 import { QuarterlyGoalCard } from "~/components/domains/goals/quarterly-goal/quarterly-goal-card";
 import { MilestoneCard } from "~/components/domains/goals/milestone/milestone-card";
@@ -15,16 +17,8 @@ interface IGoalSummaryProps {
 export const GoalSummary = ({
   formData: { rallyingCry, annualInitiative },
 }: IGoalSummaryProps): JSX.Element => {
-  const quarterlyGoalLens = R.lens(R.prop("quarterlyGoals"), R.assoc("quarterlyGoals"));
-  const annualInitiativeFormatted = R.pipe(
-    R.ifElse(
-      R.compose(R.is(Array), R.view(quarterlyGoalLens)),
-      R.identity,
-      R.pipe(R.prop("quarterlyGoals"), R.values, R.set(quarterlyGoalLens, R.__, annualInitiative)),
-      R.assoc("fiscalYear", "2022"),
-    ),
-  )(annualInitiative);
-  const quarterlyGoal = R.path(["quarterlyGoals", "0"], annualInitiative);
+  const annualInitiativeFormatted = parseAnnualInitiative(annualInitiative);
+  const quarterlyGoal = R.path(["quarterlyGoals", "0"], annualInitiativeFormatted);
   const milestone = R.path(["milestones", "0"], quarterlyGoal);
   return (
     <Container>

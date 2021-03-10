@@ -12,6 +12,7 @@ import { BulletedList } from "~/components/shared/bulleted-list";
 import { GoalSummary } from "./goal-summary";
 import { AddPyns } from "./add-pyns";
 import { PynsSummary } from "./pyns-summary";
+import { parseAnnualInitiative } from "./annual-initiative-parser";
 
 interface IOnboardingProps {}
 
@@ -105,18 +106,15 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
   };
 
   const submitGoalData = async () => {
-    return await companyStore.updateOnboardingCompanyGoals(onboardingCompany.id, goalData);
+    return await companyStore.updateOnboardingCompanyGoals(onboardingCompany.id, {
+      rallyingCry: goalData.rallyingCry,
+      annualInitiative: parseAnnualInitiative(goalData.annualInitiative),
+    });
   };
 
   const submitPynsData = async () => {
     return await companyStore.updateOnboardingKeyActivities(onboardingCompany.id, pynsData);
   };
-
-  // const addLogo = async (keys, logoData) => {
-  //   const form = new FormData();
-  //   form.append("logo", logoData[0]);
-  //   await companyStore.updateCompanyLogo(form);
-  // };
 
   const onStepClick = stepIndex => {
     setCurrentStep(stepIndex);
