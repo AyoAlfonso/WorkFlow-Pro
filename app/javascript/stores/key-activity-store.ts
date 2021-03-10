@@ -29,27 +29,23 @@ export const KeyActivityStoreModel = types
       );
       return filteredKeyActivities;
     },
+  }))
+  .views(self => ({
     get completedActivities() {
       return self.keyActivities.filter(
         keyActivity => keyActivity.completedAt
       )
     },
     get weeklyKeyActivities() {
-      return self.keyActivities.filter(
-        keyActivity =>
-          keyActivity.weeklyList && !keyActivity.completedAt && !keyActivity.todaysPriority,
-      );
+      const filteredKeyActivities = self.keyActivitiesByScheduledGroupName("Weekly List")
+      return filteredKeyActivities.filter(keyActivity => !keyActivity.completedAt)
     },
     get masterKeyActivities() {
-      return self.keyActivities.filter(
-        keyActivity =>
-          (!keyActivity.weeklyList && !keyActivity.todaysPriority) || keyActivity.completedAt,
-      );
+      return self.keyActivitiesByScheduledGroupName("Backlog")
     },
     get todaysPriorities() {
-      return self.keyActivities.filter(
-        keyActivity => keyActivity.todaysPriority && !keyActivity.completedAt,
-      );
+      const filteredKeyActivities = self.keyActivitiesByScheduledGroupName("Today")
+      return filteredKeyActivities.filter(keyActivity => !keyActivity.completedAt)
     },
     get completedToday() {
       const today = new Date();

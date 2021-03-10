@@ -34,7 +34,7 @@ class Api::UsersController < Api::ApplicationController
   def update
     @user.update!(params[:user][:teams].present? ? user_update_params.merge(team_user_enablements_attributes: team_user_enablement_attribute_parser(params[:user][:teams])) : user_update_params)
     user_company_enablement = UserCompanyEnablement.where(company_id: current_company.id, user_id: @user.id).first
-    user_company_enablement.update!(title: params[:user][:title])
+    user_company_enablement.update!(title: params[:user][:title]) if params[:user].present? && params[:user][:title].present?
     render 'api/users/show'
   end
 
