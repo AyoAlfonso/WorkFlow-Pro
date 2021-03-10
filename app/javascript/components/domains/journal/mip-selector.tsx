@@ -16,12 +16,10 @@ export const MIPSelector = observer(
   (props): JSX.Element => {
     const { keyActivityStore } = useMst();
     const todaysPriorities = keyActivityStore.todaysPriorities;
-    const weeklyKeyActivities = keyActivityStore.weeklyKeyActivities;
-    const masterKeyActivities = keyActivityStore.masterKeyActivities.filter(
-      mka => mka.completedAt === null,
-    );
+    const nextActivities = keyActivityStore.nextActivities;
+    const masterKeyActivities = keyActivityStore.incompleteMasterKeyActivities;
 
-    if (R.isNil(todaysPriorities) || R.isNil(weeklyKeyActivities) || R.isNil(masterKeyActivities)) {
+    if (R.isNil(keyActivityStore.keyActivities)) {
       return <Loading />;
     }
 
@@ -30,9 +28,7 @@ export const MIPSelector = observer(
 
     const keyActivityOptions = R.pipe(
       R.concat(
-        weeklyKeyActivities.length > 0
-          ? weeklyKeyActivities.slice(0, 10)
-          : masterKeyActivities.slice(0, 10),
+        nextActivities.length > 0 ? nextActivities.slice(0, 10) : masterKeyActivities.slice(0, 10),
       ),
       R.sortBy(R.prop("createdAt")),
     )(optionsChecked);

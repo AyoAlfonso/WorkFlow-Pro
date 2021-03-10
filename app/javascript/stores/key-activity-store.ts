@@ -16,14 +16,16 @@ export const KeyActivityStoreModel = types
   .extend(withEnvironment())
   .views(self => ({
     keyActivitiesByScheduledGroupName(scheduledGroupName) {
-      const { sessionStore: {scheduledGroups} } = getRoot(self);
+      const {
+        sessionStore: { scheduledGroups },
+      } = getRoot(self);
       const scheduledGroup = scheduledGroups.find(group => group.name == scheduledGroupName);
       const filteredKeyActivities = self.keyActivities.filter(
         keyActivity => keyActivity.scheduledGroupId == scheduledGroup.id,
       );
       return filteredKeyActivities;
     },
-    keyActivitiesByTeamId(teamId){
+    keyActivitiesByTeamId(teamId) {
       const filteredKeyActivities = self.keyActivities.filter(
         keyActivity => keyActivity.teamId == teamId,
       );
@@ -32,26 +34,37 @@ export const KeyActivityStoreModel = types
   }))
   .views(self => ({
     get completedActivities() {
-      return self.keyActivities.filter(
-        keyActivity => keyActivity.completedAt
-      )
-    },
-    get weeklyKeyActivities() {
-      const filteredKeyActivities = self.keyActivitiesByScheduledGroupName("Weekly List")
-      return filteredKeyActivities.filter(keyActivity => !keyActivity.completedAt)
-    },
-    get masterKeyActivities() {
-      return self.keyActivitiesByScheduledGroupName("Backlog")
-    },
-    get todaysPriorities() {
-      const filteredKeyActivities = self.keyActivitiesByScheduledGroupName("Today")
-      return filteredKeyActivities.filter(keyActivity => !keyActivity.completedAt)
+      return self.keyActivities.filter(keyActivity => keyActivity.completedAt);
     },
     get completedToday() {
       const today = new Date();
       return self.keyActivities.filter(
         keyActivity => new Date(keyActivity.completedAt).getDate() === today.getDate(),
       );
+    },
+  }))
+  .views(self => ({
+    get nextActivities() {
+      return self
+        .keyActivitiesByScheduledGroupName("Tomorrow")
+        .concat(self.keyActivitiesByScheduledGroupName("Weekly List"));
+    },
+    get tomorrowKeyActivities() {
+      return self.keyActivitiesByScheduledGroupName("Tomorrow");
+    },
+    get weeklyKeyActivities() {
+      const filteredKeyActivities = self.keyActivitiesByScheduledGroupName("Weekly List");
+      return filteredKeyActivities.filter(keyActivity => !keyActivity.completedAt);
+    },
+    get incompleteMasterKeyActivities() {
+      return self.keyActivitiesByScheduledGroupName("Backlog").filter(mka => !mka.completedAt);
+    },
+    get completedMasterKeyActivities() {
+      return self.keyActivitiesByScheduledGroupName("Backlog").filter(mka => mka.completedAt);
+    },
+    get todaysPriorities() {
+      const filteredKeyActivities = self.keyActivitiesByScheduledGroupName("Today");
+      return filteredKeyActivities.filter(keyActivity => !keyActivity.completedAt);
     },
   }))
   .actions(self => ({
@@ -146,10 +159,10 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
-    updateLabel: flow(function*(keyActivityId, labelName){
+    updateLabel: flow(function*(keyActivityId, labelName) {
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivity({
         id: keyActivityId,
-        labelList: labelName
+        labelList: labelName,
       });
 
       self.finishLoading();
@@ -159,7 +172,7 @@ export const KeyActivityStoreModel = types
       } else {
         return false;
       }
-    })
+    }),
   }))
   .actions(self => ({
     updateKeyActivityState(id, field, value) {
