@@ -9,11 +9,10 @@ export const Accordion = withStyles({
       display: "none",
     },
     "&$expanded": {
-      margin: "auto"
-    }
+      margin: "auto",
+    },
   },
-  expanded: {},
-})(MuiAccordion)
+})(MuiAccordion);
 
 export const AccordionSummary = withStyles({
   root: {
@@ -38,19 +37,14 @@ export const AccordionSummary = withStyles({
     "&$expanded": {
       marginTop: 0,
       marginBottom: 0,
-      marginRight: 5, 
+      marginRight: 5,
     },
   },
-  expanded: {},
-})(MuiAccordionSummary)
+})(MuiAccordionSummary);
 
 export const AccordionDetails = withStyles({
   root: {
     borderRadius: 10,
     padding: 0,
-    "&$expanded": {
-
-    }
   },
-  expanded: {}
-})(MuiAccordionDetails)
+})(MuiAccordionDetails);

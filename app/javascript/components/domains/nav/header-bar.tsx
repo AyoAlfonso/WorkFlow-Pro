@@ -36,6 +36,7 @@ export const HeaderBar = observer(
     const [showAccountActions, setShowAccountActions] = useState<boolean>(false);
     const [inviteUserModalOpen, setInviteUserModalOpen] = useState<boolean>(false);
     const [showCompanyOptions, setShowCompanyOptions] = useState<boolean>(false);
+    const [showCompanyCreationSelector, setShowCompanyCreationSelector] = useState<boolean>(false);
 
     const { sessionStore, companyStore, meetingStore, userStore } = useMst();
     const dropdownRef = useRef(null);
@@ -69,6 +70,7 @@ export const HeaderBar = observer(
     const { t } = useTranslation();
 
     const parsedProfile = toJS(sessionStore.profile);
+    const { onboardingCompany } = companyStore;
 
     const renderHeaderIcon = (iconName: string) => {
       const dropdownValue = iconName == "Plus" ? openCreateDropdown : openLynchPynDropdown;
@@ -220,6 +222,34 @@ export const HeaderBar = observer(
       );
     };
 
+    const renderCompanyCreationSelector = (): JSX.Element => {
+      const displayFormat = R.path(["displayFormat"], onboardingCompany);
+      return (
+        showCompanyCreationSelector && (
+          <CompanyCreationSelectionContainer>
+            {!displayFormat ? (
+              <>
+                <CreationOption onClick={() => companyStore.openOnboardingModal(displayFormat)}>
+                  <CreationSelectionText>{t("company.newCompany")}</CreationSelectionText>
+                </CreationOption>
+                <CreationOption onClick={() => companyStore.openOnboardingModal(displayFormat)}>
+                  <CreationSelectionText>{t("company.newForum")}</CreationSelectionText>
+                </CreationOption>
+              </>
+            ) : displayFormat === "Company" ? (
+              <CreationOption onClick={() => companyStore.openOnboardingModal(displayFormat)}>
+                <CreationSelectionText>{t("company.newCompany")}</CreationSelectionText>
+              </CreationOption>
+            ) : (
+              <CreationOption onClick={() => companyStore.openOnboardingModal(displayFormat)}>
+                <CreationSelectionText>{t("company.newForum")}</CreationSelectionText>
+              </CreationOption>
+            )}
+          </CompanyCreationSelectionContainer>
+        )
+      );
+    };
+
     const renderActionDropdown = (): JSX.Element => {
       return showAccountActions ? (
         <ActionDropdownContainer>
@@ -240,6 +270,20 @@ export const HeaderBar = observer(
           </AccountOption>
           {renderSwitchCompanyOptions()}
           {renderShowHelpdesk()}
+          <AccountOption
+            style={{ position: "relative" }}
+            onMouseEnter={() => {
+              setShowCompanyCreationSelector(true);
+            }}
+            onMouseLeave={() => {
+              setShowCompanyCreationSelector(false);
+            }}
+          >
+            <AccountOptionText>
+              {!R.isNil(onboardingCompany) ? t("company.edit") : t("company.create")}
+            </AccountOptionText>
+            {renderCompanyCreationSelector()}
+          </AccountOption>
           <AccountOption>
             <AccountOptionText onClick={() => sessionStore.logoutRequest()}>
               {t("profile.logout")}
@@ -538,6 +582,29 @@ const AccountOption = styled.div`
   }
 `;
 
+const CreationSelectionText = styled(Text)`
+  color: ${props => props.theme.colors.primary100};
+  cursor: pointer;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 12px;
+  &:hover {
+    color: white;
+  }
+`;
+
+const CreationOption = styled.div`
+  display: flex;
+  &:hover {
+    background-color: ${props => props.theme.colors.primary100};
+  }
+  &:hover ${CreationSelectionText} {
+    color: white;
+  }
+`;
+
 const CompanyDropdownContainer = styled(ActionDropdownContainer)`
   margin-left: -120px;
   margin-top: -80px;
@@ -545,3 +612,12 @@ const CompanyDropdownContainer = styled(ActionDropdownContainer)`
 `;
 
 const SwitchAccountContainer = styled.div``;
+
+const CompanyCreationSelectionContainer = styled.div`
+  position: absolute;
+  right: 130px;
+  top: 0;
+  width: 130px;
+  color: ${({ theme: { colors } }) => colors.primary100};
+  background-color: ${({ theme: { colors } }) => colors.backgroundBlue};
+`;

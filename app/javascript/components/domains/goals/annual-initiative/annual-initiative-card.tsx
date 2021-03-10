@@ -13,12 +13,13 @@ interface IAnnualInitiativeCardProps {
   index: number;
   totalNumberOfAnnualInitiatives: number;
   showMinimizedCards: boolean;
-  setAnnualInitiativeId: React.Dispatch<React.SetStateAction<number>>;
-  setAnnualInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setQuarterlyGoalId: React.Dispatch<React.SetStateAction<number>>;
-  setQuarterlyGoalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedAnnualInitiativeDescription: React.Dispatch<React.SetStateAction<string>>;
+  setAnnualInitiativeId?: React.Dispatch<React.SetStateAction<number>>;
+  setAnnualInitiativeModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setQuarterlyGoalId?: React.Dispatch<React.SetStateAction<number>>;
+  setQuarterlyGoalModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedAnnualInitiativeDescription?: React.Dispatch<React.SetStateAction<string>>;
   showCreateQuarterlyGoal: boolean;
+  onboarding?: boolean;
 }
 
 export const AnnualInitiativeCard = ({
@@ -32,6 +33,7 @@ export const AnnualInitiativeCard = ({
   setQuarterlyGoalModalOpen,
   setSelectedAnnualInitiativeDescription,
   showCreateQuarterlyGoal,
+  onboarding,
 }: IAnnualInitiativeCardProps): JSX.Element => {
   const [showMinimizedCard, setShowMinimizedCard] = useState<boolean>(showMinimizedCards);
 
@@ -41,15 +43,18 @@ export const AnnualInitiativeCard = ({
     setShowMinimizedCard(showMinimizedCards);
   }, [showMinimizedCards]);
 
-  const goalYearString =
-    companyStore.company.currentFiscalYear == annualInitiative.fiscalYear
-      ? `FY${annualInitiative.fiscalYear.toString().slice(-2)}`
-      : `FY${companyStore.company.currentFiscalYear
-          .toString()
-          .slice(-2)}/${annualInitiative.fiscalYear.toString().slice(-2)}`;
+  const goalYearString = onboarding
+    ? `${companyStore.onboardingCompany.currentFiscalYear}`
+    : companyStore.company.currentFiscalYear == annualInitiative.fiscalYear
+    ? `FY${annualInitiative.fiscalYear.toString().slice(-2)}`
+    : `FY${companyStore.company.currentFiscalYear
+        .toString()
+        .slice(-2)}/${annualInitiative.fiscalYear.toString().slice(-2)}`;
 
   const renderYearDisplay = () => {
-    if (
+    if (onboarding) {
+      return null;
+    } else if (
       companyStore.company.currentFiscalYear != annualInitiative.fiscalYear &&
       annualInitiative.fiscalYear
     ) {
@@ -86,6 +91,7 @@ export const AnnualInitiativeCard = ({
         <AnnualInitiativeCardMinimized
           annualInitiative={annualInitiative}
           setShowMinimizedCard={setShowMinimizedCard}
+          disableOpen={onboarding}
         />
       ) : (
         <AnnualInitiativeCardExpanded

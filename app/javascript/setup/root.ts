@@ -26,6 +26,12 @@ const initialState = {
   },
   companyStore: {
     company: null,
+    onboardingCompany: null,
+    onboardingDisplayFormat: "",
+    onboardingCompanyGoals: null,
+    onboardingKeyActivities: null,
+    onboardingTeam: null,
+    onboardingModalOpen: false,
   },
   forumStore: {
     error: false,
@@ -64,6 +70,12 @@ const initialState = {
   },
   milestoneStore: {
     milestonesForPersonalMeeting: null,
+  },
+  staticDataStore: {
+    loading: false,
+    timeZones: null,
+    headingsAndDescriptions: {},
+    fieldsAndLabels: {},
   },
 };
 

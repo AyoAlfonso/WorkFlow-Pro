@@ -169,7 +169,7 @@ export const QuarterlyGoalModalContent = observer(
     return (
       <Container>
         <StatusBlockColorIndicator
-          milestones={quarterlyGoal.milestones}
+          milestones={quarterlyGoal.milestones || []}
           indicatorWidth={80}
           marginBottom={16}
         />

@@ -9,13 +9,14 @@ import * as moment from "moment";
 interface IAnnualInitiativeCardMinimizedProps {
   annualInitiative: AnnualInitiativeType;
   setShowMinimizedCard: React.Dispatch<React.SetStateAction<boolean>>;
+  disableOpen?: boolean;
 }
 
-export const AnnualInitiativeCardMinimized = (
-  props: IAnnualInitiativeCardMinimizedProps,
-): JSX.Element => {
-  const { annualInitiative, setShowMinimizedCard } = props;
-
+export const AnnualInitiativeCardMinimized = ({
+  annualInitiative,
+  disableOpen,
+  setShowMinimizedCard,
+}: IAnnualInitiativeCardMinimizedProps): JSX.Element => {
   const renderStatusSquares = () => {
     return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
       const { warningRed, cautionYellow, finePine, grey40 } = baseTheme.colors;
@@ -26,7 +27,7 @@ export const AnnualInitiativeCardMinimized = (
 
       let backgroundColor = grey40;
 
-      if (currentMilestone) {
+      if (currentMilestone && currentMilestone.status) {
         switch (currentMilestone.status) {
           case "incomplete":
             backgroundColor = warningRed;
@@ -46,14 +47,16 @@ export const AnnualInitiativeCardMinimized = (
   return (
     <Container>
       <StatusSquareContainer>{renderStatusSquares()}</StatusSquareContainer>
-      <MaximizeIconContainer onClick={() => setShowMinimizedCard(false)}>
-        <Icon
-          icon={"Chevron-Down"}
-          size={"15px"}
-          iconColor={"grey60"}
-          style={{ marginTop: "5px" }}
-        />
-      </MaximizeIconContainer>
+      {disableOpen ? null : (
+        <MaximizeIconContainer onClick={() => setShowMinimizedCard(false)}>
+          <Icon
+            icon={"Chevron-Down"}
+            size={"15px"}
+            iconColor={"grey60"}
+            style={{ marginTop: "5px" }}
+          />
+        </MaximizeIconContainer>
+      )}
     </Container>
   );
 };

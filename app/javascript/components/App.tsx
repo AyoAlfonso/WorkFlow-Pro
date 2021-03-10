@@ -43,8 +43,10 @@ import { Section1 } from "./domains/meetings-forum/section-1";
 import { Section2 } from "./domains/meetings-forum/section-2";
 import { ForumNotSetup } from "./domains/meetings-forum/not-setup";
 import { ForumAgenda } from "./domains/meetings-forum/forum-agenda";
-import { WizardLayout } from "./layouts/wizard-layout";
 import { ForumWelcomeModal } from "./shared/forum-welcome-modal";
+import { OnboardingModal } from "./domains/onboarding";
+
+import { Onboarding } from "./domains/onboarding";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -188,6 +190,7 @@ export const App = observer(
                     <SideNav />
                     <HeaderBar />
                     <ForumWelcomeModal />
+                    <OnboardingModal />
                     <Container>
                       <Route exact path="/" component={HomeContainer} />
                       <Route
@@ -229,27 +232,9 @@ export const App = observer(
                   }}
                 />
                 <Route
-                  path={"/test_template"}
+                  path={"/onboarding"}
                   render={() => {
-                    return (
-                      <WizardLayout
-                        title={"Goals"}
-                        description={
-                          "Goals are things you (and your company) want to achieve in the next 3-12 months."
-                        }
-                        showSkipButton={false}
-                        leftBodyComponents={<> Left Component </>}
-                        rightBodyComponents={<> Right Component </>}
-                        steps={[
-                          "Tell us more about yourself",
-                          "Your company's Foundation Four \u2122",
-                          "Create your first Goal",
-                          "Add your first Pyn (todo)",
-                          "Add your Team",
-                        ]}
-                        currentStep={1}
-                      />
-                    );
+                    return <Onboarding />;
                   }}
                 />
               </Switch>

@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import { position, PositionProps } from "styled-system";
 import { ProgressBar, Step } from "react-step-progress-bar";
 import { baseTheme } from "~/themes";
 import { StepProgressBarIcon } from "../progress-bars";
@@ -8,11 +9,15 @@ import { Text } from "~/components/shared/text";
 interface ISignUpWizardProgressBarProps {
   stepNames: Array<String>;
   currentStep: number;
+  onStepClick?: (stepIndex: number) => void;
+  clickDisabled?: boolean;
 }
 
 export const SignUpWizardProgressBar = ({
   stepNames,
   currentStep,
+  onStepClick,
+  clickDisabled,
 }: ISignUpWizardProgressBarProps): JSX.Element => {
   const renderIcon = (iconColor, bgColor, iconName) => (
     <IconContainer>
@@ -34,16 +39,31 @@ export const SignUpWizardProgressBar = ({
       return (
         <StepContainer key={index}>
           <StepTitleContainer titleCharLength={titleCharLength(step)}>
-            <StepTitle>{step}</StepTitle>
+            <StepTitle index={index} currentStep={currentStep}>
+              {step}
+            </StepTitle>
           </StepTitleContainer>
-
-          <Step transition="scale">
-            {({ accomplished }) =>
-              currentStep >= index
-                ? renderIcon("white", "primary100", "Chevron-Left")
-                : renderIcon("white", "grey100", "Chevron-Left")
-            }
-          </Step>
+          <StepDiv
+            onClick={() => {
+              if (!clickDisabled) onStepClick(index);
+            }}
+          >
+            <Step transition="scale">
+              {({ accomplished }) => {
+                if (currentStep === index) {
+                  return renderIcon("white", "primary100", "Chevron-Left");
+                } else if (currentStep > index) {
+                  return renderIcon("white", "grey100", "Checkmark");
+                } else {
+                  return <IncompleteStep />;
+                }
+              }
+              // currentStep > index
+              // ? renderIcon("white", "primary100", "Chevron-Left")
+              // : renderIcon("white", "grey100", "Chevron-Left")
+              }
+            </Step>
+          </StepDiv>
         </StepContainer>
       );
     });
@@ -58,9 +78,10 @@ export const SignUpWizardProgressBar = ({
 
 const StepContainer = styled.div``;
 
-const StepTitle = styled(Text)`
+const StepTitle = styled(Text)<{ currentStep; index }>`
   font-size: 9px;
-  color: ${props => props.theme.colors.greyActive};
+  color: ${({ currentStep, index, theme: { colors } }) =>
+    currentStep === index ? colors.primary100 : colors.greyActive};
 `;
 
 const IconContainer = styled.div`
@@ -72,8 +93,48 @@ type StepTitleContainerProps = {
 };
 
 const StepTitleContainer = styled.div<StepTitleContainerProps>`
-  width: 20%;
+  width: ${props => `${props.titleCharLength}em`};
   position: absolute;
   margin-top: -60px;
   margin-left: ${props => `-${props.titleCharLength * 2.1}px`};
 `;
+
+const StepDiv = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+  &:focus {
+    outline: 0;
+  }
+  &:active {
+    transform: translate(1px, 1px);
+  }
+  transition: all ease 0.1s;
+`;
+
+interface ICircleProps extends PositionProps {
+  bgColor: string;
+  size: string;
+}
+
+const Circle = styled.div<ICircleProps>`
+  ${position}
+  border-radius: 50%;
+  height: ${({ size }) => size};
+  width: ${({ size }) => size};
+  background-color: ${({ bgColor }) => bgColor};
+`;
+
+const IncompleteStep = () => {
+  return (
+    <Circle
+      size={"24px"}
+      bgColor={baseTheme.colors.greyInactive}
+      position={"absolute"}
+      top={"-12px"}
+      left={"-12px"}
+    >
+      <Circle size={"12px"} bgColor={"white"} position={"absolute"} top={"6px"} left={"6px"} />
+    </Circle>
+  );
+};

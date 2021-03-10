@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 2021_03_05_190350) do
     t.text "accountability_chart_embed"
     t.text "strategic_plan_embed"
     t.integer "display_format", default: 0
+    t.integer "onboarding_status", default: 0
   end
 
   create_table "conversation_starters", force: :cascade do |t|
@@ -337,6 +338,14 @@ ActiveRecord::Schema.define(version: 2021_03_05_190350) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "sign_up_purposes", force: :cascade do |t|
+    t.bigint "company_id", null: false
+    t.string "purpose"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["company_id"], name: "index_sign_up_purposes_on_company_id"
+  end
+
   create_table "static_data", force: :cascade do |t|
     t.string "field"
     t.text "value"
@@ -536,6 +545,7 @@ ActiveRecord::Schema.define(version: 2021_03_05_190350) do
   add_foreign_key "quarterly_goals", "annual_initiatives"
   add_foreign_key "questionnaire_attempts", "questionnaires"
   add_foreign_key "questionnaire_attempts", "users"
+  add_foreign_key "sign_up_purposes", "companies"
   add_foreign_key "steps", "meeting_templates"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "companies"

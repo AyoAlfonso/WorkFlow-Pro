@@ -26,7 +26,7 @@ export const IconContainer = styled.div<StyledSystemProps>`
 export const IconContainerWithPadding = styled(IconContainer)`
   padding-right: 10px;
   color: ${props => props.theme.colors.grey60};
-`
+`;
 
 export const Icon = (props: IIconProps) => {
   const { icon, iconColor, size = "25px", disableFill, removeInlineStyle, ...restProps } = props;

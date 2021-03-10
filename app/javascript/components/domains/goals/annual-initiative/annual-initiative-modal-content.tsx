@@ -72,7 +72,7 @@ export const AnnualInitiativeModalContent = observer(
         return (
           <QuarterlyGoalContainer key={index}>
             <StatusBlockColorIndicator
-              milestones={quarterlyGoal.milestones}
+              milestones={quarterlyGoal.milestones || []}
               indicatorWidth={80}
               marginBottom={16}
             />
@@ -92,14 +92,16 @@ export const AnnualInitiativeModalContent = observer(
               </QuarterlyGoalOptionContainer>
             </TopRowContainer>
             <BottomRowContainer>
-              <QuarterlyGoalOwnerContainer>
-                <UserDefaultIcon
-                  firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
-                  lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
-                  defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
-                  size={40}
-                />
-              </QuarterlyGoalOwnerContainer>
+              {quarterlyGoal.ownedBy && (
+                <QuarterlyGoalOwnerContainer>
+                  <UserDefaultIcon
+                    firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
+                    lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
+                    defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
+                    size={40}
+                  />
+                </QuarterlyGoalOwnerContainer>
+              )}
             </BottomRowContainer>
           </QuarterlyGoalContainer>
         );

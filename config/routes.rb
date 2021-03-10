@@ -57,13 +57,20 @@ Rails.application.routes.draw do
     patch '/update_company_first_time_access', to: 'users#update_company_first_time_access'
     post 'invite_users_to_company', to: 'users#invite_users_to_company'
 
-    resources :companies, only: [:show, :update] do
+    get '/static_data', to: 'application#load_static_data'
+
+    resources :companies, only: [:create, :show, :update] do
       member do
         delete 'logo', to: 'companies#delete_logo'
         patch 'logo', to: 'companies#update_logo'
       end
     end
-
+    get '/onboarding', to: "companies#get_onboarding_company"
+    get 'onboarding/:company_id/goals', to: "companies#get_onboarding_goals"
+    post '/onboarding/:company_id/goals', to: "companies#create_or_update_onboarding_goals"
+    get '/onboarding/:company_id/key_activities/', to: "companies#get_onboarding_key_activities"
+    post '/onboarding/:company_id/key_activities', to: "companies#create_or_update_onboarding_key_activities"
+    post '/onboarding/:company_id/team', to: "companies#create_or_update_onboarding_team"
     # issues
     resources :issues, only: [:index, :create, :update, :destroy]
     get '/issues/issues_for_meeting', to: "issues#issues_for_meeting"

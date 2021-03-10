@@ -16,6 +16,7 @@ import { TeamStoreModel, ITeamStore } from "./team-store";
 import { MeetingStoreModel, IMeetingStore } from "./meeting-store";
 import { NotificationStoreModel, INotificationStore } from "./notification-store";
 import { MilestoneStoreModel, IMilestoneStore } from "./milestone-store";
+import { StaticDataStoreModel, IStaticDataStore } from "./static-data-store";
 
 export const RootStoreModel = types
   .model("RootStoreModel")
@@ -37,6 +38,7 @@ export const RootStoreModel = types
     meetingStore: MeetingStoreModel,
     notificationStore: NotificationStoreModel,
     milestoneStore: MilestoneStoreModel,
+    staticDataStore: StaticDataStoreModel,
   })
   .views(self => ({}))
   .actions(self => ({
@@ -45,6 +47,8 @@ export const RootStoreModel = types
       yield self.sessionStore.loadProfile();
       if (self.sessionStore.loggedIn) {
         self.companyStore.load();
+        self.companyStore.loadOnboarding();
+        self.staticDataStore.load();
         // do some API calls
         self.userStore.load();
         self.meetingStore.load();
@@ -77,4 +81,5 @@ export interface IRootStore extends IStateTreeNode {
   notificationStore: INotificationStore;
   milestoneStore: IMilestoneStore;
   forumStore: IForumStore;
+  staticDataStore: IStaticDataStore;
 }
