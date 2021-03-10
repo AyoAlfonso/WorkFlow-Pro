@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { Heading } from "~/components/shared";
-import { KeyActivitiesList } from "~/components/key-activities/key-activities-list";
+import { KeyActivitiesList } from "~/components/domains/key-activities/key-activities-list";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 
 export const YesterdayInReview = observer(
