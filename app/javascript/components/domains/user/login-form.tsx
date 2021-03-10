@@ -67,9 +67,26 @@ export const LoginForm = observer(
                 {t("profile.loginForm.login")}
               </Text>
               <Label htmlFor="email">{t("profile.loginForm.email")}</Label>
-              <Input name="email" onChange={e => setEmail(e.target.value)} />
+              <Input
+                name="email"
+                onChange={e => setEmail(e.target.value)}
+                onKeyDown={key => {
+                  if (key.keyCode == 13) {
+                    sessionStore.login(email, password);
+                  }
+                }}
+              />
               <Label>{t("profile.loginForm.password")}</Label>
-              <Input name="password" type="password" onChange={e => setPassword(e.target.value)} />
+              <Input
+                name="password"
+                type="password"
+                onChange={e => setPassword(e.target.value)}
+                onKeyDown={key => {
+                  if (key.keyCode == 13) {
+                    sessionStore.login(email, password);
+                  }
+                }}
+              />
               <Button
                 small
                 variant={"primary"}
