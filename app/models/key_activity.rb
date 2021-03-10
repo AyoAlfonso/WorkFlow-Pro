@@ -29,9 +29,11 @@ class KeyActivity < ApplicationRecord
   
   scope :created_between, -> (date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
   scope :user_created_between, -> (user, date_start, date_end) { created_by_user(user).created_between(date_start, date_end) }
-  scope :completed_between, -> (date_start, date_end) { where("completed_at >= ? AND completed_at <= ?", date_start, date_end) }
+  scope :completed_between, -> (date_start, date_end) { where("completed_at BETWEEN ? AND ?", date_start, date_end) }
   scope :user_completed_between, -> (user, date_start, date_end) { owned_by_user(user).completed_between(date_start, date_end) }
-  scope :completed_today, -> (user) { where("completed_at BETWEEN '#{user.time_in_user_timezone.beginning_of_day}' AND '#{user.time_in_user_timezone.end_of_day}'") }
+
+  scope :completed_yesterday_for_user, -> (user) { completed_between(user.time_in_user_timezone.beginning_of_day-1.day, user.time_in_user_timezone.end_of_day-1.day) }
+  scope :completed_today_for_user, -> (user) { completed_between(user.time_in_user_timezone.beginning_of_day, user.time_in_user_timezone.end_of_day) }
 
   scope :sort_by_priority_and_created_at, -> {sort_by_priority.sort_by_created_date}
   scope :sort_by_position_priority_and_created_at, -> { sort_by_position.sort_by_priority.sort_by_created_date }
@@ -44,6 +46,19 @@ class KeyActivity < ApplicationRecord
   scope :sort_by_due_date, -> { order(due_date: :asc) }
 
   validates :description, presence: true
+
+  before_update :set_move_today_on
+
+  def set_move_today_on
+    if scheduled_group_id == ScheduledGroup.find_by_name("Today").id && self.moved_to_today_on.blank?
+      self.moved_to_today_on = self.user.time_in_user_timezone.to_date
+    elsif completed_at.blank?
+      self.moved_to_today_on = nil
+    else
+      #do nothing
+    end
+  end
+
 
   def self.filter_by_team_meeting(meeting_template_id, team_id)
     meeting_ids = Meeting.where(meeting_template_id: meeting_template_id, team_id: team_id).pluck(:id)

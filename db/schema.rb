@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_05_190350) do
+ActiveRecord::Schema.define(version: 2021_03_10_051045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,6 +202,7 @@ ActiveRecord::Schema.define(version: 2021_03_05_190350) do
     t.boolean "personal", default: false
     t.bigint "scheduled_group_id"
     t.bigint "team_id"
+    t.date "moved_to_today_on"
     t.index ["company_id"], name: "index_key_activities_on_company_id"
     t.index ["completed_at", "position", "priority"], name: "index_key_activities_on_completed_at_and_position_and_priority"
     t.index ["created_at", "position", "priority"], name: "index_key_activities_on_created_at_and_position_and_priority"

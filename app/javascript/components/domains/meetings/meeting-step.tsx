@@ -3,6 +3,7 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { ConversationStarter } from "./components/conversation-starter";
 import { PersonalGoals } from "./components/personal-goals";
+import { YesterdayInReview } from "./components/yesterday-in-review";
 import { DailyPlanning } from "./components/daily-planning";
 import { CompleteDailyPlanning } from "./components/complete-daily-planning";
 import { Milestones } from "./components/milestones";
@@ -48,6 +49,8 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
           return <Milestones />;
         case "PersonalKeyActivities":
           return <PersonalKeyActivities />;
+        case "YesterdayInReview":
+          return <YesterdayInReview />;
         case "DailyPlanning":
           return <DailyPlanning />;
         case "CompleteDailyPlanning":

@@ -290,7 +290,7 @@ pdmt.update!(
       name: "Yesterday In Review",
       step_type: :component,
       instructions: "Take a quick look at how yesterday went.",
-      component_to_render: "PersonalKeyActivities",
+      component_to_render: "YesterdayInReview",
       duration: nil
     },
     {
