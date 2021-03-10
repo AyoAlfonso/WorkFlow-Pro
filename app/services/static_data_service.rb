@@ -54,17 +54,17 @@ class StaticDataService < ApplicationService
     {
       "0": {
         heading: "Welcome!",
-        description: "Add some basic info about your company so we can set up an instance of Lynchpyn for you.",
+        description: "Add some basic info about your {displayFormat} so we can set up an instance of Lynchpyn for you.",
         stepLabel: "Tell us more about yourself"
       },
       "1": {
         heading: "Foundational Four™",
-        description: "Tell us more about your company.  If you don't have all the answers, enter as much as possible and continue.  You can also skip if you want to do this later.",
-        stepLabel: "Your company's Foundation Four \u2122"
+        description: "Tell us more about your {displayFormat}.  If you don't have all the answers, enter as much as possible and continue.  You can also skip if you want to do this later.",
+        stepLabel: "Your {displayFormat}'s Foundation Four™"
       },
       "2": {
         heading: "Goals",
-        description: "Goals are things you (and your company) want to achieve in the next 3-12 months.  By adding your Goals to Lynchpyn, you can communicate and align your team around what really matters.",
+        description: "Goals are things you (and your {displayFormat}) want to achieve in the next 3-12 months.  By adding your Goals to Lynchpyn, you can communicate and align your team around what really matters.",
         stepLabel: "Create your first Goal"
       },
       "3": {
@@ -74,7 +74,7 @@ class StaticDataService < ApplicationService
       },
       "4": {
         heading: "Team",
-        descriptiion: "Final step in your onboarding is adding your team.  The power of Lynchpyn is in collaboration; add your team and teammates so they can help you populate your company Goals.",
+        description: "The final step in your onboarding is adding your team.  The power of Lynchpyn is in collaboration; add your team and teammates so they can help you populate your {displayFormat} Goals.",
         stepLabel: "Add your Team"
       }
     }

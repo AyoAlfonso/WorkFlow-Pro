@@ -102,7 +102,10 @@
           "title": "Edit User"
         },
         "rallyingCry": "LynchPyn Goal",
-        "createCompany": "Create Company"
+        "create": "Create",
+        "edit": "Edit",
+        "newCompany": "Company",
+        "newForum": "Forum"
       },
       "forum": {
         "section1": "Section 1",

@@ -47,6 +47,8 @@ export const RootStoreModel = types
       yield self.sessionStore.loadProfile();
       if (self.sessionStore.loggedIn) {
         self.companyStore.load();
+        self.companyStore.loadOnboarding();
+        self.staticDataStore.load();
         // do some API calls
         self.userStore.load();
         self.meetingStore.load();

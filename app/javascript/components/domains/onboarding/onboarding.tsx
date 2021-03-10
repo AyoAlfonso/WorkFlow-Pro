@@ -25,9 +25,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
   const [pynsData, setPynsData] = useState<any>({});
 
   const loadOnboarding = useCallback(async () => {
-    await staticDataStore.load();
-    await companyStore.getOnboardingCompany();
-    const { onboardingCompany } = companyStore;
+    const { onboardingDisplayFormat, onboardingCompany } = companyStore;
     if (!R.isNil(onboardingCompany)) {
       const signUpPurpose = R.path(["signUpPurpose"], onboardingCompany);
       const fiscalYearStart = new Date(R.path(["fiscalYearStart"], onboardingCompany));
@@ -44,7 +42,8 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         }),
         R.fromPairs,
       )(onboardingCompany);
-      const state = R.pipe(
+
+      const formDataState = R.pipe(
         R.set(
           R.lens(R.prop("signUpPurposeAttributes"), R.assoc("signUpPurposeAttributes")),
           signUpPurpose,
@@ -54,11 +53,11 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         R.dissoc("coreFour"),
         R.dissoc("signUpPurpose"),
         R.set(R.lens(R.prop("logo"), R.assoc("logo")), logoFiles),
+        R.set(R.lens(R.prop("displayFormat"), R.assoc("displayFormat")), onboardingDisplayFormat),
       )(onboardingCompany);
-      setFormData(state);
-      await companyStore.getOnboardingCompanyGoals(onboardingCompany.id);
+
+      setFormData(formDataState);
       setGoalData(companyStore.onboardingCompanyGoals);
-      await companyStore.getOnboardingKeyActivities(onboardingCompany.id);
       setPynsData(companyStore.onboardingKeyActivities);
     }
     setLoading(false);
@@ -69,7 +68,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
   }, [loadOnboarding]);
 
   const { fieldsAndLabels, headingsAndDescriptions, timeZones } = staticDataStore;
-  const { onboardingCompany } = companyStore;
+  const { onboardingCompany, onboardingDisplayFormat } = companyStore;
   const { profile } = sessionStore;
 
   if (loading || R.isNil(profile)) {
@@ -341,16 +340,35 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
     <div>STEP FOUR RIGHT</div>,
   ];
 
+  const headingsAndDescriptionsWithOnboardingDisplayFormat = R.mapObjIndexed(
+    (val, key, obj) =>
+      R.pipe(
+        R.toPairs,
+        R.map(([k, v]) => [k, R.replace("{displayFormat}", R.toLower(onboardingDisplayFormat), v)]),
+        R.fromPairs,
+      )(val),
+    headingsAndDescriptions,
+  );
+
   const stepLabels = R.pipe(
     R.props(["0", "1", "2", "3", "4"]),
     R.map(R.prop("stepLabel")),
-  )(headingsAndDescriptions);
+  )(headingsAndDescriptionsWithOnboardingDisplayFormat);
+
+  const wizardTitles = R.path(
+    [currentStep, "heading"],
+    headingsAndDescriptionsWithOnboardingDisplayFormat,
+  );
+  const wizardDescriptions = R.path(
+    [currentStep, "description"],
+    headingsAndDescriptionsWithOnboardingDisplayFormat,
+  );
 
   return (
     <Container>
       <WizardLayout
-        title={R.path([currentStep, "heading"], headingsAndDescriptions)}
-        description={R.path([currentStep, "description"], headingsAndDescriptions)}
+        title={wizardTitles}
+        description={wizardDescriptions}
         showCloseButton={true}
         showSkipButton={currentStep === 1 || currentStep === 2}
         onCloseButtonClick={companyStore.closeOnboardingModal}

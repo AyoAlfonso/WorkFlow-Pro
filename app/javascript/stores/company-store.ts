@@ -10,6 +10,7 @@ export const CompanyStoreModel = types
   .props({
     company: types.maybeNull(CompanyModel),
     onboardingCompany: types.maybeNull(CompanyModel),
+    onboardingDisplayFormat: types.maybeNull(types.string),
     onboardingCompanyGoals: types.maybeNull(types.frozen()),
     onboardingKeyActivities: types.maybeNull(types.frozen()),
     onboardingModalOpen: types.boolean,
@@ -167,12 +168,22 @@ export const CompanyStoreModel = types
     },
   }))
   .actions(self => ({
-    openOnboardingModal() {
+    openOnboardingModal(displayFormat: string) {
+      self.onboardingDisplayFormat = displayFormat;
       self.onboardingModalOpen = true;
     },
     closeOnboardingModal() {
       self.onboardingModalOpen = false;
     },
+  }))
+  .actions(self => ({
+    loadOnboarding: flow(function*() {
+      yield self.getOnboardingCompany();
+      if (!R.isNil(self.onboardingCompany)) {
+        yield self.getOnboardingCompanyGoals(self.onboardingCompany.id);
+        yield self.getOnboardingKeyActivities(self.onboardingCompany.id);
+      }
+    }),
   }));
 
 type CompanyStoreType = typeof CompanyStoreModel.Type;
