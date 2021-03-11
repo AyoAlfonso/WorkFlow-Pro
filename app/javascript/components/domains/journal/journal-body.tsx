@@ -4,14 +4,11 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { Icon } from "~/components/shared/icon";
-import { 
-  TextDiv, 
-  TextNoMargin
-} from "~/components/shared/text";
+import { TextDiv, TextNoMargin } from "~/components/shared/text";
 import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
 import { useMst } from "../../../setup/root";
 import { IconButton } from "../../shared/icon-button";
-import { AccordionDetails } from '~/components/shared/accordion-components';
+import { AccordionDetails } from "~/components/shared/accordion-components";
 
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { showToast } from "~/utils/toast-message";
@@ -62,6 +59,15 @@ export const JournalBody = ({ setQuestionnaireVariant }: IJournalBodyProps): JSX
           iconName={"AM-Check-in"}
           iconColor={"cautionYellow"}
           text={t("journals.createMyDay")}
+          onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay)}
+          disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
+        />
+        {/* FOR THE FUTURE 
+        <IconButton
+          {...defaultJournalButtonProps}
+          iconName={"AM-Check-in"}
+          iconColor={"cautionYellow"}
+          text={t("journals.createMyDay")}
           onClick={() =>
             meetingStore.createPersonalDailyMeeting().then(({ meeting }) => {
               if (!R.isNil(meeting)) {
@@ -72,7 +78,7 @@ export const JournalBody = ({ setQuestionnaireVariant }: IJournalBodyProps): JSX
             })
           }
           disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
-        />
+        /> */}
         {/* <IconButton
             {...defaultJournalButtonProps}
             iconName={"Check-in"}
@@ -113,15 +119,11 @@ export const JournalBody = ({ setQuestionnaireVariant }: IJournalBodyProps): JSX
           text={t("journals.monthlyReflection")}
           onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.monthlyReflection)}
         />
-        <FooterText 
-          color={"greyActive"} 
-        >
-          {t("journals.footer")}
-        </FooterText>
+        <FooterText color={"greyActive"}>{t("journals.footer")}</FooterText>
       </ButtonContainer>
     </AccordionDetailsContainer>
-  )
-}
+  );
+};
 
 const AccordionDetailsContainer = styled(AccordionDetails)`
   border: 0px solid white;
