@@ -23,10 +23,11 @@ interface IKeyActivityRecordProps {
   keyActivity: any;
   dragHandleProps?: any;
   meetingId?: string | number;
+  disabled?: boolean;
 }
 
 export const KeyActivityRecord = observer(
-  ({ keyActivity, dragHandleProps, meetingId }: IKeyActivityRecordProps): JSX.Element => {
+  ({ keyActivity, dragHandleProps, meetingId, disabled }: IKeyActivityRecordProps): JSX.Element => {
     const { keyActivityStore } = useMst();
     const keyActivityRef = useRef(null);
     const { t } = useTranslation();
@@ -114,6 +115,7 @@ export const KeyActivityRecord = observer(
                   meetingId ? true : false,
                 );
               }}
+              disabled={disabled}
             />
           </CheckboxContainer>
           <InputContainer>
@@ -133,29 +135,39 @@ export const KeyActivityRecord = observer(
               onBlur={() =>
                 keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false)
               }
+              disabled={disabled}
             />
 
             {keyActivity.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
           </InputContainer>
-          <ActionContainer>
-            <ActionSubContainer>
-              <DeleteButtonContainer
-                onClick={() =>
-                  keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
-                }
-              >
-                <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
-              </DeleteButtonContainer>
-            </ActionSubContainer>
-          </ActionContainer>
+          {!disabled && (
+            <ActionContainer>
+              <ActionSubContainer>
+                <DeleteButtonContainer
+                  onClick={() =>
+                    keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
+                  }
+                >
+                  <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
+                </DeleteButtonContainer>
+              </ActionSubContainer>
+            </ActionContainer>
+          )}
         </RowContainer>
 
         <BottomRowContainer>
-          <KeyActivityPriorityContainer onClick={() => updatePriority()}>
+          <KeyActivityPriorityContainer
+            onClick={() => {
+              if (!disabled) {
+                updatePriority();
+              }
+            }}
+          >
             <KeyActivityPriorityIcon priority={keyActivity.priority} />
           </KeyActivityPriorityContainer>
           <DateContainer>
             <Popup
+              disabled={disabled}
               arrow={false}
               closeOnDocumentClick
               contentStyle={{

@@ -196,6 +196,13 @@ export class Api {
     });
   }
 
+  async updateKeyActivitiesToComplete(keyActivitiesIdsString) {
+    return this.client.patch(`/key_activities/update_multiple`, {
+      idsToUpdate: keyActivitiesIdsString,
+      completed: true,
+    });
+  }
+
   async updateKeyActivity(keyActivityObject) {
     return this.client.patch(`/key_activities/${keyActivityObject.id}`, keyActivityObject);
   }

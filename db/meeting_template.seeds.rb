@@ -270,3 +270,45 @@ mt4.update!(
     }
   ],
 )
+
+
+pdmt = MeetingTemplate.where(meeting_type: :personal_daily, name: "Personal Daily").first_or_initialize
+pdmt.update!(
+  meeting_type: :personal_daily,
+  name: "Personal Daily",
+  steps_attributes: [
+    {
+      order_index: 0,
+      name: "Personal Goals",
+      step_type: :component,
+      instructions: "Review the Foundational Four, Company Goals, and Personal Goals.",
+      component_to_render: "PersonalGoals",
+      duration: nil
+    },
+    {
+      order_index: 1,
+      name: "Yesterday In Review",
+      step_type: :component,
+      instructions: "Take a quick look at how yesterday went.",
+      component_to_render: "YesterdayInReview",
+      duration: nil
+    },
+    {
+      order_index: 2,
+      name: "Create My Day",
+      step_type: :component,
+      instructions: "Create an intentional, productive day by planning what you will focus on today.\n\nStart with the three Pyns that will create the most impact today -- you can always add more later.",
+      component_to_render: "DailyPlanning",
+      description: "Start with the three Pyns that will create the most impact today -- you can always add more later."
+      duration: nil
+    },
+    {
+      order_index: 3,
+      name: "Complete Your Morning Routine",
+      step_type: :component,
+      instructions: "Review your today's Pyns and complete your morning journal with PynBot(if you want!) to complete your morning routine.",
+      component_to_render: "CompleteDailyPlanning",
+      duration: nil
+    }
+  ],
+)

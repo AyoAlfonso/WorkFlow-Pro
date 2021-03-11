@@ -4,6 +4,7 @@ import { ToastMessageConstants } from "~/constants/toast-types";
 import { showToast } from "~/utils/toast-message";
 import { withEnvironment } from "../lib/with-environment";
 import { KeyActivityModel } from "../models/key-activity";
+import * as R from "ramda";
 
 export const KeyActivityStoreModel = types
   .model("KeyActivityStoreModel")
@@ -16,14 +17,16 @@ export const KeyActivityStoreModel = types
   .extend(withEnvironment())
   .views(self => ({
     keyActivitiesByScheduledGroupName(scheduledGroupName) {
-      const { sessionStore: {scheduledGroups} } = getRoot(self);
+      const {
+        sessionStore: { scheduledGroups },
+      } = getRoot(self);
       const scheduledGroup = scheduledGroups.find(group => group.name == scheduledGroupName);
       const filteredKeyActivities = self.keyActivities.filter(
         keyActivity => keyActivity.scheduledGroupId == scheduledGroup.id,
       );
       return filteredKeyActivities;
     },
-    keyActivitiesByTeamId(teamId){
+    keyActivitiesByTeamId(teamId) {
       const filteredKeyActivities = self.keyActivities.filter(
         keyActivity => keyActivity.teamId == teamId,
       );
@@ -32,29 +35,62 @@ export const KeyActivityStoreModel = types
   }))
   .views(self => ({
     get completedActivities() {
-      return self.keyActivities.filter(
-        keyActivity => keyActivity.completedAt
-      )
-    },
-    get weeklyKeyActivities() {
-      const filteredKeyActivities = self.keyActivitiesByScheduledGroupName("Weekly List")
-      return filteredKeyActivities.filter(keyActivity => !keyActivity.completedAt)
-    },
-    get masterKeyActivities() {
-      return self.keyActivitiesByScheduledGroupName("Backlog")
-    },
-    get todaysPriorities() {
-      const filteredKeyActivities = self.keyActivitiesByScheduledGroupName("Today")
-      return filteredKeyActivities.filter(keyActivity => !keyActivity.completedAt)
+      return self.keyActivities.filter(keyActivity => keyActivity.completedAt);
     },
     get completedToday() {
-      const today = new Date();
+      const today = new Date().getDate();
       return self.keyActivities.filter(
-        keyActivity => new Date(keyActivity.completedAt).getDate() === today.getDate(),
+        keyActivity => new Date(keyActivity.completedAt).getDate() === today,
+      );
+    },
+    get completedYesterday() {
+      const today = new Date().getDate();
+      const yesterday = today - 1;
+      return self.keyActivities.filter(
+        keyActivity =>
+          new Date(keyActivity.completedAt).getDate() === yesterday ||
+          (!R.isNil(keyActivity.completedAt) &&
+            new Date(keyActivity.movedToTodayOn).getDate() < today),
+      );
+    },
+  }))
+  .views(self => ({
+    get nextActivities() {
+      return self
+        .keyActivitiesByScheduledGroupName("Tomorrow")
+        .concat(self.keyActivitiesByScheduledGroupName("Weekly List"));
+    },
+    get tomorrowKeyActivities() {
+      return self.keyActivitiesByScheduledGroupName("Tomorrow");
+    },
+    get weeklyKeyActivities() {
+      const filteredKeyActivities = self.keyActivitiesByScheduledGroupName("Weekly List");
+      return filteredKeyActivities.filter(keyActivity => !keyActivity.completedAt);
+    },
+    get incompleteMasterKeyActivities() {
+      return self.keyActivitiesByScheduledGroupName("Backlog").filter(mka => !mka.completedAt);
+    },
+    get completedMasterKeyActivities() {
+      return self.keyActivitiesByScheduledGroupName("Backlog").filter(mka => mka.completedAt);
+    },
+    get todaysPriorities() {
+      return self
+        .keyActivitiesByScheduledGroupName("Today")
+        .filter(keyActivity => !keyActivity.completedAt);
+    },
+  }))
+  .views(self => ({
+    get todaysPrioritiesFromPreviousDays() {
+      const today = new Date().getDate();
+      return self.todaysPriorities.filter(
+        keyActivity => new Date(keyActivity.movedToTodayOn).getDate() < today,
       );
     },
   }))
   .actions(self => ({
+    reset() {
+      self.keyActivities = [] as any;
+    },
     startLoading(loadingList = null) {
       self.loading = true;
       self.loadingList = loadingList;
@@ -133,6 +169,19 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
+    markAllYesterdayDone: flow(function*() {
+      const kaIdsToUpdate = self.todaysPrioritiesFromPreviousDays.map(ka => ka.id).join(",");
+
+      const response: ApiResponse<any> = yield self.environment.api.updateKeyActivitiesToComplete(
+        kaIdsToUpdate,
+      );
+      if (response.ok) {
+        self.keyActivities = response.data as any;
+        return true;
+      } else {
+        return false;
+      }
+    }),
   }))
   .actions(self => ({
     fetchKeyActivitiesFromMeeting: flow(function*(meeting_id) {
@@ -146,10 +195,10 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
-    updateLabel: flow(function*(keyActivityId, labelName){
+    updateLabel: flow(function*(keyActivityId, labelName) {
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivity({
         id: keyActivityId,
-        labelList: labelName
+        labelList: labelName,
       });
 
       self.finishLoading();
@@ -159,17 +208,12 @@ export const KeyActivityStoreModel = types
       } else {
         return false;
       }
-    })
-  }))
-  .actions(self => ({
+    }),
     updateKeyActivityState(id, field, value) {
       let keyActivities = self.keyActivities;
       let keyActivityIndex = keyActivities.findIndex(ka => ka.id == id);
       keyActivities[keyActivityIndex][field] = value;
       self.keyActivities = keyActivities;
-    },
-    reset() {
-      self.keyActivities = [] as any;
     },
   }))
   .actions(self => ({

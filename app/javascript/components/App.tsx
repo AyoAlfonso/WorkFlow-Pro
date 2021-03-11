@@ -87,16 +87,25 @@ export const App = observer(
         keyActivityStore.updateKeyActivityState(keyActivityId, "position", newPosition + 1);
         if (destination.droppableId === "weekly-activities") {
           keyActivityStore.startLoading("weekly-activities");
-          keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", true);
-          keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", false);
+          keyActivityStore.updateKeyActivityState(
+            keyActivityId,
+            "scheduledGroupId",
+            sessionStore.getScheduledGroupIdByName("Weekly List"),
+          );
         } else if (destination.droppableId === "master-activities") {
           keyActivityStore.startLoading("master-activities");
-          keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
-          keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", false);
+          keyActivityStore.updateKeyActivityState(
+            keyActivityId,
+            "scheduledGroupId",
+            sessionStore.getScheduledGroupIdByName("Backlog"),
+          );
         } else if (destination.droppableId === "todays-priorities") {
           keyActivityStore.startLoading("todays-priorities");
-          keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
-          keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", true);
+          keyActivityStore.updateKeyActivityState(
+            keyActivityId,
+            "scheduledGroupId",
+            sessionStore.getScheduledGroupIdByName("Today"),
+          );
         } else if (R.includes("todays-activities", destination.droppableId)) {
           keyActivityStore.startLoading("home-key-activities");
           keyActivityStore.updateKeyActivityState(keyActivityId, "teamId", null);
@@ -169,7 +178,6 @@ export const App = observer(
                   exact
                   path={[
                     "/",
-                    "/personal_planning/:meeting_id",
                     "/team/:team_id",
                     "/account",
                     "/company/accountability",
@@ -193,11 +201,6 @@ export const App = observer(
                     <OnboardingModal />
                     <Container>
                       <Route exact path="/" component={HomeContainer} />
-                      <Route
-                        exact
-                        path="/personal_planning/:meeting_id"
-                        component={PersonalPlanning}
-                      />
 
                       <Route exact path="/team/:team_id" component={TeamOverview} />
                       <Route exact path="/account" component={AccountSettings} />
@@ -216,8 +219,16 @@ export const App = observer(
                     </Container>
                   </>
                 </Route>
-                <Route exact path={["/team/:team_id/meeting/:meeting_id"]}>
+                <Route
+                  exact
+                  path={["/personal_planning/:meeting_id", "/team/:team_id/meeting/:meeting_id"]}
+                >
                   <>
+                    <Route
+                      exact
+                      path="/personal_planning/:meeting_id"
+                      component={PersonalPlanning}
+                    />
                     <Route exact path="/team/:team_id/meeting/:meeting_id" component={Meeting} />
                   </>
                 </Route>

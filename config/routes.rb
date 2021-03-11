@@ -84,7 +84,11 @@ Rails.application.routes.draw do
     resources :team_issue_meeting_enablements, only: [:index]
 
     #key activities
-    resources :key_activities, only: [:index, :create, :update, :destroy]
+    resources :key_activities, only: [:index, :create, :update, :destroy] do
+      collection do
+        patch "/update_multiple", to: "key_activities#update_multiple"
+      end
+    end
     get '/key_activities/created_in_meeting', to: "key_activities#created_in_meeting"
     patch '/key_activities', to: "key_activities#resort_index"
 

@@ -14,14 +14,12 @@ export interface IMIPSelectorProps {}
 
 export const MIPSelector = observer(
   (props): JSX.Element => {
-    const { keyActivityStore } = useMst();
+    const { keyActivityStore, sessionStore } = useMst();
     const todaysPriorities = keyActivityStore.todaysPriorities;
-    const weeklyKeyActivities = keyActivityStore.weeklyKeyActivities;
-    const masterKeyActivities = keyActivityStore.masterKeyActivities.filter(
-      mka => mka.completedAt === null,
-    );
+    const nextActivities = keyActivityStore.nextActivities;
+    const masterKeyActivities = keyActivityStore.incompleteMasterKeyActivities;
 
-    if (R.isNil(todaysPriorities) || R.isNil(weeklyKeyActivities) || R.isNil(masterKeyActivities)) {
+    if (R.isNil(keyActivityStore.keyActivities)) {
       return <Loading />;
     }
 
@@ -30,9 +28,7 @@ export const MIPSelector = observer(
 
     const keyActivityOptions = R.pipe(
       R.concat(
-        weeklyKeyActivities.length > 0
-          ? weeklyKeyActivities.slice(0, 10)
-          : masterKeyActivities.slice(0, 10),
+        nextActivities.length > 0 ? nextActivities.slice(0, 10) : masterKeyActivities.slice(0, 10),
       ),
       R.sortBy(R.prop("createdAt")),
     )(optionsChecked);
@@ -47,13 +43,21 @@ export const MIPSelector = observer(
       keyActivityStore.updateKeyActivityState(option.id, "position", lastPosition);
       if (optionsChecked.includes(option)) {
         keyActivityStore.startLoading("weekly-activities");
-        keyActivityStore.updateKeyActivityState(option.id, "weeklyList", true);
-        keyActivityStore.updateKeyActivityState(option.id, "todaysPriority", false);
+
+        keyActivityStore.updateKeyActivityState(
+          option.id,
+          "scheduledGroupId",
+          sessionStore.getScheduledGroupIdByName("Weekly List"),
+        );
         setOptionsChecked(optionsChecked.filter(opt => opt.id !== option.id));
       } else if (optionsChecked.length < CHECKED_LIMIT) {
         keyActivityStore.startLoading("todays-priorities");
-        keyActivityStore.updateKeyActivityState(option.id, "weeklyList", false);
-        keyActivityStore.updateKeyActivityState(option.id, "todaysPriority", true);
+
+        keyActivityStore.updateKeyActivityState(
+          option.id,
+          "scheduledGroupId",
+          sessionStore.getScheduledGroupIdByName("Today"),
+        );
         setOptionsChecked(optionsChecked.concat(option));
       }
       keyActivityStore.updateKeyActivity(option.id);

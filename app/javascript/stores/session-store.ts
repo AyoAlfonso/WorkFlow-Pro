@@ -19,11 +19,18 @@ export const SessionStoreModel = types
     //profile details added as a profile model
     profile: types.maybeNull(UserModel),
     staticData: types.maybeNull(StaticModel),
-    scheduledGroups: types.maybeNull(types.array(ScheduledGroupModel))
+    scheduledGroups: types.maybeNull(types.array(ScheduledGroupModel)),
   })
   .extend(withRootStore())
   .extend(withEnvironment())
-  .views(self => ({}))
+  .views(self => ({
+    getScheduledGroupIdByName(selectedFilterGroupName) {
+      return R.path(
+        ["id"],
+        self.scheduledGroups.find(group => group.name == selectedFilterGroupName),
+      );
+    },
+  }))
   .actions(self => ({
     setProfileData(updatedData) {
       self.profile = { ...toJS(self.profile), ...updatedData }; //fields to be updated should be filtered
@@ -124,10 +131,10 @@ export const SessionStoreModel = types
       }
       self.loading = false;
     }),
-    updateUserCompanyFirstTimeAccess: flow(function*(params){
+    updateUserCompanyFirstTimeAccess: flow(function*(params) {
       const response: any = yield self.environment.api.updateUserCompanyFirstTimeAccess(params);
-      self.profile = response.data
-    })
+      self.profile = response.data;
+    }),
   }))
   .actions(self => ({
     login: flow(function*(email, password) {

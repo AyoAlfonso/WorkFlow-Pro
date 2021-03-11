@@ -139,7 +139,7 @@ export const HeaderBar = observer(
             disabled={false}
             onClick={() => {
               companyStore.company.displayFormat === "Company"
-                ? meetingStore.createPersonalMeeting().then(({ meeting }) => {
+                ? meetingStore.createPersonalWeeklyMeeting().then(({ meeting }) => {
                     if (!R.isNil(meeting)) {
                       history.push(`/personal_planning/${meeting.id}`);
                     } else {

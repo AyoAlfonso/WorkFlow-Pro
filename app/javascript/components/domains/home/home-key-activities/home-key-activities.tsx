@@ -14,8 +14,12 @@ import { FilterDropdown } from "../../key-activities/filter-dropdown";
 import * as R from "ramda";
 import { StyledIcon } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
 
+export interface IHomeKeyActivities {
+  todayOnly?: boolean;
+}
+
 export const HomeKeyActivities = observer(
-  (): JSX.Element => {
+  ({ todayOnly = false }: IHomeKeyActivities): JSX.Element => {
     const [selectedFilterGroupName, setSelectedFilterGroupName] = useState<string>("Tomorrow");
     const [selectedFilterTeamId, setSelectedFilterTeamId] = useState<number>(null);
     const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
@@ -194,7 +198,41 @@ export const HomeKeyActivities = observer(
       );
     };
 
-    return (
+    return todayOnly ? (
+      <Container>
+        <SingleListContainer>
+          <HeaderContainer>
+            {renderHeader(
+              "Today",
+              moment().format("MMMM D"),
+              todayFilterDropdownOpen,
+              setTodayFilterDropdownOpen,
+              selectedFilterGroupIdToday,
+            )}
+          </HeaderContainer>
+          <KeyActivitiesListContainer>
+            <CreateKeyActivityButton
+              onButtonClick={() => {
+                // setTodayModalClicked(true);
+                setCreateKeyActivityModalOpen(true);
+              }}
+            />
+            <KeyActivitiesList
+              keyActivities={todaysKeyActivities}
+              droppableId={`todays-activities-${todayFilterGroupId}`}
+            />
+          </KeyActivitiesListContainer>
+        </SingleListContainer>
+
+        <CreateKeyActivityModal
+          createKeyActivityModalOpen={createKeyActivityModalOpen}
+          setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+          defaultTypeAsWeekly={true}
+          todayModalClicked={true}
+          todayFilterGroupId={todayFilterGroupId}
+        />
+      </Container>
+    ) : (
       <Container>
         <ListContainer>
           <HeaderContainer>
@@ -264,6 +302,11 @@ const Container = styled.div`
 
 const ListContainer = styled.div`
   width: 50%;
+  margin-right: 20px;
+`;
+
+const SingleListContainer = styled.div`
+  width: 100%;
   margin-right: 20px;
 `;
 

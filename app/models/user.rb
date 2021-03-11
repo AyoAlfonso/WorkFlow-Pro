@@ -6,6 +6,7 @@ class User < ApplicationRecord
   include HasDefaultAvatarColor
   include HasEmotionScores
   include HasTimezone
+  include HasKeyActivityHelpers
 
   devise :database_authenticatable, :registerable, :confirmable, :invitable,
          :recoverable, :rememberable, :trackable,
@@ -90,16 +91,6 @@ class User < ApplicationRecord
 
   def company_admin?
     role == UserRole::CEO || role == UserRole::ADMIN
-  end
-
-  def todays_priorities
-    #TODO CHANGE
-    self.key_activities.where(scheduled_group: ScheduledGroup.find_by_name("Today")).incomplete.sort_by_priority_and_created_at
-  end
-
-  def todays_completed_activities
-    #TODO CHANGE
-    self.key_activities.completed_today(self)
   end
 
   # devise confirm! method overriden

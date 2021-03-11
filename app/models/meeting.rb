@@ -17,7 +17,10 @@ class Meeting < ApplicationRecord
   scope :optimized, -> { includes([meeting_template: {steps: :image_attachment}]) }
 
   # scope :in_progress, -> { where("start_time >= ? AND start_time < ?", Date.today.beginning_of_day.utc, DateTime.now) }
-  # scope :for_day, -> (day) { where("Date(created_at) = ?", day) }
+
+  #all personal meetings have start_times that correspond to when they are created!
+  #only pre-planned meetings may have start_time = null
+  scope :for_day_of_date, -> (start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_day, start_time.end_of_day) }
   scope :for_week_of_date, -> (start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_week, start_time.end_of_week)}
   scope :for_month_of_date, -> (start_time) { where("(start_time >= ? AND start_time <= ?) OR start_time IS NULL", start_time.beginning_of_month, start_time.end_of_month) }
   scope :for_week_of_date_started_only, -> (start_time) { where("(start_time >= ? AND start_time <= ?)", start_time.beginning_of_week, start_time.end_of_week)}
@@ -29,7 +32,8 @@ class Meeting < ApplicationRecord
   scope :hosted_by_user, -> (user) { where(hosted_by_id: user.id)}
   
   scope :team_weekly_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :team_weekly})}
-  scope :personal_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :personal_weekly})}
+  scope :personal_meetings, -> {team_meetings(nil)}
+  scope :personal_weekly_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :personal_weekly})}
   scope :personal_monthly_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :personal_monthly})}
   scope :forum_monthly_meetings, -> { joins(:meeting_template).where(meeting_templates: {meeting_type: :forum_monthly})}
   scope :for_type, -> (meeting_type){ joins(:meeting_template).where(meeting_templates: {meeting_type: MeetingTemplate.meeting_types[meeting_type.to_sym]})}
@@ -60,7 +64,7 @@ class Meeting < ApplicationRecord
   end
 
   def self.first_or_create_for_weekly_planning_on_email(user, week_to_review_start_time)
-    self.personal_meetings.hosted_by_user(user).for_week_of_date(week_to_review_start_time).first_or_create(
+    self.personal_weekly_meetings.hosted_by_user(user).for_week_of_date(week_to_review_start_time).first_or_create(
       meeting_template_id: MeetingTemplate.personal_weekly.first.id,
       hosted_by_id: user.id,
       host_name: user.full_name,

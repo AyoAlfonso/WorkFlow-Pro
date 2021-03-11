@@ -5,8 +5,6 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Heading } from "~/components/shared/heading";
 import { Button } from "~/components/shared/button";
-import { StepProgressBar } from "~/components/shared/progress-bars/step-progress-bar";
-import { Text } from "~/components/shared/text";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
 import { useParams, useHistory } from "react-router-dom";
@@ -15,23 +13,25 @@ import { TextNoMargin } from "~/components/shared/text";
 import { Loading } from "~/components/shared/loading";
 import { MeetingStep } from "./meeting-step";
 
+import { StepProgressBar } from "~/components/shared/progress-bars/step-progress-bar";
 import {
   progressBarStepsForMeeting,
   stepPositionsForMeeting,
 } from "./shared/progress-transform-helper";
+import { PersonalMeetingWizardLayout } from "./personal-meeting-wizard-layout";
 
 export interface ITeamMeetingProps {}
 
 export const PersonalPlanning = observer(
   (props: ITeamMeetingProps): JSX.Element => {
-    const { 
-      meetingStore,
-    } = useMst();
+    const { meetingStore } = useMst();
     const { meeting_id } = useParams(); // team id from url params
     const history = useHistory();
 
     useEffect(() => {
       meetingStore.getPersonalMeeting(meeting_id);
+
+      //TODO: MODIFY PERRSONAL PLANNING SUMMARY
       meetingStore.getPersonalPlanningSummary();
     }, []);
 
@@ -59,8 +59,8 @@ export const PersonalPlanning = observer(
 
     const StopMeetingButton = () => {
       return (
-        <Button
-          variant={"redOutline"}
+        <StopButton
+          variant={"primary"}
           onClick={() => {
             history.push(`/`);
             //TODO: send personal plan ended to back end.  For now do not end it.
@@ -69,72 +69,51 @@ export const PersonalPlanning = observer(
           ml={"25px"}
           disabled={false}
         >
-          <Icon icon={"Stop"} iconColor={"warningRed"} size={"13px"} />
-          <TextNoMargin ml={"10px"}>End Planning</TextNoMargin>
-        </Button>
+          Done
+        </StopButton>
       );
     };
 
     return (
-      <Container>
-        <HeaderContainer>
-          <Heading type={"h1"} fontSize={"24px"}>
-            Personal Planning
-          </Heading>
-          <DateAndButtonContainer>
-            <Heading type={"h3"} fontSize={"18px"} fontWeight={400}>
-              {meeting.title}
-            </Heading>
-            <StopMeetingButton />
-          </DateAndButtonContainer>
-        </HeaderContainer>
-        <BodyContainer>
-          <ProgressContainer>
-            <ProgressBarContainer>
-              <StepProgressBar
-                progressBarProps={{
-                  stepPositions: stepPositions,
-                  percent: 0,
-                }}
-                steps={progressBarSteps}
-                onStepClick={onStepClick}
-                currentStepIndex={meeting.currentStep}
-                fromPersonalPlanning={true}
-              />
-            </ProgressBarContainer>
-          </ProgressContainer>
-          <MeetingStep meeting={meeting}></MeetingStep>
-        </BodyContainer>
-      </Container>
+      <PersonalMeetingWizardLayout
+        meeting={meeting}
+        stopMeetingButton={<StopMeetingButton />}
+        onNextButtonClick={onStepClick}
+        numberOfSteps={meeting.steps.length}
+        stepsComponent={
+          <ProgressBarTimerContainer>
+            <StepProgressBar
+              progressBarProps={{
+                stepPositions: stepPositions,
+                percent: meeting.currentStep / meeting.steps.length,
+              }}
+              steps={progressBarSteps}
+              onStepClick={onStepClick}
+              currentStepIndex={meeting.currentStep}
+            />
+          </ProgressBarTimerContainer>
+        }
+      />
     );
   },
 );
 
 const Container = styled.div`
-  padding-top: 20px;
+  height: 100%;
 `;
 
-const HeaderContainer = styled.div`
+const BodyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+`;
+
+const ProgressBarTimerContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  padding-left: 16px;
 `;
 
-const DateAndButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ProgressContainer = styled.div`
+const StopButton = styled(Button)`
   width: 100%;
-  display: flex;
-  margin-top: 20px;
 `;
-
-const ProgressBarContainer = styled.div`
-  width: 60%;
-  margin: auto;
-`;
-
-const BodyContainer = styled.div``;

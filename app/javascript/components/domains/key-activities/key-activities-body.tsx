@@ -30,14 +30,8 @@ export const KeyActivitiesBody = observer(
     }, []);
 
     const weeklyKeyActivities = keyActivityStore.weeklyKeyActivities;
-    const masterKeyActivities = keyActivityStore.masterKeyActivities;
-
-    const outstandingMasterActivities = masterKeyActivities.filter(
-      keyActivity => !keyActivity.completedAt,
-    );
-    const completedMasterActivities = masterKeyActivities.filter(
-      keyActivity => keyActivity.completedAt,
-    );
+    const outstandingMasterActivities = keyActivityStore.incompleteMasterKeyActivities;
+    const completedMasterActivities = keyActivityStore.completedMasterKeyActivities;
 
     const renderKeyActivitiesList = (): any => {
       const { loading, loadingList } = keyActivityStore;
@@ -52,8 +46,7 @@ export const KeyActivitiesBody = observer(
         // need a hook to listen to screen resizing, and to dynamically calculate the list height
         return (
           <>
-            <OutstandingMasterActivitiesListContainer
-            >
+            <OutstandingMasterActivitiesListContainer>
               {renderOutstandingMasterActivitiesList()}
             </OutstandingMasterActivitiesListContainer>
 
@@ -234,10 +227,8 @@ const CompletedMasterActivitiesListContainer = styled.div<
     props.completedMasterActivitiesPresent && `1px solid ${props.theme.colors.grey40}`};
 `;
 
-type OutstandingMasterActivitiesListContainerType = {
-};
+type OutstandingMasterActivitiesListContainerType = {};
 
 const OutstandingMasterActivitiesListContainer = styled.div<
   OutstandingMasterActivitiesListContainerType
->`
-`;
+>``;
