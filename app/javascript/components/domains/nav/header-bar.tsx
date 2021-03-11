@@ -606,7 +606,7 @@ const CreationOption = styled.div`
 `;
 
 const CompanyDropdownContainer = styled(ActionDropdownContainer)`
-  margin-left: -120px;
+  margin-left: -130px;
   margin-top: -180px;
   margin-right: 0;
 `;
