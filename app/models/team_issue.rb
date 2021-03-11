@@ -24,7 +24,7 @@ class TeamIssue < ApplicationRecord
   scope :sort_by_issue_priority, -> { joins(:issue).merge(Issue.order(priority: :desc)) }
 
   def self.exclude_personal_for_team
-    self.joins(:issue).where(issues: { personal: false }).or(where(issues: { personal: nil }))
+    self.joins(:issue).where(issues: { personal: [false, nil] })
   end
 
 end
