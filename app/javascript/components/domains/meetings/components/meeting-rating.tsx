@@ -33,11 +33,20 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
     meetingStore: { updateMeeting },
   } = useMst();
 
-  if (R.isNil(teams) || R.isNil(users)) {
+  if (!teams || !users) {
     return <Loading />;
   }
 
   const currentTeam = teams.find(team => team.id === parseInt(team_id));
+
+  if (!currentTeam) {
+    showToast(
+      "There was an issue getting your team. Please refresh and try again",
+      ToastMessageConstants.ERROR,
+    );
+    return <Loading />;
+  }
+
   const teamLeads = users.filter(user => currentTeam.isALead(user));
   const teamMembers = users.filter(user => currentTeam.isANonLead(user));
   const MEETING_MAX_RATING = "7";
