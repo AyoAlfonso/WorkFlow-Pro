@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
 import { HomeKeyActivities } from "~/components/domains/home/home-key-activities/home-key-activities";
 
 import styled from "styled-components";
@@ -10,8 +9,6 @@ import { useHistory } from "react-router-dom";
 
 export const CompleteDailyPlanning = observer(
   (props: {}): JSX.Element => {
-    const history = useHistory();
-
     const questionnaireVariant = QuestionnaireTypeConstants.createMyDay;
     const handleChatbotEnd = () => {
       // if (confirm(`Are you sure you want to exit planning?`)) {
@@ -24,7 +21,11 @@ export const CompleteDailyPlanning = observer(
           <HomeKeyActivities todayOnly={true} />
         </SideContainer>
         <SideContainer>
-          <SurveyBot variant={questionnaireVariant} endFn={handleChatbotEnd} />
+          <SurveyBot
+            variant={questionnaireVariant}
+            endFn={handleChatbotEnd}
+            fromDailyPlanning={true}
+          />
         </SideContainer>
       </Container>
     );

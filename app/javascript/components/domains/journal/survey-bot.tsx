@@ -16,6 +16,7 @@ export interface ISurveyBotProps {
   variant: string;
   endFn?: () => void | void;
   optionalActionsComponent?: JSX.Element;
+  fromDailyPlanning?: boolean;
 }
 
 const botAvatarPath = require("../../../assets/images/LynchPyn-Logo-Blue_300x300.png");
@@ -33,23 +34,20 @@ export const SurveyBot = observer(
       keyActivityStore,
     } = useMst();
 
-    
     useEffect(() => {
       async function setUp() {
-        await questionnaireStore.load()
+        await questionnaireStore.load();
         const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
-        await questionnaireStore.getQuestionnaireAttemptsSummaryForReflections(questionnaireVariant.id)
+        await questionnaireStore.getQuestionnaireAttemptsSummaryForReflections(
+          questionnaireVariant.id,
+        );
         setLoading(false);
         window.closeWidget();
       }
       setUp();
     }, []);
 
-    if (
-      loading ||
-      R.isNil(keyActivityStore.todaysPriorities) ||
-      R.isNil(sessionStore.profile)
-      ) {
+    if (loading || R.isNil(keyActivityStore.todaysPriorities) || R.isNil(sessionStore.profile)) {
       return (
         <LoadingContainer>
           <Loading />
@@ -59,7 +57,7 @@ export const SurveyBot = observer(
 
     const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
     const summaryData = questionnaireStore.questionnaireAttemptsSummaryForReflections;
-    
+
     const stringValidator = value => (value ? true : "Write just a little bit!");
 
     const steps = R.map(step => {
@@ -148,10 +146,12 @@ export const SurveyBot = observer(
         width={"100%"}
         hideBotAvatar={true}
         hideUserAvatar={true}
-        contentStyle={{ height: window.innerHeight - 120 }}
+        contentStyle={{
+          height: props.fromDailyPlanning ? window.innerHeight - 250 : window.innerHeight - 120,
+        }}
         // header and footer are 120px total
         // these hard-coded values are required to make the chatbot fit inside the Journal widget :(
-        style={{ height: window.innerHeight }}
+        style={{ height: props.fromDailyPlanning ? window.innerHeight - 130 : window.innerHeight }}
         enableSmoothScroll={true}
         userDelay={200}
         zIndex={1}

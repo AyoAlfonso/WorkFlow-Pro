@@ -299,7 +299,7 @@ pdmt.update!(
       step_type: :component,
       instructions: "Create an intentional, productive day by planning what you will focus on today.\n\nStart with the three Pyns that will create the most impact today -- you can always add more later.",
       component_to_render: "DailyPlanning",
-      description: "Start with the three Pyns that will create the most impact today -- you can always add more later."
+      description_text: "Start with the three Pyns that will create the most impact today -- you can always add more later."
       duration: nil
     },
     {
