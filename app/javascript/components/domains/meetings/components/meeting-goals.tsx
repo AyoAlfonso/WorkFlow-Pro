@@ -21,6 +21,10 @@ export const MeetingGoals = (): JSX.Element => {
     "",
   );
 
+  if (!meetingStore.currentMeeting) {
+    return <Loading />;
+  }
+
   const teamId = meetingStore.currentMeeting.teamId;
 
   useEffect(() => {
@@ -31,7 +35,7 @@ export const MeetingGoals = (): JSX.Element => {
 
   const annualInitiatives = goalStore.teamGoals;
 
-  if (loading || R.isNil(annualInitiatives)) {
+  if (loading || !annualInitiatives) {
     return <Loading />;
   }
 
