@@ -50,9 +50,12 @@ class KeyActivity < ApplicationRecord
   before_update :set_move_today_on
 
   def set_move_today_on
-    if scheduled_group_id == ScheduledGroup.find_by_name("Today").id && self.moved_to_today_on.blank?
+    if scheduled_group_id_changed? && scheduled_group_id == ScheduledGroup.find_by_name("Today").id && self.moved_to_today_on.blank?
       self.moved_to_today_on = self.user.time_in_user_timezone.to_date
-    elsif completed_at.blank?
+    elsif scheduled_group_id_changed? && scheduled_group_id_was == ScheduledGroup.find_by_name("Today").id && completed_at.blank?
+      self.moved_to_today_on = nil
+    elsif completed_at_changed? && completed_at_was.present?
+      #remove the completion, bring it back, brings the item back to backlog
       self.moved_to_today_on = nil
     else
       #do nothing

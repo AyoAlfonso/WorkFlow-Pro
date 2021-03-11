@@ -169,6 +169,19 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
+    markAllYesterdayDone: flow(function*() {
+      const kaIdsToUpdate = self.todaysPrioritiesFromPreviousDays.map(ka => ka.id).join(",");
+
+      const response: ApiResponse<any> = yield self.environment.api.updateKeyActivitiesToComplete(
+        kaIdsToUpdate,
+      );
+      if (response.ok) {
+        self.keyActivities = response.data as any;
+        return true;
+      } else {
+        return false;
+      }
+    }),
   }))
   .actions(self => ({
     fetchKeyActivitiesFromMeeting: flow(function*(meeting_id) {

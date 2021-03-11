@@ -1,6 +1,8 @@
 class Api::KeyActivitiesController < Api::ApplicationController
   before_action :set_key_activity, only: [:update, :destroy]
 
+  after_action :verify_authorized, except: [:index, :created_in_meeting, :resort_index, :update_multiple], unless: :skip_pundit?
+
   respond_to :json
 
   def index
@@ -42,6 +44,25 @@ class Api::KeyActivitiesController < Api::ApplicationController
     render "api/key_activities/update"
   end
 
+  def update_multiple
+    #take in a list of key activity ids, update them and return all back to the front end
+    if key_activities_params[:completed]
+      completed_at = Time.now
+      scheduled_group = ScheduledGroup.find_by_name("Backlog")
+      policy_scope(KeyActivity).where(id: key_activities_params[:ids_to_update].split(",")).each do |key_activity|
+        key_activity.update!(completed_at: completed_at, scheduled_group: scheduled_group)
+        key_activity.move_to_bottom
+      end
+      #TODO: need to do move to bottom on mass update, for now we just loop for simplicty sake
+      #policy_scope(KeyActivity).where(id: key_activities_params[:ids_to_update]).update_all(completed_at: Time.now, scheduled_group: ScheduledGroup.find_by_name("Backlog"))
+    else
+      #todo, work on mass moving back to incomplete state?
+    end
+
+    @key_activities_to_render = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_position
+    render "api/key_activities/update"
+  end
+
   def destroy
     @key_activity.destroy!
     if params[:from_team_meeting] == "true"
@@ -78,6 +99,10 @@ class Api::KeyActivitiesController < Api::ApplicationController
   def key_activity_params
     params.permit(:id, :user_id, :description, :completed_at, :priority, :complete,
       :position, :meeting_id, :due_date, :personal, :scheduled_group_id, :team_id, :label_list)
+  end
+
+  def key_activities_params
+    params.permit(:ids_to_update, :completed)
   end
 
   def set_key_activity
