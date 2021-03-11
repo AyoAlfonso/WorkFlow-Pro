@@ -34,8 +34,16 @@ class Api::MeetingsController < Api::ApplicationController
       
       #scope to look for what's present depending on meeting type - daily, weekly, monthly, etc.
       #personal meetings have no team ids
+
+
+      @meetings_already_present = params[:team_id] ? 
       MeetingInstanceFinderService.call(
         policy_scope(Meeting).team_meetings(params[:team_id]).incomplete,
+        params[:meeting_template_id],
+        current_user.time_in_user_timezone
+      ) :
+      MeetingInstanceFinderService.call(
+        policy_scope(Meeting).personal_meetings.hosted_by_user(current_user),
         params[:meeting_template_id],
         current_user.time_in_user_timezone
       )
