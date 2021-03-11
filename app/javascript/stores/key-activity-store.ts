@@ -4,6 +4,7 @@ import { ToastMessageConstants } from "~/constants/toast-types";
 import { showToast } from "~/utils/toast-message";
 import { withEnvironment } from "../lib/with-environment";
 import { KeyActivityModel } from "../models/key-activity";
+import * as R from "ramda";
 
 export const KeyActivityStoreModel = types
   .model("KeyActivityStoreModel")
@@ -37,9 +38,19 @@ export const KeyActivityStoreModel = types
       return self.keyActivities.filter(keyActivity => keyActivity.completedAt);
     },
     get completedToday() {
-      const today = new Date();
+      const today = new Date().getDate();
       return self.keyActivities.filter(
-        keyActivity => new Date(keyActivity.completedAt).getDate() === today.getDate(),
+        keyActivity => new Date(keyActivity.completedAt).getDate() === today,
+      );
+    },
+    get completedYesterday() {
+      const today = new Date().getDate();
+      const yesterday = today - 1;
+      return self.keyActivities.filter(
+        keyActivity =>
+          new Date(keyActivity.completedAt).getDate() === yesterday ||
+          (!R.isNil(keyActivity.completedAt) &&
+            new Date(keyActivity.movedToTodayOn).getDate() < today),
       );
     },
   }))
@@ -63,11 +74,23 @@ export const KeyActivityStoreModel = types
       return self.keyActivitiesByScheduledGroupName("Backlog").filter(mka => mka.completedAt);
     },
     get todaysPriorities() {
-      const filteredKeyActivities = self.keyActivitiesByScheduledGroupName("Today");
-      return filteredKeyActivities.filter(keyActivity => !keyActivity.completedAt);
+      return self
+        .keyActivitiesByScheduledGroupName("Today")
+        .filter(keyActivity => !keyActivity.completedAt);
+    },
+  }))
+  .views(self => ({
+    get todaysPrioritiesFromPreviousDays() {
+      const today = new Date().getDate();
+      return self.todaysPriorities.filter(
+        keyActivity => new Date(keyActivity.movedToTodayOn).getDate() < today,
+      );
     },
   }))
   .actions(self => ({
+    reset() {
+      self.keyActivities = [] as any;
+    },
     startLoading(loadingList = null) {
       self.loading = true;
       self.loadingList = loadingList;
@@ -173,16 +196,11 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
-  }))
-  .actions(self => ({
     updateKeyActivityState(id, field, value) {
       let keyActivities = self.keyActivities;
       let keyActivityIndex = keyActivities.findIndex(ka => ka.id == id);
       keyActivities[keyActivityIndex][field] = value;
       self.keyActivities = keyActivities;
-    },
-    reset() {
-      self.keyActivities = [] as any;
     },
   }))
   .actions(self => ({

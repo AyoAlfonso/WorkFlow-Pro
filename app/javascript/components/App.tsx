@@ -87,16 +87,25 @@ export const App = observer(
         keyActivityStore.updateKeyActivityState(keyActivityId, "position", newPosition + 1);
         if (destination.droppableId === "weekly-activities") {
           keyActivityStore.startLoading("weekly-activities");
-          keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", true);
-          keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", false);
+          keyActivityStore.updateKeyActivityState(
+            keyActivityId,
+            "scheduledGroupId",
+            sessionStore.getScheduledGroupIdByName("Weekly List"),
+          );
         } else if (destination.droppableId === "master-activities") {
           keyActivityStore.startLoading("master-activities");
-          keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
-          keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", false);
+          keyActivityStore.updateKeyActivityState(
+            keyActivityId,
+            "scheduledGroupId",
+            sessionStore.getScheduledGroupIdByName("Backlog"),
+          );
         } else if (destination.droppableId === "todays-priorities") {
           keyActivityStore.startLoading("todays-priorities");
-          keyActivityStore.updateKeyActivityState(keyActivityId, "weeklyList", false);
-          keyActivityStore.updateKeyActivityState(keyActivityId, "todaysPriority", true);
+          keyActivityStore.updateKeyActivityState(
+            keyActivityId,
+            "scheduledGroupId",
+            sessionStore.getScheduledGroupIdByName("Today"),
+          );
         } else if (R.includes("todays-activities", destination.droppableId)) {
           keyActivityStore.startLoading("home-key-activities");
           keyActivityStore.updateKeyActivityState(keyActivityId, "teamId", null);

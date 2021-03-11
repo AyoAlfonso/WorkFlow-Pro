@@ -8,17 +8,16 @@ export const KeyActivityModel = types
     description: types.maybeNull(types.string),
     completedAt: types.maybeNull(types.string),
     priority: types.maybeNull(types.string),
-    weeklyList: types.maybeNull(types.boolean),
     meetingId: types.maybeNull(types.number),
     position: types.maybeNull(types.number),
     user: types.maybeNull(types.frozen()),
-    todaysPriority: types.maybeNull(types.boolean),
     createdAt: types.maybeNull(types.string),
     dueDate: types.maybeNull(types.string),
     labels: types.maybeNull(types.array(LabelModel)),
     personal: types.boolean,
     scheduledGroupId: types.maybeNull(types.number),
     teamId: types.maybeNull(types.number),
+    movedToTodayOn: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));
