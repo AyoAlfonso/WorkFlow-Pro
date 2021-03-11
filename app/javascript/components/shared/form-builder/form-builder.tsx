@@ -123,7 +123,11 @@ export const FormBuilder = ({
         return (
           <Calendar
             date={
-              new Date(moment.utc(R.pathOr(null, formKeys, formData)).format("YYYY-MM-DD HH:mm:ss"))
+              R.pathOr(null, formKeys, formData)
+                ? new Date(
+                    moment.utc(R.pathOr(null, formKeys, formData)).format("YYYY-MM-DD HH:mm:ss"),
+                  )
+                : null
             }
             onChange={date => {
               callback(formKeys, date);

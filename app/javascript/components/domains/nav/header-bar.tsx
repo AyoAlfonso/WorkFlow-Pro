@@ -229,19 +229,19 @@ export const HeaderBar = observer(
           <CompanyCreationSelectionContainer>
             {!displayFormat ? (
               <>
-                <CreationOption onClick={() => companyStore.openOnboardingModal(displayFormat)}>
+                <CreationOption onClick={() => companyStore.openOnboardingModal("Company")}>
                   <CreationSelectionText>{t("company.newCompany")}</CreationSelectionText>
                 </CreationOption>
-                <CreationOption onClick={() => companyStore.openOnboardingModal(displayFormat)}>
+                <CreationOption onClick={() => companyStore.openOnboardingModal("Forum")}>
                   <CreationSelectionText>{t("company.newForum")}</CreationSelectionText>
                 </CreationOption>
               </>
             ) : displayFormat === "Company" ? (
-              <CreationOption onClick={() => companyStore.openOnboardingModal(displayFormat)}>
+              <CreationOption onClick={() => companyStore.openOnboardingModal("Company")}>
                 <CreationSelectionText>{t("company.newCompany")}</CreationSelectionText>
               </CreationOption>
             ) : (
-              <CreationOption onClick={() => companyStore.openOnboardingModal(displayFormat)}>
+              <CreationOption onClick={() => companyStore.openOnboardingModal("Forum")}>
                 <CreationSelectionText>{t("company.newForum")}</CreationSelectionText>
               </CreationOption>
             )}
