@@ -97,7 +97,7 @@ export const WizardLayout = ({
   };
 
   const renderBodyComponents = (): JSX.Element => {
-    const hasRightBodyComponent = !R.isNil(rightBodyComponents[currentStep]);
+    const hasRightBodyComponent = !R.isNil(R.path([currentStep], rightBodyComponents));
     return (
       singleComponent || (
         <>

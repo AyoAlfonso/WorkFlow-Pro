@@ -128,6 +128,7 @@ export const CalendarFilter = ({
                 setSelectedDateFilter("");
                 handleDateSelect(ranges);
               }}
+              shownDate={new Date()}
               showSelectionPreview={true}
               direction={"vertical"}
               minDate={minDate || addDays(new Date(), -90)}
