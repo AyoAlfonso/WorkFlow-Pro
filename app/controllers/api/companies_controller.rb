@@ -73,7 +73,7 @@ class Api::CompaniesController < Api::ApplicationController
   end
 
   def create_or_update_onboarding_goals  
-    # Rallying Cry aka Lynchpyn Goal
+    # Lynchpyn Goal aka Rallying Cry
     @onboarding_company.update!(rallying_cry: params[:rallying_cry])
 
     # Annual Goal aka Annual Initiative
@@ -84,7 +84,7 @@ class Api::CompaniesController < Api::ApplicationController
       context_description: "",
       importance: ["", "", ""],).first_or_initialize
     annual_initiative.update!(description: params[:annual_initiative][:description])
-    
+
     # Quarterly Initiative aka Quarterly Goal
     @quarterly_goal = QuarterlyGoal.where(
       created_by: current_user, 
@@ -93,11 +93,12 @@ class Api::CompaniesController < Api::ApplicationController
       context_description: "",
       importance: ["", "", ""],
       quarter: @onboarding_company.quarter_for_creating_quarterly_goals).first_or_initialize
-    @quarterly_goal.update(description: params[:annual_initiative][:quarterly_goals][0][:description])
+    @quarterly_goal.update!(description: params[:annual_initiative][:quarterly_goals][0][:description])
 
     # Weekly Milestones aka Milestones
     if @quarterly_goal.milestones.blank?
       @quarterly_goal.create_milestones_for_quarterly_goal(current_user, @onboarding_company)
+      @quarterly_goal.reload
     end
     @milestone = @quarterly_goal.milestones.first
     @milestone.update!(description: params[:annual_initiative][:quarterly_goals][0][:milestones][0][:description])
