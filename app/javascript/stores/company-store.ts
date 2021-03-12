@@ -161,11 +161,13 @@ export const CompanyStoreModel = types
     }),
     createOnboardingTeamAndInviteUsers: flow(function*(companyId, teamData) {
       const env = getEnv(self);
+      const { sessionStore } = getRoot(self);
       try {
         const response: any = yield env.api.createOnboardingTeamAndInviteUsers(companyId, teamData);
         if (response.ok) {
           self.onboardingTeam = response.data;
           self.onboardingCompany = null;
+          yield sessionStore.loadProfile();
           return true;
         }
       } catch {

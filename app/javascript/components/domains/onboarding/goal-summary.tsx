@@ -14,10 +14,10 @@ interface IGoalSummaryProps {
   formData: any;
 }
 
-export const GoalSummary = ({
-  formData: { rallyingCry, annualInitiative },
-}: IGoalSummaryProps): JSX.Element => {
+export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
+  const annualInitiative = R.path(["annualInitiative"], formData);
   const annualInitiativeFormatted = parseAnnualInitiative(annualInitiative);
+  const rallyingCry = R.pathOr("", ["rallyingCry"], formData);
   const quarterlyGoal = R.path(["quarterlyGoals", "0"], annualInitiativeFormatted);
   const milestone = R.path(["milestones", "0"], quarterlyGoal);
   return (
