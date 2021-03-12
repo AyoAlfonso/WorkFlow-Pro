@@ -11,7 +11,7 @@ import { baseTheme } from "../../../themes";
 import { Avatar } from "../../shared/avatar";
 import { Icon } from "../../shared/icon";
 import { RoundButton } from "../../shared/round-button";
-import { Text } from "../../shared/text";
+import { Heading, Text } from "../../shared";
 import { HomeContainerBorders } from "../home/shared-components";
 import { CreateIssueModal } from "../issues/create-issue-modal";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
@@ -339,7 +339,7 @@ export const HeaderBar = observer(
               ) : companyStore.company.logoUrl ? (
                 <LogoImage src={`${companyStore.company.logoUrl}`} />
               ) : (
-                <Text>{companyStore.company.name}</Text>
+                <Heading type={"h1"}>{companyStore.company.name}</Heading>
               )}
             </LogoContainer>
             <PersonalInfoContainer ref={accountActionRef}>
