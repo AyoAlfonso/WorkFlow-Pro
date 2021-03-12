@@ -1,4 +1,4 @@
-import { types, flow, getEnv } from "mobx-state-tree";
+import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 
 import { MeetingModel } from "../models/meeting";
@@ -68,17 +68,22 @@ export const ForumStoreModel = types
         showToast("Error creating forum meetings", ToastMessageConstants.ERROR);
       }
     }),
-    updateMeeting: flow(function*(meetingObj) {
-      try {
-        const response: ApiResponse<any> = yield self.environment.api.updateMeeting(meetingObj);
-        if (response.ok) {
-          let forumYearMeetings = self.forumYearMeetings;
-          let meetingToUpdateIndex = forumYearMeetings.findIndex(
-            meeting => meeting.id == response.data.id,
-          );
-          forumYearMeetings[meetingToUpdateIndex] = response.data;
-          self.forumYearMeetings = forumYearMeetings;
-          //may need to merge like updateMeeting in meetingStore
+    updateMeeting: flow(function*(meetingObj, fromMeeting = false) {
+      const response: ApiResponse<any> = yield self.environment.api.updateMeeting(meetingObj);
+      if (response.ok) {
+        let forumYearMeetings = self.forumYearMeetings;
+        let meetingToUpdateIndex = forumYearMeetings.findIndex(
+          meeting => meeting.id == response.data.id,
+        );
+        forumYearMeetings[meetingToUpdateIndex] = response.data;
+        self.forumYearMeetings = forumYearMeetings;
+
+        if(fromMeeting){
+          const { meetingStore } = getRoot(self);
+          meetingStore.updateCurrentMeeting(response.data)
+        }
+
+        if(self.searchedForumMeetings){
           let searchedForumMeetings = self.searchedForumMeetings;
           let searchedForumMeetingIndex = searchedForumMeetings.findIndex(
             meeting => meeting.id == response.data.id,
@@ -86,8 +91,6 @@ export const ForumStoreModel = types
           searchedForumMeetings[searchedForumMeetingIndex] = response.data;
           self.searchedForumMeetings = searchedForumMeetings;
         }
-      } catch {
-        //caught by Api Monitor
       }
     }),
     searchForMeetingsByDateRange: flow(function*(startDate, endDate, teamId){

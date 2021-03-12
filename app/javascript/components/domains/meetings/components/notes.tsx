@@ -54,7 +54,7 @@ export const Notes = ({ meeting, height }: NotesProps): JSX.Element => {
             } else if (meetingType == MeetingTypes.TEAM_WEEKLY) {
               meetingStore.updateMeeting(meetingObj);
             } else if (meetingType == MeetingTypes.FORUM_MONTHLY) {
-              forumStore.updateMeeting(meetingObj);
+              forumStore.updateMeeting(meetingObj, true);
             }
           }}
         />
