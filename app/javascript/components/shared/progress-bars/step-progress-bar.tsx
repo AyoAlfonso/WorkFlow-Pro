@@ -14,6 +14,7 @@ export interface IStepProgressBar {
   onStepClick: (args: any) => void;
   currentStepIndex: number;
   fromPersonalPlanning?: boolean;
+  meetingStarted?: boolean;
 }
 
 // TODO: Needs correct icon assets
@@ -23,6 +24,7 @@ export const StepProgressBar = ({
   onStepClick,
   currentStepIndex,
   fromPersonalPlanning,
+  meetingStarted,
 }: IStepProgressBar): JSX.Element => {
   const renderIcon = (iconColor, bgColor, iconName) => (
     <StepProgressBarIcon iconBackgroundColor={bgColor} iconName={iconName} iconColor={iconColor} />
@@ -80,7 +82,9 @@ export const StepProgressBar = ({
           <StepDiv
             data-tip={step.title}
             onClick={() => {
-              onStepClick(index);
+              if (meetingStarted) {
+                onStepClick(index);
+              }
             }}
           >
             {step.accomplished
