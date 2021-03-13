@@ -45,7 +45,7 @@ export const Section1 = observer(
       return (
         <Container>
           <HeaderContainer>
-            <NavHeader>{t("forum.section1")}</NavHeader>
+            <NavHeader>{t("forum.annualHub")}</NavHeader>
           </HeaderContainer>
           <Loading />
         </Container>
@@ -55,7 +55,7 @@ export const Section1 = observer(
     return (
       <Container>
         <HeaderContainer>
-          <NavHeader>{t("forum.section1")}</NavHeader>
+          <NavHeader>{t("forum.annualHub")}</NavHeader>
         </HeaderContainer>
         <Section1ForumMeetings company={company} teamId={teamId} />
       </Container>

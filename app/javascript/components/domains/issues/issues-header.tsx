@@ -35,7 +35,7 @@ export const IssuesHeader = observer(
     }
 
     const renderHeaderTextForCompanyType = () => {
-      return company.displayFormat == "Forum" ? "My Personal Parking Lot" : "Issues";
+      return company.displayFormat == "Forum" ? t("issues.forumHub") : t("issues.myHub");
     };
 
     return (

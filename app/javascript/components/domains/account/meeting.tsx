@@ -37,9 +37,9 @@ export const Meeting = (): JSX.Element => {
       <BodyContainer>
         <PersonalInfoContainer>
           <p>
-            Meetings will heaviliy updated in Beta Phase. List of agenda items for the weekly team
-            meeting with a toggle beside them that allows the Team Leader (refer to Users tab) to
-            disable an agenda item and/or change the order.
+            Planning will be heavily updated in Beta Phase. A list of agenda items for the weekly
+            team meeting with a toggle beside them that allows the Team Leader (refer to Users tab)
+            to disable an agenda item and/or change the order.
           </p>
         </PersonalInfoContainer>
 
