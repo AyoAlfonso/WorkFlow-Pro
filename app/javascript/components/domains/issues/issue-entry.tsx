@@ -23,6 +23,7 @@ interface IIssueEntryProps {
   meetingId?: number | string;
   dragHandleProps?: any;
   leftShareContainer?: boolean;
+  teamId?: number | string;
 }
 
 export const IssueEntry = observer(
@@ -32,7 +33,7 @@ export const IssueEntry = observer(
       teamStore,
       sessionStore: { scheduledGroups },
     } = useMst();
-    const { issue, pageEnd, meetingId, dragHandleProps, leftShareContainer } = props;
+    const { issue, pageEnd, meetingId, dragHandleProps, leftShareContainer, teamId } = props;
 
     const teams = teamStore.teams;
 
@@ -113,7 +114,7 @@ export const IssueEntry = observer(
           priority = "";
       }
       issueStore.updateIssueState(issue.id, "priority", priority);
-      issueStore.updateIssue(issue.id, meetingId ? true : false);
+      issueStore.updateIssue(issue.id, meetingId || teamId ? true : false);
     };
 
     const updateLabel = labelName => {

@@ -15,11 +15,15 @@ class IssueResortService < ApplicationService
       issue.position = index + 1
       issue.as_json
     end
-    Issue.upsert_all(updated_issues)
+    Issue.upsert_all(reject_label_list(updated_issues))
     # issues.complete.each_with_index do |issue, index|
     #   issue.position = index + 1
     #   issue.save!
     # end
     issues
+  end
+
+  def reject_label_list(key_activities)
+    key_activities.each{|ka| ka.delete("label_list")}
   end
 end
