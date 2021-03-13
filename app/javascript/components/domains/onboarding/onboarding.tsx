@@ -54,7 +54,6 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         R.dissoc("coreFour"),
         R.dissoc("signUpPurpose"),
         R.set(R.lens(R.prop("logo"), R.assoc("logo")), logoFiles),
-        R.set(R.lens(R.prop("displayFormat"), R.assoc("displayFormat")), onboardingDisplayFormat),
       )(onboardingCompany);
 
       setFormData(formDataState);
@@ -135,7 +134,8 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
 
   const onNextButtonClick = async () => {
     if (currentStep === 0 && R.isNil(onboardingCompany)) {
-      companyStore.createCompany(formData).then(res => {
+      const creationFormData = R.assoc("displayFormat", onboardingDisplayFormat, formData);
+      companyStore.createCompany(creationFormData).then(res => {
         if (res === true) {
           incrementStep();
         }

@@ -7,7 +7,7 @@ class Api::CompaniesController < Api::ApplicationController
 
   def create
     @company = Company.new({
-      display_format: 0,
+      display_format: params[:display_format],
       fiscal_year_start: params[:fiscal_year_start],
       name: params[:name],
       timezone: params[:timezone]
