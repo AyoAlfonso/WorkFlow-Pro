@@ -280,8 +280,8 @@ export const SideNavNoMst = (
             setNavOpen={setMeetingsNavChildOpen}
             setOtherNavOpen={[setTeamNavChildOpen, setCompanyNavChildOpen]}
           >
-            <SideNavChildLink to="/meetings/section_1" linkText={t("forum.section1")} />
-            <SideNavChildLink to="/meetings/section_2" linkText={t("forum.section2")} />
+            <SideNavChildLink to="/meetings/section_1" linkText={t("forum.annualHub")} />
+            <SideNavChildLink to="/meetings/section_2" linkText={t("forum.upcomingHub")} />
             <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")} />
           </SideNavChildPopup>
         </SideNavChildPopupContainer>

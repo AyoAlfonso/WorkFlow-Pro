@@ -43,7 +43,7 @@ export const Section2 = observer(
       return (
         <Container>
           <HeaderContainer>
-            <HeaderText>{t("forum.section2")}</HeaderText>
+            <HeaderText>{t("forum.upcomingHub")}</HeaderText>
           </HeaderContainer>
           <Loading />
         </Container>
@@ -53,7 +53,7 @@ export const Section2 = observer(
     return (
       <Container>
         <HeaderContainer>
-          <HeaderText>{t("forum.section2")}</HeaderText>
+          <HeaderText>{t("forum.upcomingHub")}</HeaderText>
         </HeaderContainer>
         <ParkingLot upcomingForumMeeting={upcomingForumMeeting} />
       </Container>

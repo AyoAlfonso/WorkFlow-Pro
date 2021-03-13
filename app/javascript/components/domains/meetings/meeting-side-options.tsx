@@ -24,7 +24,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
       <OptionContainer itemSelected={selectedTab == value} onClick={() => setSelectedTab(value)}>
         <OptionText>
           {value == "issues" && meeting.meetingType == "forum_monthly"
-            ? "Parking Lot"
+            ? t(`meetingForum.parkingLotIssues.title`)
             : t(`meeting.sideOptions.${value}`)}
         </OptionText>
       </OptionContainer>

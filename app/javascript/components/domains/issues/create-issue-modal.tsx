@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ModalWithHeader } from "../../shared/modal-with-header";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { TextInput } from "../../shared/text-input";
 import styled from "styled-components";
 import { Button } from "rebass";
@@ -31,6 +32,8 @@ export const CreateIssueModal = ({
   meetingEnabled = false,
 }: ICreateIssueModalProps): JSX.Element => {
   const { issueStore, sessionStore, userStore, companyStore, labelStore } = useMst();
+  const { t } = useTranslation();
+
   const [issueDescription, setIssueDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
@@ -49,7 +52,10 @@ export const CreateIssueModal = ({
 
   const companyUsers = userStore.users;
   const issues = issueStore.openIssues;
-  const itemName = companyStore.company.displayFormat == "Forum" ? "Parking Lot Item" : "Issue";
+  const itemName =
+    companyStore.company.displayFormat == "Forum"
+      ? t("meetingForum.parkingLotIssues.forumItems")
+      : t("issues.myHub");
   const selectedLabelObj = labelStore.selectedLabelObj;
 
   const renderUserSelectionList = (): JSX.Element => {

@@ -62,7 +62,7 @@
           "header": "Manage Teams"
         },
         "meetingsManagement": {
-          "header": "Meetings"
+          "header": "Planning"
         },
         "habits": {
           "new": "Habit",
@@ -108,15 +108,15 @@
         "newForum": "Forum"
       },
       "forum": {
-        "section1": "Section 1",
-        "section2": "Section 2",
-        "agenda": "Meeting Agenda",
+        "annualHub": "Annual Hub",
+        "upcomingHub": "Upcoming Hub",
+        "agenda": "Meeting Management",
         "explorationTopic": {
           "whoTitle": "Who",
           "topicTitle": "Topic"
         },
-        "teamMeetingsTitle": "Forum Meetings",
-        "teamIssuesTitle": "Forum Parking Lot",
+        "teamMeetingsTitle": "Forum Planning",
+        "teamIssuesTitle": "Forum Hub",
         "teamsPulseTitle": "Forum Pulse",
         "teamSnapshotTitle": "Forum Snapshot",
         "forumMeeting": "Forum Meeting",
@@ -130,7 +130,7 @@
         "company": "Company",
         "goals": "Goals",
         "forum": "Forum",
-        "meetings": "Meetings"
+        "meetings": "Planning"
       },
       "annualInitiative": {
         "enterTitle": "Enter Annual Goal Title...",
@@ -174,12 +174,13 @@
         "coreFourTitle": "Foundational Four",
         "saveRatings": "Save Ratings",
         "teamsPyns": "Team's Pyns",
-        "meetingAgenda": "Meeting Agenda"
+        "meetingAgenda": "Meeting Management"
       },
       "meetingForum": {
         "parkingLotIssues": {
-          "title": "Parking Lot",
-          "subTitle": "Topics members have shared"
+          "title": "Forum Hub",
+          "subTitle": "Topics members have shared",
+          "forumItems": "Forum Hub Items"
         },
         "scheduledIssues": {
           "title": "Scheduled",
@@ -200,7 +201,9 @@
         "reviewTitle": "Your Habits"
       },
       "issues": {
-        "title": "Issues"
+        "title": "Issues",
+        "forumHub": "Forum Hub",
+        "myHub": "My Hub"
       },
       "journals": {
         "createMyDay": "Morning Routine",
@@ -245,7 +248,7 @@
         "markAllYesterdayDone": "Mark all done"
       },
       "teams": {
-        "teamMeetingsTitle": "Team Meetings",
+        "teamMeetingsTitle": "Team Planning",
         "teamIssuesTitle": "Team Issues",
         "teamsPulseTitle": "Team Pulse",
         "teamSnapshotTitle": "Team Snapshot"
