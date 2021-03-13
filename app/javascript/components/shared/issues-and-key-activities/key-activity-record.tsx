@@ -137,22 +137,24 @@ export const KeyActivityRecord = observer(
               }
               disabled={disabled}
             />
-
-            {keyActivity.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
           </InputContainer>
-          {!disabled && (
-            <ActionContainer>
-              <ActionSubContainer>
-                <DeleteButtonContainer
-                  onClick={() =>
-                    keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
-                  }
-                >
-                  <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
-                </DeleteButtonContainer>
-              </ActionSubContainer>
-            </ActionContainer>
-          )}
+
+          <RightContainer>
+            {keyActivity.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
+            {!disabled && (
+              <ActionContainer>
+                <ActionSubContainer>
+                  <DeleteButtonContainer
+                    onClick={() =>
+                      keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
+                    }
+                  >
+                    <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
+                  </DeleteButtonContainer>
+                </ActionSubContainer>
+              </ActionContainer>
+            )}
+          </RightContainer>
         </RowContainer>
 
         <BottomRowContainer>
@@ -243,6 +245,7 @@ const DeleteButtonContainer = styled.div`
   margin-bottom: auto;
   color: ${props => props.theme.colors.grey60};
   display: none;
+  margin-left: 8px;
   &: hover {
     cursor: pointer;
     color: ${props => props.theme.colors.greyActive};
@@ -329,8 +332,6 @@ export const AvatarContainer = styled.div`
 
 const ActionContainer = styled.div`
   display: flex;
-  margin-left: auto;
-  width: 60px;
 `;
 
 export const ActionSubContainer = styled.div`
@@ -345,4 +346,9 @@ const RowContainer = styled.div`
 const BottomRowContainer = styled(RowContainer)`
   margin-top: -4px;
   margin-left: 36px;
+`;
+
+const RightContainer = styled.div`
+  display: flex;
+  margin-left: auto;
 `;

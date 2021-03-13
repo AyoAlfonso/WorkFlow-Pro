@@ -142,6 +142,9 @@ export const MeetingStoreModel = types
         //caught by Api Monitor
       }
     }),
+    updateCurrentMeeting(meeting) {
+      self.currentMeeting = meeting;
+    },
   }))
   .actions(self => ({
     reset() {
