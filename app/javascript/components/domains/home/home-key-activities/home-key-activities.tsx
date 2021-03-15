@@ -55,7 +55,7 @@ export const HomeKeyActivities = observer(
             .add(1, "days")
             .format("MMMM D");
         case "Backlog":
-          return "Pyns you have not scheduled";
+          return "Pyns you have to do later";
       }
     };
 
@@ -108,7 +108,7 @@ export const HomeKeyActivities = observer(
         <>
           <HeaderRowContainer>
             <StyledHeading type={"h2"} fontSize={"20px"}>
-              {header}
+              {header == "Backlog" ? "Master" : header}
             </StyledHeading>
           </HeaderRowContainer>
           <HeaderRowContainer>
@@ -297,12 +297,13 @@ export const HomeKeyActivities = observer(
 
 const Container = styled.div`
   display: flex;
-  width: 70%;
+  width: 75%;
 `;
 
 const ListContainer = styled.div`
   width: 50%;
   margin-right: 20px;
+  min-width: 220px;
 `;
 
 const SingleListContainer = styled.div`
@@ -326,6 +327,7 @@ const SubHeaderContainer = styled.div`
   color: ${props => props.theme.colors.grey100};
   margin-top: auto;
   margin-bottom: auto;
+  height: 18px;
 `;
 
 const StyledHeading = styled(Heading)`

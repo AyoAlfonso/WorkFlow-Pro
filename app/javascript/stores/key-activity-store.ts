@@ -21,9 +21,15 @@ export const KeyActivityStoreModel = types
         sessionStore: { scheduledGroups },
       } = getRoot(self);
       const scheduledGroup = scheduledGroups.find(group => group.name == scheduledGroupName);
-      const filteredKeyActivities = self.keyActivities.filter(
-        keyActivity => keyActivity.scheduledGroupId == scheduledGroup.id,
-      );
+
+      const filteredKeyActivities = 
+        scheduledGroupName == "Backlog" ? 
+          self.keyActivities.filter(
+            keyActivity => keyActivity.scheduledGroupId == scheduledGroup.id && !keyActivity.completedAt
+          ) : 
+          self.keyActivities.filter(
+            keyActivity => keyActivity.scheduledGroupId == scheduledGroup.id
+          )
       return filteredKeyActivities;
     },
     keyActivitiesByTeamId(teamId) {
@@ -35,7 +41,8 @@ export const KeyActivityStoreModel = types
   }))
   .views(self => ({
     get completedActivities() {
-      return self.keyActivities.filter(keyActivity => keyActivity.completedAt);
+      const sortByCompletedAt = (a,b) => { return new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()}
+      return R.sort(sortByCompletedAt, self.keyActivities.filter(keyActivity => keyActivity.completedAt))
     },
     get completedToday() {
       const today = new Date().getDate();

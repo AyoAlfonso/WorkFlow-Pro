@@ -33,6 +33,6 @@ const Container = styled.div`
 const ToolsWrapper = styled.div`
   flex-direction: column;
   width: 25%;
-  margin-left: auto;
+  margin-left: 20px;
   margin-right: 5px;
 `;
