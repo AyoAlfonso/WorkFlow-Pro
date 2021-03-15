@@ -9,6 +9,9 @@ class Api::LabelsController < Api::ApplicationController
   def create
     label_name = params[:label_object][:label]
     team_id = params[:label_object][:team_id]
+
+    #TODO: SET LABEL COLOR
+
     if team_id == "personal"
       @label = ActsAsTaggableOn::Tag.where(name: label_name, user_id: @current_user.id).first_or_create
     elsif team_id == "company"

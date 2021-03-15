@@ -8,6 +8,7 @@ import Autocomplete, { createFilterOptions } from "@material-ui/lab/Autocomplete
 import { toJS } from "mobx";
 import { Icon } from "./icon";
 import { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 
 interface IUserSelectionDropdownListProps {
   userList: Array<UserType>;
@@ -17,12 +18,22 @@ interface IUserSelectionDropdownListProps {
 
 const filter = createFilterOptions<any>({ limit: 5 });
 
+const useStyles = makeStyles({
+  textField: {
+    paddingTop: 0,
+    paddingBottom: 0,
+    fontFamily: "Lato",
+  },
+});
+
 export const UserSelectionDropdownList = ({
   userList,
   onUserSelect,
   setShowUsersList,
 }: IUserSelectionDropdownListProps): JSX.Element => {
   const [value, setValue] = useState<any>(null);
+  const classes = useStyles();
+
   return (
     <ActionDropdownContainer>
       <CloseIconContainer onClick={() => setShowUsersList(false)}>
@@ -66,7 +77,13 @@ export const UserSelectionDropdownList = ({
         style={{ width: 300, height: "auto" }}
         freeSolo
         renderInput={params => (
-          <TextField {...params} label="Search for users" variant="outlined" />
+          <TextField
+            {...params}
+            label="Search for users"
+            variant="outlined"
+            className={classes.textField}
+            margin="dense"
+          />
         )}
       />
     </ActionDropdownContainer>

@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { baseTheme } from "../../../themes/base";
 import { Icon } from "../../shared/icon";
-import { LabelSelection } from "~/components/shared";
+import { LabelSelection, DefaultStyledLabel } from "~/components/shared";
 import { DateButton } from "~/components/shared/date-selection/date-button";
 import { addDays, parseISO } from "date-fns";
 import Popup from "reactjs-popup";
@@ -84,18 +84,16 @@ export const KeyActivityRecord = observer(
     };
 
     const renderLabel = () => {
-      if (keyActivity.labels.length > 0) {
-        return (
-          <LabelSelection
-            selectedLabel={selectedLabel}
-            setSelectedLabel={setSelectedLabel}
-            onLabelClick={setShowLabelsList}
-            showLabelsList={showLabelsList}
-            inlineEdit={true}
-            afterLabelSelectAction={updateLabel}
-          />
-        );
-      }
+      return (
+        <LabelSelection
+          selectedLabel={selectedLabel}
+          setSelectedLabel={setSelectedLabel}
+          onLabelClick={setShowLabelsList}
+          showLabelsList={showLabelsList}
+          inlineEdit={true}
+          afterLabelSelectAction={updateLabel}
+        />
+      );
     };
 
     return (
@@ -263,6 +261,9 @@ const Container = styled(HomeContainerBorders)<ContainerProps>`
   &:hover ${DeleteButtonContainer} {
     display: block;
   }
+  &:hover ${DefaultStyledLabel} {
+    display: block;
+  }
   margin-left: 4px;
   padding-left: 12px;
   padding-right: 12px;
@@ -273,7 +274,7 @@ const Container = styled(HomeContainerBorders)<ContainerProps>`
 
 const InputContainer = styled.div`
   display: flex;
-  width: 100%;
+  width: 85%;
   font-size: 14px;
   padding: 4px 0px 4px 0px;
 `;
