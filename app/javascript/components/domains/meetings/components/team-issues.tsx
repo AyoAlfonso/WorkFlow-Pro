@@ -99,7 +99,7 @@ export const TeamIssues = observer(
           setShowOpenIssues={setShowOpenIssues}
           issuesText={
             meetingStore.currentMeeting.meetingType === MeetingTypes.FORUM_MONTHLY
-              ? "Parking Lot"
+              ? "Topic"
               : "Team's Issues"
           }
           teamId={team_id}

@@ -55,7 +55,7 @@ export const CreateIssueModal = ({
   const itemName =
     companyStore.company.displayFormat == "Forum"
       ? t("meetingForum.parkingLotIssues.forumItems")
-      : t("issues.myHub");
+      : t("issues.title");
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (

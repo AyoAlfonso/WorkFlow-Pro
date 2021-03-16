@@ -77,7 +77,7 @@ export const Exploration = observer(
       <Container>
         <SectionContainer>
           <HeaderContainer>{headerText("Scheduled Exploration")}</HeaderContainer>
-          <DescriptionText>Scheduled topic for today</DescriptionText>
+          <DescriptionText>Topics to be discussed today</DescriptionText>
           <HostContainer>{renderUserAvatar()}</HostContainer>
           <StyledContentEditable
             placeholder={"No Topic"}
@@ -88,12 +88,12 @@ export const Exploration = observer(
         </SectionContainer>
 
         <SectionContainer>
-          <HeaderContainer>{headerText("Dynamic Exploration")}</HeaderContainer>
+          <HeaderContainer>{headerText("Dynamic Explorations")}</HeaderContainer>
           <ScheduledIssues teamId={currentMeeting.teamId} upcomingForumMeeting={currentMeeting} />
         </SectionContainer>
 
         <SectionContainer>
-          <HeaderContainer>{headerText("Parking Lot")}</HeaderContainer>
+          <HeaderContainer>{headerText("Forum Hub")}</HeaderContainer>
           <ParkingLotIssues teamId={currentMeeting.teamId} upcomingForumMeeting={currentMeeting} />
         </SectionContainer>
       </Container>

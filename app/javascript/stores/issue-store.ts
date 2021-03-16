@@ -77,7 +77,7 @@ export const IssueStoreModel = types
     }),
     createIssue: flow(function*(issueObject) {
       const { companyStore } = getRoot(self);
-      const itemName = companyStore.company.displayFormat == "Forum" ? "Parking Lot item" : "Issue"
+      const itemName = companyStore.company.displayFormat == "Forum" ? "Topic" : "Issue"
       const response: ApiResponse<any> = yield self.environment.api.createIssue(issueObject);
       if (response.ok) {
         self.issues = response.data.issues;
