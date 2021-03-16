@@ -1,4 +1,5 @@
 class Api::LabelsController < Api::ApplicationController
+  include RandomizedColorPickerHelper
   respond_to :json
 
   def index
@@ -10,8 +11,6 @@ class Api::LabelsController < Api::ApplicationController
     label_name = params[:label_object][:label]
     team_id = params[:label_object][:team_id]
 
-    #TODO: SET LABEL COLOR
-
     if team_id == "personal"
       @label = ActsAsTaggableOn::Tag.where(name: label_name, user_id: @current_user.id).first_or_create
     elsif team_id == "company"
@@ -19,6 +18,12 @@ class Api::LabelsController < Api::ApplicationController
     else
       @label = ActsAsTaggableOn::Tag.where(name: label_name, team_id: params[:label_object][:team_id]).first_or_create
     end
+
+    if @label.color.nil?
+      @label.assign_attributes({ color: get_randomized_color })
+      @label.save(validate: false)
+    end
+
     @labels = labels_for_team.order('created_at DESC')
     render "api/labels/create"
   end

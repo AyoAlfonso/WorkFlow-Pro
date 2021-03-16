@@ -33,7 +33,7 @@ export const LabelSelection = ({
     if (inlineEdit) {
       return selectedLabel.color || baseTheme.colors.grey60;
     } else {
-      return baseTheme.colors.primary100;
+      return selectedLabel.color || baseTheme.colors.primary100;
     }
   };
 
