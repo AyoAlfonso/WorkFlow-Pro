@@ -56,7 +56,6 @@ export const ModifyTeamBody = observer(
     const updateTeam = () => {
       if (team) {
         teamStore.updateTeam(team.id, teamName, memberListState).then(() => {
-          showToast("Team updated", ToastMessageConstants.SUCCESS);
           setModalOpen(false);
         });
       } else {
@@ -84,6 +83,7 @@ export const ModifyTeamBody = observer(
             placeholder="e.g. Leadership"
             variant="outlined"
             value={teamName}
+            margin="dense"
             onChange={e => setTeamName(e.target.value)}
           />
         </SectionContainer>
@@ -100,9 +100,26 @@ export const ModifyTeamBody = observer(
           <TextContainer> Add another user</TextContainer>
         </AddNewUserContainer>
 
-        <SaveButton small variant={"primary"} disabled={!teamName} onClick={() => updateTeam()}>
-          {team ? "Update Team" : "Send Invite"}
-        </SaveButton>
+        <ActionButtonsContainer>
+          <SaveButton small variant={"primary"} disabled={!teamName} onClick={() => updateTeam()}>
+            {team ? "Update Team" : "Send Invite"}
+          </SaveButton>
+          {team && (
+            <DeleteButton
+              small
+              variant={"redOutline"}
+              onClick={() => {
+                if (confirm(`Are you sure you want to delete this team?`)) {
+                  teamStore.deleteTeam(team.id).then(() => {
+                    showToast("Team deleted", ToastMessageConstants.SUCCESS);
+                  });
+                }
+              }}
+            >
+              Delete Team
+            </DeleteButton>
+          )}
+        </ActionButtonsContainer>
       </Container>
     );
   },
@@ -140,6 +157,12 @@ const SaveButton = styled(Button)`
   margin-bottom: 16px;
 `;
 
+const DeleteButton = styled(SaveButton)`
+  margin-top: 24px;
+  margin-bottom: 16px;
+  margin-left: 8px;
+`;
+
 const MembersHeaderContainer = styled.div`
   display: flex;
   margin-bottom: 4px;
@@ -167,4 +190,8 @@ const TextContainer = styled.div`
   margin-left: 8px;
   margin-top: auto;
   margin-bottom: auto;
+`;
+
+const ActionButtonsContainer = styled.div`
+  display: flex;
 `;
