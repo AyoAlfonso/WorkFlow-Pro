@@ -14,6 +14,7 @@ import { useRefCallback } from "~/components/shared/content-editable-hooks";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { SelectedMeetingNotes } from "./selected-meeting-notes";
+import { Subject } from "@material-ui/icons";
 interface ISelectedMeetingAgendaEntry {
   selectedMeetingId: string | number;
 }
@@ -48,12 +49,15 @@ export const SelectedMeetingAgendaEntry = observer(
 
     const locationRef = useRef(null);
     const [location, setLocation] = useState<string>("");
+    const subjectRef = useRef(null);
+    const [subject, setSubject] = useState<string>("");
     const [newScheduledStartTime, setNewScheduledStartTime] = useState<string>(
       selectedMeeting.scheduledStartTime,
     );
 
     useEffect(() => {
       setLocation(R.path(["forumLocation"], selectedMeeting.settings));
+      setSubject(R.path(["forumSubject"], selectedMeeting.settings));
     }, [selectedMeeting.id]);
 
     const teamMembers = teams.find(team => team.id == selectedMeeting.teamId)["users"];
@@ -75,6 +79,21 @@ export const SelectedMeetingAgendaEntry = observer(
         },
       });
     }, [location]);
+
+    const handleChangeSubject = useRefCallback(e => {
+      if (!e.target.value.includes("<div>")) {
+        setSubject(e.target.value);
+      }
+    }, []);
+
+    const handleBlurSubject = useRefCallback(() => {
+      forumStore.updateMeeting({
+        id: selectedMeeting.id,
+        meeting: {
+          settingsForumSubject: subject,
+        },
+      });
+    }, [subject]);
 
     return (
       <Container>
@@ -125,6 +144,20 @@ export const SelectedMeetingAgendaEntry = observer(
               onBlur={handleBlurLocation}
             />
           </LocationContainer>
+          <LocationContainer>
+            <StyledContentEditable
+              innerRef={subjectRef}
+              placeholder={"Enter the subject"}
+              html={subject || ""}
+              onChange={handleChangeSubject}
+              onKeyDown={key => {
+                if (key.keyCode == 13) {
+                  subjectRef.current.blur();
+                }
+              }}
+              onBlur={handleBlurSubject}
+            />
+          </LocationContainer>
         </MeetingHeader>
         <MeetingAgendaContainer>
           <ChildContainer>
@@ -167,6 +200,7 @@ const MeetingTimeText = styled(Text)`
 
 const LocationContainer = styled.div`
   display: flex;
+  margin: 6px;
 `;
 
 const StyledContentEditable = styled(ContentEditable)`
