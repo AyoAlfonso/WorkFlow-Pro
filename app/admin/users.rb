@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :first_name, :last_name, :email, :password, :password_confirmation, :timezone, :company_id, :user_role_id
+  permit_params :first_name, :last_name, :email, :password, :password_confirmation, :timezone, :company_id, :user_role_id, user_company_enablements_attributes: [:id, :company_id, :user_role_id, :user_title]
 
   config.sort_order = 'last_name_asc'
 
@@ -17,22 +17,26 @@ ActiveAdmin.register User do
     def create
       if User.find_by_email(permitted_params.dig(:user, :email)).present?
         @user = User.create(permitted_params[:user])
-        render 'new', errors: @user.errors.full_messages
+        flash[:alert] = @user.errors.full_messages
+        render 'new'
         return
       end
 
-      @user = User.invite!(permitted_params[:user])
+      # @user = User.invite!(permitted_params[:user])
+      @user = User.invite!(permitted_params[:user].merge(default_selected_company_id: permitted_params.dig(:user, :user_company_enablements_attributes, "0", :company_id)))
       if @user.valid?
         redirect_to resource_path(@user), notice: "User created!"
       else
-        render 'new', errors: @user.errors.full_messages
+        flash[:alert] = @user.errors.full_messages
+        render 'new'
       end
     end
 
     def update
       @user = User.find(params[:id])
       if @user.update!(params.require(:user).permit(:first_name, :last_name, :email, :user_role, :timezone, user_company_enablements_attributes: [:id, :company_id, :user_role_id, :user_title, :_destroy]))
-        render 'show', errors: @user.errors.full_messages
+        flash[:alert] = @user.errors.full_messages
+        render 'show'
       end
     end
 
@@ -106,7 +110,6 @@ ActiveAdmin.register User do
       f.input :email
       # f.input :password
       # f.input :password_confirmation
-      f.input :user_role, as: :select, collection: UserRole.all
       f.input :timezone, as: :select, collection: timezones
 
       f.has_many :user_company_enablements, allow_destroy: true do |uce|

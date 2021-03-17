@@ -15,7 +15,7 @@ class User < ApplicationRecord
 
   before_save :sanitize_personal_vision
   after_create :create_default_notifications
-  delegate :name, :timezone, to: :company, prefix: true, allow_nil: true
+  delegate :name, :timezone, to: :default_selected_company, prefix: 'company', allow_nil: true
   delegate :name, to: :user_role, prefix: true, allow_nil: true
   has_many :issues
   has_many :key_activities
@@ -43,7 +43,7 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :daily_logs
 
-  belongs_to :company #to be removed after we finalize rake, etc.
+  #TODO - DELETE COMPANY FROM DATABASE to be removed after we finalize rake, etc.
   belongs_to :default_selected_company, class_name: "Company"
 
   def status
