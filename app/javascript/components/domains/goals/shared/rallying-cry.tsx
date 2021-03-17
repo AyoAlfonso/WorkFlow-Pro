@@ -5,6 +5,7 @@ import { color } from "styled-system";
 import { useMst } from "~/setup/root";
 import ContentEditable from "react-contenteditable";
 import { RoleAdministrator, RoleCEO } from "~/lib/constants";
+import { useTranslation } from "react-i18next";
 import { useRef } from "react";
 
 interface IRallyingCryProps {
@@ -13,13 +14,18 @@ interface IRallyingCryProps {
 
 export const RallyingCry = ({ rallyingCry }: IRallyingCryProps): JSX.Element => {
   const { sessionStore, companyStore } = useMst();
+  const { t } = useTranslation();
   const profile = sessionStore.profile;
   const editable = profile.role == RoleCEO || profile.role == RoleAdministrator;
   const rallyingCryRef = useRef(null);
 
+  const visionTitle = companyStore.company.name
+    ? `${companyStore.company.name} ${t("company.personalizedRallyingCrySuffix")}`
+    : t("company.rallyingCry");
+
   return (
     <VisionContainer>
-      <VisionTitle>LynchPyn Goal</VisionTitle>
+      <VisionTitle>{visionTitle}</VisionTitle>
       <StyledContentEditable
         innerRef={rallyingCryRef}
         html={rallyingCry}

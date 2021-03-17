@@ -105,7 +105,8 @@
         "create": "Create",
         "edit": "Edit",
         "newCompany": "Company",
-        "newForum": "Forum"
+        "newForum": "Forum",
+        "personalizedRallyingCrySuffix": " Goal"
       },
       "forum": {
         "annualHub": "Annual Hub",
