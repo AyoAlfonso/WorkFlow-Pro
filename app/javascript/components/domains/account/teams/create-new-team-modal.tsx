@@ -15,7 +15,7 @@ export const CreateNewTeamModal = ({
     <ModalWithHeader
       modalOpen={modalOpen}
       setModalOpen={setModalOpen}
-      headerText={"New Team"}
+      headerText={"Create Team"}
       width="480px"
     >
       <ModifyTeamBody setModalOpen={setModalOpen} />

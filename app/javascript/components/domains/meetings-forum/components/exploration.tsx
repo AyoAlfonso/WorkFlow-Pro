@@ -3,11 +3,19 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
-import { Text, Avatar, Loading, Heading, Icon } from "~/components/shared";
+import {
+  Text,
+  Avatar,
+  Loading,
+  Heading,
+  Icon,
+  UserSelectionDropdownList,
+} from "~/components/shared";
 import ContentEditable from "react-contenteditable";
 import { ParkingLotIssues } from "./parking-lot-issues";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ScheduledIssues } from "./scheduled-issues";
+import { toJS } from "mobx";
 
 export const Exploration = observer(
   (): JSX.Element => {
@@ -15,7 +23,10 @@ export const Exploration = observer(
       meetingStore: { currentMeeting },
       teamStore: { teams },
       issueStore,
+      forumStore,
     } = useMst();
+
+    const [userSelectionOpen, setUserSelectionOpen] = useState<boolean>(false);
 
     //a bit roundabout, we sould probably refactor the meeting step to pass in both team and meeting
     const currentTeam = (teams || []).find(team => team.id === currentMeeting.teamId);
@@ -37,6 +48,21 @@ export const Exploration = observer(
       member => member.id == R.path(["forumExplorationTopicOwnerId"], currentMeeting.settings),
     );
 
+    const handleChangeExplorationTopicOwnerId = user => {
+      setUserSelectionOpen(false);
+      forumStore
+        .updateMeeting(
+          {
+            id: currentMeeting.id,
+            meeting: {
+              settingsForumExplorationTopicOwnerId: user.id,
+            },
+          },
+          true,
+        )
+        .then(() => {});
+    };
+
     const headerText = (text: string): JSX.Element => {
       return (
         <Heading type={"h2"} fontSize={"20px"} fontWeight={600}>
@@ -46,54 +72,65 @@ export const Exploration = observer(
     };
 
     const renderUserAvatar = (): JSX.Element => {
-      if (topicOwner) {
-        return (
-          <>
-            <Avatar
-              firstName={topicOwner.firstName}
-              lastName={topicOwner.lastName}
-              defaultAvatarColor={topicOwner.defaultAvatarColor}
-              avatarUrl={topicOwner.avatarUrl}
-              size={48}
-              marginLeft={"inherit"}
-              marginRight={"inherit"}
-            />
-            <HostedByName>{`${topicOwner.firstName} ${topicOwner.lastName}`}</HostedByName>
-          </>
-        );
-      } else {
-        return (
-          <>
-            <ImageContainer>
-              <StyledIcon icon={"New-User"} size={"30px"} />
-            </ImageContainer>
-            <NoMemberText>No Member</NoMemberText>
-          </>
-        );
-      }
+      return (
+        <>
+          <AvatarContainer onClick={() => setUserSelectionOpen(!userSelectionOpen)}>
+            {topicOwner ? (
+              <>
+                <Avatar
+                  firstName={topicOwner.firstName}
+                  lastName={topicOwner.lastName}
+                  defaultAvatarColor={topicOwner.defaultAvatarColor}
+                  avatarUrl={topicOwner.avatarUrl}
+                  size={48}
+                  marginLeft={"inherit"}
+                  marginRight={"inherit"}
+                />
+                <HostedByName>{`${topicOwner.firstName} ${topicOwner.lastName}`}</HostedByName>
+              </>
+            ) : (
+              <>
+                <ImageContainer>
+                  <StyledIcon icon={"New-User"} size={"30px"} />
+                </ImageContainer>
+                <NoMemberText>No Member</NoMemberText>
+              </>
+            )}
+          </AvatarContainer>
+
+          {userSelectionOpen && (
+            <UserSelectionContainer onClick={e => e.stopPropagation()}>
+              <UserSelectionDropdownList
+                userList={toJS(currentTeam.users)}
+                onUserSelect={handleChangeExplorationTopicOwnerId}
+                setShowUsersList={setUserSelectionOpen}
+              />
+            </UserSelectionContainer>
+          )}
+        </>
+      );
     };
 
     return (
       <Container>
         <SectionContainer>
           <HeaderContainer>{headerText("Scheduled Exploration")}</HeaderContainer>
-          <DescriptionText>Scheduled topic for today</DescriptionText>
+          <DescriptionText>Topics to be discussed today</DescriptionText>
           <HostContainer>{renderUserAvatar()}</HostContainer>
           <StyledContentEditable
             placeholder={"No Topic"}
             html={R.path(["forumExplorationTopic"], currentMeeting.settings) || "No Topic"}
-            disabled={true}
             onChange={null}
           />
         </SectionContainer>
 
         <SectionContainer>
-          <HeaderContainer>{headerText("Dynamic Exploration")}</HeaderContainer>
+          <HeaderContainer>{headerText("Dynamic Explorations")}</HeaderContainer>
           <ScheduledIssues teamId={currentMeeting.teamId} upcomingForumMeeting={currentMeeting} />
         </SectionContainer>
 
         <SectionContainer>
-          <HeaderContainer>{headerText("Parking Lot")}</HeaderContainer>
+          <HeaderContainer>{headerText("Forum Hub")}</HeaderContainer>
           <ParkingLotIssues teamId={currentMeeting.teamId} upcomingForumMeeting={currentMeeting} />
         </SectionContainer>
       </Container>
@@ -160,4 +197,16 @@ const StyledIcon = styled(Icon)`
 const NoMemberText = styled(HostedByName)`
   font-style: italic;
   color: ${props => props.theme.colors.greyActive};
+`;
+
+const UserSelectionContainer = styled.div`
+  margin-top: 50px;
+  margin-left: -20px;
+`;
+
+const AvatarContainer = styled.div`
+  display: flex;
+  &: hover {
+    cursor: pointer;
+  }
 `;

@@ -11,16 +11,34 @@ import { Heading } from "~/components/shared";
 import ContentEditable from "react-contenteditable";
 import { useRef, useState, useEffect } from "react";
 import { useRefCallback } from "~/components/shared/content-editable-hooks";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
 interface ISelectedMeetingAgendaEntry {
   selectedMeetingId: string | number;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      display: "flex",
+      flexWrap: "wrap",
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(3),
+      width: 250,
+    },
+  }),
+);
+
 export const SelectedMeetingAgendaEntry = observer(
   ({ selectedMeetingId }: ISelectedMeetingAgendaEntry) => {
     const { t } = useTranslation();
+    const classes = useStyles();
     const {
       teamStore: { teams },
       forumStore,
+      meetingStore,
     } = useMst();
 
     const selectedMeeting = forumStore.searchedForumMeetings.find(
@@ -29,6 +47,9 @@ export const SelectedMeetingAgendaEntry = observer(
 
     const locationRef = useRef(null);
     const [location, setLocation] = useState<string>("");
+    const [newScheduledStartTime, setNewScheduledStartTime] = useState<string>(
+      selectedMeeting.scheduledStartTime,
+    );
 
     useEffect(() => {
       setLocation(R.path(["forumLocation"], selectedMeeting.settings));
@@ -58,11 +79,29 @@ export const SelectedMeetingAgendaEntry = observer(
       <Container>
         <MeetingHeader>
           <Heading type={"h3"}>{t("forum.forumMeeting")}</Heading>
-          <MeetingTimeText>
-            {`${t("forum.scheduledStartTime")}: ${moment(selectedMeeting.scheduledStartTime).format(
-              "dddd, MMMM D, LT",
-            )}`}
-          </MeetingTimeText>
+          <MeetingTimeContainer>
+            <MeetingTimeText>{`${t("forum.scheduledStartTime")}: `}</MeetingTimeText>
+            <form className={classes.container} noValidate>
+              <TextField
+                id="datetime-local"
+                type="datetime-local"
+                value={moment(newScheduledStartTime).format("YYYY-MM-DDTHH:mm")}
+                className={classes.textField}
+                onChange={async event => {
+                  setNewScheduledStartTime(event.target.value);
+                  await meetingStore.updateMeeting(
+                    R.merge(selectedMeeting, {
+                      scheduledStartTime: moment(event.target.value).format(),
+                    }),
+                  );
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </form>
+          </MeetingTimeContainer>
+
           {selectedMeeting.startTime && (
             <MeetingTimeText>
               {`${t("forum.actualStartTime")}: ${moment(selectedMeeting.startTime).format(
@@ -122,4 +161,10 @@ const StyledContentEditable = styled(ContentEditable)`
   padding-left: 16px;
   padding-right: 16px;
   width: 100%;
+`;
+
+const MeetingTimeContainer = styled.div`
+  display: flex;
+  padding-top: 8px;
+  padding-bottom: 8px;
 `;

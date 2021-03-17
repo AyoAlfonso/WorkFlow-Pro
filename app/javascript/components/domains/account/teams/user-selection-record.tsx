@@ -54,6 +54,7 @@ export const UserSelectionRecord = observer(
               labelId="simple-select-outlined-label-for-users"
               id="simple-select-outlined-for-users"
               value={selectedUserId}
+              margin="dense"
               onChange={e => {
                 if (!selectedUserId) {
                   setMeetingLead(1);
@@ -73,6 +74,7 @@ export const UserSelectionRecord = observer(
               labelId="simple-select-outlined-label-meeting-lead"
               id="simple-select-outlined-meeting-lead"
               value={meetingLead}
+              margin="dense"
               onChange={e => {
                 setMeetingLead(e.target.value);
                 updateMemberListState("meetingLead", e.target.value);

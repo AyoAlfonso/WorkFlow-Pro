@@ -110,7 +110,7 @@ export const IssuesBody = observer(
                   <Icon icon={"Plus"} size={16} />
                 </AddNewIssuePlus>
                 <AddNewIssueText>
-                  {`Add a New ${company.displayFormat == "Forum" ? "Parking Lot" : "Issue"}`}
+                  {`Add a ${company.displayFormat == "Forum" ? "Topic" : "Issue"}`}
                 </AddNewIssueText>
               </AddNewIssueContainer>
               <IssuesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>

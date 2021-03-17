@@ -17,7 +17,13 @@ interface IUserDefaultIconProps {
 export const UserDefaultIcon = (props: IUserDefaultIconProps) => {
   const { firstName, lastName, size, marginLeft, marginRight, border, defaultAvatarColor } = props;
 
-  const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`;
+  let initials;
+
+  if (!firstName && !lastName) {
+    initials = "";
+  } else {
+    initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  }
 
   return (
     <Container
@@ -27,7 +33,7 @@ export const UserDefaultIcon = (props: IUserDefaultIconProps) => {
       border={border}
       defaultAvatarColor={defaultAvatarColor}
     >
-      <StyledText size={size}> {initials.toUpperCase()} </StyledText>
+      <StyledText size={size}> {initials} </StyledText>
     </Container>
   );
 };

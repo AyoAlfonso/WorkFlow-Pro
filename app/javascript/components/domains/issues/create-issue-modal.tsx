@@ -55,8 +55,7 @@ export const CreateIssueModal = ({
   const itemName =
     companyStore.company.displayFormat == "Forum"
       ? t("meetingForum.parkingLotIssues.forumItems")
-      : t("issues.myHub");
-  const selectedLabelObj = labelStore.selectedLabelObj;
+      : t("issues.title");
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
@@ -141,7 +140,7 @@ export const CreateIssueModal = ({
                   position: newIssuePosition,
                   meetingId: meetingId,
                   meetingEnabled: meetingEnabled,
-                  label: selectedLabelObj,
+                  label: selectedLabel,
                   personal: personal,
                   teamId: teamId,
                 })

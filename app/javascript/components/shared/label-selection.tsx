@@ -33,7 +33,7 @@ export const LabelSelection = ({
     if (inlineEdit) {
       return selectedLabel.color || baseTheme.colors.grey60;
     } else {
-      return baseTheme.colors.primary100;
+      return selectedLabel.color || baseTheme.colors.primary100;
     }
   };
 
@@ -44,7 +44,7 @@ export const LabelSelection = ({
   return (
     <LabelContainer onClick={() => onLabelClick(!showLabelsList)} marginLeft={marginLeft}>
       {!R.isNil(selectedLabel) ? (
-        <StyledLabel>
+        <StyledLabel inlineEdit={inlineEdit}>
           <Icon
             icon={"Label"}
             size={inlineEdit ? "10px" : "16px"}
@@ -54,9 +54,12 @@ export const LabelSelection = ({
           <StyledLabelText color={styledLabelTextColor()}>{selectedLabel.name}</StyledLabelText>
         </StyledLabel>
       ) : (
-        <StyledLabel>
-          <Icon icon={"Label"} size={inlineEdit ? "10px" : "16px"} iconColor={"grey60"} />
-        </StyledLabel>
+        <DefaultStyledLabel inlineEdit={inlineEdit}>
+          <DefaultStyledLabelContainer>
+            <Icon icon={"Label"} size={inlineEdit ? "10px" : "16px"} iconColor={"grey60"} />{" "}
+            {inlineEdit && <DefaultStyledTextContainer>Label</DefaultStyledTextContainer>}
+          </DefaultStyledLabelContainer>
+        </DefaultStyledLabel>
       )}
       {showLabelsList && (
         <div onClick={e => e.stopPropagation()}>
@@ -82,7 +85,6 @@ const LabelContainer = styled.div<LabelContainerProps>`
   align-items: flex-end;
   justify-content: center;
   margin-left: ${props => props.marginLeft || "auto"};
-  margin-right: 5px;
   height: 20px;
   margin-top: auto;
   margin-bottom: auto;
@@ -91,7 +93,11 @@ const LabelContainer = styled.div<LabelContainerProps>`
   }
 `;
 
-const StyledLabel = styled(TextDiv)`
+type StyledLabel = {
+  inlineEdit: boolean;
+};
+
+const StyledLabel = styled(TextDiv)<StyledLabel>`
   color: ${props => props.theme.colors.primary100};
   cursor: pointer;
   display: flex;
@@ -99,7 +105,7 @@ const StyledLabel = styled(TextDiv)`
   justify-content: flex-end;
   align-items: center;
   margin-left: 6px;
-  margin-right: 6px;
+  margin-right: ${props => !props.inlineEdit && "8px"};
 `;
 
 type StyledLabelTextProps = {
@@ -110,5 +116,21 @@ const StyledLabelText = styled(Text)<StyledLabelTextProps>`
   color: ${props => props.color};
   cursor: pointer;
   margin-left: 6px;
-  margin-right: 6px;
+`;
+
+type DefaultStyledLabelContainer = {
+  inlineEdit: boolean;
+};
+
+export const DefaultStyledLabel = styled(StyledLabel)<DefaultStyledLabelContainer>`
+  display: ${props => (props.inlineEdit ? "none" : "block")};
+`;
+
+const DefaultStyledTextContainer = styled.div`
+  margin-left: 4px;
+  color: ${props => props.theme.colors.grey60};
+`;
+
+const DefaultStyledLabelContainer = styled.div`
+  display: flex;
 `;

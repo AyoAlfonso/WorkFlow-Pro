@@ -57,9 +57,6 @@ export const Teams = observer(
               {team.name}
             </TextNoMargin>
           </LeftAlignedTableContainer>,
-          <LeftAlignedTableContainer>
-            <Status key={`team-${team.id}-active`} status={team.active ? "active" : "inactive"} />
-          </LeftAlignedTableContainer>,
           <LeftAlignedColumnListTableContainer>
             {users
               .filter(user => team.isAMember(user))
@@ -161,10 +158,10 @@ export const Teams = observer(
         </HeaderContainer>
         <BodyContainer>
           <Table
-            columns={5}
-            headers={["Team", "Status", "Team Members", "Meeting Lead", ""]}
+            columns={4}
+            headers={["Team", "Team Members", "Meeting Lead", ""]}
             data={teamsData}
-            styling={{ widths: [2, 1, 2, 2, 1] }}
+            styling={{ widths: [2, 3, 1, 1] }}
           ></Table>
         </BodyContainer>
       </StretchContainer>
@@ -181,6 +178,8 @@ const CheckboxContainer = styled.div`
   height: 48px;
   margin-top: 8px;
   margin-bottom: 8px;
+  margin-left: auto;
+  margin-right: auto;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -200,4 +199,5 @@ const StyledIconContainer = styled(IconContainer)`
 
 const ActionsContainer = styled.div`
   display: flex;
+  margin-left: auto;
 `;

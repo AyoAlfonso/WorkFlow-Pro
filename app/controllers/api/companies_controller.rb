@@ -164,6 +164,9 @@ class Api::CompaniesController < Api::ApplicationController
     @team = Team.create!(company_id: @onboarding_company.id, name: params[:team_name], settings: {})
     @team.set_default_avatar_color
     authorize @team
+
+    TeamUserEnablement.create!(team_id: @team.id, user_id: current_user.id, role: 1)
+
     if params[:email_addresses].present?
       @email_addresses = params[:email_addresses].split(',')
       @email_addresses.each do |email|

@@ -24,10 +24,7 @@ export const LabelStoreModel = types
         self.labelsList = response.data.labels
         return response.data.newLabel
       }
-    }),
-    setSelectedLabelObj(label) {
-      self.selectedLabelObj = { ...label };
-    },
+    })
   }));
 
 type LabelStoreType = typeof LabelStoreModel.Type;
