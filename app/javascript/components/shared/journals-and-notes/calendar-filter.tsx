@@ -158,7 +158,7 @@ const Container = styled.div<ContainerProps>`
 `;
 
 const StyledFilterContainer = styled(FilterContainer)`
-  max-height: 75vh;
+  max-height: 80vh;
 `;
 
 const StyledBodyContainer = styled(BodyContainer)`
