@@ -4,19 +4,19 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    @user.companies.pluck(:id).include?(@record.default_selected_company_id)
+    user_is_part_of_current_company?
   end
 
   def create?
-    true
+    true #TODO: ASK CHRIS IF THIS IS THE RIGHT SCOPE, WHICH CASE WAS THIS NOT TRUE FOR, WAS THIS FOR ONBOARDING?
   end
 
   def update?
-    @record == @user || (@user.company_admin? && @user.company == @record.company)
+    @record == @user || user_is_company_admin_of_current_company?
   end
 
   def destroy? #only company admin can destroy, and destroy is a soft delete in this case
-    @user.company_admin? && @user.company == @record.company
+    user_is_company_admin_of_current_company?
   end
 
   def resend_invitation?

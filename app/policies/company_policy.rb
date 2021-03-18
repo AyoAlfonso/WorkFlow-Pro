@@ -5,11 +5,11 @@ class CompanyPolicy < ApplicationPolicy
   end
 
   def show?
-    user.companies.pluck(:id).include?(record.id)
+    user_is_part_of_this_company?(record)
   end
 
   def update?
-    (user.companies.include? record) && (["CEO", "Admin"].include? UserCompanyEnablement.find_by(company_id: record.id).user_role.name)
+    user_is_company_admin_of_this_company?(record)
   end
 
   def delete_logo?

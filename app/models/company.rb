@@ -6,7 +6,7 @@ class Company < ApplicationRecord
   before_save :sanitize_rallying_cry
 
   enum display_format: { Company: 0, Forum: 1 }
-  has_many :users, dependent: :restrict_with_error
+  # has_many :users, dependent: :restrict_with_error #thi shas been replaced with default company
   has_many :annual_initiatives, dependent: :restrict_with_error
   has_many :teams, dependent: :restrict_with_error
   has_one_attached :logo, dependent: :destroy

@@ -89,8 +89,9 @@ class User < ApplicationRecord
     self.teams.any? { |team| teams.include?(team) }
   end
 
-  def company_admin?
-    role == UserRole::CEO || role == UserRole::ADMIN
+  def company_admin?(company)
+    company_role = user.company_user_enablements(company: company).first&.role
+    company_role == UserRole::CEO || company_role == UserRole::ADMIN
   end
 
   # devise confirm! method overriden
