@@ -12,9 +12,10 @@ import htmlToDraft from "html-to-draftjs";
 interface NotesProps {
   meeting: any;
   height?: string;
+  hideSideBorders?: boolean;
 }
 
-export const Notes = ({ meeting, height }: NotesProps): JSX.Element => {
+export const Notes = ({ meeting, height, hideSideBorders }: NotesProps): JSX.Element => {
   const { meetingStore, forumStore } = useMst();
 
   const meetingType = meeting.meetingType;
@@ -30,7 +31,7 @@ export const Notes = ({ meeting, height }: NotesProps): JSX.Element => {
 
   return (
     <Container>
-      <EditorWrapper height={height}>
+      <EditorWrapper height={height} hideSideBorders={hideSideBorders}>
         <Editor
           toolbar={{
             options: ["inline", "list"],
@@ -69,11 +70,12 @@ const Container = styled.div`
 
 type EditorWrapperProps = {
   height?: string;
+  hideSideBorders: boolean;
 };
 
 const EditorWrapper = styled.div<EditorWrapperProps>`
   height: ${props => props.height || "300px"};
   overflow-y: auto;
-  border: ${props => `1px solid ${props.theme.colors.borderGrey}`};
+  border: ${props => !props.hideSideBorders && `1px solid ${props.theme.colors.borderGrey}`};
   padding: 8px;
 `;

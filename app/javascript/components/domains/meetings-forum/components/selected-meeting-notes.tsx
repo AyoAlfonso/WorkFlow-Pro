@@ -25,17 +25,16 @@ export const SelectedMeetingNotes = observer(({ selectedMeetingId }: ISelectedMe
       <NotesHeader>
         <Heading type={"h4"}>{t("meeting.sideOptions.notes")}</Heading>
       </NotesHeader>
-      <Notes meeting={selectedMeeting} height={"550px"} />
+      <Notes meeting={selectedMeeting} height={"550px"} hideSideBorders={true} />
     </Container>
   );
 });
 
 const Container = styled(Card)`
-  padding-left: 15px;
-  padding-right: 15px;
-  width: 50%;
-  min-width: 400px;
-  padding-bottom: 50px;
+  margin-left: 16px;
+  min-width: 375px;
 `;
 
-const NotesHeader = styled.div``;
+const NotesHeader = styled.div`
+  margin-left: 16px;
+`;

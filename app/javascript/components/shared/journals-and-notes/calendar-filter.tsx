@@ -164,4 +164,5 @@ const StyledFilterContainer = styled(FilterContainer)`
 const StyledBodyContainer = styled(BodyContainer)`
   display: block;
   overflow-y: auto;
+  padding-left: 4px;
 `;
