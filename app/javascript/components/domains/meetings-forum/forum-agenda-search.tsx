@@ -129,14 +129,20 @@ export const ForumAgendaSearch = observer(() => {
 
   const renderSelectedEntry = () => {
     if (selectedMeeting) {
+      const inCurrentMonth = moment(selectedMeeting.scheduledStartTime).isSame(moment(), "month");
       return (
         <>
-          <TeamMeetingButton
-            handleMeetingClick={handleMeetingClick}
-            disabled={!moment(selectedMeeting.scheduledStartTime).isSame(moment(), "month")}
-          />
+          <TeamMeetingButton handleMeetingClick={handleMeetingClick} disabled={!inCurrentMonth} />
           <SelectedEntryContainer>
+<<<<<<< HEAD
             <SelectedMeetingAgendaEntry selectedMeetingId={selectedMeeting.id} />
+=======
+            <SelectedMeetingAgendaEntry
+              selectedMeetingId={selectedMeeting.id}
+              disabled={!inCurrentMonth || selectedMeeting.ended}
+            />
+            <SelectedMeetingNotes selectedMeetingId={selectedMeeting.id} />
+>>>>>>> [ch30623][ch30527] updating exploration topics styling
           </SelectedEntryContainer>
         </>
       );

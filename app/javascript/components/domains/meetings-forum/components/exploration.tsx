@@ -16,6 +16,8 @@ import { ParkingLotIssues } from "./parking-lot-issues";
 import { useEffect, useState } from "react";
 import { ScheduledIssues } from "./scheduled-issues";
 import { toJS } from "mobx";
+import { ForumTopic } from "~/components/domains/meetings-forum/components/forum-topic";
+import { ColumnContainer } from "~/components/domains/meetings-forum/components/row-style";
 
 export const Exploration = observer(
   (): JSX.Element => {
@@ -112,41 +114,38 @@ export const Exploration = observer(
     };
 
     return (
-      <Container>
-        <SectionContainer>
-          <HeaderContainer>{headerText("Scheduled Exploration")}</HeaderContainer>
-          <DescriptionText>Topics to be discussed today</DescriptionText>
-          <HostContainer>{renderUserAvatar()}</HostContainer>
-          <StyledContentEditable
-            placeholder={"No Topic"}
-            html={R.path(["forumExplorationTopic"], currentMeeting.settings) || "No Topic"}
-            onChange={null}
+      <>
+        <Container>
+          <HeaderContainer>{headerText("1: Scheduled Exploration")}</HeaderContainer>
+        </Container>
+        <Container>
+          <ForumTopic
+            disabled={false}
+            teamMembers={toJS(currentTeam.users)}
+            meeting={currentMeeting}
           />
-        </SectionContainer>
+        </Container>
+        <Container>
+          <ColumnContainer>
+            <HeaderContainer>{headerText("2: Dynamic Explorations")}</HeaderContainer>
+            <ScheduledIssues teamId={currentMeeting.teamId} upcomingForumMeeting={currentMeeting} />
+          </ColumnContainer>
 
-        <SectionContainer>
-          <HeaderContainer>{headerText("Dynamic Explorations")}</HeaderContainer>
-          <ScheduledIssues teamId={currentMeeting.teamId} upcomingForumMeeting={currentMeeting} />
-        </SectionContainer>
-
-        <SectionContainer>
-          <HeaderContainer>{headerText("Forum Hub")}</HeaderContainer>
-          <ParkingLotIssues teamId={currentMeeting.teamId} upcomingForumMeeting={currentMeeting} />
-        </SectionContainer>
-      </Container>
+          <ColumnContainer>
+            <HeaderContainer>{headerText("Forum Hub")}</HeaderContainer>
+            <ParkingLotIssues
+              teamId={currentMeeting.teamId}
+              upcomingForumMeeting={currentMeeting}
+            />
+          </ColumnContainer>
+        </Container>
+      </>
     );
   },
 );
 
 const Container = styled.div`
   display: flex;
-`;
-
-const SectionContainer = styled.div`
-  min-width: 320px;
-  width: 33%;
-  padding-left: 8px;
-  padding-right: 8px;
 `;
 
 const HostContainer = styled.div`

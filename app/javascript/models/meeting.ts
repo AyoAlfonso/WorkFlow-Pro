@@ -44,6 +44,9 @@ export const MeetingModel = types
     hostedBy: types.maybeNull(UserModel)
   })
   .views(self => ({
+    get ended() {
+      return !(R.isNil(self.endTime) || self.endTime == "");
+    },
     get currentStepDetails() {
       return self.steps.find(step => step.orderIndex == self.currentStep);
     },

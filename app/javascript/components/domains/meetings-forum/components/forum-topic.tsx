@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import * as R from "ramda";
-import { ColumnContainer } from "./row-style";
+import { ColumnContainerCenterAligned } from "./row-style";
 import ContentEditable from "react-contenteditable";
 import { useRefCallback } from "~/components/shared/content-editable-hooks";
 import { useMst } from "~/setup/root";
@@ -87,7 +87,7 @@ export const ForumTopic = observer(
 
     return (
       <>
-        <ColumnContainer>
+        <ColumnContainerCenterAligned>
           <HostedByContainer
             onClick={() => {
               if (!disabled) {
@@ -107,8 +107,8 @@ export const ForumTopic = observer(
               />
             </UserSelectionContainer>
           )}
-        </ColumnContainer>
-        <ColumnContainer>
+        </ColumnContainerCenterAligned>
+        <ColumnContainerCenterAligned>
           <StyledContentEditable
             innerRef={topicRef}
             placeholder={"Add a topic - e.g. How do we improve productivity while we go remote?"}
@@ -122,7 +122,7 @@ export const ForumTopic = observer(
             onBlur={handleBlurExplorationTopic}
             disabled={disabled}
           />
-        </ColumnContainer>
+        </ColumnContainerCenterAligned>
       </>
     );
   },
@@ -136,7 +136,6 @@ const StyledContentEditable = styled(ContentEditable)`
   box-shadow: 0px 3px 6px #f5f5f5;
   padding-left: 16px;
   padding-right: 16px;
-  width: 100%;
   &:hover {
     cursor: ${props => (!props.disabled ? "text" : "default")};
   }

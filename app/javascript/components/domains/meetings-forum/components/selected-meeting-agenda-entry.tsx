@@ -17,6 +17,7 @@ import { SelectedMeetingNotes } from "./selected-meeting-notes";
 import { Subject } from "@material-ui/icons";
 interface ISelectedMeetingAgendaEntry {
   selectedMeetingId: string | number;
+  disabled: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const SelectedMeetingAgendaEntry = observer(
-  ({ selectedMeetingId }: ISelectedMeetingAgendaEntry) => {
+  ({ selectedMeetingId, disabled }: ISelectedMeetingAgendaEntry) => {
     const { t } = useTranslation();
     const classes = useStyles();
     const {
@@ -129,35 +130,43 @@ export const SelectedMeetingAgendaEntry = observer(
               )}`}
             </MeetingTimeText>
           )}
-          <LocationContainer>
-            <MeetingTimeText>Location: </MeetingTimeText>
-            <StyledContentEditable
-              innerRef={locationRef}
-              placeholder={"Enter the location"}
-              html={location || ""}
-              onChange={handleChangeLocation}
-              onKeyDown={key => {
-                if (key.keyCode == 13) {
-                  locationRef.current.blur();
-                }
-              }}
-              onBlur={handleBlurLocation}
-            />
-          </LocationContainer>
-          <LocationContainer>
-            <StyledContentEditable
-              innerRef={explorationTopicRef}
-              placeholder={"Enter the Exploration Topic"}
-              html={explorationTopic || ""}
-              onChange={handleChangeExplorationTopic}
-              onKeyDown={key => {
-                if (key.keyCode == 13) {
-                  explorationTopicRef.current.blur();
-                }
-              }}
-              onBlur={handleBlurExplorationTopic}
-            />
-          </LocationContainer>
+          {disabled ? (
+            <>
+              <MeetingTimeText>Location: {location}</MeetingTimeText>
+              <MeetingTimeText>Topic: {explorationTopic}</MeetingTimeText>
+            </>
+          ) : (
+            <>
+              <LocationContainer>
+                <StyledContentEditable
+                  innerRef={locationRef}
+                  placeholder={"Enter the location"}
+                  html={location || ""}
+                  onChange={handleChangeLocation}
+                  onKeyDown={key => {
+                    if (key.keyCode == 13) {
+                      locationRef.current.blur();
+                    }
+                  }}
+                  onBlur={handleBlurLocation}
+                />
+              </LocationContainer>
+              <LocationContainer>
+                <StyledContentEditable
+                  innerRef={explorationTopicRef}
+                  placeholder={"Enter the Exploration Topic"}
+                  html={explorationTopic || ""}
+                  onChange={handleChangeExplorationTopic}
+                  onKeyDown={key => {
+                    if (key.keyCode == 13) {
+                      explorationTopicRef.current.blur();
+                    }
+                  }}
+                  onBlur={handleBlurExplorationTopic}
+                />
+              </LocationContainer>
+            </>
+          )}
         </MeetingHeader>
         <MeetingAgendaContainer>
           <ChildContainer>
