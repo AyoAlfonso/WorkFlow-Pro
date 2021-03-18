@@ -49,15 +49,15 @@ export const SelectedMeetingAgendaEntry = observer(
 
     const locationRef = useRef(null);
     const [location, setLocation] = useState<string>("");
-    const subjectRef = useRef(null);
-    const [subject, setSubject] = useState<string>("");
+    const explorationTopicRef = useRef(null);
+    const [explorationTopic, setExplorationTopic] = useState<string>("");
     const [newScheduledStartTime, setNewScheduledStartTime] = useState<string>(
       selectedMeeting.scheduledStartTime,
     );
 
     useEffect(() => {
       setLocation(R.path(["forumLocation"], selectedMeeting.settings));
-      setSubject(R.path(["forumSubject"], selectedMeeting.settings));
+      setExplorationTopic(R.path(["forumExplorationTopic"], selectedMeeting.settings));
     }, [selectedMeeting.id]);
 
     const teamMembers = teams.find(team => team.id == selectedMeeting.teamId)["users"];
@@ -80,20 +80,20 @@ export const SelectedMeetingAgendaEntry = observer(
       });
     }, [location]);
 
-    const handleChangeSubject = useRefCallback(e => {
+    const handleChangeExplorationTopic = useRefCallback(e => {
       if (!e.target.value.includes("<div>")) {
-        setSubject(e.target.value);
+        setExplorationTopic(e.target.value);
       }
     }, []);
 
-    const handleBlurSubject = useRefCallback(() => {
+    const handleBlurExplorationTopic = useRefCallback(() => {
       forumStore.updateMeeting({
         id: selectedMeeting.id,
         meeting: {
-          settingsForumSubject: subject,
+          settingsForumExplorationTopic: explorationTopic,
         },
       });
-    }, [subject]);
+    }, [explorationTopic]);
 
     return (
       <Container>
@@ -146,16 +146,16 @@ export const SelectedMeetingAgendaEntry = observer(
           </LocationContainer>
           <LocationContainer>
             <StyledContentEditable
-              innerRef={subjectRef}
-              placeholder={"Enter the subject"}
-              html={subject || ""}
-              onChange={handleChangeSubject}
+              innerRef={explorationTopicRef}
+              placeholder={"Enter the Exploration Topic"}
+              html={explorationTopic || ""}
+              onChange={handleChangeExplorationTopic}
               onKeyDown={key => {
                 if (key.keyCode == 13) {
-                  subjectRef.current.blur();
+                  explorationTopicRef.current.blur();
                 }
               }}
-              onBlur={handleBlurSubject}
+              onBlur={handleBlurExplorationTopic}
             />
           </LocationContainer>
         </MeetingHeader>
@@ -200,7 +200,6 @@ const MeetingTimeText = styled(Text)`
 
 const LocationContainer = styled.div`
   display: flex;
-  margin: 6px;
 `;
 
 const StyledContentEditable = styled(ContentEditable)`
@@ -212,7 +211,7 @@ const StyledContentEditable = styled(ContentEditable)`
   padding-left: 16px;
   padding-right: 16px;
   width: 100%;
-  margin-left: 8px;
+  margin: 8px;
 `;
 
 const MeetingTimeContainer = styled.div`
