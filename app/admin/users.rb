@@ -74,7 +74,6 @@ ActiveAdmin.register User do
   show do
     h1 user.full_name
     attributes_table do
-      row("Company Name") { |user| link_to user.company_name, admin_company_path(user.company) }
       row :first_name
       row :last_name
       row :email
