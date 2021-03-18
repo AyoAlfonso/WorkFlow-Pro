@@ -7,7 +7,7 @@ class Api::ApplicationController < ActionController::API
   after_action :verify_policy_scoped, only: :index, unless: :skip_pundit?
 
   #precedence highest when delcared last for rescue_from
-  rescue_from StandardError, with: :fallback_error
+  #rescue_from StandardError, with: :fallback_error
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from Pundit::AuthorizationNotPerformedError, with: :authorization_not_performed_error
   rescue_from Pundit::PolicyScopingNotPerformedError, with: :policy_scoping_not_performed_error

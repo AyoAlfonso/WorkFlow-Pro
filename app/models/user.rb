@@ -16,7 +16,6 @@ class User < ApplicationRecord
   before_save :sanitize_personal_vision
   after_create :create_default_notifications
   delegate :name, :timezone, to: :default_selected_company, prefix: 'company', allow_nil: true
-  delegate :name, to: :user_role, prefix: true, allow_nil: true
   has_many :issues
   has_many :key_activities
   has_many :created_quarterly_goals, :foreign_key => 'created_by_id', :class_name => 'QuarterlyGoal'
@@ -27,7 +26,7 @@ class User < ApplicationRecord
   has_many :daily_logs, dependent: :destroy
   has_one_attached :avatar
   has_many :questionnaire_attempts
-  belongs_to :user_role, optional: true
+ 
   has_many :habits, dependent: :destroy
   has_many :team_user_enablements, dependent: :destroy
   has_many :teams, through: :team_user_enablements
@@ -75,9 +74,9 @@ class User < ApplicationRecord
     QuestionnaireAttempt.of_questionnaire_type("Weekly Reflection").where(completed_at: (self.time_in_user_timezone.beginning_of_week + 1.days)..(self.time_in_user_timezone.end_of_week + 1.days)).present?
   end
 
-  def current_daily_log
+  def current_daily_log(current_company)
     if self.persisted?
-      daily_logs.select(:id, :work_status, :create_my_day, :evening_reflection, :mip_count, :weekly_reflection).where(log_date: self.time_in_user_timezone).first_or_create(mip_count: self.todays_priorities.count, weekly_reflection: self.weekly_reflection_complete)
+      daily_logs.select(:id, :work_status, :create_my_day, :evening_reflection, :mip_count, :weekly_reflection).where(log_date: self.time_in_user_timezone).first_or_create(mip_count: self.todays_priorities(current_company).count, weekly_reflection: self.weekly_reflection_complete)
     end
   end
 
