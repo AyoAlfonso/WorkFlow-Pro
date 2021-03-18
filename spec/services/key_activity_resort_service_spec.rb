@@ -4,13 +4,13 @@ RSpec.describe KeyActivityResortService do
   let!(:scheduled_group_today) {create(:scheduled_group, name: "Today")}
   let!(:scheduled_group_tomorrow) {create(:scheduled_group, name: "Tomorrow")}
   let!(:user) {create(:user)}
-  let!(:ka0) {create(:key_activity, description: "Today0", scheduled_group: scheduled_group_today, position: 1, priority: 0, due_date: Date.new(2021,3,6), company: user.company, user: user)}
-  let!(:ka1) {create(:key_activity, description: "Today1", scheduled_group: scheduled_group_today, position: 2, priority: 2, due_date: Date.new(2021,3,2), company: user.company, user: user)}
-  let!(:ka2) {create(:key_activity, description: "Today2", scheduled_group: scheduled_group_today, position: 3, priority: 1, due_date: Date.new(2021,3,2), company: user.company, user: user)}
-  let!(:ka3) {create(:key_activity, description: "Today3", scheduled_group: scheduled_group_today, position: 4, priority: 2, due_date: Date.new(2021,3,4), company: user.company, user: user)}
-  let!(:ka4) {create(:key_activity, description: "Today4", scheduled_group: scheduled_group_today, position: 5, priority: 2, due_date: Date.new(2021,3,1), company: user.company, user: user)}
-  let!(:kat0) {create(:key_activity, description: "Tomorrow0", scheduled_group: scheduled_group_tomorrow, position: 1, priority: 0, due_date: Date.new(2021,3,6), company: user.company, user: user)}
-  let!(:kat1) {create(:key_activity, description: "Tomorrow1", scheduled_group: scheduled_group_tomorrow, position: 2, priority: 1, due_date: Date.new(2021,3,2), company: user.company, user: user)}
+  let!(:ka0) {create(:key_activity, description: "Today0", scheduled_group: scheduled_group_today, position: 1, priority: 0, due_date: Date.new(2021,3,6), company: user.default_selected_company, user: user)}
+  let!(:ka1) {create(:key_activity, description: "Today1", scheduled_group: scheduled_group_today, position: 2, priority: 2, due_date: Date.new(2021,3,2), company: user.default_selected_company, user: user)}
+  let!(:ka2) {create(:key_activity, description: "Today2", scheduled_group: scheduled_group_today, position: 3, priority: 1, due_date: Date.new(2021,3,2), company: user.default_selected_company, user: user)}
+  let!(:ka3) {create(:key_activity, description: "Today3", scheduled_group: scheduled_group_today, position: 4, priority: 2, due_date: Date.new(2021,3,4), company: user.default_selected_company, user: user)}
+  let!(:ka4) {create(:key_activity, description: "Today4", scheduled_group: scheduled_group_today, position: 5, priority: 2, due_date: Date.new(2021,3,1), company: user.default_selected_company, user: user)}
+  let!(:kat0) {create(:key_activity, description: "Tomorrow0", scheduled_group: scheduled_group_tomorrow, position: 1, priority: 0, due_date: Date.new(2021,3,6), company: user.default_selected_company, user: user)}
+  let!(:kat1) {create(:key_activity, description: "Tomorrow1", scheduled_group: scheduled_group_tomorrow, position: 2, priority: 1, due_date: Date.new(2021,3,2), company: user.default_selected_company, user: user)}
   describe "call" do
     it "resorts items by priority if selected to do so" do
       KeyActivityResortService.call(KeyActivity.all, "by_priority", scheduled_group_today.id)
