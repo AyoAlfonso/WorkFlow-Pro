@@ -10,6 +10,7 @@ import * as R from "ramda";
 import { CoreFourOnly } from "../goals/goals-core-four";
 import { Button } from "~/components/shared/button";
 import { useHistory } from "react-router-dom";
+import { Icon } from "~/components/shared";
 
 interface ITeamMeetingProps {
   meeting: any;
@@ -58,20 +59,38 @@ export const MeetingWizardLayout = observer(
     };
 
     const renderMeetingStartedButtons = () => {
-      return (
-        <>
-          {meeting.currentStep + 1 < numberOfSteps && (
-            <NextButton
-              small
-              variant={"primary"}
-              onClick={() => onNextButtonClick(meeting.currentStep + 1)}
-            >
-              Next
-            </NextButton>
-          )}
-          {stopMeetingButton}
-        </>
+      const nextButton = (
+        <NextButton
+          small
+          variant={"primary"}
+          onClick={() => onNextButtonClick(meeting.currentStep + 1)}
+        >
+          Next
+        </NextButton>
       );
+
+      if (meeting.currentStep == 0) {
+        return nextButton;
+      } else if (meeting.currentStep + 1 == numberOfSteps) {
+        return stopMeetingButton;
+      } else {
+        return (
+          <ButtonsContainer>
+            <LeftButtonContainer>
+              {
+                <BackButton
+                  small
+                  variant={"primaryOutline"}
+                  onClick={() => onNextButtonClick(meeting.currentStep - 1)}
+                >
+                  <StyledBackIcon icon={"Move2"} size={"15px"} iconColor={"primary100"} />
+                </BackButton>
+              }
+            </LeftButtonContainer>
+            {nextButton}
+          </ButtonsContainer>
+        );
+      }
     };
 
     const actionButtons = () => {
@@ -117,4 +136,24 @@ const CoreFourWrapper = styled.div`
 
 const NextButton = styled(Button)`
   width: 100%;
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
+const LeftButtonContainer = styled.div`
+  margin-right: 16px;
+`;
+
+const BackButton = styled(Button)`
+  width: 32px;
+  padding-left: 0;
+  padding-right: 0;
+`;
+
+const StyledBackIcon = styled(Icon)`
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
 `;

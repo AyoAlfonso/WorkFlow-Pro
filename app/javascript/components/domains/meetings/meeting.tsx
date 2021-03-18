@@ -204,6 +204,7 @@ const Container = styled.div`
 const MeetingControlButton = styled(Button)`
   width: 100%;
   font-size: 14px;
+  margin-left: 0;
 `;
 
 const HeaderContainer = styled.div`
@@ -221,7 +222,9 @@ const DateAndButtonContainer = styled.div`
 const ProgressBarTimerContainer = styled.div`
   display: flex;
   align-items: center;
-  padding-left: 16px;
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-bottom: 16px;
 `;
 
 const BodyContainer = styled.div`

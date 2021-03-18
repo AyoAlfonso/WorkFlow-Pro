@@ -43,25 +43,49 @@ export const Heading = props => {
   switch (type) {
     case "h1":
       return (
-        <StyledH1 {...props} fontFamily={"Exo"}>
+        <StyledH1
+          {...props}
+          fontFamily={"Exo"}
+          fontSize={"32px"}
+          lineHeight={"32px"}
+          fontWeight={"bold"}
+        >
           {children}
         </StyledH1>
       );
     case "h2":
       return (
-        <StyledH2 {...props} fontFamily={"Exo"}>
+        <StyledH2
+          {...props}
+          fontFamily={"Exo"}
+          fontSize={"26px"}
+          lineHeight={"28px"}
+          fontWeight={"bold"}
+        >
           {children}
         </StyledH2>
       );
     case "h3":
       return (
-        <StyledH3 {...props} fontFamily={"Exo"}>
+        <StyledH3
+          {...props}
+          fontFamily={"Lato"}
+          fontSize={"22px"}
+          lineHeight={"20px"}
+          fontWeight={"bold"}
+        >
           {children}
         </StyledH3>
       );
     case "h4":
       return (
-        <StyledH4 {...props} fontFamily={"Exo"}>
+        <StyledH4
+          {...props}
+          fontFamily={"Lato"}
+          fontSize={"16px"}
+          lineHeight={"16px"}
+          fontWeight={"bold"}
+        >
           {children}
         </StyledH4>
       );

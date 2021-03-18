@@ -30,7 +30,7 @@ export const Notes = ({ meeting, height, hideSideBorders }: NotesProps): JSX.Ele
   }, [meeting.notes]);
 
   return (
-    <Container>
+    <Container height={height}>
       <EditorWrapper height={height} hideSideBorders={hideSideBorders}>
         <Editor
           toolbar={{
@@ -64,8 +64,13 @@ export const Notes = ({ meeting, height, hideSideBorders }: NotesProps): JSX.Ele
   );
 };
 
-const Container = styled.div`
-  height: inherit;
+type ContainerProps = {
+  height?: string;
+};
+
+const Container = styled.div<ContainerProps>`
+  height: ${props => props.height || "inherit"};
+  background-color: white;
 `;
 
 type EditorWrapperProps = {
@@ -77,5 +82,6 @@ const EditorWrapper = styled.div<EditorWrapperProps>`
   height: ${props => props.height || "300px"};
   overflow-y: auto;
   border: ${props => !props.hideSideBorders && `1px solid ${props.theme.colors.borderGrey}`};
-  padding: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
 `;

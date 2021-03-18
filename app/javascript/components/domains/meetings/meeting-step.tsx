@@ -104,13 +104,11 @@ export const MeetingStep = observer(
 
 const BodyContainer = styled.div`
   display: flex;
-  margin-top: 50px;
   width: -webkit-fill-available;
 `;
 
 const StepComponentContainer = styled.div`
   width: inherit;
   min-width: 320px;
-  margin-left: 10px;
-  margin-top: 5px;
+  margin-left: 8px;
 `;

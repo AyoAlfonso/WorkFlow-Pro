@@ -38,7 +38,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
       case "pyns":
         return renderDisplayKeyActivities();
       case "notes":
-        return <Notes meeting={meeting} height={"inherit"} />;
+        return <Notes meeting={meeting} height={"550px"} />;
       default:
         return (
           <MeetingAgenda
@@ -104,7 +104,8 @@ const OptionContainer = styled.div<OptionContainerType>`
 
 const OptionText = styled(Text)`
   font-size: 18px;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
+  margin-top: 0;
   padding-left: 4px;
   padding-right: 4px;
 `;

@@ -58,9 +58,9 @@ export const WizardLayout = ({
       customActionButton || (
         <>
           {showBackButton && (
-            <SkipButton small variant={"primaryOutline"} onClick={onBackButtonClick}>
-              Back
-            </SkipButton>
+            <BackButton small variant={"primaryOutline"} onClick={onBackButtonClick}>
+              <StyledBackIcon icon={"Move2"} size={"15px"} iconColor={"primary100"} />
+            </BackButton>
           )}
           {showSkipButton && (
             <SkipButton small variant={"primaryOutline"} onClick={onSkipButtonClick}>
@@ -117,7 +117,7 @@ export const WizardLayout = ({
       <DescriptionContainer>
         <DescriptionBody>
           <DescriptionTitleContainer>
-            <Heading type={"h2"} fontSize={"20px"} fontWeight={600}>
+            <Heading type={"h2"} mb={0}>
               {title}
             </Heading>
           </DescriptionTitleContainer>
@@ -156,6 +156,8 @@ const DescriptionContainer = styled.div`
   min-width: 320px;
   width: 25%;
   background-color: ${props => props.theme.colors.backgroundGrey};
+  display: flex;
+  flex-direction: column;
 `;
 
 const DescriptionBody = styled.div`
@@ -170,13 +172,15 @@ const BodyContainer = styled.div`
   padding-right: 16px;
   padding-top: 32px;
   width: 75%;
-  height: 100%;
+  height: -webkit-fill-available;
   position: relative;
+  display: flex;
+  flex-direction: column;
 `;
 
 const BodyContentContainer = styled.div`
   display: flex;
-  height: 85%;
+  height: -webkit-fill-available;
   overflow-y: auto;
 `;
 
@@ -184,19 +188,21 @@ const DescriptionTitleContainer = styled.div``;
 
 const DescriptionText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
-  font-size: 12px;
+  font-size: 16px;
+  margin-top: 8px;
 `;
 
 const ButtonsContainer = styled.div`
   display: flex;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 16px;
-  margin-bottom: 30px;
+  margin-top: 24px;
+  margin-bottom: 24px;
 `;
 
 const NextButton = styled(Button)`
   width: 100%;
+  margin-left: 0;
 `;
 
 const SkipButton = styled(Button)`
@@ -222,8 +228,9 @@ const StepComponentContainer = styled.div`
 `;
 
 const LynchpynLogoContainer = styled.div`
-  height: 15%;
   text-align: center;
+  margin-top: auto;
+  margin-bottom: 16px;
 `;
 
 const CloseButtonContainer = styled.div`
@@ -242,4 +249,15 @@ const CloseText = styled(Text)`
   font-size: 12px;
   margin-left: auto;
   margin-right: 10px;
+`;
+
+const BackButton = styled(Button)`
+  width: 32px;
+  padding-left: 0;
+  padding-right: 0;
+`;
+
+const StyledBackIcon = styled(Icon)`
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
 `;
