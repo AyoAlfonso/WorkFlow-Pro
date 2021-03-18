@@ -17,8 +17,6 @@ export const HomeGoals = observer(
   (): JSX.Element => {
     const { goalStore } = useMst();
 
-    const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(true);
-    const [showMinimizedCards, setShowMinimizedCards] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(true);
     const [annualInitiativeModalOpen, setAnnualInitiativeModalOpen] = useState<boolean>(false);
     const [annualInitiativeId, setAnnualInitiativeId] = useState<number>(null);
@@ -27,6 +25,10 @@ export const HomeGoals = observer(
     const [annualInitiativeDescription, setSelectedAnnualInitiativeDescription] = useState<string>(
       "",
     );
+    const [showCompanyMinimizedCards, setShowCompanyMinimizedCards] = useState<boolean>(true);
+    const [showPersonalMinimizedCards, setShowPersonalMinimizedCards] = useState<boolean>(true);
+    const [companyGoalsFilter, setCompanyGoalsFilter] = useState<string>("all");
+    const [personalGoalsFilter, setPersonalGoalsFilter] = useState<string>("all");
 
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
@@ -39,7 +41,33 @@ export const HomeGoals = observer(
     const companyGoals = goalStore.companyGoals;
     const personalGoals = goalStore.personalGoals;
 
-    const renderAnnualInitiatives = (annualInitiatives): JSX.Element => {
+    const companyGoalsToShow = () => {
+      switch (companyGoalsFilter) {
+        case "all":
+          return companyGoals.goals;
+        case "me":
+          return companyGoals.myAnnualInitiatives;
+        case "closed":
+          return companyGoals.closedAnnualInitiatives;
+        default:
+          return companyGoals;
+      }
+    };
+
+    const personalGoalsToShow = () => {
+      switch (personalGoalsFilter) {
+        case "all":
+          return personalGoals.goals;
+        case "closed":
+          return personalGoals.closedAnnualInitiatives;
+        default:
+          return personalGoals;
+      }
+    };
+
+    const renderAnnualInitiatives = (annualInitiatives, type): JSX.Element => {
+      const showMinimizedCards =
+        type == "company" ? showCompanyMinimizedCards : showPersonalMinimizedCards;
       return annualInitiatives.map((annualInitiative, index) => {
         return (
           <AnnualInitiativeCard
@@ -62,24 +90,30 @@ export const HomeGoals = observer(
     return (
       <Container>
         <TitleContainer
-          showMinimizedCards={showMinimizedCards}
-          setShowMinimizedCards={setShowMinimizedCards}
-          showCompanyGoals={showCompanyGoals}
-          setShowCompanyGoals={setShowCompanyGoals}
+          showMinimizedCards={showCompanyMinimizedCards}
+          setShowMinimizedCards={setShowCompanyMinimizedCards}
+          goalsFilter={companyGoalsFilter}
+          setGoalsFilter={setCompanyGoalsFilter}
+          title={"Company"}
         />
 
         <RallyingCry rallyingCry={companyGoals.rallyingCry} />
 
         <InitiativesContainer>
-          {renderAnnualInitiatives(
-            showCompanyGoals ? companyGoals.goals : companyGoals.onlyShowMyQuarterlyGoals,
-          )}
+          {renderAnnualInitiatives(companyGoalsToShow(), "company")}
         </InitiativesContainer>
 
         <PersonalVisionContainer>
+          <TitleContainer
+            showMinimizedCards={showPersonalMinimizedCards}
+            setShowMinimizedCards={setShowPersonalMinimizedCards}
+            goalsFilter={personalGoalsFilter}
+            setGoalsFilter={setPersonalGoalsFilter}
+            title={"Personal"}
+          />
           <PersonalVision personalVision={personalGoals.personalVision} />
           <InitiativesContainer>
-            {renderAnnualInitiatives(personalGoals.goals)}
+            {renderAnnualInitiatives(personalGoalsToShow(), "personal")}
           </InitiativesContainer>
         </PersonalVisionContainer>
 

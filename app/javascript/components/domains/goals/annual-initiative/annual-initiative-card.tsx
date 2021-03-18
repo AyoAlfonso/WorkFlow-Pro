@@ -43,11 +43,13 @@ export const AnnualInitiativeCard = ({
     setShowMinimizedCard(showMinimizedCards);
   }, [showMinimizedCards]);
 
+  console.log("ai id", annualInitiative.id);
+
   const goalYearString = onboarding
     ? `${companyStore.onboardingCompany.currentFiscalYear}`
     : companyStore.company.currentFiscalYear == annualInitiative.fiscalYear
     ? `FY${annualInitiative.fiscalYear.toString().slice(-2)}`
-    : `FY${companyStore.company.currentFiscalYear
+    : `FY${(annualInitiative.fiscalYear + 1)
         .toString()
         .slice(-2)}/${annualInitiative.fiscalYear.toString().slice(-2)}`;
 
@@ -79,7 +81,9 @@ export const AnnualInitiativeCard = ({
             setAnnualInitiativeId(annualInitiative.id);
           }}
         >
-          <StyledText> {annualInitiative.description} </StyledText>
+          <StyledText closedInitiative={annualInitiative.closedInitiative}>
+            {annualInitiative.description}
+          </StyledText>
         </DescriptionContainer>
         <IconContainer>
           <RecordOptions type={"annualInitiative"} id={annualInitiative.id} marginLeft={"-70px"} />
@@ -130,10 +134,15 @@ const DescriptionContainer = styled.div`
   overflow-wrap: anywhere;
 `;
 
-const StyledText = styled(Text)`
+type StyledTextProps = {
+  closedInitiative: boolean;
+};
+
+const StyledText = styled(Text)<StyledTextProps>`
   padding-left: 16px;
   padding-right: 16px;
   white-space: normal;
+  color: ${props => props.closedInitiative && props.theme.colors.greyActive};
   &:hover {
     cursor: pointer;
     font-weight: bold;

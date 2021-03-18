@@ -20,8 +20,6 @@ export const GoalsIndex = observer(
   (): JSX.Element => {
     const { goalStore, annualInitiativeStore, companyStore } = useMst();
 
-    const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(true);
-    const [showMinimizedCards, setShowMinimizedCards] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(true);
     const [annualInitiativeModalOpen, setAnnualInitiativeModalOpen] = useState<boolean>(false);
     const [annualInitiativeId, setAnnualInitiativeId] = useState<number>(null);
@@ -37,6 +35,11 @@ export const GoalsIndex = observer(
       boolean
     >(false);
 
+    const [showCompanyMinimizedCards, setShowCompanyMinimizedCards] = useState<boolean>(true);
+    const [showPersonalMinimizedCards, setShowPersonalMinimizedCards] = useState<boolean>(true);
+    const [companyGoalsFilter, setCompanyGoalsFilter] = useState<string>("all");
+    const [personalGoalsFilter, setPersonalGoalsFilter] = useState<string>("all");
+
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -49,9 +52,30 @@ export const GoalsIndex = observer(
 
     const companyGoals = goalStore.companyGoals;
     const personalGoals = goalStore.personalGoals;
-    const goalsToShow = showCompanyGoals
-      ? companyGoals.goals
-      : companyGoals.onlyShowMyQuarterlyGoals;
+
+    const companyGoalsToShow = () => {
+      switch (companyGoalsFilter) {
+        case "all":
+          return companyGoals.goals;
+        case "me":
+          return companyGoals.myAnnualInitiatives;
+        case "closed":
+          return companyGoals.closedAnnualInitiatives;
+        default:
+          return companyGoals;
+      }
+    };
+
+    const personalGoalsToShow = () => {
+      switch (personalGoalsFilter) {
+        case "all":
+          return personalGoals.goals;
+        case "closed":
+          return personalGoals.closedAnnualInitiatives;
+        default:
+          return personalGoals;
+      }
+    };
 
     const renderCreateCompanyAnnualInitiativeSection = (type): JSX.Element => {
       const showCreateAnnualInitiative =
@@ -84,7 +108,9 @@ export const GoalsIndex = observer(
       );
     };
 
-    const renderAnnualInitiatives = (annualInitiatives): JSX.Element => {
+    const renderAnnualInitiatives = (annualInitiatives, type): JSX.Element => {
+      const showMinimizedCards =
+        type == "company" ? showCompanyMinimizedCards : showPersonalMinimizedCards;
       return annualInitiatives.map((annualInitiative, index) => {
         return (
           <AnnualInitiativeCard
@@ -109,28 +135,39 @@ export const GoalsIndex = observer(
         <GoalsCoreFour />
 
         <TitleContainer
-          showMinimizedCards={showMinimizedCards}
-          setShowMinimizedCards={setShowMinimizedCards}
-          showCompanyGoals={showCompanyGoals}
-          setShowCompanyGoals={setShowCompanyGoals}
+          showMinimizedCards={showCompanyMinimizedCards}
+          setShowMinimizedCards={setShowCompanyMinimizedCards}
+          goalsFilter={companyGoalsFilter}
+          setGoalsFilter={setCompanyGoalsFilter}
           largeHomeTitle={true}
+          title={"Company"}
         />
 
         <RallyingCry rallyingCry={companyGoals.rallyingCry} />
 
         <InitiativesContainer>
-          {renderAnnualInitiatives(goalsToShow)}
-          <CreateAnnualInitiativeContainer marginLeft={goalsToShow.length > 0 ? "15px" : "0px"}>
+          {renderAnnualInitiatives(companyGoalsToShow(), "company")}
+          <CreateAnnualInitiativeContainer
+            marginLeft={R.length(companyGoalsToShow()) > 0 ? "15px" : "0px"}
+          >
             {renderCreateCompanyAnnualInitiativeSection("company")}
           </CreateAnnualInitiativeContainer>
         </InitiativesContainer>
 
         <PersonalVisionContainer>
+          <TitleContainer
+            showMinimizedCards={showPersonalMinimizedCards}
+            setShowMinimizedCards={setShowPersonalMinimizedCards}
+            goalsFilter={personalGoalsFilter}
+            setGoalsFilter={setPersonalGoalsFilter}
+            largeHomeTitle={true}
+            title={"Personal"}
+          />
           <PersonalVision personalVision={personalGoals.personalVision} />
           <InitiativesContainer>
-            {renderAnnualInitiatives(personalGoals.goals)}
+            {renderAnnualInitiatives(personalGoalsToShow(), "personal")}
             <CreateAnnualInitiativeContainer
-              marginLeft={personalGoals.goals.length > 0 ? "15px" : "0px"}
+              marginLeft={R.length(personalGoalsToShow()) > 0 ? "15px" : "0px"}
             >
               {renderCreateCompanyAnnualInitiativeSection("personal")}
             </CreateAnnualInitiativeContainer>

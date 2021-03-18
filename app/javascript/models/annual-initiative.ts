@@ -19,6 +19,10 @@ export const AnnualInitiativeModel = types
     fiscalYear: types.maybeNull(types.number),
   })
   .views(self => ({
+    get closedInitiative() {
+      const { companyStore } = getRoot(self);
+      return companyStore.company.currentFiscalYear > self.fiscalYear;
+    },
     get myQuarterlyGoals() {
       const { sessionStore } = getRoot(self);
       return self.quarterlyGoals.filter(qg => qg.ownedById == sessionStore.profile.id);
