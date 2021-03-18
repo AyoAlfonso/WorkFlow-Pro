@@ -35,4 +35,5 @@ const ToolsWrapper = styled.div`
   width: 25%;
   margin-left: 20px;
   margin-right: 5px;
+  height: 100%;
 `;

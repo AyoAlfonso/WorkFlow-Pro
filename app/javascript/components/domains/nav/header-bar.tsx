@@ -411,20 +411,18 @@ const HeaderItemsContainer = styled.div`
   align-items: center;
 `;
 
-const Container = styled(HomeContainerBorders)`
-  height: 80px;
+const Container = styled.div`
+  height: 64px;
+  border-bottom: ${props => `1px solid ${props.theme.colors.borderGrey}`};
 `;
 
 const Wrapper = styled.div`
   background-color: white;
-  padding-top: 16px;
-  margin-left: 136px;
-  margin-top: -20px;
-  height: 90px;
+  height: 64px;
+  margin-left: 96px;
   position: fixed;
   z-index: 3;
   width: -webkit-fill-available;
-  padding-right: 38px;
 `;
 
 const ActionsContainer = styled.div`
