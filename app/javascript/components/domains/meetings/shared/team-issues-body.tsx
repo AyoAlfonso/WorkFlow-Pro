@@ -8,6 +8,7 @@ import { Icon, Loading } from "~/components/shared";
 import { IssueEntry } from "../../issues/issue-entry";
 import { useMst } from "~/setup/root";
 import * as R from "ramda";
+import { List } from "@material-ui/core";
 
 interface ITeamIssuesBodyProps {
   showOpenIssues: boolean;
@@ -63,7 +64,9 @@ export const TeamIssuesBody = observer(
             {`Add a ${company.displayFormat == "Forum" ? "Topic" : "Issue"}`}
           </AddNewIssueText>
         </AddNewIssueContainer>
-        <IssuesContainer meeting={meetingId ? true : false}>{renderIssuesList()}</IssuesContainer>
+        <IssuesContainer meeting={meetingId ? true : false}>
+          <List>{renderIssuesList()}</List>
+        </IssuesContainer>
       </Container>
     );
   },

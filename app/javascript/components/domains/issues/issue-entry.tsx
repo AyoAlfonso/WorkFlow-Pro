@@ -150,7 +150,11 @@ export const IssueEntry = observer(
               key={issue["id"]}
               checked={issue["completedAt"] ? true : false}
               onChange={e => {
-                issueStore.updateIssueStatus(issue, e.target.checked, meetingId ? true : false);
+                issueStore.updateIssueStatus(
+                  issue,
+                  e.target.checked,
+                  meetingId || teamId ? true : false,
+                );
               }}
               sx={{
                 color: baseTheme.colors.primary100,
