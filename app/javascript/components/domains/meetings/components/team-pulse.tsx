@@ -1,9 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
-import { Text } from "../../../shared/text";
 import { useMst } from "~/setup/root";
-import { HomeContainerBorders } from "../../home/shared-components";
-import { TeamPulseContainer } from "../shared/team-pulse-container";
+import { TeamPulseBody } from "./team-pulse-body";
 
 export const TeamPulse = (): JSX.Element => {
   const { meetingStore } = useMst();
@@ -11,14 +9,11 @@ export const TeamPulse = (): JSX.Element => {
 
   return (
     <Container>
-      <TeamPulseContainer meeting={meeting} />
+      <TeamPulseBody meeting={meeting} />
     </Container>
   );
 };
 
-const Container = styled(HomeContainerBorders)`
-  width: 650px;
-  margin-left: 15px;
-  margin-right: auto;
-  margin-top: 0;
+const Container = styled.div`
+  width: 100%;
 `;

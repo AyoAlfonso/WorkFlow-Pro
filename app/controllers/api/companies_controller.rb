@@ -21,7 +21,7 @@ class Api::CompaniesController < Api::ApplicationController
     elsif params[:logo].blank? && @company.logo_url.present?
       @company.logo.purge 
     end
-    SignUpPurpose.create(company_id: @company[:id], purpose: params[:sign_up_purpose_attributes][:purpose])
+    SignUpPurpose.create(company_id: @company[:id], purpose: params[:sign_up_purpose_attributes][:purpose]) if params[:sign_up_purpose_attributes].present?
     @user_role = UserRole.find_by(name: "CEO")
     UserCompanyEnablement.create(user_id: current_user.id, company_id: @company.id, user_role_id: @user_role.id)
     render json: @company.as_json(only: ['id', 'name', 'phone_number', 'rallying_cry', 'fiscal_year_start', 'timezone', 'display_format'],
@@ -76,7 +76,7 @@ class Api::CompaniesController < Api::ApplicationController
     # Lynchpyn Goal aka Rallying Cry
     @onboarding_company.update!(rallying_cry: params[:rallying_cry])
 
-    # Annual Goal aka Annual Initiative
+    # Annual Objective aka Annual Initiative
     annual_initiative = AnnualInitiative.where(company_id: @onboarding_company.id, 
       created_by: current_user, 
       owned_by: current_user,

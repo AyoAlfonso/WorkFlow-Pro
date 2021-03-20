@@ -256,7 +256,7 @@ export const SideNavNoMst = (
               linkText={t("company.accountabilityChart")}
             />
             {/* <SideNavChildLink to="/company/strategic_plan" linkText={`The ${company.name} Plan`} /> */}
-            <SideNavChildLink to="/company/strategic_plan" linkText={`The Lynchpyn Plan`} />
+            <SideNavChildLink to="/company/strategic_plan" linkText={`The LynchPyn Plan`} />
           </SideNavChildPopup>
         </SideNavChildPopupContainer>
       ) : (

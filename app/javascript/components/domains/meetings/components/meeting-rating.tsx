@@ -3,7 +3,7 @@ import { useState } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { Card, CardBody } from "../../../shared/card";
+import { CardBody } from "../../../shared/card";
 import { Text } from "../../../shared/text";
 import { useMst } from "~/setup/root";
 import { Avatar } from "~/components/shared/avatar";
@@ -124,34 +124,24 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
 
   return (
     <Container>
-      <Card
-        width={"720px"}
-        alignment={"left"}
-        headerComponent={
-          <Text fontSize={"20px"} fontWeight={"bold"}>
-            {t("meeting.meetingRating")}
-          </Text>
-        }
-      >
-        <CardBody>
-          <BodyContainer>
-            {renderUserRows(teamMembers)}
-            {renderUserRows(teamLeads)}
-          </BodyContainer>
-          <ButtonDiv>
-            <Button variant={"primaryOutline"} onClick={saveScores} small>
-              {t("meeting.saveRatings")}
-            </Button>
-          </ButtonDiv>
-        </CardBody>
-      </Card>
+      <CardBody>
+        <BodyContainer>
+          {renderUserRows(teamMembers)}
+          {renderUserRows(teamLeads)}
+        </BodyContainer>
+        <ButtonDiv>
+          <Button variant={"primaryOutline"} onClick={saveScores} small>
+            {t("meeting.saveRatings")}
+          </Button>
+        </ButtonDiv>
+      </CardBody>
     </Container>
   );
 };
 
 const Container = styled.div`
-  width: 100%;
-  margin-left: 15px;
+  width: 600px;
+  margin-left: 16px;
 `;
 
 const BodyContainer = styled.div`

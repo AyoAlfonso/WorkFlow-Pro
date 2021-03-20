@@ -47,7 +47,7 @@ export const InviteYourTeamBody = observer(
           </StyledHeading>
           <StyledTextField
             id="standard-textarea"
-            placeholder="e.g. steven@redbottlecoffee.com"
+            placeholder={`e.g. user@${companyStore.company.name.replace(/\s+/g, "")}.com`}
             multiline
             rows={4}
             variant="outlined"
@@ -110,7 +110,7 @@ const StyledTextField = styled(TextField)`
 
 const HelperText = styled.p`
   color: ${props => props.theme.colors.grey100};
-  font-size: 9px;
+  font-size: 11px;
 `;
 
 const StyledSelect = styled(Select)`

@@ -133,10 +133,10 @@
         "meetings": "Planning"
       },
       "annualInitiative": {
-        "enterTitle": "Enter Annual Goal Title...",
-        "add": "Add an Annual Goal",
-        "addInitiative": "Add Goal",
-        "messageText": "annual goal"
+        "enterTitle": "Enter Annual Objective Title...",
+        "add": "Add an Annual Objective",
+        "addInitiative": "Add Objective",
+        "messageText": "annual objective"
       },
       "quarterlyGoal": {
         "enterTitle": "Enter Quarterly Initiative Title...",

@@ -62,9 +62,12 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
       <StatusBlockColorIndicator milestones={quarterlyGoal.milestones || []} indicatorWidth={25} />
 
       <RowContainer>
-        <StyledText onClick={() => openQuarterlyGoalModal()}>
-          {quarterlyGoal.description}
-        </StyledText>
+        <DescriptionContainer>
+          <StyledText onClick={() => openQuarterlyGoalModal()}>
+            {quarterlyGoal.description}
+          </StyledText>
+        </DescriptionContainer>
+
         <IconContainer>
           <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} />
         </IconContainer>
@@ -130,4 +133,8 @@ const QuarterText = styled(Text)`
   color: white;
   margin-top: 8px;
   margin-bottom: 8px;
+`;
+
+const DescriptionContainer = styled.div`
+  overflow-wrap: anywhere;
 `;

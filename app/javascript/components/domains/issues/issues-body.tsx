@@ -14,6 +14,7 @@ import { sortByPosition } from "~/utils/sorting";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { HomeContainerBorders } from "../home/shared-components";
 import { AccordionDetails } from "~/components/shared/accordion-components";
+import { List } from "@material-ui/core";
 
 interface IIssuesBodyProps {
   showOpenIssues: boolean;
@@ -114,7 +115,7 @@ export const IssuesBody = observer(
                 </AddNewIssueText>
               </AddNewIssueContainer>
               <IssuesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
-                {renderIssuesList()}
+                <List>{renderIssuesList()}</List>
                 {provided.placeholder}
               </IssuesContainer>
             </IssuesBodyContainer>
@@ -129,7 +130,6 @@ const AccordionDetailsContainer = styled(AccordionDetails)`
   padding: 0px 0px 15px 0px;
   display: flex;
   flex-direction: column;
-  height: 500px;
 `;
 
 const AddNewIssuePlus = styled.div`

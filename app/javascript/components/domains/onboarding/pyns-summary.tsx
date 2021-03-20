@@ -22,9 +22,11 @@ export const PynsSummary = ({ goalData: { annualInitiative } }: IPynsSummaryProp
         These are your Weekly Milestones for this week
       </TextDiv>
       <TextDiv fontFamily={"Exo"} fontSize={"20px"} fontWeight={600}>
-        {quarterlyGoal.description}
+        {quarterlyGoal
+          ? quarterlyGoal.description
+          : "You do not have a quarterly goal created yet."}
       </TextDiv>
-      <MilestoneCard milestone={milestone} editable={false} />
+      {milestone && <MilestoneCard milestone={milestone} editable={false} />}
     </Container>
   );
 };

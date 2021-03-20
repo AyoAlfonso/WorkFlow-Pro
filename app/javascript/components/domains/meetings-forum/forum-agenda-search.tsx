@@ -19,7 +19,6 @@ import * as moment from "moment";
 import { meetingTypeParser } from "~/components/shared/agenda/meeting-type-parser";
 import { Text } from "~/components/shared/text";
 import { SelectedMeetingAgendaEntry } from "./components/selected-meeting-agenda-entry";
-import { SelectedMeetingNotes } from "./components/selected-meeting-notes";
 import { TeamMeetingButton } from "~/components/shared/team-meeting-button";
 import MeetingTypes from "~/constants/meeting-types";
 
@@ -138,7 +137,6 @@ export const ForumAgendaSearch = observer(() => {
           />
           <SelectedEntryContainer>
             <SelectedMeetingAgendaEntry selectedMeetingId={selectedMeeting.id} />
-            <SelectedMeetingNotes selectedMeetingId={selectedMeeting.id} />
           </SelectedEntryContainer>
         </>
       );

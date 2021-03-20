@@ -103,6 +103,6 @@ const BackButton = styled(Button)`
 
 const StepText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
-  font-size: 9px;
+  font-size: 11px;
   text-align: right;
 `;
