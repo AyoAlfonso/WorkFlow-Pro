@@ -23,7 +23,7 @@ RSpec.describe NotificationEmailJob, type: :job do
     end
 
     it 'should send an email' do
-      expect(ActionMailer::Base.deliveries.length).to eq(2) # user confirmation email and notification email
+      expect(ActionMailer::Base.deliveries.length).to eq(1)
       expect(ActionMailer::Base.deliveries.last.subject).to eq("FirstName, Create Your Day")
     end
   end
@@ -48,7 +48,7 @@ RSpec.describe NotificationEmailJob, type: :job do
     end
 
     it 'should send an email' do
-      expect(ActionMailer::Base.deliveries.length).to eq(2) # user confirmation email and notification email
+      expect(ActionMailer::Base.deliveries.length).to eq(1)
       expect(ActionMailer::Base.deliveries.last.subject).to eq("FirstName, Create Your Day")
     end
   end
@@ -71,8 +71,7 @@ RSpec.describe NotificationEmailJob, type: :job do
     end
 
     it 'should not send an email' do
-      expect(ActionMailer::Base.deliveries.length).to eq(1) # user confirmation email
-      expect(ActionMailer::Base.deliveries.last.subject.to_s).to eq(I18n.t 'devise.mailer.confirmation_instructions.subject')
+      expect(ActionMailer::Base.deliveries.length).to eq(0)
     end
   end
 
@@ -95,8 +94,7 @@ RSpec.describe NotificationEmailJob, type: :job do
     end
 
     it 'should not send an email' do
-      expect(ActionMailer::Base.deliveries.length).to eq(1) # user confirmation email and notification email
-      expect(ActionMailer::Base.deliveries.last.subject).to eq("Confirmation instructions")
+      expect(ActionMailer::Base.deliveries.length).to eq(0)
     end
   end
 
@@ -120,7 +118,7 @@ RSpec.describe NotificationEmailJob, type: :job do
     end
 
     it 'should send an email at 5:00 PM on Fridays' do
-      expect(ActionMailer::Base.deliveries.length).to eq(2) # user confirmation email and notification email
+      expect(ActionMailer::Base.deliveries.length).to eq(1)
       expect(ActionMailer::Base.deliveries.last.subject.to_s).to eq("FirstName, Time to Plan for Next Week")
     end
   end
@@ -149,8 +147,7 @@ RSpec.describe NotificationEmailJob, type: :job do
         end
       end
       it "should not send an email" do
-        expect(ActionMailer::Base.deliveries.length).to eq(1) # user confirmation email and notification email
-        expect(ActionMailer::Base.deliveries.last.subject).to_not eq("FirstName, Your Upcoming Weekly Alignment Meeting")
+        expect(ActionMailer::Base.deliveries.length).to eq(0)
       end
     end
 
@@ -170,7 +167,7 @@ RSpec.describe NotificationEmailJob, type: :job do
         end
       end
       it 'should send an email if the notification is scheduled during the job run time' do
-        expect(ActionMailer::Base.deliveries.length).to eq(2) # user confirmation email and notification email
+        expect(ActionMailer::Base.deliveries.length).to eq(1)
         expect(ActionMailer::Base.deliveries.last.subject).to eq("FirstName, Your Upcoming Weekly Alignment Meeting")
       end
     end
