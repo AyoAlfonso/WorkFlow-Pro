@@ -23,7 +23,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
   const [formData, setFormData] = useState<any>({});
   const [goalData, setGoalData] = useState<any>({});
   const [pynsData, setPynsData] = useState<any>({});
-  const [teamData, setTeamData] = useState<string>("");
+  const [teamData, setTeamData] = useState<any>({});
 
   const loadOnboarding = useCallback(async () => {
     const { onboardingDisplayFormat, onboardingCompany } = companyStore;
@@ -160,15 +160,28 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         }
       });
     } else if (currentStep === 4) {
-      submitTeamDataAndComplete().then(res => {
-        companyStore.closeOnboardingModal();
-      });
+      if (!teamData["emails"]) {
+        //CHRIS' NOTE: THE INDENTATION IS ON PURPOSE. DO NOT FIX IT.
+        if (
+          confirm(`Are you sure you don't want to invite other team members? 
+          \n
+True value of LynchPyn is in working together with others in your team and company. Add a few others in your team to get the most out of the platform!`)
+        ) {
+          submitTeamDataAndComplete().then(res => {
+            companyStore.closeOnboardingModal();
+          });
+        }
+      } else {
+        submitTeamDataAndComplete().then(res => {
+          companyStore.closeOnboardingModal();
+        });
+      }
     }
   };
 
   const hasCreationParams = () =>
     R.pipe(
-      R.props(["name", "logo", "timezone", "fiscalYearStart", "signUpPurposeAttributes"]),
+      R.props(["name", "timezone", "fiscalYearStart"]),
       R.none(R.or(R.isNil, R.isEmpty)),
     )(formData);
 
@@ -195,7 +208,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
           options: timeZonesWithNull(),
         },
         {
-          label: "Why did you decide to sign up for Lynchpyn?",
+          label: "Why did you decide to sign up for LynchPyn? (Optional)",
           fieldType: EFieldType.TextField,
           formKeys: ["signUpPurposeAttributes", "purpose"],
           callback: setFormState,
@@ -250,15 +263,15 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
           fieldType: EFieldType.TextField,
           formKeys: ["rallyingCry"],
           callback: setGoalDataState,
-          subText: `Awesome ${profile.firstName}! This is what we call your Lynchpyn Goal. This is the ultimate filter when the company is making any strategic decisions until it's achieved`,
+          subText: `Awesome ${profile.firstName}! This is what we call your LynchPyn Goal. This is the ultimate filter when the company is making any strategic decisions until it's achieved`,
         },
         {
           label:
-            "What's a specific Goal you can set for the next year to achieve your Lynchpyn Goal? This can be specific to your team.",
+            "What's a specific Goal you can set for the next year to achieve your LynchPyn Goal? This can be specific to your team.",
           fieldType: EFieldType.TextField,
           formKeys: ["annualInitiative", "description"],
           callback: setGoalDataState,
-          subText: `Nice going.  This is your Annual Goal.  By adding an Annual Goal you can start a "lane" where Quarterly Initiatives can be added`,
+          subText: `Nice going.  This is your Annual Objective.  By adding an Annual Objective you can start a "lane" where Quarterly Initiatives can be added`,
         },
         {
           label: `What would be an Initiative you can take on this quarter towards "${R.pathOr(
@@ -302,7 +315,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
           formKeys: ["emails"],
           callback: setTeamDataState,
           subText: "Use commas to separate different emails",
-          placeholder: "e.g. steven@redbottlecoffee.com,janice@redbottlecoffee.com",
+          placeholder: `e.g. user@${formData.name.replace(/\s+/g, "").toLowerCase()}.com`,
           style: { resize: "vertical", marginBottom: "16px" },
           rows: 8,
         },
@@ -341,7 +354,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
       formContainerStyle={{ height: "140px" }}
       stepwise={true}
     />,
-    <AddPyns formData={pynsData} goalData={goalData} setPynsDataState={setPynsDataState} />,
+    <AddPyns formData={formData} />,
     <FormBuilder
       formFields={leftBodyComponentProps[3].formFields}
       formData={teamData}
@@ -350,7 +363,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
     />,
   ];
 
-  const bulletContainerStyle = { height: "175px", marginBottom: "24px", marginTop: "18px" };
+  const bulletContainerStyle = { height: "108px", paddingTop: "88px" };
 
   const rightBodyComponents = [
     <FormBuilder
@@ -427,6 +440,8 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         nextButtonDisabled={!hasCreationParams()}
         onStepClick={onStepClick}
         stepClickDisabled={currentStep === 0}
+        completeButtonText={"Send Invites and Complete"}
+        finalButtonDisabled={!teamData}
       />
     </Container>
   );

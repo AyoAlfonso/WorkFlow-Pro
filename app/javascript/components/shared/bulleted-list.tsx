@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as R from "ramda";
 import styled from "styled-components";
 
 import { TextDiv } from "~/components/shared";
@@ -29,16 +28,16 @@ export const BulletedList = ({
     <Container align={align} style={containerStyle}>
       {heading ? (
         <HeadingContainer style={headingStyle}>
-          <TextDiv color={"grey100"} fontStyle={"italic"} fontSize={"12px"}>
+          <StyledTextDiv color={"grey100"} fontStyle={"italic"} fontSize={"16px"}>
             {heading}
-          </TextDiv>
+          </StyledTextDiv>
           <ListContainer>
             {listItems.map((li, idx) => (
               <ListItem style={listItemStyle} key={idx}>
                 <TextDiv
                   color={"grey100"}
                   fontStyle={"italic"}
-                  fontSize={"12px"}
+                  fontSize={"16px"}
                 >{`• ${li}`}</TextDiv>
               </ListItem>
             ))}
@@ -77,3 +76,7 @@ const HeadingContainer = styled.div``;
 const ListContainer = styled.div``;
 
 const ListItem = styled.div``;
+
+const StyledTextDiv = styled(TextDiv)`
+  margin-bottom: 4px;
+`;

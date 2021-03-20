@@ -16,6 +16,17 @@ import { Input, Label, Select, TextArea, TextDiv } from "~/components/shared";
 
 import * as moment from "moment";
 
+import { createStyles, makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme =>
+  createStyles({
+    previewChip: {
+      minWidth: 160,
+      maxWidth: 210,
+    },
+  }),
+);
+
 export enum EFieldType {
   TextField = "TEXT_FIELD",
   TextArea = "TEXT_AREA",
@@ -51,6 +62,7 @@ export const FormBuilder = ({
   formFields,
   stepwise,
 }: IFormBuilderProps): JSX.Element => {
+  const classes = useStyles();
   const formComponent = (formField: IFormField) => {
     const { fieldType, formKeys, options, callback, style, placeholder, rows } = formField;
     switch (fieldType) {
@@ -64,6 +76,7 @@ export const FormBuilder = ({
             style={{ ...style }}
             value={R.pathOr("", formKeys, formData)}
             placeholder={placeholder ? placeholder : ""}
+            maxLength={140}
           />
         );
       case "TEXT_AREA":
@@ -89,16 +102,21 @@ export const FormBuilder = ({
             Icon={null}
             acceptedFiles={["image/*"]}
             dropzoneText={dropZoneText}
+            useChipsForPreview
             onAdd={(f: any) => {
               callback(formKeys, f);
             }}
             onDelete={(f: any) => {
               callback(formKeys, []);
             }}
-            showPreviewsInDropzone={true}
+            showPreviews={true}
+            showPreviewsInDropzone={false}
             filesLimit={1}
             maxFileSize={2000000}
             fileObjects={R.path(formKeys, formData) ? R.path(formKeys, formData) : []}
+            previewGridProps={{ container: { spacing: 1, direction: "row" } }}
+            previewChipProps={{ classes: { root: classes.previewChip } }}
+            previewText="Selected files"
           />
         );
       case "SELECT":
@@ -178,7 +196,7 @@ export const FormBuilder = ({
                 <Label>{formField.label}</Label>
                 {formComponent(formField)}
                 {formField.subText && (
-                  <TextDiv fontSize={"9px"} color={"grey100"}>
+                  <TextDiv fontSize={"11px"} color={"grey100"}>
                     {formField.subText}
                   </TextDiv>
                 )}

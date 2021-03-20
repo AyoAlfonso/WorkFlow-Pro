@@ -69,7 +69,8 @@ export const AnnualInitiativeCard = ({
   return (
     <Container
       key={index}
-      margin-right={index + 1 == totalNumberOfAnnualInitiatives ? "0px" : "15px"}
+      marginRight={index + 1 == totalNumberOfAnnualInitiatives ? "0px" : "15px"}
+      onboarding={onboarding}
     >
       <HeaderContainer>
         <DescriptionContainer
@@ -107,10 +108,15 @@ export const AnnualInitiativeCard = ({
   );
 };
 
-const Container = styled(HomeContainerBorders)`
-  width: calc(20% - 15px);
+type ContainerProps = {
+  onboarding: boolean;
+  marginRight: string;
+};
+
+const Container = styled(HomeContainerBorders)<ContainerProps>`
+  width: ${props => (props.onboarding ? "-webkit-fill-available" : "calc(20% - 15px)")};
   min-width: 240px;
-  margin-right: ${props => props["margin-right"] || "0px"};
+  margin-right: ${props => props.marginRight || "0px"};
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -120,7 +126,9 @@ const Container = styled(HomeContainerBorders)`
   }
 `;
 
-const DescriptionContainer = styled.div``;
+const DescriptionContainer = styled.div`
+  overflow-wrap: anywhere;
+`;
 
 const StyledText = styled(Text)`
   padding-left: 16px;

@@ -28,6 +28,7 @@ interface ICreateKeyActivityModalProps {
   defaultSelectedGroupId?: number;
   defaultSelectedTeamId?: number;
   todayFilterGroupId?: number;
+  onboardingCompanyId?: number;
 }
 
 export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX.Element => {
@@ -167,6 +168,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                   personal: personal,
                   scheduledGroupId: selectedGroupId,
                   teamId: selectedTeamId,
+                  onboardingCompanyId: props.onboardingCompanyId,
                 })
                 .then(result => {
                   if (result) {

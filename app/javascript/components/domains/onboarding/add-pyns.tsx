@@ -1,64 +1,55 @@
 import * as React from "react";
-import * as R from "ramda";
 import styled from "styled-components";
 import moment from "moment";
-import { baseTheme } from "~/themes/base";
-
-import { IconButton, TextDiv } from "~/components/shared";
-import { Pyn } from "./pyn";
+import { TextDiv } from "~/components/shared";
+import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
+import { CreateKeyActivityButton } from "../key-activities/create-key-activity-button";
+import { KeyActivitiesList } from "../key-activities/key-activities-list";
+import { useState } from "react";
+import { observer } from "mobx-react";
+import { useMst } from "~/setup/root";
+import { toJS } from "mobx";
 
 interface IAddPyns {
   formData: any;
-  goalData: any;
-  setPynsDataState: (keys: Array<string>, value: any) => void;
 }
 
-export const AddPyns = ({ formData, goalData, setPynsDataState }: IAddPyns): JSX.Element => {
-  const addPyn = () => {
-    const newPynKey = R.pipe(
-      R.keys,
-      R.sort((a, b) => a - b),
-      R.last,
-      R.ifElse(R.isNil, () => 0, R.inc),
-    )(formData);
-    setPynsDataState([`${newPynKey}`, "description"], "");
-  };
+export const AddPyns = observer(
+  ({ formData }: IAddPyns): JSX.Element => {
+    const { keyActivityStore } = useMst();
 
-  interface IPyn {
-    description: string;
-    position: number;
-  }
+    const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
-  const renderPyns = () => {
-    return Object.entries(formData).map(([key, pyn]: [string, IPyn]) => {
-      return <Pyn key={key} pynDataKey={key} pyn={pyn} onEditPyn={setPynsDataState} />;
-    });
-  };
+    return (
+      <Container>
+        <TextDiv fontFamily={"Exo"} fontSize={"22px"} fontWeight={600}>
+          Today
+        </TextDiv>
+        <TextDiv fontSize={"16px"} color={"greyInactive"} my={"16px"}>
+          {moment().format("MMMM D")}
+        </TextDiv>
+        <KeyActivitiesListContainer>
+          <CreateKeyActivityButton
+            onButtonClick={() => {
+              setCreateKeyActivityModalOpen(true);
+            }}
+          />
+          <KeyActivitiesList
+            keyActivities={toJS(keyActivityStore.keyActivitiesForOnboarding)}
+            droppableId={`todays-activities`}
+          />
+        </KeyActivitiesListContainer>
 
-  return (
-    <Container>
-      <TextDiv fontFamily={"Exo"} fontSize={"20px"} fontWeight={600}>
-        Today
-      </TextDiv>
-      <TextDiv fontSize={"12px"} color={"greyInactive"} my={"16px"}>
-        {moment().format("MMMM D")}
-      </TextDiv>
-      <IconButton
-        iconName={"Plus"}
-        iconSize={"20px"}
-        iconColor={"greyInactive"}
-        onClick={() => addPyn()}
-        text={"Add a Pyn"}
-        textColor={"greyInactive"}
-        shadow
-        height={36}
-        width={"50%"}
-        px={"8px"}
-      />
-      <PynsContainer>{renderPyns()}</PynsContainer>
-    </Container>
-  );
-};
+        <CreateKeyActivityModal
+          createKeyActivityModalOpen={createKeyActivityModalOpen}
+          setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+          defaultTypeAsWeekly={true}
+          onboardingCompanyId={formData.id}
+        />
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
   height: 100%;
@@ -67,11 +58,6 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const PynsContainer = styled.div`
+const KeyActivitiesListContainer = styled.div`
   height: 100%;
-  width: 100%;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  margin-right: 16px;
 `;

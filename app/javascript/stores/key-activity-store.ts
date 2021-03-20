@@ -11,6 +11,7 @@ export const KeyActivityStoreModel = types
   .props({
     keyActivities: types.array(KeyActivityModel),
     keyActivitiesFromMeeting: types.array(KeyActivityModel),
+    keyActivitiesForOnboarding: types.array(KeyActivityModel),
     loading: types.maybeNull(types.boolean),
     loadingList: types.maybeNull(types.string),
   })
@@ -133,7 +134,12 @@ export const KeyActivityStoreModel = types
         keyActivityObject,
       );
       if (response.ok) {
-        self.keyActivities = response.data;
+        if(keyActivityObject.onboardingCompanyId){
+          self.keyActivitiesForOnboarding = response.data
+        } else {
+          self.keyActivities = response.data;
+        }
+        
         showToast("Pyn created.", ToastMessageConstants.SUCCESS);
         return true;
       } else {

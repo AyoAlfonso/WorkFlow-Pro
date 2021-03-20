@@ -35,7 +35,7 @@ en:
   accountability_chart: "Accountability Matrix"
   core_four: "Foundational Four"
   strategic_plan: "Strategic Plan"
-  rallying_cry: "Lynchpyn Goal"
+  rallying_cry: "LynchPyn Goal"
   notification_rules:
     every: "Every Day"
     sunday: "Sunday"
@@ -59,8 +59,8 @@ en:
         one: Quarterly Initiative
         other: Quarterly Initiatives
       annual_initiative:
-        one: Annual Goal
-        other: Annual Goals
+        one: Annual Objective
+        other: Annual Objectives
       core_four:
         one: Foundational Four
         other: Foundational Four

@@ -28,6 +28,8 @@ interface IWizardLayoutProps {
   nextButtonDisabled?: boolean;
   onStepClick?: (stepIndex: number) => void;
   stepClickDisabled?: boolean;
+  completeButtonText?: string;
+  finalButtonDisabled?: boolean;
 }
 
 export const WizardLayout = ({
@@ -52,6 +54,8 @@ export const WizardLayout = ({
   nextButtonDisabled,
   onStepClick,
   stepClickDisabled,
+  completeButtonText,
+  finalButtonDisabled,
 }: IWizardLayoutProps): JSX.Element => {
   const renderActionButtons = (): JSX.Element => {
     return (
@@ -71,9 +75,9 @@ export const WizardLayout = ({
             small
             variant={"primary"}
             onClick={onNextButtonClick}
-            disabled={nextButtonDisabled}
+            disabled={currentStep === steps.length - 1 ? finalButtonDisabled : nextButtonDisabled}
           >
-            {currentStep === steps.length - 1 ? "Send Invites and Complete" : "Next"}
+            {currentStep === steps.length - 1 ? completeButtonText || "Complete" : "Next"}
           </NextButton>
         </>
       )

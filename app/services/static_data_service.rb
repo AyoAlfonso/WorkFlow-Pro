@@ -16,7 +16,7 @@ class StaticDataService < ApplicationService
           {label: "Logo (preferably horizontal logos)", key: "logo"},
           {label: "Timezone", key: "timezone"},
           {label: "Fiscal Year Start", key: "fiscal_year_start"},
-          {label: "Why did you decide to sign up for LynchPyn?", key: "sign_up_purpose"}
+          {label: "Why did you decide to sign up for LynchPyn? (Optional)", key: "sign_up_purpose"}
         ]
       },
       "1": {
@@ -54,7 +54,7 @@ class StaticDataService < ApplicationService
     {
       "0": {
         heading: "Welcome!",
-        description: "Add some basic info about your {displayFormat} so we can set up an instance of Lynchpyn for you.",
+        description: "Add some basic info about your {displayFormat} so we can set up an instance of LynchPyn for you.",
         stepLabel: "Tell us more about yourself"
       },
       "1": {
@@ -68,7 +68,7 @@ class StaticDataService < ApplicationService
         stepLabel: "Create your first Goal"
       },
       "3": {
-        heading: "Pyns™",
+        heading: "Pyns",
         description: "Pyns are the LynchPyn version of to-dos.  Review the Weekly Milestone you just defined; what can you do today towards it?  Add it as a Pyn.",
         stepLabel: "Add your first Pyn (todo)"
       },

@@ -190,6 +190,6 @@ const FooterText = styled(TextDiv)`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  font-size: 9px;
+  font-size: 11px;
   margin-top: 16px;
 `;

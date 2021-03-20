@@ -11,12 +11,14 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def create
-    @key_activity = KeyActivity.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], meeting_id: params[:meeting_id], due_date: params[:due_date], company_id: current_company.id, personal: params[:personal], label_list: params[:label] && params[:label][:name], scheduled_group_id: params[:scheduled_group_id], team_id: params[:team_id] })
+    @key_activity = KeyActivity.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], meeting_id: params[:meeting_id], due_date: params[:due_date], company_id: params[:onboarding_company_id] || current_company.id, personal: params[:personal], label_list: params[:label] && params[:label][:name], scheduled_group_id: params[:scheduled_group_id], team_id: params[:team_id] })
     authorize @key_activity
     @key_activity.insert_at(1)
     @key_activity.save!
 
-    if params[:meeting_id]
+    if params[:onboarding_company_id]
+      @key_activities_to_render = KeyActivity.where(company_id: params[:onboarding_company_id])
+    elsif params[:meeting_id]
       meeting = Meeting.find(params[:meeting_id])
       @key_activities_to_render = team_meeting_activities(params[:meeting_id]).exclude_personal_for_team
     else

@@ -25,19 +25,19 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
       {!R.isNil(rallyingCry) && (
         <SectionContainer>
           <RallyingCryContainer>
-            <TextDiv fontSize={"20px"} color={"primary100"} mr={"8px"}>
+            <TextDiv fontSize={"22px"} color={"primary100"} mr={"8px"}>
               Lynchpyn Goal
             </TextDiv>
-            <TextDiv fontSize={"12px"} color={"black"}>
+            <WrappedTextDiv fontSize={"16px"} color={"black"} ml={"auto"} mr={"auto"}>
               {rallyingCry}
-            </TextDiv>
+            </WrappedTextDiv>
           </RallyingCryContainer>
         </SectionContainer>
       )}
       {!R.isNil(annualInitiative) && (
         <SectionContainer>
-          <TextDiv fontSize={"12px"} color={"primary100"} mb={"6px"}>
-            Annual Goal
+          <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"}>
+            Annual Objective
           </TextDiv>
           <AnnualInitiativeContainer>
             <AnnualInitiativeCard
@@ -53,7 +53,7 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
       )}
       {!R.isNil(quarterlyGoal) && (
         <SectionContainer>
-          <TextDiv fontSize={"12px"} color={"primary100"} mb={"6px"}>
+          <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"}>
             Quarterly Initiative
           </TextDiv>
           <QuarterlyGoalCardContainer>
@@ -66,7 +66,7 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
       )}
       {!R.isNil(milestone) && (
         <SectionContainer>
-          <TextDiv fontSize={"12px"} color={"primary100"} mb={"6px"}>
+          <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"}>
             Weekly Milestone
           </TextDiv>
           <MilestoneCard milestone={milestone} editable={false} />
@@ -91,7 +91,7 @@ const SectionContainer = styled.div<SpaceProps>`
 
 const RallyingCryContainer = styled.div`
   height: 64px;
-  width: 100%;
+  width: -webkit-fill-available;
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 10px;
   display: flex;
@@ -107,5 +107,8 @@ const QuarterlyGoalCardContainer = styled.div`
   width: 100%;
   border-radius: 10px;
   box-shadow: 0px 3px 6px #00000029;
-  padding: 16px 16px 0 16px;
+`;
+
+const WrappedTextDiv = styled(TextDiv)`
+  overflow-wrap: anywhere;
 `;
