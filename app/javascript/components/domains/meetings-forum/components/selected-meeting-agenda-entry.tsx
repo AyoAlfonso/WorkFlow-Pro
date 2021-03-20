@@ -52,13 +52,12 @@ export const SelectedMeetingAgendaEntry = observer(
     const [location, setLocation] = useState<string>("");
     const explorationTopicRef = useRef(null);
     const [explorationTopic, setExplorationTopic] = useState<string>("");
-    const [newScheduledStartTime, setNewScheduledStartTime] = useState<string>(
-      selectedMeeting.scheduledStartTime,
-    );
+    const [newScheduledStartTime, setNewScheduledStartTime] = useState<string>("");
 
     useEffect(() => {
       setLocation(R.path(["forumLocation"], selectedMeeting.settings));
       setExplorationTopic(R.path(["forumExplorationTopic"], selectedMeeting.settings));
+      setNewScheduledStartTime(selectedMeeting.scheduledStartTime);
     }, [selectedMeeting.id]);
 
     const teamMembers = teams.find(team => team.id == selectedMeeting.teamId)["users"];

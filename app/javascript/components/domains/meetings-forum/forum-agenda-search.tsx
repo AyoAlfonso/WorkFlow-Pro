@@ -134,15 +134,10 @@ export const ForumAgendaSearch = observer(() => {
         <>
           <TeamMeetingButton handleMeetingClick={handleMeetingClick} disabled={!inCurrentMonth} />
           <SelectedEntryContainer>
-<<<<<<< HEAD
-            <SelectedMeetingAgendaEntry selectedMeetingId={selectedMeeting.id} />
-=======
             <SelectedMeetingAgendaEntry
               selectedMeetingId={selectedMeeting.id}
               disabled={!inCurrentMonth || selectedMeeting.ended}
             />
-            <SelectedMeetingNotes selectedMeetingId={selectedMeeting.id} />
->>>>>>> [ch30623][ch30527] updating exploration topics styling
           </SelectedEntryContainer>
         </>
       );
