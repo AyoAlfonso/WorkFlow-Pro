@@ -9,7 +9,10 @@ export const MonthContainer = styled.div`
 export const ColumnContainer = styled.div`
   width: 50%;
   min-width: 240px;
-  display: flex;
+  margin-right: 16px;
+`;
+
+export const ColumnContainerCenterAligned = styled(ColumnContainer)`
   margin-top: auto;
   margin-bottom: auto;
 `;
