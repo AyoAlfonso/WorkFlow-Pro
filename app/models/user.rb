@@ -89,7 +89,7 @@ class User < ApplicationRecord
   end
 
   def company_admin?(company)
-    company_role = user.company_user_enablements(company: company).first&.role
+    company_role = self.user_company_enablements.find_by_company_id(company.id)&.user_role&.name
     company_role == UserRole::CEO || company_role == UserRole::ADMIN
   end
 
