@@ -216,7 +216,7 @@ export const HeaderBar = observer(
               setShowAccountActions(false);
             }}
           >
-            Show Helpdesk
+            Help
           </AccountOptionText>
         </AccountOption>
       );
@@ -270,6 +270,9 @@ export const HeaderBar = observer(
           </AccountOption>
           {renderSwitchCompanyOptions()}
           {renderShowHelpdesk()}
+          <AccountOption id="lynchpyn-whats-new">
+            <AccountOptionText>What's New?</AccountOptionText>
+          </AccountOption>
           {process.env.QA_SHOW_CREATE_COMPANY_FORUM_MENU == "true" && (
             <AccountOption
               style={{ position: "relative" }}
