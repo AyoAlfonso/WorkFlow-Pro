@@ -9,23 +9,23 @@ class QuarterlyGoalPolicy < ApplicationPolicy
   end
 
   def show?
-    @user.companies.pluck(:id).include?(@record.annual_initiative.company_id) || @record.owned_by == @user
+    user_is_part_of_this_company?(@record.annual_initiative.company) || @record.owned_by == @user
   end
 
   def update?
-    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 
   def destroy?
-    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 
   def create_key_element?
-    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 
   def create_milestones?
-    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 
   def create_or_update_onboarding_goals?

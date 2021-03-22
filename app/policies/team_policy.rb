@@ -9,15 +9,15 @@ class TeamPolicy < ApplicationPolicy
   end
 
   def update?
-    (@user.company_admin? || @record.is_lead?(@user)) && @user.companies.include?(@record.company)
+    user_is_part_of_current_company? && (@user.company_admin?(company) || @record.is_lead?(@user))
   end
 
   def create_team_and_invite_users?
-    (@user.company_admin? || @record.is_lead?(@user)) && @user.companies.include?(@record.company)
+    user_is_part_of_current_company? && (@user.company_admin?(company) || @record.is_lead?(@user))
   end
 
   def destroy?
-    (@user.company_admin? || @record.is_lead?(@user)) && @user.companies.include?(@record.company)
+    user_is_part_of_current_company? && (@user.company_admin?(company) || @record.is_lead?(@user))
   end
 
   def create_or_update_onboarding_team? 

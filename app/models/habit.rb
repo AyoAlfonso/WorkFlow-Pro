@@ -267,7 +267,7 @@ class Habit < ApplicationRecord
   end
 
   def habit_user_company
-    self.user.company
+    self.user.default_selected_company #database default company, not session company
   end
 
   def sanitize_name

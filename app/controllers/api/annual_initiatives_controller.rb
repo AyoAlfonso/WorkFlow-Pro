@@ -11,7 +11,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
       company_id: params[:type] == "company" ? current_company.id : nil,
       context_description: "",
       importance: ["", "", ""],
-      fiscal_year: current_user.company.year_for_creating_annual_initiatives
+      fiscal_year: current_company.year_for_creating_annual_initiatives
     })
     authorize @annual_initiative
     @annual_initiative.save!
@@ -19,12 +19,12 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   end
 
   def show
-    @company = current_user.company
+    @company = current_company
     render 'api/annual_initiatives/show'
   end
 
   def update
-    @company = current_user.company
+    @company = current_company
     @annual_initiative.update!(annual_initiative_params)
     render 'api/annual_initiatives/update'
   end
@@ -41,7 +41,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
 
   def team
     @team_id = params[:team_id]
-    @company = current_user.company
+    @company = current_company
     @annual_initiatives = AnnualInitiative.where(company_id: current_company.id).for_company_current_year_and_future(@company.current_fiscal_year)
     authorize @annual_initiatives
     render 'api/annual_initiatives/team'

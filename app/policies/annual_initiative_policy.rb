@@ -9,19 +9,19 @@ class AnnualInitiativePolicy < ApplicationPolicy
   end
 
   def show?
-    @user.companies.pluck(:id).include?(@record.company_id) || @record.owned_by == @user 
+    user_is_part_of_this_company?(@record.company) || @record.owned_by == @user 
   end
 
   def update?
-    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 
   def destroy?
-    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 
   def create_key_element?
-    @record.created_by == @user || @record.owned_by == @user || @user.company_admin?
+    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 
   def team?
@@ -46,7 +46,7 @@ class AnnualInitiativePolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes([:key_elements, {owned_by: [:user_role, :avatar_attachment, :company]}]).user_current_company(@company.id)
+      scope.includes([:key_elements, {owned_by: [:avatar_attachment]}]).user_current_company(@company.id)
     end
   end
 end

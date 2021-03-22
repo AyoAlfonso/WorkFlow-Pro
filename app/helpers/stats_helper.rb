@@ -16,7 +16,7 @@ module StatsHelper
   end
   
   def quarterly_milestone_progress(current_user)
-    current_quarter = current_user.company.current_fiscal_quarter
+    current_quarter = current_company.current_fiscal_quarter
     #TODO: NEED TO ADD THE CURRENT YEAR HERE
     #milestones for this week and in team
     completed_milestones = Milestone.for_user_on_quarter(current_user, current_quarter).completed.count

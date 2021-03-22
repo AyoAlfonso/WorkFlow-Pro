@@ -3,7 +3,7 @@ import { RouterModel } from "mst-react-router";
 import { UserStoreModel, IUserStore } from "./user-store";
 import { IssueStoreModel, IIssueStore } from "./issue-store";
 import { KeyActivityStoreModel, IKeyActivityStore } from "./key-activity-store";
-import { LabelStoreModel, ILabelStore } from './label-store';
+import { LabelStoreModel, ILabelStore } from "./label-store";
 import { SessionStoreModel, ISessionStore } from "./session-store";
 import { CompanyStoreModel, ICompanyStore } from "./company-store";
 import { ForumStoreModel, IForumStore } from "./forum-store";

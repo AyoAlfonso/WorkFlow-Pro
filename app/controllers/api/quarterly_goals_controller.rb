@@ -4,13 +4,13 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   respond_to :json
 
   def index
-    company_current_quarter = current_user.company.current_fiscal_quarter
-    @quarterly_goals = policy_scope(QuarterlyGoal).owned_by_user(current_user.company).present_or_future(company_current_quarter).sort_by_created_date
+    company_current_quarter = current_company.current_fiscal_quarter
+    @quarterly_goals = policy_scope(QuarterlyGoal).owned_by_user(current_company).present_or_future(company_current_quarter).sort_by_created_date
     render "/api/quarterly_goals/index"
   end
 
   def create
-    company = current_user.company
+    company = current_company
 
     @quarterly_goal = QuarterlyGoal.new({
       created_by: current_user, 
@@ -47,7 +47,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def create_milestones
-    @quarterly_goal.create_milestones_for_quarterly_goal(current_user, current_user.company)
+    @quarterly_goal.create_milestones_for_quarterly_goal(current_user, current_company)
     render "api/quarterly_goals/create_milestones"
   end
 
