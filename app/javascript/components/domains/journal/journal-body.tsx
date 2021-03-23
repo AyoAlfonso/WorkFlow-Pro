@@ -184,6 +184,8 @@ const SpeechBubble = styled.div`
   text-align: center;
   text-overflow: ellipsis;
   width: 70%;
+  margin-top: auto;
+  margin-bottom: auto;
 `;
 
 const FooterText = styled(TextDiv)`
