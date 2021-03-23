@@ -20,6 +20,7 @@ import {
   emotionE,
 } from "~/components/shared/pulse/pulse-icon";
 import { AccountDropdownOptions } from "./top-nav/account-dropdown-options";
+import { InviteYourTeamModal } from "../account/users/invite-your-team-modal";
 
 declare global {
   interface Window {
@@ -34,6 +35,7 @@ export const HeaderBar = observer(
     const [showAccountActions, setShowAccountActions] = useState<boolean>(false);
     const [inviteUserModalOpen, setInviteUserModalOpen] = useState<boolean>(false);
     const [showCompanyOptions, setShowCompanyOptions] = useState<boolean>(false);
+    const [inviteTeamModalOpen, setInviteTeamModalOpen] = useState<boolean>(false);
 
     const { sessionStore, companyStore, meetingStore, userStore, teamStore } = useMst();
     const accountActionRef = useRef(null);
@@ -109,6 +111,7 @@ export const HeaderBar = observer(
             setShowAccountActions={setShowAccountActions}
             showCompanyOptions={showCompanyOptions}
             setShowCompanyOptions={setShowCompanyOptions}
+            setInviteTeamModalOpen={setInviteTeamModalOpen}
           />
         )
       );
@@ -161,6 +164,11 @@ export const HeaderBar = observer(
               setInviteUserModalOpen={setInviteUserModalOpen}
             />
           )}
+
+          <InviteYourTeamModal
+            modalOpen={inviteTeamModalOpen}
+            setModalOpen={setInviteTeamModalOpen}
+          />
         </Container>
       </Wrapper>
     );

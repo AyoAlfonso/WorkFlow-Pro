@@ -12,13 +12,13 @@ import { toJS } from "mobx";
 import { baseTheme } from "~/themes";
 import { useMst } from "~/setup/root";
 import { Avatar, Heading, Icon, Text } from "~/components/shared";
-import { InviteYourTeamModal } from "../../account/users/invite-your-team-modal";
 
 interface IAccountDropdownOptionsProps {
   accountActionRef: any;
   setShowAccountActions: any;
   showCompanyOptions: boolean;
   setShowCompanyOptions: any;
+  setInviteTeamModalOpen: any;
 }
 
 export const AccountDropdownOptions = observer(
@@ -27,9 +27,9 @@ export const AccountDropdownOptions = observer(
     setShowAccountActions,
     showCompanyOptions,
     setShowCompanyOptions,
+    setInviteTeamModalOpen,
   }: IAccountDropdownOptionsProps): JSX.Element => {
     const [showCompanyCreationSelector, setShowCompanyCreationSelector] = useState<boolean>(false);
-    const [inviteTeamModalOpen, setInviteTeamModalOpen] = useState<boolean>(false);
 
     const { sessionStore, companyStore, meetingStore, userStore, teamStore } = useMst();
     const { onboardingCompany } = companyStore;
@@ -170,12 +170,17 @@ export const AccountDropdownOptions = observer(
 
         <DropdownSectionContainer>
           <Link to="/account" style={{ textDecoration: "none", padding: "0" }}>
-            <AccountOptionText color={baseTheme.colors.primary100}>
+            <AccountOptionText
+              color={baseTheme.colors.primary100}
+              onClick={() => setShowAccountActions(false)}
+            >
               {t("profile.growthPlan")}
             </AccountOptionText>
           </Link>
           <Link to="/account" style={{ textDecoration: "none", padding: "0" }}>
-            <AccountOptionText>{t("profile.accountSettings")}</AccountOptionText>
+            <AccountOptionText onClick={() => setShowAccountActions(false)}>
+              {t("profile.accountSettings")}
+            </AccountOptionText>
           </Link>
         </DropdownSectionContainer>
 
@@ -206,17 +211,29 @@ export const AccountDropdownOptions = observer(
 
         <DropdownSectionContainer>
           <Link to="/journals" style={{ textDecoration: "none", padding: "0" }}>
-            <AccountOptionText>{t("journals.headerNavTitle")}</AccountOptionText>
+            <AccountOptionText onClick={() => setShowAccountActions(false)}>
+              {t("journals.headerNavTitle")}
+            </AccountOptionText>
           </Link>
           <Link to="/notes" style={{ textDecoration: "none", padding: "0" }}>
-            <AccountOptionText>{t("notes.headerNavTitle")}</AccountOptionText>
+            <AccountOptionText onClick={() => setShowAccountActions(false)}>
+              {t("notes.headerNavTitle")}
+            </AccountOptionText>
           </Link>
         </DropdownSectionContainer>
 
         <StyledDivider />
 
         <DropdownSectionContainer>
-          <AccountOptionText color={baseTheme.colors.finePine}> Invite Users </AccountOptionText>
+          <AccountOptionText
+            color={baseTheme.colors.finePine}
+            onClick={() => {
+              setInviteTeamModalOpen(true);
+              setShowAccountActions(false);
+            }}
+          >
+            Invite Users
+          </AccountOptionText>
           <AccountOptionText id="lynchpyn-whats-new">What's New? </AccountOptionText>
           {renderShowHelpdesk()}
         </DropdownSectionContainer>
@@ -225,11 +242,8 @@ export const AccountDropdownOptions = observer(
 
         <DropdownSectionContainer>
           <AccountOptionText
-            onMouseEnter={() => {
-              setShowCompanyCreationSelector(true);
-            }}
-            onMouseLeave={() => {
-              setShowCompanyCreationSelector(false);
+            onClick={() => {
+              setShowCompanyCreationSelector(!showCompanyCreationSelector);
             }}
           >
             {!R.isNil(onboardingCompany) ? t("company.edit") : t("company.create")}
@@ -247,11 +261,6 @@ export const AccountDropdownOptions = observer(
             {t("profile.logout")}
           </AccountOptionText>
         </DropdownSectionContainer>
-
-        <InviteYourTeamModal
-          modalOpen={inviteTeamModalOpen}
-          setModalOpen={setInviteTeamModalOpen}
-        />
       </Container>
     );
   },
@@ -261,7 +270,7 @@ const Container = styled.div`
   position: absolute;
   width: 256px;
   padding-top: 16px;
-  padding-bottom: 16px;
+  padding-bottom: 8px;
   margin-left: -160px;
   margin-top: 60px;
   background-color: white;
@@ -283,58 +292,38 @@ const AccountOptionText = styled(Text)<AccountOptionTextProps>`
   padding-bottom: 8px;
 `;
 
-const AccountOption = styled.div`
-  display: flex;
-  &:hover {
-    background-color: ${props => props.theme.colors.primary100};
-  }
-  &:hover ${AccountOptionText} {
-    color: white;
-  }
-`;
-
 const CreationSelectionText = styled(Text)`
-  color: ${props => props.theme.colors.primary100};
   cursor: pointer;
   margin-top: 0;
   margin-bottom: 0;
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 12px;
-  &:hover {
-    color: white;
-  }
 `;
 
 const CreationOption = styled.div`
   display: flex;
-  &:hover {
-    background-color: ${props => props.theme.colors.primary100};
-  }
-  &:hover ${CreationSelectionText} {
-    color: white;
-  }
 `;
 
 const CompanyDropdownContainer = styled(Container)`
-  margin-left: -264px;
+  margin-left: -136px;
   margin-top: -16px;
   margin-right: 0;
   padding-top: 8px;
   padding-bottom: 8px;
+  width: 128px;
 `;
 
 const SwitchAccountContainer = styled.div`
   display: flex;
 `;
 
-const CompanyCreationSelectionContainer = styled.div`
-  position: absolute;
-  right: 130px;
-  top: 0;
-  width: 130px;
-  color: ${({ theme: { colors } }) => colors.primary100};
-  background-color: ${({ theme: { colors } }) => colors.backgroundBlue};
+const CompanyCreationSelectionContainer = styled(Container)`
+  margin-left: -264px;
+  margin-top: -16px;
+  margin-right: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
 `;
 
 const DropdownSectionContainer = styled.div`

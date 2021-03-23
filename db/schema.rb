@@ -467,7 +467,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_225211) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_role_id"
     t.string "user_title"
-    t.boolean "first_time_access", default: true
+    t.boolean "first_time_access", default: false
     t.index ["company_id"], name: "index_user_company_enablements_on_company_id"
     t.index ["user_id"], name: "index_user_company_enablements_on_user_id"
     t.index ["user_role_id"], name: "index_user_company_enablements_on_user_role_id"
@@ -477,7 +477,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_225211) do
     t.bigint "user_id", null: false
     t.integer "score"
     t.string "feeling", default: ""
-    t.date "completed_at"
+    t.string "completed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_user_pulses_on_user_id"
