@@ -275,4 +275,5 @@ const MoodSelectorContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 20px;
+  color: ${props => props.theme.colors.grey60};
 `;

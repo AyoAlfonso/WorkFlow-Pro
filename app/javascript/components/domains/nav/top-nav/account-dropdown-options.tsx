@@ -12,6 +12,7 @@ import { toJS } from "mobx";
 import { baseTheme } from "~/themes";
 import { useMst } from "~/setup/root";
 import { Avatar, Heading, Icon, Text } from "~/components/shared";
+import { InviteYourTeamModal } from "../../account/users/invite-your-team-modal";
 
 interface IAccountDropdownOptionsProps {
   accountActionRef: any;
@@ -28,6 +29,7 @@ export const AccountDropdownOptions = observer(
     setShowCompanyOptions,
   }: IAccountDropdownOptionsProps): JSX.Element => {
     const [showCompanyCreationSelector, setShowCompanyCreationSelector] = useState<boolean>(false);
+    const [inviteTeamModalOpen, setInviteTeamModalOpen] = useState<boolean>(false);
 
     const { sessionStore, companyStore, meetingStore, userStore, teamStore } = useMst();
     const { onboardingCompany } = companyStore;
@@ -73,7 +75,17 @@ export const AccountDropdownOptions = observer(
               }
             }}
           >
+            <CurrentCompanyCheckboxContainer>
+              {companyStore.company.id == company.id && (
+                <Icon icon={"Checkmark"} size={"15px"} iconColor={"primary100"} />
+              )}
+            </CurrentCompanyCheckboxContainer>
             <AccountOptionText>{company.name}</AccountOptionText>
+            {company.id == sessionStore.profile.defaultSelectedCompanyId && (
+              <DefaultTextContainer>
+                <DefaultText> Default </DefaultText>
+              </DefaultTextContainer>
+            )}
           </SwitchAccountContainer>
         );
       });
@@ -81,11 +93,7 @@ export const AccountDropdownOptions = observer(
 
     const renderSwitchCompanyOptions = (): JSX.Element => {
       if (parsedProfile.companyProfiles.length > 1) {
-        return (
-          <AccountOptionText onClick={() => setShowCompanyOptions(!showCompanyOptions)}>
-            {t("profile.switchCompanies")}
-          </AccountOptionText>
-        );
+        return <AccountOptionText>{t("profile.switchCompanies")}</AccountOptionText>;
       }
     };
 
@@ -175,12 +183,9 @@ export const AccountDropdownOptions = observer(
 
         <DropdownSectionContainer>
           <WorkspaceContainer
-          // onMouseEnter={() => {
-          //   setShowCompanyOptions(true);
-          // }}
-          // onMouseLeave={() => {
-          //   setShowCompanyOptions(false);
-          // }}
+            onClick={() => {
+              setShowCompanyOptions(!showCompanyOptions);
+            }}
           >
             <LeftWorkspaceContainer>
               {renderSwitchCompanyOptions()}
@@ -242,6 +247,11 @@ export const AccountDropdownOptions = observer(
             {t("profile.logout")}
           </AccountOptionText>
         </DropdownSectionContainer>
+
+        <InviteYourTeamModal
+          modalOpen={inviteTeamModalOpen}
+          setModalOpen={setInviteTeamModalOpen}
+        />
       </Container>
     );
   },
@@ -310,9 +320,13 @@ const CompanyDropdownContainer = styled(Container)`
   margin-left: -264px;
   margin-top: -16px;
   margin-right: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
 `;
 
-const SwitchAccountContainer = styled.div``;
+const SwitchAccountContainer = styled.div`
+  display: flex;
+`;
 
 const CompanyCreationSelectionContainer = styled.div`
   position: absolute;
@@ -390,4 +404,21 @@ const RightWorkspaceContainer = styled.div`
   margin-left: auto;
   margin-top: auto;
   margin-bottom: auto;
+`;
+
+const CurrentCompanyCheckboxContainer = styled.div`
+  width: 16px;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 8px;
+`;
+
+const DefaultTextContainer = styled.div`
+  margin-left: auto;
+`;
+
+const DefaultText = styled(Text)`
+  font-size: 11px;
+  font-style: italic;
 `;
