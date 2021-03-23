@@ -17,17 +17,22 @@ export const InitialsGenerator = ({
   if (name == "Backlog") {
     return <StyledIcon icon={"Master"} size={iconSize || "16px"} iconColor={fontColor} />;
   } else {
-    const splittedName = name.split(" ");
-
     let initials = "";
-    if (name == "Tomorrow") {
-      initials = "TM";
-    } else if (splittedName.length == 1) {
-      initials = splittedName[0].substring(0, 1).toUpperCase();
+
+    if (!name) {
+      initials = "N/A";
     } else {
-      initials = `${splittedName[0].substring(0, 1).toUpperCase()}${splittedName[1]
-        .substring(0, 1)
-        .toUpperCase()}`;
+      const splittedName = name.split(" ");
+
+      if (name == "Tomorrow") {
+        initials = "TM";
+      } else if (splittedName.length == 1) {
+        initials = splittedName[0].substring(0, 1).toUpperCase();
+      } else {
+        initials = `${splittedName[0].substring(0, 1).toUpperCase()}${splittedName[1]
+          .substring(0, 1)
+          .toUpperCase()}`;
+      }
     }
 
     return (
