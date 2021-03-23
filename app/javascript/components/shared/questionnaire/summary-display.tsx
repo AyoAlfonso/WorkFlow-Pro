@@ -3,6 +3,7 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { Text, TextNoMargin } from "~/components/shared/text";
 import * as humps from "humps";
+import { useTranslation } from "react-i18next";
 
 export interface ISummaryDisplayProps {
   summaryData: any;
@@ -15,6 +16,7 @@ export const SummaryDisplay = ({
   title,
   variant,
 }: ISummaryDisplayProps): JSX.Element => {
+  const { t } = useTranslation();
   const rowTextProps = {
     fontSize: "12px",
     color: "text",
@@ -29,7 +31,7 @@ export const SummaryDisplay = ({
       <DataContainer>
         {R.isEmpty(dataForDisplay) || R.isNil(dataForDisplay) ? (
           <Text fontSize={"12px"} fontWeight={400}>
-            No entries. PynBot can help you each evening to journal better!
+            {t("journals.pynBotNoEntries")}
           </Text>
         ) : (
           dataForDisplay.map((summaryDataEl, index) => {
