@@ -10,9 +10,11 @@ class QuestionnaireAttempt < ApplicationRecord
   validates_with QuestionnaireAttemptValidator, on: :create
 
   scope :within_last_week, -> (current_time) { where(completed_at: current_time.last_week.beginning_of_week..current_time.last_week.end_of_week) }
+  scope :within_day, -> (current_time) { where(completed_at: current_time.beginning_of_day..current_time.end_of_day)}
   scope :within_current_week, -> (current_time) { where(completed_at: current_time.beginning_of_week..current_time.end_of_week) }
   scope :within_last_four_weeks, -> (current_time) { where(completed_at: current_time.beginning_of_week.days_ago(28)..current_time.beginning_of_week) }
   scope :of_questionnaire_type, -> (questionnaire_name) { joins(:questionnaire).where(questionnaires: { name: questionnaire_name }) }
+  scope :of_questionnaire, -> (questionnaire) { where(questionnaire: questionnaire) }
   scope :for_user, -> (user) { where(user_id: user.id) }
 
   scope :sort_by_completed_at, -> { order(completed_at: :desc) }

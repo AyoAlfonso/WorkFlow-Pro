@@ -32,6 +32,7 @@ export const SurveyBot = observer(
       },
       questionnaireStore,
       keyActivityStore,
+      companyStore,
     } = useMst();
 
     useEffect(() => {
@@ -60,64 +61,80 @@ export const SurveyBot = observer(
 
     const stringValidator = value => (value ? true : "Write just a little bit!");
 
-    const steps = R.map(step => {
-      if (R.hasPath(["metadata", "mipSelector"], step)) {
-        return R.pipe(R.assoc("component", <MIPSelector />), R.dissoc("options"))(step);
-      } else if (R.hasPath(["metadata", "emotionSelector"], step)) {
-        return R.pipe(R.assoc("component", <EmotionSelector />), R.dissoc("options"))(step);
-      } else if (R.hasPath(["metadata", "username"], step)) {
-        return R.assoc("message", R.replace("{userName}", firstName, step.message))(step);
-      } else if (R.hasPath(["metadata", "pynCount"], step)) {
-        const completedPynCount = keyActivityStore.completedToday.length;
-        const totalPynCount = keyActivityStore.todaysPriorities.length + completedPynCount;
-        const newMessage = R.pipe(
-          R.replace("{completedMIPCount}", `${completedPynCount < 0 ? 0 : completedPynCount}`),
-          R.replace("{totalMIPCount}", `${totalPynCount}`),
-        )(step.message);
-        return R.assoc("message", newMessage)(step);
-      } else if (R.hasPath(["metadata", "mipCheck"], step)) {
-        const mipCheck =
-          keyActivityStore.todaysPriorities.length > 0
-            ? R.path(["metadata", "mipCheck", "hasMips"], step)
-            : R.path(["metadata", "mipCheck", "noMips"], step);
-        return R.assoc("message", R.replace("{mipCheck}", mipCheck, step.message))(step);
-      } else if (R.hasPath(["metadata", "validatorType"], step)) {
-        return R.assoc("validator", stringValidator, step);
-      } else if (R.path(["metadata", "summary"], step) === "gratitude") {
-        return R.pipe(
-          R.assoc(
-            "component",
-            <>
+    // Customized Steps
+    const steps = R.pipe(
+      R.clone,
+      R.map(step => {
+        if (
+          R.path(["metadata", "forumOverrideTrigger"], step) &&
+          companyStore.company.accessForum
+        ) {
+          return R.assoc("trigger", R.path(["metadata", "forumOverrideTrigger"], step))(step);
+        } else {
+          return step;
+        }
+      }),
+      R.map(step => {
+        if (R.hasPath(["metadata", "mipSelector"], step)) {
+          return R.pipe(R.assoc("component", <MIPSelector />), R.dissoc("options"))(step);
+        } else if (R.hasPath(["metadata", "emotionSelector"], step)) {
+          return R.pipe(R.assoc("component", <EmotionSelector />), R.dissoc("options"))(step);
+        } else if (R.hasPath(["metadata", "username"], step)) {
+          return R.assoc("message", R.replace("{userName}", firstName, step.message))(step);
+        } else if (R.hasPath(["metadata", "pynCount"], step)) {
+          const completedPynCount = keyActivityStore.completedToday.length;
+          const totalPynCount = keyActivityStore.todaysPriorities.length + completedPynCount;
+          const newMessage = R.pipe(
+            R.replace("{completedMIPCount}", `${completedPynCount < 0 ? 0 : completedPynCount}`),
+            R.replace("{totalMIPCount}", `${totalPynCount}`),
+          )(step.message);
+          return R.assoc("message", newMessage)(step);
+        } else if (R.hasPath(["metadata", "mipCheck"], step)) {
+          const mipCheck =
+            keyActivityStore.todaysPriorities.length > 0
+              ? R.path(["metadata", "mipCheck", "hasMips"], step)
+              : R.path(["metadata", "mipCheck", "noMips"], step);
+          return R.assoc("message", R.replace("{mipCheck}", mipCheck, step.message))(step);
+        } else if (R.hasPath(["metadata", "validatorType"], step)) {
+          return R.assoc("validator", stringValidator, step);
+        } else if (R.path(["metadata", "summary"], step) === "gratitude") {
+          return R.pipe(
+            R.assoc(
+              "component",
+              <>
+                <SummaryDisplay
+                  summaryData={summaryData}
+                  variant={`${R.path(["metadata", "summary"], step)}Am`}
+                  title={R.path(["metadata", "message", "am"], step)}
+                />
+                <SummaryDisplay
+                  summaryData={summaryData}
+                  variant={`${R.path(["metadata", "summary"], step)}Pm`}
+                  title={R.path(["metadata", "message", "pm"], step)}
+                />
+              </>,
+            ),
+            R.dissoc("options"),
+          )(step);
+        } else if (R.hasPath(["metadata", "summary"], step)) {
+          return R.pipe(
+            R.assoc(
+              "component",
               <SummaryDisplay
                 summaryData={summaryData}
-                variant={`${R.path(["metadata", "summary"], step)}Am`}
-                title={R.path(["metadata", "message", "am"], step)}
-              />
-              <SummaryDisplay
-                summaryData={summaryData}
-                variant={`${R.path(["metadata", "summary"], step)}Pm`}
-                title={R.path(["metadata", "message", "pm"], step)}
-              />
-            </>,
-          ),
-          R.dissoc("options"),
-        )(step);
-      } else if (R.hasPath(["metadata", "summary"], step)) {
-        return R.pipe(
-          R.assoc(
-            "component",
-            <SummaryDisplay
-              summaryData={summaryData}
-              variant={R.path(["metadata", "summary"], step)}
-              title={R.path(["metadata", "message"], step)}
-            />,
-          ),
-          R.dissoc("options"),
-        )(step);
-      } else {
-        return step;
-      }
-    }, R.clone(questionnaireVariant.steps));
+                variant={R.path(["metadata", "summary"], step)}
+                title={R.path(["metadata", "message"], step)}
+              />,
+            ),
+            R.dissoc("options"),
+          )(step);
+        } else {
+          return step;
+        }
+      }),
+    )(questionnaireVariant.steps);
+
+    // End of Customized Steps
 
     if (R.isNil(steps)) {
       return (

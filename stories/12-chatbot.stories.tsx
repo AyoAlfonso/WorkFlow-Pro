@@ -25,6 +25,10 @@ const propsList = [
   },
 ];
 
+//TODO: ADD README ON PYNBOT AND HOW TO OVERRIDE STEPS PROGRAMATICALLY
+//ADD METADATA TO THE STEP
+//ADD LOGIC TO THE STEPS TO REMAP THE VALUES
+
 const SurveyContainer = styled.div<LayoutProps>`
   ${layout}
 `;
