@@ -53,10 +53,10 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
       end
     else
       if current_company.display_format === "Company"
-        questionnaire_attempts_for_weekly
+        questionnaire_attempts_for_weekly(questionnaire)
       else
         # for forum get the first monthly attempt
-        questionnaire_attempts_for_monthly
+        questionnaire_attempts_for_monthly(questionnaire)
       end
     end
     
