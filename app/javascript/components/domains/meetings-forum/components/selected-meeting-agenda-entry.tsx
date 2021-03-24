@@ -97,89 +97,90 @@ export const SelectedMeetingAgendaEntry = observer(
 
     return (
       <Container>
-        <MeetingHeader>
-          <StyledHeading type={"h3"}>{t("forum.forumMeeting")}</StyledHeading>
-          <MeetingTimeContainer>
-            <MeetingTimeText>{`${t("forum.scheduledStartTime")}: `}</MeetingTimeText>
-            <form className={classes.container} noValidate>
-              <TextField
-                id="datetime-local"
-                type="datetime-local"
-                value={moment(newScheduledStartTime).format("YYYY-MM-DDTHH:mm")}
-                className={classes.textField}
-                onChange={async event => {
-                  setNewScheduledStartTime(event.target.value);
-                  await meetingStore.updateMeeting(
-                    R.merge(selectedMeeting, {
-                      scheduledStartTime: moment(event.target.value).format(),
-                    }),
-                  );
-                }}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </form>
-          </MeetingTimeContainer>
+        <ChildContainer>
+          <MeetingHeader>
+            <StyledHeading type={"h3"}>{t("forum.forumMeeting")}</StyledHeading>
+            <MeetingTimeContainer>
+              <MeetingTimeText>{`${t("forum.scheduledStartTime")}: `}</MeetingTimeText>
+              <form className={classes.container} noValidate>
+                <TextField
+                  id="datetime-local"
+                  type="datetime-local"
+                  value={moment(newScheduledStartTime).format("YYYY-MM-DDTHH:mm")}
+                  className={classes.textField}
+                  onChange={async event => {
+                    setNewScheduledStartTime(event.target.value);
+                    await meetingStore.updateMeeting(
+                      R.merge(selectedMeeting, {
+                        scheduledStartTime: moment(event.target.value).format(),
+                      }),
+                    );
+                  }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </form>
+            </MeetingTimeContainer>
 
-          {selectedMeeting.startTime && (
-            <MeetingTimeText>
-              {`${t("forum.actualStartTime")}: ${moment(selectedMeeting.startTime).format(
-                "dddd, MMMM D, LT",
-              )}`}
-            </MeetingTimeText>
-          )}
-          {disabled ? (
-            <>
-              <MeetingTimeText>Location: {location}</MeetingTimeText>
-              <MeetingTimeText>Topic: {explorationTopic}</MeetingTimeText>
-            </>
-          ) : (
-            <>
-              <LocationContainer>
-                <StyledContentEditable
-                  innerRef={locationRef}
-                  placeholder={"Enter the location"}
-                  html={location || ""}
-                  onChange={handleChangeLocation}
-                  onKeyDown={key => {
-                    if (key.keyCode == 13) {
-                      locationRef.current.blur();
-                    }
-                  }}
-                  onBlur={handleBlurLocation}
-                />
-              </LocationContainer>
-              <LocationContainer>
-                <StyledContentEditable
-                  innerRef={explorationTopicRef}
-                  placeholder={"Enter the Exploration Topic"}
-                  html={explorationTopic || ""}
-                  onChange={handleChangeExplorationTopic}
-                  onKeyDown={key => {
-                    if (key.keyCode == 13) {
-                      explorationTopicRef.current.blur();
-                    }
-                  }}
-                  onBlur={handleBlurExplorationTopic}
-                />
-              </LocationContainer>
-            </>
-          )}
-        </MeetingHeader>
-        <MeetingAgendaContainer>
-          <ChildContainer>
+            {selectedMeeting.startTime && (
+              <MeetingTimeText>
+                {`${t("forum.actualStartTime")}: ${moment(selectedMeeting.startTime).format(
+                  "dddd, MMMM D, LT",
+                )}`}
+              </MeetingTimeText>
+            )}
+            {disabled ? (
+              <>
+                <MeetingTimeText>Location: {location}</MeetingTimeText>
+                <MeetingTimeText>Topic: {explorationTopic}</MeetingTimeText>
+              </>
+            ) : (
+              <>
+                <LocationContainer>
+                  <StyledContentEditable
+                    innerRef={locationRef}
+                    placeholder={"Enter the location"}
+                    html={location || ""}
+                    onChange={handleChangeLocation}
+                    onKeyDown={key => {
+                      if (key.keyCode == 13) {
+                        locationRef.current.blur();
+                      }
+                    }}
+                    onBlur={handleBlurLocation}
+                  />
+                </LocationContainer>
+                <LocationContainer>
+                  <StyledContentEditable
+                    innerRef={explorationTopicRef}
+                    placeholder={"Enter the Exploration Topic"}
+                    html={explorationTopic || ""}
+                    onChange={handleChangeExplorationTopic}
+                    onKeyDown={key => {
+                      if (key.keyCode == 13) {
+                        explorationTopicRef.current.blur();
+                      }
+                    }}
+                    onBlur={handleBlurExplorationTopic}
+                  />
+                </LocationContainer>
+              </>
+            )}
+          </MeetingHeader>
+          <MeetingAgendaContainer>
             <MeetingAgenda
               steps={selectedMeeting.steps}
               currentStep={999}
               topicOwner={topicOwner}
               meeting={selectedMeeting}
             />
-          </ChildContainer>
-          <ChildContainer>
-            <SelectedMeetingNotes selectedMeetingId={selectedMeeting.id} />
-          </ChildContainer>
-        </MeetingAgendaContainer>
+          </MeetingAgendaContainer>
+        </ChildContainer>
+
+        <ChildContainer>
+          <SelectedMeetingNotes selectedMeetingId={selectedMeeting.id} />
+        </ChildContainer>
       </Container>
     );
   },
@@ -188,7 +189,7 @@ export const SelectedMeetingAgendaEntry = observer(
 const Container = styled.div`
   width: 100%;
   min-width: 400px;
-  margin-right: 30px;
+  display: flex;
 `;
 
 const MeetingHeader = styled.div`

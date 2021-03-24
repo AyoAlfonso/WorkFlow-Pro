@@ -19,19 +19,24 @@ export const MeetingAgenda = ({
   meeting,
 }: MeetingAgendaProps): JSX.Element => {
   const renderExplorationTopicOwner = (step): JSX.Element => {
-    if (step.componentToRender == "Exploration" && topicOwner) {
+    if (
+      step.componentToRender == "Exploration" &&
+      (topicOwner || R.path(["settings", "forumExplorationTopic"], meeting))
+    ) {
       return (
         <ExplorationTopicOwnerContainer>
-          <Avatar
-            defaultAvatarColor={topicOwner.defaultAvatarColor}
-            firstName={topicOwner.firstName}
-            lastName={topicOwner.lastName}
-            avatarUrl={topicOwner.avatarUrl}
-            size={25}
-            marginLeft={"20px"}
-          />
+          {topicOwner && (
+            <Avatar
+              defaultAvatarColor={topicOwner.defaultAvatarColor}
+              firstName={topicOwner.firstName}
+              lastName={topicOwner.lastName}
+              avatarUrl={topicOwner.avatarUrl}
+              size={25}
+              marginLeft={"20px"}
+            />
+          )}
           <DetailsContainer>
-            <SubText>{`${topicOwner.firstName} ${topicOwner.lastName}`}</SubText>
+            <SubText>{topicOwner ? `${topicOwner.firstName} ${topicOwner.lastName}` : ""}</SubText>
             <SubText> Topic: {R.path(["settings", "forumExplorationTopic"], meeting)}</SubText>
           </DetailsContainer>
         </ExplorationTopicOwnerContainer>
