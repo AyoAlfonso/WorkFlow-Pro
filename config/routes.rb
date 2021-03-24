@@ -151,6 +151,8 @@ Rails.application.routes.draw do
     resources :milestones, only: [:update]
     get '/milestones/milestones_for_meeting', to: "milestones#milestones_for_meeting"
 
+    post "/user_pulses/create_or_update", to: "user_pulses#create_or_update"
+
     #summaries
     get '/journals', to: 'summaries#journals_by_date'
     get '/notes', to: 'summaries#meetings_by_date'

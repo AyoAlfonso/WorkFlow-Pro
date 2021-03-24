@@ -306,12 +306,12 @@ const CreationOption = styled.div`
 `;
 
 const CompanyDropdownContainer = styled(Container)`
-  margin-left: -136px;
+  margin-left: -264px;
   margin-top: -16px;
   margin-right: 0;
   padding-top: 8px;
   padding-bottom: 8px;
-  width: 128px;
+  width: 256px;
 `;
 
 const SwitchAccountContainer = styled.div`

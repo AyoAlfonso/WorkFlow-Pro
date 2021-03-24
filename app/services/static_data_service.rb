@@ -1,7 +1,7 @@
 class StaticDataService < ApplicationService
 
   def call
-    { "time_zones": time_zones, "headings_and_descriptions": headings_and_descriptions, "fields_and_labels": fields_and_labels }
+    { "time_zones": time_zones, "headings_and_descriptions": headings_and_descriptions, "fields_and_labels": fields_and_labels, "emotion_adjectives": emotion_adjectives }
   end
 
   def time_zones
@@ -77,6 +77,40 @@ class StaticDataService < ApplicationService
         description: "The final step in your onboarding is adding your team.  The power of Lynchpyn is in collaboration; add your team and teammates so they can help you populate your {displayFormat} Goals.",
         stepLabel: "Add your Team"
       }
+    }
+  end
+
+  def emotion_adjectives
+    emotion_score_1 = ["Livid", "Enraged", "Irate", "Furious", "Disgusted",
+                        "Panicked", "Terrified", "Freightened", "Anxious", "Scared",
+                        "Frustrated", "Peeved" , "Angry", "Agitated", "Troubled",
+                        "Shocked ", "Worried", "Nervous", "Unsure", "Restless",
+                        "Stunned", "Annoyed", "Concerned", "Excluded", "Uneasy"]
+
+    emotion_score_2 = ["Apprehensive", "Sullen", "Exhausted", "Alienated", "Despair",
+                        "Ashamed", "Glum", "Fatigued", "Depressed", "Disappointed", 
+                        "Anguished", "Guilty", "Disheartened", "Sad", "Disappointed", 
+                        "Anguished", "Deflated", "Discouraged", "Miserable", "Tired", 
+                        "Hopeless", "Complacent", "Bored", "Pessimistic", "Confused", "Lonely"]
+
+    emotion_score_4 = ["Energised", "Positive", "Glad", "Amused", "Satisfied", 
+                        "Thrilled", "Connected", "Inspired", "Focused", "Pleased", 
+                        "Ecstatic", "Joyful", "Happy", "Cheerful", "Hopeful", 
+                        "Euphoric", "Enthusiastic", "Motivated", "Proud", "Optimistic", 
+                        "Exhilarated", "Elated", "Excited", "Surprised", "Lively"]
+
+    
+    emotion_score_5 = ["Easy-going", "Relaxed", "Thoughtful", "Mellow", "Listless", 
+                        "Safe", "Secure", "Composed", "Peaceful", "Sleepy", 
+                        "Chill", "Content", "Calm", "Balanced", "Restful", 
+                        "Respected", "Thankful", "Grateful", "At Ease", "Comfy",
+                        "Blessed", "Fulfilled", "Tranquil", "Collected", "Serene"]
+
+    feelings = {
+      emotion_score_1: emotion_score_1,
+      emotion_score_2: emotion_score_2,
+      emotion_score_4: emotion_score_4,
+      emotion_score_5: emotion_score_5
     }
   end
 end

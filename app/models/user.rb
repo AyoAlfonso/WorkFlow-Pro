@@ -34,6 +34,7 @@ class User < ApplicationRecord
   has_many :meetings, :foreign_key => 'hosted_by_id'
   has_many :user_company_enablements, dependent: :destroy
   has_many :companies, through: :user_company_enablements
+  has_many :user_pulses, dependent: :destroy
   accepts_nested_attributes_for :companies, :allow_destroy => true
   accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
   accepts_nested_attributes_for :team_user_enablements, :allow_destroy => true

@@ -477,7 +477,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_225211) do
     t.bigint "user_id", null: false
     t.integer "score"
     t.string "feeling", default: ""
-    t.string "completed_at"
+    t.datetime "completed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_user_pulses_on_user_id"

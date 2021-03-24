@@ -448,5 +448,9 @@ export class Api {
     return this.client.post(`/create_team_and_invite_users`, { teamName, users });
   }
 
+  async getEmotionAdjectives(){
+    return this.client.get(`/user_pulses/emotion_adjectives`)
+  }
+
   //async setJWT(jwt) {}
 }

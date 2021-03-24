@@ -60,7 +60,8 @@ export const HeaderBar = observer(
       switch (locationPath[1]) {
         case "team":
         case "forum":
-          return `${teamStore.currentTeam.name} Overview`;
+          const team = teamStore.teams.find(team => team.id == subPath);
+          return team ? `${team.name} Overview` : "Team Overview";
         case "company":
           if (subPath == "accountability") {
             return "Accountability Matrix";

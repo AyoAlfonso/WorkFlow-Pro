@@ -4,7 +4,7 @@ class CreateUserPulse < ActiveRecord::Migration[6.0]
       t.references :user, null: false, foreign_key: true
       t.integer :score
       t.string :feeling, default: ""
-      t.string :completed_at
+      t.datetime :completed_at
       t.timestamps
     end
   end

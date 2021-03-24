@@ -10,6 +10,7 @@ export const StaticDataStoreModel = types
     timeZones: types.maybeNull(types.array(types.frozen())),
     headingsAndDescriptions: types.maybeNull(types.frozen()),
     fieldsAndLabels: types.maybeNull(types.frozen()),
+    emotionAdjectives: types.maybeNull(types.frozen()),
   })
   .extend(withEnvironment())
   .views(self => ({}))
@@ -21,6 +22,7 @@ export const StaticDataStoreModel = types
           self.timeZones = response.data.timeZones as any;
           self.headingsAndDescriptions = response.data.headingsAndDescriptions as any;
           self.fieldsAndLabels = response.data.fieldsAndLabels as any;
+          self.emotionAdjectives = response.data.emotionAdjectives as any;
         } else {
         }
       } catch {
