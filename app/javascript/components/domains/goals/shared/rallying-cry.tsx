@@ -19,13 +19,9 @@ export const RallyingCry = ({ rallyingCry }: IRallyingCryProps): JSX.Element => 
   const editable = profile.role == RoleCEO || profile.role == RoleAdministrator;
   const rallyingCryRef = useRef(null);
 
-  const visionTitle = companyStore.company.name
-    ? `${companyStore.company.name} ${t("company.personalizedRallyingCrySuffix")}`
-    : t("company.rallyingCry");
-
   return (
     <VisionContainer>
-      <VisionTitle>{visionTitle}</VisionTitle>
+      <VisionTitle>{t("company.rallyingCry")}</VisionTitle>
       <StyledContentEditable
         innerRef={rallyingCryRef}
         html={rallyingCry}
