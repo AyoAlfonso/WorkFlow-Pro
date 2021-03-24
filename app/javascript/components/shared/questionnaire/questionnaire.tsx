@@ -47,7 +47,7 @@ export const Questionnaire = observer(
       );
     }
 
-    const summaryData = meetingStore.personalPlanningSummary;
+    const summaryData = meetingStore.personalPlanningSummary; //used to show weekly planning summaries for a component
     const userFirstName = sessionStore.profile.firstName;
     const currentPersonalPlanning = meetingStore.currentPersonalPlanning;
     const companyType = companyStore.company.displayFormat;

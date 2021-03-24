@@ -25,9 +25,7 @@ export const PersonalPlanning = observer(
 
     useEffect(() => {
       meetingStore.getPersonalMeeting(meeting_id);
-
-      //TODO: MODIFY PERRSONAL PLANNING SUMMARY
-      meetingStore.getPersonalPlanningSummary();
+      meetingStore.getPersonalPlanningSummary(); //currently loads this for weekly meeting
     }, []);
 
     const renderLoading = () => (

@@ -108,6 +108,7 @@ export const MeetingStoreModel = types
       }
     }),
     getPersonalPlanningSummary: flow(function*() {
+      //TODO: REFACTOR we should think about how we treive this ofr personal planning differently.  We do not need this in a non weekly/monthly review.
       //fetches summary that defaults to weekly if no questionnaire type
       try {
         const response: ApiResponse<any> = yield self.environment.api.getSummaryForPersonalMeeting();
