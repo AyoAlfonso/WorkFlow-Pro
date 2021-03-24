@@ -54,6 +54,7 @@ export const JournalBody = ({ setQuestionnaireVariant }: IJournalBodyProps): JSX
           </PynBotContainer>
           <SpeechBubble>{pynBotGreeting}</SpeechBubble>
         </PynBotSpeechContainer>
+        {/*}
         <IconButton
           {...defaultJournalButtonProps}
           iconName={"AM-Check-in"}
@@ -61,8 +62,8 @@ export const JournalBody = ({ setQuestionnaireVariant }: IJournalBodyProps): JSX
           text={t("journals.createMyDay")}
           onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay)}
           disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
-        />
-        {/* FOR THE FUTURE 
+        /> 
+        */}
         <IconButton
           {...defaultJournalButtonProps}
           iconName={"AM-Check-in"}
@@ -78,7 +79,7 @@ export const JournalBody = ({ setQuestionnaireVariant }: IJournalBodyProps): JSX
             })
           }
           disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
-        /> */}
+        />
         {/* <IconButton
             {...defaultJournalButtonProps}
             iconName={"Check-in"}
