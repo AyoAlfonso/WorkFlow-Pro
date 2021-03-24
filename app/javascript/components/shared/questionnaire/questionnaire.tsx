@@ -29,7 +29,7 @@ export const Questionnaire = observer(
       });
       companyStore.load().then(() => {
         setLoading(false);
-      })
+      });
     }, []);
 
     const questionnaireVariant = questionnaireStore.getQuestionnaireByVariant(props.variant);
@@ -52,44 +52,58 @@ export const Questionnaire = observer(
     const currentPersonalPlanning = meetingStore.currentPersonalPlanning;
     const companyType = companyStore.company.displayFormat;
 
-    const steps = R.map(step => {
-      if (R.path(["metadata", "summary"], step) === "gratitude") {
-        return R.pipe(
-          R.assoc(
-            "component",
-            <>
+    const steps = R.pipe(
+      R.clone,
+      R.map(step => {
+        if (
+          R.path(["metadata", "forumOverrideTrigger"], step) &&
+          companyStore.company.accessForum
+        ) {
+          return R.assoc("trigger", R.path(["metadata", "forumOverrideTrigger"], step))(step);
+        } else {
+          return step;
+        }
+      }),
+      R.map(step => {
+        if (R.path(["metadata", "summary"], step) === "gratitude") {
+          return R.pipe(
+            R.assoc(
+              "component",
+              <>
+                <SummaryDisplay
+                  summaryData={summaryData}
+                  variant={`${R.path(["metadata", "summary"], step)}Am`}
+                  title={R.path(["metadata", "message", "am"], step)}
+                />
+                <SummaryDisplay
+                  summaryData={summaryData}
+                  variant={`${R.path(["metadata", "summary"], step)}Pm`}
+                  title={R.path(["metadata", "message", "pm"], step)}
+                />
+              </>,
+            ),
+            R.dissoc("options"),
+          )(step);
+        } else if (R.hasPath(["metadata", "summary"], step)) {
+          return R.pipe(
+            R.assoc(
+              "component",
               <SummaryDisplay
                 summaryData={summaryData}
-                variant={`${R.path(["metadata", "summary"], step)}Am`}
-                title={R.path(["metadata", "message", "am"], step)}
-              />
-              <SummaryDisplay
-                summaryData={summaryData}
-                variant={`${R.path(["metadata", "summary"], step)}Pm`}
-                title={R.path(["metadata", "message", "pm"], step)}
-              />
-            </>,
-          ),
-          R.dissoc("options"),
-        )(step);
-      } else if (R.hasPath(["metadata", "summary"], step)) {
-        return R.pipe(
-          R.assoc(
-            "component",
-            <SummaryDisplay
-              summaryData={summaryData}
-              variant={R.path(["metadata", "summary"], step)}
-              title={R.path(["metadata", "message"], step)}
-            />,
-          ),
-          R.dissoc("options"),
-        )(step);
-      } else {
-        return step;
-      }
-    }, R.clone(questionnaireVariant.steps));
+                variant={R.path(["metadata", "summary"], step)}
+                title={R.path(["metadata", "message"], step)}
+              />,
+            ),
+            R.dissoc("options"),
+          )(step);
+        } else {
+          return step;
+        }
+      }),
+    )(questionnaireVariant.steps);
 
-    return (R.path(["profile", "currentDailyLog", "weeklyReflection"], sessionStore) && companyType === "Company") ? (
+    return R.path(["profile", "currentDailyLog", "weeklyReflection"], sessionStore) &&
+      companyType === "Company" ? (
       <Container>
         <Card
           width={"100%"}
@@ -112,7 +126,14 @@ export const Questionnaire = observer(
           hideUserAvatar={true}
           botDelay={1000}
           headerComponent={
-          <SurveyHeader title={companyType === "Company" ? t("journals.weeklyReflectionTitle") : t("journals.monthlyReflection")} />}
+            <SurveyHeader
+              title={
+                companyType === "Company"
+                  ? t("journals.weeklyReflectionTitle")
+                  : t("journals.monthlyReflection")
+              }
+            />
+          }
           steps={steps}
           width={"100%"}
           contentStyle={{ height: "400px" }}

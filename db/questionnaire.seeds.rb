@@ -871,9 +871,10 @@ Questionnaire.where(name: "Weekly Reflection",
       options: [],
       metadata: {
         summary: "what-happened",
-        message: "What happened this week:"
+        message: "What happened this week:",
+        forumOverrideTrigger: 17
       },
-      trigger: 17
+      trigger: 23
     },
     {
       id: 17,
@@ -1170,9 +1171,10 @@ Questionnaire.where(name: "Monthly Reflection",
       options: [],
       metadata: {
         summary: "what-happened",
-        message: "What happened this week:"
+        message: "What happened this week:",
+        forumOverrideTrigger: 28
       },
-      trigger: 28
+      trigger: 37
     },
     {
       id: 28,
