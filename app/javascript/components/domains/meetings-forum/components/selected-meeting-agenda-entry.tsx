@@ -50,9 +50,7 @@ export const SelectedMeetingAgendaEntry = observer(
 
     const locationRef = useRef(null);
     const explorationTopicRef = useRef(null);
-    const subjectRef = useRef(null);
     const [location, setLocation] = useState<string>("");
-    const [subject, setSubject] = useState<string>("");
     const [explorationTopic, setExplorationTopic] = useState<string>("");
     const [newScheduledStartTime, setNewScheduledStartTime] = useState<string>("");
 
@@ -60,7 +58,6 @@ export const SelectedMeetingAgendaEntry = observer(
       setLocation(R.path(["forumLocation"], selectedMeeting.settings));
       setExplorationTopic(R.path(["forumExplorationTopic"], selectedMeeting.settings));
       setNewScheduledStartTime(selectedMeeting.scheduledStartTime);
-      setSubject(R.path(["forumSubject"], selectedMeeting.settings));
     }, [selectedMeeting.id]);
 
     const teamMembers = teams.find(team => team.id == selectedMeeting.teamId)["users"];
@@ -97,20 +94,6 @@ export const SelectedMeetingAgendaEntry = observer(
         },
       });
     }, [explorationTopic]);
-    const handleChangeSubject = useRefCallback(e => {
-      if (!e.target.value.includes("<div>")) {
-        setSubject(e.target.value);
-      }
-    }, []);
-
-    const handleBlurSubject = useRefCallback(() => {
-      forumStore.updateMeeting({
-        id: selectedMeeting.id,
-        meeting: {
-          settingsForumSubject: subject,
-        },
-      });
-    }, [subject]);
 
     return (
       <Container>
@@ -150,7 +133,6 @@ export const SelectedMeetingAgendaEntry = observer(
             <>
               <MeetingTimeText>Location: {location}</MeetingTimeText>
               <MeetingTimeText>Topic: {explorationTopic}</MeetingTimeText>
-              <MeetingTimeText>Subject: {subject}</MeetingTimeText>
             </>
           ) : (
             <>
@@ -180,20 +162,6 @@ export const SelectedMeetingAgendaEntry = observer(
                     }
                   }}
                   onBlur={handleBlurExplorationTopic}
-                />
-              </LocationContainer>
-              <LocationContainer>
-                <StyledContentEditable
-                  innerRef={subjectRef}
-                  placeholder={"Enter the subject"}
-                  html={subject || ""}
-                  onChange={handleChangeSubject}
-                  onKeyDown={key => {
-                    if (key.keyCode == 13) {
-                      subjectRef.current.blur();
-                    }
-                  }}
-                  onBlur={handleBlurSubject}
                 />
               </LocationContainer>
             </>
