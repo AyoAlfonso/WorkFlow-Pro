@@ -1,4 +1,5 @@
 mt1 = MeetingTemplate.where(meeting_type: :team_weekly).first_or_initialize
+mt1.steps.destroy_all if mt1.steps.count > 0
 mt1.update!(
   meeting_type: :team_weekly,
   name: "Weekly Meeting",
@@ -94,6 +95,7 @@ step2.image.attach(io: File.open("app/assets/images/updates.png"), filename: "up
 
 
 mt2 = MeetingTemplate.where(meeting_type: :personal_weekly, name: "Weekly Planning").first_or_initialize
+mt2.steps.destroy_all if mt2.steps.count > 0
 mt2.update!(
   meeting_type: :personal_weekly,
   name: "Weekly Planning",
@@ -142,6 +144,7 @@ mt2.update!(
 )
 
 mt3 = MeetingTemplate.where(meeting_type: :forum_monthly, name: "Forum Monthly").first_or_initialize
+mt3.steps.destroy_all if mt3.steps.count > 0
 mt3.update!(
   meeting_type: :forum_monthly,
   name: "Forum Monthly",
@@ -224,6 +227,7 @@ step1 = mt3.steps.where(name: "One Word Opener").first
 step1.image.attach(io: File.open("app/assets/images/mood-meter.png"), filename: "mood-meter.png", content_type: 'image/png') if step1.present? 
 
 mt4 = MeetingTemplate.where(meeting_type: :personal_monthly, name: "Monthly Planning").first_or_initialize
+mt4.steps.destroy_all if mt4.steps.count > 0
 mt4.update!(
   meeting_type: :personal_monthly,
   name: "Monthly Planning",
