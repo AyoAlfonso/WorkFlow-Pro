@@ -108,7 +108,7 @@ export const HomeKeyActivities = observer(
         <>
           <HeaderRowContainer>
             <StyledHeading type={"h2"} fontSize={"20px"}>
-              {header == "Backlog" ? "Master" : header}
+              {header == "Backlog" ? "Master List" : header}
             </StyledHeading>
           </HeaderRowContainer>
           <HeaderRowContainer>

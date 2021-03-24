@@ -22,7 +22,6 @@ export const ImageStep = ({ step }: IImageStepProps): JSX.Element => {
 
 const Container = styled.div`
   max-height: 700px;
-  margin-left: 16px;
   width: 100%;
 `;
 

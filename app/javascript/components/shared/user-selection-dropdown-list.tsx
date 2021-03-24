@@ -53,6 +53,7 @@ export const UserSelectionDropdownList = ({
         selectOnFocus
         clearOnBlur
         handleHomeEndKeys
+        size={"small"}
         id="search-for-labels"
         options={toJS(userList)}
         getOptionLabel={option => {
@@ -94,7 +95,7 @@ const ActionDropdownContainer = styled.div`
   position: absolute;
   background-color: ${props => props.theme.colors.white};
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 10px;
   z-index: 2;
   margin-left: -80px;

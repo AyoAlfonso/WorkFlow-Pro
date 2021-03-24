@@ -50,7 +50,7 @@ class Company < ApplicationRecord
   def date_for_start_on(fiscal_year)
     result = self.current_fiscal_start_date
     if fiscal_year.to_i != self.current_fiscal_year
-      result = result + year_difference.year
+      result = result + (fiscal_year.to_i - self.current_fiscal_year).year
     end
     result
   end
