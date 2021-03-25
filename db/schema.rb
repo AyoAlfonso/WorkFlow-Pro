@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_17_234649) do
+ActiveRecord::Schema.define(version: 2021_03_24_225211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -184,6 +184,17 @@ ActiveRecord::Schema.define(version: 2021_03_17_234649) do
     t.index ["team_id"], name: "index_issues_on_team_id"
     t.index ["user_id", "position", "completed_at"], name: "index_issues_on_user_id_and_position_and_completed_at"
     t.index ["user_id"], name: "index_issues_on_user_id"
+  end
+
+  create_table "journal_entries", force: :cascade do |t|
+    t.text "body"
+    t.string "generated_from_type"
+    t.bigint "generated_from_id"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["generated_from_type", "generated_from_id"], name: "index_journal_entries_on_generated_from_polymorphic"
+    t.index ["user_id"], name: "index_journal_entries_on_user_id"
   end
 
   create_table "key_activities", force: :cascade do |t|
@@ -535,6 +546,7 @@ ActiveRecord::Schema.define(version: 2021_03_17_234649) do
   add_foreign_key "habits", "users"
   add_foreign_key "issues", "companies"
   add_foreign_key "issues", "users"
+  add_foreign_key "journal_entries", "users"
   add_foreign_key "key_activities", "companies"
   add_foreign_key "key_activities", "meetings"
   add_foreign_key "key_activities", "users"

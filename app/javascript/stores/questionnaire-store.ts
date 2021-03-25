@@ -42,16 +42,18 @@ export const QuestionnaireStoreModel = types
           questionnaireId,
           { ...questionnaireAttemptData, ...optionalParams },
         );
-        sessionStore.updateUser(
-          {
-            dailyLogsAttributes: [
-              {
-                ...response.data,
-              },
-            ],
-          },
-          `${questionnaireTitle} Complete`,
-        );
+        if (response.ok) {
+          sessionStore.updateUser(
+            {
+              dailyLogsAttributes: [
+                {
+                  ...response.data,
+                },
+              ],
+            },
+            `${questionnaireTitle} Complete`,
+          );
+        }
       } catch {
         // error messaging handled by API monitor
       }

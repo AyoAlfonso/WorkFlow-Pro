@@ -31,4 +31,13 @@ class QuestionnaireAttempt < ApplicationRecord
   def journal_format
     self.rendered_steps ? questionnaire_attempt_to_text(self.rendered_steps) : ""
   end
+
+  def save_and_create_journal_entry
+    ActiveRecord::Base.transaction do
+      save!
+      parsed_body = questionnaire_attempt_to_text(self.rendered_steps)
+      JournalEntry.create!(generated_from_type: self.class.name, generated_from_id: self.id, body: parsed_body, user_id: self.user_id) if parsed_body.present?
+    end
+    
+  end
 end
