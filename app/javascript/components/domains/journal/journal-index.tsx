@@ -188,9 +188,7 @@ export const JournalIndex = observer(
     };
 
     const dateSelectedAction = ranges => {
-      questionnaireStore
-        .getQuestionnaireAttemptsSummary(ranges.selection)
-        .then(() => setLoading(false));
+      questionnaireStore.getQuestionnaireAttemptsSummary(ranges).then(() => setLoading(false));
     };
 
     return (
