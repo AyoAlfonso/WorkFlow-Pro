@@ -161,7 +161,7 @@ export const JournalIndex = observer(
     };
 
     const dateSelectedAction = ranges => {
-      journalStore.getJournalEntries(ranges.selection).then(() => setLoading(false));
+      journalStore.getJournalEntries(ranges).then(() => setLoading(false));
     };
 
     return (

@@ -5,7 +5,7 @@ class JournalEntry < ApplicationRecord
   belongs_to :user
 
   scope :for_user, -> (user) { where(user: user) }
-  scope :between, -> (start_date, end_date) {where(completed_at: start_date..end_date)}
+  scope :between, -> (start_date, end_date) {where(created_at: start_date..end_date)}
   scope :sort_by_created_at, -> { order(created_at: :desc) }
 
   before_save :update_preview
