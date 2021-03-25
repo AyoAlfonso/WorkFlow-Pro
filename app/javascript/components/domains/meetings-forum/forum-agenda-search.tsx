@@ -139,14 +139,19 @@ export const ForumAgendaSearch = observer(() => {
 
   const renderSelectedEntry = () => {
     if (selectedMeeting) {
+      //TODO may want to look at actual start time
       const inCurrentMonth = moment(selectedMeeting.scheduledStartTime).isSame(moment(), "month");
+      const inCurrentOrFutureMonth = moment(selectedMeeting.scheduledStartTime).isSameOrAfter(
+        moment(),
+        "month",
+      );
       return (
         <>
           <TeamMeetingButton handleMeetingClick={handleMeetingClick} disabled={!inCurrentMonth} />
           <SelectedEntryContainer>
             <SelectedMeetingAgendaEntry
               selectedMeetingId={selectedMeeting.id}
-              disabled={!inCurrentMonth || selectedMeeting.ended}
+              disabled={!inCurrentOrFutureMonth || selectedMeeting.ended}
             />
           </SelectedEntryContainer>
         </>
