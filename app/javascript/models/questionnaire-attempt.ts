@@ -10,6 +10,7 @@ export const QuestionnaireAttemptModel = types
     answers: types.maybeNull(types.array(types.frozen<object>())),
     steps: types.maybeNull(types.array(types.frozen<object>())),
     renderedSteps: types.maybeNull(types.array(types.frozen<object>())),
+    journalFormat: types.maybeNull(types.string),
     completedAt: types.string,
     emotionScore: types.maybeNull(types.number),
   })

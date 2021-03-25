@@ -1,4 +1,5 @@
 class QuestionnaireAttempt < ApplicationRecord
+  include JournalEntryHelper
   belongs_to :user
   belongs_to :questionnaire
   belongs_to :questionnaire_attemptable, polymorphic: true, optional: true
@@ -25,5 +26,9 @@ class QuestionnaireAttempt < ApplicationRecord
 
   def get_questionnaire_version_when_completed
     self.questionnaire.paper_trail.version_at(self.completed_at)
+  end
+
+  def journal_format
+    self.rendered_steps ? questionnaire_attempt_to_text(self.rendered_steps) : ""
   end
 end

@@ -67,25 +67,6 @@ export const JournalIndex = observer(
       return <Loading />;
     }
 
-    // find all steps with journalQuestion in their metadata, and map the questions and answers together
-    const parseRenderedSteps = renderedSteps =>
-      R.pipe(
-        R.filter(R.hasPath(["metadata", "journalQuestion"])),
-        R.map(step => {
-          if (step.id === "rating") {
-            return {
-              question: R.path(["metadata", "journalQuestion"], step),
-              answer: `${R.path(["value"], step)} / 5`,
-            };
-          } else {
-            return {
-              question: R.path(["metadata", "journalQuestion"], step),
-              answer: R.path(["value"], step),
-            };
-          }
-        }),
-      )(renderedSteps);
-
     const renderItems = () =>
       loading || R.isNil(questionnaireAttemptsSummary) ? (
         <Loading />
@@ -142,9 +123,6 @@ export const JournalIndex = observer(
     };
 
     const renderSelectedEntry = () => {
-      const questionsAnswers = parseRenderedSteps(
-        toJS(R.pathOr([], ["renderedSteps"], selectedItem)),
-      );
       return R.isNil(selectedItem) ? (
         <NoSelectedItems text={t("journals.startAdding")} />
       ) : (
@@ -171,16 +149,11 @@ export const JournalIndex = observer(
             }
           >
             <EntryBodyCard>
-              {questionsAnswers.map((step, index) => (
-                <EntryBodyContainer key={index}>
-                  <Text fontSize={"12px"} fontWeight={600} mb={"20px"}>
-                    {step.question}
-                  </Text>
-                  <Text fontSize={"12px"} fontWeight={400} mb={"20px"}>
-                    {step.answer}
-                  </Text>
-                </EntryBodyContainer>
-              ))}
+              <Text
+                fontSize={"12px"}
+                mb={"20px"}
+                dangerouslySetInnerHTML={{ __html: selectedItem.journalFormat }}
+              />
             </EntryBodyCard>
           </Card>
         </>
