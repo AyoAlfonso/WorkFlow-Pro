@@ -16,7 +16,7 @@ class CreateJournalEntries < ActiveRecord::Migration[6.0]
     #utilize the journal serilaizer to convert a json questionnaire attmpet to rich text
     QuestionnaireAttempt.find_each do |qa|
       parsed_body = questionnaire_attempt_to_text(qa.rendered_steps)
-      JournalEntry.create!(generated_from_type: qa.class.name, generated_from_id: qa.id, body: parsed_body, user_id: qa.user_id) if parsed_body.present?
+      JournalEntry.create!(generated_from_type: qa.class.name, generated_from_id: qa.id, body: parsed_body, user_id: qa.user_id, created_at: qa.completed_at) if parsed_body.present?
     end
   end
 end
