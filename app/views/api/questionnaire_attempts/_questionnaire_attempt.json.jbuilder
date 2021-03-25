@@ -1,2 +1,1 @@
 json.extract! questionnaire_attempt, :id, :user_id, :questionnaire_id, :answers, :steps, :rendered_steps, :completed_at, :created_at, :updated_at, :json_representation, :emotion_score, :questionnaire_type
-json.journal_format questionnaire_attempt.journal_format

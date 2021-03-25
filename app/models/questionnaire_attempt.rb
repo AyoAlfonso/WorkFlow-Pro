@@ -28,10 +28,6 @@ class QuestionnaireAttempt < ApplicationRecord
     self.questionnaire.paper_trail.version_at(self.completed_at)
   end
 
-  def journal_format
-    self.rendered_steps ? questionnaire_attempt_to_text(self.rendered_steps) : ""
-  end
-
   def save_and_create_journal_entry
     ActiveRecord::Base.transaction do
       save!
