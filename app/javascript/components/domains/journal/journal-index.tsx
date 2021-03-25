@@ -1,4 +1,5 @@
 import { observer } from "mobx-react";
+import styled from "styled-components";
 import * as R from "ramda";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -13,15 +14,15 @@ import { addDays } from "date-fns";
 import {
   ActionButtonsContainer,
   AvatarContainer,
+  BodyRightContainer,
+  Container,
   EntryBodyCard,
-  EntryBodyContainer,
   EntryContainer,
   EntryCardHeaderContainer,
   EntryHeadingContainer,
   ItemCard,
   ItemContainer,
   ItemListContainer,
-  MainContainer,
   NoSelectedItems,
 } from "~/components/shared/journals-and-notes";
 import { Card } from "~/components/shared/card";
@@ -96,10 +97,10 @@ export const JournalIndex = observer(
       return (
         <>
           <Text fontSize={"16px"} fontWeight={600}>
-            {selectedEntry.questionnaireType}
+            {selectedEntry.title}
           </Text>
           <Text fontSize={"12px"} fontWeight={400} color={"grey100"}>
-            {moment(selectedEntry.completedAt).format("dddd, MMMM Do, h:mm a")}
+            {moment(selectedEntry.createdAt).format("dddd, MMMM Do, h:mm a")}
           </Text>
           <AvatarContainer>
             <Avatar
@@ -165,7 +166,7 @@ export const JournalIndex = observer(
     };
 
     return (
-      <MainContainer>
+      <Container>
         <CalendarFilter
           header={t("journals.indexTitle")}
           dateFilter={dateFilter}
@@ -175,14 +176,13 @@ export const JournalIndex = observer(
           setSelectedDateFilter={setSelectedDateFilter}
           setLoading={setLoading}
           dateSelectAction={dateSelectedAction}
-          additionalBodyComponents={
-            <>
-              <ItemListContainer>{renderItems()}</ItemListContainer>
-              <EntryContainer>{renderSelectedEntry()}</EntryContainer>
-            </>
-          }
         />
-      </MainContainer>
+
+        <BodyRightContainer>
+          <ItemListContainer>{renderItems()}</ItemListContainer>
+          <EntryContainer>{renderSelectedEntry()}</EntryContainer>
+        </BodyRightContainer>
+      </Container>
     );
   },
 );

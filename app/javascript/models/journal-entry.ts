@@ -8,6 +8,7 @@ export const JournalEntryModel = types
     id: types.identifierNumber,
     userId: types.number,
     body: types.string,
+    title: types.string,
     preview: types.string,
     createdAt: types.string,
   })

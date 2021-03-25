@@ -154,6 +154,7 @@ type ContainerProps = {
 
 const Container = styled.div<ContainerProps>`
   width: ${props => props.width};
+  min-width: 370px;
 `;
 
 const StyledFilterContainer = styled(FilterContainer)`
