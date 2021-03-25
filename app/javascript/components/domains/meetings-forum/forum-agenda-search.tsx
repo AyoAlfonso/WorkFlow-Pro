@@ -113,6 +113,16 @@ export const ForumAgendaSearch = observer(() => {
     const { startDate, endDate } = ranges;
 
     if (!moment(startDate).isSame(endDate)) {
+      //if currentSelectedMeeting is not between start and end date, set to null to ensure no boundary effects
+      if (
+        selectedMeeting &&
+        moment(selectedMeeting.scheduledStartTime).isSameOrAfter(startDate) &&
+        moment(selectedMeeting.scheduledStartTime).isSameOrBefore(endDate)
+      ) {
+        //TODO: filter not based on actual start time as well
+      } else {
+        setSelectedMeeting(null);
+      }
       fetchMeetings(startDate, endDate);
     }
   };

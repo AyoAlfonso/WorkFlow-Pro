@@ -16,6 +16,8 @@ class Api::ForumsController < Api::ApplicationController
     @team = Team.find(params[:team_id])
     authorize @team, policy_class: ForumTeamPolicy
 
+    #TODO: add filtering so its the actual start time if it exists and scheduled_start_time if no actual start_time exists
+    #Move scoping to model
     @meetings = Meeting.joins(:meeting_template)
       .where("team_id = ? 
         AND scheduled_start_time >= ?          
