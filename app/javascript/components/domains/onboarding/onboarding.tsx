@@ -315,7 +315,7 @@ True value of LynchPyn is in working together with others in your team and compa
           formKeys: ["emails"],
           callback: setTeamDataState,
           subText: "Use commas to separate different emails",
-          placeholder: `e.g. user@${formData.name.replace(/\s+/g, "").toLowerCase()}.com`,
+          placeholder: `e.g. user@${(formData.name || "").replace(/\s+/g, "").toLowerCase()}.com`,
           style: { resize: "vertical", marginBottom: "16px" },
           rows: 8,
         },
