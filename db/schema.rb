@@ -188,6 +188,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_225211) do
 
   create_table "journal_entries", force: :cascade do |t|
     t.text "body"
+    t.string "preview"
     t.string "generated_from_type"
     t.bigint "generated_from_id"
     t.bigint "user_id", null: false

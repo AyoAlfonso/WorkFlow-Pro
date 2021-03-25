@@ -3,6 +3,7 @@ class CreateJournalEntries < ActiveRecord::Migration[6.0]
   def change
     create_table :journal_entries do |t|
       t.text :body
+      t.string :preview
       t.references :generated_from, polymorphic: true, index: {name: 'index_journal_entries_on_generated_from_polymorphic'}
       t.references :user, null: false, foreign_key: true, index: true
 

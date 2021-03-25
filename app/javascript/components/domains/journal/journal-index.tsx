@@ -28,7 +28,7 @@ import { Card } from "~/components/shared/card";
 import { Text } from "~/components/shared/text";
 import { Avatar } from "~/components/shared/avatar";
 import { Loading } from "~/components/shared";
-import { IQuestionnaireAttempt } from "~/models/questionnaire-attempt";
+import { IJournalEntry } from "~/models/journal-entry";
 import { CalendarFilter } from "~/components/shared/journals-and-notes/calendar-filter";
 
 export interface IJournalIndexProps {}
@@ -38,7 +38,7 @@ export const JournalIndex = observer(
     const { t } = useTranslation();
 
     const [loading, setLoading] = useState<boolean>(true);
-    const [selectedItem, setSelectedItem] = useState<IQuestionnaireAttempt>(null);
+    const [selectedItem, setSelectedItem] = useState<IJournalEntry>(null);
     const [selectedDateFilter, setSelectedDateFilter] = useState<string>(
       t("dateFilters.lastThirtyDays"),
     );
@@ -55,34 +55,34 @@ export const JournalIndex = observer(
       },
     });
 
-    const { questionnaireStore, userStore } = useMst();
+    const { journalStore, userStore } = useMst();
 
     useEffect(() => {
-      questionnaireStore.getQuestionnaireAttemptsSummary(null).then(() => setLoading(false));
+      journalStore.getJournalEntries(null).then(() => setLoading(false));
     }, []);
 
-    const questionnaireAttemptsSummary = questionnaireStore.questionnaireAttemptsSummary;
+    const { journalEntriesFiltered } = journalStore;
 
     if (R.isNil(userStore.users)) {
       return <Loading />;
     }
 
     const renderItems = () =>
-      loading || R.isNil(questionnaireAttemptsSummary) ? (
+      loading || R.isNil(journalEntriesFiltered) ? (
         <Loading />
       ) : (
-        questionnaireAttemptsSummary.map((item, index) => (
+        journalEntriesFiltered.map((item, index) => (
           <ItemContainer key={index}>
             <Text fontSize={"16px"} fontWeight={600}>
               {item.date}
             </Text>
-            {item.items.map((qa, qaIndex) => (
+            {item.items.map((journalEntry, journalEntryIndex) => (
               <ItemCard
-                key={qaIndex}
-                titleText={moment(qa.completedAt).format("LT")}
-                bodyText={qa.questionnaireType}
-                onClick={() => setSelectedItem({ ...qa })}
-                selected={!R.isNil(selectedItem) ? selectedItem.id === qa.id : false}
+                key={journalEntryIndex}
+                titleText={moment(journalEntry.createdAt).format("LT")}
+                bodyText={journalEntry.preview}
+                onClick={() => setSelectedItem({ ...journalEntry })}
+                selected={!R.isNil(selectedItem) ? selectedItem.id === journalEntry.id : false}
               />
             ))}
           </ItemContainer>
@@ -152,7 +152,7 @@ export const JournalIndex = observer(
               <Text
                 fontSize={"12px"}
                 mb={"20px"}
-                dangerouslySetInnerHTML={{ __html: selectedItem.journalFormat }}
+                dangerouslySetInnerHTML={{ __html: selectedItem.body }}
               />
             </EntryBodyCard>
           </Card>
@@ -161,7 +161,7 @@ export const JournalIndex = observer(
     };
 
     const dateSelectedAction = ranges => {
-      questionnaireStore.getQuestionnaireAttemptsSummary(ranges).then(() => setLoading(false));
+      journalStore.getJournalEntries(ranges.selection).then(() => setLoading(false));
     };
 
     return (

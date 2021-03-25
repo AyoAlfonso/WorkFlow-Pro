@@ -1,0 +1,1 @@
+json.extract! journal_entry, :id, :body, :preview, :user_id, :created_at

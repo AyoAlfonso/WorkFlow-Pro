@@ -12,6 +12,7 @@ import { AnnualInitiativeStoreModel, IAnnualInitiativeStore } from "./annual-ini
 import { QuarterlyGoalStoreModel, IQuarterlyGoalStore } from "./quarterly-goal-store";
 import { HabitStoreModel } from "./habit-store";
 import { QuestionnaireStoreModel, IQuestionnaireStore } from "./questionnaire-store";
+import { JournalStoreModel, IJournalStore } from "./journal-store";
 import { TeamStoreModel, ITeamStore } from "./team-store";
 import { MeetingStoreModel, IMeetingStore } from "./meeting-store";
 import { NotificationStoreModel, INotificationStore } from "./notification-store";
@@ -34,6 +35,7 @@ export const RootStoreModel = types
     quarterlyGoalStore: QuarterlyGoalStoreModel,
     habitStore: HabitStoreModel,
     questionnaireStore: QuestionnaireStoreModel,
+    journalStore: JournalStoreModel,
     teamStore: TeamStoreModel,
     meetingStore: MeetingStoreModel,
     notificationStore: NotificationStoreModel,
@@ -76,6 +78,7 @@ export interface IRootStore extends IStateTreeNode {
   annualInitiativeStore: IAnnualInitiativeStore;
   quarterlyGoalStore: IQuarterlyGoalStore;
   questionnaireStore: IQuestionnaireStore;
+  journalStore: IJournalStore;
   teamStore: ITeamStore;
   meetingStore: IMeetingStore;
   notificationStore: INotificationStore;

@@ -152,7 +152,7 @@ Rails.application.routes.draw do
     get '/milestones/milestones_for_meeting', to: "milestones#milestones_for_meeting"
 
     #summaries
-    get '/journals', to: 'summaries#questionnaire_attempts_by_date'
+    get '/journals', to: 'summaries#journals_by_date'
     get '/notes', to: 'summaries#meetings_by_date'
 
   end
