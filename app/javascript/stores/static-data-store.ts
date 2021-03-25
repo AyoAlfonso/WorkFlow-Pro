@@ -1,5 +1,4 @@
-import { types, flow, getRoot } from "mobx-state-tree";
-import * as R from "ramda";
+import { types, flow } from "mobx-state-tree";
 import { ApiResponse } from "apisauce";
 
 import { withEnvironment } from "../lib/with-environment";
@@ -15,16 +14,17 @@ export const StaticDataStoreModel = types
   .views(self => ({}))
   .actions(self => ({
     load: flow(function*() {
-      try {
-        const response: ApiResponse<any> = yield self.environment.api.getStaticData();
-        if (response.ok) {
-          self.timeZones = response.data.timeZones as any;
-          self.headingsAndDescriptions = response.data.headingsAndDescriptions as any;
-          self.fieldsAndLabels = response.data.fieldsAndLabels as any;
-        } else {
-        }
-      } catch {
-        // caught by Api Monitor
+      const response: ApiResponse<any> = yield self.environment.api.getStaticData();
+      if (response.ok) {
+        self.timeZones = response.data.timeZones as any;
+        console.log(self.timeZones);
+        self.headingsAndDescriptions = response.data.headingsAndDescriptions as any;
+        console.log(self.headingsAndDescriptions);
+        self.fieldsAndLabels = response.data.fieldsAndLabels as any;
+        console.log(self.fieldsAndLabels);
+        return true;
+      } else {
+        return false;
       }
     }),
   }));
