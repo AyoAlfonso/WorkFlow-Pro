@@ -277,6 +277,7 @@ mt4.update!(
 
 
 pdmt = MeetingTemplate.where(meeting_type: :personal_daily, name: "Personal Daily").first_or_initialize
+pdmt.steps.destroy_all if pdmt.steps.count > 0
 pdmt.update!(
   meeting_type: :personal_daily,
   name: "Personal Daily",

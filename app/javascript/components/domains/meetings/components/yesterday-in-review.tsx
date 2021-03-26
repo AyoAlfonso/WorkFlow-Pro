@@ -7,6 +7,7 @@ import { useMst } from "~/setup/root";
 import { Heading } from "~/components/shared";
 import { Button } from "~/components/shared/button";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
+import { useState } from "react";
 
 export const YesterdayInReview = observer(
   (props: {}): JSX.Element => {
@@ -15,6 +16,8 @@ export const YesterdayInReview = observer(
 
     const finishedYesterdayPyns = keyActivityStore.completedYesterday;
     const remainingPyns = keyActivityStore.todaysPrioritiesFromPreviousDays;
+
+    const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
 
     return (
       <Container>
@@ -47,7 +50,13 @@ export const YesterdayInReview = observer(
             <MarkDoneButton
               small
               variant={"primary"}
-              onClick={() => keyActivityStore.markAllYesterdayDone()}
+              disabled={buttonDisabled}
+              onClick={() => {
+                setButtonDisabled(true);
+                keyActivityStore.markAllYesterdayDone().then(() => {
+                  setButtonDisabled(false);
+                });
+              }}
             >
               {t("keyActivities.markAllYesterdayDone")}
             </MarkDoneButton>
@@ -60,7 +69,7 @@ export const YesterdayInReview = observer(
 
 const Container = styled.div`
   display: flex;
-  width: 70%;
+  width: 100%;
 `;
 
 const ListContainer = styled.div`
@@ -81,12 +90,15 @@ const SubHeaderContainer = styled.div`
 
 const KeyActivitiesListContainer = styled.div`
   margin-top: 16px;
-  height: 100%;
+  margin-bottom: 16px;
 `;
 
-const MarkDoneButton = styled(Button)``;
+const MarkDoneButton = styled(Button)`
+  width: 100%;
+  margin-left: 4px;
+`;
 
 const ButtonContainer = styled.div`
   display: flex;
-  direction: rtl;
+  width: 100%;
 `;
