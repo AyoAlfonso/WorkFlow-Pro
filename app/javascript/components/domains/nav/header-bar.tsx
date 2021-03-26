@@ -31,7 +31,7 @@ export const HeaderBar = observer(
     const [showCompanyOptions, setShowCompanyOptions] = useState<boolean>(false);
     const [inviteTeamModalOpen, setInviteTeamModalOpen] = useState<boolean>(false);
 
-    const { sessionStore, companyStore, meetingStore, userStore, teamStore } = useMst();
+    const { sessionStore, companyStore, teamStore } = useMst();
     const accountActionRef = useRef(null);
 
     const location = useLocation();

@@ -96,8 +96,12 @@ export const SessionStoreModel = types
     }),
     getUserPulseByDate: flow(function*(date){
       const response = yield self.environment.api.getUserPulseByDate(date);
-      console.log('response data', response.data)
-      self.profile.userPulseForDisplay = response.data.userPulse
+      if(response.data){
+        self.profile.userPulseForDisplay = response.data.userPulse
+      } else {
+        self.profile.userPulseForDisplay = null
+      }
+      
     }),
     updateAvatar: flow(function*(formData) {
       self.loading = true;

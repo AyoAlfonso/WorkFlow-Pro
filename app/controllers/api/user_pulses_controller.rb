@@ -2,16 +2,15 @@ class Api::UserPulsesController < Api::ApplicationController
   respond_to :json
 
   def user_pulse_by_date
-    #binding.pry
     if params[:date] == "Today"
       date = current_user.time_in_user_timezone.to_date
     elsif params[:date] == "Yesterday"
       date = current_user.time_in_user_timezone.to_date - 1.day
     else
-      date = current_user.time_in_user_timezone
+      date = current_user.convert_to_their_timezone(params[:date].to_date)
     end
     @user_pulse = current_user.user_pulse_for_display(date)
-    authorize @user_pulse
+    authorize current_user, policy_class: UserPulsePolicy
     render json: { user_pulse: @user_pulse }
   end
 
