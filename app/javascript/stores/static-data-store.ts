@@ -13,7 +13,22 @@ export const StaticDataStoreModel = types
     emotionAdjectives: types.maybeNull(types.frozen()),
   })
   .extend(withEnvironment())
-  .views(self => ({}))
+  .views(self => ({
+    filteredEmotionAdjectives(selectedEmotion){
+      switch (selectedEmotion) {
+        case 1:
+          return self.emotionAdjectives.emotionScore1;
+        case 2:
+          return self.emotionAdjectives.emotionScore2;
+        case 4:
+          return self.emotionAdjectives.emotionScore4;
+        case 5:
+          return self.emotionAdjectives.emotionScore5;
+        default:
+          return [];
+      }
+    }
+  }))
   .actions(self => ({
     load: flow(function*() {
       try {

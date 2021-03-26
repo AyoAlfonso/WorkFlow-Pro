@@ -151,6 +151,10 @@ class User < ApplicationRecord
     end
   end
 
+  def user_pulse_for_display(date = nil)
+    self.user_pulses.where(completed_at: date || self.time_in_user_timezone.to_date).first
+  end
+
   def daily_average_users_emotion_scores_over_week(from_date, to_date)
     daily_average_users_emotion_score(self, from_date, to_date)
   end

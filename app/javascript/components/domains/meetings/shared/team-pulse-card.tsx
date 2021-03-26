@@ -96,15 +96,15 @@ const renderTickIcon = (value, index) => {
   //                That's why we are passing in hard coded svg values instead of using the Icon component
   switch (index) {
     case 0:
-      return emotionE();
+      return emotionE(true);
     case 1:
-      return emotionD();
+      return emotionD(true);
     case 2:
-      return emotionC();
+      return emotionC(true);
     case 3:
-      return emotionB();
+      return emotionB(true);
     case 4:
-      return emotionA();
+      return emotionA(true);
   }
 };
 

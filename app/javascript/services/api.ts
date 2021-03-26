@@ -452,5 +452,12 @@ export class Api {
     return this.client.get(`/user_pulses/emotion_adjectives`)
   }
 
+  async updateUserPulse(pulseObject){
+    return this.client.post(`/update_user_pulse`, pulseObject )
+  }
+  
+  async getUserPulseByDate(date){
+    return this.client.get(`/user_pulse_by_date`, { date })
+  }
   //async setJWT(jwt) {}
 }

@@ -12,15 +12,9 @@ import { CreateIssueModal } from "../issues/create-issue-modal";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 import { InviteUserModal } from "~/components/shared/invite-user-modal";
 import * as moment from "moment";
-import {
-  emotionA,
-  emotionB,
-  emotionC,
-  emotionD,
-  emotionE,
-} from "~/components/shared/pulse/pulse-icon";
 import { AccountDropdownOptions } from "./top-nav/account-dropdown-options";
 import { InviteYourTeamModal } from "../account/users/invite-your-team-modal";
+import { PulseSelectorWrapper } from "./top-nav/pulse-selector-wrapper";
 
 declare global {
   interface Window {
@@ -137,7 +131,7 @@ export const HeaderBar = observer(
               )}
             </LogoContainer>
             <PersonalInfoContainer ref={accountActionRef}>
-              <MoodSelectorContainer>{emotionC()}</MoodSelectorContainer>
+              <PulseSelectorWrapper />
               <PersonalInfoDisplayContainer
                 onClick={() => {
                   setShowAccountActions(!showAccountActions);
@@ -278,11 +272,4 @@ const PersonalInfoContainer = styled.div`
   position: fixed;
   display: flex;
   right: 0;
-`;
-
-const MoodSelectorContainer = styled.div`
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: 20px;
-  color: ${props => props.theme.colors.grey60};
 `;
