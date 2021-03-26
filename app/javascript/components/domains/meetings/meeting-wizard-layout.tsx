@@ -72,7 +72,22 @@ export const MeetingWizardLayout = observer(
       if (meeting.currentStep == 0) {
         return nextButton;
       } else if (meeting.currentStep + 1 == numberOfSteps) {
-        return stopMeetingButton;
+        return (
+          <ButtonsContainer>
+            <LeftButtonContainer>
+              {
+                <BackButton
+                  small
+                  variant={"primaryOutline"}
+                  onClick={() => onNextButtonClick(meeting.currentStep - 1)}
+                >
+                  <StyledBackIcon icon={"Move2"} size={"15px"} iconColor={"primary100"} />
+                </BackButton>
+              }
+            </LeftButtonContainer>
+            {stopMeetingButton}
+          </ButtonsContainer>
+        );
       } else {
         return (
           <ButtonsContainer>

@@ -16,10 +16,11 @@ import { StyledIcon } from "~/components/shared/issues-and-key-activities/schedu
 
 export interface IHomeKeyActivities {
   todayOnly?: boolean;
+  width?: string;
 }
 
 export const HomeKeyActivities = observer(
-  ({ todayOnly = false }: IHomeKeyActivities): JSX.Element => {
+  ({ todayOnly = false, width }: IHomeKeyActivities): JSX.Element => {
     const [selectedFilterGroupName, setSelectedFilterGroupName] = useState<string>("Tomorrow");
     const [selectedFilterTeamId, setSelectedFilterTeamId] = useState<number>(null);
     const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
@@ -199,7 +200,7 @@ export const HomeKeyActivities = observer(
     };
 
     return todayOnly ? (
-      <Container>
+      <Container width={width}>
         <SingleListContainer>
           <HeaderContainer>
             {renderHeader(
@@ -233,7 +234,7 @@ export const HomeKeyActivities = observer(
         />
       </Container>
     ) : (
-      <Container>
+      <Container width={width}>
         <ListContainer>
           <HeaderContainer>
             {renderHeader(
@@ -295,9 +296,13 @@ export const HomeKeyActivities = observer(
   },
 );
 
-const Container = styled.div`
+type ContainerProps = {
+  width?: string;
+};
+
+const Container = styled.div<ContainerProps>`
   display: flex;
-  width: 75%;
+  width: ${props => props.width || "75%"};
 `;
 
 const ListContainer = styled.div`

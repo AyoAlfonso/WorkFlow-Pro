@@ -46,7 +46,7 @@ export const PersonalMeetingWizardLayout = observer(
               variant={"primaryOutline"}
               onClick={() => onNextButtonClick(meeting.currentStep - 1)}
             >
-              <Icon icon={"Chevron-Left"} size={"16px"} iconColor={"primary80"} />
+              <StyledBackIcon icon={"Move2"} size={"15px"} iconColor={"primary100"} />
             </BackButton>
           )}
           {meeting.currentStep + 1 < numberOfSteps && (
@@ -105,4 +105,9 @@ const StepText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
   font-size: 11px;
   text-align: right;
+`;
+
+const StyledBackIcon = styled(Icon)`
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
 `;
