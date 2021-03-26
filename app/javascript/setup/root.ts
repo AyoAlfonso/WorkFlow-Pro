@@ -73,7 +73,7 @@ const initialState = {
   },
   staticDataStore: {
     loading: false,
-    timeZones: null,
+    timeZones: [],
     headingsAndDescriptions: {},
     fieldsAndLabels: {},
   },

@@ -37,7 +37,9 @@ export const KeyActivityRecord = observer(
     const [selectedLabel, setSelectedLabel] = useState<any>(null);
 
     useEffect(() => {
-      setSelectedLabel(keyActivity.labels ? keyActivity.labels[0] : null);
+      setSelectedLabel(
+        keyActivity.labels && keyActivity.labels.length > 0 ? keyActivity.labels[0] : null,
+      );
     }, [keyActivity]);
 
     const updatePriority = () => {
