@@ -418,6 +418,7 @@ True value of LynchPyn is in working together with others in your team and compa
     [currentStep, "heading"],
     headingsAndDescriptionsWithOnboardingDisplayFormat,
   );
+
   const wizardDescriptions = R.path(
     [currentStep, "description"],
     headingsAndDescriptionsWithOnboardingDisplayFormat,
