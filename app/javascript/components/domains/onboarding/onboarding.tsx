@@ -2,6 +2,7 @@ import * as React from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { useCallback, useEffect, useState } from "react";
+import { toJS } from "mobx";
 import { useMst } from "~/setup/root";
 import { convertUrlToFile } from "~/utils/image-to-file";
 
@@ -76,7 +77,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
   }
 
   const timeZonesWithNull = () => {
-    const timeZoneList = timeZones.map(tz => ({ label: tz, value: tz }));
+    const timeZoneList = toJS(timeZones).map(tz => ({ label: tz, value: tz }));
     timeZoneList.unshift({ label: "Please select a time zone", value: null });
     return timeZoneList;
   };
