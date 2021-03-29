@@ -11,13 +11,12 @@ import { addDays } from "date-fns";
 import { DateRange } from "react-date-range";
 import { baseTheme } from "~/themes/base";
 import styled from "styled-components";
-import { IQuestionnaireAttempt } from "~/models/questionnaire-attempt";
 
 interface ICalendarFilterProps {
   header: string;
   dateFilter: any;
   setDateFilter: React.Dispatch<React.SetStateAction<any>>;
-  setSelectedItem?: React.Dispatch<React.SetStateAction<IQuestionnaireAttempt>>;
+  setSelectedItem?: React.Dispatch<React.SetStateAction<any>>;
   selectedDateFilter: string;
   setSelectedDateFilter: React.Dispatch<React.SetStateAction<string>>;
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -155,6 +154,7 @@ type ContainerProps = {
 
 const Container = styled.div<ContainerProps>`
   width: ${props => props.width};
+  min-width: 370px;
 `;
 
 const StyledFilterContainer = styled(FilterContainer)`

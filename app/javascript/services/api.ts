@@ -312,7 +312,7 @@ export class Api {
     return this.client.get(`/questionnaires`);
   }
 
-  async getQuestionnaireAttemptsSummary(dateFilterObj) {
+  async getJournalEntries(dateFilterObj) {
     return this.client.get(`/journals`, dateFilterObj);
   }
 

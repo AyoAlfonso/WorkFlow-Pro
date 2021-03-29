@@ -1,4 +1,5 @@
 class QuestionnaireAttempt < ApplicationRecord
+  include JournalEntryHelper
   belongs_to :user
   belongs_to :questionnaire
   belongs_to :questionnaire_attemptable, polymorphic: true, optional: true
@@ -25,5 +26,14 @@ class QuestionnaireAttempt < ApplicationRecord
 
   def get_questionnaire_version_when_completed
     self.questionnaire.paper_trail.version_at(self.completed_at)
+  end
+
+  def save_and_create_journal_entry
+    ActiveRecord::Base.transaction do
+      save!
+      parsed_body = questionnaire_attempt_to_text(self.rendered_steps)
+      JournalEntry.create!(generated_from_type: self.class.name, generated_from_id: self.id, body: parsed_body, user_id: self.user_id, title: self.questionnaire.name) if parsed_body.present?
+    end
+    
   end
 end
