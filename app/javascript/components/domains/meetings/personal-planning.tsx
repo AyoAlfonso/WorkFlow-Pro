@@ -59,7 +59,6 @@ export const PersonalPlanning = observer(
             //TODO: send personal plan ended to back end.  For now do not end it.
           }}
           small
-          ml={"25px"}
           disabled={false}
         >
           Done

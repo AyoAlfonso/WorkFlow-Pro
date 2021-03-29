@@ -12,14 +12,10 @@ export const JournalStoreModel = types
   .views(self => ({}))
   .actions(self => ({
     getJournalEntries: flow(function*(dateFilterObj) {
-      try {
-        const response: ApiResponse<any> = yield self.environment.api.getJournalEntries(
-          dateFilterObj,
-        );
-        self.journalEntriesFiltered = response.data;
-      } catch {
-        // caught by Api monitor
-      }
+      const response: ApiResponse<any> = yield self.environment.api.getJournalEntries(
+        dateFilterObj,
+      );
+      self.journalEntriesFiltered = response.data;
     }),
   }));
 

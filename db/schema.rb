@@ -267,7 +267,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_225211) do
     t.datetime "scheduled_start_time"
     t.datetime "end_time"
     t.bigint "hosted_by_id"
-    t.text "notes", default: ""
+    t.text "notes"
     t.json "settings"
     t.boolean "original_creation", default: false
     t.index ["created_at"], name: "index_meetings_on_created_at"
@@ -473,6 +473,16 @@ ActiveRecord::Schema.define(version: 2021_03_24_225211) do
     t.index ["user_role_id"], name: "index_user_company_enablements_on_user_role_id"
   end
 
+  create_table "user_pulses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "score"
+    t.string "feeling", default: ""
+    t.date "completed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_pulses_on_user_id"
+  end
+
   create_table "user_roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -574,6 +584,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_225211) do
   add_foreign_key "user_company_enablements", "companies"
   add_foreign_key "user_company_enablements", "user_roles"
   add_foreign_key "user_company_enablements", "users"
+  add_foreign_key "user_pulses", "users"
   add_foreign_key "users", "companies"
   add_foreign_key "users", "companies", column: "default_selected_company_id"
   add_foreign_key "users", "user_roles"
