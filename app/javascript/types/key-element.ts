@@ -3,4 +3,7 @@ export type KeyElementType = {
   value: string;
   completedAt: Date | string;
   elementableId: number;
+  completionType: string;
+  completionCurrentValue: number;
+  completionTargetValue: number;
 };

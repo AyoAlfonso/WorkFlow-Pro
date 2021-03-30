@@ -51,7 +51,6 @@ export const AnnualInitiativeModalContent = observer(
     }, []);
 
     const annualInitiative = annualInitiativeStore.annualInitiative;
-
     if (annualInitiative == null) {
       return <Loading />;
     }

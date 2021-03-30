@@ -246,8 +246,8 @@ export class Api {
     return this.client.delete(`/annual_initiatives/${id}`);
   }
 
-  async createAnnualInitiativeKeyElement(id) {
-    return this.client.post(`/annual_initiatives/create_key_element/${id}`);
+  async createAnnualInitiativeKeyElement(id, params) {
+    return this.client.post(`/annual_initiatives/create_key_element/${id}`, params);
   }
 
   async getQuarterlyGoal(id) {
@@ -264,8 +264,8 @@ export class Api {
     return this.client.patch(`/quarterly_goals/${quarterlyGoal.id}`, parsedQuarterlyGoal);
   }
 
-  async createQuarterlyGoalKeyElement(id) {
-    return this.client.post(`/quarterly_goals/create_key_element/${id}`);
+  async createQuarterlyGoalKeyElement(id, params) {
+    return this.client.post(`/quarterly_goals/create_key_element/${id}`, params);
   }
 
   async deleteQuarterlyGoal(id) {

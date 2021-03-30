@@ -54,7 +54,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   private
 
   def quarterly_goal_params
-    params.permit(:id, :created_by_id, :owned_by_id, :context_description, :annual_initiative_id, :description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value], milestones_attributes: [:id, :description, :status], :importance => [])
+    params.permit(:id, :created_by_id, :owned_by_id, :context_description, :annual_initiative_id, :description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value], milestones_attributes: [:id, :description, :status], :importance => [])
   end
 
   def set_quarterly_goal

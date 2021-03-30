@@ -25,26 +25,28 @@ export const AnnualInitiativeStoreModel = types
     }),
     update: flow(function*() {
       const env = getEnv(self);
-      try {
-        const response: any = yield env.api.updateAnnualInitiative(self.annualInitiative);
-        const responseAnnualInitiative = response.data.annualInitiative;
-        self.annualInitiative = responseAnnualInitiative;
-        const { goalStore } = getRoot(self);
-        goalStore.updateAnnualInitiative(responseAnnualInitiative);
-        showToast("Annual objective updated", ToastMessageConstants.SUCCESS);
-        return responseAnnualInitiative;
-      } catch {
-        showToast("There was an error updating the annual objective", ToastMessageConstants.ERROR);
-      }
+      // try {
+      const response: any = yield env.api.updateAnnualInitiative(self.annualInitiative);
+      const responseAnnualInitiative = response.data.annualInitiative;
+      self.annualInitiative = responseAnnualInitiative;
+      const { goalStore } = getRoot(self);
+      goalStore.updateAnnualInitiative(responseAnnualInitiative);
+      showToast("Annual objective updated", ToastMessageConstants.SUCCESS);
+      return responseAnnualInitiative;
+      // } catch {
+      //   showToast("There was an error updating the annual objective", ToastMessageConstants.ERROR);
+      // }
     }),
-    createKeyElement: flow(function*() {
+    createKeyElement: flow(function*(keyElementParams) {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createAnnualInitiativeKeyElement(
           self.annualInitiative.id,
+          keyElementParams,
         );
         const updatedKeyElements = [...self.annualInitiative.keyElements, response.data.keyElement];
         self.annualInitiative.keyElements = updatedKeyElements as any;
+        return response.data.keyElement;
       } catch {
         showToast("There was an error creating the key element", ToastMessageConstants.ERROR);
       }
@@ -81,10 +83,10 @@ export const AnnualInitiativeStoreModel = types
     updateModelField(field, value) {
       self.annualInitiative[field] = value;
     },
-    updateKeyElementValue(id, value) {
+    updateKeyElementValue(field: string, id: number, value: number) {
       let keyElements = self.annualInitiative.keyElements;
       let keyElementIndex = keyElements.findIndex(ke => ke.id == id);
-      keyElements[keyElementIndex].value = value;
+      keyElements[keyElementIndex][field] = value;
       self.annualInitiative.keyElements = keyElements;
     },
     updateKeyElementStatus(id, value) {

@@ -25,22 +25,26 @@ export const QuarterlyGoalStoreModel = types
     }),
     update: flow(function*() {
       const env = getEnv(self);
-      try {
-        const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
-        const responseQuarterlyGoal = response.data;
-        self.quarterlyGoal = responseQuarterlyGoal;
-        showToast(il8n.t("quarterlyGoal.updated"), ToastMessageConstants.SUCCESS);
-        return responseQuarterlyGoal;
-      } catch {
-        showToast(il8n.t("quarterlyGoal.retrievalError"), ToastMessageConstants.ERROR);
-      }
+      // try {
+      const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
+      const responseQuarterlyGoal = response.data;
+      self.quarterlyGoal = responseQuarterlyGoal;
+      showToast(il8n.t("quarterlyGoal.updated"), ToastMessageConstants.SUCCESS);
+      return responseQuarterlyGoal;
+      // } catch {
+      //   showToast(il8n.t("quarterlyGoal.retrievalError"), ToastMessageConstants.ERROR);
+      // }
     }),
-    createKeyElement: flow(function*() {
+    createKeyElement: flow(function*(keyElementParams) {
       const env = getEnv(self);
       try {
-        const response: any = yield env.api.createQuarterlyGoalKeyElement(self.quarterlyGoal.id);
+        const response: any = yield env.api.createQuarterlyGoalKeyElement(
+          self.quarterlyGoal.id,
+          keyElementParams,
+        );
         const updatedKeyElements = [...self.quarterlyGoal.keyElements, response.data.keyElement];
         self.quarterlyGoal.keyElements = updatedKeyElements as any;
+        return response.data.keyElement;
       } catch {
         showToast(il8n.t("quarterlyGoal.keyElementCreationError"), ToastMessageConstants.ERROR);
       }
@@ -126,10 +130,10 @@ export const QuarterlyGoalStoreModel = types
     updateModelField(field, value) {
       self.quarterlyGoal[field] = value;
     },
-    updateKeyElementValue(id, value) {
+    updateKeyElementValue(field: string, id: number, value: number) {
       let keyElements = self.quarterlyGoal.keyElements;
       let keyElementIndex = keyElements.findIndex(ke => ke.id == id);
-      keyElements[keyElementIndex].value = value;
+      keyElements[keyElementIndex][field] = value;
       self.quarterlyGoal.keyElements = keyElements;
     },
     updateKeyElementStatus(id, value) {

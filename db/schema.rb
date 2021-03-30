@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_24_225211) do
+ActiveRecord::Schema.define(version: 2021_03_26_181205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -239,6 +239,9 @@ ActiveRecord::Schema.define(version: 2021_03_24_225211) do
     t.bigint "elementable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "completion_type"
+    t.integer "completion_current_value"
+    t.integer "completion_target_value"
     t.index ["elementable_type", "elementable_id"], name: "index_key_elements_on_elementable_type_and_elementable_id"
   end
 

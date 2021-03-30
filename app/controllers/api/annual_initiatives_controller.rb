@@ -35,7 +35,8 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   end
 
   def create_key_element
-    key_element = KeyElement.create!(elementable: @annual_initiative, value: "")
+    binding.pry
+    key_element = KeyElement.create!(elementable: @annual_initiative, value: params[:value], completion_type: params[:completion_type], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
     render json: { key_element: key_element, status: :ok }
   end
 
@@ -50,7 +51,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   private 
 
   def annual_initiative_params
-    params.permit(:id, :created_by_id, :owned_by_id, :description, :company_id, :context_description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value], :importance => [])
+    params.permit(:id, :created_by_id, :owned_by_id, :description, :company_id, :context_description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value], :importance => [])
   end
   
   def set_annual_initiative

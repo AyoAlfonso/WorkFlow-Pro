@@ -7,6 +7,9 @@ export const KeyElementModel = types
     value: types.maybeNull(types.string),
     completedAt: types.maybeNull(types.string),
     elementableId: types.number,
+    completionType: types.maybeNull(types.string),
+    completionCurrentValue: types.maybeNull(types.number),
+    completionTargetValue: types.maybeNull(types.number),
   })
   .views(self => ({}))
   .actions(self => ({}));
