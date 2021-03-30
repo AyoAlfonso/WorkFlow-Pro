@@ -34,6 +34,7 @@ class User < ApplicationRecord
   has_many :meetings, :foreign_key => 'hosted_by_id'
   has_many :user_company_enablements, dependent: :destroy
   has_many :companies, through: :user_company_enablements
+  has_many :user_pulses, dependent: :destroy
   accepts_nested_attributes_for :companies, :allow_destroy => true
   accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
   accepts_nested_attributes_for :team_user_enablements, :allow_destroy => true
@@ -148,6 +149,10 @@ class User < ApplicationRecord
     elsif time == 'noon'
       Time.current.in_time_zone(timezone_name).at_noon
     end
+  end
+
+  def user_pulse_for_display(date = nil)
+    self.user_pulses.where(completed_at: date || self.time_in_user_timezone.to_date).first
   end
 
   def daily_average_users_emotion_scores_over_week(from_date, to_date)

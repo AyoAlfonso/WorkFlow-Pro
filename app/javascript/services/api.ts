@@ -448,5 +448,16 @@ export class Api {
     return this.client.post(`/create_team_and_invite_users`, { teamName, users });
   }
 
+  async getEmotionAdjectives(){
+    return this.client.get(`/user_pulses/emotion_adjectives`)
+  }
+
+  async updateUserPulse(pulseObject){
+    return this.client.post(`/update_user_pulse`, pulseObject )
+  }
+  
+  async getUserPulseByDate(date){
+    return this.client.get(`/user_pulse_by_date`, { date })
+  }
   //async setJWT(jwt) {}
 }

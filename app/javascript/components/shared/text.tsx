@@ -8,11 +8,41 @@ const StyledText = styled.p`
   ${typography}
 `;
 
-export const Text = props => (
-  <StyledText {...props} fontFamily={props.fontFamily ? props.fontFamily : "Lato"}>
-    {props.children}
-  </StyledText>
-);
+export const Text = props => {
+  const { type, children, fontFamily } = props;
+  switch (type) {
+    case "small":
+      return (
+        <StyledText {...props} fontSize={"11px"} lineHeight={"12px"} fontFamily={"Lato"}>
+          {children}
+        </StyledText>
+      );
+    case "paragraph":
+      return (
+        <StyledText {...props} fontSize={"14px"} lineHeight={"16px"} fontFamily={"Lato"}>
+          {children}
+        </StyledText>
+      );
+    case "fieldLabel":
+      return (
+        <StyledText
+          {...props}
+          fontSize={"12px"}
+          lineHeight={"12px"}
+          fontFamily={"Lato"}
+          fontWeight={"bold"}
+        >
+          {children}
+        </StyledText>
+      );
+    default:
+      return (
+        <StyledText {...props} fontFamily={fontFamily ? fontFamily : "Lato"}>
+          {children}
+        </StyledText>
+      );
+  }
+};
 
 const StyledTextNoMargin = styled.p`
   ${color}
