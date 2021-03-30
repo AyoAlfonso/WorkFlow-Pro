@@ -21,7 +21,7 @@ export interface IHomeKeyActivities {
 
 export const HomeKeyActivities = observer(
   ({ todayOnly = false, width }: IHomeKeyActivities): JSX.Element => {
-    const [selectedFilterGroupName, setSelectedFilterGroupName] = useState<string>("Tomorrow");
+    const [selectedFilterGroupName, setSelectedFilterGroupName] = useState<string>("Weekly List");
     const [selectedFilterTeamId, setSelectedFilterTeamId] = useState<number>(null);
     const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
