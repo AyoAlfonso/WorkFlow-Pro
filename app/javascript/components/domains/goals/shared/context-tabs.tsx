@@ -276,7 +276,6 @@ const TabPanelContainer = styled.div<TabPanelContainerType>`
   border: 1px solid #e3e3e3;
   box-shadow: 0px 3px 6px #f5f5f5;
   margin-top: -20px;
-  /* padding: 16px; */
   border-top-left-radius: 0px;
   display: ${props => props.hideContent && "none"};
 `;
@@ -343,15 +342,6 @@ const ButtonContainer = styled.div`
   margin-bottom: 16px;
   &:hover {
     cursor: pointer;
-  }
-`;
-
-const StyledButton = styled(Button)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &: hover {
-    color: ${props => props.theme.colors.primary100};
   }
 `;
 

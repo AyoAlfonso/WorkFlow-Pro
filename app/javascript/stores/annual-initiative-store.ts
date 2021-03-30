@@ -25,17 +25,17 @@ export const AnnualInitiativeStoreModel = types
     }),
     update: flow(function*() {
       const env = getEnv(self);
-      // try {
-      const response: any = yield env.api.updateAnnualInitiative(self.annualInitiative);
-      const responseAnnualInitiative = response.data.annualInitiative;
-      self.annualInitiative = responseAnnualInitiative;
-      const { goalStore } = getRoot(self);
-      goalStore.updateAnnualInitiative(responseAnnualInitiative);
-      showToast("Annual objective updated", ToastMessageConstants.SUCCESS);
-      return responseAnnualInitiative;
-      // } catch {
-      //   showToast("There was an error updating the annual objective", ToastMessageConstants.ERROR);
-      // }
+      try {
+        const response: any = yield env.api.updateAnnualInitiative(self.annualInitiative);
+        const responseAnnualInitiative = response.data.annualInitiative;
+        self.annualInitiative = responseAnnualInitiative;
+        const { goalStore } = getRoot(self);
+        goalStore.updateAnnualInitiative(responseAnnualInitiative);
+        showToast("Annual objective updated", ToastMessageConstants.SUCCESS);
+        return responseAnnualInitiative;
+      } catch {
+        showToast("There was an error updating the annual objective", ToastMessageConstants.ERROR);
+      }
     }),
     createKeyElement: flow(function*(keyElementParams) {
       const env = getEnv(self);
@@ -46,9 +46,22 @@ export const AnnualInitiativeStoreModel = types
         );
         const updatedKeyElements = [...self.annualInitiative.keyElements, response.data.keyElement];
         self.annualInitiative.keyElements = updatedKeyElements as any;
+        showToast("Key Result created", ToastMessageConstants.SUCCESS);
         return response.data.keyElement;
       } catch {
         showToast("There was an error creating the key element", ToastMessageConstants.ERROR);
+      }
+    }),
+    deleteKeyElement: flow(function*(keyElementId) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.deleteAnnualInitiativeKeyElement(keyElementId);
+        self.annualInitiative = response.data;
+        showToast("Key Result deleted", ToastMessageConstants.SUCCESS);
+        return true;
+      } catch {
+        showToast("There was an error deleting the key result", ToastMessageConstants.ERROR);
+        return false;
       }
     }),
     create: flow(function*(annualInitiativeObject) {
@@ -98,6 +111,7 @@ export const AnnualInitiativeStoreModel = types
       self.annualInitiative.keyElements = keyElements;
       self.update();
     },
+
     updateOwnedBy(user) {
       self.annualInitiative.ownedById = user.id;
       self.update();

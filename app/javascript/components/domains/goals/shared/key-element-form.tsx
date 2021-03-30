@@ -62,6 +62,17 @@ export const KeyElementForm = ({ onCreate, onClose }: IKeyElementFormProps): JSX
     }
   };
 
+  const completionSymbol = () => {
+    switch (completionType) {
+      case "numerical":
+        return "#";
+      case "percentage":
+        return "%";
+      case "currency":
+        return "$";
+    }
+  };
+
   return (
     <Container>
       <RowContainer>
@@ -86,7 +97,7 @@ export const KeyElementForm = ({ onCreate, onClose }: IKeyElementFormProps): JSX
               setCompletionType(e.currentTarget.value);
             }}
             value={completionType}
-            style={{ width: "100%" }}
+            style={{ minWidth: "200px" }}
           >
             {selectOptions.map(({ label, value }, index) => (
               <option key={`option-${index}`} value={value}>
@@ -110,6 +121,9 @@ export const KeyElementForm = ({ onCreate, onClose }: IKeyElementFormProps): JSX
                 }}
                 value={completionCurrentValue}
               />
+              <CompletionTypeContainer>
+                <TextDiv fontSize={"12px"}>{completionSymbol()}</TextDiv>
+              </CompletionTypeContainer>
             </InputContainer>
           </FormGroupContainer>
           <FormGroupContainer ml={"4px"}>
@@ -118,17 +132,25 @@ export const KeyElementForm = ({ onCreate, onClose }: IKeyElementFormProps): JSX
               <Input
                 type={"number"}
                 min={0}
+                max={completionType === "percentage" ? 100 : null}
                 onChange={e => {
                   e.preventDefault();
-                  setCompletionTargetValue(e.currentTarget.value);
+                  const value =
+                    completionType === "percentage" && e.currentTarget.value > 100
+                      ? 100
+                      : e.currentTarget.value;
+                  setCompletionTargetValue(value);
                 }}
                 value={completionTargetValue}
               />
+              <CompletionTypeContainer>
+                <TextDiv fontSize={"12px"}>{completionSymbol()}</TextDiv>
+              </CompletionTypeContainer>
             </InputContainer>
           </FormGroupContainer>
         </RowContainer>
       )}
-      <RowContainer>
+      <RowContainer mt={completionType === "binary" ? "20px" : "0"}>
         <Button variant={"primary"} onClick={handleSave} mr={"8px"} small disabled={!isValid}>
           <TextDiv fontSize={"16px"}>Save</TextDiv>
         </Button>
@@ -170,4 +192,10 @@ const FormGroupContainer = styled.div<SpaceProps>`
 const InputContainer = styled.div`
   position: relative;
   width: 100%;
+`;
+
+const CompletionTypeContainer = styled.div`
+  position: absolute;
+  right: 30px;
+  top: 9px;
 `;

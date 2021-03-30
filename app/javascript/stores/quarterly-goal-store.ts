@@ -44,9 +44,22 @@ export const QuarterlyGoalStoreModel = types
         );
         const updatedKeyElements = [...self.quarterlyGoal.keyElements, response.data.keyElement];
         self.quarterlyGoal.keyElements = updatedKeyElements as any;
+        showToast("Key Result deleted", ToastMessageConstants.SUCCESS);
         return response.data.keyElement;
       } catch {
         showToast(il8n.t("quarterlyGoal.keyElementCreationError"), ToastMessageConstants.ERROR);
+      }
+    }),
+    deleteKeyElement: flow(function*(keyElementId) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.deleteQuarterlyGoalKeyElement(keyElementId);
+        self.quarterlyGoal = response.data.quarterlyGoal;
+        showToast("Key Result deleted", ToastMessageConstants.SUCCESS);
+        return true;
+      } catch {
+        showToast("There was an error deleting the key result", ToastMessageConstants.ERROR);
+        return false;
       }
     }),
     create: flow(function*(quarterlyGoalObject, inAnnualInitiative) {

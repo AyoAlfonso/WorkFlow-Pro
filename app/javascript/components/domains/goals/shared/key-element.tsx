@@ -131,7 +131,7 @@ export const KeyElement = ({
                 placeholder={completionSymbol()}
               />
               <CompletionTextContainer>
-                {`/${element.completionTargetValue}${completionSymbol()}`}
+                {`/ ${element.completionTargetValue}${completionSymbol()}`}
               </CompletionTextContainer>
             </ProgressContainer>
             <ProgressBarContainer>
@@ -149,10 +149,11 @@ export const KeyElement = ({
       </OptionsButtonContainer>
       {showOptions && (
         <OptionsContainer>
-          <Option>
-            <OptionText>Edit</OptionText>
-          </Option>
-          <Option>
+          <Option
+            onClick={() => {
+              store.deleteKeyElement(element.id);
+            }}
+          >
             <OptionText>Delete</OptionText>
           </Option>
         </OptionsContainer>
@@ -207,7 +208,7 @@ const Option = styled.div`
   display: flex;
   &:hover {
     background-color: ${props => props.theme.colors.primary100};
-    /* border-radius: 10px; */
+    border-radius: 10px;
     z-index: 2;
   }
   &:hover ${OptionText} {
@@ -217,7 +218,7 @@ const Option = styled.div`
 
 const StyledContentEditable = styled(ContentEditable)`
   box-sizing: border-box;
-  width: 100%;
+  /* width: 100%; */
   padding-top: 5px;
   padding-bottom: 5px;
   padding-left: 16px;
@@ -251,17 +252,17 @@ const CompletionTextContainer = styled.div`
   align-items: center;
   justify-content: flex-start;
   white-space: nowrap;
-  margin-left: 16px;
+  margin-left: 8px;
   margin-right: 16px;
 `;
 
 const ProgressContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 20%;
+  justify-content: flex-start;
+  width: 25%;
 `;
 
 const ProgressBarContainer = styled.div`
-  width: 80%;
+  width: 75%;
 `;

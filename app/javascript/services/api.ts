@@ -250,6 +250,10 @@ export class Api {
     return this.client.post(`/annual_initiatives/create_key_element/${id}`, params);
   }
 
+  async deleteAnnualInitiativeKeyElement(keyElementId) {
+    return this.client.delete(`/annual_initiatives/delete_key_element/${keyElementId}`);
+  }
+
   async getQuarterlyGoal(id) {
     return this.client.get(`/quarterly_goals/${id}`);
   }
@@ -266,6 +270,10 @@ export class Api {
 
   async createQuarterlyGoalKeyElement(id, params) {
     return this.client.post(`/quarterly_goals/create_key_element/${id}`, params);
+  }
+
+  async deleteQuarterlyGoalKeyElement(keyElementId) {
+    return this.client.delete(`/quarterly_goals/delete_key_element/${keyElementId}`);
   }
 
   async deleteQuarterlyGoal(id) {

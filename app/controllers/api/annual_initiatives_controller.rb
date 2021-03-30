@@ -35,9 +35,17 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   end
 
   def create_key_element
-    binding.pry
     key_element = KeyElement.create!(elementable: @annual_initiative, value: params[:value], completion_type: params[:completion_type], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
     render json: { key_element: key_element, status: :ok }
+  end
+
+  def delete_key_element
+    key_element = KeyElement.find(params[:key_element_id])
+    key_element.destroy!
+    @annual_initiative = policy_scope(AnnualInitiative).find(key_element.elementable_id)
+    @company = current_company
+    authorize @annual_initiative
+    render 'api/annual_initiatives/delete_key_element'
   end
 
   def team

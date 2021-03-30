@@ -42,8 +42,17 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def create_key_element
-    key_element = KeyElement.create!(elementable: @quarterly_goal, value: "")
+    key_element = KeyElement.create!(elementable: @quarterly_goal, value: params[:value], completion_type: params[:completion_type], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
     render json: { key_element: key_element, status: :ok }
+  end
+
+  def delete_key_element
+    key_element = KeyElement.find(params[:key_element_id])
+    key_element.destroy!
+    @quarterly_goal = policy_scope(QuarterlyGoal).find(key_element.elementable_id)
+    @company = current_company
+    authorize @quarterly_goal
+    render "api/quarterly_goals/delete_key_element"
   end
 
   def create_milestones
