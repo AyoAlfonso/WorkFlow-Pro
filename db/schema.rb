@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_24_225211) do
+ActiveRecord::Schema.define(version: 2021_03_29_221742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -467,7 +467,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_225211) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_role_id"
     t.string "user_title"
-    t.boolean "first_time_access", default: true
+    t.boolean "first_time_access", default: false
     t.index ["company_id"], name: "index_user_company_enablements_on_company_id"
     t.index ["user_id"], name: "index_user_company_enablements_on_user_id"
     t.index ["user_role_id"], name: "index_user_company_enablements_on_user_role_id"
@@ -525,6 +525,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_225211) do
     t.string "title"
     t.datetime "deleted_at"
     t.bigint "default_selected_company_id"
+    t.string "customer_subscription_profile_id"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["default_selected_company_id"], name: "index_users_on_default_selected_company_id"
