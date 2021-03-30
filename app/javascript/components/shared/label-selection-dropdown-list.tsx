@@ -14,6 +14,7 @@ interface ILabelSelectionDropdownListProps {
   setSelectedLabel: any;
   afterLabelSelectAction?: any;
   closeModal: any;
+  marginLeft?: string;
 }
 
 const filter = createFilterOptions<any>({ limit: 5 });
@@ -24,6 +25,7 @@ export const LabelSelectionDropdownList = observer(
     setSelectedLabel,
     afterLabelSelectAction,
     closeModal,
+    marginLeft,
   }: ILabelSelectionDropdownListProps): JSX.Element => {
     const { labelStore } = useMst();
 
@@ -39,7 +41,7 @@ export const LabelSelectionDropdownList = observer(
     };
 
     return (
-      <ActionDropdownContainer>
+      <ActionDropdownContainer marginLeft={marginLeft}>
         <CloseIconContainer onClick={() => closeModal()}>
           <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
         </CloseIconContainer>
@@ -117,17 +119,20 @@ export const LabelSelectionDropdownList = observer(
   },
 );
 
-const ActionDropdownContainer = styled.div`
+type ActionDropdownContainerProps = {
+  marginLeft?: string;
+};
+
+const ActionDropdownContainer = styled.div<ActionDropdownContainerProps>`
   position: absolute;
   background-color: ${props => props.theme.colors.white};
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   padding: 10px;
   z-index: 2;
-  margin-left: -80px;
+  margin-left: ${props => props.marginLeft || "-80px"};
   margin-top: 5px;
   height: auto;
-  overflow: auto;
 `;
 
 type OptionContainerProps = {

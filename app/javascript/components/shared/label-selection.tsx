@@ -15,6 +15,7 @@ interface ILabelSelectionProps {
   inlineEdit?: boolean;
   afterLabelSelectAction?: any;
   marginLeft?: string;
+  marginLeftDropdownList?: string;
 }
 
 export const LabelSelection = ({
@@ -25,6 +26,7 @@ export const LabelSelection = ({
   inlineEdit = false,
   afterLabelSelectAction,
   marginLeft,
+  marginLeftDropdownList,
 }: ILabelSelectionProps): JSX.Element => {
   const { labelStore } = useMst();
   const { labelsList } = labelStore;
@@ -68,6 +70,7 @@ export const LabelSelection = ({
             setSelectedLabel={setSelectedLabel}
             afterLabelSelectAction={afterLabelSelectAction}
             closeModal={closeModal}
+            marginLeft={marginLeftDropdownList}
           />
         </div>
       )}
