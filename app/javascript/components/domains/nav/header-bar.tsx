@@ -11,10 +11,10 @@ import { Heading, Text } from "../../shared";
 import { CreateIssueModal } from "../issues/create-issue-modal";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 import { InviteUserModal } from "~/components/shared/invite-user-modal";
-import * as moment from "moment";
 import { AccountDropdownOptions } from "./top-nav/account-dropdown-options";
 import { InviteYourTeamModal } from "../account/users/invite-your-team-modal";
 import { PulseSelectorWrapper } from "./top-nav/pulse-selector-wrapper";
+import { HeaderText } from "~/utils/header-text";
 
 declare global {
   interface Window {
@@ -31,61 +31,10 @@ export const HeaderBar = observer(
     const [showCompanyOptions, setShowCompanyOptions] = useState<boolean>(false);
     const [inviteTeamModalOpen, setInviteTeamModalOpen] = useState<boolean>(false);
 
-    const { sessionStore, companyStore, teamStore } = useMst();
+    const { sessionStore, companyStore } = useMst();
     const accountActionRef = useRef(null);
 
     const location = useLocation();
-    const locationPath = location.pathname.split("/");
-    const subPath = locationPath[2];
-
-    const getGreetingTime = currentTime => {
-      const splitAfternoon = 12; // 24hr time to split the afternoon
-      const splitEvening = 18; // 24hr time to split the evening
-      const currentHour = parseFloat(currentTime.format("HH"));
-      if (currentHour >= splitAfternoon && currentHour <= splitEvening) {
-        return "Good Afternoon";
-      } else if (currentHour >= splitEvening) {
-        return "Good Evening";
-      }
-      return "Good Morning";
-    };
-
-    const renderHeaderTitle = () => {
-      switch (locationPath[1]) {
-        case "team":
-        case "forum":
-          const team = teamStore.teams.find(team => team.id == subPath);
-          return team ? `${team.name} Overview` : "Team Overview";
-        case "company":
-          if (subPath == "accountability") {
-            return "Accountability Matrix";
-          } else if (subPath == "strategic_plan") {
-            return `The ${companyStore.company.name} Plan`;
-          }
-          return "";
-        case "meetings":
-          switch (subPath) {
-            case "section_1":
-              return "Annual Hub";
-            case "section_2":
-              return "Upcoming Hub";
-            case "agenda":
-              return "Meeting Management";
-            default:
-              return "";
-          }
-        case "goals":
-          return "Goals";
-        case "account":
-          return "Account Settings";
-        case "notes":
-          return "Notes";
-        case "journals":
-          return "Journal Entries";
-        default:
-          return `${getGreetingTime(moment())} ${sessionStore.profile.firstName}`;
-      }
-    };
 
     const renderUserAvatar = () => {
       return (
@@ -117,7 +66,9 @@ export const HeaderBar = observer(
         <Container>
           <HeaderItemsContainer>
             <ActionsContainer>
-              <StyledHeading type={"h1"}>{renderHeaderTitle()}</StyledHeading>
+              <StyledHeading type={"h1"}>
+                <HeaderText location={location} />
+              </StyledHeading>
             </ActionsContainer>
             <LogoContainer>
               {R.isNil(companyStore.company) ? (

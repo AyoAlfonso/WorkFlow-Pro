@@ -1,9 +1,19 @@
 class UserPulsePolicy < ApplicationPolicy
   def user_pulse_by_date?
-    true
+    @record.blank? || @record.user == @user
   end
 
   def create_or_update?
-    true
+    @record.user == @user
+  end
+
+  class Scope
+    attr_reader :context, :scope
+
+    def initialize(context, scope)
+      @user = context.user
+      @company = context.company
+      @scope = scope
+    end
   end
 end

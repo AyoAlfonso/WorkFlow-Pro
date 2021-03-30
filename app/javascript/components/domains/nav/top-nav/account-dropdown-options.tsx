@@ -83,7 +83,7 @@ export const AccountDropdownOptions = observer(
             <AccountOptionText>{company.name}</AccountOptionText>
             {company.id == sessionStore.profile.defaultSelectedCompanyId && (
               <DefaultTextContainer>
-                <DefaultText> Default </DefaultText>
+                <DefaultText type={"small"}> Default </DefaultText>
               </DefaultTextContainer>
             )}
           </SwitchAccountContainer>
@@ -160,7 +160,7 @@ export const AccountDropdownOptions = observer(
               </Heading>
               <StatusContainer>
                 <StatusColorBlock />
-                <StatusText> Active </StatusText>
+                <StatusText type={"small"}> Active </StatusText>
               </StatusContainer>
             </UserDetailsNameContainer>
           </UserDetailsContainer>
@@ -194,7 +194,7 @@ export const AccountDropdownOptions = observer(
           >
             <LeftWorkspaceContainer>
               {renderSwitchCompanyOptions()}
-              <CompanyText> {companyStore.company.name} </CompanyText>
+              <CompanyText type={"small"}> {companyStore.company.name} </CompanyText>
             </LeftWorkspaceContainer>
             <RightWorkspaceContainer>
               <Icon icon={"Chevron-Left"} size={"15px"} iconColor={"grey80"} />
@@ -357,7 +357,6 @@ const UserDetailsNameContainer = styled.div`
 `;
 
 const StatusText = styled(Text)`
-  font-size: 11px;
   margin-top: auto;
   margin-bottom: auto;
   color: ${props => props.theme.colors.greyActive};
@@ -374,7 +373,6 @@ const StyledDivider = styled.hr`
 `;
 
 const CompanyText = styled(Text)`
-  font-size: 11px;
   margin-top: auto;
   color: ${props => props.theme.colors.greyActive};
 `;
@@ -408,6 +406,5 @@ const DefaultTextContainer = styled.div`
 `;
 
 const DefaultText = styled(Text)`
-  font-size: 11px;
   font-style: italic;
 `;

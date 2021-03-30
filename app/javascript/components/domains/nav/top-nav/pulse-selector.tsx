@@ -25,12 +25,17 @@ export const PulseSelector = observer(
     const { t } = useTranslation();
     const userPulse = R.path(["profile", "userPulseForDisplay"], sessionStore);
 
+    const todaysDate = moment().format("YYYY-MM-DD");
+    const yesterdaysDate = moment()
+      .subtract(1, "days")
+      .format("YYYY-MM-DD");
+
     const [showPulseSelector, setShowPulseSelector] = useState<boolean>(false);
     const [showCalendar, setShowCalendar] = useState<boolean>(false);
     const [selectedEmotion, setSelectedEmotion] = useState<number>(0);
     const [selectedAdjective, setSelectedAdjective] = useState<string>("");
     const [typedAdjective, setTypedAdjective] = useState<string>("");
-    const [selectedDateFilter, setSelectedDateFilter] = useState<string>("Today"); //Today, Yesterday, CalendarDate
+    const [selectedDateFilter, setSelectedDateFilter] = useState<string>(todaysDate);
 
     const selectorRef = useRef(null);
 
@@ -50,8 +55,8 @@ export const PulseSelector = observer(
 
       const handleClickOutside = event => {
         if (selectorRef.current && !selectorRef.current.contains(event.target)) {
-          getPulseByDate("Today");
-          setSelectedDateFilter("Today");
+          getPulseByDate(todaysDate);
+          setSelectedDateFilter(todaysDate);
           setShowPulseSelector(false);
         }
       };
@@ -98,19 +103,24 @@ export const PulseSelector = observer(
     };
 
     const renderDatePickerIcon = () => {
-      const realDate = !(selectedDateFilter == "Today" || selectedDateFilter == "Yesterday");
+      const notTodayOrYesterday = !(
+        selectedDateFilter == todaysDate || selectedDateFilter == yesterdaysDate
+      );
+
       return (
         <DatePickerContainer>
           <Icon
             icon={"Deadline-Calendar"}
             size={"16px"}
-            iconColor={realDate ? "primary100" : "grey60"}
+            iconColor={notTodayOrYesterday ? "primary100" : "grey60"}
           />
-          <DatePickerText selected={realDate}>{moment().format("YYYY-MM-DD")}</DatePickerText>
+          <DatePickerText type={"small"} selected={notTodayOrYesterday}>
+            {moment(selectedDateFilter).format("YYYY-MM-DD")}
+          </DatePickerText>
           <Icon
             icon={"Chevron-Down"}
             size={"10px"}
-            iconColor={realDate ? "primary100" : "grey60"}
+            iconColor={notTodayOrYesterday ? "primary100" : "grey60"}
           />
         </DatePickerContainer>
       );
@@ -122,10 +132,10 @@ export const PulseSelector = observer(
           id: userPulse ? userPulse.id : "",
           score: selectedEmotion,
           feeling: selectedAdjective || typedAdjective,
-          completedAt: selectedDateFilter == "Today" && moment(),
+          completedAt: selectedDateFilter == todaysDate && moment(),
         })
         .then(() => {
-          setSelectedDateFilter("Today");
+          setSelectedDateFilter(todaysDate);
           setShowPulseSelector(false);
         });
     };
@@ -164,11 +174,7 @@ export const PulseSelector = observer(
                           calendarWidth: 320,
                           monthWidth: 320,
                         }}
-                        date={
-                          selectedDateFilter == "Today" || selectedDateFilter == "Yesterday"
-                            ? new Date()
-                            : new Date(selectedDateFilter)
-                        }
+                        date={moment(selectedDateFilter).toDate()}
                         onChange={date => {
                           setShowCalendar(false);
                           getPulseByDate(moment(date).format("YYYY-MM-DD"));
@@ -179,14 +185,16 @@ export const PulseSelector = observer(
                   )}
 
                   <FilterText
-                    onClick={() => getPulseByDate("Today")}
-                    selected={selectedDateFilter == "Today"}
+                    onClick={() => getPulseByDate(todaysDate)}
+                    selected={selectedDateFilter == todaysDate}
+                    type={"small"}
                   >
                     Today
                   </FilterText>
                   <FilterText
-                    onClick={() => getPulseByDate("Yesterday")}
-                    selected={selectedDateFilter == "Yesterday"}
+                    onClick={() => getPulseByDate(yesterdaysDate)}
+                    selected={selectedDateFilter == yesterdaysDate}
+                    type={"small"}
                   >
                     Yesterday
                   </FilterText>
@@ -334,7 +342,6 @@ const FilterWrapper = styled.div`
 `;
 
 const FilterText = styled(Text)<FilterTextProps>`
-  font-size: 11px;
   color: ${props => props.selected && props.theme.colors.primary100};
   margin-left: 8px;
   margin-top: auto;
@@ -356,7 +363,6 @@ const DatePickerText = styled(Text)<DatePickerTextProps>`
   color: ${props => (props.selected ? props.theme.colors.primary100 : props.theme.colors.grey60)};
   margin-left: 8px;
   margin-right: 4px;
-  font-size: 11px;
 `;
 
 const DatePickerWrapper = styled.div`

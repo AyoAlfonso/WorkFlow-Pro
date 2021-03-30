@@ -1,5 +1,4 @@
 import { types, flow, getRoot } from "mobx-state-tree";
-import * as R from "ramda";
 import { ApiResponse } from "apisauce";
 
 import { withEnvironment } from "../lib/with-environment";
@@ -15,18 +14,7 @@ export const StaticDataStoreModel = types
   .extend(withEnvironment())
   .views(self => ({
     filteredEmotionAdjectives(selectedEmotion){
-      switch (selectedEmotion) {
-        case 1:
-          return self.emotionAdjectives.emotionScore1;
-        case 2:
-          return self.emotionAdjectives.emotionScore2;
-        case 4:
-          return self.emotionAdjectives.emotionScore4;
-        case 5:
-          return self.emotionAdjectives.emotionScore5;
-        default:
-          return [];
-      }
+      return self.emotionAdjectives[`emotionScore${selectedEmotion}`]
     }
   }))
   .actions(self => ({
