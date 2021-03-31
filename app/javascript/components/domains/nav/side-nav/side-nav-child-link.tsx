@@ -17,10 +17,11 @@ export const SideNavChildLinkNavLink = styled(NavLink)`
 
 export const SideNavChildLinkContainer = styled.div`
   align-items: center;
-  height: 40px;
+  min-height: 40px;
   padding-left: 20px;
-  width: 250px;
   display: flex;
+  word-break: break-word;
+  overflow-wrap: break-word;
 `;
 
 export const SideNavChildLinkText = styled.p`
