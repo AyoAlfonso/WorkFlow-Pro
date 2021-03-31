@@ -14,16 +14,16 @@ export const TextStep = ({ step }: ITextStepProps): JSX.Element => {
   }
 
   return (
-    <Container>
+    <TextStepContainer>
       <div
         className="trix-content"
         dangerouslySetInnerHTML={{ __html: step.descriptionTextContent }}
       ></div>
-    </Container>
+    </TextStepContainer>
   );
 };
 
-const Container = styled.div`
+export const TextStepContainer = styled.div`
   max-height: 700px;
   margin-left: 16px;
   min-width: 640px;
