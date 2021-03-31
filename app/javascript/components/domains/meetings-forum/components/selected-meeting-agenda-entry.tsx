@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     textField: {
       marginLeft: theme.spacing(1),
+      marginTop: "3px",
       marginRight: theme.spacing(3),
       width: 250,
     },
@@ -106,7 +107,7 @@ export const SelectedMeetingAgendaEntry = observer(
             </MeetingTimeContainer>
 
             {selectedMeeting.startTime && (
-              <MeetingTimeText>
+              <MeetingTimeText fontWeight={"bold"}>
                 {`${t("forum.actualStartTime")}: ${moment(selectedMeeting.startTime).format(
                   "dddd, MMMM D, LT",
                 )}`}

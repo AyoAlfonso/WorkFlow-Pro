@@ -121,8 +121,8 @@
         "teamSnapshotTitle": "Forum Snapshot",
         "forumMeeting": "Forum Meeting",
         "emptyMeetingEntries": "Start creating meetings on the meetings page!",
-        "scheduledStartTime": "Scheduled Start Time",
-        "actualStartTime": "Actual Start Time"
+        "scheduledStartTime": "Scheduled Start Date",
+        "actualStartTime": "Actual Start Date"
       },
       "navigation": {
         "home": "Home",

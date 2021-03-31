@@ -72,7 +72,8 @@ const HeaderContainer = styled.div`
 const CloseIconContainer = styled.div`
   margin-left: auto;
   margin-right: 16px;
-  margin-top: 14px;
+  margin-top: auto;
+  margin-bottom: auto;
   cursor: pointer;
   &:hover ${StyledIcon} {
     color: ${props => props.theme.colors.greyActive};
@@ -93,6 +94,7 @@ const SubHeaderText = styled.p`
 
 const StyledHeading = styled(Heading)`
   font-family: Lato;
-  margin-bottom: 8px;
+  margin-top: 16px;
+  margin-bottom: 16px;
   font-weight: bold;
 `;

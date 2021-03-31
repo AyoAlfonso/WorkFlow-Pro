@@ -42,7 +42,7 @@ export const PrioritySelector = ({
       case 1:
         setIconName("Priority-High");
         setIconColor("cautionYellow");
-        setDisplayName("LynchPyn Priority");
+        setDisplayName("Medium Priority");
         break;
       case 2:
         setIconName("Priority-Urgent");
@@ -52,7 +52,7 @@ export const PrioritySelector = ({
       case 3:
         setIconName("Priority-MIP");
         setIconColor("mipBlue");
-        setDisplayName("Medium Priority");
+        setDisplayName("LynchPyn Priority");
         break;
       default:
         setIconName("Priority-None");
