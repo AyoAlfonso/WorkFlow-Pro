@@ -114,7 +114,7 @@ export const Questionnaire = observer(
         >
           <CardBody>
             <Text fontFamily={"Lato"} fontSize={"14px"} mt={"15px"} textAlign={"center"}>
-              {R.replace("{userName}", userFirstName, t("journals.weeklyReflectionCompleted"))}
+              {t("journals.weeklyReflectionCompleted", { userName: userFirstName })}
             </Text>
           </CardBody>
         </Card>

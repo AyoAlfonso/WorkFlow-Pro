@@ -133,7 +133,7 @@ export const NotesIndex = observer(
       },
     ].concat(
       teams.map(team => ({
-        label: R.replace("{teamName}", team.name, t("notes.teamNotes")),
+        label: t("notes.teamNotes", { teamName: team.name }),
         filters: {
           userId: null,
           teamId: team.id,

@@ -23,11 +23,7 @@ export const JournalBody = ({ setQuestionnaireVariant }: IJournalBodyProps): JSX
 
   const { t } = useTranslation();
 
-  const pynBotGreeting = R.replace(
-    "{userName}",
-    sessionStore.profile.firstName,
-    t("journals.pynBotGreeting"),
-  );
+  const pynBotGreeting = t("journals.pynBotGreeting", { userName: sessionStore.profile.firstName });
 
   const defaultJournalButtonProps = {
     width: "90%",
