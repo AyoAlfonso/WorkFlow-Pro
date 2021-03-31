@@ -22,8 +22,9 @@ class Api::SummariesController < Api::ApplicationController
         @meetings = policy_scope(Meeting).has_notes.where(start_time: filters["start_date"].to_date.beginning_of_day..filters["end_date"].to_date.end_of_day).sort_by_start_time
       end
     else
-      @meetings = policy_scope(Meeting).has_notes.sort_by_start_time
+      @meetings = policy_scope(Meeting).where(team_id: current_user.user_teams_for_company(current_company).pluck(:id)).has_notes.sort_by_start_time
     end
+
     authorize @meetings
     @dates = @meetings.map{ |meeting| current_user.convert_to_their_timezone(meeting.start_time).strftime("%a, %b %e") }.uniq
     render "api/summaries/meetings_by_date"

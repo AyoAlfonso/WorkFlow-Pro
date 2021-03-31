@@ -27,7 +27,8 @@ export const UserModel = types
     // teams: types.array(types.reference(TeamModel)), THIS ONLY WORKS IF TEAMS IS LOADED BEFORE USERS
     todaysPriorities: types.maybeNull(types.array(KeyActivityModel)),
     todaysCompletedActivities: types.maybeNull(types.array(KeyActivityModel)),
-    firstAccessToForum: types.maybeNull(types.boolean)
+    firstAccessToForum: types.maybeNull(types.boolean),
+    currentCompanyUserTeams: types.maybeNull(types.array(types.frozen()))
     //add avatarurl2x
   })
   .views(self => ({

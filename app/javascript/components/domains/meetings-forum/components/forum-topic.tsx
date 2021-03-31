@@ -11,7 +11,7 @@ import { IMeeting } from "~/models/meeting";
 import { Icon, Text, UserSelectionDropdownList, Avatar } from "~/components/shared";
 
 interface IForumTopic {
-  teamMembers: Array<IUser>;
+  teamMembers: Array<any>;
   meeting: IMeeting;
   disabled: boolean;
 }

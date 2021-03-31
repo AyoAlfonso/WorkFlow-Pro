@@ -1,10 +1,11 @@
-import { types, flow, getEnv } from "mobx-state-tree";
+import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { ApiResponse } from "apisauce";
 import { TeamModel } from "~/models/team";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { toJS } from "mobx";
+import * as R from "ramda";
 
 export const TeamStoreModel = types
   .model("TeamStoreModel")
@@ -13,6 +14,18 @@ export const TeamStoreModel = types
     currentTeam: types.maybeNull(TeamModel),
   })
   .extend(withEnvironment())
+  .views(self => ({
+    // get yourTeams() {
+    //   // const { sessionStore: { profile } } = getRoot(self);
+    //   // const teamIds = R.pluck('id', profile.)
+
+
+
+    //   // collection.filter(item => array.includes(item.type))
+
+    //   return []
+    // }
+  }))
   .actions(self => ({
     fetchTeams: flow(function*() {
       const response: ApiResponse<any> = yield self.environment.api.getTeams();
