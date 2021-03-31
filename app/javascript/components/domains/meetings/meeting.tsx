@@ -162,7 +162,7 @@ export const Meeting = observer(
           disabled={meetingEnded}
         >
           <Icon icon={"Stop"} iconColor={"warningRed"} size={"13px"} />
-          <TextNoMargin ml={"10px"}>Stop Meeting</TextNoMargin>
+          <TextNoMargin ml={"10px"}>End Meeting</TextNoMargin>
         </MeetingControlButton>
       );
     };
