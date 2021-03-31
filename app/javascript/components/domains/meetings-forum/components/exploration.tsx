@@ -17,7 +17,12 @@ import { useEffect, useState } from "react";
 import { ScheduledIssues } from "./scheduled-issues";
 import { toJS } from "mobx";
 import { ForumTopic } from "~/components/domains/meetings-forum/components/forum-topic";
-import { ColumnContainer } from "~/components/domains/meetings-forum/components/row-style";
+import {
+  ColumnContainerParent,
+  ColumnContainer,
+  HeaderText,
+} from "~/components/domains/meetings-forum/components/row-style";
+import { useTranslation } from "react-i18next";
 
 export const Exploration = observer(
   (): JSX.Element => {
@@ -27,6 +32,7 @@ export const Exploration = observer(
       issueStore,
       forumStore,
     } = useMst();
+    const { t } = useTranslation();
 
     const [userSelectionOpen, setUserSelectionOpen] = useState<boolean>(false);
 
@@ -63,14 +69,6 @@ export const Exploration = observer(
           true,
         )
         .then(() => {});
-    };
-
-    const headerText = (text: string): JSX.Element => {
-      return (
-        <Heading type={"h2"} fontSize={"20px"} fontWeight={600}>
-          {text}
-        </Heading>
-      );
     };
 
     const renderUserAvatar = (): JSX.Element => {
@@ -115,69 +113,36 @@ export const Exploration = observer(
 
     return (
       <>
-        <Container>
-          <HeaderContainer>{headerText("1: Scheduled Exploration")}</HeaderContainer>
-        </Container>
-        <Container>
+        <ColumnContainerParent>
+          <HeaderText text={t("meetingForum.exploration.title")} />
+        </ColumnContainerParent>
+        <ColumnContainerParent>
           <ForumTopic
             disabled={false}
             teamMembers={toJS(currentTeam.users)}
             meeting={currentMeeting}
           />
-        </Container>
-        <Container>
+        </ColumnContainerParent>
+        <ColumnContainerParent>
           <ColumnContainer>
-            <HeaderContainer>{headerText("2: Dynamic Explorations")}</HeaderContainer>
+            <HeaderText text={t("meetingForum.scheduledIssues.title")} />
             <ScheduledIssues teamId={currentMeeting.teamId} upcomingForumMeeting={currentMeeting} />
           </ColumnContainer>
-
           <ColumnContainer>
-            <HeaderContainer>{headerText("Forum Hub")}</HeaderContainer>
+            <HeaderText text={t("meetingForum.parkingLotIssues.title")} />
             <ParkingLotIssues
               teamId={currentMeeting.teamId}
               upcomingForumMeeting={currentMeeting}
             />
           </ColumnContainer>
-        </Container>
+        </ColumnContainerParent>
       </>
     );
   },
 );
 
-const Container = styled.div`
-  display: flex;
-`;
-
-const HostContainer = styled.div`
-  display: flex;
-  margin-bottom: 15px;
-`;
-
 const HostedByName = styled(Text)`
   margin-left: 15px;
-`;
-
-const HeaderContainer = styled.div``;
-
-const DescriptionText = styled(Text)`
-  color: ${props => props.theme.colors.greyActive};
-  font-size: 12px;
-  margin-bottom: 25px;
-  margin-left: 0;
-`;
-
-const StyledContentEditable = styled(ContentEditable)`
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-radius: 10px;
-  border: ${props => `1px solid ${props.theme.colors.borderGrey}`};
-  box-shadow: 0px 3px 6px #f5f5f5;
-  padding-left: 16px;
-  padding-right: 16px;
-  width: 80%;
-  &:hover {
-    cursor: ${props => (!props.disabled ? "text" : "default")};
-  }
 `;
 
 const ImageContainer = styled.div`

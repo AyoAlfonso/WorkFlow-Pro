@@ -174,17 +174,30 @@
         "coreFourTitle": "Foundational Four",
         "saveRatings": "Save Ratings",
         "teamsPyns": "Team's Pyns",
-        "meetingAgenda": "Meeting Management"
+        "meetingAgenda": "Meeting Management",
+        "teamIssues": {
+          "parkingLotIssues": {
+            "title": "{{teamName}} Issues",
+            "subTitle": "Issues added to the team's list"
+          },
+          "scheduledIssues": {
+            "title": "CDR",
+            "subTitle": "Issues to be resolved today. Clarify, Debate, and Resolve."
+          }
+        }
       },
       "meetingForum": {
+        "exploration": {
+          "title": "1: Scheduled Exploration"
+        },
         "parkingLotIssues": {
           "title": "Forum Hub",
           "subTitle": "Topics members have shared",
           "forumItems": "Topic"
         },
         "scheduledIssues": {
-          "title": "Scheduled",
-          "subTitle": "Add topics you want to discuss in the section 2 of your next meeting"
+          "title": "2. Dynamic Explorations",
+          "subTitle": "Add topics you want to discuss in the Forum Hub of your next meeting"
         },
         "noUpcomingMeetingScheduled": "Scheduled meeting must be created in order to organize items onto it."
       },

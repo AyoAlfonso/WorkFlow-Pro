@@ -15,10 +15,11 @@ import { space, SpaceProps, color, ColorProps } from "styled-system";
 interface ParkingLotIssuesProps {
   teamId: number | string;
   upcomingForumMeeting: any;
+  descriptionText?: string;
 }
 
 export const ParkingLotIssues = observer(
-  ({ teamId, upcomingForumMeeting }: ParkingLotIssuesProps): JSX.Element => {
+  ({ teamId, upcomingForumMeeting, descriptionText }: ParkingLotIssuesProps): JSX.Element => {
     const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
     const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
@@ -81,7 +82,10 @@ export const ParkingLotIssues = observer(
     return (
       <>
         <StyledFilterContainer>
-          <DescriptionText> {t("meetingForum.parkingLotIssues.subTitle")} </DescriptionText>
+          <DescriptionText>
+            {" "}
+            {descriptionText || t("meetingForum.parkingLotIssues.subTitle")}{" "}
+          </DescriptionText>
           <FilterOptions
             onClick={() => setShowOpenIssues(true)}
             mr={"15px"}

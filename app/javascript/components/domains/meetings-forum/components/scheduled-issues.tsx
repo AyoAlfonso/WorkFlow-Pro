@@ -24,11 +24,12 @@ import {
 interface ScheduledIssuesProps {
   teamId: number | string;
   upcomingForumMeeting: any;
+  descriptionText?: string;
 }
 
 //this displays all issues for the upcoming forum meeting that are highlighted to be discussed
 export const ScheduledIssues = observer(
-  ({ teamId, upcomingForumMeeting }: ScheduledIssuesProps): JSX.Element => {
+  ({ teamId, upcomingForumMeeting, descriptionText }: ScheduledIssuesProps): JSX.Element => {
     const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
     const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
@@ -87,7 +88,10 @@ export const ScheduledIssues = observer(
     return (
       <>
         <StyledFilterContainer>
-          <DescriptionText> {t("meetingForum.scheduledIssues.subTitle")} </DescriptionText>
+          <DescriptionText>
+            {" "}
+            {descriptionText || t("meetingForum.scheduledIssues.subTitle")}{" "}
+          </DescriptionText>
           <FilterOptions
             onClick={() => setShowOpenIssues(true)}
             mr={"15px"}

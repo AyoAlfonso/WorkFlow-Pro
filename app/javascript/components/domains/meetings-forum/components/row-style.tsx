@@ -1,4 +1,6 @@
+import * as React from "react";
 import styled from "styled-components";
+import { Heading } from "~/components/shared";
 
 export const MonthContainer = styled.div`
   width: 315px;
@@ -30,3 +32,18 @@ export const Divider = styled.div`
   width: 100%;
   background-color: lightgrey;
 `;
+
+export const ColumnContainerParent = styled.div`
+  display: flex;
+`;
+
+const HeaderContainer = styled.div``;
+export const HeaderText = ({ text }: { text: string }): JSX.Element => {
+  return (
+    <HeaderContainer>
+      <Heading type={"h2"} fontSize={"20px"} fontWeight={600}>
+        {text}
+      </Heading>
+    </HeaderContainer>
+  );
+};
