@@ -1,7 +1,7 @@
 namespace :key_activities do
   desc "set company id to the user's key activities"
   task set_company: :environment do
-    scheduled_group = ScheduledGroup.find_by_name("This Week")
+    scheduled_group = ScheduledGroup.find_by_name("Weekly List")
     KeyActivity.all.each do |ka|
       ka.update!(company_id: ka.user.company_id || ka.user.companies.first.id, scheduled_group: scheduled_group)
     end
