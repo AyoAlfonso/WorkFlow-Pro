@@ -16,6 +16,7 @@ import { CreateKeyActivityModal } from "../key-activities/create-key-activity-mo
 import { Avatar, LabelSelection, DefaultStyledLabel } from "~/components/shared";
 import { toJS } from "mobx";
 import { InitialsGenerator } from "~/components/shared/issues-and-key-activities/initials-generator";
+import * as R from "ramda";
 
 interface IIssueEntryProps {
   issue: any;
@@ -31,11 +32,12 @@ export const IssueEntry = observer(
     const {
       issueStore,
       teamStore,
+      sessionStore,
       sessionStore: { scheduledGroups },
     } = useMst();
     const { issue, pageEnd, meetingId, dragHandleProps, leftShareContainer, teamId } = props;
 
-    const teams = teamStore.teams;
+    const teams = R.path(["profile", "currentCompanyUserTeams"], sessionStore);
 
     const [showShareModal, setShowShareModal] = useState<boolean>(false);
     const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
@@ -186,18 +188,6 @@ export const IssueEntry = observer(
             <ActionContainer meeting={meetingId ? true : false}>
               <ActionSubContainer>
                 <ActionsDisplayContainer>
-                  {meetingId && (
-                    <AvatarContainer>
-                      <Avatar
-                        defaultAvatarColor={issue.user.defaultAvatarColor}
-                        firstName={issue.user.firstName}
-                        lastName={issue.user.lastName}
-                        avatarUrl={issue.user.avatarUrl}
-                        size={25}
-                      />
-                    </AvatarContainer>
-                  )}
-
                   {!issue.personal && (
                     <ShareButtonContainer onMouseEnter={() => setShowShareModal(true)}>
                       <Icon icon={"Forward"} size={24} style={{ marginTop: "3px" }} />
@@ -268,6 +258,17 @@ export const IssueEntry = observer(
           <IssuePriorityContainer onClick={() => updatePriority()}>
             {renderPriorityIcon(issue.priority)}
           </IssuePriorityContainer>
+          {meetingId && (
+            <AvatarContainer>
+              <Avatar
+                defaultAvatarColor={issue.user.defaultAvatarColor}
+                firstName={issue.user.firstName}
+                lastName={issue.user.lastName}
+                avatarUrl={issue.user.avatarUrl}
+                size={25}
+              />
+            </AvatarContainer>
+          )}
           {currentSelectedItem && (
             <InitialsWrapper>
               <InitialsGenerator name={currentSelectedItem.name} />
@@ -303,7 +304,6 @@ type ActionContainerProps = {
 const ActionContainer = styled.div<ActionContainerProps>`
   margin-top: auto;
   margin-bottom: auto;
-  padding-left: 4px;
   margin-right: 4px;
   display: none;
 `;
@@ -315,6 +315,8 @@ const ActionsDisplayContainer = styled.div`
 const DeleteButtonContainer = styled.div`
   color: ${props => props.theme.colors.grey60};
   padding-right: 3px;
+  margin-top: auto;
+  m‰
   &: hover {
     cursor: pointer;
     color: ${props => props.theme.colors.greyActive};
@@ -452,9 +454,8 @@ const CheckboxContainer = props => (
 );
 
 const AvatarContainer = styled.div`
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: 8px;
+  margin-top: 1.5px;
+  margin-left: 8px;
 `;
 
 const ActionSubContainer = styled.div`
@@ -475,4 +476,6 @@ const RightActionContainer = styled.div`
 
 const LabelContainer = styled.div`
   margin-left: auto;
+  margin-top: auto;
+  margin-bottom: auto;
 `;

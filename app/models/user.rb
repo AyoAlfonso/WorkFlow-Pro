@@ -80,6 +80,10 @@ class User < ApplicationRecord
     end
   end
 
+  def user_teams_for_company(current_company)
+    self.teams.where(company: current_company)
+  end
+
   def team_lead_for?(team)
     team.is_lead?(self)
   end

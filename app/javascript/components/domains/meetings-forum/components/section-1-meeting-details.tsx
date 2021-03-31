@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface ISection1MeetingDetailsProps {
   meeting: IMeeting;
-  teamMembers: Array<IUser>;
+  teamMembers: Array<any>;
 }
 
 export const Section1MeetingDetails = observer(
