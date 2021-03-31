@@ -5,15 +5,18 @@ import { layout, LayoutProps, space, SpaceProps } from "styled-system";
 import { Text } from "~/components/shared/text";
 import { Icon } from "~/components/shared/icon";
 
+export const Container = styled.div`
+  display: flex;
+`;
+
+//Main container is for notes where the filtering is one of the columns
 export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-right: 20px;
 `;
 
 export const HeadingContainer = styled.div`
-  margin: 20px 0px 20px 0px;
   width: 100%;
 `;
 
@@ -21,6 +24,13 @@ export const BodyContainer = styled.div`
   display: grid;
   grid-template-columns: minmax(370px, auto) minmax(205px, 1fr) minmax(440px, 3fr);
   width: 100%;
+`;
+
+export const BodyRightContainer = styled.div`
+  display: grid;
+  grid-template-columns: minmax(205px, 1fr) minmax(440px, 3fr);
+  width: 100%;
+  margin-top: 75px;
 `;
 
 export const FilterContainer = styled.div`

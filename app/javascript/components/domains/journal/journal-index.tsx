@@ -13,6 +13,8 @@ import { addDays } from "date-fns";
 import {
   ActionButtonsContainer,
   AvatarContainer,
+  BodyRightContainer,
+  Container,
   EntryBodyCard,
   EntryBodyContainer,
   EntryContainer,
@@ -192,7 +194,7 @@ export const JournalIndex = observer(
     };
 
     return (
-      <MainContainer>
+      <Container>
         <CalendarFilter
           header={t("journals.indexTitle")}
           dateFilter={dateFilter}
@@ -202,14 +204,12 @@ export const JournalIndex = observer(
           setSelectedDateFilter={setSelectedDateFilter}
           setLoading={setLoading}
           dateSelectAction={dateSelectedAction}
-          additionalBodyComponents={
-            <>
-              <ItemListContainer>{renderItems()}</ItemListContainer>
-              <EntryContainer>{renderSelectedEntry()}</EntryContainer>
-            </>
-          }
         />
-      </MainContainer>
+        <BodyRightContainer>
+          <ItemListContainer>{renderItems()}</ItemListContainer>
+          <EntryContainer>{renderSelectedEntry()}</EntryContainer>
+        </BodyRightContainer>
+      </Container>
     );
   },
 );
