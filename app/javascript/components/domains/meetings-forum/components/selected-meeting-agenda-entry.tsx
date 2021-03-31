@@ -156,10 +156,7 @@ const Container = styled.div`
   display: flex;
 `;
 
-const MeetingHeader = styled.div`
-  width: 50%;
-  min-width: 375px;
-`;
+const MeetingHeader = styled.div``;
 
 const StyledHeading = styled(Heading)`
   margin-bottom: 0;

@@ -31,8 +31,8 @@ export const HomeKeyActivities = observer(
 
     const {
       keyActivityStore,
+      sessionStore,
       sessionStore: { scheduledGroups },
-      teamStore: { teams },
     } = useMst();
 
     const todaysKeyActivities = keyActivityStore.keyActivitiesByScheduledGroupName("Today");
@@ -46,6 +46,8 @@ export const HomeKeyActivities = observer(
       ["id"],
       scheduledGroups.find(group => group.name == "Today"),
     );
+
+    const teams = sessionStore.profile.currentCompanyUserTeams;
 
     const subHeaderForFilterGroups = (name: string): string => {
       switch (name) {

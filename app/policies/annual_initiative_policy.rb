@@ -46,7 +46,7 @@ class AnnualInitiativePolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes([:key_elements, {owned_by: [:avatar_attachment]}]).user_current_company(@company.id)
+      scope.includes([:key_elements, {owned_by: [:avatar_attachment]}])
     end
   end
 end

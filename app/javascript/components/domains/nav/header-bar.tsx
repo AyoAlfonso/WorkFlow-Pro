@@ -273,22 +273,23 @@ export const HeaderBar = observer(
           <AccountOption id="lynchpyn-whats-new">
             <AccountOptionText>What's New?</AccountOptionText>
           </AccountOption>
-          {process.env.QA_SHOW_CREATE_COMPANY_FORUM_MENU == "true" && (
-            <AccountOption
-              style={{ position: "relative" }}
-              onMouseEnter={() => {
-                setShowCompanyCreationSelector(true);
-              }}
-              onMouseLeave={() => {
-                setShowCompanyCreationSelector(false);
-              }}
-            >
-              <AccountOptionText>
-                {!R.isNil(onboardingCompany) ? t("company.edit") : t("company.create")} (QA Only)
-              </AccountOptionText>
-              {renderCompanyCreationSelector()}
-            </AccountOption>
-          )}
+          {console.log("WTF IS THIS", process.env.QA_SHOW_CREATE_COMPANY_FORUM_MENU)}
+          {/* {process.env.QA_SHOW_CREATE_COMPANY_FORUM_MENU == "true" && ( */}
+          <AccountOption
+            style={{ position: "relative" }}
+            onMouseEnter={() => {
+              setShowCompanyCreationSelector(true);
+            }}
+            onMouseLeave={() => {
+              setShowCompanyCreationSelector(false);
+            }}
+          >
+            <AccountOptionText>
+              {!R.isNil(onboardingCompany) ? t("company.edit") : t("company.create")} (QA Only)
+            </AccountOptionText>
+            {renderCompanyCreationSelector()}
+          </AccountOption>
+          {/* )} */}
           <AccountOption>
             <AccountOptionText onClick={() => sessionStore.logoutRequest()}>
               {t("profile.logout")}

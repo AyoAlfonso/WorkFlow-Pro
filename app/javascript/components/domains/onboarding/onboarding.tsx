@@ -429,7 +429,7 @@ True value of LynchPyn is in working together with others in your team and compa
       <WizardLayout
         title={wizardTitles}
         description={wizardDescriptions}
-        showCloseButton={true}
+        showCloseButton={false}
         showSkipButton={currentStep === 1 || currentStep === 2}
         onCloseButtonClick={companyStore.closeOnboardingModal}
         onSkipButtonClick={() => setCurrentStep(c => c + 1)}
