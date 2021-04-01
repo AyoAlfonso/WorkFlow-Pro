@@ -258,7 +258,7 @@ export const IssueEntry = observer(
           <IssuePriorityContainer onClick={() => updatePriority()}>
             {renderPriorityIcon(issue.priority)}
           </IssuePriorityContainer>
-          {meetingId && (
+          {(meetingId || teamId) && (
             <AvatarContainer>
               <Avatar
                 defaultAvatarColor={issue.user.defaultAvatarColor}
@@ -268,11 +268,6 @@ export const IssueEntry = observer(
                 size={25}
               />
             </AvatarContainer>
-          )}
-          {currentSelectedItem && (
-            <InitialsWrapper>
-              <InitialsGenerator name={currentSelectedItem.name} />
-            </InitialsWrapper>
           )}
           {issue.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
           <LabelContainer>{renderLabel()}</LabelContainer>
@@ -316,7 +311,7 @@ const DeleteButtonContainer = styled.div`
   color: ${props => props.theme.colors.grey60};
   padding-right: 3px;
   margin-top: auto;
-  m‰
+  margin-bottom: auto;
   &: hover {
     cursor: pointer;
     color: ${props => props.theme.colors.greyActive};
@@ -456,17 +451,12 @@ const CheckboxContainer = props => (
 const AvatarContainer = styled.div`
   margin-top: 1.5px;
   margin-left: 8px;
+  margin-right: 4px;
 `;
 
 const ActionSubContainer = styled.div`
   margin-left: auto;
   display: flex;
-`;
-
-const InitialsWrapper = styled.div`
-  margin-left: 12px;
-  margin-top: auto;
-  margin-bottom: auto;
 `;
 
 const RightActionContainer = styled.div`
