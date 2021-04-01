@@ -45,6 +45,7 @@ export const RallyingCry = ({ rallyingCry }: IRallyingCryProps): JSX.Element => 
 const VisionContainer = styled(HomeContainerBorders)`
   height: 60px;
   display: flex;
+  position: relative;
 `;
 
 const VisionTitle = styled.p`
