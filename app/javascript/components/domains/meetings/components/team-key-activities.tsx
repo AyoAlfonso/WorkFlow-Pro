@@ -1,24 +1,34 @@
 import * as React from "react";
-import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 import styled from "styled-components";
-import { KeyActivitiesHeader } from "~/components/domains/key-activities/key-activities-header";
+import * as moment from "moment";
+import { Heading } from "~/components/shared";
+import {
+  KeyActivitiesWrapperContainer,
+  KeyActivityListSubHeaderContainer,
+} from "~/components/domains/key-activities/key-activities-list";
 import { TeamKeyActivitiesBody } from "../shared/team-key-activities-body";
 import { useTranslation } from "react-i18next";
 
 export const TeamKeyActivities = (props: {}): JSX.Element => {
   const { t } = useTranslation();
   return (
-    <Container>
-      <KeyActivitiesHeader hideFilter={true} title={t("meeting.teamsPyns")} />
-      <TeamKeyActivitiesBody />
-    </Container>
+    <KeyActivitiesWrapperContainer width={"100%"}>
+      <SingleListContainer>
+        <Heading type={"h2"} fontSize={"20px"} fontWeight={"bold"}>
+          {t("meeting.teamsPyns")}
+        </Heading>
+        <KeyActivityListSubHeaderContainer>
+          {moment()
+            .subtract(1, "days")
+            .format("MMMM D")}
+        </KeyActivityListSubHeaderContainer>
+        <TeamKeyActivitiesBody />
+      </SingleListContainer>
+    </KeyActivitiesWrapperContainer>
   );
 };
 
-const Container = styled(HomeContainerBorders)`
-  margin-left: 15px;
-  margin-right: auto;
-  min-width: 525px;
-  width: 50%;
-  margin-top: 0;
+const SingleListContainer = styled.div`
+  width: 100%;
+  margin-right: 20px;
 `;

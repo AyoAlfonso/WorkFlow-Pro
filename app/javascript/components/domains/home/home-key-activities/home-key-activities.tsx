@@ -9,7 +9,12 @@ import { InitialsGenerator } from "~/components/shared/issues-and-key-activities
 import { baseTheme } from "~/themes";
 import { CreateKeyActivityModal } from "../../key-activities/create-key-activity-modal";
 import { CreateKeyActivityButton } from "../../key-activities/create-key-activity-button";
-import { KeyActivitiesList } from "../../key-activities/key-activities-list";
+import {
+  KeyActivitiesList,
+  KeyActivityColumnStyleListContainer,
+  KeyActivitiesWrapperContainer,
+  KeyActivityListSubHeaderContainer,
+} from "../../key-activities/key-activities-list";
 import { FilterDropdown } from "../../key-activities/filter-dropdown";
 import * as R from "ramda";
 import { StyledIcon } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
@@ -123,12 +128,12 @@ export const HomeKeyActivities = observer(
       return (
         <>
           <HeaderRowContainer>
-            <StyledHeading type={"h2"} fontSize={"20px"}>
+            <Heading type={"h2"} fontSize={"20px"} fontWeight={"bold"}>
               {header == "Backlog" ? "Master List" : header}
-            </StyledHeading>
+            </Heading>
           </HeaderRowContainer>
           <HeaderRowContainer>
-            <SubHeaderContainer>{subText}</SubHeaderContainer>
+            <KeyActivityListSubHeaderContainer>{subText}</KeyActivityListSubHeaderContainer>
             {!R.isNil(scheduledGroupId) && (
               <SortContainer onClick={() => setFilterOpen(!sortFilterOpen)}>
                 <Icon icon={"Sort"} size={12} iconColor="grey100" />
@@ -215,7 +220,7 @@ export const HomeKeyActivities = observer(
     };
 
     return todayOnly ? (
-      <Container width={width}>
+      <KeyActivitiesWrapperContainer width={width}>
         <SingleListContainer>
           <HeaderContainer>
             {renderHeader(
@@ -247,10 +252,10 @@ export const HomeKeyActivities = observer(
           todayModalClicked={true}
           todayFilterGroupId={todayFilterGroupId}
         />
-      </Container>
+      </KeyActivitiesWrapperContainer>
     ) : (
-      <Container width={width}>
-        <ListContainer>
+      <KeyActivitiesWrapperContainer width={width}>
+        <KeyActivityColumnStyleListContainer>
           <HeaderContainer>
             {renderHeader(
               "Today",
@@ -272,8 +277,8 @@ export const HomeKeyActivities = observer(
               droppableId={`todays-activities-${todayFilterGroupId}`}
             />
           </KeyActivitiesListContainer>
-        </ListContainer>
-        <ListContainer>
+        </KeyActivityColumnStyleListContainer>
+        <KeyActivityColumnStyleListContainer>
           <HeaderContainer>{renderMiddleColumnHeader()}</HeaderContainer>
           <KeyActivitiesListContainer>
             <CreateKeyActivityButton
@@ -291,7 +296,7 @@ export const HomeKeyActivities = observer(
               }
             />
           </KeyActivitiesListContainer>
-        </ListContainer>
+        </KeyActivityColumnStyleListContainer>
         <FilterContainer>
           {renderFilterGroupOptions()}
           {renderFilterCompletedOption()}
@@ -306,25 +311,10 @@ export const HomeKeyActivities = observer(
           defaultTypeAsWeekly={true}
           todayFilterGroupId={todayFilterGroupId}
         />
-      </Container>
+      </KeyActivitiesWrapperContainer>
     );
   },
 );
-
-type ContainerProps = {
-  width?: string;
-};
-
-const Container = styled.div<ContainerProps>`
-  display: flex;
-  width: ${props => props.width || "75%"};
-`;
-
-const ListContainer = styled.div`
-  width: 50%;
-  margin-right: 20px;
-  min-width: 220px;
-`;
 
 const SingleListContainer = styled.div`
   width: 100%;
@@ -340,18 +330,6 @@ const HeaderContainer = styled.div``;
 
 const HeaderRowContainer = styled.div`
   display: flex;
-`;
-
-const SubHeaderContainer = styled.div`
-  font-size: 12px;
-  color: ${props => props.theme.colors.grey100};
-  margin-top: auto;
-  margin-bottom: auto;
-  height: 18px;
-`;
-
-const StyledHeading = styled(Heading)`
-  font-weight: bold;
 `;
 
 const SortContainer = styled.div`

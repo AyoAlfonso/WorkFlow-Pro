@@ -6,6 +6,11 @@ import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { Heading } from "~/components/shared";
 import { Button } from "~/components/shared/button";
+import {
+  KeyActivityColumnStyleListContainer,
+  KeyActivitiesWrapperContainer,
+  KeyActivityListSubHeaderContainer,
+} from "~/components/domains/key-activities/key-activities-list";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 import { useState } from "react";
 
@@ -20,32 +25,32 @@ export const YesterdayInReview = observer(
     const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
 
     return (
-      <Container>
-        <ListContainer>
-          <StyledHeading type={"h2"} fontSize={"20px"}>
+      <KeyActivitiesWrapperContainer width={"100%"}>
+        <KeyActivityColumnStyleListContainer>
+          <Heading type={"h2"} fontSize={"20px"} fontWeight={"bold"}>
             {t("keyActivities.yesterdayTitle")}
-          </StyledHeading>
-          <SubHeaderContainer>
-            {moment()
-              .subtract(1, "days")
-              .format("MMMM D")}
-          </SubHeaderContainer>
-          <KeyActivitiesListContainer>
+          </Heading>
+          <KeyActivityListSubHeaderContainer>
+            {moment().format("MMMM D")}
+          </KeyActivityListSubHeaderContainer>
+          <KeyActivitiesListStyleContainer>
             {finishedYesterdayPyns.map(ka => (
               <KeyActivityRecord keyActivity={ka} disabled={true} />
             ))}
-          </KeyActivitiesListContainer>
-        </ListContainer>
-        <ListContainer>
-          <StyledHeading type={"h2"} fontSize={"20px"}>
+          </KeyActivitiesListStyleContainer>
+        </KeyActivityColumnStyleListContainer>
+        <KeyActivityColumnStyleListContainer>
+          <Heading type={"h2"} fontSize={"20px"} fontWeight={"bold"}>
             {t("keyActivities.yesterdayRemainingTitle")}
-          </StyledHeading>
-          <SubHeaderContainer>{t("keyActivities.yesterdayUnfinishedText")}</SubHeaderContainer>
-          <KeyActivitiesListContainer>
+          </Heading>
+          <KeyActivityListSubHeaderContainer>
+            {t("keyActivities.yesterdayUnfinishedText")}
+          </KeyActivityListSubHeaderContainer>
+          <KeyActivitiesListStyleContainer>
             {remainingPyns.map(ka => (
               <KeyActivityRecord keyActivity={ka} />
             ))}
-          </KeyActivitiesListContainer>
+          </KeyActivitiesListStyleContainer>
           <ButtonContainer>
             <MarkDoneButton
               small
@@ -61,36 +66,14 @@ export const YesterdayInReview = observer(
               {t("keyActivities.markAllYesterdayDone")}
             </MarkDoneButton>
           </ButtonContainer>
-        </ListContainer>
-      </Container>
+        </KeyActivityColumnStyleListContainer>
+      </KeyActivitiesWrapperContainer>
     );
   },
 );
 
-const Container = styled.div`
-  display: flex;
-  width: 100%;
-`;
-
-const ListContainer = styled.div`
-  width: 50%;
-  margin-right: 20px;
-`;
-
-const StyledHeading = styled(Heading)`
-  font-weight: bold;
-`;
-
-const SubHeaderContainer = styled.div`
-  font-size: 12px;
-  color: ${props => props.theme.colors.grey100};
-  margin-top: auto;
-  margin-bottom: auto;
-`;
-
-const KeyActivitiesListContainer = styled.div`
+const KeyActivitiesListStyleContainer = styled.div`
   margin-top: 16px;
-  margin-bottom: 16px;
 `;
 
 const MarkDoneButton = styled(Button)`

@@ -57,7 +57,7 @@ export const KeyActivitiesList = observer(
     };
 
     return (
-      <Container>
+      <KeyActivitiesListStyleContainer>
         <Droppable droppableId={droppableId} key={"keyActivity"}>
           {(provided, snapshot) => (
             <KeyActivitiesContainer
@@ -69,12 +69,13 @@ export const KeyActivitiesList = observer(
             </KeyActivitiesContainer>
           )}
         </Droppable>
-      </Container>
+      </KeyActivitiesListStyleContainer>
     );
   },
 );
 
-const Container = styled.div`
+//used internally or just for styling export
+export const KeyActivitiesListStyleContainer = styled.div`
   margin-top: 10px;
   height: 100%;
 `;
@@ -94,4 +95,27 @@ type KeyActivitiesContainerType = {
 
 const KeyActivitiesContainer = styled.div<KeyActivitiesContainerType>`
   height: 100%;
+`;
+
+///COMMON STYLING COMPONENTS FOR KEY ACTIVITIES
+export const KeyActivityColumnStyleListContainer = styled.div`
+  width: 50%;
+  margin-right: 20px;
+  min-width: 220px;
+`;
+
+type ContainerProps = {
+  width?: string;
+};
+
+export const KeyActivitiesWrapperContainer = styled.div<ContainerProps>`
+  display: flex;
+  width: ${props => props.width || "75%"};
+`;
+
+export const KeyActivityListSubHeaderContainer = styled.div`
+  font-size: 12px;
+  color: ${props => props.theme.colors.grey100};
+  margin-top: auto;
+  margin-bottom: auto;
 `;
