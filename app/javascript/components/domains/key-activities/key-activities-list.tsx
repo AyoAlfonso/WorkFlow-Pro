@@ -2,67 +2,77 @@ import * as React from "react";
 import styled from "styled-components";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
-
+import { observer } from "mobx-react";
+import { useMst } from "~/setup/root";
+import { Loading } from "~/components/shared/loading";
 interface IKeyActivitiesListProps {
   keyActivities: Array<any>;
   droppableId: string;
 }
 
-export const KeyActivitiesList = ({
-  keyActivities,
-  droppableId,
-}: IKeyActivitiesListProps): JSX.Element => {
-  const splittedDroppableId = droppableId.split("-");
-  const updateId = splittedDroppableId[splittedDroppableId.length - 1];
+export const KeyActivitiesList = observer(
+  ({ keyActivities, droppableId }: IKeyActivitiesListProps): JSX.Element => {
+    const splittedDroppableId = droppableId.split("-");
+    const updateId = splittedDroppableId[splittedDroppableId.length - 1];
 
-  const renderKeyActivitiesList = () => {
-    return keyActivities.map((keyActivity, index) => {
-      const draggableId = () => {
-        if (isNaN(parseInt(updateId))) {
-          return `keyActivity-${keyActivity.id}`;
-        } else {
-          return `keyActivity-${keyActivity.id}-${updateId}`;
-        }
-      };
+    const { keyActivityStore } = useMst();
 
-      return (
-        <Draggable
-          draggableId={draggableId()}
-          index={index}
-          key={keyActivity["id"]}
-          type={"keyActivity"}
-        >
-          {provided => (
-            <KeyActivityContainer
-              key={keyActivity["id"]}
+    if (keyActivityStore.loading) {
+      return <Loading />;
+    }
+
+    const renderKeyActivitiesList = () => {
+      return keyActivities.map((keyActivity, index) => {
+        const draggableId = () => {
+          if (isNaN(parseInt(updateId))) {
+            return `keyActivity-${keyActivity.id}`;
+          } else {
+            return `keyActivity-${keyActivity.id}-${updateId}`;
+          }
+        };
+
+        return (
+          <Draggable
+            draggableId={draggableId()}
+            index={index}
+            key={keyActivity["id"]}
+            type={"keyActivity"}
+          >
+            {provided => (
+              <KeyActivityContainer
+                key={keyActivity["id"]}
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+              >
+                <KeyActivityRecord
+                  keyActivity={keyActivity}
+                  dragHandleProps={...provided.dragHandleProps}
+                />
+              </KeyActivityContainer>
+            )}
+          </Draggable>
+        );
+      });
+    };
+
+    return (
+      <Container>
+        <Droppable droppableId={droppableId} key={"keyActivity"}>
+          {(provided, snapshot) => (
+            <KeyActivitiesContainer
               ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
+              isDraggingOver={snapshot.isDraggingOver}
             >
-              <KeyActivityRecord
-                keyActivity={keyActivity}
-                dragHandleProps={...provided.dragHandleProps}
-              />
-            </KeyActivityContainer>
+              {renderKeyActivitiesList()}
+              {provided.placeholder}
+            </KeyActivitiesContainer>
           )}
-        </Draggable>
-      );
-    });
-  };
-
-  return (
-    <Container>
-      <Droppable droppableId={droppableId} key={"keyActivity"}>
-        {(provided, snapshot) => (
-          <KeyActivitiesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
-            {renderKeyActivitiesList()}
-            {provided.placeholder}
-          </KeyActivitiesContainer>
-        )}
-      </Droppable>
-    </Container>
-  );
-};
+        </Droppable>
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
   margin-top: 10px;

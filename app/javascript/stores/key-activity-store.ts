@@ -110,10 +110,12 @@ export const KeyActivityStoreModel = types
   }))
   .actions(self => ({
     fetchKeyActivities: flow(function*() {
+      self.loading = true;
       const response: ApiResponse<any> = yield self.environment.api.getKeyActivities();
       self.finishLoading();
       if (response.ok) {
         self.keyActivities = response.data;
+        self.loading = false;
       }
     }),
     updateKeyActivityStatus: flow(function*(keyActivity, value, fromTeamMeeting = false) {
