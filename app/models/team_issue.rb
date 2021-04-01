@@ -12,6 +12,7 @@ class TeamIssue < ApplicationRecord
   scope :for_team, -> (team_id) { where(team_id: team_id) }
   scope :complete, -> { where.not(completed_at: nil) }
   scope :incomplete, -> { where(completed_at: nil) }
+  scope :optimized, -> { includes([issue: [:user, :labels, :label_taggings]]) }
   
   scope :sort_by_completed_date, -> { order(completed_at: :desc)}
 

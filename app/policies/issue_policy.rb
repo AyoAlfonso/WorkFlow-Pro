@@ -44,7 +44,7 @@ class IssuePolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.optimized.user_current_company(@company.id).owned_by_self_or_team_members(@user)
+      scope.includes([:label_taggings, :labels]).optimized.user_current_company(@company.id).owned_by_self_or_team_members(@user)
     end
   end
 end

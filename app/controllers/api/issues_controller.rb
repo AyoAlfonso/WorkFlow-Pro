@@ -16,7 +16,7 @@ class Api::IssuesController < Api::ApplicationController
 
     if params[:team_id]
       # USE HOOK TO CREATE A TEAM ISSUE IF IT DOESNT EXIST FOR @ISSUE
-      @team_issues = TeamIssue.for_team(params[:team_id]).sort_by_position.exclude_personal_for_team
+      @team_issues = TeamIssue.optimized.for_team(params[:team_id]).sort_by_position.exclude_personal_for_team
       @issues_to_render = team_meeting_issues(params[:team_id]).exclude_personal_for_team
       
       #additional details to render if its a team
@@ -42,7 +42,7 @@ class Api::IssuesController < Api::ApplicationController
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
     end
-    @team_issues = TeamIssue.for_team(@issue.team_id).sort_by_position
+    @team_issues = TeamIssue.optimized.for_team(@issue.team_id).sort_by_position
     render "api/issues/update"
   end
 

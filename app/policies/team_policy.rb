@@ -34,7 +34,7 @@ class TeamPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes([:team_user_enablements]).for_company(@company)
+      scope.includes([:team_user_enablements, :users]).for_company(@company)
     end
   end
 end
