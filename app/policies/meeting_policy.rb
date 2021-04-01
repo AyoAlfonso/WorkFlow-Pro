@@ -62,7 +62,7 @@ class MeetingPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.optimized.from_user_teams_or_hosted_by_user(@user)
+      scope.includes([:hosted_by, meeting_template: [steps: :rich_text_description_text]]).optimized.from_user_teams_or_hosted_by_user(@user)
     end
   end
 

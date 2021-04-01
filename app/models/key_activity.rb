@@ -12,7 +12,8 @@ class KeyActivity < ApplicationRecord
 
   acts_as_taggable_on :labels
 
-  scope :optimized, -> { includes([:user]) }
+  scope :optimized, -> { includes([:user, :labels, :label_taggings]) }
+  scope :optimized_for_team, -> { includes([:taggings]) }
   scope :user_current_company, -> (company_id) {where(company_id: company_id)}
 
   scope :created_by_user, -> (user) { where(user: user) }
