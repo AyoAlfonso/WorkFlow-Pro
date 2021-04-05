@@ -29,16 +29,11 @@ export const SignUpWizardProgressBar = ({
     </IconContainer>
   );
 
-  const titleCharLength = (title): number => {
-    const splittedTitle = title.split("");
-    return splittedTitle.length;
-  };
-
   const renderSteps = () => {
     return stepNames.map((step, index) => {
       return (
         <StepContainer key={index}>
-          <StepTitleContainer titleCharLength={titleCharLength(step)}>
+          <StepTitleContainer titleCharLength={(step || "").length}>
             <StepTitle index={index} currentStep={currentStep}>
               {step}
             </StepTitle>

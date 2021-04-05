@@ -72,53 +72,57 @@ class Api::CompaniesController < Api::ApplicationController
         })
   end
 
-  def create_or_update_onboarding_goals  
-    # Lynchpyn Goal aka Rallying Cry
-    @onboarding_company.update!(rallying_cry: params[:rallying_cry])
+  def create_or_update_onboarding_goals 
+    begin 
+      # Lynchpyn Goal aka Rallying Cry
+      @onboarding_company.update!(rallying_cry: params[:rallying_cry])
 
-    # Annual Objective aka Annual Initiative
-    annual_initiative = AnnualInitiative.where(company_id: @onboarding_company.id, 
-      created_by: current_user, 
-      owned_by: current_user,
-      fiscal_year: @onboarding_company.year_for_creating_annual_initiatives,
-      context_description: "",
-      importance: ["", "", ""],).first_or_initialize
-    annual_initiative.update!(description: params[:annual_initiative][:description])
+      # Annual Objective aka Annual Initiative
+      annual_initiative = AnnualInitiative.where(company_id: @onboarding_company.id, 
+        created_by: current_user, 
+        owned_by: current_user,
+        fiscal_year: @onboarding_company.year_for_creating_annual_initiatives,
+        context_description: "",
+        importance: ["", "", ""],).first_or_initialize
+      annual_initiative.update!(description: params[:annual_initiative][:description])
 
-    # Quarterly Initiative aka Quarterly Goal
-    @quarterly_goal = QuarterlyGoal.where(
-      created_by: current_user, 
-      owned_by: current_user, 
-      annual_initiative_id: annual_initiative.id,
-      context_description: "",
-      importance: ["", "", ""],
-      quarter: @onboarding_company.quarter_for_creating_quarterly_goals).first_or_initialize
-    @quarterly_goal.update!(description: params[:annual_initiative][:quarterly_goals][0][:description])
+      # Quarterly Initiative aka Quarterly Goal
+      @quarterly_goal = QuarterlyGoal.where(
+        created_by: current_user, 
+        owned_by: current_user, 
+        annual_initiative_id: annual_initiative.id,
+        context_description: "",
+        importance: ["", "", ""],
+        quarter: @onboarding_company.quarter_for_creating_quarterly_goals).first_or_initialize
+      @quarterly_goal.update!(description: params[:annual_initiative][:quarterly_goals][0][:description])
 
-    # Weekly Milestones aka Milestones
-    if @quarterly_goal.milestones.blank?
-      @quarterly_goal.create_milestones_for_quarterly_goal(current_user, @onboarding_company)
-      @quarterly_goal.reload
-    end
-    @milestone = @quarterly_goal.milestones.first
-    @milestone.update!(description: params[:annual_initiative][:quarterly_goals][0][:milestones][0][:description])
+      # Weekly Milestones aka Milestones
+      if @quarterly_goal.milestones.blank?
+        @quarterly_goal.create_milestones_for_quarterly_goal(current_user, @onboarding_company)
+        @quarterly_goal.reload
+      end
+      @milestone = @quarterly_goal.milestones.first
+      @milestone.update!(description: params[:annual_initiative][:quarterly_goals][0][:milestones][0][:description])
 
-    @annual_initiative = annual_initiative.as_json(only: [:id, :created_by, :owned_by, :importance, :description, :key_elements, :company_id, :context_description, :fiscal_year],
-      include: {
-        quarterly_goals: {
-          only: [:id, :annual_initiative_id, :importance, :description, :key_elements, :company_id, :context_description, :quarter],
-          methods: [:owned_by, :created_by],
-          include: {
-            milestones: {
-              only: [:id, :quarterly_goal_id, :description, :week, :status, :week_of],
-              methods: [:created_by]
+      @annual_initiative = annual_initiative.as_json(only: [:id, :created_by, :owned_by, :importance, :description, :key_elements, :company_id, :context_description, :fiscal_year],
+        include: {
+          quarterly_goals: {
+            only: [:id, :annual_initiative_id, :importance, :description, :key_elements, :company_id, :context_description, :quarter],
+            methods: [:owned_by, :created_by],
+            include: {
+              milestones: {
+                only: [:id, :quarterly_goal_id, :description, :week, :status, :week_of],
+                methods: [:created_by]
+              }
             }
           }
         }
-      }
-    )
+      )
 
-    render json: { rallying_cry: @onboarding_company.rallying_cry, annual_initiative: @annual_initiative }
+      render json: { rallying_cry: @onboarding_company.rallying_cry, annual_initiative: @annual_initiative }
+    rescue StandardError => e
+      render json: { message: "Please complete all the questions before proceeding to next or choose to skip this altogether."}, status: :bad_request
+    end
   end
 
   def get_onboarding_goals
