@@ -35,6 +35,10 @@ class Api::UsersController < Api::ApplicationController
     @user.update!(params[:user][:teams].present? ? user_update_params.merge(team_user_enablements_attributes: team_user_enablement_attribute_parser(params[:user][:teams])) : user_update_params)
     user_company_enablement = UserCompanyEnablement.where(company_id: current_company.id, user_id: @user.id).first
     user_company_enablement.update!(user_title: params[:user][:title]) if params[:user].present? && params[:user][:title].present?
+    @session_company_id = current_company.id
+    @static_data = view_context.static_data
+    @scheduled_groups = ScheduledGroup.all
+    @user_first_access_to_forum = current_company.display_format == "Forum" && current_user.user_company_enablements.find_by_company_id(current_company.id)&.first_time_access
     render 'api/users/show'
   end
 
