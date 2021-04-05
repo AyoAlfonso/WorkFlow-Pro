@@ -159,6 +159,9 @@ Rails.application.routes.draw do
     get '/journals', to: 'summaries#journals_by_date'
     get '/notes', to: 'summaries#meetings_by_date'
 
+    #pabbly_subscriptions
+    post '/pabbly_subscriptions/', to: "pabbly_subscriptions#create_company_and_user"
+
   end
 
 

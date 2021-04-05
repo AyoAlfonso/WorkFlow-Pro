@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_221742) do
     t.text "strategic_plan_embed"
     t.integer "display_format", default: 0
     t.integer "onboarding_status", default: 0
+    t.string "customer_subscription_profile_id"
   end
 
   create_table "conversation_starters", force: :cascade do |t|
@@ -525,7 +526,6 @@ ActiveRecord::Schema.define(version: 2021_03_29_221742) do
     t.string "title"
     t.datetime "deleted_at"
     t.bigint "default_selected_company_id"
-    t.string "customer_subscription_profile_id"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["default_selected_company_id"], name: "index_users_on_default_selected_company_id"
