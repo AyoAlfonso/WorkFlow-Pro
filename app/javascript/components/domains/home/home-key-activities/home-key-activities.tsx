@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Heading, Icon } from "~/components/shared";
 import * as moment from "moment";
@@ -35,7 +35,18 @@ export const HomeKeyActivities = observer(
       sessionStore: { scheduledGroups },
     } = useMst();
 
-    const todaysKeyActivities = keyActivityStore.keyActivitiesByScheduledGroupName("Today");
+    useEffect(() => {
+      showCompletedItems
+        ? keyActivityStore.fetchCompleteKeyActivities()
+        : keyActivityStore.fetchIncompleteKeyActivities();
+    }, [showCompletedItems]);
+
+    const todaysKeyActivities = keyActivityStore.incompleteKeyActivitiesByScheduledGroupName(
+      "Today",
+    );
+
+    const completedKeyActivities = keyActivityStore.completedActivities;
+
     const selectedFilterGroupId = R.path(
       ["id"],
       scheduledGroups.find(group => group.name == selectedFilterGroupName),
@@ -64,11 +75,13 @@ export const HomeKeyActivities = observer(
 
     const filteredKeyActivities = () => {
       if (showCompletedItems) {
-        return keyActivityStore.completedActivities;
+        return completedKeyActivities;
       } else if (selectedFilterGroupName) {
-        return keyActivityStore.keyActivitiesByScheduledGroupName(selectedFilterGroupName);
+        return keyActivityStore.incompleteKeyActivitiesByScheduledGroupName(
+          selectedFilterGroupName,
+        );
       } else {
-        return keyActivityStore.keyActivitiesByTeamId(selectedFilterTeamId);
+        return keyActivityStore.incompleteKeyActivitiesByTeamId(selectedFilterTeamId);
       }
     };
 

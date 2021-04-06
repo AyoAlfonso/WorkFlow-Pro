@@ -45,6 +45,7 @@ class KeyActivity < ApplicationRecord
     ScheduledGroup.find_by_name("Backlog").id
     ]).sort_by_position}
   scope :sort_by_due_date, -> { order(due_date: :asc) }
+  scope :completed_state_and_owned_by_current_user, -> (completed, user) { (completed ? where.not(completed_at: nil) : where(completed_at: nil)).owned_by_user(user) }
 
   validates :description, presence: true
 

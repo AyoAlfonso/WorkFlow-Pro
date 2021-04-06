@@ -32,7 +32,7 @@ export const TeamKeyActivitiesBody = observer(
       return <Loading />;
     }
 
-    const masterKeyActivities = keyActivityStore.keyActivities;
+    const masterKeyActivities = keyActivityStore.keyActivitiesFromMeeting;
 
     const outstandingMasterActivities = masterKeyActivities.filter(ka => !ka.completedAt);
     const completedMasterActivities = masterKeyActivities.filter(ka => ka.completedAt);

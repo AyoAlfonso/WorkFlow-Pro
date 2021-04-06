@@ -9,7 +9,8 @@ import * as R from "ramda";
 export const KeyActivityStoreModel = types
   .model("KeyActivityStoreModel")
   .props({
-    keyActivities: types.array(KeyActivityModel),
+    incompleteKeyActivities: types.array(KeyActivityModel),
+    completedKeyActivities: types.array(KeyActivityModel),
     keyActivitiesFromMeeting: types.array(KeyActivityModel),
     keyActivitiesForOnboarding: types.array(KeyActivityModel),
     loading: types.maybeNull(types.boolean),
@@ -17,7 +18,8 @@ export const KeyActivityStoreModel = types
   })
   .extend(withEnvironment())
   .views(self => ({
-    keyActivitiesByScheduledGroupName(scheduledGroupName) {
+    filterKeyActivitiesByScheduledGroupName(scheduledGroupName, completed) {
+      let keyActivitiesForFiltering = completed ? self.completedKeyActivities : self.incompleteKeyActivities
       const {
         sessionStore: { scheduledGroups },
       } = getRoot(self);
@@ -25,16 +27,24 @@ export const KeyActivityStoreModel = types
 
       const filteredKeyActivities = 
         scheduledGroupName == "Backlog" ? 
-          self.keyActivities.filter(
+          keyActivitiesForFiltering.filter(
             keyActivity => keyActivity.scheduledGroupId == scheduledGroup.id && !keyActivity.completedAt
           ) : 
-          self.keyActivities.filter(
+          keyActivitiesForFiltering.filter(
             keyActivity => keyActivity.scheduledGroupId == scheduledGroup.id
           )
       return filteredKeyActivities;
     },
-    keyActivitiesByTeamId(teamId) {
-      const filteredKeyActivities = self.keyActivities.filter(
+  }))
+  .views(self => ({
+    incompleteKeyActivitiesByScheduledGroupName(scheduledGroupName) {
+      return self.filterKeyActivitiesByScheduledGroupName(scheduledGroupName, false)
+    },
+    completedKeyActivitiesByScheduledGroupName(scheduledGroupName) {
+      return self.filterKeyActivitiesByScheduledGroupName(scheduledGroupName, true)
+    },
+    incompleteKeyActivitiesByTeamId(teamId) {
+      const filteredKeyActivities = self.incompleteKeyActivities.filter(
         keyActivity => keyActivity.teamId == teamId,
       );
       return filteredKeyActivities;
@@ -43,18 +53,18 @@ export const KeyActivityStoreModel = types
   .views(self => ({
     get completedActivities() {
       const sortByCompletedAt = (a,b) => { return new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()}
-      return R.sort(sortByCompletedAt, self.keyActivities.filter(keyActivity => keyActivity.completedAt))
+      return R.sort(sortByCompletedAt, self.completedKeyActivities)
     },
     get completedToday() {
       const today = new Date().getDate();
-      return self.keyActivities.filter(
+      return self.completedKeyActivities.filter(
         keyActivity => new Date(keyActivity.completedAt).getDate() === today,
       );
     },
     get completedYesterday() {
       const today = new Date().getDate();
       const yesterday = today - 1;
-      return self.keyActivities.filter(
+      return self.completedKeyActivities.filter(
         keyActivity =>
           new Date(keyActivity.completedAt).getDate() === yesterday ||
           (!R.isNil(keyActivity.completedAt) &&
@@ -65,26 +75,23 @@ export const KeyActivityStoreModel = types
   .views(self => ({
     get nextActivities() {
       return self
-        .keyActivitiesByScheduledGroupName("Tomorrow")
-        .concat(self.keyActivitiesByScheduledGroupName("Weekly List"));
+        .incompleteKeyActivitiesByScheduledGroupName("Tomorrow")
+        .concat(self.incompleteKeyActivitiesByScheduledGroupName("Weekly List"));
     },
     get tomorrowKeyActivities() {
-      return self.keyActivitiesByScheduledGroupName("Tomorrow");
+      return self.incompleteKeyActivitiesByScheduledGroupName("Tomorrow");
     },
     get weeklyKeyActivities() {
-      const filteredKeyActivities = self.keyActivitiesByScheduledGroupName("Weekly List");
-      return filteredKeyActivities.filter(keyActivity => !keyActivity.completedAt);
+      return self.incompleteKeyActivitiesByScheduledGroupName("Weekly List");
     },
     get incompleteMasterKeyActivities() {
-      return self.keyActivitiesByScheduledGroupName("Backlog").filter(mka => !mka.completedAt);
+      return self.incompleteKeyActivitiesByScheduledGroupName("Backlog")
     },
     get completedMasterKeyActivities() {
-      return self.keyActivitiesByScheduledGroupName("Backlog").filter(mka => mka.completedAt);
+      return self.completedKeyActivitiesByScheduledGroupName("Backlog")
     },
     get todaysPriorities() {
-      return self
-        .keyActivitiesByScheduledGroupName("Today")
-        .filter(keyActivity => !keyActivity.completedAt);
+      return self.incompleteKeyActivitiesByScheduledGroupName("Today")
     },
   }))
   .views(self => ({
@@ -97,7 +104,8 @@ export const KeyActivityStoreModel = types
   }))
   .actions(self => ({
     reset() {
-      self.keyActivities = [] as any;
+      self.incompleteKeyActivities = [] as any;
+      self.completedKeyActivities = [] as any;
     },
     startLoading(loadingList = null) {
       self.loading = true;
@@ -109,23 +117,38 @@ export const KeyActivityStoreModel = types
     },
   }))
   .actions(self => ({
-    fetchKeyActivities: flow(function*() {
+    fetchIncompleteKeyActivities: flow(function*(){
       self.loading = true;
-      const response: ApiResponse<any> = yield self.environment.api.getKeyActivities();
+      const response: ApiResponse<any> = yield self.environment.api.getKeyActivities(false);
       self.finishLoading();
       if (response.ok) {
-        self.keyActivities = response.data;
+        self.incompleteKeyActivities = response.data;
+        self.loading = false;
+      }
+    }),
+    fetchCompleteKeyActivities: flow(function*(){
+      self.loading = true;
+      const response: ApiResponse<any> = yield self.environment.api.getKeyActivities(true);
+      self.finishLoading();
+      if (response.ok) {
+        self.completedKeyActivities = response.data;
         self.loading = false;
       }
     }),
     updateKeyActivityStatus: flow(function*(keyActivity, value, fromTeamMeeting = false) {
+      let itemIncomplete = keyActivity.completedAt ? true : false
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivityStatus(
         keyActivity,
         value,
         fromTeamMeeting,
       );
       if (response.ok) {
-        self.keyActivities = response.data;
+        const { createdFor, keyActivities } = response.data
+        if(createdFor == "meeting"){
+          self.keyActivitiesFromMeeting = keyActivities
+        } else {
+          itemIncomplete ? self.incompleteKeyActivities = keyActivities : self.completedKeyActivities = keyActivities
+        }
         return true;
       } else {
         return false;
@@ -136,12 +159,16 @@ export const KeyActivityStoreModel = types
         keyActivityObject,
       );
       if (response.ok) {
-        if(keyActivityObject.onboardingCompanyId){
-          self.keyActivitiesForOnboarding = response.data
+        const { createdFor, keyActivities } = response.data
+
+        if (createdFor == "onboarding") {
+          self.keyActivitiesForOnboarding = keyActivities
+        } else if (createdFor == "meeting"){
+          self.keyActivitiesFromMeeting = keyActivities
         } else {
-          self.keyActivities = response.data;
+          self.incompleteKeyActivities = keyActivities
         }
-        
+
         showToast("Pyn created.", ToastMessageConstants.SUCCESS);
         return true;
       } else {
@@ -150,14 +177,25 @@ export const KeyActivityStoreModel = types
       }
     }),
     updateKeyActivity: flow(function*(id, fromTeamMeeting = false) {
-      let keyActivityObject = self.keyActivities.find(ka => ka.id == id);
+      let itemIncomplete = true;
+      let keyActivityObject = self.incompleteKeyActivities.find(ka => ka.id == id);
+      if(!keyActivityObject){
+        keyActivityObject = self.completedKeyActivities.find(ka => ka.id == id);
+        itemIncomplete = false;
+      }
+
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivity({
         ...keyActivityObject,
         fromTeamMeeting,
       });
       self.finishLoading();
       if (response.ok) {
-        self.keyActivities = response.data;
+        const { createdFor, keyActivities } = response.data
+        if (createdFor == "meeting") {
+          self.keyActivitiesFromMeeting = keyActivities
+        } else {
+          itemIncomplete ? self.incompleteKeyActivities = keyActivities : self.completedKeyActivities = keyActivities
+        }
         return true;
       } else {
         return false;
@@ -168,8 +206,13 @@ export const KeyActivityStoreModel = types
         id,
         fromTeamMeeting,
       });
-      if (response.ok) {
-        self.keyActivities = response.data;
+      if (response.ok) {  
+        const { completedList, keyActivities} = response.data
+        if (completedList) {
+          self.completedKeyActivities = keyActivities
+        } else {
+          self.incompleteKeyActivities = keyActivities;
+        }
         return true;
       } else {
         return false;
@@ -178,7 +221,7 @@ export const KeyActivityStoreModel = types
     resortKeyActivities: flow(function*(sortParams) {
       const response: ApiResponse<any> = yield self.environment.api.resortKeyActivities(sortParams);
       if (response.ok) {
-        self.keyActivities = response.data as any;
+        self.incompleteKeyActivities = response.data as any;
         return true;
       } else {
         return false;
@@ -191,7 +234,7 @@ export const KeyActivityStoreModel = types
         kaIdsToUpdate,
       );
       if (response.ok) {
-        self.keyActivities = response.data as any;
+        self.incompleteKeyActivities = response.data as any;
         return true;
       } else {
         return false;
@@ -199,12 +242,16 @@ export const KeyActivityStoreModel = types
     }),
   }))
   .actions(self => ({
+    fetchAllKeyActivities(){
+      self.fetchCompleteKeyActivities();
+      self.fetchIncompleteKeyActivities();
+    },
     fetchKeyActivitiesFromMeeting: flow(function*(meeting_id) {
       const response: ApiResponse<any> = yield self.environment.api.getKeyActivitiesFromMeeting(
         meeting_id,
       );
       if (response.ok) {
-        self.keyActivities = response.data;
+        self.keyActivitiesFromMeeting = response.data
         return true;
       } else {
         return false;
@@ -218,23 +265,40 @@ export const KeyActivityStoreModel = types
 
       self.finishLoading();
       if (response.ok) {
-        self.keyActivities = response.data;
+        self.incompleteKeyActivities = response.data;
         return true;
       } else {
         return false;
       }
     }),
     updateKeyActivityState(id, field, value) {
-      let keyActivities = self.keyActivities;
+      let keyActivities = self.incompleteKeyActivities
+      // we're trying to find where the key activity is in the store.
+      // there are 3 different key activity lists, and the key activity can be in any of them
+      // since we're updating the local state, we'll need to find where the key activity is stored in the store
       let keyActivityIndex = keyActivities.findIndex(ka => ka.id == id);
-      keyActivities[keyActivityIndex][field] = value;
-      self.keyActivities = keyActivities;
+      if (keyActivityIndex == -1) {
+        keyActivities = self.completedKeyActivities
+        keyActivityIndex = keyActivities.findIndex(ka => ka.id == id);
+        if (keyActivityIndex == -1) {
+          keyActivities = self.keyActivitiesFromMeeting
+          keyActivityIndex = keyActivities.findIndex(ka => ka.id == id);
+          keyActivities[keyActivityIndex][field] = value;
+          self.keyActivitiesFromMeeting = keyActivities;
+        } else {
+          keyActivities[keyActivityIndex][field] = value;
+          self.completedKeyActivities = keyActivities;
+        }
+      } else {
+        keyActivities[keyActivityIndex][field] = value;
+        self.incompleteKeyActivities = keyActivities;
+      }
     },
   }))
   .actions(self => ({
     load: flow(function*() {
       self.reset();
-      yield self.fetchKeyActivities();
+      yield self.fetchIncompleteKeyActivities();
     }),
   }));
 

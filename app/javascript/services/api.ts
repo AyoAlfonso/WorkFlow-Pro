@@ -38,8 +38,8 @@ export class Api {
     return this.client.get("/issues");
   }
 
-  async getKeyActivities() {
-    return this.client.get("/key_activities");
+  async getKeyActivities(completed) {
+    return this.client.get("/key_activities", { completed });
   }
 
   async login(email, password) {
