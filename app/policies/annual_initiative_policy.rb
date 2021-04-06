@@ -46,7 +46,7 @@ class AnnualInitiativePolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes([:key_elements, {owned_by: [:avatar_attachment]}])
+      scope.includes([:key_elements, {owned_by: {avatar_attachment: :blob}}])
     end
   end
 end

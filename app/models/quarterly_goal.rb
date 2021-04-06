@@ -20,6 +20,7 @@ class QuarterlyGoal < ApplicationRecord
       company.current_fiscal_year, company.current_fiscal_quarter, company.current_fiscal_year
       )
     }
+    scope :optimized, -> () { includes([:key_elements, :milestones, {owned_by: {avatar_attachment: :blob}}]) }
 
   def create_milestones_for_quarterly_goal(current_user, company)
     fiscal_quarter_start_date = company.current_fiscal_start_date + (13.weeks * (self.quarter-1))
