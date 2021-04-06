@@ -25,9 +25,7 @@ export const TeamKeyActivitiesRecap = observer(
     }
 
     const renderOutstandingTeamKeyActivities = (): Array<JSX.Element> => {
-      const teamOutstandingKeyActivities = keyActivityStore.keyActivities.filter(
-        ka => !ka.completedAt,
-      );
+      const teamOutstandingKeyActivities = keyActivityStore.incompleteKeyActivities;
       return teamOutstandingKeyActivities.map(keyActivity => (
         <KeyActivityContainer key={keyActivity["id"]}>
           <KeyActivityEntryRecap keyActivity={keyActivity} />

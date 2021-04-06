@@ -26,7 +26,7 @@ export const KeyActivitiesBody = observer(
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
     useEffect(() => {
-      keyActivityStore.fetchKeyActivities();
+      keyActivityStore.fetchAllKeyActivities();
     }, []);
 
     const weeklyKeyActivities = keyActivityStore.weeklyKeyActivities;

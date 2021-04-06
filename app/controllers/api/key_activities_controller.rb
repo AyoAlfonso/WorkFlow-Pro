@@ -6,7 +6,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
   respond_to :json
 
   def index
-    @key_activities = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_position
+    @key_activities = params[:completed] == "true" ? completed_key_activities : incomplete_key_activities
     render "api/key_activities/index"
   end
 
@@ -18,16 +18,20 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
     if params[:onboarding_company_id]
       @key_activities_to_render = KeyActivity.where(company_id: params[:onboarding_company_id])
+      @created_for = "onboarding"
     elsif params[:meeting_id]
       meeting = Meeting.find(params[:meeting_id])
       @key_activities_to_render = team_meeting_activities(params[:meeting_id]).exclude_personal_for_team
+      @created_for = "meeting"
     else
-      @key_activities_to_render = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_position
+      @key_activities_to_render = incomplete_key_activities
+      @created_for = "general"
     end
     render "api/key_activities/create"
   end
 
   def update
+    key_activity_previously_completed = @key_activity.completed_at.present?
     if params[:completed]
       # if we complete an item on the master list, it should move it to the end
       @key_activity.update!(key_activity_params.merge(completed_at: Time.now, scheduled_group: ScheduledGroup.find_by_name("Backlog")))
@@ -40,8 +44,10 @@ class Api::KeyActivitiesController < Api::ApplicationController
     if params[:from_team_meeting] == true
       meeting = Meeting.find(@key_activity.meeting_id)
       @key_activities_to_render = team_meeting_activities(@key_activity.meeting_id).exclude_personal_for_team
+      @created_for = "meeting"
     else
-      @key_activities_to_render = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_position
+      @key_activities_to_render = key_activity_previously_completed ? completed_key_activities : incomplete_key_activities
+      @created_for = "general"
     end
     render "api/key_activities/update"
   end
@@ -60,19 +66,20 @@ class Api::KeyActivitiesController < Api::ApplicationController
     else
       #todo, work on mass moving back to incomplete state?
     end
-
-    @key_activities_to_render = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_position
+    @created_for = "general"
+    @key_activities_to_render = policy_scope(KeyActivity).where(completed_at: nil).owned_by_user(current_user).sort_by_position
     render "api/key_activities/update"
   end
 
   def destroy
+    @key_activity_previously_completed = @key_activity.completed_at.present?
     @key_activity.destroy!
     if params[:from_team_meeting] == "true"
       meeting_id = @key_activity.meeting_id
       meeting = Meeting.find(meeting_id)
       @key_activities_to_render = team_meeting_activities(meeting_id).exclude_personal_for_team
     else
-      @key_activities_to_render = policy_scope(KeyActivity).owned_by_user(current_user).sort_by_position
+      @key_activities_to_render = @key_activity_previously_completed ? completed_key_activities : incomplete_key_activities
     end
     render "api/key_activities/destroy"
   end
@@ -110,6 +117,14 @@ class Api::KeyActivitiesController < Api::ApplicationController
   def set_key_activity
     @key_activity = policy_scope(KeyActivity).find(params[:id])
     authorize @key_activity
+  end
+
+  def incomplete_key_activities
+    policy_scope(KeyActivity).where(completed_at: nil).owned_by_user(current_user).sort_by_position
+  end
+
+  def completed_key_activities
+    policy_scope(KeyActivity).where.not(completed_at: nil).owned_by_user(current_user).sort_by_position
   end
 
   def team_meeting_activities(meeting_id)

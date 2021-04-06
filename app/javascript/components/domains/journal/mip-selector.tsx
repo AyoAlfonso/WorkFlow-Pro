@@ -19,7 +19,7 @@ export const MIPSelector = observer(
     const nextActivities = keyActivityStore.nextActivities;
     const masterKeyActivities = keyActivityStore.incompleteMasterKeyActivities;
 
-    if (R.isNil(keyActivityStore.keyActivities)) {
+    if (R.isNil(keyActivityStore.incompleteMasterKeyActivities)) {
       return <Loading />;
     }
 
