@@ -40,6 +40,7 @@ class Api::TeamsController < Api::ApplicationController
 
   def destroy
     @team.destroy!
+    #TODO: make this restful
     @teams = policy_scope(Team).all
     render 'api/teams/index'
   end
@@ -53,7 +54,7 @@ class Api::TeamsController < Api::ApplicationController
   end
 
   def set_team
-    @team = policy_scope(Team).find(params[:id])
+    @team = TeamPolicy::Scope.new(pundit_user, Team).for_find.find(params[:id])
     authorize @team
   end
 

@@ -16,7 +16,7 @@ class Issue < ApplicationRecord
 
   acts_as_taggable_on :labels
 
-  scope :optimized, -> { includes([:user, :label_taggings, :labels]) }
+  scope :optimized, -> { includes([{user: {avatar_attachment: :blob}}, :label_taggings, :labels]) }
   scope :user_current_company, -> (company_id) {where(company_id: company_id)}
 
   scope :created_by_user, -> (user) { where(user: user) }

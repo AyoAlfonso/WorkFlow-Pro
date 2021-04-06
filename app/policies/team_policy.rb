@@ -34,7 +34,11 @@ class TeamPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes([:team_user_enablements, :users]).for_company(@company)
+      scope.includes([:team_user_enablements, users: {avatar_attachment: :blob}]).for_company(@company)
+    end
+
+    def for_find
+      scope.includes([users: {avatar_attachment: :blob}]).for_company(@company)
     end
   end
 end

@@ -62,7 +62,7 @@ class UserPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.joins(:user_company_enablements).includes([:default_selected_company, avatar_attachment: :blob]).where(user_company_enablements: {company: @company})
+      scope.joins(:user_company_enablements).includes([avatar_attachment: :blob]).where(user_company_enablements: {company: @company})
     end
   end
 end
