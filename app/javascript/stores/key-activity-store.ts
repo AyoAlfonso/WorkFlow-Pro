@@ -136,10 +136,7 @@ export const KeyActivityStoreModel = types
       }
     }),
     updateKeyActivityStatus: flow(function*(keyActivity, value, fromTeamMeeting = false) {
-      let itemIncomplete = true;
-      if(keyActivity.completedAt){
-        itemIncomplete = false
-      }
+      let itemIncomplete = keyActivity.completedAt ? true : false
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivityStatus(
         keyActivity,
         value,
@@ -276,6 +273,9 @@ export const KeyActivityStoreModel = types
     }),
     updateKeyActivityState(id, field, value) {
       let keyActivities = self.incompleteKeyActivities
+      // we're trying to find where the key activity is in the store.
+      // there are 3 different key activity lists, and the key activity can be in any of them
+      // since we're updating the local state, we'll need to find where the key activity is stored in the store
       let keyActivityIndex = keyActivities.findIndex(ka => ka.id == id);
       if (keyActivityIndex == -1) {
         keyActivities = self.completedKeyActivities
