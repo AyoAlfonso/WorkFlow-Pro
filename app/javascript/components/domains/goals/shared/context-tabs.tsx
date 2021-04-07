@@ -10,7 +10,6 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import ContentEditable from "react-contenteditable";
 
-import { Text, TextDiv } from "../../../shared";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
 import { QuarterlyGoalType } from "~/types/quarterly-goal";
 import { KeyElement } from "./key-element";
@@ -18,7 +17,7 @@ import { Button } from "~/components/shared/button";
 import { Icon } from "~/components/shared/icon";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
 import { KeyElementForm } from "./key-element-form";
-import { RoundButton } from "~/components/shared";
+import { RoundButton, Text, TextDiv } from "~/components/shared";
 
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;
@@ -139,23 +138,25 @@ export const ContextTabs = observer(
 
     const renderContextDescription = () => {
       return (
-        <StyledContentEditable
-          innerRef={descriptionRef}
-          html={object.contextDescription}
-          placeholder={"Type here..."}
-          disabled={!editable}
-          onChange={e => {
-            if (!e.target.value.includes("<div>")) {
-              store.updateModelField("contextDescription", e.target.value);
-            }
-          }}
-          onKeyDown={key => {
-            if (key.keyCode == 13) {
-              descriptionRef.current.blur();
-            }
-          }}
-          onBlur={() => updateContentEditable()}
-        />
+        <ContextDescriptionContainer>
+          <StyledContentEditable
+            innerRef={descriptionRef}
+            html={object.contextDescription}
+            placeholder={"Type here..."}
+            disabled={!editable}
+            onChange={e => {
+              if (!e.target.value.includes("<div>")) {
+                store.updateModelField("contextDescription", e.target.value);
+              }
+            }}
+            onKeyDown={key => {
+              if (key.keyCode == 13) {
+                descriptionRef.current.blur();
+              }
+            }}
+            onBlur={() => updateContentEditable()}
+          />
+        </ContextDescriptionContainer>
       );
     };
 
@@ -188,7 +189,9 @@ export const ContextTabs = observer(
         </KeyElementsTabContainer>
       ) : (
         <KeyElementsTabContainer>
-          <KeyElementContentContainer>{renderKeyElementsIndex()}</KeyElementContentContainer>
+          {object.keyElements.length > 0 && (
+            <KeyElementContentContainer>{renderKeyElementsIndex()}</KeyElementContentContainer>
+          )}
           {editable && (
             <ButtonContainer
               onClick={() => {
@@ -313,12 +316,11 @@ const StyledTabTitle = styled(Text)<StyledTabTitleType>`
     props.tabSelected ? props.theme.colors.primary100 : props.theme.colors.grey80};
 `;
 
-const StyledTabPanel = styled(TabPanel)`
-  padding: 16px;
-`;
+const StyledTabPanel = styled(TabPanel)``;
 
 const ContextImportanceContainer = styled.div`
   margin-top: -8px;
+  padding: 16px;
 `;
 
 const StyledContentEditable = styled(ContentEditable)`
@@ -338,8 +340,7 @@ const ButtonContainer = styled.div`
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
-  margin-left: 16px;
-  margin-bottom: 16px;
+  padding: 16px;
   &:hover {
     cursor: pointer;
   }
@@ -349,7 +350,10 @@ const KeyElementsFormHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  padding-left: 16px;
+  width: auto;
+  padding-right: 16px;
+  padding-top: 8px;
   height: 24px;
   border-bottom: ${({ theme: { colors } }) => `1px solid ${colors.borderGrey}`};
 `;
@@ -365,9 +369,12 @@ const KeyElementFormBackButtonContainer = styled.div`
 const KeyElementsTabContainer = styled.div`
   height: 100%;
   width: 100%;
-  margin-top: -56px;
 `;
 
 const KeyElementContentContainer = styled.div`
+  padding: 16px;
+`;
+
+const ContextDescriptionContainer = styled.div`
   padding: 16px;
 `;

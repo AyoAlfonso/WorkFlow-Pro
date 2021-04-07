@@ -69,8 +69,8 @@ export const KeyElement = ({
 
   return (
     <KeyElementContainer>
-      <CheckboxContainer>
-        {element.completionType === "binary" && (
+      {element.completionType === "binary" && (
+        <CheckboxContainer>
           <Label>
             <Checkbox
               id={element.id}
@@ -85,8 +85,8 @@ export const KeyElement = ({
               }}
             />
           </Label>
-        )}
-      </CheckboxContainer>
+        </CheckboxContainer>
+      )}
       <ContentContainer>
         <KeyElementStyledContentEditable
           innerRef={keyElementTitleRef}
@@ -180,9 +180,13 @@ const CheckboxContainer = styled.div`
 
 const OptionsButtonContainer = styled.div`
   position: absolute;
+  margin-top: 5px;
   right: 0;
   top: 0;
   transform: rotate(90deg);
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const OptionsContainer = styled(HomeContainerBorders)`
