@@ -30,6 +30,7 @@ export const UserModel = types
     todaysCompletedActivities: types.maybeNull(types.array(KeyActivityModel)),
     firstAccessToForum: types.maybeNull(types.boolean),
     userPulseForDisplay: types.maybeNull(UserPulseModel),
+    currentCompanyOnboarded: types.maybeNull(types.boolean)
     //add avatarurl2x
   })
   .views(self => ({

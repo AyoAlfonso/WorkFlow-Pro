@@ -8,6 +8,7 @@ json.company_name @user.default_selected_company.name
 json.session_company_profile_id @session_company_id
 json.first_access_to_forum @user_first_access_to_forum
 json.scheduled_groups @scheduled_groups
+json.current_company_onboarded current_company.onboarding_status == "complete"
  
 json.company_profiles @user.companies.where(onboarding_status: 1) do |company|
   json.extract! company, :id, :name, :display_format

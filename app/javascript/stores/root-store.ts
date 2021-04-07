@@ -48,9 +48,8 @@ export const RootStoreModel = types
       //check if there is a cookie, if so try to call the profile endpoint and set logged into true
       yield self.sessionStore.loadProfile();
       if (self.sessionStore.loggedIn) {
-        self.companyStore.load();
-        self.companyStore.loadOnboarding();
         self.staticDataStore.load();
+        self.companyStore.load();
         // do some API calls
         self.userStore.load();
         self.meetingStore.load();

@@ -61,6 +61,10 @@ Rails.application.configure do
   config.assets.quiet = true
 
   config.hosts << "a9120c4cdc17.ngrok.io"
+
+  # FOR NGROK SETUP
+  # config.web_console.whitelisted_ips = 'XX.XX.XXX.XXX'
+
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
 
