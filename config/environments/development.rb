@@ -60,9 +60,9 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
-  config.hosts << "a9120c4cdc17.ngrok.io"
-
-  # FOR NGROK SETUP
+  # 
+  # FOR NGROK SETUP - REPLACE WITH YOUR OWN NGROK ADDRESS
+  # config.hosts << "a9120c4cdc17.ngrok.io"
   # config.web_console.whitelisted_ips = 'XX.XX.XXX.XXX'
 
   # Raises error for missing translations.
