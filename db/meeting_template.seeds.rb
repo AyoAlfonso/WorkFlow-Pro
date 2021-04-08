@@ -126,7 +126,7 @@ mt2.update!(
     },
     {
       order_index: 3,
-      name: "Personal Pyns",
+      name: "Weekly List",
       step_type: :component,
       instructions: "What else must you accomplish this week? Add new Pyns or move them from your Master List to the Weekly List. Review your email and calendar to add anything else you need to account for this week.",
       component_to_render: "PersonalKeyActivities",
@@ -139,6 +139,14 @@ mt2.update!(
       instructions: "What are the top 3 things you must accomplish tomorrow? Move them over to Today’s Priority.",
       component_to_render: "DailyPlanning",
       duration: 5
+    },
+    {
+      order_index: 5,
+      name: "Morning Routine",
+      step_type: :component,
+      instructions: "Review your today's Pyns and complete your morning journal with PynBot(if you want!) to complete your morning routine.",
+      component_to_render: "CompleteDailyPlanning",
+      duration: nil
     }
   ],
 )
