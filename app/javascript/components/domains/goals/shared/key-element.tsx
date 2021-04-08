@@ -33,6 +33,7 @@ export const KeyElement = ({
   );
   const [showOptions, setShowOptions] = useState<boolean>(false);
 
+  const optionsRef = useRef(null);
   const keyElementTitleRef = useRef(null);
   const keyElementCompletionTargetRef = useRef(null);
 
@@ -40,7 +41,22 @@ export const KeyElement = ({
     if (lastKeyElement && editable && focusOnLastInput) {
       keyElementTitleRef.current.focus();
     }
-  }, [focusOnLastInput]);
+
+    const handleClickOutside = event => {
+      if (optionsRef.current && !optionsRef.current.contains(event.target)) {
+        setShowOptions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [focusOnLastInput, element.completionCurrentValue, optionsRef]);
+
+  const completion =
+    element.completionTargetValue > 0
+      ? (element.completionCurrentValue / element.completionTargetValue) * 100
+      : 0;
 
   const completionSymbol = () => {
     switch (element.completionType) {
@@ -52,11 +68,6 @@ export const KeyElement = ({
         return "$";
     }
   };
-
-  const completion =
-    element.completionTargetValue > 0
-      ? (element.completionCurrentValue / element.completionTargetValue) * 100
-      : 0;
 
   const sanitize = html => {
     const result = R.pipe(
@@ -148,7 +159,7 @@ export const KeyElement = ({
         <Icon icon={"Options"} size={"12px"} iconColor={"grey40"} />
       </OptionsButtonContainer>
       {showOptions && (
-        <OptionsContainer>
+        <OptionsContainer ref={optionsRef}>
           <Option
             onClick={() => {
               store.deleteKeyElement(element.id);
