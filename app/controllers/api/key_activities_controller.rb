@@ -11,7 +11,20 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def create
-    @key_activity = KeyActivity.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], meeting_id: params[:meeting_id], due_date: params[:due_date], company_id: params[:onboarding_company_id] || current_company.id, personal: params[:personal], label_list: params[:label] && params[:label][:name], scheduled_group_id: params[:scheduled_group_id], team_id: params[:team_id] })
+    creation_params = {
+      user_id: params[:personal] ? current_user.id : params[:user_id], 
+      description: params[:description], 
+      priority: params[:priority], 
+      meeting_id: params[:personal] ? nil : params[:meeting_id], 
+      due_date: params[:due_date], 
+      company_id: params[:onboarding_company_id] || current_company.id, 
+      personal: params[:personal], 
+      label_list: params[:label] && params[:label][:name], 
+      scheduled_group_id: params[:scheduled_group_id], 
+      team_id: params[:personal] ? nil : params[:team_id]
+    }
+
+    @key_activity = KeyActivity.new(creation_params)
     authorize @key_activity
     @key_activity.insert_at(1)
     @key_activity.save!
@@ -31,7 +44,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def update
-    key_activity_previously_completed = @key_activity.completed_at.present?
+    @key_activity_previously_completed = @key_activity.completed_at.present?
     if params[:completed]
       # if we complete an item on the master list, it should move it to the end
       @key_activity.update!(key_activity_params.merge(completed_at: Time.now, scheduled_group: ScheduledGroup.find_by_name("Backlog")))
@@ -46,7 +59,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
       @key_activities_to_render = team_meeting_activities(@key_activity.meeting_id).exclude_personal_for_team
       @created_for = "meeting"
     else
-      @key_activities_to_render = policy_scope(KeyActivity).completed_state_and_owned_by_current_user(key_activity_previously_completed, current_user).sort_by_position
+      @key_activities_to_render = policy_scope(KeyActivity).completed_state_and_owned_by_current_user(@key_activity_previously_completed, current_user).sort_by_position
       @created_for = "general"
     end
     render "api/key_activities/update"

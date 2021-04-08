@@ -120,7 +120,7 @@ export const IssueEntry = observer(
     };
 
     const updateLabel = labelName => {
-      issueStore.updateLabel(issue.id, labelName);
+      issueStore.updateLabel(issue.id, labelName, meetingId || teamId ? true : false);
     };
 
     const renderLabel = () => {

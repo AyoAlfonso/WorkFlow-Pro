@@ -49,13 +49,13 @@ export const LabelSelectionDropdownList = observer(
           value={value}
           onChange={(event, newValue) => {
             setValue(newValue);
-            if (afterLabelSelectAction) {
-              afterLabelSelectAction(newValue.type ? newValue.inputValue : newValue.name);
-            }
             if (typeof newValue !== "string" && newValue && newValue.inputValue) {
               createAndSetLabel(newValue, newValue.type);
             } else {
               setSelectedLabel(newValue);
+            }
+            if (afterLabelSelectAction) {
+              afterLabelSelectAction(newValue.type ? newValue.inputValue : newValue.name);
             }
             closeModal();
           }}

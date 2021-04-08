@@ -201,10 +201,11 @@ export const IssueStoreModel = types
         return false;
       }
     }),
-    updateLabel: flow(function*(issueId, labelName){
+    updateLabel: flow(function*(issueId, labelName, fromTeamMeeting = false){
       const response: ApiResponse<any> = yield self.environment.api.updateIssue({
         id: issueId,
-        labelList: labelName
+        labelList: labelName,
+        fromTeamMeeting: fromTeamMeeting
       });
 
       if (response.ok) {
