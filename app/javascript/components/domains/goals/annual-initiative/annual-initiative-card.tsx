@@ -170,7 +170,7 @@ const YearText = styled(Text)`
 `;
 
 const YearDisplayContainer = styled.div`
-  width: 100px;
+  width: fit-content;
   margin-left: 14px;
   text-align: center;
   margin-bottom: 8px;

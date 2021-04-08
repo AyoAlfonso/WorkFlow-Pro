@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_24_225211) do
+ActiveRecord::Schema.define(version: 2021_03_29_221742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_225211) do
     t.text "strategic_plan_embed"
     t.integer "display_format", default: 0
     t.integer "onboarding_status", default: 0
+    t.string "customer_subscription_profile_id"
   end
 
   create_table "conversation_starters", force: :cascade do |t|
@@ -239,6 +240,9 @@ ActiveRecord::Schema.define(version: 2021_03_24_225211) do
     t.bigint "elementable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "completion_type"
+    t.integer "completion_current_value"
+    t.integer "completion_target_value"
     t.index ["elementable_type", "elementable_id"], name: "index_key_elements_on_elementable_type_and_elementable_id"
   end
 
@@ -467,7 +471,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_225211) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_role_id"
     t.string "user_title"
-    t.boolean "first_time_access", default: true
+    t.boolean "first_time_access", default: false
     t.index ["company_id"], name: "index_user_company_enablements_on_company_id"
     t.index ["user_id"], name: "index_user_company_enablements_on_user_id"
     t.index ["user_role_id"], name: "index_user_company_enablements_on_user_role_id"
