@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as R from "ramda";
+import * as moment from "moment";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
@@ -11,7 +12,13 @@ import { Text } from "../../../shared/text";
 import { useParams } from "react-router-dom";
 import { Loading } from "~/components/shared/loading";
 import { observer } from "mobx-react";
-import { TeamKeyActivitiesRecap } from "~/components/domains/meetings/components/team-key-activities-recap";
+
+import { Heading } from "~/components/shared";
+import {
+  KeyActivitiesWrapperContainer,
+  KeyActivityListSubHeaderContainer,
+} from "~/components/domains/key-activities/key-activities-list";
+import { TeamKeyActivitiesBody } from "../shared/team-key-activities-body";
 
 export interface IRecapProps {}
 
@@ -107,12 +114,29 @@ export const Recap = observer(
 
     return (
       <Container>
-        <TeamKeyActivitiesRecap />
+        <SingleListContainer>
+          <Heading type={"h2"} fontSize={"20px"} fontWeight={"bold"}>
+            {t("meeting.teamsPyns")}
+          </Heading>
+          <KeyActivityListSubHeaderContainer>
+            {moment()
+              .subtract(1, "days")
+              .format("MMMM D")}
+          </KeyActivityListSubHeaderContainer>
+          <TeamKeyActivitiesBody />
+        </SingleListContainer>
         <GraphContainer>{renderGraphCards()}</GraphContainer>
       </Container>
     );
   },
 );
+
+const SingleListContainer = styled.div`
+  overflow-y: auto;
+  height: 100%;
+  min-width: 525px;
+  width: 50%;
+`;
 
 const Container = styled.div`
   display: flex;

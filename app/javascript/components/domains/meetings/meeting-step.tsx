@@ -56,7 +56,7 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
         case "CompleteDailyPlanning":
           return <CompleteDailyPlanning />;
         case "TeamPulse":
-          return <TeamPulse />;
+          return <TeamPulse meeting={meeting} />;
         case "MeetingRating":
           return <MeetingRating />;
         case "KeyActivities":
@@ -79,6 +79,7 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
     case "image":
       return <ImageStep step={step} />;
     case "embedded_link":
+      //the embedded link will override itself based on the team's override key setting
       return <EmbedStep step={step} />;
     case "description_text":
       return <TextStep step={step} />;

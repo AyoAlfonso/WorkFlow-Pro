@@ -1,12 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useMst } from "~/setup/root";
 import { TeamPulseBody } from "./team-pulse-body";
+import { IMeeting } from "~/models/meeting";
 
-export const TeamPulse = (): JSX.Element => {
-  const { meetingStore } = useMst();
-  const meeting = meetingStore.currentMeeting;
+export interface ITeamPulse {
+  meeting: IMeeting;
+}
 
+export const TeamPulse = ({ meeting }: ITeamPulse): JSX.Element => {
   return (
     <Container>
       <TeamPulseBody meeting={meeting} />
