@@ -41,13 +41,15 @@ export const PersonalMeetingWizardLayout = observer(
       return (
         <>
           {meeting.currentStep > 0 && (
-            <BackButton
-              small
-              variant={"primaryOutline"}
-              onClick={() => onNextButtonClick(meeting.currentStep - 1)}
-            >
-              <StyledBackIcon icon={"Move2"} size={"15px"} iconColor={"primary100"} />
-            </BackButton>
+            <LeftButtonContainer>
+              <BackButton
+                small
+                variant={"primaryOutline"}
+                onClick={() => onNextButtonClick(meeting.currentStep - 1)}
+              >
+                <StyledBackIcon icon={"Move2"} size={"15px"} iconColor={"primary100"} />
+              </BackButton>
+            </LeftButtonContainer>
           )}
           {meeting.currentStep + 1 < numberOfSteps && (
             <NextButton
@@ -97,8 +99,12 @@ const NextButton = styled(Button)`
 
 const BackButton = styled(Button)`
   width: 32px;
-  margin-right: 14px;
+  padding-left: 0;
   padding: 0px;
+`;
+
+const LeftButtonContainer = styled.div`
+  margin-right: 16px;
 `;
 
 const StepText = styled(Text)`

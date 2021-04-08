@@ -109,4 +109,5 @@ const ProgressBarTimerContainer = styled.div`
 
 const StopButton = styled(Button)`
   width: 100%;
+  margin: 0;
 `;

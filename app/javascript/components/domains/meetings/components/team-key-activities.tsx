@@ -6,6 +6,7 @@ import {
   KeyActivitiesWrapperContainer,
   KeyActivityListSubHeaderContainer,
 } from "~/components/domains/key-activities/key-activities-list";
+import { KeyActivitiesHeader } from "~/components/domains/key-activities/key-activities-header-no-filter";
 import { TeamKeyActivitiesBody } from "../shared/team-key-activities-body";
 import { useTranslation } from "react-i18next";
 
@@ -14,9 +15,7 @@ export const TeamKeyActivities = (props: {}): JSX.Element => {
   return (
     <KeyActivitiesWrapperContainer width={"100%"}>
       <SingleListContainer>
-        <Heading type={"h2"} fontSize={"20px"} fontWeight={"bold"}>
-          {t("meeting.teamsPyns")}
-        </Heading>
+        <KeyActivitiesHeader title={t("meeting.teamsPyns")} />
         <KeyActivityListSubHeaderContainer>
           {moment()
             .subtract(1, "days")

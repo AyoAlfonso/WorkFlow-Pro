@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Heading, Icon } from "~/components/shared";
+import { Icon } from "~/components/shared";
 import * as moment from "moment";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
@@ -9,6 +9,7 @@ import { InitialsGenerator } from "~/components/shared/issues-and-key-activities
 import { baseTheme } from "~/themes";
 import { CreateKeyActivityModal } from "../../key-activities/create-key-activity-modal";
 import { CreateKeyActivityButton } from "../../key-activities/create-key-activity-button";
+import { KeyActivitiesHeader } from "~/components/domains/key-activities/key-activities-header-no-filter";
 import {
   KeyActivitiesList,
   KeyActivityColumnStyleListContainer,
@@ -128,9 +129,7 @@ export const HomeKeyActivities = observer(
       return (
         <>
           <HeaderRowContainer>
-            <Heading type={"h2"} fontSize={"20px"} fontWeight={"bold"}>
-              {header == "Backlog" ? "Master List" : header}
-            </Heading>
+            <KeyActivitiesHeader title={header == "Backlog" ? "Master List" : header} />
           </HeaderRowContainer>
           <HeaderRowContainer>
             <KeyActivityListSubHeaderContainer>{subText}</KeyActivityListSubHeaderContainer>

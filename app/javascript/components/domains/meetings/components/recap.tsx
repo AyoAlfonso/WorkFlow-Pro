@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 import { Loading } from "~/components/shared/loading";
 import { observer } from "mobx-react";
 
-import { Heading } from "~/components/shared";
+import { KeyActivitiesHeader } from "~/components/domains/key-activities/key-activities-header-no-filter";
 import {
   KeyActivitiesWrapperContainer,
   KeyActivityListSubHeaderContainer,
@@ -115,9 +115,7 @@ export const Recap = observer(
     return (
       <Container>
         <SingleListContainer>
-          <Heading type={"h2"} fontSize={"20px"} fontWeight={"bold"}>
-            {t("meeting.teamsPyns")}
-          </Heading>
+          <KeyActivitiesHeader title={t("meeting.teamsPyns")} />
           <KeyActivityListSubHeaderContainer>
             {moment()
               .subtract(1, "days")

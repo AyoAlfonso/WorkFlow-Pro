@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
-import { Heading } from "~/components/shared";
+import { KeyActivitiesHeader } from "~/components/domains/key-activities/key-activities-header-no-filter";
 import { Button } from "~/components/shared/button";
 import {
   KeyActivityColumnStyleListContainer,
@@ -27,9 +27,7 @@ export const YesterdayInReview = observer(
     return (
       <KeyActivitiesWrapperContainer width={"100%"}>
         <KeyActivityColumnStyleListContainer>
-          <Heading type={"h2"} fontSize={"20px"} fontWeight={"bold"}>
-            {t("keyActivities.yesterdayTitle")}
-          </Heading>
+          <KeyActivitiesHeader title={t("keyActivities.yesterdayTitle")} />
           <KeyActivityListSubHeaderContainer>
             {moment().format("MMMM D")}
           </KeyActivityListSubHeaderContainer>
@@ -40,9 +38,7 @@ export const YesterdayInReview = observer(
           </KeyActivitiesListStyleContainer>
         </KeyActivityColumnStyleListContainer>
         <KeyActivityColumnStyleListContainer>
-          <Heading type={"h2"} fontSize={"20px"} fontWeight={"bold"}>
-            {t("keyActivities.yesterdayRemainingTitle")}
-          </Heading>
+          <KeyActivitiesHeader title={t("keyActivities.yesterdayRemainingTitle")} />
           <KeyActivityListSubHeaderContainer>
             {t("keyActivities.yesterdayUnfinishedText")}
           </KeyActivityListSubHeaderContainer>
