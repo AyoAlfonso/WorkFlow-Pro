@@ -15,10 +15,12 @@ import {
   KeyActivityColumnStyleListContainer,
   KeyActivitiesWrapperContainer,
   KeyActivityListSubHeaderContainer,
+  KeyActivitiesListContainer,
 } from "../../key-activities/key-activities-list";
 import { FilterDropdown } from "../../key-activities/filter-dropdown";
 import * as R from "ramda";
 import { StyledIcon } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
+import { useTranslation } from "react-i18next";
 
 export interface IHomeKeyActivities {
   todayOnly?: boolean;
@@ -40,6 +42,7 @@ export const HomeKeyActivities = observer(
       sessionStore,
       sessionStore: { scheduledGroups },
     } = useMst();
+    const { t } = useTranslation();
 
     useEffect(() => {
       showCompletedItems
@@ -53,29 +56,22 @@ export const HomeKeyActivities = observer(
 
     const completedKeyActivities = keyActivityStore.completedActivities;
 
-    const selectedFilterGroupId = R.path(
-      ["id"],
-      scheduledGroups.find(group => group.name == selectedFilterGroupName),
-    );
-    const todayFilterGroupId = scheduledGroups.find(group => group.name == "Today").id;
+    const selectedFilterGroupId = sessionStore.getScheduledGroupIdByName(selectedFilterGroupName);
 
-    const selectedFilterGroupIdToday = R.path(
-      ["id"],
-      scheduledGroups.find(group => group.name == "Today"),
-    );
+    const selectedFilterGroupIdToday = sessionStore.getScheduledGroupIdByName("Today");
 
     const teams = sessionStore.profile.currentCompanyUserTeams;
 
     const subHeaderForFilterGroups = (name: string): string => {
       switch (name) {
         case "Weekly List":
-          return "Pyns you have to get done this week";
+          return t("keyActivities.weeklyListDescription");
         case "Tomorrow":
           return moment()
             .add(1, "days")
             .format("MMMM D");
         case "Backlog":
-          return "Pyns you have to do later";
+          return t("keyActivities.backlogListDescription");
       }
     };
 
@@ -129,7 +125,9 @@ export const HomeKeyActivities = observer(
       return (
         <>
           <HeaderRowContainer>
-            <KeyActivitiesHeader title={header == "Backlog" ? "Master List" : header} />
+            <KeyActivitiesHeader
+              title={header == "Backlog" ? t("keyActivities.backlogListTitle") : header}
+            />
           </HeaderRowContainer>
           <HeaderRowContainer>
             <KeyActivityListSubHeaderContainer>{subText}</KeyActivityListSubHeaderContainer>
@@ -239,7 +237,7 @@ export const HomeKeyActivities = observer(
             />
             <KeyActivitiesList
               keyActivities={todaysKeyActivities}
-              droppableId={`todays-activities-${todayFilterGroupId}`}
+              droppableId={`todays-activities-${selectedFilterGroupIdToday}`}
             />
           </KeyActivitiesListContainer>
         </SingleListContainer>
@@ -249,7 +247,7 @@ export const HomeKeyActivities = observer(
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
           defaultTypeAsWeekly={true}
           todayModalClicked={true}
-          todayFilterGroupId={todayFilterGroupId}
+          todayFilterGroupId={selectedFilterGroupIdToday}
         />
       </KeyActivitiesWrapperContainer>
     ) : (
@@ -273,7 +271,7 @@ export const HomeKeyActivities = observer(
             />
             <KeyActivitiesList
               keyActivities={todaysKeyActivities}
-              droppableId={`todays-activities-${todayFilterGroupId}`}
+              droppableId={`todays-activities-${selectedFilterGroupIdToday}`}
             />
           </KeyActivitiesListContainer>
         </KeyActivityColumnStyleListContainer>
@@ -308,7 +306,7 @@ export const HomeKeyActivities = observer(
           defaultSelectedGroupId={selectedFilterGroupId}
           defaultSelectedTeamId={selectedFilterTeamId}
           defaultTypeAsWeekly={true}
-          todayFilterGroupId={todayFilterGroupId}
+          todayFilterGroupId={selectedFilterGroupIdToday}
         />
       </KeyActivitiesWrapperContainer>
     );
@@ -354,8 +352,4 @@ const FilterOptionContainer = styled.div<FilterOptionsContainerProps>`
   &: hover {
     cursor: pointer;
   }
-`;
-
-const KeyActivitiesListContainer = styled.div`
-  height: 100%;
 `;

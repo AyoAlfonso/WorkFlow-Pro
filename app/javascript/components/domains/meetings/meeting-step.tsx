@@ -7,7 +7,7 @@ import { YesterdayInReview } from "./components/yesterday-in-review";
 import { DailyPlanning } from "./components/daily-planning";
 import { CompleteDailyPlanning } from "./components/complete-daily-planning";
 import { Milestones } from "./components/milestones";
-import { PersonalKeyActivities } from "./components/personal-key-activities";
+import { PersonalKeyActivitiesWeekly } from "./components/personal-key-activities-weekly";
 import { WeeklyReflection } from "./components/weekly-reflection";
 import { MeetingRating } from "./components/meeting-rating";
 import { Recap } from "./components/recap";
@@ -48,7 +48,7 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
         case "Milestones":
           return <Milestones />;
         case "PersonalKeyActivities":
-          return <PersonalKeyActivities />;
+          return <PersonalKeyActivitiesWeekly />;
         case "YesterdayInReview":
           return <YesterdayInReview />;
         case "DailyPlanning":

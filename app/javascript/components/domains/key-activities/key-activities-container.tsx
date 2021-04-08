@@ -1,3 +1,4 @@
+//TODO: CLEANUP SHOULD REMOVE THIS OLD COMPONENT
 import * as React from "react";
 import { KeyActivitiesHeader } from "./key-activities-header";
 import { KeyActivitiesBody } from "./key-activities-body";

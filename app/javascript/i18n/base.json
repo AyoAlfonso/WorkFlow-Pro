@@ -259,7 +259,11 @@
         "yesterdayTitle": "Finished Yesterday",
         "yesterdayRemainingTitle": "Remaining Pyns",
         "yesterdayUnfinishedText": "Unfinished Pyns from yesterday",
-        "markAllYesterdayDone": "Mark all done"
+        "markAllYesterdayDone": "Mark all done",
+        "weeklyListTitle": "Weekly List",
+        "backlogListTitle": "Master List",
+        "weeklyListDescription": "Pyns you have to get done this week.",
+        "backlogListDescription": "Pyns you have to get done at some point."
       },
       "teams": {
         "teamMeetingsTitle": "Team Planning",

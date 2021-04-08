@@ -119,3 +119,7 @@ export const KeyActivityListSubHeaderContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `;
+
+export const KeyActivitiesListContainer = styled.div`
+  height: 100%;
+`;
