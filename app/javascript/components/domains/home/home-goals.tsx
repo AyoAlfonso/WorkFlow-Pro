@@ -30,6 +30,12 @@ export const HomeGoals = observer(
     const [companyGoalsFilter, setCompanyGoalsFilter] = useState<string>("all");
     const [personalGoalsFilter, setPersonalGoalsFilter] = useState<string>("all");
 
+    const [companyPlanning, setCompanyPlanning] = useState<boolean>(false);
+    const [personalPlanning, setPersonalPlanning] = useState<boolean>(false);
+
+    const [showCompanyInitiatives, setShowCompanyInitiatives] = useState<boolean>(true);
+    const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
+
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
     }, []);
@@ -40,6 +46,24 @@ export const HomeGoals = observer(
 
     const companyGoals = goalStore.companyGoals;
     const personalGoals = goalStore.personalGoals;
+
+    const toggleCompanyPlanning = () => {
+      if (companyPlanning) {
+        setCompanyPlanning(false);
+      } else {
+        setPersonalPlanning(false);
+        setCompanyPlanning(true);
+      }
+    };
+
+    const togglePersonalPlanning = () => {
+      if (personalPlanning) {
+        setPersonalPlanning(false);
+      } else {
+        setCompanyPlanning(false);
+        setPersonalPlanning(true);
+      }
+    };
 
     const companyGoalsToShow = () => {
       switch (companyGoalsFilter) {
@@ -89,19 +113,26 @@ export const HomeGoals = observer(
 
     return (
       <Container>
-        <TitleContainer
-          showMinimizedCards={showCompanyMinimizedCards}
-          setShowMinimizedCards={setShowCompanyMinimizedCards}
-          goalsFilter={companyGoalsFilter}
-          setGoalsFilter={setCompanyGoalsFilter}
-          title={"Company"}
-        />
+        <CompanyInitiativesContainer>
+          <TitleContainer
+            showMinimizedCards={showCompanyMinimizedCards}
+            setShowMinimizedCards={setShowCompanyMinimizedCards}
+            goalsFilter={companyGoalsFilter}
+            setGoalsFilter={setCompanyGoalsFilter}
+            largeHomeTitle={true}
+            title={"Company"}
+            handleToggleChange={toggleCompanyPlanning}
+            toggleChecked={companyPlanning}
+            showInitiatives={showCompanyInitiatives}
+            setShowInitiatives={setShowCompanyInitiatives}
+          />
 
-        <RallyingCry rallyingCry={companyGoals.rallyingCry} />
+          <RallyingCry rallyingCry={companyGoals.rallyingCry} />
 
-        <InitiativesContainer>
-          {renderAnnualInitiatives(companyGoalsToShow(), "company")}
-        </InitiativesContainer>
+          <InitiativesContainer>
+            {renderAnnualInitiatives(companyGoalsToShow(), "company")}
+          </InitiativesContainer>
+        </CompanyInitiativesContainer>
 
         <PersonalVisionContainer>
           <TitleContainer
@@ -109,7 +140,12 @@ export const HomeGoals = observer(
             setShowMinimizedCards={setShowPersonalMinimizedCards}
             goalsFilter={personalGoalsFilter}
             setGoalsFilter={setPersonalGoalsFilter}
+            largeHomeTitle={true}
             title={"Personal"}
+            handleToggleChange={togglePersonalPlanning}
+            toggleChecked={personalPlanning}
+            showInitiatives={showPersonalInitiatives}
+            setShowInitiatives={setShowPersonalInitiatives}
           />
           <PersonalVision personalVision={personalGoals.personalVision} />
           <InitiativesContainer>
@@ -171,3 +207,5 @@ const StyledModal = Modal.styled`
   border-radius: 10px;
   background-color: ${props => props.theme.colors.white};
 `;
+
+const CompanyInitiativesContainer = styled.div``;

@@ -5,6 +5,12 @@ import { HomeTitle } from "../../home/shared-components";
 import { EnlargedHomeTitle } from "./enlarged-home-title";
 import { Icon } from "~/components/shared/icon";
 import { observer } from "mobx-react";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
+import { baseTheme } from "~/themes";
+import { withStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { Text } from "~/components/shared/text";
 interface ITitleContainerProps {
   showMinimizedCards: boolean;
   setShowMinimizedCards: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,7 +18,32 @@ interface ITitleContainerProps {
   setGoalsFilter: React.Dispatch<React.SetStateAction<string>>;
   largeHomeTitle?: boolean;
   title: string;
+  handleToggleChange: any;
+  toggleChecked: boolean;
+  showInitiatives: boolean;
+  setShowInitiatives: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+const StyledSwitch = withStyles({
+  switchBase: {
+    "&$checked": {
+      color: baseTheme.colors.primary100,
+      "& + $track": {
+        backgroundColor: baseTheme.colors.primary40,
+        opacity: 1,
+      },
+    },
+  },
+  track: {},
+  checked: {},
+  focusVisible: {},
+})(Switch);
+
+const StyledLabel = withStyles({
+  label: {
+    fontFamily: "Lato",
+  },
+})(FormControlLabel);
 
 export const TitleContainer = observer(
   ({
@@ -22,6 +53,10 @@ export const TitleContainer = observer(
     setGoalsFilter,
     largeHomeTitle,
     title,
+    handleToggleChange,
+    toggleChecked,
+    showInitiatives,
+    setShowInitiatives,
   }: ITitleContainerProps): JSX.Element => {
     const renderExpandAnnualInitiativesIcon = (): JSX.Element => {
       return showMinimizedCards ? (
@@ -69,6 +104,21 @@ export const TitleContainer = observer(
       );
     };
 
+    const renderHideButton = () => {
+      return (
+        <HideButtonContainer onClick={() => setShowInitiatives(!showInitiatives)}>
+          <HideText>{showInitiatives ? "Hide" : "Show"} </HideText>
+          <HideIconContainer>
+            {showInitiatives ? (
+              <HideIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
+            ) : (
+              <ShowIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
+            )}
+          </HideIconContainer>
+        </HideButtonContainer>
+      );
+    };
+
     return (
       <Container>
         <HomeTitleContainer>
@@ -78,15 +128,32 @@ export const TitleContainer = observer(
             <HomeTitle> {title} </HomeTitle>
           )}
 
-          <ExpandAnnualInitiativesButton
+          <ToggleContainer>
+            <FormGroup row>
+              <StyledLabel
+                control={
+                  <StyledSwitch
+                    checked={toggleChecked}
+                    onChange={handleToggleChange}
+                    name="switch-checked"
+                  />
+                }
+                label="Plan"
+                labelPlacement="start"
+              />
+            </FormGroup>
+          </ToggleContainer>
+
+          {/* <ExpandAnnualInitiativesButton
             showMinimizedCards={showMinimizedCards}
             onClick={() => setShowMinimizedCards(!showMinimizedCards)}
           >
             {renderExpandAnnualInitiativesIcon()}
-          </ExpandAnnualInitiativesButton>
+          </ExpandAnnualInitiativesButton> */}
         </HomeTitleContainer>
 
         {renderFilterOptions()}
+        {renderHideButton()}
       </Container>
     );
   },
@@ -158,4 +225,32 @@ const FilterOptionContainer = styled.div<FilterOptionContainerType>`
   padding-right: 4px;
   margin-left: 4px;
   margin-right: 4px;
+`;
+
+const ToggleContainer = styled.div`
+  margin-left: 16px;
+`;
+
+const HideButtonContainer = styled.div`
+  display: flex;
+`;
+
+const HideText = styled(Text)`
+  font-size: 14px;
+  color: ${props => props.theme.colors.greyInactive};
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 8px;
+`;
+
+const HideIconContainer = styled.div``;
+
+const HideIcon = styled(Icon)`
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+`;
+
+const ShowIcon = styled(Icon)`
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
 `;

@@ -40,6 +40,12 @@ export const GoalsIndex = observer(
     const [companyGoalsFilter, setCompanyGoalsFilter] = useState<string>("all");
     const [personalGoalsFilter, setPersonalGoalsFilter] = useState<string>("all");
 
+    const [companyPlanning, setCompanyPlanning] = useState<boolean>(false);
+    const [personalPlanning, setPersonalPlanning] = useState<boolean>(false);
+
+    const [showCompanyInitiatives, setShowCompanyInitiatives] = useState<boolean>(true);
+    const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
+
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -52,6 +58,24 @@ export const GoalsIndex = observer(
 
     const companyGoals = goalStore.companyGoals;
     const personalGoals = goalStore.personalGoals;
+
+    const toggleCompanyPlanning = () => {
+      if (companyPlanning) {
+        setCompanyPlanning(false);
+      } else {
+        setPersonalPlanning(false);
+        setCompanyPlanning(true);
+      }
+    };
+
+    const togglePersonalPlanning = () => {
+      if (personalPlanning) {
+        setPersonalPlanning(false);
+      } else {
+        setCompanyPlanning(false);
+        setPersonalPlanning(true);
+      }
+    };
 
     const companyGoalsToShow = () => {
       switch (companyGoalsFilter) {
@@ -134,27 +158,33 @@ export const GoalsIndex = observer(
       <Container>
         <GoalsCoreFour />
 
-        <TitleContainer
-          showMinimizedCards={showCompanyMinimizedCards}
-          setShowMinimizedCards={setShowCompanyMinimizedCards}
-          goalsFilter={companyGoalsFilter}
-          setGoalsFilter={setCompanyGoalsFilter}
-          largeHomeTitle={true}
-          title={"Company"}
-        />
+        <CompanyInitiativesContainer>
+          <TitleContainer
+            showMinimizedCards={showCompanyMinimizedCards}
+            setShowMinimizedCards={setShowCompanyMinimizedCards}
+            goalsFilter={companyGoalsFilter}
+            setGoalsFilter={setCompanyGoalsFilter}
+            largeHomeTitle={true}
+            title={"Company"}
+            handleToggleChange={toggleCompanyPlanning}
+            toggleChecked={companyPlanning}
+            showInitiatives={showCompanyInitiatives}
+            setShowInitiatives={setShowCompanyInitiatives}
+          />
 
-        <RallyingCry rallyingCry={companyGoals.rallyingCry} />
+          <RallyingCry rallyingCry={companyGoals.rallyingCry} />
 
-        <InitiativesContainer>
-          {renderAnnualInitiatives(companyGoalsToShow(), "company")}
-          <CreateAnnualInitiativeContainer
-            marginLeft={R.length(companyGoalsToShow()) > 0 ? "15px" : "0px"}
-          >
-            {renderCreateCompanyAnnualInitiativeSection("company")}
-          </CreateAnnualInitiativeContainer>
-        </InitiativesContainer>
+          <InitiativesContainer>
+            {renderAnnualInitiatives(companyGoalsToShow(), "company")}
+            <CreateAnnualInitiativeContainer
+              marginLeft={R.length(companyGoalsToShow()) > 0 ? "15px" : "0px"}
+            >
+              {renderCreateCompanyAnnualInitiativeSection("company")}
+            </CreateAnnualInitiativeContainer>
+          </InitiativesContainer>
+        </CompanyInitiativesContainer>
 
-        <PersonalVisionContainer>
+        <PersonalInitiativesContainer>
           <TitleContainer
             showMinimizedCards={showPersonalMinimizedCards}
             setShowMinimizedCards={setShowPersonalMinimizedCards}
@@ -162,6 +192,10 @@ export const GoalsIndex = observer(
             setGoalsFilter={setPersonalGoalsFilter}
             largeHomeTitle={true}
             title={"Personal"}
+            handleToggleChange={togglePersonalPlanning}
+            toggleChecked={personalPlanning}
+            showInitiatives={showPersonalInitiatives}
+            setShowInitiatives={setShowPersonalInitiatives}
           />
           <PersonalVision personalVision={personalGoals.personalVision} />
           <InitiativesContainer>
@@ -172,7 +206,7 @@ export const GoalsIndex = observer(
               {renderCreateCompanyAnnualInitiativeSection("personal")}
             </CreateAnnualInitiativeContainer>
           </InitiativesContainer>
-        </PersonalVisionContainer>
+        </PersonalInitiativesContainer>
 
         <StyledModal
           isOpen={annualInitiativeModalOpen}
@@ -217,7 +251,7 @@ const InitiativesContainer = styled.div`
   padding-bottom: 15px;
 `;
 
-const PersonalVisionContainer = styled.div`
+const PersonalInitiativesContainer = styled.div`
   margin-top: 20px;
   padding-top: 10px;
 `;
@@ -237,3 +271,5 @@ const CreateAnnualInitiativeContainer = styled.div<CreateAnnualInitiativeContain
   margin-left: ${props => props.marginLeft || "0px"};
   width: 20%;
 `;
+
+const CompanyInitiativesContainer = styled.div``;
