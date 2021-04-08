@@ -92,7 +92,7 @@ class Api::IssuesController < Api::ApplicationController
   private
 
   def issue_params
-    params.permit(:user_id, :description, :completed_at, :priority, :team_id, :position, :personal)
+    params.permit(:user_id, :description, :completed_at, :priority, :team_id, :position, :personal, :label_list)
   end
 
   def set_issue

@@ -51,8 +51,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
   const [selectedGroupId, setSelectedGroupId] = useState<number>(null);
   const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
 
-  useEffect(() => {
-    setSelectedUser(sessionStore.profile);
+  const initializeGroupAndTeam = () => {
     if (props.todayModalClicked) {
       setSelectedGroupId(props.todayFilterGroupId);
     } else {
@@ -66,9 +65,27 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
         setSelectedGroupId(null);
       }
     }
+  };
+
+  useEffect(() => {
+    setSelectedUser(sessionStore.profile);
+    initializeGroupAndTeam();
   }, [props.todayModalClicked, props.defaultSelectedGroupId, props.defaultSelectedTeamId]);
 
   const companyUsers = userStore.users;
+
+  const resetFields = () => {
+    setKeyActivityDescription("");
+    setSelectedPriority(0);
+    setWeeklyList(defaultTypeAsWeekly);
+    setShowUsersList(false);
+    setSelectedUser(sessionStore.profile);
+    setSelectedDueDate(null);
+    setShowLabelsList(false);
+    setPersonal(false);
+    setSelectedLabel(null);
+    initializeGroupAndTeam();
+  };
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
@@ -90,6 +107,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
       setModalOpen={setCreateKeyActivityModalOpen}
       headerText="Pyn"
       width="640px"
+      onCloseAction={resetFields}
     >
       <Container>
         <TextInputFlexContainer>

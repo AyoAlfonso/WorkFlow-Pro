@@ -136,18 +136,21 @@ export const KeyActivityStoreModel = types
       }
     }),
     updateKeyActivityStatus: flow(function*(keyActivity, value, fromTeamMeeting = false) {
-      let itemIncomplete = keyActivity.completedAt ? true : false
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivityStatus(
         keyActivity,
         value,
         fromTeamMeeting,
       );
       if (response.ok) {
-        const { createdFor, keyActivities } = response.data
+        const { createdFor, keyActivities, completedList } = response.data
         if(createdFor == "meeting"){
           self.keyActivitiesFromMeeting = keyActivities
         } else {
-          itemIncomplete ? self.incompleteKeyActivities = keyActivities : self.completedKeyActivities = keyActivities
+          if (completedList) {
+            self.completedKeyActivities = keyActivities
+          } else {
+            self.incompleteKeyActivities = keyActivities;
+          }
         }
         return true;
       } else {
@@ -177,11 +180,9 @@ export const KeyActivityStoreModel = types
       }
     }),
     updateKeyActivity: flow(function*(id, fromTeamMeeting = false) {
-      let itemIncomplete = true;
       let keyActivityObject = self.incompleteKeyActivities.find(ka => ka.id == id);
       if(!keyActivityObject){
         keyActivityObject = self.completedKeyActivities.find(ka => ka.id == id);
-        itemIncomplete = false;
       }
 
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivity({
@@ -190,11 +191,15 @@ export const KeyActivityStoreModel = types
       });
       self.finishLoading();
       if (response.ok) {
-        const { createdFor, keyActivities } = response.data
+        const { createdFor, keyActivities, completedList } = response.data
         if (createdFor == "meeting") {
           self.keyActivitiesFromMeeting = keyActivities
         } else {
-          itemIncomplete ? self.incompleteKeyActivities = keyActivities : self.completedKeyActivities = keyActivities
+          if (completedList) {
+            self.completedKeyActivities = keyActivities
+          } else {
+            self.incompleteKeyActivities = keyActivities;
+          }
         }
         return true;
       } else {
