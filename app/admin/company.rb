@@ -12,6 +12,7 @@ ActiveAdmin.register Company do
                 :strategic_plan_embed,
                 :timezone,
                 :display_format,
+                :onboarding_status,
                 core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4]
 
   index do
@@ -22,6 +23,7 @@ ActiveAdmin.register Company do
     column :contact_email
     column :phone_number
     column :display_format
+    column :onboarding_status
     column "#{t("rallying_cry")}", :rallying_cry
     actions
   end
@@ -106,6 +108,7 @@ ActiveAdmin.register Company do
       f.input :rallying_cry, input_html: { rows: 5 }, label: "#{t("rallying_cry")}"
       f.input :fiscal_year_start, order: [:month, :day, :year], end_year: Date.current.year + 1
       f.input :timezone, as: :select, collection: timezones
+      f.input :onboarding_status
       f.input :display_format, as: :select, collection: Company.display_formats.keys
     end
     h2 'Foundational Four '
