@@ -96,15 +96,11 @@ export const CompanyStoreModel = types
   .actions(self => ({
     getOnboardingCompany: flow(function*() {
       const env = getEnv(self);
-      try {
-        const response: any = yield env.api.getOnboardingCompany();
-        if (response.ok) {
-          self.onboardingCompany = response.data as any;
-          return true;
-        } else {
-          return false;
-        }
-      } catch {
+      const response: any = yield env.api.getOnboardingCompany();
+      if (response.ok) {
+        self.onboardingCompany = response.data as any;
+        return true;
+      } else {
         return false;
       }
     }),
