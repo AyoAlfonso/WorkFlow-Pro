@@ -1,4 +1,4 @@
-class Integrations::PabblySubscriptionsController < ApplicationController
+class Integrations::PabblySubscriptionsController < Integrations::ApplicationController
   respond_to :json
 
   def create_company_and_user
