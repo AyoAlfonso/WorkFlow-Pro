@@ -168,7 +168,7 @@ export const JournalIndex = observer(
     return (
       <Container>
         <CalendarFilter
-          header={t("journals.indexTitle")}
+          header={""}
           dateFilter={dateFilter}
           setDateFilter={setDateFilter}
           setSelectedItem={setSelectedItem}

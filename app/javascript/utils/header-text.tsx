@@ -2,10 +2,12 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { useMst } from "~/setup/root";
 import * as moment from "moment";
+import { useTranslation } from "react-i18next";
 
 export const HeaderText = observer(
   ({ location }): JSX.Element => {
     const { sessionStore, companyStore, teamStore } = useMst();
+    const { t } = useTranslation();
 
     const locationPath = location.pathname.split("/");
     const subPath = locationPath[2];
@@ -29,7 +31,7 @@ export const HeaderText = observer(
         return <> {team ? `${team.name} Overview` : "Team Overview"} </>;
       case "company":
         if (subPath == "accountability") {
-          return <> Accountability Matrix</>;
+          return <> {t("accountabilityChart")}</>;
         } else if (subPath == "strategic_plan") {
           return <> The ${companyStore.company.name} Plan </>;
         }
@@ -37,22 +39,22 @@ export const HeaderText = observer(
       case "meetings":
         switch (subPath) {
           case "section_1":
-            return <> Annual Hub </>;
+            return <> {t("forum.annualHub")} </>;
           case "section_2":
-            return <> Upcoming Hub </>;
+            return <> {t("forum.upcomingHub")} </>;
           case "agenda":
-            return <> Meeting Management </>;
+            return <> {t("forum.agenda")} </>;
           default:
             return <></>;
         }
       case "goals":
         return <> Goals </>;
       case "account":
-        return <>Account Settings</>;
+        return <> {t("profile.accountSettings")} </>;
       case "notes":
-        return <>Notes</>;
+        return <> {t("notes.indexTitle")} </>;
       case "journals":
-        return <>Journal Entries</>;
+        return <> {t("journals.indexTitle")} </>;
       default:
         return (
           <>

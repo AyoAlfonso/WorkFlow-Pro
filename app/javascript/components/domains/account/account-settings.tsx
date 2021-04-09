@@ -43,5 +43,5 @@ export const AccountSettings = (): JSX.Element => {
     },
   ];
 
-  return <TabsLayout headerText={t("profile.accountSettings")} tabOptions={tabOptions} />;
+  return <TabsLayout headerText={""} tabOptions={tabOptions} />;
 };

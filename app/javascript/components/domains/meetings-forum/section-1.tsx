@@ -44,9 +44,6 @@ export const Section1 = observer(
     if (loading || !company || !teamId) {
       return (
         <Container>
-          <HeaderContainer>
-            <NavHeader>{t("forum.annualHub")}</NavHeader>
-          </HeaderContainer>
           <Loading />
         </Container>
       );
@@ -54,9 +51,6 @@ export const Section1 = observer(
 
     return (
       <Container>
-        <HeaderContainer>
-          <NavHeader>{t("forum.annualHub")}</NavHeader>
-        </HeaderContainer>
         <Section1ForumMeetings company={company} teamId={teamId} />
       </Container>
     );
@@ -64,8 +58,3 @@ export const Section1 = observer(
 );
 
 const Container = styled.div``;
-
-const HeaderContainer = styled.div`
-  display: flex;
-  margin-top: 10px;
-`;

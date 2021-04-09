@@ -186,7 +186,7 @@ export const ForumAgendaSearch = observer(() => {
   return (
     <Container>
       <CalendarFilter
-        header={t("meeting.meetingAgenda")}
+        header={""}
         dateFilter={dateFilter}
         setDateFilter={setDateFilter}
         selectedDateFilter={selectedDateFilter}

@@ -62,9 +62,7 @@ export const TeamOverview = observer(
     ) {
       return (
         <Container>
-          <BodyContainer>
-            <Loading />
-          </BodyContainer>
+          <Loading />
         </Container>
       );
     }
@@ -165,71 +163,53 @@ export const TeamOverview = observer(
 
     return (
       <Container>
-        <HeaderContainer>
-          <Heading type={"h1"} fontSize={"24px"}>{`${currentTeam.name} Overview`}</Heading>
-        </HeaderContainer>
-        <BodyContainer>
-          <LeftContainer>
-            <CardLayout titleText={t(`${overviewType}.teamSnapshotTitle`)}>
-              {renderUserSnapshotTable()}
-            </CardLayout>
-          </LeftContainer>
-          <RightContainer>
-            <TeamMeetingInfoContainer>
-              <FutureTeamMeetingsWrapper>
-                {overviewType === "teams" && (
-                  <FutureTeamMeetingsContainer
-                    titleText={t(`${overviewType}.teamMeetingsTitle`)}
-                    buttonText={"Team Meeting"}
-                    handleMeetingClick={handleMeetingClick}
-                  />
-                )}
-                {overviewType === "forum" && (
-                  <FutureTeamMeetingsContainer
-                    titleText={t(`${overviewType}.teamMeetingsTitle`)}
-                    buttonText={"Forum Meeting"}
-                    handleMeetingClick={handleForumMeetingClick}
-                  />
-                )}
-              </FutureTeamMeetingsWrapper>
-              <TeamIssuesWrapper>
-                <TeamIssuesContainer
-                  teamId={team_id}
-                  title={t(`${overviewType}.teamIssuesTitle`)}
+        <LeftContainer>
+          <CardLayout titleText={t(`${overviewType}.teamSnapshotTitle`)}>
+            {renderUserSnapshotTable()}
+          </CardLayout>
+        </LeftContainer>
+        <RightContainer>
+          <TeamMeetingInfoContainer>
+            <FutureTeamMeetingsWrapper>
+              {overviewType === "teams" && (
+                <FutureTeamMeetingsContainer
+                  titleText={t(`${overviewType}.teamMeetingsTitle`)}
+                  buttonText={"Team Meeting"}
+                  handleMeetingClick={handleMeetingClick}
                 />
-              </TeamIssuesWrapper>
-            </TeamMeetingInfoContainer>
-
-            <CardLayout titleText={t(`${overviewType}.teamsPulseTitle`)}>
-              {currentTeam.averageTeamEmotionScore > 0 ? (
-                <TeamPulseBody>
-                  <OverallTeamPulse value={currentTeam.averageTeamEmotionScore} />
-                  <TeamPulseCard
-                    data={toJS(currentTeam.formattedAverageWeeklyUserEmotions) || []}
-                  />
-                </TeamPulseBody>
-              ) : (
-                <NoMoodWrapper>
-                  <NoMoodRatings />
-                </NoMoodWrapper>
               )}
-            </CardLayout>
-          </RightContainer>
-        </BodyContainer>
+              {overviewType === "forum" && (
+                <FutureTeamMeetingsContainer
+                  titleText={t(`${overviewType}.teamMeetingsTitle`)}
+                  buttonText={"Forum Meeting"}
+                  handleMeetingClick={handleForumMeetingClick}
+                />
+              )}
+            </FutureTeamMeetingsWrapper>
+            <TeamIssuesWrapper>
+              <TeamIssuesContainer teamId={team_id} title={t(`${overviewType}.teamIssuesTitle`)} />
+            </TeamIssuesWrapper>
+          </TeamMeetingInfoContainer>
+
+          <CardLayout titleText={t(`${overviewType}.teamsPulseTitle`)}>
+            {currentTeam.averageTeamEmotionScore > 0 ? (
+              <TeamPulseBody>
+                <OverallTeamPulse value={currentTeam.averageTeamEmotionScore} />
+                <TeamPulseCard data={toJS(currentTeam.formattedAverageWeeklyUserEmotions) || []} />
+              </TeamPulseBody>
+            ) : (
+              <NoMoodWrapper>
+                <NoMoodRatings />
+              </NoMoodWrapper>
+            )}
+          </CardLayout>
+        </RightContainer>
       </Container>
     );
   },
 );
 
 const Container = styled.div`
-  padding-bottom: 0;
-`;
-
-const HeaderContainer = styled.div`
-  display: flex;
-`;
-
-const BodyContainer = styled.div`
   display: flex;
 `;
 

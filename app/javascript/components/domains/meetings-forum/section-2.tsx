@@ -42,9 +42,6 @@ export const Section2 = observer(
     if (loading || R.isNil(upcomingForumMeeting) || upcomingForumMeeting.teamId != teamId) {
       return (
         <Container>
-          <HeaderContainer>
-            <HeaderText>{t("forum.upcomingHub")}</HeaderText>
-          </HeaderContainer>
           <Loading />
         </Container>
       );
@@ -52,9 +49,6 @@ export const Section2 = observer(
 
     return (
       <Container>
-        <HeaderContainer>
-          <HeaderText>{t("forum.upcomingHub")}</HeaderText>
-        </HeaderContainer>
         <ParkingLot upcomingForumMeeting={upcomingForumMeeting} />
       </Container>
     );

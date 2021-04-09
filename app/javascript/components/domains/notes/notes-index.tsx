@@ -325,11 +325,6 @@ export const NotesIndex = observer(
 
     return (
       <MainContainer>
-        <HeadingContainer>
-          <Heading type={"h1"} fontSize={"24px"}>
-            {t("notes.indexTitle")}
-          </Heading>
-        </HeadingContainer>
         <BodyContainer>
           <FilterContainer>
             <Card headerComponent={<CardHeaderText fontSize={"12px"}>Filter</CardHeaderText>}>
