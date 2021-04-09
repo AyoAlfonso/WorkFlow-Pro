@@ -165,9 +165,9 @@ export const NotesIndex = observer(
         avatarUrl = profile.avatarUrl;
       } else if (template.meetingType === MeetingTypes.TEAM_WEEKLY) {
         const team = teams.find(team => team.id === teamId);
-        firstName = team.name;
+        firstName = (team && team.name) || "";
         lastName = "";
-        avatarColor = team.defaultAvatarColor;
+        avatarColor = team && team.defaultAvatarColor;
         avatarUrl = null;
       }
 

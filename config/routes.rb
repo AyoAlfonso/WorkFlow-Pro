@@ -101,11 +101,13 @@ Rails.application.routes.draw do
     #annual_initiatives
     resources :annual_initiatives, only: [:create, :show, :update, :destroy]
     post '/annual_initiatives/create_key_element/:id', to: 'annual_initiatives#create_key_element'
+    delete '/annual_initiatives/delete_key_element/:key_element_id', to: 'annual_initiatives#delete_key_element'
     get '/annual_initiatives/team/:team_id', to: "annual_initiatives#team"
 
     #quarterly_goals
     resources :quarterly_goals, only: [:index, :create, :show, :update, :destroy]
     post '/quarterly_goals/create_key_element/:id', to: 'quarterly_goals#create_key_element'
+    delete '/quarterly_goals/delete_key_element/:key_element_id', to: 'quarterly_goals#delete_key_element'
     post '/quarterly_goals/create_milestones/:id', to: 'quarterly_goals#create_milestones'
 
     #habits
@@ -151,10 +153,18 @@ Rails.application.routes.draw do
     resources :milestones, only: [:update]
     get '/milestones/milestones_for_meeting', to: "milestones#milestones_for_meeting"
 
-    #summaries
-    get '/journals', to: 'summaries#questionnaire_attempts_by_date'
-    get '/notes', to: 'summaries#meetings_by_date'
+    #user_pulses
+    get "user_pulse_by_date", to: "user_pulses#user_pulse_by_date"
+    post "/update_user_pulse", to: "user_pulses#create_or_update"
 
+    #summaries
+    get '/journals', to: 'summaries#journals_by_date'
+    get '/notes', to: 'summaries#meetings_by_date'
+  end
+
+  scope module: :integrations, path: :integrations do
+    #pabbly_subscriptions
+    post '/pabbly_subscriptions', to: "pabbly_subscriptions#create_company_and_user"
   end
 
 

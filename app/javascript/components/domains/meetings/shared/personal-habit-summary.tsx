@@ -1,4 +1,5 @@
 import * as React from "react";
+import { isNil } from "ramda";
 import { useEffect } from "react";
 import styled from "styled-components";
 import { Text } from "~/components/shared/text";
@@ -8,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { HabitsSummary } from "~/components/domains/habits/habits-summary";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
+import { Loading } from "~/components/shared/loading";
 
 export interface IPersonalHabitProps {
   meeting: any;
@@ -24,6 +26,10 @@ export const PersonalHabitSummary = observer(
       habitStore.fetchHabitsForPersonalPlanning();
       companyStore.load();
     }, [habitStore.habits, companyStore.company]);
+
+    if (isNil(companyStore.company)) {
+      return <Loading />;
+    }
 
     return (
       <Container>

@@ -56,6 +56,7 @@ const initialState = {
     questionnaires: [],
     questionnaireAttempt: null,
   },
+  journalStore: {},
   teamStore: {
     teams: [],
   },

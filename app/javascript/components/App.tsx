@@ -52,7 +52,7 @@ const Container = styled.div`
   margin-left: 136px;
   margin-right: 40px;
   margin-bottom: 50px;
-  padding-top: 96px;
+  padding-top: 64px;
   height: inherit;
 `;
 
@@ -67,6 +67,7 @@ export const App = observer(
     usePageViews();
     const { issueStore, keyActivityStore, sessionStore } = useMst();
     const loggedIn = sessionStore.loggedIn; //if logged in show switch
+    const profile = sessionStore.profile;
 
     const onDragEnd = result => {
       const { destination, source, draggableId } = result;
@@ -166,6 +167,7 @@ export const App = observer(
         issueStore.updateIssuePosition(issueId, newPosition + 1);
       }
     };
+
     return (
       <DragDropContext onDragEnd={onDragEnd}>
         <ThemeProvider theme={baseTheme}>
@@ -173,66 +175,85 @@ export const App = observer(
             <GlobalStyles />
             <Toaster position="bottom-right" />
             {loggedIn ? (
-              <Switch>
-                <Route
-                  exact
-                  path={[
-                    "/",
-                    "/team/:team_id",
-                    "/account",
-                    "/company/accountability",
-                    "/company/strategic_plan",
-                    "/goals",
-                    "/journals",
-                    "/notes",
-                    "/forum",
-                    "/forum/:team_id",
-                    "/meetings/agenda",
-                    "/meetings/section_1",
-                    "/meetings/section_1/:team_id",
-                    "/meetings/section_2",
-                    "/meetings/section_2/:team_id",
-                  ]}
-                >
-                  <>
-                    <SideNav />
-                    <HeaderBar />
-                    <ForumWelcomeModal />
-                    <OnboardingModal />
-                    <Container>
-                      <Route exact path="/" component={HomeContainer} />
+              profile && profile.currentCompanyOnboarded ? (
+                <Switch>
+                  <Route
+                    exact
+                    path={[
+                      "/",
+                      "/team/:team_id",
+                      "/account",
+                      "/company/accountability",
+                      "/company/strategic_plan",
+                      "/goals",
+                      "/journals",
+                      "/notes",
+                      "/forum",
+                      "/forum/:team_id",
+                      "/meetings/agenda",
+                      "/meetings/section_1",
+                      "/meetings/section_1/:team_id",
+                      "/meetings/section_2",
+                      "/meetings/section_2/:team_id",
+                    ]}
+                  >
+                    <>
+                      <SideNav />
+                      <HeaderBar />
+                      <ForumWelcomeModal />
+                      <OnboardingModal />
+                      <Container>
+                        <Route exact path="/" component={HomeContainer} />
 
-                      <Route exact path="/team/:team_id" component={TeamOverview} />
-                      <Route exact path="/account" component={AccountSettings} />
-                      <Route exact path="/company/accountability" component={AccountabilityChart} />
-                      <Route exact path="/company/strategic_plan" component={StrategicPlan} />
-                      <Route exact path="/goals" component={GoalsIndex} />
-                      <Route exact path="/journals" component={JournalIndex} />
-                      <Route exact path="/notes" component={NotesIndex} />
-                      <Route exact path="/forum" component={ForumNotSetup} />
-                      <Route exact path="/forum/:team_id" component={TeamOverview} />
-                      <Route exact path="/meetings/agenda" component={ForumAgenda} />
-                      <Route exact path="/meetings/section_1" component={Section1} />
-                      <Route exact path="/meetings/section_1/:team_id" component={Section1} />
-                      <Route exact path="/meetings/section_2" component={Section2} />
-                      <Route exact path="/meetings/section_2/:team_id" component={Section2} />
-                    </Container>
-                  </>
-                </Route>
-                <Route
-                  exact
-                  path={["/personal_planning/:meeting_id", "/team/:team_id/meeting/:meeting_id"]}
-                >
-                  <>
-                    <Route
-                      exact
-                      path="/personal_planning/:meeting_id"
-                      component={PersonalPlanning}
-                    />
-                    <Route exact path="/team/:team_id/meeting/:meeting_id" component={Meeting} />
-                  </>
-                </Route>
-              </Switch>
+                        <Route exact path="/team/:team_id" component={TeamOverview} />
+                        <Route exact path="/account" component={AccountSettings} />
+                        <Route
+                          exact
+                          path="/company/accountability"
+                          component={AccountabilityChart}
+                        />
+                        <Route exact path="/company/strategic_plan" component={StrategicPlan} />
+                        <Route exact path="/goals" component={GoalsIndex} />
+                        <Route exact path="/journals" component={JournalIndex} />
+                        <Route exact path="/notes" component={NotesIndex} />
+                        <Route exact path="/forum" component={ForumNotSetup} />
+                        <Route exact path="/forum/:team_id" component={TeamOverview} />
+                        <Route exact path="/meetings/agenda" component={ForumAgenda} />
+                        <Route exact path="/meetings/section_1" component={Section1} />
+                        <Route exact path="/meetings/section_1/:team_id" component={Section1} />
+                        <Route exact path="/meetings/section_2" component={Section2} />
+                        <Route exact path="/meetings/section_2/:team_id" component={Section2} />
+                      </Container>
+                    </>
+                  </Route>
+                  <Route
+                    exact
+                    path={["/personal_planning/:meeting_id", "/team/:team_id/meeting/:meeting_id"]}
+                  >
+                    <>
+                      <Route
+                        exact
+                        path="/personal_planning/:meeting_id"
+                        component={PersonalPlanning}
+                      />
+                      <Route exact path="/team/:team_id/meeting/:meeting_id" component={Meeting} />
+                    </>
+                  </Route>
+                </Switch>
+              ) : (
+                <Switch>
+                  <Route exact path={["/"]}>
+                    <>
+                      <Route
+                        path={"/"}
+                        render={() => {
+                          return <Onboarding />;
+                        }}
+                      />
+                    </>
+                  </Route>
+                </Switch>
+              )
             ) : (
               <Switch>
                 <Route

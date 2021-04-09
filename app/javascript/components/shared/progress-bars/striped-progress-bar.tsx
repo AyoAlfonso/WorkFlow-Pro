@@ -2,14 +2,14 @@ import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
-import { color, layout, space, variant } from "styled-system";
+import { color, ColorProps, layout, LayoutProps, space, SpaceProps, variant } from "styled-system";
 import { buildRepeatingLinearGradient } from "~/utils/css-utils";
 
 const ProgressBarContainer = styled.div`
   ${color}
   ${layout}
   ${space}
-  height: 23px;
+  height: 16px;
   width: ${props => (props.width ? props.width : "100%")};
   border-radius: 4px;
   position: relative;

@@ -1,4 +1,5 @@
 import { observer } from "mobx-react";
+import styled from "styled-components";
 import * as R from "ramda";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -16,21 +17,19 @@ import {
   BodyRightContainer,
   Container,
   EntryBodyCard,
-  EntryBodyContainer,
   EntryContainer,
   EntryCardHeaderContainer,
   EntryHeadingContainer,
   ItemCard,
   ItemContainer,
   ItemListContainer,
-  MainContainer,
   NoSelectedItems,
 } from "~/components/shared/journals-and-notes";
 import { Card } from "~/components/shared/card";
 import { Text } from "~/components/shared/text";
 import { Avatar } from "~/components/shared/avatar";
 import { Loading } from "~/components/shared";
-import { IQuestionnaireAttempt } from "~/models/questionnaire-attempt";
+import { IJournalEntry } from "~/models/journal-entry";
 import { CalendarFilter } from "~/components/shared/journals-and-notes/calendar-filter";
 
 export interface IJournalIndexProps {}
@@ -40,7 +39,7 @@ export const JournalIndex = observer(
     const { t } = useTranslation();
 
     const [loading, setLoading] = useState<boolean>(true);
-    const [selectedItem, setSelectedItem] = useState<IQuestionnaireAttempt>(null);
+    const [selectedItem, setSelectedItem] = useState<IJournalEntry>(null);
     const [selectedDateFilter, setSelectedDateFilter] = useState<string>(
       t("dateFilters.lastThirtyDays"),
     );
@@ -57,53 +56,34 @@ export const JournalIndex = observer(
       },
     });
 
-    const { questionnaireStore, userStore } = useMst();
+    const { journalStore, userStore } = useMst();
 
     useEffect(() => {
-      questionnaireStore.getQuestionnaireAttemptsSummary(null).then(() => setLoading(false));
+      journalStore.getJournalEntries(null).then(() => setLoading(false));
     }, []);
 
-    const questionnaireAttemptsSummary = questionnaireStore.questionnaireAttemptsSummary;
+    const { journalEntriesFiltered } = journalStore;
 
     if (R.isNil(userStore.users)) {
       return <Loading />;
     }
 
-    // find all steps with journalQuestion in their metadata, and map the questions and answers together
-    const parseRenderedSteps = renderedSteps =>
-      R.pipe(
-        R.filter(R.hasPath(["metadata", "journalQuestion"])),
-        R.map(step => {
-          if (step.id === "rating") {
-            return {
-              question: R.path(["metadata", "journalQuestion"], step),
-              answer: `${R.path(["value"], step)} / 5`,
-            };
-          } else {
-            return {
-              question: R.path(["metadata", "journalQuestion"], step),
-              answer: R.path(["value"], step),
-            };
-          }
-        }),
-      )(renderedSteps);
-
     const renderItems = () =>
-      loading || R.isNil(questionnaireAttemptsSummary) ? (
+      loading || R.isNil(journalEntriesFiltered) ? (
         <Loading />
       ) : (
-        questionnaireAttemptsSummary.map((item, index) => (
+        journalEntriesFiltered.map((item, index) => (
           <ItemContainer key={index}>
             <Text fontSize={"16px"} fontWeight={600}>
               {item.date}
             </Text>
-            {item.items.map((qa, qaIndex) => (
+            {item.items.map((journalEntry, journalEntryIndex) => (
               <ItemCard
-                key={qaIndex}
-                titleText={moment(qa.completedAt).format("LT")}
-                bodyText={qa.questionnaireType}
-                onClick={() => setSelectedItem({ ...qa })}
-                selected={!R.isNil(selectedItem) ? selectedItem.id === qa.id : false}
+                key={journalEntryIndex}
+                titleText={moment(journalEntry.createdAt).format("LT")}
+                bodyText={journalEntry.preview}
+                onClick={() => setSelectedItem({ ...journalEntry })}
+                selected={!R.isNil(selectedItem) ? selectedItem.id === journalEntry.id : false}
               />
             ))}
           </ItemContainer>
@@ -117,10 +97,10 @@ export const JournalIndex = observer(
       return (
         <>
           <Text fontSize={"16px"} fontWeight={600}>
-            {selectedEntry.questionnaireType}
+            {selectedEntry.title}
           </Text>
           <Text fontSize={"12px"} fontWeight={400} color={"grey100"}>
-            {moment(selectedEntry.completedAt).format("dddd, MMMM Do, h:mm a")}
+            {moment(selectedEntry.createdAt).format("dddd, MMMM Do, h:mm a")}
           </Text>
           <AvatarContainer>
             <Avatar
@@ -144,9 +124,6 @@ export const JournalIndex = observer(
     };
 
     const renderSelectedEntry = () => {
-      const questionsAnswers = parseRenderedSteps(
-        toJS(R.pathOr([], ["renderedSteps"], selectedItem)),
-      );
       return R.isNil(selectedItem) ? (
         <NoSelectedItems text={t("journals.startAdding")} />
       ) : (
@@ -173,16 +150,11 @@ export const JournalIndex = observer(
             }
           >
             <EntryBodyCard>
-              {questionsAnswers.map((step, index) => (
-                <EntryBodyContainer key={index}>
-                  <Text fontSize={"12px"} fontWeight={600} mb={"20px"}>
-                    {step.question}
-                  </Text>
-                  <Text fontSize={"12px"} fontWeight={400} mb={"20px"}>
-                    {step.answer}
-                  </Text>
-                </EntryBodyContainer>
-              ))}
+              <Text
+                fontSize={"12px"}
+                mb={"20px"}
+                dangerouslySetInnerHTML={{ __html: selectedItem.body }}
+              />
             </EntryBodyCard>
           </Card>
         </>
@@ -190,7 +162,7 @@ export const JournalIndex = observer(
     };
 
     const dateSelectedAction = ranges => {
-      questionnaireStore.getQuestionnaireAttemptsSummary(ranges).then(() => setLoading(false));
+      journalStore.getJournalEntries(ranges).then(() => setLoading(false));
     };
 
     return (
@@ -205,6 +177,7 @@ export const JournalIndex = observer(
           setLoading={setLoading}
           dateSelectAction={dateSelectedAction}
         />
+
         <BodyRightContainer>
           <ItemListContainer>{renderItems()}</ItemListContainer>
           <EntryContainer>{renderSelectedEntry()}</EntryContainer>

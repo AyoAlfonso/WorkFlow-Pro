@@ -246,8 +246,12 @@ export class Api {
     return this.client.delete(`/annual_initiatives/${id}`);
   }
 
-  async createAnnualInitiativeKeyElement(id) {
-    return this.client.post(`/annual_initiatives/create_key_element/${id}`);
+  async createAnnualInitiativeKeyElement(id, params) {
+    return this.client.post(`/annual_initiatives/create_key_element/${id}`, params);
+  }
+
+  async deleteAnnualInitiativeKeyElement(keyElementId) {
+    return this.client.delete(`/annual_initiatives/delete_key_element/${keyElementId}`);
   }
 
   async getQuarterlyGoal(id) {
@@ -264,8 +268,12 @@ export class Api {
     return this.client.patch(`/quarterly_goals/${quarterlyGoal.id}`, parsedQuarterlyGoal);
   }
 
-  async createQuarterlyGoalKeyElement(id) {
-    return this.client.post(`/quarterly_goals/create_key_element/${id}`);
+  async createQuarterlyGoalKeyElement(id, params) {
+    return this.client.post(`/quarterly_goals/create_key_element/${id}`, params);
+  }
+
+  async deleteQuarterlyGoalKeyElement(keyElementId) {
+    return this.client.delete(`/quarterly_goals/delete_key_element/${keyElementId}`);
   }
 
   async deleteQuarterlyGoal(id) {
@@ -312,7 +320,7 @@ export class Api {
     return this.client.get(`/questionnaires`);
   }
 
-  async getQuestionnaireAttemptsSummary(dateFilterObj) {
+  async getJournalEntries(dateFilterObj) {
     return this.client.get(`/journals`, dateFilterObj);
   }
 
@@ -448,5 +456,16 @@ export class Api {
     return this.client.post(`/create_team_and_invite_users`, { teamName, users });
   }
 
+  async getEmotionAdjectives(){
+    return this.client.get(`/user_pulses/emotion_adjectives`)
+  }
+
+  async updateUserPulse(pulseObject){
+    return this.client.post(`/update_user_pulse`, pulseObject )
+  }
+  
+  async getUserPulseByDate(date){
+    return this.client.get(`/user_pulse_by_date`, { date })
+  }
   //async setJWT(jwt) {}
 }

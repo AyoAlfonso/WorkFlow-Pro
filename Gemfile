@@ -50,6 +50,7 @@ gem 'acts-as-taggable-on', '~> 7.0'
 
 gem "aws-sdk-s3", require: false
 gem 'rack-cors'
+gem 'faraday'
 
 group :development, :test do
   gem 'factory_bot_rails'

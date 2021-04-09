@@ -32,7 +32,7 @@ export const PersonalMeetingWizardLayout = observer(
     const meetingDescription = () => R.path(["currentStepDetails", "instructions"], meeting);
 
     const childrenUnderDescription = () => (
-      <StepText>{`Step ${meeting.currentStep + 1} / ${numberOfSteps}`}</StepText>
+      <StepText type={"small"}>{`Step ${meeting.currentStep + 1} / ${numberOfSteps}`}</StepText>
     );
 
     const meetingComponent = () => <MeetingStep meeting={meeting} />;
@@ -109,7 +109,6 @@ const LeftButtonContainer = styled.div`
 
 const StepText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
-  font-size: 11px;
   text-align: right;
 `;
 

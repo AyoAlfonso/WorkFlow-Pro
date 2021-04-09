@@ -12,6 +12,7 @@ json.scheduled_groups @scheduled_groups
 json.current_company_user_teams @user.user_teams_for_company(current_company) do |team|
   json.partial! team, partial: 'api/teams/team', as: :team
 end
+json.current_company_onboarded current_company.complete?
  
 json.company_profiles @user.companies.where(onboarding_status: 1) do |company|
   json.extract! company, :id, :name, :display_format

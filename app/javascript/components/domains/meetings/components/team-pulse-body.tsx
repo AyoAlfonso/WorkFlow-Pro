@@ -1,4 +1,5 @@
 import * as React from "react";
+import { isNil } from "ramda";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import { OverallTeamPulse } from "../shared/overall-team-pulse";
@@ -6,13 +7,17 @@ import { TeamPulseCard } from "../shared/team-pulse-card";
 import { PercentChange } from "~/components/shared/percent-change";
 import { toJS } from "mobx";
 import { NoMoodRatings } from "~/components/shared/no-mood-ratings";
-
+import { Loading } from "~/components/shared/loading";
 interface ITeamPulseBodyProps {
   meeting: any;
 }
 
 export const TeamPulseBody = ({ meeting }: ITeamPulseBodyProps): JSX.Element => {
   const { companyStore } = useMst();
+
+  if (isNil(companyStore.company)) {
+    return <Loading />;
+  }
 
   let teamEmotions, userEmotions, percentageDifference, periodDesc;
   if (companyStore.company.displayFormat === "Company") {

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_17_234649) do
+ActiveRecord::Schema.define(version: 2021_03_29_221742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 2021_03_17_234649) do
     t.text "strategic_plan_embed"
     t.integer "display_format", default: 0
     t.integer "onboarding_status", default: 0
+    t.string "customer_subscription_profile_id"
   end
 
   create_table "conversation_starters", force: :cascade do |t|
@@ -186,6 +187,19 @@ ActiveRecord::Schema.define(version: 2021_03_17_234649) do
     t.index ["user_id"], name: "index_issues_on_user_id"
   end
 
+  create_table "journal_entries", force: :cascade do |t|
+    t.text "body"
+    t.string "title"
+    t.string "preview"
+    t.string "generated_from_type"
+    t.bigint "generated_from_id"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["generated_from_type", "generated_from_id"], name: "index_journal_entries_on_generated_from_polymorphic"
+    t.index ["user_id"], name: "index_journal_entries_on_user_id"
+  end
+
   create_table "key_activities", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.text "description"
@@ -226,6 +240,9 @@ ActiveRecord::Schema.define(version: 2021_03_17_234649) do
     t.bigint "elementable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "completion_type"
+    t.integer "completion_current_value"
+    t.integer "completion_target_value"
     t.index ["elementable_type", "elementable_id"], name: "index_key_elements_on_elementable_type_and_elementable_id"
   end
 
@@ -460,6 +477,16 @@ ActiveRecord::Schema.define(version: 2021_03_17_234649) do
     t.index ["user_role_id"], name: "index_user_company_enablements_on_user_role_id"
   end
 
+  create_table "user_pulses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "score"
+    t.string "feeling", default: ""
+    t.date "completed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_pulses_on_user_id"
+  end
+
   create_table "user_roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -535,6 +562,7 @@ ActiveRecord::Schema.define(version: 2021_03_17_234649) do
   add_foreign_key "habits", "users"
   add_foreign_key "issues", "companies"
   add_foreign_key "issues", "users"
+  add_foreign_key "journal_entries", "users"
   add_foreign_key "key_activities", "companies"
   add_foreign_key "key_activities", "meetings"
   add_foreign_key "key_activities", "users"
@@ -560,6 +588,7 @@ ActiveRecord::Schema.define(version: 2021_03_17_234649) do
   add_foreign_key "user_company_enablements", "companies"
   add_foreign_key "user_company_enablements", "user_roles"
   add_foreign_key "user_company_enablements", "users"
+  add_foreign_key "user_pulses", "users"
   add_foreign_key "users", "companies"
   add_foreign_key "users", "companies", column: "default_selected_company_id"
   add_foreign_key "users", "user_roles"

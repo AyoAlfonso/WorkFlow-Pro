@@ -14,10 +14,11 @@ import { GoalSummary } from "./goal-summary";
 import { AddPyns } from "./add-pyns";
 import { PynsSummary } from "./pyns-summary";
 import { parseAnnualInitiative } from "./annual-initiative-parser";
+import { observer } from "mobx-react";
 
 interface IOnboardingProps {}
 
-export const Onboarding: React.FC = (props: IOnboardingProps) => {
+export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
   const { companyStore, sessionStore, staticDataStore } = useMst();
   const [loading, setLoading] = useState<boolean>(true);
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -28,6 +29,7 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
 
   const loadOnboarding = useCallback(async () => {
     const { onboardingDisplayFormat, onboardingCompany } = companyStore;
+
     if (!R.isNil(onboardingCompany)) {
       const signUpPurpose = R.path(["signUpPurpose"], onboardingCompany);
       const fiscalYearStart = new Date(R.path(["fiscalYearStart"], onboardingCompany));
@@ -56,7 +58,6 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
         R.dissoc("signUpPurpose"),
         R.set(R.lens(R.prop("logo"), R.assoc("logo")), logoFiles),
       )(onboardingCompany);
-
       setFormData(formDataState);
       setGoalData(companyStore.onboardingCompanyGoals);
       setPynsData(companyStore.onboardingKeyActivities);
@@ -65,14 +66,18 @@ export const Onboarding: React.FC = (props: IOnboardingProps) => {
   }, []);
 
   useEffect(() => {
-    loadOnboarding();
+    companyStore.getOnboardingCompany().then(data => {
+      if (data) {
+        loadOnboarding();
+      }
+    });
   }, [loadOnboarding]);
 
   const { fieldsAndLabels, headingsAndDescriptions, timeZones } = staticDataStore;
   const { onboardingCompany, onboardingDisplayFormat } = companyStore;
   const { profile } = sessionStore;
 
-  if (loading || R.isNil(profile)) {
+  if (loading || R.isNil(profile) || !timeZones) {
     return <Loading />;
   }
 
@@ -447,7 +452,7 @@ True value of LynchPyn is in working together with others in your team and compa
       />
     </Container>
   );
-};
+});
 
 const Container = styled.div`
   width: 100%;

@@ -3,18 +3,17 @@ module HasEmotionScores
   include StatsHelper
   
   def daily_average_users_emotion_score(users, from_date, to_date)
-    q_attempts = QuestionnaireAttempt.where(user: users)
-                                      .where("emotion_score IS NOT NULL AND completed_at <= ? AND completed_at >= ?", to_date, from_date)
-                                      .order(:completed_at)
-                                      .select(:id, :completed_at, :emotion_score)
-                                      .group_by{|qa| qa.completed_at.strftime("%a-%-d")}
+    user_pulses = UserPulse.where(user: users)
+                            .where("completed_at <= ? AND completed_at >= ?", to_date, from_date)
+                            .order(:completed_at)
+                            .group_by{|qa| qa.completed_at.strftime("%a-%-d")}
 
     results_array = []
 
-    q_attempts.map do |qa|
+    user_pulses.map do |qa|
       average_score_hash = {
         date: qa[0],
-        average_score: qa[1].pluck(:emotion_score).inject(:+).to_f / qa[1].size
+        average_score: qa[1].pluck(:score).inject(:+).to_f / qa[1].size
       }
       results_array << average_score_hash
     end

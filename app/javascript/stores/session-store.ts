@@ -7,9 +7,9 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { UserModel } from "~/models/user";
 import { StaticModel } from "~/models/static";
-import { homePersonalStatusOptions as options } from "~/components/domains/home/home-personal-status/home-personal-status-options";
 import { registerIdentity } from "~/components/shared/analytics";
 import { ScheduledGroupModel } from "~/models/scheduled-group";
+import { UserPulseModel } from "~/models/user-pulse";
 
 export const SessionStoreModel = types
   .model("SessionStoreModel")
@@ -20,6 +20,7 @@ export const SessionStoreModel = types
     profile: types.maybeNull(UserModel),
     staticData: types.maybeNull(StaticModel),
     scheduledGroups: types.maybeNull(types.array(ScheduledGroupModel)),
+    selectedUserPulse: types.maybeNull(UserPulseModel),
   })
   .extend(withRootStore())
   .extend(withEnvironment())
@@ -83,6 +84,24 @@ export const SessionStoreModel = types
       } catch {
         // error messaging handled by API monitor
       }
+    }),
+    updateUserPulse: flow(function*(userPulseObject){
+      const response = yield self.environment.api.updateUserPulse(userPulseObject);
+      if(response.ok){
+        self.profile = response.data;
+        showToast("Daily pulse updated.", ToastMessageConstants.SUCCESS);
+      } else {
+        showToast("There was an error updating the daily pulse", ToastMessageConstants.ERROR);
+      }
+    }),
+    getUserPulseByDate: flow(function*(date){
+      const response = yield self.environment.api.getUserPulseByDate(date);
+      if(response.data){
+        self.profile.userPulseForDisplay = response.data.userPulse
+      } else {
+        self.profile.userPulseForDisplay = null
+      }
+      
     }),
     updateAvatar: flow(function*(formData) {
       self.loading = true;

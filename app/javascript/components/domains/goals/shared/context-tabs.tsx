@@ -1,19 +1,23 @@
 import * as React from "react";
-import styled from "styled-components";
-import { Text } from "../../../shared/text";
 import { useState, useEffect, useRef } from "react";
+import * as R from "ramda";
+import styled from "styled-components";
+import { useMst } from "~/setup/root";
+import { observer } from "mobx-react";
+import { baseTheme } from "~/themes/base";
+
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
+import ContentEditable from "react-contenteditable";
+
 import { AnnualInitiativeType } from "~/types/annual-initiative";
 import { QuarterlyGoalType } from "~/types/quarterly-goal";
-import { useMst } from "~/setup/root";
-import ContentEditable from "react-contenteditable";
-import * as R from "ramda";
 import { KeyElement } from "./key-element";
 import { Button } from "~/components/shared/button";
 import { Icon } from "~/components/shared/icon";
-import { observer } from "mobx-react";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
+import { KeyElementForm } from "./key-element-form";
+import { RoundButton, Text, TextDiv } from "~/components/shared";
 
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;
@@ -23,7 +27,6 @@ interface IContextTabsProps {
 export const ContextTabs = observer(
   ({ object, type }: IContextTabsProps): JSX.Element => {
     const { sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
-
     const tabDefaultIndex = () => {
       if (
         (type == "annualInitiative" && R.length(R.path(["quarterlyGoals"], object)) == 0) ||
@@ -40,6 +43,7 @@ export const ContextTabs = observer(
     const [hideContent, setHideContent] = useState<boolean>(false);
     const [store, setStore] = useState<any>(null);
     const [focusOnLastInput, setFocusOnLastInput] = useState<boolean>(false);
+    const [showKeyElementForm, setShowKeyElementForm] = useState<boolean>(false);
     const editable = currentUser.id == object.ownedById;
 
     const firstImportanceRef = useRef(null);
@@ -134,27 +138,84 @@ export const ContextTabs = observer(
 
     const renderContextDescription = () => {
       return (
-        <StyledContentEditable
-          innerRef={descriptionRef}
-          html={object.contextDescription}
-          placeholder={"Type here..."}
-          disabled={!editable}
-          onChange={e => {
-            if (!e.target.value.includes("<div>")) {
-              store.updateModelField("contextDescription", e.target.value);
-            }
-          }}
-          onKeyDown={key => {
-            if (key.keyCode == 13) {
-              descriptionRef.current.blur();
-            }
-          }}
-          onBlur={() => updateContentEditable()}
-        />
+        <ContextDescriptionContainer>
+          <StyledContentEditable
+            innerRef={descriptionRef}
+            html={object.contextDescription}
+            placeholder={"Type here..."}
+            disabled={!editable}
+            onChange={e => {
+              if (!e.target.value.includes("<div>")) {
+                store.updateModelField("contextDescription", e.target.value);
+              }
+            }}
+            onKeyDown={key => {
+              if (key.keyCode == 13) {
+                descriptionRef.current.blur();
+              }
+            }}
+            onBlur={() => updateContentEditable()}
+          />
+        </ContextDescriptionContainer>
       );
     };
 
-    const renderKeyElements = () => {
+    const renderContextKeyElements = () => {
+      return showKeyElementForm ? (
+        <KeyElementsTabContainer>
+          <KeyElementsFormHeader>
+            <TextDiv ml={"16px"} mb={"8px"} fontSize={"16px"} fontWeight={600}>
+              Add a Key Result
+            </TextDiv>
+            <KeyElementFormBackButtonContainer
+              onClick={() => {
+                setShowKeyElementForm(false);
+              }}
+            >
+              <Icon
+                icon={"Close"}
+                size={"12px"}
+                iconColor={baseTheme.colors.grey40}
+                style={{ marginLeft: "8px", marginTop: "8px" }}
+              />
+            </KeyElementFormBackButtonContainer>
+          </KeyElementsFormHeader>
+          <KeyElementContentContainer>
+            <KeyElementForm
+              onCreate={store.createKeyElement}
+              onClose={() => setShowKeyElementForm(false)}
+            />
+          </KeyElementContentContainer>
+        </KeyElementsTabContainer>
+      ) : (
+        <KeyElementsTabContainer>
+          {object.keyElements.length > 0 && (
+            <KeyElementContentContainer>{renderKeyElementsIndex()}</KeyElementContentContainer>
+          )}
+          {editable && (
+            <ButtonContainer
+              onClick={() => {
+                setShowKeyElementForm(true);
+              }}
+            >
+              <RoundButton backgroundColor={"primary100"} size={"32px"}>
+                <Icon
+                  icon={"Plus"}
+                  size={"16px"}
+                  iconColor={baseTheme.colors.white}
+                  style={{ marginLeft: "8px", marginTop: "8px" }}
+                />
+              </RoundButton>
+              <TextDiv color={"primary100"} fontSize={"16px"} ml={"8px"}>
+                Add a Key Result
+              </TextDiv>
+            </ButtonContainer>
+          )}
+        </KeyElementsTabContainer>
+      );
+    };
+
+    const renderKeyElementsIndex = () => {
       return object.keyElements.map((element, index) => {
         const lastKeyElement = index == object.keyElements.length - 1;
         return (
@@ -192,32 +253,14 @@ export const ContextTabs = observer(
               <StyledTabTitle tabSelected={selectedContextTab == 2}>Description</StyledTabTitle>
             </StyledTab>
             <StyledTab onClick={() => tabClicked(3)}>
-              <StyledTabTitle tabSelected={selectedContextTab == 3}>Key Elements</StyledTabTitle>
+              <StyledTabTitle tabSelected={selectedContextTab == 3}>Key Results</StyledTabTitle>
             </StyledTab>
           </StyledTabList>
 
           <TabPanelContainer hideContent={hideContent}>
             <StyledTabPanel>{renderContextImportance()}</StyledTabPanel>
             <StyledTabPanel>{renderContextDescription()}</StyledTabPanel>
-            <StyledTabPanel>
-              {renderKeyElements()}
-              {editable && (
-                <ButtonContainer>
-                  <StyledButton
-                    small
-                    variant={"grey"}
-                    onClick={() => {
-                      store.createKeyElement().then(() => {
-                        setFocusOnLastInput(true);
-                      });
-                    }}
-                  >
-                    <Icon icon={"Plus"} size={"20px"} style={{ marginTop: "3px" }} />
-                    <AddKeyElementText>Add a Key Element</AddKeyElementText>
-                  </StyledButton>
-                </ButtonContainer>
-              )}
-            </StyledTabPanel>
+            <StyledTabPanel style={{ padding: "0px" }}>{renderContextKeyElements()}</StyledTabPanel>
           </TabPanelContainer>
         </Tabs>
       </Container>
@@ -236,7 +279,6 @@ const TabPanelContainer = styled.div<TabPanelContainerType>`
   border: 1px solid #e3e3e3;
   box-shadow: 0px 3px 6px #f5f5f5;
   margin-top: -20px;
-  padding: 16px;
   border-top-left-radius: 0px;
   display: ${props => props.hideContent && "none"};
 `;
@@ -278,6 +320,7 @@ const StyledTabPanel = styled(TabPanel)``;
 
 const ContextImportanceContainer = styled.div`
   margin-top: -8px;
+  padding: 16px;
 `;
 
 const StyledContentEditable = styled(ContentEditable)`
@@ -294,18 +337,44 @@ const StyledContentEditable = styled(ContentEditable)`
 `;
 
 const ButtonContainer = styled.div`
-  margin-top: 24px;
-`;
-
-const StyledButton = styled(Button)`
-  display: flex;
-  justify-content: center;
+  display: inline-flex;
   align-items: center;
-  &: hover {
-    color: ${props => props.theme.colors.primary100};
+  justify-content: flex-start;
+  padding: 16px;
+  &:hover {
+    cursor: pointer;
   }
 `;
 
-const AddKeyElementText = styled.p`
-  margin-left: 16px;
+const KeyElementsFormHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 16px;
+  width: auto;
+  padding-right: 16px;
+  padding-top: 8px;
+  height: 24px;
+  border-bottom: ${({ theme: { colors } }) => `1px solid ${colors.borderGrey}`};
+`;
+
+const KeyElementFormBackButtonContainer = styled.div`
+  margin-right: 16px;
+  margin-bottom: 8px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const KeyElementsTabContainer = styled.div`
+  height: 100%;
+  width: 100%;
+`;
+
+const KeyElementContentContainer = styled.div`
+  padding: 16px;
+`;
+
+const ContextDescriptionContainer = styled.div`
+  padding: 16px;
 `;

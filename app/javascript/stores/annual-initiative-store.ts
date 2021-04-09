@@ -37,16 +37,31 @@ export const AnnualInitiativeStoreModel = types
         showToast("There was an error updating the annual objective", ToastMessageConstants.ERROR);
       }
     }),
-    createKeyElement: flow(function*() {
+    createKeyElement: flow(function*(keyElementParams) {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createAnnualInitiativeKeyElement(
           self.annualInitiative.id,
+          keyElementParams,
         );
         const updatedKeyElements = [...self.annualInitiative.keyElements, response.data.keyElement];
         self.annualInitiative.keyElements = updatedKeyElements as any;
+        showToast("Key Result created", ToastMessageConstants.SUCCESS);
+        return response.data.keyElement;
       } catch {
         showToast("There was an error creating the key element", ToastMessageConstants.ERROR);
+      }
+    }),
+    deleteKeyElement: flow(function*(keyElementId) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.deleteAnnualInitiativeKeyElement(keyElementId);
+        self.annualInitiative = response.data;
+        showToast("Key Result deleted", ToastMessageConstants.SUCCESS);
+        return true;
+      } catch {
+        showToast("There was an error deleting the key result", ToastMessageConstants.ERROR);
+        return false;
       }
     }),
     create: flow(function*(annualInitiativeObject) {
@@ -81,10 +96,10 @@ export const AnnualInitiativeStoreModel = types
     updateModelField(field, value) {
       self.annualInitiative[field] = value;
     },
-    updateKeyElementValue(id, value) {
+    updateKeyElementValue(field: string, id: number, value: number) {
       let keyElements = self.annualInitiative.keyElements;
       let keyElementIndex = keyElements.findIndex(ke => ke.id == id);
-      keyElements[keyElementIndex].value = value;
+      keyElements[keyElementIndex][field] = value;
       self.annualInitiative.keyElements = keyElements;
     },
     updateKeyElementStatus(id, value) {
@@ -96,6 +111,7 @@ export const AnnualInitiativeStoreModel = types
       self.annualInitiative.keyElements = keyElements;
       self.update();
     },
+
     updateOwnedBy(user) {
       self.annualInitiative.ownedById = user.id;
       self.update();

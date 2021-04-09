@@ -5,12 +5,13 @@ import { motion } from "framer-motion";
 
 type IconContainerType = {
   backgroundColor?: string;
+  size?: string;
 };
 
 const StyledButton = styled(motion.div)<IconContainerType>`
   ${color}
-  height: 40px;
-  width: 40px;
+  height: ${({ size }) => (size ? size : "40px")};
+  width: ${({ size }) => (size ? size : "40px")};
   border-radius: 50px;
   box-shadow: 0px 2px rgba(0, 0, 0, 0.2);
   &:hover {

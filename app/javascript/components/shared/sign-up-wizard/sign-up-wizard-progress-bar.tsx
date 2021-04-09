@@ -34,7 +34,7 @@ export const SignUpWizardProgressBar = ({
       return (
         <StepContainer key={index}>
           <StepTitleContainer titleCharLength={(step || "").length}>
-            <StepTitle index={index} currentStep={currentStep}>
+            <StepTitle type={"small"} index={index} currentStep={currentStep}>
               {step}
             </StepTitle>
           </StepTitleContainer>
@@ -74,7 +74,6 @@ export const SignUpWizardProgressBar = ({
 const StepContainer = styled.div``;
 
 const StepTitle = styled(Text)<{ currentStep; index }>`
-  font-size: 11px;
   color: ${({ currentStep, index, theme: { colors } }) =>
     currentStep === index ? colors.primary100 : colors.greyActive};
 `;

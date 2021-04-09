@@ -70,7 +70,6 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
   const resetFields = () => {
     setKeyActivityDescription("");
     setSelectedPriority(0);
-    setWeeklyList(defaultTypeAsWeekly);
     setShowUsersList(false);
     setSelectedUser(sessionStore.profile);
     setSelectedDueDate(null);

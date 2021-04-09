@@ -3,6 +3,7 @@ import { DailyLogModel } from "~/models";
 import * as R from "ramda";
 import { KeyActivityModel } from "./key-activity";
 import { CompanyModel } from "./company";
+import { UserPulseModel } from "./user-pulse";
 
 export const UserModel = types
   .model("UserModel")
@@ -28,7 +29,9 @@ export const UserModel = types
     todaysPriorities: types.maybeNull(types.array(KeyActivityModel)),
     todaysCompletedActivities: types.maybeNull(types.array(KeyActivityModel)),
     firstAccessToForum: types.maybeNull(types.boolean),
-    currentCompanyUserTeams: types.maybeNull(types.array(types.frozen()))
+    currentCompanyUserTeams: types.maybeNull(types.array(types.frozen())),
+    userPulseForDisplay: types.maybeNull(UserPulseModel),
+    currentCompanyOnboarded: types.maybeNull(types.boolean),
     //add avatarurl2x
   })
   .views(self => ({
