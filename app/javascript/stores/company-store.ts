@@ -98,9 +98,6 @@ export const CompanyStoreModel = types
       const env = getEnv(self);
       const response: any = yield env.api.getOnboardingCompany();
       if (response.ok) {
-
-        console.log('response data', response.data)
-
         self.onboardingCompany = response.data as any;
         return true;
       } else {

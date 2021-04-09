@@ -158,10 +158,11 @@ Rails.application.routes.draw do
     #summaries
     get '/journals', to: 'summaries#journals_by_date'
     get '/notes', to: 'summaries#meetings_by_date'
+  end
 
+  scope module: :integrations, path: :integrations do
     #pabbly_subscriptions
-    post '/pabbly_subscriptions/', to: "pabbly_subscriptions#create_company_and_user"
-
+    post '/pabbly_subscriptions', to: "pabbly_subscriptions#create_company_and_user"
   end
 
 
