@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import * as R from "ramda";
-import { ColumnContainerCenterAligned } from "./row-style";
+import { ColumnContainerCenterAligned } from "~/components/shared/styles/row-style";
 import ContentEditable from "react-contenteditable";
 import { useRefCallback } from "~/components/shared/content-editable-hooks";
 import { useMst } from "~/setup/root";

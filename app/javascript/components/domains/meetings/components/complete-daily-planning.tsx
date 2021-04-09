@@ -6,6 +6,7 @@ import { SurveyBot } from "~/components/domains/journal/survey-bot";
 import { QuestionnaireTypeConstants } from "~/constants/questionnaire-types";
 import { observer } from "mobx-react";
 import { useHistory } from "react-router-dom";
+import { ColumnContainerParent, ColumnContainer } from "~/components/shared/styles/row-style";
 
 export const CompleteDailyPlanning = observer(
   (props: {}): JSX.Element => {
@@ -16,27 +17,18 @@ export const CompleteDailyPlanning = observer(
       // }
     };
     return (
-      <Container>
-        <SideContainer>
+      <ColumnContainerParent>
+        <ColumnContainer>
           <HomeKeyActivities todayOnly={true} />
-        </SideContainer>
-        <SideContainer>
+        </ColumnContainer>
+        <ColumnContainer>
           <SurveyBot
             variant={questionnaireVariant}
             endFn={handleChatbotEnd}
             fromDailyPlanning={true}
           />
-        </SideContainer>
-      </Container>
+        </ColumnContainer>
+      </ColumnContainerParent>
     );
   },
 );
-
-const Container = styled.div`
-  display: flex;
-  width: 100%;
-`;
-
-const SideContainer = styled.div`
-  width: 50%;
-`;

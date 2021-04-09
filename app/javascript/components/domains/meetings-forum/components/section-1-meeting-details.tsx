@@ -3,7 +3,11 @@ import { useState } from "react";
 import * as R from "ramda";
 import moment from "moment";
 import { IMeeting } from "~/models/meeting";
-import { MonthContainer, Container as Wrapper, Divider } from "./row-style";
+import {
+  MonthContainer,
+  ForumSectionContainer,
+  Divider,
+} from "~/components/shared/styles/row-style";
 import { observer } from "mobx-react";
 import { IUser } from "~/models/user";
 import { Heading } from "~/components/shared";
@@ -43,35 +47,33 @@ export const Section1MeetingDetails = observer(
     // @TODO Add back stable Date Picker and date functions
     return (
       <Container>
-        <Wrapper>
-          <SectionContainer>
-            <MonthContainer>
-              <Heading type={"h3"} mt={"auto"} mb={"auto"} ml={"8px"}>
-                {moment(meeting.scheduledStartTime).format("MMMM")}
-              </Heading>
-              <form className={classes.container} noValidate>
-                <TextField
-                  id="datetime-local"
-                  type="datetime-local"
-                  value={moment(newScheduledStartTime).format("YYYY-MM-DDTHH:mm")}
-                  className={classes.textField}
-                  onChange={async event => {
-                    setNewScheduledStartTime(event.target.value);
-                    await meetingStore.updateMeeting(
-                      R.merge(meeting, {
-                        scheduledStartTime: moment(event.target.value).format(),
-                      }),
-                    );
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </form>
-            </MonthContainer>
-            <ForumTopic disabled={false} teamMembers={teamMembers} meeting={meeting} />
-          </SectionContainer>
-        </Wrapper>
+        <ForumSectionContainer>
+          <MonthContainer>
+            <Heading type={"h3"} mt={"auto"} mb={"auto"} ml={"8px"}>
+              {moment(meeting.scheduledStartTime).format("MMMM")}
+            </Heading>
+            <form className={classes.container} noValidate>
+              <TextField
+                id="datetime-local"
+                type="datetime-local"
+                value={moment(newScheduledStartTime).format("YYYY-MM-DDTHH:mm")}
+                className={classes.textField}
+                onChange={async event => {
+                  setNewScheduledStartTime(event.target.value);
+                  await meetingStore.updateMeeting(
+                    R.merge(meeting, {
+                      scheduledStartTime: moment(event.target.value).format(),
+                    }),
+                  );
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </form>
+          </MonthContainer>
+          <ForumTopic disabled={false} teamMembers={teamMembers} meeting={meeting} />
+        </ForumSectionContainer>
         <Divider />
       </Container>
     );
@@ -79,9 +81,3 @@ export const Section1MeetingDetails = observer(
 );
 
 const Container = styled.div``;
-
-const SectionContainer = styled(Container)`
-  margin-bottom: 4px;
-  display: flex;
-  width: 100%;
-`;

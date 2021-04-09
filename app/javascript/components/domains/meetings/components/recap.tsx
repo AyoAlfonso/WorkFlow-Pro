@@ -134,6 +134,7 @@ const SingleListContainer = styled.div`
   height: 100%;
   min-width: 525px;
   width: 50%;
+  padding-right: 16px;
 `;
 
 const Container = styled.div`

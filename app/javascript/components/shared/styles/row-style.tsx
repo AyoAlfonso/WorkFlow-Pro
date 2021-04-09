@@ -19,7 +19,7 @@ export const ColumnContainerCenterAligned = styled(ColumnContainer)`
   margin-bottom: auto;
 `;
 
-export const Container = styled.div`
+export const ForumSectionContainer = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -35,6 +35,7 @@ export const Divider = styled.div`
 
 export const ColumnContainerParent = styled.div`
   display: flex;
+  width: 100%;
 `;
 
 const HeaderContainer = styled.div``;

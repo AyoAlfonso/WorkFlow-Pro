@@ -7,6 +7,7 @@ import { MilestoneCard } from "~/components/domains/goals/milestone/milestone-ca
 import { Loading } from "~/components/shared/loading";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { ColumnContainerParent, ColumnContainer } from "~/components/shared/styles/row-style";
 
 export const Milestones = observer(
   (): JSX.Element => {
@@ -34,34 +35,21 @@ export const Milestones = observer(
     };
 
     return (
-      <Container>
-        <SideContainer>
+      <ColumnContainerParent>
+        <ColumnContainer>
           <HomeKeyActivities todayOnly={true} width={"100%"} />
-        </SideContainer>
-        <SideContainer>{renderWeeklyMilestones()}</SideContainer>
-      </Container>
+        </ColumnContainer>
+        <ColumnContainer>{renderWeeklyMilestones()}</ColumnContainer>
+      </ColumnContainerParent>
     );
   },
 );
-
-const Container = styled.div`
-  display: flex;
-  width: 100%;
-`;
 
 const MilestoneContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
 `;
-
-const SideContainer = styled.div`
-  width: 50%;
-`;
-
-// const Container = styled.div`
-//   margin-bottom: 16px;
-// `;
 
 const StyledText = styled.h4`
   font-size: 20px;

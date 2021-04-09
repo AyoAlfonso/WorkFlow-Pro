@@ -21,7 +21,7 @@ import {
   ColumnContainerParent,
   ColumnContainer,
   HeaderText,
-} from "~/components/domains/meetings-forum/components/row-style";
+} from "~/components/shared/styles/row-style";
 import { useTranslation } from "react-i18next";
 
 export const Exploration = observer(

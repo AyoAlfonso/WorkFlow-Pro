@@ -11,7 +11,7 @@ import { Text } from "~/components/shared/text";
 import { Section1MeetingDetails } from "./section-1-meeting-details";
 import { baseTheme } from "~/themes/base";
 import { toJS } from "mobx";
-import { ColumnContainer, Container as SectionContainer } from "./row-style";
+import { ColumnContainer, ForumSectionContainer } from "~/components/shared/styles/row-style";
 import Popup from "reactjs-popup";
 
 interface ISection1ForumMeetingsProps {
@@ -128,14 +128,14 @@ export const Section1ForumMeetings = observer(
               <>{renderYearOptions}</>
             </Popup>
           </YearPlanContainer>
-          <SectionContainer>
+          <ForumSectionContainer>
             <ColumnContainer>
               <SubHeaderText>{t("forum.explorationTopic.whoTitle")}</SubHeaderText>
             </ColumnContainer>
             <ColumnContainer>
               <SubHeaderText>{t("forum.explorationTopic.topicTitle")}</SubHeaderText>
             </ColumnContainer>
-          </SectionContainer>
+          </ForumSectionContainer>
         </SubHeaderContainer>
         {renderCreateMeetingsButton()}
       </Container>
