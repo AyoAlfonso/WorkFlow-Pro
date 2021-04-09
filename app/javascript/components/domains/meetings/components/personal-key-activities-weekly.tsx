@@ -3,16 +3,15 @@ import * as R from "ramda";
 import { useState } from "react";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
-import { KeyActivitiesHeader } from "~/components/domains/key-activities/key-activities-header-no-filter";
 import {
   KeyActivitiesList,
   KeyActivityColumnStyleListContainer,
   KeyActivitiesWrapperContainer,
   KeyActivitiesListContainer,
-  KeyActivityListSubHeaderContainer,
 } from "~/components/domains/key-activities/key-activities-list";
 import { CreateKeyActivityModal } from "../../key-activities/create-key-activity-modal";
 import { CreateKeyActivityButton } from "../../key-activities/create-key-activity-button";
+import { KeyActivitiesSubHeader } from "../../key-activities/key-activities-sub-header";
 
 import { useTranslation } from "react-i18next";
 
@@ -24,17 +23,27 @@ export const PersonalKeyActivitiesWeekly = observer(
       sessionStore: { scheduledGroups },
     } = useMst();
     const { t } = useTranslation();
+    const [weeklyFilterDropdownOpen, setWeeklyFilterDropdownOpen] = useState<boolean>(false);
+    const [backlogFilterDropdownOpen, setBacklogFilterDropdownOpen] = useState<boolean>(false);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
+    const [selectedFilterGroupId, setSelectedFilterGroupId] = useState<number>(null);
     const selectedFilterGroupIdWeekly = sessionStore.getScheduledGroupIdByName("Weekly List");
     const selectedFilterGroupIdBacklog = sessionStore.getScheduledGroupIdByName("Backlog");
 
     return (
       <KeyActivitiesWrapperContainer width={"100%"}>
         <KeyActivityColumnStyleListContainer>
-          <KeyActivitiesHeader title={t("keyActivities.weeklyListTitle")} />
+          <KeyActivitiesSubHeader
+            header={t("keyActivities.weeklyListTitle")}
+            subText={t("keyActivities.weeklyListDescription")}
+            sortFilterOpen={weeklyFilterDropdownOpen}
+            setFilterOpen={setWeeklyFilterDropdownOpen}
+            scheduledGroupId={selectedFilterGroupIdWeekly}
+          />
           <KeyActivitiesListContainer>
             <CreateKeyActivityButton
               onButtonClick={() => {
+                setSelectedFilterGroupId(selectedFilterGroupIdWeekly);
                 setCreateKeyActivityModalOpen(true);
               }}
             />
@@ -47,10 +56,17 @@ export const PersonalKeyActivitiesWeekly = observer(
           </KeyActivitiesListContainer>
         </KeyActivityColumnStyleListContainer>
         <KeyActivityColumnStyleListContainer>
-          <KeyActivitiesHeader title={t("keyActivities.backlogListTitle")} />
+          <KeyActivitiesSubHeader
+            header={t("keyActivities.backlogTitle")}
+            subText={t("keyActivities.backlogDescription")}
+            sortFilterOpen={backlogFilterDropdownOpen}
+            setFilterOpen={setBacklogFilterDropdownOpen}
+            scheduledGroupId={selectedFilterGroupIdBacklog}
+          />
           <KeyActivitiesListContainer>
             <CreateKeyActivityButton
               onButtonClick={() => {
+                setSelectedFilterGroupId(selectedFilterGroupIdBacklog);
                 setCreateKeyActivityModalOpen(true);
               }}
             />
@@ -62,6 +78,11 @@ export const PersonalKeyActivitiesWeekly = observer(
             />
           </KeyActivitiesListContainer>
         </KeyActivityColumnStyleListContainer>
+        <CreateKeyActivityModal
+          createKeyActivityModalOpen={createKeyActivityModalOpen}
+          setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+          defaultSelectedGroupId={selectedFilterGroupId}
+        />
       </KeyActivitiesWrapperContainer>
     );
   },

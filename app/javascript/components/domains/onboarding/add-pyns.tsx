@@ -16,7 +16,7 @@ interface IAddPyns {
 
 export const AddPyns = observer(
   ({ formData }: IAddPyns): JSX.Element => {
-    const { keyActivityStore } = useMst();
+    const { keyActivityStore, sessionStore } = useMst();
 
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
@@ -43,7 +43,7 @@ export const AddPyns = observer(
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
-          defaultTypeAsWeekly={true}
+          defaultSelectedGroupId={sessionStore.getScheduledGroupIdByName("Weekly List")}
           onboardingCompanyId={formData.id}
         />
       </Container>

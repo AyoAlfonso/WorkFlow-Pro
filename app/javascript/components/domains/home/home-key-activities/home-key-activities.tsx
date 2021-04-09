@@ -9,15 +9,14 @@ import { InitialsGenerator } from "~/components/shared/issues-and-key-activities
 import { baseTheme } from "~/themes";
 import { CreateKeyActivityModal } from "../../key-activities/create-key-activity-modal";
 import { CreateKeyActivityButton } from "../../key-activities/create-key-activity-button";
-import { KeyActivitiesHeader } from "~/components/domains/key-activities/key-activities-header-no-filter";
 import {
   KeyActivitiesList,
   KeyActivityColumnStyleListContainer,
   KeyActivitiesWrapperContainer,
-  KeyActivityListSubHeaderContainer,
   KeyActivitiesListContainer,
 } from "../../key-activities/key-activities-list";
 import { FilterDropdown } from "../../key-activities/filter-dropdown";
+import { KeyActivitiesSubHeader } from "../../key-activities/key-activities-sub-header";
 import * as R from "ramda";
 import { StyledIcon } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
 import { useTranslation } from "react-i18next";
@@ -71,7 +70,7 @@ export const HomeKeyActivities = observer(
             .add(1, "days")
             .format("MMMM D");
         case "Backlog":
-          return t("keyActivities.backlogListDescription");
+          return t("keyActivities.backlogDescription");
       }
     };
 
@@ -123,27 +122,13 @@ export const HomeKeyActivities = observer(
       scheduledGroupId?: number,
     ): JSX.Element => {
       return (
-        <>
-          <HeaderRowContainer>
-            <KeyActivitiesHeader
-              title={header == "Backlog" ? t("keyActivities.backlogListTitle") : header}
-            />
-          </HeaderRowContainer>
-          <HeaderRowContainer>
-            <KeyActivityListSubHeaderContainer>{subText}</KeyActivityListSubHeaderContainer>
-            {!R.isNil(scheduledGroupId) && (
-              <SortContainer onClick={() => setFilterOpen(!sortFilterOpen)}>
-                <Icon icon={"Sort"} size={12} iconColor="grey100" />
-                {sortFilterOpen && (
-                  <FilterDropdown
-                    setFilterOpen={setFilterOpen}
-                    scheduledGroupId={scheduledGroupId}
-                  />
-                )}
-              </SortContainer>
-            )}
-          </HeaderRowContainer>
-        </>
+        <KeyActivitiesSubHeader
+          header={header}
+          subText={subText}
+          sortFilterOpen={sortFilterOpen}
+          setFilterOpen={setFilterOpen}
+          scheduledGroupId={scheduledGroupId}
+        />
       );
     };
 
@@ -245,7 +230,6 @@ export const HomeKeyActivities = observer(
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
-          defaultTypeAsWeekly={true}
           todayModalClicked={true}
           todayFilterGroupId={selectedFilterGroupIdToday}
         />
@@ -305,7 +289,6 @@ export const HomeKeyActivities = observer(
           todayModalClicked={todayModalClicked}
           defaultSelectedGroupId={selectedFilterGroupId}
           defaultSelectedTeamId={selectedFilterTeamId}
-          defaultTypeAsWeekly={true}
           todayFilterGroupId={selectedFilterGroupIdToday}
         />
       </KeyActivitiesWrapperContainer>

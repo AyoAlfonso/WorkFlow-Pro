@@ -378,7 +378,7 @@ export const HeaderBar = observer(
           <CreateKeyActivityModal
             createKeyActivityModalOpen={createKeyActivityModalOpen}
             setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
-            defaultTypeAsWeekly={true}
+            defaultSelectedGroupId={sessionStore.getScheduledGroupIdByName("Weekly List")}
           />
           {inviteUserModalOpen && (
             <InviteUserModal

@@ -276,7 +276,7 @@ export const IssueEntry = observer(
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
-          defaultTypeAsWeekly={true}
+          defaultSelectedGroupId={sessionStore.getScheduledGroupIdByName("Weekly List")}
         />
       </Container>
     );

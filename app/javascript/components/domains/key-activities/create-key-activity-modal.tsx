@@ -23,7 +23,6 @@ interface ICreateKeyActivityModalProps {
   createKeyActivityModalOpen: boolean;
   setCreateKeyActivityModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   meetingId?: string | number;
-  defaultTypeAsWeekly: boolean;
   todayModalClicked?: boolean;
   defaultSelectedGroupId?: number;
   defaultSelectedTeamId?: number;
@@ -33,15 +32,9 @@ interface ICreateKeyActivityModalProps {
 
 export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX.Element => {
   const { keyActivityStore, sessionStore, userStore } = useMst();
-  const {
-    createKeyActivityModalOpen,
-    setCreateKeyActivityModalOpen,
-    meetingId,
-    defaultTypeAsWeekly,
-  } = props;
+  const { createKeyActivityModalOpen, setCreateKeyActivityModalOpen, meetingId } = props;
   const [keyActivityDescription, setKeyActivityDescription] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<number>(0);
-  const [weeklyList, setWeeklyList] = useState<boolean>(defaultTypeAsWeekly);
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [selectedDueDate, setSelectedDueDate] = useState<Date>(null);
@@ -178,7 +171,6 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                 .createKeyActivity({
                   description: keyActivityDescription,
                   priority: selectedPriority,
-                  weeklyList: weeklyList,
                   userId: selectedUser.id,
                   meetingId: meetingId,
                   dueDate: selectedDueDate,
@@ -194,7 +186,6 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                     setSelectedDueDate(null);
                     setCreateKeyActivityModalOpen(false);
                     setSelectedPriority(0);
-                    setWeeklyList(defaultTypeAsWeekly);
                     setSelectedLabel(null);
                     setSelectedTeamId(null);
                     setPersonal(false);

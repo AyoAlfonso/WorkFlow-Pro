@@ -28,6 +28,7 @@ export const TeamKeyActivitiesBody = observer(
     const {
       meetingStore,
       keyActivityStore,
+      sessionStore,
       sessionStore: { scheduledGroups },
     } = useMst();
     const { t } = useTranslation();
@@ -67,7 +68,7 @@ export const TeamKeyActivitiesBody = observer(
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
           todayModalClicked={true}
-          defaultTypeAsWeekly={false}
+          defaultSelectedGroupId={sessionStore.getScheduledGroupIdByName("Today")}
           todayFilterGroupId={todayFilterGroupId}
         />
       </>
@@ -147,7 +148,7 @@ const KeyActivitiesListStyleContainer = styled.div`
 //           createKeyActivityModalOpen={createKeyActivityModalOpen}
 //           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
 //           meetingId={meetingStore.currentMeeting.id}
-//           defaultTypeAsWeekly={true}
+//           defaultSelectedGroupId={sessionStore.getScheduledGroupIdByName("Weekly List")}
 //         />
 //         <AddNewKeyActivityContainer onClick={() => setCreateKeyActivityModalOpen(true)}>
 //           <AddNewKeyActivityPlus>

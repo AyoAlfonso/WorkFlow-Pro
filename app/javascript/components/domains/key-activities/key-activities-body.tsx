@@ -20,7 +20,7 @@ interface IKeyActivitiesBodyProps {
 
 export const KeyActivitiesBody = observer(
   (props: IKeyActivitiesBodyProps): JSX.Element => {
-    const { keyActivityStore } = useMst();
+    const { keyActivityStore, sessionStore } = useMst();
     const { t } = useTranslation();
     const { showAllKeyActivities, borderLeft } = props;
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
@@ -129,7 +129,7 @@ export const KeyActivitiesBody = observer(
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
-          defaultTypeAsWeekly={!showAllKeyActivities}
+          defaultSelectedGroupId={sessionStore.getScheduledGroupIdByName("Weekly List")}
         />
         <AddNewKeyActivityContainer onClick={() => setCreateKeyActivityModalOpen(true)}>
           <AddNewKeyActivityPlus>

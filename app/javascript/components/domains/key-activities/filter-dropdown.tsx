@@ -65,6 +65,7 @@ export const FilterDropdown = ({
 };
 
 const Container = styled.div`
+  margin-left: -238px;
   width: 250px;
   padding-top: 8px;
   padding-bottom: 8px;
