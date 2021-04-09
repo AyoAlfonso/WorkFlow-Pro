@@ -7,7 +7,7 @@ import { TeamPulseContainer } from "../shared/team-pulse-container";
 import { Loading } from "~/components/shared/loading";
 import { StatCard } from "~/components/shared/stat-card";
 import { PersonalHabitSummary } from "~/components/domains/meetings/shared/personal-habit-summary";
-import { Card } from "~/components/shared/card";
+import { ColumnContainerParent, ColumnContainer } from "~/components/shared/styles/row-style";
 
 import { useMst } from "~/setup/root";
 
@@ -21,31 +21,29 @@ export const WeeklyReflection = (props: {}): JSX.Element => {
   }
 
   return (
-    <Container>
-      <RowContainer>
-        {(meeting.statsForWeek || []).map((statObj, index) => (
-          <StatCard key={index} {...statObj} />
-        ))}
-      </RowContainer>
-      <RowContainer>
-        <Card width={"67%"} alignment={"left"} my={"5px"} minWidth={"670px"}>
-          <TeamPulseContainer meeting={meeting} title={"Your Mood"} />
-        </Card>
-        <PersonalHabitsContainer>
+    <ColumnContainerParent minWidth={"650px"}>
+      <ColumnContainer minWidth={"325px"}>
+        <RowContainer>
+          {(meeting.statsForWeek || []).map((statObj, index) => (
+            <StatCard key={index} {...statObj} periodDesc={"week"} />
+          ))}
+        </RowContainer>
+        <RowContainer>
           <PersonalHabitSummary meeting={meeting} />
-        </PersonalHabitsContainer>
-      </RowContainer>
-      <RowContainer>
-        <Questionnaire variant={QuestionnaireTypeConstants.weeklyReflection} />
-        <Placeholder />
-      </RowContainer>
-    </Container>
+        </RowContainer>
+        <RowContainer>
+          <TeamPulseContainer meeting={meeting} title={"Your Mood"} />
+        </RowContainer>
+      </ColumnContainer>
+      <ColumnContainer minWidth={"325px"}>
+        <Questionnaire
+          variant={QuestionnaireTypeConstants.weeklyReflection}
+          fromDailyPlanning={true}
+        />
+      </ColumnContainer>
+    </ColumnContainerParent>
   );
 };
-
-const Container = styled.div`
-  margin-top: -5px;
-`;
 
 const RowContainer = styled.div`
   display: flex;
@@ -54,12 +52,4 @@ const RowContainer = styled.div`
   margin-bottom: 10px;
   width: 100%;
   gap: 20px;
-`;
-
-const PersonalHabitsContainer = styled.div`
-  width: 33%;
-`;
-
-const Placeholder = styled.div`
-  width: 33%;
 `;

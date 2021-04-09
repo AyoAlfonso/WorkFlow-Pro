@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 export interface IQuestionnaireProps {
   variant: string;
   endFn?: Dispatch<SetStateAction<string>>;
+  fromDailyPlanning?: boolean;
 }
 
 export const Questionnaire = observer(
@@ -136,9 +137,14 @@ export const Questionnaire = observer(
           }
           steps={steps}
           width={"100%"}
-          contentStyle={{ height: "400px" }}
+          contentStyle={{
+            height: props.fromDailyPlanning ? window.innerHeight - 250 : window.innerHeight - 120,
+          }}
           // header and footer are 120px total
-          style={{ height: "520px" }}
+          // these hard-coded values are required to make the chatbot fit inside the Journal widget :(
+          style={{
+            height: props.fromDailyPlanning ? window.innerHeight - 130 : window.innerHeight,
+          }}
           enableSmoothScroll={true}
           userDelay={200}
           handleEnd={async ({ renderedSteps, steps, values: answers }) => {
@@ -181,8 +187,7 @@ const HeaderDiv = styled.div`
 `;
 
 const Container = styled.div`
-  width: 67%;
-  min-width: 670px;
+  min-width: 325px;
 `;
 
 export const SurveyHeader = ({ title }) => {

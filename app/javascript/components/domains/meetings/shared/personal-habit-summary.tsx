@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useEffect } from "react";
 import styled from "styled-components";
-import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 import { Text } from "~/components/shared/text";
 import { PercentChange } from "~/components/shared/percent-change";
 import { ContainerHeaderWithText } from "~/components/shared/styles/container-header";
@@ -19,10 +18,7 @@ export const PersonalHabitSummary = observer(
     const { meeting } = props;
     const { t } = useTranslation();
 
-    const { 
-      habitStore,
-      companyStore,
-    } = useMst();
+    const { habitStore, companyStore } = useMst();
 
     useEffect(() => {
       habitStore.fetchHabitsForPersonalPlanning();
@@ -36,28 +32,26 @@ export const PersonalHabitSummary = observer(
           <HabitsSummary />
         </HabitsContainer>
         {companyStore.company.displayFormat === "Company" ? (
-          <PercentageChangeContainer>
-            <PercentChange percentChange={habitStore.weeklyDifferenceForPersonalMeeting} />
-          </PercentageChangeContainer>
+          <PercentChange
+            percentChange={habitStore.weeklyDifferenceForPersonalMeeting}
+            periodDesc="week"
+          />
         ) : (
-          <PercentageChangeContainer>
-            <PercentChange percentChange={habitStore.monthlyDifferenceForPersonalMeeting} />
-          </PercentageChangeContainer>
+          <PercentChange
+            percentChange={habitStore.monthlyDifferenceForPersonalMeeting}
+            periodDesc="month"
+          />
         )}
       </Container>
     );
   },
 );
 
-const Container = styled(HomeContainerBorders)`
+const Container = styled.div`
   min-width: 325px;
   width: 100%;
 `;
 
 const HabitsContainer = styled.div`
   max-height: 500px;
-`;
-
-const PercentageChangeContainer = styled.div`
-  border-top: 1px solid ${props => props.theme.colors.borderGrey};
 `;

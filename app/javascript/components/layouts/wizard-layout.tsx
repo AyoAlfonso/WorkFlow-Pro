@@ -180,6 +180,7 @@ const BodyContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  overflow-x: auto;
 `;
 
 const BodyContentContainer = styled.div`

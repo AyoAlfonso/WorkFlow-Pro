@@ -9,43 +9,41 @@ import { useMst } from "~/setup/root";
 export interface IPercentChangeProps {
   percentChange: number;
   showLineIfZeroOrLess?: boolean;
+  periodDesc: string;
 }
 
-export const PercentChange = observer(({
-  percentChange,
-  showLineIfZeroOrLess,
-}: IPercentChangeProps): JSX.Element => {
-  const { companyStore } = useMst();
+export const PercentChange = observer(
+  ({ percentChange, showLineIfZeroOrLess, periodDesc }: IPercentChangeProps): JSX.Element => {
+    const { companyStore } = useMst();
 
-  useEffect(() => {
-    companyStore.load()
-  },[]);
+    useEffect(() => {
+      companyStore.load();
+    }, []);
 
-  const selectColor = percentChange => {
-    if (percentChange >= 0) {
-      return baseTheme.colors.successGreen;
-    } else if (percentChange < -20) {
-      return baseTheme.colors.warningRed;
-    } else {
-      return baseTheme.colors.cautionYellow;
-    }
-  };
-  return (
-    <PercentageChangeContainer>
-      {showLineIfZeroOrLess ? (
-        <DisabledLine>--</DisabledLine>
-      ) : (
-        <PercentageChangeText color={selectColor(percentChange)}>
-          {percentChange >= 0 ? "+" : ""}
-          {Math.round(percentChange)}%
-        </PercentageChangeText>
-      )}
-      <ComparedToLastWeekText>
-        Compared to last {companyStore.company.displayFormat === "Company" ? "week" : "month"}
-      </ComparedToLastWeekText>
-    </PercentageChangeContainer>
-  );
-});
+    const selectColor = percentChange => {
+      if (percentChange >= 0) {
+        return baseTheme.colors.successGreen;
+      } else if (percentChange < -20) {
+        return baseTheme.colors.warningRed;
+      } else {
+        return baseTheme.colors.cautionYellow;
+      }
+    };
+    return (
+      <PercentageChangeContainer>
+        {showLineIfZeroOrLess ? (
+          <DisabledLine>--</DisabledLine>
+        ) : (
+          <PercentageChangeText color={selectColor(percentChange)}>
+            {percentChange >= 0 ? "+" : ""}
+            {Math.round(percentChange)}%
+          </PercentageChangeText>
+        )}
+        <ComparedToLastWeekText>{periodDesc}</ComparedToLastWeekText>
+      </PercentageChangeContainer>
+    );
+  },
+);
 
 const PercentageChangeContainer = styled.div`
   display: flex;

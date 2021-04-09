@@ -1,6 +1,5 @@
 import * as React from "react";
 import styled from "styled-components";
-import { HomeContainerBorders } from "~/components/domains/home/shared-components";
 import { Text } from "~/components/shared/text";
 import { PercentChange } from "./percent-change";
 import { HeaderText, HeaderContainerNoBorder } from "~/components/shared/styles/container-header";
@@ -9,12 +8,14 @@ export interface IPercentChangeProps {
   statisticName: string;
   statisticNumber: number;
   statisticChange: number;
+  periodDesc?: string;
 }
 
 export const StatCard = ({
   statisticName,
   statisticNumber,
   statisticChange,
+  periodDesc,
 }: IPercentChangeProps): JSX.Element => {
   return (
     <Container>
@@ -23,14 +24,18 @@ export const StatCard = ({
       </HeaderContainerNoBorder>
 
       <RatingText fontSize={3}>{statisticNumber}</RatingText>
-      <PercentChange percentChange={statisticChange} showLineIfZeroOrLess={statisticNumber == 0} />
+      <PercentChange
+        percentChange={statisticChange}
+        showLineIfZeroOrLess={statisticNumber == 0}
+        periodDesc={periodDesc || ""}
+      />
     </Container>
   );
 };
 
-const Container = styled(HomeContainerBorders)`
+const Container = styled.div`
   padding: 5px;
-  min-width: 315px;
+  min-width: 60px;
   width: 33.33%;
 `;
 

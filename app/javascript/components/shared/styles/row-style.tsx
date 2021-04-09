@@ -8,11 +8,17 @@ export const MonthContainer = styled.div`
   margin-bottom: auto;
 `;
 
-export const ColumnContainer = styled.div`
+type ColumnContainerType = {
+  minWidth?: string;
+};
+
+export const ColumnContainer = styled.div<ColumnContainerType>`
   width: 50%;
-  min-width: 240px;
+  min-width: ${props => props.minWidth || "240px"};
   margin-right: 16px;
 `;
+
+export const ColumnContainerWithFixedImages = styled.div;
 
 export const ColumnContainerCenterAligned = styled(ColumnContainer)`
   margin-top: auto;
@@ -33,8 +39,9 @@ export const Divider = styled.div`
   background-color: lightgrey;
 `;
 
-export const ColumnContainerParent = styled.div`
+export const ColumnContainerParent = styled.div<ColumnContainerType>`
   display: flex;
+  min-width: ${props => props.minWidth || "480px"};
   width: 100%;
 `;
 

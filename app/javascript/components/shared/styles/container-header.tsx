@@ -5,9 +5,9 @@ export interface IContainerHeaderProps {
   text: string;
 }
 export const ContainerHeaderWithText = ({ text }: IContainerHeaderProps): JSX.Element => (
-  <HeaderContainer>
+  <HeaderContainerNoBorder>
     <HeaderText> {text} </HeaderText>
-  </HeaderContainer>
+  </HeaderContainerNoBorder>
 );
 
 export const HeaderContainer = styled.div`
@@ -48,6 +48,6 @@ export const AccordionHeaderText = styled.h4<AccordionHeaderTextType>`
   line-height: 20px;
   font-size: 16px;
   font-weight: 600;
-  color: ${props => 
+  color: ${props =>
     props.expanded === props.accordionPanel ? props.theme.colors.black : props.theme.colors.grey60};
 `;

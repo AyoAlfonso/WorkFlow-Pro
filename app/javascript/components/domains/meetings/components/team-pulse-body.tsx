@@ -14,18 +14,17 @@ interface ITeamPulseBodyProps {
 export const TeamPulseBody = ({ meeting }: ITeamPulseBodyProps): JSX.Element => {
   const { companyStore } = useMst();
 
-  let teamEmotions;
-  let userEmotions;
-  let percentageDifference;
-
+  let teamEmotions, userEmotions, percentageDifference, periodDesc;
   if (companyStore.company.displayFormat === "Company") {
     teamEmotions = meeting.currentWeekAverageTeamEmotions;
     userEmotions = meeting.formattedAverageWeeklyUserEmotions;
     percentageDifference = meeting.emotionScorePercentageDifference;
+    periodDesc = "week";
   } else {
     teamEmotions = meeting.currentMonthAverageTeamEmotions;
     userEmotions = meeting.formattedAverageMonthlyUserEmotions;
     percentageDifference = meeting.emotionScorePercentageDifferenceMonthly;
+    periodDesc = "month";
   }
 
   return (
@@ -37,7 +36,7 @@ export const TeamPulseBody = ({ meeting }: ITeamPulseBodyProps): JSX.Element => 
             <TeamPulseCard data={toJS(userEmotions || [])} />
           </TeamPulseWrapper>
           <PercentChangeContainer>
-            <PercentChange percentChange={percentageDifference} />
+            <PercentChange percentChange={percentageDifference} periodDesc={periodDesc} />
           </PercentChangeContainer>
         </BodyContainer>
       ) : (

@@ -8,7 +8,7 @@ export const HabitsTable = styled.table`
   border-collapse: collapse;
   display: block;
   overflow-y: auto;
-  height: 320px;
+  min-height: 120px;
   padding-left: 8px;
   padding-right: 8px;
 }
