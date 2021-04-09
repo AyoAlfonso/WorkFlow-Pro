@@ -16,6 +16,7 @@ interface IAnnualInitiativeCardExpandedProps {
   setQuarterlyGoalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedAnnualInitiativeDescription: React.Dispatch<React.SetStateAction<string>>;
   showCreateQuarterlyGoal: boolean;
+  showEditButton?: boolean;
 }
 
 export const AnnualInitiativeCardExpanded = observer(
@@ -27,6 +28,7 @@ export const AnnualInitiativeCardExpanded = observer(
       setQuarterlyGoalModalOpen,
       setSelectedAnnualInitiativeDescription,
       showCreateQuarterlyGoal,
+      showEditButton,
     } = props;
 
     const { quarterlyGoalStore, companyStore } = useMst();
@@ -55,7 +57,8 @@ export const AnnualInitiativeCardExpanded = observer(
           annualInitiative.fiscalYear == companyStore.company.currentFiscalYear &&
           companyStore.company.currentFiscalQuarter == 4 &&
           companyStore.company.quarterForCreatingQuarterlyGoals == 1
-        )
+        ) &&
+        showEditButton
       ) {
         return (
           <CreateGoalContainer>

@@ -115,8 +115,6 @@ export const HomeGoals = observer(
       <Container>
         <CompanyInitiativesContainer>
           <TitleContainer
-            showMinimizedCards={showCompanyMinimizedCards}
-            setShowMinimizedCards={setShowCompanyMinimizedCards}
             goalsFilter={companyGoalsFilter}
             setGoalsFilter={setCompanyGoalsFilter}
             largeHomeTitle={true}
@@ -136,8 +134,6 @@ export const HomeGoals = observer(
 
         <PersonalVisionContainer>
           <TitleContainer
-            showMinimizedCards={showPersonalMinimizedCards}
-            setShowMinimizedCards={setShowPersonalMinimizedCards}
             goalsFilter={personalGoalsFilter}
             setGoalsFilter={setPersonalGoalsFilter}
             largeHomeTitle={true}

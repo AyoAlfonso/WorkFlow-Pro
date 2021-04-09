@@ -9,11 +9,10 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import { baseTheme } from "~/themes";
-import { withStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import { Text } from "~/components/shared/text";
+import { useMst } from "~/setup/root";
 interface ITitleContainerProps {
-  showMinimizedCards: boolean;
-  setShowMinimizedCards: React.Dispatch<React.SetStateAction<boolean>>;
   goalsFilter: string;
   setGoalsFilter: React.Dispatch<React.SetStateAction<string>>;
   largeHomeTitle?: boolean;
@@ -47,8 +46,6 @@ const StyledLabel = withStyles({
 
 export const TitleContainer = observer(
   ({
-    showMinimizedCards,
-    setShowMinimizedCards,
     goalsFilter,
     setGoalsFilter,
     largeHomeTitle,
@@ -58,17 +55,7 @@ export const TitleContainer = observer(
     showInitiatives,
     setShowInitiatives,
   }: ITitleContainerProps): JSX.Element => {
-    const renderExpandAnnualInitiativesIcon = (): JSX.Element => {
-      return showMinimizedCards ? (
-        <IconContainer>
-          <Icon icon={"Chevron-Down"} size={"15px"} iconColor={"primary100"} />
-        </IconContainer>
-      ) : (
-        <IconContainer marginTop={"3px"}>
-          <Icon icon={"Chevron-Up"} size={"15px"} iconColor={"white"} />
-        </IconContainer>
-      );
-    };
+    const { sessionStore } = useMst();
 
     const renderFilterOptions = () => {
       return (
@@ -88,7 +75,7 @@ export const TitleContainer = observer(
                 onClick={() => setGoalsFilter("me")}
                 color={goalsFilter == "me" ? "primary100" : "grey40"}
               >
-                Me
+                {sessionStore.profile.firstName}
               </FilterOptions>
             </FilterOptionContainer>
           )}
@@ -143,13 +130,6 @@ export const TitleContainer = observer(
               />
             </FormGroup>
           </ToggleContainer>
-
-          {/* <ExpandAnnualInitiativesButton
-            showMinimizedCards={showMinimizedCards}
-            onClick={() => setShowMinimizedCards(!showMinimizedCards)}
-          >
-            {renderExpandAnnualInitiativesIcon()}
-          </ExpandAnnualInitiativesButton> */}
         </HomeTitleContainer>
 
         {renderFilterOptions()}
@@ -233,6 +213,9 @@ const ToggleContainer = styled.div`
 
 const HideButtonContainer = styled.div`
   display: flex;
+  &: hover {
+    cursor: pointer;
+  }
 `;
 
 const HideText = styled(Text)`

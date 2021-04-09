@@ -20,6 +20,7 @@ interface IAnnualInitiativeCardProps {
   setSelectedAnnualInitiativeDescription?: React.Dispatch<React.SetStateAction<string>>;
   showCreateQuarterlyGoal: boolean;
   onboarding?: boolean;
+  showEditButton?: boolean;
 }
 
 export const AnnualInitiativeCard = ({
@@ -34,6 +35,7 @@ export const AnnualInitiativeCard = ({
   setSelectedAnnualInitiativeDescription,
   showCreateQuarterlyGoal,
   onboarding,
+  showEditButton = true,
 }: IAnnualInitiativeCardProps): JSX.Element => {
   const [showMinimizedCard, setShowMinimizedCard] = useState<boolean>(showMinimizedCards);
 
@@ -42,8 +44,6 @@ export const AnnualInitiativeCard = ({
   useEffect(() => {
     setShowMinimizedCard(showMinimizedCards);
   }, [showMinimizedCards]);
-
-  console.log("ai id", annualInitiative.id);
 
   const goalYearString = onboarding
     ? `${companyStore.onboardingCompany.currentFiscalYear}`
@@ -106,6 +106,7 @@ export const AnnualInitiativeCard = ({
           setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
           setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
           showCreateQuarterlyGoal={showCreateQuarterlyGoal}
+          showEditButton={showEditButton}
         />
       )}
     </Container>
