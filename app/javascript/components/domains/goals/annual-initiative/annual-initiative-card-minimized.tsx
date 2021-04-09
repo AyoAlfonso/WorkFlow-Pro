@@ -20,10 +20,14 @@ export const AnnualInitiativeCardMinimized = ({
   const renderStatusSquares = () => {
     return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
       const { warningRed, cautionYellow, finePine, grey40 } = baseTheme.colors;
-
-      const currentMilestone = quarterlyGoal.milestones.find(milestone =>
-        moment(milestone.weekOf).isSame(moment(), "week"),
-      );
+      let currentMilestone;
+      if (quarterlyGoal.milestones.length == 13) {
+        currentMilestone = quarterlyGoal.milestones[12];
+      } else {
+        currentMilestone = quarterlyGoal.milestones.find(milestone =>
+          moment(milestone.weekOf).isSame(moment(), "week"),
+        );
+      }
 
       let backgroundColor = grey40;
 

@@ -11,15 +11,21 @@ export const GoalModel = types
   })
   .extend(withRootStore())
   .views(self => ({
+    get activeAnnualInitiatives() {
+      const { companyStore } = getRoot(self);
+      const currentFiscalYear = companyStore.company.currentFiscalYear;
+      return self.goals.filter(annualInitiative => annualInitiative.fiscalYear >= currentFiscalYear)
+    },
     get closedAnnualInitiatives(){
       const { companyStore } = getRoot(self);
       const currentFiscalYear = companyStore.company.currentFiscalYear;
       return self.goals.filter(annualInitiative => annualInitiative.fiscalYear < currentFiscalYear)
     },
     get myAnnualInitiatives(){
-      const { sessionStore } = getRoot(self);
+      const { sessionStore, companyStore } = getRoot(self);
       const userId = sessionStore.profile.id;
-      return self.goals.filter(annualInitiative => annualInitiative.ownedById == userId)
+      const currentFiscalYear = companyStore.company.currentFiscalYear;
+      return self.goals.filter(annualInitiative => annualInitiative.ownedById == userId && annualInitiative.fiscalYear >= currentFiscalYear)
     },
     get onlyShowMyQuarterlyGoals() {
       let goals = self.goals;

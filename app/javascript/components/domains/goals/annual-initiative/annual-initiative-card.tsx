@@ -7,6 +7,7 @@ import { AnnualInitiativeCardExpanded } from "./annual-initiative-card-expanded"
 import { useState, useEffect } from "react";
 import { RecordOptions } from "../shared/record-options";
 import { useMst } from "~/setup/root";
+import { baseTheme } from "~/themes";
 
 interface IAnnualInitiativeCardProps {
   annualInitiative: any;
@@ -60,8 +61,12 @@ export const AnnualInitiativeCard = ({
       companyStore.company.currentFiscalYear != annualInitiative.fiscalYear &&
       annualInitiative.fiscalYear
     ) {
+      let containerColor =
+        companyStore.company.currentFiscalYear > annualInitiative.fiscalYear
+          ? baseTheme.colors.grey100
+          : baseTheme.colors.primary100;
       return (
-        <YearContainer>
+        <YearContainer color={containerColor}>
           <YearText> {goalYearString} Goal </YearText>
         </YearContainer>
       );
@@ -163,8 +168,12 @@ const IconContainer = styled.div`
   display: flex;
 `;
 
-const YearContainer = styled.div`
-  background-color: ${props => props.theme.colors.primary100};
+type YearContainerProps = {
+  color: string;
+};
+
+const YearContainer = styled.div<YearContainerProps>`
+  background-color: ${props => props.color || props.theme.colors.primary100};
   border-radius: 5px;
   padding-left: 8px;
   padding-right: 8px;

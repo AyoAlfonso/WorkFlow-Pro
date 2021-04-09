@@ -25,8 +25,6 @@ export const HomeGoals = observer(
     const [annualInitiativeDescription, setSelectedAnnualInitiativeDescription] = useState<string>(
       "",
     );
-    const [showCompanyMinimizedCards, setShowCompanyMinimizedCards] = useState<boolean>(true);
-    const [showPersonalMinimizedCards, setShowPersonalMinimizedCards] = useState<boolean>(true);
     const [companyGoalsFilter, setCompanyGoalsFilter] = useState<string>("all");
     const [personalGoalsFilter, setPersonalGoalsFilter] = useState<string>("all");
 
@@ -90,8 +88,6 @@ export const HomeGoals = observer(
     };
 
     const renderAnnualInitiatives = (annualInitiatives, type): JSX.Element => {
-      const showMinimizedCards =
-        type == "company" ? showCompanyMinimizedCards : showPersonalMinimizedCards;
       return annualInitiatives.map((annualInitiative, index) => {
         return (
           <AnnualInitiativeCard
@@ -99,7 +95,7 @@ export const HomeGoals = observer(
             index={index}
             annualInitiative={annualInitiative}
             totalNumberOfAnnualInitiatives={annualInitiatives.length}
-            showMinimizedCards={showMinimizedCards}
+            showMinimizedCards={true}
             setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
             setAnnualInitiativeId={setAnnualInitiativeId}
             setQuarterlyGoalId={setQuarterlyGoalId}

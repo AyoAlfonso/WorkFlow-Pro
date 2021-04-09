@@ -35,8 +35,6 @@ export const GoalsIndex = observer(
       boolean
     >(false);
 
-    const [showCompanyMinimizedCards, setShowCompanyMinimizedCards] = useState<boolean>(true);
-    const [showPersonalMinimizedCards, setShowPersonalMinimizedCards] = useState<boolean>(true);
     const [companyGoalsFilter, setCompanyGoalsFilter] = useState<string>("all");
     const [personalGoalsFilter, setPersonalGoalsFilter] = useState<string>("all");
 
@@ -86,7 +84,7 @@ export const GoalsIndex = observer(
     const companyGoalsToShow = () => {
       switch (companyGoalsFilter) {
         case "all":
-          return companyGoals.goals;
+          return companyGoals.activeAnnualInitiatives;
         case "me":
           return companyGoals.myAnnualInitiatives;
         case "closed":
@@ -99,7 +97,7 @@ export const GoalsIndex = observer(
     const personalGoalsToShow = () => {
       switch (personalGoalsFilter) {
         case "all":
-          return personalGoals.goals;
+          return personalGoals.activeAnnualInitiatives;
         case "closed":
           return personalGoals.closedAnnualInitiatives;
         default:
@@ -139,8 +137,6 @@ export const GoalsIndex = observer(
     };
 
     const renderAnnualInitiatives = (annualInitiatives, type): JSX.Element => {
-      const showMinimizedCards =
-        type == "company" ? showCompanyMinimizedCards : showPersonalMinimizedCards;
       const showEditButton = type == "company" ? companyPlanning : personalPlanning;
       return annualInitiatives.map((annualInitiative, index) => {
         return (
@@ -149,7 +145,7 @@ export const GoalsIndex = observer(
             index={index}
             annualInitiative={annualInitiative}
             totalNumberOfAnnualInitiatives={annualInitiatives.length}
-            showMinimizedCards={showMinimizedCards}
+            showMinimizedCards={true}
             setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
             setAnnualInitiativeId={setAnnualInitiativeId}
             setQuarterlyGoalId={setQuarterlyGoalId}
