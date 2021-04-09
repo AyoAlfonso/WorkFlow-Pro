@@ -29,10 +29,13 @@ export const AccountDropdownOptions = observer(
     setShowCompanyOptions,
     setInviteTeamModalOpen,
   }: IAccountDropdownOptionsProps): JSX.Element => {
-    const [showCompanyCreationSelector, setShowCompanyCreationSelector] = useState<boolean>(false);
-
     const { sessionStore, companyStore, meetingStore, userStore, teamStore } = useMst();
     const { onboardingCompany } = companyStore;
+
+    const [showCompanyCreationSelector, setShowCompanyCreationSelector] = useState<boolean>(false);
+    const [selectedUserStatus, setSelectedUserStatus] = useState<string>(
+      R.path(["profile", "currentDailyLog", "workStatus"], sessionStore),
+    );
 
     const history = useHistory();
     const location = useLocation();
@@ -89,6 +92,46 @@ export const AccountDropdownOptions = observer(
           </SwitchAccountContainer>
         );
       });
+    };
+
+    const renderUserStatus = (): JSX.Element => {
+      switch (selectedUserStatus) {
+        case "active":
+          return (
+            <StatusContainer>
+              <StatusColorBlock color={baseTheme.colors.finePine} />
+              <StatusText type={"small"}> Active </StatusText>
+            </StatusContainer>
+          );
+        case "work_from_home":
+          return (
+            <StatusContainer>
+              <StatusColorBlock color={baseTheme.colors.fadedPurple} />
+              <StatusText type={"small"}> WFH </StatusText>
+            </StatusContainer>
+          );
+        case "half_day":
+          return (
+            <StatusContainer>
+              <StatusColorBlock color={baseTheme.colors.cautionYellow} />
+              <StatusText type={"small"}> Half Day </StatusText>
+            </StatusContainer>
+          );
+        case "day_off":
+          return (
+            <StatusContainer>
+              <StatusColorBlock color={baseTheme.colors.warningRed} />
+              <StatusText type={"small"}> Day off </StatusText>
+            </StatusContainer>
+          );
+        default:
+          return (
+            <StatusContainer>
+              <StatusColorBlock color={baseTheme.colors.greyInactive} />
+              <StatusText type={"small"}> Inactive </StatusText>
+            </StatusContainer>
+          );
+      }
     };
 
     const renderSwitchCompanyOptions = (): JSX.Element => {
@@ -158,10 +201,7 @@ export const AccountDropdownOptions = observer(
               <Heading type={"h4"} mt={"0px"} mb={"8px"}>
                 {`${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`}
               </Heading>
-              <StatusContainer>
-                <StatusColorBlock />
-                <StatusText type={"small"}> Active </StatusText>
-              </StatusContainer>
+              {renderUserStatus()}
             </UserDetailsNameContainer>
           </UserDetailsContainer>
         </DropdownSectionContainer>
