@@ -4,7 +4,7 @@ class Api::UserPulsesController < Api::ApplicationController
   def user_pulse_by_date
     date = current_user.convert_to_their_timezone(params[:date].to_date)
     @user_pulse = current_user.user_pulse_for_display(date)
-    authorize @user_pulse
+    authorize @user_pulse, policy_class: UserPulsePolicy
     render json: { user_pulse: @user_pulse }
   end
 

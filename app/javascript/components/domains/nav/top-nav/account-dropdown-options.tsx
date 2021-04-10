@@ -12,6 +12,7 @@ import { toJS } from "mobx";
 import { baseTheme } from "~/themes";
 import { useMst } from "~/setup/root";
 import { Avatar, Heading, Icon, Text } from "~/components/shared";
+import { homePersonalStatusOptions } from "~/components/domains/home/home-personal-status/home-personal-status-options";
 
 interface IAccountDropdownOptionsProps {
   accountActionRef: any;
@@ -94,39 +95,57 @@ export const AccountDropdownOptions = observer(
       });
     };
 
+    const updateStatus = async status => {
+      setSelectedUserStatus(status);
+      await sessionStore.updateUser(
+        {
+          dailyLogsAttributes: [
+            {
+              ...R.path(["profile", "currentDailyLog"], sessionStore),
+              workStatus: status,
+            },
+          ],
+        },
+        `You successfully changed your status to ${R.path(
+          [status, "label"],
+          homePersonalStatusOptions,
+        )}`,
+      );
+    };
+
     const renderUserStatus = (): JSX.Element => {
       switch (selectedUserStatus) {
-        case "active":
+        case "in_office":
           return (
-            <StatusContainer>
+            <StatusContainer onClick={() => updateStatus("work_from_home")}>
               <StatusColorBlock color={baseTheme.colors.finePine} />
               <StatusText type={"small"}> Active </StatusText>
             </StatusContainer>
           );
         case "work_from_home":
           return (
-            <StatusContainer>
+            <StatusContainer onClick={() => updateStatus("half_day")}>
               <StatusColorBlock color={baseTheme.colors.fadedPurple} />
               <StatusText type={"small"}> WFH </StatusText>
             </StatusContainer>
           );
         case "half_day":
           return (
-            <StatusContainer>
+            <StatusContainer onClick={() => updateStatus("day_off")}>
               <StatusColorBlock color={baseTheme.colors.cautionYellow} />
               <StatusText type={"small"}> Half Day </StatusText>
             </StatusContainer>
           );
         case "day_off":
           return (
-            <StatusContainer>
+            <StatusContainer onClick={() => updateStatus("status_not_set")}>
               <StatusColorBlock color={baseTheme.colors.warningRed} />
               <StatusText type={"small"}> Day off </StatusText>
             </StatusContainer>
           );
         default:
           return (
-            <StatusContainer>
+            <StatusContainer onClick={() => updateStatus("in_office")}>
               <StatusColorBlock color={baseTheme.colors.greyInactive} />
               <StatusText type={"small"}> Inactive </StatusText>
             </StatusContainer>
@@ -383,11 +402,15 @@ const StatusContainer = styled.div`
   display: flex;
 `;
 
-const StatusColorBlock = styled.div`
+type StatusColorBlockProps = {
+  color: string;
+};
+
+const StatusColorBlock = styled.div<StatusColorBlockProps>`
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background-color: ${props => props.theme.colors.finePine};
+  background-color: ${props => props.color};
 `;
 
 const UserDetailsNameContainer = styled.div`

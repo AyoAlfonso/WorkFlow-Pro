@@ -70,11 +70,7 @@ export const SessionStoreModel = types
         );
 
         if (response.ok) {
-          if (fieldsAndValues["dailyLogsAttributes"]) {
-            if (!R.isNil(successMessageOverride)) {
-              showToast(successMessageOverride, ToastMessageConstants.SUCCESS);
-            }
-          } else {
+          if (!fieldsAndValues["dailyLogsAttributes"]) {
             showToast("User updated", ToastMessageConstants.SUCCESS);
           }
 
