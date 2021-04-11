@@ -11,7 +11,7 @@ import MeetingTypes from "~/constants/meeting-types";
 import { HomeTitle } from "~/components/domains/home/shared-components";
 import { Loading } from "~/components/shared/loading";
 
-import { ParkingLot } from "~/components/domains/meetings-forum/components/parking-lot";
+import { Exploration } from "~/components/domains/meetings-forum/components/exploration";
 
 export const Section2 = observer(
   (): JSX.Element => {
@@ -49,7 +49,7 @@ export const Section2 = observer(
 
     return (
       <Container>
-        <ParkingLot upcomingForumMeeting={upcomingForumMeeting} />
+        <Exploration includeExplorationTopic={false} />
       </Container>
     );
   },
