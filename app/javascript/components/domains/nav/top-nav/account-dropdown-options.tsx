@@ -400,6 +400,9 @@ const UserDetailsAvatarContainer = styled.div`
 
 const StatusContainer = styled.div`
   display: flex;
+  &: hover {
+    cursor: pointer;
+  }
 `;
 
 type StatusColorBlockProps = {
