@@ -1,4 +1,3 @@
-import { Checkbox, Label } from "@rebass/forms";
 import { observer } from "mobx-react";
 import * as R from "ramda";
 import * as React from "react";
@@ -6,28 +5,18 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { typography, TypographyProps } from "styled-system";
 import { Avatar } from "~/components/shared/avatar";
-import { Heading } from "~/components/shared/heading";
 import { Loading } from "~/components/shared/loading";
 import { Text } from "~/components/shared/text";
 import MeetingTypes from "~/constants/meeting-types";
 import { ToastMessageConstants } from "~/constants/toast-types";
-import { baseTheme } from "~/themes";
 import { showToast } from "~/utils/toast-message";
 import { useMst } from "../../../setup/root";
 
-import { StatusView } from "~/components/domains/home/home-personal-status/status-view";
 import { KeyActivitiesListStyleContainer } from "~/components/domains/key-activities/key-activities-list";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 
 import { today } from "~/lib/date-helpers";
-
-//TODO: REMOVE THESE OLD ITEMS ONCE WE KNOW HOW STATUS IS SET
-// import { HomePersonalStatusDropdownMenuItem } from "../home/home-personal-status/home-personal-status-dropdown-menu-item";
-// import { homePersonalStatusOptions as options } from "../home/home-personal-status/home-personal-status-options";
-
-import { KeyActivityPriorityIcon } from "../key-activities/key-activity-priority-icon";
 
 import {
   ColumnContainer,
@@ -45,6 +34,7 @@ import {
   ToolsHeader,
   SnapshotHeading,
 } from "~/components/shared/styles/overview-styles";
+import { UserStatus } from "~/components/shared/user-status";
 
 interface ITeamOverviewProps {}
 
@@ -159,7 +149,10 @@ export const TeamOverview = observer(
                 <TeamMemberName>
                   {user.firstName} {user.lastName}
                 </TeamMemberName>
-                <StatusView status={user.currentDailyLog.workStatus} />
+
+                <UserStatusContainer>
+                  <UserStatus selectedUserStatus={user.currentDailyLog.workStatus} />
+                </UserStatusContainer>
               </TeamMemberInfoContainer>
             </ColumnContainer>
             <ColumnContainer>{renderUserPriorities(prioritiesToRender)}</ColumnContainer>
@@ -263,4 +256,10 @@ const TeamMemberName = styled(Text)`
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 16px;
+`;
+
+const UserStatusContainer = styled.div`
+  margin-left: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
 `;

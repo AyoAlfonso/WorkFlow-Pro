@@ -13,6 +13,7 @@ import { baseTheme } from "~/themes";
 import { useMst } from "~/setup/root";
 import { Avatar, Heading, Icon, Text } from "~/components/shared";
 import { homePersonalStatusOptions } from "~/components/domains/home/home-personal-status/home-personal-status-options";
+import { UserStatus } from "~/components/shared/user-status";
 
 interface IAccountDropdownOptionsProps {
   accountActionRef: any;
@@ -114,43 +115,7 @@ export const AccountDropdownOptions = observer(
     };
 
     const renderUserStatus = (): JSX.Element => {
-      switch (selectedUserStatus) {
-        case "in_office":
-          return (
-            <StatusContainer onClick={() => updateStatus("work_from_home")}>
-              <StatusColorBlock color={baseTheme.colors.finePine} />
-              <StatusText type={"small"}> Active </StatusText>
-            </StatusContainer>
-          );
-        case "work_from_home":
-          return (
-            <StatusContainer onClick={() => updateStatus("half_day")}>
-              <StatusColorBlock color={baseTheme.colors.fadedPurple} />
-              <StatusText type={"small"}> WFH </StatusText>
-            </StatusContainer>
-          );
-        case "half_day":
-          return (
-            <StatusContainer onClick={() => updateStatus("day_off")}>
-              <StatusColorBlock color={baseTheme.colors.cautionYellow} />
-              <StatusText type={"small"}> Half Day </StatusText>
-            </StatusContainer>
-          );
-        case "day_off":
-          return (
-            <StatusContainer onClick={() => updateStatus("status_not_set")}>
-              <StatusColorBlock color={baseTheme.colors.warningRed} />
-              <StatusText type={"small"}> Day off </StatusText>
-            </StatusContainer>
-          );
-        default:
-          return (
-            <StatusContainer onClick={() => updateStatus("in_office")}>
-              <StatusColorBlock color={baseTheme.colors.greyInactive} />
-              <StatusText type={"small"}> Inactive </StatusText>
-            </StatusContainer>
-          );
-      }
+      return <UserStatus selectedUserStatus={selectedUserStatus} onStatusUpdate={updateStatus} />;
     };
 
     const renderSwitchCompanyOptions = (): JSX.Element => {
