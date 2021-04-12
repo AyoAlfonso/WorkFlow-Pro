@@ -39,6 +39,7 @@ export const HeaderText = styled.h4`
 type AccordionHeaderTextType = {
   expanded?: string;
   accordionPanel: string;
+  inverse?: boolean;
 };
 
 export const AccordionHeaderText = styled.h4<AccordionHeaderTextType>`
@@ -49,5 +50,9 @@ export const AccordionHeaderText = styled.h4<AccordionHeaderTextType>`
   font-size: 16px;
   font-weight: 600;
   color: ${props =>
-    props.expanded === props.accordionPanel ? props.theme.colors.black : props.theme.colors.grey60};
+    props.inverse
+      ? props.theme.colors.white
+      : props.expanded === props.accordionPanel
+      ? props.theme.colors.black
+      : props.theme.colors.grey60};
 `;

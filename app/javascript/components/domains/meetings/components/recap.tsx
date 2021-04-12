@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as R from "ramda";
-import * as moment from "moment";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
@@ -12,6 +11,8 @@ import { Text } from "../../../shared/text";
 import { useParams } from "react-router-dom";
 import { Loading } from "~/components/shared/loading";
 import { observer } from "mobx-react";
+
+import { today } from "~/lib/date-helpers";
 
 import { KeyActivitiesHeader } from "~/components/domains/key-activities/key-activities-header-no-filter";
 import {
@@ -116,11 +117,7 @@ export const Recap = observer(
       <Container>
         <SingleListContainer>
           <KeyActivitiesHeader title={t("meeting.teamsPyns")} />
-          <KeyActivityListSubHeaderContainer>
-            {moment()
-              .subtract(1, "days")
-              .format("MMMM D")}
-          </KeyActivityListSubHeaderContainer>
+          <KeyActivityListSubHeaderContainer>{today}</KeyActivityListSubHeaderContainer>
           <TeamKeyActivitiesBody />
         </SingleListContainer>
         <GraphContainer>{renderGraphCards()}</GraphContainer>

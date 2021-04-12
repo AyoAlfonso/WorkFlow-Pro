@@ -6,7 +6,7 @@ import { Issues } from "../issues/issues-container";
 import { Journal } from "../journal/journal-widget";
 import { HomeKeyActivities } from "./home-key-activities/home-key-activities";
 import { useTranslation } from "react-i18next";
-import { Heading } from "~/components/shared";
+import { ToolsWrapper, ToolsHeader } from "~/components/shared/styles/overview-styles";
 
 export const HomePersonalItems = (): JSX.Element => {
   const { t } = useTranslation();
@@ -29,23 +29,7 @@ export const HomePersonalItems = (): JSX.Element => {
   );
 };
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   height: inherit;
-`;
-
-const ToolsWrapper = styled.div`
-  flex-direction: column;
-  width: 25%;
-  margin-left: 20px;
-  margin-right: 5px;
-  height: 100%;
-`;
-
-const ToolsHeader = styled(Heading)`
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
-  margin-bottom: 40px;
 `;

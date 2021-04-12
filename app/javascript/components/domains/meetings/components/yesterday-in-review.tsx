@@ -1,5 +1,5 @@
 import * as React from "react";
-import moment from "moment";
+import { yesterday } from "~/lib/date-helpers";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { observer } from "mobx-react";
@@ -28,9 +28,7 @@ export const YesterdayInReview = observer(
       <KeyActivitiesWrapperContainer width={"100%"}>
         <KeyActivityColumnStyleListContainer>
           <KeyActivitiesHeader title={t("keyActivities.yesterdayTitle")} />
-          <KeyActivityListSubHeaderContainer>
-            {moment().format("MMMM D")}
-          </KeyActivityListSubHeaderContainer>
+          <KeyActivityListSubHeaderContainer>{yesterday}</KeyActivityListSubHeaderContainer>
           <KeyActivitiesListStyleContainer>
             {finishedYesterdayPyns.map(ka => (
               <KeyActivityRecord keyActivity={ka} disabled={true} />
