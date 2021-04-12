@@ -26,7 +26,7 @@ export const FutureTeamMeetingsContainer = ({
       <HeaderContainerNoBorder>
         <div style={{ width: "30px" }} />
         <AccordionHeaderText expanded={"notMatching"} accordionPanel={"team"} inverse={true}>
-          Team Meeting
+          {buttonText}
         </AccordionHeaderText>
       </HeaderContainerNoBorder>
       <IconContainerWithPadding>

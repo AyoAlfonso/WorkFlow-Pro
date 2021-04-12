@@ -141,30 +141,6 @@ export const TeamOverview = observer(
       );
     };
 
-    // const renderUserPriorities = (keyActivities): JSX.Element => {
-    //   return keyActivities.map((keyActivity, index) => {
-    //     return (
-    //       <PriorityContainer key={index}>
-    //         <CheckboxContainer>
-    //           <Checkbox
-    //             key={`checkbox-${index}`}
-    //             checked={keyActivity.completedAt ? true : false}
-    //             sx={{
-    //               color: baseTheme.colors.primary100,
-    //             }}
-    //           />
-    //         </CheckboxContainer>
-    //         <PriorityTextContainer>
-    //           <PriorityText>{keyActivity.description}</PriorityText>
-    //         </PriorityTextContainer>
-    //         <PriorityIconContainer>
-    //           <KeyActivityPriorityIcon priority={keyActivity.priority} />
-    //         </PriorityIconContainer>
-    //       </PriorityContainer>
-    //     );
-    //   });
-    // };
-
     const renderUserRecords = () => {
       return currentTeam.users.map((user, index) => {
         const prioritiesToRender = user.todaysPriorities.concat(user.todaysCompletedActivities);
@@ -288,33 +264,3 @@ const TeamMemberName = styled(Text)`
   margin-bottom: auto;
   margin-left: 16px;
 `;
-
-const PriorityContainer = styled.div`
-  display: flex;
-  margin-top: -10px;
-`;
-
-const PriorityTextContainer = styled.div`
-  width: 100%;
-`;
-
-const PriorityText = styled(Text)``;
-
-const PriorityIconContainer = styled.div`
-  margin-left: auto;
-  margin-top: auto;
-  margin-bottom: auto;
-`;
-
-const CheckboxContainer = props => (
-  <Label
-    {...props}
-    sx={{
-      width: "auto",
-      marginTop: "auto",
-      marginBottom: "auto",
-    }}
-  >
-    {props.children}
-  </Label>
-);
