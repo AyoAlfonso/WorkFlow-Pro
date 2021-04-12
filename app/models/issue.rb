@@ -30,6 +30,8 @@ class Issue < ApplicationRecord
   scope :created_between, -> (date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
   scope :user_created_between, -> (user, date_start, date_end) { created_by_user(user).created_between(date_start, date_end) }
 
+  scope :exclude_personal_for_team, -> { where.not(personal: true) }
+  
   #for team issue meetings
   scope :for_meeting, -> (meeting_id) {
     joins(:team_issue)
@@ -47,11 +49,6 @@ class Issue < ApplicationRecord
     team_member_ids = TeamUserEnablement.where(team_id: user.team_ids).pluck(:user_id)
     self.where(user_id: [*team_member_ids, user.id].uniq)
   end
-
-  def self.exclude_personal_for_team
-    self.where(personal: false).or(self.where(personal: nil))
-  end
-
 
   def create_or_update_team_issue
     if self.team_id
