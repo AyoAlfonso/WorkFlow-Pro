@@ -5,6 +5,7 @@ import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { Loading } from "~/components/shared/loading";
+import { ColumnContainer, ColumnSubHeaderContainer } from "~/components/shared/styles/row-style";
 interface IKeyActivitiesListProps {
   keyActivities: Array<any>;
   droppableId: string;
@@ -98,12 +99,6 @@ const KeyActivitiesContainer = styled.div<KeyActivitiesContainerType>`
 `;
 
 ///COMMON STYLING COMPONENTS FOR KEY ACTIVITIES
-export const KeyActivityColumnStyleListContainer = styled.div`
-  width: 50%;
-  margin-right: 20px;
-  min-width: 220px;
-`;
-
 type ContainerProps = {
   width?: string;
 };
@@ -113,13 +108,11 @@ export const KeyActivitiesWrapperContainer = styled.div<ContainerProps>`
   width: ${props => props.width || "75%"};
 `;
 
-export const KeyActivityListSubHeaderContainer = styled.div`
-  font-size: 12px;
-  color: ${props => props.theme.colors.grey100};
-  margin-top: auto;
-  margin-bottom: auto;
-`;
-
 export const KeyActivitiesListContainer = styled.div`
   height: 100%;
 `;
+
+//column stles and subheader styles match row-styles in overall,
+export const KeyActivityColumnStyleListContainer = ColumnContainer;
+
+export const KeyActivityListSubHeaderContainer = ColumnSubHeaderContainer;

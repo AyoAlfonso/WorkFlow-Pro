@@ -4,16 +4,24 @@ import { useEffect, useState } from "react";
 import { color } from "styled-system";
 import { observer } from "mobx-react";
 import { CreateIssueModal } from "../../issues/create-issue-modal";
+import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { Icon, Loading } from "~/components/shared";
 import { IssueEntry } from "../../issues/issue-entry";
+import {
+  FilterContainer,
+  FilterOptions,
+  IssuesBodyContainer,
+} from "~/components/domains/issues/issues-body";
 import { useMst } from "~/setup/root";
 import * as R from "ramda";
 import { List } from "@material-ui/core";
 
 interface ITeamIssuesBodyProps {
   showOpenIssues: boolean;
+  setShowOpenIssues?: React.Dispatch<React.SetStateAction<boolean>>;
   teamId: number | string;
   meetingId?: number | string;
+  showFilters: boolean;
 }
 
 export const TeamIssuesBody = observer(
@@ -22,8 +30,9 @@ export const TeamIssuesBody = observer(
       issueStore,
       companyStore: { company },
     } = useMst();
-    const { showOpenIssues, teamId, meetingId } = props;
+    const { showOpenIssues, setShowOpenIssues, teamId, meetingId, showFilters } = props;
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
+    const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
 
     const openIssues = issueStore.openIssues;
     const closedIssues = issueStore.closedIssues;
@@ -39,6 +48,18 @@ export const TeamIssuesBody = observer(
         issueStore.fetchIssues();
       }
     }, []);
+
+    const sortMenuOptions = [
+      {
+        label: "Sort by Priority",
+        value: "by_priority",
+      },
+    ];
+
+    const handleSortMenuItemClick = value => {
+      setSortOptionsOpen(false);
+      issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });
+    };
 
     const renderIssuesList = (): Array<JSX.Element> => {
       const issues = showOpenIssues ? openIssues : closedIssues;
@@ -56,17 +77,43 @@ export const TeamIssuesBody = observer(
           setCreateIssueModalOpen={setCreateIssueModalOpen}
           teamId={teamId}
         />
-        <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
-          <AddNewIssuePlus>
-            <Icon icon={"Plus"} size={16} />
-          </AddNewIssuePlus>
-          <AddNewIssueText>
-            {`Add a ${company.displayFormat == "Forum" ? "Topic" : "Issue"}`}
-          </AddNewIssueText>
-        </AddNewIssueContainer>
-        <IssuesContainer meeting={meetingId ? true : false}>
-          <List>{renderIssuesList()}</List>
-        </IssuesContainer>
+        {showFilters && (
+          <FilterContainer>
+            <FilterOptions
+              onClick={() => setShowOpenIssues(true)}
+              mr={"15px"}
+              color={showOpenIssues ? "primary100" : "grey40"}
+            >
+              Open
+            </FilterOptions>
+            <FilterOptions
+              onClick={() => setShowOpenIssues(false)}
+              color={!showOpenIssues ? "primary100" : "grey40"}
+            >
+              Closed
+            </FilterOptions>
+            <WidgetHeaderSortButtonMenu
+              onButtonClick={setSortOptionsOpen}
+              onMenuItemClick={handleSortMenuItemClick}
+              menuOpen={sortOptionsOpen}
+              menuOptions={sortMenuOptions}
+              ml={"15px"}
+            />
+          </FilterContainer>
+        )}
+        <IssuesBodyContainer>
+          <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
+            <AddNewIssuePlus>
+              <Icon icon={"Plus"} size={16} />
+            </AddNewIssuePlus>
+            <AddNewIssueText>
+              {`Add a ${company.displayFormat == "Forum" ? "Topic" : "Issue"}`}
+            </AddNewIssueText>
+          </AddNewIssueContainer>
+          <IssuesContainer meeting={meetingId ? true : false}>
+            <List>{renderIssuesList()}</List>
+          </IssuesContainer>
+        </IssuesBodyContainer>
       </Container>
     );
   },

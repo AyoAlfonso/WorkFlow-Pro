@@ -1,5 +1,3 @@
-import { Checkbox, Label } from "@rebass/forms";
-import { toJS } from "mobx";
 import { observer } from "mobx-react";
 import * as R from "ramda";
 import * as React from "react";
@@ -7,25 +5,36 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { typography, TypographyProps } from "styled-system";
 import { Avatar } from "~/components/shared/avatar";
-import { Heading } from "~/components/shared/heading";
 import { Loading } from "~/components/shared/loading";
-import { NoMoodRatings } from "~/components/shared/no-mood-ratings";
 import { Text } from "~/components/shared/text";
 import MeetingTypes from "~/constants/meeting-types";
 import { ToastMessageConstants } from "~/constants/toast-types";
-import { baseTheme } from "~/themes";
 import { showToast } from "~/utils/toast-message";
 import { useMst } from "../../../setup/root";
-import { HomePersonalStatusDropdownMenuItem } from "../home/home-personal-status/home-personal-status-dropdown-menu-item";
-import { homePersonalStatusOptions as options } from "../home/home-personal-status/home-personal-status-options";
-import { KeyActivityPriorityIcon } from "../key-activities/key-activity-priority-icon";
+
+import { KeyActivitiesListStyleContainer } from "~/components/domains/key-activities/key-activities-list";
+import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
+
+import { today } from "~/lib/date-helpers";
+
+import {
+  ColumnContainer,
+  ColumnSubHeaderContainer,
+  ColumnContainerParent,
+} from "~/components/shared/styles/row-style";
+
 import { FutureTeamMeetingsContainer } from "./shared/future-team-meetings-container";
-import { OverallTeamPulse } from "./shared/overall-team-pulse";
 import { TeamIssuesContainer } from "./shared/team-issues-container";
-import { TeamPulseCard } from "./shared/team-pulse-card";
-import { CardLayout } from "~/components/layouts/card-layout";
+import { TeamPulsePanel } from "./shared/team-pulse-panel";
+
+import { StyledOverviewAccordion } from "~/components/shared/styles/overview-styles";
+import {
+  ToolsWrapper,
+  ToolsHeader,
+  SnapshotHeading,
+} from "~/components/shared/styles/overview-styles";
+import { UserStatus } from "~/components/shared/user-status";
 
 interface ITeamOverviewProps {}
 
@@ -43,6 +52,13 @@ export const TeamOverview = observer(
     const { t } = useTranslation();
 
     const [loading, setLoading] = useState<boolean>(true);
+    const [expanded, setExpanded] = useState<string>("");
+    const handleToolsChange = (panel: string) => (
+      event: React.ChangeEvent<{}>,
+      isExpanded: boolean,
+    ) => {
+      setExpanded(isExpanded ? panel : "");
+    };
 
     useEffect(() => {
       teamStore
@@ -91,11 +107,14 @@ export const TeamOverview = observer(
       return (
         <TableContainer>
           <TableHeaderContainer>
-            <TeamMemberContainer />
-            <StatusContainer fontSize={"16px"}>Status</StatusContainer>
-            <TodaysPrioritiesContainer fontSize={"16px"}>
-              {t("keyActivities.prioritiesTitle")}
-            </TodaysPrioritiesContainer>
+            <ColumnContainerParent>
+              <ColumnContainer>
+                <ColumnSubHeaderContainer>{today}</ColumnSubHeaderContainer>
+              </ColumnContainer>
+              <ColumnContainer>
+                <ColumnSubHeaderContainer>{"Today's Pyns"}</ColumnSubHeaderContainer>
+              </ColumnContainer>
+            </ColumnContainerParent>
           </TableHeaderContainer>
           {renderUserRecords()}
         </TableContainer>
@@ -103,27 +122,13 @@ export const TeamOverview = observer(
     };
 
     const renderUserPriorities = (keyActivities): JSX.Element => {
-      return keyActivities.map((keyActivity, index) => {
-        return (
-          <PriorityContainer key={index}>
-            <CheckboxContainer>
-              <Checkbox
-                key={`checkbox-${index}`}
-                checked={keyActivity.completedAt ? true : false}
-                sx={{
-                  color: baseTheme.colors.primary100,
-                }}
-              />
-            </CheckboxContainer>
-            <PriorityTextContainer>
-              <PriorityText>{keyActivity.description}</PriorityText>
-            </PriorityTextContainer>
-            <PriorityIconContainer>
-              <KeyActivityPriorityIcon priority={keyActivity.priority} />
-            </PriorityIconContainer>
-          </PriorityContainer>
-        );
-      });
+      return (
+        <KeyActivitiesListStyleContainer>
+          {keyActivities.map(keyActivity => {
+            return <KeyActivityRecord key={keyActivity.id} keyActivity={keyActivity} />;
+          })}
+        </KeyActivitiesListStyleContainer>
+      );
     };
 
     const renderUserRecords = () => {
@@ -131,7 +136,7 @@ export const TeamOverview = observer(
         const prioritiesToRender = user.todaysPriorities.concat(user.todaysCompletedActivities);
         return (
           <UserRecordContainer key={index}>
-            <TeamMemberContainer>
+            <ColumnContainer>
               <TeamMemberInfoContainer>
                 <Avatar
                   defaultAvatarColor={user.defaultAvatarColor}
@@ -144,18 +149,13 @@ export const TeamOverview = observer(
                 <TeamMemberName>
                   {user.firstName} {user.lastName}
                 </TeamMemberName>
+
+                <UserStatusContainer>
+                  <UserStatus selectedUserStatus={user.currentDailyLog.workStatus} />
+                </UserStatusContainer>
               </TeamMemberInfoContainer>
-            </TeamMemberContainer>
-            <StatusContainer fontSize={"16px"}>
-              <HomePersonalStatusDropdownMenuItem
-                style={{ height: "32px", width: "135px", borderRadius: "5px", marginTop: "5px" }}
-                menuItem={options[user.currentDailyLog.workStatus]}
-                onSelect={() => null}
-              />
-            </StatusContainer>
-            <TodaysPrioritiesContainer fontSize={"16px"}>
-              {renderUserPriorities(prioritiesToRender)}
-            </TodaysPrioritiesContainer>
+            </ColumnContainer>
+            <ColumnContainer>{renderUserPriorities(prioritiesToRender)}</ColumnContainer>
           </UserRecordContainer>
         );
       });
@@ -164,46 +164,54 @@ export const TeamOverview = observer(
     return (
       <Container>
         <LeftContainer>
-          <CardLayout titleText={t(`${overviewType}.teamSnapshotTitle`)}>
-            {renderUserSnapshotTable()}
-          </CardLayout>
+          <SnapshotHeading type={"h2"}>{t(`${overviewType}.teamSnapshotTitle`)}</SnapshotHeading>
+          {renderUserSnapshotTable()}
         </LeftContainer>
-        <RightContainer>
-          <TeamMeetingInfoContainer>
-            <FutureTeamMeetingsWrapper>
-              {overviewType === "teams" && (
-                <FutureTeamMeetingsContainer
-                  titleText={t(`${overviewType}.teamMeetingsTitle`)}
-                  buttonText={"Team Meeting"}
-                  handleMeetingClick={handleMeetingClick}
-                />
-              )}
-              {overviewType === "forum" && (
-                <FutureTeamMeetingsContainer
-                  titleText={t(`${overviewType}.teamMeetingsTitle`)}
-                  buttonText={"Forum Meeting"}
-                  handleMeetingClick={handleForumMeetingClick}
-                />
-              )}
-            </FutureTeamMeetingsWrapper>
-            <TeamIssuesWrapper>
-              <TeamIssuesContainer teamId={team_id} title={t(`${overviewType}.teamIssuesTitle`)} />
-            </TeamIssuesWrapper>
-          </TeamMeetingInfoContainer>
-
-          <CardLayout titleText={t(`${overviewType}.teamsPulseTitle`)}>
-            {currentTeam.averageTeamEmotionScore > 0 ? (
-              <TeamPulseBody>
-                <OverallTeamPulse value={currentTeam.averageTeamEmotionScore} />
-                <TeamPulseCard data={toJS(currentTeam.formattedAverageWeeklyUserEmotions) || []} />
-              </TeamPulseBody>
-            ) : (
-              <NoMoodWrapper>
-                <NoMoodRatings />
-              </NoMoodWrapper>
+        <ToolsWrapper>
+          <ToolsHeader type={"h2"}>{t("tools.title")}</ToolsHeader>
+          <StyledOverviewAccordion expanded={false} onChange={handleToolsChange("")} elevation={0}>
+            {overviewType === "teams" && (
+              <FutureTeamMeetingsContainer
+                titleText={t(`${overviewType}.teamMeetingsTitle`)}
+                buttonText={"Team Meeting"}
+                handleMeetingClick={handleMeetingClick}
+              />
             )}
-          </CardLayout>
-        </RightContainer>
+            {overviewType === "forum" && (
+              <FutureTeamMeetingsContainer
+                titleText={t(`${overviewType}.teamMeetingsTitle`)}
+                buttonText={"Forum Meeting"}
+                handleMeetingClick={handleForumMeetingClick}
+              />
+            )}
+          </StyledOverviewAccordion>
+
+          <StyledOverviewAccordion
+            expanded={expanded == "team-issues-panel"}
+            onChange={handleToolsChange("team-issues-panel")}
+            elevation={0}
+          >
+            <TeamIssuesContainer
+              teamId={team_id}
+              title={t(`${overviewType}.teamIssuesTitle`)}
+              expanded={expanded}
+              handleChange={handleToolsChange}
+            />
+          </StyledOverviewAccordion>
+
+          <StyledOverviewAccordion
+            expanded={expanded == "team-pulse-panel"}
+            onChange={handleToolsChange("team-pulse-panel")}
+            elevation={0}
+          >
+            <TeamPulsePanel
+              team={currentTeam}
+              title={t(`${overviewType}.teamsPulseTitle`)}
+              expanded={expanded}
+              handleChange={handleToolsChange}
+            />
+          </StyledOverviewAccordion>
+        </ToolsWrapper>
       </Container>
     );
   },
@@ -214,56 +222,24 @@ const Container = styled.div`
 `;
 
 const LeftContainer = styled.div`
-  width: 55%;
-  margin-right: 10px;
-  min-width: 555px;
-`;
-
-const RightContainer = styled.div`
-  width: 45%;
-  min-width: 610px;
-  margin-left: 10px;
-`;
-
-const TeamIssuesWrapper = styled.div`
-  width: 50%;
-`;
-
-const FutureTeamMeetingsWrapper = styled.div`
-  width: 50%;
-  margin-right: 20px;
-`;
-
-const TeamMemberContainer = styled.div`
-  width: 30%;
-`;
-
-const StatusContainer = styled.div<TypographyProps>`
-  ${typography}
-  width: 30%;
-`;
-
-const TodaysPrioritiesContainer = styled.div<TypographyProps>`
-  ${typography}
-  width: 40%;
+  display: flex;
+  width: 75%;
+  min-width: 480px;
+  flex-direction: column;
 `;
 
 const TableContainer = styled.div`
-  padding-left: 16px;
-  padding-right: 16px;
+  width: 100%;
 `;
 
 const TableHeaderContainer = styled.div`
   display: flex;
-  padding-left: 8px;
-  padding-right: 8px;
-  border-bottom: ${props => `1px solid ${props.theme.colors.grey40}`};
   padding-top: 16px;
   padding-bottom: 8px;
 `;
 
 //TODO: do not display border bottom if last record of users
-const UserRecordContainer = styled.div`
+const UserRecordContainer = styled(ColumnContainerParent)`
   display: flex;
   padding-top: 16px;
   padding-bottom: 16px;
@@ -282,48 +258,8 @@ const TeamMemberName = styled(Text)`
   margin-left: 16px;
 `;
 
-const PriorityContainer = styled.div`
-  display: flex;
-  margin-top: -10px;
-`;
-
-const PriorityTextContainer = styled.div`
-  width: 100%;
-`;
-
-const PriorityText = styled(Text)``;
-
-const PriorityIconContainer = styled.div`
-  margin-left: auto;
+const UserStatusContainer = styled.div`
+  margin-left: 16px;
   margin-top: auto;
   margin-bottom: auto;
-`;
-
-const TeamPulseBody = styled.div`
-  display: flex;
-  padding-top: 36px;
-  padding-bottom: 36px;
-`;
-
-const TeamMeetingInfoContainer = styled.div`
-  display: flex;
-  margin-bottom: 20px;
-`;
-
-const CheckboxContainer = props => (
-  <Label
-    {...props}
-    sx={{
-      width: "auto",
-      marginTop: "auto",
-      marginBottom: "auto",
-    }}
-  >
-    {props.children}
-  </Label>
-);
-
-const NoMoodWrapper = styled.div`
-  padding-top: 40px;
-  padding-bottom: 40px;
 `;

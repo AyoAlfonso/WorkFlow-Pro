@@ -15,7 +15,14 @@ type ColumnContainerType = {
 export const ColumnContainer = styled.div<ColumnContainerType>`
   width: 50%;
   min-width: ${props => props.minWidth || "240px"};
-  margin-right: 16px;
+  margin-right: 20px;
+`;
+
+export const ColumnSubHeaderContainer = styled.div`
+  font-size: 12px;
+  color: ${props => props.theme.colors.grey100};
+  margin-top: auto;
+  margin-bottom: auto;
 `;
 
 export const ColumnContainerWithFixedImages = styled.div;

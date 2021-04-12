@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { Icon, ModalWithHeader } from "~/components/shared";
 import { HabitsCreateHabitForm } from "./habits-create-habit-form";
-import { AccordionSummary } from '~/components/shared/accordion-components';
+import { AccordionSummary } from "~/components/shared/accordion-components";
 import { IconContainerWithPadding } from "~/components/shared/icon";
-import { 
+import {
   HeaderContainerNoBorder,
   AccordionHeaderText,
 } from "~/components/shared/styles/container-header";
@@ -33,16 +33,16 @@ export const HabitsHeader = ({ expanded }: IHabitsHeaderProps): JSX.Element => {
             icon={expanded === "panel1" ? "Chevron-Up" : "Chevron-Down"}
             size={15}
             style={{ paddingRight: "15px" }}
-            iconColor={expanded === "panel1" ? "primary100" : "grey60" }
+            iconColor={expanded === "panel1" ? "primary100" : "grey60"}
           />
-          <AccordionHeaderText
-            expanded={expanded}
-            accordionPanel={"panel1"}
-          > {t("habits.title")} </AccordionHeaderText>
+          <AccordionHeaderText expanded={expanded} accordionPanel={"panel1"}>
+            {" "}
+            {t("habits.title")}{" "}
+          </AccordionHeaderText>
         </HeaderContainerNoBorder>
-        <IconContainerWithPadding 
-          onClick={(e) => {
-            e.stopPropagation(); 
+        <IconContainerWithPadding
+          onClick={e => {
+            e.stopPropagation();
             setHabitsModalOpen(true);
           }}
         >

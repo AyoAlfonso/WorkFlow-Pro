@@ -34,7 +34,14 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
   const renderDisplayContent = (): JSX.Element => {
     switch (selectedTab) {
       case "issues":
-        return <TeamIssuesBody showOpenIssues={true} teamId={teamId} meetingId={meeting.id} />;
+        return (
+          <TeamIssuesBody
+            showOpenIssues={true}
+            showFilters={false}
+            teamId={teamId}
+            meetingId={meeting.id}
+          />
+        );
       case "pyns":
         return renderDisplayKeyActivities();
       case "notes":

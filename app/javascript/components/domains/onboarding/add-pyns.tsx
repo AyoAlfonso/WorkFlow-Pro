@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import moment from "moment";
+import { today } from "~/lib/date-helpers";
 import { TextDiv } from "~/components/shared";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 import { CreateKeyActivityButton } from "../key-activities/create-key-activity-button";
@@ -26,7 +26,7 @@ export const AddPyns = observer(
           Today
         </TextDiv>
         <TextDiv fontSize={"16px"} color={"greyInactive"} my={"16px"}>
-          {moment().format("MMMM D")}
+          {today}
         </TextDiv>
         <KeyActivitiesListContainer>
           <CreateKeyActivityButton

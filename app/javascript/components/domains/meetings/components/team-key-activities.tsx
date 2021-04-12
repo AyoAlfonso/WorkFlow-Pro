@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import * as moment from "moment";
+import { today } from "~/lib/date-helpers";
 import { Heading } from "~/components/shared";
 import {
   KeyActivitiesWrapperContainer,
@@ -16,11 +16,7 @@ export const TeamKeyActivities = (props: {}): JSX.Element => {
     <KeyActivitiesWrapperContainer width={"100%"}>
       <SingleListContainer>
         <KeyActivitiesHeader title={t("meeting.teamsPyns")} />
-        <KeyActivityListSubHeaderContainer>
-          {moment()
-            .subtract(1, "days")
-            .format("MMMM D")}
-        </KeyActivityListSubHeaderContainer>
+        <KeyActivityListSubHeaderContainer>{today}</KeyActivityListSubHeaderContainer>
         <TeamKeyActivitiesBody />
       </SingleListContainer>
     </KeyActivitiesWrapperContainer>

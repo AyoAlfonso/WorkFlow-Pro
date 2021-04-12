@@ -24,8 +24,12 @@ import {
 } from "~/components/shared/styles/row-style";
 import { useTranslation } from "react-i18next";
 
+interface IExplorationProps {
+  includeExplorationTopic?: boolean;
+}
+
 export const Exploration = observer(
-  (): JSX.Element => {
+  ({ includeExplorationTopic = true }: IExplorationProps): JSX.Element => {
     const {
       meetingStore: { currentMeeting },
       teamStore: { teams },
@@ -113,19 +117,27 @@ export const Exploration = observer(
 
     return (
       <>
-        <ColumnContainerParent>
-          <HeaderText text={t("meetingForum.exploration.title")} />
-        </ColumnContainerParent>
-        <ColumnContainerParent>
-          <ForumTopic
-            disabled={false}
-            teamMembers={toJS(currentTeam.users)}
-            meeting={currentMeeting}
-          />
-        </ColumnContainerParent>
+        {includeExplorationTopic && (
+          <>
+            <ColumnContainerParent>
+              <HeaderText text={t("meetingForum.exploration.title")} />
+            </ColumnContainerParent>
+            <ColumnContainerParent>
+              <ForumTopic
+                disabled={false}
+                teamMembers={toJS(currentTeam.users)}
+                meeting={currentMeeting}
+              />
+            </ColumnContainerParent>
+          </>
+        )}
         <ColumnContainerParent>
           <ColumnContainer>
-            <HeaderText text={t("meetingForum.scheduledIssues.title")} />
+            <HeaderText
+              text={t("meetingForum.scheduledIssues.title", {
+                prefix: includeExplorationTopic ? "2: " : "",
+              })}
+            />
             <ScheduledIssues teamId={currentMeeting.teamId} upcomingForumMeeting={currentMeeting} />
           </ColumnContainer>
           <ColumnContainer>

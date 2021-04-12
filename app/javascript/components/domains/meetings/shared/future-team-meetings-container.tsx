@@ -1,7 +1,11 @@
 import * as React from "react";
-import styled from "styled-components";
-import { TeamMeetingButton } from "~/components/shared/team-meeting-button";
-import { CardLayout } from "~/components/layouts/card-layout";
+import { AccordionSummaryInverse } from "~/components/shared/accordion-components";
+import { IconContainerWithPadding } from "~/components/shared/icon";
+import { Icon } from "~/components/shared/icon";
+import {
+  HeaderContainerNoBorder,
+  AccordionHeaderText,
+} from "~/components/shared/styles/container-header";
 interface IFutureTeamMeetingsContainerProps {
   handleMeetingClick: any;
   titleText?: string;
@@ -14,22 +18,20 @@ export const FutureTeamMeetingsContainer = ({
   buttonText = "Team Meeting",
 }: IFutureTeamMeetingsContainerProps): JSX.Element => {
   return (
-    <CardLayout titleText={titleText} height={"100%"}>
-      <BodyContainer>
-        <ButtonContainer>
-          <TeamMeetingButton handleMeetingClick={handleMeetingClick} buttonText={buttonText} />
-        </ButtonContainer>
-      </BodyContainer>
-    </CardLayout>
+    <AccordionSummaryInverse
+      onClick={e => {
+        handleMeetingClick();
+      }}
+    >
+      <HeaderContainerNoBorder>
+        <div style={{ width: "30px" }} />
+        <AccordionHeaderText expanded={"notMatching"} accordionPanel={"team"} inverse={true}>
+          {buttonText}
+        </AccordionHeaderText>
+      </HeaderContainerNoBorder>
+      <IconContainerWithPadding>
+        <Icon icon={"Team"} size={16} iconColor={"white"} />
+      </IconContainerWithPadding>
+    </AccordionSummaryInverse>
   );
 };
-
-const BodyContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ButtonContainer = styled.div`
-  margin-top: 15px;
-`;

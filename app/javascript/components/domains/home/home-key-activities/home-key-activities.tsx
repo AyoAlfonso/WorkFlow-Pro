@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Icon } from "~/components/shared";
-import * as moment from "moment";
+import { today, tomorrow } from "~/lib/date-helpers";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { InitialsGenerator } from "~/components/shared/issues-and-key-activities/initials-generator";
@@ -66,9 +66,7 @@ export const HomeKeyActivities = observer(
         case "Weekly List":
           return t("keyActivities.weeklyListDescription");
         case "Tomorrow":
-          return moment()
-            .add(1, "days")
-            .format("MMMM D");
+          return tomorrow;
         case "Backlog":
           return t("keyActivities.backlogDescription");
       }
@@ -207,7 +205,7 @@ export const HomeKeyActivities = observer(
           <HeaderContainer>
             {renderHeader(
               "Today",
-              moment().format("MMMM D"),
+              today,
               todayFilterDropdownOpen,
               setTodayFilterDropdownOpen,
               selectedFilterGroupIdToday,
@@ -240,7 +238,7 @@ export const HomeKeyActivities = observer(
           <HeaderContainer>
             {renderHeader(
               "Today",
-              moment().format("MMMM D"),
+              today,
               todayFilterDropdownOpen,
               setTodayFilterDropdownOpen,
               selectedFilterGroupIdToday,

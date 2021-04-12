@@ -178,7 +178,7 @@ const IssuesContainer = styled.div<TIssuesContainerType>`
 
 const IssueContainer = styled.div``;
 
-const IssuesBodyContainer = styled(HomeContainerBorders)`
+export const IssuesBodyContainer = styled(HomeContainerBorders)`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -186,14 +186,14 @@ const IssuesBodyContainer = styled(HomeContainerBorders)`
   margin-right: 20px;
 `;
 
-const FilterContainer = styled.div`
+export const FilterContainer = styled.div`
   display: flex;
   margin-left: auto;
   justify-content: flex-end;
   align-items: center;
 `;
 
-const FilterOptions = styled.p<ColorProps & SpaceProps>`
+export const FilterOptions = styled.p<ColorProps & SpaceProps>`
   ${space}
   ${color}
   font-size: 12px;
