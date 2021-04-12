@@ -47,6 +47,9 @@ class KeyActivity < ApplicationRecord
   scope :sort_by_due_date, -> { order(due_date: :asc) }
   scope :completed_state_and_owned_by_current_user, -> (completed, user) { (completed ? where.not(completed_at: nil) : where(completed_at: nil)).owned_by_user(user) }
 
+  scope :exclude_personal_for_team, -> { where.not(personal: true) }
+
+
   validates :description, presence: true
 
   before_update :set_move_today_on
@@ -73,9 +76,5 @@ class KeyActivity < ApplicationRecord
   def self.owned_by_self_or_team_members(user)
     team_member_ids = TeamUserEnablement.where(team_id: user.team_ids).pluck(:user_id)
     self.where(user_id: [*team_member_ids, user.id])
-  end
-
-  def self.exclude_personal_for_team
-    self.where(personal: false).or(self.where(personal: nil))
   end
 end
