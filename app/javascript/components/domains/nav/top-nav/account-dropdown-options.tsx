@@ -12,6 +12,7 @@ import { toJS } from "mobx";
 import { baseTheme } from "~/themes";
 import { useMst } from "~/setup/root";
 import { Avatar, Heading, Icon, Text } from "~/components/shared";
+import { homePersonalStatusOptions } from "~/components/domains/home/home-personal-status/home-personal-status-options";
 
 interface IAccountDropdownOptionsProps {
   accountActionRef: any;
@@ -29,10 +30,13 @@ export const AccountDropdownOptions = observer(
     setShowCompanyOptions,
     setInviteTeamModalOpen,
   }: IAccountDropdownOptionsProps): JSX.Element => {
-    const [showCompanyCreationSelector, setShowCompanyCreationSelector] = useState<boolean>(false);
-
     const { sessionStore, companyStore, meetingStore, userStore, teamStore } = useMst();
     const { onboardingCompany } = companyStore;
+
+    const [showCompanyCreationSelector, setShowCompanyCreationSelector] = useState<boolean>(false);
+    const [selectedUserStatus, setSelectedUserStatus] = useState<string>(
+      R.path(["profile", "currentDailyLog", "workStatus"], sessionStore),
+    );
 
     const history = useHistory();
     const location = useLocation();
@@ -89,6 +93,64 @@ export const AccountDropdownOptions = observer(
           </SwitchAccountContainer>
         );
       });
+    };
+
+    const updateStatus = async status => {
+      setSelectedUserStatus(status);
+      await sessionStore.updateUser(
+        {
+          dailyLogsAttributes: [
+            {
+              ...R.path(["profile", "currentDailyLog"], sessionStore),
+              workStatus: status,
+            },
+          ],
+        },
+        `You successfully changed your status to ${R.path(
+          [status, "label"],
+          homePersonalStatusOptions,
+        )}`,
+      );
+    };
+
+    const renderUserStatus = (): JSX.Element => {
+      switch (selectedUserStatus) {
+        case "in_office":
+          return (
+            <StatusContainer onClick={() => updateStatus("work_from_home")}>
+              <StatusColorBlock color={baseTheme.colors.finePine} />
+              <StatusText type={"small"}> Active </StatusText>
+            </StatusContainer>
+          );
+        case "work_from_home":
+          return (
+            <StatusContainer onClick={() => updateStatus("half_day")}>
+              <StatusColorBlock color={baseTheme.colors.fadedPurple} />
+              <StatusText type={"small"}> WFH </StatusText>
+            </StatusContainer>
+          );
+        case "half_day":
+          return (
+            <StatusContainer onClick={() => updateStatus("day_off")}>
+              <StatusColorBlock color={baseTheme.colors.cautionYellow} />
+              <StatusText type={"small"}> Half Day </StatusText>
+            </StatusContainer>
+          );
+        case "day_off":
+          return (
+            <StatusContainer onClick={() => updateStatus("status_not_set")}>
+              <StatusColorBlock color={baseTheme.colors.warningRed} />
+              <StatusText type={"small"}> Day off </StatusText>
+            </StatusContainer>
+          );
+        default:
+          return (
+            <StatusContainer onClick={() => updateStatus("in_office")}>
+              <StatusColorBlock color={baseTheme.colors.greyInactive} />
+              <StatusText type={"small"}> Inactive </StatusText>
+            </StatusContainer>
+          );
+      }
     };
 
     const renderSwitchCompanyOptions = (): JSX.Element => {
@@ -158,10 +220,7 @@ export const AccountDropdownOptions = observer(
               <Heading type={"h4"} mt={"0px"} mb={"8px"}>
                 {`${sessionStore.profile.firstName} ${sessionStore.profile.lastName}`}
               </Heading>
-              <StatusContainer>
-                <StatusColorBlock />
-                <StatusText type={"small"}> Active </StatusText>
-              </StatusContainer>
+              {renderUserStatus()}
             </UserDetailsNameContainer>
           </UserDetailsContainer>
         </DropdownSectionContainer>
@@ -341,13 +400,20 @@ const UserDetailsAvatarContainer = styled.div`
 
 const StatusContainer = styled.div`
   display: flex;
+  &: hover {
+    cursor: pointer;
+  }
 `;
 
-const StatusColorBlock = styled.div`
+type StatusColorBlockProps = {
+  color: string;
+};
+
+const StatusColorBlock = styled.div<StatusColorBlockProps>`
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background-color: ${props => props.theme.colors.finePine};
+  background-color: ${props => props.color};
 `;
 
 const UserDetailsNameContainer = styled.div`
