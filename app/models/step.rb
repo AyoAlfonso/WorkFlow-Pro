@@ -32,6 +32,6 @@ class Step < ApplicationRecord
     "DailyPlanning",
     "CompleteDailyPlanning",
     "ParkingLot",
-    "ExplorationTopic",
+    "Exploration",
   ]
 end
