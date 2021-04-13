@@ -77,13 +77,6 @@ export const JournalBody = ({ setQuestionnaireVariant }: IJournalBodyProps): JSX
           disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
         />
         {/* <IconButton
-            {...defaultJournalButtonProps}
-            iconName={"Check-in"}
-            iconColor={"successGreen"}
-            text={t("journals.thoughtChallenge")}
-            onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.thoughtChallenge)}
-          /> */}
-        {/* <IconButton
           {...defaultJournalButtonProps}
           iconName={"Check-in"}
           iconColor={"successGreen"}

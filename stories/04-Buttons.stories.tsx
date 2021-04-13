@@ -375,19 +375,6 @@ export const IconButton = () => {
         py={"5px"}
         iconName={"Check-in"}
         iconSize={28}
-        iconColor={"successGreen"}
-        text={"Thought Challenge"}
-        shadow={true}
-        onClick={() => actionFn()}
-      />
-      <IconButtonComponent
-        width={"288px"}
-        mb={"20px"}
-        bg={"white"}
-        px={"10px"}
-        py={"5px"}
-        iconName={"Check-in"}
-        iconSize={28}
         iconColor={"primary20"}
         text={"Evening Reflection"}
         shadow={true}

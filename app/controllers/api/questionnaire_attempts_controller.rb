@@ -33,7 +33,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
 
     if @questionnaire_attempt.save_and_create_journal_entry
       @current_daily_log = DailyLog.find(current_user.current_daily_log(current_company).id)
-      @current_daily_log[questionnaire.name.delete(' ').underscore] = true unless (questionnaire.name == "Thought Challenge" || questionnaire.name == "Monthly Reflection")
+      @current_daily_log[questionnaire.name.delete(' ').underscore] = true unless (questionnaire.name == "Monthly Reflection")
       @current_daily_log.save!
     end
     render json: @current_daily_log
