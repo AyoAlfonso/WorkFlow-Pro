@@ -19,7 +19,7 @@ class KeyActivityResortService < ApplicationService
     end
     
     reset_positions(sorted_key_activities)
-    @key_activities
+    @key_activities.sort_by_position
   end
 
   def reset_positions(key_activities)

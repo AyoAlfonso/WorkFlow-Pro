@@ -111,11 +111,11 @@ class Api::KeyActivitiesController < Api::ApplicationController
     #currently you cannot sort if it is for a team so a scheudled group id must be present
     if params[:sort].present? && params[:scheduled_group_id].present?
       key_activities = policy_scope(KeyActivity).owned_by_user(current_user)
+      authorize key_activities
       @key_activities = KeyActivityResortService.call(key_activities, params[:sort], params[:scheduled_group_id])
     else
       raise "No Sort Type Given"
     end
-    authorize @key_activities
     render "api/key_activities/index"
   end
 
