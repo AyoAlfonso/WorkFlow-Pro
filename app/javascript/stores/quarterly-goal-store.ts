@@ -42,10 +42,13 @@ export const QuarterlyGoalStoreModel = types
           self.quarterlyGoal.id,
           keyElementParams,
         );
-        const updatedKeyElements = [...self.quarterlyGoal.keyElements, response.data.keyElement];
-        self.quarterlyGoal.keyElements = updatedKeyElements as any;
-        showToast("Key Result deleted", ToastMessageConstants.SUCCESS);
-        return response.data.keyElement;
+        if (response.ok) {
+          const updatedKeyElements = [...self.quarterlyGoal.keyElements, response.data.keyElement];
+          self.quarterlyGoal.keyElements = updatedKeyElements as any;
+          showToast("Key Result created", ToastMessageConstants.SUCCESS);
+          return response.data.keyElement;
+        }
+        //api monitor to show error
       } catch {
         showToast(il8n.t("quarterlyGoal.keyElementCreationError"), ToastMessageConstants.ERROR);
       }
@@ -54,9 +57,12 @@ export const QuarterlyGoalStoreModel = types
       const env = getEnv(self);
       try {
         const response: any = yield env.api.deleteQuarterlyGoalKeyElement(keyElementId);
-        self.quarterlyGoal = response.data.quarterlyGoal;
-        showToast("Key Result deleted", ToastMessageConstants.SUCCESS);
-        return true;
+        if (response.ok) {
+          self.quarterlyGoal = response.data.quarterlyGoal;
+          showToast("Key Result deleted", ToastMessageConstants.SUCCESS);
+          return true;
+        }
+        //api monitor to show error
       } catch {
         showToast("There was an error deleting the key result", ToastMessageConstants.ERROR);
         return false;
