@@ -81,11 +81,19 @@ export const AnnualInitiativeCardExpanded = observer(
     };
 
     return (
-      <Container>
+      <Container
+        onClick={e => {
+          e.stopPropagation();
+        }}
+      >
         <QuarterlyGoalsText>{t("quarterlyGoal.title")}</QuarterlyGoalsText>
         {renderQuarterlyGoals()}
         {showCreateQuarterlyGoal && renderCreateGoal()}
-        <MinimizeIconContainer onClick={() => setShowMinimizedCard(true)}>
+        <MinimizeIconContainer
+          onClick={e => {
+            setShowMinimizedCard(true);
+          }}
+        >
           <Icon icon={"Chevron-Up"} size={"15px"} iconColor={"grey60"} />
         </MinimizeIconContainer>
       </Container>

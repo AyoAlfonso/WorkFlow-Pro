@@ -78,14 +78,14 @@ export const AnnualInitiativeCard = ({
       key={index}
       marginRight={index + 1 == totalNumberOfAnnualInitiatives ? "0px" : "15px"}
       onboarding={onboarding}
+      onClick={e => {
+        e.stopPropagation();
+        setAnnualInitiativeModalOpen(true);
+        setAnnualInitiativeId(annualInitiative.id);
+      }}
     >
       <HeaderContainer>
-        <DescriptionContainer
-          onClick={() => {
-            setAnnualInitiativeModalOpen(true);
-            setAnnualInitiativeId(annualInitiative.id);
-          }}
-        >
+        <DescriptionContainer>
           <StyledText closedInitiative={annualInitiative.closedInitiative}>
             {annualInitiative.description}
           </StyledText>

@@ -52,10 +52,18 @@ export const AnnualInitiativeCardMinimized = ({
   };
 
   return (
-    <Container>
+    <Container
+      onClick={e => {
+        e.stopPropagation();
+      }}
+    >
       <StatusSquareContainer>{renderStatusSquares()}</StatusSquareContainer>
       {disableOpen ? null : (
-        <MaximizeIconContainer onClick={() => setShowMinimizedCard(false)}>
+        <MaximizeIconContainer
+          onClick={e => {
+            setShowMinimizedCard(false);
+          }}
+        >
           <Icon
             icon={"Chevron-Down"}
             size={"15px"}
