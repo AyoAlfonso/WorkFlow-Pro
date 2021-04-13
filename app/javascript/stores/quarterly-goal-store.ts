@@ -58,7 +58,7 @@ export const QuarterlyGoalStoreModel = types
       try {
         const response: any = yield env.api.deleteQuarterlyGoalKeyElement(keyElementId);
         if (response.ok) {
-          self.quarterlyGoal = response.data.quarterlyGoal;
+          self.quarterlyGoal = response.data;
           showToast("Key Result deleted", ToastMessageConstants.SUCCESS);
           return true;
         }
