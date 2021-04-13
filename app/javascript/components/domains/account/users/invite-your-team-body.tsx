@@ -9,15 +9,18 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import { Button } from "~/components/shared/button";
+import * as R from "ramda";
 interface IInviteYourTeamBodyProps {
   setModalOpen: any;
+  setShowUserLimitModal: any;
 }
 
 export const InviteYourTeamBody = observer(
-  ({ setModalOpen }: IInviteYourTeamBodyProps): JSX.Element => {
+  ({ setModalOpen, setShowUserLimitModal }: IInviteYourTeamBodyProps): JSX.Element => {
     const {
       teamStore: { teams },
       companyStore,
+      userStore: { users },
     } = useMst();
 
     const [emailAddresses, setEmailAddresses] = useState<string>("");
@@ -34,9 +37,25 @@ export const InviteYourTeamBody = observer(
     };
 
     const inviteUsersToCompany = () => {
-      companyStore.inviteUsersToCompany(emailAddresses, selectedTeamId).then(() => {
-        setModalOpen(false);
-      });
+      // TODO: UPDATE THIS FEATURE WHEN THE IMPLEMENTATION FOR SUBSCRIPTION HAS BEEN COMPLETED.
+      //       WE NEED TO DETERMINE THE NUMBER OF USERS + WHICH PLAN THE COMPANY IS ON
+
+      const numberOfUsersToInvite = emailAddresses.split(",").filter(item => item.trim().length > 0)
+        .length;
+
+      const remainingNumberOfUsers = 15 - users.length;
+
+      console.log("remaining number of users", remainingNumberOfUsers);
+      console.log("num of users to invite", numberOfUsersToInvite);
+
+      if (numberOfUsersToInvite > remainingNumberOfUsers) {
+        // TODO: SHOW THE TOO MANY PEOPLE MODAL
+        setShowUserLimitModal(true);
+      } else {
+        companyStore.inviteUsersToCompany(emailAddresses, selectedTeamId).then(() => {
+          setModalOpen(false);
+        });
+      }
     };
 
     return (
