@@ -56,26 +56,29 @@ export const OwnedBySection = ({
   };
 
   return (
-    <Container
-      editable={editable}
-      onClick={() => {
-        if (editable) {
-          setShowUsersList(!showUsersList);
-        }
-      }}
-    >
+    <Container>
       <OwnedBySubHeaderContainer>
         <SubHeaderText text={"Owned By"} />
       </OwnedBySubHeaderContainer>
-      <Avatar
-        defaultAvatarColor={ownedBy.defaultAvatarColor}
-        avatarUrl={ownedBy.avatarUrl}
-        firstName={ownedBy.firstName}
-        lastName={ownedBy.lastName}
-        size={45}
-        marginLeft={"0px"}
-        border={userIconBorder}
-      />
+      <EditTriggerContainer
+        editable={editable}
+        onClick={e => {
+          if (editable) {
+            setShowUsersList(!showUsersList);
+          }
+        }}
+      >
+        <Avatar
+          defaultAvatarColor={ownedBy.defaultAvatarColor}
+          avatarUrl={ownedBy.avatarUrl}
+          firstName={ownedBy.firstName}
+          lastName={ownedBy.lastName}
+          size={45}
+          marginLeft={"auto"}
+          marginRight={"auto"}
+          border={userIconBorder}
+        />
+      </EditTriggerContainer>
       {renderUserSelectionList()}
     </Container>
   );
@@ -85,9 +88,12 @@ type ContainerType = {
   editable: boolean;
 };
 
-const Container = styled.div<ContainerType>`
+const Container = styled.div`
   width: 10%;
   margin-left: 50px;
+`;
+
+const EditTriggerContainer = styled.div<ContainerType>`
   &:hover {
     cursor: ${props => props.editable && "pointer"};
   }
@@ -98,5 +104,7 @@ const SubHeaderContainer = styled.div`
 `;
 
 const OwnedBySubHeaderContainer = styled(SubHeaderContainer)`
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 20px;
 `;
