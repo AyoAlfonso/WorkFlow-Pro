@@ -151,7 +151,9 @@ export const KeyElement = ({
       </ContentContainer>
       <OptionsButtonContainer
         onClick={() => {
-          store.deleteKeyElement(element.id);
+          if (confirm(`Are you sure you want to delete this key result?`)) {
+            store.deleteKeyElement(element.id);
+          }
         }}
       >
         <Icon icon={"Delete"} size={"12px"} iconColor={"grey40"} />
