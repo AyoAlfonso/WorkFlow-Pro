@@ -35,6 +35,14 @@ export const QuarterlyGoalStoreModel = types
       //   showToast(il8n.t("quarterlyGoal.retrievalError"), ToastMessageConstants.ERROR);
       // }
     }),
+    closeGoal: flow(function*(id) {
+      const env = getEnv(self);
+      const response: any = yield env.api.closeQuarterlyGoal(id);
+      const responseQuarterlyGoal = response.data;
+      self.quarterlyGoal = responseQuarterlyGoal;
+      showToast(il8n.t("quarterlyGoal.closed"), ToastMessageConstants.SUCCESS);
+      return responseQuarterlyGoal;
+    }),
     createKeyElement: flow(function*(keyElementParams) {
       const env = getEnv(self);
       try {

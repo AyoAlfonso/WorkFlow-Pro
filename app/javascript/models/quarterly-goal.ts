@@ -19,6 +19,7 @@ export const QuarterlyGoalModel = types
     milestones: types.array(MilestoneModel),
     contextDescription: types.string,
     quarter: types.number,
+    closedAt: types.maybeNull(types.string)
   })
   .views(self => ({
     get activeMilestones() {

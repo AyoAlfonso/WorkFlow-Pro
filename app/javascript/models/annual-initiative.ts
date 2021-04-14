@@ -17,6 +17,7 @@ export const AnnualInitiativeModel = types
     contextDescription: types.string,
     ownedBy: types.maybeNull(UserModel),
     fiscalYear: types.maybeNull(types.number),
+    closedAt: types.maybeNull(types.string)
   })
   .views(self => ({
     get closedInitiative() {

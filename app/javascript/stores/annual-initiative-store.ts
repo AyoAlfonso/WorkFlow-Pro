@@ -37,6 +37,20 @@ export const AnnualInitiativeStoreModel = types
         showToast("There was an error updating the annual objective", ToastMessageConstants.ERROR);
       }
     }),
+    closeInitiative: flow(function*(id) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.closeAnnualInitiative(id);
+        const responseAnnualInitiative = response.data.annualInitiative;
+        self.annualInitiative = responseAnnualInitiative;
+        const { goalStore } = getRoot(self);
+        goalStore.updateAnnualInitiative(responseAnnualInitiative);
+        showToast("Annual objective updated", ToastMessageConstants.SUCCESS);
+        return responseAnnualInitiative;
+      } catch {
+        showToast("There was an error updating the annual objective", ToastMessageConstants.ERROR);
+      }
+    }),
     createKeyElement: flow(function*(keyElementParams) {
       const env = getEnv(self);
       try {

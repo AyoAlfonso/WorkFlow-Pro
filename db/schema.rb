@@ -317,6 +317,7 @@ ActiveRecord::Schema.define(version: 2021_04_13_211609) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "context_description"
     t.integer "quarter"
+    t.date "closed_at"
     t.index ["annual_initiative_id"], name: "index_quarterly_goals_on_annual_initiative_id"
     t.index ["created_by_id"], name: "index_quarterly_goals_on_created_by_id"
     t.index ["owned_by_id"], name: "index_quarterly_goals_on_owned_by_id"

@@ -1,5 +1,5 @@
 class Api::QuarterlyGoalsController < Api::ApplicationController
-  before_action :set_quarterly_goal, only: [:show, :update, :destroy, :create_key_element, :create_milestones]
+  before_action :set_quarterly_goal, only: [:show, :update, :destroy, :create_key_element, :create_milestones, :close_goal]
 
   respond_to :json
 
@@ -39,6 +39,11 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     annual_initiative = @quarterly_goal.annual_initiative
     @quarterly_goal.destroy!
     render json: annual_initiative.as_json(include: [{owned_by: {methods: [:avatar_url]}}, { quarterly_goals: { include: [:milestones, owned_by: {methods: [:avatar_url]}] } }])
+  end
+
+  def close_goal
+    @quarterly_goal.update!(closed_at: Date.today)
+    render 'api/quarterly_goals/update'
   end
 
   def create_key_element

@@ -41,7 +41,17 @@ export const GoalDropdownOptions = ({
 
   const closeInitiative = () => {
     if (itemType == "annualInitiative") {
+      if (confirm(`Are you sure you want to close this ${t("annualInitiative.messageText")}`)) {
+        annualInitiativeStore.closeInitiative(itemId).then(() => {
+          setModalOpen(false);
+        });
+      }
     } else if (itemType == "quarterlyGoal") {
+      if (confirm(`Are you sure you want to close this ${t("quarterlyGoal.messageText")}`)) {
+        quarterlyGoalStore.closeGoal(itemId).then(() => {
+          setModalOpen(false);
+        });
+      }
     }
   };
 

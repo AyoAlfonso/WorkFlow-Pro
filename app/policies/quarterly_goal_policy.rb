@@ -40,6 +40,10 @@ class QuarterlyGoalPolicy < ApplicationPolicy
     true
   end
 
+  def close_goal?
+    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
+  end
+
   class Scope
     attr_reader :user, :scope
 
