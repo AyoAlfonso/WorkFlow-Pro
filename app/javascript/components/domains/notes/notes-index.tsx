@@ -76,7 +76,7 @@ export const NotesIndex = observer(
 
     const meetingTemplates = meetingStore.meetingTemplates;
     const profile = sessionStore.profile;
-    const teams = teamStore.teams;
+    const teams = toJS(profile.teams); //TODO: if you are a coach you can see other team notes
     const users = userStore.users;
 
     if (R.isNil(meetingTemplates) || R.isNil(users) || R.isNil(profile) || R.isNil(teams)) {
