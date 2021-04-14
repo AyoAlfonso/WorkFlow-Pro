@@ -20,6 +20,7 @@ import { NavLink } from "react-router-dom";
 import { RecordOptions } from "../shared/record-options";
 import { Loading } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
+import { GoalDropdownOptions } from "../shared/goal-dropdown-options";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -42,6 +43,9 @@ export const AnnualInitiativeModalContent = observer(
 
     const [showCreateQuarterlyGoal, setShowCreateQuarterlyGoal] = useState<boolean>(false);
     const [showAllQuarterlyGoals, setShowAllQuarterlyGoals] = useState<boolean>(false);
+    const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
+      false,
+    );
 
     const { t } = useTranslation();
     const descriptionRef = useRef(null);
@@ -108,6 +112,26 @@ export const AnnualInitiativeModalContent = observer(
       });
     };
 
+    const renderDropdownOptions = (): JSX.Element => {
+      return (
+        editable && (
+          <DropdownOptionsContainer
+            onClick={() => setShowDropdownOptionsContainer(!showDropdownOptionsContainer)}
+          >
+            <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
+            {showDropdownOptionsContainer && (
+              <GoalDropdownOptions
+                setShowDropdownOptions={setShowDropdownOptionsContainer}
+                setModalOpen={setAnnualInitiativeModalOpen}
+                itemType={"annualInitiative"}
+                itemId={annualInitiative.id}
+              />
+            )}
+          </DropdownOptionsContainer>
+        )
+      );
+    };
+
     const renderHeader = (): JSX.Element => {
       return (
         <HeaderContainer>
@@ -138,24 +162,7 @@ export const AnnualInitiativeModalContent = observer(
             )}
           </TitleContainer>
           <AnnualInitiativeActionContainer>
-            {editable && (
-              <DeleteIconContainer
-                onClick={() => {
-                  if (
-                    confirm(
-                      `Are you sure you want to delete this ${t("annualInitiative.messageText")}`,
-                    )
-                  ) {
-                    annualInitiativeStore.delete(annualInitiativeId).then(() => {
-                      setAnnualInitiativeModalOpen(false);
-                    });
-                  }
-                }}
-              >
-                <Icon icon={"Delete"} size={"16px"} iconColor={"grey80"} />
-              </DeleteIconContainer>
-            )}
-
+            {renderDropdownOptions()}
             <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
               <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
             </CloseIconContainer>
@@ -267,11 +274,6 @@ const GoalText = styled(Text)`
   color: ${props => props.theme.colors.grey80};
 `;
 
-const UnderlinedGoalText = styled.span`
-  font-weight: bold;
-  text-decoration: underline;
-`;
-
 const AnnualInitiativeActionContainer = styled.div`
   display: flex;
   margin-left: auto;
@@ -283,17 +285,8 @@ const CloseIconContainer = styled.div`
   }
 `;
 
-const DeleteIconContainer = styled(CloseIconContainer)`
-  margin-right: 16px;
-`;
-
 const SectionContainer = styled.div`
   margin-top: 24px;
-`;
-
-const ContextContainer = styled(HomeContainerBorders)`
-  padding-left: 16px;
-  padding-right: 16px;
 `;
 
 const QuarterlyGoalsContainer = styled.div`
@@ -370,4 +363,15 @@ const StyledNavLink = styled(NavLink)`
   &:visited {
     color: ${props => props.theme.colors.grey80};
   }
+`;
+
+const DropdownOptionsContainer = styled.div`
+  margin-right: 16px;
+  &: hover {
+    cursor: pointer;
+  }
+`;
+
+const StyledOptionIcon = styled(Icon)`
+  transform: rotate(90deg);
 `;

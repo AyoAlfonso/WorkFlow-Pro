@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_29_221742) do
+ActiveRecord::Schema.define(version: 2021_04_13_211609) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_221742) do
     t.bigint "company_id"
     t.string "context_description"
     t.integer "fiscal_year"
+    t.date "closed_at"
     t.index ["company_id"], name: "index_annual_initiatives_on_company_id"
     t.index ["created_by_id"], name: "index_annual_initiatives_on_created_by_id"
     t.index ["owned_by_id"], name: "index_annual_initiatives_on_owned_by_id"
@@ -271,7 +272,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_221742) do
     t.datetime "scheduled_start_time"
     t.datetime "end_time"
     t.bigint "hosted_by_id"
-    t.text "notes", default: ""
+    t.text "notes"
     t.json "settings"
     t.boolean "original_creation", default: false
     t.index ["created_at"], name: "index_meetings_on_created_at"
@@ -471,7 +472,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_221742) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_role_id"
     t.string "user_title"
-    t.boolean "first_time_access", default: true
+    t.boolean "first_time_access", default: false
     t.index ["company_id"], name: "index_user_company_enablements_on_company_id"
     t.index ["user_id"], name: "index_user_company_enablements_on_user_id"
     t.index ["user_role_id"], name: "index_user_company_enablements_on_user_role_id"

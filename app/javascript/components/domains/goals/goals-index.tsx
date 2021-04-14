@@ -50,7 +50,7 @@ export const GoalsIndex = observer(
       goalStore.load().then(() => setLoading(false));
     }, []);
 
-    if (loading || R.isNil(goalStore.companyGoals)) {
+    if (loading || R.isNil(goalStore.companyGoals) || !companyStore.company) {
       return <Loading />;
     }
 

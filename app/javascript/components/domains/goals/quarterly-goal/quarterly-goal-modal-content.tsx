@@ -17,6 +17,7 @@ import { MilestoneCard } from "../milestone/milestone-card";
 import { Loading } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { useTranslation } from "react-i18next";
+import { GoalDropdownOptions } from "../shared/goal-dropdown-options";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -41,6 +42,9 @@ export const QuarterlyGoalModalContent = observer(
     const currentUser = sessionStore.profile;
     const [quarterlyGoal, setQuarterlyGoal] = useState<any>(null);
     const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
+    const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
+      false,
+    );
 
     const descriptionRef = useRef(null);
 
@@ -61,6 +65,26 @@ export const QuarterlyGoalModalContent = observer(
 
     const allMilestones = quarterlyGoal.milestones;
     const activeMilestones = quarterlyGoal.activeMilestones;
+
+    const renderDropdownOptions = (): JSX.Element => {
+      return (
+        editable && (
+          <DropdownOptionsContainer
+            onClick={() => setShowDropdownOptionsContainer(!showDropdownOptionsContainer)}
+          >
+            <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
+            {showDropdownOptionsContainer && (
+              <GoalDropdownOptions
+                setShowDropdownOptions={setShowDropdownOptionsContainer}
+                setModalOpen={setAnnualInitiativeModalOpen}
+                itemType={"quarterlyGoal"}
+                itemId={quarterlyGoal.id}
+              />
+            )}
+          </DropdownOptionsContainer>
+        )
+      );
+    };
 
     const renderHeader = (): JSX.Element => {
       return (
@@ -96,19 +120,7 @@ export const QuarterlyGoalModalContent = observer(
             </GoalText>
           </TitleContainer>
           <AnnualInitiativeActionContainer>
-            {editable && (
-              <DeleteIconContainer
-                onClick={() => {
-                  if (confirm(t("quarterlyGoal.confirmDelete"))) {
-                    quarterlyGoalStore.delete(false, quarterlyGoalId).then(() => {
-                      setQuarterlyGoalModalOpen(false);
-                    });
-                  }
-                }}
-              >
-                <Icon icon={"Delete"} size={"16px"} iconColor={"grey80"} />
-              </DeleteIconContainer>
-            )}
+            {renderDropdownOptions()}
             <CloseIconContainer onClick={() => setQuarterlyGoalModalOpen(false)}>
               <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
             </CloseIconContainer>
@@ -264,17 +276,8 @@ const CloseIconContainer = styled.div`
   }
 `;
 
-const DeleteIconContainer = styled(CloseIconContainer)`
-  margin-right: 16px;
-`;
-
 const SectionContainer = styled.div`
   margin-top: 24px;
-`;
-
-const ContextContainer = styled(HomeContainerBorders)`
-  padding-left: 16px;
-  padding-right: 16px;
 `;
 
 const MilestonesHeaderContainer = styled.div`
@@ -321,4 +324,15 @@ const StyledButton = styled(Button)`
 
 const AddMilestoneText = styled.p`
   margin-left: 16px;
+`;
+
+const DropdownOptionsContainer = styled.div`
+  margin-right: 16px;
+  &: hover {
+    cursor: pointer;
+  }
+`;
+
+const StyledOptionIcon = styled(Icon)`
+  transform: rotate(90deg);
 `;
