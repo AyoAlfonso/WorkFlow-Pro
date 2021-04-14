@@ -5,6 +5,7 @@ import { baseTheme } from "../../../../themes";
 import { Icon } from "../../../shared/icon";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
 import * as moment from "moment";
+import { MilestoneCard } from "../milestone/milestone-card";
 
 interface IAnnualInitiativeCardMinimizedProps {
   annualInitiative: AnnualInitiativeType;
@@ -21,9 +22,15 @@ export const AnnualInitiativeCardMinimized = ({
     return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
       const { warningRed, cautionYellow, finePine, grey40 } = baseTheme.colors;
 
-      const currentMilestone = quarterlyGoal.milestones.find(milestone =>
+      //if there is no currentMilestone, use the last milestone, assuming this is past the 13th week
+
+      let currentMilestone;
+      currentMilestone = quarterlyGoal.milestones.find(milestone =>
         moment(milestone.weekOf).isSame(moment(), "week"),
       );
+      if (!currentMilestone) {
+        currentMilestone = quarterlyGoal.milestones[quarterlyGoal.milestones.length - 1];
+      }
 
       let backgroundColor = grey40;
 

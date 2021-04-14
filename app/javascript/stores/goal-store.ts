@@ -1,4 +1,4 @@
-import { types, flow, getEnv } from "mobx-state-tree";
+import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { GoalModel } from "../models/goal";
 import { showToast } from "~/utils/toast-message";
@@ -14,7 +14,9 @@ export const GoalStoreModel = types
     teamGoals: types.maybeNull(types.array(AnnualInitiativeModel)),
   })
   .extend(withEnvironment())
-  .views(self => ({}))
+  .views(self => ({
+
+  }))
   .actions(self => ({
     load: flow(function*() {
       const env = getEnv(self);

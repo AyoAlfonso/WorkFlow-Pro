@@ -56,9 +56,10 @@ export const AnnualInitiativeModalContent = observer(
     }
 
     const editable =
-      currentUser.id == annualInitiative.ownedById ||
-      currentUser.role == RoleCEO ||
-      currentUser.role == RoleAdministrator;
+      (currentUser.id == annualInitiative.ownedById ||
+        currentUser.role == RoleCEO ||
+        currentUser.role == RoleAdministrator) &&
+      !annualInitiative.closedInitiative;
 
     const activeQuarterlyGoals = annualInitiative.activeQuarterlyGoals;
     const allQuarterlyGoals = annualInitiative.quarterlyGoals;
@@ -170,9 +171,17 @@ export const AnnualInitiativeModalContent = observer(
             <SubHeaderContainer>
               <SubHeaderText text={"Context"} />
             </SubHeaderContainer>
-            <ContextTabs object={annualInitiative} type={"annualInitiative"} />
+            <ContextTabs
+              object={annualInitiative}
+              type={"annualInitiative"}
+              disabled={annualInitiative.closedInitiative}
+            />
           </ContextSectionContainer>
-          <OwnedBySection ownedBy={annualInitiative.ownedBy} type={"annualInitiative"} />
+          <OwnedBySection
+            ownedBy={annualInitiative.ownedBy}
+            type={"annualInitiative"}
+            disabled={annualInitiative.closedInitiative}
+          />
         </InfoSectionContainer>
       );
     };

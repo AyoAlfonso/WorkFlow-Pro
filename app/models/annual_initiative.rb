@@ -12,8 +12,6 @@ class AnnualInitiative < ApplicationRecord
   has_many :key_elements, as: :elementable
   accepts_nested_attributes_for :key_elements
 
-  default_scope { order(id: :asc) }
-
   scope :sort_by_created_date, -> { order(created_at: :asc) }
   scope :user_current_company, -> (company_id) {where(company_id: company_id)}
   scope :owned_by_user, -> (user) { where(owned_by_id: user.id).where(company_id: nil) }

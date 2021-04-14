@@ -22,10 +22,11 @@ import { RoundButton, Text, TextDiv } from "~/components/shared";
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;
   type: string;
+  disabled?: boolean;
 }
 
 export const ContextTabs = observer(
-  ({ object, type }: IContextTabsProps): JSX.Element => {
+  ({ object, type, disabled }: IContextTabsProps): JSX.Element => {
     const { sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
     const tabDefaultIndex = () => {
       if (
@@ -44,7 +45,7 @@ export const ContextTabs = observer(
     const [store, setStore] = useState<any>(null);
     const [focusOnLastInput, setFocusOnLastInput] = useState<boolean>(false);
     const [showKeyElementForm, setShowKeyElementForm] = useState<boolean>(false);
-    const editable = currentUser.id == object.ownedById;
+    const editable = currentUser.id == object.ownedById && !disabled;
 
     const firstImportanceRef = useRef(null);
     const secondImportanceRef = useRef(null);

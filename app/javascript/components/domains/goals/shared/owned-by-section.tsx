@@ -12,12 +12,14 @@ interface IOwnedBySectionProps {
   ownedBy: UserType;
   type: string;
   userIconBorder?: string;
+  disabled?: boolean;
 }
 
 export const OwnedBySection = ({
   ownedBy,
   type,
   userIconBorder,
+  disabled,
 }: IOwnedBySectionProps): JSX.Element => {
   const { userStore, sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
   const [store, setStore] = useState<any>(null);
@@ -34,9 +36,10 @@ export const OwnedBySection = ({
   const companyUsers = userStore.users;
   const currentUser = sessionStore.profile;
   const editable =
-    ownedBy.id == currentUser.id ||
-    currentUser.role == RoleCEO ||
-    currentUser.role == RoleAdministrator;
+    (ownedBy.id == currentUser.id ||
+      currentUser.role == RoleCEO ||
+      currentUser.role == RoleAdministrator) &&
+    !disabled;
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (

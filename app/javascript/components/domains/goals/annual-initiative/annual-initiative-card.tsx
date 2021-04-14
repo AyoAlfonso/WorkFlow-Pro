@@ -7,6 +7,7 @@ import { AnnualInitiativeCardExpanded } from "./annual-initiative-card-expanded"
 import { useState, useEffect } from "react";
 import { RecordOptions } from "../shared/record-options";
 import { useMst } from "~/setup/root";
+import { baseTheme } from "~/themes";
 
 interface IAnnualInitiativeCardProps {
   annualInitiative: any;
@@ -20,6 +21,7 @@ interface IAnnualInitiativeCardProps {
   setSelectedAnnualInitiativeDescription?: React.Dispatch<React.SetStateAction<string>>;
   showCreateQuarterlyGoal: boolean;
   onboarding?: boolean;
+  showEditButton?: boolean;
 }
 
 export const AnnualInitiativeCard = ({
@@ -34,6 +36,7 @@ export const AnnualInitiativeCard = ({
   setSelectedAnnualInitiativeDescription,
   showCreateQuarterlyGoal,
   onboarding,
+  showEditButton = true,
 }: IAnnualInitiativeCardProps): JSX.Element => {
   const [showMinimizedCard, setShowMinimizedCard] = useState<boolean>(showMinimizedCards);
 
@@ -47,7 +50,7 @@ export const AnnualInitiativeCard = ({
     ? `${companyStore.onboardingCompany.currentFiscalYear}`
     : companyStore.company.currentFiscalYear == annualInitiative.fiscalYear
     ? `FY${annualInitiative.fiscalYear.toString().slice(-2)}`
-    : `FY${companyStore.company.currentFiscalYear
+    : `FY${(annualInitiative.fiscalYear + 1)
         .toString()
         .slice(-2)}/${annualInitiative.fiscalYear.toString().slice(-2)}`;
 
@@ -58,8 +61,12 @@ export const AnnualInitiativeCard = ({
       companyStore.company.currentFiscalYear != annualInitiative.fiscalYear &&
       annualInitiative.fiscalYear
     ) {
+      let containerColor =
+        companyStore.company.currentFiscalYear > annualInitiative.fiscalYear
+          ? baseTheme.colors.grey100
+          : baseTheme.colors.primary100;
       return (
-        <YearContainer>
+        <YearContainer color={containerColor}>
           <YearText> {goalYearString} Goal </YearText>
         </YearContainer>
       );
@@ -79,7 +86,9 @@ export const AnnualInitiativeCard = ({
             setAnnualInitiativeId(annualInitiative.id);
           }}
         >
-          <StyledText> {annualInitiative.description} </StyledText>
+          <StyledText closedInitiative={annualInitiative.closedInitiative}>
+            {annualInitiative.description}
+          </StyledText>
         </DescriptionContainer>
         <IconContainer>
           <RecordOptions type={"annualInitiative"} id={annualInitiative.id} marginLeft={"-70px"} />
@@ -102,6 +111,7 @@ export const AnnualInitiativeCard = ({
           setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
           setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
           showCreateQuarterlyGoal={showCreateQuarterlyGoal}
+          showEditButton={showEditButton}
         />
       )}
     </Container>
@@ -130,10 +140,15 @@ const DescriptionContainer = styled.div`
   overflow-wrap: anywhere;
 `;
 
-const StyledText = styled(Text)`
+type StyledTextProps = {
+  closedInitiative: boolean;
+};
+
+const StyledText = styled(Text)<StyledTextProps>`
   padding-left: 16px;
   padding-right: 16px;
   white-space: normal;
+  color: ${props => props.closedInitiative && props.theme.colors.greyActive};
   &:hover {
     cursor: pointer;
     font-weight: bold;
@@ -153,8 +168,12 @@ const IconContainer = styled.div`
   display: flex;
 `;
 
-const YearContainer = styled.div`
-  background-color: ${props => props.theme.colors.primary100};
+type YearContainerProps = {
+  color: string;
+};
+
+const YearContainer = styled.div<YearContainerProps>`
+  background-color: ${props => props.color || props.theme.colors.primary100};
   border-radius: 5px;
   padding-left: 8px;
   padding-right: 8px;

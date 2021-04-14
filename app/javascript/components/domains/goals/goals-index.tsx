@@ -20,8 +20,6 @@ export const GoalsIndex = observer(
   (): JSX.Element => {
     const { goalStore, annualInitiativeStore, companyStore } = useMst();
 
-    const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(true);
-    const [showMinimizedCards, setShowMinimizedCards] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(true);
     const [annualInitiativeModalOpen, setAnnualInitiativeModalOpen] = useState<boolean>(false);
     const [annualInitiativeId, setAnnualInitiativeId] = useState<number>(null);
@@ -37,6 +35,15 @@ export const GoalsIndex = observer(
       boolean
     >(false);
 
+    const [companyGoalsFilter, setCompanyGoalsFilter] = useState<string>("all");
+    const [personalGoalsFilter, setPersonalGoalsFilter] = useState<string>("all");
+
+    const [companyPlanning, setCompanyPlanning] = useState<boolean>(false);
+    const [personalPlanning, setPersonalPlanning] = useState<boolean>(false);
+
+    const [showCompanyInitiatives, setShowCompanyInitiatives] = useState<boolean>(true);
+    const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
+
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -49,9 +56,54 @@ export const GoalsIndex = observer(
 
     const companyGoals = goalStore.companyGoals;
     const personalGoals = goalStore.personalGoals;
-    const goalsToShow = showCompanyGoals
-      ? companyGoals.goals
-      : companyGoals.onlyShowMyQuarterlyGoals;
+
+    const toggleCompanyPlanning = () => {
+      if (companyPlanning) {
+        setCompanyPlanning(false);
+        setShowPersonalInitiatives(true);
+      } else {
+        setPersonalPlanning(false);
+        setShowCompanyInitiatives(true);
+        setShowPersonalInitiatives(false);
+        setCompanyPlanning(true);
+      }
+    };
+
+    const togglePersonalPlanning = () => {
+      if (personalPlanning) {
+        setPersonalPlanning(false);
+        setShowCompanyInitiatives(true);
+      } else {
+        setCompanyPlanning(false);
+        setShowCompanyInitiatives(false);
+        setShowPersonalInitiatives(true);
+        setPersonalPlanning(true);
+      }
+    };
+
+    const companyGoalsToShow = () => {
+      switch (companyGoalsFilter) {
+        case "all":
+          return companyGoals.activeAnnualInitiatives;
+        case "me":
+          return companyGoals.myAnnualInitiatives;
+        case "closed":
+          return companyGoals.closedAnnualInitiatives;
+        default:
+          return companyGoals;
+      }
+    };
+
+    const personalGoalsToShow = () => {
+      switch (personalGoalsFilter) {
+        case "all":
+          return personalGoals.activeAnnualInitiatives;
+        case "closed":
+          return personalGoals.closedAnnualInitiatives;
+        default:
+          return personalGoals;
+      }
+    };
 
     const renderCreateCompanyAnnualInitiativeSection = (type): JSX.Element => {
       const showCreateAnnualInitiative =
@@ -84,7 +136,8 @@ export const GoalsIndex = observer(
       );
     };
 
-    const renderAnnualInitiatives = (annualInitiatives): JSX.Element => {
+    const renderAnnualInitiatives = (annualInitiatives, type): JSX.Element => {
+      const showEditButton = type == "company" ? companyPlanning : personalPlanning;
       return annualInitiatives.map((annualInitiative, index) => {
         return (
           <AnnualInitiativeCard
@@ -92,13 +145,14 @@ export const GoalsIndex = observer(
             index={index}
             annualInitiative={annualInitiative}
             totalNumberOfAnnualInitiatives={annualInitiatives.length}
-            showMinimizedCards={showMinimizedCards}
+            showMinimizedCards={true}
             setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
             setAnnualInitiativeId={setAnnualInitiativeId}
             setQuarterlyGoalId={setQuarterlyGoalId}
             setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
             setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
             showCreateQuarterlyGoal={true}
+            showEditButton={showEditButton}
           />
         );
       });
@@ -108,34 +162,64 @@ export const GoalsIndex = observer(
       <Container>
         <GoalsCoreFour />
 
-        <TitleContainer
-          showMinimizedCards={showMinimizedCards}
-          setShowMinimizedCards={setShowMinimizedCards}
-          showCompanyGoals={showCompanyGoals}
-          setShowCompanyGoals={setShowCompanyGoals}
-          largeHomeTitle={true}
-        />
+        <CompanyInitiativesContainer>
+          <TitleContainer
+            goalsFilter={companyGoalsFilter}
+            setGoalsFilter={setCompanyGoalsFilter}
+            largeHomeTitle={true}
+            title={"Company"}
+            handleToggleChange={toggleCompanyPlanning}
+            toggleChecked={companyPlanning}
+            showInitiatives={showCompanyInitiatives}
+            setShowInitiatives={setShowCompanyInitiatives}
+          />
 
-        <RallyingCry rallyingCry={companyGoals.rallyingCry} />
+          {showCompanyInitiatives && (
+            <>
+              <RallyingCry rallyingCry={companyGoals.rallyingCry} />
 
-        <InitiativesContainer>
-          {renderAnnualInitiatives(goalsToShow)}
-          <CreateAnnualInitiativeContainer marginLeft={goalsToShow.length > 0 ? "15px" : "0px"}>
-            {renderCreateCompanyAnnualInitiativeSection("company")}
-          </CreateAnnualInitiativeContainer>
-        </InitiativesContainer>
+              <InitiativesContainer>
+                {renderAnnualInitiatives(companyGoalsToShow(), "company")}
+                {companyPlanning && (
+                  <CreateAnnualInitiativeContainer
+                    marginLeft={R.length(companyGoalsToShow()) > 0 ? "15px" : "0px"}
+                  >
+                    {renderCreateCompanyAnnualInitiativeSection("company")}
+                  </CreateAnnualInitiativeContainer>
+                )}
+              </InitiativesContainer>
+            </>
+          )}
+        </CompanyInitiativesContainer>
 
-        <PersonalVisionContainer>
-          <PersonalVision personalVision={personalGoals.personalVision} />
-          <InitiativesContainer>
-            {renderAnnualInitiatives(personalGoals.goals)}
-            <CreateAnnualInitiativeContainer
-              marginLeft={personalGoals.goals.length > 0 ? "15px" : "0px"}
-            >
-              {renderCreateCompanyAnnualInitiativeSection("personal")}
-            </CreateAnnualInitiativeContainer>
-          </InitiativesContainer>
-        </PersonalVisionContainer>
+        <PersonalInitiativesContainer>
+          <TitleContainer
+            goalsFilter={personalGoalsFilter}
+            setGoalsFilter={setPersonalGoalsFilter}
+            largeHomeTitle={true}
+            title={"Personal"}
+            handleToggleChange={togglePersonalPlanning}
+            toggleChecked={personalPlanning}
+            showInitiatives={showPersonalInitiatives}
+            setShowInitiatives={setShowPersonalInitiatives}
+          />
+
+          {showPersonalInitiatives && (
+            <>
+              <PersonalVision personalVision={personalGoals.personalVision} />
+              <InitiativesContainer>
+                {renderAnnualInitiatives(personalGoalsToShow(), "personal")}
+                {personalPlanning && (
+                  <CreateAnnualInitiativeContainer
+                    marginLeft={R.length(personalGoalsToShow()) > 0 ? "15px" : "0px"}
+                  >
+                    {renderCreateCompanyAnnualInitiativeSection("personal")}
+                  </CreateAnnualInitiativeContainer>
+                )}
+              </InitiativesContainer>
+            </>
+          )}
+        </PersonalInitiativesContainer>
 
         <StyledModal
           isOpen={annualInitiativeModalOpen}
@@ -180,7 +264,7 @@ const InitiativesContainer = styled.div`
   padding-bottom: 15px;
 `;
 
-const PersonalVisionContainer = styled.div`
+const PersonalInitiativesContainer = styled.div`
   margin-top: 20px;
   padding-top: 10px;
 `;
@@ -200,3 +284,5 @@ const CreateAnnualInitiativeContainer = styled.div<CreateAnnualInitiativeContain
   margin-left: ${props => props.marginLeft || "0px"};
   width: 20%;
 `;
+
+const CompanyInitiativesContainer = styled.div``;
