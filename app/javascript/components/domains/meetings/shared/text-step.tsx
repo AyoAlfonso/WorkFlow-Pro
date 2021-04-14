@@ -15,19 +15,27 @@ export const TextStep = ({ step }: ITextStepProps): JSX.Element => {
 
   return (
     <TextStepContainer>
-      <div
+      <TextStepDiv
         className="trix-content"
         dangerouslySetInnerHTML={{ __html: step.descriptionTextContent }}
-      ></div>
+      />
     </TextStepContainer>
   );
 };
 
-export const TextStepContainer = styled.div`
+export const TextStepDiv = styled.div`
   max-height: 700px;
-  margin-left: 16px;
+  margin: auto;
   min-width: 640px;
-  width: 75%;
+  width: 80%;
   font-size: 48px;
   font-family: exo;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const TextStepContainer = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
 `;
