@@ -22,7 +22,7 @@ export const ScheduledGroupSelector = observer(
     setSelectedTeamId,
   }: IScheduledGroupSelectorProps): JSX.Element => {
     const {
-      sessionStore: { scheduledGroups },
+      sessionStore: { scheduledGroups, profile },
       teamStore: { teams },
     } = useMst();
 
@@ -63,7 +63,7 @@ export const ScheduledGroupSelector = observer(
     };
 
     const renderTeams = () => {
-      return teams.map((team, index) => {
+      return profile.teams.map((team, index) => {
         return (
           <OptionContainer onClick={() => onTeamSelect(team.id)} key={index}>
             <OptionInitialContainer>

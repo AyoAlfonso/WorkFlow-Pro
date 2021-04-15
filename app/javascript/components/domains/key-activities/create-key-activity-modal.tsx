@@ -186,7 +186,6 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                     setCreateKeyActivityModalOpen(false);
                     setSelectedPriority(0);
                     setSelectedLabel(null);
-                    setSelectedTeamId(null);
                     setPersonal(false);
                   }
                 })
