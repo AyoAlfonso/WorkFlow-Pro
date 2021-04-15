@@ -80,7 +80,7 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
       return <ImageStep step={step} />;
     case "embedded_link":
       //the embedded link will override itself based on the team's override key setting
-      return <EmbedStep step={step} />;
+      return <EmbedStep linkEmbed={step.linkEmbed} />;
     case "description_text":
       return <TextStep step={step} />;
     default:

@@ -3,7 +3,7 @@ import * as R from "ramda";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 import { Avatar } from "~/components/shared/avatar";
 import { Loading } from "~/components/shared/loading";
@@ -11,7 +11,7 @@ import { Text } from "~/components/shared/text";
 import MeetingTypes from "~/constants/meeting-types";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { showToast } from "~/utils/toast-message";
-import { useMst } from "../../../setup/root";
+import { useMst } from "~/setup/root";
 
 import { KeyActivitiesListStyleContainer } from "~/components/domains/key-activities/key-activities-list";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
@@ -32,9 +32,12 @@ import { StyledOverviewAccordion } from "~/components/shared/styles/overview-sty
 import {
   ToolsWrapper,
   ToolsHeader,
-  SnapshotHeading,
+  OverviewTabsContainer,
+  OverviewTabs,
 } from "~/components/shared/styles/overview-styles";
 import { UserStatus } from "~/components/shared/user-status";
+
+import { TeamDashboard } from "./team-dashboard";
 
 interface ITeamOverviewProps {}
 
@@ -49,6 +52,7 @@ export const TeamOverview = observer(
     } = useMst();
 
     const { team_id } = useParams();
+    const inDashboard = useRouteMatch("/team/:team_id/dashboard");
     const { t } = useTranslation();
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -164,8 +168,35 @@ export const TeamOverview = observer(
     return (
       <Container>
         <LeftContainer>
-          <SnapshotHeading type={"h2"}>{t(`${overviewType}.teamSnapshotTitle`)}</SnapshotHeading>
-          {renderUserSnapshotTable()}
+          <OverviewTabsContainer>
+            <OverviewTabs
+              exact={true}
+              to={`/team/${team_id}`}
+              activeStyle={{
+                borderBottomWidth: "1px",
+              }}
+            >
+              {t(`${overviewType}.teamSnapshotTitle`)}
+            </OverviewTabs>
+            {overviewType == "teams" ? (
+              <OverviewTabs
+                to={`/team/${team_id}/dashboard`}
+                activeStyle={{
+                  borderBottomWidth: "1px",
+                }}
+              >
+                {t(`${overviewType}.dashboard`)}
+              </OverviewTabs>
+            ) : (
+              <></>
+            )}
+          </OverviewTabsContainer>
+
+          {inDashboard && overviewType == "teams" ? (
+            <TeamDashboard team={currentTeam} />
+          ) : (
+            renderUserSnapshotTable()
+          )}
         </LeftContainer>
         <ToolsWrapper>
           <ToolsHeader type={"h2"}>{t("tools.title")}</ToolsHeader>

@@ -182,6 +182,7 @@ export const App = observer(
                     path={[
                       "/",
                       "/team/:team_id",
+                      "/team/:team_id/dashboard",
                       "/account",
                       "/company/accountability",
                       "/company/strategic_plan",
@@ -205,7 +206,11 @@ export const App = observer(
                       <Container>
                         <Route exact path="/" component={HomeContainer} />
 
-                        <Route exact path="/team/:team_id" component={TeamOverview} />
+                        <Route
+                          exact
+                          path={["/team/:team_id", "/team/:team_id/dashboard"]}
+                          component={TeamOverview}
+                        />
                         <Route exact path="/account" component={AccountSettings} />
                         <Route
                           exact
