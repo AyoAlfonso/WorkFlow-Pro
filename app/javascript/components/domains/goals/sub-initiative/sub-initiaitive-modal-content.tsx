@@ -17,9 +17,9 @@ import { MilestoneCreateButton } from "../shared-quarterly-goal-and-sub-initiati
 import { WeeklyMilestones } from "../shared-quarterly-goal-and-sub-initiative/weekly-milestones";
 import { InitiativeHeader } from "../shared-quarterly-goal-and-sub-initiative/initiative-header";
 
-interface IQuarterlyGoalModalContentProps {
-  quarterlyGoalId: number;
-  setQuarterlyGoalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+interface ISubInitiativeModalContentProps {
+  subInitiativeId: number;
+  setSubInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   annualInitiativeDescription: string;
   setAnnualInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setAnnualInitiativeId: React.Dispatch<React.SetStateAction<number>>;
@@ -28,14 +28,14 @@ interface IQuarterlyGoalModalContentProps {
 
 export const QuarterlyGoalModalContent = observer(
   ({
-    quarterlyGoalId,
-    setQuarterlyGoalModalOpen,
+    subInitiativeId,
+    setSubInitiativeModalOpen,
     annualInitiativeDescription,
     setAnnualInitiativeModalOpen,
     setAnnualInitiativeId,
     showCreateMilestones,
-  }: IQuarterlyGoalModalContentProps): JSX.Element => {
-    const { quarterlyGoalStore, sessionStore } = useMst();
+  }: ISubInitiativeModalContentProps): JSX.Element => {
+    const { subInitiativeStore, sessionStore } = useMst();
     const currentUser = sessionStore.profile;
     const [quarterlyGoal, setQuarterlyGoal] = useState<any>(null);
     const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);

@@ -78,6 +78,9 @@ const initialState = {
     headingsAndDescriptions: {},
     fieldsAndLabels: {},
   },
+  subInitiativeStore: {
+    subInitiative: null
+  }
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);
