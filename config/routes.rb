@@ -112,6 +112,13 @@ Rails.application.routes.draw do
     delete '/quarterly_goals/delete_key_element/:key_element_id', to: 'quarterly_goals#delete_key_element'
     post '/quarterly_goals/create_milestones/:id', to: 'quarterly_goals#create_milestones'
 
+    #sub_initiatives
+    resources :sub_initiatives, only: [:index, :create, :show, :update, :destroy]
+    post '/sub_initiatives/create_key_element/:id', to: 'sub_initiatives#create_key_element'
+    patch '/sub_initiatives/close_goal/:id', to: 'sub_initiatives#close_goal'
+    delete '/sub_initiatives/delete_key_element/:key_element_id', to: 'sub_initiatives#delete_key_element'
+    post '/sub_initiatives/create_milestones/:id', to: 'sub_initiatives#create_milestones'
+
     #habits
     resources :habits, only: [:index, :create, :update, :destroy] do
       resources :habit_logs, only: [:update], param: :log_date

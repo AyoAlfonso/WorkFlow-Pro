@@ -156,6 +156,23 @@
         "keyElementCreationError": "There was an error creating the key element",
         "milestoneCreationError": "There was an error creating milestones"
       },
+      "subInitiative": {
+        "enterTitle": "Enter Sub Initiative Title...",
+        "add": "Add a Sub Initiative",
+        "addGoal": "Add Initiative",
+        "title": "Sub Initiatives",
+        "messageText": "sub initiative",
+        "confirmDelete": "Are you sure you want to delete this sub initiative?",
+        "created": "Sub Initiative created",
+        "updated": "Sub Initiative updated",
+        "closed": "Sub Initiative closed",
+        "deleted": "Sub Initiative deleted",
+        "creationError": "There was an error creating the sub initiative",
+        "retrievalError": "There was an error retrieving the sub initiative",
+        "deletionError": "There was an error deleting the sub initiative",
+        "keyElementCreationError": "There was an error creating the key element",
+        "milestoneCreationError": "There was an error creating milestones"
+      },
       "meeting": {
         "conversationStarter": "Conversation Starter",
         "meetingRating": "Rate the Meeting",

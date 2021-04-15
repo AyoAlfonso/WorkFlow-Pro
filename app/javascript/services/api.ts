@@ -288,6 +288,36 @@ export class Api {
     return this.client.delete(`/quarterly_goals/${id}`);
   }
 
+  async getSubInitiative(id) {
+    return this.client.get(`/sub_initiatives/${id}`);
+  }
+
+  async updateSubInitiative(subInitiative) {
+    const parsedSubInitiative = {
+      ...subInitiative,
+      keyElementsAttributes: subInitiative.keyElements,
+      milestonesAttributes: subInitiative.milestones,
+    };
+
+    return this.client.patch(`/sub_initiatives/${subInitiative.id}`, parsedSubInitiative);
+  }
+
+  async closeSubInitiative(id) {
+    return this.client.patch(`/sub_initiatives/close_goal/${id}`);
+  }
+
+  async createSubInitiativeKeyElement(id, params) {
+    return this.client.post(`/sub_initiatives/create_key_element/${id}`, params);
+  }
+
+  async deleteSubInitiativeKeyElement(keyElementId) {
+    return this.client.delete(`/sub_initiatives/delete_key_element/${keyElementId}`);
+  }
+
+  async deleteSubInitiative(id) {
+    return this.client.delete(`/sub_initiatives/${id}`);
+  }
+
   async getHabits() {
     return this.client.get("/habits");
   }
@@ -316,8 +346,16 @@ export class Api {
     return this.client.post(`/quarterly_goals`, quarterlyGoalObject);
   }
 
-  async createMilestones(quarterlyGoalId) {
+  async createQuarterlyGoalMilestones(quarterlyGoalId) {
     return this.client.post(`/quarterly_goals/create_milestones/${quarterlyGoalId}`);
+  }
+
+  async createSubInitiative(subInitiativeObject) {
+    return this.client.post(`/sub_initiatives`, subInitiativeObject);
+  }
+
+  async createSubInitiativeMilestones(subInitiativeId) {
+    return this.client.post(`/sub_initiatives/create_milestones/${subInitiativeId}`);
   }
 
   async updateHabitLog(habitId: number, logDate: string) {

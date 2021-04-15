@@ -3,25 +3,22 @@ import { UserModel } from "./user";
 import { MilestoneModel } from "./milestone";
 import { KeyElementModel } from "./key-element";
 import * as moment from "moment";
-import { SubInitiativeModel } from "./sub-initiative";
 
-export const QuarterlyGoalModel = types
-  .model("QuarterlyGoalModel")
+export const SubInitiativeModel = types
+  .model("SubInitiativeModel")
   .props({
     id: types.identifierNumber,
-    annualInitiativeId: types.number,
+    quarterlyGoalId: types.number,
     createdById: types.number,
-    createdAt: types.string,
     importance: types.array(types.string),
     keyElements: types.array(KeyElementModel),
     ownedById: types.number,
     ownedBy: types.maybeNull(UserModel),
     description: types.string,
     milestones: types.array(MilestoneModel),
-    contextDescription: types.string,
+    contextDescription: types.maybeNull(types.string),
     quarter: types.number,
-    closedAt: types.maybeNull(types.string),
-    subInitiative: types.maybeNull(SubInitiativeModel)
+    closedAt: types.maybeNull(types.string)
   })
   .views(self => ({
     get activeMilestones() {
@@ -40,8 +37,8 @@ export const QuarterlyGoalModel = types
   }))
   .actions(self => ({}));
 
-type QuarterlyGoalModelType = typeof QuarterlyGoalModel.Type;
-type QuarterlyGoalModelDataType = typeof QuarterlyGoalModel.CreationType;
+type SubInitiativeModelType = typeof SubInitiativeModel.Type;
+type SubInitiativeModelDataType = typeof SubInitiativeModel.CreationType;
 
-export interface IQuarterlyGoal extends QuarterlyGoalModelType {}
-export interface IQuarterlyGoalData extends QuarterlyGoalModelDataType {}
+export interface ISubInitiative extends SubInitiativeModelType {}
+export interface ISubInitiativeData extends SubInitiativeModelDataType {}

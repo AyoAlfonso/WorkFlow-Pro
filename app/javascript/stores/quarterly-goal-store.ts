@@ -146,7 +146,7 @@ export const QuarterlyGoalStoreModel = types
     createMilestones: flow(function*(quarterlyGoalId) {
       const env = getEnv(self);
       try {
-        const response: any = yield env.api.createMilestones(quarterlyGoalId);
+        const response: any = yield env.api.createQuarterlyGoalMilestones(quarterlyGoalId);
         self.quarterlyGoal = response.data;
       } catch {
         showToast(il8n.t("quarterlyGoal.milestoneCreationError"), ToastMessageConstants.ERROR); // error messaging handled by API monitor
@@ -188,6 +188,11 @@ export const QuarterlyGoalStoreModel = types
       milestones[milestoneIndex].status = status;
       self.quarterlyGoal.milestones = milestones;
       self.update();
+    },
+    updateQuarterlyGoalAfterAddingSubInitiative(subInitiative){
+      if (self.quarterlyGoal.id) {
+        self.quarterlyGoal.subInitiative = subInitiative as any
+      }
     },
   }));
 
