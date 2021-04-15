@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { toJS } from "mobx";
 
-import { OverallTeamPulse } from "./overall-team-pulse";
-import { TeamPulseCard } from "./team-pulse-card";
+import { OverallTeamPulseMini } from "./overall-team-pulse";
+import { TeamPulseCardMini } from "./team-pulse-card";
 import { NoMoodRatings } from "~/components/shared/no-mood-ratings";
 
 import { CardLayout } from "~/components/layouts/card-layout";
@@ -15,6 +15,7 @@ import {
   HeaderContainerNoBorder,
   AccordionHeaderText,
 } from "~/components/shared/styles/container-header";
+import { Divider } from "@material-ui/core";
 
 interface ITeamPulsePanel {
   team: any;
@@ -50,8 +51,8 @@ export const TeamPulsePanel = ({
         <CardLayout customHeader={<></>}>
           {team.averageTeamEmotionScore > 0 ? (
             <TeamPulseBody>
-              <OverallTeamPulse value={team.averageTeamEmotionScore} />
-              <TeamPulseCard data={toJS(team.formattedAverageWeeklyUserEmotions) || []} />
+              <OverallTeamPulseMini value={team.averageTeamEmotionScore} />
+              <TeamPulseCardMini data={toJS(team.formattedAverageWeeklyUserEmotions) || []} />
             </TeamPulseBody>
           ) : (
             <NoMoodWrapper>
@@ -66,11 +67,12 @@ export const TeamPulsePanel = ({
 
 const TeamPulseBody = styled.div`
   display: flex;
-  padding-top: 36px;
-  padding-bottom: 36px;
+  flex-direction: column;
+  padding-top: 16px;
+  padding-bottom: 16px;
 `;
 
 const NoMoodWrapper = styled.div`
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 `;

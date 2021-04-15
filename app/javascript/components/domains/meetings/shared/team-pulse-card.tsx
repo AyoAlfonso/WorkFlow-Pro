@@ -77,6 +77,65 @@ export const TeamPulseCard = ({ data }: ITeamPulseCardProps): JSX.Element => {
   );
 };
 
+export const TeamPulseCardMini = ({ data }: ITeamPulseCardProps): JSX.Element => {
+  const parsedData = () => {
+    return data.map(data => {
+      return {
+        ...data,
+        color: colorParser(data.y),
+      };
+    });
+  };
+
+  const colorParser = value => {
+    switch (true) {
+      case value < 2:
+        return warningRed;
+      case value < 3:
+        return cautionYellow;
+      case value < 4:
+        return greyInactive;
+      case value < 5:
+        return successGreen;
+      case value == 5:
+        return finePine;
+    }
+  };
+
+  return (
+    <ContainerMini>
+      <XYPlot
+        height={225}
+        width={224}
+        margin={{ top: 40, bottom: 20 }}
+        xType="ordinal"
+        yDomain={[1, 5]}
+      >
+        <HorizontalGridLines />
+        <XAxis
+          orientation="top"
+          hideLine
+          top={-34}
+          tickSize={0}
+          tickFormat={value => renderDateOfWeek(value)}
+        />
+        <YAxis
+          hideLine
+          tickFormat={(value, index) => renderTickIcon(value, index)}
+          left={-40}
+          top={28}
+        />
+        <LineMarkSeries
+          data={parsedData()}
+          colorType="literal"
+          strokeStyle={"dashed"}
+          lineStyle={{ stroke: greyInactive }}
+        />
+      </XYPlot>
+    </ContainerMini>
+  );
+};
+
 const renderDateOfWeek = date => {
   const splittedDate = date.split("-");
   return (
@@ -110,4 +169,10 @@ const renderTickIcon = (value, index) => {
 
 const Container = styled.div`
   padding-left: 36px;
+`;
+
+const ContainerMini = styled.div`
+  width: 224px;
+  margin-right: auto;
+  margin-left: auto;
 `;

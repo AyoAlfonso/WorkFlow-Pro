@@ -33,9 +33,40 @@ export const OverallTeamPulse = ({ value }: IOverallTeamPulseProps): JSX.Element
   );
 };
 
+export const OverallTeamPulseMini = ({ value }: IOverallTeamPulseProps): JSX.Element => {
+  const renderIcon = () => {
+    switch (true) {
+      case value < 2:
+        return <Icon icon={"Emotion-E"} size={"110px"} iconColor={"warningRed"} />;
+      case value < 3:
+        return <Icon icon={"Emotion-D"} size={"110px"} iconColor={"cautionYellow"} />;
+      case value < 4:
+        return <Icon icon={"Emotion-C"} size={"110px"} iconColor={"greyInactive"} />;
+      case value < 5:
+        return <Icon icon={"Emotion-B"} size={"110px"} iconColor={"successGreen"} />;
+      case value == 5:
+        return <Icon icon={"Emotion-A"} size={"110px"} iconColor={"finePine"} />;
+    }
+  };
+
+  return (
+    <ContainerMini>
+      {renderIcon()}
+      <RatingContainer>
+        <RatingText>{value.toFixed(1)} / 5</RatingText>
+      </RatingContainer>
+    </ContainerMini>
+  );
+};
+
 const Container = styled.div`
   padding-left: 36px;
   margin-top: 28px;
+`;
+
+const ContainerMini = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const RatingContainer = styled.div``;
