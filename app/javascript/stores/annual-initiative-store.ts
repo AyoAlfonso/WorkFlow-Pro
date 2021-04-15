@@ -44,10 +44,16 @@ export const AnnualInitiativeStoreModel = types
           self.annualInitiative.id,
           keyElementParams,
         );
-        const updatedKeyElements = [...self.annualInitiative.keyElements, response.data.keyElement];
-        self.annualInitiative.keyElements = updatedKeyElements as any;
-        showToast("Key Result created", ToastMessageConstants.SUCCESS);
-        return response.data.keyElement;
+        if (response.ok) {
+          const updatedKeyElements = [
+            ...self.annualInitiative.keyElements,
+            response.data.keyElement,
+          ];
+          self.annualInitiative.keyElements = updatedKeyElements as any;
+          showToast("Key Result created", ToastMessageConstants.SUCCESS);
+          return response.data.keyElement;
+        }
+        //api to show error
       } catch {
         showToast("There was an error creating the key element", ToastMessageConstants.ERROR);
       }
@@ -56,9 +62,12 @@ export const AnnualInitiativeStoreModel = types
       const env = getEnv(self);
       try {
         const response: any = yield env.api.deleteAnnualInitiativeKeyElement(keyElementId);
-        self.annualInitiative = response.data;
-        showToast("Key Result deleted", ToastMessageConstants.SUCCESS);
-        return true;
+        if (response.ok) {
+          self.annualInitiative = response.data;
+          showToast("Key Result deleted", ToastMessageConstants.SUCCESS);
+          return true;
+        }
+        //api to show error
       } catch {
         showToast("There was an error deleting the key result", ToastMessageConstants.ERROR);
         return false;

@@ -7,7 +7,7 @@ import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
 import { toJS } from "mobx";
 
-import { TextStepContainer } from "~/components/domains/meetings/shared/text-step";
+import { TextStepDiv, TextStepContainer } from "~/components/domains/meetings/shared/text-step";
 
 export const ConversationStarter = observer(
   (): JSX.Element => {
@@ -21,7 +21,7 @@ export const ConversationStarter = observer(
 
     return (
       <TextStepContainer>
-        <div>{randomConvoStarter.body}</div>
+        <TextStepDiv>{randomConvoStarter.body}</TextStepDiv>
       </TextStepContainer>
     );
   },

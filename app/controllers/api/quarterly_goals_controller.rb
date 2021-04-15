@@ -48,10 +48,9 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
   def delete_key_element
     key_element = KeyElement.find(params[:key_element_id])
-    key_element.destroy!
     @quarterly_goal = policy_scope(QuarterlyGoal).find(key_element.elementable_id)
-    @company = current_company
     authorize @quarterly_goal
+    key_element.destroy!      
     render "api/quarterly_goals/delete_key_element"
   end
 

@@ -32,7 +32,8 @@ export const MilestoneCard = ({
     <MilestoneContainer>
       <MilestoneDetails unstarted={unstarted} currentWeek={currentWeek}>
         <WeekOfText unstarted={unstarted}>
-          Week of <WeekOfTextValue>{moment(milestone.weekOf).format("MMMM D")}</WeekOfTextValue>
+          Week {milestone.week}: Week of{" "}
+          <WeekOfTextValue>{moment(milestone.weekOf).format("MMMM D")}</WeekOfTextValue>
         </WeekOfText>
         <MilestoneContentEditable
           innerRef={descriptionRef}
@@ -111,4 +112,5 @@ const MilestoneContentEditable = styled(ContentEditable)`
   margin-bottom: 8px;
   padding-top: 5px;
   padding-bottom: 5px;
+  color: ${props => props.theme.colors.black};
 `;

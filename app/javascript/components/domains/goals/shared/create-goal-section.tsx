@@ -50,12 +50,13 @@ export const CreateGoalSection = ({
 
             if (annualInitiativeId) {
               createAction(variables, inAnnualInitiative).then(() => {
-                setShowCreateGoal(false);
+                // leave open for next item creation - // setShowCreateGoal(false);
                 setDescription("");
+                //open the next item for creation
               });
             } else {
               createAction(variables).then(() => {
-                setShowCreateGoal(false);
+                // leave open for next item creation - // setShowCreateGoal(false);
                 setDescription("");
               });
             }

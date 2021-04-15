@@ -224,6 +224,9 @@ export const GoalsIndex = observer(
         <StyledModal
           isOpen={annualInitiativeModalOpen}
           style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
+          onBackgroundClick={e => {
+            setAnnualInitiativeModalOpen(false);
+          }}
         >
           <AnnualInitiativeModalContent
             annualInitiativeId={annualInitiativeId}
@@ -237,6 +240,9 @@ export const GoalsIndex = observer(
         <StyledModal
           isOpen={quarterlyGoalModalOpen}
           style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
+          onBackgroundClick={e => {
+            setQuarterlyGoalModalOpen(false);
+          }}
         >
           <QuarterlyGoalModalContent
             quarterlyGoalId={quarterlyGoalId}

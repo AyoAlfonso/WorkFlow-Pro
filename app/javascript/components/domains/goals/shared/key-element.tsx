@@ -9,8 +9,6 @@ import { KeyElementType } from "~/types/key-element";
 import { baseTheme } from "~/themes";
 import { StripedProgressBar } from "~/components/shared/progress-bars";
 import { Icon, Text } from "~/components/shared";
-import { HomeContainerBorders } from "~/components/domains/home/shared-components";
-
 interface IKeyElementProps {
   element: KeyElementType;
   store: any;
@@ -153,22 +151,13 @@ export const KeyElement = ({
       </ContentContainer>
       <OptionsButtonContainer
         onClick={() => {
-          setShowOptions(!showOptions);
+          if (confirm(`Are you sure you want to delete this key result?`)) {
+            store.deleteKeyElement(element.id);
+          }
         }}
       >
-        <Icon icon={"Options"} size={"12px"} iconColor={"grey40"} />
+        <Icon icon={"Delete"} size={"12px"} iconColor={"grey40"} />
       </OptionsButtonContainer>
-      {showOptions && (
-        <OptionsContainer ref={optionsRef}>
-          <Option
-            onClick={() => {
-              store.deleteKeyElement(element.id);
-            }}
-          >
-            <OptionText>Delete</OptionText>
-          </Option>
-        </OptionsContainer>
-      )}
     </KeyElementContainer>
   );
 };
@@ -194,40 +183,8 @@ const OptionsButtonContainer = styled.div`
   margin-top: 5px;
   right: 0;
   top: 0;
-  transform: rotate(90deg);
   &:hover {
     cursor: pointer;
-  }
-`;
-
-const OptionsContainer = styled(HomeContainerBorders)`
-  position: absolute;
-  background: white;
-  right: 0;
-  top: 12px;
-  width: 100px;
-  z-index: 2;
-`;
-
-const OptionText = styled(Text)`
-  color: black;
-  cursor: pointer;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 12px;
-`;
-
-const Option = styled.div`
-  display: flex;
-  &:hover {
-    background-color: ${props => props.theme.colors.primary100};
-    border-radius: 10px;
-    z-index: 2;
-  }
-  &:hover ${OptionText} {
-    color: white;
   }
 `;
 

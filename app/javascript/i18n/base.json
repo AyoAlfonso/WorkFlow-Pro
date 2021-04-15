@@ -269,7 +269,8 @@
         "teamMeetingsTitle": "Team Planning",
         "teamIssuesTitle": "Team Issues",
         "teamsPulseTitle": "Team Pulse",
-        "teamSnapshotTitle": "Team Snapshot"
+        "teamSnapshotTitle": "Team Snapshot",
+        "dashboard": "Dashboard"
       },
       "dateFilters": {
         "today": "Today",

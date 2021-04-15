@@ -58,21 +58,24 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
   };
 
   return (
-    <Container>
+    <Container
+      onClick={e => {
+        e.stopPropagation();
+        openQuarterlyGoalModal();
+      }}
+    >
       <StatusBlockColorIndicator milestones={quarterlyGoal.milestones || []} indicatorWidth={25} />
 
       <RowContainer>
         <DescriptionContainer>
-          <StyledText onClick={() => openQuarterlyGoalModal()}>
-            {quarterlyGoal.description}
-          </StyledText>
+          <StyledText>{quarterlyGoal.description}</StyledText>
         </DescriptionContainer>
 
         <IconContainer>
           <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} />
         </IconContainer>
       </RowContainer>
-      <RowContainer onClick={() => openQuarterlyGoalModal()}>
+      <RowContainer>
         {renderQuarterDisplay()}
         {quarterlyGoal.ownedBy && (
           <IconContainer>

@@ -53,13 +53,23 @@ export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
 
   return (
     <Container ref={optionsRef}>
-      <IconWrapper onClick={() => setShowOptions(!showOptions)}>
+      <IconWrapper
+        onClick={e => {
+          e.stopPropagation();
+          setShowOptions(!showOptions);
+        }}
+      >
         <Icon icon={"Options"} size={"16px"} iconColor={"grey60"} />
       </IconWrapper>
 
       {showOptions && (
         <OptionsContainer marginLeft={marginLeft}>
-          <Option onClick={() => deleteRecord()}>
+          <Option
+            onClick={e => {
+              e.stopPropagation();
+              deleteRecord();
+            }}
+          >
             <StyledIcon icon={"Delete"} size={16} />
             <OptionText> Delete </OptionText>
           </Option>
