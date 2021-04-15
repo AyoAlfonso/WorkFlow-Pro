@@ -51,6 +51,7 @@ class KeyActivity < ApplicationRecord
 
 
   validates :description, presence: true
+  validate :has_required_grouping, on: :create
 
   before_update :set_move_today_on
 
@@ -76,5 +77,11 @@ class KeyActivity < ApplicationRecord
   def self.owned_by_self_or_team_members(user)
     team_member_ids = TeamUserEnablement.where(team_id: user.team_ids).pluck(:user_id)
     self.where(user_id: [*team_member_ids, user.id])
+  end
+
+  def has_required_grouping
+    if scheduled_group_id.blank? && team_id.blank?
+      errors.add(:base, "A valid list option for the Pyn must must be selected")
+    end
   end
 end
