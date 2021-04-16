@@ -80,7 +80,7 @@ export const UserSelectionDropdownList = ({
         renderInput={params => (
           <TextField
             {...params}
-            label="Search for users"
+            label="Select user"
             variant="outlined"
             className={classes.textField}
             margin="dense"
