@@ -112,5 +112,7 @@ const MilestoneContentEditable = styled(ContentEditable)`
   margin-bottom: 8px;
   padding-top: 5px;
   padding-bottom: 5px;
+  padding-left: 16px;
+  padding-right: 16px;
   color: ${props => props.theme.colors.black};
 `;
