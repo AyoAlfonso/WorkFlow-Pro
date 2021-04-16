@@ -36,10 +36,9 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def destroy
-    annual_initiative = @quarterly_goal.annual_initiative
+    @annual_initiative = @quarterly_goal.annual_initiative
     @quarterly_goal.destroy!
-    render json: annual_initiative.as_json(include: [{owned_by: {methods: [:avatar_url]}}, { quarterly_goals: { include: [:milestones, owned_by: {methods: [:avatar_url]}] } }])
-  end
+    render 'api/annual_initiatives/show'
 
   def close_goal
     @quarterly_goal.update!(closed_at: Date.today)
