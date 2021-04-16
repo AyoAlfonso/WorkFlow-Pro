@@ -27,7 +27,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def show
-    render json: @quarterly_goal.as_json(include: [:milestones, owned_by: {methods: [:avatar_url]}])
+    render "api/quarterly_goals/show"
   end
 
   def update

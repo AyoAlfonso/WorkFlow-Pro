@@ -8,6 +8,6 @@ json.milestones quarterly_goal.milestones do |milestone|
   json.partial! milestone, partial: 'api/milestones/milestone', as: :milestone
 end
 
-json.sub_initiative do
-  json.partial! quarterly_goal.sub_initiative, partial: "api/sub_initiatives/sub_initiative", as: :sub_initiative if quarterly_goal.sub_initiative.present?
+json.sub_initiatives quarterly_goal.sub_initiatives do |sub_initiative|
+  json.partial! sub_initiative, partial: "api/sub_initiatives/sub_initiative", as: :sub_initiative
 end

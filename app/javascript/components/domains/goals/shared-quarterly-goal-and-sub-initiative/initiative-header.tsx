@@ -7,6 +7,7 @@ import { useRef } from "react";
 import { DropdownOptions } from "./dropdown-options";
 import { Text } from "../../../shared/text";
 import ContentEditable from "react-contenteditable";
+import { OwnedBySection } from "../shared/owned-by-section";
 
 interface IInitiativeHeaderProps {
   itemType: string;
@@ -69,6 +70,10 @@ export const InitiativeHeader = ({
             {annualInitiativeDescription}
           </UnderlinedGoalText>
         </GoalText>
+        <DetailsContainer>
+          <YearText type={"small"}>Q{item.quarter}</YearText>
+          <OwnedBySection ownedBy={item.ownedBy} type={itemType} disabled={item.closedInitiative} />
+        </DetailsContainer>
       </TitleContainer>
       <AnnualInitiativeActionContainer>
         <DropdownOptions
@@ -95,6 +100,7 @@ const TitleContainer = styled.div``;
 
 const GoalText = styled(Text)`
   font-size: 15px;
+  margin-left: 4px;
   color: ${props => props.theme.colors.grey80};
 `;
 
@@ -125,4 +131,13 @@ const StyledContentEditable = styled(ContentEditable)`
   padding-left: 4px;
   padding-right: 4px;
   margin-right: -4px;
+`;
+
+const DetailsContainer = styled.div`
+  display: flex;
+  margin-left: 4px;
+`;
+
+const YearText = styled(Text)`
+  color: ${props => props.theme.colors.greyActive};
 `;

@@ -6,6 +6,7 @@ interface IWeeklyMilestonesProps {
   allMilestones: any;
   activeMilestones: any;
   showInactiveMilestones: boolean;
+  itemType: string;
 }
 
 export const WeeklyMilestones = ({
@@ -13,9 +14,12 @@ export const WeeklyMilestones = ({
   allMilestones,
   activeMilestones,
   showInactiveMilestones,
+  itemType,
 }: IWeeklyMilestonesProps): JSX.Element => {
   const milestonesToShow = showInactiveMilestones ? allMilestones : activeMilestones;
   return milestonesToShow.map((milestone, index) => {
-    return <MilestoneCard key={index} milestone={milestone} editable={editable} />;
+    return (
+      <MilestoneCard key={index} milestone={milestone} editable={editable} itemType={itemType} />
+    );
   });
 };

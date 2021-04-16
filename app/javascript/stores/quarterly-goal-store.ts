@@ -191,9 +191,15 @@ export const QuarterlyGoalStoreModel = types
     },
     updateQuarterlyGoalAfterAddingSubInitiative(subInitiative){
       if (self.quarterlyGoal.id) {
-        self.quarterlyGoal.subInitiative = subInitiative as any
+        self.quarterlyGoal.subInitiatives = [
+          ...self.quarterlyGoal.subInitiatives,
+          subInitiative,
+        ] as any;
       }
     },
+    updateQuarterlyGoal(quarterlyGoal){
+      self.quarterlyGoal = quarterlyGoal as any;
+    }
   }));
 
 type QuarterlyGoalStoreType = typeof QuarterlyGoalStoreModel.Type;

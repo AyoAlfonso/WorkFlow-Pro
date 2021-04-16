@@ -34,6 +34,9 @@ export const HomeGoals = observer(
     const [showCompanyInitiatives, setShowCompanyInitiatives] = useState<boolean>(true);
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
 
+    const [subInitiativeModalOpen, setSubInitiativeModalOpen] = useState<boolean>(null);
+    const [subInitiativeId, setSubInitiativeId] = useState<number>(null);
+
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
     }, []);
@@ -175,6 +178,9 @@ export const HomeGoals = observer(
             annualInitiativeDescription={annualInitiativeDescription}
             setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
             showCreateMilestones={false}
+            setSubInitiativeId={setSubInitiativeId}
+            setSubInitiativeModalOpen={setSubInitiativeModalOpen}
+            setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
           />
         </StyledModal>
       </Container>

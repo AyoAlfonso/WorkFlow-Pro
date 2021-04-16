@@ -7,6 +7,7 @@ import { SubHeaderText } from "~/components/shared/sub-header-text";
 import { Avatar } from "~/components/shared/avatar";
 import { RoleAdministrator, RoleCEO } from "~/lib/constants";
 import { UserSelectionDropdownList } from "~/components/shared/user-selection-dropdown-list";
+import { Text } from "~/components/shared/text";
 
 interface IOwnedBySectionProps {
   ownedBy: UserType;
@@ -57,9 +58,6 @@ export const OwnedBySection = ({
 
   return (
     <Container>
-      <OwnedBySubHeaderContainer>
-        <SubHeaderText text={"Owned By"} />
-      </OwnedBySubHeaderContainer>
       <EditTriggerContainer
         editable={editable}
         onClick={e => {
@@ -73,11 +71,16 @@ export const OwnedBySection = ({
           avatarUrl={ownedBy.avatarUrl}
           firstName={ownedBy.firstName}
           lastName={ownedBy.lastName}
-          size={45}
+          size={20}
           marginLeft={"auto"}
           marginRight={"auto"}
+          marginTop={"auto"}
+          marginBottom={"auto"}
           border={userIconBorder}
         />
+        <OwnedByName type={"small"}>
+          {ownedBy.firstName} {ownedBy.lastName}
+        </OwnedByName>
       </EditTriggerContainer>
       {renderUserSelectionList()}
     </Container>
@@ -89,11 +92,11 @@ type ContainerType = {
 };
 
 const Container = styled.div`
-  width: 10%;
-  margin-left: 50px;
+  margin-left: 12px;
 `;
 
 const EditTriggerContainer = styled.div<ContainerType>`
+  display: flex;
   &:hover {
     cursor: ${props => props.editable && "pointer"};
   }
@@ -103,8 +106,7 @@ const SubHeaderContainer = styled.div`
   display: flex;
 `;
 
-const OwnedBySubHeaderContainer = styled(SubHeaderContainer)`
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 20px;
+const OwnedByName = styled(Text)`
+  margin-left: 8px;
+  color: ${props => props.theme.colors.greyActive};
 `;

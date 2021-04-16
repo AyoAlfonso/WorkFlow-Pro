@@ -9,6 +9,7 @@ export const SubInitiativeModel = types
   .props({
     id: types.identifierNumber,
     quarterlyGoalId: types.number,
+    annualInitiativeId: types.number,
     createdById: types.number,
     importance: types.array(types.string),
     keyElements: types.array(KeyElementModel),

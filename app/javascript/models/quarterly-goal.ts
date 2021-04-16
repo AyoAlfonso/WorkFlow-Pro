@@ -21,7 +21,7 @@ export const QuarterlyGoalModel = types
     contextDescription: types.string,
     quarter: types.number,
     closedAt: types.maybeNull(types.string),
-    subInitiative: types.maybeNull(SubInitiativeModel)
+    subInitiatives: types.array(SubInitiativeModel)
   })
   .views(self => ({
     get activeMilestones() {

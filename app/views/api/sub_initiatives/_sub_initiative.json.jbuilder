@@ -7,3 +7,5 @@ end
 json.milestones sub_initiative.milestones do |milestone|
   json.partial! milestone, partial: 'api/milestones/milestone', as: :milestone
 end
+
+json.annual_initiative_id sub_initiative.quarterly_goal.annual_initiative_id

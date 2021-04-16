@@ -64,17 +64,14 @@ export const SubInitiativeStoreModel = types
         return false;
       }
     }),
-    create: flow(function*(subInitiativeObject, inQuarterlyGoal) {
+    create: flow(function*(subInitiativeObject ) {
       //TODO: CHANGE THIS FUNCTION
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createSubInitiative(subInitiativeObject);
         const { goalStore, quarterlyGoalStore } = getRoot(self);
         goalStore.mergeQuarterlyGoals(response.data);
-        if (inQuarterlyGoal) {
-          quarterlyGoalStore.updateQuarterlyGoalAfterAddingSubInitiative(response.data);
-          //annualInitiativeStore.updateAnnualInitiativeAfterAddingQuarterlyGoal(response.data);
-        }
+        quarterlyGoalStore.updateQuarterlyGoalAfterAddingSubInitiative(response.data);
         showToast(il8n.t("subInitiative.created"), ToastMessageConstants.SUCCESS);
         return response.data;
       } catch {
@@ -86,10 +83,10 @@ export const SubInitiativeStoreModel = types
       try {
         const response: any = yield env.api.deleteSubInitiative(subInitiativeId);
         const { quarterlyGoalStore } = getRoot(self);
-        const quarterlyGoal = response.data
-        quarterlyGoalStore.updateQuarterlyGoalAfterAddingSubInitiative(response.data);
+        console.log('response.data', response.data)
+        quarterlyGoalStore.updateQuarterlyGoal(response.data);
         showToast(il8n.t("subInitiative.deleted"), ToastMessageConstants.SUCCESS);
-        return quarterlyGoal;
+        return response.data;
       } catch {
         showToast(il8n.t("subInitiative.deletionError"), ToastMessageConstants.ERROR);
       }

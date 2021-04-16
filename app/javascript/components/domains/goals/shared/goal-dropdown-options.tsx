@@ -18,7 +18,7 @@ export const GoalDropdownOptions = ({
   itemType,
   itemId,
 }: IGoalDropdownOptionsProps): JSX.Element => {
-  const { annualInitiativeStore, quarterlyGoalStore } = useMst();
+  const { annualInitiativeStore, quarterlyGoalStore, subInitiativeStore } = useMst();
   const optionsRef = useRef(null);
 
   const { t } = useTranslation();
@@ -35,10 +35,6 @@ export const GoalDropdownOptions = ({
     };
   }, [optionsRef]);
 
-  const createSubInitiative = () => {
-    console.log("create sub initiative");
-  };
-
   const closeInitiative = () => {
     if (itemType == "annualInitiative") {
       if (confirm(`Are you sure you want to close this ${t("annualInitiative.messageText")}`)) {
@@ -49,6 +45,12 @@ export const GoalDropdownOptions = ({
     } else if (itemType == "quarterlyGoal") {
       if (confirm(`Are you sure you want to close this ${t("quarterlyGoal.messageText")}`)) {
         quarterlyGoalStore.closeGoal(itemId).then(() => {
+          setModalOpen(false);
+        });
+      }
+    } else if (itemType == "subInitiative") {
+      if (confirm(`Are you sure you want to close this ${t("subInitiative.messageText")}`)) {
+        subInitiativeStore.closeGoal(itemId).then(() => {
           setModalOpen(false);
         });
       }
@@ -68,19 +70,27 @@ export const GoalDropdownOptions = ({
           setModalOpen(false);
         });
       }
+    } else if (itemType == "subInitiative") {
+      if (confirm(t("subInitiative.confirmDelete"))) {
+        subInitiativeStore.delete(itemId).then(() => {
+          setModalOpen(false);
+        });
+      }
     }
   };
 
   return (
     <Container ref={optionsRef}>
-      {itemType == "quarterlyGoal" && (
+      {/* 
+        // DONT HAVE THE PATTERN TO CREATE AN INITIATIVE YET.
+        {itemType == "quarterlyGoal" && (
         <OptionContainer onClick={() => createSubInitiative()}>
           <IconContainer>
             <StyledIcon icon={"Plus"} size={"15px"} />
           </IconContainer>
           <OptionText> Create Sub-Initiative </OptionText>
         </OptionContainer>
-      )}
+      )} */}
       <OptionContainer onClick={() => closeInitiative()}>
         <IconContainer>
           <StyledIcon icon={"Checkmark"} size={"15px"} />

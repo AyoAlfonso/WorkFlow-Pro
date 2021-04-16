@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_14_220909) do
+ActiveRecord::Schema.define(version: 2021_04_16_180523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -284,7 +284,6 @@ ActiveRecord::Schema.define(version: 2021_04_14_220909) do
 
   create_table "milestones", force: :cascade do |t|
     t.bigint "created_by_id"
-    t.bigint "quarterly_goal_id", null: false
     t.text "description"
     t.integer "week"
     t.datetime "created_at", precision: 6, null: false
@@ -295,7 +294,6 @@ ActiveRecord::Schema.define(version: 2021_04_14_220909) do
     t.bigint "milestoneable_id"
     t.index ["created_by_id"], name: "index_milestones_on_created_by_id"
     t.index ["milestoneable_type", "milestoneable_id"], name: "index_milestones_on_milestoneable_type_and_milestoneable_id"
-    t.index ["quarterly_goal_id"], name: "index_milestones_on_quarterly_goal_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -590,7 +588,6 @@ ActiveRecord::Schema.define(version: 2021_04_14_220909) do
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"
-  add_foreign_key "milestones", "quarterly_goals"
   add_foreign_key "notifications", "users"
   add_foreign_key "quarterly_goals", "annual_initiatives"
   add_foreign_key "questionnaire_attempts", "questionnaires"

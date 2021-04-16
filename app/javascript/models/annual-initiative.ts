@@ -21,17 +21,15 @@ export const AnnualInitiativeModel = types
   })
   .views(self => ({
     get closedInitiative() {
-      const { companyStore } = getRoot(self);
-      return companyStore.company.currentFiscalYear > self.fiscalYear;
+      return self.closedAt != null
     },
     get myQuarterlyGoals() {
       const { sessionStore } = getRoot(self);
       return self.quarterlyGoals.filter(qg => qg.ownedById == sessionStore.profile.id);
     },
     get activeQuarterlyGoals() {
-      const { companyStore } = getRoot(self);
       return self.quarterlyGoals.filter(
-        qg => companyStore.company.currentFiscalQuarter == qg.quarter,
+        qg => qg.closedAt != null
       );
     },
   }))

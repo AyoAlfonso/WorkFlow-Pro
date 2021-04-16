@@ -8,7 +8,7 @@ class QuarterlyGoal < ApplicationRecord
   belongs_to :annual_initiative
   has_many :milestones, as: :milestoneable
   has_many :key_elements, as: :elementable
-  has_one :sub_initiative, dependent: :destroy
+  has_many :sub_initiatives, dependent: :destroy
   accepts_nested_attributes_for :key_elements, :milestones
 
   scope :sort_by_created_date, -> { order(created_at: :asc) }
@@ -29,8 +29,7 @@ class QuarterlyGoal < ApplicationRecord
     fiscal_quarter_start_date_closest_monday = fiscal_quarter_start_date.monday? ? fiscal_quarter_start_date : fiscal_quarter_start_date.next_occurring(:monday)
     13.times do |index|
       Milestone.create!(
-        milestoneable_type: "QuarterlyGoal",
-        milestoneable_id: self.id,
+        milestoneable: self,
         description: "",
         week: index + 1, 
         week_of: fiscal_quarter_start_date_closest_monday + (1.week * index),

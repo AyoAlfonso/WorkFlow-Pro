@@ -3,12 +3,6 @@ class Api::SubInitiativesController < Api::ApplicationController
 
   respond_to :json
 
-  def index
-    company_current_quarter = current_company.current_fiscal_quarter
-    @quarterly_goals = policy_scope(QuarterlyGoal).owned_by_user(current_company).present_or_future(company_current_quarter).sort_by_created_date
-    render "/api/quarterly_goals/index"
-  end
-
   def create
     company = current_company
 
@@ -26,7 +20,7 @@ class Api::SubInitiativesController < Api::ApplicationController
   end
 
   def show
-    render json: @sub_initiative.as_json(include: [:milestones, owned_by: {methods: [:avatar_url]}])
+    render "api/sub_initiatives/show"
   end
 
   def update
@@ -35,9 +29,9 @@ class Api::SubInitiativesController < Api::ApplicationController
   end
 
   def destroy
-    quarterly_goal = @sub_initiative.quarterly_goal
+    @quarterly_goal = @sub_initiative.quarterly_goal
     @sub_initiative.destroy!
-    render json: quarterly_goal.as_json(include: [{owned_by: {methods: [:avatar_url]}}, { sub_initiative: { include: [:milestones, owned_by: {methods: [:avatar_url]}] } }])
+    render "api/quarterly_goals/show"
   end
 
   def close_goal
@@ -56,12 +50,12 @@ class Api::SubInitiativesController < Api::ApplicationController
     @sub_initiative = policy_scope(SubInitiative).find(key_element.elementable_id)
     @company = current_company
     authorize @sub_initiative
-    render "api/sub_initiative/delete_key_element"
+    render "api/sub_initiatives/delete_key_element"
   end
 
   def create_milestones
     @sub_initiative.create_milestones_for_sub_initiative(current_user, current_company)
-    render "api/sub_initiative/create_milestones"
+    render "api/sub_initiatives/create_milestones"
   end
 
   private

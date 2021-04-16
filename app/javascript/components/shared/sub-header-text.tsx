@@ -4,13 +4,20 @@ import { Text } from "./text";
 
 interface ISubHeaderTextProps {
   text: string;
+  noMargin?: boolean;
 }
 
-export const SubHeaderText = ({ text }: ISubHeaderTextProps): JSX.Element => {
-  return <StyledText>{text}</StyledText>;
+export const SubHeaderText = ({ text, noMargin }: ISubHeaderTextProps): JSX.Element => {
+  return <StyledText noMargin={noMargin}>{text}</StyledText>;
 };
 
-const StyledText = styled(Text)`
+type StyledTextProps = {
+  noMargin?: boolean;
+};
+
+const StyledText = styled(Text)<StyledTextProps>`
   font-size: 16px;
   font-weight: bold;
+  margin-top: ${props => props.noMargin && "0px"};
+  margin-bottom: ${props => props.noMargin && "0px"};
 `;

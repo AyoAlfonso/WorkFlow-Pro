@@ -15,7 +15,7 @@ interface IRecordOptionsProps {
 
 export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
   const { type, id, marginLeft } = props;
-  const { quarterlyGoalStore, annualInitiativeStore } = useMst();
+  const { quarterlyGoalStore, annualInitiativeStore, subInitiativeStore } = useMst();
 
   const optionsRef = useRef(null);
   const { t } = useTranslation();
@@ -43,6 +43,8 @@ export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
     } else if (type == "annualInitiative") {
       store = annualInitiativeStore;
       stringValue = t("annualInitiative.messageText");
+    } else if (type == "subInitiative") {
+      store = subInitiativeStore;
     }
 
     if (confirm(`Are you sure you want to delete this ${stringValue}?`)) {
