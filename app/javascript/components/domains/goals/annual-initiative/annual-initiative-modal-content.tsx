@@ -286,6 +286,7 @@ const QuarterlyGoalContainer = styled(HomeContainerBorders)`
 `;
 
 const SubHeaderContainer = styled.div`
+  position: relative;
   display: flex;
 `;
 
