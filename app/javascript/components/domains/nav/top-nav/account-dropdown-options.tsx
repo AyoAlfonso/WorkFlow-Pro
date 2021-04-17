@@ -218,7 +218,10 @@ export const AccountDropdownOptions = observer(
           >
             <LeftWorkspaceContainer>
               {renderSwitchCompanyOptions()}
-              <CompanyText type={"small"}> {companyStore.company.name} </CompanyText>
+              <CompanyText type={"small"}>
+                {" "}
+                {R.path(["name", "company"], companyStore)}{" "}
+              </CompanyText>
             </LeftWorkspaceContainer>
             <RightWorkspaceContainer>
               <Icon icon={"Chevron-Left"} size={"15px"} iconColor={"grey80"} />
