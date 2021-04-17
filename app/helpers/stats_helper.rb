@@ -2,7 +2,7 @@ module StatsHelper
 
 
   def weekly_milestone_progress(user)
-    milestones = Milestone.current_week_for_user(get_beginning_of_last_or_current_work_week_date(user.time_in_user_timezone), user)
+    milestones = Milestone.current_week_for_user(get_beginning_of_last_or_current_work_week_date(user.time_in_user_timezone), user, "QuarterlyGoal")
     completed_milestone_scores = milestones.map do |m|
       if m[:status] == "completed"
         1

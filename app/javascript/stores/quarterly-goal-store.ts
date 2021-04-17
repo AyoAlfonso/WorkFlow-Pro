@@ -35,6 +35,14 @@ export const QuarterlyGoalStoreModel = types
       //   showToast(il8n.t("quarterlyGoal.retrievalError"), ToastMessageConstants.ERROR);
       // }
     }),
+    closeGoal: flow(function*(id) {
+      const env = getEnv(self);
+      const response: any = yield env.api.closeQuarterlyGoal(id);
+      const responseQuarterlyGoal = response.data;
+      self.quarterlyGoal = responseQuarterlyGoal;
+      showToast(il8n.t("quarterlyGoal.closed"), ToastMessageConstants.SUCCESS);
+      return responseQuarterlyGoal;
+    }),
     createKeyElement: flow(function*(keyElementParams) {
       const env = getEnv(self);
       try {
@@ -138,7 +146,7 @@ export const QuarterlyGoalStoreModel = types
     createMilestones: flow(function*(quarterlyGoalId) {
       const env = getEnv(self);
       try {
-        const response: any = yield env.api.createMilestones(quarterlyGoalId);
+        const response: any = yield env.api.createQuarterlyGoalMilestones(quarterlyGoalId);
         self.quarterlyGoal = response.data;
       } catch {
         showToast(il8n.t("quarterlyGoal.milestoneCreationError"), ToastMessageConstants.ERROR); // error messaging handled by API monitor
@@ -181,6 +189,17 @@ export const QuarterlyGoalStoreModel = types
       self.quarterlyGoal.milestones = milestones;
       self.update();
     },
+    updateQuarterlyGoalAfterAddingSubInitiative(subInitiative){
+      if (self.quarterlyGoal.id) {
+        self.quarterlyGoal.subInitiatives = [
+          ...self.quarterlyGoal.subInitiatives,
+          subInitiative,
+        ] as any;
+      }
+    },
+    updateQuarterlyGoal(quarterlyGoal){
+      self.quarterlyGoal = quarterlyGoal as any;
+    }
   }));
 
 type QuarterlyGoalStoreType = typeof QuarterlyGoalStoreModel.Type;

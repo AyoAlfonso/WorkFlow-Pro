@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_29_221742) do
+ActiveRecord::Schema.define(version: 2021_04_16_180523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_221742) do
     t.bigint "company_id"
     t.string "context_description"
     t.integer "fiscal_year"
+    t.date "closed_at"
     t.index ["company_id"], name: "index_annual_initiatives_on_company_id"
     t.index ["created_by_id"], name: "index_annual_initiatives_on_created_by_id"
     t.index ["owned_by_id"], name: "index_annual_initiatives_on_owned_by_id"
@@ -271,7 +272,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_221742) do
     t.datetime "scheduled_start_time"
     t.datetime "end_time"
     t.bigint "hosted_by_id"
-    t.text "notes", default: ""
+    t.text "notes"
     t.json "settings"
     t.boolean "original_creation", default: false
     t.index ["created_at"], name: "index_meetings_on_created_at"
@@ -283,15 +284,16 @@ ActiveRecord::Schema.define(version: 2021_03_29_221742) do
 
   create_table "milestones", force: :cascade do |t|
     t.bigint "created_by_id"
-    t.bigint "quarterly_goal_id", null: false
     t.text "description"
     t.integer "week"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "status", default: 0
     t.date "week_of"
+    t.string "milestoneable_type"
+    t.bigint "milestoneable_id"
     t.index ["created_by_id"], name: "index_milestones_on_created_by_id"
-    t.index ["quarterly_goal_id"], name: "index_milestones_on_quarterly_goal_id"
+    t.index ["milestoneable_type", "milestoneable_id"], name: "index_milestones_on_milestoneable_type_and_milestoneable_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -316,6 +318,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_221742) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "context_description"
     t.integer "quarter"
+    t.date "closed_at"
     t.index ["annual_initiative_id"], name: "index_quarterly_goals_on_annual_initiative_id"
     t.index ["created_by_id"], name: "index_quarterly_goals_on_created_by_id"
     t.index ["owned_by_id"], name: "index_quarterly_goals_on_owned_by_id"
@@ -387,6 +390,22 @@ ActiveRecord::Schema.define(version: 2021_03_29_221742) do
     t.index ["meeting_template_id", "order_index"], name: "index_steps_on_meeting_template_id_and_order_index"
     t.index ["meeting_template_id"], name: "index_steps_on_meeting_template_id"
     t.index ["order_index"], name: "index_steps_on_order_index"
+  end
+
+  create_table "sub_initiatives", force: :cascade do |t|
+    t.bigint "quarterly_goal_id", null: false
+    t.bigint "created_by_id"
+    t.bigint "owned_by_id"
+    t.string "importance", default: [], array: true
+    t.text "description"
+    t.string "key_elements", default: [], array: true
+    t.string "context_description"
+    t.date "closed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["created_by_id"], name: "index_sub_initiatives_on_created_by_id"
+    t.index ["owned_by_id"], name: "index_sub_initiatives_on_owned_by_id"
+    t.index ["quarterly_goal_id"], name: "index_sub_initiatives_on_quarterly_goal_id"
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
@@ -471,7 +490,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_221742) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_role_id"
     t.string "user_title"
-    t.boolean "first_time_access", default: true
+    t.boolean "first_time_access", default: false
     t.index ["company_id"], name: "index_user_company_enablements_on_company_id"
     t.index ["user_id"], name: "index_user_company_enablements_on_user_id"
     t.index ["user_role_id"], name: "index_user_company_enablements_on_user_role_id"
@@ -569,13 +588,13 @@ ActiveRecord::Schema.define(version: 2021_03_29_221742) do
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"
-  add_foreign_key "milestones", "quarterly_goals"
   add_foreign_key "notifications", "users"
   add_foreign_key "quarterly_goals", "annual_initiatives"
   add_foreign_key "questionnaire_attempts", "questionnaires"
   add_foreign_key "questionnaire_attempts", "users"
   add_foreign_key "sign_up_purposes", "companies"
   add_foreign_key "steps", "meeting_templates"
+  add_foreign_key "sub_initiatives", "quarterly_goals"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "companies"
   add_foreign_key "tags", "teams"

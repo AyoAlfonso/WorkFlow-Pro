@@ -101,14 +101,23 @@ Rails.application.routes.draw do
     #annual_initiatives
     resources :annual_initiatives, only: [:create, :show, :update, :destroy]
     post '/annual_initiatives/create_key_element/:id', to: 'annual_initiatives#create_key_element'
+    patch '/annual_initiatives/close_initiative/:id', to: 'annual_initiatives#close_initiative'
     delete '/annual_initiatives/delete_key_element/:key_element_id', to: 'annual_initiatives#delete_key_element'
     get '/annual_initiatives/team/:team_id', to: "annual_initiatives#team"
 
     #quarterly_goals
     resources :quarterly_goals, only: [:index, :create, :show, :update, :destroy]
     post '/quarterly_goals/create_key_element/:id', to: 'quarterly_goals#create_key_element'
+    patch '/quarterly_goals/close_goal/:id', to: 'quarterly_goals#close_goal'
     delete '/quarterly_goals/delete_key_element/:key_element_id', to: 'quarterly_goals#delete_key_element'
     post '/quarterly_goals/create_milestones/:id', to: 'quarterly_goals#create_milestones'
+
+    #sub_initiatives
+    resources :sub_initiatives, only: [:create, :show, :update, :destroy]
+    post '/sub_initiatives/create_key_element/:id', to: 'sub_initiatives#create_key_element'
+    patch '/sub_initiatives/close_goal/:id', to: 'sub_initiatives#close_goal'
+    delete '/sub_initiatives/delete_key_element/:key_element_id', to: 'sub_initiatives#delete_key_element'
+    post '/sub_initiatives/create_milestones/:id', to: 'sub_initiatives#create_milestones'
 
     #habits
     resources :habits, only: [:index, :create, :update, :destroy] do
