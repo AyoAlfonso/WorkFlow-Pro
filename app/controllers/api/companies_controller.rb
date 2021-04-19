@@ -101,6 +101,7 @@ class Api::CompaniesController < Api::ApplicationController
         @quarterly_goal.create_milestones_for_quarterly_goal(current_user, @onboarding_company)
         @quarterly_goal.reload
       end
+
       @milestone = @quarterly_goal.milestones.first
       @milestone.update!(description: params[:annual_initiative][:quarterly_goals][0][:milestones][0][:description])
 
@@ -111,7 +112,7 @@ class Api::CompaniesController < Api::ApplicationController
             methods: [:owned_by, :created_by],
             include: {
               milestones: {
-                only: [:id, :quarterly_goal_id, :description, :week, :status, :week_of],
+                only: [:id, :milestoneable_id, :milestoneable_type, :description, :week, :status, :week_of],
                 methods: [:created_by]
               }
             }
@@ -137,7 +138,7 @@ class Api::CompaniesController < Api::ApplicationController
           methods: [:owned_by, :created_by],
           include: {
             milestones: {
-              only: [:id, :quarterly_goal_id, :description, :week, :status, :week_of],
+              only: [:id, :milestoneable_id, :milestoneable_type, :description, :week, :status, :week_of],
               methods: [:created_by]
             }
           }
