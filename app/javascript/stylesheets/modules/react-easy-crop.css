@@ -1,0 +1,42 @@
+
+/* Rename file to react-easy-crop.css  */
+
+.reactEasyCrop_Container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    user-select: none;
+    touch-action: none;
+    margin-right: 35%;
+    margin-left: 35%;
+    margin-top: 20vh;
+    margin-bottom: 30vh;
+    cursor: move;
+}
+
+.reactEasyCrop_Image, .reactEasyCrop_Video {
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    will-change: transform;
+    overflow: hidden;
+}
+
+.reactEasyCrop_CropArea {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    color: #fff  !important;
+    overflow: hidden;
+    border-radius: 15%;
+    width: 100vh;
+    height: 100vh;
+}
