@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as R from "ramda";
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
@@ -31,7 +31,7 @@ export const AccountDropdownOptions = observer(
     setShowCompanyOptions,
     setInviteTeamModalOpen,
   }: IAccountDropdownOptionsProps): JSX.Element => {
-    const { sessionStore, companyStore, meetingStore, userStore, teamStore } = useMst();
+    const { sessionStore, companyStore, userStore } = useMst();
     const { onboardingCompany } = companyStore;
 
     const [showCompanyCreationSelector, setShowCompanyCreationSelector] = useState<boolean>(false);
@@ -220,7 +220,7 @@ export const AccountDropdownOptions = observer(
               {renderSwitchCompanyOptions()}
               <CompanyText type={"small"}>
                 {" "}
-                {R.path(["name", "company"], companyStore)}{" "}
+                {R.path(["company", "name"], companyStore)}{" "}
               </CompanyText>
             </LeftWorkspaceContainer>
             <RightWorkspaceContainer>
@@ -366,35 +366,10 @@ const UserDetailsAvatarContainer = styled.div`
   margin-bottom: 8px;
 `;
 
-const StatusContainer = styled.div`
-  display: flex;
-  &: hover {
-    cursor: pointer;
-  }
-`;
-
-type StatusColorBlockProps = {
-  color: string;
-};
-
-const StatusColorBlock = styled.div<StatusColorBlockProps>`
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background-color: ${props => props.color};
-`;
-
 const UserDetailsNameContainer = styled.div`
   margin-left: 16px;
   margin-top: auto;
   margin-bottom: auto;
-`;
-
-const StatusText = styled(Text)`
-  margin-top: auto;
-  margin-bottom: auto;
-  color: ${props => props.theme.colors.greyActive};
-  margin-left: 8px;
 `;
 
 const StyledDivider = styled.hr`
