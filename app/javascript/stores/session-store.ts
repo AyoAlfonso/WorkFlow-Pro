@@ -156,7 +156,7 @@ export const SessionStoreModel = types
       self.loading = true;
       //may want to show a loading modal here
       const env = getEnv(self);
-      const { companyStore, teamStore, userStore, meetingStore, notificationStore, keyActivityStore } = getRoot(self);
+      const { companyStore, teamStore, userStore, meetingStore, notificationStore, keyActivityStore, labelStore } = getRoot(self);
       try {
         const response: any = yield env.api.login(email, password);
         if (response.ok) {
@@ -181,6 +181,7 @@ export const SessionStoreModel = types
             teamStore.load();
             keyActivityStore.load();
             meetingStore.load();
+            labelStore.fetchLabels();
             notificationStore.load();
           }
         }
