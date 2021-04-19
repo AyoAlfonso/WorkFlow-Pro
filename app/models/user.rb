@@ -85,12 +85,20 @@ class User < ApplicationRecord
     self.teams.where(company: current_company)
   end
 
+  def user_teams_for_company_or_full_access(current_company)
+    self.can_observe_company?(current_company) ? current_company.teams : user_teams_for_company(current_company)
+  end
+
   def team_lead_for?(team)
     team.is_lead?(self)
   end
 
   def teams_intersect?(teams)
     self.teams.any? { |team| teams.include?(team) }
+  end
+
+  def can_observe_company?(company)
+    user_company_enablements.find_by_company_id(company.id)&.user_role&.name == UserRole::COACH
   end
 
   def company_admin?(company)

@@ -58,7 +58,7 @@ class ApplicationPolicy
 
 
   def user_can_observe_company?(company)
-    @user.user_company_enablements.find_by_company_id(company.id)&.user_role&.name == UserRole::COACH
+    @user.can_observe_company?(company)
   end
 
   def user_can_observe_current_company?
