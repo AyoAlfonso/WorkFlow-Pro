@@ -429,7 +429,84 @@ True value of LynchPyn is in working together with others in your team and compa
     headingsAndDescriptionsWithOnboardingDisplayFormat,
   );
 
-  return (
+  //////FORUM RELATED CHARGES
+
+  const forumMode = companyStore.onboardingCompany.accessForum;
+  const leftBodyComponentsForum = [
+    leftBodyComponents[0],
+    <></>,
+    <></>,
+    <></>,
+    leftBodyComponents[4],
+  ];
+  const rightBodyComponentsForum = [
+    rightBodyComponents[0],
+    <></>,
+    <></>,
+    <></>,
+    rightBodyComponents[4],
+  ];
+  const stepLabelsForum = [stepLabels[0], stepLabels[4]];
+  const onNextButtonClickForum = async () => {
+    if (currentStep === 0 && R.isNil(onboardingCompany)) {
+      const creationFormData = R.assoc("displayFormat", onboardingDisplayFormat, formData);
+      companyStore.createCompany(creationFormData).then(res => {
+        if (res === true) {
+          setCurrentStep(4);
+        }
+      });
+    } else if (currentStep === 0) {
+      // updateCompany
+      submitFormState().then(res => {
+        if (res === true) {
+          setCurrentStep(4);
+        }
+      });
+    } else if (currentStep === 4) {
+      if (!teamData["emails"]) {
+        //CHRIS' NOTE: THE INDENTATION IS ON PURPOSE. DO NOT FIX IT.
+        if (
+          confirm(`Are you sure you don't want to invite other team members? 
+          \n
+True value of LynchPyn is in working together with others in your team and company. Add a few others in your team to get the most out of the platform!`)
+        ) {
+          submitTeamDataAndComplete().then(res => {
+            companyStore.closeOnboardingModal();
+          });
+        }
+      } else {
+        submitTeamDataAndComplete().then(res => {
+          companyStore.closeOnboardingModal();
+        });
+      }
+    }
+  };
+
+  //////
+
+  return forumMode ? (
+    <Container>
+      <WizardLayout
+        title={wizardTitles}
+        description={wizardDescriptions}
+        showCloseButton={false}
+        showSkipButton={false}
+        onCloseButtonClick={companyStore.closeOnboardingModal}
+        onSkipButtonClick={() => setCurrentStep(c => 4)}
+        onNextButtonClick={onNextButtonClickForum}
+        leftBodyComponents={leftBodyComponentsForum}
+        rightBodyComponents={rightBodyComponentsForum}
+        currentStep={currentStep}
+        steps={stepLabelsForum}
+        showLynchpynLogo={true}
+        nextButtonDisabled={!hasCreationParams()}
+        onStepClick={onStepClick}
+        stepClickDisabled={currentStep === 0}
+        completeButtonText={"Send Invites and Complete"}
+        finalButtonDisabled={!teamData}
+      />
+    </Container>
+  ) : (
     <Container>
       <WizardLayout
         title={wizardTitles}
