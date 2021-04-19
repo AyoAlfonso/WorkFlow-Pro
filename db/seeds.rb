@@ -174,6 +174,9 @@ end
 
 
 StaticData.where(field: "forum_introduction").first_or_create(value: "")
+StaticData.where(field: "annual_goal").first_or_create(value: "Annual Goal")
+StaticData.where(field: "quarterly_initiative").first_or_create(value: "Quarterly Initiative")
+StaticData.where(field: "sub_initiative").first_or_create(value: "Sub Initiative")
 
 ["Today", "Tomorrow", "Weekly List", "Backlog"].each do |group|
   ScheduledGroup.where(name: group).first_or_create
