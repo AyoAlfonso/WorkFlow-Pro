@@ -12,6 +12,9 @@ interface IModalWithHeaderProps {
   subHeaderText?: string;
   children: any;
   width?: string;
+  overflow?: string;
+  padding?:string;
+	boxSizing?:string;
   onCloseAction?: any;
 }
 
@@ -22,11 +25,22 @@ export const ModalWithHeader = ({
   centerHeader,
   children,
   width,
+  overflow,
+  padding,
+	boxSizing,
   subHeaderText,
   onCloseAction,
 }: IModalWithHeaderProps): JSX.Element => {
   return (
-    <StyledModal isOpen={modalOpen} style={{ width: width || "30rem" }}>
+    <StyledModal
+      isOpen={modalOpen}
+      style={{
+        width: width || "30rem",
+        overflow: overflow || "auto",
+        padding:padding,
+	      boxSizing:boxSizing
+      }}
+    >
       <HeaderContainer>
         <RowWrapper>
           <StyledHeading type={"h3"} centerHeader={centerHeader} color={"black"} fontSize={"16px"}>
