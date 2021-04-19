@@ -4,11 +4,11 @@ class SubInitiativePolicy < ApplicationPolicy
   end
 
   def create?
-    true
+    !user_can_observe_current_company?
   end
 
   def show?
-    user_is_part_of_this_company?(@record.quarterly_goal.annual_initiative.company) || @record.owned_by == @user
+    user_is_part_of_this_company?(@record.quarterly_goal.annual_initiative.company) || @record.owned_by == @user || user_can_observe_current_company?
   end
 
   def update?
@@ -52,6 +52,7 @@ class SubInitiativePolicy < ApplicationPolicy
     end
 
     def resolve
+      #not really used as we scope this via annual initiatives
       scope.all
     end
   end

@@ -5,7 +5,7 @@ class JournalEntryPolicy < ApplicationPolicy
   end
 
   def create?
-    @user == @record.user
+    @user == @record.user && !user_can_observe_current_company?
   end
 
   def show?

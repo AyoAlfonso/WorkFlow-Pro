@@ -1,6 +1,6 @@
 class QuestionnaireAttemptPolicy < ApplicationPolicy
   def create?
-    true
+    !user_can_observe_current_company?
   end
 
   def questionnaire_summary?
