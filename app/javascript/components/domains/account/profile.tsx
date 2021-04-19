@@ -6,6 +6,7 @@ import { Button } from "~/components/shared/button";
 import { Avatar } from "~/components/shared/avatar";
 import { useTranslation } from "react-i18next";
 import { FileInput } from "./file-input";
+import { AvatarModal } from "./avatarModal";
 import { observer } from "mobx-react";
 
 import {
@@ -26,16 +27,36 @@ export const AccountProfile = observer(
     const { sessionStore } = useMst();
     const { staticData } = sessionStore;
     const [email, setEmail] = useState(sessionStore.profile.email);
+    const [avatarImageblub, setAvatarImageblub] = useState<any | null>(null);
     const [firstName, setFirstName] = useState(sessionStore.profile.firstName);
     const [lastName, setLastName] = useState(sessionStore.profile.lastName);
     const [timezone, setTimezone] = useState(sessionStore.profile.timezone);
+    const [avatarImageModalOpen, setAvatarImageModalOpen] = useState<boolean>(false);
+
     const { t } = useTranslation();
-    const submitAvatar = async (files: FileList) => {
+    const submitAvatar = async (image) => {
       const form = new FormData();
-      form.append("avatar", files[0]);
+      form.append("avatar", image);
       await sessionStore.updateAvatar(form);
     };
 
+    const readFile = (file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.addEventListener('load', () => resolve(reader.result), false)
+        reader.readAsDataURL(file)
+      })
+    }
+
+   const pickAvatarImageblub = async (file) => {
+     setAvatarImageblub(file)
+     setAvatarImageModalOpen(!avatarImageModalOpen)
+    };
+
+  const inputFileUpload = async (files: FileList) => {
+     const imageDataUrl = await readFile(files[0])
+     pickAvatarImageblub(imageDataUrl)
+  }
     const deleteAvatar = async () => {
       await sessionStore.deleteAvatar();
     };
@@ -105,7 +126,19 @@ export const AccountProfile = observer(
                 >
                   {t("general.remove")}
                 </Button>
-                <FileInput labelText={t("general.upload")} onChange={submitAvatar} />
+
+                <FileInput 
+                  labelText={t("general.upload")}
+                  onChange={inputFileUpload} /> 
+                
+                 {avatarImageModalOpen && (
+                    <AvatarModal
+                    image={avatarImageblub}
+                    uploadCroppedImage={submitAvatar}
+                    modalOpen={avatarImageModalOpen}
+                    setModalOpen={setAvatarImageModalOpen}
+                    />
+                 )}
               </PhotoModificationButtonsSection>
             </ProfilePhotoWrapper>
           </ProfilePhotoSection>
