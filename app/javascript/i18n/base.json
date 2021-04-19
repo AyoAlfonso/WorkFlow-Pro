@@ -13,7 +13,6 @@
         "greeting": "Hey {{name}}",
         "accountSettings": "Account Settings",
         "profile": "Profile",
-        "updateProfileAvatar": "Update Avatar",
         "growthPlan": "Growth Plan",
         "notifications": "Notifications",
         "security": "Security",
