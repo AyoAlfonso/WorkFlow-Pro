@@ -23,9 +23,6 @@ class Api::CompaniesController < Api::ApplicationController
     end
     SignUpPurpose.create(company_id: @company[:id], purpose: params[:sign_up_purpose_attributes][:purpose]) if params[:sign_up_purpose_attributes].present?
     @user_role = UserRole.find_by(name: "CEO")
-    CompanyStaticData.create!(field: 'annual_objective', value: 'Annual Objective', company: @company)
-    CompanyStaticData.create!(field: 'quarterly_initiative', value: 'Quarterly Initiative', company: @company)
-    CompanyStaticData.create!(field: 'sub_initiative', value: 'Sub Initiative', company: @company)
     UserCompanyEnablement.create(user_id: current_user.id, company_id: @company.id, user_role_id: @user_role.id)
     render json: @company.as_json(only: ['id', 'name', 'phone_number', 'rallying_cry', 'fiscal_year_start', 'timezone', 'display_format'],
       methods: ['accountability_chart_content', 'strategic_plan_content', 'logo_url', 'current_fiscal_quarter', 'quarter_for_creating_quarterly_goals', 'current_fiscal_year', 'year_for_creating_annual_initiatives', 'fiscal_year_range', 'current_quarter_start_date', 'next_quarter_start_date', 'forum_meetings_year_range', 'forum_intro_video'], 

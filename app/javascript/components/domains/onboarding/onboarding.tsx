@@ -431,7 +431,7 @@ True value of LynchPyn is in working together with others in your team and compa
 
   //////FORUM RELATED CHARGES
 
-  const forumMode = companyStore.onboardingCompany.accessForum;
+  const forumMode = companyStore.onboardingCompany && companyStore.onboardingCompany.accessForum;
   const leftBodyComponentsForum = [
     leftBodyComponents[0],
     <></>,
