@@ -30,14 +30,7 @@ class Company < ApplicationRecord
 
   scope :with_team, -> (team_id) { joins(:teams).where({teams: {id: team_id}})}
 
-  after_initialize :setup_company_static_data
   after_save :verify_company_static_data
-
-  def setup_company_static_data # we could do additional work to ensure static data is created like building on new record
-    company_static_datas.build(field: 'annual_objective', value: 'Annual Objective')
-    company_static_datas.build(field: 'quarterly_initiative', value: 'Quarterly Initiative')
-    company_static_datas.build(field: 'sub_initiative', value: 'Sub Initiative')
-  end
 
   def verify_company_static_data
     company_static_datas.create(field: 'annual_objective', value: 'Annual Objective') if company_static_datas.where(field: 'annual_objective').blank?
