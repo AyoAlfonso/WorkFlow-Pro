@@ -5,11 +5,11 @@ class AnnualInitiativePolicy < ApplicationPolicy
   end
 
   def create?
-    true
+    !user_can_observe_current_company?
   end
 
   def show?
-    user_is_part_of_this_company?(@record.company) || @record.owned_by == @user 
+    user_is_part_of_this_company?(@record.company) || @record.owned_by == @user || user_can_observe_current_company?
   end
 
   def update?

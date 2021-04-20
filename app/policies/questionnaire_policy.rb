@@ -11,7 +11,7 @@ class QuestionnairePolicy < ApplicationPolicy
       @scope = scope
     end
 
-    def resolve
+    def resolve #system defaults
       scope.all
     end
   end
