@@ -28,6 +28,8 @@ class Company < ApplicationRecord
 
   enum onboarding_status: { incomplete: 0, complete: 1 }
 
+  after_create :create_company_static_data
+
   scope :with_team, -> (team_id) { joins(:teams).where({teams: {id: team_id}})}
   def self.find_first_with_team(team_id)
     with_team(team_id).first
@@ -75,6 +77,12 @@ class Company < ApplicationRecord
     if display_format_changed? && self.persisted?
       errors.add(:display_format, "Update of display_format not allowed.  Please create a new company.")
     end
+  end
+
+  def create_company_static_data
+    CompanyStaticData.create!(field: 'annual_objective', value: 'Annual Objective', company: self)
+    CompanyStaticData.create!(field: 'quarterly_initiative', value: 'Quarterly Initiative', company: self)
+    CompanyStaticData.create!(field: 'sub_initiative', value: 'Sub Initiative', company: self)
   end
 
 end
