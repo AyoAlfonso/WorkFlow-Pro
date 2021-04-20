@@ -9,7 +9,7 @@ class Company < ApplicationRecord
   # has_many :users, dependent: :restrict_with_error #thi shas been replaced with default company
   has_many :annual_initiatives, dependent: :restrict_with_error
   has_many :teams, dependent: :restrict_with_error
-  has_many :company_static_data, dependent: :destroy
+  has_many :company_static_datas, dependent: :destroy
   has_one_attached :logo, dependent: :destroy
   has_one :sign_up_purpose, dependent: :destroy
   accepts_nested_attributes_for :sign_up_purpose
@@ -20,6 +20,7 @@ class Company < ApplicationRecord
   has_many :user_company_enablements
   has_many :users, through: :user_company_enablements
 
+  accepts_nested_attributes_for :company_static_datas, :allow_destroy => true
   accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
 
   validates :name, :timezone, :display_format, presence: true
