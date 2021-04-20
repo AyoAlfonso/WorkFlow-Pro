@@ -70,12 +70,10 @@ export const SubInitiativeStoreModel = types
       }
     }),
     create: flow(function*(subInitiativeObject ) {
-      //TODO: CHANGE THIS FUNCTION
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createSubInitiative(subInitiativeObject);
-        const { goalStore, quarterlyGoalStore } = getRoot(self);
-        goalStore.mergeQuarterlyGoals(response.data);
+        const { quarterlyGoalStore } = getRoot(self);
         quarterlyGoalStore.updateQuarterlyGoalAfterAddingSubInitiative(response.data);
         showToast(il8n.t("subInitiative.created", { title: self.title }), ToastMessageConstants.SUCCESS);
         return response.data;
@@ -88,7 +86,6 @@ export const SubInitiativeStoreModel = types
       try {
         const response: any = yield env.api.deleteSubInitiative(subInitiativeId);
         const { quarterlyGoalStore } = getRoot(self);
-        console.log('response.data', response.data)
         quarterlyGoalStore.updateQuarterlyGoal(response.data);
         showToast(il8n.t("subInitiative.deleted", { title: self.title }), ToastMessageConstants.SUCCESS);
         return response.data;

@@ -12,6 +12,7 @@ const initialState = {
   },
   issueStore: {
     issues: [],
+    loading: false,
   },
   labelStore: {
     labelsList: [],

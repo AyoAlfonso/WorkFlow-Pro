@@ -80,7 +80,7 @@ export const InitiativeHeader = ({
           editable={editable}
           showDropdownOptionsContainer={showDropdownOptionsContainer}
           setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
-          setParentModalOpen={setAnnualInitiativeModalOpen}
+          setParentModalOpen={setModalOpen}
           itemType={itemType}
           item={item}
         />

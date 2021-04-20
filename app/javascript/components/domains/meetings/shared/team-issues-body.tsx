@@ -56,6 +56,10 @@ export const TeamIssuesBody = observer(
       },
     ];
 
+    if (issueStore.loading) {
+      return <Loading />;
+    }
+
     const handleSortMenuItemClick = value => {
       setSortOptionsOpen(false);
       issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });

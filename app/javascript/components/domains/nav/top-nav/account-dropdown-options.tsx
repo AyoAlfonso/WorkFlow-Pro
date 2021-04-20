@@ -283,7 +283,11 @@ export const AccountDropdownOptions = observer(
         <DropdownSectionContainer>
           <AccountOptionText
             color={baseTheme.colors.warningRed}
-            onClick={() => sessionStore.logoutRequest()}
+            onClick={() =>
+              sessionStore.logoutRequest().then(() => {
+                history.push(`/`);
+              })
+            }
           >
             {t("profile.logout")}
           </AccountOptionText>
