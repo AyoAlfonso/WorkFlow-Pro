@@ -49,6 +49,8 @@ export const AnnualInitiativeModalContent = observer(
     const { t } = useTranslation();
     const descriptionRef = useRef(null);
 
+    const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
+
     useEffect(() => {
       annualInitiativeStore.getAnnualInitiative(annualInitiativeId);
     }, []);
@@ -183,7 +185,10 @@ export const AnnualInitiativeModalContent = observer(
         <>
           <SubHeaderContainer>
             <SubHeaderTextContainer>
-              <SubHeaderText text={t("quarterlyGoal.title")} noMargin={true} />
+              <SubHeaderText
+                text={t("quarterlyGoal.title", { title: quarterlyGoalTitle })}
+                noMargin={true}
+              />
             </SubHeaderTextContainer>
             <FilterOptionsContainer>
               <FilterOptionContainer underline={!showAllQuarterlyGoals}>
@@ -209,11 +214,11 @@ export const AnnualInitiativeModalContent = observer(
             {editable && (
               <CreateGoalContainer>
                 <CreateGoalSection
-                  placeholder={t("quarterlyGoal.enterTitle")}
-                  addButtonText={`${t("quarterlyGoal.add")} (Q${
+                  placeholder={t("quarterlyGoal.enterTitle", { title: quarterlyGoalTitle })}
+                  addButtonText={`${t("quarterlyGoal.add", { title: quarterlyGoalTitle })} (Q${
                     companyStore.company.quarterForCreatingQuarterlyGoals
                   })`}
-                  createButtonText={t("quarterlyGoal.addGoal")}
+                  createButtonText={t("quarterlyGoal.addGoal", { title: quarterlyGoalTitle })}
                   showCreateGoal={showCreateQuarterlyGoal}
                   setShowCreateGoal={setShowCreateQuarterlyGoal}
                   createAction={quarterlyGoalStore.create}

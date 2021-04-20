@@ -71,6 +71,8 @@ export const QuarterlyGoalModalContent = observer(
     const allMilestones = quarterlyGoal.milestones;
     const activeMilestones = quarterlyGoal.activeMilestones;
 
+    const subInitiativeTitle = sessionStore.subInitiativeTitle;
+
     const renderSubInitiative = () => {
       return quarterlyGoal.subInitiatives.map((subInitiative, index) => {
         return (
@@ -141,9 +143,9 @@ export const QuarterlyGoalModalContent = observer(
             {editable && (
               <CreateGoalContainer>
                 <CreateGoalSection
-                  placeholder={t("subInitiative.enterTitle")}
-                  addButtonText={`${t("subInitiative.add")}`}
-                  createButtonText={t("subInitiative.addGoal")}
+                  placeholder={t("subInitiative.enterTitle", { title: subInitiativeTitle })}
+                  addButtonText={`${t("subInitiative.add", { title: subInitiativeTitle })}`}
+                  createButtonText={t("subInitiative.addGoal", { title: subInitiativeTitle })}
                   showCreateGoal={showCreateSubInitiative}
                   setShowCreateGoal={setShowCreateSubInitiative}
                   createAction={subInitiativeStore.create}

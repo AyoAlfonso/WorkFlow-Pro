@@ -18,10 +18,14 @@ export const GoalDropdownOptions = ({
   itemType,
   itemId,
 }: IGoalDropdownOptionsProps): JSX.Element => {
-  const { annualInitiativeStore, quarterlyGoalStore, subInitiativeStore } = useMst();
+  const { annualInitiativeStore, quarterlyGoalStore, subInitiativeStore, sessionStore } = useMst();
   const optionsRef = useRef(null);
 
   const { t } = useTranslation();
+
+  const annualInitiativeTitle = sessionStore.annualInitiativeTitle;
+  const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
+  const subInitiativeTitle = sessionStore.subInitiativeTitle;
 
   useEffect(() => {
     const handleClickOutside = event => {
@@ -37,19 +41,37 @@ export const GoalDropdownOptions = ({
 
   const closeInitiative = () => {
     if (itemType == "annualInitiative") {
-      if (confirm(`Are you sure you want to close this ${t("annualInitiative.messageText")}`)) {
+      if (
+        confirm(
+          `Are you sure you want to close this ${t("annualInitiative.messageText", {
+            title: annualInitiativeTitle,
+          })}`,
+        )
+      ) {
         annualInitiativeStore.closeInitiative(itemId).then(() => {
           setModalOpen(false);
         });
       }
     } else if (itemType == "quarterlyGoal") {
-      if (confirm(`Are you sure you want to close this ${t("quarterlyGoal.messageText")}`)) {
+      if (
+        confirm(
+          `Are you sure you want to close this ${t("quarterlyGoal.messageText", {
+            title: quarterlyGoalTitle,
+          })}`,
+        )
+      ) {
         quarterlyGoalStore.closeGoal(itemId).then(() => {
           setModalOpen(false);
         });
       }
     } else if (itemType == "subInitiative") {
-      if (confirm(`Are you sure you want to close this ${t("subInitiative.messageText")}`)) {
+      if (
+        confirm(
+          `Are you sure you want to close this ${t("subInitiative.messageText", {
+            title: subInitiativeTitle,
+          })}`,
+        )
+      ) {
         subInitiativeStore.closeGoal(itemId).then(() => {
           setModalOpen(false);
         });
@@ -59,19 +81,37 @@ export const GoalDropdownOptions = ({
 
   const deleteInitiative = () => {
     if (itemType == "annualInitiative") {
-      if (confirm(`Are you sure you want to delete this ${t("annualInitiative.messageText")}`)) {
+      if (
+        confirm(
+          `Are you sure you want to delete this ${t("annualInitiative.messageText", {
+            title: annualInitiativeTitle,
+          })}`,
+        )
+      ) {
         annualInitiativeStore.delete(itemId).then(() => {
           setModalOpen(false);
         });
       }
     } else if (itemType == "quarterlyGoal") {
-      if (confirm(t("quarterlyGoal.confirmDelete"))) {
+      if (
+        confirm(
+          t("quarterlyGoal.confirmDelete", {
+            title: quarterlyGoalTitle,
+          }),
+        )
+      ) {
         quarterlyGoalStore.delete(false, itemId).then(() => {
           setModalOpen(false);
         });
       }
     } else if (itemType == "subInitiative") {
-      if (confirm(t("subInitiative.confirmDelete"))) {
+      if (
+        confirm(
+          t("subInitiative.confirmDelete", {
+            title: subInitiativeTitle,
+          }),
+        )
+      ) {
         subInitiativeStore.delete(itemId).then(() => {
           setModalOpen(false);
         });

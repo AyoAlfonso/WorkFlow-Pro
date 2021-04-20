@@ -11,7 +11,12 @@ export const AnnualInitiativeStoreModel = types
     annualInitiative: types.maybeNull(AnnualInitiativeModel),
   })
   .extend(withEnvironment())
-  .views(self => ({}))
+  .views(self => ({
+    get title(){
+      const { sessionStore } = getRoot(self);
+      return sessionStore.annualInitiativeTitle
+    }
+  }))
   .actions(self => ({
     getAnnualInitiative: flow(function*(id) {
       const env = getEnv(self);
@@ -20,7 +25,7 @@ export const AnnualInitiativeStoreModel = types
         self.annualInitiative = response.data;
         return response.data;
       } catch {
-        showToast("There was an error fetching the annual objective", ToastMessageConstants.ERROR);
+        showToast(`There was an error fetching the ${self.title}`, ToastMessageConstants.ERROR);
       }
     }),
     update: flow(function*() {
@@ -31,10 +36,10 @@ export const AnnualInitiativeStoreModel = types
         self.annualInitiative = responseAnnualInitiative;
         const { goalStore } = getRoot(self);
         goalStore.updateAnnualInitiative(responseAnnualInitiative);
-        showToast("Annual objective updated", ToastMessageConstants.SUCCESS);
+        showToast(`${self.title} updated`, ToastMessageConstants.SUCCESS);
         return responseAnnualInitiative;
       } catch {
-        showToast("There was an error updating the annual objective", ToastMessageConstants.ERROR);
+        showToast(`There was an error updating the ${self.title}`, ToastMessageConstants.ERROR);
       }
     }),
     closeInitiative: flow(function*(id) {
@@ -45,10 +50,10 @@ export const AnnualInitiativeStoreModel = types
         self.annualInitiative = responseAnnualInitiative;
         const { goalStore } = getRoot(self);
         goalStore.updateAnnualInitiative(responseAnnualInitiative);
-        showToast("Annual objective updated", ToastMessageConstants.SUCCESS);
+        showToast(`${self.title} updated`, ToastMessageConstants.SUCCESS);
         return responseAnnualInitiative;
       } catch {
-        showToast("There was an error updating the annual objective", ToastMessageConstants.ERROR);
+        showToast(`There was an error updating the ${self.title}`, ToastMessageConstants.ERROR);
       }
     }),
     createKeyElement: flow(function*(keyElementParams) {
@@ -96,10 +101,10 @@ export const AnnualInitiativeStoreModel = types
           annualInitiativeObject.type,
           response.data.annualInitiative,
         );
-        showToast("Annual objective created", ToastMessageConstants.SUCCESS);
+        showToast(`${self.title} created`, ToastMessageConstants.SUCCESS);
         return response.data.annualInitiative;
       } catch {
-        showToast("There was an error creating the annual objective", ToastMessageConstants.ERROR);
+        showToast(`There was an error creating the ${self.title}`, ToastMessageConstants.ERROR);
       }
     }),
     delete: flow(function*(annualInitiativeId) {
@@ -108,10 +113,10 @@ export const AnnualInitiativeStoreModel = types
         const response: any = yield env.api.deleteAnnualInitiative(annualInitiativeId);
         const { goalStore } = getRoot(self);
         goalStore.removeDeletedAnnualInitiative(annualInitiativeId);
-        showToast("Annual objective deleted", ToastMessageConstants.SUCCESS);
+        showToast(`${self.title} deleted`, ToastMessageConstants.SUCCESS);
         return response.data.annualInitiativeId;
       } catch {
-        showToast("There was an error deleting the annual objective", ToastMessageConstants.ERROR);
+        showToast(`There was an error deleting the ${self.title}`, ToastMessageConstants.ERROR);
       }
     }),
   }))

@@ -9,6 +9,7 @@ class Company < ApplicationRecord
   # has_many :users, dependent: :restrict_with_error #thi shas been replaced with default company
   has_many :annual_initiatives, dependent: :restrict_with_error
   has_many :teams, dependent: :restrict_with_error
+  has_many :company_static_datas, dependent: :destroy
   has_one_attached :logo, dependent: :destroy
   has_one :sign_up_purpose, dependent: :destroy
   accepts_nested_attributes_for :sign_up_purpose
@@ -19,6 +20,7 @@ class Company < ApplicationRecord
   has_many :user_company_enablements
   has_many :users, through: :user_company_enablements
 
+  accepts_nested_attributes_for :company_static_datas, :allow_destroy => true
   accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
 
   validates :name, :timezone, :display_format, presence: true
@@ -27,6 +29,15 @@ class Company < ApplicationRecord
   enum onboarding_status: { incomplete: 0, complete: 1 }
 
   scope :with_team, -> (team_id) { joins(:teams).where({teams: {id: team_id}})}
+
+  after_save :verify_company_static_data
+
+  def verify_company_static_data
+    company_static_datas.create(field: 'annual_objective', value: 'Annual Objective') if company_static_datas.where(field: 'annual_objective').blank?
+    company_static_datas.create(field: 'quarterly_initiative', value: 'Quarterly Initiative') if company_static_datas.where(field: 'quarterly_initiative').blank?
+    company_static_datas.create(field: 'sub_initiative', value: 'Sub Initiative') if company_static_datas.where(field: 'sub_initiative').blank?
+  end
+
   def self.find_first_with_team(team_id)
     with_team(team_id).first
   end

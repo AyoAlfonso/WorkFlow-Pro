@@ -17,3 +17,7 @@ json.current_company_onboarded current_company.complete?
 json.company_profiles @user.companies.where(onboarding_status: 1) do |company|
   json.extract! company, :id, :name, :display_format
 end
+
+json.company_static_data current_company.company_static_datas do |company_static_data|
+  json.extract! company_static_data, :field, :value
+end

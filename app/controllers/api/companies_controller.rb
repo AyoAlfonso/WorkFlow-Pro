@@ -10,7 +10,7 @@ class Api::CompaniesController < Api::ApplicationController
       display_format: params[:display_format],
       fiscal_year_start: params[:fiscal_year_start],
       name: params[:name],
-      timezone: params[:timezone]
+      timezone: params[:timezone],
     })
     authorize @company
     @company.save!

@@ -19,7 +19,7 @@ import { SubInitiativeModalContent } from "./sub-initiative/sub-initiaitive-moda
 
 export const GoalsIndex = observer(
   (): JSX.Element => {
-    const { goalStore, annualInitiativeStore, companyStore } = useMst();
+    const { goalStore, annualInitiativeStore, companyStore, sessionStore } = useMst();
 
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -63,6 +63,8 @@ export const GoalsIndex = observer(
 
     const companyGoals = goalStore.companyGoals;
     const personalGoals = goalStore.personalGoals;
+
+    const annualInitiativeTitle = sessionStore.annualInitiativeTitle;
 
     const toggleCompanyPlanning = () => {
       if (companyPlanning) {
@@ -133,9 +135,11 @@ export const GoalsIndex = observer(
       return (
         <CreateGoalSection
           type={type}
-          placeholder={t("annualInitiative.enterTitle")}
-          addButtonText={`${t("annualInitiative.add")} (${createGoalYearString})`}
-          createButtonText={t("annualInitiative.addInitiative")}
+          placeholder={t("annualInitiative.enterTitle", { title: annualInitiativeTitle })}
+          addButtonText={`${t("annualInitiative.add", {
+            title: annualInitiativeTitle,
+          })} (${createGoalYearString})`}
+          createButtonText={t("annualInitiative.addInitiative", { title: annualInitiativeTitle })}
           showCreateGoal={showCreateAnnualInitiative}
           setShowCreateGoal={setShowCreateAnnualInitiative}
           createAction={annualInitiativeStore.create}

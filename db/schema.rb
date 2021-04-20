@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_16_180523) do
+ActiveRecord::Schema.define(version: 2021_04_19_230231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -123,6 +123,15 @@ ActiveRecord::Schema.define(version: 2021_04_16_180523) do
     t.integer "display_format", default: 0
     t.integer "onboarding_status", default: 0
     t.string "customer_subscription_profile_id"
+  end
+
+  create_table "company_static_data", force: :cascade do |t|
+    t.string "field"
+    t.text "value"
+    t.bigint "company_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["company_id"], name: "index_company_static_data_on_company_id"
   end
 
   create_table "conversation_starters", force: :cascade do |t|
@@ -575,6 +584,7 @@ ActiveRecord::Schema.define(version: 2021_04_16_180523) do
   add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
   add_foreign_key "annual_initiatives", "companies"
   add_foreign_key "comments", "annual_initiatives"
+  add_foreign_key "company_static_data", "companies"
   add_foreign_key "core_fours", "companies"
   add_foreign_key "daily_logs", "users"
   add_foreign_key "habit_logs", "habits"
