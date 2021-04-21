@@ -45,10 +45,8 @@ export const AvatarModal = ({
       modalOpen={modalOpen}
       setModalOpen={setModalOpen}
       headerText={t("profile.updateProfileAvatar")}
-      // subHeaderText={"Rezise your image upload by pinching or panning"}
       width="480px"
       overflow="hidden"
-      padding="10px"
       boxSizing="border-box"
     >
       <Container>
@@ -73,29 +71,12 @@ export const AvatarModal = ({
         Save changes
       </StyledButton>
       <StyledButton
-        // disabled={issueDescription.length == 0} if there are not images disable
         onClick={() => setModalOpen(!modalOpen)}
         intent={"cancel"}
       >
         Cancel
       </StyledButton>
     </ModalWithHeader>
-    //     <div className="App">
-    //       <div className="crop-container">
-
-    //       </div>
-    //       <div className="controls">
-    //         <Slider
-    //           value={zoom}
-    //           min={1}
-    //           max={3}
-    //           step={0.1}
-    //           aria-labelledby="Zoom"
-    //           onChange={(e, zoom) => setZoom(zoom)}
-    //           classes={{ root: 'slider' }}
-    //         />
-    //       </div>
-    //     </div>
   );
 };
 
@@ -112,12 +93,12 @@ const StyledButton = styled(Button)<StyledButtonType>`
       : baseTheme.colors.primary100};
   width: 130px;
   height: 35px;
-  margin: 0 5px 5px !important;
+  margin: 10px 10px 10px !important;
   &: hover {
     cursor: ${props => !props.disabled && "pointer"};
   }
 `;
 
 const Container = styled.div`
-  height: 70vh;
+  height: 60vh;
 `;
