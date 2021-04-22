@@ -5,7 +5,8 @@
         "save": "Save",
         "remove": "Remove",
         "upload": "Upload",
-        "submit": "Submit"
+        "submit": "Submit",
+        "cancel": "Cancel"
       },
       "profile": {
         "account": "Account",
