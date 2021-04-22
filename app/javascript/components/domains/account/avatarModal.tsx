@@ -1,12 +1,12 @@
 import React, { useState, useCallback } from "react";
 import { ModalWithHeader } from "~/components/shared/modal-with-header";
-import { Button } from "rebass";
 import { useTranslation } from "react-i18next";
 import { baseTheme } from "../../../themes";
 import styled from "styled-components";
 import { getCroppedImg } from "~/lib/cropImage";
 import "~/stylesheets/utilities.css";
 import Cropper from "react-easy-crop";
+import { Button } from "~/components/shared/button";
 
 export interface IAvatarModalProps {
   image: string;
@@ -43,9 +43,9 @@ export const AvatarModal = ({
   return (
     <ModalWithHeader
       modalOpen={modalOpen}
+      centerHeader={true}
       setModalOpen={setModalOpen}
       headerText={t("profile.updateProfileAvatar")}
-      width="480px"
       overflow="hidden"
       boxSizing="border-box"
     >
@@ -61,21 +61,29 @@ export const AvatarModal = ({
           onZoomChange={setZoom}
         />
       </Container>
-
-      <StyledButton
-        onClick={() => {
-          uploadCroppedImage(croppedImage);
-          setModalOpen(!modalOpen);
-        }}
-      >
-        Save changes
-      </StyledButton>
-      <StyledButton
-        onClick={() => setModalOpen(!modalOpen)}
-        intent={"cancel"}
-      >
-        Cancel
-      </StyledButton>
+      <ButtonContainer>
+       <Button
+          small
+          variant={"redOutline"}
+          m={1}
+          style={{ width: "auto", display: "inline-block" }}
+          onClick={() => setModalOpen(!modalOpen)}
+          >
+          {t("general.cancel")}
+        </Button>
+        <Button
+          small
+          variant={"primary"}
+          m={1}
+          style={{ width: "auto", display: "inline-block" }}
+          onClick={() => {
+            uploadCroppedImage(croppedImage);
+            setModalOpen(!modalOpen);
+          }}
+        >
+          {t("general.save")}
+        </Button>
+     </ButtonContainer>
     </ModalWithHeader>
   );
 };
@@ -84,21 +92,11 @@ type StyledButtonType = {
   disabled: boolean;
 };
 
-const StyledButton = styled(Button)<StyledButtonType>`
-  background-color: ${props =>
-    props.intent === "cancel"
-      ? baseTheme.colors.warningRed
-      : props.disabled
-      ? baseTheme.colors.grey60
-      : baseTheme.colors.primary100};
-  width: 130px;
-  height: 35px;
-  margin: 10px 10px 10px !important;
-  &: hover {
-    cursor: ${props => !props.disabled && "pointer"};
-  }
+const Container = styled.div`
+  height: 30rem;
 `;
 
-const Container = styled.div`
-  height: 60vh;
+const ButtonContainer = styled.div`
+  margin: 0 25%;
+  padding-bottom: 4px;
 `;
