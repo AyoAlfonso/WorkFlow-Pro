@@ -8,6 +8,7 @@ interface IModalWithHeaderProps {
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   headerText?: string;
+  centerHeader?: boolean;
   subHeaderText?: string;
   children: any;
   width?: string;
@@ -21,6 +22,7 @@ export const ModalWithHeader = ({
   modalOpen,
   setModalOpen,
   headerText,
+  centerHeader,
   children,
   width,
   overflow,
@@ -41,10 +43,11 @@ export const ModalWithHeader = ({
     >
       <HeaderContainer>
         <RowWrapper>
-          <StyledHeading type={"h3"} color={"black"} fontSize={"16px"}>
+          <StyledHeading type={"h3"} centerHeader={centerHeader} color={"black"} fontSize={"16px"}>
             {headerText}
           </StyledHeading>
           <CloseIconContainer
+            centerHeader={centerHeader}
             onClick={() => {
               setModalOpen(false);
               if (onCloseAction) {
@@ -84,7 +87,7 @@ const HeaderContainer = styled.div`
 `;
 
 const CloseIconContainer = styled.div`
-  margin-left: auto;
+  margin-left: ${props => props.centerHeader? "0px" :"auto" };
   margin-right: 16px;
   margin-top: auto;
   margin-bottom: auto;
@@ -111,4 +114,6 @@ const StyledHeading = styled(Heading)`
   margin-top: 16px;
   margin-bottom: 16px;
   font-weight: bold;
+  margin-left : ${props => props.centerHeader? "auto": "0px" };
+  margin-right: ${props => props.centerHeader? "auto": "0px" };
 `;
