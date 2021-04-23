@@ -14,14 +14,18 @@ interface IMilestoneCardProps {
   milestone: MilestoneType;
   editable: boolean;
   fromMeeting?: boolean;
+  itemType: string;
 }
 
 export const MilestoneCard = ({
   milestone,
   editable,
   fromMeeting,
+  itemType,
 }: IMilestoneCardProps): JSX.Element => {
-  const { quarterlyGoalStore, milestoneStore } = useMst();
+  const { quarterlyGoalStore, subInitiativeStore, milestoneStore } = useMst();
+
+  const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
 
   const descriptionRef = useRef(null);
 
@@ -45,7 +49,7 @@ export const MilestoneCard = ({
               if (fromMeeting) {
                 milestoneStore.updateDescriptionFromPersonalMeeting(milestone.id, e.target.value);
               } else {
-                quarterlyGoalStore.updateMilestoneDescription(milestone.id, e.target.value);
+                mobxStore.updateMilestoneDescription(milestone.id, e.target.value);
               }
             }
           }}
@@ -58,7 +62,7 @@ export const MilestoneCard = ({
             if (fromMeeting) {
               milestoneStore.updateMilestoneFromPersonalMeeting(milestone.id);
             } else {
-              quarterlyGoalStore.update();
+              mobxStore.update();
             }
           }}
         />
@@ -68,6 +72,7 @@ export const MilestoneCard = ({
         milestoneStatus={milestone.status}
         editable={editable}
         fromMeeting={fromMeeting}
+        itemType={itemType}
       />
     </MilestoneContainer>
   );
@@ -112,5 +117,7 @@ const MilestoneContentEditable = styled(ContentEditable)`
   margin-bottom: 8px;
   padding-top: 5px;
   padding-bottom: 5px;
+  padding-left: 16px;
+  padding-right: 16px;
   color: ${props => props.theme.colors.black};
 `;

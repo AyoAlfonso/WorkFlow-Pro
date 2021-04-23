@@ -5,11 +5,11 @@ class QuarterlyGoalPolicy < ApplicationPolicy
   end
 
   def create?
-    true
+    !user_can_observe_current_company?
   end
 
   def show?
-    user_is_part_of_this_company?(@record.annual_initiative.company) || @record.owned_by == @user
+    user_is_part_of_this_company?(@record.annual_initiative.company) || @record.owned_by == @user || user_can_observe_current_company?
   end
 
   def update?
@@ -40,6 +40,10 @@ class QuarterlyGoalPolicy < ApplicationPolicy
     true
   end
 
+  def close_goal?
+    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
+  end
+
   class Scope
     attr_reader :user, :scope
 
@@ -49,6 +53,7 @@ class QuarterlyGoalPolicy < ApplicationPolicy
     end
 
     def resolve
+      #not really used as we scope this via annual initiatives
       scope.all
     end
   end

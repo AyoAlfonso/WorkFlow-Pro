@@ -76,6 +76,7 @@ export const NotesIndex = observer(
 
     const meetingTemplates = meetingStore.meetingTemplates;
     const profile = sessionStore.profile;
+    //notes is across teams?
     const teams = toJS(profile.teams); //TODO: if you are a coach you can see other team notes
     const users = userStore.users;
 

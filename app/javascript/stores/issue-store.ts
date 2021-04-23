@@ -13,6 +13,7 @@ export const IssueStoreModel = types
     issues: types.array(IssueModel),
     teamIssues: types.array(TeamIssueModel),
     meetingTeamIssues: types.array(IssueModel),
+    loading: types.maybeNull(types.boolean)
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -56,9 +57,11 @@ export const IssueStoreModel = types
   }))
   .actions(self => ({
     fetchIssues: flow(function*() {
+      self.loading = true;
       const response: ApiResponse<any> = yield self.environment.api.getIssues();
       if (response.ok) {
         self.issues = response.data;
+        self.loading = false;
       }
     }),
     updateIssueStatus: flow(function*(issue, value, fromTeamMeeting = false) {
@@ -136,19 +139,23 @@ export const IssueStoreModel = types
       }
     }),
     fetchIssuesForMeeting: flow(function*(meetingId) {
+      self.loading = true;
       const response: ApiResponse<any> = yield self.environment.api.getIssuesForMeeting(meetingId);
       if (response.ok) {
         self.issues = response.data.issues;
         self.teamIssues = response.data.teamIssues;
+        self.loading = false;
         return true;
       } else {
         return false;
       }
     }),
     fetchIssuesForTeam: flow(function*(teamId) {
+      self.loading = true;
       const response: ApiResponse<any> = yield self.environment.api.getIssuesForTeam(teamId);
       if (response.ok) {
         self.issues = response.data.issues;
+        self.loading = false;
         return true;
       } else {
         return false;
@@ -179,9 +186,11 @@ export const IssueStoreModel = types
   }))
   .actions(self => ({
     fetchTeamIssues: flow(function*(teamId) {
+      self.loading = true;
       const response: ApiResponse<any> = yield self.environment.api.getTeamIssues(teamId);
       if (response.ok) {
         self.teamIssues = response.data;
+        self.loading = false;
         return true;
       } else {
         return false;

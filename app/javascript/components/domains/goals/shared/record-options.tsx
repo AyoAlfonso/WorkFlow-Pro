@@ -15,10 +15,13 @@ interface IRecordOptionsProps {
 
 export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
   const { type, id, marginLeft } = props;
-  const { quarterlyGoalStore, annualInitiativeStore } = useMst();
+  const { quarterlyGoalStore, annualInitiativeStore, subInitiativeStore, sessionStore } = useMst();
 
   const optionsRef = useRef(null);
   const { t } = useTranslation();
+  const annualInitiativeTitle = sessionStore.annualInitiativeTitle;
+  const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
+  const subInitiativeTitle = sessionStore.subInitiativeTitle;
 
   const [showOptions, setShowOptions] = useState<boolean>(false);
 
@@ -39,10 +42,17 @@ export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
     let stringValue = "";
     if (type == "quarterlyGoal") {
       store = quarterlyGoalStore;
-      stringValue = t("quarterlyGoal.messageText");
+      stringValue = t("quarterlyGoal.messageText", { title: quarterlyGoalTitle });
     } else if (type == "annualInitiative") {
       store = annualInitiativeStore;
-      stringValue = t("annualInitiative.messageText");
+      stringValue = t("annualInitiative.messageText", {
+        title: annualInitiativeTitle,
+      });
+    } else if (type == "subInitiative") {
+      store = subInitiativeStore;
+      stringValue = t("annualInitiative.messageText", {
+        title: subInitiativeTitle,
+      });
     }
 
     if (confirm(`Are you sure you want to delete this ${stringValue}?`)) {

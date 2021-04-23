@@ -16,6 +16,7 @@ interface ICreateGoalSectionProps {
   setShowCreateGoal: React.Dispatch<React.SetStateAction<boolean>>;
   createAction: any;
   annualInitiativeId?: string | number;
+  quarterlyGoalId?: string | number;
   buttonWidth?: string;
   inAnnualInitiative?: boolean;
 }
@@ -29,6 +30,7 @@ export const CreateGoalSection = ({
   setShowCreateGoal,
   createAction,
   annualInitiativeId,
+  quarterlyGoalId,
   buttonWidth,
   inAnnualInitiative,
 }: ICreateGoalSectionProps): JSX.Element => {
@@ -46,6 +48,8 @@ export const CreateGoalSection = ({
               ? { type, description }
               : annualInitiativeId
               ? { annualInitiativeId, description }
+              : quarterlyGoalId
+              ? { quarterlyGoalId, description }
               : { description };
 
             if (annualInitiativeId) {

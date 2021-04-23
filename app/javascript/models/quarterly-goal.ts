@@ -3,6 +3,7 @@ import { UserModel } from "./user";
 import { MilestoneModel } from "./milestone";
 import { KeyElementModel } from "./key-element";
 import * as moment from "moment";
+import { SubInitiativeModel } from "./sub-initiative";
 
 export const QuarterlyGoalModel = types
   .model("QuarterlyGoalModel")
@@ -19,6 +20,8 @@ export const QuarterlyGoalModel = types
     milestones: types.array(MilestoneModel),
     contextDescription: types.string,
     quarter: types.number,
+    closedAt: types.maybeNull(types.string),
+    subInitiatives: types.array(SubInitiativeModel)
   })
   .views(self => ({
     get activeMilestones() {

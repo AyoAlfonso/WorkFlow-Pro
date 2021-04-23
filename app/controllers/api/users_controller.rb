@@ -63,6 +63,7 @@ class Api::UsersController < Api::ApplicationController
   def invite_users_to_company
     team = Team.where(id: params[:team_id])
     email_addresses = params[:email_addresses].split(',')
+
     email_addresses.each do |email|
       sanitized_email = email.strip
       if User.find_by_email(sanitized_email).blank?
@@ -87,6 +88,8 @@ class Api::UsersController < Api::ApplicationController
 
   def profile
     @user = current_user
+    daily_log = @user.current_daily_log(current_company)
+    daily_log.update!({user_id: @user.id, work_status: 0}) if daily_log.status_not_set?
     @session_company_id = current_company.id
     @static_data = view_context.static_data
     @scheduled_groups = ScheduledGroup.all

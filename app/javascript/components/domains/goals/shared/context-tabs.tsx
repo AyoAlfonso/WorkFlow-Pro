@@ -27,7 +27,13 @@ interface IContextTabsProps {
 
 export const ContextTabs = observer(
   ({ object, type, disabled }: IContextTabsProps): JSX.Element => {
-    const { sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
+    const {
+      sessionStore,
+      annualInitiativeStore,
+      quarterlyGoalStore,
+      subInitiativeStore,
+    } = useMst();
+
     const tabDefaultIndex = () => {
       if (
         (type == "annualInitiative" && R.length(R.path(["quarterlyGoals"], object)) == 0) ||
@@ -57,6 +63,8 @@ export const ContextTabs = observer(
         setStore(annualInitiativeStore);
       } else if (type == "quarterlyGoal") {
         setStore(quarterlyGoalStore);
+      } else if (type == "subInitiative") {
+        setStore(subInitiativeStore);
       }
     }, []);
 

@@ -44,10 +44,6 @@ export const InviteYourTeamBody = observer(
         .length;
 
       const remainingNumberOfUsers = 15 - users.length;
-
-      console.log("remaining number of users", remainingNumberOfUsers);
-      console.log("num of users to invite", numberOfUsersToInvite);
-
       if (numberOfUsersToInvite > remainingNumberOfUsers) {
         // TODO: SHOW THE TOO MANY PEOPLE MODAL
         setShowUserLimitModal(true);

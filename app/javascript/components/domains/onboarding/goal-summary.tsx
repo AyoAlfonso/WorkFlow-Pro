@@ -69,7 +69,7 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
           <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"}>
             Weekly Milestone
           </TextDiv>
-          <MilestoneCard milestone={milestone} editable={false} />
+          <MilestoneCard milestone={milestone} editable={false} itemType={"quarterlyGoal"} />
         </SectionContainer>
       )}
     </Container>
