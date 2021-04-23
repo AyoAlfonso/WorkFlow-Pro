@@ -16,6 +16,7 @@ import { CreateGoalSection } from "./shared/create-goal-section";
 import { useTranslation } from "react-i18next";
 import { GoalsCoreFour } from "./goals-core-four";
 import { SubInitiativeModalContent } from "./sub-initiative/sub-initiaitive-modal-content";
+import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge";
 
 export const GoalsIndex = observer(
   (): JSX.Element => {
@@ -53,6 +54,7 @@ export const GoalsIndex = observer(
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
 
     const { t } = useTranslation();
+    const instanceType = companyStore.company.accessForum ? "forum" : "teams";
 
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
@@ -292,6 +294,7 @@ export const GoalsIndex = observer(
             showCreateMilestones={true}
           />
         </StyledModal>
+        {instanceType === "forum" && <LynchPynBadge />}
       </Container>
     );
   },
