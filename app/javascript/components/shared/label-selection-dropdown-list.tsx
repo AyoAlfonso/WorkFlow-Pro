@@ -110,9 +110,7 @@ export const LabelSelectionDropdownList = observer(
           openOnFocus={true}
           style={{ width: 300, height: "auto" }}
           freeSolo
-          renderInput={params => (
-            <TextField {...params} label="Search for labels" variant="outlined" />
-          )}
+          renderInput={params => <TextField {...params} label="Add label" variant="outlined" />}
         />
       </ActionDropdownContainer>
     );

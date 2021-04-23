@@ -5,7 +5,7 @@ class StaticDataService < ApplicationService
   end
 
   def time_zones
-    ActiveSupport::TimeZone.all.uniq(&:utc_offset).sort.map &:to_s
+    ActiveSupport::TimeZone.all.sort.map &:to_s
   end
 
   def fields_and_labels

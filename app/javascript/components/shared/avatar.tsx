@@ -16,6 +16,8 @@ interface AvatarProps {
   size?: number;
   marginLeft?: string;
   marginRight?: string;
+  marginTop?: string;
+  marginBottom?: string;
   border?: string;
   defaultAvatarColor?: string;
 }
@@ -25,6 +27,8 @@ type ImageContainerProps = {
   size?: number;
   marginLeft?: string;
   marginRight?: string;
+  marginTop?: string;
+  marginBottom?: string;
 };
 
 const ImageContainer = styled.div<ImageContainerProps>`
@@ -35,6 +39,8 @@ const ImageContainer = styled.div<ImageContainerProps>`
   min-width: ${props => props.size || 48}px;
   margin-left: ${props => props.marginLeft || "auto"};
   margin-right: ${props => props.marginRight};
+  margin-top: ${props => props.marginTop};
+  margin-bottom: ${props => props.marginBottom};
 `;
 
 export const Avatar = ({
@@ -44,6 +50,8 @@ export const Avatar = ({
   size,
   marginLeft,
   marginRight,
+  marginTop,
+  marginBottom,
   border,
   defaultAvatarColor,
 }: AvatarProps): JSX.Element =>
@@ -53,6 +61,8 @@ export const Avatar = ({
       size={size}
       marginLeft={marginLeft || "auto"}
       marginRight={marginRight}
+      marginTop={marginTop}
+      marginBottom={marginBottom}
     >
       <Image
         style={{
@@ -70,6 +80,8 @@ export const Avatar = ({
       lastName={lastName}
       marginLeft={marginLeft}
       marginRight={marginRight}
+      marginTop={marginTop}
+      marginBottom={marginBottom}
       border={border}
       defaultAvatarColor={defaultAvatarColor}
     />

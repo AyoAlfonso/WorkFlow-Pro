@@ -12,19 +12,21 @@ interface IIndividualVerticalStatusBlockColorIndicatorProps {
   milestoneStatus: string;
   editable: boolean;
   fromMeeting?: boolean;
+  itemType: string;
 }
 
 export const IndividualVerticalStatusBlockColorIndicator = observer(
   (props: IIndividualVerticalStatusBlockColorIndicatorProps): JSX.Element => {
-    const { milestone, milestoneStatus, editable, fromMeeting } = props;
-    const { quarterlyGoalStore, milestoneStore } = useMst();
+    const { milestone, milestoneStatus, editable, fromMeeting, itemType } = props;
+    const { quarterlyGoalStore, subInitiativeStore, milestoneStore } = useMst();
+    const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
 
     const colorChangable =
       moment(milestone.weekOf).isSame(moment(), "week") ||
       moment(milestone.weekOf).isBefore(moment(), "week");
 
-    const determineStatusColor = () => {
-      switch (milestoneStatus) {
+    const determineStatusColor = status => {
+      switch (status) {
         case "incomplete":
           return warningRed;
         case "in_progress":
@@ -37,8 +39,8 @@ export const IndividualVerticalStatusBlockColorIndicator = observer(
     };
 
     useEffect(() => {
-      setStatusColor(determineStatusColor());
-    });
+      setStatusColor(determineStatusColor(milestoneStatus));
+    }, []);
 
     const [statusColor, setStatusColor] = useState<any>(null);
     const { warningRed, cautionYellow, finePine, grey20 } = baseTheme.colors;
@@ -65,8 +67,9 @@ export const IndividualVerticalStatusBlockColorIndicator = observer(
       if (fromMeeting) {
         milestoneStore.updateStatusFromPersonalMeeting(milestone.id, statusValue);
       } else {
-        quarterlyGoalStore.updateMilestoneStatus(milestone.id, statusValue);
+        mobxStore.updateMilestoneStatus(milestone.id, statusValue);
       }
+      setStatusColor(determineStatusColor(statusValue));
     };
 
     return (

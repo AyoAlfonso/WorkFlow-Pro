@@ -15,16 +15,23 @@ import { PersonalVision } from "./shared/personal-vision";
 import { CreateGoalSection } from "./shared/create-goal-section";
 import { useTranslation } from "react-i18next";
 import { GoalsCoreFour } from "./goals-core-four";
+import { SubInitiativeModalContent } from "./sub-initiative/sub-initiaitive-modal-content";
 
 export const GoalsIndex = observer(
   (): JSX.Element => {
-    const { goalStore, annualInitiativeStore, companyStore } = useMst();
+    const { goalStore, annualInitiativeStore, companyStore, sessionStore } = useMst();
 
     const [loading, setLoading] = useState<boolean>(true);
+
     const [annualInitiativeModalOpen, setAnnualInitiativeModalOpen] = useState<boolean>(false);
     const [annualInitiativeId, setAnnualInitiativeId] = useState<number>(null);
+
     const [quarterlyGoalModalOpen, setQuarterlyGoalModalOpen] = useState<boolean>(null);
     const [quarterlyGoalId, setQuarterlyGoalId] = useState<number>(null);
+
+    const [subInitiativeModalOpen, setSubInitiativeModalOpen] = useState<boolean>(null);
+    const [subInitiativeId, setSubInitiativeId] = useState<number>(null);
+
     const [annualInitiativeDescription, setSelectedAnnualInitiativeDescription] = useState<string>(
       "",
     );
@@ -50,12 +57,14 @@ export const GoalsIndex = observer(
       goalStore.load().then(() => setLoading(false));
     }, []);
 
-    if (loading || R.isNil(goalStore.companyGoals)) {
+    if (loading || R.isNil(goalStore.companyGoals) || !companyStore.company) {
       return <Loading />;
     }
 
     const companyGoals = goalStore.companyGoals;
     const personalGoals = goalStore.personalGoals;
+
+    const annualInitiativeTitle = sessionStore.annualInitiativeTitle;
 
     const toggleCompanyPlanning = () => {
       if (companyPlanning) {
@@ -126,9 +135,11 @@ export const GoalsIndex = observer(
       return (
         <CreateGoalSection
           type={type}
-          placeholder={t("annualInitiative.enterTitle")}
-          addButtonText={`${t("annualInitiative.add")} (${createGoalYearString})`}
-          createButtonText={t("annualInitiative.addInitiative")}
+          placeholder={t("annualInitiative.enterTitle", { title: annualInitiativeTitle })}
+          addButtonText={`${t("annualInitiative.add", {
+            title: annualInitiativeTitle,
+          })} (${createGoalYearString})`}
+          createButtonText={t("annualInitiative.addInitiative", { title: annualInitiativeTitle })}
           showCreateGoal={showCreateAnnualInitiative}
           setShowCreateGoal={setShowCreateAnnualInitiative}
           createAction={annualInitiativeStore.create}
@@ -250,6 +261,26 @@ export const GoalsIndex = observer(
             setAnnualInitiativeId={setAnnualInitiativeId}
             annualInitiativeDescription={annualInitiativeDescription}
             setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+            showCreateMilestones={true}
+            setSubInitiativeId={setSubInitiativeId}
+            setSubInitiativeModalOpen={setSubInitiativeModalOpen}
+            setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
+          />
+        </StyledModal>
+
+        <StyledModal
+          isOpen={subInitiativeModalOpen}
+          style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
+          onBackgroundClick={e => {
+            setSubInitiativeModalOpen(false);
+          }}
+        >
+          <SubInitiativeModalContent
+            subInitiativeId={subInitiativeId}
+            setSubInitiativeModalOpen={setSubInitiativeModalOpen}
+            annualInitiativeDescription={annualInitiativeDescription}
+            setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+            setAnnualInitiativeId={setAnnualInitiativeId}
             showCreateMilestones={true}
           />
         </StyledModal>

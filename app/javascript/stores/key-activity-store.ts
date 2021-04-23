@@ -270,7 +270,7 @@ export const KeyActivityStoreModel = types
 
       self.finishLoading();
       if (response.ok) {
-        self.incompleteKeyActivities = response.data;
+        self.incompleteKeyActivities = response.data.keyActivities;
         return true;
       } else {
         return false;

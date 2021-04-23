@@ -9,6 +9,7 @@ ur1 = UserRole.where(name: UserRole::CEO).first_or_create(name: UserRole::CEO)
 ur2 = UserRole.where(name: UserRole::ADMIN).first_or_create(name: UserRole::ADMIN)
 ur3 = UserRole.where(name: UserRole::NORMAL).first_or_create(name: UserRole::NORMAL)
 ur4 = UserRole.where(name: UserRole::LEADERSHIP).first_or_create(name: UserRole::LEADERSHIP)
+ur5 = UserRole.where(name: UserRole::COACH).first_or_create(name: UserRole::COACH)
 
 c2 = Company.where(name: "LynchPyn").first_or_create(name: 'LynchPyn', address: 'Toronto', contact_email: 'parham@lynchpyn.com', phone_number: '647-631-1996', rallying_cry: 'LynchPyn Goal!', fiscal_year_start: Date.new(2020,01,01), timezone: "(GMT-05:00) Eastern Time (US & Canada)")
 CoreFour.where(company: c2).first_or_create(core_1: 'The First Core', core_2: 'The Second Core', core_3: 'The Third Core', core_4: 'The Fourth Core', company_id: c2.id)

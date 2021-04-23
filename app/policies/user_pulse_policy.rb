@@ -4,7 +4,8 @@ class UserPulsePolicy < ApplicationPolicy
   end
 
   def create_or_update?
-    @record.user == @user
+    @record.user == @user && !user_can_observe_current_company?
+
   end
 
   class Scope

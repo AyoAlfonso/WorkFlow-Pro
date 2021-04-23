@@ -37,7 +37,8 @@ class ApplicationPolicy
 
   ##helpers
   def user_is_part_of_this_company?(company)
-    @user.companies.include?(company)
+    enablement = @user.user_company_enablements.find_by_company_id(company.id)
+    enablement.present? && enablement&.user_role&.name != UserRole::COACH
   end
 
   def user_is_company_admin_of_this_company?(company)
@@ -56,6 +57,15 @@ class ApplicationPolicy
   end
 
 
+  def user_can_observe_company?(company)
+    @user.can_observe_company?(company)
+  end
+
+  def user_can_observe_current_company?
+    user_can_observe_company?(@company)
+  end
+
+
   class Scope
     attr_reader :user, :company, :scope
 
@@ -66,7 +76,7 @@ class ApplicationPolicy
     end
 
     def resolve
-      scope.all
+      scope.none
     end
   end
 end

@@ -10,6 +10,7 @@ import { Can } from "~/components/shared/auth/can";
 import { Button } from "~/components/shared/button";
 import { FileInput } from "./file-input";
 import { TrixEditor } from "react-trix";
+import { useHistory } from "react-router";
 
 import {
   StretchContainer,
@@ -27,8 +28,10 @@ export const Company = observer(
   (): JSX.Element => {
     const {
       companyStore,
+      sessionStore,
       sessionStore: { staticData },
     } = useMst();
+    const history = useHistory();
     const { company } = companyStore;
     const [name, setName] = useState(company.name);
     const [timezone, setTimezone] = useState(company.timezone);
@@ -37,23 +40,54 @@ export const Company = observer(
     const [core2Content, setCore2Content] = useState(company.coreFour.core2Content);
     const [core3Content, setCore3Content] = useState(company.coreFour.core3Content);
     const [core4Content, setCore4Content] = useState(company.coreFour.core4Content);
+    const [annualInitiativeTitle, setAnnualInitiativeTitle] = useState<string>(
+      sessionStore.annualInitiativeTitle,
+    );
+    const [quarterlyGoalTitle, setQuarterlyGoalTitle] = useState<string>(
+      sessionStore.quarterlyGoalTitle,
+    );
+    const [subInitiativeTitle, setSubInitiativeTitle] = useState<string>(
+      sessionStore.subInitiativeTitle,
+    );
+
     const { t } = useTranslation();
 
     const save = () => {
-      companyStore.updateCompany(
-        {
-          name,
-          timezone,
-          rallyingCry,
-          coreFourAttributes: {
-            core_1: core1Content,
-            core_2: core2Content,
-            core_3: core3Content,
-            core_4: core4Content,
+      companyStore
+        .updateCompany(
+          {
+            name,
+            timezone,
+            rallyingCry,
+            coreFourAttributes: {
+              core_1: core1Content,
+              core_2: core2Content,
+              core_3: core3Content,
+              core_4: core4Content,
+            },
+            companyStaticDatasAttributes: {
+              0: {
+                id: sessionStore.companyStaticData.find(item => item.field == "annual_objective")
+                  .id,
+                value: annualInitiativeTitle,
+              },
+              1: {
+                id: sessionStore.companyStaticData.find(
+                  item => item.field == "quarterly_initiative",
+                ).id,
+                value: quarterlyGoalTitle,
+              },
+              2: {
+                id: sessionStore.companyStaticData.find(item => item.field == "sub_initiative").id,
+                value: subInitiativeTitle,
+              },
+            },
           },
-        },
-        false,
-      );
+          false,
+        )
+        .then(() => {
+          history.go(0);
+        });
     };
     const submitLogo = async (files: FileList) => {
       const form = new FormData();
@@ -242,6 +276,38 @@ export const Company = observer(
                       });
                     }}
                   />
+                  <CompanyStaticDataSection>
+                    <CompanyStaticDataArea>
+                      <Label htmlFor="annualInitiative">Annual Objective</Label>
+                      <Input
+                        name="annualInitiative"
+                        onChange={e => {
+                          setAnnualInitiativeTitle(e.target.value);
+                        }}
+                        value={annualInitiativeTitle}
+                      />
+                    </CompanyStaticDataArea>
+                    <CompanyStaticDataArea>
+                      <Label htmlFor="quarterlyGoal">Quarterly Initiative</Label>
+                      <Input
+                        name="quarterlyGoal"
+                        onChange={e => {
+                          setQuarterlyGoalTitle(e.target.value);
+                        }}
+                        value={quarterlyGoalTitle}
+                      />
+                    </CompanyStaticDataArea>
+                    <CompanyStaticDataArea>
+                      <Label htmlFor="subInitiative">Sub Initiative</Label>
+                      <Input
+                        name="subInitiative"
+                        onChange={e => {
+                          setSubInitiativeTitle(e.target.value);
+                        }}
+                        value={subInitiativeTitle}
+                      />
+                    </CompanyStaticDataArea>
+                  </CompanyStaticDataSection>
                 </PersonalInfoContainer>
                 <ProfilePhotoSection display={"block"}>
                   <PhotoContainer>
@@ -287,3 +353,11 @@ export const Company = observer(
     );
   },
 );
+
+const CompanyStaticDataSection = styled.div`
+  margin-top: 16px;
+`;
+
+const CompanyStaticDataArea = styled.div`
+  margin-top: 8px;
+`;
