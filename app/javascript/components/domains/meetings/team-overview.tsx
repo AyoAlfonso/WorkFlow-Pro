@@ -12,7 +12,7 @@ import MeetingTypes from "~/constants/meeting-types";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { showToast } from "~/utils/toast-message";
 import { useMst } from "~/setup/root";
-
+import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge";
 import { KeyActivitiesListStyleContainer } from "~/components/domains/key-activities/key-activities-list";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 
@@ -86,7 +86,7 @@ export const TeamOverview = observer(
         </Container>
       );
     }
-    const overviewType = company.accessForum ? "forum" : "teams";
+    const overviewType = company && company.accessForum ? "forum" : "teams";
     //based on
 
     const handleForumMeetingClick = () => {
@@ -243,6 +243,7 @@ export const TeamOverview = observer(
             />
           </StyledOverviewAccordion>
         </ToolsWrapper>
+        {overviewType === "forum" && <LynchPynBadge />}
       </Container>
     );
   },
