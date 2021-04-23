@@ -73,7 +73,8 @@ if Rails.env.development?
     importance: ["So we don't need to use 3rd party services", "We will have to spend a lot more money", "Day off for everyone!"], 
     description: "Purchase company vehicles for transportation", 
     key_elements_attributes: [{value: "Check out Toyota"}, {value: "Check out Mercedes Benz"}],
-    context_description: "Choose a nice fleet!"
+    context_description: "Choose a nice fleet!",
+    fiscal_year: 2022
   )
 
   qg1 = QuarterlyGoal.where(description: "Visit Toyota Dealerships").first_or_create(
@@ -83,7 +84,7 @@ if Rails.env.development?
     importance: ["So we don't need to use 3rd party services", "We will have to spend a lot more money", "Day off for everyone!"], 
     description: "Visit Toyota Dealerships",
     context_description: "Check out the SUVs",
-    quarter: 1
+    quarter: 1,
   )
 
   m1 = Milestone.where(description: "Get brochures and pricing", quarterly_goal_id: qg1.id).first_or_create(
@@ -139,7 +140,8 @@ if Rails.env.development?
     importance: ["More people can work for us", "Won't be able to maximize our profits", "Throw a huge party!"], 
     description: "Find a good city to expand our office", 
     key_elements_attributes: [{value: "Research Kelowna"}, {value: "Research Edmonton"}],
-    context_description: "Find a good city!"
+    context_description: "Find a good city!",
+    fiscal_year: 2022
   )
 
   qg3 = QuarterlyGoal.where(description: "Fly to Kelowna and do some research").first_or_create(
