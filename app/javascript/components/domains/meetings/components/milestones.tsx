@@ -26,11 +26,11 @@ export const Milestones = observer(
     }
 
     const renderWeeklyMilestones = (): JSX.Element[] => {
-      return milestoneStore.milestonesForPersonalMeeting.map((milestone, index) => (
-        <MilestoneContainer key={index}>
+      return milestoneStore.milestonesForPersonalMeeting.map(milestone => (
+        <MilestoneContainer key={milestone.id}>
           <StyledText>{`${milestone.quarterlyGoalDescription || ""}`}</StyledText>
           <MilestoneCard
-            key={index}
+            key={milestone.id}
             milestone={milestone}
             editable={true}
             fromMeeting={true}
