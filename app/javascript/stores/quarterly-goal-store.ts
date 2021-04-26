@@ -150,6 +150,7 @@ export const QuarterlyGoalStoreModel = types
       let milestoneIndex = milestones.findIndex(milestone => milestone.id == id);
       milestones[milestoneIndex].description = value;
       self.quarterlyGoal.milestones = milestones;
+      self.update();
     },
     updateMilestoneStatus(id, status) {
       let milestones = self.quarterlyGoal.milestones;
