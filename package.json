@@ -61,7 +61,7 @@
     "react-date-range": "^1.0.3",
     "react-dom": "^16.13.1",
     "react-draft-wysiwyg": "^1.14.5",
-    "react-easy-crop": "^3.3.2",
+    "react-easy-crop": "^3.3.3",
     "react-html-parser": "^2.0.2",
     "react-i18next": "^11.7.0",
     "react-icomoon": "^2.1.3",
