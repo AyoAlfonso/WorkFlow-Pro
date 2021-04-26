@@ -131,6 +131,7 @@ export const SubInitiativeStoreModel = types
       let milestoneIndex = milestones.findIndex(milestone => milestone.id == id);
       milestones[milestoneIndex].description = value;
       self.subInitiative.milestones = milestones;
+      self.update();
     },
     updateMilestoneStatus(id, status) {
       let milestones = self.subInitiative.milestones;
