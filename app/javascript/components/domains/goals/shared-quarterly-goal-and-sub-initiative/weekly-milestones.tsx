@@ -17,9 +17,14 @@ export const WeeklyMilestones = ({
   itemType,
 }: IWeeklyMilestonesProps): JSX.Element => {
   const milestonesToShow = showInactiveMilestones ? allMilestones : activeMilestones;
-  return milestonesToShow.map((milestone, index) => {
+  return milestonesToShow.map(milestone => {
     return (
-      <MilestoneCard key={index} milestone={milestone} editable={editable} itemType={itemType} />
+      <MilestoneCard
+        key={milestone.id}
+        milestone={milestone}
+        editable={editable}
+        itemType={itemType}
+      />
     );
   });
 };
