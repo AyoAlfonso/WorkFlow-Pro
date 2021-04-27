@@ -40,7 +40,7 @@ ActiveAdmin.register Team do
           if tu.object.persisted?
             tu.input :user, as: :select, collection: [tu.object.user], input_html: {disabled: true}
           else
-            tu.input :user, as: :select, collection: f.object.company.users.active_users.where.not(id: f.object.users), input_html: {disabled: tu.object.persisted?}
+            tu.input :user, as: :select, collection: f.object.company.users.active_users_for_company(f.object.company.id).where.not(id: f.object.users), input_html: {disabled: tu.object.persisted?}
           end
           tu.input :role
         end 
