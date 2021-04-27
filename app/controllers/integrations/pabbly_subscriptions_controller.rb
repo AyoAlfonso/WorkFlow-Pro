@@ -4,15 +4,11 @@ class Integrations::PabblySubscriptionsController < Integrations::ApplicationCon
   respond_to :json
 
   def create_company_and_user
-
     if params[:event_name] == "test_webhook_url"
       render json: { message: "testing success"} 
     else
-      customer_profile = PabblySubscriptionService.new.get_customer(params[:data][:customer_id])
-      if customer_profile.blank? || customer_profile["status"] != "success"
-        ExceptionNotifier.notify_exception(nil, data: { params: params} )
-        render json: { result: false, message: "There was an error creating your subscription service." }
-      else
+      begin
+        customer_profile = PabblySubscriptionService.new.get_customer(params[:data][:customer_id])
         # The plan code includes the company type. All the plan codes will be in the format of [company_type]:[plan_name]
         # e.g. forum:monthly_plan_1, company:monthly_plan_2
         begin
