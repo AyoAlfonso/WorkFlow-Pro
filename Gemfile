@@ -52,6 +52,8 @@ gem "aws-sdk-s3", require: false
 gem 'rack-cors'
 gem 'faraday'
 
+gem 'exception_notification'
+
 group :development, :test do
   gem 'factory_bot_rails'
   gem 'pry-byebug'
