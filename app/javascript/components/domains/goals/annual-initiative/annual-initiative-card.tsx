@@ -80,8 +80,10 @@ export const AnnualInitiativeCard = ({
       onboarding={onboarding}
       onClick={e => {
         e.stopPropagation();
-        setAnnualInitiativeModalOpen(true);
-        setAnnualInitiativeId(annualInitiative.id);
+        if (annualInitiative) {
+          setAnnualInitiativeModalOpen(true);
+          setAnnualInitiativeId(annualInitiative.id);
+        }
       }}
     >
       <HeaderContainer>
@@ -91,7 +93,7 @@ export const AnnualInitiativeCard = ({
           </StyledText>
         </DescriptionContainer>
         <IconContainer>
-          <RecordOptions type={"annualInitiative"} id={annualInitiative.id} marginLeft={"-70px"} />
+          <RecordOptions type={"annualInitiative"} id={annualInitiative.id} />
         </IconContainer>
       </HeaderContainer>
 

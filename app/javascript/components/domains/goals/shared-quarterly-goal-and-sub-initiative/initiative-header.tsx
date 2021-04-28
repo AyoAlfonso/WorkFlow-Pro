@@ -1,13 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Icon } from "~/components/shared/icon";
-import { Button } from "~/components/shared/button";
 import { useMst } from "~/setup/root";
 import { useRef } from "react";
 import { DropdownOptions } from "./dropdown-options";
 import { Text } from "../../../shared/text";
 import ContentEditable from "react-contenteditable";
 import { OwnedBySection } from "../shared/owned-by-section";
+import { useTranslation } from "react-i18next";
 
 interface IInitiativeHeaderProps {
   itemType: string;
@@ -38,11 +38,20 @@ export const InitiativeHeader = ({
 }: IInitiativeHeaderProps): JSX.Element => {
   const { quarterlyGoalStore, subInitiativeStore } = useMst();
 
+  const { t } = useTranslation();
+
   const descriptionRef = useRef(null);
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
 
   return (
     <HeaderContainer>
+      {item.closedAt && (
+        <InitiativeClosedContainer>
+          {itemType == "quarterlyGoal"
+            ? t("quarterlyGoal.closedItem")
+            : t("subInitiative.closedItem")}
+        </InitiativeClosedContainer>
+      )}
       <TitleContainer>
         <StyledContentEditable
           innerRef={descriptionRef}
@@ -88,6 +97,7 @@ export const InitiativeHeader = ({
           itemType={itemType}
           item={item}
         />
+
         <CloseIconContainer onClick={() => setModalOpen(false)}>
           <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
         </CloseIconContainer>
@@ -144,4 +154,11 @@ const DetailsContainer = styled.div`
 
 const YearText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
+`;
+
+const InitiativeClosedContainer = styled.div`
+  padding: 8px;
+  background-color: ${props => props.theme.colors.backgroundGrey};
+  color: ${props => props.theme.colors.greyActive};
+  margin-bottom: 16px;
 `;

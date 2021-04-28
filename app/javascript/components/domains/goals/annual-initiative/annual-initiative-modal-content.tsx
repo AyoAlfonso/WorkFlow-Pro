@@ -121,12 +121,14 @@ export const AnnualInitiativeModalContent = observer(
           >
             <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
             {showDropdownOptionsContainer && (
-              <GoalDropdownOptions
-                setShowDropdownOptions={setShowDropdownOptionsContainer}
-                setModalOpen={setAnnualInitiativeModalOpen}
-                itemType={"annualInitiative"}
-                itemId={annualInitiative.id}
-              />
+              <GoalDropdownContainer>
+                <GoalDropdownOptions
+                  setShowDropdownOptions={setShowDropdownOptionsContainer}
+                  setModalOpen={setAnnualInitiativeModalOpen}
+                  itemType={"annualInitiative"}
+                  itemId={annualInitiative.id}
+                />
+              </GoalDropdownContainer>
             )}
           </DropdownOptionsContainer>
         )
@@ -143,6 +145,11 @@ export const AnnualInitiativeModalContent = observer(
       return (
         <HeaderContainer>
           <TitleContainer>
+            {annualInitiative.closedAt && (
+              <InitiativeClosedContainer>
+                {t("annualInitiative.closedItem")}
+              </InitiativeClosedContainer>
+            )}
             <StyledContentEditable
               innerRef={descriptionRef}
               html={annualInitiative.description}
@@ -400,4 +407,15 @@ const FilterOptionContainer = styled.div<FilterOptionContainerType>`
 const SubHeaderTextContainer = styled.div`
   position: absolute;
   margin-bottom: 24px;
+`;
+
+const GoalDropdownContainer = styled.div`
+  margin-left: -50px;
+`;
+
+const InitiativeClosedContainer = styled.div`
+  padding: 8px;
+  background-color: ${props => props.theme.colors.backgroundGrey};
+  color: ${props => props.theme.colors.greyActive};
+  margin-bottom: 16px;
 `;

@@ -152,7 +152,7 @@ export const GoalsIndex = observer(
       return annualInitiatives.map((annualInitiative, index) => {
         return (
           <AnnualInitiativeCard
-            key={index}
+            key={annualInitiative.id}
             index={index}
             annualInitiative={annualInitiative}
             totalNumberOfAnnualInitiatives={annualInitiatives.length}

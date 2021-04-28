@@ -21,7 +21,23 @@ export const AnnualInitiativeModel = types
   })
   .views(self => ({
     get closedInitiative() {
-      return self.closedAt != null
+      let itemClosed = false;
+      if(self.closedAt){
+        itemClosed = true
+      } else {
+        self.quarterlyGoals.forEach(qg => {
+          if(qg.closedAt){
+            itemClosed = true;
+          } else {
+            qg.subInitiatives.forEach(si => {
+              if(si.closedAt){
+                itemClosed = true;
+              }
+            })
+          }
+        })
+      }
+      return itemClosed
     },
     get myQuarterlyGoals() {
       const { sessionStore } = getRoot(self);
