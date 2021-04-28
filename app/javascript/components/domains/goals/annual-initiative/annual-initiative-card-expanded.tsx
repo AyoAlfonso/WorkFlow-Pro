@@ -98,7 +98,13 @@ export const AnnualInitiativeCardExpanded = observer(
             setShowMinimizedCard(true);
           }}
         >
-          <Icon icon={"Chevron-Up"} size={"15px"} iconColor={"grey60"} />
+          <ShowInitiativeBar> Hide Initiative </ShowInitiativeBar>
+          <Icon
+            icon={"Chevron-Up"}
+            size={"12px"}
+            iconColor={"#005FFE"}
+            style={{ padding: "0px 5px" }}
+          />
         </MinimizeIconContainer>
       </Container>
     );
@@ -122,17 +128,24 @@ const QuarterlyGoalsText = styled.p`
 const MinimizeIconContainer = styled.div`
   background-color: white;
   border-radius: 50px;
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
   &: hover {
     cursor: pointer;
   }
+`;
+
+//TODOIT: component repeated cleanup once reaching 4x
+const ShowInitiativeBar = styled.div`
+  margin: 15%;
+  color: #005ffe;
+  font-size: 12px;
+  font-weight: bold;
 `;
 
 const CreateGoalContainer = styled.div`

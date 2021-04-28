@@ -95,7 +95,8 @@ export const AnnualInitiativeCard = ({
         </IconContainer>
       </HeaderContainer>
 
-      <YearDisplayContainer>{renderYearDisplay()}</YearDisplayContainer>
+      
+      {/* <YearDisplayContainer>{renderYearDisplay()}</YearDisplayContainer> */}
 
       {showMinimizedCard ? (
         <AnnualInitiativeCardMinimized
@@ -148,13 +149,21 @@ const StyledText = styled(Text)<StyledTextProps>`
   padding-left: 16px;
   padding-right: 16px;
   white-space: normal;
+  font-weight: 800;
+  width: 160px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   color: ${props => props.closedInitiative && props.theme.colors.greyActive};
   &:hover {
     cursor: pointer;
+    color: #34353a;
     font-weight: bold;
     text-decoration: underline;
   }
 `;
+// TODOIT: Add the color in hover state above to constants
 
 const HeaderContainer = styled.div`
   display: flex;

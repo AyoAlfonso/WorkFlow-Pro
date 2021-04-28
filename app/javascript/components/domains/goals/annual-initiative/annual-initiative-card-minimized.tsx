@@ -6,6 +6,7 @@ import { Icon } from "../../../shared/icon";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
 import * as moment from "moment";
 import { MilestoneCard } from "../milestone/milestone-card";
+import { OwnedBySection } from "../shared/owned-by-section";
 
 interface IAnnualInitiativeCardMinimizedProps {
   annualInitiative: AnnualInitiativeType;
@@ -19,7 +20,9 @@ export const AnnualInitiativeCardMinimized = ({
   setShowMinimizedCard,
 }: IAnnualInitiativeCardMinimizedProps): JSX.Element => {
   const { warningRed, cautionYellow, finePine, grey40 } = baseTheme.colors;
-    let milestoneObj = [
+  const counts = []
+  // TODOIT: RETURN counts BACK to zero  
+  let milestoneObj = [
           {
             color: finePine,
             count: 0,
@@ -38,18 +41,13 @@ export const AnnualInitiativeCardMinimized = ({
             count: 0,
           },
     ]
-    let counts = []
-    console.log("milestoneObj", milestoneObj)
+  
   const renderStatusSquares = () => {
      
-    let gradient = '';
     annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
-      console.log(quarterlyGoal, "annualInitiative")
       
-
       //if there is no currentMilestone, use the last milestone, assuming this is past the 13th week
       let currentMilestone;
-   
 
       currentMilestone = quarterlyGoal.milestones.find(milestone =>
         moment(milestone.weekOf).isSame(moment(), "week"),
@@ -58,25 +56,18 @@ export const AnnualInitiativeCardMinimized = ({
         currentMilestone = quarterlyGoal.milestones[quarterlyGoal.milestones.length - 1];
       }
 
-      // let backgroundColor = grey40;
-
       if (currentMilestone && currentMilestone.status) {
-        console.log(currentMilestone.status)
         switch (currentMilestone.status) {
           case "completed":
-           console.log("completed")
             milestoneObj[0].count++
             break;
           case "in_progress":
-           console.log("in_progress")
             milestoneObj[1].count++
             break;
           case "incomplete":
-          console.log("incomplete")
             milestoneObj[2].count++
             break;
           case "unstarted":
-          console.log("unstarted")
             milestoneObj[3].count++
             break;
         }
@@ -84,65 +75,81 @@ export const AnnualInitiativeCardMinimized = ({
     
     });
  
-      
+    let gradient = '';
+    let annualQtrGoalsLength = annualInitiative.quarterlyGoals.length
     milestoneObj.forEach((obj, index) => {
-      if (obj.count > 0 ){
-         counts.push(<MilestoneCountContainer>{obj.count}</MilestoneCountContainer>)
-      }
-
+      let margin = 0;
       if(index > 0) {
-         gradient += `, ${obj.color} ${(milestoneObj[index-1].count/annualInitiative.quarterlyGoals.length)*100}% ${(obj.count/annualInitiative.quarterlyGoals.length)*100}` + `% `;
-         return obj
+         let lastPercentage = 0
+         let intialPercentage = 0
+         Array.from({ length: index + 1}).map((_, i)=> {
+           lastPercentage += (milestoneObj[i].count/annualQtrGoalsLength)*100
+         })
+         Array.from({ length: index }).map((_, i)=> intialPercentage += (milestoneObj[i].count/annualQtrGoalsLength)*100)
+         gradient += `, ${obj.color} ${intialPercentage}% ${lastPercentage}` + `% `
+         margin = lastPercentage - intialPercentage 
         } else {
-          gradient += `, ${obj.color} ${(obj.count/annualInitiative.quarterlyGoals.length)*100}% `;
-          return obj
+          gradient += `, ${obj.color} ${(obj.count/annualQtrGoalsLength)*100}% `;
+          margin = (obj.count/annualQtrGoalsLength)*100
+      }
+      if (obj.count > 0 ){
+         counts.push(<MilestoneCountContainer color={obj.color} margin={`${Math.floor(margin)/2}%`} >{obj.count}</MilestoneCountContainer>)
       }
     }) 
-  console.log("gradient", gradient)
     return <GradientContainer gradient={gradient} />;
   };
   return (
-    <Container
-      onClick={e => {
-        e.stopPropagation();
-      }}
-    >
-      <InitiativeCountContainer>
-       {/* {renderMilestoneCounts()} */}
+    <div
+    onClick={e => {
+          e.stopPropagation();
+        }}
+      >
+      <OwnedBySection
+          ownedBy={annualInitiative.ownedBy}
+          type={"annualInitiative"}
+          disabled={annualInitiative.closedInitiative}
+          size={25}
+          marginLeft={"5px"}
+          marginRight={"0px"}
+          marginTop={"5px"}
+          marginBottom={"0px"}
+        />
+    <InitiativeCountContainer>
        {...counts}
       </InitiativeCountContainer>
       <StatusSquareContainer>{renderStatusSquares()}</StatusSquareContainer>
-    
-      {disableOpen ? null : (
-        <MaximizeIconContainer
-          onClick={e => {
-            setShowMinimizedCard(false);
-          }}
-        >
+     
+     
+    <Container
+      onClick={e => {
+        setShowMinimizedCard(false);
+       }}
+    >
+    {disableOpen ? null : (
+        <MaximizeIconContainer>
           <ShowInitiativeBar> Show Initiative </ShowInitiativeBar>
           <Icon
             icon={"Chevron-Down"}
-            size={"15px"}
-            iconColor={"#005FFE"}
-            style={{ marginTop: "5px" }}
+            size={"12px"}
+            iconColor={"#005FFE"}// TODOIT: ADD TO CONSTANT VARIABLES
+            style={{ padding: "0px 5px" }}
           />
         </MaximizeIconContainer>
-      )}
+      )} 
     </Container>
+    </div>
   );
 };
 
 const Container = styled.div`
   ${color}
-  height: 50px;
   background-color: ${props => props.theme.colors.backgroundGrey};
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   display: flex;
-  padding-left: 16px;
-  padding-right: 16px;
   position: relative;
-  padding-bottom: 10px;
+  width: auto;
+  cursor: pointer;
 `;
 
 type QuarterlyGoalIndicatorType = {
@@ -168,7 +175,7 @@ const MaximizeIconContainer = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin: 15% 50%;
+  margin: 5% auto;
   &: hover {
     cursor: pointer;
   }
@@ -176,23 +183,32 @@ const MaximizeIconContainer = styled.div`
 
 const ShowInitiativeBar = styled.div`
  margin: 15%;
- color: #005FFE
+ color: #005FFE;
+ font-size: 12px;
+ font-weight: bold;
 `;
-//add blue above to constants
+//TODOIT: add blue color above to constants
 const StatusSquareContainer = styled.div`
-  position: absolute;
+  position: relative;
   display: flex;
-  margin-top: 10%;
-  width: 200px;
+  margin: 10px 0px 0px;
 `;
 
 const InitiativeCountContainer = styled.div`
   display: flex;
-  width: 100%;
+  width: 100%; 
+  font-size: small;
 `
-const MilestoneCountContainer = styled.div`
-    margin: 0 10%;
-    display: inline-block
+type MilestoneCountContainerType = {
+  margin: string;
+  color: string;
+};
+
+const MilestoneCountContainer = styled.div<MilestoneCountContainerType>`
+    margin: 0 ${props => props.margin} 0px;
+    color: ${props => props.color}
+    display: inline-block;
+    width: 0px;
 `
 type GradientContainerType = {
   gradient?: string;

@@ -14,6 +14,11 @@ interface IOwnedBySectionProps {
   type: string;
   userIconBorder?: string;
   disabled?: boolean;
+  size?: number;
+  marginLeft?:string
+  marginRight?:string
+  marginTop?:string
+  marginBottom?:string
 }
 
 export const OwnedBySection = ({
@@ -21,6 +26,8 @@ export const OwnedBySection = ({
   type,
   userIconBorder,
   disabled,
+  size,
+  ...restProps
 }: IOwnedBySectionProps): JSX.Element => {
   const { userStore, sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
   const [store, setStore] = useState<any>(null);
@@ -71,14 +78,11 @@ export const OwnedBySection = ({
           avatarUrl={ownedBy.avatarUrl}
           firstName={ownedBy.firstName}
           lastName={ownedBy.lastName}
-          size={20}
-          marginLeft={"auto"}
-          marginRight={"auto"}
-          marginTop={"auto"}
-          marginBottom={"auto"}
+          size={ size || 20}
           border={userIconBorder}
+          {...restProps}
         />
-        <OwnedByName type={"small"}>
+        <OwnedByName type={"fieldLabel"}>
           {ownedBy.firstName} {ownedBy.lastName}
         </OwnedByName>
       </EditTriggerContainer>
@@ -106,7 +110,9 @@ const SubHeaderContainer = styled.div`
   display: flex;
 `;
 
+// TODO:IT color: ${props => props.theme.colors.greyActive}; 
 const OwnedByName = styled(Text)`
   margin-left: 8px;
-  color: ${props => props.theme.colors.greyActive};
+  letter-spacing: 0px;
+  color: #000000; 
 `;
