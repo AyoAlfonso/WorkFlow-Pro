@@ -94,7 +94,7 @@ class Meeting < ApplicationRecord
 
   private
   def start_meeting_if_weekly_planning
-    if self.meeting_type == "personal_weekly"
+    if self.meeting_type == "personal_weekly" || self.meeting_type == "personal_daily"
       self.start_time = Time.now if self.start_time.blank?
     end
   end
