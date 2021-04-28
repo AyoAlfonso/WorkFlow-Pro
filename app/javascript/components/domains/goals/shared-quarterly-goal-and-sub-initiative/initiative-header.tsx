@@ -20,6 +20,7 @@ interface IInitiativeHeaderProps {
   annualInitiativeDescription: string;
   showDropdownOptionsContainer: boolean;
   setShowDropdownOptionsContainer: React.Dispatch<React.SetStateAction<boolean>>;
+  goalYearString: string;
 }
 
 export const InitiativeHeader = ({
@@ -33,6 +34,7 @@ export const InitiativeHeader = ({
   annualInitiativeDescription,
   showDropdownOptionsContainer,
   setShowDropdownOptionsContainer,
+  goalYearString,
 }: IInitiativeHeaderProps): JSX.Element => {
   const { quarterlyGoalStore, subInitiativeStore } = useMst();
 
@@ -71,7 +73,9 @@ export const InitiativeHeader = ({
           </UnderlinedGoalText>
         </GoalText>
         <DetailsContainer>
-          <YearText type={"small"}>Q{item.quarter}</YearText>
+          <YearText type={"small"}>
+            Q{item.quarter} {goalYearString} Initiative
+          </YearText>
           <OwnedBySection ownedBy={item.ownedBy} type={itemType} disabled={item.closedInitiative} />
         </DetailsContainer>
       </TitleContainer>

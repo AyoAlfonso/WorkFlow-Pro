@@ -133,6 +133,12 @@ export const AnnualInitiativeModalContent = observer(
       );
     };
 
+    const goalYearString = `FY${annualInitiative.fiscalYear.toString().slice(-2)}/${(
+      annualInitiative.fiscalYear + 1
+    )
+      .toString()
+      .slice(-2)}`;
+
     const renderHeader = (): JSX.Element => {
       return (
         <HeaderContainer>
@@ -162,7 +168,7 @@ export const AnnualInitiativeModalContent = observer(
               </GoalText>
             )}
             <DetailsContainer>
-              <YearText type={"small"}>{annualInitiative.fiscalYear} Goal</YearText>
+              <YearText type={"small"}>{goalYearString} Objective</YearText>
               <OwnedBySection
                 ownedBy={annualInitiative.ownedBy}
                 type={"annualInitiative"}

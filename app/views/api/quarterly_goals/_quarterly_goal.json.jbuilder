@@ -11,3 +11,5 @@ end
 json.sub_initiatives quarterly_goal.sub_initiatives do |sub_initiative|
   json.partial! sub_initiative, partial: "api/sub_initiatives/sub_initiative", as: :sub_initiative
 end
+
+json.fiscal_year quarterly_goal.annual_initiative.fiscal_year
