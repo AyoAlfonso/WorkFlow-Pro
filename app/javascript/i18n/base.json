@@ -83,7 +83,7 @@
         "core2": "How Do We Behave?",
         "core3": "What Do We Do?",
         "core4": "How Do We Succeed?",
-        "goalsTitle": "Foundational Four"
+        "goalsTitle": "Foundational Four™"
       },
       "company": {
         "accountabilityChart": "Accountability Matrix",
@@ -102,7 +102,7 @@
         "editUser": {
           "title": "Edit User"
         },
-        "rallyingCry": "LynchPyn Goal",
+        "rallyingCry": "LynchPyn Goal™",
         "create": "Create",
         "edit": "Edit",
         "newCompany": "Company",
@@ -193,8 +193,8 @@
         },
         "noPermissions": "This meeting is not for this team, please go back to the team overview page and click start meeting.",
         "meetingComplete": "This meeting has already been completed.",
-        "reviewCoreFour": "Review the Foundational Four as a team.",
-        "coreFourTitle": "Foundational Four",
+        "reviewCoreFour": "Review the Foundational Four™ as a team.",
+        "coreFourTitle": "Foundational Four™",
         "saveRatings": "Save Ratings",
         "teamsPyns": "Team's Pyns",
         "teamIssues": {

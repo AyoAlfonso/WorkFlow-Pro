@@ -48,6 +48,7 @@ export const GoalsIndex = observer(
     const [companyPlanning, setCompanyPlanning] = useState<boolean>(false);
     const [personalPlanning, setPersonalPlanning] = useState<boolean>(false);
 
+    const [showCoreFour, setShowCoreFour] = useState<boolean>(true);
     const [showCompanyInitiatives, setShowCompanyInitiatives] = useState<boolean>(true);
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
 
@@ -70,11 +71,13 @@ export const GoalsIndex = observer(
       if (companyPlanning) {
         setCompanyPlanning(false);
         setShowPersonalInitiatives(true);
+        setShowCoreFour(true);
       } else {
         setPersonalPlanning(false);
         setShowCompanyInitiatives(true);
         setShowPersonalInitiatives(false);
         setCompanyPlanning(true);
+        setShowCoreFour(false);
       }
     };
 
@@ -82,11 +85,13 @@ export const GoalsIndex = observer(
       if (personalPlanning) {
         setPersonalPlanning(false);
         setShowCompanyInitiatives(true);
+        setShowCoreFour(true);
       } else {
         setCompanyPlanning(false);
         setShowCompanyInitiatives(false);
         setShowPersonalInitiatives(true);
         setPersonalPlanning(true);
+        setShowCoreFour(false);
       }
     };
 
@@ -171,7 +176,7 @@ export const GoalsIndex = observer(
 
     return (
       <Container>
-        <GoalsCoreFour />
+        <GoalsCoreFour showCoreFour={showCoreFour} setShowCoreFour={setShowCoreFour} />
 
         <CompanyInitiativesContainer>
           <TitleContainer
