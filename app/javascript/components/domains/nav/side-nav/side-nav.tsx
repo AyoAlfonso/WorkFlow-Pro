@@ -293,7 +293,7 @@ export const SideNavNoMst = (
       )}
 
       <StyledNavLinkChildrenActive to="/goals" icon={"Goals"} currentPathName={currentPathName}>
-        {t("navigation.goals")}
+        <div style={{ marginLeft: "-5px" }}>{t("navigation.goals")}</div>
       </StyledNavLinkChildrenActive>
 
       {/* <SideBarElement margin={"16px"} marginTop={"auto"}>

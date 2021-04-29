@@ -40,11 +40,16 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :team_user_enablements, :allow_destroy => true
 
   validates :first_name, :last_name, presence: true, on: :update
+  
 
   accepts_nested_attributes_for :daily_logs
 
   #TODO - DELETE COMPANY FROM DATABASE to be removed after we finalize rake, etc.
   belongs_to :default_selected_company, class_name: "Company"
+
+  scope :active_users_for_company, -> (company_id) { joins(:user_company_enablements)
+                                                        .where(user_company_enablements: { company_id: company_id})
+                                                        .where.not(user_company_enablements: {user_role: UserRole::COACH}) } #later on we can extend inactive users, etc.
 
   def status
     return "inactive" if deleted_at.present?

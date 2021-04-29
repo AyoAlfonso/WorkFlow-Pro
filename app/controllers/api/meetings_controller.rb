@@ -51,7 +51,6 @@ class Api::MeetingsController < Api::ApplicationController
       # @meeting = incomplete_meetings_for_today.first_or_create(meeting_params.merge({hosted_by: current_user}))
       # authorize @meeting
       # render 'api/meetings/create'
-      
       if @meetings_already_present.present?
         @meeting = @meetings_already_present.first
         set_additional_data

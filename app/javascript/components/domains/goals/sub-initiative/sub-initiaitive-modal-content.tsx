@@ -58,6 +58,12 @@ export const SubInitiativeModalContent = observer(
     const allMilestones = subInitiative.milestones;
     const activeMilestones = subInitiative.activeMilestones;
 
+    const goalYearString = `FY${subInitiative.fiscalYear.toString().slice(-2)}/${(
+      subInitiative.fiscalYear + 1
+    )
+      .toString()
+      .slice(-2)}`;
+
     return (
       <Container>
         <StatusBlockColorIndicator
@@ -78,6 +84,7 @@ export const SubInitiativeModalContent = observer(
             annualInitiativeDescription={annualInitiativeDescription}
             showDropdownOptionsContainer={showDropdownOptionsContainer}
             setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
+            goalYearString={goalYearString}
           />
           <SectionContainer>
             <Context itemType={"subInitiative"} item={subInitiative} />
@@ -87,8 +94,6 @@ export const SubInitiativeModalContent = observer(
               <ShowMilestonesButton
                 setShowInactiveMilestones={setShowInactiveMilestones}
                 showInactiveMilestones={showInactiveMilestones}
-                allMilestones={allMilestones}
-                activeMilestones={activeMilestones}
               />
             </MilestonesHeaderContainer>
 

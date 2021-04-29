@@ -50,9 +50,9 @@ export const AnnualInitiativeCard = ({
     ? `${companyStore.onboardingCompany.currentFiscalYear}`
     : companyStore.company.currentFiscalYear == annualInitiative.fiscalYear
     ? `FY${annualInitiative.fiscalYear.toString().slice(-2)}`
-    : `FY${(annualInitiative.fiscalYear + 1)
+    : `FY${annualInitiative.fiscalYear.toString().slice(-2)}/${(annualInitiative.fiscalYear + 1)
         .toString()
-        .slice(-2)}/${annualInitiative.fiscalYear.toString().slice(-2)}`;
+        .slice(-2)}`;
 
   const renderYearDisplay = () => {
     if (onboarding) {
@@ -80,8 +80,10 @@ export const AnnualInitiativeCard = ({
       onboarding={onboarding}
       onClick={e => {
         e.stopPropagation();
-        setAnnualInitiativeModalOpen(true);
-        setAnnualInitiativeId(annualInitiative.id);
+        if (annualInitiative) {
+          setAnnualInitiativeModalOpen(true);
+          setAnnualInitiativeId(annualInitiative.id);
+        }
       }}
     >
       <HeaderContainer>
@@ -91,7 +93,7 @@ export const AnnualInitiativeCard = ({
           </StyledText>
         </DescriptionContainer>
         <IconContainer>
-          <RecordOptions type={"annualInitiative"} id={annualInitiative.id} marginLeft={"-70px"} />
+          <RecordOptions type={"annualInitiative"} id={annualInitiative.id} />
         </IconContainer>
       </HeaderContainer>
 

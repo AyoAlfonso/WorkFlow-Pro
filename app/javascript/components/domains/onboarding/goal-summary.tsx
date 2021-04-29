@@ -26,7 +26,7 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
         <SectionContainer>
           <RallyingCryContainer>
             <TextDiv fontSize={"22px"} color={"primary100"} mr={"8px"}>
-              Lynchpyn Goal
+              Lynchpyn Goal™
             </TextDiv>
             <WrappedTextDiv fontSize={"16px"} color={"black"} ml={"auto"} mr={"auto"}>
               {rallyingCry}

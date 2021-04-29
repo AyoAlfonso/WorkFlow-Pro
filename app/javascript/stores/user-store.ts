@@ -94,6 +94,11 @@ export const UserStoreModel = types
           showToast("User updated", ToastMessageConstants.SUCCESS);
           return true;
         }
+    }),
+    updateUserCompany: flow(function*(companyId){
+      self.environment.api.switchCompanies(companyId).then(() => {
+        return true
+      })
     })
   }));
 

@@ -269,11 +269,11 @@ True value of LynchPyn is in working together with others in your team and compa
           fieldType: EFieldType.TextField,
           formKeys: ["rallyingCry"],
           callback: setGoalDataState,
-          subText: `Awesome ${profile.firstName}! This is what we call your LynchPyn Goal. This is the ultimate filter when the company is making any strategic decisions until it's achieved`,
+          subText: `Awesome ${profile.firstName}! This is what we call your LynchPyn Goal™. This is the ultimate filter when the company is making any strategic decisions until it's achieved`,
         },
         {
           label:
-            "What's a specific Goal you can set for the next year to achieve your LynchPyn Goal? This can be specific to your team.",
+            "What's a specific Goal you can set for the next year to achieve your LynchPyn Goal™? This can be specific to your team.",
           fieldType: EFieldType.TextField,
           formKeys: ["annualInitiative", "description"],
           callback: setGoalDataState,

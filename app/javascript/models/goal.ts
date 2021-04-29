@@ -15,7 +15,25 @@ export const GoalModel = types
       return self.goals.filter(annualInitiative => !annualInitiative.closedAt)
     },
     get closedAnnualInitiatives(){
-      return self.goals.filter(annualInitiative => annualInitiative.closedAt)
+      let annualInitiatives = [];
+      self.goals.forEach((goal) => {
+        if(goal.closedAt){
+          annualInitiatives.push(goal)
+        } else {
+          goal.quarterlyGoals.forEach((qg) => {
+            if(qg.closedAt) {
+              annualInitiatives.push(goal)
+            } else {
+              qg.subInitiatives.forEach((si) => {
+                if(si.closedAt){
+                  annualInitiatives.push(goal)
+                }
+              })
+            }
+          })
+        }
+      })
+      return annualInitiatives
     },
     get myAnnualInitiatives(){
       const { sessionStore } = getRoot(self);
