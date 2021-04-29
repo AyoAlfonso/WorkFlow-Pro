@@ -298,7 +298,7 @@ export const Company = observer(
                       />
                     </CompanyStaticDataArea>
                     <CompanyStaticDataArea>
-                      <Label htmlFor="subInitiative">Sub Initiative</Label>
+                      <Label htmlFor="subInitiative">Supporting Initiative</Label>
                       <Input
                         name="subInitiative"
                         onChange={e => {

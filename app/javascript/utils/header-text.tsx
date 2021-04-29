@@ -48,7 +48,7 @@ export const HeaderText = observer(
             return <></>;
         }
       case "goals":
-        return <> Goals </>;
+        return <> Objectives </>;
       case "account":
         return <> {t("profile.accountSettings")} </>;
       case "notes":

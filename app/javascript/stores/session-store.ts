@@ -48,7 +48,7 @@ export const SessionStoreModel = types
       const titleObject = self.companyStaticData.find(
         item => item.field == "sub_initiative",
       );
-      return titleObject ? titleObject.value : "Sub Initiative";
+      return titleObject ? titleObject.value : "Supporting Initiative";
     }
   }))
   .actions(self => ({
