@@ -12,6 +12,7 @@ export class Api {
       headers: {
         "Cache-Control": "no-cache",
         "Content-Type": "application/json",
+        "Current-Company-ID": localStorage.getItem("companyId") !== undefined ?  localStorage.getItem("companyId") : "",
       },
       timeout: 30000,
       withCredentials: true, //allow cookies to be sent if its from same domain
@@ -52,9 +53,7 @@ export class Api {
 
   async profile() {
     const response = await this.client.get("/profile");
-    this.client.setHeaders({
-      "Current-Company-ID": R.path(["data", "sessionCompanyProfileId"], response) || "",
-    });
+    localStorage.setItem('companyId', R.path(["data", "sessionCompanyProfileId"], response));
     return response;
   }
 
@@ -139,6 +138,11 @@ export class Api {
       "Current-Company-ID": "",
     });
     return this.client.delete("/users/sign_out");
+  }
+
+  async switchCompanies(id) {
+    localStorage.setItem("companyId", id);
+    return true
   }
 
   async createIssue(issueObject) {

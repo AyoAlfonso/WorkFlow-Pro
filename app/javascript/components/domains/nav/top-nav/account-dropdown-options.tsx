@@ -64,20 +64,12 @@ export const AccountDropdownOptions = observer(
           <SwitchAccountContainer
             key={index}
             onClick={() => {
-              if (parsedProfile.defaultSelectedCompanyId != company.id) {
-                userStore
-                  .updateUser({ id: parsedProfile.id, defaultSelectedCompanyId: company.id })
-                  .then(() => {
-                    if (location.pathname !== "/") {
-                      history.replace("/");
-                    }
-                    window.location.reload();
-                  });
-              } else {
-                setShowAccountActions(false);
-                setShowCompanyOptions(false);
-                showToast(`You are already on ${company.name}`, ToastMessageConstants.INFO);
-              }
+              userStore.updateUserCompany(company.id).then(() => {
+                if (location.pathname !== "/") {
+                  history.replace("/");
+                }
+                window.location.reload();
+              });
             }}
           >
             <CurrentCompanyCheckboxContainer>
@@ -193,14 +185,17 @@ export const AccountDropdownOptions = observer(
         <StyledDivider />
 
         <DropdownSectionContainer>
-          <Link to="/account" style={{ textDecoration: "none", padding: "0" }}>
+          <GrowthPlanContainer>
             <AccountOptionText
               color={baseTheme.colors.primary100}
-              onClick={() => setShowAccountActions(false)}
+              onClick={() => {
+                window.open("https://payments.pabbly.com/portal/signin/lynchpyn", "_blank");
+                setShowAccountActions(false);
+              }}
             >
               {t("profile.growthPlan")}
             </AccountOptionText>
-          </Link>
+          </GrowthPlanContainer>
           <Link to="/account" style={{ textDecoration: "none", padding: "0" }}>
             <AccountOptionText onClick={() => setShowAccountActions(false)}>
               {t("profile.accountSettings")}
@@ -265,18 +260,21 @@ export const AccountDropdownOptions = observer(
           {renderShowHelpdesk()}
         </DropdownSectionContainer>
 
-        <StyledDivider />
-
-        <DropdownSectionContainer>
-          <AccountOptionText
-            onClick={() => {
-              setShowCompanyCreationSelector(!showCompanyCreationSelector);
-            }}
-          >
-            {!R.isNil(onboardingCompany) ? t("company.edit") : t("company.create")}
-          </AccountOptionText>
-          {renderCompanyCreationSelector()}
-        </DropdownSectionContainer>
+        {process.env.QA_SHOW_CREATE_COMPANY_FORUM_MENU && (
+          <>
+            <StyledDivider />
+            <DropdownSectionContainer>
+              <AccountOptionText
+                onClick={() => {
+                  setShowCompanyCreationSelector(!showCompanyCreationSelector);
+                }}
+              >
+                {!R.isNil(onboardingCompany) ? t("company.edit") : t("company.create")}
+              </AccountOptionText>
+              {renderCompanyCreationSelector()}
+            </DropdownSectionContainer>
+          </>
+        )}
 
         <StyledDivider />
 
@@ -421,3 +419,5 @@ const DefaultTextContainer = styled.div`
 const DefaultText = styled(Text)`
   font-style: italic;
 `;
+
+const GrowthPlanContainer = styled.div``;
