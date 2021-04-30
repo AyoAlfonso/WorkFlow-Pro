@@ -262,10 +262,10 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
-    updateLabel: flow(function*(keyActivityId, labelName) {
+    updateLabel: flow(function*(keyActivityId, labelId) {
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivity({
         id: keyActivityId,
-        labelList: labelName,
+        labelList: labelId,
       });
 
       self.finishLoading();
