@@ -141,31 +141,31 @@ export const AccountDropdownOptions = observer(
     };
 
     const renderCompanyCreationSelector = (): JSX.Element => {
-      const displayFormat = R.path(["displayFormat"], onboardingCompany);
-      return (
-        showCompanyCreationSelector && (
-          <CompanyCreationSelectionContainer>
-            {!displayFormat ? (
-              <>
-                <CreationOption onClick={() => companyStore.openOnboardingModal("Company")}>
-                  <CreationSelectionText>{t("company.newCompany")}</CreationSelectionText>
-                </CreationOption>
-                <CreationOption onClick={() => companyStore.openOnboardingModal("Forum")}>
-                  <CreationSelectionText>{t("company.newForum")}</CreationSelectionText>
-                </CreationOption>
-              </>
-            ) : displayFormat === "Company" ? (
+      if (onboardingCompany) {
+        const displayFormat = R.path(["displayFormat"], onboardingCompany);
+        return (
+          showCompanyCreationSelector && (
+            <CreationOption onClick={() => companyStore.openOnboardingModal(displayFormat)}>
+              <CreationSelectionText>
+                {t("onboarding.continue", { format: displayFormat })}
+              </CreationSelectionText>
+            </CreationOption>
+          )
+        );
+      } else {
+        return (
+          showCompanyCreationSelector && (
+            <>
               <CreationOption onClick={() => companyStore.openOnboardingModal("Company")}>
                 <CreationSelectionText>{t("company.newCompany")}</CreationSelectionText>
               </CreationOption>
-            ) : (
               <CreationOption onClick={() => companyStore.openOnboardingModal("Forum")}>
                 <CreationSelectionText>{t("company.newForum")}</CreationSelectionText>
               </CreationOption>
-            )}
-          </CompanyCreationSelectionContainer>
-        )
-      );
+            </>
+          )
+        );
+      }
     };
 
     return (

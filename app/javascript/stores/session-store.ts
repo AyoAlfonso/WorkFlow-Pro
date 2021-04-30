@@ -205,6 +205,7 @@ export const SessionStoreModel = types
             meetingStore.load();
             labelStore.fetchLabels();
             notificationStore.load();
+            companyStore.getOnboardingCompany();
           }
         }
       } catch {

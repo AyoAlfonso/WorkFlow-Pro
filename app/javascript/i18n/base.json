@@ -306,6 +306,9 @@
       "datePicker": {
         "dueDate": "Due Date",
         "clearDate": "Clear Date"
+      },
+      "onboarding": {
+        "continue": "Resume {{format}} creation"
       }
     }
   }
