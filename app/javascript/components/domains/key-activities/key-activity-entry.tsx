@@ -77,8 +77,8 @@ export const KeyActivityEntry = observer(
       keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false);
     };
 
-    const updateLabel = labelName => {
-      keyActivityStore.updateLabel(keyActivity.id, labelName);
+    const updateLabel = labelId => {
+      keyActivityStore.updateLabel(keyActivity.id, labelId);
     };
 
     const renderLabel = () => {

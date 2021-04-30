@@ -11,9 +11,9 @@
         "account": "Account",
         "logout": "Log Out",
         "greeting": "Hey {{name}}",
-        "accountSettings": "Account Settings",
+        "accountSettings": "Settings",
         "profile": "Profile",
-        "growthPlan": "Growth Plan",
+        "growthPlan": "Billing & Plans",
         "notifications": "Notifications",
         "security": "Security",
         "switchCompanies": "Switch Profiles",
@@ -306,6 +306,9 @@
       "datePicker": {
         "dueDate": "Due Date",
         "clearDate": "Clear Date"
+      },
+      "onboarding": {
+        "continue": "Resume {{format}} creation"
       }
     }
   }

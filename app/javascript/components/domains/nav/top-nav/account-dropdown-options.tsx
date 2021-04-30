@@ -141,31 +141,31 @@ export const AccountDropdownOptions = observer(
     };
 
     const renderCompanyCreationSelector = (): JSX.Element => {
-      const displayFormat = R.path(["displayFormat"], onboardingCompany);
-      return (
-        showCompanyCreationSelector && (
-          <CompanyCreationSelectionContainer>
-            {!displayFormat ? (
-              <>
-                <CreationOption onClick={() => companyStore.openOnboardingModal("Company")}>
-                  <CreationSelectionText>{t("company.newCompany")}</CreationSelectionText>
-                </CreationOption>
-                <CreationOption onClick={() => companyStore.openOnboardingModal("Forum")}>
-                  <CreationSelectionText>{t("company.newForum")}</CreationSelectionText>
-                </CreationOption>
-              </>
-            ) : displayFormat === "Company" ? (
+      if (onboardingCompany) {
+        const displayFormat = R.path(["displayFormat"], onboardingCompany);
+        return (
+          showCompanyCreationSelector && (
+            <CreationOption onClick={() => companyStore.openOnboardingModal(displayFormat)}>
+              <CreationSelectionText>
+                {t("onboarding.continue", { format: displayFormat })}
+              </CreationSelectionText>
+            </CreationOption>
+          )
+        );
+      } else {
+        return (
+          showCompanyCreationSelector && (
+            <>
               <CreationOption onClick={() => companyStore.openOnboardingModal("Company")}>
                 <CreationSelectionText>{t("company.newCompany")}</CreationSelectionText>
               </CreationOption>
-            ) : (
               <CreationOption onClick={() => companyStore.openOnboardingModal("Forum")}>
                 <CreationSelectionText>{t("company.newForum")}</CreationSelectionText>
               </CreationOption>
-            )}
-          </CompanyCreationSelectionContainer>
-        )
-      );
+            </>
+          )
+        );
+      }
     };
 
     return (
@@ -185,9 +185,13 @@ export const AccountDropdownOptions = observer(
         <StyledDivider />
 
         <DropdownSectionContainer>
+          <Link to="/account" style={{ textDecoration: "none", padding: "0" }}>
+            <AccountOptionText onClick={() => setShowAccountActions(false)}>
+              {t("profile.accountSettings")}
+            </AccountOptionText>
+          </Link>
           <GrowthPlanContainer>
             <AccountOptionText
-              color={baseTheme.colors.primary100}
               onClick={() => {
                 window.open("https://payments.pabbly.com/portal/signin/lynchpyn", "_blank");
                 setShowAccountActions(false);
@@ -196,11 +200,6 @@ export const AccountDropdownOptions = observer(
               {t("profile.growthPlan")}
             </AccountOptionText>
           </GrowthPlanContainer>
-          <Link to="/account" style={{ textDecoration: "none", padding: "0" }}>
-            <AccountOptionText onClick={() => setShowAccountActions(false)}>
-              {t("profile.accountSettings")}
-            </AccountOptionText>
-          </Link>
         </DropdownSectionContainer>
 
         <StyledDivider />
