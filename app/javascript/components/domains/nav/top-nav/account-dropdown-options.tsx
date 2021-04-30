@@ -185,9 +185,13 @@ export const AccountDropdownOptions = observer(
         <StyledDivider />
 
         <DropdownSectionContainer>
+          <Link to="/account" style={{ textDecoration: "none", padding: "0" }}>
+            <AccountOptionText onClick={() => setShowAccountActions(false)}>
+              {t("profile.accountSettings")}
+            </AccountOptionText>
+          </Link>
           <GrowthPlanContainer>
             <AccountOptionText
-              color={baseTheme.colors.primary100}
               onClick={() => {
                 window.open("https://payments.pabbly.com/portal/signin/lynchpyn", "_blank");
                 setShowAccountActions(false);
@@ -196,11 +200,6 @@ export const AccountDropdownOptions = observer(
               {t("profile.growthPlan")}
             </AccountOptionText>
           </GrowthPlanContainer>
-          <Link to="/account" style={{ textDecoration: "none", padding: "0" }}>
-            <AccountOptionText onClick={() => setShowAccountActions(false)}>
-              {t("profile.accountSettings")}
-            </AccountOptionText>
-          </Link>
         </DropdownSectionContainer>
 
         <StyledDivider />
