@@ -370,6 +370,14 @@ export class Api {
     return this.client.get(`/journals`, dateFilterObj);
   }
 
+  async updateJournalEntry(journalEntry) {
+    return this.client.patch(`/journal_entries/${journalEntry.id}`, journalEntry);
+  }
+
+  async deleteJournalEntry(journalEntryId) {
+    return this.client.delete(`/journal_entries/${journalEntryId}`);
+  }
+
   async createQuestionnaireAttempt(questionnaireId, questionnaireAttemptData) {
     const questionnaireAttemptObject = {
       questionnaire_id: questionnaireId,
@@ -502,16 +510,16 @@ export class Api {
     return this.client.post(`/create_team_and_invite_users`, { teamName, users });
   }
 
-  async getEmotionAdjectives(){
-    return this.client.get(`/user_pulses/emotion_adjectives`)
+  async getEmotionAdjectives() {
+    return this.client.get(`/user_pulses/emotion_adjectives`);
   }
 
-  async updateUserPulse(pulseObject){
-    return this.client.post(`/update_user_pulse`, pulseObject )
+  async updateUserPulse(pulseObject) {
+    return this.client.post(`/update_user_pulse`, pulseObject);
   }
-  
-  async getUserPulseByDate(date){
-    return this.client.get(`/user_pulse_by_date`, { date })
+
+  async getUserPulseByDate(date) {
+    return this.client.get(`/user_pulse_by_date`, { date });
   }
   //async setJWT(jwt) {}
 }

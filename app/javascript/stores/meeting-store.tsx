@@ -198,7 +198,7 @@ export const MeetingStoreModel = types
           return { meeting: null };
         }
       } catch {
-        console.log("does it hit catch create meeting");
+        // console.log("does it hit catch create meeting");
         // caught bv Api Monitor
       }
       return { meeting: null };
@@ -263,7 +263,7 @@ export const MeetingStoreModel = types
           return { meeting: null };
         }
       } catch {
-        console.log("does it hit the catch");
+        // console.log("does it hit the catch");
         //caught by Api Monitor
       }
       return { meeting: null };

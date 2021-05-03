@@ -17,6 +17,26 @@ export const JournalStoreModel = types
       );
       self.journalEntriesFiltered = response.data;
     }),
+    updateJournalEntry: flow(function*(updatedJournalEntry) {
+      const response: ApiResponse<any> = yield self.environment.api.updateJournalEntry(
+        updatedJournalEntry,
+      );
+      if (response.ok) {
+        //nested filter is hard to update, entry will update list
+        return response.data;
+      }
+      return false;
+    }),
+    deleteJournalEntry: flow(function*(journalEntry) {
+      const response: ApiResponse<any> = yield self.environment.api.deleteJournalEntry(
+        journalEntry.id,
+      );
+      if (response.ok) {
+        //nested filter is hard to update, entry will update list
+        return true;
+      }
+      return false;
+    }),
   }));
 
 type JournalStoreType = typeof JournalStoreModel.Type;
