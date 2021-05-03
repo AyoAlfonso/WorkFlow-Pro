@@ -87,7 +87,7 @@ if Rails.env.development?
     quarter: 1,
   )
 
-  m1 = Milestone.where(description: "Get brochures and pricing", quarterly_goal_id: qg1.id).first_or_create(
+  m1 = Milestone.where(description: "Get brochures and pricing", milestoneable: qg1).first_or_create(
     created_by_id: u1.id, 
     description: "Get brochures and pricing", 
     week: Time.now.strftime("%U").to_i, 
@@ -96,7 +96,7 @@ if Rails.env.development?
     week_of: "2020-07-16"
   )
 
-  m2 = Milestone.where(description: "Test drive the vehicles", quarterly_goal_id: qg1.id).first_or_create(
+  m2 = Milestone.where(description: "Test drive the vehicles", milestoneable: qg1).first_or_create(
     created_by_id: u1.id, 
     description: "Test drive the vehicles", 
     week: Time.now.strftime("%U").to_i, 
@@ -115,7 +115,7 @@ if Rails.env.development?
     quarter: 1
   )
 
-  m3 = Milestone.where(description: "Get brochures and pricing", quarterly_goal_id: qg2.id).first_or_create(
+  m3 = Milestone.where(description: "Get brochures and pricing", milestoneable: qg2).first_or_create(
     created_by_id: u1.id, 
     description: "Get brochures and pricing", 
     week: Time.now.strftime("%U").to_i, 
@@ -124,7 +124,7 @@ if Rails.env.development?
     week_of: "2020-07-16"
   )
 
-  m4 = Milestone.where(description: "Test drive the vehicles", quarterly_goal_id: qg2.id).first_or_create(
+  m4 = Milestone.where(description: "Test drive the vehicles", milestoneable: qg2).first_or_create(
     created_by_id: u1.id, 
     description: "Test drive the vehicles", 
     week: Time.now.strftime("%U").to_i, 
@@ -154,7 +154,7 @@ if Rails.env.development?
     quarter: 1
   )
 
-  m5 = Milestone.where(description: "Accessbility of the city", quarterly_goal_id: qg2.id).first_or_create(
+  m5 = Milestone.where(description: "Accessbility of the city", milestoneable: qg3).first_or_create(
     created_by_id: u1.id, 
     description: "Accessbility of the city", 
     week: Time.now.strftime("%U").to_i, 
@@ -163,7 +163,7 @@ if Rails.env.development?
     week_of: "2020-07-16"
   )
 
-  m6 = Milestone.where(description: "Number of good restaurants", quarterly_goal_id: qg2.id).first_or_create(
+  m6 = Milestone.where(description: "Number of good restaurants", milestoneable: qg3).first_or_create(
     created_by_id: u1.id, 
     description: "Number of good restaurants", 
     week: Time.now.strftime("%U").to_i, 
