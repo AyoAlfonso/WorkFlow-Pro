@@ -168,6 +168,19 @@ class User < ApplicationRecord
     end
   end
 
+  def questionnaire_type_for_planning
+    user_time = self.time_in_user_timezone
+    if [2,3,4,5].include? user_time.wday # Tuesday to Friday
+      if user_time.wday == 5 && user_time.hour > 12
+        "weekly"
+      else
+        "daily"
+      end
+    else
+     "weekly"
+    end
+  end
+
   def user_pulse_for_display(date = nil)
     self.user_pulses.where(completed_at: date || self.time_in_user_timezone.to_date).first
   end

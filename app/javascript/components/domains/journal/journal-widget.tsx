@@ -8,12 +8,17 @@ import { StyledOverviewAccordion } from "~/components/shared/styles/overview-sty
 interface IJournalProps {
   expanded: string;
   handleChange: any;
+  questionnaireVariant: string;
+  setQuestionnaireVariant: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const Journal = observer(
-  ({ expanded, handleChange }: IJournalProps): JSX.Element => {
-    const [questionnaireVariant, setQuestionnaireVariant] = useState<string>("");
-
+  ({
+    expanded,
+    handleChange,
+    questionnaireVariant,
+    setQuestionnaireVariant,
+  }: IJournalProps): JSX.Element => {
     return (
       <StyledOverviewAccordion
         expanded={expanded === "panel0"}
