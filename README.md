@@ -4,6 +4,8 @@
 
 1. Install npm packages -> `yarn install`
 2. Run Bundler -> `bundle install`
+3. Run the migration -> `rake db:migrate`
+4. Run the seeding -> `rake db:seed`
 
 ## Run Project
 
