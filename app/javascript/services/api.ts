@@ -7,12 +7,14 @@ export class Api {
   token: string;
 
   constructor() {
+    let companyId = localStorage.getItem("companyId")
+    
     this.client = create({
       baseURL: "/api",
       headers: {
         "Cache-Control": "no-cache",
         "Content-Type": "application/json",
-        "Current-Company-ID": localStorage.getItem("companyId") !== undefined ?  localStorage.getItem("companyId") : "",
+        "Current-Company-ID": companyId == "undefined" || !companyId ? "" : companyId
       },
       timeout: 30000,
       withCredentials: true, //allow cookies to be sent if its from same domain
