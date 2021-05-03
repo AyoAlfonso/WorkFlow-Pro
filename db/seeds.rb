@@ -92,7 +92,7 @@ if Rails.env.development?
     description: "Get brochures and pricing", 
     week: Time.now.strftime("%U").to_i, 
     status: 0, 
-    quarterly_goal_id: qg1.id,
+    milestoneable: qg1,
     week_of: "2020-07-16"
   )
 
@@ -101,7 +101,7 @@ if Rails.env.development?
     description: "Test drive the vehicles", 
     week: Time.now.strftime("%U").to_i, 
     status: 0, 
-    quarterly_goal_id: qg1.id,
+    milestoneable: qg1,
     week_of: "2020-07-23"
   )
 
@@ -120,7 +120,7 @@ if Rails.env.development?
     description: "Get brochures and pricing", 
     week: Time.now.strftime("%U").to_i, 
     status: 0, 
-    quarterly_goal_id: qg2.id,
+    milestoneable: qg2,
     week_of: "2020-07-16"
   )
 
@@ -129,7 +129,7 @@ if Rails.env.development?
     description: "Test drive the vehicles", 
     week: Time.now.strftime("%U").to_i, 
     status: 0, 
-    quarterly_goal_id: qg2.id,
+    milestoneable: qg2,
     week_of: "2020-07-23"
   )
 
@@ -159,7 +159,7 @@ if Rails.env.development?
     description: "Accessbility of the city", 
     week: Time.now.strftime("%U").to_i, 
     status: 0, 
-    quarterly_goal_id: qg3.id,
+    milestoneable: qg3,
     week_of: "2020-07-16"
   )
 
@@ -168,7 +168,7 @@ if Rails.env.development?
     description: "Number of good restaurants", 
     week: Time.now.strftime("%U").to_i, 
     status: 0, 
-    quarterly_goal_id: qg3.id,
+    milestoneable: qg3,
     week_of: "2020-07-23"
   )
   
