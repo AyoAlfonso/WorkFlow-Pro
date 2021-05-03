@@ -1,10 +1,10 @@
 import { UserType } from "./user";
 import { MilestoneType } from "./milestone";
 import { KeyElementType } from "./key-element";
-import { SubInitiativesType } from "./sub-initiatives";
 
-export type QuarterlyGoalType = {
+export type SubInitiativesType = {
   id: number;
+  quarterlyGoalId: number;
   annualInitiativeId: number;
   createdById: number;
   createdAt: Date | string;
@@ -15,6 +15,5 @@ export type QuarterlyGoalType = {
   description: string;
   milestones: Array<MilestoneType>;
   contextDescription: string;
-  subInitiatives?: Array<SubInitiativesType>;
   quarter: number;
 };

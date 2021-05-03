@@ -12,12 +12,14 @@ interface IAnnualInitiativeCardMinimizedProps {
   annualInitiative: AnnualInitiativeType;
   setShowMinimizedCard: React.Dispatch<React.SetStateAction<boolean>>;
   disableOpen?: boolean;
+  showMinimizedCard?:boolean;
 }
 
 export const AnnualInitiativeCardMinimized = ({
   annualInitiative,
   disableOpen,
   setShowMinimizedCard,
+  showMinimizedCard
 }: IAnnualInitiativeCardMinimizedProps): JSX.Element => {
   const { warningRed, cautionYellow, finePine, grey40 } = baseTheme.colors;
   const counts = []
@@ -107,9 +109,9 @@ export const AnnualInitiativeCardMinimized = ({
       <OwnedBySection
           ownedBy={annualInitiative.ownedBy}
           type={"annualInitiative"}
-          disabled={annualInitiative.closedInitiative}
+          disabled={true}
           size={25}
-          marginLeft={"5px"}
+          marginLeft={"16px"}
           marginRight={"0px"}
           marginTop={"5px"}
           marginBottom={"0px"}
@@ -122,17 +124,18 @@ export const AnnualInitiativeCardMinimized = ({
      
     <Container
       onClick={e => {
-        setShowMinimizedCard(false);
+        setShowMinimizedCard(!showMinimizedCard);
        }}
     >
     {disableOpen ? null : (
         <MaximizeIconContainer>
-          <ShowInitiativeBar> Show Initiative </ShowInitiativeBar>
-          <Icon
-            icon={"Chevron-Down"}
+          <ShowInitiativeBar> {showMinimizedCard ? 'Show' : 'Hide'}  Initiative </ShowInitiativeBar>
+          <StyledIcon
+            icon={showMinimizedCard ? "Chevron-Down": "Chevron-Up"}
             size={"12px"}
             iconColor={"#005FFE"}// TODOIT: ADD TO CONSTANT VARIABLES
             style={{ padding: "0px 5px" }}
+    
           />
         </MaximizeIconContainer>
       )} 
@@ -167,15 +170,14 @@ const QuarterlyGoalIndicator = styled.div<QuarterlyGoalIndicatorType>`
 `;
 
 const MaximizeIconContainer = styled.div`
-  background-color: white;
   border-radius: 50px;
-  width: 15px;
   height: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   margin: 5% auto;
+
   &: hover {
     cursor: pointer;
   }
@@ -218,4 +220,12 @@ const GradientContainer = styled.div<GradientContainerType> `
     height: 2px;
     width: 100%;
     background: linear-gradient(to right ${props => props.gradient});
+`
+
+const StyledIcon = styled(Icon)`
+  transition: .8s
+  -moz-animation-delay: 3.5s;
+   -webkit-animation-delay: 3.5s;
+   -o-animation-delay: 3.5s;
+    animation-delay: 3.5s;
 `

@@ -6,11 +6,12 @@ import { MilestoneType } from "~/types/milestone";
 interface IStatusBlockColorIndicatorProps {
   milestones: Array<MilestoneType>;
   indicatorWidth: number;
+  indicatorHeight: number;
   marginBottom?: number;
 }
 
 export const StatusBlockColorIndicator = (props: IStatusBlockColorIndicatorProps): JSX.Element => {
-  const { milestones, indicatorWidth, marginBottom } = props;
+  const { milestones, indicatorWidth, indicatorHeight, marginBottom } = props;
   const renderStatusBlocks = () => {
     return milestones.map((milestone, index) => {
       const { warningRed, cautionYellow, finePine, grey20 } = baseTheme.colors;
@@ -33,6 +34,7 @@ export const StatusBlockColorIndicator = (props: IStatusBlockColorIndicatorProps
         <StatusBlock
           backgroundColor={backgroundColor}
           key={index}
+          indicatorHeight={indicatorHeight}
           indicatorWidth={indicatorWidth}
         />
       );
@@ -56,11 +58,12 @@ const Container = styled.div<ContainerType>`
 type StatusBlockType = {
   backgroundColor?: string;
   indicatorWidth: number;
+  indicatorHeight: number;
 };
 
 const StatusBlock = styled.div<StatusBlockType>`
   width: ${props => props.indicatorWidth}px;
-  height: 5px;
+  height: ${props => props.indicatorHeight || 5}px;
   border-radius: 5px;
   margin-right: 1px;
   background-color: ${props => props.backgroundColor || props.theme.colors.grey20};

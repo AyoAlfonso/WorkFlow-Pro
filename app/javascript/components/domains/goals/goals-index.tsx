@@ -157,6 +157,7 @@ export const GoalsIndex = observer(
             annualInitiative={annualInitiative}
             totalNumberOfAnnualInitiatives={annualInitiatives.length}
             showMinimizedCards={true}
+            showSubInitiativeCards={false}
             setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
             setAnnualInitiativeId={setAnnualInitiativeId}
             setQuarterlyGoalId={setQuarterlyGoalId}

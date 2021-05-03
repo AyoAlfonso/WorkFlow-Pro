@@ -41,6 +41,12 @@ export const InitiativeHeader = ({
 
   return (
     <HeaderContainer>
+    {!item.closed_at && (
+       <ClosedStatusBannerContainer>
+      This card is closed. Originally created on {item.created_at}
+      </ClosedStatusBannerContainer>
+    )}
+   
       <TitleContainer>
         <StyledContentEditable
           innerRef={descriptionRef}
@@ -72,7 +78,13 @@ export const InitiativeHeader = ({
         </GoalText>
         <DetailsContainer>
           <YearText type={"small"}>Q{item.quarter}</YearText>
-          <OwnedBySection ownedBy={item.ownedBy} type={itemType} disabled={item.closedInitiative} />
+          <OwnedBySection
+            ownedBy={item.ownedBy}
+            marginLeft={"5px"}
+            marginRight={"5px"}
+            type={itemType}
+            disabled={item.closedInitiative}
+          />
         </DetailsContainer>
       </TitleContainer>
       <AnnualInitiativeActionContainer>
@@ -141,3 +153,7 @@ const DetailsContainer = styled.div`
 const YearText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
 `;
+
+const ClosedStatusBannerContainer = styled.div`
+background-image: linear-gradient(to bottom right,rgba(0,0,0,.05) 25%,transparent 0,transparent 50%,rgba(0,0,0,.05) 0,rgba(0,0,0,.05) 75%,transparent 0,transparent)
+`

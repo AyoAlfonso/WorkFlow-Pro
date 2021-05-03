@@ -79,6 +79,7 @@ export const AnnualInitiativeModalContent = observer(
             <StatusBlockColorIndicator
               milestones={quarterlyGoal.milestones || []}
               indicatorWidth={80}
+              indicatorHeight={4}
               marginBottom={16}
             />
             <TopRowContainer>
@@ -164,6 +165,8 @@ export const AnnualInitiativeModalContent = observer(
             <DetailsContainer>
               <YearText type={"small"}>{annualInitiative.fiscalYear} Goal</YearText>
               <OwnedBySection
+                marginLeft={"5px"}
+                marginRight={"0px"}
                 ownedBy={annualInitiative.ownedBy}
                 type={"annualInitiative"}
                 disabled={annualInitiative.closedInitiative}

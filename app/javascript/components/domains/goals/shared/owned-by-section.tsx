@@ -19,6 +19,8 @@ interface IOwnedBySectionProps {
   marginRight?:string
   marginTop?:string
   marginBottom?:string
+  nameWidth?:string
+  fontSize?:string
 }
 
 export const OwnedBySection = ({
@@ -27,6 +29,8 @@ export const OwnedBySection = ({
   userIconBorder,
   disabled,
   size,
+  nameWidth,
+  fontSize,
   ...restProps
 }: IOwnedBySectionProps): JSX.Element => {
   const { userStore, sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
@@ -64,7 +68,9 @@ export const OwnedBySection = ({
   };
 
   return (
-    <Container>
+    <Container
+      width={100}
+    >
       <EditTriggerContainer
         editable={editable}
         onClick={e => {
@@ -82,7 +88,7 @@ export const OwnedBySection = ({
           border={userIconBorder}
           {...restProps}
         />
-        <OwnedByName type={"fieldLabel"}>
+        <OwnedByName fontSize={fontSize} nameWidth={nameWidth} type={"fieldLabel"}>
           {ownedBy.firstName} {ownedBy.lastName}
         </OwnedByName>
       </EditTriggerContainer>
@@ -96,7 +102,8 @@ type ContainerType = {
 };
 
 const Container = styled.div`
-  margin-left: 12px;
+   margin-left: 0px;
+   width: ${props => `${props.width}%` || 'auto'};
 `;
 
 const EditTriggerContainer = styled.div<ContainerType>`
@@ -115,4 +122,8 @@ const OwnedByName = styled(Text)`
   margin-left: 8px;
   letter-spacing: 0px;
   color: #000000; 
+  width: ${props => `${props.nameWidth}` || 'auto'};
+  overflow: hidden; 
+  font-size: ${props => `${props.fontSize}` || '12px'};
+  text-overflow: ellipsis;
 `;
