@@ -10,6 +10,7 @@ import { toJS } from "mobx";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { addDays } from "date-fns";
+import { TrixEditor } from "react-trix";
 
 import {
   ActionButtonsContainer,
@@ -20,6 +21,7 @@ import {
   EntryContainer,
   EntryCardHeaderContainer,
   EntryHeadingContainer,
+  IconButtonContainer,
   ItemCard,
   ItemContainer,
   ItemListContainer,
@@ -27,6 +29,7 @@ import {
 } from "~/components/shared/journals-and-notes";
 import { Card } from "~/components/shared/card";
 import { Text } from "~/components/shared/text";
+import { Icon } from "~/components/shared/icon";
 import { Avatar } from "~/components/shared/avatar";
 import { Loading } from "~/components/shared";
 import { IJournalEntry } from "~/models/journal-entry";
@@ -55,8 +58,10 @@ export const JournalIndex = observer(
         key: "compare",
       },
     });
+    const [editMode, setEditMode] = useState<boolean>(false);
+    const [entryUpdate, setEntryUpdate] = useState<string>("");
 
-    const { journalStore, userStore } = useMst();
+    const { journalStore, sessionStore } = useMst();
 
     useEffect(() => {
       journalStore.getJournalEntries(null).then(() => setLoading(false));
@@ -64,7 +69,7 @@ export const JournalIndex = observer(
 
     const { journalEntriesFiltered } = journalStore;
 
-    if (R.isNil(userStore.users)) {
+    if (R.isNil(sessionStore.profile)) {
       return <Loading />;
     }
 
@@ -91,9 +96,7 @@ export const JournalIndex = observer(
       );
 
     const renderSelectedEntryHeading = selectedEntry => {
-      const { avatarUrl, defaultAvatarColor, firstName, lastName } = userStore.users.find(
-        user => user.id === selectedEntry.userId,
-      );
+      const { avatarUrl, defaultAvatarColor, firstName, lastName } = sessionStore.profile;
       return (
         <>
           <Text fontSize={"16px"} fontWeight={600}>
@@ -139,23 +142,72 @@ export const JournalIndex = observer(
                   {t("journals.journalEntry")}
                 </Text>
                 <ActionButtonsContainer>
-                  {/* <IconButtonContainer onClick={() => {}}>
+                  {editMode && (
+                    <IconButtonContainer
+                      onClick={async () => {
+                        const journalEntry = await journalStore.updateJournalEntry({
+                          ...selectedItem,
+                          body: entryUpdate,
+                        });
+                        if (journalEntry) {
+                          setSelectedItem(journalEntry);
+                          setEditMode(false);
+                          journalStore.getJournalEntries(dateFilter).then(() => setLoading(false));
+                        }
+                      }}
+                    >
+                      <Icon icon={"Checkmark"} size={"16px"} mr={"16px"} />
+                    </IconButtonContainer>
+                  )}
+                  <IconButtonContainer
+                    onClick={() => {
+                      if (!editMode) {
+                        setEntryUpdate(selectedItem.body);
+                      }
+                      setEditMode(!editMode);
+                    }}
+                  >
                     <Icon icon={"Edit-2"} size={"16px"} mr={"16px"} />
-                  </IconButtonContainer> */}
-                  {/* <IconButtonContainer onClick={() => {}}>
+                  </IconButtonContainer>
+                  <IconButtonContainer
+                    onClick={async () => {
+                      if (confirm(t("journals.deleteEntry"))) {
+                        const journalEntry = await journalStore.deleteJournalEntry(selectedItem);
+                        if (journalEntry) {
+                          setEditMode(false);
+                          setSelectedItem(null);
+                          journalStore
+                            .getJournalEntries(dateFilter.selection)
+                            .then(() => setLoading(false));
+                        }
+                      }
+                    }}
+                  >
                     <Icon icon={"Delete"} size={"16px"} />
-                  </IconButtonContainer> */}
+                  </IconButtonContainer>
                 </ActionButtonsContainer>
               </EntryCardHeaderContainer>
             }
           >
-            <EntryBodyCard>
-              <Text
-                fontSize={"12px"}
-                mb={"20px"}
-                dangerouslySetInnerHTML={{ __html: selectedItem.body }}
+            {editMode ? (
+              <TrixEditor
+                className="custom-trix-class"
+                autoFocus={true}
+                mergeTags={[]}
+                value={entryUpdate}
+                onChange={(html, text) => {
+                  setEntryUpdate(html);
+                }}
               />
-            </EntryBodyCard>
+            ) : (
+              <EntryBodyCard>
+                <Text
+                  fontSize={"12px"}
+                  mb={"20px"}
+                  dangerouslySetInnerHTML={{ __html: selectedItem.body }}
+                />
+              </EntryBodyCard>
+            )}
           </Card>
         </>
       );
