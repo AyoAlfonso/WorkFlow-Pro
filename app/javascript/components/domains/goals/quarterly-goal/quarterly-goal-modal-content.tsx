@@ -121,22 +121,24 @@ export const QuarterlyGoalModalContent = observer(
           milestones={quarterlyGoal.milestones || []}
           indicatorWidth={80}
           indicatorHeight={4}
-          marginBottom={16}
+          marginBottom={0}
         />
 
         <QuarterlyGoalBodyContainer>
-          <InitiativeHeader
-            itemType={"quarterlyGoal"}
-            item={quarterlyGoal}
-            editable={editable}
-            setAnnualInitiativeId={setAnnualInitiativeId}
-            setModalOpen={setQuarterlyGoalModalOpen}
-            setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
-            annualInitiativeId={quarterlyGoal.annualInitiativeId}
-            annualInitiativeDescription={annualInitiativeDescription}
-            showDropdownOptionsContainer={showDropdownOptionsContainer}
-            setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
-          />
+          <SectionContainer>
+            <InitiativeHeader
+              itemType={"quarterlyGoal"}
+              item={quarterlyGoal}
+              editable={editable}
+              setAnnualInitiativeId={setAnnualInitiativeId}
+              setModalOpen={setQuarterlyGoalModalOpen}
+              setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+              annualInitiativeId={quarterlyGoal.annualInitiativeId}
+              annualInitiativeDescription={annualInitiativeDescription}
+              showDropdownOptionsContainer={showDropdownOptionsContainer}
+              setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
+            />
+          </SectionContainer>
           <SectionContainer>
             <Context itemType={"quarterlyGoal"} item={quarterlyGoal} />
           </SectionContainer>
@@ -189,19 +191,18 @@ const Container = styled.div`
   margin-right: ${props => props["margin-right"] || "0px"};
   height: fit-content;
   overflow: auto;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: auto
+  padding-right: auto;
 `;
 
 const QuarterlyGoalBodyContainer = styled.div`
   padding-top: 16px;
-  padding-bottom: 36px;
-  padding-left: 20px;
-  padding-right: 20px;
 `;
 
 const SectionContainer = styled.div`
-  margin-top: 24px;
+  padding-bottom: 36px;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
 
 const MilestonesHeaderContainer = styled.div`

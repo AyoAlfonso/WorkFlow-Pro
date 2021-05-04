@@ -40,13 +40,26 @@ export const InitiativeHeader = ({
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
 
   return (
-    <HeaderContainer>
-    {!item.closed_at && (
+    <>
+    {item.closed_at && (
        <ClosedStatusBannerContainer>
       This card is closed. Originally created on {item.created_at}
+        <AnnualInitiativeActionContainer>
+        <DropdownOptions
+          editable={editable}
+          showDropdownOptionsContainer={showDropdownOptionsContainer}
+          setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
+          setParentModalOpen={setModalOpen}
+          itemType={itemType}
+          item={item}
+        />
+        <CloseIconContainer onClick={() => setModalOpen(false)}>
+          <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+        </CloseIconContainer>
+      </AnnualInitiativeActionContainer>
       </ClosedStatusBannerContainer>
     )}
-   
+    <HeaderContainer>
       <TitleContainer>
         <StyledContentEditable
           innerRef={descriptionRef}
@@ -87,20 +100,9 @@ export const InitiativeHeader = ({
           />
         </DetailsContainer>
       </TitleContainer>
-      <AnnualInitiativeActionContainer>
-        <DropdownOptions
-          editable={editable}
-          showDropdownOptionsContainer={showDropdownOptionsContainer}
-          setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
-          setParentModalOpen={setModalOpen}
-          itemType={itemType}
-          item={item}
-        />
-        <CloseIconContainer onClick={() => setModalOpen(false)}>
-          <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
-        </CloseIconContainer>
-      </AnnualInitiativeActionContainer>
+  
     </HeaderContainer>
+    </>
   );
 };
 
@@ -155,5 +157,15 @@ const YearText = styled(Text)`
 `;
 
 const ClosedStatusBannerContainer = styled.div`
-background-image: linear-gradient(to bottom right,rgba(0,0,0,.05) 25%,transparent 0,transparent 50%,rgba(0,0,0,.05) 0,rgba(0,0,0,.05) 75%,transparent 0,transparent)
+background-image: repeating-linear-gradient(150deg, #feecea, #feecea 20px, #f2e2e4 20px, #f2e2e4 25px);
+border-radius: 4px;
+text-align: left;
+font: normal normal bold 16px/16px Lato;
+letter-spacing: 0px;
+color: #000000;
+opacity: 1;
+padding: 40px 5%;
+justify-content: space-between;
+display: flex;
+height: 20px;
 `

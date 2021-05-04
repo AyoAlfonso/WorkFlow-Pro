@@ -82,6 +82,7 @@ export const AnnualInitiativeModalContent = observer(
               indicatorHeight={4}
               marginBottom={16}
             />
+           
             <TopRowContainer>
               <QuarterlyGoalDescription
                 onClick={() => {
@@ -136,6 +137,7 @@ export const AnnualInitiativeModalContent = observer(
 
     const renderHeader = (): JSX.Element => {
       return (
+         
         <HeaderContainer>
           <TitleContainer>
             <StyledContentEditable
@@ -173,13 +175,9 @@ export const AnnualInitiativeModalContent = observer(
               />
             </DetailsContainer>
           </TitleContainer>
-          <AnnualInitiativeActionContainer>
-            {renderDropdownOptions()}
-            <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
-              <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
-            </CloseIconContainer>
-          </AnnualInitiativeActionContainer>
+         
         </HeaderContainer>
+    
       );
     };
 
@@ -236,6 +234,19 @@ export const AnnualInitiativeModalContent = observer(
     };
 
     return (
+
+      <>
+       {annualInitiative.closedAt && (
+        <ClosedStatusBannerContainer>
+          This card is closed
+            <AnnualInitiativeActionContainer>
+            {renderDropdownOptions()}
+            <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
+              <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+            </CloseIconContainer>
+          </AnnualInitiativeActionContainer>
+        </ClosedStatusBannerContainer>
+      )}
       <Container>
         {renderHeader()}
         <SectionContainer>
@@ -243,6 +254,7 @@ export const AnnualInitiativeModalContent = observer(
         </SectionContainer>
         <SectionContainer>{renderGoals()}</SectionContainer>
       </Container>
+      </>
     );
   },
 );
@@ -253,6 +265,8 @@ const Container = styled.div`
   height: fit-content;
   padding: 48px;
   overflow: auto;
+  padding-left: auto;
+  padding-right: auto;
 `;
 
 const HeaderContainer = styled.div`
@@ -398,3 +412,17 @@ const SubHeaderTextContainer = styled.div`
   position: absolute;
   margin-bottom: 24px;
 `;
+// TODOIST: color to constant
+const ClosedStatusBannerContainer = styled.div`
+background-image: repeating-linear-gradient(150deg, #feecea, #feecea 20px, #f2e2e4 20px, #f2e2e4 25px);
+border-radius: 4px;
+text-align: left;
+font: normal normal bold 16px/16px Lato;
+letter-spacing: 0px;
+color: #000000;
+opacity: 1;
+padding: 40px 5%;
+justify-content: space-between;
+display: flex;
+height: 20px;
+`
