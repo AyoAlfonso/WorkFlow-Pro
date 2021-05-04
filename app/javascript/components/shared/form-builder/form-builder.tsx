@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 
@@ -18,6 +18,8 @@ import * as moment from "moment";
 
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 
+import { LogoModal } from "~/components/domains/account/LogoModal";
+
 const useStyles = makeStyles(theme =>
   createStyles({
     previewChip: {
@@ -31,6 +33,7 @@ export enum EFieldType {
   TextField = "TEXT_FIELD",
   TextArea = "TEXT_AREA",
   Image = "IMAGE",
+  CroppedImage = "CROPPED_IMAGE",
   Select = "SELECT",
   DateSelect = "DATE_SELECT",
   HtmlEditor = "HTML_EDITOR",
@@ -63,6 +66,10 @@ export const FormBuilder = ({
   stepwise,
 }: IFormBuilderProps): JSX.Element => {
   const classes = useStyles();
+  const [imageblub, setImageblub] = useState<any | null>(null);
+  const [imageModalOpen, setImageModalOpen] = useState<boolean>(false);
+  const [filename, setFilename] = useState<string>("");
+
   const formComponent = (formField: IFormField) => {
     const { fieldType, formKeys, options, callback, style, placeholder, rows } = formField;
     switch (fieldType) {
@@ -118,6 +125,65 @@ export const FormBuilder = ({
             previewChipProps={{ classes: { root: classes.previewChip } }}
             previewText="Selected files"
           />
+        );
+      case "CROPPED_IMAGE":
+        const submitImage = async (blob) => {
+          const imageDataUrl = await readFile(blob);
+          const f_obj = { data: imageDataUrl, file: { name: filename, path: filename } }
+          callback(formKeys, [f_obj]);
+        }
+
+        const pickLogoImageblub = async (file) => {
+          setImageblub(file)
+          setImageModalOpen(!imageModalOpen)
+        };
+        const readFile = (file) => {
+          return new Promise((resolve) => {
+            const reader = new FileReader()
+            reader.addEventListener('load', () => resolve(reader.result), false)
+            reader.readAsDataURL(file)
+          })
+        }
+        const inputFileUpload = async (files: any) => {
+          const imageDataUrl = await readFile(files[0].file)
+          setFilename(files[0].file.name)
+          pickLogoImageblub(imageDataUrl)
+        }
+        const croppedDropZoneText =
+          R.isNil(R.path(formKeys, formData)) || R.isEmpty(R.path(formKeys, formData))
+            ? "Drag 'n' drop some files here, or click to select files"
+            : "";
+        return (
+          <>
+            <Dropzone
+              Icon={null}
+              acceptedFiles={["image/*"]}
+              dropzoneText={croppedDropZoneText}
+              useChipsForPreview
+              onAdd={(f: any) => {
+                inputFileUpload(f);
+              }}
+              onDelete={(f: any) => {
+                callback(formKeys, []);
+              }}
+              showPreviews={true}
+              showPreviewsInDropzone={false}
+              filesLimit={1}
+              maxFileSize={2000000}
+              fileObjects={R.path(formKeys, formData) ? R.path(formKeys, formData) : []}
+              previewGridProps={{ container: { spacing: 1, direction: "row" } }}
+              previewChipProps={{ classes: { root: classes.previewChip } }}
+              previewText="Selected files"
+            />
+            {imageModalOpen && (
+              <LogoModal
+                image={imageblub}
+                uploadCroppedImage={submitImage}
+                modalOpen={imageModalOpen}
+                setModalOpen={setImageModalOpen}
+              />
+            )}
+          </>
         );
       case "SELECT":
         return (
