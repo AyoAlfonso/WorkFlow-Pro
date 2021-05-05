@@ -161,7 +161,7 @@ const Wrapper = styled.div`
 
 const ActionsContainer = styled.div`
   display: flex;
-  padding-left: 16px;
+  padding-left: 40px;
   position: fixed;
 `;
 

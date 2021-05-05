@@ -56,11 +56,7 @@ export const HeaderText = observer(
       case "journals":
         return <> {t("journals.indexTitle")} </>;
       default:
-        return (
-          <>
-            {getGreetingTime(moment())} {sessionStore.profile.firstName}
-          </>
-        );
+        return <>{`${getGreetingTime(moment())} ${sessionStore.profile.firstName}`}</>;
     }
   },
 );
