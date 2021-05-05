@@ -12,7 +12,25 @@ export const GoalModel = types
   .extend(withRootStore())
   .views(self => ({
     get activeAnnualInitiatives() {
-      return self.goals.filter(annualInitiative => !annualInitiative.closedAt)
+      let annualInitiatives = [];
+      self.goals.forEach((goal) => {
+        if(!goal.closedAt && goal.quarterlyGoals.length == 0){
+          annualInitiatives.push(goal)
+        } else {
+          goal.quarterlyGoals.forEach((qg) => {
+            if(!qg.closedAt) {
+              annualInitiatives.push(goal)
+            } else {
+              qg.subInitiatives.forEach((si) => {
+                if(!si.closedAt){
+                  annualInitiatives.push(goal)
+                }
+              })
+            }
+          })
+        }
+      })
+      return annualInitiatives
     },
     get closedAnnualInitiatives(){
       let annualInitiatives = [];
