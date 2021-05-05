@@ -16,7 +16,7 @@ import { PynsSummary } from "./pyns-summary";
 import { parseAnnualInitiative } from "./annual-initiative-parser";
 import { observer } from "mobx-react";
 
-interface IOnboardingProps {}
+interface IOnboardingProps { }
 
 export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
   const { companyStore, sessionStore, staticDataStore } = useMst();
@@ -202,7 +202,7 @@ True value of LynchPyn is in working together with others in your team and compa
         },
         {
           label: "Logo (preferably horizontal logos)",
-          fieldType: EFieldType.Image,
+          fieldType: EFieldType.CroppedImage,
           formKeys: ["logo"],
           callback: setFormState,
         },

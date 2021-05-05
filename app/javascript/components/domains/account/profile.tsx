@@ -4,9 +4,9 @@ import * as R from "ramda";
 import { Label, Input, Select } from "~/components/shared/input";
 import { Button } from "~/components/shared/button";
 import { Avatar } from "~/components/shared/avatar";
+import { ImageCropperModal } from "~/components/shared/image-cropper-modal";
 import { useTranslation } from "react-i18next";
 import { FileInput } from "./file-input";
-import { AvatarModal } from "./avatarModal";
 import { observer } from "mobx-react";
 
 import {
@@ -48,14 +48,14 @@ export const AccountProfile = observer(
       })
     }
 
-   const pickAvatarImageblub = async (file) => {
+   const pickAvatarImageblob = async (file) => {
      setAvatarImageblub(file)
      setAvatarImageModalOpen(!avatarImageModalOpen)
     };
 
   const inputFileUpload = async (files: FileList) => {
      const imageDataUrl = await readFile(files[0])
-     pickAvatarImageblub(imageDataUrl)
+     pickAvatarImageblob(imageDataUrl)
   }
     const deleteAvatar = async () => {
       await sessionStore.deleteAvatar();
@@ -132,11 +132,12 @@ export const AccountProfile = observer(
                   onChange={inputFileUpload} /> 
                 
                  {avatarImageModalOpen && (
-                    <AvatarModal
+                    <ImageCropperModal
                     image={avatarImageblub}
                     uploadCroppedImage={submitAvatar}
                     modalOpen={avatarImageModalOpen}
                     setModalOpen={setAvatarImageModalOpen}
+                    headerText={t("profile.updateProfileAvatar")}
                     />
                  )}
               </PhotoModificationButtonsSection>

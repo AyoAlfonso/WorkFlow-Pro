@@ -9,7 +9,7 @@ import { observer } from "mobx-react";
 import { Can } from "~/components/shared/auth/can";
 import { Button } from "~/components/shared/button";
 import { FileInput } from "./file-input";
-import { LogoModal } from "./LogoModal";
+import { ImageCropperModal } from "~/components/shared/image-cropper-modal"
 import { TrixEditor } from "react-trix";
 
 import {
@@ -48,7 +48,7 @@ export const Company = observer(
       await companyStore.updateCompanyLogo(form);
     };
 
-    const pickLogoImageblub = async (file) => {
+    const pickLogoImageblob = async (file) => {
       setLogoImageblub(file)
       setLogoImageModalOpen(!logoImageModalOpen)
     };
@@ -63,7 +63,7 @@ export const Company = observer(
 
     const inputFileUpload = async (files: FileList) => {
       const imageDataUrl = await readFile(files[0])
-      pickLogoImageblub(imageDataUrl)
+      pickLogoImageblob(imageDataUrl)
     }
 
     const deleteLogo = () => {
@@ -289,11 +289,12 @@ export const Company = observer(
                       onChange={inputFileUpload} />
 
                     {logoImageModalOpen && (
-                      <LogoModal
+                      <ImageCropperModal
                         image={logoImageblub}
                         uploadCroppedImage={submitLogo}
                         modalOpen={logoImageModalOpen}
                         setModalOpen={setLogoImageModalOpen}
+                        headerText={t("company.updateLogo")}
                       />
                     )}
                   </PhotoModificationButtonsSection>

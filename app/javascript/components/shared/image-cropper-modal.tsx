@@ -1,26 +1,28 @@
 import React, { useState, useCallback } from "react";
 import { ModalWithHeader } from "~/components/shared/modal-with-header";
 import { useTranslation } from "react-i18next";
-import { baseTheme } from "../../../themes";
+import { baseTheme } from "~/themes";
 import styled from "styled-components";
 import { getCroppedImg } from "~/lib/cropImage";
 import "~/stylesheets/modules/react-easy-crop.css";
 import Cropper from "react-easy-crop";
 import { Button } from "~/components/shared/button";
 
-export interface IAvatarModalProps {
+export interface IImageCropperModalProps {
   image: string;
   uploadCroppedImage: any;
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  headerText: string;
 }
 
-export const AvatarModal = ({
+export const ImageCropperModal = ({
   image,
   uploadCroppedImage,
   modalOpen,
   setModalOpen,
-}: IAvatarModalProps): JSX.Element => {
+  headerText,
+}: IImageCropperModalProps): JSX.Element => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const { t } = useTranslation();
@@ -45,7 +47,7 @@ export const AvatarModal = ({
       modalOpen={modalOpen}
       centerHeader={true}
       setModalOpen={setModalOpen}
-      headerText={t("profile.updateProfileAvatar")}
+      headerText={headerText}
       overflow="hidden"
       boxSizing="border-box"
     >
@@ -86,7 +88,7 @@ export const AvatarModal = ({
      </ButtonContainer>
     </ModalWithHeader>
   );
-};
+}
 
 type StyledButtonType = {
   disabled: boolean;
