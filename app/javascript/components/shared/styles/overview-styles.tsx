@@ -22,7 +22,6 @@ export const ToolsHeader = styled(Heading)`
   align-items: center;
   display: flex;
   justify-content: space-between;
-  margin-top: 16px;
   margin-bottom: 40px;
 `;
 
@@ -48,6 +47,6 @@ export const OverviewTabs = styled(NavLink)`
 export const OverviewTabsContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 16px;
+  margin-top: 20px;
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
 `;
