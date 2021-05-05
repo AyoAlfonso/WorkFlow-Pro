@@ -45,7 +45,7 @@ type StyledIconType = {
   active: boolean;
 };
 
-export const StyledIcon = styled(Icon)<StyledIconType>`
+export const StyledIcon = styled(Icon) <StyledIconType>`
   color: ${props => (props.active ? props.theme.colors.primary100 : props.theme.colors.grey40)};
 `;
 
@@ -53,7 +53,7 @@ type StyledNavLinkType = {
   active: string;
 };
 
-const StyledNavLink = styled(NavLink)<StyledNavLinkType>`
+const StyledNavLink = styled(NavLink) <StyledNavLinkType>`
   ${color}
   align-item: center;
   text-decoration: none;
@@ -199,16 +199,30 @@ export const SideNavNoMst = (
     }
   };
 
+  const LynchPynLogo = (): JSX.Element => (
+    <Image
+      sx={{
+        width: 60,
+        height: 60,
+      }}
+      src={"/assets/LynchPyn-Logo-Blue_300x300"}
+    />
+  )
+
   return (
     <StyledSideNav>
-      <SideBarElement marginTop={"29px"}>
-        <Image
-          sx={{
-            width: 60,
-            height: 60,
-          }}
-          src={"/assets/LynchPyn-Logo-Blue_300x300"}
-        />
+      <SideBarElement margin={"16px"}>
+        {!R.isNil(company) && company.logoUrl ? (
+          <Image
+            sx={{
+              width: 60,
+              height: 60,
+            }}
+            src={`${company.logoUrl}`}
+          />
+        ) : (
+            <LynchPynLogo />
+          )}
       </SideBarElement>
 
       <StyledNavLinkChildrenActive to="/" icon={"Home"} currentPathName={currentPathName}>
@@ -233,8 +247,8 @@ export const SideNavNoMst = (
           </SideNavChildPopup>
         </SideNavChildPopupContainer>
       ) : (
-        <> </>
-      )}
+          <> </>
+        )}
 
       {company && company.accessCompany ? (
         <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/company")}>
@@ -263,8 +277,8 @@ export const SideNavNoMst = (
           </SideNavChildPopup>
         </SideNavChildPopupContainer>
       ) : (
-        <> </>
-      )}
+          <> </>
+        )}
 
       {company && company.accessForum ? renderForum(R.path(["length"], teams) || 0) : <> </>}
 
@@ -289,16 +303,21 @@ export const SideNavNoMst = (
           </SideNavChildPopup>
         </SideNavChildPopupContainer>
       ) : (
-        <> </>
-      )}
+          <> </>
+        )}
 
       <StyledNavLinkChildrenActive to="/goals" icon={"Goals"} currentPathName={currentPathName}>
         {t("navigation.goals")}
       </StyledNavLinkChildrenActive>
 
-      {/* <SideBarElement margin={"16px"} marginTop={"auto"}>
-        <Icon icon={"Help"} size={"2em"} iconColor={"primary100"} />
-      </SideBarElement> */}
+
+      {!R.isNil(company) && company.logoUrl ? (
+        <SideBarElement margin={"16px"} marginTop={"auto"}>
+          <LynchPynLogo />
+        </SideBarElement>
+      ) : (
+          <></>
+        )}
     </StyledSideNav>
   );
 };
@@ -315,3 +334,9 @@ export const SideNav = observer(
     return SideNavNoMst(router.location.pathname, toJS(profile.teams), company);
   },
 );
+
+const LogoImage = styled.img`
+  width: auto;
+  height: auto;
+  max-height: 60px;
+`;
