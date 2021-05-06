@@ -124,6 +124,20 @@ export const AccountDropdownOptions = observer(
       }
     };
 
+    const renderShowProductStash = (): JSX.Element => {
+      return (
+        <AccountOptionText 
+          id="lynchpyn-whats-new"
+          onClick={() => {
+            window.showPsWidget();
+            setShowAccountActions(false);
+          }}
+        >
+          What's New? 
+        </AccountOptionText>
+      )
+    }
+
     const renderShowHelpdesk = (): JSX.Element => {
       return (
         <AccountOptionText
@@ -258,7 +272,7 @@ export const AccountDropdownOptions = observer(
           >
             Invite Users
           </AccountOptionText>
-          <AccountOptionText id="lynchpyn-whats-new">What's New? </AccountOptionText>
+          {renderShowProductStash()}
           {renderShowHelpdesk()}
         </DropdownSectionContainer>
 

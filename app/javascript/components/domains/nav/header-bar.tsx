@@ -18,6 +18,7 @@ import { HeaderText } from "~/utils/header-text";
 
 declare global {
   interface Window {
+    showPsWidget: any;
     FreshworksWidget: any;
   }
 }
