@@ -21,7 +21,9 @@ export const HomePersonalItems = (): JSX.Element => {
     <Container>
       <HomeKeyActivities setQuestionnaireVariant={setQuestionnaireVariant} />
       <ToolsWrapper>
-        <ToolsHeader type={"h2"}>{t("tools.title")}</ToolsHeader>
+        <ToolsHeader type={"h2"} mt={0}>
+          {t("tools.title")}
+        </ToolsHeader>
         <Journal
           expanded={expanded}
           handleChange={handleChange}

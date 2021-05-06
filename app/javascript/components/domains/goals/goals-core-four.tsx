@@ -110,7 +110,6 @@ const CoreFourValues = observer(
 );
 
 const Container = styled.div`
-  margin-top: 30px;
   margin-bottom: 32px;
 `;
 
@@ -136,6 +135,7 @@ export const CoreFourOnly = (): JSX.Element => (
 
 const CoreFourHeader = styled.div`
   display: flex;
+  margin-top: -32px;
 `;
 
 const HideButtonContainer = styled.div`
