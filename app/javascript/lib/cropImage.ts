@@ -20,6 +20,7 @@ const createImage = (url: string) =>
  */
 
 export const getCroppedImg = async ({ image, pixelCrop }: CropImageProps) => {
+  const format: string = image.match(/data:(image\/\w+);/)[1];
   image = await createImage(image);
 
   const canvas = document.createElement("canvas");
@@ -51,6 +52,6 @@ export const getCroppedImg = async ({ image, pixelCrop }: CropImageProps) => {
   return new Promise(resolve => {
     canvas.toBlob(file => {
       resolve(file);
-    }, "image/jpeg");
+    }, format);
   });
 };
