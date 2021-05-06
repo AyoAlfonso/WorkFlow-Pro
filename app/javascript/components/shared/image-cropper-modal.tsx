@@ -90,10 +90,6 @@ export const ImageCropperModal = ({
   );
 }
 
-type StyledButtonType = {
-  disabled: boolean;
-};
-
 const Container = styled.div`
   height: 30rem;
 `;
