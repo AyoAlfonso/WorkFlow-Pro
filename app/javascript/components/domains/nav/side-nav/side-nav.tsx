@@ -83,17 +83,18 @@ interface StyledNavLinkChildrenActiveProps {
   currentPathName: string;
 }
 
-type SideNavChildPopupContainerType = {
+interface SideNavChildPopupContainerProps {
   active: boolean;
+  disableOnActive: boolean;
 };
 
-const SideNavChildContainer = styled.div<SideNavChildPopupContainerType>`
+const SideNavChildContainer = styled.div<SideNavChildPopupContainerProps>`
   padding-top: 16px;
   padding-bottom: 16px;
   transition: 0.3s;
   background-color: ${props => props.active ? "rgba(0,0,0,0.25)" : "rgba(0,0,0,0)"};
-  ${props => props.active ? "" :
-  `&:hover ${StyledIcon} {
+  ${props => props.active && props.disableOnActive ? "" :
+    `&:hover ${StyledIcon} {
     transform: scale(1.25) translateY(-10%);
     color: ${props.theme.colors.white};
   }
@@ -118,16 +119,18 @@ const NavMenuIconText = styled.h4<INavMenuIconTextProps>`
 `;
 interface INavMenuIconProps {
   active?: boolean;
+  disableOnActive?: boolean;
   icon: string;
 }
 
 const NavMenuIcon: React.FunctionComponent<INavMenuIconProps> = ({
   active = false,
+  disableOnActive = true,
   children,
   icon,
 }) => {
   return (
-    <SideNavChildContainer active={active}>
+    <SideNavChildContainer active={active} disableOnActive={disableOnActive}>
       <IconContainer>
         <StyledIcon icon={icon} size={"32px"} active={active} m={"auto"} />
       </IconContainer>
@@ -146,7 +149,7 @@ const StyledNavLinkChildrenActive = ({
   const isActive = isNavMenuIconActive(currentPathName, to);
   // CHRIS' NOTE: CANT PASS BOOLEAN TO STYLED COMPONENTS, HENCE THE TOSTRING()
   return (
-    <StyledNavLink to={to} disabled={disabled} active={isActive.toString()}>
+    <StyledNavLink to={to} disabled={disabled} active={isActive}>
       <NavMenuIcon active={isActive} icon={icon}>
         {children}
       </NavMenuIcon>
@@ -196,7 +199,11 @@ export const SideNavNoMst = (
         return (
           <SideNavChildPopup
             trigger={
-              <NavMenuIcon icon={"Team"} active={isNavMenuIconActive(currentPathName, "/team")}>
+              <NavMenuIcon
+                icon={"Team"}
+                active={isNavMenuIconActive(currentPathName, "/team")}
+                disableOnActive={false}
+              >
                 {t("navigation.forum")}
               </NavMenuIcon>
             }
@@ -239,7 +246,11 @@ export const SideNavNoMst = (
       {company && company.accessCompany ? (
         <SideNavChildPopup
           trigger={
-            <NavMenuIcon icon={"Team"} active={isNavMenuIconActive(currentPathName, "/team")}>
+            <NavMenuIcon
+              icon={"Team"}
+              active={isNavMenuIconActive(currentPathName, "/team")}
+              disableOnActive={false}
+            >
               {t("navigation.team")}
             </NavMenuIcon>
           }
@@ -261,6 +272,7 @@ export const SideNavNoMst = (
             <NavMenuIcon
               icon={"Company"}
               active={isNavMenuIconActive(currentPathName, "/company")}
+              disableOnActive={false}
             >
               {t("navigation.company")}
             </NavMenuIcon>
@@ -291,6 +303,7 @@ export const SideNavNoMst = (
             <NavMenuIcon
               icon={"Meeting"}
               active={isNavMenuIconActive(currentPathName, "/meetings")}
+              disableOnActive={false}
             >
               {t("navigation.meetings")}
             </NavMenuIcon>
@@ -324,6 +337,7 @@ const LynchPynLogo = (): JSX.Element => (
       width: 48,
       height: 48,
     }}
+    marginTop={16}
     src={"/assets/LynchPyn-Logo_Favicon_White"}
   />
 )
@@ -340,9 +354,3 @@ export const SideNav = observer(
     return SideNavNoMst(router.location.pathname, toJS(profile.teams), company);
   },
 );
-
-const LogoImage = styled.img`
-  width: auto;
-  height: auto;
-  max-height: 60px;
-`;
