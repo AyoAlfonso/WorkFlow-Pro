@@ -1,6 +1,7 @@
 import { types, getEnv, getRoot } from "mobx-state-tree";
 import { AnnualInitiativeModel } from "../models/annual-initiative";
 import { withRootStore } from "../lib/with-root-store";
+import * as R from "ramda";
 
 export const GoalModel = types
   .model("GoalModel")
@@ -15,15 +16,21 @@ export const GoalModel = types
       let annualInitiatives = [];
       self.goals.forEach((goal) => {
         if(!goal.closedAt && goal.quarterlyGoals.length == 0){
-          annualInitiatives.push(goal)
+          if(!R.contains(goal.id, R.pluck('id', annualInitiatives))){
+            annualInitiatives.push(goal)
+          }
         } else {
           goal.quarterlyGoals.forEach((qg) => {
             if(!qg.closedAt) {
-              annualInitiatives.push(goal)
+              if(!R.contains(goal.id, R.pluck('id', annualInitiatives))){
+                annualInitiatives.push(goal)
+              }
             } else {
               qg.subInitiatives.forEach((si) => {
                 if(!si.closedAt){
-                  annualInitiatives.push(goal)
+                  if(!R.contains(goal.id, R.pluck('id', annualInitiatives))){
+                    annualInitiatives.push(goal)
+                  }
                 }
               })
             }
@@ -36,15 +43,21 @@ export const GoalModel = types
       let annualInitiatives = [];
       self.goals.forEach((goal) => {
         if(goal.closedAt){
-          annualInitiatives.push(goal)
+          if(!R.contains(goal.id, R.pluck('id', annualInitiatives))){
+            annualInitiatives.push(goal)
+          }
         } else {
           goal.quarterlyGoals.forEach((qg) => {
             if(qg.closedAt) {
-              annualInitiatives.push(goal)
+              if(!R.contains(goal.id, R.pluck('id', annualInitiatives))){
+                annualInitiatives.push(goal)
+              }
             } else {
               qg.subInitiatives.forEach((si) => {
                 if(si.closedAt){
-                  annualInitiatives.push(goal)
+                  if(!R.contains(goal.id, R.pluck('id', annualInitiatives))){
+                    annualInitiatives.push(goal)
+                  }
                 }
               })
             }

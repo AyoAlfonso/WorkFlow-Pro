@@ -294,9 +294,7 @@ export const GoalsIndex = observer(
   },
 );
 
-const Container = styled.div`
-  margin-top: 30px;
-`;
+const Container = styled.div``;
 
 const InitiativesContainer = styled.div`
   display: -webkit-box;
