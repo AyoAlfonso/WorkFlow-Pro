@@ -52,7 +52,7 @@ const Container = styled.div<ContainerType>`
   display: flex;
   padding-left: 16px;
   padding-right: 16px;
-  margin-bottom: ${props => props.marginBottom}px;
+  margin-bottom: ${props => props.marginBottom || 0 }px;
 `;
 
 type StatusBlockType = {

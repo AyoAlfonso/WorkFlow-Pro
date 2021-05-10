@@ -40,7 +40,7 @@ export const AnnualInitiativeCardExpanded = observer(
         const showRender = showSubInitiativeCards && selectedSubInitiativeCards == index;
       
         return (
-           <>
+          <>
            <InitiativesContainer>
               <QuarterlyGoalCard
                 key={index}
@@ -83,7 +83,7 @@ export const AnnualInitiativeCardExpanded = observer(
               showEditButton={showEditButton}
               />
             </SubInitiativeContainer>
-           </>
+            </>
         );
       });
     };
@@ -109,7 +109,7 @@ export const AnnualInitiativeCardExpanded = observer(
               setShowCreateGoal={setCreateQuarterlyGoalArea}
               createAction={quarterlyGoalStore.create}
               annualInitiativeId={annualInitiative.id}
-              buttonWidth={"220px"}
+              buttonWidth={"auto"}
               inAnnualInitiative={false}
             />
           </CreateGoalContainer>
@@ -138,13 +138,14 @@ const Container = styled.div`
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   width: calc(20% - 16px);
-  min-width: 240px;
+  min-width: 220px;
 `;
 
 type SubInitiativeContainerProps = {
   display?: string;
  
 };
+
 
 const SubInitiativeContainer =  styled.div<SubInitiativeContainerProps>`
   display: ${props => props.display};
@@ -158,11 +159,10 @@ const QuarterlyGoalsText = styled.p`
 `;
 
 const MinimizeIconContainer = styled.div`
-  background-color: white;
+  background-color: inherit;
   border-radius: 50px;
   height: 15px;
   display: flex;
-  margin: 10px 0px 10px;
   align-items: center;
   justify-content: center;
   text-align: center;

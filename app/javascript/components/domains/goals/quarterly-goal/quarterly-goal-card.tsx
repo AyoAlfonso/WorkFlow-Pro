@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
@@ -33,7 +33,9 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
   } = props;
 
   const { companyStore } = useMst();
-  const { warningRed, fadedRed, cautionYellow, fadedYellow, finePine, fadedGreen, grey40, grey20 } = baseTheme.colors;
+  const { warningRed, fadedRed, cautionYellow, fadedYellow, finePine, fadedGreen, grey40, grey20, grey80, white } = baseTheme.colors;
+  const defaultOptionsColor = goalCardType == "child" ? grey20 : white; 
+  const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
 
     //TODOIST: Come back to make this code dry and icon color constant
       let currentMilestone;
@@ -103,8 +105,14 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
         e.stopPropagation();
         openQuarterlyGoalModal();
       }}
+      onMouseEnter={e => {
+        setShowOptions(grey80)
+      }}
+     onMouseLeave={e => {
+        setShowOptions(() => goalCardType == "parent" ? white : grey20 )
+      }}
     >
-      <StatusBlockColorIndicator milestones={quarterlyGoal.milestones || []} indicatorWidth={25} indicatorHeight={2}/>
+      <StatusBlockColorIndicator milestones={quarterlyGoal.milestones || []} indicatorWidth={16} indicatorHeight={2}/>
 
       <RowContainer
         mt={5}
@@ -117,7 +125,11 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
         </DescriptionContainer>
 
         <IconContainer>
-          <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} />
+          <RecordOptions 
+            type={"quarterlyGoal"} 
+            id={quarterlyGoal.id}
+            iconColor={showOptions}
+             />
         </IconContainer>
       </RowContainer>
       <RowContainer
@@ -217,34 +229,29 @@ const DescriptionContainer = styled.div`
 `;
 
 const StyledSubInitiativeIcon = styled(Icon)`
-  display: inline-block;
   margin-right: 5px;
   font-size: 12px;
-  margin-top: 10px;
 `;
 
 // TODOIST: Update the color constant 
 const StatusBadge = styled.div`
     font-size: 9px;
     font-weight: 900;
-    display: inline-block;
     background-color:${props => props.backgroundColor};
     color: ${props => props.color};
     padding: 5px;
     text-align: center;
     border-radius: 2px;
-    margin: 10px 0px 0px;
 `;
 
 const BadgeContainer = styled.div`
   display:flex;
   width: 60%;
   margin-right: 10px;
-
+  align-items: center; 
 `;
 
 const MilestoneCountContainer = styled.div`
   font-size: 9px;
   margin-right: 5px;
-  margin-top: 15%;
 `;

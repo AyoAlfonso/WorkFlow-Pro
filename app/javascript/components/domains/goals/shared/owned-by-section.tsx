@@ -36,7 +36,6 @@ export const OwnedBySection = ({
   const { userStore, sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
   const [store, setStore] = useState<any>(null);
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
-
   useEffect(() => {
     if (type == "annualInitiative") {
       setStore(annualInitiativeStore);
@@ -48,7 +47,7 @@ export const OwnedBySection = ({
   const companyUsers = userStore.users;
   const currentUser = sessionStore.profile;
   const editable =
-    (ownedBy.id == currentUser.id ||
+    (ownedBy && ownedBy.id == currentUser.id ||
       currentUser.role == RoleCEO ||
       currentUser.role == RoleAdministrator) &&
     !disabled;
@@ -117,11 +116,10 @@ const SubHeaderContainer = styled.div`
   display: flex;
 `;
 
-// TODO:IT color: ${props => props.theme.colors.greyActive}; 
 const OwnedByName = styled(Text)`
   margin-left: 8px;
   letter-spacing: 0px;
-  color: #000000; 
+  color: ${props => props.theme.colors.black};
   width: ${props => `${props.nameWidth}` || 'auto'};
   overflow: hidden; 
   font-size: ${props => `${props.fontSize}` || '12px'};

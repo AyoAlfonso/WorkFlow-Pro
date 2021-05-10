@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { color } from "styled-system";
 import { baseTheme } from "../../../../themes";
@@ -21,10 +21,11 @@ export const AnnualInitiativeCardMinimized = ({
   setShowMinimizedCard,
   showMinimizedCard
 }: IAnnualInitiativeCardMinimizedProps): JSX.Element => {
-  const { warningRed, cautionYellow, finePine, grey40 } = baseTheme.colors;
-  const counts = []
-  // TODOIT: RETURN counts BACK to zero  
-  let milestoneObj = [
+  const { warningRed, cautionYellow, finePine, grey60, grey40 } = baseTheme.colors;
+  const milestoneCounts = []
+
+  // TODOIT: RETURN milestoneCounts BACK to zero  
+  let milestones = [
           {
             color: finePine,
             count: 0,
@@ -43,14 +44,10 @@ export const AnnualInitiativeCardMinimized = ({
             count: 0,
           },
     ]
-  
-  const renderStatusSquares = () => {
-     
-    annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
+      annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
       
       //if there is no currentMilestone, use the last milestone, assuming this is past the 13th week
       let currentMilestone;
-
       currentMilestone = quarterlyGoal.milestones.find(milestone =>
         moment(milestone.weekOf).isSame(moment(), "week"),
       );
@@ -61,33 +58,34 @@ export const AnnualInitiativeCardMinimized = ({
       if (currentMilestone && currentMilestone.status) {
         switch (currentMilestone.status) {
           case "completed":
-            milestoneObj[0].count++
+            milestones[0].count++
             break;
           case "in_progress":
-            milestoneObj[1].count++
+            milestones[1].count++
             break;
           case "incomplete":
-            milestoneObj[2].count++
+            milestones[2].count++
             break;
           case "unstarted":
-            milestoneObj[3].count++
+            milestones[3].count++
             break;
         }
+      } else {
+          milestones[3].count++
       }
-    
     });
- 
+
     let gradient = '';
-    let annualQtrGoalsLength = annualInitiative.quarterlyGoals.length
-    milestoneObj.forEach((obj, index) => {
+    const annualQtrGoalsLength = annualInitiative.quarterlyGoals.length
+    milestones.forEach((obj, index) => {
       let margin = 0;
       if(index > 0) {
          let lastPercentage = 0
          let intialPercentage = 0
          Array.from({ length: index + 1}).map((_, i)=> {
-           lastPercentage += (milestoneObj[i].count/annualQtrGoalsLength)*100
+           lastPercentage += (milestones[i].count/annualQtrGoalsLength)*100
          })
-         Array.from({ length: index }).map((_, i)=> intialPercentage += (milestoneObj[i].count/annualQtrGoalsLength)*100)
+         Array.from({ length: index }).map((_, i)=> intialPercentage += (milestones[i].count/annualQtrGoalsLength)*100)
          gradient += `, ${obj.color} ${intialPercentage}% ${lastPercentage}` + `% `
          margin = lastPercentage - intialPercentage 
         } else {
@@ -95,11 +93,20 @@ export const AnnualInitiativeCardMinimized = ({
           margin = (obj.count/annualQtrGoalsLength)*100
       }
       if (obj.count > 0 ){
-         counts.push(<MilestoneCountContainer color={obj.color} margin={`${Math.floor(margin)/2}%`} >{obj.count}</MilestoneCountContainer>)
+         milestoneCounts.push(<MilestoneCountContainer color={obj.color} margin={`${Math.floor(margin)/2}%`} >{obj.count}</MilestoneCountContainer>)
       }
-    }) 
+    })
+   
+  const renderStatusSquares = () => {
+    gradient = (milestoneCounts.length == 0) ? `, ${finePine} 0% ,${cautionYellow} 0% 0% ,${warningRed} 0% 0% ,${grey40} 0% 100%` : gradient
     return <GradientContainer gradient={gradient} />;
   };
+
+  const renderCounts = () => {
+    if (milestoneCounts.length) return milestoneCounts;
+    return  <MilestoneCountContainer color={grey40} margin={`50%`}  > 0 </MilestoneCountContainer>
+  }
+
   return (
     <div
     onClick={e => {
@@ -116,9 +123,11 @@ export const AnnualInitiativeCardMinimized = ({
           marginTop={"5px"}
           marginBottom={"0px"}
         />
-    <InitiativeCountContainer>
-       {...counts}
+      
+      <InitiativeCountContainer>
+        {renderCounts()}
       </InitiativeCountContainer>
+    
       <StatusSquareContainer>{renderStatusSquares()}</StatusSquareContainer>
      
      
@@ -201,6 +210,7 @@ const InitiativeCountContainer = styled.div`
   width: 100%; 
   font-size: small;
 `
+
 type MilestoneCountContainerType = {
   margin: string;
   color: string;
@@ -208,7 +218,7 @@ type MilestoneCountContainerType = {
 
 const MilestoneCountContainer = styled.div<MilestoneCountContainerType>`
     margin: 0 ${props => props.margin} 0px;
-    color: ${props => props.color}
+    color: ${props => props.color};
     display: inline-block;
     width: 0px;
 `

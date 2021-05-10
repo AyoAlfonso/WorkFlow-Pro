@@ -11,10 +11,11 @@ interface IRecordOptionsProps {
   type: string;
   id: string | number;
   marginLeft?: string;
+  iconColor?:string;
 }
 
 export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
-  const { type, id, marginLeft } = props;
+  const { type, id, marginLeft, iconColor } = props;
   const { quarterlyGoalStore, annualInitiativeStore, subInitiativeStore, sessionStore } = useMst();
 
   const optionsRef = useRef(null);
@@ -69,7 +70,7 @@ export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
           setShowOptions(!showOptions);
         }}
       >
-        <Icon icon={"Options"} size={"16px"} iconColor={"grey60"} />
+        <Icon icon={"Options"} size={"16px"} iconColor={ iconColor || "grey60"} />
       </IconWrapper>
 
       {showOptions && (

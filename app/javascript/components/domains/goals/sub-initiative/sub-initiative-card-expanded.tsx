@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { Icon } from "../../../shared/icon";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
-import { CreateGoalSection } from "../shared/create-goal-section";
+// import { CreateGoalSection } from "../shared/create-goal-section";
 import { HomeContainerBorders } from "../../home/shared-components";
 import { useState } from "react";
 import { useMst } from "~/setup/root";
@@ -20,7 +20,7 @@ export const SubInitiativeCardsExpanded = observer(
       setQuarterlyGoalId,
       setQuarterlyGoalModalOpen,
       setSelectedAnnualInitiativeDescription,
-      showCreateQuarterlyGoal,
+      // showCreateQuarterlyGoal,
       showEditButton,
     } = props;
 
@@ -49,6 +49,7 @@ export const SubInitiativeCardsExpanded = observer(
       });
     };
 
+{/*
     const renderCreateGoal = () => {
       if (
         !(
@@ -77,7 +78,7 @@ export const SubInitiativeCardsExpanded = observer(
         );
       }
     };
-
+*/}
     return (
       
       <Container
@@ -87,7 +88,7 @@ export const SubInitiativeCardsExpanded = observer(
       >
        
         {renderSubInitiativeQuarterlyGoals()}
-        {showCreateQuarterlyGoal && renderCreateGoal()}
+        {/* {showCreateQuarterlyGoal && renderCreateGoal()} */}
       </Container>
     );
   },
@@ -146,7 +147,8 @@ const ShowInitiativeBar = styled.div`
   font-weight: bold;
 `;
 
-const CreateGoalContainer = styled.div`
-  margin-bottom: 16px;
-  margin-right: 8px;
-`;
+// const CreateGoalContainer = styled.div`
+//   margin-bottom: 16px;
+//   margin-right: 4px;
+//   margin-left: 4px
+// `;

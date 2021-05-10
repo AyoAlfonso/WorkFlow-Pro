@@ -225,6 +225,7 @@ export const AnnualInitiativeModalContent = observer(
                   createAction={quarterlyGoalStore.create}
                   annualInitiativeId={annualInitiative.id}
                   inAnnualInitiative={true}
+                  buttonWidth={"auto"}
                 />
               </CreateGoalContainer>
             )}
@@ -236,9 +237,9 @@ export const AnnualInitiativeModalContent = observer(
     return (
 
       <>
-       {annualInitiative.closedAt && (
+       {!annualInitiative.closedAt && (
         <ClosedStatusBannerContainer>
-          This card is closed
+            {t("annualInitiative.cardClosed")}
             <AnnualInitiativeActionContainer>
             {renderDropdownOptions()}
             <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
@@ -349,7 +350,7 @@ const StyledContentEditable = styled(ContentEditable)`
 `;
 
 const CreateGoalContainer = styled.div`
-  width: 300px;
+  width: auto;
 `;
 
 const StyledNavLink = styled(NavLink)`
@@ -419,7 +420,7 @@ border-radius: 4px;
 text-align: left;
 font: normal normal bold 16px/16px Lato;
 letter-spacing: 0px;
-color: #000000;
+color: ${props => props.theme.colors.black};
 opacity: 1;
 padding: 40px 5%;
 justify-content: space-between;

@@ -41,12 +41,13 @@ export const AnnualInitiativeCard = ({
   onboarding,
   showEditButton = true,
 }: IAnnualInitiativeCardProps): JSX.Element => {
+   const { white, grey60 } = baseTheme.colors;
   const [showMinimizedCard, setShowMinimizedCard] = useState<boolean>(showMinimizedCards);
   const [showSubInitiativeCard, setShowSubInitiativeCards] = useState<boolean>(showSubInitiativeCards);
   const [selectedSubInitiativeCards, setSelectSubInitiativeCard] = useState<number>();
+  const [showOptions, setShowOptions] = useState<string>(white);
 
   const { companyStore } = useMst();
-
   useEffect(() => {
     setShowMinimizedCard(showMinimizedCards);
   }, [showMinimizedCards]);
@@ -70,7 +71,7 @@ export const AnnualInitiativeCard = ({
       companyStore.company.currentFiscalYear != annualInitiative.fiscalYear &&
       annualInitiative.fiscalYear
     ) {
-      let containerColor =
+      const containerColor =
         companyStore.company.currentFiscalYear > annualInitiative.fiscalYear
           ? baseTheme.colors.grey100
           : baseTheme.colors.primary100;
@@ -94,6 +95,12 @@ export const AnnualInitiativeCard = ({
         setAnnualInitiativeModalOpen(true);
         setAnnualInitiativeId(annualInitiative.id);
       }}
+      onMouseEnter={e => {
+        setShowOptions(grey60)
+      }}
+     onMouseLeave={e => {
+        setShowOptions(white)
+      }}
     >
       <HeaderContainer>
         <DescriptionContainer>
@@ -102,7 +109,12 @@ export const AnnualInitiativeCard = ({
           </StyledText>
         </DescriptionContainer>
         <IconContainer>
-          <RecordOptions type={"annualInitiative"} id={annualInitiative.id} marginLeft={"-70px"} />
+          <RecordOptions 
+            type={"annualInitiative"} 
+            id={annualInitiative.id} 
+            marginLeft={"-70px"} 
+            iconColor={showOptions}
+          />
         </IconContainer>
       </HeaderContainer>
 
@@ -196,16 +208,21 @@ const StyledText = styled(Text)<StyledTextProps>`
 `;
 // TODOIT: Add the color in hover state above to constants
 
-const HeaderContainer = styled.div`
-  display: flex;
-  flex-grow: 1;
-`;
-
 const IconContainer = styled.div`
   margin-top: 17px;
   margin-left: auto;
   margin-right: 16px;
   display: flex;
+  opacity: 1
+`;
+
+
+const HeaderContainer = styled.div`
+  display: flex;
+  flex-grow: 1;
+  ${IconContainer}:hover & {
+      fill: rebeccapurple;
+  }
 `;
 
 type YearContainerProps = {

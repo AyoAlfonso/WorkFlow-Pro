@@ -8,6 +8,7 @@ import { DropdownOptions } from "./dropdown-options";
 import { Text } from "../../../shared/text";
 import ContentEditable from "react-contenteditable";
 import { OwnedBySection } from "../shared/owned-by-section";
+import { useTranslation } from "react-i18next";
 
 interface IInitiativeHeaderProps {
   itemType: string;
@@ -38,12 +39,13 @@ export const InitiativeHeader = ({
 
   const descriptionRef = useRef(null);
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
+  const { t } = useTranslation();
 
   return (
     <>
-    {item.closed_at && (
+    {!item.closed_at && (
        <ClosedStatusBannerContainer>
-      This card is closed. Originally created on {item.created_at}
+         {t("annualInitiative.cardClosed")}. {t("annualInitiative.createdOn")} {item.created_at}
         <AnnualInitiativeActionContainer>
         <DropdownOptions
           editable={editable}
@@ -162,7 +164,7 @@ border-radius: 4px;
 text-align: left;
 font: normal normal bold 16px/16px Lato;
 letter-spacing: 0px;
-color: #000000;
+color: ${props => props.theme.colors.black};
 opacity: 1;
 padding: 40px 5%;
 justify-content: space-between;

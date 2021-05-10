@@ -19,6 +19,7 @@ export const PersonalVision = ({ personalVision }: IPersonalVisionProps): JSX.El
       <VisionTitle>Future Self</VisionTitle>
       <StyledContentEditable
         innerRef={personalVisionRef}
+        placeholder={"Describe what the ideal, future you will look like, in one statement..."}
         html={personalVision || ""}
         disabled={false}
         onChange={e => {
@@ -64,10 +65,12 @@ const VisionText = styled.p`
 `;
 
 const StyledContentEditable = styled(ContentEditable)`
-  font-size: 15px;
+  font-size: 16px;
   margin-left: auto;
   margin-right: auto;
   margin-top: auto;
   margin-bottom: auto;
   padding: 5px;
+  text-transform: capitalize;
+  font-weight: 700;
 `;
