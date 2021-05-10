@@ -231,7 +231,13 @@ export const SideNavNoMst = (
             src={`${company.logoUrl}`}
           />
         ) : (
-            <LynchPynLogo />
+            <Image
+              sx={{
+                width: 48,
+                height: 48,
+              }}
+              src={"/assets/LynchPyn-Logo_Favicon_White"}
+            />
           )}
       </SideBarElement>
 
@@ -322,7 +328,14 @@ export const SideNavNoMst = (
 
       {!R.isNil(company) && company.logoUrl ? (
         <SideBarElement margin={"16px"} marginTop={"auto"}>
-          <LynchPynLogo />
+          <Image
+            sx={{
+              width: 48,
+              height: 48,
+            }}
+            marginTop={16}
+            src={"/assets/LynchPyn-Logo_Favicon_White"}
+          />
         </SideBarElement>
       ) : (
           <></>
@@ -330,17 +343,6 @@ export const SideNavNoMst = (
     </StyledSideNav>
   );
 };
-
-const LynchPynLogo = (): JSX.Element => (
-  <Image
-    sx={{
-      width: 48,
-      height: 48,
-    }}
-    marginTop={16}
-    src={"/assets/LynchPyn-Logo_Favicon_White"}
-  />
-)
 
 export const SideNav = observer(
   (): JSX.Element => {
