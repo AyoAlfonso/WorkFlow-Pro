@@ -26,6 +26,7 @@ export const AnnualInitiativeCardExpanded = observer(
       setSelectedAnnualInitiativeDescription,
       showCreateQuarterlyGoal,
       showEditButton,
+      marginLeft,
     } = props;
 
     const { quarterlyGoalStore, companyStore, sessionStore } = useMst();
@@ -122,6 +123,7 @@ export const AnnualInitiativeCardExpanded = observer(
         onClick={e => {
           e.stopPropagation();
         }}
+        marginLeft={marginLeft}
       >
         {/* <QuarterlyGoalsText>
           {t("quarterlyGoal.title", { title: quarterlyGoalTitle })}
@@ -134,11 +136,16 @@ export const AnnualInitiativeCardExpanded = observer(
   },
 );
 
-const Container = styled.div`
+type ContainerProps = {
+  marginLeft: string;
+}
+
+const Container = styled.div<ContainerProps>`
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   width: calc(20% - 16px);
   min-width: 220px;
+  margin-left: ${props => props.marginLeft};
 `;
 
 type SubInitiativeContainerProps = {
@@ -146,10 +153,10 @@ type SubInitiativeContainerProps = {
  
 };
 
-
 const SubInitiativeContainer =  styled.div<SubInitiativeContainerProps>`
   display: ${props => props.display};
   transition: "all 0.4s ease-in";
+  transform-style: preserve-3d;
 `;
 
 const QuarterlyGoalsText = styled.p`
@@ -171,22 +178,20 @@ const MinimizeIconContainer = styled.div`
   }
 `;
 
-type ContainerProps = {
+type InitiativesContainerProps = {
   onboarding?: boolean;
-  marginRight?: string;
 };
 
-const InitiativesContainer  = styled(HomeContainerBorders)<ContainerProps>`
+const InitiativesContainer  = styled(HomeContainerBorders)<InitiativesContainerProps>`
   width: ${props => (props.onboarding ? "-webkit-fill-available" : "calc(20% - 16px)")};
   min-width: 240px;
   display: flex;
-  margin-top:5%;
-  margin-left: 2px;
+  margin-top: 16px;
   flex-direction: column;
   min-height: 88px;
-  &: hover {
-    background: rgba(0, 0, 0, 0.02);
-    opacity: 0.85;
+  transition: 0.3s ease-out;
+  &:hover {
+    transform: scale(1.05);
   }
 `;
 
@@ -200,6 +205,7 @@ const ShowInitiativeBar = styled.div`
 `;
 
 const CreateGoalContainer = styled.div`
+  margin-top: 16px;
+  margin-left: 16px;
   margin-bottom: 16px;
-  margin-right: 8px;
 `;

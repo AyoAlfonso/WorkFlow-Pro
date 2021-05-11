@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useMst } from "~/setup/root";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
 import { observer } from "mobx-react";
-import { Loading, UserDefaultIcon } from "~/components/shared";
+import { Loading, Avatar } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
 import { MilestoneCreateButton } from "../shared-quarterly-goal-and-sub-initiative/milestone-create-button";
@@ -101,10 +101,11 @@ export const QuarterlyGoalModalContent = observer(
             <BottomRowContainer>
               {subInitiative.ownedBy && (
                 <SubInitiativeOwnerContainer>
-                  <UserDefaultIcon
+                  <Avatar
                     firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
                     lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
                     defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
+                    avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
                     size={40}
                   />
                 </SubInitiativeOwnerContainer>
@@ -155,7 +156,7 @@ export const QuarterlyGoalModalContent = observer(
                   createAction={subInitiativeStore.create}
                   quarterlyGoalId={quarterlyGoal.id}
                   inAnnualInitiative={true}
-                  buttonWidth={"150px"}
+                  buttonWidth={"200px"}
                 />
               </CreateGoalContainer>
             )}

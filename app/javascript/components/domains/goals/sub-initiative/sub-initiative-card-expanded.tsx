@@ -34,6 +34,12 @@ export const SubInitiativeCardsExpanded = observer(
     const renderSubInitiativeQuarterlyGoals = () => {
       return annualInitiative.quarterlyGoals[selectedSubInitiativeCards].subInitiatives.map((quarterlyGoal, index) => {
         return (
+          <>
+          <LineContainer>
+            <svg height="16" width="2">
+              <line x1="1" y1="4" x2="1" y2="16" />
+            </svg>
+          </LineContainer>
           <InitiativesContainer>
             <QuarterlyGoalCard
               key={index}
@@ -45,6 +51,7 @@ export const SubInitiativeCardsExpanded = observer(
               goalCardType={"child"}
             />
           </InitiativesContainer>
+          </>
         );
       });
     };
@@ -94,6 +101,19 @@ export const SubInitiativeCardsExpanded = observer(
   },
 );
 
+const LineContainer = styled.div<ContainerProps>`
+  z-index: -1;
+  width: ${props => (props.onboarding ? "-webkit-fill-available" : "calc(20% - 16px)")};
+  min-width: 240px;
+  display: flex;
+  justify-content: center;
+  line {
+    stroke: ${props => props.theme.colors.grey20};
+    stroke-width: 2;
+  }
+  margin: 0 0 0 0;
+`
+
 const Container = styled.div`
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
@@ -127,15 +147,15 @@ type ContainerProps = {
 //TODOIST: calc the margin left
 const InitiativesContainer = styled(HomeContainerBorders)<ContainerProps>`
   width: ${props => (props.onboarding ? "-webkit-fill-available" : "calc(20% - 16px)")};
+  background-color: ${props => props.theme.colors.backgroundGrey};
   min-width: 240px;
   display: flex;
-  margin-top: 5%;
-  margin-left: 2px;
+  border-radius: 8px;
   flex-direction: column;
   min-height: 88px;
-  &: hover {
-    background: rgba(0, 0, 0, 0.02);
-    opacity: 0.85;
+  transition: 0.3s ease-out;
+  &:hover {
+    transform: scale(1.05);
   }
 `;
 

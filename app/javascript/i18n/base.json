@@ -102,7 +102,7 @@
         "editUser": {
           "title": "Edit User"
         },
-        "rallyingCry": "LynchPyn Goal",
+        "rallyingCry": "LynchPyn™ Goal",
         "create": "Create",
         "edit": "Edit",
         "newCompany": "Company",
@@ -139,7 +139,7 @@
         "add": "Add an {{title}}",
         "addInitiative": "Add {{title}}",
         "messageText": "{{title}}",
-        "cardClosed" : "This card is closed",
+        "cardClosed" : "This Annual Initiative is closed",
         "createdOn" : "Originally created on"
       },
       "quarterlyGoal": {
@@ -157,7 +157,8 @@
         "retrievalError": "There was an error retrieving the {{title}}",
         "deletionError": "There was an error deleting the {{title}}",
         "keyElementCreationError": "There was an error creating the key element",
-        "milestoneCreationError": "There was an error creating milestones"
+        "milestoneCreationError": "There was an error creating milestones",
+        "cardClosed": "This Quarterly Initiative is Closed"
       },
       "subInitiative": {
         "enterTitle": "Enter {{title}} Title...",
@@ -174,7 +175,8 @@
         "retrievalError": "There was an error retrieving the {{title}}",
         "deletionError": "There was an error deleting the {{title}}",
         "keyElementCreationError": "There was an error creating the key element",
-        "milestoneCreationError": "There was an error creating milestones"
+        "milestoneCreationError": "There was an error creating milestones",
+        "cardClosed": "This Supporting Initiative is Closed"
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",

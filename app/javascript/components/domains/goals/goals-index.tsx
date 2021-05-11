@@ -143,6 +143,7 @@ export const GoalsIndex = observer(
           showCreateGoal={showCreateAnnualInitiative}
           setShowCreateGoal={setShowCreateAnnualInitiative}
           createAction={annualInitiativeStore.create}
+          buttonWidth={"fill"}
         />
       );
     };
@@ -193,9 +194,7 @@ export const GoalsIndex = observer(
               <InitiativesContainer>
                 {renderAnnualInitiatives(companyGoalsToShow(), "company")}
                 {companyPlanning && (
-                  <CreateAnnualInitiativeContainer
-                    marginLeft={R.length(companyGoalsToShow()) > 0 ? "15px" : "0px"}
-                  >
+                  <CreateAnnualInitiativeContainer>
                     {renderCreateCompanyAnnualInitiativeSection("company")}
                   </CreateAnnualInitiativeContainer>
                 )}
@@ -222,9 +221,7 @@ export const GoalsIndex = observer(
               <InitiativesContainer>
                 {renderAnnualInitiatives(personalGoalsToShow(), "personal")}
                 {personalPlanning && (
-                  <CreateAnnualInitiativeContainer
-                    marginLeft={R.length(personalGoalsToShow()) > 0 ? "15px" : "0px"}
-                  >
+                  <CreateAnnualInitiativeContainer>
                     {renderCreateCompanyAnnualInitiativeSection("personal")}
                   </CreateAnnualInitiativeContainer>
                 )}
@@ -296,10 +293,12 @@ const Container = styled.div`
 
 const InitiativesContainer = styled.div`
   display: -webkit-box;
-  margin-top: 15px;
+  margin-top: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-bottom: 16px;
   white-space: nowrap;
-  overflow-x: auto;
-  padding-bottom: 15px;
+  overflow-x: scroll;
 `;
 
 const PersonalInitiativesContainer = styled.div`
@@ -310,16 +309,13 @@ const PersonalInitiativesContainer = styled.div`
 const StyledModal = Modal.styled`
   width: 30rem;
   min-height: 100px;
-  border-radius: 10px;
+  border-radius: 8px;
   background-color: ${props => props.theme.colors.white};
 `;
 
-type CreateAnnualInitiativeContainerProps = {
-  marginLeft: string;
-};
-
-const CreateAnnualInitiativeContainer = styled.div<CreateAnnualInitiativeContainerProps>`
-  margin-left: ${props => props.marginLeft || "0px"};
+const CreateAnnualInitiativeContainer = styled.div`
+  margin-top: 16px;
+  margin-left: 8px;
   width: 20%;
 `;
 

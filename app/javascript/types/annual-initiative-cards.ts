@@ -14,4 +14,6 @@ export interface IAnnualInitiativeCardExpandedProps {
   showSubInitiativeCards?: boolean; 
   setSelectSubInitiativeCard?:React.Dispatch<React.SetStateAction<number>>;
   setShowSubInitiativeCards?: React.Dispatch<React.SetStateAction<boolean>>;
+  marginLeft?: string;
+  marginRight?: string;
 }

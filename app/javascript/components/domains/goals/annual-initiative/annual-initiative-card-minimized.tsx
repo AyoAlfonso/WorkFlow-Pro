@@ -19,7 +19,7 @@ export const AnnualInitiativeCardMinimized = ({
   annualInitiative,
   disableOpen,
   setShowMinimizedCard,
-  showMinimizedCard
+  showMinimizedCard,
 }: IAnnualInitiativeCardMinimizedProps): JSX.Element => {
   const { warningRed, cautionYellow, finePine, grey60, grey40 } = baseTheme.colors;
   const milestoneCounts = []
@@ -104,7 +104,7 @@ export const AnnualInitiativeCardMinimized = ({
 
   const renderCounts = () => {
     if (milestoneCounts.length) return milestoneCounts;
-    return  <MilestoneCountContainer color={grey40} margin={`50%`}  > 0 </MilestoneCountContainer>
+    return  <MilestoneCountContainer color={grey40} margin={`50%`}> 0 </MilestoneCountContainer>
   }
 
   return (
@@ -117,11 +117,12 @@ export const AnnualInitiativeCardMinimized = ({
           ownedBy={annualInitiative.ownedBy}
           type={"annualInitiative"}
           disabled={true}
-          size={25}
+          size={16}
+          fontSize={"12px"}
           marginLeft={"16px"}
           marginRight={"0px"}
-          marginTop={"5px"}
-          marginBottom={"0px"}
+          marginTop={"auto"}
+          marginBottom={"auto"}
         />
       
       <InitiativeCountContainer>
@@ -202,7 +203,7 @@ const ShowInitiativeBar = styled.div`
 const StatusSquareContainer = styled.div`
   position: relative;
   display: flex;
-  margin: 10px 0px 0px;
+  margin: 2px 0px 0px;
 `;
 
 const InitiativeCountContainer = styled.div`
@@ -220,6 +221,7 @@ const MilestoneCountContainer = styled.div<MilestoneCountContainerType>`
     margin: 0 ${props => props.margin} 0px;
     color: ${props => props.color};
     display: inline-block;
+    font-weight: bolder;
     width: 0px;
 `
 type GradientContainerType = {

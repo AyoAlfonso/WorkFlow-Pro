@@ -237,7 +237,7 @@ export const AnnualInitiativeModalContent = observer(
     return (
 
       <>
-       {!annualInitiative.closedAt && (
+       {annualInitiative.closedAt && (
         <ClosedStatusBannerContainer>
             {t("annualInitiative.cardClosed")}
             <AnnualInitiativeActionContainer>

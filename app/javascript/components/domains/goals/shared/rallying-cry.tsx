@@ -51,7 +51,8 @@ const VisionContainer = styled(HomeContainerBorders)`
 
 const VisionTitle = styled.p`
   ${color}
-  font-size: 20px;
+  font-size: 24px;
+  font-weight: 800;
   color: ${props => props.theme.colors.primary100};
   margin-top: auto;
   margin-bottom: auto;
@@ -63,7 +64,7 @@ const VisionTitle = styled.p`
 `;
 
 const StyledContentEditable = styled(ContentEditable)`
-  font-size: 16px;
+  font-size: 21px;
   margin-left: auto;
   margin-right: auto;
   margin-top: auto;

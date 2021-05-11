@@ -96,17 +96,22 @@ export const OwnedBySection = ({
   );
 };
 
-type ContainerType = {
+type EditTriggerContainerType = {
   editable: boolean;
 };
 
-const Container = styled.div`
+type ContainerProps = {
+  width?: number;
+}
+
+const Container = styled.div<ContainerProps>`
    margin-left: 0px;
    width: ${props => `${props.width}%` || 'auto'};
 `;
 
-const EditTriggerContainer = styled.div<ContainerType>`
+const EditTriggerContainer = styled.div<EditTriggerContainerType>`
   display: flex;
+  align-items: center center;
   &:hover {
     cursor: ${props => props.editable && "pointer"};
   }
