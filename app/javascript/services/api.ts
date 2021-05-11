@@ -527,5 +527,8 @@ export class Api {
   async getUserPulseByDate(date) {
     return this.client.get(`/user_pulse_by_date`, { date });
   }
+  async getSelectedDailyLogByDate(date) {
+    return this.client.get(`/daily_logs`, { date });
+  }
   //async setJWT(jwt) {}
 }

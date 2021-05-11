@@ -2,12 +2,12 @@ class Api::SummariesController < Api::ApplicationController
   
   def journals_by_date
     if params[:start_date].present? && params[:end_date].present?
-      @journal_entries = policy_scope(JournalEntry).between(params[:start_date].to_date.beginning_of_day, params[:end_date].to_date.end_of_day).sort_by_created_at
+      @journal_entries = policy_scope(JournalEntry).between(current_user.start_of_day_for_user(params[:start_date].to_date), current_user.end_of_day_for_user(params[:end_date].to_date)).sort_by_date
     else
-      @journal_entries = policy_scope(JournalEntry).sort_by_created_at
+      @journal_entries = policy_scope(JournalEntry).sort_by_date
     end
     authorize @journal_entries, :index?
-    @dates = @journal_entries.map{ |je| current_user.convert_to_their_timezone(je.created_at).strftime("%a, %b %e") }.uniq
+    @dates = @journal_entries.map{ |je| current_user.convert_to_their_timezone(je.logged_at).strftime("%a, %b %e") }.uniq
     render "api/summaries/journals_by_date"
   end
   
