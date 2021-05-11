@@ -29,6 +29,7 @@ export const SurveyBot = observer(
       sessionStore,
       sessionStore: {
         profile: { currentDailyLog, firstName },
+        selectedDailyLog,
       },
       questionnaireStore,
       keyActivityStore,
@@ -43,7 +44,7 @@ export const SurveyBot = observer(
           questionnaireVariant.id,
         );
         setLoading(false);
-        window.closeWidget();
+        window.closeWidget && window.closeWidget();
       }
       setUp();
     }, []);
@@ -173,6 +174,7 @@ export const SurveyBot = observer(
         userDelay={200}
         zIndex={1}
         handleEnd={async ({ renderedSteps, steps, values: answers }) => {
+          const optionalParams = selectedDailyLog ? { logDate: selectedDailyLog.logDate } : {};
           await questionnaireStore.createQuestionnaireAttempt(
             questionnaireVariant.id,
             {
@@ -181,6 +183,7 @@ export const SurveyBot = observer(
               answers,
             },
             questionnaireVariant.title,
+            optionalParams,
           );
           if (typeof props.endFn === "function") {
             setTimeout(() => {

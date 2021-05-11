@@ -85,7 +85,7 @@ export const JournalIndex = observer(
             {item.items.map((journalEntry, journalEntryIndex) => (
               <ItemCard
                 key={journalEntryIndex}
-                titleText={moment(journalEntry.createdAt).format("LT")}
+                titleText={moment(journalEntry.loggedAt).format("LT")}
                 bodyText={journalEntry.preview}
                 onClick={() => setSelectedItem({ ...journalEntry })}
                 selected={!R.isNil(selectedItem) ? selectedItem.id === journalEntry.id : false}
@@ -103,7 +103,7 @@ export const JournalIndex = observer(
             {selectedEntry.title}
           </Text>
           <Text fontSize={"12px"} fontWeight={400} color={"grey100"}>
-            {moment(selectedEntry.createdAt).format("dddd, MMMM Do, h:mm a")}
+            {moment(selectedEntry.loggedAt).format("dddd, MMMM Do, h:mm a")}
           </Text>
           <AvatarContainer>
             <Avatar
