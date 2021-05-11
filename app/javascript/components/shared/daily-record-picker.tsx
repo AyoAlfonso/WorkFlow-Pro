@@ -95,6 +95,7 @@ type FilterTextProps = {
 
 const FilterContainer = styled.div`
   display: flex;
+  margin-right: 16px;
 `;
 
 const FilterWrapper = styled.div`
@@ -103,7 +104,7 @@ const FilterWrapper = styled.div`
 `;
 
 const FilterText = styled(Text)<FilterTextProps>`
-  color: ${props => props.selected && props.theme.colors.primary100};
+  color: ${props => (props.selected ? props.theme.colors.primary100 : props.theme.colors.grey60)};
   margin-left: 8px;
   margin-top: auto;
   margin-bottom: auto;
