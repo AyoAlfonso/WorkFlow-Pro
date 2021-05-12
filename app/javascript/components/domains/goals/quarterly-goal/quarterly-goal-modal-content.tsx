@@ -88,6 +88,7 @@ export const QuarterlyGoalModalContent = observer(
                 onClick={() => {
                   setQuarterlyGoalModalOpen(false);
                   setSubInitiativeId(subInitiative.id);
+                  //Look into this.
                   setSelectedAnnualInitiativeDescription(annualInitiativeDescription);
                   setSubInitiativeModalOpen(true);
                 }}

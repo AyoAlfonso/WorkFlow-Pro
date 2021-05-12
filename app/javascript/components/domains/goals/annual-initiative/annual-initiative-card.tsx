@@ -24,12 +24,16 @@ interface IAnnualInitiativeCardProps {
   showCreateQuarterlyGoal: boolean;
   onboarding?: boolean;
   showEditButton?: boolean;
+  setSubInitiativeModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setSubInitiativeId?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const AnnualInitiativeCard = ({
   annualInitiative,
   index,
   totalNumberOfAnnualInitiatives,
+  setSubInitiativeModalOpen,
+  setSubInitiativeId,
   showMinimizedCards,
   showSubInitiativeCards,
   setAnnualInitiativeId,
@@ -84,7 +88,7 @@ export const AnnualInitiativeCard = ({
   };
   const marginRight = "8px";
   const marginLeft = index == 0 ? "0px" : "8px";
-
+  
   return (
     <div>
       <Container
@@ -139,6 +143,8 @@ export const AnnualInitiativeCard = ({
           setSelectSubInitiativeCard={setSelectSubInitiativeCard}
           selectedSubInitiativeCards={selectedSubInitiativeCards}
           setQuarterlyGoalId={setQuarterlyGoalId}
+          setSubInitiativeModalOpen={setSubInitiativeModalOpen}
+          setSubInitiativeId={setSubInitiativeId}
           setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
           setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
           showCreateQuarterlyGoal={showCreateQuarterlyGoal}

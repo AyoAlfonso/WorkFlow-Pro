@@ -5,11 +5,8 @@ import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
 import { baseTheme } from "~/themes/base";
-
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
 import ContentEditable from "react-contenteditable";
-
 import { AnnualInitiativeType } from "~/types/annual-initiative";
 import { QuarterlyGoalType } from "~/types/quarterly-goal";
 import { KeyElement } from "./key-element";
@@ -18,6 +15,7 @@ import { Icon } from "~/components/shared/icon";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
 import { KeyElementForm } from "./key-element-form";
 import { RoundButton, Text, TextDiv } from "~/components/shared";
+import "react-tabs/style/react-tabs.css";
 
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;

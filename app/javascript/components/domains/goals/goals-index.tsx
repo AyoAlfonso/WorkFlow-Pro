@@ -52,7 +52,7 @@ export const GoalsIndex = observer(
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
 
     const { t } = useTranslation();
-
+    
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
     }, []);
@@ -163,6 +163,8 @@ export const GoalsIndex = observer(
             setAnnualInitiativeId={setAnnualInitiativeId}
             setQuarterlyGoalId={setQuarterlyGoalId}
             setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
+            setSubInitiativeModalOpen={setSubInitiativeModalOpen}
+            setSubInitiativeId={setSubInitiativeId}
             setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
             showCreateQuarterlyGoal={true}
             showEditButton={showEditButton}
@@ -277,7 +279,7 @@ export const GoalsIndex = observer(
             subInitiativeId={subInitiativeId}
             setSubInitiativeModalOpen={setSubInitiativeModalOpen}
             annualInitiativeDescription={annualInitiativeDescription}
-            setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+            // setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
             setAnnualInitiativeId={setAnnualInitiativeId}
             showCreateMilestones={true}
           />

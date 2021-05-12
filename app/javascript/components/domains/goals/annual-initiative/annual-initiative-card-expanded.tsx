@@ -10,8 +10,6 @@ import { QuarterlyGoalCard } from "../quarterly-goal/quarterly-goal-card";
 import { SubInitiativeCardsExpanded } from "../sub-initiative/sub-initiative-card-expanded"
 import { observer } from "mobx-react";
 import { IAnnualInitiativeCardExpandedProps } from "~/types/annual-initiative-cards";
-// TODOIST: You should define this in another folder
-
 
 export const AnnualInitiativeCardExpanded = observer(
   (props: IAnnualInitiativeCardExpandedProps): JSX.Element => {
@@ -27,13 +25,15 @@ export const AnnualInitiativeCardExpanded = observer(
       showCreateQuarterlyGoal,
       showEditButton,
       marginLeft,
+      setSubInitiativeModalOpen,
+      setSubInitiativeId
     } = props;
 
     const { quarterlyGoalStore, companyStore, sessionStore } = useMst();
     const [createQuarterlyGoalArea, setCreateQuarterlyGoalArea] = useState<boolean>(false);
 
     const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
-
+  
     const { t } = useTranslation();
 
     const renderQuarterlyGoals = () => {
@@ -77,11 +77,12 @@ export const AnnualInitiativeCardExpanded = observer(
               // quarterlyGoals={annualInitiative.quarterlyGoals}
               // showSubInitiativeCards={showSubInitiativeCards}
               selectedSubInitiativeCards={index}
-              setQuarterlyGoalId={setQuarterlyGoalId}
-              setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
+              // setQuarterlyGoalId={setQuarterlyGoalId}
+              setSubInitiativeId={setSubInitiativeId}
+              setSubInitiativeModalOpen={setSubInitiativeModalOpen}
               setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
-              showCreateQuarterlyGoal={showCreateQuarterlyGoal}
-              showEditButton={showEditButton}
+              // showCreateQuarterlyGoal={showCreateQuarterlyGoal}
+              // showEditButton={showEditButton}
               />
             </SubInitiativeContainer>
             </>

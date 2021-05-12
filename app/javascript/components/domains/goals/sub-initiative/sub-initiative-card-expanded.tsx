@@ -7,32 +7,30 @@ import { HomeContainerBorders } from "../../home/shared-components";
 import { useState } from "react";
 import { useMst } from "~/setup/root";
 import { useTranslation } from "react-i18next";
-import { QuarterlyGoalCard } from "../quarterly-goal/quarterly-goal-card";
+import { SubInitiativeGoalCard } from "./sub-intiative-goal-card";
 import { observer } from "mobx-react";
-import { IAnnualInitiativeCardExpandedProps } from "~/types/annual-initiative-cards";
+import { ISubInitiativeCardExpandedProps } from "~/types/sub-initiative-cards";
+
 
 export const SubInitiativeCardsExpanded = observer(
-  (props: IAnnualInitiativeCardExpandedProps): JSX.Element => {
+  (props: ISubInitiativeCardExpandedProps): JSX.Element => {
     const {
       annualInitiative,
-      // quarterlyGoals,
+      setSubInitiativeId,
       selectedSubInitiativeCards,
-      setQuarterlyGoalId,
-      setQuarterlyGoalModalOpen,
+      setSubInitiativeModalOpen,
       setSelectedAnnualInitiativeDescription,
-      // showCreateQuarterlyGoal,
-      showEditButton,
     } = props;
 
     const { quarterlyGoalStore, companyStore, sessionStore } = useMst();
     const [createQuarterlyGoalArea, setCreateQuarterlyGoalArea] = useState<boolean>(false);
-
+  
     const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
 
     const { t } = useTranslation();
   
     const renderSubInitiativeQuarterlyGoals = () => {
-      return annualInitiative.quarterlyGoals[selectedSubInitiativeCards].subInitiatives.map((quarterlyGoal, index) => {
+      return annualInitiative.quarterlyGoals[selectedSubInitiativeCards].subInitiatives.map((subInitiative, index) => {
         return (
           <>
           <LineContainer>
@@ -41,14 +39,13 @@ export const SubInitiativeCardsExpanded = observer(
             </svg>
           </LineContainer>
           <InitiativesContainer>
-            <QuarterlyGoalCard
+            <SubInitiativeGoalCard
               key={index}
-              quarterlyGoal={quarterlyGoal}
-              setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
-              setQuarterlyGoalId={setQuarterlyGoalId}
+              subInitiative={subInitiative}
+              setSubInitiativeModalOpen={setSubInitiativeModalOpen}           
               setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
-              annualInitiativeDescription={annualInitiative.description}
-              goalCardType={"child"}
+              // annualInitiativeDescription={annualInitiative.description}
+              setSubInitiativeId={setSubInitiativeId}
             />
           </InitiativesContainer>
           </>
