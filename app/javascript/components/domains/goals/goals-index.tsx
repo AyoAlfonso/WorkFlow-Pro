@@ -56,6 +56,9 @@ export const GoalsIndex = observer(
 
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
+      if (!companyStore.company) {
+        companyStore.load();
+      }
     }, []);
 
     if (loading || R.isNil(goalStore.companyGoals) || !companyStore.company) {

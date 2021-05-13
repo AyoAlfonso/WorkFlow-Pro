@@ -13,7 +13,7 @@ import { Loading } from "../../shared";
 import { sortByPosition } from "~/utils/sorting";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { HomeContainerBorders } from "../home/shared-components";
-import { AccordionDetails } from "~/components/shared/accordion-components";
+
 import { List } from "@material-ui/core";
 
 interface IIssuesBodyProps {
@@ -76,7 +76,7 @@ export const IssuesBody = observer(
     };
 
     return (
-      <AccordionDetailsContainer>
+      <>
         <CreateIssueModal
           createIssueModalOpen={createIssueModalOpen}
           setCreateIssueModalOpen={setCreateIssueModalOpen}
@@ -121,16 +121,10 @@ export const IssuesBody = observer(
             </IssuesBodyContainer>
           )}
         </Droppable>
-      </AccordionDetailsContainer>
+      </>
     );
   },
 );
-
-const AccordionDetailsContainer = styled(AccordionDetails)`
-  padding: 0px 0px 15px 0px;
-  display: flex;
-  flex-direction: column;
-`;
 
 const AddNewIssuePlus = styled.div`
   margin-top: auto;
