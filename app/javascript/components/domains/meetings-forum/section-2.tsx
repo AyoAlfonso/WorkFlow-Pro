@@ -7,7 +7,7 @@ import { useMst } from "~/setup/root";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import MeetingTypes from "~/constants/meeting-types";
-
+import { LynchPynBadge } from "./components/lynchpyn-badge";
 import { HomeTitle } from "~/components/domains/home/shared-components";
 import { Loading } from "~/components/shared/loading";
 
@@ -29,6 +29,7 @@ export const Section2 = observer(
     const [loading, setLoading] = useState<boolean>(true);
     const teamId =
       (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
+    const instanceType = company && company.accessForum ? "forum" : "teams";
 
     useEffect(() => {
       if (loading && teamId && company) {
@@ -50,6 +51,7 @@ export const Section2 = observer(
     return (
       <Container>
         <Exploration includeExplorationTopic={false} />
+        {instanceType === "forum" && <LynchPynBadge />}
       </Container>
     );
   },
