@@ -95,6 +95,14 @@ export const KeyElement = observer(
       return result;
     };
 
+    const renderElementCompletionTargetValue = () => {
+      if (element.completionType == "currency") {
+        return `/ ${completionSymbol()}${element.completionTargetValue}`;
+      } else {
+        return `/ ${element.completionTargetValue}${completionSymbol()}`;
+      }
+    };
+
     return (
       <KeyElementContainer>
         {element.completionType === "binary" && (
@@ -159,7 +167,7 @@ export const KeyElement = observer(
                   placeholder={completionSymbol()}
                 />
                 <CompletionTextContainer>
-                  {`/ ${element.completionTargetValue}${completionSymbol()}`}
+                  {renderElementCompletionTargetValue()}
                 </CompletionTextContainer>
               </ProgressContainer>
               <ProgressBarContainer>

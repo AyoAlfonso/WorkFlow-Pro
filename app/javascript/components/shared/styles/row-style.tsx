@@ -36,7 +36,6 @@ export const ForumSectionContainer = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  margin-top: 16px;
   height: 100px;
 `;
 
@@ -56,7 +55,7 @@ const HeaderContainer = styled.div``;
 export const HeaderText = ({ text }: { text: string }): JSX.Element => {
   return (
     <HeaderContainer>
-      <Heading type={"h2"} fontSize={"20px"} fontWeight={600}>
+      <Heading type={"h2"} fontSize={"20px"} fontWeight={600} mt={0}>
         {text}
       </Heading>
     </HeaderContainer>
