@@ -50,7 +50,7 @@ export const JournalBody = observer(
 
     const dailyLogToDisplay =
       sessionStore?.selectedDailyLog || sessionStore.profile?.currentDailyLog;
-    console.log(dailyLogToDisplay);
+
     const getDailyLogByDate = filter => {
       setSelectedDateFilter(filter);
       if (todaysDateFull == filter) {

@@ -8,6 +8,7 @@ import { Button } from "~/components/shared/button";
 import { useHistory } from "react-router-dom";
 import { Icon } from "~/components/shared/icon";
 import { Text } from "~/components/shared/text";
+import { MeetingSideOptions } from "./meeting-side-options";
 
 interface ITeamMeetingProps {
   meeting: any;
@@ -32,7 +33,10 @@ export const PersonalMeetingWizardLayout = observer(
     const meetingDescription = () => R.path(["currentStepDetails", "instructions"], meeting);
 
     const childrenUnderDescription = () => (
-      <StepText type={"small"}>{`Step ${meeting.currentStep + 1} / ${numberOfSteps}`}</StepText>
+      <ChildrenContainer>
+        <StepText type={"small"}>{`Step ${meeting.currentStep + 1} / ${numberOfSteps}`}</StepText>
+        {meeting.meetingType == "personal_weekly" && <MeetingSideOptions meeting={meeting} />}
+      </ChildrenContainer>
     );
 
     const meetingComponent = () => <MeetingStep meeting={meeting} />;
@@ -116,3 +120,5 @@ const StyledBackIcon = styled(Icon)`
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
 `;
+
+const ChildrenContainer = styled.div``;
