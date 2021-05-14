@@ -69,7 +69,12 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
     return teamId ? (
       <TeamKeyActivitiesBody meeting={meeting ? true : false} />
     ) : (
-      <KeyActivitiesBody showAllKeyActivities={false} disableDrag={true} borderLeft={"none"} />
+      <KeyActivitiesBody
+        showAllKeyActivities={false}
+        disableDrag={true}
+        borderLeft={"none"}
+        fromMeeting={true}
+      />
     );
   };
 
