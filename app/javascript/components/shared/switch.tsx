@@ -5,7 +5,7 @@ import { baseTheme } from "~/themes/base";
 export default withStyles((_) => ({
   root: {
     width: 36,
-    height: 16,
+    height: 14,
     padding: 0,
     margin: 8,
     display: 'flex',
@@ -15,7 +15,7 @@ export default withStyles((_) => ({
     padding: 2,
     color: baseTheme.colors.primary40,
     '&$checked': {
-      transform: 'translateX(18px)',
+      transform: 'translateX(20px)',
       color: "#FFFFFF",
       '& + $track': {
         opacity: 1,
@@ -25,8 +25,8 @@ export default withStyles((_) => ({
     },
   },
   thumb: {
-    width: 14,
-    height: 14,
+    width: 12,
+    height: 12,
     boxShadow: 'none',
   },
   track: {

@@ -158,7 +158,7 @@
         "deletionError": "There was an error deleting the {{title}}",
         "keyElementCreationError": "There was an error creating the key element",
         "milestoneCreationError": "There was an error creating milestones",
-        "cardClosed": "This Quarterly Initiative is Closed"
+        "cardClosed": "This Quarterly Initiative is closed"
       },
       "subInitiative": {
         "enterTitle": "Enter {{title}} Title...",
@@ -176,7 +176,7 @@
         "deletionError": "There was an error deleting the {{title}}",
         "keyElementCreationError": "There was an error creating the key element",
         "milestoneCreationError": "There was an error creating milestones",
-        "cardClosed": "This Supporting Initiative is Closed"
+        "cardClosed": "This Supporting Initiative is closed"
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",

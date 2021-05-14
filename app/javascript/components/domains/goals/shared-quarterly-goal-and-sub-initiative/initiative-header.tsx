@@ -9,6 +9,7 @@ import { Text } from "../../../shared/text";
 import ContentEditable from "react-contenteditable";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useTranslation } from "react-i18next";
+import moment from "moment"
 
 interface IInitiativeHeaderProps {
   itemType: string;
@@ -41,11 +42,13 @@ export const InitiativeHeader = ({
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
   const { t } = useTranslation();
 
+  console.log(item.closedAt)
+
   return (
     <>
       {item.closedAt && (
         <ClosedStatusBannerContainer>
-          {itemType == "quarterlyGoal" ? t("quarterlyGoal.cardClosed") : t("subInitiative.cardClosed")}.
+        {itemType == "quarterlyGoal" ? t("quarterlyGoal.cardClosed") : t("subInitiative.cardClosed")}. {t("annualInitiative.createdOn")} {moment(item.createdAt).format("MMM Do, YYYY")}.
           <AnnualInitiativeActionContainer>
             <DropdownOptions
               editable={editable}
