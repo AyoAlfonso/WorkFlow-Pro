@@ -41,6 +41,7 @@ export const SubInitiativeCardsExpanded = observer(
           <InitiativesContainer>
             <SubInitiativeGoalCard
               key={index}
+              annualInitiativeYear={annualInitiative.fiscalYear}
               subInitiative={subInitiative}
               setSubInitiativeModalOpen={setSubInitiativeModalOpen}           
               setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}

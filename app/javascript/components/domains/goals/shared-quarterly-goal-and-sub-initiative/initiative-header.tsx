@@ -45,7 +45,7 @@ export const InitiativeHeader = ({
     <>
       {item.closedAt && (
         <ClosedStatusBannerContainer>
-          {itemType == "quarterlyGoal" ? t("quarterlyGoal.cardClosed"):t("subInitiative.cardClosed")}.
+          {itemType == "quarterlyGoal" ? t("quarterlyGoal.cardClosed") : t("subInitiative.cardClosed")}.
           <AnnualInitiativeActionContainer>
             <DropdownOptions
               editable={editable}
@@ -104,7 +104,23 @@ export const InitiativeHeader = ({
             />
           </DetailsContainer>
         </TitleContainer>
-
+        {!item.closedAt &&
+          (
+            <AnnualInitiativeActionContainer>
+              <DropdownOptions
+                editable={editable}
+                showDropdownOptionsContainer={showDropdownOptionsContainer}
+                setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
+                setParentModalOpen={setModalOpen}
+                itemType={itemType}
+                item={item}
+              />
+              <CloseIconContainer onClick={() => setModalOpen(false)}>
+                <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+              </CloseIconContainer>
+            </AnnualInitiativeActionContainer>
+          )
+        }
       </HeaderContainer>
     </>
   );
@@ -129,6 +145,11 @@ const UnderlinedGoalText = styled.span`
     cursor: pointer;
   }
 `;
+
+const DescriptionContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
 
 const AnnualInitiativeActionContainer = styled.div`
   display: flex;
@@ -169,7 +190,7 @@ const ClosedStatusBannerContainer = styled.div`
   color: ${props => props.theme.colors.black};
   opacity: 1;
   padding: 40px 5%;
-  justify-content: space-between;
   display: flex;
+  justify-content: space-between;
   height: 20px;
 `

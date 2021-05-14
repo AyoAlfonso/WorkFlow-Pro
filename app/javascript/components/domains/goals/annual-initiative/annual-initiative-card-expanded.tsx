@@ -35,6 +35,7 @@ export const AnnualInitiativeCardExpanded = observer(
     const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
   
     const { t } = useTranslation();
+    console.log(annualInitiative)
 
     const renderQuarterlyGoals = () => {
       return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
@@ -46,6 +47,7 @@ export const AnnualInitiativeCardExpanded = observer(
               <QuarterlyGoalCard
                 key={index}
                 quarterlyGoal={quarterlyGoal}
+                annualInitiativeYear={annualInitiative.fiscalYear}
                 setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
                 setQuarterlyGoalId={setQuarterlyGoalId}
                 setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}

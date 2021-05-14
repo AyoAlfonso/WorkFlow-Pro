@@ -18,6 +18,7 @@ interface ISubInitiativeCardProps {
   setSubInitiativeModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedAnnualInitiativeDescription?: React.Dispatch<React.SetStateAction<string>>;
   // annualInitiativeDescription: string;
+  annualInitiativeYear: number;
   setSubInitiativeId: React.Dispatch<React.SetStateAction<number>>;
 }
 
@@ -27,11 +28,26 @@ export const SubInitiativeGoalCard = (props: ISubInitiativeCardProps): JSX.Eleme
     setSubInitiativeModalOpen,
     setSubInitiativeId,
     setSelectedAnnualInitiativeDescription,
+    annualInitiativeYear,
     // annualInitiativeDescription,
   } = props;
 
   const { companyStore } = useMst();
-  const { warningRed, fadedRed, cautionYellow, fadedYellow, finePine, fadedGreen, grey40, grey20, grey80, white } = baseTheme.colors;
+  const { currentFiscalYear, currentFiscalQuarter } = companyStore.company
+  const {
+    warningRed,
+    fadedRed,
+    cautionYellow,
+    fadedYellow,
+    finePine,
+    fadedGreen,
+    grey40,
+    grey20,
+    grey80,
+    grey100,
+    white,
+    primary100
+  } = baseTheme.colors;
   const defaultOptionsColor = grey20;
   const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
 
@@ -46,28 +62,39 @@ export const SubInitiativeGoalCard = (props: ISubInitiativeCardProps): JSX.Eleme
   currentMilestone = subInitiative.milestones.find(milestone =>
     moment(milestone.weekOf).isSame(moment(), "week"),
   );
-  if (!currentMilestone) {
-    currentMilestone = subInitiative.milestones[subInitiative.milestones.length - 1];
-  }
 
-  if (currentMilestone && currentMilestone.status) {
-    switch (currentMilestone.status) {
-      case "completed":
-        statusBadge.description = "On Track"
-        statusBadge.colors = { color: finePine, backgroundColor: fadedGreen }
-        break;
-      case "in_progress":
-        statusBadge.description = "Needs Attention"
-        statusBadge.colors = { color: cautionYellow, backgroundColor: fadedYellow }
-        break;
-      case "incomplete":
-        statusBadge.description = "Behind"
-        statusBadge.colors = { color: warningRed, backgroundColor: fadedRed }
-        break;
-      case "unstarted":
-        statusBadge.description = "No update"
-        statusBadge.colors = { color: grey40, backgroundColor: grey20 }
-        break;
+  if (subInitiative.closedAt != null) {
+    statusBadge.description = `Closed - Q${subInitiative.quarter}`
+    statusBadge.colors = { color: white, backgroundColor: grey100 }
+  }
+  else if (currentFiscalYear * 10 + currentFiscalQuarter < annualInitiativeYear * 10 + subInitiative.quarter) {
+    statusBadge.description = `Upcoming - Q${subInitiative.quarter}`
+    statusBadge.colors = { color: white, backgroundColor: primary100 }
+  }
+  else {
+    if (!currentMilestone) {
+      currentMilestone = subInitiative.milestones[subInitiative.milestones.length - 1];
+    }
+
+    if (currentMilestone && currentMilestone.status) {
+      switch (currentMilestone.status) {
+        case "completed":
+          statusBadge.description = "On Track"
+          statusBadge.colors = { color: finePine, backgroundColor: fadedGreen }
+          break;
+        case "in_progress":
+          statusBadge.description = "Needs Attention"
+          statusBadge.colors = { color: cautionYellow, backgroundColor: fadedYellow }
+          break;
+        case "incomplete":
+          statusBadge.description = "Behind"
+          statusBadge.colors = { color: warningRed, backgroundColor: fadedRed }
+          break;
+        case "unstarted":
+          statusBadge.description = "No update"
+          statusBadge.colors = { color: grey40, backgroundColor: grey20 }
+          break;
+      }
     }
   }
 
@@ -140,7 +167,13 @@ export const SubInitiativeGoalCard = (props: ISubInitiativeCardProps): JSX.Eleme
               marginBottom={"auto"}
             />
           )}
-         
+          <BadgeContainer>
+            <StatusBadge
+              color={statusBadge.colors.color}
+              backgroundColor={statusBadge.colors.backgroundColor}
+            > {statusBadge.description} </StatusBadge>
+          </BadgeContainer>
+
         </RowContainer>
       </Container>
     </>

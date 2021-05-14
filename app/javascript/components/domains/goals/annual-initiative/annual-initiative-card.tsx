@@ -177,11 +177,12 @@ const Container = styled(HomeContainerBorders) <ContainerProps>`
   margin-right: ${props => props.marginRight};
   margin-left: ${props => props.marginLeft};
   flex-direction: column;
-  height: 160px;
+  height: ${props => (props.onboarding ? "-webkit-fill-available" : "160px")};
   &: hover {
     background: rgba(0, 0, 0, 0.02);
     opacity: 0.85;
   }
+  ${props => (props.onboarding ? "padding-bottom: 15px;" : "")}
 `;
 
 

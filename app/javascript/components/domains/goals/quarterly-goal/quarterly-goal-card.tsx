@@ -15,16 +15,18 @@ import * as moment from "moment";
 
 interface IQuarterlyGoalCardProps {
   quarterlyGoal: QuarterlyGoalType;
+  annualInitiativeYear: number;
   setQuarterlyGoalModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   setQuarterlyGoalId?: React.Dispatch<React.SetStateAction<number>>;
   setSelectedAnnualInitiativeDescription?: React.Dispatch<React.SetStateAction<string>>;
   annualInitiativeDescription: string;
-  goalCardType?: string
+  goalCardType?: string;
 }
 
 export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element => {
   const {
     quarterlyGoal,
+    annualInitiativeYear,
     setQuarterlyGoalModalOpen,
     setQuarterlyGoalId,
     setSelectedAnnualInitiativeDescription,
@@ -33,10 +35,12 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
   } = props;
 
   const { companyStore } = useMst();
-  const { warningRed, fadedRed, cautionYellow, fadedYellow, finePine, fadedGreen, grey40, grey20, grey80, white } = baseTheme.colors;
+  const { currentFiscalYear, currentFiscalQuarter } = companyStore.company
+  const { warningRed, fadedRed, cautionYellow, fadedYellow, finePine, fadedGreen, grey40, grey20, grey80, grey100, white, primary100 } = baseTheme.colors;
   const defaultOptionsColor = goalCardType == "child" ? grey20 : white;
   const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
 
+  console.log(quarterlyGoal)
   //TODOIST: Come back to make this code dry and icon color constant
   let currentMilestone;
   let statusBadge = {
@@ -45,31 +49,39 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
       color: ''
     }
   };
-  currentMilestone = quarterlyGoal.milestones.find(milestone =>
-    moment(milestone.weekOf).isSame(moment(), "week"),
-  );
-  if (!currentMilestone) {
-    currentMilestone = quarterlyGoal.milestones[quarterlyGoal.milestones.length - 1];
-  }
 
-  if (currentMilestone && currentMilestone.status) {
-    switch (currentMilestone.status) {
-      case "completed":
-        statusBadge.description = "On Track"
-        statusBadge.colors = { color: finePine, backgroundColor: fadedGreen }
-        break;
-      case "in_progress":
-        statusBadge.description = "Needs Attention"
-        statusBadge.colors = { color: cautionYellow, backgroundColor: fadedYellow }
-        break;
-      case "incomplete":
-        statusBadge.description = "Behind"
-        statusBadge.colors = { color: warningRed, backgroundColor: fadedRed }
-        break;
-      case "unstarted":
-        statusBadge.description = "No update"
-        statusBadge.colors = { color: grey40, backgroundColor: grey20 }
-        break;
+  if (quarterlyGoal.closedAt != null) {
+    statusBadge.description = `Closed - Q${quarterlyGoal.quarter}`
+    statusBadge.colors = { color: white, backgroundColor: grey100 }
+  }
+  else if (currentFiscalYear*10 + currentFiscalQuarter < annualInitiativeYear*10 + quarterlyGoal.quarter) {
+    statusBadge.description = `Upcoming - Q${quarterlyGoal.quarter}`
+    statusBadge.colors = { color: white, backgroundColor: primary100 }
+  }
+  else {
+    if (!currentMilestone) {
+      currentMilestone = quarterlyGoal.milestones[quarterlyGoal.milestones.length - 1];
+    }
+
+    if (currentMilestone && currentMilestone.status) {
+      switch (currentMilestone.status) {
+        case "completed":
+          statusBadge.description = "On Track"
+          statusBadge.colors = { color: finePine, backgroundColor: fadedGreen }
+          break;
+        case "in_progress":
+          statusBadge.description = "Needs Attention"
+          statusBadge.colors = { color: cautionYellow, backgroundColor: fadedYellow }
+          break;
+        case "incomplete":
+          statusBadge.description = "Behind"
+          statusBadge.colors = { color: warningRed, backgroundColor: fadedRed }
+          break;
+        case "unstarted":
+          statusBadge.description = "No update"
+          statusBadge.colors = { color: grey40, backgroundColor: grey20 }
+          break;
+      }
     }
   }
 
@@ -154,22 +166,20 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
               marginBottom={"auto"}
             />
           )}
-          {goalCardType == "parent" && (
-            <BadgeContainer>
-              {quarterlyGoal.subInitiatives.length > 0 && (
-                <>
-                  <MilestoneCountContainer>
-                    {quarterlyGoal.subInitiatives.length}
-                  </MilestoneCountContainer>
-                  <StyledSubInitiativeIcon icon={"Sub_initiative"} size={"16px"} iconColor={"#868DAA"} />
-                </>
-              )}
-              <StatusBadge
-                color={statusBadge.colors.color}
-                backgroundColor={statusBadge.colors.backgroundColor}
-              > {statusBadge.description} </StatusBadge>
-            </BadgeContainer>
-          )}
+          <BadgeContainer>
+            {quarterlyGoal.subInitiatives.length > 0 && (
+              <>
+                <MilestoneCountContainer>
+                  {quarterlyGoal.subInitiatives.length}
+                </MilestoneCountContainer>
+                <StyledSubInitiativeIcon icon={"Sub_initiative"} size={"16px"} iconColor={"#868DAA"} />
+              </>
+            )}
+            <StatusBadge
+              color={statusBadge.colors.color}
+              backgroundColor={statusBadge.colors.backgroundColor}
+            > {statusBadge.description} </StatusBadge>
+          </BadgeContainer>
         </RowContainer>
       </Container>
     </>
