@@ -42,8 +42,6 @@ export const InitiativeHeader = ({
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
   const { t } = useTranslation();
 
-  console.log(item.closedAt)
-
   return (
     <>
       {item.closedAt && (

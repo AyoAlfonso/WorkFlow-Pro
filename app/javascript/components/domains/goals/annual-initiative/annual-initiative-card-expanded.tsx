@@ -35,7 +35,23 @@ export const AnnualInitiativeCardExpanded = observer(
     const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
   
     const { t } = useTranslation();
-    console.log(annualInitiative)
+
+    const renderEmptyState = () => {
+      return annualInitiative.quarterlyGoals.length <= 0 ?
+        (
+          <EmptyStateContainer>
+            <EmptyStateHeader>
+            Add your first Initiative
+            </EmptyStateHeader>
+            <EmptyStateText>
+            Initiatives are quarterly efforts that help you get closer to reaching your Objective.
+            </EmptyStateText>
+            <EmptyStateCta>
+            Activate "Plan" mode
+            </EmptyStateCta>
+          </EmptyStateContainer>
+        ):null
+    }
 
     const renderQuarterlyGoals = () => {
       return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
@@ -128,9 +144,7 @@ export const AnnualInitiativeCardExpanded = observer(
         }}
         marginLeft={marginLeft}
       >
-        {/* <QuarterlyGoalsText>
-          {t("quarterlyGoal.title", { title: quarterlyGoalTitle })}
-        </QuarterlyGoalsText> */}
+        {showEditButton || renderEmptyState()}
         {renderQuarterlyGoals()}
         {showCreateQuarterlyGoal && renderCreateGoal()}
         
@@ -147,7 +161,7 @@ const Container = styled.div<ContainerProps>`
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   width: calc(20% - 16px);
-  min-width: 220px;
+  min-width: 240px;
   margin-left: ${props => props.marginLeft};
 `;
 
@@ -155,6 +169,37 @@ type SubInitiativeContainerProps = {
   display?: string;
  
 };
+
+const EmptyStateContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px auto;
+  margin-top: 20px;
+  text-align: center;
+  width: inherit;
+  min-width: inherit;
+  white-space: normal;
+  p {
+    margin: 4px 12px;
+  }
+`
+const EmptyStateHeader = styled.p`
+  font-size: 14px;
+  font-weight: bold;
+  color: ${props => props.theme.colors.greyActive};
+`
+
+const EmptyStateText = styled.p`
+  font-size: 12px;
+  color: ${props => props.theme.colors.greyActive};
+`
+
+const EmptyStateCta = styled.p`
+  font-size: 12px;
+  font-weight: bold;
+  color: ${props => props.theme.colors.primary100}
+`
 
 const SubInitiativeContainer =  styled.div<SubInitiativeContainerProps>`
   display: ${props => props.display};

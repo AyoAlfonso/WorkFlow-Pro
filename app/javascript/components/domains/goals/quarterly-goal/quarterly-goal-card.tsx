@@ -53,7 +53,6 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
   const defaultOptionsColor = white;
   const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
 
-  console.log(quarterlyGoal)
   //TODOIST: Come back to make this code dry and icon color constant
   let currentMilestone;
   let statusBadge = {
