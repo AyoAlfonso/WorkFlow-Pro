@@ -1,0 +1,74 @@
+<%= simple_format(@message) %>
+
+<div style="
+  font-size: 14px;
+">
+<p> You have <%= @todays_list.length %> Pyn<% if @todays_list.length != 1 %>s<% end %> in <strong>Today's list</strong>:</p>
+<% if @todays_list.length > 0 %>
+  <ul>
+  <% @todays_list.each do |pyn| %>
+    <li>
+      <%= pyn.description %> <% if pyn.priority == "low" %>
+        🔷
+      <% elsif pyn.priority == "medium" %>
+        🟥
+      <% elsif pyn.priority == "high" %>
+        🟡
+      <% end %><% if pyn.due_date != nil %> - <% if pyn.due_date < @user.time_in_user_timezone.to_date %>
+        <strong><span style="color: #EB221B;">Overdue</span></strong>
+      <% elsif pyn.due_date == @user.time_in_user_timezone.to_date %>
+        <strong><span style="color: #FBB004;">Due Today</span></strong>
+      <% elsif pyn.due_date == @user.time_in_user_timezone.to_date + 1.days %>
+        <span style="color: #00C3B3;">Due Tomorrow</span>
+      <% elsif pyn.due_date > @user.time_in_user_timezone.to_date %>
+        <span style="color: #868DAA;">Due <%= pyn.due_date.strftime("%b %d") %></span>
+      <% end %><% end %>
+    </li>
+  <% end %>
+  </ul>
+<% end %>
+<p> You also have <%= @due_today.length %> Pyn
+  <% if @due_today.length == 1 %>
+    that is due today but hasn't been added to your list:
+  <% else %>
+    that are due today but haven't been added to your list:
+  <% end %>
+</p>
+<% if @todays_list.length > 0 %>
+<% end %>
+<% if @overdue.length > 0 %>
+  <p>And <%= @overdue.length %> Pyn
+    <% if @overdue.length == 1 %>
+      that is
+    <% else %>
+      s that are
+    <% end %> <strong>overdue</strong>:
+  </p>
+  <% if @overdue.length > 0 %>
+  <% end %>
+<% end %>
+
+<div style="
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  margin-top: 30px; 
+  margin-bottom: 30px;
+">
+  <div style="
+    background-color: #005ffe;
+    border-radius: 4px;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 8px 16px;
+    text-align: center;
+    cursor: pointer;
+    line-height: 120%;
+    display: block;
+  ">
+    <a target="_blank" style="text-decoration: none; color: #FFFFFF; cursor: pointer; line-height: 19.2px" href=<%="#{ENV["HOST_URL"]}#{@cta_url}"%>>
+      <%= @cta_text %>
+    </a>
+  </div>
+</div>

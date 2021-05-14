@@ -34,4 +34,18 @@ class UserMailer < ApplicationMailer
     @cta_url = "/team/#{@team.id}"
     mail(to: @user.email, subject: @subject)
   end
+
+  def daily_planning_email
+    @user = params[:user]
+    @subject = params[:subject]
+    @greeting = params[:greeting]
+    @message = params[:message]
+    @todays_list = @user.key_activities.where(completed_at: nil, scheduled_group_id: 1)
+    @due_today = @user.key_activities.where(completed_at: nil, due_date: @user.time_in_user_timezone.to_date).where("scheduled_group_id != ?", 1)
+    @overdue = @user.key_activities.where(completed_at: nil).where("due_date < ?", @user.time_in_user_timezone.to_date)
+    @cta_text = params[:cta_text]
+    @cta_url = params[:cta_url]
+    mail(to: @user.email, subject: @subject)
+  end
+
 end

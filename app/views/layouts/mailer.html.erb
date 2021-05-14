@@ -6,7 +6,7 @@
   </head>
 
   <body style="
-    font-family: Verdana;
+    font-family: arial,helvetica,sans-serif;
     display: flex;
     background-color: #F4F4F4;"
   >
@@ -18,36 +18,39 @@
     >
       <div style="
         background-color: #ffffff;
-        border-radius: 8px;
         display: flex;
-        margin: 10px;
-        padding: 25px 30px;"
+        padding: 20px;"
       >
         <div style="
           margin-left: auto; margin-right: auto"
         ">
-          <%= image_tag image_path('LynchPyn-Logo_Horizontal-Blue'), height: 67, width: 192 %>
+          <%= image_tag image_path('LynchPyn-Logo_Horizontal-Blue'), height: 59, width: 168 %>
         </div>
       </div>
       <div style="
         background-color: #ffffff;
-        border-radius: 8px;
-        margin: 10px;
-        padding: 25px 30px;
-        color: #9B9B9B;
+        color: #000000;
       ">
-        <h1 style="color: #151515"><%= @greeting || "Let's Get Things Done!" %></h1>
-        <%= yield %>
+        <strong style="
+					font-size: 22px;
+					padding: 5px 5px 30px;
+				">
+					<%= @greeting || "Let's Get Things Done!" %>
+				</strong>
+				<div style="
+					padding: 5px;
+          line-height: 22.4px;
+				">
+					<%= yield %>
+				</div>
       </div>
       <footer style="
-        border-radius: 8px;
-        margin: 10px;
-        padding: 25px 30px;
-        background-color: #172b4d;
+        background-color: #022F7B;
+        padding: 20px;
         color: #ffffff;
         display: flex;
       ">
-        <div style="
+        <!-- <div style="
           color: #D8D8D8;
           font-size: 14px;
           height: 100%;
@@ -87,34 +90,30 @@
               </a>
             </div>
           </div>
-        </div>
+        </div> -->
         <div style="
-          color: #D8D8D8;
-          font-size: 14px;
-          height: 100%;
-          margin: 0px 5px;
-          padding: 0px 5px;
-          width: 48%;
+          color: #ECF0F1;
+          font-size: 12px;
+          display: flex;
+          flex-direction: column;
+          place-items: center center;
+          width: 100%;
         ">
-          <div style="color: #ffffff; margin-bottom: 25px">
-            <h2>Contact Us.</h2>
-          </div>
-          <div style="margin-bottom: 5px;">
-            <div>
-              421 Applewood Crescent,<br>
-              Concord, ON
-            </div>
-          </div>
-          <div style="margin-top: 20px">
+          <span style="line-height: 19.2px; height: 22.4px">
+            You are receiving this email because you signed up for LynchPyn
+          </span>
+          <span style="line-height: 19.2px; height: 22.4px; margin-top: 22.4px;">
+            421 Applewood Crescent, Concord, ON
+          </span>
+          <span style="line-height: 19.2px; height: 22.4px">
             <a style="
-              color: #00b8d9;
+              color: #15c;
               font-weight: 500;
               background-color: inherit;
-              border-radius: inherit;
               padding: inherit;"
-              href="mailto:support@lynchpyn.com">support@lynchpyn.com
+              href="mailto:support@lynchpyn.com">Unsubscribe
             </a>
-          </div>
+          </span>
         </div>
       </div>
     </div>

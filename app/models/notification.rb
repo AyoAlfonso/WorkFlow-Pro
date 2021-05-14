@@ -1,10 +1,11 @@
 class Notification < ApplicationRecord
   belongs_to :user
   enum notification_type: {
-    create_my_day: 0,
+    daily_planning: 0,
     weekly_planning: 1, #removed, no longer used
     weekly_report: 2,
-    weekly_alignment_meeting: 3
+    weekly_alignment_meeting: 3,
+    evening_reflection: 4
   }
   enum method: { disabled: 0, email: 1 }
 
