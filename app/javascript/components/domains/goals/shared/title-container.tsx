@@ -206,6 +206,7 @@ const FilterOptionContainer = styled.div<FilterOptionContainerType>`
   padding-right: 4px;
   margin-left: 4px;
   margin-right: 4px;
+  border-radius: 0px 0px 2px 2px;
 `;
 
 const ToggleContainer = styled.div`
