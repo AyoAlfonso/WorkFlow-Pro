@@ -216,7 +216,7 @@ const IconContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   margin-left: auto;
-  margin-right: 8px;
+  margin-right: 16px;
   display: flex;
 `;
 
@@ -236,7 +236,7 @@ const DescriptionContainer = styled.div`
   overflow-wrap: anywhere;
   display:flex;
   font-size: 12px;
-  padding: 0px 16px; 
+  padding-left: 16px;
 `;
 
 const StyledSubInitiativeIcon = styled(Icon)`
@@ -269,6 +269,6 @@ const BadgeContainer = styled.div`
 
 const MilestoneCountContainer = styled.div`
   font-size: 9px;
-  color: #868DAA;
+  color: ${props => props.theme.colors.grey100};
   margin-right: 5px;
 `;

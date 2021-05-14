@@ -209,7 +209,7 @@ const FilterOptionContainer = styled.div<FilterOptionContainerType>`
 `;
 
 const ToggleContainer = styled.div`
-  margin-left: 16px;
+  margin-left: 32px;
 `;
 
 const HideButtonContainer = styled.div`

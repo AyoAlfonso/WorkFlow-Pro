@@ -139,7 +139,7 @@ export const AnnualInitiativeCardMinimized = ({
     >
     {disableOpen ? null : (
         <MaximizeIconContainer>
-          <ShowInitiativeBar> {showMinimizedCard ? 'Show' : 'Hide'}  Initiative </ShowInitiativeBar>
+          <ShowInitiativeBar> {showMinimizedCard ? 'Show' : 'Hide'}  Initiatives </ShowInitiativeBar>
           <StyledIcon
             icon={showMinimizedCard ? "Chevron-Down": "Chevron-Up"}
             size={"12px"}

@@ -16,11 +16,11 @@ export default withStyles((_) => ({
     color: baseTheme.colors.primary40,
     '&$checked': {
       transform: 'translateX(20px)',
-      color: "#FFFFFF",
+      color: baseTheme.colors.white,
       '& + $track': {
         opacity: 1,
-        backgroundColor: "#005FFE",
-        borderColor: "#005FFE",
+        backgroundColor: baseTheme.colors.primary100,
+        borderColor: baseTheme.colors.primary100,
       },
     },
   },
