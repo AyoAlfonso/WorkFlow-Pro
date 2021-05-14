@@ -140,7 +140,10 @@
         "addInitiative": "Add {{title}}",
         "messageText": "{{title}}",
         "cardClosed" : "This Annual Initiative is closed",
-        "createdOn" : "Originally created on"
+        "createdOn" : "Originally created on",
+        "emptyHeader": "Add your first Initiative",
+        "emptyText": "Initiatives are quarterly efforts that help you get closer to reaching your Objective.",
+        "emptyCta": "Activate \"Plan\" mode"
       },
       "quarterlyGoal": {
         "enterTitle": "Enter {{title}} Title...",

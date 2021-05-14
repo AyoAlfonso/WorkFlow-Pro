@@ -41,13 +41,13 @@ export const AnnualInitiativeCardExpanded = observer(
         (
           <EmptyStateContainer>
             <EmptyStateHeader>
-            Add your first Initiative
+            {t("annualInitiative.emptyHeader")}
             </EmptyStateHeader>
             <EmptyStateText>
-            Initiatives are quarterly efforts that help you get closer to reaching your Objective.
+            {t("annualInitiative.emptyText")}
             </EmptyStateText>
             <EmptyStateCta>
-            Activate "Plan" mode
+            {t("annualInitiative.emptyCta")}
             </EmptyStateCta>
           </EmptyStateContainer>
         ):null
