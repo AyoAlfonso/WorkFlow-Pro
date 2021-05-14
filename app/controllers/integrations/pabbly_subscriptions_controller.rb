@@ -15,7 +15,7 @@ class Integrations::PabblySubscriptionsController < Integrations::ApplicationCon
           ActiveRecord::Base.transaction do
             company_type = params.dig("data", "plan", "plan_code").split(":")[0]
             company = Company.new({
-              display_format: company_type == "company" || company_type == "Company" ? 1 : 0,
+              display_format: company_type == "company" || company_type == "Company" ? 0 : 1,
               name: customer_profile["data"]["company_name"],
               customer_subscription_profile_id: params[:data][:customer_id],
               timezone: "(GMT-05:00) Eastern Time (US & Canada)",
