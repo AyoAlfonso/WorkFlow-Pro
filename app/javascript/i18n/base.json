@@ -103,6 +103,7 @@
           "title": "Edit User"
         },
         "rallyingCry": "LynchPyn™ Goal",
+        "rallyingCryPlaceholder": "Write the most important thing you have to achieve in the upcoming year...",
         "create": "Create",
         "edit": "Edit",
         "newCompany": "Company",
@@ -310,6 +311,10 @@
       "datePicker": {
         "dueDate": "Due Date",
         "clearDate": "Clear Date"
+      },
+      "personal": {
+        "vision": "Future Self",
+        "placeholder": "Describe what the ideal, future you will look like, in one statement..."
       }
     }
   }

@@ -24,7 +24,7 @@ export const RallyingCry = ({ rallyingCry }: IRallyingCryProps): JSX.Element => 
       <VisionTitle>{t("company.rallyingCry")}</VisionTitle>
       <StyledContentEditable
         innerRef={rallyingCryRef}
-        placeholder={"Write the most important thing that you have to achieve in the upcoming year..."}
+        placeholder={t("company.rallyingCryPlaceholder")}
         html={rallyingCry}
         disabled={!editable}
         onChange={e => {
@@ -56,7 +56,8 @@ const VisionTitle = styled.p`
   color: ${props => props.theme.colors.primary100};
   margin-top: auto;
   margin-bottom: auto;
-  margin-left: 16px;
+  margin-left: 32px;
+  margin-right: 32px;
   display: flex;
   align-items: center;
   height: inherit;
