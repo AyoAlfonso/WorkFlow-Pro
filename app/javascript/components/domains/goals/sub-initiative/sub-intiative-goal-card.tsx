@@ -46,9 +46,10 @@ export const SubInitiativeGoalCard = (props: ISubInitiativeCardProps): JSX.Eleme
     grey80,
     grey100,
     white,
-    primary100
+    primary100,
+    backgroundGrey
   } = baseTheme.colors;
-  const defaultOptionsColor = grey20;
+  const defaultOptionsColor = backgroundGrey;
   const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
 
   let currentMilestone;
@@ -126,7 +127,7 @@ export const SubInitiativeGoalCard = (props: ISubInitiativeCardProps): JSX.Eleme
           setShowOptions(grey80)
         }}
         onMouseLeave={e => {
-          setShowOptions(grey20)
+          setShowOptions(defaultOptionsColor)
         }}
       >
         <StatusBlockColorIndicator milestones={subInitiative.milestones || []} indicatorWidth={16} indicatorHeight={2} />

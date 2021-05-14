@@ -11,7 +11,7 @@ import { RecordOptions } from "../shared/record-options";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
-import * as moment from "moment";
+import moment from "moment";
 
 interface IQuarterlyGoalCardProps {
   quarterlyGoal: QuarterlyGoalType;
@@ -36,8 +36,21 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
 
   const { companyStore } = useMst();
   const { currentFiscalYear, currentFiscalQuarter } = companyStore.company
-  const { warningRed, fadedRed, cautionYellow, fadedYellow, finePine, fadedGreen, grey40, grey20, grey80, grey100, white, primary100 } = baseTheme.colors;
-  const defaultOptionsColor = goalCardType == "child" ? grey20 : white;
+  const {
+    warningRed,
+    fadedRed,
+    cautionYellow,
+    fadedYellow,
+    finePine,
+    fadedGreen,
+    grey40,
+    grey20,
+    grey80,
+    grey100,
+    white,
+    primary100,
+  } = baseTheme.colors;
+  const defaultOptionsColor = white;
   const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
 
   console.log(quarterlyGoal)
@@ -124,7 +137,7 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
           setShowOptions(grey80)
         }}
         onMouseLeave={e => {
-          setShowOptions(() => goalCardType == "parent" ? white : grey20)
+          setShowOptions(defaultOptionsColor)
         }}
       >
         <StatusBlockColorIndicator milestones={quarterlyGoal.milestones || []} indicatorWidth={16} indicatorHeight={2} />
