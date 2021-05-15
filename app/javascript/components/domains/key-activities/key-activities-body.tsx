@@ -16,13 +16,14 @@ interface IKeyActivitiesBodyProps {
   showAllKeyActivities: boolean;
   borderLeft?: string;
   disableDrag?: boolean;
+  fromMeeting?: boolean;
 }
 
 export const KeyActivitiesBody = observer(
   (props: IKeyActivitiesBodyProps): JSX.Element => {
     const { keyActivityStore, sessionStore } = useMst();
     const { t } = useTranslation();
-    const { showAllKeyActivities, borderLeft } = props;
+    const { showAllKeyActivities, borderLeft, fromMeeting } = props;
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
     useEffect(() => {
@@ -146,6 +147,7 @@ export const KeyActivitiesBody = observer(
             <KeyActivitiesContainer
               ref={provided.innerRef}
               isDraggingOver={snapshot.isDraggingOver}
+              meeting={fromMeeting}
             >
               {renderKeyActivitiesList()}
               {provided.placeholder}
@@ -196,9 +198,14 @@ const AddNewKeyActivityContainer = styled.div`
   }
 `;
 
+type KeyActivitiesContainerType = {
+  isDraggingOver?: any;
+  meeting?: any;
+};
+
 const KeyActivitiesContainer = styled.div<KeyActivitiesContainerType>`
   background-color: ${props =>
-    props.isDraggingOver ? props.theme.colors.backgroundBlue : "white"};
+    props.isDraggingOver ? props.theme.colors.backgroundBlue : !props.meeting && "white"};
   overflow-y: auto;
   height: 260px;
 `;
@@ -207,10 +214,6 @@ const KeyActivityContainer = styled.div<KeyActivityContainerType>`
   border-bottom: ${props => props.borderBottom};
   margin-right: ${props => (props.borderBottom ? "8px" : "")};
 `;
-
-type KeyActivitiesContainerType = {
-  isDraggingOver?: any;
-};
 
 type KeyActivityContainerType = {
   borderBottom?: string;

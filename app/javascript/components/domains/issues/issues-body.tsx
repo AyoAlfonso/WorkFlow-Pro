@@ -105,7 +105,7 @@ export const IssuesBody = observer(
         </FilterContainer>
         <Droppable droppableId={"issues-container"} type={"issue"}>
           {(provided, snapshot) => (
-            <IssuesBodyContainer>
+            <IssuesBodyContainer meeting={meetingId}>
               <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
                 <AddNewIssuePlus>
                   <Icon icon={"Plus"} size={16} />
@@ -114,7 +114,11 @@ export const IssuesBody = observer(
                   {`Add a ${company.displayFormat == "Forum" ? "Topic" : "Issue"}`}
                 </AddNewIssueText>
               </AddNewIssueContainer>
-              <IssuesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
+              <IssuesContainer
+                ref={provided.innerRef}
+                isDraggingOver={snapshot.isDraggingOver}
+                meeting={meetingId}
+              >
                 <List>{renderIssuesList()}</List>
                 {provided.placeholder}
               </IssuesContainer>
@@ -156,28 +160,34 @@ const AddNewIssueContainer = styled.div`
   }
 `;
 
-type TIssuesContainerType = {
+type IssuesContainerType = {
   isDraggingOver?: any;
+  meeting?: any;
 };
 
-const IssuesContainer = styled.div<TIssuesContainerType>`
+const IssuesContainer = styled.div<IssuesContainerType>`
   overflow-y: auto;
   margin-bottom: 8px;
   height: 260px;
   overflow-x: hidden;
   padding-right: 5px;
   background-color: ${props =>
-    props.isDraggingOver ? props.theme.colors.backgroundBlue : "white"};
+    props.isDraggingOver ? props.theme.colors.backgroundBlue : !props.meeting && "white"};
 `;
 
 const IssueContainer = styled.div``;
 
-export const IssuesBodyContainer = styled(HomeContainerBorders)`
+type IssuesBodyContainerProps = {
+  meeting?: any;
+};
+
+export const IssuesBodyContainer = styled(HomeContainerBorders)<IssuesBodyContainerProps>`
   display: flex;
   flex-direction: column;
   width: 100%;
   min-width: 224px;
   margin-right: 20px;
+  box-shadow: ${props => props.meeting && "none"};
 `;
 
 export const FilterContainer = styled.div`

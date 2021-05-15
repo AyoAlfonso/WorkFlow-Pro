@@ -105,7 +105,7 @@ export const TeamIssuesBody = observer(
             />
           </FilterContainer>
         )}
-        <IssuesBodyContainer>
+        <IssuesBodyContainer meeting={meetingId}>
           <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
             <AddNewIssuePlus>
               <Icon icon={"Plus"} size={16} />
