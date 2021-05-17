@@ -188,6 +188,7 @@ export const IssuesBodyContainer = styled(HomeContainerBorders)<IssuesBodyContai
   min-width: 224px;
   margin-right: 20px;
   box-shadow: ${props => props.meeting && "none"};
+  height: inherit;
 `;
 
 export const FilterContainer = styled.div`
