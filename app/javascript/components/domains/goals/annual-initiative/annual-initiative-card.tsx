@@ -198,19 +198,18 @@ type StyledTextProps = {
 
 const StyledText = styled(Text) <StyledTextProps>`
   padding-left: 16px;
-  padding-right: 16px;
   white-space: normal;
   font-weight: 1000;
-  font-size: 14px;
-  width: 160px;
+  font-size: 16px;
+  width: 190px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  color: ${props => props.closedInitiative ? props.theme.colors.black : props.theme.colors.greyActive};
+  color: ${props => props.closedInitiative ? props.theme.colors.greyActive : props.theme.colors.black};
   &:hover {
     cursor: pointer;
-    color: #34353a;
+    color: ${props => props.theme.colors.greyActive};
     font-weight: bold;
     text-decoration: underline;
   }

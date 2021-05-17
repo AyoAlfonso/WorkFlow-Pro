@@ -139,7 +139,7 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
           setShowOptions(defaultOptionsColor)
         }}
       >
-        <StatusBlockColorIndicator milestones={quarterlyGoal.milestones || []} indicatorWidth={16} indicatorHeight={2} />
+        <StatusBlockColorIndicator milestones={quarterlyGoal.milestones || []} indicatorWidth={14} indicatorHeight={2} marginTop={4}/>
 
         <RowContainer
           mt={0}

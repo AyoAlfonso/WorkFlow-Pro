@@ -24,21 +24,6 @@ interface ITitleContainerProps {
   setShowInitiatives: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const StyledSwitch = withStyles({
-  switchBase: {
-    "&$checked": {
-      color: baseTheme.colors.primary100,
-      "& + $track": {
-        backgroundColor: baseTheme.colors.primary40,
-        opacity: 1,
-      },
-    },
-  },
-  track: {},
-  checked: {},
-  focusVisible: {},
-})(Switch);
-
 const StyledLabel = withStyles({
   label: {
     fontFamily: "Lato",
@@ -204,9 +189,9 @@ const FilterOptionContainer = styled.div<FilterOptionContainerType>`
   border-bottom: ${props => props.underline && `4px solid ${props.theme.colors.primary100}`};
   padding-left: 4px;
   padding-right: 4px;
+  padding-bottom: 4px;
   margin-left: 4px;
   margin-right: 4px;
-  border-radius: 0px 0px 2px 2px;
 `;
 
 const ToggleContainer = styled.div`

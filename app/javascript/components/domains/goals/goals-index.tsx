@@ -182,7 +182,7 @@ export const GoalsIndex = observer(
             goalsFilter={companyGoalsFilter}
             setGoalsFilter={setCompanyGoalsFilter}
             largeHomeTitle={true}
-            title={"Company"}
+            title={companyStore.company.name}
             handleToggleChange={toggleCompanyPlanning}
             toggleChecked={companyPlanning}
             showInitiatives={showCompanyInitiatives}
@@ -210,7 +210,7 @@ export const GoalsIndex = observer(
             goalsFilter={personalGoalsFilter}
             setGoalsFilter={setPersonalGoalsFilter}
             largeHomeTitle={true}
-            title={"Personal"}
+            title={sessionStore.profile.firstName}
             handleToggleChange={togglePersonalPlanning}
             toggleChecked={personalPlanning}
             showInitiatives={showPersonalInitiatives}
@@ -316,9 +316,7 @@ const StyledModal = Modal.styled`
 `;
 
 const CreateAnnualInitiativeContainer = styled.div`
-  margin-top: 16px;
   margin-left: 8px;
-  width: 20%;
 `;
 
 const CompanyInitiativesContainer = styled.div``;

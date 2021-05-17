@@ -130,7 +130,7 @@ export const SubInitiativeGoalCard = (props: ISubInitiativeCardProps): JSX.Eleme
           setShowOptions(defaultOptionsColor)
         }}
       >
-        <StatusBlockColorIndicator milestones={subInitiative.milestones || []} indicatorWidth={16} indicatorHeight={2} />
+        <StatusBlockColorIndicator milestones={subInitiative.milestones || []} indicatorWidth={14} indicatorHeight={2} marginTop={4} />
 
         <RowContainer
           mt={0}
@@ -266,10 +266,4 @@ const BadgeContainer = styled.div`
   justify-content: flex-end;
   margin-right: 16px;
   align-items: center; 
-`;
-
-const MilestoneCountContainer = styled.div`
-  font-size: 9px;
-  color: ${props => props.theme.colors.grey100};
-  margin-right: 5px;
 `;

@@ -118,7 +118,7 @@ export const AnnualInitiativeCardExpanded = observer(
         showEditButton
       ) {
         return (
-          <CreateGoalContainer>
+          <CreateGoalContainer show={createQuarterlyGoalArea}>
             <CreateGoalSection
               placeholder={t("quarterlyGoal.enterTitle", { title: quarterlyGoalTitle })}
               addButtonText={`${t("quarterlyGoal.add", { title: quarterlyGoalTitle })} (Q${
@@ -252,8 +252,11 @@ const ShowInitiativeBar = styled.div`
   font-weight: bold;
 `;
 
-const CreateGoalContainer = styled.div`
+type CreateGoalContainerProps = {
+  show: boolean;
+}
+const CreateGoalContainer = styled.div<CreateGoalContainerProps>`
   margin-top: 16px;
-  margin-left: 16px;
+  ${props => props.show ? "": "margin-left: 16px;"}
   margin-bottom: 16px;
 `;
