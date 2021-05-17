@@ -83,4 +83,6 @@ const KeyActivitiesListContainer = styled.div`
 
 const KeyActivitiesListStyleContainer = styled.div`
   margin-top: 16px;
+  height: inherit;
+  overflow-y: auto;
 `;
