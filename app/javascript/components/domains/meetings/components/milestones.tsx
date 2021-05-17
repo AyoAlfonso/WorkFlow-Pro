@@ -9,8 +9,12 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { ColumnContainerParent, ColumnContainer } from "~/components/shared/styles/row-style";
 
+interface IMilestoneProps {
+  meetingType?: string;
+}
+
 export const Milestones = observer(
-  (): JSX.Element => {
+  ({ meetingType }: IMilestoneProps): JSX.Element => {
     const { milestoneStore } = useMst();
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -43,7 +47,11 @@ export const Milestones = observer(
     return (
       <ColumnContainerParent>
         <ColumnContainer>
-          <HomeKeyActivities todayOnly={true} width={"100%"} />
+          {meetingType == "personal_weekly" ? (
+            <HomeKeyActivities weeklyOnly={true} width={"100%"} />
+          ) : (
+            <HomeKeyActivities todayOnly={true} width={"100%"} />
+          )}
         </ColumnContainer>
         <ColumnContainer>{renderWeeklyMilestones()}</ColumnContainer>
       </ColumnContainerParent>
