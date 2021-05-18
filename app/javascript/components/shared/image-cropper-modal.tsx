@@ -23,10 +23,14 @@ export const ImageCropperModal = ({
   setModalOpen,
   headerText,
 }: IImageCropperModalProps): JSX.Element => {
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  type cropCoordinates = {
+    x: number;
+    y: number;
+  }
+  const [crop, setCrop] = useState<cropCoordinates>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const { t } = useTranslation();
-  const [croppedImage, setCroppedImage] = useState(null);
+  const [croppedImage, setCroppedImage] = useState<any>(null);
 
   const onCropComplete = useCallback(
     async (croppedArea, croppedAreaPixels) => {
@@ -37,7 +41,7 @@ export const ImageCropperModal = ({
         });
 
         setCroppedImage(newCroppedImage);
-      } catch (e) {}
+      } catch (e) { }
     },
     [image],
   );
@@ -64,31 +68,34 @@ export const ImageCropperModal = ({
         />
       </Container>
       <ButtonContainer>
-       <Button
+        <StyledButton
           small
           variant={"redOutline"}
           m={1}
-          style={{ width: "auto", display: "inline-block" }}
           onClick={() => setModalOpen(!modalOpen)}
-          >
+        >
           {t("general.cancel")}
-        </Button>
-        <Button
+        </StyledButton>
+        <StyledButton
           small
           variant={"primary"}
           m={1}
-          style={{ width: "auto", display: "inline-block" }}
           onClick={() => {
             uploadCroppedImage(croppedImage);
             setModalOpen(!modalOpen);
           }}
         >
           {t("general.save")}
-        </Button>
-     </ButtonContainer>
+        </StyledButton>
+      </ButtonContainer>
     </ModalWithHeader>
   );
 }
+
+const StyledButton = styled(Button)`
+  width: auto;
+  display: inline-block;
+`
 
 const Container = styled.div`
   height: 30rem;
