@@ -5,10 +5,10 @@ import { useMst } from "../../../setup/root";
 import { Loading } from "../../shared/loading";
 import { Flex, Box } from "rebass";
 import { Text } from "~/components/shared/text";
+import { Icon } from "~/components/shared/icon";
 import { useTranslation } from "react-i18next";
 import { HomeContainerBorders } from "../home/shared-components";
 import { EnlargedHomeTitle } from "./shared/enlarged-home-title";
-import { Icon } from "~/components/shared";
 
 interface ICoreFourValuesProps {
   showCoreFour?: boolean;
@@ -110,13 +110,20 @@ const CoreFourValues = observer(
   },
 );
 
+export const CoreFourOnly = (): JSX.Element => (
+  <div>
+    <CoreFourValues />
+  </div>
+);
+
+
 const Container = styled.div`
   margin-bottom: 32px;
 `;
 
 const TitleContainer = styled.div`
   display: flex;
-`;
+`
 
 const CoreFourHeaderText = styled(Text)`
   margin-top: 16px;
@@ -132,16 +139,16 @@ const CoreFourTitle = styled(EnlargedHomeTitle)`
   margin-bottom: 16px;
 `;
 
-export const CoreFourOnly = (): JSX.Element => (
-  <div>
-    <CoreFourValues />
-  </div>
-);
+const CoreFourHeader = styled.div`
+  display: flex;
+  margin-top: -32px;
+`;
 
 const HideButtonContainer = styled.div`
   display: flex;
   margin-left: auto;
   margin-top: 32px;
+  margin-bottom: 16px;
   &: hover {
     cursor: pointer;
   }
@@ -165,9 +172,4 @@ const HideIcon = styled(Icon)`
 const ShowIcon = styled(Icon)`
   -webkit-transform: rotate(-90deg);
   transform: rotate(-90deg);
-`;
-
-const CoreFourHeader = styled.div`
-  display: flex;
-  margin-top: -32px;
 `;

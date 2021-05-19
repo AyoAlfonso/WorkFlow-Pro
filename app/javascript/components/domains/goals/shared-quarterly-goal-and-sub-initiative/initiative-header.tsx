@@ -38,9 +38,7 @@ export const InitiativeHeader = ({
   goalYearString,
 }: IInitiativeHeaderProps): JSX.Element => {
   const { quarterlyGoalStore, subInitiativeStore } = useMst();
-
   const { t } = useTranslation();
-
   const descriptionRef = useRef(null);
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
 
