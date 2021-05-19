@@ -1,5 +1,7 @@
 import * as React from "react";
+import { useState } from "react";
 import * as R from "ramda";
+import { observer } from "mobx-react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -13,107 +15,149 @@ import { AccordionDetails } from "~/components/shared/accordion-components";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { showToast } from "~/utils/toast-message";
 
+import { todaysDateFull } from "~/lib/date-helpers";
+import { DailyRecordPicker } from "~/components/shared/daily-record-picker";
+
 interface IJournalBodyProps {
   setQuestionnaireVariant: any;
 }
 
-export const JournalBody = ({ setQuestionnaireVariant }: IJournalBodyProps): JSX.Element => {
-  const { sessionStore, meetingStore } = useMst();
-  const history = useHistory();
+export const JournalBody = observer(
+  ({ setQuestionnaireVariant }: IJournalBodyProps): JSX.Element => {
+    const { sessionStore, meetingStore } = useMst();
+    const { loading } = sessionStore;
+    const history = useHistory();
 
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  const pynBotGreeting = t("journals.pynBotGreeting", { userName: sessionStore.profile.firstName });
+    const [showCalendar, setShowCalendar] = useState<boolean>(false);
+    const [selectedDateFilter, setSelectedDateFilter] = useState<string>(todaysDateFull);
 
-  const defaultJournalButtonProps = {
-    width: "90%",
-    height: "48px",
-    bg: "white",
-    mt: "20px",
-    mx: "16px",
-    pl: "15px",
-    iconSize: 28,
-    shadow: true,
-  };
+    const pynBotGreeting = t("journals.pynBotGreeting", {
+      userName: sessionStore.profile.firstName,
+    });
 
-  return (
-    <AccordionDetailsContainer>
-      <ButtonContainer>
-        <PynBotSpeechContainer>
-          <PynBotContainer>
-            <PynBotIconContainer>
-              <Icon icon={"PynBot"} iconColor={"primary80"} size={"42px"} width={"90%"} />
-            </PynBotIconContainer>
-            <TextNoMargin fontSize={"12px"} fontWeight={600}>
-              PynBot
-            </TextNoMargin>
-          </PynBotContainer>
-          <SpeechBubble>{pynBotGreeting}</SpeechBubble>
-        </PynBotSpeechContainer>
-        {/*}
-        <IconButton
-          {...defaultJournalButtonProps}
-          iconName={"AM-Check-in"}
-          iconColor={"cautionYellow"}
-          text={t("journals.createMyDay")}
-          onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay)}
-          disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
-        /> 
-        */}
-        <IconButton
-          {...defaultJournalButtonProps}
-          iconName={"AM-Check-in"}
-          iconColor={"cautionYellow"}
-          text={t("journals.createMyDay")}
-          onClick={() =>
-            meetingStore.createPersonalDailyMeeting().then(({ meeting }) => {
-              if (!R.isNil(meeting)) {
-                history.push(`/personal_planning/${meeting.id}`);
-              } else {
-                showToast("Failed to start planning.", ToastMessageConstants.ERROR);
-              }
-            })
-          }
-          disabled={R.path(["profile", "currentDailyLog", "createMyDay"], sessionStore)}
+    const defaultJournalButtonProps = {
+      width: "90%",
+      height: "48px",
+      bg: "white",
+      mt: "20px",
+      mx: "16px",
+      pl: "15px",
+      iconSize: 28,
+      shadow: true,
+    };
+
+    const dailyLogToDisplay =
+      sessionStore?.selectedDailyLog || sessionStore.profile?.currentDailyLog;
+
+    const getDailyLogByDate = filter => {
+      setSelectedDateFilter(filter);
+      if (todaysDateFull == filter) {
+        sessionStore.getSelectedDailyLog(null);
+      } else {
+        sessionStore.getSelectedDailyLog(filter);
+      }
+    };
+
+    return (
+      <AccordionDetailsContainer>
+        <DailyRecordPicker
+          showCalendar={showCalendar}
+          setShowCalendar={setShowCalendar}
+          selectedDateFilter={selectedDateFilter}
+          setSelectedDateFilter={setSelectedDateFilter}
+          retrieveData={getDailyLogByDate}
         />
-        {/* <IconButton
+        <ButtonContainer>
+          <PynBotSpeechContainer>
+            <PynBotContainer>
+              <PynBotIconContainer>
+                <Icon icon={"PynBot"} iconColor={"primary80"} size={"42px"} width={"90%"} />
+              </PynBotIconContainer>
+              <TextNoMargin fontSize={"12px"} fontWeight={600}>
+                PynBot
+              </TextNoMargin>
+            </PynBotContainer>
+            <SpeechBubble>{pynBotGreeting}</SpeechBubble>
+          </PynBotSpeechContainer>
+          {/* <IconButton
           {...defaultJournalButtonProps}
-          iconName={"Check-in"}
-          iconColor={"successGreen"}
-          text={"Coming soon"}
-          textColor={"grey20"}
-          fontStyle={"italic"}
-          onClick={() => {}}
-          disabled={true}
+          iconName={"AM-Check-in"}
+          iconColor={"cautionYellow"}
+          text={t("journals.createMyDay")}
+          onClick={() => {
+            if (todaysDateFull !== selectedDateFilter) {
+              meetingStore.createPersonalDailyMeeting().then(({ meeting }) => {
+                if (!R.isNil(meeting)) {
+                  history.push(`/personal_planning/${meeting.id}`);
+                } else {
+                  showToast("Failed to start planning.", ToastMessageConstants.ERROR);
+                }
+              });
+            }
+          }}
+          disabled={todaysDateFull !== selectedDateFilter || dailyLogToDisplay?.createMyDay}
         /> */}
-        <IconButton
-          {...defaultJournalButtonProps}
-          iconName={"PM-Check-in"}
-          iconColor={"primary40"}
-          text={t("journals.eveningReflection")}
-          onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.eveningReflection)}
-          disabled={R.path(["profile", "currentDailyLog", "eveningReflection"], sessionStore)}
-        />
-        <IconButton
-          {...defaultJournalButtonProps}
-          iconName={"Weekly"}
-          iconColor={"primaryActive"}
-          text={t("journals.weeklyReflectionTitle")}
-          onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.weeklyReflection)}
-          disabled={R.path(["profile", "currentDailyLog", "weeklyReflection"], sessionStore)}
-        />
-        <IconButton
-          {...defaultJournalButtonProps}
-          iconName={"EoM"}
-          iconColor={"fuschiaBlue"}
-          text={t("journals.monthlyReflection")}
-          onClick={() => setQuestionnaireVariant(QuestionnaireTypeConstants.monthlyReflection)}
-        />
-        <FooterText color={"greyActive"}>{t("journals.footer")}</FooterText>
-      </ButtonContainer>
-    </AccordionDetailsContainer>
-  );
-};
+          <IconButton
+            {...defaultJournalButtonProps}
+            iconName={"AM-Check-in"}
+            iconColor={"cautionYellow"}
+            text={t("journals.createMyDay")}
+            onClick={() =>
+              setQuestionnaireVariant(QuestionnaireTypeConstants.createMyDay, selectedDateFilter)
+            }
+            disabled={loading || dailyLogToDisplay?.createMyDay}
+          />
+          <IconButton
+            {...defaultJournalButtonProps}
+            iconName={"PM-Check-in"}
+            iconColor={"primary40"}
+            text={t("journals.eveningReflection")}
+            onClick={() =>
+              setQuestionnaireVariant(
+                QuestionnaireTypeConstants.eveningReflection,
+                selectedDateFilter,
+              )
+            }
+            disabled={loading || dailyLogToDisplay?.eveningReflection}
+          />
+          {todaysDateFull == selectedDateFilter && (
+            <IconButton
+              {...defaultJournalButtonProps}
+              iconName={"Weekly"}
+              iconColor={"primaryActive"}
+              text={t("journals.weeklyReflectionTitle")}
+              onClick={() =>
+                setQuestionnaireVariant(
+                  QuestionnaireTypeConstants.weeklyReflection,
+                  selectedDateFilter,
+                )
+              }
+              disabled={loading || dailyLogToDisplay?.weeklyReflection}
+            />
+          )}
+          {todaysDateFull == selectedDateFilter && (
+            <IconButton
+              {...defaultJournalButtonProps}
+              iconName={"EoM"}
+              iconColor={"fuschiaBlue"}
+              text={t("journals.monthlyReflection")}
+              onClick={() =>
+                setQuestionnaireVariant(
+                  QuestionnaireTypeConstants.monthlyReflection,
+                  selectedDateFilter,
+                )
+              }
+              disabled={loading}
+            />
+          )}
+          <FooterText color={"greyActive"}>{t("journals.footer")}</FooterText>
+        </ButtonContainer>
+      </AccordionDetailsContainer>
+    );
+  },
+);
 
 const AccordionDetailsContainer = styled(AccordionDetails)`
   border: 0px solid white;

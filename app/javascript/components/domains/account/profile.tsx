@@ -7,6 +7,7 @@ import { Avatar } from "~/components/shared/avatar";
 import { ImageCropperModal } from "~/components/shared/image-cropper-modal";
 import { useTranslation } from "react-i18next";
 import { FileInput } from "./file-input";
+import { AvatarModal } from "./avatarModal";
 import { observer } from "mobx-react";
 
 import {
@@ -57,6 +58,7 @@ export const AccountProfile = observer(
       const imageDataUrl = await readFile(files[0])
       pickAvatarImageblob(imageDataUrl)
     }
+
     const deleteAvatar = async () => {
       await sessionStore.deleteAvatar();
     };

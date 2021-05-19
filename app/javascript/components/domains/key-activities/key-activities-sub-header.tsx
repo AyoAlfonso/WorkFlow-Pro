@@ -49,14 +49,18 @@ export const KeyActivitiesSubHeader = observer(
           }
         });
       } else {
-        setQuestionnaireVariant(QuestionnaireTypeConstants.weeklyReflection);
+        onReflectClicked();
       }
     };
 
     const onReflectClicked = () => {
-      if (setQuestionnaireVariant) {
-        setQuestionnaireVariant(QuestionnaireTypeConstants.eveningReflection);
-      }
+      meetingStore.createPersonalWeeklyMeeting().then(({ meeting }) => {
+        if (!R.isNil(meeting)) {
+          history.push(`/personal_planning/${meeting.id}`);
+        } else {
+          showToast("Failed to start planning.", ToastMessageConstants.ERROR);
+        }
+      });
     };
 
     const renderPlanAndReflect = (): JSX.Element => {

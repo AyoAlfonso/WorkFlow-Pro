@@ -8,9 +8,10 @@ import { TeamKeyActivitiesBody } from "./shared/team-key-activities-body";
 import { KeyActivitiesBody } from "../key-activities/key-activities-body";
 import { Notes } from "./components/notes";
 import { MeetingAgenda } from "./components/meeting-agenda";
+import { IssuesBody } from "../issues/issues-body";
 
 interface IMeetingSideOptionsProps {
-  teamId: string | number;
+  teamId?: string | number;
   meeting: any;
 }
 
@@ -18,6 +19,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
   const { t } = useTranslation();
 
   const [selectedTab, setSelectedTab] = useState<string>("agenda");
+  const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
 
   const renderOption = (value: string): JSX.Element => {
     return (
@@ -34,11 +36,17 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
   const renderDisplayContent = (): JSX.Element => {
     switch (selectedTab) {
       case "issues":
-        return (
+        return teamId ? (
           <TeamIssuesBody
             showOpenIssues={true}
             showFilters={false}
             teamId={teamId}
+            meetingId={meeting.id}
+          />
+        ) : (
+          <IssuesBody
+            showOpenIssues={showOpenIssues}
+            setShowOpenIssues={setShowOpenIssues}
             meetingId={meeting.id}
           />
         );
@@ -61,7 +69,12 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
     return teamId ? (
       <TeamKeyActivitiesBody meeting={meeting ? true : false} />
     ) : (
-      <KeyActivitiesBody showAllKeyActivities={false} disableDrag={true} borderLeft={"none"} />
+      <KeyActivitiesBody
+        showAllKeyActivities={false}
+        disableDrag={true}
+        borderLeft={"none"}
+        fromMeeting={true}
+      />
     );
   };
 

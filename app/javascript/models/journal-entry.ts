@@ -11,6 +11,7 @@ export const JournalEntryModel = types
     title: types.string,
     preview: types.string,
     createdAt: types.string,
+    loggedAt: types.string,
   })
   .views(self => ({}))
   .actions(self => ({}));
