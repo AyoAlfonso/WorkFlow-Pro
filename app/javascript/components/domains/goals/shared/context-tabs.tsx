@@ -79,6 +79,8 @@ export const ContextTabs = observer(
         annualInitiativeStore.update();
       } else if (type == "quarterlyGoal") {
         quarterlyGoalStore.update();
+      } else if (type == "subInitiative") {
+        subInitiativeStore.update();
       }
     };
 

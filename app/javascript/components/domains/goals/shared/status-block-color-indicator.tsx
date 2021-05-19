@@ -1,5 +1,7 @@
 import * as React from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
+import { observer } from "mobx-react";
 import { baseTheme } from "../../../../themes";
 import { MilestoneType } from "~/types/milestone";
 
@@ -11,7 +13,7 @@ interface IStatusBlockColorIndicatorProps {
   marginTop?: number;
 }
 
-export const StatusBlockColorIndicator = (props: IStatusBlockColorIndicatorProps): JSX.Element => {
+export const StatusBlockColorIndicator = observer((props: IStatusBlockColorIndicatorProps): JSX.Element => {
   const { milestones, indicatorWidth, indicatorHeight, marginBottom, marginTop } = props;
   const renderStatusBlocks = () => {
     return milestones.map((milestone, index) => {
@@ -42,8 +44,12 @@ export const StatusBlockColorIndicator = (props: IStatusBlockColorIndicatorProps
     });
   };
 
-  return <Container marginBottom={marginBottom} marginTop={marginTop}>{renderStatusBlocks()}</Container>;
-};
+  return (
+    <Container marginBottom={marginBottom} marginTop={marginTop}>
+      {renderStatusBlocks()}
+    </Container>
+  );
+});
 
 type ContainerType = {
   marginBottom?: number;
@@ -55,7 +61,7 @@ const Container = styled.div<ContainerType>`
   padding-left: 17px;
   padding-right: 17px;
   margin-top: ${props => props.marginTop || 0}px;
-  margin-bottom: ${props => props.marginBottom || 0 }px;
+  margin-bottom: ${props => props.marginBottom || 0}px;
 `;
 
 type StatusBlockType = {

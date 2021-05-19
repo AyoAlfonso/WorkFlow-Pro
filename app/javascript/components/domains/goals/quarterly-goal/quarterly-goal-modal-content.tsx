@@ -50,6 +50,7 @@ export const QuarterlyGoalModalContent = observer(
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
+    const itemType = "quarterlyGoal";
 
     const { t } = useTranslation();
 
@@ -129,7 +130,7 @@ export const QuarterlyGoalModalContent = observer(
         <QuarterlyGoalBodyContainer>
           <SectionContainer>
             <InitiativeHeader
-              itemType={"quarterlyGoal"}
+              itemType={itemType}
               item={quarterlyGoal}
               editable={editable}
               setAnnualInitiativeId={setAnnualInitiativeId}
@@ -142,7 +143,7 @@ export const QuarterlyGoalModalContent = observer(
             />
           </SectionContainer>
           <SectionContainer>
-            <Context itemType={"quarterlyGoal"} item={quarterlyGoal} />
+            <Context itemType={itemType} item={quarterlyGoal} />
           </SectionContainer>
           <SectionContainer>
             {renderSubInitiative()}
@@ -169,6 +170,11 @@ export const QuarterlyGoalModalContent = observer(
                 showInactiveMilestones={showInactiveMilestones}
                 allMilestones={allMilestones}
                 activeMilestones={activeMilestones}
+                // onClick= {() =>{
+                //   quarterlyGoalStore.getSubInitiative();
+                // }
+
+                // }
               />
             </MilestonesHeaderContainer>
 
@@ -177,10 +183,10 @@ export const QuarterlyGoalModalContent = observer(
               allMilestones={allMilestones}
               activeMilestones={activeMilestones}
               showInactiveMilestones={showInactiveMilestones}
-              itemType={"quarterlyGoal"}
+              itemType={itemType}
             />
             {showCreateMilestones && editable && allMilestones.length == 0 && (
-              <MilestoneCreateButton itemType={"quarterlyGoal"} item={quarterlyGoal} />
+              <MilestoneCreateButton itemType={itemType} item={quarterlyGoal} />
             )}
           </SectionContainer>
         </QuarterlyGoalBodyContainer>
