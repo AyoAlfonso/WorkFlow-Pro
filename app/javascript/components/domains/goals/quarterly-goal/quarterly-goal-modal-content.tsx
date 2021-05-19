@@ -175,8 +175,8 @@ export const QuarterlyGoalModalContent = observer(
               <ShowMilestonesButton
                 setShowInactiveMilestones={setShowInactiveMilestones}
                 showInactiveMilestones={showInactiveMilestones}
-                allMilestones={allMilestones}
-                activeMilestones={activeMilestones}
+                // allMilestones={allMilestones}
+                // activeMilestones={activeMilestones}
               />
             </MilestonesHeaderContainer>
 

@@ -148,11 +148,6 @@ export const AnnualInitiativeModalContent = observer(
          
         <HeaderContainer>
           <TitleContainer>
-            {annualInitiative.closedAt && (
-              <InitiativeClosedContainer>
-                {t("annualInitiative.closedItem")}
-              </InitiativeClosedContainer>
-            )}
             <StyledContentEditable
               innerRef={descriptionRef}
               html={annualInitiative.description}
@@ -426,6 +421,7 @@ const SubHeaderTextContainer = styled.div`
   position: absolute;
   margin-bottom: 24px;
 `;
+
 // TODOIST: color to constant
 const ClosedStatusBannerContainer = styled.div`
 background-image: repeating-linear-gradient(150deg, #feecea, #feecea 20px, #f2e2e4 20px, #f2e2e4 25px);
@@ -440,3 +436,7 @@ justify-content: space-between;
 display: flex;
 height: 20px;
 `
+
+const GoalDropdownContainer = styled.div`
+  margin-left: -50px;
+`;
