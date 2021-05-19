@@ -173,6 +173,7 @@ type SubInitiativeContainerProps = {
 const EmptyStateContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   margin: 0px auto;
   margin-top: 20px;
@@ -181,7 +182,8 @@ const EmptyStateContainer = styled.div`
   min-width: inherit;
   white-space: normal;
   p {
-    margin: 4px 12px;
+    margin-top: 4px;
+    margin-bottom: 4px;
   }
 `
 const EmptyStateHeader = styled.p`
@@ -192,6 +194,7 @@ const EmptyStateHeader = styled.p`
 
 const EmptyStateText = styled.p`
   font-size: 12px;
+  width: 240px;
   color: ${props => props.theme.colors.greyActive};
 `
 
