@@ -43,6 +43,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
   def close_goal
     @quarterly_goal.update!(closed_at: Date.today)
+    @quarterly_goal.sub_initiatives.update_all(closed_at: Date.today)
     render 'api/quarterly_goals/update'
   end
 

@@ -46,7 +46,7 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
         case "WeeklyReflection":
           return <WeeklyReflection />;
         case "Milestones":
-          return <Milestones />;
+          return <Milestones meetingType={meeting.meetingType} />;
         case "PersonalKeyActivities":
           return <PersonalKeyActivitiesWeekly />;
         case "YesterdayInReview":
