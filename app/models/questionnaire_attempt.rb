@@ -3,6 +3,7 @@ class QuestionnaireAttempt < ApplicationRecord
   belongs_to :user
   belongs_to :questionnaire
   belongs_to :questionnaire_attemptable, polymorphic: true, optional: true
+  attr_accessor :log_date #virtual attribute for questionnaires created later on
 
   serialize :answers, Array
   serialize :steps, Array
@@ -30,10 +31,24 @@ class QuestionnaireAttempt < ApplicationRecord
 
   def save_and_create_journal_entry
     ActiveRecord::Base.transaction do
+      logged_at = Time.current
+      if log_date.present?
+        previous_datetime = self.user.end_of_day_for_user(log_date)
+        self.completed_at = previous_datetime
+        logged_at = previous_datetime
+      end
+
       save!
       parsed_body = questionnaire_attempt_to_text(self.rendered_steps)
-      JournalEntry.create!(generated_from_type: self.class.name, generated_from_id: self.id, body: parsed_body, user_id: self.user_id, title: self.questionnaire.name) if parsed_body.present?
+      if parsed_body.present?
+        JournalEntry.create!(generated_from_type: self.class.name, generated_from_id: self.id, body: parsed_body, user_id: self.user_id, title: self.questionnaire.name, logged_at: logged_at )
+      else
+        true
+      end
     end
     
   end
 end
+
+#user - timezone
+#journal_entry logged_at (UTC) -> date .end of day, but for that timezone

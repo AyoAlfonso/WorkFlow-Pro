@@ -139,36 +139,10 @@ export const TitleContainer = observer(
   },
 );
 
-type ExpandAnnualInitiativesButtonType = {
-  showMinimizedCards: boolean;
-};
-
-const ExpandAnnualInitiativesButton = styled.div<ExpandAnnualInitiativesButtonType>`
-  border-radius: 50px;
-  border: 1px solid #e3e3e3;
-  box-shadow: 0px 3px 6px #f5f5f5;
-  height: 25px;
-  width: 25px;
-  margin-left: 16px;
-  background-color: ${props =>
-    props.showMinimizedCards ? props.theme.colors.white : props.theme.colors.primary100};
-`;
-
 const Container = styled.div`
   display: flex;
   margin-bottom: 16px;
-`;
-
-type IconContainerType = {
-  marginTop?: string;
-};
-
-const IconContainer = styled.div<IconContainerType>`
-  text-align: center;
-  margin-top: ${props => props.marginTop || "6px"};
-  &: hover {
-    cursor: pointer;
-  }
+  position: relative;
 `;
 
 const FilterContainer = styled.div`

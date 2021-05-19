@@ -195,7 +195,7 @@ True value of LynchPyn is in working together with others in your team and compa
     {
       formFields: [
         {
-          label: onboardingDisplayFormat == "Company" ? "Business Name" : "Forum Organization",
+          label: onboardingDisplayFormat == "Company" ? "Business Name" : "Forum Name",
           fieldType: EFieldType.TextField,
           formKeys: ["name"],
           callback: setFormState,

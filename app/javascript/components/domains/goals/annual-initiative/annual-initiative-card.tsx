@@ -49,10 +49,9 @@ export const AnnualInitiativeCard = ({
   const goalYearString = onboarding
     ? `${companyStore.onboardingCompany.currentFiscalYear}`
     : companyStore.company.currentFiscalYear == annualInitiative.fiscalYear
-    ? `FY${annualInitiative.fiscalYear.toString().slice(-2)}`
-    : `FY${annualInitiative.fiscalYear.toString().slice(-2)}/${(annualInitiative.fiscalYear + 1)
-        .toString()
-        .slice(-2)}`;
+    ? `FY${annualInitiative.fiscalYear.toString().slice(-2) - 1}`
+    : `FY${annualInitiative.fiscalYear.toString().slice(-2) -
+        1}/${annualInitiative.fiscalYear.toString().slice(-2)}`;
 
   const renderYearDisplay = () => {
     if (onboarding) {

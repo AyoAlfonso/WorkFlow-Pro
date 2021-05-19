@@ -16,6 +16,7 @@ import { CreateGoalSection } from "./shared/create-goal-section";
 import { useTranslation } from "react-i18next";
 import { GoalsCoreFour } from "./goals-core-four";
 import { SubInitiativeModalContent } from "./sub-initiative/sub-initiaitive-modal-content";
+import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge";
 
 export const GoalsIndex = observer(
   (): JSX.Element => {
@@ -53,9 +54,13 @@ export const GoalsIndex = observer(
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
 
     const { t } = useTranslation();
+    const instanceType = companyStore.company.accessForum ? "forum" : "teams";
 
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
+      if (!companyStore.company) {
+        companyStore.load();
+      }
     }, []);
 
     if (loading || R.isNil(goalStore.companyGoals) || !companyStore.company) {
@@ -130,10 +135,10 @@ export const GoalsIndex = observer(
       const createGoalYearString =
         companyStore.company.currentFiscalYear ==
         companyStore.company.yearForCreatingAnnualInitiatives
-          ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-          : `FY${companyStore.company.currentFiscalYear
-              .toString()
-              .slice(-2)}/${companyStore.company.yearForCreatingAnnualInitiatives
+          ? `FY${(companyStore.company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
+          : `FY${(companyStore.company.currentFiscalYear - 1).toString().slice(-2)}/${(
+              companyStore.company.yearForCreatingAnnualInitiatives - 1
+            )
               .toString()
               .slice(-2)}`;
 
@@ -289,14 +294,13 @@ export const GoalsIndex = observer(
             showCreateMilestones={true}
           />
         </StyledModal>
+        {instanceType === "forum" && <LynchPynBadge />}
       </Container>
     );
   },
 );
 
-const Container = styled.div`
-  margin-top: 30px;
-`;
+const Container = styled.div``;
 
 const InitiativesContainer = styled.div`
   display: -webkit-box;

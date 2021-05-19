@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { Input } from "~/components/shared/input";
 import { useMst } from "~/setup/root";
-import { Heading, Button, Text, Icon } from "~/components/shared";
+import { Heading, Button } from "~/components/shared";
 import {
   emotionA,
   emotionB,
@@ -15,8 +15,8 @@ import {
   emotionE,
 } from "~/components/shared/pulse/pulse-icon";
 import * as moment from "moment";
-import { Calendar } from "react-date-range";
-import { addDays } from "date-fns";
+import { todaysDateFull } from "~/lib/date-helpers";
+import { DailyRecordPicker } from "~/components/shared/daily-record-picker";
 
 export const PulseSelector = observer(
   (): JSX.Element => {
@@ -25,18 +25,13 @@ export const PulseSelector = observer(
     const { t } = useTranslation();
     const userPulse = R.path(["profile", "userPulseForDisplay"], sessionStore);
 
-    const todaysDate = moment().format("YYYY-MM-DD");
-    const yesterdaysDate = moment()
-      .subtract(1, "days")
-      .format("YYYY-MM-DD");
-
     const [showPulseSelector, setShowPulseSelector] = useState<boolean>(false);
-    const [showCalendar, setShowCalendar] = useState<boolean>(false);
     const [todaysEmotion, setTodaysEmotion] = useState<number>(0);
     const [selectedEmotion, setSelectedEmotion] = useState<number>(0);
     const [selectedAdjective, setSelectedAdjective] = useState<string>("");
     const [typedAdjective, setTypedAdjective] = useState<string>("");
-    const [selectedDateFilter, setSelectedDateFilter] = useState<string>(todaysDate);
+    const [showCalendar, setShowCalendar] = useState<boolean>(false);
+    const [selectedDateFilter, setSelectedDateFilter] = useState<string>(todaysDateFull);
 
     const selectorRef = useRef(null);
 
@@ -57,8 +52,8 @@ export const PulseSelector = observer(
 
       const handleClickOutside = event => {
         if (selectorRef.current && !selectorRef.current.contains(event.target)) {
-          getPulseByDate(todaysDate);
-          setSelectedDateFilter(todaysDate);
+          getPulseByDate(todaysDateFull);
+          setSelectedDateFilter(todaysDateFull);
           setShowPulseSelector(false);
         }
       };
@@ -104,32 +99,8 @@ export const PulseSelector = observer(
       }
     };
 
-    const renderDatePickerIcon = () => {
-      const notTodayOrYesterday = !(
-        selectedDateFilter == todaysDate || selectedDateFilter == yesterdaysDate
-      );
-
-      return (
-        <DatePickerContainer>
-          <Icon
-            icon={"Deadline-Calendar"}
-            size={"16px"}
-            iconColor={notTodayOrYesterday ? "primary100" : "grey60"}
-          />
-          <DatePickerText type={"small"} selected={notTodayOrYesterday}>
-            {moment(selectedDateFilter).format("YYYY-MM-DD")}
-          </DatePickerText>
-          <Icon
-            icon={"Chevron-Down"}
-            size={"10px"}
-            iconColor={notTodayOrYesterday ? "primary100" : "grey60"}
-          />
-        </DatePickerContainer>
-      );
-    };
-
     const onPulseSave = () => {
-      if (selectedDateFilter == todaysDate) {
+      if (selectedDateFilter == todaysDateFull) {
         setTodaysEmotion(selectedEmotion);
       }
 
@@ -138,10 +109,10 @@ export const PulseSelector = observer(
           id: userPulse ? userPulse.id : "",
           score: selectedEmotion,
           feeling: selectedAdjective || typedAdjective,
-          completedAt: selectedDateFilter == todaysDate ? moment() : selectedDateFilter,
+          completedAt: selectedDateFilter == todaysDateFull ? moment() : selectedDateFilter,
         })
         .then(() => {
-          setSelectedDateFilter(todaysDate);
+          setSelectedDateFilter(todaysDateFull);
           setShowPulseSelector(false);
         });
     };
@@ -158,54 +129,14 @@ export const PulseSelector = observer(
         </SelectedEmotionContainer>
         {showPulseSelector && (
           <PulseSelectorContainer ref={selectorRef}>
+            <DailyRecordPicker
+              showCalendar={showCalendar}
+              setShowCalendar={setShowCalendar}
+              selectedDateFilter={selectedDateFilter}
+              setSelectedDateFilter={setSelectedDateFilter}
+              retrieveData={getPulseByDate}
+            />
             <ContentsContainer>
-              <FilterContainer>
-                <FilterWrapper>
-                  <DatePickerWrapper onClick={() => setShowCalendar(!showCalendar)}>
-                    {renderDatePickerIcon()}
-                  </DatePickerWrapper>
-
-                  {showCalendar && (
-                    <CalendarContainer>
-                      <Calendar
-                        showDateDisplay={false}
-                        showMonthAndYearPickers={false}
-                        showSelectionPreview={true}
-                        direction={"vertical"}
-                        shownDate={new Date()}
-                        minDate={addDays(new Date(), -14)}
-                        maxDate={new Date()}
-                        scroll={{
-                          enabled: true,
-                          calendarWidth: 320,
-                          monthWidth: 320,
-                        }}
-                        date={moment(selectedDateFilter).toDate()}
-                        onChange={date => {
-                          setShowCalendar(false);
-                          getPulseByDate(moment(date).format("YYYY-MM-DD"));
-                          setSelectedDateFilter(moment(date).format("YYYY-MM-DD"));
-                        }}
-                      />
-                    </CalendarContainer>
-                  )}
-
-                  <FilterText
-                    onClick={() => getPulseByDate(todaysDate)}
-                    selected={selectedDateFilter == todaysDate}
-                    type={"small"}
-                  >
-                    Today
-                  </FilterText>
-                  <FilterText
-                    onClick={() => getPulseByDate(yesterdaysDate)}
-                    selected={selectedDateFilter == yesterdaysDate}
-                    type={"small"}
-                  >
-                    Yesterday
-                  </FilterText>
-                </FilterWrapper>
-              </FilterContainer>
               <FeelingHeader type={"h4"}>
                 How are you feeling, {sessionStore.profile.firstName}?
               </FeelingHeader>
@@ -280,10 +211,6 @@ const PulseSelectorContainer = styled.div`
   margin-left: -250px;
 `;
 
-const FilterContainer = styled.div`
-  display: flex;
-`;
-
 const FeelingHeader = styled(Heading)`
   color: black;
 `;
@@ -336,50 +263,4 @@ const InputAdjectiveContainer = styled.div``;
 
 const SaveButtonContainer = styled.div`
   margin-top: 16px;
-`;
-
-type FilterTextProps = {
-  selected: boolean;
-};
-
-const FilterWrapper = styled.div`
-  margin-left: auto;
-  display: flex;
-`;
-
-const FilterText = styled(Text)<FilterTextProps>`
-  color: ${props => props.selected && props.theme.colors.primary100};
-  margin-left: 8px;
-  margin-top: auto;
-  margin-bottom: auto;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const DatePickerContainer = styled.div`
-  display: flex;
-`;
-
-type DatePickerTextProps = {
-  selected: boolean;
-};
-
-const DatePickerText = styled(Text)<DatePickerTextProps>`
-  color: ${props => (props.selected ? props.theme.colors.primary100 : props.theme.colors.grey60)};
-  margin-left: 8px;
-  margin-right: 4px;
-`;
-
-const DatePickerWrapper = styled.div`
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const CalendarContainer = styled.div`
-  position: fixed;
-  margin-top: 30px;
-  margin-left: -150px;
-  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
 `;

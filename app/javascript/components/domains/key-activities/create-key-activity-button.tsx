@@ -6,15 +6,17 @@ import { useTranslation } from "react-i18next";
 
 interface ICreateKeyActivityButtonProps {
   onButtonClick: any;
+  meeting?: any;
 }
 
 export const CreateKeyActivityButton = ({
   onButtonClick,
+  meeting,
 }: ICreateKeyActivityButtonProps): JSX.Element => {
   const { t } = useTranslation();
 
   return (
-    <Container onClick={onButtonClick}>
+    <Container onClick={onButtonClick} meeting={meeting}>
       <AddNewKeyActivityPlus>
         <Icon icon={"Plus"} size={16} />
       </AddNewKeyActivityPlus>
@@ -23,10 +25,15 @@ export const CreateKeyActivityButton = ({
   );
 };
 
-const Container = styled(HomeContainerBorders)`
+type ContainerProps = {
+  meeting?: any;
+};
+
+const Container = styled(HomeContainerBorders)<ContainerProps>`
   display: flex;
   margin-left: 4px;
   margin-top: 16px;
+  box-shadow: ${props => props.meeting && "none"};
   &: hover {
     cursor: pointer;
   }

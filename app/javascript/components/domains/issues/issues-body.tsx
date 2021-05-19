@@ -13,7 +13,7 @@ import { Loading } from "../../shared";
 import { sortByPosition } from "~/utils/sorting";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { HomeContainerBorders } from "../home/shared-components";
-import { AccordionDetails } from "~/components/shared/accordion-components";
+
 import { List } from "@material-ui/core";
 
 interface IIssuesBodyProps {
@@ -76,7 +76,7 @@ export const IssuesBody = observer(
     };
 
     return (
-      <AccordionDetailsContainer>
+      <>
         <CreateIssueModal
           createIssueModalOpen={createIssueModalOpen}
           setCreateIssueModalOpen={setCreateIssueModalOpen}
@@ -105,7 +105,7 @@ export const IssuesBody = observer(
         </FilterContainer>
         <Droppable droppableId={"issues-container"} type={"issue"}>
           {(provided, snapshot) => (
-            <IssuesBodyContainer>
+            <IssuesBodyContainer meeting={meetingId}>
               <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
                 <AddNewIssuePlus>
                   <Icon icon={"Plus"} size={16} />
@@ -114,23 +114,21 @@ export const IssuesBody = observer(
                   {`Add a ${company.displayFormat == "Forum" ? "Topic" : "Issue"}`}
                 </AddNewIssueText>
               </AddNewIssueContainer>
-              <IssuesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
+              <IssuesContainer
+                ref={provided.innerRef}
+                isDraggingOver={snapshot.isDraggingOver}
+                meeting={meetingId}
+              >
                 <List>{renderIssuesList()}</List>
                 {provided.placeholder}
               </IssuesContainer>
             </IssuesBodyContainer>
           )}
         </Droppable>
-      </AccordionDetailsContainer>
+      </>
     );
   },
 );
-
-const AccordionDetailsContainer = styled(AccordionDetails)`
-  padding: 0px 0px 15px 0px;
-  display: flex;
-  flex-direction: column;
-`;
 
 const AddNewIssuePlus = styled.div`
   margin-top: auto;
@@ -162,28 +160,35 @@ const AddNewIssueContainer = styled.div`
   }
 `;
 
-type TIssuesContainerType = {
+type IssuesContainerType = {
   isDraggingOver?: any;
+  meeting?: any;
 };
 
-const IssuesContainer = styled.div<TIssuesContainerType>`
+const IssuesContainer = styled.div<IssuesContainerType>`
   overflow-y: auto;
   margin-bottom: 8px;
   height: 260px;
   overflow-x: hidden;
   padding-right: 5px;
   background-color: ${props =>
-    props.isDraggingOver ? props.theme.colors.backgroundBlue : "white"};
+    props.isDraggingOver ? props.theme.colors.backgroundBlue : !props.meeting && "white"};
 `;
 
 const IssueContainer = styled.div``;
 
-export const IssuesBodyContainer = styled(HomeContainerBorders)`
+type IssuesBodyContainerProps = {
+  meeting?: any;
+};
+
+export const IssuesBodyContainer = styled(HomeContainerBorders)<IssuesBodyContainerProps>`
   display: flex;
   flex-direction: column;
   width: 100%;
   min-width: 224px;
   margin-right: 20px;
+  box-shadow: ${props => props.meeting && "none"};
+  height: inherit;
 `;
 
 export const FilterContainer = styled.div`

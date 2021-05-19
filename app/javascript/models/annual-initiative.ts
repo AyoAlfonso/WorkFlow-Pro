@@ -49,6 +49,16 @@ export const AnnualInitiativeModel = types
         qg => companyStore.company.currentFiscalQuarter == qg.quarter,
       );
     },
+    get openQuarterlyGoals() {
+      return self.quarterlyGoals.filter(
+        qg => !qg.closedAt
+      )
+    },
+    get closedQuarterlyGoals() {
+      return self.quarterlyGoals.filter(
+        qg => qg.closedAt
+      )
+    }
   }))
   .actions(self => ({}));
 

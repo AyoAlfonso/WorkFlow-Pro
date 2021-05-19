@@ -47,7 +47,6 @@ class Api::MeetingsController < Api::ApplicationController
         params[:meeting_template_id],
         current_user.time_in_user_timezone
       )
-
       # @meeting = incomplete_meetings_for_today.first_or_create(meeting_params.merge({hosted_by: current_user}))
       # authorize @meeting
       # render 'api/meetings/create'
