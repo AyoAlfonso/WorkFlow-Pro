@@ -7,7 +7,8 @@ import { Icon } from "~/components/shared/icon";
 import { observer } from "mobx-react";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
+// import Switch from "@material-ui/core/Switch";
+import Switch from "~/components/shared/switch"
 import { baseTheme } from "~/themes";
 import { withStyles } from "@material-ui/core/styles";
 import { Text } from "~/components/shared/text";
@@ -22,21 +23,6 @@ interface ITitleContainerProps {
   showInitiatives: boolean;
   setShowInitiatives: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
-const StyledSwitch = withStyles({
-  switchBase: {
-    "&$checked": {
-      color: baseTheme.colors.primary100,
-      "& + $track": {
-        backgroundColor: baseTheme.colors.primary40,
-        opacity: 1,
-      },
-    },
-  },
-  track: {},
-  checked: {},
-  focusVisible: {},
-})(Switch);
 
 const StyledLabel = withStyles({
   label: {
@@ -119,14 +105,14 @@ export const TitleContainer = observer(
             <FormGroup row>
               <StyledLabel
                 control={
-                  <StyledSwitch
+                  <Switch
                     checked={toggleChecked}
                     onChange={handleToggleChange}
                     name="switch-checked"
                   />
                 }
                 label="Plan"
-                labelPlacement="start"
+                labelPlacement="end"
               />
             </FormGroup>
           </ToggleContainer>
@@ -177,12 +163,13 @@ const FilterOptionContainer = styled.div<FilterOptionContainerType>`
   border-bottom: ${props => props.underline && `4px solid ${props.theme.colors.primary100}`};
   padding-left: 4px;
   padding-right: 4px;
+  padding-bottom: 4px;
   margin-left: 4px;
   margin-right: 4px;
 `;
 
 const ToggleContainer = styled.div`
-  margin-left: 16px;
+  margin-left: 32px;
 `;
 
 const HideButtonContainer = styled.div`

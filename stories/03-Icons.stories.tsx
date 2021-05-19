@@ -433,5 +433,11 @@ export const Icons = () => (
         <TextCenteredDiv>List</TextCenteredDiv>
       </CenteredColumnDiv>
     </RowDiv>
+    <RowDiv>
+     <CenteredColumnDiv>
+        <Icon icon={"SubInitiative"} size={"2em"} />
+        <TextCenteredDiv>Sub Initiative</TextCenteredDiv>
+      </CenteredColumnDiv>
+    </RowDiv>
   </ContainerDiv>
 );

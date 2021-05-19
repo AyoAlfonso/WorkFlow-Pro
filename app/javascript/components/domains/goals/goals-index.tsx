@@ -153,6 +153,7 @@ export const GoalsIndex = observer(
           showCreateGoal={showCreateAnnualInitiative}
           setShowCreateGoal={setShowCreateAnnualInitiative}
           createAction={annualInitiativeStore.create}
+          buttonWidth={"fill"}
         />
       );
     };
@@ -167,10 +168,13 @@ export const GoalsIndex = observer(
             annualInitiative={annualInitiative}
             totalNumberOfAnnualInitiatives={annualInitiatives.length}
             showMinimizedCards={true}
+            showSubInitiativeCards={false}
             setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
             setAnnualInitiativeId={setAnnualInitiativeId}
             setQuarterlyGoalId={setQuarterlyGoalId}
             setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
+            setSubInitiativeModalOpen={setSubInitiativeModalOpen}
+            setSubInitiativeId={setSubInitiativeId}
             setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
             showCreateQuarterlyGoal={true}
             showEditButton={showEditButton}
@@ -188,7 +192,7 @@ export const GoalsIndex = observer(
             goalsFilter={companyGoalsFilter}
             setGoalsFilter={setCompanyGoalsFilter}
             largeHomeTitle={true}
-            title={"Company"}
+            title={companyStore.company.name}
             handleToggleChange={toggleCompanyPlanning}
             toggleChecked={companyPlanning}
             showInitiatives={showCompanyInitiatives}
@@ -202,9 +206,7 @@ export const GoalsIndex = observer(
               <InitiativesContainer>
                 {renderAnnualInitiatives(companyGoalsToShow(), "company")}
                 {companyPlanning && (
-                  <CreateAnnualInitiativeContainer
-                    marginLeft={R.length(companyGoalsToShow()) > 0 ? "15px" : "0px"}
-                  >
+                  <CreateAnnualInitiativeContainer>
                     {renderCreateCompanyAnnualInitiativeSection("company")}
                   </CreateAnnualInitiativeContainer>
                 )}
@@ -218,7 +220,7 @@ export const GoalsIndex = observer(
             goalsFilter={personalGoalsFilter}
             setGoalsFilter={setPersonalGoalsFilter}
             largeHomeTitle={true}
-            title={"Personal"}
+            title={sessionStore.profile.firstName}
             handleToggleChange={togglePersonalPlanning}
             toggleChecked={personalPlanning}
             showInitiatives={showPersonalInitiatives}
@@ -231,9 +233,7 @@ export const GoalsIndex = observer(
               <InitiativesContainer>
                 {renderAnnualInitiatives(personalGoalsToShow(), "personal")}
                 {personalPlanning && (
-                  <CreateAnnualInitiativeContainer
-                    marginLeft={R.length(personalGoalsToShow()) > 0 ? "15px" : "0px"}
-                  >
+                  <CreateAnnualInitiativeContainer>
                     {renderCreateCompanyAnnualInitiativeSection("personal")}
                   </CreateAnnualInitiativeContainer>
                 )}
@@ -289,7 +289,7 @@ export const GoalsIndex = observer(
             subInitiativeId={subInitiativeId}
             setSubInitiativeModalOpen={setSubInitiativeModalOpen}
             annualInitiativeDescription={annualInitiativeDescription}
-            setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+            // setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
             setAnnualInitiativeId={setAnnualInitiativeId}
             showCreateMilestones={true}
           />
@@ -304,10 +304,12 @@ const Container = styled.div``;
 
 const InitiativesContainer = styled.div`
   display: -webkit-box;
-  margin-top: 15px;
+  margin-top: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-bottom: 16px;
   white-space: nowrap;
-  overflow-x: auto;
-  padding-bottom: 15px;
+  overflow-x: scroll;
 `;
 
 const PersonalInitiativesContainer = styled.div`
@@ -318,17 +320,12 @@ const PersonalInitiativesContainer = styled.div`
 const StyledModal = Modal.styled`
   width: 30rem;
   min-height: 100px;
-  border-radius: 10px;
+  border-radius: 8px;
   background-color: ${props => props.theme.colors.white};
 `;
 
-type CreateAnnualInitiativeContainerProps = {
-  marginLeft: string;
-};
-
-const CreateAnnualInitiativeContainer = styled.div<CreateAnnualInitiativeContainerProps>`
-  margin-left: ${props => props.marginLeft || "0px"};
-  width: 20%;
+const CreateAnnualInitiativeContainer = styled.div`
+  margin-left: 8px;
 `;
 
 const CompanyInitiativesContainer = styled.div``;

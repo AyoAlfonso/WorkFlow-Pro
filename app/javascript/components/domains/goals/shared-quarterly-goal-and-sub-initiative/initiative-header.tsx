@@ -8,6 +8,7 @@ import { Text } from "../../../shared/text";
 import ContentEditable from "react-contenteditable";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useTranslation } from "react-i18next";
+import moment from "moment"
 
 interface IInitiativeHeaderProps {
   itemType: string;
@@ -42,67 +43,90 @@ export const InitiativeHeader = ({
 
   const descriptionRef = useRef(null);
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
+  const { t } = useTranslation();
 
   return (
-    <HeaderContainer>
+    <>
       {item.closedAt && (
-        <InitiativeClosedContainer>
-          {itemType == "quarterlyGoal"
-            ? t("quarterlyGoal.closedItem")
-            : t("subInitiative.closedItem")}
-        </InitiativeClosedContainer>
+        <ClosedStatusBannerContainer>
+        {itemType == "quarterlyGoal" ? t("quarterlyGoal.cardClosed") : t("subInitiative.cardClosed")}. {t("annualInitiative.createdOn")} {moment(item.createdAt).format("MMM Do, YYYY")}.
+          <AnnualInitiativeActionContainer>
+            <DropdownOptions
+              editable={editable}
+              showDropdownOptionsContainer={showDropdownOptionsContainer}
+              setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
+              setParentModalOpen={setModalOpen}
+              itemType={itemType}
+              item={item}
+            />
+            <CloseIconContainer onClick={() => setModalOpen(false)}>
+              <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+            </CloseIconContainer>
+          </AnnualInitiativeActionContainer>
+        </ClosedStatusBannerContainer>
       )}
-      <TitleContainer>
-        <StyledContentEditable
-          innerRef={descriptionRef}
-          html={item.description}
-          disabled={!editable}
-          onChange={e => {
-            if (!e.target.value.includes("<div>")) {
-              mobxStore.updateModelField("description", e.target.value);
-            }
-          }}
-          onKeyDown={key => {
-            if (key.keyCode == 13) {
-              descriptionRef.current.blur();
-            }
-          }}
-          onBlur={() => mobxStore.update()}
-        />
-        <GoalText>
-          driving{" "}
-          <UnderlinedGoalText
-            onClick={() => {
-              setModalOpen(false);
-              setAnnualInitiativeId(annualInitiativeId);
-              setAnnualInitiativeModalOpen(true);
+      <HeaderContainer>
+        <TitleContainer>
+          <StyledContentEditable
+            innerRef={descriptionRef}
+            html={item.description}
+            disabled={!editable}
+            onChange={e => {
+              if (!e.target.value.includes("<div>")) {
+                mobxStore.updateModelField("description", e.target.value);
+              }
             }}
-          >
-            {annualInitiativeDescription}
-          </UnderlinedGoalText>
-        </GoalText>
-        <DetailsContainer>
-          <YearText type={"small"}>
-            Q{item.quarter} {goalYearString} Initiative
-          </YearText>
-          <OwnedBySection ownedBy={item.ownedBy} type={itemType} disabled={item.closedInitiative} />
-        </DetailsContainer>
-      </TitleContainer>
-      <AnnualInitiativeActionContainer>
-        <DropdownOptions
-          editable={editable}
-          showDropdownOptionsContainer={showDropdownOptionsContainer}
-          setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
-          setParentModalOpen={setModalOpen}
-          itemType={itemType}
-          item={item}
-        />
-
-        <CloseIconContainer onClick={() => setModalOpen(false)}>
-          <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
-        </CloseIconContainer>
-      </AnnualInitiativeActionContainer>
-    </HeaderContainer>
+            onKeyDown={key => {
+              if (key.keyCode == 13) {
+                descriptionRef.current.blur();
+              }
+            }}
+            onBlur={() => mobxStore.update()}
+          />
+          <GoalText>
+            driving{" "}
+            <UnderlinedGoalText
+              onClick={() => {
+                setModalOpen(false);
+                setAnnualInitiativeId(annualInitiativeId);
+                setAnnualInitiativeModalOpen(true);
+              }}
+            >
+              {annualInitiativeDescription}
+            </UnderlinedGoalText>
+          </GoalText>
+          <DetailsContainer>
+            <YearText type={"small"}>Q{item.quarter}</YearText>
+            <OwnedBySection
+              ownedBy={item.ownedBy}
+              marginLeft={"5px"}
+              marginRight={"5px"}
+              marginTop={"auto"}
+              marginBottom={"auto"}
+              type={itemType}
+              disabled={item.closedInitiative}
+            />
+          </DetailsContainer>
+        </TitleContainer>
+        {!item.closedAt &&
+          (
+            <AnnualInitiativeActionContainer>
+              <DropdownOptions
+                editable={editable}
+                showDropdownOptionsContainer={showDropdownOptionsContainer}
+                setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
+                setParentModalOpen={setModalOpen}
+                itemType={itemType}
+                item={item}
+              />
+              <CloseIconContainer onClick={() => setModalOpen(false)}>
+                <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+              </CloseIconContainer>
+            </AnnualInitiativeActionContainer>
+          )
+        }
+      </HeaderContainer>
+    </>
   );
 };
 
@@ -125,6 +149,11 @@ const UnderlinedGoalText = styled.span`
     cursor: pointer;
   }
 `;
+
+const DescriptionContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
 
 const AnnualInitiativeActionContainer = styled.div`
   display: flex;
@@ -156,9 +185,16 @@ const YearText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
 `;
 
-const InitiativeClosedContainer = styled.div`
-  padding: 8px;
-  background-color: ${props => props.theme.colors.backgroundGrey};
-  color: ${props => props.theme.colors.greyActive};
-  margin-bottom: 16px;
-`;
+const ClosedStatusBannerContainer = styled.div`
+  background-image: repeating-linear-gradient(150deg, #feecea, #feecea 20px, #f2e2e4 20px, #f2e2e4 25px);
+  border-radius: 4px;
+  text-align: left;
+  font: normal normal bold 16px/16px Lato;
+  letter-spacing: 0px;
+  color: ${props => props.theme.colors.black};
+  opacity: 1;
+  padding: 40px 5%;
+  display: flex;
+  justify-content: space-between;
+  height: 20px;
+`

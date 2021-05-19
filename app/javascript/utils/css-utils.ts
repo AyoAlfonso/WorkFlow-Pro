@@ -37,6 +37,7 @@ export const hexToHSL = hex => {
 
   return `hsl(${h},${s}%,${l}%)`;
 };
+//TODOIST: Add the util for milestone gradient
 
 export const adjustBrightnessHSL = (hslString, offset) => {
   const brightness = parseFloat(hslString.split(",")[2].split("%")[0]);
