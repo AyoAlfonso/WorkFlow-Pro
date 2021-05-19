@@ -91,6 +91,7 @@
         "accountabilityChart": "Accountability Matrix",
         "name": "Company Name",
         "logo": "Company Logo",
+        "updateLogo": "Update Company Logo",
         "fiscalYearStartDate": "Fiscal Year Start Date",
         "strategicPlan": "The Plan",
         "timezone": "Location/Time Zone",

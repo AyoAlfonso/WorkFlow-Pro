@@ -22,10 +22,10 @@ const StyledSideNav = styled.div`
   width: 96px; /* Set the width of the sidebar */
   z-index: 4; /* Stay on top of everything */
   top: 0em; /* Stay at the top */
-  background-color: white; /* White */
+  background-color: ${props => props.theme.colors.mipBlue};
   // Disable hidden x-overflow to allow nested menu items
   // overflow-x: hidden; /* Disable horizontal scroll*/
-  box-shadow: 0px 0px 0px 2px #f5f5f5;
+  box-shadow: 0px 3px 6px #00000029;
   display: flex;
   flex-direction: column;
 `;
@@ -45,34 +45,31 @@ type StyledIconType = {
   active: boolean;
 };
 
-export const StyledIcon = styled(Icon)<StyledIconType>`
-  color: ${props => (props.active ? props.theme.colors.primary100 : props.theme.colors.grey40)};
+export const StyledIcon = styled(Icon) <StyledIconType>`
+  transition: 0.3s ease-out;
+  color: ${props => props.active ? props.theme.colors.white : props.theme.colors.greyInactive};
 `;
 
 type StyledNavLinkType = {
   active: string;
 };
 
-const StyledNavLink = styled(NavLink)<StyledNavLinkType>`
+const StyledNavLink = styled(NavLink) <StyledNavLinkType>`
   ${color}
   align-item: center;
   text-decoration: none;
-  margin: 16px;
   &:link,
   &:visited {
-    color: ${props => props.theme.colors.text};
-  }
-  &:hover ${StyledIcon} {
-    color: ${props => props.active == "false" && props.theme.colors.greyActive};
+    color: ${props => props.theme.colors.white};
   }
 `;
 
-const IconBorder = styled.div`
-  box-shadow: 0px 3px 6px #00000029;
-  border-radius: 10px;
+const IconContainer = styled.div`
   width: 48px;
   height: 48px;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -86,38 +83,59 @@ interface StyledNavLinkChildrenActiveProps {
   currentPathName: string;
 }
 
-type SideNavChildPopupContainerType = {
+interface SideNavChildPopupContainerProps {
   active: boolean;
+  disableOnActive: boolean;
 };
 
-const SideNavChildPopupContainer = styled.div<SideNavChildPopupContainerType>`
-  &:hover ${StyledIcon} {
-    color: ${props => !props.active && props.theme.colors.greyActive};
+const SideNavChildContainer = styled.div<SideNavChildPopupContainerProps>`
+  padding-top: 16px;
+  padding-bottom: 16px;
+  transition: 0.3s;
+  background-color: ${props => props.active ? "rgba(0,0,0,0.25)" : "rgba(0,0,0,0)"};
+  ${props => props.active && props.disableOnActive ? "" :
+    `&:hover ${StyledIcon} {
+    transform: scale(1.25) translateY(-10%);
+    color: ${props.theme.colors.white};
   }
+  &:hover ${NavMenuIconText} {
+    color: ${props.theme.colors.white}
+  }
+  &:hover {
+    background-color: rgba(255,255,255,0.25);
+  }`}
 `;
 
-const NavMenuIconText = styled.h4`
+interface INavMenuIconTextProps {
+  active: boolean;
+}
+
+const NavMenuIconText = styled.h4<INavMenuIconTextProps>`
   text-align: center;
-  margin-top: 12px;
+  font-size: 15px;
+  margin-top: 8px;
   margin-bottom: 0;
+  color: ${props => props.active ? props.theme.colors.white : props.theme.colors.greyInactive};
 `;
 interface INavMenuIconProps {
   active?: boolean;
+  disableOnActive?: boolean;
   icon: string;
 }
 
 const NavMenuIcon: React.FunctionComponent<INavMenuIconProps> = ({
   active = false,
+  disableOnActive = true,
   children,
   icon,
 }) => {
   return (
-    <>
-      <IconBorder>
-        <StyledIcon icon={icon} size={"24px"} active={active} m={"auto"} />
-      </IconBorder>
-      <NavMenuIconText>{children}</NavMenuIconText>
-    </>
+    <SideNavChildContainer active={active} disableOnActive={disableOnActive}>
+      <IconContainer>
+        <StyledIcon icon={icon} size={"32px"} active={active} m={"auto"} />
+      </IconContainer>
+      <NavMenuIconText active={active}>{children}</NavMenuIconText>
+    </SideNavChildContainer>
   );
 };
 
@@ -131,7 +149,7 @@ const StyledNavLinkChildrenActive = ({
   const isActive = isNavMenuIconActive(currentPathName, to);
   // CHRIS' NOTE: CANT PASS BOOLEAN TO STYLED COMPONENTS, HENCE THE TOSTRING()
   return (
-    <StyledNavLink to={to} disabled={disabled} active={isActive.toString()}>
+    <StyledNavLink to={to} disabled={disabled} active={isActive}>
       <NavMenuIcon active={isActive} icon={icon}>
         {children}
       </NavMenuIcon>
@@ -179,48 +197,14 @@ export const SideNavNoMst = (
         );
       default:
         return (
-          <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/team")}>
-            <SideNavChildPopup
-              trigger={
-                <NavMenuIcon icon={"Team"} active={isNavMenuIconActive(currentPathName, "/team")}>
-                  {t("navigation.forum")}
-                </NavMenuIcon>
-              }
-              navOpen={teamNavChildOpen}
-              setNavOpen={setTeamNavChildOpen}
-              setOtherNavOpen={[setCompanyNavChildOpen, setMeetingsNavChildOpen]}
-            >
-              {teams.map((team, index) => (
-                <SideNavChildLink key={index} to={`/forum/${team.id}`} linkText={team.name} />
-              ))}
-            </SideNavChildPopup>
-          </SideNavChildPopupContainer>
-        );
-    }
-  };
-
-  return (
-    <StyledSideNav>
-      <SideBarElement marginTop={"29px"}>
-        <Image
-          sx={{
-            width: 60,
-            height: 60,
-          }}
-          src={"/assets/LynchPyn-Logo-Blue_300x300"}
-        />
-      </SideBarElement>
-
-      <StyledNavLinkChildrenActive to="/" icon={"Home"} currentPathName={currentPathName}>
-        {t("navigation.home")}
-      </StyledNavLinkChildrenActive>
-
-      {company && company.accessCompany ? (
-        <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/team")}>
           <SideNavChildPopup
             trigger={
-              <NavMenuIcon icon={"Team"} active={isNavMenuIconActive(currentPathName, "/team")}>
-                {t("navigation.team")}
+              <NavMenuIcon
+                icon={"Team"}
+                active={isNavMenuIconActive(currentPathName, "/team")}
+                disableOnActive={false}
+              >
+                {t("navigation.forum")}
               </NavMenuIcon>
             }
             navOpen={teamNavChildOpen}
@@ -228,77 +212,134 @@ export const SideNavNoMst = (
             setOtherNavOpen={[setCompanyNavChildOpen, setMeetingsNavChildOpen]}
           >
             {teams.map((team, index) => (
-              <SideNavChildLink key={index} to={`/team/${team.id}`} linkText={team.name} />
+              <SideNavChildLink key={index} to={`/forum/${team.id}`} linkText={team.name} />
             ))}
           </SideNavChildPopup>
-        </SideNavChildPopupContainer>
-      ) : (
-        <> </>
-      )}
+        );
+    }
+  };
+
+  return (
+    <StyledSideNav>
+      <SideBarElement margin={"16px"} marginTop={"16px"}>
+        {!R.isNil(company) && company.logoUrl ? (
+          <Image
+            sx={{
+              width: 48,
+              height: 48,
+            }}
+            src={`${company.logoUrl}`}
+          />
+        ) : (
+            <Image
+              sx={{
+                width: 48,
+                height: 48,
+              }}
+              src={"/assets/LynchPyn-Logo_Favicon_White"}
+            />
+          )}
+      </SideBarElement>
+
+
+      <StyledNavLinkChildrenActive to="/" icon={"Home"} currentPathName={currentPathName}>
+        {t("navigation.home")}
+      </StyledNavLinkChildrenActive>
+      <StyledNavLinkChildrenActive to="/goals" icon={"Goals"} currentPathName={currentPathName}>
+        {t("navigation.goals")}
+      </StyledNavLinkChildrenActive>
 
       {company && company.accessCompany ? (
-        <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/company")}>
-          <SideNavChildPopup
-            trigger={
-              <NavMenuIcon
-                icon={"Company"}
-                active={isNavMenuIconActive(currentPathName, "/company")}
-              >
-                {t("navigation.company")}
-              </NavMenuIcon>
-            }
-            navOpen={companyNavChildOpen}
-            setNavOpen={setCompanyNavChildOpen}
-            setOtherNavOpen={[setTeamNavChildOpen, setMeetingsNavChildOpen]}
-          >
-            <SideNavChildLink
-              to="/company/accountability"
-              linkText={t("company.accountabilityChart")}
-            />
-            {/* <SideNavChildLink to="/company/strategic_plan" linkText={`The ${company.name} Plan`} /> */}
-            <SideNavChildLink
-              to="/company/strategic_plan"
-              linkText={`The ${company && company.name} Plan`}
-            />
-          </SideNavChildPopup>
-        </SideNavChildPopupContainer>
+        <SideNavChildPopup
+          trigger={
+            <NavMenuIcon
+              icon={"Team"}
+              active={isNavMenuIconActive(currentPathName, "/team")}
+              disableOnActive={false}
+            >
+              {t("navigation.team")}
+            </NavMenuIcon>
+          }
+          navOpen={teamNavChildOpen}
+          setNavOpen={setTeamNavChildOpen}
+          setOtherNavOpen={[setCompanyNavChildOpen, setMeetingsNavChildOpen]}
+        >
+          {teams.map((team, index) => (
+            <SideNavChildLink key={index} to={`/team/${team.id}`} linkText={team.name} />
+          ))}
+        </SideNavChildPopup>
       ) : (
-        <> </>
-      )}
+          <> </>
+        )}
+
+      {company && company.accessCompany ? (
+        <SideNavChildPopup
+          trigger={
+            <NavMenuIcon
+              icon={"Company"}
+              active={isNavMenuIconActive(currentPathName, "/company")}
+              disableOnActive={false}
+            >
+              {t("navigation.company")}
+            </NavMenuIcon>
+          }
+          navOpen={companyNavChildOpen}
+          setNavOpen={setCompanyNavChildOpen}
+          setOtherNavOpen={[setTeamNavChildOpen, setMeetingsNavChildOpen]}
+        >
+          <SideNavChildLink
+            to="/company/accountability"
+            linkText={t("company.accountabilityChart")}
+          />
+          {/* <SideNavChildLink to="/company/strategic_plan" linkText={`The ${company.name} Plan`} /> */}
+          <SideNavChildLink
+            to="/company/strategic_plan"
+            linkText={`The ${company && company.name} Plan`}
+          />
+        </SideNavChildPopup>
+      ) : (
+          <> </>
+        )}
 
       {company && company.accessForum ? renderForum(R.path(["length"], teams) || 0) : <> </>}
 
       {company && company.accessForum && !R.isNil(R.path(["0", "id"], teams)) ? (
-        <SideNavChildPopupContainer active={isNavMenuIconActive(currentPathName, "/company")}>
-          <SideNavChildPopup
-            trigger={
-              <NavMenuIcon
-                icon={"Meeting"}
-                active={isNavMenuIconActive(currentPathName, "/meetings")}
-              >
-                {t("navigation.meetings")}
-              </NavMenuIcon>
-            }
-            navOpen={meetingsNavChildOpen}
-            setNavOpen={setMeetingsNavChildOpen}
-            setOtherNavOpen={[setTeamNavChildOpen, setCompanyNavChildOpen]}
-          >
-            <SideNavChildLink to="/meetings/section_1" linkText={t("forum.annualHub")} />
-            <SideNavChildLink to="/meetings/section_2" linkText={t("forum.upcomingHub")} />
-            <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")} />
-          </SideNavChildPopup>
-        </SideNavChildPopupContainer>
+        <SideNavChildPopup
+          trigger={
+            <NavMenuIcon
+              icon={"Meeting"}
+              active={isNavMenuIconActive(currentPathName, "/meetings")}
+              disableOnActive={false}
+            >
+              {t("navigation.meetings")}
+            </NavMenuIcon>
+          }
+          navOpen={meetingsNavChildOpen}
+          setNavOpen={setMeetingsNavChildOpen}
+          setOtherNavOpen={[setTeamNavChildOpen, setCompanyNavChildOpen]}
+        >
+          <SideNavChildLink to="/meetings/section_1" linkText={t("forum.annualHub")} />
+          <SideNavChildLink to="/meetings/section_2" linkText={t("forum.upcomingHub")} />
+          <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")} />
+        </SideNavChildPopup>
       ) : (
-        <> </>
-      )}
+          <> </>
+        )}
 
-      <StyledNavLinkChildrenActive to="/goals" icon={"Goals"} currentPathName={currentPathName}>
-        <div style={{ marginLeft: "-5px" }}>{t("navigation.goals")}</div>
-      </StyledNavLinkChildrenActive>
-
-      {/* <SideBarElement margin={"16px"} marginTop={"auto"}>
-        <Icon icon={"Help"} size={"2em"} iconColor={"primary100"} />
-      </SideBarElement> */}
+      {!R.isNil(company) && company.logoUrl ? (
+        <SideBarElement margin={"16px"} marginTop={"auto"}>
+          <Image
+            sx={{
+              width: 48,
+              height: 48,
+            }}
+            marginTop={16}
+            src={"/assets/LynchPyn-Logo_Favicon_White"}
+          />
+        </SideBarElement>
+      ) : (
+          <></>
+        )}
     </StyledSideNav>
   );
 };
