@@ -146,7 +146,7 @@ export const QuarterlyGoalModalContent = observer(
               annualInitiativeDescription={annualInitiativeDescription}
               showDropdownOptionsContainer={showDropdownOptionsContainer}
               setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
-               goalYearString={goalYearString}
+              goalYearString={goalYearString}
             />
           </SectionContainer>
           <SectionContainer>
@@ -175,8 +175,6 @@ export const QuarterlyGoalModalContent = observer(
               <ShowMilestonesButton
                 setShowInactiveMilestones={setShowInactiveMilestones}
                 showInactiveMilestones={showInactiveMilestones}
-                allMilestones={allMilestones}
-                activeMilestones={activeMilestones}
               />
             </MilestonesHeaderContainer>
 

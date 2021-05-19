@@ -82,7 +82,7 @@ export const AnnualInitiativeModalContent = observer(
               indicatorHeight={4}
               marginBottom={16}
             />
-           
+
             <TopRowContainer>
               <QuarterlyGoalDescription
                 onClick={() => {
@@ -145,7 +145,6 @@ export const AnnualInitiativeModalContent = observer(
 
     const renderHeader = (): JSX.Element => {
       return (
-         
         <HeaderContainer>
           <TitleContainer>
             {annualInitiative.closedAt && (
@@ -188,9 +187,7 @@ export const AnnualInitiativeModalContent = observer(
               />
             </DetailsContainer>
           </TitleContainer>
-         
         </HeaderContainer>
-    
       );
     };
 
@@ -248,26 +245,25 @@ export const AnnualInitiativeModalContent = observer(
     };
 
     return (
-
       <>
-       {annualInitiative.closedAt && (
-        <ClosedStatusBannerContainer>
+        {annualInitiative.closedAt && (
+          <ClosedStatusBannerContainer>
             {t("annualInitiative.cardClosed")}
             <AnnualInitiativeActionContainer>
-            {renderDropdownOptions()}
-            <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
-              <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
-            </CloseIconContainer>
-          </AnnualInitiativeActionContainer>
-        </ClosedStatusBannerContainer>
-      )}
-      <Container>
-        {renderHeader()}
-        <SectionContainer>
-          <Context itemType={"annualInitiative"} item={annualInitiative} />
-        </SectionContainer>
-        <SectionContainer>{renderGoals()}</SectionContainer>
-      </Container>
+              {renderDropdownOptions()}
+              <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
+                <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+              </CloseIconContainer>
+            </AnnualInitiativeActionContainer>
+          </ClosedStatusBannerContainer>
+        )}
+        <Container>
+          {renderHeader()}
+          <SectionContainer>
+            <Context itemType={"annualInitiative"} item={annualInitiative} />
+          </SectionContainer>
+          <SectionContainer>{renderGoals()}</SectionContainer>
+        </Container>
       </>
     );
   },
@@ -428,15 +424,32 @@ const SubHeaderTextContainer = styled.div`
 `;
 // TODOIST: color to constant
 const ClosedStatusBannerContainer = styled.div`
-background-image: repeating-linear-gradient(150deg, #feecea, #feecea 20px, #f2e2e4 20px, #f2e2e4 25px);
-border-radius: 4px;
-text-align: left;
-font: normal normal bold 16px/16px Lato;
-letter-spacing: 0px;
-color: ${props => props.theme.colors.black};
-opacity: 1;
-padding: 40px 5%;
-justify-content: space-between;
-display: flex;
-height: 20px;
-`
+  background-image: repeating-linear-gradient(
+    150deg,
+    #feecea,
+    #feecea 20px,
+    #f2e2e4 20px,
+    #f2e2e4 25px
+  );
+  border-radius: 4px;
+  text-align: left;
+  font: normal normal bold 16px/16px Lato;
+  letter-spacing: 0px;
+  color: ${props => props.theme.colors.black};
+  opacity: 1;
+  padding: 40px 5%;
+  justify-content: space-between;
+  display: flex;
+  height: 20px;
+`;
+
+const GoalDropdownContainer = styled.div`
+  margin-left: -50px;
+`;
+
+const InitiativeClosedContainer = styled.div`
+  padding: 8px;
+  background-color: ${props => props.theme.colors.backgroundGrey};
+  color: ${props => props.theme.colors.greyActive};
+  margin-bottom: 16px;
+`;

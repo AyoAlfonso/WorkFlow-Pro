@@ -8,7 +8,7 @@ import { Text } from "../../../shared/text";
 import ContentEditable from "react-contenteditable";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useTranslation } from "react-i18next";
-import moment from "moment"
+import moment from "moment";
 
 interface IInitiativeHeaderProps {
   itemType: string;
@@ -43,13 +43,15 @@ export const InitiativeHeader = ({
 
   const descriptionRef = useRef(null);
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
-  const { t } = useTranslation();
 
   return (
     <>
       {item.closedAt && (
         <ClosedStatusBannerContainer>
-        {itemType == "quarterlyGoal" ? t("quarterlyGoal.cardClosed") : t("subInitiative.cardClosed")}. {t("annualInitiative.createdOn")} {moment(item.createdAt).format("MMM Do, YYYY")}.
+          {itemType == "quarterlyGoal"
+            ? t("quarterlyGoal.cardClosed")
+            : t("subInitiative.cardClosed")}
+          . {t("annualInitiative.createdOn")} {moment(item.createdAt).format("MMM Do, YYYY")}.
           <AnnualInitiativeActionContainer>
             <DropdownOptions
               editable={editable}
@@ -108,23 +110,21 @@ export const InitiativeHeader = ({
             />
           </DetailsContainer>
         </TitleContainer>
-        {!item.closedAt &&
-          (
-            <AnnualInitiativeActionContainer>
-              <DropdownOptions
-                editable={editable}
-                showDropdownOptionsContainer={showDropdownOptionsContainer}
-                setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
-                setParentModalOpen={setModalOpen}
-                itemType={itemType}
-                item={item}
-              />
-              <CloseIconContainer onClick={() => setModalOpen(false)}>
-                <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
-              </CloseIconContainer>
-            </AnnualInitiativeActionContainer>
-          )
-        }
+        {!item.closedAt && (
+          <AnnualInitiativeActionContainer>
+            <DropdownOptions
+              editable={editable}
+              showDropdownOptionsContainer={showDropdownOptionsContainer}
+              setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
+              setParentModalOpen={setModalOpen}
+              itemType={itemType}
+              item={item}
+            />
+            <CloseIconContainer onClick={() => setModalOpen(false)}>
+              <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+            </CloseIconContainer>
+          </AnnualInitiativeActionContainer>
+        )}
       </HeaderContainer>
     </>
   );
@@ -153,7 +153,7 @@ const UnderlinedGoalText = styled.span`
 const DescriptionContainer = styled.div`
   display: flex;
   justify-content: space-between;
-`
+`;
 
 const AnnualInitiativeActionContainer = styled.div`
   display: flex;
@@ -186,7 +186,13 @@ const YearText = styled(Text)`
 `;
 
 const ClosedStatusBannerContainer = styled.div`
-  background-image: repeating-linear-gradient(150deg, #feecea, #feecea 20px, #f2e2e4 20px, #f2e2e4 25px);
+  background-image: repeating-linear-gradient(
+    150deg,
+    #feecea,
+    #feecea 20px,
+    #f2e2e4 20px,
+    #f2e2e4 25px
+  );
   border-radius: 4px;
   text-align: left;
   font: normal normal bold 16px/16px Lato;
@@ -197,4 +203,4 @@ const ClosedStatusBannerContainer = styled.div`
   display: flex;
   justify-content: space-between;
   height: 20px;
-`
+`;

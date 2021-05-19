@@ -322,7 +322,6 @@
       "personal": {
         "vision": "Future Self",
         "placeholder": "Describe what the ideal, future you will look like, in one statement...",
-        "onboarding": {
         "continue": "Resume {{format}} creation"
       }
     }

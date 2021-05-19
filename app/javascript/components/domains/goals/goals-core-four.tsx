@@ -5,7 +5,6 @@ import { useMst } from "../../../setup/root";
 import { Loading } from "../../shared/loading";
 import { Flex, Box } from "rebass";
 import { Text } from "~/components/shared/text";
-import { Icon } from "~/components/shared/icon";
 import { useTranslation } from "react-i18next";
 import { HomeContainerBorders } from "../home/shared-components";
 import { EnlargedHomeTitle } from "./shared/enlarged-home-title";
@@ -117,7 +116,7 @@ const Container = styled.div`
 
 const TitleContainer = styled.div`
   display: flex;
-`
+`;
 
 const CoreFourHeaderText = styled(Text)`
   margin-top: 16px;
@@ -132,36 +131,6 @@ const CoreFourTitle = styled(EnlargedHomeTitle)`
   margin-top: 32px;
   margin-bottom: 16px;
 `;
-
-export const GoalsCoreFour = (): JSX.Element => {
-  const { t } = useTranslation();
-  const [ showCoreFour, setShowCoreFour ] = useState<boolean>(true);
-
-  const renderHideButton = () => {
-    return (
-      <HideButtonContainer onClick={() => setShowCoreFour(!showCoreFour)}>
-        <HideText>{showCoreFour ? "Hide" : "Show"} </HideText>
-        <HideIconContainer>
-          {showCoreFour ? (
-            <HideIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
-          ) : (
-            <ShowIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
-          )}
-        </HideIconContainer>
-      </HideButtonContainer>
-    );
-  };
-
-  return (
-    <Container>
-      <TitleContainer>
-        <CoreFourTitle>{t("core.goalsTitle")}</CoreFourTitle>
-        {renderHideButton()}
-      </TitleContainer>
-      {showCoreFour && <CoreFourValues />}
-    </Container>
-  );
-};
 
 export const CoreFourOnly = (): JSX.Element => (
   <div>
@@ -196,4 +165,9 @@ const HideIcon = styled(Icon)`
 const ShowIcon = styled(Icon)`
   -webkit-transform: rotate(-90deg);
   transform: rotate(-90deg);
+`;
+
+const CoreFourHeader = styled.div`
+  display: flex;
+  margin-top: -32px;
 `;
