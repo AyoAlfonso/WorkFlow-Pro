@@ -32,6 +32,7 @@ export const PulseSelector = observer(
 
     const [showPulseSelector, setShowPulseSelector] = useState<boolean>(false);
     const [showCalendar, setShowCalendar] = useState<boolean>(false);
+    const [todaysEmotion, setTodaysEmotion] = useState<number>(0);
     const [selectedEmotion, setSelectedEmotion] = useState<number>(0);
     const [selectedAdjective, setSelectedAdjective] = useState<string>("");
     const [typedAdjective, setTypedAdjective] = useState<string>("");
@@ -42,6 +43,7 @@ export const PulseSelector = observer(
     useEffect(() => {
       if (userPulse) {
         setSelectedEmotion(userPulse.score);
+        setTodaysEmotion(userPulse.score);
         staticDataStore
           .filteredEmotionAdjectives(userPulse.score)
           .find(option => option == userPulse.feeling)
@@ -85,8 +87,8 @@ export const PulseSelector = observer(
       );
     };
 
-    const renderSelectedEmotion = () => {
-      switch (selectedEmotion) {
+    const renderTodaysEmotion = () => {
+      switch (todaysEmotion) {
         case 1:
           return emotionE(true);
         case 2:
@@ -127,12 +129,16 @@ export const PulseSelector = observer(
     };
 
     const onPulseSave = () => {
+      if (selectedDateFilter == todaysDate) {
+        setTodaysEmotion(selectedEmotion);
+      }
+
       sessionStore
         .updateUserPulse({
           id: userPulse ? userPulse.id : "",
           score: selectedEmotion,
           feeling: selectedAdjective || typedAdjective,
-          completedAt: selectedDateFilter == todaysDate && moment(),
+          completedAt: selectedDateFilter == todaysDate ? moment() : selectedDateFilter,
         })
         .then(() => {
           setSelectedDateFilter(todaysDate);
@@ -148,7 +154,7 @@ export const PulseSelector = observer(
     return (
       <Container>
         <SelectedEmotionContainer onClick={() => setShowPulseSelector(!showPulseSelector)}>
-          {renderSelectedEmotion()}
+          {renderTodaysEmotion()}
         </SelectedEmotionContainer>
         {showPulseSelector && (
           <PulseSelectorContainer ref={selectorRef}>
@@ -313,7 +319,7 @@ type AdjectiveOptionsProps = {
 
 const AdjectiveOption = styled.div<AdjectiveOptionsProps>`
   background-color: ${props =>
-    props.selected ? props.theme.colors.mipBlue : props.theme.colors.greyInactive};
+    props.selected ? props.theme.colors.mipBlue : props.theme.colors.primary100};
   border-radius: 8px;
   color: white;
   padding: 4px;

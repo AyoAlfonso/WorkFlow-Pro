@@ -38,6 +38,7 @@ import {
 import { UserStatus } from "~/components/shared/user-status";
 
 import { TeamDashboard } from "./team-dashboard";
+import { Heading } from "~/components/shared";
 
 interface ITeamOverviewProps {}
 
@@ -112,11 +113,15 @@ export const TeamOverview = observer(
         <TableContainer>
           <TableHeaderContainer>
             <ColumnContainerParent>
+              <TodayColumnContainer>
+                <ColumnSubHeaderContainer>
+                  <TodayText type={"paragraph"}>{today}</TodayText>
+                </ColumnSubHeaderContainer>
+              </TodayColumnContainer>
               <ColumnContainer>
-                <ColumnSubHeaderContainer>{today}</ColumnSubHeaderContainer>
-              </ColumnContainer>
-              <ColumnContainer>
-                <ColumnSubHeaderContainer>{"Today's Pyns"}</ColumnSubHeaderContainer>
+                <ColumnSubHeaderContainer>
+                  <Heading type={"h4"}>Today's Pyns</Heading>
+                </ColumnSubHeaderContainer>
               </ColumnContainer>
             </ColumnContainerParent>
           </TableHeaderContainer>
@@ -135,6 +140,39 @@ export const TeamOverview = observer(
       );
     };
 
+    const renderUserStatus = user => {
+      if (user.userPulseForDisplay) {
+        return (
+          <TeamMemberRightContainer>
+            <InfoRow>
+              <TeamMemberName>
+                {user.firstName} {user.lastName}
+              </TeamMemberName>
+
+              <UserStatusContainer>
+                <UserStatus selectedUserStatus={user.currentDailyLog.workStatus} />
+              </UserStatusContainer>
+            </InfoRow>
+            <InfoRow>
+              <EmotionText>{user.userPulseForDisplay.feeling}!</EmotionText>
+            </InfoRow>
+          </TeamMemberRightContainer>
+        );
+      } else {
+        return (
+          <>
+            <TeamMemberName>
+              {user.firstName} {user.lastName}
+            </TeamMemberName>
+
+            <UserStatusContainer>
+              <UserStatus selectedUserStatus={user.currentDailyLog.workStatus} />
+            </UserStatusContainer>
+          </>
+        );
+      }
+    };
+
     const renderUserRecords = () => {
       return currentTeam.users.map((user, index) => {
         const prioritiesToRender = user.todaysPriorities.concat(user.todaysCompletedActivities);
@@ -150,13 +188,7 @@ export const TeamOverview = observer(
                   size={45}
                   marginLeft={"0px"}
                 />
-                <TeamMemberName>
-                  {user.firstName} {user.lastName}
-                </TeamMemberName>
-
-                <UserStatusContainer>
-                  <UserStatus selectedUserStatus={user.currentDailyLog.workStatus} />
-                </UserStatusContainer>
+                {renderUserStatus(user)}
               </TeamMemberInfoContainer>
             </ColumnContainer>
             <ColumnContainer>{renderUserPriorities(prioritiesToRender)}</ColumnContainer>
@@ -291,6 +323,35 @@ const TeamMemberName = styled(Text)`
 
 const UserStatusContainer = styled.div`
   margin-left: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
+`;
+
+const TeamMemberRightContainer = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
+`;
+
+const InfoRow = styled.div`
+  display: flex;
+`;
+
+const EmotionText = styled(Text)`
+  margin-left: 16px;
+  color: ${props => props.theme.colors.greyActive};
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 8px;
+  margin-bottom: 0px;
+`;
+
+const TodayText = styled(Text)`
+  margin-top: 0;
+  margin-bottom: 0;
+  color: ${props => props.theme.colors.greyActive};
+`;
+
+const TodayColumnContainer = styled(ColumnContainer)`
   margin-top: auto;
   margin-bottom: auto;
 `;

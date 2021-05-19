@@ -5,7 +5,7 @@ class StaticDataService < ApplicationService
   end
 
   def time_zones
-    ActiveSupport::TimeZone.all.uniq(&:utc_offset).sort.map &:to_s
+    ActiveSupport::TimeZone.all.sort.map &:to_s
   end
 
   def fields_and_labels
@@ -63,19 +63,19 @@ class StaticDataService < ApplicationService
         stepLabel: "Your {displayFormat}'s Foundation Four™"
       },
       "2": {
-        heading: "Goals",
-        description: "Goals are things you (and your {displayFormat}) want to achieve in the next 3-12 months.  By adding your Goals to Lynchpyn, you can communicate and align your team around what really matters.",
+        heading: "Objectives",
+        description: "Objectives are strategic moves you want to make in the next year. LynchPyn helps you better communicate your strategy, improve alignment, and drive accountability.",
         stepLabel: "Create your first Goal"
       },
       "3": {
         heading: "Pyns",
         description: "Pyns are the LynchPyn version of to-dos.  Review the Weekly Milestone you just defined; what can you do today towards it?  Add it as a Pyn.",
-        stepLabel: "Add your first Pyn (todo)"
+        stepLabel: "Add your first Pyn"
       },
       "4": {
-        heading: "Team",
-        description: "The final step in your onboarding is adding your team.  The power of Lynchpyn is in collaboration; add your team and teammates so they can help you populate your {displayFormat} Goals.",
-        stepLabel: "Add your Team"
+        heading: "{teamFormatHeading}",
+        description: "{teamFormatDescription}",
+        stepLabel: "Add your {teamFormatHeading}"
       }
     }
   end

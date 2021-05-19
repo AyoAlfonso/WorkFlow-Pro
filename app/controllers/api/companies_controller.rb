@@ -10,7 +10,7 @@ class Api::CompaniesController < Api::ApplicationController
       display_format: params[:display_format],
       fiscal_year_start: params[:fiscal_year_start],
       name: params[:name],
-      timezone: params[:timezone]
+      timezone: params[:timezone],
     })
     authorize @company
     @company.save!
@@ -101,6 +101,7 @@ class Api::CompaniesController < Api::ApplicationController
         @quarterly_goal.create_milestones_for_quarterly_goal(current_user, @onboarding_company)
         @quarterly_goal.reload
       end
+
       @milestone = @quarterly_goal.milestones.first
       @milestone.update!(description: params[:annual_initiative][:quarterly_goals][0][:milestones][0][:description])
 
@@ -111,7 +112,7 @@ class Api::CompaniesController < Api::ApplicationController
             methods: [:owned_by, :created_by],
             include: {
               milestones: {
-                only: [:id, :quarterly_goal_id, :description, :week, :status, :week_of],
+                only: [:id, :milestoneable_id, :milestoneable_type, :description, :week, :status, :week_of],
                 methods: [:created_by]
               }
             }
@@ -137,7 +138,7 @@ class Api::CompaniesController < Api::ApplicationController
           methods: [:owned_by, :created_by],
           include: {
             milestones: {
-              only: [:id, :quarterly_goal_id, :description, :week, :status, :week_of],
+              only: [:id, :milestoneable_id, :milestoneable_type, :description, :week, :status, :week_of],
               methods: [:created_by]
             }
           }
@@ -215,7 +216,7 @@ class Api::CompaniesController < Api::ApplicationController
 
   def company_params
     #user should not be allowed to update the display_format once created
-    params.require(:company).permit(:name, :timezone, :fiscal_year_start, :rallying_cry, sign_up_purpose_attributes: [:purpose], core_four_attributes: [:core_1, :core_2, :core_3, :core_4])
+    params.require(:company).permit(:name, :timezone, :fiscal_year_start, :rallying_cry, sign_up_purpose_attributes: [:purpose], core_four_attributes: [:core_1, :core_2, :core_3, :core_4], company_static_datas_attributes: [:id, :value])
   end
 
   # def new_company_params

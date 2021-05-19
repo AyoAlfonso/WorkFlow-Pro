@@ -8,4 +8,5 @@ class UserRole < ApplicationRecord
   ADMIN = "Admin"
   NORMAL = "Employee"
   LEADERSHIP = "Leadership Team"
+  COACH = "Coach" #read only access
 end

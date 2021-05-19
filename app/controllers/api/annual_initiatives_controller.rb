@@ -1,5 +1,5 @@
 class Api::AnnualInitiativesController < Api::ApplicationController
-  before_action :set_annual_initiative, only: [:show, :update, :destroy, :create_key_element]
+  before_action :set_annual_initiative, only: [:show, :update, :destroy, :create_key_element, :close_initiative]
 
   respond_to :json
 
@@ -34,8 +34,14 @@ class Api::AnnualInitiativesController < Api::ApplicationController
     render json: { annual_initiative_id: @annual_initiative.id, status: :ok }
   end
 
+  def close_initiative
+    @company = current_company
+    @annual_initiative.update!(closed_at: Date.today)
+    render 'api/annual_initiatives/update'
+  end
+
   def create_key_element
-    key_element = KeyElement.create!(elementable: @annual_initiative, value: params[:value], completion_type: params[:completion_type], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
+    key_element = KeyElement.create!(elementable: @annual_initiative, value: params[:value], completion_type: params[:completion_type], completion_starting_value: params[:completion_current_value], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
     render json: { key_element: key_element, status: :ok }
   end
 
@@ -59,7 +65,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   private 
 
   def annual_initiative_params
-    params.permit(:id, :created_by_id, :owned_by_id, :description, :company_id, :context_description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value], :importance => [])
+    params.permit(:id, :created_by_id, :owned_by_id, :description, :company_id, :context_description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_starting_value, :completion_current_value, :completion_target_value], :importance => [])
   end
   
   def set_annual_initiative

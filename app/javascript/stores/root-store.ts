@@ -18,6 +18,7 @@ import { MeetingStoreModel, IMeetingStore } from "./meeting-store";
 import { NotificationStoreModel, INotificationStore } from "./notification-store";
 import { MilestoneStoreModel, IMilestoneStore } from "./milestone-store";
 import { StaticDataStoreModel, IStaticDataStore } from "./static-data-store";
+import { SubInitiativeStoreModel, ISubInitiativeStore } from "./sub-initiative-store";
 
 export const RootStoreModel = types
   .model("RootStoreModel")
@@ -41,6 +42,7 @@ export const RootStoreModel = types
     notificationStore: NotificationStoreModel,
     milestoneStore: MilestoneStoreModel,
     staticDataStore: StaticDataStoreModel,
+    subInitiativeStore: SubInitiativeStoreModel
   })
   .views(self => ({}))
   .actions(self => ({
@@ -57,6 +59,7 @@ export const RootStoreModel = types
         self.notificationStore.load();
         self.labelStore.fetchLabels();
         self.keyActivityStore.load();
+        self.companyStore.getOnboardingCompany();
       }
     }),
   }))
@@ -84,4 +87,5 @@ export interface IRootStore extends IStateTreeNode {
   milestoneStore: IMilestoneStore;
   forumStore: IForumStore;
   staticDataStore: IStaticDataStore;
+  subInitiativeStore: ISubInitiativeStore;
 }

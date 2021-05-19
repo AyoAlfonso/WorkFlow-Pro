@@ -8,8 +8,47 @@ import { Text } from "~/components/shared/text";
 import { useTranslation } from "react-i18next";
 import { HomeContainerBorders } from "../home/shared-components";
 import { EnlargedHomeTitle } from "./shared/enlarged-home-title";
+import { Icon } from "~/components/shared";
 
-export const CoreFourValues = observer(
+interface ICoreFourValuesProps {
+  showCoreFour?: boolean;
+  setShowCoreFour?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const GoalsCoreFour = ({
+  showCoreFour,
+  setShowCoreFour,
+}: ICoreFourValuesProps): JSX.Element => {
+  const { t } = useTranslation();
+
+  const renderHideButton = () => {
+    return (
+      <HideButtonContainer onClick={() => setShowCoreFour(!showCoreFour)}>
+        <HideText>{showCoreFour ? "Hide" : "Show"} </HideText>
+        <HideIconContainer>
+          {showCoreFour ? (
+            <HideIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
+          ) : (
+            <ShowIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
+          )}
+        </HideIconContainer>
+      </HideButtonContainer>
+    );
+  };
+
+  return (
+    <Container>
+      <CoreFourHeader>
+        <CoreFourTitle>{t("core.goalsTitle")}</CoreFourTitle>
+        {renderHideButton()}
+      </CoreFourHeader>
+
+      {showCoreFour && <CoreFourValues />}
+    </Container>
+  );
+};
+
+const CoreFourValues = observer(
   (): JSX.Element => {
     const {
       companyStore: { company },
@@ -89,18 +128,42 @@ const CoreFourTitle = styled(EnlargedHomeTitle)`
   margin-bottom: 16px;
 `;
 
-export const GoalsCoreFour = (): JSX.Element => {
-  const { t } = useTranslation();
-  return (
-    <Container>
-      <CoreFourTitle>{t("core.goalsTitle")}</CoreFourTitle>
-      <CoreFourValues />
-    </Container>
-  );
-};
-
 export const CoreFourOnly = (): JSX.Element => (
   <div>
     <CoreFourValues />
   </div>
 );
+
+const CoreFourHeader = styled.div`
+  display: flex;
+`;
+
+const HideButtonContainer = styled.div`
+  display: flex;
+  margin-left: auto;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  &: hover {
+    cursor: pointer;
+  }
+`;
+
+const HideText = styled(Text)`
+  font-size: 14px;
+  color: ${props => props.theme.colors.greyInactive};
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 8px;
+`;
+
+const HideIconContainer = styled.div``;
+
+const HideIcon = styled(Icon)`
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+`;
+
+const ShowIcon = styled(Icon)`
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+`;

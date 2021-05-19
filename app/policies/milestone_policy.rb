@@ -1,6 +1,6 @@
 class MilestonePolicy < ApplicationPolicy
   def update?
-    true
+    !user_can_observe_current_company?
   end
 
   def milestones_for_meeting?
@@ -8,7 +8,7 @@ class MilestonePolicy < ApplicationPolicy
   end
 
   def create_or_update_onboarding_goals?
-    true
+    !user_can_observe_current_company?
   end
 
   def get_onboarding_goals?

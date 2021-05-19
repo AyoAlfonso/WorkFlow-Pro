@@ -5,7 +5,7 @@ class HabitPolicy < ApplicationPolicy
   end
 
   def create?
-    true
+    !user_can_observe_current_company?
   end
 
   def show_habit?

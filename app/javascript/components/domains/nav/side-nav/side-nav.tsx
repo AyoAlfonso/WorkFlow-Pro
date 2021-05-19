@@ -293,7 +293,7 @@ export const SideNavNoMst = (
       )}
 
       <StyledNavLinkChildrenActive to="/goals" icon={"Goals"} currentPathName={currentPathName}>
-        {t("navigation.goals")}
+        <div style={{ marginLeft: "-5px" }}>{t("navigation.goals")}</div>
       </StyledNavLinkChildrenActive>
 
       {/* <SideBarElement margin={"16px"} marginTop={"auto"}>
@@ -312,6 +312,6 @@ export const SideNav = observer(
       companyStore: { company },
     } = useMst();
 
-    return SideNavNoMst(router.location.pathname, toJS(profile.teams), company);
+    return SideNavNoMst(router.location.pathname, toJS(profile.currentCompanyUserTeams), company);
   },
 );

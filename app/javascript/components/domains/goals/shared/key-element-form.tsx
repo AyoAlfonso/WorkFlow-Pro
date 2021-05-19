@@ -14,20 +14,19 @@ interface IKeyElementFormProps {
 
 export const KeyElementForm = ({ onCreate, onClose }: IKeyElementFormProps): JSX.Element => {
   const [title, setTitle] = useState<string>("");
-  const [completionType, setCompletionType] = useState<string>("binary");
+  const [completionType, setCompletionType] = useState<string>("numerical");
   const [completionCurrentValue, setCompletionCurrentValue] = useState<number>(0);
   const [completionTargetValue, setCompletionTargetValue] = useState<number>(0);
 
   const selectOptions = [
-    { label: "Completion", value: "binary" },
-    { label: "Numerical", value: "numerical" },
-    { label: "Percentage", value: "percentage" },
-    { label: "Dollars", value: "currency" },
+    { label: "Numerical #", value: "numerical" },
+    { label: "Percentage %", value: "percentage" },
+    { label: "Dollars $", value: "currency" },
   ];
 
   const resetForm = () => {
     setTitle("");
-    setCompletionType("binary");
+    setCompletionType("numerical");
     setCompletionCurrentValue(0);
     setCompletionTargetValue(0);
   };

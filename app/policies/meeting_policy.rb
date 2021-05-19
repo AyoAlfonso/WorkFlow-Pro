@@ -23,7 +23,7 @@ class MeetingPolicy < ApplicationPolicy
     if (@record.meeting_type == "team_weekly" || @record.meeting_type == "forum_monthly")
       @user.team_lead_for?(@record.team)
     else
-      true
+      !user_can_observe_current_company? #anyone can crate personal plans but observers
     end
   end
 

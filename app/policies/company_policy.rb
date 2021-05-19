@@ -5,7 +5,7 @@ class CompanyPolicy < ApplicationPolicy
   end
 
   def show?
-    user_is_part_of_this_company?(record)
+    user_is_part_of_this_company?(record) || user_can_observe_company?(record)
   end
 
   def update?

@@ -7,9 +7,7 @@ import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
 import * as R from "ramda";
 import { UserDefaultIcon } from "~/components/shared/user-default-icon";
-import { Button } from "~/components/shared/button";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
-import { ContextTabs } from "../shared/context-tabs";
 import { OwnedBySection } from "../shared/owned-by-section";
 import ContentEditable from "react-contenteditable";
 import { observer } from "mobx-react";
@@ -20,6 +18,8 @@ import { NavLink } from "react-router-dom";
 import { RecordOptions } from "../shared/record-options";
 import { Loading } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
+import { GoalDropdownOptions } from "../shared/goal-dropdown-options";
+import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -42,9 +42,14 @@ export const AnnualInitiativeModalContent = observer(
 
     const [showCreateQuarterlyGoal, setShowCreateQuarterlyGoal] = useState<boolean>(false);
     const [showAllQuarterlyGoals, setShowAllQuarterlyGoals] = useState<boolean>(false);
+    const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
+      false,
+    );
 
     const { t } = useTranslation();
     const descriptionRef = useRef(null);
+
+    const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
 
     useEffect(() => {
       annualInitiativeStore.getAnnualInitiative(annualInitiativeId);
@@ -108,10 +113,43 @@ export const AnnualInitiativeModalContent = observer(
       });
     };
 
+    const renderDropdownOptions = (): JSX.Element => {
+      return (
+        editable && (
+          <DropdownOptionsContainer
+            onClick={() => setShowDropdownOptionsContainer(!showDropdownOptionsContainer)}
+          >
+            <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
+            {showDropdownOptionsContainer && (
+              <GoalDropdownContainer>
+                <GoalDropdownOptions
+                  setShowDropdownOptions={setShowDropdownOptionsContainer}
+                  setModalOpen={setAnnualInitiativeModalOpen}
+                  itemType={"annualInitiative"}
+                  itemId={annualInitiative.id}
+                />
+              </GoalDropdownContainer>
+            )}
+          </DropdownOptionsContainer>
+        )
+      );
+    };
+
+    const goalYearString = `FY${annualInitiative.fiscalYear.toString().slice(-2)}/${(
+      annualInitiative.fiscalYear + 1
+    )
+      .toString()
+      .slice(-2)}`;
+
     const renderHeader = (): JSX.Element => {
       return (
         <HeaderContainer>
           <TitleContainer>
+            {annualInitiative.closedAt && (
+              <InitiativeClosedContainer>
+                {t("annualInitiative.closedItem")}
+              </InitiativeClosedContainer>
+            )}
             <StyledContentEditable
               innerRef={descriptionRef}
               html={annualInitiative.description}
@@ -136,26 +174,17 @@ export const AnnualInitiativeModalContent = observer(
                 </StyledNavLink>
               </GoalText>
             )}
+            <DetailsContainer>
+              <YearText type={"small"}>{goalYearString} Objective</YearText>
+              <OwnedBySection
+                ownedBy={annualInitiative.ownedBy}
+                type={"annualInitiative"}
+                disabled={annualInitiative.closedInitiative}
+              />
+            </DetailsContainer>
           </TitleContainer>
           <AnnualInitiativeActionContainer>
-            {editable && (
-              <DeleteIconContainer
-                onClick={() => {
-                  if (
-                    confirm(
-                      `Are you sure you want to delete this ${t("annualInitiative.messageText")}`,
-                    )
-                  ) {
-                    annualInitiativeStore.delete(annualInitiativeId).then(() => {
-                      setAnnualInitiativeModalOpen(false);
-                    });
-                  }
-                }}
-              >
-                <Icon icon={"Delete"} size={"16px"} iconColor={"grey80"} />
-              </DeleteIconContainer>
-            )}
-
+            {renderDropdownOptions()}
             <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
               <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
             </CloseIconContainer>
@@ -164,55 +193,45 @@ export const AnnualInitiativeModalContent = observer(
       );
     };
 
-    const renderContext = (): JSX.Element => {
-      return (
-        <InfoSectionContainer>
-          <ContextSectionContainer>
-            <SubHeaderContainer>
-              <SubHeaderText text={"Context"} />
-            </SubHeaderContainer>
-            <ContextTabs
-              object={annualInitiative}
-              type={"annualInitiative"}
-              disabled={annualInitiative.closedInitiative}
-            />
-          </ContextSectionContainer>
-          <OwnedBySection
-            ownedBy={annualInitiative.ownedBy}
-            type={"annualInitiative"}
-            disabled={annualInitiative.closedInitiative}
-          />
-        </InfoSectionContainer>
-      );
-    };
-
     const renderGoals = (): JSX.Element => {
       return (
         <>
           <SubHeaderContainer>
-            <SubHeaderText text={t("quarterlyGoal.title")} />
-            <ShowPastGoalsContainer>
-              <Button
-                small
-                variant={"primaryOutline"}
-                onClick={() => setShowAllQuarterlyGoals(!showAllQuarterlyGoals)}
-              >
-                {showAllQuarterlyGoals
-                  ? `Show Active (${activeQuarterlyGoals.length})`
-                  : `Show Past Goals (${allQuarterlyGoals.length - activeQuarterlyGoals.length})`}
-              </Button>
-            </ShowPastGoalsContainer>
+            <SubHeaderTextContainer>
+              <SubHeaderText
+                text={t("quarterlyGoal.title", { title: quarterlyGoalTitle })}
+                noMargin={true}
+              />
+            </SubHeaderTextContainer>
+            <FilterOptionsContainer>
+              <FilterOptionContainer underline={!showAllQuarterlyGoals}>
+                <FilterOption
+                  onClick={() => setShowAllQuarterlyGoals(false)}
+                  color={showAllQuarterlyGoals ? "grey40" : "primary100"}
+                >
+                  Open
+                </FilterOption>
+              </FilterOptionContainer>
+              <FilterOptionContainer underline={showAllQuarterlyGoals}>
+                <FilterOption
+                  onClick={() => setShowAllQuarterlyGoals(true)}
+                  color={showAllQuarterlyGoals ? "primary100" : "grey40"}
+                >
+                  All
+                </FilterOption>
+              </FilterOptionContainer>
+            </FilterOptionsContainer>
           </SubHeaderContainer>
           <QuarterlyGoalsContainer>
             {renderQuarterlyGoals()}
             {editable && (
               <CreateGoalContainer>
                 <CreateGoalSection
-                  placeholder={t("quarterlyGoal.enterTitle")}
-                  addButtonText={`${t("quarterlyGoal.add")} (Q${
+                  placeholder={t("quarterlyGoal.enterTitle", { title: quarterlyGoalTitle })}
+                  addButtonText={`${t("quarterlyGoal.add", { title: quarterlyGoalTitle })} (Q${
                     companyStore.company.quarterForCreatingQuarterlyGoals
                   })`}
-                  createButtonText={t("quarterlyGoal.addGoal")}
+                  createButtonText={t("quarterlyGoal.addGoal", { title: quarterlyGoalTitle })}
                   showCreateGoal={showCreateQuarterlyGoal}
                   setShowCreateGoal={setShowCreateQuarterlyGoal}
                   createAction={quarterlyGoalStore.create}
@@ -229,20 +248,10 @@ export const AnnualInitiativeModalContent = observer(
     return (
       <Container>
         {renderHeader()}
-        <SectionContainer>{renderContext()}</SectionContainer>
-        <SectionContainer>{renderGoals()}</SectionContainer>
-        {/* <SectionContainer>
-          <SubHeaderContainer>
-            <SubHeaderText text={"Comments"} />
-          </SubHeaderContainer>
-          <ContextContainer>PLACEHOLDER FOR COMMENTS</ContextContainer>
-        </SectionContainer>
         <SectionContainer>
-          <SubHeaderContainer>
-            <SubHeaderText text={"Attachments"} />
-          </SubHeaderContainer>
-          <ContextContainer>PLACEHOLDER FOR ATTACHMENTS</ContextContainer>
-        </SectionContainer> */}
+          <Context itemType={"annualInitiative"} item={annualInitiative} />
+        </SectionContainer>
+        <SectionContainer>{renderGoals()}</SectionContainer>
       </Container>
     );
   },
@@ -265,11 +274,8 @@ const TitleContainer = styled.div``;
 const GoalText = styled(Text)`
   font-size: 15px;
   color: ${props => props.theme.colors.grey80};
-`;
-
-const UnderlinedGoalText = styled.span`
-  font-weight: bold;
-  text-decoration: underline;
+  margin-left: 4px;
+  margin-top: 8px;
 `;
 
 const AnnualInitiativeActionContainer = styled.div`
@@ -283,17 +289,8 @@ const CloseIconContainer = styled.div`
   }
 `;
 
-const DeleteIconContainer = styled(CloseIconContainer)`
-  margin-right: 16px;
-`;
-
 const SectionContainer = styled.div`
   margin-top: 24px;
-`;
-
-const ContextContainer = styled(HomeContainerBorders)`
-  padding-left: 16px;
-  padding-right: 16px;
 `;
 
 const QuarterlyGoalsContainer = styled.div`
@@ -307,6 +304,7 @@ const QuarterlyGoalContainer = styled(HomeContainerBorders)`
 `;
 
 const SubHeaderContainer = styled.div`
+  position: relative;
   display: flex;
 `;
 
@@ -336,20 +334,6 @@ const QuarterlyGoalOwnerContainer = styled.div`
   margin-left: auto;
 `;
 
-const InfoSectionContainer = styled.div`
-  display: flex;
-`;
-
-const ContextSectionContainer = styled.div`
-  width: 90%;
-`;
-
-const ShowPastGoalsContainer = styled.div`
-  margin-left: auto;
-  margin-top: auto;
-  margin-bottom: auto;
-`;
-
 const StyledContentEditable = styled(ContentEditable)`
   font-weight: bold;
   font-size: 20px;
@@ -370,4 +354,68 @@ const StyledNavLink = styled(NavLink)`
   &:visited {
     color: ${props => props.theme.colors.grey80};
   }
+`;
+
+const DropdownOptionsContainer = styled.div`
+  margin-right: 16px;
+  &: hover {
+    cursor: pointer;
+  }
+`;
+
+const StyledOptionIcon = styled(Icon)`
+  transform: rotate(90deg);
+`;
+
+const DetailsContainer = styled.div`
+  display: flex;
+  margin-left: 4px;
+`;
+
+const YearText = styled(Text)`
+  color: ${props => props.theme.colors.greyActive};
+`;
+
+const FilterOptionsContainer = styled.div`
+  display: flex;
+  margin: auto;
+`;
+
+type FilterOptionType = {
+  mr?: string;
+};
+
+const FilterOption = styled.p<FilterOptionType>`
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  margin-top: 4px;
+  margin-bottom: 0;
+`;
+
+type FilterOptionContainerType = {
+  underline: boolean;
+};
+const FilterOptionContainer = styled.div<FilterOptionContainerType>`
+  border-bottom: ${props => props.underline && `4px solid ${props.theme.colors.primary100}`};
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-left: 4px;
+  margin-right: 4px;
+`;
+
+const SubHeaderTextContainer = styled.div`
+  position: absolute;
+  margin-bottom: 24px;
+`;
+
+const GoalDropdownContainer = styled.div`
+  margin-left: -50px;
+`;
+
+const InitiativeClosedContainer = styled.div`
+  padding: 8px;
+  background-color: ${props => props.theme.colors.backgroundGrey};
+  color: ${props => props.theme.colors.greyActive};
+  margin-bottom: 16px;
 `;

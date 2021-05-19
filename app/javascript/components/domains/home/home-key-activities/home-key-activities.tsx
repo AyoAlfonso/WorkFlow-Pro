@@ -24,10 +24,11 @@ import { useTranslation } from "react-i18next";
 export interface IHomeKeyActivities {
   todayOnly?: boolean;
   width?: string;
+  setQuestionnaireVariant?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const HomeKeyActivities = observer(
-  ({ todayOnly = false, width }: IHomeKeyActivities): JSX.Element => {
+  ({ todayOnly = false, width, setQuestionnaireVariant }: IHomeKeyActivities): JSX.Element => {
     const [selectedFilterGroupName, setSelectedFilterGroupName] = useState<string>("Weekly List");
     const [selectedFilterTeamId, setSelectedFilterTeamId] = useState<number>(null);
     const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
@@ -126,6 +127,7 @@ export const HomeKeyActivities = observer(
           sortFilterOpen={sortFilterOpen}
           setFilterOpen={setFilterOpen}
           scheduledGroupId={scheduledGroupId}
+          setQuestionnaireVariant={header == "Today" && setQuestionnaireVariant}
         />
       );
     };

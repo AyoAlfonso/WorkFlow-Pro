@@ -28,7 +28,7 @@ export const UserLimitReached = ({ setModalOpen }: IUserLimitReachedProps): JSX.
       <Button
         small
         variant={"primary"}
-        onClick={() => console.log("plan button clicked")}
+        onClick={() => window.open("https://go.lynchpyn.com/upgrade", "_blank")}
         style={{
           marginLeft: "auto",
           marginRight: "auto",

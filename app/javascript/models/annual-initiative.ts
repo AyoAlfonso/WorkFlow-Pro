@@ -17,11 +17,27 @@ export const AnnualInitiativeModel = types
     contextDescription: types.string,
     ownedBy: types.maybeNull(UserModel),
     fiscalYear: types.maybeNull(types.number),
+    closedAt: types.maybeNull(types.string)
   })
   .views(self => ({
     get closedInitiative() {
-      const { companyStore } = getRoot(self);
-      return companyStore.company.currentFiscalYear > self.fiscalYear;
+      let itemClosed = false;
+      if(self.closedAt){
+        itemClosed = true
+      } else {
+        self.quarterlyGoals.forEach(qg => {
+          if(qg.closedAt){
+            itemClosed = true;
+          } else {
+            qg.subInitiatives.forEach(si => {
+              if(si.closedAt){
+                itemClosed = true;
+              }
+            })
+          }
+        })
+      }
+      return itemClosed
     },
     get myQuarterlyGoals() {
       const { sessionStore } = getRoot(self);
