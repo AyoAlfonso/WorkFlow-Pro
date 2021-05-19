@@ -19,6 +19,7 @@ export const SubInitiativeModel = types
     milestones: types.array(MilestoneModel),
     contextDescription: types.maybeNull(types.string),
     quarter: types.number,
+    fiscalYear: types.maybeNull(types.number),
     closedAt: types.maybeNull(types.string)
   })
   .views(self => ({

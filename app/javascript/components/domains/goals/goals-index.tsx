@@ -48,6 +48,7 @@ export const GoalsIndex = observer(
     const [companyPlanning, setCompanyPlanning] = useState<boolean>(false);
     const [personalPlanning, setPersonalPlanning] = useState<boolean>(false);
 
+    const [showCoreFour, setShowCoreFour] = useState<boolean>(true);
     const [showCompanyInitiatives, setShowCompanyInitiatives] = useState<boolean>(true);
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
 
@@ -55,6 +56,9 @@ export const GoalsIndex = observer(
     
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
+      if (!companyStore.company) {
+        companyStore.load();
+      }
     }, []);
 
     if (loading || R.isNil(goalStore.companyGoals) || !companyStore.company) {
@@ -70,11 +74,13 @@ export const GoalsIndex = observer(
       if (companyPlanning) {
         setCompanyPlanning(false);
         setShowPersonalInitiatives(true);
+        setShowCoreFour(true);
       } else {
         setPersonalPlanning(false);
         setShowCompanyInitiatives(true);
         setShowPersonalInitiatives(false);
         setCompanyPlanning(true);
+        setShowCoreFour(false);
       }
     };
 
@@ -82,11 +88,13 @@ export const GoalsIndex = observer(
       if (personalPlanning) {
         setPersonalPlanning(false);
         setShowCompanyInitiatives(true);
+        setShowCoreFour(true);
       } else {
         setCompanyPlanning(false);
         setShowCompanyInitiatives(false);
         setShowPersonalInitiatives(true);
         setPersonalPlanning(true);
+        setShowCoreFour(false);
       }
     };
 
@@ -125,10 +133,10 @@ export const GoalsIndex = observer(
       const createGoalYearString =
         companyStore.company.currentFiscalYear ==
         companyStore.company.yearForCreatingAnnualInitiatives
-          ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-          : `FY${companyStore.company.currentFiscalYear
-              .toString()
-              .slice(-2)}/${companyStore.company.yearForCreatingAnnualInitiatives
+          ? `FY${(companyStore.company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
+          : `FY${(companyStore.company.currentFiscalYear - 1).toString().slice(-2)}/${(
+              companyStore.company.yearForCreatingAnnualInitiatives - 1
+            )
               .toString()
               .slice(-2)}`;
 
@@ -153,7 +161,7 @@ export const GoalsIndex = observer(
       return annualInitiatives.map((annualInitiative, index) => {
         return (
           <AnnualInitiativeCard
-            key={index}
+            key={annualInitiative.id}
             index={index}
             annualInitiative={annualInitiative}
             totalNumberOfAnnualInitiatives={annualInitiatives.length}
@@ -175,7 +183,7 @@ export const GoalsIndex = observer(
 
     return (
       <Container>
-        <GoalsCoreFour />
+        <GoalsCoreFour showCoreFour={showCoreFour} setShowCoreFour={setShowCoreFour} />
 
         <CompanyInitiativesContainer>
           <TitleContainer
@@ -289,9 +297,7 @@ export const GoalsIndex = observer(
   },
 );
 
-const Container = styled.div`
-  margin-top: 30px;
-`;
+const Container = styled.div``;
 
 const InitiativesContainer = styled.div`
   display: -webkit-box;

@@ -123,23 +123,36 @@ export const AnnualInitiativeModalContent = observer(
           >
             <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
             {showDropdownOptionsContainer && (
-              <GoalDropdownOptions
-                setShowDropdownOptions={setShowDropdownOptionsContainer}
-                setModalOpen={setAnnualInitiativeModalOpen}
-                itemType={"annualInitiative"}
-                itemId={annualInitiative.id}
-              />
+              <GoalDropdownContainer>
+                <GoalDropdownOptions
+                  setShowDropdownOptions={setShowDropdownOptionsContainer}
+                  setModalOpen={setAnnualInitiativeModalOpen}
+                  itemType={"annualInitiative"}
+                  itemId={annualInitiative.id}
+                />
+              </GoalDropdownContainer>
             )}
           </DropdownOptionsContainer>
         )
       );
     };
 
+    const goalYearString = `FY${annualInitiative.fiscalYear.toString().slice(-2)}/${(
+      annualInitiative.fiscalYear + 1
+    )
+      .toString()
+      .slice(-2)}`;
+
     const renderHeader = (): JSX.Element => {
       return (
          
         <HeaderContainer>
           <TitleContainer>
+            {annualInitiative.closedAt && (
+              <InitiativeClosedContainer>
+                {t("annualInitiative.closedItem")}
+              </InitiativeClosedContainer>
+            )}
             <StyledContentEditable
               innerRef={descriptionRef}
               html={annualInitiative.description}
@@ -165,7 +178,7 @@ export const AnnualInitiativeModalContent = observer(
               </GoalText>
             )}
             <DetailsContainer>
-              <YearText type={"small"}>{annualInitiative.fiscalYear} Goal</YearText>
+              <YearText type={"small"}>{goalYearString} Objective</YearText>
               <OwnedBySection
                 marginLeft={"5px"}
                 marginRight={"0px"}

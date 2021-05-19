@@ -4,6 +4,7 @@ import { IssuesHeader } from "./issues-header";
 import { IssuesBody } from "./issues-body";
 import { useState } from "react";
 import { StyledOverviewAccordion } from "~/components/shared/styles/overview-styles";
+import { AccordionDetails } from "~/components/shared/accordion-components";
 
 interface IIssuesContainerProps {
   expanded: string;
@@ -20,7 +21,15 @@ export const Issues = ({ expanded, handleChange }: IIssuesContainerProps): JSX.E
       elevation={0}
     >
       <IssuesHeader expanded={expanded} />
-      <IssuesBody showOpenIssues={showOpenIssues} setShowOpenIssues={setShowOpenIssues} />
+      <AccordionDetailsContainer>
+        <IssuesBody showOpenIssues={showOpenIssues} setShowOpenIssues={setShowOpenIssues} />
+      </AccordionDetailsContainer>
     </StyledOverviewAccordion>
   );
 };
+
+const AccordionDetailsContainer = styled(AccordionDetails)`
+  padding: 0px 0px 15px 0px;
+  display: flex;
+  flex-direction: column;
+`;

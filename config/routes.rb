@@ -166,6 +166,10 @@ Rails.application.routes.draw do
     get "user_pulse_by_date", to: "user_pulses#user_pulse_by_date"
     post "/update_user_pulse", to: "user_pulses#create_or_update"
 
+    #daily_logs
+    resources :daily_logs, only: [:index]
+
+    resources :journal_entries, only: [:update, :destroy]
     #summaries
     get '/journals', to: 'summaries#journals_by_date'
     get '/notes', to: 'summaries#meetings_by_date'

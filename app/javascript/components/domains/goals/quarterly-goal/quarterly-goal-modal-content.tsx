@@ -118,6 +118,12 @@ export const QuarterlyGoalModalContent = observer(
       });
     };
 
+    const goalYearString = `FY${quarterlyGoal.fiscalYear.toString().slice(-2)}/${(
+      quarterlyGoal.fiscalYear + 1
+    )
+      .toString()
+      .slice(-2)}`;
+
     return (
       <Container>
         <StatusBlockColorIndicator
@@ -140,6 +146,7 @@ export const QuarterlyGoalModalContent = observer(
               annualInitiativeDescription={annualInitiativeDescription}
               showDropdownOptionsContainer={showDropdownOptionsContainer}
               setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
+               goalYearString={goalYearString}
             />
           </SectionContainer>
           <SectionContainer>
@@ -170,11 +177,6 @@ export const QuarterlyGoalModalContent = observer(
                 showInactiveMilestones={showInactiveMilestones}
                 allMilestones={allMilestones}
                 activeMilestones={activeMilestones}
-                // onClick= {() =>{
-                //   quarterlyGoalStore.getSubInitiative();
-                // }
-
-                // }
               />
             </MilestonesHeaderContainer>
 

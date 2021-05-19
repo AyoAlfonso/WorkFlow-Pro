@@ -195,13 +195,16 @@ True value of LynchPyn is in working together with others in your team and compa
     {
       formFields: [
         {
-          label: "Business Name",
+          label: onboardingDisplayFormat == "Company" ? "Business Name" : "Forum Name",
           fieldType: EFieldType.TextField,
           formKeys: ["name"],
           callback: setFormState,
         },
         {
-          label: "Logo (preferably horizontal logos)",
+          label:
+            onboardingDisplayFormat == "Company"
+              ? "Logo (preferably horizontal logos)"
+              : "Logo (optional)",
           fieldType: EFieldType.Image,
           formKeys: ["logo"],
           callback: setFormState,
@@ -269,11 +272,11 @@ True value of LynchPyn is in working together with others in your team and compa
           fieldType: EFieldType.TextField,
           formKeys: ["rallyingCry"],
           callback: setGoalDataState,
-          subText: `Awesome ${profile.firstName}! This is what we call your LynchPyn Goal. This is the ultimate filter when the company is making any strategic decisions until it's achieved`,
+          subText: `Awesome ${profile.firstName}! This is what we call your LynchPyn Goal™. This is the ultimate filter when the company is making any strategic decisions until it's achieved`,
         },
         {
           label:
-            "What's a specific Goal you can set for the next year to achieve your LynchPyn Goal? This can be specific to your team.",
+            "What's a specific Goal you can set for the next year to achieve your LynchPyn Goal™? This can be specific to your team.",
           fieldType: EFieldType.TextField,
           formKeys: ["annualInitiative", "description"],
           callback: setGoalDataState,
@@ -308,12 +311,16 @@ True value of LynchPyn is in working together with others in your team and compa
     {
       formFields: [
         {
-          label: "What team do you belong to? (create one, you can add others later)",
+          label:
+            onboardingDisplayFormat == "Company"
+              ? "What team do you belong to? (create one, you can add others later)"
+              : "What is your forum group's name?",
           fieldType: EFieldType.TextField,
           formKeys: ["teamName"],
           callback: setTeamDataState,
           subText: "Each member will get a link to set up their account",
-          placeholder: "e.g. Leadership Team",
+          placeholder:
+            onboardingDisplayFormat == "Company" ? "e.g. Leadership Team" : "e.g. Summiteers",
         },
         {
           label: "Email Addresses",
@@ -333,7 +340,7 @@ True value of LynchPyn is in working together with others in your team and compa
     {
       formFields: [
         {
-          label: "Fiscal Year Start",
+          label: onboardingDisplayFormat == "Company" ? "Fiscal Year Start" : "Cycle Start Date",
           fieldType: EFieldType.DateSelect,
           formKeys: ["fiscalYearStart"],
           callback: setFormState,
@@ -395,7 +402,11 @@ True value of LynchPyn is in working together with others in your team and compa
       />
       <BulletedList
         heading={"e.g. Southwest Airline"}
-        listItems={["Warrior Spirit", "Servant's Heart", "Fun Loving"]}
+        listItems={[
+          "Keep fair prices low",
+          "Create fanatically loyal customers",
+          "Make sure planes are on time",
+        ]}
         containerStyle={bulletContainerStyle}
       />
     </>,
@@ -409,6 +420,24 @@ True value of LynchPyn is in working together with others in your team and compa
       R.pipe(
         R.toPairs,
         R.map(([k, v]) => [k, R.replace("{displayFormat}", R.toLower(onboardingDisplayFormat), v)]),
+        R.map(([k, v]) => [
+          k,
+          R.replace(
+            "{teamFormatHeading}",
+            onboardingDisplayFormat == "Company" ? "Team" : "Forum",
+            v,
+          ),
+        ]),
+        R.map(([k, v]) => [
+          k,
+          R.replace(
+            "{teamFormatDescription}",
+            onboardingDisplayFormat == "Company"
+              ? "The final step in your onboarding is adding your team. The power of LynchPyn is in collaboration; add your team and teammates so they can help you populate your company plan."
+              : "Add your forum mates to get started. The power of Forum is in collaboration; add your forum mates so they can add topics for your Forum meetings and access the agenda prior to each meeting.",
+            v,
+          ),
+        ]),
         R.fromPairs,
       )(val),
     headingsAndDescriptions,
@@ -432,6 +461,7 @@ True value of LynchPyn is in working together with others in your team and compa
   //////FORUM RELATED CHARGES
 
   const forumMode = companyStore.onboardingCompany && companyStore.onboardingCompany.accessForum;
+
   const leftBodyComponentsForum = [
     leftBodyComponents[0],
     <></>,

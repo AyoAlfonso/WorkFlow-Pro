@@ -59,6 +59,7 @@ export const RootStoreModel = types
         self.notificationStore.load();
         self.labelStore.fetchLabels();
         self.keyActivityStore.load();
+        self.companyStore.getOnboardingCompany();
       }
     }),
   }))

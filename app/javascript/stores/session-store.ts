@@ -10,6 +10,7 @@ import { StaticModel } from "~/models/static";
 import { registerIdentity } from "~/components/shared/analytics";
 import { ScheduledGroupModel } from "~/models/scheduled-group";
 import { UserPulseModel } from "~/models/user-pulse";
+import { DailyLogModel } from "~/models/daily-log";
 
 export const SessionStoreModel = types
   .model("SessionStoreModel")
@@ -21,7 +22,8 @@ export const SessionStoreModel = types
     staticData: types.maybeNull(StaticModel),
     scheduledGroups: types.maybeNull(types.array(ScheduledGroupModel)),
     selectedUserPulse: types.maybeNull(UserPulseModel),
-    companyStaticData: types.maybeNull(types.array(types.frozen()))
+    companyStaticData: types.maybeNull(types.array(types.frozen())),
+    selectedDailyLog: types.maybeNull(DailyLogModel),
   })
   .extend(withRootStore())
   .extend(withEnvironment())
@@ -48,7 +50,7 @@ export const SessionStoreModel = types
       const titleObject = self.companyStaticData.find(
         item => item.field == "sub_initiative",
       );
-      return titleObject ? titleObject.value : "Sub Initiative";
+      return titleObject ? titleObject.value : "Supporting Initiative";
     }
   }))
   .actions(self => ({
@@ -116,6 +118,23 @@ export const SessionStoreModel = types
         self.profile.userPulseForDisplay = response.data.userPulse
       } else {
         self.profile.userPulseForDisplay = null
+      }
+    }),
+    updateSelectedDailyLog: function(dailyLogObject) {
+      self.selectedDailyLog = dailyLogObject;
+    },
+    getSelectedDailyLog: flow(function*(date) {
+      if (date == null) {
+        self.selectedDailyLog = null;
+      } else {
+        self.loading = true;
+        const response = yield self.environment.api.getSelectedDailyLogByDate(date);
+        if (response.data) {
+          self.selectedDailyLog = response.data.dailyLog;
+        } else {
+          self.selectedDailyLog = null;
+        }
+        self.loading = false;
       }
       
     }),
@@ -205,6 +224,7 @@ export const SessionStoreModel = types
             meetingStore.load();
             labelStore.fetchLabels();
             notificationStore.load();
+            companyStore.getOnboardingCompany();
           }
         }
       } catch {

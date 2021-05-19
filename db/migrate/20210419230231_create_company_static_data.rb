@@ -12,7 +12,7 @@ class CreateCompanyStaticData < ActiveRecord::Migration[6.0]
     Company.all.each do |company|
       CompanyStaticData.create!(field: 'annual_objective', value: 'Annual Objective', company: company)
       CompanyStaticData.create!(field: 'quarterly_initiative', value: 'Quarterly Initiative', company: company)
-      CompanyStaticData.create!(field: 'sub_initiative', value: 'Sub Initiative', company: company)
+      CompanyStaticData.create!(field: 'sub_initiative', value: 'Supporting Initiative', company: company)
     end
   end
 end

@@ -35,16 +35,22 @@ class User < ApplicationRecord
   has_many :user_company_enablements, dependent: :destroy
   has_many :companies, through: :user_company_enablements
   has_many :user_pulses, dependent: :destroy
+  has_many :journal_entries, dependent: :destroy
   accepts_nested_attributes_for :companies, :allow_destroy => true
   accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
   accepts_nested_attributes_for :team_user_enablements, :allow_destroy => true
 
   validates :first_name, :last_name, presence: true, on: :update
+  
 
   accepts_nested_attributes_for :daily_logs
 
   #TODO - DELETE COMPANY FROM DATABASE to be removed after we finalize rake, etc.
   belongs_to :default_selected_company, class_name: "Company"
+
+  scope :active_users_for_company, -> (company_id) { joins(:user_company_enablements)
+                                                        .where(user_company_enablements: { company_id: company_id})
+                                                        .where.not(user_company_enablements: {user_role: UserRole::COACH}) } #later on we can extend inactive users, etc.
 
   def status
     return "inactive" if deleted_at.present?
@@ -158,8 +164,31 @@ class User < ApplicationRecord
   def time_in_user_timezone(time = nil)
     if time.nil?
       Time.current.in_time_zone(timezone_name)
-    elsif time == 'noon'
+    elsif time == 'noon' #TODO: REFACTOR OUT
       Time.current.in_time_zone(timezone_name).at_noon
+    end
+  end
+
+  def end_of_day_for_user(date)
+    # date.to_datetime.in_time_zone(timezone_name).end_of_day
+    date.to_datetime.end_of_day.change(offset: "#{date.to_datetime.end_of_day.in_time_zone(timezone_name).utc_offset/3600}")
+  end
+
+  def start_of_day_for_user(date)
+    # date.to_datetime.in_time_zone(timezone_name).start_of_day
+    date.to_datetime.start_of_day.change(offset: "#{date.to_datetime.end_of_day.in_time_zone(timezone_name).utc_offset/3600}")
+  end
+
+  def questionnaire_type_for_planning
+    user_time = self.time_in_user_timezone
+    if [2,3,4,5].include? user_time.wday # Tuesday to Friday
+      if user_time.wday == 5 && user_time.hour > 12
+        "weekly"
+      else
+        "daily"
+      end
+    else
+     "weekly"
     end
   end
 

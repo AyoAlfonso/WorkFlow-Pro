@@ -43,6 +43,7 @@ export const PersonalVision = ({ personalVision }: IPersonalVisionProps): JSX.El
 const VisionContainer = styled(HomeContainerBorders)`
   height: 60px;
   display: flex;
+  position: relative;
 `;
 
 const VisionTitle = styled.p`

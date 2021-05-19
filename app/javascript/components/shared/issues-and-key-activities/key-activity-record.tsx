@@ -24,10 +24,17 @@ interface IKeyActivityRecordProps {
   dragHandleProps?: any;
   meetingId?: string | number;
   disabled?: boolean;
+  noBorder?: boolean;
 }
 
 export const KeyActivityRecord = observer(
-  ({ keyActivity, dragHandleProps, meetingId, disabled }: IKeyActivityRecordProps): JSX.Element => {
+  ({
+    keyActivity,
+    dragHandleProps,
+    meetingId,
+    disabled,
+    noBorder,
+  }: IKeyActivityRecordProps): JSX.Element => {
     const { keyActivityStore } = useMst();
     const keyActivityRef = useRef(null);
     const { t } = useTranslation();
@@ -81,8 +88,8 @@ export const KeyActivityRecord = observer(
       keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false);
     };
 
-    const updateLabel = labelName => {
-      keyActivityStore.updateLabel(keyActivity.id, labelName);
+    const updateLabel = labelId => {
+      keyActivityStore.updateLabel(keyActivity.id, labelId);
     };
 
     const renderLabel = () => {
@@ -99,7 +106,7 @@ export const KeyActivityRecord = observer(
     };
 
     return (
-      <Container dragHandleProps={dragHandleProps}>
+      <Container dragHandleProps={dragHandleProps} noBorder={noBorder}>
         <RowContainer>
           <CheckboxContainer key={keyActivity["id"]}>
             <Checkbox
@@ -254,12 +261,14 @@ const DeleteButtonContainer = styled.div`
 
 type ContainerProps = {
   dragHandleProps?: any;
+  noBorder?: any;
 };
 
 const Container = styled(HomeContainerBorders)<ContainerProps>`
   font-size: 14px;
   width: inherit;
   padding: 4px 0px 4px 0px;
+  box-shadow: ${props => props.noBorder && "none"};
   &:hover ${DeleteButtonContainer} {
     display: block;
   }
@@ -276,7 +285,7 @@ const Container = styled(HomeContainerBorders)<ContainerProps>`
 
 const InputContainer = styled.div`
   display: flex;
-  width: 85%;
+  width: auto;
   font-size: 14px;
   padding: 4px 0px 4px 0px;
 `;

@@ -1,7 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Icon } from "~/components/shared/icon";
-import { Button } from "~/components/shared/button";
 import { useMst } from "~/setup/root";
 import { useRef } from "react";
 import { DropdownOptions } from "./dropdown-options";
@@ -22,6 +21,7 @@ interface IInitiativeHeaderProps {
   annualInitiativeDescription: string;
   showDropdownOptionsContainer: boolean;
   setShowDropdownOptionsContainer: React.Dispatch<React.SetStateAction<boolean>>;
+  goalYearString: string;
 }
 
 export const InitiativeHeader = ({
@@ -35,8 +35,11 @@ export const InitiativeHeader = ({
   annualInitiativeDescription,
   showDropdownOptionsContainer,
   setShowDropdownOptionsContainer,
+  goalYearString,
 }: IInitiativeHeaderProps): JSX.Element => {
   const { quarterlyGoalStore, subInitiativeStore } = useMst();
+
+  const { t } = useTranslation();
 
   const descriptionRef = useRef(null);
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
