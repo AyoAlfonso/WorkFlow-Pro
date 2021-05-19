@@ -47,7 +47,7 @@ export const CreateIssueModal = ({
   }, []);
 
   if (!companyStore.company) {
-    return <Loading />;
+    return <></>;
   }
 
   const companyUsers = userStore.users;

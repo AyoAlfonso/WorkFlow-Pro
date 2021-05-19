@@ -9,12 +9,11 @@ interface IRecordOptionsProps {
   type: string;
   id: string | number;
   marginLeft?: string;
-  iconColor?:string;
+  iconColor?: string;
 }
 
 export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
   const { type, id, marginLeft, iconColor } = props;
-  const { quarterlyGoalStore, annualInitiativeStore, subInitiativeStore, sessionStore } = useMst();
 
   const optionsRef = useRef(null);
 
@@ -40,7 +39,7 @@ export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
           setShowOptions(!showOptions);
         }}
       >
-        <Icon icon={"Options"} size={"16px"} iconColor={ iconColor || "grey60"} />
+        <Icon icon={"Options"} size={"16px"} iconColor={iconColor || "grey60"} />
       </IconWrapper>
       {showOptions && (
         <DropdownOptionsContainer onClick={e => e.stopPropagation()}>
@@ -64,13 +63,13 @@ const DropdownOptionsContainer = styled.div`
 `;
 
 const IconWrapper = styled.div`
--webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
   &:hover {
     cursor: pointer;
-    color:  ${props => props.theme.colors.greyActive};
+    color: ${props => props.theme.colors.greyActive};
   }
 `;
