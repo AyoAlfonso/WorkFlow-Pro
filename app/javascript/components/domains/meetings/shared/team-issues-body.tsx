@@ -56,6 +56,10 @@ export const TeamIssuesBody = observer(
       },
     ];
 
+    if (issueStore.loading) {
+      return <Loading />;
+    }
+
     const handleSortMenuItemClick = value => {
       setSortOptionsOpen(false);
       issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });
@@ -165,6 +169,7 @@ const IssuesContainer = styled.div<IssuesContainerProps>`
   overflow-y: auto;
   height: ${props => (props.meeting ? "inherit" : "260px")};
   overflow-x: hidden;
+  padding-right: 8px;
 `;
 
 const IssueContainer = styled.div``;

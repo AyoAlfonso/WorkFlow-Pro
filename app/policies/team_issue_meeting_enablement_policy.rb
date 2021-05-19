@@ -1,29 +1,11 @@
 class TeamIssueMeetingEnablementPolicy < ApplicationPolicy
-  attr_reader :user, :team_issue_meeting_enablement
 
-  def initialize(user, team_issue_meeting_enablement)
-    @user = user
-    @team_issue_meeting_enablement = team_issue_meeting_enablement
-  end
-
+  #not used really as we currently acceses team issue enableme nts via issues controller and service
   def create?
     true
   end
 
   def index?
     true
-  end
-
-  class Scope
-    attr_reader :user, :scope
-
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
-
-    def resolve
-      scope.all
-    end
   end
 end

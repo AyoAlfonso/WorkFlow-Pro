@@ -32,6 +32,7 @@ export const UserModel = types
     currentCompanyUserTeams: types.maybeNull(types.array(types.frozen())),
     userPulseForDisplay: types.maybeNull(UserPulseModel),
     currentCompanyOnboarded: types.maybeNull(types.boolean),
+    questionnaireTypeForPlanning: types.maybeNull(types.string)
     //add avatarurl2x
   })
   .views(self => ({

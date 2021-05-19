@@ -17,6 +17,7 @@ import { Avatar, LabelSelection, DefaultStyledLabel } from "~/components/shared"
 import { toJS } from "mobx";
 import { InitialsGenerator } from "~/components/shared/issues-and-key-activities/initials-generator";
 import * as R from "ramda";
+import { LabelImportantRounded } from "@material-ui/icons";
 
 interface IIssueEntryProps {
   issue: any;
@@ -119,8 +120,8 @@ export const IssueEntry = observer(
       issueStore.updateIssue(issue.id, meetingId || teamId ? true : false);
     };
 
-    const updateLabel = labelName => {
-      issueStore.updateLabel(issue.id, labelName, meetingId || teamId ? true : false);
+    const updateLabel = labelId => {
+      issueStore.updateLabel(issue.id, labelId, meetingId || teamId ? true : false);
     };
 
     const renderLabel = () => {

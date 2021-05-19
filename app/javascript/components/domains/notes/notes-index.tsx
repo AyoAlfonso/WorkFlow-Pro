@@ -12,6 +12,7 @@ import "react-date-range/dist/theme/default.css";
 import { addDays } from "date-fns";
 import { baseTheme } from "~/themes/base";
 import ReactHtmlParser from "react-html-parser";
+import { TrixEditor } from "react-trix";
 
 import MeetingTypes from "~/constants/meeting-types";
 
@@ -67,6 +68,8 @@ export const NotesIndex = observer(
       },
     });
     const [noteTypeFilter, setNoteTypeFilter] = useState<any>({});
+    const [editMode, setEditMode] = useState<boolean>(false);
+    const [entryUpdate, setEntryUpdate] = useState<string>("");
 
     const { meetingStore, userStore, sessionStore, teamStore } = useMst();
 
@@ -76,6 +79,7 @@ export const NotesIndex = observer(
 
     const meetingTemplates = meetingStore.meetingTemplates;
     const profile = sessionStore.profile;
+    //notes is across teams?
     const teams = toJS(profile.teams); //TODO: if you are a coach you can see other team notes
     const users = userStore.users;
 
@@ -158,7 +162,11 @@ export const NotesIndex = observer(
       const template = meetingTemplates.find(mt => mt.id === meetingTemplateId);
       let firstName, lastName, avatarColor, avatarUrl;
 
-      if (template.meetingType === MeetingTypes.PERSONAL_WEEKLY) {
+      if (
+        template.meetingType === MeetingTypes.PERSONAL_WEEKLY ||
+        template.meetingType === MeetingTypes.PERSONAL_DAILY ||
+        template.meetingType === MeetingTypes.PERSONAL_MONTHLY //not yet available
+      ) {
         firstName = profile.firstName;
         lastName = profile.lastName;
         avatarColor = profile.defaultAvatarColor;
@@ -216,19 +224,52 @@ export const NotesIndex = observer(
                   {t("notes.meetingNotes")}
                 </Text>
                 <ActionButtonsContainer>
-                  {/* <IconButtonContainer onClick={() => {}}>
+                  {editMode && (
+                    <IconButtonContainer
+                      onClick={async () => {
+                        const updatedMeeting = await meetingStore.updateMeeting({
+                          ...selectedItem,
+                          notes: entryUpdate,
+                        });
+                        if (updatedMeeting) {
+                          setEditMode(false);
+                          setSelectedItem(updatedMeeting);
+                          meetingStore
+                            .getMeetingNotes({
+                              filters: { ...dateFilter.selection, ...noteTypeFilter },
+                            })
+                            .then(() => setLoading(false));
+                        }
+                      }}
+                    >
+                      <Icon icon={"Checkmark"} size={"16px"} mr={"16px"} />
+                    </IconButtonContainer>
+                  )}
+                  <IconButtonContainer
+                    onClick={() => {
+                      if (!editMode) {
+                        setEntryUpdate(selectedItem.notes);
+                      }
+                      setEditMode(!editMode);
+                    }}
+                  >
                     <Icon icon={"Edit-2"} size={"16px"} mr={"16px"} />
-                  </IconButtonContainer> */}
+                  </IconButtonContainer>
                   <IconButtonContainer
                     onClick={async () => {
                       if (confirm(t("notes.deleteNote"))) {
-                        await meetingStore.updateMeeting({ ...selectedItem, notes: "" });
-                        setSelectedItem(null);
-                        meetingStore
-                          .getMeetingNotes({
-                            filters: { ...dateFilter.selection, ...noteTypeFilter },
-                          })
-                          .then(() => setLoading(false));
+                        const updatedMeeting = await meetingStore.updateMeeting({
+                          ...selectedItem,
+                          notes: "",
+                        });
+                        if (updatedMeeting) {
+                          setEditMode(false);
+                          meetingStore
+                            .getMeetingNotes({
+                              filters: { ...dateFilter.selection, ...noteTypeFilter },
+                            })
+                            .then(() => setLoading(false));
+                        }
                       }
                     }}
                   >
@@ -238,7 +279,19 @@ export const NotesIndex = observer(
               </EntryCardHeaderContainer>
             }
           >
-            <EntryBodyCard>{ReactHtmlParser(selectedItem.notes)}</EntryBodyCard>
+            {editMode ? (
+              <TrixEditor
+                className="custom-trix-class"
+                autoFocus={true}
+                mergeTags={[]}
+                value={entryUpdate}
+                onChange={(html, text) => {
+                  setEntryUpdate(html);
+                }}
+              />
+            ) : (
+              <EntryBodyCard>{ReactHtmlParser(selectedItem.notes)}</EntryBodyCard>
+            )}
           </Card>
         </>
       );

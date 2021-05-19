@@ -48,15 +48,15 @@ export const AccountProfile = observer(
       })
     }
 
-   const pickAvatarImageblob = async (file) => {
-     setAvatarImageblub(file)
-     setAvatarImageModalOpen(!avatarImageModalOpen)
+    const pickAvatarImageblob = async (file) => {
+      setAvatarImageblub(file)
+      setAvatarImageModalOpen(!avatarImageModalOpen)
     };
 
-  const inputFileUpload = async (files: FileList) => {
-     const imageDataUrl = await readFile(files[0])
-     pickAvatarImageblob(imageDataUrl)
-  }
+    const inputFileUpload = async (files: FileList) => {
+      const imageDataUrl = await readFile(files[0])
+      pickAvatarImageblob(imageDataUrl)
+    }
     const deleteAvatar = async () => {
       await sessionStore.deleteAvatar();
     };
@@ -127,19 +127,19 @@ export const AccountProfile = observer(
                   {t("general.remove")}
                 </Button>
 
-                <FileInput 
+                <FileInput
                   labelText={t("general.upload")}
-                  onChange={inputFileUpload} /> 
-                
-                 {avatarImageModalOpen && (
-                    <ImageCropperModal
+                  onChange={inputFileUpload} />
+
+                {avatarImageModalOpen && (
+                  <ImageCropperModal
                     image={avatarImageblub}
                     uploadCroppedImage={submitAvatar}
                     modalOpen={avatarImageModalOpen}
                     setModalOpen={setAvatarImageModalOpen}
                     headerText={t("profile.updateProfileAvatar")}
-                    />
-                 )}
+                  />
+                )}
               </PhotoModificationButtonsSection>
             </ProfilePhotoWrapper>
           </ProfilePhotoSection>

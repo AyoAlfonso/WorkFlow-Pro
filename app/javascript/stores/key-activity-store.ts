@@ -262,15 +262,15 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
-    updateLabel: flow(function*(keyActivityId, labelName) {
+    updateLabel: flow(function*(keyActivityId, labelId) {
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivity({
         id: keyActivityId,
-        labelList: labelName,
+        labelList: labelId,
       });
 
       self.finishLoading();
       if (response.ok) {
-        self.incompleteKeyActivities = response.data;
+        self.incompleteKeyActivities = response.data.keyActivities;
         return true;
       } else {
         return false;

@@ -40,11 +40,16 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :team_user_enablements, :allow_destroy => true
 
   validates :first_name, :last_name, presence: true, on: :update
+  
 
   accepts_nested_attributes_for :daily_logs
 
   #TODO - DELETE COMPANY FROM DATABASE to be removed after we finalize rake, etc.
   belongs_to :default_selected_company, class_name: "Company"
+
+  scope :active_users_for_company, -> (company_id) { joins(:user_company_enablements)
+                                                        .where(user_company_enablements: { company_id: company_id})
+                                                        .where.not(user_company_enablements: {user_role: UserRole::COACH}) } #later on we can extend inactive users, etc.
 
   def status
     return "inactive" if deleted_at.present?
@@ -85,12 +90,20 @@ class User < ApplicationRecord
     self.teams.where(company: current_company)
   end
 
+  def user_teams_for_company_or_full_access(current_company)
+    self.can_observe_company?(current_company) ? current_company.teams : user_teams_for_company(current_company)
+  end
+
   def team_lead_for?(team)
     team.is_lead?(self)
   end
 
   def teams_intersect?(teams)
     self.teams.any? { |team| teams.include?(team) }
+  end
+
+  def can_observe_company?(company)
+    user_company_enablements.find_by_company_id(company.id)&.user_role&.name == UserRole::COACH
   end
 
   def company_admin?(company)
@@ -152,6 +165,19 @@ class User < ApplicationRecord
       Time.current.in_time_zone(timezone_name)
     elsif time == 'noon'
       Time.current.in_time_zone(timezone_name).at_noon
+    end
+  end
+
+  def questionnaire_type_for_planning
+    user_time = self.time_in_user_timezone
+    if [2,3,4,5].include? user_time.wday # Tuesday to Friday
+      if user_time.wday == 5 && user_time.hour > 12
+        "weekly"
+      else
+        "daily"
+      end
+    else
+     "weekly"
     end
   end
 

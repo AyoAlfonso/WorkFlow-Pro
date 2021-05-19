@@ -14,19 +14,39 @@ interface IMilestoneCardProps {
   milestone: MilestoneType;
   editable: boolean;
   fromMeeting?: boolean;
+  itemType: string;
 }
 
 export const MilestoneCard = ({
   milestone,
   editable,
   fromMeeting,
+  itemType,
 }: IMilestoneCardProps): JSX.Element => {
-  const { quarterlyGoalStore, milestoneStore } = useMst();
+  const { quarterlyGoalStore, subInitiativeStore, milestoneStore } = useMst();
+
+  const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
 
   const descriptionRef = useRef(null);
 
   const unstarted = milestone.status == "unstarted";
   const currentWeek = moment(milestone.weekOf).isSame(moment(), "week");
+
+  const descriptionText = useRef(milestone.description || "");
+
+  const handleChange = e => {
+    if (!e.target.value.includes("<div>")) {
+      descriptionText.current = e.target.value;
+    }
+  };
+
+  const handleBlur = () => {
+    if (fromMeeting) {
+      milestoneStore.updateDescriptionFromPersonalMeeting(milestone.id, descriptionText.current);
+    } else {
+      mobxStore.updateMilestoneDescription(milestone.id, descriptionText.current);
+    }
+  };
 
   return (
     <MilestoneContainer>
@@ -37,30 +57,16 @@ export const MilestoneCard = ({
         </WeekOfText>
         <MilestoneContentEditable
           innerRef={descriptionRef}
-          html={milestone.description}
+          html={descriptionText.current}
           disabled={!editable}
           placeholder={"Enter Description"}
-          onChange={e => {
-            if (!e.target.value.includes("<div>")) {
-              if (fromMeeting) {
-                milestoneStore.updateDescriptionFromPersonalMeeting(milestone.id, e.target.value);
-              } else {
-                quarterlyGoalStore.updateMilestoneDescription(milestone.id, e.target.value);
-              }
-            }
-          }}
+          onChange={handleChange}
           onKeyDown={key => {
             if (key.keyCode == 13) {
               descriptionRef.current.blur();
             }
           }}
-          onBlur={() => {
-            if (fromMeeting) {
-              milestoneStore.updateMilestoneFromPersonalMeeting(milestone.id);
-            } else {
-              quarterlyGoalStore.update();
-            }
-          }}
+          onBlur={handleBlur}
         />
       </MilestoneDetails>
       <IndividualVerticalStatusBlockColorIndicator
@@ -68,6 +74,7 @@ export const MilestoneCard = ({
         milestoneStatus={milestone.status}
         editable={editable}
         fromMeeting={fromMeeting}
+        itemType={itemType}
       />
     </MilestoneContainer>
   );
@@ -112,5 +119,7 @@ const MilestoneContentEditable = styled(ContentEditable)`
   margin-bottom: 8px;
   padding-top: 5px;
   padding-bottom: 5px;
+  padding-left: 16px;
+  padding-right: 16px;
   color: ${props => props.theme.colors.black};
 `;

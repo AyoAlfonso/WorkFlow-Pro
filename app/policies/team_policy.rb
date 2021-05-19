@@ -5,7 +5,7 @@ class TeamPolicy < ApplicationPolicy
 
   def show?
     team_ids = @user.team_user_enablements.pluck(:team_id)
-    team_ids.include?(@record.id)
+    team_ids.include?(@record.id) || user_can_observe_current_company?
   end
 
   def update?

@@ -31,8 +31,10 @@ export const AnnualInitiativeCardExpanded = observer(
       showEditButton,
     } = props;
 
-    const { quarterlyGoalStore, companyStore } = useMst();
+    const { quarterlyGoalStore, companyStore, sessionStore } = useMst();
     const [createQuarterlyGoalArea, setCreateQuarterlyGoalArea] = useState<boolean>(false);
+
+    const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
 
     const { t } = useTranslation();
 
@@ -63,11 +65,11 @@ export const AnnualInitiativeCardExpanded = observer(
         return (
           <CreateGoalContainer>
             <CreateGoalSection
-              placeholder={t("quarterlyGoal.enterTitle")}
-              addButtonText={`${t("quarterlyGoal.add")} (Q${
+              placeholder={t("quarterlyGoal.enterTitle", { title: quarterlyGoalTitle })}
+              addButtonText={`${t("quarterlyGoal.add", { title: quarterlyGoalTitle })} (Q${
                 companyStore.company.quarterForCreatingQuarterlyGoals
               })`}
-              createButtonText={t("quarterlyGoal.addGoal")}
+              createButtonText={t("quarterlyGoal.addGoal", { title: quarterlyGoalTitle })}
               showCreateGoal={createQuarterlyGoalArea}
               setShowCreateGoal={setCreateQuarterlyGoalArea}
               createAction={quarterlyGoalStore.create}
@@ -86,7 +88,9 @@ export const AnnualInitiativeCardExpanded = observer(
           e.stopPropagation();
         }}
       >
-        <QuarterlyGoalsText>{t("quarterlyGoal.title")}</QuarterlyGoalsText>
+        <QuarterlyGoalsText>
+          {t("quarterlyGoal.title", { title: quarterlyGoalTitle })}
+        </QuarterlyGoalsText>
         {renderQuarterlyGoals()}
         {showCreateQuarterlyGoal && renderCreateGoal()}
         <MinimizeIconContainer

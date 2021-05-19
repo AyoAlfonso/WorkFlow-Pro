@@ -26,7 +26,9 @@ export const PynsSummary = ({ goalData: { annualInitiative } }: IPynsSummaryProp
           ? quarterlyGoal.description
           : "You do not have a quarterly goal created yet."}
       </TextDiv>
-      {milestone && <MilestoneCard milestone={milestone} editable={false} />}
+      {milestone && (
+        <MilestoneCard milestone={milestone} editable={false} itemType={"quarterlyGoal"} />
+      )}
     </Container>
   );
 };

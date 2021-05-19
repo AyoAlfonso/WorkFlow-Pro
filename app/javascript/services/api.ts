@@ -7,11 +7,14 @@ export class Api {
   token: string;
 
   constructor() {
+    let companyId = localStorage.getItem("companyId")
+    
     this.client = create({
       baseURL: "/api",
       headers: {
         "Cache-Control": "no-cache",
         "Content-Type": "application/json",
+        "Current-Company-ID": companyId == "undefined" || !companyId ? "" : companyId
       },
       timeout: 30000,
       withCredentials: true, //allow cookies to be sent if its from same domain
@@ -52,9 +55,7 @@ export class Api {
 
   async profile() {
     const response = await this.client.get("/profile");
-    this.client.setHeaders({
-      "Current-Company-ID": R.path(["data", "sessionCompanyProfileId"], response) || "",
-    });
+    localStorage.setItem('companyId', R.path(["data", "sessionCompanyProfileId"], response));
     return response;
   }
 
@@ -139,6 +140,11 @@ export class Api {
       "Current-Company-ID": "",
     });
     return this.client.delete("/users/sign_out");
+  }
+
+  async switchCompanies(id) {
+    localStorage.setItem("companyId", id);
+    return true
   }
 
   async createIssue(issueObject) {
@@ -238,6 +244,10 @@ export class Api {
     return this.client.patch(`/annual_initiatives/${annualInitiative.id}`, parsedAnnualInitiative);
   }
 
+  async closeAnnualInitiative(id) {
+    return this.client.patch(`/annual_initiatives/close_initiative/${id}`);
+  }
+
   async createAnnualInitiative(annualInitiativeObject) {
     return this.client.post(`/annual_initiatives`, annualInitiativeObject);
   }
@@ -268,6 +278,10 @@ export class Api {
     return this.client.patch(`/quarterly_goals/${quarterlyGoal.id}`, parsedQuarterlyGoal);
   }
 
+  async closeQuarterlyGoal(id) {
+    return this.client.patch(`/quarterly_goals/close_goal/${id}`);
+  }
+
   async createQuarterlyGoalKeyElement(id, params) {
     return this.client.post(`/quarterly_goals/create_key_element/${id}`, params);
   }
@@ -278,6 +292,36 @@ export class Api {
 
   async deleteQuarterlyGoal(id) {
     return this.client.delete(`/quarterly_goals/${id}`);
+  }
+
+  async getSubInitiative(id) {
+    return this.client.get(`/sub_initiatives/${id}`);
+  }
+
+  async updateSubInitiative(subInitiative) {
+    const parsedSubInitiative = {
+      ...subInitiative,
+      keyElementsAttributes: subInitiative.keyElements,
+      milestonesAttributes: subInitiative.milestones,
+    };
+
+    return this.client.patch(`/sub_initiatives/${subInitiative.id}`, parsedSubInitiative);
+  }
+
+  async closeSubInitiative(id) {
+    return this.client.patch(`/sub_initiatives/close_goal/${id}`);
+  }
+
+  async createSubInitiativeKeyElement(id, params) {
+    return this.client.post(`/sub_initiatives/create_key_element/${id}`, params);
+  }
+
+  async deleteSubInitiativeKeyElement(keyElementId) {
+    return this.client.delete(`/sub_initiatives/delete_key_element/${keyElementId}`);
+  }
+
+  async deleteSubInitiative(id) {
+    return this.client.delete(`/sub_initiatives/${id}`);
   }
 
   async getHabits() {
@@ -308,8 +352,16 @@ export class Api {
     return this.client.post(`/quarterly_goals`, quarterlyGoalObject);
   }
 
-  async createMilestones(quarterlyGoalId) {
+  async createQuarterlyGoalMilestones(quarterlyGoalId) {
     return this.client.post(`/quarterly_goals/create_milestones/${quarterlyGoalId}`);
+  }
+
+  async createSubInitiative(subInitiativeObject) {
+    return this.client.post(`/sub_initiatives`, subInitiativeObject);
+  }
+
+  async createSubInitiativeMilestones(subInitiativeId) {
+    return this.client.post(`/sub_initiatives/create_milestones/${subInitiativeId}`);
   }
 
   async updateHabitLog(habitId: number, logDate: string) {
@@ -322,6 +374,14 @@ export class Api {
 
   async getJournalEntries(dateFilterObj) {
     return this.client.get(`/journals`, dateFilterObj);
+  }
+
+  async updateJournalEntry(journalEntry) {
+    return this.client.patch(`/journal_entries/${journalEntry.id}`, journalEntry);
+  }
+
+  async deleteJournalEntry(journalEntryId) {
+    return this.client.delete(`/journal_entries/${journalEntryId}`);
   }
 
   async createQuestionnaireAttempt(questionnaireId, questionnaireAttemptData) {
@@ -456,16 +516,16 @@ export class Api {
     return this.client.post(`/create_team_and_invite_users`, { teamName, users });
   }
 
-  async getEmotionAdjectives(){
-    return this.client.get(`/user_pulses/emotion_adjectives`)
+  async getEmotionAdjectives() {
+    return this.client.get(`/user_pulses/emotion_adjectives`);
   }
 
-  async updateUserPulse(pulseObject){
-    return this.client.post(`/update_user_pulse`, pulseObject )
+  async updateUserPulse(pulseObject) {
+    return this.client.post(`/update_user_pulse`, pulseObject);
   }
-  
-  async getUserPulseByDate(date){
-    return this.client.get(`/user_pulse_by_date`, { date })
+
+  async getUserPulseByDate(date) {
+    return this.client.get(`/user_pulse_by_date`, { date });
   }
   //async setJWT(jwt) {}
 }

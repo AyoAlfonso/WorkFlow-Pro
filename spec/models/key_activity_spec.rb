@@ -5,7 +5,7 @@ RSpec.describe KeyActivity, type: :model do
   it { should validate_presence_of(:description) }
 
   context "Basic validations" do
-    let!(:key_activity) { create(:key_activity) }
+    let!(:key_activity) { create(:key_activity, scheduled_group: create(:today_scheduled_group)) }
     it "priority defaults to low" do
       expect(key_activity.priority).to eq("low")
     end

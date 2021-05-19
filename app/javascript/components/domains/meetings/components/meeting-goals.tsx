@@ -20,6 +20,8 @@ export const MeetingGoals = (): JSX.Element => {
   const [annualInitiativeDescription, setSelectedAnnualInitiativeDescription] = useState<string>(
     "",
   );
+  const [subInitiativeModalOpen, setSubInitiativeModalOpen] = useState<boolean>(null);
+  const [subInitiativeId, setSubInitiativeId] = useState<number>(null);
 
   if (!meetingStore.currentMeeting) {
     return <Loading />;
@@ -88,6 +90,9 @@ export const MeetingGoals = (): JSX.Element => {
           annualInitiativeDescription={annualInitiativeDescription}
           setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
           showCreateMilestones={true}
+          setSubInitiativeId={setSubInitiativeId}
+          setSubInitiativeModalOpen={setSubInitiativeModalOpen}
+          setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
         />
       </StyledModal>
     </Container>

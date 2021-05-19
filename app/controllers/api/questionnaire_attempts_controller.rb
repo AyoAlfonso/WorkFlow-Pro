@@ -15,7 +15,7 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
 
     steps = permit_array_param_and_convert_to_hash(params[:steps])
     rendered_steps = permit_array_param_and_convert_to_hash(params[:rendered_steps])
-    
+
     @questionnaire_attempt = QuestionnaireAttempt.new({
       user_id: current_user.id,
       questionnaire_id: params[:questionnaire_id],
@@ -25,7 +25,6 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
       rendered_steps: rendered_steps,
       completed_at: current_user.time_in_user_timezone,
       json_representation: json_representation,
-      emotion_score: questionnaire.name == "Evening Reflection" ? emotion_to_score_conversion(rendered_steps) : nil,
       questionnaire_attemptable_id: params[:questionnaire_attemptable_id],
       questionnaire_attemptable_type: params[:questionnaire_attemptable_type]
     })
@@ -128,10 +127,6 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
     array.map do |param|
       param.permit!.to_h
     end
-  end
-
-  def emotion_to_score_conversion(rendered_steps)
-    rendered_steps.detect { |rs| rs["id"] == "rating" }["value"]
   end
 
   def questionnaire_attempts_for_weekly(questionnaire)

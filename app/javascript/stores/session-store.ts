@@ -21,6 +21,7 @@ export const SessionStoreModel = types
     staticData: types.maybeNull(StaticModel),
     scheduledGroups: types.maybeNull(types.array(ScheduledGroupModel)),
     selectedUserPulse: types.maybeNull(UserPulseModel),
+    companyStaticData: types.maybeNull(types.array(types.frozen()))
   })
   .extend(withRootStore())
   .extend(withEnvironment())
@@ -31,6 +32,24 @@ export const SessionStoreModel = types
         self.scheduledGroups.find(group => group.name == selectedFilterGroupName),
       );
     },
+    get annualInitiativeTitle(){
+      const titleObject = self.companyStaticData.find(
+        item => item.field == "annual_objective",
+      );
+      return titleObject ? titleObject.value : "Annual Objective";
+    },
+    get quarterlyGoalTitle(){
+      const titleObject = self.companyStaticData.find(
+        item => item.field == "quarterly_initiative",
+      );
+      return titleObject ? titleObject.value : "Quarterly Initiative";
+    },
+    get subInitiativeTitle(){
+      const titleObject = self.companyStaticData.find(
+        item => item.field == "sub_initiative",
+      );
+      return titleObject ? titleObject.value : "Supporting Initiative";
+    }
   }))
   .actions(self => ({
     setProfileData(updatedData) {
@@ -45,6 +64,7 @@ export const SessionStoreModel = types
           self.profile = response.data;
           self.staticData = response.data.staticData;
           self.scheduledGroups = response.data.scheduledGroups;
+          self.companyStaticData = response.data.companyStaticData
           self.loggedIn = true;
 
           //data and company name are not stored on user model
@@ -156,7 +176,7 @@ export const SessionStoreModel = types
       self.loading = true;
       //may want to show a loading modal here
       const env = getEnv(self);
-      const { companyStore, teamStore, userStore, meetingStore, notificationStore, keyActivityStore } = getRoot(self);
+      const { companyStore, teamStore, userStore, meetingStore, notificationStore, keyActivityStore, labelStore, staticDataStore } = getRoot(self);
       try {
         const response: any = yield env.api.login(email, password);
         if (response.ok) {
@@ -175,13 +195,17 @@ export const SessionStoreModel = types
 
             //TODO SET TOKEN INTO COOKIE
             //env.api.setJWT(newJWT);
+            
             self.loadProfile();
+            staticDataStore.load();
             companyStore.load();
             userStore.load();
             teamStore.load();
             keyActivityStore.load();
             meetingStore.load();
+            labelStore.fetchLabels();
             notificationStore.load();
+            companyStore.getOnboardingCompany();
           }
         }
       } catch {

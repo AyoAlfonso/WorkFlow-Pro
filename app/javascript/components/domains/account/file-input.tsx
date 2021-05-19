@@ -34,8 +34,7 @@ export const FileInput = ({ labelText, onChange }: IFileInputProps): JSX.Element
         onChange={(event) => {
           onChange(fileInput.current.files)
           event.target.value = null
-            }
-        }
+        }}
         ref={fileInput}
         type="file"
       />

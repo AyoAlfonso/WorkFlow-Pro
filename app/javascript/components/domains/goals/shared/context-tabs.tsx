@@ -27,7 +27,13 @@ interface IContextTabsProps {
 
 export const ContextTabs = observer(
   ({ object, type, disabled }: IContextTabsProps): JSX.Element => {
-    const { sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
+    const {
+      sessionStore,
+      annualInitiativeStore,
+      quarterlyGoalStore,
+      subInitiativeStore,
+    } = useMst();
+
     const tabDefaultIndex = () => {
       if (
         (type == "annualInitiative" && R.length(R.path(["quarterlyGoals"], object)) == 0) ||
@@ -57,6 +63,8 @@ export const ContextTabs = observer(
         setStore(annualInitiativeStore);
       } else if (type == "quarterlyGoal") {
         setStore(quarterlyGoalStore);
+      } else if (type == "subInitiative") {
+        setStore(subInitiativeStore);
       }
     }, []);
 
@@ -165,7 +173,7 @@ export const ContextTabs = observer(
       return showKeyElementForm ? (
         <KeyElementsTabContainer>
           <KeyElementsFormHeader>
-            <TextDiv ml={"16px"} mb={"8px"} fontSize={"16px"} fontWeight={600}>
+            <TextDiv mb={"8px"} fontSize={"16px"} fontWeight={600}>
               Add a Key Result
             </TextDiv>
             <KeyElementFormBackButtonContainer
@@ -173,10 +181,9 @@ export const ContextTabs = observer(
                 setShowKeyElementForm(false);
               }}
             >
-              <Icon
+              <StyledIcon
                 icon={"Close"}
                 size={"12px"}
-                iconColor={baseTheme.colors.grey40}
                 style={{ marginLeft: "8px", marginTop: "8px" }}
               />
             </KeyElementFormBackButtonContainer>
@@ -221,13 +228,13 @@ export const ContextTabs = observer(
         const lastKeyElement = index == object.keyElements.length - 1;
         return (
           <KeyElement
-            element={element}
+            elementId={element.id}
             store={store}
             editable={editable}
-            key={index}
+            key={element.id}
             lastKeyElement={lastKeyElement}
             focusOnLastInput={focusOnLastInput}
-            setFocusOnLastInput={setFocusOnLastInput}
+            type={type}
           />
         );
       });
@@ -360,7 +367,7 @@ const KeyElementsFormHeader = styled.div`
 `;
 
 const KeyElementFormBackButtonContainer = styled.div`
-  margin-right: 16px;
+  margin-right: 4px;
   margin-bottom: 8px;
   &:hover {
     cursor: pointer;
@@ -378,4 +385,11 @@ const KeyElementContentContainer = styled.div`
 
 const ContextDescriptionContainer = styled.div`
   padding: 16px;
+`;
+
+const StyledIcon = styled(Icon)`
+  color: ${props => props.theme.colors.grey40};
+  &: hover {
+    color: ${props => props.theme.colors.greyActive};
+  }
 `;

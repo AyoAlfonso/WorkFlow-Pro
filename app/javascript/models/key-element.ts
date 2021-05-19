@@ -8,6 +8,7 @@ export const KeyElementModel = types
     completedAt: types.maybeNull(types.string),
     elementableId: types.number,
     completionType: types.maybeNull(types.string),
+    completionStartingValue: types.maybeNull(types.number),
     completionCurrentValue: types.maybeNull(types.number),
     completionTargetValue: types.maybeNull(types.number),
   })

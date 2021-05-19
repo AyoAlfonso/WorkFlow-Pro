@@ -11,6 +11,7 @@ import { ToolsWrapper, ToolsHeader } from "~/components/shared/styles/overview-s
 export const HomePersonalItems = (): JSX.Element => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState<string>("");
+  const [questionnaireVariant, setQuestionnaireVariant] = useState<string>("");
 
   const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : "");
@@ -18,10 +19,15 @@ export const HomePersonalItems = (): JSX.Element => {
 
   return (
     <Container>
-      <HomeKeyActivities />
+      <HomeKeyActivities setQuestionnaireVariant={setQuestionnaireVariant} />
       <ToolsWrapper>
         <ToolsHeader type={"h2"}>{t("tools.title")}</ToolsHeader>
-        <Journal expanded={expanded} handleChange={handleChange} />
+        <Journal
+          expanded={expanded}
+          handleChange={handleChange}
+          questionnaireVariant={questionnaireVariant}
+          setQuestionnaireVariant={setQuestionnaireVariant}
+        />
         <Habits expanded={expanded} handleChange={handleChange} />
         <Issues expanded={expanded} handleChange={handleChange} />
       </ToolsWrapper>

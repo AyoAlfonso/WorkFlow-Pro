@@ -35,7 +35,9 @@ class Api::IssuesController < Api::ApplicationController
   end
 
   def update
-    @issue.update!(issue_params.merge(completed_at: params[:completed] ? Time.now : nil))
+    merged_issue_params = params[:label_list].present? ? issue_params.merge(label_list: ActsAsTaggableOn::Tag.find(params[:label_list]) || params[:label_list]) : issue_params
+    @issue.update!(merged_issue_params.merge(completed_at: params[:completed] ? Time.now : nil))
+    
     if params[:from_team_meeting]
       #returns issues only related to the team, not all issues
       @issues_to_render = team_meeting_issues(@issue.team_id).exclude_personal_for_team
@@ -92,7 +94,7 @@ class Api::IssuesController < Api::ApplicationController
   private
 
   def issue_params
-    params.permit(:user_id, :description, :completed_at, :priority, :team_id, :position, :personal, :label_list)
+    params.permit(:user_id, :description, :completed_at, :priority, :team_id, :position, :personal)
   end
 
   def set_issue

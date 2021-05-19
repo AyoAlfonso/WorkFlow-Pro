@@ -4,6 +4,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
+    #TODO: coach can see this
     user_is_part_of_current_company?
   end
 
@@ -24,11 +25,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def reset_password?
-    true
+    @record == @user
   end
 
   def invite_users_to_company?
-    true
+    user_is_company_admin_of_current_company?
   end
 
   # TODO: Needs logic here
@@ -41,7 +42,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update_team_role?
-    true
+    user_is_company_admin_of_current_company?
   end
 
   def update_company_first_time_access?

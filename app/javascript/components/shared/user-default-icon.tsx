@@ -10,12 +10,24 @@ interface IUserDefaultIconProps {
   size?: number;
   marginLeft?: string;
   marginRight?: string;
+  marginTop?: string;
+  marginBottom?: string;
   border?: string;
   defaultAvatarColor?: string;
 }
 
 export const UserDefaultIcon = (props: IUserDefaultIconProps) => {
-  const { firstName, lastName, size, marginLeft, marginRight, border, defaultAvatarColor } = props;
+  const {
+    firstName,
+    lastName,
+    size,
+    marginLeft,
+    marginRight,
+    border,
+    defaultAvatarColor,
+    marginTop,
+    marginBottom,
+  } = props;
 
   let initials;
 
@@ -30,6 +42,8 @@ export const UserDefaultIcon = (props: IUserDefaultIconProps) => {
       size={size}
       marginLeft={marginLeft}
       marginRight={marginRight}
+      marginTop={marginTop}
+      marginBottom={marginBottom}
       border={border}
       defaultAvatarColor={defaultAvatarColor}
     >
@@ -42,6 +56,8 @@ type ContainerProps = {
   size?: number;
   marginLeft?: string;
   marginRight?: string;
+  marginTop?: string;
+  marginBottom?: string;
   border?: string;
   defaultAvatarColor?: string;
 };
@@ -50,6 +66,8 @@ const Container = styled.div<ContainerProps>`
   background-color: ${props => baseTheme.colors[props.defaultAvatarColor] || baseTheme.colors.bali};
   margin-left: ${props => props.marginLeft || "auto"};
   margin-right: ${props => props.marginRight};
+  margin-top: ${props => props.marginTop};
+  margin-bottom: ${props => props.marginBottom};
   border-radius: 9999px;
   height: ${props => props.size || 48}px;
   width: ${props => props.size || 48}px;

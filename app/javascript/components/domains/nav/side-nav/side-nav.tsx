@@ -353,6 +353,6 @@ export const SideNav = observer(
       companyStore: { company },
     } = useMst();
 
-    return SideNavNoMst(router.location.pathname, toJS(profile.teams), company);
+    return SideNavNoMst(router.location.pathname, toJS(profile.currentCompanyUserTeams), company);
   },
 );

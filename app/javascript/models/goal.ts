@@ -12,20 +12,33 @@ export const GoalModel = types
   .extend(withRootStore())
   .views(self => ({
     get activeAnnualInitiatives() {
-      const { companyStore } = getRoot(self);
-      const currentFiscalYear = companyStore.company.currentFiscalYear;
-      return self.goals.filter(annualInitiative => annualInitiative.fiscalYear >= currentFiscalYear)
+      return self.goals.filter(annualInitiative => !annualInitiative.closedAt)
     },
     get closedAnnualInitiatives(){
-      const { companyStore } = getRoot(self);
-      const currentFiscalYear = companyStore.company.currentFiscalYear;
-      return self.goals.filter(annualInitiative => annualInitiative.fiscalYear < currentFiscalYear)
+      let annualInitiatives = [];
+      self.goals.forEach((goal) => {
+        if(goal.closedAt){
+          annualInitiatives.push(goal)
+        } else {
+          goal.quarterlyGoals.forEach((qg) => {
+            if(qg.closedAt) {
+              annualInitiatives.push(goal)
+            } else {
+              qg.subInitiatives.forEach((si) => {
+                if(si.closedAt){
+                  annualInitiatives.push(goal)
+                }
+              })
+            }
+          })
+        }
+      })
+      return annualInitiatives
     },
     get myAnnualInitiatives(){
-      const { sessionStore, companyStore } = getRoot(self);
+      const { sessionStore } = getRoot(self);
       const userId = sessionStore.profile.id;
-      const currentFiscalYear = companyStore.company.currentFiscalYear;
-      return self.goals.filter(annualInitiative => annualInitiative.ownedById == userId && annualInitiative.fiscalYear >= currentFiscalYear)
+      return self.goals.filter(annualInitiative => annualInitiative.ownedById == userId)
     },
     get onlyShowMyQuarterlyGoals() {
       let goals = self.goals;

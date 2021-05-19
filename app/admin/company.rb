@@ -13,7 +13,8 @@ ActiveAdmin.register Company do
                 :timezone,
                 :display_format,
                 :onboarding_status,
-                core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4]
+                core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4],
+                company_static_datas_attributes: [:id, :value]
 
   index do
     selectable_column
@@ -125,6 +126,13 @@ ActiveAdmin.register Company do
     f.input :accountability_chart_embed, input_html: { rows: 5 }
     f.label :strategic_plan
     f.input :strategic_plan_embed, input_html: { rows: 5 }
+
+    f.inputs do
+      f.has_many :company_static_datas, allow_destroy: false, new_record: false do |tu|
+        tu.input :field, input_html: {disabled: true}
+        tu.input :value
+      end 
+    end
     f.actions
   end
 end
