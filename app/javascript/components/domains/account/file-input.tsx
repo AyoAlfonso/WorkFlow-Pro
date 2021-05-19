@@ -31,7 +31,10 @@ export const FileInput = ({ labelText, onChange }: IFileInputProps): JSX.Element
     <StyledFileInputLabel>
       {labelText}
       <StyledFileInput
-        onChange={() => onChange(fileInput.current.files)}
+        onChange={(event) => {
+          onChange(fileInput.current.files)
+          event.target.value = null
+        }}
         ref={fileInput}
         type="file"
       />

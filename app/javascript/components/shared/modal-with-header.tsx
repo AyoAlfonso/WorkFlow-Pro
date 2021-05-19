@@ -8,9 +8,13 @@ interface IModalWithHeaderProps {
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   headerText?: string;
+  centerHeader?: boolean;
   subHeaderText?: string;
   children: any;
   width?: string;
+  overflow?: string;
+  padding?: string;
+  boxSizing?: string;
   onCloseAction?: any;
 }
 
@@ -18,19 +22,32 @@ export const ModalWithHeader = ({
   modalOpen,
   setModalOpen,
   headerText,
+  centerHeader,
   children,
   width,
+  overflow,
+  padding,
+  boxSizing,
   subHeaderText,
   onCloseAction,
 }: IModalWithHeaderProps): JSX.Element => {
   return (
-    <StyledModal isOpen={modalOpen} style={{ width: width || "30rem" }}>
+    <StyledModal
+      isOpen={modalOpen}
+      style={{
+        width: width || "30rem",
+        overflow: overflow || "auto",
+        padding: padding,
+        boxSizing: boxSizing
+      }}
+    >
       <HeaderContainer>
         <RowWrapper>
-          <StyledHeading type={"h3"} color={"black"} fontSize={"16px"}>
+          <StyledHeading type={"h3"} centerHeader={centerHeader} color={"black"} fontSize={"16px"}>
             {headerText}
           </StyledHeading>
           <CloseIconContainer
+            centerHeader={centerHeader}
             onClick={() => {
               setModalOpen(false);
               if (onCloseAction) {
@@ -69,8 +86,12 @@ const HeaderContainer = styled.div`
   border-bottom ${props => `1px solid ${props.theme.colors.grey20}`};
 `;
 
-const CloseIconContainer = styled.div`
-  margin-left: auto;
+type CloseIconContainerProps = {
+  centerHeader?: boolean;
+}
+
+const CloseIconContainer = styled.div<CloseIconContainerProps>`
+  margin-left: ${props => props.centerHeader ? "0px" : "auto"};
   margin-right: 16px;
   margin-top: auto;
   margin-bottom: auto;
@@ -92,9 +113,15 @@ const SubHeaderText = styled.p`
   margin-top: 0;
 `;
 
-const StyledHeading = styled(Heading)`
+type StyledHeadingProps = {
+  centerHeader?: boolean;
+}
+
+const StyledHeading = styled(Heading)<StyledHeadingProps>`
   font-family: Lato;
   margin-top: 16px;
   margin-bottom: 16px;
   font-weight: bold;
+  margin-left : ${props => props.centerHeader ? "auto" : "0px"};
+  margin-right: ${props => props.centerHeader ? "auto" : "0px"};
 `;

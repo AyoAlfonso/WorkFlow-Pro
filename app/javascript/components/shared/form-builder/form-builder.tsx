@@ -6,15 +6,14 @@ import { Calendar } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
-import { baseTheme } from "~/themes/base";
-
-import { DropzoneAreaBase as MuiDropzoneAreaBase } from "material-ui-dropzone";
-import { withStyles } from "@material-ui/core/styles";
 import { TrixEditor } from "react-trix";
+
+import { Dropzone } from "./dropzone"
+import { DropzoneWithCropper } from "./dropzone-with-cropper"
 
 import { Input, Label, Select, TextArea, TextDiv } from "~/components/shared";
 
-import * as moment from "moment";
+import moment from "moment";
 
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 
@@ -31,6 +30,7 @@ export enum EFieldType {
   TextField = "TEXT_FIELD",
   TextArea = "TEXT_AREA",
   Image = "IMAGE",
+  CroppedImage = "CROPPED_IMAGE",
   Select = "SELECT",
   DateSelect = "DATE_SELECT",
   HtmlEditor = "HTML_EDITOR",
@@ -63,6 +63,7 @@ export const FormBuilder = ({
   stepwise,
 }: IFormBuilderProps): JSX.Element => {
   const classes = useStyles();
+
   const formComponent = (formField: IFormField) => {
     const { fieldType, formKeys, options, callback, style, placeholder, rows } = formField;
     switch (fieldType) {
@@ -99,24 +100,25 @@ export const FormBuilder = ({
             : "";
         return (
           <Dropzone
-            Icon={null}
-            acceptedFiles={["image/*"]}
+            classes={classes}
             dropzoneText={dropZoneText}
-            useChipsForPreview
             onAdd={(f: any) => {
               callback(formKeys, f);
             }}
             onDelete={(f: any) => {
               callback(formKeys, []);
             }}
-            showPreviews={true}
-            showPreviewsInDropzone={false}
-            filesLimit={1}
-            maxFileSize={2000000}
             fileObjects={R.path(formKeys, formData) ? R.path(formKeys, formData) : []}
-            previewGridProps={{ container: { spacing: 1, direction: "row" } }}
-            previewChipProps={{ classes: { root: classes.previewChip } }}
             previewText="Selected files"
+          />
+        );
+      case "CROPPED_IMAGE":
+        return (
+          <DropzoneWithCropper
+            classes={classes}
+            formData={formData}
+            formKeys={formKeys}
+            callback={callback}
           />
         );
       case "SELECT":
@@ -143,8 +145,8 @@ export const FormBuilder = ({
             date={
               R.pathOr(null, formKeys, formData)
                 ? new Date(
-                    moment.utc(R.pathOr(null, formKeys, formData)).format("YYYY-MM-DD HH:mm:ss"),
-                  )
+                  moment.utc(R.pathOr(null, formKeys, formData)).format("YYYY-MM-DD HH:mm:ss"),
+                )
                 : null
             }
             onChange={date => {
@@ -191,18 +193,18 @@ export const FormBuilder = ({
     <Container>
       {formFields
         ? formFields.map((formField: IFormField, index: number) => {
-            return isPreviousStepComplete(index) ? (
-              <FormContainer key={index} style={formContainerStyle}>
-                <Label>{formField.label}</Label>
-                {formComponent(formField)}
-                {formField.subText && (
-                  <TextDiv fontSize={"11px"} color={"grey100"}>
-                    {formField.subText}
-                  </TextDiv>
-                )}
-              </FormContainer>
-            ) : null;
-          })
+          return isPreviousStepComplete(index) ? (
+            <FormContainer key={index} style={formContainerStyle}>
+              <Label>{formField.label}</Label>
+              {formComponent(formField)}
+              {formField.subText && (
+                <TextDiv fontSize={"11px"} color={"grey100"}>
+                  {formField.subText}
+                </TextDiv>
+              )}
+            </FormContainer>
+          ) : null;
+        })
         : null}
     </Container>
   );
@@ -218,25 +220,3 @@ const FormContainer = styled.div`
 `;
 
 const StyledOption = styled.option``;
-
-const Dropzone = withStyles({
-  active: {
-    backgroundColor: baseTheme.colors.primary20,
-  },
-  icon: {
-    display: "none",
-  },
-  root: {
-    height: "120px",
-    width: "100%",
-    borderRadius: 10,
-    borderWidth: "2px",
-  },
-  textContainer: {
-    marginTop: "15%",
-  },
-  text: {
-    fontSize: "14px",
-    color: baseTheme.colors.borderGrey,
-  },
-})(MuiDropzoneAreaBase);
