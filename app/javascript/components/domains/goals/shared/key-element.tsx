@@ -69,9 +69,9 @@ export const KeyElement = observer(
       const current = element.completionCurrentValue;
 
       if (target >= starting) {
-        return ((current - starting) / target) * 100;
+        return Math.min(Math.max(current - starting, 0) / (target - starting), 1) * 100;
       } else {
-        return ((starting - current) / target) * 100;
+        return Math.min(Math.max(starting - current, 0) / (starting - target), 1) * 100;
       }
     };
 
