@@ -213,10 +213,14 @@ export const KeyActivityStoreModel = types
       });
       if (response.ok) {  
         const { completedList, keyActivities} = response.data
-        if (completedList) {
-          self.completedKeyActivities = keyActivities
+        if(fromTeamMeeting){
+          self.keyActivitiesFromMeeting = keyActivities;
         } else {
-          self.incompleteKeyActivities = keyActivities;
+          if (completedList) {
+            self.completedKeyActivities = keyActivities
+          } else {
+            self.incompleteKeyActivities = keyActivities;
+          }
         }
         return true;
       } else {
