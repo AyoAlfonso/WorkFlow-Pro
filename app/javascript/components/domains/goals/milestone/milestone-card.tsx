@@ -28,6 +28,21 @@ export const MilestoneCard = observer(
 
     const unstarted = milestone.status == "unstarted";
     const currentWeek = moment(milestone.weekOf).isSame(moment(), "week");
+    const descriptionText = useRef(milestone.description || "");
+
+    const handleChange = e => {
+      if (!e.target.value.includes("<div>")) {
+        descriptionText.current = e.target.value;
+      }
+    };
+
+    const handleBlur = () => {
+      if (fromMeeting) {
+        milestoneStore.updateDescriptionFromPersonalMeeting(milestone.id, descriptionText.current);
+      } else {
+        mobxStore.updateMilestoneDescription(milestone.id, descriptionText.current);
+      }
+    };
 
     return (
       <MilestoneContainer>
@@ -38,30 +53,16 @@ export const MilestoneCard = observer(
           </WeekOfText>
           <MilestoneContentEditable
             innerRef={descriptionRef}
-            html={milestone.description}
+            html={descriptionText.current}
             disabled={!editable}
             placeholder={"Enter Description"}
-            onChange={e => {
-              if (!e.target.value.includes("<div>")) {
-                if (fromMeeting) {
-                  milestoneStore.updateDescriptionFromPersonalMeeting(milestone.id, e.target.value);
-                } else {
-                  mobxStore.updateMilestoneDescription(milestone.id, e.target.value);
-                }
-              }
-            }}
+            onChange={handleChange}
             onKeyDown={key => {
               if (key.keyCode == 13) {
                 descriptionRef.current.blur();
               }
             }}
-            onBlur={() => {
-              if (fromMeeting) {
-                milestoneStore.updateMilestoneFromPersonalMeeting(milestone.id);
-              } else {
-                mobxStore.update();
-              }
-            }}
+            onBlur={handleBlur}
           />
         </MilestoneDetails>
         <IndividualVerticalStatusBlockColorIndicator
