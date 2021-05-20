@@ -94,19 +94,6 @@ class User < ApplicationRecord
     QuestionnaireAttempt.of_questionnaire_type("Evening Reflection").where(completed_at: (self.time_in_user_timezone.beginning_of_day)..(self.time_in_user_timezone.end_of_day)).present?
   end
 
-  def overdue_key_activities
-    # Rather cumbersome as beginless ranges are introduced in ruby 2.7 not 2.6
-    self.key_activities.where(completed_at: nil).where("due_date < ?", self.time_in_user_timezone.to_date).to_ary
-  end
-
-  def todays_key_activities
-    self.key_activities.where(completed_at: nil, due_date: self.time_in_user_timezone.to_date).to_ary
-  end
-
-  def tomorrows_key_activities
-    self.key_activities.where(completed_at: nil, due_date: self.time_in_user_timezone.tomorrow).to_ary
-  end
-
   def current_daily_log(current_company)
     if self.persisted?
       daily_logs.select(:id, :work_status, :create_my_day, :evening_reflection, :mip_count, :weekly_reflection).where(log_date: self.time_in_user_timezone).first_or_create(mip_count: self.todays_priorities(current_company).count, weekly_reflection: self.weekly_reflection_complete)

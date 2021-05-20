@@ -26,4 +26,16 @@ class UserMailerPreview < ActionMailer::Preview
       cta_url: '' # home
     ).daily_planning_email
   end
+  
+  def weekly_planning_email
+    user = User.find(3)
+    UserMailer.with(
+      user: user,
+      subject: "Weekly Review: How your week went and what's next",
+      greeting: "Hi #{user.first_name}! 👋",
+      message: "Check out your progress from last week in numbers and plan for the week ahead.",
+      cta_text: "Plan Your Week",
+      cta_url: "" # home
+    ).weekly_planning_email
+  end
 end

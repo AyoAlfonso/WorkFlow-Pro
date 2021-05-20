@@ -40,11 +40,14 @@ module NotificationEmailJobHelper
     ).team_meeting_email.deliver_later
   end
 
-  # def send_weekly_planning_meeting_email(user, notification_type)
-  #   UserMailer.with(
-  #     user: @user,
-  #     subject: notification_type,
-  #     message: "Hi #{@user&.first_name}! \n \n Just a quick reminder to start your Weekly Planning Meeting."
-  #   ).notification_email.deliver_later
-  # end
+  def send_weekly_planning_email(user, notification_type)
+    UserMailer.with(
+      user: user,
+      subject: "Weekly Review: How your week went and what's next",
+      message: "Check out your progress from last week in numbers and plan for the week ahead.",
+      greeting: "Hi #{user&.first_name}!",
+      cta_text: "Plan Your Week",
+      cta_url: "" # home
+    ).weekly_planning_email.deliver_later
+  end
 end
