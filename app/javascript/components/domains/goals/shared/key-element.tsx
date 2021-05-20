@@ -66,7 +66,10 @@ export const KeyElement = observer(
     const completion = () => {
       const starting = element.completionStartingValue;
       const target = element.completionTargetValue;
-      const current = element.completionCurrentValue;
+      const current =
+        element.completionCurrentValue == ""
+          ? element.completionStartingValue
+          : element.completionCurrentValue;
 
       if (target >= starting) {
         return Math.min(Math.max(current - starting, 0) / (target - starting), 1) * 100;
@@ -154,7 +157,7 @@ export const KeyElement = observer(
                       store.updateKeyElementValue(
                         "completionCurrentValue",
                         element.id,
-                        parseInt(e.target.value),
+                        e.target.value == "" ? "" : parseInt(e.target.value),
                       );
                     }
                   }}
@@ -164,7 +167,7 @@ export const KeyElement = observer(
                     }
                   }}
                   onBlur={() => store.update()}
-                  placeholder={completionSymbol()}
+                  placeholder={`${completionSymbol()} `}
                 />
                 <CompletionTextContainer>
                   {renderElementCompletionTargetValue()}

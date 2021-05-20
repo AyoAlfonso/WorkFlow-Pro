@@ -9,7 +9,7 @@ export const KeyElementModel = types
     elementableId: types.number,
     completionType: types.maybeNull(types.string),
     completionStartingValue: types.maybeNull(types.number),
-    completionCurrentValue: types.maybeNull(types.number),
+    completionCurrentValue: types.optional(types.union(types.number, types.string), ""), //add case for no entry value ''
     completionTargetValue: types.maybeNull(types.number),
   })
   .views(self => ({}))
