@@ -49,7 +49,7 @@ export const ImageCropperModal = ({
   return (
     <ModalWithHeader
       modalOpen={modalOpen}
-      centerHeader={true}
+      centerHeader={false}
       setModalOpen={setModalOpen}
       headerText={headerText}
       overflow="hidden"
@@ -70,14 +70,6 @@ export const ImageCropperModal = ({
       <ButtonContainer>
         <StyledButton
           small
-          variant={"redOutline"}
-          m={1}
-          onClick={() => setModalOpen(!modalOpen)}
-        >
-          {t("general.cancel")}
-        </StyledButton>
-        <StyledButton
-          small
           variant={"primary"}
           m={1}
           onClick={() => {
@@ -86,6 +78,14 @@ export const ImageCropperModal = ({
           }}
         >
           {t("general.save")}
+        </StyledButton>
+        <StyledButton
+          small
+          variant={"redOutline"}
+          m={1}
+          onClick={() => setModalOpen(!modalOpen)}
+        >
+          {t("general.cancel")}
         </StyledButton>
       </ButtonContainer>
     </ModalWithHeader>
@@ -102,6 +102,6 @@ const Container = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  margin: 0 25%;
-  padding-bottom: 4px;
+  margin-left: 8px;
+  padding: 4px;
 `;
