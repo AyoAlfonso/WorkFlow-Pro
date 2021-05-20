@@ -1,4 +1,4 @@
-<%= simple_format(@message) %>
+<p><%= simple_format(@message) %></p>
 
 <div style="
   font-size: 14px;
@@ -7,9 +7,9 @@
 <p>Are you ready to complete your <strong style="color: #005FFE">Weekly Review</strong>?
 It is important to find the time to review, reflect, and plan.</p>
 <p>Take this time to appreciate what you have accomplished.</p>
-<strong style="font-size: 22px;"/>
+<h2 style="font-size: 18px; margin-top: 32px;"/>
   Review the past week
-</strong>
+</h2>
 <p style="font-size: 11px;">
   <%= get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone).strftime("%B %-d")%> 
     - 
@@ -115,7 +115,6 @@ You were on track for
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   margin-top: 5px;
   margin-bottom: 5px;
-  width: 350px;
   margin-left: auto;
   margin-right: auto;
 
@@ -251,7 +250,8 @@ You were on track for
   </div>
 </div>
 
-<p>Now it's time to look forward.</p>
+
+<p style="margin-top: 64px;">Now it's time to look forward.</p>
 <h2 style="font-size: 18px; font-weight: bold;">Get ready for this week</h2>
 
 <% @number_of_milestones = @next_quarterly_milestones.length + @next_subinitiative_milestones.length %>
@@ -264,7 +264,7 @@ this week.
 <% @quarterly_goals = QuarterlyGoal.where(id: @next_quarterly_milestones.select("milestoneable_id")) %>
 <% @quarterly_goals.each do |goal| %>
   <p style="font-weight: bold; margin-bottom: 0px;">
-  Quarterly Goal: <%= goal.description %>
+  Initiative: <%= goal.description %>
   </p>
   <% @next_quarterly_milestones.where(milestoneable_id: goal.id).each do |milestone|%>
     <p style="margin-top: 0px;">
@@ -276,7 +276,7 @@ this week.
 <% @subinitiatives = SubInitiative.where(id: @next_subinitiative_milestones.select("milestoneable_id")) %>
 <% @subinitiatives.each do |goal| %>
   <p style="font-weight: bold; margin-bottom: 0px;">
-  Sub-Initiative: <%= goal.description %>
+  Initiative: <%= goal.description %>
   </p>
   <% @next_subinitiative_milestones.where(milestoneable_id: goal.id).each do |milestone|%>
     <p style="margin-top: 0px;">
