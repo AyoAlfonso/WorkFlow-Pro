@@ -45,16 +45,16 @@ type StyledIconType = {
   active: boolean;
 };
 
-export const StyledIcon = styled(Icon) <StyledIconType>`
+export const StyledIcon = styled(Icon)<StyledIconType>`
   transition: 0.3s ease-out;
   color: ${props => props.active ? props.theme.colors.white : props.theme.colors.greyInactive};
 `;
 
 type StyledNavLinkType = {
-  active: string;
+  active: boolean;
 };
 
-const StyledNavLink = styled(NavLink) <StyledNavLinkType>`
+const StyledNavLink = styled(NavLink)<StyledNavLinkType>`
   ${color}
   align-item: center;
   text-decoration: none;
@@ -149,7 +149,7 @@ const StyledNavLinkChildrenActive = ({
   const isActive = isNavMenuIconActive(currentPathName, to);
   // CHRIS' NOTE: CANT PASS BOOLEAN TO STYLED COMPONENTS, HENCE THE TOSTRING()
   return (
-    <StyledNavLink to={to} disabled={disabled} active={isActive}>
+    <StyledNavLink to={to} disabled={disabled}>
       <NavMenuIcon active={isActive} icon={icon}>
         {children}
       </NavMenuIcon>
@@ -205,7 +205,7 @@ export const SideNavNoMst = (
                 active={isNavMenuIconActive(currentPathName, `/${domain}`)}
                 disableOnActive={false}
               >
-              {isForum ? t("navigation.forum") : t("navigation.team")}
+                {isForum ? t("navigation.forum") : t("navigation.team")}
               </NavMenuIcon>
             }
             navOpen={teamNavChildOpen}
@@ -213,7 +213,7 @@ export const SideNavNoMst = (
             setOtherNavOpen={[setCompanyNavChildOpen, setMeetingsNavChildOpen]}
           >
             {teams.map((team: any, index: number) => (
-              <SideNavChildLink key={index} to={`/forum/${team.id}`} linkText={team.name} />
+              <SideNavChildLink key={index} to={`/${domain}/${team.id}`} linkText={team.name} />
             ))}
           </SideNavChildPopup>
         );
