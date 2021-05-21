@@ -79,6 +79,8 @@ export const KeyElement = observer(
     };
 
     const completionSymbol = () => {
+      console.log("element completion type", element.completionType);
+
       switch (element.completionType) {
         case "percentage":
           return "%";
@@ -167,7 +169,7 @@ export const KeyElement = observer(
                     }
                   }}
                   onBlur={() => store.update()}
-                  placeholder={`${completionSymbol()} `}
+                  placeholder={element.completionType == "numerical" ? "..." : completionSymbol()}
                 />
                 <CompletionTextContainer>
                   {renderElementCompletionTargetValue()}
