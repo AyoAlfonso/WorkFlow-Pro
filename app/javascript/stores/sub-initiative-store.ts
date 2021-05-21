@@ -107,7 +107,7 @@ export const SubInitiativeStoreModel = types
     updateModelField(field, value) {
       self.subInitiative[field] = value;
     },
-    updateKeyElementValue(field: string, id: number, value: number) {
+    updateKeyElementValue(field: string, id: number, value: number | string) {
       let keyElements = self.subInitiative.keyElements;
       let keyElementIndex = keyElements.findIndex(ke => ke.id == id);
       keyElements[keyElementIndex][field] = value;
