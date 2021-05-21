@@ -73,6 +73,15 @@ class User < ApplicationRecord
     selected_user_company_enablement&.user_title
   end
 
+  def role_for(company)
+    self.user_company_enablements.find_by_company_id(company.id)&.user_role&.name
+  end
+
+  def title_for(company)
+    self.user_company_enablements.find_by_company_id(company.id)&.user_title
+  end
+
+
   def timezone
     read_attribute(:timezone).present? ? read_attribute(:timezone) : company_timezone
   end
