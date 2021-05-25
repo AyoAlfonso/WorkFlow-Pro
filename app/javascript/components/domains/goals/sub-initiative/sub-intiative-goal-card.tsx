@@ -6,32 +6,30 @@ import { UserIconBorder } from "../shared/user-icon-border";
 import { Avatar } from "~/components/shared/avatar";
 import * as R from "ramda";
 import { baseTheme } from "../../../../themes";
-import { QuarterlyGoalType } from "~/types/quarterly-goal";
+import { SubInitiativesType } from "~/types/sub-initiatives";
 import { RecordOptions } from "../shared/record-options";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
-import moment from "moment";
+import * as moment from "moment";
 
-interface IQuarterlyGoalCardProps {
-  quarterlyGoal: QuarterlyGoalType;
-  annualInitiativeYear: number;
-  setQuarterlyGoalModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  setQuarterlyGoalId?: React.Dispatch<React.SetStateAction<number>>;
+interface ISubInitiativeCardProps {
+  subInitiative: SubInitiativesType;
+  setSubInitiativeModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedAnnualInitiativeDescription?: React.Dispatch<React.SetStateAction<string>>;
-  annualInitiativeDescription: string;
-  goalCardType?: string;
+  // annualInitiativeDescription: string;
+  annualInitiativeYear: number;
+  setSubInitiativeId: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element => {
+export const SubInitiativeGoalCard = (props: ISubInitiativeCardProps): JSX.Element => {
   const {
-    quarterlyGoal,
-    annualInitiativeYear,
-    setQuarterlyGoalModalOpen,
-    setQuarterlyGoalId,
+    subInitiative,
+    setSubInitiativeModalOpen,
+    setSubInitiativeId,
     setSelectedAnnualInitiativeDescription,
-    annualInitiativeDescription,
-    goalCardType
+    annualInitiativeYear,
+    // annualInitiativeDescription,
   } = props;
 
   const { companyStore } = useMst();
@@ -49,30 +47,34 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
     grey100,
     white,
     primary100,
+    backgroundGrey
   } = baseTheme.colors;
-  const defaultOptionsColor = white;
+  const defaultOptionsColor = backgroundGrey;
   const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
 
-  //TODOIST: Come back to make this code dry and icon color constant
   let currentMilestone;
-  let statusBadge = {
+  const statusBadge = {
     description: '', colors: {
       backgroundColor: '',
       color: ''
     }
   };
 
-  if (quarterlyGoal.closedAt != null) {
-    statusBadge.description = `Closed - Q${quarterlyGoal.quarter}`
+  currentMilestone = subInitiative.milestones.find(milestone =>
+    moment(milestone.weekOf).isSame(moment(), "week"),
+  );
+
+  if (subInitiative.closedAt != null) {
+    statusBadge.description = `Closed - Q${subInitiative.quarter}`
     statusBadge.colors = { color: white, backgroundColor: grey100 }
   }
-  else if (currentFiscalYear*10 + currentFiscalQuarter < annualInitiativeYear*10 + quarterlyGoal.quarter) {
-    statusBadge.description = `Upcoming - Q${quarterlyGoal.quarter}`
+  else if (currentFiscalYear * 10 + currentFiscalQuarter < annualInitiativeYear * 10 + subInitiative.quarter) {
+    statusBadge.description = `Upcoming - Q${subInitiative.quarter}`
     statusBadge.colors = { color: white, backgroundColor: primary100 }
   }
   else {
     if (!currentMilestone) {
-      currentMilestone = quarterlyGoal.milestones[quarterlyGoal.milestones.length - 1];
+      currentMilestone = subInitiative.milestones[subInitiative.milestones.length - 1];
     }
 
     if (currentMilestone && currentMilestone.status) {
@@ -97,40 +99,29 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
     }
   }
 
-  const startedMilestones = quarterlyGoal.milestones
-    ? quarterlyGoal.milestones.filter(milestone => milestone.status != "unstarted")
+  const startedMilestones = subInitiative.milestones
+    ? subInitiative.milestones.filter(milestone => milestone.status != "unstarted")
     : [];
 
   let userIconBorder = "";
 
-  if (startedMilestones.length > 0) {
-    const lastStartedMilestone = startedMilestones[startedMilestones.length - 1];
-    userIconBorder = UserIconBorder(lastStartedMilestone.status);
-  }
+  // if (startedMilestones.length > 0) {
+  //   const lastStartedMilestone = startedMilestones[startedMilestones.length - 1];
+  //   userIconBorder = UserIconBorder(lastStartedMilestone.status);
+  // }
 
-  const openQuarterlyGoalModal = () => {
-    setQuarterlyGoalModalOpen(true);
-    setQuarterlyGoalId(quarterlyGoal.id);
-    setSelectedAnnualInitiativeDescription(annualInitiativeDescription);
-  };
-
-  const renderQuarterDisplay = () => {
-    if (companyStore.company.currentFiscalQuarter != quarterlyGoal.quarter) {
-      const quarter =
-        quarterlyGoal.quarter || companyStore.onboardingCompany.quarterForCreatingQuarterlyGoals;
-      return (
-        <QuarterText> Q{quarter}: </QuarterText>
-      );
-    }
+  const openSubInitiativeGoalModal = () => {
+    setSubInitiativeModalOpen(true);
+    setSubInitiativeId(subInitiative.id);
+    setSelectedAnnualInitiativeDescription(subInitiative.description);
   };
 
   return (
     <>
       <Container
-        goalCardType={goalCardType}
         onClick={e => {
           e.stopPropagation();
-          openQuarterlyGoalModal();
+          openSubInitiativeGoalModal();
         }}
         onMouseEnter={e => {
           setShowOptions(grey80)
@@ -139,22 +130,21 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
           setShowOptions(defaultOptionsColor)
         }}
       >
-        <StatusBlockColorIndicator milestones={quarterlyGoal.milestones || []} indicatorWidth={14} indicatorHeight={2} marginTop={4}/>
+        <StatusBlockColorIndicator milestones={subInitiative.milestones || []} indicatorWidth={14} indicatorHeight={2} marginTop={4} />
 
         <RowContainer
           mt={0}
           mb={0}
         >
           <DescriptionContainer>
-            {goalCardType == "child" && (<StyledSubInitiativeIcon icon={"Sub_initiative"} size={"16px"} iconColor={"#868DAA"} />)}
-            {goalCardType == "parent" && (renderQuarterDisplay())}
-            <StyledText>{quarterlyGoal.description}</StyledText>
+            <StyledSubInitiativeIcon icon={"Sub_initiative"} size={"16px"} iconColor={"#868DAA"} />
+            <StyledText>{subInitiative.description}</StyledText>
           </DescriptionContainer>
 
           <IconContainer>
             <RecordOptions
-              type={"quarterlyGoal"}
-              id={quarterlyGoal.id}
+              type={"subInitiative"}
+              id={subInitiative.id}
               iconColor={showOptions}
             />
           </IconContainer>
@@ -164,10 +154,10 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
           mb={0}
         >
           {/* // TODOIST: refactor the values of this component to get only */}
-          {quarterlyGoal.ownedBy && (
+          {subInitiative.ownedBy && (
             <OwnedBySection
-              ownedBy={quarterlyGoal.ownedBy}
-              type={"quarterlyGoal"}
+              ownedBy={subInitiative.ownedBy}
+              type={"subInitiative"}
               disabled={true}
               size={16}
               nameWidth={"74px"}
@@ -179,19 +169,12 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
             />
           )}
           <BadgeContainer>
-            {quarterlyGoal.subInitiatives.length > 0 && (
-              <>
-                <MilestoneCountContainer>
-                  {quarterlyGoal.subInitiatives.length}
-                </MilestoneCountContainer>
-                <StyledSubInitiativeIcon icon={"Sub_initiative"} size={"16px"} iconColor={"#868DAA"} />
-              </>
-            )}
             <StatusBadge
               color={statusBadge.colors.color}
               backgroundColor={statusBadge.colors.backgroundColor}
             > {statusBadge.description} </StatusBadge>
           </BadgeContainer>
+
         </RowContainer>
       </Container>
     </>
@@ -222,12 +205,9 @@ const StyledText = styled(Text)`
   overflow: hidden;
 `;
 
-type ContainerProps = {
-  goalCardType?: string;
-}
 
-const Container = styled.div<ContainerProps>`
-  background-color: ${props => (props.goalCardType == "child" ? `${props.theme.colors.backgroundGrey}` : 'inherit')};
+const Container = styled.div`
+  background-color: ${props => props.theme.colors.backgroundGrey};
   &:hover {
     cursor: pointer;
   }
@@ -286,10 +266,4 @@ const BadgeContainer = styled.div`
   justify-content: flex-end;
   margin-right: 16px;
   align-items: center; 
-`;
-
-const MilestoneCountContainer = styled.div`
-  font-size: 9px;
-  color: #868DAA;
-  margin-right: 5px;
 `;

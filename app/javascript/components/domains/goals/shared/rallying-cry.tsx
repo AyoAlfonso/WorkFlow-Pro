@@ -24,6 +24,7 @@ export const RallyingCry = ({ rallyingCry }: IRallyingCryProps): JSX.Element => 
       <VisionTitle>{t("company.rallyingCry")}</VisionTitle>
       <StyledContentEditable
         innerRef={rallyingCryRef}
+        placeholder={t("company.rallyingCryPlaceholder")}
         html={rallyingCry}
         disabled={!editable}
         onChange={e => {
@@ -50,11 +51,13 @@ const VisionContainer = styled(HomeContainerBorders)`
 
 const VisionTitle = styled.p`
   ${color}
-  font-size: 20px;
+  font-size: 24px;
+  font-weight: 800;
   color: ${props => props.theme.colors.primary100};
   margin-top: auto;
   margin-bottom: auto;
-  margin-left: 16px;
+  margin-left: 32px;
+  margin-right: 32px;
   display: flex;
   align-items: center;
   height: inherit;
@@ -62,10 +65,12 @@ const VisionTitle = styled.p`
 `;
 
 const StyledContentEditable = styled(ContentEditable)`
-  font-size: 15px;
+  font-size: 21px;
   margin-left: auto;
   margin-right: auto;
   margin-top: auto;
   margin-bottom: auto;
   padding: 5px;
+  text-transform: capitalize;
+  font-weight: 700;
 `;

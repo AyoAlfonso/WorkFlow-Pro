@@ -91,7 +91,6 @@
         "accountabilityChart": "Accountability Matrix",
         "name": "Company Name",
         "logo": "Company Logo",
-        "updateLogo": "Update Company Logo",
         "fiscalYearStartDate": "Fiscal Year Start Date",
         "strategicPlan": "The Plan",
         "timezone": "Location/Time Zone",
@@ -105,7 +104,8 @@
         "editUser": {
           "title": "Edit User"
         },
-        "rallyingCry": "LynchPyn Goal™",
+        "rallyingCry": "LynchPyn™ Goal",
+        "rallyingCryPlaceholder": "Write the most important thing you have to achieve in the upcoming year...",
         "create": "Create",
         "edit": "Edit",
         "newCompany": "Company",
@@ -142,6 +142,11 @@
         "add": "Add an {{title}}",
         "addInitiative": "Add {{title}}",
         "messageText": "{{title}}",
+        "cardClosed" : "This Annual Initiative is closed",
+        "createdOn" : "Originally created on",
+        "emptyHeader": "Add your first Initiative",
+        "emptyText": "Initiatives are quarterly efforts that help you get closer to reaching your Objective.",
+        "emptyCta": "Activate \"Plan\" mode",
         "closedItem": "This Objective is closed"
       },
       "quarterlyGoal": {
@@ -160,6 +165,7 @@
         "deletionError": "There was an error deleting the {{title}}",
         "keyElementCreationError": "There was an error creating the key element",
         "milestoneCreationError": "There was an error creating milestones",
+        "cardClosed": "This Quarterly Initiative is closed",
         "closedItem": "This Initiative is closed"
       },
       "subInitiative": {
@@ -178,6 +184,7 @@
         "deletionError": "There was an error deleting the {{title}}",
         "keyElementCreationError": "There was an error creating the key element",
         "milestoneCreationError": "There was an error creating milestones",
+        "cardClosed": "This Supporting Initiative is closed",
         "closedItem": "This Initiative is closed"
       },
       "meeting": {
@@ -310,6 +317,10 @@
       "datePicker": {
         "dueDate": "Due Date",
         "clearDate": "Clear Date"
+      },
+      "personal": {
+        "vision": "Future Self",
+        "placeholder": "Describe what the ideal, future you will look like, in one statement..."
       },
       "onboarding": {
         "continue": "Resume {{format}} creation"

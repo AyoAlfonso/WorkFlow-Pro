@@ -1,14 +1,14 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { Loading } from "../../shared/loading";
 import { Flex, Box } from "rebass";
 import { Text } from "~/components/shared/text";
+import { Icon } from "~/components/shared/icon";
 import { useTranslation } from "react-i18next";
 import { HomeContainerBorders } from "../home/shared-components";
 import { EnlargedHomeTitle } from "./shared/enlarged-home-title";
-import { Icon } from "~/components/shared";
 
 interface ICoreFourValuesProps {
   showCoreFour?: boolean;
@@ -54,6 +54,7 @@ const CoreFourValues = observer(
       companyStore: { company },
     } = useMst();
     const { t } = useTranslation();
+
     return company ? (
       <HomeContainerBorders key="core-four">
         <Flex>
@@ -109,9 +110,20 @@ const CoreFourValues = observer(
   },
 );
 
+export const CoreFourOnly = (): JSX.Element => (
+  <div>
+    <CoreFourValues />
+  </div>
+);
+
+
 const Container = styled.div`
   margin-bottom: 32px;
 `;
+
+const TitleContainer = styled.div`
+  display: flex;
+`
 
 const CoreFourHeaderText = styled(Text)`
   margin-top: 16px;
@@ -126,12 +138,6 @@ const CoreFourTitle = styled(EnlargedHomeTitle)`
   margin-top: 32px;
   margin-bottom: 16px;
 `;
-
-export const CoreFourOnly = (): JSX.Element => (
-  <div>
-    <CoreFourValues />
-  </div>
-);
 
 const CoreFourHeader = styled.div`
   display: flex;

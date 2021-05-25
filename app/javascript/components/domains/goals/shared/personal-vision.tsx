@@ -5,6 +5,7 @@ import { color } from "styled-system";
 import { useMst } from "~/setup/root";
 import ContentEditable from "react-contenteditable";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next"
 
 interface IPersonalVisionProps {
   personalVision: string;
@@ -12,13 +13,15 @@ interface IPersonalVisionProps {
 
 export const PersonalVision = ({ personalVision }: IPersonalVisionProps): JSX.Element => {
   const { sessionStore } = useMst();
+  const { t } = useTranslation();
   const personalVisionRef = useRef(null);
 
   return (
     <VisionContainer>
       <VisionTitle>Future Self</VisionTitle>
       <StyledContentEditable
-        innerRef={personalVisionRef}
+        innerRef={t("personal.vision")}
+        placeholder={t("personal.placeholder")}
         html={personalVision || ""}
         disabled={false}
         onChange={e => {
@@ -45,30 +48,26 @@ const VisionContainer = styled(HomeContainerBorders)`
 
 const VisionTitle = styled.p`
   ${color}
-  font-size: 20px;
+  font-size: 24px;
+  font-weight: 800;
   color: ${props => props.theme.colors.primary100};
   margin-top: auto;
   margin-bottom: auto;
-  margin-left: 16px;
+  margin-left: 32px;
+  margin-right: 32px;
   display: flex;
   align-items: center;
   height: inherit;
   position: absolute;
 `;
 
-const VisionText = styled.p`
-  font-size: 15px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-  margin-bottom: auto;
-`;
-
 const StyledContentEditable = styled(ContentEditable)`
-  font-size: 15px;
+  font-size: 21px;
   margin-left: auto;
   margin-right: auto;
   margin-top: auto;
   margin-bottom: auto;
   padding: 5px;
+  text-transform: capitalize;
+  font-weight: 700;
 `;

@@ -49,7 +49,6 @@ export const ImageCropperModal = ({
   return (
     <ModalWithHeader
       modalOpen={modalOpen}
-      centerHeader={false}
       setModalOpen={setModalOpen}
       headerText={headerText}
       overflow="hidden"

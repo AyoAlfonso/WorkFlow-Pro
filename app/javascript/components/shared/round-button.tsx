@@ -2,6 +2,7 @@ import * as React from "react";
 import { color } from "styled-system";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { baseTheme } from "~/themes/base";
 
 type IconContainerType = {
   backgroundColor?: string;
@@ -13,7 +14,7 @@ const StyledButton = styled(motion.div)<IconContainerType>`
   height: ${({ size }) => (size ? size : "40px")};
   width: ${({ size }) => (size ? size : "40px")};
   border-radius: 50px;
-  box-shadow: 0px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 3px 6px ${baseTheme.colors.grayShadow};
   &:hover {
     cursor: pointer;
   }
