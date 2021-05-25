@@ -138,7 +138,7 @@
       },
       "annualInitiative": {
         "title": "{{title}}",
-        "enterTitle": "Enter {{title}} Title...",
+        "enterTitle": "Enter Title...",
         "add": "Add an {{title}}",
         "addInitiative": "Add {{title}}",
         "messageText": "{{title}}",
@@ -149,7 +149,7 @@
         "emptyCta": "Activate \"Plan\" mode"
       },
       "quarterlyGoal": {
-        "enterTitle": "Enter {{title}} Title...",
+        "enterTitle": "Enter Title...",
         "add": "Add a {{title}}",
         "addGoal": "Add {{title}}",
         "title": "{{title}}s",
@@ -167,7 +167,7 @@
         "milestoneCreationError": "There was an error creating milestones"
       },
       "subInitiative": {
-        "enterTitle": "Enter {{title}} Title...",
+        "enterTitle": "Enter Title...",
         "add": "Add a {{title}}",
         "addGoal": "Add {{title}}",
         "title": "{{title}}",
