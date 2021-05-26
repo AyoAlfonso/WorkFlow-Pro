@@ -18,8 +18,10 @@ import { HeaderText } from "~/utils/header-text";
 
 declare global {
   interface Window {
-    showPsWidget: any;
     FreshworksWidget: any;
+    Productstash: {
+      show: any;
+    }
   }
 }
 
@@ -110,18 +112,6 @@ export const HeaderBar = observer(
     );
   },
 );
-
-const LogoContainer = styled.div`
-  display: flex;
-  margin: 16px;
-  margin-left: auto;
-`;
-
-const LogoImage = styled.img`
-  width: auto;
-  height: auto;
-  max-height: 60px;
-`;
 
 const StyledHeading = styled(Heading)`
   margin-top: auto;

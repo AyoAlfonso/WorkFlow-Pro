@@ -45,16 +45,16 @@ type StyledIconType = {
   active: boolean;
 };
 
-export const StyledIcon = styled(Icon) <StyledIconType>`
+export const StyledIcon = styled(Icon)<StyledIconType>`
   transition: 0.3s ease-out;
   color: ${props => props.active ? props.theme.colors.white : props.theme.colors.greyInactive};
 `;
 
 type StyledNavLinkType = {
-  active: string;
+  active: boolean;
 };
 
-const StyledNavLink = styled(NavLink) <StyledNavLinkType>`
+const StyledNavLink = styled(NavLink)<StyledNavLinkType>`
   ${color}
   align-item: center;
   text-decoration: none;
@@ -149,7 +149,7 @@ const StyledNavLinkChildrenActive = ({
   const isActive = isNavMenuIconActive(currentPathName, to);
   // CHRIS' NOTE: CANT PASS BOOLEAN TO STYLED COMPONENTS, HENCE THE TOSTRING()
   return (
-    <StyledNavLink to={to} disabled={disabled} active={isActive}>
+    <StyledNavLink to={to} disabled={disabled}>
       <NavMenuIcon active={isActive} icon={icon}>
         {children}
       </NavMenuIcon>
@@ -173,26 +173,27 @@ export const SideNavNoMst = (
   const [companyNavChildOpen, setCompanyNavChildOpen] = useState<boolean>(false);
   const [meetingsNavChildOpen, setMeetingsNavChildOpen] = useState<boolean>(false);
 
-  const renderForum = teamLength => {
+  const renderForumOrTeam = (teamLength: number, isForum = true) => {
+    const domain = isForum ? "forum" : "team"
     switch (teamLength) {
       case 0:
         return (
           <StyledNavLinkChildrenActive
-            to={`/forum/`}
+            to={`/${domain}/`}
             icon={"Team"}
             currentPathName={currentPathName}
           >
-            {t("navigation.forum")}
+            {isForum ? t("navigation.forum") : t("navigation.team")}
           </StyledNavLinkChildrenActive>
         );
       case 1:
         return (
           <StyledNavLinkChildrenActive
-            to={`/forum/${R.path(["0", "id"], teams) || ""}`}
+            to={`/${domain}/${R.path(["0", "id"], teams) || ""}`}
             icon={"Team"}
             currentPathName={currentPathName}
           >
-            {t("navigation.forum")}
+            {isForum ? t("navigation.forum") : t("navigation.team")}
           </StyledNavLinkChildrenActive>
         );
       default:
@@ -201,18 +202,18 @@ export const SideNavNoMst = (
             trigger={
               <NavMenuIcon
                 icon={"Team"}
-                active={isNavMenuIconActive(currentPathName, "/team")}
+                active={isNavMenuIconActive(currentPathName, `/${domain}`)}
                 disableOnActive={false}
               >
-                {t("navigation.forum")}
+                {isForum ? t("navigation.forum") : t("navigation.team")}
               </NavMenuIcon>
             }
             navOpen={teamNavChildOpen}
             setNavOpen={setTeamNavChildOpen}
             setOtherNavOpen={[setCompanyNavChildOpen, setMeetingsNavChildOpen]}
           >
-            {teams.map((team, index) => (
-              <SideNavChildLink key={index} to={`/forum/${team.id}`} linkText={team.name} />
+            {teams.map((team: any, index: number) => (
+              <SideNavChildLink key={index} to={`/${domain}/${team.id}`} linkText={team.name} />
             ))}
           </SideNavChildPopup>
         );
@@ -249,28 +250,7 @@ export const SideNavNoMst = (
         {t("navigation.goals")}
       </StyledNavLinkChildrenActive>
 
-      {company && company.accessCompany ? (
-        <SideNavChildPopup
-          trigger={
-            <NavMenuIcon
-              icon={"Team"}
-              active={isNavMenuIconActive(currentPathName, "/team")}
-              disableOnActive={false}
-            >
-              {t("navigation.team")}
-            </NavMenuIcon>
-          }
-          navOpen={teamNavChildOpen}
-          setNavOpen={setTeamNavChildOpen}
-          setOtherNavOpen={[setCompanyNavChildOpen, setMeetingsNavChildOpen]}
-        >
-          {teams.map((team, index) => (
-            <SideNavChildLink key={index} to={`/team/${team.id}`} linkText={team.name} />
-          ))}
-        </SideNavChildPopup>
-      ) : (
-          <> </>
-        )}
+      {company && company.accessCompany ? renderForumOrTeam(R.path(["length"], teams) || 0, false) : <> </>}
 
       {company && company.accessCompany ? (
         <SideNavChildPopup
@@ -301,7 +281,7 @@ export const SideNavNoMst = (
           <> </>
         )}
 
-      {company && company.accessForum ? renderForum(R.path(["length"], teams) || 0) : <> </>}
+      {company && company.accessForum ? renderForumOrTeam(R.path(["length"], teams) || 0) : <> </>}
 
       {company && company.accessForum && !R.isNil(R.path(["0", "id"], teams)) ? (
         <SideNavChildPopup

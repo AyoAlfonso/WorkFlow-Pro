@@ -141,7 +141,7 @@ export const AccountDropdownOptions = observer(
         <AccountOptionText 
           id="lynchpyn-whats-new"
           onClick={() => {
-            window.showPsWidget();
+            window.Productstash.show();
             setShowAccountActions(false);
           }}
         >

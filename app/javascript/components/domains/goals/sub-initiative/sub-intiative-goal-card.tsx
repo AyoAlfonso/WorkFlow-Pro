@@ -160,7 +160,7 @@ export const SubInitiativeGoalCard = (props: ISubInitiativeCardProps): JSX.Eleme
               type={"subInitiative"}
               disabled={true}
               size={16}
-              nameWidth={"74px"}
+              nameWidth={"60%"}
               marginLeft={"16px"}
               marginRight={"0px"}
               marginTop={"auto"}
@@ -252,8 +252,8 @@ type StatusBadgeType = {
 
 // TODOIST: Update the color constant 
 const StatusBadge = styled.div<StatusBadgeType>`
-    font-size: 9px;
-    font-weight: 900;
+    font-size: 11px;
+    line-height: 12px;
     background-color:${props => props.backgroundColor};
     color: ${props => props.color};
     padding: 2px;
