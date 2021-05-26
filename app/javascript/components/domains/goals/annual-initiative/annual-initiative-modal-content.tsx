@@ -239,11 +239,14 @@ export const AnnualInitiativeModalContent = observer(
       );
     };
 
+    console.log(sessionStore.companyStaticData)
     return (
       <>
-        {annualInitiative.closedAt && (
+        {!annualInitiative.closedAt && (
           <ClosedStatusBannerContainer>
-            {t("annualInitiative.cardClosed")}
+          {t("annualInitiative.cardClosed", {
+            title: sessionStore.companyStaticData[0].value
+          })}
             <AnnualInitiativeActionContainer>
               {renderDropdownOptions()}
               <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>

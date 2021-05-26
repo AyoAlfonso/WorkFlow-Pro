@@ -37,7 +37,7 @@ export const InitiativeHeader = ({
   setShowDropdownOptionsContainer,
   goalYearString,
 }: IInitiativeHeaderProps): JSX.Element => {
-  const { quarterlyGoalStore, subInitiativeStore } = useMst();
+  const { quarterlyGoalStore, subInitiativeStore, sessionStore } = useMst();
   const { t } = useTranslation();
   const descriptionRef = useRef(null);
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
@@ -47,8 +47,12 @@ export const InitiativeHeader = ({
       {item.closedAt && (
         <ClosedStatusBannerContainer>
           {itemType == "quarterlyGoal"
-            ? t("quarterlyGoal.cardClosed")
-            : t("subInitiative.cardClosed")}
+            ? t("quarterlyGoal.cardClosed", {
+              title: sessionStore.companyStaticData[1].value
+            })
+              : t("subInitiative.cardClosed", {
+                title: sessionStore.companyStaticData[2].value
+              })}
           . {t("annualInitiative.createdOn")} {moment(item.createdAt).format("MMM Do, YYYY")}.
           <AnnualInitiativeActionContainer>
             <DropdownOptions
