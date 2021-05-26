@@ -155,6 +155,7 @@
         "title": "{{title}}s",
         "messageText": "{{title}}",
         "cardClosed" : "This {{title}} is closed",
+        "createdOn" : "Originally created on",
         "confirmDelete": "Are you sure you want to delete this {{title}}?",
         "created": "{{title}} created",
         "updated": "{{title}} updated",

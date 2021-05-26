@@ -53,7 +53,7 @@ export const InitiativeHeader = ({
               : t("subInitiative.cardClosed", {
                 title: sessionStore.companyStaticData[2].value
               })}
-          . {t("annualInitiative.createdOn")} {moment(item.createdAt).format("MMM Do, YYYY")}.
+          . {t("quarterlyGoal.createdOn")} {moment(item.createdAt).format("MMM Do, YYYY")}.
           <AnnualInitiativeActionContainer>
             <DropdownOptions
               editable={editable}
