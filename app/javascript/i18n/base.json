@@ -143,7 +143,7 @@
         "addInitiative": "Add {{title}}",
         "messageText": "{{title}}",
         "cardClosed" : "This {{title}} is closed",
-        "createdOn" : "Originally created on",
+        "createdOn" : "Originally created for",
         "emptyHeader": "Add your first Initiative",
         "emptyText": "Initiatives are quarterly efforts that help you get closer to reaching your Objective.",
         "emptyCta": "Activate \"Plan\" mode"

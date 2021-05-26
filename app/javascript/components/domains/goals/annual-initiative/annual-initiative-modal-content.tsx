@@ -20,6 +20,7 @@ import { Loading } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { GoalDropdownOptions } from "../shared/goal-dropdown-options";
 import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
+import moment from "moment";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -239,14 +240,13 @@ export const AnnualInitiativeModalContent = observer(
       );
     };
 
-    console.log(sessionStore.companyStaticData)
     return (
       <>
-        {!annualInitiative.closedAt && (
+        {annualInitiative.closedAt && (
           <ClosedStatusBannerContainer>
           {t("annualInitiative.cardClosed", {
             title: sessionStore.companyStaticData[0].value
-          })}
+          })}. {t("annualInitiative.createdOn")} {`FY${annualInitiative.fiscalYear}`}.
             <AnnualInitiativeActionContainer>
               {renderDropdownOptions()}
               <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
