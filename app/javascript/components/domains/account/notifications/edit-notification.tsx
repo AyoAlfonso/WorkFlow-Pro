@@ -79,7 +79,8 @@ const RenderNotificationTimeOptions = (): JSX.Element => {
 
 const RenderNotificationDayOptions = (): JSX.Element => {
   const { t } = useTranslation();
-  let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  // let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  let days = ["Friday", "Saturday", "Sunday", "Monday"];
   const [notificationDay, setNotificationDay] = useState();
   const { notificationStore } = useMst();
   const { notificationToEdit } = notificationStore;
