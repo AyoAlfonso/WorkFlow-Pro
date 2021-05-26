@@ -63,11 +63,11 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
   };
 
   if (quarterlyGoal.closedAt != null) {
-    statusBadge.description = `Closed - Q${quarterlyGoal.quarter}`
+    statusBadge.description = `Closed`
     statusBadge.colors = { color: white, backgroundColor: grey100 }
   }
   else if (currentFiscalYear*10 + currentFiscalQuarter < annualInitiativeYear*10 + quarterlyGoal.quarter) {
-    statusBadge.description = `Upcoming - Q${quarterlyGoal.quarter}`
+    statusBadge.description = `Upcoming`
     statusBadge.colors = { color: white, backgroundColor: primary100 }
   }
   else {
@@ -115,13 +115,11 @@ export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element =
   };
 
   const renderQuarterDisplay = () => {
-    if (companyStore.company.currentFiscalQuarter != quarterlyGoal.quarter) {
-      const quarter =
-        quarterlyGoal.quarter || companyStore.onboardingCompany.quarterForCreatingQuarterlyGoals;
-      return (
-        <QuarterText> Q{quarter}: </QuarterText>
-      );
-    }
+    const quarter =
+      quarterlyGoal.quarter || companyStore.onboardingCompany.quarterForCreatingQuarterlyGoals;
+    return (
+      <QuarterText> Q{quarter}: </QuarterText>
+    );
   };
 
   return (
@@ -214,7 +212,7 @@ const StyledText = styled(Text)`
   padding-left: 4px;
   padding-right: 4px;
   white-space: normal;
-  font-size: 12px;
+  font-size: 14px;
   width: 160px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -250,6 +248,7 @@ const QuarterContainer = styled.div`
 `;
 
 const QuarterText = styled(Text)`
+  font-size: 14px;
   font-weight: 700
 `;
 
