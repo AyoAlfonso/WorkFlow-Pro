@@ -145,7 +145,7 @@ const Wrapper = styled.div`
 
 const ActionsContainer = styled.div`
   display: flex;
-  margin-left: 16px;
+  margin-left: 40px;
 `;
 
 const ProfileFirstName = styled(Text)`
