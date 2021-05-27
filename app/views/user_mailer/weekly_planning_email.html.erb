@@ -1,0 +1,340 @@
+<p><%= simple_format(@message) %></p>
+
+<div style="
+  font-size: 14px;
+  white-space: normal;
+">
+<p>Are you ready to complete your <strong style="color: #005FFE">Weekly Review</strong>?
+It is important to find the time to review, reflect, and plan.</p>
+<p>Take this time to appreciate what you have accomplished.</p>
+<h2 style="font-size: 18px; margin-top: 32px;"/>
+  Review the past week
+</h2>
+<p style="font-size: 11px;">
+  <%= get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone).strftime("%B %-d")%> 
+    - 
+  <%= (get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone) + 6.days).strftime("%B %-d")%>
+</p>
+<p>You completed <strong><%= @this_week_completed_pyns.length %> 
+Pyn<% if @this_week_completed_pyns.length != 1 %>s<% end %></strong> this week.</p>
+<p style="color: #868DAA; font-size: 11px;">That's
+<%if @this_week_completed_pyns.length - @last_week_completed_pyns.length >= 0 %>
+  <%= @this_week_completed_pyns.length - @last_week_completed_pyns.length %> more
+<% else %>
+  <%= @last_week_completed_pyns.length - @this_week_completed_pyns.length %> less
+<% end %>
+than last week.
+</p>
+<div style="
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #9B9B9B;
+  font-size: 12px;">
+  <% calculate_stats_for_week(@user).each do |stat| %>
+    <div style="margin-left: 30px; margin-right: 30px">
+      <p style="text-align: center"> <%= stat[:statistic_number] %> </p>
+      <p style="text-align: center; font-weight: bold;"> <%= stat[:statistic_name] %> </p>
+      <p style="text-align: center; color: <%= stat[:statistic_change] >= 0 ? "#00C3B3" : "#EB221B" %>"> <%= "#{stat[:statistic_change] > 0 ? "+": ""}#{'%.1f' % stat[:statistic_change]}%"%></p>
+    </div>
+  <% end %>
+
+  <div style="margin-left: 30px; margin-right: 30px">
+    <p style="text-align: center"> <%= "#{weekly_milestone_progress(@user).round(0)}%"%><p>
+    <p style="text-align: center; font-weight: bold;"> Milestones Progress </p>
+  </div>
+</div>
+<p>
+You average mood was
+<% if average_weekly_emotion_score_over_last_week(@user) < 1.5 %>
+Low Pleasantness & Low Energy
+<% elsif average_weekly_emotion_score_over_last_week(@user) < 2.5 %>
+Low Pleasantness & High Energy
+<% elsif average_weekly_emotion_score_over_last_week(@user) < 3.5 %>
+Neutral
+<% elsif average_weekly_emotion_score_over_last_week(@user) < 4.5 %>
+High Pleasantness & Low Energy
+<% else %>
+High Pleasantness & High Energy
+<% end %>
+</p>
+<p style="color: #868DAA; font-size: 11px;">
+That's
+<% if average_weekly_emotion_score_over_last_week(@user) < average_weekly_emotion_score_over_last_week_previous_week(@user) %>
+  lower than
+<% elsif average_weekly_emotion_score_over_last_week(@user) == average_weekly_emotion_score_over_last_week_previous_week(@user) %>
+  about the same
+<% else %>
+  higher than
+<% end %>
+last week.
+</p>
+<div style="text-align: center">
+  <% if average_weekly_emotion_score_over_last_week(@user) < 1.5 %>
+    <%= image_tag image_path('Emotion-E'), height: 100, width: 100 %>
+  <% elsif average_weekly_emotion_score_over_last_week(@user) < 2.5 %>
+    <%= image_tag image_path('Emotion-D'), height: 100, width: 100 %>
+  <% elsif average_weekly_emotion_score_over_last_week(@user) < 3.5 %>
+    <%= image_tag image_path('Emotion-C'), height: 100, width: 100 %>
+  <% elsif average_weekly_emotion_score_over_last_week(@user) < 4.5 %>
+    <%= image_tag image_path('Emotion-B'), height: 100, width: 100 %>
+  <% else %>
+    <%= image_tag image_path('Emotion-A'), height: 100, width: 100 %>
+  <% end %>
+  <div style="font-size: 14px; font-weight: bold; margin-top: 10px;">
+    <% if average_weekly_emotion_score_over_last_week(@user) < 1.5 %>
+      <div style="color: #eb221b">Low Pleasantness & Low Energy</div>
+    <% elsif average_weekly_emotion_score_over_last_week(@user) < 2.5 %>
+      <div style="color: #ffcc57">Low Pleasantness & High Energy</div>
+    <% elsif average_weekly_emotion_score_over_last_week(@user) < 3.5 %>
+      <div style="color: #9ea3bb">Neutral</div>
+    <% elsif average_weekly_emotion_score_over_last_week(@user) < 4.5 %>
+      <div style="color: #00c3b3">High Pleasantness & Low Energy</div>
+    <% else %>
+      <div style="color: #36b37e">High Pleasantness & High Energy</div>
+    <% end %>
+  </div>
+</div>
+
+<p>
+You were on track for
+<strong><%=
+  sum = 0
+  habits_for_the_previous_week(@user) do |habit|
+    if habit[:weekly_completion_percentage] >= 100
+      sum += 1
+    end
+  end
+  sum
+  %> out of <%= habits_for_the_previous_week(@user).length %></strong> habits this week.
+</p>
+
+<div class="container" style="
+  border-radius: 10px;
+  border: 0px solid white;
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: auto;
+
+">
+  <div class="habits-header-container" style="
+    display: flex;
+    border-bottom: 1px solid #E3E3E3;
+    padding-left: 10px;
+    padding-right: 10px;
+  ">
+    <h4 style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 20px;
+      font-size: 16px;
+      font-weight: 600;"
+    >
+      Your Habits
+    </h4>
+  </div>
+  <div class="habits-body" style="max-height: 500px">
+    <table class="habits-table" style="
+      width: auto;
+      border-collapse: collapse;
+      display: block;
+      overflow-y: auto;
+      padding-left: 8px;
+      padding-right: 8px;"
+    >
+      <thead>
+        <tr>
+          <th style="color: #CED1DD;
+                    height: 25px;
+                    font-size: 12px;">
+          </th>
+          <th style="color: #CED1DD;
+                    height: 25px;
+                    width: 65%;
+                    font-size: 12px;">
+          </th>
+          <% ["Score", "Week", "Total"].each do |value|%>
+            <th style="color: #CED1DD;
+                    height: 25px;
+                    font-size: 12px;
+                    width: 12%;
+                    font-weight: normal;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    "
+            >
+              <%= value %>
+            </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% habits_for_the_previous_week(@user).each do |habit| %>
+          <tr>
+
+            <td style="height: 35px;
+                        padding-right: 15px;
+                        padding-top: 2px;
+                        padding-right: 5px;
+                        text-align: center;">
+             
+            </td>
+
+            <td style="height: 35px;
+                        padding-right: 15px;
+                        padding-top: 2px;">
+              <p style="font-weight: 600;
+                        margin-left: 10px;
+                        margin-top: 5px;
+                        margin-bottom: 5px;">
+                <%= habit[:habit][:name] %>
+              </p>
+            </td>
+
+
+
+            <td style="height: 35px;
+                        padding-top: 2px;
+                        text-align: center;">
+              <p style="margin-top: 5px;
+                        margin-bottom: 5px;">
+                <%= "#{habit[:weekly_completion_percentage].round}%" %>
+              </p>
+            </td>
+
+            <td style="height: 35px;
+                        padding-top: 2px;
+                        text-align: center;">
+              <p style="margin-top: 5px;
+                        margin-bottom: 5px;">
+                <%= "#{habit[:weekly_difference] > 0 ? "+": ""}" "#{habit[:weekly_difference].round}%" %>
+              </p>
+            </td>
+
+            <td style="height: 35px;
+                        padding-top: 2px;
+                        text-align: center;">
+              <p style="margin-top: 5px;
+                        margin-bottom: 5px;">
+                <%= habit[:weekly_completion_fraction]%>
+              </p>
+            </td>
+
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="border-top: 1px solid #E3E3E3">
+    <div style="display: flex;
+                margin-bottom: 5px;
+                margin-left: 5px;">
+      <% @habit_sum = habits_for_the_previous_week(@user).map{|habit| habit[:weekly_difference].round}.sum %>
+      <p style="font-weight: bold; margin-left: 5px; color: <%= @habit_sum >= 0 ? "#00C3B3" : "#EB221B" %>">
+        <%= "#{@habit_sum > 0 ? "+" : ""}"%>
+        <%= "#{@habit_sum.to_f / (habits_for_the_previous_week(@user).count.to_f > 0 ? habits_for_the_previous_week(@user).count.to_f : 1)}%" %>
+      </p>
+      <p style="font-size: 14px;
+                color: #B6BACC;
+                margin-left: 10px;
+                margin-top: auto;
+                margin-bottom: auto;"
+      >
+        Compared to last week
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<p style="margin-top: 64px;">Now it's time to look forward.</p>
+<h2 style="font-size: 18px; font-weight: bold;">Get ready for this week</h2>
+
+<% @number_of_milestones = @next_quarterly_milestones.length + @next_subinitiative_milestones.length %>
+<p>
+You have
+<strong><%= @number_of_milestones %> milestone<% if @number_of_milestones != 1 %>s<% end %></strong>
+this week.
+</p>
+
+<% @quarterly_goals = QuarterlyGoal.where(id: @next_quarterly_milestones.select("milestoneable_id")) %>
+<% @quarterly_goals.each do |goal| %>
+  <p style="font-weight: bold; margin-bottom: 0px;">
+  Initiative: <%= goal.description %>
+  </p>
+  <% @next_quarterly_milestones.where(milestoneable_id: goal.id).each do |milestone|%>
+    <p style="margin-top: 0px;">
+    Week of <%= milestone.week_of.strftime("%B %-d") %>:
+    <%= milestone.description.gsub("<br>", "") %>
+    </p>
+  <% end %>
+<% end %>
+<% @subinitiatives = SubInitiative.where(id: @next_subinitiative_milestones.select("milestoneable_id")) %>
+<% @subinitiatives.each do |goal| %>
+  <p style="font-weight: bold; margin-bottom: 0px;">
+  Initiative: <%= goal.description %>
+  </p>
+  <% @next_subinitiative_milestones.where(milestoneable_id: goal.id).each do |milestone|%>
+    <p style="margin-top: 0px;">
+    Week of <%= milestone.week_of.strftime("%B %-d") %>:
+    <%= milestone.description.gsub("<br>", "") %>
+    </p>
+  <% end %>
+<% end %>
+
+<p>You have <strong><%= @next_week_pyns.length %> Pyn<% if @next_week_pyns.length != 1 %>s<% end %></strong>
+coming up for this week.</p>
+<ul>
+<% @next_week_pyns.each do |pyn| %>
+  <li>
+    <%= pyn.description %> 
+    <% if pyn.personal %>
+      🔒
+    <% end %>
+    <% if pyn.priority == "low" %>
+      🔷
+    <% elsif pyn.priority == "medium" %>
+      🟥
+    <% elsif pyn.priority == "high" %>
+      🟡
+    <% end %><% if pyn.due_date != nil %> - <% if pyn.due_date < @user.time_in_user_timezone.to_date %>
+      <strong><span style="color: #EB221B;">Overdue</span></strong>
+    <% elsif pyn.due_date == @user.time_in_user_timezone.to_date %>
+      <strong><span style="color: #FBB004;">Due Today</span></strong>
+    <% elsif pyn.due_date == @user.time_in_user_timezone.to_date + 1.days %>
+      <span style="color: #00C3B3;">Due Tomorrow</span>
+    <% elsif pyn.due_date > @user.time_in_user_timezone.to_date %>
+      <span style="color: #868DAA;">Due <%= pyn.due_date.strftime("%b %d") %></span>
+    <% end %><% end %>
+  </li>
+<% end %>
+</ul>
+<div style="
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+">
+  <div style="
+    background-color: #005FFE;
+    border-radius: 4px;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 8px 16px;
+    text-align: center;
+    cursor: pointer;
+    line-height: 120%;
+    display: block;
+  ">
+    <a target="_blank" style="text-decoration: none; color: #FFFFFF; cursor: pointer; line-height: 19.2px" href=<%="#{ENV["HOST_URL"]}#{@cta_url}"%>>
+      <%= @cta_text %>
+    </a>
+  </div>
+</div>
+</div>

@@ -31,7 +31,7 @@ module HasEmotionScores
   def overall_average_emotion_score(users, from_date, to_date)
     average_user_score = daily_average_users_emotion_score(users, from_date, to_date)[:emotion_scores]
     if average_user_score.size == 0
-      0
+      3.0
     else
       sum_of_scores = average_user_score.pluck(:average_score).sum
       sum_of_scores / average_user_score.size
