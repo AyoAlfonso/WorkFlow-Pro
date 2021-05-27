@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_10_194545) do
+ActiveRecord::Schema.define(version: 2021_05_11_183936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -259,6 +259,22 @@ ActiveRecord::Schema.define(version: 2021_05_10_194545) do
     t.index ["elementable_type", "elementable_id"], name: "index_key_elements_on_elementable_type_and_elementable_id"
   end
 
+  create_table "key_performance_indicators", force: :cascade do |t|
+    t.string "description"
+    t.datetime "closed_at"
+    t.bigint "created_by_id"
+    t.bigint "owned_by_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.date "fiscal_year_start"
+    t.date "week_of"
+    t.integer "unit_type", default: 0
+    t.integer "status", default: 0
+    t.boolean "is_deleted", default: false
+    t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
+    t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
+  end
+
   create_table "meeting_templates", force: :cascade do |t|
     t.string "name"
     t.integer "meeting_type"
@@ -284,7 +300,7 @@ ActiveRecord::Schema.define(version: 2021_05_10_194545) do
     t.datetime "scheduled_start_time"
     t.datetime "end_time"
     t.bigint "hosted_by_id"
-    t.text "notes", default: ""
+    t.text "notes"
     t.json "settings"
     t.boolean "original_creation", default: false
     t.index ["created_at"], name: "index_meetings_on_created_at"
