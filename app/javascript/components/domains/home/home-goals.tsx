@@ -8,6 +8,7 @@ import { Loading } from "../../shared/loading";
 import Modal from "styled-react-modal";
 import { AnnualInitiativeModalContent } from "../goals/annual-initiative/annual-initiative-modal-content";
 import { QuarterlyGoalModalContent } from "../goals/quarterly-goal/quarterly-goal-modal-content";
+import { SubInitiativeModalContent } from "../goals/sub-initiative/sub-initiaitive-modal-content";
 import { observer } from "mobx-react";
 import { TitleContainer } from "../goals/shared/title-container";
 import { RallyingCry } from "../goals/shared/rallying-cry";
@@ -22,6 +23,9 @@ export const HomeGoals = observer(
     const [annualInitiativeId, setAnnualInitiativeId] = useState<number>(null);
     const [quarterlyGoalModalOpen, setQuarterlyGoalModalOpen] = useState<boolean>(null);
     const [quarterlyGoalId, setQuarterlyGoalId] = useState<number>(null);
+    const [subInitiativeModalOpen, setSubInitiativeModalOpen] = useState<boolean>(null);
+    const [subInitiativeId, setSubInitiativeId] = useState<number>(null);
+
     const [annualInitiativeDescription, setSelectedAnnualInitiativeDescription] = useState<string>(
       "",
     );
@@ -34,8 +38,6 @@ export const HomeGoals = observer(
     const [showCompanyInitiatives, setShowCompanyInitiatives] = useState<boolean>(true);
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
 
-    const [subInitiativeModalOpen, setSubInitiativeModalOpen] = useState<boolean>(null);
-    const [subInitiativeId, setSubInitiativeId] = useState<number>(null);
 
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
@@ -102,7 +104,9 @@ export const HomeGoals = observer(
             setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
             setAnnualInitiativeId={setAnnualInitiativeId}
             setQuarterlyGoalId={setQuarterlyGoalId}
+            // setSubInitiativeId={setSubInitiativeId}
             setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
+            setSubInitiativeModalOpen={setSubInitiativeModalOpen}
             setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
             showCreateQuarterlyGoal={false}
           />
@@ -181,6 +185,22 @@ export const HomeGoals = observer(
             setSubInitiativeId={setSubInitiativeId}
             setSubInitiativeModalOpen={setSubInitiativeModalOpen}
             setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
+          />
+        </StyledModal>
+
+          <StyledModal
+          isOpen={subInitiativeModalOpen}
+          style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
+          onBackgroundClick={e => {
+            setSubInitiativeModalOpen(false);
+          }}
+        >
+          <SubInitiativeModalContent
+            subInitiativeId={subInitiativeId}
+            setAnnualInitiativeId={setAnnualInitiativeId}
+            annualInitiativeDescription={annualInitiativeDescription}
+            setSubInitiativeModalOpen={setSubInitiativeModalOpen}
+            showCreateMilestones={false}
           />
         </StyledModal>
       </Container>

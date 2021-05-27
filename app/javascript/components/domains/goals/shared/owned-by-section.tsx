@@ -14,6 +14,13 @@ interface IOwnedBySectionProps {
   type: string;
   userIconBorder?: string;
   disabled?: boolean;
+  size?: number;
+  marginLeft?:string
+  marginRight?:string
+  marginTop?:string
+  marginBottom?:string
+  nameWidth?:string
+  fontSize?:string
 }
 
 export const OwnedBySection = ({
@@ -21,11 +28,14 @@ export const OwnedBySection = ({
   type,
   userIconBorder,
   disabled,
+  size,
+  nameWidth,
+  fontSize,
+  ...restProps
 }: IOwnedBySectionProps): JSX.Element => {
   const { userStore, sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
   const [store, setStore] = useState<any>(null);
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
-
   useEffect(() => {
     if (type == "annualInitiative") {
       setStore(annualInitiativeStore);
@@ -36,8 +46,9 @@ export const OwnedBySection = ({
 
   const companyUsers = userStore.users;
   const currentUser = sessionStore.profile;
+  ownedBy = ownedBy || currentUser
   const editable =
-    (ownedBy.id == currentUser.id ||
+    (ownedBy && ownedBy.id == currentUser.id ||
       currentUser.role == RoleCEO ||
       currentUser.role == RoleAdministrator) &&
     !disabled;
@@ -57,7 +68,9 @@ export const OwnedBySection = ({
   };
 
   return (
-    <Container>
+    <Container
+      width={100}
+    >
       <EditTriggerContainer
         editable={editable}
         onClick={e => {
@@ -71,14 +84,11 @@ export const OwnedBySection = ({
           avatarUrl={ownedBy.avatarUrl}
           firstName={ownedBy.firstName}
           lastName={ownedBy.lastName}
-          size={20}
-          marginLeft={"auto"}
-          marginRight={"auto"}
-          marginTop={"auto"}
-          marginBottom={"auto"}
+          size={ size || 20}
           border={userIconBorder}
+          {...restProps}
         />
-        <OwnedByName type={"small"}>
+        <OwnedByName fontSize={fontSize} nameWidth={nameWidth} type={"fieldLabel"}>
           {ownedBy.firstName} {ownedBy.lastName}
         </OwnedByName>
       </EditTriggerContainer>
@@ -87,16 +97,22 @@ export const OwnedBySection = ({
   );
 };
 
-type ContainerType = {
+type EditTriggerContainerType = {
   editable: boolean;
 };
 
-const Container = styled.div`
-  margin-left: 12px;
+type ContainerProps = {
+  width?: number;
+}
+
+const Container = styled.div<ContainerProps>`
+   margin-left: 0px;
+   width: ${props => `${props.width}%` || 'auto'};
 `;
 
-const EditTriggerContainer = styled.div<ContainerType>`
+const EditTriggerContainer = styled.div<EditTriggerContainerType>`
   display: flex;
+  align-items: center center;
   &:hover {
     cursor: ${props => props.editable && "pointer"};
   }
@@ -108,5 +124,10 @@ const SubHeaderContainer = styled.div`
 
 const OwnedByName = styled(Text)`
   margin-left: 8px;
-  color: ${props => props.theme.colors.greyActive};
+  letter-spacing: 0px;
+  color: ${props => props.theme.colors.black};
+  width: ${props => `${props.nameWidth}` || 'auto'};
+  overflow: hidden; 
+  font-size: ${props => `${props.fontSize}` || '12px'};
+  text-overflow: ellipsis;
 `;

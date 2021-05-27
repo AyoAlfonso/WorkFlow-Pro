@@ -33,7 +33,7 @@ export const JournalHeader = ({
 
   const handleChatbotEnd = () => {
     setQuestionnaireVariant("");
-    window.openWidget();
+    window.openWidget && window.openWidget();
   };
 
   return (

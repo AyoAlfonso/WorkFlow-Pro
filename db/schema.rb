@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_28_181427) do
+ActiveRecord::Schema.define(version: 2021_05_10_194545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -206,7 +206,9 @@ ActiveRecord::Schema.define(version: 2021_04_28_181427) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "logged_at"
     t.index ["generated_from_type", "generated_from_id"], name: "index_journal_entries_on_generated_from_polymorphic"
+    t.index ["logged_at"], name: "index_journal_entries_on_logged_at"
     t.index ["user_id"], name: "index_journal_entries_on_user_id"
   end
 
@@ -282,7 +284,7 @@ ActiveRecord::Schema.define(version: 2021_04_28_181427) do
     t.datetime "scheduled_start_time"
     t.datetime "end_time"
     t.bigint "hosted_by_id"
-    t.text "notes"
+    t.text "notes", default: ""
     t.json "settings"
     t.boolean "original_creation", default: false
     t.index ["created_at"], name: "index_meetings_on_created_at"
@@ -500,7 +502,7 @@ ActiveRecord::Schema.define(version: 2021_04_28_181427) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_role_id"
     t.string "user_title"
-    t.boolean "first_time_access", default: false
+    t.boolean "first_time_access", default: true
     t.index ["company_id"], name: "index_user_company_enablements_on_company_id"
     t.index ["user_id"], name: "index_user_company_enablements_on_user_id"
     t.index ["user_role_id"], name: "index_user_company_enablements_on_user_role_id"

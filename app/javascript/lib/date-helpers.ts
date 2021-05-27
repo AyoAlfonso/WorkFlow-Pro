@@ -10,3 +10,8 @@ export const yesterday = moment()
 export const tomorrow = moment()
   .add(1, "days")
   .format("MMMM D");
+
+export const todaysDateFull = moment().format("YYYY-MM-DD");
+export const yesterdaysDateFull = moment()
+  .subtract(1, "days")
+  .format("YYYY-MM-DD");

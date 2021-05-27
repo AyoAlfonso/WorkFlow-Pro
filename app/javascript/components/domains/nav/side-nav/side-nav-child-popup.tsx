@@ -1,31 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import Popup from "reactjs-popup";
+import "~/stylesheets/modules/reactjs-popup.css"
 import { CSSProperties } from "react";
-import { SideNavDrawer } from "./side-nav-drawer";
+// import { SideNavDrawer } from "./side-nav-drawer";
 
 export const PopupContainer = styled.div`
-  background-color: white;
+  background-color: ${props => props.theme.colors.primary100};
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  margin-left: 16px;
-  overflow-x: hidden;
-  position: absolute;
-  width: 200px;
+  margin-left: -10px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  width: 256px;
+  transition: 0.3s;
+  box-shadow: 0px 3px 6px #00000029;
 `;
 
 export const PopupTriggerContainer = styled.div`
+  margin: 0px;
+  padding: 0px;
   :hover {
     cursor: pointer;
   }
 `;
 
-const Container = styled.div`
-  margin: 16px;
-`;
-
 const popupStyle: CSSProperties = {
-  borderRadius: 8,
   border: "none",
   boxShadow: "none",
 };
@@ -45,17 +46,14 @@ export const SideNavChildPopup: React.FunctionComponent<ISideNavChildPopupProps>
 }) => {
   //const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   return (
-    <Container>
-      <SideNavDrawer isOpen={navOpen} />
+    <>
       <Popup
         arrow={false}
         closeOnDocumentClick
         // Had errors trying to do .styled(Popup): https://github.com/yjose/reactjs-popup/issues/118#issuecomment-533941132
         contentStyle={popupStyle}
-        // defaultOpen={true}
-        mouseLeaveDelay={10000}
+        mouseLeaveDelay={300}
         mouseEnterDelay={0}
-        offsetY={-50}
         on={"click"}
         open={navOpen}
         onClose={() => setNavOpen(false)}
@@ -77,6 +75,6 @@ export const SideNavChildPopup: React.FunctionComponent<ISideNavChildPopupProps>
           )}
         </PopupContainer>
       </Popup>
-    </Container>
+    </>
   );
 };

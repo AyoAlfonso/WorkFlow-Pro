@@ -37,6 +37,8 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   def close_initiative
     @company = current_company
     @annual_initiative.update!(closed_at: Date.today)
+    @annual_initiative.quarterly_goals.update_all(closed_at: Date.today)
+    @annual_initiative.sub_initiatives.update_all(closed_at: Date.today)
     render 'api/annual_initiatives/update'
   end
 

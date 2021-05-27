@@ -38,7 +38,11 @@ export const CreateGoalSection = ({
 
   return showCreateGoal ? (
     <CreateAnnualInitiativeCardContainer>
-      <TextInput textValue={description} setTextValue={setDescription} placeholder={placeholder} />
+      <TextInput 
+        textValue={description} 
+        setTextValue={setDescription}
+        placeholder={placeholder}
+         />
       <ActionsContainer>
         <AddInitiativeButton
           small
@@ -74,7 +78,7 @@ export const CreateGoalSection = ({
             setDescription("");
           }}
         >
-          <Icon icon={"Close"} size={"20px"} style={{ marginTop: "3px" }} iconColor={"grey60"} />
+          <Icon icon={"Close"} size={"12px"} style={{ marginTop: "3px" }} iconColor={"grey60"} />
         </CloseIconContainer>
       </ActionsContainer>
     </CreateAnnualInitiativeCardContainer>
@@ -85,7 +89,7 @@ export const CreateGoalSection = ({
       onClick={() => setShowCreateGoal(true)}
       width={buttonWidth}
     >
-      <Icon icon={"Plus"} size={"20px"} />
+      <CircularIcon icon={"Plus"} size={"12px"} />
       <AddGoalText>{addButtonText}</AddGoalText>
     </StyledButton>
   );
@@ -94,26 +98,38 @@ export const CreateGoalSection = ({
 type StyledButtonType = {
   width?: string;
 };
-
+   
 const StyledButton = styled(Button)<StyledButtonType>`
   display: flex;
   justify-content: center;
-  margin-left: 8px;
   align-items: center;
-  min-width: ${props => !props.width && "240px"};
-  width: ${props => (props.width ? props.width : "-webkit-fill-available")};
+  width: ${props => (props.width != "fill" ? props.width : "-webkit-fill-available")};
   padding-left: 0;
   padding-right: 0;
-  width: 100%;
+  background-color: ${props => props.theme.colors.white};
+  border-color: ${props => props.theme.colors.white};
   &: hover {
-    color: ${props => props.theme.colors.primary100};
+     color: ${props => props.theme.colors.primary100};
   }
 `;
-
+const CircularIcon = styled(Icon)`
+ box-shadow: 2px 2px 6px 0.5px rgb(0 0 0 / 20%);
+ color:  ${props => props.theme.colors.white};
+ border-radius: 50%;
+ height: 25px;
+ width: 25px;
+ background-color: ${props => props.theme.colors.primary100};
+   &: hover {
+    background-color: ${props => props.theme.colors.primaryActive};
+  }
+`
 const AddGoalText = styled(TextDiv)`
-  margin-left: 16px;
+  margin-left: 10px;
   white-space: break-spaces;
+  color: ${props => props.theme.colors.primary100};
+  font-size: 12px;
 `;
+
 
 const CreateAnnualInitiativeCardContainer = styled(HomeContainerBorders)`
   padding-top: 8px;
@@ -125,7 +141,7 @@ const CreateAnnualInitiativeCardContainer = styled(HomeContainerBorders)`
 
 const ActionsContainer = styled.div`
   display: flex;
-  margin-top: 16px;
+  margin-top: 12px;
 `;
 
 const AddInitiativeButton = styled(Button)`
@@ -140,11 +156,11 @@ const AddInitiativeButton = styled(Button)`
 `;
 const AddInitiativeText = styled.p`
   margin: 0;
-  font-size: 14px;
+  font-size: 12px;
 `;
 
 const CloseIconContainer = styled.div`
-  margin-left: 16px;
+  margin-left: 10px;
   margin-top: auto;
   margin-bottom: auto;
   &:hover {

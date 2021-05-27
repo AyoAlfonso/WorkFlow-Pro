@@ -110,11 +110,45 @@ export const AccountDropdownOptions = observer(
       return <UserStatus selectedUserStatus={selectedUserStatus} onStatusUpdate={updateStatus} />;
     };
 
-    const renderSwitchCompanyOptions = (): JSX.Element => {
+    const renderWorkspaceDisplay = () => {
       if (parsedProfile.companyProfiles.length > 1) {
-        return <AccountOptionText>{t("profile.switchCompanies")}</AccountOptionText>;
+        return (
+          <WorkspaceContainer
+            onClick={() => {
+              setShowCompanyOptions(!showCompanyOptions);
+            }}
+          >
+            <LeftWorkspaceContainer>
+              <AccountOptionText>{t("profile.switchCompanies")}</AccountOptionText>
+              <CompanyText type={"small"}>{R.path(["company", "name"], companyStore)}</CompanyText>
+            </LeftWorkspaceContainer>
+            <RightWorkspaceContainer>
+              <Icon icon={"Chevron-Left"} size={"15px"} iconColor={"grey80"} />
+            </RightWorkspaceContainer>
+          </WorkspaceContainer>
+        );
+      } else {
+        return (
+          <WorkspaceContainer>
+            <AccountOptionText>{R.path(["company", "name"], companyStore)}</AccountOptionText>
+          </WorkspaceContainer>
+        );
       }
     };
+
+    const renderShowProductStash = (): JSX.Element => {
+      return (
+        <AccountOptionText 
+          id="lynchpyn-whats-new"
+          onClick={() => {
+            window.Productstash.show();
+            setShowAccountActions(false);
+          }}
+        >
+          What's New? 
+        </AccountOptionText>
+      )
+    }
 
     const renderShowHelpdesk = (): JSX.Element => {
       return (
@@ -205,22 +239,7 @@ export const AccountDropdownOptions = observer(
         <StyledDivider />
 
         <DropdownSectionContainer>
-          <WorkspaceContainer
-            onClick={() => {
-              setShowCompanyOptions(!showCompanyOptions);
-            }}
-          >
-            <LeftWorkspaceContainer>
-              {renderSwitchCompanyOptions()}
-              <CompanyText type={"small"}>
-                {" "}
-                {R.path(["company", "name"], companyStore)}{" "}
-              </CompanyText>
-            </LeftWorkspaceContainer>
-            <RightWorkspaceContainer>
-              <Icon icon={"Chevron-Left"} size={"15px"} iconColor={"grey80"} />
-            </RightWorkspaceContainer>
-          </WorkspaceContainer>
+          {renderWorkspaceDisplay()}
           {showCompanyOptions && (
             <CompanyDropdownContainer>
               <DropdownSectionContainer>{renderCompanyOptions()}</DropdownSectionContainer>
@@ -255,7 +274,7 @@ export const AccountDropdownOptions = observer(
           >
             Invite Users
           </AccountOptionText>
-          <AccountOptionText id="lynchpyn-whats-new">What's New? </AccountOptionText>
+          {renderShowProductStash()}
           {renderShowHelpdesk()}
         </DropdownSectionContainer>
 

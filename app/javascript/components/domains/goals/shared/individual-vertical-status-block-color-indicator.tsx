@@ -21,10 +21,7 @@ export const IndividualVerticalStatusBlockColorIndicator = observer(
     const { quarterlyGoalStore, subInitiativeStore, milestoneStore } = useMst();
     const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
 
-    const colorChangable =
-      moment(milestone.weekOf).isSame(moment(), "week") ||
-      moment(milestone.weekOf).isBefore(moment(), "week");
-
+    const colorChangable = moment(milestone.weekOf).isSameOrBefore(moment(), "week");
     const determineStatusColor = status => {
       switch (status) {
         case "incomplete":
@@ -40,7 +37,7 @@ export const IndividualVerticalStatusBlockColorIndicator = observer(
 
     useEffect(() => {
       setStatusColor(determineStatusColor(milestoneStatus));
-    }, []);
+    }, [milestone]);
 
     const [statusColor, setStatusColor] = useState<any>(null);
     const { warningRed, cautionYellow, finePine, grey20 } = baseTheme.colors;
@@ -77,6 +74,13 @@ export const IndividualVerticalStatusBlockColorIndicator = observer(
         backgroundColor={statusColor}
         colorChangable={colorChangable}
         onClick={() => {
+          //remove this to do 
+          console.log(
+            moment().format("w"),
+            moment(milestone.weekOf).isSameOrBefore(moment()),
+            milestone.weekOf,
+            moment().format(),
+          );
           if (colorChangable && editable) {
             updateStatus();
           }

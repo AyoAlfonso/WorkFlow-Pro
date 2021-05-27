@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useMst } from "~/setup/root";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
 import { observer } from "mobx-react";
-import { Loading, UserDefaultIcon } from "~/components/shared";
+import { Loading, Avatar } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
 import { MilestoneCreateButton } from "../shared-quarterly-goal-and-sub-initiative/milestone-create-button";
@@ -50,6 +50,7 @@ export const QuarterlyGoalModalContent = observer(
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
+    const itemType = "quarterlyGoal";
 
     const { t } = useTranslation();
 
@@ -80,6 +81,7 @@ export const QuarterlyGoalModalContent = observer(
             <StatusBlockColorIndicator
               milestones={subInitiative.milestones || []}
               indicatorWidth={80}
+              indicatorHeight={4}
               marginBottom={16}
             />
             <TopRowContainer>
@@ -87,6 +89,7 @@ export const QuarterlyGoalModalContent = observer(
                 onClick={() => {
                   setQuarterlyGoalModalOpen(false);
                   setSubInitiativeId(subInitiative.id);
+                  //Look into this.
                   setSelectedAnnualInitiativeDescription(annualInitiativeDescription);
                   setSubInitiativeModalOpen(true);
                 }}
@@ -100,10 +103,11 @@ export const QuarterlyGoalModalContent = observer(
             <BottomRowContainer>
               {subInitiative.ownedBy && (
                 <SubInitiativeOwnerContainer>
-                  <UserDefaultIcon
+                  <Avatar
                     firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
                     lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
                     defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
+                    avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
                     size={40}
                   />
                 </SubInitiativeOwnerContainer>
@@ -125,25 +129,28 @@ export const QuarterlyGoalModalContent = observer(
         <StatusBlockColorIndicator
           milestones={quarterlyGoal.milestones || []}
           indicatorWidth={80}
-          marginBottom={16}
+          indicatorHeight={4}
+          marginBottom={0}
         />
 
         <QuarterlyGoalBodyContainer>
-          <InitiativeHeader
-            itemType={"quarterlyGoal"}
-            item={quarterlyGoal}
-            editable={editable}
-            setAnnualInitiativeId={setAnnualInitiativeId}
-            setModalOpen={setQuarterlyGoalModalOpen}
-            setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
-            annualInitiativeId={quarterlyGoal.annualInitiativeId}
-            annualInitiativeDescription={annualInitiativeDescription}
-            showDropdownOptionsContainer={showDropdownOptionsContainer}
-            setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
-            goalYearString={goalYearString}
-          />
           <SectionContainer>
-            <Context itemType={"quarterlyGoal"} item={quarterlyGoal} />
+            <InitiativeHeader
+              itemType={itemType}
+              item={quarterlyGoal}
+              editable={editable}
+              setAnnualInitiativeId={setAnnualInitiativeId}
+              setModalOpen={setQuarterlyGoalModalOpen}
+              setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+              annualInitiativeId={quarterlyGoal.annualInitiativeId}
+              annualInitiativeDescription={annualInitiativeDescription}
+              showDropdownOptionsContainer={showDropdownOptionsContainer}
+              setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
+              goalYearString={goalYearString}
+            />
+          </SectionContainer>
+          <SectionContainer>
+            <Context itemType={itemType} item={quarterlyGoal} />
           </SectionContainer>
           <SectionContainer>
             {renderSubInitiative()}
@@ -158,6 +165,7 @@ export const QuarterlyGoalModalContent = observer(
                   createAction={subInitiativeStore.create}
                   quarterlyGoalId={quarterlyGoal.id}
                   inAnnualInitiative={true}
+                  buttonWidth={"200px"}
                 />
               </CreateGoalContainer>
             )}
@@ -175,10 +183,10 @@ export const QuarterlyGoalModalContent = observer(
               allMilestones={allMilestones}
               activeMilestones={activeMilestones}
               showInactiveMilestones={showInactiveMilestones}
-              itemType={"quarterlyGoal"}
+              itemType={itemType}
             />
             {showCreateMilestones && editable && allMilestones.length == 0 && (
-              <MilestoneCreateButton itemType={"quarterlyGoal"} item={quarterlyGoal} />
+              <MilestoneCreateButton itemType={itemType} item={quarterlyGoal} />
             )}
           </SectionContainer>
         </QuarterlyGoalBodyContainer>
@@ -192,19 +200,18 @@ const Container = styled.div`
   margin-right: ${props => props["margin-right"] || "0px"};
   height: fit-content;
   overflow: auto;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: auto
+  padding-right: auto;
 `;
 
 const QuarterlyGoalBodyContainer = styled.div`
   padding-top: 16px;
-  padding-bottom: 36px;
-  padding-left: 20px;
-  padding-right: 20px;
 `;
 
 const SectionContainer = styled.div`
-  margin-top: 24px;
+  padding-bottom: 36px;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
 
 const MilestonesHeaderContainer = styled.div`
