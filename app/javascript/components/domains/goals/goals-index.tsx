@@ -20,12 +20,7 @@ import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge";
 
 export const GoalsIndex = observer(
   (): JSX.Element => {
-    const {
-      goalStore,
-      annualInitiativeStore,
-      companyStore,
-      sessionStore,
-    } = useMst();
+    const { goalStore, annualInitiativeStore, companyStore, sessionStore } = useMst();
 
     const [loading, setLoading] = useState<boolean>(true);
 

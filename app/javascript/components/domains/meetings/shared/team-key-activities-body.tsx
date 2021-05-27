@@ -60,7 +60,12 @@ export const TeamKeyActivitiesBody = observer(
           />
           <KeyActivitiesListStyleContainer>
             {todaysKeyActivities.map(ka => (
-              <KeyActivityRecord key={ka.id} keyActivity={ka} noBorder={meeting} />
+              <KeyActivityRecord
+                key={ka.id}
+                keyActivity={ka}
+                noBorder={meeting}
+                meetingId={meeting && meetingStore.currentMeeting.id}
+              />
             ))}
           </KeyActivitiesListStyleContainer>
         </KeyActivitiesListContainer>
@@ -71,6 +76,7 @@ export const TeamKeyActivitiesBody = observer(
           todayModalClicked={true}
           defaultSelectedGroupId={sessionStore.getScheduledGroupIdByName("Today")}
           todayFilterGroupId={todayFilterGroupId}
+          meetingId={meeting && meetingStore.currentMeeting.id}
         />
       </>
     );

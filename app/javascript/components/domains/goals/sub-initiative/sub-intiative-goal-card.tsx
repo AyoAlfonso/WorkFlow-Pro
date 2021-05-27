@@ -196,7 +196,7 @@ const StyledText = styled(Text)`
   padding-left: 4px;
   padding-right: 4px;
   white-space: normal;
-  font-size: 12px;
+  font-size: 14px;
   width: 160px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
