@@ -59,8 +59,8 @@ export const GoalsIndex = observer(
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
       if (!companyStore.company) {
-        companyStore.load();
-        setInstanceType(companyStore.company.accessForum ? "forum" : "teams")
+        companyStore.load().then(() =>
+        setInstanceType(companyStore.company.accessForum ? "forum" : "teams"));
       }
     }, []);
 

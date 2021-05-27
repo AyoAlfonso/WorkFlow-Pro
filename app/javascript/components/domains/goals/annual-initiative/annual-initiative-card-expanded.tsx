@@ -70,7 +70,7 @@ export const AnnualInitiativeCardExpanded = observer(
                 annualInitiativeDescription={annualInitiative.description}
                 goalCardType={"parent"}
               />
-             {quarterlyGoal.subInitiatives.length > 0 &&
+              {quarterlyGoal.subInitiatives.length > 0 ?
               (<MinimizeIconContainer
                   onClick={e => {
                     (showSubInitiativeCards && selectedSubInitiativeCards !== index) ?
@@ -85,7 +85,7 @@ export const AnnualInitiativeCardExpanded = observer(
                   iconColor={"#005FFE"}
                   style={{ padding: "0px 5px" }}
                 />
-              </MinimizeIconContainer>)}
+                </MinimizeIconContainer>):(<MinimizeIconContainer/>)}
           </InitiativesContainer>
           <SubInitiativeContainer
              display={showRender? 'block' : 'none'}

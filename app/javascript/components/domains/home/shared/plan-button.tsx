@@ -56,7 +56,7 @@ export const Plan = ({
         </AccordionHeaderText>
       </HeaderContainerNoBorder>
       <IconContainerWithPadding>
-        <Icon icon={""} size={16} iconColor={"white"} />
+        <Icon icon={"Plan"} size={16} iconColor={"white"} />
       </IconContainerWithPadding>
     </AccordionSummaryInverse>
   );
