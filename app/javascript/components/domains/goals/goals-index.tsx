@@ -20,7 +20,12 @@ import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge";
 
 export const GoalsIndex = observer(
   (): JSX.Element => {
-    const { goalStore, annualInitiativeStore, companyStore, sessionStore } = useMst();
+    const {
+      goalStore,
+      annualInitiativeStore,
+      companyStore,
+      sessionStore,
+    } = useMst();
 
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -54,8 +59,6 @@ export const GoalsIndex = observer(
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
 
     const { t } = useTranslation();
-    const instanceType = companyStore.company.accessForum ? "forum" : "teams";
-
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
       if (!companyStore.company) {
@@ -67,9 +70,9 @@ export const GoalsIndex = observer(
       return <Loading />;
     }
 
+    const instanceType = companyStore.company.accessForum ? "forum" : "teams";
     const companyGoals = goalStore.companyGoals;
     const personalGoals = goalStore.personalGoals;
-
     const annualInitiativeTitle = sessionStore.annualInitiativeTitle;
 
     const toggleCompanyPlanning = () => {

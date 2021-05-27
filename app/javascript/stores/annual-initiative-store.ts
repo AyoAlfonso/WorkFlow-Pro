@@ -147,12 +147,12 @@ export const AnnualInitiativeStoreModel = types
       self.update();
     },
     updateAnnualInitiativeAfterAddingQuarterlyGoal(quarterlyGoal) {
-      if (self.annualInitiative.id) {
-        self.annualInitiative.quarterlyGoals = [
-          ...self.annualInitiative.quarterlyGoals,
-          quarterlyGoal,
-        ] as any;
-      }
+         if (self.annualInitiative.id) {
+           self.annualInitiative.quarterlyGoals = [
+             ...self.annualInitiative.quarterlyGoals,
+             quarterlyGoal,
+           ] as any;
+         }
     },
     updateRecordIfOpened(annualInitiative) {
       if (self.annualInitiative.id == annualInitiative.id) {
