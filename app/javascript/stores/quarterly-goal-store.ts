@@ -48,10 +48,11 @@ export const QuarterlyGoalStoreModel = types
       // }
     }),
     updateParents: flow(function*(quarterlyGoal) {
-      const { goalStore, annualInitiativeStore } = getRoot(self);
+      const { goalStore, quarterlyGoalStore, annualInitiativeStore } = getRoot(self);
       const responseAnnualInitiative = yield annualInitiativeStore.getAnnualInitiative(
         quarterlyGoal.annualInitiativeId,
       );
+      yield quarterlyGoalStore.getQuarterlyGoal(quarterlyGoal.id);
       goalStore.updateAnnualInitiative(responseAnnualInitiative);
     }),
     closeGoal: flow(function*(id) {
