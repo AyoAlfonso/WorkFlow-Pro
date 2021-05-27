@@ -11,7 +11,6 @@ import { SubInitiativeGoalCard } from "./sub-intiative-goal-card";
 import { observer } from "mobx-react";
 import { ISubInitiativeCardExpandedProps } from "~/types/sub-initiative-cards";
 
-
 export const SubInitiativeCardsExpanded = observer(
   (props: ISubInitiativeCardExpandedProps): JSX.Element => {
     const {
@@ -24,37 +23,39 @@ export const SubInitiativeCardsExpanded = observer(
 
     const { quarterlyGoalStore, companyStore, sessionStore } = useMst();
     const [createQuarterlyGoalArea, setCreateQuarterlyGoalArea] = useState<boolean>(false);
-  
+
     const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
 
     const { t } = useTranslation();
-  
+
     const renderSubInitiativeQuarterlyGoals = () => {
-      return annualInitiative.quarterlyGoals[selectedSubInitiativeCards].subInitiatives.map((subInitiative, index) => {
-        return (
-          <>
-          <LineContainer>
-            <svg height="16" width="2">
-              <line x1="1" y1="4" x2="1" y2="16" />
-            </svg>
-          </LineContainer>
-          <InitiativesContainer>
-            <SubInitiativeGoalCard
-              key={index}
-              annualInitiativeYear={annualInitiative.fiscalYear}
-              subInitiative={subInitiative}
-              setSubInitiativeModalOpen={setSubInitiativeModalOpen}           
-              setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
-              // annualInitiativeDescription={annualInitiative.description}
-              setSubInitiativeId={setSubInitiativeId}
-            />
-          </InitiativesContainer>
-          </>
-        );
-      });
+      return annualInitiative.quarterlyGoals[selectedSubInitiativeCards].subInitiatives.map(
+        (subInitiative, index) => {
+          return (
+            <>
+              <LineContainer>
+                <svg height="16" width="2">
+                  <line x1="1" y1="4" x2="1" y2="16" />
+                </svg>
+              </LineContainer>
+              <InitiativesContainer>
+                <SubInitiativeGoalCard
+                  key={index}
+                  annualInitiativeYear={annualInitiative.fiscalYear}
+                  subInitiative={subInitiative}
+                  setSubInitiativeModalOpen={setSubInitiativeModalOpen}
+                  setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
+                  setSubInitiativeId={setSubInitiativeId}
+                />
+              </InitiativesContainer>
+            </>
+          );
+        },
+      );
     };
 
-{/*
+    {
+      /*
     const renderCreateGoal = () => {
       if (
         !(
@@ -83,15 +84,14 @@ export const SubInitiativeCardsExpanded = observer(
         );
       }
     };
-*/}
+*/
+    }
     return (
-      
       <Container
         onClick={e => {
           e.stopPropagation();
         }}
       >
-       
         {renderSubInitiativeQuarterlyGoals()}
         {/* {showCreateQuarterlyGoal && renderCreateGoal()} */}
       </Container>
@@ -110,7 +110,7 @@ const LineContainer = styled.div<ContainerProps>`
     stroke-width: 2;
   }
   margin: 0 0 0 0;
-`
+`;
 
 const Container = styled.div`
   border-bottom-left-radius: 8px;

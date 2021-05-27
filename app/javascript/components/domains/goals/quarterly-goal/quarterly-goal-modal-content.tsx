@@ -44,7 +44,6 @@ export const QuarterlyGoalModalContent = observer(
   }: IQuarterlyGoalModalContentProps): JSX.Element => {
     const { quarterlyGoalStore, sessionStore, subInitiativeStore } = useMst();
     const currentUser = sessionStore.profile;
-    const [quarterlyGoal, setQuarterlyGoal] = useState<any>(null);
     const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
     const [showCreateSubInitiative, setShowCreateSubInitiative] = useState<boolean>(false);
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
@@ -56,9 +55,10 @@ export const QuarterlyGoalModalContent = observer(
 
     useEffect(() => {
       quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
-        setQuarterlyGoal(quarterlyGoalStore.quarterlyGoal);
+        // setQuarterlyGoal(quarterlyGoalStore.quarterlyGoal);
       });
     }, []);
+    const quarterlyGoal = quarterlyGoalStore.quarterlyGoal;
 
     if (quarterlyGoal == null) {
       return <Loading />;
@@ -75,47 +75,52 @@ export const QuarterlyGoalModalContent = observer(
     const subInitiativeTitle = sessionStore.subInitiativeTitle;
 
     const renderSubInitiative = () => {
-      return quarterlyGoal.subInitiatives.map((subInitiative, index) => {
-        return (
-          <SubInitiativeContainer key={index}>
-            <StatusBlockColorIndicator
-              milestones={subInitiative.milestones || []}
-              indicatorWidth={80}
-              indicatorHeight={4}
-              marginBottom={16}
-            />
-            <TopRowContainer>
-              <SubInitiativeDescription
-                onClick={() => {
-                  setQuarterlyGoalModalOpen(false);
-                  setSubInitiativeId(subInitiative.id);
-                  //Look into this.
-                  setSelectedAnnualInitiativeDescription(annualInitiativeDescription);
-                  setSubInitiativeModalOpen(true);
-                }}
-              >
-                {subInitiative.description}
-              </SubInitiativeDescription>
-              <SubInitiativeOptionContainer>
-                <RecordOptions type={"subInitiative"} id={subInitiative.id} marginLeft={"-70px"} />
-              </SubInitiativeOptionContainer>
-            </TopRowContainer>
-            <BottomRowContainer>
-              {subInitiative.ownedBy && (
-                <SubInitiativeOwnerContainer>
-                  <Avatar
-                    firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
-                    lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
-                    defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
-                    avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
-                    size={40}
+      return quarterlyGoal.subInitiatives
+        .map((subInitiative, index) => {
+          return (
+            <SubInitiativeContainer key={index}>
+              <StatusBlockColorIndicator
+                milestones={subInitiative.milestones || []}
+                indicatorWidth={80}
+                indicatorHeight={4}
+                marginBottom={16}
+              />
+              <TopRowContainer>
+                <SubInitiativeDescription
+                  onClick={() => {
+                    setQuarterlyGoalModalOpen(false);
+                    setSubInitiativeId(subInitiative.id);
+                    //Look into this.
+                    setSelectedAnnualInitiativeDescription(annualInitiativeDescription);
+                    setSubInitiativeModalOpen(true);
+                  }}
+                >
+                  {subInitiative.description}
+                </SubInitiativeDescription>
+                <SubInitiativeOptionContainer>
+                  <RecordOptions
+                    type={"subInitiative"}
+                    id={subInitiative.id}
+                    marginLeft={"-70px"}
                   />
-                </SubInitiativeOwnerContainer>
-              )}
-            </BottomRowContainer>
-          </SubInitiativeContainer>
-        );
-      });
+                </SubInitiativeOptionContainer>
+              </TopRowContainer>
+              <BottomRowContainer>
+                {subInitiative.ownedBy && (
+                  <SubInitiativeOwnerContainer>
+                    <Avatar
+                      firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
+                      lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
+                      defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
+                      avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
+                      size={40}
+                    />
+                  </SubInitiativeOwnerContainer>
+                )}
+              </BottomRowContainer>
+            </SubInitiativeContainer>
+          );
+        });
     };
 
     const goalYearString = `FY${quarterlyGoal.fiscalYear.toString().slice(-2)}/${(
@@ -164,7 +169,7 @@ export const QuarterlyGoalModalContent = observer(
                   setShowCreateGoal={setShowCreateSubInitiative}
                   createAction={subInitiativeStore.create}
                   quarterlyGoalId={quarterlyGoal.id}
-                  inAnnualInitiative={true}
+                  // inAnnualInitiative={true}
                   buttonWidth={"200px"}
                 />
               </CreateGoalContainer>

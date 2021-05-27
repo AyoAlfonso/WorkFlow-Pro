@@ -52,15 +52,12 @@ export const GoalsIndex = observer(
     const [showCoreFour, setShowCoreFour] = useState<boolean>(true);
     const [showCompanyInitiatives, setShowCompanyInitiatives] = useState<boolean>(true);
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
-    const [instanceType, setInstanceType] = useState<string>("teams");
 
     const { t } = useTranslation();
-
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
       if (!companyStore.company) {
-        companyStore.load().then(() =>
-        setInstanceType(companyStore.company.accessForum ? "forum" : "teams"));
+        companyStore.load();
       }
     }, []);
 
@@ -68,9 +65,9 @@ export const GoalsIndex = observer(
       return <Loading />;
     }
 
+    const instanceType = companyStore.company.accessForum ? "forum" : "teams";
     const companyGoals = goalStore.companyGoals;
     const personalGoals = goalStore.personalGoals;
-
     const annualInitiativeTitle = sessionStore.annualInitiativeTitle;
 
     const toggleCompanyPlanning = () => {

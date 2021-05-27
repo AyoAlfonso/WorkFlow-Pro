@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { baseTheme } from "../../../../themes";
 import { MilestoneType } from "~/types/milestone";
+// import { SubInitiativesType } from "~/types/sub-initiatives";
+
 
 interface IStatusBlockColorIndicatorProps {
   milestones: Array<MilestoneType>;
@@ -11,6 +13,7 @@ interface IStatusBlockColorIndicatorProps {
   indicatorHeight: number;
   marginBottom?: number;
   marginTop?: number;
+  // subInitiatives?:Array<SubInitiativesType>;
 }
 
 export const StatusBlockColorIndicator = observer((props: IStatusBlockColorIndicatorProps): JSX.Element => {

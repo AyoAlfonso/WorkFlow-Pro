@@ -19,7 +19,6 @@ export const IndividualVerticalStatusBlockColorIndicator = observer(
   (props: IIndividualVerticalStatusBlockColorIndicatorProps): JSX.Element => {
     const { milestone, milestoneStatus, editable, fromMeeting, itemType } = props;
     const { quarterlyGoalStore, subInitiativeStore, milestoneStore } = useMst();
-    const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
 
     const colorChangable = moment(milestone.weekOf).isSameOrBefore(moment(), "week");
     const determineStatusColor = status => {
@@ -63,9 +62,21 @@ export const IndividualVerticalStatusBlockColorIndicator = observer(
 
       if (fromMeeting) {
         milestoneStore.updateStatusFromPersonalMeeting(milestone.id, statusValue);
-      } else {
-        mobxStore.updateMilestoneStatus(milestone.id, statusValue);
       }
+
+      if (!fromMeeting) {
+        switch (itemType) {
+          case "quarterlyGoal":
+            quarterlyGoalStore.updateMilestoneStatus(milestone.id, statusValue);
+            break;
+          case "subInitiative":
+            subInitiativeStore.updateMilestoneStatus(milestone.id, statusValue);
+            break;
+          default:
+            break;
+        }
+      }
+
       setStatusColor(determineStatusColor(statusValue));
     };
 
@@ -74,13 +85,6 @@ export const IndividualVerticalStatusBlockColorIndicator = observer(
         backgroundColor={statusColor}
         colorChangable={colorChangable}
         onClick={() => {
-          //remove this to do 
-          console.log(
-            moment().format("w"),
-            moment(milestone.weekOf).isSameOrBefore(moment()),
-            milestone.weekOf,
-            moment().format(),
-          );
           if (colorChangable && editable) {
             updateStatus();
           }
