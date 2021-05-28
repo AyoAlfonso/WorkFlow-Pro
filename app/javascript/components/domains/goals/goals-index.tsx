@@ -17,7 +17,6 @@ import { useTranslation } from "react-i18next";
 import { GoalsCoreFour } from "./goals-core-four";
 import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge"
 import { SubInitiativeModalContent } from "./sub-initiative/sub-initiaitive-modal-content";
-import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge";
 
 export const GoalsIndex = observer(
   (): JSX.Element => {
@@ -294,12 +293,7 @@ export const GoalsIndex = observer(
             showCreateMilestones={true}
           />
         </StyledModal>
-<<<<<<< HEAD
-        {instanceType === "forum" && (
-          <LynchPynBadge/> )}
-=======
         {instanceType === "forum" && <LynchPynBadge />}
->>>>>>> c432c8ac69645f392fbff48c5b48e76851810388
       </Container>
     );
   },
