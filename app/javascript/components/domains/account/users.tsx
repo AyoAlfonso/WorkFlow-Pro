@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import * as R from "ramda";
-
 import { observer } from "mobx-react";
 import { UserCard } from "~/components/shared/user-card";
 import { useMst } from "~/setup/root";
@@ -54,71 +53,76 @@ export const Users = observer(
 
     const usersData = R.flatten(
       [].concat(
-        users.map(user => [
-          <UserCard {...user} />,
-          <LeftAlignedTableContainer>
-            <Text>{user.title || ""}</Text>
-          </LeftAlignedTableContainer>,
-          <LeftAlignedTableContainer>
-            <Text>{user.teamNames}</Text>
-          </LeftAlignedTableContainer>,
-          <SpacedTableContainer>
-            <Status status={user.status} />
-            {user.status == "pending" ? (
+        users
+          .slice()
+          .sort((a, b) => a.firstName.localeCompare(b.firstName))
+          .map(user => [
+            <UserCard {...user} />,
+            <LeftAlignedTableContainer>
+              <Text>{user.title || ""}</Text>
+            </LeftAlignedTableContainer>,
+            <LeftAlignedTableContainer>
+              <Text>{user.teamNames}</Text>
+            </LeftAlignedTableContainer>,
+            <SpacedTableContainer>
+              <Status status={user.status} />
+              {user.status == "pending" ? (
+                <Can
+                  action={"create-user"}
+                  data={null}
+                  no={
+                    <TextNoMargin
+                      fontSize={1}
+                    >{`Invited on ${user.invitationSentAt}`}</TextNoMargin>
+                  }
+                  yes={
+                    <>
+                      {resend ? (
+                        <Button
+                          small
+                          variant={"noOutline"}
+                          fontOverride={"12px"}
+                          onClick={() => {
+                            if (resend) {
+                              resend(user.id);
+                            }
+                          }}
+                        >
+                          {t("profile.profileUpdateForm.resend")}
+                        </Button>
+                      ) : (
+                        <></>
+                      )}
+                    </>
+                  }
+                />
+              ) : (
+                <></>
+              )}
               <Can
                 action={"create-user"}
                 data={null}
-                no={
-                  <TextNoMargin fontSize={1}>{`Invited on ${user.invitationSentAt}`}</TextNoMargin>
-                }
+                no={<></>}
                 yes={
-                  <>
-                    {resend ? (
-                      <Button
-                        small
-                        variant={"noOutline"}
-                        fontOverride={"12px"}
-                        onClick={() => {
-                          if (resend) {
-                            resend(user.id);
-                          }
-                        }}
-                      >
-                        {t("profile.profileUpdateForm.resend")}
-                      </Button>
-                    ) : (
-                      <></>
-                    )}
-                  </>
+                  <IconContainer
+                    onClick={() => {
+                      setUserDeactivated(user.status == "inactive");
+                      setUserId(user.id);
+                      setEmail(user.email || "");
+                      setFirstName(user.firstName || "");
+                      setLastName(user.lastName || "");
+                      setUserRole(getUserRoleIdFrom(user.role, userRoles));
+                      setTitle(user.title || "");
+                      setTeams(user.teams || []);
+                      setEditUserModalOpen(true);
+                    }}
+                  >
+                    <Icon icon={"Edit-2"} size={"15px"} iconColor={"grey80"} />
+                  </IconContainer>
                 }
               />
-            ) : (
-              <></>
-            )}
-            <Can
-              action={"create-user"}
-              data={null}
-              no={<></>}
-              yes={
-                <IconContainer
-                  onClick={() => {
-                    setUserDeactivated(user.status == "inactive");
-                    setUserId(user.id);
-                    setEmail(user.email || "");
-                    setFirstName(user.firstName || "");
-                    setLastName(user.lastName || "");
-                    setUserRole(getUserRoleIdFrom(user.role, userRoles));
-                    setTitle(user.title || "");
-                    setTeams(user.teams || []);
-                    setEditUserModalOpen(true);
-                  }}
-                >
-                  <Icon icon={"Edit-2"} size={"15px"} iconColor={"grey80"} />
-                </IconContainer>
-              }
-            />
-          </SpacedTableContainer>,
-        ]),
+            </SpacedTableContainer>,
+          ]),
       ),
     );
     return (

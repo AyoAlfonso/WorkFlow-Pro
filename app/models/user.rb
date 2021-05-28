@@ -73,12 +73,25 @@ class User < ApplicationRecord
     selected_user_company_enablement&.user_title
   end
 
+  def role_for(company)
+    self.user_company_enablements.find_by_company_id(company.id)&.user_role&.name
+  end
+
+  def title_for(company)
+    self.user_company_enablements.find_by_company_id(company.id)&.user_title
+  end
+
+
   def timezone
     read_attribute(:timezone).present? ? read_attribute(:timezone) : company_timezone
   end
 
   def weekly_reflection_complete
     QuestionnaireAttempt.of_questionnaire_type("Weekly Reflection").where(completed_at: (self.time_in_user_timezone.beginning_of_week + 1.days)..(self.time_in_user_timezone.end_of_week + 1.days)).present?
+  end
+
+  def evening_reflection_complete
+    QuestionnaireAttempt.of_questionnaire_type("Evening Reflection").where(completed_at: (self.time_in_user_timezone.beginning_of_day)..(self.time_in_user_timezone.end_of_day)).present?
   end
 
   def current_daily_log(current_company)

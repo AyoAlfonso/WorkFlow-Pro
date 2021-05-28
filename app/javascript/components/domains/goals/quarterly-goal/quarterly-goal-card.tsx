@@ -1,118 +1,248 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
 import { UserIconBorder } from "../shared/user-icon-border";
 import { Avatar } from "~/components/shared/avatar";
 import * as R from "ramda";
+import { baseTheme } from "../../../../themes";
 import { QuarterlyGoalType } from "~/types/quarterly-goal";
 import { RecordOptions } from "../shared/record-options";
+import { OwnedBySection } from "../shared/owned-by-section";
 import { useMst } from "~/setup/root";
+import { Icon } from "~/components/shared/icon";
+import moment from "moment";
+import { observer } from "mobx-react";
 
 interface IQuarterlyGoalCardProps {
   quarterlyGoal: QuarterlyGoalType;
+  annualInitiativeYear: number;
   setQuarterlyGoalModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   setQuarterlyGoalId?: React.Dispatch<React.SetStateAction<number>>;
   setSelectedAnnualInitiativeDescription?: React.Dispatch<React.SetStateAction<string>>;
   annualInitiativeDescription: string;
+  goalCardType?: string;
 }
 
-export const QuarterlyGoalCard = (props: IQuarterlyGoalCardProps): JSX.Element => {
-  const {
+export const QuarterlyGoalCard = observer(
+  ({
     quarterlyGoal,
+    annualInitiativeYear,
     setQuarterlyGoalModalOpen,
     setQuarterlyGoalId,
     setSelectedAnnualInitiativeDescription,
     annualInitiativeDescription,
-  } = props;
+    goalCardType,
+  }: IQuarterlyGoalCardProps): JSX.Element => {
+    const { companyStore } = useMst();
+    const { currentFiscalYear, currentFiscalQuarter } = companyStore.company;
+    const {
+      warningRed,
+      fadedRed,
+      cautionYellow,
+      fadedYellow,
+      finePine,
+      fadedGreen,
+      grey40,
+      grey20,
+      grey80,
+      grey100,
+      white,
+      primary100,
+    } = baseTheme.colors;
+    const defaultOptionsColor = white;
+    const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
 
-  const { companyStore } = useMst();
+    //TODOIST: Come back to make this code dry and icon color constant
+    let currentMilestone;
+    let statusBadge = {
+      description: "",
+      colors: {
+        backgroundColor: "",
+        color: "",
+      },
+    };
 
-  const startedMilestones = quarterlyGoal.milestones
-    ? quarterlyGoal.milestones.filter(milestone => milestone.status != "unstarted")
-    : [];
+    currentMilestone = quarterlyGoal.milestones.find(milestone =>
+      moment(milestone.weekOf).isSame(moment(), "week"),
+    );
 
-  let userIconBorder = "";
+    if (quarterlyGoal.closedAt != null) {
+      statusBadge.description = `Closed - Q${quarterlyGoal.quarter}`;
+      statusBadge.colors = { color: white, backgroundColor: grey100 };
+    } else if (
+      currentFiscalYear * 10 + currentFiscalQuarter <
+      annualInitiativeYear * 10 + quarterlyGoal.quarter
+    ) {
+      statusBadge.description = `Upcoming - Q${quarterlyGoal.quarter}`;
+      statusBadge.colors = { color: white, backgroundColor: primary100 };
+    } else {
+      if (!currentMilestone) {
+        currentMilestone = quarterlyGoal.milestones[quarterlyGoal.milestones.length - 1];
+      }
 
-  if (startedMilestones.length > 0) {
-    const lastStartedMilestone = startedMilestones[startedMilestones.length - 1];
-    userIconBorder = UserIconBorder(lastStartedMilestone.status);
-  }
-
-  const openQuarterlyGoalModal = () => {
-    setQuarterlyGoalModalOpen(true);
-    setQuarterlyGoalId(quarterlyGoal.id);
-    setSelectedAnnualInitiativeDescription(annualInitiativeDescription);
-  };
-
-  const renderQuarterDisplay = () => {
-    if (companyStore.company.currentFiscalQuarter != quarterlyGoal.quarter) {
-      const quarter =
-        quarterlyGoal.quarter || companyStore.onboardingCompany.quarterForCreatingQuarterlyGoals;
-      return (
-        <QuarterContainer>
-          <QuarterText> Q{quarter} Goal </QuarterText>
-        </QuarterContainer>
-      );
+      if (currentMilestone && currentMilestone.status) {
+        switch (currentMilestone.status) {
+          case "completed":
+            statusBadge.description = "On Track";
+            statusBadge.colors = { color: finePine, backgroundColor: fadedGreen };
+            break;
+          case "in_progress":
+            statusBadge.description = "Needs Attention";
+            statusBadge.colors = { color: cautionYellow, backgroundColor: fadedYellow };
+            break;
+          case "incomplete":
+            statusBadge.description = "Behind";
+            statusBadge.colors = { color: warningRed, backgroundColor: fadedRed };
+            break;
+          case "unstarted":
+            statusBadge.description = "No update";
+            statusBadge.colors = { color: grey40, backgroundColor: grey20 };
+            break;
+        }
+      }
     }
-  };
 
-  return (
-    <Container
-      onClick={e => {
-        e.stopPropagation();
-        openQuarterlyGoalModal();
-      }}
-    >
-      <StatusBlockColorIndicator milestones={quarterlyGoal.milestones || []} indicatorWidth={25} />
+    const startedMilestones = quarterlyGoal.milestones
+      ? quarterlyGoal.milestones.filter(milestone => milestone.status != "unstarted")
+      : [];
 
-      <RowContainer>
-        <DescriptionContainer>
-          <StyledText>{quarterlyGoal.description}</StyledText>
-        </DescriptionContainer>
+    let userIconBorder = "";
 
-        <IconContainer>
-          <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} />
-        </IconContainer>
-      </RowContainer>
-      <RowContainer>
-        {renderQuarterDisplay()}
-        {quarterlyGoal.ownedBy && (
-          <IconContainer>
-            <Avatar
-              avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
-              defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
-              firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
-              lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
-              size={36}
-              border={userIconBorder}
-            />
-          </IconContainer>
-        )}
-      </RowContainer>
-    </Container>
-  );
+    if (startedMilestones.length > 0) {
+      const lastStartedMilestone = startedMilestones[startedMilestones.length - 1];
+      userIconBorder = UserIconBorder(lastStartedMilestone.status);
+    }
+
+    const openQuarterlyGoalModal = () => {
+      setQuarterlyGoalModalOpen(true);
+      setQuarterlyGoalId(quarterlyGoal.id);
+      setSelectedAnnualInitiativeDescription(annualInitiativeDescription);
+    };
+
+    const renderQuarterDisplay = () => {
+      if (companyStore.company.currentFiscalQuarter != quarterlyGoal.quarter) {
+        const quarter =
+          quarterlyGoal.quarter || companyStore.onboardingCompany.quarterForCreatingQuarterlyGoals;
+        return <QuarterText> Q{quarter}: </QuarterText>;
+      }
+    };
+
+    return (
+      <>
+        <Container
+          goalCardType={goalCardType}
+          onClick={e => {
+            e.stopPropagation();
+            openQuarterlyGoalModal();
+          }}
+          onMouseEnter={e => {
+            setShowOptions(grey80);
+          }}
+          onMouseLeave={e => {
+            setShowOptions(defaultOptionsColor);
+          }}
+        >
+          <StatusBlockColorIndicator
+            milestones={quarterlyGoal.milestones || []}
+            indicatorWidth={14}
+            indicatorHeight={2}
+            marginTop={4}
+          />
+
+          <RowContainer mt={0} mb={0}>
+            <DescriptionContainer>
+              {goalCardType == "child" && (
+                <StyledSubInitiativeIcon
+                  icon={"Sub_initiative"}
+                  size={"16px"}
+                  iconColor={"#868DAA"}
+                />
+              )}
+              {goalCardType == "parent" && renderQuarterDisplay()}
+              <StyledText>{quarterlyGoal.description}</StyledText>
+            </DescriptionContainer>
+
+            <IconContainer>
+              <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} iconColor={showOptions} />
+            </IconContainer>
+          </RowContainer>
+          <RowContainer mt={0} mb={0}>
+            {/* // TODOIST: refactor the values of this component to get only */}
+            {quarterlyGoal.ownedBy && (
+              <OwnedBySection
+                ownedBy={quarterlyGoal.ownedBy}
+                type={"quarterlyGoal"}
+                disabled={true}
+                size={16}
+                nameWidth={"74px"}
+                marginLeft={"16px"}
+                marginRight={"0px"}
+                marginTop={"auto"}
+                fontSize={"9px"}
+                marginBottom={"auto"}
+              />
+            )}
+            <BadgeContainer>
+              {quarterlyGoal.subInitiatives.length > 0 && (
+                <>
+                  <MilestoneCountContainer>
+                    {quarterlyGoal.subInitiatives.length}
+                  </MilestoneCountContainer>
+                  <StyledSubInitiativeIcon
+                    icon={"Sub_initiative"}
+                    size={"16px"}
+                    iconColor={"#868DAA"}
+                  />
+                </>
+              )}
+              <StatusBadge
+                color={statusBadge.colors.color}
+                backgroundColor={statusBadge.colors.backgroundColor}
+              >
+                {" "}
+                {statusBadge.description}{" "}
+              </StatusBadge>
+            </BadgeContainer>
+          </RowContainer>
+        </Container>
+      </>
+    );
+  },
+);
+
+type RowContainerProps = {
+  mb?: number;
+  mt?: number;
 };
 
-const RowContainer = styled.div`
+const RowContainer = styled.div<RowContainerProps>`
   display: flex;
+  margin-top: ${props => `${props.mt}%` || "auto"};
+  margin-bottom: ${props => `${props.mb}%` || "auto"};
 `;
 
 const StyledText = styled(Text)`
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 4px;
+  padding-right: 4px;
   white-space: normal;
+  font-size: 14px;
+  width: 160px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
-const Container = styled.div`
-  background-color: white;
-  border-radius: 10px;
-  margin-bottom: 16px;
-  padding-bottom: 8px;
+type ContainerProps = {
+  goalCardType?: string;
+};
+
+const Container = styled.div<ContainerProps>`
+  background-color: ${props =>
+    props.goalCardType == "child" ? `${props.theme.colors.backgroundGrey}` : "inherit"};
   &:hover {
     cursor: pointer;
-    background: rgba(0, 0, 0, 0.02);
-    opacity: 0.85;
   }
 `;
 
@@ -120,7 +250,7 @@ const IconContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   margin-left: auto;
-  margin-right: 8px;
+  margin-right: 16px;
   display: flex;
 `;
 
@@ -133,11 +263,46 @@ const QuarterContainer = styled.div`
 `;
 
 const QuarterText = styled(Text)`
-  color: white;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  font-weight: 700;
 `;
 
 const DescriptionContainer = styled.div`
   overflow-wrap: anywhere;
+  display: flex;
+  font-size: 12px;
+  padding-left: 16px;
+`;
+
+const StyledSubInitiativeIcon = styled(Icon)`
+  margin-right: 5px;
+  font-size: 12px;
+`;
+
+type StatusBadgeType = {
+  color: string;
+  backgroundColor: string;
+};
+
+// TODOIST: Update the color constant
+const StatusBadge = styled.div<StatusBadgeType>`
+  font-size: 9px;
+  font-weight: 900;
+  background-color: ${props => props.backgroundColor};
+  color: ${props => props.color};
+  padding: 2px;
+  text-align: center;
+  border-radius: 2px;
+`;
+
+const BadgeContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 16px;
+  align-items: center;
+`;
+
+const MilestoneCountContainer = styled.div`
+  font-size: 9px;
+  color: #868daa;
+  margin-right: 5px;
 `;

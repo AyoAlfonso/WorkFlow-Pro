@@ -19,7 +19,7 @@ export const ForumNotSetup = props => (
     }}
   >
     <Box sx={{ minWidth: "200px", margin: "auto", border: "1" }}>
-      <StyledText fontFamily={"Lato"}>You have not been added to your forum team yet.</StyledText>
+      <StyledText >You have not been added to your forum team yet.</StyledText>
     </Box>
     <LynchPynBadge/>
   </Flex>

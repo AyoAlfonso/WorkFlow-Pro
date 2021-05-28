@@ -58,6 +58,7 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
           </TextDiv>
           <QuarterlyGoalCardContainer>
             <QuarterlyGoalCard
+              annualInitiativeYear={annualInitiative.fiscalYear}
               quarterlyGoal={quarterlyGoal}
               annualInitiativeDescription={R.pathOr("", ["description"], annualInitiative)}
             />

@@ -5,15 +5,13 @@ interface CropImageProps {
 
 const createImage = (url: string) =>
   new Promise((resolve, reject) => {
-    const image = new Image()
-    image.addEventListener('load', () => resolve(image))
-    image.addEventListener('error', error => reject(error))
-    image.setAttribute('crossOrigin', 'anonymous') // might be able to removed
-    image.src = url
-  })
+    const image = new Image();
+    image.addEventListener("load", () => resolve(image));
+    image.addEventListener("error", error => reject(error));
+    image.setAttribute("crossOrigin", "anonymous"); // might be able to removed
+    image.src = url;
+  });
 
-  
- 
 /**
  * 
  * @param {File} image
@@ -22,23 +20,22 @@ const createImage = (url: string) =>
  */
 
 export const getCroppedImg = async ({ image, pixelCrop }: CropImageProps) => {
+  const format: string = image.match(/data:(image\/\w+);/)[1];
   image = await createImage(image);
 
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
-  const maxSize = Math.max(image.width, image.height)
-  const safeArea = 2 * ((maxSize / 2) * Math.sqrt(2))
+  const maxSize = Math.max(image.width, image.height);
+  const safeArea = 2 * ((maxSize / 2) * Math.sqrt(2));
 
-  // set each dimensions to double largest dimension to allow for a safe area for the
-  // image to rotate in without being clipped by canvas context
-  canvas.width = safeArea
-  canvas.height = safeArea
+  // @ TO DO Add rotation to image crop
+  canvas.width = safeArea;
+  canvas.height = safeArea;
 
-  // translate canvas context to a central location on image to allow rotating around the center.
-  ctx.translate(safeArea / 2, safeArea / 2)
+  ctx.translate(safeArea / 2, safeArea / 2);
   // ctx.rotate(getRadianAngle(rotation))
-  ctx.translate(-safeArea / 2, -safeArea / 2)
+  ctx.translate(-safeArea / 2, -safeArea / 2);
 
   ctx.drawImage(image, safeArea / 2 - image.width * 0.5, safeArea / 2 - image.height * 0.5);
   const data = ctx.getImageData(0, 0, safeArea, safeArea);
@@ -49,15 +46,12 @@ export const getCroppedImg = async ({ image, pixelCrop }: CropImageProps) => {
   ctx.putImageData(
     data,
     Math.round(0 - safeArea / 2 + image.width * 0.5 - pixelCrop.x),
-    Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y)
-  )
-  // As Base64 string
-  // return canvas.toDataURL('image/jpeg');
+    Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y),
+  );
 
   return new Promise(resolve => {
     canvas.toBlob(file => {
-      resolve(URL.createObjectURL(file))
-    }, 'image/jpeg')
-  })
-
-}
+      resolve(file);
+    }, format);
+  });
+};

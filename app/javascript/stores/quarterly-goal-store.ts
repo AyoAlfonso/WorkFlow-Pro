@@ -13,10 +13,10 @@ export const QuarterlyGoalStoreModel = types
   })
   .extend(withEnvironment())
   .views(self => ({
-    get title(){
+    get title() {
       const { sessionStore } = getRoot(self);
-      return sessionStore.quarterlyGoalTitle
-    }
+      return sessionStore.quarterlyGoalTitle;
+    },
   }))
   .actions(self => ({
     getQuarterlyGoal: flow(function*(id) {
@@ -25,27 +25,51 @@ export const QuarterlyGoalStoreModel = types
         const response: any = yield env.api.getQuarterlyGoal(id);
         self.quarterlyGoal = response.data;
       } catch {
-        showToast(il8n.t("quarterlyGoal.retrievalError", { title: self.title }), ToastMessageConstants.ERROR);
+        showToast(
+          il8n.t("quarterlyGoal.retrievalError", { title: self.title }),
+          ToastMessageConstants.ERROR,
+        );
       }
     }),
     update: flow(function*() {
       const env = getEnv(self);
+      //TO DO: investigate why try/catch was removed
       // try {
       const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
       const responseQuarterlyGoal = response.data;
       self.quarterlyGoal = responseQuarterlyGoal;
-      showToast(il8n.t("quarterlyGoal.updated", { title: self.title }), ToastMessageConstants.SUCCESS);
+      showToast(
+        il8n.t("quarterlyGoal.updated", { title: self.title }),
+        ToastMessageConstants.SUCCESS,
+      );
       return responseQuarterlyGoal;
       // } catch {
       //   showToast(il8n.t("quarterlyGoal.retrievalError"), ToastMessageConstants.ERROR);
       // }
     }),
+    updateParents: flow(function*(quarterlyGoal) {
+      const { goalStore, quarterlyGoalStore, annualInitiativeStore } = getRoot(self);
+      const responseAnnualInitiative = yield annualInitiativeStore.getAnnualInitiative(
+        quarterlyGoal.annualInitiativeId,
+      );
+      yield quarterlyGoalStore.getQuarterlyGoal(quarterlyGoal.id);
+      goalStore.updateAnnualInitiative(responseAnnualInitiative);
+    }),
     closeGoal: flow(function*(id) {
       const env = getEnv(self);
+      const { goalStore, annualInitiativeStore } = getRoot(self);
       const response: any = yield env.api.closeQuarterlyGoal(id);
       const responseQuarterlyGoal = response.data;
       self.quarterlyGoal = responseQuarterlyGoal;
-      showToast(il8n.t("quarterlyGoal.closed", { title: self.title }), ToastMessageConstants.SUCCESS);
+      const responseAnnualInitiative = yield annualInitiativeStore.getAnnualInitiative(
+        responseQuarterlyGoal.annualInitiativeId,
+      );
+
+      goalStore.updateAnnualInitiative(responseAnnualInitiative);
+      showToast(
+        il8n.t("quarterlyGoal.closed", { title: self.title }),
+        ToastMessageConstants.SUCCESS,
+      );
       return responseQuarterlyGoal;
     }),
     createKeyElement: flow(function*(keyElementParams) {
@@ -90,10 +114,16 @@ export const QuarterlyGoalStoreModel = types
         if (inAnnualInitiative) {
           annualInitiativeStore.updateAnnualInitiativeAfterAddingQuarterlyGoal(response.data);
         }
-        showToast(il8n.t("quarterlyGoal.created", { title: self.title }), ToastMessageConstants.SUCCESS);
+        showToast(
+          il8n.t("quarterlyGoal.created", { title: self.title }),
+          ToastMessageConstants.SUCCESS,
+        );
         return response.data;
       } catch {
-        showToast(il8n.t("quarterlyGoal.creationError", { title: self.title }), ToastMessageConstants.ERROR);
+        showToast(
+          il8n.t("quarterlyGoal.creationError", { title: self.title }),
+          ToastMessageConstants.ERROR,
+        );
       }
     }),
     delete: flow(function*(updateAnnualInitiative = true, quarterlyGoalId) {
@@ -105,7 +135,7 @@ export const QuarterlyGoalStoreModel = types
         const annualInitiative = response.data;
 
         if (goalStore.companyGoals) {
-          let companyGoalIndex = goalStore.companyGoals.goals.findIndex(
+          const companyGoalIndex = goalStore.companyGoals.goals.findIndex(
             ai => ai.id == annualInitiative.id,
           );
           if (companyGoalIndex > -1) {
@@ -118,7 +148,7 @@ export const QuarterlyGoalStoreModel = types
         }
 
         if (goalStore.personalGoals) {
-          let personalGoalIndex = goalStore.personalGoals.goals.findIndex(
+          const personalGoalIndex = goalStore.personalGoals.goals.findIndex(
             ai => ai.id == annualInitiative.id,
           );
           if (personalGoalIndex > -1) {
@@ -142,10 +172,16 @@ export const QuarterlyGoalStoreModel = types
           annualInitiativeStore.updateRecordIfOpened(annualInitiative);
         }
 
-        showToast(il8n.t("quarterlyGoal.deleted", { title: self.title }), ToastMessageConstants.SUCCESS);
+        showToast(
+          il8n.t("quarterlyGoal.deleted", { title: self.title }),
+          ToastMessageConstants.SUCCESS,
+        );
         return annualInitiative;
       } catch {
-        showToast(il8n.t("quarterlyGoal.deletionError", { title: self.title }), ToastMessageConstants.ERROR);
+        showToast(
+          il8n.t("quarterlyGoal.deletionError", { title: self.title }),
+          ToastMessageConstants.ERROR,
+        );
       }
     }),
     createMilestones: flow(function*(quarterlyGoalId) {
@@ -162,7 +198,7 @@ export const QuarterlyGoalStoreModel = types
     updateModelField(field, value) {
       self.quarterlyGoal[field] = value;
     },
-    updateKeyElementValue(field: string, id: number, value: number) {
+    updateKeyElementValue(field: string, id: number, value: number | string) {
       let keyElements = self.quarterlyGoal.keyElements;
       let keyElementIndex = keyElements.findIndex(ke => ke.id == id);
       keyElements[keyElementIndex][field] = value;
@@ -182,20 +218,21 @@ export const QuarterlyGoalStoreModel = types
       self.update();
     },
     updateMilestoneDescription(id, value) {
-      let milestones = self.quarterlyGoal.milestones;
-      let milestoneIndex = milestones.findIndex(milestone => milestone.id == id);
+      const milestones = self.quarterlyGoal.milestones;
+      const milestoneIndex = milestones.findIndex(milestone => milestone.id == id);
       milestones[milestoneIndex].description = value;
       self.quarterlyGoal.milestones = milestones;
       self.update();
     },
     updateMilestoneStatus(id, status) {
-      let milestones = self.quarterlyGoal.milestones;
-      let milestoneIndex = milestones.findIndex(milestone => milestone.id == id);
+      const milestones = self.quarterlyGoal.milestones;
+      const milestoneIndex = milestones.findIndex(milestone => milestone.id == id);
       milestones[milestoneIndex].status = status;
       self.quarterlyGoal.milestones = milestones;
       self.update();
+      self.updateParents(self.quarterlyGoal);
     },
-    updateQuarterlyGoalAfterAddingSubInitiative(subInitiative){
+    updateQuarterlyGoalAfterAddingSubInitiative(subInitiative) {
       if (self.quarterlyGoal.id) {
         self.quarterlyGoal.subInitiatives = [
           ...self.quarterlyGoal.subInitiatives,
@@ -203,9 +240,20 @@ export const QuarterlyGoalStoreModel = types
         ] as any;
       }
     },
-    updateQuarterlyGoal(quarterlyGoal){
+    updateQuarterlyGoalAfterRemovingSubInitiatives(subInitiativeId) {
+      if (self.quarterlyGoal) {
+        const subInitiativesIndex = self.quarterlyGoal.subInitiatives.findIndex(
+          subInitiative => subInitiative.id == subInitiativeId,
+        );
+        if (subInitiativesIndex > -1) {
+          self.quarterlyGoal.subInitiatives.splice(subInitiativesIndex, 1);
+          self.update();
+        }
+      }
+    },
+    updateQuarterlyGoal(quarterlyGoal) {
       self.quarterlyGoal = quarterlyGoal as any;
-    }
+    },
   }));
 
 type QuarterlyGoalStoreType = typeof QuarterlyGoalStoreModel.Type;

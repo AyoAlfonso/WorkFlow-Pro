@@ -2,12 +2,12 @@ module NotificationEmailJobHelper
   def send_person_planning_reminder_email(user, notification_type)
     UserMailer.with(
       user: user,
-      subject: "#{user&.first_name}, Create Your Day",
-      greeting: "Good Morning #{user&.first_name}!",
-      message: "Check into your personal dashboard and plan your day ahead:",
-      cta_text: "Create My Day",
-      cta_url: "" #home
-    ).notification_email.deliver_later
+      subject: "Today's Focus",
+      greeting: "Hi #{user&.first_name}!",
+      message: "See what you have on the table for today and set yourself up for success!",
+      cta_text: "Plan My Day",
+      cta_url: "" # home
+    ).daily_planning.deliver_later
   end
 
   def send_evening_reflection_reminder_email(user, notification_type)
@@ -25,7 +25,7 @@ module NotificationEmailJobHelper
     UserMailer.with(
       user: user,
       subject: "#{user.first_name}, Time to Plan for Next Week",
-      greeting: "Hi #{user&.first_name}!",
+      greeting: "Hi #{user&.first_name}! 👋",
       message: ""
     ).end_of_week_stats.deliver_later
   end
@@ -40,11 +40,14 @@ module NotificationEmailJobHelper
     ).team_meeting_email.deliver_later
   end
 
-  # def send_weekly_planning_meeting_email(user, notification_type)
-  #   UserMailer.with(
-  #     user: @user,
-  #     subject: notification_type,
-  #     message: "Hi #{@user&.first_name}! \n \n Just a quick reminder to start your Weekly Planning Meeting."
-  #   ).notification_email.deliver_later
-  # end
+  def send_weekly_planning_email(user, notification_type)
+    UserMailer.with(
+      user: user,
+      subject: "Weekly Review: How your week went and what's next",
+      message: "Check out your progress from last week in numbers and plan for the week ahead.",
+      greeting: "Hi #{user&.first_name}!",
+      cta_text: "Plan Your Week",
+      cta_url: "" # home
+    ).weekly_planning_email.deliver_later
+  end
 end

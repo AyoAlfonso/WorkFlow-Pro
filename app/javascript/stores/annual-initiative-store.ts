@@ -94,15 +94,17 @@ export const AnnualInitiativeStoreModel = types
     }),
     create: flow(function*(annualInitiativeObject) {
       const env = getEnv(self);
+
       try {
         const response: any = yield env.api.createAnnualInitiative(annualInitiativeObject);
+        const newAnnualInitiative: any = yield env.api.getAnnualInitiative(response.data.annualInitiative.id);
         const { goalStore } = getRoot(self);
         goalStore.mergeAnnualInitiatives(
           annualInitiativeObject.type,
-          response.data.annualInitiative,
+          newAnnualInitiative.data
         );
         showToast(`${self.title} created`, ToastMessageConstants.SUCCESS);
-        return response.data.annualInitiative;
+        return newAnnualInitiative;
       } catch {
         showToast(`There was an error creating the ${self.title}`, ToastMessageConstants.ERROR);
       }
@@ -124,7 +126,7 @@ export const AnnualInitiativeStoreModel = types
     updateModelField(field, value) {
       self.annualInitiative[field] = value;
     },
-    updateKeyElementValue(field: string, id: number, value: number) {
+    updateKeyElementValue(field: string, id: number, value: number | string) {
       let keyElements = self.annualInitiative.keyElements;
       let keyElementIndex = keyElements.findIndex(ke => ke.id == id);
       keyElements[keyElementIndex][field] = value;
@@ -145,12 +147,12 @@ export const AnnualInitiativeStoreModel = types
       self.update();
     },
     updateAnnualInitiativeAfterAddingQuarterlyGoal(quarterlyGoal) {
-      if (self.annualInitiative.id) {
-        self.annualInitiative.quarterlyGoals = [
-          ...self.annualInitiative.quarterlyGoals,
-          quarterlyGoal,
-        ] as any;
-      }
+         if (self.annualInitiative.id) {
+           self.annualInitiative.quarterlyGoals = [
+             ...self.annualInitiative.quarterlyGoals,
+             quarterlyGoal,
+           ] as any;
+         }
     },
     updateRecordIfOpened(annualInitiative) {
       if (self.annualInitiative.id == annualInitiative.id) {

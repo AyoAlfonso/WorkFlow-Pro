@@ -19,6 +19,9 @@ import { HeaderText } from "~/utils/header-text";
 declare global {
   interface Window {
     FreshworksWidget: any;
+    Productstash: {
+      show: any;
+    }
   }
 }
 
@@ -31,7 +34,7 @@ export const HeaderBar = observer(
     const [showCompanyOptions, setShowCompanyOptions] = useState<boolean>(false);
     const [inviteTeamModalOpen, setInviteTeamModalOpen] = useState<boolean>(false);
 
-    const { sessionStore, companyStore } = useMst();
+    const { sessionStore } = useMst();
     const accountActionRef = useRef(null);
 
     const location = useLocation();
@@ -70,17 +73,6 @@ export const HeaderBar = observer(
                 <HeaderText location={location} />
               </StyledHeading>
             </ActionsContainer>
-            <LogoContainer>
-              {R.isNil(companyStore.company) ? (
-                <></>
-              ) : companyStore.company.logoUrl ? (
-                <>
-                  <LogoImage src={`${companyStore.company.logoUrl}`} />
-                </>
-              ) : (
-                <StyledHeading type={"h1"}>{companyStore.company.name}</StyledHeading>
-              )}
-            </LogoContainer>
             <PersonalInfoContainer ref={accountActionRef}>
               <PulseSelectorWrapper />
               <PersonalInfoDisplayContainer
@@ -121,17 +113,6 @@ export const HeaderBar = observer(
   },
 );
 
-const LogoContainer = styled.div`
-  display: flex;
-  margin: auto;
-`;
-
-const LogoImage = styled.img`
-  width: auto;
-  height: auto;
-  max-height: 60px;
-`;
-
 const StyledHeading = styled(Heading)`
   margin-top: auto;
   margin-bottom: auto;
@@ -148,6 +129,7 @@ const HeaderItemsContainer = styled.div`
 const Container = styled.div`
   height: 64px;
   border-bottom: ${props => `1px solid ${props.theme.colors.borderGrey}`};
+  width: 100%;
 `;
 
 const Wrapper = styled.div`
@@ -156,13 +138,14 @@ const Wrapper = styled.div`
   margin-left: 96px;
   position: fixed;
   z-index: 3;
+  width: -moz-available;
   width: -webkit-fill-available;
+  width: fill-available;
 `;
 
 const ActionsContainer = styled.div`
   display: flex;
-  padding-left: 40px;
-  position: fixed;
+  margin-left: 40px;
 `;
 
 const ProfileFirstName = styled(Text)`
@@ -220,7 +203,6 @@ const PersonalInfoDisplayContainer = styled.div`
 
 const PersonalInfoContainer = styled.div`
   padding-right: 24px;
-  position: fixed;
   display: flex;
   right: 0;
 `;

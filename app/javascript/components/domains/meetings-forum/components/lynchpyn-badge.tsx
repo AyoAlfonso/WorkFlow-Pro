@@ -1,7 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
-import { Image } from "rebass";
+import { Image, Link } from "rebass";
 
+//to do : Make actual semantic button
 const BadgeContainer = styled.div`
   position: fixed;
   z-index: 99;
@@ -9,18 +10,21 @@ const BadgeContainer = styled.div`
   bottom: 0;
   left: auto;
   top: auto;
+  cursor: pointer;
 `;
 const lynchPynBadgePath = require("../../../../assets/images/LynchPynBadge.png");
 
 export const LynchPynBadge = (): JSX.Element => {
   return (
-    <BadgeContainer>
-      <Image
-        sx={{
-          height: 36,
-        }}
-        src={lynchPynBadgePath}
-      />
-    </BadgeContainer>
+    <Link href="http://go.lynchpyn.com/forum">
+      <BadgeContainer>
+        <Image
+          sx={{
+            height: 36,
+          }}
+          src={lynchPynBadgePath}
+        />
+      </BadgeContainer>
+    </Link>
   );
 };

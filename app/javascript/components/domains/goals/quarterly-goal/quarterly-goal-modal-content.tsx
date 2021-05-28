@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useMst } from "~/setup/root";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
 import { observer } from "mobx-react";
-import { Loading, UserDefaultIcon } from "~/components/shared";
+import { Loading, Avatar } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
 import { MilestoneCreateButton } from "../shared-quarterly-goal-and-sub-initiative/milestone-create-button";
@@ -44,20 +44,21 @@ export const QuarterlyGoalModalContent = observer(
   }: IQuarterlyGoalModalContentProps): JSX.Element => {
     const { quarterlyGoalStore, sessionStore, subInitiativeStore } = useMst();
     const currentUser = sessionStore.profile;
-    const [quarterlyGoal, setQuarterlyGoal] = useState<any>(null);
     const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
     const [showCreateSubInitiative, setShowCreateSubInitiative] = useState<boolean>(false);
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
+    const itemType = "quarterlyGoal";
 
     const { t } = useTranslation();
 
     useEffect(() => {
       quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
-        setQuarterlyGoal(quarterlyGoalStore.quarterlyGoal);
+        // setQuarterlyGoal(quarterlyGoalStore.quarterlyGoal);
       });
     }, []);
+    const quarterlyGoal = quarterlyGoalStore.quarterlyGoal;
 
     if (quarterlyGoal == null) {
       return <Loading />;
@@ -74,44 +75,52 @@ export const QuarterlyGoalModalContent = observer(
     const subInitiativeTitle = sessionStore.subInitiativeTitle;
 
     const renderSubInitiative = () => {
-      return quarterlyGoal.subInitiatives.map((subInitiative, index) => {
-        return (
-          <SubInitiativeContainer key={index}>
-            <StatusBlockColorIndicator
-              milestones={subInitiative.milestones || []}
-              indicatorWidth={80}
-              marginBottom={16}
-            />
-            <TopRowContainer>
-              <SubInitiativeDescription
-                onClick={() => {
-                  setQuarterlyGoalModalOpen(false);
-                  setSubInitiativeId(subInitiative.id);
-                  setSelectedAnnualInitiativeDescription(annualInitiativeDescription);
-                  setSubInitiativeModalOpen(true);
-                }}
-              >
-                {subInitiative.description}
-              </SubInitiativeDescription>
-              <SubInitiativeOptionContainer>
-                <RecordOptions type={"subInitiative"} id={subInitiative.id} marginLeft={"-70px"} />
-              </SubInitiativeOptionContainer>
-            </TopRowContainer>
-            <BottomRowContainer>
-              {subInitiative.ownedBy && (
-                <SubInitiativeOwnerContainer>
-                  <UserDefaultIcon
-                    firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
-                    lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
-                    defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
-                    size={40}
+      return quarterlyGoal.subInitiatives
+        .map((subInitiative, index) => {
+          return (
+            <SubInitiativeContainer key={index}>
+              <StatusBlockColorIndicator
+                milestones={subInitiative.milestones || []}
+                indicatorWidth={80}
+                indicatorHeight={4}
+                marginBottom={16}
+              />
+              <TopRowContainer>
+                <SubInitiativeDescription
+                  onClick={() => {
+                    setQuarterlyGoalModalOpen(false);
+                    setSubInitiativeId(subInitiative.id);
+                    //Look into this.
+                    setSelectedAnnualInitiativeDescription(annualInitiativeDescription);
+                    setSubInitiativeModalOpen(true);
+                  }}
+                >
+                  {subInitiative.description}
+                </SubInitiativeDescription>
+                <SubInitiativeOptionContainer>
+                  <RecordOptions
+                    type={"subInitiative"}
+                    id={subInitiative.id}
+                    marginLeft={"-70px"}
                   />
-                </SubInitiativeOwnerContainer>
-              )}
-            </BottomRowContainer>
-          </SubInitiativeContainer>
-        );
-      });
+                </SubInitiativeOptionContainer>
+              </TopRowContainer>
+              <BottomRowContainer>
+                {subInitiative.ownedBy && (
+                  <SubInitiativeOwnerContainer>
+                    <Avatar
+                      firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
+                      lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
+                      defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
+                      avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
+                      size={40}
+                    />
+                  </SubInitiativeOwnerContainer>
+                )}
+              </BottomRowContainer>
+            </SubInitiativeContainer>
+          );
+        });
     };
 
     const goalYearString = `FY${quarterlyGoal.fiscalYear.toString().slice(-2)}/${(
@@ -125,25 +134,28 @@ export const QuarterlyGoalModalContent = observer(
         <StatusBlockColorIndicator
           milestones={quarterlyGoal.milestones || []}
           indicatorWidth={80}
-          marginBottom={16}
+          indicatorHeight={4}
+          marginBottom={0}
         />
 
         <QuarterlyGoalBodyContainer>
-          <InitiativeHeader
-            itemType={"quarterlyGoal"}
-            item={quarterlyGoal}
-            editable={editable}
-            setAnnualInitiativeId={setAnnualInitiativeId}
-            setModalOpen={setQuarterlyGoalModalOpen}
-            setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
-            annualInitiativeId={quarterlyGoal.annualInitiativeId}
-            annualInitiativeDescription={annualInitiativeDescription}
-            showDropdownOptionsContainer={showDropdownOptionsContainer}
-            setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
-            goalYearString={goalYearString}
-          />
           <SectionContainer>
-            <Context itemType={"quarterlyGoal"} item={quarterlyGoal} />
+            <InitiativeHeader
+              itemType={itemType}
+              item={quarterlyGoal}
+              editable={editable}
+              setAnnualInitiativeId={setAnnualInitiativeId}
+              setModalOpen={setQuarterlyGoalModalOpen}
+              setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
+              annualInitiativeId={quarterlyGoal.annualInitiativeId}
+              annualInitiativeDescription={annualInitiativeDescription}
+              showDropdownOptionsContainer={showDropdownOptionsContainer}
+              setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
+              goalYearString={goalYearString}
+            />
+          </SectionContainer>
+          <SectionContainer>
+            <Context itemType={itemType} item={quarterlyGoal} />
           </SectionContainer>
           <SectionContainer>
             {renderSubInitiative()}
@@ -157,7 +169,8 @@ export const QuarterlyGoalModalContent = observer(
                   setShowCreateGoal={setShowCreateSubInitiative}
                   createAction={subInitiativeStore.create}
                   quarterlyGoalId={quarterlyGoal.id}
-                  inAnnualInitiative={true}
+                  // inAnnualInitiative={true}
+                  buttonWidth={"200px"}
                 />
               </CreateGoalContainer>
             )}
@@ -175,10 +188,10 @@ export const QuarterlyGoalModalContent = observer(
               allMilestones={allMilestones}
               activeMilestones={activeMilestones}
               showInactiveMilestones={showInactiveMilestones}
-              itemType={"quarterlyGoal"}
+              itemType={itemType}
             />
             {showCreateMilestones && editable && allMilestones.length == 0 && (
-              <MilestoneCreateButton itemType={"quarterlyGoal"} item={quarterlyGoal} />
+              <MilestoneCreateButton itemType={itemType} item={quarterlyGoal} />
             )}
           </SectionContainer>
         </QuarterlyGoalBodyContainer>
@@ -192,19 +205,18 @@ const Container = styled.div`
   margin-right: ${props => props["margin-right"] || "0px"};
   height: fit-content;
   overflow: auto;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: auto
+  padding-right: auto;
 `;
 
 const QuarterlyGoalBodyContainer = styled.div`
   padding-top: 16px;
-  padding-bottom: 36px;
-  padding-left: 20px;
-  padding-right: 20px;
 `;
 
 const SectionContainer = styled.div`
-  margin-top: 24px;
+  padding-bottom: 36px;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
 
 const MilestonesHeaderContainer = styled.div`

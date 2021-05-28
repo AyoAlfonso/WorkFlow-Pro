@@ -174,27 +174,30 @@ export const TeamOverview = observer(
     };
 
     const renderUserRecords = () => {
-      return currentTeam.users.map((user, index) => {
-        const prioritiesToRender = user.todaysPriorities.concat(user.todaysCompletedActivities);
-        return (
-          <UserRecordContainer key={index}>
-            <ColumnContainer>
-              <TeamMemberInfoContainer>
-                <Avatar
-                  defaultAvatarColor={user.defaultAvatarColor}
-                  avatarUrl={user.avatarUrl}
-                  firstName={user.firstName}
-                  lastName={user.lastName}
-                  size={45}
-                  marginLeft={"0px"}
-                />
-                {renderUserStatus(user)}
-              </TeamMemberInfoContainer>
-            </ColumnContainer>
-            <ColumnContainer>{renderUserPriorities(prioritiesToRender)}</ColumnContainer>
-          </UserRecordContainer>
-        );
-      });
+      return currentTeam.users
+        .slice()
+        .sort((a, b) => a.firstName.localeCompare(b.firstName))
+        .map((user, index) => {
+          const prioritiesToRender = user.todaysPriorities.concat(user.todaysCompletedActivities);
+          return (
+            <UserRecordContainer key={index}>
+              <ColumnContainer>
+                <TeamMemberInfoContainer>
+                  <Avatar
+                    defaultAvatarColor={user.defaultAvatarColor}
+                    avatarUrl={user.avatarUrl}
+                    firstName={user.firstName}
+                    lastName={user.lastName}
+                    size={45}
+                    marginLeft={"0px"}
+                  />
+                  {renderUserStatus(user)}
+                </TeamMemberInfoContainer>
+              </ColumnContainer>
+              <ColumnContainer>{renderUserPriorities(prioritiesToRender)}</ColumnContainer>
+            </UserRecordContainer>
+          );
+        });
     };
 
     return (

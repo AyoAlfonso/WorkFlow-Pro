@@ -59,6 +59,8 @@ export const Teams = observer(
           </LeftAlignedTableContainer>,
           <LeftAlignedColumnListTableContainer>
             {users
+              .slice()
+              .sort((a, b) => a.firstName.localeCompare(b.firstName))
               .filter(user => team.isAMember(user))
               .map(
                 user =>

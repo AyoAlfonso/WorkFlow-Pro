@@ -1,10 +1,12 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
+import { observer } from "mobx-react";
 import { HomeContainerBorders } from "../../home/shared-components";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
 import { AnnualInitiativeCardMinimized } from "./annual-initiative-card-minimized";
 import { AnnualInitiativeCardExpanded } from "./annual-initiative-card-expanded";
-import { useState, useEffect } from "react";
+import { SubInitiativeCardsExpanded } from "../sub-initiative/sub-initiative-card-expanded";
 import { RecordOptions } from "../shared/record-options";
 import { useMst } from "~/setup/root";
 import { baseTheme } from "~/themes";
@@ -12,8 +14,9 @@ import { baseTheme } from "~/themes";
 interface IAnnualInitiativeCardProps {
   annualInitiative: any;
   index: number;
-  totalNumberOfAnnualInitiatives: number;
+  totalNumberOfAnnualInitiatives?: any;
   showMinimizedCards: boolean;
+  showSubInitiativeCards?: boolean;
   setAnnualInitiativeId?: React.Dispatch<React.SetStateAction<number>>;
   setAnnualInitiativeModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   setQuarterlyGoalId?: React.Dispatch<React.SetStateAction<number>>;
@@ -22,123 +25,165 @@ interface IAnnualInitiativeCardProps {
   showCreateQuarterlyGoal: boolean;
   onboarding?: boolean;
   showEditButton?: boolean;
+  setSubInitiativeModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setSubInitiativeId?: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const AnnualInitiativeCard = ({
-  annualInitiative,
-  index,
-  totalNumberOfAnnualInitiatives,
-  showMinimizedCards,
-  setAnnualInitiativeId,
-  setAnnualInitiativeModalOpen,
-  setQuarterlyGoalId,
-  setQuarterlyGoalModalOpen,
-  setSelectedAnnualInitiativeDescription,
-  showCreateQuarterlyGoal,
-  onboarding,
-  showEditButton = true,
-}: IAnnualInitiativeCardProps): JSX.Element => {
-  const [showMinimizedCard, setShowMinimizedCard] = useState<boolean>(showMinimizedCards);
+export const AnnualInitiativeCard = observer(
+  ({
+    annualInitiative,
+    index,
+    setSubInitiativeModalOpen,
+    setSubInitiativeId,
+    showMinimizedCards,
+    showSubInitiativeCards,
+    setAnnualInitiativeId,
+    setAnnualInitiativeModalOpen,
+    setQuarterlyGoalId,
+    setQuarterlyGoalModalOpen,
+    setSelectedAnnualInitiativeDescription,
+    showCreateQuarterlyGoal,
+    onboarding,
+    showEditButton = true,
+  }: IAnnualInitiativeCardProps): JSX.Element => {
+    const { white, grey60 } = baseTheme.colors;
+    const [showMinimizedCard, setShowMinimizedCard] = useState<boolean>(showMinimizedCards);
+    const [showSubInitiativeCard, setShowSubInitiativeCards] = useState<boolean>(
+      showSubInitiativeCards,
+    );
+    const [selectedSubInitiativeCards, setSelectSubInitiativeCard] = useState<number>();
+    const [showOptions, setShowOptions] = useState<string>(white);
 
-  const { companyStore } = useMst();
+    const { companyStore } = useMst();
 
-  useEffect(() => {
-    setShowMinimizedCard(showMinimizedCards);
-  }, [showMinimizedCards]);
+    useEffect(() => {
+      setShowMinimizedCard(showMinimizedCards);
+    }, [showMinimizedCards]);
 
-  const goalYearString = onboarding
-    ? `${companyStore.onboardingCompany.currentFiscalYear}`
-    : companyStore.company.currentFiscalYear == annualInitiative.fiscalYear
-    ? `FY${annualInitiative.fiscalYear.toString().slice(-2) - 1}`
-    : `FY${annualInitiative.fiscalYear.toString().slice(-2) -
-        1}/${annualInitiative.fiscalYear.toString().slice(-2)}`;
+    useEffect(() => {
+      setShowSubInitiativeCards(showSubInitiativeCards);
+    }, [showSubInitiativeCards]);
 
-  const renderYearDisplay = () => {
-    if (onboarding) {
-      return null;
-    } else if (
-      companyStore.company.currentFiscalYear != annualInitiative.fiscalYear &&
-      annualInitiative.fiscalYear
-    ) {
-      let containerColor =
-        companyStore.company.currentFiscalYear > annualInitiative.fiscalYear
-          ? baseTheme.colors.grey100
-          : baseTheme.colors.primary100;
-      return (
-        <YearContainer color={containerColor}>
-          <YearText> {goalYearString} Goal </YearText>
-        </YearContainer>
-      );
-    }
-  };
+    const goalYearString = onboarding
+      ? `${companyStore.onboardingCompany.currentFiscalYear}`
+      : companyStore.company.currentFiscalYear == annualInitiative.fiscalYear
+      ? `FY${annualInitiative.fiscalYear.toString().slice(-2)}`
+      : `FY${(annualInitiative.fiscalYear + 1)
+          .toString()
+          .slice(-2)}/${annualInitiative.fiscalYear.toString().slice(-2)}`;
 
-  return (
-    <Container
-      key={index}
-      marginRight={index + 1 == totalNumberOfAnnualInitiatives ? "0px" : "15px"}
-      onboarding={onboarding}
-      onClick={e => {
-        e.stopPropagation();
-        if (annualInitiative) {
-          setAnnualInitiativeModalOpen(true);
-          setAnnualInitiativeId(annualInitiative.id);
-        }
-      }}
-    >
-      <HeaderContainer>
-        <DescriptionContainer>
-          <StyledText closedInitiative={annualInitiative.closedInitiative}>
-            {annualInitiative.description}
-          </StyledText>
-        </DescriptionContainer>
-        <IconContainer>
-          <RecordOptions type={"annualInitiative"} id={annualInitiative.id} />
-        </IconContainer>
-      </HeaderContainer>
+    const renderYearDisplay = () => {
+      if (onboarding) {
+        return null;
+      } else if (
+        companyStore.company.currentFiscalYear != annualInitiative.fiscalYear &&
+        annualInitiative.fiscalYear
+      ) {
+        const containerColor =
+          companyStore.company.currentFiscalYear > annualInitiative.fiscalYear
+            ? baseTheme.colors.grey100
+            : baseTheme.colors.primary100;
+        return (
+          <YearContainer color={containerColor}>
+            <YearText> {goalYearString} Goal </YearText>
+          </YearContainer>
+        );
+      }
+    };
+    const marginRight = "8px";
+    const marginLeft = index == 0 ? "0px" : "8px";
 
-      <YearDisplayContainer>{renderYearDisplay()}</YearDisplayContainer>
+    return (
+      <div>
+        <Container
+          key={index}
+          marginRight={marginRight}
+          marginLeft={marginLeft}
+          onboarding={onboarding}
+          onClick={e => {
+            e.stopPropagation();
+            setAnnualInitiativeModalOpen(true);
+            setAnnualInitiativeId(annualInitiative.id);
+          }}
+          onMouseEnter={e => {
+            setShowOptions(grey60);
+          }}
+          onMouseLeave={e => {
+            setShowOptions(white);
+          }}
+        >
+          <HeaderContainer>
+            <DescriptionContainer>
+              <StyledText closedInitiative={annualInitiative.closedInitiative}>
+                {annualInitiative.description}
+              </StyledText>
+            </DescriptionContainer>
+            <IconContainer>
+              <RecordOptions
+                type={"annualInitiative"}
+                id={annualInitiative.id}
+                marginLeft={"-70px"}
+                iconColor={showOptions}
+              />
+            </IconContainer>
+          </HeaderContainer>
 
-      {showMinimizedCard ? (
-        <AnnualInitiativeCardMinimized
-          annualInitiative={annualInitiative}
-          setShowMinimizedCard={setShowMinimizedCard}
-          disableOpen={onboarding}
-        />
-      ) : (
-        <AnnualInitiativeCardExpanded
-          annualInitiative={annualInitiative}
-          setShowMinimizedCard={setShowMinimizedCard}
-          setQuarterlyGoalId={setQuarterlyGoalId}
-          setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
-          setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
-          showCreateQuarterlyGoal={showCreateQuarterlyGoal}
-          showEditButton={showEditButton}
-        />
-      )}
-    </Container>
-  );
-};
+          <AnnualInitiativeCardMinimized
+            annualInitiative={annualInitiative}
+            setShowMinimizedCard={setShowMinimizedCard}
+            disableOpen={onboarding}
+            showMinimizedCard={showMinimizedCard}
+          />
+        </Container>
+        {/* <YearDisplayContainer>{renderYearDisplay()}</YearDisplayContainer> */}
+
+        {!showMinimizedCard ? (
+          <AnnualInitiativeCardExpanded
+            annualInitiative={annualInitiative}
+            setShowSubInitiativeCards={setShowSubInitiativeCards}
+            showSubInitiativeCards={showSubInitiativeCard}
+            setSelectSubInitiativeCard={setSelectSubInitiativeCard}
+            selectedSubInitiativeCards={selectedSubInitiativeCards}
+            setQuarterlyGoalId={setQuarterlyGoalId}
+            setSubInitiativeModalOpen={setSubInitiativeModalOpen}
+            setSubInitiativeId={setSubInitiativeId}
+            setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
+            setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
+            showCreateQuarterlyGoal={showCreateQuarterlyGoal}
+            showEditButton={showEditButton}
+            marginLeft={marginLeft}
+          />
+        ) : null}
+      </div>
+    );
+  },
+);
 
 type ContainerProps = {
   onboarding: boolean;
   marginRight: string;
+  marginLeft: string;
 };
 
+// Avoid repetition and pass min-height as a prop
 const Container = styled(HomeContainerBorders)<ContainerProps>`
-  width: ${props => (props.onboarding ? "-webkit-fill-available" : "calc(20% - 15px)")};
+  width: ${props => (props.onboarding ? "-webkit-fill-available" : "calc(20% - 16px)")};
   min-width: 240px;
-  margin-right: ${props => props.marginRight || "0px"};
   display: flex;
+  margin-right: ${props => props.marginRight};
+  margin-left: ${props => props.marginLeft};
   flex-direction: column;
-  height: 100%;
+  height: ${props => (props.onboarding ? "-webkit-fill-available" : "160px")};
   &: hover {
     background: rgba(0, 0, 0, 0.02);
     opacity: 0.85;
   }
+  ${props => (props.onboarding ? "padding-bottom: 15px;" : "")}
 `;
 
 const DescriptionContainer = styled.div`
   overflow-wrap: anywhere;
+  height: 32px;
 `;
 
 type StyledTextProps = {
@@ -147,26 +192,39 @@ type StyledTextProps = {
 
 const StyledText = styled(Text)<StyledTextProps>`
   padding-left: 16px;
-  padding-right: 16px;
   white-space: normal;
-  color: ${props => props.closedInitiative && props.theme.colors.greyActive};
+  font-weight: 1000;
+  font-size: 16px;
+  width: 190px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: ${props =>
+    props.closedInitiative ? props.theme.colors.greyActive : props.theme.colors.black};
   &:hover {
     cursor: pointer;
+    color: ${props => props.theme.colors.greyActive};
     font-weight: bold;
     text-decoration: underline;
   }
+`;
+// TODOIT: Add the color in hover state above to constants
+
+const IconContainer = styled.div`
+  margin-top: 16px;
+  margin-left: auto;
+  margin-right: 16px;
+  display: flex;
+  opacity: 1;
 `;
 
 const HeaderContainer = styled.div`
   display: flex;
   flex-grow: 1;
-`;
-
-const IconContainer = styled.div`
-  margin-top: 17px;
-  margin-left: auto;
-  margin-right: 16px;
-  display: flex;
+  ${IconContainer}:hover & {
+    fill: rebeccapurple;
+  }
 `;
 
 type YearContainerProps = {

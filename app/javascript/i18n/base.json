@@ -104,7 +104,8 @@
         "editUser": {
           "title": "Edit User"
         },
-        "rallyingCry": "LynchPyn Goal™",
+        "rallyingCry": "LynchPyn™ Goal",
+        "rallyingCryPlaceholder": "Write the most important thing you have to achieve in the upcoming year...",
         "create": "Create",
         "edit": "Edit",
         "newCompany": "Company",
@@ -137,18 +138,24 @@
       },
       "annualInitiative": {
         "title": "{{title}}",
-        "enterTitle": "Enter {{title}} Title...",
+        "enterTitle": "Enter Title...",
         "add": "Add an {{title}}",
         "addInitiative": "Add {{title}}",
         "messageText": "{{title}}",
-        "closedItem": "This Objective is closed"
+        "cardClosed" : "This {{title}} is closed",
+        "createdOn" : "Originally created for",
+        "emptyHeader": "Add your first Initiative",
+        "emptyText": "Initiatives are quarterly efforts that help you get closer to reaching your Objective.",
+        "emptyCta": "Activate \"Plan\" mode"
       },
       "quarterlyGoal": {
-        "enterTitle": "Enter {{title}} Title...",
+        "enterTitle": "Enter Title...",
         "add": "Add a {{title}}",
         "addGoal": "Add {{title}}",
         "title": "{{title}}s",
         "messageText": "{{title}}",
+        "cardClosed" : "This {{title}} is closed",
+        "createdOn" : "Originally created on",
         "confirmDelete": "Are you sure you want to delete this {{title}}?",
         "created": "{{title}} created",
         "updated": "{{title}} updated",
@@ -158,15 +165,15 @@
         "retrievalError": "There was an error retrieving the {{title}}",
         "deletionError": "There was an error deleting the {{title}}",
         "keyElementCreationError": "There was an error creating the key element",
-        "milestoneCreationError": "There was an error creating milestones",
-        "closedItem": "This Initiative is closed"
+        "milestoneCreationError": "There was an error creating milestones"
       },
       "subInitiative": {
-        "enterTitle": "Enter {{title}} Title...",
+        "enterTitle": "Enter Title...",
         "add": "Add a {{title}}",
         "addGoal": "Add {{title}}",
         "title": "{{title}}",
         "messageText": "{{title}}",
+        "cardClosed" : "This {{title}} is closed",
         "confirmDelete": "Are you sure you want to delete this {{title}}?",
         "created": "{{title}} created",
         "updated": "{{title}} updated",
@@ -176,8 +183,7 @@
         "retrievalError": "There was an error retrieving the {{title}}",
         "deletionError": "There was an error deleting the {{title}}",
         "keyElementCreationError": "There was an error creating the key element",
-        "milestoneCreationError": "There was an error creating milestones",
-        "closedItem": "This Initiative is closed"
+        "milestoneCreationError": "There was an error creating milestones"
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",
@@ -309,6 +315,10 @@
       "datePicker": {
         "dueDate": "Due Date",
         "clearDate": "Clear Date"
+      },
+      "personal": {
+        "vision": "Future Self",
+        "placeholder": "Describe what the ideal, future you will look like, in one statement..."
       },
       "onboarding": {
         "continue": "Resume {{format}} creation"

@@ -3,21 +3,17 @@ import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
 export const SideNavChildLinkNavLink = styled(NavLink)`
-  border-radius: 8px;
+  font-size: 16px;
   text-decoration: none;
-  &:link,
-  &:visited {
-    color: ${props => props.theme.colors.greyActive};
-  }
+  color: ${props => props.theme.colors.white};
   &:hover {
-    color: ${props => props.theme.colors.primaryActive};
-    background-color: ${props => props.theme.colors.primary20};
+    background-color: ${props => props.theme.colors.primary80};
   }
 `;
 
 export const SideNavChildLinkContainer = styled.div`
   align-items: center;
-  min-height: 40px;
+  min-height: 24px;
   padding-left: 20px;
   display: flex;
   word-break: break-word;

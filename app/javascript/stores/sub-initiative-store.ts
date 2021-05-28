@@ -13,10 +13,10 @@ export const SubInitiativeStoreModel = types
   })
   .extend(withEnvironment())
   .views(self => ({
-    get title(){
+    get title() {
       const { sessionStore } = getRoot(self);
-      return sessionStore.subInitiativeTitle
-    }
+      return sessionStore.subInitiativeTitle;
+    },
   }))
   .actions(self => ({
     getSubInitiative: flow(function*(id) {
@@ -25,21 +25,44 @@ export const SubInitiativeStoreModel = types
         const response: any = yield env.api.getSubInitiative(id);
         self.subInitiative = response.data;
       } catch {
-        showToast(il8n.t("subInitiative.retrievalError", { title: self.title }), ToastMessageConstants.ERROR);
+        showToast(
+          il8n.t("subInitiative.retrievalError", { title: self.title }),
+          ToastMessageConstants.ERROR,
+        );
       }
     }),
     update: flow(function*() {
       const env = getEnv(self);
       const response: any = yield env.api.updateSubInitiative(self.subInitiative);
       self.subInitiative = response.data;
-      showToast(il8n.t("subInitiative.updated", { title: self.title }), ToastMessageConstants.SUCCESS);
+      showToast(
+        il8n.t("subInitiative.updated", { title: self.title }),
+        ToastMessageConstants.SUCCESS,
+      );
       return response.data;
+    }),
+    updateParents: flow(function*() {
+      const { goalStore,quarterlyGoalStore,  annualInitiativeStore } = getRoot(self);
+      const responseAnnualInitiative = yield annualInitiativeStore.getAnnualInitiative(
+        self.subInitiative.annualInitiativeId,
+      );
+      yield quarterlyGoalStore.getQuarterlyGoal(self.subInitiative.quarterlyGoalId);
+      goalStore.updateAnnualInitiative(responseAnnualInitiative);
     }),
     closeGoal: flow(function*(id) {
       const env = getEnv(self);
+      const { goalStore, annualInitiativeStore, quarterlyGoalStore } = getRoot(self);
       const response: any = yield env.api.closeSubInitiative(id);
       self.subInitiative = response.data;
-      showToast(il8n.t("subInitiative.closed", { title: self.title }), ToastMessageConstants.SUCCESS);
+      const responseAnnualInitiative = yield annualInitiativeStore.getAnnualInitiative(
+        response.data.annualInitiativeId,
+      );
+      quarterlyGoalStore.updateQuarterlyGoalAfterRemovingSubInitiatives(response.data.id);
+      goalStore.updateAnnualInitiative(responseAnnualInitiative);
+      showToast(
+        il8n.t("subInitiative.closed", { title: self.title }),
+        ToastMessageConstants.SUCCESS,
+      );
       return response.data;
     }),
     createKeyElement: flow(function*(keyElementParams) {
@@ -69,28 +92,50 @@ export const SubInitiativeStoreModel = types
         return false;
       }
     }),
-    create: flow(function*(subInitiativeObject ) {
+    create: flow(function*(subInitiativeObject, type) {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.createSubInitiative(subInitiativeObject);
-        const { quarterlyGoalStore } = getRoot(self);
+        const { quarterlyGoalStore, goalStore, annualInitiativeStore } = getRoot(self);
         quarterlyGoalStore.updateQuarterlyGoalAfterAddingSubInitiative(response.data);
-        showToast(il8n.t("subInitiative.created", { title: self.title }), ToastMessageConstants.SUCCESS);
+        const responseAnnualInitiative = yield annualInitiativeStore.getAnnualInitiative(
+          response.data.annualInitiativeId,
+        );
+        goalStore.updateAnnualInitiative(responseAnnualInitiative);
+        showToast(
+          il8n.t("subInitiative.created", { title: self.title }),
+          ToastMessageConstants.SUCCESS,
+        );
         return response.data;
       } catch {
-        showToast(il8n.t("subInitiative.creationError", { title: self.title }), ToastMessageConstants.ERROR);
+        showToast(
+          il8n.t("subInitiative.creationError", { title: self.title }),
+          ToastMessageConstants.ERROR,
+        );
       }
     }),
     delete: flow(function*(subInitiativeId) {
       const env = getEnv(self);
       try {
+        //TO DO : Pass annualInitiative from params instead api call
         const response: any = yield env.api.deleteSubInitiative(subInitiativeId);
-        const { quarterlyGoalStore } = getRoot(self);
-        quarterlyGoalStore.updateQuarterlyGoal(response.data);
-        showToast(il8n.t("subInitiative.deleted", { title: self.title }), ToastMessageConstants.SUCCESS);
+        const { quarterlyGoalStore, goalStore, annualInitiativeStore } = getRoot(self);
+
+        const responseAnnualInitiative = yield annualInitiativeStore.getAnnualInitiative(
+          response.data.annualInitiativeId,
+        );
+        quarterlyGoalStore.updateQuarterlyGoalAfterRemovingSubInitiatives(response.data.id);
+        goalStore.updateAnnualInitiative(responseAnnualInitiative);
+        showToast(
+          il8n.t("subInitiative.deleted", { title: self.title }),
+          ToastMessageConstants.SUCCESS,
+        );
         return response.data;
       } catch {
-        showToast(il8n.t("subInitiative.deletionError", { title: self.title }), ToastMessageConstants.ERROR);
+        showToast(
+          il8n.t("subInitiative.deletionError", { title: self.title }),
+          ToastMessageConstants.ERROR,
+        );
       }
     }),
     createMilestones: flow(function*(subInitiativeId) {
@@ -134,11 +179,12 @@ export const SubInitiativeStoreModel = types
       self.update();
     },
     updateMilestoneStatus(id, status) {
-      let milestones = self.subInitiative.milestones;
-      let milestoneIndex = milestones.findIndex(milestone => milestone.id == id);
+      const milestones = self.subInitiative.milestones;
+      const milestoneIndex = milestones.findIndex(milestone => milestone.id == id);
       milestones[milestoneIndex].status = status;
       self.subInitiative.milestones = milestones;
       self.update();
+      self.updateParents();
     },
   }));
 
