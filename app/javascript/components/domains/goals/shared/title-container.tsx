@@ -18,6 +18,7 @@ interface ITitleContainerProps {
   setGoalsFilter: React.Dispatch<React.SetStateAction<string>>;
   largeHomeTitle?: boolean;
   title: string;
+  type?: string;
   handleToggleChange: any;
   toggleChecked: boolean;
   showInitiatives: boolean;
@@ -36,6 +37,7 @@ export const TitleContainer = observer(
     setGoalsFilter,
     largeHomeTitle,
     title,
+    type,
     handleToggleChange,
     toggleChecked,
     showInitiatives,
@@ -55,7 +57,7 @@ export const TitleContainer = observer(
             </FilterOptions>
           </FilterOptionContainer>
 
-          {title == "Company" && (
+          {type == "Company" && (
             <FilterOptionContainer underline={goalsFilter == "me"}>
               <FilterOptions
                 onClick={() => setGoalsFilter("me")}

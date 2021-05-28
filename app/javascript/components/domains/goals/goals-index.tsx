@@ -191,6 +191,7 @@ export const GoalsIndex = observer(
             setGoalsFilter={setCompanyGoalsFilter}
             largeHomeTitle={true}
             title={companyStore.company.name}
+            type={"Company"}
             handleToggleChange={toggleCompanyPlanning}
             toggleChecked={companyPlanning}
             showInitiatives={showCompanyInitiatives}
