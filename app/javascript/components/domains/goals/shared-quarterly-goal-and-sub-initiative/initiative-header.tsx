@@ -100,11 +100,14 @@ export const InitiativeHeader = ({
             </UnderlinedGoalText>
           </GoalText>
           <DetailsContainer>
+            <IconContainer>
+              <Icon icon={"Initiative"} size={"16px"} iconColor={"grey80"} />
+            </IconContainer>
             <YearText type={"small"}>Q{item.quarter}</YearText>
             <OwnedBySection
               ownedBy={item.ownedBy}
-              marginLeft={"5px"}
-              marginRight={"5px"}
+              marginLeft={"0px"}
+              marginRight={"0px"}
               marginTop={"auto"}
               marginBottom={"auto"}
               type={itemType}
@@ -162,6 +165,12 @@ const AnnualInitiativeActionContainer = styled.div`
   margin-left: auto;
 `;
 
+const IconContainer = styled.div`
+  margin-right: 8px;
+  margin-top: auto;
+  margin-bottom: auto;
+`;
+
 const CloseIconContainer = styled.div`
   &:hover {
     cursor: pointer;
@@ -185,6 +194,7 @@ const DetailsContainer = styled.div`
 
 const YearText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
+  margin-right: 16px;
 `;
 
 const ClosedStatusBannerContainer = styled.div`

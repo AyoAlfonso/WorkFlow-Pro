@@ -138,11 +138,7 @@ export const AnnualInitiativeModalContent = observer(
       );
     };
 
-    const goalYearString = `FY${annualInitiative.fiscalYear.toString().slice(-2)}/${(
-      annualInitiative.fiscalYear + 1
-    )
-      .toString()
-      .slice(-2)}`;
+    const goalYearString = `FY${(annualInitiative.fiscalYear % 100)}/${(annualInitiative.fiscalYear + 1) % 100}`;
 
     const renderHeader = (): JSX.Element => {
       return (
@@ -173,10 +169,15 @@ export const AnnualInitiativeModalContent = observer(
               </GoalText>
             )}
             <DetailsContainer>
-              <YearText type={"small"}>{goalYearString} Objective</YearText>
+              <IconContainer>
+                <Icon icon={"Initiative"} size={"16px"} iconColor={"grey80"} />
+              </IconContainer>
+              <YearText type={"small"}>{goalYearString}</YearText>
               <OwnedBySection
-                marginLeft={"5px"}
+                marginLeft={"0px"}
                 marginRight={"0px"}
+                marginTop={"auto"}
+                marginBottom={"auto"}
                 ownedBy={annualInitiative.ownedBy}
                 type={"annualInitiative"}
                 disabled={annualInitiative.closedInitiative}
@@ -303,6 +304,12 @@ const AnnualInitiativeActionContainer = styled.div`
   margin-left: auto;
 `;
 
+const IconContainer = styled.div`
+  margin-right: 8px;
+  margin-top: auto;
+  margin-bottom: auto;
+`;
+
 const CloseIconContainer = styled.div`
   &:hover {
     cursor: pointer;
@@ -394,6 +401,7 @@ const DetailsContainer = styled.div`
 
 const YearText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
+  margin-right: 16px;
 `;
 
 const FilterOptionsContainer = styled.div`

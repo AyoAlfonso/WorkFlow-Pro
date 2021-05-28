@@ -159,7 +159,6 @@ export const QuarterlyGoalCard = observer(
                   iconColor={"#868DAA"}
                 />
               )}
-              {goalCardType == "parent" && renderQuarterDisplay()}
               <StyledText>{quarterlyGoal.description}</StyledText>
             </DescriptionContainer>
 
@@ -227,7 +226,7 @@ const StyledText = styled(Text)`
   padding-right: 4px;
   white-space: normal;
   font-size: 14px;
-  width: 160px;
+  width: 190px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -283,7 +282,6 @@ type StatusBadgeType = {
   backgroundColor: string;
 };
 
-// TODOIST: Update the color constant
 const StatusBadge = styled.div<StatusBadgeType>`
   font-size: 9px;
   font-weight: 900;
