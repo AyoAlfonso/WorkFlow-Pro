@@ -70,7 +70,7 @@ export const HomeGoals = observer(
     const companyGoalsToShow = () => {
       switch (companyGoalsFilter) {
         case "all":
-          return companyGoals.goals;
+          return companyGoals.activeAnnualInitiatives;
         case "me":
           return companyGoals.myAnnualInitiatives;
         case "closed":
@@ -83,7 +83,7 @@ export const HomeGoals = observer(
     const personalGoalsToShow = () => {
       switch (personalGoalsFilter) {
         case "all":
-          return personalGoals.goals;
+          return personalGoals.activeAnnualInitiatives;
         case "closed":
           return personalGoals.closedAnnualInitiatives;
         default:
