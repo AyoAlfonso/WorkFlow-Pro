@@ -87,7 +87,7 @@ export const ForumTopic = observer(
 
     return (
       <>
-        <ColumnContainerCenterAligned>
+        <StyledColumnContainerCenterAligned>
           <HostedByContainer
             onClick={() => {
               if (!disabled) {
@@ -107,7 +107,7 @@ export const ForumTopic = observer(
               />
             </UserSelectionContainer>
           )}
-        </ColumnContainerCenterAligned>
+        </StyledColumnContainerCenterAligned>
         <ColumnContainerCenterAligned>
           <StyledContentEditable
             innerRef={topicRef}
@@ -186,4 +186,8 @@ const TopicOwnerContainer = styled.div`
   &:hover ${ImageContainer} {
     border-color: ${props => props.theme.colors.greyActive};
   }
+`;
+
+const StyledColumnContainerCenterAligned = styled(ColumnContainerCenterAligned)`
+  margin-bottom: 24px;
 `;
