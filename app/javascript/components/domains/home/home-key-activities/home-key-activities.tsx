@@ -245,7 +245,7 @@ export const HomeKeyActivities = observer(
           <SingleListContainer>
             <HeaderContainer>
               {renderHeader(
-                "Weekly",
+                "Weekly List",
                 subHeaderForFilterGroups("Weekly List"),
                 dynamicFilterDropdownOpen,
                 setDynamicFilterDropdownOpen,

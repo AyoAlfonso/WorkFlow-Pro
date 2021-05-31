@@ -63,6 +63,7 @@ const MilestoneContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
+  padding-bottom: 16px;
 `;
 
 const StyledText = styled.h4`
