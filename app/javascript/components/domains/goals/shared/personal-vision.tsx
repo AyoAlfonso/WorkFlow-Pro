@@ -62,6 +62,7 @@ const VisionTitle = styled.p`
 `;
 
 const StyledContentEditable = styled(ContentEditable)`
+  display: block;
   font-size: 21px;
   margin-left: auto;
   margin-right: auto;
@@ -70,6 +71,7 @@ const StyledContentEditable = styled(ContentEditable)`
   padding: 5px;
   text-transform: capitalize;
   font-weight: 700;
+  text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 `;
