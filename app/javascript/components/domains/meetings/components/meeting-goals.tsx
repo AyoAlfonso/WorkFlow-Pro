@@ -60,7 +60,7 @@ export const MeetingGoals = observer(
             setQuarterlyGoalId={setQuarterlyGoalId}
             setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
             setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
-            showCreateQuarterlyGoal={true}
+            showCreateQuarterlyGoal={false}
           />
         );
       });
