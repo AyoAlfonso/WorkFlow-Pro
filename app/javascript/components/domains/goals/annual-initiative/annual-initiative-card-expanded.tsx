@@ -24,7 +24,6 @@ export const AnnualInitiativeCardExpanded = observer(
       setSelectedAnnualInitiativeDescription,
       showCreateQuarterlyGoal,
       showEditButton,
-      marginLeft,
       setSubInitiativeModalOpen,
       setSubInitiativeId,
     } = props;
@@ -128,7 +127,6 @@ export const AnnualInitiativeCardExpanded = observer(
         onClick={e => {
           e.stopPropagation();
         }}
-        marginLeft={marginLeft}
       >
         {showEditButton || renderEmptyState()}
         {renderQuarterlyGoals()}
@@ -138,16 +136,9 @@ export const AnnualInitiativeCardExpanded = observer(
   },
 );
 
-type ContainerProps = {
-  marginLeft: string;
-};
-
-const Container = styled.div<ContainerProps>`
+const Container = styled.div`
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  width: calc(20% - 16px);
-  min-width: 240px;
-  margin-left: ${props => props.marginLeft};
 `;
 
 type SubInitiativeContainerProps = {
@@ -178,7 +169,7 @@ const EmptyStateHeader = styled.p`
 
 const EmptyStateText = styled.p`
   font-size: 12px;
-  width: 240px;
+  min-width: 240px;
   color: ${props => props.theme.colors.greyActive};
 `;
 
@@ -213,13 +204,7 @@ const MinimizeIconContainer = styled.div`
   }
 `;
 
-type InitiativesContainerProps = {
-  onboarding?: boolean;
-};
-
-const InitiativesContainer = styled(HomeContainerBorders)<InitiativesContainerProps>`
-  width: ${props => (props.onboarding ? "-webkit-fill-available" : "calc(20% - 16px)")};
-  min-width: 240px;
+const InitiativesContainer = styled(HomeContainerBorders)`
   display: flex;
   margin-top: 16px;
   flex-direction: column;

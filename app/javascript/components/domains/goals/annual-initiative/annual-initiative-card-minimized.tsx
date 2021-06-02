@@ -235,8 +235,11 @@ const Container = styled.div`
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   width: auto;
+  height: 32px;
   cursor: pointer;
 `;
 
@@ -273,6 +276,7 @@ const ShowInitiativeBar = styled.div`
   color: #005ffe;
   font-size: 12px;
   font-weight: bold;
+  white-space: nowrap;
 `;
 //TODOIT: add blue color above to constants
 const StatusSquareContainer = styled.div`
@@ -330,6 +334,7 @@ const StatusBadge = styled.div<StatusBadgeType>`
   padding: 2px;
   text-align: center;
   border-radius: 2px;
+  white-space: nowrap;
 `;
 
 const BadgeContainer = styled.div`

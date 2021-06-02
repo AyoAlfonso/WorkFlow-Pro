@@ -6,7 +6,6 @@ import styled from "styled-components";
 import { Text } from "../../../shared/text";
 import { AnnualInitiativeCardMinimized } from "./annual-initiative-card-minimized";
 import { AnnualInitiativeCardExpanded } from "./annual-initiative-card-expanded";
-import { SubInitiativeCardsExpanded } from "../sub-initiative/sub-initiative-card-expanded";
 import { RecordOptions } from "../shared/record-options";
 import { useMst } from "~/setup/root";
 import { baseTheme } from "~/themes";
@@ -94,11 +93,13 @@ export const AnnualInitiativeCard = observer(
     const marginLeft = index == 0 ? "0px" : "8px";
 
     return (
-      <div>
+      <ColumnContainer
+        onboarding={onboarding}
+        marginRight={marginRight}
+        marginLeft={marginLeft}
+      >
         <Container
           key={index}
-          marginRight={marginRight}
-          marginLeft={marginLeft}
           onboarding={onboarding}
           onClick={e => {
             e.stopPropagation();
@@ -154,24 +155,20 @@ export const AnnualInitiativeCard = observer(
             marginLeft={marginLeft}
           />
         ) : null}
-      </div>
+      </ColumnContainer>
     );
   },
 );
 
 type ContainerProps = {
   onboarding: boolean;
-  marginRight: string;
-  marginLeft: string;
 };
 
 // Avoid repetition and pass min-height as a prop
 const Container = styled(HomeContainerBorders)<ContainerProps>`
-  width: ${props => (props.onboarding ? "-webkit-fill-available" : "calc(20% - 16px)")};
+  width: 100%;
   min-width: 240px;
   display: flex;
-  margin-right: ${props => props.marginRight};
-  margin-left: ${props => props.marginLeft};
   flex-direction: column;
   height: ${props => (props.onboarding ? "-webkit-fill-available" : "160px")};
   &: hover {
@@ -180,6 +177,20 @@ const Container = styled(HomeContainerBorders)<ContainerProps>`
   }
   ${props => (props.onboarding ? "padding-bottom: 15px;" : "")}
 `;
+
+type ColumnContainerProps = {
+  onboarding: boolean;
+  marginRight: string;
+  marginLeft: string;
+}
+
+const ColumnContainer = styled.div<ColumnContainerProps>`
+  ${props => props.onboarding ? "":"flex: 0 1 calc(20% - 16px);"}
+  width: ${props => (props.onboarding ? "-webkit-fill-available" : "calc(20% - 16px)")};
+  padding-right: 8px;
+  padding-left: 8px;
+  min-width: 240px;
+`
 
 const DescriptionContainer = styled.div`
   overflow-wrap: anywhere;
@@ -195,7 +206,8 @@ const StyledText = styled(Text)<StyledTextProps>`
   white-space: normal;
   font-weight: 1000;
   font-size: 16px;
-  width: 190px;
+  width: 95%;
+  min-width: 190px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

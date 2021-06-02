@@ -3,8 +3,6 @@ import styled from "styled-components";
 import { Text } from "../../../shared/text";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
 import { UserIconBorder } from "../shared/user-icon-border";
-import { Avatar } from "~/components/shared/avatar";
-import * as R from "ramda";
 import { baseTheme } from "../../../../themes";
 import { QuarterlyGoalType } from "~/types/quarterly-goal";
 import { RecordOptions } from "../shared/record-options";
@@ -226,7 +224,8 @@ const StyledText = styled(Text)`
   padding-right: 4px;
   white-space: normal;
   font-size: 14px;
-  width: 190px;
+  width: 95%;
+  min-width: 190px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -290,6 +289,7 @@ const StatusBadge = styled.div<StatusBadgeType>`
   padding: 2px;
   text-align: center;
   border-radius: 2px;
+  white-space: nowrap;
 `;
 
 const BadgeContainer = styled.div`

@@ -99,10 +99,8 @@ export const SubInitiativeCardsExpanded = observer(
   },
 );
 
-const LineContainer = styled.div<ContainerProps>`
+const LineContainer = styled.div`
   z-index: -1;
-  width: ${props => (props.onboarding ? "-webkit-fill-available" : "calc(20% - 16px)")};
-  min-width: 240px;
   display: flex;
   justify-content: center;
   line {
@@ -138,15 +136,10 @@ const MinimizeIconContainer = styled.div`
   }
 `;
 
-type ContainerProps = {
-  onboarding?: boolean;
-};
 
 //TODOIST: calc the margin left
-const InitiativesContainer = styled(HomeContainerBorders)<ContainerProps>`
-  width: ${props => (props.onboarding ? "-webkit-fill-available" : "calc(20% - 16px)")};
+const InitiativesContainer = styled(HomeContainerBorders)`
   background-color: ${props => props.theme.colors.backgroundGrey};
-  min-width: 240px;
   display: flex;
   border-radius: 8px;
   flex-direction: column;
