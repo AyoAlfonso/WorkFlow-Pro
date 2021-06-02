@@ -47,7 +47,7 @@ export const MeetingGoals = observer(
     }
 
     const renderAnnualInitiatives = (): Array<JSX.Element> => {
-      return annualInitiatives.map((annualInitiative, index) => {
+      return goalStore.activeTeamGoals.map((annualInitiative, index) => {
         return (
           <AnnualInitiativeCard
             key={index}
