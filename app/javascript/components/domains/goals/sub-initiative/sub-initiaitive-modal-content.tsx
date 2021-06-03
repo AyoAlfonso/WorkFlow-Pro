@@ -68,7 +68,7 @@ export const SubInitiativeModalContent = observer(
       <Container>
         <StatusBlockColorIndicator
           milestones={subInitiative.milestones || []}
-          indicatorWidth={80}
+          indicatorWidth={"80px"}
           indicatorHeight={4}
            marginBottom={0}
         />

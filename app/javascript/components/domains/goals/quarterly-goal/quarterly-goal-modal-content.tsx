@@ -81,7 +81,7 @@ export const QuarterlyGoalModalContent = observer(
             <SubInitiativeContainer key={index}>
               <StatusBlockColorIndicator
                 milestones={subInitiative.milestones || []}
-                indicatorWidth={80}
+                indicatorWidth={"80px"}
                 indicatorHeight={4}
                 marginBottom={16}
               />
@@ -133,7 +133,7 @@ export const QuarterlyGoalModalContent = observer(
       <Container>
         <StatusBlockColorIndicator
           milestones={quarterlyGoal.milestones || []}
-          indicatorWidth={80}
+          indicatorWidth={"80px"}
           indicatorHeight={4}
           marginBottom={0}
         />

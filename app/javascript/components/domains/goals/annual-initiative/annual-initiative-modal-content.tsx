@@ -79,7 +79,7 @@ export const AnnualInitiativeModalContent = observer(
           <QuarterlyGoalContainer key={index}>
             <StatusBlockColorIndicator
               milestones={quarterlyGoal.milestones || []}
-              indicatorWidth={80}
+              indicatorWidth={"80px"}
               indicatorHeight={4}
               marginBottom={16}
             />
