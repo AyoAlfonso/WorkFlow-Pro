@@ -41,7 +41,7 @@ export const GoalModel = types
             let clonedGoal = R.clone(goal);
             clonedGoal.quarterlyGoals = goal.closedQuarterlyGoals as any;
             annualInitiatives.push(clonedGoal);
-          } 
+          }
           // else if (goal.closedSubInitiatives.length > 0) {
           //   let clonedGoal = R.clone(goal);
           //   clonedGoal.quarterlyGoals.subInitiatives = goal.closedSubInitiatives as any;

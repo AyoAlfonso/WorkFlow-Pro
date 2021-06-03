@@ -38,6 +38,8 @@ export const QuarterlyGoalStoreModel = types
       const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
       const responseQuarterlyGoal = response.data;
       self.quarterlyGoal = responseQuarterlyGoal;
+      console.log(responseQuarterlyGoal, "update--");
+
       showToast(
         il8n.t("quarterlyGoal.updated", { title: self.title }),
         ToastMessageConstants.SUCCESS,
