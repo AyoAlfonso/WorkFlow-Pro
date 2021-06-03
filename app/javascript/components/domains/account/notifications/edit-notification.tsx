@@ -32,8 +32,12 @@ export const EditNotification = observer(
         </HeaderContainer>
         <BodyContainer>
           <NotificationEditTableColumn>
-            <RenderNotificationTimeOptions />
-            <RenderNotificationDayOptions />
+            <NotificationOptionsContainer>
+              <RenderNotificationTimeOptions />
+            </NotificationOptionsContainer>
+            <NotificationOptionsContainer>
+              <RenderNotificationDayOptions />
+            </NotificationOptionsContainer>
           </NotificationEditTableColumn>
           <SaveButtonContainer>
             <Button
@@ -113,6 +117,10 @@ const RenderNotificationDayOptions = (): JSX.Element => {
     </Select>
   );
 };
+
+const NotificationOptionsContainer = styled.div`
+  margin-bottom: 16px;
+`
 
 export const HeaderTextAndIconContainer = styled.div`
   display: flex;

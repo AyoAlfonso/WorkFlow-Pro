@@ -1,7 +1,7 @@
-<p><%= simple_format(@message) %></p>
+<p style="font-size: 14pt"><%= simple_format(@message) %></p>
 
 <div style="
-  font-size: 14px;
+  font-size: 14pt;
 ">
 <p>✔️
 You have <strong style="color: #005FFE"><%= @todays_list.length %> Pyn<% if @todays_list.length != 1 %>s<% end %></strong> in <strong>Today's list</strong>:</p>
@@ -115,7 +115,7 @@ You also have <%= @due_today.length %> Pyn<% if @due_today.length == 1 %> that i
     border-radius: 4px;
     color: #FFFFFF;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 14pt;
     padding: 8px 16px;
     text-align: center;
     cursor: pointer;
