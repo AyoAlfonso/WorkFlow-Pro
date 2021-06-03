@@ -183,6 +183,14 @@ export const AnnualInitiativeModalContent = observer(
               />
             </DetailsContainer>
           </TitleContainer>
+          {!annualInitiative.closedAt && (
+            <AnnualInitiativeActionContainer>
+              {renderDropdownOptions()}
+              <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
+                <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+              </CloseIconContainer>
+            </AnnualInitiativeActionContainer>
+          )}
         </HeaderContainer>
       );
     };

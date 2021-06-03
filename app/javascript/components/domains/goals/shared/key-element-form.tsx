@@ -22,6 +22,7 @@ export const KeyElementForm = ({ onCreate, onClose }: IKeyElementFormProps): JSX
     { label: "Numerical #", value: "numerical" },
     { label: "Percentage %", value: "percentage" },
     { label: "Dollars $", value: "currency" },
+    { label: "Completion", value: "binary" },
   ];
 
   const resetForm = () => {
@@ -63,6 +64,8 @@ export const KeyElementForm = ({ onCreate, onClose }: IKeyElementFormProps): JSX
 
   const completionSymbol = () => {
     switch (completionType) {
+      case "binary":
+        return "";
       case "numerical":
         return "#";
       case "percentage":

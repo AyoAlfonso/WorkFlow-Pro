@@ -54,11 +54,7 @@ export const GoalModel = types
     get myAnnualInitiatives() {
       const { sessionStore } = getRoot(self);
       const userId = sessionStore.profile.id;
-      return self.goals.filter(
-        annualInitiative =>
-          annualInitiative.ownedById == userId ||
-          annualInitiative.quarterlyGoals.find(qg => qg.ownedById == userId),
-      );
+      return self.goals.filter(annualInitiative => annualInitiative.ownedById == userId);
     },
     get onlyShowMyQuarterlyGoals() {
       let goals = self.goals;

@@ -15,8 +15,8 @@ import { PersonalVision } from "./shared/personal-vision";
 import { CreateGoalSection } from "./shared/create-goal-section";
 import { useTranslation } from "react-i18next";
 import { GoalsCoreFour } from "./goals-core-four";
-import { SubInitiativeModalContent } from "./sub-initiative/sub-initiaitive-modal-content";
 import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge";
+import { SubInitiativeModalContent } from "./sub-initiative/sub-initiaitive-modal-content";
 
 export const GoalsIndex = observer(
   (): JSX.Element => {

@@ -246,7 +246,33 @@ export const SideNavNoMst = (
       <StyledNavLinkChildrenActive to="/" icon={"Home"} currentPathName={currentPathName}>
         {t("navigation.home")}
       </StyledNavLinkChildrenActive>
-      <StyledNavLinkChildrenActive to="/goals" icon={"Goals"} currentPathName={currentPathName}>
+
+      {company && company.accessForum ? renderForumOrTeam(R.path(["length"], teams) || 0) : <> </>}
+
+      {company && company.accessForum && !R.isNil(R.path(["0", "id"], teams)) ? (
+        <SideNavChildPopup
+          trigger={
+            <NavMenuIcon
+              icon={"Meeting"}
+              active={isNavMenuIconActive(currentPathName, "/meetings")}
+              disableOnActive={false}
+            >
+              {t("navigation.meetings")}
+            </NavMenuIcon>
+          }
+          navOpen={meetingsNavChildOpen}
+          setNavOpen={setMeetingsNavChildOpen}
+          setOtherNavOpen={[setTeamNavChildOpen, setCompanyNavChildOpen]}
+        >
+          <SideNavChildLink to="/meetings/section_1" linkText={t("forum.annualHub")} />
+          <SideNavChildLink to="/meetings/section_2" linkText={t("forum.upcomingHub")} />
+          <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")} />
+        </SideNavChildPopup>
+      ) : (
+          <> </>
+        )}
+
+      <StyledNavLinkChildrenActive to="/goals" icon={"New-Goals"} currentPathName={currentPathName}>
         {t("navigation.goals")}
       </StyledNavLinkChildrenActive>
 
@@ -276,31 +302,6 @@ export const SideNavNoMst = (
             to="/company/strategic_plan"
             linkText={`The ${company && company.name} Plan`}
           />
-        </SideNavChildPopup>
-      ) : (
-          <> </>
-        )}
-
-      {company && company.accessForum ? renderForumOrTeam(R.path(["length"], teams) || 0) : <> </>}
-
-      {company && company.accessForum && !R.isNil(R.path(["0", "id"], teams)) ? (
-        <SideNavChildPopup
-          trigger={
-            <NavMenuIcon
-              icon={"Meeting"}
-              active={isNavMenuIconActive(currentPathName, "/meetings")}
-              disableOnActive={false}
-            >
-              {t("navigation.meetings")}
-            </NavMenuIcon>
-          }
-          navOpen={meetingsNavChildOpen}
-          setNavOpen={setMeetingsNavChildOpen}
-          setOtherNavOpen={[setTeamNavChildOpen, setCompanyNavChildOpen]}
-        >
-          <SideNavChildLink to="/meetings/section_1" linkText={t("forum.annualHub")} />
-          <SideNavChildLink to="/meetings/section_2" linkText={t("forum.upcomingHub")} />
-          <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")} />
         </SideNavChildPopup>
       ) : (
           <> </>
