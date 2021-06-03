@@ -38,6 +38,7 @@ import { Meeting } from "./domains/meetings/meeting";
 import { PersonalPlanning } from "./domains/meetings/personal-planning";
 import { JournalIndex } from "~/components/domains/journal/journal-index";
 import { NotesIndex } from "~/components/domains/notes/notes-index";
+import { ScorecardsIndex } from "~/components/domains/scorecards/scorecards-index"
 
 import { Section1 } from "./domains/meetings-forum/section-1";
 import { Section2 } from "./domains/meetings-forum/section-2";
@@ -187,6 +188,7 @@ export const App = observer(
                       "/company/accountability",
                       "/company/strategic_plan",
                       "/goals",
+                      "/scorecards",
                       "/journals",
                       "/notes",
                       "/forum",
@@ -219,6 +221,7 @@ export const App = observer(
                         />
                         <Route exact path="/company/strategic_plan" component={StrategicPlan} />
                         <Route exact path="/goals" component={GoalsIndex} />
+                        <Route exact path="/scorecards" component={ScorecardsIndex} />
                         <Route exact path="/journals" component={JournalIndex} />
                         <Route exact path="/notes" component={NotesIndex} />
                         <Route exact path="/forum" component={ForumNotSetup} />

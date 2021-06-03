@@ -48,7 +48,9 @@ export const HeaderText = observer(
             return <></>;
         }
       case "goals":
-        return <> Objectives </>;
+        return <> {t("goals.indexTitle")} </>;
+      case "scorecards":
+        return <> {t("scorecards.indexTitle")} </>;
       case "account":
         return <> {t("profile.accountSettings")} </>;
       case "notes":

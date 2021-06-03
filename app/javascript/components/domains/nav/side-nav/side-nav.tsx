@@ -276,6 +276,10 @@ export const SideNavNoMst = (
         {t("navigation.goals")}
       </StyledNavLinkChildrenActive>
 
+      <StyledNavLinkChildrenActive to="/scorecards" icon={"Scorecards"} currentPathName={currentPathName}>
+        {t("navigation.scorecards")}
+      </StyledNavLinkChildrenActive>
+
       {company && company.accessCompany ? renderForumOrTeam(R.path(["length"], teams) || 0, false) : <> </>}
 
       {company && company.accessCompany ? (
