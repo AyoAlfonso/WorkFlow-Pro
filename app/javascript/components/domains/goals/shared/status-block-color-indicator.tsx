@@ -9,7 +9,7 @@ import { MilestoneType } from "~/types/milestone";
 
 interface IStatusBlockColorIndicatorProps {
   milestones: Array<MilestoneType>;
-  indicatorWidth: number;
+  indicatorWidth: string;
   indicatorHeight: number;
   marginBottom?: number;
   marginTop?: number;
@@ -69,12 +69,12 @@ const Container = styled.div<ContainerType>`
 
 type StatusBlockType = {
   backgroundColor?: string;
-  indicatorWidth: number;
+  indicatorWidth: string;
   indicatorHeight: number;
 };
 
 const StatusBlock = styled.div<StatusBlockType>`
-  width: ${props => props.indicatorWidth}px;
+  width: ${props => props.indicatorWidth};
   height: ${props => props.indicatorHeight || 5}px;
   border-radius: 5px;
   margin-right: 2px;

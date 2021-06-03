@@ -130,7 +130,7 @@ export const SubInitiativeGoalCard = observer(
         >
           <StatusBlockColorIndicator
             milestones={subInitiative.milestones || []}
-            indicatorWidth={14}
+            indicatorWidth={"100%"}
             indicatorHeight={2}
             marginTop={4}
           />

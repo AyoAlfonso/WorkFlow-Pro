@@ -143,7 +143,7 @@ export const QuarterlyGoalCard = observer(
         >
           <StatusBlockColorIndicator
             milestones={quarterlyGoal.milestones || []}
-            indicatorWidth={14}
+            indicatorWidth={"100%"}
             indicatorHeight={2}
             marginTop={4}
           />
