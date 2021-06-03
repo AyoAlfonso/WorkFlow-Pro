@@ -24,9 +24,35 @@ export const AnnualInitiativeCardMinimized = observer(
     setShowMinimizedCard,
     showMinimizedCard,
   }: IAnnualInitiativeCardMinimizedProps): JSX.Element => {
-   
-    const { warningRed, cautionYellow, finePine, grey60, grey40 } = baseTheme.colors;
+
+    const { companyStore } = useMst();
+    const { currentFiscalYear } = companyStore.company
+    const {
+      warningRed,
+      cautionYellow,
+      finePine,
+      grey40,
+      grey100,
+      white,
+      primary100
+    } = baseTheme.colors;
     const milestoneCounts = [];
+
+    let statusBadge = {
+      description: "",
+      colors: {
+        backgroundColor: "",
+        color: "",
+      },
+    };
+
+    if (annualInitiative.closedInitiative) {
+      statusBadge.description = `Closed - FY${annualInitiative.fiscalYear % 100}/${(annualInitiative.fiscalYear + 1) % 100}`;
+      statusBadge.colors = { color: white, backgroundColor: grey100 };
+    } else if (currentFiscalYear < annualInitiative.fiscalYear) {
+      statusBadge.description = `Upcoming - FY${annualInitiative.fiscalYear % 100}/${(annualInitiative.fiscalYear + 1) % 100}`;
+      statusBadge.colors = { color: white, backgroundColor: primary100 };
+    }
 
     // TODOIT: RETURN milestoneCounts BACK to zero
     let milestones = [
@@ -48,38 +74,48 @@ export const AnnualInitiativeCardMinimized = observer(
         count: 0,
       },
     ];
-    annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
-      //if there is no currentMilestone, use the last milestone, assuming this is past the 13th week
-      let currentMilestone;
-      currentMilestone = quarterlyGoal.milestones.find(milestone =>
+
+    const milestoneProgressCounter = (goal) => {
+
+      // if there is no currentMilestone, use the last milestone, assuming this is past the 13th week
+      let currentMilestone = goal.milestones.find((milestone: { weekOf: moment.MomentInput; }) =>
         moment(milestone.weekOf).isSame(moment(), "week"),
       );
       if (!currentMilestone) {
-        currentMilestone = quarterlyGoal.milestones[quarterlyGoal.milestones.length - 1];
+        currentMilestone = goal.milestones[goal.milestones.length - 1];
       }
 
       if (currentMilestone && currentMilestone.status) {
         switch (currentMilestone.status) {
           case "completed":
-            milestones[0].count++;
+            milestones[0].count++
             break;
           case "in_progress":
-            milestones[1].count++;
+            milestones[1].count++
             break;
           case "incomplete":
-            milestones[2].count++;
+            milestones[2].count++
             break;
           case "unstarted":
-            milestones[3].count++;
+            milestones[3].count++
             break;
         }
       } else {
-        milestones[3].count++;
+        milestones[3].count++
       }
+    }
+    annualInitiative.quarterlyGoals.map((quarterlyGoal) => {
+
+      milestoneProgressCounter(quarterlyGoal)
+
+      quarterlyGoal.subInitiatives.map(milestoneProgressCounter)
+
     });
 
     let gradient = "";
-    const annualQtrGoalsLength = annualInitiative.quarterlyGoals.length;
+    const annualQtrGoalsLength = annualInitiative.quarterlyGoals.length +
+      annualInitiative.quarterlyGoals
+        .reduce((acc: number, quarterlyGoal) => acc + quarterlyGoal.subInitiatives.length, 0);
     milestones.forEach((obj, index) => {
       let margin = 0;
       if (index > 0) {
@@ -130,17 +166,28 @@ export const AnnualInitiativeCardMinimized = observer(
           e.stopPropagation();
         }}
       >
-        <OwnedBySection
-          ownedBy={annualInitiative.ownedBy}
-          type={"annualInitiative"}
-          disabled={true}
-          size={16}
-          fontSize={"12px"}
-          marginLeft={"16px"}
-          marginRight={"0px"}
-          marginTop={"auto"}
-          marginBottom={"auto"}
-        />
+        <RowContainer mt={0} mb={0}>
+          <OwnedBySection
+            ownedBy={annualInitiative.ownedBy}
+            type={"annualInitiative"}
+            disabled={true}
+            size={16}
+            fontSize={"11px"}
+            marginLeft={"16px"}
+            marginRight={"0px"}
+            marginTop={"auto"}
+            marginBottom={"auto"}
+          />
+          <BadgeContainer>
+            <StatusBadge
+              color={statusBadge.colors.color}
+              backgroundColor={statusBadge.colors.backgroundColor}
+            >
+              {" "}
+              {statusBadge.description}{" "}
+            </StatusBadge>
+          </BadgeContainer>
+        </RowContainer>
 
         <InitiativeCountContainer>{renderCounts()}</InitiativeCountContainer>
 
@@ -171,14 +218,28 @@ export const AnnualInitiativeCardMinimized = observer(
   },
 );
 
+type RowContainerProps = {
+  mb?: number;
+  mt?: number;
+};
+
+const RowContainer = styled.div<RowContainerProps>`
+  display: flex;
+  margin-top: ${props => `${props.mt}%` || "auto"};
+  margin-bottom: ${props => `${props.mb}%` || "auto"};
+`;
+
 const Container = styled.div`
   ${color}
   background-color: ${props => props.theme.colors.backgroundGrey};
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   width: auto;
+  height: 32px;
   cursor: pointer;
 `;
 
@@ -215,6 +276,7 @@ const ShowInitiativeBar = styled.div`
   color: #005ffe;
   font-size: 12px;
   font-weight: bold;
+  white-space: nowrap;
 `;
 //TODOIT: add blue color above to constants
 const StatusSquareContainer = styled.div`
@@ -257,4 +319,27 @@ const StyledIcon = styled(Icon)`
    -webkit-animation-delay: 3.5s;
    -o-animation-delay: 3.5s;
     animation-delay: 3.5s;
+`;
+
+type StatusBadgeType = {
+  color: string;
+  backgroundColor: string;
+};
+
+const StatusBadge = styled.div<StatusBadgeType>`
+  font-size: 9px;
+  font-weight: 900;
+  background-color: ${props => props.backgroundColor};
+  color: ${props => props.color};
+  padding: 2px;
+  text-align: center;
+  border-radius: 2px;
+  white-space: nowrap;
+`;
+
+const BadgeContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 16px;
+  align-items: center;
 `;

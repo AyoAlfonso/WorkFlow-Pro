@@ -53,15 +53,16 @@ const VisionTitle = styled.p`
   color: ${props => props.theme.colors.primary100};
   margin-top: auto;
   margin-bottom: auto;
-  margin-left: 32px;
-  margin-right: 32px;
+  margin-left: 16px;
+  margin-right: 16px;
   display: flex;
   align-items: center;
   height: inherit;
-  position: absolute;
+  white-space: nowrap;
 `;
 
 const StyledContentEditable = styled(ContentEditable)`
+  display: block;
   font-size: 21px;
   margin-left: auto;
   margin-right: auto;
@@ -70,4 +71,7 @@ const StyledContentEditable = styled(ContentEditable)`
   padding: 5px;
   text-transform: capitalize;
   font-weight: 700;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 `;
