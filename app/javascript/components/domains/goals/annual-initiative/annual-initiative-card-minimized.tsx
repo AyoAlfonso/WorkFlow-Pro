@@ -24,9 +24,8 @@ export const AnnualInitiativeCardMinimized = observer(
     setShowMinimizedCard,
     showMinimizedCard,
   }: IAnnualInitiativeCardMinimizedProps): JSX.Element => {
-
     const { companyStore } = useMst();
-    const { currentFiscalYear } = companyStore.company
+    const { currentFiscalYear } = companyStore.company;
     const {
       warningRed,
       cautionYellow,
@@ -34,11 +33,10 @@ export const AnnualInitiativeCardMinimized = observer(
       grey40,
       grey100,
       white,
-      primary100
+      primary100,
     } = baseTheme.colors;
     const milestoneCounts = [];
-
-    let statusBadge = {
+    const statusBadge = {
       description: "",
       colors: {
         backgroundColor: "",
@@ -47,15 +45,17 @@ export const AnnualInitiativeCardMinimized = observer(
     };
 
     if (annualInitiative.closedInitiative) {
-      statusBadge.description = `Closed - FY${annualInitiative.fiscalYear % 100}/${(annualInitiative.fiscalYear + 1) % 100}`;
+      statusBadge.description = `Closed - FY${annualInitiative.fiscalYear %
+        100}/${(annualInitiative.fiscalYear + 1) % 100}`;
       statusBadge.colors = { color: white, backgroundColor: grey100 };
     } else if (currentFiscalYear < annualInitiative.fiscalYear) {
-      statusBadge.description = `Upcoming - FY${annualInitiative.fiscalYear % 100}/${(annualInitiative.fiscalYear + 1) % 100}`;
+      statusBadge.description = `Upcoming - FY${annualInitiative.fiscalYear %
+        100}/${(annualInitiative.fiscalYear + 1) % 100}`;
       statusBadge.colors = { color: white, backgroundColor: primary100 };
     }
 
     // TODOIT: RETURN milestoneCounts BACK to zero
-    let milestones = [
+    const milestones = [
       {
         color: finePine,
         count: 0,
@@ -68,17 +68,15 @@ export const AnnualInitiativeCardMinimized = observer(
         color: warningRed,
         count: 0,
       },
-
       {
         color: grey40,
         count: 0,
       },
     ];
 
-    const milestoneProgressCounter = (goal) => {
-
+    const milestoneProgressCounter = goal => {
       // if there is no currentMilestone, use the last milestone, assuming this is past the 13th week
-      let currentMilestone = goal.milestones.find((milestone: { weekOf: moment.MomentInput; }) =>
+      let currentMilestone = goal.milestones.find((milestone: { weekOf: moment.MomentInput }) =>
         moment(milestone.weekOf).isSame(moment(), "week"),
       );
       if (!currentMilestone) {
@@ -88,34 +86,34 @@ export const AnnualInitiativeCardMinimized = observer(
       if (currentMilestone && currentMilestone.status) {
         switch (currentMilestone.status) {
           case "completed":
-            milestones[0].count++
+            milestones[0].count++;
             break;
           case "in_progress":
-            milestones[1].count++
+            milestones[1].count++;
             break;
           case "incomplete":
-            milestones[2].count++
+            milestones[2].count++;
             break;
           case "unstarted":
-            milestones[3].count++
+            milestones[3].count++;
             break;
         }
       } else {
-        milestones[3].count++
+        milestones[3].count++;
       }
-    }
-    annualInitiative.quarterlyGoals.map((quarterlyGoal) => {
-
-      milestoneProgressCounter(quarterlyGoal)
-
-      quarterlyGoal.subInitiatives.map(milestoneProgressCounter)
-
+    };
+    annualInitiative.quarterlyGoals.map(quarterlyGoal => {
+      milestoneProgressCounter(quarterlyGoal);
+      quarterlyGoal.subInitiatives.map(milestoneProgressCounter);
     });
 
     let gradient = "";
-    const annualQtrGoalsLength = annualInitiative.quarterlyGoals.length +
-      annualInitiative.quarterlyGoals
-        .reduce((acc: number, quarterlyGoal) => acc + quarterlyGoal.subInitiatives.length, 0);
+    const annualQtrGoalsLength =
+      annualInitiative.quarterlyGoals.length +
+      annualInitiative.quarterlyGoals.reduce(
+        (acc: number, quarterlyGoal) => acc + quarterlyGoal.subInitiatives.length,
+        0,
+      );
     milestones.forEach((obj, index) => {
       let margin = 0;
       if (index > 0) {
