@@ -42,7 +42,7 @@ export const HomeGoals = observer(
       goalStore.load().then(() => setLoading(false));
     }, []);
 
-    if (loading || R.isNil(goalStore.companyGoals) || !companyStore.company){
+    if (loading || R.isNil(goalStore.companyGoals) || !companyStore.company) {
       return <Loading />;
     }
 
