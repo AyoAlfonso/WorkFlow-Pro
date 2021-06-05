@@ -304,11 +304,8 @@ const Container = styled.div``;
 const InitiativesContainer = styled.div`
   display: -webkit-box;
   margin-top: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
   padding-bottom: 16px;
-  white-space: nowrap;
-  overflow-x: scroll;
+  overflow-x: auto;
 `;
 
 const PersonalInitiativesContainer = styled.div`
@@ -324,7 +321,10 @@ const StyledModal = Modal.styled`
 `;
 
 const CreateAnnualInitiativeContainer = styled.div`
-  margin-left: 8px;
+  width: calc(20% - 16px);
+  min-width: 240px;
+  padding-left: 8px;
+  padding-right: 8px;
 `;
 
 const CompanyInitiativesContainer = styled.div``;

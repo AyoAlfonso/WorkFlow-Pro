@@ -3,8 +3,6 @@ import styled from "styled-components";
 import { Text } from "../../../shared/text";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
 import { UserIconBorder } from "../shared/user-icon-border";
-import { Avatar } from "~/components/shared/avatar";
-import * as R from "ramda";
 import { baseTheme } from "../../../../themes";
 import { QuarterlyGoalType } from "~/types/quarterly-goal";
 import { RecordOptions } from "../shared/record-options";
@@ -145,7 +143,7 @@ export const QuarterlyGoalCard = observer(
         >
           <StatusBlockColorIndicator
             milestones={quarterlyGoal.milestones || []}
-            indicatorWidth={14}
+            indicatorWidth={"100%"}
             indicatorHeight={2}
             marginTop={4}
           />
@@ -159,7 +157,6 @@ export const QuarterlyGoalCard = observer(
                   iconColor={"#868DAA"}
                 />
               )}
-              {goalCardType == "parent" && renderQuarterDisplay()}
               <StyledText>{quarterlyGoal.description}</StyledText>
             </DescriptionContainer>
 
@@ -227,7 +224,8 @@ const StyledText = styled(Text)`
   padding-right: 4px;
   white-space: normal;
   font-size: 14px;
-  width: 160px;
+  width: 95%;
+  min-width: 180px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -283,7 +281,6 @@ type StatusBadgeType = {
   backgroundColor: string;
 };
 
-// TODOIST: Update the color constant
 const StatusBadge = styled.div<StatusBadgeType>`
   font-size: 9px;
   font-weight: 900;
@@ -292,6 +289,7 @@ const StatusBadge = styled.div<StatusBadgeType>`
   padding: 2px;
   text-align: center;
   border-radius: 2px;
+  white-space: nowrap;
 `;
 
 const BadgeContainer = styled.div`

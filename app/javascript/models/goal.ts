@@ -41,12 +41,7 @@ export const GoalModel = types
             let clonedGoal = R.clone(goal);
             clonedGoal.quarterlyGoals = goal.closedQuarterlyGoals as any;
             annualInitiatives.push(clonedGoal);
-          } 
-          // else if (goal.closedSubInitiatives.length > 0) {
-          //   let clonedGoal = R.clone(goal);
-          //   clonedGoal.quarterlyGoals.subInitiatives = goal.closedSubInitiatives as any;
-          //   annualInitiatives.push(clonedGoal);
-          // }
+          }
         }
       });
       return annualInitiatives;
@@ -54,7 +49,17 @@ export const GoalModel = types
     get myAnnualInitiatives() {
       const { sessionStore } = getRoot(self);
       const userId = sessionStore.profile.id;
-      return self.goals.filter(annualInitiative => annualInitiative.ownedById == userId);
+      let annualInitiatives = [];
+      self.goals.forEach(goal => {
+        if (!goal.closedAt) {
+          if (!R.contains(goal.id, R.pluck("id", annualInitiatives)) && goal.ownedById == userId) {
+            let clonedGoal = R.clone(goal);
+            clonedGoal.quarterlyGoals = goal.openPersonalQuarterlyGoals as any;
+            annualInitiatives.push(clonedGoal);
+          }
+        }
+      });
+      return annualInitiatives;
     },
     get onlyShowMyQuarterlyGoals() {
       let goals = self.goals;

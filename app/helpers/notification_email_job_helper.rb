@@ -13,9 +13,9 @@ module NotificationEmailJobHelper
   def send_evening_reflection_reminder_email(user, notification_type)
     UserMailer.with(
       user: user,
-      subject: "#{@user&.first_name}, Time for Your Evening Reflection",
+      subject: "#{user&.first_name}, Time for Your Evening Reflection",
       greeting: "Good Evening #{user&.first_name}!",
-      message: "Check into your personal dashboard and reflect your day:",
+      message: "Remember we don't learn from our experiences, we learn from reflecting on our experiences! Take some time to reflect. Your future self will be glad you did.",
       cta_text: "Evening Reflection",
       cta_url: "" #home
     ).notification_email.deliver_later
@@ -36,8 +36,10 @@ module NotificationEmailJobHelper
       team: team,
       subject: "#{user&.first_name}, Your Upcoming Weekly Alignment Meeting",
       greeting: "Hi #{user&.first_name}!",
-      message: "You have an upcoming Weekly Alignment Meeting with your team. Go to the team page and start the meeting:"
-    ).team_meeting_email.deliver_later
+      message: "You have an upcoming Weekly Alignment Meeting with your team. Go to the team page and start the meeting:",
+      cta_text: "Weekly Alignment Meeting",
+      cta_url: "/team/#{team.id}"
+    ).notification_email.deliver_later
   end
 
   def send_weekly_planning_email(user, notification_type)

@@ -130,7 +130,7 @@ export const SubInitiativeGoalCard = observer(
         >
           <StatusBlockColorIndicator
             milestones={subInitiative.milestones || []}
-            indicatorWidth={14}
+            indicatorWidth={"100%"}
             indicatorHeight={2}
             marginTop={4}
           />
@@ -197,7 +197,8 @@ const StyledText = styled(Text)`
   padding-right: 4px;
   white-space: normal;
   font-size: 14px;
-  width: 160px;
+  width: 95%;
+  min-width: 160px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -257,6 +258,7 @@ const StatusBadge = styled.div<StatusBadgeType>`
   padding: 2px;
   text-align: center;
   border-radius: 2px;
+  white-space: nowrap;
 `;
 
 const BadgeContainer = styled.div`

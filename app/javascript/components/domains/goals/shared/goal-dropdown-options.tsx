@@ -186,6 +186,7 @@ const IconContainer = styled.div`
 const OptionText = styled(TextContainer)`
   color: ${props => props.theme.colors.black};
   margin-left: 8px;
+  white-space: nowrap;
 `;
 
 export const StyledIcon = styled(Icon)``;

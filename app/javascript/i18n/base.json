@@ -105,7 +105,7 @@
           "title": "Edit User"
         },
         "rallyingCry": "LynchPyn™ Goal",
-        "rallyingCryPlaceholder": "Write the most important thing you have to achieve in the upcoming year...",
+        "rallyingCryPlaceholder": "Write the most important thing you have to achieve this year...",
         "create": "Create",
         "edit": "Edit",
         "newCompany": "Company",
@@ -318,7 +318,7 @@
       },
       "personal": {
         "vision": "Future Self",
-        "placeholder": "Describe what the ideal, future you will look like, in one statement..."
+        "placeholder": "Describe what the ideal future you will look like, in one statement..."
       },
       "onboarding": {
         "continue": "Resume {{format}} creation"

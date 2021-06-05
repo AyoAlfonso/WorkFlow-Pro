@@ -44,7 +44,7 @@ export const ForumWelcomeModal = observer(
         width="65rem"
         onCloseAction={() => {
           updateUserCompanyFirstTimeAccess({
-            companyId: profile.defaultSelectedCompanyId,
+            companyId: company.id,
             firstTimeAccess: false,
           });
         }}

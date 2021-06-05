@@ -66,12 +66,32 @@ export const AnnualInitiativeModel = types
     get closedQuarterlyGoals() {
       const quarterlyGoals = [];
       self.quarterlyGoals
-        .filter(qg => !qg.closedAt && qg.subInitiatives.find(si => si.closedAt) || (qg.closedAt))
+        .filter(qg => !qg.closedAt && qg.subInitiatives.find(si => si.closedAt) || qg.closedAt)
         .forEach(qg => {
           quarterlyGoals.push(
             Object.assign(
               { ...qg },
               { subInitiatives: qg.subInitiatives.filter(si => si.closedAt) },
+            ),
+          );
+        });
+      return quarterlyGoals;
+    },
+    get openPersonalQuarterlyGoals() {
+      const { sessionStore } = getRoot(self);
+      const userId = sessionStore.profile.id
+      const quarterlyGoals = [];
+      self.quarterlyGoals
+        .filter(qg => !qg.closedAt && qg.ownedById == userId)
+        .forEach(qg => {
+          quarterlyGoals.push(
+            Object.assign(
+              { ...qg },
+              {
+                subInitiatives: qg.subInitiatives.filter(
+                  si => !si.closedAt && si.ownedById == userId,
+                ),
+              },
             ),
           );
         });
