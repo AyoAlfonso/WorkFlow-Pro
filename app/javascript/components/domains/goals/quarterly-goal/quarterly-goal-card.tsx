@@ -225,7 +225,7 @@ const StyledText = styled(Text)`
   white-space: normal;
   font-size: 14px;
   width: 95%;
-  min-width: 190px;
+  min-width: 180px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
