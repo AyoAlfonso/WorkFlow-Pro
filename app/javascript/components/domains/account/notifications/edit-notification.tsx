@@ -32,8 +32,12 @@ export const EditNotification = observer(
         </HeaderContainer>
         <BodyContainer>
           <NotificationEditTableColumn>
-            <RenderNotificationTimeOptions />
-            <RenderNotificationDayOptions />
+            <NotificationOptionsContainer>
+              <RenderNotificationTimeOptions />
+            </NotificationOptionsContainer>
+            <NotificationOptionsContainer>
+              <RenderNotificationDayOptions />
+            </NotificationOptionsContainer>
           </NotificationEditTableColumn>
           <SaveButtonContainer>
             <Button
@@ -79,7 +83,8 @@ const RenderNotificationTimeOptions = (): JSX.Element => {
 
 const RenderNotificationDayOptions = (): JSX.Element => {
   const { t } = useTranslation();
-  let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  // let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  let days = ["Friday", "Saturday", "Sunday", "Monday"];
   const [notificationDay, setNotificationDay] = useState();
   const { notificationStore } = useMst();
   const { notificationToEdit } = notificationStore;
@@ -112,6 +117,10 @@ const RenderNotificationDayOptions = (): JSX.Element => {
     </Select>
   );
 };
+
+const NotificationOptionsContainer = styled.div`
+  margin-bottom: 16px;
+`
 
 export const HeaderTextAndIconContainer = styled.div`
   display: flex;

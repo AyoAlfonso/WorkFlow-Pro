@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Text } from "../../../shared/text";
 import { useRef } from "react";
 import { useMst } from "~/setup/root";
+import { observer } from "mobx-react";
 import { Button } from "~/components/shared/button";
 import { IndividualVerticalStatusBlockColorIndicator } from "../shared/individual-vertical-status-block-color-indicator";
 import * as moment from "moment";
@@ -17,66 +18,64 @@ interface IMilestoneCardProps {
   itemType: string;
 }
 
-export const MilestoneCard = ({
-  milestone,
-  editable,
-  fromMeeting,
-  itemType,
-}: IMilestoneCardProps): JSX.Element => {
-  const { quarterlyGoalStore, subInitiativeStore, milestoneStore } = useMst();
+export const MilestoneCard = observer(
+  ({ milestone, editable, fromMeeting, itemType }: IMilestoneCardProps): JSX.Element => {
+    const { quarterlyGoalStore, subInitiativeStore, milestoneStore } = useMst();
 
-  const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
+    const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
 
-  const descriptionRef = useRef(null);
+    const descriptionRef = useRef(null);
 
-  const unstarted = milestone.status == "unstarted";
-  const currentWeek = moment(milestone.weekOf).isSame(moment(), "week");
+    const unstarted = milestone.status == "unstarted";
+    const currentWeek = moment(milestone.weekOf).isSame(moment(), "week");
+    const descriptionText = useRef(milestone.description || "");
 
-  return (
-    <MilestoneContainer>
-      <MilestoneDetails unstarted={unstarted} currentWeek={currentWeek}>
-        <WeekOfText unstarted={unstarted}>
-          Week {milestone.week}: Week of{" "}
-          <WeekOfTextValue>{moment(milestone.weekOf).format("MMMM D")}</WeekOfTextValue>
-        </WeekOfText>
-        <MilestoneContentEditable
-          innerRef={descriptionRef}
-          html={milestone.description}
-          disabled={!editable}
-          placeholder={"Enter Description"}
-          onChange={e => {
-            if (!e.target.value.includes("<div>")) {
-              if (fromMeeting) {
-                milestoneStore.updateDescriptionFromPersonalMeeting(milestone.id, e.target.value);
-              } else {
-                mobxStore.updateMilestoneDescription(milestone.id, e.target.value);
+    const handleChange = e => {
+      if (!e.target.value.includes("<div>")) {
+        descriptionText.current = e.target.value;
+      }
+    };
+
+    const handleBlur = () => {
+      if (fromMeeting) {
+        milestoneStore.updateDescriptionFromPersonalMeeting(milestone.id, descriptionText.current);
+      } else {
+        mobxStore.updateMilestoneDescription(milestone.id, descriptionText.current);
+      }
+    };
+
+    return (
+      <MilestoneContainer>
+        <MilestoneDetails unstarted={unstarted} currentWeek={currentWeek}>
+          <WeekOfText unstarted={unstarted}>
+            Week {milestone.week}: Week of{" "}
+            <WeekOfTextValue>{moment(milestone.weekOf).format("MMMM D")}</WeekOfTextValue>
+          </WeekOfText>
+          <MilestoneContentEditable
+            innerRef={descriptionRef}
+            html={descriptionText.current}
+            disabled={!editable}
+            placeholder={"Enter Description"}
+            onChange={handleChange}
+            onKeyDown={key => {
+              if (key.keyCode == 13) {
+                descriptionRef.current.blur();
               }
-            }
-          }}
-          onKeyDown={key => {
-            if (key.keyCode == 13) {
-              descriptionRef.current.blur();
-            }
-          }}
-          onBlur={() => {
-            if (fromMeeting) {
-              milestoneStore.updateMilestoneFromPersonalMeeting(milestone.id);
-            } else {
-              mobxStore.update();
-            }
-          }}
+            }}
+            onBlur={handleBlur}
+          />
+        </MilestoneDetails>
+        <IndividualVerticalStatusBlockColorIndicator
+          milestone={milestone}
+          milestoneStatus={milestone.status}
+          editable={editable}
+          fromMeeting={fromMeeting}
+          itemType={itemType}
         />
-      </MilestoneDetails>
-      <IndividualVerticalStatusBlockColorIndicator
-        milestone={milestone}
-        milestoneStatus={milestone.status}
-        editable={editable}
-        fromMeeting={fromMeeting}
-        itemType={itemType}
-      />
-    </MilestoneContainer>
-  );
-};
+      </MilestoneContainer>
+    );
+  },
+);
 
 const MilestoneContainer = styled.div`
   display: flex;

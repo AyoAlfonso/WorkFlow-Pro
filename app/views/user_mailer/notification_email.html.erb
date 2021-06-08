@@ -1,17 +1,25 @@
-<%= simple_format(@message) %>
+<p style="font-size: 14pt"><%= @message %></p>
 
-<div style="display: flex; justify-content: center; margin-top: 80px; margin-bottom: 30px;">
+<div style="
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  margin-top: 30px; 
+  margin-bottom: 30px;
+">
   <div style="
     background-color: #005ffe;
-    border-radius: 8px;
+    border-radius: 4px;
     color: #FFFFFF;
     font-weight: 500;
-    padding: 14px 19px;
-    width: 175px;
+    font-size: 14pt;
+    padding: 8px 16px;
     text-align: center;
     cursor: pointer;
+    line-height: 120%;
+    display: block;
   ">
-    <a target="_blank" style="text-decoration: none; color: #FFFFFF; cursor: pointer;" href=<%="#{ENV["HOST_URL"]}#{@cta_url}"%>>
+    <a target="_blank" style="text-decoration: none; color: #FFFFFF; cursor: pointer; line-height: 19.2px" href=<%="#{ENV["HOST_URL"]}#{@cta_url}"%>>
       <%= @cta_text %>
     </a>
   </div>

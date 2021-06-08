@@ -43,6 +43,7 @@ export const MilestoneStoreModel = types
         milestone => milestone.id == id,
       );
       self.milestonesForPersonalMeeting[milestoneIndex]["description"] = description;
+      self.updateMilestoneFromPersonalMeeting(id);
     },
     updateStatusFromPersonalMeeting(id, status) {
       const milestoneIndex = self.milestonesForPersonalMeeting.findIndex(

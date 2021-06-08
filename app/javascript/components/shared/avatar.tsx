@@ -37,10 +37,10 @@ const ImageContainer = styled.div<ImageContainerProps>`
   width: ${props => props.size || 48}px;
   height: ${props => props.size || 48}px;
   min-width: ${props => props.size || 48}px;
-  margin-left: ${props => props.marginLeft || "auto"};
-  margin-right: ${props => props.marginRight || "auto"};
-  margin-top: ${props => props.marginTop||"auto"};
-  margin-bottom: ${props => props.marginBottom||"auto"};
+  margin-left: ${props => props.marginLeft || "0px"};
+  margin-right: ${props => props.marginRight || "0px"};
+  margin-top: ${props => props.marginTop || "auto"};
+  margin-bottom: ${props => props.marginBottom || "auto"};
 `;
 
 export const Avatar = ({

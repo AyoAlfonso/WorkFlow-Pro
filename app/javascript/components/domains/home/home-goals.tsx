@@ -16,7 +16,7 @@ import { PersonalVision } from "../goals/shared/personal-vision";
 
 export const HomeGoals = observer(
   (): JSX.Element => {
-    const { goalStore } = useMst();
+    const { goalStore, companyStore } = useMst();
 
     const [loading, setLoading] = useState<boolean>(true);
     const [annualInitiativeModalOpen, setAnnualInitiativeModalOpen] = useState<boolean>(false);
@@ -38,12 +38,11 @@ export const HomeGoals = observer(
     const [showCompanyInitiatives, setShowCompanyInitiatives] = useState<boolean>(true);
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
 
-
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
     }, []);
 
-    if (loading || R.isNil(goalStore.companyGoals)) {
+    if (loading || R.isNil(goalStore.companyGoals) || !companyStore.company) {
       return <Loading />;
     }
 
@@ -71,7 +70,7 @@ export const HomeGoals = observer(
     const companyGoalsToShow = () => {
       switch (companyGoalsFilter) {
         case "all":
-          return companyGoals.goals;
+          return companyGoals.activeAnnualInitiatives;
         case "me":
           return companyGoals.myAnnualInitiatives;
         case "closed":
@@ -84,7 +83,7 @@ export const HomeGoals = observer(
     const personalGoalsToShow = () => {
       switch (personalGoalsFilter) {
         case "all":
-          return personalGoals.goals;
+          return personalGoals.activeAnnualInitiatives;
         case "closed":
           return personalGoals.closedAnnualInitiatives;
         default:
@@ -121,7 +120,8 @@ export const HomeGoals = observer(
             goalsFilter={companyGoalsFilter}
             setGoalsFilter={setCompanyGoalsFilter}
             largeHomeTitle={true}
-            title={"Company"}
+            type={"Company"}
+            title={companyStore.company.name}
             handleToggleChange={toggleCompanyPlanning}
             toggleChecked={companyPlanning}
             showInitiatives={showCompanyInitiatives}
@@ -188,7 +188,7 @@ export const HomeGoals = observer(
           />
         </StyledModal>
 
-          <StyledModal
+        <StyledModal
           isOpen={subInitiativeModalOpen}
           style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
           onBackgroundClick={e => {

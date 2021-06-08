@@ -15,19 +15,24 @@ import {
   KeyActivitiesWrapperContainer,
   KeyActivitiesListContainer,
 } from "../../key-activities/key-activities-list";
-import { FilterDropdown } from "../../key-activities/filter-dropdown";
 import { KeyActivitiesSubHeader } from "../../key-activities/key-activities-sub-header";
-import * as R from "ramda";
 import { StyledIcon } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
 import { useTranslation } from "react-i18next";
 
 export interface IHomeKeyActivities {
   todayOnly?: boolean;
+  weeklyOnly?: boolean;
   width?: string;
+  setQuestionnaireVariant?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const HomeKeyActivities = observer(
-  ({ todayOnly = false, width }: IHomeKeyActivities): JSX.Element => {
+  ({
+    todayOnly = false,
+    weeklyOnly = false,
+    width,
+    setQuestionnaireVariant,
+  }: IHomeKeyActivities): JSX.Element => {
     const [selectedFilterGroupName, setSelectedFilterGroupName] = useState<string>("Weekly List");
     const [selectedFilterTeamId, setSelectedFilterTeamId] = useState<number>(null);
     const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
@@ -126,6 +131,7 @@ export const HomeKeyActivities = observer(
           sortFilterOpen={sortFilterOpen}
           setFilterOpen={setFilterOpen}
           scheduledGroupId={scheduledGroupId}
+          setQuestionnaireVariant={header == "Today" && setQuestionnaireVariant}
         />
       );
     };
@@ -199,98 +205,139 @@ export const HomeKeyActivities = observer(
       );
     };
 
-    return todayOnly ? (
-      <KeyActivitiesWrapperContainer width={width}>
-        <SingleListContainer>
-          <HeaderContainer>
-            {renderHeader(
-              "Today",
-              today,
-              todayFilterDropdownOpen,
-              setTodayFilterDropdownOpen,
-              selectedFilterGroupIdToday,
-            )}
-          </HeaderContainer>
-          <KeyActivitiesListContainer>
-            <CreateKeyActivityButton
-              onButtonClick={() => {
-                // setTodayModalClicked(true);
-                setCreateKeyActivityModalOpen(true);
-              }}
-            />
-            <KeyActivitiesList
-              keyActivities={todaysKeyActivities}
-              droppableId={`todays-activities-${selectedFilterGroupIdToday}`}
-            />
-          </KeyActivitiesListContainer>
-        </SingleListContainer>
+    if (todayOnly) {
+      return (
+        <KeyActivitiesWrapperContainer width={width}>
+          <SingleListContainer>
+            <HeaderContainer>
+              {renderHeader(
+                "Today",
+                today,
+                todayFilterDropdownOpen,
+                setTodayFilterDropdownOpen,
+                selectedFilterGroupIdToday,
+              )}
+            </HeaderContainer>
+            <KeyActivitiesListContainer>
+              <CreateKeyActivityButton
+                onButtonClick={() => {
+                  setCreateKeyActivityModalOpen(true);
+                }}
+              />
+              <KeyActivitiesList
+                keyActivities={todaysKeyActivities}
+                droppableId={`todays-activities-${selectedFilterGroupIdToday}`}
+              />
+            </KeyActivitiesListContainer>
+          </SingleListContainer>
 
-        <CreateKeyActivityModal
-          createKeyActivityModalOpen={createKeyActivityModalOpen}
-          setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
-          todayModalClicked={true}
-          todayFilterGroupId={selectedFilterGroupIdToday}
-        />
-      </KeyActivitiesWrapperContainer>
-    ) : (
-      <KeyActivitiesWrapperContainer width={width}>
-        <KeyActivityColumnStyleListContainer>
-          <HeaderContainer>
-            {renderHeader(
-              "Today",
-              today,
-              todayFilterDropdownOpen,
-              setTodayFilterDropdownOpen,
-              selectedFilterGroupIdToday,
-            )}
-          </HeaderContainer>
-          <KeyActivitiesListContainer>
-            <CreateKeyActivityButton
-              onButtonClick={() => {
-                setTodayModalClicked(true);
-                setCreateKeyActivityModalOpen(true);
-              }}
-            />
-            <KeyActivitiesList
-              keyActivities={todaysKeyActivities}
-              droppableId={`todays-activities-${selectedFilterGroupIdToday}`}
-            />
-          </KeyActivitiesListContainer>
-        </KeyActivityColumnStyleListContainer>
-        <KeyActivityColumnStyleListContainer>
-          <HeaderContainer>{renderMiddleColumnHeader()}</HeaderContainer>
-          <KeyActivitiesListContainer>
-            <CreateKeyActivityButton
-              onButtonClick={() => {
-                setCreateKeyActivityModalOpen(true);
-                setTodayModalClicked(false);
-              }}
-            />
-            <KeyActivitiesList
-              keyActivities={filteredKeyActivities()}
-              droppableId={
-                selectedFilterGroupName
-                  ? `scheduled-group-activities-${selectedFilterGroupId}`
-                  : `team-activities-${selectedFilterTeamId}`
-              }
-            />
-          </KeyActivitiesListContainer>
-        </KeyActivityColumnStyleListContainer>
-        <FilterContainer>
-          {renderFilterGroupOptions()}
-          {renderFilterCompletedOption()}
-          {renderFilterTeamOptions()}
-        </FilterContainer>
-        <CreateKeyActivityModal
-          createKeyActivityModalOpen={createKeyActivityModalOpen}
-          setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
-          todayModalClicked={todayModalClicked}
-          defaultSelectedGroupId={selectedFilterGroupId}
-          defaultSelectedTeamId={selectedFilterTeamId}
-          todayFilterGroupId={selectedFilterGroupIdToday}
-        />
-      </KeyActivitiesWrapperContainer>
-    );
+          <CreateKeyActivityModal
+            createKeyActivityModalOpen={createKeyActivityModalOpen}
+            setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+            todayModalClicked={true}
+            todayFilterGroupId={selectedFilterGroupIdToday}
+          />
+        </KeyActivitiesWrapperContainer>
+      );
+    } else if (weeklyOnly) {
+      return (
+        <KeyActivitiesWrapperContainer width={width}>
+          <SingleListContainer>
+            <HeaderContainer>
+              {renderHeader(
+                "Weekly List",
+                subHeaderForFilterGroups("Weekly List"),
+                dynamicFilterDropdownOpen,
+                setDynamicFilterDropdownOpen,
+                selectedFilterGroupId,
+              )}
+            </HeaderContainer>
+            <KeyActivitiesListContainer>
+              <CreateKeyActivityButton
+                onButtonClick={() => {
+                  setCreateKeyActivityModalOpen(true);
+                }}
+              />
+              <KeyActivitiesList
+                keyActivities={keyActivityStore.incompleteKeyActivitiesByScheduledGroupName(
+                  "Weekly List",
+                )}
+                droppableId={`scheduled-group-activities-${sessionStore.getScheduledGroupIdByName(
+                  "Weekly List",
+                )}`}
+              />
+            </KeyActivitiesListContainer>
+          </SingleListContainer>
+
+          <CreateKeyActivityModal
+            createKeyActivityModalOpen={createKeyActivityModalOpen}
+            setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+            todayModalClicked={true}
+            todayFilterGroupId={selectedFilterGroupIdToday}
+          />
+        </KeyActivitiesWrapperContainer>
+      );
+    } else {
+      return (
+        <KeyActivitiesWrapperContainer width={width}>
+          <KeyActivityColumnStyleListContainer>
+            <HeaderContainer>
+              {renderHeader(
+                "Today",
+                today,
+                todayFilterDropdownOpen,
+                setTodayFilterDropdownOpen,
+                selectedFilterGroupIdToday,
+              )}
+            </HeaderContainer>
+            <KeyActivitiesListContainer>
+              <CreateKeyActivityButton
+                onButtonClick={() => {
+                  setTodayModalClicked(true);
+                  setCreateKeyActivityModalOpen(true);
+                }}
+              />
+              <KeyActivitiesList
+                keyActivities={todaysKeyActivities}
+                droppableId={`todays-activities-${selectedFilterGroupIdToday}`}
+              />
+            </KeyActivitiesListContainer>
+          </KeyActivityColumnStyleListContainer>
+          <KeyActivityColumnStyleListContainer>
+            <HeaderContainer>{renderMiddleColumnHeader()}</HeaderContainer>
+            <KeyActivitiesListContainer>
+              <CreateKeyActivityButton
+                onButtonClick={() => {
+                  setCreateKeyActivityModalOpen(true);
+                  setTodayModalClicked(false);
+                }}
+              />
+              <KeyActivitiesList
+                keyActivities={filteredKeyActivities()}
+                droppableId={
+                  selectedFilterGroupName
+                    ? `scheduled-group-activities-${selectedFilterGroupId}`
+                    : `team-activities-${selectedFilterTeamId}`
+                }
+              />
+            </KeyActivitiesListContainer>
+          </KeyActivityColumnStyleListContainer>
+          <FilterContainer>
+            {renderFilterGroupOptions()}
+            {renderFilterCompletedOption()}
+            {renderFilterTeamOptions()}
+          </FilterContainer>
+          <CreateKeyActivityModal
+            createKeyActivityModalOpen={createKeyActivityModalOpen}
+            setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
+            todayModalClicked={todayModalClicked}
+            defaultSelectedGroupId={selectedFilterGroupId}
+            defaultSelectedTeamId={selectedFilterTeamId}
+            todayFilterGroupId={selectedFilterGroupIdToday}
+          />
+        </KeyActivitiesWrapperContainer>
+      );
+    }
   },
 );
 
@@ -305,17 +352,6 @@ const FilterContainer = styled.div`
 `;
 
 const HeaderContainer = styled.div``;
-
-const HeaderRowContainer = styled.div`
-  display: flex;
-`;
-
-const SortContainer = styled.div`
-  margin-left: auto;
-  &: hover {
-    cursor: pointer;
-  }
-`;
 
 type FilterOptionsContainerProps = {
   currentSelectedItem: boolean;

@@ -31,9 +31,9 @@ export const HeaderText = observer(
         return <> {team ? `${team.name} Overview` : "Team Overview"} </>;
       case "company":
         if (subPath == "accountability") {
-          return <> {t("accountabilityChart")}</>;
+          return <> {t("company.accountabilityChart")}</>;
         } else if (subPath == "strategic_plan") {
-          return <> The ${companyStore.company.name} Plan </>;
+          return <> The {companyStore.company.name} Plan </>;
         }
         return <></>;
       case "meetings":
@@ -48,7 +48,7 @@ export const HeaderText = observer(
             return <></>;
         }
       case "goals":
-        return <> Goals </>;
+        return <> Objectives </>;
       case "account":
         return <> {t("profile.accountSettings")} </>;
       case "notes":
@@ -56,11 +56,7 @@ export const HeaderText = observer(
       case "journals":
         return <> {t("journals.indexTitle")} </>;
       default:
-        return (
-          <>
-            {getGreetingTime(moment())} {sessionStore.profile.firstName}
-          </>
-        );
+        return <>{`${getGreetingTime(moment())} ${sessionStore.profile.firstName}`}</>;
     }
   },
 );

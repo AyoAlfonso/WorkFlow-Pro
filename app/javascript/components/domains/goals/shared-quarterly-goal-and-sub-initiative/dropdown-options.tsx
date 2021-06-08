@@ -1,9 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { Text } from "../../../shared/text";
 import { Icon } from "~/components/shared/icon";
-import { Button } from "~/components/shared/button";
-import ContentEditable from "react-contenteditable";
 import { GoalDropdownOptions } from "../shared/goal-dropdown-options";
 
 interface IDropdownOptionsProps {
@@ -27,12 +24,14 @@ export const DropdownOptions = ({
     <Container onClick={() => setShowDropdownOptionsContainer(!showDropdownOptionsContainer)}>
       <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
       {showDropdownOptionsContainer && (
-        <GoalDropdownOptions
-          setShowDropdownOptions={setShowDropdownOptionsContainer}
-          setModalOpen={setParentModalOpen}
-          itemType={itemType}
-          itemId={item.id}
-        />
+        <GoalDropdownContainer>
+          <GoalDropdownOptions
+            setShowDropdownOptions={setShowDropdownOptionsContainer}
+            setModalOpen={setParentModalOpen}
+            itemType={itemType}
+            itemId={item.id}
+          />
+        </GoalDropdownContainer>
       )}
     </Container>
   ) : (
@@ -49,4 +48,8 @@ const Container = styled.div`
 
 const StyledOptionIcon = styled(Icon)`
   transform: rotate(90deg);
+`;
+
+const GoalDropdownContainer = styled.div`
+  margin-left: -50px;
 `;

@@ -4,6 +4,8 @@
 
 1. Install npm packages -> `yarn install`
 2. Run Bundler -> `bundle install`
+3. Run the migration -> `rake db:migrate`
+4. Run the seeding -> `rake db:seed`
 
 ## Run Project
 
@@ -18,3 +20,8 @@ To run storybook -> `yarn storybook`
 
 You can publish a static storybook to Chromatic's CDN by using this command -> `yarn chromatic`
 The new storybook can be reviewed by other collaborators on the project.
+
+## Email Previews
+
+`ActionMailer` email previews are to be placed in `spec/mailers/previews`.
+Refer to the guides for everything else.

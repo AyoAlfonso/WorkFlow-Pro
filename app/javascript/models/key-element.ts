@@ -8,7 +8,8 @@ export const KeyElementModel = types
     completedAt: types.maybeNull(types.string),
     elementableId: types.number,
     completionType: types.maybeNull(types.string),
-    completionCurrentValue: types.maybeNull(types.number),
+    completionStartingValue: types.maybeNull(types.number),
+    completionCurrentValue: types.optional(types.union(types.number, types.string), ""), //add case for no entry value ''
     completionTargetValue: types.maybeNull(types.number),
   })
   .views(self => ({}))

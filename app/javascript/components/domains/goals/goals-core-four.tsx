@@ -10,7 +10,45 @@ import { useTranslation } from "react-i18next";
 import { HomeContainerBorders } from "../home/shared-components";
 import { EnlargedHomeTitle } from "./shared/enlarged-home-title";
 
-export const CoreFourValues = observer(
+interface ICoreFourValuesProps {
+  showCoreFour?: boolean;
+  setShowCoreFour?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const GoalsCoreFour = ({
+  showCoreFour,
+  setShowCoreFour,
+}: ICoreFourValuesProps): JSX.Element => {
+  const { t } = useTranslation();
+
+  const renderHideButton = () => {
+    return (
+      <HideButtonContainer onClick={() => setShowCoreFour(!showCoreFour)}>
+        <HideText>{showCoreFour ? "Hide" : "Show"} </HideText>
+        <HideIconContainer>
+          {showCoreFour ? (
+            <HideIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
+          ) : (
+            <ShowIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
+          )}
+        </HideIconContainer>
+      </HideButtonContainer>
+    );
+  };
+
+  return (
+    <Container>
+      <CoreFourHeader>
+        <CoreFourTitle>{t("core.goalsTitle")}</CoreFourTitle>
+        {renderHideButton()}
+      </CoreFourHeader>
+
+      {showCoreFour && <CoreFourValues />}
+    </Container>
+  );
+};
+
+const CoreFourValues = observer(
   (): JSX.Element => {
     const {
       companyStore: { company },
@@ -72,8 +110,14 @@ export const CoreFourValues = observer(
   },
 );
 
+export const CoreFourOnly = (): JSX.Element => (
+  <div>
+    <CoreFourValues />
+  </div>
+);
+
+
 const Container = styled.div`
-  margin-top: 30px;
   margin-bottom: 32px;
 `;
 
@@ -95,46 +139,16 @@ const CoreFourTitle = styled(EnlargedHomeTitle)`
   margin-bottom: 16px;
 `;
 
-export const GoalsCoreFour = (): JSX.Element => {
-  const { t } = useTranslation();
-  const [ showCoreFour, setShowCoreFour ] = useState<boolean>(true);
-
-  const renderHideButton = () => {
-    return (
-      <HideButtonContainer onClick={() => setShowCoreFour(!showCoreFour)}>
-        <HideText>{showCoreFour ? "Hide" : "Show"} </HideText>
-        <HideIconContainer>
-          {showCoreFour ? (
-            <HideIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
-          ) : (
-            <ShowIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
-          )}
-        </HideIconContainer>
-      </HideButtonContainer>
-    );
-  };
-
-  return (
-    <Container>
-      <TitleContainer>
-        <CoreFourTitle>{t("core.goalsTitle")}</CoreFourTitle>
-        {renderHideButton()}
-      </TitleContainer>
-      {showCoreFour && <CoreFourValues />}
-    </Container>
-  );
-};
-
-export const CoreFourOnly = (): JSX.Element => (
-  <div>
-    <CoreFourValues />
-  </div>
-);
+const CoreFourHeader = styled.div`
+  display: flex;
+  margin-top: -32px;
+`;
 
 const HideButtonContainer = styled.div`
   display: flex;
   margin-left: auto;
   margin-top: 32px;
+  margin-bottom: 16px;
   &: hover {
     cursor: pointer;
   }

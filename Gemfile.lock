@@ -149,6 +149,9 @@ GEM
     erubi (1.9.0)
     et-orbi (1.2.4)
       tzinfo
+    exception_notification (4.4.3)
+      actionmailer (>= 4.0, < 7)
+      activesupport (>= 4.0, < 7)
     factory_bot (6.1.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.1.0)
@@ -430,6 +433,7 @@ DEPENDENCIES
   devise-jwt (= 0.7.0)
   devise_invitable
   dotenv-rails (~> 2.7.5)
+  exception_notification
   factory_bot_rails
   faraday
   ice_cube (~> 0.16.3)

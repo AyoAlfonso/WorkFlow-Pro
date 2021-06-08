@@ -92,27 +92,29 @@ export const ScheduledIssues = observer(
             {" "}
             {descriptionText || t("meetingForum.scheduledIssues.subTitle")}{" "}
           </DescriptionText>
-          <FilterOptions
-            onClick={() => setShowOpenIssues(true)}
-            mr={"15px"}
-            color={showOpenIssues ? "primary100" : "grey40"}
-          >
-            Open
-          </FilterOptions>
-          <FilterOptions
-            onClick={() => setShowOpenIssues(false)}
-            color={!showOpenIssues ? "primary100" : "grey40"}
-          >
-            Closed
-          </FilterOptions>
-          <WidgetHeaderSortButtonMenu
-            onButtonClick={setSortOptionsOpen}
-            onMenuItemClick={handleSortMenuItemClick}
-            menuOpen={sortOptionsOpen}
-            menuOptions={sortMenuOptions}
-            ml={"15px"}
-            mt={"-12px"}
-          />
+          <FilterOptionsContainer>
+            <FilterOptions
+              onClick={() => setShowOpenIssues(true)}
+              mr={"15px"}
+              color={showOpenIssues ? "primary100" : "grey40"}
+            >
+              Open
+            </FilterOptions>
+            <FilterOptions
+              onClick={() => setShowOpenIssues(false)}
+              color={!showOpenIssues ? "primary100" : "grey40"}
+            >
+              Closed
+            </FilterOptions>
+            <WidgetHeaderSortButtonMenu
+              onButtonClick={setSortOptionsOpen}
+              onMenuItemClick={handleSortMenuItemClick}
+              menuOpen={sortOptionsOpen}
+              menuOptions={sortMenuOptions}
+              ml={"15px"}
+              mt={"-12px"}
+            />
+          </FilterOptionsContainer>
         </StyledFilterContainer>
         <CreateIssueContainer>
           <CreateIssueModal
@@ -161,4 +163,8 @@ const FilterOptions = styled.p<ColorProps & SpaceProps>`
   font-weight: 400;
   cursor: pointer;
   margin-top: 0;
+`;
+
+const FilterOptionsContainer = styled.div`
+  display: flex;
 `;

@@ -49,6 +49,7 @@ export const baseTheme = {
     backgroundGreen: "#00C3B326",
     mipBlue: "#022F7B",
     boxShadow: "#00000029;",
+    cavier: "#F38374"
   },
 
   fonts: {

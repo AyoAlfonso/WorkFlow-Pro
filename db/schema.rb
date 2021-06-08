@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2021_05_14_104136) do
+=======
+ActiveRecord::Schema.define(version: 2021_05_11_183936) do
+>>>>>>> 8435aa190b8359f68bbaf93ebc67e74f57ee4742
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -300,7 +304,7 @@ ActiveRecord::Schema.define(version: 2021_05_14_104136) do
     t.datetime "scheduled_start_time"
     t.datetime "end_time"
     t.bigint "hosted_by_id"
-    t.text "notes", default: ""
+    t.text "notes"
     t.json "settings"
     t.boolean "original_creation", default: false
     t.index ["created_at"], name: "index_meetings_on_created_at"

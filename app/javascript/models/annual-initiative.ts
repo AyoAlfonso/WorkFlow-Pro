@@ -17,11 +17,27 @@ export const AnnualInitiativeModel = types
     contextDescription: types.string,
     ownedBy: types.maybeNull(UserModel),
     fiscalYear: types.maybeNull(types.number),
-    closedAt: types.maybeNull(types.string)
+    closedAt: types.maybeNull(types.string),
   })
   .views(self => ({
     get closedInitiative() {
-      return self.closedAt != null
+      let itemClosed = false;
+      if (self.closedAt) {
+        itemClosed = true;
+      } else {
+        self.quarterlyGoals.forEach(qg => {
+          if (qg.closedAt) {
+            itemClosed = true;
+          } else {
+            qg.subInitiatives.forEach(si => {
+              if (si.closedAt) {
+                itemClosed = true;
+              }
+            });
+          }
+        });
+      }
+      return itemClosed;
     },
     get myQuarterlyGoals() {
       const { sessionStore } = getRoot(self);
@@ -32,6 +48,54 @@ export const AnnualInitiativeModel = types
       return self.quarterlyGoals.filter(
         qg => companyStore.company.currentFiscalQuarter == qg.quarter,
       );
+    },
+    get openQuarterlyGoals() {
+      const quarterlyGoals = [];
+      self.quarterlyGoals
+        .filter(qg => !qg.closedAt)
+        .forEach(qg => {
+          quarterlyGoals.push(
+            Object.assign(
+              { ...qg },
+              { subInitiatives: qg.subInitiatives.filter(si => !si.closedAt) },
+            ),
+          );
+        });
+      return quarterlyGoals;
+    },
+    get closedQuarterlyGoals() {
+      const quarterlyGoals = [];
+      self.quarterlyGoals
+        .filter(qg => !qg.closedAt && qg.subInitiatives.find(si => si.closedAt) || qg.closedAt)
+        .forEach(qg => {
+          quarterlyGoals.push(
+            Object.assign(
+              { ...qg },
+              { subInitiatives: qg.subInitiatives.filter(si => si.closedAt) },
+            ),
+          );
+        });
+      return quarterlyGoals;
+    },
+    get openPersonalQuarterlyGoals() {
+      const { sessionStore } = getRoot(self);
+      const userId = sessionStore.profile.id
+      const quarterlyGoals = [];
+      self.quarterlyGoals
+        .filter(qg => !qg.closedAt && qg.ownedById == userId)
+        .forEach(qg => {
+          quarterlyGoals.push(
+            Object.assign(
+              { ...qg },
+              {
+                subInitiatives: qg.subInitiatives.filter(
+                  si => !si.closedAt && si.ownedById == userId,
+                ),
+              },
+            ),
+          );
+        });
+      return quarterlyGoals;
     },
   }))
   .actions(self => ({}));

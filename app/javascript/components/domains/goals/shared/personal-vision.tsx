@@ -5,6 +5,7 @@ import { color } from "styled-system";
 import { useMst } from "~/setup/root";
 import ContentEditable from "react-contenteditable";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next"
 
 interface IPersonalVisionProps {
   personalVision: string;
@@ -12,14 +13,15 @@ interface IPersonalVisionProps {
 
 export const PersonalVision = ({ personalVision }: IPersonalVisionProps): JSX.Element => {
   const { sessionStore } = useMst();
+  const { t } = useTranslation();
   const personalVisionRef = useRef(null);
 
   return (
     <VisionContainer>
       <VisionTitle>Future Self</VisionTitle>
       <StyledContentEditable
-        innerRef={personalVisionRef}
-        placeholder={"Describe what the ideal, future you will look like, in one statement..."}
+        innerRef={t("personal.vision")}
+        placeholder={t("personal.placeholder")}
         html={personalVision || ""}
         disabled={false}
         onChange={e => {
@@ -41,31 +43,27 @@ export const PersonalVision = ({ personalVision }: IPersonalVisionProps): JSX.El
 const VisionContainer = styled(HomeContainerBorders)`
   height: 60px;
   display: flex;
+  position: relative;
 `;
 
 const VisionTitle = styled.p`
   ${color}
-  font-size: 20px;
+  font-size: 24px;
+  font-weight: 800;
   color: ${props => props.theme.colors.primary100};
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 16px;
+  margin-right: 16px;
   display: flex;
   align-items: center;
   height: inherit;
-  position: absolute;
-`;
-
-const VisionText = styled.p`
-  font-size: 15px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-  margin-bottom: auto;
+  white-space: nowrap;
 `;
 
 const StyledContentEditable = styled(ContentEditable)`
-  font-size: 16px;
+  display: block;
+  font-size: 21px;
   margin-left: auto;
   margin-right: auto;
   margin-top: auto;
@@ -73,4 +71,7 @@ const StyledContentEditable = styled(ContentEditable)`
   padding: 5px;
   text-transform: capitalize;
   font-weight: 700;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 `;

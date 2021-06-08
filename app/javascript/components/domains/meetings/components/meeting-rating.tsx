@@ -49,7 +49,7 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
 
   const teamLeads = users.filter(user => currentTeam.isALead(user));
   const teamMembers = users.filter(user => currentTeam.isANonLead(user));
-  const MEETING_MAX_RATING = "7";
+  const MEETING_MAX_RATING = "5";
 
   const saveScores = () => {
     const averageScore = Number(
@@ -64,13 +64,20 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
     });
   };
 
+  // to do add consideration < 0
   const handleScoreChange = (user, value) => {
+    const formattedValue = parseInt(value);
     setScores(
       R.pipe(
         R.reject(score => score.userId === user.id),
         R.append({
           userId: user.id,
-          value: parseInt(value) > parseInt(MEETING_MAX_RATING) ? MEETING_MAX_RATING : value,
+          value:
+            formattedValue > parseInt(MEETING_MAX_RATING)
+              ? MEETING_MAX_RATING
+              : formattedValue < 1
+              ? 1
+              : isNaN(formattedValue) ? 1 : formattedValue,
         }),
       )(scores),
     );
@@ -98,7 +105,9 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
           <ScoreContainer>
             <InputContainer>
               <Input
-                maxLength={1}
+                type="number"
+                max="5"
+                min="1"
                 style={{
                   border: `1px dashed ${baseTheme.colors.grey20}`,
                   textAlign: "center",

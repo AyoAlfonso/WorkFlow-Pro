@@ -73,7 +73,8 @@ if Rails.env.development?
     importance: ["So we don't need to use 3rd party services", "We will have to spend a lot more money", "Day off for everyone!"], 
     description: "Purchase company vehicles for transportation", 
     key_elements_attributes: [{value: "Check out Toyota"}, {value: "Check out Mercedes Benz"}],
-    context_description: "Choose a nice fleet!"
+    context_description: "Choose a nice fleet!",
+    fiscal_year: 2022
   )
 
   qg1 = QuarterlyGoal.where(description: "Visit Toyota Dealerships").first_or_create(
@@ -83,24 +84,24 @@ if Rails.env.development?
     importance: ["So we don't need to use 3rd party services", "We will have to spend a lot more money", "Day off for everyone!"], 
     description: "Visit Toyota Dealerships",
     context_description: "Check out the SUVs",
-    quarter: 1
+    quarter: 1,
   )
 
-  m1 = Milestone.where(description: "Get brochures and pricing", quarterly_goal_id: qg1.id).first_or_create(
+  m1 = Milestone.where(description: "Get brochures and pricing", milestoneable: qg1).first_or_create(
     created_by_id: u1.id, 
     description: "Get brochures and pricing", 
     week: Time.now.strftime("%U").to_i, 
     status: 0, 
-    quarterly_goal_id: qg1.id,
+    milestoneable: qg1,
     week_of: "2020-07-16"
   )
 
-  m2 = Milestone.where(description: "Test drive the vehicles", quarterly_goal_id: qg1.id).first_or_create(
+  m2 = Milestone.where(description: "Test drive the vehicles", milestoneable: qg1).first_or_create(
     created_by_id: u1.id, 
     description: "Test drive the vehicles", 
     week: Time.now.strftime("%U").to_i, 
     status: 0, 
-    quarterly_goal_id: qg1.id,
+    milestoneable: qg1,
     week_of: "2020-07-23"
   )
 
@@ -114,21 +115,21 @@ if Rails.env.development?
     quarter: 1
   )
 
-  m3 = Milestone.where(description: "Get brochures and pricing", quarterly_goal_id: qg2.id).first_or_create(
+  m3 = Milestone.where(description: "Get brochures and pricing", milestoneable: qg2).first_or_create(
     created_by_id: u1.id, 
     description: "Get brochures and pricing", 
     week: Time.now.strftime("%U").to_i, 
     status: 0, 
-    quarterly_goal_id: qg2.id,
+    milestoneable: qg2,
     week_of: "2020-07-16"
   )
 
-  m4 = Milestone.where(description: "Test drive the vehicles", quarterly_goal_id: qg2.id).first_or_create(
+  m4 = Milestone.where(description: "Test drive the vehicles", milestoneable: qg2).first_or_create(
     created_by_id: u1.id, 
     description: "Test drive the vehicles", 
     week: Time.now.strftime("%U").to_i, 
     status: 0, 
-    quarterly_goal_id: qg2.id,
+    milestoneable: qg2,
     week_of: "2020-07-23"
   )
 
@@ -139,7 +140,8 @@ if Rails.env.development?
     importance: ["More people can work for us", "Won't be able to maximize our profits", "Throw a huge party!"], 
     description: "Find a good city to expand our office", 
     key_elements_attributes: [{value: "Research Kelowna"}, {value: "Research Edmonton"}],
-    context_description: "Find a good city!"
+    context_description: "Find a good city!",
+    fiscal_year: 2022
   )
 
   qg3 = QuarterlyGoal.where(description: "Fly to Kelowna and do some research").first_or_create(
@@ -152,21 +154,21 @@ if Rails.env.development?
     quarter: 1
   )
 
-  m5 = Milestone.where(description: "Accessbility of the city", quarterly_goal_id: qg2.id).first_or_create(
+  m5 = Milestone.where(description: "Accessbility of the city", milestoneable: qg3).first_or_create(
     created_by_id: u1.id, 
     description: "Accessbility of the city", 
     week: Time.now.strftime("%U").to_i, 
     status: 0, 
-    quarterly_goal_id: qg3.id,
+    milestoneable: qg3,
     week_of: "2020-07-16"
   )
 
-  m6 = Milestone.where(description: "Number of good restaurants", quarterly_goal_id: qg2.id).first_or_create(
+  m6 = Milestone.where(description: "Number of good restaurants", milestoneable: qg3).first_or_create(
     created_by_id: u1.id, 
     description: "Number of good restaurants", 
     week: Time.now.strftime("%U").to_i, 
     status: 0, 
-    quarterly_goal_id: qg3.id,
+    milestoneable: qg3,
     week_of: "2020-07-23"
   )
   

@@ -36,6 +36,9 @@ export const LabelSelectionDropdownList = observer(
         const labelName = selectedGroup ? label.inputValue : label.name;
         labelStore.createLabel(labelName, selectedGroup).then(data => {
           setSelectedLabel(data);
+          if (afterLabelSelectAction) {
+            afterLabelSelectAction(data.id);
+          }
         });
       }
     };
@@ -53,9 +56,9 @@ export const LabelSelectionDropdownList = observer(
               createAndSetLabel(newValue, newValue.type);
             } else {
               setSelectedLabel(newValue);
-            }
-            if (afterLabelSelectAction) {
-              afterLabelSelectAction(newValue.type ? newValue.inputValue : newValue.name);
+              if (afterLabelSelectAction) {
+                afterLabelSelectAction(newValue.type ? newValue.inputValue : newValue.id);
+              }
             }
             closeModal();
           }}

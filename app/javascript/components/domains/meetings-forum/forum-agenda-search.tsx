@@ -21,6 +21,7 @@ import { Text } from "~/components/shared/text";
 import { SelectedMeetingAgendaEntry } from "./components/selected-meeting-agenda-entry";
 import { TeamMeetingButton } from "~/components/shared/team-meeting-button";
 import MeetingTypes from "~/constants/meeting-types";
+import { LynchPynBadge } from "./components/lynchpyn-badge";
 
 export const ForumAgendaSearch = observer(() => {
   const { t } = useTranslation();
@@ -39,6 +40,10 @@ export const ForumAgendaSearch = observer(() => {
       forumStore.searchForMeetingsByDateRange(startDate, endDate, teamId);
     }
   };
+  
+  const { company } = companyStore;
+  const instanceType = company && company.accessForum ? "forum" : "teams";
+
 
   const [selectedDateFilter, setSelectedDateFilter] = useState<string>(
     t("dateFilters.lastThirtyDays"),
@@ -200,6 +205,8 @@ export const ForumAgendaSearch = observer(() => {
         customFilterOptions={filterOptions}
       />
       <StyledEntryContainer>{renderSelectedEntry()}</StyledEntryContainer>
+       {instanceType === "forum" && (
+          <LynchPynBadge/> )}
     </Container>
   );
 });

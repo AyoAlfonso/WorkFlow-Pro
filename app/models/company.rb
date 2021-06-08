@@ -37,7 +37,7 @@ class Company < ApplicationRecord
   def verify_company_static_data
     company_static_datas.create(field: 'annual_objective', value: 'Annual Objective') if company_static_datas.where(field: 'annual_objective').blank?
     company_static_datas.create(field: 'quarterly_initiative', value: 'Quarterly Initiative') if company_static_datas.where(field: 'quarterly_initiative').blank?
-    company_static_datas.create(field: 'sub_initiative', value: 'Sub Initiative') if company_static_datas.where(field: 'sub_initiative').blank?
+    company_static_datas.create(field: 'sub_initiative', value: 'Supporting Initiative') if company_static_datas.where(field: 'sub_initiative').blank?
   end
 
   def self.find_first_with_team(team_id)
@@ -91,7 +91,7 @@ class Company < ApplicationRecord
   def create_company_static_data
     CompanyStaticData.create!(field: 'annual_objective', value: 'Annual Objective', company: self)
     CompanyStaticData.create!(field: 'quarterly_initiative', value: 'Quarterly Initiative', company: self)
-    CompanyStaticData.create!(field: 'sub_initiative', value: 'Sub Initiative', company: self)
+    CompanyStaticData.create!(field: 'sub_initiative', value: 'Supporting Initiative', company: self)
   end
 
 end

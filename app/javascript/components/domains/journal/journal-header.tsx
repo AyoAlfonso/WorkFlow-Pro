@@ -5,8 +5,8 @@ import { SurveyBot } from "./survey-bot";
 import { Link } from "react-router-dom";
 import { Icon } from "~/components/shared";
 import Modal from "styled-react-modal";
-import { AccordionSummary } from '~/components/shared/accordion-components';
-import { 
+import { AccordionSummary } from "~/components/shared/accordion-components";
+import {
   HeaderContainerNoBorder,
   AccordionHeaderText,
 } from "~/components/shared/styles/container-header";
@@ -24,17 +24,16 @@ interface IJournalHeaderProps {
   setQuestionnaireVariant: any;
 }
 
-export const JournalHeader = ({ 
+export const JournalHeader = ({
   expanded,
   questionnaireVariant,
-  setQuestionnaireVariant, 
+  setQuestionnaireVariant,
 }: IJournalHeaderProps): JSX.Element => {
-
   const { t } = useTranslation();
 
   const handleChatbotEnd = () => {
     setQuestionnaireVariant("");
-    window.openWidget();
+    window.openWidget && window.openWidget();
   };
 
   return (
@@ -45,12 +44,12 @@ export const JournalHeader = ({
             icon={expanded === "panel0" ? "Chevron-Up" : "Chevron-Down"}
             size={15}
             style={{ paddingRight: "15px" }}
-            iconColor={expanded === "panel0" ? "primary100" : "grey60" }
+            iconColor={expanded === "panel0" ? "primary100" : "grey60"}
           />
-          <AccordionHeaderText
-            expanded={expanded}
-            accordionPanel={"panel0"}
-          > {t("journals.title")} </AccordionHeaderText>
+          <AccordionHeaderText expanded={expanded} accordionPanel={"panel0"}>
+            {" "}
+            {t("journals.title")}{" "}
+          </AccordionHeaderText>
         </HeaderContainerNoBorder>
         <EndButtonContainer>
           <Link to="/journals" style={{ textDecoration: "none", padding: "0" }}>
@@ -75,21 +74,21 @@ export const JournalHeader = ({
               <EndButtonContainer>
                 {questionnaireVariant ? (
                   <EndButton
-                  onClick={() => {
-                    if (confirm(t("journals.confirmQuit"))) {
-                      handleChatbotEnd();
-                    }
-                  }}
+                    onClick={() => {
+                      if (confirm(t("journals.confirmQuit"))) {
+                        handleChatbotEnd();
+                      }
+                    }}
                   >
                     Quit Journal
                   </EndButton>
                 ) : null}
               </EndButtonContainer>
             }
-            />
-            ) : (
-              <></>
-              )}
+          />
+        ) : (
+          <></>
+        )}
       </StyledModal>
     </>
   );
@@ -119,4 +118,3 @@ const StyledModal = Modal.styled`
   position: absolute;
   background-color: ${props => props.theme.colors.white};
 `;
-

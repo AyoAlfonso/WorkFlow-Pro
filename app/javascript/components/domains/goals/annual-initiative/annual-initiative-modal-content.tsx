@@ -20,6 +20,7 @@ import { Loading } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { GoalDropdownOptions } from "../shared/goal-dropdown-options";
 import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
+import moment from "moment";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -78,11 +79,11 @@ export const AnnualInitiativeModalContent = observer(
           <QuarterlyGoalContainer key={index}>
             <StatusBlockColorIndicator
               milestones={quarterlyGoal.milestones || []}
-              indicatorWidth={80}
+              indicatorWidth={"80px"}
               indicatorHeight={4}
               marginBottom={16}
             />
-           
+
             <TopRowContainer>
               <QuarterlyGoalDescription
                 onClick={() => {
@@ -123,21 +124,24 @@ export const AnnualInitiativeModalContent = observer(
           >
             <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
             {showDropdownOptionsContainer && (
-              <GoalDropdownOptions
-                setShowDropdownOptions={setShowDropdownOptionsContainer}
-                setModalOpen={setAnnualInitiativeModalOpen}
-                itemType={"annualInitiative"}
-                itemId={annualInitiative.id}
-              />
+              <GoalDropdownContainer>
+                <GoalDropdownOptions
+                  setShowDropdownOptions={setShowDropdownOptionsContainer}
+                  setModalOpen={setAnnualInitiativeModalOpen}
+                  itemType={"annualInitiative"}
+                  itemId={annualInitiative.id}
+                />
+              </GoalDropdownContainer>
             )}
           </DropdownOptionsContainer>
         )
       );
     };
 
+    const goalYearString = `FY${(annualInitiative.fiscalYear % 100)}/${(annualInitiative.fiscalYear + 1) % 100}`;
+
     const renderHeader = (): JSX.Element => {
       return (
-         
         <HeaderContainer>
           <TitleContainer>
             <StyledContentEditable
@@ -165,19 +169,30 @@ export const AnnualInitiativeModalContent = observer(
               </GoalText>
             )}
             <DetailsContainer>
-              <YearText type={"small"}>{annualInitiative.fiscalYear} Goal</YearText>
+              <IconContainer>
+                <Icon icon={"Initiative"} size={"16px"} iconColor={"grey80"} />
+              </IconContainer>
+              <YearText type={"small"}>{goalYearString}</YearText>
               <OwnedBySection
-                marginLeft={"5px"}
+                marginLeft={"0px"}
                 marginRight={"0px"}
+                marginTop={"auto"}
+                marginBottom={"auto"}
                 ownedBy={annualInitiative.ownedBy}
                 type={"annualInitiative"}
                 disabled={annualInitiative.closedInitiative}
               />
             </DetailsContainer>
           </TitleContainer>
-         
+          {!annualInitiative.closedAt && (
+            <AnnualInitiativeActionContainer>
+              {renderDropdownOptions()}
+              <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
+                <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+              </CloseIconContainer>
+            </AnnualInitiativeActionContainer>
+          )}
         </HeaderContainer>
-    
       );
     };
 
@@ -235,26 +250,27 @@ export const AnnualInitiativeModalContent = observer(
     };
 
     return (
-
       <>
-       {annualInitiative.closedAt && (
-        <ClosedStatusBannerContainer>
-            {t("annualInitiative.cardClosed")}
+        {annualInitiative.closedAt && (
+          <ClosedStatusBannerContainer>
+          {t("annualInitiative.cardClosed", {
+            title: sessionStore.companyStaticData[0].value
+          })}. {t("annualInitiative.createdOn")} {`FY${annualInitiative.fiscalYear}`}.
             <AnnualInitiativeActionContainer>
-            {renderDropdownOptions()}
-            <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
-              <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
-            </CloseIconContainer>
-          </AnnualInitiativeActionContainer>
-        </ClosedStatusBannerContainer>
-      )}
-      <Container>
-        {renderHeader()}
-        <SectionContainer>
-          <Context itemType={"annualInitiative"} item={annualInitiative} />
-        </SectionContainer>
-        <SectionContainer>{renderGoals()}</SectionContainer>
-      </Container>
+              {renderDropdownOptions()}
+              <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
+                <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+              </CloseIconContainer>
+            </AnnualInitiativeActionContainer>
+          </ClosedStatusBannerContainer>
+        )}
+        <Container>
+          {renderHeader()}
+          <SectionContainer>
+            <Context itemType={"annualInitiative"} item={annualInitiative} />
+          </SectionContainer>
+          <SectionContainer>{renderGoals()}</SectionContainer>
+        </Container>
       </>
     );
   },
@@ -286,6 +302,12 @@ const GoalText = styled(Text)`
 const AnnualInitiativeActionContainer = styled.div`
   display: flex;
   margin-left: auto;
+`;
+
+const IconContainer = styled.div`
+  margin-right: 8px;
+  margin-top: auto;
+  margin-bottom: auto;
 `;
 
 const CloseIconContainer = styled.div`
@@ -379,6 +401,7 @@ const DetailsContainer = styled.div`
 
 const YearText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
+  margin-right: 16px;
 `;
 
 const FilterOptionsContainer = styled.div`
@@ -413,17 +436,28 @@ const SubHeaderTextContainer = styled.div`
   position: absolute;
   margin-bottom: 24px;
 `;
+
 // TODOIST: color to constant
 const ClosedStatusBannerContainer = styled.div`
-background-image: repeating-linear-gradient(150deg, #feecea, #feecea 20px, #f2e2e4 20px, #f2e2e4 25px);
-border-radius: 4px;
-text-align: left;
-font: normal normal bold 16px/16px Lato;
-letter-spacing: 0px;
-color: ${props => props.theme.colors.black};
-opacity: 1;
-padding: 40px 5%;
-justify-content: space-between;
-display: flex;
-height: 20px;
-`
+  background-image: repeating-linear-gradient(
+    150deg,
+    #feecea,
+    #feecea 20px,
+    #f2e2e4 20px,
+    #f2e2e4 25px
+  );
+  border-radius: 4px;
+  text-align: left;
+  font: normal normal bold 16px/16px Lato;
+  letter-spacing: 0px;
+  color: ${props => props.theme.colors.black};
+  opacity: 1;
+  padding: 40px 5%;
+  justify-content: space-between;
+  display: flex;
+  height: 20px;
+`;
+
+const GoalDropdownContainer = styled.div`
+  margin-left: -50px;
+`;

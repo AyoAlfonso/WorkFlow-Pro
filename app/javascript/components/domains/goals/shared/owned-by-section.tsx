@@ -46,6 +46,7 @@ export const OwnedBySection = ({
 
   const companyUsers = userStore.users;
   const currentUser = sessionStore.profile;
+  ownedBy = ownedBy || currentUser
   const editable =
     (ownedBy && ownedBy.id == currentUser.id ||
       currentUser.role == RoleCEO ||

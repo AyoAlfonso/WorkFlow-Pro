@@ -41,16 +41,22 @@ export const QuestionnaireStoreModel = types
           { ...questionnaireAttemptData, ...optionalParams },
         );
         if (response.ok) {
-          sessionStore.updateUser(
-            {
-              dailyLogsAttributes: [
-                {
-                  ...response.data,
-                },
-              ],
-            },
-            `${questionnaireTitle} Complete`,
-          );
+          if (optionalParams["logDate"]) {
+            //if the log applies to the dslected daily log update it
+            sessionStore.updateSelectedDailyLog(response.data);
+          } else {
+            //if the log applies to current daily log merge it
+            sessionStore.updateUser(
+              {
+                dailyLogsAttributes: [
+                  {
+                    ...response.data,
+                  },
+                ],
+              },
+              `${questionnaireTitle} Complete`,
+            );
+          }
         }
       } catch {
         // error messaging handled by API monitor

@@ -30,7 +30,7 @@ export const UserStatus = ({
       case "work_from_home":
         return (
           <StatusContainer onClick={() => updateStatus("half_day")}>
-            <StatusColorBlock color={baseTheme.colors.fadedPurple} />
+            <StatusColorBlock color={baseTheme.colors.cavier} />
             <StatusText type={"small"}> WFH </StatusText>
           </StatusContainer>
         );

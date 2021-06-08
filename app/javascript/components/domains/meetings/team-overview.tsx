@@ -12,7 +12,7 @@ import MeetingTypes from "~/constants/meeting-types";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { showToast } from "~/utils/toast-message";
 import { useMst } from "~/setup/root";
-
+import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge";
 import { KeyActivitiesListStyleContainer } from "~/components/domains/key-activities/key-activities-list";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 
@@ -38,6 +38,7 @@ import {
 import { UserStatus } from "~/components/shared/user-status";
 
 import { TeamDashboard } from "./team-dashboard";
+import { Heading } from "~/components/shared";
 
 interface ITeamOverviewProps {}
 
@@ -86,7 +87,7 @@ export const TeamOverview = observer(
         </Container>
       );
     }
-    const overviewType = company.accessForum ? "forum" : "teams";
+    const overviewType = company && company.accessForum ? "forum" : "teams";
     //based on
 
     const handleForumMeetingClick = () => {
@@ -112,11 +113,15 @@ export const TeamOverview = observer(
         <TableContainer>
           <TableHeaderContainer>
             <ColumnContainerParent>
+              <TodayColumnContainer>
+                <ColumnSubHeaderContainer>
+                  <TodayText type={"paragraph"}>{today}</TodayText>
+                </ColumnSubHeaderContainer>
+              </TodayColumnContainer>
               <ColumnContainer>
-                <ColumnSubHeaderContainer>{today}</ColumnSubHeaderContainer>
-              </ColumnContainer>
-              <ColumnContainer>
-                <ColumnSubHeaderContainer>{"Today's Pyns"}</ColumnSubHeaderContainer>
+                <ColumnSubHeaderContainer>
+                  <Heading type={"h4"}>Today's Pyns</Heading>
+                </ColumnSubHeaderContainer>
               </ColumnContainer>
             </ColumnContainerParent>
           </TableHeaderContainer>
@@ -135,34 +140,64 @@ export const TeamOverview = observer(
       );
     };
 
-    const renderUserRecords = () => {
-      return currentTeam.users.map((user, index) => {
-        const prioritiesToRender = user.todaysPriorities.concat(user.todaysCompletedActivities);
+    const renderUserStatus = user => {
+      if (user.userPulseForDisplay) {
         return (
-          <UserRecordContainer key={index}>
-            <ColumnContainer>
-              <TeamMemberInfoContainer>
-                <Avatar
-                  defaultAvatarColor={user.defaultAvatarColor}
-                  avatarUrl={user.avatarUrl}
-                  firstName={user.firstName}
-                  lastName={user.lastName}
-                  size={45}
-                  marginLeft={"0px"}
-                />
-                <TeamMemberName>
-                  {user.firstName} {user.lastName}
-                </TeamMemberName>
+          <TeamMemberRightContainer>
+            <InfoRow>
+              <TeamMemberName>
+                {user.firstName} {user.lastName}
+              </TeamMemberName>
 
-                <UserStatusContainer>
-                  <UserStatus selectedUserStatus={user.currentDailyLog.workStatus} />
-                </UserStatusContainer>
-              </TeamMemberInfoContainer>
-            </ColumnContainer>
-            <ColumnContainer>{renderUserPriorities(prioritiesToRender)}</ColumnContainer>
-          </UserRecordContainer>
+              <UserStatusContainer>
+                <UserStatus selectedUserStatus={user.currentDailyLog.workStatus} />
+              </UserStatusContainer>
+            </InfoRow>
+            <InfoRow>
+              <EmotionText>{user.userPulseForDisplay.feeling}!</EmotionText>
+            </InfoRow>
+          </TeamMemberRightContainer>
         );
-      });
+      } else {
+        return (
+          <>
+            <TeamMemberName>
+              {user.firstName} {user.lastName}
+            </TeamMemberName>
+
+            <UserStatusContainer>
+              <UserStatus selectedUserStatus={user.currentDailyLog.workStatus} />
+            </UserStatusContainer>
+          </>
+        );
+      }
+    };
+
+    const renderUserRecords = () => {
+      return currentTeam.users
+        .slice()
+        .sort((a, b) => a.firstName.localeCompare(b.firstName))
+        .map((user, index) => {
+          const prioritiesToRender = user.todaysPriorities.concat(user.todaysCompletedActivities);
+          return (
+            <UserRecordContainer key={index}>
+              <ColumnContainer>
+                <TeamMemberInfoContainer>
+                  <Avatar
+                    defaultAvatarColor={user.defaultAvatarColor}
+                    avatarUrl={user.avatarUrl}
+                    firstName={user.firstName}
+                    lastName={user.lastName}
+                    size={45}
+                    marginLeft={"0px"}
+                  />
+                  {renderUserStatus(user)}
+                </TeamMemberInfoContainer>
+              </ColumnContainer>
+              <ColumnContainer>{renderUserPriorities(prioritiesToRender)}</ColumnContainer>
+            </UserRecordContainer>
+          );
+        });
     };
 
     return (
@@ -243,6 +278,7 @@ export const TeamOverview = observer(
             />
           </StyledOverviewAccordion>
         </ToolsWrapper>
+        {overviewType === "forum" && <LynchPynBadge />}
       </Container>
     );
   },
@@ -291,6 +327,35 @@ const TeamMemberName = styled(Text)`
 
 const UserStatusContainer = styled.div`
   margin-left: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
+`;
+
+const TeamMemberRightContainer = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
+`;
+
+const InfoRow = styled.div`
+  display: flex;
+`;
+
+const EmotionText = styled(Text)`
+  margin-left: 16px;
+  color: ${props => props.theme.colors.greyActive};
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 8px;
+  margin-bottom: 0px;
+`;
+
+const TodayText = styled(Text)`
+  margin-top: 0;
+  margin-bottom: 0;
+  color: ${props => props.theme.colors.greyActive};
+`;
+
+const TodayColumnContainer = styled(ColumnContainer)`
   margin-top: auto;
   margin-bottom: auto;
 `;

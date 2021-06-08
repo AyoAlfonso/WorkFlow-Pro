@@ -64,20 +64,12 @@ export const AccountDropdownOptions = observer(
           <SwitchAccountContainer
             key={index}
             onClick={() => {
-              if (parsedProfile.defaultSelectedCompanyId != company.id) {
-                userStore
-                  .updateUser({ id: parsedProfile.id, defaultSelectedCompanyId: company.id })
-                  .then(() => {
-                    if (location.pathname !== "/") {
-                      history.replace("/");
-                    }
-                    window.location.reload();
-                  });
-              } else {
-                setShowAccountActions(false);
-                setShowCompanyOptions(false);
-                showToast(`You are already on ${company.name}`, ToastMessageConstants.INFO);
-              }
+              userStore.updateUserCompany(company.id).then(() => {
+                if (location.pathname !== "/") {
+                  history.replace("/");
+                }
+                window.location.reload();
+              });
             }}
           >
             <CurrentCompanyCheckboxContainer>
@@ -118,11 +110,45 @@ export const AccountDropdownOptions = observer(
       return <UserStatus selectedUserStatus={selectedUserStatus} onStatusUpdate={updateStatus} />;
     };
 
-    const renderSwitchCompanyOptions = (): JSX.Element => {
+    const renderWorkspaceDisplay = () => {
       if (parsedProfile.companyProfiles.length > 1) {
-        return <AccountOptionText>{t("profile.switchCompanies")}</AccountOptionText>;
+        return (
+          <WorkspaceContainer
+            onClick={() => {
+              setShowCompanyOptions(!showCompanyOptions);
+            }}
+          >
+            <LeftWorkspaceContainer>
+              <AccountOptionText>{t("profile.switchCompanies")}</AccountOptionText>
+              <CompanyText type={"small"}>{R.path(["company", "name"], companyStore)}</CompanyText>
+            </LeftWorkspaceContainer>
+            <RightWorkspaceContainer>
+              <Icon icon={"Chevron-Left"} size={"15px"} iconColor={"grey80"} />
+            </RightWorkspaceContainer>
+          </WorkspaceContainer>
+        );
+      } else {
+        return (
+          <WorkspaceContainer>
+            <AccountOptionText>{R.path(["company", "name"], companyStore)}</AccountOptionText>
+          </WorkspaceContainer>
+        );
       }
     };
+
+    const renderShowProductStash = (): JSX.Element => {
+      return (
+        <AccountOptionText 
+          id="lynchpyn-whats-new"
+          onClick={() => {
+            window.Productstash.show();
+            setShowAccountActions(false);
+          }}
+        >
+          What's New? 
+        </AccountOptionText>
+      )
+    }
 
     const renderShowHelpdesk = (): JSX.Element => {
       return (
@@ -149,31 +175,31 @@ export const AccountDropdownOptions = observer(
     };
 
     const renderCompanyCreationSelector = (): JSX.Element => {
-      const displayFormat = R.path(["displayFormat"], onboardingCompany);
-      return (
-        showCompanyCreationSelector && (
-          <CompanyCreationSelectionContainer>
-            {!displayFormat ? (
-              <>
-                <CreationOption onClick={() => companyStore.openOnboardingModal("Company")}>
-                  <CreationSelectionText>{t("company.newCompany")}</CreationSelectionText>
-                </CreationOption>
-                <CreationOption onClick={() => companyStore.openOnboardingModal("Forum")}>
-                  <CreationSelectionText>{t("company.newForum")}</CreationSelectionText>
-                </CreationOption>
-              </>
-            ) : displayFormat === "Company" ? (
+      if (onboardingCompany) {
+        const displayFormat = R.path(["displayFormat"], onboardingCompany);
+        return (
+          showCompanyCreationSelector && (
+            <CreationOption onClick={() => companyStore.openOnboardingModal(displayFormat)}>
+              <CreationSelectionText>
+                {t("onboarding.continue", { format: displayFormat })}
+              </CreationSelectionText>
+            </CreationOption>
+          )
+        );
+      } else {
+        return (
+          showCompanyCreationSelector && (
+            <>
               <CreationOption onClick={() => companyStore.openOnboardingModal("Company")}>
                 <CreationSelectionText>{t("company.newCompany")}</CreationSelectionText>
               </CreationOption>
-            ) : (
               <CreationOption onClick={() => companyStore.openOnboardingModal("Forum")}>
                 <CreationSelectionText>{t("company.newForum")}</CreationSelectionText>
               </CreationOption>
-            )}
-          </CompanyCreationSelectionContainer>
-        )
-      );
+            </>
+          )
+        );
+      }
     };
 
     return (
@@ -194,39 +220,26 @@ export const AccountDropdownOptions = observer(
 
         <DropdownSectionContainer>
           <Link to="/account" style={{ textDecoration: "none", padding: "0" }}>
-            <AccountOptionText
-              color={baseTheme.colors.primary100}
-              onClick={() => setShowAccountActions(false)}
-            >
-              {t("profile.growthPlan")}
-            </AccountOptionText>
-          </Link>
-          <Link to="/account" style={{ textDecoration: "none", padding: "0" }}>
             <AccountOptionText onClick={() => setShowAccountActions(false)}>
               {t("profile.accountSettings")}
             </AccountOptionText>
           </Link>
+          <GrowthPlanContainer>
+            <AccountOptionText
+              onClick={() => {
+                window.open("https://payments.pabbly.com/portal/signin/lynchpyn", "_blank");
+                setShowAccountActions(false);
+              }}
+            >
+              {t("profile.growthPlan")}
+            </AccountOptionText>
+          </GrowthPlanContainer>
         </DropdownSectionContainer>
 
         <StyledDivider />
 
         <DropdownSectionContainer>
-          <WorkspaceContainer
-            onClick={() => {
-              setShowCompanyOptions(!showCompanyOptions);
-            }}
-          >
-            <LeftWorkspaceContainer>
-              {renderSwitchCompanyOptions()}
-              <CompanyText type={"small"}>
-                {" "}
-                {R.path(["company", "name"], companyStore)}{" "}
-              </CompanyText>
-            </LeftWorkspaceContainer>
-            <RightWorkspaceContainer>
-              <Icon icon={"Chevron-Left"} size={"15px"} iconColor={"grey80"} />
-            </RightWorkspaceContainer>
-          </WorkspaceContainer>
+          {renderWorkspaceDisplay()}
           {showCompanyOptions && (
             <CompanyDropdownContainer>
               <DropdownSectionContainer>{renderCompanyOptions()}</DropdownSectionContainer>
@@ -261,22 +274,25 @@ export const AccountDropdownOptions = observer(
           >
             Invite Users
           </AccountOptionText>
-          <AccountOptionText id="lynchpyn-whats-new">What's New? </AccountOptionText>
+          {renderShowProductStash()}
           {renderShowHelpdesk()}
         </DropdownSectionContainer>
 
-        <StyledDivider />
-
-        <DropdownSectionContainer>
-          <AccountOptionText
-            onClick={() => {
-              setShowCompanyCreationSelector(!showCompanyCreationSelector);
-            }}
-          >
-            {!R.isNil(onboardingCompany) ? t("company.edit") : t("company.create")}
-          </AccountOptionText>
-          {renderCompanyCreationSelector()}
-        </DropdownSectionContainer>
+        {process.env.QA_SHOW_CREATE_COMPANY_FORUM_MENU && (
+          <>
+            <StyledDivider />
+            <DropdownSectionContainer>
+              <AccountOptionText
+                onClick={() => {
+                  setShowCompanyCreationSelector(!showCompanyCreationSelector);
+                }}
+              >
+                {!R.isNil(onboardingCompany) ? t("company.edit") : t("company.create")}
+              </AccountOptionText>
+              {renderCompanyCreationSelector()}
+            </DropdownSectionContainer>
+          </>
+        )}
 
         <StyledDivider />
 
@@ -421,3 +437,5 @@ const DefaultTextContainer = styled.div`
 const DefaultText = styled(Text)`
   font-style: italic;
 `;
+
+const GrowthPlanContainer = styled.div``;

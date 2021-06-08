@@ -45,13 +45,15 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def update
     @key_activity_previously_completed = @key_activity.completed_at.present?
+    merged_key_activity_params = params[:label_list].present? ? key_activity_params.merge(label_list: ActsAsTaggableOn::Tag.find(params[:label_list]) || params[:label_list]) : key_activity_params
+
     if params[:completed]
       # if we complete an item on the master list, it should move it to the end
-      @key_activity.update!(key_activity_params.merge(completed_at: Time.now, scheduled_group: ScheduledGroup.find_by_name("Backlog")))
+      @key_activity.update!(merged_key_activity_params.merge(completed_at: Time.now, scheduled_group: ScheduledGroup.find_by_name("Backlog")))
       @key_activity.move_to_bottom
     else
       #if you move an item to todays list, it should set the moved_to_today_on
-      @key_activity.update!(key_activity_params.merge(completed_at: nil))
+      @key_activity.update!(merged_key_activity_params.merge(completed_at: nil))
     end
 
     if params[:from_team_meeting] == true
@@ -123,7 +125,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def key_activity_params
     params.permit(:id, :user_id, :description, :completed_at, :priority, :complete,
-      :position, :meeting_id, :due_date, :personal, :scheduled_group_id, :team_id, :label_list)
+      :position, :meeting_id, :due_date, :personal, :scheduled_group_id, :team_id)
   end
 
   def key_activities_params

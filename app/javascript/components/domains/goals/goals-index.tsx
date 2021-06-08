@@ -15,6 +15,7 @@ import { PersonalVision } from "./shared/personal-vision";
 import { CreateGoalSection } from "./shared/create-goal-section";
 import { useTranslation } from "react-i18next";
 import { GoalsCoreFour } from "./goals-core-four";
+import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge";
 import { SubInitiativeModalContent } from "./sub-initiative/sub-initiaitive-modal-content";
 
 export const GoalsIndex = observer(
@@ -48,33 +49,38 @@ export const GoalsIndex = observer(
     const [companyPlanning, setCompanyPlanning] = useState<boolean>(false);
     const [personalPlanning, setPersonalPlanning] = useState<boolean>(false);
 
+    const [showCoreFour, setShowCoreFour] = useState<boolean>(true);
     const [showCompanyInitiatives, setShowCompanyInitiatives] = useState<boolean>(true);
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
 
     const { t } = useTranslation();
-    
     useEffect(() => {
       goalStore.load().then(() => setLoading(false));
+      if (!companyStore.company) {
+        companyStore.load();
+      }
     }, []);
 
     if (loading || R.isNil(goalStore.companyGoals) || !companyStore.company) {
       return <Loading />;
     }
 
+    const instanceType = companyStore.company.accessForum ? "forum" : "teams";
     const companyGoals = goalStore.companyGoals;
     const personalGoals = goalStore.personalGoals;
-
     const annualInitiativeTitle = sessionStore.annualInitiativeTitle;
 
     const toggleCompanyPlanning = () => {
       if (companyPlanning) {
         setCompanyPlanning(false);
         setShowPersonalInitiatives(true);
+        setShowCoreFour(true);
       } else {
         setPersonalPlanning(false);
         setShowCompanyInitiatives(true);
         setShowPersonalInitiatives(false);
         setCompanyPlanning(true);
+        setShowCoreFour(false);
       }
     };
 
@@ -82,11 +88,13 @@ export const GoalsIndex = observer(
       if (personalPlanning) {
         setPersonalPlanning(false);
         setShowCompanyInitiatives(true);
+        setShowCoreFour(true);
       } else {
         setCompanyPlanning(false);
         setShowCompanyInitiatives(false);
         setShowPersonalInitiatives(true);
         setPersonalPlanning(true);
+        setShowCoreFour(false);
       }
     };
 
@@ -125,10 +133,10 @@ export const GoalsIndex = observer(
       const createGoalYearString =
         companyStore.company.currentFiscalYear ==
         companyStore.company.yearForCreatingAnnualInitiatives
-          ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-          : `FY${companyStore.company.currentFiscalYear
-              .toString()
-              .slice(-2)}/${companyStore.company.yearForCreatingAnnualInitiatives
+          ? `FY${(companyStore.company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
+          : `FY${(companyStore.company.currentFiscalYear - 1).toString().slice(-2)}/${(
+              companyStore.company.yearForCreatingAnnualInitiatives - 1
+            )
               .toString()
               .slice(-2)}`;
 
@@ -153,7 +161,7 @@ export const GoalsIndex = observer(
       return annualInitiatives.map((annualInitiative, index) => {
         return (
           <AnnualInitiativeCard
-            key={index}
+            key={annualInitiative.id}
             index={index}
             annualInitiative={annualInitiative}
             totalNumberOfAnnualInitiatives={annualInitiatives.length}
@@ -175,14 +183,15 @@ export const GoalsIndex = observer(
 
     return (
       <Container>
-        <GoalsCoreFour />
+        <GoalsCoreFour showCoreFour={showCoreFour} setShowCoreFour={setShowCoreFour} />
 
         <CompanyInitiativesContainer>
           <TitleContainer
             goalsFilter={companyGoalsFilter}
             setGoalsFilter={setCompanyGoalsFilter}
             largeHomeTitle={true}
-            title={"Company"}
+            title={companyStore.company.name}
+            type={"Company"}
             handleToggleChange={toggleCompanyPlanning}
             toggleChecked={companyPlanning}
             showInitiatives={showCompanyInitiatives}
@@ -210,7 +219,7 @@ export const GoalsIndex = observer(
             goalsFilter={personalGoalsFilter}
             setGoalsFilter={setPersonalGoalsFilter}
             largeHomeTitle={true}
-            title={"Personal"}
+            title={sessionStore.profile.firstName}
             handleToggleChange={togglePersonalPlanning}
             toggleChecked={personalPlanning}
             showInitiatives={showPersonalInitiatives}
@@ -284,23 +293,19 @@ export const GoalsIndex = observer(
             showCreateMilestones={true}
           />
         </StyledModal>
+        {instanceType === "forum" && <LynchPynBadge />}
       </Container>
     );
   },
 );
 
-const Container = styled.div`
-  margin-top: 30px;
-`;
+const Container = styled.div``;
 
 const InitiativesContainer = styled.div`
   display: -webkit-box;
   margin-top: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
   padding-bottom: 16px;
-  white-space: nowrap;
-  overflow-x: scroll;
+  overflow-x: auto;
 `;
 
 const PersonalInitiativesContainer = styled.div`
@@ -316,9 +321,10 @@ const StyledModal = Modal.styled`
 `;
 
 const CreateAnnualInitiativeContainer = styled.div`
-  margin-top: 16px;
-  margin-left: 8px;
-  width: 20%;
+  width: calc(20% - 16px);
+  min-width: 240px;
+  padding-left: 8px;
+  padding-right: 8px;
 `;
 
 const CompanyInitiativesContainer = styled.div``;

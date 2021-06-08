@@ -4,6 +4,6 @@ export type KeyElementType = {
   completedAt: Date | string;
   elementableId: number;
   completionType: string;
-  completionCurrentValue: number;
+  completionCurrentValue: number | string;
   completionTargetValue: number;
 };

@@ -1,7 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Icon } from "~/components/shared/icon";
-import { Button } from "~/components/shared/button";
 import { useMst } from "~/setup/root";
 import { useRef } from "react";
 import { DropdownOptions } from "./dropdown-options";
@@ -9,6 +8,7 @@ import { Text } from "../../../shared/text";
 import ContentEditable from "react-contenteditable";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useTranslation } from "react-i18next";
+import moment from "moment";
 
 interface IInitiativeHeaderProps {
   itemType: string;
@@ -21,6 +21,7 @@ interface IInitiativeHeaderProps {
   annualInitiativeDescription: string;
   showDropdownOptionsContainer: boolean;
   setShowDropdownOptionsContainer: React.Dispatch<React.SetStateAction<boolean>>;
+  goalYearString: string;
 }
 
 export const InitiativeHeader = ({
@@ -34,18 +35,25 @@ export const InitiativeHeader = ({
   annualInitiativeDescription,
   showDropdownOptionsContainer,
   setShowDropdownOptionsContainer,
+  goalYearString,
 }: IInitiativeHeaderProps): JSX.Element => {
-  const { quarterlyGoalStore, subInitiativeStore } = useMst();
-
+  const { quarterlyGoalStore, subInitiativeStore, sessionStore } = useMst();
+  const { t } = useTranslation();
   const descriptionRef = useRef(null);
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
-  const { t } = useTranslation();
 
   return (
     <>
       {item.closedAt && (
         <ClosedStatusBannerContainer>
-          {itemType == "quarterlyGoal" ? t("quarterlyGoal.cardClosed"):t("subInitiative.cardClosed")}.
+          {itemType == "quarterlyGoal"
+            ? t("quarterlyGoal.cardClosed", {
+              title: sessionStore.companyStaticData[1].value
+            })
+              : t("subInitiative.cardClosed", {
+                title: sessionStore.companyStaticData[2].value
+              })}
+          . {t("quarterlyGoal.createdOn")} {moment(item.createdAt).format("MMM Do, YYYY")}.
           <AnnualInitiativeActionContainer>
             <DropdownOptions
               editable={editable}
@@ -92,11 +100,14 @@ export const InitiativeHeader = ({
             </UnderlinedGoalText>
           </GoalText>
           <DetailsContainer>
+            <IconContainer>
+              <Icon icon={"Initiative"} size={"16px"} iconColor={"grey80"} />
+            </IconContainer>
             <YearText type={"small"}>Q{item.quarter}</YearText>
             <OwnedBySection
               ownedBy={item.ownedBy}
-              marginLeft={"5px"}
-              marginRight={"5px"}
+              marginLeft={"0px"}
+              marginRight={"0px"}
               marginTop={"auto"}
               marginBottom={"auto"}
               type={itemType}
@@ -104,7 +115,21 @@ export const InitiativeHeader = ({
             />
           </DetailsContainer>
         </TitleContainer>
-
+        {!item.closedAt && (
+          <AnnualInitiativeActionContainer>
+            <DropdownOptions
+              editable={editable}
+              showDropdownOptionsContainer={showDropdownOptionsContainer}
+              setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
+              setParentModalOpen={setModalOpen}
+              itemType={itemType}
+              item={item}
+            />
+            <CloseIconContainer onClick={() => setModalOpen(false)}>
+              <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+            </CloseIconContainer>
+          </AnnualInitiativeActionContainer>
+        )}
       </HeaderContainer>
     </>
   );
@@ -130,9 +155,20 @@ const UnderlinedGoalText = styled.span`
   }
 `;
 
+const DescriptionContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 const AnnualInitiativeActionContainer = styled.div`
   display: flex;
   margin-left: auto;
+`;
+
+const IconContainer = styled.div`
+  margin-right: 8px;
+  margin-top: auto;
+  margin-bottom: auto;
 `;
 
 const CloseIconContainer = styled.div`
@@ -158,10 +194,17 @@ const DetailsContainer = styled.div`
 
 const YearText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
+  margin-right: 16px;
 `;
 
 const ClosedStatusBannerContainer = styled.div`
-  background-image: repeating-linear-gradient(150deg, #feecea, #feecea 20px, #f2e2e4 20px, #f2e2e4 25px);
+  background-image: repeating-linear-gradient(
+    150deg,
+    #feecea,
+    #feecea 20px,
+    #f2e2e4 20px,
+    #f2e2e4 25px
+  );
   border-radius: 4px;
   text-align: left;
   font: normal normal bold 16px/16px Lato;
@@ -169,7 +212,7 @@ const ClosedStatusBannerContainer = styled.div`
   color: ${props => props.theme.colors.black};
   opacity: 1;
   padding: 40px 5%;
-  justify-content: space-between;
   display: flex;
+  justify-content: space-between;
   height: 20px;
-`
+`;

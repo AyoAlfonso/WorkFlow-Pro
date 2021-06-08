@@ -9,3 +9,4 @@ json.milestones sub_initiative.milestones do |milestone|
 end
 
 json.annual_initiative_id sub_initiative.quarterly_goal.annual_initiative_id
+json.fiscal_year sub_initiative.quarterly_goal.annual_initiative.fiscal_year

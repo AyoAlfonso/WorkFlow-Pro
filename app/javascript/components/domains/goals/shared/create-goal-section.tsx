@@ -136,7 +136,6 @@ const CreateAnnualInitiativeCardContainer = styled(HomeContainerBorders)`
   padding-bottom: 8px;
   padding-left: 16px;
   padding-right: 16px;
-  width: 100%;
   background-color: white;
 `;
 

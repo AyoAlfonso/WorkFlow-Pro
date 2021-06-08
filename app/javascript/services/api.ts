@@ -7,11 +7,14 @@ export class Api {
   token: string;
 
   constructor() {
+    let companyId = localStorage.getItem("companyId")
+    
     this.client = create({
       baseURL: "/api",
       headers: {
         "Cache-Control": "no-cache",
         "Content-Type": "application/json",
+        "Current-Company-ID": companyId == "undefined" || !companyId ? "" : companyId
       },
       timeout: 30000,
       withCredentials: true, //allow cookies to be sent if its from same domain
@@ -52,9 +55,7 @@ export class Api {
 
   async profile() {
     const response = await this.client.get("/profile");
-    this.client.setHeaders({
-      "Current-Company-ID": R.path(["data", "sessionCompanyProfileId"], response) || "",
-    });
+    localStorage.setItem('companyId', R.path(["data", "sessionCompanyProfileId"], response));
     return response;
   }
 
@@ -139,6 +140,11 @@ export class Api {
       "Current-Company-ID": "",
     });
     return this.client.delete("/users/sign_out");
+  }
+
+  async switchCompanies(id) {
+    localStorage.setItem("companyId", id);
+    return true
   }
 
   async createIssue(issueObject) {
@@ -370,6 +376,14 @@ export class Api {
     return this.client.get(`/journals`, dateFilterObj);
   }
 
+  async updateJournalEntry(journalEntry) {
+    return this.client.patch(`/journal_entries/${journalEntry.id}`, journalEntry);
+  }
+
+  async deleteJournalEntry(journalEntryId) {
+    return this.client.delete(`/journal_entries/${journalEntryId}`);
+  }
+
   async createQuestionnaireAttempt(questionnaireId, questionnaireAttemptData) {
     const questionnaireAttemptObject = {
       questionnaire_id: questionnaireId,
@@ -502,16 +516,19 @@ export class Api {
     return this.client.post(`/create_team_and_invite_users`, { teamName, users });
   }
 
-  async getEmotionAdjectives(){
-    return this.client.get(`/user_pulses/emotion_adjectives`)
+  async getEmotionAdjectives() {
+    return this.client.get(`/user_pulses/emotion_adjectives`);
   }
 
-  async updateUserPulse(pulseObject){
-    return this.client.post(`/update_user_pulse`, pulseObject )
+  async updateUserPulse(pulseObject) {
+    return this.client.post(`/update_user_pulse`, pulseObject);
   }
-  
-  async getUserPulseByDate(date){
-    return this.client.get(`/user_pulse_by_date`, { date })
+
+  async getUserPulseByDate(date) {
+    return this.client.get(`/user_pulse_by_date`, { date });
+  }
+  async getSelectedDailyLogByDate(date) {
+    return this.client.get(`/daily_logs`, { date });
   }
   //async setJWT(jwt) {}
 }

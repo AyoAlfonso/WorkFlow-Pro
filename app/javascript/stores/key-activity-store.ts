@@ -213,10 +213,14 @@ export const KeyActivityStoreModel = types
       });
       if (response.ok) {  
         const { completedList, keyActivities} = response.data
-        if (completedList) {
-          self.completedKeyActivities = keyActivities
+        if(fromTeamMeeting){
+          self.keyActivitiesFromMeeting = keyActivities;
         } else {
-          self.incompleteKeyActivities = keyActivities;
+          if (completedList) {
+            self.completedKeyActivities = keyActivities
+          } else {
+            self.incompleteKeyActivities = keyActivities;
+          }
         }
         return true;
       } else {
@@ -262,10 +266,10 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
-    updateLabel: flow(function*(keyActivityId, labelName) {
+    updateLabel: flow(function*(keyActivityId, labelId) {
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivity({
         id: keyActivityId,
-        labelList: labelName,
+        labelList: labelId,
       });
 
       self.finishLoading();

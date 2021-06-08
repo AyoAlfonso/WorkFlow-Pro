@@ -9,8 +9,12 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { ColumnContainerParent, ColumnContainer } from "~/components/shared/styles/row-style";
 
+interface IMilestoneProps {
+  meetingType?: string;
+}
+
 export const Milestones = observer(
-  (): JSX.Element => {
+  ({ meetingType }: IMilestoneProps): JSX.Element => {
     const { milestoneStore } = useMst();
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -26,11 +30,11 @@ export const Milestones = observer(
     }
 
     const renderWeeklyMilestones = (): JSX.Element[] => {
-      return milestoneStore.milestonesForPersonalMeeting.map((milestone, index) => (
-        <MilestoneContainer key={index}>
+      return milestoneStore.milestonesForPersonalMeeting.map(milestone => (
+        <MilestoneContainer key={milestone.id}>
           <StyledText>{`${milestone.quarterlyGoalDescription || ""}`}</StyledText>
           <MilestoneCard
-            key={index}
+            key={milestone.id}
             milestone={milestone}
             editable={true}
             fromMeeting={true}
@@ -43,7 +47,11 @@ export const Milestones = observer(
     return (
       <ColumnContainerParent>
         <ColumnContainer>
-          <HomeKeyActivities todayOnly={true} width={"100%"} />
+          {meetingType == "personal_weekly" ? (
+            <HomeKeyActivities weeklyOnly={true} width={"100%"} />
+          ) : (
+            <HomeKeyActivities todayOnly={true} width={"100%"} />
+          )}
         </ColumnContainer>
         <ColumnContainer>{renderWeeklyMilestones()}</ColumnContainer>
       </ColumnContainerParent>
@@ -55,6 +63,7 @@ const MilestoneContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
+  padding-bottom: 16px;
 `;
 
 const StyledText = styled.h4`

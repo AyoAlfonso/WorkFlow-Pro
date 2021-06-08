@@ -7,9 +7,9 @@ import { useTranslation } from "react-i18next";
 
 interface IGoalDropdownOptionsProps {
   setShowDropdownOptions: any;
-  setModalOpen: any;
+  setModalOpen?: any;
   itemType: string;
-  itemId: number;
+  itemId: number | string;
 }
 
 export const GoalDropdownOptions = ({
@@ -39,6 +39,14 @@ export const GoalDropdownOptions = ({
     };
   }, [optionsRef]);
 
+  const itemText = itemType == "annualInitiative" ? "Objective" : "Initiative";
+
+  const closeModal = () => {
+    if (setModalOpen) {
+      setModalOpen(false);
+    }
+  };
+
   const closeInitiative = () => {
     if (itemType == "annualInitiative") {
       if (
@@ -49,7 +57,7 @@ export const GoalDropdownOptions = ({
         )
       ) {
         annualInitiativeStore.closeInitiative(itemId).then(() => {
-          setModalOpen(false);
+          closeModal();
         });
       }
     } else if (itemType == "quarterlyGoal") {
@@ -61,7 +69,7 @@ export const GoalDropdownOptions = ({
         )
       ) {
         quarterlyGoalStore.closeGoal(itemId).then(() => {
-          setModalOpen(false);
+          closeModal();
         });
       }
     } else if (itemType == "subInitiative") {
@@ -73,7 +81,7 @@ export const GoalDropdownOptions = ({
         )
       ) {
         subInitiativeStore.closeGoal(itemId).then(() => {
-          setModalOpen(false);
+          closeModal();
         });
       }
     }
@@ -89,7 +97,7 @@ export const GoalDropdownOptions = ({
         )
       ) {
         annualInitiativeStore.delete(itemId).then(() => {
-          setModalOpen(false);
+          closeModal();
         });
       }
     } else if (itemType == "quarterlyGoal") {
@@ -101,7 +109,7 @@ export const GoalDropdownOptions = ({
         )
       ) {
         quarterlyGoalStore.delete(false, itemId).then(() => {
-          setModalOpen(false);
+          closeModal();
         });
       }
     } else if (itemType == "subInitiative") {
@@ -113,7 +121,7 @@ export const GoalDropdownOptions = ({
         )
       ) {
         subInitiativeStore.delete(itemId).then(() => {
-          setModalOpen(false);
+          closeModal();
         });
       }
     }
@@ -135,13 +143,13 @@ export const GoalDropdownOptions = ({
         <IconContainer>
           <StyledIcon icon={"Checkmark"} size={"15px"} />
         </IconContainer>
-        <OptionText> Close Initiative </OptionText>
+        <OptionText> Close {itemText} </OptionText>
       </OptionContainer>
       <OptionContainer onClick={() => deleteInitiative()}>
         <IconContainer>
           <StyledIcon icon={"Delete"} size={"15px"} />
         </IconContainer>
-        <OptionText> Delete Initiative </OptionText>
+        <OptionText> Delete {itemText} </OptionText>
       </OptionContainer>
     </Container>
   );
@@ -152,7 +160,7 @@ const Container = styled.div`
   background-color: ${props => props.theme.colors.white};
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
-  z-index: 2;
+  z-index: 3;
   margin-left: -80px;
   margin-top: 5px;
   height: auto;
@@ -178,6 +186,7 @@ const IconContainer = styled.div`
 const OptionText = styled(TextContainer)`
   color: ${props => props.theme.colors.black};
   margin-left: 8px;
+  white-space: nowrap;
 `;
 
 export const StyledIcon = styled(Icon)``;

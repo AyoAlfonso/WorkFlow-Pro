@@ -15,7 +15,9 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
 
     steps = permit_array_param_and_convert_to_hash(params[:steps])
     rendered_steps = permit_array_param_and_convert_to_hash(params[:rendered_steps])
-    
+
+    log_date = params[:log_date] ? params[:log_date].to_date : current_user.convert_to_their_timezone.to_date
+
     @questionnaire_attempt = QuestionnaireAttempt.new({
       user_id: current_user.id,
       questionnaire_id: params[:questionnaire_id],
@@ -25,16 +27,25 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
       rendered_steps: rendered_steps,
       completed_at: current_user.time_in_user_timezone,
       json_representation: json_representation,
-      emotion_score: questionnaire.name == "Evening Reflection" ? emotion_to_score_conversion(rendered_steps) : nil,
       questionnaire_attemptable_id: params[:questionnaire_attemptable_id],
-      questionnaire_attemptable_type: params[:questionnaire_attemptable_type]
+      questionnaire_attemptable_type: params[:questionnaire_attemptable_type],
+      log_date: log_date
     })
     authorize @questionnaire_attempt
 
     if @questionnaire_attempt.save_and_create_journal_entry
-      @current_daily_log = DailyLog.find(current_user.current_daily_log(current_company).id)
-      @current_daily_log[questionnaire.name.delete(' ').underscore] = true unless (questionnaire.name == "Monthly Reflection")
-      @current_daily_log.save!
+      if params[:log_date]
+        @current_daily_log = DailyLog.find_by_log_date(log_date)
+        @current_daily_log[questionnaire.name.delete(' ').underscore] = true unless (questionnaire.name == "Monthly Reflection")
+        @current_daily_log.save!
+      else
+        @current_daily_log = DailyLog.find(current_user.current_daily_log(current_company).id)
+        @current_daily_log[questionnaire.name.delete(' ').underscore] = true unless (questionnaire.name == "Monthly Reflection")
+        @current_daily_log.save!
+      end
+      
+      #TODO IF PARAMS HAS A DATE TO IT, WE UPDATE IT FOR THAT DAILY LOG  CURRENT_USER.FIND
+      
     end
     render json: @current_daily_log
   end
@@ -128,10 +139,6 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
     array.map do |param|
       param.permit!.to_h
     end
-  end
-
-  def emotion_to_score_conversion(rendered_steps)
-    rendered_steps.detect { |rs| rs["id"] == "rating" }["value"]
   end
 
   def questionnaire_attempts_for_weekly(questionnaire)

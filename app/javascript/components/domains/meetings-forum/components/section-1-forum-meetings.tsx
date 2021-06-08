@@ -178,11 +178,12 @@ const SubHeaderContainer = styled.div`
 
 const SubHeaderText = styled(Text)`
   font-weight: bold;
+  margin-top: 0;
 `;
 
 const YearPlanContainer = styled.div`
   width: 335px;
-  margin-top: auto;
+  margin-top: 0;
   margin-bottom: -4px;
 `;
 

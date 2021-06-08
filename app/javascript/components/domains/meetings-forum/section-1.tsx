@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { NavHeader } from "~/components/domains/nav/nav-header";
 import { Loading } from "~/components/shared/loading";
 import { Section1ForumMeetings } from "./components/section-1-forum-meetings";
+import { LynchPynBadge } from "./components/lynchpyn-badge";
 import { toJS } from "mobx";
 
 export const Section1 = observer(
@@ -23,6 +24,7 @@ export const Section1 = observer(
 
     const { team_id } = useParams();
     const [loading, setLoading] = useState<boolean>(true);
+    const instanceType = company && company.accessForum ? "forum" : "teams";
 
     useEffect(() => {
       async function setUp() {
@@ -52,6 +54,8 @@ export const Section1 = observer(
     return (
       <Container>
         <Section1ForumMeetings company={company} teamId={teamId} />
+
+        {instanceType === "forum" && <LynchPynBadge />}
       </Container>
     );
   },
