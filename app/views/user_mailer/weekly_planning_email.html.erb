@@ -266,7 +266,7 @@ this week.
   <% @next_quarterly_milestones.where(milestoneable_id: goal.id).each do |milestone|%>
     <p style="margin-top: 0px;">
     Week of <%= milestone.week_of.strftime("%B %-d") %>:
-    <%= milestone.description.gsub("<br>", "") %>
+    <%= strip_tags(milestone.description) %>
     </p>
   <% end %>
 <% end %>
@@ -278,7 +278,7 @@ this week.
   <% @next_subinitiative_milestones.where(milestoneable_id: goal.id).each do |milestone|%>
     <p style="margin-top: 0px;">
     Week of <%= milestone.week_of.strftime("%B %-d") %>:
-    <%= milestone.description.gsub("<br>", "") %>
+    <%= strip_tags(milestone.description) %>
     </p>
   <% end %>
 <% end %>
