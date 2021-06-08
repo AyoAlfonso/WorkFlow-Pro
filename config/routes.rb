@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get 'key_performance_index/ScoreCardLog'
-  get 'key_performance_index/index'
   # devise_for :users, defaults: {format: :json}
   devise_for :users,
   defaults: {format: :json},
@@ -135,7 +133,6 @@ Rails.application.routes.draw do
     post '/key_performance_index/create_key_element/:id', to: 'sub_initiatives#create_key_element'
     patch '/key_performance_index/close/:id', to: 'key_performance_index#close_kpi'
     # post '/sub_initiatives/create_milestones/:id', to: 'sub_initiatives#create_milestones'
-   
 
     #questionnaires
     resources :questionnaires, only: [:index]
