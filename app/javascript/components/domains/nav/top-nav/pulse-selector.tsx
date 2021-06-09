@@ -95,7 +95,12 @@ export const PulseSelector = observer(
         case 5:
           return emotionA(true);
         default:
-          return emotionC(true);
+          return (
+            <div style={{ position: "relative" }}>
+              {emotionC(true)}
+              <NotificationBadge/>
+            </div>
+          );
       }
     };
 
@@ -264,3 +269,14 @@ const InputAdjectiveContainer = styled.div``;
 const SaveButtonContainer = styled.div`
   margin-top: 16px;
 `;
+
+const NotificationBadge = styled.span`
+  background-color: ${props => props.theme.colors.primary60};
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%,-50%)
+`
