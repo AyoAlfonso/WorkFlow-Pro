@@ -61,6 +61,7 @@ const VisionTitle = styled.p`
   display: flex;
   align-items: center;
   height: inherit;
+  width: 200px;
   white-space: nowrap;
 `;
 
@@ -72,6 +73,7 @@ const StyledContentEditable = styled(ContentEditable)`
   margin-top: auto;
   margin-bottom: auto;
   padding: 5px;
+  padding-right: 200px;
   text-transform: capitalize;
   font-weight: 700;
   text-overflow: ellipsis;
