@@ -3,7 +3,7 @@ import * as R from "ramda";
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Input } from "~/components/shared/input";
 import { useMst } from "~/setup/root";
 import { Heading, Button } from "~/components/shared";
@@ -95,7 +95,12 @@ export const PulseSelector = observer(
         case 5:
           return emotionA(true);
         default:
-          return emotionC(true);
+          return (
+            <div style={{ position: "relative" }}>
+              {emotionC(true)}
+              <NotificationBadge/>
+            </div>
+          );
       }
     };
 
@@ -264,3 +269,24 @@ const InputAdjectiveContainer = styled.div``;
 const SaveButtonContainer = styled.div`
   margin-top: 16px;
 `;
+
+const PulseAnimation = keyframes`
+  0% {
+    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 8px rgba(0, 0, 0, 0);
+  }
+`
+
+const NotificationBadge = styled.span`
+  background-color: ${props => props.theme.colors.primary60};
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%,-50%);
+  animation: ${PulseAnimation} 2s infinite;
+`
