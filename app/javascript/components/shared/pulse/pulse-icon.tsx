@@ -1,7 +1,7 @@
 import * as React from "react";
 import { baseTheme } from "~/themes";
 
-const { warningRed, cautionYellow, successGreen, finePine, greyInactive } = baseTheme.colors;
+const { warningRed, cautionYellow, successGreen, finePine, greyInactive, primary60 } = baseTheme.colors;
 
 export const emotionA = (active: boolean, size = 24) => {
   return (
@@ -74,20 +74,20 @@ export const emotionC = (active: boolean, size = 24) => {
     >
       <title>Emotion-C</title>
       <path
-        fill={greyInactive}
+        fill={active ? primary60 : greyInactive}
         d="M28.395 0h-24.789c-1.989 0.006-3.601 1.617-3.606 3.606v24.788c0.006 1.989 1.617 3.601 3.606 3.606h24.789c1.989-0.006 3.599-1.617 3.605-3.606v-24.788c-0.006-1.989-1.616-3.6-3.604-3.606h-0.001zM28.395 28.394h-24.789v-24.788h24.789z"
       ></path>
       <path
-        fill={greyInactive}
+        fill={active ? primary60 : greyInactive}
         d="M11.575 15.875c1.964 0 3.556-1.592 3.556-3.556v0c-0.018-0.477-0.41-0.857-0.889-0.857s-0.871 0.38-0.889 0.855l-0 0.002c0 0.982-0.796 1.777-1.777 1.777s-1.777-0.796-1.777-1.777v0-0.026c-0.007-0.485-0.402-0.876-0.889-0.876-0.491 0-0.889 0.398-0.889 0.889 0 0.005 0 0.009 0 0.014v-0.001c0 0 0 0.001 0 0.001 0 1.963 1.592 3.555 3.555 3.555v0z"
       ></path>
-      <path fill={greyInactive} d="M17.785 11.419v0z"></path>
+      <path fill={active ? primary60 : greyInactive} d="M17.785 11.419v0z"></path>
       <path
-        fill={greyInactive}
+        fill={active ? primary60 : greyInactive}
         d="M20.464 15.875c1.964 0 3.556-1.592 3.556-3.556v0c-0.018-0.477-0.41-0.857-0.889-0.857s-0.871 0.38-0.889 0.855l-0 0.002c0 0.982-0.796 1.777-1.777 1.777s-1.777-0.796-1.777-1.777v0-0.026c-0.007-0.485-0.402-0.876-0.889-0.876-0.491 0-0.889 0.398-0.889 0.889 0 0.005 0 0.009 0 0.014v-0.001c0 0 0 0.001 0 0.001 0 1.963 1.592 3.555 3.555 3.555v0z"
       ></path>
       <path
-        fill={greyInactive}
+        fill={active ? primary60 : greyInactive}
         d="M15.064 21.241c0.025 0.472 0.414 0.845 0.89 0.845 0.016 0 0.032-0 0.047-0.001l-0.002 0h3.583c0.010 0 0.022 0.001 0.033 0.001 0.492 0 0.89-0.398 0.89-0.89s-0.398-0.89-0.89-0.89c-0.012 0-0.023 0-0.035 0.001l0.002-0h-3.672c-0.473 0.025-0.846 0.415-0.846 0.891 0 0.015 0 0.031 0.001 0.046l-0-0.002z"
       ></path>
     </svg>
