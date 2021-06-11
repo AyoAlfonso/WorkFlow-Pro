@@ -5,13 +5,16 @@ import { useMst } from "../../../../setup/root";
 import { toJS } from "mobx";
 import { Icon } from "../../../shared/icon";
 import { Text } from "../../../shared/text";
-import { NavLink } from "react-router-dom";
+import MeetingTypes from "~/constants/meeting-types";
+import { ToastMessageConstants } from "~/constants/toast-types";
+import { showToast } from "~/utils/toast-message";
+import { NavLink, useHistory } from "react-router-dom";
 import { color } from "styled-system";
 import { matchPath } from "react-router";
 
 import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react";
-import { SideNavChildLink } from "./side-nav-child-link";
+import { SideNavChildLink, SideNavChildProgrammatic } from "./side-nav-child-link";
 import { SideNavChildPopup } from "./side-nav-child-popup";
 import { Image } from "rebass";
 import { ICompany } from "~/models/company";
@@ -75,14 +78,6 @@ const IconContainer = styled.div`
   align-items: center;
 `;
 
-interface StyledNavLinkChildrenActiveProps {
-  to: string;
-  icon: string;
-  children: any;
-  disabled?: boolean;
-  currentPathName: string;
-}
-
 interface SideNavChildPopupContainerProps {
   active: boolean;
   disableOnActive: boolean;
@@ -141,6 +136,14 @@ const NavMenuIcon: React.FunctionComponent<INavMenuIconProps> = ({
   );
 };
 
+interface StyledNavLinkChildrenActiveProps {
+  to: string;
+  icon: string;
+  children: any;
+  disabled?: boolean;
+  currentPathName: string;
+}
+
 const StyledNavLinkChildrenActive = ({
   to,
   icon,
@@ -159,6 +162,43 @@ const StyledNavLinkChildrenActive = ({
   );
 };
 
+interface StyledProgrammaticLinkChildrenActiveProps {
+  onClick: any;
+  icon: string;
+  children: any;
+  disabled?: boolean;
+  currentPathName: string;
+}
+
+type StyledNavLinkDivType = {
+  active: boolean;
+};
+
+const StyledNavLinkDiv = styled.div<StyledNavLinkType>`
+  ${color}
+  align-item: center;
+  text-decoration: none;
+  &:link,
+  &:visited {
+    color: ${props => props.theme.colors.white};
+  }
+`;
+const StyledProgrammaticLinkChildrenActive = ({
+  onClick,
+  icon,
+  children,
+  disabled,
+  currentPathName
+}:  StyledProgrammaticLinkChildrenActiveProps): JSX.Element => {
+  return (
+    <StyledNavLinkDiv disabled={disabled} onClick={onClick}>
+      <NavMenuIcon icon={icon}>
+        {children}
+      </NavMenuIcon>
+    </StyledNavLinkDiv>
+  );
+}
+
 const isNavMenuIconActive = (currentPath: string, to: string): boolean => {
   const pathMatch = matchPath(currentPath, to);
   return pathMatch ? (to == "/" ? pathMatch.isExact : true) : false;
@@ -169,34 +209,37 @@ export const SideNavNoMst = (
   teams: any,
   productFeatures?: any,
   company?: ICompany,
+  startNextMeeting?: any,
+  createMeeting?: any,
 ): JSX.Element => {
   const { t } = useTranslation();
 
   const [teamNavChildOpen, setTeamNavChildOpen] = useState<boolean>(false);
   const [companyNavChildOpen, setCompanyNavChildOpen] = useState<boolean>(false);
   const [meetingsNavChildOpen, setMeetingsNavChildOpen] = useState<boolean>(false);
+  const [startMeetingNavChildOpen, setStartMeetingNavChildOpen] = useState<boolean>(false);
 
-  const renderForumOrTeam = (teamLength: number, isForum = true) => {
-    const domain = isForum ? "forum" : "team";
+
+  const renderTeam = (teamLength: number) => {
     switch (teamLength) {
       case 0:
         return (
           <StyledNavLinkChildrenActive
-            to={`/${domain}/`}
+            to={`/team/`}
             icon={"Team"}
             currentPathName={currentPathName}
           >
-            {isForum ? t("navigation.forum") : t("navigation.team")}
+            {t("navigation.team")}
           </StyledNavLinkChildrenActive>
         );
       case 1:
         return (
           <StyledNavLinkChildrenActive
-            to={`/${domain}/${R.path(["0", "id"], teams) || ""}`}
+            to={`/team/${R.path(["0", "id"], teams) || ""}`}
             icon={"Team"}
             currentPathName={currentPathName}
           >
-            {isForum ? t("navigation.forum") : t("navigation.team")}
+            {t("navigation.team")}
           </StyledNavLinkChildrenActive>
         );
       default:
@@ -205,10 +248,10 @@ export const SideNavNoMst = (
             trigger={
               <NavMenuIcon
                 icon={"Team"}
-                active={isNavMenuIconActive(currentPathName, `/${domain}`)}
+                active={isNavMenuIconActive(currentPathName, "/team")}
                 disableOnActive={false}
               >
-                {isForum ? t("navigation.forum") : t("navigation.team")}
+                {t("navigation.team")}
               </NavMenuIcon>
             }
             navOpen={teamNavChildOpen}
@@ -216,7 +259,71 @@ export const SideNavNoMst = (
             setOtherNavOpen={[setCompanyNavChildOpen, setMeetingsNavChildOpen]}
           >
             {teams.map((team: any, index: number) => (
-              <SideNavChildLink key={index} to={`/${domain}/${team.id}`} linkText={team.name} />
+              <SideNavChildLink key={index} to={`/team/${team.id}`} linkText={team.name} />
+            ))}
+          </SideNavChildPopup>
+        );
+    }
+  };
+
+  const history = useHistory()
+  const handleForumMeetingClick = (team_id: number | string) => () => {
+    startNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
+      if (!R.isNil(meeting)) {
+        history.push(`/team/${team_id}/meeting/${meeting.id}`);
+      }
+    });
+  };
+
+  const handleMeetingClick = (team_id: number | string) => () => {
+    createMeeting(team_id).then(({ meeting }) => {
+      if (!R.isNil(meeting)) {
+        history.push(`/team/${team_id}/meeting/${meeting.id}`);
+      } else {
+        showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
+      }
+    });
+  };
+
+  const renderMeeting = (teamLength: number, type: string) => {
+    const handler = type == "team" ? handleMeetingClick : handleForumMeetingClick
+    switch (teamLength) {
+      case 0:
+        return (
+          <></>
+        );
+      case 1:
+        return (
+          <StyledProgrammaticLinkChildrenActive
+            onClick={handler(R.path(["0", "id"], teams) || "")}
+            icon={"Team"}
+            currentPathName={currentPathName}
+          >
+            {t("navigation.forum")}
+          </StyledProgrammaticLinkChildrenActive>
+        );
+      default:
+        return (
+          <SideNavChildPopup
+            trigger={
+              <NavMenuIcon
+                icon={"Team"}
+                active={false}
+                disableOnActive={false}
+              >
+                {t("navigation.forum")}
+              </NavMenuIcon>
+            }
+            navOpen={startMeetingNavChildOpen}
+            setNavOpen={setStartMeetingNavChildOpen}
+            setOtherNavOpen={[setCompanyNavChildOpen, setMeetingsNavChildOpen, setTeamNavChildOpen]}
+          >
+            {teams.map((team: any, index: number) => (
+              <SideNavChildProgrammatic
+                key={index}
+                linkText={team.name}
+                handleClick={handler(team.id)}
+              />
             ))}
           </SideNavChildPopup>
         );
@@ -249,7 +356,7 @@ export const SideNavNoMst = (
         {t("navigation.home")}
       </StyledNavLinkChildrenActive>
 
-      {company && company.accessForum ? renderForumOrTeam(R.path(["length"], teams) || 0) : <> </>}
+      {company && company.accessForum ? renderMeeting(R.path(["length"], teams) || 0, "forum") : <> </>}
 
       {company && company.accessForum && !R.isNil(R.path(["0", "id"], teams)) ? (
         <SideNavChildPopup
@@ -288,11 +395,9 @@ export const SideNavNoMst = (
         <> </>
       )}
 
-      {company && company.accessCompany ? (
-        renderForumOrTeam(R.path(["length"], teams) || 0, false)
-      ) : (
-        <> </>
-      )}
+      {company && company.accessCompany ? renderTeam(R.path(["length"], teams) || 0) : <> </>}
+
+      {company && company.accessCompany ? renderMeeting(R.path(["length"], teams) || 0, "team") : <> </>}
 
       {company && company.accessCompany ? (
         <SideNavChildPopup
@@ -348,6 +453,7 @@ export const SideNav = observer(
       teamStore,
       sessionStore: { profile },
       companyStore: { company },
+      meetingStore: { startNextMeeting, createMeeting },
     } = useMst();
 
     if (profile == null) {
@@ -359,6 +465,8 @@ export const SideNav = observer(
       toJS(profile.currentCompanyUserTeams),
       profile.productFeatures,
       company,
+      startNextMeeting,
+      createMeeting,
     );
   },
 );
