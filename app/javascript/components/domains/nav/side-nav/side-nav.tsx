@@ -6,13 +6,15 @@ import { toJS } from "mobx";
 import { Icon } from "../../../shared/icon";
 import { Text } from "../../../shared/text";
 import MeetingTypes from "~/constants/meeting-types";
+import { ToastMessageConstants } from "~/constants/toast-types";
+import { showToast } from "~/utils/toast-message";
 import { NavLink, useHistory } from "react-router-dom";
 import { color } from "styled-system";
 import { matchPath } from "react-router";
 
 import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react";
-import { SideNavChildLink } from "./side-nav-child-link";
+import { SideNavChildLink, SideNavChildProgrammatic } from "./side-nav-child-link";
 import { SideNavChildPopup } from "./side-nav-child-popup";
 import { Image } from "rebass";
 import { ICompany } from "~/models/company";
@@ -205,12 +207,14 @@ export const SideNavNoMst = (
   teams: any,
   company?: ICompany,
   startNextMeeting?: any,
+  createMeeting?: any,
 ): JSX.Element => {
   const { t } = useTranslation();
 
   const [teamNavChildOpen, setTeamNavChildOpen] = useState<boolean>(false);
   const [companyNavChildOpen, setCompanyNavChildOpen] = useState<boolean>(false);
   const [meetingsNavChildOpen, setMeetingsNavChildOpen] = useState<boolean>(false);
+  const [startMeetingNavChildOpen, setStartMeetingNavChildOpen] = useState<boolean>(false);
 
   const renderTeam = (teamLength: number) => {
     switch (teamLength) {
@@ -266,22 +270,28 @@ export const SideNavNoMst = (
       }
     });
   };
-  const renderForum = (teamLength: number) => {
+
+  const handleMeetingClick = (team_id: number | string) => () => {
+    createMeeting(team_id).then(({ meeting }) => {
+      if (!R.isNil(meeting)) {
+        history.push(`/team/${team_id}/meeting/${meeting.id}`);
+      } else {
+        showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
+      }
+    });
+  };
+
+  const renderMeeting = (teamLength: number, type: string) => {
+    const handler = type == "team" ? handleMeetingClick : handleForumMeetingClick
     switch (teamLength) {
       case 0:
         return (
-          <StyledProgrammaticLinkChildrenActive
-            onClick={handleForumMeetingClick(R.path(["0", "id"], teams) || "")}
-            icon={"Team"}
-            currentPathName={currentPathName}
-          >
-            {t("navigation.forum")}
-          </StyledProgrammaticLinkChildrenActive>
+          <></>
         );
       case 1:
         return (
           <StyledProgrammaticLinkChildrenActive
-            onClick={handleForumMeetingClick(R.path(["0", "id"], teams) || "")}
+            onClick={handler(R.path(["0", "id"], teams) || "")}
             icon={"Team"}
             currentPathName={currentPathName}
           >
@@ -294,22 +304,21 @@ export const SideNavNoMst = (
             trigger={
               <NavMenuIcon
                 icon={"Team"}
-                active={isNavMenuIconActive(currentPathName, "/team")}
+                active={false}
                 disableOnActive={false}
               >
                 {t("navigation.forum")}
               </NavMenuIcon>
             }
-            navOpen={teamNavChildOpen}
-            setNavOpen={setTeamNavChildOpen}
-            setOtherNavOpen={[setCompanyNavChildOpen, setMeetingsNavChildOpen]}
+            navOpen={startMeetingNavChildOpen}
+            setNavOpen={setStartMeetingNavChildOpen}
+            setOtherNavOpen={[setCompanyNavChildOpen, setMeetingsNavChildOpen, setTeamNavChildOpen]}
           >
             {teams.map((team: any, index: number) => (
-              <SideNavChildLink
+              <SideNavChildProgrammatic
                 key={index}
-                to={`/team/${team.id}`}
                 linkText={team.name}
-                onClick={handleForumMeetingClick(team.id)}
+                handleClick={handler(team.id)}
               />
             ))}
           </SideNavChildPopup>
@@ -344,7 +353,7 @@ export const SideNavNoMst = (
         {t("navigation.home")}
       </StyledNavLinkChildrenActive>
 
-      {company && company.accessForum ? renderForum(R.path(["length"], teams) || 0) : <> </>}
+      {company && company.accessForum ? renderMeeting(R.path(["length"], teams) || 0, "forum") : <> </>}
 
       {company && company.accessForum && !R.isNil(R.path(["0", "id"], teams)) ? (
         <SideNavChildPopup
@@ -374,6 +383,8 @@ export const SideNavNoMst = (
       </StyledNavLinkChildrenActive>
 
       {company && company.accessCompany ? renderTeam(R.path(["length"], teams) || 0) : <> </>}
+
+      {company && company.accessCompany ? renderMeeting(R.path(["length"], teams) || 0, "team") : <> </>}
 
       {company && company.accessCompany ? (
         <SideNavChildPopup
@@ -429,14 +440,15 @@ export const SideNav = observer(
       teamStore,
       sessionStore: { profile },
       companyStore: { company },
-      meetingStore: { startNextMeeting },
+      meetingStore: { startNextMeeting, createMeeting },
     } = useMst();
 
     return SideNavNoMst(
       router.location.pathname,
       toJS(profile.currentCompanyUserTeams),
       company,
-      startNextMeeting
+      startNextMeeting,
+      createMeeting,
     );
   },
 );
