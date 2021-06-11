@@ -26,7 +26,8 @@ class User < ApplicationRecord
   has_many :daily_logs, dependent: :destroy
   has_one_attached :avatar
   has_many :questionnaire_attempts
- 
+  has_many :product_features
+
   has_many :habits, dependent: :destroy
   has_many :team_user_enablements, dependent: :destroy
   has_many :teams, through: :team_user_enablements
@@ -39,8 +40,10 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :companies, :allow_destroy => true
   accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
   accepts_nested_attributes_for :team_user_enablements, :allow_destroy => true
+  accepts_nested_attributes_for :product_features, :allow_destroy => true
 
   validates :first_name, :last_name, presence: true, on: :update
+  validates :product_features, length: { maximum: 1, too_long: "1 is maximum" } 
   
 
   accepts_nested_attributes_for :daily_logs
@@ -190,6 +193,10 @@ class User < ApplicationRecord
   def start_of_day_for_user(date)
     # date.to_datetime.in_time_zone(timezone_name).start_of_day
     date.to_datetime.start_of_day.change(offset: "#{date.to_datetime.end_of_day.in_time_zone(timezone_name).utc_offset/3600}")
+  end
+
+  def product_feature(id)
+    ProductFeature.where(user_id: id).first;
   end
 
   def questionnaire_type_for_planning

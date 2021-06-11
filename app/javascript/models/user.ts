@@ -4,6 +4,7 @@ import * as R from "ramda";
 import { KeyActivityModel } from "./key-activity";
 import { CompanyModel } from "./company";
 import { UserPulseModel } from "./user-pulse";
+import { ProductFeaturesModel } from "./product-feature";
 
 export const UserModel = types
   .model("UserModel")
@@ -32,7 +33,8 @@ export const UserModel = types
     currentCompanyUserTeams: types.maybeNull(types.array(types.frozen())),
     userPulseForDisplay: types.maybeNull(UserPulseModel),
     currentCompanyOnboarded: types.maybeNull(types.boolean),
-    questionnaireTypeForPlanning: types.maybeNull(types.string)
+    questionnaireTypeForPlanning: types.maybeNull(types.string),
+    productFeatures: types.maybeNull(ProductFeaturesModel),
     //add avatarurl2x
   })
   .views(self => ({

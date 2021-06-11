@@ -47,7 +47,7 @@ type StyledIconType = {
 
 export const StyledIcon = styled(Icon)<StyledIconType>`
   transition: 0.3s ease-out;
-  color: ${props => props.active ? props.theme.colors.white : props.theme.colors.greyInactive};
+  color: ${props => (props.active ? props.theme.colors.white : props.theme.colors.greyInactive)};
 `;
 
 type StyledNavLinkType = {
@@ -86,15 +86,17 @@ interface StyledNavLinkChildrenActiveProps {
 interface SideNavChildPopupContainerProps {
   active: boolean;
   disableOnActive: boolean;
-};
+}
 
 const SideNavChildContainer = styled.div<SideNavChildPopupContainerProps>`
   padding-top: 16px;
   padding-bottom: 16px;
   transition: 0.3s;
-  background-color: ${props => props.active ? "rgba(0,0,0,0.25)" : "rgba(0,0,0,0)"};
-  ${props => props.active && props.disableOnActive ? "" :
-    `&:hover ${StyledIcon} {
+  background-color: ${props => (props.active ? "rgba(0,0,0,0.25)" : "rgba(0,0,0,0)")};
+  ${props =>
+    props.active && props.disableOnActive
+      ? ""
+      : `&:hover ${StyledIcon} {
     transform: scale(1.25) translateY(-10%);
     color: ${props.theme.colors.white};
   }
@@ -115,7 +117,7 @@ const NavMenuIconText = styled.h4<INavMenuIconTextProps>`
   font-size: 15px;
   margin-top: 8px;
   margin-bottom: 0;
-  color: ${props => props.active ? props.theme.colors.white : props.theme.colors.greyInactive};
+  color: ${props => (props.active ? props.theme.colors.white : props.theme.colors.greyInactive)};
 `;
 interface INavMenuIconProps {
   active?: boolean;
@@ -165,6 +167,7 @@ const isNavMenuIconActive = (currentPath: string, to: string): boolean => {
 export const SideNavNoMst = (
   currentPathName: string,
   teams: any,
+  productFeatures?: any,
   company?: ICompany,
 ): JSX.Element => {
   const { t } = useTranslation();
@@ -174,7 +177,7 @@ export const SideNavNoMst = (
   const [meetingsNavChildOpen, setMeetingsNavChildOpen] = useState<boolean>(false);
 
   const renderForumOrTeam = (teamLength: number, isForum = true) => {
-    const domain = isForum ? "forum" : "team"
+    const domain = isForum ? "forum" : "team";
     switch (teamLength) {
       case 0:
         return (
@@ -232,16 +235,15 @@ export const SideNavNoMst = (
             src={`${company.logoUrl}`}
           />
         ) : (
-            <Image
-              sx={{
-                width: 48,
-                height: 48,
-              }}
-              src={"/assets/LynchPyn-Logo_Favicon_White"}
-            />
-          )}
+          <Image
+            sx={{
+              width: 48,
+              height: 48,
+            }}
+            src={"/assets/LynchPyn-Logo_Favicon_White"}
+          />
+        )}
       </SideBarElement>
-
 
       <StyledNavLinkChildrenActive to="/" icon={"Home"} currentPathName={currentPathName}>
         {t("navigation.home")}
@@ -269,14 +271,28 @@ export const SideNavNoMst = (
           <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")} />
         </SideNavChildPopup>
       ) : (
-          <> </>
-        )}
+        <> </>
+      )}
 
-      <StyledNavLinkChildrenActive to="/goals" icon={"New-Goals"} currentPathName={currentPathName}>
-        {t("navigation.goals")}
-      </StyledNavLinkChildrenActive>
+      {!productFeatures.pyns ? (
+        <> </>
+      ) : productFeatures.scorecard ? (
+        <StyledNavLinkChildrenActive
+          to="/goals"
+          icon={"New-Goals"}
+          currentPathName={currentPathName}
+        >
+          {t("navigation.goals")}
+        </StyledNavLinkChildrenActive>
+      ) : (
+        <> </>
+      )}
 
-      {company && company.accessCompany ? renderForumOrTeam(R.path(["length"], teams) || 0, false) : <> </>}
+      {company && company.accessCompany ? (
+        renderForumOrTeam(R.path(["length"], teams) || 0, false)
+      ) : (
+        <> </>
+      )}
 
       {company && company.accessCompany ? (
         <SideNavChildPopup
@@ -304,8 +320,8 @@ export const SideNavNoMst = (
           />
         </SideNavChildPopup>
       ) : (
-          <> </>
-        )}
+        <> </>
+      )}
 
       {!R.isNil(company) && company.logoUrl ? (
         <SideBarElement margin={"16px"} marginTop={"auto"}>
@@ -319,8 +335,8 @@ export const SideNavNoMst = (
           />
         </SideBarElement>
       ) : (
-          <></>
-        )}
+        <></>
+      )}
     </StyledSideNav>
   );
 };
@@ -334,6 +350,15 @@ export const SideNav = observer(
       companyStore: { company },
     } = useMst();
 
-    return SideNavNoMst(router.location.pathname, toJS(profile.currentCompanyUserTeams), company);
+    if (profile == null) {
+      return <> </>;
+    }
+
+    return SideNavNoMst(
+      router.location.pathname,
+      toJS(profile.currentCompanyUserTeams),
+      profile.productFeatures,
+      company,
+    );
   },
 );
