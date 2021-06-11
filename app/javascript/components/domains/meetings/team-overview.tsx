@@ -246,7 +246,7 @@ export const TeamOverview = observer(
             {overviewType === "forum" && (
               <FutureTeamMeetingsContainer
                 titleText={t(`${overviewType}.teamMeetingsTitle`)}
-                buttonText={"Forum Meeting"}
+                buttonText={t("forum.forumMeeting")}
                 handleMeetingClick={handleForumMeetingClick}
               />
             )}

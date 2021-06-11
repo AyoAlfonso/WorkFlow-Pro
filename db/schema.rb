@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 2021_05_14_104136) do
-=======
-ActiveRecord::Schema.define(version: 2021_05_11_183936) do
->>>>>>> 8435aa190b8359f68bbaf93ebc67e74f57ee4742
+ActiveRecord::Schema.define(version: 2021_06_10_093423) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -304,7 +300,7 @@ ActiveRecord::Schema.define(version: 2021_05_11_183936) do
     t.datetime "scheduled_start_time"
     t.datetime "end_time"
     t.bigint "hosted_by_id"
-    t.text "notes"
+    t.text "notes", default: ""
     t.json "settings"
     t.boolean "original_creation", default: false
     t.index ["created_at"], name: "index_meetings_on_created_at"
@@ -337,6 +333,13 @@ ActiveRecord::Schema.define(version: 2021_05_11_183936) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id", "notification_type"], name: "index_notifications_on_user_id_and_notification_type", unique: true
     t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "product_features", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.boolean "scorecard", default: false, null: false
+    t.boolean "pyns", default: false, null: false
+    t.index ["user_id"], name: "index_product_features_on_user_id"
   end
 
   create_table "quarterly_goals", force: :cascade do |t|
@@ -633,6 +636,7 @@ ActiveRecord::Schema.define(version: 2021_05_11_183936) do
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"
   add_foreign_key "notifications", "users"
+  add_foreign_key "product_features", "users"
   add_foreign_key "quarterly_goals", "annual_initiatives"
   add_foreign_key "questionnaire_attempts", "questionnaires"
   add_foreign_key "questionnaire_attempts", "users"

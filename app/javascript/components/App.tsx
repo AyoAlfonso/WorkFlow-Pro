@@ -204,8 +204,13 @@ export const App = observer(
                       <ForumWelcomeModal />
                       <OnboardingModal />
                       <Container>
-                        <Route exact path="/" component={HomeContainer} />
+                        {sessionStore.profile.productFeatures.pyns ? (
+                          <Route exact path="/" component={HomeContainer} />
+                        ) : (
+                          <Route exact path="/" component={GoalsIndex} />
+                        )}
 
+                
                         <Route
                           exact
                           path={["/team/:team_id", "/team/:team_id/dashboard"]}
@@ -218,7 +223,12 @@ export const App = observer(
                           component={AccountabilityChart}
                         />
                         <Route exact path="/company/strategic_plan" component={StrategicPlan} />
-                        <Route exact path="/goals" component={GoalsIndex} />
+                        {sessionStore.profile.productFeatures.scorecard ? (
+                          <Route exact path="/goals" component={GoalsIndex} />
+                        ) : (
+                          <> </>
+                        )}
+
                         <Route exact path="/journals" component={JournalIndex} />
                         <Route exact path="/notes" component={NotesIndex} />
                         <Route exact path="/forum" component={ForumNotSetup} />

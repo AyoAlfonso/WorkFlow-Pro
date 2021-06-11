@@ -49,7 +49,9 @@ export const PersonalPlanning = observer(
     const onStepClick = stepIndex => {
       meetingStore.updatePersonalMeeting(R.merge(meeting, { currentStep: stepIndex }));
     };
-
+   console.log(meeting, "this--currentStep");
+    
+  
     const StopMeetingButton = () => {
       return (
         <StopButton
