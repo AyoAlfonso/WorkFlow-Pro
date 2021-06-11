@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useMst } from "../../../setup/root"
 import { Loading } from "../../shared/loading"
 import { observer } from "mobx-react"
+import { ScorecardTableView } from "./scorecard-table-view"
 
 export const ScorecardsIndex = observer(
 	(): JSX.Element => {
@@ -11,12 +12,17 @@ export const ScorecardsIndex = observer(
 		const [loading, setLoading] = useState<boolean>(true);
 
 		useEffect(() => {
-			// TODO: Loading logic for scorecards store
+			companyStore.load().then(() => setLoading(false))
 		});
+
+    if (loading || !companyStore.company) {
+      return <Loading />;
+    }
 
 		return (
 			<Container>
 				<h2>Scorecards</h2>
+				<ScorecardTableView />
 			</Container>
 		)
 	}
