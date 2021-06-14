@@ -337,7 +337,10 @@ ActiveRecord::Schema.define(version: 2021_06_10_093423) do
 
   create_table "product_features", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.boolean "scorecard", default: false, null: false
+    t.boolean "objective", default: true, null: false
+    t.boolean "team", default: false, null: false
+    t.boolean "meeting", default: false, null: false
+    t.boolean "company", default: false, null: false
     t.boolean "pyns", default: false, null: false
     t.index ["user_id"], name: "index_product_features_on_user_id"
   end
@@ -661,4 +664,13 @@ ActiveRecord::Schema.define(version: 2021_06_10_093423) do
   add_foreign_key "users", "companies"
   add_foreign_key "users", "companies", column: "default_selected_company_id"
   add_foreign_key "users", "user_roles"
+
+  create_view "v_scoredcards", sql_definition: <<-SQL
+      SELECT key_performance_indicators.id AS kpi,
+      avg(scorecard_logs.score) AS score,
+      scorecard_logs.user_id AS owned_by
+     FROM (key_performance_indicators
+       JOIN scorecard_logs ON ((key_performance_indicators.id = scorecard_logs.key_performance_indicator_id)))
+    GROUP BY scorecard_logs.user_id, key_performance_indicators.id;
+  SQL
 end

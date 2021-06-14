@@ -1,6 +1,5 @@
 ActiveAdmin.register User do
-  
-  permit_params :first_name, :last_name, :email, :password, :password_confirmation, :timezone, :company_id, :user_role_id, user_company_enablements_attributes: [:id, :company_id, :user_role_id, :user_title], product_features_attributes: [:id, :pyns, :scorecard]
+  permit_params :first_name, :last_name, :email, :password, :password_confirmation, :timezone, :company_id, :user_role_id, user_company_enablements_attributes: [:id, :company_id, :user_role_id, :user_title], product_features_attributes: [:id, :pyns, :objective, :team, :meeting, :company]
 
   config.sort_order = "last_name_asc"
 
@@ -15,7 +14,6 @@ ActiveAdmin.register User do
   end
 
   controller do
-
     def create
       if User.find_by_email(permitted_params.dig(:user, :email)).present?
         @user = User.create(permitted_params[:user])
@@ -36,7 +34,7 @@ ActiveAdmin.register User do
     def update
       @user = User.find(params[:id])
       # pp params
-      if @user.update!(params.require(:user).permit(:first_name, :last_name, :email, :user_role, :timezone, user_company_enablements_attributes: [:id, :company_id, :user_role_id, :user_title, :_destroy], product_features_attributes: [:id, :pyns, :scorecard]))
+      if @user.update!(params.require(:user).permit(:first_name, :last_name, :email, :user_role, :timezone, user_company_enablements_attributes: [:id, :company_id, :user_role_id, :user_title, :_destroy], product_features_attributes: [:id, :pyns, :objective, :team, :meeting, :company]))
         flash[:alert] = @user.errors.full_messages
         render "show"
       end
@@ -113,11 +111,17 @@ ActiveAdmin.register User do
         if (user.product_features.exists?)
           user.product_features.each do |product_sub|
             feature.input :pyns, as: :boolean, :checked_value => true, :unchecked_value => false, input_html: { :checked => product_sub[:pyns] }
-            feature.input :scorecard, as: :boolean, :checked_value => true, :unchecked_value => false, input_html: { :checked => product_sub[:scorecard] }
+            feature.input :objective, as: :boolean, :checked_value => true, :unchecked_value => false, input_html: { :checked => product_sub[:objective] }
+            feature.input :team, as: :boolean, :checked_value => true, :unchecked_value => false, input_html: { :checked => product_sub[:team] }
+            feature.input :meeting, as: :boolean, :checked_value => true, :unchecked_value => false, input_html: { :checked => product_sub[:meeting] }
+            feature.input :company, as: :boolean, :checked_value => true, :unchecked_value => false, input_html: { :checked => product_sub[:company] }
           end
         else
           feature.input :pyns, as: :boolean, :checked_value => true, :unchecked_value => false
-          feature.input :scorecard, as: :boolean, :checked_value => true, :unchecked_value => false
+          feature.input :objective, as: :boolean, :checked_value => true, :unchecked_value => false
+          feature.input :team, as: :boolean, :checked_value => true, :unchecked_value => false
+          feature.input :meeting, as: :boolean, :checked_value => true, :unchecked_value => false
+          feature.input :company, as: :boolean, :checked_value => true, :unchecked_value => false
         end
       end
 
