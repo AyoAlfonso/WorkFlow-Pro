@@ -188,16 +188,14 @@ const StyledProgrammaticLinkChildrenActive = ({
   icon,
   children,
   disabled,
-  currentPathName
-}:  StyledProgrammaticLinkChildrenActiveProps): JSX.Element => {
+  currentPathName,
+}: StyledProgrammaticLinkChildrenActiveProps): JSX.Element => {
   return (
     <StyledNavLinkDiv disabled={disabled} onClick={onClick}>
-      <NavMenuIcon icon={icon}>
-        {children}
-      </NavMenuIcon>
+      <NavMenuIcon icon={icon}>{children}</NavMenuIcon>
     </StyledNavLinkDiv>
   );
-}
+};
 
 const isNavMenuIconActive = (currentPath: string, to: string): boolean => {
   const pathMatch = matchPath(currentPath, to);
@@ -218,8 +216,11 @@ export const SideNavNoMst = (
   const [companyNavChildOpen, setCompanyNavChildOpen] = useState<boolean>(false);
   const [meetingsNavChildOpen, setMeetingsNavChildOpen] = useState<boolean>(false);
   const [startMeetingNavChildOpen, setStartMeetingNavChildOpen] = useState<boolean>(false);
-
-
+  const showCompany = productFeatures && productFeatures.company;
+  const showGoal = productFeatures && productFeatures.objective;
+  const showPyn = productFeatures && productFeatures.pyns;
+  const showTeam = productFeatures && productFeatures.team;
+  const showMeeting = productFeatures && productFeatures.meeting;
   const renderTeam = (teamLength: number) => {
     switch (teamLength) {
       case 0:
@@ -266,7 +267,7 @@ export const SideNavNoMst = (
     }
   };
 
-  const history = useHistory()
+  const history = useHistory();
   const handleForumMeetingClick = (team_id: number | string) => () => {
     startNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
       if (!R.isNil(meeting)) {
@@ -286,12 +287,10 @@ export const SideNavNoMst = (
   };
 
   const renderMeeting = (teamLength: number, type: string) => {
-    const handler = type == "team" ? handleMeetingClick : handleForumMeetingClick
+    const handler = type == "team" ? handleMeetingClick : handleForumMeetingClick;
     switch (teamLength) {
       case 0:
-        return (
-          <></>
-        );
+        return <></>;
       case 1:
         return (
           <StyledProgrammaticLinkChildrenActive
@@ -306,11 +305,7 @@ export const SideNavNoMst = (
         return (
           <SideNavChildPopup
             trigger={
-              <NavMenuIcon
-                icon={"Team"}
-                active={false}
-                disableOnActive={false}
-              >
+              <NavMenuIcon icon={"Team"} active={false} disableOnActive={false}>
                 {t("navigation.forum")}
               </NavMenuIcon>
             }
@@ -352,13 +347,22 @@ export const SideNavNoMst = (
         )}
       </SideBarElement>
 
-      <StyledNavLinkChildrenActive to="/" icon={"Home"} currentPathName={currentPathName}>
-        {t("navigation.home")}
-      </StyledNavLinkChildrenActive>
+      {showPyn && (
+        <StyledNavLinkChildrenActive to="/" icon={"Home"} currentPathName={currentPathName}>
+          {t("navigation.home")}
+        </StyledNavLinkChildrenActive>
+      )}
 
-      {company && company.accessForum ? renderMeeting(R.path(["length"], teams) || 0, "forum") : <> </>}
+      {company && company.accessForum && showMeeting ? (
+        renderMeeting(R.path(["length"], teams) || 0, "forum")
+      ) : (
+        <> </>
+      )}
 
-      {company && company.accessForum && !R.isNil(R.path(["0", "id"], teams)) ? (
+      {company &&
+      company.accessForum &&
+      productFeatures.meeting &&
+      !R.isNil(R.path(["0", "id"], teams)) ? (
         <SideNavChildPopup
           trigger={
             <NavMenuIcon
@@ -381,9 +385,7 @@ export const SideNavNoMst = (
         <> </>
       )}
 
-      {!productFeatures.pyns ? (
-        <> </>
-      ) : productFeatures.scorecard ? (
+      {showGoal && (
         <StyledNavLinkChildrenActive
           to="/goals"
           icon={"New-Goals"}
@@ -391,15 +393,17 @@ export const SideNavNoMst = (
         >
           {t("navigation.goals")}
         </StyledNavLinkChildrenActive>
+      )}
+
+      {company && company.accessCompany && showTeam ? renderTeam(R.path(["length"], teams) || 0) : <> </>}
+
+      {company && company.accessCompany && !showTeam ? (
+        renderMeeting(R.path(["length"], teams) || 0, "team")
       ) : (
         <> </>
       )}
 
-      {company && company.accessCompany ? renderTeam(R.path(["length"], teams) || 0) : <> </>}
-
-      {company && company.accessCompany ? renderMeeting(R.path(["length"], teams) || 0, "team") : <> </>}
-
-      {company && company.accessCompany ? (
+      {company && company.accessCompany && showCompany ? (
         <SideNavChildPopup
           trigger={
             <NavMenuIcon
@@ -459,7 +463,6 @@ export const SideNav = observer(
     if (profile == null) {
       return <> </>;
     }
-
     return SideNavNoMst(
       router.location.pathname,
       toJS(profile.currentCompanyUserTeams),

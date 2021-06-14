@@ -1,5 +1,4 @@
 class HabitPolicy < ApplicationPolicy
-
   def index?
     true
   end
@@ -17,16 +16,19 @@ class HabitPolicy < ApplicationPolicy
   end
 
   class Scope
-    attr_reader :pyns, :scorecard
+    attr_reader :pyns, :objective, :team, :meeting, :company
 
     def initialize(context, scope)
       @user = context.user
-      @scorecard = scorecard
       @pyns = pyns
+      @objective = objective
+      @team = team
+      @meeting = meeting
+      @company = company
     end
 
     def resolve
-      scope.includes([:pyns, :scorecard]).owned_by_user(@user)
+      scope.includes([:pyns, :objective, :team, :meeting, :company]).owned_by_user(@user)
     end
   end
 end

@@ -2,6 +2,7 @@ import * as React from "react";
 import * as R from "ramda";
 import { observer } from "mobx-react";
 //import { RouterModel } from "mst-react-router";
+import { Loading, Avatar } from "~/components/shared";
 import { Route, Switch } from "react-router-dom";
 import { usePageViews } from "~/components/shared/analytics";
 import { ThemeProvider } from "styled-components";
@@ -69,6 +70,15 @@ export const App = observer(
     const loggedIn = sessionStore.loggedIn; //if logged in show switch
     const profile = sessionStore.profile;
 
+    if (profile == null) {
+      return <Loading />;
+    }
+
+    const noFeatures = !profile.productFeatures;
+
+    const showGoalRoute =
+      !noFeatures && profile.productFeatures.objective;
+    const showTeamRoute = !noFeatures && profile.productFeatures && profile.productFeatures.team;
     const onDragEnd = result => {
       const { destination, source, draggableId } = result;
 
@@ -76,7 +86,7 @@ export const App = observer(
         return;
       }
 
-      let newPosition = destination.index;
+      const newPosition = destination.index;
       if (newPosition === source.index && destination.droppableId === source.droppableId) {
         return;
       }
@@ -204,18 +214,22 @@ export const App = observer(
                       <ForumWelcomeModal />
                       <OnboardingModal />
                       <Container>
-                        {sessionStore.profile.productFeatures.pyns ? (
+                        
+                        {profile.productFeatures && profile.productFeatures.pyns ? (
                           <Route exact path="/" component={HomeContainer} />
                         ) : (
-                          <Route exact path="/" component={GoalsIndex} />
+                        <Route exact path="/" component={GoalsIndex} /> 
                         )}
 
-                
-                        <Route
-                          exact
-                          path={["/team/:team_id", "/team/:team_id/dashboard"]}
-                          component={TeamOverview}
-                        />
+                        {showGoalRoute && <Route exact path="/goals" component={GoalsIndex} />}
+                        {showTeamRoute && (
+                          <Route
+                            exact
+                            path={["/team/:team_id", "/team/:team_id/dashboard"]}
+                            component={TeamOverview}
+                          />
+                         
+                        )}
                         <Route exact path="/account" component={AccountSettings} />
                         <Route
                           exact
@@ -223,21 +237,21 @@ export const App = observer(
                           component={AccountabilityChart}
                         />
                         <Route exact path="/company/strategic_plan" component={StrategicPlan} />
-                        {sessionStore.profile.productFeatures.scorecard ? (
-                          <Route exact path="/goals" component={GoalsIndex} />
-                        ) : (
-                          <> </>
-                        )}
 
                         <Route exact path="/journals" component={JournalIndex} />
                         <Route exact path="/notes" component={NotesIndex} />
-                        <Route exact path="/forum" component={ForumNotSetup} />
-                        <Route exact path="/forum/:team_id" component={TeamOverview} />
-                        <Route exact path="/meetings/agenda" component={ForumAgenda} />
-                        <Route exact path="/meetings/section_1" component={Section1} />
-                        <Route exact path="/meetings/section_1/:team_id" component={Section1} />
-                        <Route exact path="/meetings/section_2" component={Section2} />
-                        <Route exact path="/meetings/section_2/:team_id" component={Section2} />
+                      
+                        {profile.productFeatures && profile.productFeatures.meeting && (
+                          <>
+                            <Route exact path="/meetings/agenda" component={ForumAgenda} />
+                            <Route exact path="/meetings/section_1" component={Section1} />
+                            <Route exact path="/meetings/section_1/:team_id" component={Section1} />
+                            <Route exact path="/meetings/section_2" component={Section2} />
+                            <Route exact path="/meetings/section_2/:team_id" component={Section2} />
+                            <Route exact path="/forum" component={ForumNotSetup} />
+                            <Route exact path="/forum/:team_id" component={TeamOverview} />
+                          </>
+                        )}
                       </Container>
                     </>
                   </Route>
@@ -251,7 +265,13 @@ export const App = observer(
                         path="/personal_planning/:meeting_id"
                         component={PersonalPlanning}
                       />
-                      <Route exact path="/team/:team_id/meeting/:meeting_id" component={Meeting} />
+                      {profile.productFeatures && profile.productFeatures.meeting && (
+                        <Route
+                          exact
+                          path="/team/:team_id/meeting/:meeting_id"
+                          component={Meeting}
+                        />
+                      )}
                     </>
                   </Route>
                 </Switch>
