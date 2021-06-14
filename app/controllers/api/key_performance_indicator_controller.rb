@@ -1,4 +1,4 @@
-class KeyPerformanceIndicatorController < ApplicationController
+class Api::KeyPerformanceIndicatorController < ApplicationController
   before_action :set_key_performance_indicator, only: [:show, :update, :destroy, :close_kpi]
 
   respond_to :json
@@ -16,8 +16,8 @@ class KeyPerformanceIndicatorController < ApplicationController
       created_by: current_user, 
       owned_by: current_user, 
       unit_type: params[:unit_type],
-      quarter: company.quarter_for_creating_quarterly_goals
-      description: params[:description],
+      quarter: company.quarter_for_creating_quarterly_goals,
+      description: params[:description]
     })
 
     authorize @kpi
