@@ -40,3 +40,4 @@ yarn-debug.log*
 .yarn-integrity
 
 build-storybook.log
+.vscode/settings.json
