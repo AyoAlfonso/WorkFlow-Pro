@@ -7,7 +7,7 @@ class KeyPerformanceIndicator < ApplicationRecord
     belongs_to :team, optional: true
     
     validates :description, :created_by, :owned_by, :unit_type, :quarter, presence: true
-    # enum unit_type : { percentage: 0, numerical: 1, currency: 2 }
+    enum unit_type: { percentage: 0, numerical: 1, currency: 2 }
 
     #save the data for kpi and create api route
     
