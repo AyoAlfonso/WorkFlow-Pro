@@ -1,4 +1,4 @@
-class HabitPolicy < ApplicationPolicy
+class ProductFeaturePolicy < ApplicationPolicy
   def index?
     true
   end
