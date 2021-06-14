@@ -70,16 +70,15 @@ export const App = observer(
     const loggedIn = sessionStore.loggedIn; //if logged in show switch
     const profile = sessionStore.profile;
 
-    if (profile == null) {
-      return <Loading />;
-    }
-
-    const noFeatures = !profile.productFeatures;
-
-    const showGoalRoute =
-      !noFeatures && profile.productFeatures.objective;
-    const showTeamRoute = !noFeatures && profile.productFeatures && profile.productFeatures.team;
-    const onDragEnd = result => {
+      let noFeatures;
+      let showGoalRoute;
+      let showTeamRoute;
+      if (profile) {
+          noFeatures = !profile.productFeatures;
+          showGoalRoute = !noFeatures && profile.productFeatures.objective;
+          showTeamRoute = !noFeatures && profile.productFeatures && profile.productFeatures.team;
+      }
+      const onDragEnd = result => {
       const { destination, source, draggableId } = result;
 
       if (!result.destination) {
