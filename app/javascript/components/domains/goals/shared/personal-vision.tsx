@@ -55,11 +55,10 @@ const VisionTitle = styled.p`
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 16px;
-  margin-right: 16px;
   display: flex;
   align-items: center;
   height: inherit;
-  width: 200px;
+  width: 184px;
   white-space: nowrap;
 `;
 
@@ -71,14 +70,10 @@ const StyledContentEditable = styled(ContentEditable)`
   margin-top: auto;
   margin-bottom: auto;
   padding: 5px;
-  padding-right: 200px;
+  padding-right: 205px;
   text-transform: capitalize;
   font-weight: 700;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 `;
-
-const Spacer = styled.div`
-  width: 200px;
-`
