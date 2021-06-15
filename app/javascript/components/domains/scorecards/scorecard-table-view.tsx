@@ -21,26 +21,39 @@ export const ScorecardTableView = (
 		t("scorecards.tabs.people"),
 	]
 
+	// TODO: convert the data from the KPI store into passable data for the table.
 	const data = useMemo(
 		() => [
 			{
-				title: "Example",
-				owner: "Christopher Pang",
+				title: {
+					item: "",
+					logic: "",
+					highlighted: true,
+				},
+				owner: {
+					id: 3,
+					name: "Christopher Pang"
+				},
 				status: "Needs Attention",
 			}
 		],
 		[]
 	)
-	console.log("Score")
 	const columns = useMemo(
 		() => [
 			{
 				Header: "KPIs",
 				accessor: "title",
+				Cell: ({ value }) => {
+					return (<div>{value.item}</div>);
+				},
 			},
 			{
 				Header: "Owner",
 				accessor: "owner",
+				Cell: ({ value }) => {
+					return (<div>{value.name}</div>);
+				}
 			},
 			{
 				Header: "Status",
@@ -68,25 +81,25 @@ export const ScorecardTableView = (
 		<Container>
 			<TopRow>
 				<TabContainer>
-				{tabs.map(elem => (
-					<Tab
-						key={elem}
-						active={tab === elem}
-						onClick={() => setTab(elem)}
-					>
-						{elem}
-					</Tab>
-				))}
+					{tabs.map(elem => (
+						<Tab
+							key={elem}
+							active={tab === elem}
+							onClick={() => setTab(elem)}
+						>
+							{elem}
+						</Tab>
+					))}
 				</TabContainer>
 				<Select
 					selection={quarter}
 					setSelection={setQuarter}
 					id={"scorecard-quarter-selection"}
 				>
-					{R.range(1,5).map((n: number) => (<option value={n}>Q{n} {company.currentFiscalYear}</option>))}
+					{R.range(1, 5).map((n: number) => (<option value={n}>Q{n} {company.currentFiscalYear}</option>))}
 				</Select>
 			</TopRow>
-			<Table {...getTableProps()}>
+			{/*<Table {...getTableProps()}>
 				<TableHead>
 				{headerGroups.map(headerGroup => (
 					<TableRow {...headerGroup.getHeaderGroupProps()}>
@@ -100,11 +113,40 @@ export const ScorecardTableView = (
 				</TableHead>
 				<TableBody>
 				</TableBody>
-			</Table>
+				</Table>*/}
+			<table {...getTableProps()}>
+				<thead>
+					{headerGroups.map(headerGroup => (
+							<tr {...headerGroup.getHeaderGroupProps()}>
+								{headerGroup.headers.map(column => (
+										<th {...column.getHeaderProps()}>
+											{column.render('Header')}
+										</th>
+									))}
+							</tr>
+						))}
+				</thead>
+				<tbody {...getTableBodyProps()}>
+					{rows.map(row => {
+							prepareRow(row)
+							return (
+								<tr {...row.getRowProps()}>
+									{row.cells.map(cell => {
+											return (
+												<td {...cell.getCellProps()}>
+													{cell.render('Cell')}
+												</td>
+											)
+										})}
+								</tr>
+							)
+						})}
+				</tbody>
+			</table>
 			<StyledButton
 				small
 				variant={"grey"}
-				onClick={() => {}}
+				onClick={() => { }}
 				width={"fill"}
 			>
 				<CircularIcon icon={"Plus"} size={"12px"} />
@@ -144,7 +186,7 @@ const Tab = styled.button<TabProps>`
 	outline: 0;
 	opacity: 0.6;
   ${props => props.active &&
-	 `border-bottom: 2px solid ${props.theme.colors.primary80};
+		`border-bottom: 2px solid ${props.theme.colors.primary80};
 		opacity: 1;`}
 `
 
@@ -159,9 +201,9 @@ const TableHeader = styled.th``
 const TableRow = styled.tr``
 
 type StyledButtonType = {
-  width?: string;
+	width?: string;
 };
-const StyledButton = styled(Button)<StyledButtonType>`
+const StyledButton = styled(Button) <StyledButtonType>`
   display: flex;
   justify-content: center;
   align-items: center;
