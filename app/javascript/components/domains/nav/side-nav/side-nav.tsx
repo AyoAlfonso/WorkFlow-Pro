@@ -176,6 +176,7 @@ const StyledNavLinkDiv = styled.div<StyledNavLinkType>`
   ${color}
   align-item: center;
   text-decoration: none;
+  cursor: pointer;
   &:link,
   &:visited {
     color: ${props => props.theme.colors.white};
