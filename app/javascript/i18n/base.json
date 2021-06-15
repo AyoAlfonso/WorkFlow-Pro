@@ -190,7 +190,11 @@
         "milestoneCreationError": "There was an error creating milestones"
       },
       "scorecards": {
-        "indexTitle": "Scorecards"
+        "indexTitle": "Scorecards",
+        "tabs": {
+          "kpis": "KPIs",
+          "people": "People"
+        }
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",

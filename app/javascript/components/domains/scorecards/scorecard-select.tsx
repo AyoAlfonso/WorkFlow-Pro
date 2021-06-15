@@ -11,18 +11,20 @@ const StyledInput = withStyles(
 		input: {
 			borderRadius: 4,
 			postition: 'relative',
+			color: baseTheme.colors.greyActive,
 			backgroundColor: baseTheme.colors.white,
 			border: `1px solid ${baseTheme.colors.borderGrey}`,
       transition: theme.transitions.create(['border-color', 'box-shadow']),
 			fontFamily: "Lato, sans-serif",
+			fontSize: 12,
 			'&:focus': {
         borderRadius: 4,
         borderColor: baseTheme.colors.primary60,
         boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
       },
-			padding: "4px 8px",
+			padding: "8px 16px",
 		},
-		select: {
+		svg: {
 			paddingRight: "16px",
 		}
 }))(InputBase);
