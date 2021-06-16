@@ -1,7 +1,7 @@
 import * as React from "react";
 import { baseTheme } from "~/themes";
 
-const { warningRed, cautionYellow, successGreen, finePine, greyInactive, primary60 } = baseTheme.colors;
+const { warningRed, cautionYellow, successGreen, greyActive, greyInactive, primary60 } = baseTheme.colors;
 
 export const emotionA = (active: boolean, size = 24) => {
   return (
@@ -14,19 +14,19 @@ export const emotionA = (active: boolean, size = 24) => {
     >
       <title>Emotion-A</title>
       <path
-        fill={active ? finePine : greyInactive}
+        fill={active ? cautionYellow : greyInactive}
         d="M8.637 13.551c0.442-0.001 0.799-0.358 0.8-0.8v-0c0-0.884 0.716-1.6 1.6-1.6s1.6 0.716 1.6 1.6v0c0 0.442 0.358 0.8 0.8 0.8s0.8-0.358 0.8-0.8v0c-0.001-1.766-1.434-3.197-3.2-3.197 0 0 0 0 0 0v0c-0 0-0.001 0-0.001 0-1.766 0-3.197 1.431-3.199 3.196v0c0 0 0 0.001 0 0.001 0 0.442 0.358 0.8 0.8 0.8 0 0 0 0 0 0v0z"
       ></path>
       <path
-        fill={active ? finePine : greyInactive}
+        fill={active ? cautionYellow : greyInactive}
         d="M18.238 13.551c0.442-0.001 0.799-0.358 0.8-0.8v-0c0.025-0.864 0.731-1.555 1.599-1.555s1.574 0.691 1.599 1.553l0 0.002c0.017 0.429 0.369 0.77 0.801 0.77s0.783-0.341 0.801-0.768l0-0.002c0-1.767-1.433-3.2-3.2-3.2s-3.2 1.433-3.2 3.2v0c0 0.442 0.358 0.8 0.8 0.8v0z"
       ></path>
       <path
-        fill={active ? finePine : greyInactive}
+        fill={active ? cautionYellow : greyInactive}
         d="M15.838 23.95c3.535 0 6.4-2.865 6.4-6.4v0h-12.8c0 3.535 2.865 6.4 6.4 6.4v0z"
       ></path>
       <path
-        fill={active ? finePine : greyInactive}
+        fill={active ? cautionYellow : greyInactive}
         d="M28.394 0.013h-24.788c-1.989 0.006-3.6 1.616-3.606 3.604v24.789c0.006 1.989 1.617 3.601 3.606 3.606h24.788c1.989-0.006 3.601-1.617 3.606-3.606v-24.789c-0.006-1.989-1.617-3.599-3.606-3.605h-0.001zM28.394 28.406h-24.788v-24.789h24.788z"
       ></path>
     </svg>
@@ -105,19 +105,19 @@ export const emotionD = (active: boolean, size = 24) => {
     >
       <title>Emotion-D</title>
       <path
-        fill={active ? cautionYellow : greyInactive}
+        fill={active ? greyActive : greyInactive}
         d="M28.394-0.031h-24.789c-1.988 0.006-3.599 1.617-3.605 3.604v24.789c0.006 1.989 1.616 3.6 3.604 3.606h24.789c1.989-0.006 3.601-1.617 3.606-3.606v-24.789c-0.006-1.989-1.617-3.599-3.606-3.605h-0.001zM28.394 28.363h-24.789v-24.789h24.789z"
       ></path>
       <path
-        fill={active ? cautionYellow : greyInactive}
+        fill={active ? greyActive : greyInactive}
         d="M9 14c0.552 0 1-0.448 1-1v0q0-0.037 0-0.075c0.021-1.088 0.908-1.963 2-1.963 1.105 0 2 0.896 2 2 0 0.013-0 0.026-0 0.039l0-0.002c0 0.552 0.448 1 1 1s1-0.448 1-1v0 0c0-2.209-1.791-4-4-4v0 0c-2.209 0-4 1.791-4 4v0c0 0.552 0.448 1 1 1v0z"
       ></path>
       <path
-        fill={active ? cautionYellow : greyInactive}
+        fill={active ? greyActive : greyInactive}
         d="M17 14c0.552 0 1-0.448 1-1v0c0-1.105 0.895-2 2-2s2 0.895 2 2v0c0 0.552 0.448 1 1 1s1-0.448 1-1v0c0-2.209-1.791-4-4-4s-4 1.791-4 4v0c0 0.552 0.448 1 1 1v0z"
       ></path>
       <path
-        fill={active ? cautionYellow : greyInactive}
+        fill={active ? greyActive : greyInactive}
         d="M16 18.010c-2.209 0-4 1.791-4 4v0c0 0.552 0.448 1 1 1s1-0.448 1-1v0c0-1.105 0.895-2 2-2s2 0.895 2 2v0c0 0.552 0.448 1 1 1s1-0.448 1-1v0c0-2.209-1.791-4-4-4v0z"
       ></path>
     </svg>
