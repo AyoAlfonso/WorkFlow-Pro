@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_10_093423) do
+ActiveRecord::Schema.define(version: 2021_05_10_194545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -259,22 +259,6 @@ ActiveRecord::Schema.define(version: 2021_06_10_093423) do
     t.index ["elementable_type", "elementable_id"], name: "index_key_elements_on_elementable_type_and_elementable_id"
   end
 
-  create_table "key_performance_indicators", force: :cascade do |t|
-    t.string "description"
-    t.datetime "closed_at"
-    t.bigint "created_by_id"
-    t.bigint "owned_by_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.date "fiscal_year_start"
-    t.date "week_of"
-    t.integer "unit_type", default: 0
-    t.integer "status", default: 0
-    t.boolean "is_deleted", default: false
-    t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
-    t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
-  end
-
   create_table "meeting_templates", force: :cascade do |t|
     t.string "name"
     t.integer "meeting_type"
@@ -335,16 +319,6 @@ ActiveRecord::Schema.define(version: 2021_06_10_093423) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
-  create_table "product_features", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.boolean "objective", default: true, null: false
-    t.boolean "team", default: false, null: false
-    t.boolean "meeting", default: false, null: false
-    t.boolean "company", default: false, null: false
-    t.boolean "pyns", default: false, null: false
-    t.index ["user_id"], name: "index_product_features_on_user_id"
-  end
-
   create_table "quarterly_goals", force: :cascade do |t|
     t.bigint "created_by_id"
     t.bigint "owned_by_id"
@@ -395,17 +369,6 @@ ActiveRecord::Schema.define(version: 2021_06_10_093423) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "scorecard_logs", force: :cascade do |t|
-    t.bigint "key_performance_indicator_id", null: false
-    t.integer "score"
-    t.string "note"
-    t.bigint "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["key_performance_indicator_id"], name: "index_scorecard_logs_on_key_performance_indicator_id"
-    t.index ["user_id"], name: "index_scorecard_logs_on_user_id"
   end
 
   create_table "sign_up_purposes", force: :cascade do |t|
@@ -639,12 +602,9 @@ ActiveRecord::Schema.define(version: 2021_06_10_093423) do
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"
   add_foreign_key "notifications", "users"
-  add_foreign_key "product_features", "users"
   add_foreign_key "quarterly_goals", "annual_initiatives"
   add_foreign_key "questionnaire_attempts", "questionnaires"
   add_foreign_key "questionnaire_attempts", "users"
-  add_foreign_key "scorecard_logs", "key_performance_indicators"
-  add_foreign_key "scorecard_logs", "users"
   add_foreign_key "sign_up_purposes", "companies"
   add_foreign_key "steps", "meeting_templates"
   add_foreign_key "sub_initiatives", "quarterly_goals"
@@ -664,13 +624,4 @@ ActiveRecord::Schema.define(version: 2021_06_10_093423) do
   add_foreign_key "users", "companies"
   add_foreign_key "users", "companies", column: "default_selected_company_id"
   add_foreign_key "users", "user_roles"
-
-  create_view "v_scoredcards", sql_definition: <<-SQL
-      SELECT key_performance_indicators.id AS kpi,
-      avg(scorecard_logs.score) AS score,
-      scorecard_logs.user_id AS owned_by
-     FROM (key_performance_indicators
-       JOIN scorecard_logs ON ((key_performance_indicators.id = scorecard_logs.key_performance_indicator_id)))
-    GROUP BY scorecard_logs.user_id, key_performance_indicators.id;
-  SQL
 end

@@ -1,5 +1,4 @@
-class KeyPerformanceIndicatorPolicy < ApplicationPolicy
-
+class ScorecardLogPolicy < ApplicationPolicy
   def index? 
     true
   end
@@ -10,22 +9,6 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
 
   def show?
     user_is_part_of_this_company?(@record.company) || @record.owned_by == @user || user_can_observe_current_company?
-  end
-
-  def update?
-    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
-  end
-
-  def destroy?
-    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
-  end
-
-  def team?
-    true
-  end
-
-  def close_kpi?
-    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 
   class Scope

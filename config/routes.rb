@@ -126,13 +126,12 @@ Rails.application.routes.draw do
     get '/habits/show_habit/:id', to: 'habits#show_habit'
     get '/habits/habits_for_personal_planning', to: 'habits#habits_for_personal_planning'
    
-    #key_performance_index
-    resources :key_performance_index, only: [:index, :create, :update, :destroy] do
-      resources :scorecard_logs, only: [:create]
+    #key_performance_indicator
+    resources :key_performance_indicator, only: [:index, :create, :update, :destroy] do
+      resources :scorecard_logs, only: [:create, :show]
     end
-    post '/key_performance_index/create_key_element/:id', to: 'sub_initiatives#create_key_element'
-    patch '/key_performance_index/close/:id', to: 'key_performance_index#close_kpi'
-    # post '/sub_initiatives/create_milestones/:id', to: 'sub_initiatives#create_milestones'
+    # post '/key_performance_indicator/create_key_element/:id', to: 'sub_initiatives#create_key_element'
+    # patch '/key_performance_indicator/close/:id', to: 'key_performance_indicator#close_kpi'
 
     #questionnaires
     resources :questionnaires, only: [:index]

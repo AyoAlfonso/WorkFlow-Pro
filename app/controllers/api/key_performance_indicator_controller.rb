@@ -4,33 +4,30 @@ class Api::KeyPerformanceIndicatorController < ApplicationController
   respond_to :json
 
   def index
-    #Get all the kpi's
-    #Get by company, by team and by individual
-    @kpi = policy_scope(KeyPerformanceIndicator)
+    if params[:meeting_id].present?
+    @kpi = policy_scope(KeyPerformanceIndicator).where(user_id: current_user.id)
     render json: { kpi: @kpi }
     render "/api/key_performance_indicator/index"
   end
 
   def create
     @kpi = KeyPerformanceIndicator.new({
-      created_by: current_user, 
-      owned_by: current_user, 
+      created_by_id: current_user,
+      user_id: params[:user],  
+      company_id: params[:company],   # team, company, user
+      team_id: params[:team], 
       unit_type: params[:unit_type],
-      quarter: company.quarter_for_creating_quarterly_goals,
-      description: params[:description]
+      target_value: params[:target_value],
+      description: params[:description],
     })
 
     authorize @kpi
     @kpi.save!
     #TO DO CREATE VIEWS
-    render "/api/key_performance_indicator/create"
+    render json: @kpi
+    # "/api/key_performance_indicator/create"
   end
-
-  def create_scorecard_logs
-    scorecard_log = ScoreCardLog.create!(scorecard_log_params)
-    render json: { scorecard_log: scorecard_log, status: :ok }
-  end
-
+  
   def show
     @company = current_company
     render "api/key_performance_indicator/show"
@@ -38,7 +35,7 @@ class Api::KeyPerformanceIndicatorController < ApplicationController
 
   def update
     @kpi.update!(key_performance_indicator_params)
-    render json: @habit
+    render json: @kpi
   end
 
   def destroy
@@ -54,11 +51,11 @@ class Api::KeyPerformanceIndicatorController < ApplicationController
   private
 
   def key_performance_indicator_params
-    params.permit(:id, :created_by_id, :owned_by_id, :description, :unit_type)
+    params.permit(:id, :user_id, :company_id, :team_id, :description, :unit_type, :target_value)
   end
 
   def scorecard_log_params
-    params.permit(:id, :associated_kpi_id, :score, :created_by_id, :note)
+    params.permit(:id, :associated_kpi_id, :score, :note)
   end
 
   def set_key_performance_indicator

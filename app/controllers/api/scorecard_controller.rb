@@ -1,30 +1,38 @@
 class Api::ScorecardController < Api::ApplicationController
   include StatsHelper
   respond_to :json
-  before_action :set_milestone, only: [:update]
+  before_action :set_scorecard_log, only: [:show]
 
-  #create a kpi score card log 
-  #if anotehr is created within same week. add a new week score card log
-  #Or else  m
-  # i nnot 
-  def update
-    @milestone.update!(milestone_params)
-    render '/api/scorecard_log/update'
+  def create
+    @scorecard_log = ScoreCardLog.create!(scorecard_log_params)
+    authorize @scorecard_log
+    @scorecard_log.save!
+    render json: @scorecard_log
   end
 
-  def milestones_for_meeting
-    @my_current_milestones = Milestone.current_week_for_user(get_next_week_or_current_week_date(current_user.time_in_user_timezone), current_user, "QuarterlyGoal")
-    authorize @my_current_milestones
-    render '/api/scorecard_log/milestones_for_meeting'
+  def show
+    @company = current_company
+    #TO DO
+    #Considerations
+    #who can see what
+    #what other models are we rendering
+    render "api/scorecard_logs/show"
   end
 
   private
-  def set_milestone
-    @milestone = policy_scope(Milestone).find(params[:id])
-    authorize @milestone
+
+  def set_scorecard_log
+    kpi_id = params[:key_performance_indicator_id]
+    fiscal_year = params[:fiscal_year]
+    fiscal_quarter = params[:fiscal_quarter]
+
+    @scorecard_log = policy_scope(ScoreCardLog).thirteen_weeks_of_scorecards(kpi_id, fiscal_year, fiscal_quarter)
+    authorize @scorecard_log
   end
 
-  def milestone_params
-    params.require(:milestone).permit(:id, :description, :status)
+  def scorecard_log_params
+    fiscal_quarter = company.current_fiscal_quarter
+    fiscal_year = company.current_fiscal_year
+    params.require(:scorecard_log).permit(:user_id, :score, :note, :key_performance_indicator_id, :fiscal_quarter, :fiscal_year)
   end
 end
