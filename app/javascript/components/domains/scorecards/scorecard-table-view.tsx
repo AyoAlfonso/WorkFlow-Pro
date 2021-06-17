@@ -26,8 +26,8 @@ export const ScorecardTableView = (
 		() => [
 			{
 				title: {
-					item: "",
-					logic: "",
+					item: "Booked Work",
+					logic: "< $5000",
 					highlighted: true,
 				},
 				owner: {
@@ -42,32 +42,50 @@ export const ScorecardTableView = (
 	const columns = useMemo(
 		() => [
 			{
-				Header: "KPIs",
+				Header: () => (
+					<div style={{ textAlign: "left" }}>KPIs</div>
+				),
 				accessor: "title",
 				Cell: ({ value }) => {
-					return (<div>{value.item}</div>);
+					return (<KPITitleContainer>{`${value.item} ${value.logic}`}</KPITitleContainer>);
 				},
+				width: "21%",
 			},
 			{
 				Header: "Owner",
 				accessor: "owner",
 				Cell: ({ value }) => {
-					return (<div>{value.name}</div>);
-				}
+					return (<OwnerContainer>{value.name}</OwnerContainer>);
+				},
+				width: "15%",
 			},
 			{
 				Header: "Status",
 				accessor: "status",
+				Cell: ({ value }) => {
+					return (<StatusContainer>{value}</StatusContainer>);
+				},
+				width: "8%",
 			},
-			...R.range(1, 13).map(n => ({
+			...R.range(1, 53).map(n => ({
 				Header: `WK ${n}`,
-				accessor: `wk_${n}`
+				accessor: `wk_${n}`,
+				Cell: ({ value }) => {
+					return (<WeekContainer>{value}</WeekContainer>);
+				},
+				width: "6%",
 			}))
 		],
 		[]
 	)
 
-	const tableInstance = useTable({ columns, data })
+	const getHiddenColumns = (q: number) => R.range(1, 53).filter(n => Math.floor((n - 1) / 13) != q - 1).map(n => `wk_${n}`);
+
+	const initialState = {
+		hiddenColumns: getHiddenColumns(quarter),
+	}
+
+	const tableInstance = useTable({ columns, data, initialState })
 
 	const {
 		getTableProps,
@@ -75,7 +93,13 @@ export const ScorecardTableView = (
 		headerGroups,
 		rows,
 		prepareRow,
+		setHiddenColumns,
 	} = tableInstance
+
+	const handleQuarterSelect = (q) => {
+		setQuarter(q)
+		setHiddenColumns(getHiddenColumns(q))
+	}
 
 	return (
 		<Container>
@@ -93,7 +117,7 @@ export const ScorecardTableView = (
 				</TabContainer>
 				<Select
 					selection={quarter}
-					setSelection={setQuarter}
+					setSelection={handleQuarterSelect}
 					id={"scorecard-quarter-selection"}
 				>
 					{R.range(1, 5).map((n: number) => (<option value={n}>Q{n} {company.currentFiscalYear}</option>))}
@@ -114,35 +138,35 @@ export const ScorecardTableView = (
 				<TableBody>
 				</TableBody>
 				</Table>*/}
-			<table {...getTableProps()}>
+			<Table {...getTableProps()}>
 				<thead>
 					{headerGroups.map(headerGroup => (
-							<tr {...headerGroup.getHeaderGroupProps()}>
-								{headerGroup.headers.map(column => (
-										<th {...column.getHeaderProps()}>
-											{column.render('Header')}
-										</th>
-									))}
-							</tr>
-						))}
+						<tr {...headerGroup.getHeaderGroupProps()}>
+							{headerGroup.headers.map(column => (
+								<TableHeader {...column.getHeaderProps({ style: { width: column.width } })}>
+									{column.render('Header')}
+								</TableHeader>
+							))}
+						</tr>
+					))}
 				</thead>
 				<tbody {...getTableBodyProps()}>
 					{rows.map(row => {
-							prepareRow(row)
-							return (
-								<tr {...row.getRowProps()}>
-									{row.cells.map(cell => {
-											return (
-												<td {...cell.getCellProps()}>
-													{cell.render('Cell')}
-												</td>
-											)
-										})}
-								</tr>
-							)
-						})}
+						prepareRow(row)
+						return (
+							<tr {...row.getRowProps()}>
+								{row.cells.map(cell => {
+									return (
+										<td {...cell.getCellProps()}>
+											{cell.render('Cell', cell.getCellProps())}
+										</td>
+									)
+								})}
+							</tr>
+						)
+					})}
 				</tbody>
-			</table>
+			</Table>
 			<StyledButton
 				small
 				variant={"grey"}
@@ -165,6 +189,7 @@ const TopRow = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 16px;
 `
 
 const TabContainer = styled.div`
@@ -190,13 +215,27 @@ const Tab = styled.button<TabProps>`
 		opacity: 1;`}
 `
 
-const Table = styled.table``
+const Table = styled.table`
+	border-collapse: collapse;
+	display: -webkit-box;
+	padding-bottom: 16px;
+	font-size: 12px;
+	overflow-x: scroll;
+	width: 100%;
+	td {
+		padding: 8px 8px;
+	}
+`
 
-const TableHead = styled.thead``
+const TableHead = styled.thead`
+`
 
 const TableBody = styled.tbody``
 
-const TableHeader = styled.th``
+const TableHeader = styled.th`
+	border: 1px solid ${props => props.theme.colors.borderGrey};
+	padding: 16px 8px;
+`
 
 const TableRow = styled.tr``
 
@@ -233,3 +272,19 @@ const AddGoalText = styled(TextDiv)`
   color: ${props => props.theme.colors.primary100};
   font-size: 12px;
 `;
+
+const KPITitleContainer = styled.div`
+	min-width: 216px;
+`
+
+const OwnerContainer = styled.div`
+	min-width: 160px;
+`
+
+const StatusContainer = styled.div`
+	min-width: 86px;
+`
+
+const WeekContainer = styled.div`
+	min-width: 64px;
+`
