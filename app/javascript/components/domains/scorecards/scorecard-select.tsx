@@ -1,12 +1,14 @@
 import React from "react"
+import styled from "styled-components"
 import { createStyles, makeStyles, withStyles, Theme } from '@material-ui/core/styles';
 import { baseTheme } from "~/themes/base";
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
 import InputLabel from '@material-ui/core/InputLabel';
+import { Icon } from "../../shared/icon";
 
-const StyledInput = withStyles(
+const MuiStyledInput = withStyles(
 	(theme: Theme) => createStyles({
 		input: {
 			borderRadius: 4,
@@ -22,12 +24,32 @@ const StyledInput = withStyles(
         borderColor: baseTheme.colors.primary60,
         boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
       },
-			padding: "8px 16px",
+			paddingLeft: "16px",
+			paddingTop: "6px",
+			paddingBottom: "8px",
+			width: "80px"
 		},
-		svg: {
-			paddingRight: "16px",
+		select: {
+			paddingRight: "48px",
 		}
 }))(InputBase);
+
+const StyledIcon = styled(Icon)`
+	top: calc(50% - 8px);
+	right: 16px;
+	position: absolute;
+	pointer-events: none;
+`
+
+const ChevronDownIcon = (): JSX.Element => {
+	return (
+		<StyledIcon
+			icon={"Chevron-Down"}
+			size={"16px"}
+			color={baseTheme.colors.greyActive}
+		/>
+	)
+}
 
 type SelectProps = {
 	selection: string | number;
@@ -51,7 +73,8 @@ export default ({
 				id={id}
 				value={selection}
 				onChange={handleChange}
-				input={<StyledInput />}
+				input={<MuiStyledInput />}
+				IconComponent={ChevronDownIcon}
 			>
 			{children}
 			</NativeSelect>
