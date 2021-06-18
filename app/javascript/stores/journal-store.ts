@@ -18,12 +18,16 @@ export const JournalStoreModel = types
       self.journalEntriesFiltered = response.data;
     }),
     updateJournalEntry: flow(function*(updatedJournalEntry) {
+      const { sessionStore } = getRoot(self);
       const response: ApiResponse<any> = yield self.environment.api.updateJournalEntry(
         updatedJournalEntry,
       );
+   
       if (response.ok) {
         //nested filter is hard to update, entry will update list
+        
         return response.data;
+        
       }
       return false;
     }),

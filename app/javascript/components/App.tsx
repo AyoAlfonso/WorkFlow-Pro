@@ -74,9 +74,9 @@ export const App = observer(
       let showGoalRoute;
       let showTeamRoute;
       if (profile) {
-          noFeatures = !profile.productFeatures;
-          showGoalRoute = !noFeatures && profile.productFeatures.objective;
-          showTeamRoute = !noFeatures && profile.productFeatures && profile.productFeatures.team;
+        noFeatures = !profile.productFeatures;
+        showGoalRoute = !noFeatures && profile.productFeatures.objective;
+        showTeamRoute = !noFeatures && profile.productFeatures && profile.productFeatures.team;
       }
       const onDragEnd = result => {
       const { destination, source, draggableId } = result;

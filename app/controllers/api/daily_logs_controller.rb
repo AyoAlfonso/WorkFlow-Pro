@@ -7,11 +7,10 @@ class Api::DailyLogsController < Api::ApplicationController
       raise ArgumentError.new("Missing date for viewing daily log.")
     else
       date = params[:date].to_date
-      @daily_log = policy_scope(DailyLog).find_by_log_date(date)
+      @daily_log = policy_scope(DailyLog).find_by(log_date: date)
       @daily_log = current_user.daily_logs.create(log_date: date) if @daily_log.blank?
-      
+
       render json: { daily_log: @daily_log }
     end
-    
   end
 end

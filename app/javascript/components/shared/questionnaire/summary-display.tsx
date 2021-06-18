@@ -9,12 +9,14 @@ export interface ISummaryDisplayProps {
   summaryData: any;
   variant: string;
   title: string;
+  reflectionType: string;
 }
 
 export const SummaryDisplay = ({
   summaryData,
   title,
   variant,
+  reflectionType,
 }: ISummaryDisplayProps): JSX.Element => {
   const { t } = useTranslation();
   const rowTextProps = {
@@ -22,7 +24,7 @@ export const SummaryDisplay = ({
     color: "text",
   };
   const dataForDisplay = summaryData[humps.camelize(variant)];
-
+  
   return (
     <Container>
       <Text fontSize={"16px"} fontWeight={600}>
@@ -31,7 +33,11 @@ export const SummaryDisplay = ({
       <DataContainer>
         {R.isEmpty(dataForDisplay) || R.isNil(dataForDisplay) ? (
           <Text fontSize={"12px"} fontWeight={400}>
-            {t("journals.pynBotNoEntries")}
+            {t("journals.pynBotNoEntries", {
+              reflectionType,
+              frequency:
+                reflectionType.toLowerCase().indexOf("monthly") > -1 ? "Weekly" : "Evening",
+            })}
           </Text>
         ) : (
           dataForDisplay.map((summaryDataEl, index) => {
