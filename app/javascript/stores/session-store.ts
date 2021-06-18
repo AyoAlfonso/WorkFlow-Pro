@@ -34,24 +34,18 @@ export const SessionStoreModel = types
         self.scheduledGroups.find(group => group.name == selectedFilterGroupName),
       );
     },
-    get annualInitiativeTitle(){
-      const titleObject = self.companyStaticData.find(
-        item => item.field == "annual_objective",
-      );
+    get annualInitiativeTitle() {
+      const titleObject = self.companyStaticData.find(item => item.field == "annual_objective");
       return titleObject ? titleObject.value : "Annual Objective";
     },
-    get quarterlyGoalTitle(){
-      const titleObject = self.companyStaticData.find(
-        item => item.field == "quarterly_initiative",
-      );
+    get quarterlyGoalTitle() {
+      const titleObject = self.companyStaticData.find(item => item.field == "quarterly_initiative");
       return titleObject ? titleObject.value : "Quarterly Initiative";
     },
-    get subInitiativeTitle(){
-      const titleObject = self.companyStaticData.find(
-        item => item.field == "sub_initiative",
-      );
+    get subInitiativeTitle() {
+      const titleObject = self.companyStaticData.find(item => item.field == "sub_initiative");
       return titleObject ? titleObject.value : "Supporting Initiative";
-    }
+    },
   }))
   .actions(self => ({
     setProfileData(updatedData) {
@@ -66,7 +60,7 @@ export const SessionStoreModel = types
           self.profile = response.data;
           self.staticData = response.data.staticData;
           self.scheduledGroups = response.data.scheduledGroups;
-          self.companyStaticData = response.data.companyStaticData
+          self.companyStaticData = response.data.companyStaticData;
           self.loggedIn = true;
 
           //data and company name are not stored on user model
@@ -102,22 +96,23 @@ export const SessionStoreModel = types
       } catch {
         // error messaging handled by API monitor
       }
+      self.loading = false;
     }),
-    updateUserPulse: flow(function*(userPulseObject){
+    updateUserPulse: flow(function*(userPulseObject) {
       const response = yield self.environment.api.updateUserPulse(userPulseObject);
-      if(response.ok){
+      if (response.ok) {
         self.profile = response.data;
         showToast("Daily pulse updated.", ToastMessageConstants.SUCCESS);
       } else {
         showToast("There was an error updating the daily pulse", ToastMessageConstants.ERROR);
       }
     }),
-    getUserPulseByDate: flow(function*(date){
+    getUserPulseByDate: flow(function*(date) {
       const response = yield self.environment.api.getUserPulseByDate(date);
-      if(response.data){
-        self.profile.userPulseForDisplay = response.data.userPulse
+      if (response.data) {
+        self.profile.userPulseForDisplay = response.data.userPulse;
       } else {
-        self.profile.userPulseForDisplay = null
+        self.profile.userPulseForDisplay = null;
       }
     }),
     updateSelectedDailyLog: function(dailyLogObject) {
@@ -136,7 +131,6 @@ export const SessionStoreModel = types
         }
         self.loading = false;
       }
-      
     }),
     updateAvatar: flow(function*(formData) {
       self.loading = true;
@@ -195,7 +189,16 @@ export const SessionStoreModel = types
       self.loading = true;
       //may want to show a loading modal here
       const env = getEnv(self);
-      const { companyStore, teamStore, userStore, meetingStore, notificationStore, keyActivityStore, labelStore, staticDataStore } = getRoot(self);
+      const {
+        companyStore,
+        teamStore,
+        userStore,
+        meetingStore,
+        notificationStore,
+        keyActivityStore,
+        labelStore,
+        staticDataStore,
+      } = getRoot(self);
       try {
         const response: any = yield env.api.login(email, password);
         if (response.ok) {
@@ -214,7 +217,7 @@ export const SessionStoreModel = types
 
             //TODO SET TOKEN INTO COOKIE
             //env.api.setJWT(newJWT);
-            
+
             self.loadProfile();
             staticDataStore.load();
             companyStore.load();
