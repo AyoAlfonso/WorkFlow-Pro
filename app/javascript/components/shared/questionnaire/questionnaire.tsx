@@ -75,11 +75,13 @@ export const Questionnaire = observer(
                   summaryData={summaryData}
                   variant={`${R.path(["metadata", "summary"], step)}Am`}
                   title={R.path(["metadata", "message", "am"], step)}
+                  reflectionType={questionnaireVariant.title}
                 />
                 <SummaryDisplay
                   summaryData={summaryData}
                   variant={`${R.path(["metadata", "summary"], step)}Pm`}
                   title={R.path(["metadata", "message", "pm"], step)}
+                  reflectionType={questionnaireVariant.title}
                 />
               </>,
             ),
@@ -93,6 +95,7 @@ export const Questionnaire = observer(
                 summaryData={summaryData}
                 variant={R.path(["metadata", "summary"], step)}
                 title={R.path(["metadata", "message"], step)}
+                reflectionType={questionnaireVariant.title}
               />,
             ),
             R.dissoc("options"),
