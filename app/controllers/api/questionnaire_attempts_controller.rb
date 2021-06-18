@@ -59,16 +59,16 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
       when "Evening Reflection"
         @questionnaire_attempts = policy_scope(QuestionnaireAttempt).of_questionnaire(questionnaire).within_day(current_user.time_in_user_timezone) #not really used since we have not made front end endpoints to fetch this
       when "Weekly Reflection"
-        questionnaire_attempts_for_weekly(questionnaire)
+        questionnaire_attempts_for_weekly
       when "Monthly Reflection"
-        questionnaire_attempts_for_monthly(questionnaire)
+        questionnaire_attempts_for_monthly
       end
     else
       if current_company.display_format === "Company"
-        questionnaire_attempts_for_weekly(questionnaire)
+        questionnaire_attempts_for_weekly
       else
         # for forum get the first monthly attempt
-        questionnaire_attempts_for_monthly(questionnaire)
+        questionnaire_attempts_for_monthly
       end
     end
     
@@ -141,18 +141,18 @@ class Api::QuestionnaireAttemptsController <  Api::ApplicationController
     end
   end
 
-  def questionnaire_attempts_for_weekly(questionnaire)
+  def questionnaire_attempts_for_weekly
     if current_user.time_in_user_timezone.wday == 1 # Monday
-      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).of_questionnaire(questionnaire).within_last_week(current_user.time_in_user_timezone)
+      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).of_questionnaire_type("Evening Reflection").within_last_week(current_user.time_in_user_timezone)
     elsif [0, 2, 3, 4, 5, 6].include? current_user.time_in_user_timezone.wday # Tuesday to Sunday
-      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).of_questionnaire(questionnaire).within_current_week(current_user.time_in_user_timezone)
+      @questionnaire_attempts = policy_scope(QuestionnaireAttempt).of_questionnaire_type("Evening Reflection").within_current_week(current_user.time_in_user_timezone)
     else
       render json: { error: "You can't do your Weekly Personal Planning at this time", status: 412 }
       return
     end
   end
 
-  def questionnaire_attempts_for_monthly(questionnaire)
-    @questionnaire_attempts = policy_scope(QuestionnaireAttempt).of_questionnaire(questionnaire).within_last_four_weeks(current_user.time_in_user_timezone)
+  def questionnaire_attempts_for_monthly
+    @questionnaire_attempts = policy_scope(QuestionnaireAttempt).of_questionnaire_type("Evening Reflection").within_last_four_weeks(current_user.time_in_user_timezone)
   end
 end
