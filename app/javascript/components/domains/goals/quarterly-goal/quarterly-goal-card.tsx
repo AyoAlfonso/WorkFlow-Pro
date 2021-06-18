@@ -181,7 +181,7 @@ export const QuarterlyGoalCard = observer(
               />
             )}
             <BadgeContainer>
-              {quarterlyGoal.subInitiatives.length > 0 && (
+              {quarterlyGoal.subInitiatives && quarterlyGoal.subInitiatives.length > 0 && (
                 <>
                   <MilestoneCountContainer>
                     {quarterlyGoal.subInitiatives.length}

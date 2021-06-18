@@ -104,14 +104,16 @@ export const AnnualInitiativeCardMinimized = observer(
     };
     annualInitiative.quarterlyGoals.map(quarterlyGoal => {
       milestoneProgressCounter(quarterlyGoal);
-      quarterlyGoal.subInitiatives.map(milestoneProgressCounter);
+      if(quarterlyGoal.subInitiatives) {
+        quarterlyGoal.subInitiatives.map(milestoneProgressCounter);
+      }
     });
 
     let gradient = "";
     const annualQtrGoalsLength =
       annualInitiative.quarterlyGoals.length +
       annualInitiative.quarterlyGoals.reduce(
-        (acc: number, quarterlyGoal) => acc + quarterlyGoal.subInitiatives.length,
+        (acc: number, quarterlyGoal) => acc + (quarterlyGoal.subInitiatives ? quarterlyGoal.subInitiatives.length : 0),
         0,
       );
     milestones.forEach((obj, index) => {
