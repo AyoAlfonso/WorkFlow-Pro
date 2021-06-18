@@ -32,6 +32,7 @@ export const PulseSelector = observer(
     const [typedAdjective, setTypedAdjective] = useState<string>("");
     const [showCalendar, setShowCalendar] = useState<boolean>(false);
     const [selectedDateFilter, setSelectedDateFilter] = useState<string>(todaysDateFull);
+    const [attention, setAttention] = useState<boolean>(true);
 
     const selectorRef = useRef(null);
 
@@ -85,20 +86,20 @@ export const PulseSelector = observer(
     const renderTodaysEmotion = () => {
       switch (todaysEmotion) {
         case 1:
-          return emotionE(true);
+          return emotionE(true, 32);
         case 2:
-          return emotionD(true);
+          return emotionD(true, 32);
         case 3:
-          return emotionC(true);
+          return emotionC(true, 32);
         case 4:
-          return emotionB(true);
+          return emotionB(true, 32);
         case 5:
-          return emotionA(true);
+          return emotionA(true, 32);
         default:
           return (
-            <div style={{ position: "relative" }}>
-              {emotionC(true)}
-              <NotificationBadge/>
+            <div style={{ position: "relative" }} onClick={() => setAttention(false)}>
+              {emotionC(attention, 32)}
+              {attention && <NotificationBadge/>}
             </div>
           );
       }
@@ -280,7 +281,7 @@ const PulseAnimation = keyframes`
 `
 
 const NotificationBadge = styled.span`
-  background-color: ${props => props.theme.colors.primary60};
+  background-color: ${props => props.theme.colors.primary100};
   border-radius: 50%;
   width: 10px;
   height: 10px;
