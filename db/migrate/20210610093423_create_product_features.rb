@@ -9,4 +9,12 @@ class CreateProductFeatures < ActiveRecord::Migration[6.0]
       t.boolean :pyns, null: false, default: false
     end
   end
+
+  def data
+    User.find_each(batch_size: 100) do |user|
+      if user.product_features.empty? 
+	      ProductFeature.create!(user_id: user.id, objective: true, team: true, meeting: true, company: true, pyns: true)
+			end
+    end
+  end
 end
