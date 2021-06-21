@@ -13,8 +13,7 @@ class CreateProductFeatures < ActiveRecord::Migration[6.0]
   def data
     User.find_each(batch_size: 100) do |user|
       if user.product_features.empty? 
-	      product_feature = ProductFeature.create!(user_id: user.id, objective: true, team: true, meeting: true, company: true, pyns: true)
-	      product_feature.save!
+	      ProductFeature.create!(user_id: user.id, objective: true, team: true, meeting: true, company: true, pyns: true)
 			end
     end
   end
