@@ -9,14 +9,14 @@ export interface ISummaryDisplayProps {
   summaryData: any;
   variant: string;
   title: string;
-  reflectionType: string;
+  questionnaireVariant?: string;
 }
 
 export const SummaryDisplay = ({
   summaryData,
   title,
   variant,
-  reflectionType,
+  questionnaireVariant,
 }: ISummaryDisplayProps): JSX.Element => {
   const { t } = useTranslation();
   const rowTextProps = {
@@ -33,11 +33,9 @@ export const SummaryDisplay = ({
       <DataContainer>
         {R.isEmpty(dataForDisplay) || R.isNil(dataForDisplay) ? (
           <Text fontSize={"12px"} fontWeight={400}>
-            {t("journals.pynBotNoEntries", {
-              reflectionType,
-              frequency:
-                reflectionType.toLowerCase().indexOf("monthly") > -1 ? "Weekly" : "Evening",
-            })}
+            {questionnaireVariant == "Monthly Reflection"
+              ? t("journals.pynBotNoEntriesMonthly")
+              : t("journals.pynBotNoEntriesWeekly")}
           </Text>
         ) : (
           dataForDisplay.map((summaryDataEl, index) => {
