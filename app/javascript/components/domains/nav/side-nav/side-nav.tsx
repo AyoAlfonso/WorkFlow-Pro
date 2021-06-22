@@ -55,6 +55,7 @@ export const StyledIcon = styled(Icon)<StyledIconType>`
 
 type StyledNavLinkType = {
   active: boolean;
+  disabled: boolean;
 };
 
 const StyledNavLink = styled(NavLink)<StyledNavLinkType>`
@@ -396,7 +397,11 @@ export const SideNavNoMst = (
         </StyledNavLinkChildrenActive>
       )}
 
-      {company && company.accessCompany && showTeam ? renderTeam(R.path(["length"], teams) || 0) : <> </>}
+      {company && company.accessCompany && showTeam ? (
+        renderTeam(R.path(["length"], teams) || 0)
+      ) : (
+        <> </>
+      )}
 
       {company && company.accessCompany && !showTeam ? (
         renderMeeting(R.path(["length"], teams) || 0, "team")
