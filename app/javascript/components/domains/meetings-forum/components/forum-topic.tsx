@@ -12,19 +12,22 @@ import { Icon, Text, UserSelectionDropdownList, Avatar } from "~/components/shar
 
 interface IForumTopic {
   teamMembers: Array<any>;
-  meeting: IMeeting;
+  meeting?: IMeeting;
   disabled: boolean;
 }
 
 export const ForumTopic = observer(
   ({ teamMembers, meeting, disabled }: IForumTopic): JSX.Element => {
-    const { forumStore } = useMst();
+    const { forumStore, meetingStore } = useMst();
+
+    const [currentMeeting, setCurrentMeeting] = useState<any>(
+      meeting || meetingStore.currentMeeting,
+    );
+    const [userSelectionOpen, setUserSelectionOpen] = useState<boolean>(false);
 
     const [explorationTopic, setExplorationTopic] = useState(
-      R.path(["forumExplorationTopic"], meeting.settings) || "",
+      R.path(["forumExplorationTopic"], currentMeeting.settings) || "",
     );
-
-    const [userSelectionOpen, setUserSelectionOpen] = useState<boolean>(false);
 
     //https://github.com/lovasoa/react-contenteditable/issues/161
     const handleChangeExplorationTopic = useRefCallback(e => {
@@ -35,7 +38,7 @@ export const ForumTopic = observer(
 
     const handleBlurExplorationTopic = useRefCallback(() => {
       forumStore.updateMeeting({
-        id: meeting.id,
+        id: currentMeeting.id,
         meeting: {
           settingsForumExplorationTopic: explorationTopic,
         },
@@ -44,17 +47,23 @@ export const ForumTopic = observer(
 
     const handleChangeExplorationTopicOwnerId = user => {
       setUserSelectionOpen(false);
-      forumStore.updateMeeting({
-        id: meeting.id,
-        meeting: {
-          settingsForumExplorationTopicOwnerId: user.id,
-        },
-      });
+      forumStore
+        .updateMeeting({
+          id: currentMeeting.id,
+          meeting: {
+            settingsForumExplorationTopicOwnerId: user.id,
+          },
+        })
+        .then(result => {
+          if (!meeting) {
+            setCurrentMeeting(result);
+          }
+        });
     };
 
     const topicRef = useRef(null);
     const topicOwner = teamMembers.find(
-      member => member.id == R.path(["forumExplorationTopicOwnerId"], meeting.settings),
+      member => member.id == R.path(["forumExplorationTopicOwnerId"], currentMeeting.settings),
     );
 
     const renderUserAvatar = () => {
@@ -142,7 +151,7 @@ const StyledContentEditable = styled(ContentEditable)`
 `;
 
 const UserSelectionContainer = styled.div`
-  margin-left: 25px;
+  margin-left: 80px;
   margin-top: -10px;
 `;
 

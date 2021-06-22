@@ -123,11 +123,7 @@ export const Exploration = observer(
               <HeaderText text={t("meetingForum.exploration.title")} />
             </ColumnContainerParent>
             <ColumnContainerParent>
-              <ForumTopic
-                disabled={false}
-                teamMembers={toJS(currentTeam.users)}
-                meeting={currentMeeting}
-              />
+              <ForumTopic disabled={false} teamMembers={toJS(currentTeam.users)} />
             </ColumnContainerParent>
           </>
         )}
