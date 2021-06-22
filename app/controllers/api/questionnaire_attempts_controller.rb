@@ -16,7 +16,7 @@ class Api::QuestionnaireAttemptsController < Api::ApplicationController
     steps = permit_array_param_and_convert_to_hash(params[:steps])
     rendered_steps = permit_array_param_and_convert_to_hash(params[:rendered_steps])
 
-    log_date = params[:log_date] ? params[:log_date].to_date : current_user.convert_to_their_timezone.to_date
+    log_date = params[:log_date] ? params[:log_date].to_date : nil
 
     @questionnaire_attempt = QuestionnaireAttempt.new({
       user_id: current_user.id,
@@ -89,7 +89,7 @@ class Api::QuestionnaireAttemptsController < Api::ApplicationController
       weekly_takeaways: [],
     }
 
-    @questionnaire_attempts.each do |qa|
+    @questionnaire_attempts.order(completed_at: :asc).each do |qa|
       day_of_the_week = current_user.convert_to_their_timezone(qa.completed_at).strftime("%A")
       day_of_the_month = current_user.convert_to_their_timezone(qa.completed_at).strftime("%b %-d")
       qa.rendered_steps.each do |rs|
