@@ -1,4 +1,3 @@
-
 import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 
@@ -59,7 +58,7 @@ export const ForumStoreModel = types
       try {
         const response: ApiResponse<any> = yield self.environment.api.createForumMeetingsForYear(
           teamId,
-          currentYear
+          currentYear,
         );
         if (response.ok) {
           self.forumYearMeetings = response.data as any;
@@ -79,12 +78,12 @@ export const ForumStoreModel = types
         forumYearMeetings[meetingToUpdateIndex] = response.data;
         self.forumYearMeetings = forumYearMeetings;
 
-        if(fromMeeting){
+        if (fromMeeting) {
           const { meetingStore } = getRoot(self);
-          meetingStore.updateCurrentMeeting(response.data)
+          meetingStore.updateCurrentMeeting(response.data);
         }
 
-        if(self.searchedForumMeetings){
+        if (self.searchedForumMeetings) {
           let searchedForumMeetings = self.searchedForumMeetings;
           let searchedForumMeetingIndex = searchedForumMeetings.findIndex(
             meeting => meeting.id == response.data.id,
@@ -92,27 +91,30 @@ export const ForumStoreModel = types
           searchedForumMeetings[searchedForumMeetingIndex] = response.data;
           self.searchedForumMeetings = searchedForumMeetings;
         }
+
+        return response.data;
       }
     }),
-    searchForMeetingsByDateRange: flow(function*(startDate, endDate, teamId){
+    searchForMeetingsByDateRange: flow(function*(startDate, endDate, teamId) {
       const response: ApiResponse<any> = yield self.environment.api.searchForumMeetingsByDateRange(
-        startDate, endDate, teamId
+        startDate,
+        endDate,
+        teamId,
       );
       if (response.ok) {
-        self.searchedForumMeetings = response.data
+        self.searchedForumMeetings = response.data;
       } else {
         self.error = true;
       }
     }),
-    searchForForumMeeting: flow(function*(meetingId){
+    searchForForumMeeting: flow(function*(meetingId) {
       const response: ApiResponse<any> = yield self.environment.api.getMeeting(meetingId);
       if (response.ok) {
-        self.currentSelectedForumMeeting = response.data
+        self.currentSelectedForumMeeting = response.data;
       } else {
         self.error = true;
       }
-    })
-
+    }),
   }));
 
 type ForumStoreType = typeof ForumStoreModel.Type;
