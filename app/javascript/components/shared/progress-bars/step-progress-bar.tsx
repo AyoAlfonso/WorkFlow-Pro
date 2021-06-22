@@ -43,7 +43,6 @@ export const StepProgressBar = ({
       return false;
     }
   };
-
   const calculatePercent = () => {
     const currentPosition = steps[currentStepIndex].position;
     return progressBarProps.percent > currentPosition ? progressBarProps.percent : currentPosition;
