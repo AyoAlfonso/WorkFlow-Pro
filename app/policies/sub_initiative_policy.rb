@@ -8,7 +8,7 @@ class SubInitiativePolicy < ApplicationPolicy
   end
 
   def show?
-    user_is_part_of_this_company?(@record.quarterly_goal.annual_initiative.company) || @record.owned_by == @user || user_can_observe_current_company?
+    @record.owned_by == @user || @record.quarterly_goal.annual_initiative.company.present? && (user_is_part_of_this_company?(@record.quarterly_goal.annual_initiative.company) || user_can_observe_current_company?)
   end
 
   def update?
