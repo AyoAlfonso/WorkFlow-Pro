@@ -44,6 +44,7 @@ export const CompanyStoreModel = types
       }
     }),
     updateCompany: flow(function*(fieldsAndValues: any, onboarding: boolean) {
+      const formData = fieldsAndValues.logo
       const env = getEnv(self);
       const companyId = onboarding ? self.onboardingCompany.id : self.company.id;
       try {
