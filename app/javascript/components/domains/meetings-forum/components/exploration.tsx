@@ -203,7 +203,7 @@ const AvatarContainer = styled.div`
 
 const HeaderSubText = styled.div`
   cursor: pointer;
-  font: normal normal bold 9px Lato;
+  font: normal normal bold 10px Lato;
   width: 20%;
   color: ${props => props.theme.colors.primary100};
 `;
