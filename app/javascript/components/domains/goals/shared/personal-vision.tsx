@@ -42,6 +42,7 @@ export const PersonalVision = ({ personalVision }: IPersonalVisionProps): JSX.El
 
 const VisionContainer = styled(HomeContainerBorders)`
   height: 60px;
+  width: 100%;
   display: flex;
   position: relative;
 `;
@@ -54,10 +55,10 @@ const VisionTitle = styled.p`
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 16px;
-  margin-right: 16px;
   display: flex;
   align-items: center;
   height: inherit;
+  width: 184px;
   white-space: nowrap;
 `;
 
@@ -69,6 +70,7 @@ const StyledContentEditable = styled(ContentEditable)`
   margin-top: auto;
   margin-bottom: auto;
   padding: 5px;
+  padding-right: 205px;
   text-transform: capitalize;
   font-weight: 700;
   text-overflow: ellipsis;

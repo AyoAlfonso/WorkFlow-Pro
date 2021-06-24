@@ -3,7 +3,7 @@ import * as R from "ramda";
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Input } from "~/components/shared/input";
 import { useMst } from "~/setup/root";
 import { Heading, Button } from "~/components/shared";
@@ -32,6 +32,7 @@ export const PulseSelector = observer(
     const [typedAdjective, setTypedAdjective] = useState<string>("");
     const [showCalendar, setShowCalendar] = useState<boolean>(false);
     const [selectedDateFilter, setSelectedDateFilter] = useState<string>(todaysDateFull);
+    const [attention, setAttention] = useState<boolean>(true);
 
     const selectorRef = useRef(null);
 
@@ -85,17 +86,22 @@ export const PulseSelector = observer(
     const renderTodaysEmotion = () => {
       switch (todaysEmotion) {
         case 1:
-          return emotionE(true);
+          return emotionE(true, 32);
         case 2:
-          return emotionD(true);
+          return emotionD(true, 32);
         case 3:
-          return emotionC(true);
+          return emotionC(true, 32);
         case 4:
-          return emotionB(true);
+          return emotionB(true, 32);
         case 5:
-          return emotionA(true);
+          return emotionA(true, 32);
         default:
-          return emotionC(true);
+          return (
+            <div style={{ position: "relative" }} onClick={() => setAttention(false)}>
+              {emotionC(attention, 32)}
+              {attention && <NotificationBadge/>}
+            </div>
+          );
       }
     };
 
@@ -264,3 +270,24 @@ const InputAdjectiveContainer = styled.div``;
 const SaveButtonContainer = styled.div`
   margin-top: 16px;
 `;
+
+const PulseAnimation = keyframes`
+  0% {
+    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 8px rgba(0, 0, 0, 0);
+  }
+`
+
+const NotificationBadge = styled.span`
+  background-color: ${props => props.theme.colors.primary100};
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%,-50%);
+  animation: ${PulseAnimation} 2s infinite;
+`

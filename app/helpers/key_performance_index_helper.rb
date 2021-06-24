@@ -1,0 +1,2 @@
+module KeyPerformanceIndexHelper
+end

@@ -11,6 +11,15 @@ export const SideNavChildLinkNavLink = styled(NavLink)`
   }
 `;
 
+export const SideNavChildLinkDiv = styled.div`
+  font-size: 16px;
+  text-decoration: none;
+  color: ${props => props.theme.colors.white};
+  &:hover {
+    background-color: ${props => props.theme.colors.primary80};
+  }
+`
+
 export const SideNavChildLinkContainer = styled.div`
   align-items: center;
   min-height: 24px;
@@ -46,3 +55,20 @@ export const SideNavChildLink = ({
     </SideNavChildLinkContainer>
   </SideNavChildLinkNavLink>
 );
+
+export interface ISideNavChildProgrammaticProps {
+  linkText: string;
+  handleClick: any;
+}
+export const SideNavChildProgrammatic = ({
+  linkText,
+  handleClick,
+}: ISideNavChildProgrammaticProps): JSX.Element => (
+  <SideNavChildLinkDiv
+    onClick={handleClick}
+  >
+    <SideNavChildLinkContainer>
+      <SideNavChildLinkText>{linkText}</SideNavChildLinkText>
+    </SideNavChildLinkContainer>
+  </SideNavChildLinkDiv>
+)

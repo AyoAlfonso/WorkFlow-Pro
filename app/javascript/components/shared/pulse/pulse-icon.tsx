@@ -1,7 +1,7 @@
 import * as React from "react";
 import { baseTheme } from "~/themes";
 
-const { warningRed, cautionYellow, successGreen, finePine, greyInactive } = baseTheme.colors;
+const { warningRed, cautionYellow, successGreen, greyActive, greyInactive, primary60 } = baseTheme.colors;
 
 export const emotionA = (active: boolean, size = 24) => {
   return (
@@ -14,19 +14,19 @@ export const emotionA = (active: boolean, size = 24) => {
     >
       <title>Emotion-A</title>
       <path
-        fill={active ? finePine : greyInactive}
+        fill={active ? cautionYellow : greyInactive}
         d="M8.637 13.551c0.442-0.001 0.799-0.358 0.8-0.8v-0c0-0.884 0.716-1.6 1.6-1.6s1.6 0.716 1.6 1.6v0c0 0.442 0.358 0.8 0.8 0.8s0.8-0.358 0.8-0.8v0c-0.001-1.766-1.434-3.197-3.2-3.197 0 0 0 0 0 0v0c-0 0-0.001 0-0.001 0-1.766 0-3.197 1.431-3.199 3.196v0c0 0 0 0.001 0 0.001 0 0.442 0.358 0.8 0.8 0.8 0 0 0 0 0 0v0z"
       ></path>
       <path
-        fill={active ? finePine : greyInactive}
+        fill={active ? cautionYellow : greyInactive}
         d="M18.238 13.551c0.442-0.001 0.799-0.358 0.8-0.8v-0c0.025-0.864 0.731-1.555 1.599-1.555s1.574 0.691 1.599 1.553l0 0.002c0.017 0.429 0.369 0.77 0.801 0.77s0.783-0.341 0.801-0.768l0-0.002c0-1.767-1.433-3.2-3.2-3.2s-3.2 1.433-3.2 3.2v0c0 0.442 0.358 0.8 0.8 0.8v0z"
       ></path>
       <path
-        fill={active ? finePine : greyInactive}
+        fill={active ? cautionYellow : greyInactive}
         d="M15.838 23.95c3.535 0 6.4-2.865 6.4-6.4v0h-12.8c0 3.535 2.865 6.4 6.4 6.4v0z"
       ></path>
       <path
-        fill={active ? finePine : greyInactive}
+        fill={active ? cautionYellow : greyInactive}
         d="M28.394 0.013h-24.788c-1.989 0.006-3.6 1.616-3.606 3.604v24.789c0.006 1.989 1.617 3.601 3.606 3.606h24.788c1.989-0.006 3.601-1.617 3.606-3.606v-24.789c-0.006-1.989-1.617-3.599-3.606-3.605h-0.001zM28.394 28.406h-24.788v-24.789h24.788z"
       ></path>
     </svg>
@@ -74,20 +74,20 @@ export const emotionC = (active: boolean, size = 24) => {
     >
       <title>Emotion-C</title>
       <path
-        fill={greyInactive}
+        fill={active ? primary60 : greyInactive}
         d="M28.395 0h-24.789c-1.989 0.006-3.601 1.617-3.606 3.606v24.788c0.006 1.989 1.617 3.601 3.606 3.606h24.789c1.989-0.006 3.599-1.617 3.605-3.606v-24.788c-0.006-1.989-1.616-3.6-3.604-3.606h-0.001zM28.395 28.394h-24.789v-24.788h24.789z"
       ></path>
       <path
-        fill={greyInactive}
+        fill={active ? primary60 : greyInactive}
         d="M11.575 15.875c1.964 0 3.556-1.592 3.556-3.556v0c-0.018-0.477-0.41-0.857-0.889-0.857s-0.871 0.38-0.889 0.855l-0 0.002c0 0.982-0.796 1.777-1.777 1.777s-1.777-0.796-1.777-1.777v0-0.026c-0.007-0.485-0.402-0.876-0.889-0.876-0.491 0-0.889 0.398-0.889 0.889 0 0.005 0 0.009 0 0.014v-0.001c0 0 0 0.001 0 0.001 0 1.963 1.592 3.555 3.555 3.555v0z"
       ></path>
-      <path fill={greyInactive} d="M17.785 11.419v0z"></path>
+      <path fill={active ? primary60 : greyInactive} d="M17.785 11.419v0z"></path>
       <path
-        fill={greyInactive}
+        fill={active ? primary60 : greyInactive}
         d="M20.464 15.875c1.964 0 3.556-1.592 3.556-3.556v0c-0.018-0.477-0.41-0.857-0.889-0.857s-0.871 0.38-0.889 0.855l-0 0.002c0 0.982-0.796 1.777-1.777 1.777s-1.777-0.796-1.777-1.777v0-0.026c-0.007-0.485-0.402-0.876-0.889-0.876-0.491 0-0.889 0.398-0.889 0.889 0 0.005 0 0.009 0 0.014v-0.001c0 0 0 0.001 0 0.001 0 1.963 1.592 3.555 3.555 3.555v0z"
       ></path>
       <path
-        fill={greyInactive}
+        fill={active ? primary60 : greyInactive}
         d="M15.064 21.241c0.025 0.472 0.414 0.845 0.89 0.845 0.016 0 0.032-0 0.047-0.001l-0.002 0h3.583c0.010 0 0.022 0.001 0.033 0.001 0.492 0 0.89-0.398 0.89-0.89s-0.398-0.89-0.89-0.89c-0.012 0-0.023 0-0.035 0.001l0.002-0h-3.672c-0.473 0.025-0.846 0.415-0.846 0.891 0 0.015 0 0.031 0.001 0.046l-0-0.002z"
       ></path>
     </svg>
@@ -105,19 +105,19 @@ export const emotionD = (active: boolean, size = 24) => {
     >
       <title>Emotion-D</title>
       <path
-        fill={active ? cautionYellow : greyInactive}
+        fill={active ? greyActive : greyInactive}
         d="M28.394-0.031h-24.789c-1.988 0.006-3.599 1.617-3.605 3.604v24.789c0.006 1.989 1.616 3.6 3.604 3.606h24.789c1.989-0.006 3.601-1.617 3.606-3.606v-24.789c-0.006-1.989-1.617-3.599-3.606-3.605h-0.001zM28.394 28.363h-24.789v-24.789h24.789z"
       ></path>
       <path
-        fill={active ? cautionYellow : greyInactive}
+        fill={active ? greyActive : greyInactive}
         d="M9 14c0.552 0 1-0.448 1-1v0q0-0.037 0-0.075c0.021-1.088 0.908-1.963 2-1.963 1.105 0 2 0.896 2 2 0 0.013-0 0.026-0 0.039l0-0.002c0 0.552 0.448 1 1 1s1-0.448 1-1v0 0c0-2.209-1.791-4-4-4v0 0c-2.209 0-4 1.791-4 4v0c0 0.552 0.448 1 1 1v0z"
       ></path>
       <path
-        fill={active ? cautionYellow : greyInactive}
+        fill={active ? greyActive : greyInactive}
         d="M17 14c0.552 0 1-0.448 1-1v0c0-1.105 0.895-2 2-2s2 0.895 2 2v0c0 0.552 0.448 1 1 1s1-0.448 1-1v0c0-2.209-1.791-4-4-4s-4 1.791-4 4v0c0 0.552 0.448 1 1 1v0z"
       ></path>
       <path
-        fill={active ? cautionYellow : greyInactive}
+        fill={active ? greyActive : greyInactive}
         d="M16 18.010c-2.209 0-4 1.791-4 4v0c0 0.552 0.448 1 1 1s1-0.448 1-1v0c0-1.105 0.895-2 2-2s2 0.895 2 2v0c0 0.552 0.448 1 1 1s1-0.448 1-1v0c0-2.209-1.791-4-4-4v0z"
       ></path>
     </svg>

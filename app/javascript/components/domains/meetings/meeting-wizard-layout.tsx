@@ -33,7 +33,9 @@ export const MeetingWizardLayout = observer(
     numberOfSteps,
   }: ITeamMeetingProps): JSX.Element => {
     const { t } = useTranslation();
-    const { meetingStore } = useMst();
+    const {
+      companyStore: { company },
+    } = useMst();
     const history = useHistory();
 
     const meetingTitle = () => {
@@ -49,7 +51,7 @@ export const MeetingWizardLayout = observer(
     };
 
     const meetingComponent = () => {
-      return meetingStarted ? (
+      return meetingStarted || (company && company.accessForum) ? (
         <MeetingStep meeting={meeting} />
       ) : (
         <CoreFourWrapper>

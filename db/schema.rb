@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_11_183936) do
+ActiveRecord::Schema.define(version: 2021_06_22_174854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -123,6 +123,7 @@ ActiveRecord::Schema.define(version: 2021_05_11_183936) do
     t.integer "display_format", default: 0
     t.integer "onboarding_status", default: 0
     t.string "customer_subscription_profile_id"
+    t.integer "forum_type"
   end
 
   create_table "company_static_data", force: :cascade do |t|
@@ -300,7 +301,7 @@ ActiveRecord::Schema.define(version: 2021_05_11_183936) do
     t.datetime "scheduled_start_time"
     t.datetime "end_time"
     t.bigint "hosted_by_id"
-    t.text "notes"
+    t.text "notes", default: ""
     t.json "settings"
     t.boolean "original_creation", default: false
     t.index ["created_at"], name: "index_meetings_on_created_at"
@@ -333,6 +334,16 @@ ActiveRecord::Schema.define(version: 2021_05_11_183936) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id", "notification_type"], name: "index_notifications_on_user_id_and_notification_type", unique: true
     t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "product_features", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.boolean "objective", default: true, null: false
+    t.boolean "team", default: false, null: false
+    t.boolean "meeting", default: false, null: false
+    t.boolean "company", default: false, null: false
+    t.boolean "pyns", default: false, null: false
+    t.index ["user_id"], name: "index_product_features_on_user_id"
   end
 
   create_table "quarterly_goals", force: :cascade do |t|
@@ -385,6 +396,17 @@ ActiveRecord::Schema.define(version: 2021_05_11_183936) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "scorecard_logs", force: :cascade do |t|
+    t.bigint "key_performance_indicator_id", null: false
+    t.integer "score"
+    t.string "note"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["key_performance_indicator_id"], name: "index_scorecard_logs_on_key_performance_indicator_id"
+    t.index ["user_id"], name: "index_scorecard_logs_on_user_id"
   end
 
   create_table "sign_up_purposes", force: :cascade do |t|
@@ -618,9 +640,12 @@ ActiveRecord::Schema.define(version: 2021_05_11_183936) do
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"
   add_foreign_key "notifications", "users"
+  add_foreign_key "product_features", "users"
   add_foreign_key "quarterly_goals", "annual_initiatives"
   add_foreign_key "questionnaire_attempts", "questionnaires"
   add_foreign_key "questionnaire_attempts", "users"
+  add_foreign_key "scorecard_logs", "key_performance_indicators"
+  add_foreign_key "scorecard_logs", "users"
   add_foreign_key "sign_up_purposes", "companies"
   add_foreign_key "steps", "meeting_templates"
   add_foreign_key "sub_initiatives", "quarterly_goals"
@@ -640,4 +665,13 @@ ActiveRecord::Schema.define(version: 2021_05_11_183936) do
   add_foreign_key "users", "companies"
   add_foreign_key "users", "companies", column: "default_selected_company_id"
   add_foreign_key "users", "user_roles"
+
+  create_view "v_scoredcards", sql_definition: <<-SQL
+      SELECT key_performance_indicators.id AS kpi,
+      avg(scorecard_logs.score) AS score,
+      scorecard_logs.user_id AS owned_by
+     FROM (key_performance_indicators
+       JOIN scorecard_logs ON ((key_performance_indicators.id = scorecard_logs.key_performance_indicator_id)))
+    GROUP BY scorecard_logs.user_id, key_performance_indicators.id;
+  SQL
 end

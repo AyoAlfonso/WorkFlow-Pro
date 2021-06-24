@@ -93,18 +93,17 @@ class StaticDataService < ApplicationService
                         "Anguished", "Deflated", "Discouraged", "Miserable", "Tired", 
                         "Hopeless", "Complacent", "Bored", "Pessimistic", "Confused", "Lonely"]
 
-    emotion_score_4 = ["Energised", "Positive", "Glad", "Amused", "Satisfied", 
-                        "Thrilled", "Connected", "Inspired", "Focused", "Pleased", 
-                        "Ecstatic", "Joyful", "Happy", "Cheerful", "Hopeful", 
-                        "Euphoric", "Enthusiastic", "Motivated", "Proud", "Optimistic", 
-                        "Exhilarated", "Elated", "Excited", "Surprised", "Lively"]
-
-    
-    emotion_score_5 = ["Easy-going", "Relaxed", "Thoughtful", "Mellow", "Listless", 
+    emotion_score_4 = ["Easy-going", "Relaxed", "Thoughtful", "Mellow", "Listless", 
                         "Safe", "Secure", "Composed", "Peaceful", "Sleepy", 
                         "Chill", "Content", "Calm", "Balanced", "Restful", 
                         "Respected", "Thankful", "Grateful", "At Ease", "Comfy",
                         "Blessed", "Fulfilled", "Tranquil", "Collected", "Serene"]
+
+    emotion_score_5 = ["Energised", "Positive", "Glad", "Amused", "Satisfied", 
+                        "Thrilled", "Connected", "Inspired", "Focused", "Pleased", 
+                        "Ecstatic", "Joyful", "Happy", "Cheerful", "Hopeful", 
+                        "Euphoric", "Enthusiastic", "Motivated", "Proud", "Optimistic", 
+                        "Exhilarated", "Elated", "Excited", "Surprised", "Lively"]
 
     feelings = {
       emotion_score_1: emotion_score_1,
