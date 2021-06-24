@@ -218,7 +218,9 @@
       },
       "meetingForum": {
         "exploration": {
-          "title": "1: Scheduled Exploration"
+          "title": "1: Scheduled Exploration",
+           "subTitle": "Four Step Forum Exploration™ Guide",
+           "done": "Done"
         },
         "parkingLotIssues": {
           "title": "Forum Hub",

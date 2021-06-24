@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { QuarterlyGoalCard } from "../quarterly-goal/quarterly-goal-card";
 import { SubInitiativeCardsExpanded } from "../sub-initiative/sub-initiative-card-expanded";
 import { observer } from "mobx-react";
+import { baseTheme } from "../../../../themes";
 import { IAnnualInitiativeCardExpandedProps } from "~/types/annual-initiative-cards";
 
 export const AnnualInitiativeCardExpanded = observer(
@@ -27,6 +28,7 @@ export const AnnualInitiativeCardExpanded = observer(
       setSubInitiativeModalOpen,
       setSubInitiativeId,
     } = props;
+    const { primary100 } = baseTheme.colors;
 
     const { quarterlyGoalStore, companyStore, sessionStore } = useMst();
     const [createQuarterlyGoalArea, setCreateQuarterlyGoalArea] = useState<boolean>(false);
@@ -73,7 +75,7 @@ export const AnnualInitiativeCardExpanded = observer(
                   <Icon
                     icon={showRender ? "Chevron-Up" : "Chevron-Down"}
                     size={"12px"}
-                    iconColor={"#005FFE"}
+                    iconColor={primary100}
                     style={{ padding: "0px 5px" }}
                   />
                 </MinimizeIconContainer>
@@ -218,7 +220,7 @@ const InitiativesContainer = styled(HomeContainerBorders)`
 //TODOIT: component repeated cleanup once reaching 4x
 const ShowInitiativeBar = styled.div`
   margin: 15%;
-  color: #005ffe;
+  color: ${props => props.theme.colors.primary100};
   font-size: 12px;
   font-weight: bold;
 `;

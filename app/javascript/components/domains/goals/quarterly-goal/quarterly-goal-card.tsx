@@ -154,7 +154,7 @@ export const QuarterlyGoalCard = observer(
                 <StyledSubInitiativeIcon
                   icon={"Sub_initiative"}
                   size={"16px"}
-                  iconColor={"#868DAA"}
+                  iconColor={grey100}
                 />
               )}
               <StyledText>{quarterlyGoal.description}</StyledText>
@@ -189,7 +189,7 @@ export const QuarterlyGoalCard = observer(
                   <StyledSubInitiativeIcon
                     icon={"Sub_initiative"}
                     size={"16px"}
-                    iconColor={"#868DAA"}
+                    iconColor={grey100}
                   />
                 </>
               )}
@@ -301,6 +301,6 @@ const BadgeContainer = styled.div`
 
 const MilestoneCountContainer = styled.div`
   font-size: 9px;
-  color: #868daa;
+  color: ${props => props.theme.colors.grey100};
   margin-right: 5px;
 `;

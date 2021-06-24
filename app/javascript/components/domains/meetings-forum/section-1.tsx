@@ -27,9 +27,11 @@ export const Section1 = observer(
     const instanceType = company && company.accessForum ? "forum" : "teams";
 
     useEffect(() => {
-      async function setUp() {
-        await companyStore.load();
-        setLoading(false);
+      function setUp() {
+        if (!companyStore.company) {
+          companyStore.load();
+          setLoading(false);
+        }
       }
       !company ? setUp() : setLoading(false);
     }, [company]);
