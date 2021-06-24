@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { Label, Input, Select } from "~/components/shared/input";
@@ -54,6 +54,17 @@ export const Company = observer(
       sessionStore.subInitiativeTitle,
     );
     const { t } = useTranslation();
+
+    useEffect(() => {
+      getLogo()
+    }, [])
+
+    const getLogo = async () => {
+      const image = await fetch(company.logoUrl).then(r => r.blob())
+      const form = new FormData();
+      form.append("logo", image);
+      setLogoImageForm(form);
+    }
 
     const submitLogo = async (image) => {
       const form = new FormData();
