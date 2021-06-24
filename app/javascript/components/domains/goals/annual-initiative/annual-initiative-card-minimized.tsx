@@ -207,7 +207,7 @@ export const AnnualInitiativeCardMinimized = observer(
               <StyledIcon
                 icon={showMinimizedCard ? "Chevron-Down" : "Chevron-Up"}
                 size={"12px"}
-                iconColor={"#005FFE"} // TODOIT: ADD TO CONSTANT VARIABLES
+                iconColor={primary100} // TODOIT: ADD TO CONSTANT VARIABLES
                 style={{ padding: "0px 5px" }}
               />
             </MaximizeIconContainer>
@@ -273,7 +273,7 @@ const MaximizeIconContainer = styled.div`
 
 const ShowInitiativeBar = styled.div`
   margin: 15%;
-  color: #005ffe;
+  color: ${props => props.theme.colors.primary100};
   font-size: 12px;
   font-weight: bold;
   white-space: nowrap;

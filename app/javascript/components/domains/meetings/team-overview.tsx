@@ -176,7 +176,13 @@ export const TeamOverview = observer(
     const renderUserRecords = () => {
       return currentTeam.users
         .slice()
-        .sort((a, b) => a.firstName.localeCompare(b.firstName))
+        .sort((a, b) => {
+          if (!a.firstName || !b.firstName) {
+            return 0;
+          } else {
+            return a.firstName.localeCompare(b.firstName);
+          }
+        })
         .map((user, index) => {
           const prioritiesToRender = user.todaysPriorities.concat(user.todaysCompletedActivities);
           return (

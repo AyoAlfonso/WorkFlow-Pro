@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_10_093423) do
+ActiveRecord::Schema.define(version: 2021_06_22_174854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -123,6 +123,7 @@ ActiveRecord::Schema.define(version: 2021_06_10_093423) do
     t.integer "display_format", default: 0
     t.integer "onboarding_status", default: 0
     t.string "customer_subscription_profile_id"
+    t.integer "forum_type"
   end
 
   create_table "company_static_data", force: :cascade do |t|
