@@ -329,11 +329,15 @@ export const SideNav = observer(
   (): JSX.Element => {
     const {
       router,
-      teamStore,
+      teamStore: { teams },
       sessionStore: { profile },
       companyStore: { company },
     } = useMst();
 
-    return SideNavNoMst(router.location.pathname, toJS(profile.currentCompanyUserTeams), company);
+    const roleTeams = profile.role === "Coach" ? 
+      toJS(teams) :
+      toJS(profile.currentCompanyUserTeams);
+
+    return SideNavNoMst(router.location.pathname, roleTeams, company);
   },
 );
