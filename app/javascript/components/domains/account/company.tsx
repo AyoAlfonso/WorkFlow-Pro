@@ -183,6 +183,41 @@ export const Company = observer(
             <>
               <BodyContainer>
                 <PersonalInfoContainer>
+                  <ProfilePhotoSection display={"block"}>
+                    <Label htmlFor="logo">{t("company.logo")}</Label>
+                    <PhotoContainer>
+                      {company.logoUrl ? (
+                        <img style={{ maxHeight: 256, maxWidth: 256 }} src={company.logoUrl}></img>
+                      ) : (
+                          "No Company Logo set"
+                        )}
+                    </PhotoContainer>
+                    <PhotoModificationButtonsSection>
+                      <Button
+                        small
+                        variant={"redOutline"}
+                        onClick={deleteLogo}
+                        mr={2}
+                        style={{ width: "120px" }}
+                      >
+                        {t("general.remove")}
+                      </Button>
+
+                      <FileInput
+                        labelText={t("general.upload")}
+                        onChange={inputFileUpload} />
+
+                      {logoImageModalOpen && (
+                        <ImageCropperModal
+                          image={logoImageblub}
+                          uploadCroppedImage={submitLogo}
+                          modalOpen={logoImageModalOpen}
+                          setModalOpen={setLogoImageModalOpen}
+                          headerText={t("company.updateLogo")}
+                        />
+                      )}
+                    </PhotoModificationButtonsSection>
+                  </ProfilePhotoSection>
                   {company.displayFormat !== "Company" ? (
                     <Text>This is a {company.displayFormat} type of company.</Text>
                   ) : (
@@ -343,40 +378,6 @@ export const Company = observer(
                     </CompanyStaticDataArea>
                   </CompanyStaticDataSection>
                 </PersonalInfoContainer>
-                <ProfilePhotoSection display={"block"}>
-                  <PhotoContainer>
-                    {company.logoUrl ? (
-                      <img style={{ maxHeight: 256, maxWidth: 256 }} src={company.logoUrl}></img>
-                    ) : (
-                        "No Company Logo set"
-                      )}
-                  </PhotoContainer>
-                  <PhotoModificationButtonsSection>
-                    <Button
-                      small
-                      variant={"redOutline"}
-                      onClick={deleteLogo}
-                      mr={2}
-                      style={{ width: "120px" }}
-                    >
-                      {t("general.remove")}
-                    </Button>
-
-                    <FileInput
-                      labelText={t("general.upload")}
-                      onChange={inputFileUpload} />
-
-                    {logoImageModalOpen && (
-                      <ImageCropperModal
-                        image={logoImageblub}
-                        uploadCroppedImage={submitLogo}
-                        modalOpen={logoImageModalOpen}
-                        setModalOpen={setLogoImageModalOpen}
-                        headerText={t("company.updateLogo")}
-                      />
-                    )}
-                  </PhotoModificationButtonsSection>
-                </ProfilePhotoSection>
               </BodyContainer>
               <SaveButtonContainer>
                 <Button
