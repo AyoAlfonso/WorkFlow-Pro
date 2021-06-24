@@ -88,6 +88,7 @@ type KeyActivityContainerType = {
 const KeyActivityContainer = styled.div<KeyActivityContainerType>`
   border-bottom: ${props => props.borderBottom};
   margin-right: ${props => (props.borderBottom ? "8px" : "")};
+  margin-bottom: 8px;
 `;
 
 type KeyActivitiesContainerType = {

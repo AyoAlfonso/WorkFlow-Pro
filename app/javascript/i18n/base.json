@@ -133,7 +133,7 @@
         "team": "Team",
         "company": "Company",
         "goals": "Objectives",
-        "forum": "Forum",
+        "forum": "Meeting",
         "meetings": "Planning"
       },
       "annualInitiative": {
@@ -218,7 +218,9 @@
       },
       "meetingForum": {
         "exploration": {
-          "title": "1: Scheduled Exploration"
+          "title": "1: Scheduled Exploration",
+           "subTitle": "Four Step Forum Exploration™ Guide",
+           "done": "Done"
         },
         "parkingLotIssues": {
           "title": "Forum Hub",
@@ -258,7 +260,8 @@
         "indexTitle": "Journal Entries",
         "pynBotName": "PynBot",
         "pynBotGreeting": "Hey {{userName}}, what can I help you with?",
-        "pynBotNoEntries": "No entries! Use the Evening Reflection journal to track daily entries.",
+        "pynBotNoEntriesWeekly": "No entries! Use the Evening Reflection journal to track daily entries.",
+        "pynBotNoEntriesMonthly": "No entries! Use the Weekly Reflection journal to track weekly entries.",
         "confirmQuit": "Are you sure you want to quit?  Your journal entry will be lost",
         "weeklyReflectionTitle": "Weekly Reflection",
         "weeklyReflectionCompleted": "Great job {{userName}}, You've completed your weekly reflection. Go to the next step to start planning for the week ahead!",

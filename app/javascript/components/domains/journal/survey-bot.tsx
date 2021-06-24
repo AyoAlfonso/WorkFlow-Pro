@@ -107,11 +107,13 @@ export const SurveyBot = observer(
                   summaryData={summaryData}
                   variant={`${R.path(["metadata", "summary"], step)}Am`}
                   title={R.path(["metadata", "message", "am"], step)}
+                  questionnaireVariant={props.variant}
                 />
                 <SummaryDisplay
                   summaryData={summaryData}
                   variant={`${R.path(["metadata", "summary"], step)}Pm`}
                   title={R.path(["metadata", "message", "pm"], step)}
+                  questionnaireVariant={props.variant}
                 />
               </>,
             ),
@@ -125,6 +127,7 @@ export const SurveyBot = observer(
                 summaryData={summaryData}
                 variant={R.path(["metadata", "summary"], step)}
                 title={R.path(["metadata", "message"], step)}
+                questionnaireVariant={props.variant}
               />,
             ),
             R.dissoc("options"),

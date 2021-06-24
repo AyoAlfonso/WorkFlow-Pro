@@ -50,11 +50,17 @@ export const ColumnContainerParent = styled.div<ColumnContainerType>`
   min-width: ${props => props.minWidth || "480px"};
   width: 100%;
 `;
+interface IHeaderType {
+  text: string;
+  width?: string;
+}
+const HeaderContainer = styled.div`
+  width: ${props => props.width};
+`;
 
-const HeaderContainer = styled.div``;
-export const HeaderText = ({ text }: { text: string }): JSX.Element => {
+export const HeaderText = ({ text, width }: IHeaderType): JSX.Element => {
   return (
-    <HeaderContainer>
+    <HeaderContainer width={width}>
       <Heading type={"h2"} fontSize={"20px"} fontWeight={600} mt={0}>
         {text}
       </Heading>
