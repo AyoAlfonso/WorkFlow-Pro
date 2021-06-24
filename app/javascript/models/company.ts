@@ -27,6 +27,7 @@ export const CompanyModel = types
            forumIntroVideo: types.maybeNull(types.frozen()),
            signUpPurpose: types.maybeNull(types.frozen()),
            forumType: types.maybeNull(types.string),
+           forumTypes: types.map(types.number)
          })
          .views(self => ({
            get accessCompany() {
@@ -35,6 +36,12 @@ export const CompanyModel = types
            get accessForum() {
              return self.displayFormat == "Forum";
            },
+           get forumTypesList() {
+             return Array.from(self.forumTypes.entries()).map(a => {
+               const str = a[0]
+               return [str.charAt(0).toUpperCase() + str.slice(1), a[1]]
+             })
+           }
          }))
          .actions(self => ({
            setLogoUrl: logoUrl => {

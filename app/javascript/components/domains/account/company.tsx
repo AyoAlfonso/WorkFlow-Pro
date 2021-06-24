@@ -36,6 +36,7 @@ export const Company = observer(
     const { company } = companyStore;
     const [name, setName] = useState(company.name);
     const [timezone, setTimezone] = useState(company.timezone);
+    const [forumType, setForumType] = useState(company.forumType);
     const [rallyingCry, setRallyingCry] = useState(company.rallyingCry);
     const [core1Content, setCore1Content] = useState(company.coreFour.core1Content);
     const [core2Content, setCore2Content] = useState(company.coreFour.core2Content);
@@ -60,6 +61,10 @@ export const Company = observer(
     }, [])
 
     const getLogo = async () => {
+      if (!company.logoUrl) {
+        setLogoImageForm(null);
+        return
+      }
       const image = await fetch(company.logoUrl).then(r => r.blob())
       const form = new FormData();
       form.append("logo", image);
@@ -96,12 +101,13 @@ export const Company = observer(
     };
 
     const save = () => {
-      Promise.all([
+      const promises: Array<Promise<any>> = [
         companyStore.updateCompany(
           {
             name,
             timezone,
             rallyingCry,
+            forumType,
             coreFourAttributes: {
               core_1: core1Content,
               core_2: core2Content,
@@ -128,7 +134,11 @@ export const Company = observer(
           },
           false,
         ),
-        companyStore.updateCompanyLogo(logoImageForm)]).then(() => {
+      ]
+      if(company.logoUrl) {
+        promises.push(companyStore.updateCompanyLogo(logoImageForm))
+      }
+      Promise.all(promises).then(() => {
           setTimeout(history.go, 1000, 0)
         })
     };
@@ -136,7 +146,7 @@ export const Company = observer(
     return (
       <StretchContainer>
         <HeaderContainer>
-          <HeaderText>{t("profile.companyDetails")}</HeaderText>
+          <HeaderText>{company.accessCompany ? t("profile.companyDetails") : t("profile.forumDetails")}</HeaderText>
         </HeaderContainer>
 
         <Can
@@ -145,12 +155,7 @@ export const Company = observer(
           no={
             <BodyContainer>
               <PersonalInfoContainer>
-                {company.displayFormat !== "Company" ? (
-                  <Text>This is a {company.displayFormat} type of company.</Text>
-                ) : (
-                    <></>
-                  )}
-                <Label htmlFor="name">{t("company.name")}</Label>
+                <Label htmlFor="name">{company.accessCompany ? t("company.name") : t("company.forumName")}</Label>
                 <Input
                   disabled={true}
                   name="name"
@@ -173,7 +178,7 @@ export const Company = observer(
                   {company.logoUrl ? (
                     <img style={{ maxHeight: 256, maxWidth: 256 }} src={company.logoUrl}></img>
                   ) : (
-                      "No Company Logo set"
+                      "No Logo set"
                     )}
                 </PhotoContainer>
               </ProfilePhotoSection>
@@ -184,12 +189,12 @@ export const Company = observer(
               <BodyContainer>
                 <PersonalInfoContainer>
                   <ProfilePhotoSection display={"block"}>
-                    <Label htmlFor="logo">{t("company.logo")}</Label>
+                    <Label htmlFor="logo">{company.accessCompany ? t("company.logo") : t("company.forumLogo")}</Label>
                     <PhotoContainer>
                       {company.logoUrl ? (
                         <img style={{ maxHeight: 256, maxWidth: 256 }} src={company.logoUrl}></img>
                       ) : (
-                          "No Company Logo set"
+                          "No Logo set"
                         )}
                     </PhotoContainer>
                     <PhotoModificationButtonsSection>
@@ -218,12 +223,7 @@ export const Company = observer(
                       )}
                     </PhotoModificationButtonsSection>
                   </ProfilePhotoSection>
-                  {company.displayFormat !== "Company" ? (
-                    <Text>This is a {company.displayFormat} type of company.</Text>
-                  ) : (
-                      <></>
-                    )}
-                  <Label htmlFor="name">{t("company.name")}</Label>
+                  <Label htmlFor="name">{company.accessCompany ? t("company.name") : t("company.forumName")}</Label>
                   <Input
                     name="name"
                     onChange={e => {
@@ -231,6 +231,28 @@ export const Company = observer(
                     }}
                     value={name}
                   />
+                  {company.accessForum && (
+                    <>
+                      <Label htmlFor="forum_type">{t("company.forumType")}</Label>
+                      <Select
+                        name="forum_type"
+                        onChange={e => {
+                          setForumType(e.target.value);
+                        }}
+                        value={forumType}
+                      >
+                        {R.map(
+                          (type: string) => (
+                            <option key={type[0]} value={type[0]}>
+                              {type[0]}
+                            </option>
+                          ),
+                          company.forumTypesList
+                        )}
+                      </Select>
+                      <div style={{ marginBottom: "16px" }} />
+                    </>
+                  )}
                   <Label htmlFor="fiscal_year_start">{t("company.fiscalYearStartDate")}</Label>
                   <Input
                     disabled={true}
