@@ -460,7 +460,7 @@ export const SideNav = observer(
   (): JSX.Element => {
     const {
       router,
-      teamStore,
+      teamStore: { teams },
       sessionStore: { profile },
       companyStore: { company },
       meetingStore: { startNextMeeting, createMeeting },
@@ -469,9 +469,12 @@ export const SideNav = observer(
     if (profile == null) {
       return <> </>;
     }
+
+    const roleTeams =
+      profile.role === "Coach" ? toJS(teams) : toJS(profile.currentCompanyUserTeams);
     return SideNavNoMst(
       router.location.pathname,
-      toJS(profile.currentCompanyUserTeams),
+      roleTeams,
       profile.productFeatures,
       company,
       startNextMeeting,
