@@ -37,19 +37,21 @@ export const HabitsHabitTracker = observer(
           {log.id ? (
             <RawIcon icon={"Checkmark"} color={habit.color} size={12} />
           ) : (
-            <RawIcon icon={"Close"} color={baseTheme.colors.greyInactive} size={12} />
-          )}
+              <RawIcon icon={"Close"} color={baseTheme.colors.greyInactive} size={12} />
+            )}
         </SelectionCell>
       ));
+
+    console.log(habit)
 
     return (
       <>
         <HabitsTableDataCell>
-          {habit.weeklyCompletionPercentage == 0 ? (
+          {habit.completedCurrentWeekLogs.length == 0 ? (
             <HabitsTableCircularProgressBar color={baseTheme.colors.greyInactive} value={100} />
           ) : (
-            <HabitsTableCircularProgressBar color={habit.color} value={habit.weeklyCompletionPercentage} />
-          )}
+              <HabitsTableCircularProgressBar color={habit.color} value={habit.completedCurrentWeekLogs.length * 100 / habit.frequency} />
+            )}
         </HabitsTableDataCell>
         <HabitsTextContainer
           onClick={() => {
@@ -87,24 +89,24 @@ export const HabitsTableCircularProgressBar = ({
   color,
   value,
 }: IHabitsTableCircularProgressBar) => (
-  <CircularProgressbar
-    value={value}
-    strokeWidth={36}
-    styles={{
-      root: {
-        height: "16px",
-        width: "16px",
-      },
-      path: {
-        stroke: color,
-        strokeLinecap: "butt",
-      },
-      trail: {
-        stroke: "none",
-      },
-    }}
-  />
-);
+    <CircularProgressbar
+      value={value}
+      strokeWidth={36}
+      styles={{
+        root: {
+          height: "16px",
+          width: "16px",
+        },
+        path: {
+          stroke: color,
+          strokeLinecap: "butt",
+        },
+        trail: {
+          stroke: "none",
+        },
+      }}
+    />
+  );
 
 const SelectionCell = styled(HabitsTableDataCell)`
   padding-right: 5px;
