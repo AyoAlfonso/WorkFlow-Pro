@@ -15,6 +15,7 @@ export const UserCard = ({
   id,
 }: UserCardProps): JSX.Element => {
   const { t } = useTranslation();
+  let fullname = lastName ? `${firstName} ${lastName}` : "No name";
   return (
     <Card
       sx={{
@@ -34,11 +35,9 @@ export const UserCard = ({
         marginRight={"8px"}
       />
       <div>
-        <TextNoMargin
-          letterSpacing={"0em"}
-          fontSize={1}
-          fontWeight={"bold"}
-        >{`${firstName} ${lastName}`}</TextNoMargin>
+        <TextNoMargin letterSpacing={"0em"} fontSize={1} fontWeight={"bold"}>
+          {fullname}
+        </TextNoMargin>
         <TextNoMargin letterSpacing={"0em"} fontSize={1}>{`${email}`}</TextNoMargin>
       </div>
     </Card>

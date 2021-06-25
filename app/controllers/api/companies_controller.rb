@@ -216,7 +216,7 @@ class Api::CompaniesController < Api::ApplicationController
 
   def company_params
     #user should not be allowed to update the display_format once created
-    params.require(:company).permit(:name, :timezone, :fiscal_year_start, :rallying_cry, sign_up_purpose_attributes: [:purpose], core_four_attributes: [:core_1, :core_2, :core_3, :core_4], company_static_datas_attributes: [:id, :value])
+    params.require(:company).permit(:name, :timezone, :fiscal_year_start, :forum_type, :rallying_cry, sign_up_purpose_attributes: [:purpose], core_four_attributes: [:core_1, :core_2, :core_3, :core_4], company_static_datas_attributes: [:id, :value])
   end
 
   # def new_company_params
