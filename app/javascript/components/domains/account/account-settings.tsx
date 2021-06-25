@@ -19,10 +19,7 @@ export const AccountSettings = observer(
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-      if (!companyStore.company) {
-        companyStore.load();
-        setLoading(false);
-      }
+      companyStore.load().then(() => setLoading(false));
     }, []);
 
     if (loading || !companyStore.company) {
