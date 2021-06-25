@@ -33,6 +33,7 @@
         "company": "Company",
         "editProfile": "Edit Profile",
         "companyDetails": "Company Details",
+        "forumDetails": "Forum Details",
         "loginForm": {
           "email": "E-mail",
           "password": "Password",
@@ -90,7 +91,11 @@
       "company": {
         "accountabilityChart": "Accountability Matrix",
         "name": "Company Name",
+        "forumName": "Forum Name",
         "logo": "Company Logo",
+        "forumLogo": "Forum Logo",
+        "forumType": "Forum Type",
+        "updateLogo": "Update Logo",
         "fiscalYearStartDate": "Fiscal Year Start Date",
         "strategicPlan": "The Plan",
         "timezone": "Location/Time Zone",

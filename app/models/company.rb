@@ -74,6 +74,10 @@ class Company < ApplicationRecord
     StaticData.find_by_field("forum_introduction")
   end
 
+  def forum_types
+    Company.forum_types
+  end
+
   private
 
   def sanitize_rallying_cry
