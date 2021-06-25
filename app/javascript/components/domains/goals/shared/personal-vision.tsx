@@ -19,6 +19,7 @@ export const PersonalVision = ({ personalVision }: IPersonalVisionProps): JSX.El
   return (
     <VisionContainer>
       <VisionTitle>Future Self</VisionTitle>
+      <ContentEditableContainer>
       <StyledContentEditable
         innerRef={t("personal.vision")}
         placeholder={t("personal.placeholder")}
@@ -36,6 +37,7 @@ export const PersonalVision = ({ personalVision }: IPersonalVisionProps): JSX.El
         }}
         onBlur={() => sessionStore.updateProfileFromModel()}
       />
+      </ContentEditableContainer>
     </VisionContainer>
   );
 };
@@ -65,15 +67,19 @@ const VisionTitle = styled.p`
 const StyledContentEditable = styled(ContentEditable)`
   display: block;
   font-size: 21px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-  margin-bottom: auto;
-  padding: 5px;
-  padding-right: 205px;
   text-transform: capitalize;
   font-weight: 700;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 `;
+
+const ContentEditableContainer = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 5px;
+  padding-right: 250px;
+  overflow: hidden;
+`
