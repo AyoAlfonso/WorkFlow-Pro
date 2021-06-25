@@ -42,6 +42,7 @@ export const Company = observer(
     const [core3Content, setCore3Content] = useState(company.coreFour.core3Content);
     const [core4Content, setCore4Content] = useState(company.coreFour.core4Content);
     const [logoImageblub, setLogoImageblub] = useState<any | null>(null);
+    const [logoImageForm, setLogoImageForm] = useState<FormData | null>(null);
     const [logoImageModalOpen, setLogoImageModalOpen] = useState<boolean>(false);
     const [annualInitiativeTitle, setAnnualInitiativeTitle] = useState<string>(
       sessionStore.annualInitiativeTitle,
@@ -57,6 +58,7 @@ export const Company = observer(
     const submitLogo = async (image) => {
       const form = new FormData();
       form.append("logo", image);
+      setLogoImageForm(form)
       await companyStore.updateCompanyLogo(form);
     };
 
@@ -83,8 +85,8 @@ export const Company = observer(
     };
 
     const save = () => {
-      companyStore
-        .updateCompany(
+      Promise.all([
+        companyStore.updateCompany(
           {
             name,
             timezone,
@@ -114,10 +116,10 @@ export const Company = observer(
             },
           },
           false,
-        )
-        .then(() => {
-          history.go(0);
-        });
+        ),
+        companyStore.updateCompanyLogo(logoImageForm)]).then(() => {
+          setTimeout(history.go, 1000, 0)
+        })
     };
 
     return (
