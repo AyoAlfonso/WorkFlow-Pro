@@ -97,6 +97,7 @@ export const SessionStoreModel = types
       } catch {
         // error messaging handled by API monitor
       }
+      self.loading = false;
     }),
     updateUserPulse: flow(function*(userPulseObject) {
       const response = yield self.environment.api.updateUserPulse(userPulseObject);
