@@ -116,7 +116,7 @@ const StyledButton = styled(Button)`
 
 const ButtonContainer = styled.div`
   margin-left: 8px;
-  padding: 4px;
+  padding: 8px;
 `;
 
 type GuideItemType = {
@@ -128,7 +128,7 @@ const GuideModalBody = styled.div``;
 
 const GuideItem = styled.div<GuideItemType>`
   display: inline-block;
-  margin: 0% 5% 0% 0%;
+  margin: 0% 10% 0% 0%;
   width: 20%;
   color: ${props => props.color};
   font-weight: ${props => props.fontweight || "auto"};
@@ -140,7 +140,7 @@ const GuideItemStepTitle = styled(GuideItem)`
 const GuideHeader = styled.div`
   display: inline-block;
   font-weight: 700;
-  margin: 0% 5% 0% 0%;
+  margin: 0% 10% 0% 0%;
   width: 20%;
 `;
 
@@ -175,8 +175,7 @@ const GuideItemNumber = styled.div<GuideItemNumberType>`
 `;
 
 const GuideHiddenItem = styled.div`
-  padding: 0px 10px;
-  margin: 16px 16px 16px 32px;
+   margin: 16px 8px;
   color: white;
   width: 18px;
   display: inline-block;

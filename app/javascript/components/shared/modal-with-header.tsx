@@ -132,8 +132,8 @@ type StyledHeadingProps = {
 
 const StyledHeading = styled(Heading)<StyledHeadingProps>`
   font-family: Lato;
-  margin-top:  ${props => (props.mt ? props.mt : "16px")}
-  margin-bottom: ${props => (props.mb ? props.mb : "16px")}
+  margin-top:  ${props => (props.mt ? props.mt : "16px")};
+  margin-bottom: ${props => (props.mb ? props.mb : "16px")};
   font-weight: bold;
   margin-left : ${props => (props.centerHeader ? "auto" : "0px")};
   margin-right: ${props => (props.centerHeader ? "auto" : "0px")};

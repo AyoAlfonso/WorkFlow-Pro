@@ -53,6 +53,7 @@ export const JournalBody = observer(
     if (R.isNil(dailyLogToDisplay) || R.isNil(loading)) {
       return <></>;
     }
+
     const getDailyLogByDate = filter => {
       setSelectedDateFilter(filter);
       if (todaysDateFull == filter) {

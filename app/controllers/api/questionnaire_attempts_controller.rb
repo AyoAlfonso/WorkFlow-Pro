@@ -153,6 +153,6 @@ class Api::QuestionnaireAttemptsController < Api::ApplicationController
   end
 
   def questionnaire_attempts_for_monthly
-    @questionnaire_attempts = policy_scope(QuestionnaireAttempt).of_questionnaire_type("Evening Reflection").within_last_four_weeks(current_user.time_in_user_timezone)
+    @questionnaire_attempts = policy_scope(QuestionnaireAttempt).of_questionnaire_type("Weekly Reflection").within_last_four_weeks(current_user.time_in_user_timezone)
   end
 end

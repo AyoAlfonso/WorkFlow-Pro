@@ -42,8 +42,6 @@ export const HabitsHabitTracker = observer(
         </SelectionCell>
       ));
 
-    console.log(habit)
-
     return (
       <>
         <HabitsTableDataCell>

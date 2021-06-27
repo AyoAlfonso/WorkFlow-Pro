@@ -11,13 +11,13 @@ class QuestionnaireAttempt < ApplicationRecord
 
   validates_with QuestionnaireAttemptValidator, on: :create
 
-  scope :within_last_week, -> (current_time) { where(completed_at: current_time.last_week.beginning_of_week..current_time.last_week.end_of_week) }
-  scope :within_day, -> (current_time) { where(completed_at: current_time.beginning_of_day..current_time.end_of_day)}
-  scope :within_current_week, -> (current_time) { where(completed_at: current_time.beginning_of_week..current_time.end_of_week) }
-  scope :within_last_four_weeks, -> (current_time) { where(completed_at: current_time.beginning_of_day.days_ago(28)..current_time.end_of_day) }
-  scope :of_questionnaire_type, -> (questionnaire_name) { joins(:questionnaire).where(questionnaires: { name: questionnaire_name }) }
-  scope :of_questionnaire, -> (questionnaire) { where(questionnaire: questionnaire) }
-  scope :for_user, -> (user) { where(user_id: user.id) }
+  scope :within_last_week, ->(current_time) { where(completed_at: current_time.last_week.beginning_of_week..current_time.last_week.end_of_week) }
+  scope :within_day, ->(current_time) { where(completed_at: current_time.beginning_of_day..current_time.end_of_day) }
+  scope :within_current_week, ->(current_time) { where(completed_at: current_time.beginning_of_week..current_time.end_of_week) }
+  scope :within_last_four_weeks, ->(current_time) { where(completed_at: current_time.beginning_of_day.days_ago(28)..current_time.end_of_day) }
+  scope :of_questionnaire_type, ->(questionnaire_name) { joins(:questionnaire).where(questionnaires: { name: questionnaire_name }) }
+  scope :of_questionnaire, ->(questionnaire) { where(questionnaire: questionnaire) }
+  scope :for_user, ->(user) { where(user_id: user.id) }
 
   scope :sort_by_completed_at, -> { order(completed_at: :desc) }
 
@@ -33,7 +33,7 @@ class QuestionnaireAttempt < ApplicationRecord
     ActiveRecord::Base.transaction do
       logged_at = Time.current
       if log_date.present?
-        previous_datetime = self.user.end_of_day_for_user(log_date)
+        previous_datetime = self.user.convert_to_their_timezone(log_date)
         self.completed_at = previous_datetime
         logged_at = previous_datetime
       end
@@ -41,12 +41,11 @@ class QuestionnaireAttempt < ApplicationRecord
       save!
       parsed_body = questionnaire_attempt_to_text(self.rendered_steps)
       if parsed_body.present?
-        JournalEntry.create!(generated_from_type: self.class.name, generated_from_id: self.id, body: parsed_body, user_id: self.user_id, title: self.questionnaire.name, logged_at: logged_at )
+        JournalEntry.create!(generated_from_type: self.class.name, generated_from_id: self.id, body: parsed_body, user_id: self.user_id, title: self.questionnaire.name, logged_at: logged_at)
       else
         true
       end
     end
-    
   end
 end
 

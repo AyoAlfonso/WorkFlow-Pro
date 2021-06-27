@@ -24,7 +24,7 @@ export const SummaryDisplay = ({
     color: "text",
   };
   const dataForDisplay = summaryData[humps.camelize(variant)];
-  
+
   return (
     <Container>
       <Text fontSize={"16px"} fontWeight={600}>
