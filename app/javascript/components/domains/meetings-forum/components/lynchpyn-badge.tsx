@@ -16,7 +16,7 @@ const BadgeContainer = styled.div`
   z-index: 0;
 `;
 
-const lynchPynBadgePath = require("../../../../assets/images/LynchPynBadge.png");
+const lynchPynBadgePath = require("~/assets/images/LynchPyn_Badge_Navy_Grey.svg");
 
 export const LynchPynBadge = (): JSX.Element => {
   return (
