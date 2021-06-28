@@ -369,12 +369,12 @@ True value of LynchPyn is in working together with others in your team and compa
       formData={formData}
       stepwise={false}
     />,
-    <FormBuilder
-      formFields={leftBodyComponentProps[2].formFields}
-      formData={formData}
-      formContainerStyle={{ height: "140px" }}
-      stepwise={true}
-    />,
+    // <FormBuilder
+    //   formFields={leftBodyComponentProps[2].formFields}
+    //   formData={formData}
+    //   formContainerStyle={{ height: "140px" }}
+    //   stepwise={true}
+    // />,
     <FormBuilder
       formFields={leftBodyComponentProps[1].formFields}
       formData={formData}
@@ -494,7 +494,8 @@ True value of LynchPyn is in working together with others in your team and compa
     <></>,
     <></>,
     <></>,
-    rightBodyComponents[4],
+    <></>,
+    // rightBodyComponents[3],
   ];
   const stepLabelsForum = [stepLabels[0], stepLabels[4]];
   const onNextButtonClickForum = async () => {
