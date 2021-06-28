@@ -8,7 +8,7 @@ export class Api {
 
   constructor() {
     let companyId = localStorage.getItem("companyId")
-    
+
     this.client = create({
       baseURL: "/api",
       headers: {
@@ -530,5 +530,25 @@ export class Api {
   async getSelectedDailyLogByDate(date) {
     return this.client.get(`/daily_logs`, { date });
   }
+  async getKPI(id) {
+    return this.client.get(`/key_performance_indicator/${id}`);
+  }
+
+  async createKPI(KPI) {
+    return this.client.post(`/key_performance_indicator`, KPI);
+  }
+
+  async updateKPI(KPI) {
+    return this.client.patch(`/key_performance_indicator/${KPI.id}`, KPI);
+  }
+
+  async deleteKPI(id) {
+    return this.client.delete(`/key_performance_indicator/${id}`);
+  }
+
+  async createScorecardLog(KPIid: number, scorecardLog) {
+    return this.client.post(`key_performance_indicator/scorecard_logs`, scorecardLog)
+  }
+
   //async setJWT(jwt) {}
 }
