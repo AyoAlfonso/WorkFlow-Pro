@@ -78,11 +78,12 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
   const { fieldsAndLabels, headingsAndDescriptions, timeZones } = staticDataStore;
   const { onboardingCompany, onboardingDisplayFormat } = companyStore;
   const { profile } = sessionStore;
+  const requiredFields = ["name", "timezone", "fiscalYearStart"];
 
   if (loading || R.isNil(profile) || !timeZones) {
     return <Loading />;
   }
-  
+
   const timeZonesWithNull = () => {
     const timeZoneList = toJS(timeZones).map(tz => ({ label: tz, value: tz }));
     timeZoneList.unshift({ label: "Please select a time zone", value: null });
@@ -195,11 +196,8 @@ True value of LynchPyn is in working together with others in your team and compa
     }
   };
 
-  const hasCreationParams = () =>
-    R.pipe(
-      R.props(["name", "timezone", "forumType", "fiscalYearStart"]),
-      R.none(R.or(R.isNil, R.isEmpty)),
-    )(formData);
+  const hasCreationParams = fields =>
+    R.pipe(R.props(fields), R.none(R.or(R.isNil, R.isEmpty)))(formData);
 
   const leftBodyComponentProps = [
     {
@@ -209,13 +207,6 @@ True value of LynchPyn is in working together with others in your team and compa
           fieldType: EFieldType.TextField,
           formKeys: ["name"],
           callback: setFormState,
-        },
-        {
-          label: "Forum Type",
-          fieldType: EFieldType.Select,
-          formKeys: ["forumType"],
-          callback: setFormState,
-          options: forumTypesWithNull(),
         },
         {
           label: onboardingDisplayFormat == "Company" ? "Logo" : "Logo (optional)",
@@ -369,12 +360,6 @@ True value of LynchPyn is in working together with others in your team and compa
       formData={formData}
       stepwise={false}
     />,
-    // <FormBuilder
-    //   formFields={leftBodyComponentProps[2].formFields}
-    //   formData={formData}
-    //   formContainerStyle={{ height: "140px" }}
-    //   stepwise={true}
-    // />,
     <FormBuilder
       formFields={leftBodyComponentProps[1].formFields}
       formData={formData}
@@ -395,6 +380,10 @@ True value of LynchPyn is in working together with others in your team and compa
       stepwise={false}
     />,
   ];
+
+  // const leftBodyForumComponents = [
+
+  // ];
 
   const bulletContainerStyle = { height: "108px", paddingTop: "88px" };
 
@@ -479,11 +468,23 @@ True value of LynchPyn is in working together with others in your team and compa
   );
 
   //////FORUM RELATED CHARGES
-
+  const insert = function(array, index, item) {
+   return  R.clone(array).splice(index, 0, item);
+  };
   const forumMode = companyStore.onboardingDisplayFormat == "Forum";
 
   const leftBodyComponentsForum = [
-    leftBodyComponents[0],
+    <FormBuilder
+      formFields={insert(leftBodyComponentProps[0].formFields, 1, {
+        label: "Forum Type",
+        fieldType: EFieldType.Select,
+        formKeys: ["forumType"],
+        callback: setFormState,
+        options: forumTypesWithNull(),
+      })}
+      formData={formData}
+      stepwise={false}
+    />,
     <></>,
     <></>,
     <></>,
@@ -550,7 +551,7 @@ True value of LynchPyn is in working together with others in your team and compa
         currentStep={currentStep}
         steps={stepLabelsForum}
         showLynchpynLogo={true}
-        nextButtonDisabled={!hasCreationParams()}
+        nextButtonDisabled={!hasCreationParams([...requiredFields, "forumType"])}
         onStepClick={onStepClick}
         stepClickDisabled={currentStep === 0}
         completeButtonText={"Send Invites and Complete"}
@@ -572,7 +573,7 @@ True value of LynchPyn is in working together with others in your team and compa
         currentStep={currentStep}
         steps={stepLabels}
         showLynchpynLogo={true}
-        nextButtonDisabled={!hasCreationParams()}
+        nextButtonDisabled={!hasCreationParams([requiredFields])}
         onStepClick={onStepClick}
         stepClickDisabled={currentStep === 0}
         completeButtonText={"Send Invites and Complete"}
