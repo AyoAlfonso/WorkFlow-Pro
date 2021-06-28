@@ -125,7 +125,7 @@ export const Exploration = observer(
         {includeExplorationTopic && (
           <>
             <ColumnContainerParent alignItems={"baseline"}>
-              <HeaderText width={"80%"} text={t("meetingForum.exploration.title")} />
+              <HeaderText width={"70%"} text={t("meetingForum.exploration.title")} />
               {company.forumType == "YPO" && (
                 <HeaderSubText onClick={toggleGuideModal}>
                   {t("meetingForum.exploration.subTitle")}
@@ -204,7 +204,7 @@ const AvatarContainer = styled.div`
 const HeaderSubText = styled.div`
   cursor: pointer;
   font: bold 12px Lato;
-  width: 20%;
+  width: 30%;
   margin-right: 0px;
   color: ${props => props.theme.colors.primary100};
 `;
