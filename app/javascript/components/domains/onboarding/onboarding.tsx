@@ -469,7 +469,9 @@ True value of LynchPyn is in working together with others in your team and compa
 
   //////FORUM RELATED CHARGES
   const insert = function(array, index, item) {
-    return R.clone(array).splice(index, 0, item);
+    const cloned = [...array];
+    cloned.splice(index, 0, item);
+    return cloned;
   };
   const forumMode = companyStore.onboardingDisplayFormat == "Forum";
 
