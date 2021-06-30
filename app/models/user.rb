@@ -186,11 +186,13 @@ class User < ApplicationRecord
   end
 
   def end_of_day_for_user(date)
-    date.to_datetime.in_time_zone(timezone_name).at_end_of_day.change({ hour: 1 })
+    date.to_datetime.in_time_zone(timezone_name).at_end_of_day + 1.day
+    # date.to_date.end_of_day.change(offset: "#{date.to_datetime.end_of_day.in_time_zone(timezone_name).utc_offset/3600}")
   end
 
   def start_of_day_for_user(date)
-    date.to_datetime.in_time_zone(timezone_name).at_beginning_of_day.change({ hour: 1 })
+    date.to_datetime.in_time_zone(timezone_name).at_beginning_of_day + 1.day
+    # date.to_date.start_of_day.change(offset: "#{date.to_datetime.end_of_day.in_time_zone(timezone_name).utc_offset/3600}")
   end
 
   def product_feature(id)
