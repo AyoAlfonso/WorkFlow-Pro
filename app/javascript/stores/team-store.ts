@@ -18,11 +18,7 @@ export const TeamStoreModel = types
     // get yourTeams() {
     //   // const { sessionStore: { profile } } = getRoot(self);
     //   // const teamIds = R.pluck('id', profile.)
-
-
-
     //   // collection.filter(item => array.includes(item.type))
-
     //   return []
     // }
   }))
@@ -40,14 +36,18 @@ export const TeamStoreModel = types
       }
     }),
     updateTeam: flow(function*(teamId, teamName, users) {
-      const response: ApiResponse<any> = yield self.environment.api.updateTeam(teamId, teamName, users);
+      const response: ApiResponse<any> = yield self.environment.api.updateTeam(
+        teamId,
+        teamName,
+        users,
+      );
       if (response.ok) {
         self.currentTeam = response.data.team;
-        self.teams = response.data.teams
+        self.teams = response.data.teams;
         showToast("Updated team", ToastMessageConstants.SUCCESS);
       }
     }),
-    updateTeamSettings: flow(function*(formData){
+    updateTeamSettings: flow(function*(formData) {
       const response: ApiResponse<any> = yield self.environment.api.updateTeamSettings(formData);
       if (response.ok) {
         self.currentTeam = response.data.team;
@@ -55,17 +55,23 @@ export const TeamStoreModel = types
       }
     }),
     createTeamAndInviteUsers: flow(function*(teamName, users) {
-      const response: ApiResponse<any> = yield self.environment.api.createTeamAndInviteUsers(teamName, users);
+      const { teamStore } = getRoot(self);
+      const response: ApiResponse<any> = yield self.environment.api.createTeamAndInviteUsers(
+        teamName,
+        users,
+      );
       if (response.ok) {
         self.teams = response.data as any;
+        showToast("Invites sent", ToastMessageConstants.SUCCESS);
+        yield teamStore.fetchTeams();
       }
     }),
-    deleteTeam: flow(function*(teamId){
+    deleteTeam: flow(function*(teamId) {
       const response: ApiResponse<any> = yield self.environment.api.deleteTeam(teamId);
       if (response.ok) {
         self.teams = response.data as any;
       }
-    })
+    }),
   }))
   .actions(self => ({
     reset() {
