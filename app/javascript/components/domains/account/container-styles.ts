@@ -31,6 +31,7 @@ export const ProfilePhotoSection = styled.div<ProfilePhotoSectionType>`
   display: ${props => props.display || "flex"};
   justify-content: center;
   align-items: center;
+  margin-bottom: 16px;
 `;
 
 export const ProfilePhotoWrapper = styled.div``;

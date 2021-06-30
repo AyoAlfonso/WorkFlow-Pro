@@ -51,10 +51,10 @@ class NotificationEmailJob
     most_recent_daily_log = @user.daily_logs.order(:created_at).last
     #if the daily log's log date is today in the user's timezone and the status is not set send it.
     # (It doesn't do a noon time check in case you want to set the notifcation) - @users_time >= @user.time_in_user_timezone('noon')
-    if most_recent_daily_log && most_recent_daily_log.log_date == @user.time_in_user_timezone.to_date && most_recent_daily_log.work_status != "status_not_set"
-      return false
-    else
+    if most_recent_daily_log && most_recent_daily_log.log_date != @user.time_in_user_timezone.to_date && most_recent_daily_log.work_status == "status_not_set"
       return true
+    else
+      return false
     end
   end
 

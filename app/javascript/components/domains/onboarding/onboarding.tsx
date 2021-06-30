@@ -16,7 +16,7 @@ import { PynsSummary } from "./pyns-summary";
 import { parseAnnualInitiative } from "./annual-initiative-parser";
 import { observer } from "mobx-react";
 
-interface IOnboardingProps { }
+interface IOnboardingProps {}
 
 export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
   const { companyStore, sessionStore, staticDataStore } = useMst();
@@ -33,6 +33,7 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
     if (!R.isNil(onboardingCompany)) {
       const signUpPurpose = R.path(["signUpPurpose"], onboardingCompany);
       const fiscalYearStart = new Date(R.path(["fiscalYearStart"], onboardingCompany));
+      const forumType = new Date(R.path(["forumType"], onboardingCompany));
       const logoUrl = R.path(["logoUrl"], onboardingCompany);
       const logoFiles = R.isNil(logoUrl) ? [] : [await convertUrlToFile(logoUrl)];
       const coreFour = R.pipe(
@@ -53,6 +54,7 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
           signUpPurpose,
         ),
         R.set(R.lens(R.prop("fiscalYearStart"), R.assoc("fiscalYearStart")), fiscalYearStart),
+        R.set(R.lens(R.prop("forumType"), R.assoc("forumType")), forumType),
         R.set(R.lens(R.prop("coreFourAttributes"), R.assoc("coreFourAttributes")), coreFour),
         R.dissoc("coreFour"),
         R.dissoc("signUpPurpose"),
@@ -76,6 +78,7 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
   const { fieldsAndLabels, headingsAndDescriptions, timeZones } = staticDataStore;
   const { onboardingCompany, onboardingDisplayFormat } = companyStore;
   const { profile } = sessionStore;
+  const requiredFields = ["name", "timezone", "fiscalYearStart"];
 
   if (loading || R.isNil(profile) || !timeZones) {
     return <Loading />;
@@ -85,6 +88,14 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
     const timeZoneList = toJS(timeZones).map(tz => ({ label: tz, value: tz }));
     timeZoneList.unshift({ label: "Please select a time zone", value: null });
     return timeZoneList;
+  };
+  const forumTypesWithNull = () => {
+    const forumTypeList = toJS(["EO", "YPO", "Organisation", "Other"]).map(tz => ({
+      label: tz,
+      value: tz,
+    }));
+    forumTypeList.unshift({ label: "Please select forum type", value: null });
+    return forumTypeList;
   };
 
   const setFormState = (keys: Array<string>, value: any) => {
@@ -185,11 +196,8 @@ True value of LynchPyn is in working together with others in your team and compa
     }
   };
 
-  const hasCreationParams = () =>
-    R.pipe(
-      R.props(["name", "timezone", "fiscalYearStart"]),
-      R.none(R.or(R.isNil, R.isEmpty)),
-    )(formData);
+  const hasCreationParams = fields =>
+    R.pipe(R.props(fields), R.none(R.or(R.isNil, R.isEmpty)))(formData);
 
   const leftBodyComponentProps = [
     {
@@ -201,10 +209,7 @@ True value of LynchPyn is in working together with others in your team and compa
           callback: setFormState,
         },
         {
-          label:
-            onboardingDisplayFormat == "Company"
-              ? "Logo"
-              : "Logo (optional)",
+          label: onboardingDisplayFormat == "Company" ? "Logo" : "Logo (optional)",
           fieldType: EFieldType.CroppedImage,
           formKeys: ["logo"],
           callback: setFormState,
@@ -376,6 +381,10 @@ True value of LynchPyn is in working together with others in your team and compa
     />,
   ];
 
+  // const leftBodyForumComponents = [
+
+  // ];
+
   const bulletContainerStyle = { height: "108px", paddingTop: "88px" };
 
   const rightBodyComponents = [
@@ -459,11 +468,25 @@ True value of LynchPyn is in working together with others in your team and compa
   );
 
   //////FORUM RELATED CHARGES
-
-  const forumMode = companyStore.onboardingCompany && companyStore.onboardingCompany.accessForum;
+  const insert = function(array, index, item) {
+    const cloned = [...array];
+    cloned.splice(index, 0, item);
+    return cloned;
+  };
+  const forumMode = companyStore.onboardingDisplayFormat == "Forum";
 
   const leftBodyComponentsForum = [
-    leftBodyComponents[0],
+    <FormBuilder
+      formFields={insert(leftBodyComponentProps[0].formFields, 1, {
+        label: "Forum Type",
+        fieldType: EFieldType.Select,
+        formKeys: ["forumType"],
+        callback: setFormState,
+        options: forumTypesWithNull(),
+      })}
+      formData={formData}
+      stepwise={false}
+    />,
     <></>,
     <></>,
     <></>,
@@ -474,7 +497,8 @@ True value of LynchPyn is in working together with others in your team and compa
     <></>,
     <></>,
     <></>,
-    rightBodyComponents[4],
+    <></>,
+    // rightBodyComponents[3],
   ];
   const stepLabelsForum = [stepLabels[0], stepLabels[4]];
   const onNextButtonClickForum = async () => {
@@ -529,7 +553,7 @@ True value of LynchPyn is in working together with others in your team and compa
         currentStep={currentStep}
         steps={stepLabelsForum}
         showLynchpynLogo={true}
-        nextButtonDisabled={!hasCreationParams()}
+        nextButtonDisabled={!hasCreationParams([...requiredFields, "forumType"])}
         onStepClick={onStepClick}
         stepClickDisabled={currentStep === 0}
         completeButtonText={"Send Invites and Complete"}
@@ -551,7 +575,7 @@ True value of LynchPyn is in working together with others in your team and compa
         currentStep={currentStep}
         steps={stepLabels}
         showLynchpynLogo={true}
-        nextButtonDisabled={!hasCreationParams()}
+        nextButtonDisabled={!hasCreationParams([requiredFields])}
         onStepClick={onStepClick}
         stepClickDisabled={currentStep === 0}
         completeButtonText={"Send Invites and Complete"}

@@ -13,7 +13,7 @@ export const IssueStoreModel = types
     issues: types.array(IssueModel),
     teamIssues: types.array(TeamIssueModel),
     meetingTeamIssues: types.array(IssueModel),
-    loading: types.maybeNull(types.boolean)
+    loading: types.maybeNull(types.boolean),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -36,22 +36,27 @@ export const IssueStoreModel = types
   .views(self => ({
     get openMeetingParkingLotTeamIssues() {
       return self.teamIssues.filter(
-        teamIssue => !R.includes(teamIssue.issueId, self.meetingTeamIssueIds) && teamIssue.completedAt == null
+        teamIssue =>
+          !R.includes(teamIssue.issueId, self.meetingTeamIssueIds) && teamIssue.completedAt == null,
       );
     },
     get closedMeetingParkingLotTeamIssues() {
       return self.teamIssues.filter(
-        teamIssue => !R.includes(teamIssue.issueId, self.meetingTeamIssueIds) && teamIssue.completedAt !== null
+        teamIssue =>
+          !R.includes(teamIssue.issueId, self.meetingTeamIssueIds) &&
+          teamIssue.completedAt !== null,
       );
     },
     get openMeetingScheduledTeamIssues() {
-      return self.teamIssues.filter(teamIssue =>
-        R.includes(teamIssue.issueId, self.meetingTeamIssueIds) && teamIssue.completedAt == null
+      return self.teamIssues.filter(
+        teamIssue =>
+          R.includes(teamIssue.issueId, self.meetingTeamIssueIds) && teamIssue.completedAt == null,
       );
     },
     get closedMeetingScheduledTeamIssues() {
-      return self.teamIssues.filter(teamIssue =>
-        R.includes(teamIssue.issueId, self.meetingTeamIssueIds) && teamIssue.completedAt !== null
+      return self.teamIssues.filter(
+        teamIssue =>
+          R.includes(teamIssue.issueId, self.meetingTeamIssueIds) && teamIssue.completedAt !== null,
       );
     },
   }))
@@ -80,7 +85,7 @@ export const IssueStoreModel = types
     }),
     createIssue: flow(function*(issueObject) {
       const { companyStore } = getRoot(self);
-      const itemName = companyStore.company.displayFormat == "Forum" ? "Topic" : "Issue"
+      const itemName = companyStore.company.displayFormat == "Forum" ? "Topic" : "Issue";
       const response: ApiResponse<any> = yield self.environment.api.createIssue(issueObject);
       if (response.ok) {
         self.issues = response.data.issues;
@@ -210,11 +215,11 @@ export const IssueStoreModel = types
         return false;
       }
     }),
-    updateLabel: flow(function*(issueId, labelId, fromTeamMeeting = false){
+    updateLabel: flow(function*(issueId, labelId, fromTeamMeeting = false) {
       const response: ApiResponse<any> = yield self.environment.api.updateIssue({
         id: issueId,
         labelList: labelId,
-        fromTeamMeeting: fromTeamMeeting
+        fromTeamMeeting: fromTeamMeeting,
       });
 
       if (response.ok) {
@@ -224,7 +229,7 @@ export const IssueStoreModel = types
       } else {
         return false;
       }
-    })
+    }),
   }))
   .actions(self => ({
     sortIssuesByPriority: flow(function*(sortParams) {

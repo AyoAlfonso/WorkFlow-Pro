@@ -136,7 +136,6 @@ const MinimizeIconContainer = styled.div`
   }
 `;
 
-
 //TODOIST: calc the margin left
 const InitiativesContainer = styled(HomeContainerBorders)`
   background-color: ${props => props.theme.colors.backgroundGrey};
@@ -153,7 +152,7 @@ const InitiativesContainer = styled(HomeContainerBorders)`
 //TODOIT: component repeated cleanup once reaching 4x
 const ShowInitiativeBar = styled.div`
   margin: 15%;
-  color: #005ffe;
+  color: ${props => props.theme.colors.primary100};
   font-size: 12px;
   font-weight: bold;
 `;
