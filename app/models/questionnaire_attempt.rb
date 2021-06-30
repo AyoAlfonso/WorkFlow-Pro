@@ -33,7 +33,7 @@ class QuestionnaireAttempt < ApplicationRecord
     ActiveRecord::Base.transaction do
       logged_at = Time.current
       if log_date.present?
-        previous_datetime = self.user.convert_to_their_timezone(log_date)
+        previous_datetime = self.user.end_of_day_for_user(log_date)
         self.completed_at = previous_datetime
         logged_at = previous_datetime
       end
