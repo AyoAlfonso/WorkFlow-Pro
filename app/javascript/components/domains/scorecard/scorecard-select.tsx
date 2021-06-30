@@ -46,7 +46,7 @@ const ChevronDownIcon = (): JSX.Element => {
 		<StyledIcon
 			icon={"Chevron-Down"}
 			size={"16px"}
-			color={baseTheme.colors.greyActive}
+			iconColor={baseTheme.colors.primary80}
 		/>
 	)
 }

@@ -39,7 +39,7 @@ import { Meeting } from "./domains/meetings/meeting";
 import { PersonalPlanning } from "./domains/meetings/personal-planning";
 import { JournalIndex } from "~/components/domains/journal/journal-index";
 import { NotesIndex } from "~/components/domains/notes/notes-index";
-import { ScorecardsIndex } from "~/components/domains/scorecards/scorecards-index"
+import { ScorecardsIndex } from "~/components/domains/scorecard/scorecards-index"
 
 import { Section1 } from "./domains/meetings-forum/section-1";
 import { Section2 } from "./domains/meetings-forum/section-2";
