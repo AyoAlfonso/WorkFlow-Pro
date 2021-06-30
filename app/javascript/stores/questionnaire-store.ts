@@ -3,6 +3,9 @@ import { withEnvironment } from "../lib/with-environment";
 import { QuestionnaireAttemptModel } from "../models/questionnaire-attempt";
 import { QuestionnaireModel } from "../models/questionnaire";
 import { ApiResponse } from "apisauce";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
+
 
 export const QuestionnaireStoreModel = types
   .model("QuestionnaireStoreModel")
@@ -57,6 +60,7 @@ export const QuestionnaireStoreModel = types
               `${questionnaireTitle} Complete`,
             );
           }
+          showToast("Responses saved", ToastMessageConstants.SUCCESS);
         }
       } catch {
         // error messaging handled by API monitor

@@ -90,7 +90,16 @@ export const CompanyStoreModel = types
     }),
     inviteUsersToCompany: flow(function*(emailAddresses, teamId) {
       const env = getEnv(self);
-      const response = yield env.api.inviteUsersToCompany(emailAddresses, teamId);
+      const { userStore } = getRoot(self);
+      try {
+        const response = yield env.api.inviteUsersToCompany(emailAddresses, teamId);
+        if (response.ok) {
+          showToast("Invites sent", ToastMessageConstants.SUCCESS);
+          yield userStore.fetchUsers();
+        }
+      } catch {
+        showToast("There was an error sending invites", ToastMessageConstants.ERROR);
+      }
     }),
   }))
   .actions(self => ({
