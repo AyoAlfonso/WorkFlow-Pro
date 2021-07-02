@@ -5,7 +5,7 @@ class ScoreCardLog < ApplicationRecord
   before_save :sanitize_description
   after_save :purge_old_scorecard
 
-  validates :description, :target_value, :created_by, :unit_type, presence: true
+  validates :notes, :score, :created_by, presence: true
   enum unit_type: { percentage: "percentage", numerical: "numerical", currency: "currency" }
   scope :created_by_user, ->(user) { where(user: user) }
   scope :created_between, ->(date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }

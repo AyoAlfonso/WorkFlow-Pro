@@ -12,7 +12,7 @@ class Api::KeyPerformanceIndicatorController < ApplicationController
 
   def create
     @kpi = KeyPerformanceIndicator.new({
-      created_by_id: current_user,
+      created_by: current_user,
       user_id: params[:user],  
       company_id: params[:company],   # team, company, user
       team_id: params[:team], 
