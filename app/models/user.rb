@@ -28,7 +28,7 @@ class User < ApplicationRecord
   has_many :questionnaire_attempts
   has_many :product_features
   has_many :key_performance_indicators
-
+  has_many :score_card_logs
   has_many :habits, dependent: :destroy
   has_many :team_user_enablements, dependent: :destroy
   has_many :teams, through: :team_user_enablements

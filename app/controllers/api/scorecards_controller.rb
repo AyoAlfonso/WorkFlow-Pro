@@ -1,4 +1,4 @@
-class Api::ScorecardController < Api::ApplicationController
+class Api::ScorecardsController < Api::ApplicationController
   include StatsHelper
   respond_to :json
   before_action :set_scorecard_log, only: [:show]
@@ -12,6 +12,8 @@ class Api::ScorecardController < Api::ApplicationController
 
   def show
     @company = current_company
+
+    # ScoreCardLog.created_by_entity(id)
     #TO DO
     #Considerations
     #who can see what
