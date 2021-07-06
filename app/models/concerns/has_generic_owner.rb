@@ -3,9 +3,9 @@ module HasGenericOwner
 
   included do
     belongs_to :user
-    belongs_to :company, class_name: "Company", optional: true
-    belongs_to :team, class_name: "Team", optional: true
+    belongs_to :company
+    belongs_to :team
 
-    scope :created_by_entity, ->(owner) { where(user: owner).or.where(company: owner).or.where(team: owner) }
+    scope :owned_by_entity, ->(owner) { where(user: owner).or(self.where(company: owner)).or(self.where(team: owner)) }
   end
 end

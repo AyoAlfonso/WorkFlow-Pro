@@ -1,7 +1,7 @@
 class Api::ScorecardsController < Api::ApplicationController
   include StatsHelper
   respond_to :json
-  before_action :set_scorecard_log, only: [:show]
+  # before_action :set_scorecard_log, only: [:show]
 
   def create
     @scorecard_log = ScoreCardLog.create!(scorecard_log_params)
@@ -11,30 +11,25 @@ class Api::ScorecardsController < Api::ApplicationController
   end
 
   def show
-    @company = current_company
-
-    # ScoreCardLog.created_by_entity(id)
-    #TO DO
-    #Considerations
-    #who can see what
-    #what other models are we rendering
-    render "api/scorecard_logs/show"
+    @key_performance_indicators = policy_scope(KeyPerformanceIndicator).owned_by_entity(params[:owner_id])
+    authorize @key_performance_indicators
+    @kpi = @key_performance_indicators.map do |kpi|
+      if kpi.scorecard_logs.group_by(&:week).empty? 
+        value = []
+      else
+        value =  kpi.scorecard_logs.group_by(&:week) 
+      end 
+      kpi.as_json.merge({:weeks => value})
+    end
+    render json: @kpi
   end
 
   private
 
   def set_scorecard_log
-    kpi_id = params[:key_performance_indicator_id]
-    fiscal_year = params[:fiscal_year]
-    fiscal_quarter = params[:fiscal_quarter]
-
-    @scorecard_log = policy_scope(ScoreCardLog).thirteen_weeks_of_scorecards(kpi_id, fiscal_year, fiscal_quarter)
-    authorize @scorecard_log
   end
 
   def scorecard_log_params
-    fiscal_quarter = company.current_fiscal_quarter
-    fiscal_year = company.current_fiscal_year
     params.require(:scorecard_log).permit(:user_id, :score, :note, :key_performance_indicator_id, :fiscal_quarter, :fiscal_year)
   end
 end
