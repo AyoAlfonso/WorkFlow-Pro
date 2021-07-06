@@ -3,7 +3,7 @@ import { useMst } from "~/setup/root";
 import { useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import Select from "@material-ui/core/Select";
+import { Select } from "~/components/shared"
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import { Icon } from "~/components/shared/icon";
@@ -49,12 +49,12 @@ export const UserSelectionRecord = observer(
     return (
       <Container>
         <SelectMemberContainer>
-          <StyledFormControl variant="outlined">
-            <StyledSelect
-              labelId="simple-select-outlined-label-for-users"
+            <Select
               id="simple-select-outlined-for-users"
               value={selectedUserId}
               margin="dense"
+              width={"100%"}
+              native={false}
               onChange={e => {
                 if (!selectedUserId) {
                   setMeetingLead(1);
@@ -65,16 +65,15 @@ export const UserSelectionRecord = observer(
               }}
             >
               {renderUserSelections()}
-            </StyledSelect>
-          </StyledFormControl>
+            </Select>
         </SelectMemberContainer>
         <SelectMeetingLeadContainer>
-          <StyledFormControl variant="outlined">
-            <StyledSelect
-              labelId="simple-select-outlined-label-meeting-lead"
+            <Select
               id="simple-select-outlined-meeting-lead"
               value={meetingLead}
               margin="dense"
+              width={"100%"}
+              native={false}
               onChange={e => {
                 setMeetingLead(e.target.value);
                 updateMemberListState("meetingLead", e.target.value);
@@ -82,12 +81,12 @@ export const UserSelectionRecord = observer(
             >
               <MenuItem value={1}>Yes</MenuItem>
               <MenuItem value={0}>No</MenuItem>
-            </StyledSelect>
-          </StyledFormControl>
+            </Select>
         </SelectMeetingLeadContainer>
         <CloseIconContainer
           onClick={() => {
-            let removedList = R.omit([index], memberListState);
+            const removedList = R.omit([index], memberListState);
+            console.log(removedList)
             setMemberListState(removedList);
             setSelectedUserId("");
             setMeetingLead("");
@@ -102,7 +101,7 @@ export const UserSelectionRecord = observer(
 
 const Container = styled.div`
   display: flex;
-  width: -webkit-fill-available;
+  width: 100%;
   margin-bottom: 8px;
 `;
 

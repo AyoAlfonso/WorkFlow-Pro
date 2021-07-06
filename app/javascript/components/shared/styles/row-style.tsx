@@ -54,7 +54,7 @@ export const ColumnContainerParent = styled.div<ColumnContainerType>`
 `;
 
 interface IHeaderType {
-  text: string;
+  text?: string;
   width?: string;
 }
 

@@ -5,11 +5,9 @@ import styled from "styled-components";
 import { Heading } from "~/components/shared";
 import { observer } from "mobx-react";
 import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
+import { Select } from "~/components/shared"
 import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
 import { Button } from "~/components/shared/button";
-import * as R from "ramda";
 interface IInviteYourTeamBodyProps {
   setModalOpen: any;
   setShowUserLimitModal: any;
@@ -75,16 +73,15 @@ export const InviteYourTeamBody = observer(
           <StyledHeading type={"h4"} color={"black"} fontSize={"12px"}>
             Team
           </StyledHeading>
-          <StyledFormControl variant="outlined">
-            <StyledSelect
-              labelId="simple-select-outlined-label"
-              id="simple-select-outlined"
-              value={selectedTeamId}
-              onChange={e => setSelectedTeamId(e.target.value)}
-            >
-              {renderTeamSelections()}
-            </StyledSelect>
-          </StyledFormControl>
+          <Select
+            labelId="simple-select-outlined-label"
+            id="simple-select-outlined"
+            value={selectedTeamId}
+            native={false}
+            onChange={e => setSelectedTeamId(e.target.value)}
+          >
+            {renderTeamSelections()}
+          </Select>
           <HelperText>
             Add new members to a team. Don't see the team?{" "}
             <CreateATeamText> Create a team</CreateATeamText>
@@ -120,20 +117,12 @@ const StyledHeading = styled(Heading)`
 `;
 
 const StyledTextField = styled(TextField)`
-  width: -webkit-fill-available;
+  width: 100%;
 `;
 
 const HelperText = styled.p`
   color: ${props => props.theme.colors.grey100};
   font-size: 11px;
-`;
-
-const StyledSelect = styled(Select)`
-  width: -webkit-fill-available;
-`;
-
-const StyledFormControl = styled(FormControl)`
-  width: -webkit-fill-available;
 `;
 
 const CreateATeamText = styled.span`
