@@ -1,4 +1,4 @@
-json.extract! user, :id, :first_name, :last_name, :email, :confirmed_at, :invitation_sent_at, :timezone, :phone_number, :default_avatar_color, :status, :default_selected_company_id
+json.extract! user, :id, :first_name, :last_name, :avatar_url, :email, :confirmed_at, :invitation_sent_at, :timezone, :phone_number, :default_avatar_color, :status, :default_selected_company_id
 json.role role if defined?(role)
 json.title title if defined?(title)
 json.user_pulse_for_display user.user_pulse_for_display

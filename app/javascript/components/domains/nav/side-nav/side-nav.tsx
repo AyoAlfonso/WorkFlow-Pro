@@ -55,6 +55,7 @@ export const StyledIcon = styled(Icon)<StyledIconType>`
 
 type StyledNavLinkType = {
   active: boolean;
+  disabled: boolean;
 };
 
 const StyledNavLink = styled(NavLink)<StyledNavLinkType>`
@@ -178,6 +179,7 @@ const StyledNavLinkDiv = styled.div<StyledNavLinkType>`
   ${color}
   align-item: center;
   text-decoration: none;
+  cursor: pointer;
   &:link,
   &:visited {
     color: ${props => props.theme.colors.white};
@@ -395,7 +397,11 @@ export const SideNavNoMst = (
         </StyledNavLinkChildrenActive>
       )}
 
-      {company && company.accessCompany && showTeam ? renderTeam(R.path(["length"], teams) || 0) : <> </>}
+      {company && company.accessCompany && showTeam ? (
+        renderTeam(R.path(["length"], teams) || 0)
+      ) : (
+        <> </>
+      )}
 
       <StyledNavLinkChildrenActive to="/scorecards" icon={"Scorecards"} currentPathName={currentPathName}>
         {t("navigation.scorecards")}
@@ -458,7 +464,7 @@ export const SideNav = observer(
   (): JSX.Element => {
     const {
       router,
-      teamStore,
+      teamStore: { teams },
       sessionStore: { profile },
       companyStore: { company },
       meetingStore: { startNextMeeting, createMeeting },
@@ -467,9 +473,12 @@ export const SideNav = observer(
     if (profile == null) {
       return <> </>;
     }
+
+    const roleTeams =
+      profile.role === "Coach" ? toJS(teams) : toJS(profile.currentCompanyUserTeams);
     return SideNavNoMst(
       router.location.pathname,
-      toJS(profile.currentCompanyUserTeams),
+      roleTeams,
       profile.productFeatures,
       company,
       startNextMeeting,

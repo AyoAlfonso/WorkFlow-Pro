@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useMst } from "~/setup/root";
+import { Loading } from "../../shared/loading";
+import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { AccountProfile } from "./profile";
 import { Notifications } from "./notifications";
@@ -9,39 +12,50 @@ import { Teams } from "./teams";
 import { Company } from "./company";
 import { TabsLayout } from "~/components/layouts/tabs-layout";
 
-export const AccountSettings = (): JSX.Element => {
-  const { t } = useTranslation();
+export const AccountSettings = observer(
+  (): JSX.Element => {
+    const { t } = useTranslation();
+    const { companyStore } = useMst();
+    const [loading, setLoading] = useState<boolean>(true);
 
-  const tabOptions = [
-    {
-      name: "Profile",
-      component: <AccountProfile />,
-    },
-    {
-      name: "Notifications",
-      component: <Notifications />,
-    },
-    {
-      name: "Meeting",
-      component: <Meeting />,
-    },
-    {
-      name: "Users",
-      component: <Users />,
-    },
-    {
-      name: "Teams",
-      component: <Teams />,
-    },
-    {
-      name: "Company",
-      component: <Company />,
-    },
-    {
-      name: "Security",
-      component: <Security />,
-    },
-  ];
+    useEffect(() => {
+      companyStore.load().then(() => setLoading(false));
+    }, []);
 
-  return <TabsLayout headerText={""} tabOptions={tabOptions} />;
-};
+    if (loading || !companyStore.company) {
+      return <Loading />;
+    }
+
+    const tabOptions = [
+      {
+        name: "Profile",
+        component: <AccountProfile />,
+      },
+      {
+        name: "Notifications",
+        component: <Notifications />,
+      },
+      {
+        name: "Meeting",
+        component: <Meeting />,
+      },
+      {
+        name: "Users",
+        component: <Users />,
+      },
+      {
+        name: "Teams",
+        component: <Teams />,
+      },
+      {
+        name: companyStore.company.displayFormat,
+        component: <Company />,
+      },
+      {
+        name: "Security",
+        component: <Security />,
+      },
+    ];
+
+    return <TabsLayout headerText={""} tabOptions={tabOptions} />;
+  })

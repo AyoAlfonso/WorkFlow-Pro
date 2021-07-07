@@ -15,25 +15,25 @@ class User < ApplicationRecord
 
   before_save :sanitize_personal_vision
   after_create :create_default_notifications
-  delegate :name, :timezone, to: :default_selected_company, prefix: 'company', allow_nil: true
+  delegate :name, :timezone, to: :default_selected_company, prefix: "company", allow_nil: true
   has_many :issues
   has_many :key_activities
-  has_many :created_quarterly_goals, :foreign_key => 'created_by_id', :class_name => 'QuarterlyGoal'
-  has_many :owned_quarterly_goals, :foreign_key => 'owned_by_id', :class_name => 'QuarterlyGoal'
-  has_many :created_annual_initiatives, :foreign_key => 'created_by_id', :class_name => 'AnnualInitiative'
-  has_many :owned_annual_initiatives, :foreign_key => 'owned_by_id', :class_name => 'AnnualInitiative'
+  has_many :created_quarterly_goals, :foreign_key => "created_by_id", :class_name => "QuarterlyGoal"
+  has_many :owned_quarterly_goals, :foreign_key => "owned_by_id", :class_name => "QuarterlyGoal"
+  has_many :created_annual_initiatives, :foreign_key => "created_by_id", :class_name => "AnnualInitiative"
+  has_many :owned_annual_initiatives, :foreign_key => "owned_by_id", :class_name => "AnnualInitiative"
   has_many :meeting_ratings
   has_many :daily_logs, dependent: :destroy
   has_one_attached :avatar
   has_many :questionnaire_attempts
   has_many :product_features
   has_many :key_performance_indicators
-
+  has_many :score_card_logs
   has_many :habits, dependent: :destroy
   has_many :team_user_enablements, dependent: :destroy
   has_many :teams, through: :team_user_enablements
   has_many :notifications, dependent: :destroy
-  has_many :meetings, :foreign_key => 'hosted_by_id'
+  has_many :meetings, :foreign_key => "hosted_by_id"
   has_many :user_company_enablements, dependent: :destroy
   has_many :companies, through: :user_company_enablements
   has_many :user_pulses, dependent: :destroy
@@ -44,17 +44,18 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :product_features, :allow_destroy => true
 
   validates :first_name, :last_name, presence: true, on: :update
-  validates :product_features, length: { maximum: 1, too_long: "1 is maximum" } 
-  
+  validates :product_features, length: { maximum: 1, too_long: "1 is maximum" }
 
   accepts_nested_attributes_for :daily_logs
 
   #TODO - DELETE COMPANY FROM DATABASE to be removed after we finalize rake, etc.
   belongs_to :default_selected_company, class_name: "Company"
 
-  scope :active_users_for_company, -> (company_id) { joins(:user_company_enablements)
-                                                        .where(user_company_enablements: { company_id: company_id})
-                                                        .where.not(user_company_enablements: {user_role: UserRole::COACH}) } #later on we can extend inactive users, etc.
+  scope :active_users_for_company, ->(company_id) {
+          joins(:user_company_enablements)
+            .where(user_company_enablements: { company_id: company_id })
+            .where.not(user_company_enablements: { user_role: UserRole::COACH })
+        } #later on we can extend inactive users, etc.
 
   def status
     return "inactive" if deleted_at.present?
@@ -62,7 +63,7 @@ class User < ApplicationRecord
   end
 
   def full_name
-    ([first_name, last_name] - ['']).compact.join(' ')
+    ([first_name, last_name] - [""]).compact.join(" ")
   end
 
   def avatar_url
@@ -84,7 +85,6 @@ class User < ApplicationRecord
   def title_for(company)
     self.user_company_enablements.find_by_company_id(company.id)&.user_title
   end
-
 
   def timezone
     read_attribute(:timezone).present? ? read_attribute(:timezone) : company_timezone
@@ -159,15 +159,15 @@ class User < ApplicationRecord
   # end
 
   def create_default_notifications
-    Notification.notification_types.each do |k,v|
+    Notification.notification_types.each do |k, v|
       notification = Notification.find_or_initialize_by(
         user_id: self.id,
-        notification_type: v
+        notification_type: v,
       )
       unless notification.persisted?
         notification.attributes = {
           rule: IceCube::DefaultRules.send("default_#{k}_rule"),
-          method: :disabled
+          method: :disabled,
         }
         notification.save
       end
@@ -181,35 +181,35 @@ class User < ApplicationRecord
   def time_in_user_timezone(time = nil)
     if time.nil?
       Time.current.in_time_zone(timezone_name)
-    elsif time == 'noon' #TODO: REFACTOR OUT
+    elsif time == "noon" #TODO: REFACTOR OUT
       Time.current.in_time_zone(timezone_name).at_noon
     end
   end
 
   def end_of_day_for_user(date)
-    # date.to_datetime.in_time_zone(timezone_name).end_of_day
-    date.to_datetime.end_of_day.change(offset: "#{date.to_datetime.end_of_day.in_time_zone(timezone_name).utc_offset/3600}")
+    date.to_datetime.in_time_zone(timezone_name).at_end_of_day + 1.day
+    # date.to_date.end_of_day.change(offset: "#{date.to_datetime.end_of_day.in_time_zone(timezone_name).utc_offset/3600}")
   end
 
   def start_of_day_for_user(date)
-    # date.to_datetime.in_time_zone(timezone_name).start_of_day
-    date.to_datetime.start_of_day.change(offset: "#{date.to_datetime.end_of_day.in_time_zone(timezone_name).utc_offset/3600}")
+    date.to_datetime.in_time_zone(timezone_name).at_beginning_of_day + 1.day
+    # date.to_date.start_of_day.change(offset: "#{date.to_datetime.end_of_day.in_time_zone(timezone_name).utc_offset/3600}")
   end
 
   def product_feature(id)
-    ProductFeature.where(user_id: id).first;
+    ProductFeature.where(user_id: id).first
   end
 
   def questionnaire_type_for_planning
     user_time = self.time_in_user_timezone
-    if [2,3,4,5].include? user_time.wday # Tuesday to Friday
+    if [2, 3, 4, 5].include? user_time.wday # Tuesday to Friday
       if user_time.wday == 5 && user_time.hour > 12
         "weekly"
       else
         "daily"
       end
     else
-     "weekly"
+      "weekly"
     end
   end
 
@@ -248,21 +248,22 @@ class User < ApplicationRecord
   end
 
   #https://github.com/heartcombo/devise/wiki/How-to:-Soft-delete-a-user-when-user-deletes-account
-  def soft_delete  
-    update_attribute(:deleted_at, Time.current)  
-  end  
-  
-  # ensure user account is active  
-  def active_for_authentication?  
-    super && !deleted_at  
-  end  
-  
-  # provide a custom message for a deleted account   
-  def inactive_message   
-    !deleted_at ? super : :deleted_account  
-  end  
+  def soft_delete
+    update_attribute(:deleted_at, Time.current)
+  end
+
+  # ensure user account is active
+  def active_for_authentication?
+    super && !deleted_at
+  end
+
+  # provide a custom message for a deleted account
+  def inactive_message
+    !deleted_at ? super : :deleted_account
+  end
 
   private
+
   def sanitize_personal_vision
     self.personal_vision = strip_tags(personal_vision)
   end

@@ -10,6 +10,7 @@ export const MonthContainer = styled.div`
 
 type ColumnContainerType = {
   minWidth?: string;
+  alignItems?: string;
 };
 
 export const ColumnContainer = styled.div<ColumnContainerType>`
@@ -49,12 +50,21 @@ export const ColumnContainerParent = styled.div<ColumnContainerType>`
   display: flex;
   min-width: ${props => props.minWidth || "480px"};
   width: 100%;
+  align-items: ${props => props.alignItems || "stretch"};
 `;
 
-const HeaderContainer = styled.div``;
-export const HeaderText = ({ text }: { text: string }): JSX.Element => {
+interface IHeaderType {
+  text: string;
+  width?: string;
+}
+
+const HeaderContainer = styled.div<IHeaderType>`
+  width: ${props => props.width};
+`;
+
+export const HeaderText = ({ text, width }: IHeaderType): JSX.Element => {
   return (
-    <HeaderContainer>
+    <HeaderContainer width={width}>
       <Heading type={"h2"} fontSize={"20px"} fontWeight={600} mt={0}>
         {text}
       </Heading>

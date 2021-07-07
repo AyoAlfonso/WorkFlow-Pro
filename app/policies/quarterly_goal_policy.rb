@@ -9,7 +9,7 @@ class QuarterlyGoalPolicy < ApplicationPolicy
   end
 
   def show?
-    user_is_part_of_this_company?(@record.annual_initiative.company) || @record.owned_by == @user || user_can_observe_current_company?
+    @record.owned_by == @user || @record.annual_initiative.company.present? && (user_is_part_of_this_company?(@record.annual_initiative.company) || user_can_observe_current_company?)
   end
 
   def update?

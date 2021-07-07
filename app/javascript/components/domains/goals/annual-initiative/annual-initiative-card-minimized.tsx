@@ -104,14 +104,16 @@ export const AnnualInitiativeCardMinimized = observer(
     };
     annualInitiative.quarterlyGoals.map(quarterlyGoal => {
       milestoneProgressCounter(quarterlyGoal);
-      quarterlyGoal.subInitiatives.map(milestoneProgressCounter);
+      if(quarterlyGoal.subInitiatives) {
+        quarterlyGoal.subInitiatives.map(milestoneProgressCounter);
+      }
     });
 
     let gradient = "";
     const annualQtrGoalsLength =
       annualInitiative.quarterlyGoals.length +
       annualInitiative.quarterlyGoals.reduce(
-        (acc: number, quarterlyGoal) => acc + quarterlyGoal.subInitiatives.length,
+        (acc: number, quarterlyGoal) => acc + (quarterlyGoal.subInitiatives ? quarterlyGoal.subInitiatives.length : 0),
         0,
       );
     milestones.forEach((obj, index) => {
@@ -205,7 +207,7 @@ export const AnnualInitiativeCardMinimized = observer(
               <StyledIcon
                 icon={showMinimizedCard ? "Chevron-Down" : "Chevron-Up"}
                 size={"12px"}
-                iconColor={"#005FFE"} // TODOIT: ADD TO CONSTANT VARIABLES
+                iconColor={primary100} // TODOIT: ADD TO CONSTANT VARIABLES
                 style={{ padding: "0px 5px" }}
               />
             </MaximizeIconContainer>
@@ -271,7 +273,7 @@ const MaximizeIconContainer = styled.div`
 
 const ShowInitiativeBar = styled.div`
   margin: 15%;
-  color: #005ffe;
+  color: ${props => props.theme.colors.primary100};
   font-size: 12px;
   font-weight: bold;
   white-space: nowrap;

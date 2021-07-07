@@ -13,8 +13,8 @@ module HasFiscalYear
 
   def current_fiscal_year
     current_time = self.convert_to_their_timezone
-    #if the year start is the first of january it means the year end will be this calendar year 
-    ( current_time >= current_year_fiscal_year_start && current_year_fiscal_year_start != Date.parse("#{current_time.year}-01-01") ) ? current_time.year + 1 : current_time.year
+    #if the year start is the first of january it means the year end will be this calendar year
+    (current_time >= current_year_fiscal_year_start && current_year_fiscal_year_start != Date.parse("#{current_time.year}-01-01")) ? current_time.year + 1 : current_time.year
   end
 
   def current_fiscal_start_date
@@ -46,9 +46,9 @@ module HasFiscalYear
     else
       current_time = self.convert_to_their_timezone
       (current_time < self.current_fiscal_start_date &&
-      current_fiscal_start_date != Date.parse("#{current_time.year}-01-01")) ? 
-      current_fiscal_start_date : 
-      current_fiscal_start_date + 1.year
+       current_fiscal_start_date != Date.parse("#{current_time.year}-01-01")) ?
+        current_fiscal_start_date :
+        current_fiscal_start_date + 1.year
     end
   end
 
@@ -63,16 +63,15 @@ module HasFiscalYear
     Date.parse("#{year}-#{fiscal_start_month}-#{fiscal_start_day}")
   end
 
-
   def format_fiscal_year_start
     return "" if fiscal_year_start.blank?
-    month = sprintf('%02d', fiscal_year_start.month)
-    day = sprintf('%02d', fiscal_year_start.day)
+    month = sprintf("%02d", fiscal_year_start.month)
+    day = sprintf("%02d", fiscal_year_start.day)
     "#{month}/#{day}"
   end
 
   def format_month_and_day(date)
-    date.strftime("%m/%d")
+    date.strftime("%m/%d").to_date
   end
 
   def year_for_creating_annual_initiatives
@@ -85,7 +84,7 @@ module HasFiscalYear
   end
 
   def quarter_for_creating_quarterly_goals
-    current_date = format_month_and_day(self.convert_to_their_timezone.to_date)
+    current_date = format_month_and_day(self.convert_to_their_timezone)
     if current_date.between?(format_month_and_day(current_fiscal_start_date), format_month_and_day(second_quarter_start_date()))
       within_4_weeks_range(second_quarter_start_date()) ? 2 : 1
     elsif current_date.between?(format_month_and_day(second_quarter_start_date()), format_month_and_day(third_quarter_start_date()))
@@ -102,7 +101,7 @@ module HasFiscalYear
   end
 
   def second_quarter_start_date
-    # CHRIS' COMMENT: 
+    # CHRIS' COMMENT:
     # The reason we do + 13.weeks instead of .next_quarter is because for LynchPyn each quarter
     # is a fixed 13 weeks. Rails does next_quarter by + 3.months (which is not what we want)
     current_fiscal_start_date + 13.weeks
@@ -131,15 +130,14 @@ module HasFiscalYear
 
   def fiscal_year_range
     #can select from initial fiscal year start date to present year + next year
-    (fiscal_year_start.year..(self.current_fiscal_year + 1)).to_a.map{ |year|
-      {year: year, start_date: fiscal_year_date_for_start_on(year)}
+    (fiscal_year_start.year..(self.current_fiscal_year + 1)).to_a.map { |year|
+      { year: year, start_date: fiscal_year_date_for_start_on(year) }
     }
   end
 
   def forum_meetings_year_range
-    ((self.current_fiscal_year - 1)..(self.current_fiscal_year + 1)).to_a.map{ |year| 
-      {year: year, start_date: fiscal_year_date_for_start_on(year)}
+    ((self.current_fiscal_year - 1)..(self.current_fiscal_year + 1)).to_a.map { |year|
+      { year: year, start_date: fiscal_year_date_for_start_on(year) }
     }
   end
-  
 end

@@ -22,6 +22,7 @@ export const RallyingCry = ({ rallyingCry }: IRallyingCryProps): JSX.Element => 
   return (
     <VisionContainer>
       <VisionTitle>{t("company.rallyingCry")}</VisionTitle>
+      <ContentEditableContainer>
       <StyledContentEditable
         innerRef={rallyingCryRef}
         placeholder={t("company.rallyingCryPlaceholder")}
@@ -39,6 +40,7 @@ export const RallyingCry = ({ rallyingCry }: IRallyingCryProps): JSX.Element => 
         }}
         onBlur={() => companyStore.updateCompanyFromModel()}
       />
+      </ContentEditableContainer>
     </VisionContainer>
   );
 };
@@ -57,26 +59,30 @@ const VisionTitle = styled.p`
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 16px;
-  margin-right: 16px;
   display: flex;
   align-items: center;
   height: inherit;
-  width: 200px;
+  width: 184px;
   white-space: nowrap;
 `;
 
 const StyledContentEditable = styled(ContentEditable)`
   display: block;
   font-size: 21px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-  margin-bottom: auto;
-  padding: 5px;
-  padding-right: 200px;
   text-transform: capitalize;
   font-weight: 700;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 `;
+
+const ContentEditableContainer = styled.div`
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 5px;
+  padding-right: 250px;
+  overflow: hidden;
+`

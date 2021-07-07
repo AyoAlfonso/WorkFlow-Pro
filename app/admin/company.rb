@@ -12,6 +12,7 @@ ActiveAdmin.register Company do
                 :strategic_plan_embed,
                 :timezone,
                 :display_format,
+                :forum_type,
                 :onboarding_status,
                 core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4],
                 company_static_datas_attributes: [:id, :value]
@@ -49,6 +50,7 @@ ActiveAdmin.register Company do
       end
       row :timezone
       row :display_format
+      row :forum_type
     end
     br
     panel "#{I18n.t('core_four')}" do
@@ -111,6 +113,7 @@ ActiveAdmin.register Company do
       f.input :timezone, as: :select, collection: timezones
       f.input :onboarding_status
       f.input :display_format, as: :select, collection: Company.display_formats.keys
+      f.input :forum_type, as: :select, collection: Company.forum_types.keys
     end
     h2 'Foundational Four '
     f.inputs do

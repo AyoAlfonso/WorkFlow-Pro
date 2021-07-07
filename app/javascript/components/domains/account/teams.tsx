@@ -60,7 +60,13 @@ export const Teams = observer(
           <LeftAlignedColumnListTableContainer>
             {users
               .slice()
-              .sort((a, b) => a.firstName.localeCompare(b.firstName))
+              .sort((a, b) => {
+                if (!a.firstName || !b.firstName) {
+                  return 0;
+                } else {
+                  return a.firstName.localeCompare(b.firstName);
+                }
+              })
               .filter(user => team.isAMember(user))
               .map(
                 user =>

@@ -28,7 +28,9 @@ class ProductFeaturePolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes([:pyns, :objective, :team, :meeting, :company]).owned_by_user(@user)
+      scope.includes([:pyns, :objective, :team, :meeting, :company])
+      # .owned_by_user(@user) to do 
+      # this should be used at the controller level with the correct strong param
     end
   end
 end

@@ -15,6 +15,7 @@ import ContentEditable from "react-contenteditable";
 import { ParkingLotIssues } from "./parking-lot-issues";
 import { useEffect, useState } from "react";
 import { ScheduledIssues } from "./scheduled-issues";
+import { ForumMeetingGuideModal } from "./forumMeetingGuideModal";
 import { toJS } from "mobx";
 import { ForumTopic } from "~/components/domains/meetings-forum/components/forum-topic";
 import {
@@ -35,17 +36,14 @@ export const Exploration = observer(
       teamStore: { teams },
       issueStore,
       forumStore,
+      companyStore: { company },
     } = useMst();
     const { t } = useTranslation();
-
     const [userSelectionOpen, setUserSelectionOpen] = useState<boolean>(false);
+    const [guideModalOpen, setGuideModalOpen] = useState<boolean>(false);
 
     //a bit roundabout, we sould probably refactor the meeting step to pass in both team and meeting
     const currentTeam = (teams || []).find(team => team.id === currentMeeting.teamId);
-
-    if (R.isNil(currentTeam) || R.isNil(currentMeeting)) {
-      return <Loading />;
-    }
 
     useEffect(() => {
       issueStore.fetchTeamIssues(currentMeeting.teamId); //ASSUMPTIONS: must have team id for parking lot
@@ -56,10 +54,17 @@ export const Exploration = observer(
       }
     }, [currentMeeting.teamId]);
 
+    if (R.isNil(currentTeam) || R.isNil(currentMeeting)) {
+      return <Loading />;
+    }
+
     const topicOwner = currentTeam.users.find(
       member => member.id == R.path(["forumExplorationTopicOwnerId"], currentMeeting.settings),
     );
 
+    const toggleGuideModal = () => {
+      setGuideModalOpen(!guideModalOpen);
+    };
     const handleChangeExplorationTopicOwnerId = user => {
       setUserSelectionOpen(false);
       forumStore
@@ -119,17 +124,26 @@ export const Exploration = observer(
       <>
         {includeExplorationTopic && (
           <>
-            <ColumnContainerParent>
-              <HeaderText text={t("meetingForum.exploration.title")} />
+            <ColumnContainerParent alignItems={"baseline"}>
+              <HeaderText width={"70%"} text={t("meetingForum.exploration.title")} />
+              {company.forumType == "YPO" && (
+                <HeaderSubText onClick={toggleGuideModal}>
+                  {t("meetingForum.exploration.subTitle")}
+                </HeaderSubText>
+              )}
+              {/* <TextDiv color={"primary100"} fontSize={"16px"} ml={"8px"}></TextDiv> */}
             </ColumnContainerParent>
             <ColumnContainerParent>
-              <ForumTopic
-                disabled={false}
-                teamMembers={toJS(currentTeam.users)}
-                meeting={currentMeeting}
-              />
+              <ForumTopic disabled={false} teamMembers={toJS(currentTeam.users)} />
             </ColumnContainerParent>
           </>
+        )}
+        {guideModalOpen && (
+          <ForumMeetingGuideModal
+            modalOpen={guideModalOpen}
+            setModalOpen={setGuideModalOpen}
+            headerText={t("meetingForum.exploration.subTitle")}
+          ></ForumMeetingGuideModal>
         )}
         <ColumnContainerParent>
           <ColumnContainer>
@@ -185,4 +199,12 @@ const AvatarContainer = styled.div`
   &: hover {
     cursor: pointer;
   }
+`;
+
+const HeaderSubText = styled.div`
+  cursor: pointer;
+  font: bold 12px Lato;
+  width: 30%;
+  margin-right: 0px;
+  color: ${props => props.theme.colors.primary100};
 `;

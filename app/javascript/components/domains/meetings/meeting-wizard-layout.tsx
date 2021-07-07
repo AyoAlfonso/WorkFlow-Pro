@@ -59,6 +59,7 @@ export const MeetingWizardLayout = observer(
         </CoreFourWrapper>
       );
     };
+    const forumMode = company && company.accessForum;
 
     const renderMeetingStartedButtons = () => {
       const nextButton = (
@@ -116,7 +117,11 @@ export const MeetingWizardLayout = observer(
 
     const closeButtonClick = () => {
       if (confirm(`Are you sure you want to exit this meeting?`)) {
-        history.push(`/team/${meeting.teamId}`);
+        if (forumMode) {
+          history.push(`/`);
+        } else {
+          history.push(`/team/${meeting.teamId}`);
+        }
       }
     };
 

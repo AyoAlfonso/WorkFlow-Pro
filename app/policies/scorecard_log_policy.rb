@@ -1,4 +1,4 @@
-class ScorecardLogPolicy < ApplicationPolicy
+class ScorecardLogsPolicy < ApplicationPolicy
   def index? 
     true
   end
@@ -8,6 +8,7 @@ class ScorecardLogPolicy < ApplicationPolicy
   end
 
   def show?
+    # true
     user_is_part_of_this_company?(@record.company) || @record.owned_by == @user || user_can_observe_current_company?
   end
 
@@ -21,7 +22,8 @@ class ScorecardLogPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes([:created_by, :user, :company, :team ]) 
+      # scope.includes([:created_by, :user, :team ]) 
+      scope.all
     end
   end
 end

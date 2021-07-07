@@ -6,6 +6,7 @@ class Company < ApplicationRecord
   before_save :sanitize_rallying_cry
 
   enum display_format: { Company: 0, Forum: 1 }
+  enum forum_type: { EO: 0, YPO: 1, Organisation: 2, Other: 3 }
   # has_many :users, dependent: :restrict_with_error #thi shas been replaced with default company
   has_many :annual_initiatives, dependent: :restrict_with_error
   has_many :teams, dependent: :restrict_with_error
@@ -13,7 +14,7 @@ class Company < ApplicationRecord
   has_one_attached :logo, dependent: :destroy
   has_one :sign_up_purpose, dependent: :destroy
   accepts_nested_attributes_for :sign_up_purpose
-  
+
   has_one :core_four, dependent: :destroy
   accepts_nested_attributes_for :core_four
 
@@ -25,19 +26,20 @@ class Company < ApplicationRecord
 
   validates :name, :timezone, :display_format, presence: true
   validate :display_format_not_changed, on: :update
+  validate :forum_type_not_changed, on: :update
 
   enum onboarding_status: { incomplete: 0, complete: 1 }
 
   after_create :create_company_static_data
 
-  scope :with_team, -> (team_id) { joins(:teams).where({teams: {id: team_id}})}
+  scope :with_team, ->(team_id) { joins(:teams).where({ teams: { id: team_id } }) }
 
   after_save :verify_company_static_data
 
   def verify_company_static_data
-    company_static_datas.create(field: 'annual_objective', value: 'Annual Objective') if company_static_datas.where(field: 'annual_objective').blank?
-    company_static_datas.create(field: 'quarterly_initiative', value: 'Quarterly Initiative') if company_static_datas.where(field: 'quarterly_initiative').blank?
-    company_static_datas.create(field: 'sub_initiative', value: 'Supporting Initiative') if company_static_datas.where(field: 'sub_initiative').blank?
+    company_static_datas.create(field: "annual_objective", value: "Annual Objective") if company_static_datas.where(field: "annual_objective").blank?
+    company_static_datas.create(field: "quarterly_initiative", value: "Quarterly Initiative") if company_static_datas.where(field: "quarterly_initiative").blank?
+    company_static_datas.create(field: "sub_initiative", value: "Supporting Initiative") if company_static_datas.where(field: "sub_initiative").blank?
   end
 
   def self.find_first_with_team(team_id)
@@ -67,9 +69,13 @@ class Company < ApplicationRecord
     end
     result
   end
-  
+
   def forum_intro_video
     StaticData.find_by_field("forum_introduction")
+  end
+
+  def forum_types
+    Company.forum_types
   end
 
   private
@@ -88,10 +94,15 @@ class Company < ApplicationRecord
     end
   end
 
-  def create_company_static_data
-    CompanyStaticData.create!(field: 'annual_objective', value: 'Annual Objective', company: self)
-    CompanyStaticData.create!(field: 'quarterly_initiative', value: 'Quarterly Initiative', company: self)
-    CompanyStaticData.create!(field: 'sub_initiative', value: 'Supporting Initiative', company: self)
+  def forum_type_not_changed
+    if forum_type_changed? && self.display_format == "Company" && self.persisted?
+      errors.add(:forum_type, "Update of forum type not allowed for a company. Please create a new forum.")
+    end
   end
 
+  def create_company_static_data
+    CompanyStaticData.create!(field: "annual_objective", value: "Annual Objective", company: self)
+    CompanyStaticData.create!(field: "quarterly_initiative", value: "Quarterly Initiative", company: self)
+    CompanyStaticData.create!(field: "sub_initiative", value: "Supporting Initiative", company: self)
+  end
 end
