@@ -14,12 +14,8 @@ class Api::ScorecardsController < Api::ApplicationController
     @key_performance_indicators = policy_scope(KeyPerformanceIndicator).owned_by_entity(params[:owner_id])
     authorize @key_performance_indicators
     @kpi = @key_performance_indicators.map do |kpi|
-      if kpi.scorecard_logs.group_by(&:week).empty? 
-        value = []
-      else
-        value =  kpi.scorecard_logs.group_by(&:week) 
-      end 
-      kpi.as_json.merge({:weeks => value})
+      value = (kpi.scorecard_logs.group_by(&:week).empty?) ? [] : kpi.scorecard_logs.group_by(&:week)
+      kpi.as_json.merge({ :weeks => value })
     end
     render json: @kpi
   end
