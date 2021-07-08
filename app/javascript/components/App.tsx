@@ -50,6 +50,8 @@ import { OnboardingModal } from "./domains/onboarding";
 
 import { Onboarding } from "./domains/onboarding";
 
+import { PageNotFound } from "./domains/page-not-found/page-not-found"
+
 const Container = styled.div`
   margin-left: 136px;
   margin-right: 40px;
@@ -197,7 +199,7 @@ export const App = observer(
                       "/company/accountability",
                       "/company/strategic_plan",
                       "/goals",
-                      "/scorecards",
+                      "/scorecard/:type/:owner_id",
                       "/journals",
                       "/notes",
                       "/forum",
@@ -237,7 +239,7 @@ export const App = observer(
                         />
                         <Route exact path="/company/strategic_plan" component={StrategicPlan} />
                         <Route exact path="/goals" component={GoalsIndex} />
-                        <Route exact path="/scorecards" component={ScorecardsIndex} />
+                        <Route exact path="/scorecard/:owner_type/:owner_id" component={ScorecardsIndex} />
                         <Route exact path="/journals" component={JournalIndex} />
                         <Route exact path="/notes" component={NotesIndex} />
 

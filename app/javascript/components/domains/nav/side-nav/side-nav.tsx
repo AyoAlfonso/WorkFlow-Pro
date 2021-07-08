@@ -48,7 +48,7 @@ type StyledIconType = {
   active: boolean;
 };
 
-export const StyledIcon = styled(Icon)<StyledIconType>`
+export const StyledIcon = styled(Icon) <StyledIconType>`
   transition: 0.3s ease-out;
   color: ${props => (props.active ? props.theme.colors.white : props.theme.colors.greyInactive)};
 `;
@@ -58,7 +58,7 @@ type StyledNavLinkType = {
   disabled: boolean;
 };
 
-const StyledNavLink = styled(NavLink)<StyledNavLinkType>`
+const StyledNavLink = styled(NavLink) <StyledNavLinkType>`
   ${color}
   align-item: center;
   text-decoration: none;
@@ -339,14 +339,14 @@ export const SideNavNoMst = (
             src={`${company.logoUrl}`}
           />
         ) : (
-          <Image
-            sx={{
-              width: 48,
-              height: 48,
-            }}
-            src={"/assets/LynchPyn-Logo_Favicon_White"}
-          />
-        )}
+            <Image
+              sx={{
+                width: 48,
+                height: 48,
+              }}
+              src={"/assets/LynchPyn-Logo_Favicon_White"}
+            />
+          )}
       </SideBarElement>
 
       {showPyn && (
@@ -358,34 +358,34 @@ export const SideNavNoMst = (
       {company && company.accessForum && showMeeting ? (
         renderMeeting(R.path(["length"], teams) || 0, "forum")
       ) : (
-        <> </>
-      )}
+          <> </>
+        )}
 
       {company &&
-      company.accessForum &&
-      productFeatures.meeting &&
-      !R.isNil(R.path(["0", "id"], teams)) ? (
-        <SideNavChildPopup
-          trigger={
-            <NavMenuIcon
-              icon={"Meeting"}
-              active={isNavMenuIconActive(currentPathName, "/meetings")}
-              disableOnActive={false}
-            >
-              {t("navigation.meetings")}
-            </NavMenuIcon>
-          }
-          navOpen={meetingsNavChildOpen}
-          setNavOpen={setMeetingsNavChildOpen}
-          setOtherNavOpen={[setTeamNavChildOpen, setCompanyNavChildOpen]}
-        >
-          <SideNavChildLink to="/meetings/section_1" linkText={t("forum.annualHub")} />
-          <SideNavChildLink to="/meetings/section_2" linkText={t("forum.upcomingHub")} />
-          <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")} />
-        </SideNavChildPopup>
-      ) : (
-        <> </>
-      )}
+        company.accessForum &&
+        productFeatures.meeting &&
+        !R.isNil(R.path(["0", "id"], teams)) ? (
+          <SideNavChildPopup
+            trigger={
+              <NavMenuIcon
+                icon={"Meeting"}
+                active={isNavMenuIconActive(currentPathName, "/meetings")}
+                disableOnActive={false}
+              >
+                {t("navigation.meetings")}
+              </NavMenuIcon>
+            }
+            navOpen={meetingsNavChildOpen}
+            setNavOpen={setMeetingsNavChildOpen}
+            setOtherNavOpen={[setTeamNavChildOpen, setCompanyNavChildOpen]}
+          >
+            <SideNavChildLink to="/meetings/section_1" linkText={t("forum.annualHub")} />
+            <SideNavChildLink to="/meetings/section_2" linkText={t("forum.upcomingHub")} />
+            <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")} />
+          </SideNavChildPopup>
+        ) : (
+          <> </>
+        )}
 
       {showGoal && (
         <StyledNavLinkChildrenActive
@@ -400,18 +400,19 @@ export const SideNavNoMst = (
       {company && company.accessCompany && showTeam ? (
         renderTeam(R.path(["length"], teams) || 0)
       ) : (
-        <> </>
-      )}
+          <> </>
+        )}
 
-      <StyledNavLinkChildrenActive to="/scorecards" icon={"Scorecards"} currentPathName={currentPathName}>
-        {t("navigation.scorecards")}
-      </StyledNavLinkChildrenActive>
-
+      {company &&
+        (<StyledNavLinkChildrenActive to={`/scorecard/company/${company.id}`} icon={"Scorecards"} currentPathName={currentPathName}>
+          {t("navigation.scorecards")}
+        </StyledNavLinkChildrenActive>)
+      }
       {company && company.accessCompany && !showTeam ? (
         renderMeeting(R.path(["length"], teams) || 0, "team")
       ) : (
-        <> </>
-      )}
+          <> </>
+        )}
 
       {company && company.accessCompany && showCompany ? (
         <SideNavChildPopup
@@ -439,8 +440,8 @@ export const SideNavNoMst = (
           />
         </SideNavChildPopup>
       ) : (
-        <> </>
-      )}
+          <> </>
+        )}
 
       {!R.isNil(company) && company.logoUrl ? (
         <SideBarElement margin={"16px"} marginTop={"auto"}>
@@ -454,8 +455,8 @@ export const SideNavNoMst = (
           />
         </SideBarElement>
       ) : (
-        <></>
-      )}
+          <></>
+        )}
     </StyledSideNav>
   );
 };
