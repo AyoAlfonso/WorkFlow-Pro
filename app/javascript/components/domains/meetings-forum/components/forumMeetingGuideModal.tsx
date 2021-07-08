@@ -29,7 +29,6 @@ export const ForumMeetingGuideModal = ({
       width="1024px"
       headerMarginBottom={"32px"}
       headerMarginTop={"32px"}
-      // height="627px"
     >
       <GuideModalBody>
         <GuideModalRow>
@@ -37,7 +36,6 @@ export const ForumMeetingGuideModal = ({
           <GuideHeader> Steps </GuideHeader>
           <GuideHeader> Duration </GuideHeader>
           <GuideHeader> Instruction </GuideHeader>
-          {/* <StyledDivider /> */}
         </GuideModalRow>
         <GuideModalRow>
           <GuideItemNumber> 1 </GuideItemNumber>

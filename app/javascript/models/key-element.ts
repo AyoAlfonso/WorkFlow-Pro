@@ -10,7 +10,7 @@ export const KeyElementModel = types
     elementableId: types.number,
     completionType: types.maybeNull(types.string),
     status: types.string,
-    ownedById: types.number,
+    ownedById: types.maybeNull(types.number),
     ownedBy: types.maybeNull(UserModel),
     completionStartingValue: types.maybeNull(types.number),
     completionCurrentValue: types.optional(types.union(types.number, types.string), ""), //add case for no entry value ''

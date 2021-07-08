@@ -171,31 +171,37 @@ export const ContextTabs = observer(
 
     const renderContextKeyElements = () => {
       return showKeyElementForm ? (
-        <KeyElementsTabContainer>
-          <KeyElementsFormHeader>
-            <TextDiv mb={"8px"} fontSize={"16px"} fontWeight={600}>
-              Add a Key Result
-            </TextDiv>
-            <KeyElementFormBackButtonContainer
-              onClick={() => {
-                setShowKeyElementForm(false);
-              }}
-            >
-              <StyledIcon
-                icon={"Close"}
-                size={"12px"}
-                style={{ marginLeft: "8px", marginTop: "8px" }}
-              />
-            </KeyElementFormBackButtonContainer>
-          </KeyElementsFormHeader>
-          <KeyElementContentContainer>
-            <KeyElementForm
-              onCreate={store.createKeyElement}
-              onClose={() => setShowKeyElementForm(false)}
-            />
-          </KeyElementContentContainer>
-        </KeyElementsTabContainer>
+        <KeyElementModal
+          modalOpen={showKeyElementForm}
+          setModalOpen={setShowKeyElementForm}
+          renderKeyElementsIndex={renderKeyElementsIndex}
+          store={store}
+        />
       ) : (
+        // <KeyElementsTabContainer>
+        //   <KeyElementsFormHeader>
+        //     <TextDiv mb={"8px"} fontSize={"16px"} fontWeight={600}>
+        //       Add a Key Result
+        //     </TextDiv>
+        //     <KeyElementFormBackButtonContainer
+        //       onClick={() => {
+        //         setShowKeyElementForm(false);
+        //       }}
+        //     >
+        //       <StyledIcon
+        //         icon={"Close"}
+        //         size={"12px"}
+        //         style={{ marginLeft: "8px", marginTop: "8px" }}
+        //       />
+        //     </KeyElementFormBackButtonContainer>
+        //   </KeyElementsFormHeader>
+        //   <KeyElementContentContainer>
+        //     <KeyElementForm
+        //       onCreate={store.createKeyElement}
+        //       onClose={() => setShowKeyElementForm(false)}
+        //     />
+        //   </KeyElementContentContainer>
+        // </KeyElementsTabContainer>
         <KeyElementsTabContainer>
           {object.keyElements.length > 0 && (
             <KeyElementContentContainer>{renderKeyElementsIndex()}</KeyElementContentContainer>
