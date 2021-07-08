@@ -50,8 +50,6 @@ import { OnboardingModal } from "./domains/onboarding";
 
 import { Onboarding } from "./domains/onboarding";
 
-import { PageNotFound } from "./domains/page-not-found/page-not-found"
-
 const Container = styled.div`
   margin-left: 136px;
   margin-right: 40px;
