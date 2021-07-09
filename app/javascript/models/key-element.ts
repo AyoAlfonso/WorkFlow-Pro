@@ -1,4 +1,5 @@
 import { types } from "mobx-state-tree";
+import { UserModel } from "./user";
 
 export const KeyElementModel = types
   .model("KeyElementModel")
@@ -8,6 +9,9 @@ export const KeyElementModel = types
     completedAt: types.maybeNull(types.string),
     elementableId: types.number,
     completionType: types.maybeNull(types.string),
+    status: types.string,
+    ownedById: types.maybeNull(types.number),
+    ownedBy: types.maybeNull(UserModel),
     completionStartingValue: types.maybeNull(types.number),
     completionCurrentValue: types.optional(types.union(types.number, types.string), ""), //add case for no entry value ''
     completionTargetValue: types.maybeNull(types.number),

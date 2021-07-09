@@ -7,14 +7,14 @@ export class Api {
   token: string;
 
   constructor() {
-    let companyId = localStorage.getItem("companyId")
+    let companyId = localStorage.getItem("companyId");
 
     this.client = create({
       baseURL: "/api",
       headers: {
         "Cache-Control": "no-cache",
         "Content-Type": "application/json",
-        "Current-Company-ID": companyId == "undefined" || !companyId ? "" : companyId
+        "Current-Company-ID": companyId == "undefined" || !companyId ? "" : companyId,
       },
       timeout: 30000,
       withCredentials: true, //allow cookies to be sent if its from same domain
@@ -55,7 +55,7 @@ export class Api {
 
   async profile() {
     const response = await this.client.get("/profile");
-    localStorage.setItem('companyId', R.path(["data", "sessionCompanyProfileId"], response));
+    localStorage.setItem("companyId", R.path(["data", "sessionCompanyProfileId"], response));
     return response;
   }
 
@@ -144,7 +144,7 @@ export class Api {
 
   async switchCompanies(id) {
     localStorage.setItem("companyId", id);
-    return true
+    return true;
   }
 
   async createIssue(issueObject) {
@@ -260,6 +260,10 @@ export class Api {
     return this.client.post(`/annual_initiatives/create_key_element/${id}`, params);
   }
 
+  async updateAnnualInitiativeKeyElement(id, keyElementId, params) {
+    return this.client.post(`/annual_initiatives/${id}/update_key_element/${keyElementId}`, params);
+  }
+
   async deleteAnnualInitiativeKeyElement(keyElementId) {
     return this.client.delete(`/annual_initiatives/delete_key_element/${keyElementId}`);
   }
@@ -284,6 +288,10 @@ export class Api {
 
   async createQuarterlyGoalKeyElement(id, params) {
     return this.client.post(`/quarterly_goals/create_key_element/${id}`, params);
+  }
+
+  async updateQuarterlyGoalKeyElement(id, keyElementId, params) {
+    return this.client.post(`/quarterly_goals/${id}/update_key_element/${keyElementId}`, params);
   }
 
   async deleteQuarterlyGoalKeyElement(keyElementId) {
@@ -314,6 +322,10 @@ export class Api {
 
   async createSubInitiativeKeyElement(id, params) {
     return this.client.post(`/sub_initiatives/create_key_element/${id}`, params);
+  }
+
+  async updateSubInitiativeKeyElement(id, keyElementId, params) {
+    return this.client.post(`/sub_initiatives/${id}/update_key_element/${keyElementId}`, params);
   }
 
   async deleteSubInitiativeKeyElement(keyElementId) {

@@ -3,6 +3,7 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import "react-tabs/style/react-tabs.css";
+import { KeyElementsDropdownOptions } from "./key-elements/key-elements-options";
 import { Checkbox, Label } from "@rebass/forms";
 import ContentEditable from "react-contenteditable";
 import { baseTheme } from "~/themes";
@@ -10,6 +11,7 @@ import { StripedProgressBar } from "~/components/shared/progress-bars";
 import { Icon, Loading } from "~/components/shared";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
+
 interface IKeyElementProps {
   elementId: number;
   store: any;
@@ -17,6 +19,11 @@ interface IKeyElementProps {
   lastKeyElement: boolean;
   focusOnLastInput: boolean;
   type: string;
+  setShowKeyElementForm: any;
+  setActionType: any;
+  hideDropdownOptions?: boolean;
+  setSelectedElement: any;
+  // TODO: set correct type
 }
 
 export const KeyElement = observer(
@@ -27,9 +34,15 @@ export const KeyElement = observer(
     lastKeyElement,
     focusOnLastInput,
     type,
-  }: IKeyElementProps): JSX.Element => {
+    setShowKeyElementForm,
+    setActionType,
+    hideDropdownOptions,
+    setSelectedElement,
+  }: // iconColor,
+  IKeyElementProps): JSX.Element => {
     const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
     const [element, setElement] = useState<any>(null);
+    const [showOptions, setShowOptions] = useState<boolean>(false);
 
     const { annualInitiativeStore, quarterlyGoalStore, subInitiativeStore } = useMst();
     const optionsRef = useRef(null);
@@ -179,15 +192,30 @@ export const KeyElement = observer(
             </CompletionContainer>
           )}
         </ContentContainer>
-        <OptionsButtonContainer
-          onClick={() => {
-            if (confirm(`Are you sure you want to delete this key result?`)) {
-              store.deleteKeyElement(element.id);
-            }
+        {/* <OptionsButtonContainer> */}
+        {/* <StyledIcon icon={"Delete"} size={"12px"} /> */}
+
+        <IconWrapper
+          onClick={e => {
+            e.stopPropagation();
+            console.log(showOptions, "showOptions-");
+            setShowOptions(!showOptions);
           }}
         >
-          <StyledIcon icon={"Delete"} size={"12px"} />
-        </OptionsButtonContainer>
+          <Icon icon={"Options"} size={"16px"} iconColor={"grey60"} />
+        </IconWrapper>
+        {showOptions && (
+          <KeyElementsDropdownOptions
+            element={element}
+            setShowDropdownOptions={setShowOptions}
+            showOptions={showOptions}
+            setShowKeyElementForm={setShowKeyElementForm}
+            setActionType={setActionType}
+            setSelectedElement={setSelectedElement}
+            store={store}
+          />
+        )}
+        {/* </OptionsButtonContainer> */}
       </KeyElementContainer>
     );
   },
@@ -202,6 +230,7 @@ const KeyElementContainer = styled.div`
 const ContentContainer = styled.div`
   width: -webkit-fill-available;
   margin-right: 36px;
+  width: 90%;
 `;
 
 const CheckboxContainer = styled.div`
@@ -274,6 +303,21 @@ const ProgressBarContainer = styled.div`
 const StyledIcon = styled(Icon)`
   color: ${props => props.theme.colors.grey40};
   &: hover {
+    color: ${props => props.theme.colors.greyActive};
+  }
+`;
+
+// TODO: Move to shared styling folder
+
+const IconWrapper = styled.div`
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  width: 10%;
+  &:hover {
+    cursor: pointer;
     color: ${props => props.theme.colors.greyActive};
   }
 `;

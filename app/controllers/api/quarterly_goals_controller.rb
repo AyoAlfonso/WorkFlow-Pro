@@ -1,5 +1,5 @@
 class Api::QuarterlyGoalsController < Api::ApplicationController
-  before_action :set_quarterly_goal, only: [:show, :update, :destroy, :create_key_element, :create_milestones, :close_goal]
+  before_action :set_quarterly_goal, only: [:show, :update, :destroy, :create_key_element, :update_key_element, :create_milestones, :close_goal]
 
   respond_to :json
 
@@ -52,6 +52,13 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     render json: { key_element: key_element, status: :ok }
   end
 
+   def update_key_element
+    key_element = KeyElement.find(params[:key_element_id])
+    @quarterly_goal = policy_scope(QuarterlyGoal).find(key_element.elementable_id)
+    authorize @quarterly_goal
+    key_element.update!(key_elements_params) 
+   end
+
   def delete_key_element
     key_element = KeyElement.find(params[:key_element_id])
     @quarterly_goal = policy_scope(QuarterlyGoal).find(key_element.elementable_id)
@@ -69,6 +76,10 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
   def quarterly_goal_params
     params.permit(:id, :created_by_id, :owned_by_id, :context_description, :annual_initiative_id, :description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value], milestones_attributes: [:id, :description, :status], :importance => [])
+  end
+
+  def key_elements_params
+      params.permit(key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value])
   end
 
   def set_quarterly_goal

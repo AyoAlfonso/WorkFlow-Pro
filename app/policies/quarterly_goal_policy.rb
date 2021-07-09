@@ -1,5 +1,4 @@
 class QuarterlyGoalPolicy < ApplicationPolicy
-
   def index?
     true
   end
@@ -21,6 +20,10 @@ class QuarterlyGoalPolicy < ApplicationPolicy
   end
 
   def create_key_element?
+    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
+  end
+
+  def update_key_element?
     @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 

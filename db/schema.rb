@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_22_174854) do
+ActiveRecord::Schema.define(version: 2021_07_09_153500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -257,7 +257,11 @@ ActiveRecord::Schema.define(version: 2021_06_22_174854) do
     t.integer "completion_current_value"
     t.integer "completion_target_value"
     t.integer "completion_starting_value", default: 0
+    t.integer "status", default: 0
+    t.bigint "owned_by_id"
+    t.boolean "greater_than"
     t.index ["elementable_type", "elementable_id"], name: "index_key_elements_on_elementable_type_and_elementable_id"
+    t.index ["owned_by_id"], name: "index_key_elements_on_owned_by_id"
   end
 
   create_table "key_performance_indicators", force: :cascade do |t|
@@ -272,8 +276,12 @@ ActiveRecord::Schema.define(version: 2021_06_22_174854) do
     t.integer "unit_type"
     t.integer "target_value", default: 0
     t.boolean "is_deleted", default: false
+    t.integer "owner_type"
+    t.boolean "greater_than", default: true
+    t.bigint "owned_by_id"
     t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
+    t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
     t.index ["team_id"], name: "index_key_performance_indicators_on_team_id"
     t.index ["user_id"], name: "index_key_performance_indicators_on_user_id"
   end

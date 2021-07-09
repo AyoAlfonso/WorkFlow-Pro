@@ -1,6 +1,5 @@
 class AnnualInitiativePolicy < ApplicationPolicy
-
-  def index? 
+  def index?
     true
   end
 
@@ -21,6 +20,10 @@ class AnnualInitiativePolicy < ApplicationPolicy
   end
 
   def create_key_element?
+    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
+  end
+
+  def update_key_element?
     @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 
@@ -54,7 +57,7 @@ class AnnualInitiativePolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes([:key_elements, {owned_by: {avatar_attachment: :blob}}])
+      scope.includes([:key_elements, { owned_by: { avatar_attachment: :blob } }])
     end
   end
 end

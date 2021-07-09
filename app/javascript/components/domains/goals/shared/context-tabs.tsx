@@ -13,7 +13,14 @@ import { KeyElement } from "./key-element";
 import { Button } from "~/components/shared/button";
 import { Icon } from "~/components/shared/icon";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
+import {
+  KeyElementContentContainer,
+  KeyElementsTabContainer,
+  KeyElementsFormHeader,
+  KeyElementFormBackButtonContainer,
+} from "./key-elements/key-element-containers";
 import { KeyElementForm } from "./key-element-form";
+import { KeyElementModal } from "./key-element-modal";
 import { RoundButton, Text, TextDiv } from "~/components/shared";
 import "react-tabs/style/react-tabs.css";
 
@@ -45,8 +52,10 @@ export const ContextTabs = observer(
 
     const currentUser = sessionStore.profile;
     const [selectedContextTab, setSelectedContextTab] = useState<number>(tabDefaultIndex() + 1);
+    const [showActionType, setActionType] = useState<string>("Add");
     const [hideContent, setHideContent] = useState<boolean>(false);
     const [store, setStore] = useState<any>(null);
+    const [selectedElement, setSelectedElement] = useState<number>(null);
     const [focusOnLastInput, setFocusOnLastInput] = useState<boolean>(false);
     const [showKeyElementForm, setShowKeyElementForm] = useState<boolean>(false);
     const editable = currentUser.id == object.ownedById && !disabled;
@@ -170,32 +179,43 @@ export const ContextTabs = observer(
     };
 
     const renderContextKeyElements = () => {
+      // we want to show the modal with stte of showKeyElementForm
       return showKeyElementForm ? (
-        <KeyElementsTabContainer>
-          <KeyElementsFormHeader>
-            <TextDiv mb={"8px"} fontSize={"16px"} fontWeight={600}>
-              Add a Key Result
-            </TextDiv>
-            <KeyElementFormBackButtonContainer
-              onClick={() => {
-                setShowKeyElementForm(false);
-              }}
-            >
-              <StyledIcon
-                icon={"Close"}
-                size={"12px"}
-                style={{ marginLeft: "8px", marginTop: "8px" }}
-              />
-            </KeyElementFormBackButtonContainer>
-          </KeyElementsFormHeader>
-          <KeyElementContentContainer>
-            <KeyElementForm
-              onCreate={store.createKeyElement}
-              onClose={() => setShowKeyElementForm(false)}
-            />
-          </KeyElementContentContainer>
-        </KeyElementsTabContainer>
+        <KeyElementModal
+          modalOpen={showKeyElementForm}
+          setModalOpen={setShowKeyElementForm}
+          action={showActionType}
+          setActionType={setActionType}
+          store={store}
+          type={type}
+          element={selectedElement}
+          setSelectedElement={setSelectedElement}
+        />
       ) : (
+        // <KeyElementsTabContainer>
+        //   <KeyElementsFormHeader>
+        //     <TextDiv mb={"8px"} fontSize={"16px"} fontWeight={600}>
+        //       Add a Key Result
+        //     </TextDiv>
+        //     <KeyElementFormBackButtonContainer
+        //       onClick={() => {
+        //         setShowKeyElementForm(false);
+        //       }}
+        //     >
+        //       <StyledIcon
+        //         icon={"Close"}
+        //         size={"12px"}
+        //         style={{ marginLeft: "8px", marginTop: "8px" }}
+        //       />
+        //     </KeyElementFormBackButtonContainer>
+        //   </KeyElementsFormHeader>
+        //   <KeyElementContentContainer>
+        //     <KeyElementForm
+        //       onCreate={store.createKeyElement}
+        //       onClose={() => setShowKeyElementForm(false)}
+        //     />
+        //   </KeyElementContentContainer>
+        // </KeyElementsTabContainer>
         <KeyElementsTabContainer>
           {object.keyElements.length > 0 && (
             <KeyElementContentContainer>{renderKeyElementsIndex()}</KeyElementContentContainer>
@@ -230,11 +250,14 @@ export const ContextTabs = observer(
           <KeyElement
             elementId={element.id}
             store={store}
-            editable={editable}
+            editable={false}
             key={element.id}
             lastKeyElement={lastKeyElement}
             focusOnLastInput={focusOnLastInput}
             type={type}
+            setShowKeyElementForm={setShowKeyElementForm}
+            setActionType={setActionType}
+            setSelectedElement={setSelectedElement}
           />
         );
       });
@@ -354,34 +377,36 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const KeyElementsFormHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 16px;
-  width: auto;
-  padding-right: 16px;
-  padding-top: 8px;
-  height: 24px;
-  border-bottom: ${({ theme: { colors } }) => `1px solid ${colors.borderGrey}`};
-`;
+// const KeyElementsFormHeader = styled.div`
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   padding-left: 16px;
+//   width: auto;
+//   padding-right: 16px;
+//   padding-top: 8px;
+//   height: 24px;
+//   border-bottom: ${({ theme: { colors } }) => `1px solid ${colors.borderGrey}`};
+// `;
 
-const KeyElementFormBackButtonContainer = styled.div`
-  margin-right: 4px;
-  margin-bottom: 8px;
-  &:hover {
-    cursor: pointer;
-  }
-`;
+// const KeyElementFormBackButtonContainer = styled.div`
+//   margin-right: 4px;
+//   margin-bottom: 8px;
+//   &:hover {
+//     cursor: pointer;
+//   }
+// `;
 
-const KeyElementsTabContainer = styled.div`
-  height: 100%;
-  width: 100%;
-`;
+// const KeyElementsTabContainer = styled.div`
+//   height: 100%;
+//   width: 100%;
+// `;
 
-const KeyElementContentContainer = styled.div`
-  padding: 16px;
-`;
+//TODO: Remove comment
+
+// const KeyElementContentContainer = styled.div`
+//   padding: 16px;
+// `;
 
 const ContextDescriptionContainer = styled.div`
   padding: 16px;
