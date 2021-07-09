@@ -150,6 +150,7 @@
         "cardClosed" : "This {{title}} is closed",
         "createdOn" : "Originally created for",
         "emptyHeader": "Add your first Initiative",
+        "keyElementCreationError": "There was an error creating the key element",
         "emptyText": "Initiatives are quarterly efforts that help you get closer to reaching your Objective.",
         "emptyCta": "Activate \"Plan\" mode"
       },
@@ -170,6 +171,7 @@
         "retrievalError": "There was an error retrieving the {{title}}",
         "deletionError": "There was an error deleting the {{title}}",
         "keyElementCreationError": "There was an error creating the key element",
+        "keyElementUpdateError": "There was an error updating the key element",
         "milestoneCreationError": "There was an error creating milestones"
       },
       "subInitiative": {
@@ -188,6 +190,7 @@
         "retrievalError": "There was an error retrieving the {{title}}",
         "deletionError": "There was an error deleting the {{title}}",
         "keyElementCreationError": "There was an error creating the key element",
+        "keyElementUpdateError": "There was an error updating the key element",
         "milestoneCreationError": "There was an error creating milestones"
       },
       "meeting": {

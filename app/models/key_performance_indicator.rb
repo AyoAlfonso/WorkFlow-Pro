@@ -2,7 +2,7 @@ class KeyPerformanceIndicator < ApplicationRecord
     include ActionView::Helpers::SanitizeHelper
     
     before_save :sanitize_description
-    belongs_to :user
+    belongs_to :user, optional: true
     belongs_to :company, optional: true
     belongs_to :team, optional: true
     
