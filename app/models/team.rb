@@ -13,8 +13,8 @@ class Team < ApplicationRecord
 
   accepts_nested_attributes_for :team_user_enablements, allow_destroy: true
 
-  scope :for_company, -> (company) { where(company: company) }
-  
+  scope :for_company, ->(company) { where(company: company) }
+
   def self.for_user(user)
     self.select { |team| team.users.include?(user) }
   end
@@ -43,5 +43,4 @@ class Team < ApplicationRecord
   def team_average_monthly_emotion_score(from_date, to_date)
     overall_average_emotion_score(self.users, from_date, to_date)
   end
-
 end

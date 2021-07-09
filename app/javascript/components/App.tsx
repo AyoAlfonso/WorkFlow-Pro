@@ -70,15 +70,15 @@ export const App = observer(
     const loggedIn = sessionStore.loggedIn; //if logged in show switch
     const profile = sessionStore.profile;
 
-      let noFeatures;
-      let showGoalRoute;
-      let showTeamRoute;
-      if (profile) {
-        noFeatures = !profile.productFeatures;
-        showGoalRoute = !noFeatures && profile.productFeatures.objective;
-        showTeamRoute = !noFeatures && profile.productFeatures && profile.productFeatures.team;
-      }
-      const onDragEnd = result => {
+    let noFeatures;
+    let showGoalRoute;
+    let showTeamRoute;
+    if (profile) {
+      noFeatures = !profile.productFeatures;
+      showGoalRoute = !noFeatures && profile.productFeatures.objective;
+      showTeamRoute = !noFeatures && profile.productFeatures && profile.productFeatures.team;
+    }
+    const onDragEnd = result => {
       const { destination, source, draggableId } = result;
 
       if (!result.destination) {
@@ -213,11 +213,10 @@ export const App = observer(
                       <ForumWelcomeModal />
                       <OnboardingModal />
                       <Container>
-                        
                         {profile.productFeatures && profile.productFeatures.pyns ? (
                           <Route exact path="/" component={HomeContainer} />
                         ) : (
-                        <Route exact path="/" component={GoalsIndex} /> 
+                          <Route exact path="/" component={GoalsIndex} />
                         )}
 
                         {showGoalRoute && <Route exact path="/goals" component={GoalsIndex} />}
@@ -227,7 +226,6 @@ export const App = observer(
                             path={["/team/:team_id", "/team/:team_id/dashboard"]}
                             component={TeamOverview}
                           />
-                         
                         )}
                         <Route exact path="/account" component={AccountSettings} />
                         <Route
@@ -239,7 +237,7 @@ export const App = observer(
 
                         <Route exact path="/journals" component={JournalIndex} />
                         <Route exact path="/notes" component={NotesIndex} />
-                      
+
                         {profile.productFeatures && profile.productFeatures.meeting && (
                           <>
                             <Route exact path="/meetings/agenda" component={ForumAgenda} />
