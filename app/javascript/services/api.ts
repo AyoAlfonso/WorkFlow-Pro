@@ -550,5 +550,9 @@ export class Api {
     return this.client.post(`key_performance_indicator/scorecard_logs`, scorecardLog)
   }
 
+  async getScorecard(owner_type: string, owner_id: number) {
+    return this.client.get(`scorecard/${owner_type}/${owner_id}`)
+  }
+
   //async setJWT(jwt) {}
 }
