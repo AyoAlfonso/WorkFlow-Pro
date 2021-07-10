@@ -15,7 +15,7 @@ interface IEditKeyElementFormProps {
   element: any;
   store: any;
   type: any;
-  //TODO: This should be an addition
+  //TODO: set correct type
 }
 
 export const EditKeyElementForm = ({
@@ -25,21 +25,18 @@ export const EditKeyElementForm = ({
   onClose,
   type,
 }: IEditKeyElementFormProps): JSX.Element => {
-  const { userStore, annualInitiativeStore } = useMst();
+  const { userStore } = useMst();
   const { users } = userStore;
   const [title, setTitle] = useState<string>(element.value);
   const [completionType, setCompletionType] = useState<string>(element.completionType);
-  //   const [completionCurrentValue, setCompletionCurrentValue] = useState<number>(
-  //     element.completionCurrentValue,
-  //   );
+
   const [completionTargetValue, setCompletionTargetValue] = useState<number>(
     element.completionTargetValue,
   );
-  //   const [completionStartingValue, setcompletionStartingValue] = useState<number>(
-  //     element.completionStartingValue,
-  //   );
-  const [condition, setCondition] = useState<number>(element.condition);
-  const [ownedBy, setOwnedBy] = useState<number>(element.ownedBy);
+  const [condition, setCondition] = useState<number>(element.greaterThan);
+  const [ownedBy, setOwnedBy] = useState<number>(element.ownedById);
+
+  const allUsers = [...users, { id: null, firstName: "None", lastName: "" }];
 
   const selectOptions = [
     { label: "Numerical #", value: "numerical" },
@@ -56,9 +53,7 @@ export const EditKeyElementForm = ({
   const resetForm = () => {
     setTitle("");
     setCompletionType("numerical");
-    // setCompletionCurrentValue(0);
     setCompletionTargetValue(0);
-    // setcompletionStartingValue(0);
     setCondition(0);
     setOwnedBy(0);
   };
@@ -67,10 +62,8 @@ export const EditKeyElementForm = ({
     const keyElementParams = {
       value: title,
       completionType,
-      //   completionCurrentValue,
       completionTargetValue,
-      //   completionStartingValue,
-      condition,
+      greaterThan: condition,
       ownedBy,
     };
     let id;
@@ -162,17 +155,19 @@ export const EditKeyElementForm = ({
             value={ownedBy}
             style={{ minWidth: "200px" }}
           >
-            {users.map(({ id, firstName, lastName }, index) => (
-              <option key={`option-${index}`} value={id}>
-                {firstName} {lastName}
-              </option>
-            ))}
+            {allUsers
+              .filter(user => user.firstName)
+              .map(({ id, firstName, lastName }, index) => (
+                <option key={`option-${index}`} value={id}>
+                  {firstName} {lastName}
+                </option>
+              ))}
           </Select>
         </FormGroupContainer>
       </RowContainer>
 
       <RowContainer mt={"16px"}>
-        <FormGroupContainer>
+        <FormGroupContainer mb={"15px"}>
           <Label>Condition</Label>
           <Select
             onChange={e => {
@@ -189,27 +184,8 @@ export const EditKeyElementForm = ({
             ))}
           </Select>
         </FormGroupContainer>
-      </RowContainer>
 
-      {completionType !== "binary" && (
-        <RowContainer mt={"16px"}>
-          {/* <FormGroupContainer mr={"4px"}>
-            <Label>Current Value</Label>
-            <InputContainer>
-              <Input
-                type={"number"}
-                min={0}
-                onChange={e => {
-                  e.preventDefault();
-                  setCompletionCurrentValue(e.currentTarget.value);
-                }}
-                value={completionCurrentValue}
-              />
-              <CompletionTypeContainer>
-                <TextDiv fontSize={"12px"}>{completionSymbol()}</TextDiv>
-              </CompletionTypeContainer>
-            </InputContainer>
-          </FormGroupContainer> */}
+        {completionType !== "binary" && (
           <FormGroupContainer ml={"4px"}>
             <Label>Target Value</Label>
             <InputContainer>
@@ -232,8 +208,8 @@ export const EditKeyElementForm = ({
               </CompletionTypeContainer>
             </InputContainer>
           </FormGroupContainer>
-        </RowContainer>
-      )}
+        )}
+      </RowContainer>
       <RowContainer mt={completionType === "binary" ? "20px" : "0"}>
         <Button variant={"primary"} onClick={handleSave} mr={"8px"} small disabled={!isValid}>
           <TextDiv fontSize={"16px"}>Save</TextDiv>

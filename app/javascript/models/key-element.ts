@@ -9,12 +9,13 @@ export const KeyElementModel = types
     completedAt: types.maybeNull(types.string),
     elementableId: types.number,
     completionType: types.maybeNull(types.string),
-    status: types.string,
+    status: types.maybeNull(types.string),
     ownedById: types.maybeNull(types.number),
     ownedBy: types.maybeNull(UserModel),
     completionStartingValue: types.maybeNull(types.number),
     completionCurrentValue: types.optional(types.union(types.number, types.string), ""), //add case for no entry value ''
     completionTargetValue: types.maybeNull(types.number),
+    greaterThan: types.maybeNull(types.number),
   })
   .views(self => ({}))
   .actions(self => ({}));

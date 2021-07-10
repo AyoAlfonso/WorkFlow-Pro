@@ -259,7 +259,7 @@ ActiveRecord::Schema.define(version: 2021_07_09_153500) do
     t.integer "completion_starting_value", default: 0
     t.integer "status", default: 0
     t.bigint "owned_by_id"
-    t.boolean "greater_than"
+    t.integer "greater_than", default: 1
     t.index ["elementable_type", "elementable_id"], name: "index_key_elements_on_elementable_type_and_elementable_id"
     t.index ["owned_by_id"], name: "index_key_elements_on_owned_by_id"
   end

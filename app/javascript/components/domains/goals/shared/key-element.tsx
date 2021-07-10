@@ -198,7 +198,6 @@ export const KeyElement = observer(
         <IconWrapper
           onClick={e => {
             e.stopPropagation();
-            console.log(showOptions, "showOptions-");
             setShowOptions(!showOptions);
           }}
         >

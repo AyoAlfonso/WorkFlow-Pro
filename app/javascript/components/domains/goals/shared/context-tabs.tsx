@@ -250,7 +250,7 @@ export const ContextTabs = observer(
           <KeyElement
             elementId={element.id}
             store={store}
-            editable={false}
+            editable={editable}
             key={element.id}
             lastKeyElement={lastKeyElement}
             focusOnLastInput={focusOnLastInput}
