@@ -224,7 +224,7 @@ const StyledText = styled(Text)`
   padding-right: 4px;
   white-space: normal;
   font-size: 14px;
-  width: 95%;
+  width: 100%;
   min-width: 180px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -267,6 +267,7 @@ const QuarterText = styled(Text)`
 const DescriptionContainer = styled.div`
   overflow-wrap: anywhere;
   display: flex;
+  width: 95%;
   font-size: 12px;
   padding-left: 16px;
 `;
