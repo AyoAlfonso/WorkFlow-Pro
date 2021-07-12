@@ -9,49 +9,106 @@ import { Icon } from "~/components/shared/icon";
 import { Button } from "~/components/shared/button";
 import { TextDiv } from "~/components/shared/text";
 import { baseTheme } from "~/themes/base"
+import { OwnedBy } from "./scorecard-owned-by"
+import { StatusBadge } from "~/components/shared/status-badge"
 
-export const ScorecardTableView = (
+type ScorecardTableViewProps = {
+	kpis: any
+}
 
-): JSX.Element => {
+export const ScorecardTableView = ({
+	kpis
+}:ScorecardTableViewProps): JSX.Element => {
 	const { t } = useTranslation();
 	const { companyStore: { company } } = useMst();
-	console.log(company)
 	const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter)
 	const [tab, setTab] = useState<string>("KPIs")
+	const [scores, setScores] = useState<any>([])
 	const tabs = [
 		t("scorecards.tabs.kpis"),
 		t("scorecards.tabs.people"),
 	]
-
 	const {
 		fadedYellow,
+		fadedGreen,
+		fadedRed,
 		poppySunrise,
 		cautionYellow,
+		finePine,
+		warningRed,
 	} = baseTheme.colors
+
+	const formatValue = (unitType: string, value: number) => {
+		switch(unitType) {
+			case "percentage":
+				return `${value}%`;
+			case "currency":
+				return `$${value}`
+			default:
+				return `${value}`;
+		}
+	}
+
+	const getScorePercent = (value: number, target: number, greaterThan: boolean) => {
+		if (greaterThan) {
+			return (value / target) * 100;
+		} 
+		else {
+			return ((target + target - value) / target) * 100;
+		}
+	}
+
+	const averageScorePercent = (scores: [number]) => {
+		return Math.floor(Math.min(scores.reduce((acc, score) => acc + score, 0), 100))
+	}
+
+	const getStatusValue = (value: number, target: number, greaterThan: boolean) => {
+		const comparator = (a, b) => greaterThan ? a > b: a < b;
+		if(comparator(value, target)) {
+			return {
+				color: finePine,
+				background: fadedGreen,
+				text: "On Track",
+			}
+		}
+		else {
+			return {
+				color: warningRed,
+				background: fadedRed,
+				text: "Behind",
+			}
+		}
+	}
+
 	const data = useMemo(
-		() => [
-			{
+		() => kpis.map((kpi: any, index: number) => {
+			const targetText = formatValue(kpi.unitType, kpi.targetValue)
+			const description = `${kpi.description} ${kpi.greaterThan ? ">" : "<"} ${targetText}`
+			const logic = kpi.greaterThan ? `Greater than or equal to ${targetText}`:`Less than or equal to ${targetText}`
+			const row: any = {
 				title: {
-					description: "Booked Work > $5000",
-					logic: "Greater than or equal to $5000",
-					highlighted: false,
-				},
-				owner: {
-					id: 3,
-					name: "Christopher Pang"
-				},
-				status: {
-					text: "Needs Attention",
-					color: poppySunrise,
-					background: fadedYellow,
-				},
-				wk_14: {
-					score: 4800,
-					color: cautionYellow,
+					description,
+					logic
 				}
 			}
-		],
-		[]
+			row.owner = {
+				id: kpi.ownedById,
+			}
+
+			const weeks = Object.values(kpi.weeks)
+			let average = 0
+			weeks.forEach((week: any) => {
+				average += week.score
+				row[`wk_${week.week}`] = {
+					score: formatValue(kpi.unitType, week.score),
+					color: getStatusValue(week.score, kpi.targetValue, true).color,
+				}
+			})
+			average /= weeks.length
+			row.status = getStatusValue(average, kpi.targetValue, true)
+			return row
+		}),
+		[kpis]
 	)
 	const columns = useMemo(
 		() => [
@@ -71,24 +128,16 @@ export const ScorecardTableView = (
 									{value.logic}
 								</KPILogic>
 							</KPITextContainer>
-							<IconsContainer>
-								<HighlightContainer>
-									<HighlightIcon on={value.highlighted} />
-								</HighlightContainer>
-							</IconsContainer>
 						</KPITitleContainer>);
 				},
 				width: "21%",
 				minWidth: "216px",
 			},
 			{
-				Header: "Owner",
-				accessor: "owner",
-				Cell: ({ value }) => {
-					return (<OwnerContainer>{value.name}</OwnerContainer>);
-				},
-				width: "15%",
-				minWidth: "160px",
+				Header: "Score",
+				accessor: "score",
+				width: "8%",
+				minWidth: "86px",
 			},
 			{
 				Header: "Status",
@@ -105,6 +154,19 @@ export const ScorecardTableView = (
 				width: "8%",
 				minWidth: "86px",
 			},
+			{
+				Header: "Owner",
+				accessor: "owner",
+				Cell: ({ value }) => {
+					return (
+						<OwnerContainer>
+						<OwnedBy ownedById={value.id} marginLeft={"0px"}/>
+						</OwnerContainer>
+					);
+				},
+				width: "17%",
+				minWidth: "160px",
+			},
 			...R.range(1, 53).map(n => ({
 				Header: `WK ${n}`,
 				accessor: `wk_${n}`,
@@ -119,7 +181,7 @@ export const ScorecardTableView = (
 						</WeekContainer>
 					);
 				},
-				width: "6%",
+				width: "1fr",
 				minWidth: "64px",
 			}))
 		],
@@ -167,11 +229,11 @@ export const ScorecardTableView = (
 					setSelection={handleQuarterSelect}
 					id={"scorecard-quarter-selection"}
 				>
-					{R.range(1, 5).map((n: number) => (<option value={n}>Q{n} {company.currentFiscalYear}</option>))}
+					{R.range(1, 5).map((n: number) => (<option key={n} value={n}>Q{n} {company.currentFiscalYear}</option>))}
 				</Select>
 			</TopRow>
 			{tab == "KPIs" && (
-				<>
+				<TableContainer>
 					<Table {...getTableProps()}>
 						<TableHead>
 							{headerGroups.map(headerGroup => (
@@ -188,7 +250,7 @@ export const ScorecardTableView = (
 							{rows.map(row => {
 								prepareRow(row)
 								return (
-									<TableRow {...row.getRowProps()}>
+									<TableRow hover={true} {...row.getRowProps()}>
 										{row.cells.map(cell => {
 											return (
 												<td {...cell.getCellProps()}>
@@ -210,13 +272,18 @@ export const ScorecardTableView = (
 						<CircularIcon icon={"Plus"} size={"12px"} />
 						<AddGoalText>Add KPI</AddGoalText>
 					</StyledButton>
-				</>
+				</TableContainer>
 			)}
 		</Container>
 	)
 }
 
 const Container = styled.div`
+	width: 100%;
+	font-family: Lato;
+`
+
+const TableContainer = styled.div`
 	width: 100%;
 	font-family: Lato;
 `
@@ -261,9 +328,11 @@ const Table = styled.table`
 `
 
 const TableHead = styled.thead`
+	width: 100%;
 `
 
 const TableBody = styled.tbody`
+	width: 100%;
 `
 
 const TableHeader = styled.th`
@@ -281,14 +350,20 @@ const KPIDescription = styled.div`
   white-space: nowrap;
 `
 
-const TableRow = styled.tr`
-	&:hover {
-		background: ${props => props.theme.colors.backgroundGrey};
+type TableRowProps = {
+	hover?: boolean,
+}
+
+const TableRow = styled.tr<TableRowProps>`
+	width: 100%;
+	height: 48px;
+	${props => props.hover && `&:hover {
+		background: ${props.theme.colors.backgroundBlue};
 		${KPIDescription} {
 			font-weight: 800;
 			text-decoration: underline;
 		}
-	}
+	}`}
 `
 
 type StyledButtonType = {
@@ -298,12 +373,12 @@ const StyledButton = styled(Button) <StyledButtonType>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${props => (props.width != "fill" ? props.width : "-webkit-fill-available")};
+  width: ${props => (props.width != "auto" ? props.width : "auto")};
   padding-left: 0;
   padding-right: 0;
   background-color: ${props => props.theme.colors.white};
   border-color: ${props => props.theme.colors.white};
-  &: hover {
+  &:hover {
      color: ${props => props.theme.colors.primary100};
   }
 `;
@@ -314,7 +389,7 @@ const CircularIcon = styled(Icon)`
  height: 25px;
  width: 25px;
  background-color: ${props => props.theme.colors.primary100};
-   &: hover {
+   &:hover {
     background-color: ${props => props.theme.colors.primaryActive};
   }
 `
@@ -356,7 +431,11 @@ const HighlightContainer = styled.div`
 `
 
 const OwnerContainer = styled.div`
-	min-width: 160px;
+	display: flex;
+	height: 100%;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
 `
 
 const StatusContainer = styled.div`
@@ -365,20 +444,6 @@ const StatusContainer = styled.div`
 	width: 100%;
 	justify-content: center;
 	align-items: center;
-`
-
-type StatusBadgeProps = {
-	color: string;
-	background: string;
-}
-
-const StatusBadge = styled.div<StatusBadgeProps>`
-	display: inline-block;
-	font-size: 9px;
-	color: ${props => props.color};
-	background: ${props => props.background};
-	padding: 4px;
-	border-radius: 2px;
 `
 
 const WeekContainer = styled.div`

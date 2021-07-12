@@ -18,7 +18,7 @@ class Api::ScorecardsController < Api::ApplicationController
     authorize @key_performance_indicators
     puts @key_performance_indicators
     @kpi = @key_performance_indicators.map do |kpi|
-      value = (kpi.scorecard_logs.group_by(&:week).empty?) ? [] : kpi.scorecard_logs.group_by(&:week)
+      value = (kpi.scorecard_logs.group_by(&:week).empty?) ? {} : kpi.scorecard_logs.group_by(&:week).map{|k,v| [k, v[-1]]}.to_hash
       kpi.as_json.merge({ :weeks => value })
     end
     render json: @kpi

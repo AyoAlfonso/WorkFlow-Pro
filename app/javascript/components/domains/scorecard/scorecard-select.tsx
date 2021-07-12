@@ -29,9 +29,6 @@ const MuiStyledInput = withStyles(
 			paddingBottom: "8px",
 			width: "80px"
 		},
-		select: {
-			paddingRight: "48px",
-		}
 }))(InputBase);
 
 const StyledIcon = styled(Icon)`

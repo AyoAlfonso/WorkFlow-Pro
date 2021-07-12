@@ -33,6 +33,10 @@ export class Api {
     this.client.addMonitor(monitor);
   }
 
+  async getUser(userId) {
+    return this.client.get(`/users/${userId}`);
+  }
+
   async getUsers() {
     return this.client.get("/users");
   }
