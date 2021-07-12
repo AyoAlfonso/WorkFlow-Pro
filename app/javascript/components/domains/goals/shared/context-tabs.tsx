@@ -60,6 +60,7 @@ export const ContextTabs = observer(
     const [showKeyElementForm, setShowKeyElementForm] = useState<boolean>(false);
     const editable = currentUser.id == object.ownedById && !disabled;
 
+
     const firstImportanceRef = useRef(null);
     const secondImportanceRef = useRef(null);
     const thirdImportanceRef = useRef(null);
