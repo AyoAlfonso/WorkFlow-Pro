@@ -7,6 +7,5 @@
   "editor.fontLigatures": null,
   "editor.formatOnPaste": true,
   "editor.codeActionsOnSave": null,
-  "ruby.rubocop.executePath": "/Users/applepro/.rvm/gems/ruby-2.6.5/bin/",
-  "ruby.rubocop.onSave": true
+  "ruby.rubocop.executePath": "/Users/applepro/.rvm/gems/ruby-2.6.5/bin/"
 }
