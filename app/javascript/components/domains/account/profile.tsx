@@ -95,6 +95,7 @@ export const AccountProfile = observer(
                 setTimezone(e.target.value);
               }}
               value={timezone}
+              width={"100%"}
             >
               {R.map(
                 (zone: string) => (
