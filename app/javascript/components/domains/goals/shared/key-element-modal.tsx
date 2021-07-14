@@ -31,9 +31,19 @@ export const KeyElementModal = ({
       setModalOpen={setModalOpen}
       headerText={action + " Key Result"}
       width="480px"
+      onClose={() => {
+        setActionType("Add");
+        setSelectedElement(null);
+        setModalOpen(false);
+      }}
     >
       {action == "Add" ? (
-        <CreateKeyElementBody setModalOpen={setModalOpen} store={store} />
+        <CreateKeyElementBody
+          setModalOpen={setModalOpen}
+          store={store}
+          setActionType={setActionType}
+          setSelectedElement={setSelectedElement}
+        />
       ) : (
         <EditKeyElementBody
           store={store}

@@ -12,9 +12,9 @@ interface IEditKeyElementBodyProps {
   type: any;
   action: any;
   //   showOptions: any;
-  setModalOpen: any;
-  setActionType: any;
   setSelectedElement: any;
+  setActionType: any;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   // TODO: set correct type
 }
 
@@ -25,34 +25,21 @@ export const EditKeyElementBody = observer(
     type,
     action,
     setModalOpen,
-    setActionType,
     setSelectedElement,
+    setActionType,
   }: IEditKeyElementBodyProps): JSX.Element => {
     return (
       <KeyElementsTabContainer>
         <KeyElementContentContainer>
           <EditKeyElementForm
-            onClose={() => setModalOpen(false)}
+            onClose={() => {
+              setModalOpen(false);
+            }}
             action={action}
             store={store}
             type={type}
             element={element}
           />
-
-          {/* <KeyElement
-            elementId={element.id}
-            store={store}
-            editable={true}
-            key={element.id}
-            lastKeyElement={false}
-            focusOnLastInput={false}
-            type={type}
-            hideDropdownOptions={true}
-            // action={action}
-            setShowKeyElementForm={setShowKeyElementForm}
-            setActionType={setActionType}
-            setSelectedElement={setSelectedElement}
-           */}
         </KeyElementContentContainer>
       </KeyElementsTabContainer>
     );

@@ -21,7 +21,6 @@ interface IKeyElementProps {
   type: string;
   setShowKeyElementForm: any;
   setActionType: any;
-  hideDropdownOptions?: boolean;
   setSelectedElement: any;
   // TODO: set correct type
 }
@@ -36,9 +35,8 @@ export const KeyElement = observer(
     type,
     setShowKeyElementForm,
     setActionType,
-    hideDropdownOptions,
     setSelectedElement,
-  }: // iconColor,
+  }:
   IKeyElementProps): JSX.Element => {
     const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
     const [element, setElement] = useState<any>(null);
@@ -198,7 +196,6 @@ export const KeyElement = observer(
         <IconWrapper
           onClick={e => {
             e.stopPropagation();
-            console.log(showOptions, "showOptions-");
             setShowOptions(!showOptions);
           }}
         >

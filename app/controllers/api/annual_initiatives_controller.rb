@@ -51,7 +51,10 @@ class Api::AnnualInitiativesController < Api::ApplicationController
     key_element = KeyElement.find(params[:key_element_id])
     @annual_initiative = policy_scope(AnnualInitiative).find(key_element.elementable_id)
     authorize @annual_initiative
-    key_element.update!(value: params[:value], completion_type: params[:completion_type],completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value], status: params[:status], owned_by_id: params[:owned_by])
+    key_element.update!(value: params[:value], completion_type: params[:completion_type],
+                        completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value],
+                        status: params[:status], owned_by_id: params[:owned_by], greater_than: params[:greater_than])
+    render json: { key_element: key_element }
   end
 
   def delete_key_element

@@ -13,6 +13,7 @@ export const TeamModel = types
     defaultAvatarColor: types.maybeNull(types.string),
     users: types.maybeNull(types.array(UserModel)),
     settings: types.maybeNull(types.frozen()),
+    executive: types.maybeNull(types.number),
     averageWeeklyUserEmotions: types.maybeNull(types.frozen()),
     averageTeamEmotionScore: types.maybeNull(types.number),
   })

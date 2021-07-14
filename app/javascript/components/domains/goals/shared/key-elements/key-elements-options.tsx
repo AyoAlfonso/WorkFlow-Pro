@@ -87,7 +87,7 @@ const Container = styled.div`
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   z-index: 3;
-  margin-left: -80px;
+  margin-left: 90%;
   margin-top: 5px;
   height: auto;
   overflow: auto;

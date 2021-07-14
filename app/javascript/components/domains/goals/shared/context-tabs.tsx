@@ -60,6 +60,7 @@ export const ContextTabs = observer(
     const [showKeyElementForm, setShowKeyElementForm] = useState<boolean>(false);
     const editable = currentUser.id == object.ownedById && !disabled;
 
+
     const firstImportanceRef = useRef(null);
     const secondImportanceRef = useRef(null);
     const thirdImportanceRef = useRef(null);
@@ -250,7 +251,7 @@ export const ContextTabs = observer(
           <KeyElement
             elementId={element.id}
             store={store}
-            editable={false}
+            editable={editable}
             key={element.id}
             lastKeyElement={lastKeyElement}
             focusOnLastInput={focusOnLastInput}

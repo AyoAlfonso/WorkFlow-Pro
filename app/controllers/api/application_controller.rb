@@ -49,7 +49,6 @@ class Api::ApplicationController < ActionController::API
   end
 
   def fallback_error(exception)
-    render json: { message: exception.to_s}, status: :bad_request #:unprocessable_entity
+    render json: { message: exception.to_s }, status: :bad_request #:unprocessable_entity
   end
-
 end

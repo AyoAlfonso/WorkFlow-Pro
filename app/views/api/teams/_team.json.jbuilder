@@ -1,2 +1,2 @@
-json.extract! team, :id, :name, :company_id, :active, :default_avatar_color, :settings
+json.extract! team, :id, :name, :company_id, :active, :default_avatar_color, :settings, :executive
 json.team_user_enablements team.team_user_enablements, :role, :user_id

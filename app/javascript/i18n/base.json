@@ -99,6 +99,7 @@
         "fiscalYearStartDate": "Fiscal Year Start Date",
         "strategicPlan": "The Plan",
         "timezone": "Location/Time Zone",
+        "executiveTeam" : "Executive Team",
         "createUser": {
           "addButton": "Create New User",
           "inviteYourTeam": "Invite your team"

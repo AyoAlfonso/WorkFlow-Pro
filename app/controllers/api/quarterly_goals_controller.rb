@@ -13,13 +13,13 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     company = current_company
 
     @quarterly_goal = QuarterlyGoal.new({
-      created_by: current_user, 
-      owned_by: current_user, 
+      created_by: current_user,
+      owned_by: current_user,
       annual_initiative_id: params[:annual_initiative_id],
       description: params[:description],
       context_description: "",
       importance: ["", "", ""],
-      quarter: company.quarter_for_creating_quarterly_goals
+      quarter: company.quarter_for_creating_quarterly_goals,
     })
     authorize @quarterly_goal
     @quarterly_goal.save!
@@ -38,13 +38,13 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   def destroy
     @annual_initiative = @quarterly_goal.annual_initiative
     @quarterly_goal.destroy!
-    render 'api/annual_initiatives/show'
+    render "api/annual_initiatives/show"
   end
 
   def close_goal
     @quarterly_goal.update!(closed_at: Date.today)
     @quarterly_goal.sub_initiatives.update_all(closed_at: Date.today)
-    render 'api/quarterly_goals/update'
+    render "api/quarterly_goals/update"
   end
 
   def create_key_element
@@ -52,18 +52,21 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     render json: { key_element: key_element, status: :ok }
   end
 
-   def update_key_element
+  def update_key_element
     key_element = KeyElement.find(params[:key_element_id])
     @quarterly_goal = policy_scope(QuarterlyGoal).find(key_element.elementable_id)
     authorize @quarterly_goal
-    key_element.update!(key_elements_params) 
-   end
+    key_element.update!(value: params[:value], completion_type: params[:completion_type],
+                        completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value],
+                        status: params[:status], owned_by_id: params[:owned_by], greater_than: params[:greater_than])
+    render json: { key_element: key_element }
+  end
 
   def delete_key_element
     key_element = KeyElement.find(params[:key_element_id])
     @quarterly_goal = policy_scope(QuarterlyGoal).find(key_element.elementable_id)
     authorize @quarterly_goal
-    key_element.destroy!      
+    key_element.destroy!
     render "api/quarterly_goals/delete_key_element"
   end
 
@@ -79,7 +82,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def key_elements_params
-      params.permit(key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value])
+    params.permit(key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value])
   end
 
   def set_quarterly_goal

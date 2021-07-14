@@ -15,27 +15,26 @@ import {
 interface ICreateKeyElementBodyProps {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   store: any;
+  setSelectedElement: any;
+  setActionType: any;
 }
 
 export const CreateKeyElementBody = observer(
-  ({ store, setModalOpen }: ICreateKeyElementBodyProps): JSX.Element => {
+  ({
+    store,
+    setModalOpen,
+    setSelectedElement,
+    setActionType,
+  }: ICreateKeyElementBodyProps): JSX.Element => {
     return (
       <KeyElementsTabContainer>
-        <KeyElementsFormHeader>
-          <KeyElementFormBackButtonContainer
-            onClick={() => {
-              setModalOpen(false);
-            }}
-          >
-            <StyledIcon
-              icon={"Close"}
-              size={"12px"}
-              style={{ marginLeft: "8px", marginTop: "8px" }}
-            />
-          </KeyElementFormBackButtonContainer>
-        </KeyElementsFormHeader>
         <KeyElementContentContainer>
-          <KeyElementForm onCreate={store.createKeyElement} onClose={() => setModalOpen(false)} />
+          <KeyElementForm
+            onCreate={store.createKeyElement}
+            onClose={() => setModalOpen(false)}
+            setSelectedElement={setSelectedElement}
+            setActionType={setActionType}
+          />
         </KeyElementContentContainer>
       </KeyElementsTabContainer>
     );

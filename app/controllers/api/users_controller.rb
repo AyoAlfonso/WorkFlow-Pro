@@ -7,28 +7,28 @@ class Api::UsersController < Api::ApplicationController
 
   def index
     @users = policy_scope(User)
-    render '/api/users/index'
+    render "/api/users/index"
   end
 
   def create
     authorize current_user
     if User.find_by_email(user_creation_params[:email]).present?
-      render json: {message: "User already created."}, status: :unprocessable_entity
+      render json: { message: "User already created." }, status: :unprocessable_entity
       return
     end
 
     @user = User.invite!(user_creation_params.merge(company_id: current_company.id, default_selected_company_id: current_company.id))
 
     if @user.valid? && @user.persisted?
-      @user.update!({user_company_enablements_attributes: create_user_company_enablement_attribute_parser, team_user_enablements_attributes: team_user_enablement_attribute_parser(params[:user][:teams])})
-      render '/api/users/show'
+      @user.update!({ user_company_enablements_attributes: create_user_company_enablement_attribute_parser, team_user_enablements_attributes: team_user_enablement_attribute_parser(params[:user][:teams]) })
+      render "/api/users/show"
     else
-      render json: {message: "Failed to invite user"}, status: :unprocessable_entity
+      render json: { message: "Failed to invite user" }, status: :unprocessable_entity
     end
   end
 
   def show
-    render '/api/users/show'
+    render "/api/users/show"
   end
 
   def update
@@ -39,62 +39,62 @@ class Api::UsersController < Api::ApplicationController
     @static_data = view_context.static_data
     @scheduled_groups = ScheduledGroup.all
     @user_first_access_to_forum = current_company.display_format == "Forum" && current_user.user_company_enablements.find_by_company_id(current_company.id)&.first_time_access
-    render 'api/users/show'
+    render "api/users/show"
   end
 
   def destroy
     @user.soft_delete
-    render 'api/users/show'
+    render "api/users/show"
   end
 
   def resend_invitation
     @user.invite!
-    render 'api/users/show'
+    render "api/users/show"
   end
 
   def reset_password
     @user = User.find_by_email!(params[:email]) #for security reasons do not let user know if they are not found in database.
     if @user.present?
       @user.send_reset_password_instructions
-      render json: {message: "An email has been sent to reset your password, please check it there."}
+      render json: { message: "An email has been sent to reset your password, please check it there." }
     end
   end
 
   def invite_users_to_company
     team = Team.where(id: params[:team_id])
-    email_addresses = params[:email_addresses].split(',')
+    email_addresses = params[:email_addresses].split(",")
 
     email_addresses.each do |email|
       sanitized_email = email.strip
       if User.find_by_email(sanitized_email).blank?
         @user = User.create!({
-          email: sanitized_email, 
-          company_id: current_company.id, 
+          email: sanitized_email,
+          company_id: current_company.id,
           default_selected_company_id: current_company.id,
-          password: ENV["DEFAULT_PASSWORD"] || "password"
+          password: ENV["DEFAULT_PASSWORD"] || "password",
         })
         @user.invite!
         @user.assign_attributes({
-          user_company_enablements_attributes: create_user_company_enablement_attribute_parser, 
-          team_user_enablements_attributes: team_user_enablement_attribute_parser(team)
+          user_company_enablements_attributes: create_user_company_enablement_attribute_parser,
+          team_user_enablements_attributes: team_user_enablement_attribute_parser(team),
         })
         @user.save(validate: false)
       end
     end
     authorize current_user
     @users = policy_scope(User)
-    render '/api/users/index'
+    render "/api/users/index"
   end
 
   def profile
     @user = current_user
     daily_log = @user.current_daily_log(current_company)
-    daily_log.update!({user_id: @user.id, work_status: 0}) if daily_log.status_not_set?
+    daily_log.update!({ user_id: @user.id, work_status: 0 }) if daily_log.status_not_set?
     @session_company_id = current_company.id
     @static_data = view_context.static_data
     @scheduled_groups = ScheduledGroup.all
     @user_first_access_to_forum = current_company.display_format == "Forum" && current_user.user_company_enablements.find_by_company_id(current_company.id)&.first_time_access
-    render '/api/users/profile'
+    render "/api/users/profile"
   end
 
   def update_avatar
@@ -114,7 +114,7 @@ class Api::UsersController < Api::ApplicationController
     team_user_enablement = TeamUserEnablement.where(user_id: params[:user_id], team_id: params[:team_id]).first
     team_user_enablement.update!(role: params[:can_edit] ? 1 : 0)
     @user = User.find(params[:user_id])
-    render 'api/users/show'
+    render "api/users/show"
   end
 
   def update_company_first_time_access
@@ -122,9 +122,8 @@ class Api::UsersController < Api::ApplicationController
     user_company_enablement = current_user.user_company_enablements.find_by_company_id(params[:company_id])
     user_company_enablement.update!(first_time_access: params[:first_time_access])
     @user = current_user
-    render '/api/users/profile'
+    render "/api/users/profile"
   end
-
 
   private
 
@@ -143,10 +142,10 @@ class Api::UsersController < Api::ApplicationController
 
   def create_user_company_enablement_attribute_parser
     [{
-      user_id: @user.id, 
+      user_id: @user.id,
       company_id: current_company.id,
       user_title: params[:user][:title],
-      user_role_id: params[:user] && params[:user][:user_role_id] ? params[:user][:user_role_id] : UserRole.find_by_name("Employee").id
+      user_role_id: params[:user] && params[:user][:user_role_id] ? params[:user][:user_role_id] : UserRole.find_by_name("Employee").id,
     }]
   end
 
@@ -156,14 +155,14 @@ class Api::UsersController < Api::ApplicationController
       tue_list.push({
         team_id: team[:id],
         user_id: @user.id,
-        role: 0
+        role: 0,
       })
     end
 
     @user.team_user_enablements.each do |tue|
       tue_list.push({
         id: tue.id,
-        _destroy: true
+        _destroy: true,
       }) if !tue_list.any? { |enablement| enablement[:team_id] == tue.team_id && enablement[:user_id] == tue.user_id }
     end
 
