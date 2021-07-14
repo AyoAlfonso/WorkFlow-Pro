@@ -302,14 +302,14 @@ export const Company = observer(
                     To modify Fiscal Start Date, {t("company.accountabilityChart")}, or The{" "}
                     {company.name} Plan, please contact LynchPyn support.
                   </Text>
-                  <Label htmlFor="executive_team">{t("company.executive_team")}</Label>
+                  <Label htmlFor="executive_team">{t("company.executiveTeam")}</Label>
                   <Select
                     onChange={e => {
                       e.preventDefault();
                       setExecutiveTeam(e.currentTarget.value);
                     }}
                     value={executiveTeam}
-                    style={{ minWidth: "200px" }}
+                    style={{ minWidth: "200px", marginBottom: "16px" }}
                   >
                     {teams.map(({ id, name }, index) => (
                       <option key={`option-${index}`} value={id}>
