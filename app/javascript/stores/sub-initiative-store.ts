@@ -42,7 +42,7 @@ export const SubInitiativeStoreModel = types
       return response.data;
     }),
     updateParents: flow(function*() {
-      const { goalStore,quarterlyGoalStore,  annualInitiativeStore } = getRoot(self);
+      const { goalStore, quarterlyGoalStore, annualInitiativeStore } = getRoot(self);
       const responseAnnualInitiative = yield annualInitiativeStore.getAnnualInitiative(
         self.subInitiative.annualInitiativeId,
       );
@@ -74,10 +74,28 @@ export const SubInitiativeStoreModel = types
         );
         const updatedKeyElements = [...self.subInitiative.keyElements, response.data.keyElement];
         self.subInitiative.keyElements = updatedKeyElements as any;
-        showToast("Key Result deleted", ToastMessageConstants.SUCCESS);
+        showToast("Key Result created", ToastMessageConstants.SUCCESS);
         return response.data.keyElement;
       } catch {
         showToast(il8n.t("subInitiative.keyElementCreationError"), ToastMessageConstants.ERROR);
+      }
+    }),
+    updateKeyElement: flow(function*(id, keyElementId, keyElementParams) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.updateSubInitiativeKeyElement(
+          id,
+          keyElementId,
+          keyElementParams,
+        );
+        const keyElements = self.subInitiative.keyElements;
+        const keyElementIndex = keyElements.findIndex(ke => ke.id == keyElementId);
+        keyElements[keyElementIndex] = response.data.keyElement;
+        self.subInitiative.keyElements = keyElements;
+        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
+        return response.data.keyElement;
+      } catch (error) {
+        showToast(il8n.t("subInitiative.keyElementUpdateError"), ToastMessageConstants.ERROR);
       }
     }),
     deleteKeyElement: flow(function*(keyElementId) {

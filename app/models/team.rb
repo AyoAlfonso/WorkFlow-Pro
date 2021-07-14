@@ -8,19 +8,24 @@ class Team < ApplicationRecord
   has_many :meetings
   has_many :team_issues, dependent: :destroy
   has_many :key_activities
+  after_create :set_default_executive_team
 
   store :settings, accessors: [:weekly_meeting_dashboard_link_embed], coder: JSON
 
   accepts_nested_attributes_for :team_user_enablements, allow_destroy: true
 
-  scope :for_company, -> (company) { where(company: company) }
-  
+  scope :for_company, ->(company) { where(company: company) }
+
   def self.for_user(user)
     self.select { |team| team.users.include?(user) }
   end
 
   def is_lead?(user)
     team_user_enablements.where(role: :team_lead, user: user).present?
+  end
+
+  def set_default_executive_team
+  self.update(executive: 1)
   end
 
   def active
@@ -43,5 +48,4 @@ class Team < ApplicationRecord
   def team_average_monthly_emotion_score(from_date, to_date)
     overall_average_emotion_score(self.users, from_date, to_date)
   end
-
 end

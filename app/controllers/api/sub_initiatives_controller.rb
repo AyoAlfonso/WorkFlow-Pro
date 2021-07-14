@@ -1,5 +1,5 @@
 class Api::SubInitiativesController < Api::ApplicationController
-  before_action :set_sub_initiative, only: [:show, :update, :destroy, :create_key_element, :create_milestones, :close_goal]
+  before_action :set_sub_initiative, only: [:show, :update, :destroy, :create_key_element, :update_key_element, :create_milestones, :close_goal]
 
   respond_to :json
 
@@ -7,8 +7,8 @@ class Api::SubInitiativesController < Api::ApplicationController
     company = current_company
 
     @sub_initiative = SubInitiative.new({
-      created_by: current_user, 
-      owned_by: current_user, 
+      created_by: current_user,
+      owned_by: current_user,
       quarterly_goal_id: params[:quarterly_goal_id],
       description: params[:description],
       context_description: "",
@@ -36,12 +36,22 @@ class Api::SubInitiativesController < Api::ApplicationController
 
   def close_goal
     @sub_initiative.update!(closed_at: Date.today)
-    render 'api/sub_initiatives/update'
+    render "api/sub_initiatives/update"
   end
 
   def create_key_element
     key_element = KeyElement.create!(elementable: @sub_initiative, value: params[:value], completion_type: params[:completion_type], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
     render json: { key_element: key_element, status: :ok }
+  end
+
+  def update_key_element
+    key_element = KeyElement.find(params[:key_element_id])
+    @sub_initiative = policy_scope(SubInitiative).find(key_element.elementable_id)
+    authorize @sub_initiative
+    key_element.update!(value: params[:value], completion_type: params[:completion_type],
+                        completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value],
+                        status: params[:status], owned_by_id: params[:owned_by], greater_than: params[:greater_than])
+    render json: { key_element: key_element }
   end
 
   def delete_key_element

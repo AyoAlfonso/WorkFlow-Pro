@@ -77,3 +77,10 @@
   padding-left: 32px !important;
   padding-right: 32px !important;
 }
+
+.devise-title-submit {
+  padding: 5px;
+  width: 100%;
+  border: 0px;
+  margin-bottom: 5%;
+}

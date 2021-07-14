@@ -8,27 +8,35 @@ import { baseTheme } from "~/themes/base";
 import { Store } from "@material-ui/icons";
 import { useMst } from "~/setup/root";
 
-interface IKeyElementFormProps {
-  onCreate: (keyElementParams: any) => void;
+interface IEditKeyElementFormProps {
+  //   onCreate: (keyElementParams: any) => void;
   onClose: () => void;
-  setActionType: any;
-  setSelectedElement: any;
+  action: any;
+  element: any;
+  store: any;
+  type: any;
+  //TODO: set correct type
 }
 
-export const KeyElementForm = ({
-  onCreate,
+export const EditKeyElementForm = ({
+  store,
+  element,
+  action,
   onClose,
-  setActionType,
-  setSelectedElement,
-}: IKeyElementFormProps): JSX.Element => {
+  type,
+}: IEditKeyElementFormProps): JSX.Element => {
   const { userStore } = useMst();
   const { users } = userStore;
-  const [title, setTitle] = useState<string>("");
-  const [completionType, setCompletionType] = useState<string>("numerical");
-  // const [ , setCompletionCurrentValue] = useState<number>(0);
-  const [completionTargetValue, setCompletionTargetValue] = useState<number>(0);
-  const [ownedBy, setOwnedBy] = useState<number>(users?.[0].id);
-  const [condition, setCondition] = useState<number>(1);
+  const [title, setTitle] = useState<string>(element.value);
+  const [completionType, setCompletionType] = useState<string>(element.completionType);
+
+  const [completionTargetValue, setCompletionTargetValue] = useState<number>(
+    element.completionTargetValue,
+  );
+  const [condition, setCondition] = useState<number>(element.greaterThan);
+  const [ownedBy, setOwnedBy] = useState<number>(element.ownedById);
+
+  const allUsers = [...users, { id: null, firstName: "None", lastName: "" }];
 
   const selectOptions = [
     { label: "Numerical #", value: "numerical" },
@@ -48,11 +56,9 @@ export const KeyElementForm = ({
     setCompletionTargetValue(0);
     setCondition(0);
     setOwnedBy(0);
-    setActionType("Add");
-    setSelectedElement(null);
   };
 
-  const createKeyElement = () => {
+  const updateKeyElement = () => {
     const keyElementParams = {
       value: title,
       completionType,
@@ -60,26 +66,35 @@ export const KeyElementForm = ({
       greaterThan: condition,
       ownedBy,
     };
-    onCreate(keyElementParams);
+    let id;
+
+    if (type == "annualInitiative") {
+      id = store.annualInitiative.id;
+    } else if (type == "quarterlyGoal") {
+      id = store.quarterlyGoal.id;
+    } else if (type == "subInitiative") {
+      id = store.subInitiative.id;
+    }
+    store.updateKeyElement(id, element.id, keyElementParams);
   };
 
   const isValid =
     !R.isEmpty(title) &&
     !R.isEmpty(completionType) &&
+    !R.isNil(condition) &&
     !R.isNil(completionTargetValue) &&
-    !R.isNil(ownedBy) &&
-    !R.isNil(condition);
+    !R.isNil(ownedBy);
 
   const handleSave = () => {
     if (isValid) {
-      createKeyElement();
+      updateKeyElement();
       onClose();
     }
   };
 
   const handleSaveAndAddAnother = () => {
     if (isValid) {
-      createKeyElement();
+      updateKeyElement();
       resetForm();
     }
   };
@@ -140,7 +155,7 @@ export const KeyElementForm = ({
             value={ownedBy}
             style={{ minWidth: "200px" }}
           >
-            {users
+            {allUsers
               .filter(user => user.firstName)
               .map(({ id, firstName, lastName }, index) => (
                 <option key={`option-${index}`} value={id}>
@@ -169,8 +184,9 @@ export const KeyElementForm = ({
             ))}
           </Select>
         </FormGroupContainer>
+
         {completionType !== "binary" && (
-          <FormGroupContainer>
+          <FormGroupContainer ml={"4px"}>
             <Label>Target Value</Label>
             <InputContainer>
               <Input
@@ -192,21 +208,22 @@ export const KeyElementForm = ({
               </CompletionTypeContainer>
             </InputContainer>
           </FormGroupContainer>
-          // </RowContainer>
         )}
       </RowContainer>
       <RowContainer mt={completionType === "binary" ? "20px" : "0"}>
         <Button variant={"primary"} onClick={handleSave} mr={"8px"} small disabled={!isValid}>
           <TextDiv fontSize={"16px"}>Save</TextDiv>
         </Button>
-        <Button
-          variant={"primaryOutline"}
-          onClick={handleSaveAndAddAnother}
-          small
-          disabled={!isValid}
-        >
-          <TextDiv fontSize={"16px"}>Save & Add Another</TextDiv>
-        </Button>
+        {action == "Add" && (
+          <Button
+            variant={"primaryOutline"}
+            onClick={handleSaveAndAddAnother}
+            small
+            disabled={!isValid}
+          >
+            <TextDiv fontSize={"16px"}>Save & Add Another</TextDiv>
+          </Button>
+        )}
       </RowContainer>
     </Container>
   );

@@ -18,6 +18,7 @@ interface IModalWithHeaderProps {
   onCloseAction?: any;
   headerMarginTop?: string;
   headerMarginBottom?: string;
+  onClose?: () => void;
 }
 
 export const ModalWithHeader = ({
@@ -34,6 +35,7 @@ export const ModalWithHeader = ({
   onCloseAction,
   headerMarginTop,
   headerMarginBottom,
+  onClose,
 }: IModalWithHeaderProps): JSX.Element => {
   return (
     <StyledModal
@@ -61,6 +63,7 @@ export const ModalWithHeader = ({
             centerHeader={centerHeader}
             onClick={() => {
               setModalOpen(false);
+              onClose();
               if (onCloseAction) {
                 onCloseAction();
               }
@@ -132,9 +135,9 @@ type StyledHeadingProps = {
 
 const StyledHeading = styled(Heading)<StyledHeadingProps>`
   font-family: Lato;
-  margin-top:  ${props => (props.mt ? props.mt : "16px")};
+  margin-top: ${props => (props.mt ? props.mt : "16px")};
   margin-bottom: ${props => (props.mb ? props.mb : "16px")};
   font-weight: bold;
-  margin-left : ${props => (props.centerHeader ? "auto" : "0px")};
+  margin-left: ${props => (props.centerHeader ? "auto" : "0px")};
   margin-right: ${props => (props.centerHeader ? "auto" : "0px")};
 `;

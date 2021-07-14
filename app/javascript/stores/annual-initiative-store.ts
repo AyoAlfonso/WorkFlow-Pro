@@ -4,6 +4,7 @@ import { AnnualInitiativeModel } from "../models/annual-initiative";
 import moment from "moment";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { showToast } from "~/utils/toast-message";
+import il8n from "i18next";
 
 export const AnnualInitiativeStoreModel = types
   .model("AnnualInitiativeModel")
@@ -12,10 +13,10 @@ export const AnnualInitiativeStoreModel = types
   })
   .extend(withEnvironment())
   .views(self => ({
-    get title(){
+    get title() {
       const { sessionStore } = getRoot(self);
-      return sessionStore.annualInitiativeTitle
-    }
+      return sessionStore.annualInitiativeTitle;
+    },
   }))
   .actions(self => ({
     getAnnualInitiative: flow(function*(id) {
@@ -77,6 +78,28 @@ export const AnnualInitiativeStoreModel = types
         showToast("There was an error creating the key element", ToastMessageConstants.ERROR);
       }
     }),
+    updateKeyElement: flow(function*(id, keyElementId, keyElementParams) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.updateAnnualInitiativeKeyElement(
+          id,
+          keyElementId,
+          keyElementParams,
+        );
+
+        const keyElements = self.annualInitiative.keyElements;
+        const keyElementIndex = keyElements.findIndex(ke => ke.id == keyElementId);
+        keyElements[keyElementIndex] = response.data.keyElement;
+        self.annualInitiative.keyElements = keyElements;
+        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
+        return response.data.keyElement;
+      } catch (error) {
+         showToast(
+           il8n.t("annualInitiative.keyElementUpdateError"),
+           ToastMessageConstants.ERROR,
+         );
+      }
+    }),
     deleteKeyElement: flow(function*(keyElementId) {
       const env = getEnv(self);
       try {
@@ -97,12 +120,11 @@ export const AnnualInitiativeStoreModel = types
 
       try {
         const response: any = yield env.api.createAnnualInitiative(annualInitiativeObject);
-        const newAnnualInitiative: any = yield env.api.getAnnualInitiative(response.data.annualInitiative.id);
-        const { goalStore } = getRoot(self);
-        goalStore.mergeAnnualInitiatives(
-          annualInitiativeObject.type,
-          newAnnualInitiative.data
+        const newAnnualInitiative: any = yield env.api.getAnnualInitiative(
+          response.data.annualInitiative.id,
         );
+        const { goalStore } = getRoot(self);
+        goalStore.mergeAnnualInitiatives(annualInitiativeObject.type, newAnnualInitiative.data);
         showToast(`${self.title} created`, ToastMessageConstants.SUCCESS);
         return newAnnualInitiative;
       } catch {
@@ -147,12 +169,12 @@ export const AnnualInitiativeStoreModel = types
       self.update();
     },
     updateAnnualInitiativeAfterAddingQuarterlyGoal(quarterlyGoal) {
-         if (self.annualInitiative.id) {
-           self.annualInitiative.quarterlyGoals = [
-             ...self.annualInitiative.quarterlyGoals,
-             quarterlyGoal,
-           ] as any;
-         }
+      if (self.annualInitiative.id) {
+        self.annualInitiative.quarterlyGoals = [
+          ...self.annualInitiative.quarterlyGoals,
+          quarterlyGoal,
+        ] as any;
+      }
     },
     updateRecordIfOpened(annualInitiative) {
       if (self.annualInitiative.id == annualInitiative.id) {

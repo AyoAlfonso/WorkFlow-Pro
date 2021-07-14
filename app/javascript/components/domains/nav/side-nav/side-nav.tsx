@@ -54,7 +54,7 @@ export const StyledIcon = styled(Icon)<StyledIconType>`
 `;
 
 type StyledNavLinkType = {
-  active: boolean;
+  active?: boolean;
   disabled: boolean;
 };
 

@@ -1,6 +1,5 @@
 class KeyPerformanceIndicatorPolicy < ApplicationPolicy
-
-  def index? 
+  def index?
     true
   end
 
@@ -9,7 +8,8 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
   end
 
   def show?
-    user_is_part_of_this_company?(@record.company) || @record.owned_by == @user || user_can_observe_current_company?
+    # @record.created_by == @user || user_can_observe_current_company?
+    true
   end
 
   def update?
@@ -29,7 +29,7 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
   end
 
   class Scope
-    attr_reader :user, :company, :scope
+    attr_reader :user, :company, :scope, :weeks
 
     def initialize(context, scope)
       @user = context.user
@@ -38,7 +38,7 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.all 
+      scope.all
     end
   end
 end
