@@ -4,10 +4,12 @@ import { useMst } from "~/setup/root";
 import { Loading } from "~/components/shared";
 import { PulseSelector } from "./pulse-selector";
 
-interface IPulseSelectorProps {}
+interface IPulseSelectorProps {
+  onClick?: any;
+}
 
 export const PulseSelectorWrapper = observer(
-  ({}: IPulseSelectorProps): JSX.Element => {
+  ({ onClick }: IPulseSelectorProps): JSX.Element => {
     const {
       staticDataStore: { emotionAdjectives },
       sessionStore: { profile },
@@ -17,6 +19,6 @@ export const PulseSelectorWrapper = observer(
       return <Loading />;
     }
 
-    return <PulseSelector />;
+    return <PulseSelector onClick={onClick}/>;
   },
 );

@@ -9,6 +9,8 @@ import { Avatar } from "../../shared/avatar";
 import { Icon } from "../../shared/icon";
 import { Heading, Text } from "../../shared";
 import { CreateIssueModal } from "../issues/create-issue-modal";
+import { IssuesBody } from "../issues/issues-body"
+import { KeyActivitiesContainer } from "../key-activities/key-activities-container"
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 import { InviteUserModal } from "~/components/shared/invite-user-modal";
 import { AccountDropdownOptions } from "./top-nav/account-dropdown-options";
@@ -33,6 +35,9 @@ export const HeaderBar = observer(
     const [inviteUserModalOpen, setInviteUserModalOpen] = useState<boolean>(false);
     const [showCompanyOptions, setShowCompanyOptions] = useState<boolean>(false);
     const [inviteTeamModalOpen, setInviteTeamModalOpen] = useState<boolean>(false);
+    const [showKeyActivities, setShowKeyActivities] = useState<boolean>(false);
+    const [showIssues, setShowIssues] = useState<boolean>(false);
+    const [showOpenIssues, setShowOpenIssues] = useState<boolean>(false);
 
     const { sessionStore } = useMst();
     const accountActionRef = useRef(null);
@@ -64,6 +69,21 @@ export const HeaderBar = observer(
       );
     };
 
+    const renderKeyActivitiesPopup = (): JSX.Element => {
+      return (showKeyActivities && (
+        <KeyActivitiesPopupContainer>
+          <KeyActivitiesContainer />
+        </KeyActivitiesPopupContainer>
+      ))
+    }
+
+    const renderIssuesPopup = (): JSX.Element => {
+      return (showIssues && (
+        <IssuesPopupContainer>
+          <IssuesBody showOpenIssues={showOpenIssues} setShowOpenIssues={setShowOpenIssues} />
+        </IssuesPopupContainer>
+      ))
+    }
     return (
       <Wrapper>
         <Container>
@@ -74,15 +94,52 @@ export const HeaderBar = observer(
               </StyledHeading>
             </ActionsContainer>
             <PersonalInfoContainer ref={accountActionRef}>
-              <PulseSelectorWrapper />
+              <KeyActivitiesButtonContainer>
+                <KeyActivitiesButton onClick={() => {
+                  setShowKeyActivities(!showKeyActivities);
+                  setShowIssues(false);
+                  setShowAccountActions(false);
+                  setShowCompanyOptions(false);
+                  setCreateIssueModalOpen(false);
+                  setCreateKeyActivityModalOpen(false);
+                }}>
+                  Pyns
+                </KeyActivitiesButton>
+              </KeyActivitiesButtonContainer>
+              <IssuesButtonContainer>
+                <IssuesButton onClick={() => {
+                  setShowIssues(!showIssues);
+                  setShowKeyActivities(false);
+                  setShowAccountActions(false);
+                  setShowCompanyOptions(false);
+                  setCreateIssueModalOpen(false);
+                  setCreateKeyActivityModalOpen(false);
+                }}>
+                  Issues
+                </IssuesButton>
+              </IssuesButtonContainer>
+              <PulseSelectorWrapper onClick={() => {
+                  setShowKeyActivities(false);
+                  setShowIssues(false);
+                  setShowAccountActions(false);
+                  setShowCompanyOptions(false);
+                  setCreateIssueModalOpen(false);
+                  setCreateKeyActivityModalOpen(false);
+              }}/>
               <PersonalInfoDisplayContainer
                 onClick={() => {
                   setShowAccountActions(!showAccountActions);
+                  setShowKeyActivities(false);
+                  setShowIssues(false);
                   setShowCompanyOptions(false);
+                  setCreateIssueModalOpen(false);
+                  setCreateKeyActivityModalOpen(false);
                 }}
               >
                 {renderUserAvatar()}
               </PersonalInfoDisplayContainer>
+              {renderKeyActivitiesPopup()}
+              {renderIssuesPopup()}
               {renderActionDropdown()}
             </PersonalInfoContainer>
           </HeaderItemsContainer>
@@ -200,6 +257,64 @@ const PersonalInfoDisplayContainer = styled.div`
     color: ${props => props.theme.colors.white};
   }
 `;
+
+const IssuesButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 24px;
+`
+
+const IssuesPopupContainer = styled.div`
+  position: absolute;
+  padding: 16px;
+  margin-left: -160px;
+  margin-top: 60px;
+  background: white;
+  box-shadow: 1px 3px 4px 2px rgba(0,0,0,0.1);
+  border-radius: 10px;
+`
+
+const KeyActivitiesPopupContainer = styled.div`
+  position: absolute;
+  width: 256px;
+  padding: 16px;
+  margin-top: 60px;
+  margin-left: -240px;
+  background-color: white;
+  box-shadow: 1px 3px 4px 2px rgba(0,0,0,0.1);
+  border-radius: 10px;
+`
+const KeyActivitiesButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 24px;
+`
+
+const KeyActivitiesButton = styled.div`
+  color: ${props => props.theme.colors.primary100};
+  font-weight: bold;
+  display: flex;
+  padding: 4px;
+  border-radius: 5px;
+  &:hover {
+    background: ${props => props.theme.colors.primary20};
+    cursor: pointer;
+  }
+`
+
+const IssuesButton = styled.div`
+  color: ${props => props.theme.colors.primary100};
+  font-weight: bold;
+  display: flex;
+  padding: 4px;
+  border-radius: 5px;
+  &:hover {
+    background: ${props => props.theme.colors.primary20};
+    cursor: pointer;
+  }
+`
 
 const PersonalInfoContainer = styled.div`
   padding-right: 24px;
