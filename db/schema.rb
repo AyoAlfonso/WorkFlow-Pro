@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_22_174854) do
+ActiveRecord::Schema.define(version: 2021_07_07_110220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -257,23 +257,28 @@ ActiveRecord::Schema.define(version: 2021_06_22_174854) do
     t.integer "completion_current_value"
     t.integer "completion_target_value"
     t.integer "completion_starting_value", default: 0
+    t.integer "status", default: 0
+    t.bigint "owned_by_id"
     t.index ["elementable_type", "elementable_id"], name: "index_key_elements_on_elementable_type_and_elementable_id"
+    t.index ["owned_by_id"], name: "index_key_elements_on_owned_by_id"
   end
 
   create_table "key_performance_indicators", force: :cascade do |t|
     t.string "description"
     t.datetime "closed_at"
     t.bigint "created_by_id"
-    t.bigint "owned_by_id"
+    t.bigint "user_id"
+    t.bigint "company_id"
+    t.bigint "team_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.date "fiscal_year_start"
-    t.date "week_of"
-    t.integer "unit_type", default: 0
-    t.integer "status", default: 0
+    t.integer "unit_type"
+    t.integer "target_value", default: 0
     t.boolean "is_deleted", default: false
+    t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
-    t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
+    t.index ["team_id"], name: "index_key_performance_indicators_on_team_id"
+    t.index ["user_id"], name: "index_key_performance_indicators_on_user_id"
   end
 
   create_table "meeting_templates", force: :cascade do |t|
@@ -402,6 +407,9 @@ ActiveRecord::Schema.define(version: 2021_06_22_174854) do
     t.bigint "key_performance_indicator_id", null: false
     t.integer "score"
     t.string "note"
+    t.integer "fiscal_quarter"
+    t.integer "fiscal_year"
+    t.integer "week"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -636,6 +644,9 @@ ActiveRecord::Schema.define(version: 2021_06_22_174854) do
   add_foreign_key "key_activities", "companies"
   add_foreign_key "key_activities", "meetings"
   add_foreign_key "key_activities", "users"
+  add_foreign_key "key_performance_indicators", "companies"
+  add_foreign_key "key_performance_indicators", "teams"
+  add_foreign_key "key_performance_indicators", "users"
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"
@@ -669,9 +680,12 @@ ActiveRecord::Schema.define(version: 2021_06_22_174854) do
   create_view "v_scoredcards", sql_definition: <<-SQL
       SELECT key_performance_indicators.id AS kpi,
       avg(scorecard_logs.score) AS score,
-      scorecard_logs.user_id AS owned_by
+      scorecard_logs.user_id AS owned_by,
+      scorecard_logs.fiscal_quarter,
+      scorecard_logs.fiscal_year,
+      scorecard_logs.week
      FROM (key_performance_indicators
        JOIN scorecard_logs ON ((key_performance_indicators.id = scorecard_logs.key_performance_indicator_id)))
-    GROUP BY scorecard_logs.user_id, key_performance_indicators.id;
+    GROUP BY scorecard_logs.user_id, key_performance_indicators.id, scorecard_logs.fiscal_year, scorecard_logs.fiscal_quarter, scorecard_logs.week;
   SQL
 end
