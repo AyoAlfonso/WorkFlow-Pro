@@ -272,7 +272,9 @@ export const HomeKeyActivities = observer(
           <CreateKeyActivityModal
             createKeyActivityModalOpen={createKeyActivityModalOpen}
             setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
-            todayModalClicked={true}
+            todayModalClicked={todayModalClicked}
+            defaultSelectedGroupId={selectedFilterGroupId}
+            defaultSelectedTeamId={selectedFilterTeamId}
             todayFilterGroupId={selectedFilterGroupIdToday}
           />
         </KeyActivitiesWrapperContainer>
