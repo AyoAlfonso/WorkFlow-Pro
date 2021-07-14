@@ -48,7 +48,7 @@ export const TimePicker = ({ ...props }: ITimePickerProps): JSX.Element => {
   }
   return (
     <Select
-      defaultValue={props.defaultValue}
+      value={props.defaultValue}
       onChange={props.onChange}
       name={props.name}
       disabled={props.disabled}

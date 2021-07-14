@@ -263,6 +263,13 @@ export class Api {
            return this.client.post(`/annual_initiatives/create_key_element/${id}`, params);
          }
 
+         async updateAnnualInitiativeKeyElement(id, keyElementId, params) {
+           return this.client.post(
+             `/annual_initiatives/${id}/update_key_element/${keyElementId}`,
+             params,
+           );
+         }
+
          async deleteAnnualInitiativeKeyElement(keyElementId) {
            return this.client.delete(`/annual_initiatives/delete_key_element/${keyElementId}`);
          }
@@ -287,6 +294,13 @@ export class Api {
 
          async createQuarterlyGoalKeyElement(id, params) {
            return this.client.post(`/quarterly_goals/create_key_element/${id}`, params);
+         }
+
+         async updateQuarterlyGoalKeyElement(id, keyElementId, params) {
+           return this.client.post(
+             `/quarterly_goals/${id}/update_key_element/${keyElementId}`,
+             params,
+           );
          }
 
          async deleteQuarterlyGoalKeyElement(keyElementId) {
@@ -317,6 +331,13 @@ export class Api {
 
          async createSubInitiativeKeyElement(id, params) {
            return this.client.post(`/sub_initiatives/create_key_element/${id}`, params);
+         }
+
+         async updateSubInitiativeKeyElement(id, keyElementId, params) {
+           return this.client.post(
+             `/sub_initiatives/${id}/update_key_element/${keyElementId}`,
+             params,
+           );
          }
 
          async deleteSubInitiativeKeyElement(keyElementId) {
@@ -537,6 +558,7 @@ export class Api {
          async getSelectedDailyLogByDate(date) {
            return this.client.get(`/daily_logs`, { date });
          }
+
          async getKPI(id) {
            return this.client.get(`/key_performance_indicator/${id}`);
          }
@@ -559,6 +581,5 @@ export class Api {
          async getScorecard(id) {
            return this.client.get(`/scorecard/${id}`);
          }
-
          //async setJWT(jwt) {}
        }

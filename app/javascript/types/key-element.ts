@@ -6,4 +6,6 @@ export type KeyElementType = {
   completionType: string;
   completionCurrentValue: number | string;
   completionTargetValue: number;
+  greaterThan: number;
+  status: string;
 };

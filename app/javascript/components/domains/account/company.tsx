@@ -9,9 +9,10 @@ import { observer } from "mobx-react";
 import { Can } from "~/components/shared/auth/can";
 import { Button } from "~/components/shared/button";
 import { FileInput } from "./file-input";
-import { ImageCropperModal } from "~/components/shared/image-cropper-modal"
+import { ImageCropperModal } from "~/components/shared/image-cropper-modal";
 import { TrixEditor } from "react-trix";
 import { useHistory } from "react-router";
+import { toJS } from "mobx";
 
 import {
   StretchContainer,
@@ -30,6 +31,7 @@ export const Company = observer(
     const {
       companyStore,
       sessionStore,
+      teamStore,
       sessionStore: { staticData },
     } = useMst();
     const history = useHistory();
@@ -45,6 +47,7 @@ export const Company = observer(
     const [logoImageblub, setLogoImageblub] = useState<any | null>(null);
     const [logoImageForm, setLogoImageForm] = useState<FormData | null>(null);
     const [logoImageModalOpen, setLogoImageModalOpen] = useState<boolean>(false);
+    const [executiveTeam, setExecutiveTeam] = useState<any>(null);
     const [annualInitiativeTitle, setAnnualInitiativeTitle] = useState<string>(
       sessionStore.annualInitiativeTitle,
     );
@@ -54,47 +57,51 @@ export const Company = observer(
     const [subInitiativeTitle, setSubInitiativeTitle] = useState<string>(
       sessionStore.subInitiativeTitle,
     );
+
     const { t } = useTranslation();
+    const teams = toJS(teamStore.teams);
 
     useEffect(() => {
-      getLogo()
-    }, [])
+      getLogo();
+      const executiveTeam = teams.find(team => team.executive == 1);
+      setExecutiveTeam(executiveTeam && executiveTeam.id);
+    }, [teamStore.teams]);
 
     const getLogo = async () => {
       if (!company.logoUrl) {
         setLogoImageForm(null);
-        return
+        return;
       }
-      const image = await fetch(company.logoUrl).then(r => r.blob())
+      const image = await fetch(company.logoUrl).then(r => r.blob());
       const form = new FormData();
       form.append("logo", image);
       setLogoImageForm(form);
-    }
+    };
 
-    const submitLogo = async (image) => {
+    const submitLogo = async image => {
       const form = new FormData();
       form.append("logo", image);
-      setLogoImageForm(form)
+      setLogoImageForm(form);
       await companyStore.updateCompanyLogo(form);
     };
 
-    const pickLogoImageblob = async (file) => {
-      setLogoImageblub(file)
-      setLogoImageModalOpen(!logoImageModalOpen)
+    const pickLogoImageblob = async file => {
+      setLogoImageblub(file);
+      setLogoImageModalOpen(!logoImageModalOpen);
     };
 
-    const readFile = (file) => {
-      return new Promise((resolve) => {
-        const reader = new FileReader()
-        reader.addEventListener('load', () => resolve(reader.result), false)
-        reader.readAsDataURL(file)
-      })
-    }
+    const readFile = file => {
+      return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => resolve(reader.result), false);
+        reader.readAsDataURL(file);
+      });
+    };
 
     const inputFileUpload = async (files: FileList) => {
-      const imageDataUrl = await readFile(files[0])
-      pickLogoImageblob(imageDataUrl)
-    }
+      const imageDataUrl = await readFile(files[0]);
+      pickLogoImageblob(imageDataUrl);
+    };
 
     const deleteLogo = () => {
       companyStore.deleteCompanyLogo();
@@ -134,19 +141,29 @@ export const Company = observer(
           },
           false,
         ),
-      ]
-      if(company.logoUrl) {
-        promises.push(companyStore.updateCompanyLogo(logoImageForm))
+      ];
+      if (company.logoUrl) {
+        promises.push(companyStore.updateCompanyLogo(logoImageForm));
+      }
+      if (executiveTeam) {
+        promises.push(
+          teamStore.updateTeamSettings({
+            id: executiveTeam,
+            executive: 1,
+          }),
+        );
       }
       Promise.all(promises).then(() => {
-          setTimeout(history.go, 1000, 0)
-        })
+        setTimeout(history.go, 1000, 0);
+      });
     };
 
     return (
       <StretchContainer>
         <HeaderContainer>
-          <HeaderText>{company.accessCompany ? t("profile.companyDetails") : t("profile.forumDetails")}</HeaderText>
+          <HeaderText>
+            {company.accessCompany ? t("profile.companyDetails") : t("profile.forumDetails")}
+          </HeaderText>
         </HeaderContainer>
 
         <Can
@@ -155,7 +172,9 @@ export const Company = observer(
           no={
             <BodyContainer>
               <PersonalInfoContainer>
-                <Label htmlFor="name">{company.accessCompany ? t("company.name") : t("company.forumName")}</Label>
+                <Label htmlFor="name">
+                  {company.accessCompany ? t("company.name") : t("company.forumName")}
+                </Label>
                 <Input
                   disabled={true}
                   name="name"
@@ -178,8 +197,8 @@ export const Company = observer(
                   {company.logoUrl ? (
                     <img style={{ maxHeight: 256, maxWidth: 256 }} src={company.logoUrl}></img>
                   ) : (
-                      "No Logo set"
-                    )}
+                    "No Logo set"
+                  )}
                 </PhotoContainer>
               </ProfilePhotoSection>
             </BodyContainer>
@@ -189,13 +208,15 @@ export const Company = observer(
               <BodyContainer>
                 <PersonalInfoContainer>
                   <ProfilePhotoSection display={"block"}>
-                    <Label htmlFor="logo">{company.accessCompany ? t("company.logo") : t("company.forumLogo")}</Label>
+                    <Label htmlFor="logo">
+                      {company.accessCompany ? t("company.logo") : t("company.forumLogo")}
+                    </Label>
                     <PhotoContainer>
                       {company.logoUrl ? (
                         <img style={{ maxHeight: 256, maxWidth: 256 }} src={company.logoUrl}></img>
                       ) : (
-                          "No Logo set"
-                        )}
+                        "No Logo set"
+                      )}
                     </PhotoContainer>
                     <PhotoModificationButtonsSection>
                       <Button
@@ -208,9 +229,7 @@ export const Company = observer(
                         {t("general.remove")}
                       </Button>
 
-                      <FileInput
-                        labelText={t("general.upload")}
-                        onChange={inputFileUpload} />
+                      <FileInput labelText={t("general.upload")} onChange={inputFileUpload} />
 
                       {logoImageModalOpen && (
                         <ImageCropperModal
@@ -223,7 +242,9 @@ export const Company = observer(
                       )}
                     </PhotoModificationButtonsSection>
                   </ProfilePhotoSection>
-                  <Label htmlFor="name">{company.accessCompany ? t("company.name") : t("company.forumName")}</Label>
+                  <Label htmlFor="name">
+                    {company.accessCompany ? t("company.name") : t("company.forumName")}
+                  </Label>
                   <Input
                     name="name"
                     onChange={e => {
@@ -247,7 +268,7 @@ export const Company = observer(
                               {type[0]}
                             </option>
                           ),
-                          company.forumTypesList
+                          company.forumTypesList,
                         )}
                       </Select>
                       <div style={{ marginBottom: "16px" }} />
@@ -257,7 +278,7 @@ export const Company = observer(
                   <Input
                     disabled={true}
                     name="fiscal_year_start"
-                    onChange={() => { }}
+                    onChange={() => {}}
                     value={company.fiscalYearStart}
                   />
                   <Label htmlFor="timezone">{t("company.timezone")}</Label>
@@ -281,7 +302,21 @@ export const Company = observer(
                     To modify Fiscal Start Date, {t("company.accountabilityChart")}, or The{" "}
                     {company.name} Plan, please contact LynchPyn support.
                   </Text>
-
+                  <Label htmlFor="executive_team">{t("company.executiveTeam")}</Label>
+                  <Select
+                    onChange={e => {
+                      e.preventDefault();
+                      setExecutiveTeam(e.currentTarget.value);
+                    }}
+                    value={executiveTeam}
+                    style={{ minWidth: "200px", marginBottom: "16px" }}
+                  >
+                    {teams.map(({ id, name }, index) => (
+                      <option key={`option-${index}`} value={id}>
+                        {name}
+                      </option>
+                    ))}
+                  </Select>
                   <Label htmlFor="rallying">{t("company.rallyingCry")}</Label>
                   <Input
                     name="rallyingCry"

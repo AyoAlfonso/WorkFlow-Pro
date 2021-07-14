@@ -4,10 +4,12 @@ class KeyElement < ApplicationRecord
   before_save :sanitize_value
 
   belongs_to :elementable, :polymorphic => true
+  belongs_to :user, optional: true
   
   # completion_type of binary is boolean, if completed_at.present?
   # completion_type of currency is in cents (data type integer)
   enum completion_type: { binary: 0, numerical: 1, percentage: 2, currency: 3 }
+  enum status: { unstarted: 0, incomplete: 1, in_progress: 2, completed: 3 }
 
   default_scope { order(id: :asc) }
 

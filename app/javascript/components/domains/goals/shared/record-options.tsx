@@ -5,6 +5,7 @@ import { Icon } from "../../../shared/icon";
 import { useRef, useState, useEffect } from "react";
 import { GoalDropdownOptions } from "./goal-dropdown-options";
 
+// TODO: Turn this to  a shared component on friday
 interface IRecordOptionsProps {
   type: string;
   id: string | number;

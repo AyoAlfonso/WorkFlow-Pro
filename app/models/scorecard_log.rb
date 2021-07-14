@@ -6,7 +6,6 @@ class ScorecardLog < ApplicationRecord
   belongs_to :user
   belongs_to :key_performance_indicator
   validates :score, :week, :fiscal_quarter, :fiscal_year, :key_performance_indicator_id, :user_id, presence: true
-  enum unit_type: { percentage: "percentage", numerical: "numerical", currency: "currency" }
 
   scope :created_by_user, ->(user) { where(user: user) }
   scope :created_between, ->(date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }

@@ -88,7 +88,27 @@ export const QuarterlyGoalStoreModel = types
         }
         //api monitor to show error
       } catch {
-        showToast(il8n.t("quarterlyGoal.keyElementCreationError"), ToastMessageConstants.ERROR);
+        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
+        // showToast(il8n.t("quarterlyGoal.keyElementCreationError"), ToastMessageConstants.ERROR);
+      }
+    }),
+    updateKeyElement: flow(function*(id, keyElementId, keyElementParams) {
+      const env = getEnv(self);
+
+      try {
+        const response: any = yield env.api.updateQuarterlyGoalKeyElement(
+          id,
+          keyElementId,
+          keyElementParams,
+        );
+        const keyElements = self.quarterlyGoal.keyElements;
+        const keyElementIndex = keyElements.findIndex(ke => ke.id == keyElementId);
+        keyElements[keyElementIndex] = response.data.keyElement;
+        self.quarterlyGoal.keyElements = keyElements;
+        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
+        return response.data.keyElement;
+      } catch (error) {
+        showToast(il8n.t("quarterlyGoal.keyElementUpdateError"), ToastMessageConstants.ERROR);
       }
     }),
     deleteKeyElement: flow(function*(keyElementId) {
