@@ -1,26 +1,28 @@
-import React, { useEffect } from "react";
-import { OwnedBySection } from "../shared/owned-by-section";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components"
 import { useMst } from "~/setup/root";
 import { Avatar } from "~/components/shared/avatar";
 import { UserSelectionDropdownList } from "~/components/shared/user-selection-dropdown-list";
+import { Text } from "~/components/shared/text";
 
 
 interface IScorecardSelectorProps {
-
-
-
+  ownedBy: any;
 }
 
-export const ScorecardSelector = ({}: IScorecardSelectorProps): JSX.Element => {
-  const companyUsers = userStore.users;
+export const ScorecardSelector = ({
+  ownedBy
+}: IScorecardSelectorProps): JSX.Element => {
   const { userStore, sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
+  const companyUsers = userStore.users;
+  const [showUsersList, setShowUsersList] = useState<boolean>(false);
 
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
       <div onClick={e => e.stopPropagation()}>
         <UserSelectionDropdownList
           userList={companyUsers}
-          onUserSelect={store.updateOwnedBy}
+          onUserSelect={() => {}}
           setShowUsersList={setShowUsersList}
         />
       </div>
@@ -36,27 +38,16 @@ export const ScorecardSelector = ({}: IScorecardSelectorProps): JSX.Element => {
       }}
     >
       <Container width={100}>
-        <EditTriggerContainer
-          editable={true}
-          onClick={e => {
-            if (editable) {
-              setShowUsersList(!showUsersList);
-            }
-          }}
-        >
-          <Avatar
-            defaultAvatarColor={ownedBy.defaultAvatarColor}
-            avatarUrl={ownedBy.avatarUrl}
-            firstName={ownedBy.firstName}
-            lastName={ownedBy.lastName}
-            size={size || 20}
-            border={userIconBorder}
-            {...restProps}
-          />
-          <OwnedByName fontSize={fontSize} nameWidth={nameWidth} type={"fieldLabel"}>
-            {ownedBy.firstName} {ownedBy.lastName}
-          </OwnedByName>
-        </EditTriggerContainer>
+        <Avatar
+          defaultAvatarColor={ownedBy.defaultAvatarColor}
+          avatarUrl={ownedBy.avatarUrl}
+          firstName={ownedBy.firstName}
+          lastName={ownedBy.lastName}
+          size={20}
+        />
+        <OwnedByName type={"fieldLabel"}>
+          {ownedBy.firstName} {ownedBy.lastName}
+        </OwnedByName>
         {renderUserSelectionList()}
       </Container>
     </div>
