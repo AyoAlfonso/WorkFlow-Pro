@@ -10,7 +10,7 @@ import { UserSelectionDropdownList } from "~/components/shared/user-selection-dr
 import { Text } from "~/components/shared/text";
 
 interface IOwnedByProps {
-  ownedById: UserType;
+  user: UserType;
   userIconBorder?: string;
   disabled?: boolean;
   size?: number;
@@ -23,7 +23,7 @@ interface IOwnedByProps {
 }
 
 export const OwnedBy = ({
-  ownedById,
+  user,
   userIconBorder,
   disabled,
   size,
@@ -32,30 +32,23 @@ export const OwnedBy = ({
   ...restProps
 }: IOwnedByProps): JSX.Element => {
   const { userStore, sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
-  const [store, setStore] = useState<any>(null);
-  const [showUsersList, setShowUsersList] = useState<boolean>(false);
-  useEffect(() => {
-    userStore.getUser(ownedById)
-  }, []);
 
-  const currentUser = sessionStore.profile;
-  const ownedBy = userStore.user || currentUser;
 
   return (
     <Container
       width={100}
     >
       <Avatar
-        defaultAvatarColor={ownedBy.defaultAvatarColor}
-        avatarUrl={ownedBy.avatarUrl}
-        firstName={ownedBy.firstName}
-        lastName={ownedBy.lastName}
+        defaultAvatarColor={user.defaultAvatarColor}
+        avatarUrl={user.avatarUrl}
+        firstName={user.firstName}
+        lastName={user.lastName}
         size={size || 20}
         border={userIconBorder}
         {...restProps}
       />
       <OwnedByName fontSize={fontSize} nameWidth={nameWidth} type={"fieldLabel"}>
-        {ownedBy.firstName} {ownedBy.lastName}
+        {user.firstName} {user.lastName}
       </OwnedByName>
     </Container>
   );

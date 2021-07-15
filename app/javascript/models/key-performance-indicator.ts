@@ -1,4 +1,4 @@
-import { types, getRoot } from "mobx-state-tree";
+import { types, getRoot, flow } from "mobx-state-tree";
 // // import { QuarterlyGoalModel } from "./quarterly-goal";
 // // import { KeyElementModel } from "./key-element";
 import { ScorecardLogModel } from "./scorecard-log"
@@ -15,6 +15,7 @@ export const KeyPerformanceIndicatorModel = types
     userId: types.maybeNull(types.number),
     companyId: types.maybeNull(types.number),
     teamId: types.maybeNull(types.number),
+    ownedBy: UserModel,
     ownedById: types.maybeNull(types.number),
     createdAt: types.maybeNull(types.string),
     updatedAt: types.maybeNull(types.string),
@@ -22,7 +23,10 @@ export const KeyPerformanceIndicatorModel = types
     targetValue: types.number,
     isDeleted: types.boolean,
     ownerType: types.string,
+    greaterThan: types.boolean,
     weeks: types.map(ScorecardLogModel),
   })
-  .views(self => ({}))
-  .actions(self => ({}));
+  .views(self => ({
+  }))
+  .actions(self => ({
+  }));

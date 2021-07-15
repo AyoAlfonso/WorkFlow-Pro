@@ -28,7 +28,7 @@ export const ScorecardStoreModel = types
         }
       } catch(e) {
         console.error(e)
-        showToast(`Could not get ${ownerType} scorecard with id ${ownerType}.`, ToastMessageConstants.ERROR);
+        showToast(`Could not get ${ownerType} scorecard with id ${ownerId}.`, ToastMessageConstants.ERROR);
       }
     })
   }))

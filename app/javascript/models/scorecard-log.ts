@@ -6,7 +6,7 @@ export const ScorecardLogModel = types
   .props({
     id: types.number,
     score: types.number,
-    note: types.string,
+    note: types.maybeNull(types.string),
     keyPerformanceIndicatorId: types.number,
     week: types.identifierNumber,
     fiscalQuarter: types.number,

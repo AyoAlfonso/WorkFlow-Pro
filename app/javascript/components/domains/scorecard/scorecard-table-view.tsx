@@ -20,7 +20,7 @@ export const ScorecardTableView = ({
 	kpis
 }:ScorecardTableViewProps): JSX.Element => {
 	const { t } = useTranslation();
-	const { companyStore: { company } } = useMst();
+	const { companyStore: { company }, scorecardStore } = useMst();
 	const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter)
 	const [tab, setTab] = useState<string>("KPIs")
 	const [scores, setScores] = useState<any>([])
@@ -32,6 +32,7 @@ export const ScorecardTableView = ({
 		fadedYellow,
 		fadedGreen,
 		fadedRed,
+		successGreen,
 		poppySunrise,
 		cautionYellow,
 		finePine,
@@ -41,9 +42,9 @@ export const ScorecardTableView = ({
 	const formatValue = (unitType: string, value: number) => {
 		switch(unitType) {
 			case "percentage":
-				return `${value}%`;
+				return `${Math.round(value * 1000) / 1000}%`;
 			case "currency":
-				return `$${value}`
+				return `$${value.toFixed(2)}`
 			default:
 				return `${value}`;
 		}
@@ -58,17 +59,30 @@ export const ScorecardTableView = ({
 		}
 	}
 
-	const averageScorePercent = (scores: [number]) => {
-		return Math.floor(Math.min(scores.reduce((acc, score) => acc + score, 0), 100))
+	const averageScorePercent = (scores: [number], target: number, greaterThan: boolean) => {
+		return Math.min(
+			Math.floor(getScorePercent(
+				scores.reduce((acc, score) => acc + score, 0) / scores.length,
+				target,
+				greaterThan
+			)), 
+			100
+		)
 	}
 
-	const getStatusValue = (value: number, target: number, greaterThan: boolean) => {
-		const comparator = (a, b) => greaterThan ? a > b: a < b;
-		if(comparator(value, target)) {
+	const getStatusValue = (percentScore) => {
+		if(percentScore >= 100) {
 			return {
-				color: finePine,
+				color: successGreen,
 				background: fadedGreen,
 				text: "On Track",
+			}
+		}
+		else if(percentScore >= 90) {
+			return {
+				color: poppySunrise,
+				background: fadedYellow,
+				text: "Needs Attention",
 			}
 		}
 		else {
@@ -80,38 +94,84 @@ export const ScorecardTableView = ({
 		}
 	}
 
+	const getScoreValue = (percentScore) => {
+		if(percentScore >= 100) {
+			return {
+				color: successGreen,
+			}
+		}
+		else if(percentScore >= 90) {
+			return {
+				color: cautionYellow,
+			}
+		}
+		else {
+			return {
+				color: warningRed,
+			}
+		}
+	}
+
+	const getPercentScoreValue = (percentScore) => {
+		if(percentScore >= 100) {
+			return {
+				background: successGreen,
+				percent: percentScore,
+			}
+		}
+		else if(percentScore >= 90) {
+			return {
+				background: cautionYellow,
+				percent: percentScore,
+			}
+		}
+		else {
+			return {
+				background: warningRed,
+				percent: percentScore,
+			}
+		}
+	}
+
 	const data = useMemo(
 		() => kpis.map((kpi: any, index: number) => {
 			const targetText = formatValue(kpi.unitType, kpi.targetValue)
-			const description = `${kpi.description} ${kpi.greaterThan ? ">" : "<"} ${targetText}`
+			const description = `${kpi.description} ${kpi.greaterThan ? "≥" : "≤"} ${targetText}`
 			const logic = kpi.greaterThan ? `Greater than or equal to ${targetText}`:`Less than or equal to ${targetText}`
 			const row: any = {
 				title: {
 					description,
 					logic
-				}
+				},
+				owner: kpi.ownedBy,
 			}
-			row.owner = {
-				id: kpi.ownedById,
-			}
-
 			const weeks = Object.values(kpi.weeks)
-			let average = 0
 			weeks.forEach((week: any) => {
-				average += week.score
+				const percentScore = getScorePercent(week.score, kpi.targetValue, kpi.greaterThan)
 				row[`wk_${week.week}`] = {
 					score: formatValue(kpi.unitType, week.score),
-					color: getStatusValue(week.score, kpi.targetValue, true).color,
+					color: getScoreValue(percentScore).color,
 				}
 			})
-			average /= weeks.length
-			row.status = getStatusValue(average, kpi.targetValue, true)
+			const percentScore = averageScorePercent(
+				weeks.map((w: any) => w.score) as [number],
+				kpi.targetValue,
+				kpi.greaterThan
+			)
+			row.score = getPercentScoreValue(percentScore)
+			row.status = getStatusValue(percentScore)
 			return row
 		}),
 		[kpis]
 	)
 	const columns = useMemo(
 		() => [
+			{
+				Header: "",
+				id: "updateKPI",
+				width: "31px",
+				minWidth: "31px",
+			},
 			{
 				Header: () => (
 					<div style={{ textAlign: "left" }}>KPIs</div>
@@ -138,6 +198,13 @@ export const ScorecardTableView = ({
 				accessor: "score",
 				width: "8%",
 				minWidth: "86px",
+				Cell: ({ value }) => {
+					return (
+						<ScoreContainer background={value.background}>
+							<Score>{`${value.percent}%`}</Score>
+						</ScoreContainer>
+					);
+				}
 			},
 			{
 				Header: "Status",
@@ -160,7 +227,7 @@ export const ScorecardTableView = ({
 				Cell: ({ value }) => {
 					return (
 						<OwnerContainer>
-						<OwnedBy ownedById={value.id} marginLeft={"0px"}/>
+						<OwnedBy user={value} marginLeft={"0px"}/>
 						</OwnerContainer>
 					);
 				},
@@ -270,7 +337,7 @@ export const ScorecardTableView = ({
 						width={"fill"}
 					>
 						<CircularIcon icon={"Plus"} size={"12px"} />
-						<AddGoalText>Add KPI</AddGoalText>
+						<AddKPIText>Add KPI</AddKPIText>
 					</StyledButton>
 				</TableContainer>
 			)}
@@ -393,12 +460,20 @@ const CircularIcon = styled(Icon)`
     background-color: ${props => props.theme.colors.primaryActive};
   }
 `
-const AddGoalText = styled(TextDiv)`
+const AddKPIText = styled(TextDiv)`
   margin-left: 10px;
   white-space: break-spaces;
   color: ${props => props.theme.colors.primary100};
   font-size: 12px;
 `;
+
+const UpdateKPIContainer = styled.div`
+
+`
+
+const UpdateKPI = styled.div`
+
+`
 
 const KPITitleContainer = styled.div`
 	display: flex;
@@ -410,6 +485,7 @@ const KPITitleContainer = styled.div`
 
 const KPITextContainer = styled.div`
 `
+
 const KPILogic = styled.div`
 	display: block;
 	font-size: 9px;
@@ -419,15 +495,25 @@ const KPILogic = styled.div`
   white-space: nowrap;
 `
 
-const IconsContainer = styled.div`
-	display: block;
-	overflow: hidden;
+type ScoreContainerProps = {
+	background: string,
+}
+
+const ScoreContainer = styled.div<ScoreContainerProps>`
+	display: flex;
+	width: 32px;
+	height: 32px;
+	background: ${props => props.background};
+	justify-content: center;
+	align-items: center;
+	margin: auto;
+	border-radius: 4px;
 `
 
-const HighlightContainer = styled.div`
-	overflow: hidden;
-	position: relative;
-	right: 0px;
+const Score = styled.p`
+	color: ${props => props.theme.colors.white};
+	font-size: 12px;
+	font-weight: bold;
 `
 
 const OwnerContainer = styled.div`
@@ -471,22 +557,9 @@ type WeekTextProps = {
 
 const WeekText = styled.p<WeekTextProps>`
 	color: ${props => props.color};
-	font-weight: bold;
+	font-size: 12px;
 `
 
 interface IHighlightIconProps {
 	on: boolean;
-}
-
-const HighlightIcon = ({
-	on
-}: IHighlightIconProps): JSX.Element => {
-	return on ? (
-		<Icon
-			icon={"Star"}
-			iconColor={baseTheme.colors.cautionYellow}
-			size={16}
-			disableFill={false}
-		/>
-	) : (<></>)
 }

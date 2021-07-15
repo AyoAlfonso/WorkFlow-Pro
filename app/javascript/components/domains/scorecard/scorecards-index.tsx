@@ -32,9 +32,8 @@ export const ScorecardsIndex = observer(
 
     return (
       <Container>
-        <ScorecardSelector />
         <h2>Scorecards</h2>
-        <ScorecardTableView kpis={scorecardStore.kpis}/>
+        <ScorecardTableView kpis={kpis}/>
       </Container>
     );
   },
