@@ -575,7 +575,7 @@ True value of LynchPyn is in working together with others in your team and compa
         currentStep={currentStep}
         steps={stepLabels}
         showLynchpynLogo={true}
-        nextButtonDisabled={!hasCreationParams([requiredFields])}
+        nextButtonDisabled={!hasCreationParams([...requiredFields])}
         onStepClick={onStepClick}
         stepClickDisabled={currentStep === 0}
         completeButtonText={"Send Invites and Complete"}
