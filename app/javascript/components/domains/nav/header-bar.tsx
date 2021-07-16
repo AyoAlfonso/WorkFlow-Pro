@@ -10,7 +10,7 @@ import { Icon } from "../../shared/icon";
 import { Heading, Text } from "../../shared";
 import { CreateIssueModal } from "../issues/create-issue-modal";
 import { IssuesBody } from "../issues/issues-body"
-import { KeyActivitiesContainer } from "../key-activities/key-activities-container"
+import { KeyActivitiesBody } from "../key-activities/key-activities-body"
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 import { InviteUserModal } from "~/components/shared/invite-user-modal";
 import { AccountDropdownOptions } from "./top-nav/account-dropdown-options";
@@ -72,7 +72,10 @@ export const HeaderBar = observer(
     const renderKeyActivitiesPopup = (): JSX.Element => {
       return (showKeyActivities && (
         <KeyActivitiesPopupContainer>
-          <KeyActivitiesContainer />
+          <PopupHeaderContainer>
+            <PopupHeaderText>Pyns</PopupHeaderText>
+          </PopupHeaderContainer>
+          <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"}/>
         </KeyActivitiesPopupContainer>
       ))
     }
@@ -80,7 +83,10 @@ export const HeaderBar = observer(
     const renderIssuesPopup = (): JSX.Element => {
       return (showIssues && (
         <IssuesPopupContainer>
-          <IssuesBody showOpenIssues={showOpenIssues} setShowOpenIssues={setShowOpenIssues} />
+          <PopupHeaderContainer>
+            <PopupHeaderText>Issues</PopupHeaderText>
+          </PopupHeaderContainer>
+          <IssuesBody showOpenIssues={showOpenIssues} setShowOpenIssues={setShowOpenIssues} noShadow/>
         </IssuesPopupContainer>
       ))
     }
@@ -267,6 +273,8 @@ const IssuesButtonContainer = styled.div`
 
 const IssuesPopupContainer = styled.div`
   position: absolute;
+  width: 268px;
+  height: 438px;
   padding: 16px;
   margin-left: -160px;
   margin-top: 60px;
@@ -275,9 +283,28 @@ const IssuesPopupContainer = styled.div`
   border-radius: 10px;
 `
 
+
+const PopupHeaderContainer = styled.div`
+  display: flex;
+  border-bottom: 1px solid #e3e3e3;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 65px;
+`;
+
+const PopupHeaderText = styled.h4`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 20px;
+  font-size: 16px;
+  font-weight: 600;
+`;
+
 const KeyActivitiesPopupContainer = styled.div`
   position: absolute;
-  width: 256px;
+  width: 268px;
+  height: 438px;
   padding: 16px;
   margin-top: 60px;
   margin-left: -240px;
