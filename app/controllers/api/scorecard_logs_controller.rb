@@ -1,4 +1,4 @@
-class Api::ScorecardsController < Api::ApplicationController
+class Api::ScorecardLogsController < Api::ApplicationController
   include StatsHelper
   respond_to :json
   # before_action :set_scorecard_log, only: [:show]
@@ -11,16 +11,16 @@ class Api::ScorecardsController < Api::ApplicationController
   end
 
   def show
-    @key_performance_indicators = policy_scope(KeyPerformanceIndicator)
-    .owned_by_entity(params[:owner_id])
-    .where(owner_type: params[:owner_type])
-    
+
+    # //search by `user`_id will be filter users that belong to company, team and just user [which will not have any filtering]
+    # //search by id of user on the owner_id
+    @key_performance_indicators = policy_scope(KeyPerformanceIndicator).where(:owner_id: params[:owner_id]).all
     authorize @key_performance_indicators
-    puts @key_performance_indicators
     @kpi = @key_performance_indicators.map do |kpi|
-      value = (kpi.scorecard_logs.group_by(&:week).empty?) ? {} : kpi.scorecard_logs.group_by(&:week).map{|k,v| [k, v[-1]]}.to_hash
-      kpi.as_json.merge({ :weeks => value })
+      value = (kpi.scorecard_logs.group_by(&:week).empty?) ? {} : kpi.scorecard_logs.group_by(&:week).map{|k,v| [k, v[-1]]}.to_h
+      kpi.as_json.merge({ :owned_by => kpi.user , :weeks => value })
     end
+
     render json: @kpi
   end
 

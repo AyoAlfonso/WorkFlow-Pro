@@ -16,6 +16,6 @@ class InvitationsController < Devise::InvitationsController
                               "lastName": params[:user][:last_name],
                               "role": params[:user][:title] })
     https.request(request)
-    params.require(:user).permit(:password, :password_confirmation, :invitation_token, :first_name, :last_name,:title)
+    params.require(:user).permit(:password, :password_confirmation, :invitation_token, :first_name, :last_name, :title)
   end
 end

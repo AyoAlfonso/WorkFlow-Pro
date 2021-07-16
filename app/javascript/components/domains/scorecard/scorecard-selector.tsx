@@ -1,33 +1,52 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components"
+import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import { Avatar } from "~/components/shared/avatar";
 import { UserSelectionDropdownList } from "~/components/shared/user-selection-dropdown-list";
 import { Text } from "~/components/shared/text";
 
-
 interface IScorecardSelectorProps {
-  ownedBy: any;
+  //   ownedBy: any;
 }
 
-export const ScorecardSelector = ({
-  ownedBy
-}: IScorecardSelectorProps): JSX.Element => {
-  const { userStore, sessionStore, annualInitiativeStore, quarterlyGoalStore } = useMst();
+export const ScorecardSelector = ({}: //   ownedBy
+IScorecardSelectorProps): JSX.Element => {
+  const { userStore, scorecardStore, teamStore, companyStore } = useMst();
   const companyUsers = userStore.users;
+  const teams = teamStore.teams;
+  const company = companyStore.company;
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
+  const [ownerType, setOwnerType] = useState<string>("company");
+  const [ownerId, setOwnerId] = useState<number>(company.id);
 
+  useEffect(() => {
+    console.log(ownerType, ownerId);
+    scorecardStore.getScorecard({ ownerType, ownerId });
+  }, []);
+  const ownerSelector = value => {
+    // console.log(value, "values---");
+    const ownerType = value.email ? "user" : value.displayFormat ? "company" : "team";
+    setOwnerType(ownerType);
+    setOwnerId(value.id);
+    // console.log(ownerType, "value--");
+    scorecardStore.getScorecard({ ownerType, ownerId });
+    return { ownerType, ownerId };
+  };
+
+  console.log(company, teams, companyUsers);
   const renderUserSelectionList = (): JSX.Element => {
-    return showUsersList ? (
+    return (
       <div onClick={e => e.stopPropagation()}>
         <UserSelectionDropdownList
           userList={companyUsers}
-          onUserSelect={() => {}}
+          teamList={teams}
+          company={company}
+          onUserSelect={ownerSelector}
           setShowUsersList={setShowUsersList}
+          ownerType={ownerType}
+          title={"Scorecard"}
         />
       </div>
-    ) : (
-      <></>
     );
   };
 
@@ -38,17 +57,16 @@ export const ScorecardSelector = ({
       }}
     >
       <Container width={100}>
-        <Avatar
-          defaultAvatarColor={ownedBy.defaultAvatarColor}
-          avatarUrl={ownedBy.avatarUrl}
-          firstName={ownedBy.firstName}
-          lastName={ownedBy.lastName}
-          size={20}
-        />
-        <OwnedByName type={"fieldLabel"}>
-          {ownedBy.firstName} {ownedBy.lastName}
-        </OwnedByName>
-        {renderUserSelectionList()}
+        <EditTriggerContainer
+          editable={true}
+          onClick={e => {
+            setShowUsersList(!showUsersList);
+          }}
+        >
+          <Owner>This one guy</Owner>
+        </EditTriggerContainer>
+
+        {showUsersList ? renderUserSelectionList() : <></>}
       </Container>
     </div>
   );
@@ -83,3 +101,4 @@ const OwnedByName = styled(Text)`
   font-size: ${props => `${props.fontSize}` || "12px"};
   text-overflow: ellipsis;
 `;
+const Owner = styled(Text)``;

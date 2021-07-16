@@ -4,13 +4,16 @@ class KeyPerformanceIndicator < ApplicationRecord
   include HasGenericOwner
 
   before_save :sanitize_description
-
+  belongs_to :owned_by
+  belongs_to :user
+  
   enum unit_type: { percentage: 0, numerical: 1, currency: 2 }
   # alias_attribute :weeks
 
   validates :description, :created_by, :owner_type, :owned_by_id, :unit_type, :target_value, presence: true
   enum owner_type: { user: 0, team: 1, company: 2 }
   has_many :scorecard_logs
+ 
 
   private
 

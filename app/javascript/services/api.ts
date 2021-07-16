@@ -2,6 +2,11 @@ import { create, ApisauceInstance } from "apisauce";
 import { camelizeResponse, decamelizeRequest } from "../utils";
 import * as R from "ramda";
 
+interface IScorecardProps {
+  ownerType: string;
+  ownerId: number;
+}
+
 export class Api {
   client: ApisauceInstance;
   token: string;
@@ -503,7 +508,11 @@ export class Api {
   }
 
   async searchForumMeetingsByDateRange(startDate, endDate, teamId) {
-    return this.client.get("/forum/search_meetings_by_date_range", { startDate, endDate, teamId });
+    return this.client.get("/forum/search_meetings_by_date_range", {
+      startDate,
+      endDate,
+      teamId,
+    });
   }
 
   async getQuestionnaireAttemptsSummaryForReflections(questionnaireId) {
@@ -563,11 +572,11 @@ export class Api {
   }
 
   async createScorecardLog(KPIid: number, scorecardLog) {
-    return this.client.post(`key_performance_indicator/scorecard_logs`, scorecardLog)
+    return this.client.post(`key_performance_indicator/scorecard_logs`, scorecardLog);
   }
 
-  async getScorecard(owner_type: string, owner_id: number) {
-    return this.client.get(`scorecard/${owner_type}/${owner_id}`)
+  async getScorecard(props: IScorecardProps) {
+    return this.client.get(`scorecard/${props.ownerType}/${props.ownerId}`);
   }
 
   //async setJWT(jwt) {}

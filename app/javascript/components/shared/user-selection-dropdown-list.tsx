@@ -9,11 +9,15 @@ import { toJS } from "mobx";
 import { Icon } from "./icon";
 import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-
+//TODO: Company type and Team type
 interface IUserSelectionDropdownListProps {
   userList: Array<UserType>;
   onUserSelect: any;
   setShowUsersList: any;
+  teamList?: Array<any>;
+  company?: any;
+  title?: any;
+  ownerType?: any;
 }
 
 const filter = createFilterOptions<any>({ limit: 5 });
@@ -28,17 +32,19 @@ const useStyles = makeStyles({
 
 export const UserSelectionDropdownList = ({
   userList,
+  teamList,
+  company,
+  title = "User",
+  ownerType,
   onUserSelect,
   setShowUsersList,
 }: IUserSelectionDropdownListProps): JSX.Element => {
   const [value, setValue] = useState<any>(null);
   const classes = useStyles();
 
+  // console
   return (
     <ActionDropdownContainer>
-      <CloseIconContainer onClick={() => setShowUsersList(false)}>
-        <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
-      </CloseIconContainer>
       <Autocomplete
         value={value}
         onChange={(event, newValue) => {
@@ -57,6 +63,7 @@ export const UserSelectionDropdownList = ({
         id="search-for-labels"
         options={toJS(userList)}
         getOptionLabel={option => {
+          // dy to separate, users, teams, and companies
           return `${option.firstName} ${option.lastName}`;
         }}
         renderOption={option => {
@@ -80,7 +87,7 @@ export const UserSelectionDropdownList = ({
         renderInput={params => (
           <TextField
             {...params}
-            label="Select user"
+            label={`Select ${title}`}
             variant="outlined"
             className={classes.textField}
             margin="dense"

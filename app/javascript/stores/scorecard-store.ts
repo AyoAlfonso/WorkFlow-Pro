@@ -14,24 +14,31 @@ export const ScorecardStoreModel = types
   })
   .extend(withEnvironment())
   .views(self => ({}))
+  // .actions(self => ({
+  //    get reset () {
+  //     self.kpis = [] as any;
+  //   })
+  // }))
   .actions(self => ({
-    reset: flow(function*() {
-      self.kpis = [] as any;
-    })
-  }))
-  .actions(self => ({
-    getScorecard: flow(function*(ownerType, ownerId) {
+    getScorecard: flow(function*({ownerType, ownerId}) {
       try {
-        const response: ApiResponse<any> = yield self.environment.api.getScorecard(ownerType, ownerId);
-        if(response.ok) {
+        const response: ApiResponse<any> = yield self.environment.api.getScorecard({
+          ownerType,
+          ownerId,
+        });
+        if (response.ok) {
           self.kpis = response.data;
         }
-      } catch(e) {
-        console.error(e)
-        showToast(`Could not get ${ownerType} scorecard with id ${ownerType}.`, ToastMessageConstants.ERROR);
+        //TODO: Success message?
+      } catch (e) {
+        console.error(e);
+        showToast(
+          `Could not get ${ownerType} scorecard with id ${ownerType}.`,
+          ToastMessageConstants.ERROR,
+        );
       }
-    })
-  }))
+    }),
+  }));
 
 type ScorecardStoreType = typeof ScorecardStoreModel.Type;
 export interface IScorecardStore extends ScorecardStoreType {
