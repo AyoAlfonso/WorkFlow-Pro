@@ -25,7 +25,6 @@ export const KeyElementForm = ({
   const { users } = userStore;
   const [title, setTitle] = useState<string>("");
   const [completionType, setCompletionType] = useState<string>("numerical");
-  // const [ , setCompletionCurrentValue] = useState<number>(0);
   const [completionTargetValue, setCompletionTargetValue] = useState<number>(0);
   const [ownedBy, setOwnedBy] = useState<number>(users?.[0].id);
   const [condition, setCondition] = useState<number>(1);
@@ -39,7 +38,7 @@ export const KeyElementForm = ({
 
   const selectCondition = [
     { label: "Greater than or equal to", value: 1 },
-    { label: "Less than", value: 0 },
+    { label: "Less than or equal to", value: 0 },
   ];
 
   const resetForm = () => {
