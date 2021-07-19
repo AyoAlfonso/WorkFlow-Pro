@@ -13,24 +13,22 @@ export const GoalModel = types
   .extend(withRootStore())
   .views(self => ({
     get activeAnnualInitiatives() {
-      let annualInitiatives = [];
+      const annualInitiatives = [];
       self.goals.forEach(goal => {
         if (!goal.closedAt && goal.quarterlyGoals.length == 0) {
           if (!R.contains(goal.id, R.pluck("id", annualInitiatives))) {
             annualInitiatives.push(goal);
           }
-        } else {
-          if (goal.openQuarterlyGoals.length > 0) {
-            let clonedGoal = R.clone(goal);
-            clonedGoal.quarterlyGoals = goal.openQuarterlyGoals as any;
-            annualInitiatives.push(clonedGoal);
-          }
+        } else if (goal.quarterlyGoals.length > 0) {
+          const clonedGoal = R.clone(goal);
+          clonedGoal.quarterlyGoals = goal.openQuarterlyGoals as any;
+          annualInitiatives.push(clonedGoal);
         }
       });
       return annualInitiatives;
     },
     get closedAnnualInitiatives() {
-      let annualInitiatives = [];
+      const annualInitiatives = [];
       self.goals.forEach(goal => {
         if (goal.closedAt) {
           if (!R.contains(goal.id, R.pluck("id", annualInitiatives))) {
@@ -38,7 +36,7 @@ export const GoalModel = types
           }
         } else {
           if (goal.closedQuarterlyGoals.length > 0) {
-            let clonedGoal = R.clone(goal);
+            const clonedGoal = R.clone(goal);
             clonedGoal.quarterlyGoals = goal.closedQuarterlyGoals as any;
             annualInitiatives.push(clonedGoal);
           }
@@ -49,11 +47,11 @@ export const GoalModel = types
     get myAnnualInitiatives() {
       const { sessionStore } = getRoot(self);
       const userId = sessionStore.profile.id;
-      let annualInitiatives = [];
+      const annualInitiatives = [];
       self.goals.forEach(goal => {
         if (!goal.closedAt) {
           if (!R.contains(goal.id, R.pluck("id", annualInitiatives)) && goal.ownedById == userId) {
-            let clonedGoal = R.clone(goal);
+            const clonedGoal = R.clone(goal);
             clonedGoal.quarterlyGoals = goal.openPersonalQuarterlyGoals as any;
             annualInitiatives.push(clonedGoal);
           }
@@ -62,8 +60,8 @@ export const GoalModel = types
       return annualInitiatives;
     },
     get onlyShowMyQuarterlyGoals() {
-      let goals = self.goals;
-      let filteredQuarterlyGoals = goals.map((ai, index) => {
+      const goals = self.goals;
+      const filteredQuarterlyGoals = goals.map((ai, index) => {
         return { ...ai, quarterlyGoals: ai.myQuarterlyGoals };
       });
       return filteredQuarterlyGoals;

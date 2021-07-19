@@ -29,8 +29,8 @@ export const HomeGoals = observer(
     const [annualInitiativeDescription, setSelectedAnnualInitiativeDescription] = useState<string>(
       "",
     );
-    const [companyGoalsFilter, setCompanyGoalsFilter] = useState<string>("all");
-    const [personalGoalsFilter, setPersonalGoalsFilter] = useState<string>("all");
+    const [companyGoalsFilter, setCompanyGoalsFilter] = useState<string>("open");
+    const [personalGoalsFilter, setPersonalGoalsFilter] = useState<string>("open");
 
     const [companyPlanning, setCompanyPlanning] = useState<boolean>(false);
     const [personalPlanning, setPersonalPlanning] = useState<boolean>(false);
@@ -69,7 +69,7 @@ export const HomeGoals = observer(
 
     const companyGoalsToShow = () => {
       switch (companyGoalsFilter) {
-        case "all":
+        case "open":
           return companyGoals.activeAnnualInitiatives;
         case "me":
           return companyGoals.myAnnualInitiatives;
@@ -82,7 +82,7 @@ export const HomeGoals = observer(
 
     const personalGoalsToShow = () => {
       switch (personalGoalsFilter) {
-        case "all":
+        case "open":
           return personalGoals.activeAnnualInitiatives;
         case "closed":
           return personalGoals.closedAnnualInitiatives;

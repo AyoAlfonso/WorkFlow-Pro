@@ -111,7 +111,7 @@ export const InitiativeHeader = ({
               marginTop={"auto"}
               marginBottom={"auto"}
               type={itemType}
-              disabled={item.closedInitiative}
+              // disabled={item.closedInitiative}
             />
           </DetailsContainer>
         </TitleContainer>

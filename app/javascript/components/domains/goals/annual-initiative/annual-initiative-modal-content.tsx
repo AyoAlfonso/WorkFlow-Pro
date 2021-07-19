@@ -180,7 +180,8 @@ export const AnnualInitiativeModalContent = observer(
                 marginBottom={"auto"}
                 ownedBy={annualInitiative.ownedBy}
                 type={"annualInitiative"}
-                disabled={annualInitiative.closedInitiative}
+                //TODO: Confirm if this is necessary 
+                // disabled={annualInitiative.closedInitiative}
               />
             </DetailsContainer>
           </TitleContainer>

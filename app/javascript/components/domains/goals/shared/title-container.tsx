@@ -49,10 +49,10 @@ export const TitleContainer = observer(
     const renderFilterOptions = () => {
       return (
         <FilterContainer>
-          <FilterOptionContainer underline={goalsFilter == "all"}>
+          <FilterOptionContainer underline={goalsFilter == "open"}>
             <FilterOptions
-              onClick={() => setGoalsFilter("all")}
-              color={goalsFilter == "all" ? "primary100" : "grey40"}
+              onClick={() => setGoalsFilter("open")}
+              color={goalsFilter == "open" ? "primary100" : "grey40"}
             >
               All
             </FilterOptions>

@@ -60,32 +60,39 @@ export const GoalStoreModel = types
   }))
   .actions(self => ({
     updateAnnualInitiative(annualInitiative) {
-     
-         if (self.companyGoals) {
+      const { goals } = self.companyGoals;
+      const { goals: personalGoals } = self.personalGoals;
+      const { teamGoals } = self;
+      if (self.companyGoals && annualInitiative) {
+        const companyGoalAIIndex = self.companyGoals.goals.findIndex(
+          ai => ai.id == annualInitiative.id,
+        );
+        if (companyGoalAIIndex > -1) {
+          self.companyGoals.goals[companyGoalAIIndex] = annualInitiative;
+        }
+      } else if (!annualInitiative) {
+        console.log("annualInitiative--", annualInitiative, self.companyGoals.goals[1]);
+        self.companyGoals.goals[1] = self.companyGoals.goals[1];
+      }
 
-           let companyGoalAIIndex = self.companyGoals.goals.findIndex(
-             ai => ai.id == annualInitiative.id,
-           );
-           if (companyGoalAIIndex > -1) {
-             self.companyGoals.goals[companyGoalAIIndex] = annualInitiative;
-           }
-         }
-
-         if (self.personalGoals) {
-           let personalGoalAIIndex = self.personalGoals.goals.findIndex(
-             ai => ai.id == annualInitiative.id,
-           );
-           if (personalGoalAIIndex > -1) {
-             self.personalGoals.goals[personalGoalAIIndex] = annualInitiative;
-           }
-         }
-
-         if (self.teamGoals) {
-           let teamGoalAIIndex = self.teamGoals.findIndex(ai => ai.id == annualInitiative.id);
-           if (teamGoalAIIndex > -1) {
-             self.teamGoals[teamGoalAIIndex] = annualInitiative;
-           }
-         }
+      if (self.personalGoals && annualInitiative) {
+        const personalGoalAIIndex = self.personalGoals.goals.findIndex(
+          ai => ai.id == annualInitiative.id,
+        );
+        if (personalGoalAIIndex > -1) {
+          self.personalGoals.goals[personalGoalAIIndex] = annualInitiative;
+        }
+      } else if (!annualInitiative) {
+        self.personalGoals.goals = personalGoals;
+      }
+      if (self.teamGoals && annualInitiative) {
+        const teamGoalAIIndex = self.teamGoals.findIndex(ai => ai.id == annualInitiative.id);
+        if (teamGoalAIIndex > -1) {
+          self.teamGoals[teamGoalAIIndex] = annualInitiative;
+        }
+      } else if (!annualInitiative) {
+        self.teamGoals = teamGoals;
+      }
     },
     mergeAnnualInitiatives(type, annualInitiative) {
       if (type == "company") {
