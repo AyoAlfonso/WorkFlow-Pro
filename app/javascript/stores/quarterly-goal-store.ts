@@ -40,9 +40,6 @@ export const QuarterlyGoalStoreModel = types
       const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
       const responseQuarterlyGoal = response.data;
       self.quarterlyGoal = responseQuarterlyGoal;
-      // console.log(self.quarterlyGoal, "responseAnnualInitiative");
-      // console.log({...annualInitiativeStore}, "annualInitiativeStore");
-      // const responseAnnualInitiative = yield annualInitiativeStore.getAnnualInitiative(
       // goalStore.updateAnnualInitiative();
 
       showToast(

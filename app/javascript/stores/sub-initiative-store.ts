@@ -33,10 +33,8 @@ export const SubInitiativeStoreModel = types
     }),
     update: flow(function*() {
       const env = getEnv(self);
-      const { goalStore } = getRoot(self);
       const response: any = yield env.api.updateSubInitiative(self.subInitiative);
       self.subInitiative = response.data;
-      // goalStore.updateAnnualInitiative();
 
       showToast(
         il8n.t("subInitiative.updated", { title: self.title }),
@@ -189,7 +187,6 @@ export const SubInitiativeStoreModel = types
       self.update();
     },
     updateOwnedBy(user) {
-       console.log(user, "user--d");
       self.subInitiative.ownedById = user.id;
       self.update();
     },
