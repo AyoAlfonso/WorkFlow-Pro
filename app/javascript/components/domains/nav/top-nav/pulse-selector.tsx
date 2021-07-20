@@ -18,8 +18,11 @@ import * as moment from "moment";
 import { todaysDateFull } from "~/lib/date-helpers";
 import { DailyRecordPicker } from "~/components/shared/daily-record-picker";
 
+interface IPulseSelectorProps {
+  onClick?: any;
+}
 export const PulseSelector = observer(
-  (): JSX.Element => {
+  ({ onClick }: IPulseSelectorProps): JSX.Element => {
     const { sessionStore, staticDataStore } = useMst();
 
     const { t } = useTranslation();
@@ -129,7 +132,7 @@ export const PulseSelector = observer(
     };
 
     return (
-      <Container>
+      <Container onClick={() => onClick && onClick()}>
         <SelectedEmotionContainer onClick={() => setShowPulseSelector(!showPulseSelector)}>
           {renderTodaysEmotion()}
         </SelectedEmotionContainer>
@@ -215,6 +218,7 @@ const PulseSelectorContainer = styled.div`
   border-radius: 5px;
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   margin-left: -250px;
+  margin-top: 20px;
 `;
 
 const FeelingHeader = styled(Heading)`

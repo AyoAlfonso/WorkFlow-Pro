@@ -14,11 +14,11 @@ export const KeyActivitiesContainer = (): JSX.Element => {
         showAllKeyActivities={showAllKeyActivities}
         setShowAllKeyActivities={setShowAllKeyActivities}
       />
-      <KeyActivitiesBody showAllKeyActivities={showAllKeyActivities} />
+      <KeyActivitiesBody showAllKeyActivities={showAllKeyActivities} borderLeft={"none"}/>
     </Container>
   );
 };
 
 const Container = styled.div`
-  width: 50%;
+  width: 100%;
 `;
