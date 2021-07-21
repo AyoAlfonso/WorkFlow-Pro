@@ -62,7 +62,6 @@ class Api::CompaniesController < Api::ApplicationController
   end
 
   def get_onboarding_company
-    puts "hereww"
     user_company_enablements = UserCompanyEnablement.where(user_id: current_user.id)
     @onboarding_company = Company.where(id: user_company_enablements.pluck(:company_id), onboarding_status: :incomplete).last
       render json: @onboarding_company.as_json(only: ['id', 'name', 'phone_number', 'rallying_cry', 'fiscal_year_start', 'timezone', 'display_format', 'forum_type'],

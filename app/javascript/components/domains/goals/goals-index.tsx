@@ -14,6 +14,7 @@ import { RallyingCry } from "./shared/rallying-cry";
 import { PersonalVision } from "./shared/personal-vision";
 import { CreateGoalSection } from "./shared/create-goal-section";
 import { useTranslation } from "react-i18next";
+import { AnnualInitiativeType } from "~/types/annual-initiative";
 import { GoalsCoreFour } from "./goals-core-four";
 import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge";
 import { SubInitiativeModalContent } from "./sub-initiative/sub-initiaitive-modal-content";
@@ -99,9 +100,10 @@ export const GoalsIndex = observer(
     };
 
     const companyGoalsToShow = () => {
+    
       switch (companyGoalsFilter) {
         case "open":
-          return companyGoals.activeAnnualInitiatives;
+          return companyGoals.activeAnnualInitiatives as Array<AnnualInitiativeType>;
         case "me":
           return companyGoals.myAnnualInitiatives;
         case "closed":

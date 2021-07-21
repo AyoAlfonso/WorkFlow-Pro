@@ -1,5 +1,6 @@
 import { types, getEnv, getRoot } from "mobx-state-tree";
 import { AnnualInitiativeModel } from "../models/annual-initiative";
+import { AnnualInitiativeType } from "../types/annual-initiative";
 import { withRootStore } from "../lib/with-root-store";
 import * as R from "ramda";
 
@@ -14,7 +15,7 @@ export const GoalModel = types
   .views(self => ({
     get activeAnnualInitiatives() {
       const annualInitiatives = [];
-      self.goals.forEach(goal => {
+      self.goals.forEach((goal): AnnualInitiativeType => {
         if (!goal.closedAt && goal.quarterlyGoals.length == 0) {
           if (!R.contains(goal.id, R.pluck("id", annualInitiatives))) {
             annualInitiatives.push(goal);
@@ -24,6 +25,7 @@ export const GoalModel = types
           clonedGoal.quarterlyGoals = goal.openQuarterlyGoals as any;
           annualInitiatives.push(clonedGoal);
         }
+        return 
       });
       return annualInitiatives;
     },

@@ -48,10 +48,10 @@ export const InitiativeHeader = ({
         <ClosedStatusBannerContainer>
           {itemType == "quarterlyGoal"
             ? t("quarterlyGoal.cardClosed", {
-              title: sessionStore.companyStaticData[1].value
-            })
-              : t("subInitiative.cardClosed", {
-                title: sessionStore.companyStaticData[2].value
+                title: sessionStore.companyStaticData[1].value,
+              })
+            : t("subInitiative.cardClosed", {
+                title: sessionStore.companyStaticData[2].value,
               })}
           . {t("quarterlyGoal.createdOn")} {moment(item.createdAt).format("MMM Do, YYYY")}.
           <AnnualInitiativeActionContainer>
@@ -111,7 +111,7 @@ export const InitiativeHeader = ({
               marginTop={"auto"}
               marginBottom={"auto"}
               type={itemType}
-              // disabled={item.closedInitiative}
+              disabled={item.closedInitiative}
             />
           </DetailsContainer>
         </TitleContainer>
