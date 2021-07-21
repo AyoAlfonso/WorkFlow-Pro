@@ -318,7 +318,6 @@ const Container = styled.div`
   width: 256px;
   padding-top: 16px;
   padding-bottom: 8px;
-  margin-left: -160px;
   margin-top: 60px;
   background-color: white;
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
