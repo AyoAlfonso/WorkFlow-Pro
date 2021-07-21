@@ -63,3 +63,4 @@ class Api::KeyPerformanceIndicatorController < ApplicationController
     authorize @kpi
   end
 end
+end

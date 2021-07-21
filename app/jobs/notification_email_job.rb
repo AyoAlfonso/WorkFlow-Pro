@@ -71,4 +71,5 @@ class NotificationEmailJob
       false
     end
   end
+  end
 end
