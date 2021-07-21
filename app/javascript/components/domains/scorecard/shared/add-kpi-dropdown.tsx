@@ -28,7 +28,7 @@ export const AddKPIDropdown = ({ }): JSX.Element => {
   }, [optionsRef]);
 
   return (
-    <Container>
+    <Container ref={optionsRef}>
       <StyledButton
         small
         variant={"grey"}

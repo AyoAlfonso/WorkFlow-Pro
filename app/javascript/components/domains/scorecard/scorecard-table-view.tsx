@@ -426,24 +426,6 @@ const TableRow = styled.tr<TableRowProps>`
 	}`}
 `
 
-const CircularIcon = styled(Icon)`
- box-shadow: 2px 2px 6px 0.5px rgb(0 0 0 / 20%);
- color:  ${props => props.theme.colors.white};
- border-radius: 50%;
- height: 25px;
- width: 25px;
- background-color: ${props => props.theme.colors.primary100};
-   &:hover {
-    background-color: ${props => props.theme.colors.primaryActive};
-  }
-`
-const AddKPIText = styled(TextDiv)`
-  margin-left: 10px;
-  white-space: break-spaces;
-  color: ${props => props.theme.colors.primary100};
-  font-size: 12px;
-`;
-
 const UpdateKPIContainer = styled.div`
 
 `
@@ -536,20 +518,3 @@ const WeekText = styled.p<WeekTextProps>`
 	color: ${props => props.color};
 	font-size: 12px;
 `
-
-type StyledButtonType = {
-	width?: string;
-};
-const StyledButton = styled(Button) <StyledButtonType>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: ${props => (props.width != "auto" ? props.width : "auto")};
-  padding-left: 0;
-  padding-right: 0;
-  background-color: ${props => props.theme.colors.white};
-  border-color: ${props => props.theme.colors.white};
-  &:hover {
-     color: ${props => props.theme.colors.primary100};
-  }
-`;
