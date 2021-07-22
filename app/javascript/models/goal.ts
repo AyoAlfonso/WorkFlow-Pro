@@ -15,17 +15,16 @@ export const GoalModel = types
   .views(self => ({
     get activeAnnualInitiatives() {
       const annualInitiatives = [];
-      self.goals.forEach((goal): AnnualInitiativeType => {
+      self.goals.forEach((goal) => {
         if (!goal.closedAt && goal.quarterlyGoals.length == 0) {
           if (!R.contains(goal.id, R.pluck("id", annualInitiatives))) {
             annualInitiatives.push(goal);
           }
-        } else if (goal.quarterlyGoals.length > 0) {
+        } else if (!goal.closedAt && goal.quarterlyGoals.length > 0) {
           const clonedGoal = R.clone(goal);
           clonedGoal.quarterlyGoals = goal.openQuarterlyGoals as any;
           annualInitiatives.push(clonedGoal);
         }
-        return 
       });
       return annualInitiatives;
     },
