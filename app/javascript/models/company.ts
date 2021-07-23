@@ -13,6 +13,7 @@ export const CompanyModel = types
            logoUrl: types.maybeNull(types.string),
            timezone: types.maybeNull(types.string),
            fiscalYearStart: types.maybeNull(types.string),
+           currentFiscalWeek: types.maybeNull(types.number),
            currentFiscalQuarter: types.maybeNull(types.number),
            quarterForCreatingQuarterlyGoals: types.maybeNull(types.number),
            currentFiscalYear: types.maybeNull(types.number),

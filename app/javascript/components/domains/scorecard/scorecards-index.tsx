@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { Loading } from "../../shared/loading"
 import { ScorecardTableView } from "./scorecard-table-view"
 import { ScorecardSelector } from "./scorecard-selector"
+import { ScorecardSummary } from "./scorecard-summary"
 import { toJS } from "mobx"
 
 export const ScorecardsIndex = observer(
@@ -33,7 +34,12 @@ export const ScorecardsIndex = observer(
     return (
       <Container>
         <h2>Scorecards</h2>
-        <ScorecardTableView kpis={kpis}/>
+        <ScorecardSummary
+          kpis={kpis}
+          currentWeek={companyStore.company.currentFiscalWeek}
+          currentQuarter={companyStore.company.currentFiscalQuarter}
+        />
+        <ScorecardTableView kpis={kpis} />
       </Container>
     );
   },
