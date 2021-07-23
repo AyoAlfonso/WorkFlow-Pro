@@ -1,4 +1,4 @@
-class ScorecardLogsPolicy < ApplicationPolicy
+class ScorecardLogPolicy < ApplicationPolicy
   def index? 
     true
   end
