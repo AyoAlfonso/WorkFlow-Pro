@@ -207,7 +207,7 @@ const KeyActivitiesContainer = styled.div<KeyActivitiesContainerType>`
   background-color: ${props =>
     props.isDraggingOver ? props.theme.colors.backgroundBlue : !props.meeting && "white"};
   overflow-y: auto;
-  height: 260px;
+  height: 308px;
 `;
 
 const KeyActivityContainer = styled.div<KeyActivityContainerType>`

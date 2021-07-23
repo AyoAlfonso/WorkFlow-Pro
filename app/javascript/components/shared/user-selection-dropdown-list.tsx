@@ -18,6 +18,7 @@ interface IUserSelectionDropdownListProps {
   company?: any;
   title?: any;
   ownerType?: any;
+  setOwner?: any;
 }
 
 const filter = createFilterOptions<any>({ limit: 5 });
@@ -38,6 +39,7 @@ export const UserSelectionDropdownList = ({
   ownerType,
   onUserSelect,
   setShowUsersList,
+  setOwner,
 }: IUserSelectionDropdownListProps): JSX.Element => {
   const [value, setValue] = useState<any>(null);
   const classes = useStyles();
@@ -50,6 +52,7 @@ export const UserSelectionDropdownList = ({
         onChange={(event, newValue) => {
           setValue(newValue);
           onUserSelect(newValue);
+          setOwner(newValue);
           setShowUsersList(false);
         }}
         filterOptions={(options, params) => {

@@ -38,7 +38,7 @@ export const KeyElementForm = ({
 
   const selectCondition = [
     { label: "Greater than or equal to", value: 1 },
-    { label: "Less than", value: 0 },
+    { label: "Less than or equal to", value: 0 },
   ];
 
   const resetForm = () => {
