@@ -72,3 +72,4 @@ class NotificationEmailJob
     end
   end
 end
+end

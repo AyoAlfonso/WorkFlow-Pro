@@ -11,7 +11,6 @@ class Api::ScorecardsController < Api::ApplicationController
   end
 
   def show
-
     @key_performance_indicators = policy_scope(KeyPerformanceIndicator)
     .owned_by_entity(params[:owner_id])
     .where("owner ->> 'type' = ?", params[:owner_type])
@@ -23,6 +22,10 @@ class Api::ScorecardsController < Api::ApplicationController
     end
     render json: @kpi
   end
+
+  def rollup
+  #TODO: Roll up function
+  end 
 
   private
 

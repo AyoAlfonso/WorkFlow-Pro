@@ -63,7 +63,7 @@ IScorecardSelectorProps): JSX.Element => {
             setShowUsersList(!showUsersList);
           }}
         >
-          <Owner>This one guy</Owner>
+          <Owner>Select Scorecard</Owner>
         </EditTriggerContainer>
 
         {showUsersList ? renderUserSelectionList() : <></>}
