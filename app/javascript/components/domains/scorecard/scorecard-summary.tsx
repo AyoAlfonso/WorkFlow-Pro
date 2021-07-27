@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react"
 import * as R from "ramda"
 import styled from "styled-components"
 import { baseTheme } from "~/themes/base"
-import { Doughnut } from "react-chartjs-2"
+import { Doughnut, Line } from "react-chartjs-2"
 import { StatusBadge } from "~/components/shared/status-badge"
+import { Icon } from "~/components/shared/icon"
+
+const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
+  greaterThan ? (value / target) * 100 : (target + target - value) / target * 100;
 
 const WeekSummary = ({
   kpis,
@@ -23,27 +27,27 @@ const WeekSummary = ({
     greyActive,
   } = baseTheme.colors
 
-	const getScorePercent = (value: number, target: number, greaterThan: boolean) => {
-		if (greaterThan) {
-			return (value / target) * 100;
-		} 
-		else {
-			return ((target + target - value) / target) * 100;
-		}
-	}
+  const chartOptions = {
+    legend: {
+      display: false,
+    },
+    radius: 100,
+    cutoutPercentage: 60,
+  };
+
 
   useEffect(() => {
     const dataPoints = kpis.reduce((acc: number[], kpi: any) => {
       const week = kpi.weeks?.[currentWeek];
-      if(!week) {
+      if (!week) {
         acc[0]++;
       }
       else {
         const percentScore = getScorePercent(week.score, kpi.targetValue, kpi.greaterThan)
-        if(percentScore >= 100) {
+        if (percentScore >= 100) {
           acc[3]++;
         }
-        else if(percentScore >= 90) {
+        else if (percentScore >= 90) {
           acc[2]++;
         }
         else {
@@ -51,7 +55,7 @@ const WeekSummary = ({
         }
       }
       return acc;
-    }, [0,0,0,0])// ["None", "Behind", "Needs Attention", "On Track"]
+    }, [0, 0, 0, 0])// ["None", "Behind", "Needs Attention", "On Track"]
     setOnTrack(dataPoints[3]);
     setData({
       labels: [
@@ -83,15 +87,9 @@ const WeekSummary = ({
             <div><Text fontSize={20} bold><OnTrackCount>{onTrack}</OnTrackCount> / {kpis.length}</Text></div>
             <Text fontSize={11} mt={8}>KPIs are On Track</Text>
           </DoughnutTextContainer>
-          <StyledDoughnut data={data} options={{
-            legend: {
-              display: false,
-            },
-            radius: 100,
-            cutoutPercentage: 60,
-          }} width={200} height={200}/>
+          {data && <StyledDoughnut data={data} options={chartOptions} width={200} height={200} />}
         </DoughnutChartContainer>
-        <LegendContainer>
+        <WeekLegendContainer>
           <StatusBadgeContainer>
             <StatusBadge color={successGreen} background={fadedGreen}>On Track</StatusBadge>
           </StatusBadgeContainer>
@@ -104,18 +102,175 @@ const WeekSummary = ({
           <StatusBadgeContainer>
             <StatusBadge color={greyActive} background={backgroundGrey}>None</StatusBadge>
           </StatusBadgeContainer>
-        </LegendContainer>
+        </WeekLegendContainer>
       </RowContainer>
     </WeekContainer>
   )
 }
 
+const Arrow = ({ up = true, color }) => {
+  return (
+    <ArrowIconContainer up={up}>
+      <Icon icon={"Arrow"} size={12} iconColor={color} />
+    </ArrowIconContainer>
+  )
+}
+
 const QuarterSummary = ({
-  kpis
+  kpis,
+  currentWeek,
+  currentQuarter,
+  fiscalYearStart,
 }): JSX.Element => {
+  const [currentWeekPercent, setCurrentWeekPercent] = useState(0);
+  const [lastWeekPercent, setLastWeekPercent] = useState<number | null>(null);
+  const [data, setData] = useState<Object>(null);
+
+  const {
+    white,
+    primary100,
+    backgroundBlue,
+    greyActive,
+    backgroundGrey,
+    cautionYellow,
+    successGreen,
+    warningRed,
+  } = baseTheme.colors
+
+  const chartOptions = {
+    legend: {
+      display: false,
+    },
+    tooltips: {
+      callbacks: {
+        label: function(tooltipItem, data) {
+          const label = data.datasets[tooltipItem.datasetIndex].label || '';
+          if(label) {
+            return `${label}: ${tooltipItem.yLabel}%`;
+          }
+          else {
+            return '';
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        autoSkip: false,
+      },
+      yAxes: [{
+        ticks: {
+          stepSize: 20,
+          callback: function(value, index, values) {
+            return `${value}%`;
+          }
+        }
+      }]
+    },
+    responsive: true,
+    maintainAspectRatio: false,
+  }
+
+  const gatherData = (weeks: [number]) => {
+    return kpis ? weeks
+      .map((weekIndex: number) => kpis.reduce((acc: number, kpi: any) => {
+        const week = kpi.weeks?.[weekIndex];
+        const { targetValue, greaterThan } = kpi
+        return acc + (week ? Math.min(100, getScorePercent(
+          week.score,
+          targetValue,
+          greaterThan
+        )) : 0);
+      }, 0) / kpis.length) : [];
+  }
+
+  useEffect(() => {
+    const startWeek = (currentQuarter - 1) * 13 + 1;
+    const currentQuarterWeeks = R.range(startWeek, currentWeek + 1);
+    const currentQuarterData = gatherData(currentQuarterWeeks);
+    const lastQuarterStartWeek = (currentQuarter - 2) * 13 + 1;
+    const lastQuarterWeeks = R.range(lastQuarterStartWeek, lastQuarterStartWeek + currentQuarterData.length);
+    const lastQuarterData = currentQuarter > 1 ? gatherData(lastQuarterWeeks) : [];
+    setCurrentWeekPercent(R.last(currentQuarterData));
+    if (currentWeek != 1) {
+      setLastWeekPercent(currentQuarterData[currentQuarterData.length - 2])
+    }
+    setData({
+      labels: R.range(startWeek, startWeek + 13).map((i: number) => `WK ${i}`),
+      datasets: [{
+        label: "Current Quarter",
+        data: currentQuarterData,
+        fill: false,
+        backgroundColor: white,
+        borderColor: primary100,
+        borderWidth: 2,
+        tension: 0,
+      }, {
+        label: "Last Quarter",
+        data: lastQuarterData,
+        fill: false,
+        backgroundColor: white,
+        borderColor: greyActive,
+        borderWidth: 2,
+        tension: 0,
+      }]
+    })
+  }, [kpis])
+
+  const renderCurrentWeekPercent = () => {
+    return (
+      <Text ml={8} mr={16} fontSize={32} color={cautionYellow} bold>{currentWeekPercent}%</Text>
+    )
+  }
+
+  const renderWeekDifference = () => {
+    if (lastWeekPercent === null) {
+      return (<></>);
+    }
+    else {
+      const difference = currentWeekPercent - lastWeekPercent;
+      return (
+        <>
+          {difference >= 0 ? (
+            <>
+              <Arrow up={true} color={successGreen} />
+              <Text color={successGreen} ml={4}>{difference}%</Text>
+            </>) : (
+              <>
+                <Arrow up={false} color={warningRed} />
+                <Text color={warningRed} ml={4}>{difference * -1}%</Text>
+              </>
+            )}
+          <Text color={greyActive} ml={8} fontSize={9}>compared to last week</Text>
+        </>
+      )
+    }
+  }
+
   return (
     <QuarterContainer>
       <Header>This Quarter</Header>
+      <Text color={greyActive} fontSize={9} mt={4} mb={9}>Trend of average percentage of all KPIs actual value compared to the target</Text>
+      <QuarterInfoContainer>
+        <StatsContainer>
+          <GradeContainer>
+            <Text fontSize={24} color={cautionYellow} bold>B</Text>
+          </GradeContainer>
+          {renderCurrentWeekPercent()}
+          {renderWeekDifference()}
+        </StatsContainer>
+        <QuarterLegendContainer>
+          <StatusBadgeContainer>
+            <StatusBadge color={primary100} background={backgroundBlue}>•  Current Quarter</StatusBadge>
+          </StatusBadgeContainer>
+          <StatusBadgeContainer>
+            <StatusBadge color={greyActive} background={backgroundGrey}>•  Last Quarter</StatusBadge>
+          </StatusBadgeContainer>
+        </QuarterLegendContainer>
+      </QuarterInfoContainer>
+      <LineChartContainer>
+        {data && <Line data={data} options={chartOptions} height={200} />}
+      </LineChartContainer>
     </QuarterContainer>
   )
 }
@@ -125,17 +280,23 @@ type ScorecardSummaryProps = {
   kpis: any,
   currentWeek: number,
   currentQuarter: number,
+  fiscalYearStart: string,
 }
 
 export const ScorecardSummary = ({
   kpis,
   currentWeek,
   currentQuarter,
+  fiscalYearStart,
 }: ScorecardSummaryProps): JSX.Element => {
   return (
     <Container>
-      <WeekSummary kpis={kpis} currentWeek={currentWeek}/>
-      <QuarterSummary kpis={kpis}/>
+      <WeekSummary kpis={kpis} currentWeek={currentWeek} />
+      <QuarterSummary
+        kpis={kpis}
+        currentWeek={currentWeek}
+        currentQuarter={currentQuarter}
+        fiscalYearStart={fiscalYearStart} />
     </Container>
   )
 }
@@ -149,7 +310,7 @@ const Container = styled.div`
 
 const Header = styled.h4`
   margin-top: 0px;
-  margin-bottom; 0px;
+  margin-bottom: 0px;
 `
 
 const WeekContainer = styled.div`
@@ -161,7 +322,7 @@ const WeekContainer = styled.div`
 `
 
 const QuarterContainer = styled.div`
-  width: calc(100% - 32px);
+  width: calc(100% - 360px);
   height: 288px;
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 8px;
@@ -187,8 +348,11 @@ const StyledDoughnut = styled(Doughnut)`
 
 type TextProps = {
   fontSize?: number;
+  color?: string;
   mt?: number;
   mb?: number;
+  ml?: number;
+  mr?: number;
   bold?: boolean;
 }
 
@@ -196,6 +360,9 @@ const Text = styled.p<TextProps>`
   font-size: ${props => props.fontSize || 12}px;
   margin-top: ${props => props.mt || 0}px;
   margin-bottom: ${props => props.mb || 0}px;
+  margin-left: ${props => props.ml || 0}px;
+  margin-right: ${props => props.mr || 0}px;
+  ${props => props.color && `color: ${props.color};`}
   ${props => props.bold && "font-weight: bold;"}
 `
 
@@ -218,14 +385,55 @@ const DoughnutTextContainer = styled.div`
   z-index: -2;
 `
 
-const LegendContainer = styled.div`
+const WeekLegendContainer = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 8px;
   width: 80px;
   margin-top: auto;
   margin-bottom: auto;
 `
 
-const StatusBadgeContainer = styled.div`
-  margin-bottom: 8px;
+const StatusBadgeContainer = styled.div``
+
+const LineChartContainer = styled.div`
+  position: relative;
+  overflow-x: auto;
+  height: 184px;
+  width: 100%;
+`
+
+const StatsContainer = styled.div`
+  display: flex;
+  align-items: flex-end;
+`
+
+const GradeContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 38px;
+  background: ${props => props.theme.colors.fadedYellow};
+`
+
+const QuarterInfoContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+`
+
+const QuarterLegendContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: space-between;
+`
+
+type ArrowIconContainerProps = {
+  up
+}
+
+const ArrowIconContainer = styled.div<ArrowIconContainerProps>`
+  transform: rotate(${props => props.up ? 0 : 180}deg);
 `

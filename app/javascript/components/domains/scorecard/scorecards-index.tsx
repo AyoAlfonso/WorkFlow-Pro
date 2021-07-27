@@ -38,6 +38,7 @@ export const ScorecardsIndex = observer(
           kpis={kpis}
           currentWeek={companyStore.company.currentFiscalWeek}
           currentQuarter={companyStore.company.currentFiscalQuarter}
+          fiscalYearStart={companyStore.company.fiscalYearStart}
         />
         <ScorecardTableView kpis={kpis} />
       </Container>
