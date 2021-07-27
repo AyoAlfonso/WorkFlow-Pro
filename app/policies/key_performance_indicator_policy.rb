@@ -38,7 +38,7 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes(:user).all
+      scope.includes(:owned_by).all
     end
   end
 end

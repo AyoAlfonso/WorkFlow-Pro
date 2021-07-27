@@ -12,20 +12,17 @@ class Api::ScorecardsController < Api::ApplicationController
 
   def show
     @key_performance_indicators = policy_scope(KeyPerformanceIndicator)
-    .owned_by_entity(params[:owner_id])
-    .where("owner ->> 'type' = ?", params[:owner_type])
+    .vieweable_by_entity(params[:owner_id])
+    .where(owner_type: params[:owner_type])
     
     authorize @key_performance_indicators
+    puts @key_performance_indicators
     @kpi = @key_performance_indicators.map do |kpi|
       value = (kpi.scorecard_logs.group_by(&:week).empty?) ? [] : kpi.scorecard_logs.group_by(&:week)
       kpi.as_json.merge({ :weeks => value })
     end
     render json: @kpi
   end
-
-  def rollup
-  #TODO: Roll up function
-  end 
 
   private
 

@@ -12,19 +12,23 @@ class Api::ScorecardLogsController < Api::ApplicationController
 
   def show
 
-    # //search by `user`_id will be filter users that belong to company, team and just user [which will not have any filtering]
-    # //search by id of user on the owner_id
-    @key_performance_indicators = policy_scope(KeyPerformanceIndicator).owned_by_entity(params[:owner_id])
-    .where("owner ->> 'type' = ?", params[:owner_type])
+  @key_performance_indicators = policy_scope(KeyPerformanceIndicator)
+  .where(owned_by: params[:owner_id])
+  .vieweable_by_entity(params[:viewer_type], params[:viewer_id])
+  
     authorize @key_performance_indicators
-    @kpi = @key_performance_indicators.map do |kpi|
+     @kpi = @key_performance_indicators.map do |kpi|
       value = (kpi.scorecard_logs.group_by(&:week).empty?) ? {} : kpi.scorecard_logs.group_by(&:week).map{|k,v| [k, v[-1]]}.to_h
-      kpi.as_json.merge({ :owned_by => kpi.user , :weeks => value })
+      kpi.as_json.merge({ :owner_by => kpi.owned_by, :weeks => value })
     end
 
     render json: @kpi
   end
 
+  def rollup
+  #TODO: Roll up function but
+
+  end
   private
 
   def set_scorecard_log
