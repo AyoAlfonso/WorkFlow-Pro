@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import * as R from "ramda"
 import styled from "styled-components"
+import moment from "moment"
 import { baseTheme } from "~/themes/base"
 import { Doughnut, Line } from "react-chartjs-2"
 import { StatusBadge } from "~/components/shared/status-badge"
@@ -25,6 +26,7 @@ const WeekSummary = ({
     poppySunrise,
     warningRed,
     greyActive,
+    grey100,
   } = baseTheme.colors
 
   const chartOptions = {
@@ -67,7 +69,7 @@ const WeekSummary = ({
       datasets: [{
         data: dataPoints,
         backgroundColor: [
-          greyActive,
+          grey100,
           warningRed,
           cautionYellow,
           successGreen,
@@ -131,6 +133,7 @@ const QuarterSummary = ({
     primary100,
     backgroundBlue,
     greyActive,
+    grey100,
     backgroundGrey,
     cautionYellow,
     successGreen,
@@ -184,34 +187,40 @@ const QuarterSummary = ({
       }, 0) / kpis.length) : [];
   }
 
+  const weekToDate = (week: number): string => 
+    moment(fiscalYearStart)
+      .add(week, "w")
+      .startOf("week" as moment.unitOfTime.StartOf)
+      .format("MMM D")
+
   useEffect(() => {
     const startWeek = (currentQuarter - 1) * 13 + 1;
     const currentQuarterWeeks = R.range(startWeek, currentWeek + 1);
     const currentQuarterData = gatherData(currentQuarterWeeks);
     const lastQuarterStartWeek = (currentQuarter - 2) * 13 + 1;
-    const lastQuarterWeeks = R.range(lastQuarterStartWeek, lastQuarterStartWeek + currentQuarterData.length);
+    const lastQuarterWeeks = R.range(lastQuarterStartWeek, lastQuarterStartWeek + 13);
     const lastQuarterData = currentQuarter > 1 ? gatherData(lastQuarterWeeks) : [];
     setCurrentWeekPercent(R.last(currentQuarterData));
     if (currentWeek != 1) {
       setLastWeekPercent(currentQuarterData[currentQuarterData.length - 2])
     }
     setData({
-      labels: R.range(startWeek, startWeek + 13).map((i: number) => `WK ${i}`),
+      labels: R.range(startWeek, startWeek + 13).map((i: number) => weekToDate(i)),
       datasets: [{
         label: "Current Quarter",
         data: currentQuarterData,
         fill: false,
         backgroundColor: white,
         borderColor: primary100,
-        borderWidth: 2,
+        borderWidth: 1.5,
         tension: 0,
       }, {
         label: "Last Quarter",
         data: lastQuarterData,
         fill: false,
         backgroundColor: white,
-        borderColor: greyActive,
-        borderWidth: 2,
+        borderColor: grey100,
+        borderWidth: 1.5,
         tension: 0,
       }]
     })
