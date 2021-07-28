@@ -148,8 +148,6 @@ export const SurveyBot = observer(
       );
     }
 
-    console.log(window.innerHeight - 250, window.innerHeight - 120, "first");
-    console.log(window.innerHeight - 130, window.innerHeight, "second");
     return (
       <ChatBot
         botDelay={1000}
