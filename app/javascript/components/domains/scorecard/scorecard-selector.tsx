@@ -2,49 +2,89 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import { Avatar } from "~/components/shared/avatar";
-import { UserSelectionDropdownList } from "~/components/shared/user-selection-dropdown-list";
+import { MultiOptionTypeSelectionDropdownList } from "~/components/shared/multi-option-type-selection-dropdown";
+import { Icon } from "~/components/shared/icon";
+import { baseTheme } from "~/themes";
 import { Text } from "~/components/shared/text";
+import { toJS } from "mobx";
 
-interface IScorecardSelectorProps {
-  //   ownedBy: any;
-}
-
-export const ScorecardSelector = ({}: //   ownedBy
-IScorecardSelectorProps): JSX.Element => {
+export const ScorecardSelector = (): JSX.Element => {
   const { userStore, scorecardStore, teamStore, companyStore } = useMst();
-  const companyUsers = userStore.users;
-  const teams = teamStore.teams;
-  const company = companyStore.company;
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
   const [ownerType, setOwnerType] = useState<string>("company");
-  const [ownerId, setOwnerId] = useState<number>(company.id);
+  const [ownerId, setOwnerId] = useState<number>(companyStore.company?.id);
+  const [teams, setTeams] = useState<Array<any>>([]);
+  const [company, setCompany] = useState(null);
+  const [companyUsers, setCompanyUsers] = useState<Array<any>>([]);
+  const [currentScorecard, setCurrentScorecard] = useState<string>("company");
+  const { primary100 } = baseTheme.colors;
 
   useEffect(() => {
-    console.log(ownerType, ownerId);
-    scorecardStore.getScorecard({ ownerType, ownerId });
-  }, []);
+    scorecardStore.getScorecard({
+      ownerType,
+      ownerId,
+    });
+  }, [companyStore.company]);
+
+  useEffect(() => {
+    const teams =
+      teamStore &&
+      toJS(teamStore).teams.map(team => {
+        return {
+          id: team.id,
+          type: "team",
+          executive: team.executive,
+          defaultAvatarColor: team.defaultAvatarColor,
+          name: team.name,
+        };
+      });
+    setTeams(teams);
+    const company = companyStore && {
+      id: companyStore.company.id,
+      type: "company",
+      defaultAvatarColor: "cautionYellow",
+      avatarUrl: companyStore.company.logoUrl,
+      name: companyStore.company.name,
+    };
+
+    setCompany(company);
+    setCurrentScorecard(company.name);
+    const users =
+      userStore &&
+      toJS(userStore).users.map(user => {
+        return {
+          id: user.id,
+          type: "user",
+          defaultAvatarColor: user.defaultAvatarColor,
+          avatarUrl: user.avatarUrl,
+          name: user.firstName,
+          lastName: user.lastName,
+        };
+      });
+    setCompanyUsers(users);
+  }, [teamStore.teams, companyStore.company, userStore.users]);
+
   const ownerSelector = value => {
-    // console.log(value, "values---");
-    const ownerType = value.email ? "user" : value.displayFormat ? "company" : "team";
-    setOwnerType(ownerType);
+    const owner = {
+      ownerType: value.type,
+      ownerId,
+    };
+    setCurrentScorecard(`${value.name} ${value.lastName}`);
+    setOwnerType(value.type);
     setOwnerId(value.id);
-    // console.log(ownerType, "value--");
-    scorecardStore.getScorecard({ ownerType, ownerId });
-    return { ownerType, ownerId };
+    scorecardStore.getScorecard(owner);
+    return owner;
   };
 
-  console.log(company, teams, companyUsers);
   const renderUserSelectionList = (): JSX.Element => {
     return (
       <div onClick={e => e.stopPropagation()}>
-        <UserSelectionDropdownList
-          userList={companyUsers}
-          teamList={teams}
-          company={company}
+        <MultiOptionTypeSelectionDropdownList
+          userList={[...companyUsers, ...teams, company]}
           onUserSelect={ownerSelector}
           setShowUsersList={setShowUsersList}
-          ownerType={ownerType}
           title={"Scorecard"}
+          showUsersList
         />
       </div>
     );
@@ -63,7 +103,14 @@ IScorecardSelectorProps): JSX.Element => {
             setShowUsersList(!showUsersList);
           }}
         >
-          <Owner>Select Scorecard</Owner>
+            <Owner>{currentScorecard} </Owner>{" "}
+            <Icon
+              icon={!showUsersList ? "Chevron-Up" : "Chevron-Down"}
+              size={"12px"}
+              iconColor={primary100}
+              style={{ padding: "0px 5px" }}
+            />
+        
         </EditTriggerContainer>
 
         {showUsersList ? renderUserSelectionList() : <></>}
@@ -81,7 +128,7 @@ type ContainerProps = {
 
 const Container = styled.div<ContainerProps>`
   margin-left: 0px;
-  width: ${props => `${props.width}%` || "auto"};
+  width: max-content;
 `;
 
 const EditTriggerContainer = styled.div<EditTriggerContainerType>`
@@ -101,4 +148,14 @@ const OwnedByName = styled(Text)`
   font-size: ${props => `${props.fontSize}` || "12px"};
   text-overflow: ellipsis;
 `;
-const Owner = styled(Text)``;
+const Owner = styled(Text)`
+  display: inline-block;
+`;
+
+const CloseIconContainer = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const StyledIcon = styled(Icon)``;

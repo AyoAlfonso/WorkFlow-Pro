@@ -12,7 +12,6 @@ export const ScorecardsIndex = observer(
   (): JSX.Element => {
     const { ownerType, ownerId } = useParams();
     const { companyStore, scorecardStore } = useMst();
-
     const [loading, setLoading] = useState<boolean>(true);
     const [kpis, setKpis] = useState([]);
 
@@ -31,9 +30,8 @@ export const ScorecardsIndex = observer(
     }
 
     return (
-      <Container>
-        <ScorecardSelector />
-        <h2>Scorecards</h2>
+      <Container> 
+        <ScorecardSelector/>
         <ScorecardTableView kpis={scorecardStore.kpis} />
       </Container>
     );
