@@ -6,33 +6,36 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   def index
     @kpi = policy_scope(KeyPerformanceIndicator).where(owned_by: current_user.id)
     authorize @kpi
-    render json: @kpi 
+    render json: @kpi.as_json(except: %w[created_at updated_at],
+                              methods: [:owned_by, :created_by],
+                              include: {
+                                scorecard_logs: { methods: [:user] },
+                              })
   end
 
   def create
     @kpi = KeyPerformanceIndicator.new({
-              created_by: current_user,
-              owned_by: params[:owned_by],
-              viewers: { :data => params[:data] },
-              unit_type: params[:unit_type],
-              target_value: params[:target_value],
-              description: params[:description],
-        })
+                                         created_by: current_user,
+                                         owned_by: params[:owned_by],
+                                         viewers: { :data => params[:data] },
+                                         unit_type: params[:unit_type],
+                                         target_value: params[:target_value],
+                                         description: params[:description],
+                                       })
 
     authorize @kpi
     @kpi.save!
-    #TO DO CREATE VIEWS
-    render json: @kpi
+    render json: { kpi: @kpi }
   end
 
   def show
     @company = current_company
-    render json: @kpi
+    render json: { kpi: @kpi }
   end
 
   def update
-    @kpi.update!(key_performance_indicator_params)
-    render json: @kpi
+    @kpi.update!(kpi_params)
+    render json: { kpi: @kpi }
   end
 
   def destroy
@@ -42,12 +45,12 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
 
   def close_kpi
     @kpi.update!(closed_at: Date.today)
-    render "api/key_performance_indicator/update"
+    render json: { kpi: @kpi }
   end
 
   private
 
-  def key_performance_indicator_params
+  def kpi_params
     params.permit(:id, :owned_by, :viewers, :description, :unit_type, :target_value)
   end
 
