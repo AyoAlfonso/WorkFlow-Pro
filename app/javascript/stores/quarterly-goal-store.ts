@@ -4,6 +4,7 @@ import { QuarterlyGoalModel } from "../models/quarterly-goal";
 import moment from "moment";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import * as R from "ramda";
 import il8n from "i18next";
 
 export const QuarterlyGoalStoreModel = types
@@ -33,17 +34,19 @@ export const QuarterlyGoalStoreModel = types
     }),
     update: flow(function*() {
       const env = getEnv(self);
+
       //TO DO: investigate why try/catch was removed
-      // try {
+      // try
       const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
       const responseQuarterlyGoal = response.data;
       self.quarterlyGoal = responseQuarterlyGoal;
+      // goalStore.updateAnnualInitiative();
 
       showToast(
         il8n.t("quarterlyGoal.updated", { title: self.title }),
         ToastMessageConstants.SUCCESS,
       );
-      return responseQuarterlyGoal;
+      // return responseQuarterlyGoal;
       // } catch {
       //   showToast(il8n.t("quarterlyGoal.retrievalError"), ToastMessageConstants.ERROR);
       // }
@@ -235,7 +238,7 @@ export const QuarterlyGoalStoreModel = types
       self.update();
     },
     updateOwnedBy(user) {
-      self.quarterlyGoal.ownedById = user.id;
+      self.quarterlyGoal = { ...self.quarterlyGoal, ownedById :user.id  };
       self.update();
     },
     updateMilestoneDescription(id, value) {

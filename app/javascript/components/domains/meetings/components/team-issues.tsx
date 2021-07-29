@@ -60,7 +60,7 @@ export const TeamIssues = observer(
         </ColumnContainer>
         <ColumnContainer>
           <HeaderText
-            text={t("meeting.teamIssues.parkingLotIssues.title", { teamName: "Leadership" })}
+            text={t("meeting.teamIssues.parkingLotIssues.title", { teamName: "Team" })}
           />
           <ParkingLotIssues
             teamId={currentMeeting.teamId}

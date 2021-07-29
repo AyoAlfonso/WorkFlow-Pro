@@ -10,6 +10,7 @@ import InputBase from '@material-ui/core/InputBase';
 import { Icon } from "./icon";
 
 export const Label = props => <StyledLabel {...props}>{props.children}</StyledLabel>;
+export const Input = props => <StyledInput {...props}>{props.children}</StyledInput>;
 
 const StyledLabel = styled.label`
   display: block;
@@ -19,6 +20,19 @@ const StyledLabel = styled.label`
   margin-bottom: 15px;
   font-family: Lato, sans-serif;
   font-weight: bold;
+	`;
+const StyledInput = styled.input`
+  display: block;
+  width: 100%;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  font-family: Lato;
+  border: 1px solid ${props => props.theme.colors.grey40};
+  background-color: transparent;
+  padding: 8px;
+  box-sizing: border-box;
+  appearance: none;
 `;
 
 const MuiStyledInputBase = (props) => withStyles(
@@ -52,18 +66,18 @@ const StyledIcon = styled(Icon)`
 	margin: auto;
 `
 
-export const Input = (props): JSX.Element => {
-	const MuiInput = MuiStyledInputBase(props)
-	return (
-		<FormControl
-			style={{
-				width: props.width || "100%",
-				marginBottom: props.marginBottom || "16px"
-			}}>
-			<MuiInput {...props}>{props.children}</MuiInput>
-		</FormControl>
-	)
-}
+// export const Input = (props): JSX.Element => {
+// 	const MuiInput = MuiStyledInputBase(props)
+// 	return (
+// 		<FormControl
+// 			style={{
+// 				width: props.width || "100%",
+// 				marginBottom: props.marginBottom || "16px"
+// 			}}>
+// 			<MuiInput {...props}>{props.children}</MuiInput>
+// 		</FormControl>
+// 	)
+// }
 
 type ChevronDownIconProps = {
 	iconColor?: string;

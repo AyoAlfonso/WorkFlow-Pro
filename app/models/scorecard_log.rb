@@ -25,8 +25,6 @@ class ScorecardLog < ApplicationRecord
 
     current_week_end = self.user.time_in_user_timezone
     owner = self.user.id
-    puts current_week_start
-    puts current_week_end
 
     if self.user_log_created_between(owner, kpi_id, current_week_start, current_week_end).count > 10
       self.first.destroy

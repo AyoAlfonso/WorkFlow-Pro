@@ -6,7 +6,6 @@ import { Icon } from "../../../shared/icon";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
 import * as moment from "moment";
 import { observer } from "mobx-react";
-import { MilestoneCard } from "../milestone/milestone-card";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useMst } from "~/setup/root";
 
@@ -44,7 +43,7 @@ export const AnnualInitiativeCardMinimized = observer(
       },
     };
 
-    if (annualInitiative.closedInitiative) {
+    if (annualInitiative.closedAt) {
       statusBadge.description = `Closed - FY${annualInitiative.fiscalYear %
         100}/${(annualInitiative.fiscalYear + 1) % 100}`;
       statusBadge.colors = { color: white, backgroundColor: grey100 };
@@ -53,8 +52,6 @@ export const AnnualInitiativeCardMinimized = observer(
         100}/${(annualInitiative.fiscalYear + 1) % 100}`;
       statusBadge.colors = { color: white, backgroundColor: primary100 };
     }
-
-    // TODOIT: RETURN milestoneCounts BACK to zero
     const milestones = [
       {
         color: finePine,
@@ -75,7 +72,6 @@ export const AnnualInitiativeCardMinimized = observer(
     ];
 
     const milestoneProgressCounter = goal => {
-      // if there is no currentMilestone, use the last milestone, assuming this is past the 13th week
       let currentMilestone = goal.milestones.find((milestone: { weekOf: moment.MomentInput }) =>
         moment(milestone.weekOf).isSame(moment(), "week"),
       );

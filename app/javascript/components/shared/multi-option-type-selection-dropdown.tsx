@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { UserType } from "~/types/user";
 import { Avatar } from "~/components/shared/avatar";
 import { Text } from "./text";
+// import { Icon } from "~/components/shared/icon";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete, { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { toJS } from "mobx";
@@ -10,11 +11,12 @@ import { Icon } from "./icon";
 import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
-interface IUserSelectionDropdownListProps {
+interface IMultiOptionTypeSelectionDropdownList {
   userList: Array<UserType>;
   onUserSelect: any;
-  setShowUsersList: any;
-  setOwner?: any;
+  setShowUsersList: React.Dispatch<React.SetStateAction<boolean>>;
+  title?: string;
+  showUsersList: boolean;
 }
 
 const filter = createFilterOptions<any>({ limit: 5 });
@@ -27,23 +29,25 @@ const useStyles = makeStyles({
   },
 });
 
-export const UserSelectionDropdownList = ({
+export const MultiOptionTypeSelectionDropdownList = ({
   userList,
+  title,
   onUserSelect,
   setShowUsersList,
-  setOwner,
-}: IUserSelectionDropdownListProps): JSX.Element => {
+  showUsersList,
+}: IMultiOptionTypeSelectionDropdownList): JSX.Element => {
   const [value, setValue] = useState<any>(null);
   const classes = useStyles();
-
   return (
     <ActionDropdownContainer>
+      <CloseIconContainer onClick={() => setShowUsersList(!showUsersList)}>
+        <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+      </CloseIconContainer>
       <Autocomplete
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue);
           onUserSelect(newValue);
-          setOwner(newValue);
           setShowUsersList(false);
         }}
         filterOptions={(options, params) => {
@@ -55,9 +59,9 @@ export const UserSelectionDropdownList = ({
         handleHomeEndKeys
         size={"small"}
         id="search-for-labels"
-        options={toJS(userList)}
+        options={userList}
         getOptionLabel={option => {
-          return `${option.firstName} ${option.lastName}`;
+          return `${option.name} ${option.lastName}`;
         }}
         renderOption={option => {
           return (
@@ -65,12 +69,12 @@ export const UserSelectionDropdownList = ({
               <Avatar
                 defaultAvatarColor={option.defaultAvatarColor}
                 avatarUrl={option.avatarUrl}
-                firstName={option.firstName}
-                lastName={option.lastName}
+                firstName={option.name || ""}
+                lastName={option.lastName || ""}
                 size={45}
                 marginLeft={"0px"}
               />
-              <UserOptionText> {`${option.firstName} ${option.lastName}`}</UserOptionText>
+              <UserOptionText> {`${option.name} ${option.lastName || ""}`}</UserOptionText>
             </OptionContainer>
           );
         }}
@@ -80,7 +84,7 @@ export const UserSelectionDropdownList = ({
         renderInput={params => (
           <TextField
             {...params}
-            label={`Select User`}
+            label={`Select ${title}`}
             variant="outlined"
             className={classes.textField}
             margin="dense"
@@ -98,15 +102,8 @@ const ActionDropdownContainer = styled.div`
   border-radius: 12px;
   padding: 10px;
   z-index: 2;
-  margin-left: -80px;
-  margin-top: 5px;
   height: auto;
   overflow: auto;
-`;
-
-const CloseIconContainer = styled.div`
-  text-align: right;
-  margin-bottom: 5px;
 `;
 
 const OptionContainer = styled.div`
@@ -122,4 +119,11 @@ const UserOptionText = styled(Text)`
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 12px;
+`;
+
+const CloseIconContainer = styled.div`
+  padding-left: 90%;
+  &:hover {
+    cursor: pointer;
+  }
 `;

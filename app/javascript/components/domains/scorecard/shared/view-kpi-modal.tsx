@@ -77,7 +77,7 @@ export const ViewEditKPIModal = observer(
 const Container = styled.div`
   height: fit-content;
   padding: 32px;
-  width: 100%;
+  width: calc(100% - 64px);
   overflow-y: auto;
   
 `
@@ -146,6 +146,7 @@ const SubHeader = styled.p`
   margin-top: 32px;
   margin-bottom: 16px;
   font-size: 12px;
+  font-weight: bold;
 `
 
 const ActivityLogsContainer = styled.div`

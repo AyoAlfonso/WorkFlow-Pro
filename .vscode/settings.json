@@ -7,5 +7,7 @@
   "editor.fontLigatures": null,
   "editor.formatOnPaste": true,
   "editor.codeActionsOnSave": null,
-  "ruby.rubocop.executePath": "/Users/applepro/.rvm/gems/ruby-2.6.5/bin/"
+  "ruby.rubocop.executePath": "/Users/ayooluwaalfonso/.gem/ruby/2.6.5/bin/",
+  "ruby.rubocop.suppressRubocopWarnings": true,
+  "ruby.rubocop.configFilePath": "/Users/ayooluwaalfonso/code/lynchpyn/lynchpyncore/.rubocop.yml"
 }
