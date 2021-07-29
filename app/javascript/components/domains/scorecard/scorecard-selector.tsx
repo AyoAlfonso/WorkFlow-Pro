@@ -5,6 +5,7 @@ import { Avatar } from "~/components/shared/avatar";
 import { MultiOptionTypeSelectionDropdownList } from "~/components/shared/multi-option-type-selection-dropdown";
 import { Icon } from "~/components/shared/icon";
 import { baseTheme } from "~/themes";
+import { Heading } from "~/components/shared";
 import { Text } from "~/components/shared/text";
 import { toJS } from "mobx";
 
@@ -29,15 +30,17 @@ export const ScorecardSelector = (): JSX.Element => {
   useEffect(() => {
     const teams =
       teamStore &&
-      toJS(teamStore).teams.map(team => {
-        return {
-          id: team.id,
-          type: "team",
-          executive: team.executive,
-          defaultAvatarColor: team.defaultAvatarColor,
-          name: team.name,
-        };
-      });
+      toJS(teamStore)
+        .teams.filter(team => team.active)
+        .map(team => {
+          return {
+            id: team.id,
+            type: "team",
+            executive: team.executive,
+            defaultAvatarColor: team.defaultAvatarColor,
+            name: team.name,
+          };
+        });
     setTeams(teams);
     const company = companyStore && {
       id: companyStore.company.id,
@@ -51,16 +54,18 @@ export const ScorecardSelector = (): JSX.Element => {
     setCurrentScorecard(company.name);
     const users =
       userStore &&
-      toJS(userStore).users.map(user => {
-        return {
-          id: user.id,
-          type: "user",
-          defaultAvatarColor: user.defaultAvatarColor,
-          avatarUrl: user.avatarUrl,
-          name: user.firstName,
-          lastName: user.lastName,
-        };
-      });
+      toJS(userStore)
+        .users.filter(user => user.status == "active")
+        .map(user => {
+          return {
+            id: user.id,
+            type: "user",
+            defaultAvatarColor: user.defaultAvatarColor,
+            avatarUrl: user.avatarUrl,
+            name: user.firstName,
+            lastName: user.lastName,
+          };
+        });
     setCompanyUsers(users);
   }, [teamStore.teams, companyStore.company, userStore.users]);
 
@@ -69,7 +74,7 @@ export const ScorecardSelector = (): JSX.Element => {
       ownerType: value.type,
       ownerId,
     };
-    setCurrentScorecard(`${value.name} ${value.lastName}`);
+    setCurrentScorecard(`${value.name} ${value.lastName || ""}`);
     setOwnerType(value.type);
     setOwnerId(value.id);
     scorecardStore.getScorecard(owner);
@@ -103,14 +108,16 @@ export const ScorecardSelector = (): JSX.Element => {
             setShowUsersList(!showUsersList);
           }}
         >
-            <Owner>{currentScorecard} </Owner>{" "}
-            <Icon
+          <ScorecardOwnerContainer>
+            <OwnerHeading type={"h3"} fontSize={"20px"} fontWeight={600} mt={0}>
+              {currentScorecard}
+            </OwnerHeading>
+            <StyledChevronIcon
               icon={!showUsersList ? "Chevron-Up" : "Chevron-Down"}
               size={"12px"}
               iconColor={primary100}
-              style={{ padding: "0px 5px" }}
             />
-        
+          </ScorecardOwnerContainer>
         </EditTriggerContainer>
 
         {showUsersList ? renderUserSelectionList() : <></>}
@@ -148,7 +155,8 @@ const OwnedByName = styled(Text)`
   font-size: ${props => `${props.fontSize}` || "12px"};
   text-overflow: ellipsis;
 `;
-const Owner = styled(Text)`
+
+const OwnerHeading = styled(Heading)`
   display: inline-block;
 `;
 
@@ -158,4 +166,11 @@ const CloseIconContainer = styled.div`
   }
 `;
 
-const StyledIcon = styled(Icon)``;
+const ScorecardOwnerContainer = styled.div`
+  align-items: baseline;
+`;
+
+const StyledChevronIcon = styled(Icon)`
+  display: inline-block;
+  padding: 0px 15px;
+`;
