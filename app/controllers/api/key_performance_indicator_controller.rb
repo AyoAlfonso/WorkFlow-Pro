@@ -1,12 +1,12 @@
-class Api::KeyPerformanceIndicatorController < ApplicationController
+class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   before_action :set_key_performance_indicator, only: [:show, :update, :destroy, :close_kpi]
 
-  respond_to :json¬
+  respond_to :json
 
   def index
     @kpi = policy_scope(KeyPerformanceIndicator).where(owned_by: current_user.id)
-    render json: { kpi: @kpi }
-    render "/api/key_performance_indicator/index"
+    authorize @kpi
+    render json: @kpi 
   end
 
   def create
@@ -23,12 +23,11 @@ class Api::KeyPerformanceIndicatorController < ApplicationController
     @kpi.save!
     #TO DO CREATE VIEWS
     render json: @kpi
-    # "/api/key_performance_indicator/create"
   end
 
   def show
     @company = current_company
-    render "api/key_performance_indicator/show"
+    render json: @kpi
   end
 
   def update
