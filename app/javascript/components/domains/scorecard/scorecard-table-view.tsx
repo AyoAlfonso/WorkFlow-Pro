@@ -12,6 +12,7 @@ import { baseTheme } from "~/themes/base"
 import { OwnedBy } from "./scorecard-owned-by"
 import { StatusBadge } from "~/components/shared/status-badge"
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown"
+import { ViewEditKPIModal } from "./shared/view-kpi-modal"
 
 type ScorecardTableViewProps = {
 	kpis: any
@@ -19,12 +20,14 @@ type ScorecardTableViewProps = {
 
 export const ScorecardTableView = ({
 	kpis
-}:ScorecardTableViewProps): JSX.Element => {
+}: ScorecardTableViewProps): JSX.Element => {
 	const { t } = useTranslation();
 	const { companyStore: { company }, scorecardStore } = useMst();
 	const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter)
 	const [tab, setTab] = useState<string>("KPIs")
 	const [scores, setScores] = useState<any>([])
+	const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(true);
+	const [viewEditKPIId, setViewEditKPIID] = useState(3);
 	const tabs = [
 		t("scorecards.tabs.kpis"),
 		t("scorecards.tabs.people"),
@@ -41,7 +44,7 @@ export const ScorecardTableView = ({
 	} = baseTheme.colors
 
 	const formatValue = (unitType: string, value: number) => {
-		switch(unitType) {
+		switch (unitType) {
 			case "percentage":
 				return `${Math.round(value * 1000) / 1000}%`;
 			case "currency":
@@ -54,7 +57,7 @@ export const ScorecardTableView = ({
 	const getScorePercent = (value: number, target: number, greaterThan: boolean) => {
 		if (greaterThan) {
 			return (value / target) * 100;
-		} 
+		}
 		else {
 			return ((target + target - value) / target) * 100;
 		}
@@ -66,20 +69,20 @@ export const ScorecardTableView = ({
 				scores.reduce((acc, score) => acc + score, 0) / scores.length,
 				target,
 				greaterThan
-			)), 
+			)),
 			100
 		)
 	}
 
 	const getStatusValue = (percentScore) => {
-		if(percentScore >= 100) {
+		if (percentScore >= 100) {
 			return {
 				color: successGreen,
 				background: fadedGreen,
 				text: "On Track",
 			}
 		}
-		else if(percentScore >= 90) {
+		else if (percentScore >= 90) {
 			return {
 				color: poppySunrise,
 				background: fadedYellow,
@@ -96,12 +99,12 @@ export const ScorecardTableView = ({
 	}
 
 	const getScoreValue = (percentScore) => {
-		if(percentScore >= 100) {
+		if (percentScore >= 100) {
 			return {
 				color: successGreen,
 			}
 		}
-		else if(percentScore >= 90) {
+		else if (percentScore >= 90) {
 			return {
 				color: cautionYellow,
 			}
@@ -114,13 +117,13 @@ export const ScorecardTableView = ({
 	}
 
 	const getPercentScoreValue = (percentScore) => {
-		if(percentScore >= 100) {
+		if (percentScore >= 100) {
 			return {
 				background: successGreen,
 				percent: percentScore,
 			}
 		}
-		else if(percentScore >= 90) {
+		else if (percentScore >= 90) {
 			return {
 				background: cautionYellow,
 				percent: percentScore,
@@ -138,11 +141,12 @@ export const ScorecardTableView = ({
 		() => kpis.map((kpi: any, index: number) => {
 			const targetText = formatValue(kpi.unitType, kpi.targetValue)
 			const description = `${kpi.description} ${kpi.greaterThan ? "≥" : "≤"} ${targetText}`
-			const logic = kpi.greaterThan ? `Greater than or equal to ${targetText}`:`Less than or equal to ${targetText}`
+			const logic = kpi.greaterThan ? `Greater than or equal to ${targetText}` : `Less than or equal to ${targetText}`
 			const row: any = {
 				title: {
 					description,
-					logic
+					logic,
+					id: kpi.id,
 				},
 				owner: kpi.ownedBy,
 			}
@@ -180,7 +184,10 @@ export const ScorecardTableView = ({
 				accessor: "title",
 				Cell: ({ value }) => {
 					return (
-						<KPITitleContainer>
+						<KPITitleContainer onClick={() => {
+							setViewEditKPIID(value.id);
+							setViewEditKPIModalOpen(true);
+						}}>
 							<KPITextContainer>
 								<KPIDescription>
 									{value.description}
@@ -189,7 +196,8 @@ export const ScorecardTableView = ({
 									{value.logic}
 								</KPILogic>
 							</KPITextContainer>
-						</KPITitleContainer>);
+						</KPITitleContainer>
+					);
 				},
 				width: "21%",
 				minWidth: "216px",
@@ -228,7 +236,7 @@ export const ScorecardTableView = ({
 				Cell: ({ value }) => {
 					return (
 						<OwnerContainer>
-						<OwnedBy user={value} marginLeft={"0px"}/>
+							<OwnedBy user={value} marginLeft={"0px"} />
 						</OwnerContainer>
 					);
 				},
@@ -241,7 +249,7 @@ export const ScorecardTableView = ({
 				Cell: ({ value }) => {
 					// return (<WeekText color={value.color} background={value.background}>{value.score}</WeekText>);
 					if (value === undefined) {
-						return (<EmptyWeekContainer><EmptyWeek/></EmptyWeekContainer>);
+						return (<EmptyWeekContainer><EmptyWeek /></EmptyWeekContainer>);
 					}
 					return (
 						<WeekContainer>
@@ -279,62 +287,72 @@ export const ScorecardTableView = ({
 	}
 
 	return (
-		<Container>
-			<TopRow>
-				<TabContainer>
-					{tabs.map(elem => (
-						<Tab
-							key={elem}
-							active={tab === elem}
-							onClick={() => setTab(elem)}
-						>
-							{elem}
-						</Tab>
-					))}
-				</TabContainer>
-				<Select
-					selection={quarter}
-					setSelection={handleQuarterSelect}
-					id={"scorecard-quarter-selection"}
-				>
-					{R.range(1, 5).map((n: number) => (<option key={n} value={n}>Q{n} {company.currentFiscalYear}</option>))}
-				</Select>
-			</TopRow>
-			{tab == "KPIs" && (
-				<TableContainer>
-					<Table {...getTableProps()}>
-						<TableHead>
-							{headerGroups.map(headerGroup => (
-								<TableRow {...headerGroup.getHeaderGroupProps()}>
-									{headerGroup.headers.map(column => (
-										<TableHeader {...column.getHeaderProps({ style: { width: column.width, minWidth: column.minWidth } })}>
-											{column.render('Header')}
-										</TableHeader>
-									))}
-								</TableRow>
-							))}
-						</TableHead>
-						<TableBody {...getTableBodyProps()}>
-							{rows.map(row => {
-								prepareRow(row)
-								return (
-									<TableRow hover={true} {...row.getRowProps()}>
-										{row.cells.map(cell => {
-											return (
-												<td {...cell.getCellProps()}>
-													{cell.render('Cell', cell.getCellProps())}
-												</td>
-											)
-										})}
+		<>
+			<Container>
+				<TopRow>
+					<TabContainer>
+						{tabs.map(elem => (
+							<Tab
+								key={elem}
+								active={tab === elem}
+								onClick={() => setTab(elem)}
+							>
+								{elem}
+							</Tab>
+						))}
+					</TabContainer>
+					<Select
+						selection={quarter}
+						setSelection={handleQuarterSelect}
+						id={"scorecard-quarter-selection"}
+					>
+						{R.range(1, 5).map((n: number) => (<option key={n} value={n}>Q{n} {company.currentFiscalYear}</option>))}
+					</Select>
+				</TopRow>
+				{tab == "KPIs" && (
+					<TableContainer>
+						<Table {...getTableProps()}>
+							<TableHead>
+								{headerGroups.map(headerGroup => (
+									<TableRow {...headerGroup.getHeaderGroupProps()}>
+										{headerGroup.headers.map(column => (
+											<TableHeader {...column.getHeaderProps({ style: { width: column.width, minWidth: column.minWidth } })}>
+												{column.render('Header')}
+											</TableHeader>
+										))}
 									</TableRow>
-								)
-							})}
-						</TableBody>
-					</Table>
-					<AddKPIDropdown />
-				</TableContainer>
-			)}
-		</Container>
+								))}
+							</TableHead>
+							<TableBody {...getTableBodyProps()}>
+								{rows.map(row => {
+									prepareRow(row)
+									return (
+										<TableRow hover={true} {...row.getRowProps()}>
+											{row.cells.map(cell => {
+												return (
+													<td {...cell.getCellProps()}>
+														{cell.render('Cell', cell.getCellProps())}
+													</td>
+												)
+											})}
+										</TableRow>
+									)
+								})}
+							</TableBody>
+						</Table>
+						<AddKPIDropdown />
+					</TableContainer>
+				)}
+			</Container>
+			{viewEditKPIId && (
+			<ViewEditKPIModal
+				kpiId={viewEditKPIId}
+				viewEditKPIModalOpen={viewEditKPIModalOpen}
+				setViewEditKPIModalOpen={setViewEditKPIModalOpen}
+			/>
+			)
+			}
+		</>
 	)
 }
 
