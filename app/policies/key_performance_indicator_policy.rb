@@ -8,8 +8,10 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
   end
 
   def show?
-    # @record.created_by == @user || user_can_observe_current_company?
-    true
+    # true
+    # @record.created_by == @user
+    #  ||
+      @record.created_by == @user || user_is_company_admin_of_current_company?
   end
 
   def update?
@@ -20,16 +22,12 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
     @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 
-  def team?
-    true
-  end
-
   def close_kpi?
     @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 
   class Scope
-    attr_reader :user, :company, :scope, :weeks
+    attr_reader :user, :company, :scope
 
     def initialize(context, scope)
       @user = context.user
@@ -38,7 +36,7 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes(:owned_by).all
+      scope.all
     end
   end
 end

@@ -1,7 +1,7 @@
 class Api::KeyPerformanceIndicatorController < ApplicationController
   before_action :set_key_performance_indicator, only: [:show, :update, :destroy, :close_kpi]
 
-  respond_to :json
+  respond_to :json¬
 
   def index
     @kpi = policy_scope(KeyPerformanceIndicator).where(owned_by: current_user.id)
@@ -11,13 +11,13 @@ class Api::KeyPerformanceIndicatorController < ApplicationController
 
   def create
     @kpi = KeyPerformanceIndicator.new({
-      created_by: current_user,
-      owned_by: params[:owned_by],
-      viewers: { :data => params[:data] },
-      unit_type: params[:unit_type],
-      target_value: params[:target_value],
-      description: params[:description],
-    })
+              created_by: current_user,
+              owned_by: params[:owned_by],
+              viewers: { :data => params[:data] },
+              unit_type: params[:unit_type],
+              target_value: params[:target_value],
+              description: params[:description],
+        })
 
     authorize @kpi
     @kpi.save!
@@ -25,7 +25,7 @@ class Api::KeyPerformanceIndicatorController < ApplicationController
     render json: @kpi
     # "/api/key_performance_indicator/create"
   end
-  
+
   def show
     @company = current_company
     render "api/key_performance_indicator/show"
@@ -60,5 +60,4 @@ class Api::KeyPerformanceIndicatorController < ApplicationController
     @kpi = policy_scope(KeyPerformanceIndicator).find(params[:id])
     authorize @kpi
   end
-end
 end

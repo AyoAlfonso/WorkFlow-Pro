@@ -2,6 +2,6 @@ module HasViewer
   extend ActiveSupport::Concern
 
   included do
-       scope :vieweable_by_entity, ->(viewer_type, viewer_id) { where("viewers @> ?", %Q([{ "type": "#{viewer_type}"}])).where("viewers #> '{data,0}' ->> 'id' = ?", viewer_id)}
+    scope :vieweable_by_entity, ->(owner_type, owner_id) { where("viewers @> ?", %Q([{ "type": "#{owner_type}", "id": "#{owner_id}"}]))}
   end
 end
