@@ -11,13 +11,11 @@ class Api::ScorecardLogsController < Api::ApplicationController
   end
 
   def show
-    binding.pry
     @key_performance_indicators = policy_scope(KeyPerformanceIndicator).vieweable_by_entity(params[:owner_type], params[:owner_id])
-    # .where(owned_by: params[:owner_id])
     authorize @key_performance_indicators
     @kpi = @key_performance_indicators.map do |kpi|
       value = (kpi.scorecard_logs.group_by(&:week).empty?) ? {} : kpi.scorecard_logs.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h
-      kpi.as_json.merge({ :owned_by => kpi.user, :weeks => value })
+      kpi.as_json.merge({ :owned_by => kpi.owned_by, :weeks => value })
     end
 
     render json: @kpi

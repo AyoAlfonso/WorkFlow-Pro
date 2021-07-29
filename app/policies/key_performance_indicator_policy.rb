@@ -8,10 +8,7 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
   end
 
   def show?
-    # true
-    # @record.created_by == @user
-    #  ||
-      @record.created_by == @user || user_is_company_admin_of_current_company?
+    true
   end
 
   def update?
