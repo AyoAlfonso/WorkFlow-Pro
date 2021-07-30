@@ -24,12 +24,9 @@ export const ViewEditKPIModal = observer(
     setViewEditKPIModalOpen,
     viewEditKPIModalOpen,
   }: ViewEditKPIModalProps): JSX.Element => {
-    const { companyStore } = useMst();
+    const { companyStore: { company } } = useMst();
+    const [loading, setLoading] = useState(true);
     const [data, setData] = useState(null);
-    const [chartOptions, setChartOptions] = useState({});
-
-    useEffect(() => {
-    }, [kpiId])
 
     const {
       backgroundGrey,
@@ -40,7 +37,42 @@ export const ViewEditKPIModal = observer(
       warningRed,
       poppySunrise,
       successGreen,
+      primary100,
+      white,
     } = baseTheme.colors
+
+    const chartOptions = {
+      legend: {
+        display: false,
+      },
+      responsive: true,
+      maintainAspectRatio: false,
+    }
+
+    const weekToDate = (week: number): string => 
+      moment(company.fiscalYearStart)
+        .add(week, "w")
+        .startOf("week" as moment.unitOfTime.StartOf)
+        .format("MMM D")
+
+    useEffect(() => {
+      const startWeek = (company.currentFiscalQuarter - 1) * 13 + 1;
+      const weeks = R.range(startWeek, startWeek + 13)
+      const labels = weeks.map(weekToDate)
+      
+      setData({
+        labels: R.range(startWeek, startWeek + 13).map((i: number) => weekToDate(i)),
+        datasets: [{
+          label: "Current Quarter",
+          data: [],
+          fill: false,
+          backgroundColor: white,
+          borderColor: primary100,
+          borderWidth: 1.5,
+          tension: 0,
+        }],
+      })
+    }, [kpiId])
 
     return (
       <StyledModal
@@ -59,7 +91,12 @@ export const ViewEditKPIModal = observer(
             <StatusBadgeContainer>
               <StatusBadge color={poppySunrise} background={fadedYellow}>Needs Attention</StatusBadge>
             </StatusBadgeContainer>
-            <UpdateProgressButton>Update Progress</UpdateProgressButton>
+            <UpdateProgressButton>
+              <Icon icon={"Edit"} iconColor={white} size={16} style={{ marginRight: 16 }}/>
+              <div>
+                Update Progress
+              </div>
+            </UpdateProgressButton>
           </ValueAndUpdateContainer>
           <ChartContainer>
             {data && (
@@ -91,6 +128,7 @@ const StyledModal = Modal.styled`
 
 const ChartContainer = styled.div`
   width: 100%;
+  height: 240px;
 `
 
 const Header = styled.p`
@@ -108,12 +146,14 @@ const OwnerAndLogicContainer = styled.div`
 const ValueAndUpdateContainer = styled.div`
   width: 100%;
   display: flex;
+  margin-bottom: 22px;
 `
 
 const ValueText = styled.p`
   margin: 0px;
   margin-right: 16px;
   font-size: 32px;
+  font-weight: bold;
 `
 
 const StatusBadgeContainer = styled.div`
@@ -130,6 +170,7 @@ const UpdateProgressButton = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 12px;
+  font-weight: bold;
   color: ${props => props.theme.colors.white};
   border-radius: 4px;
   background: ${props => props.theme.colors.primary100};
@@ -139,6 +180,7 @@ const UpdateProgressButton = styled.div`
 
   &:hover {
     cursor: pointer;
+    background: ${props => props.theme.colors.primary80};
   }
 `
 
