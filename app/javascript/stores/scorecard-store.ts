@@ -14,18 +14,14 @@ export const ScorecardStoreModel = types
   })
   .extend(withEnvironment())
   .views(self => ({}))
-  // .actions(self => ({
-  //    get reset () {
-  //     self.kpis = [] as any;
-  //   })
-  // }))
   .actions(self => ({
-    getScorecard: flow(function*({ownerType, ownerId}) {
+    getScorecard: flow(function*(ownerType, ownerId) {
       try {
-        const response: ApiResponse<any> = yield self.environment.api.getScorecard({
+        console.log(ownerType, ownerId)
+        const response: ApiResponse<any> = yield self.environment.api.getScorecard(
           ownerType,
           ownerId,
-        });
+        );
         if (response.ok) {
           self.kpis = response.data;
         }

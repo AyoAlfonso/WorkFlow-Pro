@@ -20,12 +20,12 @@ export const ScorecardSelector = (): JSX.Element => {
   const [currentScorecard, setCurrentScorecard] = useState<string>("company");
   const { primary100 } = baseTheme.colors;
 
-  useEffect(() => {
-    scorecardStore.getScorecard({
-      ownerType,
-      ownerId,
-    });
-  }, [companyStore.company]);
+  // useEffect(() => {
+  //   scorecardStore.getScorecard(
+  //     ownerType,
+  //     ownerId,
+  //   );
+  // }, [companyStore.company]);
 
   useEffect(() => {
     const teams =
@@ -77,7 +77,7 @@ export const ScorecardSelector = (): JSX.Element => {
     setCurrentScorecard(`${value.name} ${value.lastName || ""}`);
     setOwnerType(value.type);
     setOwnerId(value.id);
-    scorecardStore.getScorecard(owner);
+    scorecardStore.getScorecard(owner.ownerType, ownerId);
     return owner;
   };
 

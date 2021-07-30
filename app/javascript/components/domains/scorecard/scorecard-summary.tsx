@@ -6,13 +6,12 @@ import { baseTheme } from "~/themes/base"
 import { Doughnut, Line } from "react-chartjs-2"
 import { StatusBadge } from "~/components/shared/status-badge"
 import { Icon } from "~/components/shared/icon"
-
-const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
-  greaterThan ? (value / target) * 100 : (target + target - value) / target * 100;
+import { getScorePercent } from "./scorecard-table-view"
 
 const WeekSummary = ({
   kpis,
-  currentWeek
+  currentWeek,
+  currentFiscalYear,
 }): JSX.Element => {
   const [data, setData] = useState<Object>(null);
   const [onTrack, setOnTrack] = useState(0);
@@ -40,7 +39,7 @@ const WeekSummary = ({
 
   useEffect(() => {
     const dataPoints = kpis.reduce((acc: number[], kpi: any) => {
-      const week = kpi.weeks?.[currentWeek];
+      const week = kpi.period[currentFiscalYear]?.[currentWeek];
       if (!week) {
         acc[0]++;
       }
@@ -123,6 +122,7 @@ const QuarterSummary = ({
   currentWeek,
   currentQuarter,
   fiscalYearStart,
+  currentFiscalYear,
 }): JSX.Element => {
   const [currentWeekPercent, setCurrentWeekPercent] = useState(0);
   const [lastWeekPercent, setLastWeekPercent] = useState<number | null>(null);
@@ -177,7 +177,7 @@ const QuarterSummary = ({
   const gatherData = (weeks: [number]) => {
     return kpis ? weeks
       .map((weekIndex: number) => kpis.reduce((acc: number, kpi: any) => {
-        const week = kpi.weeks?.[weekIndex];
+        const week = kpi.period[currentFiscalYear]?.[weekIndex];
         const { targetValue, greaterThan } = kpi
         return acc + (week ? Math.min(100, getScorePercent(
           week.score,
@@ -290,6 +290,7 @@ type ScorecardSummaryProps = {
   currentWeek: number,
   currentQuarter: number,
   fiscalYearStart: string,
+  currentFiscalYear: number,
 }
 
 export const ScorecardSummary = ({
@@ -297,15 +298,18 @@ export const ScorecardSummary = ({
   currentWeek,
   currentQuarter,
   fiscalYearStart,
+  currentFiscalYear,
 }: ScorecardSummaryProps): JSX.Element => {
   return (
     <Container>
-      <WeekSummary kpis={kpis} currentWeek={currentWeek} />
+      <WeekSummary kpis={kpis} currentWeek={currentWeek} currentFiscalYear={currentFiscalYear} />
       <QuarterSummary
         kpis={kpis}
         currentWeek={currentWeek}
         currentQuarter={currentQuarter}
-        fiscalYearStart={fiscalYearStart} />
+        fiscalYearStart={fiscalYearStart} 
+        currentFiscalYear={currentFiscalYear}
+      />
     </Container>
   )
 }

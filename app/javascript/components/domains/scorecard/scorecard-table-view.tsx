@@ -14,6 +14,9 @@ import { StatusBadge } from "~/components/shared/status-badge"
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown"
 import { ViewEditKPIModal } from "./shared/view-kpi-modal"
 
+export const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
+  greaterThan ? (value / target) * 100 : (target + target - value) / target * 100;
+
 type ScorecardTableViewProps = {
 	kpis: any
 }
@@ -23,9 +26,9 @@ export const ScorecardTableView = ({
 }: ScorecardTableViewProps): JSX.Element => {
 	const { t } = useTranslation();
 	const { companyStore: { company }, scorecardStore } = useMst();
+	const [year, setYear] = useState<number>(company.currentFiscalYear)
 	const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter)
 	const [tab, setTab] = useState<string>("KPIs")
-	const [scores, setScores] = useState<any>([])
 	const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(true);
 	const [viewEditKPIId, setViewEditKPIID] = useState(3);
 	const tabs = [
@@ -51,15 +54,6 @@ export const ScorecardTableView = ({
 				return `$${value.toFixed(2)}`
 			default:
 				return `${value}`;
-		}
-	}
-
-	const getScorePercent = (value: number, target: number, greaterThan: boolean) => {
-		if (greaterThan) {
-			return (value / target) * 100;
-		}
-		else {
-			return ((target + target - value) / target) * 100;
 		}
 	}
 
@@ -150,7 +144,7 @@ export const ScorecardTableView = ({
 				},
 				owner: kpi.ownedBy,
 			}
-			const weeks = Object.values(kpi.weeks)
+			const weeks = Object.values(kpi.period[year])
 			weeks.forEach((week: any) => {
 				const percentScore = getScorePercent(week.score, kpi.targetValue, kpi.greaterThan)
 				row[`wk_${week.week}`] = {

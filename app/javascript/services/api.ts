@@ -2,11 +2,6 @@ import { create, ApisauceInstance } from "apisauce";
 import { camelizeResponse, decamelizeRequest } from "../utils";
 import * as R from "ramda";
 
-interface IScorecardProps {
-  ownerType: string;
-  ownerId: number;
-}
-
 export class Api {
   client: ApisauceInstance;
   token: string;
@@ -575,8 +570,8 @@ export class Api {
     return this.client.post(`key_performance_indicator/scorecard_logs`, scorecardLog);
   }
 
-  async getScorecard(props: IScorecardProps) {
-    return this.client.get(`scorecard/${props.ownerType}/${props.ownerId}`);
+  async getScorecard(ownerType: string, ownerId: number) {
+    return this.client.get(`scorecard/${ownerType}/${ownerId}`);
   }
 
   //async setJWT(jwt) {}
