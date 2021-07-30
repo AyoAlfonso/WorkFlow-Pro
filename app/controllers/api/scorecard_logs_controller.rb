@@ -14,8 +14,10 @@ class Api::ScorecardLogsController < Api::ApplicationController
     @key_performance_indicators = policy_scope(KeyPerformanceIndicator).vieweable_by_entity(params[:owner_type], params[:owner_id])
     authorize @key_performance_indicators
     @kpi = @key_performance_indicators.map do |kpi|
-      value = (kpi.scorecard_logs.group_by(&:week).empty?) ? {} : kpi.scorecard_logs.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h
-      kpi.as_json.merge({ :owned_by => kpi.owned_by, :weeks => value })
+      @period = (kpi.scorecard_logs.empty?) ? {} : kpi.scorecard_logs.group_by { |log| log[:fiscal_year] }.map do |year, scorecard_log|
+        [year, scorecard_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
+      end.to_h
+      kpi.as_json.merge({ :owned_by => kpi.owned_by, :period => @period })
     end
 
     render json: @kpi
@@ -25,6 +27,7 @@ class Api::ScorecardLogsController < Api::ApplicationController
     #TODO: Roll up function but
 
   end
+
   private
 
   def set_scorecard_log
