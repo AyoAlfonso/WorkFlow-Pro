@@ -364,7 +364,7 @@ type ActivityLogTextProps = {
   mb: number,
 }
 
-const ActivityLogText = styled.p`
+const ActivityLogText = styled.p<ActivityLogTextProps>`
   font-size: 12px;
   margin-top: 0px;
   margin-bottom: ${props => props.mb}px;

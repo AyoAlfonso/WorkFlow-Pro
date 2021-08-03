@@ -29,8 +29,8 @@ export const ScorecardTableView = ({
 	const [year, setYear] = useState<number>(company.currentFiscalYear)
 	const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter)
 	const [tab, setTab] = useState<string>("KPIs")
-	const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(true);
-	const [viewEditKPIId, setViewEditKPIID] = useState(3);
+	const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(false);
+	const [viewEditKPIId, setViewEditKPIID] = useState(undefined);
 	const tabs = [
 		t("scorecards.tabs.kpis"),
 		t("scorecards.tabs.people"),
@@ -42,7 +42,6 @@ export const ScorecardTableView = ({
 		successGreen,
 		poppySunrise,
 		cautionYellow,
-		finePine,
 		warningRed,
 	} = baseTheme.colors
 
