@@ -566,8 +566,12 @@ export class Api {
     return this.client.delete(`/key_performance_indicator/${id}`);
   }
 
-  async createScorecardLog(KPIid: number, scorecardLog) {
-    return this.client.post(`key_performance_indicator/scorecard_logs`, scorecardLog);
+  async createScorecardLog(scorecardLog) {
+    return this.client.post(`scorecard_logs`, scorecardLog);
+  }
+
+  async deleteScorecardLog(id) {
+    return this.client.delete(`scorecard_logs/${id}`);
   }
 
   async getScorecard(ownerType: string, ownerId: number) {

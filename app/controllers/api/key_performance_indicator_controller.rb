@@ -46,7 +46,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
 
   def destroy
     @kpi.destroy!
-    render json: { annual_initiative_id: @annual_initiative.id, status: :ok }
+    # render json: { annual_initiative_id: @annual_initiative.id, status: :ok }
   end
 
   def close_kpi

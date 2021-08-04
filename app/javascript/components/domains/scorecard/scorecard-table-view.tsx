@@ -13,9 +13,10 @@ import { OwnedBy } from "./scorecard-owned-by"
 import { StatusBadge } from "~/components/shared/status-badge"
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown"
 import { ViewEditKPIModal } from "./shared/view-kpi-modal"
+import { UpdateKPIModal } from "./shared/update-kpi-modal"
 
 export const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
-  greaterThan ? (value / target) * 100 : (target + target - value) / target * 100;
+	greaterThan ? (value / target) * 100 : (target + target - value) / target * 100;
 
 type ScorecardTableViewProps = {
 	kpis: any
@@ -28,9 +29,12 @@ export const ScorecardTableView = ({
 	const { companyStore: { company }, scorecardStore } = useMst();
 	const [year, setYear] = useState<number>(company.currentFiscalYear)
 	const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter)
+	const [percentScores, setPercentScores] = useState<any>([]);
 	const [tab, setTab] = useState<string>("KPIs")
 	const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(false);
 	const [viewEditKPIId, setViewEditKPIID] = useState(undefined);
+	const [updateKPI, setUpdateKPI] = useState(undefined);
+	const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
 	const tabs = [
 		t("scorecards.tabs.kpis"),
 		t("scorecards.tabs.people"),
@@ -43,6 +47,7 @@ export const ScorecardTableView = ({
 		poppySunrise,
 		cautionYellow,
 		warningRed,
+		primary100,
 	} = baseTheme.colors
 
 	const formatValue = (unitType: string, value: number) => {
@@ -136,6 +141,11 @@ export const ScorecardTableView = ({
 			const description = `${kpi.description} ${kpi.greaterThan ? "≥" : "≤"} ${targetText}`
 			const logic = kpi.greaterThan ? `Greater than or equal to ${targetText}` : `Less than or equal to ${targetText}`
 			const row: any = {
+				updateKPI: {
+					id: kpi.id,
+					ownedById: kpi.ownedById,
+					unitType: kpi.unitType,
+				},
 				title: {
 					description,
 					logic,
@@ -166,9 +176,19 @@ export const ScorecardTableView = ({
 		() => [
 			{
 				Header: "",
-				id: "updateKPI",
+				accessor: "updateKPI",
 				width: "31px",
 				minWidth: "31px",
+				Cell: ({ value }) => {
+					return (
+						<UpdateKPIContainer onClick={() => {
+							setUpdateKPI(value);
+							setUpdateKPIModalOpen(true);
+						}}>
+							<Icon icon={"Update_KPI"} size={16} iconColor={primary100} />
+						</UpdateKPIContainer>
+					)
+				}
 			},
 			{
 				Header: () => (
@@ -338,13 +358,25 @@ export const ScorecardTableView = ({
 				)}
 			</Container>
 			{viewEditKPIId && (
-			<ViewEditKPIModal
-				kpiId={viewEditKPIId}
-				viewEditKPIModalOpen={viewEditKPIModalOpen}
-				setViewEditKPIModalOpen={setViewEditKPIModalOpen}
-			/>
-			)
-			}
+				<ViewEditKPIModal
+					kpiId={viewEditKPIId}
+					viewEditKPIModalOpen={viewEditKPIModalOpen}
+					setViewEditKPIModalOpen={setViewEditKPIModalOpen}
+				/>
+			)}
+			{updateKPI && (
+        <UpdateKPIModal
+          kpiId={updateKPI.id}
+          ownedById={updateKPI.ownedById}
+					unitType={updateKPI.unitType}
+          year={company.currentFiscalYear}
+          week={company.currentFiscalWeek}
+          currentValue={updateKPI.currentValue}
+          headerText={"Update Current Week"}
+          updateKPIModalOpen={updateKPIModalOpen}
+          setUpdateKPIModalOpen={setUpdateKPIModalOpen}
+        />
+			)}
 		</>
 	)
 }
@@ -438,11 +470,15 @@ const TableRow = styled.tr<TableRowProps>`
 `
 
 const UpdateKPIContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 48px;
+	height: 48px;
 
-`
-
-const UpdateKPI = styled.div`
-
+	&:hover {
+		cursor: pointer;
+	}
 `
 
 const KPITitleContainer = styled.div`
@@ -451,6 +487,10 @@ const KPITitleContainer = styled.div`
 	overflow: hidden;
 	justify-content: space-between;
 	padding: 4px 8px;
+
+	&:hover {
+		cursor: pointer;
+	}
 `
 
 const KPITextContainer = styled.div`

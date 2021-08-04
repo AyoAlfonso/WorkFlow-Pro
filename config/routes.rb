@@ -133,6 +133,7 @@ Rails.application.routes.draw do
     #scorecards
     # resources :scorecard, only: [:create]
     get "/scorecard/:owner_type/:owner_id", to: "scorecard_logs#show"
+    resources :scorecard_logs, only: [:create, :destroy]
 
     #questionnaires
     resources :questionnaires, only: [:index]

@@ -13,6 +13,7 @@ import { Icon } from "~/components/shared/icon"
 import { Line } from "react-chartjs-2"
 import { baseTheme } from "~/themes/base"
 import { getScorePercent } from "../scorecard-table-view"
+import { UpdateKPIModal } from "./update-kpi-modal"
 
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -32,7 +33,7 @@ export const ViewEditKPIModal = observer(
     const [header, setHeader] = useState("");
     const [value, setValue] = useState<number>(undefined)
     const [logic, setLogic] = useState("");
-    const [viewers, setViewers] = useState("");
+    const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
     const [data, setData] = useState(null);
 
     const {
@@ -155,6 +156,7 @@ export const ViewEditKPIModal = observer(
     }, [kpi])
 
     return (
+      <>
       <StyledModal
         isOpen={viewEditKPIModalOpen}
         style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
@@ -191,7 +193,9 @@ export const ViewEditKPIModal = observer(
             <ValueAndUpdateContainer>
               <ValueText>{formatValue(value, kpi.unitType)}</ValueText>
               {renderStatus()}
-              <UpdateProgressButton>
+              <UpdateProgressButton onClick={() => {
+                setUpdateKPIModalOpen(true);
+              }}>
                 <Icon icon={"Edit"} iconColor={white} size={16} style={{ marginRight: 16 }} />
                 <div>
                   Update Progress
@@ -239,6 +243,20 @@ export const ViewEditKPIModal = observer(
           </>))}
         </Container>
       </StyledModal>
+      {kpi && (
+        <UpdateKPIModal
+          kpiId={kpi.id}
+          ownedById={kpi.ownedById}
+          unitType={kpi.unitType}
+          year={company.currentFiscalYear}
+          week={company.currentFiscalWeek}
+          currentValue={value}
+          headerText={"Update Current Week"}
+          updateKPIModalOpen={updateKPIModalOpen}
+          setUpdateKPIModalOpen={setUpdateKPIModalOpen}
+        />
+      )}
+      </>
     )
   }
 )
@@ -361,11 +379,11 @@ const ActivityLogDelete = styled.span`
 `
 
 type ActivityLogTextProps = {
-  mb: number,
+  mb?: number,
 }
 
 const ActivityLogText = styled.p<ActivityLogTextProps>`
   font-size: 12px;
   margin-top: 0px;
-  margin-bottom: ${props => props.mb}px;
+  margin-bottom: ${props => props.mb || 0}px;
 `

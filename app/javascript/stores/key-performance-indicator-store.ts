@@ -39,7 +39,19 @@ export const KeyPerformanceIndicatorStoreModel = types
       if (response.ok) {
         showToast("KPI deleted", ToastMessageConstants.SUCCESS);
       }
-    }) 
+    }),
+    createScorecardLog: flow(function*(scorecardlog) {
+      const response: ApiResponse<any> = yield self.environment.api.createScorecardLog(scorecardlog);
+      if (response.ok) {
+        showToast("Log created", ToastMessageConstants.SUCCESS);
+      }
+    }),
+    deleteScorecardLog:  flow(function*(id) {
+      const response: ApiResponse<any> = yield self.environment.api.deleteScorecardLog(id);
+      if (response.ok) {
+        showToast("Log deleted", ToastMessageConstants.SUCCESS);
+      }
+    }),
   }))
 
 type KeyPerformanceIndicatorType = typeof KeyPerformanceIndicatorModel.Type;

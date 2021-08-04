@@ -1,7 +1,7 @@
 class Api::ScorecardLogsController < Api::ApplicationController
   include StatsHelper
   respond_to :json
-  # before_action :set_scorecard_log, only: [:show]
+  before_action :set_scorecard_log, only: [:destroy]
 
   def create
     @scorecard_log = ScoreCardLog.create!(scorecard_log_params)
@@ -21,6 +21,10 @@ class Api::ScorecardLogsController < Api::ApplicationController
     end
 
     render json: @kpis
+  end
+
+  def destroy
+    @scorecard_log.destroy!
   end
 
   def rollup
