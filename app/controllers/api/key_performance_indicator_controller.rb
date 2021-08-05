@@ -14,14 +14,15 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   end
 
   def create
+    @template_description = DescriptionTemplate.is_of_type(0).owned_by_company(current_company).body || ""
     @kpi = KeyPerformanceIndicator.new({
-                                         created_by: current_user,
-                                         owned_by: params[:owned_by],
-                                         viewers: { :data => params[:data] },
-                                         unit_type: params[:unit_type],
-                                         target_value: params[:target_value],
-                                         description: params[:description],
-                                       })
+      created_by: current_user,
+      owned_by: params[:owned_by],
+      viewers: { :data => params[:data] },
+      unit_type: params[:unit_type],
+      target_value: params[:target_value],
+      description: @template_description
+    })
 
     authorize @kpi
     @kpi.save!

@@ -4,13 +4,12 @@ class Api::SubInitiativesController < Api::ApplicationController
   respond_to :json
 
   def create
-    company = current_company
-
+    @template_description = DescriptionTemplate.is_of_type(2).owned_by_company(current_company).body || ""
     @sub_initiative = SubInitiative.new({
       created_by: current_user,
       owned_by: current_user,
       quarterly_goal_id: params[:quarterly_goal_id],
-      description: params[:description],
+      description: @template_description,
       context_description: "",
       importance: ["", "", ""],
     })

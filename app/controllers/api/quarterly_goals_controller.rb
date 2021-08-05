@@ -11,12 +11,12 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
   def create
     company = current_company
-
+    @template_description = DescriptionTemplate.is_of_type(1).owned_by_company(current_company).body || ""
     @quarterly_goal = QuarterlyGoal.new({
       created_by: current_user,
       owned_by: current_user,
       annual_initiative_id: params[:annual_initiative_id],
-      description: params[:description],
+      description: @template_description,
       context_description: "",
       importance: ["", "", ""],
       quarter: company.quarter_for_creating_quarterly_goals,

@@ -437,6 +437,17 @@ export class Api {
     return this.client.get(`/meeting_templates`);
   }
 
+  async getDescriptionTemplates() {
+    return this.client.get(`/description_templates`);
+  }
+
+  async createDescriptionTemplates(descriptionTemplates) {
+    return this.client.post(`/description_templates/create_templates`, descriptionTemplates);
+  }
+
+  async deleteDescriptionTemplates(id) {
+    return this.client.delete(`/description_templates/${id}`);
+  }
   async getMeetings() {
     return this.client.get(`/meetings`);
   }

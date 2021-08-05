@@ -163,6 +163,12 @@ Rails.application.routes.draw do
     #meeting_templates
     resources :meeting_templates, only: [:index]
 
+    #description_templates
+    resources :description_templates, only: [:index, :destroy, :show]
+    post "/description_templates/create_templates", to: "description_templates#update_or_create_templates"
+
+  
+
     #notifications
     resources :notifications, only: [:index, :update]
 
