@@ -25,7 +25,13 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
       {!R.isNil(rallyingCry) && (
         <SectionContainer>
           <RallyingCryContainer>
-            <TextDiv fontSize={"22px"} color={"primary100"} mr={"8px"}>
+            <TextDiv
+              fontSize={"22px"}
+              color={"primary100"}
+              mr={"8px"}
+              fontFamily={"Lato, Exo, sans-serif"}
+              fontWeight={"800"}
+            >
               Lynchpyn Goal™
             </TextDiv>
             <WrappedTextDiv fontSize={"16px"} color={"black"} ml={"auto"} mr={"auto"}>
@@ -108,6 +114,7 @@ const QuarterlyGoalCardContainer = styled.div`
   width: 100%;
   border-radius: 10px;
   box-shadow: 0px 3px 6px #00000029;
+  padding-bottom: 8px;
 `;
 
 const WrappedTextDiv = styled(TextDiv)`

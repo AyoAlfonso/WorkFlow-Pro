@@ -149,7 +149,7 @@ export const AnnualInitiativeCardMinimized = observer(
     const renderCounts = () => {
       if (milestoneCounts.length) return milestoneCounts;
       return (
-        <MilestoneCountContainer color={grey40} margin={`50%`}>
+        <MilestoneCountContainer color={grey40} margin={`auto`}>
           {" "}
           0{" "}
         </MilestoneCountContainer>
@@ -191,10 +191,19 @@ export const AnnualInitiativeCardMinimized = observer(
 
         <Container
           onClick={e => {
-            setShowMinimizedCard(!showMinimizedCard);
+            if(!disableOpen) {
+              setShowMinimizedCard(!showMinimizedCard);
+            }
           }}
         >
-          {disableOpen ? null : (
+        {disableOpen ? (
+              <StyledIcon
+                icon={"Chevron-Down"}
+                size={"12px"}
+                iconColor={grey100}
+                style={{ padding: "0px 5px" }}
+              />
+        ) : (
             <MaximizeIconContainer>
               <ShowInitiativeBar>
                 {" "}
@@ -297,7 +306,7 @@ const MilestoneCountContainer = styled.div<MilestoneCountContainerType>`
   color: ${props => props.color};
   display: inline-block;
   font-weight: bolder;
-  width: 0px;
+  transform: translateX(-50%);
 `;
 type GradientContainerType = {
   gradient?: string;

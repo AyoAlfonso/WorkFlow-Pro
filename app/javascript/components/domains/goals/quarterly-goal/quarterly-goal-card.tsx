@@ -20,6 +20,7 @@ interface IQuarterlyGoalCardProps {
   setSelectedAnnualInitiativeDescription?: React.Dispatch<React.SetStateAction<string>>;
   annualInitiativeDescription: string;
   goalCardType?: string;
+  onboarding?: boolean;
 }
 
 export const QuarterlyGoalCard = observer(
@@ -31,8 +32,9 @@ export const QuarterlyGoalCard = observer(
     setSelectedAnnualInitiativeDescription,
     annualInitiativeDescription,
     goalCardType,
+    onboarding = false,
   }: IQuarterlyGoalCardProps): JSX.Element => {
-    const { companyStore } = useMst();
+    const { companyStore, sessionStore } = useMst();
     const { currentFiscalYear, currentFiscalQuarter } = companyStore.company;
     const {
       warningRed,
@@ -160,15 +162,17 @@ export const QuarterlyGoalCard = observer(
               <StyledText>{quarterlyGoal.description}</StyledText>
             </DescriptionContainer>
 
-            <IconContainer>
-              <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} iconColor={showOptions} />
-            </IconContainer>
+            {!onboarding && (
+              <IconContainer>
+                <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} iconColor={showOptions} />
+              </IconContainer>
+            )}
           </RowContainer>
           <RowContainer mt={0} mb={0}>
             {/* // TODOIST: refactor the values of this component to get only */}
-            {quarterlyGoal.ownedBy && (
+              {(quarterlyGoal.ownedBy || sessionStore.profile) && (
               <OwnedBySection
-                ownedBy={quarterlyGoal.ownedBy}
+                ownedBy={quarterlyGoal.ownedBy || sessionStore.profile}
                 type={"quarterlyGoal"}
                 disabled={true}
                 size={16}
