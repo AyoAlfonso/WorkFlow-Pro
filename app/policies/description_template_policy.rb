@@ -11,6 +11,10 @@ class DescriptionTemplatePolicy < ApplicationPolicy
    true
   end
 
+  def update_template_body?
+    true
+  end
+
   def destroy?
     user_is_company_admin_of_current_company?
   end

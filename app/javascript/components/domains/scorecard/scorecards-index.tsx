@@ -20,9 +20,11 @@ export const ScorecardsIndex = observer(
     }, []);
 
     useEffect(() => {
+     if(ownerType && ownerId ) {
       scorecardStore
         .getScorecard({ ownerType, ownerId })
         .then(() => setKpis(toJS(scorecardStore.kpis)));
+      }
     }, [ownerType, ownerId]);
 
     if (loading || !companyStore.company) {
@@ -31,7 +33,7 @@ export const ScorecardsIndex = observer(
 
     return (
       <Container> 
-        <ScorecardSelector/>
+        <ScorecardSelector ownerType={ownerType} ownerId={ownerId}/>
         <ScorecardTableView kpis={scorecardStore.kpis} />
       </Container>
     );

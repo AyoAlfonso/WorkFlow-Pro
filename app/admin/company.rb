@@ -70,6 +70,15 @@ ActiveAdmin.register Company do
         end
       end
     end
+    panel "#{I18n.t('description_templates')}" do
+     attributes_table_for company.description_templates do
+        row :description_templates do |c|
+          if c.present?
+            c
+          end
+        end
+      end
+    end
     br
     panel 'Users' do
       table_for company.users do
@@ -138,12 +147,10 @@ ActiveAdmin.register Company do
       end 
     end
 
-    #Add  description_templates
-
-     f.inputs do
+    f.inputs do
       f.has_many :description_templates, allow_destroy: false, new_record: false do |tu|
         tu.input :title
-        tu.input :body, input_html: {disabled: false}
+        tu.input :body, as: :action_text
       end 
     end
     f.actions

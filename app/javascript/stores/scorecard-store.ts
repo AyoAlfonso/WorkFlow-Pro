@@ -27,7 +27,7 @@ export const ScorecardStoreModel = types
           ownerId,
         });
         if (response.ok) {
-          self.kpis = response.data;
+          self.kpis = response.data.kpi;
         }
         //TODO: Success message?
       } catch (e) {
