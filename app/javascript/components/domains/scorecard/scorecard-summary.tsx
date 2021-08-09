@@ -134,6 +134,7 @@ const QuarterSummary = ({
     backgroundBlue,
     greyActive,
     grey100,
+    poppySunrise,
     backgroundGrey,
     cautionYellow,
     successGreen,
@@ -228,7 +229,7 @@ const QuarterSummary = ({
 
   const renderCurrentWeekPercent = () => {
     return (
-      <Text ml={8} mr={16} fontSize={32} color={cautionYellow} bold>{currentWeekPercent}%</Text>
+      <Text ml={8} mr={16} fontSize={32} color={poppySunrise} bold>{currentWeekPercent}%</Text>
     )
   }
 
@@ -263,7 +264,7 @@ const QuarterSummary = ({
       <QuarterInfoContainer>
         <StatsContainer>
           <GradeContainer>
-            <Text fontSize={24} color={cautionYellow} bold>B</Text>
+            <Text fontSize={24} color={poppySunrise} bold>B</Text>
           </GradeContainer>
           {renderCurrentWeekPercent()}
           {renderWeekDifference()}
@@ -315,10 +316,21 @@ export const ScorecardSummary = ({
 }
 
 const Container = styled.div`
-  display: flex;
-  height: 320px;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  grid-template-rows: 320px;
+  grid-template-areas:
+    'week quarter';
+  grid-gap: 16px;
   width: 100%;
   margin-bottom: 32px;
+  @media (max-width: 850px) {
+    grid-template-columns: 100%;
+    grid-template-rows: 320px 340px;
+    grid-template-areas:
+      'week'
+      'quarter';
+  }
 `
 
 const Header = styled.h4`
@@ -327,26 +339,27 @@ const Header = styled.h4`
 `
 
 const WeekContainer = styled.div`
-  width: 288px;
-  height: 288px;
+  grid-area: week;
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 8px;
   padding: 16px;
 `
 
 const QuarterContainer = styled.div`
-  width: calc(100% - 360px);
-  height: 288px;
+  grid-area: quarter;
+  @media (min-width: 850px) {
+    width: calc(100% - 34px);
+  }
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 8px;
   padding: 16px;
-  margin-left: 16px;
 `
 
 const RowContainer = styled.div`
   margin-top: 35px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 12px;
 `
 
 const DoughnutChartContainer = styled.div`
