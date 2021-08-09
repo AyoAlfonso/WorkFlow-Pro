@@ -38,6 +38,6 @@ class Api::ScorecardLogsController < Api::ApplicationController
   end
 
   def scorecard_log_params
-    params.require(:scorecard_log).permit(:user_id, :score, :note, :key_performance_indicator_id, :fiscal_quarter, :fiscal_year)
+    params.require(:scorecard_log).permit(:user_id, :score, :note, :key_performance_indicator_id, :fiscal_quarter, :fiscal_year, :week)
   end
 end
