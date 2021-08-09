@@ -4,7 +4,8 @@ class Api::ScorecardLogsController < Api::ApplicationController
   before_action :set_scorecard_log, only: [:destroy]
 
   def create
-    @scorecard_log = ScoreCardLog.create!(scorecard_log_params)
+    binding.pry
+    @scorecard_log = ScorecardLog.create!(scorecard_log_params)
     authorize @scorecard_log
     @scorecard_log.save!
     render json: @scorecard_log
