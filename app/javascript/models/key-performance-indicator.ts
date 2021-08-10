@@ -18,9 +18,8 @@ export const KeyPerformanceIndicatorModel = types
     unitType: types.string,
     targetValue: types.number,
     isDeleted: types.boolean,
-    ownerType: types.string,
     weeks: types.map(ScorecardLogModel),
-    needsAttentionThreshold: types.number,
+    needsAttentionThreshold: types.maybeNull(types.number),
   })
   .views(self => ({}))
   .actions(self => ({}));

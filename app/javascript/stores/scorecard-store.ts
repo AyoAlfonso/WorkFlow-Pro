@@ -1,7 +1,6 @@
 import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { ApiResponse } from "apisauce";
-// import { ScorecardLogModel } from "../models/scorecard";
 import { KeyPerformanceIndicatorModel } from "../models/key-performance-indicator";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
@@ -26,8 +25,8 @@ export const ScorecardStoreModel = types
           ownerType,
           ownerId,
         });
-        if (response.ok) {
-          self.kpis = response.data;
+        if (response.ok && response.data.kpi.length > 0) {
+          self.kpis = response.data.kpi;
         }
         //TODO: Success message?
       } catch (e) {
