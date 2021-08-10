@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as R from "ramda";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { space, SpaceProps } from "styled-system";
 
 import { parseAnnualInitiative } from "./annual-initiative-parser";
@@ -15,32 +15,31 @@ interface IGoalSummaryProps {
 }
 
 export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
-  const annualInitiative = R.path(["annualInitiative"], formData);
+  const annualInitiative = R.pathOr("", ["annualInitiative"], formData);
   const annualInitiativeFormatted = parseAnnualInitiative(annualInitiative);
-  const rallyingCry = R.pathOr("", ["rallyingCry"], formData);
-  const quarterlyGoal = R.path(["quarterlyGoals", "0"], annualInitiativeFormatted);
-  const milestone = R.path(["milestones", "0"], quarterlyGoal);
+  const rallyingCry = R.pathOr("",["rallyingCry"], formData);
+  const quarterlyGoal = R.pathOr("", ["quarterlyGoals", "0"], annualInitiativeFormatted);
+  const milestone = R.pathOr("", ["milestones", "0"], quarterlyGoal);
   return (
     <Container>
-      {!R.isNil(rallyingCry) && (
+      {!R.isEmpty(rallyingCry) && (
         <SectionContainer>
+          <TextDiv
+            fontSize={"16px"}
+            color={"primary100"}
+            mb={"8px"}
+            fontFamily={"Lato, Exo, sans-serif"}
+          >
+            Lynchpyn Goal™
+          </TextDiv>
           <RallyingCryContainer>
-            <TextDiv
-              fontSize={"22px"}
-              color={"primary100"}
-              mr={"8px"}
-              fontFamily={"Lato, Exo, sans-serif"}
-              fontWeight={"800"}
-            >
-              Lynchpyn Goal™
-            </TextDiv>
-            <WrappedTextDiv fontSize={"16px"} color={"black"} ml={"auto"} mr={"auto"}>
+            <WrappedTextDiv fontSize={"16px"} fontWeight={"bold"} color={"black"}>
               {rallyingCry}
             </WrappedTextDiv>
           </RallyingCryContainer>
         </SectionContainer>
       )}
-      {!R.isNil(annualInitiative) && (
+      {annualInitiative?.description && (
         <SectionContainer>
           <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"}>
             Annual Objective
@@ -57,7 +56,7 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
           </AnnualInitiativeContainer>
         </SectionContainer>
       )}
-      {!R.isNil(quarterlyGoal) && (
+      {quarterlyGoal?.description && (
         <SectionContainer>
           <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"}>
             Quarterly Initiative
@@ -67,22 +66,41 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
               annualInitiativeYear={annualInitiative.fiscalYear}
               quarterlyGoal={quarterlyGoal}
               annualInitiativeDescription={R.pathOr("", ["description"], annualInitiative)}
+              onboarding={true}
             />
           </QuarterlyGoalCardContainer>
         </SectionContainer>
       )}
-      {!R.isNil(milestone) && (
+      {milestone?.description && (
         <SectionContainer>
-          <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"}>
-            Weekly Milestone
-          </TextDiv>
-          <MilestoneCard milestone={milestone} editable={false} itemType={"quarterlyGoal"} />
+          <MilestoneContainer>
+            <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"}>
+              Weekly Milestone
+            </TextDiv>
+            <MilestoneCard milestone={milestone} editable={false} itemType={"quarterlyGoal"} />
+          </MilestoneContainer>
         </SectionContainer>
       )}
     </Container>
   );
 };
 
+const fadeIn = keyframes`
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+`
+
+const animTiming = "800ms ease forwards"
+
+const fadeInAnimation = css`
+  animation: ${fadeIn} ${animTiming};
+`
 const Container = styled.div`
   width: 80%;
   height: 100%;
@@ -94,6 +112,7 @@ const SectionContainer = styled.div<SpaceProps>`
   height: 140px;
   width: 100%;
   margin-bottom: 24px;
+  ${fadeInAnimation}
 `;
 
 const RallyingCryContainer = styled.div`
@@ -115,6 +134,9 @@ const QuarterlyGoalCardContainer = styled.div`
   border-radius: 10px;
   box-shadow: 0px 3px 6px #00000029;
   padding-bottom: 8px;
+`;
+
+const MilestoneContainer = styled.div`
 `;
 
 const WrappedTextDiv = styled(TextDiv)`

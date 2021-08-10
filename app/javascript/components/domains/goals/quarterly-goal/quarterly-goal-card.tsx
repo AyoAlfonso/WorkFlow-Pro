@@ -143,12 +143,14 @@ export const QuarterlyGoalCard = observer(
             setShowOptions(defaultOptionsColor);
           }}
         >
-          <StatusBlockColorIndicator
-            milestones={quarterlyGoal.milestones || []}
-            indicatorWidth={"100%"}
-            indicatorHeight={2}
-            marginTop={4}
-          />
+          {onboarding || (
+            <StatusBlockColorIndicator
+              milestones={quarterlyGoal.milestones || []}
+              indicatorWidth={"100%"}
+              indicatorHeight={2}
+              marginTop={4}
+            />
+          )}
 
           <RowContainer mt={0} mb={0}>
             <DescriptionContainer>
@@ -170,7 +172,7 @@ export const QuarterlyGoalCard = observer(
           </RowContainer>
           <RowContainer mt={0} mb={0}>
             {/* // TODOIST: refactor the values of this component to get only */}
-              {(quarterlyGoal.ownedBy || sessionStore.profile) && (
+            {(quarterlyGoal.ownedBy || sessionStore.profile) && (
               <OwnedBySection
                 ownedBy={quarterlyGoal.ownedBy || sessionStore.profile}
                 type={"quarterlyGoal"}

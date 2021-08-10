@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { observer } from "mobx-react";
 import { HomeContainerBorders } from "../../home/shared-components";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { Text } from "../../../shared/text";
 import { AnnualInitiativeCardMinimized } from "./annual-initiative-card-minimized";
 import { AnnualInitiativeCardExpanded } from "./annual-initiative-card-expanded";
@@ -118,7 +118,7 @@ export const AnnualInitiativeCard = observer(
           }}
         >
           <HeaderContainer>
-            <DescriptionContainer>
+            <DescriptionContainer onboarding={onboarding}>
               <StyledText
                 closedInitiative={annualInitiative.closedInitiative}
                 onboarding={onboarding}
@@ -192,6 +192,7 @@ type ColumnContainerProps = {
   marginLeft: string;
 }
 
+
 const ColumnContainer = styled.div<ColumnContainerProps>`
   ${props => props.onboarding ? "" : "flex: 0 1 calc(20% - 16px);"}
   width: ${props => (props.onboarding ? "100%" : "calc(20% - 16px)")};
@@ -200,10 +201,14 @@ const ColumnContainer = styled.div<ColumnContainerProps>`
   min-width: 240px;
 `
 
-const DescriptionContainer = styled.div`
+type DescriptionContainerProps = {
+  onboarding: boolean;
+}
+
+const DescriptionContainer = styled.div<DescriptionContainerProps>`
   width: 100%;
   overflow-wrap: anywhere;
-  height: 32px;
+  ${props => props.onboarding ? "":"height: 32px;"}
 `;
 
 type StyledTextProps = {

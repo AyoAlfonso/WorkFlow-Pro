@@ -100,7 +100,7 @@ export const AnnualInitiativeCardMinimized = observer(
     };
     annualInitiative.quarterlyGoals.map(quarterlyGoal => {
       milestoneProgressCounter(quarterlyGoal);
-      if(quarterlyGoal.subInitiatives) {
+      if (quarterlyGoal.subInitiatives) {
         quarterlyGoal.subInitiatives.map(milestoneProgressCounter);
       }
     });
@@ -184,39 +184,41 @@ export const AnnualInitiativeCardMinimized = observer(
             </StatusBadge>
           </BadgeContainer>
         </RowContainer>
+        {disableOpen ||
+          (<>
+            <InitiativeCountContainer>{renderCounts()}</InitiativeCountContainer>
 
-        <InitiativeCountContainer>{renderCounts()}</InitiativeCountContainer>
-
-        <StatusSquareContainer>{renderStatusSquares()}</StatusSquareContainer>
+            <StatusSquareContainer>{renderStatusSquares()}</StatusSquareContainer>
+          </>)}
 
         <Container
           onClick={e => {
-            if(!disableOpen) {
+            if (!disableOpen) {
               setShowMinimizedCard(!showMinimizedCard);
             }
           }}
         >
-        {disableOpen ? (
-              <StyledIcon
-                icon={"Chevron-Down"}
-                size={"12px"}
-                iconColor={grey100}
-                style={{ padding: "0px 5px" }}
-              />
-        ) : (
-            <MaximizeIconContainer>
-              <ShowInitiativeBar>
-                {" "}
-                {showMinimizedCard ? "Show" : "Hide"} Initiatives{" "}
-              </ShowInitiativeBar>
-              <StyledIcon
-                icon={showMinimizedCard ? "Chevron-Down" : "Chevron-Up"}
-                size={"12px"}
-                iconColor={primary100} // TODOIT: ADD TO CONSTANT VARIABLES
-                style={{ padding: "0px 5px" }}
-              />
-            </MaximizeIconContainer>
-          )}
+          {disableOpen ? (
+            <StyledIcon
+              icon={"Chevron-Down"}
+              size={"12px"}
+              iconColor={grey100}
+              style={{ padding: "0px 5px" }}
+            />
+          ) : (
+              <MaximizeIconContainer>
+                <ShowInitiativeBar>
+                  {" "}
+                  {showMinimizedCard ? "Show" : "Hide"} Initiatives{" "}
+                </ShowInitiativeBar>
+                <StyledIcon
+                  icon={showMinimizedCard ? "Chevron-Down" : "Chevron-Up"}
+                  size={"12px"}
+                  iconColor={primary100} // TODOIT: ADD TO CONSTANT VARIABLES
+                  style={{ padding: "0px 5px" }}
+                />
+              </MaximizeIconContainer>
+            )}
         </Container>
       </div>
     );
