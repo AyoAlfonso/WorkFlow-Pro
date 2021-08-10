@@ -31,14 +31,14 @@ export const Templates = observer(
     const { descriptionTemplateStore } = useMst();
     const { descriptionTemplates } = descriptionTemplateStore;
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
-     const [initiativesTemplate, setInitiativesTemplate] = useState(
-       descriptionTemplatesFormatted.find(t => t.templateType == "initiatives")
+    const [initiativesTemplate, setInitiativesTemplate] = useState(
+       descriptionTemplatesFormatted?.find(t => t.templateType == "initiatives")
     );
     const [objectivesTemplate, setObjectivesTemplate] = useState(
-       descriptionTemplatesFormatted.find(t => t.templateType == "objectives")
+       descriptionTemplatesFormatted?.find(t => t.templateType == "objectives")
    );
     const [kpiTemplate, setKPITemplate] = useState(
-      descriptionTemplatesFormatted.find(t => t.templateType == "kpi")
+      descriptionTemplatesFormatted?.find(t => t.templateType == "kpi")
     );
     const [initiativesTemplateBody, setInitiativesTemplateBody] = useState({})
     const [objectivesTemplateBody, setObjectivesTemplateBody] = useState({})
@@ -49,7 +49,7 @@ export const Templates = observer(
 
     function createFormData(formData, key, data) {
         if (data === Object(data) || Array.isArray(data)) {
-            for (var i in data) {
+            for (const i in data) {
                 createFormData(formData, key + '[' + i + ']', data[i]);
             }
         } else {
@@ -59,7 +59,7 @@ export const Templates = observer(
 
     useEffect(() => {
       descriptionTemplateStore.fetchDescriptiveTemplates();
-      descriptionTemplatesFormatted.map(t => {
+      descriptionTemplatesFormatted?.map(t => {
         if (t.templateType == "kpi") {
           setKPITemplate(t);
         } else if (t.templateType == "objectives") {

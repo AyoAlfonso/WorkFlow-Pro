@@ -6,7 +6,7 @@ ActiveAdmin.register DefaultAdminTemplate do
     id_column
     column :title
     column :template_type do |mt|
-      mt.template_type.upcase
+      mt
     end
     actions
   end
@@ -31,7 +31,7 @@ ActiveAdmin.register DefaultAdminTemplate do
     attributes_table do
       row :title
       row "Template Type" do
-        default_admin_template.template_type.upcase
+        default_admin_template.template_type
       end
       row :body
     end

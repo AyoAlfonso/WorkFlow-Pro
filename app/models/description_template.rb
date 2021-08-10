@@ -15,4 +15,7 @@ class DescriptionTemplate < ApplicationRecord
     body.body
   end
 
+  def template_types
+    DescriptionTemplate.template_types
+  end
 end
