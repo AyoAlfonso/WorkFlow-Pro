@@ -59,16 +59,17 @@ class NotificationEmailJob
     end
   end
 
-  def meeting_did_not_start_this_period(meeting_type)
-    case meeting_type
-    when "personal_weekly"
-      Meeting.personal_meeting_for_week_on_user(@user, get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)).blank?
-    when "team_weekly"
-      @user.team_user_enablements.team_lead.any? do |team_lead_enablement|
-        Meeting.team_weekly_meetings.team_meetings(team_lead_enablement&.team&.id).for_week_of_date_started_only(get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)).blank?
+    def meeting_did_not_start_this_period(meeting_type)
+      case meeting_type
+      when "personal_weekly"
+        Meeting.personal_meeting_for_week_on_user(@user, get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)).blank?
+      when "team_weekly"
+        @user.team_user_enablements.team_lead.any? do |team_lead_enablement|
+          Meeting.team_weekly_meetings.team_meetings(team_lead_enablement&.team&.id).for_week_of_date_started_only(get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)).blank?
+        end
+      else
+        false
       end
-    else
-      false
     end
   end
 end

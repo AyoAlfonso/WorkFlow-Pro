@@ -4,62 +4,63 @@ class Api::KeyPerformanceIndicatorController < ApplicationController
   respond_to :json
 
   def index
-    if params[:meeting_id].present?
-    @kpi = policy_scope(KeyPerformanceIndicator).where(user_id: current_user.id)
-    render json: { kpi: @kpi }
-    render "/api/key_performance_indicator/index"
-  end
+      if params[:meeting_id].present?
+      @kpi = policy_scope(KeyPerformanceIndicator).where(user_id: current_user.id)
+      render json: { kpi: @kpi }
+      render "/api/key_performance_indicator/index"
+    end
 
-  def create
-    @kpi = KeyPerformanceIndicator.new({
-      created_by: current_user,
-      user_id: params[:user],  
-      company_id: params[:company],   # team, company, user
-      team_id: params[:team], 
-      unit_type: params[:unit_type],
-      target_value: params[:target_value],
-      description: params[:description],
-    })
+    def create
+      @kpi = KeyPerformanceIndicator.new({
+        created_by: current_user,
+        user_id: params[:user],  
+        company_id: params[:company],   # team, company, user
+        team_id: params[:team], 
+        unit_type: params[:unit_type],
+        target_value: params[:target_value],
+        description: params[:description],
+      })
 
-    authorize @kpi
-    @kpi.save!
-    #TO DO CREATE VIEWS
-    render json: @kpi
-    # "/api/key_performance_indicator/create"
-  end
-  
-  def show
-    @company = current_company
-    render "api/key_performance_indicator/show"
-  end
+      authorize @kpi
+      @kpi.save!
+      #TO DO CREATE VIEWS
+      render json: @kpi
+      # "/api/key_performance_indicator/create"
+    end
+    
+    def show
+      @company = current_company
+      render "api/key_performance_indicator/show"
+    end
 
-  def update
-    @kpi.update!(key_performance_indicator_params)
-    render json: @kpi
-  end
+    def update
+      @kpi.update!(key_performance_indicator_params)
+      render json: @kpi
+    end
 
-  def destroy
-    @kpi.destroy!
-    render json: { annual_initiative_id: @annual_initiative.id, status: :ok }
-  end
+    def destroy
+      @kpi.destroy!
+      render json: { annual_initiative_id: @annual_initiative.id, status: :ok }
+    end
 
-  def close_kpi
-    @kpi.update!(closed_at: Date.today)
-    render "api/key_performance_indicator/update"
-  end
+    def close_kpi
+      @kpi.update!(closed_at: Date.today)
+      render "api/key_performance_indicator/update"
+    end
 
-  private
+    private
 
-  def key_performance_indicator_params
-    params.permit(:id, :user_id, :company_id, :team_id, :description, :unit_type, :target_value)
-  end
+    def key_performance_indicator_params
+      params.permit(:id, :user_id, :company_id, :team_id, :description, :unit_type, :target_value)
+    end
 
-  def scorecard_log_params
-    params.permit(:id, :associated_kpi_id, :score, :note)
-  end
+    def scorecard_log_params
+      params.permit(:id, :associated_kpi_id, :score, :note)
+    end
 
-  def set_key_performance_indicator
-    @kpi = policy_scope(KeyPerformanceIndicator).find(params[:id])
-    authorize @kpi
+    def set_key_performance_indicator
+      @kpi = policy_scope(KeyPerformanceIndicator).find(params[:id])
+      authorize @kpi
+    end
   end
-end
+end 
