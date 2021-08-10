@@ -35,6 +35,7 @@ export const SubInitiativeStoreModel = types
       const env = getEnv(self);
       const response: any = yield env.api.updateSubInitiative(self.subInitiative);
       self.subInitiative = response.data;
+
       showToast(
         il8n.t("subInitiative.updated", { title: self.title }),
         ToastMessageConstants.SUCCESS,
