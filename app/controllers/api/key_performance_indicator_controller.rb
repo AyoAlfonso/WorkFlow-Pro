@@ -14,7 +14,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   end
 
   def create
-    @template_description = DescriptionTemplate.is_of_type(0).owned_by_company(current_company).body || ""
+    @template_description = DescriptionTemplate.find_by(company_id: current_company.id, template_type: 0).body_content || ""
     @kpi = KeyPerformanceIndicator.new({
       created_by: current_user,
       owned_by: params[:owned_by],

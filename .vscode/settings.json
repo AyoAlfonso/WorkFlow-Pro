@@ -9,5 +9,6 @@
   "editor.codeActionsOnSave": null,
   "ruby.rubocop.executePath": "/Users/ayooluwaalfonso/.gem/ruby/2.6.5/bin/",
   "ruby.rubocop.suppressRubocopWarnings": true,
-  "ruby.rubocop.configFilePath": "/Users/ayooluwaalfonso/code/lynchpyn/lynchpyncore/.rubocop.yml"
+  "ruby.rubocop.configFilePath": "/Users/ayooluwaalfonso/code/lynchpyn/lynchpyncore/.rubocop.yml",
+  "files.autoSave": "afterDelay"
 }

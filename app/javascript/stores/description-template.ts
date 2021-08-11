@@ -22,7 +22,7 @@ export const DescriptionTemplateStoreModel = types
   .actions(self => ({
     updateDescriptiveTemplates: flow(function*(templates) {
       try {
-        const response: ApiResponse<any> = yield self.environment.api.createDescriptionTemplates(templates,
+        const response: ApiResponse<any> = yield self.environment.api.updateDescriptiveTemplates(templates
         );
         if (response.ok) {
           self.descriptionTemplates = response.data.templates;
@@ -32,6 +32,20 @@ export const DescriptionTemplateStoreModel = types
         // caught bv Api Monitor
       }
     }),
+    updateDescriptiveTemplatesBody: flow(function*(formData) {
+     try {
+        const response: ApiResponse<any> = yield self.environment.api.updateDescriptiveTemplatesBody(formData,
+        );
+        if (response.ok) {
+            self.descriptionTemplates = response.data.templates;
+          // self.descriptionTemplates = response.data.templates;
+          // showToast("Templates updated", ToastMessageConstants.SUCCESS);
+        }
+      } catch {
+        // caught bv Api Monitor
+      }
+    }),
+
     deleteDescriptiveTemplate: flow(function*(meetingId) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.deleteMeeting(meetingId);

@@ -5,7 +5,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   respond_to :json
 
   def create
-    @template_description = DescriptionTemplate.is_of_type(1).owned_by_company(current_company).body || ""
+    @template_description = DescriptionTemplate.find_by(company_id: current_company.id, template_type: 1).body_content || ""
     @annual_initiative = AnnualInitiative.new({
       created_by: current_user, owned_by: current_user,
       description: @template_description,

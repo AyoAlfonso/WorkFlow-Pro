@@ -441,8 +441,12 @@ export class Api {
     return this.client.get(`/description_templates`);
   }
 
-  async createDescriptionTemplates(descriptionTemplates) {
+  async updateDescriptiveTemplates(descriptionTemplates) {
     return this.client.post(`/description_templates/create_templates`, descriptionTemplates);
+  }
+
+   async updateDescriptiveTemplatesBody(formData) {
+    return this.client.patch(`/description_templates/update_templates`, formData);
   }
 
   async deleteDescriptionTemplates(id) {

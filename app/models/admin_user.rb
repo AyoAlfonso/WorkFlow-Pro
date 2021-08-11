@@ -3,9 +3,4 @@ class AdminUser < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable,
          :recoverable, :rememberable, :validatable
-
-  # def self.current_logged_user
-  #   # ?
-  #   current_admin_user
-  # end
 end

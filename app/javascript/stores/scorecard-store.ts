@@ -25,7 +25,7 @@ export const ScorecardStoreModel = types
           ownerType,
           ownerId,
         });
-        if (response.ok && response.data.kpi.length > 0) {
+        if (response.ok && response.data?.kpi.length) {
           self.kpis = response.data.kpi;
         }
         //TODO: Success message?

@@ -32,7 +32,7 @@ class Company < ApplicationRecord
 
   enum onboarding_status: { incomplete: 0, complete: 1 }
 
-  after_create :create_company_static_data, :create_description_templates
+  after_create :create_company_static_data, :create_default_description_templates
 
   scope :with_team, ->(team_id) { joins(:teams).where({ teams: { id: team_id } }) }
 
@@ -45,9 +45,14 @@ class Company < ApplicationRecord
   end
 
   def verify_description_templates
-    description_templates.create(template_type: 0, company_id: self, body: "", title: "KPI Template" ) if description_templates.where(template_type: 0).blank?
-    description_templates.create(template_type: 1, company_id: self, body: "", title: "Objective Template"  ) if description_templates.where(template_type: 1).blank?
-    description_templates.create(template_type: 2, company_id: self, body: "", title: "Initiative Template"  ) if description_templates.where(template_type: 2).blank?
+      existing_templates = description_templates.where(template_type: DefaultAdminTemplate.template_types.values.map(&:to_i)).pluck(:template_type)
+       if existing_templates.length < DefaultAdminTemplate.template_types.length
+         DefaultAdminTemplate.find_each do |template|
+              if !template.template_type.in?(existing_templates)
+                DescriptionTemplate.create!(template_type: template.template_type, company: self, body: template.body, title: template.title)
+              end
+          end
+       end
   end
   
   def self.find_first_with_team(team_id)
@@ -114,9 +119,9 @@ class Company < ApplicationRecord
     CompanyStaticData.create!(field: "sub_initiative", value: "Supporting Initiative", company: self)
   end
 
-  def create_description_templates
-    DescriptionTemplate.create!(template_type: 0, company_id: self, body: "", title: "KPI Template" )
-    DescriptionTemplate.create!(template_type: 1, company_id: self, body: "", title: "Objective Template" )
-    DescriptionTemplate.create!(template_type: 2, company_id: self, body: "", title: "Initiative Template"  )
-  end 
+  def create_default_description_templates
+    DefaultAdminTemplate.find_each do |template|
+      DescriptionTemplate.create!(template_type: template.template_type, company_id: self.id, body: template.body, title: template.title)
+    end
+  end
 end

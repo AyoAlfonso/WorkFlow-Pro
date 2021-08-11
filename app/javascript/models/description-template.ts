@@ -1,5 +1,6 @@
 import * as R from "ramda";
 import { types } from "mobx-state-tree";
+import { TemplateBodyModel } from "./template-body";
 
 export const DescriptionTemplateModel = types.model("DescriptionTemplateModel").props({
   id: types.identifierNumber,
@@ -8,7 +9,7 @@ export const DescriptionTemplateModel = types.model("DescriptionTemplateModel").
   templateType: types.string,
   companyId: types.maybeNull(types.number),
   title: types.maybeNull(types.string),
-  body: types.maybeNull(types.string),
+  body: types.maybeNull(TemplateBodyModel),
 });
 
 type DescriptionTemplateModelType = typeof DescriptionTemplateModel.Type;

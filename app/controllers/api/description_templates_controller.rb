@@ -1,7 +1,5 @@
 class Api::DescriptionTemplatesController < Api::ApplicationController
   before_action :set_template, only: [:update, :destroy, :show]
-  # before_action :prefill_template, only: [:index]
-#  before_action :skip_authorization, only: :update_or_create_templates 
   respond_to :json
 
   def index
@@ -15,7 +13,7 @@ class Api::DescriptionTemplatesController < Api::ApplicationController
     DescriptionTemplate.upsert_all(params[:description_template]) if(description_template_params)
     @templates = policy_scope(DescriptionTemplate)
     authorize @templates
-    render json: { templates: @templates, status: :ok }  
+     render json: { templates: @templates, status: :ok }
   end 
 
   def show
@@ -23,10 +21,11 @@ class Api::DescriptionTemplatesController < Api::ApplicationController
     render json: { template: @template, status: :ok }
   end
 
-  def update
-    @template.update!(template_params)
-    # render "api/description_template/update"
-    render json: { template: @template, status: :ok }
+  def update_template_body
+    Company.find(current_company.id).update!(company_attributes_params)
+    @templates = policy_scope(DescriptionTemplate)
+    authorize @templates
+    render json: { template: @templates, status: :ok }
   end
 
   def destroy
@@ -34,8 +33,13 @@ class Api::DescriptionTemplatesController < Api::ApplicationController
     render json: { template: @template.id, status: :ok }
   end
 
+  def company_attributes_params
+    #user should not be allowed to update the display_format once created
+    params.permit( description_templates_attributes: [:id, :title, :body])
+  end
+
   def description_template_params
-    params.permit(description_template: [:id, :template_type, :company_id, :title, :body, :updated_at, :created_at] )
+    params.permit(description_template: [:id, :template_type, :company_id, :title, :updated_at, :created_at] )
   end
 
   def set_template

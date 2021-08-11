@@ -138,12 +138,10 @@ ActiveAdmin.register Company do
       end 
     end
 
-    #Add  description_templates
-
-     f.inputs do
+    f.inputs do
       f.has_many :description_templates, allow_destroy: false, new_record: false do |tu|
-        tu.input :title
-        tu.input :body, input_html: {disabled: false}
+        tu.input :title, input_html: {disabled: true}
+        tu.input :body, as: :action_text
       end 
     end
     f.actions
