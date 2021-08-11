@@ -31,11 +31,12 @@ export const AnnualInitiativeStoreModel = types
     }),
     update: flow(function*() {
       const env = getEnv(self);
+      const { goalStore } = getRoot(self);
+      
       try {
         const response: any = yield env.api.updateAnnualInitiative(self.annualInitiative);
         const responseAnnualInitiative = response.data.annualInitiative;
         self.annualInitiative = responseAnnualInitiative;
-        const { goalStore } = getRoot(self);
         goalStore.updateAnnualInitiative(responseAnnualInitiative);
         showToast(`${self.title} updated`, ToastMessageConstants.SUCCESS);
         return responseAnnualInitiative;
@@ -94,10 +95,7 @@ export const AnnualInitiativeStoreModel = types
         showToast("Key Result updated", ToastMessageConstants.SUCCESS);
         return response.data.keyElement;
       } catch (error) {
-         showToast(
-           il8n.t("annualInitiative.keyElementUpdateError"),
-           ToastMessageConstants.ERROR,
-         );
+        showToast(il8n.t("annualInitiative.keyElementUpdateError"), ToastMessageConstants.ERROR);
       }
     }),
     deleteKeyElement: flow(function*(keyElementId) {

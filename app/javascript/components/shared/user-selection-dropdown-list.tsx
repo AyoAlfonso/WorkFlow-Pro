@@ -14,6 +14,7 @@ interface IUserSelectionDropdownListProps {
   userList: Array<UserType>;
   onUserSelect: any;
   setShowUsersList: any;
+  setOwner?: any;
 }
 
 const filter = createFilterOptions<any>({ limit: 5 });
@@ -30,20 +31,19 @@ export const UserSelectionDropdownList = ({
   userList,
   onUserSelect,
   setShowUsersList,
+  setOwner,
 }: IUserSelectionDropdownListProps): JSX.Element => {
   const [value, setValue] = useState<any>(null);
   const classes = useStyles();
 
   return (
     <ActionDropdownContainer>
-      <CloseIconContainer onClick={() => setShowUsersList(false)}>
-        <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
-      </CloseIconContainer>
       <Autocomplete
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue);
           onUserSelect(newValue);
+          setOwner(newValue);
           setShowUsersList(false);
         }}
         filterOptions={(options, params) => {
@@ -80,7 +80,7 @@ export const UserSelectionDropdownList = ({
         renderInput={params => (
           <TextField
             {...params}
-            label="Select user"
+            label={`Select User`}
             variant="outlined"
             className={classes.textField}
             margin="dense"

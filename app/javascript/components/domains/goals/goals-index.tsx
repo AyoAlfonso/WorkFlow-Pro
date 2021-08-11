@@ -14,6 +14,7 @@ import { RallyingCry } from "./shared/rallying-cry";
 import { PersonalVision } from "./shared/personal-vision";
 import { CreateGoalSection } from "./shared/create-goal-section";
 import { useTranslation } from "react-i18next";
+import { AnnualInitiativeType } from "~/types/annual-initiative";
 import { GoalsCoreFour } from "./goals-core-four";
 import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge";
 import { SubInitiativeModalContent } from "./sub-initiative/sub-initiaitive-modal-content";
@@ -43,8 +44,8 @@ export const GoalsIndex = observer(
       boolean
     >(false);
 
-    const [companyGoalsFilter, setCompanyGoalsFilter] = useState<string>("all");
-    const [personalGoalsFilter, setPersonalGoalsFilter] = useState<string>("all");
+    const [companyGoalsFilter, setCompanyGoalsFilter] = useState<string>("open");
+    const [personalGoalsFilter, setPersonalGoalsFilter] = useState<string>("open");
 
     const [companyPlanning, setCompanyPlanning] = useState<boolean>(false);
     const [personalPlanning, setPersonalPlanning] = useState<boolean>(false);
@@ -99,9 +100,10 @@ export const GoalsIndex = observer(
     };
 
     const companyGoalsToShow = () => {
+    
       switch (companyGoalsFilter) {
-        case "all":
-          return companyGoals.activeAnnualInitiatives;
+        case "open":
+          return companyGoals.activeAnnualInitiatives as Array<AnnualInitiativeType>;
         case "me":
           return companyGoals.myAnnualInitiatives;
         case "closed":
@@ -113,7 +115,7 @@ export const GoalsIndex = observer(
 
     const personalGoalsToShow = () => {
       switch (personalGoalsFilter) {
-        case "all":
+        case "open":
           return personalGoals.activeAnnualInitiatives;
         case "closed":
           return personalGoals.closedAnnualInitiatives;

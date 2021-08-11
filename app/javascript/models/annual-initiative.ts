@@ -24,6 +24,13 @@ export const AnnualInitiativeModel = types
       let itemClosed = false;
       if (self.closedAt) {
         itemClosed = true;
+      }
+      return itemClosed;
+    },
+    get deepClosedInitiative() {
+      let itemClosed = false;
+      if (self.closedAt) {
+        itemClosed = true;
       } else {
         self.quarterlyGoals.forEach(qg => {
           if (qg.closedAt) {
@@ -66,7 +73,7 @@ export const AnnualInitiativeModel = types
     get closedQuarterlyGoals() {
       const quarterlyGoals = [];
       self.quarterlyGoals
-        .filter(qg => !qg.closedAt && qg.subInitiatives.find(si => si.closedAt) || qg.closedAt)
+        .filter(qg => (!qg.closedAt && qg.subInitiatives.find(si => si.closedAt)) || qg.closedAt)
         .forEach(qg => {
           quarterlyGoals.push(
             Object.assign(
@@ -79,7 +86,7 @@ export const AnnualInitiativeModel = types
     },
     get openPersonalQuarterlyGoals() {
       const { sessionStore } = getRoot(self);
-      const userId = sessionStore.profile.id
+      const userId = sessionStore.profile.id;
       const quarterlyGoals = [];
       self.quarterlyGoals
         .filter(qg => !qg.closedAt && qg.ownedById == userId)

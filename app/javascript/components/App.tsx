@@ -236,7 +236,6 @@ export const App = observer(
                           component={AccountabilityChart}
                         />
                         <Route exact path="/company/strategic_plan" component={StrategicPlan} />
-                        <Route exact path="/goals" component={GoalsIndex} />
                         <Route exact path="/scorecard/:owner_type/:owner_id" component={ScorecardsIndex} />
                         <Route exact path="/journals" component={JournalIndex} />
                         <Route exact path="/notes" component={NotesIndex} />

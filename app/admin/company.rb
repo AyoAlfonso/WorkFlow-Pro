@@ -15,7 +15,8 @@ ActiveAdmin.register Company do
                 :forum_type,
                 :onboarding_status,
                 core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4],
-                company_static_datas_attributes: [:id, :value]
+                company_static_datas_attributes: [:id, :value],
+                description_templates_attributes: [:id, :title, :body]
 
   index do
     selectable_column
@@ -134,6 +135,13 @@ ActiveAdmin.register Company do
       f.has_many :company_static_datas, allow_destroy: false, new_record: false do |tu|
         tu.input :field, input_html: {disabled: true}
         tu.input :value
+      end 
+    end
+
+    f.inputs do
+      f.has_many :description_templates, allow_destroy: false, new_record: false do |tu|
+        tu.input :title, input_html: {disabled: true}
+        tu.input :body, as: :action_text
       end 
     end
     f.actions
