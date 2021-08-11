@@ -41,6 +41,5 @@ yarn-debug.log*
 
 build-storybook.log
 .vscode/settings.json
+.idea/
 *.DS_Store
-
-.idea
