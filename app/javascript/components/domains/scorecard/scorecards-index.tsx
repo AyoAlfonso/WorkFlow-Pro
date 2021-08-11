@@ -3,10 +3,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { useParams } from "react-router-dom";
-import { Loading } from "../../shared/loading";
-import { ScorecardTableView } from "./scorecard-table-view";
-import { ScorecardSelector } from "./scorecard-selector";
-import { toJS } from "mobx";
+import { Loading } from "../../shared/loading"
+import { ScorecardTableView } from "./scorecard-table-view"
+import { ScorecardSelector } from "./scorecard-selector"
+import { ScorecardSummary } from "./scorecard-summary"
+import { toJS } from "mobx"
 
 export const ScorecardsIndex = observer(
   (): JSX.Element => {
