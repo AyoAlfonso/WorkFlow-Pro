@@ -278,10 +278,11 @@ True value of LynchPyn is in working together with others in your team and compa
           formKeys: ["rallyingCry"],
           callback: setGoalDataState,
           subText: !R.view(R.lensPath(["rallyingCry"]), goalData) ? "" : `Awesome ${profile.firstName}! This is what we call your LynchPyn Goal™. This is the ultimate filter when the company is making any strategic decisions until it's achieved`,
+          style: { marginLeft: "2px" }
         },
         {
           label:
-            "What's a specific Goal you can set for the next year to achieve your LynchPyn Goal™? This can be specific to your team.",
+            "What's a specific Objective you can set for the next year to achieve your LynchPyn Goal™? This can be specific to your team.",
           fieldType: EFieldType.TextField,
           formKeys: ["annualInitiative", "description"],
           callback: setGoalDataState,
@@ -309,7 +310,7 @@ True value of LynchPyn is in working together with others in your team and compa
           formKeys: ["annualInitiative", "quarterlyGoals", "0", "milestones", "0", "description"],
           callback: setGoalDataState,
           subText:
-            !R.view(R.lensPath(["annualInitiative", "quarterlyGoals", "0", "milestones", "0", "description"]), goalData) ? "" : "You're all done. Weekly Milestones are the final piece in the Goals and Initiatives puzzle. Click next to see how this helps you prioritize each day.",
+            !R.view(R.lensPath(["annualInitiative", "quarterlyGoals", "0", "milestones", "0", "description"]), goalData) ? "" : "You're all done. Weekly Milestones are the final piece in the Objectives and Initiatives puzzle. Click next to see how this helps you prioritize each day.",
         },
       ],
     },
@@ -369,7 +370,7 @@ True value of LynchPyn is in working together with others in your team and compa
     <FormBuilder
       formFields={leftBodyComponentProps[2].formFields}
       formData={goalData}
-      formContainerStyle={{ height: "140px" }}
+      formContainerStyle={{ height: "160px" }}
       stepwise={true}
     />,
     <AddPyns formData={formData} />,
