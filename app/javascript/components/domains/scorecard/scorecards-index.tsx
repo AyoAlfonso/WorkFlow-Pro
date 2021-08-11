@@ -33,6 +33,7 @@ export const ScorecardsIndex = observer(
     }
 
     return (
+<<<<<<< HEAD
       // <<<<<<< HEAD
       <Container>
         <h2>Scorecards</h2>
@@ -50,6 +51,11 @@ export const ScorecardsIndex = observer(
         <ScorecardTableView kpis={scorecardStore.kpis} />
 >>>>>>> 639efa0504c866d7be6512405f3e876847663866
       </Container> */}
+=======
+      <Container> 
+        <ScorecardSelector ownerType={ownerType} ownerId={ownerId}/>
+        <ScorecardTableView kpis={scorecardStore.kpis} />
+>>>>>>> d86ac101444340e245d973bc754a48c6158b243e
       </Container>
     );
   },
