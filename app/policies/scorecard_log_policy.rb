@@ -1,4 +1,4 @@
-class ScorecardLogsPolicy < ApplicationPolicy
+class ScorecardLogPolicy < ApplicationPolicy
   def index? 
     true
   end
@@ -22,8 +22,7 @@ class ScorecardLogsPolicy < ApplicationPolicy
     end
 
     def resolve
-      # scope.includes([:created_by, :user, :team ]) 
-      scope.all
+      scope.none
     end
   end
 end

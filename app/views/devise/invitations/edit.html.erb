@@ -10,23 +10,15 @@
   <%= f.label :last_name %>
   <%= f.text_field :last_name %>
 
-  <%= f.label :title %>
-  <%= f.select :title, ["Chief executive officer",
-                        "Chief operating officer",
-                        "Chief financial officer",
-                        "Chief information officer",
-                        "Chief innovation officer",
-                        "Chief strategy officer",
-                        "Chief compliance officer",
-                        "Chief marketing officer",
-                        "Chief talent officer",
-                        "Chief human resources officer",
-                        "Chief user experience officer",
-                        "President",
-                        "Partner",
-                        "Chairman"],  {include_blank: "Select A Role"}, { :class => 'devise-title-submit' }   %>
+  <%= f.label "What is your role?" %>
+  <%= f.select :title, ["CEO/President",
+                        "Leadership/C-Level/VP"
+                        "Team Manager/Lead",
+                        "Team Member (not a manager/lead)",
+                        "Human Resources Professional"],
+                            {include_blank: "Select A Role"}, { :class => 'devise-title-submit' }   %>
 
-  <%= f.label :password %>
+  <%= f.label "Create a password" %>
   <%= f.password_field :password %>
 
   <%= f.label :password_confirmation %>

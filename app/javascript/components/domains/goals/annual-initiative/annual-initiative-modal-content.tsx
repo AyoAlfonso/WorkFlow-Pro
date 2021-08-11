@@ -138,7 +138,9 @@ export const AnnualInitiativeModalContent = observer(
       );
     };
 
-    const goalYearString = `FY${(annualInitiative.fiscalYear % 100)}/${(annualInitiative.fiscalYear + 1) % 100}`;
+    const goalYearString = `FY${annualInitiative.fiscalYear % 100}/${(annualInitiative.fiscalYear +
+      1) %
+      100}`;
 
     const renderHeader = (): JSX.Element => {
       return (
@@ -253,9 +255,10 @@ export const AnnualInitiativeModalContent = observer(
       <>
         {annualInitiative.closedAt && (
           <ClosedStatusBannerContainer>
-          {t("annualInitiative.cardClosed", {
-            title: sessionStore.companyStaticData[0].value
-          })}. {t("annualInitiative.createdOn")} {`FY${annualInitiative.fiscalYear}`}.
+            {t("annualInitiative.cardClosed", {
+              title: sessionStore.companyStaticData[0].value,
+            })}
+            . {t("annualInitiative.createdOn")} {`FY${annualInitiative.fiscalYear}`}.
             <AnnualInitiativeActionContainer>
               {renderDropdownOptions()}
               <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>

@@ -11,6 +11,7 @@ class Company < ApplicationRecord
   has_many :annual_initiatives, dependent: :restrict_with_error
   has_many :teams, dependent: :restrict_with_error
   has_many :company_static_datas, dependent: :destroy
+  has_many :description_templates, dependent: :destroy
   has_one_attached :logo, dependent: :destroy
   has_one :sign_up_purpose, dependent: :destroy
   accepts_nested_attributes_for :sign_up_purpose
@@ -21,6 +22,7 @@ class Company < ApplicationRecord
   has_many :user_company_enablements
   has_many :users, through: :user_company_enablements
 
+  accepts_nested_attributes_for :description_templates, :allow_destroy => true
   accepts_nested_attributes_for :company_static_datas, :allow_destroy => true
   accepts_nested_attributes_for :user_company_enablements, :allow_destroy => true
 
@@ -30,11 +32,11 @@ class Company < ApplicationRecord
 
   enum onboarding_status: { incomplete: 0, complete: 1 }
 
-  after_create :create_company_static_data
+  after_create :create_company_static_data, :create_default_description_templates
 
   scope :with_team, ->(team_id) { joins(:teams).where({ teams: { id: team_id } }) }
 
-  after_save :verify_company_static_data
+  after_save :verify_company_static_data, :verify_description_templates
 
   def verify_company_static_data
     company_static_datas.create(field: "annual_objective", value: "Annual Objective") if company_static_datas.where(field: "annual_objective").blank?
@@ -42,6 +44,17 @@ class Company < ApplicationRecord
     company_static_datas.create(field: "sub_initiative", value: "Supporting Initiative") if company_static_datas.where(field: "sub_initiative").blank?
   end
 
+  def verify_description_templates
+      existing_templates = description_templates.where(template_type: DefaultAdminTemplate.template_types.values.map(&:to_i)).pluck(:template_type)
+       if existing_templates.length < DefaultAdminTemplate.template_types.length
+         DefaultAdminTemplate.find_each do |template|
+              if !template.template_type.in?(existing_templates)
+                DescriptionTemplate.create!(template_type: template.template_type, company: self, body: template.body, title: template.title)
+              end
+          end
+       end
+  end
+  
   def self.find_first_with_team(team_id)
     with_team(team_id).first
   end
@@ -104,5 +117,11 @@ class Company < ApplicationRecord
     CompanyStaticData.create!(field: "annual_objective", value: "Annual Objective", company: self)
     CompanyStaticData.create!(field: "quarterly_initiative", value: "Quarterly Initiative", company: self)
     CompanyStaticData.create!(field: "sub_initiative", value: "Supporting Initiative", company: self)
+  end
+
+  def create_default_description_templates
+    DefaultAdminTemplate.find_each do |template|
+      DescriptionTemplate.create!(template_type: template.template_type, company_id: self.id, body: template.body, title: template.title)
+    end
   end
 end

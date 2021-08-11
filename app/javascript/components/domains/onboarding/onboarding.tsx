@@ -33,7 +33,7 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
     if (!R.isNil(onboardingCompany)) {
       const signUpPurpose = R.path(["signUpPurpose"], onboardingCompany);
       const fiscalYearStart = new Date(R.path(["fiscalYearStart"], onboardingCompany));
-      const forumType = new Date(R.path(["forumType"], onboardingCompany));
+      const forumType = R.path(["forumType"], onboardingCompany);
       const logoUrl = R.path(["logoUrl"], onboardingCompany);
       const logoFiles = R.isNil(logoUrl) ? [] : [await convertUrlToFile(logoUrl)];
       const coreFour = R.pipe(
@@ -575,7 +575,7 @@ True value of LynchPyn is in working together with others in your team and compa
         currentStep={currentStep}
         steps={stepLabels}
         showLynchpynLogo={true}
-        nextButtonDisabled={!hasCreationParams([requiredFields])}
+        nextButtonDisabled={!hasCreationParams([...requiredFields])}
         onStepClick={onStepClick}
         stepClickDisabled={currentStep === 0}
         completeButtonText={"Send Invites and Complete"}
