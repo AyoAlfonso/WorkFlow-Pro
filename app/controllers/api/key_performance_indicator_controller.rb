@@ -21,7 +21,8 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
       viewers: { :data => params[:data] },
       unit_type: params[:unit_type],
       target_value: params[:target_value],
-      description: @template_description
+      description: @template_description,
+      needs_attention_threshold: params[:needs_attention_threshold]
     })
 
     authorize @kpi
@@ -52,7 +53,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   private
 
   def kpi_params
-    params.permit(:id, :owned_by, :viewers, :description, :unit_type, :target_value)
+    params.permit(:id, :owned_by, :viewers, :description, :unit_type, :target_value, :needs_attention_threshold)
   end
 
   def scorecard_log_params
