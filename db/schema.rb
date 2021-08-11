@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_10_024954) do
+ActiveRecord::Schema.define(version: 2021_08_10_064031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -294,6 +294,7 @@ ActiveRecord::Schema.define(version: 2021_08_10_024954) do
     t.boolean "greater_than", default: true
     t.jsonb "viewers"
     t.bigint "owned_by_id"
+    t.float "needs_attention_threshold"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
   end
