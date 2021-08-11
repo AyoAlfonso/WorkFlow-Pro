@@ -87,8 +87,11 @@ const initialState = {
   },
   keyPerformanceIndicatorStore: {
     kpi: null,
-  }
-};
+  },
+  descriptionTemplateStore: {
+    descriptionTemplates: [],
+  },
+}
 
 export const rootStore = RootStoreModel.create(initialState, environment);
 

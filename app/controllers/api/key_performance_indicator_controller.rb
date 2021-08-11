@@ -14,14 +14,16 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   end
 
   def create
+    @template_description = DescriptionTemplate.find_by(company_id: current_company.id, template_type: 0).body_content || ""
     @kpi = KeyPerformanceIndicator.new({
-                                         created_by: current_user,
-                                         owned_by: params[:owned_by],
-                                         viewers: { :data => params[:data] },
-                                         unit_type: params[:unit_type],
-                                         target_value: params[:target_value],
-                                         description: params[:description],
-                                       })
+      created_by: current_user,
+      owned_by: params[:owned_by],
+      viewers: { :data => params[:data] },
+      unit_type: params[:unit_type],
+      target_value: params[:target_value],
+      description: @template_description,
+      needs_attention_threshold: params[:needs_attention_threshold]
+    })
 
     authorize @kpi
     @kpi.save!
@@ -57,7 +59,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   private
 
   def kpi_params
-    params.permit(:id, :owned_by, :viewers, :description, :unit_type, :target_value)
+    params.permit(:id, :owned_by, :viewers, :description, :unit_type, :target_value, :needs_attention_threshold)
   end
 
   def scorecard_log_params

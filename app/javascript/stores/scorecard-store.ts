@@ -1,7 +1,6 @@
 import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { ApiResponse } from "apisauce";
-// import { ScorecardLogModel } from "../models/scorecard";
 import { KeyPerformanceIndicatorModel } from "../models/key-performance-indicator";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
@@ -17,11 +16,11 @@ export const ScorecardStoreModel = types
   .actions(self => ({
     getScorecard: flow(function*(ownerType, ownerId) {
       try {
-        console.log(ownerType, ownerId)
         const response: ApiResponse<any> = yield self.environment.api.getScorecard(
           ownerType,
           ownerId,
         );
+        console.log(response.data)
         if (response.ok) {
           self.kpis = response.data;
         }

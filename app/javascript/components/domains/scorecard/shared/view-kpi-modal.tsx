@@ -132,7 +132,7 @@ export const ViewEditKPIModal = observer(
         return
       }
       const startWeek = (company.currentFiscalQuarter - 1) * 13 + 1;
-      const weekNumbers = R.range(startWeek, company.currentFiscalWeek)
+      const weekNumbers = R.range(startWeek, company.currentFiscalWeek + 1)
       const weeks = kpi.period.get(company.currentFiscalYear).toJSON()
       const currentQuarterData = weekNumbers.map(week => weeks?.[week] ? weeks[week].score : 0)
 

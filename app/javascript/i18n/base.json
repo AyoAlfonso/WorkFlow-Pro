@@ -34,6 +34,7 @@
         "editProfile": "Edit Profile",
         "companyDetails": "Company Details",
         "forumDetails": "Forum Details",
+        "descriptionTemplate": "Template Details",
         "loginForm": {
           "email": "E-mail",
           "password": "Password",

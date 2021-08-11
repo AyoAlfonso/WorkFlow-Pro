@@ -7,7 +7,7 @@ class Api::ScorecardLogsController < Api::ApplicationController
     @scorecard_log = ScorecardLog.create!(scorecard_log_params)
     authorize @scorecard_log
     @scorecard_log.save!
-    render json: @scorecard_log
+    render json: { scorecard_log: @scorecard_log, status: :ok }
   end
 
   def show
@@ -28,7 +28,7 @@ class Api::ScorecardLogsController < Api::ApplicationController
   end
 
   def rollup
-    #TODO: Roll up function but
+    # TODO: Roll up function but
 
   end
 

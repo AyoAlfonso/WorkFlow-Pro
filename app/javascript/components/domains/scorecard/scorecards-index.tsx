@@ -21,10 +21,13 @@ export const ScorecardsIndex = observer(
     }, []);
 
     useEffect(() => {
-      scorecardStore
-        .getScorecard(owner_type, owner_id)
-        .then(() => setKpis(toJS(scorecardStore.kpis)));
-    }, [owner_type, owner_id]);
+      if (owner_type && owner_id) {
+        scorecardStore
+          .getScorecard(owner_type, owner_id)
+          .then(() => setKpis(toJS(scorecardStore.kpis)));
+
+      }
+    }, [owner_type, owner_id])
 
     if (loading || !companyStore.company) {
       return <Loading />;
@@ -32,7 +35,7 @@ export const ScorecardsIndex = observer(
 
     return (
       <Container>
-        <ScorecardSelector/>
+        <ScorecardSelector ownerType={owner_type} ownerId={owner_id} />
         <ScorecardSummary
           kpis={kpis}
           currentWeek={companyStore.company.currentFiscalWeek}
