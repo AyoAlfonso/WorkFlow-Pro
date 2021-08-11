@@ -57,6 +57,12 @@ class User < ApplicationRecord
             .where.not(user_company_enablements: { user_role: UserRole::COACH })
         } #later on we can extend inactive users, etc.
 
+  def as_json(options = [])
+    super({
+      methods: [:avatar_url]
+    })
+  end
+
   def status
     return "inactive" if deleted_at.present?
     confirmed_at.present? ? "active" : "pending"

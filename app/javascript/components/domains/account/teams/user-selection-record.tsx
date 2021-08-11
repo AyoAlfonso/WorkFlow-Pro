@@ -86,7 +86,6 @@ export const UserSelectionRecord = observer(
         <CloseIconContainer
           onClick={() => {
             const removedList = R.omit([index], memberListState);
-            console.log(removedList)
             setMemberListState(removedList);
             setSelectedUserId("");
             setMeetingLead("");

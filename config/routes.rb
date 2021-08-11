@@ -127,12 +127,12 @@ Rails.application.routes.draw do
     get "/habits/show_habit/:id", to: "habits#show_habit"
     get "/habits/habits_for_personal_planning", to: "habits#habits_for_personal_planning"
 
-    #key_performance_indicator
-    resources :key_performance_indicator, only: [:index, :create, :update, :destroy]
+    #key_performance_indicators
+    resources :key_performance_indicator, only: [:index, :show, :create, :update, :destroy]
+    
+    #scorecards
     # resources :scorecard, only: [:create]
-    get "/scorecard/:owner_type/:owner_id", to: "scorecards#show"
-    # post '/key_performance_indicator/create_key_element/:id', to: 'sub_initiatives#create_key_element'
-    # patch '/key_performance_indicator/close/:id', to: 'key_performance_indicator#close_kpi'
+    get "/scorecard/:owner_type/:owner_id", to: "scorecard_logs#show"
 
     #questionnaires
     resources :questionnaires, only: [:index]
@@ -162,6 +162,11 @@ Rails.application.routes.draw do
 
     #meeting_templates
     resources :meeting_templates, only: [:index]
+
+    #description_templates
+    resources :description_templates, only: [:index, :destroy, :show]
+    post "/description_templates/create_templates", to: "description_templates#update_or_create_templates"
+    patch "/description_templates/update_templates", to: "description_templates#update_template_body"
 
     #notifications
     resources :notifications, only: [:index, :update]

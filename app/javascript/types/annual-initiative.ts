@@ -10,9 +10,11 @@ export type AnnualInitiativeType = {
   description: string;
   keyElements: Array<KeyElementType>;
   ownedById: number;
-  ownedBy?:  UserType;
+  ownedBy?: UserType;
   quarterlyGoals: Array<QuarterlyGoalType>;
   contextDescription: string;
   fiscalYear?: number;
+  closedAt?:string;
   closedInitiative?: true;
+  deepClosedInitiative?: true;
 };

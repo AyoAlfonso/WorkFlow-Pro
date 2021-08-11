@@ -21,10 +21,11 @@ interface IIssuesBodyProps {
   setShowOpenIssues: React.Dispatch<React.SetStateAction<boolean>>;
   teamId?: number | string;
   meetingId?: number | string;
+  noShadow?: boolean;
 }
 
 export const IssuesBody = observer(
-  ({ showOpenIssues, setShowOpenIssues, meetingId, teamId }: IIssuesBodyProps): JSX.Element => {
+  ({ showOpenIssues, setShowOpenIssues, meetingId, teamId, noShadow }: IIssuesBodyProps): JSX.Element => {
     const {
       issueStore,
       sessionStore,
@@ -105,7 +106,7 @@ export const IssuesBody = observer(
         </FilterContainer>
         <Droppable droppableId={"issues-container"} type={"issue"}>
           {(provided, snapshot) => (
-            <IssuesBodyContainer meeting={meetingId}>
+            <IssuesBodyContainer meeting={meetingId} noShadow={noShadow}>
               <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
                 <AddNewIssuePlus>
                   <Icon icon={"Plus"} size={16} />
@@ -168,7 +169,7 @@ type IssuesContainerType = {
 const IssuesContainer = styled.div<IssuesContainerType>`
   overflow-y: auto;
   margin-bottom: 8px;
-  height: 260px;
+  height: 270px;
   overflow-x: hidden;
   padding-right: 5px;
   background-color: ${props =>
@@ -178,7 +179,8 @@ const IssuesContainer = styled.div<IssuesContainerType>`
 const IssueContainer = styled.div``;
 
 type IssuesBodyContainerProps = {
-  meeting?: any;
+  meeting?: any,
+  noShadow?: boolean,
 };
 
 export const IssuesBodyContainer = styled(HomeContainerBorders)<IssuesBodyContainerProps>`
@@ -187,7 +189,7 @@ export const IssuesBodyContainer = styled(HomeContainerBorders)<IssuesBodyContai
   width: 100%;
   min-width: 224px;
   margin-right: 20px;
-  box-shadow: ${props => props.meeting && "none"};
+  box-shadow: ${props => (props.meeting || props.noShadow) && "none"};
   height: inherit;
 `;
 

@@ -1,41 +1,43 @@
-class Api::KeyPerformanceIndicatorController < ApplicationController
+class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   before_action :set_key_performance_indicator, only: [:show, :update, :destroy, :close_kpi]
 
   respond_to :json
 
   def index
-    if params[:meeting_id].present?
-    @kpi = policy_scope(KeyPerformanceIndicator).where(user_id: current_user.id)
-    render json: { kpi: @kpi }
-    render "/api/key_performance_indicator/index"
+    @kpi = policy_scope(KeyPerformanceIndicator).where(owned_by: current_user.id)
+    authorize @kpi
+    render json: @kpi.as_json(except: %w[created_at updated_at],
+                              methods: [:owned_by, :created_by],
+                              include: {
+                                scorecard_logs: { methods: [:user] },
+                              })
   end
 
   def create
+    @template_description = DescriptionTemplate.find_by(company_id: current_company.id, template_type: 0).body_content || ""
     @kpi = KeyPerformanceIndicator.new({
       created_by: current_user,
-      user_id: params[:user],  
-      company_id: params[:company],   # team, company, user
-      team_id: params[:team], 
+      owned_by: params[:owned_by],
+      viewers: { :data => params[:data] },
       unit_type: params[:unit_type],
       target_value: params[:target_value],
-      description: params[:description],
+      description: @template_description,
+      needs_attention_threshold: params[:needs_attention_threshold]
     })
 
     authorize @kpi
     @kpi.save!
-    #TO DO CREATE VIEWS
-    render json: @kpi
-    # "/api/key_performance_indicator/create"
+    render json: { kpi: @kpi }
   end
-  
+
   def show
     @company = current_company
-    render "api/key_performance_indicator/show"
+    render json: { kpi: @kpi }
   end
 
   def update
-    @kpi.update!(key_performance_indicator_params)
-    render json: @kpi
+    @kpi.update!(kpi_params)
+    render json: { kpi: @kpi }
   end
 
   def destroy
@@ -45,13 +47,13 @@ class Api::KeyPerformanceIndicatorController < ApplicationController
 
   def close_kpi
     @kpi.update!(closed_at: Date.today)
-    render "api/key_performance_indicator/update"
+    render json: { kpi: @kpi }
   end
 
   private
 
-  def key_performance_indicator_params
-    params.permit(:id, :user_id, :company_id, :team_id, :description, :unit_type, :target_value)
+  def kpi_params
+    params.permit(:id, :owned_by, :viewers, :description, :unit_type, :target_value, :needs_attention_threshold)
   end
 
   def scorecard_log_params
