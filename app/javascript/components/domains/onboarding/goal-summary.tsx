@@ -29,6 +29,7 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
             color={"primary100"}
             mb={"8px"}
             fontFamily={"Lato, Exo, sans-serif"}
+            fontWeight={"bold"}
           >
             Lynchpyn Goal™
           </TextDiv>
@@ -40,7 +41,7 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
         </SectionContainer>
       )}
       {annualInitiative?.description && (
-        <SectionContainer>
+        <SectionContainer height={180}>
           <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"}>
             Annual Objective
           </TextDiv>
@@ -107,9 +108,13 @@ const Container = styled.div`
   margin-right: 24px;
 `;
 
-const SectionContainer = styled.div<SpaceProps>`
+type SectionContainerProps = {
+  height?: number,
+}
+
+const SectionContainer = styled.div<SpaceProps | SectionContainerProps>`
   ${space}
-  height: 140px;
+  height: ${props => props.height || 140}px;
   width: 100%;
   margin-bottom: 24px;
   ${fadeInAnimation}
