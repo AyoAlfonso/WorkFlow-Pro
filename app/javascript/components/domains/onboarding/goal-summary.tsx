@@ -112,7 +112,7 @@ type SectionContainerProps = {
   height?: number,
 }
 
-const SectionContainer = styled.div<SpaceProps | SectionContainerProps>`
+const SectionContainer = styled.div<SectionContainerProps | SpaceProps>`
   ${space}
   height: ${props => props.height || 140}px;
   width: 100%;
