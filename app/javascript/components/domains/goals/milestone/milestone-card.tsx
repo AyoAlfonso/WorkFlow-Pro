@@ -1,13 +1,12 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { HomeContainerBorders } from "../../home/shared-components";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
 import { useRef } from "react";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
-import { Button } from "~/components/shared/button";
 import { IndividualVerticalStatusBlockColorIndicator } from "../shared/individual-vertical-status-block-color-indicator";
-import * as moment from "moment";
+import moment from "moment";
 import ContentEditable from "react-contenteditable";
 import { MilestoneType } from "~/types/milestone";
 
@@ -28,19 +27,23 @@ export const MilestoneCard = observer(
 
     const unstarted = milestone.status == "unstarted";
     const currentWeek = moment(milestone.weekOf).isSame(moment(), "week");
-    const descriptionText = useRef(milestone.description || "");
+    const [descriptionText, setDescriptionText] = useState(milestone.description || "");
+
+    useEffect(() => {
+      setDescriptionText(milestone.description);
+    }, [milestone])
 
     const handleChange = e => {
       if (!e.target.value.includes("<div>")) {
-        descriptionText.current = e.target.value;
+        setDescriptionText(e.target.value);
       }
     };
 
     const handleBlur = () => {
       if (fromMeeting) {
-        milestoneStore.updateDescriptionFromPersonalMeeting(milestone.id, descriptionText.current);
+        milestoneStore.updateDescriptionFromPersonalMeeting(milestone.id, descriptionText);
       } else {
-        mobxStore.updateMilestoneDescription(milestone.id, descriptionText.current);
+        mobxStore.updateMilestoneDescription(milestone.id, descriptionText);
       }
     };
 
@@ -53,7 +56,7 @@ export const MilestoneCard = observer(
           </WeekOfText>
           <MilestoneContentEditable
             innerRef={descriptionRef}
-            html={descriptionText.current}
+            html={descriptionText}
             disabled={!editable}
             placeholder={"Enter Description"}
             onChange={handleChange}

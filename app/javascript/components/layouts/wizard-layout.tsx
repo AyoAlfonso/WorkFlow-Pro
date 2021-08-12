@@ -176,7 +176,7 @@ const BodyContainer = styled.div`
   padding-right: 16px;
   padding-top: 32px;
   width: 75%;
-  height: -webkit-fill-available;
+  height: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -185,7 +185,7 @@ const BodyContainer = styled.div`
 
 const BodyContentContainer = styled.div`
   display: flex;
-  height: -webkit-fill-available;
+  height: 100%;
   overflow-y: auto;
 `;
 

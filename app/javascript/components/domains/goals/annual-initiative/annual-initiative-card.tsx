@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { observer } from "mobx-react";
 import { HomeContainerBorders } from "../../home/shared-components";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { Text } from "../../../shared/text";
 import { AnnualInitiativeCardMinimized } from "./annual-initiative-card-minimized";
 import { AnnualInitiativeCardExpanded } from "./annual-initiative-card-expanded";
@@ -66,14 +66,18 @@ export const AnnualInitiativeCard = observer(
     const goalYearString = onboarding
       ? `${companyStore.onboardingCompany.currentFiscalYear}`
       : companyStore.company.currentFiscalYear == annualInitiative.fiscalYear
-      ? `FY${annualInitiative.fiscalYear.toString().slice(-2)}`
-      : `FY${(annualInitiative.fiscalYear + 1)
+        ? `FY${annualInitiative.fiscalYear.toString().slice(-2)}`
+        : `FY${(annualInitiative.fiscalYear + 1)
           .toString()
           .slice(-2)}/${annualInitiative.fiscalYear.toString().slice(-2)}`;
 
     const renderYearDisplay = () => {
       if (onboarding) {
-        return null;
+        return (
+          <YearContainer color={baseTheme.colors.primary100}>
+            <YearText> {goalYearString} Goal </YearText>
+          </YearContainer>
+        )
       } else if (
         companyStore.company.currentFiscalYear != annualInitiative.fiscalYear &&
         annualInitiative.fiscalYear
@@ -114,19 +118,24 @@ export const AnnualInitiativeCard = observer(
           }}
         >
           <HeaderContainer>
-            <DescriptionContainer>
-              <StyledText closedInitiative={annualInitiative.closedInitiative}>
+            <DescriptionContainer onboarding={onboarding}>
+              <StyledText
+                closedInitiative={annualInitiative.closedInitiative}
+                onboarding={onboarding}
+              >
                 {annualInitiative.description}
               </StyledText>
             </DescriptionContainer>
-            <IconContainer>
-              <RecordOptions
-                type={"annualInitiative"}
-                id={annualInitiative.id}
-                marginLeft={"-70px"}
-                iconColor={showOptions}
-              />
-            </IconContainer>
+            {!onboarding && (
+              <IconContainer>
+                <RecordOptions
+                  type={"annualInitiative"}
+                  id={annualInitiative.id}
+                  marginLeft={"-70px"}
+                  iconColor={showOptions}
+                />
+              </IconContainer>
+            )}
           </HeaderContainer>
 
           <AnnualInitiativeCardMinimized
@@ -165,7 +174,7 @@ type ContainerProps = {
 };
 
 // Avoid repetition and pass min-height as a prop
-const Container = styled(HomeContainerBorders)<ContainerProps>`
+const Container = styled(HomeContainerBorders) <ContainerProps>`
   width: 100%;
   min-width: 240px;
   display: flex;
@@ -175,7 +184,6 @@ const Container = styled(HomeContainerBorders)<ContainerProps>`
     background: rgba(0, 0, 0, 0.02);
     opacity: 0.85;
   }
-  ${props => (props.onboarding ? "padding-bottom: 15px;" : "")}
 `;
 
 type ColumnContainerProps = {
@@ -184,33 +192,44 @@ type ColumnContainerProps = {
   marginLeft: string;
 }
 
+
 const ColumnContainer = styled.div<ColumnContainerProps>`
-  ${props => props.onboarding ? "":"flex: 0 1 calc(20% - 16px);"}
-  width: ${props => (props.onboarding ? "-webkit-fill-available" : "calc(20% - 16px)")};
-  padding-right: 8px;
-  padding-left: 8px;
+  ${props => props.onboarding ? "" : "flex: 0 1 calc(20% - 16px);"}
+  width: ${props => (props.onboarding ? "100%" : "calc(20% - 16px)")};
+  ${props => props.onboarding ? "" : `padding-right: 8px;
+  padding-left: 8px;`}
   min-width: 240px;
 `
 
-const DescriptionContainer = styled.div`
+type DescriptionContainerProps = {
+  onboarding: boolean;
+}
+
+const DescriptionContainer = styled.div<DescriptionContainerProps>`
+  width: 100%;
   overflow-wrap: anywhere;
-  height: 32px;
+  ${props => props.onboarding ? "":"height: 32px;"}
 `;
 
 type StyledTextProps = {
   closedInitiative: boolean;
+  onboarding: boolean;
 };
 
-const StyledText = styled(Text)<StyledTextProps>`
+const StyledText = styled(Text) <StyledTextProps>`
   padding-left: 16px;
-  white-space: normal;
+  white-space: ${props => props.onboarding ? "nowrap" : "normal"};
   font-weight: 1000;
   font-size: 16px;
-  width: 95%;
   min-width: 190px;
+  width: 95%;
+  ${props => !props.onboarding ? `
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  `: `
+  text-overflow: ellipsis;
+  `}
   overflow: hidden;
   color: ${props =>
     props.closedInitiative ? props.theme.colors.greyActive : props.theme.colors.black};
