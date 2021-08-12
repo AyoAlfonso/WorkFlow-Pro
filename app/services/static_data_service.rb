@@ -65,7 +65,7 @@ class StaticDataService < ApplicationService
       "2": {
         heading: "Objectives",
         description: "Objectives are strategic moves you want to make in the next year. LynchPyn helps you better communicate your strategy, improve alignment, and drive accountability.",
-        stepLabel: "Create your first Goal"
+        stepLabel: "Create your first Objective"
       },
       "3": {
         heading: "Pyns",
@@ -75,7 +75,7 @@ class StaticDataService < ApplicationService
       "4": {
         heading: "{teamFormatHeading}",
         description: "{teamFormatDescription}",
-        stepLabel: "Add your {teamFormatHeading}"
+        stepLabel: "Invite your {teamFormatHeading}"
       }
     }
   end

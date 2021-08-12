@@ -194,7 +194,7 @@ export const FormBuilder = ({
       {formFields
         ? formFields.map((formField: IFormField, index: number) => {
           return isPreviousStepComplete(index) ? (
-            <FormContainer key={index} style={formContainerStyle}>
+            <FormContainer key={index} style={Array.isArray(formContainerStyle) ?  formContainerStyle[index] : formContainerStyle}>
               <Label>{formField.label}</Label>
               {formComponent(formField)}
               {formField.subText && (
