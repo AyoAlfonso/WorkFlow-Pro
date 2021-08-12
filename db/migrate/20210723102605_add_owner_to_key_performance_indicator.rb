@@ -5,6 +5,5 @@ class AddOwnerToKeyPerformanceIndicator < ActiveRecord::Migration[6.0]
     remove_column :key_performance_indicators, :company_id
     remove_column :key_performance_indicators, :user_id
     remove_column :key_performance_indicators, :owned_by_id
-    remove_column :key_performance_indicators, :owned_type
   end
 end

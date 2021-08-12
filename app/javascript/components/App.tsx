@@ -197,7 +197,7 @@ export const App = observer(
                       "/company/accountability",
                       "/company/strategic_plan",
                       "/goals",
-                      "/scorecard/:type/:owner_id",
+                      "/scorecard/:owner_type/:owner_id",
                       "/journals",
                       "/notes",
                       "/forum",

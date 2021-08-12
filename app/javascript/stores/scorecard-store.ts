@@ -13,11 +13,6 @@ export const ScorecardStoreModel = types
   })
   .extend(withEnvironment())
   .views(self => ({}))
-  // .actions(self => ({
-  //    get reset () {
-  //     self.kpis = [] as any;
-  //   })
-  // }))
   .actions(self => ({
     getScorecard: flow(function*({ ownerType, ownerId }) {
       try {

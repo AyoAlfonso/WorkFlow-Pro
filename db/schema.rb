@@ -292,6 +292,8 @@ ActiveRecord::Schema.define(version: 2021_08_10_064031) do
     t.integer "target_value", default: 0
     t.boolean "is_deleted", default: false
     t.boolean "greater_than", default: true
+    t.date "fiscal_year_start"
+    t.date "week_of"
     t.jsonb "viewers"
     t.bigint "owned_by_id"
     t.float "needs_attention_threshold"

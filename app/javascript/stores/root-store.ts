@@ -21,6 +21,7 @@ import { MilestoneStoreModel, IMilestoneStore } from "./milestone-store";
 import { StaticDataStoreModel, IStaticDataStore } from "./static-data-store";
 import { SubInitiativeStoreModel, ISubInitiativeStore } from "./sub-initiative-store";
 import { ScorecardStoreModel, IScorecardStore } from "./scorecard-store"
+import { KeyPerformanceIndicatorStoreModel, IKeyPerformanceIndicatorStore } from "./key-performance-indicator-store"
 
 export const RootStoreModel = types
   .model("RootStoreModel")
@@ -47,6 +48,7 @@ export const RootStoreModel = types
     staticDataStore: StaticDataStoreModel,
     subInitiativeStore: SubInitiativeStoreModel,
     scorecardStore: ScorecardStoreModel,
+    keyPerformanceIndicatorStore: KeyPerformanceIndicatorStoreModel,
   })
   .views(self => ({}))
   .actions(self => ({
@@ -95,4 +97,5 @@ export interface IRootStore extends IStateTreeNode {
   staticDataStore: IStaticDataStore;
   subInitiativeStore: ISubInitiativeStore;
   scorecardStore: IScorecardStore;
+  keyPerformanceIndicatorStore: IKeyPerformanceIndicatorStore;
 }

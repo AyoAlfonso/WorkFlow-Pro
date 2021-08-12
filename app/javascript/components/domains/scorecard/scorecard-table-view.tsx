@@ -12,6 +12,12 @@ import { baseTheme } from "~/themes/base"
 import { OwnedBy } from "./scorecard-owned-by"
 import { StatusBadge } from "~/components/shared/status-badge"
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown"
+import { ViewEditKPIModal } from "./shared/view-kpi-modal"
+import { UpdateKPIModal } from "./shared/update-kpi-modal"
+
+// TODO: figure out better function for percent scores.
+export const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
+	greaterThan ? (value / target) * 100 : (target + target - value) / target * 100;
 
 type ScorecardTableViewProps = {
 	kpis: any
@@ -19,12 +25,16 @@ type ScorecardTableViewProps = {
 
 export const ScorecardTableView = ({
 	kpis
-}:ScorecardTableViewProps): JSX.Element => {
+}: ScorecardTableViewProps): JSX.Element => {
 	const { t } = useTranslation();
 	const { companyStore: { company }, scorecardStore } = useMst();
+	const [year, setYear] = useState<number>(company.currentFiscalYear)
 	const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter)
 	const [tab, setTab] = useState<string>("KPIs")
-	const [scores, setScores] = useState<any>([])
+	const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(false);
+	const [viewEditKPIId, setViewEditKPIID] = useState(undefined);
+	const [updateKPI, setUpdateKPI] = useState(undefined);
+	const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
 	const tabs = [
 		t("scorecards.tabs.kpis"),
 		t("scorecards.tabs.people"),
@@ -35,13 +45,14 @@ export const ScorecardTableView = ({
 		fadedRed,
 		successGreen,
 		poppySunrise,
-		cautionYellow,
-		finePine,
 		warningRed,
+		primary100,
+		backgroundGrey,
+		greyActive,
 	} = baseTheme.colors
 
 	const formatValue = (unitType: string, value: number) => {
-		switch(unitType) {
+		switch (unitType) {
 			case "percentage":
 				return `${Math.round(value * 1000) / 1000}%`;
 			case "currency":
@@ -51,38 +62,40 @@ export const ScorecardTableView = ({
 		}
 	}
 
-	const getScorePercent = (value: number, target: number, greaterThan: boolean) => {
-		if (greaterThan) {
-			return (value / target) * 100;
-		} 
-		else {
-			return ((target + target - value) / target) * 100;
-		}
-	}
-
 	const averageScorePercent = (scores: [number], target: number, greaterThan: boolean) => {
 		return Math.min(
 			Math.floor(getScorePercent(
 				scores.reduce((acc, score) => acc + score, 0) / scores.length,
 				target,
 				greaterThan
-			)), 
+			)),
 			100
 		)
 	}
 
 	const getStatusValue = (percentScore) => {
-		if(percentScore >= 100) {
+		const percent = Math.round(percentScore)
+		if (percentScore === null) {
+			return {
+				color: greyActive,
+				background: backgroundGrey,
+				percent,
+				text: "No Update",
+			}
+		}
+		else if (percentScore >= 100) {
 			return {
 				color: successGreen,
 				background: fadedGreen,
+				percent,
 				text: "On Track",
 			}
 		}
-		else if(percentScore >= 90) {
+		else if (percentScore >= 90) {
 			return {
 				color: poppySunrise,
 				background: fadedYellow,
+				percent,
 				text: "Needs Attention",
 			}
 		}
@@ -90,77 +103,73 @@ export const ScorecardTableView = ({
 			return {
 				color: warningRed,
 				background: fadedRed,
+				percent,
 				text: "Behind",
 			}
 		}
 	}
 
-	const getScoreValue = (percentScore) => {
-		if(percentScore >= 100) {
-			return {
-				color: successGreen,
-			}
-		}
-		else if(percentScore >= 90) {
-			return {
-				color: cautionYellow,
-			}
-		}
-		else {
-			return {
-				color: warningRed,
-			}
-		}
+	const calcQuarterAverageScores = (weeks: any, target: number, greaterThan: boolean) => {
+		let quarterScores = [
+			[null, 0],
+			[null, 0],
+			[null, 0],
+			[null, 0],
+		]
+		weeks.forEach(({ week, score }) => {
+			const q = Math.floor(((week) - 1) / 13)
+			console.log(q)
+			quarterScores[q][0] += score
+			quarterScores[q][1]++
+		})
+		return quarterScores
+		.map((tuple) => 
+				 tuple[0] === null ? 
+				 null : getScorePercent(tuple[0] / tuple[1], target, greaterThan))
 	}
 
-	const getPercentScoreValue = (percentScore) => {
-		if(percentScore >= 100) {
-			return {
-				background: successGreen,
-				percent: percentScore,
-			}
+	const getScoreValueColor = (percentScore: number) => {
+		if (percentScore >= 100) {
+			return successGreen
 		}
-		else if(percentScore >= 90) {
-			return {
-				background: cautionYellow,
-				percent: percentScore,
-			}
-		}
+		// else if (percentScore >= 90) {
+		// 	return poppySunrise
+		// }
 		else {
-			return {
-				background: warningRed,
-				percent: percentScore,
-			}
+			return warningRed
 		}
 	}
 
 	const data = useMemo(
-		() => kpis.map((kpi: any, index: number) => {
+		() => kpis.map((kpi: any) => {
 			const targetText = formatValue(kpi.unitType, kpi.targetValue)
 			const description = `${kpi.description} ${kpi.greaterThan ? "≥" : "≤"} ${targetText}`
-			const logic = kpi.greaterThan ? `Greater than or equal to ${targetText}`:`Less than or equal to ${targetText}`
+			const logic = kpi.greaterThan ? `Greater than or equal to ${targetText}` : `Less than or equal to ${targetText}`
 			const row: any = {
+				updateKPI: {
+					id: kpi.id,
+					ownedById: kpi.ownedById,
+					unitType: kpi.unitType,
+				},
 				title: {
 					description,
-					logic
+					logic,
+					id: kpi.id,
 				},
 				owner: kpi.ownedBy,
 			}
-			const weeks = Object.values(kpi.weeks)
+			const weeks = Object.values(kpi.period[year])
 			weeks.forEach((week: any) => {
 				const percentScore = getScorePercent(week.score, kpi.targetValue, kpi.greaterThan)
 				row[`wk_${week.week}`] = {
 					score: formatValue(kpi.unitType, week.score),
-					color: getScoreValue(percentScore).color,
+					color: getScoreValueColor(percentScore),
 				}
 			})
-			const percentScore = averageScorePercent(
-				weeks.map((w: any) => w.score) as [number],
-				kpi.targetValue,
-				kpi.greaterThan
-			)
-			row.score = getPercentScoreValue(percentScore)
-			row.status = getStatusValue(percentScore)
+			const percentScores = calcQuarterAverageScores(weeks, kpi.targetValue, kpi.greaterThan)
+				.map(score => getStatusValue(score))
+			row.score = percentScores
+			row.status = percentScores
 			return row
 		}),
 		[kpis]
@@ -169,9 +178,19 @@ export const ScorecardTableView = ({
 		() => [
 			{
 				Header: "",
-				id: "updateKPI",
+				accessor: "updateKPI",
 				width: "31px",
 				minWidth: "31px",
+				Cell: ({ value }) => {
+					return (
+						<UpdateKPIContainer onClick={() => {
+							setUpdateKPI(value);
+							setUpdateKPIModalOpen(true);
+						}}>
+							<Icon icon={"Update_KPI"} size={16} iconColor={primary100} />
+						</UpdateKPIContainer>
+					)
+				}
 			},
 			{
 				Header: () => (
@@ -180,7 +199,10 @@ export const ScorecardTableView = ({
 				accessor: "title",
 				Cell: ({ value }) => {
 					return (
-						<KPITitleContainer>
+						<KPITitleContainer onClick={() => {
+							setViewEditKPIID(value.id);
+							setViewEditKPIModalOpen(true);
+						}}>
 							<KPITextContainer>
 								<KPIDescription>
 									{value.description}
@@ -189,7 +211,8 @@ export const ScorecardTableView = ({
 									{value.logic}
 								</KPILogic>
 							</KPITextContainer>
-						</KPITitleContainer>);
+						</KPITitleContainer>
+					);
 				},
 				width: "21%",
 				minWidth: "216px",
@@ -200,9 +223,10 @@ export const ScorecardTableView = ({
 				width: "8%",
 				minWidth: "86px",
 				Cell: ({ value }) => {
+					const quarterValue = value[quarter-1]
 					return (
-						<ScoreContainer background={value.background}>
-							<Score>{`${value.percent}%`}</Score>
+						<ScoreContainer background={quarterValue.background}>
+							<Score color={quarterValue.color}>{quarterValue.percent ? `${quarterValue.percent}%`:"..."}</Score>
 						</ScoreContainer>
 					);
 				}
@@ -211,10 +235,11 @@ export const ScorecardTableView = ({
 				Header: "Status",
 				accessor: "status",
 				Cell: ({ value }) => {
+					const quarterValue = value[quarter-1]
 					return (
 						<StatusContainer>
-							<StatusBadge color={value.color} background={value.background}>
-								{value.text}
+							<StatusBadge color={quarterValue.color} background={quarterValue.background}>
+								{quarterValue.text}
 							</StatusBadge>
 						</StatusContainer>
 					);
@@ -228,7 +253,7 @@ export const ScorecardTableView = ({
 				Cell: ({ value }) => {
 					return (
 						<OwnerContainer>
-						<OwnedBy user={value} marginLeft={"0px"}/>
+							<OwnedBy user={value} marginLeft={"0px"} />
 						</OwnerContainer>
 					);
 				},
@@ -241,7 +266,7 @@ export const ScorecardTableView = ({
 				Cell: ({ value }) => {
 					// return (<WeekText color={value.color} background={value.background}>{value.score}</WeekText>);
 					if (value === undefined) {
-						return (<EmptyWeekContainer><EmptyWeek/></EmptyWeekContainer>);
+						return (<EmptyWeekContainer><EmptyWeek /></EmptyWeekContainer>);
 					}
 					return (
 						<WeekContainer>
@@ -253,13 +278,13 @@ export const ScorecardTableView = ({
 				minWidth: "64px",
 			}))
 		],
-		[]
+		[quarter, year]
 	)
 
-	const getHiddenColumns = (q: number) => R.range(1, 53).filter(n => Math.floor((n - 1) / 13) != q - 1).map(n => `wk_${n}`);
+	const getHiddenWeeks = (q: number) => R.range(1, 53).filter(n => Math.floor((n - 1) / 13) != q - 1).map(n => `wk_${n}`);
 
 	const initialState = {
-		hiddenColumns: getHiddenColumns(quarter),
+		hiddenColumns: getHiddenWeeks(quarter),
 	}
 
 	const tableInstance = useTable({ columns, data, initialState })
@@ -275,66 +300,88 @@ export const ScorecardTableView = ({
 
 	const handleQuarterSelect = (q) => {
 		setQuarter(q)
-		setHiddenColumns(getHiddenColumns(q))
+		setHiddenColumns(getHiddenWeeks(q))
 	}
 
 	return (
-		<Container>
-			<TopRow>
-				<TabContainer>
-					{tabs.map(elem => (
-						<Tab
-							key={elem}
-							active={tab === elem}
-							onClick={() => setTab(elem)}
-						>
-							{elem}
-						</Tab>
-					))}
-				</TabContainer>
-				<Select
-					selection={quarter}
-					setSelection={handleQuarterSelect}
-					id={"scorecard-quarter-selection"}
-				>
-					{R.range(1, 5).map((n: number) => (<option key={n} value={n}>Q{n} {company.currentFiscalYear}</option>))}
-				</Select>
-			</TopRow>
-			{tab == "KPIs" && (
-				<TableContainer>
-					<Table {...getTableProps()}>
-						<TableHead>
-							{headerGroups.map(headerGroup => (
-								<TableRow {...headerGroup.getHeaderGroupProps()}>
-									{headerGroup.headers.map(column => (
-										<TableHeader {...column.getHeaderProps({ style: { width: column.width, minWidth: column.minWidth } })}>
-											{column.render('Header')}
-										</TableHeader>
-									))}
-								</TableRow>
-							))}
-						</TableHead>
-						<TableBody {...getTableBodyProps()}>
-							{rows.map(row => {
-								prepareRow(row)
-								return (
-									<TableRow hover={true} {...row.getRowProps()}>
-										{row.cells.map(cell => {
-											return (
-												<td {...cell.getCellProps()}>
-													{cell.render('Cell', cell.getCellProps())}
-												</td>
-											)
-										})}
+		<>
+			<Container>
+				<TopRow>
+					<TabContainer>
+						{tabs.map(elem => (
+							<Tab
+								key={elem}
+								active={tab === elem}
+								onClick={() => setTab(elem)}
+							>
+								{elem}
+							</Tab>
+						))}
+					</TabContainer>
+					<Select
+						selection={quarter}
+						setSelection={handleQuarterSelect}
+						id={"scorecard-quarter-selection"}
+					>
+						{R.range(1, 5).map((n: number) => (<option key={n} value={n}>Q{n} {company.currentFiscalYear}</option>))}
+					</Select>
+				</TopRow>
+				{tab == "KPIs" && (
+					<TableContainer>
+						<Table {...getTableProps()}>
+							<TableHead>
+								{headerGroups.map(headerGroup => (
+									<TableRow {...headerGroup.getHeaderGroupProps()}>
+										{headerGroup.headers.map(column => (
+											<TableHeader {...column.getHeaderProps({ style: { width: column.width, minWidth: column.minWidth } })}>
+												{column.render('Header')}
+											</TableHeader>
+										))}
 									</TableRow>
-								)
-							})}
-						</TableBody>
-					</Table>
-					<AddKPIDropdown />
-				</TableContainer>
+								))}
+							</TableHead>
+							<TableBody {...getTableBodyProps()}>
+								{rows.map(row => {
+									prepareRow(row)
+									return (
+										<TableRow hover={true} {...row.getRowProps()}>
+											{row.cells.map(cell => {
+												return (
+													<td {...cell.getCellProps()}>
+														{cell.render('Cell', cell.getCellProps())}
+													</td>
+												)
+											})}
+										</TableRow>
+									)
+								})}
+							</TableBody>
+						</Table>
+						<AddKPIDropdown />
+					</TableContainer>
+				)}
+			</Container>
+			{viewEditKPIId && (
+				<ViewEditKPIModal
+					kpiId={viewEditKPIId}
+					viewEditKPIModalOpen={viewEditKPIModalOpen}
+					setViewEditKPIModalOpen={setViewEditKPIModalOpen}
+				/>
 			)}
-		</Container>
+			{updateKPI && (
+				<UpdateKPIModal
+					kpiId={updateKPI.id}
+					ownedById={updateKPI.ownedById}
+					unitType={updateKPI.unitType}
+					year={company.currentFiscalYear}
+					week={company.currentFiscalWeek}
+					currentValue={updateKPI.currentValue}
+					headerText={"Update Current Week"}
+					updateKPIModalOpen={updateKPIModalOpen}
+					setUpdateKPIModalOpen={setUpdateKPIModalOpen}
+				/>
+			)}
+		</>
 	)
 }
 
@@ -427,11 +474,15 @@ const TableRow = styled.tr<TableRowProps>`
 `
 
 const UpdateKPIContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 48px;
+	height: 48px;
 
-`
-
-const UpdateKPI = styled.div`
-
+	&:hover {
+		cursor: pointer;
+	}
 `
 
 const KPITitleContainer = styled.div`
@@ -440,6 +491,10 @@ const KPITitleContainer = styled.div`
 	overflow: hidden;
 	justify-content: space-between;
 	padding: 4px 8px;
+
+	&:hover {
+		cursor: pointer;
+	}
 `
 
 const KPITextContainer = styled.div`
@@ -469,8 +524,12 @@ const ScoreContainer = styled.div<ScoreContainerProps>`
 	border-radius: 4px;
 `
 
-const Score = styled.p`
-	color: ${props => props.theme.colors.white};
+type ScoreProps = {
+	color: string,
+}
+
+const Score = styled.p<ScoreProps>`
+	color: ${props => props.color};
 	font-size: 12px;
 	font-weight: bold;
 `

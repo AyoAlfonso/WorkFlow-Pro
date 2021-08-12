@@ -6,7 +6,6 @@ interface IScorecardProps {
   ownerType: string;
   ownerId: number;
 }
-
 export class Api {
   client: ApisauceInstance;
   token: string;
@@ -445,7 +444,7 @@ export class Api {
     return this.client.post(`/description_templates/create_templates`, descriptionTemplates);
   }
 
-   async updateDescriptiveTemplatesBody(formData) {
+  async updateDescriptiveTemplatesBody(formData) {
     return this.client.patch(`/description_templates/update_templates`, formData);
   }
 
@@ -586,13 +585,16 @@ export class Api {
     return this.client.delete(`/key_performance_indicator/${id}`);
   }
 
-  async createScorecardLog(KPIid: number, scorecardLog) {
-    return this.client.post(`key_performance_indicator/scorecard_logs`, scorecardLog);
+  async createScorecardLog(scorecardLog) {
+    return this.client.post(`scorecard_logs`, scorecardLog);
+  }
+
+  async deleteScorecardLog(id) {
+    return this.client.delete(`scorecard_logs/${id}`);
   }
 
   async getScorecard(props: IScorecardProps) {
     return this.client.get(`scorecard/${props.ownerType}/${props.ownerId}`);
   }
-
   //async setJWT(jwt) {}
 }

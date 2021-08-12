@@ -11,7 +11,7 @@ import { toJS } from "mobx";
 
 export const ScorecardsIndex = observer(
   (): JSX.Element => {
-    const { ownerType, ownerId } = useParams();
+    const { owner_type, owner_id } = useParams();
     const { companyStore, scorecardStore } = useMst();
     const [loading, setLoading] = useState<boolean>(true);
     const [kpis, setKpis] = useState([]);
@@ -21,12 +21,12 @@ export const ScorecardsIndex = observer(
     }, []);
 
     useEffect(() => {
-      if (ownerType && ownerId) {
+      if (owner_type && owner_id) {
         scorecardStore
-          .getScorecard({ ownerType, ownerId })
+          .getScorecard({ ownerType: owner_type, ownerId: owner_id })
           .then(() => setKpis(toJS(scorecardStore.kpis)));
       }
-    }, [ownerType, ownerId]);
+    }, [owner_type, owner_id]);
 
     if (loading || !companyStore.company) {
       return <Loading />;
@@ -35,12 +35,13 @@ export const ScorecardsIndex = observer(
     return (
       <Container>
         <h2>Scorecards</h2>
-        <ScorecardSelector ownerType={ownerType} ownerId={ownerId} />
+        <ScorecardSelector ownerType={owner_type} ownerId={owner_id} />
         <ScorecardSummary
           kpis={kpis}
           currentWeek={companyStore.company.currentFiscalWeek}
           currentQuarter={companyStore.company.currentFiscalQuarter}
           fiscalYearStart={companyStore.company.fiscalYearStart}
+          currentFiscalYear={companyStore.company.currentFiscalYear}
         />
         <ScorecardTableView kpis={kpis} />
       </Container>
