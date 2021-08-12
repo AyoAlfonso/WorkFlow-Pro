@@ -22,7 +22,8 @@ export const DescriptionTemplateStoreModel = types
   .actions(self => ({
     updateDescriptiveTemplates: flow(function*(templates) {
       try {
-        const response: ApiResponse<any> = yield self.environment.api.updateDescriptiveTemplates(templates
+        const response: ApiResponse<any> = yield self.environment.api.updateDescriptiveTemplates(
+          templates,
         );
         if (response.ok) {
           self.descriptionTemplates = response.data.templates;
@@ -33,11 +34,12 @@ export const DescriptionTemplateStoreModel = types
       }
     }),
     updateDescriptiveTemplatesBody: flow(function*(formData) {
-     try {
-        const response: ApiResponse<any> = yield self.environment.api.updateDescriptiveTemplatesBody(formData,
+      try {
+        const response: ApiResponse<any> = yield self.environment.api.updateDescriptiveTemplatesBody(
+          formData,
         );
         if (response.ok) {
-            self.descriptionTemplates = response.data.templates;
+          self.descriptionTemplates = response.data.templates;
           // self.descriptionTemplates = response.data.templates;
           // showToast("Templates updated", ToastMessageConstants.SUCCESS);
         }
@@ -54,7 +56,7 @@ export const DescriptionTemplateStoreModel = types
       } catch {
         // caught bv Api Monitor
       }
-    })
+    }),
   }))
   .actions(self => ({
     reset() {
@@ -64,9 +66,9 @@ export const DescriptionTemplateStoreModel = types
   .actions(self => ({
     load: flow(function*() {
       self.reset();
-      self.fetchDescriptiveTemplates();
+      yield self.fetchDescriptiveTemplates();
     }),
-  }))
+  }));
 
 type DescriptionTemplateStoreType = typeof DescriptionTemplateStoreModel.Type;
 export interface IDescriptionTemplateStore extends DescriptionTemplateStoreType {}

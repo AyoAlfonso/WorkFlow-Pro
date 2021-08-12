@@ -51,7 +51,7 @@ export const Meeting = observer(
       if (meetingStarted) {
         interval = setInterval(() => {
           setSecondsElapsed(sec => {
-            let seconds = sec < 0 ? 0 : sec;
+            const seconds = sec < 0 ? 0 : sec;
             return seconds + 1;
           });
         }, 1000);

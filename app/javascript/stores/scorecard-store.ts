@@ -19,7 +19,7 @@ export const ScorecardStoreModel = types
   //   })
   // }))
   .actions(self => ({
-    getScorecard: flow(function*({ownerType, ownerId}) {
+    getScorecard: flow(function*({ ownerType, ownerId }) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getScorecard({
           ownerType,
@@ -28,9 +28,12 @@ export const ScorecardStoreModel = types
         if (response.ok && response.data?.kpi.length) {
           self.kpis = response.data.kpi;
         }
-      } catch(e) {
-        console.error(e)
-        showToast(`Could not get ${ownerType} scorecard with id ${ownerId}.`, ToastMessageConstants.ERROR);
+      } catch (e) {
+        console.error(e);
+        showToast(
+          `Could not get ${ownerType} scorecard with id ${ownerId}.`,
+          ToastMessageConstants.ERROR,
+        );
       }
     }),
   }));

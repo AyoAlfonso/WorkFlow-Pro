@@ -3,11 +3,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { useParams } from "react-router-dom";
-import { Loading } from "../../shared/loading"
-import { ScorecardTableView } from "./scorecard-table-view"
-import { ScorecardSelector } from "./scorecard-selector"
-import { ScorecardSummary } from "./scorecard-summary"
-import { toJS } from "mobx"
+import { Loading } from "../../shared/loading";
+import { ScorecardTableView } from "./scorecard-table-view";
+import { ScorecardSelector } from "./scorecard-selector";
+import { ScorecardSummary } from "./scorecard-summary";
+import { toJS } from "mobx";
 
 export const ScorecardsIndex = observer(
   (): JSX.Element => {
@@ -21,10 +21,10 @@ export const ScorecardsIndex = observer(
     }, []);
 
     useEffect(() => {
-     if(ownerType && ownerId ) {
-      scorecardStore
-        .getScorecard({ ownerType, ownerId })
-        .then(() => setKpis(toJS(scorecardStore.kpis)));
+      if (ownerType && ownerId) {
+        scorecardStore
+          .getScorecard({ ownerType, ownerId })
+          .then(() => setKpis(toJS(scorecardStore.kpis)));
       }
     }, [ownerType, ownerId]);
 
@@ -33,9 +33,16 @@ export const ScorecardsIndex = observer(
     }
 
     return (
-      <Container> 
-        <ScorecardSelector ownerType={ownerType} ownerId={ownerId}/>
-        <ScorecardTableView kpis={scorecardStore.kpis} />
+      <Container>
+        <h2>Scorecards</h2>
+        <ScorecardSelector ownerType={ownerType} ownerId={ownerId} />
+        <ScorecardSummary
+          kpis={kpis}
+          currentWeek={companyStore.company.currentFiscalWeek}
+          currentQuarter={companyStore.company.currentFiscalQuarter}
+          fiscalYearStart={companyStore.company.fiscalYearStart}
+        />
+        <ScorecardTableView kpis={kpis} />
       </Container>
     );
   },
