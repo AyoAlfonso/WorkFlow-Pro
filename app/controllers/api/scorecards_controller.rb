@@ -11,13 +11,6 @@ class Api::ScorecardsController < Api::ApplicationController
   end
 
   def show
-    @key_performance_indicators = policy_scope(KeyPerformanceIndicator)
-    .vieweable_by_entity(params[:owner_id])
-    .where(owner_type: params[:owner_type])
-
-    authorize @key_performance_indicators
-    puts @key_performance_indicators
-    render json: @kpis
   end
 
   private

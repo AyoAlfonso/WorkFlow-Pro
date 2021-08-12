@@ -35,6 +35,7 @@ en:
   accountability_chart: "Accountability Matrix"
   core_four: "Foundational Four"
   strategic_plan: "Strategic Plan"
+  description_templates: "Description Templates"
   rallying_cry: "LynchPyn Goal"
   notification_rules:
     every: "Every Day"
@@ -48,7 +49,6 @@ en:
   key_activities_created: "Pyns Created"
   key_activities_completed: "Pyns Completed"
   issues_addressed: "Issues Addressed"
-  rallying_cry: "LynchPyn Goal"
   quarterly_goals: "Quarterly Initiative"
   activerecord:
     models:

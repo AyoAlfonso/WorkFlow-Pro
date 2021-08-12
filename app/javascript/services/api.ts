@@ -2,6 +2,10 @@ import { create, ApisauceInstance } from "apisauce";
 import { camelizeResponse, decamelizeRequest } from "../utils";
 import * as R from "ramda";
 
+interface IScorecardProps {
+  ownerType: string;
+  ownerId: number;
+}
 export class Api {
   client: ApisauceInstance;
   token: string;
@@ -432,6 +436,21 @@ export class Api {
     return this.client.get(`/meeting_templates`);
   }
 
+  async getDescriptionTemplates() {
+    return this.client.get(`/description_templates`);
+  }
+
+  async updateDescriptiveTemplates(descriptionTemplates) {
+    return this.client.post(`/description_templates/create_templates`, descriptionTemplates);
+  }
+
+  async updateDescriptiveTemplatesBody(formData) {
+    return this.client.patch(`/description_templates/update_templates`, formData);
+  }
+
+  async deleteDescriptionTemplates(id) {
+    return this.client.delete(`/description_templates/${id}`);
+  }
   async getMeetings() {
     return this.client.get(`/meetings`);
   }
@@ -574,9 +593,8 @@ export class Api {
     return this.client.delete(`scorecard_logs/${id}`);
   }
 
-  async getScorecard(ownerType: string, ownerId: number) {
-    return this.client.get(`scorecard/${ownerType}/${ownerId}`);
+  async getScorecard(props: IScorecardProps) {
+    return this.client.get(`scorecard/${props.ownerType}/${props.ownerId}`);
   }
-
   //async setJWT(jwt) {}
 }

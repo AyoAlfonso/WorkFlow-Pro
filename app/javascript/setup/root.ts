@@ -87,6 +87,9 @@ const initialState = {
   },
   keyPerformanceIndicatorStore: {
     kpi: null,
+  },
+  descriptionTemplateStore: {
+    descriptionTemplates: [],
   }
 };
 

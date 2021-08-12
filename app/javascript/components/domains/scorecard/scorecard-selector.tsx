@@ -7,9 +7,15 @@ import { Icon } from "~/components/shared/icon";
 import { baseTheme } from "~/themes";
 import { Heading } from "~/components/shared";
 import { Text } from "~/components/shared/text";
+import { useHistory } from "react-router";
 import { toJS } from "mobx";
 
-export const ScorecardSelector = (): JSX.Element => {
+export interface IScorecardSelectorProps {
+    ownerType: string;
+    ownerId: number;
+}
+
+export const ScorecardSelector =   (props: IScorecardSelectorProps): JSX.Element => {
   const { userStore, scorecardStore, teamStore, companyStore } = useMst();
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
   const [ownerType, setOwnerType] = useState<string>("company");
@@ -19,13 +25,14 @@ export const ScorecardSelector = (): JSX.Element => {
   const [companyUsers, setCompanyUsers] = useState<Array<any>>([]);
   const [currentScorecard, setCurrentScorecard] = useState<string>("company");
   const { primary100 } = baseTheme.colors;
-
-  // useEffect(() => {
-  //   scorecardStore.getScorecard(
-  //     ownerType,
-  //     ownerId,
-  //   );
-  // }, [companyStore.company]);
+  const history = useHistory();
+  
+  useEffect(() => {
+    scorecardStore.getScorecard({
+      ownerType,
+      ownerId,
+    });
+  }, [ownerType, ownerId, companyStore.company]);
 
   useEffect(() => {
     const teams =
@@ -69,16 +76,20 @@ export const ScorecardSelector = (): JSX.Element => {
     setCompanyUsers(users);
   }, [teamStore.teams, companyStore.company, userStore.users]);
 
-  const ownerSelector = value => {
-    const owner = {
-      ownerType: value.type,
+  const ownerSelector = owner => {
+    setCurrentScorecard(`${owner.name} ${owner.lastName || ""}`);
+    setOwnerType(owner.type);
+    setOwnerId(owner.id);
+    history.push(`/scorecard/${owner.type}/${owner.id}`);
+    // scorecardStore.getScorecard({
+    //   ownerType: owner.type,
+    //   ownerId,
+    // });
+    // history.go();
+    return {
+      ownerType: owner.type,
       ownerId,
     };
-    setCurrentScorecard(`${value.name} ${value.lastName || ""}`);
-    setOwnerType(value.type);
-    setOwnerId(value.id);
-    scorecardStore.getScorecard(owner.ownerType, ownerId);
-    return owner;
   };
 
   const renderUserSelectionList = (): JSX.Element => {

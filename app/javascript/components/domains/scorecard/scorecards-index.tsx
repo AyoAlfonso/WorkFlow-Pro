@@ -3,11 +3,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { useParams } from "react-router-dom";
-import { Loading } from "../../shared/loading"
-import { ScorecardTableView } from "./scorecard-table-view"
-import { ScorecardSelector } from "./scorecard-selector"
-import { ScorecardSummary } from "./scorecard-summary"
-import { toJS } from "mobx"
+import { Loading } from "../../shared/loading";
+import { ScorecardTableView } from "./scorecard-table-view";
+import { ScorecardSelector } from "./scorecard-selector";
+import { ScorecardSummary } from "./scorecard-summary";
+import { toJS } from "mobx";
 
 export const ScorecardsIndex = observer(
   (): JSX.Element => {
@@ -21,9 +21,11 @@ export const ScorecardsIndex = observer(
     }, []);
 
     useEffect(() => {
-      scorecardStore
-        .getScorecard(owner_type, owner_id)
-        .then(() => setKpis(toJS(scorecardStore.kpis)));
+      if (owner_type && owner_id) {
+        scorecardStore
+          .getScorecard({ ownerType: owner_type, ownerId: owner_id })
+          .then(() => setKpis(toJS(scorecardStore.kpis)));
+      }
     }, [owner_type, owner_id]);
 
     if (loading || !companyStore.company) {
@@ -32,7 +34,8 @@ export const ScorecardsIndex = observer(
 
     return (
       <Container>
-        <ScorecardSelector/>
+        <h2>Scorecards</h2>
+        <ScorecardSelector ownerType={owner_type} ownerId={owner_id} />
         <ScorecardSummary
           kpis={kpis}
           currentWeek={companyStore.company.currentFiscalWeek}
