@@ -7,6 +7,10 @@ module HasFiscalYear
     validates :fiscal_year_start, presence: true
   end
 
+  def current_fiscal_week
+    calculate_current_fiscal_week
+  end
+
   def current_fiscal_quarter
     calculate_current_fiscal_quarter
   end
@@ -113,6 +117,11 @@ module HasFiscalYear
 
   def fourth_quarter_start_date
     current_fiscal_start_date + 39.weeks
+  end
+
+  def calculate_current_fiscal_week
+    current_date = self.convert_to_their_timezone.to_date
+    ((current_date - current_fiscal_start_date).to_i / 7).floor + 1
   end
 
   def calculate_current_fiscal_quarter

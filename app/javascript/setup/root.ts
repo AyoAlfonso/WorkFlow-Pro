@@ -81,6 +81,12 @@ const initialState = {
   },
   subInitiativeStore: {
     subInitiative: null
+  },
+  scorecardStore: {
+    kpis: [],
+  },
+  descriptionTemplateStore: {
+    descriptionTemplates: [],
   }
 };
 

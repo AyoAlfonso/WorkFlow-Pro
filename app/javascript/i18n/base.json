@@ -34,6 +34,7 @@
         "editProfile": "Edit Profile",
         "companyDetails": "Company Details",
         "forumDetails": "Forum Details",
+        "descriptionTemplate": "Template Details",
         "loginForm": {
           "email": "E-mail",
           "password": "Password",
@@ -140,7 +141,11 @@
         "company": "Company",
         "goals": "Objectives",
         "forum": "Meeting",
-        "meetings": "Planning"
+        "meetings": "Planning",
+        "scorecards": "Scorecards"
+      },
+      "goals": {
+        "indexTitle": "Objectives"
       },
       "annualInitiative": {
         "title": "{{title}}",
@@ -193,6 +198,13 @@
         "keyElementCreationError": "There was an error creating the key element",
         "keyElementUpdateError": "There was an error updating the key element",
         "milestoneCreationError": "There was an error creating milestones"
+      },
+      "scorecards": {
+        "indexTitle": "Scorecards",
+        "tabs": {
+          "kpis": "KPIs",
+          "people": "People"
+        }
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",

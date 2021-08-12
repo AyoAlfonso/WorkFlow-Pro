@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { AccountProfile } from "./profile";
 import { Notifications } from "./notifications";
 import { Security } from "./security";
+import { Templates } from "./templates";
 import { Meeting } from "./meeting";
 import { Users } from "./users";
 import { Teams } from "./teams";
@@ -54,6 +55,10 @@ export const AccountSettings = observer(
       {
         name: "Security",
         component: <Security />,
+      },
+      {
+        name: "Templates",
+        component: <Templates />,
       },
     ];
 

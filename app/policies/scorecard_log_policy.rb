@@ -22,8 +22,7 @@ class ScorecardLogPolicy < ApplicationPolicy
     end
 
     def resolve
-      # scope.includes([:created_by, :user, :team ]) 
-      scope.all
+      scope.none
     end
   end
 end

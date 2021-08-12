@@ -173,6 +173,60 @@ if Rails.env.development?
   )
   
   c1.users.each{|u| u.confirm}
+
+  # KPI seeding
+  k1 = KeyPerformanceIndicator.where(owner_type: 2, owned_by_id: c1.id, description: "Booked Work").first_or_create(
+    created_by: u2,
+    owned_by_id: u2.id,
+    company_id: c1.id,
+    owner_type: 2,
+    unit_type: 2,
+    description: "Booked Work",
+    greater_than: true,
+    target_value: 5000
+  )
+  k2 = KeyPerformanceIndicator.where(owner_type: 2, owned_by_id: c1.id, description: "Variance in Salaries").first_or_create(
+    created_by: u1,
+    owned_by_id: u1.id,
+    company_id: c1.id,
+    owner_type: 2,
+    unit_type: 0,
+    description: "Variance in Salaries",
+    greater_than: false,
+    target_value: 3
+  )
+  scores1 = [4500, 3000, 4600, 3900, 5200, 4800, 5100, 4700, 4800, 5200, 5300, 5000]
+  scores2 = [0, 1, 0, 3, 5, 0, 0, 2, 4, 2, 1, 0, 1]
+  wk = c1.current_fiscal_week
+  scores1.each do |s|
+    ScorecardLog.where(week: wk, key_performance_indicator_id: k1.id).first_or_create(
+      user_id: u1.id,
+      week: wk,
+      score: s,
+      fiscal_quarter: c1.current_fiscal_quarter,
+      fiscal_year: c1.current_fiscal_year,
+      key_performance_indicator_id: k1.id
+    )
+    wk = wk - 1
+    if wk == 0 then
+      break
+    end
+  end
+  wk = c1.current_fiscal_week
+  scores2.each do |s|
+    ScorecardLog.where(week: wk, key_performance_indicator_id: k2.id).first_or_create(
+      user_id: u1.id,
+      week: wk,
+      score: s,
+      fiscal_quarter: c1.current_fiscal_quarter,
+      fiscal_year: c1.current_fiscal_year,
+      key_performance_indicator_id: k2.id
+    )
+    wk = wk - 1
+    if wk == 0 then
+      break
+    end
+  end
 end
 
 

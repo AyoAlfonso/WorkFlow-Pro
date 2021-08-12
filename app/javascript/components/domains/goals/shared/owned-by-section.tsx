@@ -106,6 +106,7 @@ export const OwnedBySection = observer(
   },
 );
 
+// Duplicate make these shared styling 
 type EditTriggerContainerType = {
   editable: boolean;
 };
