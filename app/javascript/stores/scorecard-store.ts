@@ -13,24 +13,22 @@ export const ScorecardStoreModel = types
   })
   .extend(withEnvironment())
   .views(self => ({}))
-  // .actions(self => ({
-  //    get reset () {
-  //     self.kpis = [] as any;
-  //   })
-  // }))
   .actions(self => ({
-    getScorecard: flow(function*({ownerType, ownerId}) {
+    getScorecard: flow(function*({ ownerType, ownerId }) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getScorecard({
           ownerType,
           ownerId,
         });
-        if (response.ok && response.data?.kpi.length) {
+        if (response.ok && response.data?.kpi) {
           self.kpis = response.data.kpi;
         }
-      } catch(e) {
-        console.error(e)
-        showToast(`Could not get ${ownerType} scorecard with id ${ownerId}.`, ToastMessageConstants.ERROR);
+      } catch (e) {
+        console.error(e);
+        showToast(
+          `Could not get ${ownerType} scorecard with id ${ownerId}.`,
+          ToastMessageConstants.ERROR,
+        );
       }
     }),
   }));

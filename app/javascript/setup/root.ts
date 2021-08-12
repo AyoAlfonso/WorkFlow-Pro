@@ -85,6 +85,9 @@ const initialState = {
   scorecardStore: {
     kpis: [],
   },
+  keyPerformanceIndicatorStore: {
+    kpi: null,
+  },
   descriptionTemplateStore: {
     descriptionTemplates: [],
   }

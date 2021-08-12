@@ -1,5 +1,5 @@
 import * as React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { createStyles, withStyles, Theme } from '@material-ui/core/styles';
 import { baseTheme } from "../../themes";
 import FormControl from '@material-ui/core/FormControl';
@@ -7,6 +7,8 @@ import MuiSelect from '@material-ui/core/Select';
 import MuiTextField from '@material-ui/core/TextField';
 import NativeSelect from '@material-ui/core/NativeSelect'
 import InputBase from '@material-ui/core/InputBase';
+import MaskedInput from 'react-text-mask'
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import { Icon } from "./icon";
 
 export const Label = props => <StyledLabel {...props}>{props.children}</StyledLabel>;
@@ -20,8 +22,9 @@ const StyledLabel = styled.label`
   margin-bottom: 15px;
   font-family: Lato, sans-serif;
   font-weight: bold;
-	`;
-const StyledInput = styled.input`
+`;
+
+const baseInputStyles = css`
   display: block;
   width: 100%;
   font-size: 16px;
@@ -33,7 +36,52 @@ const StyledInput = styled.input`
   padding: 8px;
   box-sizing: border-box;
   appearance: none;
+
+	&::placeholder {
+		color: ${props => props.theme.colors.grey100};
+	}
+`
+
+const StyledInput = styled.input`
+	${baseInputStyles}
 `;
+
+const StyledMaskInput = styled(MaskedInput)`
+	${baseInputStyles}
+`
+
+const currencyMaskOptions = {
+	prefix: '$',
+	suffix: '',
+	includeThousandsSeperator: true,
+	thousandsSeperatorSymbol: ', ',
+	allowDecimal: true,
+	decimalSymbol: '.',
+	decimalLimit: 2,
+	allowNegative: true,
+	allowLeadingZeroes: false,
+}
+
+export const CurrencyInput = (props) => {
+	const currencyMask = createNumberMask(currencyMaskOptions);
+
+	return <StyledMaskInput inputMode={"numeric"} mask={currencyMask} {...props} />
+}
+
+const percentMaskOptions = {
+	prefix: '',
+	suffix: '%',
+	includeThousandsSeperator: false,
+	allowDecimal: true,
+	decimalSymbol: '.',
+	allowLeadingZeroes: false,
+}
+
+export const PercentInput = (props) => {
+	const percentMask = createNumberMask(percentMaskOptions);
+
+	return <StyledMaskInput mask={percentMask} {...props}/>
+}
 
 const MuiStyledInputBase = (props) => withStyles(
 	(theme: Theme) => createStyles({

@@ -1,4 +1,4 @@
-import { types, getRoot } from "mobx-state-tree";
+import { types } from "mobx-state-tree";
 import { ScorecardLogModel } from "./scorecard-log";
 import { UserModel } from "./user";
 
@@ -9,9 +9,6 @@ export const KeyPerformanceIndicatorModel = types
     description: types.string,
     closedAt: types.maybeNull(types.string),
     createdById: types.number,
-    userId: types.maybeNull(types.number),
-    companyId: types.maybeNull(types.number),
-    teamId: types.maybeNull(types.number),
     ownedBy: UserModel,
     ownedById: types.maybeNull(types.number),
     createdAt: types.maybeNull(types.string),
@@ -19,9 +16,11 @@ export const KeyPerformanceIndicatorModel = types
     unitType: types.string,
     targetValue: types.number,
     isDeleted: types.boolean,
-    ownerType: types.string,
     greaterThan: types.boolean,
-    weeks: types.map(ScorecardLogModel),
+    viewers: types.array(types.model({ type: types.string, id: types.string })),
+    period: types.maybeNull(types.map(types.map(ScorecardLogModel))),
+    scorecardLogs: types.maybeNull(types.array(ScorecardLogModel)),
+    weeks: types.maybeNull(types.map(ScorecardLogModel)),
     needsAttentionThreshold: types.maybeNull(types.number),
   })
   .views(self => ({

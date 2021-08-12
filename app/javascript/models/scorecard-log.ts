@@ -1,4 +1,5 @@
 import { types, getRoot } from "mobx-state-tree";
+import { UserModel } from "./user"
 // import { KeyPerformanceIndicatorModel } from "./user";
 
 export const ScorecardLogModel = types
@@ -12,6 +13,7 @@ export const ScorecardLogModel = types
     fiscalQuarter: types.number,
     fiscalYear: types.number,
     createdAt: types.string,
+    user: types.maybeNull(UserModel),
   })
   .views(self => ({}))
   .actions(self => ({}));

@@ -156,8 +156,8 @@ export const MeetingStoreModel = types
   .actions(self => ({
     load: flow(function*() {
       self.reset();
-      self.fetchMeetingTemplates();
-      self.fetchMeetings();
+      yield self.fetchMeetingTemplates();
+      yield self.fetchMeetings();
     }),
   }))
   .actions(self => ({
@@ -195,11 +195,13 @@ export const MeetingStoreModel = types
           self.currentMeeting = response.data;
           return { meeting: self.currentMeeting };
         } else {
+          showToast("No current meeting returned.", ToastMessageConstants.ERROR);
           return { meeting: null };
         }
       } catch {
         // caught bv Api Monitor
       }
+      showToast("No current meeting returned.", ToastMessageConstants.ERROR);
       return { meeting: null };
     }),
     createPersonalMeetingOfType: flow(function*(meetingType) {
