@@ -20,7 +20,7 @@ export const KeyPerformanceIndicatorModel = types
     viewers: types.array(types.model({ type: types.string, id: types.string })),
     period: types.maybeNull(types.map(types.map(ScorecardLogModel))),
     scorecardLogs: types.maybeNull(types.array(ScorecardLogModel)),
-    weeks: types.map(ScorecardLogModel),
+    weeks: types.maybeNull(types.map(ScorecardLogModel)),
     needsAttentionThreshold: types.maybeNull(types.number),
   })
   .views(self => ({

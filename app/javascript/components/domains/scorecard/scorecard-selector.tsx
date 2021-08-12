@@ -7,7 +7,7 @@ import { Icon } from "~/components/shared/icon";
 import { baseTheme } from "~/themes";
 import { Heading } from "~/components/shared";
 import { Text } from "~/components/shared/text";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import { toJS } from "mobx";
 
 export interface IScorecardSelectorProps {
@@ -81,11 +81,6 @@ export const ScorecardSelector =   (props: IScorecardSelectorProps): JSX.Element
     setOwnerType(owner.type);
     setOwnerId(owner.id);
     history.push(`/scorecard/${owner.type}/${owner.id}`);
-    // scorecardStore.getScorecard({
-    //   ownerType: owner.type,
-    //   ownerId,
-    // });
-    // history.go();
     return {
       ownerType: owner.type,
       ownerId,
