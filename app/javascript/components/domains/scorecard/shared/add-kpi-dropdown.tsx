@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Icon } from "../../../shared/icon";
 import { Button } from "~/components/shared/button";
 import { TextDiv } from "~/components/shared/text";
-import {AddKPIModal} from "~/components/"
+import { AddKPIModal } from "./add-kpi-modal";
 import { useRef, useState, useEffect } from "react";
 
 interface IAddKPIDropdownProps {}
@@ -13,7 +13,10 @@ export const AddKPIDropdown = ({}): JSX.Element => {
   const optionsRef = useRef(null);
 
   const [showOptions, setShowOptions] = useState<boolean>(false);
-  const [addKPIModal, setAddKPIModal] = useState<string>("");
+  const [showAddKPIModal, setAddKPIModal] = useState<boolean>();
+  const [kpiModalType, setAddKPIModalType] = useState<string>("");
+  const [kpis, setKpis] = useState([]);
+
   useEffect(() => {
     const handleClickOutside = event => {
       if (optionsRef.current && !optionsRef.current.contains(event.target)) {
@@ -25,7 +28,10 @@ export const AddKPIDropdown = ({}): JSX.Element => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [optionsRef]);
-
+  const clicKPIOptions = type => {
+    setAddKPIModal(!showAddKPIModal);
+    setAddKPIModalType(type);
+  };
   return (
     <Container ref={optionsRef}>
       <StyledButton
@@ -46,28 +52,28 @@ export const AddKPIDropdown = ({}): JSX.Element => {
           </OptionContainer>
           <OptionContainer
             onClick={() => {
-              setAddKPIModal("source");
+              clicKPIOptions("source");
             }}
           >
             <OptionText>Source</OptionText>
           </OptionContainer>
           <OptionContainer
             onClick={() => {
-              setAddKPIModal("existing");
+              clicKPIOptions("existing");
             }}
           >
             <OptionText>Existing</OptionText>
           </OptionContainer>
           <OptionContainer
             onClick={() => {
-              setAddKPIModal("roll up");
+              clicKPIOptions("roll up");
             }}
           >
             <OptionText>Roll Up</OptionText>
           </OptionContainer>
           <OptionContainer
             onClick={() => {
-              setAddKPIModal("average");
+              clicKPIOptions("average");
             }}
           >
             <OptionText>Average</OptionText>
@@ -75,13 +81,14 @@ export const AddKPIDropdown = ({}): JSX.Element => {
         </DropdownOptionsContainer>
       )}
 
-      {
+      {showAddKPIModal && (
         <AddKPIModal
           kpis={kpis}
-          modalOpen={editTeamModalOpen}
-          setModalOpen={setEditTeamModalOpen}
+          showAddKPIModal={showAddKPIModal}
+          kpiModalType={kpiModalType}
+          setModalOpen={setAddKPIModal}
         />
-      }
+      )}
     </Container>
   );
 };
