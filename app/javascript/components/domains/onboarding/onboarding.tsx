@@ -303,7 +303,7 @@ True value of LynchPyn is in working together with others in your team and compa
           style: { marginLeft: "2px" },
         },
         {
-          label: `What would be an achievable milestone for this week to move you closer to "${R.pathOr(
+          label: `What would be an achievable Milestone for this week to move you closer to "${R.pathOr(
             "",
             ["annualInitiative", "quarterlyGoals", "0", "description"],
             goalData,
