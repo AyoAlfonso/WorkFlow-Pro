@@ -20,7 +20,6 @@ const inputStyles = css`
 export const StyledInput = styled(Input)`${inputStyles}`
 export const StyledCurrencyInput = styled(CurrencyInput)`${inputStyles}`
 export const StyledPercentInput = styled(PercentInput)`${inputStyles}`
-export const StyledSelect = styled(Select)`${inputStyles}`
 
 export const HeaderContainer = styled.div`
   display: flex;
