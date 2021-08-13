@@ -56,10 +56,12 @@ export const AccountSettings = observer(
         name: "Security",
         component: <Security />,
       },
-      {
-        name: "Templates",
-        component: <Templates />,
-      },
+
+      // Release next version
+      // {
+      //   name: "Templates",
+      //   component: <Templates />,
+      // },
     ];
 
     return <TabsLayout headerText={""} tabOptions={tabOptions} />;

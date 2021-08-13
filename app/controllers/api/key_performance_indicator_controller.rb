@@ -14,6 +14,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   end
 
   def create
+    # Release next version 
     @template_description = DescriptionTemplate.find_by(company_id: current_company.id, template_type: 0).body_content || ""
     @kpi = KeyPerformanceIndicator.new({
       created_by: current_user,
@@ -21,7 +22,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
       viewers: { :data => params[:data] },
       unit_type: params[:unit_type],
       target_value: params[:target_value],
-      description: @template_description,
+      description: params[:description],
       needs_attention_threshold: params[:needs_attention_threshold]
     })
 

@@ -402,7 +402,7 @@ export const SideNavNoMst = (
       ) : (
         <> </>
       )}
-
+      {/* Release next version */}
       {/* {company &&
         (<StyledNavLinkChildrenActive to={`/scorecard/company/${company.id}`} icon={"Scorecards"} currentPathName={currentPathName}>
           {t("navigation.scorecards")}
