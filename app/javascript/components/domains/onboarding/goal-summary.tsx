@@ -31,7 +31,7 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
             fontFamily={"Lato, Exo, sans-serif"}
             fontWeight={"bold"}
           >
-            Lynchpyn Goal™
+            LynchPyn Goal™
           </TextDiv>
           <RallyingCryContainer>
             <WrappedTextDiv fontSize={"16px"} fontWeight={"bold"} color={"black"}>
@@ -42,7 +42,7 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
       )}
       {annualInitiative?.description && (
         <SectionContainer height={180}>
-          <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"}>
+          <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"} fontWeight={"bold"}>
             Annual Objective
           </TextDiv>
           <AnnualInitiativeContainer>
@@ -59,7 +59,7 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
       )}
       {quarterlyGoal?.description && (
         <SectionContainer>
-          <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"}>
+          <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"} fontWeight={"bold"}>
             Quarterly Initiative
           </TextDiv>
           <QuarterlyGoalCardContainer>
@@ -75,7 +75,7 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
       {milestone?.description && (
         <SectionContainer>
           <MilestoneContainer>
-            <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"}>
+            <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"} fontWeight={"bold"}>
               Weekly Milestone
             </TextDiv>
             <MilestoneCard milestone={milestone} editable={false} itemType={"quarterlyGoal"} />
