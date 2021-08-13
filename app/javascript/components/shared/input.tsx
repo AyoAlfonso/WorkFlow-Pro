@@ -155,8 +155,6 @@ export const Select = ({
 	id,
 	onChange,
 	children,
-	fontSize,
-	color,
 	native = true,
 	...restProps
 }: SelectProps): JSX.Element => {

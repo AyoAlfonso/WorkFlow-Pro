@@ -5,16 +5,15 @@ import { Icon } from "../../../shared/icon";
 import { Button } from "~/components/shared/button";
 import { TextDiv } from "~/components/shared/text";
 import { useRef, useState, useEffect } from "react";
-
-interface IAddKPIDropdownProps {
-
-}
+import { AddManualKPIModal } from "./add-manual-kpi-modal"
 
 export const AddKPIDropdown = ({ }): JSX.Element => {
 
   const optionsRef = useRef(null);
 
   const [showOptions, setShowOptions] = useState<boolean>(false);
+  const [addManualKPIModalOpen, setAddManualKPIModalOpen] = useState<boolean>(true);
+
   useEffect(() => {
     const handleClickOutside = event => {
       if (optionsRef.current && !optionsRef.current.contains(event.target)) {
@@ -28,48 +27,56 @@ export const AddKPIDropdown = ({ }): JSX.Element => {
   }, [optionsRef]);
 
   return (
-    <Container ref={optionsRef}>
-      <StyledButton
-        small
-        variant={"grey"}
-        onClick={() => {
-          setShowOptions(!showOptions);
-        }}
-        width={"fill"}
-      >
-        <CircularIcon icon={"Plus"} size={"12px"} />
-        <AddKPIText>Add KPI</AddKPIText>
-      </StyledButton>
-      {showOptions && (
-        <DropdownOptionsContainer onClick={e => e.stopPropagation()}>
-          <OptionContainer>
-            <OptionText>
-              Manual
-            </OptionText>
-          </OptionContainer>
-          <OptionContainer>
-            <OptionText>
-              Source
-            </OptionText>
-          </OptionContainer>
-          <OptionContainer>
-            <OptionText>
-              Existing
-            </OptionText>
-          </OptionContainer>
-          <OptionContainer>
-            <OptionText>
-              Roll Up
-            </OptionText>
-          </OptionContainer>
-          <OptionContainer>
-            <OptionText>
-              Average
-            </OptionText>
-          </OptionContainer>
-        </DropdownOptionsContainer>
-      )}
-    </Container>
+    <>
+      <Container ref={optionsRef}>
+        <StyledButton
+          small
+          variant={"grey"}
+          onClick={() => {
+            setShowOptions(!showOptions);
+          }}
+          width={"fill"}
+        >
+          <CircularIcon icon={"Plus"} size={"12px"} />
+          <AddKPIText>Add KPI</AddKPIText>
+        </StyledButton>
+        {showOptions && (
+          <DropdownOptionsContainer onClick={e => e.stopPropagation()}>
+            <OptionContainer onClick={() => {
+              setAddManualKPIModalOpen(true)
+            }}>
+              <OptionText>
+                Manual
+              </OptionText>
+            </OptionContainer>
+            <OptionContainer>
+              <OptionText>
+                Source
+              </OptionText>
+            </OptionContainer>
+            <OptionContainer>
+              <OptionText>
+                Existing
+              </OptionText>
+            </OptionContainer>
+            <OptionContainer>
+              <OptionText>
+                Roll Up
+              </OptionText>
+            </OptionContainer>
+            <OptionContainer>
+              <OptionText>
+                Average
+              </OptionText>
+            </OptionContainer>
+          </DropdownOptionsContainer>
+        )}
+      </Container>
+      <AddManualKPIModal
+        addManualKPIModalOpen={addManualKPIModalOpen}
+        setAddManualKPIModalOpen={setAddManualKPIModalOpen}
+      />
+    </>
   )
 }
 
