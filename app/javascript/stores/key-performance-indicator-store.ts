@@ -18,6 +18,7 @@ export const KeyPerformanceIndicatorStoreModel = types
     createKPI: flow(function*(KPIData) {
       const response: ApiResponse<any> = yield self.environment.api.createKPI(KPIData);
       if (response.ok) {
+        showToast("KPI created", ToastMessageConstants.SUCCESS);
         return response.data.kpi;
       }
     }),
@@ -31,6 +32,7 @@ export const KeyPerformanceIndicatorStoreModel = types
     updateKPI: flow(function*(KPIData) {
       const response: ApiResponse<any> = yield self.environment.api.updateKPI(KPIData);
       if (response.ok) {
+        showToast("KPI updated", ToastMessageConstants.SUCCESS);
         return response.data.kpi;
       }
     }),

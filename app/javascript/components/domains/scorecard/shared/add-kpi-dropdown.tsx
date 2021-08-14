@@ -12,7 +12,7 @@ export const AddKPIDropdown = ({ }): JSX.Element => {
   const optionsRef = useRef(null);
 
   const [showOptions, setShowOptions] = useState<boolean>(false);
-  const [addManualKPIModalOpen, setAddManualKPIModalOpen] = useState<boolean>(true);
+  const [addManualKPIModalOpen, setAddManualKPIModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const handleClickOutside = event => {

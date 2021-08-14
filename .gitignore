@@ -43,3 +43,5 @@ build-storybook.log
 .vscode/settings.json
 .idea/
 *.DS_Store
+dump.rdb
+db/schema.rb

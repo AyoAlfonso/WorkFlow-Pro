@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
 import Modal from "styled-react-modal"
-import { Input, CurrencyInput, PercentInput, Select } from "~/components/shared/input"
+import { Input, NumberInput, CurrencyInput, PercentInput } from "~/components/shared/input"
 import { baseTheme } from "~/themes/base"
 import { Icon } from "~/components/shared/icon"
 
@@ -18,6 +18,7 @@ const inputStyles = css`
 `
 
 export const StyledInput = styled(Input)`${inputStyles}`
+export const StyledNumberInput = styled(NumberInput)`${inputStyles}`
 export const StyledCurrencyInput = styled(CurrencyInput)`${inputStyles}`
 export const StyledPercentInput = styled(PercentInput)`${inputStyles}`
 
@@ -43,16 +44,24 @@ export const CloseIconContainer = styled.div`
 
 export const FormContainer = styled.div`
   display: flex;
-  padding: 16px;
   width: calc(100% - 32px);
   flex-direction: column;
+  padding: 16px;
   gap: 16px;
 `
 
 export const FormElementContainer = styled.div`
   display: flex;
+  width: 100%;
   flex-direction: column;
   gap: 4px;
+`
+
+export const RowContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  gap: 16px;
 `
 
 const InputHeaderContainer = styled.div`
@@ -111,35 +120,45 @@ type InputFromUnitTypeProps = {
   unitType: string,
   placeholder: string,
   onChange: Function,
-  value: string | number,
+  defaultValue: string | number,
+  [restProps: string]: any
 }
 
 export const InputFromUnitType = ({
   unitType,
   placeholder,
   onChange,
-  value,
+  defaultValue,
+  ...restProps
 }: InputFromUnitTypeProps): JSX.Element => {
+  const [val, setVal] = useState(defaultValue)
+
+  const handleChange = (e) => {
+    onChange(e)
+    setVal(e.target.value)
+  }
+
   switch (unitType) {
     case "currency":
       return (<StyledCurrencyInput
         placeholder={placeholder}
-        onChange={onChange}
-        value={value}
+        onChange={handleChange}
+        value={val}
+        {...restProps}
       />)
     case "percentage":
       return (<StyledPercentInput
         placeholder={placeholder}
-        onChange={onChange}
-        value={value}
+        onChange={handleChange}
+        value={val}
+        {...restProps}
       />)
     default:
-      return (<StyledInput
+      return (<StyledNumberInput
         placeholder={placeholder}
-        onChange={onChange}
-        type={"number"}
-        inputMode={"numeric"}
-        value={value}
+        onChange={handleChange}
+        value={val}
+        {...restProps}
       />)
   }
 }
