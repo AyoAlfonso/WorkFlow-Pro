@@ -226,7 +226,7 @@ const RightBodyContainer = styled.div`
 
 const StepComponentContainer = styled.div`
   margin-top: 48px;
-  margin-bottom: 32px;
+  margin-bottom: 48px;
   margin-left: auto;
   margin-right: auto;
   width: 75%;
