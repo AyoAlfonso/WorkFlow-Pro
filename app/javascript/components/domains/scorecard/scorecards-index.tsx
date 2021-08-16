@@ -37,7 +37,7 @@ export const ScorecardsIndex = observer(
 
     return (
       <Container>
-        <ScorecardSelector ownerType={owner_type} ownerId={owner_id} companyStore={companyStore} teamStore={teamStore} />
+        <ScorecardSelector ownerType={owner_type} ownerId={owner_id} />
         <ScorecardSummary
           kpis={kpis}
           currentWeek={companyStore.company.currentFiscalWeek}
