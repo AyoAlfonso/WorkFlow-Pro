@@ -13,8 +13,6 @@ import { toJS } from "mobx";
 export interface IScorecardSelectorProps {
   ownerType: string;
   ownerId: number;
-  companyStore: any;
-  teamStore: any;
 }
 
 export const ScorecardSelector = (props: IScorecardSelectorProps): JSX.Element => {
