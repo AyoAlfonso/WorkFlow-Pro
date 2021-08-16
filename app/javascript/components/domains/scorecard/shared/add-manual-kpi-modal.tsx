@@ -58,20 +58,6 @@ export const AddManualKPIModal = observer(
         if(!result) {
           return
         }
-        console.log(kpi)
-        console.log(result)
-        if(currentValue) {
-          const log = {
-            keyPerformanceIndicatorId: result.id,
-            userId: sessionStore.profile.id,
-            score: currentValue,
-            note: null,
-            week: companyStore.company.currentFiscalWeek,
-            fiscalYear: companyStore.company.currentFiscalYear,
-            fiscalQuarter: Math.floor((companyStore.company.currentFiscalWeek - 1)/13) + 1,
-          }
-          keyPerformanceIndicatorStore.createScorecardLog(log)
-        }
         // Reset and close
         setTitle(undefined)
         setGreaterThan(1)
@@ -105,21 +91,6 @@ export const AddManualKPIModal = observer(
                 placeholder={"e.g. Employee NPS"}
                 onChange={(e) => { setTitle(e.target.value) }}
               />
-            </FormElementContainer>
-            <FormElementContainer>
-              <InputHeaderWithComment>Logic</InputHeaderWithComment>
-              <Select
-                name={"logic"}
-                onChange={(e) => { setGreaterThan(e.target.value) }}
-                value={greaterThan}
-                fontSize={12}
-                height={15}
-                pt={6}
-                pb={10}
-              >
-                <option key={"greater-than"} value={1}>Greater than or equal to</option>
-                <option key={"less-than"} value={0}>Less than or equal to</option>
-              </Select>
             </FormElementContainer>
           </RowContainer>
           <RowContainer>
@@ -165,21 +136,27 @@ export const AddManualKPIModal = observer(
           </RowContainer>
           <RowContainer>
             <FormElementContainer>
+              <InputHeaderWithComment>Logic</InputHeaderWithComment>
+              <Select
+                name={"logic"}
+                onChange={(e) => { setGreaterThan(e.target.value) }}
+                value={greaterThan}
+                fontSize={12}
+                height={15}
+                pt={6}
+                pb={10}
+              >
+                <option key={"greater-than"} value={1}>Greater than or equal to</option>
+                <option key={"less-than"} value={0}>Less than or equal to</option>
+              </Select>
+            </FormElementContainer>
+            <FormElementContainer>
               <InputHeaderWithComment>Target Value</InputHeaderWithComment>
               <InputFromUnitType
                 unitType={unitType}
                 placeholder={"0"}
                 onChange={(e) => { handleChange(e, setTargetValue) }}
                 defaultValue={targetValue}
-              />
-            </FormElementContainer>
-            <FormElementContainer>
-              <InputHeaderWithComment comment={"optional"}>Current Value</InputHeaderWithComment>
-              <InputFromUnitType
-                unitType={unitType}
-                placeholder={"0"}
-                onChange={(e) => { handleChange(e, setCurrentValue) }}
-                defaultValue={currentValue}
               />
             </FormElementContainer>
           </RowContainer>
