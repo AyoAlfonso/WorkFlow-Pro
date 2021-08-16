@@ -53,8 +53,6 @@ const StyledMaskInput = styled(MaskedInput)`
 const currencyMaskOptions = {
 	prefix: '$',
 	suffix: '',
-	includeThousandsSeperator: true,
-	thousandsSeperatorSymbol: ', ',
 	allowDecimal: true,
 	decimalSymbol: '.',
 	decimalLimit: 2,
@@ -71,16 +69,31 @@ export const CurrencyInput = (props) => {
 const percentMaskOptions = {
 	prefix: '',
 	suffix: '%',
-	includeThousandsSeperator: false,
 	allowDecimal: true,
 	decimalSymbol: '.',
 	allowLeadingZeroes: false,
+	allowNegative: true,
 }
 
 export const PercentInput = (props) => {
 	const percentMask = createNumberMask(percentMaskOptions);
 
 	return <StyledMaskInput mask={percentMask} {...props}/>
+}
+
+const numberMaskOptions = {
+	prefix: '',
+	suffix: '',
+	allowDecimal: true,
+	decimalSymbol: '.',
+	allowLeadingZeroes: false,
+	allowNegative: true,
+}
+
+export const NumberInput = (props) => {
+	const numberMask = createNumberMask(numberMaskOptions);
+
+	return <StyledMaskInput mask={numberMask} {...props}/>
 }
 
 const MuiStyledInputBase = (props) => withStyles(
@@ -99,10 +112,10 @@ const MuiStyledInputBase = (props) => withStyles(
 				borderColor: baseTheme.colors.primary60,
 				boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
 			},
-			paddingLeft: props.paddingLeft || "4px",
-			paddingTop: props.paddingTop || "8px",
-			paddingBottom: props.paddingBottom || "8px",
-			height: "20px",
+			paddingLeft: props.pl || "4px",
+			paddingTop: props.pt || "8px",
+			paddingBottom: props.pb || "8px",
+			height: props.height || 20,
 		},
 	}))(InputBase);
 
@@ -155,8 +168,6 @@ export const Select = ({
 	id,
 	onChange,
 	children,
-	fontSize,
-	color,
 	native = true,
 	...restProps
 }: SelectProps): JSX.Element => {

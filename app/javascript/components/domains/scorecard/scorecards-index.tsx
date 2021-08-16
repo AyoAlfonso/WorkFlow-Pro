@@ -34,7 +34,6 @@ export const ScorecardsIndex = observer(
 
     return (
       <Container>
-        <h2>Scorecards</h2>
         <ScorecardSelector ownerType={owner_type} ownerId={owner_id} />
         <ScorecardSummary
           kpis={kpis}

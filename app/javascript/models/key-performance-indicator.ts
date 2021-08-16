@@ -6,10 +6,11 @@ export const KeyPerformanceIndicatorModel = types
   .model("KeyPerformanceIndicatorModel")
   .props({
     id: types.identifierNumber,
+    title: types.string,
     description: types.string,
     closedAt: types.maybeNull(types.string),
     createdById: types.number,
-    ownedBy: UserModel,
+    ownedBy: types.maybeNull(UserModel),
     ownedById: types.maybeNull(types.number),
     createdAt: types.maybeNull(types.string),
     updatedAt: types.maybeNull(types.string),
