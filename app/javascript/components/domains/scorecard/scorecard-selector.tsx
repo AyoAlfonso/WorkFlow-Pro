@@ -26,13 +26,6 @@ export const ScorecardSelector =   (props: IScorecardSelectorProps): JSX.Element
   const [currentScorecard, setCurrentScorecard] = useState<string>("company");
   const { primary100 } = baseTheme.colors;
   const history = useHistory();
-  
-  useEffect(() => {
-    scorecardStore.getScorecard({
-      ownerType,
-      ownerId,
-    });
-  }, [ownerType, ownerId, companyStore.company]);
 
   useEffect(() => {
     const teams =

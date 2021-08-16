@@ -47,7 +47,7 @@ export const ModalWithHeader = ({
         boxSizing: boxSizing,
       }}
     >
-      <HeaderContainer>
+      {/* <HeaderContainer>
         <RowWrapper>
           <StyledHeading
             mt={headerMarginTop}
@@ -77,7 +77,9 @@ export const ModalWithHeader = ({
             <SubHeaderText>{subHeaderText}</SubHeaderText>
           </RowWrapper>
         )}
-      </HeaderContainer>
+      </HeaderContainer> */}
+
+      
       {children}
     </StyledModal>
   );
