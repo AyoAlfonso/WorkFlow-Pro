@@ -11,7 +11,7 @@ import { MIPSelector } from "./mip-selector";
 import { EmotionSelector } from "./emotion-selector";
 import { baseTheme } from "~/themes/base";
 import { SummaryDisplay } from "~/components/shared/questionnaire/summary-display";
-import "~/stylesheets/modules/chatbot";
+import "~/stylesheets/modules/chatbot.css";
 export interface ISurveyBotProps {
   variant: string;
   endFn?: () => void | void;
