@@ -224,7 +224,8 @@ const ProgressBarTimerContainer = styled.div`
   align-items: center;
   margin-left: 16px;
   margin-right: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 48px;
+  margin-top: 48px;
 `;
 
 const BodyContainer = styled.div`
