@@ -116,7 +116,8 @@
         "create": "Create",
         "edit": "Edit",
         "newCompany": "Company",
-        "newForum": "Forum"
+        "newForum": "Forum",
+        "lastSevenDays": "In the last 7 Days"
       },
       "forum": {
         "annualHub": "Annual Hub",

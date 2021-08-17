@@ -58,8 +58,6 @@ export const AddManualKPIModal = observer(
         if(!result) {
           return
         }
-        console.log(kpi)
-        console.log(result)
         if(currentValue) {
           const log = {
             keyPerformanceIndicatorId: result.id,

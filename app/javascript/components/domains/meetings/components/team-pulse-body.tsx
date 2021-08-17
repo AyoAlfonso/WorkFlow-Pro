@@ -82,3 +82,4 @@ const NoMoodWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
+

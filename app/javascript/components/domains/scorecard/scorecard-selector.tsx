@@ -82,7 +82,6 @@ export const ScorecardSelector = (props: IScorecardSelectorProps): JSX.Element =
   };
 
   const renderUserSelectionList = (): JSX.Element => {
-    console.log("thius", companyUsers, company);
     return (
       <div onClick={e => e.stopPropagation()}>
         <MultiOptionTypeSelectionDropdownList
