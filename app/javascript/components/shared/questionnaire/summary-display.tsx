@@ -10,6 +10,7 @@ export interface ISummaryDisplayProps {
   variant: string;
   title: string;
   questionnaireVariant?: string;
+  timeOfDay?: string;
 }
 
 export const SummaryDisplay = ({
@@ -17,6 +18,7 @@ export const SummaryDisplay = ({
   title,
   variant,
   questionnaireVariant,
+  timeOfDay,
 }: ISummaryDisplayProps): JSX.Element => {
   const { t } = useTranslation();
   const rowTextProps = {
@@ -24,7 +26,6 @@ export const SummaryDisplay = ({
     color: "text",
   };
   const dataForDisplay = summaryData[humps.camelize(variant)];
-
   return (
     <Container>
       <Text fontSize={"16px"} fontWeight={600}>
@@ -35,6 +36,8 @@ export const SummaryDisplay = ({
           <Text fontSize={"12px"} fontWeight={400}>
             {questionnaireVariant == "Monthly Reflection"
               ? t("journals.pynBotNoEntriesMonthly")
+              : timeOfDay == "am"
+              ? t("journals.pynBotNoEntriesDaily")
               : t("journals.pynBotNoEntriesWeekly")}
           </Text>
         ) : (
