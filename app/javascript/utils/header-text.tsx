@@ -57,6 +57,8 @@ export const HeaderText = observer(
         return <> {t("notes.indexTitle")} </>;
       case "journals":
         return <> {t("journals.indexTitle")} </>;
+      case "scorecard":
+        return <> {t("scorecards.indexTitle")} </>;
       default:
         return <>{`${getGreetingTime(moment())} ${sessionStore.profile.firstName}`}</>;
     }

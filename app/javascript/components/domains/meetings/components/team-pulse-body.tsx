@@ -40,9 +40,9 @@ export const TeamPulseBody = ({ meeting }: ITeamPulseBodyProps): JSX.Element => 
             <OverallTeamPulse value={teamEmotions} />
             <TeamPulseCard data={toJS(userEmotions || [])} />
           </TeamPulseWrapper>
-          <PercentChangeContainer>
+          {/* <PercentChangeContainer>
             <PercentChange percentChange={percentageDifference} periodDesc={periodDesc} />
-          </PercentChangeContainer>
+          </PercentChangeContainer> */}
         </BodyContainer>
       ) : (
         <BodyContainer>

@@ -9,7 +9,7 @@ import { Icon } from "~/components/shared/icon";
 interface IWizardLayoutProps {
   title: string;
   description: string;
-  customActionButton?: JSX.Element;
+  customActionButton?: JSX.Element; 
   showBackButton?: boolean;
   showSkipButton?: boolean;
   singleComponent?: JSX.Element;
@@ -176,7 +176,6 @@ const BodyContainer = styled.div`
   padding-right: 16px;
   padding-top: 32px;
   width: 75%;
-  height: 100%;
   position: relative;
   display: flex;
   flex-direction: column;

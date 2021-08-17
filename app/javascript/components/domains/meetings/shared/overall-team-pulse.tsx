@@ -2,12 +2,14 @@ import * as React from "react";
 import styled from "styled-components";
 import { Icon } from "~/components/shared";
 import { Text } from "~/components/shared/text";
+import { useTranslation } from "react-i18next";
 
 interface IOverallTeamPulseProps {
   value: number;
 }
 
 export const OverallTeamPulse = ({ value }: IOverallTeamPulseProps): JSX.Element => {
+  const { t } = useTranslation();
   const renderIcon = () => {
     switch (true) {
       case value < 2:
@@ -29,6 +31,7 @@ export const OverallTeamPulse = ({ value }: IOverallTeamPulseProps): JSX.Element
       <RatingContainer>
         <RatingText>{value.toFixed(1)} / 5</RatingText>
       </RatingContainer>
+      <LastSevenDays> {t("company.lastSevenDays")}</LastSevenDays>
     </Container>
   );
 };
@@ -76,4 +79,15 @@ const RatingText = styled(Text)`
   margin-top: 10px;
   font-weight: bold;
   text-align: center;
+`;
+
+const LastSevenDays = styled.div`
+  border: 1px solid black;
+  display: block;
+  font-weight: bold;
+  font-size: 12px;
+  margin-top: -30%;
+  color: black;
+  padding: 5px;
+  background: yellow;
 `;
