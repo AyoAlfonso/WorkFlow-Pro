@@ -4,14 +4,18 @@ import styled from "styled-components";
 import { Icon } from "../../../shared/icon";
 import { Button } from "~/components/shared/button";
 import { TextDiv } from "~/components/shared/text";
+import { AddKPIModal } from "./add-kpi-modal";
 import { useRef, useState, useEffect } from "react";
-import { AddManualKPIModal } from "./add-manual-kpi-modal"
 
-export const AddKPIDropdown = ({ }): JSX.Element => {
+interface IAddKPIDropdownProps {}
 
+export const AddKPIDropdown = ({}): JSX.Element => {
   const optionsRef = useRef(null);
 
   const [showOptions, setShowOptions] = useState<boolean>(false);
+  const [showAddKPIModal, setAddKPIModal] = useState<boolean>();
+  const [kpiModalType, setAddKPIModalType] = useState<string>("");
+  const [kpis, setKpis] = useState([]);
   const [addManualKPIModalOpen, setAddManualKPIModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -25,60 +29,70 @@ export const AddKPIDropdown = ({ }): JSX.Element => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [optionsRef]);
-
+  const clicKPIOptions = type => {
+    setAddKPIModal(!showAddKPIModal);
+    setAddKPIModalType(type);
+  };
   return (
-    <>
-      <Container ref={optionsRef}>
-        <StyledButton
-          small
-          variant={"grey"}
-          onClick={() => {
-            setShowOptions(!showOptions);
-          }}
-          width={"fill"}
-        >
-          <CircularIcon icon={"Plus"} size={"12px"} />
-          <AddKPIText>Add KPI</AddKPIText>
-        </StyledButton>
-        {showOptions && (
-          <DropdownOptionsContainer onClick={e => e.stopPropagation()}>
-            <OptionContainer onClick={() => {
-              setAddManualKPIModalOpen(true)
-            }}>
-              <OptionText>
-                Manual
-              </OptionText>
-            </OptionContainer>
-            <OptionContainer>
-              <OptionText>
-                Source
-              </OptionText>
-            </OptionContainer>
-            <OptionContainer>
-              <OptionText>
-                Existing
-              </OptionText>
-            </OptionContainer>
-            <OptionContainer>
-              <OptionText>
-                Roll Up
-              </OptionText>
-            </OptionContainer>
-            <OptionContainer>
-              <OptionText>
-                Average
-              </OptionText>
-            </OptionContainer>
-          </DropdownOptionsContainer>
-        )}
-      </Container>
-      <AddManualKPIModal
-        addManualKPIModalOpen={addManualKPIModalOpen}
-        setAddManualKPIModalOpen={setAddManualKPIModalOpen}
-      />
-    </>
-  )
-}
+    <Container ref={optionsRef}>
+      <StyledButton
+        small
+        variant={"grey"}
+        onClick={() => {
+          setShowOptions(!showOptions);
+        }}
+        width={"fill"}
+      >
+        <CircularIcon icon={"Plus"} size={"12px"} />
+        <AddKPIText>Add KPI</AddKPIText>
+      </StyledButton>
+      {showOptions && (
+        <DropdownOptionsContainer onClick={e => e.stopPropagation()}>
+          <OptionContainer>
+            <OptionText>Manual</OptionText>
+          </OptionContainer>
+          <OptionContainer
+            onClick={() => {
+              clicKPIOptions("source");
+            }}
+          >
+            <OptionText>Source</OptionText>
+          </OptionContainer>
+          <OptionContainer
+            onClick={() => {
+              clicKPIOptions("existing");
+            }}
+          >
+            <OptionText>Existing</OptionText>
+          </OptionContainer>
+          <OptionContainer
+            onClick={() => {
+              clicKPIOptions("roll up");
+            }}
+          >
+            <OptionText>Roll Up</OptionText>
+          </OptionContainer>
+          <OptionContainer
+            onClick={() => {
+              clicKPIOptions("average");
+            }}
+          >
+            <OptionText>Average</OptionText>
+          </OptionContainer>
+        </DropdownOptionsContainer>
+      )}
+
+      {showAddKPIModal && (
+        <AddKPIModal
+          kpis={kpis}
+          showAddKPIModal={showAddKPIModal}
+          kpiModalType={kpiModalType}
+          setModalOpen={setAddKPIModal}
+        />
+      )}
+    </Container>
+  );
+};
 
 const Container = styled.div`
   position: relative;
@@ -88,8 +102,7 @@ type StyledButtonType = {
   width?: string;
 };
 
-
-const StyledButton = styled(Button) <StyledButtonType>`
+const StyledButton = styled(Button)<StyledButtonType>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -99,21 +112,21 @@ const StyledButton = styled(Button) <StyledButtonType>`
   background-color: ${props => props.theme.colors.white};
   border-color: ${props => props.theme.colors.white};
   &:hover {
-     color: ${props => props.theme.colors.primary100};
+    color: ${props => props.theme.colors.primary100};
   }
 `;
 
 const CircularIcon = styled(Icon)`
- box-shadow: 2px 2px 6px 0.5px rgb(0 0 0 / 20%);
- color:  ${props => props.theme.colors.white};
- border-radius: 50%;
- height: 25px;
- width: 25px;
- background-color: ${props => props.theme.colors.primary100};
-   &:hover {
+  box-shadow: 2px 2px 6px 0.5px rgb(0 0 0 / 20%);
+  color: ${props => props.theme.colors.white};
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  background-color: ${props => props.theme.colors.primary100};
+  &:hover {
     background-color: ${props => props.theme.colors.primaryActive};
   }
-`
+`;
 
 const AddKPIText = styled(TextDiv)`
   margin-left: 10px;

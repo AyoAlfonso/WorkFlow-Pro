@@ -20,7 +20,7 @@ export const ModifyTeamBody = observer(
     const { teamStore } = useMst();
 
     const formatMemberListState = teamUserEnablements => {
-      let membersListItem = {};
+      const membersListItem = {};
 
       teamUserEnablements.forEach((tue, index) => {
         membersListItem[index] = {
