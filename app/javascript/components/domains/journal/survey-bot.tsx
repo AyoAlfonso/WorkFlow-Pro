@@ -11,7 +11,7 @@ import { MIPSelector } from "./mip-selector";
 import { EmotionSelector } from "./emotion-selector";
 import { baseTheme } from "~/themes/base";
 import { SummaryDisplay } from "~/components/shared/questionnaire/summary-display";
-import "~/stylesheets/modules/chatbot";
+import "~/stylesheets/modules/chatbot.css";
 export interface ISurveyBotProps {
   variant: string;
   endFn?: () => void | void;
@@ -108,12 +108,14 @@ export const SurveyBot = observer(
                   variant={`${R.path(["metadata", "summary"], step)}Am`}
                   title={R.path(["metadata", "message", "am"], step)}
                   questionnaireVariant={props.variant}
+                  timeOfDay={"am"}
                 />
                 <SummaryDisplay
                   summaryData={summaryData}
                   variant={`${R.path(["metadata", "summary"], step)}Pm`}
                   title={R.path(["metadata", "message", "pm"], step)}
                   questionnaireVariant={props.variant}
+                  timeOfDay={"pm"}
                 />
               </>,
             ),

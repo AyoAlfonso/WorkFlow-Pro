@@ -16,7 +16,7 @@ import { PynsSummary } from "./pyns-summary";
 import { parseAnnualInitiative } from "./annual-initiative-parser";
 import { observer } from "mobx-react";
 
-interface IOnboardingProps { }
+interface IOnboardingProps {}
 
 export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
   const { companyStore, sessionStore, staticDataStore } = useMst();
@@ -185,12 +185,12 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
 True value of LynchPyn is in working together with others in your team and company. Add a few others in your team to get the most out of the platform!`)
         ) {
           submitTeamDataAndComplete().then(res => {
-            companyStore.closeOnboardingModal();
+            setTimeout(companyStore.closeOnboardingModal(), 2000, 0);
           });
         }
       } else {
         submitTeamDataAndComplete().then(res => {
-          companyStore.closeOnboardingModal();
+          setTimeout(companyStore.closeOnboardingModal(), 2000, 0);
         });
       }
     }
@@ -277,7 +277,9 @@ True value of LynchPyn is in working together with others in your team and compa
           fieldType: EFieldType.TextField,
           formKeys: ["rallyingCry"],
           callback: setGoalDataState,
-          subText: !R.view(R.lensPath(["rallyingCry"]), goalData) ? "" : `Awesome ${profile.firstName}! This is what we call your LynchPyn Goal™. This is the ultimate filter when the company is making any strategic decisions until it's achieved`,
+          subText: !R.view(R.lensPath(["rallyingCry"]), goalData)
+            ? ""
+            : `Awesome ${profile.firstName}! This is what we call your LynchPyn Goal™. This is the ultimate filter when the company is making any strategic decisions until it's achieved`,
           style: { marginLeft: "2px" },
         },
         {
@@ -286,7 +288,9 @@ True value of LynchPyn is in working together with others in your team and compa
           fieldType: EFieldType.TextField,
           formKeys: ["annualInitiative", "description"],
           callback: setGoalDataState,
-          subText: !R.view(R.lensPath(["annualInitiative", "description"]), goalData) ? "" : `Nice going.  This is your Annual Objective.  By adding an Annual Objective you can start a "lane" where Quarterly Initiatives can be added`,
+          subText: !R.view(R.lensPath(["annualInitiative", "description"]), goalData)
+            ? ""
+            : `Nice going.  This is your Annual Objective.  By adding an Annual Objective you can start a "lane" where Quarterly Initiatives can be added`,
           style: { marginLeft: "2px" },
         },
         {
@@ -298,12 +302,16 @@ True value of LynchPyn is in working together with others in your team and compa
           fieldType: EFieldType.TextField,
           formKeys: ["annualInitiative", "quarterlyGoals", "0", "description"],
           callback: setGoalDataState,
-          subText:
-            !R.view(R.lensPath(["annualInitiative", "quarterlyGoals", "0", "description"]), goalData) ? "" : "Almost there!  You have your Quarterly Initiative now, just one more thing left.",
+          subText: !R.view(
+            R.lensPath(["annualInitiative", "quarterlyGoals", "0", "description"]),
+            goalData,
+          )
+            ? ""
+            : "Almost there!  You have your Quarterly Initiative now, just one more thing left.",
           style: { marginLeft: "2px" },
         },
         {
-          label: `What would be an achievable milestone for this week to move you closer to "${R.pathOr(
+          label: `What would be an achievable Milestone for this week to move you closer to "${R.pathOr(
             "",
             ["annualInitiative", "quarterlyGoals", "0", "description"],
             goalData,
@@ -311,8 +319,19 @@ True value of LynchPyn is in working together with others in your team and compa
           fieldType: EFieldType.TextField,
           formKeys: ["annualInitiative", "quarterlyGoals", "0", "milestones", "0", "description"],
           callback: setGoalDataState,
-          subText:
-            !R.view(R.lensPath(["annualInitiative", "quarterlyGoals", "0", "milestones", "0", "description"]), goalData) ? "" : "You're all done. Weekly Milestones are the final piece in the Objectives and Initiatives puzzle. Click next to see how this helps you prioritize each day.",
+          subText: !R.view(
+            R.lensPath([
+              "annualInitiative",
+              "quarterlyGoals",
+              "0",
+              "milestones",
+              "0",
+              "description",
+            ]),
+            goalData,
+          )
+            ? ""
+            : "You're all done. Weekly Milestones are the final piece in the Objectives and Initiatives puzzle. Click next to see how this helps you prioritize each day.",
           style: { marginLeft: "2px" },
         },
       ],
@@ -373,7 +392,12 @@ True value of LynchPyn is in working together with others in your team and compa
     <FormBuilder
       formFields={leftBodyComponentProps[2].formFields}
       formData={goalData}
-      formContainerStyle={[{ height: "140px" }, { height: "180px" }, { height: "140px" }, { height: "140px" }, ]}
+      formContainerStyle={[
+        { height: "140px" },
+        { height: "180px" },
+        { height: "140px" },
+        { height: "140px" },
+      ]}
       stepwise={true}
     />,
     <AddPyns formData={formData} />,
@@ -565,28 +589,28 @@ True value of LynchPyn is in working together with others in your team and compa
       />
     </Container>
   ) : (
-      <Container>
-        <WizardLayout
-          title={wizardTitles}
-          description={wizardDescriptions}
-          showCloseButton={false}
-          showSkipButton={currentStep === 1 || currentStep === 2}
-          onCloseButtonClick={companyStore.closeOnboardingModal}
-          onSkipButtonClick={() => setCurrentStep(c => c + 1)}
-          onNextButtonClick={onNextButtonClick}
-          leftBodyComponents={leftBodyComponents}
-          rightBodyComponents={rightBodyComponents}
-          currentStep={currentStep}
-          steps={stepLabels}
-          showLynchpynLogo={true}
-          nextButtonDisabled={!hasCreationParams([...requiredFields])}
-          onStepClick={onStepClick}
-          stepClickDisabled={currentStep === 0}
-          completeButtonText={"Send Invites and Complete"}
-          finalButtonDisabled={!teamData}
-        />
-      </Container>
-    );
+    <Container>
+      <WizardLayout
+        title={wizardTitles}
+        description={wizardDescriptions}
+        showCloseButton={false}
+        showSkipButton={currentStep === 1 || currentStep === 2}
+        onCloseButtonClick={companyStore.closeOnboardingModal}
+        onSkipButtonClick={() => setCurrentStep(c => c + 1)}
+        onNextButtonClick={onNextButtonClick}
+        leftBodyComponents={leftBodyComponents}
+        rightBodyComponents={rightBodyComponents}
+        currentStep={currentStep}
+        steps={stepLabels}
+        showLynchpynLogo={true}
+        nextButtonDisabled={!hasCreationParams([...requiredFields])}
+        onStepClick={onStepClick}
+        stepClickDisabled={currentStep === 0}
+        completeButtonText={"Send Invites and Complete"}
+        finalButtonDisabled={!teamData}
+      />
+    </Container>
+  );
 });
 
 const Container = styled.div`
