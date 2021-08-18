@@ -59,7 +59,6 @@ export const TeamPulseCard = ({ data }: ITeamPulseCardProps): JSX.Element => {
           top={-34}
           tickSize={0}
           tickFormat={value => renderDateOfWeek(value)}
-          title={data.length ? "" : "This chart empty"}
         />
         <YAxis
           hideLine
@@ -68,7 +67,7 @@ export const TeamPulseCard = ({ data }: ITeamPulseCardProps): JSX.Element => {
           top={28}
         />
         <LineMarkSeries
-          data={data.length ? parsedData() : [{ x: 0, y: 0 }]}
+          data={parsedData()}
           colorType="literal"
           strokeStyle={"dashed"}
           lineStyle={{ stroke: greyInactive }}
@@ -119,7 +118,6 @@ export const TeamPulseCardMini = ({ data }: ITeamPulseCardProps): JSX.Element =>
           top={-34}
           tickSize={0}
           tickFormat={value => renderDateOfWeek(value)}
-          title={data.length ? "" : "This chart empty"}
         />
         <YAxis
           hideLine
@@ -128,7 +126,7 @@ export const TeamPulseCardMini = ({ data }: ITeamPulseCardProps): JSX.Element =>
           top={28}
         />
         <LineMarkSeries
-          data={data.length ? parsedData() : [{ x: 0, y: 0 }]}
+          data={parsedData()}
           colorType="literal"
           strokeStyle={"dashed"}
           lineStyle={{ stroke: greyInactive }}

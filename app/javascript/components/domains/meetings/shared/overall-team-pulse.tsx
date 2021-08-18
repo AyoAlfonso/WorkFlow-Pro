@@ -82,12 +82,10 @@ const RatingText = styled(Text)`
 `;
 
 const LastSevenDays = styled.div`
-  border: 1px solid black;
   display: block;
   font-weight: bold;
   font-size: 12px;
   margin-top: -30%;
-  color: black;
+  color: ${props => props.theme.colors.greyActive};
   padding: 5px;
-  background: yellow;
 `;
