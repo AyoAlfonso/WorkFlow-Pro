@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import styled, { css } from "styled-components"
 import Modal from "styled-react-modal"
 import { Input, NumberInput, CurrencyInput, PercentInput } from "~/components/shared/input"
 import { baseTheme } from "~/themes/base"
 import { Icon } from "~/components/shared/icon"
 
-export const StyledModal = Modal.styled`
+type StyledModalProps = {
+  width: string;
+}
+
+export const StyledModal = Modal.styled<StyledModalProps>`
   border-radius: 8px;
-  width: 640px;
+  width: ${props => props.width || "640px"};
   maxHeight: 90%;
   background-color: ${props => props.theme.colors.white};
 `
@@ -55,6 +59,10 @@ export const FormElementContainer = styled.div`
   width: 100%;
   flex-direction: column;
   gap: 4px;
+  .trix-kpi-modal {
+    font-size: 12px;
+    margin: 0px;
+  }
 `
 
 export const RowContainer = styled.div`
@@ -87,6 +95,7 @@ type ModalWithHeaderProps = {
   children?: JSX.Element | JSX.Element[] | string,
   header: string,
   isOpen: boolean,
+  width?: string,
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
@@ -95,6 +104,7 @@ export const ModalWithHeader = ({
   header,
   isOpen,
   setIsOpen,
+  width,
 }: ModalWithHeaderProps): JSX.Element => {
   return (
     <StyledModal
@@ -102,6 +112,7 @@ export const ModalWithHeader = ({
       onBackgroundClick={e => {
         setIsOpen(false)
       }}
+      width={width}
     >
       <HeaderContainer>
         <Header>{header}</Header>
