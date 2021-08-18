@@ -9,7 +9,7 @@ import { Icon } from "~/components/shared/icon";
 import { Button } from "~/components/shared/button";
 import { TextDiv } from "~/components/shared/text";
 import { baseTheme } from "~/themes/base"
-import { OwnedBy } from "./scorecard-owned-by"
+import { OwnedBy } from "./shared/scorecard-owned-by"
 import { StatusBadge } from "~/components/shared/status-badge"
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown"
 import { ViewEditKPIModal } from "./shared/view-kpi-modal"
@@ -118,7 +118,6 @@ export const ScorecardTableView = ({
 		]
 		weeks.forEach(({ week, score }) => {
 			const q = Math.floor(((week) - 1) / 13)
-			console.log(q)
 			quarterScores[q][0] += score
 			quarterScores[q][1]++
 		})
@@ -143,7 +142,7 @@ export const ScorecardTableView = ({
 	const data = useMemo(
 		() => kpis.map((kpi: any) => {
 			const targetText = formatValue(kpi.unitType, kpi.targetValue)
-			const description = `${kpi.description} ${kpi.greaterThan ? "≥" : "≤"} ${targetText}`
+			const title = `${kpi.title} ${kpi.greaterThan ? "≥" : "≤"} ${targetText}`
 			const logic = kpi.greaterThan ? `Greater than or equal to ${targetText}` : `Less than or equal to ${targetText}`
 			const row: any = {
 				updateKPI: {
@@ -152,13 +151,13 @@ export const ScorecardTableView = ({
 					unitType: kpi.unitType,
 				},
 				title: {
-					description,
+					title,
 					logic,
 					id: kpi.id,
 				},
 				owner: kpi.ownedBy,
 			}
-			const weeks = Object.values(kpi.period[year])
+			const weeks = Object.values(kpi?.period?.[year] || {})
 			weeks.forEach((week: any) => {
 				const percentScore = getScorePercent(week.score, kpi.targetValue, kpi.greaterThan)
 				row[`wk_${week.week}`] = {
@@ -204,9 +203,9 @@ export const ScorecardTableView = ({
 							setViewEditKPIModalOpen(true);
 						}}>
 							<KPITextContainer>
-								<KPIDescription>
-									{value.description}
-								</KPIDescription>
+								<KPITitle>
+									{value.title}
+								</KPITitle>
 								<KPILogic>
 									{value.logic}
 								</KPILogic>
@@ -253,7 +252,7 @@ export const ScorecardTableView = ({
 				Cell: ({ value }) => {
 					return (
 						<OwnerContainer>
-							<OwnedBy user={value} marginLeft={"0px"} />
+							<OwnedBy ownedBy={value} marginLeft={"0px"} disabled/>
 						</OwnerContainer>
 					);
 				},
@@ -447,7 +446,7 @@ const TableHeader = styled.th`
 	padding: 16px 8px;
 `
 
-const KPIDescription = styled.div`
+const KPITitle = styled.div`
 	display: block;
 	font-size: 12px;
 	margin-bottom: 4px;
@@ -466,7 +465,7 @@ const TableRow = styled.tr<TableRowProps>`
 	height: 48px;
 	${props => props.hover && `&:hover {
 		background: ${props.theme.colors.backgroundBlue};
-		${KPIDescription} {
+		${KPITitle} {
 			font-weight: 800;
 			text-decoration: underline;
 		}

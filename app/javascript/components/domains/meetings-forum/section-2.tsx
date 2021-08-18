@@ -50,7 +50,7 @@ export const Section2 = observer(
 
     return (
       <Container>
-        {/* <Exploration includeExplorationTopic={false} /> */}
+        <Exploration includeExplorationTopic={false} />
         {instanceType === "forum" && <LynchPynBadge />}
       </Container>
     );

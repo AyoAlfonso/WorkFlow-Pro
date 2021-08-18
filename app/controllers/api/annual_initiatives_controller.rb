@@ -8,7 +8,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
     @template_description = DescriptionTemplate.find_by(company_id: current_company.id, template_type: 1).body_content || ""
     @annual_initiative = AnnualInitiative.new({
       created_by: current_user, owned_by: current_user,
-      description: @template_description,
+      description: params[:description],
       company_id: params[:type] == "company" ? current_company.id : nil,
       context_description: "", importance: ["", "", ""],
       fiscal_year: current_company.year_for_creating_annual_initiatives,

@@ -23,26 +23,31 @@ export const RallyingCry = ({ rallyingCry }: IRallyingCryProps): JSX.Element => 
     <VisionContainer>
       <VisionTitle>{t("company.rallyingCry")}</VisionTitle>
       <ContentEditableContainer>
-      <StyledContentEditable
-        innerRef={rallyingCryRef}
-        placeholder={t("company.rallyingCryPlaceholder")}
-        html={rallyingCry}
-        disabled={!editable}
-        onChange={e => {
-          if (!e.target.value.includes("<div>")) {
-            companyStore.updateModelField("rallyingCry", e.target.value);
-          }
-        }}
-        onKeyDown={key => {
-          if (key.keyCode == 13) {
-            rallyingCryRef.current.blur();
-          }
-        }}
-        onBlur={() => companyStore.updateCompanyFromModel()}
-      />
+        <StyledContentEditable
+          innerRef={rallyingCryRef}
+          placeholder={t("company.rallyingCryPlaceholder")}
+          html={rallyingCry}
+          disabled={!editable}
+          onChange={e => {
+            if (!e.target.value.includes("<div>")) {
+              companyStore.updateModelField("rallyingCry", e.target.value);
+            }
+          }}
+          onKeyDown={key => {
+            if (key.keyCode == 13) {
+              rallyingCryRef.current.blur();
+            }
+          }}
+          onBlur={() => companyStore.updateCompanyFromModel()}
+        />
       </ContentEditableContainer>
     </VisionContainer>
   );
+};
+
+type ContentEditableType = {
+  html?: any;
+  innerRef: any;
 };
 
 const VisionContainer = styled(HomeContainerBorders)`
@@ -66,7 +71,7 @@ const VisionTitle = styled.p`
   white-space: nowrap;
 `;
 
-const StyledContentEditable = styled(ContentEditable)`
+const StyledContentEditable = styled(ContentEditable)<ContentEditableType>`
   display: block;
   font-size: 21px;
   text-transform: capitalize;
@@ -85,4 +90,4 @@ const ContentEditableContainer = styled.div`
   padding: 5px;
   padding-right: 250px;
   overflow: hidden;
-`
+`;

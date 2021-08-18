@@ -16,6 +16,7 @@ export const AddKPIDropdown = ({}): JSX.Element => {
   const [showAddKPIModal, setAddKPIModal] = useState<boolean>();
   const [kpiModalType, setAddKPIModalType] = useState<string>("");
   const [kpis, setKpis] = useState([]);
+  const [addManualKPIModalOpen, setAddManualKPIModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const handleClickOutside = event => {

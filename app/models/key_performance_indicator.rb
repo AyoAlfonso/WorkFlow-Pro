@@ -8,7 +8,8 @@ class KeyPerformanceIndicator < ApplicationRecord
   enum unit_type: { percentage: 0, numerical: 1, currency: 2 }
   # alias_attribute :weeks
 
-  validates :description, :created_by, :viewers, :unit_type, :target_value, :greater_than, presence: true
+  validates :title, :description, :created_by, :viewers, :unit_type, :target_value, presence: true
+  validates :greater_than, inclusion: [true, false]
   has_many :scorecard_logs
 
 

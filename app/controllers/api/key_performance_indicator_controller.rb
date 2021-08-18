@@ -14,14 +14,15 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   end
 
   def create
-    @template_description = DescriptionTemplate.find_by(company_id: current_company.id, template_type: 0).body_content || ""
+    @description = params[:description] != "" ? params[:description] : DescriptionTemplate.find_by(company_id: current_company.id, template_type: 0).body_content || ""
+    @owned_by = User.find(params[:owned_by_id])
     @kpi = KeyPerformanceIndicator.new({
       created_by: current_user,
-      owned_by: params[:owned_by],
-      viewers: { :data => params[:data] },
+      owned_by: @owned_by,
+      viewers: params[:viewers],
       unit_type: params[:unit_type],
       target_value: params[:target_value],
-      description: @template_description,
+      description: params[:description],
       needs_attention_threshold: params[:needs_attention_threshold]
     })
 
@@ -56,18 +57,18 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
     render json: { kpi: @kpi }
   end
 
-  private
+    private
 
   def kpi_params
     params.permit(:id, :owned_by, :viewers, :description, :unit_type, :target_value, :needs_attention_threshold)
   end
 
-  def scorecard_log_params
-    params.permit(:id, :associated_kpi_id, :score, :note)
-  end
+    def scorecard_log_params
+      params.permit(:id, :associated_kpi_id, :score, :note)
+    end
 
-  def set_key_performance_indicator
-    @kpi = policy_scope(KeyPerformanceIndicator).find(params[:id])
-    authorize @kpi
-  end
+    def set_key_performance_indicator
+      @kpi = policy_scope(KeyPerformanceIndicator).find(params[:id])
+      authorize @kpi
+    end
 end
