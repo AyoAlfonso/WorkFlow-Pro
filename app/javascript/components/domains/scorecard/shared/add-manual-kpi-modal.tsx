@@ -16,12 +16,14 @@ import {
   FormElementContainer,
   RowContainer,
 } from "./modal-elements"
-import { baseTheme } from "~/themes/base"
+import { toJS } from "mobx";
+import { TrixEditor } from "react-trix"
 
 interface AddManualKPIModalProps {
   addManualKPIModalOpen: boolean;
   setAddManualKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
 
 export const AddManualKPIModal = observer(
   ({
@@ -29,16 +31,25 @@ export const AddManualKPIModal = observer(
     setAddManualKPIModalOpen,
   }: AddManualKPIModalProps): JSX.Element => {
     const { owner_id, owner_type } = useParams()
-    const { keyPerformanceIndicatorStore, sessionStore, companyStore } = useMst();
+    const { keyPerformanceIndicatorStore, sessionStore, descriptionTemplateStore } = useMst();
     const [title, setTitle] = useState<string>(undefined)
     const [greaterThan, setGreaterThan] = useState(1)
     const [description, setDescription] = useState<string>(undefined)
     const [unitType, setUnitType] = useState<string>("numerical")
     const [owner, setOwner] = useState(sessionStore?.profile)
-    const [currentValue, setCurrentValue] = useState<number>(undefined)
     const [targetValue, setTargetValue] = useState<number>(undefined)
     const [showAdvancedSettings, setShowAdvancedSettings] = useState(false)
     const [needsAttentionThreshold, setNeedsAttentionThreshold] = useState(90)
+
+    useEffect(() => {
+      if (!descriptionTemplateStore.descriptionTemplates) {
+        descriptionTemplateStore.fetchDescriptiveTemplates()
+      }
+      const template = toJS(descriptionTemplateStore.descriptionTemplates).find(t => t.templateType == "kpi")
+      if (template) {
+        setDescription(template.body.body)
+      }
+    }, [])
 
     const handleSave = () => {
       const kpi = {
@@ -51,24 +62,12 @@ export const AddManualKPIModal = observer(
         targetValue,
         needsAttentionThreshold,
       }
-      if(description) {
+      if (description) {
         kpi.description = description
       }
       keyPerformanceIndicatorStore.createKPI(kpi).then((result) => {
-        if(!result) {
+        if (!result) {
           return
-        }
-        if(currentValue) {
-          const log = {
-            keyPerformanceIndicatorId: result.id,
-            userId: sessionStore.profile.id,
-            score: currentValue,
-            note: null,
-            week: companyStore.company.currentFiscalWeek,
-            fiscalYear: companyStore.company.currentFiscalYear,
-            fiscalQuarter: Math.floor((companyStore.company.currentFiscalWeek - 1)/13) + 1,
-          }
-          keyPerformanceIndicatorStore.createScorecardLog(log)
         }
         // Reset and close
         setTitle(undefined)
@@ -76,7 +75,6 @@ export const AddManualKPIModal = observer(
         setDescription(undefined)
         setUnitType("numerical")
         setOwner(sessionStore?.profile)
-        setCurrentValue(undefined)
         setTargetValue(undefined)
         setShowAdvancedSettings(false)
         setNeedsAttentionThreshold(90)
@@ -104,29 +102,17 @@ export const AddManualKPIModal = observer(
                 onChange={(e) => { setTitle(e.target.value) }}
               />
             </FormElementContainer>
-            <FormElementContainer>
-              <InputHeaderWithComment>Logic</InputHeaderWithComment>
-              <Select
-                name={"logic"}
-                onChange={(e) => { setGreaterThan(e.target.value) }}
-                value={greaterThan}
-                fontSize={12}
-                height={15}
-                pt={6}
-                pb={10}
-              >
-                <option key={"greater-than"} value={1}>Greater than or equal to</option>
-                <option key={"less-than"} value={0}>Less than or equal to</option>
-              </Select>
-            </FormElementContainer>
           </RowContainer>
           <RowContainer>
             <FormElementContainer>
               <InputHeaderWithComment comment={"optional"}>Description</InputHeaderWithComment>
-              <StyledInput
-                type={"text"}
-                placeholder={"Add a description"}
-                onChange={(e) => { setDescription(e.target.value) }}
+              <TrixEditor
+                className={"trix-kpi-modal"}
+                autoFocus={false}
+                placeholder={"Add a description..."}
+                onChange={(s) => { setDescription(s) }}
+                value={description}
+                mergeTags={[]}
               />
             </FormElementContainer>
           </RowContainer>
@@ -163,21 +149,27 @@ export const AddManualKPIModal = observer(
           </RowContainer>
           <RowContainer>
             <FormElementContainer>
+              <InputHeaderWithComment>Logic</InputHeaderWithComment>
+              <Select
+                name={"logic"}
+                onChange={(e) => { setGreaterThan(e.target.value) }}
+                value={greaterThan}
+                fontSize={12}
+                height={15}
+                pt={6}
+                pb={10}
+              >
+                <option key={"greater-than"} value={1}>Greater than or equal to</option>
+                <option key={"less-than"} value={0}>Less than or equal to</option>
+              </Select>
+            </FormElementContainer>
+            <FormElementContainer>
               <InputHeaderWithComment>Target Value</InputHeaderWithComment>
               <InputFromUnitType
                 unitType={unitType}
                 placeholder={"0"}
                 onChange={(e) => { handleChange(e, setTargetValue) }}
                 defaultValue={targetValue}
-              />
-            </FormElementContainer>
-            <FormElementContainer>
-              <InputHeaderWithComment comment={"optional"}>Current Value</InputHeaderWithComment>
-              <InputFromUnitType
-                unitType={unitType}
-                placeholder={"0"}
-                onChange={(e) => { handleChange(e, setCurrentValue) }}
-                defaultValue={currentValue}
               />
             </FormElementContainer>
           </RowContainer>
