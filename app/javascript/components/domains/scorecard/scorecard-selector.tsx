@@ -11,11 +11,11 @@ import { useHistory } from "react-router-dom";
 import { toJS } from "mobx";
 
 export interface IScorecardSelectorProps {
-    ownerType: string;
-    ownerId: number;
+  ownerType: string;
+  ownerId: number;
 }
 
-export const ScorecardSelector =   (props: IScorecardSelectorProps): JSX.Element => {
+export const ScorecardSelector = (props: IScorecardSelectorProps): JSX.Element => {
   const { userStore, scorecardStore, teamStore, companyStore } = useMst();
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
   const [ownerType, setOwnerType] = useState<string>("company");
@@ -26,17 +26,10 @@ export const ScorecardSelector =   (props: IScorecardSelectorProps): JSX.Element
   const [currentScorecard, setCurrentScorecard] = useState<string>("company");
   const { primary100 } = baseTheme.colors;
   const history = useHistory();
-  
-  useEffect(() => {
-    scorecardStore.getScorecard({
-      ownerType,
-      ownerId,
-    });
-  }, [ownerType, ownerId, companyStore.company]);
 
   useEffect(() => {
     const teams =
-      teamStore &&
+      teamStore.teams &&
       toJS(teamStore)
         .teams.filter(team => team.active)
         .map(team => {
@@ -48,7 +41,7 @@ export const ScorecardSelector =   (props: IScorecardSelectorProps): JSX.Element
             name: team.name,
           };
         });
-    setTeams(teams);
+
     const company = companyStore && {
       id: companyStore.company.id,
       type: "company",
@@ -57,10 +50,8 @@ export const ScorecardSelector =   (props: IScorecardSelectorProps): JSX.Element
       name: companyStore.company.name,
     };
 
-    setCompany(company);
-    setCurrentScorecard(company.name);
     const users =
-      userStore &&
+      userStore.users &&
       toJS(userStore)
         .users.filter(user => user.status == "active")
         .map(user => {
@@ -74,7 +65,10 @@ export const ScorecardSelector =   (props: IScorecardSelectorProps): JSX.Element
           };
         });
     setCompanyUsers(users);
-  }, [teamStore.teams, companyStore.company, userStore.users]);
+    setTeams(teams);
+    setCompany(company);
+    setCurrentScorecard(company.name);
+  }, [teamStore.teams, companyStore.company, userStore.users, ownerId]);
 
   const ownerSelector = owner => {
     setCurrentScorecard(`${owner.name} ${owner.lastName || ""}`);

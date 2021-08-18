@@ -170,6 +170,7 @@ export const CompanyStoreModel = types
       try {
         const response: any = yield env.api.createOnboardingTeamAndInviteUsers(companyId, teamData);
         if (response.ok) {
+          showToast("Company created and invites sent", ToastMessageConstants.SUCCESS);
           self.onboardingTeam = response.data;
           self.onboardingCompany = null;
           yield sessionStore.loadProfile();

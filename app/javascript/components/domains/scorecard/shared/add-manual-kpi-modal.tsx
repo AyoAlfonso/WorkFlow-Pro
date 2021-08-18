@@ -69,6 +69,18 @@ export const AddManualKPIModal = observer(
         if (!result) {
           return
         }
+        if(currentValue) {
+          const log = {
+            keyPerformanceIndicatorId: result.id,
+            userId: sessionStore.profile.id,
+            score: currentValue,
+            note: null,
+            week: companyStore.company.currentFiscalWeek,
+            fiscalYear: companyStore.company.currentFiscalYear,
+            fiscalQuarter: Math.floor((companyStore.company.currentFiscalWeek - 1)/13) + 1,
+          }
+          keyPerformanceIndicatorStore.createScorecardLog(log)
+        }
         // Reset and close
         setTitle(undefined)
         setGreaterThan(1)

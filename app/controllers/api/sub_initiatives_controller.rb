@@ -4,12 +4,13 @@ class Api::SubInitiativesController < Api::ApplicationController
   respond_to :json
 
   def create
+    # Release next version 
     @template_description = DescriptionTemplate.find_by(company_id: current_company.id, template_type: 2).body_content || ""
     @sub_initiative = SubInitiative.new({
       created_by: current_user,
       owned_by: current_user,
       quarterly_goal_id: params[:quarterly_goal_id],
-      description: @template_description,
+      description: params[:description],
       context_description: "",
       importance: ["", "", ""],
     })

@@ -37,15 +37,15 @@ export const MeetingWizardLayout = observer(
       companyStore: { company },
     } = useMst();
     const history = useHistory();
-
+    const forumMode = company && company.accessForum;
     const meetingTitle = () => {
-      return meetingStarted
+      return meetingStarted || forumMode
         ? R.path(["currentStepDetails", "name"], meeting)
         : t("meeting.coreFourTitle");
     };
 
     const meetingDescription = () => {
-      return meetingStarted
+      return meetingStarted || forumMode
         ? R.path(["currentStepDetails", "instructions"], meeting)
         : t("meeting.reviewCoreFour");
     };
@@ -59,7 +59,6 @@ export const MeetingWizardLayout = observer(
         </CoreFourWrapper>
       );
     };
-    const forumMode = company && company.accessForum;
 
     const renderMeetingStartedButtons = () => {
       const nextButton = (

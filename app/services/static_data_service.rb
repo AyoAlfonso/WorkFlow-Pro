@@ -60,12 +60,12 @@ class StaticDataService < ApplicationService
       "1": {
         heading: "Foundational Four™",
         description: "Tell us more about your {displayFormat}.  If you don't have all the answers, enter as much as possible and continue.  You can also skip if you want to do this later.",
-        stepLabel: "Your {displayFormat}'s Foundation Four™"
+        stepLabel: "Your {displayFormat}'s Foundational Four™"
       },
       "2": {
         heading: "Objectives",
         description: "Objectives are strategic moves you want to make in the next year. LynchPyn helps you better communicate your strategy, improve alignment, and drive accountability.",
-        stepLabel: "Create your first Goal"
+        stepLabel: "Create your first Objective"
       },
       "3": {
         heading: "Pyns",
@@ -75,7 +75,7 @@ class StaticDataService < ApplicationService
       "4": {
         heading: "{teamFormatHeading}",
         description: "{teamFormatDescription}",
-        stepLabel: "Add your {teamFormatHeading}"
+        stepLabel: "Invite your {teamFormatHeading}"
       }
     }
   end

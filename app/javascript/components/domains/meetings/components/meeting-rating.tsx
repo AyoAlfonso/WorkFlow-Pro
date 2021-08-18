@@ -77,58 +77,62 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
               ? MEETING_MAX_RATING
               : formattedValue < 1
               ? 1
-              : isNaN(formattedValue) ? 1 : formattedValue,
+              : isNaN(formattedValue)
+              ? 1
+              : formattedValue,
         }),
       )(scores),
     );
   };
 
   const renderUserRows = users => {
-    return users.map((user, index) => {
-      const score = scores.find(score => score.userId === user.id);
-      const inputValue = R.isNil(score) ? "" : score.value;
-      return (
-        <RowDiv key={index}>
-          <AvatarNameContainer>
-            <Avatar
-              avatarUrl={user.avatarUrl ? user.avatarUrl : null}
-              defaultAvatarColor={user.defaultAvatarColor}
-              firstName={user.firstName}
-              lastName={user.lastName}
-              size={48}
-              marginLeft={"inherit"}
-            />
-            <Text fontSize={"15px"} fontWeight={"regular"} ml={"20px"}>
-              {`${user.firstName} ${user.lastName}`}
-            </Text>
-          </AvatarNameContainer>
-          <ScoreContainer>
-            <InputContainer>
-              <Input
-                type="number"
-                max="5"
-                min="1"
-                style={{
-                  border: `1px dashed ${baseTheme.colors.grey20}`,
-                  textAlign: "center",
-                  borderRadius: "10px",
-                }}
-                value={inputValue}
-                onChange={e => handleScoreChange(user, e.target.value)}
+    return users
+      .filter(user => user.status == "active")
+      .map((user, index) => {
+        const score = scores.find(score => score.userId === user.id);
+        const inputValue = R.isNil(score) ? "" : score.value;
+        return (
+          <RowDiv key={index}>
+            <AvatarNameContainer>
+              <Avatar
+                avatarUrl={user.avatarUrl ? user.avatarUrl : null}
+                defaultAvatarColor={user.defaultAvatarColor}
+                firstName={user.firstName}
+                lastName={user.lastName}
+                size={48}
+                marginLeft={"inherit"}
               />
-            </InputContainer>
-            <ScoreDivider />
-            <InputContainer>
-              <PlaceHolderInputDiv>
-                <Text color={"grey40"} fontSize={"15px"} fontWeight={"regular"}>
-                  {MEETING_MAX_RATING}
-                </Text>
-              </PlaceHolderInputDiv>
-            </InputContainer>
-          </ScoreContainer>
-        </RowDiv>
-      );
-    });
+              <Text fontSize={"15px"} fontWeight={"regular"} ml={"20px"}>
+                {`${user.firstName} ${user.lastName}`}
+              </Text>
+            </AvatarNameContainer>
+            <ScoreContainer>
+              <InputContainer>
+                <Input
+                  type="number"
+                  max="5"
+                  min="1"
+                  style={{
+                    border: `1px dashed ${baseTheme.colors.grey20}`,
+                    textAlign: "center",
+                    borderRadius: "10px",
+                  }}
+                  value={inputValue}
+                  onChange={e => handleScoreChange(user, e.target.value)}
+                />
+              </InputContainer>
+              <ScoreDivider />
+              <InputContainer>
+                <PlaceHolderInputDiv>
+                  <Text color={"grey40"} fontSize={"15px"} fontWeight={"regular"}>
+                    {MEETING_MAX_RATING}
+                  </Text>
+                </PlaceHolderInputDiv>
+              </InputContainer>
+            </ScoreContainer>
+          </RowDiv>
+        );
+      });
   };
 
   return (

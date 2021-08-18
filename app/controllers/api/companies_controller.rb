@@ -172,8 +172,8 @@ class Api::CompaniesController < Api::ApplicationController
 
     TeamUserEnablement.create!(team_id: @team.id, user_id: current_user.id, role: 1)
 
-    if params[:email_addresses].present?
-      @email_addresses = params[:email_addresses].split(',')
+    if params[:emails].present?
+      @email_addresses = params[:emails].split(',')
       @email_addresses.each do |email|
         sanitized_email = email.strip
         if User.find_by_email(sanitized_email).blank?

@@ -12,11 +12,13 @@ import { toJS } from "mobx";
 export const ScorecardsIndex = observer(
   (): JSX.Element => {
     const { owner_type, owner_id } = useParams();
-    const { companyStore, scorecardStore } = useMst();
+    const { companyStore, scorecardStore, teamStore, userStore } = useMst();
     const [loading, setLoading] = useState<boolean>(true);
     const [kpis, setKpis] = useState([]);
 
     useEffect(() => {
+      userStore.load()
+      teamStore.load()
       companyStore.load().then(() => setLoading(false));
     }, []);
 
@@ -26,11 +28,12 @@ export const ScorecardsIndex = observer(
           .getScorecard({ ownerType: owner_type, ownerId: owner_id })
           .then(() => setKpis(toJS(scorecardStore.kpis)));
       }
-    }, [owner_type, owner_id]);
+    }, [owner_type, owner_id ]);
 
-    if (loading || !companyStore.company) {
+    if (loading || !companyStore.company || !userStore.users || !teamStore.teams) {
       return <Loading />;
     }
+
 
     return (
       <Container>

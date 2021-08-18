@@ -9,7 +9,7 @@ import { Icon } from "~/components/shared/icon";
 interface IWizardLayoutProps {
   title: string;
   description: string;
-  customActionButton?: JSX.Element;
+  customActionButton?: JSX.Element; 
   showBackButton?: boolean;
   showSkipButton?: boolean;
   singleComponent?: JSX.Element;
@@ -176,7 +176,6 @@ const BodyContainer = styled.div`
   padding-right: 16px;
   padding-top: 32px;
   width: 75%;
-  height: -webkit-fill-available;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -185,7 +184,7 @@ const BodyContainer = styled.div`
 
 const BodyContentContainer = styled.div`
   display: flex;
-  height: -webkit-fill-available;
+  height: 100%;
   overflow-y: auto;
 `;
 
@@ -225,11 +224,10 @@ const RightBodyContainer = styled.div`
 `;
 
 const StepComponentContainer = styled.div`
-  margin-top: 48px;
+  margin-top: 32px;
   margin-bottom: 32px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 75%;
+  margin-left: 15%;
+  margin-right: 15%;
 `;
 
 const LynchpynLogoContainer = styled.div`

@@ -20,8 +20,8 @@ export const ScorecardStoreModel = types
           ownerType,
           ownerId,
         });
-        if (response.ok) {
-          self.kpis = response.data;
+        if (response.ok && response.data?.kpi) {
+          self.kpis = response.data.kpi;
         }
       } catch (e) {
         console.error(e);

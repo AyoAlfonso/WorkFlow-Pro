@@ -22,9 +22,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
       viewers: params[:viewers],
       unit_type: params[:unit_type],
       target_value: params[:target_value],
-      greater_than: params[:greater_than],
-      title: params[:title],
-      description: @description,
+      description: params[:description],
       needs_attention_threshold: params[:needs_attention_threshold]
     })
 
@@ -59,18 +57,18 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
     render json: { kpi: @kpi }
   end
 
-  private
+    private
 
   def kpi_params
     params.permit(:id, :owned_by, :viewers, :description, :unit_type, :target_value, :needs_attention_threshold)
   end
 
-  def scorecard_log_params
-    params.permit(:id, :associated_kpi_id, :score, :note)
-  end
+    def scorecard_log_params
+      params.permit(:id, :associated_kpi_id, :score, :note)
+    end
 
-  def set_key_performance_indicator
-    @kpi = policy_scope(KeyPerformanceIndicator).find(params[:id])
-    authorize @kpi
-  end
+    def set_key_performance_indicator
+      @kpi = policy_scope(KeyPerformanceIndicator).find(params[:id])
+      authorize @kpi
+    end
 end
