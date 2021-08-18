@@ -402,12 +402,11 @@ export const SideNavNoMst = (
       ) : (
         <> </>
       )}
-      {/* Release next version */}
-      {/* {company &&
+      {company &&
         (<StyledNavLinkChildrenActive to={`/scorecard/company/${company.id}`} icon={"Scorecards"} currentPathName={currentPathName}>
           {t("navigation.scorecards")}
         </StyledNavLinkChildrenActive>)
-      } */}
+      }
       {company && company.accessCompany && !showTeam ? (
         renderMeeting(R.path(["length"], teams) || 0, "team")
       ) : (
