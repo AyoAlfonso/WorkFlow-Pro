@@ -1,13 +1,17 @@
 import React, { useState, useCallback } from "react";
 import { ModalWithHeader } from "~/components/shared/modal-with-unique-header";
 import { useTranslation } from "react-i18next";
-import { baseTheme } from "../../../../themes";
+import { baseTheme } from "~/themes";
 import styled, { css } from "styled-components";
-import { titleCase } from "../../../../utils/camelize";
+import { titleCase } from "~/utils/camelize";
 import { observer } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Input } from "~/components/shared/input";
-import { LabelSelectionDropdownList } from "../../../shared/label-selection-dropdown-list";
+// import { LabelSelectionDropdownList } from "../../../shared/label-selection-dropdown-list";
+import { Source } from "./source";
+import { Existing } from "./existing";
+import { RollUp } from "./roll-up";
+import { Average } from "./average";
 
 interface IAddKPIModalProps {
   kpis: any;
@@ -49,7 +53,7 @@ export const AddKPIModal = observer(
         //  child={renderIndividualKPIS()}
       >
         <Container>
-          <LeftContainer>
+          {/* <LeftContainer>
             {kpiModalType == "source" && (
               <LynchpynLogoContainer>
                 <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="100"></img>
@@ -57,21 +61,24 @@ export const AddKPIModal = observer(
             )}
             {kpiModalType != "source" && (
               <LynchpynLogoContainer>
-                {/* <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="100"></img> */}
+                <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="100"></img>
               </LynchpynLogoContainer>
             )}
-          </LeftContainer>
-
-          <RightContainer>
-            {/* <LabelSelectionDropdownList
+          </LeftContainer> */}
+          {/* <RightContainer>
+            <LabelSelectionDropdownList
               labelsList={labelsList}
               setSelectedLabel={setSelectedLabel}
               afterLabelSelectAction={afterLabelSelectAction}
               closeModal={closeModal}
               marginLeft={marginLeftDropdownList}
-            /> */}
+            />
             {renderIndividualKPIS()}
-          </RightContainer>
+          </RightContainer> */}
+          {kpiModalType == "source" && <Source></Source>}
+          {kpiModalType == "existing" && <Existing></Existing>}
+          {kpiModalType == "roll up" && <RollUp></RollUp>}
+          {kpiModalType == "average" && <Average></Average>}
         </Container>
       </ModalWithHeader>
     );

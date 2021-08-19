@@ -63,7 +63,7 @@ Rails.application.configure do
   # 
   # FOR NGROK SETUP - REPLACE WITH YOUR OWN NGROK ADDRESS
   # config.hosts << "a9120c4cdc17.ngrok.io"
-  config.hosts << "008979c661a0.ngrok.io"
+  config.hosts << "rotten-liger-84.loca.lt"
   # config.web_console.whitelisted_ips = 'XX.XX.XXX.XXX'
 
   # Raises error for missing translations.

@@ -131,9 +131,6 @@ export const ScorecardTableView = ({
 		if (percentScore >= 100) {
 			return successGreen
 		}
-		// else if (percentScore >= 90) {
-		// 	return poppySunrise
-		// }
 		else {
 			return warningRed
 		}
