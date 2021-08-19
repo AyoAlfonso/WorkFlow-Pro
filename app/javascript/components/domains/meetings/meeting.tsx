@@ -222,9 +222,10 @@ const DateAndButtonContainer = styled.div`
 const ProgressBarTimerContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 16px;
+  margin-left: 32px;
   margin-right: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  margin-top: 24px;
 `;
 
 const BodyContainer = styled.div`
