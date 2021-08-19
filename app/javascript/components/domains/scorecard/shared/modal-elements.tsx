@@ -62,6 +62,7 @@ export const FormElementContainer = styled.div`
   .trix-kpi-modal {
     font-size: 12px;
     margin: 0px;
+    margin-top: 4px;
   }
 `
 

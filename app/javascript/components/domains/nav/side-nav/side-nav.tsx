@@ -402,7 +402,6 @@ export const SideNavNoMst = (
       ) : (
         <> </>
       )}
-      {/* Release next version */}
       {company && (
         <StyledNavLinkChildrenActive
           to={`/scorecard/company/${company.id}`}
