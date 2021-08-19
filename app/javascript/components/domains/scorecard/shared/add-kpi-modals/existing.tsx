@@ -2,28 +2,18 @@ import React from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 
-export const Average = observer(
+export const Existing = observer(
   (): JSX.Element => {
     return (
-      <StyledAverage>
+      <StyledExisting>
         <StyledSource>
           <StyledHeader>
-            <StyledSubHeader>Average</StyledSubHeader>
+            <StyledSubHeader>Existing</StyledSubHeader>
           </StyledHeader>
           <StyledSelectionBox>
             <StyledOperationBox>
               <StyledOperation>
-                DB - Deals Closed
-                <StyledOperationClose>x</StyledOperationClose>
-              </StyledOperation>
-
-              <StyledOperation>
-                MG - Deals closed
-                <StyledOperationClose>x</StyledOperationClose>
-              </StyledOperation>
-
-              <StyledOperation>
-                SA - Deals closed
+                Cost per Lead
                 <StyledOperationClose>x</StyledOperationClose>
               </StyledOperation>
 
@@ -39,7 +29,8 @@ export const Average = observer(
           <StyledLayerOne>
             <StyledLayerText>
               <StyledLayerPara>
-                Average two or more relevant KPIs to create a new KPI. Start by selecting a unit.
+                Add an existing KPI to this scorecard. Start by selecting the unit and then the
+                specific KPI on the right hand side. You can only select one.
               </StyledLayerPara>
               <StyledOptionToggle>
                 <StyledNumerical>
@@ -171,12 +162,12 @@ export const Average = observer(
             </StyledList>
           </StyledLayerTwo>
         </StyledSecondLayer>
-      </StyledAverage>
+      </StyledExisting>
     );
   },
 );
 
-const StyledAverage = styled.div`
+const StyledExisting = styled.div`
   width: 60%;
   position: absolute;
   top: 50%;
@@ -475,4 +466,4 @@ const StyledItemSpan = styled.span`
   font-weight: 400;
 `;
 
-export default Average;
+export default Existing;
