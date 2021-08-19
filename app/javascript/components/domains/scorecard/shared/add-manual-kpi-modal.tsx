@@ -20,15 +20,15 @@ import { toJS } from "mobx";
 import { TrixEditor } from "react-trix"
 
 interface AddManualKPIModalProps {
-  addManualKPIModalOpen: boolean;
-  setAddManualKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  showAddManualKPIModal: boolean;
+  setShowAddManualKPIModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
 export const AddManualKPIModal = observer(
   ({
-    addManualKPIModalOpen,
-    setAddManualKPIModalOpen,
+    showAddManualKPIModal,
+    setShowAddManualKPIModal,
   }: AddManualKPIModalProps): JSX.Element => {
     const { owner_id, owner_type } = useParams()
     const { keyPerformanceIndicatorStore, sessionStore, descriptionTemplateStore } = useMst();
@@ -69,18 +69,6 @@ export const AddManualKPIModal = observer(
         if (!result) {
           return
         }
-        if(currentValue) {
-          const log = {
-            keyPerformanceIndicatorId: result.id,
-            userId: sessionStore.profile.id,
-            score: currentValue,
-            note: null,
-            week: companyStore.company.currentFiscalWeek,
-            fiscalYear: companyStore.company.currentFiscalYear,
-            fiscalQuarter: Math.floor((companyStore.company.currentFiscalWeek - 1)/13) + 1,
-          }
-          keyPerformanceIndicatorStore.createScorecardLog(log)
-        }
         // Reset and close
         setTitle(undefined)
         setGreaterThan(1)
@@ -90,7 +78,7 @@ export const AddManualKPIModal = observer(
         setTargetValue(undefined)
         setShowAdvancedSettings(false)
         setNeedsAttentionThreshold(90)
-        setAddManualKPIModalOpen(false)
+        setShowAddManualKPIModal(false)
       })
     }
 
@@ -101,8 +89,9 @@ export const AddManualKPIModal = observer(
     return (
       <ModalWithHeader
         header={"Add Manual KPI"}
-        isOpen={addManualKPIModalOpen}
-        setIsOpen={setAddManualKPIModalOpen}
+        isOpen={showAddManualKPIModal}
+        setIsOpen={setShowAddManualKPIModal}
+        width={"720px"}
       >
         <FormContainer>
           <RowContainer>
@@ -118,14 +107,16 @@ export const AddManualKPIModal = observer(
           <RowContainer>
             <FormElementContainer>
               <InputHeaderWithComment comment={"optional"}>Description</InputHeaderWithComment>
-              <TrixEditor
-                className={"trix-kpi-modal"}
-                autoFocus={false}
-                placeholder={"Add a description..."}
-                onChange={(s) => { setDescription(s) }}
-                value={description}
-                mergeTags={[]}
-              />
+              <TrixEditorContainer>
+                <TrixEditor
+                  className={"trix-kpi-modal"}
+                  autoFocus={false}
+                  placeholder={"Add a description..."}
+                  onChange={(s) => { setDescription(s) }}
+                  value={description}
+                  mergeTags={[]}
+                />
+              </TrixEditorContainer>
             </FormElementContainer>
           </RowContainer>
           <RowContainer>
@@ -161,7 +152,7 @@ export const AddManualKPIModal = observer(
           </RowContainer>
           <RowContainer>
             <FormElementContainer>
-              <InputHeaderWithComment>Logic</InputHeaderWithComment>
+              <InputHeaderWithComment>Condition</InputHeaderWithComment>
               <Select
                 name={"logic"}
                 onChange={(e) => { setGreaterThan(e.target.value) }}
@@ -223,4 +214,8 @@ const AdvancedSettingsButton = styled.div`
   &:hover {
     cursor: pointer;
   }
+`
+
+const TrixEditorContainer = styled.div`
+  margin-top: 4px;
 `
