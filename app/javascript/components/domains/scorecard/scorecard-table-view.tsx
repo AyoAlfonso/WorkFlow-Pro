@@ -186,7 +186,7 @@ export const ScorecardTableView = ({
 							setUpdateKPI(value);
 							setUpdateKPIModalOpen(true);
 						}}>
-							<Icon icon={"Update_KPI"} size={16} iconColor={primary100} />
+							<Icon icon={"Update_KPI_New"} size={16} iconColor={primary100} />
 						</UpdateKPIContainer>
 					)
 				}
