@@ -237,7 +237,7 @@ export const App = observer(
                         />
                         <Route exact path="/company/strategic_plan" component={StrategicPlan} />
                         {/* Release next version */}
-                        {/* <Route exact path="/scorecard/:owner_type/:owner_id" component={ScorecardsIndex} /> */}
+                        <Route exact path="/scorecard/:owner_type/:owner_id" component={ScorecardsIndex} />
                         <Route exact path="/journals" component={JournalIndex} />
                         <Route exact path="/notes" component={NotesIndex} />
 

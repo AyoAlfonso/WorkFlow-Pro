@@ -403,11 +403,15 @@ export const SideNavNoMst = (
         <> </>
       )}
       {/* Release next version */}
-      {/* {company &&
-        (<StyledNavLinkChildrenActive to={`/scorecard/company/${company.id}`} icon={"Scorecards"} currentPathName={currentPathName}>
+      {company && (
+        <StyledNavLinkChildrenActive
+          to={`/scorecard/company/${company.id}`}
+          icon={"Scorecards"}
+          currentPathName={currentPathName}
+        >
           {t("navigation.scorecards")}
-        </StyledNavLinkChildrenActive>)
-      } */}
+        </StyledNavLinkChildrenActive>
+      )}
       {company && company.accessCompany && !showTeam ? (
         renderMeeting(R.path(["length"], teams) || 0, "team")
       ) : (
