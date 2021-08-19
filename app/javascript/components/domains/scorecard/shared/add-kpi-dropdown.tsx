@@ -1,12 +1,11 @@
-import * as React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useMst } from "~/setup/root";
 import styled from "styled-components";
 import { Icon } from "../../../shared/icon";
 import { Button } from "~/components/shared/button";
 import { TextDiv } from "~/components/shared/text";
-import { AddKPIModal } from "./add-kpi-modal";
+import { AddKPIModal } from "./add-kpi-modals";
 import { AddManualKPIModal } from "./add-manual-kpi-modal"
-import { useRef, useState, useEffect } from "react";
 
 interface IAddKPIDropdownProps { }
 

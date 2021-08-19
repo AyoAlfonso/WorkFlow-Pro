@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react"
-import styled from "styled-components"
-import { observer } from "mobx-react"
-import { useTranslation } from "react-i18next"
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { observer } from "mobx-react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { useMst } from "~/setup/root"
-import { Select } from "~/components/shared/input"
-import { OwnedBy } from "./scorecard-owned-by"
+import { useMst } from "~/setup/root";
+import { Select } from "~/components/shared/input";
+import { OwnedBy } from "./scorecard-owned-by";
 import {
   InputFromUnitType,
   ModalWithHeader,
@@ -15,15 +15,14 @@ import {
   FormContainer,
   FormElementContainer,
   RowContainer,
-} from "./modal-elements"
+} from "./modal-elements";
 import { toJS } from "mobx";
-import { TrixEditor } from "react-trix"
+import { TrixEditor } from "react-trix";
 
 interface AddManualKPIModalProps {
   showAddManualKPIModal: boolean;
   setShowAddManualKPIModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
 
 export const AddManualKPIModal = observer(
   ({
@@ -32,24 +31,26 @@ export const AddManualKPIModal = observer(
   }: AddManualKPIModalProps): JSX.Element => {
     const { owner_id, owner_type } = useParams()
     const { keyPerformanceIndicatorStore, sessionStore, descriptionTemplateStore } = useMst();
-    const [title, setTitle] = useState<string>(undefined)
-    const [greaterThan, setGreaterThan] = useState(1)
-    const [description, setDescription] = useState<string>(undefined)
-    const [unitType, setUnitType] = useState<string>("numerical")
-    const [owner, setOwner] = useState(sessionStore?.profile)
-    const [targetValue, setTargetValue] = useState<number>(undefined)
-    const [showAdvancedSettings, setShowAdvancedSettings] = useState(false)
-    const [needsAttentionThreshold, setNeedsAttentionThreshold] = useState(90)
+    const [title, setTitle] = useState<string>(undefined);
+    const [greaterThan, setGreaterThan] = useState(1);
+    const [description, setDescription] = useState<string>(undefined);
+    const [unitType, setUnitType] = useState<string>("numerical");
+    const [owner, setOwner] = useState(sessionStore?.profile);
+    const [targetValue, setTargetValue] = useState<number>(undefined);
+    const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+    const [needsAttentionThreshold, setNeedsAttentionThreshold] = useState(90);
 
     useEffect(() => {
       if (!descriptionTemplateStore.descriptionTemplates) {
-        descriptionTemplateStore.fetchDescriptiveTemplates()
+        descriptionTemplateStore.fetchDescriptiveTemplates();
       }
-      const template = toJS(descriptionTemplateStore.descriptionTemplates).find(t => t.templateType == "kpi")
+      const template = toJS(descriptionTemplateStore.descriptionTemplates).find(
+        t => t.templateType == "kpi",
+      );
       if (template) {
-        setDescription(template.body.body)
+        setDescription(template.body.body);
       }
-    }, [])
+    }, []);
 
     const handleSave = () => {
       const kpi = {
@@ -61,30 +62,30 @@ export const AddManualKPIModal = observer(
         unitType,
         targetValue,
         needsAttentionThreshold,
-      }
+      };
       if (description) {
-        kpi.description = description
+        kpi.description = description;
       }
-      keyPerformanceIndicatorStore.createKPI(kpi).then((result) => {
+      keyPerformanceIndicatorStore.createKPI(kpi).then(result => {
         if (!result) {
-          return
+          return;
         }
         // Reset and close
-        setTitle(undefined)
-        setGreaterThan(1)
-        setDescription(undefined)
-        setUnitType("numerical")
-        setOwner(sessionStore?.profile)
-        setTargetValue(undefined)
-        setShowAdvancedSettings(false)
-        setNeedsAttentionThreshold(90)
-        setShowAddManualKPIModal(false)
-      })
-    }
+        setTitle(undefined);
+        setGreaterThan(1);
+        setDescription(undefined);
+        setUnitType("numerical");
+        setOwner(sessionStore?.profile);
+        setTargetValue(undefined);
+        setShowAdvancedSettings(false);
+        setNeedsAttentionThreshold(90);
+        setShowAddManualKPIModal(false);
+      });
+    };
 
     const handleChange = (e, setStateAction) => {
-      setStateAction(Number(e.target.value.replace(/[^0-9.]+/g, "")))
-    }
+      setStateAction(Number(e.target.value.replace(/[^0-9.]+/g, "")));
+    };
 
     return (
       <ModalWithHeader
@@ -100,7 +101,9 @@ export const AddManualKPIModal = observer(
               <StyledInput
                 type={"text"}
                 placeholder={"e.g. Employee NPS"}
-                onChange={(e) => { setTitle(e.target.value) }}
+                onChange={e => {
+                  setTitle(e.target.value);
+                }}
               />
             </FormElementContainer>
           </RowContainer>
@@ -124,16 +127,24 @@ export const AddManualKPIModal = observer(
               <InputHeaderWithComment>Unit</InputHeaderWithComment>
               <Select
                 name={"unitType"}
-                onChange={(e) => { setUnitType(e.target.value) }}
+                onChange={e => {
+                  setUnitType(e.target.value);
+                }}
                 value={unitType}
                 fontSize={12}
                 height={15}
                 pt={6}
                 pb={10}
               >
-                <option key={"numerical"} value={"numerical"}># Numerical</option>
-                <option key={"percentage"} value={"percentage"}>% Percentage</option>
-                <option key={"currency"} value={"currency"}>$ Currency</option>
+                <option key={"numerical"} value={"numerical"}>
+                  # Numerical
+                </option>
+                <option key={"percentage"} value={"percentage"}>
+                  % Percentage
+                </option>
+                <option key={"currency"} value={"currency"}>
+                  $ Currency
+                </option>
               </Select>
             </FormElementContainer>
             <FormElementContainer>
@@ -155,15 +166,21 @@ export const AddManualKPIModal = observer(
               <InputHeaderWithComment>Condition</InputHeaderWithComment>
               <Select
                 name={"logic"}
-                onChange={(e) => { setGreaterThan(e.target.value) }}
+                onChange={e => {
+                  setGreaterThan(e.target.value);
+                }}
                 value={greaterThan}
                 fontSize={12}
                 height={15}
                 pt={6}
                 pb={10}
               >
-                <option key={"greater-than"} value={1}>Greater than or equal to</option>
-                <option key={"less-than"} value={0}>Less than or equal to</option>
+                <option key={"greater-than"} value={1}>
+                  Greater than or equal to
+                </option>
+                <option key={"less-than"} value={0}>
+                  Less than or equal to
+                </option>
               </Select>
             </FormElementContainer>
             <FormElementContainer>
@@ -171,14 +188,18 @@ export const AddManualKPIModal = observer(
               <InputFromUnitType
                 unitType={unitType}
                 placeholder={"0"}
-                onChange={(e) => { handleChange(e, setTargetValue) }}
+                onChange={e => {
+                  handleChange(e, setTargetValue);
+                }}
                 defaultValue={targetValue}
               />
             </FormElementContainer>
           </RowContainer>
-          <AdvancedSettingsButton onClick={() => {
-            setShowAdvancedSettings(!showAdvancedSettings);
-          }}>
+          <AdvancedSettingsButton
+            onClick={() => {
+              setShowAdvancedSettings(!showAdvancedSettings);
+            }}
+          >
             Advanced Settings
           </AdvancedSettingsButton>
           {showAdvancedSettings && (
@@ -189,7 +210,9 @@ export const AddManualKPIModal = observer(
                   name="needs-attention-threshold"
                   unitType={"percentage"}
                   placeholder={"90"}
-                  onChange={(e) => { handleChange(e, setNeedsAttentionThreshold) }}
+                  onChange={e => {
+                    handleChange(e, setNeedsAttentionThreshold);
+                  }}
                   defaultValue={needsAttentionThreshold}
                 />
               </FormElementContainer>
@@ -201,8 +224,9 @@ export const AddManualKPIModal = observer(
           </FormElementContainer>
         </FormContainer>
       </ModalWithHeader>
-    )
-  })
+    );
+  },
+);
 
 const AdvancedSettingsButton = styled.div`
   font-size: 12px;
@@ -214,8 +238,8 @@ const AdvancedSettingsButton = styled.div`
   &:hover {
     cursor: pointer;
   }
-`
+`;
 
 const TrixEditorContainer = styled.div`
   margin-top: 4px;
-`
+`;

@@ -10,26 +10,27 @@ interface IMultiTagInputProps {
 
 //we are passing the props we want to put into the input field as an array
 //We are summarizing after three inputs to 3+
-// export const MultiTagInput = ({ options, validator }: IMultiTagInputProps): JSX.Element => {
-//   const [tags, setTags] = React.useState([options]);
-//   useEffect(() => {
-//     onChangeTags();
-//   }, [options]);
+export const MultiTagInput = ({ options }: IMultiTagInputProps): JSX.Element => {
+  const [tags, setTags] = useState([options]);
+  useEffect(() => {
+    onChangeTags();
+  }, [options]);
 
-//   const onChangeTags = () => {
-//     if (options.length > 3) {
-//       setTags([...options, { value: "3+", id: null }]);
-//     } else {
-//       setTags(options);
-//     }
-//   };
-//   return (
-//     <ReactTagInput
-//       editable={false}
-//       readOnly={false}
-//       removeOnBackspace={true}
-//       tags={tags}
-//       validator={validator}
-//     />
-//   );
-// };
+  const onChangeTags = () => {
+    if (options.length > 3) {
+      setTags([...options, { value: "3+", id: null }]);
+    } else {
+      setTags(options);
+    }
+  };
+  return (
+    // <ReactTagInput
+    //   editable={false}
+    //   readOnly={false}
+    //   removeOnBackspace={true}
+    //   tags={tags}
+    //   // validator={validator}
+    // />
+    <></>
+  );
+};
