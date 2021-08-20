@@ -20,7 +20,7 @@ class TeamPolicy < ApplicationPolicy
     user_is_part_of_current_company? && (@user.company_admin?(company) || @record.is_lead?(@user))
   end
 
-  def create_or_update_onboarding_team? 
+  def create_or_update_onboarding_team?
     true
   end
 
@@ -34,11 +34,11 @@ class TeamPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.includes([:team_user_enablements, users: [:default_selected_company, {avatar_attachment: :blob}]]).for_company(@company)
+      scope.includes([:team_user_enablements, users: [:default_selected_company, { avatar_attachment: :blob }]]).for_company(@company)
     end
 
     def for_find
-      scope.includes([users: {avatar_attachment: :blob}]).for_company(@company)
+      scope.includes([users: { avatar_attachment: :blob }]).for_company(@company)
     end
   end
 end

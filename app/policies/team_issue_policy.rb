@@ -1,11 +1,10 @@
 class TeamIssuePolicy < ApplicationPolicy
-
   def index?
     true
   end
 
   def update?
-    @user.teams.map{ |t| t.id }.include?(@record.team_id)
+    @user.teams.map { |t| t.id }.include?(@record.team_id)
   end
 
   class Scope

@@ -5,7 +5,7 @@ class Step < ApplicationRecord
   has_one_attached :image
 
   default_scope { order(meeting_template_id: :asc).order(order_index: :asc) }
-  
+
   include RichTextHelper
   has_rich_text :description_text
   rich_text_content_render :description_text

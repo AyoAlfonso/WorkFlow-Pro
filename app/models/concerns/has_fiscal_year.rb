@@ -81,7 +81,7 @@ module HasFiscalYear
   def year_for_creating_annual_initiatives
     current_date = self.convert_to_their_timezone
     if current_year_fiscal_year_start > current_date
-      within_4_weeks_range(current_year_fiscal_year_start) ? current_year_fiscal_year_start.year : current_date.year 
+      within_4_weeks_range(current_year_fiscal_year_start) ? current_year_fiscal_year_start.year : current_date.year
     else
       within_4_weeks_range(current_year_fiscal_year_start + 1.year) ? current_year_fiscal_year_start.year + 1 : current_year_fiscal_year_start.year
     end

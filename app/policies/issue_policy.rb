@@ -1,5 +1,4 @@
 class IssuePolicy < ApplicationPolicy
-
   def index?
     true
   end
@@ -25,7 +24,7 @@ class IssuePolicy < ApplicationPolicy
   def issues_for_team?
     true
   end
-  
+
   def meeting_recap?
     true
   end

@@ -5,7 +5,7 @@ json.owned_by do
 end
 
 json.milestones quarterly_goal.milestones do |milestone|
-  json.partial! milestone, partial: 'api/milestones/milestone', as: :milestone
+  json.partial! milestone, partial: "api/milestones/milestone", as: :milestone
 end
 
 json.sub_initiatives quarterly_goal.sub_initiatives do |sub_initiative|

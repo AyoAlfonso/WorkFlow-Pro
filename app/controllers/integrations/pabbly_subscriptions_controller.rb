@@ -5,7 +5,7 @@ class Integrations::PabblySubscriptionsController < Integrations::ApplicationCon
 
   def create_company_and_user
     if params[:event_name] == "test_webhook_url"
-      render json: { message: "testing success"} 
+      render json: { message: "testing success" }
     else
       begin
         customer_profile = PabblySubscriptionService.new.get_customer(params[:data][:customer_id])
@@ -19,11 +19,11 @@ class Integrations::PabblySubscriptionsController < Integrations::ApplicationCon
               name: customer_profile["data"]["company_name"],
               customer_subscription_profile_id: params[:data][:customer_id],
               timezone: "(GMT-05:00) Eastern Time (US & Canada)",
-              fiscal_year_start: Date.new(Date.today.year,01,01)
+              fiscal_year_start: Date.new(Date.today.year, 01, 01),
             })
-  
+
             company.save(validate: false)
-  
+
             if User.find_by_email(customer_profile["data"]["email_id"]).present?
               user = User.find_by_email(customer_profile["data"]["email_id"])
             else
@@ -34,16 +34,16 @@ class Integrations::PabblySubscriptionsController < Integrations::ApplicationCon
                 company_id: company.id,
                 default_selected_company_id: company.id,
                 title: "",
-                password: ENV["DEFAULT_PASSWORD"] || "password"
+                password: ENV["DEFAULT_PASSWORD"] || "password",
               })
               user.invite!
-            end   
+            end
             user.assign_attributes({
               user_company_enablements_attributes: [{
                 user_id: user.id,
                 company_id: company.id,
                 user_title: user.title,
-                user_role_id: UserRole.find_by_name("Admin").id
+                user_role_id: UserRole.find_by_name("Admin").id,
               }],
             })
             user.save(validate: false)
@@ -51,7 +51,7 @@ class Integrations::PabblySubscriptionsController < Integrations::ApplicationCon
           end
         rescue => exception
           ExceptionNotifier.notify_exception(exception, data: { params: params })
-          render json: { result: false, message: exception.message}
+          render json: { result: false, message: exception.message }
         end
       end
     end

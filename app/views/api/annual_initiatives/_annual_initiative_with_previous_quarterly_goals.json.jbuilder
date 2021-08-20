@@ -3,5 +3,5 @@ json.owned_by do
   json.partial! annual_initiative.owned_by, partial: "api/users/user", as: :user
 end
 json.quarterly_goals annual_initiative.quarterly_goals do |quarterly_goal|
-  json.partial! quarterly_goal, partial: 'api/quarterly_goals/quarterly_goal', as: :quarterly_goal
+  json.partial! quarterly_goal, partial: "api/quarterly_goals/quarterly_goal", as: :quarterly_goal
 end

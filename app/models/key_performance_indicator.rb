@@ -12,7 +12,6 @@ class KeyPerformanceIndicator < ApplicationRecord
   validates :greater_than, inclusion: [true, false]
   has_many :scorecard_logs
 
-
   private
 
   def sanitize_description

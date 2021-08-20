@@ -24,6 +24,6 @@ class IssueResortService < ApplicationService
   end
 
   def reject_label_list(key_activities)
-    key_activities.each{|ka| ka.delete("label_list")}
+    key_activities.each { |ka| ka.delete("label_list") }
   end
 end

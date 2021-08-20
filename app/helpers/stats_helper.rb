@@ -1,6 +1,4 @@
 module StatsHelper
-
-
   def weekly_milestone_progress(user)
     milestones = Milestone.current_week_for_user(get_beginning_of_last_or_current_work_week_date(user.time_in_user_timezone), user, "QuarterlyGoal")
     completed_milestone_scores = milestones.map do |m|
@@ -14,7 +12,7 @@ module StatsHelper
     end
     average_completed_milestone_scores = completed_milestone_scores.length == 0 ? 0 : completed_milestone_scores.sum.to_f / completed_milestone_scores.length
   end
-  
+
   def quarterly_milestone_progress(current_user)
     current_quarter = current_company.current_fiscal_quarter
     #TODO: NEED TO ADD THE CURRENT YEAR HERE
@@ -104,7 +102,7 @@ module StatsHelper
         habit: habit,
         weekly_completion_percentage: habit.weekly_completion_percentage_by_date_range(beginning_of_last_week, end_of_last_week),
         weekly_difference: habit.weekly_difference_for_the_previous_week,
-        weekly_completion_fraction: habit.weekly_completion_fraction_by_date_range(beginning_of_last_week, end_of_last_week)
+        weekly_completion_fraction: habit.weekly_completion_fraction_by_date_range(beginning_of_last_week, end_of_last_week),
       }
     end
     habits
@@ -132,20 +130,20 @@ module StatsHelper
 
     [
       {
-        statistic_name: "#{I18n.t('key_activities_created')}",
+        statistic_name: "#{I18n.t("key_activities_created")}",
         statistic_number: ka_created_this_week,
         statistic_change: ka_created_change,
-      }, 
-      {
-        statistic_name: "#{I18n.t('key_activities_completed')}",
-        statistic_number: ka_completed_this_week,
-        statistic_change: ka_completed_change
       },
       {
-        statistic_name: "#{I18n.t('issues_addressed')}",
+        statistic_name: "#{I18n.t("key_activities_completed")}",
+        statistic_number: ka_completed_this_week,
+        statistic_change: ka_completed_change,
+      },
+      {
+        statistic_name: "#{I18n.t("issues_addressed")}",
         statistic_number: issues_created_this_week,
-        statistic_change: issues_created_change
-      }
+        statistic_change: issues_created_change,
+      },
     ]
   end
 
@@ -171,33 +169,32 @@ module StatsHelper
 
     [
       {
-        statistic_name: "#{I18n.t('key_activities_created')}",
+        statistic_name: "#{I18n.t("key_activities_created")}",
         statistic_number: ka_created_this_month,
         statistic_change: ka_created_change,
-      }, 
-      {
-        statistic_name: "#{I18n.t('key_activities_completed')}",
-        statistic_number: ka_completed_this_month,
-        statistic_change: ka_completed_change
       },
       {
-        statistic_name: "#{I18n.t('issues_addressed')}",
+        statistic_name: "#{I18n.t("key_activities_completed")}",
+        statistic_number: ka_completed_this_month,
+        statistic_change: ka_completed_change,
+      },
+      {
+        statistic_name: "#{I18n.t("issues_addressed")}",
         statistic_number: issues_created_this_month,
-        statistic_change: issues_created_change
-      }
+        statistic_change: issues_created_change,
+      },
     ]
   end
 
   def difference_between_values(current_value, previous_value)
     if current_value >= previous_value
-      difference = previous_value == 0 ? 
-                    current_value * 100 : 
-                    ((current_value - previous_value).to_f / previous_value.to_f) * 100
+      difference = previous_value == 0 ?
+        current_value * 100 :
+        ((current_value - previous_value).to_f / previous_value.to_f) * 100
     else
-      difference = current_value == 0 ? 
-                    -previous_value * 100 : 
-                    ((current_value - previous_value).to_f / previous_value.to_f) * 100
+      difference = current_value == 0 ?
+        -previous_value * 100 :
+        ((current_value - previous_value).to_f / previous_value.to_f) * 100
     end
   end
-
 end

@@ -23,7 +23,7 @@ module RandomizedColorPickerHelper
     "#A59DCC",
     "#C624FF",
     "#CD54F8",
-    "#D483F1"
+    "#D483F1",
   ]
 
   def get_randomized_color

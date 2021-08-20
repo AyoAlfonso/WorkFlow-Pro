@@ -1,5 +1,4 @@
 class StaticDataService < ApplicationService
-
   def call
     { "time_zones": time_zones, "headings_and_descriptions": headings_and_descriptions, "fields_and_labels": fields_and_labels, "emotion_adjectives": emotion_adjectives }
   end
@@ -12,40 +11,40 @@ class StaticDataService < ApplicationService
     {
       "0": {
         fields: [
-          {label: "Business Name", key: "name"},
-          {label: "Logo (preferably horizontal logos)", key: "logo"},
-          {label: "Timezone", key: "timezone"},
-          {label: "Fiscal Year Start", key: "fiscal_year_start"},
-          {label: "Why did you decide to sign up for LynchPyn? (Optional)", key: "sign_up_purpose"}
-        ]
+          { label: "Business Name", key: "name" },
+          { label: "Logo (preferably horizontal logos)", key: "logo" },
+          { label: "Timezone", key: "timezone" },
+          { label: "Fiscal Year Start", key: "fiscal_year_start" },
+          { label: "Why did you decide to sign up for LynchPyn? (Optional)", key: "sign_up_purpose" },
+        ],
       },
       "1": {
         fields: [
-          {label: "Why does {company_name} exist?", key: "core_1"},
-          {label: "How do {company_name} employees and leaders behave? (AKA your core values)", key: "core_2"},
-          {label: "What does {company_name} do?", key: "core_3"},
-          {label: "What sets {company_name} apart from the rest?", key: "core_4"}
-        ]
+          { label: "Why does {company_name} exist?", key: "core_1" },
+          { label: "How do {company_name} employees and leaders behave? (AKA your core values)", key: "core_2" },
+          { label: "What does {company_name} do?", key: "core_3" },
+          { label: "What sets {company_name} apart from the rest?", key: "core_4" },
+        ],
       },
       "2": {
         fields: [
-          {label: "What's the most important thing your company has to achieve in the upcoming year?", key: "rallying_cry"},
-          {label: "What's a specific Goal you can set for the next year to achieve your LynchPyn Goal? This can be specific to your team.", key: "annual_initiative"},
-          {label: 'What would be an Initiative you can take on this quarter towards "${annual_initiative}"?', key: "quarterly_goal"},
-          {label: 'What would be an achievable milestone for this week to move you closer to "{quarterly_goal}?"', key: "milestone"},
-        ]
+          { label: "What's the most important thing your company has to achieve in the upcoming year?", key: "rallying_cry" },
+          { label: "What's a specific Goal you can set for the next year to achieve your LynchPyn Goal? This can be specific to your team.", key: "annual_initiative" },
+          { label: 'What would be an Initiative you can take on this quarter towards "${annual_initiative}"?', key: "quarterly_goal" },
+          { label: 'What would be an achievable milestone for this week to move you closer to "{quarterly_goal}?"', key: "milestone" },
+        ],
       },
       "3": {
         fields: [
-          {label: "", key: "key_activity"}
-        ]
+          { label: "", key: "key_activity" },
+        ],
       },
       "4": {
         fields: [
-          {label: "What team do you belong to? (pick one, you can add others later)", key: "team"},
-          {label: "Other Members", key: "other_members"}
-        ]
-      }
+          { label: "What team do you belong to? (pick one, you can add others later)", key: "team" },
+          { label: "Other Members", key: "other_members" },
+        ],
+      },
     }
   end
 
@@ -55,61 +54,61 @@ class StaticDataService < ApplicationService
       "0": {
         heading: "Welcome!",
         description: "Add some basic info about your {displayFormat} so we can set up an instance of LynchPyn for you.",
-        stepLabel: "Tell us more about yourself"
+        stepLabel: "Tell us more about yourself",
       },
       "1": {
         heading: "Foundational Four™",
         description: "Tell us more about your {displayFormat}.  If you don't have all the answers, enter as much as possible and continue.  You can also skip if you want to do this later.",
-        stepLabel: "Your {displayFormat}'s Foundational Four™"
+        stepLabel: "Your {displayFormat}'s Foundational Four™",
       },
       "2": {
         heading: "Objectives",
         description: "Objectives are strategic moves you want to make in the next year. LynchPyn helps you better communicate your strategy, improve alignment, and drive accountability.",
-        stepLabel: "Create your first Objective"
+        stepLabel: "Create your first Objective",
       },
       "3": {
         heading: "Pyns",
         description: "Pyns are the LynchPyn version of to-dos.  Review the Weekly Milestone you just defined; what can you do today towards it?  Add it as a Pyn.",
-        stepLabel: "Add your first Pyn"
+        stepLabel: "Add your first Pyn",
       },
       "4": {
         heading: "{teamFormatHeading}",
         description: "{teamFormatDescription}",
-        stepLabel: "Invite your {teamFormatHeading}"
-      }
+        stepLabel: "Invite your {teamFormatHeading}",
+      },
     }
   end
 
   def emotion_adjectives
     emotion_score_1 = ["Livid", "Enraged", "Irate", "Furious", "Disgusted",
-                        "Panicked", "Terrified", "Freightened", "Anxious", "Scared",
-                        "Frustrated", "Peeved" , "Angry", "Agitated", "Troubled",
-                        "Shocked ", "Worried", "Nervous", "Unsure", "Restless",
-                        "Stunned", "Annoyed", "Concerned", "Excluded", "Uneasy"]
+                       "Panicked", "Terrified", "Freightened", "Anxious", "Scared",
+                       "Frustrated", "Peeved", "Angry", "Agitated", "Troubled",
+                       "Shocked ", "Worried", "Nervous", "Unsure", "Restless",
+                       "Stunned", "Annoyed", "Concerned", "Excluded", "Uneasy"]
 
     emotion_score_2 = ["Apprehensive", "Sullen", "Exhausted", "Alienated", "Despair",
-                        "Ashamed", "Glum", "Fatigued", "Depressed", "Disappointed", 
-                        "Anguished", "Guilty", "Disheartened", "Sad", "Disappointed", 
-                        "Anguished", "Deflated", "Discouraged", "Miserable", "Tired", 
-                        "Hopeless", "Complacent", "Bored", "Pessimistic", "Confused", "Lonely"]
+                       "Ashamed", "Glum", "Fatigued", "Depressed", "Disappointed",
+                       "Anguished", "Guilty", "Disheartened", "Sad", "Disappointed",
+                       "Anguished", "Deflated", "Discouraged", "Miserable", "Tired",
+                       "Hopeless", "Complacent", "Bored", "Pessimistic", "Confused", "Lonely"]
 
-    emotion_score_4 = ["Easy-going", "Relaxed", "Thoughtful", "Mellow", "Listless", 
-                        "Safe", "Secure", "Composed", "Peaceful", "Sleepy", 
-                        "Chill", "Content", "Calm", "Balanced", "Restful", 
-                        "Respected", "Thankful", "Grateful", "At Ease", "Comfy",
-                        "Blessed", "Fulfilled", "Tranquil", "Collected", "Serene"]
+    emotion_score_4 = ["Easy-going", "Relaxed", "Thoughtful", "Mellow", "Listless",
+                       "Safe", "Secure", "Composed", "Peaceful", "Sleepy",
+                       "Chill", "Content", "Calm", "Balanced", "Restful",
+                       "Respected", "Thankful", "Grateful", "At Ease", "Comfy",
+                       "Blessed", "Fulfilled", "Tranquil", "Collected", "Serene"]
 
-    emotion_score_5 = ["Energised", "Positive", "Glad", "Amused", "Satisfied", 
-                        "Thrilled", "Connected", "Inspired", "Focused", "Pleased", 
-                        "Ecstatic", "Joyful", "Happy", "Cheerful", "Hopeful", 
-                        "Euphoric", "Enthusiastic", "Motivated", "Proud", "Optimistic", 
-                        "Exhilarated", "Elated", "Excited", "Surprised", "Lively"]
+    emotion_score_5 = ["Energised", "Positive", "Glad", "Amused", "Satisfied",
+                       "Thrilled", "Connected", "Inspired", "Focused", "Pleased",
+                       "Ecstatic", "Joyful", "Happy", "Cheerful", "Hopeful",
+                       "Euphoric", "Enthusiastic", "Motivated", "Proud", "Optimistic",
+                       "Exhilarated", "Elated", "Excited", "Surprised", "Lively"]
 
     feelings = {
       emotion_score_1: emotion_score_1,
       emotion_score_2: emotion_score_2,
       emotion_score_4: emotion_score_4,
-      emotion_score_5: emotion_score_5
+      emotion_score_5: emotion_score_5,
     }
   end
 end

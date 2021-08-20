@@ -23,7 +23,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
       unit_type: params[:unit_type],
       target_value: params[:target_value],
       description: params[:description],
-      needs_attention_threshold: params[:needs_attention_threshold]
+      needs_attention_threshold: params[:needs_attention_threshold],
     })
 
     authorize @kpi
@@ -33,13 +33,13 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
 
   def show
     @company = current_company
-    @period = (@kpi.scorecard_logs.empty?) ? {} : @kpi.scorecard_logs.group_by{ |log| log[:fiscal_year] }.map do |year, scorecard_log|
+    @period = (@kpi.scorecard_logs.empty?) ? {} : @kpi.scorecard_logs.group_by { |log| log[:fiscal_year] }.map do |year, scorecard_log|
       [year, scorecard_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
     end.to_h
     render json: { kpi: @kpi.as_json(methods: [:owned_by],
-                                     include: {
-                                       scorecard_logs: { methods: [:user] }
-                                     }).merge({ :period => @period })}
+                                    include: {
+                                      scorecard_logs: { methods: [:user] },
+                                    }).merge({ :period => @period }) }
   end
 
   def update
@@ -57,18 +57,18 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
     render json: { kpi: @kpi }
   end
 
-    private
+  private
 
   def kpi_params
     params.permit(:id, :owned_by, :viewers, :description, :unit_type, :target_value, :needs_attention_threshold)
   end
 
-    def scorecard_log_params
-      params.permit(:id, :associated_kpi_id, :score, :note)
-    end
+  def scorecard_log_params
+    params.permit(:id, :associated_kpi_id, :score, :note)
+  end
 
-    def set_key_performance_indicator
-      @kpi = policy_scope(KeyPerformanceIndicator).find(params[:id])
-      authorize @kpi
-    end
+  def set_key_performance_indicator
+    @kpi = policy_scope(KeyPerformanceIndicator).find(params[:id])
+    authorize @kpi
+  end
 end

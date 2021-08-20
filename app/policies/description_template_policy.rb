@@ -8,7 +8,7 @@ class DescriptionTemplatePolicy < ApplicationPolicy
   end
 
   def update_or_create_templates?
-   true
+    true
   end
 
   def update_template_body?
@@ -18,7 +18,7 @@ class DescriptionTemplatePolicy < ApplicationPolicy
   def destroy?
     user_is_company_admin_of_current_company?
   end
-  
+
   class Scope
     attr_reader :user, :company, :scope
 

@@ -7,7 +7,7 @@ module ApplicationHelper
     {
       timezones: timezones,
       user_roles: UserRole.all,
-      conversation_starters: ConversationStarter.all
+      conversation_starters: ConversationStarter.all,
     }
   end
 end

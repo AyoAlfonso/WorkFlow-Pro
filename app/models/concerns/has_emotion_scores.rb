@@ -1,19 +1,19 @@
 module HasEmotionScores
   extend ActiveSupport::Concern
   include StatsHelper
-  
+
   def daily_average_users_emotion_score(users, from_date, to_date)
     user_pulses = UserPulse.where(user: users)
-                            .where("completed_at <= ? AND completed_at >= ?", to_date, from_date)
-                            .order(:completed_at)
-                            .group_by{|qa| qa.completed_at.strftime("%a-%-d")}
+      .where("completed_at <= ? AND completed_at >= ?", to_date, from_date)
+      .order(:completed_at)
+      .group_by { |qa| qa.completed_at.strftime("%a-%-d") }
 
     results_array = []
 
     user_pulses.map do |qa|
       average_score_hash = {
         date: qa[0],
-        average_score: qa[1].pluck(:score).inject(:+).to_f / qa[1].size
+        average_score: qa[1].pluck(:score).inject(:+).to_f / qa[1].size,
       }
       results_array << average_score_hash
     end
@@ -21,10 +21,10 @@ module HasEmotionScores
     record_dates = results_array.pluck(:date).map do |date|
       date
     end
-    
+
     {
       emotion_scores: results_array,
-      record_dates: record_dates
+      record_dates: record_dates,
     }
   end
 
@@ -41,5 +41,4 @@ module HasEmotionScores
   def compare_emotion_score(current_value, previous_value)
     difference_between_values(current_value, previous_value)
   end
-  
 end

@@ -9,40 +9,39 @@ class Api::MeetingsController < Api::ApplicationController
   def index
     week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
     @meetings = policy_scope(Meeting).personal_recent_or_incomplete_for_user(current_user).for_week_of_date(week_to_review_start_time)
-    render 'api/meetings/index'
+    render "api/meetings/index"
   end
 
   def search
     #if its for a forum, it should authorize the search if you can access the team_id in the params
     authorize Team.find(params[:team_id]), :show?, policy_class: TeamPolicy
-    #allow year and meeting type 
+    #allow year and meeting type
     @meetings = MeetingSearch.new(policy_scope(Meeting), search_meeting_params).search
-    render 'api/meetings/index'
+    render "api/meetings/index"
   end
 
   def search_section_1_meetings
     #if its for a forum, it should authorize the search if you can access the team_id in the params
     authorize Team.find(params[:team_id]), :show?, policy_class: TeamPolicy
-    #allow year and meeting type 
+    #allow year and meeting type
     @meetings = MeetingSearch.new(policy_scope(Meeting), search_meeting_params).search.where(original_creation: true)
-    render 'api/meetings/index'
+    render "api/meetings/index"
   end
 
   def create
     if current_company.display_format === "Company"
       #scope differs if team (assume you can only have one incomplete meeting, allow you to create another one for week if required)
-      
+
       #scope to look for what's present depending on meeting type - daily, weekly, monthly, etc.
       #personal meetings have no team ids
 
-
-      @meetings_already_present = params[:team_id] ? 
-      MeetingInstanceFinderService.call(
+      @meetings_already_present = params[:team_id] ?
+        MeetingInstanceFinderService.call(
         policy_scope(Meeting).team_meetings(params[:team_id]).incomplete,
         params[:meeting_template_id],
         current_user.time_in_user_timezone
       ) :
-      MeetingInstanceFinderService.call(
+        MeetingInstanceFinderService.call(
         policy_scope(Meeting).personal_meetings.hosted_by_user(current_user),
         params[:meeting_template_id],
         current_user.time_in_user_timezone
@@ -54,54 +53,54 @@ class Api::MeetingsController < Api::ApplicationController
         @meeting = @meetings_already_present.first
         set_additional_data
         authorize @meeting
-        render 'api/meetings/show'  
+        render "api/meetings/show"
       else
         @meeting = Meeting.new(meeting_params)
         @meeting.hosted_by_id = current_user.id
         set_additional_data
         authorize @meeting
         @meeting.save!
-        render 'api/meetings/show'
+        render "api/meetings/show"
       end
-    else 
+    else
       #For Forum.  You only have monthly meetings.
 
-      @meetings_already_present = params[:team_id] ? 
-      MeetingInstanceFinderService.call(
+      @meetings_already_present = params[:team_id] ?
+        MeetingInstanceFinderService.call(
         policy_scope(Meeting).team_meetings(params[:team_id]).incomplete,
         params[:meeting_template_id],
         current_user.time_in_user_timezone
-       ) :
-      MeetingInstanceFinderService.call(
+      ) :
+        MeetingInstanceFinderService.call(
         policy_scope(Meeting).personal_monthly_meetings.hosted_by_user(current_user),
         params[:meeting_template_id],
         current_user.time_in_user_timezone
       )
-    
+
       if @meetings_already_present.present?
         @meeting = @meetings_already_present.first
         set_additional_data
         authorize @meeting
-        render 'api/meetings/show'  
+        render "api/meetings/show"
       else
         @meeting = Meeting.new(meeting_params)
         @meeting.hosted_by_id = current_user.id
         set_additional_data
         authorize @meeting
         @meeting.save!
-        render 'api/meetings/show'
+        render "api/meetings/show"
       end
     end
   end
 
   def start_next_for
     #takes in team and meeting type to see if there is one in range
-    @meeting = case(params[:meeting_type])
-    when "forum_monthly"
-      policy_scope(Meeting).team_meetings(params[:team_id]).for_type(params[:meeting_type]).for_scheduled_start_date_range(current_user.convert_to_their_timezone.beginning_of_month, current_user.convert_to_their_timezone.end_of_month).last
-    else
-      nil
-    end
+    @meeting = case (params[:meeting_type])
+      when "forum_monthly"
+        policy_scope(Meeting).team_meetings(params[:team_id]).for_type(params[:meeting_type]).for_scheduled_start_date_range(current_user.convert_to_their_timezone.beginning_of_month, current_user.convert_to_their_timezone.end_of_month).last
+      else
+        nil
+      end
 
     if @meeting.blank?
       #raise error
@@ -109,29 +108,30 @@ class Api::MeetingsController < Api::ApplicationController
     elsif @meeting.end_time.present? && @meeting.meeting_template_id == MeetingTemplate.forum_monthly.first.id
       old_meeting = @meeting
       @meeting = Meeting.create!({
-        meeting_template_id: old_meeting.meeting_template_id, 
+        meeting_template_id: old_meeting.meeting_template_id,
         scheduled_start_time: old_meeting.scheduled_start_time,
         hosted_by_id: old_meeting.hosted_by_id,
         team_id: old_meeting.team_id,
         host_name: old_meeting.host_name,
-        current_step: 0})
+        current_step: 0,
+      })
       authorize @meeting, :update?
-      render 'api/meetings/show'
+      render "api/meetings/show"
     else
       authorize @meeting, :update?
-      render 'api/meetings/show'
+      render "api/meetings/show"
     end
   end
 
   def show
     set_additional_data
-    render 'api/meetings/show'
+    render "api/meetings/show"
   end
 
   def update
     @meeting.update!(meeting_params)
     set_additional_data
-    render 'api/meetings/update'
+    render "api/meetings/update"
   end
 
   def destroy
@@ -142,7 +142,7 @@ class Api::MeetingsController < Api::ApplicationController
   def team_meetings #id is team_id in this case
     @meetings = Meeting.team_meetings(params[:id]).sort_by_creation_date
     authorize @meetings
-    render 'api/meetings/team_meetings'
+    render "api/meetings/team_meetings"
   end
 
   def meeting_recap
@@ -190,7 +190,7 @@ class Api::MeetingsController < Api::ApplicationController
       @stats_for_month = nil
       @my_current_milestones = nil
     else
-      #if it's Monday or Tuesday, 
+      #if it's Monday or Tuesday,
       @current_week_average_user_emotions = daily_average_users_emotion_scores_over_last_week(current_user)
       @current_week_average_team_emotions = average_weekly_emotion_score_over_last_week(current_user)
       @current_month_average_user_emotions = daily_average_users_emotion_scores_over_last_month(current_user)

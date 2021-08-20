@@ -1,5 +1,5 @@
 class ScorecardLogPolicy < ApplicationPolicy
-  def index? 
+  def index?
     true
   end
 
