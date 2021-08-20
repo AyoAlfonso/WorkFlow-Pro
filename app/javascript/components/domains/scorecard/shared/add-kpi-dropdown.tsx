@@ -5,6 +5,7 @@ import { Icon } from "../../../shared/icon";
 import { Button } from "~/components/shared/button";
 import { TextDiv } from "~/components/shared/text";
 import { AddKPIModal } from "./add-kpi-modals";
+import { AddManualKPIModal } from "./add-manual-kpi-modal";
 import { toJS } from "mobx";
 
 interface IAddKPIDropdownProps {
@@ -16,9 +17,7 @@ export const AddKPIDropdown = (props: IAddKPIDropdownProps): JSX.Element => {
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const [showAddKPIModal, setAddKPIModal] = useState<boolean>(false);
   const [kpiModalType, setAddKPIModalType] = useState<string>("");
-  // const [kpis, setKpis] = useState(props.kpis);
-  const [addManualKPIModalOpen, setAddManualKPIModalOpen] = useState<boolean>(false);
-  console.log(toJS(props.kpis));
+  const [showAddManualKPIModal, setShowAddManualKPIModal] = useState<boolean>(false);
 
   useEffect(() => {
     const handleClickOutside = event => {
@@ -31,7 +30,7 @@ export const AddKPIDropdown = (props: IAddKPIDropdownProps): JSX.Element => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [optionsRef]);
-  const clicKPIOptions = type => {
+  const clickKPIOptions = type => {
     setAddKPIModal(!showAddKPIModal);
     setAddKPIModalType(type);
   };
@@ -50,33 +49,37 @@ export const AddKPIDropdown = (props: IAddKPIDropdownProps): JSX.Element => {
       </StyledButton>
       {showOptions && (
         <DropdownOptionsContainer onClick={e => e.stopPropagation()}>
-          <OptionContainer>
+          <OptionContainer
+            onClick={() => {
+              setShowAddManualKPIModal(!showAddManualKPIModal);
+            }}
+          >
             <OptionText>Manual</OptionText>
           </OptionContainer>
           <OptionContainer
             onClick={() => {
-              clicKPIOptions("source");
+              clickKPIOptions("source");
             }}
           >
             <OptionText>Source</OptionText>
           </OptionContainer>
           <OptionContainer
             onClick={() => {
-              clicKPIOptions("existing");
+              clickKPIOptions("existing");
             }}
           >
             <OptionText>Existing</OptionText>
           </OptionContainer>
           <OptionContainer
             onClick={() => {
-              clicKPIOptions("roll up");
+              clickKPIOptions("roll up");
             }}
           >
             <OptionText>Roll Up</OptionText>
           </OptionContainer>
           <OptionContainer
             onClick={() => {
-              clicKPIOptions("average");
+              clickKPIOptions("average");
             }}
           >
             <OptionText>Average</OptionText>
@@ -90,6 +93,12 @@ export const AddKPIDropdown = (props: IAddKPIDropdownProps): JSX.Element => {
           showAddKPIModal={showAddKPIModal}
           kpiModalType={kpiModalType}
           setModalOpen={setAddKPIModal}
+        />
+      )}
+      {showAddManualKPIModal && (
+        <AddManualKPIModal
+          showAddManualKPIModal={showAddManualKPIModal}
+          setShowAddManualKPIModal={setShowAddManualKPIModal}
         />
       )}
     </Container>

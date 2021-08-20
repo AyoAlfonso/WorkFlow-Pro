@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import * as R from "ramda"
 import styled from "styled-components"
 import moment from "moment"
+import { observer } from "mobx-react"
 import { baseTheme } from "~/themes/base"
 import { Doughnut, Line } from "react-chartjs-2"
 import { StatusBadge } from "~/components/shared/status-badge"
@@ -131,14 +132,17 @@ const QuarterSummary = ({
   const {
     white,
     primary100,
+    primary20,
     backgroundBlue,
     greyActive,
     grey100,
     poppySunrise,
     backgroundGrey,
-    cautionYellow,
     successGreen,
     warningRed,
+    fadedGreen,
+    fadedYellow,
+    fadedRed,
   } = baseTheme.colors
 
   const chartOptions = {
@@ -149,7 +153,7 @@ const QuarterSummary = ({
       callbacks: {
         label: function(tooltipItem, data) {
           const label = data.datasets[tooltipItem.datasetIndex].label || '';
-          if(label) {
+          if (label) {
             return `${label}: ${tooltipItem.yLabel}%`;
           }
           else {
@@ -188,7 +192,7 @@ const QuarterSummary = ({
       }, 0) / kpis.length) : [];
   }
 
-  const weekToDate = (week: number): string => 
+  const weekToDate = (week: number): string =>
     moment(fiscalYearStart)
       .add(week, "w")
       .startOf("week" as moment.unitOfTime.StartOf)
@@ -233,6 +237,62 @@ const QuarterSummary = ({
     )
   }
 
+  const renderGrade = (percentGrade) => {
+    if (percentGrade === NaN) {
+      return (<></>)
+    }
+    if (percentGrade >= 100) {
+      return (
+        <>
+          <GradeContainer background={primary20}>
+            <Text fontSize={24} color={primary100} bold>S</Text>
+          </GradeContainer>
+          <Text ml={8} mr={16} fontSize={32} color={primary100} bold>+100%</Text>
+        </>
+      )
+    }
+    else if(percentGrade >= 90) {
+      return (
+        <>
+          <GradeContainer background={fadedGreen}>
+            <Text fontSize={24} color={successGreen} bold>A</Text>
+          </GradeContainer>
+          <Text ml={8} mr={16} fontSize={32} color={successGreen} bold>{currentWeekPercent}%</Text>
+        </>
+      )
+    }
+    else if(percentGrade >= 75) {
+      return (
+        <>
+          <GradeContainer background={fadedYellow}>
+            <Text fontSize={24} color={poppySunrise} bold>B</Text>
+          </GradeContainer>
+          <Text ml={8} mr={16} fontSize={32} color={poppySunrise} bold>{currentWeekPercent}%</Text>
+        </>
+      )
+    }
+    else if(percentGrade >= 50) {
+      return (
+        <>
+          <GradeContainer background={fadedRed}>
+            <Text fontSize={24} color={warningRed} bold>C</Text>
+          </GradeContainer>
+          <Text ml={8} mr={16} fontSize={32} color={warningRed} bold>{currentWeekPercent}%</Text>
+        </>
+      )
+    }
+    else {
+      return (
+        <>
+          <GradeContainer background={warningRed}>
+            <Text fontSize={24} color={white} bold>D</Text>
+          </GradeContainer>
+          <Text ml={8} mr={16} fontSize={32} color={warningRed} bold>{currentWeekPercent}%</Text>
+        </>
+      )
+    }
+  }
+
   const renderWeekDifference = () => {
     if (lastWeekPercent === null) {
       return (<></>);
@@ -263,10 +323,7 @@ const QuarterSummary = ({
       <Text color={greyActive} fontSize={9} mt={4} mb={9}>Trend of average percentage of all KPIs actual value compared to the target</Text>
       <QuarterInfoContainer>
         <StatsContainer>
-          <GradeContainer>
-            <Text fontSize={24} color={poppySunrise} bold>B</Text>
-          </GradeContainer>
-          {renderCurrentWeekPercent()}
+          {renderGrade(currentWeekPercent)}
           {renderWeekDifference()}
         </StatsContainer>
         <QuarterLegendContainer>
@@ -308,7 +365,7 @@ export const ScorecardSummary = ({
         kpis={kpis}
         currentWeek={currentWeek}
         currentQuarter={currentQuarter}
-        fiscalYearStart={fiscalYearStart} 
+        fiscalYearStart={fiscalYearStart}
         currentFiscalYear={currentFiscalYear}
       />
     </Container>
@@ -434,13 +491,18 @@ const StatsContainer = styled.div`
   align-items: flex-end;
 `
 
-const GradeContainer = styled.div`
+type GradeContainerProps = {
+  background?: string,
+}
+
+const GradeContainer = styled.div<GradeContainerProps>`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 32px;
   height: 38px;
-  background: ${props => props.theme.colors.fadedYellow};
+  background: ${props => props.background || props.theme.colors.fadedYellow};
+  border-radius: 4px;
 `
 
 const QuarterInfoContainer = styled.div`
@@ -457,7 +519,7 @@ const QuarterLegendContainer = styled.div`
 `
 
 type ArrowIconContainerProps = {
-  up
+  up: boolean
 }
 
 const ArrowIconContainer = styled.div<ArrowIconContainerProps>`
