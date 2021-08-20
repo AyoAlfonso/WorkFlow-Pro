@@ -12,13 +12,21 @@ import { toJS } from "mobx";
 export const ScorecardsIndex = observer(
   (): JSX.Element => {
     const { owner_type, owner_id } = useParams();
-    const { companyStore, scorecardStore, teamStore, userStore } = useMst();
+    const {
+      companyStore,
+      scorecardStore,
+      teamStore,
+      userStore,
+      keyPerformanceIndicatorStore,
+    } = useMst();
     const [loading, setLoading] = useState<boolean>(true);
     const [kpis, setKpis] = useState([]);
+    const [allKPIs, setallKPIs] = useState([]);
 
     useEffect(() => {
-      userStore.load()
-      teamStore.load()
+      userStore.load();
+      teamStore.load();
+      keyPerformanceIndicatorStore.load().then(()=> setallKPIs(keyPerformanceIndicatorStore.allKPIs));
       companyStore.load().then(() => setLoading(false));
     }, []);
 
@@ -28,12 +36,18 @@ export const ScorecardsIndex = observer(
           .getScorecard({ ownerType: owner_type, ownerId: owner_id })
           .then(() => setKpis(toJS(scorecardStore.kpis)));
       }
-    }, [owner_type, owner_id ]);
+    }, [owner_type, owner_id]);
 
-    if (loading || !companyStore.company || !userStore.users || !teamStore.teams) {
+    if (
+      loading ||
+      !companyStore.company ||
+      !userStore.users ||
+      !teamStore.teams ||
+      !keyPerformanceIndicatorStore
+    ) {
       return <Loading />;
     }
-
+    // const { allKPIs } = keyPerformanceIndicatorStore;
 
     return (
       <Container>
@@ -45,7 +59,7 @@ export const ScorecardsIndex = observer(
           fiscalYearStart={companyStore.company.fiscalYearStart}
           currentFiscalYear={companyStore.company.currentFiscalYear}
         />
-        <ScorecardTableView kpis={kpis} />
+        <ScorecardTableView kpis={kpis} allKPIs={allKPIs} />
       </Container>
     );
   },

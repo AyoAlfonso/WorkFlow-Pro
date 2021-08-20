@@ -1,34 +1,61 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
+import { Icon } from "~/components/shared/icon";
+import { KPIModalHeader } from "./header";
+
+interface ISourceProps {
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  KPIs: any[];
+  kpiModalType: string;
+}
 
 export const Source = observer(
-  (): JSX.Element => {
+  ({ KPIs, setModalOpen, kpiModalType }: ISourceProps): JSX.Element => {
+    //Move this to its own folder in utils TODO:
+    function groupBy(objectArray, property) {
+      return objectArray.reduce(function(acc, obj) {
+        let key = obj[property];
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(obj);
+        return acc;
+      }, {});
+    }
+    const onSearchKeyword = keyword => {
+      console.log(keyword);
+    };
+
+    const renderKPIListContent = (): Array<JSX.Element> => {
+      const groupedKPIs = groupBy(KPIs, "unitType");
+      return Object.keys(groupedKPIs).map(function (unitTypeKey, key) {
+        return (
+          <UserKPIList  key={key}>
+            <StyledCheckTitle>{unitTypeKey}</StyledCheckTitle>
+            {groupedKPIs[unitTypeKey].map((kpi, key) => {
+              <StyledCheckboxWrapper>
+                <StyledLabel>
+                  <StyledCheckboxInput type="checkbox" id={key} key={key}></StyledCheckboxInput>
+                  <StlyedCheckMark></StlyedCheckMark>
+                  <StyledItemSpan>{kpi.title}</StyledItemSpan>
+                </StyledLabel>
+              </StyledCheckboxWrapper>;
+            })}
+          </UserKPIList>
+        )
+      })
+    };
+
     return (
       <StyledSourceModal>
-        <StyledSource>
-          <StyledHeader>
-            <StyledSubHeader>Source</StyledSubHeader>
-          </StyledHeader>
-          <StyledSelectionBox>
-            <StyledOperationBox>
-              <StyledOperation>
-                Pyns Completed(Perc...
-                <StyledOperationClose>x</StyledOperationClose>
-              </StyledOperation>
-
-              <StyledSelectedNumber>+3</StyledSelectedNumber>
-            </StyledOperationBox>
-            <StyledClose>
-              <StyledCloseSpan>x</StyledCloseSpan>
-            </StyledClose>
-          </StyledSelectionBox>
-        </StyledSource>
-
+        <KPIModalHeader setModalOpen={setModalOpen} KPIs={KPIs} kpiModalType={kpiModalType} />
         <StyledSecondLayer>
           <StyledLayerOne>
             <StyledLogoSection>
-              <StyledLogo alt="lync" />
+              <LynchpynLogoContainer>
+                <img src={"/assets/LynchPyn-Logo-Blue_300x300"} width="30"></img>
+              </LynchpynLogoContainer>
               <StyledLogoText>LynchPyn</StyledLogoText>
             </StyledLogoSection>
 
@@ -39,27 +66,11 @@ export const Source = observer(
 
           <StyledLayerTwo>
             <StyledLayerDiv>
-              <StyledInput type="text" placeholder="Search KPIs" />
+              <StyledInput type="text" placeholder="Search KPIs" onChange={onSearchKeyword} />
             </StyledLayerDiv>
-            <StyledList>
-              <StyledCheckTitle>OPERATIONS</StyledCheckTitle>
+            {renderKPIListContent()}
 
-              <StyledCheckboxWrapper>
-                <StyledLabel htmlFor="operation-01">
-                  <StyledCheckboxInput type="checkbox" id="operation-01" name="operation-01" />
-                  <StlyedCheckMark></StlyedCheckMark>
-                  <StyledItemSpan>Pyns Completed (Total)</StyledItemSpan>
-                </StyledLabel>
-
-                <StyledLabel htmlFor="operation-02">
-                  <StyledCheckboxInput type="checkbox" id="operation-02" name="operation-02" />
-                  <StlyedCheckMark></StlyedCheckMark>
-                  <StyledItemSpan>Pyns Completed (Percentage)</StyledItemSpan>
-                </StyledLabel>
-              </StyledCheckboxWrapper>
-            </StyledList>
-
-            <StyledList>
+            <UserKPIList>
               <StyledCheckTitle>STRATEGY EXECUTION</StyledCheckTitle>
 
               <StyledCheckboxWrapper>
@@ -69,7 +80,7 @@ export const Source = observer(
                   <StyledItemSpan>Initiatives on Track (Percentage)</StyledItemSpan>
                 </StyledLabel>
               </StyledCheckboxWrapper>
-            </StyledList>
+            </UserKPIList>
           </StyledLayerTwo>
         </StyledSecondLayer>
       </StyledSourceModal>
@@ -93,6 +104,10 @@ const StyledSourceModal = styled.div`
     border: 1px solid #ccc;
     transform: translate(-50%, -50%);
   }
+`;
+
+const UserKPIList = styled.div`
+  color: #000;
 `;
 
 const StyledSource = styled.div`
@@ -138,17 +153,6 @@ const StyledOperationBox = styled.div`
   align-items: center;
 `;
 
-const StyledOperation = styled.span`
-  border: 1px solid #1065f6;
-  color: #1065f6;
-  padding: 0.2rem 0.5rem;
-  border-radius: 5px;
-  font-size: 0.8rem;
-  display: flex;
-  height: 1.5rem;
-  align-items: center;
-`;
-
 const StyledOperationClose = styled.span`
   font-size: 1rem;
   color: #cdd1dd;
@@ -157,20 +161,6 @@ const StyledOperationClose = styled.span`
   display: flex;
   height: 1.5rem;
   align-items: center;
-`;
-
-const StyledClose = styled.div`
-  justify-self: right;
-`;
-
-const StyledCloseSpan = styled.span`
-  font-size: 2rem;
-  color: #cdd1dd;
-  font-weight: 600;
-
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    padding: 0 0.5rem;
-  }
 `;
 
 const StyledSelectedNumber = styled.span`
@@ -227,12 +217,11 @@ const StyledLayerTwo = styled.div`
 const StyledLogoSection = styled.div`
   display: flex;
   gap: 1rem;
-
   @media only screen and (min-width: 280px) and (max-width: 767px) {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    gap: 1rem;
     height: 100%;
+    gap: 1rem;
     align-items: center;
   }
 `;
@@ -241,12 +230,15 @@ const StyledLogo = styled.img.attrs(props => ({
   alt: props.alt,
 }))``;
 
+const LynchpynLogoContainer = styled.div``;
+
 const StyledLogoText = styled.div`
+  margin: 5px;
   @media only screen and (min-width: 280px) and (max-width: 767px) {
     display: flex;
     overflow-x: scroll;
     width: 100%;
-    margin: 0 auto;
+    margin: auto;
   }
 `;
 
@@ -285,15 +277,12 @@ const StyledInput = styled.input.attrs(props => ({
   }
 `;
 
-const StyledList = styled.div`
-  color: #000;
-`;
-
 const StyledCheckTitle = styled.p`
   font-size: 0.9rem;
   color: #a5a9c0;
   font-weight: 400;
   margin: 1.7rem 0rem;
+  text-transform: uppercase;
 `;
 
 const StyledLayerDiv = styled.div`
@@ -304,7 +293,6 @@ const StyledCheckboxWrapper = styled.div``;
 const StyledCheckboxInput = styled.input.attrs(props => ({
   type: props.type,
   id: props.id,
-  name: props.name,
 }))`
   -webkit-appearance: button;
   margin-right: 1.5rem;

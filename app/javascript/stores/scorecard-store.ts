@@ -24,7 +24,6 @@ export const ScorecardStoreModel = types
           self.kpis = response.data.kpi;
         }
       } catch (e) {
-        console.error(e);
         showToast(
           `Could not get ${ownerType} scorecard with id ${ownerId}.`,
           ToastMessageConstants.ERROR,

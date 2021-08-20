@@ -5,17 +5,20 @@ import { Icon } from "../../../shared/icon";
 import { Button } from "~/components/shared/button";
 import { TextDiv } from "~/components/shared/text";
 import { AddKPIModal } from "./add-kpi-modals";
+import { toJS } from "mobx";
 
-interface IAddKPIDropdownProps {}
+interface IAddKPIDropdownProps {
+  kpis: any[];
+}
 
-export const AddKPIDropdown = ({}): JSX.Element => {
+export const AddKPIDropdown = (props: IAddKPIDropdownProps): JSX.Element => {
   const optionsRef = useRef(null);
-
   const [showOptions, setShowOptions] = useState<boolean>(false);
-  const [showAddKPIModal, setAddKPIModal] = useState<boolean>();
+  const [showAddKPIModal, setAddKPIModal] = useState<boolean>(false);
   const [kpiModalType, setAddKPIModalType] = useState<string>("");
-  const [kpis, setKpis] = useState([]);
+  // const [kpis, setKpis] = useState(props.kpis);
   const [addManualKPIModalOpen, setAddManualKPIModalOpen] = useState<boolean>(false);
+  console.log(toJS(props.kpis));
 
   useEffect(() => {
     const handleClickOutside = event => {
@@ -83,7 +86,7 @@ export const AddKPIDropdown = ({}): JSX.Element => {
 
       {showAddKPIModal && (
         <AddKPIModal
-          kpis={kpis}
+          KPIs={toJS(props.kpis)}
           showAddKPIModal={showAddKPIModal}
           kpiModalType={kpiModalType}
           setModalOpen={setAddKPIModal}

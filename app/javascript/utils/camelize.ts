@@ -9,5 +9,8 @@ export const decamelizeRequest = params => {
 };
 
 export const titleCase = str => {
-  return str.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
+  return str
+    .split(" ")
+    .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
+    .join(" ");
 };

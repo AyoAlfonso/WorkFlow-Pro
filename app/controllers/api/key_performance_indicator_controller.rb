@@ -4,7 +4,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   respond_to :json
 
   def index
-    @kpi = policy_scope(KeyPerformanceIndicator).where(owned_by: current_user.id)
+    @kpi = policy_scope(KeyPerformanceIndicator)
     authorize @kpi
     render json: @kpi.as_json(except: %w[created_at updated_at],
                               methods: [:owned_by, :created_by],

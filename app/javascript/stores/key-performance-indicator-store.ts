@@ -1,20 +1,30 @@
 import { types, flow, getEnv, getRoot } from "mobx-state-tree";
 import { ApiResponse } from "apisauce";
 import { withEnvironment } from "../lib/with-environment";
-import { KeyPerformanceIndicatorModel } from "../models/key-performance-indicator"
+import { KeyPerformanceIndicatorModel } from "../models/key-performance-indicator";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 
 export const KeyPerformanceIndicatorStoreModel = types
   .model("KeyPerformanceIndicatorStoreModel")
   .props({
-    kpi: types.maybeNull(KeyPerformanceIndicatorModel)
+    kpi: types.maybeNull(KeyPerformanceIndicatorModel),
+    allKPIs: types.array(KeyPerformanceIndicatorModel),
   })
   .extend(withEnvironment())
-  .views(self => ({
-
-  }))
+  .views(self => ({}))
   .actions(self => ({
+    load: flow(function*() {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.getKPIs();
+        if (response.ok) {
+          self.allKPIs = response.data;
+        }
+      } catch (e) {
+        showToast("There was an error loading the kpis", ToastMessageConstants.ERROR);
+      }
+    }),
     createKPI: flow(function*(KPIData) {
       const response: ApiResponse<any> = yield self.environment.api.createKPI(KPIData);
       if (response.ok) {
@@ -43,18 +53,20 @@ export const KeyPerformanceIndicatorStoreModel = types
       }
     }),
     createScorecardLog: flow(function*(scorecardlog) {
-      const response: ApiResponse<any> = yield self.environment.api.createScorecardLog(scorecardlog);
+      const response: ApiResponse<any> = yield self.environment.api.createScorecardLog(
+        scorecardlog,
+      );
       if (response.ok) {
         showToast("Log created", ToastMessageConstants.SUCCESS);
       }
     }),
-    deleteScorecardLog:  flow(function*(id) {
+    deleteScorecardLog: flow(function*(id) {
       const response: ApiResponse<any> = yield self.environment.api.deleteScorecardLog(id);
       if (response.ok) {
         showToast("Log deleted", ToastMessageConstants.SUCCESS);
       }
     }),
-  }))
+  }));
 
 type KeyPerformanceIndicatorType = typeof KeyPerformanceIndicatorModel.Type;
 export interface IKeyPerformanceIndicatorStore extends KeyPerformanceIndicatorType {

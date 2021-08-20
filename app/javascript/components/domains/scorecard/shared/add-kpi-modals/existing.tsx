@@ -1,30 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
+import { KPIModalHeader } from "./header";
 
 export const Existing = observer(
   (): JSX.Element => {
     return (
       <StyledExisting>
-        <StyledSource>
-          <StyledHeader>
-            <StyledSubHeader>Existing</StyledSubHeader>
-          </StyledHeader>
-          <StyledSelectionBox>
-            <StyledOperationBox>
-              <StyledOperation>
-                Cost per Lead
-                <StyledOperationClose>x</StyledOperationClose>
-              </StyledOperation>
-
-              <StyledSelectedNumber>+3</StyledSelectedNumber>
-            </StyledOperationBox>
-            <StyledClose>
-              <StyledCloseSpan>x</StyledCloseSpan>
-            </StyledClose>
-          </StyledSelectionBox>
-        </StyledSource>
-
+        <KPIModalHeader />
         <StyledSecondLayer>
           <StyledLayerOne>
             <StyledLayerText>

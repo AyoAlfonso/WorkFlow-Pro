@@ -1,40 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
+import { KPIModalHeader } from "./header";
+
+//repeated ofteen TODO:
+interface IAverage {
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  KPIs: any[];
+  kpiModalType: string;
+}
 
 export const Average = observer(
-  (): JSX.Element => {
+  ({ KPIs, kpiModalType, setModalOpen }: IAverage): JSX.Element => {
     return (
       <StyledAverage>
-        <StyledSource>
-          <StyledHeader>
-            <StyledSubHeader>Average</StyledSubHeader>
-          </StyledHeader>
-          <StyledSelectionBox>
-            <StyledOperationBox>
-              <StyledOperation>
-                DB - Deals Closed
-                <StyledOperationClose>x</StyledOperationClose>
-              </StyledOperation>
-
-              <StyledOperation>
-                MG - Deals closed
-                <StyledOperationClose>x</StyledOperationClose>
-              </StyledOperation>
-
-              <StyledOperation>
-                SA - Deals closed
-                <StyledOperationClose>x</StyledOperationClose>
-              </StyledOperation>
-
-              <StyledSelectedNumber>+3</StyledSelectedNumber>
-            </StyledOperationBox>
-            <StyledClose>
-              <StyledCloseSpan>x</StyledCloseSpan>
-            </StyledClose>
-          </StyledSelectionBox>
-        </StyledSource>
-
+        <KPIModalHeader setModalOpen={setModalOpen} KPIs={KPIs} kpiModalType={kpiModalType} />
         <StyledSecondLayer>
           <StyledLayerOne>
             <StyledLayerText>
@@ -196,74 +176,6 @@ const StyledAverage = styled.div`
   }
 `;
 
-const StyledSource = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  border-bottom: 1px solid #ccc;
-
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    width: 100%;
-    display: flex;
-    align-items: center;
-  }
-`;
-
-const StyledHeader = styled.div`
-  background-color: #f8f8f9;
-  padding: 0rem 1rem;
-  border-top-left-radius: 10px;
-`;
-
-const StyledSelectionBox = styled.div`
-  background-color: #ffffff;
-  display: grid;
-  grid-template-columns: 11fr 1fr;
-  height: 100%;
-  align-items: center;
-  padding: 0rem 1.2rem;
-  border-top-right-radius: 10px;
-
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    padding: 0.7em 0.3rem;
-    width: 100%;
-  }
-`;
-
-const StyledSubHeader = styled.h3`
-  color: #000;
-`;
-const StyledOperationBox = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  height: 100%;
-  align-items: center;
-`;
-
-const StyledOperation = styled.span`
-  border: 1px solid #1065f6;
-  color: #1065f6;
-  padding: 0.2rem 0.5rem;
-  border-radius: 5px;
-  font-size: 0.8rem;
-  display: flex;
-  height: 1.5rem;
-  align-items: center;
-`;
-
-const StyledOperationClose = styled.span`
-  font-size: 1rem;
-  color: #cdd1dd;
-  font-weight: 600;
-  margin-left: 0.2rem;
-  display: flex;
-  height: 1.5rem;
-  align-items: center;
-`;
-
-const StyledClose = styled.div`
-  justify-self: right;
-`;
-
 const StyledCloseSpan = styled.span`
   font-size: 2rem;
   color: #cdd1dd;
@@ -272,13 +184,6 @@ const StyledCloseSpan = styled.span`
   @media only screen and (min-width: 280px) and (max-width: 767px) {
     padding: 0 0.5rem;
   }
-`;
-
-const StyledSelectedNumber = styled.span`
-  background: #1065f6;
-  color: #ffffff;
-  padding: 0.2rem 0.4rem;
-  border-radius: 5px;
 `;
 
 const StyledSecondLayer = styled.div`
