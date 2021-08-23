@@ -12,6 +12,8 @@ interface ISourceProps {
 
 export const Source = observer(
   ({ KPIs, setModalOpen, kpiModalType }: ISourceProps): JSX.Element => {
+    const [selectedKPIs, setSelectedKPIs] = useState([]);
+    const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
     //Move this to its own folder in utils TODO:
     function groupBy(objectArray, property) {
       return objectArray.reduce(function(acc, obj) {
@@ -23,33 +25,61 @@ export const Source = observer(
         return acc;
       }, {});
     }
-    const onSearchKeyword = keyword => {
-      console.log(keyword);
+    const onSearchKeyword = e => {
+      const keyword = e.target.value.toLowerCase();
+      setfilteredKPIs(
+        KPIs.filter(
+          kpi =>
+            kpi.description?.toLowerCase().includes(keyword) ||
+            kpi.title?.toLowerCase().includes(keyword),
+        ),
+      );
+    };
+    const selectKPI = kpi => {
+      const duplicate = selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id);
+      if (!duplicate) setSelectedKPIs([...selectedKPIs, kpi]);
+    };
+    const removeTagInput = id => {
+      setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
     };
 
-    const renderKPIListContent = (): Array<JSX.Element> => {
-      const groupedKPIs = groupBy(KPIs, "unitType");
-      return Object.keys(groupedKPIs).map(function (unitTypeKey, key) {
+    const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
+      const groupedKPIs = groupBy(filteredKPIs, "unitType");
+      return Object.keys(groupedKPIs).map(function(unitTypeKey, key) {
         return (
-          <UserKPIList  key={key}>
+          <UserKPIList key={key}>
             <StyledCheckTitle>{unitTypeKey}</StyledCheckTitle>
             {groupedKPIs[unitTypeKey].map((kpi, key) => {
-              <StyledCheckboxWrapper>
-                <StyledLabel>
-                  <StyledCheckboxInput type="checkbox" id={key} key={key}></StyledCheckboxInput>
-                  <StlyedCheckMark></StlyedCheckMark>
-                  <StyledItemSpan>{kpi.title}</StyledItemSpan>
-                </StyledLabel>
-              </StyledCheckboxWrapper>;
+              return (
+                <StyledCheckboxWrapper>
+                  <StyledLabel>
+                    <StyledCheckboxInput
+                      type="checkbox"
+                      id={key}
+                      key={key}
+                      onClick={() => {
+                        selectKPI(kpi);
+                      }}
+                    ></StyledCheckboxInput>
+                    <StlyedCheckMark></StlyedCheckMark>
+                    <StyledItemSpan>{kpi.title}</StyledItemSpan>
+                  </StyledLabel>
+                </StyledCheckboxWrapper>
+              );
             })}
           </UserKPIList>
-        )
-      })
+        );
+      });
     };
 
     return (
       <StyledSourceModal>
-        <KPIModalHeader setModalOpen={setModalOpen} KPIs={KPIs} kpiModalType={kpiModalType} />
+        <KPIModalHeader
+          setModalOpen={setModalOpen}
+          selectedKPIs={selectedKPIs}
+          kpiModalType={kpiModalType}
+          removeTagInput={removeTagInput}
+        />
         <StyledSecondLayer>
           <StyledLayerOne>
             <StyledLogoSection>
@@ -68,19 +98,7 @@ export const Source = observer(
             <StyledLayerDiv>
               <StyledInput type="text" placeholder="Search KPIs" onChange={onSearchKeyword} />
             </StyledLayerDiv>
-            {renderKPIListContent()}
-
-            <UserKPIList>
-              <StyledCheckTitle>STRATEGY EXECUTION</StyledCheckTitle>
-
-              <StyledCheckboxWrapper>
-                <StyledLabel htmlFor="strategy-01">
-                  <StyledCheckboxInput type="checkbox" id="strategy-01" name="strategy-01" />
-                  <StlyedCheckMark></StlyedCheckMark>
-                  <StyledItemSpan>Initiatives on Track (Percentage)</StyledItemSpan>
-                </StyledLabel>
-              </StyledCheckboxWrapper>
-            </UserKPIList>
+            {renderKPIListContent(filteredKPIs)}
           </StyledLayerTwo>
         </StyledSecondLayer>
       </StyledSourceModal>
@@ -88,7 +106,8 @@ export const Source = observer(
   },
 );
 const StyledSourceModal = styled.div`
-  width: 60%;
+  width: 640px;
+  height: auto;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -281,14 +300,16 @@ const StyledCheckTitle = styled.p`
   font-size: 0.9rem;
   color: #a5a9c0;
   font-weight: 400;
-  margin: 1.7rem 0rem;
+  margin: 4em 0rem 2em;
   text-transform: uppercase;
 `;
 
 const StyledLayerDiv = styled.div`
   color: #000;
 `;
-const StyledCheckboxWrapper = styled.div``;
+const StyledCheckboxWrapper = styled.div`
+  margin-left: 5%;
+`;
 
 const StyledCheckboxInput = styled.input.attrs(props => ({
   type: props.type,

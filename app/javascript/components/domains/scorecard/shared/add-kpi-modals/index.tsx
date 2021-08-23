@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { ModalWithHeader } from "~/components/shared/modal-with-unique-header";
+import { ModalWithHeader } from "~/components/shared/modal-with-header";
 import { useTranslation } from "react-i18next";
 import { baseTheme } from "~/themes";
 import styled, { css } from "styled-components";
@@ -26,13 +26,14 @@ export const AddKPIModal = observer(
     const formattedKpiModalType = titleCase(kpiModalType);
 
     return (
-      <ModalWithHeader
+      <ModalContainer
         modalOpen={showAddKPIModal}
         setModalOpen={setModalOpen}
         headerText={formattedKpiModalType}
         width="480px"
+        height="0px"
       >
-        <Container>
+        <InnerContainer>
           {kpiModalType == "source" && (
             <Source
               KPIs={KPIs}
@@ -43,13 +44,13 @@ export const AddKPIModal = observer(
           {/* {kpiModalType == "existing" && <Existing></Existing>}
           {kpiModalType == "roll up" && <RollUp></RollUp>}
           {kpiModalType == "average" && <Average></Average>} */}
-        </Container>
-      </ModalWithHeader>
+        </InnerContainer>
+      </ModalContainer>
     );
   },
 );
 
-const Container = styled.div`
+const InnerContainer = styled.div`
   height: 30rem;
   display: flex;
   flex-direction: row;
@@ -81,4 +82,8 @@ const LynchpynLogoContainer = styled.div`
   text-align: center;
   margin-top: auto;
   margin-bottom: 16px;
+`;
+
+const ModalContainer = styled(ModalWithHeader)`
+  height: 0px;
 `;

@@ -4,30 +4,26 @@ import { observer } from "mobx-react";
 import { Icon } from "~/components/shared";
 interface IKPIModalHeader {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  KPIs: any[];
+  selectedKPIs: any[];
   kpiModalType: string;
+  removeTagInput?: any;
 }
 
 export const KPIModalHeader = observer(
   (props): JSX.Element => {
-    const [KPIs, setKPIs] = useState(props.KPIs);
+    const [selectedKPIs, setSelectedKPIs] = useState(props.selectedKPIs);
     const [selectedTagInputCount, setSelectedTagInputCount] = useState(0);
-
-    const removeTagInput = id => {
-      setKPIs(KPIs.filter(kpi => kpi.id != id));
-    };
-
     useEffect(() => {
-      setKPIs(props.KPIs);
-      setSelectedTagInputCount(props.KPIs.length - 3);
-    }, [props.KPIs]);
+      setSelectedKPIs(props.selectedKPIs);
+      setSelectedTagInputCount(props.selectedKPIs.length - 3);
+    }, [props.selectedKPIs]);
 
     const renderTaggedInput = (): Array<JSX.Element> => {
-      return KPIs.map((kpi, key)=> {
+      return selectedKPIs.slice(0, 3).map((kpi, key) => {
         return (
           <TagInput id={key} key={key}>
-            {kpi.name}
-            <TagInputClose onClick={() => removeTagInput(kpi.id)}> x </TagInputClose>
+            <TagTitle>{kpi.title}</TagTitle>
+            <TagInputClose onClick={() => props.removeTagInput(kpi.id)}> x </TagInputClose>
           </TagInput>
         );
       });
@@ -39,16 +35,8 @@ export const KPIModalHeader = observer(
         </SubHeaderContainer>
         <SelectionBox>
           <MultiTagInputContainer>
-            {/* {renderTaggedInput()} */}
-            <TagInput>
-              MG - Deals closed
-              <TagInputClose>x</TagInputClose>
-            </TagInput>
+            {renderTaggedInput()}
 
-            <TagInput>
-              SA - Deals closed
-              <TagInputClose>x</TagInputClose>
-            </TagInput>
             {selectedTagInputCount > 0 ? (
               <SelectedTagInputCount> {selectedTagInputCount}+ </SelectedTagInputCount>
             ) : (
@@ -105,9 +93,20 @@ const TagInput = styled.span`
   padding: 0.2rem 0.5rem;
   border-radius: 5px;
   font-size: 0.8rem;
-  display: flex;
   height: 1.5rem;
+  white-space: nowrap;
   align-items: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  justify-content: space-between;
+  display: inline;
+`;
+
+const TagTitle = styled.span`
+  max-width: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline;
 `;
 
 const TagInputClose = styled.span`
@@ -115,9 +114,9 @@ const TagInputClose = styled.span`
   color: #cdd1dd;
   font-weight: 600;
   margin-left: 0.2rem;
-  display: flex;
   height: 1.5rem;
   align-items: center;
+  display: inline;
 `;
 
 const SelectedTagInputCount = styled.span`
