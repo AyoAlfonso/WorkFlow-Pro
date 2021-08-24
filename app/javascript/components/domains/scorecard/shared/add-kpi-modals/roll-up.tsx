@@ -2,14 +2,30 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { KPIModalHeader } from "./header";
+import {
+  StyledLayerTwo,
+  UserKPIList,
+  StyledCheckboxWrapper,
+  StyledSecondLayer,
+  StyledLayerOne,
+  StyledItemSpan,
+  StlyedCheckMark,
+  StyledLabel,
+  StyledInput,
+} from "./styled-components";
 
+interface IRollUpProps {
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  KPIs: any[];
+  kpiModalType: string;
+}
 export const RollUp = observer(
-  (): JSX.Element => {
+  ({ KPIs, setModalOpen, kpiModalType }: IRollUpProps): JSX.Element => {
     const [selectedKPIs, setSelectedKPIs] = useState([]);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
     function groupBy(objectArray, property) {
       return objectArray.reduce(function(acc, obj) {
-        let key = obj[property];
+        const key = obj[property];
         if (!acc[key]) {
           acc[key] = [];
         }
@@ -72,29 +88,6 @@ export const RollUp = observer(
             kpiModalType={kpiModalType}
             removeTagInput={removeTagInput}
           />
-          <StyledSelectionBox>
-            <StyledOperationBox>
-              <StyledOperation>
-                DB - Deals Closed
-                <StyledOperationClose>x</StyledOperationClose>
-              </StyledOperation>
-
-              <StyledOperation>
-                MG - Deals closed
-                <StyledOperationClose>x</StyledOperationClose>
-              </StyledOperation>
-
-              <StyledOperation>
-                SA - Deals closed
-                <StyledOperationClose>x</StyledOperationClose>
-              </StyledOperation>
-
-              <StyledSelectedNumber>+3</StyledSelectedNumber>
-            </StyledOperationBox>
-            <StyledClose>
-              <StyledCloseSpan>x</StyledCloseSpan>
-            </StyledClose>
-          </StyledSelectionBox>
         </StyledSource>
 
         <StyledSecondLayer>
@@ -121,88 +114,11 @@ export const RollUp = observer(
               <StyledNext>Next</StyledNext>
             </StyledNextButton>
           </StyledLayerOne>
-
           <StyledLayerTwo>
             <StyledLayerDiv>
-              <StyledInput type="text" placeholder="Search KPIs" />
+              <StyledInput type="text" placeholder="Search KPIs" onChange={onSearchKeyword} />
             </StyledLayerDiv>
-            <StyledList>
-              <StyledCheckTitle>OPERATIONS</StyledCheckTitle>
-
-              <StyledCheckboxWrapper>
-                <StyledLabel htmlFor="operation-01">
-                  <StyledCheckboxInput type="checkbox" id="operation-01" name="operation-01" />
-                  <StlyedCheckMark></StlyedCheckMark>
-                  <StyledItemSpan>Pyns Completed (Total)</StyledItemSpan>
-                </StyledLabel>
-
-                <StyledLabel htmlFor="operation-02">
-                  <StyledCheckboxInput type="checkbox" id="operation-02" name="operation-02" />
-                  <StlyedCheckMark></StlyedCheckMark>
-                  <StyledItemSpan>Pyns Completed (Percentage)</StyledItemSpan>
-                </StyledLabel>
-              </StyledCheckboxWrapper>
-            </StyledList>
-
-            <StyledList>
-              <StyledCheckTitle>DOUG BEGINNER</StyledCheckTitle>
-
-              <StyledCheckboxWrapper>
-                <StyledLabel htmlFor="operation-04">
-                  <StyledCheckboxInput type="checkbox" id="operation-01" name="operation-01" />
-                  <StlyedCheckMark></StlyedCheckMark>
-                  <StyledItemSpan>Clickthrough rate</StyledItemSpan>
-                </StyledLabel>
-
-                <StyledLabel htmlFor="operation-05">
-                  <StyledCheckboxInput type="checkbox" id="operation-02" name="operation-02" />
-                  <StlyedCheckMark></StlyedCheckMark>
-                  <StyledItemSpan>Cost per Lead</StyledItemSpan>
-                </StyledLabel>
-
-                <StyledLabel htmlFor="operation-06">
-                  <StyledCheckboxInput type="checkbox" id="operation-02" name="operation-02" />
-                  <StlyedCheckMark></StlyedCheckMark>
-                  <StyledItemSpan>Deals Closed</StyledItemSpan>
-                </StyledLabel>
-              </StyledCheckboxWrapper>
-            </StyledList>
-
-            <StyledList>
-              <StyledCheckTitle>DOUG BEGINNER</StyledCheckTitle>
-
-              <StyledCheckboxWrapper>
-                <StyledLabel htmlFor="operation-08">
-                  <StyledCheckboxInput type="checkbox" id="operation-01" name="operation-01" />
-                  <StlyedCheckMark></StlyedCheckMark>
-                  <StyledItemSpan>Clickthrough rate</StyledItemSpan>
-                </StyledLabel>
-
-                <StyledLabel htmlFor="operation-09">
-                  <StyledCheckboxInput type="checkbox" id="operation-02" name="operation-02" />
-                  <StlyedCheckMark></StlyedCheckMark>
-                  <StyledItemSpan>Cost per Lead</StyledItemSpan>
-                </StyledLabel>
-
-                <StyledLabel htmlFor="operation-10">
-                  <StyledCheckboxInput type="checkbox" id="operation-02" name="operation-02" />
-                  <StlyedCheckMark></StlyedCheckMark>
-                  <StyledItemSpan>Deals Closed</StyledItemSpan>
-                </StyledLabel>
-              </StyledCheckboxWrapper>
-            </StyledList>
-
-            <StyledList>
-              <StyledCheckTitle>STRATEGY EXECUTION</StyledCheckTitle>
-
-              <StyledCheckboxWrapper>
-                <StyledLabel htmlFor="strategy-01">
-                  <StyledCheckboxInput type="checkbox" id="strategy-01" name="strategy-01" />
-                  <StlyedCheckMark></StlyedCheckMark>
-                  <StyledItemSpan>Initiatives on Track (Percentage)</StyledItemSpan>
-                </StyledLabel>
-              </StyledCheckboxWrapper>
-            </StyledList>
+            {renderKPIListContent(filteredKPIs)}
           </StyledLayerTwo>
         </StyledSecondLayer>
       </StyledRollUpModal>
@@ -248,113 +164,6 @@ const StyledHeader = styled.div`
   border-top-left-radius: 10px;
 `;
 
-const StyledSelectionBox = styled.div`
-  background-color: #ffffff;
-  display: grid;
-  grid-template-columns: 11fr 1fr;
-  height: 100%;
-  align-items: center;
-  padding: 0rem 1.2rem;
-  border-top-right-radius: 10px;
-
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    padding: 0.7em 0.3rem;
-    width: 100%;
-  }
-`;
-
-const StyledSubHeader = styled.h3`
-  color: #000;
-`;
-const StyledOperationBox = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  height: 100%;
-  align-items: center;
-`;
-
-const StyledOperation = styled.span`
-  border: 1px solid #1065f6;
-  color: #1065f6;
-  padding: 0.2rem 0.5rem;
-  border-radius: 5px;
-  font-size: 0.8rem;
-  display: flex;
-  height: 1.5rem;
-  align-items: center;
-`;
-
-const StyledOperationClose = styled.span`
-  font-size: 1rem;
-  color: #cdd1dd;
-  font-weight: 600;
-  margin-left: 0.2rem;
-  display: flex;
-  height: 1.5rem;
-  align-items: center;
-`;
-
-const StyledClose = styled.div`
-  justify-self: right;
-`;
-
-const StyledCloseSpan = styled.span`
-  font-size: 2rem;
-  color: #cdd1dd;
-  font-weight: 600;
-
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    padding: 0 0.5rem;
-  }
-`;
-
-const StyledSelectedNumber = styled.span`
-  background: #1065f6;
-  color: #ffffff;
-  padding: 0.2rem 0.4rem;
-  border-radius: 5px;
-`;
-
-const StyledSecondLayer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    display: flex;
-    flex-direction: column;
-  }
-`;
-
-const StyledLayerOne = styled.div`
-  background-color: #f8f8f9;
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  border-bottom-left-radius: 10px;
-
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    background-color: #f8f8f9;
-    display: flex;
-    flex-direction: column;
-    border-bottom-left-radius: 10px;
-  }
-`;
-
-const StyledLayerTwo = styled.div`
-  padding: 1rem 1.2rem;
-  background-color: #ffffff;
-  height: 600px;
-  overflow: scroll;
-  border-bottom-right-radius: 10px;
-
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    padding: 1rem 1.2rem;
-    background-color: #ffffff;
-    height: 200px;
-    overflow: scroll;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-  }
-`;
 
 const StyledLayerText = styled.div`
   color: #000;
@@ -428,25 +237,6 @@ const StyledNext = styled.button`
   border-radius: 5px;
 `;
 
-const StyledInput = styled.input.attrs(props => ({
-  type: props.type,
-  placeholder: props.placeholder,
-}))`
-  position: fixed;
-  height: 2.5rem;
-  width: 60%;
-  color: #a5aac0;
-  border: 1px solid #e9e9ec;
-  border-radius: 3px;
-  ::placeholder {
-    color: #a5aac0;
-    padding-left: 0.5rem;
-  }
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    width: 85%;
-  }
-`;
-
 const StyledList = styled.div`
   color: #000;
 `;
@@ -461,8 +251,6 @@ const StyledCheckTitle = styled.p`
 const StyledLayerDiv = styled.div`
   color: #000;
 `;
-const StyledCheckboxWrapper = styled.div``;
-
 const StyledCheckboxInput = styled.input.attrs(props => ({
   type: props.type,
   id: props.id,
@@ -471,40 +259,6 @@ const StyledCheckboxInput = styled.input.attrs(props => ({
   -webkit-appearance: button;
   margin-right: 1.5rem;
   display: none;
-`;
-
-const StlyedCheckMark = styled.span`
-  width: 1.2rem;
-  height: 1.2rem;
-  border: 2px solid #095df6;
-  display: inline-block;
-  border-radius: 5px;
-  margin-right: 1rem;
-  background: #095df6
-    url("https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/White_check.svg/1200px-White_check.svg.png")
-    center/1250% no-repeat;
-  transition: background-size 0.2s cubic-bezier(0.7, 0, 0.18, 1.24);
-`;
-
-const StyledLabel = styled.label.attrs(props => ({
-  htmlFor: props.htmlFor,
-}))`
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  margin-top: 1rem;
-
-  ${StyledCheckboxInput}:checked + ${StlyedCheckMark} {
-    background-size: 60%;
-    transition: background-size 0.25s cubic-bezier(0.7, 0, 0.18, 1.24);
-  }
-`;
-
-const StyledItemSpan = styled.span`
-  font-size: 1rem;
-  font-weight: 400;
 `;
 
 export default RollUp;

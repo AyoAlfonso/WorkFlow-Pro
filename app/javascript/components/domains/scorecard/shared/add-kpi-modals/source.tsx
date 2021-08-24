@@ -3,6 +3,15 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { Icon } from "~/components/shared/icon";
 import { KPIModalHeader } from "./header";
+import {
+  UserKPIList,
+  StyledSecondLayer,
+  StyledItemSpan,
+  StlyedCheckMark,
+  StyledLabel,
+  StyledCheckboxInput,
+  StyledInput,
+} from "./styled-components";
 
 interface ISourceProps {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -125,79 +134,65 @@ const StyledSourceModal = styled.div`
   }
 `;
 
-const UserKPIList = styled.div`
-  color: #000;
-`;
+// const StyledSource = styled.div`
+//   display: grid;
+//   grid-template-columns: 1fr 2fr;
+//   border-bottom: 1px solid #ccc;
 
-const StyledSource = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  border-bottom: 1px solid #ccc;
+//   @media only screen and (min-width: 280px) and (max-width: 767px) {
+//     width: 100%;
+//     display: flex;
+//     align-items: center;
+//   }
+// `;
 
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    width: 100%;
-    display: flex;
-    align-items: center;
-  }
-`;
+// const StyledHeader = styled.div`
+//   background-color: #f8f8f9;
+//   padding: 0rem 1rem;
+//   border-top-left-radius: 10px;
+// `;
 
-const StyledHeader = styled.div`
-  background-color: #f8f8f9;
-  padding: 0rem 1rem;
-  border-top-left-radius: 10px;
-`;
+// const StyledSelectionBox = styled.div`
+//   background-color: #ffffff;
+//   display: grid;
+//   grid-template-columns: 11fr 1fr;
+//   height: 100%;
+//   align-items: center;
+//   padding: 0rem 1.2rem;
+//   border-top-right-radius: 10px;
 
-const StyledSelectionBox = styled.div`
-  background-color: #ffffff;
-  display: grid;
-  grid-template-columns: 11fr 1fr;
-  height: 100%;
-  align-items: center;
-  padding: 0rem 1.2rem;
-  border-top-right-radius: 10px;
+//   @media only screen and (min-width: 280px) and (max-width: 767px) {
+//     padding: 0.7em 0.3rem;
+//     width: 100%;
+//   }
+// `;
 
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    padding: 0.7em 0.3rem;
-    width: 100%;
-  }
-`;
+// const StyledSubHeader = styled.h3`
+//   color: #000;
+// `;
+// const StyledOperationBox = styled.div`
+//   display: flex;
+//   gap: 0.5rem;
+//   height: 100%;
+//   align-items: center;
+// `;
 
-const StyledSubHeader = styled.h3`
-  color: #000;
-`;
-const StyledOperationBox = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  height: 100%;
-  align-items: center;
-`;
+// const StyledOperationClose = styled.span`
+//   font-size: 1rem;
+//   color: #cdd1dd;
+//   font-weight: 600;
+//   margin-left: 0.2rem;
+//   display: flex;
+//   height: 1.5rem;
+//   align-items: center;
+// `;
 
-const StyledOperationClose = styled.span`
-  font-size: 1rem;
-  color: #cdd1dd;
-  font-weight: 600;
-  margin-left: 0.2rem;
-  display: flex;
-  height: 1.5rem;
-  align-items: center;
-`;
-
-const StyledSelectedNumber = styled.span`
-  background: #1065f6;
-  color: #ffffff;
-  padding: 0.2rem 0.4rem;
-  border-radius: 5px;
-`;
-
-const StyledSecondLayer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    display: flex;
-    flex-direction: column;
-  }
-`;
+// const StyledSelectedNumber = styled.span`
+//   background: #1065f6;
+//   color: #ffffff;
+//   padding: 0.2rem 0.4rem;
+//   border-radius: 5px;
+// `;
 
 const StyledLayerOne = styled.div`
   background-color: #f8f8f9;
@@ -245,6 +240,10 @@ const StyledLogoSection = styled.div`
   }
 `;
 
+export const StyledCheckboxWrapper = styled.div`
+  margin-left: 5%;
+`;
+
 const StyledLogo = styled.img.attrs(props => ({
   alt: props.alt,
 }))``;
@@ -277,25 +276,6 @@ const StyledNext = styled.button`
   border-radius: 5px;
 `;
 
-const StyledInput = styled.input.attrs(props => ({
-  type: props.type,
-  placeholder: props.placeholder,
-}))`
-  position: fixed;
-  height: 2.5rem;
-  width: 60%;
-  color: #a5aac0;
-  border: 1px solid #e9e9ec;
-  border-radius: 3px;
-  ::placeholder {
-    color: #a5aac0;
-    padding-left: 0.5rem;
-  }
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    width: 85%;
-  }
-`;
-
 const StyledCheckTitle = styled.p`
   font-size: 0.9rem;
   color: #a5a9c0;
@@ -306,52 +286,6 @@ const StyledCheckTitle = styled.p`
 
 const StyledLayerDiv = styled.div`
   color: #000;
-`;
-const StyledCheckboxWrapper = styled.div`
-  margin-left: 5%;
-`;
-
-const StyledCheckboxInput = styled.input.attrs(props => ({
-  type: props.type,
-  id: props.id,
-}))`
-  -webkit-appearance: button;
-  margin-right: 1.5rem;
-  display: none;
-`;
-
-const StlyedCheckMark = styled.span`
-  width: 1.2rem;
-  height: 1.2rem;
-  border: 2px solid #095df6;
-  display: inline-block;
-  border-radius: 5px;
-  margin-right: 1rem;
-  background: #095df6
-    url("https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/White_check.svg/1200px-White_check.svg.png")
-    center/1250% no-repeat;
-  transition: background-size 0.2s cubic-bezier(0.7, 0, 0.18, 1.24);
-`;
-
-const StyledLabel = styled.label.attrs(props => ({
-  htmlFor: props.htmlFor,
-}))`
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  margin-top: 1rem;
-
-  ${StyledCheckboxInput}:checked + ${StlyedCheckMark} {
-    background-size: 60%;
-    transition: background-size 0.25s cubic-bezier(0.7, 0, 0.18, 1.24);
-  }
-`;
-
-const StyledItemSpan = styled.span`
-  font-size: 1rem;
-  font-weight: 400;
 `;
 
 export default Source;
