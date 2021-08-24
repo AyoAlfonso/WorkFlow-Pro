@@ -12,9 +12,71 @@ interface IAverage {
 
 export const Average = observer(
   ({ KPIs, kpiModalType, setModalOpen }: IAverage): JSX.Element => {
+    function groupBy(objectArray, property) {
+      return objectArray.reduce(function(acc, obj) {
+        let key = obj[property];
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(obj);
+        return acc;
+      }, {});
+    }
+    const onSearchKeyword = e => {
+      const keyword = e.target.value.toLowerCase();
+      setfilteredKPIs(
+        KPIs.filter(
+          kpi =>
+            kpi.description?.toLowerCase().includes(keyword) ||
+            kpi.title?.toLowerCase().includes(keyword),
+        ),
+      );
+    };
+    const selectKPI = kpi => {
+      const duplicate = selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id);
+      if (!duplicate) setSelectedKPIs([...selectedKPIs, kpi]);
+    };
+    const removeTagInput = id => {
+      setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
+    };
+
+    const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
+      const groupedKPIs = groupBy(filteredKPIs, "unitType");
+      return Object.keys(groupedKPIs).map(function(unitTypeKey, key) {
+        return (
+          <UserKPIList key={key}>
+            <StyledCheckTitle>{unitTypeKey}</StyledCheckTitle>
+            {groupedKPIs[unitTypeKey].map((kpi, key) => {
+              return (
+                <StyledCheckboxWrapper>
+                  <StyledLabel>
+                    <StyledCheckboxInput
+                      type="checkbox"
+                      id={key}
+                      key={key}
+                      onClick={() => {
+                        selectKPI(kpi);
+                      }}
+                    ></StyledCheckboxInput>
+                    <StlyedCheckMark></StlyedCheckMark>
+                    <StyledItemSpan>{kpi.title}</StyledItemSpan>
+                  </StyledLabel>
+                </StyledCheckboxWrapper>
+              );
+            })}
+          </UserKPIList>
+        );
+      });
+    };
+
     return (
       <StyledAverage>
-        <KPIModalHeader setModalOpen={setModalOpen} KPIs={KPIs} kpiModalType={kpiModalType} />
+        <KPIModalHeader
+          setModalOpen={setModalOpen}
+          selectedKPIs={selectedKPIs}
+          kpiModalType={kpiModalType}
+          removeTagInput={removeTagInput}
+        />
         <StyledSecondLayer>
           <StyledLayerOne>
             <StyledLayerText>

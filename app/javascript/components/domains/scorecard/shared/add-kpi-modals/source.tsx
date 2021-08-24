@@ -15,7 +15,7 @@ export const Source = observer(
     const [selectedKPIs, setSelectedKPIs] = useState([]);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
     //Move this to its own folder in utils TODO:
-    function groupBy(objectArray, property) {
+    const groupBy = (objectArray, property) => {
       return objectArray.reduce(function(acc, obj) {
         let key = obj[property];
         if (!acc[key]) {
@@ -24,7 +24,7 @@ export const Source = observer(
         acc[key].push(obj);
         return acc;
       }, {});
-    }
+    };
     const onSearchKeyword = e => {
       const keyword = e.target.value.toLowerCase();
       setfilteredKPIs(
