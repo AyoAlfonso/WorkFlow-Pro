@@ -112,7 +112,7 @@ export const RollUp = observer(
             </StyledLayerText>
 
             <StyledNextButton>
-              <SaveButton onClick={handleSaveToManual}>Save</SaveButton>
+              <SaveButton onClick={handleSaveToManual}>Next</SaveButton>
             </StyledNextButton>
           </StyledLayerOne>
           <StyledLayerTwo>

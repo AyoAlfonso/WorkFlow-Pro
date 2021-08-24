@@ -104,7 +104,7 @@ export const Source = observer(
             </StyledLogoSection>
 
             <StyledNextButton>
-              <SaveButton onClick={handleSaveToManual}>Save</SaveButton>
+              <SaveButton onClick={handleSaveToManual}>Next</SaveButton>
             </StyledNextButton>
           </StyledLayerOne>
 
@@ -120,7 +120,7 @@ export const Source = observer(
   },
 );
 const StyledSourceModal = styled.div`
-  width: 640px;
+  width: 60%;
   height: auto;
   position: absolute;
   top: 50%;
@@ -138,66 +138,6 @@ const StyledSourceModal = styled.div`
     transform: translate(-50%, -50%);
   }
 `;
-
-// const StyledSource = styled.div`
-//   display: grid;
-//   grid-template-columns: 1fr 2fr;
-//   border-bottom: 1px solid #ccc;
-
-//   @media only screen and (min-width: 280px) and (max-width: 767px) {
-//     width: 100%;
-//     display: flex;
-//     align-items: center;
-//   }
-// `;
-
-// const StyledHeader = styled.div`
-//   background-color: #f8f8f9;
-//   padding: 0rem 1rem;
-//   border-top-left-radius: 10px;
-// `;
-
-// const StyledSelectionBox = styled.div`
-//   background-color: #ffffff;
-//   display: grid;
-//   grid-template-columns: 11fr 1fr;
-//   height: 100%;
-//   align-items: center;
-//   padding: 0rem 1.2rem;
-//   border-top-right-radius: 10px;
-
-//   @media only screen and (min-width: 280px) and (max-width: 767px) {
-//     padding: 0.7em 0.3rem;
-//     width: 100%;
-//   }
-// `;
-
-// const StyledSubHeader = styled.h3`
-//   color: #000;
-// `;
-// const StyledOperationBox = styled.div`
-//   display: flex;
-//   gap: 0.5rem;
-//   height: 100%;
-//   align-items: center;
-// `;
-
-// const StyledOperationClose = styled.span`
-//   font-size: 1rem;
-//   color: #cdd1dd;
-//   font-weight: 600;
-//   margin-left: 0.2rem;
-//   display: flex;
-//   height: 1.5rem;
-//   align-items: center;
-// `;
-
-// const StyledSelectedNumber = styled.span`
-//   background: #1065f6;
-//   color: #ffffff;
-//   padding: 0.2rem 0.4rem;
-//   border-radius: 5px;
-// `;
 
 const StyledLayerOne = styled.div`
   background-color: #f8f8f9;

@@ -54,15 +54,15 @@ export const StyledItemSpan = styled.span`
 `;
 
 export const StlyedCheckMark = styled.span`
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 0.8rem;
+  height: 0.8rem;
   border: 2px solid #095df6;
   display: inline-block;
   border-radius: 5px;
   margin-right: 1rem;
   background: #095df6
     url("https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/White_check.svg/1200px-White_check.svg.png")
-    center/1250% no-repeat;
+    center/80% no-repeat;
   transition: background-size 0.2s cubic-bezier(0.7, 0, 0.18, 1.24);
 `;
 

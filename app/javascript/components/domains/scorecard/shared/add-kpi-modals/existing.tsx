@@ -113,32 +113,32 @@ export const Existing = observer(
                 specific KPI on the right hand side. You can only select one.
               </StyledLayerPara>
               <StyledOptionToggle>
-                <StyledNumerical
+                <StyledDataTypeContainer
                   onClick={() => {
                     toggleUnitType("numerical");
                   }}
                 >
-                  <StyledCurrencyIcon>#</StyledCurrencyIcon>
-                  <StyledNum>Numerical</StyledNum>
-                </StyledNumerical>
+                  <StyledDataTypeIcon>#</StyledDataTypeIcon>
+                  <StyledDataTypeContent>Numerical</StyledDataTypeContent>
+                </StyledDataTypeContainer>
 
-                <StyledNumerical
+                <StyledDataTypeContainer
                   onClick={() => {
                     toggleUnitType("currency");
                   }}
                 >
-                  <StyledCurrencyIcon>$</StyledCurrencyIcon>
-                  <StyledNum>Currency</StyledNum>
-                </StyledNumerical>
+                  <StyledDataTypeIcon>$</StyledDataTypeIcon>
+                  <StyledDataTypeContent>Currency</StyledDataTypeContent>
+                </StyledDataTypeContainer>
 
-                <StyledNumerical
+                <StyledDataTypeContainer
                   onClick={() => {
                     toggleUnitType("percentage");
                   }}
                 >
-                  <StyledCurrencyIcon>%</StyledCurrencyIcon>
-                  <StyledNum>Percentage</StyledNum>
-                </StyledNumerical>
+                  <StyledDataTypeIcon>%</StyledDataTypeIcon>
+                  <StyledDataTypeContent>Percentage</StyledDataTypeContent>
+                </StyledDataTypeContainer>
               </StyledOptionToggle>
             </StyledLayerText>
 
@@ -179,83 +179,7 @@ const StyledExistingModal = styled.div`
   }
 `;
 
-const StyledSource = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  border-bottom: 1px solid #ccc;
 
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    width: 100%;
-    display: flex;
-    align-items: center;
-  }
-`;
-
-const StyledHeader = styled.div`
-  background-color: #f8f8f9;
-  padding: 0rem 1rem;
-  border-top-left-radius: 10px;
-`;
-
-const StyledSelectionBox = styled.div`
-  background-color: #ffffff;
-  display: grid;
-  grid-template-columns: 11fr 1fr;
-  height: 100%;
-  align-items: center;
-  padding: 0rem 1.2rem;
-  border-top-right-radius: 10px;
-
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    padding: 0.7em 0.3rem;
-    width: 100%;
-  }
-`;
-
-const StyledSubHeader = styled.h3`
-  color: #000;
-`;
-const StyledOperationBox = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  height: 100%;
-  align-items: center;
-`;
-
-const StyledOperation = styled.span`
-  border: 1px solid #1065f6;
-  color: #1065f6;
-  padding: 0.2rem 0.5rem;
-  border-radius: 5px;
-  font-size: 0.8rem;
-  display: flex;
-  height: 1.5rem;
-  align-items: center;
-`;
-
-const StyledOperationClose = styled.span`
-  font-size: 1rem;
-  color: #cdd1dd;
-  font-weight: 600;
-  margin-left: 0.2rem;
-  display: flex;
-  height: 1.5rem;
-  align-items: center;
-`;
-
-const StyledClose = styled.div`
-  justify-self: right;
-`;
-
-const StyledCloseSpan = styled.span`
-  font-size: 2rem;
-  color: #cdd1dd;
-  font-weight: 600;
-
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    padding: 0 0.5rem;
-  }
-`;
 
 const StyledLayerText = styled.div`
   color: #000;
@@ -283,7 +207,7 @@ const StyledOptionToggle = styled.div`
   }
 `;
 
-const StyledNumerical = styled.div`
+const StyledDataTypeContainer = styled.div`
   display: flex;
   gap: 1rem;
   margin-top: 0.3rem;
@@ -299,11 +223,11 @@ const StyledNumerical = styled.div`
   }
 `;
 
-const StyledNum = styled.div`
+const StyledDataTypeContent = styled.div`
   font-size: 0.8rem;
 `;
 
-const StyledCurrencyIcon = styled.div`
+const StyledDataTypeIcon = styled.div`
   height: 2rem;
   width: 2rem;
   border-radius: 50%;
