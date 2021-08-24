@@ -31,16 +31,17 @@ export const Existing = observer(
     useEffect(() => {
       setfilteredKPIs(filterBasedOnUnitType(KPIs));
     }, [unitType]);
-    function groupBy(objectArray, property) {
+
+    const groupBy = objectArray => {
       return objectArray.reduce(function(acc, obj) {
-        const key = obj[property];
+        const key = `${obj["ownedBy"]["firstName"]} ` + ` ${obj["ownedBy"]["lastName"]}`;
         if (!acc[key]) {
           acc[key] = [];
         }
         acc[key].push(obj);
         return acc;
       }, {});
-    }
+    };
     const onSearchKeyword = e => {
       const keyword = e.target.value.toLowerCase();
       setfilteredKPIs(
@@ -70,12 +71,12 @@ export const Existing = observer(
       setUnitType(type);
     };
     const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
-      const groupedKPIs = groupBy(filteredKPIs, "unitType");
-      return Object.keys(groupedKPIs).map(function(unitTypeKey, key) {
+      const groupedKPIs = groupBy(filteredKPIs);
+      return Object.keys(groupedKPIs).map(function(ownerKey, key) {
         return (
           <UserKPIList key={key}>
-            <StyledCheckTitle>{unitTypeKey}</StyledCheckTitle>
-            {groupedKPIs[unitTypeKey].map((kpi, key) => {
+            <StyledCheckTitle>{ownerKey}</StyledCheckTitle>
+            {groupedKPIs[ownerKey].map((kpi, key) => {
               return (
                 <StyledCheckboxWrapper>
                   <StyledLabel>
@@ -178,8 +179,6 @@ const StyledExistingModal = styled.div`
     transform: translate(-50%, -50%);
   }
 `;
-
-
 
 const StyledLayerText = styled.div`
   color: #000;

@@ -95,9 +95,9 @@ export const StyledInput = styled.input.attrs(props => ({
   type: props.type,
   placeholder: props.placeholder,
 }))`
-  position: fixed;
+  position: sticky;
   height: 2.5rem;
-  width: 60%;
+  width: 100%;
   color: #a5aac0;
   border: 1px solid #e9e9ec;
   border-radius: 3px;

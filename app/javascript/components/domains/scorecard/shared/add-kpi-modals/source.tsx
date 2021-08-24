@@ -126,7 +126,7 @@ export const Source = observer(
   },
 );
 const StyledSourceModal = styled.div`
-  width: 60%;
+  width: 50%;
   height: auto;
   position: absolute;
   top: 50%;

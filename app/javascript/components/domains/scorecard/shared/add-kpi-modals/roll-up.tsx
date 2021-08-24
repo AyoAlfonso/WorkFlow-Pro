@@ -10,6 +10,7 @@ import {
   StyledLayerOne,
   StyledItemSpan,
   StlyedCheckMark,
+  StyledCheckboxInput,
   StyledLabel,
   StyledInput,
 } from "./styled-components";
@@ -24,26 +25,38 @@ export const RollUp = observer(
   ({ KPIs, setModalOpen, kpiModalType }: IRollUpProps): JSX.Element => {
     const [selectedKPIs, setSelectedKPIs] = useState([]);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
-    function groupBy(objectArray, property) {
+    const [unitType, setUnitType] = useState("numerical");
+
+    useEffect(() => {
+      setfilteredKPIs(filterBasedOnUnitType(KPIs));
+    }, [unitType]);
+
+    const groupBy = objectArray => {
       return objectArray.reduce(function(acc, obj) {
-        const key = obj[property];
+        const key = `${obj["ownedBy"]["firstName"]} ` + ` ${obj["ownedBy"]["lastName"]}`;
         if (!acc[key]) {
           acc[key] = [];
         }
         acc[key].push(obj);
         return acc;
       }, {});
-    }
+    };
     const onSearchKeyword = e => {
       const keyword = e.target.value.toLowerCase();
       setfilteredKPIs(
-        KPIs.filter(
-          kpi =>
-            kpi.description?.toLowerCase().includes(keyword) ||
-            kpi.title?.toLowerCase().includes(keyword),
+        filterBasedOnUnitType(
+          KPIs.filter(
+            kpi =>
+              kpi.description?.toLowerCase().includes(keyword) ||
+              kpi.title?.toLowerCase().includes(keyword),
+          ),
         ),
       );
     };
+    const filterBasedOnUnitType = array => {
+      return array.filter(kpi => kpi.unitType == unitType);
+    };
+
     const selectKPI = kpi => {
       const duplicate = selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id);
       if (!duplicate) setSelectedKPIs([...selectedKPIs, kpi]);
@@ -51,16 +64,18 @@ export const RollUp = observer(
     const removeTagInput = id => {
       setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
     };
-    const handleSaveToManual = () => {
-      //push to the
+
+    const handleSaveToManual = () => {};
+    const toggleUnitType = type => {
+      setUnitType(type);
     };
     const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
-      const groupedKPIs = groupBy(filteredKPIs, "unitType");
-      return Object.keys(groupedKPIs).map(function(unitTypeKey, key) {
+      const groupedKPIs = groupBy(filteredKPIs);
+      return Object.keys(groupedKPIs).map(function(ownerKey, key) {
         return (
           <UserKPIList key={key}>
-            <StyledCheckTitle>{unitTypeKey}</StyledCheckTitle>
-            {groupedKPIs[unitTypeKey].map((kpi, key) => {
+            <StyledCheckTitle>{ownerKey}</StyledCheckTitle>
+            {groupedKPIs[ownerKey].map((kpi, key) => {
               return (
                 <StyledCheckboxWrapper>
                   <StyledLabel>
@@ -99,15 +114,23 @@ export const RollUp = observer(
                 values of selcted KPIs to calculate the new value. Start by selecting a unit.
               </StyledLayerPara>
               <StyledOptionToggle>
-                <StyledNumerical>
-                  <StyledCurrencyIcon>#</StyledCurrencyIcon>
-                  <StyledNum>Numerical</StyledNum>
-                </StyledNumerical>
+                <StyledDataTypeContainer
+                  onClick={() => {
+                    toggleUnitType("numerical");
+                  }}
+                >
+                  <StyledDataTypeIcon>#</StyledDataTypeIcon>
+                  <StyledDataTypeContent>Numerical</StyledDataTypeContent>
+                </StyledDataTypeContainer>
 
-                <StyledNumerical>
-                  <StyledCurrencyIcon>$</StyledCurrencyIcon>
-                  <StyledNum>Currency</StyledNum>
-                </StyledNumerical>
+                <StyledDataTypeContainer
+                  onClick={() => {
+                    toggleUnitType("currency");
+                  }}
+                >
+                  <StyledDataTypeIcon>$</StyledDataTypeIcon>
+                  <StyledDataTypeContent>Currency</StyledDataTypeContent>
+                </StyledDataTypeContainer>
               </StyledOptionToggle>
             </StyledLayerText>
 
@@ -127,6 +150,37 @@ export const RollUp = observer(
   },
 );
 
+const StyledDataTypeContent = styled.div`
+  font-size: 0.8rem;
+`;
+
+const StyledDataTypeIcon = styled.div`
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  background-color: #075df6;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledDataTypeContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.3rem;
+  padding: 0.5rem 1rem;
+  align-items: center;
+  font-size: 0.8rem;
+
+  :hover {
+    background-color: #dbdbdf;
+  }
+  :active {
+    background-color: #dbdbdf;
+  }
+`;
+
 const StyledRollUpModal = styled.div`
   width: 60%;
   position: absolute;
@@ -145,24 +199,6 @@ const StyledRollUpModal = styled.div`
     border: 1px solid #ccc;
     transform: translate(-50%, -50%);
   }
-`;
-
-const StyledSource = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  border-bottom: 1px solid #ccc;
-
-  @media only screen and (min-width: 280px) and (max-width: 767px) {
-    width: 100%;
-    display: flex;
-    align-items: center;
-  }
-`;
-
-const StyledHeader = styled.div`
-  background-color: #f8f8f9;
-  padding: 0rem 1rem;
-  border-top-left-radius: 10px;
 `;
 
 const StyledLayerText = styled.div`
@@ -189,37 +225,6 @@ const StyledOptionToggle = styled.div`
   }
 `;
 
-const StyledNumerical = styled.div`
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.3rem;
-  padding: 0.5rem 1rem;
-  align-items: center;
-  font-size: 0.8rem;
-
-  :hover {
-    background-color: #dbdbdf;
-  }
-  :active {
-    background-color: #dbdbdf;
-  }
-`;
-
-const StyledNum = styled.div`
-  font-size: 0.8rem;
-`;
-
-const StyledCurrencyIcon = styled.div`
-  height: 2rem;
-  width: 2rem;
-  border-radius: 50%;
-  background-color: #075df6;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const StyledNextButton = styled.div`
   align-self: flex-end;
   padding: 1rem 1rem;
@@ -227,18 +232,6 @@ const StyledNextButton = styled.div`
     align-self: flex-start;
     padding: 1rem 1rem;
   }
-`;
-
-const StyledNext = styled.button`
-  border: none;
-  background-color: #075df6;
-  color: #ffffff;
-  padding: 0.4rem 1rem;
-  border-radius: 5px;
-`;
-
-const StyledList = styled.div`
-  color: #000;
 `;
 
 const StyledCheckTitle = styled.p`
@@ -250,15 +243,6 @@ const StyledCheckTitle = styled.p`
 
 const StyledLayerDiv = styled.div`
   color: #000;
-`;
-const StyledCheckboxInput = styled.input.attrs(props => ({
-  type: props.type,
-  id: props.id,
-  name: props.name,
-}))`
-  -webkit-appearance: button;
-  margin-right: 1.5rem;
-  display: none;
 `;
 
 export default RollUp;
