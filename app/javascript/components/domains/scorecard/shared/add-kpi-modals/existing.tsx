@@ -26,9 +26,14 @@ export const Existing = observer(
   ({ KPIs, setModalOpen, kpiModalType }: IExistingProps): JSX.Element => {
     const [selectedKPIs, setSelectedKPIs] = useState([]);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
+    const [unitType, setUnitType] = useState("numerical");
+
+    useEffect(() => {
+      setfilteredKPIs(filterBasedOnUnitType(KPIs));
+    }, [unitType]);
     function groupBy(objectArray, property) {
       return objectArray.reduce(function(acc, obj) {
-        let key = obj[property];
+        const key = obj[property];
         if (!acc[key]) {
           acc[key] = [];
         }
@@ -39,13 +44,19 @@ export const Existing = observer(
     const onSearchKeyword = e => {
       const keyword = e.target.value.toLowerCase();
       setfilteredKPIs(
-        KPIs.filter(
-          kpi =>
-            kpi.description?.toLowerCase().includes(keyword) ||
-            kpi.title?.toLowerCase().includes(keyword),
+        filterBasedOnUnitType(
+          KPIs.filter(
+            kpi =>
+              kpi.description?.toLowerCase().includes(keyword) ||
+              kpi.title?.toLowerCase().includes(keyword),
+          ),
         ),
       );
     };
+    const filterBasedOnUnitType = array => {
+      return array.filter(kpi => kpi.unitType == unitType);
+    };
+
     const selectKPI = kpi => {
       const duplicate = selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id);
       if (!duplicate) setSelectedKPIs([...selectedKPIs, kpi]);
@@ -55,6 +66,9 @@ export const Existing = observer(
     };
 
     const handleSaveToManual = () => {};
+    const toggleUnitType = type => {
+      setUnitType(type);
+    };
     const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
       const groupedKPIs = groupBy(filteredKPIs, "unitType");
       return Object.keys(groupedKPIs).map(function(unitTypeKey, key) {
@@ -99,19 +113,31 @@ export const Existing = observer(
                 specific KPI on the right hand side. You can only select one.
               </StyledLayerPara>
               <StyledOptionToggle>
-                <StyledNumerical>
+                <StyledNumerical
+                  onClick={() => {
+                    toggleUnitType("numerical");
+                  }}
+                >
                   <StyledCurrencyIcon>#</StyledCurrencyIcon>
                   <StyledNum>Numerical</StyledNum>
                 </StyledNumerical>
 
-                <StyledNumerical>
+                <StyledNumerical
+                  onClick={() => {
+                    toggleUnitType("currency");
+                  }}
+                >
                   <StyledCurrencyIcon>$</StyledCurrencyIcon>
                   <StyledNum>Currency</StyledNum>
                 </StyledNumerical>
 
-                <StyledNumerical>
+                <StyledNumerical
+                  onClick={() => {
+                    toggleUnitType("percentage");
+                  }}
+                >
                   <StyledCurrencyIcon>%</StyledCurrencyIcon>
-                  <StyledNum>Currency</StyledNum>
+                  <StyledNum>Percentage</StyledNum>
                 </StyledNumerical>
               </StyledOptionToggle>
             </StyledLayerText>
