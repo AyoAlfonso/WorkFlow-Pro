@@ -49,7 +49,7 @@ export const StyledLayerTwo = styled.div`
 `;
 
 export const StyledItemSpan = styled.span`
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 400;
 `;
 

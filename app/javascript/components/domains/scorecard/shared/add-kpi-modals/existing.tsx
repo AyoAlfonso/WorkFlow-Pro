@@ -14,6 +14,7 @@ import {
   StyledCheckboxInput,
   StyledInput,
 } from "./styled-components";
+import { SaveButton } from "../modal-elements";
 
 interface IExistingProps {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -53,6 +54,7 @@ export const Existing = observer(
       setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
     };
 
+    const handleSaveToManual = () => {};
     const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
       const groupedKPIs = groupBy(filteredKPIs, "unitType");
       return Object.keys(groupedKPIs).map(function(unitTypeKey, key) {
@@ -115,7 +117,7 @@ export const Existing = observer(
             </StyledLayerText>
 
             <StyledNextButton>
-              <StyledNext>Next</StyledNext>
+              <SaveButton onClick={handleSaveToManual}>Save</SaveButton>
             </StyledNextButton>
           </StyledLayerOne>
 

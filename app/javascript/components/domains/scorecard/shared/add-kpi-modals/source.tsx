@@ -12,6 +12,7 @@ import {
   StyledCheckboxInput,
   StyledInput,
 } from "./styled-components";
+import { SaveButton } from "../modal-elements";
 
 interface ISourceProps {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -50,6 +51,10 @@ export const Source = observer(
     };
     const removeTagInput = id => {
       setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
+    };
+
+    const handleSaveToManual = () => {
+      //transfer the data to manual kpi
     };
 
     const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
@@ -99,7 +104,7 @@ export const Source = observer(
             </StyledLogoSection>
 
             <StyledNextButton>
-              <StyledNext>Next</StyledNext>
+              <SaveButton onClick={handleSaveToManual}>Save</SaveButton>
             </StyledNextButton>
           </StyledLayerOne>
 

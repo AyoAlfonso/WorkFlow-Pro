@@ -41,9 +41,27 @@ export const AddKPIModal = observer(
               setModalOpen={setModalOpen}
             ></Source>
           )}
-          {/* {kpiModalType == "existing" && <Existing></Existing>}
-          {kpiModalType == "roll up" && <RollUp></RollUp>}
-          {kpiModalType == "average" && <Average></Average>} */}
+          {kpiModalType == "existing" && (
+            <Existing
+              KPIs={KPIs}
+              kpiModalType={formattedKpiModalType}
+              setModalOpen={setModalOpen}
+            ></Existing>
+          )}
+          {kpiModalType == "roll up" && (
+            <RollUp
+              KPIs={KPIs}
+              kpiModalType={formattedKpiModalType}
+              setModalOpen={setModalOpen}
+            ></RollUp>
+          )}
+          {kpiModalType == "average" && (
+            <Average
+              KPIs={KPIs}
+              kpiModalType={formattedKpiModalType}
+              setModalOpen={setModalOpen}
+            ></Average>
+          )}
         </InnerContainer>
       </ModalContainer>
     );

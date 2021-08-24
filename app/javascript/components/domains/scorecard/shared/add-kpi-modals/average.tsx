@@ -14,6 +14,7 @@ import {
   StyledInput,
 } from "./styled-components";
 
+import { SaveButton } from "../modal-elements";
 //repeated ofteen TODO:
 interface IAverage {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -51,6 +52,10 @@ export const Average = observer(
     };
     const removeTagInput = id => {
       setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
+    };
+
+    const handleSaveToManual = () => {
+      //transfer to manual modal
     };
 
     const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
@@ -115,7 +120,7 @@ export const Average = observer(
             </StyledLayerText>
 
             <StyledNextButton>
-              <StyledNext>Next</StyledNext>
+              <SaveButton onClick={handleSaveToManual}>Save</SaveButton>
             </StyledNextButton>
           </StyledLayerOne>
 

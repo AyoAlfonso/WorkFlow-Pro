@@ -13,6 +13,7 @@ import {
   StyledLabel,
   StyledInput,
 } from "./styled-components";
+import { SaveButton } from "../modal-elements";
 
 interface IRollUpProps {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -50,7 +51,9 @@ export const RollUp = observer(
     const removeTagInput = id => {
       setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
     };
-
+    const handleSaveToManual = () => {
+      //push to the
+    };
     const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
       const groupedKPIs = groupBy(filteredKPIs, "unitType");
       return Object.keys(groupedKPIs).map(function(unitTypeKey, key) {
@@ -81,14 +84,12 @@ export const RollUp = observer(
     };
     return (
       <StyledRollUpModal>
-        <StyledSource>
-          <KPIModalHeader
-            setModalOpen={setModalOpen}
-            selectedKPIs={selectedKPIs}
-            kpiModalType={kpiModalType}
-            removeTagInput={removeTagInput}
-          />
-        </StyledSource>
+        <KPIModalHeader
+          setModalOpen={setModalOpen}
+          selectedKPIs={selectedKPIs}
+          kpiModalType={kpiModalType}
+          removeTagInput={removeTagInput}
+        />
 
         <StyledSecondLayer>
           <StyledLayerOne>
@@ -111,7 +112,7 @@ export const RollUp = observer(
             </StyledLayerText>
 
             <StyledNextButton>
-              <StyledNext>Next</StyledNext>
+              <SaveButton onClick={handleSaveToManual}>Save</SaveButton>
             </StyledNextButton>
           </StyledLayerOne>
           <StyledLayerTwo>
@@ -163,7 +164,6 @@ const StyledHeader = styled.div`
   padding: 0rem 1rem;
   border-top-left-radius: 10px;
 `;
-
 
 const StyledLayerText = styled.div`
   color: #000;
