@@ -6,8 +6,13 @@ import { KPIModalHeader } from "./header";
 export const Existing = observer(
   (): JSX.Element => {
     return (
-      <StyledExisting>
-        <KPIModalHeader />
+      <StyledExistingModal>
+        <KPIModalHeader
+          setModalOpen={setModalOpen}
+          selectedKPIs={selectedKPIs}
+          kpiModalType={kpiModalType}
+          removeTagInput={removeTagInput}
+        />
         <StyledSecondLayer>
           <StyledLayerOne>
             <StyledLayerText>
@@ -145,12 +150,12 @@ export const Existing = observer(
             </StyledList>
           </StyledLayerTwo>
         </StyledSecondLayer>
-      </StyledExisting>
+      </StyledExistingModal>
     );
   },
 );
 
-const StyledExisting = styled.div`
+const StyledExistingModal = styled.div`
   width: 60%;
   position: absolute;
   top: 50%;
