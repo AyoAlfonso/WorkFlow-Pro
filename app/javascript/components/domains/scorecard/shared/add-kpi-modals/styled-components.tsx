@@ -62,7 +62,7 @@ export const StlyedCheckMark = styled.span`
   margin-right: 1rem;
   background: #095df6
     url("https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/White_check.svg/1200px-White_check.svg.png")
-    center/80% no-repeat;
+    center/1250% no-repeat;
   transition: background-size 0.2s cubic-bezier(0.7, 0, 0.18, 1.24);
 `;
 

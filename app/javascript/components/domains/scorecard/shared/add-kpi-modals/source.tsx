@@ -46,8 +46,14 @@ export const Source = observer(
       );
     };
     const selectKPI = kpi => {
-      const duplicate = selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id);
-      if (!duplicate) setSelectedKPIs([...selectedKPIs, kpi]);
+      const duplicateIndex = selectedKPIs.findIndex(selectedKPI => selectedKPI.id == kpi.id);
+      if (duplicateIndex > -1) {
+        const slicedArray = selectedKPIs.slice();
+        slicedArray.splice(duplicateIndex, 1);
+        setSelectedKPIs(slicedArray);
+      } else {
+        setSelectedKPIs([...selectedKPIs, kpi]);
+      }
     };
     const removeTagInput = id => {
       setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
