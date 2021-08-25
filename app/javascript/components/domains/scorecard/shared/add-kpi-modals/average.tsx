@@ -11,6 +11,7 @@ import {
   StyledItemSpan,
   StlyedCheckMark,
   StyledLabel,
+  StyledCheckboxInput,
   StyledInput,
 } from "./styled-components";
 
@@ -20,10 +21,11 @@ interface IAverage {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   KPIs: any[];
   kpiModalType: string;
+  setExternalManualKPIData: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const Average = observer(
-  ({ KPIs, kpiModalType, setModalOpen }: IAverage): JSX.Element => {
+  ({ KPIs, kpiModalType, setModalOpen, setExternalManualKPIData }: IAverage): JSX.Element => {
     const [selectedKPIs, setSelectedKPIs] = useState([]);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
     const [unitType, setUnitType] = useState("numerical");
@@ -59,15 +61,29 @@ export const Average = observer(
     };
 
     const selectKPI = kpi => {
-      const duplicate = selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id);
-      if (!duplicate) setSelectedKPIs([...selectedKPIs, kpi]);
+      const duplicateIndex = selectedKPIs.findIndex(selectedKPI => selectedKPI.id == kpi.id);
+      if (duplicateIndex > -1) {
+        const slicedArray = selectedKPIs.slice();
+        slicedArray.splice(duplicateIndex, 1);
+        setSelectedKPIs(slicedArray);
+      } else {
+        setSelectedKPIs([...selectedKPIs, kpi]);
+      }
     };
     const removeTagInput = id => {
       setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
     };
 
-    const handleSaveToManual = () => {};
+    const handleSaveToManual = () => {
+      setExternalManualKPIData({
+        selectedKPIs,
+        unitType,
+        targetValue: selectedKPIs.reduce((a, b) => a + (b["targetValue"] || 0), 0),
+        kpiModalType,
+      });
+    };
     const toggleUnitType = type => {
+      setSelectedKPIs([]);
       setUnitType(type);
     };
     const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
@@ -255,16 +271,6 @@ const StyledCheckTitle = styled.p`
 
 const StyledLayerDiv = styled.div`
   color: #000;
-`;
-
-const StyledCheckboxInput = styled.input.attrs(props => ({
-  type: props.type,
-  id: props.id,
-  name: props.name,
-}))`
-  -webkit-appearance: button;
-  margin-right: 1.5rem;
-  display: none;
 `;
 
 export default Average;

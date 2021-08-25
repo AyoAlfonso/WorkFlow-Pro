@@ -18,10 +18,11 @@ interface ISourceProps {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   KPIs: any[];
   kpiModalType: string;
+  setExternalManualKPIData: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const Source = observer(
-  ({ KPIs, setModalOpen, kpiModalType }: ISourceProps): JSX.Element => {
+  ({ KPIs, setModalOpen, kpiModalType, setExternalManualKPIData }: ISourceProps): JSX.Element => {
     const [selectedKPIs, setSelectedKPIs] = useState([]);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
     //Move this to its own folder in utils TODO:
@@ -60,7 +61,7 @@ export const Source = observer(
     };
 
     const handleSaveToManual = () => {
-      //transfer the data to manual kpi
+      setExternalManualKPIData(selectedKPIs);
     };
 
     const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {

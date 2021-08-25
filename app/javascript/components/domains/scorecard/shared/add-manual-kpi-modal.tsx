@@ -23,24 +23,41 @@ import { TrixEditor } from "react-trix";
 interface AddManualKPIModalProps {
   showAddManualKPIModal: boolean;
   setShowAddManualKPIModal: React.Dispatch<React.SetStateAction<boolean>>;
+  externalManualKPIData?: any;
 }
 
 export const AddManualKPIModal = observer(
   ({
     showAddManualKPIModal,
     setShowAddManualKPIModal,
+    externalManualKPIData,
   }: AddManualKPIModalProps): JSX.Element => {
-    const { owner_id, owner_type } = useParams()
+    const { owner_id, owner_type } = useParams();
     const { keyPerformanceIndicatorStore, sessionStore, descriptionTemplateStore } = useMst();
-    const [title, setTitle] = useState<string>(undefined);
+    const [title, setTitle] = useState<string>(
+      externalManualKPIData?.selectedKPIs[0].title || undefined,
+    );
     const [greaterThan, setGreaterThan] = useState(1);
     const [description, setDescription] = useState<string>(undefined);
-    const [unitType, setUnitType] = useState<string>("numerical");
+    const [unitType, setUnitType] = useState<string>(
+      externalManualKPIData?.unitType || "numerical",
+    );
     const [owner, setOwner] = useState(sessionStore?.profile);
-    const [targetValue, setTargetValue] = useState<number>(undefined);
+    const [targetValue, setTargetValue] = useState<number>(
+      externalManualKPIData?.targetValue || undefined,
+    );
     const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
     const [needsAttentionThreshold, setNeedsAttentionThreshold] = useState(90);
+    const [selectedKPIs, setSelectedKPIs] = useState(externalManualKPIData?.selectedKPIs);
+    const [selectedTagInputCount, setSelectedTagInputCount] = useState(0);
 
+    useEffect(() => {
+      setSelectedTagInputCount(externalManualKPIData?.selectedKPIs.length - 3);
+    }, [selectedKPIs]);
+
+    const removeTagInput = id => {
+      setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
+    };
     useEffect(() => {
       if (!descriptionTemplateStore.descriptionTemplates) {
         descriptionTemplateStore.fetchDescriptiveTemplates();
@@ -88,9 +105,20 @@ export const AddManualKPIModal = observer(
       setStateAction(Number(e.target.value.replace(/[^0-9.]+/g, "")));
     };
 
+    const renderTaggedInput = (): Array<JSX.Element> => {
+      return selectedKPIs?.slice(0, 3).map((kpi, key) => {
+        return (
+          <TagInput id={key} key={key}>
+            <TagTitle>{kpi.title}</TagTitle>
+            <TagInputClose onClick={() => removeTagInput(kpi.id)}> x </TagInputClose>
+          </TagInput>
+        );
+      });
+    };
+
     return (
       <ModalWithHeader
-        header={"Add Manual KPI"}
+        header={`Add ${externalManualKPIData?.kpiModalType || "Manual"} KPI`}
         isOpen={showAddManualKPIModal}
         setIsOpen={setShowAddManualKPIModal}
         width={"720px"}
@@ -101,6 +129,7 @@ export const AddManualKPIModal = observer(
               <InputHeaderWithComment>Title</InputHeaderWithComment>
               <StyledInput
                 type={"text"}
+                value={title}
                 placeholder={"e.g. Employee NPS"}
                 onChange={e => {
                   setTitle(e.target.value);
@@ -116,13 +145,30 @@ export const AddManualKPIModal = observer(
                   className={"trix-kpi-modal"}
                   autoFocus={false}
                   placeholder={"Add a description..."}
-                  onChange={(s) => { setDescription(s) }}
+                  onChange={s => {
+                    setDescription(s);
+                  }}
                   value={description}
                   mergeTags={[]}
                 />
               </TrixEditorContainer>
             </FormElementContainer>
           </RowContainer>
+          <RowContainer>
+            <FormElementContainer>
+              <InputHeaderWithComment comment={"optional"}>KPI Selection</InputHeaderWithComment>
+              <MultiTagInputContainer>
+                {renderTaggedInput()}
+
+                {selectedTagInputCount > 0 ? (
+                  <SelectedTagInputCount> {selectedTagInputCount}+ </SelectedTagInputCount>
+                ) : (
+                  <> </>
+                )}
+              </MultiTagInputContainer>
+            </FormElementContainer>
+          </RowContainer>
+
           <RowContainer>
             <FormElementContainer>
               <InputHeaderWithComment>Unit</InputHeaderWithComment>
@@ -136,6 +182,7 @@ export const AddManualKPIModal = observer(
                 height={15}
                 pt={6}
                 pb={10}
+                disabled={!!selectedKPIs.length}
               >
                 <option key={"numerical"} value={"numerical"}>
                   # Numerical
@@ -239,6 +286,64 @@ const AdvancedSettingsButton = styled.div`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const SelectedTagInputCount = styled.span`
+  background: #1065f6;
+  color: #ffffff;
+  padding: 0.2rem 0.4rem;
+  border-radius: 5px;
+`;
+
+const SelectionBox = styled.div`
+  background-color: #ffffff;
+  display: grid;
+  grid-template-columns: 11fr 1fr;
+  height: 100%;
+  align-items: center;
+  padding: 0rem 1.2rem;
+  border-top-right-radius: 10px;
+
+  @media only screen and (min-width: 280px) and (max-width: 767px) {
+    padding: 0.7em 0.3rem;
+    width: 100%;
+  }
+`;
+const MultiTagInputContainer = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  height: 100%;
+  align-items: center;
+`;
+const TagInput = styled.span`
+  border: 1px solid #1065f6;
+  color: #1065f6;
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  height: 1.5rem;
+  white-space: nowrap;
+  align-items: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  justify-content: space-between;
+  display: inline;
+`;
+const TagTitle = styled.span`
+  max-width: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline;
+`;
+
+const TagInputClose = styled.span`
+  font-size: 1rem;
+  color: #cdd1dd;
+  font-weight: 600;
+  margin-left: 0.2rem;
+  height: 1.5rem;
+  align-items: center;
+  display: inline;
 `;
 
 const TrixEditorContainer = styled.div`

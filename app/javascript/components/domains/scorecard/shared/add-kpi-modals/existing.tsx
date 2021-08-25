@@ -20,17 +20,18 @@ interface IExistingProps {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   KPIs: any[];
   kpiModalType: string;
+  setExternalManualKPIData: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const Existing = observer(
-  ({ KPIs, setModalOpen, kpiModalType }: IExistingProps): JSX.Element => {
+  ({ KPIs, setModalOpen, kpiModalType, setExternalManualKPIData }: IExistingProps): JSX.Element => {
     const [selectedKPIs, setSelectedKPIs] = useState([]);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
     const [unitType, setUnitType] = useState("numerical");
 
     useEffect(() => {
       setfilteredKPIs(filterBasedOnUnitType(KPIs));
-    }, [unitType]);
+    }, [unitType, selectedKPIs]);
 
     const groupBy = objectArray => {
       return objectArray.reduce(function(acc, obj) {
@@ -59,19 +60,36 @@ export const Existing = observer(
     };
 
     const selectKPI = kpi => {
-      const duplicate = selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id);
-      if (!duplicate) setSelectedKPIs([...selectedKPIs, kpi]);
+      const duplicateIndex = selectedKPIs.findIndex(selectedKPI => selectedKPI.id == kpi.id);
+      if (selectedKPIs.length >= 1) {
+        return;
+      }
+      if (duplicateIndex > -1) {
+        const slicedArray = selectedKPIs.slice();
+        slicedArray.splice(duplicateIndex, 1);
+        setSelectedKPIs(slicedArray);
+      } else {
+        setSelectedKPIs([...selectedKPIs, kpi]);
+      }
     };
     const removeTagInput = id => {
       setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
     };
 
-    const handleSaveToManual = () => {};
+    const handleSaveToManual = () => {
+      setExternalManualKPIData({
+        selectedKPIs,
+        unitType,
+        targetValue: selectedKPIs.reduce((a, b) => a + (b["targetValue"] || 0), 0),
+        kpiModalType,
+      });
+    };
     const toggleUnitType = type => {
+      setSelectedKPIs([]);
       setUnitType(type);
     };
-    const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
-      const groupedKPIs = groupBy(filteredKPIs);
+    const renderKPIListContent = (filteredArrays): Array<JSX.Element> => {
+      const groupedKPIs = groupBy(filteredArrays);
       return Object.keys(groupedKPIs).map(function(ownerKey, key) {
         return (
           <UserKPIList key={key}>
@@ -82,7 +100,7 @@ export const Existing = observer(
                   <StyledLabel>
                     <StyledCheckboxInput
                       type="checkbox"
-                      id={key}
+                      // id={key}
                       key={key}
                       onClick={() => {
                         selectKPI(kpi);

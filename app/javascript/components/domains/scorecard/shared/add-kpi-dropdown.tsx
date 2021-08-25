@@ -18,6 +18,7 @@ export const AddKPIDropdown = (props: IAddKPIDropdownProps): JSX.Element => {
   const [showAddKPIModal, setAddKPIModal] = useState<boolean>(false);
   const [kpiModalType, setAddKPIModalType] = useState<string>("");
   const [showAddManualKPIModal, setShowAddManualKPIModal] = useState<boolean>(false);
+  const [externalManualKPIData, setExternalManualKPIData] = useState({});
 
   useEffect(() => {
     const handleClickOutside = event => {
@@ -33,6 +34,11 @@ export const AddKPIDropdown = (props: IAddKPIDropdownProps): JSX.Element => {
   const clickKPIOptions = type => {
     setAddKPIModal(!showAddKPIModal);
     setAddKPIModalType(type);
+  };
+  const setManualKPIData = data => {
+    setShowAddManualKPIModal(!showAddManualKPIModal);
+    setAddKPIModal(false);
+    setExternalManualKPIData(data);
   };
   return (
     <Container ref={optionsRef}>
@@ -93,12 +99,14 @@ export const AddKPIDropdown = (props: IAddKPIDropdownProps): JSX.Element => {
           showAddKPIModal={showAddKPIModal}
           kpiModalType={kpiModalType}
           setModalOpen={setAddKPIModal}
+          setExternalManualKPIData={setManualKPIData}
         />
       )}
       {showAddManualKPIModal && (
         <AddManualKPIModal
           showAddManualKPIModal={showAddManualKPIModal}
           setShowAddManualKPIModal={setShowAddManualKPIModal}
+          externalManualKPIData={externalManualKPIData}
         />
       )}
     </Container>
