@@ -28,7 +28,6 @@ export const ScorecardsIndex = observer(
       userStore.load();
       teamStore.load();
       keyPerformanceIndicatorStore.load();
-      // .then(() => setallKPIs(keyPerformanceIndicatorStore.allKPIs));
       companyStore.load().then(() => setLoading(false));
     }, []);
 

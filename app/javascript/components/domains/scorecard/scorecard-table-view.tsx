@@ -20,7 +20,7 @@ export const getScorePercent = (value: number, target: number, greaterThan: bool
   greaterThan ? (value / target) * 100 : ((target + target - value) / target) * 100;
 
 type ScorecardTableViewProps = {
-  kpis: any[];
+  kpis: any;
   allKPIs: any[];
 };
 
@@ -127,11 +127,7 @@ export const ScorecardTableView = ({ kpis, allKPIs }: ScorecardTableViewProps): 
   const getScoreValueColor = (percentScore: number) => {
     if (percentScore >= 100) {
       return successGreen;
-    }
-    // else if (percentScore >= 90) {
-    // 	return poppySunrise
-    // }
-    else {
+    } else {
       return warningRed;
     }
   };
@@ -191,7 +187,7 @@ export const ScorecardTableView = ({ kpis, allKPIs }: ScorecardTableViewProps): 
                 setUpdateKPIModalOpen(true);
               }}
             >
-              <Icon icon={"Update_KPI"} size={16} iconColor={primary100} />
+              <Icon icon={"Update_KPI_New"} size={16} iconColor={primary100} />
             </UpdateKPIContainer>
           );
         },
