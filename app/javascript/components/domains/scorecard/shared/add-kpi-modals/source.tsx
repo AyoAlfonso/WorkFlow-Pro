@@ -82,7 +82,9 @@ export const Source = observer(
                         selectKPI(kpi);
                       }}
                     ></StyledCheckboxInput>
-                    <StlyedCheckMark></StlyedCheckMark>
+                    <StlyedCheckMark
+                      selected={!!selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id)}
+                    ></StlyedCheckMark>
                     <StyledItemSpan>{kpi.title}</StyledItemSpan>
                   </StyledLabel>
                 </StyledCheckboxWrapper>

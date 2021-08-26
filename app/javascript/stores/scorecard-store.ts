@@ -3,6 +3,7 @@ import { withEnvironment } from "../lib/with-environment";
 import { ApiResponse } from "apisauce";
 import { KeyPerformanceIndicatorModel } from "../models/key-performance-indicator";
 import { showToast } from "~/utils/toast-message";
+import { toJS } from "mobx";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import * as R from "ramda";
 
@@ -30,6 +31,13 @@ export const ScorecardStoreModel = types
         );
       }
     }),
+  }))
+  .actions(self => ({
+    updateKPIs(kpi) {
+      if (kpi) {
+        self.kpis = [...toJS(self.kpis), kpi] as any;
+      }
+    },
   }));
 
 type ScorecardStoreType = typeof ScorecardStoreModel.Type;

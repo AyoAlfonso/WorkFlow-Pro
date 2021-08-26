@@ -102,7 +102,9 @@ export const RollUp = observer(
                         selectKPI(kpi);
                       }}
                     ></StyledCheckboxInput>
-                    <StlyedCheckMark></StlyedCheckMark>
+                    <StlyedCheckMark
+                      selected={!!selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id)}
+                    ></StlyedCheckMark>
                     <StyledItemSpan>{kpi.title}</StyledItemSpan>
                   </StyledLabel>
                 </StyledCheckboxWrapper>
@@ -130,6 +132,7 @@ export const RollUp = observer(
               </StyledLayerPara>
               <StyledOptionToggle>
                 <StyledDataTypeContainer
+                  selected={unitType == "numerical"}
                   onClick={() => {
                     toggleUnitType("numerical");
                   }}
@@ -139,6 +142,7 @@ export const RollUp = observer(
                 </StyledDataTypeContainer>
 
                 <StyledDataTypeContainer
+                  selected={unitType == "currency"}
                   onClick={() => {
                     toggleUnitType("currency");
                   }}
@@ -180,13 +184,19 @@ const StyledDataTypeIcon = styled.div`
   align-items: center;
 `;
 
-const StyledDataTypeContainer = styled.div`
+type StyledDataTypeContainerProps = {
+  selected: boolean;
+  onClick: any;
+};
+
+const StyledDataTypeContainer = styled.div<StyledDataTypeContainerProps>`
   display: flex;
   gap: 1rem;
   margin-top: 0.3rem;
   padding: 0.5rem 1rem;
   align-items: center;
   font-size: 0.8rem;
+  background-color: ${props => (props.selected ? "#dbdbdf" : "")};
 
   :hover {
     background-color: #dbdbdf;

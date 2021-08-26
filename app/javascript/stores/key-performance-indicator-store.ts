@@ -26,9 +26,11 @@ export const KeyPerformanceIndicatorStoreModel = types
       }
     }),
     createKPI: flow(function*(KPIData) {
+      const { scorecardStore } = getRoot(self);
       const response: ApiResponse<any> = yield self.environment.api.createKPI(KPIData);
       if (response.ok) {
         showToast("KPI created", ToastMessageConstants.SUCCESS);
+        scorecardStore.updateKPIs(response.data.kpi);
         return response.data.kpi;
       }
     }),

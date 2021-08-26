@@ -78,7 +78,8 @@ export const Average = observer(
       setExternalManualKPIData({
         selectedKPIs,
         unitType,
-        targetValue: selectedKPIs.reduce((a, b) => a + (b["targetValue"] || 0), 0),
+        targetValue:
+          selectedKPIs.reduce((a, b) => a + (b["targetValue"] || 0), 0) / selectedKPIs.length,
         kpiModalType,
       });
     };
@@ -87,7 +88,7 @@ export const Average = observer(
       setUnitType(type);
     };
     const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
-      const groupedKPIs = groupBy(filteredKPIs);
+      const groupedKPIs = groupBy( );
       return Object.keys(groupedKPIs).map(function(ownerKey, key) {
         return (
           <UserKPIList key={key}>
@@ -104,7 +105,9 @@ export const Average = observer(
                         selectKPI(kpi);
                       }}
                     ></StyledCheckboxInput>
-                    <StlyedCheckMark></StlyedCheckMark>
+                    <StlyedCheckMark
+                      selected={!!selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id)}
+                    ></StlyedCheckMark>
                     <StyledItemSpan>{kpi.title}</StyledItemSpan>
                   </StyledLabel>
                 </StyledCheckboxWrapper>
@@ -131,6 +134,7 @@ export const Average = observer(
               </StyledLayerPara>
               <StyledOptionToggle>
                 <StyledDataTypeContainer
+                  selected={unitType == "numerical"}
                   onClick={() => {
                     toggleUnitType("numerical");
                   }}
@@ -140,6 +144,7 @@ export const Average = observer(
                 </StyledDataTypeContainer>
 
                 <StyledDataTypeContainer
+                  selected={unitType == "currency"}
                   onClick={() => {
                     toggleUnitType("currency");
                   }}
@@ -149,6 +154,7 @@ export const Average = observer(
                 </StyledDataTypeContainer>
 
                 <StyledDataTypeContainer
+                  selected={unitType == "percentage"}
                   onClick={() => {
                     toggleUnitType("percentage");
                   }}
@@ -190,15 +196,19 @@ const StyledDataTypeIcon = styled.div`
   justify-content: center;
   align-items: center;
 `;
+type StyledDataTypeContainerProps = {
+  selected: boolean;
+  onClick: any;
+};
 
-const StyledDataTypeContainer = styled.div`
+const StyledDataTypeContainer = styled.div<StyledDataTypeContainerProps>`
   display: flex;
   gap: 1rem;
   margin-top: 0.3rem;
   padding: 0.5rem 1rem;
   align-items: center;
   font-size: 0.8rem;
-
+  background-color: ${props => (props.selected ? "#dbdbdf" : "")};
   :hover {
     background-color: #dbdbdf;
   }
