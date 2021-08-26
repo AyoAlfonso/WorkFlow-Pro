@@ -28,7 +28,6 @@ export const ScorecardTableView = ({ kpis, allKPIs }: ScorecardTableViewProps): 
   const { t } = useTranslation();
   const {
     companyStore: { company },
-    scorecardStore,
   } = useMst();
   const [year, setYear] = useState<number>(company.currentFiscalYear);
   const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
@@ -108,7 +107,7 @@ export const ScorecardTableView = ({ kpis, allKPIs }: ScorecardTableViewProps): 
   };
 
   const calcQuarterAverageScores = (weeks: any, target: number, greaterThan: boolean) => {
-    let quarterScores = [
+    const quarterScores = [
       [null, 0],
       [null, 0],
       [null, 0],

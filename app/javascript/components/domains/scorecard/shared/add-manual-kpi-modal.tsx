@@ -35,7 +35,9 @@ export const AddManualKPIModal = observer(
     const { owner_id, owner_type } = useParams();
     const { keyPerformanceIndicatorStore, sessionStore, descriptionTemplateStore } = useMst();
     const [title, setTitle] = useState<string>(
-      externalManualKPIData?.selectedKPIs[0].title || undefined,
+      (externalManualKPIData?.selectedKPIs?.length &&
+        externalManualKPIData.selectedKPIs[0].title) ||
+        undefined,
     );
     const [greaterThan, setGreaterThan] = useState(1);
     const [description, setDescription] = useState<string>(undefined);
@@ -52,7 +54,7 @@ export const AddManualKPIModal = observer(
     const [selectedTagInputCount, setSelectedTagInputCount] = useState(0);
 
     useEffect(() => {
-      setSelectedTagInputCount(externalManualKPIData?.selectedKPIs.length - 3);
+      setSelectedTagInputCount(externalManualKPIData?.selectedKPIs?.length - 3);
     }, [selectedKPIs]);
 
     const removeTagInput = id => {
@@ -182,7 +184,7 @@ export const AddManualKPIModal = observer(
                 height={15}
                 pt={6}
                 pb={10}
-                disabled={!!selectedKPIs.length}
+                disabled={!!selectedKPIs?.length}
               >
                 <option key={"numerical"} value={"numerical"}>
                   # Numerical

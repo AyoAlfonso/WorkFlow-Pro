@@ -23,61 +23,60 @@ interface IAddKPIModalProps {
 }
 
 export const AddKPIModal = observer(
-         ({
-           KPIs,
-           showAddKPIModal,
-           setModalOpen,
-           kpiModalType,
-           setExternalManualKPIData,
-         }: IAddKPIModalProps): JSX.Element => {
-           const formattedKpiModalType = titleCase(kpiModalType);
-
-           return (
-             <ModalContainer
-               modalOpen={showAddKPIModal}
-               setModalOpen={setModalOpen}
-               headerText={formattedKpiModalType}
-               width="480px"
-               height="0px"
-             >
-               <InnerContainer>
-                 {kpiModalType == "source" && (
-                   <Source
-                     KPIs={KPIs}
-                     kpiModalType={formattedKpiModalType}
-                     setModalOpen={setModalOpen}
-                     setExternalManualKPIData={setExternalManualKPIData}
-                   ></Source>
-                 )}
-                 {kpiModalType == "existing" && (
-                   <Existing
-                     KPIs={KPIs}
-                     kpiModalType={formattedKpiModalType}
-                     setModalOpen={setModalOpen}
-                     setExternalManualKPIData={setExternalManualKPIData}
-                   ></Existing>
-                 )}
-                 {kpiModalType == "roll up" && (
-                   <RollUp
-                     KPIs={KPIs}
-                     kpiModalType={formattedKpiModalType}
-                     setModalOpen={setModalOpen}
-                     setExternalManualKPIData={setExternalManualKPIData}
-                   ></RollUp>
-                 )}
-                 {kpiModalType == "average" && (
-                   <Average
-                     KPIs={KPIs}
-                     kpiModalType={formattedKpiModalType}
-                     setModalOpen={setModalOpen}
-                     setExternalManualKPIData={setExternalManualKPIData}
-                   ></Average>
-                 )}
-               </InnerContainer>
-             </ModalContainer>
-           );
-         },
-       );
+  ({
+    KPIs,
+    showAddKPIModal,
+    setModalOpen,
+    kpiModalType,
+    setExternalManualKPIData,
+  }: IAddKPIModalProps): JSX.Element => {
+    const formattedKpiModalType = titleCase(kpiModalType);
+    return (
+      <ModalContainer
+        modalOpen={showAddKPIModal}
+        setModalOpen={setModalOpen}
+        headerText={formattedKpiModalType}
+        width="480px"
+        height="0px"
+      >
+        <InnerContainer>
+          {kpiModalType == "source" && (
+            <Source
+              KPIs={KPIs}
+              kpiModalType={formattedKpiModalType}
+              setModalOpen={setModalOpen}
+              setExternalManualKPIData={setExternalManualKPIData}
+            ></Source>
+          )}
+          {kpiModalType == "existing" && (
+            <Existing
+              KPIs={KPIs}
+              kpiModalType={formattedKpiModalType}
+              setModalOpen={setModalOpen}
+              setExternalManualKPIData={setExternalManualKPIData}
+            ></Existing>
+          )}
+          {kpiModalType == "roll up" && (
+            <RollUp
+              KPIs={KPIs}
+              kpiModalType={formattedKpiModalType}
+              setModalOpen={setModalOpen}
+              setExternalManualKPIData={setExternalManualKPIData}
+            ></RollUp>
+          )}
+          {kpiModalType == "average" && (
+            <Average
+              KPIs={KPIs}
+              kpiModalType={formattedKpiModalType}
+              setModalOpen={setModalOpen}
+              setExternalManualKPIData={setExternalManualKPIData}
+            ></Average>
+          )}
+        </InnerContainer>
+      </ModalContainer>
+    );
+  },
+);
 
 const InnerContainer = styled.div`
   height: 30rem;
