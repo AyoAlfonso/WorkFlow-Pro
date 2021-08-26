@@ -56,8 +56,8 @@ export const Average = observer(
         ),
       );
     };
-    const filterBasedOnUnitType = array => {
-      return array.filter(kpi => kpi.unitType == unitType);
+    const filterBasedOnUnitType = KPIs => {
+      return KPIs.filter(kpi => kpi.unitType == unitType);
     };
 
     const selectKPI = kpi => {
@@ -85,10 +85,11 @@ export const Average = observer(
     };
     const toggleUnitType = type => {
       setSelectedKPIs([]);
+      setfilteredKPIs([]);
       setUnitType(type);
     };
     const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
-      const groupedKPIs = groupBy( );
+      const groupedKPIs = groupBy(filteredKPIs);
       return Object.keys(groupedKPIs).map(function(ownerKey, key) {
         return (
           <UserKPIList key={key}>
