@@ -493,6 +493,8 @@ const UpdateKPIContainer = styled.div`
 
   &:hover {
     cursor: pointer;
+     filter: brightness(10);
+    background-color: blue;
   }
 `;
 
