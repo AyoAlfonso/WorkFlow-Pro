@@ -218,7 +218,7 @@ const QuarterSummary = ({
     const lastQuarterStartWeek = (currentQuarter - 2) * 13 + 1;
     const lastQuarterWeeks = R.range(lastQuarterStartWeek, lastQuarterStartWeek + 13);
     const lastQuarterData = currentQuarter > 1 ? gatherData(lastQuarterWeeks) : [];
-    setCurrentWeekPercent(R.last(currentQuarterData));
+    setCurrentWeekPercent(R.last(currentQuarterData).toFixed(2));
     if (currentWeek != 1) {
       setLastWeekPercent(currentQuarterData[currentQuarterData.length - 2]);
     }
@@ -256,7 +256,7 @@ const QuarterSummary = ({
   };
 
   const renderGrade = percentGrade => {
-    if (percentGrade === NaN) {
+    if (isNaN(percentGrade)) {
       return <></>;
     }
     if (percentGrade >= 100) {
