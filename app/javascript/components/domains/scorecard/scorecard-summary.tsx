@@ -13,6 +13,8 @@ const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
   const [data, setData] = useState<Object>(null);
   const [onTrack, setOnTrack] = useState(0);
   const {
+    cavier,
+    fadedCavier,
     fadedGreen,
     fadedYellow,
     fadedRed,
@@ -134,6 +136,8 @@ const QuarterSummary = ({
   const [data, setData] = useState<Object>(null);
 
   const {
+    cavier,
+    fadedCavier,
     white,
     primary100,
     primary20,
@@ -149,6 +153,7 @@ const QuarterSummary = ({
     fadedRed,
   } = baseTheme.colors;
 
+  console.log(baseTheme.colors.cavier, "baseTheme.colors.cavier");
   const chartOptions = {
     legend: {
       display: false,
@@ -257,30 +262,17 @@ const QuarterSummary = ({
     if (percentGrade >= 100) {
       return (
         <>
-          <GradeContainer background={primary20}>
-            <Text fontSize={24} color={primary100} bold>
-              S
-            </Text>
-          </GradeContainer>
-          <Text ml={8} mr={16} fontSize={32} color={primary100} bold>
-            +100%
-          </Text>
-        </>
-      );
-    } else if (percentGrade >= 90) {
-      return (
-        <>
           <GradeContainer background={fadedGreen}>
             <Text fontSize={24} color={successGreen} bold>
               A
             </Text>
           </GradeContainer>
           <Text ml={8} mr={16} fontSize={32} color={successGreen} bold>
-            {currentWeekPercent}%
+            +100%
           </Text>
         </>
       );
-    } else if (percentGrade >= 75) {
+    } else if (percentGrade >= 90) {
       return (
         <>
           <GradeContainer background={fadedYellow}>
@@ -293,15 +285,28 @@ const QuarterSummary = ({
           </Text>
         </>
       );
-    } else if (percentGrade >= 50) {
+    } else if (percentGrade >= 75) {
       return (
         <>
-          <GradeContainer background={fadedRed}>
-            <Text fontSize={24} color={warningRed} bold>
+          <GradeContainer background={fadedYellow}>
+            <Text fontSize={24} color={poppySunrise} bold>
               C
             </Text>
           </GradeContainer>
-          <Text ml={8} mr={16} fontSize={32} color={warningRed} bold>
+          <Text ml={8} mr={16} fontSize={32} color={poppySunrise} bold>
+            {currentWeekPercent}%
+          </Text>
+        </>
+      );
+    } else if (percentGrade >= 50) {
+      return (
+        <>
+          <GradeContainer background={fadedCavier}>
+            <Text fontSize={24} color={cavier} bold>
+              D
+            </Text>
+          </GradeContainer>
+          <Text ml={8} mr={16} fontSize={32} color={cavier} bold>
             {currentWeekPercent}%
           </Text>
         </>
@@ -311,7 +316,7 @@ const QuarterSummary = ({
         <>
           <GradeContainer background={warningRed}>
             <Text fontSize={24} color={white} bold>
-              D
+              F
             </Text>
           </GradeContainer>
           <Text ml={8} mr={16} fontSize={32} color={warningRed} bold>
