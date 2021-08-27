@@ -64,7 +64,7 @@ export const Existing = observer(
     const selectKPI = kpi => {
       const duplicateIndex = selectedKPIs.findIndex(selectedKPI => selectedKPI.id == kpi.id);
       if (selectedKPIs.length >= 1) {
-        showToast("You can't select more than one existing KPI.", ToastMessageConstants.WARNING);
+        showToast("You can't select more than one existing KPI.", ToastMessageConstants.INFO);
         return;
       }
       if (duplicateIndex > -1) {
