@@ -15,6 +15,8 @@ import {
   StyledInput,
 } from "./styled-components";
 import { SaveButton } from "../modal-elements";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 interface IExistingProps {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -62,6 +64,7 @@ export const Existing = observer(
     const selectKPI = kpi => {
       const duplicateIndex = selectedKPIs.findIndex(selectedKPI => selectedKPI.id == kpi.id);
       if (selectedKPIs.length >= 1) {
+        showToast("You can't select more than one existing KPI.", ToastMessageConstants.WARNING);
         return;
       }
       if (duplicateIndex > -1) {
@@ -86,6 +89,7 @@ export const Existing = observer(
     };
     const toggleUnitType = type => {
       setSelectedKPIs([]);
+      setfilteredKPIs([]);
       setUnitType(type);
     };
     const renderKPIListContent = (filteredArrays): Array<JSX.Element> => {

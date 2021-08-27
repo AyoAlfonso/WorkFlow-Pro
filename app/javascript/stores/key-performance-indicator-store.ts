@@ -30,7 +30,8 @@ export const KeyPerformanceIndicatorStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.createKPI(KPIData);
       if (response.ok) {
         showToast("KPI created", ToastMessageConstants.SUCCESS);
-        scorecardStore.updateKPIs(response.data.kpi);
+        scorecardStore.kpis = [...scorecardStore.kpis, response.data.kpi] as any;
+        // scorecardStore.updateKPIs(response.data.kpi);
         return response.data.kpi;
       }
     }),

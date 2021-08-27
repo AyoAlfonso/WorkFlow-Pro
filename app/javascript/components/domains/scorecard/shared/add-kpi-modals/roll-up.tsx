@@ -82,6 +82,7 @@ export const RollUp = observer(
     };
     const toggleUnitType = type => {
       setSelectedKPIs([]);
+      setfilteredKPIs([]);
       setUnitType(type);
     };
     const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
