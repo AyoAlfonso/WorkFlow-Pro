@@ -54,7 +54,9 @@ export const OwnedBySection = observer(
       } else if (type == "subInitiative") {
         setStore(subInitiativeStore);
       }
-    }, []);
+      setOwner(ownedBy)
+    }, [ownedBy]);
+
 
     const companyUsers = userStore.users;
     const editable =
@@ -106,7 +108,7 @@ export const OwnedBySection = observer(
   },
 );
 
-// Duplicate make these shared styling 
+// Duplicate make these shared styling
 type EditTriggerContainerType = {
   editable: boolean;
 };

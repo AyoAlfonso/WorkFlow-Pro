@@ -8,6 +8,8 @@ import { Doughnut, Line } from "react-chartjs-2";
 import { StatusBadge } from "~/components/shared/status-badge";
 import { Icon } from "~/components/shared/icon";
 import { getScorePercent } from "./scorecard-table-view";
+import { toJS } from "mobx";
+import { useTranslation } from "react-i18next";
 
 const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
   const [data, setData] = useState<Object>(null);
@@ -38,7 +40,7 @@ const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
   useEffect(() => {
     const dataPoints = kpis.reduce(
       (acc: number[], kpi: any) => {
-        const week = kpi.period[currentFiscalYear]?.[currentWeek];
+        const week = kpi?.period[currentFiscalYear]?.[currentWeek];
         if (!week) {
           acc[0]++;
         } else {
@@ -153,7 +155,6 @@ const QuarterSummary = ({
     fadedRed,
   } = baseTheme.colors;
 
-  console.log(baseTheme.colors.cavier, "baseTheme.colors.cavier");
   const chartOptions = {
     legend: {
       display: false,
@@ -220,7 +221,7 @@ const QuarterSummary = ({
     const lastQuarterData = currentQuarter > 1 ? gatherData(lastQuarterWeeks) : [];
     setCurrentWeekPercent(R.last(currentQuarterData).toFixed(2));
     if (currentWeek != 1) {
-      setLastWeekPercent(currentQuarterData[currentQuarterData.length - 2]);
+      setLastWeekPercent(+currentQuarterData[currentQuarterData.length - 2]);
     }
     setData({
       labels: R.range(startWeek, startWeek + 13).map((i: number) => weekToDate(i)),
@@ -246,6 +247,7 @@ const QuarterSummary = ({
       ],
     });
   }, [kpis]);
+  const { t } = useTranslation();
 
   const renderCurrentWeekPercent = () => {
     return (
@@ -331,7 +333,9 @@ const QuarterSummary = ({
     if (lastWeekPercent === null) {
       return <></>;
     } else {
-      const difference = currentWeekPercent - lastWeekPercent;
+      const difference = +(currentWeekPercent - lastWeekPercent).toFixed(2);
+      // difference = +difference;
+
       return (
         <>
           {difference >= 0 ? (
@@ -361,7 +365,7 @@ const QuarterSummary = ({
     <QuarterContainer>
       <Header>This Quarter</Header>
       <Text color={greyActive} fontSize={9} mt={4} mb={9}>
-        Trend of average percentage of all KPIs actual value compared to the target
+        {t("scorecards.quarterlyGraphTitle")}
       </Text>
       <QuarterInfoContainer>
         <StatsContainer>
@@ -403,11 +407,12 @@ export const ScorecardSummary = ({
   fiscalYearStart,
   currentFiscalYear,
 }: ScorecardSummaryProps): JSX.Element => {
+  const KPIs = toJS(kpis);
   return (
     <Container>
-      <WeekSummary kpis={kpis} currentWeek={currentWeek} currentFiscalYear={currentFiscalYear} />
+      <WeekSummary kpis={KPIs} currentWeek={currentWeek} currentFiscalYear={currentFiscalYear} />
       <QuarterSummary
-        kpis={kpis}
+        kpis={KPIs}
         currentWeek={currentWeek}
         currentQuarter={currentQuarter}
         fiscalYearStart={fiscalYearStart}

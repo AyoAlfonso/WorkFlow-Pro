@@ -23,7 +23,7 @@ export const ScorecardsIndex = observer(
     const [loading, setLoading] = useState<boolean>(true);
     const [kpis, setKpis] = useState([]);
     const [scorecardOwner, setScorecardOwner] = useState<any>({});
-
+    const { allKPIs } = keyPerformanceIndicatorStore;
     useEffect(() => {
       userStore.load();
       teamStore.load();
@@ -35,21 +35,21 @@ export const ScorecardsIndex = observer(
       if (owner_type && owner_id) {
         scorecardStore
           .getScorecard({ ownerType: owner_type, ownerId: owner_id })
-          .then(() => setKpis(toJS(scorecardStore.kpis)));
+          .then(() => setKpis(scorecardStore.kpis));
       }
-    }, [owner_type, owner_id]);
+    }, [owner_type, owner_id, scorecardStore.kpis]);
 
     if (
       loading ||
       !companyStore.company ||
       !userStore.users ||
       !teamStore.teams ||
-      !keyPerformanceIndicatorStore
+      !keyPerformanceIndicatorStore ||
+      !scorecardStore.kpis
     ) {
       return <Loading />;
     }
 
-    const { allKPIs } = keyPerformanceIndicatorStore;
     return kpis.length != 0 ? (
       <Container>
         <ScorecardSelector

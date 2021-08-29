@@ -66,8 +66,8 @@ export const AnnualInitiativeCard = observer(
     const goalYearString = onboarding
       ? `${companyStore.onboardingCompany.currentFiscalYear}`
       : companyStore.company.currentFiscalYear == annualInitiative.fiscalYear
-        ? `FY${annualInitiative.fiscalYear.toString().slice(-2)}`
-        : `FY${(annualInitiative.fiscalYear + 1)
+      ? `FY${annualInitiative.fiscalYear.toString().slice(-2)}`
+      : `FY${(annualInitiative.fiscalYear + 1)
           .toString()
           .slice(-2)}/${annualInitiative.fiscalYear.toString().slice(-2)}`;
 
@@ -77,7 +77,7 @@ export const AnnualInitiativeCard = observer(
           <YearContainer color={baseTheme.colors.primary100}>
             <YearText> {goalYearString} Goal </YearText>
           </YearContainer>
-        )
+        );
       } else if (
         companyStore.company.currentFiscalYear != annualInitiative.fiscalYear &&
         annualInitiative.fiscalYear
@@ -97,11 +97,7 @@ export const AnnualInitiativeCard = observer(
     const marginLeft = index == 0 ? "0px" : "8px";
 
     return (
-      <ColumnContainer
-        onboarding={onboarding}
-        marginRight={marginRight}
-        marginLeft={marginLeft}
-      >
+      <ColumnContainer onboarding={onboarding} marginRight={marginRight} marginLeft={marginLeft}>
         <Container
           key={index}
           onboarding={onboarding}
@@ -174,7 +170,7 @@ type ContainerProps = {
 };
 
 // Avoid repetition and pass min-height as a prop
-const Container = styled(HomeContainerBorders) <ContainerProps>`
+const Container = styled(HomeContainerBorders)<ContainerProps>`
   width: 100%;
   min-width: 240px;
   display: flex;
@@ -190,25 +186,27 @@ type ColumnContainerProps = {
   onboarding: boolean;
   marginRight: string;
   marginLeft: string;
-}
-
+};
 
 const ColumnContainer = styled.div<ColumnContainerProps>`
-  ${props => props.onboarding ? "" : "flex: 0 1 calc(20% - 16px);"}
+  ${props => (props.onboarding ? "" : "flex: 0 1 calc(20% - 16px);")}
   width: ${props => (props.onboarding ? "100%" : "calc(20% - 16px)")};
-  ${props => props.onboarding ? "" : `padding-right: 8px;
+  ${props =>
+    props.onboarding
+      ? ""
+      : `padding-right: 8px;
   padding-left: 8px;`}
   min-width: 240px;
-`
+`;
 
 type DescriptionContainerProps = {
   onboarding: boolean;
-}
+};
 
 const DescriptionContainer = styled.div<DescriptionContainerProps>`
   width: 100%;
   overflow-wrap: anywhere;
-  ${props => props.onboarding ? "":"height: 32px;"}
+  ${props => (props.onboarding ? "" : "height: 32px;")}
 `;
 
 type StyledTextProps = {
@@ -216,18 +214,21 @@ type StyledTextProps = {
   onboarding: boolean;
 };
 
-const StyledText = styled(Text) <StyledTextProps>`
+const StyledText = styled(Text)<StyledTextProps>`
   padding-left: 16px;
-  white-space: ${props => props.onboarding ? "nowrap" : "normal"};
+  white-space: ${props => (props.onboarding ? "nowrap" : "normal")};
   font-weight: 1000;
   font-size: 16px;
   min-width: 190px;
   width: 95%;
-  ${props => !props.onboarding ? `
+  ${props =>
+    !props.onboarding
+      ? `
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  `: `
+  `
+      : `
   text-overflow: ellipsis;
   `}
   overflow: hidden;

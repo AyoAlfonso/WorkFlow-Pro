@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { ModalWithHeader } from "~/components/shared/modal-with-header";
 import { useTranslation } from "react-i18next";
 import { baseTheme } from "~/themes";
@@ -31,6 +31,7 @@ export const AddKPIModal = observer(
     setExternalManualKPIData,
   }: IAddKPIModalProps): JSX.Element => {
     const formattedKpiModalType = titleCase(kpiModalType);
+
     return (
       <ModalContainer
         modalOpen={showAddKPIModal}

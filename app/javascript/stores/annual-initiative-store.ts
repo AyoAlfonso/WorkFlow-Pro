@@ -32,7 +32,7 @@ export const AnnualInitiativeStoreModel = types
     update: flow(function*() {
       const env = getEnv(self);
       const { goalStore } = getRoot(self);
-      
+
       try {
         const response: any = yield env.api.updateAnnualInitiative(self.annualInitiative);
         const responseAnnualInitiative = response.data.annualInitiative;
@@ -163,8 +163,8 @@ export const AnnualInitiativeStoreModel = types
     },
 
     updateOwnedBy(user) {
-      self.annualInitiative.ownedById = user.id;
-      self.update();
+      self.annualInitiative.ownedById = user.id
+      self.update()
     },
     updateAnnualInitiativeAfterAddingQuarterlyGoal(quarterlyGoal) {
       if (self.annualInitiative.id) {

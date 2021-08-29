@@ -35,8 +35,7 @@ export const ScorecardStoreModel = types
   .actions(self => ({
     updateKPIs(kpi) {
       if (kpi) {
-        // self.kpis = [...self.kpis, kpi] as any;
-        console.log(self.kpis);
+        self.kpis = [...self.kpis, kpi] as any;
       }
     },
   }));

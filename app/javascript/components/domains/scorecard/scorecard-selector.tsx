@@ -89,9 +89,6 @@ export const ScorecardSelector = ({
   }, [teamStore.teams, companyStore.company, userStore.users]);
 
   const ownerSelector = owner => {
-    // setCurrentScorecard(`${owner?.name}${owner?.lastName ? " " + owner.lastName:""}`);
-    // setOwnerType(owner.type);
-    // setOwnerId(owner.id);
     history.push(`/scorecard/${owner.type}/${owner.id}`);
     return {
       ownerType: owner.type,

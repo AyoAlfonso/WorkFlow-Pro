@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useMst } from "~/setup/root";
 import styled from "styled-components";
+import { observer } from "mobx-react";
 import { Icon } from "../../../shared/icon";
 import { Button } from "~/components/shared/button";
 import { TextDiv } from "~/components/shared/text";
@@ -12,106 +13,108 @@ interface IAddKPIDropdownProps {
   kpis: any[];
 }
 
-export const AddKPIDropdown = (props: IAddKPIDropdownProps): JSX.Element => {
-  const optionsRef = useRef(null);
-  const [showOptions, setShowOptions] = useState<boolean>(false);
-  const [showAddKPIModal, setAddKPIModal] = useState<boolean>(false);
-  const [kpiModalType, setAddKPIModalType] = useState<string>("");
-  const [showAddManualKPIModal, setShowAddManualKPIModal] = useState<boolean>(false);
-  const [externalManualKPIData, setExternalManualKPIData] = useState({});
+export const AddKPIDropdown = observer(
+  ({ kpis }: IAddKPIDropdownProps): JSX.Element => {
+    const optionsRef = useRef(null);
+    const [showOptions, setShowOptions] = useState<boolean>(false);
+    const [showAddKPIModal, setAddKPIModal] = useState<boolean>(false);
+    const [kpiModalType, setAddKPIModalType] = useState<string>("");
+    const [showAddManualKPIModal, setShowAddManualKPIModal] = useState<boolean>(false);
+    const [externalManualKPIData, setExternalManualKPIData] = useState({});
 
-  useEffect(() => {
-    const handleClickOutside = event => {
-      if (optionsRef.current && !optionsRef.current.contains(event.target)) {
-        setShowOptions(false);
-      }
+    useEffect(() => {
+      const handleClickOutside = event => {
+        if (optionsRef.current && !optionsRef.current.contains(event.target)) {
+          setShowOptions(false);
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [optionsRef, kpis]);
+    const clickKPIOptions = type => {
+      setAddKPIModal(!showAddKPIModal);
+      setAddKPIModalType(type);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+    const setManualKPIData = data => {
+      setShowAddManualKPIModal(!showAddManualKPIModal);
+      setAddKPIModal(false);
+      setExternalManualKPIData(data);
     };
-  }, [optionsRef]);
-  const clickKPIOptions = type => {
-    setAddKPIModal(!showAddKPIModal);
-    setAddKPIModalType(type);
-  };
-  const setManualKPIData = data => {
-    setShowAddManualKPIModal(!showAddManualKPIModal);
-    setAddKPIModal(false);
-    setExternalManualKPIData(data);
-  };
-  return (
-    <Container ref={optionsRef}>
-      <StyledButton
-        small
-        variant={"grey"}
-        onClick={() => {
-          setShowOptions(!showOptions);
-        }}
-        width={"fill"}
-      >
-        <CircularIcon icon={"Plus"} size={"12px"} />
-        <AddKPIText>Add KPI</AddKPIText>
-      </StyledButton>
-      {showOptions && (
-        <DropdownOptionsContainer onClick={e => e.stopPropagation()}>
-          <OptionContainer
-            onClick={() => {
-              setShowAddManualKPIModal(!showAddManualKPIModal);
-            }}
-          >
-            <OptionText>Manual</OptionText>
-          </OptionContainer>
-          <OptionContainer
-            onClick={() => {
-              clickKPIOptions("source");
-            }}
-          >
-            <OptionText>Source</OptionText>
-          </OptionContainer>
-          <OptionContainer
-            onClick={() => {
-              clickKPIOptions("existing");
-            }}
-          >
-            <OptionText>Existing</OptionText>
-          </OptionContainer>
-          <OptionContainer
-            onClick={() => {
-              clickKPIOptions("roll up");
-            }}
-          >
-            <OptionText>Roll Up</OptionText>
-          </OptionContainer>
-          <OptionContainer
-            onClick={() => {
-              clickKPIOptions("average");
-            }}
-          >
-            <OptionText>Average</OptionText>
-          </OptionContainer>
-        </DropdownOptionsContainer>
-      )}
+    return (
+      <Container ref={optionsRef}>
+        <StyledButton
+          small
+          variant={"grey"}
+          onClick={() => {
+            setShowOptions(!showOptions);
+          }}
+          width={"fill"}
+        >
+          <CircularIcon icon={"Plus"} size={"12px"} />
+          <AddKPIText>Add KPI</AddKPIText>
+        </StyledButton>
+        {showOptions && (
+          <DropdownOptionsContainer onClick={e => e.stopPropagation()}>
+            <OptionContainer
+              onClick={() => {
+                setShowAddManualKPIModal(!showAddManualKPIModal);
+              }}
+            >
+              <OptionText>Manual</OptionText>
+            </OptionContainer>
+            <OptionContainer
+              onClick={() => {
+                clickKPIOptions("source");
+              }}
+            >
+              <OptionText>Source</OptionText>
+            </OptionContainer>
+            <OptionContainer
+              onClick={() => {
+                clickKPIOptions("existing");
+              }}
+            >
+              <OptionText>Existing</OptionText>
+            </OptionContainer>
+            <OptionContainer
+              onClick={() => {
+                clickKPIOptions("roll up");
+              }}
+            >
+              <OptionText>Roll Up</OptionText>
+            </OptionContainer>
+            <OptionContainer
+              onClick={() => {
+                clickKPIOptions("average");
+              }}
+            >
+              <OptionText>Average</OptionText>
+            </OptionContainer>
+          </DropdownOptionsContainer>
+        )}
 
-      {showAddKPIModal && (
-        <AddKPIModal
-          KPIs={toJS(props.kpis)}
-          showAddKPIModal={showAddKPIModal}
-          kpiModalType={kpiModalType}
-          setModalOpen={setAddKPIModal}
-          setExternalManualKPIData={setManualKPIData}
-        />
-      )}
-      {showAddManualKPIModal && (
-        <AddManualKPIModal
-          showAddManualKPIModal={showAddManualKPIModal}
-          setShowAddManualKPIModal={setShowAddManualKPIModal}
-          externalManualKPIData={externalManualKPIData}
-        />
-      )}
-    </Container>
-  );
-};
+        {showAddKPIModal && (
+          <AddKPIModal
+            KPIs={kpis}
+            showAddKPIModal={showAddKPIModal}
+            kpiModalType={kpiModalType}
+            setModalOpen={setAddKPIModal}
+            setExternalManualKPIData={setManualKPIData}
+          />
+        )}
+        {showAddManualKPIModal && (
+          <AddManualKPIModal
+            showAddManualKPIModal={showAddManualKPIModal}
+            setShowAddManualKPIModal={setShowAddManualKPIModal}
+            externalManualKPIData={externalManualKPIData}
+          />
+        )}
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
   position: relative;

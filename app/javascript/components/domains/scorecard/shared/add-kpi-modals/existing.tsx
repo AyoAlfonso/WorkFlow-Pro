@@ -33,7 +33,7 @@ export const Existing = observer(
 
     useEffect(() => {
       setfilteredKPIs(filterBasedOnUnitType(KPIs));
-    }, [unitType, selectedKPIs]);
+    }, [unitType, selectedKPIs, KPIs]);
 
     const groupBy = objectArray => {
       return objectArray.reduce(function(acc, obj) {

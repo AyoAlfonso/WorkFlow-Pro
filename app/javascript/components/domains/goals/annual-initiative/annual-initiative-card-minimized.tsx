@@ -3,14 +3,13 @@ import styled from "styled-components";
 import { color } from "styled-system";
 import { baseTheme } from "../../../../themes";
 import { Icon } from "../../../shared/icon";
-import { AnnualInitiativeType } from "~/types/annual-initiative";
 import * as moment from "moment";
 import { observer } from "mobx-react";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useMst } from "~/setup/root";
 
 interface IAnnualInitiativeCardMinimizedProps {
-  annualInitiative: AnnualInitiativeType;
+  annualInitiative: any;
   setShowMinimizedCard: React.Dispatch<React.SetStateAction<boolean>>;
   disableOpen?: boolean;
   showMinimizedCard?: boolean;
@@ -109,7 +108,8 @@ export const AnnualInitiativeCardMinimized = observer(
     const annualQtrGoalsLength =
       annualInitiative.quarterlyGoals.length +
       annualInitiative.quarterlyGoals.reduce(
-        (acc: number, quarterlyGoal) => acc + (quarterlyGoal.subInitiatives ? quarterlyGoal.subInitiatives.length : 0),
+        (acc: number, quarterlyGoal) =>
+          acc + (quarterlyGoal.subInitiatives ? quarterlyGoal.subInitiatives.length : 0),
         0,
       );
     milestones.forEach((obj, index) => {
@@ -184,12 +184,13 @@ export const AnnualInitiativeCardMinimized = observer(
             </StatusBadge>
           </BadgeContainer>
         </RowContainer>
-        {disableOpen ||
-          (<>
+        {disableOpen || (
+          <>
             <InitiativeCountContainer>{renderCounts()}</InitiativeCountContainer>
 
             <StatusSquareContainer>{renderStatusSquares()}</StatusSquareContainer>
-          </>)}
+          </>
+        )}
 
         <Container
           onClick={e => {
@@ -206,19 +207,19 @@ export const AnnualInitiativeCardMinimized = observer(
               style={{ padding: "0px 5px" }}
             />
           ) : (
-              <MaximizeIconContainer>
-                <ShowInitiativeBar>
-                  {" "}
-                  {showMinimizedCard ? "Show" : "Hide"} Initiatives{" "}
-                </ShowInitiativeBar>
-                <StyledIcon
-                  icon={showMinimizedCard ? "Chevron-Down" : "Chevron-Up"}
-                  size={"12px"}
-                  iconColor={primary100} // TODOIT: ADD TO CONSTANT VARIABLES
-                  style={{ padding: "0px 5px" }}
-                />
-              </MaximizeIconContainer>
-            )}
+            <MaximizeIconContainer>
+              <ShowInitiativeBar>
+                {" "}
+                {showMinimizedCard ? "Show" : "Hide"} Initiatives{" "}
+              </ShowInitiativeBar>
+              <StyledIcon
+                icon={showMinimizedCard ? "Chevron-Down" : "Chevron-Up"}
+                size={"12px"}
+                iconColor={primary100} // TODOIT: ADD TO CONSTANT VARIABLES
+                style={{ padding: "0px 5px" }}
+              />
+            </MaximizeIconContainer>
+          )}
         </Container>
       </div>
     );

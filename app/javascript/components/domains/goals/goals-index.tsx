@@ -98,9 +98,7 @@ export const GoalsIndex = observer(
         setShowCoreFour(false);
       }
     };
-
     const companyGoalsToShow = () => {
-    
       switch (companyGoalsFilter) {
         case "open":
           return companyGoals.activeAnnualInitiatives as Array<AnnualInitiativeType>;

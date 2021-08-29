@@ -29,7 +29,12 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
 
     authorize @kpi
     @kpi.save!
-    render json: { kpi: @kpi }
+    @period = (@kpi.scorecard_logs.empty?) ? {} : @kpi.scorecard_logs.group_by { |log| log[:fiscal_year] }.map do |year, scorecard_log|
+      [year, scorecard_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
+    end.to_h
+    render json: { kpi: @kpi.as_json(methods: [:owned_by],
+                                    include: {
+                                      scorecard_logs: { methods: [:user] },                         }).merge({ :period => @period }) }
   end
 
   def show
