@@ -163,8 +163,8 @@ export const AnnualInitiativeStoreModel = types
     },
 
     updateOwnedBy(user) {
-      self.annualInitiative.ownedById = user.id
-      self.update()
+      self.annualInitiative = { ...self.annualInitiative, ownedById: user.id };
+      self.update();
     },
     updateAnnualInitiativeAfterAddingQuarterlyGoal(quarterlyGoal) {
       if (self.annualInitiative.id) {

@@ -54,7 +54,7 @@ export const OwnedBySection = observer(
       } else if (type == "subInitiative") {
         setStore(subInitiativeStore);
       }
-      setOwner(ownedBy)
+      setOwner(ownedBy);
     }, [ownedBy]);
 
 

@@ -26,8 +26,6 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   def update
     @company = current_company
     @annual_initiative.update!(annual_initiative_params)
-    # @annual_initiative = set_annual_initiative() 
-   
     render "api/annual_initiatives/update"
   end
 

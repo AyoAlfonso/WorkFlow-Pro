@@ -40,8 +40,6 @@ export const QuarterlyGoalStoreModel = types
       const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
       const responseQuarterlyGoal = response.data;
       self.quarterlyGoal = responseQuarterlyGoal;
-      // goalStore.updateAnnualInitiative();
-
       showToast(
         il8n.t("quarterlyGoal.updated", { title: self.title }),
         ToastMessageConstants.SUCCESS,
@@ -238,8 +236,9 @@ export const QuarterlyGoalStoreModel = types
       self.update();
     },
     updateOwnedBy(user) {
-      self.quarterlyGoal = { ...self.quarterlyGoal, ownedById :user.id  };
+      self.quarterlyGoal = { ...self.quarterlyGoal, ownedById: user.id };
       self.update();
+      self.updateParents(self.quarterlyGoal);
     },
     updateMilestoneDescription(id, value) {
       const milestones = self.quarterlyGoal.milestones;
@@ -254,7 +253,6 @@ export const QuarterlyGoalStoreModel = types
       milestones[milestoneIndex].status = status;
       self.quarterlyGoal.milestones = milestones;
       self.update();
-      self.updateParents(self.quarterlyGoal);
     },
     updateQuarterlyGoalAfterAddingSubInitiative(subInitiative) {
       if (self.quarterlyGoal.id) {

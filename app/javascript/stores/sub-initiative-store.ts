@@ -187,8 +187,9 @@ export const SubInitiativeStoreModel = types
       self.update();
     },
     updateOwnedBy(user) {
-      self.subInitiative.ownedById = user.id;
+      self.subInitiative = { ...self.subInitiative, ownedById: user.id };
       self.update();
+      self.updateParents();
     },
     updateMilestoneDescription(id, value) {
       let milestones = self.subInitiative.milestones;

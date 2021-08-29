@@ -13,6 +13,8 @@ interface IModalWithHeaderProps {
   children: any;
   width?: string;
   height?: string;
+  headerFontSize?: string;
+  borderRadius?: string;
   overflow?: string;
   padding?: string;
   boxSizing?: string;
@@ -32,12 +34,14 @@ export const ModalWithHeader = ({
   padding,
   boxSizing,
   subHeaderText,
+  headerFontSize,
   onCloseAction,
   headerMarginTop,
   headerMarginBottom,
   onClose,
   width,
-  height
+  height,
+  borderRadius,
 }: IModalWithHeaderProps): JSX.Element => {
   return (
     <StyledModal
@@ -47,7 +51,8 @@ export const ModalWithHeader = ({
         overflow,
         padding,
         boxSizing,
-        height
+        height,
+        borderRadius,
       }}
     >
       <HeaderContainer>
@@ -58,7 +63,7 @@ export const ModalWithHeader = ({
             type={"h3"}
             centerHeader={centerHeader}
             color={"black"}
-            fontSize={"16px"}
+            fontSize={headerFontSize}
           >
             {headerText}
           </StyledHeading>
@@ -94,7 +99,7 @@ const StyledModal = Modal.styled`
   width: ${props => props.width || "30rem"};
   height: ${props => props.overflow || "auto"};
   min-height: 100px;
-  border-radius: 5px;
+  border-radius: ${props => props.borderRadius || "auto"};
   background-color: ${props => props.theme.colors.white};
   max-height: 660px;
   overflow: ${props => props.width || "auto"};
@@ -135,6 +140,7 @@ type StyledHeadingProps = {
   centerHeader?: boolean;
   mt?: string;
   mb?: string;
+  fontSize?: string;
 };
 
 const StyledHeading = styled(Heading)<StyledHeadingProps>`
@@ -142,6 +148,7 @@ const StyledHeading = styled(Heading)<StyledHeadingProps>`
   margin-top: ${props => props.mt || "16px"};
   margin-bottom: ${props => props.mb || "16px"};
   font-weight: bold;
+  font-size: ${props => props.fontSize || "16px"};
   margin-left: ${props => (props.centerHeader ? "auto" : "0px")};
   margin-right: ${props => (props.centerHeader ? "auto" : "0px")};
 `;
