@@ -50,25 +50,40 @@ export const KeyPerformanceIndicatorStoreModel = types
       }
     }),
     deleteKPI: flow(function*() {
-      const response: ApiResponse<any> = yield self.environment.api.updateKPI(self.kpi.id);
+      const response: ApiResponse<any> = yield self.environment.api.deleteKPI(self.kpi.id);
       if (response.ok) {
         showToast("KPI deleted", ToastMessageConstants.SUCCESS);
       }
     }),
     createScorecardLog: flow(function*(scorecardlog) {
+      const { scorecardStore } = getRoot(self);
+
       const response: ApiResponse<any> = yield self.environment.api.createScorecardLog(
         scorecardlog,
       );
+
       if (response.ok) {
         showToast("Log created", ToastMessageConstants.SUCCESS);
+        scorecardStore.mergeKPIS(response.data.kpi);
+        self.kpi = response.data.kpi;
       }
     }),
+    
     deleteScorecardLog: flow(function*(id) {
+        const { scorecardStore } = getRoot(self);
       const response: ApiResponse<any> = yield self.environment.api.deleteScorecardLog(id);
       if (response.ok) {
         showToast("Log deleted", ToastMessageConstants.SUCCESS);
+       scorecardStore.deleteScorecard(response.data.scorecardLog);
+        self.kpi = response.data.kpi;
       }
     }),
+  }))
+  .actions(self => ({
+    updateOwnedBy(user) {
+      self.kpi = { ...self.kpi, ownedById: user.id };
+      self.updateKPI(self.kpi);
+    },
   }));
 
 type KeyPerformanceIndicatorType = typeof KeyPerformanceIndicatorModel.Type;

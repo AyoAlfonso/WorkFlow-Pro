@@ -74,10 +74,12 @@ export const App = observer(
     let noFeatures;
     let showGoalRoute;
     let showTeamRoute;
+    let showScorecardRoute
     if (profile) {
       noFeatures = !profile.productFeatures;
       showGoalRoute = !noFeatures && profile.productFeatures.objective;
       showTeamRoute = !noFeatures && profile.productFeatures && profile.productFeatures.team;
+      showScorecardRoute = !noFeatures && profile.productFeatures && profile.productFeatures.scorecard;
     }
     const onDragEnd = result => {
       const { destination, source, draggableId } = result;
@@ -236,10 +238,12 @@ export const App = observer(
                           component={AccountabilityChart}
                         />
                         <Route exact path="/company/strategic_plan" component={StrategicPlan} />
+                       {showScorecardRoute && (
                         <Route exact path="/scorecard/:owner_type/:owner_id" component={ScorecardsIndex} />
+                         )}
                         <Route exact path="/journals" component={JournalIndex} />
                         <Route exact path="/notes" component={NotesIndex} />
-
+                      
                         {profile.productFeatures && profile.productFeatures.meeting && (
                           <>
                             <Route exact path="/meetings/agenda" component={ForumAgenda} />

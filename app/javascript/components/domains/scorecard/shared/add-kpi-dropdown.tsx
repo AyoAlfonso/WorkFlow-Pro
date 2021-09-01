@@ -64,13 +64,13 @@ export const AddKPIDropdown = observer(
             >
               <OptionText>Manual</OptionText>
             </OptionContainer>
-            <OptionContainer
+            {/* <OptionContainer
               onClick={() => {
                 clickKPIOptions("source");
               }}
             >
               <OptionText>Source</OptionText>
-            </OptionContainer>
+            </OptionContainer> */}
             <OptionContainer
               onClick={() => {
                 clickKPIOptions("existing");

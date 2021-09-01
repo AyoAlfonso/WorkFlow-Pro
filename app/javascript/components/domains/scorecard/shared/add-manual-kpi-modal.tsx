@@ -81,6 +81,8 @@ export const AddManualKPIModal = observer(
         ownedById: owner.id,
         unitType,
         targetValue,
+        parentType: externalManualKPIData?.kpiModalType,
+        parentKpi: selectedKPIs.map(kpi => kpi.id),
         needsAttentionThreshold,
       };
       if (description) {

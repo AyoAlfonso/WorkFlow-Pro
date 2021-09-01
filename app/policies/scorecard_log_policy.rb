@@ -12,6 +12,14 @@ class ScorecardLogPolicy < ApplicationPolicy
     user_is_part_of_this_company?(@record.company) || @record.owned_by == @user || user_can_observe_current_company?
   end
 
+  def destroy?
+     @record.user_id == @user.id
+  end
+
+  def set_scorecard_log?
+      true 
+  end
+
   class Scope
     attr_reader :user, :company, :scope
 
@@ -22,7 +30,7 @@ class ScorecardLogPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.none
+       scope.all
     end
   end
 end

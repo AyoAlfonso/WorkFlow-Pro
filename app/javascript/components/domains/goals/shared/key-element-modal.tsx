@@ -31,7 +31,7 @@ export const KeyElementModal = ({
       setModalOpen={setModalOpen}
       headerText={action + " Key Result"}
       width="500px"
-      height="369px"
+      height="320px"
       borderRadius="10px"
       headerFontSize="16px"
       onClose={() => {

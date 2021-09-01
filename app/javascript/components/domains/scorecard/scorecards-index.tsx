@@ -24,6 +24,7 @@ export const ScorecardsIndex = observer(
     const [kpis, setKpis] = useState([]);
     const [scorecardOwner, setScorecardOwner] = useState<any>({});
     const { allKPIs } = keyPerformanceIndicatorStore;
+    
     useEffect(() => {
       userStore.load();
       teamStore.load();

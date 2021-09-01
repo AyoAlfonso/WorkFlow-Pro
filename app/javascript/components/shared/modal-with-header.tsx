@@ -102,7 +102,7 @@ const StyledModal = Modal.styled`
   border-radius: ${props => props.borderRadius || "auto"};
   background-color: ${props => props.theme.colors.white};
   max-height: 660px;
-  overflow: ${props => props.width || "auto"};
+  overflow: ${props => props.width || "hidden"};
 `;
 
 const HeaderContainer = styled.div`

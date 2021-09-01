@@ -38,6 +38,14 @@ export const ScorecardStoreModel = types
         self.kpis = [...self.kpis, kpi] as any;
       }
     },
+    mergeKPIS(kpi) {
+      const kpiIndex = self.kpis.findIndex(KPI =>  KPI.id == kpi.id);
+      self.kpis[kpiIndex] = kpi;
+    },
+      deleteScorecard(scorecardLog) {
+      const kpiIndex = self.kpis.findIndex(KPI =>  KPI.id == scorecardLog.keyPerformanceIndicatorId);
+      self.kpis[kpiIndex].scorecardLogs = self.kpis[kpiIndex].scorecardLogs.filter(log => log.id != scorecardLog.id ) as any
+    },
   }));
 
 type ScorecardStoreType = typeof ScorecardStoreModel.Type;

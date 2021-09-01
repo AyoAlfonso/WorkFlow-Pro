@@ -14,6 +14,8 @@ import { Line } from "react-chartjs-2";
 import { baseTheme } from "~/themes/base";
 import { getScorePercent } from "../scorecard-table-view";
 import { UpdateKPIModal } from "./update-kpi-modal";
+import { TrixEditor } from "react-trix";
+import { OwnedBySection } from "~/components/domains/goals/shared/owned-by-section";
 
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -30,6 +32,7 @@ export const ViewEditKPIModal = observer(
     const {
       companyStore: { company },
       keyPerformanceIndicatorStore,
+      scorecardStore: { kpis },
     } = useMst();
     const [loading, setLoading] = useState(true);
     const [kpi, setKpi] = useState(null);
@@ -38,6 +41,10 @@ export const ViewEditKPIModal = observer(
     const [logic, setLogic] = useState("");
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
     const [data, setData] = useState(null);
+    const [description, setDescription] = useState<string>(undefined);
+    const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
+      false,
+    );
 
     const {
       backgroundGrey,
@@ -121,6 +128,26 @@ export const ViewEditKPIModal = observer(
       maintainAspectRatio: false,
     };
 
+  // const renderDropdownOptions = (): JSX.Element => {
+  //     return (
+    
+  //         <DropdownOptionsContainer
+  //           onClick={() => setShowDropdownOptionsContainer(!showDropdownOptionsContainer)}
+  //         >
+  //           <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
+  //           {showDropdownOptionsContainer && (
+  //             <GoalDropdownContainer>
+  //               <GoalDropdownOptions
+  //                 setShowDropdownOptions={setShowDropdownOptionsContainer}
+  //                 setModalOpen={setAnnualInitiativeModalOpen}
+  //                 itemType={"annualInitiative"}
+  //                 itemId={annualInitiative.id}
+  //               />
+  //             </GoalDropdownContainer>
+  //           )}
+  //         </DropdownOptionsContainer>
+  //     );
+  //   };
     const weekToDate = (week: number): string =>
       moment(company.fiscalYearStart)
         .add(week, "w")
@@ -131,10 +158,18 @@ export const ViewEditKPIModal = observer(
       if (kpiId !== null) {
         keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
           setLoading(false);
+          const Log = keyPerformanceIndicatorStore.kpi?.scorecardLogs.slice(-1).pop();
+          Log ? setValue(Log.score) : null;
           setKpi(keyPerformanceIndicatorStore.kpi);
         });
       }
-    }, [kpiId]);
+    }, [kpiId, kpis]);
+
+    const saveKPI = () => {
+      const clonedKPI =  R.clone(kpi)
+      kpi.description = description
+      keyPerformanceIndicatorStore.updateKPI(kpi)
+    }
 
     useEffect(() => {
       if (!kpi) {
@@ -185,20 +220,35 @@ export const ViewEditKPIModal = observer(
             ) : (
               kpi && (
                 <>
-                  <Header>{header}</Header>
+                  <Header>{header} 
+                    {/* DropdownOptions> */}
+                  {/* {renderDropdownOptions()} */}
+                  {/* <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
+                    <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+                  </CloseIconContainer> */}
+                {/* </DropdownOptions> */}
+                  </Header>
                   <OwnerAndLogicContainer>
                     <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
                       {R.uniq(kpi.viewers.map(viewer => viewer.type)).join(", ")} KPI
                     </OwnerAndLogicText>
-                    <Avatar
+                      <OwnedBySection
+                      marginLeft={"0px"}
+                      marginRight={"0px"}
+                      marginTop={"auto"}
+                      marginBottom={"auto"}
+                      ownedBy={kpi.ownedBy}
+                      type={"scorecard"}
+                    />
+                    {/* <Avatar
                       firstName={kpi.ownedBy.firstName}
                       lastName={kpi.ownedBy.lastName}
                       avatarUrl={kpi.ownedBy.avatarUrl}
                       size={16}
                       marginLeft={"0px"}
                       defaultAvatarColor={kpi.ownedBy.defaultAvatarColor}
-                    />
+                    /> */}
                     <OwnerAndLogicText>
                       {kpi.ownedBy.firstName} {kpi.ownedBy.lastName}
                     </OwnerAndLogicText>
@@ -221,6 +271,19 @@ export const ViewEditKPIModal = observer(
                     {data && <Line data={data} options={chartOptions} />}
                   </ChartContainer>
                   <SubHeader>Description</SubHeader>
+                  <TrixEditorContainer>
+                    <TrixEditor
+                      className={"trix-kpi-modal"}
+                      autoFocus={false}
+                      placeholder={"Add a description..."}
+                      onChange={s => {
+                        setDescription(s);
+                        saveKPI()
+                      }}
+                      value={description}
+                      mergeTags={[]}
+                    />
+                  </TrixEditorContainer>
                   <SubHeader>Activity</SubHeader>
                   <ActivityLogsContainer>
                     {kpi.scorecardLogs.map(log => {
@@ -248,13 +311,13 @@ export const ViewEditKPIModal = observer(
                               for week <b>{log.week}</b>
                             </ActivityLogText>
                             <ActivityLogText mb={4}>
-                              <i>{log.description}</i>
+                              <i>{log.note}</i>
                             </ActivityLogText>
                             <ActivityLogText>
                               <ActivityLogDate>
                                 {moment(log.createdAt).format("MMM D, YYYY")}
                               </ActivityLogDate>
-                              <ActivityLogDelete> Delete</ActivityLogDelete>
+                              <ActivityLogDelete onClick={()=> keyPerformanceIndicatorStore.deleteScorecardLog(log.id)}> Delete</ActivityLogDelete>
                             </ActivityLogText>
                           </ActivityLogTextContainer>
                         </ActivityLogContainer>
@@ -407,4 +470,20 @@ const ActivityLogText = styled.p<ActivityLogTextProps>`
   font-size: 12px;
   margin-top: 0px;
   margin-bottom: ${props => props.mb || 0}px;
+`;
+
+const TrixEditorContainer = styled.div`
+  margin-top: 4px;
+`;
+
+const DropdownOptions = styled.div``
+
+const DropdownOptionsContainer = styled.div`
+  margin-right: 16px;
+  &: hover {
+    cursor: pointer;
+  }
+`;
+const GoalDropdownContainer = styled.div`
+  margin-left: -50px;
 `;
