@@ -54,7 +54,7 @@ export const TitleContainer = observer(
               onClick={() => setGoalsFilter("open")}
               color={goalsFilter == "open" ? "primary100" : "grey40"}
             >
-              All
+              Open
             </FilterOptions>
           </FilterOptionContainer>
 

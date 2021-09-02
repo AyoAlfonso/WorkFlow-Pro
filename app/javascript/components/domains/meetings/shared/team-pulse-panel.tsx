@@ -49,7 +49,7 @@ export const TeamPulsePanel = ({
       </AccordionSummary>
       {expanded === "team-pulse-panel" && (
         <CardLayout customHeader={<></>}>
-          {team.averageTeamEmotionScore > 0 ? (
+          {team.averageTeamEmotionScore > 0 && team.formattedAverageWeeklyUserEmotions.length ? (
             <TeamPulseBody>
               <OverallTeamPulseMini value={team.averageTeamEmotionScore} />
               <TeamPulseCardMini data={toJS(team.formattedAverageWeeklyUserEmotions) || []} />

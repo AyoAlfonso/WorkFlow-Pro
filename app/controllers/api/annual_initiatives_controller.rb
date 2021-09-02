@@ -1,16 +1,16 @@
 class Api::AnnualInitiativesController < Api::ApplicationController
-  before_action :set_annual_initiative, only: [:show, :update, :destroy, :create_key_element, :update_key_element, :close_initiative]
+  before_action :set_annual_initiative, only: [:show, :update, :destroy, :create_key_element, :update_key_element,
+                                               :close_initiative]
 
   respond_to :json
 
   def create
+    @template_description = DescriptionTemplate.find_by(company_id: current_company.id, template_type: 1).body_content || ""
     @annual_initiative = AnnualInitiative.new({
-      created_by: current_user,
-      owned_by: current_user,
+      created_by: current_user, owned_by: current_user,
       description: params[:description],
       company_id: params[:type] == "company" ? current_company.id : nil,
-      context_description: "",
-      importance: ["", "", ""],
+      context_description: "", importance: ["", "", ""],
       fiscal_year: current_company.year_for_creating_annual_initiatives,
     })
     authorize @annual_initiative
@@ -54,7 +54,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
     key_element.update!(value: params[:value], completion_type: params[:completion_type],
                         completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value],
                         status: params[:status], owned_by_id: params[:owned_by], greater_than: params[:greater_than])
-    render json: { key_element: key_element }
+    render json: { key_element: key_element, status: :ok }
   end
 
   def delete_key_element

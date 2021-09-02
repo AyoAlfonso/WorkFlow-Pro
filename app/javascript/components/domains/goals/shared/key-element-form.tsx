@@ -191,7 +191,6 @@ export const KeyElementForm = ({
               </CompletionTypeContainer>
             </InputContainer>
           </FormGroupContainer>
-          // </RowContainer>
         )}
       </RowContainer>
       <RowContainer mt={completionType === "binary" ? "20px" : "0"}>

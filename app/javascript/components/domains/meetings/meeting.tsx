@@ -51,7 +51,7 @@ export const Meeting = observer(
       if (meetingStarted) {
         interval = setInterval(() => {
           setSecondsElapsed(sec => {
-            let seconds = sec < 0 ? 0 : sec;
+            const seconds = sec < 0 ? 0 : sec;
             return seconds + 1;
           });
         }, 1000);
@@ -222,9 +222,10 @@ const DateAndButtonContainer = styled.div`
 const ProgressBarTimerContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 16px;
+  margin-left: 32px;
   margin-right: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  margin-top: 24px;
 `;
 
 const BodyContainer = styled.div`

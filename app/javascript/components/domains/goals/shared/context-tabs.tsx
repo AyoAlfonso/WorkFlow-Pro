@@ -180,7 +180,6 @@ export const ContextTabs = observer(
     };
 
     const renderContextKeyElements = () => {
-      // we want to show the modal with stte of showKeyElementForm
       return showKeyElementForm ? (
         <KeyElementModal
           modalOpen={showKeyElementForm}
@@ -193,30 +192,6 @@ export const ContextTabs = observer(
           setSelectedElement={setSelectedElement}
         />
       ) : (
-        // <KeyElementsTabContainer>
-        //   <KeyElementsFormHeader>
-        //     <TextDiv mb={"8px"} fontSize={"16px"} fontWeight={600}>
-        //       Add a Key Result
-        //     </TextDiv>
-        //     <KeyElementFormBackButtonContainer
-        //       onClick={() => {
-        //         setShowKeyElementForm(false);
-        //       }}
-        //     >
-        //       <StyledIcon
-        //         icon={"Close"}
-        //         size={"12px"}
-        //         style={{ marginLeft: "8px", marginTop: "8px" }}
-        //       />
-        //     </KeyElementFormBackButtonContainer>
-        //   </KeyElementsFormHeader>
-        //   <KeyElementContentContainer>
-        //     <KeyElementForm
-        //       onCreate={store.createKeyElement}
-        //       onClose={() => setShowKeyElementForm(false)}
-        //     />
-        //   </KeyElementContentContainer>
-        // </KeyElementsTabContainer>
         <KeyElementsTabContainer>
           {object.keyElements.length > 0 && (
             <KeyElementContentContainer>{renderKeyElementsIndex()}</KeyElementContentContainer>
@@ -377,37 +352,6 @@ const ButtonContainer = styled.div`
     cursor: pointer;
   }
 `;
-
-// const KeyElementsFormHeader = styled.div`
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   padding-left: 16px;
-//   width: auto;
-//   padding-right: 16px;
-//   padding-top: 8px;
-//   height: 24px;
-//   border-bottom: ${({ theme: { colors } }) => `1px solid ${colors.borderGrey}`};
-// `;
-
-// const KeyElementFormBackButtonContainer = styled.div`
-//   margin-right: 4px;
-//   margin-bottom: 8px;
-//   &:hover {
-//     cursor: pointer;
-//   }
-// `;
-
-// const KeyElementsTabContainer = styled.div`
-//   height: 100%;
-//   width: 100%;
-// `;
-
-//TODO: Remove comment
-
-// const KeyElementContentContainer = styled.div`
-//   padding: 16px;
-// `;
 
 const ContextDescriptionContainer = styled.div`
   padding: 16px;

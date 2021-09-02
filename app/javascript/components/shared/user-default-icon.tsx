@@ -34,7 +34,7 @@ export const UserDefaultIcon = (props: IUserDefaultIconProps) => {
   if (!firstName && !lastName) {
     initials = "";
   } else {
-    initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    initials = `${firstName?.charAt(0)}${lastName?.charAt(0)}`.toUpperCase();
   }
 
   return (

@@ -34,6 +34,7 @@
         "editProfile": "Edit Profile",
         "companyDetails": "Company Details",
         "forumDetails": "Forum Details",
+        "descriptionTemplate": "Template Details",
         "loginForm": {
           "email": "E-mail",
           "password": "Password",
@@ -99,7 +100,7 @@
         "fiscalYearStartDate": "Fiscal Year Start Date",
         "strategicPlan": "The Plan",
         "timezone": "Location/Time Zone",
-        "executiveTeam" : "Executive Team",
+        "executiveTeam" : "Leadership Team",
         "createUser": {
           "addButton": "Create New User",
           "inviteYourTeam": "Invite your team"
@@ -115,7 +116,8 @@
         "create": "Create",
         "edit": "Edit",
         "newCompany": "Company",
-        "newForum": "Forum"
+        "newForum": "Forum",
+        "lastSevenDays": "In the last 7 Days"
       },
       "forum": {
         "annualHub": "Annual Hub",
@@ -140,7 +142,11 @@
         "company": "Company",
         "goals": "Objectives",
         "forum": "Meeting",
-        "meetings": "Planning"
+        "meetings": "Planning",
+        "scorecards": "Scorecards"
+      },
+      "goals": {
+        "indexTitle": "Objectives"
       },
       "annualInitiative": {
         "title": "{{title}}",
@@ -193,6 +199,13 @@
         "keyElementCreationError": "There was an error creating the key element",
         "keyElementUpdateError": "There was an error updating the key element",
         "milestoneCreationError": "There was an error creating milestones"
+      },
+      "scorecards": {
+        "indexTitle": "Scorecards",
+        "tabs": {
+          "kpis": "KPIs",
+          "people": "People"
+        }
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",
@@ -269,6 +282,7 @@
         "indexTitle": "Journal Entries",
         "pynBotName": "PynBot",
         "pynBotGreeting": "Hey {{userName}}, what can I help you with?",
+        "pynBotNoEntriesDaily": "No entries! Use the Morning Reflection journal to track daily entries.",
         "pynBotNoEntriesWeekly": "No entries! Use the Evening Reflection journal to track daily entries.",
         "pynBotNoEntriesMonthly": "No entries! Use the Weekly Reflection journal to track weekly entries.",
         "confirmQuit": "Are you sure you want to quit?  Your journal entry will be lost",

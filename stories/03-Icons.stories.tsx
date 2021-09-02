@@ -413,6 +413,10 @@ export const Icons = () => (
         <Icon icon={"New-Goals"} size={"2em"} />
         <TextCenteredDiv>New-Goals</TextCenteredDiv>
       </CenteredColumnDiv>
+      <CenteredColumnDiv>
+        <Icon icon={"Scorecards"} size={"2em"} />
+        <TextCenteredDiv>Scorecards</TextCenteredDiv>
+      </CenteredColumnDiv>
     </RowDiv>
     <Divider />
     <RowDiv>

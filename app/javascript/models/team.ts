@@ -30,7 +30,10 @@ export const TeamModel = types
     get formattedAverageWeeklyUserEmotions() {
       if (!R.isNil(self.averageWeeklyUserEmotions)) {
         return self.averageWeeklyUserEmotions["emotionScores"].map((averages, index) => {
-          return { x: self.averageWeeklyUserEmotions["recordDates"][index], y: averages.averageScore };
+          return {
+            x: self.averageWeeklyUserEmotions["recordDates"][index],
+            y: averages.averageScore,
+          };
         });
       } else {
         [];
@@ -44,9 +47,9 @@ export const TeamModel = types
     isANonLead(user) {
       return R.contains(user.id, self.nonLeadMemberIds);
     },
-    isAMember(user){
-      return R.contains(user.id, self.allTeamUserIds)
-    }
+    isAMember(user) {
+      return R.contains(user.id, self.allTeamUserIds);
+    },
   }))
   .actions(self => ({}));
 

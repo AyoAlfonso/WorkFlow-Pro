@@ -2,6 +2,10 @@ import { create, ApisauceInstance } from "apisauce";
 import { camelizeResponse, decamelizeRequest } from "../utils";
 import * as R from "ramda";
 
+interface IScorecardProps {
+  ownerType: string;
+  ownerId: number;
+}
 export class Api {
   client: ApisauceInstance;
   token: string;
@@ -31,6 +35,10 @@ export class Api {
 
   addMonitor(monitor) {
     this.client.addMonitor(monitor);
+  }
+
+  async getUser(userId) {
+    return this.client.get(`/users/${userId}`);
   }
 
   async getUsers() {
@@ -428,6 +436,21 @@ export class Api {
     return this.client.get(`/meeting_templates`);
   }
 
+  async getDescriptionTemplates() {
+    return this.client.get(`/description_templates`);
+  }
+
+  async updateDescriptiveTemplates(descriptionTemplates) {
+    return this.client.post(`/description_templates/create_templates`, descriptionTemplates);
+  }
+
+  async updateDescriptiveTemplatesBody(formData) {
+    return this.client.patch(`/description_templates/update_templates`, formData);
+  }
+
+  async deleteDescriptionTemplates(id) {
+    return this.client.delete(`/description_templates/${id}`);
+  }
   async getMeetings() {
     return this.client.get(`/meetings`);
   }
@@ -499,7 +522,11 @@ export class Api {
   }
 
   async searchForumMeetingsByDateRange(startDate, endDate, teamId) {
-    return this.client.get("/forum/search_meetings_by_date_range", { startDate, endDate, teamId });
+    return this.client.get("/forum/search_meetings_by_date_range", {
+      startDate,
+      endDate,
+      teamId,
+    });
   }
 
   async getQuestionnaireAttemptsSummaryForReflections(questionnaireId) {
@@ -541,6 +568,33 @@ export class Api {
   }
   async getSelectedDailyLogByDate(date) {
     return this.client.get(`/daily_logs`, { date });
+  }
+  async getKPI(id) {
+    return this.client.get(`/key_performance_indicator/${id}`);
+  }
+
+  async createKPI(KPI) {
+    return this.client.post(`/key_performance_indicator`, KPI);
+  }
+
+  async updateKPI(KPI) {
+    return this.client.patch(`/key_performance_indicator/${KPI.id}`, KPI);
+  }
+
+  async deleteKPI(id) {
+    return this.client.delete(`/key_performance_indicator/${id}`);
+  }
+
+  async createScorecardLog(scorecardLog) {
+    return this.client.post(`scorecard_logs`, scorecardLog);
+  }
+
+  async deleteScorecardLog(id) {
+    return this.client.delete(`scorecard_logs/${id}`);
+  }
+
+  async getScorecard(props: IScorecardProps) {
+    return this.client.get(`scorecard/${props.ownerType}/${props.ownerId}`);
   }
   //async setJWT(jwt) {}
 }

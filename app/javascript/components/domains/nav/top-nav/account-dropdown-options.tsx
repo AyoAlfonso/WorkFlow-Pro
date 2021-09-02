@@ -138,17 +138,17 @@ export const AccountDropdownOptions = observer(
 
     const renderShowProductStash = (): JSX.Element => {
       return (
-        <AccountOptionText 
+        <AccountOptionText
           id="lynchpyn-whats-new"
           onClick={() => {
             window.Productstash.show();
             setShowAccountActions(false);
           }}
         >
-          What's New? 
+          What's New? <VersionTag>v 1.1</VersionTag>
         </AccountOptionText>
-      )
-    }
+      );
+    };
 
     const renderShowHelpdesk = (): JSX.Element => {
       return (
@@ -438,3 +438,8 @@ const DefaultText = styled(Text)`
 `;
 
 const GrowthPlanContainer = styled.div``;
+
+const VersionTag = styled.div`
+  font-size: 8px;
+  display: inline-block;
+`;

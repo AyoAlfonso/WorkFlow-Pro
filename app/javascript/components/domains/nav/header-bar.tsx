@@ -37,7 +37,7 @@ export const HeaderBar = observer(
     const [inviteTeamModalOpen, setInviteTeamModalOpen] = useState<boolean>(false);
     const [showKeyActivities, setShowKeyActivities] = useState<boolean>(false);
     const [showIssues, setShowIssues] = useState<boolean>(false);
-    const [showOpenIssues, setShowOpenIssues] = useState<boolean>(false);
+    const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
 
     const { sessionStore } = useMst();
     const accountActionRef = useRef(null);
@@ -276,6 +276,7 @@ const IssuesPopupContainer = styled.div`
   width: 268px;
   height: 438px;
   padding: 16px;
+  padding-top: 0px;
   margin-left: -160px;
   margin-top: 60px;
   background: white;
@@ -293,9 +294,8 @@ const PopupHeaderContainer = styled.div`
 `;
 
 const PopupHeaderText = styled.h4`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-bottom: auto;
+  margin-top: auto;
   line-height: 20px;
   font-size: 16px;
   font-weight: 600;
@@ -306,6 +306,7 @@ const KeyActivitiesPopupContainer = styled.div`
   width: 268px;
   height: 438px;
   padding: 16px;
+  padding-top: 0px;
   margin-top: 60px;
   margin-left: -240px;
   background-color: white;

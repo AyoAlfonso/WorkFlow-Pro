@@ -11,7 +11,7 @@ import { MIPSelector } from "./mip-selector";
 import { EmotionSelector } from "./emotion-selector";
 import { baseTheme } from "~/themes/base";
 import { SummaryDisplay } from "~/components/shared/questionnaire/summary-display";
-
+import "~/stylesheets/modules/chatbot.css";
 export interface ISurveyBotProps {
   variant: string;
   endFn?: () => void | void;
@@ -108,12 +108,14 @@ export const SurveyBot = observer(
                   variant={`${R.path(["metadata", "summary"], step)}Am`}
                   title={R.path(["metadata", "message", "am"], step)}
                   questionnaireVariant={props.variant}
+                  timeOfDay={"am"}
                 />
                 <SummaryDisplay
                   summaryData={summaryData}
                   variant={`${R.path(["metadata", "summary"], step)}Pm`}
                   title={R.path(["metadata", "message", "pm"], step)}
                   questionnaireVariant={props.variant}
+                  timeOfDay={"pm"}
                 />
               </>,
             ),
@@ -168,11 +170,11 @@ export const SurveyBot = observer(
         hideBotAvatar={true}
         hideUserAvatar={true}
         contentStyle={{
-          height: props.fromDailyPlanning ? window.innerHeight - 250 : window.innerHeight - 120,
+          height: props.fromDailyPlanning ? window.innerHeight - 250 : "84%"
         }}
         // header and footer are 120px total
         // these hard-coded values are required to make the chatbot fit inside the Journal widget :(
-        style={{ height: props.fromDailyPlanning ? window.innerHeight - 130 : window.innerHeight }}
+        style={{ height: props.fromDailyPlanning ? window.innerHeight - 130 :  "100%" }}
         enableSmoothScroll={true}
         userDelay={200}
         zIndex={1}

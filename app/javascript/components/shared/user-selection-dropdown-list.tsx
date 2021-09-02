@@ -38,9 +38,6 @@ export const UserSelectionDropdownList = ({
 
   return (
     <ActionDropdownContainer>
-      <CloseIconContainer onClick={() => setShowUsersList(false)}>
-        <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
-      </CloseIconContainer>
       <Autocomplete
         value={value}
         onChange={(event, newValue) => {
@@ -83,7 +80,7 @@ export const UserSelectionDropdownList = ({
         renderInput={params => (
           <TextField
             {...params}
-            label="Select user"
+            label={`Select User`}
             variant="outlined"
             className={classes.textField}
             margin="dense"

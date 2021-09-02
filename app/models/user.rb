@@ -57,6 +57,12 @@ class User < ApplicationRecord
             .where.not(user_company_enablements: { user_role: UserRole::COACH })
         } #later on we can extend inactive users, etc.
 
+  def as_json(options = [])
+    super({
+      methods: [:avatar_url]
+    })
+  end
+
   def status
     return "inactive" if deleted_at.present?
     confirmed_at.present? ? "active" : "pending"
@@ -68,6 +74,12 @@ class User < ApplicationRecord
 
   def avatar_url
     avatar.present? ? Rails.application.routes.url_helpers.rails_blob_url(avatar, host: ENV["ASSETS_HOST_URL"] || ENV["HOST_URL"]) : nil
+  end
+
+  def as_json(options = [])
+    super({
+      methods: [:avatar_url]
+    })
   end
 
   def role

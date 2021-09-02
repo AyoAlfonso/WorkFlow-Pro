@@ -10,10 +10,17 @@ export const UserStoreModel = types
   .model("UserStoreModel")
   .props({
     users: types.array(UserModel),
+    user: types.maybeNull(UserModel),
   })
   .extend(withEnvironment())
   .views(self => ({}))
   .actions(self => ({
+    getUser: flow(function*(userId) {
+      const response: ApiResponse<any> = yield self.environment.api.getUser(userId);
+      if (response.ok) {
+        self.user = response.data;
+      }
+    }),
     fetchUsers: flow(function*() {
       const response: ApiResponse<any> = yield self.environment.api.getUsers();
       if (response.ok) {

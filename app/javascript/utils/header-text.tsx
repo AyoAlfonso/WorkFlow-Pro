@@ -48,13 +48,17 @@ export const HeaderText = observer(
             return <></>;
         }
       case "goals":
-        return <> Objectives </>;
+        return <> {t("goals.indexTitle")} </>;
+      case "scorecards":
+        return <> {t("scorecards.indexTitle")} </>;
       case "account":
         return <> {t("profile.accountSettings")} </>;
       case "notes":
         return <> {t("notes.indexTitle")} </>;
       case "journals":
         return <> {t("journals.indexTitle")} </>;
+      case "scorecard":
+        return <> {t("scorecards.indexTitle")} </>;
       default:
         return <>{`${getGreetingTime(moment())} ${sessionStore.profile.firstName}`}</>;
     }

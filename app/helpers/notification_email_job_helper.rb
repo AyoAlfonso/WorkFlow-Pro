@@ -7,7 +7,7 @@ module NotificationEmailJobHelper
       message: "See what you have on the table for today and set yourself up for success!",
       cta_text: "Plan My Day",
       cta_url: "" # home
-    ).daily_planning.deliver_later
+    ).daily_planning_email.deliver_later
   end
 
   def send_evening_reflection_reminder_email(user, notification_type)
