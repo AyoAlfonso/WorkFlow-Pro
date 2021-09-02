@@ -195,7 +195,7 @@ const QuarterSummary = ({
       ? weeks.map(
           (weekIndex: number) =>
             kpis.reduce((acc: number, kpi: any) => {
-              const week = kpi.period[currentFiscalYear]?.[weekIndex];
+              const week = kpi?.period[currentFiscalYear]?.[weekIndex];
               const { targetValue, greaterThan } = kpi;
               return (
                 acc +

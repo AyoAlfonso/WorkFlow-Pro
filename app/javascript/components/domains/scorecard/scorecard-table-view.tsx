@@ -31,7 +31,7 @@ export const ScorecardTableView = observer(
     const { t } = useTranslation();
     const {
       companyStore: { company },
-      scorecardStore,
+      keyPerformanceIndicatorStore,
     } = useMst();
     const KPIs = toJS(kpis);
 
@@ -380,6 +380,7 @@ export const ScorecardTableView = observer(
             kpiId={viewEditKPIId}
             viewEditKPIModalOpen={viewEditKPIModalOpen}
             setViewEditKPIModalOpen={setViewEditKPIModalOpen}
+            // scorecardLogs={keyPerformanceIndicatorStore.kpi.scorecardLogs.length}
           />
         )}
         {updateKPI && (

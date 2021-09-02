@@ -16,6 +16,8 @@ import { getScorePercent } from "../scorecard-table-view";
 import { UpdateKPIModal } from "./update-kpi-modal";
 import { TrixEditor } from "react-trix";
 import { OwnedBySection } from "~/components/domains/goals/shared/owned-by-section";
+import TextareaAutosize from "@material-ui/core/TextareaAutosize";
+import { toJS } from "mobx";
 
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -32,16 +34,21 @@ export const ViewEditKPIModal = observer(
     const {
       companyStore: { company },
       keyPerformanceIndicatorStore,
-      scorecardStore: { kpis },
+      descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
-    const [loading, setLoading] = useState(true);
+
     const [kpi, setKpi] = useState(null);
+    const descriptionTemplatesFormatted = toJS(descriptionTemplates);
+    const [loading, setLoading] = useState(true);
+
     const [header, setHeader] = useState("");
     const [value, setValue] = useState<number>(undefined);
     const [logic, setLogic] = useState("");
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
     const [data, setData] = useState(null);
-    const [description, setDescription] = useState<string>(undefined);
+    const [description, setDescription] = useState<string>(
+      descriptionTemplatesFormatted?.find(t => t.templateType == "kpi").body.body,
+    );
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
@@ -114,6 +121,9 @@ export const ViewEditKPIModal = observer(
         );
       }
     };
+    const renderNewValue = value => {
+      setValue(value);
+    };
 
     const chartOptions = {
       legend: {
@@ -128,56 +138,57 @@ export const ViewEditKPIModal = observer(
       maintainAspectRatio: false,
     };
 
-  // const renderDropdownOptions = (): JSX.Element => {
-  //     return (
-    
-  //         <DropdownOptionsContainer
-  //           onClick={() => setShowDropdownOptionsContainer(!showDropdownOptionsContainer)}
-  //         >
-  //           <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
-  //           {showDropdownOptionsContainer && (
-  //             <GoalDropdownContainer>
-  //               <GoalDropdownOptions
-  //                 setShowDropdownOptions={setShowDropdownOptionsContainer}
-  //                 setModalOpen={setAnnualInitiativeModalOpen}
-  //                 itemType={"annualInitiative"}
-  //                 itemId={annualInitiative.id}
-  //               />
-  //             </GoalDropdownContainer>
-  //           )}
-  //         </DropdownOptionsContainer>
-  //     );
-  //   };
+    // const renderDropdownOptions = (): JSX.Element => {
+    //     return (
+
+    //         <DropdownOptionsContainer
+    //           onClick={() => setShowDropdownOptionsContainer(!showDropdownOptionsContainer)}
+    //         >
+    //           <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
+    //           {showDropdownOptionsContainer && (
+    //             <GoalDropdownContainer>
+    //               <GoalDropdownOptions
+    //                 setShowDropdownOptions={setShowDropdownOptionsContainer}
+    //                 setModalOpen={setAnnualInitiativeModalOpen}
+    //                 itemType={"annualInitiative"}
+    //                 itemId={annualInitiative.id}
+    //               />
+    //             </GoalDropdownContainer>
+    //           )}
+    //         </DropdownOptionsContainer>
+    //     );
+    //   };
+
     const weekToDate = (week: number): string =>
       moment(company.fiscalYearStart)
         .add(week, "w")
         .startOf("week" as moment.unitOfTime.StartOf)
         .format("MMM D");
 
+    const setCurrentLog = (step = 1) => {
+      const Log = kpi?.scorecardLogs[kpi?.scorecardLogs.length - step];
+      kpi?.parentType ? renderNewValue(kpi?.aggregrateScore) : Log ? renderNewValue(Log?.score) : null;
+    };
+
     useEffect(() => {
       if (kpiId !== null) {
         keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
-          setLoading(false);
-          const Log = keyPerformanceIndicatorStore.kpi?.scorecardLogs.slice(-1).pop();
-          Log ? setValue(Log.score) : null;
+          setDescription(keyPerformanceIndicatorStore.kpi.description);
+          setCurrentLog();
           setKpi(keyPerformanceIndicatorStore.kpi);
+          setLoading(false);
         });
       }
-    }, [kpiId, kpis]);
+    }, [kpiId]);
 
-    const saveKPI = () => {
-      const clonedKPI =  R.clone(kpi)
-      kpi.description = description
-      keyPerformanceIndicatorStore.updateKPI(kpi)
-    }
-
-    useEffect(() => {
-      if (!kpi) {
-        return;
-      }
+    const saveKPI = ({ description }) => {
+      const clonedKPI = Object.assign({}, kpi, { description });
+      keyPerformanceIndicatorStore.updateKPI(clonedKPI);
+    };
+    const drawGraph = (kpi) => {
       const startWeek = (company.currentFiscalQuarter - 1) * 13 + 1;
       const weekNumbers = R.range(startWeek, company.currentFiscalWeek + 1);
-      const weeks = kpi.period.get(company.currentFiscalYear)?.toJSON();
+      const weeks = kpi?.period.get(company.currentFiscalYear)?.toJSON();
       const currentQuarterData = weekNumbers.map(week => (weeks?.[week] ? weeks[week].score : 0));
 
       setData({
@@ -194,6 +205,14 @@ export const ViewEditKPIModal = observer(
           },
         ],
       });
+    };
+
+    useEffect(() => {
+      if (!kpi) {
+        return;
+      }
+      const weeks = kpi.period.get(company.currentFiscalYear)?.toJSON();
+      drawGraph(kpi);
       const targetText = formatValue(kpi.targetValue, kpi.unitType);
       setLogic(
         kpi.greaterThan
@@ -220,37 +239,30 @@ export const ViewEditKPIModal = observer(
             ) : (
               kpi && (
                 <>
-                  <Header>{header} 
+                  <Header>
+                    {header}
                     {/* DropdownOptions> */}
-                  {/* {renderDropdownOptions()} */}
-                  {/* <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
+                    {/* {renderDropdownOptions()} */}
+                    {/* <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
                     <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
                   </CloseIconContainer> */}
-                {/* </DropdownOptions> */}
+                    {/* </DropdownOptions> */}
                   </Header>
                   <OwnerAndLogicContainer>
                     <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
                       {R.uniq(kpi.viewers.map(viewer => viewer.type)).join(", ")} KPI
                     </OwnerAndLogicText>
-                      <OwnedBySection
-                      marginLeft={"0px"}
-                      marginRight={"0px"}
-                      marginTop={"auto"}
-                      marginBottom={"auto"}
-                      ownedBy={kpi.ownedBy}
-                      type={"scorecard"}
-                    />
-                    {/* <Avatar
-                      firstName={kpi.ownedBy.firstName}
-                      lastName={kpi.ownedBy.lastName}
-                      avatarUrl={kpi.ownedBy.avatarUrl}
-                      size={16}
-                      marginLeft={"0px"}
-                      defaultAvatarColor={kpi.ownedBy.defaultAvatarColor}
-                    /> */}
+
                     <OwnerAndLogicText>
-                      {kpi.ownedBy.firstName} {kpi.ownedBy.lastName}
+                      <OwnedBySection
+                        marginLeft={"0px"}
+                        marginRight={"0px"}
+                        marginTop={"auto"}
+                        marginBottom={"auto"}
+                        ownedBy={kpi.ownedBy}
+                        type={"scorecard"}
+                      />
                     </OwnerAndLogicText>
                     <Icon icon={"Initiative"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText>{logic}</OwnerAndLogicText>
@@ -273,12 +285,13 @@ export const ViewEditKPIModal = observer(
                   <SubHeader>Description</SubHeader>
                   <TrixEditorContainer>
                     <TrixEditor
+                      // toolbar="toolbar-custom"
                       className={"trix-kpi-modal"}
                       autoFocus={false}
                       placeholder={"Add a description..."}
-                      onChange={s => {
-                        setDescription(s);
-                        saveKPI()
+                      onChange={description => {
+                        setDescription(description);
+                        saveKPI({ description });
                       }}
                       value={description}
                       mergeTags={[]}
@@ -317,7 +330,20 @@ export const ViewEditKPIModal = observer(
                               <ActivityLogDate>
                                 {moment(log.createdAt).format("MMM D, YYYY")}
                               </ActivityLogDate>
-                              <ActivityLogDelete onClick={()=> keyPerformanceIndicatorStore.deleteScorecardLog(log.id)}> Delete</ActivityLogDelete>
+                              <ActivityLogDelete
+                                onClick={() => {
+                                   keyPerformanceIndicatorStore.deleteScorecardLog(
+                                    log.id,
+                                  ).then(scorecard =>{
+                        
+                                  });
+                                   setCurrentLog(2);
+                                   drawGraph(keyPerformanceIndicatorStore.kpi);
+                                }}
+                              >
+                                {" "}
+                                Delete
+                              </ActivityLogDelete>
                             </ActivityLogText>
                           </ActivityLogTextContainer>
                         </ActivityLogContainer>
@@ -337,6 +363,7 @@ export const ViewEditKPIModal = observer(
             year={company.currentFiscalYear}
             week={company.currentFiscalWeek}
             currentValue={value}
+            renderNewValue={renderNewValue}
             headerText={"Update Current Week"}
             updateKPIModalOpen={updateKPIModalOpen}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
@@ -474,9 +501,10 @@ const ActivityLogText = styled.p<ActivityLogTextProps>`
 
 const TrixEditorContainer = styled.div`
   margin-top: 4px;
+  width: 80%;
 `;
 
-const DropdownOptions = styled.div``
+const DropdownOptions = styled.div``;
 
 const DropdownOptionsContainer = styled.div`
   margin-right: 16px;

@@ -14,7 +14,7 @@ class Api::ScorecardLogsController < Api::ApplicationController
    
     render json: { scorecard_log: @scorecard_log,  kpi: @kpi.as_json(except: %w[created_at updated_at],methods: [:owned_by],
                                     include: {
-                                    scorecard_logs: { methods: [:user] }}).merge({ :period => @period }), status: :ok }
+                                    scorecard_logs: { methods: [:user] }}).merge({ :period => @period,  :aggregrate_score => @kpi.aggregrate_score  }), status: :ok }
   end
 
   def show
