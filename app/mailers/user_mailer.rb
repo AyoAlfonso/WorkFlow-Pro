@@ -2,8 +2,8 @@ class UserMailer < ApplicationMailer
   add_template_helper(StatsHelper)
   add_template_helper(ActionView::Helpers::SanitizeHelper)
   include StatsHelper
-  default from: 'LynchPyn <no-reply@lynchpyn.com>'
-  layout 'mailer'
+  default from: "LynchPyn <no-reply@lynchpyn.com>"
+  layout "mailer"
 
   def notification_email
     @user = params[:user]
@@ -20,7 +20,7 @@ class UserMailer < ApplicationMailer
     @subject = params[:subject]
     @greeting = params[:greeting]
     @message = params[:message]
-    beginning_of_last_week = get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone-7.days)
+    beginning_of_last_week = get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone - 7.days)
     end_of_last_week = beginning_of_last_week + 6.days
     beginning_of_week = get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)
     end_of_week = beginning_of_week + 6.days

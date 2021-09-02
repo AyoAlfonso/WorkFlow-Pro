@@ -41,7 +41,7 @@ ActiveAdmin.register DefaultAdminTemplate do
     h1 object.title
     f.input :title
     f.input :template_type, as: :select, collection: DescriptionTemplate.template_types.map { |dt| [dt[0].humanize.upcase, dt[0]] }
-    f.input :body,  as: :action_text
+    f.input :body, as: :action_text
     f.actions
   end
 end

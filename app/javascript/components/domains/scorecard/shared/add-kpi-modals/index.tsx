@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from "react";
-import { ModalWithHeader } from "~/components/shared/modal-with-unique-header";
+import React, { useState, useEffect, useCallback } from "react";
+import { ModalWithHeader } from "~/components/shared/modal-with-header";
 import { useTranslation } from "react-i18next";
 import { baseTheme } from "~/themes";
 import styled, { css } from "styled-components";
@@ -14,78 +14,72 @@ import { RollUp } from "./roll-up";
 import { Average } from "./average";
 
 interface IAddKPIModalProps {
-  kpis: any;
-  showAddKPIModal: true;
+  KPIs: any;
+  showAddKPIModal: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   headerText?: string;
   kpiModalType: string;
+  setExternalManualKPIData: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const AddKPIModal = observer(
   ({
-    kpis,
+    KPIs,
     showAddKPIModal,
     setModalOpen,
-    headerText,
     kpiModalType,
+    setExternalManualKPIData,
   }: IAddKPIModalProps): JSX.Element => {
-    const renderIndividualKPIS = (): Array<JSX.Element> => {
-      return kpis.map((kpi, index) => {
-        return (
-          // <MenuItem value={kpi.id} key={index}>
-          // {kpi.owner.firstName} {kpi.owner.firstName}
-          // </MenuItem>
+    const formattedKpiModalType = titleCase(kpiModalType);
 
-          <MenuItem value={kpi.id} key={index}>
-            {kpi.owner.firstName} {kpi.owner.firstName}
-            {/* </br> */}
-            {kpi.name}
-          </MenuItem>
-        );
-      });
-    };
     return (
-      <ModalWithHeader
+      <ModalContainer
         modalOpen={showAddKPIModal}
         setModalOpen={setModalOpen}
-        headerText={"Source"}
+        headerText={formattedKpiModalType}
         width="480px"
-        //  child={renderIndividualKPIS()}
+        height="0px"
       >
-        <Container>
-          {/* <LeftContainer>
-            {kpiModalType == "source" && (
-              <LynchpynLogoContainer>
-                <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="100"></img>
-              </LynchpynLogoContainer>
-            )}
-            {kpiModalType != "source" && (
-              <LynchpynLogoContainer>
-                <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="100"></img>
-              </LynchpynLogoContainer>
-            )}
-          </LeftContainer> */}
-          {/* <RightContainer>
-            <LabelSelectionDropdownList
-              labelsList={labelsList}
-              setSelectedLabel={setSelectedLabel}
-              afterLabelSelectAction={afterLabelSelectAction}
-              closeModal={closeModal}
-              marginLeft={marginLeftDropdownList}
-            />
-            {renderIndividualKPIS()}
-          </RightContainer> */}
-          {kpiModalType == "source" && <Source></Source>}
-          {kpiModalType == "existing" && <Existing></Existing>}
-          {kpiModalType == "roll up" && <RollUp></RollUp>}
-          {kpiModalType == "average" && <Average></Average>}
-        </Container>
-      </ModalWithHeader>
+        <InnerContainer>
+          {kpiModalType == "source" && (
+            <Source
+              KPIs={KPIs}
+              kpiModalType={formattedKpiModalType}
+              setModalOpen={setModalOpen}
+              setExternalManualKPIData={setExternalManualKPIData}
+            ></Source>
+          )}
+          {kpiModalType == "existing" && (
+            <Existing
+              KPIs={KPIs}
+              kpiModalType={formattedKpiModalType}
+              setModalOpen={setModalOpen}
+              setExternalManualKPIData={setExternalManualKPIData}
+            ></Existing>
+          )}
+          {kpiModalType == "roll up" && (
+            <RollUp
+              KPIs={KPIs}
+              kpiModalType={formattedKpiModalType}
+              setModalOpen={setModalOpen}
+              setExternalManualKPIData={setExternalManualKPIData}
+            ></RollUp>
+          )}
+          {kpiModalType == "average" && (
+            <Average
+              KPIs={KPIs}
+              kpiModalType={formattedKpiModalType}
+              setModalOpen={setModalOpen}
+              setExternalManualKPIData={setExternalManualKPIData}
+            ></Average>
+          )}
+        </InnerContainer>
+      </ModalContainer>
     );
   },
 );
 
-const Container = styled.div`
+const InnerContainer = styled.div`
   height: 30rem;
   display: flex;
   flex-direction: row;
@@ -117,4 +111,8 @@ const LynchpynLogoContainer = styled.div`
   text-align: center;
   margin-top: auto;
   margin-bottom: 16px;
+`;
+
+const ModalContainer = styled(ModalWithHeader)`
+  height: 0px;
 `;

@@ -33,6 +33,8 @@ class NotificationEmailJob
         end
         # end
       end
+      # end
+    end
 
     def is_weekend?
       ["Saturday", "Sunday"].include?(@users_time.strftime("%A"))
@@ -63,6 +65,7 @@ class NotificationEmailJob
       end
     end
   end
+
   def schedule_occurs_between?(user, schedule)
     # previous_occurrence in 10 minutes is really the 'current' notification occurrence
     earlier_time = user.time_in_user_timezone - 10.minutes

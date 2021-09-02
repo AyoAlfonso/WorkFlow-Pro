@@ -1,5 +1,4 @@
 class NotificationPolicy < ApplicationPolicy
-
   def index?
     true
   end
@@ -20,5 +19,4 @@ class NotificationPolicy < ApplicationPolicy
       scope.remove_deprecated
     end
   end
-
 end

@@ -2,7 +2,7 @@ ActiveAdmin.register Questionnaire do
   permit_params :name,
                 :steps,
                 :title
-  
+
   index do
     selectable_column
     id_column
@@ -13,7 +13,7 @@ ActiveAdmin.register Questionnaire do
   filter :title
 
   controller do
-    def update 
+    def update
       @questionnaire = Questionnaire.find(params[:id])
       @questionnaire.title = params[:questionnaire][:title]
       @questionnaire.steps = JSON.parse(params[:questionnaire][:steps_raw])

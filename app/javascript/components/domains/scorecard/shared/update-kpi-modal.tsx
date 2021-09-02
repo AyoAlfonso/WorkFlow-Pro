@@ -22,6 +22,7 @@ interface UpdateKPIModalProps {
   headerText: string,
   setUpdateKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   updateKPIModalOpen: boolean;
+  renderNewValue?:any
 }
 
 export const UpdateKPIModal = observer(
@@ -34,6 +35,7 @@ export const UpdateKPIModal = observer(
     headerText,
     setUpdateKPIModalOpen,
     updateKPIModalOpen,
+    renderNewValue
   }: UpdateKPIModalProps): JSX.Element => {
     const { keyPerformanceIndicatorStore, sessionStore } = useMst();
     const [value, setValue] = useState<number>(currentValue);
@@ -56,6 +58,7 @@ export const UpdateKPIModal = observer(
         keyPerformanceIndicatorStore.createScorecardLog(log)
       }
       setUpdateKPIModalOpen(false);
+      renderNewValue(value)
     }
 
     const handleChange = (e) => {

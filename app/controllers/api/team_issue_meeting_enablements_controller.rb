@@ -9,5 +9,4 @@ class Api::TeamIssueMeetingEnablementsController < Api::ApplicationController
 
     render "api/team_issue_meeting_enablements/index"
   end
-
 end

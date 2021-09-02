@@ -6,18 +6,18 @@ class Habit < ApplicationRecord
   has_many :habit_logs, dependent: :destroy
   before_save :sanitize_name
 
-  scope :owned_by_user, -> (user) { where(user: user) }
-  delegate  :completed_logs_by_date_range, to: :habit_logs
+  scope :owned_by_user, ->(user) { where(user: user) }
+  delegate :completed_logs_by_date_range, to: :habit_logs
 
   def as_json(options = [])
     super({
       methods: [:score, :monthly_score_difference, :weekly_score_difference],
       except: [:created_at, :updated_at],
       include: [
-                current_week_logs: {
-                  except: [:created_at, :updated_at]
-                },
-              ]
+        current_week_logs: {
+          except: [:created_at, :updated_at],
+        },
+      ],
     })
   end
 
@@ -25,13 +25,13 @@ class Habit < ApplicationRecord
   def current_week_logs
     (0..4).map do |index|
       date = (self.user.convert_to_their_timezone - index.days).to_date
-      self.habit_logs.find { |wl| wl.log_date == date} ||
+      self.habit_logs.find { |wl| wl.log_date == date } ||
         HabitLog.new(
           habit: self,
-          log_date: date
+          log_date: date,
         )
     end
-  end 
+  end
 
   def weekly_logs_completion_difference
     current_week_completion_count = self.completed_logs_by_date_range(current_week_start_date, current_week_end_date).count
@@ -86,7 +86,7 @@ class Habit < ApplicationRecord
     monthly_score_results = first_day_of_last_6_months.map do |date|
       calculate_score_for_date(date.end_of_month)
     end
-  
+
     # show each quarter (4)
     next_quarter_start_date = habit_user_company.next_quarter_start_date
 
@@ -97,23 +97,22 @@ class Habit < ApplicationRecord
     end
 
     {
-      weekly_stats:{
+      weekly_stats: {
         label: "weekly",
         data: weekly_score_results.reverse,
-        labels: weekly_chart_labels.reverse
+        labels: weekly_chart_labels.reverse,
       },
       monthly_stats: {
         label: "monthly",
         data: monthly_score_results.reverse,
-        labels: monthly_chart_labels.reverse
+        labels: monthly_chart_labels.reverse,
       },
       quarterly_stats: {
         label: "quarterly",
-        data: quarterly_score_results.reverse, 
-        labels: quarterly_chart_labels
-      }
+        data: quarterly_score_results.reverse,
+        labels: quarterly_chart_labels,
+      },
     }
-
   end
 
   def frequency_data_for_bar_graph
@@ -125,7 +124,7 @@ class Habit < ApplicationRecord
     monthly_frequency_results = first_day_of_last_6_months.map do |date|
       self.habit_logs.where("log_date >= ? AND log_date <= ?", date, date.end_of_month).count
     end
-  
+
     # show each quarter (4)
     next_quarter_start_date = habit_user_company.next_quarter_start_date
 
@@ -136,25 +135,26 @@ class Habit < ApplicationRecord
     end
 
     {
-      weekly_stats:{
+      weekly_stats: {
         label: "weekly",
         data: weekly_frequency_results.reverse,
-        labels: weekly_chart_labels.reverse
+        labels: weekly_chart_labels.reverse,
       },
       monthly_stats: {
         label: "monthly",
         data: monthly_frequency_results.reverse,
-        labels: monthly_chart_labels.reverse
+        labels: monthly_chart_labels.reverse,
       },
       quarterly_stats: {
         label: "quarterly",
-        data: quarterly_frequency_results.reverse, 
-        labels: quarterly_chart_labels
-      }
+        data: quarterly_frequency_results.reverse,
+        labels: quarterly_chart_labels,
+      },
     }
   end
 
   private
+
   def get_previous_week_completion(start_date, end_date)
     self.completed_logs_by_date_range(start_date, end_date)
   end
@@ -196,7 +196,7 @@ class Habit < ApplicationRecord
   end
 
   def calculate_score_for_date(date)
-    weekly_average_from_past_4_weeks = self.habit_logs.where("log_date >= ? AND log_date <= ?", date - 4.weeks, date).count.to_f / 4 
+    weekly_average_from_past_4_weeks = self.habit_logs.where("log_date >= ? AND log_date <= ?", date - 4.weeks, date).count.to_f / 4
     aggregate_from_past_256_days_count = self.habit_logs.where("log_date >= ? AND log_date <= ?", date - 256.days, date).count
     parhams_equation_for_score(weekly_average_from_past_4_weeks, self.frequency, aggregate_from_past_256_days_count)
   end
@@ -208,7 +208,7 @@ class Habit < ApplicationRecord
   end
 
   def parhams_equation_for_score(weekly_average, weekly_goal, aggregate_from_past_256_days_count)
-     #PARHAM'S EQUATION
+    #PARHAM'S EQUATION
     # w ~ Weekly average from the past 4 weeks
     # g ~ Weekly goal/target
     # a ~ Aggregate from the past 256 days (set to 66 if above 66)
@@ -242,7 +242,7 @@ class Habit < ApplicationRecord
     end
   end
 
-  def monthly_chart_labels 
+  def monthly_chart_labels
     first_day_of_last_6_months.map do |date|
       date.strftime("%b")
     end
@@ -253,17 +253,17 @@ class Habit < ApplicationRecord
     current_fiscal_quarter = company.current_fiscal_quarter
     current_fiscal_year = company.current_year_fiscal_year_start.year
     next_quarter_start_date = company.next_quarter_start_date
-    
+
     quarterly_score_labels = case current_fiscal_quarter
-                          when 1
-                            ["#{current_fiscal_year-1} Q2", "#{current_fiscal_year-1} Q3", "#{current_fiscal_year-1} Q4", "#{current_fiscal_year} Q1"]
-                          when 2
-                            ["#{current_fiscal_year-1} Q3", "#{current_fiscal_year-1} Q4", "#{current_fiscal_year} Q1", "#{current_fiscal_year} Q2"]
-                          when 3
-                            ["#{current_fiscal_year-1} Q4", "#{current_fiscal_year} Q1", "#{current_fiscal_year} Q2", "#{current_fiscal_year} Q3"]
-                          else
-                            ["#{current_fiscal_year} Q1", "#{current_fiscal_year} Q2", "#{current_fiscal_year} Q3", "#{current_fiscal_year} Q4"]
-                          end
+      when 1
+        ["#{current_fiscal_year - 1} Q2", "#{current_fiscal_year - 1} Q3", "#{current_fiscal_year - 1} Q4", "#{current_fiscal_year} Q1"]
+      when 2
+        ["#{current_fiscal_year - 1} Q3", "#{current_fiscal_year - 1} Q4", "#{current_fiscal_year} Q1", "#{current_fiscal_year} Q2"]
+      when 3
+        ["#{current_fiscal_year - 1} Q4", "#{current_fiscal_year} Q1", "#{current_fiscal_year} Q2", "#{current_fiscal_year} Q3"]
+      else
+        ["#{current_fiscal_year} Q1", "#{current_fiscal_year} Q2", "#{current_fiscal_year} Q3", "#{current_fiscal_year} Q4"]
+      end
   end
 
   def habit_user_company

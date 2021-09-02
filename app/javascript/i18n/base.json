@@ -205,7 +205,8 @@
         "tabs": {
           "kpis": "KPIs",
           "people": "People"
-        }
+        },
+        "quarterlyGraphTitle":  "Trend of average percentage of all KPIs actual value compared to the target"
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",

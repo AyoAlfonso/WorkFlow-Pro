@@ -16,31 +16,31 @@ class Issue < ApplicationRecord
 
   acts_as_taggable_on :labels
 
-  scope :optimized, -> { includes([{user: {avatar_attachment: :blob}}, :label_taggings, :labels]) }
-  scope :user_current_company, -> (company_id) {where(company_id: company_id)}
+  scope :optimized, -> { includes([{ user: { avatar_attachment: :blob } }, :label_taggings, :labels]) }
+  scope :user_current_company, ->(company_id) { where(company_id: company_id) }
 
-  scope :created_by_user, -> (user) { where(user: user) }
+  scope :created_by_user, ->(user) { where(user: user) }
   scope :sort_by_priority, -> { order(priority: :desc) }
   scope :sort_by_created_date, -> { order(created_at: :asc) }
-  scope :sort_by_completed_date, -> { order(completed_at: :asc)}
+  scope :sort_by_completed_date, -> { order(completed_at: :asc) }
   scope :sort_by_position, -> { order(position: :asc) }
   scope :complete, -> { where.not(completed_at: nil) }
   scope :incomplete, -> { where(completed_at: nil) }
-  
-  scope :created_between, -> (date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
-  scope :user_created_between, -> (user, date_start, date_end) { created_by_user(user).created_between(date_start, date_end) }
+
+  scope :created_between, ->(date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
+  scope :user_created_between, ->(user, date_start, date_end) { created_by_user(user).created_between(date_start, date_end) }
 
   scope :exclude_personal_for_team, -> { where.not(personal: true) }
-  
+
   #for team issue meetings
-  scope :for_meeting, -> (meeting_id) {
-    joins(:team_issue)
-    .joins(:team_issue_meeting_enablements)
-    .where(team_issue_meeting_enablements: {meeting_id: meeting_id})
-  }
+  scope :for_meeting, ->(meeting_id) {
+          joins(:team_issue)
+            .joins(:team_issue_meeting_enablements)
+            .where(team_issue_meeting_enablements: { meeting_id: meeting_id })
+        }
 
   validates :description, presence: true
-  
+
   def self.sort_by_position_and_priority_and_created_at_and_completed_at
     self.sort_by_position.sort_by_priority.sort_by_created_date.sort_by_completed_date
   end
@@ -55,7 +55,7 @@ class Issue < ApplicationRecord
       team_issue_to_update = team_issue || build_team_issue
       team_issue_to_update.team_id = self.team_id
       team_issue_to_update.completed_at = self.completed_at
-    # there is no else case because you cannot unshare an issue from the team, but you can switch which team it's associated with
+      # there is no else case because you cannot unshare an issue from the team, but you can switch which team it's associated with
     end
   end
 end

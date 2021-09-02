@@ -12,16 +12,16 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def create
     creation_params = {
-      user_id: params[:personal] ? current_user.id : params[:user_id], 
-      description: params[:description], 
-      priority: params[:priority], 
-      meeting_id: params[:personal] ? nil : params[:meeting_id], 
-      due_date: params[:due_date], 
-      company_id: params[:onboarding_company_id] || current_company.id, 
-      personal: params[:personal], 
-      label_list: params[:label] && params[:label][:name], 
-      scheduled_group_id: params[:scheduled_group_id], 
-      team_id: params[:personal] ? nil : params[:team_id]
+      user_id: params[:personal] ? current_user.id : params[:user_id],
+      description: params[:description],
+      priority: params[:priority],
+      meeting_id: params[:personal] ? nil : params[:meeting_id],
+      due_date: params[:due_date],
+      company_id: params[:onboarding_company_id] || current_company.id,
+      personal: params[:personal],
+      label_list: params[:label] && params[:label][:name],
+      scheduled_group_id: params[:scheduled_group_id],
+      team_id: params[:personal] ? nil : params[:team_id],
     }
 
     @key_activity = KeyActivity.new(creation_params)
@@ -125,7 +125,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
 
   def key_activity_params
     params.permit(:id, :user_id, :description, :completed_at, :priority, :complete,
-      :position, :meeting_id, :due_date, :personal, :scheduled_group_id, :team_id)
+                  :position, :meeting_id, :due_date, :personal, :scheduled_group_id, :team_id)
   end
 
   def key_activities_params

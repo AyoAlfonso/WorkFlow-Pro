@@ -13,7 +13,7 @@ class ScorecardLog < ApplicationRecord
   scope :thirteen_weeks_of_scorecards, ->(kpi_id, fiscal_year, fiscal_quarter) {
           where(key_performance_indicator_id: kpi_id, fiscal_quarter: fiscal_quarter, fiscal_year: fiscal_year)
         }
- 
+
   def self.scorecard_logs(kpi_id)
     ScorecardLog.where.(key_performance_indicator_id: kpi_id).group_by(&:week)
   end
@@ -30,7 +30,6 @@ class ScorecardLog < ApplicationRecord
       self.first.destroy
     end
   end
-
 
   def def(logger)
     #Getting model by logger

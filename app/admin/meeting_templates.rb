@@ -23,7 +23,7 @@ ActiveAdmin.register MeetingTemplate do
         name: @meeting_template_params[:name],
         meeting_type: @meeting_template_params[:meeting_type],
         duration: @meeting_template_params[:duration],
-        description: @meeting_template_params[:description]
+        description: @meeting_template_params[:description],
       })
       @step_atrributes = params[:meeting_template][:steps_attributes]
       if @step_atrributes.present?
@@ -56,7 +56,7 @@ ActiveAdmin.register MeetingTemplate do
       end
       row "Duration (in minutes)" do
         meeting_template.total_duration
-      end 
+      end
       row :description
     end
     panel "Steps" do
@@ -88,10 +88,9 @@ ActiveAdmin.register MeetingTemplate do
     f.input :duration, label: "Duration (in minutes)"
     f.input :description, input_html: { rows: 5 }
 
-
     f.has_many :steps, heading: "Steps", allow_destroy: true do |step|
       step.input :name
-      step.input :step_type, as: :select, collection: Step.step_types.map { |st| [st[0].humanize.titleize, st[0]]}
+      step.input :step_type, as: :select, collection: Step.step_types.map { |st| [st[0].humanize.titleize, st[0]] }
       step.input :order_index
       step.input :duration, label: "Duration (in minutes)"
       step.input :instructions, input_html: { rows: 3 }
@@ -99,7 +98,7 @@ ActiveAdmin.register MeetingTemplate do
       step.input :link_embed, input_html: { rows: 2 }
       step.input :override_key, input_html: { rows: 1 }
 
-      step.input :description_text, as: :action_text 
+      step.input :description_text, as: :action_text
 
       step.input :image, as: :file, hint: (step.object.try(:image_url) ? image_tag(step.object.image_url, style: "max-height: 150px;") : "No Image Selected")
     end

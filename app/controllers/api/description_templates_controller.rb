@@ -10,11 +10,11 @@ class Api::DescriptionTemplatesController < Api::ApplicationController
   end
 
   def update_or_create_templates
-    DescriptionTemplate.upsert_all(params[:description_template]) if(description_template_params)
+    DescriptionTemplate.upsert_all(params[:description_template]) if (description_template_params)
     @templates = policy_scope(DescriptionTemplate)
     authorize @templates
-     render json: { templates: @templates, status: :ok }
-  end 
+    render json: { templates: @templates, status: :ok }
+  end
 
   def show
     # render "api/description_template/show"
@@ -35,11 +35,11 @@ class Api::DescriptionTemplatesController < Api::ApplicationController
 
   def company_attributes_params
     #user should not be allowed to update the display_format once created
-    params.permit( description_templates_attributes: [:id, :title, :body])
+    params.permit(description_templates_attributes: [:id, :title, :body])
   end
 
   def description_template_params
-    params.permit(description_template: [:id, :template_type, :company_id, :title, :updated_at, :created_at] )
+    params.permit(description_template: [:id, :template_type, :company_id, :title, :updated_at, :created_at])
   end
 
   def set_template

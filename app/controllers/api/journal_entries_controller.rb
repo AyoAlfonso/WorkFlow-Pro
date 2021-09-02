@@ -21,5 +21,4 @@ class Api::JournalEntriesController < Api::ApplicationController
   def journal_params
     params.permit(:body)
   end
-
 end
