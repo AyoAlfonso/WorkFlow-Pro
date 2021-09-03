@@ -223,14 +223,14 @@ export const QuarterlyGoalStoreModel = types
       self.quarterlyGoal[field] = value;
     },
     updateKeyElementValue(field: string, id: number, value: number | string) {
-      let keyElements = self.quarterlyGoal.keyElements;
-      let keyElementIndex = keyElements.findIndex(ke => ke.id == id);
+      const keyElements = self.quarterlyGoal.keyElements;
+      const keyElementIndex = keyElements.findIndex(ke => ke.id == id);
       keyElements[keyElementIndex][field] = value;
       self.quarterlyGoal.keyElements = keyElements;
     },
     updateKeyElementStatus(id, value) {
-      let keyElements = self.quarterlyGoal.keyElements;
-      let keyElementIndex = keyElements.findIndex(ke => ke.id == id);
+      const keyElements = self.quarterlyGoal.keyElements;
+      const keyElementIndex = keyElements.findIndex(ke => ke.id == id);
       value
         ? (keyElements[keyElementIndex].completedAt = moment().toString())
         : (keyElements[keyElementIndex].completedAt = "");
