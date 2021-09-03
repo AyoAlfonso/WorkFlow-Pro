@@ -160,7 +160,11 @@ export const AddManualKPIModal = observer(
           </RowContainer>
           <RowContainer>
             <FormElementContainer>
-              <InputHeaderWithComment comment={"optional"}>KPI Selection</InputHeaderWithComment>
+              {selectedTagInputCount > 0 ? (
+                <InputHeaderWithComment comment={"optional"}>KPI Selection</InputHeaderWithComment>
+              ) : (
+                <> </>
+              )}
               <MultiTagInputContainer>
                 {renderTaggedInput()}
 
