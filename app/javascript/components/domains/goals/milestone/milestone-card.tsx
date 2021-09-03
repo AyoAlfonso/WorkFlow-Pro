@@ -31,7 +31,7 @@ export const MilestoneCard = observer(
 
     useEffect(() => {
       setDescriptionText(milestone.description);
-    }, [milestone])
+    }, [milestone]);
 
     const handleChange = e => {
       if (!e.target.value.includes("<div>")) {
