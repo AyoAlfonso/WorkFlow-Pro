@@ -11,30 +11,27 @@ class NotificationEmailJob
       @schedule = IceCube::Schedule.from_hash(notification.rule)
       notification_type = human_type(notification.notification_type)
       # The job runs at top and bottom of each hour. There's a -10 and +5 minute buffer in case the job starts early or late.
-      if schedule_occurs_between?(@user, @schedule)
-        if notification_type == "Daily Planning" && user_has_not_set_status
+        if schedule_occurs_between(@user, @schedule)
+          if notification_type == "Daily Planning" && user_has_not_set_status
             return if is_weekend?
             send_person_planning_reminder_email(@user, notification_type)
             # elsif notification_type == "Weekly Report"
             #   send_end_of_week_stats_email(@user, notification_type)
-        elsif notification_type == "Evening Reflection"
-            if !@user.evening_reflection_complete
-              send_evening_reflection_reminder_email(@user, notification_type)
-            end
-        elsif notification_type == "Weekly Planning"
+          elsif notification_type == "Evening Reflection"
+              if !@user.evening_reflection_complete
+                send_evening_reflection_reminder_email(@user, notification_type)
+              end
+          elsif notification_type == "Weekly Planning"
             send_weekly_planning_email(@user, notification_type)
-        elsif notification_type == "Weekly Alignment Meeting" && meeting_did_not_start_this_period("team_weekly")
-            @user.team_user_enablements.team_lead.each do |team_lead_enablement|
+          elsif notification_type == "Weekly Alignment Meeting" && meeting_did_not_start_this_period("team_weekly")
+              @user.team_user_enablements.team_lead.each do |team_lead_enablement|
               if Meeting.team_weekly_meetings.team_meetings(team_lead_enablement&.team&.id).for_week_of_date_started_only(get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)).blank?
                 send_sync_meeting_email(@user, notification_type, team_lead_enablement&.team)
               end
             end
-        # end
+          end
         end
-        # end
-      end
-      # end
-    end
+  end
 
     def is_weekend?
       ["Saturday", "Sunday"].include?(@users_time.strftime("%A"))
@@ -52,21 +49,21 @@ class NotificationEmailJob
       end
     end
 
-    def meeting_did_not_start_this_period(meeting_type)
+  def meeting_did_not_start_this_period(meeting_type)
       case meeting_type
-      when "personal_weekly"
-        Meeting.personal_meeting_for_week_on_user(@user, get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)).blank?
-      when "team_weekly"
-        @user.team_user_enablements.team_lead.any? do |team_lead_enablement|
-          Meeting.team_weekly_meetings.team_meetings(team_lead_enablement&.team&.id).for_week_of_date_started_only(get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)).blank?
+        when "personal_weekly"
+          Meeting.personal_meeting_for_week_on_user(@user, get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)).blank?
+        when "team_weekly"
+          @user.team_user_enablements.team_lead.any? do |team_lead_enablement|
+            Meeting.team_weekly_meetings.team_meetings(team_lead_enablement&.team&.id).for_week_of_date_started_only(get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)).blank?
+          end
+        else
+          false
         end
-      else
-        false
       end
     end
-  end
-
-  def schedule_occurs_between?(user, schedule)
+  
+  def schedule_occurs_between(user, schedule)
     # previous_occurrence in 10 minutes is really the 'current' notification occurrence
     earlier_time = user.time_in_user_timezone - 10.minutes
     later_time = user.time_in_user_timezone + 5.minutes
@@ -102,4 +99,3 @@ class NotificationEmailJob
       false
     end
   end
-end
