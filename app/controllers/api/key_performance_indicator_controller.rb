@@ -18,7 +18,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   end
 
   def create
-    @description = params[:description] != "" ? params[:description] : DescriptionTemplate.find_by(company_id: current_company.id, template_type: 0).body_content || ""
+    # @description = params[:description] != "" ? params[:description] : DescriptionTemplate.find_by(company_id: current_company.id, template_type: 0).body_content || ""
     @owned_by = User.find(params[:owned_by_id])
     @kpi = KeyPerformanceIndicator.new({
       title:params[:title],
@@ -28,7 +28,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
       unit_type: params[:unit_type],
       target_value: params[:target_value],
       parent_type: params[:parent_type],
-      parent_kpi: params[:parent_kpi],
+      parent_kpi: params[:parent_kpi] || [],
       description: params[:description],
       needs_attention_threshold: params[:needs_attention_threshold],
     })
@@ -38,10 +38,10 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
     @period = (@kpi.scorecard_logs.empty?) ? {} : @kpi.scorecard_logs.group_by { |log| log[:fiscal_year] }.map do |year, scorecard_log|
       [year, scorecard_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
     end.to_h
-    render json: { kpi: @kpi.as_json(methods: [:owned_by],
+   render json: { kpi: @kpi.as_json(methods: [:owned_by],
                                     include: {
                                       scorecard_logs: { methods: [:user] },
-                                     }).merge({ :period => @period, :aggregrate_score => @kpi.aggregrate_score }) }
+                                    }).merge({ :period => @period,  :aggregrate_score => @kpi.aggregrate_score }) }
   end
 
   def show
@@ -68,9 +68,6 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
 
   def destroy
     @kpi.destroy!
-    @period = (@kpi.scorecard_logs.empty?) ? {} : kpi.scorecard_logs.group_by { |log| log[:fiscal_year] }.map do |year, scorecard_log|
-      [year, scorecard_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
-    end.to_h
     render json: { kpi: @kpi.as_json(except: %w[created_at updated_at],methods: [:owned_by]),  status: :ok }
   end
 
