@@ -40,6 +40,7 @@ export const ViewEditKPIModal = observer(
     const [kpi, setKpi] = useState(null);
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
     const [loading, setLoading] = useState(true);
+    const [id, setid] = useState(kpiId);
 
     const [header, setHeader] = useState("");
     const [value, setValue] = useState<number>(undefined);
@@ -47,7 +48,7 @@ export const ViewEditKPIModal = observer(
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
     const [data, setData] = useState(null);
     const [description, setDescription] = useState<string>(
-      descriptionTemplatesFormatted?.find(t => t.templateType == "kpi").body.body,
+      descriptionTemplatesFormatted?.find(t => t.templateType == "kpi")?.body.body,
     );
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
@@ -122,7 +123,7 @@ export const ViewEditKPIModal = observer(
       }
     };
     const renderNewValue = value => {
-      setValue(value);
+      drawGraph(keyPerformanceIndicatorStore.kpi);
     };
 
     const chartOptions = {
@@ -167,30 +168,37 @@ export const ViewEditKPIModal = observer(
 
     const setCurrentLog = (step = 1) => {
       const Log = kpi?.scorecardLogs[kpi?.scorecardLogs.length - step];
-      kpi?.parentType ? renderNewValue(kpi?.aggregrateScore) : Log ? renderNewValue(Log?.score) : null;
+      kpi?.parentType
+        ? renderNewValue(kpi?.aggregrateScore)
+        : Log
+        ? renderNewValue(Log?.score)
+        : null;
     };
 
     useEffect(() => {
-      if (kpiId !== null) {
-        keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
+      console.log("HERE USEFFECT ONE");
+      if (id !== null) {
+        keyPerformanceIndicatorStore.getKPI(id).then(value => {
           setDescription(keyPerformanceIndicatorStore.kpi.description);
           setCurrentLog();
           setKpi(keyPerformanceIndicatorStore.kpi);
           setLoading(false);
         });
       }
-    }, [kpiId]);
+    }, [id]);
 
     const saveKPI = ({ description }) => {
       const clonedKPI = Object.assign({}, kpi, { description });
       keyPerformanceIndicatorStore.updateKPI(clonedKPI);
     };
-    const drawGraph = (kpi) => {
+    const drawGraph = KPI => {
+      console.log(KPI, "HERE");
       const startWeek = (company.currentFiscalQuarter - 1) * 13 + 1;
       const weekNumbers = R.range(startWeek, company.currentFiscalWeek + 1);
-      const weeks = kpi?.period.get(company.currentFiscalYear)?.toJSON();
+      console.log(KPI.period, "HERE-period");
+      const weeks = KPI?.period.get(company.currentFiscalYear)?.toJSON();
       const currentQuarterData = weekNumbers.map(week => (weeks?.[week] ? weeks[week].score : 0));
-
+      setData(null);
       setData({
         labels: R.range(startWeek, startWeek + 13).map(weekToDate),
         datasets: [
@@ -211,6 +219,7 @@ export const ViewEditKPIModal = observer(
       if (!kpi) {
         return;
       }
+      console.log(kpi, "after-life");
       const weeks = kpi.period.get(company.currentFiscalYear)?.toJSON();
       drawGraph(kpi);
       const targetText = formatValue(kpi.targetValue, kpi.unitType);
@@ -228,7 +237,7 @@ export const ViewEditKPIModal = observer(
       <>
         <StyledModal
           isOpen={viewEditKPIModalOpen}
-          style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
+          style={{ width: "60rem", maxHeight: "80%", overflow: "auto" }}
           onBackgroundClick={e => {
             setViewEditKPIModalOpen(false);
           }}
@@ -332,13 +341,12 @@ export const ViewEditKPIModal = observer(
                               </ActivityLogDate>
                               <ActivityLogDelete
                                 onClick={() => {
-                                   keyPerformanceIndicatorStore.deleteScorecardLog(
-                                    log.id,
-                                  ).then(scorecard =>{
-                        
-                                  });
-                                   setCurrentLog(2);
-                                   drawGraph(keyPerformanceIndicatorStore.kpi);
+                                  keyPerformanceIndicatorStore
+                                    .deleteScorecardLog(log.id)
+                                    .then(() => {
+                                      setid(null);
+                                      setid(kpiId);
+                                    });
                                 }}
                               >
                                 {" "}

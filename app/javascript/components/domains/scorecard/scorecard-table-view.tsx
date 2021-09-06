@@ -267,7 +267,6 @@ export const ScorecardTableView = observer(
           Header: `WK ${n}`,
           accessor: `wk_${n}`,
           Cell: ({ value }) => {
-            // return (<WeekText color={value.color} background={value.background}>{value.score}</WeekText>);
             if (value === undefined) {
               return (
                 <EmptyWeekContainer>
@@ -380,7 +379,6 @@ export const ScorecardTableView = observer(
             kpiId={viewEditKPIId}
             viewEditKPIModalOpen={viewEditKPIModalOpen}
             setViewEditKPIModalOpen={setViewEditKPIModalOpen}
-            // scorecardLogs={keyPerformanceIndicatorStore.kpi.scorecardLogs.length}
           />
         )}
         {updateKPI && (
