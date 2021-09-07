@@ -212,7 +212,7 @@ export const App = observer(
                     <>
                       <SideNav />
                       <HeaderBar />
-                      <ForumWelcomeModal />
+                      {/* <ForumWelcomeModal /> */}
                       <OnboardingModal />
                       <Container>
                         {profile.productFeatures && profile.productFeatures.pyns ? (
