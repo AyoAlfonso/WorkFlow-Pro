@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_01_114425) do
+ActiveRecord::Schema.define(version: 2021_09_07_110032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -697,16 +697,4 @@ ActiveRecord::Schema.define(version: 2021_09_01_114425) do
   add_foreign_key "users", "companies"
   add_foreign_key "users", "companies", column: "default_selected_company_id"
   add_foreign_key "users", "user_roles"
-
-  create_view "v_scoredcards", sql_definition: <<-SQL
-      SELECT key_performance_indicators.id AS kpi,
-      avg(scorecard_logs.score) AS score,
-      scorecard_logs.user_id AS owned_by,
-      scorecard_logs.fiscal_quarter,
-      scorecard_logs.fiscal_year,
-      scorecard_logs.week
-     FROM (key_performance_indicators
-       JOIN scorecard_logs ON ((key_performance_indicators.id = scorecard_logs.key_performance_indicator_id)))
-    GROUP BY scorecard_logs.user_id, key_performance_indicators.id, scorecard_logs.fiscal_year, scorecard_logs.fiscal_quarter, scorecard_logs.week;
-  SQL
 end

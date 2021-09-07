@@ -123,6 +123,8 @@ export const ViewEditKPIModal = observer(
       }
     };
     const renderNewValue = value => {
+      setData(null);
+      setValue(value);
       drawGraph(keyPerformanceIndicatorStore.kpi);
     };
 
@@ -176,29 +178,25 @@ export const ViewEditKPIModal = observer(
     };
 
     useEffect(() => {
-      console.log("HERE USEFFECT ONE");
-      if (id !== null) {
-        keyPerformanceIndicatorStore.getKPI(id).then(value => {
+      if (kpiId !== null) {
+        keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
           setDescription(keyPerformanceIndicatorStore.kpi.description);
           setCurrentLog();
           setKpi(keyPerformanceIndicatorStore.kpi);
           setLoading(false);
         });
       }
-    }, [id]);
+    }, [kpiId]);
 
     const saveKPI = ({ description }) => {
       const clonedKPI = Object.assign({}, kpi, { description });
       keyPerformanceIndicatorStore.updateKPI(clonedKPI);
     };
     const drawGraph = KPI => {
-      console.log(KPI, "HERE");
       const startWeek = (company.currentFiscalQuarter - 1) * 13 + 1;
       const weekNumbers = R.range(startWeek, company.currentFiscalWeek + 1);
-      console.log(KPI.period, "HERE-period");
       const weeks = KPI?.period.get(company.currentFiscalYear)?.toJSON();
       const currentQuarterData = weekNumbers.map(week => (weeks?.[week] ? weeks[week].score : 0));
-      setData(null);
       setData({
         labels: R.range(startWeek, startWeek + 13).map(weekToDate),
         datasets: [
@@ -219,7 +217,6 @@ export const ViewEditKPIModal = observer(
       if (!kpi) {
         return;
       }
-      console.log(kpi, "after-life");
       const weeks = kpi.period.get(company.currentFiscalYear)?.toJSON();
       drawGraph(kpi);
       const targetText = formatValue(kpi.targetValue, kpi.unitType);
@@ -345,7 +342,9 @@ export const ViewEditKPIModal = observer(
                                     .deleteScorecardLog(log.id)
                                     .then(() => {
                                       setid(null);
+                                      setData(null);
                                       setid(kpiId);
+                                      drawGraph(keyPerformanceIndicatorStore.kpi);
                                     });
                                 }}
                               >
