@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useRef, useEffect } from "react";
 import { ModalWithHeader } from "~/components/shared/modal-with-header";
 import { useTranslation } from "react-i18next";
 import { baseTheme } from "~/themes";
@@ -14,7 +14,7 @@ import { RollUp } from "./roll-up";
 import { Average } from "./average";
 
 interface IAddKPIModalProps {
-  KPIs: any;
+  KPIs: any[];
   showAddKPIModal: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   headerText?: string;
@@ -31,6 +31,20 @@ export const AddKPIModal = observer(
     setExternalManualKPIData,
   }: IAddKPIModalProps): JSX.Element => {
     const formattedKpiModalType = titleCase(kpiModalType);
+    const optionsRef = useRef(null);
+
+    useEffect(() => {
+      const handleClickOutside = event => {
+        console.log(event, "event");
+        if (optionsRef.current && !optionsRef.current.contains(event.target)) {
+          setModalOpen(false);
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [optionsRef]);
 
     return (
       <ModalContainer
@@ -39,6 +53,7 @@ export const AddKPIModal = observer(
         headerText={formattedKpiModalType}
         width="480px"
         height="0px"
+        ref={optionsRef}
       >
         <InnerContainer>
           {kpiModalType == "source" && (

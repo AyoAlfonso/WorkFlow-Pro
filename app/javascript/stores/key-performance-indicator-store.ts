@@ -53,7 +53,9 @@ export const KeyPerformanceIndicatorStoreModel = types
       }
     }),
     deleteKPI: flow(function*() {
+      const { scorecardStore } = getRoot(self);
       const response: ApiResponse<any> = yield self.environment.api.deleteKPI(self.kpi.id);
+      scorecardStore.deleteKPI(response.data.kpi);
       if (response.ok) {
         showToast("KPI deleted", ToastMessageConstants.SUCCESS);
       }

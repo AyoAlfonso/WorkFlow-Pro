@@ -18,7 +18,7 @@ import { TrixEditor } from "react-trix";
 import { OwnedBySection } from "~/components/domains/goals/shared/owned-by-section";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import { toJS } from "mobx";
-
+import { ScorecardKPIDropdownOptions } from "./scorecard-dropdown-options";
 interface ViewEditKPIModalProps {
   kpiId: number;
   setViewEditKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,7 +40,6 @@ export const ViewEditKPIModal = observer(
     const [kpi, setKpi] = useState(null);
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
     const [loading, setLoading] = useState(true);
-    const [id, setid] = useState(kpiId);
 
     const [header, setHeader] = useState("");
     const [value, setValue] = useState<number>(undefined);
@@ -123,7 +122,6 @@ export const ViewEditKPIModal = observer(
       }
     };
     const renderNewValue = value => {
-      setData(null);
       setValue(value);
       drawGraph(keyPerformanceIndicatorStore.kpi);
     };
@@ -141,26 +139,23 @@ export const ViewEditKPIModal = observer(
       maintainAspectRatio: false,
     };
 
-    // const renderDropdownOptions = (): JSX.Element => {
-    //     return (
-
-    //         <DropdownOptionsContainer
-    //           onClick={() => setShowDropdownOptionsContainer(!showDropdownOptionsContainer)}
-    //         >
-    //           <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
-    //           {showDropdownOptionsContainer && (
-    //             <GoalDropdownContainer>
-    //               <GoalDropdownOptions
-    //                 setShowDropdownOptions={setShowDropdownOptionsContainer}
-    //                 setModalOpen={setAnnualInitiativeModalOpen}
-    //                 itemType={"annualInitiative"}
-    //                 itemId={annualInitiative.id}
-    //               />
-    //             </GoalDropdownContainer>
-    //           )}
-    //         </DropdownOptionsContainer>
-    //     );
-    //   };
+    const renderDropdownOptions = (): JSX.Element => {
+      return (
+        <DropdownOptionsContainer
+          onClick={() => setShowDropdownOptionsContainer(!showDropdownOptionsContainer)}
+        >
+          <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
+          {showDropdownOptionsContainer && (
+            <ScorecardKPIDropdownContainer>
+              <ScorecardKPIDropdownOptions
+                setShowDropdownOptions={setShowDropdownOptionsContainer}
+                setModalOpen={setViewEditKPIModalOpen}
+              />
+            </ScorecardKPIDropdownContainer>
+          )}
+        </DropdownOptionsContainer>
+      );
+    };
 
     const weekToDate = (week: number): string =>
       moment(company.fiscalYearStart)
@@ -245,15 +240,16 @@ export const ViewEditKPIModal = observer(
             ) : (
               kpi && (
                 <>
-                  <Header>
-                    {header}
-                    {/* DropdownOptions> */}
-                    {/* {renderDropdownOptions()} */}
-                    {/* <CloseIconContainer onClick={() => setAnnualInitiativeModalOpen(false)}>
-                    <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
-                  </CloseIconContainer> */}
-                    {/* </DropdownOptions> */}
-                  </Header>
+                  <HeaderContainer>
+                    <Header>{header}</Header>
+                    <DropdownOptions>
+                      {renderDropdownOptions()}
+                      <CloseIconContainer onClick={() => setViewEditKPIModalOpen(false)}>
+                        <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+                      </CloseIconContainer>
+                    </DropdownOptions>
+                  </HeaderContainer>
+
                   <OwnerAndLogicContainer>
                     <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
@@ -341,9 +337,6 @@ export const ViewEditKPIModal = observer(
                                   keyPerformanceIndicatorStore
                                     .deleteScorecardLog(log.id)
                                     .then(() => {
-                                      setid(null);
-                                      setData(null);
-                                      setid(kpiId);
                                       drawGraph(keyPerformanceIndicatorStore.kpi);
                                     });
                                 }}
@@ -511,7 +504,9 @@ const TrixEditorContainer = styled.div`
   width: 80%;
 `;
 
-const DropdownOptions = styled.div``;
+const DropdownOptions = styled.div`
+  display: flex;
+`;
 
 const DropdownOptionsContainer = styled.div`
   margin-right: 16px;
@@ -519,6 +514,21 @@ const DropdownOptionsContainer = styled.div`
     cursor: pointer;
   }
 `;
-const GoalDropdownContainer = styled.div`
+const ScorecardKPIDropdownContainer = styled.div`
   margin-left: -50px;
+`;
+
+const StyledOptionIcon = styled(Icon)`
+  transform: rotate(90deg);
+`;
+
+const CloseIconContainer = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;

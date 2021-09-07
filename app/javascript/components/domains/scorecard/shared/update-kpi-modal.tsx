@@ -1,7 +1,7 @@
-import React, { useState } from "react"
-import { observer } from "mobx-react"
-import { useTranslation } from "react-i18next"
-import { useMst } from "~/setup/root"
+import React, { useState } from "react";
+import { observer } from "mobx-react";
+import { useTranslation } from "react-i18next";
+import { useMst } from "~/setup/root";
 import {
   InputFromUnitType,
   ModalWithHeader,
@@ -10,19 +10,19 @@ import {
   StyledInput,
   FormContainer,
   FormElementContainer,
-} from "./modal-elements"
+} from "./modal-elements";
 
 interface UpdateKPIModalProps {
-  kpiId: number,
-  ownedById: number,
-  unitType: string,
-  year: number,
-  week: number,
-  currentValue: number | undefined,
-  headerText: string,
+  kpiId: number;
+  ownedById: number;
+  unitType: string;
+  year: number;
+  week: number;
+  currentValue: number | undefined;
+  headerText: string;
   setUpdateKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   updateKPIModalOpen: boolean;
-  renderNewValue?:any
+  renderNewValue?: any;
 }
 
 export const UpdateKPIModal = observer(
@@ -35,14 +35,14 @@ export const UpdateKPIModal = observer(
     headerText,
     setUpdateKPIModalOpen,
     updateKPIModalOpen,
-    renderNewValue
+    renderNewValue,
   }: UpdateKPIModalProps): JSX.Element => {
     const { keyPerformanceIndicatorStore, sessionStore } = useMst();
     const [value, setValue] = useState<number>(currentValue);
     const [comment, setComment] = useState("");
 
     const handleSave = () => {
-      if(value != undefined) {
+      if (value != undefined) {
         const log = {
           keyPerformanceIndicatorId: kpiId,
           userId: sessionStore.profile.id,
@@ -50,20 +50,21 @@ export const UpdateKPIModal = observer(
           note: null,
           week,
           fiscalYear: year,
-          fiscalQuarter: Math.floor((week - 1)/13) + 1,
-        }
-        if(comment != "") {
+          fiscalQuarter: Math.floor((week - 1) / 13) + 1,
+        };
+        if (comment != "") {
           log.note = comment;
         }
-        keyPerformanceIndicatorStore.createScorecardLog(log)
+        keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
+          setUpdateKPIModalOpen(false);
+          renderNewValue(value);
+        });
       }
-      setUpdateKPIModalOpen(false);
-      renderNewValue(value)
-    }
+    };
 
-    const handleChange = (e) => {
-      setValue(Number(e.target.value.replace(/[^0-9\.]+/g, "")))
-    }
+    const handleChange = e => {
+      setValue(Number(e.target.value.replace(/[^0-9\.]+/g, "")));
+    };
 
     return (
       <ModalWithHeader
@@ -75,7 +76,7 @@ export const UpdateKPIModal = observer(
           <FormElementContainer>
             <InputHeaderWithComment>New value</InputHeaderWithComment>
             <InputFromUnitType
-              unitType={unitType} 
+              unitType={unitType}
               placeholder={"Add the new value..."}
               onChange={handleChange}
               defaultValue={currentValue}
@@ -83,15 +84,18 @@ export const UpdateKPIModal = observer(
           </FormElementContainer>
           <FormElementContainer>
             <InputHeaderWithComment comment={"optional"}>Comment</InputHeaderWithComment>
-            <StyledInput placeholder={"Add a comment..."} onChange={(e) => {
-              setComment(e.target.value);
-            }}/>
+            <StyledInput
+              placeholder={"Add a comment..."}
+              onChange={e => {
+                setComment(e.target.value);
+              }}
+            />
           </FormElementContainer>
           <FormElementContainer>
             <SaveButton onClick={handleSave}>Save</SaveButton>
           </FormElementContainer>
         </FormContainer>
       </ModalWithHeader>
-    )
-  }
-)
+    );
+  },
+);

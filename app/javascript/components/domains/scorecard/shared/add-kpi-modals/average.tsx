@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { KPIModalHeader } from "./header";
@@ -29,10 +29,12 @@ export const Average = observer(
     const [selectedKPIs, setSelectedKPIs] = useState([]);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
     const [unitType, setUnitType] = useState("numerical");
+    const optionsRef = useRef(null);
 
     useEffect(() => {
       setfilteredKPIs(filterBasedOnUnitType(KPIs));
     }, [unitType]);
+
 
     const groupBy = objectArray => {
       return objectArray.reduce(function(acc, obj) {

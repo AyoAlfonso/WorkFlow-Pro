@@ -39,12 +39,18 @@ export const ScorecardStoreModel = types
       }
     },
     mergeKPIS(kpi) {
-      const kpiIndex = self.kpis.findIndex(KPI =>  KPI.id == kpi.id);
+      const kpiIndex = self.kpis.findIndex(KPI => KPI.id == kpi.id);
       self.kpis[kpiIndex] = kpi;
     },
-      deleteScorecard(scorecardLog) {
-      const kpiIndex = self.kpis.findIndex(KPI =>  KPI.id == scorecardLog.keyPerformanceIndicatorId);
-      self.kpis[kpiIndex].scorecardLogs = self.kpis[kpiIndex].scorecardLogs.filter(log => log.id != scorecardLog.id ) as any
+    deleteKPI(kpi) {
+      const updatedKPIs = R.filter(KPI => KPI.id != kpi.id, self.kpis);
+      self.kpis = updatedKPIs;
+    },
+    deleteScorecard(scorecardLog) {
+      const kpiIndex = self.kpis.findIndex(KPI => KPI.id == scorecardLog.keyPerformanceIndicatorId);
+      self.kpis[kpiIndex].scorecardLogs = self.kpis[kpiIndex].scorecardLogs.filter(
+        log => log.id != scorecardLog.id,
+      ) as any;
     },
   }));
 
