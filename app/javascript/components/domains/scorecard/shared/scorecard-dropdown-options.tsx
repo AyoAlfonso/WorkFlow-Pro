@@ -31,7 +31,6 @@ export const ScorecardKPIDropdownOptions = ({
 
   const closeModal = () => {
     if (setModalOpen) {
-      console.log("closeModal--");
       setModalOpen(false);
     }
   };

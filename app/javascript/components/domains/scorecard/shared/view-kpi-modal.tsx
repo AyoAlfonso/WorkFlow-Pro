@@ -337,7 +337,7 @@ export const ViewEditKPIModal = observer(
                                   keyPerformanceIndicatorStore
                                     .deleteScorecardLog(log.id)
                                     .then(() => {
-                                      drawGraph(keyPerformanceIndicatorStore.kpi);
+                                     setCurrentLog()
                                     });
                                 }}
                               >

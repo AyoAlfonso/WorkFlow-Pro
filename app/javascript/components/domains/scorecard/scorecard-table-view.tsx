@@ -533,7 +533,7 @@ type ScoreContainerProps = {
 
 const ScoreContainer = styled.div<ScoreContainerProps>`
   display: flex;
-  width: 32px;
+  width: auto;
   height: 32px;
   background: ${props => props.background};
   justify-content: center;

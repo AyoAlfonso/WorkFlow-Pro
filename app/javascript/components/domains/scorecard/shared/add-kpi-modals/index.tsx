@@ -35,7 +35,6 @@ export const AddKPIModal = observer(
 
     useEffect(() => {
       const handleClickOutside = event => {
-        console.log(event, "event");
         if (optionsRef.current && !optionsRef.current.contains(event.target)) {
           setModalOpen(false);
         }

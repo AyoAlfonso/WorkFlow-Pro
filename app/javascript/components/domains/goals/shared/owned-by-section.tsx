@@ -41,7 +41,7 @@ export const OwnedBySection = observer(
       annualInitiativeStore,
       quarterlyGoalStore,
       subInitiativeStore,
-      keyPerformanceIndicatorStore
+      keyPerformanceIndicatorStore,
     } = useMst();
     const currentUser = sessionStore.profile;
     const [store, setStore] = useState<any>(null);
@@ -55,11 +55,10 @@ export const OwnedBySection = observer(
       } else if (type == "subInitiative") {
         setStore(subInitiativeStore);
       } else if (type == "scorecard") {
-          setStore(keyPerformanceIndicatorStore);
+        setStore(keyPerformanceIndicatorStore);
       }
       setOwner(ownedBy);
     }, [ownedBy]);
-
 
     const companyUsers = userStore.users;
     const editable =

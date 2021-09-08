@@ -99,7 +99,7 @@ const StyledModal = Modal.styled`
   width: ${props => props.width || "30rem"};
   height: ${props => props.overflow || "auto"};
   min-height: 100px;
-  border-radius: ${props => props.borderRadius || "auto"};
+  border-radius: ${props => props.borderRadius || "5px"};
   background-color: ${props => props.theme.colors.white};
   max-height: 660px;
   overflow: ${props => props.width || "hidden"};
