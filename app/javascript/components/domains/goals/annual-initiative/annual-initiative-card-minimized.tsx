@@ -8,6 +8,7 @@ import * as moment from "moment";
 import { observer } from "mobx-react";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useMst } from "~/setup/root";
+import { Loading } from "~/components/shared";
 
 interface IAnnualInitiativeCardMinimizedProps {
   annualInitiative: AnnualInitiativeType;
@@ -42,6 +43,10 @@ export const AnnualInitiativeCardMinimized = observer(
         color: "",
       },
     };
+
+    if (annualInitiative == null) {
+      return <Loading />;
+    }
 
     if (annualInitiative.closedAt) {
       statusBadge.description = `Closed - FY${annualInitiative.fiscalYear %
@@ -109,7 +114,8 @@ export const AnnualInitiativeCardMinimized = observer(
     const annualQtrGoalsLength =
       annualInitiative.quarterlyGoals.length +
       annualInitiative.quarterlyGoals.reduce(
-        (acc: number, quarterlyGoal) => acc + (quarterlyGoal.subInitiatives ? quarterlyGoal.subInitiatives.length : 0),
+        (acc: number, quarterlyGoal) =>
+          acc + (quarterlyGoal.subInitiatives ? quarterlyGoal.subInitiatives.length : 0),
         0,
       );
     milestones.forEach((obj, index) => {
@@ -184,12 +190,13 @@ export const AnnualInitiativeCardMinimized = observer(
             </StatusBadge>
           </BadgeContainer>
         </RowContainer>
-        {disableOpen ||
-          (<>
+        {disableOpen || (
+          <>
             <InitiativeCountContainer>{renderCounts()}</InitiativeCountContainer>
 
             <StatusSquareContainer>{renderStatusSquares()}</StatusSquareContainer>
-          </>)}
+          </>
+        )}
 
         <Container
           onClick={e => {
@@ -206,19 +213,19 @@ export const AnnualInitiativeCardMinimized = observer(
               style={{ padding: "0px 5px" }}
             />
           ) : (
-              <MaximizeIconContainer>
-                <ShowInitiativeBar>
-                  {" "}
-                  {showMinimizedCard ? "Show" : "Hide"} Initiatives{" "}
-                </ShowInitiativeBar>
-                <StyledIcon
-                  icon={showMinimizedCard ? "Chevron-Down" : "Chevron-Up"}
-                  size={"12px"}
-                  iconColor={primary100} // TODOIT: ADD TO CONSTANT VARIABLES
-                  style={{ padding: "0px 5px" }}
-                />
-              </MaximizeIconContainer>
-            )}
+            <MaximizeIconContainer>
+              <ShowInitiativeBar>
+                {" "}
+                {showMinimizedCard ? "Show" : "Hide"} Initiatives{" "}
+              </ShowInitiativeBar>
+              <StyledIcon
+                icon={showMinimizedCard ? "Chevron-Down" : "Chevron-Up"}
+                size={"12px"}
+                iconColor={primary100} // TODOIT: ADD TO CONSTANT VARIABLES
+                style={{ padding: "0px 5px" }}
+              />
+            </MaximizeIconContainer>
+          )}
         </Container>
       </div>
     );
