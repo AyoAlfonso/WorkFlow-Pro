@@ -175,21 +175,39 @@ if Rails.env.development?
   c1.users.each{|u| u.confirm}
 
   # KPI seeding
-  k1 = KeyPerformanceIndicator.where(owner_type: 2, owned_by_id: c1.id, description: "Booked Work").first_or_create(
+  k1 = KeyPerformanceIndicator.where(owned_by_id: c1.id, description: "Booked Work").first_or_create(
+    title: "Important_KPI",
     created_by: u2,
     owned_by_id: u2.id,
-    company_id: c1.id,
-    owner_type: 2,
+    target_value: 500,
+    viewers: [
+    {
+        "id": "2",
+        "type": "team"
+    },
+    {
+        "id": "2",
+        "type": "user"
+    }
+    ],
     unit_type: 2,
     description: "Booked Work",
-    greater_than: true,
-    target_value: 5000
+    greater_than: true
   )
-  k2 = KeyPerformanceIndicator.where(owner_type: 2, owned_by_id: c1.id, description: "Variance in Salaries").first_or_create(
+  k2 = KeyPerformanceIndicator.where(owned_by_id: c1.id, description: "Variance in Salaries").first_or_create(
+    title: "Important_KPI",
     created_by: u1,
     owned_by_id: u1.id,
-    company_id: c1.id,
-    owner_type: 2,
+    viewers: [
+    {
+        "id": "2",
+        "type": "team"
+    },
+    {
+        "id": "2",
+        "type": "user"
+    }
+    ],
     unit_type: 0,
     description: "Variance in Salaries",
     greater_than: false,
