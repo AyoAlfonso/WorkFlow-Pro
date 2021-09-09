@@ -288,7 +288,6 @@ export const GoalsIndex = observer(
             subInitiativeId={subInitiativeId}
             setSubInitiativeModalOpen={setSubInitiativeModalOpen}
             annualInitiativeDescription={annualInitiativeDescription}
-            // setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
             setAnnualInitiativeId={setAnnualInitiativeId}
             showCreateMilestones={true}
           />
