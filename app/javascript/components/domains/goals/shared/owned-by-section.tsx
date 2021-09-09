@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import * as R from "ramda";
 import { UserType } from "~/types/user";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
