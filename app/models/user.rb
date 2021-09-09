@@ -44,7 +44,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :product_features, :allow_destroy => true
 
   validates :first_name, :last_name, presence: true, on: :update
-  validates :product_features, length: { maximum: 1, too_long: "1 is maximum" }
+  # validates :product_features, length: { maximum: 1, too_long: "1 is maximum" }
 
   accepts_nested_attributes_for :daily_logs
 
@@ -52,7 +52,7 @@ class User < ApplicationRecord
 
   def create_product_features
       if self.product_features.empty? 
-	        ProductFeature.create!(user_id: self.id, objective: true, team: true, meeting: true, company: true, pyns: true)
+	      ProductFeature.create!(user_id: self.id, objective: true, team: true, meeting: true, company: true, pyns: true)
 			end
   end
 
