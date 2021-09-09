@@ -9,7 +9,8 @@ export const ProductFeaturesModel = types
            pyns: types.maybeNull(types.boolean),
            team: types.maybeNull(types.boolean),
            meeting: types.maybeNull(types.boolean),
-           company: types.maybeNull(types.boolean)
+           company: types.maybeNull(types.boolean),
+           scorecard:  types.maybeNull(types.boolean),
          })
          .views(self => ({}))
          .actions(self => ({}));

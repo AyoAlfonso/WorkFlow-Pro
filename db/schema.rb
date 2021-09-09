@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_10_144152) do
+ActiveRecord::Schema.define(version: 2021_09_07_110032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -298,6 +298,9 @@ ActiveRecord::Schema.define(version: 2021_08_10_144152) do
     t.jsonb "viewers"
     t.bigint "owned_by_id"
     t.float "needs_attention_threshold"
+    t.string "title"
+    t.string "parent_type"
+    t.integer "parent_kpi", default: [], array: true
     t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
@@ -372,6 +375,7 @@ ActiveRecord::Schema.define(version: 2021_08_10_144152) do
     t.boolean "meeting", default: false, null: false
     t.boolean "company", default: false, null: false
     t.boolean "pyns", default: false, null: false
+    t.boolean "scorecard", default: false
     t.index ["user_id"], name: "index_product_features_on_user_id"
   end
 
@@ -702,16 +706,4 @@ ActiveRecord::Schema.define(version: 2021_08_10_144152) do
   add_foreign_key "users", "companies"
   add_foreign_key "users", "companies", column: "default_selected_company_id"
   add_foreign_key "users", "user_roles"
-
-  create_view "v_scoredcards", sql_definition: <<-SQL
-      SELECT key_performance_indicators.id AS kpi,
-      avg(scorecard_logs.score) AS score,
-      scorecard_logs.user_id AS owned_by,
-      scorecard_logs.fiscal_quarter,
-      scorecard_logs.fiscal_year,
-      scorecard_logs.week
-     FROM (key_performance_indicators
-       JOIN scorecard_logs ON ((key_performance_indicators.id = scorecard_logs.key_performance_indicator_id)))
-    GROUP BY scorecard_logs.user_id, key_performance_indicators.id, scorecard_logs.fiscal_year, scorecard_logs.fiscal_quarter, scorecard_logs.week;
-  SQL
 end

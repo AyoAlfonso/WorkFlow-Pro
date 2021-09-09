@@ -4,12 +4,12 @@ class PabblySubscriptionService
   def initialize
     @connection = Faraday.new("https://payments.pabbly.com/api/v1/") do |conn|
       conn.adapter Faraday.default_adapter
-      conn.basic_auth(ENV['PABBLY_API_KEY'], ENV['PABBLY_SECRET_KEY'])
-    end   
+      conn.basic_auth(ENV["PABBLY_API_KEY"], ENV["PABBLY_SECRET_KEY"])
+    end
   end
 
   def get_all_subscriptions
-    api_get('customers')
+    api_get("customers")
   end
 
   def get_subscriptions(company_id) #company_id in our database
@@ -31,11 +31,11 @@ class PabblySubscriptionService
     user.update!(customer_subscription_profile_id: nil)
   end
 
-
   private
+
   def api_get(url)
     response = @connection.get do |req|
-      req.headers['Content-Type'] = 'application/json'
+      req.headers["Content-Type"] = "application/json"
       req.url url
     end
     parse_results(response)
@@ -44,7 +44,7 @@ class PabblySubscriptionService
   def api_post(url, body = nil)
     response = @connection.post do |req|
       req.url url
-      req.headers['Content-Type'] = 'application/json'
+      req.headers["Content-Type"] = "application/json"
       req.body = body.to_json if body.present?
     end
     parse_results(response)
@@ -53,7 +53,7 @@ class PabblySubscriptionService
   def api_delete(url)
     response = @connection.delete do |req|
       req.url url
-      req.headers['Content-Type'] = 'application/json'
+      req.headers["Content-Type"] = "application/json"
     end
     parse_results(response)
   end

@@ -43,12 +43,13 @@ export const GoalsCoreFour = ({
         {renderHideButton()}
       </CoreFourHeader>
 
-      {showCoreFour && <CoreFourValues />}
+      {showCoreFour && <CoreFirstValue />}
     </Container>
   );
 };
 
-const CoreFourValues = observer(
+
+const CoreFirstValue = observer(
   (): JSX.Element => {
     const {
       companyStore: { company },
@@ -58,8 +59,7 @@ const CoreFourValues = observer(
     return company ? (
       <HomeContainerBorders key="core-four">
         <Flex>
-          <div>
-            <Box className = "foundation-1" width={1/4} sx={{ padding: 16  }}>
+            <Box width={1/4} sx={{ padding: 16 }}>
               <CoreFourHeaderText fontSize={2} color={"primary100"}>
                 {t("core.core1")}
               </CoreFourHeaderText>
@@ -70,7 +70,24 @@ const CoreFourValues = observer(
                 ></div>
               </CoreFourBodyTextContainer>
             </Box>
-            <Box className="foundation-2" width={1/4} sx={{ padding: 16 }}>
+        </Flex>
+      </HomeContainerBorders>
+    ) : (
+      <Loading key="core-four" />
+    );
+  },
+);
+const CoreSecondValue = observer(
+  (): JSX.Element => {
+    const {
+      companyStore: { company },
+    } = useMst();
+    const { t } = useTranslation();
+
+    return company ? (
+    <HomeContainerBorders>
+      <Flex>
+            <Box width={1/4} sx={{ padding: 16 }}>
               <CoreFourHeaderText fontSize={2} color={"primary100"}>
                 {t("core.core2")}
               </CoreFourHeaderText>
@@ -81,7 +98,25 @@ const CoreFourValues = observer(
                 ></div>
               </CoreFourBodyTextContainer>
             </Box>
-            <Box className="foundation-3" width={1/4} sx={{ padding: 16 }}>
+      </Flex>
+    </HomeContainerBorders>
+  ) : (
+      <Loading key="core-four" />
+    );
+  },
+);
+
+const CoreThirdValue = observer(
+  (): JSX.Element => {
+    const {
+      companyStore: { company },
+    } = useMst();
+    const { t } = useTranslation();
+
+    return company ? (
+    <HomeContainerBorders>
+      <Flex>
+            <Box width={1/4} sx={{ padding: 16 }}>
               <CoreFourHeaderText fontSize={2} color={"primary100"}>
                 {t("core.core3")}
               </CoreFourHeaderText>
@@ -92,7 +127,25 @@ const CoreFourValues = observer(
                 ></div>
               </CoreFourBodyTextContainer>
             </Box>
-            <Box className="foundation-4" width={1/4} sx={{ padding: 16 }}>
+      </Flex>
+    </HomeContainerBorders>
+  ) : (
+      <Loading key="core-four" />
+    );
+  },
+);
+
+const CoreFourthValue = observer(
+  (): JSX.Element => {
+    const {
+      companyStore: { company },
+    } = useMst();
+    const { t } = useTranslation();
+
+    return company ? (
+    <HomeContainerBorders>
+      <Flex>
+            <Box width={1/4} sx={{ padding: 16 }}>
               <CoreFourHeaderText fontSize={2} color={"primary100"}>
                 {t("core.core4")}
               </CoreFourHeaderText>
@@ -103,10 +156,9 @@ const CoreFourValues = observer(
                 ></div>
               </CoreFourBodyTextContainer>
             </Box>
-          </div>
-        </Flex>
-      </HomeContainerBorders>
-    ) : (
+      </Flex>
+    </HomeContainerBorders>
+  ) : (
       <Loading key="core-four" />
     );
   },
@@ -114,9 +166,14 @@ const CoreFourValues = observer(
 
 export const CoreFourOnly = (): JSX.Element => (
   <div>
-    <CoreFourValues />
+    <CoreFirstValue />
+    <CoreSecondValue />
+    <CoreThirdValue />
+    <CoreFourthValue />
   </div>
 );
+
+
 
 
 const Container = styled.div`

@@ -54,7 +54,7 @@ ActiveAdmin.register Company do
       row :forum_type
     end
     br
-    panel "#{I18n.t('core_four')}" do
+    panel "#{I18n.t("core_four")}" do
       attributes_table_for company.core_four do
         row :core_1 do |cf|
           cf.core_1.body
@@ -71,9 +71,9 @@ ActiveAdmin.register Company do
       end
     end
     br
-    panel 'Users' do
+    panel "Users" do
       table_for company.users do
-        column('Full Name') { |user| link_to user.full_name, admin_user_path(user) }
+        column("Full Name") { |user| link_to user.full_name, admin_user_path(user) }
         column :email
         column :phone_number
         column :current_sign_in_at
@@ -81,7 +81,7 @@ ActiveAdmin.register Company do
         column :created_at
       end
     end
-    panel "#{I18n.t('accountability_chart')}" do
+    panel "#{I18n.t("accountability_chart")}" do
       attributes_table_for company do
         row :accountability_chart do |c|
           if c.accountability_chart_embed.present?
@@ -90,7 +90,7 @@ ActiveAdmin.register Company do
         end
       end
     end
-    panel 'Strategic Plan' do
+    panel "Strategic Plan" do
       attributes_table_for company do
         row :strategic_plan do |c|
           if c.strategic_plan_embed.present?
@@ -103,7 +103,7 @@ ActiveAdmin.register Company do
 
   form do |f|
     h1 f.object.name
-    f.inputs 'Company Details' do
+    f.inputs "Company Details" do
       f.input :name
       f.input :logo, as: :file, hint: (f.object.try(:logo_url).present? ? image_tag(f.object.logo_url) : "Please set logo")
       f.input :address
@@ -116,7 +116,7 @@ ActiveAdmin.register Company do
       f.input :display_format, as: :select, collection: Company.display_formats.keys
       f.input :forum_type, as: :select, collection: Company.forum_types.keys
     end
-    h2 'Foundational Four '
+    h2 "Foundational Four "
     f.inputs do
       # Some hackery because trix editor was only displaying one field otherwise in the has_many
       [:core_1, :core_2, :core_3, :core_4].each_with_index do |cf_field|
@@ -133,16 +133,16 @@ ActiveAdmin.register Company do
 
     f.inputs do
       f.has_many :company_static_datas, allow_destroy: false, new_record: false do |tu|
-        tu.input :field, input_html: {disabled: true}
+        tu.input :field, input_html: { disabled: true }
         tu.input :value
-      end 
+      end
     end
 
     f.inputs do
       f.has_many :description_templates, allow_destroy: false, new_record: false do |tu|
-        tu.input :title, input_html: {disabled: true}
+        tu.input :title, input_html: { disabled: true }
         tu.input :body, as: :action_text
-      end 
+      end
     end
     f.actions
   end

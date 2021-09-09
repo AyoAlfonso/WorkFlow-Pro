@@ -17,7 +17,7 @@ class KeyActivityResortService < ApplicationService
     when "by_due_date_and_priority"
       sorted_key_activities = @key_activities.is_in_scheduled_group_id(scheduled_group_id).sort_by_due_date.sort_by_priority.sort_by_created_date
     end
-    
+
     reset_positions(sorted_key_activities)
     @key_activities.sort_by_position
   end
@@ -31,6 +31,6 @@ class KeyActivityResortService < ApplicationService
   end
 
   def reject_label_list(key_activities)
-    key_activities.each{|ka| ka.delete("label_list")}
+    key_activities.each { |ka| ka.delete("label_list") }
   end
 end

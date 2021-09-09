@@ -45,16 +45,16 @@ class Company < ApplicationRecord
   end
 
   def verify_description_templates
-      existing_templates = description_templates.where(template_type: DefaultAdminTemplate.template_types.values.map(&:to_i)).pluck(:template_type)
-       if existing_templates.length < DefaultAdminTemplate.template_types.length
-         DefaultAdminTemplate.find_each do |template|
-              if !template.template_type.in?(existing_templates)
-                DescriptionTemplate.create!(template_type: template.template_type, company: self, body: template.body, title: template.title)
-              end
-          end
-       end
+    existing_templates = description_templates.where(template_type: DefaultAdminTemplate.template_types.values.map(&:to_i)).pluck(:template_type)
+    if existing_templates.length < DefaultAdminTemplate.template_types.length
+      DefaultAdminTemplate.find_each do |template|
+        if !template.template_type.in?(existing_templates)
+          DescriptionTemplate.create!(template_type: template.template_type, company: self, body: template.body, title: template.title)
+        end
+      end
+    end
   end
-  
+
   def self.find_first_with_team(team_id)
     with_team(team_id).first
   end

@@ -223,6 +223,7 @@ export const SideNavNoMst = (
   const showPyn = productFeatures && productFeatures.pyns;
   const showTeam = productFeatures && productFeatures.team;
   const showMeeting = productFeatures && productFeatures.meeting;
+  const showScorecard = productFeatures && productFeatures.scorecard;
   const renderTeam = (teamLength: number) => {
     switch (teamLength) {
       case 0:
@@ -402,12 +403,15 @@ export const SideNavNoMst = (
       ) : (
         <> </>
       )}
-      {/* Release next version */}
-      {/* {company &&
-        (<StyledNavLinkChildrenActive to={`/scorecard/company/${company.id}`} icon={"Scorecards"} currentPathName={currentPathName}>
+      {company && showScorecard ? (
+        <StyledNavLinkChildrenActive
+          to={`/scorecard/company/${company.id}`}
+          icon={"Scorecard_New"}
+          currentPathName={currentPathName}
+        >
           {t("navigation.scorecards")}
-        </StyledNavLinkChildrenActive>)
-      } */}
+        </StyledNavLinkChildrenActive>
+      ): (<> </>)}
       {company && company.accessCompany && !showTeam ? (
         renderMeeting(R.path(["length"], teams) || 0, "team")
       ) : (

@@ -6,7 +6,7 @@ module NotificationEmailJobHelper
       greeting: "Hi #{user&.first_name}!",
       message: "See what you have on the table for today and set yourself up for success!",
       cta_text: "Plan My Day",
-      cta_url: "" # home
+      cta_url: "", # home
     ).daily_planning_email.deliver_later
   end
 
@@ -17,7 +17,7 @@ module NotificationEmailJobHelper
       greeting: "Good Evening #{user&.first_name}!",
       message: "Remember we don't learn from our experiences, we learn from reflecting on our experiences! Take some time to reflect. Your future self will be glad you did.",
       cta_text: "Evening Reflection",
-      cta_url: "" #home
+      cta_url: "", #home
     ).notification_email.deliver_later
   end
 
@@ -26,7 +26,7 @@ module NotificationEmailJobHelper
       user: user,
       subject: "#{user.first_name}, Time to Plan for Next Week",
       greeting: "Hi #{user&.first_name}! 👋",
-      message: ""
+      message: "",
     ).end_of_week_stats.deliver_later
   end
 
@@ -38,7 +38,7 @@ module NotificationEmailJobHelper
       greeting: "Hi #{user&.first_name}!",
       message: "You have an upcoming Weekly Alignment Meeting with your team. Go to the team page and start the meeting:",
       cta_text: "Weekly Alignment Meeting",
-      cta_url: "/team/#{team.id}"
+      cta_url: "/team/#{team.id}",
     ).notification_email.deliver_later
   end
 
@@ -49,7 +49,7 @@ module NotificationEmailJobHelper
       message: "Check out your progress from last week in numbers and plan for the week ahead.",
       greeting: "Hi #{user&.first_name}!",
       cta_text: "Plan Your Week",
-      cta_url: "" # home
+      cta_url: "", # home
     ).weekly_planning_email.deliver_later
   end
 end

@@ -59,7 +59,7 @@ class User < ApplicationRecord
 
   def as_json(options = [])
     super({
-      methods: [:avatar_url]
+      methods: [:avatar_url],
     })
   end
 
@@ -78,7 +78,7 @@ class User < ApplicationRecord
 
   def as_json(options = [])
     super({
-      methods: [:avatar_url]
+      methods: [:avatar_url],
     })
   end
 

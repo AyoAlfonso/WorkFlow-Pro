@@ -2,7 +2,7 @@ class MeetingTemplatePolicy < ApplicationPolicy
   def index?
     true
   end
-  
+
   class Scope
     attr_reader :user, :scope
 
@@ -15,5 +15,4 @@ class MeetingTemplatePolicy < ApplicationPolicy
       scope.all
     end
   end
-
 end

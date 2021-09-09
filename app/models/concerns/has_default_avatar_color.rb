@@ -11,9 +11,8 @@ module HasDefaultAvatarColor
     "fuschiaBlue",
     "finePine",
     "bali",
-    "poppySunrise"
+    "poppySunrise",
   ]
-
 
   def set_default_avatar_color
     self.update(default_avatar_color: POSSIBLE_COLORS.sample)

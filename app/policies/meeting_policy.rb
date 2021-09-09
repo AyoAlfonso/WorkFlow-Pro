@@ -52,7 +52,7 @@ class MeetingPolicy < ApplicationPolicy
   def meetings_by_date?
     true
   end
-  
+
   class Scope
     attr_reader :user, :scope
 
@@ -65,5 +65,4 @@ class MeetingPolicy < ApplicationPolicy
       scope.includes([:hosted_by, meeting_template: [steps: :rich_text_description_text]]).optimized.from_user_teams_or_hosted_by_user(@user)
     end
   end
-
 end

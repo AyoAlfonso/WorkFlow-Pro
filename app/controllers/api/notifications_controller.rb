@@ -4,16 +4,17 @@ class Api::NotificationsController < Api::ApplicationController
   before_action :set_notification, only: [:update]
 
   def index
-    render '/api/notifications/index'
+    render "/api/notifications/index"
   end
 
   def update
     @notification.update_notification(notification_params)
     set_notifications
-    render '/api/notifications/index'
+    render "/api/notifications/index"
   end
 
   private
+
   def set_notifications
     @notifications = policy_scope(Notification).owned_by_user(current_user).order(:id)
   end

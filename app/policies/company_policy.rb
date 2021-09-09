@@ -1,5 +1,4 @@
 class CompanyPolicy < ApplicationPolicy
-
   def create?
     true
   end
@@ -31,8 +30,8 @@ class CompanyPolicy < ApplicationPolicy
   def get_onboarding_goals?
     true
   end
-    
-  def create_or_update_onboarding_key_activities? 
+
+  def create_or_update_onboarding_key_activities?
     true
   end
 

@@ -12,6 +12,9 @@ interface IModalWithHeaderProps {
   subHeaderText?: string;
   children: any;
   width?: string;
+  height?: string;
+  headerFontSize?: string;
+  borderRadius?: string;
   overflow?: string;
   padding?: string;
   boxSizing?: string;
@@ -27,24 +30,29 @@ export const ModalWithHeader = ({
   headerText,
   centerHeader,
   children,
-  width,
   overflow,
   padding,
   boxSizing,
   subHeaderText,
+  headerFontSize,
   onCloseAction,
   headerMarginTop,
   headerMarginBottom,
   onClose,
+  width,
+  height,
+  borderRadius,
 }: IModalWithHeaderProps): JSX.Element => {
   return (
     <StyledModal
       isOpen={modalOpen}
       style={{
-        width: width || "30rem",
-        overflow: overflow || "auto",
-        padding: padding,
-        boxSizing: boxSizing,
+        width,
+        overflow,
+        padding,
+        boxSizing,
+        height,
+        borderRadius,
       }}
     >
       <HeaderContainer>
@@ -55,7 +63,7 @@ export const ModalWithHeader = ({
             type={"h3"}
             centerHeader={centerHeader}
             color={"black"}
-            fontSize={"16px"}
+            fontSize={headerFontSize}
           >
             {headerText}
           </StyledHeading>
@@ -88,12 +96,13 @@ const StyledIcon = styled(Icon)`
 `;
 
 const StyledModal = Modal.styled`
-  width: 30rem;
+  width: ${props => props.width || "30rem"};
+  height: ${props => props.overflow || "auto"};
   min-height: 100px;
-  border-radius: 5px;
+  border-radius: ${props => props.borderRadius || "5px"};
   background-color: ${props => props.theme.colors.white};
   max-height: 660px;
-  overflow: auto;
+  overflow: ${props => props.width || "hidden"};
 `;
 
 const HeaderContainer = styled.div`
@@ -131,13 +140,15 @@ type StyledHeadingProps = {
   centerHeader?: boolean;
   mt?: string;
   mb?: string;
+  fontSize?: string;
 };
 
 const StyledHeading = styled(Heading)<StyledHeadingProps>`
   font-family: Lato;
-  margin-top: ${props => (props.mt ? props.mt : "16px")};
-  margin-bottom: ${props => (props.mb ? props.mb : "16px")};
+  margin-top: ${props => props.mt || "16px"};
+  margin-bottom: ${props => props.mb || "16px"};
   font-weight: bold;
+  font-size: ${props => props.fontSize || "16px"};
   margin-left: ${props => (props.centerHeader ? "auto" : "0px")};
   margin-right: ${props => (props.centerHeader ? "auto" : "0px")};
 `;

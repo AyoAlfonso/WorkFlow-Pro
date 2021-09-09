@@ -1,6 +1,6 @@
 ActiveAdmin.register ConversationStarter do
   permit_params :body
-  
+
   index do
     selectable_column
     id_column
@@ -9,5 +9,4 @@ ActiveAdmin.register ConversationStarter do
   end
 
   filter :body
-
 end

@@ -1,4 +1,5 @@
-require 'sidekiq-scheduler'
+require "sidekiq-scheduler"
+
 class TestNotificationsJob
   include Sidekiq::Worker
   include NotificationsHelper

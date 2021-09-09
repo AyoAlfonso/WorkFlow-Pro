@@ -56,7 +56,6 @@ class ApplicationPolicy
     user_is_company_admin_of_this_company?(@company)
   end
 
-
   def user_can_observe_company?(company)
     @user.can_observe_company?(company)
   end
@@ -64,7 +63,6 @@ class ApplicationPolicy
   def user_can_observe_current_company?
     user_can_observe_company?(@company)
   end
-
 
   class Scope
     attr_reader :user, :company, :scope

@@ -25,7 +25,7 @@ class Team < ApplicationRecord
   end
 
   def set_default_executive_team
-  self.update(executive: 1)
+    self.update(executive: 1)
   end
 
   def active
