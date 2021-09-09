@@ -48,6 +48,14 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :daily_logs
 
+  after_save :create_product_features
+
+  def create_product_features
+      if self.product_features.empty? 
+	        ProductFeature.create!(user_id: self.id, objective: true, team: true, meeting: true, company: true, pyns: true)
+			end
+  end
+
   #TODO - DELETE COMPANY FROM DATABASE to be removed after we finalize rake, etc.
   belongs_to :default_selected_company, class_name: "Company"
 

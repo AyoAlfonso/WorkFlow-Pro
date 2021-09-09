@@ -160,9 +160,10 @@ export const ScorecardTableView = observer(
           };
           const weeks = Object.values(kpi?.period?.[year] || {});
           weeks.forEach((week: any) => {
-            const percentScore = getScorePercent(week.score, kpi.targetValue, kpi.greaterThan);
+            const score = kpi?.parentType ? kpi?.aggregrateScore : week ? week?.score : null;
+            const percentScore = getScorePercent(score, kpi.targetValue, kpi.greaterThan);
             row[`wk_${week.week}`] = {
-              score: formatValue(kpi.unitType, week.score),
+              score: formatValue(kpi.unitType, score),
               color: getScoreValueColor(percentScore),
             };
           });
