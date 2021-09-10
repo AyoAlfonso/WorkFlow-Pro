@@ -43,7 +43,8 @@ export const GoalsCoreFour = ({
         {renderHideButton()}
       </CoreFourHeader>
 
-      {showCoreFour && <CoreFirstValue />}
+      {showCoreFour && <CoreFirstValue /> && <CoreSecondValue /> &&
+      <CoreThirdValue /> && <CoreFourthValue />}
     </Container>
   );
 };
@@ -56,7 +57,7 @@ const CoreFirstValue = observer(
     } = useMst();
     const { t } = useTranslation();
 
-    return company ? (
+    return company ? ( 
       <HomeContainerBorders key="core-four">
         <Flex>
             <Box width={1/4} sx={{ padding: 16 }}>
