@@ -75,6 +75,9 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
     });
   }, [loadOnboarding]);
 
+  console.log(companyStore);
+  console.log(goalData);
+
   const { fieldsAndLabels, headingsAndDescriptions, timeZones } = staticDataStore;
   const { onboardingCompany, onboardingDisplayFormat } = companyStore;
   const { profile } = sessionStore;
