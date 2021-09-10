@@ -23,6 +23,7 @@ interface ViewEditKPIModalProps {
   kpiId: number;
   setViewEditKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   viewEditKPIModalOpen: boolean;
+  setKpis:any
 }
 
 export const ViewEditKPIModal = observer(
@@ -30,6 +31,7 @@ export const ViewEditKPIModal = observer(
     kpiId,
     setViewEditKPIModalOpen,
     viewEditKPIModalOpen,
+    setKpis
   }: ViewEditKPIModalProps): JSX.Element => {
     const {
       companyStore: { company },
@@ -52,6 +54,7 @@ export const ViewEditKPIModal = observer(
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
+    console.log(viewEditKPIModalOpen, "viewEditKPIModalOpen--");
 
     const {
       backgroundGrey,
@@ -222,7 +225,12 @@ export const ViewEditKPIModal = observer(
       );
       setHeader(`${kpi.description} ${kpi.greaterThan ? "≥" : "≤"} ${targetText}`);
       const currentWeek = weeks?.[company.currentFiscalWeek];
-      setValue(currentWeek ? currentWeek.score : undefined);
+      const score = kpi?.parentType
+        ? kpi?.aggregrateScore
+        : currentWeek
+        ? currentWeek?.score
+        : undefined;
+      setValue(score);
     }, [kpi]);
 
     return (
@@ -273,6 +281,7 @@ export const ViewEditKPIModal = observer(
                     <ValueText>{formatValue(value, kpi.unitType)}</ValueText>
                     {renderStatus()}
                     <UpdateProgressButton
+                      disabled={kpi?.parentType}
                       onClick={() => {
                         setUpdateKPIModalOpen(true);
                       }}
@@ -337,7 +346,7 @@ export const ViewEditKPIModal = observer(
                                   keyPerformanceIndicatorStore
                                     .deleteScorecardLog(log.id)
                                     .then(() => {
-                                     setCurrentLog()
+                                      setCurrentLog();
                                     });
                                 }}
                               >
@@ -366,6 +375,7 @@ export const ViewEditKPIModal = observer(
             renderNewValue={renderNewValue}
             headerText={"Update Current Week"}
             updateKPIModalOpen={updateKPIModalOpen}
+            setKpis={setKpis}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
           />
         )}
@@ -436,7 +446,10 @@ const StatusBadgeContainer = styled.div`
   }
 `;
 
-const UpdateProgressButton = styled.div`
+type UpdateProgressButtonProps = {
+  disabled?: boolean
+}
+const UpdateProgressButton = styled.div<UpdateProgressButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -448,7 +461,7 @@ const UpdateProgressButton = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   padding: 8px;
-
+  pointer-events: ${props => props.disabled ? "none" : "all"};
   &:hover {
     cursor: pointer;
     background: ${props => props.theme.colors.primary80};

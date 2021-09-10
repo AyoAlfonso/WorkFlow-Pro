@@ -61,7 +61,7 @@ export const KeyPerformanceIndicatorStoreModel = types
       }
     }),
     createScorecardLog: flow(function*(scorecardlog) {
-      const { scorecardStore } = getRoot(self);
+      const { scorecardStore,  } = getRoot(self);
 
       const response: ApiResponse<any> = yield self.environment.api.createScorecardLog(
         scorecardlog,
@@ -70,11 +70,11 @@ export const KeyPerformanceIndicatorStoreModel = types
       if (response.ok) {
         showToast("Log created", ToastMessageConstants.SUCCESS);
         scorecardStore.mergeKPIS(response.data.kpi);
-        self.kpi = response.data.kpi;
-        return response.data.kpi;
+        self.kpi = response.data.kpi
+        return {scorecardLog: response.data.scorecardlog, kpis: scorecardStore.kpis  }
+    
       }
     }),
-
     deleteScorecardLog: flow(function*(id) {
       const { scorecardStore } = getRoot(self);
       const response: ApiResponse<any> = yield self.environment.api.deleteScorecardLog(id);
@@ -82,7 +82,7 @@ export const KeyPerformanceIndicatorStoreModel = types
         showToast("Log deleted", ToastMessageConstants.SUCCESS);
         scorecardStore.deleteScorecard(response.data.scorecardLog);
         self.kpi = response.data.kpi;
-        return response.data.scorecardLog;
+        // return response.data.scorecardLog;
       }
     }),
   }))

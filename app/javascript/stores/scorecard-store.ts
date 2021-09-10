@@ -40,7 +40,7 @@ export const ScorecardStoreModel = types
     },
     mergeKPIS(kpi) {
       const kpiIndex = self.kpis.findIndex(KPI => KPI.id == kpi.id);
-      self.kpis[kpiIndex] = kpi;
+      self.kpis[kpiIndex] = kpi
     },
     deleteKPI(kpi) {
       const updatedKPIs = R.filter(KPI => KPI.id != kpi.id, self.kpis);

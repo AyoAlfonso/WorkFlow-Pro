@@ -8,7 +8,7 @@ import { ScorecardTableView } from "./scorecard-table-view";
 import { ScorecardSelector } from "./scorecard-selector";
 import { ScorecardSummary } from "./scorecard-summary";
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown";
-import { toJS } from "mobx";
+import { toJS, autorun } from "mobx";
 
 export const ScorecardsIndex = observer(
   (): JSX.Element => {
@@ -22,9 +22,18 @@ export const ScorecardsIndex = observer(
     } = useMst();
     const [loading, setLoading] = useState<boolean>(true);
     const [kpis, setKpis] = useState([]);
+    const [kpisForTableView, setKpisForTableView] = useState([]);
     const [scorecardOwner, setScorecardOwner] = useState<any>({});
     const { allKPIs } = keyPerformanceIndicatorStore;
-    
+    const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(false);
+    const setKPIs = value => {
+      setKpis([]);
+      setKpis(value);
+    };
+    useEffect(() => {
+      setViewEditKPIModalOpen(true);
+    }, [kpis]);
+
     useEffect(() => {
       userStore.load();
       teamStore.load();
@@ -34,11 +43,12 @@ export const ScorecardsIndex = observer(
 
     useEffect(() => {
       if (owner_type && owner_id) {
-        scorecardStore
-          .getScorecard({ ownerType: owner_type, ownerId: owner_id })
-          .then(() => setKpis(scorecardStore.kpis));
+        scorecardStore.getScorecard({ ownerType: owner_type, ownerId: owner_id }).then(() => {
+          setKpis(scorecardStore.kpis);
+          setKpisForTableView(scorecardStore.kpis);
+        });
       }
-    }, [owner_type, owner_id, scorecardStore.kpis]);
+    }, [owner_type, owner_id]);
 
     if (
       loading ||
@@ -65,7 +75,13 @@ export const ScorecardsIndex = observer(
           fiscalYearStart={companyStore.company.fiscalYearStart}
           currentFiscalYear={companyStore.company.currentFiscalYear}
         />
-        <ScorecardTableView kpis={kpis} allKPIs={allKPIs} />
+        <ScorecardTableView
+          kpis={kpisForTableView}
+          allKPIs={allKPIs}
+          setKpis={setKPIs}
+          viewEditKPIModalOpen={viewEditKPIModalOpen}
+          setViewEditKPIModalOpen={setViewEditKPIModalOpen}
+        />
       </Container>
     ) : (
       <Container>

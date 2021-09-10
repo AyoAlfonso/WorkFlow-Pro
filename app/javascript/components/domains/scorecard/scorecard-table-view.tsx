@@ -24,24 +24,32 @@ export const getScorePercent = (value: number, target: number, greaterThan: bool
 type ScorecardTableViewProps = {
   kpis: any;
   allKPIs: any[];
+  setKpis: any;
+  setViewEditKPIModalOpen: any;
+  viewEditKPIModalOpen: any;
 };
 
 export const ScorecardTableView = observer(
-  ({ kpis, allKPIs }: ScorecardTableViewProps): JSX.Element => {
+  ({
+    kpis,
+    allKPIs,
+    setKpis,
+    viewEditKPIModalOpen,
+    setViewEditKPIModalOpen,
+  }: ScorecardTableViewProps): JSX.Element => {
     const { t } = useTranslation();
     const {
       companyStore: { company },
-      keyPerformanceIndicatorStore,
     } = useMst();
     const KPIs = toJS(kpis);
 
     const [year, setYear] = useState<number>(company.currentFiscalYear);
     const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
     const [tab, setTab] = useState<string>("KPIs");
-    const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(false);
     const [viewEditKPIId, setViewEditKPIID] = useState(undefined);
     const [updateKPI, setUpdateKPI] = useState(undefined);
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
+
     const tabs = [t("scorecards.tabs.kpis"), t("scorecards.tabs.people")];
     const {
       fadedYellow,
@@ -112,7 +120,13 @@ export const ScorecardTableView = observer(
       }
     };
 
-    const calcQuarterAverageScores = (weeks: any, target: number, greaterThan: boolean) => {
+    const calcQuarterAverageScores = (
+      weeks: any,
+      target: number,
+      greaterThan: boolean,
+      aggregrateScore: number,
+      parentType: string,
+    ) => {
       const quarterScores = [
         [null, 0],
         [null, 0],
@@ -120,6 +134,7 @@ export const ScorecardTableView = observer(
         [null, 0],
       ];
       weeks.forEach(({ week, score }) => {
+        score = parentType ? aggregrateScore : week ? score : null;
         const q = Math.floor((week - 1) / 13);
         quarterScores[q][0] += score;
         quarterScores[q][1]++;
@@ -150,6 +165,7 @@ export const ScorecardTableView = observer(
               id: kpi.id,
               ownedById: kpi.ownedById,
               unitType: kpi.unitType,
+              parentType: kpi.parentType,
             },
             title: {
               title,
@@ -167,10 +183,24 @@ export const ScorecardTableView = observer(
               color: getScoreValueColor(percentScore),
             };
           });
+          if (weeks.length < 1 && kpi?.parentType) {
+            const percentScore = getScorePercent(
+              kpi?.aggregrateScore,
+              kpi.targetValue,
+              kpi.greaterThan,
+            );
+            row[`wk_${company.currentFiscalWeek}`] = {
+              score: formatValue(kpi.unitType, kpi?.aggregrateScore),
+              color: getScoreValueColor(percentScore),
+            };
+          }
+
           const percentScores = calcQuarterAverageScores(
             weeks,
             kpi.targetValue,
             kpi.greaterThan,
+            kpi.aggregrateScore,
+            kpi.parentType,
           ).map(score => getStatusValue(score));
           row.score = percentScores;
           row.status = percentScores;
@@ -178,6 +208,7 @@ export const ScorecardTableView = observer(
         }),
       [KPIs],
     );
+
     const columns = useMemo(
       () => [
         {
@@ -188,6 +219,7 @@ export const ScorecardTableView = observer(
           Cell: ({ value }) => {
             return (
               <UpdateKPIContainer
+                disabled={value.parentType}
                 onClick={() => {
                   setUpdateKPI(value);
                   setUpdateKPIModalOpen(true);
@@ -379,6 +411,7 @@ export const ScorecardTableView = observer(
           <ViewEditKPIModal
             kpiId={viewEditKPIId}
             viewEditKPIModalOpen={viewEditKPIModalOpen}
+            setKpis={setKpis}
             setViewEditKPIModalOpen={setViewEditKPIModalOpen}
           />
         )}
@@ -393,6 +426,7 @@ export const ScorecardTableView = observer(
             headerText={"Update Current Week"}
             updateKPIModalOpen={updateKPIModalOpen}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
+            setKpis={setKpis}
           />
         )}
       </>
@@ -491,13 +525,16 @@ const TableRow = styled.tr<TableRowProps>`
 	}`}
 `;
 
-const UpdateKPIContainer = styled.div`
+type UpdateKPIContainerProps = {
+  disabled?: boolean;
+};
+const UpdateKPIContainer = styled.div<UpdateKPIContainerProps>`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 48px;
   height: 48px;
-
+  pointer-events: ${props => (props.disabled ? "none" : "all")};
   &:hover {
     cursor: pointer;
     filter: brightness(10);

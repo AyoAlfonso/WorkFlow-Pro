@@ -19,7 +19,7 @@ export const KeyPerformanceIndicatorModel = types
     isDeleted: types.boolean,
     greaterThan: types.boolean,
     parentType: types.maybeNull(types.string),
-    aggregrateScore: types.number,
+    aggregrateScore: types.maybeNull(types.number),
     viewers: types.maybeNull(types.array(types.model({ type: types.string, id: types.string }))),
     period: types.maybeNull(types.map(types.map(ScorecardLogModel))),
     scorecardLogs: types.maybeNull(types.array(ScorecardLogModel)),
