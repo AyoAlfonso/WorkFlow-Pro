@@ -25,15 +25,12 @@ export const ScorecardsIndex = observer(
     const [kpisForTableView, setKpisForTableView] = useState([]);
     const [scorecardOwner, setScorecardOwner] = useState<any>({});
     const { allKPIs } = keyPerformanceIndicatorStore;
-    const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(false);
+    const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(true);
     const setKPIs = value => {
       setKpis([]);
       setKpis(value);
-    };
-    useEffect(() => {
       setViewEditKPIModalOpen(true);
-    }, [kpis]);
-
+    };
     useEffect(() => {
       userStore.load();
       teamStore.load();
