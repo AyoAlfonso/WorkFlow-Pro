@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as R from "ramda";
 import styled from "styled-components";
 import { UserType } from "~/types/user";
 import { useMst } from "~/setup/root";
@@ -46,6 +47,11 @@ export const OwnedBySection = observer(
     const [store, setStore] = useState<any>(null);
     const [showUsersList, setShowUsersList] = useState<boolean>(false);
     const [owner, setOwner] = useState(ownedBy || currentUser);
+
+    if (R.isNil(userStore) || R.isNil(sessionStore)) {
+      return <></>;
+    }
+
     useEffect(() => {
       if (type == "annualInitiative") {
         setStore(annualInitiativeStore);
@@ -106,7 +112,7 @@ export const OwnedBySection = observer(
   },
 );
 
-// Duplicate make these shared styling 
+// Duplicate make these shared styling
 type EditTriggerContainerType = {
   editable: boolean;
 };
