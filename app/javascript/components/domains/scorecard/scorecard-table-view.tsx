@@ -349,13 +349,13 @@ export const ScorecardTableView = observer(
       <>
         <Container>
           <TopRow>
-            {/* <TabContainer>
+            <TabContainer>
               {tabs.map(elem => (
                 <Tab key={elem} active={tab === elem} onClick={() => setTab(elem)}>
                   {elem}
                 </Tab>
               ))}
-            </TabContainer> */}
+            </TabContainer>
             <Select
               selection={quarter}
               setSelection={handleQuarterSelect}
@@ -453,6 +453,7 @@ const TopRow = styled.div`
 
 const TabContainer = styled.div`
   display: flex;
+  visibility: hidden;
 `;
 
 type TabProps = {

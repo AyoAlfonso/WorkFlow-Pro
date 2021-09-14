@@ -100,7 +100,7 @@ export const KeyPerformanceIndicatorStoreModel = types
       self.kpi = { ...self.kpi, ownedById: user.id };
       self.updateKPI(self.kpi);
     },
-      updateKPIModelField(field, value) {
+      updateKPITitle(field, value) {
       self.kpi = {...self.kpi, title: value};
     }
   }));

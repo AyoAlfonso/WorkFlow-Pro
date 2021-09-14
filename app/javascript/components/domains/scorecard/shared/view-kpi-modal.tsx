@@ -263,7 +263,7 @@ export const ViewEditKPIModal = observer(
                       disabled={false}
                       onChange={e => {
                         if (!e.target.value.includes("<div>")) {
-                          keyPerformanceIndicatorStore.updateKPIModelField("title", e.target.value);
+                          keyPerformanceIndicatorStore.updateKPITitle("title", headerRef.current.innerText?.trim());
                         }
                      }}
                       onKeyDown={key => {
@@ -320,7 +320,6 @@ export const ViewEditKPIModal = observer(
                   <SubHeader>Description</SubHeader>
                   <TrixEditorContainer>
                     <TrixEditor
-                      // toolbar="toolbar-custom"
                       className={"trix-kpi-modal"}
                       autoFocus={false}
                       placeholder={"Add a description..."}
@@ -334,7 +333,7 @@ export const ViewEditKPIModal = observer(
                   </TrixEditorContainer>
                   <SubHeader>Activity</SubHeader>
                   <ActivityLogsContainer>
-                    {kpi.scorecardLogs.map(log => {
+                    {(R.sort(R.descend(R.prop('createdAt')), kpi.scorecardLogs)).map(log => {
                       return (
                         <ActivityLogContainer key={log.id}>
                           <Avatar
@@ -435,7 +434,7 @@ const StyledContentEditable = styled(ContentEditable)`
   margin-right: -4px;
 `;
 
-const Header = styled.p`
+const Header = styled.div`
   margin: 0px;
   margin-bottom: 16px;
   font-family: Exo, Lato, sans-serif;
@@ -495,6 +494,7 @@ const UpdateProgressButton = styled.div<UpdateProgressButtonProps>`
   margin-top: auto;
   margin-bottom: auto;
   padding: 8px;
+  opacity: ${props => (props.disabled ? "60%" : "100%")};
   pointer-events: ${props => (props.disabled ? "none" : "all")};
   &:hover {
     cursor: pointer;
