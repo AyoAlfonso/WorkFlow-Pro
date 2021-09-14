@@ -32,10 +32,11 @@ export const ScorecardsIndex = observer(
       setViewEditKPIModalOpen(true);
     };
     useEffect(() => {
+      setLoading(true);
       userStore.load();
       teamStore.load();
       keyPerformanceIndicatorStore.load();
-      companyStore.load().then(() => setLoading(false));
+      companyStore.load()
     }, []);
 
     useEffect(() => {
@@ -43,7 +44,7 @@ export const ScorecardsIndex = observer(
         scorecardStore.getScorecard({ ownerType: owner_type, ownerId: owner_id }).then(() => {
           setKpis(scorecardStore.kpis);
           setKpisForTableView(scorecardStore.kpis);
-        });
+        }).then(() => setLoading(false));
       }
     }, [owner_type, owner_id]);
 

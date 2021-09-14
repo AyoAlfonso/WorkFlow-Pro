@@ -18,7 +18,6 @@ interface ISubInitiativeModalContentProps {
   subInitiativeId: number;
   setSubInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   annualInitiativeDescription: string;
-  // setAnnualInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setAnnualInitiativeId: React.Dispatch<React.SetStateAction<number>>;
   showCreateMilestones: boolean;
 }
@@ -28,7 +27,6 @@ export const SubInitiativeModalContent = observer(
     subInitiativeId,
     setSubInitiativeModalOpen,
     annualInitiativeDescription,
-    // setAnnualInitiativeModalOpen,
     setAnnualInitiativeId,
     showCreateMilestones,
   }: ISubInitiativeModalContentProps): JSX.Element => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { observer } from "mobx-react"
+import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { Avatar } from "~/components/shared/avatar";
 import { MultiOptionTypeSelectionDropdownList } from "~/components/shared/multi-option-type-selection-dropdown";
@@ -33,18 +33,16 @@ export const ScorecardSelector = ({
 
   useEffect(() => {
     let owner;
-    if(ownerType == "company") {
-      owner = company
+    if (ownerType == "company") {
+      owner = company;
+    } else if (ownerType == "team") {
+      owner = teams.find(team => team.id == ownerId);
+    } else if (ownerType == "user") {
+      owner = companyUsers.find(user => user.id == ownerId);
     }
-    else if(ownerType == "team") {
-      owner = teams.find(team => team.id == ownerId)
-    }
-    else if(ownerType == "user") {
-      owner = companyUsers.find(user => user.id == ownerId)
-    }
-    setScorecardOwner(owner)
-    setCurrentScorecard(`${owner?.name}${owner?.lastName ? " " + owner.lastName:""}`);
-  }, [teams, companyUsers, company, ownerType, ownerId])
+    setScorecardOwner(owner);
+    setCurrentScorecard(`${owner?.name}${owner?.lastName ? " " + owner.lastName : ""}`);
+  }, [teams, companyUsers, company, ownerType, ownerId]);
 
   useEffect(() => {
     const teams =
@@ -125,7 +123,7 @@ export const ScorecardSelector = ({
         >
           <ScorecardOwnerContainer>
             <OwnerHeading type={"h3"} fontSize={"20px"} fontWeight={600} mt={0}>
-              {currentScorecard}
+              {currentScorecard || ""}
             </OwnerHeading>
             <StyledChevronIcon
               icon={showUsersList ? "Chevron-Up" : "Chevron-Down"}

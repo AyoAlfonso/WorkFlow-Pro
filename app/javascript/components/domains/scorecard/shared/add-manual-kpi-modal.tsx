@@ -81,7 +81,7 @@ export const AddManualKPIModal = observer(
         ownedById: owner.id,
         unitType,
         targetValue,
-        parentType: externalManualKPIData?.kpiModalType.toLowerCase().replace(/\s+/g, ""),
+        parentType: externalManualKPIData?.kpiModalType?.toLowerCase().replace(/\s+/g, ""),
         parentKpi: selectedKPIs?.map(kpi => kpi.id),
         needsAttentionThreshold,
       };
@@ -103,6 +103,7 @@ export const AddManualKPIModal = observer(
         setNeedsAttentionThreshold(90);
         setShowAddManualKPIModal(false);
       });
+      
     };
 
     const handleChange = (e, setStateAction) => {

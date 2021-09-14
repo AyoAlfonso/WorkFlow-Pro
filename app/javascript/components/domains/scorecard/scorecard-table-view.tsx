@@ -156,7 +156,7 @@ export const ScorecardTableView = observer(
       () =>
         KPIs?.map((kpi: any) => {
           const targetText = formatValue(kpi.unitType, kpi.targetValue);
-          const title = `${kpi.title} ${kpi.greaterThan ? "≥" : "≤"} ${targetText}`;
+          const title = `${kpi.title}`;
           const logic = kpi.greaterThan
             ? `Greater than or equal to ${targetText}`
             : `Less than or equal to ${targetText}`;
@@ -453,6 +453,7 @@ const TopRow = styled.div`
 
 const TabContainer = styled.div`
   display: flex;
+  visibility: hidden;
 `;
 
 type TabProps = {
