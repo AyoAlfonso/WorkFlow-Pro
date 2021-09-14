@@ -156,7 +156,7 @@ export const ScorecardTableView = observer(
       () =>
         KPIs?.map((kpi: any) => {
           const targetText = formatValue(kpi.unitType, kpi.targetValue);
-          const title = `${kpi.title} ${kpi.greaterThan ? "≥" : "≤"} ${targetText}`;
+          const title = `${kpi.title}`;
           const logic = kpi.greaterThan
             ? `Greater than or equal to ${targetText}`
             : `Less than or equal to ${targetText}`;
@@ -349,13 +349,13 @@ export const ScorecardTableView = observer(
       <>
         <Container>
           <TopRow>
-            <TabContainer>
+            {/* <TabContainer>
               {tabs.map(elem => (
                 <Tab key={elem} active={tab === elem} onClick={() => setTab(elem)}>
                   {elem}
                 </Tab>
               ))}
-            </TabContainer>
+            </TabContainer> */}
             <Select
               selection={quarter}
               setSelection={handleQuarterSelect}

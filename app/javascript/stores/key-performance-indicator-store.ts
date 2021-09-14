@@ -42,6 +42,16 @@ export const KeyPerformanceIndicatorStoreModel = types
         return response.data.kpi;
       }
     }),
+    update: flow(function*() {
+      const { scorecardStore } = getRoot(self);
+      const response: ApiResponse<any> = yield self.environment.api.updateKPI(self.kpi);
+      if (response.ok) {
+        showToast("KPI updated", ToastMessageConstants.SUCCESS);
+        scorecardStore.mergeKPIS(response.data.kpi);
+        self.kpi = response.data.kpi;
+        return response.data.kpi;
+      }
+    }),
     updateKPI: flow(function*(KPIData) {
       const { scorecardStore } = getRoot(self);
       const response: ApiResponse<any> = yield self.environment.api.updateKPI(KPIData);
@@ -82,7 +92,6 @@ export const KeyPerformanceIndicatorStoreModel = types
         showToast("Log deleted", ToastMessageConstants.SUCCESS);
         scorecardStore.deleteScorecard(response.data.scorecardLog);
         self.kpi = response.data.kpi;
-        // return response.data.scorecardLog;
       }
     }),
   }))
@@ -91,6 +100,9 @@ export const KeyPerformanceIndicatorStoreModel = types
       self.kpi = { ...self.kpi, ownedById: user.id };
       self.updateKPI(self.kpi);
     },
+      updateKPIModelField(field, value) {
+      self.kpi = {...self.kpi, title: value};
+    }
   }));
 
 type KeyPerformanceIndicatorType = typeof KeyPerformanceIndicatorModel.Type;
