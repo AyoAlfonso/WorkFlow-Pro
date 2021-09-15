@@ -299,7 +299,7 @@ ActiveRecord::Schema.define(version: 2021_09_07_110032) do
     t.bigint "owned_by_id"
     t.float "needs_attention_threshold"
     t.string "title"
-    t.string "parent_type"
+    t.integer "parent_type"
     t.integer "parent_kpi", default: [], array: true
     t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"

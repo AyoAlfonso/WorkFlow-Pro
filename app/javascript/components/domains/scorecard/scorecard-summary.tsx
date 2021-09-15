@@ -136,7 +136,6 @@ const QuarterSummary = ({
   const [currentWeekPercent, setCurrentWeekPercent] = useState(0);
   const [lastWeekPercent, setLastWeekPercent] = useState<number | null>(null);
   const [data, setData] = useState<Object>(null);
-
   const {
     cavier,
     fadedCavier,

@@ -4,6 +4,8 @@ import styled from "styled-components";
 import moment from "moment";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
+import { useRef } from "react";
+import ContentEditable from "react-contenteditable";
 import Modal from "styled-react-modal";
 import { useMst } from "~/setup/root";
 import { StatusBadge } from "~/components/shared/status-badge";
@@ -23,6 +25,7 @@ interface ViewEditKPIModalProps {
   kpiId: number;
   setViewEditKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   viewEditKPIModalOpen: boolean;
+  setKpis: any;
 }
 
 export const ViewEditKPIModal = observer(
@@ -30,6 +33,7 @@ export const ViewEditKPIModal = observer(
     kpiId,
     setViewEditKPIModalOpen,
     viewEditKPIModalOpen,
+    setKpis,
   }: ViewEditKPIModalProps): JSX.Element => {
     const {
       companyStore: { company },
@@ -52,6 +56,12 @@ export const ViewEditKPIModal = observer(
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
+
+    const headerRef = useRef(null);
+
+    if (R.isNil(keyPerformanceIndicatorStore)) {
+      return <></>;
+    }
 
     const {
       backgroundGrey,
@@ -183,8 +193,8 @@ export const ViewEditKPIModal = observer(
       }
     }, [kpiId]);
 
-    const saveKPI = ({ description }) => {
-      const clonedKPI = Object.assign({}, kpi, { description });
+    const saveKPI = body => {
+      const clonedKPI = Object.assign({}, kpi, body);
       keyPerformanceIndicatorStore.updateKPI(clonedKPI);
     };
     const drawGraph = KPI => {
@@ -220,9 +230,14 @@ export const ViewEditKPIModal = observer(
           ? `Greater than or equal to ${targetText}`
           : `Less than or equal to ${targetText}`,
       );
-      setHeader(`${kpi.description} ${kpi.greaterThan ? "≥" : "≤"} ${targetText}`);
+      setHeader(`${kpi.title}`);
       const currentWeek = weeks?.[company.currentFiscalWeek];
-      setValue(currentWeek ? currentWeek.score : undefined);
+      const score = kpi?.parentType
+        ? kpi?.aggregrateScore
+        : currentWeek
+        ? currentWeek?.score
+        : undefined;
+      setValue(score);
     }, [kpi]);
 
     return (
@@ -241,7 +256,24 @@ export const ViewEditKPIModal = observer(
               kpi && (
                 <>
                   <HeaderContainer>
-                    <Header>{header}</Header>
+                    <Header>
+                     <StyledContentEditable
+                      innerRef={headerRef}
+                      html={kpi.title}
+                      disabled={false}
+                      onChange={e => {
+                        if (!e.target.value.includes("<div>")) {
+                          keyPerformanceIndicatorStore.updateKPITitle("title", headerRef.current.innerText?.trim());
+                        }
+                     }}
+                      onKeyDown={key => {
+                        if (key.keyCode == 13) {
+                          headerRef.current.blur();
+                        }
+                      }}
+                      onBlur={() => keyPerformanceIndicatorStore.update()}
+                    />
+                    </Header>
                     <DropdownOptions>
                       {renderDropdownOptions()}
                       <CloseIconContainer onClick={() => setViewEditKPIModalOpen(false)}>
@@ -273,6 +305,7 @@ export const ViewEditKPIModal = observer(
                     <ValueText>{formatValue(value, kpi.unitType)}</ValueText>
                     {renderStatus()}
                     <UpdateProgressButton
+                      disabled={kpi?.parentType}
                       onClick={() => {
                         setUpdateKPIModalOpen(true);
                       }}
@@ -287,7 +320,6 @@ export const ViewEditKPIModal = observer(
                   <SubHeader>Description</SubHeader>
                   <TrixEditorContainer>
                     <TrixEditor
-                      // toolbar="toolbar-custom"
                       className={"trix-kpi-modal"}
                       autoFocus={false}
                       placeholder={"Add a description..."}
@@ -301,7 +333,7 @@ export const ViewEditKPIModal = observer(
                   </TrixEditorContainer>
                   <SubHeader>Activity</SubHeader>
                   <ActivityLogsContainer>
-                    {kpi.scorecardLogs.map(log => {
+                    {(R.sort(R.descend(R.prop('createdAt')), kpi.scorecardLogs)).map(log => {
                       return (
                         <ActivityLogContainer key={log.id}>
                           <Avatar
@@ -337,7 +369,7 @@ export const ViewEditKPIModal = observer(
                                   keyPerformanceIndicatorStore
                                     .deleteScorecardLog(log.id)
                                     .then(() => {
-                                     setCurrentLog()
+                                      setCurrentLog();
                                     });
                                 }}
                               >
@@ -366,6 +398,7 @@ export const ViewEditKPIModal = observer(
             renderNewValue={renderNewValue}
             headerText={"Update Current Week"}
             updateKPIModalOpen={updateKPIModalOpen}
+            setKpis={setKpis}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
           />
         )}
@@ -391,7 +424,17 @@ const ChartContainer = styled.div`
   height: 240px;
 `;
 
-const Header = styled.p`
+const StyledContentEditable = styled(ContentEditable)`
+  font-weight: bold;
+  font-size: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-right: -4px;
+`;
+
+const Header = styled.div`
   margin: 0px;
   margin-bottom: 16px;
   font-family: Exo, Lato, sans-serif;
@@ -436,7 +479,10 @@ const StatusBadgeContainer = styled.div`
   }
 `;
 
-const UpdateProgressButton = styled.div`
+type UpdateProgressButtonProps = {
+  disabled?: boolean;
+};
+const UpdateProgressButton = styled.div<UpdateProgressButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -448,7 +494,8 @@ const UpdateProgressButton = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   padding: 8px;
-
+  opacity: ${props => (props.disabled ? "60%" : "100%")};
+  pointer-events: ${props => (props.disabled ? "none" : "all")};
   &:hover {
     cursor: pointer;
     background: ${props => props.theme.colors.primary80};

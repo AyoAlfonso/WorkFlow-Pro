@@ -22,6 +22,7 @@ interface IModalWithHeaderProps {
   headerMarginTop?: string;
   headerMarginBottom?: string;
   onClose?: () => void;
+  ref?: any;
 }
 
 export const ModalWithHeader = ({

@@ -17,8 +17,8 @@ class KeyPerformanceIndicator < ApplicationRecord
   def aggregrate_score  
     if !self.parent_type.present?
       return 0
-    elsif self.parent_type ==  "rollup" &&  self.parent_type ==  "existing"
-      return self.parent_kpi.inject(0){|sum,kpi| sum + get_scorecard_score(kpi) }
+    elsif self.parent_type ==  "rollup" || self.parent_type ==  "existing"
+      return self.parent_kpi.inject(0){|sum,kpi| sum + get_latest_scorecard_score(kpi) }
     elsif self.parent_type == "avr"
       return self.parent_kpi.inject(0){|sum,kpi| sum + get_latest_scorecard_score(kpi)}/self.parent_kpi&.length
     end
@@ -26,8 +26,10 @@ class KeyPerformanceIndicator < ApplicationRecord
 
   def get_latest_scorecard_score(kpi)
     score = KeyPerformanceIndicator.find(kpi).scorecard_logs.last&.score 
-    score = 0 if score.nil?
-    return score
+    unless score.nil?  
+      return score
+    else score = 0
+    end
   end
 
   private
