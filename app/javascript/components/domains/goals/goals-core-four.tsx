@@ -43,34 +43,66 @@ export const GoalsCoreFour = ({
         {renderHideButton()}
       </CoreFourHeader>
 
-      {showCoreFour && <CoreFirstValue /> && <CoreSecondValue /> &&
-      <CoreThirdValue /> && <CoreFourthValue />}
+      {showCoreFour && <CoreFourValues />}
     </Container>
   );
 };
 
 
-const CoreFirstValue = observer(
+const CoreFourValues = observer(
   (): JSX.Element => {
     const {
       companyStore: { company },
     } = useMst();
     const { t } = useTranslation();
 
-    return company ? ( 
+    return company ? (
       <HomeContainerBorders key="core-four">
         <Flex>
-            <Box width={1/4} sx={{ padding: 16 }}>
-              <CoreFourHeaderText fontSize={2} color={"primary100"}>
-                {t("core.core1")}
-              </CoreFourHeaderText>
-              <CoreFourBodyTextContainer>
-                <div
-                  className="trix-content"
-                  dangerouslySetInnerHTML={{ __html: company.coreFour.core1Content }}
-                ></div>
-              </CoreFourBodyTextContainer>
-            </Box>
+          <Box width={1 / 4} sx={{ padding: 16 }}>
+            <CoreFourHeaderText fontSize={2} color={"primary100"}>
+              {t("core.core1")}
+            </CoreFourHeaderText>
+            <CoreFourBodyTextContainer>
+              <div
+                className="trix-content"
+                dangerouslySetInnerHTML={{ __html: company.coreFour.core1Content }}
+              ></div>
+            </CoreFourBodyTextContainer>
+          </Box>
+          <Box width={1 / 4} sx={{ padding: 16 }}>
+            <CoreFourHeaderText fontSize={2} color={"primary100"}>
+              {t("core.core2")}
+            </CoreFourHeaderText>
+            <CoreFourBodyTextContainer>
+              <div
+                className="trix-content"
+                dangerouslySetInnerHTML={{ __html: company.coreFour.core2Content }}
+              ></div>
+            </CoreFourBodyTextContainer>
+          </Box>
+          <Box width={1 / 4} sx={{ padding: 16 }}>
+            <CoreFourHeaderText fontSize={2} color={"primary100"}>
+              {t("core.core3")}
+            </CoreFourHeaderText>
+            <CoreFourBodyTextContainer>
+              <div
+                className="trix-content"
+                dangerouslySetInnerHTML={{ __html: company.coreFour.core3Content }}
+              ></div>
+            </CoreFourBodyTextContainer>
+          </Box>
+          <Box width={1 / 4} sx={{ padding: 16 }}>
+            <CoreFourHeaderText fontSize={2} color={"primary100"}>
+              {t("core.core4")}
+            </CoreFourHeaderText>
+            <CoreFourBodyTextContainer>
+              <div
+                className="trix-content"
+                dangerouslySetInnerHTML={{ __html: company.coreFour.core4Content }}
+              ></div>
+            </CoreFourBodyTextContainer>
+          </Box>
         </Flex>
       </HomeContainerBorders>
     ) : (
@@ -78,106 +110,18 @@ const CoreFirstValue = observer(
     );
   },
 );
-const CoreSecondValue = observer(
-  (): JSX.Element => {
-    const {
-      companyStore: { company },
-    } = useMst();
-    const { t } = useTranslation();
 
-    return company ? (
-    <HomeContainerBorders>
-      <Flex>
-            <Box width={1/4} sx={{ padding: 16 }}>
-              <CoreFourHeaderText fontSize={2} color={"primary100"}>
-                {t("core.core2")}
-              </CoreFourHeaderText>
-              <CoreFourBodyTextContainer>
-                <div
-                  className="trix-content"
-                  dangerouslySetInnerHTML={{ __html: company.coreFour.core2Content }}
-                ></div>
-              </CoreFourBodyTextContainer>
-            </Box>
-      </Flex>
-    </HomeContainerBorders>
-  ) : (
-      <Loading key="core-four" />
-    );
-  },
-);
 
-const CoreThirdValue = observer(
-  (): JSX.Element => {
-    const {
-      companyStore: { company },
-    } = useMst();
-    const { t } = useTranslation();
-
-    return company ? (
-    <HomeContainerBorders>
-      <Flex>
-            <Box width={1/4} sx={{ padding: 16 }}>
-              <CoreFourHeaderText fontSize={2} color={"primary100"}>
-                {t("core.core3")}
-              </CoreFourHeaderText>
-              <CoreFourBodyTextContainer>
-                <div
-                  className="trix-content"
-                  dangerouslySetInnerHTML={{ __html: company.coreFour.core3Content }}
-                ></div>
-              </CoreFourBodyTextContainer>
-            </Box>
-      </Flex>
-    </HomeContainerBorders>
-  ) : (
-      <Loading key="core-four" />
-    );
-  },
-);
-
-const CoreFourthValue = observer(
-  (): JSX.Element => {
-    const {
-      companyStore: { company },
-    } = useMst();
-    const { t } = useTranslation();
-
-    return company ? (
-    <HomeContainerBorders>
-      <Flex>
-            <Box width={1/4} sx={{ padding: 16 }}>
-              <CoreFourHeaderText fontSize={2} color={"primary100"}>
-                {t("core.core4")}
-              </CoreFourHeaderText>
-              <CoreFourBodyTextContainer>
-                <div
-                  className="trix-content"
-                  dangerouslySetInnerHTML={{ __html: company.coreFour.core4Content }}
-                ></div>
-              </CoreFourBodyTextContainer>
-            </Box>
-      </Flex>
-    </HomeContainerBorders>
-  ) : (
-      <Loading key="core-four" />
-    );
-  },
-);
 
 export const CoreFourOnly = (): JSX.Element => (
   <div>
-    <CoreFirstValue />
-    <CoreSecondValue />
-    <CoreThirdValue />
-    <CoreFourthValue />
+    <CoreFourValues />
   </div>
 );
 
 
-
-
 const Container = styled.div`
+  flex-direction: column;
   margin-bottom: 32px;
 `;
 
