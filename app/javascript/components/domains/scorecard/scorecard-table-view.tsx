@@ -16,6 +16,7 @@ import { StatusBadge } from "~/components/shared/status-badge";
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown";
 import { ViewEditKPIModal } from "./shared/view-kpi-modal";
 import { UpdateKPIModal } from "./shared/update-kpi-modal";
+import { titleCase } from "~/utils/camelize";
 import { toJS } from "mobx";
 // TODO: figure out better function for percent scores.
 export const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
@@ -72,6 +73,7 @@ export const ScorecardTableView = observer(
           return `${value}`;
       }
     };
+    const formatKpiType = kpiType => titleCase(kpiType);
 
     const averageScorePercent = (scores: [number], target: number, greaterThan: boolean) => {
       return Math.min(
@@ -173,6 +175,7 @@ export const ScorecardTableView = observer(
             title: {
               title,
               logic,
+              parentType: kpi.parentType,
               id: kpi.id,
             },
             owner: kpi.ownedBy,
@@ -232,7 +235,9 @@ export const ScorecardTableView = observer(
                 }}
               >
                 <KPITextContainer>
-                  <KPITitle>{value.title}</KPITitle>
+                  <KPITitle>
+                    {value.title} {value.parentType && `[${formatKpiType(value.parentType)}]`}
+                  </KPITitle>
                   <KPILogic>{value.logic}</KPILogic>
                 </KPITextContainer>
               </KPITitleContainer>
@@ -459,7 +464,7 @@ const Tab = styled.button<TabProps>`
   color: ${props => props.theme.colors.black};
   border: 0;
   outline: 0;
-  opacity: 0.6;
+  opacity: 0.5;
   ${props =>
     props.active &&
     `border-bottom: 2px solid ${props.theme.colors.primary80};

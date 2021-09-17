@@ -20,6 +20,7 @@ import { TrixEditor } from "react-trix";
 import { OwnedBySection } from "~/components/domains/goals/shared/owned-by-section";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import { toJS } from "mobx";
+import { titleCase } from "~/utils/camelize";
 import { ScorecardKPIDropdownOptions } from "./scorecard-dropdown-options";
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -75,6 +76,7 @@ export const ViewEditKPIModal = observer(
       successGreen,
       primary100,
       white,
+      grey100,
     } = baseTheme.colors;
 
     const formatValue = (value: number, unitType: string) => {
@@ -90,6 +92,8 @@ export const ViewEditKPIModal = observer(
           return `${value}`;
       }
     };
+
+    const formatKpiType = kpiType => titleCase(kpiType);
 
     const renderStatus = () => {
       if (!kpi) {
@@ -295,6 +299,12 @@ export const ViewEditKPIModal = observer(
                     </OwnerAndLogicText>
                     <Icon icon={"Initiative"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText>{logic}</OwnerAndLogicText>
+                    {kpi?.parentType && (
+                      <KPITypeContainer>
+                        <KPITypeIcon icon={"Function"} size={16} iconColor={grey100} />
+                        <KPIParentTypeText> {formatKpiType(kpi?.parentType)} </KPIParentTypeText>
+                      </KPITypeContainer>
+                    )}
                   </OwnerAndLogicContainer>
                   <ValueAndUpdateContainer>
                     <ValueText>{formatValue(value, kpi.unitType)}</ValueText>
@@ -489,7 +499,7 @@ const UpdateProgressButton = styled.div<UpdateProgressButtonProps>`
   margin-top: auto;
   margin-bottom: auto;
   padding: 8px;
-  opacity: ${props => (props.disabled ? "60%" : "100%")};
+  opacity: ${props => (props.disabled ? "0.5" : "1.0")};
   pointer-events: ${props => (props.disabled ? "none" : "all")};
   &:hover {
     cursor: pointer;
@@ -573,4 +583,15 @@ const CloseIconContainer = styled.div`
 const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+const KPITypeContainer = styled.div`
+  display: flex;
+  color: ${props => props.theme.colors.grey100};
+`;
+const KPITypeIcon = styled(Icon)``;
+
+const KPIParentTypeText = styled.div`
+  font-size: 12px;
+  padding: 4px;
 `;
