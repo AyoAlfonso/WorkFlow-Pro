@@ -12,23 +12,15 @@ class Api::ScorecardLogsController < Api::ApplicationController
     authorize @scorecard_log
     @scorecard_log.save!
    
-    render json: { scorecard_log: @scorecard_log,  kpi: @kpi.as_json(except: %w[created_at updated_at],methods: [:owned_by],
-                                    include: {
-                                    scorecard_logs: { methods: [:user] }}).merge({ :period => @period,  :aggregrate_score => @kpi.aggregrate_score  }), status: :ok }
+    render json: { scorecard_log: @scorecard_log,  kpi: @kpi.as_json(), status: :ok }
   end
 
   def show
     @key_performance_indicators = policy_scope(KeyPerformanceIndicator).vieweable_by_entity(params[:owner_type], params[:owner_id])
     authorize @key_performance_indicators
     @kpis = @key_performance_indicators.map do |kpi|
-      @period = (kpi.scorecard_logs.empty?) ? {} : kpi.scorecard_logs.group_by { |log| log[:fiscal_year] }.map do |year, scorecard_log|
-        [year, scorecard_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
-      end.to_h
-      kpi.as_json(methods: [:owned_by],
-                  include: {
-                  scorecard_logs: { methods: [:user] }}).merge({ :period => @period, :aggregrate_score => kpi.aggregrate_score })
+      kpi.as_json()
     end
-
     render json: @kpis
   end
 
@@ -39,9 +31,7 @@ class Api::ScorecardLogsController < Api::ApplicationController
       @period = (kpi.scorecard_logs.empty?) ? {} : kpi.scorecard_logs.group_by { |log| log[:fiscal_year] }.map do |year, scorecard_log|
       [year, scorecard_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
     end.to_h
-    render json: { scorecard_log: @scorecard_log,  kpi: kpi.as_json(except: %w[created_at updated_at],methods: [:owned_by],
-                                    include: {
-                                    scorecard_logs: { methods: [:user] }}).merge({ :period => @period,:aggregrate_score => kpi.aggregrate_score  }),  status: :ok }
+    render json: { scorecard_log: @scorecard_log,  kpi: kpi.as_json(),  status: :ok }
   end
 
   private

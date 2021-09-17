@@ -72,7 +72,6 @@ export const KeyPerformanceIndicatorStoreModel = types
     }),
     createScorecardLog: flow(function*(scorecardlog) {
       const { scorecardStore,  } = getRoot(self);
-
       const response: ApiResponse<any> = yield self.environment.api.createScorecardLog(
         scorecardlog,
       );
@@ -81,8 +80,7 @@ export const KeyPerformanceIndicatorStoreModel = types
         showToast("Log created", ToastMessageConstants.SUCCESS);
         scorecardStore.mergeKPIS(response.data.kpi);
         self.kpi = response.data.kpi
-        return {scorecardLog: response.data.scorecardlog, kpis: scorecardStore.kpis  }
-    
+        return { scorecardLog: response.data.scorecardlog, kpis: scorecardStore.kpis };
       }
     }),
     deleteScorecardLog: flow(function*(id) {

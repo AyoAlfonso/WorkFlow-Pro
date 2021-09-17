@@ -12,23 +12,25 @@ class KeyPerformanceIndicator < ApplicationRecord
   validates :greater_than, inclusion: [true, false]
   has_many :scorecard_logs
   
-
-
-  def aggregrate_score  
-    if !self.parent_type.present?
-      return 0
-    elsif self.parent_type ==  "rollup" || self.parent_type ==  "existing"
-      return self.parent_kpi.inject(0){|sum,kpi| sum + get_latest_scorecard_score(kpi) }
-    elsif self.parent_type == "avr"
-      return self.parent_kpi.inject(0){|sum,kpi| sum + get_latest_scorecard_score(kpi)}/self.parent_kpi&.length
-    end
+  def as_json(options = [])
+    super({
+      methods: [:owned_by],
+                  include: {
+                  scorecard_logs: { methods: [:user] }}
+    }).merge({ :period => self.period, :related_parent_kpis => self.related_parent_kpis })
   end
 
-  def get_latest_scorecard_score(kpi)
-    score = KeyPerformanceIndicator.find(kpi).scorecard_logs.last&.score 
-    unless score.nil?  
-      return score
-    else score = 0
+  def period
+     (self.scorecard_logs.empty?) ? {} : self.scorecard_logs.group_by { |log| log[:fiscal_year] }.map do |year, scorecard_log|
+        [year, scorecard_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
+        end.to_h
+  end
+  
+  def related_parent_kpis
+    if !self.parent_type.present?
+      return []
+    elsif self.parent_type ==  "rollup" || self.parent_type ==  "existing"
+      return KeyPerformanceIndicator.where(id: self.parent_kpi).as_json()
     end
   end
 

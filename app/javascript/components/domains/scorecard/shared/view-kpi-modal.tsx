@@ -175,11 +175,7 @@ export const ViewEditKPIModal = observer(
 
     const setCurrentLog = (step = 1) => {
       const Log = kpi?.scorecardLogs[kpi?.scorecardLogs.length - step];
-      kpi?.parentType
-        ? renderNewValue(kpi?.aggregrateScore)
-        : Log
-        ? renderNewValue(Log?.score)
-        : null;
+      Log ? renderNewValue(Log?.score) : null;
     };
 
     useEffect(() => {
@@ -232,11 +228,7 @@ export const ViewEditKPIModal = observer(
       );
       setHeader(`${kpi.title}`);
       const currentWeek = weeks?.[company.currentFiscalWeek];
-      const score = kpi?.parentType
-        ? kpi?.aggregrateScore
-        : currentWeek
-        ? currentWeek?.score
-        : undefined;
+      const score = currentWeek ? currentWeek?.score : undefined;
       setValue(score);
     }, [kpi]);
 
@@ -257,22 +249,25 @@ export const ViewEditKPIModal = observer(
                 <>
                   <HeaderContainer>
                     <Header>
-                     <StyledContentEditable
-                      innerRef={headerRef}
-                      html={kpi.title}
-                      disabled={false}
-                      onChange={e => {
-                        if (!e.target.value.includes("<div>")) {
-                          keyPerformanceIndicatorStore.updateKPITitle("title", headerRef.current.innerText?.trim());
-                        }
-                     }}
-                      onKeyDown={key => {
-                        if (key.keyCode == 13) {
-                          headerRef.current.blur();
-                        }
-                      }}
-                      onBlur={() => keyPerformanceIndicatorStore.update()}
-                    />
+                      <StyledContentEditable
+                        innerRef={headerRef}
+                        html={kpi.title}
+                        disabled={false}
+                        onChange={e => {
+                          if (!e.target.value.includes("<div>")) {
+                            keyPerformanceIndicatorStore.updateKPITitle(
+                              "title",
+                              headerRef.current.innerText?.trim(),
+                            );
+                          }
+                        }}
+                        onKeyDown={key => {
+                          if (key.keyCode == 13) {
+                            headerRef.current.blur();
+                          }
+                        }}
+                        onBlur={() => keyPerformanceIndicatorStore.update()}
+                      />
                     </Header>
                     <DropdownOptions>
                       {renderDropdownOptions()}
@@ -333,7 +328,7 @@ export const ViewEditKPIModal = observer(
                   </TrixEditorContainer>
                   <SubHeader>Activity</SubHeader>
                   <ActivityLogsContainer>
-                    {(R.sort(R.descend(R.prop('createdAt')), kpi.scorecardLogs)).map(log => {
+                    {R.sort(R.descend(R.prop("createdAt")), kpi.scorecardLogs).map(log => {
                       return (
                         <ActivityLogContainer key={log.id}>
                           <Avatar

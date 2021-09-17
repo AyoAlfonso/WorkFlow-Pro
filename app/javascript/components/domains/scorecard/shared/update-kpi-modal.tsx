@@ -12,7 +12,7 @@ import {
   FormElementContainer,
 } from "./modal-elements";
 import { useParams } from "react-router-dom";
-
+import { useHistory } from "react-router";
 
 interface UpdateKPIModalProps {
   kpiId: number;
@@ -25,7 +25,7 @@ interface UpdateKPIModalProps {
   setUpdateKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   updateKPIModalOpen: boolean;
   renderNewValue?: any;
-  setKpis:any
+  setKpis: any;
 }
 
 export const UpdateKPIModal = observer(
@@ -39,13 +39,13 @@ export const UpdateKPIModal = observer(
     setUpdateKPIModalOpen,
     updateKPIModalOpen,
     renderNewValue,
-    setKpis
+    setKpis,
   }: UpdateKPIModalProps): JSX.Element => {
+     const history = useHistory();
     const { keyPerformanceIndicatorStore, sessionStore, scorecardStore } = useMst();
     const [value, setValue] = useState<number>(currentValue);
     const [comment, setComment] = useState("");
     const { owner_type, owner_id } = useParams();
-
 
     const handleSave = () => {
       if (value != undefined) {
@@ -62,10 +62,13 @@ export const UpdateKPIModal = observer(
           log.note = comment;
         }
         keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
+         
           setUpdateKPIModalOpen(false);
-          setKpis(scorecardStore.kpis)
+          setKpis(scorecardStore.kpis);
           renderNewValue ? renderNewValue(value) : null;
-        });
+          history.push(`/scorecard/0/0`)
+          setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 2000, 0);
+        })
       }
     };
 

@@ -45,6 +45,7 @@
     "humps": "^2.0.1",
     "i18next": "^19.5.3",
     "immutable": "^4.0.0-rc.12",
+    "lodash": "^4.17.21",
     "material-ui-dropzone": "^3.5.0",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",

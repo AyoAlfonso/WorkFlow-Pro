@@ -5,7 +5,68 @@ import { KeyPerformanceIndicatorModel } from "../models/key-performance-indicato
 import { showToast } from "~/utils/toast-message";
 import { toJS } from "mobx";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import { setDeep } from "~/utils";
 import * as R from "ramda";
+import * as _ from "lodash"
+import { observable, autorun } from "mobx";
+
+function rollupMemoizer(kpiPeriodYearWeekScore, datumPeriodYearWeekScore) {
+  return kpiPeriodYearWeekScore
+    ? kpiPeriodYearWeekScore + datumPeriodYearWeekScore
+    : datumPeriodYearWeekScore;
+}
+
+export const setRelatedParents = KPIs => {
+  return KPIs.map(kpi => {
+    if (kpi.parentType) {
+      kpi.relatedParentKpis.map((datum, index) => {
+        if (datum.period) {
+          for (const year in datum.period) {
+            for (const week in datum.period[year]) {
+              setDeep(kpi.period, [`${year}`, `${week}`], datum.period[year][week], true);
+              const parents = kpi.period[year][week].parents ? kpi.period[year][week].parents : []
+              if (kpi.parentType == "rollup") {
+                kpi.period[year][week] = {
+                  parents: [...parents, datum.id],
+                  score: rollupMemoizer(
+                    kpi.period[year][week].score,
+                    datum.period[year][week].score,
+                  ),
+                  fiscalQuarter: datum.period[year][week].fiscalQuarter,
+                  fiscalYear: parseInt(year),
+                  week: parseInt(week),
+                };
+              } else if (kpi.parentType == "avr") {
+                const old_averge = kpi.period[year][week].score
+                  ? kpi.period[year][week].score
+                  : datum.period[year][week].score;
+                const new_value = datum.period[year][week].score;
+                const new_size = index + 1;
+                kpi.period[year][week] = {
+                  parents: [...parents, datum.id],
+                  score: old_averge + (new_value - old_averge) / new_size,
+                  fiscalQuarter: datum.period[year][week].fiscalQuarter,
+                  fiscalYear: parseInt(year),
+                  week: parseInt(week),
+                };
+              } else if (kpi.parentType == "existing") {
+                kpi.period[year][week] = {
+                  parents: [...parents, datum.id] ,
+                  score: datum.period[year][week].score,
+                  fiscalQuarter: datum.period[year][week].fiscalQuarter,
+                  fiscalYear: parseInt(year),
+                  week: parseInt(week),
+                };
+              }
+            }
+          }
+        }
+      });
+    }
+
+    return kpi;
+  });
+};
 
 export const ScorecardStoreModel = types
   .model("ScorecardStoreModel")
@@ -13,7 +74,7 @@ export const ScorecardStoreModel = types
     kpis: types.array(KeyPerformanceIndicatorModel),
   })
   .extend(withEnvironment())
-  .views(self => ({}))
+  .views(self => ({ }))
   .actions(self => ({
     getScorecard: flow(function*({ ownerType, ownerId }) {
       try {
@@ -21,8 +82,12 @@ export const ScorecardStoreModel = types
           ownerType,
           ownerId,
         });
+
         if (response.ok) {
-          self.kpis = response.data;
+          if(ownerType == 0 && ownerId == 0) {
+            return
+          }
+          self.kpis = setRelatedParents(response.data);
         }
       } catch (e) {
         showToast(
@@ -35,12 +100,15 @@ export const ScorecardStoreModel = types
   .actions(self => ({
     updateKPIs(kpi) {
       if (kpi) {
-        self.kpis = [...self.kpis, kpi] as any;
+        const kpis = [...self.kpis, kpi] as any
+        self.kpis = kpis
       }
     },
     mergeKPIS(kpi) {
       const kpiIndex = self.kpis.findIndex(KPI => KPI.id == kpi.id);
-      self.kpis[kpiIndex] = kpi
+      const kpis = self.kpis;
+      kpis[kpiIndex] = kpi;
+      self.kpis = kpis
     },
     deleteKPI(kpi) {
       const updatedKPIs = R.filter(KPI => KPI.id != kpi.id, self.kpis);

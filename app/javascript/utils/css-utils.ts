@@ -1,5 +1,5 @@
 export const hexToHSL = hex => {
-  // Convert hex to RGB first
+  /*  Convert hex to RGB first */
   let r, g, b;
   if (hex.length == 4) {
     r = "0x" + hex[1] + hex[1];
@@ -10,7 +10,7 @@ export const hexToHSL = hex => {
     g = "0x" + hex[3] + hex[4];
     b = "0x" + hex[5] + hex[6];
   }
-  // Then to HSL
+  /* Then to HSL */
   r /= 255;
   g /= 255;
   b /= 255;
@@ -37,7 +37,6 @@ export const hexToHSL = hex => {
 
   return `hsl(${h},${s}%,${l}%)`;
 };
-//TODOIST: Add the util for milestone gradient
 
 export const adjustBrightnessHSL = (hslString, offset) => {
   const brightness = parseFloat(hslString.split(",")[2].split("%")[0]);

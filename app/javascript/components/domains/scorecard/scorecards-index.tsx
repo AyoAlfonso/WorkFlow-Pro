@@ -36,15 +36,18 @@ export const ScorecardsIndex = observer(
       userStore.load();
       teamStore.load();
       keyPerformanceIndicatorStore.load();
-      companyStore.load()
+      companyStore.load();
     }, []);
 
     useEffect(() => {
       if (owner_type && owner_id) {
-        scorecardStore.getScorecard({ ownerType: owner_type, ownerId: owner_id }).then(() => {
-          setKpis(scorecardStore.kpis);
-          setKpisForTableView(scorecardStore.kpis);
-        }).then(() => setLoading(false));
+        scorecardStore
+          .getScorecard({ ownerType: owner_type, ownerId: owner_id })
+          .then(() => {
+            setKpis(scorecardStore.kpis);
+            setKpisForTableView(scorecardStore.kpis);
+          })
+          .then(() => setLoading(false));
       }
     }, [owner_type, owner_id]);
 
@@ -53,8 +56,8 @@ export const ScorecardsIndex = observer(
       !companyStore.company ||
       !userStore.users ||
       !teamStore.teams ||
-      !keyPerformanceIndicatorStore ||
-      !scorecardStore.kpis
+      !keyPerformanceIndicatorStore
+      // !scorecardStore.kpis
     ) {
       return <Loading />;
     }

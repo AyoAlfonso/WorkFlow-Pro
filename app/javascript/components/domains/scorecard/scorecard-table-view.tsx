@@ -49,7 +49,6 @@ export const ScorecardTableView = observer(
     const [viewEditKPIId, setViewEditKPIID] = useState(undefined);
     const [updateKPI, setUpdateKPI] = useState(undefined);
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
-
     const tabs = [t("scorecards.tabs.kpis"), t("scorecards.tabs.people")];
     const {
       fadedYellow,
@@ -86,6 +85,10 @@ export const ScorecardTableView = observer(
         100,
       );
     };
+
+    // const calculateAggregrateScore = aggregrateScore => {
+    //   aggregrateScore
+    // };
 
     const getStatusValue = percentScore => {
       const percent = Math.round(percentScore);
@@ -124,9 +127,9 @@ export const ScorecardTableView = observer(
       weeks: any,
       target: number,
       greaterThan: boolean,
-      aggregrateScore: number,
       parentType: string,
     ) => {
+      // const aggregateScore = calculateAggregrateScore(relatedParentKpis);
       const quarterScores = [
         [null, 0],
         [null, 0],
@@ -134,7 +137,7 @@ export const ScorecardTableView = observer(
         [null, 0],
       ];
       weeks.forEach(({ week, score }) => {
-        score = parentType ? aggregrateScore : week ? score : null;
+        // score = parentType ? aggregateScore : week ? score : null;
         const q = Math.floor((week - 1) / 13);
         quarterScores[q][0] += score;
         quarterScores[q][1]++;
@@ -176,30 +179,17 @@ export const ScorecardTableView = observer(
           };
           const weeks = Object.values(kpi?.period?.[year] || {});
           weeks.forEach((week: any) => {
-            const score = kpi?.parentType ? kpi?.aggregrateScore : week ? week?.score : null;
-            const percentScore = getScorePercent(score, kpi.targetValue, kpi.greaterThan);
+            const percentScore = getScorePercent(week?.score, kpi.targetValue, kpi.greaterThan);
             row[`wk_${week.week}`] = {
-              score: formatValue(kpi.unitType, score),
+              score: formatValue(kpi.unitType, week?.score),
               color: getScoreValueColor(percentScore),
             };
           });
-          if (weeks.length < 1 && kpi?.parentType) {
-            const percentScore = getScorePercent(
-              kpi?.aggregrateScore,
-              kpi.targetValue,
-              kpi.greaterThan,
-            );
-            row[`wk_${company.currentFiscalWeek}`] = {
-              score: formatValue(kpi.unitType, kpi?.aggregrateScore),
-              color: getScoreValueColor(percentScore),
-            };
-          }
 
           const percentScores = calcQuarterAverageScores(
             weeks,
             kpi.targetValue,
             kpi.greaterThan,
-            kpi.aggregrateScore,
             kpi.parentType,
           ).map(score => getStatusValue(score));
           row.score = percentScores;
