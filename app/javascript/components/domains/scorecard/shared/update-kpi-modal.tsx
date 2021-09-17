@@ -67,7 +67,7 @@ export const UpdateKPIModal = observer(
           setKpis(scorecardStore.kpis);
           renderNewValue ? renderNewValue(value) : null;
           history.push(`/scorecard/0/0`)
-          setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 2000, 0);
+          setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
         })
       }
     };
