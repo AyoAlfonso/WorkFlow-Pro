@@ -48,6 +48,7 @@ export const GoalsCoreFour = ({
   );
 };
 
+
 const CoreFourValues = observer(
   (): JSX.Element => {
     const {
@@ -110,6 +111,8 @@ const CoreFourValues = observer(
   },
 );
 
+
+
 export const CoreFourOnly = (): JSX.Element => (
   <div>
     <CoreFourValues />
@@ -118,12 +121,13 @@ export const CoreFourOnly = (): JSX.Element => (
 
 
 const Container = styled.div`
+  flex-direction: column;
   margin-bottom: 32px;
 `;
 
 const TitleContainer = styled.div`
   display: flex;
-`
+`;
 
 const CoreFourHeaderText = styled(Text)`
   margin-top: 16px;
@@ -143,6 +147,7 @@ const CoreFourHeader = styled.div`
   display: flex;
   margin-top: -32px;
 `;
+
 
 const HideButtonContainer = styled.div`
   display: flex;

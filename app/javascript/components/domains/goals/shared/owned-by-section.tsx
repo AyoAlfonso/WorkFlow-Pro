@@ -1,6 +1,6 @@
 import * as React from "react";
-import styled from "styled-components";
 import * as R from "ramda";
+import styled from "styled-components";
 import { UserType } from "~/types/user";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
@@ -11,6 +11,7 @@ import { RoleAdministrator, RoleCEO } from "~/lib/constants";
 import { UserSelectionDropdownList } from "~/components/shared/user-selection-dropdown-list";
 import { Text } from "~/components/shared/text";
 import { Loading } from "~/components/shared";
+
 
 interface IOwnedBySectionProps {
   ownedBy: UserType;

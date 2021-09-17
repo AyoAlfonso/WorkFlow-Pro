@@ -14,3 +14,5 @@ export const HomeTitle = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `;
+
+

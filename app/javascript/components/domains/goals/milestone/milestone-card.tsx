@@ -41,9 +41,12 @@ export const MilestoneCard = observer(
 
     const handleBlur = () => {
       if (fromMeeting) {
-        milestoneStore.updateDescriptionFromPersonalMeeting(milestone.id, descriptionText);
+        milestoneStore.updateDescriptionFromPersonalMeeting(
+          milestone.id,
+          descriptionRef.current.innerHTML,
+        );
       } else {
-        mobxStore.updateMilestoneDescription(milestone.id, descriptionText);
+        mobxStore.updateMilestoneDescription(milestone.id, descriptionRef.current.innerHTML);
       }
     };
 

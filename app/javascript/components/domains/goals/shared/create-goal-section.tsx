@@ -6,6 +6,8 @@ import { Icon } from "~/components/shared/icon";
 import { TextInput } from "~/components/shared/text-input";
 import { HomeContainerBorders } from "../../home/shared-components";
 import { TextDiv } from "~/components/shared/text";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 interface ICreateGoalSectionProps {
   type?: string;
@@ -38,11 +40,7 @@ export const CreateGoalSection = ({
 
   return showCreateGoal ? (
     <CreateAnnualInitiativeCardContainer>
-      <TextInput 
-        textValue={description} 
-        setTextValue={setDescription}
-        placeholder={placeholder}
-         />
+      <TextInput textValue={description} setTextValue={setDescription} placeholder={placeholder} />
       <ActionsContainer>
         <AddInitiativeButton
           small
@@ -57,6 +55,9 @@ export const CreateGoalSection = ({
               : { description };
 
             if (annualInitiativeId) {
+              if (!variables.description) {
+                return showToast(`Please add a description`, ToastMessageConstants.INFO);
+              }
               createAction(variables, inAnnualInitiative).then(() => {
                 // leave open for next item creation - // setShowCreateGoal(false);
                 setDescription("");
@@ -98,7 +99,7 @@ export const CreateGoalSection = ({
 type StyledButtonType = {
   width?: string;
 };
-   
+
 const StyledButton = styled(Button)<StyledButtonType>`
   display: flex;
   justify-content: center;
@@ -109,27 +110,26 @@ const StyledButton = styled(Button)<StyledButtonType>`
   background-color: ${props => props.theme.colors.white};
   border-color: ${props => props.theme.colors.white};
   &: hover {
-     color: ${props => props.theme.colors.primary100};
+    color: ${props => props.theme.colors.primary100};
   }
 `;
 const CircularIcon = styled(Icon)`
- box-shadow: 2px 2px 6px 0.5px rgb(0 0 0 / 20%);
- color:  ${props => props.theme.colors.white};
- border-radius: 50%;
- height: 25px;
- width: 25px;
- background-color: ${props => props.theme.colors.primary100};
-   &: hover {
+  box-shadow: 2px 2px 6px 0.5px rgb(0 0 0 / 20%);
+  color: ${props => props.theme.colors.white};
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  background-color: ${props => props.theme.colors.primary100};
+  &: hover {
     background-color: ${props => props.theme.colors.primaryActive};
   }
-`
+`;
 const AddGoalText = styled(TextDiv)`
   margin-left: 10px;
   white-space: break-spaces;
   color: ${props => props.theme.colors.primary100};
   font-size: 12px;
 `;
-
 
 const CreateAnnualInitiativeCardContainer = styled(HomeContainerBorders)`
   padding-top: 8px;
