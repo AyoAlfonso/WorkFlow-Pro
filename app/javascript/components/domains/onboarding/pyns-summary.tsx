@@ -25,12 +25,13 @@ export const PynsSummary = ({ goalData: { annualInitiative } }: IPynsSummaryProp
       <TextDiv fontFamily={"Exo"} fontSize={"20px"} fontWeight={600}>
         {quarterlyGoal
           ? quarterlyGoal.description
-          : "You do not have quarterly initiatives created yet."}
+          : "You do not have Quarterly Initiatives created yet."}
       </TextDiv>
       {milestone && (
         <MilestoneCard milestone={milestone} editable={false} itemType={"quarterlyGoal"} />
       )}
     </Container>
+    //TODO: The variable for quarterly initiatives
   );
 };
 
