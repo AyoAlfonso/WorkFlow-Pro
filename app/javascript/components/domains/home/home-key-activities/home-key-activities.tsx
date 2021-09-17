@@ -33,7 +33,7 @@ export const HomeKeyActivities = observer(
     width,
     setQuestionnaireVariant,
   }: IHomeKeyActivities): JSX.Element => {
-    const [selectedFilterGroupName, setSelectedFilterGroupName] = useState<string>("Weekly List");
+    const [selectedFilterGroupName, setSelectedFilterGroupName] = useState<string>("Tomorrow");
     const [selectedFilterTeamId, setSelectedFilterTeamId] = useState<number>(null);
     const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
@@ -68,10 +68,10 @@ export const HomeKeyActivities = observer(
 
     const subHeaderForFilterGroups = (name: string): string => {
       switch (name) {
-        case "Weekly List":
-          return t("keyActivities.weeklyListDescription");
         case "Tomorrow":
           return tomorrow;
+        case "Weekly List":
+          return t("keyActivities.weeklyListDescription");
         case "Backlog":
           return t("keyActivities.backlogDescription");
       }

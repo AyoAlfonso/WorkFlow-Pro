@@ -61,8 +61,8 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
         R.set(R.lens(R.prop("logo"), R.assoc("logo")), logoFiles),
       )(onboardingCompany);
       setFormData(formDataState);
-      setGoalData(companyStore.onboardingCompanyGoals);
-      setPynsData(companyStore.onboardingKeyActivities);
+      setGoalData(companyStore?.onboardingCompanyGoals || {});
+      setPynsData(companyStore?.onboardingKeyActivities || {});
     }
     setLoading(false);
   }, []);

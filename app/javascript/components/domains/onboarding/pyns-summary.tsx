@@ -1,18 +1,19 @@
 import * as React from "react";
 import * as R from "ramda";
 import styled from "styled-components";
-
+import { Loading } from "../../shared/loading";
 import { TextDiv } from "~/components/shared";
 import { MilestoneCard } from "~/components/domains/goals/milestone/milestone-card";
 
 interface IPynsSummaryProps {
   goalData: any;
 }
-//quarterly init
 
 export const PynsSummary = ({ goalData: { annualInitiative } }: IPynsSummaryProps): JSX.Element => {
-  const quarterlyGoal = R.path(["quarterlyGoals", "0"], annualInitiative);
-  const milestone = R.path(["milestones", "0"], quarterlyGoal);
+  const quarterlyGoal = annualInitiative
+    ? R.pathOr("", ["quarterlyGoals", "0"], annualInitiative)
+    : "";
+  const milestone = quarterlyGoal ? R.pathOr("", ["milestones", "0"], quarterlyGoal) : "";
   return (
     <Container>
       <TextDiv fontFamily={"Exo"} fontSize={"20px"} fontWeight={600}>
@@ -24,7 +25,7 @@ export const PynsSummary = ({ goalData: { annualInitiative } }: IPynsSummaryProp
       <TextDiv fontFamily={"Exo"} fontSize={"20px"} fontWeight={600}>
         {quarterlyGoal
           ? quarterlyGoal.description
-          : "You do not have a quarterly goal created yet."}
+          : "You do not have quarterly initiatives created yet."}
       </TextDiv>
       {milestone && (
         <MilestoneCard milestone={milestone} editable={false} itemType={"quarterlyGoal"} />
