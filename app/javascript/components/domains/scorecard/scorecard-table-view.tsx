@@ -236,9 +236,12 @@ export const ScorecardTableView = observer(
               >
                 <KPITextContainer>
                   <KPITitle>
-                    {value.title} {value.parentType && `[${formatKpiType(value.parentType)}]`}
+                    {value.title} {value.parentType}{" "}
+                    {value.parentType && `[${formatKpiType(value.parentType)}]`}
                   </KPITitle>
-                  <KPILogic>{value.logic}</KPILogic>
+                  <KPILogic>
+                    {value.logic} {`T`}
+                  </KPILogic>
                 </KPITextContainer>
               </KPITitleContainer>
             );
