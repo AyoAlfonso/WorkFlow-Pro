@@ -8,16 +8,13 @@ import { MilestoneCard } from "~/components/domains/goals/milestone/milestone-ca
 interface IPynsSummaryProps {
   goalData: any;
 }
-//quarterly init
 
 
 export const PynsSummary = ({ goalData: { annualInitiative } }: IPynsSummaryProps): JSX.Element => {
-  if (!annualInitiative) {
-    return <Loading />;
-  }
-
-  const quarterlyGoal = R.path(["quarterlyGoals", "0"], annualInitiative);
-  const milestone = R.path(["milestones", "0"], quarterlyGoal);
+  const quarterlyGoal = annualInitiative
+    ? R.pathOr("", ["quarterlyGoals", "0"], annualInitiative)
+    : "";
+  const milestone = quarterlyGoal ? R.pathOr("", ["milestones", "0"], quarterlyGoal) : "";
   return (
     <Container>
       <TextDiv fontFamily={"Exo"} fontSize={"20px"} fontWeight={600}>
@@ -29,12 +26,13 @@ export const PynsSummary = ({ goalData: { annualInitiative } }: IPynsSummaryProp
       <TextDiv fontFamily={"Exo"} fontSize={"20px"} fontWeight={600}>
         {quarterlyGoal
           ? quarterlyGoal.description
-          : "You do not have a quarterly goal created yet."}
+          : "You do not have Quarterly Initiatives created yet."}
       </TextDiv>
       {milestone && (
         <MilestoneCard milestone={milestone} editable={false} itemType={"quarterlyGoal"} />
       )}
     </Container>
+    //TODO: The variable for quarterly initiatives
   );
 };
 

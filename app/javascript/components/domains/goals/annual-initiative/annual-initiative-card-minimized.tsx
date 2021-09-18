@@ -7,6 +7,7 @@ import * as moment from "moment";
 import { observer } from "mobx-react";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useMst } from "~/setup/root";
+import { Loading } from "~/components/shared";
 
 interface IAnnualInitiativeCardMinimizedProps {
   annualInitiative: any;
@@ -41,6 +42,10 @@ export const AnnualInitiativeCardMinimized = observer(
         color: "",
       },
     };
+
+    if (annualInitiative == null) {
+      return <Loading />;
+    }
 
     if (annualInitiative.closedAt) {
       statusBadge.description = `Closed - FY${annualInitiative.fiscalYear %

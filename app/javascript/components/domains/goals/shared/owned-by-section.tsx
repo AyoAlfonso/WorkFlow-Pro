@@ -50,6 +50,11 @@ export const OwnedBySection = observer(
     const [store, setStore] = useState<any>(null);
     const [showUsersList, setShowUsersList] = useState<boolean>(false);
     const [owner, setOwner] = useState(ownedBy || currentUser);
+
+    if (R.isNil(userStore) || R.isNil(sessionStore)) {
+      return <></>;
+    }
+
     useEffect(() => {
       if (type == "annualInitiative") {
         setStore(annualInitiativeStore);
