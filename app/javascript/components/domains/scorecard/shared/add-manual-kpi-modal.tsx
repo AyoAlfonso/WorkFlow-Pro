@@ -19,6 +19,7 @@ import {
 } from "./modal-elements";
 import { toJS } from "mobx";
 import { TrixEditor } from "react-trix";
+import { useHistory } from "react-router";
 
 interface AddManualKPIModalProps {
   showAddManualKPIModal: boolean;
@@ -32,6 +33,7 @@ export const AddManualKPIModal = observer(
     setShowAddManualKPIModal,
     externalManualKPIData,
   }: AddManualKPIModalProps): JSX.Element => {
+    const history = useHistory();
     const { owner_id, owner_type } = useParams();
     const { keyPerformanceIndicatorStore, sessionStore, descriptionTemplateStore } = useMst();
     const [title, setTitle] = useState<string>(
@@ -102,8 +104,9 @@ export const AddManualKPIModal = observer(
         setShowAdvancedSettings(false);
         setNeedsAttentionThreshold(90);
         setShowAddManualKPIModal(false);
+        history.push(`/scorecard/0/0`);
+        setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
       });
-      
     };
 
     const handleChange = (e, setStateAction) => {

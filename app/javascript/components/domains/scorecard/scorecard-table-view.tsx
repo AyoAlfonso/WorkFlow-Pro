@@ -6,7 +6,7 @@ import { useMst } from "../../../setup/root";
 import { useTranslation } from "react-i18next";
 import { useTable } from "react-table";
 import Select from "./scorecard-select";
-import { Icon } from "~/components/shared/icon";
+import { RawIcon } from "~/components/shared/icon";
 import { Button } from "~/components/shared/button";
 import { TextDiv } from "~/components/shared/text";
 import { baseTheme } from "~/themes/base";
@@ -88,10 +88,6 @@ export const ScorecardTableView = observer(
       );
     };
 
-    // const calculateAggregrateScore = aggregrateScore => {
-    //   aggregrateScore
-    // };
-
     const getStatusValue = percentScore => {
       const percent = Math.round(percentScore);
       if (percentScore === null) {
@@ -131,7 +127,6 @@ export const ScorecardTableView = observer(
       greaterThan: boolean,
       parentType: string,
     ) => {
-      // const aggregateScore = calculateAggregrateScore(relatedParentKpis);
       const quarterScores = [
         [null, 0],
         [null, 0],
@@ -139,7 +134,6 @@ export const ScorecardTableView = observer(
         [null, 0],
       ];
       weeks.forEach(({ week, score }) => {
-        // score = parentType ? aggregateScore : week ? score : null;
         const q = Math.floor((week - 1) / 13);
         quarterScores[q][0] += score;
         quarterScores[q][1]++;
@@ -214,11 +208,12 @@ export const ScorecardTableView = observer(
               <UpdateKPIContainer
                 disabled={value.parentType}
                 onClick={() => {
+                  if(value.parentType)return;
                   setUpdateKPI(value);
                   setUpdateKPIModalOpen(true);
                 }}
               >
-                <Icon icon={"Update_KPI_New"} size={16} iconColor={primary100} />
+                <UpdateKpiIcon icon={"Update_KPI_New"} size={16} iconColor={primary100} />
               </UpdateKPIContainer>
             );
           },
@@ -521,6 +516,13 @@ const TableRow = styled.tr<TableRowProps>`
 	}`}
 `;
 
+const UpdateKpiIcon = styled(RawIcon)`
+  color: blue;
+   &:hover {
+    cursor: pointer;
+    fill: ${props => props.theme.colors.white} !important;
+`;
+
 type UpdateKPIContainerProps = {
   disabled?: boolean;
 };
@@ -530,11 +532,12 @@ const UpdateKPIContainer = styled.div<UpdateKPIContainerProps>`
   align-items: center;
   width: 48px;
   height: 48px;
+  opacity: ${props => (props.disabled ? "0.5" : "1.0")};
   pointer-events: ${props => (props.disabled ? "none" : "all")};
   &:hover {
-    cursor: pointer;
-    filter: brightness(10);
-    background-color: blue;
+    cursor: ${props => (props.disabled ? "none" : "pointer")};
+    filter: brightness(1);
+    background-color: ${props => props.theme.colors.primary100};
   }
 `;
 
@@ -544,7 +547,6 @@ const KPITitleContainer = styled.div`
   overflow: hidden;
   justify-content: space-between;
   padding: 4px 8px;
-
   &:hover {
     cursor: pointer;
   }

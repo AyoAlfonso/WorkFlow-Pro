@@ -39,6 +39,7 @@ export const ViewEditKPIModal = observer(
     const {
       companyStore: { company },
       keyPerformanceIndicatorStore,
+      scorecardStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
 
@@ -51,9 +52,7 @@ export const ViewEditKPIModal = observer(
     const [logic, setLogic] = useState("");
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
     const [data, setData] = useState(null);
-    const [description, setDescription] = useState<string>(
-      descriptionTemplatesFormatted?.find(t => t.templateType == "kpi")?.body.body,
-    );
+    const [description, setDescription] = useState<string>("");
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
@@ -137,7 +136,7 @@ export const ViewEditKPIModal = observer(
     };
     const renderNewValue = value => {
       setValue(value);
-      drawGraph(keyPerformanceIndicatorStore.kpi);
+      drawGraph(kpi);
     };
 
     const chartOptions = {
@@ -184,19 +183,25 @@ export const ViewEditKPIModal = observer(
 
     useEffect(() => {
       if (kpiId !== null) {
+        const rollupKPI = scorecardStore.kpis.find(kpi => kpi.id == kpiId && kpi.parentType);
+
         keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
-          setDescription(keyPerformanceIndicatorStore.kpi.description);
+          const KPI = rollupKPI || keyPerformanceIndicatorStore?.kpi;
+          setDescription(
+            KPI.description ||
+              descriptionTemplatesFormatted?.find(t => t.templateType == "kpi")?.body.body,
+          );
           setCurrentLog();
-          setKpi(keyPerformanceIndicatorStore.kpi);
+          setKpi(KPI);
           setLoading(false);
         });
       }
     }, [kpiId]);
 
     const saveKPI = body => {
-      const clonedKPI = Object.assign({}, kpi, body);
-      keyPerformanceIndicatorStore.updateKPI(clonedKPI);
+      keyPerformanceIndicatorStore.updateKPI(Object.assign({}, kpi, body));
     };
+
     const drawGraph = KPI => {
       const startWeek = (company.currentFiscalQuarter - 1) * 13 + 1;
       const weekNumbers = R.range(startWeek, company.currentFiscalWeek + 1);
@@ -216,6 +221,10 @@ export const ViewEditKPIModal = observer(
           },
         ],
       });
+    };
+
+    const closeModal = () => {
+      setViewEditKPIModalOpen(false);
     };
 
     useEffect(() => {
@@ -242,7 +251,7 @@ export const ViewEditKPIModal = observer(
           isOpen={viewEditKPIModalOpen}
           style={{ width: "60rem", maxHeight: "80%", overflow: "auto" }}
           onBackgroundClick={e => {
-            setViewEditKPIModalOpen(false);
+            closeModal();
           }}
         >
           <Container>
@@ -275,12 +284,15 @@ export const ViewEditKPIModal = observer(
                     </Header>
                     <DropdownOptions>
                       {renderDropdownOptions()}
-                      <CloseIconContainer onClick={() => setViewEditKPIModalOpen(false)}>
+                      <CloseIconContainer
+                        onClick={() => {
+                          closeModal();
+                        }}
+                      >
                         <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
                       </CloseIconContainer>
                     </DropdownOptions>
                   </HeaderContainer>
-
                   <OwnerAndLogicContainer>
                     <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
@@ -301,7 +313,7 @@ export const ViewEditKPIModal = observer(
                     <OwnerAndLogicText>{logic}</OwnerAndLogicText>
                     {kpi?.parentType && (
                       <KPITypeContainer>
-                        <KPITypeIcon icon={"Function"} size={12} iconColor={greyInactive} />
+                        <KPITypeIcon icon={"Function"} size={16} iconColor={greyInactive} />
                         <KPIParentTypeText> {formatKpiType(kpi?.parentType)} </KPIParentTypeText>
                       </KPITypeContainer>
                     )}
@@ -323,19 +335,21 @@ export const ViewEditKPIModal = observer(
                     {data && <Line data={data} options={chartOptions} />}
                   </ChartContainer>
                   <SubHeader>Description</SubHeader>
-                  <TrixEditorContainer>
-                    <TrixEditor
-                      className={"trix-kpi-modal"}
-                      autoFocus={false}
-                      placeholder={"Add a description..."}
-                      onChange={description => {
-                        setDescription(description);
-                        saveKPI({ description });
-                      }}
-                      value={description}
-                      mergeTags={[]}
-                    />
-                  </TrixEditorContainer>
+                  {description && (
+                    <TrixEditorContainer>
+                      <TrixEditor
+                        className={"trix-kpi-modal"}
+                        autoFocus={false}
+                        placeholder={"Add a description..."}
+                        onChange={description => {
+                          setDescription(description);
+                          saveKPI({ description });
+                        }}
+                        value={description}
+                        mergeTags={[]}
+                      />
+                    </TrixEditorContainer>
+                  )}
                   <SubHeader>Activity</SubHeader>
                   <ActivityLogsContainer>
                     {R.sort(R.descend(R.prop("createdAt")), kpi.scorecardLogs).map(log => {
@@ -589,8 +603,7 @@ const KPITypeContainer = styled.div`
   display: flex;
   color: ${props => props.theme.colors.grey100};
 `;
-const KPITypeIcon = styled(Icon)`
-`;
+const KPITypeIcon = styled(Icon)``;
 
 const KPIParentTypeText = styled.div`
   font-size: 9px;

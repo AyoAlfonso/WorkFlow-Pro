@@ -41,7 +41,7 @@ export const UpdateKPIModal = observer(
     renderNewValue,
     setKpis,
   }: UpdateKPIModalProps): JSX.Element => {
-     const history = useHistory();
+    const history = useHistory();
     const { keyPerformanceIndicatorStore, sessionStore, scorecardStore } = useMst();
     const [value, setValue] = useState<number>(currentValue);
     const [comment, setComment] = useState("");
@@ -62,13 +62,12 @@ export const UpdateKPIModal = observer(
           log.note = comment;
         }
         keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
-         
           setUpdateKPIModalOpen(false);
           setKpis(scorecardStore.kpis);
           renderNewValue ? renderNewValue(value) : null;
-          history.push(`/scorecard/0/0`)
+          history.push(`/scorecard/0/0`);
           setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
-        })
+        });
       }
     };
 

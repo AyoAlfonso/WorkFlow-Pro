@@ -4,7 +4,7 @@ class KeyPerformanceIndicator < ApplicationRecord
   include HasOwner
   include HasViewer
 
-  before_save :sanitize_description
+  # before_save :sanitize_description
   enum unit_type: { percentage: 0, numerical: 1, currency: 2 }
   enum parent_type: { existing: 0, rollup: 1, avr: 2}
 
