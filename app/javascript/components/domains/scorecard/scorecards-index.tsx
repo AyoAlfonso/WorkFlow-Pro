@@ -57,7 +57,6 @@ export const ScorecardsIndex = observer(
       !userStore.users ||
       !teamStore.teams ||
       !keyPerformanceIndicatorStore
-      // !scorecardStore.kpis
     ) {
       return <Loading />;
     }
