@@ -301,7 +301,7 @@ export const ViewEditKPIModal = observer(
                     <OwnerAndLogicText>{logic}</OwnerAndLogicText>
                     {kpi?.parentType && (
                       <KPITypeContainer>
-                        <KPITypeIcon icon={"Function"} size={16} iconColor={grey100} />
+                        <KPITypeIcon icon={"Function"} size={12} iconColor={greyInactive} />
                         <KPIParentTypeText> {formatKpiType(kpi?.parentType)} </KPIParentTypeText>
                       </KPITypeContainer>
                     )}
@@ -589,9 +589,10 @@ const KPITypeContainer = styled.div`
   display: flex;
   color: ${props => props.theme.colors.grey100};
 `;
-const KPITypeIcon = styled(Icon)``;
+const KPITypeIcon = styled(Icon)`
+`;
 
 const KPIParentTypeText = styled.div`
-  font-size: 12px;
+  font-size: 9px;
   padding: 4px;
 `;
