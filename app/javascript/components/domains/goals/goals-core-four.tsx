@@ -9,6 +9,7 @@ import { Icon } from "~/components/shared/icon";
 import { useTranslation } from "react-i18next";
 import { HomeContainerBorders } from "../home/shared-components";
 import { EnlargedHomeTitle } from "./shared/enlarged-home-title";
+import { baseTheme } from "../../../themes";
 
 interface ICoreFourValuesProps {
   showCoreFour?: boolean;
@@ -58,16 +59,7 @@ const CoreFourValues = observer(
 
     return company ? (
       <Flex>
-        <Box
-          width={1 / 4}
-          sx={{
-            padding: 16,
-            marginRight: "10px",
-            boxShadow: "1px 3px 6px #00000029",
-            border: "0px solid white",
-            borderRadius: "10px",
-          }}
-        >
+        <Box width={1 / 4} sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
             {t("core.core1")}
           </CoreFourHeaderText>
@@ -78,16 +70,7 @@ const CoreFourValues = observer(
             ></div>
           </CoreFourBodyTextContainer>
         </Box>
-        <Box
-          width={1 / 4}
-          sx={{
-            padding: 16,
-            marginRight: "10px",
-            boxShadow: "1px 3px 6px #00000029",
-            border: "0px solid white",
-            borderRadius: "10px",
-          }}
-        >
+        <Box width={1 / 4} sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
             {t("core.core2")}
           </CoreFourHeaderText>
@@ -98,16 +81,7 @@ const CoreFourValues = observer(
             ></div>
           </CoreFourBodyTextContainer>
         </Box>
-        <Box
-          width={1 / 4}
-          sx={{
-            padding: 16,
-            marginRight: "10px",
-            boxShadow: "1px 3px 6px #00000029",
-            border: "0px solid white",
-            borderRadius: "10px",
-          }}
-        >
+        <Box width={1 / 4} sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
             {t("core.core3")}
           </CoreFourHeaderText>
@@ -118,15 +92,7 @@ const CoreFourValues = observer(
             ></div>
           </CoreFourBodyTextContainer>
         </Box>
-        <Box
-          width={1 / 4}
-          sx={{
-            padding: 16,
-            boxShadow: "1px 3px 6px #00000029",
-            border: "0px solid white",
-            borderRadius: "10px",
-          }}
-        >
+        <Box width={1 / 4} sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
             {t("core.core4")}
           </CoreFourHeaderText>
@@ -151,6 +117,14 @@ export const CoreFourOnly = (): JSX.Element => (
     <CoreFourValues />
   </div>
 );
+
+const boxStyle = {
+  padding: 16,
+  marginRight: "10px",
+  boxShadow: `1px 3px 6px ${baseTheme.colors.boxshawdowDark}`,
+  border: `0px solid ${baseTheme.colors.white}`,
+  borderRadius: "10px",
+};
 
 const Container = styled.div`
   flex-direction: column;
