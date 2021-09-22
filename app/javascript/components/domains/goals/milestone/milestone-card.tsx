@@ -89,8 +89,6 @@ export const MilestoneCard = observer(
   },
 );
 
-const options = ["here", "there", "me"];
-
 const MilestoneContainer = styled.div`
   display: flex;
   align-items: center;
