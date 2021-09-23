@@ -47,7 +47,9 @@ export const AddManualKPIModal = observer(
       externalManualKPIData?.unitType || "numerical",
     );
     const [owner, setOwner] = useState(
-      externalManualKPIData?.selectedKPIs[0].ownedBy || sessionStore?.profile,
+      externalManualKPIData?.selectedKPIs?.length > 0
+        ? externalManualKPIData?.selectedKPIs[0].ownedBy
+        : sessionStore?.profile,
     );
     const [targetValue, setTargetValue] = useState<number>(
       externalManualKPIData?.targetValue || undefined,
