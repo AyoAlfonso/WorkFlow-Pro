@@ -91,7 +91,10 @@ export const MilestoneCard = observer(
 
 const MilestoneContainer = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 type MilestoneDetailsType = {
@@ -102,6 +105,10 @@ type MilestoneDetailsType = {
 const Container = styled.div`
   margin-left: ${props => (props.right ? "auto" : "")};
   align-self: ${props => (props.center ? "center" : "")};
+  @media only screen and (max-width: 768px) {
+    justify-self: ${props => (props.center ? "center" : "")};
+    margin-left: 0;
+  }
 `;
 
 const MilestoneDetails = styled(HomeContainerBorders)<MilestoneDetailsType>`
