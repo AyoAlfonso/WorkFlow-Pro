@@ -294,6 +294,7 @@ export const ViewEditKPIModal = observer(
                     </DropdownOptions>
                   </HeaderContainer>
                   <OwnerAndLogicContainer>
+                    {renderStatus()}
                     <OwnerAndLogicText>
                       <OwnedBySection
                         marginLeft={"0px"}
@@ -320,7 +321,7 @@ export const ViewEditKPIModal = observer(
                   </OwnerAndLogicContainer>
                   <ValueAndUpdateContainer>
                     <ValueText>{formatValue(value, kpi.unitType)}</ValueText>
-                    {renderStatus()}
+
                     <UpdateProgressButton
                       disabled={kpi?.parentType}
                       onClick={() => {
