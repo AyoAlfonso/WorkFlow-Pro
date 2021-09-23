@@ -294,11 +294,6 @@ export const ViewEditKPIModal = observer(
                     </DropdownOptions>
                   </HeaderContainer>
                   <OwnerAndLogicContainer>
-                    <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
-                    <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
-                      {R.uniq(kpi.viewers.map(viewer => viewer.type)).join(", ")} KPI
-                    </OwnerAndLogicText>
-
                     <OwnerAndLogicText>
                       <OwnedBySection
                         marginLeft={"0px"}
@@ -309,6 +304,11 @@ export const ViewEditKPIModal = observer(
                         type={"scorecard"}
                       />
                     </OwnerAndLogicText>
+                    <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
+                    <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
+                      {R.uniq(kpi.viewers.map(viewer => viewer.type)).join(", ")} KPI
+                    </OwnerAndLogicText>
+
                     <Icon icon={"Initiative"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText>{logic}</OwnerAndLogicText>
                     {kpi?.parentType && (
@@ -470,7 +470,7 @@ const OwnerAndLogicContainer = styled.div`
 `;
 
 const OwnerAndLogicText = styled.div`
-  font-size: 9px;
+  font-size: 12px;
   color: ${props => props.theme.colors.grey100};
   margin-left: 8px;
   margin-right: 16px;
@@ -567,7 +567,7 @@ const ActivityLogText = styled.p<ActivityLogTextProps>`
 
 const TrixEditorContainer = styled.div`
   margin-top: 4px;
-  width: 80%;
+  width: 100%;
 `;
 
 const DropdownOptions = styled.div`
@@ -606,6 +606,6 @@ const KPITypeContainer = styled.div`
 const KPITypeIcon = styled(Icon)``;
 
 const KPIParentTypeText = styled.div`
-  font-size: 9px;
+  font-size: 12px;
   padding: 4px;
 `;

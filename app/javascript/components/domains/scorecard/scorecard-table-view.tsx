@@ -49,6 +49,7 @@ export const ScorecardTableView = observer(
     const [tab, setTab] = useState<string>("KPIs");
     const [viewEditKPIId, setViewEditKPIID] = useState(undefined);
     const [updateKPI, setUpdateKPI] = useState(undefined);
+    const [currentKPIIcon, setCurrentKPIIcon] = useState(undefined);
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
     const tabs = [t("scorecards.tabs.kpis"), t("scorecards.tabs.people")];
     const {
@@ -61,6 +62,7 @@ export const ScorecardTableView = observer(
       primary100,
       backgroundGrey,
       greyActive,
+      white,
     } = baseTheme.colors;
 
     const formatValue = (unitType: string, value: number) => {
@@ -208,12 +210,37 @@ export const ScorecardTableView = observer(
               <UpdateKPIContainer
                 disabled={value.parentType}
                 onClick={() => {
-                  if(value.parentType)return;
+                  if (value.parentType) return;
                   setUpdateKPI(value);
                   setUpdateKPIModalOpen(true);
                 }}
+                onMouseEnter={() => {
+                  setCurrentKPIIcon(value.id);
+                }}
+                onMouseLeave={() => {
+                  setCurrentKPIIcon(null);
+                }}
               >
-                <UpdateKpiIcon icon={"Update_KPI_New"} size={16} iconColor={primary100} />
+                {currentKPIIcon ? (
+                  <WhiteUpdateKpiIcon
+                    icon={"Update_KPI_New"}
+                    size={16}
+                    hover={currentKPIIcon == value.id}
+                    // iconColor={currentKPIIcon == value.id ? white : primary100}
+                  />
+                ) : (
+                  <> </>
+                )}
+                {!currentKPIIcon ? (
+                  <BlueUpdateKpiIcon
+                    icon={"Update_KPI_New"}
+                    size={16}
+                    hover={currentKPIIcon == value.id}
+                    // iconColor={primary100}
+                  />
+                ) : (
+                  <> </>
+                )}
               </UpdateKPIContainer>
             );
           },
@@ -307,7 +334,7 @@ export const ScorecardTableView = observer(
           minWidth: "64px",
         })),
       ],
-      [quarter, year],
+      [quarter, year, currentKPIIcon],
     );
 
     const getHiddenWeeks = (q: number) =>
@@ -516,11 +543,30 @@ const TableRow = styled.tr<TableRowProps>`
 	}`}
 `;
 
-const UpdateKpiIcon = styled(RawIcon)`
-  color: blue;
+type UpdateKpiIconProps = {
+  hover?: boolean;
+};
+const UpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
+   color:  ${props => (props.hover ? props.theme.colors.white : props.theme.colors.primary100)}; 
    &:hover {
     cursor: pointer;
-    fill: ${props => props.theme.colors.white} !important;
+    fill:  ${props =>
+      props.hover ? props.theme.colors.white : props.theme.colors.primary100} !important;
+`;
+
+const BlueUpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
+
+   color:  ${props => props.theme.colors.primary100}; 
+   &:hover {
+    cursor: pointer;
+    fill:  ${props => props.theme.colors.primary100} !important;
+`;
+
+const WhiteUpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
+   color:  ${props => props.theme.colors.white}; 
+   &:hover {
+    cursor: pointer;
+    fill:  ${props => props.theme.colors.white} !important;
 `;
 
 type UpdateKPIContainerProps = {

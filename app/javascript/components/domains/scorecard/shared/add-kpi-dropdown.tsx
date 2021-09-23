@@ -8,7 +8,7 @@ import { TextDiv } from "~/components/shared/text";
 import { AddKPIModal } from "./add-kpi-modals";
 import { AddManualKPIModal } from "./add-manual-kpi-modal";
 import { toJS } from "mobx";
-
+import { useIntersection } from "~/utils/hooks/useIntersection";
 interface IAddKPIDropdownProps {
   kpis: any[];
 }
@@ -21,6 +21,8 @@ export const AddKPIDropdown = observer(
     const [kpiModalType, setAddKPIModalType] = useState<string>("");
     const [showAddManualKPIModal, setShowAddManualKPIModal] = useState<boolean>(false);
     const [externalManualKPIData, setExternalManualKPIData] = useState({});
+    const dropdownRef = useRef();
+    // const inViewport = useIntersection(dropdownRef, "-200px");
 
     useEffect(() => {
       const handleClickOutside = event => {
@@ -56,7 +58,11 @@ export const AddKPIDropdown = observer(
           <AddKPIText>Add KPI</AddKPIText>
         </StyledButton>
         {showOptions && (
-          <DropdownOptionsContainer onClick={e => e.stopPropagation()}>
+          <DropdownOptionsContainer
+            // inViewport={inViewport}
+            // ref={dropdownRef}
+            onClick={e => e.stopPropagation()}
+          >
             <OptionContainer
               onClick={() => {
                 setShowAddManualKPIModal(!showAddManualKPIModal);
@@ -157,11 +163,15 @@ const AddKPIText = styled(TextDiv)`
   font-size: 12px;
 `;
 
-const DropdownOptionsContainer = styled.div`
+type DropdownOptionsContainerProps = {
+  inViewport?: any;
+};
+
+const DropdownOptionsContainer = styled.div<DropdownOptionsContainerProps>`
   position: absolute;
   width: 78px;
   background-color: ${props => props.theme.colors.white};
-  margin-top: 4px;
+  margin-top:   ${props => (props.inViewport ? "4px" : "-21%")}
   padding-top: 8px;
   padding-bottom: 8px;
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);

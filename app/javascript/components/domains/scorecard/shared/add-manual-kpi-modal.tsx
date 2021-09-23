@@ -46,7 +46,9 @@ export const AddManualKPIModal = observer(
     const [unitType, setUnitType] = useState<string>(
       externalManualKPIData?.unitType || "numerical",
     );
-    const [owner, setOwner] = useState(sessionStore?.profile);
+    const [owner, setOwner] = useState(
+      externalManualKPIData?.selectedKPIs[0].ownedBy || sessionStore?.profile,
+    );
     const [targetValue, setTargetValue] = useState<number>(
       externalManualKPIData?.targetValue || undefined,
     );
@@ -72,9 +74,30 @@ export const AddManualKPIModal = observer(
       if (template) {
         setDescription(template.body.body);
       }
+
+      return () => {
+        resetModal();
+      };
     }, []);
 
+    const resetModal = () => {
+      setTitle(undefined);
+      setGreaterThan(1);
+      setDescription(undefined);
+      setUnitType("numerical");
+      setOwner(sessionStore?.profile);
+      setTargetValue(undefined);
+      setShowAdvancedSettings(false);
+      setNeedsAttentionThreshold(90);
+      setShowAddManualKPIModal(false);
+    };
+
     const handleSave = () => {
+      externalManualKPIData.kpiModalType =
+        externalManualKPIData?.kpiModalType == "Average"
+          ? "avr"
+          : externalManualKPIData?.kpiModalType;
+
       const kpi = {
         viewers: [{ type: owner_type, id: owner_id }],
         title,
@@ -95,15 +118,8 @@ export const AddManualKPIModal = observer(
           return;
         }
         // Reset and close
+        resetModal();
         setTitle(undefined);
-        setGreaterThan(1);
-        setDescription(undefined);
-        setUnitType("numerical");
-        setOwner(sessionStore?.profile);
-        setTargetValue(undefined);
-        setShowAdvancedSettings(false);
-        setNeedsAttentionThreshold(90);
-        setShowAddManualKPIModal(false);
         history.push(`/scorecard/0/0`);
         setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
       });
