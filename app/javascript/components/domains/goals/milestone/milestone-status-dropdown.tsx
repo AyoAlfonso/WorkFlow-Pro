@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { MilestoneType } from "~/types/milestone";
+import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import * as R from "ramda";
 import * as moment from "moment";
 import { observer } from "mobx-react";
-import { Select } from "../../../shared/input";
+import { ChevronDownIcon } from "../../../shared/input";
+import { baseTheme } from "../../../../themes";
 
 interface MilestoneDropdownProps {
   milestone: MilestoneType;
@@ -14,49 +16,161 @@ interface MilestoneDropdownProps {
   itemType: string;
 }
 
-export const MilestoneDropdown = observer((props: MilestoneDropdownProps): JSX.Element => {
-  const { milestone, milestoneStatus, editable, fromMeeting, itemType } = props;
-  const { quarterlyGoalStore, subInitiativeStore, milestoneStore } = useMst();
+export const MilestoneDropdown = observer(
+  (props: MilestoneDropdownProps): JSX.Element => {
+    const { milestone, milestoneStatus, editable, fromMeeting, itemType } = props;
+    const { quarterlyGoalStore, subInitiativeStore, milestoneStore } = useMst();
 
-  const statusChangable = moment(milestone.weekOf).isSameOrBefore(moment(), "week");
+    const [showList, setShowList] = useState<boolean>(false);
 
-  const updateStatus = (status) => {
-    if (fromMeeting) {
-      milestoneStore.updateStatusFromPersonalMeeting(milestone.id, status);
-    }
-    if (!fromMeeting) {
-      switch (itemType) {
-        case "quarterlyGoal":
-          quarterlyGoalStore.updateMilestoneStatus(milestone.id, status);
-          break;
-        case "subInitiative":
-          subInitiativeStore.updateMilestoneStatus(milestone.id, status);
-          break;
+    const statusChangable = moment(milestone.weekOf).isSameOrBefore(moment(), "week");
+    const {
+      warningRed,
+      cautionYellow,
+      finePine,
+      grey30,
+      grey10,
+      almostPink,
+      lightYellow,
+      lightFinePine,
+    } = baseTheme.colors;
+
+    const determineStatusLabel = status => {
+      switch (status) {
+        case "incomplete":
+          return (
+            <ListSpan color={warningRed} backgroundColor={almostPink}>
+              Behind
+            </ListSpan>
+          );
+        case "in_progress":
+          return (
+            <ListSpan color={cautionYellow} backgroundColor={lightYellow}>
+              Needs Attention
+            </ListSpan>
+          );
+        case "completed":
+          return (
+            <ListSpan color={finePine} backgroundColor={lightFinePine}>
+              On Track
+            </ListSpan>
+          );
         default:
-          break;
+          return (
+            <ListSpan color={grey30} backgroundColor={grey10}>
+              No Status
+            </ListSpan>
+          );
       }
-    }
+    };
+
+    const updateStatus = status => {
+      if (fromMeeting) {
+        milestoneStore.updateStatusFromPersonalMeeting(milestone.id, status);
+      }
+      if (!fromMeeting) {
+        switch (itemType) {
+          case "quarterlyGoal":
+            quarterlyGoalStore.updateMilestoneStatus(milestone.id, status);
+            break;
+          case "subInitiative":
+            subInitiativeStore.updateMilestoneStatus(milestone.id, status);
+            break;
+          default:
+            break;
+        }
+      }
+    };
+
+    const statusArray = ["unstarted", "incomplete", "in_progress", "completed"];
+
+    return (
+      <Container>
+        <DropdownHeader
+          disabled={!statusChangable && !editable}
+          onClick={() => {
+            setShowList(!showList);
+          }}
+          onBlur={() => {
+            // setTimeout(() => {
+              setShowList(false);
+            // }, 500);
+          }}
+        >
+          {determineStatusLabel(milestoneStatus)}
+          <ChevronDownIcon />
+        </DropdownHeader>
+        {showList && (
+          <DropdownListContainer>
+            <DropdownList>
+              {R.map(
+                (status: string, index: number) => (
+                  <ListItem
+                    onClick={() => {
+                      updateStatus(status);
+                      setShowList(!showList);
+                    }}
+                    key={index}
+                    value={status}
+                  >
+                    {determineStatusLabel(status)}
+                  </ListItem>
+                ),
+                statusArray,
+              )}
+            </DropdownList>
+          </DropdownListContainer>
+        )}
+      </Container>
+    );
+  },
+);
+
+const Container = styled.div`
+  position: relative;
+`;
+
+const DropdownHeader = styled("div")`
+  margin-bottom: 3px;
+  border: 2px solid #ededf2;
+  width: 145px;
+  padding: 3px 0px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  pointer-events: ${props => props.disabled && `none`};
+`;
+
+const DropdownListContainer = styled("div")``;
+
+const DropdownList = styled("ul")`
+  background-color: ${props => props.theme.colors.white};
+  border-radius: 10px;
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  padding: 8px 0px;
+  position: absolute;
+  margin-top: 3px;
+  width: 145px;
+`;
+
+const ListItem = styled("li")`
+  list-style: none;
+  padding: 5px 0px;
+  cursor: pointer;
+  &:hover {
+    background-color: #f6f6f6;
   }
+`;
 
-  const statusArray = ["unstarted", "in_progress", "incomplete", "completed"];
-
-  return (
-    <Select
-      onChange={e => {
-        updateStatus(e.target.value);
-      }}
-      value={milestoneStatus}
-      width={125}
-      disabled={!statusChangable && !editable}
-    >
-      {R.map(
-        (status: string, index: number) => (
-          <option key={index} value={status}>
-            {status}
-          </option>
-        ),
-        statusArray
-      )}
-    </Select>
-  );
-});
+const ListSpan = styled("span")`
+  display: inline-block;
+  font-size: 12px;
+  border-radius: 3px;
+  padding: 2px;
+  margin: 0 16px;
+  font-weight: bold;
+  background-color: ${props => props.backgroundColor};
+  color: ${props => props.color};
+`;

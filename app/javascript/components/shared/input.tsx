@@ -144,7 +144,7 @@ type ChevronDownIconProps = {
 	iconColor?: string;
 }
 
-const ChevronDownIcon = ({ iconColor }: ChevronDownIconProps): JSX.Element => {
+ export const ChevronDownIcon = ({ iconColor }: ChevronDownIconProps): JSX.Element => {
 	return (
 		<StyledIcon
 			icon={"Chevron-Down"}
