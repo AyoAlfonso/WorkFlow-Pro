@@ -99,7 +99,10 @@ const InputHeader = styled.p<InputHeaderProps>`
   font-weight: bold;
 `;
 
-const CommentText = styled.p`
+type CommentTextProps = {
+  fontSize?: string;
+};
+const CommentText = styled.p<CommentTextProps>`
   margin: 0px;
   margin-top: auto;
   font-size: ${props => (props.fontSize ? props.fontSize : "9px")};
