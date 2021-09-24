@@ -4,7 +4,7 @@ class KeyPerformanceIndicator < ApplicationRecord
   include HasOwner
   include HasViewer
 
-  before_save :sanitize_description
+  # before_save :sanitize_description
   enum unit_type: { percentage: 0, numerical: 1, currency: 2 }
   enum parent_type: { existing: 0, rollup: 1, avr: 2}
 
@@ -17,7 +17,7 @@ class KeyPerformanceIndicator < ApplicationRecord
       methods: [:owned_by],
                   include: {
                   scorecard_logs: { methods: [:user] }}
-    }).merge({ :period => self.period, :related_parent_kpis => self.related_parent_kpis })
+    }).merge({ :parent_type => self.parent_type, :period => self.period, :related_parent_kpis => self.related_parent_kpis })
   end
 
   def period
@@ -29,7 +29,7 @@ class KeyPerformanceIndicator < ApplicationRecord
   def related_parent_kpis
     if !self.parent_type.present?
       return []
-    elsif self.parent_type ==  "rollup" || self.parent_type ==  "existing"
+    elsif self.parent_type.present?
       return KeyPerformanceIndicator.where(id: self.parent_kpi).as_json()
     end
   end

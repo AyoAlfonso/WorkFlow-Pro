@@ -8,7 +8,6 @@ import { TextDiv } from "~/components/shared/text";
 import { AddKPIModal } from "./add-kpi-modals";
 import { AddManualKPIModal } from "./add-manual-kpi-modal";
 import { toJS } from "mobx";
-
 interface IAddKPIDropdownProps {
   kpis: any[];
 }
@@ -161,7 +160,7 @@ const DropdownOptionsContainer = styled.div`
   position: absolute;
   width: 78px;
   background-color: ${props => props.theme.colors.white};
-  margin-top: 4px;
+  bottom: 30px;
   padding-top: 8px;
   padding-bottom: 8px;
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
@@ -169,10 +168,11 @@ const DropdownOptionsContainer = styled.div`
   z-index: 3;
   height: auto;
   overflow: auto;
+  margin-bottom: 4px;
 `;
 
 const TextContainer = styled.div`
-  font-size: 12px;
+  font-size: 14px;
   margin-left: 8px;
   margin-top: auto;
   margin-bottom: auto;

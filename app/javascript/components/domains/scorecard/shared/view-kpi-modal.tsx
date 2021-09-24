@@ -22,6 +22,8 @@ import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import { toJS } from "mobx";
 import { titleCase } from "~/utils/camelize";
 import { ScorecardKPIDropdownOptions } from "./scorecard-dropdown-options";
+import "~/stylesheets/modules/trix-editor.css";
+
 interface ViewEditKPIModalProps {
   kpiId: number;
   setViewEditKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,6 +41,7 @@ export const ViewEditKPIModal = observer(
     const {
       companyStore: { company },
       keyPerformanceIndicatorStore,
+      scorecardStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
 
@@ -51,9 +54,7 @@ export const ViewEditKPIModal = observer(
     const [logic, setLogic] = useState("");
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
     const [data, setData] = useState(null);
-    const [description, setDescription] = useState<string>(
-      descriptionTemplatesFormatted?.find(t => t.templateType == "kpi")?.body.body,
-    );
+    const [description, setDescription] = useState<string>("");
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
@@ -102,7 +103,7 @@ export const ViewEditKPIModal = observer(
       if (value === undefined) {
         return (
           <StatusBadgeContainer>
-            <StatusBadge color={greyActive} background={backgroundGrey}>
+            <StatusBadge fontSize={"21px"} color={greyActive} background={backgroundGrey}>
               No Update
             </StatusBadge>
           </StatusBadgeContainer>
@@ -112,32 +113,32 @@ export const ViewEditKPIModal = observer(
       if (scorePercent >= 100) {
         return (
           <StatusBadgeContainer>
-            <StatusBadge color={successGreen} background={fadedGreen}>
+            <StatusBadge fontSize={"21px"} color={successGreen} background={fadedGreen}>
               On Track
             </StatusBadge>
           </StatusBadgeContainer>
         );
-      } else if (scorePercent >= 90) {
-        return (
-          <StatusBadgeContainer>
-            <StatusBadge color={poppySunrise} background={fadedYellow}>
-              Needs Attention
-            </StatusBadge>
-          </StatusBadgeContainer>
-        );
-      } else {
-        return (
-          <StatusBadgeContainer>
-            <StatusBadge color={warningRed} background={fadedRed}>
-              Behind
-            </StatusBadge>
-          </StatusBadgeContainer>
-        );
-      }
+      } else if (scorePercent >= kpi.needsAttentionThreshold) {
+               return (
+                 <StatusBadgeContainer>
+                   <StatusBadge fontSize={"21px"} color={poppySunrise} background={fadedYellow}>
+                     Needs Attention
+                   </StatusBadge>
+                 </StatusBadgeContainer>
+               );
+             } else {
+               return (
+                 <StatusBadgeContainer>
+                   <StatusBadge fontSize={"21px"} color={warningRed} background={fadedRed}>
+                     Behind
+                   </StatusBadge>
+                 </StatusBadgeContainer>
+               );
+             }
     };
     const renderNewValue = value => {
       setValue(value);
-      drawGraph(keyPerformanceIndicatorStore.kpi);
+      drawGraph(kpi);
     };
 
     const chartOptions = {
@@ -184,19 +185,25 @@ export const ViewEditKPIModal = observer(
 
     useEffect(() => {
       if (kpiId !== null) {
+        const rollupKPI = scorecardStore.kpis.find(kpi => kpi.id == kpiId && kpi.parentType);
+
         keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
-          setDescription(keyPerformanceIndicatorStore.kpi.description);
+          const KPI = rollupKPI || keyPerformanceIndicatorStore?.kpi;
+          setDescription(
+            KPI.description ||
+              descriptionTemplatesFormatted?.find(t => t.templateType == "kpi")?.body.body,
+          );
           setCurrentLog();
-          setKpi(keyPerformanceIndicatorStore.kpi);
+          setKpi(KPI);
           setLoading(false);
         });
       }
     }, [kpiId]);
 
     const saveKPI = body => {
-      const clonedKPI = Object.assign({}, kpi, body);
-      keyPerformanceIndicatorStore.updateKPI(clonedKPI);
+      keyPerformanceIndicatorStore.updateKPI(Object.assign({}, kpi, body));
     };
+
     const drawGraph = KPI => {
       const startWeek = (company.currentFiscalQuarter - 1) * 13 + 1;
       const weekNumbers = R.range(startWeek, company.currentFiscalWeek + 1);
@@ -216,6 +223,10 @@ export const ViewEditKPIModal = observer(
           },
         ],
       });
+    };
+
+    const closeModal = () => {
+      setViewEditKPIModalOpen(false);
     };
 
     useEffect(() => {
@@ -242,7 +253,7 @@ export const ViewEditKPIModal = observer(
           isOpen={viewEditKPIModalOpen}
           style={{ width: "60rem", maxHeight: "80%", overflow: "auto" }}
           onBackgroundClick={e => {
-            setViewEditKPIModalOpen(false);
+            closeModal();
           }}
         >
           <Container>
@@ -275,18 +286,17 @@ export const ViewEditKPIModal = observer(
                     </Header>
                     <DropdownOptions>
                       {renderDropdownOptions()}
-                      <CloseIconContainer onClick={() => setViewEditKPIModalOpen(false)}>
+                      <CloseIconContainer
+                        onClick={() => {
+                          closeModal();
+                        }}
+                      >
                         <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
                       </CloseIconContainer>
                     </DropdownOptions>
                   </HeaderContainer>
-
                   <OwnerAndLogicContainer>
-                    <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
-                    <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
-                      {R.uniq(kpi.viewers.map(viewer => viewer.type)).join(", ")} KPI
-                    </OwnerAndLogicText>
-
+                    {renderStatus()}
                     <OwnerAndLogicText>
                       <OwnedBySection
                         marginLeft={"0px"}
@@ -297,18 +307,23 @@ export const ViewEditKPIModal = observer(
                         type={"scorecard"}
                       />
                     </OwnerAndLogicText>
+                    <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
+                    <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
+                      {R.uniq(kpi.viewers.map(viewer => viewer.type)).join(", ")} KPI
+                    </OwnerAndLogicText>
+
                     <Icon icon={"Initiative"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText>{logic}</OwnerAndLogicText>
                     {kpi?.parentType && (
                       <KPITypeContainer>
-                        <KPITypeIcon icon={"Function"} size={16} iconColor={grey100} />
+                        <KPITypeIcon icon={"Function"} size={16} iconColor={greyInactive} />
                         <KPIParentTypeText> {formatKpiType(kpi?.parentType)} </KPIParentTypeText>
                       </KPITypeContainer>
                     )}
                   </OwnerAndLogicContainer>
                   <ValueAndUpdateContainer>
                     <ValueText>{formatValue(value, kpi.unitType)}</ValueText>
-                    {renderStatus()}
+
                     <UpdateProgressButton
                       disabled={kpi?.parentType}
                       onClick={() => {
@@ -323,19 +338,21 @@ export const ViewEditKPIModal = observer(
                     {data && <Line data={data} options={chartOptions} />}
                   </ChartContainer>
                   <SubHeader>Description</SubHeader>
-                  <TrixEditorContainer>
-                    <TrixEditor
-                      className={"trix-kpi-modal"}
-                      autoFocus={false}
-                      placeholder={"Add a description..."}
-                      onChange={description => {
-                        setDescription(description);
-                        saveKPI({ description });
-                      }}
-                      value={description}
-                      mergeTags={[]}
-                    />
-                  </TrixEditorContainer>
+                  {description && (
+                    <TrixEditorContainer>
+                      <TrixEditor
+                        className={"trix-kpi-modal"}
+                        autoFocus={false}
+                        placeholder={"Add a description..."}
+                        onChange={description => {
+                          setDescription(description);
+                          saveKPI({ description });
+                        }}
+                        value={description}
+                        mergeTags={[]}
+                      />
+                    </TrixEditorContainer>
+                  )}
                   <SubHeader>Activity</SubHeader>
                   <ActivityLogsContainer>
                     {R.sort(R.descend(R.prop("createdAt")), kpi.scorecardLogs).map(log => {
@@ -352,7 +369,7 @@ export const ViewEditKPIModal = observer(
                             avatarUrl={log.user.avatarUrl}
                           />
                           <ActivityLogTextContainer>
-                            <ActivityLogText mb={kpi.description ? 8 : 0}>
+                            <ActivityLogText fontSize={"14px"} mb={kpi.description ? 8 : 0}>
                               <b>
                                 {log.user.firstName} {log.user.lastName}
                               </b>{" "}
@@ -456,7 +473,7 @@ const OwnerAndLogicContainer = styled.div`
 `;
 
 const OwnerAndLogicText = styled.div`
-  font-size: 9px;
+  font-size: 12px;
   color: ${props => props.theme.colors.grey100};
   margin-left: 8px;
   margin-right: 16px;
@@ -491,7 +508,7 @@ const UpdateProgressButton = styled.div<UpdateProgressButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   color: ${props => props.theme.colors.white};
   border-radius: 4px;
@@ -510,7 +527,7 @@ const UpdateProgressButton = styled.div<UpdateProgressButtonProps>`
 const SubHeader = styled.p`
   margin-top: 32px;
   margin-bottom: 16px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
 `;
 
@@ -543,17 +560,18 @@ const ActivityLogDelete = styled.span`
 
 type ActivityLogTextProps = {
   mb?: number;
+  fontSize?: string;
 };
 
 const ActivityLogText = styled.p<ActivityLogTextProps>`
-  font-size: 12px;
+  font-size: ${props => props.fontSize || "12px"};
   margin-top: 0px;
   margin-bottom: ${props => props.mb || 0}px;
 `;
 
 const TrixEditorContainer = styled.div`
   margin-top: 4px;
-  width: 80%;
+  width: 100%;
 `;
 
 const DropdownOptions = styled.div`

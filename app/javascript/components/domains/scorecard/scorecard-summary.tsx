@@ -47,7 +47,7 @@ const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
           const percentScore = getScorePercent(week.score, kpi.targetValue, kpi.greaterThan);
           if (percentScore >= 100) {
             acc[3]++;
-          } else if (percentScore >= 90) {
+          } else if (percentScore >= kpi.needsAttentionThreshold) {
             acc[2]++;
           } else {
             acc[1]++;
@@ -352,7 +352,7 @@ const QuarterSummary = ({
               </Text>
             </>
           )}
-          <Text color={greyActive} ml={8} fontSize={9}>
+          <Text color={greyActive} ml={8} fontSize={12}>
             compared to last week
           </Text>
         </>
@@ -363,7 +363,7 @@ const QuarterSummary = ({
   return (
     <QuarterContainer>
       <Header>This Quarter</Header>
-      <Text color={greyActive} fontSize={9} mt={4} mb={9}>
+      <Text color={greyActive} fontSize={12} mt={4} mb={9}>
         {t("scorecards.quarterlyGraphTitle")}
       </Text>
       <QuarterInfoContainer>
@@ -373,12 +373,12 @@ const QuarterSummary = ({
         </StatsContainer>
         <QuarterLegendContainer>
           <StatusBadgeContainer>
-            <StatusBadge color={primary100} background={backgroundBlue}>
+            <StatusBadge fontSize={"12px"} color={primary100} background={backgroundBlue}>
               • Current Quarter
             </StatusBadge>
           </StatusBadgeContainer>
           <StatusBadgeContainer>
-            <StatusBadge color={greyActive} background={backgroundGrey}>
+            <StatusBadge fontSize={"12px"} color={greyActive} background={backgroundGrey}>
               • Last Quarter
             </StatusBadge>
           </StatusBadgeContainer>
@@ -438,9 +438,10 @@ const Container = styled.div`
   }
 `;
 
-const Header = styled.h4`
+const Header = styled.h3`
   margin-top: 0px;
   margin-bottom: 0px;
+  font-size: 21px;
 `;
 
 const WeekContainer = styled.div`

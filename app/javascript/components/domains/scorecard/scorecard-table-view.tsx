@@ -6,7 +6,7 @@ import { useMst } from "../../../setup/root";
 import { useTranslation } from "react-i18next";
 import { useTable } from "react-table";
 import Select from "./scorecard-select";
-import { Icon } from "~/components/shared/icon";
+import { RawIcon } from "~/components/shared/icon";
 import { Button } from "~/components/shared/button";
 import { TextDiv } from "~/components/shared/text";
 import { baseTheme } from "~/themes/base";
@@ -49,6 +49,7 @@ export const ScorecardTableView = observer(
     const [tab, setTab] = useState<string>("KPIs");
     const [viewEditKPIId, setViewEditKPIID] = useState(undefined);
     const [updateKPI, setUpdateKPI] = useState(undefined);
+    const [currentKPIIcon, setCurrentKPIIcon] = useState(undefined);
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
     const tabs = [t("scorecards.tabs.kpis"), t("scorecards.tabs.people")];
     const {
@@ -61,6 +62,7 @@ export const ScorecardTableView = observer(
       primary100,
       backgroundGrey,
       greyActive,
+      white,
     } = baseTheme.colors;
 
     const formatValue = (unitType: string, value: number) => {
@@ -88,11 +90,7 @@ export const ScorecardTableView = observer(
       );
     };
 
-    // const calculateAggregrateScore = aggregrateScore => {
-    //   aggregrateScore
-    // };
-
-    const getStatusValue = percentScore => {
+    const getStatusValue = (percentScore, needsAttentionThreshold) => {
       const percent = Math.round(percentScore);
       if (percentScore === null) {
         return {
@@ -108,7 +106,7 @@ export const ScorecardTableView = observer(
           percent,
           text: "On Track",
         };
-      } else if (percentScore >= 90) {
+      } else if (percentScore >= needsAttentionThreshold) {
         return {
           color: poppySunrise,
           background: fadedYellow,
@@ -131,7 +129,6 @@ export const ScorecardTableView = observer(
       greaterThan: boolean,
       parentType: string,
     ) => {
-      // const aggregateScore = calculateAggregrateScore(relatedParentKpis);
       const quarterScores = [
         [null, 0],
         [null, 0],
@@ -139,7 +136,6 @@ export const ScorecardTableView = observer(
         [null, 0],
       ];
       weeks.forEach(({ week, score }) => {
-        // score = parentType ? aggregateScore : week ? score : null;
         const q = Math.floor((week - 1) / 13);
         quarterScores[q][0] += score;
         quarterScores[q][1]++;
@@ -194,7 +190,7 @@ export const ScorecardTableView = observer(
             kpi.targetValue,
             kpi.greaterThan,
             kpi.parentType,
-          ).map(score => getStatusValue(score));
+          ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
           row.score = percentScores;
           row.status = percentScores;
           return row;
@@ -214,17 +210,43 @@ export const ScorecardTableView = observer(
               <UpdateKPIContainer
                 disabled={value.parentType}
                 onClick={() => {
+                  if (value.parentType) return;
                   setUpdateKPI(value);
                   setUpdateKPIModalOpen(true);
                 }}
+                onMouseEnter={() => {
+                  setCurrentKPIIcon(value.id);
+                }}
+                onMouseLeave={() => {
+                  setCurrentKPIIcon(null);
+                }}
               >
-                <Icon icon={"Update_KPI_New"} size={16} iconColor={primary100} />
+                {currentKPIIcon ? (
+                  <WhiteUpdateKpiIcon
+                    icon={"Update_KPI_New"}
+                    size={16}
+                    hover={currentKPIIcon == value.id}
+                    // iconColor={currentKPIIcon == value.id ? white : primary100}
+                  />
+                ) : (
+                  <> </>
+                )}
+                {!currentKPIIcon ? (
+                  <BlueUpdateKpiIcon
+                    icon={"Update_KPI_New"}
+                    size={16}
+                    hover={currentKPIIcon == value.id}
+                    // iconColor={primary100}
+                  />
+                ) : (
+                  <> </>
+                )}
               </UpdateKPIContainer>
             );
           },
         },
         {
-          Header: () => <div style={{ textAlign: "left" }}>KPIs</div>,
+          Header: () => <div style={{ textAlign: "left", fontSize: "14px" }}>KPIs</div>,
           accessor: "title",
           Cell: ({ value }) => {
             return (
@@ -245,9 +267,10 @@ export const ScorecardTableView = observer(
           },
           width: "21%",
           minWidth: "216px",
+         
         },
         {
-          Header: "Score",
+          Header: () => <div style={{fontSize: "14px" }}>Score</div>,
           accessor: "score",
           width: "8%",
           minWidth: "86px",
@@ -263,7 +286,7 @@ export const ScorecardTableView = observer(
           },
         },
         {
-          Header: "Status",
+          Header: () => <div style={{fontSize: "14px" }}>Status</div>,
           accessor: "status",
           Cell: ({ value }) => {
             const quarterValue = value[quarter - 1];
@@ -279,7 +302,7 @@ export const ScorecardTableView = observer(
           minWidth: "86px",
         },
         {
-          Header: "Owner",
+          Header: () => <div style={{fontSize: "14px" }}>Owner</div>,
           accessor: "owner",
           Cell: ({ value }) => {
             return (
@@ -292,7 +315,7 @@ export const ScorecardTableView = observer(
           minWidth: "160px",
         },
         ...R.range(1, 53).map(n => ({
-          Header: `WK ${n}`,
+          Header: () => <div style={{fontSize: "14px" }}> {`WK ${n}`} </div>,
           accessor: `wk_${n}`,
           Cell: ({ value }) => {
             if (value === undefined) {
@@ -312,7 +335,7 @@ export const ScorecardTableView = observer(
           minWidth: "64px",
         })),
       ],
-      [quarter, year],
+      [quarter, year, currentKPIIcon],
     );
 
     const getHiddenWeeks = (q: number) =>
@@ -495,7 +518,7 @@ const TableHeader = styled.th`
 
 const KPITitle = styled.div`
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   margin-bottom: 4px;
   font-weight: 600;
   text-overflow: ellipsis;
@@ -521,6 +544,32 @@ const TableRow = styled.tr<TableRowProps>`
 	}`}
 `;
 
+type UpdateKpiIconProps = {
+  hover?: boolean;
+};
+const UpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
+   color:  ${props => (props.hover ? props.theme.colors.white : props.theme.colors.primary100)}; 
+   &:hover {
+    cursor: pointer;
+    fill:  ${props =>
+      props.hover ? props.theme.colors.white : props.theme.colors.primary100} !important;
+`;
+
+const BlueUpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
+
+   color:  ${props => props.theme.colors.primary100}; 
+   &:hover {
+    cursor: pointer;
+    fill:  ${props => props.theme.colors.primary100} !important;
+`;
+
+const WhiteUpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
+   color:  ${props => props.theme.colors.white}; 
+   &:hover {
+    cursor: pointer;
+    fill:  ${props => props.theme.colors.white} !important;
+`;
+
 type UpdateKPIContainerProps = {
   disabled?: boolean;
 };
@@ -530,11 +579,12 @@ const UpdateKPIContainer = styled.div<UpdateKPIContainerProps>`
   align-items: center;
   width: 48px;
   height: 48px;
+  opacity: ${props => (props.disabled ? "0.5" : "1.0")};
   pointer-events: ${props => (props.disabled ? "none" : "all")};
   &:hover {
-    cursor: pointer;
-    filter: brightness(10);
-    background-color: blue;
+    cursor: ${props => (props.disabled ? "none" : "pointer")};
+    filter: brightness(1);
+    background-color: ${props => props.theme.colors.primary100};
   }
 `;
 
@@ -544,7 +594,6 @@ const KPITitleContainer = styled.div`
   overflow: hidden;
   justify-content: space-between;
   padding: 4px 8px;
-
   &:hover {
     cursor: pointer;
   }
@@ -554,7 +603,7 @@ const KPITextContainer = styled.div``;
 
 const KPILogic = styled.div`
   display: block;
-  font-size: 9px;
+  font-size: 12px;
   color: ${props => props.theme.colors.greyActive};
   text-overflow: ellipsis;
   overflow: hidden;
@@ -627,5 +676,5 @@ type WeekTextProps = {
 
 const WeekText = styled.p<WeekTextProps>`
   color: ${props => props.color};
-  font-size: 12px;
+  font-size: 14px;
 `;

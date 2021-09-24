@@ -63,16 +63,16 @@ export const Existing = observer(
 
     const selectKPI = kpi => {
       const duplicateIndex = selectedKPIs.findIndex(selectedKPI => selectedKPI.id == kpi.id);
-    
+
       if (duplicateIndex > -1) {
         const slicedArray = selectedKPIs.slice();
         slicedArray.splice(duplicateIndex, 1);
         setSelectedKPIs(slicedArray);
       } else {
-          if (selectedKPIs.length >= 1) {
-            showToast("You can't select more than one existing KPI.", ToastMessageConstants.INFO);
-            return;
-          }
+        if (selectedKPIs.length >= 1) {
+          showToast("You can't select more than one existing KPI.", ToastMessageConstants.INFO);
+          return;
+        }
         setSelectedKPIs([...selectedKPIs, kpi]);
       }
     };
@@ -105,7 +105,7 @@ export const Existing = observer(
                   <StyledLabel>
                     <StyledCheckboxInput
                       type="checkbox"
-                      // id={key}
+                      id={key}
                       key={key}
                       onClick={() => {
                         selectKPI(kpi);
@@ -213,7 +213,7 @@ const StyledLayerText = styled.div`
 `;
 
 const StyledLayerPara = styled.p`
-  font-size: 0.8rem;
+  font-size: 12px;
   margin: 0;
   padding: 1rem 1rem;
 
@@ -257,7 +257,7 @@ const StyledDataTypeContainer = styled.div<StyledDataTypeContainerProps>`
 `;
 
 const StyledDataTypeContent = styled.div`
-  font-size: 0.8rem;
+  font-size: 14px;
 `;
 
 const StyledDataTypeIcon = styled.div`

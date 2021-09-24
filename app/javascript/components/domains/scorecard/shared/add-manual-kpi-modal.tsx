@@ -19,6 +19,7 @@ import {
 } from "./modal-elements";
 import { toJS } from "mobx";
 import { TrixEditor } from "react-trix";
+import { useHistory } from "react-router";
 
 interface AddManualKPIModalProps {
   showAddManualKPIModal: boolean;
@@ -32,6 +33,7 @@ export const AddManualKPIModal = observer(
     setShowAddManualKPIModal,
     externalManualKPIData,
   }: AddManualKPIModalProps): JSX.Element => {
+    const history = useHistory();
     const { owner_id, owner_type } = useParams();
     const { keyPerformanceIndicatorStore, sessionStore, descriptionTemplateStore } = useMst();
     const [title, setTitle] = useState<string>(
@@ -44,7 +46,11 @@ export const AddManualKPIModal = observer(
     const [unitType, setUnitType] = useState<string>(
       externalManualKPIData?.unitType || "numerical",
     );
-    const [owner, setOwner] = useState(sessionStore?.profile);
+    const [owner, setOwner] = useState(
+      externalManualKPIData?.selectedKPIs?.length > 0
+        ? externalManualKPIData?.selectedKPIs[0].ownedBy
+        : sessionStore?.profile,
+    );
     const [targetValue, setTargetValue] = useState<number>(
       externalManualKPIData?.targetValue || undefined,
     );
@@ -70,9 +76,30 @@ export const AddManualKPIModal = observer(
       if (template) {
         setDescription(template.body.body);
       }
+
+      return () => {
+        resetModal();
+      };
     }, []);
 
+    const resetModal = () => {
+      setTitle(undefined);
+      setGreaterThan(1);
+      setDescription(undefined);
+      setUnitType("numerical");
+      setOwner(sessionStore?.profile);
+      setTargetValue(undefined);
+      setShowAdvancedSettings(false);
+      setNeedsAttentionThreshold(90);
+      setShowAddManualKPIModal(false);
+    };
+
     const handleSave = () => {
+      externalManualKPIData.kpiModalType =
+        externalManualKPIData?.kpiModalType == "Average"
+          ? "avr"
+          : externalManualKPIData?.kpiModalType;
+
       const kpi = {
         viewers: [{ type: owner_type, id: owner_id }],
         title,
@@ -93,17 +120,10 @@ export const AddManualKPIModal = observer(
           return;
         }
         // Reset and close
-        setTitle(undefined);
-        setGreaterThan(1);
-        setDescription(undefined);
-        setUnitType("numerical");
-        setOwner(sessionStore?.profile);
-        setTargetValue(undefined);
-        setShowAdvancedSettings(false);
-        setNeedsAttentionThreshold(90);
-        setShowAddManualKPIModal(false);
+        resetModal();
+        history.push(`/scorecard/0/0`);
+        setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
       });
-      
     };
 
     const handleChange = (e, setStateAction) => {
@@ -131,7 +151,7 @@ export const AddManualKPIModal = observer(
         <FormContainer>
           <RowContainer>
             <FormElementContainer>
-              <InputHeaderWithComment>Title</InputHeaderWithComment>
+              <InputHeaderWithComment fontSize={"14px"}>Title</InputHeaderWithComment>
               <StyledInput
                 type={"text"}
                 value={title}
@@ -144,7 +164,9 @@ export const AddManualKPIModal = observer(
           </RowContainer>
           <RowContainer>
             <FormElementContainer>
-              <InputHeaderWithComment comment={"optional"}>Description</InputHeaderWithComment>
+              <InputHeaderWithComment fontSize={"14px"} childFontSize={"12px"} comment={"optional"}>
+                Description
+              </InputHeaderWithComment>
               <TrixEditorContainer>
                 <TrixEditor
                   className={"trix-kpi-modal"}
@@ -162,7 +184,13 @@ export const AddManualKPIModal = observer(
           <RowContainer>
             <FormElementContainer>
               {selectedTagInputCount > 0 ? (
-                <InputHeaderWithComment comment={"optional"}>KPI Selection</InputHeaderWithComment>
+                <InputHeaderWithComment
+                  fontSize={"14px"}
+                  childFontSize={"12px"}
+                  comment={"optional"}
+                >
+                  KPI Selection
+                </InputHeaderWithComment>
               ) : (
                 <> </>
               )}
@@ -180,7 +208,7 @@ export const AddManualKPIModal = observer(
 
           <RowContainer>
             <FormElementContainer>
-              <InputHeaderWithComment>Unit</InputHeaderWithComment>
+              <InputHeaderWithComment fontSize={"14px"}> Unit</InputHeaderWithComment>
               <Select
                 name={"unitType"}
                 onChange={e => {
@@ -205,7 +233,7 @@ export const AddManualKPIModal = observer(
               </Select>
             </FormElementContainer>
             <FormElementContainer>
-              <InputHeaderWithComment>Owner</InputHeaderWithComment>
+              <InputHeaderWithComment fontSize={"14px"}>Owner</InputHeaderWithComment>
               <OwnedBy
                 ownedBy={owner}
                 setOwnedBy={setOwner}
@@ -220,7 +248,7 @@ export const AddManualKPIModal = observer(
           </RowContainer>
           <RowContainer>
             <FormElementContainer>
-              <InputHeaderWithComment>Condition</InputHeaderWithComment>
+              <InputHeaderWithComment fontSize={"14px"}>Condition</InputHeaderWithComment>
               <Select
                 name={"logic"}
                 onChange={e => {
@@ -241,7 +269,7 @@ export const AddManualKPIModal = observer(
               </Select>
             </FormElementContainer>
             <FormElementContainer>
-              <InputHeaderWithComment>Target Value</InputHeaderWithComment>
+              <InputHeaderWithComment fontSize={"14px"}>Target Value</InputHeaderWithComment>
               <InputFromUnitType
                 unitType={unitType}
                 placeholder={"0"}
