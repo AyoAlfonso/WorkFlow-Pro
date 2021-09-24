@@ -4,6 +4,7 @@ import { withEnvironment } from "../lib/with-environment";
 import { KeyPerformanceIndicatorModel } from "../models/key-performance-indicator";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import * as R from "ramda";
 
 export const KeyPerformanceIndicatorStoreModel = types
   .model("KeyPerformanceIndicatorStoreModel")
@@ -71,7 +72,7 @@ export const KeyPerformanceIndicatorStoreModel = types
       }
     }),
     createScorecardLog: flow(function*(scorecardlog) {
-      const { scorecardStore,  } = getRoot(self);
+      const { scorecardStore } = getRoot(self);
       const response: ApiResponse<any> = yield self.environment.api.createScorecardLog(
         scorecardlog,
       );
@@ -79,7 +80,7 @@ export const KeyPerformanceIndicatorStoreModel = types
       if (response.ok) {
         showToast("Log created", ToastMessageConstants.SUCCESS);
         scorecardStore.mergeKPIS(response.data.kpi);
-        self.kpi = response.data.kpi
+        self.kpi = response.data.kpi;
         return { scorecardLog: response.data.scorecardlog, kpis: scorecardStore.kpis };
       }
     }),
@@ -95,12 +96,14 @@ export const KeyPerformanceIndicatorStoreModel = types
   }))
   .actions(self => ({
     updateOwnedBy(user) {
-      self.kpi = { ...self.kpi, ownedById: user.id };
+      const viewers = R.reject(R.propEq("type", "user"))(self.kpi.viewers);
+      viewers.push({ id: JSON.stringify(user.id), type: "user" });
+      self.kpi = { ...self.kpi, ownedById: user.id, viewers };
       self.updateKPI(self.kpi);
     },
-      updateKPITitle(field, value) {
-      self.kpi = {...self.kpi, title: value};
-    }
+    updateKPITitle(field, value) {
+      self.kpi = { ...self.kpi, title: value };
+    },
   }));
 
 type KeyPerformanceIndicatorType = typeof KeyPerformanceIndicatorModel.Type;

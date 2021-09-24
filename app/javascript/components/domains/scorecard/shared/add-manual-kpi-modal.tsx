@@ -121,7 +121,6 @@ export const AddManualKPIModal = observer(
         }
         // Reset and close
         resetModal();
-        setTitle(undefined);
         history.push(`/scorecard/0/0`);
         setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
       });
@@ -152,7 +151,7 @@ export const AddManualKPIModal = observer(
         <FormContainer>
           <RowContainer>
             <FormElementContainer>
-              <InputHeaderWithComment>Title</InputHeaderWithComment>
+              <InputHeaderWithComment fontSize={"14px"}>Title</InputHeaderWithComment>
               <StyledInput
                 type={"text"}
                 value={title}
@@ -165,7 +164,9 @@ export const AddManualKPIModal = observer(
           </RowContainer>
           <RowContainer>
             <FormElementContainer>
-              <InputHeaderWithComment comment={"optional"}>Description</InputHeaderWithComment>
+              <InputHeaderWithComment fontSize={"14px"} childFontSize={"12px"} comment={"optional"}>
+                Description
+              </InputHeaderWithComment>
               <TrixEditorContainer>
                 <TrixEditor
                   className={"trix-kpi-modal"}
@@ -183,7 +184,13 @@ export const AddManualKPIModal = observer(
           <RowContainer>
             <FormElementContainer>
               {selectedTagInputCount > 0 ? (
-                <InputHeaderWithComment comment={"optional"}>KPI Selection</InputHeaderWithComment>
+                <InputHeaderWithComment
+                  fontSize={"14px"}
+                  childFontSize={"12px"}
+                  comment={"optional"}
+                >
+                  KPI Selection
+                </InputHeaderWithComment>
               ) : (
                 <> </>
               )}
@@ -201,7 +208,7 @@ export const AddManualKPIModal = observer(
 
           <RowContainer>
             <FormElementContainer>
-              <InputHeaderWithComment>Unit</InputHeaderWithComment>
+              <InputHeaderWithComment fontSize={"14px"}> Unit</InputHeaderWithComment>
               <Select
                 name={"unitType"}
                 onChange={e => {
@@ -226,7 +233,7 @@ export const AddManualKPIModal = observer(
               </Select>
             </FormElementContainer>
             <FormElementContainer>
-              <InputHeaderWithComment>Owner</InputHeaderWithComment>
+              <InputHeaderWithComment fontSize={"14px"}>Owner</InputHeaderWithComment>
               <OwnedBy
                 ownedBy={owner}
                 setOwnedBy={setOwner}
@@ -241,7 +248,7 @@ export const AddManualKPIModal = observer(
           </RowContainer>
           <RowContainer>
             <FormElementContainer>
-              <InputHeaderWithComment>Condition</InputHeaderWithComment>
+              <InputHeaderWithComment fontSize={"14px"}>Condition</InputHeaderWithComment>
               <Select
                 name={"logic"}
                 onChange={e => {
@@ -262,7 +269,7 @@ export const AddManualKPIModal = observer(
               </Select>
             </FormElementContainer>
             <FormElementContainer>
-              <InputHeaderWithComment>Target Value</InputHeaderWithComment>
+              <InputHeaderWithComment fontSize={"14px"}>Target Value</InputHeaderWithComment>
               <InputFromUnitType
                 unitType={unitType}
                 placeholder={"0"}

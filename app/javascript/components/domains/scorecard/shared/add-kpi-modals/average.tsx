@@ -186,7 +186,7 @@ export const Average = observer(
 );
 
 const StyledDataTypeContent = styled.div`
-  font-size: 0.8rem;
+  font-size: 14px;
 `;
 
 const StyledDataTypeIcon = styled.div`
@@ -245,7 +245,7 @@ const StyledLayerText = styled.div`
 `;
 
 const StyledLayerPara = styled.p`
-  font-size: 0.8rem;
+  font-size: 12px;
   margin: 0;
   padding: 1rem 1rem;
 

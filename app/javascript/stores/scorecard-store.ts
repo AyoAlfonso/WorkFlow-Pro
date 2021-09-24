@@ -7,7 +7,6 @@ import { toJS } from "mobx";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { setDeep } from "~/utils";
 import * as R from "ramda";
-import * as _ from "lodash";
 
 function rollupMemoizer(kpiPeriodYearWeekScore, datumPeriodYearWeekScore) {
   return kpiPeriodYearWeekScore
@@ -16,7 +15,6 @@ function rollupMemoizer(kpiPeriodYearWeekScore, datumPeriodYearWeekScore) {
 }
 
 // TO DO  Encapsulate this function
-
 export const setRelatedParents = KPIs => {
   return KPIs.map(kpi => {
     if (kpi.parentType) {
@@ -90,6 +88,7 @@ export const ScorecardStoreModel = types
           self.kpis = setRelatedParents(response.data);
         }
       } catch (e) {
+        console.log(e)
         showToast(
           `Could not get ${ownerType} scorecard with id ${ownerId}.`,
           ToastMessageConstants.ERROR,

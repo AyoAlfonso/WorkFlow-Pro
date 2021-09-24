@@ -7,9 +7,6 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
     @key_performance_indicators = policy_scope(KeyPerformanceIndicator)
     authorize @key_performance_indicators
     @kpis = @key_performance_indicators.map do |kpi|
-      @period = (kpi.scorecard_logs.empty?) ? {} : kpi.scorecard_logs.group_by { |log| log[:fiscal_year] }.map do |year, scorecard_log|
-        [year, scorecard_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
-      end.to_h
       kpi.as_json()
     end
     render json: @kpis
@@ -33,25 +30,16 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
 
     authorize @kpi
     @kpi.save!
-    @period = (@kpi.scorecard_logs.empty?) ? {} : @kpi.scorecard_logs.group_by { |log| log[:fiscal_year] }.map do |year, scorecard_log|
-      [year, scorecard_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
-    end.to_h
    render json: { kpi: @kpi.as_json() }
   end
 
   def show
     @company = current_company
-    @period = (@kpi.scorecard_logs.empty?) ? {} : @kpi.scorecard_logs.group_by { |log| log[:fiscal_year] }.map do |year, scorecard_log|
-      [year, scorecard_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
-    end.to_h
     render json: { kpi: @kpi.as_json() }
   end
 
   def update
     @kpi.update!(kpi_params)
-     @period = (@kpi.scorecard_logs.empty?) ? {} : @kpi.scorecard_logs.group_by { |log| log[:fiscal_year] }.map do |year, scorecard_log|
-      [year, scorecard_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
-    end.to_h
     render json: { kpi: @kpi.as_json() }
   end
 
@@ -68,7 +56,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   private
 
   def kpi_params
-    params.permit(:title, :id, :owned_by, :owned_by_id, :viewers, :description, :unit_type, :target_value, :needs_attention_threshold)
+    params.permit(:title, :id, :owned_by, :owned_by_id, :description, :unit_type, :target_value, :needs_attention_threshold, viewers: [:id, :type])
   end
 
   def scorecard_log_params

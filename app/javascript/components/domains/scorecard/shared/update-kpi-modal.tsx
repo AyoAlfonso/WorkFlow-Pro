@@ -80,10 +80,11 @@ export const UpdateKPIModal = observer(
         header={headerText}
         isOpen={updateKPIModalOpen}
         setIsOpen={setUpdateKPIModalOpen}
+        headerFontSize={"21px"}
       >
         <FormContainer>
           <FormElementContainer>
-            <InputHeaderWithComment>New value</InputHeaderWithComment>
+            <InputHeaderWithComment fontSize={"14px"}>New value</InputHeaderWithComment>
             <InputFromUnitType
               unitType={unitType}
               placeholder={"Add the new value..."}
@@ -92,7 +93,9 @@ export const UpdateKPIModal = observer(
             />
           </FormElementContainer>
           <FormElementContainer>
-            <InputHeaderWithComment comment={"optional"}>Comment</InputHeaderWithComment>
+            <InputHeaderWithComment comment={"optional"} fontSize={"14px"} childFontSize={"12px"}>
+              Comment
+            </InputHeaderWithComment>
             <StyledInput
               placeholder={"Add a comment..."}
               onChange={e => {

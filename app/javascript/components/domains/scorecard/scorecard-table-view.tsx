@@ -90,7 +90,7 @@ export const ScorecardTableView = observer(
       );
     };
 
-    const getStatusValue = percentScore => {
+    const getStatusValue = (percentScore, needsAttentionThreshold) => {
       const percent = Math.round(percentScore);
       if (percentScore === null) {
         return {
@@ -106,7 +106,7 @@ export const ScorecardTableView = observer(
           percent,
           text: "On Track",
         };
-      } else if (percentScore >= 90) {
+      } else if (percentScore >= needsAttentionThreshold) {
         return {
           color: poppySunrise,
           background: fadedYellow,
@@ -190,7 +190,7 @@ export const ScorecardTableView = observer(
             kpi.targetValue,
             kpi.greaterThan,
             kpi.parentType,
-          ).map(score => getStatusValue(score));
+          ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
           row.score = percentScores;
           row.status = percentScores;
           return row;
@@ -246,7 +246,7 @@ export const ScorecardTableView = observer(
           },
         },
         {
-          Header: () => <div style={{ textAlign: "left" }}>KPIs</div>,
+          Header: () => <div style={{ textAlign: "left", fontSize: "14px" }}>KPIs</div>,
           accessor: "title",
           Cell: ({ value }) => {
             return (
@@ -267,9 +267,10 @@ export const ScorecardTableView = observer(
           },
           width: "21%",
           minWidth: "216px",
+         
         },
         {
-          Header: "Score",
+          Header: () => <div style={{fontSize: "14px" }}>Score</div>,
           accessor: "score",
           width: "8%",
           minWidth: "86px",
@@ -285,7 +286,7 @@ export const ScorecardTableView = observer(
           },
         },
         {
-          Header: "Status",
+          Header: () => <div style={{fontSize: "14px" }}>Status</div>,
           accessor: "status",
           Cell: ({ value }) => {
             const quarterValue = value[quarter - 1];
@@ -301,7 +302,7 @@ export const ScorecardTableView = observer(
           minWidth: "86px",
         },
         {
-          Header: "Owner",
+          Header: () => <div style={{fontSize: "14px" }}>Owner</div>,
           accessor: "owner",
           Cell: ({ value }) => {
             return (
@@ -314,7 +315,7 @@ export const ScorecardTableView = observer(
           minWidth: "160px",
         },
         ...R.range(1, 53).map(n => ({
-          Header: `WK ${n}`,
+          Header: () => <div style={{fontSize: "14px" }}> {`WK ${n}`} </div>,
           accessor: `wk_${n}`,
           Cell: ({ value }) => {
             if (value === undefined) {
@@ -517,7 +518,7 @@ const TableHeader = styled.th`
 
 const KPITitle = styled.div`
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   margin-bottom: 4px;
   font-weight: 600;
   text-overflow: ellipsis;
@@ -602,7 +603,7 @@ const KPITextContainer = styled.div``;
 
 const KPILogic = styled.div`
   display: block;
-  font-size: 9px;
+  font-size: 12px;
   color: ${props => props.theme.colors.greyActive};
   text-overflow: ellipsis;
   overflow: hidden;
@@ -675,5 +676,5 @@ type WeekTextProps = {
 
 const WeekText = styled.p<WeekTextProps>`
   color: ${props => props.color};
-  font-size: 12px;
+  font-size: 14px;
 `;

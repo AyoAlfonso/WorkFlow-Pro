@@ -60,6 +60,7 @@ const StyledIcon = styled(Icon)`
 
 const StyledSubHeader = styled.h3`
   color: #000;
+  font-size: 21px;
 `;
 
 const CloseIconContainer = styled.span`

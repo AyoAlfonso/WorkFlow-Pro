@@ -22,6 +22,8 @@ import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import { toJS } from "mobx";
 import { titleCase } from "~/utils/camelize";
 import { ScorecardKPIDropdownOptions } from "./scorecard-dropdown-options";
+import "~/stylesheets/modules/trix-editor.css";
+
 interface ViewEditKPIModalProps {
   kpiId: number;
   setViewEditKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -101,7 +103,7 @@ export const ViewEditKPIModal = observer(
       if (value === undefined) {
         return (
           <StatusBadgeContainer>
-            <StatusBadge color={greyActive} background={backgroundGrey}>
+            <StatusBadge fontSize={"21px"} color={greyActive} background={backgroundGrey}>
               No Update
             </StatusBadge>
           </StatusBadgeContainer>
@@ -111,28 +113,28 @@ export const ViewEditKPIModal = observer(
       if (scorePercent >= 100) {
         return (
           <StatusBadgeContainer>
-            <StatusBadge color={successGreen} background={fadedGreen}>
+            <StatusBadge fontSize={"21px"} color={successGreen} background={fadedGreen}>
               On Track
             </StatusBadge>
           </StatusBadgeContainer>
         );
-      } else if (scorePercent >= 90) {
-        return (
-          <StatusBadgeContainer>
-            <StatusBadge color={poppySunrise} background={fadedYellow}>
-              Needs Attention
-            </StatusBadge>
-          </StatusBadgeContainer>
-        );
-      } else {
-        return (
-          <StatusBadgeContainer>
-            <StatusBadge color={warningRed} background={fadedRed}>
-              Behind
-            </StatusBadge>
-          </StatusBadgeContainer>
-        );
-      }
+      } else if (scorePercent >= kpi.needsAttentionThreshold) {
+               return (
+                 <StatusBadgeContainer>
+                   <StatusBadge fontSize={"21px"} color={poppySunrise} background={fadedYellow}>
+                     Needs Attention
+                   </StatusBadge>
+                 </StatusBadgeContainer>
+               );
+             } else {
+               return (
+                 <StatusBadgeContainer>
+                   <StatusBadge fontSize={"21px"} color={warningRed} background={fadedRed}>
+                     Behind
+                   </StatusBadge>
+                 </StatusBadgeContainer>
+               );
+             }
     };
     const renderNewValue = value => {
       setValue(value);
@@ -367,7 +369,7 @@ export const ViewEditKPIModal = observer(
                             avatarUrl={log.user.avatarUrl}
                           />
                           <ActivityLogTextContainer>
-                            <ActivityLogText mb={kpi.description ? 8 : 0}>
+                            <ActivityLogText fontSize={"14px"} mb={kpi.description ? 8 : 0}>
                               <b>
                                 {log.user.firstName} {log.user.lastName}
                               </b>{" "}
@@ -506,7 +508,7 @@ const UpdateProgressButton = styled.div<UpdateProgressButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   color: ${props => props.theme.colors.white};
   border-radius: 4px;
@@ -525,7 +527,7 @@ const UpdateProgressButton = styled.div<UpdateProgressButtonProps>`
 const SubHeader = styled.p`
   margin-top: 32px;
   margin-bottom: 16px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
 `;
 
@@ -558,10 +560,11 @@ const ActivityLogDelete = styled.span`
 
 type ActivityLogTextProps = {
   mb?: number;
+  fontSize?: string;
 };
 
 const ActivityLogText = styled.p<ActivityLogTextProps>`
-  font-size: 12px;
+  font-size: ${props => props.fontSize || "12px"};
   margin-top: 0px;
   margin-bottom: ${props => props.mb || 0}px;
 `;
