@@ -153,7 +153,7 @@ const AddKPIText = styled(TextDiv)`
   margin-left: 10px;
   white-space: break-spaces;
   color: ${props => props.theme.colors.primary100};
-  font-size: 12px;
+  font-size: 14px;
 `;
 
 const DropdownOptionsContainer = styled.div`

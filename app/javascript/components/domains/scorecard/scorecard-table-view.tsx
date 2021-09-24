@@ -267,10 +267,9 @@ export const ScorecardTableView = observer(
           },
           width: "21%",
           minWidth: "216px",
-         
         },
         {
-          Header: () => <div style={{fontSize: "14px" }}>Score</div>,
+          Header: () => <div style={{ fontSize: "14px" }}>Score</div>,
           accessor: "score",
           width: "8%",
           minWidth: "86px",
@@ -286,13 +285,17 @@ export const ScorecardTableView = observer(
           },
         },
         {
-          Header: () => <div style={{fontSize: "14px" }}>Status</div>,
+          Header: () => <div style={{ fontSize: "14px" }}>Status</div>,
           accessor: "status",
           Cell: ({ value }) => {
             const quarterValue = value[quarter - 1];
             return (
               <StatusContainer>
-                <StatusBadge color={quarterValue.color} background={quarterValue.background}>
+                <StatusBadge
+                  fontSize={"12px"}
+                  color={quarterValue.color}
+                  background={quarterValue.background}
+                >
                   {quarterValue.text}
                 </StatusBadge>
               </StatusContainer>
@@ -302,7 +305,7 @@ export const ScorecardTableView = observer(
           minWidth: "86px",
         },
         {
-          Header: () => <div style={{fontSize: "14px" }}>Owner</div>,
+          Header: () => <div style={{ fontSize: "14px" }}>Owner</div>,
           accessor: "owner",
           Cell: ({ value }) => {
             return (
@@ -315,7 +318,7 @@ export const ScorecardTableView = observer(
           minWidth: "160px",
         },
         ...R.range(1, 53).map(n => ({
-          Header: () => <div style={{fontSize: "14px" }}> {`WK ${n}`} </div>,
+          Header: () => <div style={{ fontSize: "14px" }}> {`WK ${n}`} </div>,
           accessor: `wk_${n}`,
           Cell: ({ value }) => {
             if (value === undefined) {

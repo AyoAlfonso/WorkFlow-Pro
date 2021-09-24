@@ -93,22 +93,22 @@ const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
         </DoughnutChartContainer>
         <WeekLegendContainer>
           <StatusBadgeContainer>
-            <StatusBadge color={successGreen} background={fadedGreen}>
+            <StatusBadge fontSize={"12px"} color={successGreen} background={fadedGreen}>
               On Track
             </StatusBadge>
           </StatusBadgeContainer>
           <StatusBadgeContainer>
-            <StatusBadge color={poppySunrise} background={fadedYellow}>
+            <StatusBadge fontSize={"12px"} color={poppySunrise} background={fadedYellow}>
               Needs Attention
             </StatusBadge>
           </StatusBadgeContainer>
           <StatusBadgeContainer>
-            <StatusBadge color={warningRed} background={fadedRed}>
+            <StatusBadge fontSize={"12px"} color={warningRed} background={fadedRed}>
               Behind
             </StatusBadge>
           </StatusBadgeContainer>
           <StatusBadgeContainer>
-            <StatusBadge color={greyActive} background={backgroundGrey}>
+            <StatusBadge fontSize={"12px"} color={greyActive} background={backgroundGrey}>
               None
             </StatusBadge>
           </StatusBadgeContainer>
@@ -363,7 +363,7 @@ const QuarterSummary = ({
   return (
     <QuarterContainer>
       <Header>This Quarter</Header>
-      <Text color={greyActive} fontSize={12} mt={4} mb={9}>
+      <Text color={greyActive} fontSize={14} mt={4} mb={9}>
         {t("scorecards.quarterlyGraphTitle")}
       </Text>
       <QuarterInfoContainer>

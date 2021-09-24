@@ -147,6 +147,7 @@ export const AddManualKPIModal = observer(
         isOpen={showAddManualKPIModal}
         setIsOpen={setShowAddManualKPIModal}
         width={"720px"}
+        headerFontSize={"21px"}
       >
         <FormContainer>
           <RowContainer>
