@@ -418,7 +418,7 @@ export const ScorecardTableView = observer(
                   })}
                 </TableBody>
               </Table>
-              <AddKPIDropdown kpis={allKPIs} />
+              <AddKPIDropdown dropdownDirectionUp={true} kpis={allKPIs} />
             </TableContainer>
           )}
         </Container>

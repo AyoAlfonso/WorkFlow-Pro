@@ -10,10 +10,11 @@ import { AddManualKPIModal } from "./add-manual-kpi-modal";
 import { toJS } from "mobx";
 interface IAddKPIDropdownProps {
   kpis: any[];
+  dropdownDirectionUp?: boolean;
 }
 
 export const AddKPIDropdown = observer(
-  ({ kpis }: IAddKPIDropdownProps): JSX.Element => {
+  ({ kpis, dropdownDirectionUp }: IAddKPIDropdownProps): JSX.Element => {
     const optionsRef = useRef(null);
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const [showAddKPIModal, setAddKPIModal] = useState<boolean>(false);
@@ -52,10 +53,10 @@ export const AddKPIDropdown = observer(
           width={"fill"}
         >
           <CircularIcon icon={"Plus"} size={"12px"} />
-          <AddKPIText>Add KPI</AddKPIText>
+          <AddKPIText >Add KPI</AddKPIText>
         </StyledButton>
         {showOptions && (
-          <DropdownOptionsContainer onClick={e => e.stopPropagation()}>
+          <DropdownOptionsContainer dropdownDirectionUp={dropdownDirectionUp} onClick={e => e.stopPropagation()}>
             <OptionContainer
               onClick={() => {
                 setShowAddManualKPIModal(!showAddManualKPIModal);
@@ -156,11 +157,15 @@ const AddKPIText = styled(TextDiv)`
   font-size: 14px;
 `;
 
-const DropdownOptionsContainer = styled.div`
+type DropdownOptionsContainerProps = {
+    dropdownDirectionUp?: boolean;
+}
+
+const DropdownOptionsContainer = styled.div<DropdownOptionsContainerProps>`
   position: absolute;
   width: 78px;
   background-color: ${props => props.theme.colors.white};
-  bottom: 30px;
+  bottom:  ${props => props.dropdownDirectionUp ? "30px" : "auto"};
   padding-top: 8px;
   padding-bottom: 8px;
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
