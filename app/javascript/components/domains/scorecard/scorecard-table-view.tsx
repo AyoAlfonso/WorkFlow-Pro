@@ -221,22 +221,16 @@ export const ScorecardTableView = observer(
                   setCurrentKPIIcon(null);
                 }}
               >
-                {currentKPIIcon ? (
-                  <WhiteUpdateKpiIcon
-                    icon={"Update_KPI_New"}
-                    size={16}
-                    hover={currentKPIIcon == value.id}
-                    // iconColor={currentKPIIcon == value.id ? white : primary100}
-                  />
+                {currentKPIIcon == value.id ? (
+                  <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
                 ) : (
                   <> </>
                 )}
-                {!currentKPIIcon ? (
+                {currentKPIIcon !== value.id ? (
                   <BlueUpdateKpiIcon
                     icon={"Update_KPI_New"}
                     size={16}
                     hover={currentKPIIcon == value.id}
-                    // iconColor={primary100}
                   />
                 ) : (
                   <> </>
