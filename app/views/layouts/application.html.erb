@@ -16,7 +16,9 @@
     };
     </script>
     <script type="text/javascript" src="https://cdn.productstash.io/js/widget.min.js?v=0.5" defer="defer"></script>
-
+    <script>
+      document.getElementsByClassName("launcher-button")[0].style.visibility = "hidden"
+    </script>
     <script>
         window.fwSettings={
           'widget_id': <%= ENV["FRESHDESK_WIDGET_ID"] %>

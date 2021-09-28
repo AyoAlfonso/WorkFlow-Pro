@@ -23,6 +23,7 @@ import { toJS } from "mobx";
 import { titleCase } from "~/utils/camelize";
 import { ScorecardKPIDropdownOptions } from "./scorecard-dropdown-options";
 import "~/stylesheets/modules/trix-editor.css";
+import {debounce} from "lodash";
 
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -54,7 +55,9 @@ export const ViewEditKPIModal = observer(
     const [logic, setLogic] = useState("");
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
     const [data, setData] = useState(null);
-    const [description, setDescription] = useState<string>("");
+    const [description, setDescription] = useState<string>(
+      descriptionTemplatesFormatted.find(t => t.templateType == "kpi")?.body.body,
+    );
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
@@ -119,22 +122,22 @@ export const ViewEditKPIModal = observer(
           </StatusBadgeContainer>
         );
       } else if (scorePercent >= kpi.needsAttentionThreshold) {
-               return (
-                 <StatusBadgeContainer>
-                   <StatusBadge fontSize={"21px"} color={poppySunrise} background={fadedYellow}>
-                     Needs Attention
-                   </StatusBadge>
-                 </StatusBadgeContainer>
-               );
-             } else {
-               return (
-                 <StatusBadgeContainer>
-                   <StatusBadge fontSize={"21px"} color={warningRed} background={fadedRed}>
-                     Behind
-                   </StatusBadge>
-                 </StatusBadgeContainer>
-               );
-             }
+        return (
+          <StatusBadgeContainer>
+            <StatusBadge fontSize={"21px"} color={poppySunrise} background={fadedYellow}>
+              Needs Attention
+            </StatusBadge>
+          </StatusBadgeContainer>
+        );
+      } else {
+        return (
+          <StatusBadgeContainer>
+            <StatusBadge fontSize={"21px"} color={warningRed} background={fadedRed}>
+              Behind
+            </StatusBadge>
+          </StatusBadgeContainer>
+        );
+      }
     };
     const renderNewValue = value => {
       setValue(value);
@@ -189,10 +192,7 @@ export const ViewEditKPIModal = observer(
 
         keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
           const KPI = rollupKPI || keyPerformanceIndicatorStore?.kpi;
-          setDescription(
-            KPI.description ||
-              descriptionTemplatesFormatted?.find(t => t.templateType == "kpi")?.body.body,
-          );
+          setDescription(KPI.description);
           setCurrentLog();
           setKpi(KPI);
           setLoading(false);
@@ -201,7 +201,7 @@ export const ViewEditKPIModal = observer(
     }, [kpiId]);
 
     const saveKPI = body => {
-      keyPerformanceIndicatorStore.updateKPI(Object.assign({}, kpi, body));
+        debounce(() => {keyPerformanceIndicatorStore.updateKPI(Object.assign({}, kpi, body), true)}, 500)()
     };
 
     const drawGraph = KPI => {
