@@ -1,34 +1,31 @@
-ActiveAdmin.register MeetingTemplate do
-  permit_params :name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed, :override_key, :description_text]
+ActiveAdmin.register CheckInTemplate do
+  permit_params :name, :check_in_type, :description, check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :description_text]
 
   index do
     selectable_column
     id_column
     column :name
-    column :meeting_type do |mt|
-      mt.meeting_type.humanize.titleize
+    column :check_in_type do |mt|
+      mt.check_in_type.humanize.titleize
     end
-    column :duration
     actions
   end
 
   filter :name
-  filter :meeting_type
-  filter :duration
+  filter :check_in_type
 
   controller do
     def create
-      @meeting_template_params = params[:meeting_template]
-      @meeting_template = MeetingTemplate.create!({
-        name: @meeting_template_params[:name],
-        meeting_type: @meeting_template_params[:meeting_type],
-        duration: @meeting_template_params[:duration],
-        description: @meeting_template_params[:description],
+      @check_in_template_params = params[:check_in_template]
+      @check_in_template = CheckInTemplate.create!({
+        name: @check_in_template_params[:name],
+        check_in_type: @check_in_template_params[:check_in_type],
+        description: @check_in_template_params[:description],
       })
-      @step_atrributes = params[:meeting_template][:steps_attributes]
+      @step_atrributes = params[:check_in_template][:check_in_templates_steps_attributes]
       if @step_atrributes.present?
-        @steps = @step_atrributes.values
-        @steps.each do |step|
+        @check_in_templates_steps = @step_atrributes.values
+        @check_in_templates_steps.each do |step|
           Step.create!({
             step_type: step[:step_type],
             order_index: step[:order_index],
@@ -36,31 +33,28 @@ ActiveAdmin.register MeetingTemplate do
             instructions: step[:instructions],
             duration: step[:duration],
             component_to_render: step[:component_to_render],
-            meeting_template_id: @meeting_template.id,
+            check_in_template_id: @check_in_template.id,
             image: step[:image],
             override_key: step[:override_key],
             description_text: step[:description_text],
           })
         end
       end
-      redirect_to admin_meeting_template_path(@meeting_template), notice: "Meeting Template Created"
+      redirect_to admin_meeting_template_path(@check_in_template), notice: "Check In Template Created"
     end
   end
 
   show do
-    h1 meeting_template.name
+    h1 check_in_template.name
     attributes_table do
       row :name
-      row "Meeting Type" do
-        meeting_template.meeting_type.humanize.titleize
-      end
-      row "Duration (in minutes)" do
-        meeting_template.total_duration
+      row "Check In Type" do
+        check_in_template.check_in_type.humanize.titleize
       end
       row :description
     end
     panel "Steps" do
-      table_for meeting_template.steps do
+      table_for check_in_template.check_in_templates_steps do
         column :name
         column :step_type do |step|
           step.step_type.humanize.titleize
@@ -84,20 +78,16 @@ ActiveAdmin.register MeetingTemplate do
   form do |f|
     h1 object.name
     f.input :name
-    f.input :meeting_type, as: :select, collection: MeetingTemplate.meeting_types.map { |mt| [mt[0].humanize.titleize, mt[0]] }
-    f.input :duration, label: "Duration (in minutes)"
+    f.input :check_in_type, as: :select, collection: CheckInTemplate.check_in_types.map { |ci| [ci[0].humanize.titleize, ci[0]] }
     f.input :description, input_html: { rows: 5 }
 
-    f.has_many :steps, heading: "Steps", allow_destroy: true do |step|
+    f.has_many :check_in_templates_steps, heading: "Steps", allow_destroy: true do |step|
       step.input :name
       step.input :step_type, as: :select, collection: Step.step_types.map { |st| [st[0].humanize.titleize, st[0]] }
       step.input :order_index
       step.input :duration, label: "Duration (in minutes)"
       step.input :instructions, input_html: { rows: 3 }
       step.input :component_to_render, as: :select, collection: Step::STEP_COMPONENTS
-      step.input :link_embed, input_html: { rows: 2 }
-      step.input :override_key, input_html: { rows: 1 }
-
       step.input :description_text, as: :action_text
 
       step.input :image, as: :file, hint: (step.object.try(:image_url) ? image_tag(step.object.image_url, style: "max-height: 150px;") : "No Image Selected")

@@ -8,7 +8,7 @@ class MeetingTemplate < ApplicationRecord
     personal_weekly: 1,
     forum_monthly: 2,
     personal_monthly: 3,
-    personal_daily: 10,
+    personal_daily: 10
   }
   # for new meeting types past the basics, all personals are 1X, teams are 2X, team daily 20 is skipped
   #personal_monthly: 12,
