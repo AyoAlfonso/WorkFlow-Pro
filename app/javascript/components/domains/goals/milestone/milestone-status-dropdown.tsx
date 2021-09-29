@@ -91,11 +91,6 @@ export const MilestoneDropdown = observer(
           onClick={() => {
             setShowList(!showList);
           }}
-          onBlur={() => {
-            // setTimeout(() => {
-              setShowList(false);
-            // }, 500);
-          }}
         >
           {determineStatusLabel(milestoneStatus)}
           <ChevronDownIcon />
@@ -130,7 +125,12 @@ const Container = styled.div`
   position: relative;
 `;
 
-const DropdownHeader = styled("div")`
+type DropdownHeaderProps = {
+  disabled: boolean;
+  onClick: () => void;
+};
+
+const DropdownHeader = styled("div")<DropdownHeaderProps>`
   margin-bottom: 3px;
   border: 2px solid #ededf2;
   width: 145px;
@@ -155,7 +155,13 @@ const DropdownList = styled("ul")`
   width: 145px;
 `;
 
-const ListItem = styled("li")`
+type ListItemProps = {
+  key: number;
+  value: string;
+  onClick: () => void;
+};
+
+const ListItem = styled("li")<ListItemProps>`
   list-style: none;
   padding: 5px 0px;
   cursor: pointer;
@@ -164,7 +170,12 @@ const ListItem = styled("li")`
   }
 `;
 
-const ListSpan = styled("span")`
+type ListSpanProps = {
+  backgroundColor: string;
+  color: string;
+};
+
+const ListSpan = styled("span")<ListSpanProps>`
   display: inline-block;
   font-size: 12px;
   border-radius: 3px;

@@ -55,7 +55,7 @@ export const MilestoneCard = observer(
     return (
       <MilestoneContainer>
         <MilestoneDetails unstarted={unstarted} currentWeek={currentWeek}>
-          <Container>
+          <Container right={false} center={false}>
             <WeekOfText unstarted={unstarted}>
               Week {milestone.week}: Week of{" "}
               <WeekOfTextValue>{moment(milestone.weekOf).format("MMMM D")}</WeekOfTextValue>
@@ -74,7 +74,7 @@ export const MilestoneCard = observer(
               onBlur={handleBlur}
             />
           </Container>
-          <Container right={true} center>
+          <Container right={true} center={true}>
             <MilestoneDropdown
               milestone={milestone}
               milestoneStatus={milestone.status}
@@ -102,7 +102,12 @@ type MilestoneDetailsType = {
   currentWeek: boolean;
 };
 
-const Container = styled.div`
+type IContainerProps = {
+  right: boolean;
+  center: boolean;
+};
+
+const Container = styled.div<IContainerProps>`
   margin-left: ${props => (props.right ? "auto" : "")};
   align-self: ${props => (props.center ? "center" : "")};
   @media only screen and (max-width: 768px) {
