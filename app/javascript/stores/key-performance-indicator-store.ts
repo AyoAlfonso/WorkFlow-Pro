@@ -53,11 +53,13 @@ export const KeyPerformanceIndicatorStoreModel = types
         return response.data.kpi;
       }
     }),
-    updateKPI: flow(function*(KPIData) {
+    updateKPI: flow(function*(KPIData, silent=false) {
       const { scorecardStore } = getRoot(self);
       const response: ApiResponse<any> = yield self.environment.api.updateKPI(KPIData);
       if (response.ok) {
-        showToast("KPI updated", ToastMessageConstants.SUCCESS);
+        if(!silent) {
+           showToast("KPI updated", ToastMessageConstants.SUCCESS);
+          }
         scorecardStore.mergeKPIS(response.data.kpi);
         self.kpi = response.data.kpi;
         return response.data.kpi;
