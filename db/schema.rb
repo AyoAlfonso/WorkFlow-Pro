@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_07_110032) do
+ActiveRecord::Schema.define(version: 2021_09_29_115008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,6 +96,27 @@ ActiveRecord::Schema.define(version: 2021_09_07_110032) do
     t.index ["company_id"], name: "index_annual_initiatives_on_company_id"
     t.index ["created_by_id"], name: "index_annual_initiatives_on_created_by_id"
     t.index ["owned_by_id"], name: "index_annual_initiatives_on_owned_by_id"
+  end
+
+  create_table "check_in_templates", force: :cascade do |t|
+    t.string "name"
+    t.integer "check_in_type"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "check_in_templates_steps", force: :cascade do |t|
+    t.integer "step_type"
+    t.integer "order_index"
+    t.string "name"
+    t.text "instructions"
+    t.float "duration"
+    t.string "component_to_render"
+    t.bigint "check_in_template_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["check_in_template_id"], name: "index_check_in_templates_steps_on_check_in_template_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -286,13 +307,10 @@ ActiveRecord::Schema.define(version: 2021_09_07_110032) do
     t.string "description"
     t.datetime "closed_at"
     t.bigint "created_by_id"
-    t.bigint "user_id"
-    t.bigint "company_id"
-    t.bigint "team_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "unit_type"
-    t.integer "target_value", default: 0
+    t.float "target_value", default: 0.0
     t.boolean "is_deleted", default: false
     t.boolean "greater_than", default: true
     t.jsonb "viewers"
@@ -301,11 +319,8 @@ ActiveRecord::Schema.define(version: 2021_09_07_110032) do
     t.string "title"
     t.integer "parent_type"
     t.integer "parent_kpi", default: [], array: true
-    t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
-    t.index ["team_id"], name: "index_key_performance_indicators_on_team_id"
-    t.index ["user_id"], name: "index_key_performance_indicators_on_user_id"
   end
 
   create_table "meeting_templates", force: :cascade do |t|
@@ -376,6 +391,7 @@ ActiveRecord::Schema.define(version: 2021_09_07_110032) do
     t.boolean "company", default: false, null: false
     t.boolean "pyns", default: false, null: false
     t.boolean "scorecard", default: false
+    t.boolean "scorecard_pro", default: false
     t.index ["user_id"], name: "index_product_features_on_user_id"
   end
 
@@ -661,6 +677,7 @@ ActiveRecord::Schema.define(version: 2021_09_07_110032) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
   add_foreign_key "annual_initiatives", "companies"
+  add_foreign_key "check_in_templates_steps", "check_in_templates"
   add_foreign_key "comments", "annual_initiatives"
   add_foreign_key "company_static_data", "companies"
   add_foreign_key "core_fours", "companies"
@@ -674,9 +691,6 @@ ActiveRecord::Schema.define(version: 2021_09_07_110032) do
   add_foreign_key "key_activities", "companies"
   add_foreign_key "key_activities", "meetings"
   add_foreign_key "key_activities", "users"
-  add_foreign_key "key_performance_indicators", "companies"
-  add_foreign_key "key_performance_indicators", "teams"
-  add_foreign_key "key_performance_indicators", "users"
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"
