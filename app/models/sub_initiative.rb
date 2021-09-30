@@ -15,7 +15,7 @@ class SubInitiative < ApplicationRecord
  
   def create_milestones_for_sub_initiative(current_user, company)
     fiscal_quarter_start_date = company.current_fiscal_start_date + (13.weeks * (self.quarter-1))
-    fiscal_quarter_start_date = fiscal_quarter_start_date + 1.year if self.quarterly_goal.annual_initiative.fiscal_year != company.current_fiscal_year
+    fiscal_quarter_start_date = fiscal_quarter_start_date + 1.year if self.quarterly_goal.annual_initiative.fiscal_year >= company.current_fiscal_year
     fiscal_quarter_start_date_closest_monday = fiscal_quarter_start_date.monday? ? fiscal_quarter_start_date : fiscal_quarter_start_date.next_occurring(:monday)
     13.times do |index|
       Milestone.create!(
