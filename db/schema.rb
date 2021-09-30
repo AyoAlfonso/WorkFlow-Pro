@@ -322,10 +322,6 @@ ActiveRecord::Schema.define(version: 2021_09_30_101218) do
     t.string "title"
     t.integer "parent_type"
     t.integer "parent_kpi", default: [], array: true
-<<<<<<< HEAD
-    t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
-=======
->>>>>>> ece92c7e2ef5162f278da8dde4977e87bfcb36ab
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
     t.index ["team_id"], name: "index_key_performance_indicators_on_team_id"
@@ -400,10 +396,7 @@ ActiveRecord::Schema.define(version: 2021_09_30_101218) do
     t.boolean "company", default: false, null: false
     t.boolean "pyns", default: false, null: false
     t.boolean "scorecard", default: false
-<<<<<<< HEAD
-=======
     t.boolean "scorecard_pro", default: false
->>>>>>> ece92c7e2ef5162f278da8dde4977e87bfcb36ab
     t.index ["user_id"], name: "index_product_features_on_user_id"
   end
 
