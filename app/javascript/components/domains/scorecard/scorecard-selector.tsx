@@ -10,6 +10,8 @@ import { Heading } from "~/components/shared";
 import { Text } from "~/components/shared/text";
 import { useHistory } from "react-router-dom";
 import { toJS } from "mobx";
+import Typography from "@material-ui/core/Typography";
+import {HtmlTooltip} from  "~/components/shared/tooltip";
 
 export interface IScorecardSelectorProps {
   ownerType: string;
@@ -22,12 +24,14 @@ export const ScorecardSelector = ({
   ownerId,
   setScorecardOwner,
 }: IScorecardSelectorProps): JSX.Element => {
-  const { userStore, teamStore, companyStore } = useMst();
+  const { userStore, teamStore, companyStore, sessionStore } = useMst();
+  const scorecardPro = sessionStore.profile?.productFeatures?.scorecardPro;
   const [showUsersList, setShowUsersList] = useState<boolean>(false);
   const [teams, setTeams] = useState<Array<any>>([]);
   const [company, setCompany] = useState(null);
   const [companyUsers, setCompanyUsers] = useState<Array<any>>([]);
   const [currentScorecard, setCurrentScorecard] = useState<string>("company");
+  const [showScorecardProTooltip, setShowScorecardProTooltip] = useState(false);
   const { primary100 } = baseTheme.colors;
   const history = useHistory();
 
@@ -118,18 +122,39 @@ export const ScorecardSelector = ({
         <EditTriggerContainer
           editable={true}
           onClick={e => {
-            setShowUsersList(!showUsersList);
+            if (scorecardPro) {
+              setShowUsersList(!showUsersList);
+            }
           }}
+          onMouseEnter={() => {
+            setShowScorecardProTooltip(!scorecardPro && true);
+          }}
+          onMouseLeave={() => setShowScorecardProTooltip(!scorecardPro && false)}
         >
           <ScorecardOwnerContainer>
             <OwnerHeading type={"h3"} fontSize={"20px"} fontWeight={600} mt={0}>
               {currentScorecard || ""}
             </OwnerHeading>
-            <StyledChevronIcon
-              icon={showUsersList ? "Chevron-Up" : "Chevron-Down"}
-              size={"12px"}
-              iconColor={primary100}
-            />
+            <HtmlTooltip
+              arrow={true}
+              open={showScorecardProTooltip}
+              enterDelay={500}
+              leaveDelay={200}
+              title={
+                <React.Fragment>
+                 {"Upgrade to track Team"} <br/>{" "}
+                  {"and Individual Scorecards."}
+                </React.Fragment>
+              }
+            >
+              <StyledChevronIconContainer>
+                <StyledChevronIcon
+                  icon={showUsersList ? "Chevron-Up" : "Chevron-Down"}
+                  size={"12px"}
+                  iconColor={primary100}
+                />
+              </StyledChevronIconContainer>
+            </HtmlTooltip>
           </ScorecardOwnerContainer>
         </EditTriggerContainer>
 
@@ -145,6 +170,11 @@ type EditTriggerContainerType = {
 type ContainerProps = {
   width?: number;
 };
+
+const StyledChevronIconContainer = styled.div`
+  display: inline-block;
+`;
+
 
 const Container = styled.div<ContainerProps>`
   margin-left: 0px;

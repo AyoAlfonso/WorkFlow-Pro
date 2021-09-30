@@ -57,6 +57,8 @@ export const baseTheme = {
     almostPink: "#FAC7C5",
     lightYellow: "#F9EDD2",
     lightFinePine: "#BFF0EC",
+    doveGray: "#707070",
+    mystic: "#DADDE9"
   },
 
   fonts: {
