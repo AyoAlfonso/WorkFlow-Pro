@@ -27,7 +27,7 @@ export const AddKPIDropdown = observer(
     const [showAddManualKPIModal, setShowAddManualKPIModal] = useState<boolean>(false);
     const [externalManualKPIData, setExternalManualKPIData] = useState({});
     const [showScorecardProTooltip, setShowScorecardProTooltip] = useState(false);
-    const { greyActive } = baseTheme.colors;
+    const { greyInactive } = baseTheme.colors;
 
     useEffect(() => {
       const handleClickOutside = event => {
@@ -104,7 +104,7 @@ export const AddKPIDropdown = observer(
                 onMouseLeave={() => setShowScorecardProTooltip(!scorecardPro && false)}
               >
                 <OptionText>Existing</OptionText>
-                {!scorecardPro && <StyledIcon icon={"Lock"} size={"12px"} iconColor={greyActive} />}
+                {!scorecardPro && <StyledIcon icon={"Lock"} size={"12px"} iconColor={greyInactive} />}
               </OptionContainer>
               <OptionContainer
                 onClick={() => {
@@ -118,7 +118,7 @@ export const AddKPIDropdown = observer(
                 onMouseLeave={() => setShowScorecardProTooltip(!scorecardPro && false)}
               >
                 <OptionText>Roll Up</OptionText>
-                {!scorecardPro && <StyledIcon icon={"Lock"} size={"12px"} iconColor={greyActive} />}
+                {!scorecardPro && <StyledIcon icon={"Lock"} size={"12px"} iconColor={greyInactive} />}
               </OptionContainer>
               <OptionContainer
                 onClick={() => {
@@ -133,7 +133,9 @@ export const AddKPIDropdown = observer(
               >
                 <OptionText>Average</OptionText>
 
-                {!scorecardPro && <StyledIcon icon={"Lock"} size={"12px"} iconColor={greyActive} />}
+                {!scorecardPro && (
+                  <StyledIcon icon={"Lock"} size={"12px"} iconColor={greyInactive} />
+                )}
               </OptionContainer>
             </DropdownOptionsContainer>
           </HtmlTooltip>
