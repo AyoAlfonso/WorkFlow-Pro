@@ -48,8 +48,9 @@ export const baseTheme = {
     backgroundRed: "#FCDEDD",
     backgroundGreen: "#00C3B326",
     mipBlue: "#022F7B",
-    boxShadow: "#00000029",
+    boxShadow: "#00000029;",
     cavier: "#F38374",
+    boxshawdowDark: "#00000029",
     fadedCavier: "#EDC2BC",
     doveGray: "#707070",
     mystic: "#DADDE9"

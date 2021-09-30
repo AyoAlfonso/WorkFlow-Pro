@@ -141,7 +141,6 @@ const QuarterSummary = ({
     fadedCavier,
     white,
     primary100,
-    primary20,
     backgroundBlue,
     greyActive,
     grey100,
