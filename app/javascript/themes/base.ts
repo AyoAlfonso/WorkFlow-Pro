@@ -52,6 +52,8 @@ export const baseTheme = {
     cavier: "#F38374",
     boxshawdowDark: "#00000029",
     fadedCavier: "#EDC2BC",
+    doveGray: "#707070",
+    mystic: "#DADDE9"
   },
 
   fonts: {
