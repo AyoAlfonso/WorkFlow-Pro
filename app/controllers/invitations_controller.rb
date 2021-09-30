@@ -12,9 +12,9 @@ class InvitationsController < Devise::InvitationsController
     request = Net::HTTP::Post.new(url)
     request["Content-Type"] = "application/json"
     request.body = JSON.dump({ "email": user[:email],
-                              "firstName": params[:user][:first_name],
-                              "lastName": params[:user][:last_name],
-                              "role": params[:user][:title] })
+                               "firstName": params[:user][:first_name],
+                               "lastName": params[:user][:last_name],
+                               "role": params[:user][:title] })
     https.request(request)
     params.require(:user).permit(:password, :password_confirmation, :invitation_token, :first_name, :last_name, :title)
   end

@@ -7,5 +7,5 @@ end
 # if the annual_initiative is in the current/future fiscal year then we only want to show present/future quarterly goals
 # if the annual_initiative is in the past, then we show all quarterly goals
 json.quarterly_goals annual_initiative.quarterly_goals.optimized do |quarterly_goal|
-  json.partial! quarterly_goal, partial: 'api/quarterly_goals/quarterly_goal', as: :quarterly_goal
+  json.partial! quarterly_goal, partial: "api/quarterly_goals/quarterly_goal", as: :quarterly_goal
 end

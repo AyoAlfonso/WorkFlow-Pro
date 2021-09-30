@@ -1,12 +1,14 @@
 import * as React from "react";
 import * as R from "ramda";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { space, SpaceProps } from "styled-system";
 import { useState, useRef, useEffect } from "react";
-import { Input, Label, Select, Button, TextDiv } from "~/components/shared";
+import { Input, Label, Button, TextDiv } from "~/components/shared";
 import { baseTheme } from "~/themes/base";
+import { Select } from "~/components/shared/input";
 import { Store } from "@material-ui/icons";
 import { useMst } from "~/setup/root";
+import { InputFromUnitType } from "~/components/domains/scorecard/shared/modal-elements";
 
 interface IEditKeyElementFormProps {
   //   onCreate: (keyElementParams: any) => void;
@@ -115,9 +117,11 @@ export const EditKeyElementForm = ({
   return (
     <Container>
       <RowContainer>
-        <FormGroupContainer>
-          <Label>Key Result Title</Label>
-          <Input
+        <FormElementContainer>
+          <InputHeaderContainer>
+            <InputHeader>Title</InputHeader>
+          </InputHeaderContainer>
+          <StyledInput
             onChange={e => {
               e.preventDefault();
               setTitle(e.currentTarget.value);
@@ -125,18 +129,23 @@ export const EditKeyElementForm = ({
             value={title}
             placeholder={"Title..."}
           />
-        </FormGroupContainer>
+        </FormElementContainer>
       </RowContainer>
-      <RowContainer>
-        <FormGroupContainer>
-          <Label>Unit</Label>
+      <RowContainer mt={"16px"}>
+        <FormElementContainer>
+          <InputHeaderContainer>
+            <InputHeader>Unit</InputHeader>
+          </InputHeaderContainer>
           <Select
             onChange={e => {
               e.preventDefault();
               setCompletionType(e.currentTarget.value);
             }}
             value={completionType}
-            style={{ minWidth: "200px" }}
+            fontSize={12}
+            height={15}
+            pt={6}
+            pb={10}
           >
             {selectOptions.map(({ label, value }, index) => (
               <option key={`option-${index}`} value={value}>
@@ -144,16 +153,21 @@ export const EditKeyElementForm = ({
               </option>
             ))}
           </Select>
-        </FormGroupContainer>
-        <FormGroupContainer>
-          <Label>Owner</Label>
+        </FormElementContainer>
+        <FormElementContainer>
+          <InputHeaderContainer>
+            <InputHeader>Owner</InputHeader>
+          </InputHeaderContainer>
           <Select
             onChange={e => {
               e.preventDefault();
               setOwnedBy(e.currentTarget.value);
             }}
             value={ownedBy}
-            style={{ minWidth: "200px" }}
+            fontSize={12}
+            height={15}
+            pt={6}
+            pb={10}
           >
             {allUsers
               .filter(user => user.firstName)
@@ -163,19 +177,24 @@ export const EditKeyElementForm = ({
                 </option>
               ))}
           </Select>
-        </FormGroupContainer>
+        </FormElementContainer>
       </RowContainer>
 
       <RowContainer mt={"16px"}>
-        <FormGroupContainer mb={"15px"}>
-          <Label>Condition</Label>
+        <FormElementContainer>
+          <InputHeaderContainer>
+            <InputHeader>Condition</InputHeader>
+          </InputHeaderContainer>
           <Select
             onChange={e => {
               e.preventDefault();
               setCondition(e.currentTarget.value);
             }}
             value={condition}
-            style={{ minWidth: "200px" }}
+            fontSize={12}
+            height={15}
+            pt={6}
+            pb={10}
           >
             {selectCondition.map(({ label, value }, index) => (
               <option key={`option-${index}`} value={value}>
@@ -183,36 +202,36 @@ export const EditKeyElementForm = ({
               </option>
             ))}
           </Select>
-        </FormGroupContainer>
-
+        </FormElementContainer>
         {completionType !== "binary" && (
-          <FormGroupContainer ml={"4px"}>
-            <Label>Target Value</Label>
-            <InputContainer>
-              <Input
-                type={"number"}
-                min={0}
-                max={completionType === "percentage" ? 100 : null}
-                onChange={e => {
-                  e.preventDefault();
-                  const value =
-                    completionType === "percentage" && e.currentTarget.value > 100
-                      ? 100
-                      : e.currentTarget.value;
-                  setCompletionTargetValue(value);
-                }}
-                value={completionTargetValue}
-              />
-              <CompletionTypeContainer>
-                <TextDiv fontSize={"12px"}>{completionSymbol()}</TextDiv>
-              </CompletionTypeContainer>
-            </InputContainer>
-          </FormGroupContainer>
+          <FormElementContainer>
+            <InputHeaderContainer>
+              <InputHeader>Target Value</InputHeader>
+            </InputHeaderContainer>
+            <InputFromUnitType
+              defaultValue={completionTargetValue}
+              unitType={completionType}
+              placeholder={"90"}
+              max={completionType === "percentage" ? 100 : null}
+              onChange={e => {
+                e.preventDefault();
+                const value =
+                  completionType === "percentage" && e.currentTarget.value > 100
+                    ? 100
+                    : e.currentTarget.value;
+                setCompletionTargetValue(value);
+              }}
+              value={completionTargetValue}
+            />
+            <CompletionTypeContainer>
+              <TextDiv fontSize={"12px"}>{completionSymbol()}</TextDiv>
+            </CompletionTypeContainer>
+          </FormElementContainer>
         )}
       </RowContainer>
-      <RowContainer mt={completionType === "binary" ? "20px" : "0"}>
+      <ButtonRowContainer mt={completionType === "binary" ? "20px" : "0"}>
         <Button variant={"primary"} onClick={handleSave} mr={"8px"} small disabled={!isValid}>
-          <TextDiv fontSize={"16px"}>Save</TextDiv>
+          <TextDiv fontSize={"12px"}>Save</TextDiv>
         </Button>
         {action == "Add" && (
           <Button
@@ -221,10 +240,10 @@ export const EditKeyElementForm = ({
             small
             disabled={!isValid}
           >
-            <TextDiv fontSize={"16px"}>Save & Add Another</TextDiv>
+            <TextDiv fontSize={"12px"}>Save & Add Another</TextDiv>
           </Button>
         )}
-      </RowContainer>
+      </ButtonRowContainer>
     </Container>
   );
 };
@@ -240,6 +259,11 @@ const RowContainer = styled.div<SpaceProps>`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  flex-direction: row;
+  gap: 16px;
+`;
+const ButtonRowContainer = styled(RowContainer)`
+  margin: 5% 0px;
 `;
 
 const FormGroupContainer = styled.div<SpaceProps>`
@@ -260,4 +284,37 @@ const CompletionTypeContainer = styled.div`
   position: absolute;
   right: 30px;
   top: 9px;
+`;
+
+const InputHeader = styled.p`
+  margin: 0px;
+  font-size: 12px;
+  font-weight: bold;
+`;
+
+const InputHeaderContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const FormElementContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 4px;
+  .trix-kpi-modal {
+    font-size: 12px;
+    margin: 0px;
+    margin-top: 4px;
+  }
+`;
+
+const inputStyles = css`
+  margin: 0px;
+  font-size: 12px;
+`;
+
+export const StyledInput = styled(Input)`
+  ${inputStyles}
 `;

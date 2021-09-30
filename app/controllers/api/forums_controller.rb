@@ -6,10 +6,10 @@ class Api::ForumsController < Api::ApplicationController
     authorize @team, policy_class: ForumTeamPolicy
     service = ForumMeetingSetupService.new(current_user, @team, params[:current_year])
     service.call
-    
+
     @meetings = service.fetch_meetings_for_year
     #replace all meetings in the search after the creation
-    render 'api/meetings/index'
+    render "api/meetings/index"
   end
 
   def search_meetings_by_date_range
@@ -23,8 +23,7 @@ class Api::ForumsController < Api::ApplicationController
         AND scheduled_start_time >= ?          
         AND scheduled_start_time <= ?               
         AND meeting_templates.meeting_type = ?",
-        params[:team_id], params[:start_date].to_date(), params[:end_date].to_date(), 2
-      ).order(:scheduled_start_time)
-    render 'api/meetings/index'
+             params[:team_id], params[:start_date].to_date(), params[:end_date].to_date(), 2).order(:scheduled_start_time)
+    render "api/meetings/index"
   end
 end

@@ -4,7 +4,7 @@ class Api::SubInitiativesController < Api::ApplicationController
   respond_to :json
 
   def create
-    # Release next version 
+    # Release next version
     @template_description = DescriptionTemplate.find_by(company_id: current_company.id, template_type: 2).body_content || ""
     @sub_initiative = SubInitiative.new({
       created_by: current_user,

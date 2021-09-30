@@ -80,17 +80,18 @@ const initialState = {
     fieldsAndLabels: {},
   },
   subInitiativeStore: {
-    subInitiative: null
+    subInitiative: null,
   },
   scorecardStore: {
     kpis: [],
   },
   keyPerformanceIndicatorStore: {
     kpi: null,
+    allKPIs: [],
   },
   descriptionTemplateStore: {
     descriptionTemplates: [],
-  }
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);

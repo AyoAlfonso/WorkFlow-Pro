@@ -21,9 +21,7 @@ export const GoalModel = types
             annualInitiatives.push(goal);
           }
         } else if (!goal.closedAt && goal.quarterlyGoals.length > 0) {
-          const clonedGoal = R.clone(goal);
-          clonedGoal.quarterlyGoals = goal.openQuarterlyGoals as any;
-          annualInitiatives.push(clonedGoal);
+          annualInitiatives.push({ ...goal, quarterlyGoals: goal.openQuarterlyGoals });
         }
       });
       return annualInitiatives;
@@ -37,9 +35,9 @@ export const GoalModel = types
           }
         } else {
           if (goal.closedQuarterlyGoals.length > 0) {
-            const clonedGoal = R.clone(goal);
-            clonedGoal.quarterlyGoals = goal.closedQuarterlyGoals as any;
-            annualInitiatives.push(clonedGoal);
+            // const clonedGoal = R.clone(goal);
+            // clonedGoal.quarterlyGoals = goal.closedQuarterlyGoals as any;
+            annualInitiatives.push({ ...goal, quarterlyGoals: goal.closedQuarterlyGoals });
           }
         }
       });

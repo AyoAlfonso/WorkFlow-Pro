@@ -1,13 +1,14 @@
 import * as React from "react";
 import * as R from "ramda";
 import styled from "styled-components";
-import { Loading } from "../../shared/loading";
-import { TextDiv } from "~/components/shared";
+
+import { Loading, TextDiv } from "~/components/shared";
 import { MilestoneCard } from "~/components/domains/goals/milestone/milestone-card";
 
 interface IPynsSummaryProps {
   goalData: any;
 }
+
 
 export const PynsSummary = ({ goalData: { annualInitiative } }: IPynsSummaryProps): JSX.Element => {
   const quarterlyGoal = annualInitiative

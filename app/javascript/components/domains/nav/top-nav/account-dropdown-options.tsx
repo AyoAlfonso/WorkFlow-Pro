@@ -145,7 +145,7 @@ export const AccountDropdownOptions = observer(
             setShowAccountActions(false);
           }}
         >
-          What's New? <VersionTag>v 1.1</VersionTag>
+          What's New? <VersionTag>v 2.0</VersionTag>
         </AccountOptionText>
       );
     };

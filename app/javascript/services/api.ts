@@ -573,6 +573,10 @@ export class Api {
     return this.client.get(`/key_performance_indicator/${id}`);
   }
 
+  async getKPIs() {
+    return this.client.get(`/key_performance_indicator`);
+  }
+
   async createKPI(KPI) {
     return this.client.post(`/key_performance_indicator`, KPI);
   }

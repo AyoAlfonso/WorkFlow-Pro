@@ -52,10 +52,9 @@ export const QuarterlyGoalCard = observer(
     } = baseTheme.colors;
     const defaultOptionsColor = white;
     const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
-
     //TODOIST: Come back to make this code dry and icon color constant
     let currentMilestone;
-    let statusBadge = {
+    const statusBadge = {
       description: "",
       colors: {
         backgroundColor: "",
@@ -166,7 +165,11 @@ export const QuarterlyGoalCard = observer(
 
             {!onboarding && (
               <IconContainer>
-                <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} iconColor={showOptions} />
+                <RecordOptions
+                  type={"quarterlyGoal"}
+                  id={quarterlyGoal.id}
+                  iconColor={showOptions}
+                />
               </IconContainer>
             )}
           </RowContainer>

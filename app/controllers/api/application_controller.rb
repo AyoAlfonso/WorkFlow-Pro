@@ -17,7 +17,7 @@ class Api::ApplicationController < ActionController::API
   def pundit_user
     CurrentContext.new(current_user, current_company)
   end
-  
+
   def skip_pundit?
     false
   end
@@ -32,6 +32,7 @@ class Api::ApplicationController < ActionController::API
   end
 
   private
+
   def set_current_company
     @current_company ||= request.headers["HTTP_CURRENT_COMPANY_ID"].present? ? Company.find(request.headers["HTTP_CURRENT_COMPANY_ID"]) : current_user.default_selected_company if current_user.present?
   end

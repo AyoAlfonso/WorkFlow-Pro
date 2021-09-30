@@ -1,4 +1,4 @@
-import { types, flow, getRoot } from "mobx-state-tree";
+import { types, flow } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { DescriptionTemplateModel } from "../models/description-template";
 import { ApiResponse } from "apisauce";

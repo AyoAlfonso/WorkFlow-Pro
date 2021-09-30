@@ -1,7 +1,7 @@
-import React, { useState } from "react"
-import { observer } from "mobx-react"
-import { useTranslation } from "react-i18next"
-import { useMst } from "~/setup/root"
+import React, { useState } from "react";
+import { observer } from "mobx-react";
+import { useTranslation } from "react-i18next";
+import { useMst } from "~/setup/root";
 import {
   InputFromUnitType,
   ModalWithHeader,
@@ -10,18 +10,22 @@ import {
   StyledInput,
   FormContainer,
   FormElementContainer,
-} from "./modal-elements"
+} from "./modal-elements";
+import { useParams } from "react-router-dom";
+import { useHistory } from "react-router";
 
 interface UpdateKPIModalProps {
-  kpiId: number,
-  ownedById: number,
-  unitType: string,
-  year: number,
-  week: number,
-  currentValue: number | undefined,
-  headerText: string,
+  kpiId: number;
+  ownedById: number;
+  unitType: string;
+  year: number;
+  week: number;
+  currentValue: number | undefined;
+  headerText: string;
   setUpdateKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   updateKPIModalOpen: boolean;
+  renderNewValue?: any;
+  setKpis: any;
 }
 
 export const UpdateKPIModal = observer(
@@ -34,13 +38,17 @@ export const UpdateKPIModal = observer(
     headerText,
     setUpdateKPIModalOpen,
     updateKPIModalOpen,
+    renderNewValue,
+    setKpis,
   }: UpdateKPIModalProps): JSX.Element => {
-    const { keyPerformanceIndicatorStore, sessionStore } = useMst();
+    const history = useHistory();
+    const { keyPerformanceIndicatorStore, sessionStore, scorecardStore } = useMst();
     const [value, setValue] = useState<number>(currentValue);
     const [comment, setComment] = useState("");
+    const { owner_type, owner_id } = useParams();
 
     const handleSave = () => {
-      if(value != undefined) {
+      if (value != undefined) {
         const log = {
           keyPerformanceIndicatorId: kpiId,
           userId: sessionStore.profile.id,
@@ -48,47 +56,58 @@ export const UpdateKPIModal = observer(
           note: null,
           week,
           fiscalYear: year,
-          fiscalQuarter: Math.floor((week - 1)/13) + 1,
-        }
-        if(comment != "") {
+          fiscalQuarter: Math.floor((week - 1) / 13) + 1,
+        };
+        if (comment != "") {
           log.note = comment;
         }
-        keyPerformanceIndicatorStore.createScorecardLog(log)
+        keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
+          setUpdateKPIModalOpen(false);
+          setKpis(scorecardStore.kpis);
+          renderNewValue ? renderNewValue(value) : null;
+          history.push(`/scorecard/0/0`);
+          setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
+        });
       }
-      setUpdateKPIModalOpen(false);
-    }
+    };
 
-    const handleChange = (e) => {
-      setValue(Number(e.target.value.replace(/[^0-9\.]+/g, "")))
-    }
+    const handleChange = e => {
+      setValue(Number(e.target.value.replace(/[^0-9\.]+/g, "")));
+    };
 
     return (
       <ModalWithHeader
         header={headerText}
         isOpen={updateKPIModalOpen}
         setIsOpen={setUpdateKPIModalOpen}
+        headerFontSize={"21px"}
       >
         <FormContainer>
           <FormElementContainer>
-            <InputHeaderWithComment>New value</InputHeaderWithComment>
+            <InputHeaderWithComment fontSize={"14px"}>New value</InputHeaderWithComment>
             <InputFromUnitType
-              unitType={unitType} 
+              unitType={unitType}
               placeholder={"Add the new value..."}
               onChange={handleChange}
               defaultValue={currentValue}
             />
           </FormElementContainer>
           <FormElementContainer>
-            <InputHeaderWithComment comment={"optional"}>Comment</InputHeaderWithComment>
-            <StyledInput placeholder={"Add a comment..."} onChange={(e) => {
-              setComment(e.target.value);
-            }}/>
+            <InputHeaderWithComment comment={"optional"} fontSize={"14px"} childFontSize={"12px"}>
+              Comment
+            </InputHeaderWithComment>
+            <StyledInput
+              placeholder={"Add a comment..."}
+              onChange={e => {
+                setComment(e.target.value);
+              }}
+            />
           </FormElementContainer>
           <FormElementContainer>
             <SaveButton onClick={handleSave}>Save</SaveButton>
           </FormElementContainer>
         </FormContainer>
       </ModalWithHeader>
-    )
-  }
-)
+    );
+  },
+);

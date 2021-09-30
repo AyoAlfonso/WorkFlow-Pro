@@ -15,7 +15,7 @@ export const baseTheme = {
     darkGrey: "#43425D",
     greyActive: "#5E6277",
     greyInactive: "#CED1DD",
-    grayShadow:"#00000029",
+    grayShadow: "#00000029",
     grey100: "#868DAA",
     grey80: "#9EA3BB",
     grey60: "#B6BACC",
@@ -50,7 +50,8 @@ export const baseTheme = {
     mipBlue: "#022F7B",
     boxShadow: "#00000029;",
     cavier: "#F38374",
-    boxshawdowDark: "#00000029"
+    boxshawdowDark: "#00000029",
+    fadedCavier: "#EDC2BC",
   },
 
   fonts: {

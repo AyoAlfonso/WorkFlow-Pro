@@ -9,7 +9,7 @@ class Api::IssuesController < Api::ApplicationController
   end
 
   def create
-    @issue = Issue.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], team_id: params[:team_id], position: params[:position], company_id: current_company.id, personal: params[:personal], label_list: params[:label] && params[:label][:name]})
+    @issue = Issue.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], team_id: params[:team_id], position: params[:position], company_id: current_company.id, personal: params[:personal], label_list: params[:label] && params[:label][:name] })
     authorize @issue
     @issue.insert_at(1)
     @issue.save!
@@ -18,7 +18,7 @@ class Api::IssuesController < Api::ApplicationController
       # USE HOOK TO CREATE A TEAM ISSUE IF IT DOESNT EXIST FOR @ISSUE
       @team_issues = TeamIssue.optimized.for_team(params[:team_id]).sort_by_position.exclude_personal_for_team
       @issues_to_render = team_meeting_issues(params[:team_id]).exclude_personal_for_team
-      
+
       #additional details to render if its a team
       if params[:meeting_id]
         if params[:meeting_enabled]
@@ -26,18 +26,17 @@ class Api::IssuesController < Api::ApplicationController
         end
         @meeting_team_issues = Issue.for_meeting(params[:meeting_id]).exclude_personal_for_team
       end
-      
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
     end
-    
+
     render "api/issues/create"
   end
 
   def update
     merged_issue_params = params[:label_list].present? ? issue_params.merge(label_list: ActsAsTaggableOn::Tag.find(params[:label_list]) || params[:label_list]) : issue_params
     @issue.update!(merged_issue_params.merge(completed_at: params[:completed] ? Time.now : nil))
-    
+
     if params[:from_team_meeting]
       #returns issues only related to the team, not all issues
       @issues_to_render = team_meeting_issues(@issue.team_id).exclude_personal_for_team

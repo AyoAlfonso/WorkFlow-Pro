@@ -98,9 +98,7 @@ export const GoalsIndex = observer(
         setShowCoreFour(false);
       }
     };
-
     const companyGoalsToShow = () => {
-    
       switch (companyGoalsFilter) {
         case "open":
           return companyGoals.activeAnnualInitiatives as Array<AnnualInitiativeType>;
@@ -290,7 +288,6 @@ export const GoalsIndex = observer(
             subInitiativeId={subInitiativeId}
             setSubInitiativeModalOpen={setSubInitiativeModalOpen}
             annualInitiativeDescription={annualInitiativeDescription}
-            // setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
             setAnnualInitiativeId={setAnnualInitiativeId}
             showCreateMilestones={true}
           />

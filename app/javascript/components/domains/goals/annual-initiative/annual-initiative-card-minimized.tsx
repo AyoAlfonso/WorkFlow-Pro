@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { color } from "styled-system";
 import { baseTheme } from "../../../../themes";
 import { Icon } from "../../../shared/icon";
-import { AnnualInitiativeType } from "~/types/annual-initiative";
 import * as moment from "moment";
 import { observer } from "mobx-react";
 import { OwnedBySection } from "../shared/owned-by-section";
@@ -11,7 +10,7 @@ import { useMst } from "~/setup/root";
 import { Loading } from "~/components/shared";
 
 interface IAnnualInitiativeCardMinimizedProps {
-  annualInitiative: AnnualInitiativeType;
+  annualInitiative: any;
   setShowMinimizedCard: React.Dispatch<React.SetStateAction<boolean>>;
   disableOpen?: boolean;
   showMinimizedCard?: boolean;

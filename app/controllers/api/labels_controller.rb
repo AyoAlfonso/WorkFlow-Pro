@@ -3,7 +3,7 @@ class Api::LabelsController < Api::ApplicationController
   respond_to :json
 
   def index
-    @labels = labels_for_team.order('created_at DESC')
+    @labels = labels_for_team.order("created_at DESC")
     render "api/labels/index"
   end
 
@@ -24,7 +24,7 @@ class Api::LabelsController < Api::ApplicationController
       @label.save(validate: false)
     end
 
-    @labels = labels_for_team.order('created_at DESC')
+    @labels = labels_for_team.order("created_at DESC")
     render "api/labels/create"
   end
 
@@ -33,6 +33,7 @@ class Api::LabelsController < Api::ApplicationController
   end
 
   private
+
   def labels_for_team
     team_ids = @current_company.teams.pluck(:id)
     ActsAsTaggableOn::Tag.where(team_id: team_ids)

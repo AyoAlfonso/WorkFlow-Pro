@@ -275,7 +275,7 @@ const Container = styled(HomeContainerBorders)<ContainerProps>`
   &:hover ${DefaultStyledLabel} {
     display: block;
   }
-  margin-left: 4px;
+  margin: 10px 0px;
   padding-left: 12px;
   padding-right: 12px;
   &:active {
