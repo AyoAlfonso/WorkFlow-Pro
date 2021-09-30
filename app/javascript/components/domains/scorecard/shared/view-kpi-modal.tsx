@@ -23,7 +23,7 @@ import { toJS } from "mobx";
 import { titleCase } from "~/utils/camelize";
 import { ScorecardKPIDropdownOptions } from "./scorecard-dropdown-options";
 import "~/stylesheets/modules/trix-editor.css";
-import {debounce} from "lodash";
+import { debounce } from "lodash";
 
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -67,6 +67,7 @@ export const ViewEditKPIModal = observer(
     if (R.isNil(keyPerformanceIndicatorStore)) {
       return <></>;
     }
+    console.log(descriptionTemplatesFormatted.find(t => t.templateType == "kpi")?.body.body, "ttt");
 
     const {
       backgroundGrey,
@@ -188,20 +189,21 @@ export const ViewEditKPIModal = observer(
 
     useEffect(() => {
       if (kpiId !== null) {
-        const rollupKPI = scorecardStore.kpis.find(kpi => kpi.id == kpiId && kpi.parentType);
-
+        const advancedKPI = scorecardStore.kpis.find(kpi => kpi.id == kpiId && kpi.parentType);
         keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
-          const KPI = rollupKPI || keyPerformanceIndicatorStore?.kpi;
-          setDescription(KPI.description);
+          const KPI = advancedKPI || keyPerformanceIndicatorStore?.kpi;
           setCurrentLog();
           setKpi(KPI);
+          setDescription(KPI.description);
           setLoading(false);
         });
       }
     }, [kpiId]);
 
     const saveKPI = body => {
-        debounce(() => {keyPerformanceIndicatorStore.updateKPI(Object.assign({}, kpi, body), true)}, 500)()
+      debounce(() => {
+        keyPerformanceIndicatorStore.updateKPI(Object.assign({}, kpi, body), true);
+      }, 500)();
     };
 
     const drawGraph = KPI => {
@@ -226,6 +228,7 @@ export const ViewEditKPIModal = observer(
     };
 
     const closeModal = () => {
+      setDescription(null)
       setViewEditKPIModalOpen(false);
     };
 
@@ -241,7 +244,7 @@ export const ViewEditKPIModal = observer(
           ? `Greater than or equal to ${targetText}`
           : `Less than or equal to ${targetText}`,
       );
-      setHeader(`${kpi.title}`);
+      // setHeader(`${kpi.title}`);
       const currentWeek = weeks?.[company.currentFiscalWeek];
       const score = currentWeek ? currentWeek?.score : undefined;
       setValue(score);
@@ -345,7 +348,8 @@ export const ViewEditKPIModal = observer(
                         autoFocus={false}
                         placeholder={"Add a description..."}
                         onChange={description => {
-                          setDescription(description);
+                          console.log(description, "description--2");
+                          setDescription(description || " ");
                           saveKPI({ description });
                         }}
                         value={description}

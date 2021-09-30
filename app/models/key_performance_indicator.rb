@@ -8,6 +8,9 @@ class KeyPerformanceIndicator < ApplicationRecord
   enum unit_type: { percentage: 0, numerical: 1, currency: 2 }
   enum parent_type: { existing: 0, rollup: 1, avr: 2}
 
+  # TODO: Impleted soft delete with repect to the relation
+  # default_scope { where(published: true) }
+
   validates :title, :created_by, :viewers, :unit_type, :target_value, presence: true
   validates :greater_than, inclusion: [true, false]
   has_many :scorecard_logs
