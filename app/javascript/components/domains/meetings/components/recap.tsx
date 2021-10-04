@@ -48,8 +48,8 @@ export const Recap = observer(
     const goalProgress = averageMilestoneProcessPercentage;
 
     // key activities that belong to the current meeting's meeting_template and team
-    const tasksCompletedCount = keyActivities?.filter(ka => ka.completedAt !== null).length;
-    const totalTasksCount = keyActivities.length;
+    const tasksCompletedCount = keyActivities?.filter(ka => ka.completedAt !== null).length || 0;
+    const totalTasksCount = keyActivities?.length || 0 ;
 
     // issues that belong to this team
     const issuesCompletedCount = issues?.filter(issue => issue.completedAt !== null).length;
