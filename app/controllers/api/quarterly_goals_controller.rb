@@ -5,7 +5,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
   def index
     company_current_quarter = current_company.current_fiscal_quarter
-    @quarterly_goals = policy_scope(QuarterlyGoal).owned_by_user(current_company).present_or_future(company_current_quarter).sort_by_created_date
+    @quarterly_goals = policy_scope(QuarterlyGoal).owned_by_user(current_company).present_or_future_quarterly(company_current_quarter).sort_by_created_date
     render "/api/quarterly_goals/index"
   end
 
