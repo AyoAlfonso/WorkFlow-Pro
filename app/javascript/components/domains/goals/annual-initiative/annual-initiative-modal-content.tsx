@@ -152,10 +152,7 @@ export const AnnualInitiativeModalContent = observer(
               disabled={!editable}
               onChange={e => {
                 if (!e.target.value.includes("<div>")) {
-                  annualInitiativeStore.updateModelField(
-                    "description",
-                    e.target.value.replace(/&amp;/g, ""),
-                  );
+                  annualInitiativeStore.updateModelField("description", e.target.value);
                 }
               }}
               onKeyDown={key => {
