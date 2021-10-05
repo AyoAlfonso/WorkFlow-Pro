@@ -135,7 +135,7 @@ export const GoalsIndex = observer(
         companyStore.company.yearForCreatingAnnualInitiatives
           ? `FY${(companyStore.company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
           : `FY${(companyStore.company.currentFiscalYear - 1).toString().slice(-2)}/${(
-              companyStore.company.yearForCreatingAnnualInitiatives - 1
+              companyStore.company.currentFiscalYear
             )
               .toString()
               .slice(-2)}`;
