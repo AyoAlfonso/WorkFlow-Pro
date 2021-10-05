@@ -18,19 +18,20 @@ export const GoalStoreModel = types
     get activeTeamGoals() {
       const annualInitiatives = [];
       self.teamGoals.forEach(goal => {
-        if (!goal.closedAt && goal.quarterlyGoals.length == 0) {
-          console.log(goal)
+        if (!goal.closedAt && goal.quarterlyGoals.length >= 0) {
           if (!R.contains(goal.id, R.pluck("id", annualInitiatives))) {
             annualInitiatives.push(goal);
           }
-        } else {
-          console.log(goal, "culprit");
+        }
+        /*
+         else if (!goal.closedAt) {
           if (goal.openQuarterlyGoals.length > 0) {
             const clonedGoal = R.clone(goal);
             clonedGoal.quarterlyGoals = goal.openQuarterlyGoals as any;
             annualInitiatives.push(clonedGoal);
           }
         }
+        */
       });
       return annualInitiatives;
     },
