@@ -141,7 +141,7 @@ export const AnnualInitiativeCard = observer(
             showMinimizedCard={showMinimizedCard}
           />
         </Container>
-        {/* <YearDisplayContainer>{renderYearDisplay()}</YearDisplayContainer> */}
+        <YearDisplayContainer>{renderYearDisplay()}</YearDisplayContainer>
 
         {!showMinimizedCard ? (
           <AnnualInitiativeCardExpanded
