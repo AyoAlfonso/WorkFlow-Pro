@@ -17,9 +17,6 @@
     </script>
     <script type="text/javascript" src="https://cdn.productstash.io/js/widget.min.js?v=0.5" defer="defer"></script>
     <script>
-      document.getElementsByClassName("launcher-button")[0].style.visibility = "hidden"
-    </script>
-    <script>
         window.fwSettings={
           'widget_id': <%= ENV["FRESHDESK_WIDGET_ID"] %>
         };
@@ -42,8 +39,10 @@
     </script>
 
   </head>
-
-  <body onload="FreshworksWidget('hide', 'launcher');">
+    <script>
+       FreshworksWidget('hide', 'launcher')
+    </script>
+  <body>
     <!-- Google Tag Manager (noscript) -->
       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<%= ENV["GTM_ID"] %>"
       height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
