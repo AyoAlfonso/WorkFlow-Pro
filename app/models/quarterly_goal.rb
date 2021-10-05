@@ -20,10 +20,10 @@ class QuarterlyGoal < ApplicationRecord
         .where("(annual_initiatives.fiscal_year = ? AND quarter >= ?) OR annual_initiatives.fiscal_year > ?",
                company.current_fiscal_year, company.current_fiscal_quarter, company.current_fiscal_year)
     }
-  scope :present_or_future, ->(company) {
+  scope :past_until_present, ->(company) {
   joins(:annual_initiative)
-    .where("(annual_initiatives.fiscal_year >= ?)",
-            company.current_fiscal_year)
+    .where("(annual_initiatives.fiscal_year <= ? AND quarter <= ?)",
+            company.current_fiscal_year, company.current_fiscal_quarter)
 }
   scope :optimized, ->() { includes([:key_elements, :milestones, { owned_by: { avatar_attachment: :blob } }]) }
 
