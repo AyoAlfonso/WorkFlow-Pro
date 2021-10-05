@@ -11,7 +11,8 @@ import { Text } from "~/components/shared/text";
 import { useHistory } from "react-router-dom";
 import { toJS } from "mobx";
 import Typography from "@material-ui/core/Typography";
-import {HtmlTooltip} from  "~/components/shared/tooltip";
+import { HtmlTooltip } from "~/components/shared/tooltip";
+import { Loading } from "../../shared/loading";
 
 export interface IScorecardSelectorProps {
   ownerType: string;
@@ -33,6 +34,7 @@ export const ScorecardSelector = ({
   const [currentScorecard, setCurrentScorecard] = useState<string>("company");
   const [showScorecardProTooltip, setShowScorecardProTooltip] = useState(false);
   const { primary100 } = baseTheme.colors;
+
   const history = useHistory();
 
   useEffect(() => {
@@ -48,6 +50,9 @@ export const ScorecardSelector = ({
     setCurrentScorecard(`${owner?.name}${owner?.lastName ? " " + owner.lastName : ""}`);
   }, [teams, companyUsers, company, ownerType, ownerId]);
 
+  if (!teamStore.teams || !companyStore.company || !userStore.users) {
+    return <> </>;
+  }
   useEffect(() => {
     const teams =
       teamStore.teams &&
@@ -142,8 +147,7 @@ export const ScorecardSelector = ({
               leaveDelay={200}
               title={
                 <React.Fragment>
-                 {"Upgrade to track Team"} <br/>{" "}
-                  {"and Individual Scorecards."}
+                  {"Upgrade to track Team"} <br /> {"and Individual Scorecards."}
                 </React.Fragment>
               }
             >
@@ -174,7 +178,6 @@ type ContainerProps = {
 const StyledChevronIconContainer = styled.div`
   display: inline-block;
 `;
-
 
 const Container = styled.div<ContainerProps>`
   margin-left: 0px;
