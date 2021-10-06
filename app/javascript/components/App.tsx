@@ -49,6 +49,7 @@ import { ForumWelcomeModal } from "./shared/forum-welcome-modal";
 import { OnboardingModal } from "./domains/onboarding";
 
 import { Onboarding } from "./domains/onboarding";
+import { CheckIn } from "./domains/check-in/checkin";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -277,6 +278,7 @@ export const App = observer(
                       )}
                     </>
                   </Route>
+                  <Route exact path="/weekly-check-in/:userId/:dueDate" component={CheckIn} />
                 </Switch>
               ) : (
                 <Switch>

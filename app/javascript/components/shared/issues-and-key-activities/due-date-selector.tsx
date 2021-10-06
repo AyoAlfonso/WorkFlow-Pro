@@ -98,7 +98,11 @@ const Container = styled.div`
   margin-bottom: auto;
 `;
 
-const DueDateButtonContainer = styled.div`
+type IDueDateButtonContainer = {
+  dateSelected?: boolean;
+}
+
+const DueDateButtonContainer = styled.div<IDueDateButtonContainer>`
   display: flex;
   border-radius: 3px;
   border: 1px solid ${props => props.theme.colors.borderGrey};

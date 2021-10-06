@@ -92,6 +92,10 @@ const initialState = {
   descriptionTemplateStore: {
     descriptionTemplates: [],
   },
+  checkInTemplateStore: {
+    checkInTemplates: [],
+    currentCheckIn: null,
+  }
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);

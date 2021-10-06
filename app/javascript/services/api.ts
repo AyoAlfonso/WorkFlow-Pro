@@ -600,5 +600,13 @@ export class Api {
   async getScorecard(props: IScorecardProps) {
     return this.client.get(`scorecard/${props.ownerType}/${props.ownerId}`);
   }
+
+  async getCheckInTemplates() {
+    return this.client.get(`/check_in_templates`);
+  }
+
+  async getWeeklyCheckInData(userId, dueDate) {
+    return this.client.get(`/weekly-check-in/${userId}/${dueDate}`);
+  }
   //async setJWT(jwt) {}
 }

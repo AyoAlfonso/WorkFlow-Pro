@@ -65,7 +65,7 @@ export const MeetingAgenda = ({
           />
           <StepTopicContainer>
             <StyledText>
-              {step.name} ({step.duration} minutes)
+              {step.name} {step.duration && `(${step.duration} minutes)`}
             </StyledText>
             {renderExplorationTopicOwner(step)}
           </StepTopicContainer>

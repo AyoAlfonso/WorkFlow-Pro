@@ -9,7 +9,7 @@ import { Icon } from "~/components/shared/icon";
 interface IWizardLayoutProps {
   title: string;
   description: string;
-  customActionButton?: JSX.Element; 
+  customActionButton?: JSX.Element;
   showBackButton?: boolean;
   showSkipButton?: boolean;
   singleComponent?: JSX.Element;
@@ -30,6 +30,7 @@ interface IWizardLayoutProps {
   stepClickDisabled?: boolean;
   completeButtonText?: string;
   finalButtonDisabled?: boolean;
+  stepsForMobile?: JSX.Element;
 }
 
 export const WizardLayout = ({
@@ -56,6 +57,7 @@ export const WizardLayout = ({
   stepClickDisabled,
   completeButtonText,
   finalButtonDisabled,
+  mobile,
 }: IWizardLayoutProps): JSX.Element => {
   const renderActionButtons = (): JSX.Element => {
     return (
@@ -136,12 +138,14 @@ export const WizardLayout = ({
         )}
       </DescriptionContainer>
       <BodyContainer>
-        {showCloseButton && (
-          <CloseButtonContainer onClick={onCloseButtonClick}>
-            <CloseText> Close </CloseText>
-            <Icon icon={"Close"} size={"16px"} iconColor={"greyInactive"} />
-          </CloseButtonContainer>
-        )}
+        <DesktopCloseButtonContainer>
+          {showCloseButton && (
+            <CloseButtonContainer onClick={onCloseButtonClick}>
+              <CloseText> Close </CloseText>
+              <Icon icon={"Close"} size={"16px"} iconColor={"greyInactive"} />
+            </CloseButtonContainer>
+          )}
+        </DesktopCloseButtonContainer>
         <BodyContentContainer>{renderBodyComponents()}</BodyContentContainer>
         {renderStepsComponent()}
       </BodyContainer>
@@ -156,12 +160,19 @@ const Container = styled.div`
   position: relative;
 `;
 
+const DesktopCloseButtonContainer = styled.div`
+  
+`;
+
 const DescriptionContainer = styled.div`
   min-width: 320px;
   width: 25%;
   background-color: ${props => props.theme.colors.backgroundGrey};
   display: flex;
   flex-direction: column;
+  @media only screen and (max-width: 992px) {
+    display: none;
+  }
 `;
 
 const DescriptionBody = styled.div`
@@ -180,6 +191,9 @@ const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow-x: auto;
+  @media only screen and (max-width: 992px) {
+    width: 100%;
+  }
 `;
 
 const BodyContentContainer = styled.div`

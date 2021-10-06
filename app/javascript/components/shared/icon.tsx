@@ -3,7 +3,7 @@ import IcoMoon from "react-icomoon";
 import styled from "styled-components";
 import { layout, LayoutProps, space, SpaceProps } from "styled-system";
 import { baseTheme } from "../../themes/base";
-const iconSet = require("../../assets/icons/selection.json");
+import iconSet from "../../assets/icons/selection.json";
 
 type StyledSystemProps = LayoutProps & SpaceProps;
 export interface IIconProps extends StyledSystemProps {
@@ -44,4 +44,10 @@ export const Icon = (props: IIconProps) => {
   );
 };
 
-export const RawIcon = (props: IcoMoon) => <IcoMoon iconSet={iconSet} {...props} />;
+interface RawIconProps {
+  size?: number;
+  color?: string;
+  icon: string;
+}
+
+export const RawIcon = (props: RawIconProps) => <IcoMoon iconSet={iconSet} {...props} />;

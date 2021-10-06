@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import { Button } from "~/components/shared/button";
 import { observer } from "mobx-react";
+import { toJS } from 'mobx';
 import { useMst } from "../../../setup/root";
 import { useParams, useHistory } from "react-router-dom";
 import { Loading } from "~/components/shared/loading";
