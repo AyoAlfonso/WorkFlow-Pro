@@ -72,6 +72,9 @@ export const MilestoneComponent = observer(
 
 const Container = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  @media only screen and (max-width: 768px) {
+    padding: 0 16px;
+  }
 `;
 
 const AvatarContainer = styled.div`
@@ -93,6 +96,9 @@ const StyledText = styled.span`
 
 const StyledHeader = styled.h1`
   margin-bottom: 25px;
+  @media only screen and (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 type MilestoneDetailsType = {

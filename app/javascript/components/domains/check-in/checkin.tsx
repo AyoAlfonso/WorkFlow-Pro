@@ -19,7 +19,6 @@ export const CheckIn = observer(
     const history = useHistory();
 
     const checkIn = checkInTemplateStore.currentCheckIn;
-    console.log(checkIn, "checkIn");
 
     useEffect(() => {
       checkInTemplateStore.fetchCheckInTemplates();

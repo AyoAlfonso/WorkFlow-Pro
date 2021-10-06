@@ -70,10 +70,16 @@ export const KpiComponent = observer(
 
 const Container = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  @media only screen and (max-width: 768px) {
+    padding: 0 16px;
+  }
 `;
 
 const StyledHeader = styled.h1`
   margin-bottom: 25px;
+  @media only screen and (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 const SubHeaderText = styled.span`
@@ -85,20 +91,29 @@ const SubHeaderText = styled.span`
 `;
 
 const ValueSpan = styled.span`
-font-weight: bold;
-display: inline-block;
-margin-left: 50px;
+  font-weight: bold;
+  display: inline-block;
+  margin-left: 50px;
+  @media only screen and (max-width: 768px) {
+    margin-left: 30px;
+  }
 `;
 
 const CommentContainer = styled.div`
   width: 608px;
   margin-bottom: 15px;
+  @media only screen and (max-width: 768px) {
+    width: 80%;
+  }
 `;
 
 const ValueInputContainer = styled.div`
-width: 304px;
-align-items: center;
+  width: 304px;
+  align-items: center;
   display: flex;
   margin-bottom: 20px;
   justify-content: space-between;
+  @media only screen and (max-width: 768px) {
+    width: 70%;
+  }
 `;

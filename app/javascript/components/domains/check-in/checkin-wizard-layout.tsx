@@ -52,7 +52,9 @@ export const CheckInWizardLayout = observer(
     );
 
     const renderStepsForMobile = () => (
-      <QuestionText>{`Question ${checkIn.currentStep + 1} / ${numberOfSteps}`}</QuestionText>
+      <QuestionText type={"small"}>
+        {`Question ${checkIn.currentStep + 1} / ${numberOfSteps}`}
+      </QuestionText>
     );
 
     const actionButtons = () => {
@@ -98,6 +100,11 @@ export const CheckInWizardLayout = observer(
           showCloseButton={true}
           onCloseButtonClick={closeButtonClick}
           stepsForMobile={renderStepsForMobile()}
+          textUnderMobileButton={
+            <StepText type={"small"}>
+              {t("Everyone in your company will see your response")}
+            </StepText>
+          }
         />
       </Container>
     );
@@ -144,6 +151,17 @@ const StepText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
   display: flex;
   justify-content: center;
+  @media only screen and (max-width: 768px) {
+    margin-top: -8px;
+    display: block;
+  }
 `;
 
-const QuestionText = styled(Text)``;
+const QuestionText = styled(Text)`
+  display: none;
+  margin-left: auto;
+  color: ${props => props.theme.colors.greyInactive};
+  @media only screen and (max-width: 992px) {
+    display: inline-block;
+  }
+`;

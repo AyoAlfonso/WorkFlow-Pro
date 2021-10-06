@@ -31,6 +31,7 @@ interface IWizardLayoutProps {
   completeButtonText?: string;
   finalButtonDisabled?: boolean;
   stepsForMobile?: JSX.Element;
+  textUnderMobileButton?: JSX.Element;
 }
 
 export const WizardLayout = ({
@@ -57,7 +58,8 @@ export const WizardLayout = ({
   stepClickDisabled,
   completeButtonText,
   finalButtonDisabled,
-  mobile,
+  stepsForMobile,
+  textUnderMobileButton,
 }: IWizardLayoutProps): JSX.Element => {
   const renderActionButtons = (): JSX.Element => {
     return (
@@ -138,15 +140,32 @@ export const WizardLayout = ({
         )}
       </DescriptionContainer>
       <BodyContainer>
-        <DesktopCloseButtonContainer>
+        {stepsForMobile && (
+          <DesktopCloseButtonContainer>
+            {stepsForMobile}
+            {showCloseButton && (
+              <CloseButtonContainer onClick={onCloseButtonClick}>
+                <CloseText> Close </CloseText>
+                <Icon icon={"Close"} size={"16px"} iconColor={"greyInactive"} />
+              </CloseButtonContainer>
+            )}
+          </DesktopCloseButtonContainer>
+        )}
+        <MobileContainer>
           {showCloseButton && (
             <CloseButtonContainer onClick={onCloseButtonClick}>
               <CloseText> Close </CloseText>
               <Icon icon={"Close"} size={"16px"} iconColor={"greyInactive"} />
             </CloseButtonContainer>
           )}
-        </DesktopCloseButtonContainer>
-        <BodyContentContainer>{renderBodyComponents()}</BodyContentContainer>
+        </MobileContainer>
+        <BodyContentContainer>
+          {renderBodyComponents()}
+          <MobileButtonContainer>
+            <ButtonsContainer>{renderActionButtons()}</ButtonsContainer>
+            {textUnderMobileButton && textUnderMobileButton}
+          </MobileButtonContainer>
+        </BodyContentContainer>
         {renderStepsComponent()}
       </BodyContainer>
     </Container>
@@ -161,7 +180,27 @@ const Container = styled.div`
 `;
 
 const DesktopCloseButtonContainer = styled.div`
-  
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  }
+`;
+
+const MobileContainer = styled.div`
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const MobileButtonContainer = styled.div`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: block;
+    margin-left: 16px;
+  }
 `;
 
 const DescriptionContainer = styled.div`
@@ -170,7 +209,7 @@ const DescriptionContainer = styled.div`
   background-color: ${props => props.theme.colors.backgroundGrey};
   display: flex;
   flex-direction: column;
-  @media only screen and (max-width: 992px) {
+  @media only screen and (max-width: 768px) {
     display: none;
   }
 `;
@@ -191,13 +230,13 @@ const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow-x: auto;
-  @media only screen and (max-width: 992px) {
+  @media only screen and (max-width: 768px) {
     width: 100%;
+    padding: 0;
   }
 `;
 
 const BodyContentContainer = styled.div`
-  display: flex;
   height: 100%;
   overflow-y: auto;
 `;
@@ -216,6 +255,9 @@ const ButtonsContainer = styled.div`
   margin-right: auto;
   margin-top: 24px;
   margin-bottom: 24px;
+  @media only screen and (max-width: 768px) {
+    display: inline-flex;
+  }
 `;
 
 const NextButton = styled(Button)`
@@ -258,6 +300,14 @@ const CloseButtonContainer = styled.div`
   margin-right: 20px;
   &:hover {
     cursor: pointer;
+  }
+  @media only screen and (max-width: 768px) {
+    top: auto;
+    right: auto;
+    margin-right: 0;
+    margin-left: auto;
+    position: relative;
+    align-items: center;
   }
 `;
 
