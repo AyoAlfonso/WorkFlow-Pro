@@ -160,6 +160,7 @@ const StepText = styled(Text)`
 const QuestionText = styled(Text)`
   display: none;
   margin-left: auto;
+  margin-right: auto;
   color: ${props => props.theme.colors.greyInactive};
   @media only screen and (max-width: 992px) {
     display: inline-block;

@@ -305,8 +305,7 @@ const CloseButtonContainer = styled.div`
     top: auto;
     right: auto;
     margin-right: 0;
-    margin-left: auto;
-    position: relative;
+    right: 16px;
     align-items: center;
   }
 `;
