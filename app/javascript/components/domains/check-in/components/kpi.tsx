@@ -100,7 +100,7 @@ const ValueSpan = styled.span`
 `;
 
 const CommentContainer = styled.div`
-  width: 608px;
+  width: 70%;
   margin-bottom: 15px;
   @media only screen and (max-width: 768px) {
     width: 80%;
@@ -108,7 +108,7 @@ const CommentContainer = styled.div`
 `;
 
 const ValueInputContainer = styled.div`
-  width: 304px;
+  width: 40%;
   align-items: center;
   display: flex;
   margin-bottom: 20px;
