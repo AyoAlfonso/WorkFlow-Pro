@@ -201,6 +201,9 @@ const Container = styled.div`
   margin-bottom: auto;
   margin-right: 20px;
   color: ${props => props.theme.colors.grey60};
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const ContentsContainer = styled.div`

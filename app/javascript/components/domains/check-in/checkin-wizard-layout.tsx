@@ -161,7 +161,7 @@ const QuestionText = styled(Text)`
   display: none;
   margin-left: auto;
   margin-right: auto;
-  color: ${props => props.theme.colors.greyInactive};
+  color: ${props => props.theme.colors.grey100};
   @media only screen and (max-width: 992px) {
     display: inline-block;
   }

@@ -146,7 +146,7 @@ export const WizardLayout = ({
             {showCloseButton && (
               <CloseButtonContainer onClick={onCloseButtonClick}>
                 <CloseText> Close </CloseText>
-                <Icon icon={"Close"} size={"16px"} iconColor={"greyInactive"} />
+                <Icon icon={"Close"} size={"16px"} iconColor={"grey100"} />
               </CloseButtonContainer>
             )}
           </DesktopCloseButtonContainer>
@@ -184,8 +184,9 @@ const DesktopCloseButtonContainer = styled.div`
   @media only screen and (max-width: 768px) {
     display: flex;
     align-items: center;
-    padding: 0 16px;
+    padding: 6px 16px;
     border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+    background: ${props => props.theme.colors.backgroundGrey};
   }
 `;
 
@@ -315,6 +316,9 @@ const CloseText = styled(Text)`
   font-size: 12px;
   margin-left: auto;
   margin-right: 10px;
+  @media only screen and (max-width: 768px) {
+    color: ${props => props.theme.colors.grey100};
+  }
 `;
 
 const BackButton = styled(Button)`

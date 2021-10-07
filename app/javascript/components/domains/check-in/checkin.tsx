@@ -9,6 +9,7 @@ import { useMst } from "../../../setup/root";
 import { useParams, useHistory } from "react-router-dom";
 import { Loading } from "~/components/shared/loading";
 import { Button } from "~/components/shared/button";
+import { HeaderBar } from "../nav";
 
 interface CheckInProps {}
 
@@ -49,7 +50,7 @@ export const CheckIn = observer(
       );
     };
 
-    const nextStep = (stepIndex) => {
+    const nextStep = stepIndex => {
       checkInTemplateStore.updateCurrentCheckIn(R.merge(checkIn, { currentStep: stepIndex }));
     };
 
@@ -58,12 +59,19 @@ export const CheckIn = observer(
         {R.isNil(checkIn) ? (
           renderLoading()
         ) : (
-          <CheckInWizardLayout
-            checkIn={checkIn}
-            numberOfSteps={checkIn.checkInTemplatesSteps.length}
-            stopMeetingButton={<StopMeetingButton />}
-            onNextButtonClick={nextStep}
-          />
+          <>
+            <HeaderContainer>
+              <HeaderBar />
+            </HeaderContainer>
+            <CheckInWizardContainer>
+              <CheckInWizardLayout
+                checkIn={checkIn}
+                numberOfSteps={checkIn.checkInTemplatesSteps.length}
+                stopMeetingButton={<StopMeetingButton />}
+                onNextButtonClick={nextStep}
+              />
+            </CheckInWizardContainer>
+          </>
         )}
       </>
     );
@@ -90,4 +98,17 @@ type IStopMeetingButton = {
 const StopButton = styled(Button)<IStopMeetingButton>`
   width: 100%;
   margin: 0;
+`;
+
+const HeaderContainer = styled.div`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const CheckInWizardContainer = styled.div`
+  @media only screen and (max-width: 768px) {
+    padding-top: 64px;
+  }
 `;
