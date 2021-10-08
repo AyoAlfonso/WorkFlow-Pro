@@ -49,4 +49,5 @@ export const OverviewTabsContainer = styled.div`
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  margin-bottom: 15px;
 `;

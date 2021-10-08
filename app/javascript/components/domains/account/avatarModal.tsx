@@ -62,13 +62,13 @@ export const AvatarModal = ({
         />
       </Container>
       <ButtonContainer>
-       <Button
+        <Button
           small
           variant={"redOutline"}
           m={1}
           style={{ width: "auto", display: "inline-block" }}
           onClick={() => setModalOpen(!modalOpen)}
-          >
+        >
           {t("general.cancel")}
         </Button>
         <Button
@@ -83,7 +83,7 @@ export const AvatarModal = ({
         >
           {t("general.save")}
         </Button>
-     </ButtonContainer>
+      </ButtonContainer>
     </ModalWithHeader>
   );
 };
