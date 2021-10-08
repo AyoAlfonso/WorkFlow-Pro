@@ -16,6 +16,7 @@ export const TeamModel = types
     executive: types.maybeNull(types.number),
     averageWeeklyUserEmotions: types.maybeNull(types.frozen()),
     averageTeamEmotionScore: types.maybeNull(types.number),
+    customScorecard: types.maybeNull(types.boolean),
   })
   .views(self => ({
     get teamLeadIds() {
