@@ -22,9 +22,7 @@ export const CheckInSideOptions = ({ checkIn }: ICheckInSideOptionsProps): JSX.E
   const renderOption = (value: string): JSX.Element => {
     return (
       <OptionContainer itemSelected={selectedTab == value} onClick={() => setSelectedTab(value)}>
-        <OptionText>
-          {value}
-        </OptionText>
+        <OptionText selected={value === selectedTab}>{value}</OptionText>
       </OptionContainer>
     );
   };
@@ -87,7 +85,6 @@ const Container = styled.div`
 const SelectionContainer = styled.div`
   display: flex;
   padding-bottom: 10px;
-  border-bottom: ${props => `1px solid ${props.theme.colors.borderGrey}`};
 `;
 
 const SelectionTabsContainer = styled.div`
@@ -103,20 +100,26 @@ type OptionContainerType = {
 const OptionContainer = styled.div<OptionContainerType>`
   margin-left: 8px;
   margin-right: 8px;
-  border-bottom: ${props => props.itemSelected && `3px solid ${props.theme.colors.primary100}`};
+  border-bottom: ${props => props.itemSelected && `4px solid ${props.theme.colors.primary100}`};
   &:hover {
     cursor: pointer;
   }
 `;
 
-const OptionText = styled(Text)`
+type OptionTextProps = {
+  selected: boolean;
+};
+
+const OptionText = styled(Text)<OptionTextProps>`
   font-size: 18px;
   margin-bottom: 4px;
   margin-top: 0;
   padding-left: 4px;
   padding-right: 4px;
+  font-weight: bold;
+  color: ${props =>
+    props.selected ? `${props.theme.colors.black}` : `${props.theme.colors.greyInactive}`};
 `;
-
 
 const DisplayContentContainer = styled.div`
   height: inherit;

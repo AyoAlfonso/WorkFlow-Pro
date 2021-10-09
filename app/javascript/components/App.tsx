@@ -3,7 +3,7 @@ import * as R from "ramda";
 import { observer } from "mobx-react";
 //import { RouterModel } from "mst-react-router";
 import { Loading, Avatar } from "~/components/shared";
-import { Route, Switch, useLocation } from "react-router-dom";
+import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import { usePageViews } from "~/components/shared/analytics";
 import { ThemeProvider } from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
@@ -72,6 +72,22 @@ export const App = observer(
     const { issueStore, keyActivityStore, sessionStore } = useMst();
     const loggedIn = sessionStore.loggedIn; //if logged in show switch
     const profile = sessionStore.profile;
+
+    const history = useHistory();
+    const location = useLocation();
+
+    console.log(location.pathname.includes("weekly-check-in"))
+
+    useEffect(() => {
+      const redirectToCheckIn = () => {
+        const width = window.innerWidth <= 768;
+        if (width) {
+          if (location.pathname.includes("weekly-check-in")) return
+          history.push("/weekly-check-in/2/2");
+        }
+      }
+      redirectToCheckIn()
+    })
 
     let noFeatures;
     let showGoalRoute;

@@ -45,7 +45,7 @@ export const CheckIn = observer(
           small
           disabled={false}
         >
-          Complete
+          Submit Check-in
         </StopButton>
       );
     };
@@ -98,6 +98,7 @@ type IStopMeetingButton = {
 const StopButton = styled(Button)<IStopMeetingButton>`
   width: 100%;
   margin: 0;
+  font-size: 12px;
 `;
 
 const HeaderContainer = styled.div`

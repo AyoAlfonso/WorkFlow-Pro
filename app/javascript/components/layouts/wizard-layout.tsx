@@ -246,7 +246,7 @@ const DescriptionTitleContainer = styled.div``;
 
 const DescriptionText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
-  font-size: 16px;
+  font-size: 12px;
   margin-top: 8px;
 `;
 

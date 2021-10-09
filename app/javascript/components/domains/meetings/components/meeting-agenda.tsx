@@ -92,6 +92,8 @@ const StyledText = styled(Text)`
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 10px;
+  font-size: 12px;
+  font-weight: bold;
 `;
 
 const ExplorationTopicOwnerContainer = styled.div`

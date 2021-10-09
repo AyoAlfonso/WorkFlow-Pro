@@ -44,9 +44,16 @@ export const CheckInWizardLayout = observer(
       }
     };
 
+    const renderVisibilityText = () => (
+      <StepText type={"small"}>
+        <Icon icon={"Visibility"} size={"15px"} iconColor={"grey80"} />
+        {t("Everyone in your company will see your response")}
+      </StepText>
+    );
+
     const childrenUnderDescription = () => (
       <ChildrenContainer>
-        <StepText type={"small"}>{t("Everyone in your company will see your response")}</StepText>
+        {renderVisibilityText()}
         <CheckInSideOptions checkIn={checkIn} />
       </ChildrenContainer>
     );
@@ -100,11 +107,7 @@ export const CheckInWizardLayout = observer(
           showCloseButton={true}
           onCloseButtonClick={closeButtonClick}
           stepsForMobile={renderStepsForMobile()}
-          textUnderMobileButton={
-            <StepText type={"small"}>
-              {t("Everyone in your company will see your response")}
-            </StepText>
-          }
+          textUnderMobileButton={renderVisibilityText()}
         />
       </Container>
     );
@@ -123,6 +126,7 @@ type IButtonProps = {
 
 const NextButton = styled(Button)<IButtonProps>`
   width: 100%;
+  font-size: 12px;
 `;
 
 const ButtonsContainer = styled.div`
@@ -151,9 +155,18 @@ const StepText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
   display: flex;
   justify-content: center;
+  align-items: center;
+  margin-top: -15px;
+  margin-bottom: 30px;
+  > * {
+    &:first-child {
+      margin-right: 8px;
+    }
+  }
   @media only screen and (max-width: 768px) {
     margin-top: -8px;
-    display: block;
+    margin-bottom: 0;
+    justify-content: flex-start;
   }
 `;
 
