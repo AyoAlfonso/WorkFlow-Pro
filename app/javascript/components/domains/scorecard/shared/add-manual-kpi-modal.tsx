@@ -109,7 +109,6 @@ export const AddManualKPIModal = observer(
         viewers: [{ type: owner_type, id: owner_id }],
         title,
         description: "",
-        company: companyStore.company.id,
         greaterThan: greaterThan === 1,
         ownedById: owner.id,
         unitType,
