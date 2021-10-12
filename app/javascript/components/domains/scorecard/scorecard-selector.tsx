@@ -38,7 +38,6 @@ export const ScorecardSelector = ({
   const { primary100 } = baseTheme.colors;
 
   const history = useHistory();
-  console.log(miniEmbed)
 
   useEffect(() => {
     let owner;

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import { ITeam } from "~/models/team";
@@ -10,27 +10,25 @@ interface ITeamDashboardProps {
 
 export const TeamDashboard = ({ team }: ITeamDashboardProps): JSX.Element => {
   const { companyStore } = useMst();
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
-    companyStore.load();
+    companyStore.load().then(() => {
+      setLoading(false);
+    });
   }, []);
 
-  if (!team && team?.id) {
+  if (loading || !team || !team?.id) {
     return <> </>;
   }
-  //Get the main company id
-  //Once you get the main team. Give them the ownerId of company and ownerType of "company"
-
   const ownerId = team.executive ? companyStore.company.id : team?.id;
   const ownerType = team.executive ? "company" : "team";
-  
-  if (team && team.settings["weeklyMeetingDashboardLinkEmbed"]) {
-    if (team.customScorecard) {
-      return (
-        <EmbedContainer>
-          <EmbedStep linkEmbed={team.settings.weeklyMeetingDashboardLinkEmbed} />
-        </EmbedContainer>
-      );
-    }
+
+  if (team && team.settings["weeklyMeetingDashboardLinkEmbed"] && team.customScorecard) {
+    return (
+      <EmbedContainer>
+        <EmbedStep linkEmbed={team.settings.weeklyMeetingDashboardLinkEmbed} />
+      </EmbedContainer>
+    );
   } else {
     return (
       <EmbedContainer>

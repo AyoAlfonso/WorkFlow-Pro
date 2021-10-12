@@ -36,14 +36,14 @@ export const setRelatedParents = KPIs => {
                   week: parseInt(week),
                 };
               } else if (kpi.parentType == "avr") {
-                const old_averge = kpi.period[year][week].score
+                const oldAverage = kpi.period[year][week].score
                   ? kpi.period[year][week].score
                   : datum.period[year][week].score;
-                const new_value = datum.period[year][week].score;
-                const new_size = index + 1;
+                const newValue = datum.period[year][week].score;
+                const newSize = index + 1;
                 kpi.period[year][week] = {
                   parents: [...parents, datum.id],
-                  score: old_averge + (new_value - old_averge) / new_size,
+                  score: oldAverage + (newValue - oldAverage) / newSize,
                   fiscalQuarter: datum.period[year][week].fiscalQuarter,
                   fiscalYear: parseInt(year),
                   week: parseInt(week),
@@ -76,9 +76,9 @@ export const ScorecardStoreModel = types
   .actions(self => ({
     getScorecard: flow(function*({ ownerType, ownerId }) {
       try {
-         if (ownerType == 0 && ownerId == 0) {
-            return;
-          }
+        if (ownerType == 0 && ownerId == 0) {
+          return;
+        }
         const response: ApiResponse<any> = yield self.environment.api.getScorecard({
           ownerType,
           ownerId,
@@ -88,7 +88,6 @@ export const ScorecardStoreModel = types
           self.kpis = setRelatedParents(response.data);
         }
       } catch (e) {
-        console.log(e)
         showToast(
           `Could not get ${ownerType} scorecard with id ${ownerId}.`,
           ToastMessageConstants.ERROR,

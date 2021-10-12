@@ -58,7 +58,8 @@ export const baseTheme = {
     lightYellow: "#F9EDD2",
     lightFinePine: "#BFF0EC",
     doveGray: "#707070",
-    mystic: "#DADDE9"
+    mystic: "#DADDE9",
+    tango: "#EC6F25"
   },
 
   fonts: {

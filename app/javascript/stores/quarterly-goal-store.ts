@@ -34,19 +34,18 @@ export const QuarterlyGoalStoreModel = types
     }),
     update: flow(function*() {
       const env = getEnv(self);
-
-      //TODO: investigate why try/catch was removed
+      const { goalStore, annualInitiativeStore } = getRoot(self);
       const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
       const responseQuarterlyGoal = response.data;
       self.quarterlyGoal = responseQuarterlyGoal;
+      const responseAnnualInitiative = yield annualInitiativeStore.getAnnualInitiative(
+        self.quarterlyGoal.annualInitiativeId,
+      );
+      goalStore.updateAnnualInitiative(responseAnnualInitiative);
       showToast(
         il8n.t("quarterlyGoal.updated", { title: self.title }),
         ToastMessageConstants.SUCCESS,
       );
-      // return responseQuarterlyGoal;
-      // } catch {
-      //   showToast(il8n.t("quarterlyGoal.retrievalError"), ToastMessageConstants.ERROR);
-      // }
     }),
     updateParents: flow(function*(quarterlyGoal) {
       const { goalStore, quarterlyGoalStore, annualInitiativeStore } = getRoot(self);

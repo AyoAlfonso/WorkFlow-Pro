@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
@@ -36,16 +36,21 @@ export interface IMeetingStepProps {
 
 const StepComponent = (step: IStep, meeting: IMeeting) => {
   const { team_id } = useParams();
-  const { teamStore } = useMst();
+  const [loading, setLoading] = useState<boolean>(true);
+  const { teamStore, companyStore } = useMst();
   useEffect(() => {
-    teamStore.getTeam(team_id);
-  }, [team_id]);
+    teamStore.getTeam(team_id).then(() => {
+      setLoading(false);
+    });
+  }, []);
 
   const currentTeam = teamStore.currentTeam;
-
-  if (R.isNil(step) && !currentTeam && currentTeam?.id) {
+  if (loading || R.isNil(step) || !currentTeam || !currentTeam?.id) {
     return <Loading />;
   }
+
+  const ownerId = currentTeam.executive ? companyStore.company.id : currentTeam?.id;
+  const ownerType = currentTeam.executive ? "company" : "team";
 
   switch (step.stepType) {
     case "component":
@@ -85,7 +90,7 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
         case "Exploration":
           return <Exploration />;
         case "Scorecard":
-          return <ScorecardsIndex miniEmbed={true} ownerType={"team"} ownerId={currentTeam?.id} />;
+          return <ScorecardsIndex miniEmbed={true} ownerType={ownerType} ownerId={ownerId} />;
         default:
           return <Text>This custom component has not been configured</Text>;
       }

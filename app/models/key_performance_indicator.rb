@@ -11,10 +11,17 @@ class KeyPerformanceIndicator < ApplicationRecord
   # TODO: Impleted soft delete with repect to the relation
   # default_scope { where(published: true) }
 
+  scope :sort_by_company, ->(company) { where(company_id: company.id) }
+
+
   validates :title, :created_by, :viewers, :unit_type, :target_value, presence: true
   validates :greater_than, inclusion: [true, false]
   has_many :scorecard_logs
   
+  def self.for_user(user)
+    self.select { |kpi| kpi.users.include?(user) }
+  end
+
   def as_json(options = [])
     super({
       methods: [:owned_by],
