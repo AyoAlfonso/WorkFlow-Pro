@@ -5,8 +5,6 @@ class Api::ScorecardLogsController < Api::ApplicationController
 
   def create
     @scorecard_log = ScorecardLog.create!(scorecard_log_params)
-    # //get the KPI that belongs to at least one user or team of the comp 
-    
     @kpi = KeyPerformanceIndicator.find(@scorecard_log.key_performance_indicator_id)
     authorize @scorecard_log
     @scorecard_log.save!
