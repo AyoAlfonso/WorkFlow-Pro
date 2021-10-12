@@ -328,7 +328,8 @@
         "teamIssuesTitle": "Team Issues",
         "teamsPulseTitle": "Team Pulse",
         "teamSnapshotTitle": "Team Snapshot",
-        "dashboard": "Dashboard"
+        "dashboard": "Dashboard",
+        "customScorecard": "Custom Scorecard"
       },
       "dateFilters": {
         "today": "Today",

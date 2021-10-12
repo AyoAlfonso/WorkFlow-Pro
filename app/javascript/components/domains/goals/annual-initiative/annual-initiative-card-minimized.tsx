@@ -173,7 +173,8 @@ export const AnnualInitiativeCardMinimized = observer(
             type={"annualInitiative"}
             disabled={true}
             size={16}
-            fontSize={"11px"}
+            nameWidth={"74px"}
+            fontSize={"12px"}
             marginLeft={"16px"}
             marginRight={"0px"}
             marginTop={"auto"}
@@ -340,7 +341,7 @@ type StatusBadgeType = {
 };
 
 const StatusBadge = styled.div<StatusBadgeType>`
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 900;
   background-color: ${props => props.backgroundColor};
   color: ${props => props.color};

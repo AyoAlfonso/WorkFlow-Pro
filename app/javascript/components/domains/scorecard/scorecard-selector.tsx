@@ -18,12 +18,14 @@ export interface IScorecardSelectorProps {
   ownerType: string;
   ownerId: number;
   setScorecardOwner: React.Dispatch<React.SetStateAction<any>>;
+  miniEmbed?: boolean;
 }
 
 export const ScorecardSelector = ({
   ownerType,
   ownerId,
   setScorecardOwner,
+  miniEmbed,
 }: IScorecardSelectorProps): JSX.Element => {
   const { userStore, teamStore, companyStore, sessionStore } = useMst();
   const scorecardPro = sessionStore.profile?.productFeatures?.scorecardPro;
@@ -125,10 +127,10 @@ export const ScorecardSelector = ({
     >
       <Container width={100}>
         <EditTriggerContainer
-          editable={true}
+          editable={true && !miniEmbed}
           onClick={e => {
             if (scorecardPro) {
-              setShowUsersList(!showUsersList);
+              setShowUsersList(!showUsersList && !miniEmbed);
             }
           }}
           onMouseEnter={() => {

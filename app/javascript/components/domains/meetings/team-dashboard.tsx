@@ -1,21 +1,41 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useMst } from "~/setup/root";
 import { ITeam } from "~/models/team";
 import { EmbedStep } from "~/components/domains/meetings/shared/embed-step";
-
+import { ScorecardsIndex } from "~/components/domains/scorecard/scorecards-index";
 interface ITeamDashboardProps {
   team: ITeam;
 }
 
 export const TeamDashboard = ({ team }: ITeamDashboardProps): JSX.Element => {
-  if (team && team.settings["weeklyMeetingDashboardLinkEmbed"]) {
+  const { companyStore } = useMst();
+  const [loading, setLoading] = useState<boolean>(true);
+  useEffect(() => {
+    companyStore.load().then(() => {
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading || !team || !team?.id) {
+    return <> </>;
+  }
+  const ownerId = team.executive ? companyStore.company.id : team?.id;
+  const ownerType = team.executive ? "company" : "team";
+
+  if (team && team.settings["weeklyMeetingDashboardLinkEmbed"] && team.customScorecard) {
     return (
       <EmbedContainer>
         <EmbedStep linkEmbed={team.settings.weeklyMeetingDashboardLinkEmbed} />
       </EmbedContainer>
     );
   } else {
-    return <SetupMissingContainer>Please set up the team dashboard.</SetupMissingContainer>;
+    return (
+      <EmbedContainer>
+        <ScorecardsIndex miniEmbed={true} ownerType={ownerType} ownerId={ownerId} />
+      </EmbedContainer>
+    );
+    // return <SetupMissingContainer>Please set up the team dashboard.</SetupMissingContainer>;
   }
 };
 

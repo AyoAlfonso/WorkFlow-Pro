@@ -8,7 +8,7 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
   end
 
   def show?
-    true
+    user_is_part_of_this_company?(@company)
   end
 
   def update?
@@ -33,7 +33,7 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.all
+      scope.sort_by_company(@company)
     end
   end
 end

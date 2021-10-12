@@ -1,6 +1,7 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
 import { ConversationStarter } from "./components/conversation-starter";
 import { PersonalGoals } from "./components/personal-goals";
 import { YesterdayInReview } from "./components/yesterday-in-review";
@@ -26,15 +27,30 @@ import { TeamIssues } from "./components/team-issues";
 import { ParkingLot } from "~/components/domains/meetings-forum/components/parking-lot";
 import { Exploration } from "~/components/domains/meetings-forum/components/exploration";
 import { MonthlyReflection } from "~/components/domains/meetings-forum/components/monthly-reflection";
+import { ScorecardsIndex } from "~/components/domains/scorecard/scorecards-index";
+import { useMst } from "~/setup/root";
 
 export interface IMeetingStepProps {
   meeting: IMeeting;
 }
 
 const StepComponent = (step: IStep, meeting: IMeeting) => {
-  if (R.isNil(step)) {
+  const { team_id } = useParams();
+  const [loading, setLoading] = useState<boolean>(true);
+  const { teamStore, companyStore } = useMst();
+  useEffect(() => {
+    teamStore.getTeam(team_id).then(() => {
+      setLoading(false);
+    });
+  }, []);
+
+  const currentTeam = teamStore.currentTeam;
+  if (loading || R.isNil(step) || !currentTeam || !currentTeam?.id) {
     return <Loading />;
   }
+
+  const ownerId = currentTeam.executive ? companyStore.company.id : currentTeam?.id;
+  const ownerType = currentTeam.executive ? "company" : "team";
 
   switch (step.stepType) {
     case "component":
@@ -73,6 +89,8 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
           return <MonthlyReflection />;
         case "Exploration":
           return <Exploration />;
+        case "Scorecard":
+          return <ScorecardsIndex miniEmbed={true} ownerType={ownerType} ownerId={ownerId} />;
         default:
           return <Text>This custom component has not been configured</Text>;
       }
