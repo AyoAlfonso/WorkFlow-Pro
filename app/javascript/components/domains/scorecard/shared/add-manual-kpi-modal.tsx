@@ -35,7 +35,12 @@ export const AddManualKPIModal = observer(
   }: AddManualKPIModalProps): JSX.Element => {
     const history = useHistory();
     const { owner_id, owner_type } = useParams();
-    const { keyPerformanceIndicatorStore, sessionStore, descriptionTemplateStore } = useMst();
+    const {
+      keyPerformanceIndicatorStore,
+      companyStore,
+      sessionStore,
+      descriptionTemplateStore,
+    } = useMst();
     const [title, setTitle] = useState<string>(
       (externalManualKPIData?.selectedKPIs?.length &&
         externalManualKPIData.selectedKPIs[0].title) ||
@@ -104,6 +109,7 @@ export const AddManualKPIModal = observer(
         viewers: [{ type: owner_type, id: owner_id }],
         title,
         description: "",
+        company: companyStore.company.id,
         greaterThan: greaterThan === 1,
         ownedById: owner.id,
         unitType,

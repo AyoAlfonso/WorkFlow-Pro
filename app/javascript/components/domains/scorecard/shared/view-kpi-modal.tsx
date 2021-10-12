@@ -67,7 +67,6 @@ export const ViewEditKPIModal = observer(
     if (R.isNil(keyPerformanceIndicatorStore)) {
       return <></>;
     }
-    console.log(descriptionTemplatesFormatted.find(t => t.templateType == "kpi")?.body.body, "ttt");
 
     const {
       backgroundGrey,
@@ -194,7 +193,7 @@ export const ViewEditKPIModal = observer(
           const KPI = advancedKPI || keyPerformanceIndicatorStore?.kpi;
           setCurrentLog();
           setKpi(KPI);
-          setDescription(KPI.description);
+          setDescription(KPI.description || description);
           setLoading(false);
         });
       }
@@ -228,7 +227,7 @@ export const ViewEditKPIModal = observer(
     };
 
     const closeModal = () => {
-      setDescription(null)
+      setDescription(null);
       setViewEditKPIModalOpen(false);
     };
 
@@ -244,7 +243,6 @@ export const ViewEditKPIModal = observer(
           ? `Greater than or equal to ${targetText}`
           : `Less than or equal to ${targetText}`,
       );
-      // setHeader(`${kpi.title}`);
       const currentWeek = weeks?.[company.currentFiscalWeek];
       const score = currentWeek ? currentWeek?.score : undefined;
       setValue(score);
@@ -348,11 +346,14 @@ export const ViewEditKPIModal = observer(
                         autoFocus={false}
                         placeholder={"Add a description..."}
                         onChange={description => {
-                          console.log(description, "description--2");
-                          setDescription(description || " ");
+                          setDescription(description);
                           saveKPI({ description });
                         }}
-                        value={description}
+                        value={
+                          description ||
+                          descriptionTemplatesFormatted.find(t => t.templateType == "kpi")?.body
+                            .body
+                        }
                         mergeTags={[]}
                       />
                     </TrixEditorContainer>
@@ -424,8 +425,8 @@ export const ViewEditKPIModal = observer(
             renderNewValue={renderNewValue}
             headerText={"Update Current Week"}
             updateKPIModalOpen={updateKPIModalOpen}
-            setKpis={setKpis}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
+            setKpis={setKpis}
           />
         )}
       </>

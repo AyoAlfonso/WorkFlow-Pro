@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { Icon } from "~/components/shared/icon";
 import { KPIModalHeader } from "./header";
+import { titleCase } from "~/utils/camelize";
 import {
   UserKPIList,
   StyledSecondLayer,
@@ -36,6 +37,9 @@ export const Source = observer(
         return acc;
       }, {});
     };
+
+    const formatKpiType = kpiType => titleCase(kpiType);
+
     const onSearchKeyword = e => {
       const keyword = e.target.value.toLowerCase();
       setfilteredKPIs(
@@ -85,7 +89,9 @@ export const Source = observer(
                     <StlyedCheckMark
                       selected={!!selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id)}
                     ></StlyedCheckMark>
-                    <StyledItemSpan>{kpi.title}</StyledItemSpan>
+                    <StyledItemSpan>
+                      {kpi.title} {kpi.parentType && `[${formatKpiType(kpi.parentType)}]`}
+                    </StyledItemSpan>
                   </StyledLabel>
                 </StyledCheckboxWrapper>
               );

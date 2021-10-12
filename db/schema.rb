@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_07_094900) do
+ActiveRecord::Schema.define(version: 2021_10_12_043346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -319,6 +319,8 @@ ActiveRecord::Schema.define(version: 2021_10_07_094900) do
     t.string "title"
     t.integer "parent_type"
     t.integer "parent_kpi", default: [], array: true
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
   end

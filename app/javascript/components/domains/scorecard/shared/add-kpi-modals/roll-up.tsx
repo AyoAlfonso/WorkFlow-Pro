@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { KPIModalHeader } from "./header";
+import { titleCase } from "~/utils/camelize";
 import {
   StyledLayerTwo,
   UserKPIList,
@@ -31,6 +32,8 @@ export const RollUp = observer(
     useEffect(() => {
       setfilteredKPIs(filterBasedOnUnitType(KPIs));
     }, [unitType]);
+
+    const formatKpiType = kpiType => titleCase(kpiType);
 
     const groupBy = objectArray => {
       return objectArray.reduce(function(acc, obj) {
@@ -106,7 +109,9 @@ export const RollUp = observer(
                     <StlyedCheckMark
                       selected={!!selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id)}
                     ></StlyedCheckMark>
-                    <StyledItemSpan>{kpi.title}</StyledItemSpan>
+                    <StyledItemSpan>
+                      {kpi.title} {kpi.parentType && `[${formatKpiType(kpi.parentType)}]`}
+                    </StyledItemSpan>
                   </StyledLabel>
                 </StyledCheckboxWrapper>
               );

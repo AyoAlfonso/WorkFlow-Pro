@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { KPIModalHeader } from "./header";
+import { titleCase } from "~/utils/camelize";
 import {
   StyledLayerTwo,
   UserKPIList,
@@ -34,7 +35,7 @@ export const Average = observer(
     useEffect(() => {
       setfilteredKPIs(filterBasedOnUnitType(KPIs));
     }, [unitType]);
-
+    const formatKpiType = kpiType => titleCase(kpiType);
 
     const groupBy = objectArray => {
       return objectArray.reduce(function(acc, obj) {
@@ -111,7 +112,9 @@ export const Average = observer(
                     <StlyedCheckMark
                       selected={!!selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id)}
                     ></StlyedCheckMark>
-                    <StyledItemSpan>{kpi.title}</StyledItemSpan>
+                    <StyledItemSpan>
+                      {kpi.title} {kpi.parentType && `[${formatKpiType(kpi.parentType)}]`}
+                    </StyledItemSpan>
                   </StyledLabel>
                 </StyledCheckboxWrapper>
               );

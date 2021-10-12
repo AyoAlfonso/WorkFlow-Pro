@@ -65,7 +65,9 @@ export const ScorecardsIndex = observer(
       !companyStore.company ||
       !userStore.users ||
       !teamStore.teams ||
-      !keyPerformanceIndicatorStore
+      !keyPerformanceIndicatorStore ||
+      !owner_type ||
+      !owner_id
     ) {
       return <Loading />;
     }

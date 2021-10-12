@@ -19,6 +19,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
       title: params[:title],
       created_by: current_user,
       owned_by: @owned_by,
+      company_id: current_company.id,
       viewers: params[:viewers],
       unit_type: params[:unit_type],
       target_value: params[:target_value],

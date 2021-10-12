@@ -213,8 +213,12 @@ export const ScorecardTableView = observer(
                 disabled={value.parentType}
                 onClick={() => {
                   if (value.parentType) return;
-                  setUpdateKPI(value);
-                  setUpdateKPIModalOpen(true);
+                  if(!miniEmbed){
+                     setUpdateKPI(value);
+                     setUpdateKPIModalOpen(true);
+
+                  }
+                 
                 }}
                 onMouseEnter={() => {
                   setCurrentKPIIcon(value.id);
