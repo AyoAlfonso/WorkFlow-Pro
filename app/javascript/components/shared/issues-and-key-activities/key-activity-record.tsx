@@ -189,7 +189,7 @@ export const KeyActivityRecord = observer(
                 avatarUrl={user.avatarUrl}
                 firstName={user.firstName}
                 lastName={user.lastName}
-                size={34}
+                size={24}
                 marginLeft={"auto"}
               />
             </AvatarContainer>
