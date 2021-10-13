@@ -23,12 +23,14 @@ export const TeamDashboard = ({ team }: ITeamDashboardProps): JSX.Element => {
   const ownerId = team.executive ? companyStore.company.id : team?.id;
   const ownerType = team.executive ? "company" : "team";
 
-  if (team && team.settings["weeklyMeetingDashboardLinkEmbed"] && team.customScorecard) {
-    return (
-      <EmbedContainer>
-        <EmbedStep linkEmbed={team.settings.weeklyMeetingDashboardLinkEmbed} />
-      </EmbedContainer>
-    );
+  if (team && team.settings["weeklyMeetingDashboardLinkEmbed"]) {
+    if (team.customScorecard) {
+      return (
+        <EmbedContainer>
+          <EmbedStep linkEmbed={team.settings.weeklyMeetingDashboardLinkEmbed} />
+        </EmbedContainer>
+      );
+    }
   } else {
     return (
       <EmbedContainer>

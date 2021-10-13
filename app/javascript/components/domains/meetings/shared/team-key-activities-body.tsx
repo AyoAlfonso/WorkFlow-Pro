@@ -13,7 +13,7 @@ import {
   KeyActivitiesWrapperContainer,
 } from "../../key-activities/key-activities-list";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
-
+import { useParams } from "react-router-dom";
 import { Loading } from "~/components/shared";
 import { color } from "styled-system";
 interface ITeamKeyActivitiesBody {
@@ -32,6 +32,7 @@ export const TeamKeyActivitiesBody = observer(
       sessionStore: { scheduledGroups },
     } = useMst();
     const { t } = useTranslation();
+    const { meeting_id: meetingId } = useParams();
 
     useEffect(() => {
       keyActivityStore.fetchKeyActivitiesFromMeeting(meetingStore.currentMeeting.id).then(() => {
@@ -49,6 +50,7 @@ export const TeamKeyActivitiesBody = observer(
 
     const todayFilterGroupId = scheduledGroups.find(group => group.name == "Today").id;
 
+    console.log(meetingStore.currentMeeting);
     return (
       <>
         <KeyActivitiesListContainer>
@@ -73,10 +75,10 @@ export const TeamKeyActivitiesBody = observer(
         <CreateKeyActivityModal
           createKeyActivityModalOpen={createKeyActivityModalOpen}
           setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
-          todayModalClicked={true}
-          defaultSelectedGroupId={sessionStore.getScheduledGroupIdByName("Today")}
+          todayModalClicked={false}
+          defaultSelectedGroupId={sessionStore.getScheduledGroupIdByName("Weekly List")}
           todayFilterGroupId={todayFilterGroupId}
-          meetingId={meeting && meetingStore.currentMeeting.id}
+          meetingId={meetingId}
         />
       </>
     );
