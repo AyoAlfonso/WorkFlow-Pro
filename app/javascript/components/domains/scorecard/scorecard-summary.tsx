@@ -267,7 +267,7 @@ const QuarterSummary = ({
           </Text>
         </>
       );
-    } else if (percentGrade > 85 && percentGrade >= 60) {
+    } else if (percentGrade < 85 && percentGrade >= 60) {
       return (
         <>
           <Text ml={8} mr={16} fontSize={32} color={poppySunrise} bold>

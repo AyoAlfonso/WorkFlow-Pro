@@ -18,10 +18,11 @@ import { Loading } from "~/components/shared";
 import { color } from "styled-system";
 interface ITeamKeyActivitiesBody {
   meeting?: boolean;
+  includeAvatar?: boolean;
 }
 
 export const TeamKeyActivitiesBody = observer(
-  ({ meeting = false }: ITeamKeyActivitiesBody): JSX.Element => {
+  ({ meeting = false, includeAvatar = false }: ITeamKeyActivitiesBody): JSX.Element => {
     const [loading, setLoading] = useState<boolean>(true);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
@@ -65,6 +66,7 @@ export const TeamKeyActivitiesBody = observer(
                 keyActivity={ka}
                 noBorder={meeting}
                 meetingId={meeting && meetingStore.currentMeeting.id}
+                includeAvatar={includeAvatar}
               />
             ))}
           </KeyActivitiesListStyleContainer>

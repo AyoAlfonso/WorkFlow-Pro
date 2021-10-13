@@ -17,7 +17,7 @@ export const TeamKeyActivities = (props: {}): JSX.Element => {
       <SingleListContainer>
         <KeyActivitiesHeader title={t("meeting.teamsPyns")} />
         <KeyActivityListSubHeaderContainer>{today}</KeyActivityListSubHeaderContainer>
-        <TeamKeyActivitiesBody />
+        <TeamKeyActivitiesBody includeAvatar={true} />
       </SingleListContainer>
     </KeyActivitiesWrapperContainer>
   );
