@@ -260,54 +260,26 @@ const QuarterSummary = ({
     if (isNaN(percentGrade)) {
       return <></>;
     }
-    if (percentGrade >= 100) {
+    if (percentGrade >= 85) {
       return (
         <>
-          <GradeContainer background={fadedGreen}>
-            <Text fontSize={24} color={successGreen} bold>
-              A
-            </Text>
-          </GradeContainer>
           <Text ml={8} mr={16} fontSize={32} color={successGreen} bold>
-            +100%
+            {percentGrade}%
           </Text>
         </>
       );
-    } else if (percentGrade >= 90) {
+    } else if (percentGrade > 85 && percentGrade >= 60) {
       return (
         <>
-          <GradeContainer background={fadedYellow}>
-            <Text fontSize={24} color={poppySunrise} bold>
-              B
-            </Text>
-          </GradeContainer>
           <Text ml={8} mr={16} fontSize={32} color={poppySunrise} bold>
             {currentWeekPercent}%
           </Text>
         </>
       );
-    } else if (percentGrade >= 75) {
+    } else if (percentGrade < 60) {
       return (
         <>
-          <GradeContainer background={fadedYellow}>
-            <Text fontSize={24} color={poppySunrise} bold>
-              C
-            </Text>
-          </GradeContainer>
-          <Text ml={8} mr={16} fontSize={32} color={poppySunrise} bold>
-            {currentWeekPercent}%
-          </Text>
-        </>
-      );
-    } else if (percentGrade >= 50) {
-      return (
-        <>
-          <GradeContainer background={fadedCavier}>
-            <Text fontSize={24} color={cavier} bold>
-              D
-            </Text>
-          </GradeContainer>
-          <Text ml={8} mr={16} fontSize={32} color={cavier} bold>
+          <Text ml={8} mr={16} fontSize={32} color={warningRed} bold>
             {currentWeekPercent}%
           </Text>
         </>
@@ -315,11 +287,6 @@ const QuarterSummary = ({
     } else {
       return (
         <>
-          <GradeContainer background={warningRed}>
-            <Text fontSize={24} color={white} bold>
-              F
-            </Text>
-          </GradeContainer>
           <Text ml={8} mr={16} fontSize={32} color={warningRed} bold>
             {currentWeekPercent}%
           </Text>
