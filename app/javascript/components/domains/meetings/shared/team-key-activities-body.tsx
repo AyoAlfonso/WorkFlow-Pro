@@ -49,8 +49,6 @@ export const TeamKeyActivitiesBody = observer(
     const todaysKeyActivities = keyActivityStore.keyActivitiesFromMeeting;
 
     const todayFilterGroupId = scheduledGroups.find(group => group.name == "Today").id;
-
-    console.log(meetingStore.currentMeeting);
     return (
       <>
         <KeyActivitiesListContainer>

@@ -98,7 +98,6 @@ export const ViewEditKPIModal = observer(
     };
 
     const formatKpiType = kpiType => titleCase(kpiType);
-    console.log(loading);
     const renderStatus = () => {
       if (!kpi) {
         return;
@@ -191,7 +190,6 @@ export const ViewEditKPIModal = observer(
         const advancedKPI = scorecardStore.kpis.find(kpi => kpi.id == kpiId && kpi.parentType);
         keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
           const KPI = advancedKPI || keyPerformanceIndicatorStore?.kpi;
-          console.log(KPI, "KPI--");
           if (KPI) {
             setDescription(KPI.description || descriptionTemplateForKPI);
             setCurrentLog();
