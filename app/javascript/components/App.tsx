@@ -73,21 +73,22 @@ export const App = observer(
     const loggedIn = sessionStore.loggedIn; //if logged in show switch
     const profile = sessionStore.profile;
 
+    console.log(profile?.id, "sesssionStore");
+
     const history = useHistory();
     const location = useLocation();
-
-    console.log(location.pathname.includes("weekly-check-in"))
 
     useEffect(() => {
       const redirectToCheckIn = () => {
         const width = window.innerWidth <= 768;
+        const id = profile?.id;
         if (width) {
           if (location.pathname.includes("weekly-check-in")) return
-          history.push("/weekly-check-in/2/2");
+          if (id) return history.push(`/weekly-check-in/${id}/2`);
         }
       }
       redirectToCheckIn()
-    })
+    }, [profile])
 
     let noFeatures;
     let showGoalRoute;

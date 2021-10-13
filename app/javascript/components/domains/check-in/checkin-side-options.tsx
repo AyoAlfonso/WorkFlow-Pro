@@ -83,8 +83,7 @@ const Container = styled.div`
 `;
 
 const SelectionContainer = styled.div`
-  display: flex;
-  padding-bottom: 10px;
+  margin-bottom: 32px;
 `;
 
 const SelectionTabsContainer = styled.div`
@@ -101,6 +100,7 @@ const OptionContainer = styled.div<OptionContainerType>`
   margin-left: 8px;
   margin-right: 8px;
   border-bottom: ${props => props.itemSelected && `4px solid ${props.theme.colors.primary100}`};
+  border-radius: 1.5px;
   &:hover {
     cursor: pointer;
   }

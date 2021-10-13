@@ -45,7 +45,7 @@ export const CheckIn = observer(
           small
           disabled={false}
         >
-          Submit Check-in
+          Publish Check-in
         </StopButton>
       );
     };
