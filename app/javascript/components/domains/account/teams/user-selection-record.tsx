@@ -3,7 +3,7 @@ import { useMst } from "~/setup/root";
 import { useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { Select } from "~/components/shared"
+import { Select } from "~/components/shared";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import { Icon } from "~/components/shared/icon";
@@ -28,17 +28,19 @@ export const UserSelectionRecord = observer(
     );
 
     const renderUserSelections = (): Array<JSX.Element> => {
-      return users.map((user, index) => {
-        return (
-          <MenuItem value={user.id} key={index}>
-            {`${user.firstName} ${user.lastName}`}
-          </MenuItem>
-        );
-      });
+      return users
+        .filter(user => user.status == "active")
+        .map((user, index) => {
+          return (
+            <MenuItem value={user.id} key={index}>
+              {`${user.firstName} ${user.lastName}`}
+            </MenuItem>
+          );
+        });
     };
 
     const updateMemberListState = (field, value) => {
-      let updatedMemberListState = memberListState;
+      const updatedMemberListState = memberListState;
       if (!updatedMemberListState[index]) {
         updatedMemberListState[index] = {};
       }
@@ -49,39 +51,39 @@ export const UserSelectionRecord = observer(
     return (
       <Container>
         <SelectMemberContainer>
-            <Select
-              id="simple-select-outlined-for-users"
-              value={selectedUserId}
-              margin="dense"
-              width={"100%"}
-              native={false}
-              onChange={e => {
-                if (!selectedUserId) {
-                  setMeetingLead(1);
-                  updateMemberListState("meetingLead", 1);
-                }
-                setSelectedUserId(e.target.value);
-                updateMemberListState("userId", e.target.value);
-              }}
-            >
-              {renderUserSelections()}
-            </Select>
+          <Select
+            id="simple-select-outlined-for-users"
+            value={selectedUserId}
+            margin="dense"
+            width={"100%"}
+            native={false}
+            onChange={e => {
+              if (!selectedUserId) {
+                setMeetingLead(1);
+                updateMemberListState("meetingLead", 1);
+              }
+              setSelectedUserId(e.target.value);
+              updateMemberListState("userId", e.target.value);
+            }}
+          >
+            {renderUserSelections()}
+          </Select>
         </SelectMemberContainer>
         <SelectMeetingLeadContainer>
-            <Select
-              id="simple-select-outlined-meeting-lead"
-              value={meetingLead}
-              margin="dense"
-              width={"100%"}
-              native={false}
-              onChange={e => {
-                setMeetingLead(e.target.value);
-                updateMemberListState("meetingLead", e.target.value);
-              }}
-            >
-              <MenuItem value={1}>Yes</MenuItem>
-              <MenuItem value={0}>No</MenuItem>
-            </Select>
+          <Select
+            id="simple-select-outlined-meeting-lead"
+            value={meetingLead}
+            margin="dense"
+            width={"100%"}
+            native={false}
+            onChange={e => {
+              setMeetingLead(e.target.value);
+              updateMemberListState("meetingLead", e.target.value);
+            }}
+          >
+            <MenuItem value={1}>Yes</MenuItem>
+            <MenuItem value={0}>No</MenuItem>
+          </Select>
         </SelectMeetingLeadContainer>
         <CloseIconContainer
           onClick={() => {
