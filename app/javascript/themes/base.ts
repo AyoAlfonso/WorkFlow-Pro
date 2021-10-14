@@ -20,7 +20,9 @@ export const baseTheme = {
     grey80: "#9EA3BB",
     grey60: "#B6BACC",
     grey40: "#CED1DD",
+    grey30: "#A1A7BD",
     grey20: "#E7E8EE",
+    grey10: "#F3F4F7",
     cautionYellow: "#FFCC57",
     warningRed: "#EB221B",
     successGreen: "#00C3B3",
@@ -52,6 +54,9 @@ export const baseTheme = {
     cavier: "#F38374",
     boxshawdowDark: "#00000029",
     fadedCavier: "#EDC2BC",
+    almostPink: "#FAC7C5",
+    lightYellow: "#F9EDD2",
+    lightFinePine: "#BFF0EC",
   },
 
   fonts: {

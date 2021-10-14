@@ -1,6 +1,7 @@
 import * as React from "react";
+import * as R from "ramda";
+import { useEffect } from "react";
 import { observer } from "mobx-react";
-import { Loading } from "~/components/shared/loading";
 import { MilestoneType } from "~/types/milestone";
 import { HomeContainerBorders } from "../../home/shared-components";
 import { Text } from "../../../shared/text";
@@ -8,11 +9,30 @@ import { Avatar } from "../../../shared/avatar";
 import ContentEditable from "react-contenteditable";
 import { useMst } from "~/setup/root";
 import styled from "styled-components";
+import { Loading } from "~/components/shared/loading";
+import { toJS } from "mobx";
+import * as moment from "moment";
 import { MilestoneCard } from "../../goals/milestone/milestone-card";
 
-export const MilestoneComponent = observer(
+export const WeeklyMilestones = observer(
   (props): JSX.Element => {
-    const { sessionStore, quarterlyGoalStore } = useMst();
+    const { sessionStore, quarterlyGoalStore, annualInitiativeStore, goalStore } = useMst();
+    const {
+      profile: { id },
+    } = sessionStore;
+
+    const { quarterlyGoal } = quarterlyGoalStore;
+
+    console.log("quartergoal", toJS(quarterlyGoal));
+    console.log("quartergoal", toJS(annualInitiativeStore));
+    console.log(id);
+
+    useEffect(() => {
+      quarterlyGoalStore.getQuarterlyGoal(id);
+      goalStore.load();
+      if (quarterlyGoal)
+        annualInitiativeStore.getAnnualInitiative(quarterlyGoal.annualInitiativeId);
+    }, [id, quarterlyGoal]);
 
     const milestone = {
       createdAt: "2021-09-17T13:00:30.977Z",
@@ -30,10 +50,20 @@ export const MilestoneComponent = observer(
     const renderHeading = (): JSX.Element => {
       return (
         <Container>
-          <StyledHeader>What's the status on your Milestones from week of <u>June 28th</u>?</StyledHeader>
+          <StyledHeader>
+            What's the status on your Milestones from week of <u>June 28th</u>?
+          </StyledHeader>
         </Container>
       );
     };
+
+    const renderLoading = () => (
+      <LoadingContainer>
+        <BodyContainer>
+          <Loading />
+        </BodyContainer>
+      </LoadingContainer>
+    );
 
     const renderUserAvatar = () => {
       return (
@@ -50,15 +80,29 @@ export const MilestoneComponent = observer(
 
     const renderMilestones = (): JSX.Element => {
       return (
-        <Container>
-          <AvatarContainer>
-            {renderUserAvatar()}
-            <StyledText>{milestone.description}</StyledText>
-          </AvatarContainer>
-          <MilestoneContainer>
-            <MilestoneCard itemType={"quarterlyGoal"} editable={false} milestone={milestone} />
-          </MilestoneContainer>
-        </Container>
+        <>
+          {R.isNil(quarterlyGoal) ? (
+            renderLoading()
+          ) : (
+            <>
+              {quarterlyGoal.milestones.map(milestone => (
+                <Container>
+                  <AvatarContainer>
+                    {renderUserAvatar()}
+                    <StyledText>{quarterlyGoal.description}</StyledText>
+                  </AvatarContainer>
+                  <MilestoneContainer>
+                    <MilestoneCard
+                      itemType={"quarterlyGoal"}
+                      editable={true}
+                      milestone={milestone}
+                    />
+                  </MilestoneContainer>
+                </Container>
+              ))}
+            </>
+          )}
+        </>
       );
     };
     return (
@@ -75,6 +119,16 @@ const Container = styled.div`
   @media only screen and (max-width: 768px) {
     padding: 0 16px;
   }
+`;
+
+const LoadingContainer = styled.div`
+  height: 100%;
+`;
+
+const BodyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
 `;
 
 const AvatarContainer = styled.div`

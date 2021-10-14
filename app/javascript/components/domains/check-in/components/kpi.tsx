@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { observer } from "mobx-react";
 import { Loading } from "~/components/shared/loading";
 import { useMst } from "~/setup/root";
@@ -10,9 +10,19 @@ import {
   FormElementContainer,
   InputFromUnitType,
 } from "../../scorecard/shared/modal-elements";
+import { toJS } from "mobx";
 
 export const KpiComponent = observer(
   (props): JSX.Element => {
+    const { keyPerformanceIndicatorStore } = useMst();
+    const { allKPIs } = keyPerformanceIndicatorStore;
+
+    console.log(toJS(allKPIs), 'all kpis maybe');
+
+    useEffect(() => {
+      keyPerformanceIndicatorStore.load();
+    }, [])
+
     const handleChange = () => { };
     
     const renderHeading = (): JSX.Element => {

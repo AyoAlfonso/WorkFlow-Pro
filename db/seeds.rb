@@ -74,10 +74,10 @@ if Rails.env.development?
     check_in_templates_steps_attributes: [
       {
         order_index: 0,
-        name: "Key Results",
+        name: "Milestones",
         step_type: :component,
         instructions: "Provide updates on your Key Results and KPIs to complete this weekly check-in.",
-        component_to_render: "KeyResults",
+        component_to_render: "WeeklyMilestones",
         duration: nil
       },
       {

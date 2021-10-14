@@ -73,8 +73,6 @@ export const App = observer(
     const loggedIn = sessionStore.loggedIn; //if logged in show switch
     const profile = sessionStore.profile;
 
-    console.log(profile?.id, "sesssionStore");
-
     const history = useHistory();
     const location = useLocation();
 

@@ -26,7 +26,7 @@ import { TeamIssues } from "./components/team-issues";
 import { ParkingLot } from "~/components/domains/meetings-forum/components/parking-lot";
 import { Exploration } from "~/components/domains/meetings-forum/components/exploration";
 import { MonthlyReflection } from "~/components/domains/meetings-forum/components/monthly-reflection";
-import { MilestoneComponent } from "../check-in/components/key-results";
+import { WeeklyMilestones  } from "../check-in/components/weekly-milestones";
 import { KpiComponent } from "../check-in/components/kpi";
 
 export interface IMeetingStepProps {
@@ -77,8 +77,8 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
           return <Exploration />;
         case "KPI":
           return <KpiComponent />;
-        case "KeyResults":
-          return <MilestoneComponent />;
+        case "WeeklyMilestones":
+          return <WeeklyMilestones  />;
         default:
           return <Text>This custom component has not been configured</Text>;
       }

@@ -90,6 +90,8 @@ const SelectionTabsContainer = styled.div`
   display: flex;
   margin-left: auto;
   margin-right: auto;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 type OptionContainerType = {
