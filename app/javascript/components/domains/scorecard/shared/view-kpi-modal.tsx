@@ -23,7 +23,7 @@ import { toJS } from "mobx";
 import { titleCase } from "~/utils/camelize";
 import { ScorecardKPIDropdownOptions } from "./scorecard-dropdown-options";
 import "~/stylesheets/modules/trix-editor.css";
-import {debounce} from "lodash";
+import { debounce } from "lodash";
 
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -49,15 +49,15 @@ export const ViewEditKPIModal = observer(
     const [kpi, setKpi] = useState(null);
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
     const [loading, setLoading] = useState(true);
-
     const [header, setHeader] = useState("");
     const [value, setValue] = useState<number>(undefined);
     const [logic, setLogic] = useState("");
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
     const [data, setData] = useState(null);
-    const [description, setDescription] = useState<string>(
-      descriptionTemplatesFormatted.find(t => t.templateType == "kpi")?.body.body,
-    );
+    const descriptionTemplateForKPI = descriptionTemplatesFormatted.find(
+      t => t.templateType == "kpi",
+    )?.body.body;
+    const [description, setDescription] = useState<string>("");
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
@@ -98,7 +98,6 @@ export const ViewEditKPIModal = observer(
     };
 
     const formatKpiType = kpiType => titleCase(kpiType);
-
     const renderStatus = () => {
       if (!kpi) {
         return;
@@ -188,20 +187,22 @@ export const ViewEditKPIModal = observer(
 
     useEffect(() => {
       if (kpiId !== null) {
-        const rollupKPI = scorecardStore.kpis.find(kpi => kpi.id == kpiId && kpi.parentType);
-
+        const advancedKPI = scorecardStore.kpis.find(kpi => kpi.id == kpiId && kpi.parentType);
         keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
-          const KPI = rollupKPI || keyPerformanceIndicatorStore?.kpi;
-          setDescription(KPI.description);
-          setCurrentLog();
-          setKpi(KPI);
-          setLoading(false);
+          const KPI = advancedKPI || keyPerformanceIndicatorStore?.kpi;
+          if (KPI) {
+            setDescription(KPI.description || descriptionTemplateForKPI);
+            setCurrentLog();
+            setKpi(KPI);
+          }
         });
       }
     }, [kpiId]);
 
     const saveKPI = body => {
-        debounce(() => {keyPerformanceIndicatorStore.updateKPI(Object.assign({}, kpi, body), true)}, 500)()
+      debounce(() => {
+        keyPerformanceIndicatorStore.updateKPI(Object.assign({}, kpi, body), true);
+      }, 500)();
     };
 
     const drawGraph = KPI => {
@@ -226,6 +227,7 @@ export const ViewEditKPIModal = observer(
     };
 
     const closeModal = () => {
+      setLoading(true);
       setViewEditKPIModalOpen(false);
     };
 
@@ -241,10 +243,10 @@ export const ViewEditKPIModal = observer(
           ? `Greater than or equal to ${targetText}`
           : `Less than or equal to ${targetText}`,
       );
-      setHeader(`${kpi.title}`);
       const currentWeek = weeks?.[company.currentFiscalWeek];
       const score = currentWeek ? currentWeek?.score : undefined;
       setValue(score);
+      setLoading(false);
     }, [kpi]);
 
     return (
@@ -338,21 +340,24 @@ export const ViewEditKPIModal = observer(
                     {data && <Line data={data} options={chartOptions} />}
                   </ChartContainer>
                   <SubHeader>Description</SubHeader>
-                  {description && (
-                    <TrixEditorContainer>
-                      <TrixEditor
-                        className={"trix-kpi-modal"}
-                        autoFocus={false}
-                        placeholder={"Add a description..."}
-                        onChange={description => {
-                          setDescription(description);
-                          saveKPI({ description });
-                        }}
-                        value={description}
-                        mergeTags={[]}
-                      />
-                    </TrixEditorContainer>
-                  )}
+                  <TrixEditorContainer>
+                    <TrixEditor
+                      className={"trix-kpi-modal"}
+                      autoFocus={true}
+                      placeholder={"Add a description..."}
+                      onChange={description => {
+                        setDescription(description);
+                        saveKPI({ description });
+                      }}
+                      value={description}
+                      mergeTags={[]}
+                      onEditorReady={editor => {
+                        editor.element.addEventListener("trix-file-accept", event => {
+                          event.preventDefault();
+                        });
+                      }}
+                    />
+                  </TrixEditorContainer>
                   <SubHeader>Activity</SubHeader>
                   <ActivityLogsContainer>
                     {R.sort(R.descend(R.prop("createdAt")), kpi.scorecardLogs).map(log => {
@@ -420,8 +425,8 @@ export const ViewEditKPIModal = observer(
             renderNewValue={renderNewValue}
             headerText={"Update Current Week"}
             updateKPIModalOpen={updateKPIModalOpen}
-            setKpis={setKpis}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
+            setKpis={setKpis}
           />
         )}
       </>

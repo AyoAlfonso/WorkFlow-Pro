@@ -7,6 +7,9 @@ import { Button } from "~/components/shared/button";
 import { TextDiv } from "~/components/shared/text";
 import { AddKPIModal } from "./add-kpi-modals";
 import { AddManualKPIModal } from "./add-manual-kpi-modal";
+import { baseTheme } from "~/themes";
+import { HtmlTooltip } from "~/components/shared/tooltip";
+
 import { toJS } from "mobx";
 interface IAddKPIDropdownProps {
   kpis: any[];
@@ -16,11 +19,15 @@ interface IAddKPIDropdownProps {
 export const AddKPIDropdown = observer(
   ({ kpis, dropdownDirectionUp }: IAddKPIDropdownProps): JSX.Element => {
     const optionsRef = useRef(null);
+    const { sessionStore } = useMst();
+    const scorecardPro = sessionStore.profile?.productFeatures?.scorecardPro;
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const [showAddKPIModal, setAddKPIModal] = useState<boolean>(false);
     const [kpiModalType, setAddKPIModalType] = useState<string>("");
     const [showAddManualKPIModal, setShowAddManualKPIModal] = useState<boolean>(false);
     const [externalManualKPIData, setExternalManualKPIData] = useState({});
+    const [showScorecardProTooltip, setShowScorecardProTooltip] = useState(false);
+    const { greyInactive } = baseTheme.colors;
 
     useEffect(() => {
       const handleClickOutside = event => {
@@ -53,46 +60,85 @@ export const AddKPIDropdown = observer(
           width={"fill"}
         >
           <CircularIcon icon={"Plus"} size={"12px"} />
-          <AddKPIText >Add KPI</AddKPIText>
+          <AddKPIText>Add KPI</AddKPIText>
         </StyledButton>
         {showOptions && (
-          <DropdownOptionsContainer dropdownDirectionUp={dropdownDirectionUp} onClick={e => e.stopPropagation()}>
-            <OptionContainer
-              onClick={() => {
-                setShowAddManualKPIModal(!showAddManualKPIModal);
-              }}
+          <HtmlTooltip
+            arrow={true}
+            open={showScorecardProTooltip}
+            enterDelay={500}
+            leaveDelay={200}
+            title={
+              <React.Fragment>
+                {"Upgrade to access"} <br /> {"Advanced Functions."}
+              </React.Fragment>
+            }
+          >
+            <DropdownOptionsContainer
+              dropdownDirectionUp={dropdownDirectionUp}
+              onClick={e => e.stopPropagation()}
             >
-              <OptionText>Manual</OptionText>
-            </OptionContainer>
-            {/* <OptionContainer
+              <OptionContainer
+                onClick={() => {
+                  setShowAddManualKPIModal(!showAddManualKPIModal);
+                }}
+              >
+                <OptionText>Manual</OptionText>
+              </OptionContainer>
+              {/* <OptionContainer
               onClick={() => {
                 clickKPIOptions("source");
               }}
             >
               <OptionText>Source</OptionText>
             </OptionContainer> */}
-            <OptionContainer
-              onClick={() => {
-                clickKPIOptions("existing");
-              }}
-            >
-              <OptionText>Existing</OptionText>
-            </OptionContainer>
-            <OptionContainer
-              onClick={() => {
-                clickKPIOptions("roll up");
-              }}
-            >
-              <OptionText>Roll Up</OptionText>
-            </OptionContainer>
-            <OptionContainer
-              onClick={() => {
-                clickKPIOptions("average");
-              }}
-            >
-              <OptionText>Average</OptionText>
-            </OptionContainer>
-          </DropdownOptionsContainer>
+              <OptionContainer
+                onClick={() => {
+                  if (scorecardPro) {
+                    clickKPIOptions("existing");
+                  }
+                }}
+                onMouseEnter={() => {
+                  setShowScorecardProTooltip(!scorecardPro && true);
+                }}
+                onMouseLeave={() => setShowScorecardProTooltip(!scorecardPro && false)}
+              >
+                <OptionText>Existing</OptionText>
+                {!scorecardPro && <StyledIcon icon={"Lock"} size={"12px"} iconColor={greyInactive} />}
+              </OptionContainer>
+              <OptionContainer
+                onClick={() => {
+                  if (scorecardPro) {
+                    clickKPIOptions("roll up");
+                  }
+                }}
+                onMouseEnter={() => {
+                  setShowScorecardProTooltip(!scorecardPro && true);
+                }}
+                onMouseLeave={() => setShowScorecardProTooltip(!scorecardPro && false)}
+              >
+                <OptionText>Roll Up</OptionText>
+                {!scorecardPro && <StyledIcon icon={"Lock"} size={"12px"} iconColor={greyInactive} />}
+              </OptionContainer>
+              <OptionContainer
+                onClick={() => {
+                  if (scorecardPro) {
+                    clickKPIOptions("average");
+                  }
+                }}
+                onMouseEnter={() => {
+                  setShowScorecardProTooltip(!scorecardPro && true);
+                }}
+                onMouseLeave={() => setShowScorecardProTooltip(!scorecardPro && false)}
+              >
+                <OptionText>Average</OptionText>
+
+                {!scorecardPro && (
+                  <StyledIcon icon={"Lock"} size={"12px"} iconColor={greyInactive} />
+                )}
+              </OptionContainer>
+            </DropdownOptionsContainer>
+          </HtmlTooltip>
         )}
 
         {showAddKPIModal && (
@@ -158,14 +204,14 @@ const AddKPIText = styled(TextDiv)`
 `;
 
 type DropdownOptionsContainerProps = {
-    dropdownDirectionUp?: boolean;
-}
+  dropdownDirectionUp?: boolean;
+};
 
 const DropdownOptionsContainer = styled.div<DropdownOptionsContainerProps>`
   position: absolute;
   width: 78px;
   background-color: ${props => props.theme.colors.white};
-  bottom:  ${props => props.dropdownDirectionUp ? "30px" : "auto"};
+  bottom: ${props => (props.dropdownDirectionUp ? "30px" : "auto")};
   padding-top: 8px;
   padding-bottom: 8px;
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
@@ -197,11 +243,15 @@ const OptionContainer = styled.div`
   height: 24px;
   margin-top: 4px;
   margin-bottom: 4px;
+  gap: 4px;
   &: hover {
     cursor: pointer;
     background-color: ${props => props.theme.colors.primary100};
   }
   &:hover ${OptionText} {
+    color: white;
+  }
+  &:hover ${StyledIcon} {
     color: white;
   }
 `;

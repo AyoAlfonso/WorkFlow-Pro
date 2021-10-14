@@ -28,6 +28,7 @@ type ScorecardTableViewProps = {
   setKpis: any;
   setViewEditKPIModalOpen: any;
   viewEditKPIModalOpen: any;
+  miniEmbed?: boolean
 };
 
 export const ScorecardTableView = observer(
@@ -37,6 +38,7 @@ export const ScorecardTableView = observer(
     setKpis,
     viewEditKPIModalOpen,
     setViewEditKPIModalOpen,
+    miniEmbed
   }: ScorecardTableViewProps): JSX.Element => {
     const { t } = useTranslation();
     const {
@@ -211,8 +213,12 @@ export const ScorecardTableView = observer(
                 disabled={value.parentType}
                 onClick={() => {
                   if (value.parentType) return;
-                  setUpdateKPI(value);
-                  setUpdateKPIModalOpen(true);
+                  if(!miniEmbed){
+                     setUpdateKPI(value);
+                     setUpdateKPIModalOpen(true);
+
+                  }
+                 
                 }}
                 onMouseEnter={() => {
                   setCurrentKPIIcon(value.id);
@@ -418,7 +424,7 @@ export const ScorecardTableView = observer(
                   })}
                 </TableBody>
               </Table>
-              <AddKPIDropdown dropdownDirectionUp={true} kpis={allKPIs} />
+             {!miniEmbed && <AddKPIDropdown dropdownDirectionUp={true} kpis={allKPIs} /> }
             </TableContainer>
           )}
         </Container>

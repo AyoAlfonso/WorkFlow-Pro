@@ -69,7 +69,7 @@ class Api::TeamsController < Api::ApplicationController
   end
 
   def team_settings_params
-    params.require(:team).permit(:id, :executive, settings: [:weekly_meeting_dashboard_link_embed])
+    params.require(:team).permit(:id, :executive, :custom_scorecard, settings: [:weekly_meeting_dashboard_link_embed])
   end
 
   def team_user_enablement_attribute_parser(users)

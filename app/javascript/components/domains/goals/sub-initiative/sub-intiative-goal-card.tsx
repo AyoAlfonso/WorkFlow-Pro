@@ -38,7 +38,7 @@ export const SubInitiativeGoalCard = observer(
     const {
       warningRed,
       fadedRed,
-      cautionYellow,
+      tango,
       fadedYellow,
       finePine,
       fadedGreen,
@@ -88,7 +88,7 @@ export const SubInitiativeGoalCard = observer(
             break;
           case "in_progress":
             statusBadge.description = "Needs Attention";
-            statusBadge.colors = { color: cautionYellow, backgroundColor: fadedYellow };
+            statusBadge.colors = { color: tango, backgroundColor: fadedYellow };
             break;
           case "incomplete":
             statusBadge.description = "Behind";
@@ -157,11 +157,11 @@ export const SubInitiativeGoalCard = observer(
                 type={"subInitiative"}
                 disabled={true}
                 size={16}
-                nameWidth={"74px"}
+                nameWidth={"76px"}
                 marginLeft={"16px"}
                 marginRight={"0px"}
                 marginTop={"auto"}
-                fontSize={"9px"}
+                fontSize={"12px"}
                 marginBottom={"auto"}
               />
             )}
@@ -251,7 +251,7 @@ type StatusBadgeType = {
 
 // TODOIST: Update the color constant
 const StatusBadge = styled.div<StatusBadgeType>`
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 900;
   background-color: ${props => props.backgroundColor};
   color: ${props => props.color};

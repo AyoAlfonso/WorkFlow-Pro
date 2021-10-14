@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { Icon } from "~/components/shared/icon";
 import { KPIModalHeader } from "./header";
+import { titleCase } from "~/utils/camelize";
 import {
   UserKPIList,
   StyledSecondLayer,
@@ -36,6 +37,9 @@ export const Source = observer(
         return acc;
       }, {});
     };
+
+    const formatKpiType = kpiType => titleCase(kpiType);
+
     const onSearchKeyword = e => {
       const keyword = e.target.value.toLowerCase();
       setfilteredKPIs(
@@ -85,7 +89,9 @@ export const Source = observer(
                     <StlyedCheckMark
                       selected={!!selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id)}
                     ></StlyedCheckMark>
-                    <StyledItemSpan>{kpi.title}</StyledItemSpan>
+                    <StyledItemSpan>
+                      {kpi.title} {kpi.parentType && `[${formatKpiType(kpi.parentType)}]`}
+                    </StyledItemSpan>
                   </StyledLabel>
                 </StyledCheckboxWrapper>
               );
@@ -149,14 +155,14 @@ const StyledSourceModal = styled.div`
 `;
 
 const StyledLayerOne = styled.div`
-  background-color: #f8f8f9;
+  background-color: ${props => props.theme.colors.athensGray};
   display: grid;
   grid-template-rows: 1fr 1fr;
   border-bottom-left-radius: 10px;
   padding: 1rem 1rem;
 
   @media only screen and (min-width: 280px) and (max-width: 767px) {
-    background-color: #f8f8f9;
+    background-color: ${props => props.theme.colors.athensGray};
     display: grid;
     grid-template-columns: 2fr 1fr;
     height: 100%;
@@ -167,14 +173,14 @@ const StyledLayerOne = styled.div`
 
 const StyledLayerTwo = styled.div`
   padding: 1rem 1.2rem;
-  background-color: #ffffff;
+  background-color: ${props => props.theme.colors.white};
   height: 400px;
   overflow: scroll;
   border-bottom-right-radius: 10px;
 
   @media only screen and (min-width: 280px) and (max-width: 767px) {
     padding: 1rem 1.2rem;
-    background-color: #ffffff;
+    background-color: ${props => props.theme.colors.white};
     height: 200px;
     overflow: scroll;
     border-bottom-right-radius: 10px;
@@ -224,22 +230,22 @@ const StyledNextButton = styled.div`
 
 const StyledNext = styled.button`
   border: none;
-  background-color: #075df6;
-  color: #ffffff;
+  background-color: ${props => props.theme.colors.blueRibbon};
+  color: ${props => props.theme.colors.white};
   padding: 0.4rem 1rem;
   border-radius: 5px;
 `;
 
 const StyledCheckTitle = styled.p`
   font-size: 0.9rem;
-  color: #a5a9c0;
+  color: ${props => props.theme.colors.cadetBlue};
   font-weight: 400;
   margin: 4em 0rem 2em;
   text-transform: uppercase;
 `;
 
 const StyledLayerDiv = styled.div`
-  color: #000;
+  color: ${props => props.theme.colors.black};
 `;
 
 export default Source;

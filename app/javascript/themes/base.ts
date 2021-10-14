@@ -6,6 +6,8 @@
 
 export const baseTheme = {
   colors: {
+    blueRibbon: "#075df6",
+    cadetBlue: "#a5a9c0",
     primaryActive: "#0047BE",
     primary100: "#005FFE",
     primary80: "#337FFE",
@@ -23,6 +25,7 @@ export const baseTheme = {
     grey30: "#A1A7BD",
     grey20: "#E7E8EE",
     grey10: "#F3F4F7",
+    athensGray: "#f8f8f9",
     cautionYellow: "#FFCC57",
     warningRed: "#EB221B",
     successGreen: "#00C3B3",
@@ -57,6 +60,9 @@ export const baseTheme = {
     almostPink: "#FAC7C5",
     lightYellow: "#F9EDD2",
     lightFinePine: "#BFF0EC",
+    doveGray: "#707070",
+    mystic: "#DADDE9",
+    tango: "#EC6F25",
   },
 
   fonts: {
