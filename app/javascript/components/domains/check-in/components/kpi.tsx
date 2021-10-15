@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Loading } from "~/components/shared/loading";
 import { useMst } from "~/setup/root";
 import styled from "styled-components";
+import * as R from "ramda";
 import { Input } from "~/components/shared";
 import {
   StyledInput,
@@ -14,17 +15,40 @@ import { toJS } from "mobx";
 
 export const KpiComponent = observer(
   (props): JSX.Element => {
-    const { keyPerformanceIndicatorStore } = useMst();
-    const { allKPIs } = keyPerformanceIndicatorStore;
+    const { keyPerformanceIndicatorStore, scorecardStore, sessionStore, companyStore } = useMst();
+    const { createScorecardLog } = keyPerformanceIndicatorStore;
+    const { kpis } = scorecardStore;
+    const { company } = companyStore;
 
-    console.log(toJS(allKPIs), 'all kpis maybe');
+    const {
+      profile: { id },
+    } = sessionStore;
+
+    let valueForComment;
+    const [value, setValue] = useState(undefined);
+    const [comment, setComment] = useState("");
 
     useEffect(() => {
       keyPerformanceIndicatorStore.load();
-    }, [])
+      scorecardStore.getScorecard({ ownerType: "user", ownerId: id });
+      companyStore.load();
+    }, [id]);
 
-    const handleChange = () => { };
-    
+    const handleBlur = kpiId => {
+      if (!value || !valueForComment) {
+        const log = {
+          keyPerformanceIndicatorId: kpiId,
+          userId: id,
+          score: !value ? valueForComment : value,
+          note: comment != "" ? comment : null,
+          week: company.currentFiscalWeek,
+          fiscalYear: company.currentFiscalYear,
+          fiscalQuarter: Math.floor((company.currentFiscalWeek - 1) / 13) + 1,
+        };
+        createScorecardLog(log);
+      }
+    };
+
     const renderHeading = (): JSX.Element => {
       return (
         <Container>
@@ -35,44 +59,75 @@ export const KpiComponent = observer(
       );
     };
 
+    const renderLoading = () => (
+      <LoadingContainer>
+        <BodyContainer>
+          <Loading />
+        </BodyContainer>
+      </LoadingContainer>
+    );
+
     const renderKPIs = (): JSX.Element => {
       return (
-        <Container>
-          <SubHeaderText>Variance on Salaries {`<`} 2.5%</SubHeaderText>
-          <ValueInputContainer>
-            <FormElementContainer>
-              <InputFromUnitType
-                unitType={"percentage"}
-                placeholder={"Add the new value..."}
-                onChange={handleChange}
-                defaultValue={0}
-              />
-            </FormElementContainer>
-            <ValueSpan>2.5%</ValueSpan>
-          </ValueInputContainer>
-          <CommentContainer>
-            <FormElementContainer>
-              <InputHeaderWithComment
-                comment={"optional"}
-                fontSize={"14px"}
-                childFontSize={"12px"}
-              />
-              <StyledInput
-                placeholder={"Add a comment..."}
-                // onChange={e => {
-                //   setComment(e.target.value);
-                // }}
-              />
-            </FormElementContainer>
-          </CommentContainer>
-        </Container>
+        <>
+          {kpis.map(kpi => (
+            <Container key={kpi.id}>
+              <SubHeaderText>
+                {`${kpi.title} ${kpi.greaterThan ? `>` : `<`} ${kpi.targetValue}${
+                  kpi.unitType === "percentage" ? `%` : ""
+                }`}
+              </SubHeaderText>
+              <ValueInputContainer>
+                <FormElementContainer>
+                  <InputFromUnitType
+                    unitType={kpi.unitType}
+                    placeholder={"Add the new value..."}
+                    onChange={e => setValue(e.target.value)}
+                    defaultValue={kpi.scorecardLogs[kpi.scorecardLogs.length - 1]?.score || 0}
+                    onBlur={() => handleBlur(kpi.id)}
+                  />
+                </FormElementContainer>
+                <ValueSpan>{`${kpi.targetValue}${
+                  kpi.unitType === "percentage" ? `%` : ""
+                }`}</ValueSpan>
+              </ValueInputContainer>
+              <CommentContainer>
+                <FormElementContainer>
+                  <InputHeaderWithComment
+                    comment={"optional"}
+                    fontSize={"14px"}
+                    childFontSize={"12px"}
+                  />
+                  <StyledInput
+                    placeholder={"Add a comment..."}
+                    onChange={e => {
+                      setComment(e.target.value);
+                    }}
+                    onBlur={() => {
+                      if (!value) {
+                        valueForComment = kpi.scorecardLogs[kpi.scorecardLogs.length - 1]?.score;
+                      }
+                      handleBlur(kpi.id);
+                    }}
+                  />
+                </FormElementContainer>
+              </CommentContainer>
+            </Container>
+          ))}
+        </>
       );
     };
 
     return (
       <>
-        {renderHeading()}
-        {renderKPIs()}
+        {R.isNil(kpis) ? (
+          renderLoading()
+        ) : (
+          <>
+            {renderHeading()}
+            {renderKPIs()}
+          </>
+        )}
       </>
     );
   },
@@ -83,6 +138,15 @@ const Container = styled.div`
   @media only screen and (max-width: 768px) {
     padding: 0 16px;
   }
+`;
+
+const LoadingContainer = styled.div``;
+
+const BodyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  justify-content: center;
 `;
 
 const StyledHeader = styled.h1`
@@ -118,7 +182,7 @@ const CommentContainer = styled.div`
 `;
 
 const ValueInputContainer = styled.div`
-  width: 40%;
+  width: 30%;
   align-items: center;
   display: flex;
   margin-bottom: 20px;

@@ -6,19 +6,18 @@ import { CheckInSideOptions } from "./checkin-side-options";
 import { useTranslation } from "react-i18next";
 import { WizardLayout } from "~/components/layouts/wizard-layout";
 import * as R from "ramda";
-import { MeetingStep } from "../meetings/meeting-step";
 import { Button } from "~/components/shared/button";
 import { useHistory } from "react-router-dom";
 import { useMst } from "../../../setup/root";
 import { Icon } from "~/components/shared";
 import { Text } from "~/components/shared/text";
+import { CheckinStep } from "./components/checkin-step";
 
 interface ITeamCheckInProps {
   checkIn: any;
   numberOfSteps: number;
   stopMeetingButton: JSX.Element;
   onNextButtonClick: any;
-  stepsComponent?: JSX.Element;
 }
 
 export const CheckInWizardLayout = observer(
@@ -27,7 +26,6 @@ export const CheckInWizardLayout = observer(
     stopMeetingButton,
     onNextButtonClick,
     numberOfSteps,
-    stepsComponent,
   }: ITeamCheckInProps): JSX.Element => {
     const { t } = useTranslation();
     const history = useHistory();
@@ -36,7 +34,7 @@ export const CheckInWizardLayout = observer(
 
     const meetingDescription = () => R.path(["currentStepDetails", "instructions"], checkIn);
 
-    const meetingComponent = () => <MeetingStep meeting={checkIn} />;
+    const meetingComponent = () => <CheckinStep checkin={checkIn} />;
 
     const closeButtonClick = () => {
       if (confirm(`Are you sure you want to exit this weekly check-in?`)) {
