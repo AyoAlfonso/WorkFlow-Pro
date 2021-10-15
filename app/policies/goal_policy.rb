@@ -1,0 +1,3 @@
+class GoalPolicy < AnnualInitiativePolicy
+
+end

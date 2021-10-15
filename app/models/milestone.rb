@@ -23,7 +23,7 @@ class Milestone < ApplicationRecord
             joins(:sub_initiative).where(sub_initiatives: { owned_by: user }).where(
             "week_of >=? AND week_of < ?", week_start.to_date, week_start.end_of_week.to_date
           )
-        }
+      }
 
   #TODO: ADD THE YEAR FOR THE QUARTER AS WELL - current_fiscal_year
   scope :for_user_on_quarter, ->(user, quarter, milestoneable_type) {
