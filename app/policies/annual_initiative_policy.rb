@@ -47,6 +47,14 @@ class AnnualInitiativePolicy < ApplicationPolicy
     @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 
+  def get_user_goals?
+     !user_can_observe_current_company?
+  end
+
+  def get_company_goals?
+    !user_can_observe_current_company?
+  end
+
   class Scope
     attr_reader :user, :company, :scope
 
