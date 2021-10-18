@@ -175,6 +175,7 @@ Rails.application.routes.draw do
     #milestones
     resources :milestones, only: [:update]
     get "/milestones/milestones_for_meeting", to: "milestones#milestones_for_meeting"
+    get '/milestones/check_in/:due_date', to: "milestones#check_in_goals"
 
     #user_pulses
     get "user_pulse_by_date", to: "user_pulses#user_pulse_by_date"

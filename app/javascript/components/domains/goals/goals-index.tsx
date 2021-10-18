@@ -98,9 +98,7 @@ export const GoalsIndex = observer(
         setShowCoreFour(false);
       }
     };
-
     const companyGoalsToShow = () => {
-    
       switch (companyGoalsFilter) {
         case "open":
           return companyGoals.activeAnnualInitiatives as Array<AnnualInitiativeType>;
@@ -135,12 +133,10 @@ export const GoalsIndex = observer(
       const createGoalYearString =
         companyStore.company.currentFiscalYear ==
         companyStore.company.yearForCreatingAnnualInitiatives
-          ? `FY${(companyStore.company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
-          : `FY${(companyStore.company.currentFiscalYear - 1).toString().slice(-2)}/${(
-              companyStore.company.yearForCreatingAnnualInitiatives - 1
-            )
+          ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+          : `FY${(companyStore.company.currentFiscalYear - 1)
               .toString()
-              .slice(-2)}`;
+              .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
 
       return (
         <CreateGoalSection
@@ -290,7 +286,6 @@ export const GoalsIndex = observer(
             subInitiativeId={subInitiativeId}
             setSubInitiativeModalOpen={setSubInitiativeModalOpen}
             annualInitiativeDescription={annualInitiativeDescription}
-            // setAnnualInitiativeModalOpen={setAnnualInitiativeModalOpen}
             setAnnualInitiativeId={setAnnualInitiativeId}
             showCreateMilestones={true}
           />

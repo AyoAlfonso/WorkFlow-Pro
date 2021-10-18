@@ -53,7 +53,9 @@ export const GoalDropdownOptions = ({
         confirm(
           `Are you sure you want to close this ${t("annualInitiative.messageText", {
             title: annualInitiativeTitle,
-          })}`,
+          })}? Closing an Annual Objective will result in closing all of the related ${t("quarterlyGoal.messageText", {
+            title: quarterlyGoalTitle,
+          })}s as well`,
         )
       ) {
         annualInitiativeStore.closeInitiative(itemId).then(() => {

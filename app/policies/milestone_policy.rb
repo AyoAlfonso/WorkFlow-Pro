@@ -14,6 +14,10 @@ class MilestonePolicy < ApplicationPolicy
   def get_onboarding_goals?
     true
   end
+
+  def check_in_goals?
+    !user_can_observe_current_company?
+  end
   
   class Scope
     attr_reader :user, :scope
@@ -27,5 +31,4 @@ class MilestonePolicy < ApplicationPolicy
       scope.all
     end
   end
-
 end

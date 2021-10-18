@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_10_144152) do
+ActiveRecord::Schema.define(version: 2021_10_12_043346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,6 +96,27 @@ ActiveRecord::Schema.define(version: 2021_08_10_144152) do
     t.index ["company_id"], name: "index_annual_initiatives_on_company_id"
     t.index ["created_by_id"], name: "index_annual_initiatives_on_created_by_id"
     t.index ["owned_by_id"], name: "index_annual_initiatives_on_owned_by_id"
+  end
+
+  create_table "check_in_templates", force: :cascade do |t|
+    t.string "name"
+    t.integer "check_in_type"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "check_in_templates_steps", force: :cascade do |t|
+    t.integer "step_type"
+    t.integer "order_index"
+    t.string "name"
+    t.text "instructions"
+    t.float "duration"
+    t.string "component_to_render"
+    t.bigint "check_in_template_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["check_in_template_id"], name: "index_check_in_templates_steps_on_check_in_template_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -289,12 +310,17 @@ ActiveRecord::Schema.define(version: 2021_08_10_144152) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "unit_type"
-    t.integer "target_value", default: 0
+    t.float "target_value", default: 0.0
     t.boolean "is_deleted", default: false
     t.boolean "greater_than", default: true
     t.jsonb "viewers"
     t.bigint "owned_by_id"
     t.float "needs_attention_threshold"
+    t.string "title"
+    t.integer "parent_type"
+    t.integer "parent_kpi", default: [], array: true
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
   end
@@ -366,6 +392,8 @@ ActiveRecord::Schema.define(version: 2021_08_10_144152) do
     t.boolean "meeting", default: false, null: false
     t.boolean "company", default: false, null: false
     t.boolean "pyns", default: false, null: false
+    t.boolean "scorecard", default: false
+    t.boolean "scorecard_pro", default: false
     t.index ["user_id"], name: "index_product_features_on_user_id"
   end
 
@@ -557,6 +585,7 @@ ActiveRecord::Schema.define(version: 2021_08_10_144152) do
     t.string "default_avatar_color"
     t.json "settings", default: {}
     t.integer "executive", default: 0
+    t.boolean "custom_scorecard", default: false
     t.index ["company_id"], name: "index_teams_on_company_id"
   end
 
@@ -651,6 +680,7 @@ ActiveRecord::Schema.define(version: 2021_08_10_144152) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
   add_foreign_key "annual_initiatives", "companies"
+  add_foreign_key "check_in_templates_steps", "check_in_templates"
   add_foreign_key "comments", "annual_initiatives"
   add_foreign_key "company_static_data", "companies"
   add_foreign_key "core_fours", "companies"
@@ -693,16 +723,4 @@ ActiveRecord::Schema.define(version: 2021_08_10_144152) do
   add_foreign_key "users", "companies"
   add_foreign_key "users", "companies", column: "default_selected_company_id"
   add_foreign_key "users", "user_roles"
-
-  create_view "v_scoredcards", sql_definition: <<-SQL
-      SELECT key_performance_indicators.id AS kpi,
-      avg(scorecard_logs.score) AS score,
-      scorecard_logs.user_id AS owned_by,
-      scorecard_logs.fiscal_quarter,
-      scorecard_logs.fiscal_year,
-      scorecard_logs.week
-     FROM (key_performance_indicators
-       JOIN scorecard_logs ON ((key_performance_indicators.id = scorecard_logs.key_performance_indicator_id)))
-    GROUP BY scorecard_logs.user_id, key_performance_indicators.id, scorecard_logs.fiscal_year, scorecard_logs.fiscal_quarter, scorecard_logs.week;
-  SQL
 end

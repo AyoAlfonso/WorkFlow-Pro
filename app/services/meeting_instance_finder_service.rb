@@ -25,6 +25,5 @@ class MeetingInstanceFinderService < ApplicationService
     else
       raise ArgumentError.new("Meeting type not implemented for instance search")
     end
-
   end
 end

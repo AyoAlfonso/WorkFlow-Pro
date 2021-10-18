@@ -1,5 +1,4 @@
 class HabitPolicy < ApplicationPolicy
-
   def index?
     true
   end

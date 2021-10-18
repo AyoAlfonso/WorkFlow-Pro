@@ -219,14 +219,14 @@ export const TeamOverview = observer(
             >
               {t(`${overviewType}.teamSnapshotTitle`)}
             </OverviewTabs>
-            {overviewType == "teams" ? (
+            {overviewType == "teams" && currentTeam.customScorecard ? (
               <OverviewTabs
                 to={`/team/${team_id}/dashboard`}
                 activeStyle={{
                   borderBottomWidth: "1px",
                 }}
               >
-                {t(`${overviewType}.dashboard`)}
+                {t(`${overviewType}.customScorecard`)}
               </OverviewTabs>
             ) : (
               <></>

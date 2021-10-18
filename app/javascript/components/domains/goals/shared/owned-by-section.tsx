@@ -10,6 +10,8 @@ import { Avatar } from "~/components/shared/avatar";
 import { RoleAdministrator, RoleCEO } from "~/lib/constants";
 import { UserSelectionDropdownList } from "~/components/shared/user-selection-dropdown-list";
 import { Text } from "~/components/shared/text";
+import { Loading } from "~/components/shared";
+
 
 interface IOwnedBySectionProps {
   ownedBy: UserType;
@@ -42,6 +44,7 @@ export const OwnedBySection = observer(
       annualInitiativeStore,
       quarterlyGoalStore,
       subInitiativeStore,
+      keyPerformanceIndicatorStore,
     } = useMst();
     const currentUser = sessionStore.profile;
     const [store, setStore] = useState<any>(null);
@@ -59,8 +62,15 @@ export const OwnedBySection = observer(
         setStore(quarterlyGoalStore);
       } else if (type == "subInitiative") {
         setStore(subInitiativeStore);
+      } else if (type == "scorecard") {
+        setStore(keyPerformanceIndicatorStore);
       }
-    }, []);
+      setOwner(ownedBy);
+    }, [ownedBy]);
+
+    if (R.isNil(owner)) {
+      return <Loading />;
+    }
 
     const companyUsers = userStore.users;
     const editable =

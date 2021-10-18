@@ -46,9 +46,11 @@ export const MultiOptionTypeSelectionDropdownList = ({
       <Autocomplete
         value={value}
         onChange={(event, newValue) => {
-          setValue(newValue);
-          onUserSelect(newValue);
-          setShowUsersList(false);
+          if(typeof newValue === 'object' && newValue !== null) {
+              setValue(newValue);
+              onUserSelect(newValue);
+              setShowUsersList(false);
+          }
         }}
         filterOptions={(options, params) => {
           const filtered = filter(options, params);
@@ -61,7 +63,10 @@ export const MultiOptionTypeSelectionDropdownList = ({
         id="search-for-labels"
         options={userList}
         getOptionLabel={option => {
-          return `${option.name} ${option.lastName}`;
+            if(typeof option === 'object' && option !== null) {
+                return `${option.name} ${option.lastName}`;
+            }
+        
         }}
         renderOption={option => {
           return (

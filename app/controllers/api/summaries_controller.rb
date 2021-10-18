@@ -1,5 +1,4 @@
 class Api::SummariesController < Api::ApplicationController
-  
   def journals_by_date
     if params[:start_date].present? && params[:end_date].present?
       @journal_entries = policy_scope(JournalEntry).between(current_user.start_of_day_for_user(params[:start_date].to_date), current_user.end_of_day_for_user(params[:end_date].to_date)).sort_by_date
@@ -7,10 +6,10 @@ class Api::SummariesController < Api::ApplicationController
       @journal_entries = policy_scope(JournalEntry).sort_by_date
     end
     authorize @journal_entries, :index?
-    @dates = @journal_entries.map{ |je| current_user.convert_to_their_timezone(je.logged_at).strftime("%a, %b %e") }.uniq
+    @dates = @journal_entries.map { |je| current_user.convert_to_their_timezone(je.logged_at).strftime("%a, %b %e") }.uniq
     render "api/summaries/journals_by_date"
   end
-  
+
   def meetings_by_date
     if params[:filters].present?
       filters = JSON.parse(params[:filters])
@@ -26,7 +25,7 @@ class Api::SummariesController < Api::ApplicationController
     end
 
     authorize @meetings
-    @dates = @meetings.map{ |meeting| current_user.convert_to_their_timezone(meeting.start_time).strftime("%a, %b %e") }.uniq
+    @dates = @meetings.map { |meeting| current_user.convert_to_their_timezone(meeting.start_time).strftime("%a, %b %e") }.uniq
     render "api/summaries/meetings_by_date"
   end
 end

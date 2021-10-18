@@ -65,4 +65,5 @@ export const AccountSettings = observer(
     ];
 
     return <TabsLayout headerText={""} tabOptions={tabOptions} />;
-  })
+  },
+);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { MilestoneType } from "~/types/milestone";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
@@ -7,6 +7,8 @@ import * as moment from "moment";
 import { observer } from "mobx-react";
 import { ChevronDownIcon } from "../../../shared/input";
 import { baseTheme } from "../../../../themes";
+import { HtmlTooltip } from "~/components/shared/tooltip";
+import { Icon } from "~/components/shared/icon";
 
 interface MilestoneDropdownProps {
   milestone: MilestoneType;
@@ -22,8 +24,35 @@ export const MilestoneDropdown = observer(
     const { quarterlyGoalStore, subInitiativeStore, milestoneStore } = useMst();
 
     const [showList, setShowList] = useState<boolean>(false);
+    const [showTooltip, setShowTooltip] = useState<boolean>(false);
+
+    const dropdownRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showList) return;
+
+        const node = dropdownRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowList(false);
+      };
+
+      if (showList) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showList]);
 
     const statusChangable = moment(milestone.weekOf).isSameOrBefore(moment(), "week");
+    
     const {
       warningRed,
       cautionYellow,
@@ -86,15 +115,35 @@ export const MilestoneDropdown = observer(
 
     return (
       <Container>
-        <DropdownHeader
-          disabled={!statusChangable && !editable}
-          onClick={() => {
-            setShowList(!showList);
-          }}
+        <HtmlTooltip
+          arrow={true}
+          open={showTooltip}
+          enterDelay={500}
+          leaveDelay={200}
+          title={
+            <span>
+              This Milestone is in the future. You can only update the status of Milestones that
+              have already begun.
+            </span>
+          }
         >
-          {determineStatusLabel(milestoneStatus)}
-          <ChevronDownIcon />
-        </DropdownHeader>
+          <DropdownHeader
+            disabled={!statusChangable || !editable}
+            onMouseEnter={() => {
+              setShowTooltip(!statusChangable && true);
+            }}
+            onMouseLeave={() => {
+              setShowTooltip(!statusChangable && false);
+            }}
+            onClick={() => {
+              setShowList(statusChangable && editable && !showList);
+            }}
+            ref={dropdownRef}
+          >
+            {determineStatusLabel(milestoneStatus)}
+            <ChevronDownIcon />
+          </DropdownHeader>
+        </HtmlTooltip>
         {showList && (
           <DropdownListContainer>
             <DropdownList>
@@ -139,7 +188,6 @@ const DropdownHeader = styled("div")<DropdownHeaderProps>`
   display: flex;
   justify-content: space-between;
   cursor: pointer;
-  pointer-events: ${props => props.disabled && `none`};
 `;
 
 const DropdownListContainer = styled("div")``;

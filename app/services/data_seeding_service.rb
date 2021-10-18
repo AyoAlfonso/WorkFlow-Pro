@@ -1,4 +1,4 @@
-require 'roo'
+require "roo"
 
 class DataSeedingService
   attr_accessor :logOutput
@@ -13,7 +13,7 @@ class DataSeedingService
 
   def load_data
     begin
-      xlsx = Roo::Spreadsheet.open(@file, extension: :xlsx, csv_options: {internal_encoding: Encoding::UTF_8, external_encoding: Encoding::ISO_8859_1}) 
+      xlsx = Roo::Spreadsheet.open(@file, extension: :xlsx, csv_options: { internal_encoding: Encoding::UTF_8, external_encoding: Encoding::ISO_8859_1 })
       import_content(xlsx, [])
     rescue StandardError => e
       puts "**** ERROR ****, #{e}"
@@ -72,7 +72,7 @@ class DataSeedingService
     end
 
     if !@errors_summary.blank?
-      errors_summary.each{|error| puts error}
+      errors_summary.each { |error| puts error }
       # @errors_summary = []
     end
   end
@@ -86,9 +86,9 @@ class DataSeedingService
 
     keys.each_with_index do |key, index|
       next if key.blank?
-      if key == 'pk'
+      if key == "pk"
         search_hash[fields[index]] = data[index]
-      elsif key == 'fk'
+      elsif key == "fk"
         if data[index].present?
           associate_record = find_associate_record_by_name(fields[index], data[index])
           search_hash[fields[index]] = associate_record.id if associate_record.present?
@@ -101,21 +101,21 @@ class DataSeedingService
     end
 
     if table_name == "User"
-      search_hash.each{|key, value| value.downcase! if key == 'email'}
+      search_hash.each { |key, value| value.downcase! if key == "email" }
     end
 
     record = table_name.classify.constantize.where(search_hash).first_or_initialize
-    fields.reject.each_with_index{|e, i| e.to_s.empty? || keys[i] == 'skip' }.map{|elem| elem.to_sym}.each do |field|
+    fields.reject.each_with_index { |e, i| e.to_s.empty? || keys[i] == "skip" }.map { |elem| elem.to_sym }.each do |field|
       index = fields.find_index("#{field}")
 
-      if field.to_s.last(3) == '_id'
+      if field.to_s.last(3) == "_id"
         if data[index].present?
           association_record = find_associate_record_by_name(field, data[index])
           attributes_hash[field] = association_record.id if association_record.present?
         end
       else
         if record.column_for_attribute(field).type == :boolean
-          attributes_hash[field] = data[index] == 'Y' ? true : false
+          attributes_hash[field] = data[index] == "Y" ? true : false
         elsif record.column_for_attribute(field).type == :integer
           attributes_hash[field] = data[index].to_i
         else
@@ -138,7 +138,6 @@ class DataSeedingService
     record.update!(attributes_hash)
   end
 
-
   def search_for_team_user_enablements(table_name, fields, keys, data)
     search_hash = {}
 
@@ -159,7 +158,7 @@ class DataSeedingService
   end
 
   def find_associate_record_by_name(field, data)
-    record_field = field.to_s.chomp('_id')
+    record_field = field.to_s.chomp("_id")
     record_class = record_field.classify.constantize
     record_class.find_by_name(data)
   end

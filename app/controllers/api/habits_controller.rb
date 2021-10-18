@@ -6,18 +6,18 @@ class Api::HabitsController < Api::ApplicationController
 
   def index
     @habits = policy_scope(Habit)
-    render json: { habits: @habits, last_five_days:  last_five_days }
+    render json: { habits: @habits, last_five_days: last_five_days }
   end
 
   def create
     @habit = Habit.
-              select(:id, :frequency, :name, :color, :user_id).
-                new(
-                  user: current_user,
-                  name: habit_params[:name],
-                  frequency: habit_params[:frequency],
-                  color: habit_params[:color]
-                )
+      select(:id, :frequency, :name, :color, :user_id).
+      new(
+      user: current_user,
+      name: habit_params[:name],
+      frequency: habit_params[:frequency],
+      color: habit_params[:color],
+    )
     authorize @habit
 
     @habit.save!
@@ -25,7 +25,7 @@ class Api::HabitsController < Api::ApplicationController
   end
 
   def show_habit
-    render 'api/habits/show_habit'
+    render "api/habits/show_habit"
   end
 
   def update
@@ -35,7 +35,7 @@ class Api::HabitsController < Api::ApplicationController
 
   def destroy
     @habit.destroy!
-    render json: { habit_id: @habit.id, status: :ok}
+    render json: { habit_id: @habit.id, status: :ok }
   end
 
   def habits_for_personal_planning
@@ -43,7 +43,7 @@ class Api::HabitsController < Api::ApplicationController
     authorize @habits
     @current_week_start = get_beginning_of_last_or_current_work_week_date(current_user.time_in_user_timezone)
     @current_week_end = current_user.time_in_user_timezone
-    render 'api/habits/habits_for_personal_planning'
+    render "api/habits/habits_for_personal_planning"
   end
 
   private
@@ -63,4 +63,3 @@ class Api::HabitsController < Api::ApplicationController
     end
   end
 end
-

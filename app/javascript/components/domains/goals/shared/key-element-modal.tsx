@@ -30,7 +30,10 @@ export const KeyElementModal = ({
       modalOpen={modalOpen}
       setModalOpen={setModalOpen}
       headerText={action + " Key Result"}
-      width="480px"
+      width={"640px"}
+      height="320px"
+      borderRadius="8px"
+      headerFontSize="16px"
       onClose={() => {
         setActionType("Add");
         setSelectedElement(null);

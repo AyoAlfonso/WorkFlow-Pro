@@ -1,54 +1,53 @@
 class IceCube::RuleHelper
-
   def self.get_day_of_week(rule)
-    return I18n.t 'notification_rules.every' if rule['rule_type'] == 'IceCube::DailyRule'
+    return I18n.t "notification_rules.every" if rule["rule_type"] == "IceCube::DailyRule"
 
     # All validation values are stored as an array
-    day = rule['validations']['day'].first
+    day = rule["validations"]["day"].first
     case day
     when 0
-      I18n.t 'notification_rules.sunday'
+      I18n.t "notification_rules.sunday"
     when 1
-      I18n.t 'notification_rules.monday'
+      I18n.t "notification_rules.monday"
     when 2
-      I18n.t 'notification_rules.tuesday'
+      I18n.t "notification_rules.tuesday"
     when 3
-      I18n.t 'notification_rules.wednesday'
+      I18n.t "notification_rules.wednesday"
     when 4
-      I18n.t 'notification_rules.thursday'
+      I18n.t "notification_rules.thursday"
     when 5
-      I18n.t 'notification_rules.friday'
+      I18n.t "notification_rules.friday"
     when 6
-      I18n.t 'notification_rules.saturday'
+      I18n.t "notification_rules.saturday"
     end
   end
 
   def self.day_of_week_as_int(params)
     day = params[:day_of_week]
-    return if day == I18n.t('notification_rules.every')
+    return if day == I18n.t("notification_rules.every")
 
     # All validation values are stored as an array
     case day
-    when I18n.t('notification_rules.sunday')
+    when I18n.t("notification_rules.sunday")
       0
-    when I18n.t('notification_rules.monday')
+    when I18n.t("notification_rules.monday")
       1
-    when I18n.t('notification_rules.tuesday')
+    when I18n.t("notification_rules.tuesday")
       2
-    when I18n.t('notification_rules.wednesday')
+    when I18n.t("notification_rules.wednesday")
       3
-    when I18n.t('notification_rules.thursday')
+    when I18n.t("notification_rules.thursday")
       4
-    when I18n.t('notification_rules.friday')
+    when I18n.t("notification_rules.friday")
       5
-    when I18n.t('notification_rules.saturday')
+    when I18n.t("notification_rules.saturday")
       6
     end
   end
 
   def self.get_time_of_day(rule)
-    hour = rule['validations']['hour_of_day'].first
-    minutes = rule['validations']['minute_of_hour']&.first || 0
+    hour = rule["validations"]["hour_of_day"].first
+    minutes = rule["validations"]["minute_of_hour"]&.first || 0
     Tod::TimeOfDay.new(hour, minutes).strftime("%l:%M %p").strip
   end
 

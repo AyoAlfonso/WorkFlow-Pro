@@ -1,7 +1,6 @@
-
 module HasOrderByRelatedId
   extend ActiveSupport::Concern
-  
+
   module ClassMethods
     def order_by_related_ids(field_name, ids)
       order_by = ["CASE"]

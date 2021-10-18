@@ -8,7 +8,7 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
   end
 
   def show?
-    true
+    user_is_part_of_this_company?(@company)
   end
 
   def update?
@@ -22,7 +22,7 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
   def close_kpi?
     @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
-  
+
   class Scope
     attr_reader :user, :company, :scope
 
@@ -33,7 +33,7 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.all
+      scope.sort_by_company(@company)
     end
   end
 end

@@ -6,7 +6,7 @@ class Api::HabitLogsController < Api::ApplicationController
   def update
     @new_habit_log = HabitLog.new(
       habit: @habit,
-      log_date: params[:log_date]
+      log_date: params[:log_date],
     )
     if @habit_log.present?
       @habit_log.destroy
@@ -16,7 +16,7 @@ class Api::HabitLogsController < Api::ApplicationController
 
     render json: {
       habit_log: @new_habit_log,
-      habit: @habit.reload
+      habit: @habit.reload,
     }.as_json
   end
 

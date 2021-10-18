@@ -7,5 +7,4 @@ class DefaultAdminTemplate < ApplicationRecord
     objectives: 1,
     initiatives: 2,
   }
-
 end

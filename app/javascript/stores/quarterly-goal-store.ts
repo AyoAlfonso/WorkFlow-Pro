@@ -34,22 +34,18 @@ export const QuarterlyGoalStoreModel = types
     }),
     update: flow(function*() {
       const env = getEnv(self);
-
-      //TO DO: investigate why try/catch was removed
-      // try
+      const { goalStore, annualInitiativeStore } = getRoot(self);
       const response: any = yield env.api.updateQuarterlyGoal(self.quarterlyGoal);
       const responseQuarterlyGoal = response.data;
       self.quarterlyGoal = responseQuarterlyGoal;
-      // goalStore.updateAnnualInitiative();
-
+      const responseAnnualInitiative = yield annualInitiativeStore.getAnnualInitiative(
+        self.quarterlyGoal.annualInitiativeId,
+      );
+      goalStore.updateAnnualInitiative(responseAnnualInitiative);
       showToast(
         il8n.t("quarterlyGoal.updated", { title: self.title }),
         ToastMessageConstants.SUCCESS,
       );
-      // return responseQuarterlyGoal;
-      // } catch {
-      //   showToast(il8n.t("quarterlyGoal.retrievalError"), ToastMessageConstants.ERROR);
-      // }
     }),
     updateParents: flow(function*(quarterlyGoal) {
       const { goalStore, quarterlyGoalStore, annualInitiativeStore } = getRoot(self);
@@ -238,8 +234,9 @@ export const QuarterlyGoalStoreModel = types
       self.update();
     },
     updateOwnedBy(user) {
-      self.quarterlyGoal = { ...self.quarterlyGoal, ownedById :user.id  };
+      self.quarterlyGoal = { ...self.quarterlyGoal, ownedById: user.id };
       self.update();
+      self.updateParents(self.quarterlyGoal);
     },
     updateMilestoneDescription(id, value) {
       const milestones = self.quarterlyGoal.milestones;
@@ -254,7 +251,6 @@ export const QuarterlyGoalStoreModel = types
       milestones[milestoneIndex].status = status;
       self.quarterlyGoal.milestones = milestones;
       self.update();
-      self.updateParents(self.quarterlyGoal);
     },
     updateQuarterlyGoalAfterAddingSubInitiative(subInitiative) {
       if (self.quarterlyGoal.id) {

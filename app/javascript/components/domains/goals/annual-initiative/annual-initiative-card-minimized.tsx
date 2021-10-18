@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { color } from "styled-system";
 import { baseTheme } from "../../../../themes";
 import { Icon } from "../../../shared/icon";
-import { AnnualInitiativeType } from "~/types/annual-initiative";
 import * as moment from "moment";
 import { observer } from "mobx-react";
 import { OwnedBySection } from "../shared/owned-by-section";
@@ -11,7 +10,7 @@ import { useMst } from "~/setup/root";
 import { Loading } from "~/components/shared";
 
 interface IAnnualInitiativeCardMinimizedProps {
-  annualInitiative: AnnualInitiativeType;
+  annualInitiative: any;
   setShowMinimizedCard: React.Dispatch<React.SetStateAction<boolean>>;
   disableOpen?: boolean;
   showMinimizedCard?: boolean;
@@ -174,7 +173,8 @@ export const AnnualInitiativeCardMinimized = observer(
             type={"annualInitiative"}
             disabled={true}
             size={16}
-            fontSize={"11px"}
+            nameWidth={"76px"}
+            fontSize={"12px"}
             marginLeft={"16px"}
             marginRight={"0px"}
             marginTop={"auto"}
@@ -341,7 +341,7 @@ type StatusBadgeType = {
 };
 
 const StatusBadge = styled.div<StatusBadgeType>`
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 900;
   background-color: ${props => props.backgroundColor};
   color: ${props => props.color};

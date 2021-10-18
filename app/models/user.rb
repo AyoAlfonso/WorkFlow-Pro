@@ -44,9 +44,17 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :product_features, :allow_destroy => true
 
   validates :first_name, :last_name, presence: true, on: :update
-  validates :product_features, length: { maximum: 1, too_long: "1 is maximum" }
+  # validates :product_features, length: { maximum: 1, too_long: "1 is maximum" }
 
   accepts_nested_attributes_for :daily_logs
+
+  after_save :create_product_features
+
+  def create_product_features
+      if self.product_features.empty? 
+	      ProductFeature.create!(user_id: self.id, objective: true, team: false, meeting: true, company: false, pyns: true)
+			end
+  end
 
   #TODO - DELETE COMPANY FROM DATABASE to be removed after we finalize rake, etc.
   belongs_to :default_selected_company, class_name: "Company"
@@ -59,7 +67,7 @@ class User < ApplicationRecord
 
   def as_json(options = [])
     super({
-      methods: [:avatar_url]
+      methods: [:avatar_url],
     })
   end
 
@@ -78,7 +86,7 @@ class User < ApplicationRecord
 
   def as_json(options = [])
     super({
-      methods: [:avatar_url]
+      methods: [:avatar_url],
     })
   end
 
