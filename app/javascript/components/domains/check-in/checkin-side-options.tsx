@@ -39,8 +39,8 @@ export const CheckInSideOptions = ({ checkIn }: ICheckInSideOptionsProps): JSX.E
         );
       case "Pyns":
         return renderDisplayKeyActivities();
-      // case "Notes":
-      //   return <Notes meeting={checkIn} height={"550px"} />;
+      case "Notes":
+        return <Notes meeting={checkIn} height={"550px"} />;
       default:
         return (
           <MeetingAgenda

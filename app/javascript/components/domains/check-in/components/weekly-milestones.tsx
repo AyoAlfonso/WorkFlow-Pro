@@ -10,28 +10,33 @@ import ContentEditable from "react-contenteditable";
 import { useMst } from "~/setup/root";
 import styled from "styled-components";
 import { Loading } from "~/components/shared/loading";
+import { useParams } from "react-router-dom";
 import { toJS } from "mobx";
 import * as moment from "moment";
 import { MilestoneCard } from "../../goals/milestone/milestone-card";
 
 export const WeeklyMilestones = observer(
   (props): JSX.Element => {
-    const { sessionStore, quarterlyGoalStore, annualInitiativeStore, goalStore } = useMst();
+    const { sessionStore, quarterlyGoalStore, milestoneStore, goalStore } = useMst();
     const {
       profile: { id },
     } = sessionStore;
 
+    const { weekOf } = useParams();
+    const { milestonesForWeeklyCheckin } = milestoneStore;
     const { quarterlyGoal } = quarterlyGoalStore;
 
-    console.log("quartergoal", toJS(quarterlyGoal));
-    console.log("quartergoal", toJS(annualInitiativeStore));
-    console.log(id);
+    console.log("weekof", toJS(quarterlyGoal));
+    console.log("milestones", toJS(milestonesForWeeklyCheckin?.quarterlyGoalMilestones));
+
+    // const milestones = [...milestonesForWeeklyCheckin?.quarterlyGoalMilestones];
+
+    // console.log(milestones)
 
     useEffect(() => {
       quarterlyGoalStore.getQuarterlyGoal(id);
       goalStore.load();
-      if (quarterlyGoal)
-        annualInitiativeStore.getAnnualInitiative(quarterlyGoal.annualInitiativeId);
+      milestoneStore.getMilestonesForWeeklyCheckin(weekOf);
     }, [id, quarterlyGoal]);
 
     const milestone = {
@@ -51,7 +56,8 @@ export const WeeklyMilestones = observer(
       return (
         <Container>
           <StyledHeader>
-            What's the status on your Milestones from week of <u>June 28th</u>?
+            What's the status on your Milestones from week of{" "}
+            <u>{moment(weekOf).format("MMMM D")}</u>?
           </StyledHeader>
         </Container>
       );
@@ -85,8 +91,8 @@ export const WeeklyMilestones = observer(
             renderLoading()
           ) : (
             <>
-              {quarterlyGoal.milestones.map(milestone => (
-                <Container>
+              {milestonesForWeeklyCheckin?.quarterlyGoalMilestones.map(milestone => (
+                <Container key={milestone.id}>
                   <AvatarContainer>
                     {renderUserAvatar()}
                     <StyledText>{quarterlyGoal.description}</StyledText>

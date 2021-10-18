@@ -11,6 +11,8 @@ import {
   FormElementContainer,
   InputFromUnitType,
 } from "../../scorecard/shared/modal-elements";
+import { useParams } from "react-router-dom";
+import * as moment from "moment";
 import { toJS } from "mobx";
 
 export const KpiComponent = observer(
@@ -23,6 +25,8 @@ export const KpiComponent = observer(
     const {
       profile: { id },
     } = sessionStore;
+
+    const { weekOf } = useParams();
 
     let valueForComment;
     const [value, setValue] = useState(undefined);
@@ -53,7 +57,8 @@ export const KpiComponent = observer(
       return (
         <Container>
           <StyledHeader>
-            What's the status on your KPIs from week of <u>June 28th</u>?
+            What's the status on your KPIs from week of{" "}
+            <u>{moment(weekOf).format("MMMM D")}</u>?
           </StyledHeader>
         </Container>
       );
@@ -83,7 +88,7 @@ export const KpiComponent = observer(
                     unitType={kpi.unitType}
                     placeholder={"Add the new value..."}
                     onChange={e => setValue(e.target.value)}
-                    defaultValue={kpi.scorecardLogs[kpi.scorecardLogs.length - 1]?.score || 0}
+                    defaultValue={kpi.scorecardLogs[kpi.scorecardLogs?.length - 1]?.score || 0}
                     onBlur={() => handleBlur(kpi.id)}
                   />
                 </FormElementContainer>
@@ -105,7 +110,7 @@ export const KpiComponent = observer(
                     }}
                     onBlur={() => {
                       if (!value) {
-                        valueForComment = kpi.scorecardLogs[kpi.scorecardLogs.length - 1]?.score;
+                        valueForComment = kpi.scorecardLogs[kpi.scorecardLogs?.length - 1]?.score;
                       }
                       handleBlur(kpi.id);
                     }}

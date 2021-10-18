@@ -72,6 +72,7 @@ const initialState = {
   },
   milestoneStore: {
     milestonesForPersonalMeeting: null,
+    milestonesForWeeklyCheckin: null,
   },
   staticDataStore: {
     loading: false,
@@ -95,7 +96,7 @@ const initialState = {
   checkInTemplateStore: {
     checkInTemplates: [],
     currentCheckIn: null,
-  }
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);

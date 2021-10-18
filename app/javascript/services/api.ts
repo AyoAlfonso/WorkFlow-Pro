@@ -608,5 +608,9 @@ export class Api {
   async getWeeklyCheckInData(userId, dueDate) {
     return this.client.get(`/weekly-check-in/${userId}/${dueDate}`);
   }
+
+  async getWeeklyCheckinMilestones(weekOf) {
+    return this.client.get(`milestones/check_in/${weekOf}`);
+  }
   //async setJWT(jwt) {}
 }
