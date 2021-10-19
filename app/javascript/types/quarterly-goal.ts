@@ -18,4 +18,5 @@ export type QuarterlyGoalType = {
   contextDescription: string;
   subInitiatives?: Array<SubInitiativesType>;
   quarter: number;
+  fiscalYear: number;
 };

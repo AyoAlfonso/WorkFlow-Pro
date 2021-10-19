@@ -17,4 +17,5 @@ export type SubInitiativesType = {
   milestones: Array<MilestoneType>;
   contextDescription: string;
   quarter: number;
+  fiscalYear: number;
 };

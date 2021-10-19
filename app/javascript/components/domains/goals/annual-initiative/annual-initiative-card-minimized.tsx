@@ -47,7 +47,7 @@ export const AnnualInitiativeCardMinimized = observer(
       return <Loading />;
     }
 
-    if (annualInitiative.closedAt) {
+    if (annualInitiative.closedAt != null) {
       statusBadge.description = `Closed - FY${annualInitiative.fiscalYear %
         100}/${(annualInitiative.fiscalYear + 1) % 100}`;
       statusBadge.colors = { color: white, backgroundColor: grey100 };

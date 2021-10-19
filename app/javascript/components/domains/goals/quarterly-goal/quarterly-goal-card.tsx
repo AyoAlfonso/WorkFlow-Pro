@@ -49,6 +49,7 @@ export const QuarterlyGoalCard = observer(
       grey100,
       white,
       primary100,
+      tango,
     } = baseTheme.colors;
     const defaultOptionsColor = white;
     const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
@@ -88,7 +89,7 @@ export const QuarterlyGoalCard = observer(
             break;
           case "in_progress":
             statusBadge.description = "Needs Attention";
-            statusBadge.colors = { color: cautionYellow, backgroundColor: fadedYellow };
+            statusBadge.colors = { color: tango, backgroundColor: fadedYellow };
             break;
           case "incomplete":
             statusBadge.description = "Behind";

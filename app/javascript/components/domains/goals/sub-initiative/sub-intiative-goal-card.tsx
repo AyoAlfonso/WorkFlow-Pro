@@ -69,10 +69,7 @@ export const SubInitiativeGoalCard = observer(
     if (subInitiative.closedAt != null) {
       statusBadge.description = `Closed - Q${subInitiative.quarter}`;
       statusBadge.colors = { color: white, backgroundColor: grey100 };
-    } else if (
-      currentFiscalYear * 10 + currentFiscalQuarter <
-      annualInitiativeYear * 10 + subInitiative.quarter
-    ) {
+    } else if (currentFiscalYear < subInitiative.fiscalYear) {
       statusBadge.description = `Upcoming - Q${subInitiative.quarter}`;
       statusBadge.colors = { color: white, backgroundColor: primary100 };
     } else {
