@@ -19,7 +19,6 @@ interface ISubInitiativeCardProps {
   subInitiative: SubInitiativesType;
   setSubInitiativeModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedAnnualInitiativeDescription?: React.Dispatch<React.SetStateAction<string>>;
-  annualInitiativeYear: number;
   setSubInitiativeId: React.Dispatch<React.SetStateAction<number>>;
 }
 
@@ -30,7 +29,6 @@ export const SubInitiativeGoalCard = observer(
       setSubInitiativeModalOpen,
       setSubInitiativeId,
       setSelectedAnnualInitiativeDescription,
-      annualInitiativeYear,
     } = props;
 
     const { companyStore } = useMst();
@@ -42,8 +40,6 @@ export const SubInitiativeGoalCard = observer(
       fadedYellow,
       finePine,
       fadedGreen,
-      grey40,
-      grey20,
       grey80,
       grey100,
       white,
@@ -93,7 +89,7 @@ export const SubInitiativeGoalCard = observer(
             break;
           case "unstarted":
             statusBadge.description = "No update";
-            statusBadge.colors = { color: grey40, backgroundColor: grey20 };
+            statusBadge.colors = { color: grey100, backgroundColor: backgroundGrey };
             break;
         }
       }
