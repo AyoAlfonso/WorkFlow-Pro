@@ -1,5 +1,4 @@
 import { types } from "mobx-state-tree";
-import { string } from "prop-types";
 import { MilestoneModel } from "./milestone";
 
 export const MilestonesForWeeklyCheckinModel = types

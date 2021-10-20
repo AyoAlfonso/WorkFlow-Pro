@@ -51,6 +51,7 @@ import { OnboardingModal } from "./domains/onboarding";
 import { Onboarding } from "./domains/onboarding";
 import { CheckIn } from "./domains/check-in/checkin";
 import { useEffect } from "react";
+import { getWeekOf } from "~/utils/date-time";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -82,7 +83,7 @@ export const App = observer(
         const id = profile?.id;
         if (width) {
           if (location.pathname.includes("weekly-check-in")) return
-          if (id) return history.push(`/weekly-check-in/${id}/2`);
+          if (id) return history.push(`/weekly-check-in/${id}/${getWeekOf()}`);
         }
       }
       redirectToCheckIn()

@@ -14,6 +14,7 @@ import {
 import { useParams } from "react-router-dom";
 import * as moment from "moment";
 import { toJS } from "mobx";
+import { EmptyState } from "./empty-state";
 
 export const KpiComponent = observer(
   (props): JSX.Element => {
@@ -33,7 +34,6 @@ export const KpiComponent = observer(
     const [comment, setComment] = useState("");
 
     useEffect(() => {
-      keyPerformanceIndicatorStore.load();
       scorecardStore.getScorecard({ ownerType: "user", ownerId: id });
       companyStore.load();
     }, [id]);
@@ -57,8 +57,7 @@ export const KpiComponent = observer(
       return (
         <Container>
           <StyledHeader>
-            What's the status on your KPIs from week of{" "}
-            <u>{moment(weekOf).format("MMMM D")}</u>?
+            What's the status on your KPIs from week of <u>{moment(weekOf).format("MMMM D")}</u>?
           </StyledHeader>
         </Container>
       );
@@ -75,63 +74,71 @@ export const KpiComponent = observer(
     const renderKPIs = (): JSX.Element => {
       return (
         <>
-          {kpis.map(kpi => (
-            <Container key={kpi.id}>
-              <SubHeaderText>
-                {`${kpi.title} ${kpi.greaterThan ? `>` : `<`} ${kpi.targetValue}${
-                  kpi.unitType === "percentage" ? `%` : ""
-                }`}
-              </SubHeaderText>
-              <ValueInputContainer>
-                <FormElementContainer>
-                  <InputFromUnitType
-                    unitType={kpi.unitType}
-                    placeholder={"Add the new value..."}
-                    onChange={e => setValue(e.target.value)}
-                    defaultValue={kpi.scorecardLogs[kpi.scorecardLogs?.length - 1]?.score || 0}
-                    onBlur={() => handleBlur(kpi.id)}
-                  />
-                </FormElementContainer>
-                <ValueSpan>{`${kpi.targetValue}${
-                  kpi.unitType === "percentage" ? `%` : ""
-                }`}</ValueSpan>
-              </ValueInputContainer>
-              <CommentContainer>
-                <FormElementContainer>
-                  <InputHeaderWithComment
-                    comment={"optional"}
-                    fontSize={"14px"}
-                    childFontSize={"12px"}
-                  />
-                  <StyledInput
-                    placeholder={"Add a comment..."}
-                    onChange={e => {
-                      setComment(e.target.value);
-                    }}
-                    onBlur={() => {
-                      if (!value) {
-                        valueForComment = kpi.scorecardLogs[kpi.scorecardLogs?.length - 1]?.score;
-                      }
-                      handleBlur(kpi.id);
-                    }}
-                  />
-                </FormElementContainer>
-              </CommentContainer>
-            </Container>
-          ))}
+          {R.isNil(kpis) ? (
+            renderLoading()
+          ) : (
+            <>
+              {renderHeading()}
+              {kpis.map(kpi => (
+                <Container key={kpi.id}>
+                  <SubHeaderText>
+                    {`${kpi.title} ${kpi.greaterThan ? `>` : `<`} ${kpi.targetValue}${
+                      kpi.unitType === "percentage" ? `%` : ""
+                    }`}
+                  </SubHeaderText>
+                  <ValueInputContainer>
+                    <FormElementContainer>
+                      <InputFromUnitType
+                        unitType={kpi.unitType}
+                        placeholder={"Add the new value..."}
+                        onChange={e => setValue(e.target.value)}
+                        defaultValue={kpi.scorecardLogs[kpi.scorecardLogs?.length - 1]?.score || 0}
+                        onBlur={() => handleBlur(kpi.id)}
+                      />
+                    </FormElementContainer>
+                    <ValueSpan>{`${kpi.targetValue}${
+                      kpi.unitType === "percentage" ? `%` : ""
+                    }`}</ValueSpan>
+                  </ValueInputContainer>
+                  <CommentContainer>
+                    <FormElementContainer>
+                      <InputHeaderWithComment
+                        comment={"optional"}
+                        fontSize={"14px"}
+                        childFontSize={"12px"}
+                      />
+                      <StyledInput
+                        placeholder={"Add a comment..."}
+                        onChange={e => {
+                          setComment(e.target.value);
+                        }}
+                        onBlur={() => {
+                          if (!value) {
+                            valueForComment =
+                              kpi.scorecardLogs[kpi.scorecardLogs?.length - 1]?.score;
+                          }
+                          handleBlur(kpi.id);
+                        }}
+                      />
+                    </FormElementContainer>
+                  </CommentContainer>
+                </Container>
+              ))}
+            </>
+          )}
         </>
       );
     };
 
     return (
       <>
-        {R.isNil(kpis) ? (
-          renderLoading()
+        {!R.isEmpty(kpis) ? (
+          <>{renderKPIs()}</>
         ) : (
-          <>
-            {renderHeading()}
-            {renderKPIs()}
-          </>
+          <EmptyState
+            heading={"No KPIs"}
+            infoText={`You don't have any active KPIs. Visit the Scorecard page to create a KPI.`}
+          />
         )}
       </>
     );

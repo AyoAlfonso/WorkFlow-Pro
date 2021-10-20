@@ -9,21 +9,32 @@ import { useMst } from "../../../setup/root";
 import { useParams, useHistory } from "react-router-dom";
 import { Loading } from "~/components/shared/loading";
 import { Button } from "~/components/shared/button";
+import moment from "moment";
 import { HeaderBar } from "../nav";
+import { validateWeekOf } from "~/utils/date-time";
 
 interface CheckInProps {}
 
 export const CheckIn = observer(
   (props: CheckInProps): JSX.Element => {
-    const { checkInTemplateStore } = useMst();
+    const { checkInTemplateStore, sessionStore } = useMst();
+    const {
+      profile: { id },
+    } = sessionStore;
 
     const history = useHistory();
 
     const checkIn = checkInTemplateStore.currentCheckIn;
 
+    const { weekOf } = useParams();
+
     useEffect(() => {
       checkInTemplateStore.fetchCheckInTemplates();
       checkInTemplateStore.getCheckIn("Weekly Check In");
+    }, []);
+
+    useEffect(() => {
+      validateWeekOf(weekOf, history, id);
     }, []);
 
     const renderLoading = () => (

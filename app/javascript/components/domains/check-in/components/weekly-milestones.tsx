@@ -14,10 +14,11 @@ import { useParams } from "react-router-dom";
 import { toJS } from "mobx";
 import * as moment from "moment";
 import { MilestoneCard } from "../../goals/milestone/milestone-card";
+import { EmptyState } from "./empty-state";
 
 export const WeeklyMilestones = observer(
   (props): JSX.Element => {
-    const { sessionStore, quarterlyGoalStore, milestoneStore, goalStore } = useMst();
+    const { sessionStore, quarterlyGoalStore, milestoneStore } = useMst();
     const {
       profile: { id },
     } = sessionStore;
@@ -26,31 +27,10 @@ export const WeeklyMilestones = observer(
     const { milestonesForWeeklyCheckin } = milestoneStore;
     const { quarterlyGoal } = quarterlyGoalStore;
 
-    console.log("weekof", toJS(quarterlyGoal));
-    console.log("milestones", toJS(milestonesForWeeklyCheckin?.quarterlyGoalMilestones));
-
-    // const milestones = [...milestonesForWeeklyCheckin?.quarterlyGoalMilestones];
-
-    // console.log(milestones)
-
     useEffect(() => {
       quarterlyGoalStore.getQuarterlyGoal(id);
-      goalStore.load();
       milestoneStore.getMilestonesForWeeklyCheckin(weekOf);
     }, [id, quarterlyGoal]);
-
-    const milestone = {
-      createdAt: "2021-09-17T13:00:30.977Z",
-      createdById: 2,
-      description: "Test drive the vehicles",
-      id: 2,
-      milestoneableId: 1,
-      milestoneableType: "QuarterlyGoal",
-      quarterlyGoalDescription: null,
-      status: "unstarted",
-      week: 37,
-      weekOf: "2020-07-23",
-    };
 
     const renderHeading = (): JSX.Element => {
       return (
@@ -87,11 +67,27 @@ export const WeeklyMilestones = observer(
     const renderMilestones = (): JSX.Element => {
       return (
         <>
-          {R.isNil(quarterlyGoal) ? (
+          {R.isNil(milestonesForWeeklyCheckin) ? (
             renderLoading()
           ) : (
             <>
+              {renderHeading()}
               {milestonesForWeeklyCheckin?.quarterlyGoalMilestones.map(milestone => (
+                <Container key={milestone.id}>
+                  <AvatarContainer>
+                    {renderUserAvatar()}
+                    <StyledText>{quarterlyGoal?.description}</StyledText>
+                  </AvatarContainer>
+                  <MilestoneContainer>
+                    <MilestoneCard
+                      itemType={"quarterlyGoal"}
+                      editable={true}
+                      milestone={milestone}
+                    />
+                  </MilestoneContainer>
+                </Container>
+              ))}
+              {milestonesForWeeklyCheckin?.subinitiativeMilestones?.map(milestone => (
                 <Container key={milestone.id}>
                   <AvatarContainer>
                     {renderUserAvatar()}
@@ -113,8 +109,15 @@ export const WeeklyMilestones = observer(
     };
     return (
       <>
-        {renderHeading()}
-        {renderMilestones()}
+        {!R.isEmpty(milestonesForWeeklyCheckin?.quarterlyGoalMilestones) ||
+        !R.isEmpty(milestonesForWeeklyCheckin?.subinitiativeMilestones) ? (
+          <>{renderMilestones()}</>
+        ) : (
+          <EmptyState
+            heading={"No Milestones"}
+            infoText={`You don't have any active Milestones. Visit the Objectives page to create an Initiative and Milestones`}
+          />
+        )}
       </>
     );
   },
