@@ -39,18 +39,20 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
   const [loading, setLoading] = useState<boolean>(true);
   const { teamStore, companyStore } = useMst();
   useEffect(() => {
-    teamStore.getTeam(team_id).then(() => {
-      setLoading(false);
-    });
-  }, []);
+    if (!R.isNil(team_id)) {
+      teamStore.getTeam(team_id);
+    }
+    setLoading(false);
+  }, [team_id]);
 
   const currentTeam = teamStore.currentTeam;
-  if (loading || R.isNil(step) || !currentTeam || !currentTeam?.id) {
+  if (loading || R.isNil(step)) {
+    return <Loading />;
+  } else if (team_id && !currentTeam?.id) {
     return <Loading />;
   }
-
-  const ownerId = currentTeam.executive ? companyStore.company.id : currentTeam?.id;
-  const ownerType = currentTeam.executive ? "company" : "team";
+  const ownerId = team_id && currentTeam.executive ? companyStore.company.id : currentTeam?.id;
+  const ownerType = team_id && currentTeam.executive ? "company" : "team";
 
   switch (step.stepType) {
     case "component":
