@@ -64,7 +64,6 @@ export const UpdateKPIModal = observer(
         keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
           setUpdateKPIModalOpen(false);
           setKpis(scorecardStore.kpis);
-          renderNewValue ? renderNewValue(value) : null;
           history.push(`/scorecard/0/0`);
           setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
         });

@@ -35,14 +35,7 @@ export const Meeting = (): JSX.Element => {
         <HeaderText>{t("profile.meetingsManagement.header")}</HeaderText>
       </HeaderContainer>
       <BodyContainer>
-        <PersonalInfoContainer>
-          <p>
-            Planning will be heavily updated in Beta Phase. A list of agenda items for the weekly
-            team meeting with a toggle beside them that allows the Team Leader (refer to Users tab)
-            to disable an agenda item and/or change the order.
-          </p>
-        </PersonalInfoContainer>
-
+      
         {teamsData}
       </BodyContainer>
     </StretchContainer>

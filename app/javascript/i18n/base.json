@@ -142,7 +142,7 @@
         "company": "Company",
         "goals": "Objectives",
         "forum": "Meeting",
-        "meetings": "Planning",
+        "meetings": "Meeting",
         "scorecards": "Scorecards"
       },
       "goals": {
@@ -328,7 +328,8 @@
         "teamIssuesTitle": "Team Issues",
         "teamsPulseTitle": "Team Pulse",
         "teamSnapshotTitle": "Team Snapshot",
-        "dashboard": "Dashboard"
+        "dashboard": "Dashboard",
+        "customScorecard": "Custom Scorecard"
       },
       "dateFilters": {
         "today": "Today",
