@@ -7,7 +7,6 @@ import { Icon } from "~/components/shared/icon";
 import { observer } from "mobx-react";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-// import Switch from "@material-ui/core/Switch";
 import Switch from "~/components/shared/switch"
 import { baseTheme } from "~/themes";
 import { withStyles } from "@material-ui/core/styles";
