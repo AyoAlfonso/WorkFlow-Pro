@@ -145,6 +145,7 @@ const QuarterSummary = ({
     greyActive,
     grey100,
     poppySunrise,
+    yellowSea,
     backgroundGrey,
     successGreen,
     warningRed,
@@ -270,7 +271,7 @@ const QuarterSummary = ({
     } else if (percentGrade < 85 && percentGrade >= 60) {
       return (
         <>
-          <Text ml={8} mr={16} fontSize={32} color={poppySunrise} bold>
+          <Text ml={8} mr={16} fontSize={32} color={yellowSea} bold>
             {currentWeekPercent}%
           </Text>
         </>

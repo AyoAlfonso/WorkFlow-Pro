@@ -3,13 +3,12 @@ import { withEnvironment } from "../lib/with-environment";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { MilestoneModel } from "~/models/milestone";
-import { MilestonesForWeeklyCheckinModel } from "~/models/weekly-checkin-milestones";
 
 export const MilestoneStoreModel = types
   .model("MilestoneModel")
   .props({
     milestonesForPersonalMeeting: types.maybeNull(types.array(MilestoneModel)),
-    milestonesForWeeklyCheckin: types.maybeNull(MilestonesForWeeklyCheckinModel),
+    milestonesForWeeklyCheckin: types.maybeNull(types.array(MilestoneModel)),
   })
   .extend(withEnvironment())
   .views(self => ({}))

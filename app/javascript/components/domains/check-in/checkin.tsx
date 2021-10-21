@@ -31,9 +31,6 @@ export const CheckIn = observer(
     useEffect(() => {
       checkInTemplateStore.fetchCheckInTemplates();
       checkInTemplateStore.getCheckIn("Weekly Check In");
-    }, []);
-
-    useEffect(() => {
       validateWeekOf(weekOf, history, id);
     }, []);
 
@@ -51,7 +48,6 @@ export const CheckIn = observer(
           variant={"primary"}
           onClick={() => {
             history.push(`/`);
-            //TODO: send personal plan ended to back end.  For now do not end it.
           }}
           small
           disabled={false}

@@ -71,7 +71,7 @@ export const App = observer(
   (props: IAppProps): JSX.Element => {
     usePageViews();
     const { issueStore, keyActivityStore, sessionStore } = useMst();
-    const loggedIn = sessionStore.loggedIn; //if logged in show switch
+    const loggedIn = sessionStore.loggedIn;
     const profile = sessionStore.profile;
 
     const history = useHistory();

@@ -17,7 +17,7 @@ interface IGoalSummaryProps {
 export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
   const annualInitiative = R.pathOr("", ["annualInitiative"], formData);
   const annualInitiativeFormatted = parseAnnualInitiative(annualInitiative);
-  const rallyingCry = R.pathOr("",["rallyingCry"], formData);
+  const rallyingCry = R.pathOr("", ["rallyingCry"], formData);
   const quarterlyGoal = R.pathOr("", ["quarterlyGoals", "0"], annualInitiativeFormatted);
   const milestone = R.pathOr("", ["milestones", "0"], quarterlyGoal);
   return (
@@ -64,7 +64,6 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
           </TextDiv>
           <QuarterlyGoalCardContainer>
             <QuarterlyGoalCard
-              annualInitiativeYear={annualInitiative.fiscalYear}
               quarterlyGoal={quarterlyGoal}
               annualInitiativeDescription={R.pathOr("", ["description"], annualInitiative)}
               onboarding={true}
@@ -95,13 +94,13 @@ const fadeIn = keyframes`
     transform: scale(1);
     opacity: 1;
   }
-`
+`;
 
-const animTiming = "800ms ease forwards"
+const animTiming = "800ms ease forwards";
 
 const fadeInAnimation = css`
   animation: ${fadeIn} ${animTiming};
-`
+`;
 const Container = styled.div`
   width: 80%;
   height: 100%;
@@ -109,8 +108,8 @@ const Container = styled.div`
 `;
 
 type SectionContainerProps = {
-  height?: number,
-}
+  height?: number;
+};
 
 const SectionContainer = styled.div<SectionContainerProps>`
   ${space}
@@ -137,12 +136,11 @@ const AnnualInitiativeContainer = styled.div`
 const QuarterlyGoalCardContainer = styled.div`
   width: 100%;
   border-radius: 10px;
-  box-shadow: 0px 3px 6px #00000029;
+  box-shadow: 0px 3px 6px ${props => props.theme.colors.grayShadow};
   padding-bottom: 8px;
 `;
 
-const MilestoneContainer = styled.div`
-`;
+const MilestoneContainer = styled.div``;
 
 const WrappedTextDiv = styled(TextDiv)`
   overflow-wrap: anywhere;

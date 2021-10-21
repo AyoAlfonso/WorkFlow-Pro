@@ -121,7 +121,7 @@ export const CoreFourOnly = (): JSX.Element => (
 const boxStyle = {
   padding: 16,
   marginRight: "10px",
-  boxShadow: `1px 3px 6px ${baseTheme.colors.boxShadow}`,
+  boxShadow: `1px 3px 6px ${baseTheme.colors.grayShadow}`,
   border: `0px solid ${baseTheme.colors.white}`,
   borderRadius: "10px",
 };

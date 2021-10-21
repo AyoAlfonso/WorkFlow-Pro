@@ -21,7 +21,7 @@ export const EmptyState = ({ heading, infoText }: IEmptyStateProps): JSX.Element
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 95vh;
   justify-content: center;
   align-items: center;
   text-align: center;

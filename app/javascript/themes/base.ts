@@ -33,6 +33,7 @@ export const baseTheme = {
     fuschiaBlue: "#6554C0",
     bali: "#00B8D9",
     poppySunrise: "#FF5630",
+    yellowSea: "#FBB004",
     superGreen: "#18A69A",
     frog: "#696112",
     fadedYellow: "#FFEFC9",
@@ -65,12 +66,12 @@ export const baseTheme = {
     tango: "#EC6F25",
   },
 
-  fonts: {
-    body: "Lato, sans-serif",
-    heading: "Exo, sans-serif",
-  },
+         fonts: {
+           body: "Lato, sans-serif",
+           heading: "Exo, sans-serif",
+         },
 
-  fontSizes: [15, 16, 20, 30, 36, 48],
+         fontSizes: [15, 16, 20, 30, 36, 48],
 
-  space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
-};
+         space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
+       };

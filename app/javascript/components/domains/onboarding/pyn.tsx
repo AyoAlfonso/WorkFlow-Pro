@@ -62,7 +62,7 @@ const PynContainer = styled.div`
   height: 58px;
   width: 95%;
   border-radius: 10px;
-  box-shadow: 0px 3px 6px ${baseTheme.colors.boxShadow};
+  box-shadow: 0px 3px 6px ${baseTheme.colors.grayShadow};
   display: flex;
   justify-content: flex-start;
   align-items: center;

@@ -27,8 +27,6 @@ import { TeamIssues } from "./components/team-issues";
 import { ParkingLot } from "~/components/domains/meetings-forum/components/parking-lot";
 import { Exploration } from "~/components/domains/meetings-forum/components/exploration";
 import { MonthlyReflection } from "~/components/domains/meetings-forum/components/monthly-reflection";
-import { WeeklyMilestones  } from "../check-in/components/weekly-milestones";
-import { KpiComponent } from "../check-in/components/kpi";
 import { ScorecardsIndex } from "~/components/domains/scorecard/scorecards-index";
 import { useMst } from "~/setup/root";
 
@@ -41,18 +39,20 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
   const [loading, setLoading] = useState<boolean>(true);
   const { teamStore, companyStore } = useMst();
   useEffect(() => {
-    teamStore.getTeam(team_id).then(() => {
-      setLoading(false);
-    });
-  }, []);
+    if (!R.isNil(team_id)) {
+      teamStore.getTeam(team_id);
+    }
+    setLoading(false);
+  }, [team_id]);
 
   const currentTeam = teamStore.currentTeam;
-  if (loading || R.isNil(step) || !currentTeam || !currentTeam?.id) {
+  if (loading || R.isNil(step)) {
+    return <Loading />;
+  } else if (team_id && !currentTeam?.id) {
     return <Loading />;
   }
-
-  const ownerId = currentTeam.executive ? companyStore.company.id : currentTeam?.id;
-  const ownerType = currentTeam.executive ? "company" : "team";
+  const ownerId = team_id && currentTeam.executive ? companyStore.company.id : currentTeam?.id;
+  const ownerType = team_id && currentTeam.executive ? "company" : "team";
 
   switch (step.stepType) {
     case "component":
@@ -91,10 +91,6 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
           return <MonthlyReflection />;
         case "Exploration":
           return <Exploration />;
-        case "KPI":
-          return <KpiComponent />;
-        case "WeeklyMilestones":
-          return <WeeklyMilestones  />;
         case "Scorecard":
           return <ScorecardsIndex miniEmbed={true} ownerType={ownerType} ownerId={ownerId} />;
         default:

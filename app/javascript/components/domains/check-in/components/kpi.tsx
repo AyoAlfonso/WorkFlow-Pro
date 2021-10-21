@@ -32,9 +32,10 @@ export const KpiComponent = observer(
     let valueForComment;
     const [value, setValue] = useState(undefined);
     const [comment, setComment] = useState("");
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      scorecardStore.getScorecard({ ownerType: "user", ownerId: id });
+      scorecardStore.getScorecard({ ownerType: "user", ownerId: id }).then(() => setLoading(false));
       companyStore.load();
     }, [id]);
 
@@ -74,8 +75,11 @@ export const KpiComponent = observer(
     const renderKPIs = (): JSX.Element => {
       return (
         <>
-          {R.isNil(kpis) ? (
-            renderLoading()
+          {!kpis.length ? (
+            <EmptyState
+              heading={"No KPIs"}
+              infoText={`You don't have any active KPIs. Visit the Scorecard page to create a KPI.`}
+            />
           ) : (
             <>
               {renderHeading()}
@@ -130,18 +134,7 @@ export const KpiComponent = observer(
       );
     };
 
-    return (
-      <>
-        {!R.isEmpty(kpis) ? (
-          <>{renderKPIs()}</>
-        ) : (
-          <EmptyState
-            heading={"No KPIs"}
-            infoText={`You don't have any active KPIs. Visit the Scorecard page to create a KPI.`}
-          />
-        )}
-      </>
-    );
+    return <>{loading ? <>{renderLoading()}</> : <>{renderKPIs()}</>}</>;
   },
 );
 

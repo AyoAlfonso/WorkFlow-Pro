@@ -72,30 +72,19 @@ export const WeeklyMilestones = observer(
           ) : (
             <>
               {renderHeading()}
-              {milestonesForWeeklyCheckin?.quarterlyGoalMilestones.map(milestone => (
+              {milestonesForWeeklyCheckin?.map(milestone => (
                 <Container key={milestone.id}>
                   <AvatarContainer>
                     {renderUserAvatar()}
-                    <StyledText>{quarterlyGoal?.description}</StyledText>
+                    <StyledText>
+                      {milestone.quarterlyGoalDescription
+                        ? milestone.quarterlyGoalDescription
+                        : milestone.subinitiativeDescription}
+                    </StyledText>
                   </AvatarContainer>
                   <MilestoneContainer>
                     <MilestoneCard
-                      itemType={"quarterlyGoal"}
-                      editable={true}
-                      milestone={milestone}
-                    />
-                  </MilestoneContainer>
-                </Container>
-              ))}
-              {milestonesForWeeklyCheckin?.subinitiativeMilestones?.map(milestone => (
-                <Container key={milestone.id}>
-                  <AvatarContainer>
-                    {renderUserAvatar()}
-                    <StyledText>{quarterlyGoal.description}</StyledText>
-                  </AvatarContainer>
-                  <MilestoneContainer>
-                    <MilestoneCard
-                      itemType={"quarterlyGoal"}
+                      itemType={milestone.milestoneableType}
                       editable={true}
                       milestone={milestone}
                     />
@@ -109,8 +98,7 @@ export const WeeklyMilestones = observer(
     };
     return (
       <>
-        {!R.isEmpty(milestonesForWeeklyCheckin?.quarterlyGoalMilestones) ||
-        !R.isEmpty(milestonesForWeeklyCheckin?.subinitiativeMilestones) ? (
+        {!R.isEmpty(milestonesForWeeklyCheckin) ? (
           <>{renderMilestones()}</>
         ) : (
           <EmptyState
