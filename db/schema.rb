@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_28_224633) do
+ActiveRecord::Schema.define(version: 2021_10_22_173915) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,7 +57,14 @@ ActiveRecord::Schema.define(version: 2021_09_28_224633) do
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
     t.datetime "created_at", null: false
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "admin_users", force: :cascade do |t|
@@ -319,6 +326,8 @@ ActiveRecord::Schema.define(version: 2021_09_28_224633) do
     t.string "title"
     t.integer "parent_type"
     t.integer "parent_kpi", default: [], array: true
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
   end
@@ -391,6 +400,8 @@ ActiveRecord::Schema.define(version: 2021_09_28_224633) do
     t.boolean "company", default: false, null: false
     t.boolean "pyns", default: false, null: false
     t.boolean "scorecard", default: false
+    t.boolean "scorecard_pro", default: false
+    t.boolean "check_in", default: true
     t.index ["user_id"], name: "index_product_features_on_user_id"
   end
 
@@ -582,6 +593,7 @@ ActiveRecord::Schema.define(version: 2021_09_28_224633) do
     t.string "default_avatar_color"
     t.json "settings", default: {}
     t.integer "executive", default: 0
+    t.boolean "custom_scorecard", default: false
     t.index ["company_id"], name: "index_teams_on_company_id"
   end
 
@@ -674,6 +686,7 @@ ActiveRecord::Schema.define(version: 2021_09_28_224633) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
   add_foreign_key "annual_initiatives", "companies"
   add_foreign_key "check_in_templates_steps", "check_in_templates"

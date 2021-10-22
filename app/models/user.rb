@@ -52,7 +52,7 @@ class User < ApplicationRecord
 
   def create_product_features
       if self.product_features.empty? 
-	      ProductFeature.create!(user_id: self.id, objective: true, team: false, meeting: true, company: false, pyns: true)
+	      ProductFeature.create!(user_id: self.id, objective: true, team: false, meeting: true, company: false, pyns: true, check_in: true)
 			end
   end
 
