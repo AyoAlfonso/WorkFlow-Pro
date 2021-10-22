@@ -43,8 +43,22 @@ export const ScorecardKPIDropdownOptions = ({
     }
   };
 
+  const updateKPI = () => {
+    if (confirm(`Are you sure you want to edit this KPI`)) {
+      if (setModalOpen) {
+        setModalOpen(false);
+      }
+    }
+  };
+
   return (
     <Container ref={optionsRef}>
+      <OptionContainer onClick={() => updateKPI()}>
+        <IconContainer>
+          <StyledIcon icon={"Edit-2"} size={"15px"} />
+        </IconContainer>
+        <OptionText> Edit KPI </OptionText>
+      </OptionContainer>
       <OptionContainer onClick={() => deleteKPI()}>
         <IconContainer>
           <StyledIcon icon={"Delete"} size={"15px"} />
@@ -103,8 +117,6 @@ export const InitialsText = styled.div<InitialsTextProps>`
   margin-bottom: auto;
   color: ${props => props.fontColor};
 `;
-
-
 
 const OptionContainer = styled.div`
   display: flex;
