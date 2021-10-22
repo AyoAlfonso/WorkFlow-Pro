@@ -17,7 +17,7 @@ export const TeamKeyActivities = (props: {}): JSX.Element => {
       <SingleListContainer>
         <KeyActivitiesHeader title={t("meeting.teamsPyns")} />
         <KeyActivityListSubHeaderContainer>{today}</KeyActivityListSubHeaderContainer>
-        <TeamKeyActivitiesBody />
+        <TeamKeyActivitiesBody includeAvatar={true} />
       </SingleListContainer>
     </KeyActivitiesWrapperContainer>
   );
@@ -25,5 +25,5 @@ export const TeamKeyActivities = (props: {}): JSX.Element => {
 
 const SingleListContainer = styled.div`
   width: 100%;
-  margin-right: 20px;
+  // margin-right: 20px;
 `;

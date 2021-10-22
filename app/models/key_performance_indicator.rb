@@ -8,10 +8,20 @@ class KeyPerformanceIndicator < ApplicationRecord
   enum unit_type: { percentage: 0, numerical: 1, currency: 2 }
   enum parent_type: { existing: 0, rollup: 1, avr: 2}
 
+  # TODO: Impleted soft delete with repect to the relation
+  # default_scope { where(published: true) }
+
+  scope :sort_by_company, ->(company) { where(company_id: company.id) }
+
+
   validates :title, :created_by, :viewers, :unit_type, :target_value, presence: true
   validates :greater_than, inclusion: [true, false]
   has_many :scorecard_logs
   
+  def self.for_user(user)
+    self.select { |kpi| kpi.users.include?(user) }
+  end
+
   def as_json(options = [])
     super({
       methods: [:owned_by],

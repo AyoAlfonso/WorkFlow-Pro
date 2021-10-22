@@ -9,6 +9,8 @@ import { IndividualVerticalStatusBlockColorIndicator } from "../shared/individua
 import moment from "moment";
 import ContentEditable from "react-contenteditable";
 import { MilestoneType } from "~/types/milestone";
+import { MilestoneDropdown } from "./milestone-status-dropdown";
+// import { MultiSelect } from "../../../shared/multi-select";
 
 interface IMilestoneCardProps {
   milestone: MilestoneType;
@@ -53,31 +55,35 @@ export const MilestoneCard = observer(
     return (
       <MilestoneContainer>
         <MilestoneDetails unstarted={unstarted} currentWeek={currentWeek}>
-          <WeekOfText unstarted={unstarted}>
-            Week {milestone.week}: Week of{" "}
-            <WeekOfTextValue>{moment(milestone.weekOf).format("MMMM D")}</WeekOfTextValue>
-          </WeekOfText>
-          <MilestoneContentEditable
-            innerRef={descriptionRef}
-            html={descriptionText}
-            disabled={!editable}
-            placeholder={"Enter Description"}
-            onChange={handleChange}
-            onKeyDown={key => {
-              if (key.keyCode == 13) {
-                descriptionRef.current.blur();
-              }
-            }}
-            onBlur={handleBlur}
-          />
+          <Container right={false} center={false}>
+            <WeekOfText unstarted={unstarted}>
+              Week {milestone.week}: Week of{" "}
+              <WeekOfTextValue>{moment(milestone.weekOf).format("MMMM D")}</WeekOfTextValue>
+            </WeekOfText>
+            <MilestoneContentEditable
+              innerRef={descriptionRef}
+              html={descriptionText}
+              disabled={!editable}
+              placeholder={"Enter Description"}
+              onChange={handleChange}
+              onKeyDown={key => {
+                if (key.keyCode == 13) {
+                  descriptionRef.current.blur();
+                }
+              }}
+              onBlur={handleBlur}
+            />
+          </Container>
+          <Container right={true} center={true}>
+            <MilestoneDropdown
+              milestone={milestone}
+              milestoneStatus={milestone.status}
+              editable={editable}
+              fromMeeting={fromMeeting}
+              itemType={itemType}
+            />
+          </Container>
         </MilestoneDetails>
-        <IndividualVerticalStatusBlockColorIndicator
-          milestone={milestone}
-          milestoneStatus={milestone.status}
-          editable={editable}
-          fromMeeting={fromMeeting}
-          itemType={itemType}
-        />
       </MilestoneContainer>
     );
   },
@@ -85,6 +91,10 @@ export const MilestoneCard = observer(
 
 const MilestoneContainer = styled.div`
   display: flex;
+  flex-direction: row;
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 type MilestoneDetailsType = {
@@ -92,11 +102,26 @@ type MilestoneDetailsType = {
   currentWeek: boolean;
 };
 
+type IContainerProps = {
+  right: boolean;
+  center: boolean;
+};
+
+const Container = styled.div<IContainerProps>`
+  margin-left: ${props => (props.right ? "auto" : "")};
+  align-self: ${props => (props.center ? "center" : "")};
+  @media only screen and (max-width: 768px) {
+    justify-self: ${props => (props.center ? "center" : "")};
+    margin-left: 0;
+  }
+`;
+
 const MilestoneDetails = styled(HomeContainerBorders)<MilestoneDetailsType>`
+  display: flex;
   padding: 8px;
   margin-top: 8px;
   margin-bottom: 8px;
-  width: 90%;
+  width: 100%;
   border: ${props =>
     (!props.unstarted || props.currentWeek) && `1px solid ${props.theme.colors.primary100}`};
   color: ${props => props.unstarted && props.theme.colors.grey60};

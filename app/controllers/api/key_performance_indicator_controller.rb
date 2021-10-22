@@ -19,12 +19,14 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
       title: params[:title],
       created_by: current_user,
       owned_by: @owned_by,
+      company_id: current_company.id,
       viewers: params[:viewers],
       unit_type: params[:unit_type],
       target_value: params[:target_value],
       parent_type: params[:parent_type],
       parent_kpi: params[:parent_kpi] || [],
       description: params[:description],
+      greater_than: params[:greater_than],
       needs_attention_threshold: params[:needs_attention_threshold],
     })
 
@@ -44,7 +46,8 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   end
 
   def destroy
-    @kpi.destroy!
+    @kpi.scorecard_logs.destroy_all
+    @kpi.destroy! 
     render json: { kpi: @kpi.as_json(except: %w[created_at updated_at],methods: [:owned_by]),  status: :ok }
   end
 

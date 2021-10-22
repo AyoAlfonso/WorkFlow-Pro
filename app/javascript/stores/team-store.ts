@@ -47,11 +47,12 @@ export const TeamStoreModel = types
         showToast("Updated team", ToastMessageConstants.SUCCESS);
       }
     }),
-    updateTeamSettings: flow(function*(formData) {
+    updateTeamSettings: flow(function*(formData, silent = false) {
       const response: ApiResponse<any> = yield self.environment.api.updateTeamSettings(formData);
       if (response.ok) {
         self.currentTeam = response.data.team;
-        showToast("Updated team settings", ToastMessageConstants.SUCCESS);
+        self.teams = response.data.teams;
+        if (!silent) showToast("Updated team settings", ToastMessageConstants.SUCCESS);
       }
     }),
     createTeamAndInviteUsers: flow(function*(teamName, users) {

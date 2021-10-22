@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useMst } from "../../../setup/root";
 import styled from "styled-components";
-import { Plan } from "./shared/plan-button"
+import { Plan } from "./shared/plan-button";
 import { Habits } from "../habits/habits-widget";
 import { Loading } from "../../shared/loading";
 import { Issues } from "../issues/issues-container";
@@ -23,7 +23,7 @@ export const HomePersonalItems = (): JSX.Element => {
   const {
     sessionStore: { profile },
     companyStore: { company },
-    meetingStore
+    meetingStore,
   } = useMst();
 
   const instanceType = company && company.accessForum ? "forum" : "teams";
@@ -35,7 +35,7 @@ export const HomePersonalItems = (): JSX.Element => {
         <ToolsHeader type={"h2"} mt={0}>
           {t("tools.title")}
         </ToolsHeader>
-        <Plan/>
+        <Plan />
         <Journal
           expanded={expanded}
           handleChange={handleChange}

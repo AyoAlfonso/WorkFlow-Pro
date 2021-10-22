@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from "react";
 import ContentEditable from "react-contenteditable";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
+import { Avatar } from "~/components/shared/avatar";
 import { baseTheme } from "../../../themes/base";
 import { Icon } from "../../shared/icon";
 import { LabelSelection, DefaultStyledLabel } from "~/components/shared";
@@ -25,6 +26,7 @@ interface IKeyActivityRecordProps {
   meetingId?: string | number;
   disabled?: boolean;
   noBorder?: boolean;
+  includeAvatar?: boolean;
 }
 
 export const KeyActivityRecord = observer(
@@ -34,6 +36,7 @@ export const KeyActivityRecord = observer(
     meetingId,
     disabled,
     noBorder,
+    includeAvatar = false,
   }: IKeyActivityRecordProps): JSX.Element => {
     const { keyActivityStore } = useMst();
     const keyActivityRef = useRef(null);
@@ -42,6 +45,11 @@ export const KeyActivityRecord = observer(
     const [selectedDueDate, setSelectedDueDate] = useState<Date>(new Date(keyActivity.dueDate));
     const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
     const [selectedLabel, setSelectedLabel] = useState<any>(null);
+
+    if (!keyActivity) {
+      return <></>;
+    }
+    const { user } = keyActivity;
 
     useEffect(() => {
       setSelectedLabel(
@@ -174,6 +182,19 @@ export const KeyActivityRecord = observer(
           >
             <KeyActivityPriorityIcon priority={keyActivity.priority} />
           </KeyActivityPriorityContainer>
+          {includeAvatar && (
+            <AvatarContainer>
+              <Avatar
+                defaultAvatarColor={user.defaultAvatarColor}
+                avatarUrl={user.avatarUrl}
+                firstName={user.firstName}
+                lastName={user.lastName}
+                size={24}
+                marginLeft={"auto"}
+              />
+            </AvatarContainer>
+          )}
+
           <DateContainer>
             <Popup
               disabled={disabled}
@@ -364,3 +385,10 @@ const RightContainer = styled.div`
   display: flex;
   margin-left: auto;
 `;
+
+// const AvatarContainer = styled.div`
+//   margin-left: 15px;
+//   &: hover {
+//     cursor: pointer;
+//   }
+// `;

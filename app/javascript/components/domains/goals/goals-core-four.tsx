@@ -9,6 +9,7 @@ import { Icon } from "~/components/shared/icon";
 import { useTranslation } from "react-i18next";
 import { HomeContainerBorders } from "../home/shared-components";
 import { EnlargedHomeTitle } from "./shared/enlarged-home-title";
+import { baseTheme } from "../../../themes";
 
 interface ICoreFourValuesProps {
   showCoreFour?: boolean;
@@ -57,54 +58,52 @@ const CoreFourValues = observer(
     const { t } = useTranslation();
 
     return company ? (
-      <HomeContainerBorders key="core-four">
-        <Flex>
-          <Box width={1 / 4} sx={{ padding: 16 }}>
-            <CoreFourHeaderText fontSize={2} color={"primary100"}>
-              {t("core.core1")}
-            </CoreFourHeaderText>
-            <CoreFourBodyTextContainer>
-              <div
-                className="trix-content"
-                dangerouslySetInnerHTML={{ __html: company.coreFour.core1Content }}
-              ></div>
-            </CoreFourBodyTextContainer>
-          </Box>
-          <Box width={1 / 4} sx={{ padding: 16 }}>
-            <CoreFourHeaderText fontSize={2} color={"primary100"}>
-              {t("core.core2")}
-            </CoreFourHeaderText>
-            <CoreFourBodyTextContainer>
-              <div
-                className="trix-content"
-                dangerouslySetInnerHTML={{ __html: company.coreFour.core2Content }}
-              ></div>
-            </CoreFourBodyTextContainer>
-          </Box>
-          <Box width={1 / 4} sx={{ padding: 16 }}>
-            <CoreFourHeaderText fontSize={2} color={"primary100"}>
-              {t("core.core3")}
-            </CoreFourHeaderText>
-            <CoreFourBodyTextContainer>
-              <div
-                className="trix-content"
-                dangerouslySetInnerHTML={{ __html: company.coreFour.core3Content }}
-              ></div>
-            </CoreFourBodyTextContainer>
-          </Box>
-          <Box width={1 / 4} sx={{ padding: 16 }}>
-            <CoreFourHeaderText fontSize={2} color={"primary100"}>
-              {t("core.core4")}
-            </CoreFourHeaderText>
-            <CoreFourBodyTextContainer>
-              <div
-                className="trix-content"
-                dangerouslySetInnerHTML={{ __html: company.coreFour.core4Content }}
-              ></div>
-            </CoreFourBodyTextContainer>
-          </Box>
-        </Flex>
-      </HomeContainerBorders>
+      <Flex>
+        <Box width={1 / 4} sx={boxStyle}>
+          <CoreFourHeaderText fontSize={2} color={"primary100"}>
+            {t("core.core1")}
+          </CoreFourHeaderText>
+          <CoreFourBodyTextContainer>
+            <div
+              className="trix-content"
+              dangerouslySetInnerHTML={{ __html: company.coreFour.core1Content }}
+            ></div>
+          </CoreFourBodyTextContainer>
+        </Box>
+        <Box width={1 / 4} sx={boxStyle}>
+          <CoreFourHeaderText fontSize={2} color={"primary100"}>
+            {t("core.core2")}
+          </CoreFourHeaderText>
+          <CoreFourBodyTextContainer>
+            <div
+              className="trix-content"
+              dangerouslySetInnerHTML={{ __html: company.coreFour.core2Content }}
+            ></div>
+          </CoreFourBodyTextContainer>
+        </Box>
+        <Box width={1 / 4} sx={boxStyle}>
+          <CoreFourHeaderText fontSize={2} color={"primary100"}>
+            {t("core.core3")}
+          </CoreFourHeaderText>
+          <CoreFourBodyTextContainer>
+            <div
+              className="trix-content"
+              dangerouslySetInnerHTML={{ __html: company.coreFour.core3Content }}
+            ></div>
+          </CoreFourBodyTextContainer>
+        </Box>
+        <Box width={1 / 4} sx={boxStyle}>
+          <CoreFourHeaderText fontSize={2} color={"primary100"}>
+            {t("core.core4")}
+          </CoreFourHeaderText>
+          <CoreFourBodyTextContainer>
+            <div
+              className="trix-content"
+              dangerouslySetInnerHTML={{ __html: company.coreFour.core4Content }}
+            ></div>
+          </CoreFourBodyTextContainer>
+        </Box>
+      </Flex>
     ) : (
       <Loading key="core-four" />
     );
@@ -119,6 +118,13 @@ export const CoreFourOnly = (): JSX.Element => (
   </div>
 );
 
+const boxStyle = {
+  padding: 16,
+  marginRight: "10px",
+  boxShadow: `1px 3px 6px ${baseTheme.colors.boxShadow}`,
+  border: `0px solid ${baseTheme.colors.white}`,
+  borderRadius: "10px",
+};
 
 const Container = styled.div`
   flex-direction: column;
@@ -130,8 +136,10 @@ const TitleContainer = styled.div`
 `;
 
 const CoreFourHeaderText = styled(Text)`
-  margin-top: 16px;
-  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0px;
+  margin-bottom: 15px;
 `;
 
 const CoreFourBodyTextContainer = styled.div`

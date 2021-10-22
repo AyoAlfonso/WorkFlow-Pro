@@ -37,22 +37,17 @@ export const Recap = observer(
       return <Loading />;
     }
 
-    const {
-      milestoneProgressAverages,
-      keyActivities,
-      issues,
-      averageMilestoneProcessPercentage,
-    } = meetingStore.meetingRecap;
+    const { keyActivities, issues, averageMilestoneProcessPercentage } = meetingStore.meetingRecap;
 
     // the average completed percentage of milestones that belong to the quarterly goals that belong to the users of the team for the current week
-    const goalProgress = averageMilestoneProcessPercentage;
+    const goalProgress = averageMilestoneProcessPercentage || parseInt("0");
 
     // key activities that belong to the current meeting's meeting_template and team
-    const tasksCompletedCount = keyActivities.filter(ka => ka.completedAt !== null).length;
-    const totalTasksCount = keyActivities.length;
+    const tasksCompletedCount = keyActivities?.filter(ka => ka.completedAt !== null).length || 0;
+    const totalTasksCount = keyActivities?.length || 1;
 
     // issues that belong to this team
-    const issuesCompletedCount = issues.filter(issue => issue.completedAt !== null).length;
+    const issuesCompletedCount = issues?.filter(issue => issue.completedAt !== null).length || 0;
     const ISSUES_TARGET_PER_WEEK = 3;
 
     const cardProps = {

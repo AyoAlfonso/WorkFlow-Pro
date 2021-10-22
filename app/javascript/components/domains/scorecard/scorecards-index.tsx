@@ -10,9 +10,18 @@ import { ScorecardSummary } from "./scorecard-summary";
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown";
 import { toJS, autorun } from "mobx";
 
+interface IScorecardsIndexProps {
+  ownerType?: string;
+  ownerId?: number;
+  miniEmbed?: boolean;
+}
+
 export const ScorecardsIndex = observer(
-  (): JSX.Element => {
-    const { owner_type, owner_id } = useParams();
+  ({ ownerType, ownerId, miniEmbed }: IScorecardsIndexProps): JSX.Element => {
+    let { owner_type, owner_id } = useParams();
+    owner_type = ownerType ? ownerType : owner_type;
+    owner_id = ownerId ? ownerId : owner_id;
+
     const {
       companyStore,
       scorecardStore,
@@ -56,7 +65,9 @@ export const ScorecardsIndex = observer(
       !companyStore.company ||
       !userStore.users ||
       !teamStore.teams ||
-      !keyPerformanceIndicatorStore
+      !keyPerformanceIndicatorStore ||
+      !owner_type ||
+      !owner_id
     ) {
       return <Loading />;
     }
@@ -67,6 +78,7 @@ export const ScorecardsIndex = observer(
           ownerType={owner_type}
           ownerId={owner_id}
           setScorecardOwner={setScorecardOwner}
+          miniEmbed={miniEmbed}
         />
         <ScorecardSummary
           kpis={kpis}
@@ -81,6 +93,7 @@ export const ScorecardsIndex = observer(
           setKpis={setKPIs}
           viewEditKPIModalOpen={viewEditKPIModalOpen}
           setViewEditKPIModalOpen={setViewEditKPIModalOpen}
+          miniEmbed={miniEmbed}
         />
       </Container>
     ) : (
@@ -89,6 +102,7 @@ export const ScorecardsIndex = observer(
           ownerType={owner_type}
           ownerId={owner_id}
           setScorecardOwner={setScorecardOwner}
+          miniEmbed={miniEmbed}
         />
         <EmptyContainer>
           <EmptyTitle>Empty Scorecard</EmptyTitle>
@@ -98,9 +112,11 @@ export const ScorecardsIndex = observer(
             }`}{" "}
             has no KPIs yet. Add your first one here.
           </EmptySubtitle>
-          <AddKPIsContainer>
-            <AddKPIDropdown kpis={allKPIs} />
-          </AddKPIsContainer>
+          {!miniEmbed && (
+            <AddKPIsContainer>
+              <AddKPIDropdown kpis={allKPIs} />
+            </AddKPIsContainer>
+          )}
         </EmptyContainer>
       </Container>
     );
