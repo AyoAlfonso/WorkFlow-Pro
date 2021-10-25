@@ -14,7 +14,7 @@ import { observer } from "mobx-react";
 
 interface IQuarterlyGoalCardProps {
   quarterlyGoal: QuarterlyGoalType;
-  annualInitiativeYear: number;
+  annualInitiativeYear?: number;
   setQuarterlyGoalModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   setQuarterlyGoalId?: React.Dispatch<React.SetStateAction<number>>;
   setSelectedAnnualInitiativeDescription?: React.Dispatch<React.SetStateAction<string>>;
@@ -26,7 +26,6 @@ interface IQuarterlyGoalCardProps {
 export const QuarterlyGoalCard = observer(
   ({
     quarterlyGoal,
-    annualInitiativeYear,
     setQuarterlyGoalModalOpen,
     setQuarterlyGoalId,
     setSelectedAnnualInitiativeDescription,
@@ -39,20 +38,19 @@ export const QuarterlyGoalCard = observer(
     const {
       warningRed,
       fadedRed,
-      cautionYellow,
       fadedYellow,
       finePine,
       fadedGreen,
-      grey40,
-      grey20,
       grey80,
       grey100,
+      backgroundGrey,
       white,
       primary100,
+      tango,
     } = baseTheme.colors;
     const defaultOptionsColor = white;
     const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
-    //TODOIST: Come back to make this code dry and icon color constant
+
     let currentMilestone;
     const statusBadge = {
       description: "",
@@ -69,10 +67,7 @@ export const QuarterlyGoalCard = observer(
     if (quarterlyGoal.closedAt != null) {
       statusBadge.description = `Closed - Q${quarterlyGoal.quarter}`;
       statusBadge.colors = { color: white, backgroundColor: grey100 };
-    } else if (
-      currentFiscalYear * 10 + currentFiscalQuarter <
-      annualInitiativeYear * 10 + quarterlyGoal.quarter
-    ) {
+    } else if (currentFiscalYear < quarterlyGoal.quarter) {
       statusBadge.description = `Upcoming - Q${quarterlyGoal.quarter}`;
       statusBadge.colors = { color: white, backgroundColor: primary100 };
     } else {
@@ -88,7 +83,7 @@ export const QuarterlyGoalCard = observer(
             break;
           case "in_progress":
             statusBadge.description = "Needs Attention";
-            statusBadge.colors = { color: cautionYellow, backgroundColor: fadedYellow };
+            statusBadge.colors = { color: tango, backgroundColor: fadedYellow };
             break;
           case "incomplete":
             statusBadge.description = "Behind";
@@ -96,7 +91,7 @@ export const QuarterlyGoalCard = observer(
             break;
           case "unstarted":
             statusBadge.description = "No update";
-            statusBadge.colors = { color: grey40, backgroundColor: grey20 };
+            statusBadge.colors = { color: grey100, backgroundColor: backgroundGrey };
             break;
         }
       }

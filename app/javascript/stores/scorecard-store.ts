@@ -14,7 +14,6 @@ function rollupMemoizer(kpiPeriodYearWeekScore, datumPeriodYearWeekScore) {
     : datumPeriodYearWeekScore;
 }
 
-// TO DO  Encapsulate this function
 export const setRelatedParents = KPIs => {
   return KPIs.map(kpi => {
     if (kpi.parentType) {

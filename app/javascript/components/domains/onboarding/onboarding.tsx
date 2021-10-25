@@ -75,12 +75,12 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
     });
   }, [loadOnboarding]);
 
-  const { fieldsAndLabels, headingsAndDescriptions, timeZones } = staticDataStore;
+  const { headingsAndDescriptions, timeZones } = staticDataStore;
   const { onboardingCompany, onboardingDisplayFormat } = companyStore;
   const { profile } = sessionStore;
   const requiredFields = ["name", "timezone", "fiscalYearStart"];
 
-  if (loading || R.isNil(profile) || !timeZones) {
+  if (loading || R.isNil(profile) || !timeZones || !onboardingDisplayFormat) {
     return <Loading />;
   }
 
@@ -408,10 +408,6 @@ True value of LynchPyn is in working together with others in your team and compa
       stepwise={false}
     />,
   ];
-
-  // const leftBodyForumComponents = [
-
-  // ];
 
   const bulletContainerStyle = { height: "108px", paddingTop: "88px" };
 

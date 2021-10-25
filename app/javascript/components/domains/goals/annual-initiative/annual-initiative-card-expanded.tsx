@@ -56,7 +56,6 @@ export const AnnualInitiativeCardExpanded = observer(
               <QuarterlyGoalCard
                 key={index}
                 quarterlyGoal={quarterlyGoal}
-                annualInitiativeYear={annualInitiative.fiscalYear}
                 setQuarterlyGoalModalOpen={setQuarterlyGoalModalOpen}
                 setQuarterlyGoalId={setQuarterlyGoalId}
                 setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}

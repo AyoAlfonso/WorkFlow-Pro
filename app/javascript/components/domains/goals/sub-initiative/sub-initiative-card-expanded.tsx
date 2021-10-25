@@ -21,12 +21,7 @@ export const SubInitiativeCardsExpanded = observer(
       setSelectedAnnualInitiativeDescription,
     } = props;
 
-    const { quarterlyGoalStore, companyStore, sessionStore } = useMst();
-    const [createQuarterlyGoalArea, setCreateQuarterlyGoalArea] = useState<boolean>(false);
-
-    const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
-
-    const { t } = useTranslation();
+    const { sessionStore } = useMst();
 
     const renderSubInitiativeQuarterlyGoals = () => {
       return annualInitiative.quarterlyGoals[selectedSubInitiativeCards].subInitiatives.map(
@@ -41,7 +36,6 @@ export const SubInitiativeCardsExpanded = observer(
               <InitiativesContainer>
                 <SubInitiativeGoalCard
                   key={index}
-                  annualInitiativeYear={annualInitiative.fiscalYear}
                   subInitiative={subInitiative}
                   setSubInitiativeModalOpen={setSubInitiativeModalOpen}
                   setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
@@ -54,38 +48,6 @@ export const SubInitiativeCardsExpanded = observer(
       );
     };
 
-    {
-      /*
-    const renderCreateGoal = () => {
-      if (
-        !(
-          annualInitiative.fiscalYear == companyStore.company.currentFiscalYear &&
-          companyStore.company.currentFiscalQuarter == 4 &&
-          companyStore.company.quarterForCreatingQuarterlyGoals == 1
-        ) &&
-        showEditButton
-      ) {
-        return (
-          <CreateGoalContainer>
-            <CreateGoalSection
-              placeholder={t("quarterlyGoal.enterTitle", { title: quarterlyGoalTitle })}
-              addButtonText={`${t("quarterlyGoal.add", { title: quarterlyGoalTitle })} (Q${
-                companyStore.company.quarterForCreatingQuarterlyGoals
-              })`}
-              createButtonText={t("quarterlyGoal.addGoal", { title: quarterlyGoalTitle })}
-              showCreateGoal={createQuarterlyGoalArea}
-              setShowCreateGoal={setCreateQuarterlyGoalArea}
-              createAction={quarterlyGoalStore.create}
-              annualInitiativeId={annualInitiative.id}
-              buttonWidth={"220px"}
-              inAnnualInitiative={false}
-            />
-          </CreateGoalContainer>
-        );
-      }
-    };
-*/
-    }
     return (
       <Container
         onClick={e => {
@@ -93,7 +55,6 @@ export const SubInitiativeCardsExpanded = observer(
         }}
       >
         {renderSubInitiativeQuarterlyGoals()}
-        {/* {showCreateQuarterlyGoal && renderCreateGoal()} */}
       </Container>
     );
   },
@@ -136,7 +97,6 @@ const MinimizeIconContainer = styled.div`
   }
 `;
 
-//TODOIST: calc the margin left
 const InitiativesContainer = styled(HomeContainerBorders)`
   background-color: ${props => props.theme.colors.backgroundGrey};
   display: flex;
@@ -149,16 +109,9 @@ const InitiativesContainer = styled(HomeContainerBorders)`
   }
 `;
 
-//TODOIT: component repeated cleanup once reaching 4x
 const ShowInitiativeBar = styled.div`
   margin: 15%;
   color: ${props => props.theme.colors.primary100};
   font-size: 12px;
   font-weight: bold;
 `;
-
-// const CreateGoalContainer = styled.div`
-//   margin-bottom: 16px;
-//   margin-right: 4px;
-//   margin-left: 4px
-// `;
