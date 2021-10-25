@@ -25,19 +25,20 @@ export const Meeting = (): JSX.Element => {
   } = useMst();
   const { t } = useTranslation();
 
+  const profileTeams = R.sort((a, b) => a?.name.localeCompare(b?.name), profile.teams);
   const teamsData = R.flatten(
-    [].concat(profile.teams.map(team => [<TeamSettings team={team} key={team.id} />])),
+    [].concat(profileTeams.map(team => [<TeamSettings team={team} key={team.id} />])),
   );
 
+  if (!teamsData) {
+    return <> </>;
+  }
   return (
     <StretchContainer>
       <HeaderContainer>
         <HeaderText>{t("profile.meetingsManagement.header")}</HeaderText>
       </HeaderContainer>
-      <BodyContainer>
-      
-        {teamsData}
-      </BodyContainer>
+      <BodyContainer>{teamsData}</BodyContainer>
     </StretchContainer>
   );
 };
