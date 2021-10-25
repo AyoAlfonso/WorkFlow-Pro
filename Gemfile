@@ -51,11 +51,8 @@ gem 'scenic'
 gem "aws-sdk-s3", require: false
 gem 'rack-cors'
 gem 'faraday'
-<<<<<<< HEAD
-=======
 gem "lograge"
 
->>>>>>> 61d3016a (add the lograde module to rails bE)
 gem 'exception_notification'
 
 group :development, :test do
