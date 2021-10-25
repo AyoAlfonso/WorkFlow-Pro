@@ -53,7 +53,10 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
   }
   const ownerId = team_id && currentTeam.executive ? companyStore.company.id : currentTeam?.id;
   const ownerType = team_id && currentTeam.executive ? "company" : "team";
-
+  const renderScorecard = () => {
+    return !currentTeam.settings.weeklyMeetingDashboardLinkEmbed ? <ScorecardsIndex miniEmbed={true} ownerType={ownerType} ownerId={ownerId} /> : <></>;
+  }
+  
   switch (step.stepType) {
     case "component":
       switch (step.componentToRender) {
@@ -92,7 +95,7 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
         case "Exploration":
           return <Exploration />;
         case "Scorecard":
-          return <ScorecardsIndex miniEmbed={true} ownerType={ownerType} ownerId={ownerId} />;
+          return renderScorecard();
         default:
           return <Text>This custom component has not been configured</Text>;
       }

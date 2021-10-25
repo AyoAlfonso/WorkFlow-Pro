@@ -13,6 +13,18 @@ class Api::ApplicationController < ActionController::API
   rescue_from Pundit::PolicyScopingNotPerformedError, with: :policy_scoping_not_performed_error
 
   helper_method :current_company
+  # TODO: Apply a nuanced error handler
+  # def append_info_to_payload(payload)
+  #         super
+  #       case 
+  #           when payload[:status] == 200
+  #             payload[:level] = "INFO"
+  #           when payload[:status] == 302
+  #             payload[:level] = "WARN"
+  #           else
+  #             payload[:level] = "ERROR"
+  #           end
+  # end
 
   def pundit_user
     CurrentContext.new(current_user, current_company)
