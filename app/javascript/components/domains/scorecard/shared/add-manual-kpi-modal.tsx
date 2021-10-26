@@ -54,7 +54,6 @@ export const AddManualKPIModal = observer(
     );
     const [kpi, setKpi] = useState(null);
     const [greaterThan, setGreaterThan] = useState<boolean>(true);
-    const [greaterThanDescription, setGreaterThanDescription] = useState<string>(undefined);
     const [description, setDescription] = useState<string>(undefined);
     const [unitType, setUnitType] = useState<string>(
       externalManualKPIData?.unitType || "numerical",
@@ -278,7 +277,6 @@ export const AddManualKPIModal = observer(
                 name={"logic"}
                 onChange={e => {
                   setGreaterThan(e.target.key == "greater-than" ? true : false);
-                  // setGreaterThanDescription(e.target.value);
                 }}
                 value={greaterThan ? 1 : 0}
                 fontSize={12}
