@@ -5,6 +5,7 @@ import { useMst } from "~/setup/root";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { TeamSettings } from "~/components/domains/account/team-settings";
+import { Loading } from "~/components/shared/loading";
 
 import {
   StretchContainer,
@@ -27,15 +28,15 @@ export const Meeting = (): JSX.Element => {
   const teamsData = R.flatten(
     [].concat(
       profile.teams
-        .map(team => [<TeamSettings team={team} key={team.id} />])
         .sort((a, b) => {
           return a.name.localeCompare(b.name);
-        }),
+        })
+        .map(team => [<TeamSettings team={team} key={team.id} />]),
     ),
   );
 
-  if (!teamsData) {
-    return <> </>;
+  if (R.isNil(profile)) {
+    return <Loading />;
   }
   return (
     <StretchContainer>
