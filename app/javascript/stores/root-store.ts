@@ -20,8 +20,11 @@ import { NotificationStoreModel, INotificationStore } from "./notification-store
 import { MilestoneStoreModel, IMilestoneStore } from "./milestone-store";
 import { StaticDataStoreModel, IStaticDataStore } from "./static-data-store";
 import { SubInitiativeStoreModel, ISubInitiativeStore } from "./sub-initiative-store";
-import { ScorecardStoreModel, IScorecardStore } from "./scorecard-store"
-import { KeyPerformanceIndicatorStoreModel, IKeyPerformanceIndicatorStore } from "./key-performance-indicator-store"
+import { ScorecardStoreModel, IScorecardStore } from "./scorecard-store";
+import {
+  KeyPerformanceIndicatorStoreModel,
+  IKeyPerformanceIndicatorStore,
+} from "./key-performance-indicator-store";
 
 export const RootStoreModel = types
   .model("RootStoreModel")
@@ -66,7 +69,7 @@ export const RootStoreModel = types
         self.labelStore.fetchLabels();
         self.keyActivityStore.load();
         self.companyStore.getOnboardingCompany();
-        self.descriptionTemplateStore.load()
+        self.descriptionTemplateStore.load();
       }
     }),
   }))
@@ -85,7 +88,7 @@ export interface IRootStore extends IStateTreeNode {
   sessionStore: ISessionStore;
   goalStore: IGoalStore;
   annualInitiativeStore: IAnnualInitiativeStore;
-  descriptionTemplateStore: IDescriptionTemplateStore
+  descriptionTemplateStore: IDescriptionTemplateStore;
   quarterlyGoalStore: IQuarterlyGoalStore;
   questionnaireStore: IQuestionnaireStore;
   journalStore: IJournalStore;

@@ -11,7 +11,7 @@ export class Api {
   token: string;
 
   constructor() {
-    let companyId = localStorage.getItem("companyId");
+    const companyId = localStorage.getItem("companyId");
 
     this.client = create({
       baseURL: "/api",

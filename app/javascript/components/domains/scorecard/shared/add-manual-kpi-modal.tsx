@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { useMst } from "~/setup/root";
 import { Select } from "~/components/shared/input";
 import { OwnedBy } from "./scorecard-owned-by";
-
+import * as R from "ramda";
 import {
   InputFromUnitType,
   ModalWithHeader,
@@ -22,12 +22,12 @@ import { TrixEditor } from "react-trix";
 import { useHistory } from "react-router";
 
 interface AddManualKPIModalProps {
-  kpiId?: number
+  kpiId?: number;
   showAddManualKPIModal: boolean;
   setShowAddManualKPIModal: React.Dispatch<React.SetStateAction<boolean>>;
   externalManualKPIData?: any;
-  setShowEditExistingKPIContainer?:React.Dispatch<React.SetStateAction<boolean>>;
-  headerText?: string
+  setShowEditExistingKPIContainer?: React.Dispatch<React.SetStateAction<boolean>>;
+  headerText?: string;
 }
 
 export const AddManualKPIModal = observer(
@@ -37,17 +37,15 @@ export const AddManualKPIModal = observer(
     setShowAddManualKPIModal,
     externalManualKPIData,
     setShowEditExistingKPIContainer,
-    headerText
-    
+    headerText,
   }: AddManualKPIModalProps): JSX.Element => {
     const history = useHistory();
     const { owner_id, owner_type } = useParams();
     const {
       keyPerformanceIndicatorStore,
-      companyStore,
       sessionStore,
       descriptionTemplateStore,
-      scorecardStore
+      scorecardStore,
     } = useMst();
     const [title, setTitle] = useState<string>(
       (externalManualKPIData?.selectedKPIs?.length &&
@@ -55,7 +53,8 @@ export const AddManualKPIModal = observer(
         undefined,
     );
     const [kpi, setKpi] = useState(null);
-    const [greaterThan, setGreaterThan] = useState<string>(undefined);
+    const [greaterThan, setGreaterThan] = useState<boolean>(true);
+    const [greaterThanDescription, setGreaterThanDescription] = useState<string>(undefined);
     const [description, setDescription] = useState<string>(undefined);
     const [unitType, setUnitType] = useState<string>(
       externalManualKPIData?.unitType || "numerical",
@@ -74,15 +73,14 @@ export const AddManualKPIModal = observer(
     const [selectedTagInputCount, setSelectedTagInputCount] = useState(0);
 
     useEffect(() => {
-      if (kpiId !== null) {
+      if (!R.isNil(kpiId)) {
         const advancedKPI = scorecardStore.kpis.find(kpi => kpi.id == kpiId && kpi.parentType);
         keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
           const KPI = advancedKPI || keyPerformanceIndicatorStore?.kpi;
           if (KPI) {
             setDescription(KPI.description);
-            // setCurrentLog();
-            // setGreaterThan(KPI.greaterThan)
-            setUnitType(KPI.unitType)
+            setGreaterThan(KPI.greaterThan);
+            setUnitType(KPI.unitType);
             setKpi(KPI);
           }
         });
@@ -106,14 +104,7 @@ export const AddManualKPIModal = observer(
       if (template) {
         setDescription(template.body.body);
       }
-
     }, []);
-
-    useEffect(() => {
-          return () => {
-            resetModal();
-          };
-    })
 
     const resetModal = () => {
       // setTitle(undefined);
@@ -124,7 +115,7 @@ export const AddManualKPIModal = observer(
       // setTargetValue(undefined);
       // setShowAdvancedSettings(false);
       // setNeedsAttentionThreshold(90);
-      // setShowAddManualKPIModal(false);
+      setShowAddManualKPIModal(false);
     };
 
     const handleSave = () => {
@@ -137,7 +128,7 @@ export const AddManualKPIModal = observer(
         viewers: [{ type: owner_type, id: owner_id }],
         title,
         description: "",
-        greaterThan: greaterThan ? 1 : 0,
+        greaterThan,
         ownedById: owner.id,
         unitType,
         targetValue,
@@ -286,9 +277,10 @@ export const AddManualKPIModal = observer(
               <Select
                 name={"logic"}
                 onChange={e => {
-                  setGreaterThan(e.target.value);
+                  setGreaterThan(e.target.key == "greater-than" ? true : false);
+                  // setGreaterThanDescription(e.target.value);
                 }}
-                value={greaterThan}
+                value={greaterThan ? 1 : 0}
                 fontSize={12}
                 height={15}
                 pt={6}

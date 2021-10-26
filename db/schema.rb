@@ -702,6 +702,7 @@ ActiveRecord::Schema.define(version: 2021_10_15_160337) do
   add_foreign_key "key_activities", "companies"
   add_foreign_key "key_activities", "meetings"
   add_foreign_key "key_activities", "users"
+  add_foreign_key "key_performance_indicators", "companies"
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"
