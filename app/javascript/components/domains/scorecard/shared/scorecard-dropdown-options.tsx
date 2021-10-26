@@ -6,13 +6,15 @@ import { useMst } from "~/setup/root";
 import { useTranslation } from "react-i18next";
 
 interface IScorecardKPIDropdownOptionsProps {
-  setShowDropdownOptions: any;
-  setModalOpen?: any;
+  setShowDropdownOptions: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowEditExistingKPIContainer?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ScorecardKPIDropdownOptions = ({
   setShowDropdownOptions,
   setModalOpen,
+  setShowEditExistingKPIContainer,
 }: IScorecardKPIDropdownOptionsProps): JSX.Element => {
   const { keyPerformanceIndicatorStore } = useMst();
   const optionsRef = useRef(null);
@@ -47,6 +49,7 @@ export const ScorecardKPIDropdownOptions = ({
     if (confirm(`Are you sure you want to edit this KPI`)) {
       if (setModalOpen) {
         setModalOpen(false);
+        setShowEditExistingKPIContainer(true);
       }
     }
   };

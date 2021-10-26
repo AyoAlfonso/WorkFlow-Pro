@@ -16,6 +16,7 @@ import { StatusBadge } from "~/components/shared/status-badge";
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown";
 import { ViewEditKPIModal } from "./shared/view-kpi-modal";
 import { UpdateKPIModal } from "./shared/update-kpi-modal";
+import { AddManualKPIModal } from "./shared/add-manual-kpi-modal";
 import { titleCase } from "~/utils/camelize";
 import { toJS } from "mobx";
 // TODO: figure out better function for percent scores.
@@ -28,7 +29,7 @@ type ScorecardTableViewProps = {
   setKpis: any;
   setViewEditKPIModalOpen: any;
   viewEditKPIModalOpen: any;
-  miniEmbed?: boolean
+  miniEmbed?: boolean;
 };
 
 export const ScorecardTableView = observer(
@@ -38,7 +39,7 @@ export const ScorecardTableView = observer(
     setKpis,
     viewEditKPIModalOpen,
     setViewEditKPIModalOpen,
-    miniEmbed
+    miniEmbed,
   }: ScorecardTableViewProps): JSX.Element => {
     const { t } = useTranslation();
     const {
@@ -53,6 +54,9 @@ export const ScorecardTableView = observer(
     const [updateKPI, setUpdateKPI] = useState(undefined);
     const [currentKPIIcon, setCurrentKPIIcon] = useState(undefined);
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
+    const [showEditExistingKPIContainer, setShowEditExistingKPIContainer] = useState<boolean>(
+      false,
+    );
     const tabs = [t("scorecards.tabs.kpis"), t("scorecards.tabs.people")];
     const {
       fadedYellow,
@@ -213,12 +217,10 @@ export const ScorecardTableView = observer(
                 disabled={value.parentType}
                 onClick={() => {
                   if (value.parentType) return;
-                  if(!miniEmbed){
-                     setUpdateKPI(value);
-                     setUpdateKPIModalOpen(true);
-
+                  if (!miniEmbed) {
+                    setUpdateKPI(value);
+                    setUpdateKPIModalOpen(true);
                   }
-                 
                 }}
                 onMouseEnter={() => {
                   setCurrentKPIIcon(value.id);
@@ -424,7 +426,7 @@ export const ScorecardTableView = observer(
                   })}
                 </TableBody>
               </Table>
-             {!miniEmbed && <AddKPIDropdown dropdownDirectionUp={true} kpis={allKPIs} /> }
+              {!miniEmbed && <AddKPIDropdown dropdownDirectionUp={true} kpis={allKPIs} />}
             </TableContainer>
           )}
         </Container>
@@ -434,6 +436,21 @@ export const ScorecardTableView = observer(
             viewEditKPIModalOpen={viewEditKPIModalOpen}
             setKpis={setKpis}
             setViewEditKPIModalOpen={setViewEditKPIModalOpen}
+            setShowEditExistingKPIContainer={setShowEditExistingKPIContainer}
+          />
+        )}
+        {showEditExistingKPIContainer && (
+          <AddManualKPIModal
+            kpiId={updateKPI.id}
+            showAddManualKPIModal={showEditExistingKPIContainer}
+            setShowAddManualKPIModal={setShowEditExistingKPIContainer}
+            // ownedById={updateKPI.ownedById}
+            // unitType={updateKPI.unitType}
+            // year={company.currentFiscalYear}
+            // week={company.currentFiscalWeek}
+            // currentValue={updateKPI.currentValue}
+            headerText={"Edit KPI"}
+            // setKpis={setKpis}
           />
         )}
         {updateKPI && (

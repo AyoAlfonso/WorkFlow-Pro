@@ -1,6 +1,6 @@
 class UserMailer < ApplicationMailer
-  # helper(StatsHelper)
-  # helper(ActionView::Helpers::SanitizeHelper)
+  helper StatsHelper
+  helper ActionView::Helpers::SanitizeHelper
   include StatsHelper
   default from: "LynchPyn <no-reply@lynchpyn.com>"
   layout "mailer"
