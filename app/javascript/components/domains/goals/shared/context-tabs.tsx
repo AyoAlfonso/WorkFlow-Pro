@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
@@ -23,15 +23,26 @@ import { KeyElementForm } from "./key-element-form";
 import { KeyElementModal } from "./key-element-modal";
 import { RoundButton, Text, TextDiv } from "~/components/shared";
 import "react-tabs/style/react-tabs.css";
+import { JsxElement } from "typescript";
 
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;
   type: string;
   disabled?: boolean;
+  setShowInitiatives?: Dispatch<SetStateAction<boolean>>;
+  setShowMilestones?: Dispatch<SetStateAction<boolean>>;
+  activeInitiatives?: number;
 }
 
 export const ContextTabs = observer(
-  ({ object, type, disabled }: IContextTabsProps): JSX.Element => {
+  ({
+    object,
+    type,
+    disabled,
+    setShowInitiatives,
+    setShowMilestones,
+    activeInitiatives,
+  }: IContextTabsProps): JSX.Element => {
     const {
       sessionStore,
       annualInitiativeStore,
@@ -59,7 +70,8 @@ export const ContextTabs = observer(
     const [focusOnLastInput, setFocusOnLastInput] = useState<boolean>(false);
     const [showKeyElementForm, setShowKeyElementForm] = useState<boolean>(false);
     const editable = currentUser.id == object.ownedById && !disabled;
-
+    const [activeTab, setActiveTab] = useState(type == "quarterlyGoal" ? "milestones" : "aligned initiatives");
+    const [componentToRender, setComponentToRender] = useState(null);
 
     const firstImportanceRef = useRef(null);
     const secondImportanceRef = useRef(null);
@@ -249,9 +261,11 @@ export const ContextTabs = observer(
       }
     };
 
+    const initiativeTab = type == "annualInitiative" ? `Quartely Initiatives` : `Milestones`;
+
     return (
       <Container>
-        <Tabs defaultIndex={tabDefaultIndex()}>
+        {/* <Tabs defaultIndex={tabDefaultIndex()}>
           <StyledTabList>
             <StyledTab onClick={() => tabClicked(1)}>
               <StyledTabTitle tabSelected={selectedContextTab == 1}>Importance </StyledTabTitle>
@@ -269,7 +283,60 @@ export const ContextTabs = observer(
             <StyledTabPanel>{renderContextDescription()}</StyledTabPanel>
             <StyledTabPanel style={{ padding: "0px" }}>{renderContextKeyElements()}</StyledTabPanel>
           </TabPanelContainer>
-        </Tabs>
+        </Tabs> */}
+        <OverviewTabsContainer>
+          {type == "quarterlyGoal" ? (
+            <>
+              <OverviewTabs
+                active={activeTab === "milestones" ? true : false}
+                onClick={() => {
+                  setActiveTab("milestones");
+                  setComponentToRender(null);
+                  setShowInitiatives(false);
+                  setShowMilestones(true);
+                }}
+              >
+                {`Milestones ${activeInitiatives > 0 ? `(${activeInitiatives})` : ""}`}
+              </OverviewTabs>
+            </>
+          ) : (
+            <OverviewTabs
+              active={activeTab === "aligned initiatives" ? true : false}
+              onClick={() => {
+                setActiveTab("aligned initiatives");
+                setComponentToRender(null);
+                setShowInitiatives(true);
+              }}
+            >
+              {`${initiativeTab} ${activeInitiatives > 0 ? `(${activeInitiatives})` : ""}`}
+            </OverviewTabs>
+          )}
+          <OverviewTabs
+            active={activeTab === "key results" ? true : false}
+            onClick={() => {
+              setActiveTab("key results");
+              setComponentToRender(renderContextKeyElements());
+              setShowInitiatives(false);
+              setShowMilestones(false);
+            }}
+          >
+            Key Results
+          </OverviewTabs>
+          {type == "quarterlyGoal" && (
+            <OverviewTabs
+              active={activeTab === "aligned initiatives" ? true : false}
+              onClick={() => {
+                setActiveTab("aligned initiatives");
+                setComponentToRender(null);
+                setShowInitiatives(true);
+                setShowMilestones(false);
+              }}
+            >
+              Supporting Initiatives
+            </OverviewTabs>
+          )}
+        </OverviewTabsContainer>
+        <Container>{componentToRender}</Container>
       </Container>
     );
   },
@@ -362,4 +429,29 @@ const StyledIcon = styled(Icon)`
   &: hover {
     color: ${props => props.theme.colors.greyActive};
   }
+`;
+
+type IOverviewTabs = {
+  active: boolean;
+};
+
+export const OverviewTabs = styled("span")<IOverviewTabs>`
+  margin-bottom: 0;
+  padding: 0 15px;
+  padding-bottom: 5px;
+  color: ${props => (props.active ? props.theme.colors.black : props.theme.colors.greyInactive)};
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 28px;
+  text-decoration: none;
+  border-bottom-width: ${props => (props.active ? `1px` : `0px`)};
+  border-bottom-color: ${props => props.theme.colors.primary100};
+  border-bottom-style: solid;
+`;
+
+export const OverviewTabsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  margin-bottom: 24px;
 `;

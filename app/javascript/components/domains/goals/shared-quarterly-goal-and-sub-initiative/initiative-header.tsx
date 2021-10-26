@@ -8,6 +8,7 @@ import { Text } from "../../../shared/text";
 import ContentEditable from "react-contenteditable";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useTranslation } from "react-i18next";
+import { toJS } from "mobx";
 import moment from "moment";
 
 interface IInitiativeHeaderProps {
@@ -41,6 +42,10 @@ export const InitiativeHeader = ({
   const { t } = useTranslation();
   const descriptionRef = useRef(null);
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
+  const initiativeType = itemType == "quarterlyGoal" ? "quarterly_initiative" : "sub_initiative";
+  const initiativeValue = toJS(
+    sessionStore?.companyStaticData.find(company => company.field === initiativeType).value,
+  );
 
   return (
     <>
@@ -87,59 +92,55 @@ export const InitiativeHeader = ({
             }}
             onBlur={() => mobxStore.update()}
           />
-          <GoalText>
-            driving{" "}
-            <UnderlinedGoalText
-              onClick={() => {
-                setModalOpen(false);
-                setAnnualInitiativeId(annualInitiativeId);
-                setAnnualInitiativeModalOpen(true);
-              }}
-            >
-              {annualInitiativeDescription}
-            </UnderlinedGoalText>
-          </GoalText>
-          <DetailsContainer>
-            <IconContainer>
-              <Icon icon={"Initiative"} size={"16px"} iconColor={"grey80"} />
-            </IconContainer>
-            <YearText type={"small"}>Q{item.quarter}</YearText>
-            <OwnedBySection
-              ownedBy={item.ownedBy}
-              marginLeft={"0px"}
-              marginRight={"0px"}
-              marginTop={"auto"}
-              marginBottom={"auto"}
-              type={itemType}
-              disabled={item.closedInitiative}
-            />
-          </DetailsContainer>
+          {!item.closedAt && (
+            <AnnualInitiativeActionContainer>
+              <DropdownOptions
+                editable={editable}
+                showDropdownOptionsContainer={showDropdownOptionsContainer}
+                setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
+                setParentModalOpen={setModalOpen}
+                itemType={itemType}
+                item={item}
+              />
+              <CloseIconContainer onClick={() => setModalOpen(false)}>
+                <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+              </CloseIconContainer>
+            </AnnualInitiativeActionContainer>
+          )}
         </TitleContainer>
-        {!item.closedAt && (
-          <AnnualInitiativeActionContainer>
-            <DropdownOptions
-              editable={editable}
-              showDropdownOptionsContainer={showDropdownOptionsContainer}
-              setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
-              setParentModalOpen={setModalOpen}
-              itemType={itemType}
-              item={item}
-            />
-            <CloseIconContainer onClick={() => setModalOpen(false)}>
-              <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
-            </CloseIconContainer>
-          </AnnualInitiativeActionContainer>
-        )}
+        <DetailsContainer>
+          <IconContainer>
+            <Icon icon={"Initiative"} size={"16px"} iconColor={"grey80"} />
+            <YearText type={"small"}>{initiativeValue}</YearText>
+          </IconContainer>
+          <IconContainer>
+            <Icon icon={"Deadline-Calendar"} size={"16px"} iconColor={"grey80"} />
+            <YearText type={"small"}>Q{item.quarter}</YearText>
+          </IconContainer>
+          <OwnedBySection
+            ownedBy={item.ownedBy}
+            marginLeft={"0px"}
+            marginRight={"0px"}
+            marginTop={"auto"}
+            marginBottom={"auto"}
+            type={itemType}
+            disabled={item.closedInitiative}
+          />
+        </DetailsContainer>
       </HeaderContainer>
     </>
   );
 };
 
 const HeaderContainer = styled.div`
-  display: flex;
+  margin-bottom: 24px;
 `;
 
-const TitleContainer = styled.div``;
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+`;
 
 const GoalText = styled(Text)`
   font-size: 15px;
@@ -166,9 +167,11 @@ const AnnualInitiativeActionContainer = styled.div`
 `;
 
 const IconContainer = styled.div`
-  margin-right: 8px;
   margin-top: auto;
   margin-bottom: auto;
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
 `;
 
 const CloseIconContainer = styled.div`
@@ -180,21 +183,25 @@ const CloseIconContainer = styled.div`
 const StyledContentEditable = styled(ContentEditable)`
   font-weight: bold;
   font-size: 20px;
+  font-family: Exo;
   padding-top: 5px;
   padding-bottom: 5px;
   padding-left: 4px;
   padding-right: 4px;
   margin-right: -4px;
+  color: ${props => props.theme.colors.black};
 `;
 
 const DetailsContainer = styled.div`
   display: flex;
   margin-left: 4px;
+  align-items: center;
 `;
 
 const YearText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
-  margin-right: 16px;
+  margin-left: 8px;
+  white-space: nowrap;
 `;
 
 const ClosedStatusBannerContainer = styled.div`

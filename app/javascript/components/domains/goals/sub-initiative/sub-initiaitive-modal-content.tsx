@@ -37,6 +37,7 @@ export const SubInitiativeModalContent = observer(
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
+    const [showInitiatives, setShowInitiatives] = useState<boolean>(true);
 
     useEffect(() => {
       subInitiativeStore.getSubInitiative(subInitiativeId).then(() => {
@@ -63,54 +64,63 @@ export const SubInitiativeModalContent = observer(
       .slice(-2)}`;
 
     return (
-      <Container>
+      <>
         <StatusBlockColorIndicator
           milestones={subInitiative.milestones || []}
           indicatorWidth={"80px"}
           indicatorHeight={4}
-           marginBottom={0}
+          marginBottom={0}
         />
-
-        <SubInitiativeBodyContainer>
-          <SectionContainer>
-          <InitiativeHeader
-            itemType={"subInitiative"}
-            item={subInitiative}
-            editable={editable}
-            setAnnualInitiativeId={setAnnualInitiativeId}
-            setModalOpen={setSubInitiativeModalOpen}
-            setAnnualInitiativeModalOpen={setSubInitiativeModalOpen}
-            annualInitiativeId={subInitiative.annualInitiativeId}
-            annualInitiativeDescription={annualInitiativeDescription}
-            showDropdownOptionsContainer={showDropdownOptionsContainer}
-            setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
-            goalYearString={goalYearString}
-          />
-          </SectionContainer>
-          <SectionContainer>
-            <Context itemType={"subInitiative"} item={subInitiative} />
-          </SectionContainer>
-          <SectionContainer>
-            <MilestonesHeaderContainer>
-              <ShowMilestonesButton
-                setShowInactiveMilestones={setShowInactiveMilestones}
-                showInactiveMilestones={showInactiveMilestones}
+        <Container>
+          <SubInitiativeBodyContainer>
+            <SectionContainer>
+              <InitiativeHeader
+                itemType={"subInitiative"}
+                item={subInitiative}
+                editable={editable}
+                setAnnualInitiativeId={setAnnualInitiativeId}
+                setModalOpen={setSubInitiativeModalOpen}
+                setAnnualInitiativeModalOpen={setSubInitiativeModalOpen}
+                annualInitiativeId={subInitiative.annualInitiativeId}
+                annualInitiativeDescription={annualInitiativeDescription}
+                showDropdownOptionsContainer={showDropdownOptionsContainer}
+                setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
+                goalYearString={goalYearString}
               />
-            </MilestonesHeaderContainer>
+            </SectionContainer>
+            <SectionContainer>
+              <Context
+                setShowInitiatives={setShowInitiatives}
+                itemType={"subInitiative"}
+                item={subInitiative}
+              />
+            </SectionContainer>
+            {showInitiatives ? (
+              <SectionContainer>
+                <MilestonesHeaderContainer>
+                  <ShowMilestonesButton
+                    setShowInactiveMilestones={setShowInactiveMilestones}
+                    showInactiveMilestones={showInactiveMilestones}
+                  />
+                </MilestonesHeaderContainer>
 
-            <WeeklyMilestones
-              editable={editable}
-              allMilestones={allMilestones}
-              activeMilestones={activeMilestones}
-              showInactiveMilestones={showInactiveMilestones}
-              itemType={"subInitiative"}
-            />
-            {showCreateMilestones && editable && allMilestones.length == 0 && (
-              <MilestoneCreateButton itemType={"subInitiative"} item={subInitiative} />
+                <WeeklyMilestones
+                  editable={editable}
+                  allMilestones={allMilestones}
+                  activeMilestones={activeMilestones}
+                  showInactiveMilestones={showInactiveMilestones}
+                  itemType={"subInitiative"}
+                />
+                {showCreateMilestones && editable && allMilestones.length == 0 && (
+                  <MilestoneCreateButton itemType={"subInitiative"} item={subInitiative} />
+                )}
+              </SectionContainer>
+            ) : (
+              <></>
             )}
-          </SectionContainer>
-        </SubInitiativeBodyContainer>
-      </Container>
+          </SubInitiativeBodyContainer>
+        </Container>
+      </>
     );
   },
 );
@@ -119,20 +129,15 @@ const Container = styled.div`
   min-width: 240px;
   margin-right: ${props => props["margin-right"] || "0px"};
   height: fit-content;
+  padding: 30px;
   overflow: auto;
   padding-left: auto;
   padding-right: auto;
 `;
 
-const SubInitiativeBodyContainer = styled.div`
-  padding-top: 16px;
-`;
+const SubInitiativeBodyContainer = styled.div``;
 
-const SectionContainer = styled.div`
-  padding-bottom: 36px;
-  padding-left: 20px;
-  padding-right: 20px;
-`;
+const SectionContainer = styled.div``;
 
 const MilestonesHeaderContainer = styled.div`
   display: flex;
