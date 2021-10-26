@@ -47,7 +47,6 @@ import { ForumNotSetup } from "./domains/meetings-forum/not-setup";
 import { ForumAgenda } from "./domains/meetings-forum/forum-agenda";
 import { ForumWelcomeModal } from "./shared/forum-welcome-modal";
 import { OnboardingModal } from "./domains/onboarding";
-import Cookies from "js-cookie";
 
 import { Onboarding } from "./domains/onboarding";
 

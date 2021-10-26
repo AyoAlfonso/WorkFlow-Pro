@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as R from "ramda";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
@@ -20,14 +20,18 @@ const BodyContainer = styled.div`
 
 export const Meeting = (): JSX.Element => {
   const {
-    // teamStore: { teams },
     sessionStore: { profile },
   } = useMst();
   const { t } = useTranslation();
 
-  const profileTeams = R.sort((a, b) => a?.name.localeCompare(b?.name), profile.teams);
   const teamsData = R.flatten(
-    [].concat(profileTeams.map(team => [<TeamSettings team={team} key={team.id} />])),
+    [].concat(
+      profile.teams
+        .map(team => [<TeamSettings team={team} key={team.id} />])
+        .sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        }),
+    ),
   );
 
   if (!teamsData) {
