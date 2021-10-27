@@ -8,7 +8,11 @@ import { CodeBlockDiv, ContainerDiv, Divider, PropsList, RowDiv } from "./shared
 
 export default { title: "Avatar" };
 
-const WrappingDiv = styled.div`
+type WrappingDivProps = {
+  mr: string;
+}
+
+const WrappingDiv = styled.div<WrappingDivProps>`
   ${space}
 `;
 

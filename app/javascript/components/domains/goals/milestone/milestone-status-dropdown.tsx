@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { MilestoneType } from "~/types/milestone";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
-import * as R from "ramda";
 import * as moment from "moment";
 import { observer } from "mobx-react";
 import { ChevronDownIcon } from "../../../shared/input";
@@ -147,21 +146,18 @@ export const MilestoneDropdown = observer(
         {showList && (
           <DropdownListContainer>
             <DropdownList>
-              {R.map(
-                (status: string, index: number) => (
-                  <ListItem
-                    onClick={() => {
-                      updateStatus(status);
-                      setShowList(!showList);
-                    }}
-                    key={index}
-                    value={status}
-                  >
-                    {determineStatusLabel(status)}
-                  </ListItem>
-                ),
-                statusArray,
-              )}
+              {statusArray.map((status, index) => (
+                <ListItem
+                  onClick={() => {
+                    updateStatus(status);
+                    setShowList(!showList);
+                  }}
+                  key={index}
+                  value={status}
+                >
+                  {determineStatusLabel(status)}
+                </ListItem>
+              ))}
             </DropdownList>
           </DropdownListContainer>
         )}

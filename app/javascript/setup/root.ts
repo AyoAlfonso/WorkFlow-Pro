@@ -72,6 +72,7 @@ const initialState = {
   },
   milestoneStore: {
     milestonesForPersonalMeeting: null,
+    milestonesForWeeklyCheckin: null,
   },
   staticDataStore: {
     loading: false,
@@ -91,6 +92,10 @@ const initialState = {
   },
   descriptionTemplateStore: {
     descriptionTemplates: [],
+  },
+  checkInTemplateStore: {
+    checkInTemplates: [],
+    currentCheckIn: null,
   },
 };
 

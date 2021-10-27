@@ -125,6 +125,10 @@ const MilestoneDetails = styled(HomeContainerBorders)<MilestoneDetailsType>`
   border: ${props =>
     (!props.unstarted || props.currentWeek) && `1px solid ${props.theme.colors.primary100}`};
   color: ${props => props.unstarted && props.theme.colors.grey60};
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+    width: auto;
+  }
 `;
 
 type WeekOfTextType = {
@@ -135,6 +139,9 @@ const WeekOfText = styled(Text)<WeekOfTextType>`
   color: ${props => (props.unstarted ? props.theme.colors.grey60 : props.theme.colors.primary100)};
   margin-top: 8px;
   margin-bottom: 8px;
+  @media only screen and (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const WeekOfTextValue = styled.span`
@@ -150,4 +157,8 @@ const MilestoneContentEditable = styled(ContentEditable)`
   padding-left: 16px;
   padding-right: 16px;
   color: ${props => props.theme.colors.black};
+  @media only screen and (max-width: 768px) {
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
 `;

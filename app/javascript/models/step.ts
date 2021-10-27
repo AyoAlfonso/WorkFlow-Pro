@@ -15,6 +15,7 @@ export const StepModel = types
     sectionName: types.maybeNull(types.string),
     stepType: types.string,
     descriptionTextContent: types.maybeNull(types.string),
+    checkInTemplateId: types.maybeNull(types.number),
   })
   .views(self => ({}))
   .actions(self => ({}));

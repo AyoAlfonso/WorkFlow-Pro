@@ -137,13 +137,14 @@
         "actualStartTime": "Actual Start Date"
       },
       "navigation": {
-        "home": "Home",
+        "planner": "Planner",
         "team": "Team",
         "company": "Company",
         "goals": "Objectives",
         "forum": "Meeting",
         "meetings": "Meeting",
-        "scorecards": "Scorecards"
+        "scorecards": "Scorecards",
+        "checkin": "Check-in"
       },
       "goals": {
         "indexTitle": "Objectives"

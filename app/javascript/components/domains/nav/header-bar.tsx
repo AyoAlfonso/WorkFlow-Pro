@@ -9,8 +9,8 @@ import { Avatar } from "../../shared/avatar";
 import { Icon } from "../../shared/icon";
 import { Heading, Text } from "../../shared";
 import { CreateIssueModal } from "../issues/create-issue-modal";
-import { IssuesBody } from "../issues/issues-body"
-import { KeyActivitiesBody } from "../key-activities/key-activities-body"
+import { IssuesBody } from "../issues/issues-body";
+import { KeyActivitiesBody } from "../key-activities/key-activities-body";
 import { CreateKeyActivityModal } from "../key-activities/create-key-activity-modal";
 import { InviteUserModal } from "~/components/shared/invite-user-modal";
 import { AccountDropdownOptions } from "./top-nav/account-dropdown-options";
@@ -23,7 +23,7 @@ declare global {
     FreshworksWidget: any;
     Productstash: {
       show: any;
-    }
+    };
   }
 }
 
@@ -70,30 +70,41 @@ export const HeaderBar = observer(
     };
 
     const renderKeyActivitiesPopup = (): JSX.Element => {
-      return (showKeyActivities && (
-        <KeyActivitiesPopupContainer>
-          <PopupHeaderContainer>
-            <PopupHeaderText>Pyns</PopupHeaderText>
-          </PopupHeaderContainer>
-          <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"}/>
-        </KeyActivitiesPopupContainer>
-      ))
-    }
+      return (
+        showKeyActivities && (
+          <KeyActivitiesPopupContainer>
+            <PopupHeaderContainer>
+              <PopupHeaderText>Pyns</PopupHeaderText>
+            </PopupHeaderContainer>
+            <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"} />
+          </KeyActivitiesPopupContainer>
+        )
+      );
+    };
 
     const renderIssuesPopup = (): JSX.Element => {
-      return (showIssues && (
-        <IssuesPopupContainer>
-          <PopupHeaderContainer>
-            <PopupHeaderText>Issues</PopupHeaderText>
-          </PopupHeaderContainer>
-          <IssuesBody showOpenIssues={showOpenIssues} setShowOpenIssues={setShowOpenIssues} noShadow/>
-        </IssuesPopupContainer>
-      ))
-    }
+      return (
+        showIssues && (
+          <IssuesPopupContainer>
+            <PopupHeaderContainer>
+              <PopupHeaderText>Issues</PopupHeaderText>
+            </PopupHeaderContainer>
+            <IssuesBody
+              showOpenIssues={showOpenIssues}
+              setShowOpenIssues={setShowOpenIssues}
+              noShadow
+            />
+          </IssuesPopupContainer>
+        )
+      );
+    };
     return (
       <Wrapper>
         <Container>
           <HeaderItemsContainer>
+            <LynchpynLogoContainer>
+              <img src={"/assets/LynchPyn-Logo-Blue_300x300"} width="48"></img>
+            </LynchpynLogoContainer>
             <ActionsContainer>
               <StyledHeading type={"h1"}>
                 <HeaderText location={location} />
@@ -101,37 +112,43 @@ export const HeaderBar = observer(
             </ActionsContainer>
             <PersonalInfoContainer ref={accountActionRef}>
               <KeyActivitiesButtonContainer>
-                <KeyActivitiesButton onClick={() => {
-                  setShowKeyActivities(!showKeyActivities);
-                  setShowIssues(false);
-                  setShowAccountActions(false);
-                  setShowCompanyOptions(false);
-                  setCreateIssueModalOpen(false);
-                  setCreateKeyActivityModalOpen(false);
-                }}>
+                <KeyActivitiesButton
+                  onClick={() => {
+                    setShowKeyActivities(!showKeyActivities);
+                    setShowIssues(false);
+                    setShowAccountActions(false);
+                    setShowCompanyOptions(false);
+                    setCreateIssueModalOpen(false);
+                    setCreateKeyActivityModalOpen(false);
+                  }}
+                >
                   Pyns
                 </KeyActivitiesButton>
               </KeyActivitiesButtonContainer>
               <IssuesButtonContainer>
-                <IssuesButton onClick={() => {
-                  setShowIssues(!showIssues);
-                  setShowKeyActivities(false);
-                  setShowAccountActions(false);
-                  setShowCompanyOptions(false);
-                  setCreateIssueModalOpen(false);
-                  setCreateKeyActivityModalOpen(false);
-                }}>
+                <IssuesButton
+                  onClick={() => {
+                    setShowIssues(!showIssues);
+                    setShowKeyActivities(false);
+                    setShowAccountActions(false);
+                    setShowCompanyOptions(false);
+                    setCreateIssueModalOpen(false);
+                    setCreateKeyActivityModalOpen(false);
+                  }}
+                >
                   Issues
                 </IssuesButton>
               </IssuesButtonContainer>
-              <PulseSelectorWrapper onClick={() => {
+              <PulseSelectorWrapper
+                onClick={() => {
                   setShowKeyActivities(false);
                   setShowIssues(false);
                   setShowAccountActions(false);
                   setShowCompanyOptions(false);
                   setCreateIssueModalOpen(false);
                   setCreateKeyActivityModalOpen(false);
-              }}/>
+                }}
+              />
               <PersonalInfoDisplayContainer
                 onClick={() => {
                   setShowAccountActions(!showAccountActions);
@@ -179,6 +196,17 @@ export const HeaderBar = observer(
 const StyledHeading = styled(Heading)`
   margin-top: auto;
   margin-bottom: auto;
+  @media only screen and (max-width: 768px) {
+    font-size: 24px;
+  }
+`;
+
+const LynchpynLogoContainer = styled.div`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: block;
+    margin-left: 16px;
+  }
 `;
 
 const HeaderItemsContainer = styled.div`
@@ -204,11 +232,20 @@ const Wrapper = styled.div`
   width: -moz-available;
   width: -webkit-fill-available;
   width: fill-available;
+  @media only screen and (max-width: 768px) {
+    margin-left: 0px;
+    display: flex;
+    align-items: center;
+  }
 `;
 
 const ActionsContainer = styled.div`
   display: flex;
   margin-left: 40px;
+  @media only screen and (max-width: 768px) {
+    margin-left: auto;
+    margin-right: auto;
+  }
 `;
 
 const ProfileFirstName = styled(Text)`
@@ -269,7 +306,10 @@ const IssuesButtonContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding-right: 24px;
-`
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+`;
 
 const IssuesPopupContainer = styled.div`
   position: absolute;
@@ -280,10 +320,9 @@ const IssuesPopupContainer = styled.div`
   margin-left: -160px;
   margin-top: 60px;
   background: white;
-  box-shadow: 1px 3px 4px 2px rgba(0,0,0,0.1);
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-`
-
+`;
 
 const PopupHeaderContainer = styled.div`
   display: flex;
@@ -310,15 +349,18 @@ const KeyActivitiesPopupContainer = styled.div`
   margin-top: 60px;
   margin-left: -240px;
   background-color: white;
-  box-shadow: 1px 3px 4px 2px rgba(0,0,0,0.1);
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-`
+`;
 const KeyActivitiesButtonContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   padding-right: 24px;
-`
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+`;
 
 const KeyActivitiesButton = styled.div`
   color: ${props => props.theme.colors.primary100};
@@ -330,7 +372,7 @@ const KeyActivitiesButton = styled.div`
     background: ${props => props.theme.colors.primary20};
     cursor: pointer;
   }
-`
+`;
 
 const IssuesButton = styled.div`
   color: ${props => props.theme.colors.primary100};
@@ -342,10 +384,15 @@ const IssuesButton = styled.div`
     background: ${props => props.theme.colors.primary20};
     cursor: pointer;
   }
-`
+`;
 
 const PersonalInfoContainer = styled.div`
   padding-right: 24px;
   display: flex;
   right: 0;
+  @media only screen and (max-width: 768px) {
+    padding-right: 0px;
+    margin-right: 16px;
+    pointer-events: none;
+  }
 `;

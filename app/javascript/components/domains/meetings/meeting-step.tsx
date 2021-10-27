@@ -132,4 +132,7 @@ const StepComponentContainer = styled.div`
   width: inherit;
   min-width: 320px;
   margin-left: 8px;
+  @media only screen and (max-width: 768px) {
+    margin-left: 0;
+  }
 `;

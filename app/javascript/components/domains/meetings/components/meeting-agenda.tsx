@@ -65,7 +65,7 @@ export const MeetingAgenda = ({
           />
           <StepTopicContainer>
             <StyledText>
-              {step.name} ({step.duration} minutes)
+              {step.name} {step.duration && `(${step.duration} minutes)`}
             </StyledText>
             {renderExplorationTopicOwner(step)}
           </StepTopicContainer>
@@ -92,6 +92,8 @@ const StyledText = styled(Text)`
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 10px;
+  font-size: 12px;
+  font-weight: bold;
 `;
 
 const ExplorationTopicOwnerContainer = styled.div`
