@@ -226,6 +226,7 @@ export const SideNavNoMst = (
   const showTeam = productFeatures && productFeatures.team;
   const showMeeting = productFeatures && productFeatures.meeting;
   const showScorecard = productFeatures && productFeatures.scorecard;
+  console.log(productFeatures)
   const renderTeam = (teamLength: number) => {
     switch (teamLength) {
       case 0:
