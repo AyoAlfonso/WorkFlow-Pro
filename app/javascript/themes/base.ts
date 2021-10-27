@@ -31,6 +31,7 @@ export const baseTheme = {
     successGreen: "#00C3B3",
     finePine: "#36B37E",
     fuschiaBlue: "#6554C0",
+    yellowSea: "#FBB004",
     bali: "#00B8D9",
     poppySunrise: "#FF5630",
     yellowSea: "#FBB004",

@@ -121,7 +121,7 @@ module HasFiscalYear
 
   def calculate_current_fiscal_week
     current_date = self.convert_to_their_timezone.to_date
-    ((current_date - current_fiscal_start_date).to_i *  86400).seconds.in_weeks.to_i.abs
+   (current_date - current_fiscal_start_date).days.seconds.in_weeks.ceil
   end
 
   def calculate_current_fiscal_quarter
