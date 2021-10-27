@@ -23,7 +23,6 @@ import { KeyElementForm } from "./key-element-form";
 import { KeyElementModal } from "./key-element-modal";
 import { RoundButton, Text, TextDiv } from "~/components/shared";
 import "react-tabs/style/react-tabs.css";
-import { JsxElement } from "typescript";
 
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;
@@ -265,25 +264,6 @@ export const ContextTabs = observer(
 
     return (
       <Container>
-        {/* <Tabs defaultIndex={tabDefaultIndex()}>
-          <StyledTabList>
-            <StyledTab onClick={() => tabClicked(1)}>
-              <StyledTabTitle tabSelected={selectedContextTab == 1}>Importance </StyledTabTitle>
-            </StyledTab>
-            <StyledTab onClick={() => tabClicked(2)}>
-              <StyledTabTitle tabSelected={selectedContextTab == 2}>Description</StyledTabTitle>
-            </StyledTab>
-            <StyledTab onClick={() => tabClicked(3)}>
-              <StyledTabTitle tabSelected={selectedContextTab == 3}>Key Results</StyledTabTitle>
-            </StyledTab>
-          </StyledTabList>
-
-          <TabPanelContainer hideContent={hideContent}>
-            <StyledTabPanel>{renderContextImportance()}</StyledTabPanel>
-            <StyledTabPanel>{renderContextDescription()}</StyledTabPanel>
-            <StyledTabPanel style={{ padding: "0px" }}>{renderContextKeyElements()}</StyledTabPanel>
-          </TabPanelContainer>
-        </Tabs> */}
         <OverviewTabsContainer>
           {type == "quarterlyGoal" ? (
             <>
@@ -296,7 +276,7 @@ export const ContextTabs = observer(
                   setShowMilestones(true);
                 }}
               >
-                {`Milestones ${activeInitiatives > 0 ? `(${activeInitiatives})` : ""}`}
+                Milestones
               </OverviewTabs>
             </>
           ) : (
@@ -332,7 +312,7 @@ export const ContextTabs = observer(
                 setShowMilestones(false);
               }}
             >
-              Supporting Initiatives
+              {`Supporting Initiatives ${activeInitiatives > 0 ? `(${activeInitiatives})` : ""}`}
             </OverviewTabs>
           )}
         </OverviewTabsContainer>

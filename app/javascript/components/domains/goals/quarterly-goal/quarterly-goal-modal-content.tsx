@@ -16,6 +16,8 @@ import { Text } from "~/components/shared/text";
 import { HomeContainerBorders } from "../../home/shared-components";
 import { RecordOptions } from "../shared/record-options";
 import { useTranslation } from "react-i18next";
+import { toJS } from "mobx";
+import { TrixEditor } from "react-trix";
 import { CreateGoalSection } from "../shared/create-goal-section";
 
 interface IQuarterlyGoalModalContentProps {
@@ -42,15 +44,27 @@ export const QuarterlyGoalModalContent = observer(
     setSubInitiativeModalOpen,
     setSelectedAnnualInitiativeDescription,
   }: IQuarterlyGoalModalContentProps): JSX.Element => {
-    const { quarterlyGoalStore, sessionStore, subInitiativeStore } = useMst();
+    const {
+      quarterlyGoalStore,
+      sessionStore,
+      subInitiativeStore,
+      descriptionTemplateStore: { descriptionTemplates },
+    } = useMst();
     const currentUser = sessionStore.profile;
     const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
     const [showCreateSubInitiative, setShowCreateSubInitiative] = useState<boolean>(false);
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
+    const [quarterlyGoal, setQuarterlyGoal] = useState(null);
     const [showInitiatives, setShowInitiatives] = useState<boolean>(false);
     const [showMilestones, setShowMilestones] = useState<boolean>(true);
+    const [description, setDescription] = useState<string>("");
+    const descriptionTemplatesFormatted = toJS(descriptionTemplates);
+
+    const descriptionTemplateForInitiatives = descriptionTemplatesFormatted.find(
+      t => t.templateType == "initiatives",
+    )?.body.body;
     const itemType = "quarterlyGoal";
 
     const { t } = useTranslation();
@@ -58,13 +72,21 @@ export const QuarterlyGoalModalContent = observer(
     useEffect(() => {
       quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
         // setQuarterlyGoal(quarterlyGoalStore.quarterlyGoal);
+        const quarterlyGoal = quarterlyGoalStore?.quarterlyGoal;
+        if (quarterlyGoal) {
+          setDescription(quarterlyGoal.contextDescription || descriptionTemplateForInitiatives);
+          setQuarterlyGoal(quarterlyGoal);
+        }
       });
     }, []);
-    const quarterlyGoal = quarterlyGoalStore.quarterlyGoal;
 
     if (quarterlyGoal == null) {
       return <Loading />;
     }
+
+    const handleChange = (html, text) => {
+      setDescription(text);
+    };
 
     const editable =
       currentUser.id == quarterlyGoal.ownedById ||
@@ -153,7 +175,7 @@ export const QuarterlyGoalModalContent = observer(
             </SectionContainer>
             <SectionContainer>
               <Context
-                activeInitiatives={activeMilestones.length}
+                activeInitiatives={quarterlyGoal.subInitiatives.length}
                 setShowInitiatives={setShowInitiatives}
                 setShowMilestones={setShowMilestones}
                 itemType={itemType}
@@ -210,6 +232,28 @@ export const QuarterlyGoalModalContent = observer(
               <></>
             )}
           </QuarterlyGoalBodyContainer>
+          <SubHeader>Description</SubHeader>
+          <TrixEditorContainer
+            onBlur={() => {
+              quarterlyGoalStore.updateModelField("contextDescription", description);
+              quarterlyGoalStore.update();
+            }}
+          >
+            <TrixEditor
+              className={"trix-initiative-modal"}
+              autoFocus={true}
+              placeholder={"Add a description..."}
+              onChange={handleChange}
+              value={description}
+              mergeTags={[]}
+              onEditorReady={editor => {
+                editor.element.addEventListener("trix-file-accept", event => {
+                  event.preventDefault();
+                });
+              }}
+            />
+          </TrixEditorContainer>
+          {/* <SubHeader>Activity</SubHeader> */}
         </Container>
       </>
     );
@@ -226,11 +270,9 @@ const Container = styled.div`
   padding-right: auto;
 `;
 
-const QuarterlyGoalBodyContainer = styled.div`
-`;
+const QuarterlyGoalBodyContainer = styled.div``;
 
-const SectionContainer = styled.div`
-`;
+const SectionContainer = styled.div``;
 
 const MilestonesHeaderContainer = styled.div`
   display: flex;
@@ -269,4 +311,16 @@ const SubInitiativeOwnerContainer = styled.div`
 
 const CreateGoalContainer = styled.div`
   width: 300px;
+`;
+
+const SubHeader = styled.p`
+  margin-top: 32px;
+  margin-bottom: 16px;
+  font-size: 15px;
+  font-weight: bold;
+`;
+
+const TrixEditorContainer = styled.div`
+  margin-top: 4px;
+  width: 100%;
 `;
