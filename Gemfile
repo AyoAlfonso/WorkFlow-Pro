@@ -51,11 +51,8 @@ gem 'scenic'
 gem "aws-sdk-s3", require: false
 gem 'rack-cors'
 gem 'faraday'
-<<<<<<< HEAD
 gem "lograge"
 
-=======
->>>>>>> 1fcd9639388f1ec4ba63294c65b0a0cd7868703f
 gem 'exception_notification'
 
 group :development, :test do
