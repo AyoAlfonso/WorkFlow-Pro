@@ -20,7 +20,6 @@ export const ScorecardKPIDropdownOptions = ({
   const optionsRef = useRef(null);
 
   useEffect(() => {
-    console.log("thi ids");
     const handleClickOutside = event => {
       if (optionsRef.current && !optionsRef.current.contains(event.target)) {
         setShowDropdownOptions(false);
