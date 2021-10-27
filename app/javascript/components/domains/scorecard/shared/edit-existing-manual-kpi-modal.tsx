@@ -21,7 +21,7 @@ import { toJS } from "mobx";
 import { TrixEditor } from "react-trix";
 import { useHistory } from "react-router";
 
-interface AddManualKPIModalProps {
+interface AddExistingManualKPIModalProps {
   kpiId?: number;
   showAddManualKPIModal: boolean;
   setShowAddManualKPIModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,7 +30,7 @@ interface AddManualKPIModalProps {
   headerText?: string;
 }
 
-export const AddManualKPIModal = observer(
+export const AddExistingManualKPIModal = observer(
   ({
     kpiId,
     showAddManualKPIModal,
@@ -38,13 +38,14 @@ export const AddManualKPIModal = observer(
     externalManualKPIData,
     setShowEditExistingKPIContainer,
     headerText,
-  }: AddManualKPIModalProps): JSX.Element => {
+  }: AddExistingManualKPIModalProps): JSX.Element => {
     const history = useHistory();
     const { owner_id, owner_type } = useParams();
     const {
       keyPerformanceIndicatorStore,
       sessionStore,
       descriptionTemplateStore,
+      scorecardStore,
     } = useMst();
     const [title, setTitle] = useState<string>(
       (externalManualKPIData?.selectedKPIs?.length &&
@@ -70,20 +71,20 @@ export const AddManualKPIModal = observer(
     const [selectedKPIs, setSelectedKPIs] = useState(externalManualKPIData?.selectedKPIs);
     const [selectedTagInputCount, setSelectedTagInputCount] = useState(0);
 
-    // useEffect(() => {
-    //   if (!R.isNil(kpiId)) {
-    //     const advancedKPI = scorecardStore.kpis.find(kpi => kpi.id == kpiId && kpi.parentType);
-    //     keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
-    //       const KPI = advancedKPI || keyPerformanceIndicatorStore?.kpi;
-    //       if (KPI) {
-    //         setDescription(KPI.description);
-    //         setGreaterThan(KPI.greaterThan);
-    //         setUnitType(KPI.unitType);
-    //         setKpi(KPI);
-    //       }
-    //     });
-    //   }
-    // }, [kpiId]);
+    useEffect(() => {
+      if (!R.isNil(kpiId)) {
+        const advancedKPI = scorecardStore.kpis.find(kpi => kpi.id == kpiId && kpi.parentType);
+        keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
+          const KPI = advancedKPI || keyPerformanceIndicatorStore?.kpi;
+          if (KPI) {
+            setDescription(KPI.description);
+            setGreaterThan(KPI.greaterThan);
+            setUnitType(KPI.unitType);
+            setKpi(KPI);
+          }
+        });
+      }
+    }, [kpiId]);
 
     useEffect(() => {
       setSelectedTagInputCount(externalManualKPIData?.selectedKPIs?.length - 3);

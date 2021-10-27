@@ -6,18 +6,21 @@ import { useMst } from "~/setup/root";
 import { useTranslation } from "react-i18next";
 
 interface IScorecardKPIDropdownOptionsProps {
-  setShowDropdownOptions: any;
-  setModalOpen?: any;
+  setShowDropdownOptions: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowEditExistingKPIContainer?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ScorecardKPIDropdownOptions = ({
   setShowDropdownOptions,
   setModalOpen,
+  setShowEditExistingKPIContainer,
 }: IScorecardKPIDropdownOptionsProps): JSX.Element => {
   const { keyPerformanceIndicatorStore } = useMst();
   const optionsRef = useRef(null);
 
   useEffect(() => {
+    console.log("thi ids");
     const handleClickOutside = event => {
       if (optionsRef.current && !optionsRef.current.contains(event.target)) {
         setShowDropdownOptions(false);
@@ -29,23 +32,35 @@ export const ScorecardKPIDropdownOptions = ({
     };
   }, [optionsRef]);
 
-  const closeModal = () => {
-    if (setModalOpen) {
-      setModalOpen(false);
-    }
-  };
-
   const deleteKPI = () => {
     if (confirm(`Are you sure you want to delete this KPI`)) {
       keyPerformanceIndicatorStore.deleteKPI().then(() => {
-        closeModal();
+        setModalOpen(false);
       });
     }
   };
 
+  const updateKPI = () => {
+    if (confirm(`Are you sure you want to edit this KPI`)) {
+      setModalOpen(false);
+      setShowEditExistingKPIContainer(true);
+    }
+  };
+
   return (
-    <Container ref={optionsRef}>
-      <OptionContainer onClick={() => deleteKPI()}>
+    <Container>
+      {/* <OptionContainer onClick={() => updateKPI()}>
+        <IconContainer>
+          <StyledIcon icon={"Edit-2"} size={"15px"} />
+        </IconContainer>
+        <OptionText> Edit KPI </OptionText>
+      </OptionContainer> */}
+      <OptionContainer
+        onClick={e => {
+          e.stopPropagation();
+          deleteKPI();
+        }}
+      >
         <IconContainer>
           <StyledIcon icon={"Delete"} size={"15px"} />
         </IconContainer>
@@ -103,8 +118,6 @@ export const InitialsText = styled.div<InitialsTextProps>`
   margin-bottom: auto;
   color: ${props => props.fontColor};
 `;
-
-
 
 const OptionContainer = styled.div`
   display: flex;

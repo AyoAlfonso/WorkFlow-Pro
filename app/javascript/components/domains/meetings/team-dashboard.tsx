@@ -32,12 +32,16 @@ export const TeamDashboard = ({ team }: ITeamDashboardProps): JSX.Element => {
       );
     }
   } else {
-    return (
-      <EmbedContainer>
-        <ScorecardsIndex miniEmbed={true} ownerType={ownerType} ownerId={ownerId} />
-      </EmbedContainer>
-    );
-    // return <SetupMissingContainer>Please set up the team dashboard.</SetupMissingContainer>;
+    if (team.customScorecard) {
+      if (!team.settings.weeklyMeetingDashboardLinkEmbed) {
+        return <SetupMissingContainer>Please set up the team custom card in the settings.</SetupMissingContainer>;
+      }
+      return (
+        <EmbedContainer>
+          <ScorecardsIndex miniEmbed={true} ownerType={ownerType} ownerId={ownerId} />
+        </EmbedContainer>
+      );
+    }
   }
 };
 

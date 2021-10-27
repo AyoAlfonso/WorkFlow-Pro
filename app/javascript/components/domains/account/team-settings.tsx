@@ -68,11 +68,11 @@ export const TeamSettings = ({ team }: ITeamSettings): JSX.Element => {
           <TeamInfoContainer key={team.id}>
             <Text fontSize={2}>{team.name}</Text>
             <Text fontSize={1}> {t(`teams.customScorecard`)} </Text>
-            <LabelContainer htmlFor="weekly_meeting_dashboard_link_embed">
-              You have access to your LynchPyn Scorecard by default in the meetings. To use your own
-              embedded scorecard or dashboard, activate the toggle.
-            </LabelContainer>
+
             <InputAndToggle>
+              <LabelContainer htmlFor="weekly_meeting_dashboard_link_embed">
+                You do not have access to this toggle
+              </LabelContainer>
               <FormGroup row>
                 <StyledLabel
                   control={<Switch checked={toggleChecked} name="switch-checked" />}
@@ -93,7 +93,6 @@ export const TeamSettings = ({ team }: ITeamSettings): JSX.Element => {
           <TeamInfoContainer key={team.id}>
             <Text fontSize={2}>{team.name}</Text>
             <Text fontSize={1}> {t(`teams.customScorecard`)} </Text>
-
             <InputAndToggle>
               <LabelContainer htmlFor="weekly_meeting_dashboard_link_embed">
                 You have access to your LynchPyn Scorecard by default in the meetings. To use your
