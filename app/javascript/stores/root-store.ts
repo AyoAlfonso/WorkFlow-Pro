@@ -73,10 +73,7 @@ export const RootStoreModel = types
         self.keyActivityStore.load();
         self.companyStore.getOnboardingCompany();
         self.descriptionTemplateStore.load();
-<<<<<<< HEAD
         self.checkInTemplateStore.load();
-=======
->>>>>>> 0cb47a0d1939bed3dc7c63ba9c4339c30fb0fa81
       }
     }),
   }))
