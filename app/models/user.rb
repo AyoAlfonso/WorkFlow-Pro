@@ -51,9 +51,7 @@ class User < ApplicationRecord
   after_save :create_product_features
 
   def create_product_features
-      if self.product_features.empty? 
-	      ProductFeature.create!(user_id: self.id, objective: true, team: false, meeting: true, company: false, pyns: true)
-			end
+	  ProductFeature.create!(user_id: self.id, objective: true, team: false, meeting: true, company: false, pyns: false, scorecard: true, check_in: true) if self.product_features.empty?
   end
 
   #TODO - DELETE COMPANY FROM DATABASE to be removed after we finalize rake, etc.

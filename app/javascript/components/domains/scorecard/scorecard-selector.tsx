@@ -39,6 +39,10 @@ export const ScorecardSelector = ({
 
   const history = useHistory();
 
+  if (!companyStore.company || !userStore.users || !teamStore.teams || !ownerType || !ownerId) {
+    return <></>;
+  }
+
   useEffect(() => {
     let owner;
     if (ownerType == "company") {
@@ -48,8 +52,11 @@ export const ScorecardSelector = ({
     } else if (ownerType == "user") {
       owner = companyUsers.find(user => user.id == ownerId);
     }
-    setScorecardOwner(owner);
-    setCurrentScorecard(`${owner?.name}${owner?.lastName ? " " + owner.lastName : ""}`);
+
+    if (owner) {
+      setScorecardOwner(owner);
+      setCurrentScorecard(`${owner?.name}${owner?.lastName ? " " + owner?.lastName : ""}`);
+    }
   }, [teams, companyUsers, company, ownerType, ownerId]);
 
   if (!teamStore.teams || !companyStore.company || !userStore.users) {

@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.3', '>= 6.0.3.1'
+gem 'rails', '~> 6.1'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
@@ -29,7 +29,7 @@ gem 'image_processing', '~> 1.2'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
-gem 'activeadmin', '~> 2.7.0'
+gem 'activeadmin', '~> 2.9.0'
 gem 'acts_as_list', '~> 1.0.2'
 gem 'arctic_admin', '~> 3.2.0'
 gem 'devise', '~> 4.7.2'
@@ -45,13 +45,17 @@ gem 'sidekiq-failures', '~> 1.0.0'
 gem 'tod', '~> 2.2.0'
 gem 'warden-jwt_auth', '~> 0.4.2' #https://github.com/waiting-for-dev/devise-jwt/issues/56
 gem 'scout_apm', '~> 2.6.9'
-gem 'rollbar', '~> 3.0.0'
+gem 'rollbar', '~> 3.0.0',  require: "rollbar/middleware/sinatra"
 gem 'acts-as-taggable-on', '~> 7.0'
 gem 'scenic'
 gem "aws-sdk-s3", require: false
 gem 'rack-cors'
 gem 'faraday'
+<<<<<<< HEAD
+gem "lograge"
 
+=======
+>>>>>>> 1fcd9639388f1ec4ba63294c65b0a0cd7868703f
 gem 'exception_notification'
 
 group :development, :test do

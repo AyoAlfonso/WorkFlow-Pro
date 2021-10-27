@@ -13,8 +13,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { withStyles } from "@material-ui/core/styles";
 import Switch from "~/components/shared/switch";
 
-// import { StretchContainer, BodyContainer, HeaderContainer, HeaderText } from "./container-styles";
-
 interface ITeamSettings {
   team: ITeam;
 }
