@@ -20,6 +20,7 @@ export const ScorecardKPIDropdownOptions = ({
   const optionsRef = useRef(null);
 
   useEffect(() => {
+    console.log("thi ids");
     const handleClickOutside = event => {
       if (optionsRef.current && !optionsRef.current.contains(event.target)) {
         setShowDropdownOptions(false);
@@ -31,38 +32,35 @@ export const ScorecardKPIDropdownOptions = ({
     };
   }, [optionsRef]);
 
-  const closeModal = () => {
-    if (setModalOpen) {
-      setModalOpen(false);
-    }
-  };
-
   const deleteKPI = () => {
     if (confirm(`Are you sure you want to delete this KPI`)) {
       keyPerformanceIndicatorStore.deleteKPI().then(() => {
-        closeModal();
+        setModalOpen(false);
       });
     }
   };
 
   const updateKPI = () => {
     if (confirm(`Are you sure you want to edit this KPI`)) {
-      if (setModalOpen) {
-        setModalOpen(false);
-        setShowEditExistingKPIContainer(true);
-      }
+      setModalOpen(false);
+      setShowEditExistingKPIContainer(true);
     }
   };
 
   return (
-    <Container ref={optionsRef}>
+    <Container>
       {/* <OptionContainer onClick={() => updateKPI()}>
         <IconContainer>
           <StyledIcon icon={"Edit-2"} size={"15px"} />
         </IconContainer>
         <OptionText> Edit KPI </OptionText>
       </OptionContainer> */}
-      <OptionContainer onClick={() => deleteKPI()}>
+      <OptionContainer
+        onClick={e => {
+          e.stopPropagation();
+          deleteKPI();
+        }}
+      >
         <IconContainer>
           <StyledIcon icon={"Delete"} size={"15px"} />
         </IconContainer>
