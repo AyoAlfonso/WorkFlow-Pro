@@ -226,7 +226,7 @@ export const SideNavNoMst = (
   const showTeam = productFeatures && productFeatures.team;
   const showMeeting = productFeatures && productFeatures.meeting;
   const showScorecard = productFeatures && productFeatures.scorecard;
-  console.log(productFeatures)
+  const checkIn = productFeatures && productFeatures.checkIn;
   const renderTeam = (teamLength: number) => {
     switch (teamLength) {
       case 0:
@@ -413,7 +413,7 @@ export const SideNavNoMst = (
         <> </>
       )}
 
-      {company ? (
+      {company && checkIn ? (
         <StyledNavLinkChildrenActive
           to={`/weekly-check-in/${userId}/${getWeekOf()}`}
           icon={"Check-in-page"}
