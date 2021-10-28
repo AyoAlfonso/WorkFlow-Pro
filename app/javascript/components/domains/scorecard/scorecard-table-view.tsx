@@ -7,8 +7,6 @@ import { useTranslation } from "react-i18next";
 import { useTable } from "react-table";
 import Select from "./scorecard-select";
 import { RawIcon } from "~/components/shared/icon";
-import { Button } from "~/components/shared/button";
-import { TextDiv } from "~/components/shared/text";
 import { baseTheme } from "~/themes/base";
 import { OwnedBy } from "./shared/scorecard-owned-by";
 import { Loading } from "../../shared/loading";

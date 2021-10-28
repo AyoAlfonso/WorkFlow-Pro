@@ -30,7 +30,7 @@ interface ViewEditKPIModalProps {
   setViewEditKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   viewEditKPIModalOpen: boolean;
   setKpis: any;
-  setShowEditExistingKPIContainer:React.Dispatch<React.SetStateAction<boolean>>;
+  setShowEditExistingKPIContainer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ViewEditKPIModal = observer(
@@ -39,7 +39,7 @@ export const ViewEditKPIModal = observer(
     setViewEditKPIModalOpen,
     viewEditKPIModalOpen,
     setKpis,
-    setShowEditExistingKPIContainer
+    setShowEditExistingKPIContainer,
   }: ViewEditKPIModalProps): JSX.Element => {
     const {
       companyStore: { company },
@@ -63,7 +63,7 @@ export const ViewEditKPIModal = observer(
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
-    
+
     const headerRef = useRef(null);
 
     if (R.isNil(keyPerformanceIndicatorStore)) {
