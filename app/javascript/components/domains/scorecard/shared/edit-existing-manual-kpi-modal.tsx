@@ -107,10 +107,6 @@ export const AddExistingManualKPIModal = observer(
     };
 
     const handleSave = () => {
-      externalManualKPIData.kpiModalType =
-        externalManualKPIData?.kpiModalType == "Average"
-          ? "avr"
-          : externalManualKPIData?.kpiModalType;
 
       const newKpi = {
         viewers: [{ type: owner_type, id: owner_id }],
@@ -127,7 +123,8 @@ export const AddExistingManualKPIModal = observer(
       if (description) {
         newKpi.description = description;
       }
-      keyPerformanceIndicatorStore.createKPI(newKpi).then(result => {
+      keyPerformanceIndicatorStore.updateKPI(newKpi).then(result => {
+        console.log(result, "result");
         if (!result) {
           return;
         }
@@ -159,7 +156,7 @@ export const AddExistingManualKPIModal = observer(
 
     return (
       <ModalWithHeader
-        header={`Add Existing KPI`}
+        header={`Edit Existing KPI`}
         isOpen={showAddManualKPIModal}
         setIsOpen={setShowAddManualKPIModal}
         width={"720px"}
