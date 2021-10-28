@@ -85,7 +85,6 @@ export const AnnualInitiativeModalContent = observer(
     if (annualInitiative == null) {
       return <Loading />;
     }
-    console.log(description);
 
     const handleChange = (html, text) => {
       setDescription(text);
