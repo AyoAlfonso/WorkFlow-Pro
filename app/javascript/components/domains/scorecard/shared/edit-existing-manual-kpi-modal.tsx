@@ -20,6 +20,8 @@ import {
 import { toJS } from "mobx";
 import { TrixEditor } from "react-trix";
 import { useHistory } from "react-router";
+import { Loading } from "~/components/shared/loading";
+
 
 interface AddExistingManualKPIModalProps {
   kpiId?: number;
@@ -55,20 +57,12 @@ export const AddExistingManualKPIModal = observer(
     const [kpi, setKpi] = useState(null);
     const [greaterThan, setGreaterThan] = useState<boolean>(true);
     const [description, setDescription] = useState<string>(undefined);
-    const [unitType, setUnitType] = useState<string>(
-      externalManualKPIData?.unitType || "numerical",
-    );
-    const [owner, setOwner] = useState(
-      externalManualKPIData?.selectedKPIs?.length > 0
-        ? externalManualKPIData?.selectedKPIs[0].ownedBy
-        : sessionStore?.profile,
-    );
-    const [targetValue, setTargetValue] = useState<number>(
-      externalManualKPIData?.targetValue || undefined,
-    );
+    const [unitType, setUnitType] = useState<string>(undefined);
+    const [owner, setOwner] = useState(undefined);
+    const [targetValue, setTargetValue] = useState<number>(undefined);
     const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
     const [needsAttentionThreshold, setNeedsAttentionThreshold] = useState(90);
-    const [selectedKPIs, setSelectedKPIs] = useState(externalManualKPIData?.selectedKPIs);
+    const [selectedKPIs, setSelectedKPIs] = useState(undefined);
     const [selectedTagInputCount, setSelectedTagInputCount] = useState(0);
 
     useEffect(() => {
@@ -77,9 +71,15 @@ export const AddExistingManualKPIModal = observer(
         keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
           const KPI = advancedKPI || keyPerformanceIndicatorStore?.kpi;
           if (KPI) {
+        
+            setTitle(KPI.title)
+            setOwner(KPI.ownedBy);
             setDescription(KPI.description);
             setGreaterThan(KPI.greaterThan);
             setUnitType(KPI.unitType);
+            setTargetValue(KPI.targetValue);
+            setNeedsAttentionThreshold(KPI.needsAttentionThreshold);
+            setSelectedKPIs(KPI.relatedParentKpis)
             setKpi(KPI);
           }
         });
@@ -93,27 +93,16 @@ export const AddExistingManualKPIModal = observer(
     const removeTagInput = id => {
       setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
     };
-    useEffect(() => {
-      if (!descriptionTemplateStore.descriptionTemplates) {
-        descriptionTemplateStore.fetchDescriptiveTemplates();
-      }
-      const template = toJS(descriptionTemplateStore.descriptionTemplates).find(
-        t => t.templateType == "kpi",
-      );
-      if (template) {
-        setDescription(template.body.body);
-      }
-    }, []);
 
     const resetModal = () => {
-      // setTitle(undefined);
-      // setGreaterThan(1);
-      // setDescription(undefined);
-      // setUnitType("numerical");
-      // setOwner(sessionStore?.profile);
-      // setTargetValue(undefined);
-      // setShowAdvancedSettings(false);
-      // setNeedsAttentionThreshold(90);
+      setTitle(undefined);
+      setGreaterThan(true);
+      setDescription(undefined);
+      setUnitType("numerical");
+      setOwner(sessionStore?.profile);
+      setTargetValue(undefined);
+      setShowAdvancedSettings(false);
+      setNeedsAttentionThreshold(90);
       setShowAddManualKPIModal(false);
     };
 
@@ -123,7 +112,7 @@ export const AddExistingManualKPIModal = observer(
           ? "avr"
           : externalManualKPIData?.kpiModalType;
 
-      const kpi = {
+      const newKpi = {
         viewers: [{ type: owner_type, id: owner_id }],
         title,
         description: "",
@@ -131,14 +120,14 @@ export const AddExistingManualKPIModal = observer(
         ownedById: owner.id,
         unitType,
         targetValue,
-        parentType: externalManualKPIData?.kpiModalType?.toLowerCase().replace(/\s+/g, ""),
+        parentType: kpi.parentType,
         parentKpi: selectedKPIs?.map(kpi => kpi.id),
         needsAttentionThreshold,
       };
       if (description) {
-        kpi.description = description;
+        newKpi.description = description;
       }
-      keyPerformanceIndicatorStore.createKPI(kpi).then(result => {
+      keyPerformanceIndicatorStore.createKPI(newKpi).then(result => {
         if (!result) {
           return;
         }
@@ -164,9 +153,13 @@ export const AddExistingManualKPIModal = observer(
       });
     };
 
+  if (R.isNil(kpi)) {
+    return <Loading />;
+  }
+
     return (
       <ModalWithHeader
-        header={`Add ${externalManualKPIData?.kpiModalType || "Manual"} KPI`}
+        header={`Add Existing KPI`}
         isOpen={showAddManualKPIModal}
         setIsOpen={setShowAddManualKPIModal}
         width={"720px"}
@@ -258,7 +251,7 @@ export const AddExistingManualKPIModal = observer(
             </FormElementContainer>
             <FormElementContainer>
               <InputHeaderWithComment fontSize={"14px"}>Owner</InputHeaderWithComment>
-              <OwnedBy
+              {owner && (<OwnedBy
                 ownedBy={owner}
                 setOwnedBy={setOwner}
                 marginLeft={"0px"}
@@ -267,7 +260,7 @@ export const AddExistingManualKPIModal = observer(
                 fontSize={"12px"}
                 disabled={false}
                 center={false}
-              />
+              />)}
             </FormElementContainer>
           </RowContainer>
           <RowContainer>

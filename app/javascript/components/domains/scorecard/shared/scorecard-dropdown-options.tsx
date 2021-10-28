@@ -20,7 +20,6 @@ export const ScorecardKPIDropdownOptions = ({
   const optionsRef = useRef(null);
 
   useEffect(() => {
-    console.log("thi ids");
     const handleClickOutside = event => {
       if (optionsRef.current && !optionsRef.current.contains(event.target)) {
         setShowDropdownOptions(false);
@@ -49,12 +48,12 @@ export const ScorecardKPIDropdownOptions = ({
 
   return (
     <Container>
-      {/* <OptionContainer onClick={() => updateKPI()}>
+      <OptionContainer onClick={() => updateKPI()}>
         <IconContainer>
           <StyledIcon icon={"Edit-2"} size={"15px"} />
         </IconContainer>
         <OptionText> Edit KPI </OptionText>
-      </OptionContainer> */}
+      </OptionContainer>
       <OptionContainer
         onClick={e => {
           deleteKPI();

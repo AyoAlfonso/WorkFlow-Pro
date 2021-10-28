@@ -179,6 +179,7 @@ export const ViewEditKPIModal = observer(
               <ScorecardKPIDropdownOptions
                 setShowDropdownOptions={setShowDropdownOptionsContainer}
                 setModalOpen={setViewEditKPIModalOpen}
+                setShowEditExistingKPIContainer={setShowEditExistingKPIContainer}
               />
             </ScorecardKPIDropdownContainer>
           )}

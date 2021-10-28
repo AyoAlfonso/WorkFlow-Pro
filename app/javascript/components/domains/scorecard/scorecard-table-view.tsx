@@ -49,7 +49,7 @@ export const ScorecardTableView = observer(
     const [year, setYear] = useState<number>(company.currentFiscalYear);
     const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
     const [tab, setTab] = useState<string>("KPIs");
-    const [viewEditKPIId, setViewEditKPIID] = useState(undefined);
+    const [currentSelectedKpi, setCurrentSelectedKpi] = useState(undefined);
     const [updateKPI, setUpdateKPI] = useState(undefined);
     const [currentKPIIcon, setCurrentKPIIcon] = useState(undefined);
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
@@ -253,7 +253,7 @@ export const ScorecardTableView = observer(
             return (
               <KPITitleContainer
                 onClick={() => {
-                  setViewEditKPIID(value.id);
+                  setCurrentSelectedKpi(value.id);
                   setViewEditKPIModalOpen(true);
                 }}
               >
@@ -429,9 +429,9 @@ export const ScorecardTableView = observer(
             </TableContainer>
           )}
         </Container>
-        {viewEditKPIId && (
+        {currentSelectedKpi && (
           <ViewEditKPIModal
-            kpiId={viewEditKPIId}
+            kpiId={currentSelectedKpi}
             viewEditKPIModalOpen={viewEditKPIModalOpen}
             setKpis={setKpis}
             setViewEditKPIModalOpen={setViewEditKPIModalOpen}
@@ -440,7 +440,7 @@ export const ScorecardTableView = observer(
         )}
         {showEditExistingKPIContainer && (
           <AddExistingManualKPIModal
-            kpiId={updateKPI.id}
+            kpiId={currentSelectedKpi}
             showAddManualKPIModal={showEditExistingKPIContainer}
             setShowAddManualKPIModal={setShowEditExistingKPIContainer}
             // ownedById={updateKPI.ownedById}

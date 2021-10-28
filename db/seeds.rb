@@ -65,31 +65,6 @@ if Rails.env.development?
   UserCompanyEnablement.where(user_id: u7.id).first_or_create(user_id: u7.id, company_id: c3.id, user_role_id: ur3.id)
   UserCompanyEnablement.where(user_id: u8.id).first_or_create(user_id: u8.id, company_id: c3.id, user_role_id: ur3.id)
   UserCompanyEnablement.where(user_id: u9.id).first_or_create(user_id: u9.id, company_id: c3.id, user_role_id: ur2.id)
-  
-  pdmt = CheckInTemplate.where(check_in_type: :weekly_check_in, name: "Weekly Check In").first_or_initialize
-  pdmt.check_in_templates_steps.destroy_all if pdmt.check_in_templates_steps.count > 0
-  pdmt.update!(
-    check_in_type: :weekly_check_in,
-    name: "Weekly Check In",
-    check_in_templates_steps_attributes: [
-      {
-        order_index: 0,
-        name: "Milestones",
-        step_type: :component,
-        instructions: "Provide updates on your Key Results and KPIs to complete this weekly check-in.",
-        component_to_render: "WeeklyMilestones",
-        duration: nil
-      },
-      {
-        order_index: 1,
-        name: "KPI",
-        step_type: :component,
-        instructions: "Provide updates on your Key Results and KPIs to complete this weekly check-in.",
-        component_to_render: "KPI",
-        duration: nil
-      },
-    ],
-  )
 
   ai_1 = AnnualInitiative.where(description: "Purchase company vehicles for transportation").first_or_create(
     company_id: c1.id, 
