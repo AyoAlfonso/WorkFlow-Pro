@@ -18,14 +18,17 @@ const iconSet = require("../../assets/icons/selection.json");
 type StyledSystemProps = ColorProps & LayoutProps & SpaceProps & TypographyProps;
 
 export interface IIconButtonProps extends StyledSystemProps {
-  iconName: string;
-  iconSize: string | number;
+  iconName?: string;
+  iconSize?: string | number;
   iconColor?: string;
   text?: string;
   textColor?: string;
   shadow?: boolean;
   onClick: () => void;
   disabled?: boolean;
+  bg?: string;
+  p?: any;
+  color?:any
 }
 
 const Button = styled.div<IIconButtonProps>`
@@ -39,7 +42,7 @@ const Button = styled.div<IIconButtonProps>`
   &:hover {
     cursor: pointer;
     opacity: ${props => (props.bg ? "0.85" : "1.0")};
-    background: ${props => (props.bg === "white" ? "rgba(0, 0, 0, 0.02)" : props.bg)}
+    background: ${props => (props.bg === "white" ? "rgba(0, 0, 0, 0.02)" : JSON.stringify(props.bg))}
   }
   &:active {
     box-shadow: ${props =>
@@ -106,7 +109,6 @@ export const IconButton: React.FunctionComponent<IIconButtonProps> = ({
       shadow={shadow}
       onClick={disabled ? () => {} : onClick}
       {...restProps}
-      p={0}
       disabled={disabled}
     >
       <IcoMoon
