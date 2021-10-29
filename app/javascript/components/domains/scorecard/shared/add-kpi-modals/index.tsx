@@ -12,6 +12,7 @@ import { Source } from "./source";
 import { Existing } from "./existing";
 import { RollUp } from "./roll-up";
 import { Average } from "./average";
+import * as R from "ramda";
 
 interface IAddKPIModalProps {
   KPIs: any[];
@@ -21,6 +22,8 @@ interface IAddKPIModalProps {
   kpiModalType: string;
   setExternalManualKPIData: React.Dispatch<React.SetStateAction<any>>;
   setModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  existingSelectedKPIs?: any[];
+  originalKPI?: number;
 }
 
 export const AddKPIModal = observer(
@@ -31,6 +34,8 @@ export const AddKPIModal = observer(
     setModalOpen,
     kpiModalType,
     setExternalManualKPIData,
+    existingSelectedKPIs,
+    originalKPI,
   }: IAddKPIModalProps): JSX.Element => {
     const formattedKpiModalType = titleCase(kpiModalType);
     const optionsRef = useRef(null);
@@ -57,15 +62,16 @@ export const AddKPIModal = observer(
         ref={optionsRef}
       >
         <InnerContainer>
-          {kpiModalType == "source" && (
+          {/* {kpiModalType == "source" && (
             <Source
               KPIs={KPIs}
               kpiModalType={formattedKpiModalType}
               setModalOpen={setModalOpen}
               setExternalManualKPIData={setExternalManualKPIData}
               setShowFirstStage={setShowFirstStage}
+              existingSelectedKPIs={existingSelectedKPIs}
             ></Source>
-          )}
+          )} */}
           {kpiModalType == "existing" && (
             <Existing
               KPIs={KPIs}
@@ -73,24 +79,30 @@ export const AddKPIModal = observer(
               setModalOpen={setModalOpen}
               setExternalManualKPIData={setExternalManualKPIData}
               setShowFirstStage={setShowFirstStage}
+              existingSelectedKPIs={existingSelectedKPIs}
+              originalKPI={originalKPI}
             ></Existing>
           )}
-          {kpiModalType == "roll up" && (
+          {["rollup", "roll up"].includes(kpiModalType) && (
             <RollUp
               KPIs={KPIs}
               kpiModalType={formattedKpiModalType}
               setModalOpen={setModalOpen}
               setExternalManualKPIData={setExternalManualKPIData}
               setShowFirstStage={setShowFirstStage}
+              existingSelectedKPIs={existingSelectedKPIs}
+              originalKPI={originalKPI}
             ></RollUp>
           )}
-          {kpiModalType == "average" && (
+          {["average", "avr"].includes(kpiModalType) && (
             <Average
               KPIs={KPIs}
               kpiModalType={formattedKpiModalType}
               setModalOpen={setModalOpen}
               setExternalManualKPIData={setExternalManualKPIData}
               setShowFirstStage={setShowFirstStage}
+              existingSelectedKPIs={existingSelectedKPIs}
+              originalKPI={originalKPI}
             ></Average>
           )}
         </InnerContainer>

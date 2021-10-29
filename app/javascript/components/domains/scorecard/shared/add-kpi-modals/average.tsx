@@ -4,6 +4,8 @@ import * as R from "ramda";
 import { observer } from "mobx-react";
 import { KPIModalHeader } from "./header";
 import { titleCase } from "~/utils/camelize";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 import {
   StyledLayerTwo,
   UserKPIList,
@@ -25,6 +27,8 @@ interface IAverage {
   kpiModalType: string;
   setExternalManualKPIData: React.Dispatch<React.SetStateAction<any>>;
   setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean | null>>;
+  existingSelectedKPIs: any[];
+  originalKPI: number;
 }
 
 export const Average = observer(
@@ -34,14 +38,18 @@ export const Average = observer(
     setModalOpen,
     setExternalManualKPIData,
     setShowFirstStage,
+    existingSelectedKPIs,
+    originalKPI,
   }: IAverage): JSX.Element => {
-    const [selectedKPIs, setSelectedKPIs] = useState([]);
-    const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
+    const [selectedKPIs, setSelectedKPIs] = useState(existingSelectedKPIs || []);
+    const [filteredKPIs, setfilteredKPIs] = useState(KPIs || []);
     const [unitType, setUnitType] = useState("numerical");
     const optionsRef = useRef(null);
 
     useEffect(() => {
-      setfilteredKPIs(filterBasedOnUnitType(KPIs));
+      if (unitType) {
+        setfilteredKPIs(filterBasedOnUnitType(KPIs));
+      }
     }, [unitType]);
     const formatKpiType = kpiType => titleCase(kpiType);
 
@@ -72,6 +80,9 @@ export const Average = observer(
     };
 
     const selectKPI = kpi => {
+      if (kpi.id == originalKPI) {
+        return showToast("You can't add a KPI to be it's own parent.", ToastMessageConstants.INFO);
+      }
       const duplicateIndex = selectedKPIs.findIndex(selectedKPI => selectedKPI.id == kpi.id);
       if (duplicateIndex > -1) {
         const slicedArray = selectedKPIs.slice();
@@ -102,27 +113,25 @@ export const Average = observer(
       setfilteredKPIs([]);
       setUnitType(type);
     };
-    const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
-      const groupedKPIs = groupBy(filteredKPIs);
-      return Object.keys(groupedKPIs).map(function(ownerKey, key) {
+
+    const renderKPIListContent = (filteredArrays): Array<JSX.Element> => {
+      const groupedKPIs = groupBy(filteredArrays);
+
+      return Object.keys(groupedKPIs).map(function(ownerKey) {
         return (
-          <UserKPIList key={key}>
+          <UserKPIList>
             <StyledCheckTitle>{ownerKey}</StyledCheckTitle>
             {groupedKPIs[ownerKey].map((kpi, key) => {
+              const state = !!selectedKPIs?.find(selectedKPI => selectedKPI.id == kpi.id);
               return (
-                <StyledCheckboxWrapper>
+                <StyledCheckboxWrapper key={kpi.id}>
                   <StyledLabel>
                     <StyledCheckboxInput
                       type="checkbox"
-                      id={key}
-                      key={key}
-                      onClick={() => {
-                        selectKPI(kpi);
-                      }}
+                      onClick={e => selectKPI(kpi)}
+                      checked={state}
                     ></StyledCheckboxInput>
-                    <StlyedCheckMark
-                      selected={!!selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id)}
-                    ></StlyedCheckMark>
+                    {<StlyedCheckMark selected={state}></StlyedCheckMark>}
                     <StyledItemSpan>
                       {kpi.title} {kpi.parentType && `[${formatKpiType(kpi.parentType)}]`}
                     </StyledItemSpan>

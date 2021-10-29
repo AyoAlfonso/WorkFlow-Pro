@@ -55,6 +55,7 @@ export const AddExistingManualKPIModal = observer(
     const [selectedTagInputCount, setSelectedTagInputCount] = useState(0);
     const [showFirstStage, setShowFirstStage] = useState(undefined);
     const [manualKPIDataInput, setManualKPIDataInput] = useState(undefined);
+    const [showSecondStage, setShowSecondStage] = useState(undefined);
 
     useEffect(() => {
       if (!R.isNil(kpiId)) {
@@ -94,6 +95,7 @@ export const AddExistingManualKPIModal = observer(
     useEffect(() => {
       if (!R.isNil(kpi)) {
         setShowFirstStage(kpi.parentType);
+        setShowSecondStage(kpi.parentType);
       }
     }, [kpi]);
 
@@ -143,7 +145,10 @@ export const AddExistingManualKPIModal = observer(
     const handleChange = (e, setStateAction) => {
       setStateAction(Number(e.target.value.replace(/[^0-9.]+/g, "")));
     };
-
+    const closeAllModals = () => {
+      showFirstStage(false);
+      showSecondStage(false);
+    };
     const renderTaggedInput = (): Array<JSX.Element> => {
       return selectedKPIs?.slice(0, 3).map((kpi, key) => {
         return (
@@ -165,179 +170,188 @@ export const AddExistingManualKPIModal = observer(
         showAddKPIModal={showFirstStage}
         kpiModalType={kpi.parentType}
         setShowFirstStage={setShowFirstStage}
+        setModalOpen={closeAllModals}
         setExternalManualKPIData={setManualKPIDataInput}
+        existingSelectedKPIs={kpi.relatedParentKpis}
+        originalKPI={kpi.id}
       />
     ) : (
-      <ModalWithHeader
-        header={headerText}
-        isOpen={showAddManualKPIModal}
-        setIsOpen={setShowAddManualKPIModal}
-        width={"720px"}
-        headerFontSize={"21px"}
-      >
-        <FormContainer>
-          <RowContainer>
-            <FormElementContainer>
-              <InputHeaderWithComment fontSize={"14px"}>Title</InputHeaderWithComment>
-              <StyledInput
-                type={"text"}
-                value={title}
-                placeholder={"e.g. Employee NPS"}
-                onChange={e => {
-                  setTitle(e.target.value);
-                }}
-              />
-            </FormElementContainer>
-          </RowContainer>
-          <RowContainer>
-            <FormElementContainer>
-              <InputHeaderWithComment fontSize={"14px"} childFontSize={"12px"} comment={"optional"}>
-                Description
-              </InputHeaderWithComment>
-              <TrixEditorContainer>
-                <TrixEditor
-                  className={"trix-kpi-modal"}
-                  autoFocus={false}
-                  placeholder={"Add a description..."}
-                  onChange={s => {
-                    setDescription(s);
+      showSecondStage && (
+        <ModalWithHeader
+          header={headerText}
+          isOpen={showAddManualKPIModal}
+          setIsOpen={setShowAddManualKPIModal}
+          width={"720px"}
+          headerFontSize={"21px"}
+        >
+          <FormContainer>
+            <RowContainer>
+              <FormElementContainer>
+                <InputHeaderWithComment fontSize={"14px"}>Title</InputHeaderWithComment>
+                <StyledInput
+                  type={"text"}
+                  value={title}
+                  placeholder={"e.g. Employee NPS"}
+                  onChange={e => {
+                    setTitle(e.target.value);
                   }}
-                  value={description}
-                  mergeTags={[]}
                 />
-              </TrixEditorContainer>
-            </FormElementContainer>
-          </RowContainer>
-          <RowContainer>
-            <FormElementContainer>
-              {selectedTagInputCount > 0 ? (
+              </FormElementContainer>
+            </RowContainer>
+            <RowContainer>
+              <FormElementContainer>
                 <InputHeaderWithComment
                   fontSize={"14px"}
                   childFontSize={"12px"}
                   comment={"optional"}
                 >
-                  KPI Selection
+                  Description
                 </InputHeaderWithComment>
-              ) : (
-                <> </>
-              )}
-              <MultiTagInputContainer>
-                {renderTaggedInput()}
-
+                <TrixEditorContainer>
+                  <TrixEditor
+                    className={"trix-kpi-modal"}
+                    autoFocus={false}
+                    placeholder={"Add a description..."}
+                    onChange={s => {
+                      setDescription(s);
+                    }}
+                    value={description}
+                    mergeTags={[]}
+                  />
+                </TrixEditorContainer>
+              </FormElementContainer>
+            </RowContainer>
+            <RowContainer>
+              <FormElementContainer>
                 {selectedTagInputCount > 0 ? (
-                  <SelectedTagInputCount> {selectedTagInputCount}+ </SelectedTagInputCount>
+                  <InputHeaderWithComment
+                    fontSize={"14px"}
+                    childFontSize={"12px"}
+                    comment={"optional"}
+                  >
+                    KPI Selection
+                  </InputHeaderWithComment>
                 ) : (
                   <> </>
                 )}
-              </MultiTagInputContainer>
-            </FormElementContainer>
-          </RowContainer>
+                <MultiTagInputContainer>
+                  {renderTaggedInput()}
 
-          <RowContainer>
-            <FormElementContainer>
-              <InputHeaderWithComment fontSize={"14px"}> Unit</InputHeaderWithComment>
-              <Select
-                name={"unitType"}
-                onChange={e => {
-                  setUnitType(e.target.value);
-                }}
-                value={unitType}
-                fontSize={12}
-                height={15}
-                pt={6}
-                pb={10}
-                disabled={!!selectedKPIs?.length}
-              >
-                <option key={"numerical"} value={"numerical"}>
-                  # Numerical
-                </option>
-                <option key={"percentage"} value={"percentage"}>
-                  % Percentage
-                </option>
-                <option key={"currency"} value={"currency"}>
-                  $ Currency
-                </option>
-              </Select>
-            </FormElementContainer>
-            <FormElementContainer>
-              <InputHeaderWithComment fontSize={"14px"}>Owner</InputHeaderWithComment>
-              {owner && (
-                <OwnedBy
-                  ownedBy={owner}
-                  setOwnedBy={setOwner}
-                  marginLeft={"0px"}
-                  marginTop={"auto"}
-                  marginBottom={"auto"}
-                  fontSize={"12px"}
-                  disabled={false}
-                  center={false}
-                />
-              )}
-            </FormElementContainer>
-          </RowContainer>
-          <RowContainer>
-            <FormElementContainer>
-              <InputHeaderWithComment fontSize={"14px"}>Condition</InputHeaderWithComment>
-              <Select
-                name={"logic"}
-                onChange={e => {
-                  setGreaterThan(e.target.value == 1 ? true : false);
-                }}
-                value={greaterThan ? 1 : 0}
-                fontSize={12}
-                height={15}
-                pt={6}
-                pb={10}
-              >
-                <option key={"greater-than"} value={1}>
-                  Greater than or equal to
-                </option>
-                <option key={"less-than"} value={0}>
-                  Less than or equal to
-                </option>
-              </Select>
-            </FormElementContainer>
-            <FormElementContainer>
-              <InputHeaderWithComment fontSize={"14px"}>Target Value</InputHeaderWithComment>
-              <InputFromUnitType
-                unitType={unitType}
-                placeholder={"0"}
-                onChange={e => {
-                  handleChange(e, setTargetValue);
-                }}
-                defaultValue={targetValue}
-              />
-            </FormElementContainer>
-          </RowContainer>
-          <AdvancedSettingsButton
-            onClick={() => {
-              setShowAdvancedSettings(!showAdvancedSettings);
-            }}
-          >
-            Advanced Settings
-          </AdvancedSettingsButton>
-          {showAdvancedSettings && (
+                  {selectedTagInputCount > 0 ? (
+                    <SelectedTagInputCount> {selectedTagInputCount}+ </SelectedTagInputCount>
+                  ) : (
+                    <> </>
+                  )}
+                </MultiTagInputContainer>
+              </FormElementContainer>
+            </RowContainer>
+
             <RowContainer>
               <FormElementContainer>
-                <InputHeaderWithComment>Needs Attention Threshold</InputHeaderWithComment>
-                <InputFromUnitType
-                  name="needs-attention-threshold"
-                  unitType={"percentage"}
-                  placeholder={"90"}
+                <InputHeaderWithComment fontSize={"14px"}> Unit</InputHeaderWithComment>
+                <Select
+                  name={"unitType"}
                   onChange={e => {
-                    handleChange(e, setNeedsAttentionThreshold);
+                    setUnitType(e.target.value);
                   }}
-                  defaultValue={needsAttentionThreshold}
+                  value={unitType}
+                  fontSize={12}
+                  height={15}
+                  pt={6}
+                  pb={10}
+                  disabled={!!selectedKPIs?.length}
+                >
+                  <option key={"numerical"} value={"numerical"}>
+                    # Numerical
+                  </option>
+                  <option key={"percentage"} value={"percentage"}>
+                    % Percentage
+                  </option>
+                  <option key={"currency"} value={"currency"}>
+                    $ Currency
+                  </option>
+                </Select>
+              </FormElementContainer>
+              <FormElementContainer>
+                <InputHeaderWithComment fontSize={"14px"}>Owner</InputHeaderWithComment>
+                {owner && (
+                  <OwnedBy
+                    ownedBy={owner}
+                    setOwnedBy={setOwner}
+                    marginLeft={"0px"}
+                    marginTop={"auto"}
+                    marginBottom={"auto"}
+                    fontSize={"12px"}
+                    disabled={false}
+                    center={false}
+                  />
+                )}
+              </FormElementContainer>
+            </RowContainer>
+            <RowContainer>
+              <FormElementContainer>
+                <InputHeaderWithComment fontSize={"14px"}>Condition</InputHeaderWithComment>
+                <Select
+                  name={"logic"}
+                  onChange={e => {
+                    setGreaterThan(e.target.value == 1 ? true : false);
+                  }}
+                  value={greaterThan ? 1 : 0}
+                  fontSize={12}
+                  height={15}
+                  pt={6}
+                  pb={10}
+                >
+                  <option key={"greater-than"} value={1}>
+                    Greater than or equal to
+                  </option>
+                  <option key={"less-than"} value={0}>
+                    Less than or equal to
+                  </option>
+                </Select>
+              </FormElementContainer>
+              <FormElementContainer>
+                <InputHeaderWithComment fontSize={"14px"}>Target Value</InputHeaderWithComment>
+                <InputFromUnitType
+                  unitType={unitType}
+                  placeholder={"0"}
+                  onChange={e => {
+                    handleChange(e, setTargetValue);
+                  }}
+                  defaultValue={targetValue}
                 />
               </FormElementContainer>
-              <FormElementContainer />
             </RowContainer>
-          )}
-          <FormElementContainer>
-            <SaveButton onClick={handleSave}>Save</SaveButton>
-          </FormElementContainer>
-        </FormContainer>
-      </ModalWithHeader>
+            <AdvancedSettingsButton
+              onClick={() => {
+                setShowAdvancedSettings(!showAdvancedSettings);
+              }}
+            >
+              Advanced Settings
+            </AdvancedSettingsButton>
+            {showAdvancedSettings && (
+              <RowContainer>
+                <FormElementContainer>
+                  <InputHeaderWithComment>Needs Attention Threshold</InputHeaderWithComment>
+                  <InputFromUnitType
+                    name="needs-attention-threshold"
+                    unitType={"percentage"}
+                    placeholder={"90"}
+                    onChange={e => {
+                      handleChange(e, setNeedsAttentionThreshold);
+                    }}
+                    defaultValue={needsAttentionThreshold}
+                  />
+                </FormElementContainer>
+                <FormElementContainer />
+              </RowContainer>
+            )}
+            <FormElementContainer>
+              <SaveButton onClick={handleSave}>Save</SaveButton>
+            </FormElementContainer>
+          </FormContainer>
+        </ModalWithHeader>
+      )
     );
   },
 );

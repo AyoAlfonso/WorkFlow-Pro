@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+// const lynchPynBadgePath = require("~/assets/images/white_check.svg.webp");
+const whiteCheck = require("~/assets/images/white_check.png");
 
 export const UserKPIList = styled.div`
   color: #000;
@@ -67,7 +69,7 @@ export const StlyedCheckMark = styled.span<StlyedCheckMarkProps>`
   background: ${props =>
     props.selected
       ? `#095df6
-    url("https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/White_check.svg/1200px-White_check.svg.png")
+    url(${whiteCheck})
     center/1250% no-repeat`
       : "white"};
   transition: background-size 0.2s cubic-bezier(0.7, 0, 0.18, 1.24);
