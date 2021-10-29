@@ -109,10 +109,20 @@ class Api::UsersController < Api::ApplicationController
     render json: { avatar_url: nil }
   end
 
-  def update_team_role
+  #Updates role via checkbox 
+  def update_user_team_lead_role
     authorize current_user
     team_user_enablement = TeamUserEnablement.where(user_id: params[:user_id], team_id: params[:team_id]).first
-    team_user_enablement.update!(role: params[:can_edit] ? 1 : 0)
+    team_user_enablement.update!(role: params[:role] ? 1 : 0)
+    @user = User.find(params[:user_id])
+    render "api/users/show"
+  end
+
+  #Generla role update
+  def update_user_team_role
+   authorize current_user
+    team_user_enablement = TeamUserEnablement.where(user_id: params[:user_id], team_id: params[:team_id]).first
+    team_user_enablement.update!(role: params[:role])
     @user = User.find(params[:user_id])
     render "api/users/show"
   end

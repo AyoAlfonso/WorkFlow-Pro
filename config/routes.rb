@@ -49,6 +49,8 @@ Rails.application.routes.draw do
       end
     end
     patch "/update_user_team_role", to: "users#update_team_role"
+    patch "/update_user_team_lead_role", to: "users#update_user_team_lead_role"
+  
     get "/profile", to: "users#profile"
     patch "/avatar", to: "users#update_avatar"
     delete "/avatar", to: "users#delete_avatar"
