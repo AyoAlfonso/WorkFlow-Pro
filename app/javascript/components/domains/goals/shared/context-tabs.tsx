@@ -21,7 +21,7 @@ import {
 } from "./key-elements/key-element-containers";
 import { KeyElementForm } from "./key-element-form";
 import { KeyElementModal } from "./key-element-modal";
-import { RoundButton, Text, TextDiv } from "~/components/shared";
+import { Text, TextDiv } from "~/components/shared";
 import "react-tabs/style/react-tabs.css";
 
 interface IContextTabsProps {
@@ -69,7 +69,9 @@ export const ContextTabs = observer(
     const [focusOnLastInput, setFocusOnLastInput] = useState<boolean>(false);
     const [showKeyElementForm, setShowKeyElementForm] = useState<boolean>(false);
     const editable = currentUser.id == object.ownedById && !disabled;
-    const [activeTab, setActiveTab] = useState(type == "quarterlyGoal" ? "milestones" : "aligned initiatives");
+    const [activeTab, setActiveTab] = useState(
+      type == "quarterlyGoal" ? "milestones" : "aligned initiatives",
+    );
     const [componentToRender, setComponentToRender] = useState(null);
 
     const firstImportanceRef = useRef(null);
@@ -208,23 +210,16 @@ export const ContextTabs = observer(
             <KeyElementContentContainer>{renderKeyElementsIndex()}</KeyElementContentContainer>
           )}
           {editable && (
-            <ButtonContainer
+            <StyledButton
+              small
+              variant={"grey"}
               onClick={() => {
                 setShowKeyElementForm(true);
               }}
             >
-              <RoundButton backgroundColor={"primary100"} size={"32px"}>
-                <Icon
-                  icon={"Plus"}
-                  size={"16px"}
-                  iconColor={baseTheme.colors.white}
-                  style={{ marginLeft: "8px", marginTop: "8px" }}
-                />
-              </RoundButton>
-              <TextDiv color={"primary100"} fontSize={"16px"} ml={"8px"}>
-                Add a Key Result
-              </TextDiv>
-            </ButtonContainer>
+              <CircularIcon icon={"Plus"} size={"12px"} />
+              <AddKeyElementText>Add a Key Result</AddKeyElementText>
+            </StyledButton>
           )}
         </KeyElementsTabContainer>
       );
@@ -400,6 +395,38 @@ const ButtonContainer = styled.div`
   }
 `;
 
+const StyledButton = styled(Button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0;
+  padding-right: 0;
+  background-color: ${props => props.theme.colors.white};
+  border-color: ${props => props.theme.colors.white};
+  &: hover {
+    color: ${props => props.theme.colors.primary100};
+  }
+`;
+
+const CircularIcon = styled(Icon)`
+  box-shadow: 2px 2px 6px 0.5px rgb(0 0 0 / 20%);
+  color: ${props => props.theme.colors.white};
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  background-color: ${props => props.theme.colors.primary100};
+  &: hover {
+    background-color: ${props => props.theme.colors.primaryActive};
+  }
+`;
+
+const AddKeyElementText = styled(TextDiv)`
+  margin-left: 10px;
+  white-space: break-spaces;
+  color: ${props => props.theme.colors.primary100};
+  font-size: 12px;
+`;
+
 const ContextDescriptionContainer = styled.div`
   padding: 16px;
 `;
@@ -427,6 +454,7 @@ export const OverviewTabs = styled("span")<IOverviewTabs>`
   border-bottom-width: ${props => (props.active ? `1px` : `0px`)};
   border-bottom-color: ${props => props.theme.colors.primary100};
   border-bottom-style: solid;
+  cursor: pointer;
 `;
 
 export const OverviewTabsContainer = styled.div`
