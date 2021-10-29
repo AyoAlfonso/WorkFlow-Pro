@@ -111,6 +111,7 @@ Rails.application.configure do
   config.hosts << "qa-app.lynchpyn.com"
   config.hosts << "lynchpyn.herokuapp.com"
   config.hosts << "app.lynchpyn.com"
+  config.hosts << "lynchpyn-staging.herokuapp.com"
 
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector
