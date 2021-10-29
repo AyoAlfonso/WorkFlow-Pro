@@ -59,7 +59,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   private
 
   def kpi_params
-    params.permit(:title, :id, :owned_by, :owned_by_id, :description, :unit_type, :needs_attention_threshold, :target_value, parent_kpi: [], viewers: [:id, :type])
+    params.permit(:title, :id, :owned_by, :owned_by_id, :description, :greater_than, :unit_type, :needs_attention_threshold, :target_value, parent_kpi: [], viewers: [:id, :type])
   end
 
   def set_key_performance_indicator

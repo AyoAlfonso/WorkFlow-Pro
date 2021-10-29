@@ -444,7 +444,7 @@ export const ScorecardTableView = observer(
             kpiId={currentSelectedKpi}
             showAddManualKPIModal={showEditExistingKPIContainer}
             setShowAddManualKPIModal={setShowEditExistingKPIContainer}
-            headerText={"Edit Existing KPI"}
+            headerText={"Edit KPI"}
             kpis={allKPIs}
           />
         )}

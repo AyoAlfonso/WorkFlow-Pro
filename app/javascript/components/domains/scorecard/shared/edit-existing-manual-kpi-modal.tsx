@@ -114,8 +114,9 @@ export const AddExistingManualKPIModal = observer(
         kpi.viewers.push = { type: "user", id: owner.id };
       }
       const newKpi = {
-        viewers: title,
-        description: "",
+        viewers: kpi.viewers,
+        title,
+        description,
         greaterThan,
         ownedById: owner.id,
         unitType,
