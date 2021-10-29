@@ -16,16 +16,18 @@ import { Average } from "./average";
 interface IAddKPIModalProps {
   KPIs: any[];
   showAddKPIModal: boolean;
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean | null>>;
   headerText?: string;
   kpiModalType: string;
   setExternalManualKPIData: React.Dispatch<React.SetStateAction<any>>;
+  setModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AddKPIModal = observer(
   ({
     KPIs,
     showAddKPIModal,
+    setShowFirstStage,
     setModalOpen,
     kpiModalType,
     setExternalManualKPIData,
@@ -61,6 +63,7 @@ export const AddKPIModal = observer(
               kpiModalType={formattedKpiModalType}
               setModalOpen={setModalOpen}
               setExternalManualKPIData={setExternalManualKPIData}
+              setShowFirstStage={setShowFirstStage}
             ></Source>
           )}
           {kpiModalType == "existing" && (
@@ -69,6 +72,7 @@ export const AddKPIModal = observer(
               kpiModalType={formattedKpiModalType}
               setModalOpen={setModalOpen}
               setExternalManualKPIData={setExternalManualKPIData}
+              setShowFirstStage={setShowFirstStage}
             ></Existing>
           )}
           {kpiModalType == "roll up" && (
@@ -77,6 +81,7 @@ export const AddKPIModal = observer(
               kpiModalType={formattedKpiModalType}
               setModalOpen={setModalOpen}
               setExternalManualKPIData={setExternalManualKPIData}
+              setShowFirstStage={setShowFirstStage}
             ></RollUp>
           )}
           {kpiModalType == "average" && (
@@ -85,6 +90,7 @@ export const AddKPIModal = observer(
               kpiModalType={formattedKpiModalType}
               setModalOpen={setModalOpen}
               setExternalManualKPIData={setExternalManualKPIData}
+              setShowFirstStage={setShowFirstStage}
             ></Average>
           )}
         </InnerContainer>
