@@ -80,6 +80,14 @@ export const Teams = observer(
 
           <LeftAlignedColumnListTableContainer>
             {users
+              .slice()
+              .sort((a, b) => {
+                if (!a.firstName || !b.firstName) {
+                  return 0;
+                } else {
+                  return a.firstName.localeCompare(b.firstName);
+                }
+              })
               .filter(user => team.isAMember(user))
               .map(
                 user =>
@@ -90,7 +98,7 @@ export const Teams = observer(
                           id={`${user.id}`}
                           defaultChecked={team.isALead(user)}
                           onChange={e => {
-                            userStore.updateUserTeamRole(user.id, team.id, e.target.checked);
+                            userStore.updateUserTeamLeadRole(user.id, team.id, e.target.checked);
                           }}
                         />
                       </Label>

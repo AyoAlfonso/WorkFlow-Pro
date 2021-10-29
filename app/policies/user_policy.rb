@@ -45,6 +45,10 @@ class UserPolicy < ApplicationPolicy
     user_is_company_admin_of_current_company?
   end
 
+  def update_user_team_lead_role?
+    user_is_company_admin_of_current_company?
+  end
+
   def update_company_first_time_access?
     true
   end
