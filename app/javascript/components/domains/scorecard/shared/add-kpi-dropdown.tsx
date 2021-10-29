@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useMst } from "~/setup/root";
+import { toJS } from "mobx";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { Icon } from "../../../shared/icon";
@@ -10,7 +11,6 @@ import { AddManualKPIModal } from "./add-manual-kpi-modal";
 import { baseTheme } from "~/themes";
 import { HtmlTooltip } from "~/components/shared/tooltip";
 
-import { toJS } from "mobx";
 interface IAddKPIDropdownProps {
   kpis: any[];
   dropdownDirectionUp?: boolean;
@@ -104,7 +104,9 @@ export const AddKPIDropdown = observer(
                 onMouseLeave={() => setShowScorecardProTooltip(!scorecardPro && false)}
               >
                 <OptionText>Existing</OptionText>
-                {!scorecardPro && <StyledIcon icon={"Lock"} size={"12px"} iconColor={greyInactive} />}
+                {!scorecardPro && (
+                  <StyledIcon icon={"Lock"} size={"12px"} iconColor={greyInactive} />
+                )}
               </OptionContainer>
               <OptionContainer
                 onClick={() => {
@@ -118,7 +120,9 @@ export const AddKPIDropdown = observer(
                 onMouseLeave={() => setShowScorecardProTooltip(!scorecardPro && false)}
               >
                 <OptionText>Roll Up</OptionText>
-                {!scorecardPro && <StyledIcon icon={"Lock"} size={"12px"} iconColor={greyInactive} />}
+                {!scorecardPro && (
+                  <StyledIcon icon={"Lock"} size={"12px"} iconColor={greyInactive} />
+                )}
               </OptionContainer>
               <OptionContainer
                 onClick={() => {
@@ -147,6 +151,7 @@ export const AddKPIDropdown = observer(
             showAddKPIModal={showAddKPIModal}
             kpiModalType={kpiModalType}
             setModalOpen={setAddKPIModal}
+            setShowFirstStage={() => void 0}
             setExternalManualKPIData={setManualKPIData}
           />
         )}

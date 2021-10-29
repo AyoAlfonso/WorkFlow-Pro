@@ -7,8 +7,6 @@ import { useTranslation } from "react-i18next";
 import { useTable } from "react-table";
 import Select from "./scorecard-select";
 import { RawIcon } from "~/components/shared/icon";
-import { Button } from "~/components/shared/button";
-import { TextDiv } from "~/components/shared/text";
 import { baseTheme } from "~/themes/base";
 import { OwnedBy } from "./shared/scorecard-owned-by";
 import { Loading } from "../../shared/loading";
@@ -25,7 +23,7 @@ export const getScorePercent = (value: number, target: number, greaterThan: bool
   greaterThan ? (value / target) * 100 : ((target + target - value) / target) * 100;
 
 type ScorecardTableViewProps = {
-  kpis: any;
+  tableKPIs: any;
   allKPIs: any[];
   setKpis: any;
   setViewEditKPIModalOpen: any;
@@ -35,7 +33,7 @@ type ScorecardTableViewProps = {
 
 export const ScorecardTableView = observer(
   ({
-    kpis,
+    tableKPIs,
     allKPIs,
     setKpis,
     viewEditKPIModalOpen,
@@ -46,12 +44,12 @@ export const ScorecardTableView = observer(
     const {
       companyStore: { company },
     } = useMst();
-    const KPIs = toJS(kpis);
+    const KPIs = toJS(tableKPIs);
 
     const [year, setYear] = useState<number>(company.currentFiscalYear);
     const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
     const [tab, setTab] = useState<string>("KPIs");
-    const [viewEditKPIId, setViewEditKPIID] = useState(undefined);
+    const [currentSelectedKpi, setCurrentSelectedKpi] = useState(undefined);
     const [updateKPI, setUpdateKPI] = useState(undefined);
     const [currentKPIIcon, setCurrentKPIIcon] = useState(undefined);
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
@@ -255,7 +253,7 @@ export const ScorecardTableView = observer(
             return (
               <KPITitleContainer
                 onClick={() => {
-                  setViewEditKPIID(value.id);
+                  setCurrentSelectedKpi(value.id);
                   setViewEditKPIModalOpen(true);
                 }}
               >
@@ -431,29 +429,26 @@ export const ScorecardTableView = observer(
             </TableContainer>
           )}
         </Container>
-        {viewEditKPIId && (
+        {currentSelectedKpi && (
           <ViewEditKPIModal
-            kpiId={viewEditKPIId}
+            kpiId={currentSelectedKpi}
             viewEditKPIModalOpen={viewEditKPIModalOpen}
             setKpis={setKpis}
             setViewEditKPIModalOpen={setViewEditKPIModalOpen}
             setShowEditExistingKPIContainer={setShowEditExistingKPIContainer}
           />
         )}
+
         {showEditExistingKPIContainer && (
           <AddExistingManualKPIModal
-            kpiId={updateKPI.id}
+            kpiId={currentSelectedKpi}
             showAddManualKPIModal={showEditExistingKPIContainer}
             setShowAddManualKPIModal={setShowEditExistingKPIContainer}
-            // ownedById={updateKPI.ownedById}
-            // unitType={updateKPI.unitType}
-            // year={company.currentFiscalYear}
-            // week={company.currentFiscalWeek}
-            // currentValue={updateKPI.currentValue}
-            headerText={"Edit KPI"}
-            // setKpis={setKpis}
+            headerText={"Edit Existing KPI"}
+            kpis={allKPIs}
           />
         )}
+
         {updateKPI && (
           <UpdateKPIModal
             kpiId={updateKPI.id}

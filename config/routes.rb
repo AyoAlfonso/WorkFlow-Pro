@@ -131,7 +131,6 @@ Rails.application.routes.draw do
     resources :key_performance_indicator, only: [:index, :show, :create, :update, :destroy]
     
     #scorecards
-    # resources :scorecard, only: [:create]
     get "/scorecard/:owner_type/:owner_id", to: "scorecard_logs#show"
     resources :scorecard_logs, only: [:create, :destroy]
 

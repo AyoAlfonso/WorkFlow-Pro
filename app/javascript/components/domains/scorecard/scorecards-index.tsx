@@ -31,7 +31,7 @@ export const ScorecardsIndex = observer(
     } = useMst();
     const [loading, setLoading] = useState<boolean>(true);
     const [kpis, setKpis] = useState([]);
-    const [kpisForTableView, setKpisForTableView] = useState([]);
+    const [tableKPIs, setTableKPIs] = useState([]);
     const [scorecardOwner, setScorecardOwner] = useState<any>({});
     const { allKPIs } = keyPerformanceIndicatorStore;
     const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(true);
@@ -54,7 +54,7 @@ export const ScorecardsIndex = observer(
           .getScorecard({ ownerType: owner_type, ownerId: owner_id })
           .then(() => {
             setKpis(scorecardStore.kpis);
-            setKpisForTableView(scorecardStore.kpis);
+            setTableKPIs(scorecardStore.kpis);
           })
           .then(() => setLoading(false));
       }
@@ -88,7 +88,7 @@ export const ScorecardsIndex = observer(
           currentFiscalYear={companyStore.company.currentFiscalYear}
         />
         <ScorecardTableView
-          kpis={kpisForTableView}
+          tableKPIs={tableKPIs}
           allKPIs={allKPIs}
           setKpis={setKPIs}
           viewEditKPIModalOpen={viewEditKPIModalOpen}

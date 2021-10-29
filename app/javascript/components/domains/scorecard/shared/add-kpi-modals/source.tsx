@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { Icon } from "~/components/shared/icon";
 import { KPIModalHeader } from "./header";
 import { titleCase } from "~/utils/camelize";
+import * as R from "ramda";
 import {
   UserKPIList,
   StyledSecondLayer,
@@ -20,10 +21,17 @@ interface ISourceProps {
   KPIs: any[];
   kpiModalType: string;
   setExternalManualKPIData: React.Dispatch<React.SetStateAction<any>>;
+  setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean| null>>;
 }
 
 export const Source = observer(
-  ({ KPIs, setModalOpen, kpiModalType, setExternalManualKPIData }: ISourceProps): JSX.Element => {
+  ({
+    KPIs,
+    setModalOpen,
+    kpiModalType,
+    setExternalManualKPIData,
+    setShowFirstStage,
+  }: ISourceProps): JSX.Element => {
     const [selectedKPIs, setSelectedKPIs] = useState([]);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
     //Move this to its own folder in utils TODO:
@@ -66,6 +74,9 @@ export const Source = observer(
 
     const handleSaveToManual = () => {
       setExternalManualKPIData(selectedKPIs);
+      if (!R.isNil(setShowFirstStage)) {
+        setShowFirstStage(false);
+      }
     };
 
     const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
