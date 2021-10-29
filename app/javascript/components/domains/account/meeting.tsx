@@ -29,7 +29,7 @@ export const Meeting = (): JSX.Element => {
     [].concat(
       profile.teams
         .sort((a, b) => {
-          return a.name.localeCompare(b.name);
+          return a.name?.localeCompare(b.name);
         })
         .map(team => [<TeamSettings team={team} key={team.id} />]),
     ),

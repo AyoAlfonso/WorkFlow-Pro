@@ -314,9 +314,7 @@ ActiveRecord::Schema.define(version: 2021_10_22_173915) do
     t.string "description"
     t.datetime "closed_at"
     t.bigint "created_by_id"
-    t.bigint "user_id"
     t.bigint "company_id"
-    t.bigint "team_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "unit_type"

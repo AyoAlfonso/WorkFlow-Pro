@@ -13,24 +13,21 @@ import { Loading } from "~/components/shared/loading";
 import { useParams } from "react-router-dom";
 import { toJS } from "mobx";
 import * as moment from "moment";
+import { useTranslation } from "react-i18next";
 import { MilestoneCard } from "../../goals/milestone/milestone-card";
 import { EmptyState } from "./empty-state";
 
 export const WeeklyMilestones = observer(
   (props): JSX.Element => {
-    const { sessionStore, quarterlyGoalStore, milestoneStore } = useMst();
-    const {
-      profile: { id },
-    } = sessionStore;
+    const { sessionStore, milestoneStore } = useMst();
+    const { t } = useTranslation();
 
     const { weekOf } = useParams();
     const { milestonesForWeeklyCheckin } = milestoneStore;
-    const { quarterlyGoal } = quarterlyGoalStore;
 
     useEffect(() => {
-      quarterlyGoalStore.getQuarterlyGoal(id);
       milestoneStore.getMilestonesForWeeklyCheckin(weekOf);
-    }, [id, quarterlyGoal]);
+    }, [ ]);
 
     const renderHeading = (): JSX.Element => {
       return (
@@ -102,8 +99,8 @@ export const WeeklyMilestones = observer(
           <>{renderMilestones()}</>
         ) : (
           <EmptyState
-            heading={"No Milestones"}
-            infoText={`You don't have any active Milestones. Visit the Objectives page to create an Initiative and Milestones`}
+            heading={t("weeklyCheckIn.milestones.emptyText")}
+            infoText={t("weeklyCheckIn.milestones.create")}
           />
         )}
       </>

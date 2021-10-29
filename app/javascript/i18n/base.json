@@ -351,6 +351,16 @@
       },
       "onboarding": {
         "continue": "Resume {{format}} creation"
+      },
+      "weeklyCheckIn": {
+        "milestones": {
+          "emptyText": "No Milestones",
+          "create": "You don't have any active Milestones. Visit the Objectives page to create an Initiative and Milestones"
+        },
+        "kpi": {
+          "emptyText": "No KPIs",
+          "create": "You don't have any active KPIs. Visit the Scorecard page to create a KPI."
+        }
       }
     }
   }
