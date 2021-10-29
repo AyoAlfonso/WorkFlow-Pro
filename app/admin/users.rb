@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :first_name, :last_name, :email, :password, :password_confirmation, :timezone, :company_id, :user_role_id, user_company_enablements_attributes: [:id, :company_id, :user_role_id, :user_title], product_features_attributes: [:id, :pyns, :objective, :team, :meeting, :company, :scorecard, :scorecard_pro]
+  permit_params :first_name, :last_name, :email, :password, :password_confirmation, :timezone, :company_id, :user_role_id, user_company_enablements_attributes: [:id, :company_id, :user_role_id, :user_title], product_features_attributes: [:id, :pyns, :objective, :team, :meeting, :company, :scorecard, :scorecard_pro, :check_in]
 
   config.sort_order = "last_name_asc"
 
@@ -34,7 +34,7 @@ ActiveAdmin.register User do
     def update
       @user = User.find(params[:id])
       # pp params
-      if @user.update!(params.require(:user).permit(:first_name, :last_name, :email, :user_role, :timezone, user_company_enablements_attributes: [:id, :company_id, :user_role_id, :user_title, :_destroy], product_features_attributes: [:id, :pyns, :objective, :team, :meeting, :company, :scorecard, :scorecard_pro]))
+      if @user.update!(params.require(:user).permit(:first_name, :last_name, :email, :user_role, :timezone, user_company_enablements_attributes: [:id, :company_id, :user_role_id, :user_title, :_destroy], product_features_attributes: [:id, :pyns, :objective, :team, :meeting, :company, :scorecard, :scorecard_pro, :check_in]))
         flash[:alert] = @user.errors.full_messages
         render "show"
       end
@@ -117,6 +117,7 @@ ActiveAdmin.register User do
             feature.input :company, as: :boolean, :checked_value => true, :unchecked_value => false, input_html: { :checked => product_sub[:company] }
             feature.input :scorecard, as: :boolean, :checked_value => true, :unchecked_value => false, input_html: { :checked => product_sub[:scorecard] }
             feature.input :scorecard_pro, as: :boolean, :checked_value => true, :unchecked_value => false, input_html: { :checked => product_sub[:scorecard_pro] }
+            feature.input :check_in, as: :boolean, :checked_value => true, :unchecked_value => false, input_html: { :checked => product_sub[:check_in] }
           end
         else
           feature.input :pyns, as: :boolean, :checked_value => true, :unchecked_value => false
@@ -126,6 +127,7 @@ ActiveAdmin.register User do
           feature.input :company, as: :boolean, :checked_value => true, :unchecked_value => false
           feature.input :scorecard, as: :boolean, :checked_value => true, :unchecked_value => false
           feature.input :scorecard_pro, as: :boolean, :checked_value => true, :unchecked_value => false
+          feature.input :check_in, as: :boolean, :checked_value => true, :unchecked_value => false
         end
       end
 

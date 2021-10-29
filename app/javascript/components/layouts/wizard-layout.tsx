@@ -9,7 +9,7 @@ import { Icon } from "~/components/shared/icon";
 interface IWizardLayoutProps {
   title: string;
   description: string;
-  customActionButton?: JSX.Element; 
+  customActionButton?: JSX.Element;
   showBackButton?: boolean;
   showSkipButton?: boolean;
   singleComponent?: JSX.Element;
@@ -30,6 +30,8 @@ interface IWizardLayoutProps {
   stepClickDisabled?: boolean;
   completeButtonText?: string;
   finalButtonDisabled?: boolean;
+  stepsForMobile?: JSX.Element;
+  textUnderMobileButton?: JSX.Element;
 }
 
 export const WizardLayout = ({
@@ -56,6 +58,8 @@ export const WizardLayout = ({
   stepClickDisabled,
   completeButtonText,
   finalButtonDisabled,
+  stepsForMobile,
+  textUnderMobileButton,
 }: IWizardLayoutProps): JSX.Element => {
   const renderActionButtons = (): JSX.Element => {
     return (
@@ -136,13 +140,32 @@ export const WizardLayout = ({
         )}
       </DescriptionContainer>
       <BodyContainer>
-        {showCloseButton && (
-          <CloseButtonContainer onClick={onCloseButtonClick}>
-            <CloseText> Close </CloseText>
-            <Icon icon={"Close"} size={"16px"} iconColor={"greyInactive"} />
-          </CloseButtonContainer>
+        {stepsForMobile && (
+          <DesktopCloseButtonContainer>
+            {stepsForMobile}
+            {showCloseButton && (
+              <CloseButtonContainer onClick={onCloseButtonClick}>
+                <CloseText> Close </CloseText>
+                <Icon icon={"Close"} size={"16px"} iconColor={"grey100"} />
+              </CloseButtonContainer>
+            )}
+          </DesktopCloseButtonContainer>
         )}
-        <BodyContentContainer>{renderBodyComponents()}</BodyContentContainer>
+        <MobileContainer>
+          {showCloseButton && (
+            <CloseButtonContainer onClick={onCloseButtonClick}>
+              <CloseText> Close </CloseText>
+              <Icon icon={"Close"} size={"16px"} iconColor={"greyInactive"} />
+            </CloseButtonContainer>
+          )}
+        </MobileContainer>
+        <BodyContentContainer>
+          {renderBodyComponents()}
+          <MobileButtonContainer>
+            <ButtonsContainer>{renderActionButtons()}</ButtonsContainer>
+            {textUnderMobileButton && textUnderMobileButton}
+          </MobileButtonContainer>
+        </BodyContentContainer>
         {renderStepsComponent()}
       </BodyContainer>
     </Container>
@@ -156,12 +179,40 @@ const Container = styled.div`
   position: relative;
 `;
 
+const DesktopCloseButtonContainer = styled.div`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    padding: 6px 16px;
+    border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+    background: ${props => props.theme.colors.backgroundGrey};
+  }
+`;
+
+const MobileContainer = styled.div`
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const MobileButtonContainer = styled.div`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: block;
+    margin-left: 16px;
+  }
+`;
+
 const DescriptionContainer = styled.div`
   min-width: 320px;
   width: 25%;
   background-color: ${props => props.theme.colors.backgroundGrey};
   display: flex;
   flex-direction: column;
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const DescriptionBody = styled.div`
@@ -180,10 +231,13 @@ const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow-x: auto;
+  @media only screen and (max-width: 768px) {
+    width: 100%;
+    padding: 0;
+  }
 `;
 
 const BodyContentContainer = styled.div`
-  display: flex;
   height: 100%;
   overflow-y: auto;
 `;
@@ -192,7 +246,7 @@ const DescriptionTitleContainer = styled.div``;
 
 const DescriptionText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
-  font-size: 16px;
+  font-size: 12px;
   margin-top: 8px;
 `;
 
@@ -202,6 +256,9 @@ const ButtonsContainer = styled.div`
   margin-right: auto;
   margin-top: 24px;
   margin-bottom: 24px;
+  @media only screen and (max-width: 768px) {
+    display: inline-flex;
+  }
 `;
 
 const NextButton = styled(Button)`
@@ -245,6 +302,13 @@ const CloseButtonContainer = styled.div`
   &:hover {
     cursor: pointer;
   }
+  @media only screen and (max-width: 768px) {
+    top: auto;
+    right: auto;
+    margin-right: 0;
+    right: 16px;
+    align-items: center;
+  }
 `;
 
 const CloseText = styled(Text)`
@@ -252,6 +316,9 @@ const CloseText = styled(Text)`
   font-size: 12px;
   margin-left: auto;
   margin-right: 10px;
+  @media only screen and (max-width: 768px) {
+    color: ${props => props.theme.colors.grey100};
+  }
 `;
 
 const BackButton = styled(Button)`

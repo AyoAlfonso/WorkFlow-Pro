@@ -6,7 +6,7 @@ import { baseTheme } from "../../themes";
 import { useTranslation } from "react-i18next";
 
 type ActiveDotProps = {
-  active: string;
+  color: string;
 };
 
 const ActiveDot = styled.div<ActiveDotProps>`

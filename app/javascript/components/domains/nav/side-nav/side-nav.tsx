@@ -18,6 +18,7 @@ import { SideNavChildLink, SideNavChildProgrammatic } from "./side-nav-child-lin
 import { SideNavChildPopup } from "./side-nav-child-popup";
 import { Image } from "rebass";
 import { ICompany } from "~/models/company";
+import { getWeekOf } from "~/utils/date-time";
 
 const StyledSideNav = styled.div`
   position: fixed; /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
@@ -142,7 +143,7 @@ interface StyledNavLinkChildrenActiveProps {
   icon: string;
   children: any;
   disabled?: boolean;
-  currentPathName: string;
+  currentPathName?: string;
 }
 
 const StyledNavLinkChildrenActive = ({
@@ -211,6 +212,7 @@ export const SideNavNoMst = (
   company?: ICompany,
   startNextMeeting?: any,
   createMeeting?: any,
+  userId?: number,
 ): JSX.Element => {
   const { t } = useTranslation();
 
@@ -224,6 +226,7 @@ export const SideNavNoMst = (
   const showTeam = productFeatures && productFeatures.team;
   const showMeeting = productFeatures && productFeatures.meeting;
   const showScorecard = productFeatures && productFeatures.scorecard;
+  const checkIn = productFeatures && productFeatures.checkIn;
   const renderTeam = (teamLength: number) => {
     switch (teamLength) {
       case 0:
@@ -351,8 +354,8 @@ export const SideNavNoMst = (
       </SideBarElement>
 
       {showPyn && (
-        <StyledNavLinkChildrenActive to="/" icon={"Home"} currentPathName={currentPathName}>
-          {t("navigation.home")}
+        <StyledNavLinkChildrenActive to="/" icon={"Planner"} currentPathName={currentPathName}>
+          {t("navigation.planner")}
         </StyledNavLinkChildrenActive>
       )}
 
@@ -398,11 +401,6 @@ export const SideNavNoMst = (
         </StyledNavLinkChildrenActive>
       )}
 
-      {company && company.accessCompany && showTeam ? (
-        renderTeam(R.path(["length"], teams) || 0)
-      ) : (
-        <> </>
-      )}
       {company && showScorecard ? (
         <StyledNavLinkChildrenActive
           to={`/scorecard/company/${company.id}`}
@@ -411,7 +409,27 @@ export const SideNavNoMst = (
         >
           {t("navigation.scorecards")}
         </StyledNavLinkChildrenActive>
-      ): (<> </>)}
+      ) : (
+        <> </>
+      )}
+
+      {company && checkIn ? (
+        <StyledNavLinkChildrenActive
+          to={`/weekly-check-in/${userId}/${getWeekOf()}`}
+          icon={"Check-in-page"}
+        >
+          {t("navigation.checkin")}
+        </StyledNavLinkChildrenActive>
+      ) : (
+        <></>
+      )}
+
+      {company && company.accessCompany && showTeam ? (
+        renderTeam(R.path(["length"], teams) || 0)
+      ) : (
+        <> </>
+      )}
+
       {company && company.accessCompany && !showTeam ? (
         renderMeeting(R.path(["length"], teams) || 0, "team")
       ) : (
@@ -481,6 +499,7 @@ export const SideNav = observer(
 
     const roleTeams =
       profile.role === "Coach" ? toJS(teams) : toJS(profile.currentCompanyUserTeams);
+    const userId = profile.id;
     return SideNavNoMst(
       router.location.pathname,
       roleTeams,
@@ -488,6 +507,7 @@ export const SideNav = observer(
       company,
       startNextMeeting,
       createMeeting,
+      userId,
     );
   },
 );

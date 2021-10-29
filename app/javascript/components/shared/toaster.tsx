@@ -61,7 +61,11 @@ const ColorBar = styled.div`
   background-color: ${props => props.color};
 `;
 
-const TextContainer = styled.div`
+type TextContainerProps = {
+  ml?: number;
+}
+
+const TextContainer = styled.div<TextContainerProps>`
   ${space}
   height: 64px;
   display: flex;

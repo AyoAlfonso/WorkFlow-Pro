@@ -25,6 +25,8 @@ import {
   KeyPerformanceIndicatorStoreModel,
   IKeyPerformanceIndicatorStore,
 } from "./key-performance-indicator-store";
+import { CheckInTemplateStoreModel, ICheckInTemplateStore } from "./check-in-template-store";
+
 
 export const RootStoreModel = types
   .model("RootStoreModel")
@@ -52,6 +54,7 @@ export const RootStoreModel = types
     subInitiativeStore: SubInitiativeStoreModel,
     scorecardStore: ScorecardStoreModel,
     keyPerformanceIndicatorStore: KeyPerformanceIndicatorStoreModel,
+    checkInTemplateStore: CheckInTemplateStoreModel,
   })
   .views(self => ({}))
   .actions(self => ({
@@ -70,6 +73,7 @@ export const RootStoreModel = types
         self.keyActivityStore.load();
         self.companyStore.getOnboardingCompany();
         self.descriptionTemplateStore.load();
+        self.checkInTemplateStore.load();
       }
     }),
   }))
@@ -101,4 +105,5 @@ export interface IRootStore extends IStateTreeNode {
   subInitiativeStore: ISubInitiativeStore;
   scorecardStore: IScorecardStore;
   keyPerformanceIndicatorStore: IKeyPerformanceIndicatorStore;
+  checkInTemplateStore: ICheckInTemplateStore;
 }

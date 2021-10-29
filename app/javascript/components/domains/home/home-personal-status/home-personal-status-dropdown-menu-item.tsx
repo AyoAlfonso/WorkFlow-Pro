@@ -18,7 +18,7 @@ export const HomePersonalStatusDropdownMenuItem = ({
 }: IHomePersonalStatusDropdownMenuItemProps): JSX.Element => {
   return (
     <DropdownMenuItem
-      {...menuItem.containerProps}
+      // {...menuItem.containerProps}
       style={style}
       onClick={() => onSelect()}
       rightIcon={rightIcon}

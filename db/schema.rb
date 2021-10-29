@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_15_160337) do
+ActiveRecord::Schema.define(version: 2021_10_22_173915) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -314,10 +314,13 @@ ActiveRecord::Schema.define(version: 2021_10_15_160337) do
     t.string "description"
     t.datetime "closed_at"
     t.bigint "created_by_id"
+    t.bigint "user_id"
+    t.bigint "company_id"
+    t.bigint "team_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "unit_type"
-    t.float "target_value", default: 0.0
+    t.integer "target_value", default: 0
     t.boolean "is_deleted", default: false
     t.boolean "greater_than", default: true
     t.jsonb "viewers"
@@ -326,10 +329,11 @@ ActiveRecord::Schema.define(version: 2021_10_15_160337) do
     t.string "title"
     t.integer "parent_type"
     t.integer "parent_kpi", default: [], array: true
-    t.bigint "company_id"
     t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
+    t.index ["team_id"], name: "index_key_performance_indicators_on_team_id"
+    t.index ["user_id"], name: "index_key_performance_indicators_on_user_id"
   end
 
   create_table "meeting_templates", force: :cascade do |t|
@@ -401,6 +405,7 @@ ActiveRecord::Schema.define(version: 2021_10_15_160337) do
     t.boolean "pyns", default: false, null: false
     t.boolean "scorecard", default: false
     t.boolean "scorecard_pro", default: false
+    t.boolean "check_in", default: true
     t.index ["user_id"], name: "index_product_features_on_user_id"
   end
 

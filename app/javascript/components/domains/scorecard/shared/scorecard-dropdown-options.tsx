@@ -56,7 +56,6 @@ export const ScorecardKPIDropdownOptions = ({
       </OptionContainer>
       <OptionContainer
         onClick={e => {
-          e.stopPropagation();
           deleteKPI();
         }}
       >

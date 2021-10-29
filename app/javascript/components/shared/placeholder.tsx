@@ -3,7 +3,11 @@ import { color, space, typography } from "styled-system";
 import styled from "styled-components";
 import { Flex, Box } from "rebass";
 
-const StyledText = styled.p`
+type StyledTextProps = {
+  fontFamily: string;
+}
+
+const StyledText = styled.p<StyledTextProps>`
   ${color}
   ${space}
   ${typography}

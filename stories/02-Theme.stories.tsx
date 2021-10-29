@@ -7,7 +7,11 @@ import { Heading } from "../app/javascript/components/shared/heading";
 
 export default { title: "Theme" };
 
-const ColorBox = styled.div`
+type ColorBoxProps = {
+  border?: any;
+};
+
+const ColorBox = styled.div<ColorBoxProps>`
   background-color: ${props => props.color};
   height: 60px;
   width: 60px;

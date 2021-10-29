@@ -5,7 +5,12 @@ import styled from "styled-components";
 import { color, ColorProps, layout, LayoutProps, space, SpaceProps, variant } from "styled-system";
 import { buildRepeatingLinearGradient } from "~/utils/css-utils";
 
-const ProgressBarContainer = styled.div`
+type ProgressBarContainerProps = {
+  variant: string;
+  width?: string | number;
+};
+
+const ProgressBarContainer = styled.div<ProgressBarContainerProps>`
   ${color}
   ${layout}
   ${space}
@@ -32,7 +37,12 @@ const ProgressBarContainer = styled.div`
     })}
 `;
 
-const ProgressBarFillDiv = styled(motion.div)`
+type ProgressBarFillDivProps = {
+  completed: string | number;
+  variant: string;
+}
+
+const ProgressBarFillDiv = styled(motion.div)<ProgressBarFillDivProps>`
   height: 100%;
   width: ${props => props.completed}%;
   border-radius: inherit;

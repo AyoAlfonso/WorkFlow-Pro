@@ -38,3 +38,19 @@ export const parseKeyActivityDueDate = keyActivity => {
     return { text: moment(parsedDate).format("MMM Do, YYYY"), color: greyActive };
   }
 };
+
+export const getWeekOf = () => {
+  const currentWeekOf = moment().startOf("isoWeek");
+  const formatedCurrentWeekOf = moment(currentWeekOf).format("YYYY-MM-DD");
+  return formatedCurrentWeekOf;
+};
+
+export const validateWeekOf = (weekOf, history, id) => {
+  const currentWeekOf = getWeekOf();
+  if (!moment(weekOf, "YYYY-MM-DD", true).isValid()) {
+    return history.push(`/weekly-check-in/${id}/${currentWeekOf}`);
+  }
+  if (moment(weekOf, "YYYY-MM-DD", true).isValid() && currentWeekOf !== weekOf) {
+    return history.push(`/weekly-check-in/${id}/${currentWeekOf}`);
+  }
+};

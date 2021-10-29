@@ -8,6 +8,7 @@ export const MilestoneStoreModel = types
   .model("MilestoneModel")
   .props({
     milestonesForPersonalMeeting: types.maybeNull(types.array(MilestoneModel)),
+    milestonesForWeeklyCheckin: types.maybeNull(types.array(MilestoneModel)),
   })
   .extend(withEnvironment())
   .views(self => ({}))
@@ -34,6 +35,15 @@ export const MilestoneStoreModel = types
         self.milestonesForPersonalMeeting[milestoneIndex] = response.data;
       } catch {
         showToast("There was an error updating the milestone", ToastMessageConstants.ERROR);
+      }
+    }),
+    getMilestonesForWeeklyCheckin: flow(function*(weekOf) {
+      const env = getEnv(self);
+      try {
+        const response = yield env.api.getWeeklyCheckinMilestones(weekOf);
+        self.milestonesForWeeklyCheckin = response.data;
+      } catch {
+        showToast("There was an error retrieving the milestones", ToastMessageConstants.ERROR);
       }
     }),
   }))

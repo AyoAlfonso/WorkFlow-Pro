@@ -94,7 +94,7 @@ ActiveAdmin.register MeetingTemplate do
       step.input :order_index
       step.input :duration, label: "Duration (in minutes)"
       step.input :instructions, input_html: { rows: 3 }
-      step.input :component_to_render, as: :select, collection: Step::MEETING_STEP_COMPONENTS
+      step.input :component_to_render, as: :select, collection: Step::STEP_COMPONENTS
       step.input :link_embed, input_html: { rows: 2 }
       step.input :override_key, input_html: { rows: 1 }
 

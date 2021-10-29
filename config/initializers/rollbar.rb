@@ -1,8 +1,10 @@
+require 'rollbar/logger'
+
 Rollbar.configure do |config|
   # Without configuration, Rollbar is enabled in all environments.
   # To disable in specific environments, set config.enabled=false.
 
-  config.access_token = "13a61ec856494571834213d9ee0461aa"
+  config.access_token = ENV["ROLLBAR_ACCESS_TOKEN"]
 
   # Here we'll disable in 'test':
   if Rails.env.test?
@@ -71,4 +73,4 @@ Rollbar.configure do |config|
   config.enabled = %w[production development].include?(Rails.env)
 end
 
-# Rails.logger.extend(ActiveSupport::Logger.broadcast(Rollbar::Logger.new))
+Rails.logger.extend(ActiveSupport::Logger.broadcast(Rollbar::Logger.new))

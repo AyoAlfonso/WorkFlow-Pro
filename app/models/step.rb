@@ -1,6 +1,8 @@
 class Step < ApplicationRecord
   belongs_to :meeting_template
 
+  #Add check_in_template in the model of steps
+
   enum step_type: { image: 0, component: 1, embedded_link: 2, description_text: 3 }
   has_one_attached :image
 
@@ -16,7 +18,7 @@ class Step < ApplicationRecord
     image.present? ? Rails.application.routes.url_helpers.rails_blob_url(image, host: ENV["ASSETS_HOST_URL"] || ENV["HOST_URL"]) : nil
   end
 
-  MEETING_STEP_COMPONENTS = [
+  STEP_COMPONENTS = [
     "ConversationStarter",
     "TeamPulse",
     "Goals",

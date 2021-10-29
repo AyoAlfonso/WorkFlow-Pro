@@ -21,6 +21,7 @@ interface IButtonProps extends StyledSystemProps {
   small?: boolean;
   style?: object;
   fontOverride?: string;
+  color?: any
 }
 
 const StyledButton = styled.button<IButtonProps>`
@@ -94,7 +95,7 @@ export const Button: React.FunctionComponent<IButtonProps> = ({
     <StyledButton
       {...restProps}
       fontFamily={"Lato"}
-      fontSize={fontOverride ? fontOverride : small ? 1 : 2}
+      fontSize={fontOverride ? fontOverride : small ? "1" : "2"}
       px={4}
       disabled={disabled}
       onClick={disabled ? null : onClick}

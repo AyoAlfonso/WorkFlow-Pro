@@ -3,7 +3,7 @@ import * as R from "ramda";
 import { observer } from "mobx-react";
 //import { RouterModel } from "mst-react-router";
 import { Loading, Avatar } from "~/components/shared";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import { usePageViews } from "~/components/shared/analytics";
 import { ThemeProvider } from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
@@ -49,6 +49,9 @@ import { ForumWelcomeModal } from "./shared/forum-welcome-modal";
 import { OnboardingModal } from "./domains/onboarding";
 
 import { Onboarding } from "./domains/onboarding";
+import { CheckIn } from "./domains/check-in/checkin";
+import { useEffect } from "react";
+import { getWeekOf } from "~/utils/date-time";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -70,6 +73,21 @@ export const App = observer(
     const { issueStore, keyActivityStore, sessionStore } = useMst();
     const loggedIn = sessionStore.loggedIn;
     const profile = sessionStore.profile;
+
+    const history = useHistory();
+    const location = useLocation();
+
+    useEffect(() => {
+      const redirectToCheckIn = () => {
+        const width = window.innerWidth <= 768;
+        const id = profile?.id;
+        if (width) {
+          if (location.pathname.includes("weekly-check-in")) return
+          if (id) return history.push(`/weekly-check-in/${id}/${getWeekOf()}`);
+        }
+      }
+      redirectToCheckIn()
+    }, [profile])
 
     let noFeatures;
     let showGoalRoute;
@@ -282,6 +300,9 @@ export const App = observer(
                       )}
                     </>
                   </Route>
+                  <>
+                    <Route exact path="/weekly-check-in/:userId/:weekOf" component={CheckIn} />
+                  </>
                 </Switch>
               ) : (
                 <Switch>
