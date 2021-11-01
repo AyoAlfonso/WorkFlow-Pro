@@ -25,11 +25,9 @@ export const ModifyTeamBody = observer(
       const membersListItem = {};
 
       teamUserEnablements.forEach((tue, index) => {
-        console.log(tue.role);
         membersListItem[index] = {
           userId: tue.userId,
           meetingLead: tue.role == "team_lead" || tue.role == "team_manager" ? 1 : 0,
-          // teamManager: tue.role == "team_manager" ? 2 : 0,
         };
       });
       return membersListItem;
@@ -45,20 +43,6 @@ export const ModifyTeamBody = observer(
     const [teamManagerId, setTeamManagerId] = useState(
       team?.teamManager[0] ? team.teamManager[0]["userId"] : "",
     );
-
-    const updateMemeberListState = (id) => {
-      const updatedMemberListState = memberListState;
-      let index = Object.keys(updatedMemberListState).length
-      for (let i = 0; i < index; i++) {
-        if (updatedMemberListState[i]["userId"] === id) {
-          updatedMemberListState[i]["teamManager"] = 2;
-        }
-      }
-      console.log(updatedMemberListState);
-      setMemberListState(updatedMemberListState);
-    }
-
-    console.log(memberListState);
 
     const renderMembersList = () => {
       return [...Array(numberOfUserRecords)].map((e, index) => {
@@ -96,7 +80,7 @@ export const ModifyTeamBody = observer(
     };
 
     const renderUserSelections = (): Array<JSX.Element> => {
-      return userStore.users
+      return team.users
         .filter(user => user.status == "active")
         .map((user, index) => {
           return (
@@ -116,7 +100,7 @@ export const ModifyTeamBody = observer(
               onChange={e => {
                 setTeamManagerId(e.target.value);
                 // updateMemeberListState(e.target.value);
-                userStore.updateUserTeamRole(e.target.value, team.id, true);
+                userStore.updateUserTeamManagerRole(e.target.value, team.id, true);
               }}
               style={{ marginRight: "25px" }}
               margin="dense"
