@@ -28,6 +28,7 @@ export const ModifyTeamBody = observer(
         membersListItem[index] = {
           userId: tue.userId,
           meetingLead: tue.role == "team_lead" || tue.role == "team_manager" ? 1 : 0,
+          teamManager: tue.teamManager ? true : false
         };
       });
       return membersListItem;
@@ -79,6 +80,17 @@ export const ModifyTeamBody = observer(
       );
     };
 
+    const updateMemeberListState = id => {
+      const updatedMemberListState = memberListState;
+      const index = Object.keys(updatedMemberListState).length;
+      for (let i = 0; i < index; i++) {
+        if (updatedMemberListState[i]["userId"] === id) {
+          updatedMemberListState[i]["teamManager"] = true;
+        }
+      }
+      setMemberListState(updatedMemberListState);
+    };
+
     const renderUserSelections = (): Array<JSX.Element> => {
       return team.users
         .filter(user => user.status == "active")
@@ -99,7 +111,7 @@ export const ModifyTeamBody = observer(
             <Select
               onChange={e => {
                 setTeamManagerId(e.target.value);
-                // updateMemeberListState(e.target.value);
+                updateMemeberListState(e.target.value);
                 userStore.updateUserTeamManagerRole(e.target.value, team.id, true);
               }}
               style={{ marginRight: "25px" }}
