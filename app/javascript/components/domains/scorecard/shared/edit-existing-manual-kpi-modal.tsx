@@ -55,12 +55,11 @@ export const AddExistingManualKPIModal = observer(
     const [selectedTagInputCount, setSelectedTagInputCount] = useState(0);
     const [showFirstStage, setShowFirstStage] = useState(undefined);
     const [manualKPIDataInput, setManualKPIDataInput] = useState(undefined);
-    const [showSecondStage, setShowSecondStage] = useState(undefined);
 
     useEffect(() => {
       if (!R.isNil(kpiId)) {
         const advancedKPI = scorecardStore.kpis.find(kpi => kpi.id == kpiId && kpi.parentType);
-        keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
+        keyPerformanceIndicatorStore.getKPI(kpiId).then(() => {
           const KPI = advancedKPI || keyPerformanceIndicatorStore?.kpi;
           if (KPI) {
             setTitle(KPI.title);
@@ -94,8 +93,7 @@ export const AddExistingManualKPIModal = observer(
 
     useEffect(() => {
       if (!R.isNil(kpi)) {
-        setShowFirstStage(kpi.parentType);
-        setShowSecondStage(kpi.parentType);
+        setShowFirstStage(!!kpi.parentType);
       }
     }, [kpi]);
 
@@ -115,7 +113,7 @@ export const AddExistingManualKPIModal = observer(
       if (!kpi.viewers.findIndex(viewer => viewer.id == owner.id)) {
         kpi.viewers.push = { type: "user", id: owner.id };
       }
-      const newKpi = {
+      const updatedKpi = {
         viewers: kpi.viewers,
         title,
         description,
@@ -129,9 +127,9 @@ export const AddExistingManualKPIModal = observer(
         id: kpi.id,
       };
       if (description) {
-        newKpi.description = description;
+        updatedKpi.description = description;
       }
-      keyPerformanceIndicatorStore.updateKPI(newKpi).then(result => {
+      keyPerformanceIndicatorStore.updateKPI(updatedKpi).then(result => {
         if (!result) {
           return;
         }
@@ -146,8 +144,7 @@ export const AddExistingManualKPIModal = observer(
       setStateAction(Number(e.target.value.replace(/[^0-9.]+/g, "")));
     };
     const closeAllModals = () => {
-      showFirstStage(false);
-      showSecondStage(false);
+      setShowFirstStage(false);
     };
     const renderTaggedInput = (): Array<JSX.Element> => {
       return selectedKPIs?.slice(0, 3).map((kpi, key) => {
@@ -176,7 +173,7 @@ export const AddExistingManualKPIModal = observer(
         originalKPI={kpi.id}
       />
     ) : (
-      showSecondStage && (
+      !showFirstStage && (
         <ModalWithHeader
           header={headerText}
           isOpen={showAddManualKPIModal}
@@ -212,11 +209,17 @@ export const AddExistingManualKPIModal = observer(
                     className={"trix-kpi-modal"}
                     autoFocus={false}
                     placeholder={"Add a description..."}
-                    onChange={s => {
-                      setDescription(s);
+                    onChange={body => {
+                      setDescription(body);
                     }}
                     value={description}
                     mergeTags={[]}
+                    onEditorReady={editor => {
+                      setDescription(description);
+                      editor.element.addEventListener("trix-file-accept", event => {
+                        event.preventDefault();
+                      });
+                    }}
                   />
                 </TrixEditorContainer>
               </FormElementContainer>
