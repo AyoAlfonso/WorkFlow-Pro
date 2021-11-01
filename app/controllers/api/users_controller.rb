@@ -122,9 +122,12 @@ class Api::UsersController < Api::ApplicationController
   def update_user_team_manager
    authorize current_user
     team_user_enablement = TeamUserEnablement.where(user_id: params[:user_id], team_id: params[:team_id]).first
-    team_user_enablement.falsify_all_others_and_update_team_manager
-    @user = User.find(params[:user_id])
-    render "api/users/show"
+    if team_user_enablement.present?
+      team_user_enablement.falsify_all_others_and_update_team_manager
+      @user = User.find(params[:user_id])
+      return render "api/users/show"
+    end
+   render json: { message: "User is not yet added to this team" }, status: :unprocessable_entity
   end
 
   def update_company_first_time_access
