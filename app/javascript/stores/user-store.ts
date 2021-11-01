@@ -102,7 +102,15 @@ export const UserStoreModel = types
         return true;
       }
     }),
-    updateUserTeamRole: flow(function*(userId, teamId, role) {}),
+    updateUserTeamRole: flow(function* (userId, teamId, role) {
+      const response: any = yield self.environment.api.updateUserTeamRole(userId, teamId, role);
+      if (response.ok) {
+        const userIndex = self.users.findIndex(user => user.id == userId);
+        self.users[userIndex] = response.data;
+        showToast("User updated", ToastMessageConstants.SUCCESS);
+        return true;
+      }
+    }),
 
     // create your own function
     updateUserCompany: flow(function*(companyId) {

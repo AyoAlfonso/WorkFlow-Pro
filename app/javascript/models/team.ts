@@ -20,13 +20,18 @@ export const TeamModel = types
   })
   .views(self => ({
     get teamLeadIds() {
-      return self.teamUserEnablements.filter(ue => ue.role == "team_lead").map(ue => ue.userId);
+      return self.teamUserEnablements
+        .filter(ue => ue.role == "team_lead" || ue.role == "team_manager")
+        .map(ue => ue.userId);
     },
     get nonLeadMemberIds() {
       return self.teamUserEnablements.filter(ue => ue.role != "team_lead").map(ue => ue.userId);
     },
     get allTeamUserIds() {
       return self.teamUserEnablements.map(ue => ue.userId);
+    },
+    get teamManager() {
+      return self.teamUserEnablements.filter(ue => ue.role == "team_manager")
     },
     get formattedAverageWeeklyUserEmotions() {
       if (!R.isNil(self.averageWeeklyUserEmotions)) {

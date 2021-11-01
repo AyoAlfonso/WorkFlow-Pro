@@ -48,7 +48,7 @@ Rails.application.routes.draw do
         patch "/resend_invitation", to: "users#resend_invitation"
       end
     end
-    patch "/update_user_team_role", to: "users#update_team_role"
+    patch "/update_user_team_role", to: "users#update_user_team_role"
     patch "/update_user_team_lead_role", to: "users#update_user_team_lead_role"
   
     get "/profile", to: "users#profile"

@@ -2,13 +2,15 @@ import * as React from "react";
 import { useMst } from "~/setup/root";
 import { useState } from "react";
 import styled from "styled-components";
-import { Heading, Icon } from "~/components/shared";
+import { Heading, Icon, Select } from "~/components/shared";
 import { observer } from "mobx-react";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "~/components/shared/button";
 import { UserSelectionRecord } from "./user-selection-record";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import MenuItem from "@material-ui/core/MenuItem";
+import { toJS } from "mobx";
 
 interface IModifyTeamBodyProps {
   team?: any;
@@ -17,15 +19,17 @@ interface IModifyTeamBodyProps {
 
 export const ModifyTeamBody = observer(
   ({ team, setModalOpen }: IModifyTeamBodyProps): JSX.Element => {
-    const { teamStore } = useMst();
+    const { teamStore, userStore } = useMst();
 
     const formatMemberListState = teamUserEnablements => {
       const membersListItem = {};
 
       teamUserEnablements.forEach((tue, index) => {
+        console.log(tue.role);
         membersListItem[index] = {
           userId: tue.userId,
-          meetingLead: tue.role == "team_lead" ? 1 : 0,
+          meetingLead: tue.role == "team_lead" || tue.role == "team_manager" ? 1 : 0,
+          // teamManager: tue.role == "team_manager" ? 2 : 0,
         };
       });
       return membersListItem;
@@ -38,6 +42,23 @@ export const ModifyTeamBody = observer(
     const [memberListState, setMemberListState] = useState<any>(
       team ? formatMemberListState(team.teamUserEnablements) : {},
     );
+    const [teamManagerId, setTeamManagerId] = useState(
+      team?.teamManager[0] ? team.teamManager[0]["userId"] : "",
+    );
+
+    const updateMemeberListState = (id) => {
+      const updatedMemberListState = memberListState;
+      let index = Object.keys(updatedMemberListState).length
+      for (let i = 0; i < index; i++) {
+        if (updatedMemberListState[i]["userId"] === id) {
+          updatedMemberListState[i]["teamManager"] = 2;
+        }
+      }
+      console.log(updatedMemberListState);
+      setMemberListState(updatedMemberListState);
+    }
+
+    console.log(memberListState);
 
     const renderMembersList = () => {
       return [...Array(numberOfUserRecords)].map((e, index) => {
@@ -74,6 +95,41 @@ export const ModifyTeamBody = observer(
       );
     };
 
+    const renderUserSelections = (): Array<JSX.Element> => {
+      return userStore.users
+        .filter(user => user.status == "active")
+        .map((user, index) => {
+          return (
+            <MenuItem value={user.id} key={index}>
+              {`${user.firstName} ${user.lastName}`}
+            </MenuItem>
+          );
+        });
+    };
+
+    const teamManager = (): JSX.Element => {
+      return (
+        <>
+          <SelectMemberContainer>{headerText("Team Manager")}</SelectMemberContainer>
+          <SelectMemberDropdownContainer>
+            <Select
+              onChange={e => {
+                setTeamManagerId(e.target.value);
+                // updateMemeberListState(e.target.value);
+                userStore.updateUserTeamRole(e.target.value, team.id, 2);
+              }}
+              style={{ marginRight: "25px" }}
+              margin="dense"
+              native={false}
+              value={teamManagerId}
+            >
+              {renderUserSelections()}
+            </Select>
+          </SelectMemberDropdownContainer>
+        </>
+      );
+    };
+
     return (
       <Container>
         <SectionContainer>
@@ -87,6 +143,7 @@ export const ModifyTeamBody = observer(
             onChange={e => setTeamName(e.target.value)}
           />
         </SectionContainer>
+        <SectionContainer>{teamManager()}</SectionContainer>
         <SectionContainer>
           <MembersHeaderContainer>
             <SelectMemberContainer>{headerText("Members")}</SelectMemberContainer>
@@ -194,4 +251,10 @@ const TextContainer = styled.div`
 
 const ActionButtonsContainer = styled.div`
   display: flex;
+`;
+
+const SelectMemberDropdownContainer = styled.div`
+  width: 70%;
+  padding-right: 16px;
+  margin-right: 20px;
 `;
