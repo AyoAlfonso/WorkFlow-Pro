@@ -174,7 +174,7 @@ export const ViewEditKPIModal = observer(
             </ScorecardKPIDropdownContainer>
           )}
 
-          {showDropdownOptionsContainer && (
+          {/* {showDropdownOptionsContainer && (
             <ScorecardKPIDropdownContainer>
               <ScorecardKPIDropdownOptions
                 setShowDropdownOptions={setShowDropdownOptionsContainer}
@@ -182,7 +182,7 @@ export const ViewEditKPIModal = observer(
                 setShowEditExistingKPIContainer={setShowEditExistingKPIContainer}
               />
             </ScorecardKPIDropdownContainer>
-          )}
+          )} */}
         </DropdownOptionsContainer>
       );
     };
@@ -199,7 +199,7 @@ export const ViewEditKPIModal = observer(
     };
 
     useEffect(() => {
-      if (kpiId !== null) {
+      if (!R.isNil(kpiId)) {
         const advancedKPI = scorecardStore.kpis.find(kpi => kpi.id == kpiId && kpi.parentType);
         keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
           const KPI = advancedKPI || keyPerformanceIndicatorStore?.kpi;

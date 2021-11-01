@@ -54,7 +54,7 @@ export const MilestoneDropdown = observer(
     
     const {
       warningRed,
-      cautionYellow,
+      tango,
       finePine,
       grey30,
       grey10,
@@ -73,7 +73,7 @@ export const MilestoneDropdown = observer(
           );
         case "in_progress":
           return (
-            <ListSpan color={cautionYellow} backgroundColor={lightYellow}>
+            <ListSpan color={tango} backgroundColor={lightYellow}>
               Needs Attention
             </ListSpan>
           );

@@ -116,7 +116,7 @@ export const ModifyTeamBody = observer(
               onChange={e => {
                 setTeamManagerId(e.target.value);
                 // updateMemeberListState(e.target.value);
-                userStore.updateUserTeamRole(e.target.value, team.id, 2);
+                userStore.updateUserTeamRole(e.target.value, team.id, true);
               }}
               style={{ marginRight: "25px" }}
               margin="dense"

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { KPIModalHeader } from "./header";
 import { titleCase } from "~/utils/camelize";
+import * as R from "ramda";
 import {
   StyledLayerTwo,
   UserKPIList,
@@ -24,10 +25,17 @@ interface IExistingProps {
   KPIs: any[];
   kpiModalType: string;
   setExternalManualKPIData: React.Dispatch<React.SetStateAction<any>>;
+  setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 export const Existing = observer(
-  ({ KPIs, setModalOpen, kpiModalType, setExternalManualKPIData }: IExistingProps): JSX.Element => {
+  ({
+    KPIs,
+    setModalOpen,
+    kpiModalType,
+    setExternalManualKPIData,
+    setShowFirstStage,
+  }: IExistingProps): JSX.Element => {
     const [selectedKPIs, setSelectedKPIs] = useState([]);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
     const [unitType, setUnitType] = useState("numerical");
@@ -90,6 +98,9 @@ export const Existing = observer(
         targetValue: selectedKPIs.reduce((a, b) => a + (b["targetValue"] || 0), 0),
         kpiModalType,
       });
+      if (!R.isNil(setShowFirstStage)) {
+        setShowFirstStage(false);
+      }
     };
     const toggleUnitType = type => {
       setSelectedKPIs([]);

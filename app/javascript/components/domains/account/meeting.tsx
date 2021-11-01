@@ -25,19 +25,12 @@ export const Meeting = (): JSX.Element => {
   } = useMst();
   const { t } = useTranslation();
 
-  const teamsData = R.flatten(
-    [].concat(
-      profile.teams
-        .sort((a, b) => {
-          return a.name?.localeCompare(b.name);
-        })
-        .map(team => [<TeamSettings team={team} key={team.id} />]),
-    ),
-  );
-
   if (R.isNil(profile)) {
     return <Loading />;
   }
+  const teamsData = R.flatten(
+    [].concat(profile.teams.map(team => [<TeamSettings team={team} key={team.id} />])),
+  );
   return (
     <StretchContainer>
       <HeaderContainer>

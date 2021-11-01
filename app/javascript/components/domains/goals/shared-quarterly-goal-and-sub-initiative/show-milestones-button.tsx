@@ -13,23 +13,23 @@ export const ShowMilestonesButton = ({
 }: IShowMilestonesButtonProps): JSX.Element => {
   return (
     <Container>
-      <SubHeaderContainer>
+      {/* <SubHeaderContainer>
         <SubHeaderText text={"Milestones"} noMargin={true} />
-      </SubHeaderContainer>
+      </SubHeaderContainer> */}
       <ShowPastWeeksContainer>
         <FilterOptionsContainer>
           <FilterOptionContainer underline={!showInactiveMilestones}>
             <FilterOption
               onClick={() => setShowInactiveMilestones(false)}
-              color={showInactiveMilestones ? "grey40" : "primary100"}
+              active={!showInactiveMilestones ? true : false}
             >
-              Open
+              Active
             </FilterOption>
           </FilterOptionContainer>
           <FilterOptionContainer underline={showInactiveMilestones}>
             <FilterOption
               onClick={() => setShowInactiveMilestones(true)}
-              color={showInactiveMilestones ? "primary100" : "grey40"}
+              active={showInactiveMilestones ? true : false}
             >
               All
             </FilterOption>
@@ -58,10 +58,12 @@ const ShowPastWeeksContainer = styled.div`
 const FilterOptionsContainer = styled.div`
   display: flex;
   margin: auto;
+  margin-bottom: 5px;
 `;
 
 type FilterOptionType = {
   mr?: string;
+  active: boolean;
 };
 
 const FilterOption = styled.p<FilterOptionType>`
@@ -70,6 +72,9 @@ const FilterOption = styled.p<FilterOptionType>`
   cursor: pointer;
   margin-top: 4px;
   margin-bottom: 0;
+  padding: 5px 0;
+  color: ${props =>
+    props.active ? `${props.theme.colors.primary100}` : `${props.theme.colors.grey40}`};
 `;
 
 type FilterOptionContainerType = {
@@ -81,4 +86,5 @@ const FilterOptionContainer = styled.div<FilterOptionContainerType>`
   padding-right: 4px;
   margin-left: 4px;
   margin-right: 4px;
+  margin-bottom: 5px;
 `;

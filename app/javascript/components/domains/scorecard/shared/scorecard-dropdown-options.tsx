@@ -47,7 +47,7 @@ export const ScorecardKPIDropdownOptions = ({
   };
 
   return (
-    <Container>
+    <Container ref={optionsRef}>
       <OptionContainer onClick={() => updateKPI()}>
         <IconContainer>
           <StyledIcon icon={"Edit-2"} size={"15px"} />

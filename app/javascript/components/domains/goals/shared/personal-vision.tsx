@@ -5,7 +5,7 @@ import { color } from "styled-system";
 import { useMst } from "~/setup/root";
 import ContentEditable from "react-contenteditable";
 import { useRef } from "react";
-import { useTranslation } from "react-i18next"
+import { useTranslation } from "react-i18next";
 
 interface IPersonalVisionProps {
   personalVision: string;
@@ -20,23 +20,25 @@ export const PersonalVision = ({ personalVision }: IPersonalVisionProps): JSX.El
     <VisionContainer>
       <VisionTitle>Future Self</VisionTitle>
       <ContentEditableContainer>
-      <StyledContentEditable
-        innerRef={t("personal.vision")}
-        placeholder={t("personal.placeholder")}
-        html={personalVision || ""}
-        disabled={false}
-        onChange={e => {
-          if (!e.target.value.includes("<div>")) {
-            sessionStore.updateProfileModelField("personalVision", e.target.value);
-          }
-        }}
-        onKeyDown={key => {
-          if (key.keyCode == 13) {
-            personalVisionRef.current.blur();
-          }
-        }}
-        onBlur={() => sessionStore.updateProfileFromModel()}
-      />
+        <StyledContentEditable
+          innerRef={personalVisionRef}
+          placeholder={t("personal.placeholder")}
+          html={personalVision || ""}
+          disabled={false}
+          onChange={e => {
+            if (!e.target.value.includes("<div>")) {
+              sessionStore.updateProfileModelField("personalVision", e.target.value);
+            }
+          }}
+          onKeyDown={key => {
+            if (key.keyCode == 13) {
+              personalVisionRef.current.blur();
+            }
+          }}
+          onBlur={() => {
+            sessionStore.updateProfileFromModel();
+          }}
+        />
       </ContentEditableContainer>
     </VisionContainer>
   );
@@ -82,4 +84,4 @@ const ContentEditableContainer = styled.div`
   padding: 5px;
   padding-right: 250px;
   overflow: hidden;
-`
+`;

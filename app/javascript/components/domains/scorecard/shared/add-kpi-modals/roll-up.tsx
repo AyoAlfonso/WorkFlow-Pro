@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import * as R from "ramda";
 import { observer } from "mobx-react";
 import { KPIModalHeader } from "./header";
 import { titleCase } from "~/utils/camelize";
@@ -22,9 +23,16 @@ interface IRollUpProps {
   KPIs: any[];
   kpiModalType: string;
   setExternalManualKPIData: React.Dispatch<React.SetStateAction<any>>;
+  setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean| null>>;
 }
 export const RollUp = observer(
-  ({ KPIs, setModalOpen, kpiModalType, setExternalManualKPIData }: IRollUpProps): JSX.Element => {
+  ({
+    KPIs,
+    setModalOpen,
+    kpiModalType,
+    setExternalManualKPIData,
+    setShowFirstStage,
+  }: IRollUpProps): JSX.Element => {
     const [selectedKPIs, setSelectedKPIs] = useState([]);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
     const [unitType, setUnitType] = useState("numerical");
@@ -82,6 +90,9 @@ export const RollUp = observer(
         targetValue: selectedKPIs.reduce((a, b) => a + (b["targetValue"] || 0), 0),
         kpiModalType,
       });
+      if (!R.isNil(setShowFirstStage)) {
+        setShowFirstStage(false);
+      }
     };
     const toggleUnitType = type => {
       setSelectedKPIs([]);

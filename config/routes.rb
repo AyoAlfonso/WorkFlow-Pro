@@ -48,7 +48,7 @@ Rails.application.routes.draw do
         patch "/resend_invitation", to: "users#resend_invitation"
       end
     end
-    patch "/update_user_team_role", to: "users#update_user_team_role"
+    patch "/update_user_team_manager", to: "users#update_user_team_manager"
     patch "/update_user_team_lead_role", to: "users#update_user_team_lead_role"
   
     get "/profile", to: "users#profile"
@@ -133,7 +133,6 @@ Rails.application.routes.draw do
     resources :key_performance_indicator, only: [:index, :show, :create, :update, :destroy]
     
     #scorecards
-    # resources :scorecard, only: [:create]
     get "/scorecard/:owner_type/:owner_id", to: "scorecard_logs#show"
     resources :scorecard_logs, only: [:create, :destroy]
 

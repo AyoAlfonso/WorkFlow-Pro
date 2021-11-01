@@ -103,7 +103,7 @@ export const UserStoreModel = types
       }
     }),
     updateUserTeamRole: flow(function* (userId, teamId, role) {
-      const response: any = yield self.environment.api.updateUserTeamRole(userId, teamId, role);
+      const response: any = yield self.environment.api.updateUserTeamManager(userId, teamId, role);
       if (response.ok) {
         const userIndex = self.users.findIndex(user => user.id == userId);
         self.users[userIndex] = response.data;

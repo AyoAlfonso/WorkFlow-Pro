@@ -23,7 +23,7 @@ export const getScorePercent = (value: number, target: number, greaterThan: bool
   greaterThan ? (value / target) * 100 : ((target + target - value) / target) * 100;
 
 type ScorecardTableViewProps = {
-  kpis: any;
+  tableKPIs: any;
   allKPIs: any[];
   setKpis: any;
   setViewEditKPIModalOpen: any;
@@ -33,7 +33,7 @@ type ScorecardTableViewProps = {
 
 export const ScorecardTableView = observer(
   ({
-    kpis,
+    tableKPIs,
     allKPIs,
     setKpis,
     viewEditKPIModalOpen,
@@ -44,7 +44,7 @@ export const ScorecardTableView = observer(
     const {
       companyStore: { company },
     } = useMst();
-    const KPIs = toJS(kpis);
+    const KPIs = toJS(tableKPIs);
 
     const [year, setYear] = useState<number>(company.currentFiscalYear);
     const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
@@ -438,20 +438,17 @@ export const ScorecardTableView = observer(
             setShowEditExistingKPIContainer={setShowEditExistingKPIContainer}
           />
         )}
+
         {showEditExistingKPIContainer && (
           <AddExistingManualKPIModal
             kpiId={currentSelectedKpi}
             showAddManualKPIModal={showEditExistingKPIContainer}
             setShowAddManualKPIModal={setShowEditExistingKPIContainer}
-            // ownedById={updateKPI.ownedById}
-            // unitType={updateKPI.unitType}
-            // year={company.currentFiscalYear}
-            // week={company.currentFiscalWeek}
-            // currentValue={updateKPI.currentValue}
-            headerText={"Edit KPI"}
-            // setKpis={setKpis}
+            headerText={"Edit Existing KPI"}
+            kpis={allKPIs}
           />
         )}
+
         {updateKPI && (
           <UpdateKPIModal
             kpiId={updateKPI.id}

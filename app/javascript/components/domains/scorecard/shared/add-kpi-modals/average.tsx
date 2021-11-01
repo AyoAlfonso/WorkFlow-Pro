@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import * as R from "ramda";
 import { observer } from "mobx-react";
 import { KPIModalHeader } from "./header";
 import { titleCase } from "~/utils/camelize";
@@ -23,10 +24,17 @@ interface IAverage {
   KPIs: any[];
   kpiModalType: string;
   setExternalManualKPIData: React.Dispatch<React.SetStateAction<any>>;
+  setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 export const Average = observer(
-  ({ KPIs, kpiModalType, setModalOpen, setExternalManualKPIData }: IAverage): JSX.Element => {
+  ({
+    KPIs,
+    kpiModalType,
+    setModalOpen,
+    setExternalManualKPIData,
+    setShowFirstStage,
+  }: IAverage): JSX.Element => {
     const [selectedKPIs, setSelectedKPIs] = useState([]);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
     const [unitType, setUnitType] = useState("numerical");
@@ -85,6 +93,9 @@ export const Average = observer(
           selectedKPIs.reduce((a, b) => a + (b["targetValue"] || 0), 0) / selectedKPIs.length,
         kpiModalType,
       });
+      if (!R.isNil(setShowFirstStage)) {
+        setShowFirstStage(false);
+      }
     };
     const toggleUnitType = type => {
       setSelectedKPIs([]);
