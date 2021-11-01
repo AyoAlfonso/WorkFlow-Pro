@@ -102,7 +102,7 @@ export const UserStoreModel = types
         return true;
       }
     }),
-    updateUserTeamRole: flow(function*(userId, teamId, role) {}),
+    updateUserTeamManager: flow(function*(userId, teamId, role) {}),
 
     // create your own function
     updateUserCompany: flow(function*(companyId) {

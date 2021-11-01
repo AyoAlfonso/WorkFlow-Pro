@@ -119,10 +119,10 @@ class Api::UsersController < Api::ApplicationController
   end
 
   #Generla role update
-  def update_user_team_role
+  def update_user_team_manager
    authorize current_user
     team_user_enablement = TeamUserEnablement.where(user_id: params[:user_id], team_id: params[:team_id]).first
-    team_user_enablement.update!(role: params[:role])
+    team_user_enablement.update!(team_manager: params[:team_manager])
     @user = User.find(params[:user_id])
     render "api/users/show"
   end
