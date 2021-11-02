@@ -38,14 +38,7 @@ class KeyActivity < ApplicationRecord
 
   scope :sort_by_priority_and_created_at, -> { sort_by_priority.sort_by_created_date }
   scope :sort_by_position_priority_and_created_at, -> { sort_by_position.sort_by_priority.sort_by_created_date }
-  scope :sort_by_progressing_non_backlog_position, -> {
-      order_by_related_ids("scheduled_group_id", [
-        ScheduledGroup.find_by_name("Today").id,
-        ScheduledGroup.find_by_name("Tomorrow").id,
-        ScheduledGroup.find_by_name("Weekly List").id,
-        ScheduledGroup.find_by_name("Backlog").id,
-      ]).sort_by_position
-    }
+  scope :sort_by_progressing_non_backlog_position, -> { order('scheduled_group_id::integer ASC')}
   scope :sort_by_due_date, -> { order(due_date: :asc) }
   scope :completed_state_and_owned_by_current_user, ->(completed, user) { (completed ? where.not(completed_at: nil) : where(completed_at: nil)).owned_by_user(user) }
 
@@ -70,6 +63,7 @@ class KeyActivity < ApplicationRecord
   end
 
   def self.filter_by_team_meeting(meeting_template_id, team_id)
+
     meeting_ids = Meeting.where(meeting_template_id: meeting_template_id, team_id: team_id).pluck(:id)
     self.where(meeting_id: meeting_ids)
   end
