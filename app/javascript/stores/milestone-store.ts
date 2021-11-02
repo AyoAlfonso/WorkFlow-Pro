@@ -46,6 +46,22 @@ export const MilestoneStoreModel = types
         showToast("There was an error retrieving the milestones", ToastMessageConstants.ERROR);
       }
     }),
+    updateMilestonesFromWeeklyCheckIn: flow(function*(milestoneId) {
+      const env = getEnv(self);
+      try {
+        const milestoneIndex = self.milestonesForWeeklyCheckin.findIndex(
+          milestone => milestone.id == milestoneId,
+        );
+        const milestone = self.milestonesForWeeklyCheckin.find(
+          milestone => milestone.id == milestoneId,
+        );
+        const response: any = yield env.api.updateMilestone(milestone);
+        self.milestonesForPersonalMeeting[milestoneIndex] = response.data;
+        showToast("Milestone Updated Successfully", ToastMessageConstants.SUCCESS);
+      } catch (e) {
+        //
+      }
+    }),
   }))
   .actions(self => ({
     updateDescriptionFromPersonalMeeting(id, description) {
@@ -55,12 +71,26 @@ export const MilestoneStoreModel = types
       self.milestonesForPersonalMeeting[milestoneIndex]["description"] = description;
       self.updateMilestoneFromPersonalMeeting(id);
     },
+    updateDescriptionFromWeeklyCheckIn(id, description) {
+      const milestoneIndex = self.milestonesForWeeklyCheckin.findIndex(
+        milestone => milestone.id == id,
+      );
+      self.milestonesForWeeklyCheckin[milestoneIndex]["description"] = description;
+      self.updateMilestonesFromWeeklyCheckIn(id);
+    },
     updateStatusFromPersonalMeeting(id, status) {
       const milestoneIndex = self.milestonesForPersonalMeeting.findIndex(
         milestone => milestone.id == id,
       );
       self.milestonesForPersonalMeeting[milestoneIndex]["status"] = status;
       self.updateMilestoneFromPersonalMeeting(id);
+    },
+    updateStatusFromWeeklyCheckIn(id, status) {
+      const milestoneIndex = self.milestonesForWeeklyCheckin.findIndex(
+        milestone => milestone.id == id,
+      );
+      self.milestonesForWeeklyCheckin[milestoneIndex]["status"] = status;
+      self.updateMilestonesFromWeeklyCheckIn(id);
     },
   }));
 
