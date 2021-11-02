@@ -222,7 +222,6 @@ export const QuarterlyGoalModalContent = observer(
                         createAction={subInitiativeStore.create}
                         quarterlyGoalId={quarterlyGoal.id}
                         // inAnnualInitiative={true}
-                        buttonWidth={"200px"}
                       />
                     </CreateGoalContainer>
                   )}
