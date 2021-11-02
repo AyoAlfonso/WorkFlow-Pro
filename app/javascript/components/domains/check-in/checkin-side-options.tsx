@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { TeamIssuesBody } from "../meetings/shared/team-issues-body";
 import { TeamKeyActivitiesBody } from "../meetings/shared/team-key-activities-body";
 import { KeyActivitiesBody } from "../key-activities/key-activities-body";
-import { Notes } from "../meetings/components/notes";
 import { MeetingAgenda } from "../meetings/components/meeting-agenda";
 import { IssuesBody } from "../issues/issues-body";
 
@@ -39,8 +38,6 @@ export const CheckInSideOptions = ({ checkIn }: ICheckInSideOptionsProps): JSX.E
         );
       case "Pyns":
         return renderDisplayKeyActivities();
-      case "Notes":
-        return <Notes height={"550px"} />;
       default:
         return (
           <MeetingAgenda
@@ -70,7 +67,6 @@ export const CheckInSideOptions = ({ checkIn }: ICheckInSideOptionsProps): JSX.E
           {renderOption("Agenda")}
           {renderOption("Issues")}
           {renderOption("Pyns")}
-          {renderOption("Notes")}
         </SelectionTabsContainer>
       </SelectionContainer>
       <DisplayContentContainer>{renderDisplayContent()}</DisplayContentContainer>
