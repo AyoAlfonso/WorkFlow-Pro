@@ -63,6 +63,7 @@ export const ModifyTeamBody = observer(
       if (team) {
         teamStore.updateTeam(team.id, teamName, memberListState).then(() => {
           setModalOpen(false);
+          userStore.load();
         });
       } else {
         teamStore.createTeamAndInviteUsers(teamName, memberListState).then(() => {
