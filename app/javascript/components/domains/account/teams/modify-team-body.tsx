@@ -2,13 +2,15 @@ import * as React from "react";
 import { useMst } from "~/setup/root";
 import { useState } from "react";
 import styled from "styled-components";
-import { Heading, Icon } from "~/components/shared";
+import { Heading, Icon, Select } from "~/components/shared";
 import { observer } from "mobx-react";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "~/components/shared/button";
 import { UserSelectionRecord } from "./user-selection-record";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import MenuItem from "@material-ui/core/MenuItem";
+import { toJS } from "mobx";
 
 interface IModifyTeamBodyProps {
   team?: any;
@@ -17,7 +19,7 @@ interface IModifyTeamBodyProps {
 
 export const ModifyTeamBody = observer(
   ({ team, setModalOpen }: IModifyTeamBodyProps): JSX.Element => {
-    const { teamStore } = useMst();
+    const { teamStore, userStore } = useMst();
 
     const formatMemberListState = teamUserEnablements => {
       const membersListItem = {};
@@ -25,7 +27,8 @@ export const ModifyTeamBody = observer(
       teamUserEnablements.forEach((tue, index) => {
         membersListItem[index] = {
           userId: tue.userId,
-          meetingLead: tue.role == "team_lead" ? 1 : 0,
+          meetingLead: tue.role == "team_lead" || tue.role == "team_manager" ? 1 : 0,
+          teamManager: tue.teamManager ? true : false
         };
       });
       return membersListItem;
@@ -37,6 +40,9 @@ export const ModifyTeamBody = observer(
     );
     const [memberListState, setMemberListState] = useState<any>(
       team ? formatMemberListState(team.teamUserEnablements) : {},
+    );
+    const [teamManagerId, setTeamManagerId] = useState<number>(
+      team?.teamManager[0] ? team.teamManager[0]["userId"] : null,
     );
 
     const renderMembersList = () => {
@@ -57,6 +63,7 @@ export const ModifyTeamBody = observer(
       if (team) {
         teamStore.updateTeam(team.id, teamName, memberListState).then(() => {
           setModalOpen(false);
+          userStore.load();
         });
       } else {
         teamStore.createTeamAndInviteUsers(teamName, memberListState).then(() => {
@@ -74,6 +81,52 @@ export const ModifyTeamBody = observer(
       );
     };
 
+    const updateMemeberListState = id => {
+      const updatedMemberListState = memberListState;
+      const index = Object.keys(updatedMemberListState).length;
+      for (let i = 0; i < index; i++) {
+        if (updatedMemberListState[i]["userId"] === id) {
+          updatedMemberListState[i]["teamManager"] = true;
+        }
+      }
+      setMemberListState(updatedMemberListState);
+    };
+
+    const renderUserSelections = (): Array<JSX.Element> => {
+      return team.users
+        .filter(user => user.status == "active")
+        .map((user) => {
+          return (
+            <MenuItem value={user.id} key={user.id}>
+              {`${user.firstName} ${user.lastName}`}
+            </MenuItem>
+          );
+        });
+    };
+
+    const teamManager = (): JSX.Element => {
+      return (
+        <>
+          <SelectMemberContainer>{headerText("Team Manager")}</SelectMemberContainer>
+          <SelectMemberDropdownContainer>
+            <Select
+              onChange={e => {
+                setTeamManagerId(e.target.value);
+                updateMemeberListState(e.target.value);
+                userStore.updateUserTeamManagerStatus(e.target.value, team.id, true);
+              }}
+              style={{ marginRight: "25px" }}
+              margin="dense"
+              native={false}
+              value={teamManagerId}
+            >
+              {renderUserSelections()}
+            </Select>
+          </SelectMemberDropdownContainer>
+        </>
+      );
+    };
+
     return (
       <Container>
         <SectionContainer>
@@ -87,6 +140,7 @@ export const ModifyTeamBody = observer(
             onChange={e => setTeamName(e.target.value)}
           />
         </SectionContainer>
+        <SectionContainer>{teamManager()}</SectionContainer>
         <SectionContainer>
           <MembersHeaderContainer>
             <SelectMemberContainer>{headerText("Members")}</SelectMemberContainer>
@@ -194,4 +248,10 @@ const TextContainer = styled.div`
 
 const ActionButtonsContainer = styled.div`
   display: flex;
+`;
+
+const SelectMemberDropdownContainer = styled.div`
+  width: 70%;
+  padding-right: 16px;
+  margin-right: 20px;
 `;

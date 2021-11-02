@@ -75,8 +75,8 @@ export class Api {
     return this.client.patch(`/update_user_team_lead_role`, { userId, teamId, role });
   }
 
-  async updateUserTeamManager(userId, teamId, role) {
-    return this.client.patch(`/update_user_team_manager`, { userId, teamId, role });
+  async updateUserTeamManager(userId, teamId, status) {
+    return this.client.patch(`/update_user_team_manager`, { userId, teamId, status });
   }
 
   async updateUserCompanyFirstTimeAccess(params) {
