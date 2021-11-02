@@ -21,13 +21,16 @@ interface IMilestoneCardProps {
 }
 
 export const MilestoneCard = observer(
-  ({ milestone, editable, fromMeeting, fromWeeklyCheckIn, itemType }: IMilestoneCardProps): JSX.Element => {
+  ({
+    milestone,
+    editable,
+    fromMeeting,
+    fromWeeklyCheckIn,
+    itemType,
+  }: IMilestoneCardProps): JSX.Element => {
     const { quarterlyGoalStore, subInitiativeStore, milestoneStore } = useMst();
 
-    const mobxStore =
-      itemType == "quarterlyGoal" || itemType == "QuarterlyGoal"
-        ? quarterlyGoalStore
-        : subInitiativeStore;
+    const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
 
     const descriptionRef = useRef(null);
 
@@ -52,7 +55,7 @@ export const MilestoneCard = observer(
           descriptionRef.current.innerHTML,
         );
       }
-      
+
       if (fromMeeting) {
         milestoneStore.updateDescriptionFromPersonalMeeting(
           milestone.id,
