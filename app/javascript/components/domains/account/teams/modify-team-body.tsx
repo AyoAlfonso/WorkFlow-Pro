@@ -41,8 +41,8 @@ export const ModifyTeamBody = observer(
     const [memberListState, setMemberListState] = useState<any>(
       team ? formatMemberListState(team.teamUserEnablements) : {},
     );
-    const [teamManagerId, setTeamManagerId] = useState(
-      team?.teamManager[0] ? team.teamManager[0]["userId"] : "",
+    const [teamManagerId, setTeamManagerId] = useState<number>(
+      team?.teamManager[0] ? team.teamManager[0]["userId"] : null,
     );
 
     const renderMembersList = () => {

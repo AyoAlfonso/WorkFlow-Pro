@@ -13,11 +13,10 @@ interface IUserSelectionRecordProps {
   index: number;
   memberListState: any;
   setMemberListState: any;
-  teamManager?: boolean;
 }
 
 export const UserSelectionRecord = observer(
-  ({ index, memberListState, setMemberListState, teamManager }: IUserSelectionRecordProps): JSX.Element => {
+  ({ index, memberListState, setMemberListState }: IUserSelectionRecordProps): JSX.Element => {
     const {
       userStore: { users },
     } = useMst();
