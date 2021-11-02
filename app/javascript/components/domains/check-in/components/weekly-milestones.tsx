@@ -84,6 +84,7 @@ export const WeeklyMilestones = observer(
                       itemType={milestone.milestoneableType}
                       editable={true}
                       milestone={milestone}
+                      fromWeeklyCheckIn={true}
                     />
                   </MilestoneContainer>
                 </Container>

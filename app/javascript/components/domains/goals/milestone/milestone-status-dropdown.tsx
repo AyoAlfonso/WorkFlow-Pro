@@ -14,12 +14,13 @@ interface MilestoneDropdownProps {
   milestoneStatus: string;
   editable: boolean;
   fromMeeting?: boolean;
+  fromWeeklyCheckIn?: boolean;
   itemType: string;
 }
 
 export const MilestoneDropdown = observer(
   (props: MilestoneDropdownProps): JSX.Element => {
-    const { milestone, milestoneStatus, editable, fromMeeting, itemType } = props;
+    const { milestone, milestoneStatus, editable, fromMeeting, fromWeeklyCheckIn, itemType } = props;
     const { quarterlyGoalStore, subInitiativeStore, milestoneStore } = useMst();
 
     const [showList, setShowList] = useState<boolean>(false);
@@ -96,18 +97,23 @@ export const MilestoneDropdown = observer(
       if (fromMeeting) {
         milestoneStore.updateStatusFromPersonalMeeting(milestone.id, status);
       }
-      if (!fromMeeting) {
-        switch (itemType) {
-          case "quarterlyGoal":
-            quarterlyGoalStore.updateMilestoneStatus(milestone.id, status);
-            break;
-          case "subInitiative":
-            subInitiativeStore.updateMilestoneStatus(milestone.id, status);
-            break;
-          default:
-            break;
-        }
+
+      if (fromWeeklyCheckIn) {
+        milestoneStore.updateStatusFromWeeklyCheckIn(milestone.id, status);
       }
+
+        if (!fromMeeting) {
+          switch (itemType) {
+            case "quarterlyGoal":
+              quarterlyGoalStore.updateMilestoneStatus(milestone.id, status);
+              break;
+            case "subInitiative":
+              subInitiativeStore.updateMilestoneStatus(milestone.id, status);
+              break;
+            default:
+              break;
+          }
+        }
     };
 
     const statusArray = ["unstarted", "incomplete", "in_progress", "completed"];
