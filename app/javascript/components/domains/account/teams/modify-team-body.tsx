@@ -95,9 +95,9 @@ export const ModifyTeamBody = observer(
     const renderUserSelections = (): Array<JSX.Element> => {
       return team.users
         .filter(user => user.status == "active")
-        .map((user, index) => {
+        .map((user) => {
           return (
-            <MenuItem value={user.id} key={index}>
+            <MenuItem value={user.id} key={user.id}>
               {`${user.firstName} ${user.lastName}`}
             </MenuItem>
           );
@@ -113,7 +113,7 @@ export const ModifyTeamBody = observer(
               onChange={e => {
                 setTeamManagerId(e.target.value);
                 updateMemeberListState(e.target.value);
-                userStore.updateUserTeamManagerRole(e.target.value, team.id, true);
+                userStore.updateUserTeamManagerStatus(e.target.value, team.id, true);
               }}
               style={{ marginRight: "25px" }}
               margin="dense"

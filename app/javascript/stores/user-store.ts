@@ -102,7 +102,7 @@ export const UserStoreModel = types
         return true;
       }
     }),
-    updateUserTeamManagerRole: flow(function*(userId, teamId, status) {
+    updateUserTeamManagerStatus: flow(function*(userId, teamId, status) {
       const response: any = yield self.environment.api.updateUserTeamManager(
         userId,
         teamId,
