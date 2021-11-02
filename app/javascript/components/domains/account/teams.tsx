@@ -32,7 +32,7 @@ export const Teams = observer(
     const {
       teamStore: { teams },
       teamStore,
-      userStore: { users, load },
+      userStore: { users },
       userStore,
     } = useMst();
 
