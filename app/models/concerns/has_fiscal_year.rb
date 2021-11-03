@@ -89,11 +89,11 @@ module HasFiscalYear
 
   def quarter_for_creating_quarterly_goals
     current_date = format_month_and_day(self.convert_to_their_timezone)
-    if current_date.between?(format_month_and_day(current_fiscal_start_date), format_month_and_day(second_quarter_start_date()))
+    if current_date.between?(current_fiscal_start_date, second_quarter_start_date())
       within_4_weeks_range(second_quarter_start_date()) ? 2 : 1
-    elsif current_date.between?(format_month_and_day(second_quarter_start_date()), format_month_and_day(third_quarter_start_date()))
+    elsif current_date.between?(second_quarter_start_date(), third_quarter_start_date())
       within_4_weeks_range(third_quarter_start_date()) ? 3 : 2
-    elsif current_date.between?(format_month_and_day(third_quarter_start_date()), format_month_and_day(fourth_quarter_start_date()))
+    elsif current_date.between?(third_quarter_start_date(), fourth_quarter_start_date())
       within_4_weeks_range(fourth_quarter_start_date()) ? 4 : 3
     else
       if current_fiscal_start_date > current_date
@@ -121,10 +121,9 @@ module HasFiscalYear
 
   def calculate_current_fiscal_week
     current_date = self.convert_to_their_timezone.to_date
-   (current_date - current_fiscal_start_date).days.seconds.in_weeks.ceil
-  #  Time.at(seconds).utc.strftime("%U").to_i
+    Time.at((current_date - current_fiscal_start_date).days.seconds).utc.strftime("%U").to_i
   end
-
+  
   def calculate_current_fiscal_quarter
     current_date = self.convert_to_their_timezone.to_date
     if current_date.between?(current_fiscal_start_date, second_quarter_start_date())
