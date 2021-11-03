@@ -47,7 +47,7 @@ export const CheckIn = observer(
         <StopButton
           variant={"primary"}
           onClick={() => {
-            history.push(`/`);
+            history.push(`/check-in/success`);
           }}
           small
           disabled={false}
