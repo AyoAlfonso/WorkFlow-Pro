@@ -13,7 +13,7 @@ import { Loading } from "../../shared/loading";
 import { StatusBadge } from "~/components/shared/status-badge";
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown";
 import { ViewEditKPIModal } from "./shared/view-kpi-modal";
-import { UpdateKPIModal } from "./shared/update-kpi-modal";
+import { MiniUpdateKPIModal } from "./shared/update-kpi-modal";
 import { AddManualKPIModal } from "./shared/add-manual-kpi-modal";
 import { AddExistingManualKPIModal } from "./shared/edit-existing-manual-kpi-modal";
 import { titleCase } from "~/utils/camelize";
@@ -166,6 +166,7 @@ export const ScorecardTableView = observer(
           const logic = kpi.greaterThan
             ? `Greater than or equal to ${targetText}`
             : `Less than or equal to ${targetText}`;
+
           const row: any = {
             updateKPI: {
               id: kpi.id,
@@ -189,15 +190,19 @@ export const ScorecardTableView = observer(
               color: getScoreValueColor(percentScore),
             };
           });
-
           const percentScores = calcQuarterAverageScores(
             weeks,
             kpi.targetValue,
             kpi.greaterThan,
             kpi.parentType,
           ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
+
           row.score = percentScores;
           row.status = percentScores;
+          row.updateKPI.currentValue = weeks[weeks.length - 1]
+            ? weeks[weeks.length - 1]["score"]
+            : 0;
+
           return row;
         }),
       [KPIs],
@@ -450,7 +455,7 @@ export const ScorecardTableView = observer(
         )}
 
         {updateKPI && (
-          <UpdateKPIModal
+          <MiniUpdateKPIModal
             kpiId={updateKPI.id}
             ownedById={updateKPI.ownedById}
             unitType={updateKPI.unitType}
@@ -461,6 +466,7 @@ export const ScorecardTableView = observer(
             updateKPIModalOpen={updateKPIModalOpen}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
             setKpis={setKpis}
+            updateKPI={updateKPI}
           />
         )}
       </>

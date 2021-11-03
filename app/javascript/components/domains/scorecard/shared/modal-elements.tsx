@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import Modal from "styled-react-modal";
 import { Input, NumberInput, CurrencyInput, PercentInput } from "~/components/shared/input";
 import { baseTheme } from "~/themes/base";
@@ -14,6 +14,7 @@ export const StyledModal = Modal.styled<StyledModalProps>`
   width: ${props => props.width || "640px"};
   maxHeight: 90%;
   background-color: ${props => props.theme.colors.white};
+    transition: 0.8s ease-out;
 `;
 
 const inputStyles = css`
@@ -49,6 +50,7 @@ export const Header = styled.p<HeaderProps>`
   margin: 0px;
   font-size: ${props => (props.headerFontSize ? props.headerFontSize : "16px")};
   font-weight: bold;
+  transition: 0.3s ease-out;
 `;
 
 export const CloseIconContainer = styled.div`
@@ -75,6 +77,7 @@ export const FormElementContainer = styled.div`
     margin: 0px;
     margin-top: 4px;
   }
+  display: inline-block;
 `;
 
 export const RowContainer = styled.div`

@@ -14,7 +14,7 @@ import { Icon } from "~/components/shared/icon";
 import { Line } from "react-chartjs-2";
 import { baseTheme } from "~/themes/base";
 import { getScorePercent } from "../scorecard-table-view";
-import { UpdateKPIModal } from "./update-kpi-modal";
+import { MiniUpdateKPIModal } from "./update-kpi-modal";
 import { TrixEditor } from "react-trix";
 import { OwnedBySection } from "~/components/domains/goals/shared/owned-by-section";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
@@ -356,23 +356,23 @@ export const ViewEditKPIModal = observer(
                   </ChartContainer>
                   <SubHeader>Description</SubHeader>
                   <TrixEditorContainer>
-                      <TrixEditor
-                        className={"trix-kpi-modal"}
-                        autoFocus={true}
-                        placeholder={"Add a description..."}
-                        onChange={description => {
-                          setDescription(description);
-                          saveKPI({ description });
-                        }}
-                        value={description}
-                        mergeTags={[]}
-                        onEditorReady={editor => {
-                          setDescription(description);
-                          editor.element.addEventListener("trix-file-accept", event => {
-                            event.preventDefault();
-                          });
-                        }}
-                      />
+                    <TrixEditor
+                      className={"trix-kpi-modal"}
+                      autoFocus={true}
+                      placeholder={"Add a description..."}
+                      onChange={description => {
+                        setDescription(description);
+                        saveKPI({ description });
+                      }}
+                      value={description}
+                      mergeTags={[]}
+                      onEditorReady={editor => {
+                        setDescription(description);
+                        editor.element.addEventListener("trix-file-accept", event => {
+                          event.preventDefault();
+                        });
+                      }}
+                    />
                   </TrixEditorContainer>
                   <SubHeader>Activity</SubHeader>
                   <ActivityLogsContainer>
@@ -431,14 +431,13 @@ export const ViewEditKPIModal = observer(
           </Container>
         </StyledModal>
         {kpi && (
-          <UpdateKPIModal
+          <MiniUpdateKPIModal
             kpiId={kpi.id}
             ownedById={kpi.ownedById}
             unitType={kpi.unitType}
             year={company.currentFiscalYear}
             week={company.currentFiscalWeek}
             currentValue={value}
-            renderNewValue={renderNewValue}
             headerText={"Update Current Week"}
             updateKPIModalOpen={updateKPIModalOpen}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}

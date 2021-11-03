@@ -14,7 +14,7 @@ import { RollUp } from "./roll-up";
 import { Average } from "./average";
 import * as R from "ramda";
 
-interface IAddKPIModalProps {
+interface IAddAdvancedKPIModalProps {
   KPIs: any[];
   showAddKPIModal: boolean;
   setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -26,7 +26,7 @@ interface IAddKPIModalProps {
   originalKPI?: number;
 }
 
-export const AddKPIModal = observer(
+export const AddAdvancedKPIModal = observer(
   ({
     KPIs,
     showAddKPIModal,
@@ -36,7 +36,7 @@ export const AddKPIModal = observer(
     setExternalManualKPIData,
     existingSelectedKPIs,
     originalKPI,
-  }: IAddKPIModalProps): JSX.Element => {
+  }: IAddAdvancedKPIModalProps): JSX.Element => {
     const formattedKpiModalType = titleCase(kpiModalType);
     const optionsRef = useRef(null);
 
@@ -62,16 +62,6 @@ export const AddKPIModal = observer(
         ref={optionsRef}
       >
         <InnerContainer>
-          {/* {kpiModalType == "source" && (
-            <Source
-              KPIs={KPIs}
-              kpiModalType={formattedKpiModalType}
-              setModalOpen={setModalOpen}
-              setExternalManualKPIData={setExternalManualKPIData}
-              setShowFirstStage={setShowFirstStage}
-              existingSelectedKPIs={existingSelectedKPIs}
-            ></Source>
-          )} */}
           {kpiModalType == "existing" && (
             <Existing
               KPIs={KPIs}

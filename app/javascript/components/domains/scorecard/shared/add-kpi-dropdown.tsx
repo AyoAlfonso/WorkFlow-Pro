@@ -6,7 +6,7 @@ import { observer } from "mobx-react";
 import { Icon } from "../../../shared/icon";
 import { Button } from "~/components/shared/button";
 import { TextDiv } from "~/components/shared/text";
-import { AddKPIModal } from "./add-kpi-modals";
+import { AddAdvancedKPIModal } from "./add-kpi-modals";
 import { AddManualKPIModal } from "./add-manual-kpi-modal";
 import { baseTheme } from "~/themes";
 import { HtmlTooltip } from "~/components/shared/tooltip";
@@ -146,7 +146,7 @@ export const AddKPIDropdown = observer(
         )}
 
         {showAddKPIModal && (
-          <AddKPIModal
+          <AddAdvancedKPIModal
             KPIs={kpis}
             showAddKPIModal={showAddKPIModal}
             kpiModalType={kpiModalType}

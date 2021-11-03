@@ -103,6 +103,10 @@ export const Average = observer(
         targetValue:
           selectedKPIs.reduce((a, b) => a + (b["targetValue"] || 0), 0) / selectedKPIs.length,
         kpiModalType,
+        description: selectedKPIs[0]?.description,
+        greaterThan: selectedKPIs[0]?.greaterThan,
+        title: selectedKPIs[0]?.title,
+        needsAttentionThreshold: selectedKPIs[0]?.needsAttentionThreshold,
       });
       if (!R.isNil(setShowFirstStage)) {
         setShowFirstStage(false);
