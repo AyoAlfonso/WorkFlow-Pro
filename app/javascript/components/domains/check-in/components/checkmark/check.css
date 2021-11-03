@@ -16,7 +16,7 @@
   stroke-width: 5;
   stroke: #7ac142;
   stroke-miterlimit: 10;
-  margin: 40px auto;
+  margin: 70px auto;
   box-shadow: inset 0px 0px 0px #7ac142;
   animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
 }
@@ -26,7 +26,7 @@
     width: 200px;
     height: 200px;
     stroke-width: 4;
-    margin: 25px auto;
+    margin: 50px auto;
   }
 }
 

@@ -106,7 +106,7 @@ type IStopMeetingButton = {
 const StopButton = styled(Button)<IStopMeetingButton>`
   width: 100%;
   margin: 0;
-  font-size: 12px;
+  font-size: 16px;
 `;
 
 const HeaderContainer = styled.div`

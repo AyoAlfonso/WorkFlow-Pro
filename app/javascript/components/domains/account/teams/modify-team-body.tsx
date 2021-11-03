@@ -93,7 +93,7 @@ export const ModifyTeamBody = observer(
     };
 
     const renderUserSelections = (): Array<JSX.Element> => {
-      return team.users
+      return team?.users
         .filter(user => user.status == "active")
         .map((user) => {
           return (
