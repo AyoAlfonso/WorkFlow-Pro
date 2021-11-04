@@ -87,6 +87,8 @@ export const AddManualKPIModal = observer(
       }
     };
 
+    
+
     const [greaterThan, setGreaterThan] = useState<boolean>(getgreaterThanValue());
     const [description, setDescription] = useState<string>(externalManualKPIData?.description);
     const [unitType, setUnitType] = useState<string>(
@@ -149,10 +151,16 @@ export const AddManualKPIModal = observer(
     };
 
     const handleSave = () => {
-      externalManualKPIData.kpiModalType =
-        externalManualKPIData?.kpiModalType == "Average"
-          ? "avr"
-          : externalManualKPIData?.kpiModalType;
+      if (!R.isNil(externalManualKPIData?.kpiModalType)) {
+        externalManualKPIData.kpiModalType =
+          externalManualKPIData?.kpiModalType == "Average"
+            ? "avr"
+            : externalManualKPIData?.kpiModalType == "Roll Up"
+            ? "rollup"
+            : externalManualKPIData?.kpiModalType == "Existing"
+            ? "existing"
+            : externalManualKPIData?.kpiModalType;
+      }
 
       const kpi = {
         viewers: [{ type: owner_type, id: owner_id }],
