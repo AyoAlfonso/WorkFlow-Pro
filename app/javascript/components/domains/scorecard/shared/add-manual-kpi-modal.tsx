@@ -38,34 +38,36 @@ export const AddManualKPIModal = observer(
     const { t } = useTranslation();
     const { owner_id, owner_type } = useParams();
     const { keyPerformanceIndicatorStore, sessionStore, descriptionTemplateStore } = useMst();
-
-    const cachedUnitType = !R.isNil(localStorage.getItem("cachedUnitType"))
-      ? JSON.parse(localStorage.getItem("cachedUnitType"))
-      : null;
+    // const [cachedKPIData, setCachedKPIData] = useState(null);
 
     const getValueOfLocalStorage = key => {
-      return !!localStorage.getItem(key);
+      try {
+        return JSON.parse(localStorage.getItem(key));
+      } catch (error) {
+        false;
+      }
     };
-    const cashedKpiTitle = getValueOfLocalStorage("cashedKpiTitle")
-      ? JSON.parse(localStorage.getItem("cashedKpiTitle"))
-      : "";
 
-    const cachedTargetValue = getValueOfLocalStorage("cachedTargetValue")
-      ? JSON.parse(localStorage.getItem("cachedTargetValue"))
-      : 0;
-    // eslint-disable-next-line no-extra-boolean-cast
-    const cachedGreaterThan = getValueOfLocalStorage("cachedGreaterThan")
-      ? JSON.parse(localStorage.getItem("cachedGreaterThan"))
+    let cachedUnitType = !!getValueOfLocalStorage("cachedUnitType")
+      ? getValueOfLocalStorage("cachedUnitType")
       : "";
-    // eslint-disable-next-line no-extra-boolean-cast
-    const cacheNeedsAttentionThreshold = getValueOfLocalStorage("cacheNeedsAttentionThreshold")
-      ? JSON.parse(localStorage.getItem("cacheNeedsAttentionThreshold"))
+    let cachedKpiTitle = !!getValueOfLocalStorage("cachedKpiTitle")
+      ? getValueOfLocalStorage("cachedKpiTitle")
+      : "";
+    let cachedTargetValue = !!getValueOfLocalStorage("cachedTargetValue")
+      ? getValueOfLocalStorage("cachedTargetValue")
+      : 0;
+    let cacheNeedsAttentionThreshold = !!getValueOfLocalStorage("cacheNeedsAttentionThreshold")
+      ? getValueOfLocalStorage("cacheNeedsAttentionThreshold")
+      : "";
+    let cachedGreaterThan = !!getValueOfLocalStorage("cachedGreaterThan")
+      ? getValueOfLocalStorage("cachedGreaterThan")
       : "";
 
     const [title, setTitle] = useState<string>(
       (externalManualKPIData?.selectedKPIs?.length &&
         externalManualKPIData.selectedKPIs[0].title) ||
-        cashedKpiTitle,
+        cachedKpiTitle,
     );
 
     const getgreaterThanValue = () => {
@@ -129,7 +131,7 @@ export const AddManualKPIModal = observer(
       setShowAddManualKPIModal(false);
     };
     const clearCacheKPIModalData = () => {
-      localStorage.setItem("cashedKpiTitle", undefined);
+      localStorage.setItem("cachedKpiTitle", undefined);
       localStorage.setItem("cachedTargetValue", undefined);
       localStorage.setItem("cachedGreaterThan", undefined);
       localStorage.setItem("cacheNeedsAttentionThreshold", undefined);
@@ -211,7 +213,7 @@ export const AddManualKPIModal = observer(
                 value={title}
                 placeholder={"e.g. Employee NPS"}
                 onChange={e => {
-                  localStorage.setItem("cashedKpiTitle", JSON.stringify(e.target.value));
+                  localStorage.setItem("cachedKpiTitle", JSON.stringify(e.target.value));
                   setTitle(e.target.value);
                 }}
               />

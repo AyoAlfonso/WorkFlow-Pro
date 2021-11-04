@@ -24,6 +24,7 @@ export const SessionStoreModel = types
     selectedUserPulse: types.maybeNull(UserPulseModel),
     companyStaticData: types.maybeNull(types.array(types.frozen())),
     selectedDailyLog: types.maybeNull(DailyLogModel),
+    cachedKPIData: types.maybeNull(types.frozen()),
   })
   .extend(withRootStore())
   .extend(withEnvironment())
@@ -48,6 +49,7 @@ export const SessionStoreModel = types
     },
   }))
   .actions(self => ({
+
     setProfileData(updatedData) {
       self.profile = { ...toJS(self.profile), ...updatedData }; //fields to be updated should be filtered
     },

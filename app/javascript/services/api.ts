@@ -12,7 +12,6 @@ export class Api {
 
   constructor() {
     const companyId = localStorage.getItem("companyId");
-
     this.client = create({
       baseURL: "/api",
       headers: {
