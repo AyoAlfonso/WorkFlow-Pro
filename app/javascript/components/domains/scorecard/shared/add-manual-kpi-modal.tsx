@@ -378,6 +378,15 @@ export const AddManualKPIModal = observer(
           <ButtonContainer>
             <Button
               small
+              variant={"primary"}
+              m={1}
+              style={{ width: "50%", fontSize: "small" }}
+              onClick={handleSave}
+            >
+              {t("general.save")}
+            </Button>
+            <Button
+              small
               variant={"redOutline"}
               m={1}
               style={{ width: "50%", fontSize: "small" }}
@@ -387,15 +396,6 @@ export const AddManualKPIModal = observer(
               }}
             >
               {t("general.cancel")}
-            </Button>
-            <Button
-              small
-              variant={"primary"}
-              m={1}
-              style={{ width: "50%", fontSize: "small" }}
-              onClick={handleSave}
-            >
-              {t("general.save")}
             </Button>
           </ButtonContainer>
         </FormContainer>
