@@ -80,6 +80,7 @@ export const AddKPIDropdown = observer(
             >
               <OptionContainer
                 onClick={() => {
+                  setExternalManualKPIData(null);
                   setShowAddManualKPIModal(!showAddManualKPIModal);
                 }}
               >
