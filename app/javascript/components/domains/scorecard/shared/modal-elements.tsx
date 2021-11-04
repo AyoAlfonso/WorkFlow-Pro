@@ -246,3 +246,24 @@ export const SaveButton = styled.div`
     background: ${props => props.theme.colors.primary80};
   }
 `;
+
+// export const CancelButton = styled.div`
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   width: 48px;
+//   height: 16px;
+//   font-size: 14px;
+//   font-weight: bold;
+//   color: ${props => props.theme.colors.red};
+//   background: ${props => props.theme.colors.primary100};
+//   border-radius: 4px;
+//   margin-top: 8px;
+//   margin-right: auto;
+//   padding: 8px 12px;
+
+//   &:hover {
+//     cursor: pointer;
+//     background: ${props => props.theme.colors.primary80};
+//   }
+// `;

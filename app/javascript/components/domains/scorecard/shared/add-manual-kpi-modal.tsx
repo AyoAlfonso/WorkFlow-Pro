@@ -71,7 +71,7 @@ export const AddManualKPIModal = observer(
     );
 
     const getgreaterThanValue = () => {
-      if (externalManualKPIData?.greaterThan) {
+      if (!R.isNil(externalManualKPIData)) {
         if (externalManualKPIData.greaterThan) {
           return externalManualKPIData.greaterThan;
         } else {
@@ -83,11 +83,9 @@ export const AddManualKPIModal = observer(
           return false;
         }
       } else {
-        return false;
+        return true;
       }
     };
-
-    
 
     const [greaterThan, setGreaterThan] = useState<boolean>(getgreaterThanValue());
     const [description, setDescription] = useState<string>(externalManualKPIData?.description);
@@ -137,6 +135,7 @@ export const AddManualKPIModal = observer(
       localStorage.setItem("cachedTargetValue", undefined);
       localStorage.setItem("cachedGreaterThan", undefined);
       localStorage.setItem("cacheNeedsAttentionThreshold", undefined);
+      localStorage.setItem("cachedUnitType", undefined);
     };
     const clearData = () => {
       setTitle(undefined);
@@ -182,6 +181,8 @@ export const AddManualKPIModal = observer(
           return;
         }
         // Reset and close
+        clearData();
+        clearCacheKPIModalData();
         setShowAddManualKPIModal(false);
         history.push(`/scorecard/0/0`);
         setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
@@ -375,18 +376,27 @@ export const AddManualKPIModal = observer(
             </RowContainer>
           )}
           <ButtonContainer>
-            <SaveBtn onClick={handleSave}>Save</SaveBtn>
-            <CancelButton
+            <Button
               small
               variant={"redOutline"}
               m={1}
+              style={{ width: "50%", fontSize: "small" }}
               onClick={() => {
                 resetModal();
                 clearCacheKPIModalData();
               }}
             >
               {t("general.cancel")}
-            </CancelButton>
+            </Button>
+            <Button
+              small
+              variant={"primary"}
+              m={1}
+              style={{ width: "50%", fontSize: "small" }}
+              onClick={handleSave}
+            >
+              {t("general.save")}
+            </Button>
           </ButtonContainer>
         </FormContainer>
       </ModalWithHeader>
@@ -394,14 +404,11 @@ export const AddManualKPIModal = observer(
   },
 );
 
-const SaveBtn = styled(SaveButton)`
-  margin-right: 2%;
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: baseline;
+  width: 10px;
 `;
 
 const AdvancedSettingsButton = styled.div`
