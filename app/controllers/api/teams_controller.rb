@@ -48,7 +48,7 @@ class Api::TeamsController < Api::ApplicationController
   end
 
   def destroy
-    @team.destroy!
+    @team.soft_delete
     #TODO: make this restful
     @teams = policy_scope(Team).all
     render "api/teams/index"

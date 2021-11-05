@@ -21,6 +21,9 @@ export const ModifyTeamBody = observer(
   ({ team, setModalOpen }: IModifyTeamBodyProps): JSX.Element => {
     const { teamStore, userStore } = useMst();
 
+    if (!teamStore.teams) {
+      return <> </>;
+    }
     const formatMemberListState = teamUserEnablements => {
       const membersListItem = {};
 
@@ -28,7 +31,7 @@ export const ModifyTeamBody = observer(
         membersListItem[index] = {
           userId: tue.userId,
           meetingLead: tue.role == "team_lead" || tue.role == "team_manager" ? 1 : 0,
-          teamManager: tue.teamManager ? true : false
+          teamManager: tue.teamManager ? true : false,
         };
       });
       return membersListItem;
