@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { useMst } from "~/setup/root";
 import { Select } from "~/components/shared/input";
 import { OwnedBy } from "./scorecard-owned-by";
-import { AddAdvancedKPIModal } from "./add-kpi-modals";
+import { AdvancedKPIModal } from "./advanced-kpi-modals";
 import {
   InputFromUnitType,
   ModalWithHeader,
@@ -162,7 +162,7 @@ export const AddExistingManualKPIModal = observer(
     }
 
     return showFirstStage ? (
-      <AddAdvancedKPIModal
+      <AdvancedKPIModal
         KPIs={kpis}
         showAddKPIModal={showFirstStage}
         kpiModalType={kpi.parentType}

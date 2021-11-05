@@ -207,7 +207,8 @@
           "kpis": "KPIs",
           "people": "People"
         },
-        "quarterlyGraphTitle":  "Trend of average percentage of all KPIs actual value compared to the target"
+        "quarterlyGraphTitle":  "Trend of average percentage of all KPIs actual value compared to the target",
+        "latestWeekComparison": "compared to last week"
       },
       "meeting": {
         "conversationStarter": "Conversation Starter",

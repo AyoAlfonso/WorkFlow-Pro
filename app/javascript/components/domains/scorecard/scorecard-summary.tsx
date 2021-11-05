@@ -300,7 +300,6 @@ const QuarterSummary = ({
       return <></>;
     } else {
       const difference = +(currentWeekPercent - lastWeekPercent).toFixed(2);
-      // difference = +difference;
 
       return (
         <>
@@ -308,19 +307,19 @@ const QuarterSummary = ({
             <>
               <Arrow up={true} color={successGreen} />
               <Text color={successGreen} ml={4}>
-                {difference}%
+                {Number.isNaN(difference) ? 0 : difference}%
               </Text>
             </>
           ) : (
             <>
               <Arrow up={false} color={warningRed} />
               <Text color={warningRed} ml={4}>
-                {difference * -1}%
+                {Number.isNaN(difference * -1) ? 0 : difference * -1}%
               </Text>
             </>
           )}
           <Text color={greyActive} ml={8} fontSize={12}>
-            compared to last week
+            {t("scorecards.latestWeekComparison")}
           </Text>
         </>
       );

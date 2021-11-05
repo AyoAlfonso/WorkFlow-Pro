@@ -22,23 +22,22 @@ import { toJS } from "mobx";
 import { TrixEditor } from "react-trix";
 import { useHistory } from "react-router";
 
-interface AddManualKPIModalProps {
+interface ManualKPIModalProps {
   showAddManualKPIModal: boolean;
   setShowAddManualKPIModal: React.Dispatch<React.SetStateAction<boolean>>;
   externalManualKPIData?: any;
 }
 
-export const AddManualKPIModal = observer(
+export const ManualKPIModal = observer(
   ({
     showAddManualKPIModal,
     setShowAddManualKPIModal,
     externalManualKPIData,
-  }: AddManualKPIModalProps): JSX.Element => {
+  }: ManualKPIModalProps): JSX.Element => {
     const history = useHistory();
     const { t } = useTranslation();
     const { owner_id, owner_type } = useParams();
     const { keyPerformanceIndicatorStore, sessionStore, descriptionTemplateStore } = useMst();
-    // const [cachedKPIData, setCachedKPIData] = useState(null);
 
     const getValueOfLocalStorage = key => {
       try {
@@ -48,19 +47,19 @@ export const AddManualKPIModal = observer(
       }
     };
 
-    let cachedUnitType = !!getValueOfLocalStorage("cachedUnitType")
+    const cachedUnitType = !!getValueOfLocalStorage("cachedUnitType")
       ? getValueOfLocalStorage("cachedUnitType")
       : "";
-    let cachedKpiTitle = !!getValueOfLocalStorage("cachedKpiTitle")
+    const cachedKpiTitle = !!getValueOfLocalStorage("cachedKpiTitle")
       ? getValueOfLocalStorage("cachedKpiTitle")
       : "";
-    let cachedTargetValue = !!getValueOfLocalStorage("cachedTargetValue")
+    const cachedTargetValue = !!getValueOfLocalStorage("cachedTargetValue")
       ? getValueOfLocalStorage("cachedTargetValue")
       : 0;
-    let cacheNeedsAttentionThreshold = !!getValueOfLocalStorage("cacheNeedsAttentionThreshold")
+    const cacheNeedsAttentionThreshold = !!getValueOfLocalStorage("cacheNeedsAttentionThreshold")
       ? getValueOfLocalStorage("cacheNeedsAttentionThreshold")
       : "";
-    let cachedGreaterThan = !!getValueOfLocalStorage("cachedGreaterThan")
+    const cachedGreaterThan = !!getValueOfLocalStorage("cachedGreaterThan")
       ? getValueOfLocalStorage("cachedGreaterThan")
       : "";
 
