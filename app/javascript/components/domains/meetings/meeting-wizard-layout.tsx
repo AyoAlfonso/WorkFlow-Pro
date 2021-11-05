@@ -151,7 +151,6 @@ const Container = styled.div`
 
 const CoreFourWrapper = styled.div`
   width: 100%;
-  margin-left: 20px;
   margin-top: 30px;
 `;
 

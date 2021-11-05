@@ -38,7 +38,7 @@ export const KeyActivityRecord = observer(
     noBorder,
     includeAvatar = false,
   }: IKeyActivityRecordProps): JSX.Element => {
-    const { keyActivityStore } = useMst();
+    const { keyActivityStore, meetingStore } = useMst();
     const keyActivityRef = useRef(null);
     const { t } = useTranslation();
     const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
@@ -109,6 +109,7 @@ export const KeyActivityRecord = observer(
           showLabelsList={showLabelsList}
           inlineEdit={true}
           afterLabelSelectAction={updateLabel}
+          marginLeftDropdownList="-300px"
         />
       );
     };
@@ -129,6 +130,7 @@ export const KeyActivityRecord = observer(
                   e.target.checked,
                   meetingId ? true : false,
                 );
+                keyActivityStore.fetchKeyActivitiesFromMeeting(meetingStore.currentMeeting.id);
               }}
               disabled={disabled}
             />
@@ -147,9 +149,9 @@ export const KeyActivityRecord = observer(
                 textDecoration: keyActivity.completedAt && "line-through",
                 cursor: "text",
               }}
-              onBlur={() =>
-                keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false)
-              }
+              onBlur={() => {
+                keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false);
+              }}
               disabled={disabled}
             />
           </InputContainer>
