@@ -137,4 +137,5 @@ const Container = styled.div`
 const GraphContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
+  height: fit-content;
 `;

@@ -15,16 +15,22 @@ import {
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 import { useParams } from "react-router-dom";
 import { Loading } from "~/components/shared";
-import { color } from "styled-system";
+import { space, SpaceProps, color, ColorProps } from "styled-system";
 interface ITeamKeyActivitiesBody {
   meeting?: boolean;
   includeAvatar?: boolean;
+  showOnlyOpen?: boolean;
 }
 
 export const TeamKeyActivitiesBody = observer(
-  ({ meeting = false, includeAvatar = false }: ITeamKeyActivitiesBody): JSX.Element => {
+  ({
+    meeting = false,
+    includeAvatar = false,
+    showOnlyOpen,
+  }: ITeamKeyActivitiesBody): JSX.Element => {
     const [loading, setLoading] = useState<boolean>(true);
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
+    const [showOpenActivities, setShowOpenActivities] = useState<boolean>(true);
 
     const {
       meetingStore,
@@ -48,7 +54,9 @@ export const TeamKeyActivitiesBody = observer(
     //show todays pyns for all users
     // const todaysKeyActivities = keyActivityStore.keyActivitiesByScheduledGroupName("Today");
     const todaysKeyActivities = keyActivityStore.keyActivitiesFromMeeting;
-
+    const keyActivitiesToShow = showOpenActivities
+      ? todaysKeyActivities.filter(ka => ka.completedAt === null)
+      : todaysKeyActivities.filter(ka => ka.completedAt);
     const todayFilterGroupId = scheduledGroups.find(group => group.name == "Today").id;
     return (
       <>
@@ -59,8 +67,27 @@ export const TeamKeyActivitiesBody = observer(
               setCreateKeyActivityModalOpen(true);
             }}
           />
+          {!showOnlyOpen ? (
+            <FilterContainer>
+              <FilterOptions
+                onClick={() => setShowOpenActivities(true)}
+                mr={"15px"}
+                color={showOpenActivities ? "primary100" : "grey40"}
+              >
+                Open
+              </FilterOptions>
+              <FilterOptions
+                onClick={() => setShowOpenActivities(false)}
+                color={!showOpenActivities ? "primary100" : "grey40"}
+              >
+                Closed
+              </FilterOptions>
+            </FilterContainer>
+          ) : (
+            <></>
+          )}
           <KeyActivitiesListStyleContainer>
-            {todaysKeyActivities.map(ka => (
+            {keyActivitiesToShow.map(ka => (
               <KeyActivityRecord
                 key={ka.id}
                 keyActivity={ka}
@@ -90,7 +117,22 @@ const KeyActivitiesListContainer = styled.div`
 `;
 
 const KeyActivitiesListStyleContainer = styled.div`
-  margin-top: 16px;
   height: inherit;
   overflow-y: auto;
+`;
+
+export const FilterContainer = styled.div`
+  display: flex;
+  margin-left: auto;
+  margin-top: 16px;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+export const FilterOptions = styled.p<ColorProps & SpaceProps>`
+  ${space}
+  ${color}
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
 `;
