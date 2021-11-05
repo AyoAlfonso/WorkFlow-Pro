@@ -66,9 +66,11 @@ export const ModifyTeamBody = observer(
           userStore.load();
         });
       } else {
+        console.log(memberListState);
         teamStore.createTeamAndInviteUsers(teamName, memberListState).then(() => {
           showToast("Team created", ToastMessageConstants.SUCCESS);
           setModalOpen(false);
+          teamStore.load();
         });
       }
     };
@@ -93,7 +95,7 @@ export const ModifyTeamBody = observer(
     };
 
     const renderUserSelections = (): Array<JSX.Element> => {
-      return team.users
+      return team?.users
         .filter(user => user.status == "active")
         .map((user) => {
           return (

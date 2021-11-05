@@ -10,7 +10,7 @@ import { Avatar } from "~/components/shared/avatar";
 import { UserCard } from "~/components/shared/user-card";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
-
+import { toJS } from "mobx";
 import {
   StretchContainer,
   BodyContainer,
@@ -35,7 +35,7 @@ export const Teams = observer(
       userStore: { users },
       userStore,
     } = useMst();
-
+console.log(toJS(teams));
     const [createTeamModalOpen, setCreateTeamModalOpen] = useState<boolean>(false);
     const [editTeamModalOpen, setEditTeamModalOpen] = useState<boolean>(false);
     const [selectedEditTeam, setSelectedEditTeam] = useState<any>({});
