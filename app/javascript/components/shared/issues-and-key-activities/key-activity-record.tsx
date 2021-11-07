@@ -151,6 +151,7 @@ export const KeyActivityRecord = observer(
               }}
               onBlur={() => {
                 keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false);
+                keyActivityStore.fetchKeyActivitiesFromMeeting(meetingStore.currentMeeting.id);
               }}
               disabled={disabled}
             />

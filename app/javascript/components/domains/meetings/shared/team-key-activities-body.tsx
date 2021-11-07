@@ -61,12 +61,6 @@ export const TeamKeyActivitiesBody = observer(
     return (
       <>
         <KeyActivitiesListContainer>
-          <CreateKeyActivityButton
-            meeting={meeting}
-            onButtonClick={() => {
-              setCreateKeyActivityModalOpen(true);
-            }}
-          />
           {!showOnlyOpen ? (
             <FilterContainer>
               <FilterOptions
@@ -86,6 +80,12 @@ export const TeamKeyActivitiesBody = observer(
           ) : (
             <></>
           )}
+          <CreateKeyActivityButton
+            meeting={meeting}
+            onButtonClick={() => {
+              setCreateKeyActivityModalOpen(true);
+            }}
+          />
           <KeyActivitiesListStyleContainer>
             {keyActivitiesToShow.map(ka => (
               <KeyActivityRecord
@@ -119,6 +119,7 @@ const KeyActivitiesListContainer = styled.div`
 const KeyActivitiesListStyleContainer = styled.div`
   height: inherit;
   overflow-y: auto;
+  margin-top: 16px;
 `;
 
 export const FilterContainer = styled.div`

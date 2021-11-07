@@ -240,6 +240,7 @@ const BodyContainer = styled.div`
 const BodyContentContainer = styled.div`
   height: 100%;
   overflow-y: auto;
+  display: flex;
 `;
 
 const DescriptionTitleContainer = styled.div``;
