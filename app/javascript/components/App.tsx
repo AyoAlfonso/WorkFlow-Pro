@@ -301,7 +301,7 @@ export const App = observer(
                     </>
                   </Route>
                   <>
-                    {/* <Route exact path="/weekly-check-in/:userId/:weekOf" component={CheckIn} /> */}
+                    <Route exact path="/weekly-check-in/:userId/:weekOf" component={CheckIn} />
                   </>
                 </Switch>
               ) : (
