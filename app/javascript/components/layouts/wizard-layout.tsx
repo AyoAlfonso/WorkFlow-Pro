@@ -241,6 +241,9 @@ const BodyContentContainer = styled.div`
   height: 100%;
   overflow-y: auto;
   display: flex;
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
 `;
 
 const DescriptionTitleContainer = styled.div``;
