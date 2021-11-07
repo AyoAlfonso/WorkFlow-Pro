@@ -8,6 +8,8 @@ import { Avatar } from "~/components/shared/avatar";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete, { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { toJS } from "mobx";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 interface ITeamSelectionDropdownProps {
   teamsList: any;
@@ -20,20 +22,19 @@ export const TeamSelectionDropdown = observer(
   ({ teamsList, onTeamSelect }: ITeamSelectionDropdownProps): JSX.Element => {
     const { teamStore } = useMst();
     const [value, setValue] = useState<any>(null);
-    const [open, setOpen] = useState<boolean>(false);
-
-    console.log(open);
-
+    
     return (
       <ActionDropdownContainer marginLeft="0px">
         <Autocomplete
           value={value}
           onChange={(event, newValue) => {
-            console.log(newValue);
             if (newValue.inputValue) {
-              teamStore
-                .createTeamAndInviteUsers(newValue.inputValue, {})
-                .then(data => console.log(data));
+              return teamStore.createTeamAndInviteUsers(newValue.inputValue, {}).then(response => {
+                showToast("Team created", ToastMessageConstants.SUCCESS);
+                const newTeam = response.find(team => team.name === newValue.inputValue);
+                setValue(newTeam);
+                onTeamSelect(newTeam?.id);
+              });
             }
             setValue(newValue);
             onTeamSelect(newValue?.id);
@@ -48,15 +49,13 @@ export const TeamSelectionDropdown = observer(
             }
             return filtered;
           }}
-          // selectOnFocus
           clearOnEscape
           size={"small"}
           options={toJS(teamsList)}
           getOptionLabel={option => {
-            return `${option.name ? option.name : "Unamed Team"}`;
+            return `${option.inputValue ? option.inputValue : option.name}`;
           }}
           renderOption={option => {
-            console.log(option);
             return (
               <OptionContainer>
                 {option.inputValue ? (
@@ -75,7 +74,7 @@ export const TeamSelectionDropdown = observer(
                     marginLeft={"0px"}
                   />
                 )}
-                <TeamOptionText> {`${option.name ? option.name : "Unamed Team"}`}</TeamOptionText>
+                <TeamOptionText> {`${option.name}`}</TeamOptionText>
               </OptionContainer>
             );
           }}
