@@ -66,7 +66,6 @@ export const ModifyTeamBody = observer(
           userStore.load();
         });
       } else {
-        console.log(memberListState);
         teamStore.createTeamAndInviteUsers(teamName, memberListState).then(() => {
           showToast("Team created", ToastMessageConstants.SUCCESS);
           showToast("Invites sent", ToastMessageConstants.SUCCESS);
