@@ -51,7 +51,8 @@ export const ScorecardTableView = observer(
     const [tab, setTab] = useState<string>("KPIs");
     const [currentSelectedKpi, setCurrentSelectedKpi] = useState(undefined);
     const [updateKPI, setUpdateKPI] = useState(undefined);
-    const [currentKPIIcon, setCurrentKPIIcon] = useState(undefined);
+    const [selectedKPIIcon, setSelectedKPIIcon] = useState(undefined);
+    const [selectedKPIWeek, setSelectedKPIWeek] = useState(undefined);
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
     const [showEditExistingKPIContainer, setShowEditExistingKPIContainer] = useState<boolean>(
       false,
@@ -188,6 +189,7 @@ export const ScorecardTableView = observer(
             row[`wk_${week.week}`] = {
               score: formatValue(kpi.unitType, week?.score),
               color: getScoreValueColor(percentScore),
+              id: kpi.id,
             };
           });
           const percentScores = calcQuarterAverageScores(
@@ -202,7 +204,7 @@ export const ScorecardTableView = observer(
           row.updateKPI.currentValue = weeks[weeks.length - 1]
             ? weeks[weeks.length - 1]["score"]
             : 0;
-
+          row.updateKPI.currentWeek = weeks[weeks.length - 1] || 0;
           return row;
         }),
       [KPIs],
@@ -227,22 +229,22 @@ export const ScorecardTableView = observer(
                   }
                 }}
                 onMouseEnter={() => {
-                  setCurrentKPIIcon(value.id);
+                  setSelectedKPIIcon(value.id);
                 }}
                 onMouseLeave={() => {
-                  setCurrentKPIIcon(null);
+                  setSelectedKPIIcon(null);
                 }}
               >
-                {currentKPIIcon == value.id ? (
+                {selectedKPIIcon == value.id ? (
                   <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
                 ) : (
                   <> </>
                 )}
-                {currentKPIIcon !== value.id ? (
+                {selectedKPIIcon !== value.id ? (
                   <BlueUpdateKpiIcon
                     icon={"Update_KPI_New"}
                     size={16}
-                    hover={currentKPIIcon == value.id}
+                    hover={selectedKPIIcon == value.id}
                   />
                 ) : (
                   <> </>
@@ -323,13 +325,27 @@ export const ScorecardTableView = observer(
           width: "17%",
           minWidth: "160px",
         },
-        ...R.range(1, 53).map(n => ({
+        ...R.range(1, 53).map((n, i) => ({
           Header: () => <div style={{ fontSize: "14px" }}> {`WK ${n}`} </div>,
           accessor: `wk_${n}`,
           Cell: ({ value }) => {
             if (value === undefined) {
               return (
-                <EmptyWeekContainer>
+                <EmptyWeekContainer
+                // onMouseEnter={() => {
+                //   setSelectedKPIWeek(`wk_${n}_${i}`);
+                // }}
+                // onMouseLeave={() => {
+                //   setSelectedKPIWeek(null);
+                // }}
+                >
+                  {/* {selectedKPIWeek == `wk_${n}_${i}` ? (
+                    <BlueUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
+                  ) : (
+                    <> </>
+                    
+                  )}
+                  {selectedKPIWeek !== `wk_${n}_${i}` ? <EmptyWeek /> : <> </>} */}
                   <EmptyWeek />
                 </EmptyWeekContainer>
               );
@@ -344,7 +360,7 @@ export const ScorecardTableView = observer(
           minWidth: "64px",
         })),
       ],
-      [quarter, year, currentKPIIcon],
+      [quarter, year, selectedKPIIcon, selectedKPIWeek],
     );
 
     const getHiddenWeeks = (q: number) =>
@@ -578,8 +594,9 @@ const UpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
 `;
 
 const BlueUpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
-
    color:  ${props => props.theme.colors.primary100}; 
+   display: ${props => (props.hover ? "inline-block" : "none")};
+   transition: "all 0.4s ease-in";
    &:hover {
     cursor: pointer;
     fill:  ${props => props.theme.colors.primary100} !important;
@@ -587,6 +604,8 @@ const BlueUpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
 
 const WhiteUpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
    color:  ${props => props.theme.colors.white}; 
+   display: ${props => (props.hover ? "inline-block" : "none")};
+   transition: "all 0.4s ease-in";
    &:hover {
     cursor: pointer;
     fill:  ${props => props.theme.colors.white} !important;
