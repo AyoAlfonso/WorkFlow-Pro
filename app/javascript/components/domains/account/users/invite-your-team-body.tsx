@@ -1,13 +1,15 @@
 import * as React from "react";
 import { useMst } from "~/setup/root";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Heading } from "~/components/shared";
 import { observer } from "mobx-react";
 import TextField from "@material-ui/core/TextField";
-import { Select } from "~/components/shared"
+import { Select } from "~/components/shared";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Button } from "~/components/shared/button";
+import { toJS } from "mobx";
+import { TeamSelectionDropdown } from "../../../shared/team-selection-dropdown";
 interface IInviteYourTeamBodyProps {
   setModalOpen: any;
   setShowUserLimitModal: any;
@@ -23,16 +25,7 @@ export const InviteYourTeamBody = observer(
 
     const [emailAddresses, setEmailAddresses] = useState<string>("");
     const [selectedTeamId, setSelectedTeamId] = useState<any>("");
-
-    const renderTeamSelections = (): Array<JSX.Element> => {
-      return teams.map((team, index) => {
-        return (
-          <MenuItem value={team.id} key={index}>
-            {team.name}
-          </MenuItem>
-        );
-      });
-    };
+    const [loading, setLoading] = useState<boolean>(false);
 
     const inviteUsersToCompany = () => {
       // TODO: UPDATE THIS FEATURE WHEN THE IMPLEMENTATION FOR SUBSCRIPTION HAS BEEN COMPLETED.
@@ -73,26 +66,18 @@ export const InviteYourTeamBody = observer(
           <StyledHeading type={"h4"} color={"black"} fontSize={"12px"}>
             Team
           </StyledHeading>
-          <Select
-            labelId="simple-select-outlined-label"
-            id="simple-select-outlined"
-            value={selectedTeamId}
-            native={false}
-            onChange={e => setSelectedTeamId(e.target.value)}
-          >
-            {renderTeamSelections()}
-          </Select>
-          <HelperText>
-            Add new members to a team. Don't see the team?{" "}
-            <CreateATeamText> Create a team</CreateATeamText>
-          </HelperText>
+          <TeamSelectionDropdown teamsList={teams} onTeamSelect={setSelectedTeamId} />
         </SectionContainer>
 
         <SaveButton
           small
-          disabled={!emailAddresses || !selectedTeamId}
+          disabled={!emailAddresses || !selectedTeamId || loading}
           variant={"primary"}
-          onClick={() => inviteUsersToCompany()}
+          onClick={() => {
+            setLoading(true);
+            inviteUsersToCompany();
+            setLoading(false);
+          }}
         >
           Send Invite
         </SaveButton>
