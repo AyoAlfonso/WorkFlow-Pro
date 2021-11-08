@@ -52,6 +52,7 @@ import { Onboarding } from "./domains/onboarding";
 import { CheckIn } from "./domains/check-in/checkin";
 import { useEffect } from "react";
 import { getWeekOf } from "~/utils/date-time";
+import { CheckInSuccess } from "./domains/check-in/components/checkin-success";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -77,17 +78,17 @@ export const App = observer(
     const history = useHistory();
     const location = useLocation();
 
-    // useEffect(() => {
-    //   const redirectToCheckIn = () => {
-    //     const width = window.innerWidth <= 768;
-    //     const id = profile?.id;
-    //     if (width) {
-    //       if (location.pathname.includes("weekly-check-in")) return
-    //       if (id) return history.push(`/weekly-check-in/${id}/${getWeekOf()}`);
-    //     }
-    //   }
-    //   redirectToCheckIn()
-    // }, [profile])
+    useEffect(() => {
+      const redirectToCheckIn = () => {
+        const width = window.innerWidth <= 768;
+        const id = profile?.id;
+        if (width) {
+          if (location.pathname.includes("check-in")) return
+          if (id) return history.push(`/weekly-check-in/${id}/${getWeekOf()}`);
+        }
+      }
+      redirectToCheckIn()
+    }, [profile])
 
     let noFeatures;
     let showGoalRoute;
@@ -302,6 +303,7 @@ export const App = observer(
                   </Route>
                   <>
                     <Route exact path="/weekly-check-in/:userId/:weekOf" component={CheckIn} />
+                    <Route exact path="/check-in/success" component={CheckInSuccess} />
                   </>
                 </Switch>
               ) : (
