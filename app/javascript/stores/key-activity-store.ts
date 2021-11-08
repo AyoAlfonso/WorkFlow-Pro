@@ -184,7 +184,7 @@ export const KeyActivityStoreModel = types
       if(!keyActivityObject){
         keyActivityObject = self.completedKeyActivities.find(ka => ka.id === id);
       }
-console.log(keyActivityObject);
+
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivity({
         ...keyActivityObject,
         fromTeamMeeting,
