@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import * as R from "ramda";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
@@ -6,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { useMst } from "~/setup/root";
 import { Select } from "~/components/shared/input";
 import { OwnedBy } from "./scorecard-owned-by";
-import * as R from "ramda";
+import { Button } from "~/components/shared/button";
 import {
   InputFromUnitType,
   ModalWithHeader,
@@ -21,39 +22,74 @@ import { toJS } from "mobx";
 import { TrixEditor } from "react-trix";
 import { useHistory } from "react-router";
 
-interface AddManualKPIModalProps {
-  kpiId?: number;
+interface ManualKPIModalProps {
   showAddManualKPIModal: boolean;
   setShowAddManualKPIModal: React.Dispatch<React.SetStateAction<boolean>>;
   externalManualKPIData?: any;
-  setShowEditExistingKPIContainer?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const AddManualKPIModal = observer(
+export const ManualKPIModal = observer(
   ({
-    kpiId,
     showAddManualKPIModal,
     setShowAddManualKPIModal,
     externalManualKPIData,
-    setShowEditExistingKPIContainer,
-  }: AddManualKPIModalProps): JSX.Element => {
+  }: ManualKPIModalProps): JSX.Element => {
     const history = useHistory();
+    const { t } = useTranslation();
     const { owner_id, owner_type } = useParams();
-    const {
-      keyPerformanceIndicatorStore,
-      sessionStore,
-      descriptionTemplateStore,
-    } = useMst();
+    const { keyPerformanceIndicatorStore, sessionStore, descriptionTemplateStore } = useMst();
+
+    const getValueOfLocalStorage = key => {
+      try {
+        return JSON.parse(localStorage.getItem(key));
+      } catch (error) {
+        false;
+      }
+    };
+
+    const cachedUnitType = !!getValueOfLocalStorage("cachedUnitType")
+      ? getValueOfLocalStorage("cachedUnitType")
+      : "";
+    const cachedKpiTitle = !!getValueOfLocalStorage("cachedKpiTitle")
+      ? getValueOfLocalStorage("cachedKpiTitle")
+      : "";
+    const cachedTargetValue = !!getValueOfLocalStorage("cachedTargetValue")
+      ? getValueOfLocalStorage("cachedTargetValue")
+      : 0;
+    const cacheNeedsAttentionThreshold = !!getValueOfLocalStorage("cacheNeedsAttentionThreshold")
+      ? getValueOfLocalStorage("cacheNeedsAttentionThreshold")
+      : "";
+    const cachedGreaterThan = !!getValueOfLocalStorage("cachedGreaterThan")
+      ? getValueOfLocalStorage("cachedGreaterThan")
+      : "";
+
     const [title, setTitle] = useState<string>(
       (externalManualKPIData?.selectedKPIs?.length &&
         externalManualKPIData.selectedKPIs[0].title) ||
-        undefined,
+        cachedKpiTitle,
     );
-    const [kpi, setKpi] = useState(null);
-    const [greaterThan, setGreaterThan] = useState<boolean>(true);
-    const [description, setDescription] = useState<string>(undefined);
+
+    const getgreaterThanValue = () => {
+      if (!R.isNil(externalManualKPIData)) {
+        if (externalManualKPIData.greaterThan) {
+          return externalManualKPIData.greaterThan;
+        } else {
+          return false;
+        }
+        if (cachedGreaterThan) {
+          return cachedGreaterThan;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    };
+
+    const [greaterThan, setGreaterThan] = useState<boolean>(getgreaterThanValue());
+    const [description, setDescription] = useState<string>(externalManualKPIData?.description);
     const [unitType, setUnitType] = useState<string>(
-      externalManualKPIData?.unitType || "numerical",
+      externalManualKPIData?.unitType || cachedUnitType || "numerical",
     );
     const [owner, setOwner] = useState(
       externalManualKPIData?.selectedKPIs?.length > 0
@@ -61,10 +97,12 @@ export const AddManualKPIModal = observer(
         : sessionStore?.profile,
     );
     const [targetValue, setTargetValue] = useState<number>(
-      externalManualKPIData?.targetValue || undefined,
+      externalManualKPIData?.targetValue || cachedTargetValue,
     );
     const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
-    const [needsAttentionThreshold, setNeedsAttentionThreshold] = useState(90);
+    const [needsAttentionThreshold, setNeedsAttentionThreshold] = useState(
+      externalManualKPIData?.needsAttentionThreshold || cacheNeedsAttentionThreshold || 90,
+    );
     const [selectedKPIs, setSelectedKPIs] = useState(externalManualKPIData?.selectedKPIs);
     const [selectedTagInputCount, setSelectedTagInputCount] = useState(0);
 
@@ -82,20 +120,45 @@ export const AddManualKPIModal = observer(
       const template = toJS(descriptionTemplateStore.descriptionTemplates).find(
         t => t.templateType == "kpi",
       );
-      if (template) {
+      if (template && !externalManualKPIData?.description) {
         setDescription(template.body.body);
       }
     }, []);
 
     const resetModal = () => {
+      clearData();
+      setShowAddManualKPIModal(false);
+    };
+    const clearCacheKPIModalData = () => {
+      localStorage.setItem("cachedKpiTitle", undefined);
+      localStorage.setItem("cachedTargetValue", undefined);
+      localStorage.setItem("cachedGreaterThan", undefined);
+      localStorage.setItem("cacheNeedsAttentionThreshold", undefined);
+      localStorage.setItem("cachedUnitType", undefined);
+    };
+    const clearData = () => {
+      setTitle(undefined);
+      setGreaterThan(true);
+      setDescription(undefined);
+      setUnitType("numerical");
+      setOwner(sessionStore?.profile);
+      setTargetValue(undefined);
+      setShowAdvancedSettings(false);
+      setNeedsAttentionThreshold(90);
       setShowAddManualKPIModal(false);
     };
 
     const handleSave = () => {
-      externalManualKPIData.kpiModalType =
-        externalManualKPIData?.kpiModalType == "Average"
-          ? "avr"
-          : externalManualKPIData?.kpiModalType;
+      if (!R.isNil(externalManualKPIData?.kpiModalType)) {
+        externalManualKPIData.kpiModalType =
+          externalManualKPIData?.kpiModalType == "Average"
+            ? "avr"
+            : externalManualKPIData?.kpiModalType == "Roll Up"
+            ? "rollup"
+            : externalManualKPIData?.kpiModalType == "Existing"
+            ? "existing"
+            : externalManualKPIData?.kpiModalType;
+      }
 
       const kpi = {
         viewers: [{ type: owner_type, id: owner_id }],
@@ -117,13 +180,16 @@ export const AddManualKPIModal = observer(
           return;
         }
         // Reset and close
-        resetModal();
+        clearData();
+        clearCacheKPIModalData();
+        setShowAddManualKPIModal(false);
         history.push(`/scorecard/0/0`);
         setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
       });
     };
 
-    const handleChange = (e, setStateAction) => {
+    const handleChange = (e, setStateAction, cachePropName) => {
+      localStorage.setItem(cachePropName, JSON.stringify(e.target.value));
       setStateAction(Number(e.target.value.replace(/[^0-9.]+/g, "")));
     };
 
@@ -155,6 +221,7 @@ export const AddManualKPIModal = observer(
                 value={title}
                 placeholder={"e.g. Employee NPS"}
                 onChange={e => {
+                  localStorage.setItem("cachedKpiTitle", JSON.stringify(e.target.value));
                   setTitle(e.target.value);
                 }}
               />
@@ -210,6 +277,7 @@ export const AddManualKPIModal = observer(
               <Select
                 name={"unitType"}
                 onChange={e => {
+                  localStorage.setItem("cachedUnitType", JSON.stringify(e.target.value));
                   setUnitType(e.target.value);
                 }}
                 value={unitType}
@@ -249,8 +317,12 @@ export const AddManualKPIModal = observer(
               <InputHeaderWithComment fontSize={"14px"}>Condition</InputHeaderWithComment>
               <Select
                 name={"logic"}
-                onChange={e => {
-                  setGreaterThan(e.target.key == "greater-than" ? true : false);
+                onChange={(e, s) => {
+                  localStorage.setItem(
+                    "cachedGreaterThan",
+                    JSON.stringify(e.target.value == 1 ? true : false),
+                  );
+                  setGreaterThan(e.target.value == 1 ? true : false);
                 }}
                 value={greaterThan ? 1 : 0}
                 fontSize={12}
@@ -272,7 +344,7 @@ export const AddManualKPIModal = observer(
                 unitType={unitType}
                 placeholder={"0"}
                 onChange={e => {
-                  handleChange(e, setTargetValue);
+                  handleChange(e, setTargetValue, "cachedTargetValue");
                 }}
                 defaultValue={targetValue}
               />
@@ -294,7 +366,7 @@ export const AddManualKPIModal = observer(
                   unitType={"percentage"}
                   placeholder={"90"}
                   onChange={e => {
-                    handleChange(e, setNeedsAttentionThreshold);
+                    handleChange(e, setNeedsAttentionThreshold, "cacheNeedsAttentionThreshold");
                   }}
                   defaultValue={needsAttentionThreshold}
                 />
@@ -302,14 +374,41 @@ export const AddManualKPIModal = observer(
               <FormElementContainer />
             </RowContainer>
           )}
-          <FormElementContainer>
-            <SaveButton onClick={handleSave}>Save</SaveButton>
-          </FormElementContainer>
+          <ButtonContainer>
+            <Button
+              small
+              variant={"primary"}
+              m={1}
+              style={{ width: "50%", fontSize: "small" }}
+              onClick={handleSave}
+            >
+              {t("general.save")}
+            </Button>
+            <Button
+              small
+              variant={"redOutline"}
+              m={1}
+              style={{ width: "50%", fontSize: "small" }}
+              onClick={() => {
+                resetModal();
+                clearCacheKPIModalData();
+              }}
+            >
+              {t("general.cancel")}
+            </Button>
+          </ButtonContainer>
         </FormContainer>
       </ModalWithHeader>
     );
   },
 );
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  width: 10px;
+`;
 
 const AdvancedSettingsButton = styled.div`
   font-size: 12px;
@@ -321,6 +420,15 @@ const AdvancedSettingsButton = styled.div`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const CancelButton = styled(Button)`
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  font-size: 14px;
+  font-weight: bold;
 `;
 
 const SelectedTagInputCount = styled.span`

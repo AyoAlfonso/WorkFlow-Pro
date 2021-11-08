@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import moment from "moment";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
-import { useRef } from "react";
 import ContentEditable from "react-contenteditable";
-import Modal from "styled-react-modal";
+import Modal from "styled-react-modal"; //Use this to minimize issues around closing modals
 import { useMst } from "~/setup/root";
 import { StatusBadge } from "~/components/shared/status-badge";
 import { Loading } from "~/components/shared/loading";
@@ -15,7 +14,7 @@ import { Icon } from "~/components/shared/icon";
 import { Line } from "react-chartjs-2";
 import { baseTheme } from "~/themes/base";
 import { getScorePercent } from "../scorecard-table-view";
-import { UpdateKPIModal } from "./update-kpi-modal";
+import { MiniUpdateKPIModal } from "./update-kpi-modal";
 import { TrixEditor } from "react-trix";
 import { OwnedBySection } from "~/components/domains/goals/shared/owned-by-section";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
@@ -51,7 +50,6 @@ export const ViewEditKPIModal = observer(
     const [kpi, setKpi] = useState(null);
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
     const [loading, setLoading] = useState(true);
-    const [header, setHeader] = useState("");
     const [value, setValue] = useState<number>(undefined);
     const [logic, setLogic] = useState("");
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
@@ -66,7 +64,7 @@ export const ViewEditKPIModal = observer(
 
     const headerRef = useRef(null);
 
-    if (R.isNil(keyPerformanceIndicatorStore)) {
+    if (R.isNil(keyPerformanceIndicatorStore) || R.isNil(kpiId)) {
       return <></>;
     }
 
@@ -173,16 +171,6 @@ export const ViewEditKPIModal = observer(
               />
             </ScorecardKPIDropdownContainer>
           )}
-
-          {/* {showDropdownOptionsContainer && (
-            <ScorecardKPIDropdownContainer>
-              <ScorecardKPIDropdownOptions
-                setShowDropdownOptions={setShowDropdownOptionsContainer}
-                setModalOpen={setViewEditKPIModalOpen}
-                setShowEditExistingKPIContainer={setShowEditExistingKPIContainer}
-              />
-            </ScorecardKPIDropdownContainer>
-          )} */}
         </DropdownOptionsContainer>
       );
     };
@@ -199,6 +187,7 @@ export const ViewEditKPIModal = observer(
     };
 
     useEffect(() => {
+      setLoading(true);
       if (!R.isNil(kpiId)) {
         const advancedKPI = scorecardStore.kpis.find(kpi => kpi.id == kpiId && kpi.parentType);
         keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
@@ -207,6 +196,7 @@ export const ViewEditKPIModal = observer(
             setDescription(KPI.description || descriptionTemplateForKPI);
             setCurrentLog();
             setKpi(KPI);
+            setLoading(false);
           }
         });
       }
@@ -217,6 +207,13 @@ export const ViewEditKPIModal = observer(
         keyPerformanceIndicatorStore.updateKPI(Object.assign({}, kpi, body), true);
       }, 500)();
     };
+    // useEffect(() => {
+    //   setLoading(true);
+    //   if (kpi) {
+    //     setDescription(kpi.description || descriptionTemplateForKPI);
+    //   }
+    //   setLoading(false);
+    // }, [kpi]);
 
     const drawGraph = KPI => {
       const startWeek = (company.currentFiscalQuarter - 1) * 13 + 1;
@@ -240,14 +237,19 @@ export const ViewEditKPIModal = observer(
     };
 
     const closeModal = () => {
-      setLoading(true);
+      // setLoading(true);
       setViewEditKPIModalOpen(false);
+      // setKpiIdentifier(null);
+    };
+    const handleEditorChange = description => {
+      setDescription(description);
     };
 
     useEffect(() => {
       if (!kpi) {
         return;
       }
+      setLoading(true);
       const weeks = kpi.period.get(company.currentFiscalYear)?.toJSON();
       drawGraph(kpi);
       const targetText = formatValue(kpi.targetValue, kpi.unitType);
@@ -324,7 +326,7 @@ export const ViewEditKPIModal = observer(
                     </OwnerAndLogicText>
                     <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
-                      {R.uniq(kpi.viewers.map(viewer => viewer.type)).join(", ")} KPI
+                      {R.uniq(kpi?.viewers.map(viewer => viewer.type)).join(", ")} KPI
                     </OwnerAndLogicText>
 
                     <Icon icon={"Initiative"} iconColor={greyInactive} size={16} />
@@ -365,6 +367,7 @@ export const ViewEditKPIModal = observer(
                       value={description}
                       mergeTags={[]}
                       onEditorReady={editor => {
+                        setDescription(description);
                         editor.element.addEventListener("trix-file-accept", event => {
                           event.preventDefault();
                         });
@@ -428,14 +431,13 @@ export const ViewEditKPIModal = observer(
           </Container>
         </StyledModal>
         {kpi && (
-          <UpdateKPIModal
+          <MiniUpdateKPIModal
             kpiId={kpi.id}
             ownedById={kpi.ownedById}
             unitType={kpi.unitType}
             year={company.currentFiscalYear}
             week={company.currentFiscalWeek}
             currentValue={value}
-            renderNewValue={renderNewValue}
             headerText={"Update Current Week"}
             updateKPIModalOpen={updateKPIModalOpen}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}

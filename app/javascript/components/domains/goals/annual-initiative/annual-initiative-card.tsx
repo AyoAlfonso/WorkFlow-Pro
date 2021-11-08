@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { observer } from "mobx-react";
 import { HomeContainerBorders } from "../../home/shared-components";
-import styled, { keyframes, css } from "styled-components";
+import styled, { css } from "styled-components";
 import { Text } from "../../../shared/text";
 import { AnnualInitiativeCardMinimized } from "./annual-initiative-card-minimized";
 import { AnnualInitiativeCardExpanded } from "./annual-initiative-card-expanded";

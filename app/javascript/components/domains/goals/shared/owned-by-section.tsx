@@ -12,7 +12,6 @@ import { UserSelectionDropdownList } from "~/components/shared/user-selection-dr
 import { Text } from "~/components/shared/text";
 import { Loading } from "~/components/shared";
 
-
 interface IOwnedBySectionProps {
   ownedBy: UserType;
   type: string;
@@ -103,18 +102,22 @@ export const OwnedBySection = observer(
             }
           }}
         >
-          <Avatar
-            defaultAvatarColor={owner.defaultAvatarColor}
-            avatarUrl={owner.avatarUrl}
-            firstName={owner.firstName}
-            lastName={owner.lastName}
-            size={size || 20}
-            border={userIconBorder}
-            {...restProps}
-          />
-          <OwnedByName fontSize={fontSize} nameWidth={nameWidth} type={"fieldLabel"}>
-            {owner.firstName} {owner.lastName}
-          </OwnedByName>
+          {owner && (
+            <>
+              <Avatar
+                defaultAvatarColor={owner.defaultAvatarColor}
+                avatarUrl={owner.avatarUrl}
+                firstName={owner.firstName}
+                lastName={owner.lastName}
+                size={size || 20}
+                border={userIconBorder}
+                {...restProps}
+              />
+              <OwnedByName fontSize={fontSize} nameWidth={nameWidth} type={"fieldLabel"}>
+                {owner?.firstName} {owner?.lastName}
+              </OwnedByName>
+            </>
+          )}
         </EditTriggerContainer>
         {renderUserSelectionList()}
       </Container>

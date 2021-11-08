@@ -14,7 +14,7 @@ import {
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router";
 
-interface UpdateKPIModalProps {
+interface MiniUpdateKPIModalProps {
   kpiId: number;
   ownedById: number;
   unitType: string;
@@ -24,11 +24,11 @@ interface UpdateKPIModalProps {
   headerText: string;
   setUpdateKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   updateKPIModalOpen: boolean;
-  renderNewValue?: any;
   setKpis: any;
+  updateKPI?: any;
 }
 
-export const UpdateKPIModal = observer(
+export const MiniUpdateKPIModal = observer(
   ({
     kpiId,
     unitType,
@@ -38,9 +38,8 @@ export const UpdateKPIModal = observer(
     headerText,
     setUpdateKPIModalOpen,
     updateKPIModalOpen,
-    renderNewValue,
     setKpis,
-  }: UpdateKPIModalProps): JSX.Element => {
+  }: MiniUpdateKPIModalProps): JSX.Element => {
     const history = useHistory();
     const { keyPerformanceIndicatorStore, sessionStore, scorecardStore } = useMst();
     const [value, setValue] = useState<number>(currentValue);
