@@ -27,7 +27,7 @@ export const KeyElementForm = ({
   const { users } = userStore;
   const [title, setTitle] = useState<string>("");
   const [completionType, setCompletionType] = useState<string>("numerical");
-  const [completionTargetValue, setCompletionTargetValue] = useState<number>(0);
+  const [completionTargetValue, setCompletionTargetValue] = useState<string>('');
   const [ownedBy, setOwnedBy] = useState<number>(users?.[0].id);
   const [condition, setCondition] = useState<number>(1);
 
@@ -46,7 +46,7 @@ export const KeyElementForm = ({
   const resetForm = () => {
     setTitle("");
     setCompletionType("numerical");
-    setCompletionTargetValue(0);
+    setCompletionTargetValue('');
     setCondition(0);
     setOwnedBy(0);
     setActionType("Add");
@@ -57,7 +57,9 @@ export const KeyElementForm = ({
     const keyElementParams = {
       value: title,
       completionType,
-      completionTargetValue,
+      completionTargetValue: completionTargetValue.includes("$")
+        ? completionTargetValue.split("$")[1]
+        : completionTargetValue,
       greaterThan: Number(condition),
       ownedBy,
     };

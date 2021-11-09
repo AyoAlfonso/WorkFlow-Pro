@@ -312,9 +312,9 @@ const IconWrapper = styled.div`
   -ms-transform: rotate(90deg);
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
-  margin-left; auto;
   align-self: flex-start;
   // width: 10%;
+  margin-left: auto;
   &:hover {
     cursor: pointer;
     color: ${props => props.theme.colors.greyActive};
