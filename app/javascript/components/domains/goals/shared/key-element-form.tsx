@@ -34,7 +34,7 @@ export const KeyElementForm = ({
   const selectOptions = [
     { label: "Numerical #", value: "numerical" },
     { label: "Percentage %", value: "percentage" },
-    { label: "Dollars $", value: "currency" },
+    { label: "Currency $", value: "currency" },
     { label: "Completion", value: "binary" },
   ];
 
@@ -58,7 +58,7 @@ export const KeyElementForm = ({
       value: title,
       completionType,
       completionTargetValue,
-      greaterThan: condition,
+      greaterThan: Number(condition),
       ownedBy,
     };
     onCreate(keyElementParams);
@@ -165,28 +165,30 @@ export const KeyElementForm = ({
       </RowContainer>
 
       <RowContainer mt={"16px"}>
-        <FormElementContainer>
-          <InputHeaderContainer>
-            <InputHeader>Condition</InputHeader>
-          </InputHeaderContainer>
-          <Select
-            onChange={e => {
-              e.preventDefault();
-              setCondition(e.currentTarget.value);
-            }}
-            value={condition}
-            fontSize={12}
-            height={15}
-            pt={6}
-            pb={10}
-          >
-            {selectCondition.map(({ label, value }, index) => (
-              <option key={`option-${index}`} value={value}>
-                {label}
-              </option>
-            ))}
-          </Select>
-        </FormElementContainer>
+        {completionType !== "binary" && (
+          <FormElementContainer>
+            <InputHeaderContainer>
+              <InputHeader>Condition</InputHeader>
+            </InputHeaderContainer>
+            <Select
+              onChange={e => {
+                e.preventDefault();
+                setCondition(e.currentTarget.value);
+              }}
+              value={condition}
+              fontSize={12}
+              height={15}
+              pt={6}
+              pb={10}
+            >
+              {selectCondition.map(({ label, value }, index) => (
+                <option key={`option-${index}`} value={value}>
+                  {label}
+                </option>
+              ))}
+            </Select>
+          </FormElementContainer>
+        )}
         {completionType !== "binary" && (
           <FormElementContainer>
             <InputHeaderContainer>
@@ -244,7 +246,7 @@ const RowContainer = styled.div<SpaceProps>`
 `;
 
 const ButtonRowContainer = styled(RowContainer)`
-  margin: 5% 0px;
+  margin-top: 5%;
 `;
 
 const InputContainer = styled.div`
