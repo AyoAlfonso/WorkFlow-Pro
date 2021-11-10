@@ -15,7 +15,7 @@
 //   } else {
 //     return (
 //       <EmbedContainer>
-//         {/* <ScorecardsIndex miniEmbed={true} ownerType={ownerType} ownerId={ownerId} /> */}
+//         {/* <ScorecardsIndex isMiniEmbed={true} ownerType={ownerType} ownerId={ownerId} /> */}
 //       </EmbedContainer>
 //     );
 //     // return <SetupMissingContainer>Please set up the team dashboard.</SetupMissingContainer>;
