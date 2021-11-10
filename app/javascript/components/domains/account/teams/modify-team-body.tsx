@@ -91,6 +91,9 @@ export const ModifyTeamBody = observer(
       const updatedMemberListState = memberListState;
       const index = Object.keys(updatedMemberListState).length;
       for (let i = 0; i < index; i++) {
+        if (updatedMemberListState[i]["teamManager"] === true) {
+          updatedMemberListState[i]["teamManager"] = false;
+        }
         if (updatedMemberListState[i]["userId"] === id) {
           updatedMemberListState[i]["teamManager"] = true;
         }
