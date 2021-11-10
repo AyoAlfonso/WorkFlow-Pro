@@ -11,6 +11,7 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import MenuItem from "@material-ui/core/MenuItem";
 import { toJS } from "mobx";
+import { TeamManagerDropdownList } from "./team-manager-dropdown";
 
 interface IModifyTeamBodyProps {
   team?: any;
@@ -97,37 +98,20 @@ export const ModifyTeamBody = observer(
       setMemberListState(updatedMemberListState);
     };
 
-    const renderUserSelections = (): Array<JSX.Element> => {
-      const userList = team ? team.users : userStore.users;
-      return userList
-        .filter(user => user.status == "active")
-        .map(user => {
-          return (
-            <MenuItem value={user.id} key={user.id}>
-              {`${user.firstName} ${user.lastName}`}
-            </MenuItem>
-          );
-        });
-    };
-
     const teamManager = (): JSX.Element => {
+      const userList = team ? team.users : userStore.users;
+      const currentUser = userList.find(user => user.id === teamManagerId)
       return (
         <>
           <SelectMemberContainer>{headerText("Team Manager")}</SelectMemberContainer>
           <SelectMemberDropdownContainer>
-            <Select
-              onChange={e => {
-                setTeamManagerId(e.target.value);
-                updateMemeberListState(e.target.value);
-                userStore.updateUserTeamManagerStatus(e.target.value, team.id, true);
-              }}
-              style={{ marginRight: "25px" }}
-              margin="dense"
-              native={false}
-              value={teamManagerId}
-            >
-              {renderUserSelections()}
-            </Select>
+            <TeamManagerDropdownList
+              setTeamManagerId={setTeamManagerId}
+              currentUser={currentUser}
+              team={team}
+              userList={userList}
+              updateMemeberListState={updateMemeberListState}
+            />
           </SelectMemberDropdownContainer>
         </>
       );

@@ -1,20 +1,22 @@
 import * as React from "react";
 import styled from "styled-components";
+import { useMst } from "~/setup/root";
 import { UserType } from "~/types/user";
 import { Avatar } from "~/components/shared/avatar";
-import { Text } from "./text";
+import { Text } from "~/components/shared/text";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete, { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { toJS } from "mobx";
-import { Icon } from "./icon";
-import { useState } from "react";
+import { Icon } from "~/components/shared/icon";
+import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
-interface IUserSelectionDropdownListProps {
+interface ITeamManagerDropdownListProps {
   userList: Array<UserType>;
-  onUserSelect: any;
-  setShowUsersList?: any;
-  setOwner?: any;
+  setTeamManagerId: any;
+  currentUser: UserType | any;
+  updateMemeberListState: any;
+  team: any;
 }
 
 const filter = createFilterOptions<any>({ limit: 5 });
@@ -27,25 +29,32 @@ const useStyles = makeStyles({
   },
 });
 
-export const UserSelectionDropdownList = ({
+export const TeamManagerDropdownList = ({
   userList,
-  onUserSelect,
-  setShowUsersList,
-  setOwner,
-}: IUserSelectionDropdownListProps): JSX.Element => {
+  setTeamManagerId,
+  currentUser,
+  updateMemeberListState,
+  team,
+}: ITeamManagerDropdownListProps): JSX.Element => {
   const [value, setValue] = useState<any>(null);
   const classes = useStyles();
+  const { userStore } = useMst();
+
+  useEffect(() => {
+    setValue(currentUser && currentUser);
+  }, []);
 
   return (
     <ActionDropdownContainer>
       <Autocomplete
         value={value}
         onChange={(event, newValue) => {
-          console.log(newValue);
+          if (team) {
+            userStore.updateUserTeamManagerStatus(newValue.id, team.id, true);
+          }
           setValue(newValue);
-          onUserSelect(newValue);
-          setOwner(newValue);
-          setShowUsersList(false);
+          setTeamManagerId(newValue.id);
+          updateMemeberListState(newValue.id);
         }}
         filterOptions={(options, params) => {
           const filtered = filter(options, params);
@@ -76,7 +85,6 @@ export const UserSelectionDropdownList = ({
           );
         }}
         openOnFocus={true}
-        style={{ width: 300, height: "auto" }}
         freeSolo
         renderInput={params => (
           <TextField
@@ -93,16 +101,7 @@ export const UserSelectionDropdownList = ({
 };
 
 const ActionDropdownContainer = styled.div`
-  position: absolute;
-  background-color: ${props => props.theme.colors.white};
-  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  padding: 10px;
-  z-index: 2;
-  margin-left: -80px;
-  margin-top: 5px;
-  height: auto;
-  overflow: auto;
+  margin-right: 25px;
 `;
 
 const CloseIconContainer = styled.div`

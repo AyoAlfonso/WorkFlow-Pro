@@ -2,19 +2,20 @@ import * as React from "react";
 import styled from "styled-components";
 import { UserType } from "~/types/user";
 import { Avatar } from "~/components/shared/avatar";
-import { Text } from "./text";
+import { Text } from "~/components/shared/text";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete, { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { toJS } from "mobx";
-import { Icon } from "./icon";
-import { useState } from "react";
+import { Icon } from "~/components/shared/icon";
+import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface IUserSelectionDropdownListProps {
   userList: Array<UserType>;
   onUserSelect: any;
-  setShowUsersList?: any;
-  setOwner?: any;
+  currentUser: UserType | any;
+  updateMemberListState: any;
+  setSelectedUserId: any;
 }
 
 const filter = createFilterOptions<any>({ limit: 5 });
@@ -30,29 +31,32 @@ const useStyles = makeStyles({
 export const UserSelectionDropdownList = ({
   userList,
   onUserSelect,
-  setShowUsersList,
-  setOwner,
+  currentUser,
+  updateMemberListState,
+  setSelectedUserId,
 }: IUserSelectionDropdownListProps): JSX.Element => {
   const [value, setValue] = useState<any>(null);
   const classes = useStyles();
+
+  useEffect(() => {
+    setValue(currentUser && currentUser);
+  }, [currentUser]);
 
   return (
     <ActionDropdownContainer>
       <Autocomplete
         value={value}
         onChange={(event, newValue) => {
-          console.log(newValue);
+          updateMemberListState("userId", newValue.id);
+          setSelectedUserId(newValue.id);
           setValue(newValue);
-          onUserSelect(newValue);
-          setOwner(newValue);
-          setShowUsersList(false);
+          onUserSelect();
         }}
         filterOptions={(options, params) => {
           const filtered = filter(options, params);
           return filtered;
         }}
-        selectOnFocus
-        clearOnBlur
+        clearOnEscape
         handleHomeEndKeys
         size={"small"}
         id="search-for-labels"
@@ -76,7 +80,6 @@ export const UserSelectionDropdownList = ({
           );
         }}
         openOnFocus={true}
-        style={{ width: 300, height: "auto" }}
         freeSolo
         renderInput={params => (
           <TextField
@@ -92,18 +95,7 @@ export const UserSelectionDropdownList = ({
   );
 };
 
-const ActionDropdownContainer = styled.div`
-  position: absolute;
-  background-color: ${props => props.theme.colors.white};
-  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  padding: 10px;
-  z-index: 2;
-  margin-left: -80px;
-  margin-top: 5px;
-  height: auto;
-  overflow: auto;
-`;
+const ActionDropdownContainer = styled.div``;
 
 const CloseIconContainer = styled.div`
   text-align: right;
