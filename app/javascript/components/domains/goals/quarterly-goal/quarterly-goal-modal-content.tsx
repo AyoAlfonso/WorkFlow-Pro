@@ -185,12 +185,14 @@ export const QuarterlyGoalModalContent = observer(
             {showMilestones ? (
               <>
                 <SectionContainer>
-                  <MilestonesHeaderContainer>
-                    <ShowMilestonesButton
-                      setShowInactiveMilestones={setShowInactiveMilestones}
-                      showInactiveMilestones={showInactiveMilestones}
-                    />
-                  </MilestonesHeaderContainer>
+                  {!R.isEmpty(allMilestones) && (
+                    <MilestonesHeaderContainer>
+                      <ShowMilestonesButton
+                        setShowInactiveMilestones={setShowInactiveMilestones}
+                        showInactiveMilestones={showInactiveMilestones}
+                      />
+                    </MilestonesHeaderContainer>
+                  )}
 
                   <WeeklyMilestones
                     editable={editable}
