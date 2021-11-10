@@ -119,6 +119,7 @@ type ModalWithHeaderProps = {
   width?: string;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   headerFontSize?: string;
+  ref?: any
 };
 
 export const ModalWithHeader = ({
