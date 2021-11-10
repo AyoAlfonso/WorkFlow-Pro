@@ -98,9 +98,10 @@ export const ModifyTeamBody = observer(
     };
 
     const renderUserSelections = (): Array<JSX.Element> => {
-      return team?.users
+      const userList = team ? team.users : userStore.users;
+      return userList
         .filter(user => user.status == "active")
-        .map((user) => {
+        .map(user => {
           return (
             <MenuItem value={user.id} key={user.id}>
               {`${user.firstName} ${user.lastName}`}
