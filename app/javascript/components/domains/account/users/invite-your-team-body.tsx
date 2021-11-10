@@ -63,9 +63,6 @@ export const InviteYourTeamBody = observer(
           <HelperText>Use commas to separate different emails.</HelperText>
         </SectionContainer>
         <SectionContainer>
-          <StyledHeading type={"h4"} color={"black"} fontSize={"12px"}>
-            Team
-          </StyledHeading>
           <TeamSelectionDropdown teamsList={teams} onTeamSelect={setSelectedTeamId} />
         </SectionContainer>
 
