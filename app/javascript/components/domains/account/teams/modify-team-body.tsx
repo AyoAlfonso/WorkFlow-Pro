@@ -178,7 +178,7 @@ const Container = styled.div`
 `;
 
 const SectionContainer = styled.div`
-  margin-top: 16px;
+  // margin-top: 16px;
 `;
 
 const StyledHeading = styled(Heading)`
@@ -220,15 +220,15 @@ const MembersRecordContainer = styled.div`
 `;
 
 const SelectMemberContainer = styled.div`
-  width: 70%;
+  width: 68%;
 `;
 
 const SelectMeetingLeadContainer = styled.div`
-  width: 20%;
+  // width: 20%;
 `;
 
 const CloseIconContainer = styled.div`
-  width: 10%;
+  // width: 10%;
 `;
 
 const TextContainer = styled.div`

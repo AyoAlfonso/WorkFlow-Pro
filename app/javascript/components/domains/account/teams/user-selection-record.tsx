@@ -113,14 +113,14 @@ const SelectMemberContainer = styled.div`
 const SelectMeetingLeadContainer = styled.div`
   width: 20%;
   padding-right: 16px;
-  margin-top: 5px;
+  margin-top: 3px;
 `;
 
 const CloseIconContainer = styled.div`
   width: 10%;
   margin: auto;
   text-align: center;
-  margin: 5px 0 0 0;
+  margin: 3px 0 0 0;
   &: hover {
     cursor: pointer;
   }
