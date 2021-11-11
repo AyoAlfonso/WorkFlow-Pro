@@ -81,11 +81,11 @@ export const KeyElement = observer(
         element.completionCurrentValue == ""
           ? element.completionStartingValue
           : element.completionCurrentValue;
-
-      if (target >= starting) {
+      
+      if (element.greaterThan === 1) {
         return Math.min(Math.max(current - starting, 0) / (target - starting), 1) * 100;
       } else {
-        return Math.min(Math.max(starting - current, 0) / (starting - target), 1) * 100;
+        return Math.min(Math.max(target - current, 0) / (target - starting), 1) * 100;
       }
     };
 
