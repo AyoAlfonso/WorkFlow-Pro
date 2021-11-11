@@ -1,5 +1,5 @@
-import React from 'react';
-import './check.css';
+import React from "react";
+import "../../../../../stylesheets/check.scss";
 
 export const CheckMark = (): JSX.Element => {
   return (
@@ -8,4 +8,4 @@ export const CheckMark = (): JSX.Element => {
       <path className="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
     </svg>
   );
-}
+};
