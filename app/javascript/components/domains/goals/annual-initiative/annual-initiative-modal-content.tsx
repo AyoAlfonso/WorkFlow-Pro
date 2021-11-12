@@ -23,6 +23,7 @@ import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
 import { TrixEditor } from "react-trix";
 import { toJS } from "mobx";
 import moment from "moment";
+import { sortByDate } from "~/utils/sorting";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -103,7 +104,7 @@ export const AnnualInitiativeModalContent = observer(
       const quarterlyGoalsToDisplay = showAllQuarterlyGoals
         ? allQuarterlyGoals
         : activeQuarterlyGoals;
-      return quarterlyGoalsToDisplay.map((quarterlyGoal, index) => {
+      return quarterlyGoalsToDisplay.sort(sortByDate).map((quarterlyGoal, index) => {
         return (
           <QuarterlyGoalContainer key={index}>
             <StatusBlockColorIndicator
