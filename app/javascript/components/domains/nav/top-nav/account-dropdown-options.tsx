@@ -175,6 +175,7 @@ export const AccountDropdownOptions = observer(
     };
 
     const renderCompanyCreationSelector = (): JSX.Element => {
+     
       if (onboardingCompany) {
         const displayFormat = R.path(["displayFormat"], onboardingCompany);
         return (
@@ -278,7 +279,7 @@ export const AccountDropdownOptions = observer(
           {renderShowHelpdesk()}
         </DropdownSectionContainer>
 
-        {process.env.NODE_ENV !== "production" && (
+        {process.env.QA_SHOW_CREATE_COMPANY_FORUM_MENU && (
           <>
             <StyledDivider />
             <DropdownSectionContainer>

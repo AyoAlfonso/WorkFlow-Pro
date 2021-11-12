@@ -29,7 +29,7 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
 
   const loadOnboarding = useCallback(async () => {
     const { onboardingDisplayFormat, onboardingCompany } = companyStore;
-
+ 
     if (!R.isNil(onboardingCompany)) {
       const signUpPurpose = R.path(["signUpPurpose"], onboardingCompany);
       const fiscalYearStart = new Date(R.path(["fiscalYearStart"], onboardingCompany));
@@ -79,8 +79,8 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
   const { onboardingCompany, onboardingDisplayFormat: onboardingDF } = companyStore;
   const { profile } = sessionStore;
   const requiredFields = ["name", "timezone", "fiscalYearStart"];
-
-  if (loading || R.isNil(profile) || !timeZones || !onboardingCompany) {
+  
+  if (loading || R.isNil(profile) || !timeZones || R.isNil(companyStore)) {
     return <Loading />;
   }
 
