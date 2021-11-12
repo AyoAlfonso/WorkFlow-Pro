@@ -27,14 +27,14 @@ export const KeyElementForm = ({
   const { users } = userStore;
   const [title, setTitle] = useState<string>("");
   const [completionType, setCompletionType] = useState<string>("numerical");
-  const [completionTargetValue, setCompletionTargetValue] = useState<number>(0);
+  const [completionTargetValue, setCompletionTargetValue] = useState<string>('');
   const [ownedBy, setOwnedBy] = useState<number>(users?.[0].id);
   const [condition, setCondition] = useState<number>(1);
 
   const selectOptions = [
     { label: "Numerical #", value: "numerical" },
     { label: "Percentage %", value: "percentage" },
-    { label: "Dollars $", value: "currency" },
+    { label: "Currency $", value: "currency" },
     { label: "Completion", value: "binary" },
   ];
 
@@ -46,7 +46,7 @@ export const KeyElementForm = ({
   const resetForm = () => {
     setTitle("");
     setCompletionType("numerical");
-    setCompletionTargetValue(0);
+    setCompletionTargetValue('');
     setCondition(0);
     setOwnedBy(0);
     setActionType("Add");
@@ -57,8 +57,10 @@ export const KeyElementForm = ({
     const keyElementParams = {
       value: title,
       completionType,
-      completionTargetValue,
-      greaterThan: condition,
+      completionTargetValue: completionTargetValue.includes("$")
+        ? completionTargetValue.split("$")[1]
+        : completionTargetValue,
+      greaterThan: Number(condition),
       ownedBy,
     };
     onCreate(keyElementParams);
@@ -165,28 +167,30 @@ export const KeyElementForm = ({
       </RowContainer>
 
       <RowContainer mt={"16px"}>
-        <FormElementContainer>
-          <InputHeaderContainer>
-            <InputHeader>Condition</InputHeader>
-          </InputHeaderContainer>
-          <Select
-            onChange={e => {
-              e.preventDefault();
-              setCondition(e.currentTarget.value);
-            }}
-            value={condition}
-            fontSize={12}
-            height={15}
-            pt={6}
-            pb={10}
-          >
-            {selectCondition.map(({ label, value }, index) => (
-              <option key={`option-${index}`} value={value}>
-                {label}
-              </option>
-            ))}
-          </Select>
-        </FormElementContainer>
+        {completionType !== "binary" && (
+          <FormElementContainer>
+            <InputHeaderContainer>
+              <InputHeader>Condition</InputHeader>
+            </InputHeaderContainer>
+            <Select
+              onChange={e => {
+                e.preventDefault();
+                setCondition(e.currentTarget.value);
+              }}
+              value={condition}
+              fontSize={12}
+              height={15}
+              pt={6}
+              pb={10}
+            >
+              {selectCondition.map(({ label, value }, index) => (
+                <option key={`option-${index}`} value={value}>
+                  {label}
+                </option>
+              ))}
+            </Select>
+          </FormElementContainer>
+        )}
         {completionType !== "binary" && (
           <FormElementContainer>
             <InputHeaderContainer>
@@ -244,7 +248,7 @@ const RowContainer = styled.div<SpaceProps>`
 `;
 
 const ButtonRowContainer = styled(RowContainer)`
-  margin: 5% 0px;
+  margin-top: 5%;
 `;
 
 const InputContainer = styled.div`

@@ -193,18 +193,7 @@ export const ContextTabs = observer(
     };
 
     const renderContextKeyElements = () => {
-      return showKeyElementForm ? (
-        <KeyElementModal
-          modalOpen={showKeyElementForm}
-          setModalOpen={setShowKeyElementForm}
-          action={showActionType}
-          setActionType={setActionType}
-          store={store}
-          type={type}
-          element={selectedElement}
-          setSelectedElement={setSelectedElement}
-        />
-      ) : (
+      return (
         <KeyElementsTabContainer>
           {object.keyElements.length > 0 && (
             <KeyElementContentContainer>{renderKeyElementsIndex()}</KeyElementContentContainer>
@@ -259,6 +248,18 @@ export const ContextTabs = observer(
 
     return (
       <Container>
+        {showKeyElementForm && (
+          <KeyElementModal
+            modalOpen={showKeyElementForm}
+            setModalOpen={setShowKeyElementForm}
+            action={showActionType}
+            setActionType={setActionType}
+            store={store}
+            type={type}
+            element={selectedElement}
+            setSelectedElement={setSelectedElement}
+          />
+        )}
         <OverviewTabsContainer>
           {type == "quarterlyGoal" ? (
             <>

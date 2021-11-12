@@ -81,11 +81,11 @@ export const KeyElement = observer(
         element.completionCurrentValue == ""
           ? element.completionStartingValue
           : element.completionCurrentValue;
-
-      if (target >= starting) {
+      
+      if (element.greaterThan === 1) {
         return Math.min(Math.max(current - starting, 0) / (target - starting), 1) * 100;
       } else {
-        return Math.min(Math.max(starting - current, 0) / (starting - target), 1) * 100;
+        return Math.min(Math.max(target - current, 0) / (target - starting), 1) * 100;
       }
     };
 
@@ -312,7 +312,9 @@ const IconWrapper = styled.div`
   -ms-transform: rotate(90deg);
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
-  width: 10%;
+  align-self: flex-start;
+  // width: 10%;
+  margin-left: auto;
   &:hover {
     cursor: pointer;
     color: ${props => props.theme.colors.greyActive};
