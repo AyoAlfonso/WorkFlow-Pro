@@ -278,7 +278,7 @@ export const AccountDropdownOptions = observer(
           {renderShowHelpdesk()}
         </DropdownSectionContainer>
 
-        {process.env.NODE_ENV !== "production" && (
+        {process.env.QA_SHOW_CREATE_COMPANY_FORUM_MENU && (
           <>
             <StyledDivider />
             <DropdownSectionContainer>
