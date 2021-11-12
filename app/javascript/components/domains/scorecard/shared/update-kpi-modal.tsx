@@ -1,4 +1,4 @@
-import React, { useState,useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import { Calendar } from "react-date-range";
@@ -28,6 +28,7 @@ interface MiniUpdateKPIModalProps {
   unitType: string;
   year: number;
   week: number;
+  fiscalYearStart?: string;
   currentValue: number | undefined;
   headerText: string;
   setUpdateKPIModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,6 +45,7 @@ export const MiniUpdateKPIModal = observer(
     unitType,
     year,
     week,
+    fiscalYearStart,
     currentValue,
     headerText,
     setUpdateKPIModalOpen,
@@ -56,17 +58,18 @@ export const MiniUpdateKPIModal = observer(
     const { keyPerformanceIndicatorStore, sessionStore, scorecardStore } = useMst();
     const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
     const [value, setValue] = useState<number>(currentValue);
-    const [selectedDueDate, setSelectedDueDate] = useState<any>(getMondayofDate(week, year));
+    const [selectedDueDate, setSelectedDueDate] = useState<any>(
+      getMondayofDate(week, fiscalYearStart, year),
+    );
     const [currentWeek, setCurrentWeek] = useState<number>(week);
     const [comment, setComment] = useState("");
     const { owner_type, owner_id } = useParams();
-    const optionsRef = useRef(null)
-//TODO: Optimize
+    const optionsRef = useRef(null);
+    //TODO: Optimize
     useEffect(() => {
       const handleClickOutside = event => {
         if (optionsRef.current && !optionsRef.current.contains(event.target)) {
-           setShowAdvancedSettings(false);
-         
+          setShowAdvancedSettings(false);
         }
       };
       document.addEventListener("mousedown", handleClickOutside);
@@ -76,8 +79,8 @@ export const MiniUpdateKPIModal = observer(
     }, [optionsRef, selectedDueDate]);
 
     useEffect(() => {
-      setSelectedDueDate(getMondayofDate(week, year))
-    }, [showAdvancedSettings])
+      setSelectedDueDate(getMondayofDate(week, fiscalYearStart, year));
+    }, [showAdvancedSettings]);
 
     const handleSave = () => {
       if (value != undefined) {
@@ -108,9 +111,9 @@ export const MiniUpdateKPIModal = observer(
       setValue(Number(e.target.value.replace(/[^0-9\.]+/g, "")));
     };
     const closeModal = () => {
-        setUpdateKPIModalOpen(false)
-        setShowAdvancedSettings(!showAdvancedSettings);
-    }
+      setUpdateKPIModalOpen(false);
+      setShowAdvancedSettings(false);
+    };
     return (
       <ModalContainer
         header={headerText}
@@ -144,13 +147,12 @@ export const MiniUpdateKPIModal = observer(
           <AdvancedSettingsButton
             onClick={() => {
               setShowAdvancedSettings(!showAdvancedSettings);
-              setSelectedDueDate(getMondayofDate(week, year))
+              setSelectedDueDate(getMondayofDate(week, fiscalYearStart, year));
             }}
           >
             Advanced Settings
           </AdvancedSettingsButton>
           {showAdvancedSettings && (
-            
             <RowContainer>
               <FormElementContainer>
                 <InputHeaderWithComment>Date </InputHeaderWithComment>
@@ -184,7 +186,7 @@ export const MiniUpdateKPIModal = observer(
             <SaveButton onClick={handleSave}>Save</SaveButton>
           </FormElementContainer>
         </FormContainer>
-     </ModalContainer>
+      </ModalContainer>
     );
   },
 );
@@ -201,5 +203,4 @@ const AdvancedSettingsButton = styled.div`
   }
 `;
 
-const ModalContainer = styled(ModalWithHeader)`
-`;
+const ModalContainer = styled(ModalWithHeader)``;

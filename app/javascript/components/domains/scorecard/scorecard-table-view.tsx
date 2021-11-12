@@ -48,6 +48,7 @@ export const ScorecardTableView = observer(
 
     const [year, setYear] = useState<number>(company.currentFiscalYear);
     const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
+    const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
     const [targetWeek, setTargetWeek] = useState<number>(undefined);
     const [targetValue, setTargetValue] = useState<number>(undefined);
     const [tab, setTab] = useState<string>("KPIs");
@@ -336,7 +337,7 @@ export const ScorecardTableView = observer(
           Cell: ({ value, row }) => {
             const i = row.id;
             const { parentType } = row.original.updateKPI;
-      
+
             if (parentType) {
               return (
                 <EmptyWeekContainer>
@@ -540,13 +541,14 @@ export const ScorecardTableView = observer(
             year={company.currentFiscalYear}
             week={targetWeek || company.currentFiscalWeek}
             currentValue={targetValue || updateKPI.currentValue}
-            headerText={"Update Current Week"}
+            headerText={`Update Week ${targetWeek}`}
             updateKPIModalOpen={updateKPIModalOpen}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
             setKpis={setKpis}
             updateKPI={updateKPI}
             setTargetWeek={setTargetWeek}
             setTargetValue={setTargetValue}
+            fiscalYearStart={fiscalYearStart}
           />
         )}
       </>

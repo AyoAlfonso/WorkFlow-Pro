@@ -18,12 +18,12 @@ export const dateStringToSeconds = dateString => {
   return new Date(dateString).getTime() / MILLISECONDS_PER_SECOND;
 };
 export const getWeekOfDate = date => moment(date).week();
-export const getMondayofDate = (week, year) =>
-         moment()
-           .day("Monday")
-           .year(year)
-           .week(week)
-           .toDate();
+export const getMondayofDate = (week, fiscalYearStart, year) =>
+  moment(fiscalYearStart)
+    .add(week, "w")
+    .year(year)
+    .startOf("week" as moment.unitOfTime.StartOf)
+    .toDate();
 export const nowInSeconds = () => Math.round(Date.now() / MILLISECONDS_PER_SECOND);
 
 export const nowAsUTCString = () => new Date().toUTCString();

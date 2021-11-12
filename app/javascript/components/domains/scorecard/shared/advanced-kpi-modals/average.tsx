@@ -29,6 +29,7 @@ interface IAverage {
   setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean | null>>;
   existingSelectedKPIs: any[];
   originalKPI: number;
+  setShowAddManualKPIModal?: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const Average = observer(
@@ -40,6 +41,7 @@ export const Average = observer(
     setShowFirstStage,
     existingSelectedKPIs,
     originalKPI,
+    setShowAddManualKPIModal,
   }: IAverage): JSX.Element => {
     const [selectedKPIs, setSelectedKPIs] = useState(existingSelectedKPIs || []);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs || []);
@@ -155,6 +157,7 @@ export const Average = observer(
           selectedKPIs={selectedKPIs}
           kpiModalType={kpiModalType}
           removeTagInput={removeTagInput}
+          setShowAddManualKPIModal={setShowAddManualKPIModal}
         />
         <StyledSecondLayer>
           <StyledLayerOne>

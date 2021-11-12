@@ -134,6 +134,7 @@ const QuarterSummary = ({
   currentFiscalYear,
 }): JSX.Element => {
   const [currentWeekPercent, setCurrentWeekPercent] = useState(0);
+  const [quarterlyPercent, setQuarterlyPercent] = useState(0);
   const [lastWeekPercent, setLastWeekPercent] = useState<number | null>(null);
   const [data, setData] = useState<Object>(null);
   const {
@@ -191,17 +192,19 @@ const QuarterSummary = ({
 
   const gatherData = (weeks: [number]) => {
     return kpis
-      ? weeks.map(
-          (weekIndex: number) =>
+      ? weeks.map((weekIndex: number) => {
+          return (
             kpis.reduce((acc: number, kpi: any) => {
               const week = kpi?.period[currentFiscalYear]?.[weekIndex];
               const { targetValue, greaterThan } = kpi;
+
               return (
                 acc +
                 (week ? Math.min(100, getScorePercent(week.score, targetValue, greaterThan)) : 0)
               );
-            }, 0) / kpis.length,
-        )
+            }, 0) / kpis.length
+          );
+        })
       : [];
   };
 
@@ -219,6 +222,7 @@ const QuarterSummary = ({
     const lastQuarterWeeks = R.range(lastQuarterStartWeek, lastQuarterStartWeek + 13);
     const lastQuarterData = currentQuarter > 1 ? gatherData(lastQuarterWeeks) : [];
     setCurrentWeekPercent(R.last(currentQuarterData).toFixed(2));
+    setQuarterlyPercent(currentQuarterData.reduce((a, b) => a + b) / currentQuarterData.length);
     if (currentWeek != 1) {
       setLastWeekPercent(+currentQuarterData[currentQuarterData.length - 2]);
     }
@@ -264,7 +268,7 @@ const QuarterSummary = ({
       return (
         <>
           <Text ml={8} mr={16} fontSize={32} color={successGreen} bold>
-            {percentGrade}%
+            {percentGrade.toFixed(2)}%
           </Text>
         </>
       );
@@ -272,7 +276,7 @@ const QuarterSummary = ({
       return (
         <>
           <Text ml={8} mr={16} fontSize={32} color={yellowSea} bold>
-            {currentWeekPercent}%
+            {quarterlyPercent.toFixed(2)}%
           </Text>
         </>
       );
@@ -280,7 +284,7 @@ const QuarterSummary = ({
       return (
         <>
           <Text ml={8} mr={16} fontSize={32} color={warningRed} bold>
-            {currentWeekPercent}%
+            {quarterlyPercent.toFixed(2)}%
           </Text>
         </>
       );
@@ -288,7 +292,7 @@ const QuarterSummary = ({
       return (
         <>
           <Text ml={8} mr={16} fontSize={32} color={warningRed} bold>
-            {currentWeekPercent}%
+            {quarterlyPercent.toFixed(2)}%
           </Text>
         </>
       );
@@ -328,13 +332,13 @@ const QuarterSummary = ({
 
   return (
     <QuarterContainer>
-      <Header>This Quarter</Header>
+      <Header>This Quarterss</Header>
       <Text color={greyActive} fontSize={14} mt={4} mb={9}>
-        {t("scorecards.quarterlyGraphTitle")}
+        {/* {t("scorecards.quarterlyGraphTitle")} */}
       </Text>
       <QuarterInfoContainer>
         <StatsContainer>
-          {renderGrade(currentWeekPercent)}
+          {renderGrade(quarterlyPercent)}
           {renderWeekDifference()}
         </StatsContainer>
         <QuarterLegendContainer>

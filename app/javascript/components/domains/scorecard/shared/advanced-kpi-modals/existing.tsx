@@ -28,6 +28,7 @@ interface IExistingProps {
   setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean | null>>;
   existingSelectedKPIs: any[];
   originalKPI: number;
+  setShowAddManualKPIModal?:  React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const Existing = observer(
