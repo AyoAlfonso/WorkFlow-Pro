@@ -159,7 +159,7 @@ export const WizardLayout = ({
             </CloseButtonContainer>
           )}
         </MobileContainer>
-        <BodyContentContainer>
+        <BodyContentContainer hasStepsForMobile={stepsForMobile ? true : false}>
           {renderBodyComponents()}
           <MobileButtonContainer>
             <ButtonsContainer>{renderActionButtons()}</ButtonsContainer>
@@ -237,13 +237,14 @@ const BodyContainer = styled.div`
   }
 `;
 
-const BodyContentContainer = styled.div`
+type BodyContentContainerProps = {
+  hasStepsForMobile: boolean;
+}
+
+const BodyContentContainer = styled.div<BodyContentContainerProps>`
   height: 100%;
   overflow-y: auto;
-  display: flex;
-  @media only screen and (max-width: 768px) {
-    display: block;
-  }
+  display: ${props => props.hasStepsForMobile ? "block" : "flex"};
 `;
 
 const DescriptionTitleContainer = styled.div``;
