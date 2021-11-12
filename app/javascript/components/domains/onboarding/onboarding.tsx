@@ -80,10 +80,11 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
   const { profile } = sessionStore;
   const requiredFields = ["name", "timezone", "fiscalYearStart"];
 
-  const onboardingDisplayFormat = onboardingDF || onboardingCompany.displayFormat;
-  if (loading || R.isNil(profile) || !timeZones || !onboardingDisplayFormat) {
+  if (loading || R.isNil(profile) || !timeZones || !onboardingCompany) {
     return <Loading />;
   }
+
+  const onboardingDisplayFormat = onboardingDF || onboardingCompany?.displayFormat || "company";
 
   const timeZonesWithNull = () => {
     const timeZoneList = toJS(timeZones).map(tz => ({ label: tz, value: tz }));
