@@ -67,7 +67,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
 
   const renderDisplayKeyActivities = (): JSX.Element => {
     return teamId ? (
-      <TeamKeyActivitiesBody meeting={meeting ? true : false} />
+      <TeamKeyActivitiesBody showOnlyOpen includeAvatar meeting={meeting ? true : false} />
     ) : (
       <KeyActivitiesBody
         showAllKeyActivities={false}
