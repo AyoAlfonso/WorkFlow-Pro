@@ -93,7 +93,6 @@ type ActionDropdownContainerProps = {
 const ActionDropdownContainer = styled.div<ActionDropdownContainerProps>`
   position: relative;
   border-radius: 12px;
-  padding: 5px;
   z-index: 2;
   margin-left: ${props => props.marginLeft && props.marginLeft};
   margin-top: 5px;

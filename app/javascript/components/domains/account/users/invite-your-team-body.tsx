@@ -30,7 +30,7 @@ export const InviteYourTeamBody = observer(
     const inviteUsersToCompany = () => {
       // TODO: UPDATE THIS FEATURE WHEN THE IMPLEMENTATION FOR SUBSCRIPTION HAS BEEN COMPLETED.
       //       WE NEED TO DETERMINE THE NUMBER OF USERS + WHICH PLAN THE COMPANY IS ON
-
+      setLoading(true);
       const numberOfUsersToInvite = emailAddresses.split(",").filter(item => item.trim().length > 0)
         .length;
 
@@ -38,9 +38,11 @@ export const InviteYourTeamBody = observer(
       if (numberOfUsersToInvite > remainingNumberOfUsers) {
         // TODO: SHOW THE TOO MANY PEOPLE MODAL
         setShowUserLimitModal(true);
+        setLoading(false);
       } else {
         companyStore.inviteUsersToCompany(emailAddresses, selectedTeamId).then(() => {
           setModalOpen(false);
+          setLoading(false);
         });
       }
     };
@@ -63,9 +65,6 @@ export const InviteYourTeamBody = observer(
           <HelperText>Use commas to separate different emails.</HelperText>
         </SectionContainer>
         <SectionContainer>
-          <StyledHeading type={"h4"} color={"black"} fontSize={"12px"}>
-            Team
-          </StyledHeading>
           <TeamSelectionDropdown teamsList={teams} onTeamSelect={setSelectedTeamId} />
         </SectionContainer>
 
@@ -74,9 +73,7 @@ export const InviteYourTeamBody = observer(
           disabled={!emailAddresses || !selectedTeamId || loading}
           variant={"primary"}
           onClick={() => {
-            setLoading(true);
             inviteUsersToCompany();
-            setLoading(false);
           }}
         >
           Send Invite
