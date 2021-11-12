@@ -1,14 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { observer } from "mobx-react";
 import styled from "styled-components";
-import { Calendar } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
-import { baseTheme } from "~/themes";
-import { addDays, getISOWeek } from "date-fns";
-import { getWeekOfDate, getMondayofDate } from "~/utils/date-time";
+import { getMondayofDate } from "~/utils/date-time";
+import { DueDateSelector } from "~/components/shared/scorecards/date-selector";
+
 import {
   InputFromUnitType,
   ModalWithHeader,
@@ -61,6 +60,7 @@ export const MiniUpdateKPIModal = observer(
     const [selectedDueDate, setSelectedDueDate] = useState<any>(
       getMondayofDate(week, fiscalYearStart, year),
     );
+    console.log(setTargetWeek);
     const [currentWeek, setCurrentWeek] = useState<number>(week);
     const [comment, setComment] = useState("");
     const { owner_type, owner_id } = useParams();
@@ -156,27 +156,11 @@ export const MiniUpdateKPIModal = observer(
             <RowContainer>
               <FormElementContainer>
                 <InputHeaderWithComment>Date </InputHeaderWithComment>
-                <Calendar
-                  showDateDisplay={true}
-                  showMonthAndYearPickers={false}
-                  showSelectionPreview={true}
-                  direction={"vertical"}
-                  calendarFocus={"backwards"}
-                  minDate={addDays(selectedDueDate, -90)}
-                  maxDate={selectedDueDate}
-                  scroll={{
-                    enabled: true,
-                    calendarWidth: 320,
-                    monthWidth: 320,
-                  }}
-                  color={baseTheme.colors.primary100}
-                  rangeColors={[baseTheme.colors.primary100]}
-                  date={selectedDueDate}
-                  shownDate={selectedDueDate}
-                  onChange={date => {
-                    setSelectedDueDate(date);
-                    setCurrentWeek(getWeekOfDate(date));
-                  }}
+
+                <DueDateSelector
+                  selectedDueDate={selectedDueDate}
+                  setSelectedDueDate={setSelectedDueDate}
+                  setCurrentWeek={setCurrentWeek}
                 />
               </FormElementContainer>
               <FormElementContainer />

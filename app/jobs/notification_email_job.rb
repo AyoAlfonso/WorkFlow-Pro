@@ -15,14 +15,16 @@ class NotificationEmailJob
           if notification_type == "Daily Planning" && user_has_not_set_status
             return if is_weekend?
             send_person_planning_reminder_email(@user, notification_type)
-            # elsif notification_type == "Weekly Report"
-            #   send_end_of_week_stats_email(@user, notification_type)
+          elsif notification_type == "Weekly Report"
+              send_end_of_week_stats_email(@user, notification_type)
           elsif notification_type == "Evening Reflection"
               if !@user.evening_reflection_complete
                 send_evening_reflection_reminder_email(@user, notification_type)
               end
           elsif notification_type == "Weekly Planning"
             send_weekly_planning_email(@user, notification_type)
+          elsif notification_type == "Weekly Checkin"
+            send_weekly_checkin_email(@user, notification_type)
           elsif notification_type == "Weekly Alignment Meeting" && meeting_did_not_start_this_period("team_weekly")
               @user.team_user_enablements.team_lead.each do |team_lead_enablement|
               if Meeting.team_weekly_meetings.team_meetings(team_lead_enablement&.team&.id).for_week_of_date_started_only(get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)).blank?

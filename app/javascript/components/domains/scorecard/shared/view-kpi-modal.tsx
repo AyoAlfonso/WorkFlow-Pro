@@ -111,7 +111,9 @@ export const ViewEditKPIModal = observer(
         setShowEditExistingKPIContainer(true);
       }
     };
-
+    useEffect(() => {
+      console.log("   drawGraph(kpi);");
+    }, [kpi]);
     const formatKpiType = kpiType => titleCase(kpiType);
     const renderStatus = () => {
       if (!kpi) {
@@ -465,6 +467,7 @@ export const ViewEditKPIModal = observer(
                                   keyPerformanceIndicatorStore
                                     .deleteScorecardLog(log.id)
                                     .then(() => {
+                                      setCurrentLog();
                                       setCurrentLog();
                                     });
                                 }}

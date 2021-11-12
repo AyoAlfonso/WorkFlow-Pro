@@ -86,6 +86,7 @@ export const AdvancedKPIModal = observer(
               setShowFirstStage={setShowFirstStage}
               existingSelectedKPIs={existingSelectedKPIs}
               originalKPI={originalKPI}
+              setShowAddManualKPIModal={setShowAddManualKPIModal}
             ></RollUp>
           )}
           {["average", "avr"].includes(kpiModalType) && (
@@ -97,6 +98,7 @@ export const AdvancedKPIModal = observer(
               setShowFirstStage={setShowFirstStage}
               existingSelectedKPIs={existingSelectedKPIs}
               originalKPI={originalKPI}
+              setShowAddManualKPIModal={setShowAddManualKPIModal}
             ></Average>
           )}
         </InnerContainer>

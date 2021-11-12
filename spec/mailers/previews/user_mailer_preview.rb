@@ -51,6 +51,18 @@ class UserMailerPreview < ActionMailer::Preview
     ).notification_email
   end
 
+  def checkin_reminder_email
+    user = User.find(3)
+    UserMailer.with(
+      user: user,
+      subject: "#{user&.first_name}, Time for Your Check-in",
+      greeting: "Hi #{user.first_name}! 👋",
+      message: "Are you ready to complete your Weekly Check-in? Try to find time to fit this into your schedule before you forget.",
+      cta_text: "Complete Weekly Check-in",
+      cta_url: "/weekly-check-in/#{user.id}/#{Date.today.strftime("%Y-%m-%d")}" #home
+    ).notification_email
+  end
+
   def sync_meeting_email
     user = User.find(3)
     team = user.team_user_enablements.team_lead.last&.team
