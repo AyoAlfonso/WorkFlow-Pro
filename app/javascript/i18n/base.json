@@ -43,6 +43,12 @@
           "currentlyLoggedIn": "You are logged in.",
           "termsDescription": "By clicking Log In you agree to our "
         },
+        "forgotPasswordForm": {
+          "email": "E-mail",
+          "recoverPassword": "Recover Password",
+          "emailMe": "Email Me A Recovery Link",
+          "emailSent": "An email has been sent. Please click the link when you get it."
+        },
         "profileUpdateForm": {
           "email": "E-mail",
           "firstName": "First Name",

@@ -53,6 +53,7 @@ import { CheckIn } from "./domains/check-in/checkin";
 import { useEffect } from "react";
 import { getWeekOf } from "~/utils/date-time";
 import { CheckInSuccess } from "./domains/check-in/components/checkin-success";
+import { ForgotPasswordForm } from "./domains/user/forgot-password-form";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -327,6 +328,13 @@ export const App = observer(
                   path={"/"}
                   render={() => {
                     return <LoginForm />;
+                  }}
+                />
+                <Route
+                  exact
+                  path={"/forgotpassword"}
+                  render={() => {
+                    return <ForgotPasswordForm />;
                   }}
                 />
                 <Route
