@@ -264,7 +264,7 @@ const CompletionTypeContainer = styled.div`
 
 const InputHeader = styled.p`
   margin: 0px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
 `;
 

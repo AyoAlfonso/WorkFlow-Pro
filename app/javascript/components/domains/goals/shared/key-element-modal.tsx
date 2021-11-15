@@ -33,7 +33,7 @@ export const KeyElementModal = ({
       width={"640px"}
       height="fit-content"
       borderRadius="8px"
-      headerFontSize="16px"
+      headerFontSize="21px"
       onClose={() => {
         setActionType("Add");
         setSelectedElement(null);
