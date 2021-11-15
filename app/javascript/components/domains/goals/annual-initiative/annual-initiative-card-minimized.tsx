@@ -23,7 +23,7 @@ export const AnnualInitiativeCardMinimized = observer(
     setShowMinimizedCard,
     showMinimizedCard,
   }: IAnnualInitiativeCardMinimizedProps): JSX.Element => {
-    const { companyStore } = useMst();
+    const { companyStore, sessionStore } = useMst();
     const { currentFiscalYear } = companyStore.company;
     const {
       warningRed,
@@ -168,18 +168,20 @@ export const AnnualInitiativeCardMinimized = observer(
         }}
       >
         <RowContainer mt={0} mb={0}>
-          <OwnedBySection
-            ownedBy={annualInitiative.ownedBy}
-            type={"annualInitiative"}
-            disabled={true}
-            size={16}
-            nameWidth={"76px"}
-            fontSize={"12px"}
-            marginLeft={"16px"}
-            marginRight={"0px"}
-            marginTop={"auto"}
-            marginBottom={"auto"}
-          />
+          {(annualInitiative.ownedBy || sessionStore.profile) && (
+            <OwnedBySection
+              ownedBy={annualInitiative.ownedBy || sessionStore.profile}
+              type={"annualInitiative"}
+              disabled={true}
+              size={16}
+              nameWidth={"76px"}
+              fontSize={"12px"}
+              marginLeft={"16px"}
+              marginRight={"0px"}
+              marginTop={"auto"}
+              marginBottom={"auto"}
+            />
+          )}
           <BadgeContainer>
             <StatusBadge
               color={statusBadge.colors.color}
