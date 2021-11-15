@@ -31,15 +31,21 @@ export const ForgotPasswordForm = observer(
     const [loading, setLoading] = useState<boolean>(false);
     const { t } = useTranslation();
 
+    const validateEmail = email => {
+      const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    };
+
     const resetPasswordFlow = () => {
       setLoading(true);
-      if (email.length > 0) {
+      if (validateEmail(email)) {
         sessionStore.resetPassword(email).then(() => {
           setLoading(false);
           setEmailSent(true);
         });
       } else {
-        showToast("Please enter an email for the reset password", ToastMessageConstants.ERROR);
+        showToast("Please enter a valid email address", ToastMessageConstants.ERROR);
+        setLoading(false);
       }
     };
 
