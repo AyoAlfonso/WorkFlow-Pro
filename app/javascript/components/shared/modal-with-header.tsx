@@ -102,7 +102,7 @@ const StyledModal = Modal.styled`
   min-height: 100px;
   border-radius: ${props => props.borderRadius || "5px"};
   background-color: ${props => props.theme.colors.white};
-  max-height: 660px;
+  max-height: 720px;
   overflow: ${props => props.width || "auto"};
 `;
 

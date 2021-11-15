@@ -26,7 +26,7 @@ export const ImageCropperModal = ({
   type cropCoordinates = {
     x: number;
     y: number;
-  }
+  };
   const [crop, setCrop] = useState<cropCoordinates>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const { t } = useTranslation();
@@ -41,7 +41,7 @@ export const ImageCropperModal = ({
         });
 
         setCroppedImage(newCroppedImage);
-      } catch (e) { }
+      } catch (e) {}
     },
     [image],
   );
@@ -78,23 +78,18 @@ export const ImageCropperModal = ({
         >
           {t("general.save")}
         </StyledButton>
-        <StyledButton
-          small
-          variant={"redOutline"}
-          m={1}
-          onClick={() => setModalOpen(!modalOpen)}
-        >
+        <StyledButton small variant={"redOutline"} m={1} onClick={() => setModalOpen(!modalOpen)}>
           {t("general.cancel")}
         </StyledButton>
       </ButtonContainer>
     </ModalWithHeader>
   );
-}
+};
 
 const StyledButton = styled(Button)`
   width: auto;
   display: inline-block;
-`
+`;
 
 const Container = styled.div`
   height: 30rem;

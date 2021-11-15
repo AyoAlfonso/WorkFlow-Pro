@@ -15,7 +15,6 @@ class Api::MilestonesController < Api::ApplicationController
   end
 
   def check_in_goals
-    # binding.pry
     @quarterly_goal_milestones = policy_scope(Milestone).current_week_for_user(params[:due_date].to_datetime, current_user, "QuarterlyGoal")
     @subinitiative_milestones = policy_scope(Milestone).current_week_for_user(params[:due_date].to_datetime, current_user, "SubInitiative")
     authorize @quarterly_goal_milestones 

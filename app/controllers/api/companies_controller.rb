@@ -166,6 +166,7 @@ class Api::CompaniesController < Api::ApplicationController
 
   def create_or_update_onboarding_team
     @team = Team.create!(company_id: @onboarding_company.id, name: params[:team_name], settings: {})
+    @team.set_default_executive_team if Team.where(company_id: @team.company.id, executive: 1).blank?
     @team.set_default_avatar_color
     authorize @team
 

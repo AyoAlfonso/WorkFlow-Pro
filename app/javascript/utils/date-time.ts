@@ -3,6 +3,12 @@ import * as R from "ramda";
 import moment from "moment";
 import { baseTheme } from "~/themes/base";
 
+moment.updateLocale("en", {
+  week: {
+    dow: 1,
+  },
+});
+
 const MILLISECONDS_PER_SECOND = 1000;
 const SECONDS_PER_MINUTE = 60;
 const MINUTES_PER_HOUR = 60;
@@ -11,7 +17,13 @@ const HOURS_PER_DAY = 24;
 export const dateStringToSeconds = dateString => {
   return new Date(dateString).getTime() / MILLISECONDS_PER_SECOND;
 };
-
+export const getWeekOfDate = date => moment(date).week();
+export const getMondayofDate = (week, fiscalYearStart, year) =>
+  moment(fiscalYearStart)
+    .add(week, "w")
+    .year(year)
+    .startOf("week" as moment.unitOfTime.StartOf)
+    .toDate();
 export const nowInSeconds = () => Math.round(Date.now() / MILLISECONDS_PER_SECOND);
 
 export const nowAsUTCString = () => new Date().toUTCString();

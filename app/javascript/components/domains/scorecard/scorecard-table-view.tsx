@@ -13,8 +13,7 @@ import { Loading } from "../../shared/loading";
 import { StatusBadge } from "~/components/shared/status-badge";
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown";
 import { ViewEditKPIModal } from "./shared/view-kpi-modal";
-import { UpdateKPIModal } from "./shared/update-kpi-modal";
-import { AddManualKPIModal } from "./shared/add-manual-kpi-modal";
+import { MiniUpdateKPIModal } from "./shared/update-kpi-modal";
 import { AddExistingManualKPIModal } from "./shared/edit-existing-manual-kpi-modal";
 import { titleCase } from "~/utils/camelize";
 import { toJS } from "mobx";
@@ -28,7 +27,7 @@ type ScorecardTableViewProps = {
   setKpis: any;
   setViewEditKPIModalOpen: any;
   viewEditKPIModalOpen: any;
-  miniEmbed?: boolean;
+  isMiniEmbed?: boolean;
 };
 
 export const ScorecardTableView = observer(
@@ -38,7 +37,7 @@ export const ScorecardTableView = observer(
     setKpis,
     viewEditKPIModalOpen,
     setViewEditKPIModalOpen,
-    miniEmbed,
+    isMiniEmbed,
   }: ScorecardTableViewProps): JSX.Element => {
     const { t } = useTranslation();
     const {
@@ -48,10 +47,14 @@ export const ScorecardTableView = observer(
 
     const [year, setYear] = useState<number>(company.currentFiscalYear);
     const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
+    const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
+    const [targetWeek, setTargetWeek] = useState<number>(undefined);
+    const [targetValue, setTargetValue] = useState<number>(undefined);
     const [tab, setTab] = useState<string>("KPIs");
     const [currentSelectedKpi, setCurrentSelectedKpi] = useState(undefined);
     const [updateKPI, setUpdateKPI] = useState(undefined);
-    const [currentKPIIcon, setCurrentKPIIcon] = useState(undefined);
+    const [selectedKPIIcon, setSelectedKPIIcon] = useState(undefined);
+    const [selectedKPIWeek, setSelectedKPIWeek] = useState(undefined);
     const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
     const [showEditExistingKPIContainer, setShowEditExistingKPIContainer] = useState<boolean>(
       false,
@@ -166,6 +169,7 @@ export const ScorecardTableView = observer(
           const logic = kpi.greaterThan
             ? `Greater than or equal to ${targetText}`
             : `Less than or equal to ${targetText}`;
+
           const row: any = {
             updateKPI: {
               id: kpi.id,
@@ -187,17 +191,22 @@ export const ScorecardTableView = observer(
             row[`wk_${week.week}`] = {
               score: formatValue(kpi.unitType, week?.score),
               color: getScoreValueColor(percentScore),
+              id: kpi.id,
             };
           });
-
           const percentScores = calcQuarterAverageScores(
             weeks,
             kpi.targetValue,
             kpi.greaterThan,
             kpi.parentType,
           ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
+
           row.score = percentScores;
           row.status = percentScores;
+          row.updateKPI.currentValue = weeks[weeks.length - 1]
+            ? weeks[weeks.length - 1]["score"]
+            : 0;
+          row.updateKPI.currentWeek = weeks[weeks.length - 1] || 0;
           return row;
         }),
       [KPIs],
@@ -212,37 +221,40 @@ export const ScorecardTableView = observer(
           minWidth: "31px",
           Cell: ({ value }) => {
             return (
-              <UpdateKPIContainer
-                disabled={value.parentType}
-                onClick={() => {
-                  if (value.parentType) return;
-                  if (!miniEmbed) {
-                    setUpdateKPI(value);
-                    setUpdateKPIModalOpen(true);
-                  }
-                }}
+              <UpdateKPIWrapper
                 onMouseEnter={() => {
-                  setCurrentKPIIcon(value.id);
+                  setSelectedKPIIcon(value.id);
                 }}
                 onMouseLeave={() => {
-                  setCurrentKPIIcon(null);
+                  setSelectedKPIIcon(null);
                 }}
               >
-                {currentKPIIcon == value.id ? (
-                  <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
-                ) : (
-                  <> </>
-                )}
-                {currentKPIIcon !== value.id ? (
-                  <BlueUpdateKpiIcon
-                    icon={"Update_KPI_New"}
-                    size={16}
-                    hover={currentKPIIcon == value.id}
-                  />
-                ) : (
-                  <> </>
-                )}
-              </UpdateKPIContainer>
+                <UpdateKPIContainer
+                  disabled={value.parentType}
+                  onClick={() => {
+                    if (value.parentType) return;
+                    if (!isMiniEmbed) {
+                      setUpdateKPI(value);
+                      setUpdateKPIModalOpen(true);
+                    }
+                  }}
+                >
+                  {selectedKPIIcon == value.id ? (
+                    <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
+                  ) : (
+                    <> </>
+                  )}
+                  {selectedKPIIcon !== value.id ? (
+                    <BlueUpdateKpiIcon
+                      icon={"Update_KPI_New"}
+                      size={16}
+                      hover={selectedKPIIcon == value.id}
+                    />
+                  ) : (
+                    <> </>
+                  )}
+                </UpdateKPIContainer>
+              </UpdateKPIWrapper>
             );
           },
         },
@@ -318,28 +330,112 @@ export const ScorecardTableView = observer(
           width: "17%",
           minWidth: "160px",
         },
-        ...R.range(1, 53).map(n => ({
+        ...R.range(1, 53).map((n, i ) => ({
           Header: () => <div style={{ fontSize: "14px" }}> {`WK ${n}`} </div>,
           accessor: `wk_${n}`,
-          Cell: ({ value }) => {
-            if (value === undefined) {
+          Cell: ({ value, row }) => {
+            const i = row.id;
+            const { parentType } = row.original.updateKPI;
+
+            if (parentType) {
               return (
-                <EmptyWeekContainer>
-                  <EmptyWeek />
+                <EmptyWeekContainer
+                  onMouseEnter={() => {
+                    setSelectedKPIWeek(`wk_${n}_${i}`);
+                  }}
+                  onMouseLeave={() => {
+                    setSelectedKPIWeek(null);
+                  }}
+                >
+                  {selectedKPIWeek == `wk_${n}_${i}` ? (
+                    <BlueUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
+                  ) : (
+                    <> </>
+                    
+                  )}
+                  {selectedKPIWeek !== `wk_${n}_${i}` ? <EmptyWeek /> : <> </>}
+                </EmptyWeekContainer>
+              );
+            }
+            if (value === undefined) {
+              if (company.currentFiscalWeek < n) {
+                return (
+                  <EmptyWeekContainer>
+                    <EmptyWeek />
+                  </EmptyWeekContainer>
+                );
+              }
+              return (
+                // TODO: REPETITION TURN INTO A PARENT COMPONENT AND PASS THE CHILDREN
+                <EmptyWeekContainer
+                  onMouseEnter={() => {
+                    setSelectedKPIWeek(`wk_${n}_${i}`);
+                  }}
+                  onMouseLeave={() => {
+                    setSelectedKPIWeek(null);
+                  }}
+                >
+                  <UpdateKPICellContainer
+                    disabled={parentType || false}
+                    onClick={() => {
+                      if (parentType) return;
+                      if (!isMiniEmbed) {
+                        setTargetWeek(n);
+                        setTargetValue(0);
+                        setUpdateKPI(row.original.updateKPI);
+                        setUpdateKPIModalOpen(true);
+                      }
+                    }}
+                    hover={selectedKPIWeek == `wk_${n}_${i}` ? true : false}
+                  >
+                    {selectedKPIWeek == `wk_${n}_${i}` ? (
+                      <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
+                    ) : (
+                      <> </>
+                    )}
+                  </UpdateKPICellContainer>
+                  {selectedKPIWeek !== `wk_${n}_${i}` ? <EmptyWeek /> : <> </>}
                 </EmptyWeekContainer>
               );
             }
             return (
-              <WeekContainer>
-                <WeekText color={value.color}>{value.score}</WeekText>
-              </WeekContainer>
+              <EmptyWeekContainer
+                onMouseEnter={() => {
+                  setSelectedKPIWeek(`wk_${n}_${i}`);
+                }}
+                onMouseLeave={() => {
+                  setSelectedKPIWeek(null);
+                }}
+              >
+                <UpdateKPICellContainer
+                  disabled={parentType || false}
+                  onClick={() => {
+                    if (parentType) return;
+                    if (!isMiniEmbed) {
+                      setTargetWeek(n);
+                      setTargetValue(value.score);
+                      setUpdateKPI(row.original.updateKPI);
+                      setUpdateKPIModalOpen(true);
+                    }
+                  }}
+                  hover={selectedKPIWeek == `wk_${n}_${i}` || value}
+                >
+                  {selectedKPIWeek == `wk_${n}_${i}` ? (
+                    <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
+                  ) : (
+                    <WeekContainer>
+                      <WeekText color={value.color}>{value.score}</WeekText>
+                    </WeekContainer>
+                  )}
+                </UpdateKPICellContainer>
+              </EmptyWeekContainer>
             );
           },
           width: "1fr",
           minWidth: "64px",
         })),
       ],
-      [quarter, year, currentKPIIcon],
+      [quarter, year, selectedKPIIcon, selectedKPIWeek]
     );
 
     const getHiddenWeeks = (q: number) =>
@@ -425,7 +521,7 @@ export const ScorecardTableView = observer(
                   })}
                 </TableBody>
               </Table>
-              {!miniEmbed && <AddKPIDropdown dropdownDirectionUp={true} kpis={allKPIs} />}
+              {!isMiniEmbed && <AddKPIDropdown dropdownDirectionUp={true} kpis={allKPIs} />}
             </TableContainer>
           )}
         </Container>
@@ -444,23 +540,27 @@ export const ScorecardTableView = observer(
             kpiId={currentSelectedKpi}
             showAddManualKPIModal={showEditExistingKPIContainer}
             setShowAddManualKPIModal={setShowEditExistingKPIContainer}
-            headerText={"Edit Existing KPI"}
+            headerText={"Edit KPI"}
             kpis={allKPIs}
           />
         )}
 
         {updateKPI && (
-          <UpdateKPIModal
+          <MiniUpdateKPIModal
             kpiId={updateKPI.id}
             ownedById={updateKPI.ownedById}
             unitType={updateKPI.unitType}
             year={company.currentFiscalYear}
-            week={company.currentFiscalWeek}
-            currentValue={updateKPI.currentValue}
-            headerText={"Update Current Week"}
+            week={targetWeek || company.currentFiscalWeek}
+            currentValue={targetValue || updateKPI.currentValue}
+            headerText={`Update Week ${targetWeek||""}`}
             updateKPIModalOpen={updateKPIModalOpen}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
             setKpis={setKpis}
+            updateKPI={updateKPI}
+            setTargetWeek={setTargetWeek}
+            setTargetValue={setTargetValue}
+            fiscalYearStart={fiscalYearStart}
           />
         )}
       </>
@@ -572,8 +672,9 @@ const UpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
 `;
 
 const BlueUpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
-
    color:  ${props => props.theme.colors.primary100}; 
+   display: ${props => (props.hover ? "inline-block" : "none")};
+   transition: "all 0.4s ease-in";
    &:hover {
     cursor: pointer;
     fill:  ${props => props.theme.colors.primary100} !important;
@@ -581,6 +682,8 @@ const BlueUpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
 
 const WhiteUpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
    color:  ${props => props.theme.colors.white}; 
+   display: ${props => (props.hover ? "inline-block" : "none")};
+   transition: "all 0.4s ease-in";
    &:hover {
     cursor: pointer;
     fill:  ${props => props.theme.colors.white} !important;
@@ -588,7 +691,10 @@ const WhiteUpdateKpiIcon = styled(RawIcon)<UpdateKpiIconProps>`
 
 type UpdateKPIContainerProps = {
   disabled?: boolean;
+  hover?: boolean;
 };
+
+const UpdateKPIWrapper = styled.div``;
 const UpdateKPIContainer = styled.div<UpdateKPIContainerProps>`
   display: flex;
   justify-content: center;
@@ -602,6 +708,12 @@ const UpdateKPIContainer = styled.div<UpdateKPIContainerProps>`
     filter: brightness(1);
     background-color: ${props => props.theme.colors.primary100};
   }
+`;
+
+const UpdateKPICellContainer = styled(UpdateKPIContainer)`
+  display: ${props => (props.hover ? "flex" : "none")};
+  height: 34px;
+  border-radius: 4px;
 `;
 
 const KPITitleContainer = styled.div`

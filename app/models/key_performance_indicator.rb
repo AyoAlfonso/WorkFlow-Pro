@@ -16,7 +16,7 @@ class KeyPerformanceIndicator < ApplicationRecord
 
   validates :title, :created_by, :viewers, :unit_type, :target_value, presence: true
   validates :greater_than, inclusion: [true, false]
-  has_many :scorecard_logs
+  has_many :scorecard_logs, -> { order('created_at ASC') }
   
   def self.for_user(user)
     self.select { |kpi| kpi.users.include?(user) }

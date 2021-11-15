@@ -8,12 +8,13 @@ import { observer } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Input } from "~/components/shared/input";
 // import { LabelSelectionDropdownList } from "../../../shared/label-selection-dropdown-list";
-import { Source } from "./source";
+// import { Source } from "./source";
 import { Existing } from "./existing";
 import { RollUp } from "./roll-up";
 import { Average } from "./average";
+import * as R from "ramda";
 
-interface IAddKPIModalProps {
+interface IAdvancedKPIModalProps {
   KPIs: any[];
   showAddKPIModal: boolean;
   setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -21,9 +22,12 @@ interface IAddKPIModalProps {
   kpiModalType: string;
   setExternalManualKPIData: React.Dispatch<React.SetStateAction<any>>;
   setModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  existingSelectedKPIs?: any[];
+  originalKPI?: number;
+  setShowAddManualKPIModal?: React.Dispatch<React.SetStateAction<any>>;
 }
 
-export const AddKPIModal = observer(
+export const AdvancedKPIModal = observer(
   ({
     KPIs,
     showAddKPIModal,
@@ -31,7 +35,10 @@ export const AddKPIModal = observer(
     setModalOpen,
     kpiModalType,
     setExternalManualKPIData,
-  }: IAddKPIModalProps): JSX.Element => {
+    existingSelectedKPIs,
+    originalKPI,
+    setShowAddManualKPIModal,
+  }: IAdvancedKPIModalProps): JSX.Element => {
     const formattedKpiModalType = titleCase(kpiModalType);
     const optionsRef = useRef(null);
 
@@ -39,6 +46,7 @@ export const AddKPIModal = observer(
       const handleClickOutside = event => {
         if (optionsRef.current && !optionsRef.current.contains(event.target)) {
           setModalOpen(false);
+          setShowAddManualKPIModal(false);
         }
       };
       document.addEventListener("mousedown", handleClickOutside);
@@ -57,15 +65,6 @@ export const AddKPIModal = observer(
         ref={optionsRef}
       >
         <InnerContainer>
-          {kpiModalType == "source" && (
-            <Source
-              KPIs={KPIs}
-              kpiModalType={formattedKpiModalType}
-              setModalOpen={setModalOpen}
-              setExternalManualKPIData={setExternalManualKPIData}
-              setShowFirstStage={setShowFirstStage}
-            ></Source>
-          )}
           {kpiModalType == "existing" && (
             <Existing
               KPIs={KPIs}
@@ -73,24 +72,33 @@ export const AddKPIModal = observer(
               setModalOpen={setModalOpen}
               setExternalManualKPIData={setExternalManualKPIData}
               setShowFirstStage={setShowFirstStage}
+              existingSelectedKPIs={existingSelectedKPIs}
+              originalKPI={originalKPI}
+              setShowAddManualKPIModal={setShowAddManualKPIModal}
             ></Existing>
           )}
-          {kpiModalType == "roll up" && (
+          {["rollup", "roll up"].includes(kpiModalType) && (
             <RollUp
               KPIs={KPIs}
               kpiModalType={formattedKpiModalType}
               setModalOpen={setModalOpen}
               setExternalManualKPIData={setExternalManualKPIData}
               setShowFirstStage={setShowFirstStage}
+              existingSelectedKPIs={existingSelectedKPIs}
+              originalKPI={originalKPI}
+              setShowAddManualKPIModal={setShowAddManualKPIModal}
             ></RollUp>
           )}
-          {kpiModalType == "average" && (
+          {["average", "avr"].includes(kpiModalType) && (
             <Average
               KPIs={KPIs}
               kpiModalType={formattedKpiModalType}
               setModalOpen={setModalOpen}
               setExternalManualKPIData={setExternalManualKPIData}
               setShowFirstStage={setShowFirstStage}
+              existingSelectedKPIs={existingSelectedKPIs}
+              originalKPI={originalKPI}
+              setShowAddManualKPIModal={setShowAddManualKPIModal}
             ></Average>
           )}
         </InnerContainer>

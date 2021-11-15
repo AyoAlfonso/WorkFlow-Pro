@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as R from "ramda";
 import { Checkbox, Label } from "@rebass/forms";
 import { observer } from "mobx-react";
@@ -39,6 +39,10 @@ export const Teams = observer(
     const [createTeamModalOpen, setCreateTeamModalOpen] = useState<boolean>(false);
     const [editTeamModalOpen, setEditTeamModalOpen] = useState<boolean>(false);
     const [selectedEditTeam, setSelectedEditTeam] = useState<any>({});
+
+    useEffect(() => {
+      teamStore.load()
+    }, [])
 
     const { t } = useTranslation();
     const teamsData = R.flatten(

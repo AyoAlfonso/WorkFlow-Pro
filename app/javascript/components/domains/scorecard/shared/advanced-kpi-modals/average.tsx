@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import * as R from "ramda";
 import { observer } from "mobx-react";
 import { KPIModalHeader } from "./header";
 import { titleCase } from "~/utils/camelize";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 import {
   StyledLayerTwo,
   UserKPIList,
@@ -12,35 +14,46 @@ import {
   StyledLayerOne,
   StyledItemSpan,
   StlyedCheckMark,
-  StyledCheckboxInput,
   StyledLabel,
+  StyledCheckboxInput,
   StyledInput,
 } from "./styled-components";
-import { SaveButton } from "../modal-elements";
 
-interface IRollUpProps {
+import { SaveButton } from "../modal-elements";
+//repeated ofteen TODO:
+interface IAverage {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   KPIs: any[];
   kpiModalType: string;
   setExternalManualKPIData: React.Dispatch<React.SetStateAction<any>>;
-  setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean| null>>;
+  setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean | null>>;
+  existingSelectedKPIs: any[];
+  originalKPI: number;
+  setShowAddManualKPIModal?: React.Dispatch<React.SetStateAction<any>>;
 }
-export const RollUp = observer(
+
+export const Average = observer(
   ({
     KPIs,
-    setModalOpen,
     kpiModalType,
+    setModalOpen,
     setExternalManualKPIData,
     setShowFirstStage,
-  }: IRollUpProps): JSX.Element => {
-    const [selectedKPIs, setSelectedKPIs] = useState([]);
-    const [filteredKPIs, setfilteredKPIs] = useState(KPIs);
+    existingSelectedKPIs,
+    originalKPI,
+    setShowAddManualKPIModal,
+  }: IAverage): JSX.Element => {
+    console.log(setShowAddManualKPIModal, "setShowAddManualKPIModal");
+    const [selectedKPIs, setSelectedKPIs] = useState(existingSelectedKPIs || []);
+    const [filteredKPIs, setfilteredKPIs] = useState(KPIs || []);
     const [unitType, setUnitType] = useState("numerical");
+    const optionsRef = useRef(null);
 
     useEffect(() => {
-      setfilteredKPIs(filterBasedOnUnitType(KPIs));
+      if (unitType) {
+        setfilteredKPIs(filterBasedOnUnitType(KPIs));
+      }
     }, [unitType]);
-
     const formatKpiType = kpiType => titleCase(kpiType);
 
     const groupBy = objectArray => {
@@ -65,11 +78,14 @@ export const RollUp = observer(
         ),
       );
     };
-    const filterBasedOnUnitType = array => {
-      return array.filter(kpi => kpi.unitType == unitType);
+    const filterBasedOnUnitType = KPIs => {
+      return KPIs.filter(kpi => kpi.unitType == unitType);
     };
 
     const selectKPI = kpi => {
+      if (kpi.id == originalKPI) {
+        return showToast("You can't add a KPI to be it's own parent.", ToastMessageConstants.INFO);
+      }
       const duplicateIndex = selectedKPIs.findIndex(selectedKPI => selectedKPI.id == kpi.id);
       if (duplicateIndex > -1) {
         const slicedArray = selectedKPIs.slice();
@@ -87,8 +103,13 @@ export const RollUp = observer(
       setExternalManualKPIData({
         selectedKPIs,
         unitType,
-        targetValue: selectedKPIs.reduce((a, b) => a + (b["targetValue"] || 0), 0),
+        targetValue:
+          selectedKPIs.reduce((a, b) => a + (b["targetValue"] || 0), 0) / selectedKPIs.length,
         kpiModalType,
+        description: selectedKPIs[0]?.description,
+        greaterThan: selectedKPIs[0]?.greaterThan,
+        title: selectedKPIs[0]?.title,
+        needsAttentionThreshold: selectedKPIs[0]?.needsAttentionThreshold,
       });
       if (!R.isNil(setShowFirstStage)) {
         setShowFirstStage(false);
@@ -99,27 +120,25 @@ export const RollUp = observer(
       setfilteredKPIs([]);
       setUnitType(type);
     };
-    const renderKPIListContent = (filteredKPIs): Array<JSX.Element> => {
-      const groupedKPIs = groupBy(filteredKPIs);
-      return Object.keys(groupedKPIs).map(function(ownerKey, key) {
+
+    const renderKPIListContent = (filteredArrays): Array<JSX.Element> => {
+      const groupedKPIs = groupBy(filteredArrays);
+
+      return Object.keys(groupedKPIs).map(function(ownerKey) {
         return (
-          <UserKPIList key={key}>
+          <UserKPIList>
             <StyledCheckTitle>{ownerKey}</StyledCheckTitle>
             {groupedKPIs[ownerKey].map((kpi, key) => {
+              const state = !!selectedKPIs?.find(selectedKPI => selectedKPI.id == kpi.id);
               return (
-                <StyledCheckboxWrapper>
+                <StyledCheckboxWrapper key={kpi.id}>
                   <StyledLabel>
                     <StyledCheckboxInput
                       type="checkbox"
-                      id={key}
-                      key={key}
-                      onClick={() => {
-                        selectKPI(kpi);
-                      }}
+                      onClick={e => selectKPI(kpi)}
+                      checked={state}
                     ></StyledCheckboxInput>
-                    <StlyedCheckMark
-                      selected={!!selectedKPIs.find(selectedKPI => selectedKPI.id == kpi.id)}
-                    ></StlyedCheckMark>
+                    {<StlyedCheckMark selected={state}></StlyedCheckMark>}
                     <StyledItemSpan>
                       {kpi.title} {kpi.parentType && `[${formatKpiType(kpi.parentType)}]`}
                     </StyledItemSpan>
@@ -131,21 +150,21 @@ export const RollUp = observer(
         );
       });
     };
+
     return (
-      <StyledRollUpModal>
+      <StyledAverage>
         <KPIModalHeader
           setModalOpen={setModalOpen}
           selectedKPIs={selectedKPIs}
           kpiModalType={kpiModalType}
           removeTagInput={removeTagInput}
+          setShowAddManualKPIModal={setShowAddManualKPIModal}
         />
-
         <StyledSecondLayer>
           <StyledLayerOne>
             <StyledLayerText>
               <StyledLayerPara>
-                Rollup two or more relevant KPI's to create a new KPI. The new KPI will sum the
-                values of selcted KPIs to calculate the new value. Start by selecting a unit.
+                Average two or more relevant KPIs to create a new KPI. Start by selecting a unit.
               </StyledLayerPara>
               <StyledOptionToggle>
                 <StyledDataTypeContainer
@@ -167,6 +186,16 @@ export const RollUp = observer(
                   <StyledDataTypeIcon>$</StyledDataTypeIcon>
                   <StyledDataTypeContent>Currency</StyledDataTypeContent>
                 </StyledDataTypeContainer>
+
+                <StyledDataTypeContainer
+                  selected={unitType == "percentage"}
+                  onClick={() => {
+                    toggleUnitType("percentage");
+                  }}
+                >
+                  <StyledDataTypeIcon>%</StyledDataTypeIcon>
+                  <StyledDataTypeContent>Percentage</StyledDataTypeContent>
+                </StyledDataTypeContainer>
               </StyledOptionToggle>
             </StyledLayerText>
 
@@ -174,6 +203,7 @@ export const RollUp = observer(
               <SaveButton onClick={handleSaveToManual}>Next</SaveButton>
             </StyledNextButton>
           </StyledLayerOne>
+
           <StyledLayerTwo>
             <StyledLayerDiv>
               <StyledInput type="text" placeholder="Search KPIs" onChange={onSearchKeyword} />
@@ -181,7 +211,7 @@ export const RollUp = observer(
             {renderKPIListContent(filteredKPIs)}
           </StyledLayerTwo>
         </StyledSecondLayer>
-      </StyledRollUpModal>
+      </StyledAverage>
     );
   },
 );
@@ -200,7 +230,6 @@ const StyledDataTypeIcon = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
 type StyledDataTypeContainerProps = {
   selected: boolean;
   onClick: any;
@@ -214,7 +243,6 @@ const StyledDataTypeContainer = styled.div<StyledDataTypeContainerProps>`
   align-items: center;
   font-size: 0.8rem;
   background-color: ${props => (props.selected ? "#dbdbdf" : "")};
-
   :hover {
     background-color: #dbdbdf;
   }
@@ -223,7 +251,7 @@ const StyledDataTypeContainer = styled.div<StyledDataTypeContainerProps>`
   }
 `;
 
-const StyledRollUpModal = styled.div`
+const StyledAverage = styled.div`
   width: 60%;
   position: absolute;
   top: 50%;
@@ -255,6 +283,8 @@ const StyledLayerPara = styled.p`
   @media only screen and (min-width: 280px) and (max-width: 767px) {
     text-align: center;
     font-size: 1rem;
+    padding: 1rem 2rem;
+    margin: 0.8rem auto;
   }
 `;
 
@@ -287,4 +317,4 @@ const StyledLayerDiv = styled.div`
   color: #000;
 `;
 
-export default RollUp;
+export default Average;

@@ -43,7 +43,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   end
 
   def create_key_element
-    key_element = KeyElement.create!(elementable: @annual_initiative, value: params[:value], completion_type: params[:completion_type], completion_starting_value: params[:completion_current_value], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
+    key_element = KeyElement.create!(elementable: @annual_initiative, value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], completion_starting_value: params[:completion_current_value], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
     render json: { key_element: key_element, status: :ok }
   end
 

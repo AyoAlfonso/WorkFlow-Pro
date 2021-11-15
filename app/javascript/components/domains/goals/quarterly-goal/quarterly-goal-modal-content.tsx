@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { toJS } from "mobx";
 import { TrixEditor } from "react-trix";
 import { CreateGoalSection } from "../shared/create-goal-section";
+import { sortByDate } from "~/utils/sorting";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -99,7 +100,7 @@ export const QuarterlyGoalModalContent = observer(
     const subInitiativeTitle = sessionStore.subInitiativeTitle;
 
     const renderSubInitiative = () => {
-      return quarterlyGoal.subInitiatives.map((subInitiative, index) => {
+      return quarterlyGoal.subInitiatives.sort(sortByDate).map((subInitiative, index) => {
         return (
           <SubInitiativeContainer key={index}>
             <StatusBlockColorIndicator
@@ -185,12 +186,14 @@ export const QuarterlyGoalModalContent = observer(
             {showMilestones ? (
               <>
                 <SectionContainer>
-                  <MilestonesHeaderContainer>
-                    <ShowMilestonesButton
-                      setShowInactiveMilestones={setShowInactiveMilestones}
-                      showInactiveMilestones={showInactiveMilestones}
-                    />
-                  </MilestonesHeaderContainer>
+                  {!R.isEmpty(allMilestones) && (
+                    <MilestonesHeaderContainer>
+                      <ShowMilestonesButton
+                        setShowInactiveMilestones={setShowInactiveMilestones}
+                        showInactiveMilestones={showInactiveMilestones}
+                      />
+                    </MilestonesHeaderContainer>
+                  )}
 
                   <WeeklyMilestones
                     editable={editable}

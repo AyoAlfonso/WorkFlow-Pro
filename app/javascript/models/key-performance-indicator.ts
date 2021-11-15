@@ -19,6 +19,7 @@ export const KeyPerformanceIndicatorModel = types
     targetValue: types.number,
     isDeleted: types.boolean,
     greaterThan: types.boolean,
+    parentKpi: types.maybeNull(types.array(types.frozen<object>())),
     parentType: types.maybeNull(types.string),
     relatedParentKpis: types.maybeNull(types.array(types.frozen<object>())),
     viewers: types.maybeNull(types.array(types.model({ type: types.string, id: types.string }))),

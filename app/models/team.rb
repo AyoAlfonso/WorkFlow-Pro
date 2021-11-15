@@ -1,6 +1,7 @@
 class Team < ApplicationRecord
   include HasDefaultAvatarColor
   include HasEmotionScores
+  include ActiveRecordScope
   belongs_to :company
   has_many :team_user_enablements, dependent: :destroy
   has_many :users, through: :team_user_enablements
@@ -8,7 +9,6 @@ class Team < ApplicationRecord
   has_many :meetings
   has_many :team_issues, dependent: :destroy
   has_many :key_activities
-  after_create :set_default_executive_team
 
   store :settings, accessors: [:weekly_meeting_dashboard_link_embed], coder: JSON
 
@@ -20,17 +20,16 @@ class Team < ApplicationRecord
     self.select { |team| team.users.include?(user) }
   end
 
+  def active
+    return !deleted
+  end
+
   def is_lead?(user)
     team_user_enablements.where(role: :team_lead, user: user).present?
   end
 
   def set_default_executive_team
     self.update(executive: 1)
-  end
-
-  def active
-    #eventually add deactivation rules and items
-    true
   end
 
   def daily_average_users_emotion_scores_over_week(from_date, to_date)

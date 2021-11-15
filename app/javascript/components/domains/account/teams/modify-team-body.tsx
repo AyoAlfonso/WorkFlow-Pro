@@ -11,6 +11,7 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import MenuItem from "@material-ui/core/MenuItem";
 import { toJS } from "mobx";
+import { TeamManagerDropdownList } from "./team-manager-dropdown";
 
 interface IModifyTeamBodyProps {
   team?: any;
@@ -21,6 +22,9 @@ export const ModifyTeamBody = observer(
   ({ team, setModalOpen }: IModifyTeamBodyProps): JSX.Element => {
     const { teamStore, userStore } = useMst();
 
+    if (!teamStore.teams) {
+      return <> </>;
+    }
     const formatMemberListState = teamUserEnablements => {
       const membersListItem = {};
 
@@ -28,7 +32,7 @@ export const ModifyTeamBody = observer(
         membersListItem[index] = {
           userId: tue.userId,
           meetingLead: tue.role == "team_lead" || tue.role == "team_manager" ? 1 : 0,
-          teamManager: tue.teamManager ? true : false
+          teamManager: tue.teamManager ? true : false,
         };
       });
       return membersListItem;
@@ -68,7 +72,9 @@ export const ModifyTeamBody = observer(
       } else {
         teamStore.createTeamAndInviteUsers(teamName, memberListState).then(() => {
           showToast("Team created", ToastMessageConstants.SUCCESS);
+          showToast("Invites sent", ToastMessageConstants.SUCCESS);
           setModalOpen(false);
+          teamStore.load();
         });
       }
     };
@@ -85,6 +91,9 @@ export const ModifyTeamBody = observer(
       const updatedMemberListState = memberListState;
       const index = Object.keys(updatedMemberListState).length;
       for (let i = 0; i < index; i++) {
+        if (updatedMemberListState[i]["teamManager"] === true) {
+          updatedMemberListState[i]["teamManager"] = false;
+        }
         if (updatedMemberListState[i]["userId"] === id) {
           updatedMemberListState[i]["teamManager"] = true;
         }
@@ -92,36 +101,20 @@ export const ModifyTeamBody = observer(
       setMemberListState(updatedMemberListState);
     };
 
-    const renderUserSelections = (): Array<JSX.Element> => {
-      return team.users
-        .filter(user => user.status == "active")
-        .map((user) => {
-          return (
-            <MenuItem value={user.id} key={user.id}>
-              {`${user.firstName} ${user.lastName}`}
-            </MenuItem>
-          );
-        });
-    };
-
     const teamManager = (): JSX.Element => {
+      const userList = team ? team.users : userStore.users;
+      const currentUser = userList.find(user => user.id === teamManagerId)
       return (
         <>
           <SelectMemberContainer>{headerText("Team Manager")}</SelectMemberContainer>
           <SelectMemberDropdownContainer>
-            <Select
-              onChange={e => {
-                setTeamManagerId(e.target.value);
-                updateMemeberListState(e.target.value);
-                userStore.updateUserTeamManagerStatus(e.target.value, team.id, true);
-              }}
-              style={{ marginRight: "25px" }}
-              margin="dense"
-              native={false}
-              value={teamManagerId}
-            >
-              {renderUserSelections()}
-            </Select>
+            <TeamManagerDropdownList
+              setTeamManagerId={setTeamManagerId}
+              currentUser={currentUser}
+              team={team}
+              userList={userList}
+              updateMemeberListState={updateMemeberListState}
+            />
           </SelectMemberDropdownContainer>
         </>
       );
@@ -185,7 +178,7 @@ const Container = styled.div`
 `;
 
 const SectionContainer = styled.div`
-  margin-top: 16px;
+  // margin-top: 16px;
 `;
 
 const StyledHeading = styled(Heading)`
@@ -227,15 +220,15 @@ const MembersRecordContainer = styled.div`
 `;
 
 const SelectMemberContainer = styled.div`
-  width: 70%;
+  width: 68%;
 `;
 
 const SelectMeetingLeadContainer = styled.div`
-  width: 20%;
+  // width: 20%;
 `;
 
 const CloseIconContainer = styled.div`
-  width: 10%;
+  // width: 10%;
 `;
 
 const TextContainer = styled.div`

@@ -18,6 +18,7 @@ import { AnnualInitiativeType } from "~/types/annual-initiative";
 import { GoalsCoreFour } from "./goals-core-four";
 import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge";
 import { SubInitiativeModalContent } from "./sub-initiative/sub-initiaitive-modal-content";
+import { sortByDate } from "~/utils/sorting";
 
 export const GoalsIndex = observer(
   (): JSX.Element => {
@@ -101,11 +102,11 @@ export const GoalsIndex = observer(
     const companyGoalsToShow = () => {
       switch (companyGoalsFilter) {
         case "open":
-          return companyGoals.activeAnnualInitiatives as Array<AnnualInitiativeType>;
+          return companyGoals.activeAnnualInitiatives.sort(sortByDate) as Array<AnnualInitiativeType>;
         case "me":
-          return companyGoals.myAnnualInitiatives;
+          return companyGoals.myAnnualInitiatives.sort(sortByDate);
         case "closed":
-          return companyGoals.closedAnnualInitiatives;
+          return companyGoals.closedAnnualInitiatives.sort(sortByDate);
         default:
           return companyGoals;
       }

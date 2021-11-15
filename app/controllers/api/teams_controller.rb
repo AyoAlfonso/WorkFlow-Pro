@@ -36,7 +36,7 @@ class Api::TeamsController < Api::ApplicationController
   def create_team_and_invite_users
     #Split up function into smaller functions
     @team = Team.create!(company_id: current_company.id, name: params[:team_name], settings: {})
-    @team.set_default_executive_team if existing_executive_team.nil?
+    @team.set_default_executive_team if Team.where(company_id: @team.company.id, executive: 1).blank?
     @team.set_default_avatar_color
     authorize @team
     params[:users].each do |user|
@@ -48,7 +48,7 @@ class Api::TeamsController < Api::ApplicationController
   end
 
   def destroy
-    @team.destroy!
+    @team.soft_delete
     #TODO: make this restful
     @teams = policy_scope(Team).all
     render "api/teams/index"
