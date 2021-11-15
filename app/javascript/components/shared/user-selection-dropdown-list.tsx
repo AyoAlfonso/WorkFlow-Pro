@@ -41,7 +41,6 @@ export const UserSelectionDropdownList = ({
       <Autocomplete
         value={value}
         onChange={(event, newValue) => {
-          console.log(newValue);
           setValue(newValue);
           onUserSelect(newValue);
           setOwner(newValue);
