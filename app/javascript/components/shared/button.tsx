@@ -22,6 +22,7 @@ interface IButtonProps extends StyledSystemProps {
   style?: object;
   fontOverride?: string;
   color?: any
+  // width?:any
 }
 
 const StyledButton = styled.button<IButtonProps>`

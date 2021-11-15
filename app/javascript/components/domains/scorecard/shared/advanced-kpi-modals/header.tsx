@@ -7,6 +7,7 @@ interface IKPIModalHeader {
   selectedKPIs: any[];
   kpiModalType: string;
   removeTagInput?: any;
+  setShowAddManualKPIModal?: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const KPIModalHeader = observer(
@@ -44,7 +45,12 @@ export const KPIModalHeader = observer(
             )}
           </MultiTagInputContainer>
           <StyledClose>
-            <CloseIconContainer onClick={() => props.setModalOpen(false)}>
+            <CloseIconContainer
+              onClick={() => {
+                props.setShowAddManualKPIModal(false);
+                props.setModalOpen(false);
+              }}
+            >
               <StyledIcon icon={"Close"} size={18} />
             </CloseIconContainer>
           </StyledClose>

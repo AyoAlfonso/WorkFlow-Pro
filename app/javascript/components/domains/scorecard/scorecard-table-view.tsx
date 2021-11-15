@@ -14,7 +14,6 @@ import { StatusBadge } from "~/components/shared/status-badge";
 import { AddKPIDropdown } from "./shared/add-kpi-dropdown";
 import { ViewEditKPIModal } from "./shared/view-kpi-modal";
 import { MiniUpdateKPIModal } from "./shared/update-kpi-modal";
-// import { ManualKPIModal } from "./shared/manual-kpi-modal";
 import { AddExistingManualKPIModal } from "./shared/edit-existing-manual-kpi-modal";
 import { titleCase } from "~/utils/camelize";
 import { toJS } from "mobx";
@@ -48,6 +47,7 @@ export const ScorecardTableView = observer(
 
     const [year, setYear] = useState<number>(company.currentFiscalYear);
     const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
+    const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
     const [targetWeek, setTargetWeek] = useState<number>(undefined);
     const [targetValue, setTargetValue] = useState<number>(undefined);
     const [tab, setTab] = useState<string>("KPIs");
@@ -330,17 +330,30 @@ export const ScorecardTableView = observer(
           width: "17%",
           minWidth: "160px",
         },
-        ...R.range(1, 53).map(n => ({
+        ...R.range(1, 53).map((n, i ) => ({
           Header: () => <div style={{ fontSize: "14px" }}> {`WK ${n}`} </div>,
           accessor: `wk_${n}`,
           Cell: ({ value, row }) => {
             const i = row.id;
             const { parentType } = row.original.updateKPI;
-      
+
             if (parentType) {
               return (
-                <EmptyWeekContainer>
-                  <EmptyWeek />
+                <EmptyWeekContainer
+                  onMouseEnter={() => {
+                    setSelectedKPIWeek(`wk_${n}_${i}`);
+                  }}
+                  onMouseLeave={() => {
+                    setSelectedKPIWeek(null);
+                  }}
+                >
+                  {selectedKPIWeek == `wk_${n}_${i}` ? (
+                    <BlueUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
+                  ) : (
+                    <> </>
+                    
+                  )}
+                  {selectedKPIWeek !== `wk_${n}_${i}` ? <EmptyWeek /> : <> </>}
                 </EmptyWeekContainer>
               );
             }
@@ -422,7 +435,7 @@ export const ScorecardTableView = observer(
           minWidth: "64px",
         })),
       ],
-      [quarter, year, selectedKPIIcon, selectedKPIWeek],
+      [quarter, year, selectedKPIIcon, selectedKPIWeek]
     );
 
     const getHiddenWeeks = (q: number) =>
@@ -540,13 +553,14 @@ export const ScorecardTableView = observer(
             year={company.currentFiscalYear}
             week={targetWeek || company.currentFiscalWeek}
             currentValue={targetValue || updateKPI.currentValue}
-            headerText={"Update Current Week"}
+            headerText={`Update Week ${targetWeek||""}`}
             updateKPIModalOpen={updateKPIModalOpen}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
             setKpis={setKpis}
             updateKPI={updateKPI}
             setTargetWeek={setTargetWeek}
             setTargetValue={setTargetValue}
+            fiscalYearStart={fiscalYearStart}
           />
         )}
       </>

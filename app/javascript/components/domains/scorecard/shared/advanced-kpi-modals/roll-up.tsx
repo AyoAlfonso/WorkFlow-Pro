@@ -28,6 +28,7 @@ interface IRollUpProps {
   setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean | null>>;
   existingSelectedKPIs: any[];
   originalKPI: number;
+  setShowAddManualKPIModal?: React.Dispatch<React.SetStateAction<any>>;
 }
 export const RollUp = observer(
   ({
@@ -38,7 +39,9 @@ export const RollUp = observer(
     setShowFirstStage,
     existingSelectedKPIs,
     originalKPI,
+    setShowAddManualKPIModal,
   }: IRollUpProps): JSX.Element => {
+    console.log(setShowAddManualKPIModal, "setShowAddManualKPIModal");
     const [selectedKPIs, setSelectedKPIs] = useState(existingSelectedKPIs || []);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs || []);
     const [unitType, setUnitType] = useState("numerical");
@@ -151,6 +154,7 @@ export const RollUp = observer(
           selectedKPIs={selectedKPIs}
           kpiModalType={kpiModalType}
           removeTagInput={removeTagInput}
+          setShowAddManualKPIModal={setShowAddManualKPIModal}
         />
 
         <StyledSecondLayer>
