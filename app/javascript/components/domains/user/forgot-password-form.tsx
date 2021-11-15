@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { baseTheme } from "../../../themes";
 // import styled from "styled-components";
 // import { observer } from "mobx-react";
-import { useHistory } from "react-router-dom";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
 
@@ -24,13 +23,31 @@ const LogoHeaderDiv = styled.div`
   text-align: center;
 `;
 
-export const LoginForm = observer(
+export const ForgotPasswordForm = observer(
   (): JSX.Element => {
     const { sessionStore } = useMst();
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [emailSent, setEmailSent] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
     const { t } = useTranslation();
-    const history = useHistory();
+
+    const validateEmail = email => {
+      const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    };
+
+    const resetPasswordFlow = () => {
+      setLoading(true);
+      if (validateEmail(email)) {
+        sessionStore.resetPassword(email).then(() => {
+          setLoading(false);
+          setEmailSent(true);
+        });
+      } else {
+        showToast("Please enter a valid email address", ToastMessageConstants.ERROR);
+        setLoading(false);
+      }
+    };
 
     if (sessionStore.loading) return <LoadingScreen />;
     return (
@@ -52,51 +69,33 @@ export const LoginForm = observer(
             backgroundColor: baseTheme.colors.white,
           }}
         >
-          {sessionStore.loggedIn ? (
-            <Label>{t("profile.loginForm.currentlyLoggedIn")}</Label>
+          <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="120"></img>
+          <Text color={"black"} fontSize={3}>
+            {t("profile.forgotPasswordForm.recoverPassword")}
+          </Text>
+          {emailSent ? (
+            <SentEmailText>{t("profile.forgotPasswordForm.emailSent")}</SentEmailText>
           ) : (
             <>
-              <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="120"></img>
-              <Text color={"black"} fontSize={3}>
-                {t("profile.loginForm.login")}
-              </Text>
               <Label htmlFor="email">{t("profile.loginForm.email")}</Label>
               <Input
                 name="email"
                 onChange={e => setEmail(e.target.value)}
                 onKeyDown={key => {
                   if (key.keyCode == 13) {
-                    sessionStore.login(email, password);
-                  }
-                }}
-              />
-              <Label>{t("profile.loginForm.password")}</Label>
-              <Input
-                name="password"
-                type="password"
-                onChange={e => setPassword(e.target.value)}
-                onKeyDown={key => {
-                  if (key.keyCode == 13) {
-                    sessionStore.login(email, password);
+                    resetPasswordFlow;
                   }
                 }}
               />
               <Button
                 small
                 variant={"primary"}
-                style={{ width: "100%", marginTop: "15px", marginBottom: "15px" }}
-                onClick={() => sessionStore.login(email, password)}
+                style={{ width: "100%", marginTop: "25px", marginBottom: "5px" }}
+                disabled={!email || loading}
+                onClick={resetPasswordFlow}
               >
-                {t("profile.loginForm.login")}
+                {t("profile.forgotPasswordForm.emailMe")}
               </Button>
-              <TextInlineContainer color={"greyActive"} fontSize={1} onClick={() => history.push('/forgotpassword')}>
-                {t("profile.loginForm.forgot")}
-              </TextInlineContainer>
-              <Text color={"greyInactive"}>
-                {t("profile.loginForm.termsDescription")}
-                <a href="https://lynchpyn.com/terms-of-use/">Terms of Use</a> and{" "}
-                <a href="https://lynchpyn.com/privacy-policy/">Privacy Policy</a>
-              </Text>
             </>
           )}
         </Box>
@@ -111,4 +110,9 @@ const TextInlineContainer = styled.div<ColorProps & TypographyProps>`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const SentEmailText = styled(Text)`
+  font-size: 16px;
+  font-weight: normal;
 `;
