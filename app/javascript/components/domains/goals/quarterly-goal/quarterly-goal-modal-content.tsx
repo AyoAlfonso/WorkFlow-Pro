@@ -78,9 +78,7 @@ export const QuarterlyGoalModalContent = observer(
           setQuarterlyGoal(quarterlyGoal);
         }
       });
-      console.log('rendered')
-      console.log(toJS(quarterlyGoal));
-    }, [quarterlyGoalStore?.quarterlyGoal]);
+    }, []);
 
     if (quarterlyGoal == null) {
       return <Loading />;
