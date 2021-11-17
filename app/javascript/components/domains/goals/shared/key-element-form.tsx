@@ -70,6 +70,7 @@ export const KeyElementForm = ({
     !R.isEmpty(title) &&
     !R.isEmpty(completionType) &&
     !R.isNil(completionTargetValue) &&
+    completionTargetValue &&
     !R.isNil(ownedBy) &&
     !R.isNil(condition);
 

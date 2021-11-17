@@ -72,7 +72,6 @@ export const ContextTabs = observer(
     const [activeTab, setActiveTab] = useState(
       type == "quarterlyGoal" ? "milestones" : "aligned initiatives",
     );
-    const [componentToRender, setComponentToRender] = useState(null);
 
     const firstImportanceRef = useRef(null);
     const secondImportanceRef = useRef(null);
@@ -267,7 +266,6 @@ export const ContextTabs = observer(
                 active={activeTab === "milestones" ? true : false}
                 onClick={() => {
                   setActiveTab("milestones");
-                  setComponentToRender(null);
                   setShowInitiatives(false);
                   setShowMilestones(true);
                 }}
@@ -280,7 +278,6 @@ export const ContextTabs = observer(
               active={activeTab === "aligned initiatives" ? true : false}
               onClick={() => {
                 setActiveTab("aligned initiatives");
-                setComponentToRender(null);
                 setShowInitiatives(true);
               }}
             >
@@ -291,7 +288,6 @@ export const ContextTabs = observer(
             active={activeTab === "key results" ? true : false}
             onClick={() => {
               setActiveTab("key results");
-              setComponentToRender(renderContextKeyElements());
               setShowInitiatives(false);
               setShowMilestones(false);
             }}
@@ -303,7 +299,6 @@ export const ContextTabs = observer(
               active={activeTab === "aligned initiatives" ? true : false}
               onClick={() => {
                 setActiveTab("aligned initiatives");
-                setComponentToRender(null);
                 setShowInitiatives(true);
                 setShowMilestones(false);
               }}
@@ -312,7 +307,7 @@ export const ContextTabs = observer(
             </OverviewTabs>
           )}
         </OverviewTabsContainer>
-        <Container>{componentToRender}</Container>
+        <Container>{activeTab === "key results" && renderContextKeyElements()}</Container>
       </Container>
     );
   },
