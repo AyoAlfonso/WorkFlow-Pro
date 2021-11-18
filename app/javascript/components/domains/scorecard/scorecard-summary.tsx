@@ -211,6 +211,7 @@ const QuarterSummary = ({
   const weekToDate = (week: number): string =>
     moment(fiscalYearStart)
       .add(week, "w")
+      .year(currentFiscalYear)
       .startOf("week" as moment.unitOfTime.StartOf)
       .format("MMM D");
 
@@ -332,7 +333,7 @@ const QuarterSummary = ({
 
   return (
     <QuarterContainer>
-      <Header>This Quarterss</Header>
+      <Header>This Quarter</Header>
       <Text color={greyActive} fontSize={14} mt={4} mb={9}>
         {/* {t("scorecards.quarterlyGraphTitle")} */}
       </Text>
@@ -509,7 +510,7 @@ const StatusBadgeContainer = styled.div``;
 
 const LineChartContainer = styled.div`
   position: relative;
-  overflow-x: auto;
+  overflow: hidden;
   height: 184px;
   width: 100%;
 `;

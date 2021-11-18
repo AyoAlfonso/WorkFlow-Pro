@@ -45,7 +45,7 @@ export const ScorecardTableView = observer(
     } = useMst();
     const KPIs = toJS(tableKPIs);
 
-    const [year, setYear] = useState<number>(company.currentFiscalYear);
+    const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
     const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
     const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
     const [targetWeek, setTargetWeek] = useState<number>(undefined);
@@ -176,6 +176,8 @@ export const ScorecardTableView = observer(
               ownedById: kpi.ownedById,
               unitType: kpi.unitType,
               parentType: kpi.parentType,
+              relatedParentKpis: kpi.relatedParentKpis,
+              parentKpi: kpi.parentKpi,
             },
             title: {
               title,
@@ -184,6 +186,7 @@ export const ScorecardTableView = observer(
               id: kpi.id,
             },
             owner: kpi.ownedBy,
+            greaterThan: kpi.greaterThan,
           };
           const weeks = Object.values(kpi?.period?.[year] || {});
           weeks.forEach((week: any) => {
@@ -207,6 +210,7 @@ export const ScorecardTableView = observer(
             ? weeks[weeks.length - 1]["score"]
             : 0;
           row.updateKPI.currentWeek = weeks[weeks.length - 1] || 0;
+          row.updateKPI.weeks = weeks;
           return row;
         }),
       [KPIs],
@@ -286,12 +290,21 @@ export const ScorecardTableView = observer(
           accessor: "score",
           width: "8%",
           minWidth: "86px",
-          Cell: ({ value }) => {
+          Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
+            const { relatedParentKpis, parentKpi } = row.original.updateKPI;
+            const { greaterThan } = row.original;
+
             return (
               <ScoreContainer background={quarterValue.background}>
                 <Score color={quarterValue.color}>
-                  {quarterValue.percent ? `${quarterValue.percent}%` : "..."}
+                  {parentKpi.length > relatedParentKpis.length
+                    ? "—"
+                    : quarterValue.percent
+                    ? `${quarterValue.percent}%`
+                    : greaterThan
+                    ? "0%"
+                    : "—"}
                 </Score>
               </ScoreContainer>
             );
@@ -300,8 +313,19 @@ export const ScorecardTableView = observer(
         {
           Header: () => <div style={{ fontSize: "14px" }}>Status</div>,
           accessor: "status",
-          Cell: ({ value }) => {
+          Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
+            const { relatedParentKpis, parentKpi } = row.original.updateKPI;
+
+            if (parentKpi.length > relatedParentKpis.length) {
+              return (
+                <StatusContainer>
+                  <StatusBadge fontSize={"12px"} background={fadedRed} color={warningRed}>
+                    Broken
+                  </StatusBadge>
+                </StatusContainer>
+              );
+            }
             return (
               <StatusContainer>
                 <StatusBadge
@@ -330,7 +354,7 @@ export const ScorecardTableView = observer(
           width: "17%",
           minWidth: "160px",
         },
-        ...R.range(1, 53).map((n, i ) => ({
+        ...R.range(1, 53).map((n, i) => ({
           Header: () => <div style={{ fontSize: "14px" }}> {`WK ${n}`} </div>,
           accessor: `wk_${n}`,
           Cell: ({ value, row }) => {
@@ -339,21 +363,16 @@ export const ScorecardTableView = observer(
 
             if (parentType) {
               return (
-                <EmptyWeekContainer
-                  onMouseEnter={() => {
-                    setSelectedKPIWeek(`wk_${n}_${i}`);
-                  }}
-                  onMouseLeave={() => {
-                    setSelectedKPIWeek(null);
-                  }}
-                >
-                  {selectedKPIWeek == `wk_${n}_${i}` ? (
-                    <BlueUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
+                <EmptyWeekContainer>
+                  {value === undefined ? (
+                    <EmptyWeekContainer>
+                      <EmptyWeek />
+                    </EmptyWeekContainer>
                   ) : (
-                    <> </>
-                    
+                    <WeekContainer>
+                      <WeekText color={value.color}>{value.score}</WeekText>
+                    </WeekContainer>
                   )}
-                  {selectedKPIWeek !== `wk_${n}_${i}` ? <EmptyWeek /> : <> </>}
                 </EmptyWeekContainer>
               );
             }
@@ -435,7 +454,7 @@ export const ScorecardTableView = observer(
           minWidth: "64px",
         })),
       ],
-      [quarter, year, selectedKPIIcon, selectedKPIWeek]
+      [quarter, year, selectedKPIIcon, selectedKPIWeek],
     );
 
     const getHiddenWeeks = (q: number) =>
@@ -481,7 +500,7 @@ export const ScorecardTableView = observer(
             >
               {R.range(1, 5).map((n: number) => (
                 <option key={n} value={n}>
-                  Q{n} {company.currentFiscalYear}
+                  Q{n} {company.yearForCreatingAnnualInitiatives}
                 </option>
               ))}
             </Select>
@@ -550,14 +569,15 @@ export const ScorecardTableView = observer(
             kpiId={updateKPI.id}
             ownedById={updateKPI.ownedById}
             unitType={updateKPI.unitType}
-            year={company.currentFiscalYear}
+            year={company.yearForCreatingAnnualInitiatives}
             week={targetWeek || company.currentFiscalWeek}
             currentValue={targetValue || updateKPI.currentValue}
-            headerText={`Update Week ${targetWeek||""}`}
+            headerText={targetWeek ? `Update Week ${targetWeek}` : " Update Current Week "}
             updateKPIModalOpen={updateKPIModalOpen}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
             setKpis={setKpis}
             updateKPI={updateKPI}
+            // setUpdateKPI={setUpdateKPI}
             setTargetWeek={setTargetWeek}
             setTargetValue={setTargetValue}
             fiscalYearStart={fiscalYearStart}

@@ -73,7 +73,10 @@ const NotificationTableRow = observer(
     const { method, notificationType, validations } = notification;
     return (
       <NotificationTableRowContainer>
-        <NotificationTableRowColumn width={"30%"}>{notificationType}</NotificationTableRowColumn>
+        <NotificationTableRowColumn width={"30%"}>
+          {notificationType == "Weekly Checkin" && "Weekly Check In"}{" "}
+          {notificationType !== "Weekly Checkin" && notificationType}
+        </NotificationTableRowColumn>
         <NotificationTableRowColumn width={"40%"}>
           {`${validations[0].dayOfWeek} @ ${validations[0].timeOfDay}`}
         </NotificationTableRowColumn>

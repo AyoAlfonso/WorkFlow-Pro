@@ -42,7 +42,6 @@ export const Existing = observer(
     originalKPI,
     setShowAddManualKPIModal,
   }: IExistingProps): JSX.Element => {
-    console.log(setShowAddManualKPIModal, "setShowAddManualKPIModal");
     const [selectedKPIs, setSelectedKPIs] = useState(existingSelectedKPIs || []);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs || []);
     const [unitType, setUnitType] = useState("numerical");

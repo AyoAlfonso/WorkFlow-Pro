@@ -41,7 +41,6 @@ export const RollUp = observer(
     originalKPI,
     setShowAddManualKPIModal,
   }: IRollUpProps): JSX.Element => {
-    console.log(setShowAddManualKPIModal, "setShowAddManualKPIModal");
     const [selectedKPIs, setSelectedKPIs] = useState(existingSelectedKPIs || []);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs || []);
     const [unitType, setUnitType] = useState("numerical");
