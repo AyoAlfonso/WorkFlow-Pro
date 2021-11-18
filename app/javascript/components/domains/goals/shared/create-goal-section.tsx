@@ -142,13 +142,12 @@ const CreateAnnualInitiativeCardContainer = styled(HomeContainerBorders)`
 const ActionsContainer = styled.div`
   display: flex;
   margin-top: 12px;
+  justify-content: center;
 `;
 
 const AddInitiativeButton = styled(Button)`
-  width: 120px;
   padding-right: 0;
-  width: 100%;
-  padding: 0;
+  padding: 8px 16px;
   &: hover {
     font-weight: bold;
     background-color: ${props => props.theme.colors.primaryActive};

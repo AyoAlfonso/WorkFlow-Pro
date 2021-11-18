@@ -202,12 +202,12 @@ export const GoalsIndex = observer(
               <RallyingCry rallyingCry={companyGoals.rallyingCry} />
 
               <InitiativesContainer>
-                {renderAnnualInitiatives(companyGoalsToShow(), "company")}
                 {companyPlanning && (
                   <CreateAnnualInitiativeContainer>
                     {renderCreateCompanyAnnualInitiativeSection("company")}
                   </CreateAnnualInitiativeContainer>
                 )}
+                {renderAnnualInitiatives(companyGoalsToShow(), "company")}
               </InitiativesContainer>
             </>
           )}
@@ -229,12 +229,12 @@ export const GoalsIndex = observer(
             <>
               <PersonalVision personalVision={personalGoals.personalVision} />
               <InitiativesContainer>
-                {renderAnnualInitiatives(personalGoalsToShow(), "personal")}
                 {personalPlanning && (
                   <CreateAnnualInitiativeContainer>
                     {renderCreateCompanyAnnualInitiativeSection("personal")}
                   </CreateAnnualInitiativeContainer>
                 )}
+                {renderAnnualInitiatives(personalGoalsToShow(), "personal")}
               </InitiativesContainer>
             </>
           )}

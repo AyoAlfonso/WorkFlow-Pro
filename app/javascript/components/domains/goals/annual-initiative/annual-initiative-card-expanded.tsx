@@ -131,8 +131,8 @@ export const AnnualInitiativeCardExpanded = observer(
         }}
       >
         {showEditButton || renderEmptyState()}
-        {renderQuarterlyGoals()}
         {showCreateQuarterlyGoal && renderCreateGoal()}
+        {renderQuarterlyGoals()}
       </Container>
     );
   },
@@ -230,6 +230,6 @@ type CreateGoalContainerProps = {
 };
 const CreateGoalContainer = styled.div<CreateGoalContainerProps>`
   margin-top: 16px;
-  ${props => (props.show ? "" : "margin-left: 16px;")}
+  ${props => (props.show ? "" : "margin-right: 16px;")}
   margin-bottom: 16px;
 `;
