@@ -50,7 +50,7 @@ export const KeyActivityRecord = observer(
       return <></>;
     }
     const { user } = keyActivity;
-console.log(keyActivity);
+
     useEffect(() => {
       setSelectedLabel(
         keyActivity.labels && keyActivity.labels.length > 0 ? keyActivity.labels[0] : null,
