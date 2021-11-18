@@ -6,6 +6,7 @@ import { Text } from "~/components/shared/text";
 import { Button } from "~/components/shared/button";
 import { SignUpWizardProgressBar } from "../shared/sign-up-wizard/sign-up-wizard-progress-bar";
 import { Icon } from "~/components/shared/icon";
+import { Onboarding } from "../domains/onboarding";
 interface IWizardLayoutProps {
   title: string;
   description: string;
@@ -103,13 +104,13 @@ export const WizardLayout = ({
       ))
     );
   };
-
+  
   const renderBodyComponents = (): JSX.Element => {
     const hasRightBodyComponent = !R.isNil(R.path([currentStep], rightBodyComponents));
     return (
       singleComponent || (
         <>
-          <LeftBodyContainer fullWidth={!hasRightBodyComponent}>
+          <LeftBodyContainer LongerWidth={Onboarding && currentStep == 1} fullWidth={!hasRightBodyComponent}>
             {leftBodyComponents[currentStep]}
           </LeftBodyContainer>
           {hasRightBodyComponent && (
@@ -239,12 +240,12 @@ const BodyContainer = styled.div`
 
 type BodyContentContainerProps = {
   hasStepsForMobile: boolean;
-}
+};
 
 const BodyContentContainer = styled.div<BodyContentContainerProps>`
   height: 100%;
   overflow-y: auto;
-  display: ${props => props.hasStepsForMobile ? "block" : "flex"};
+  display: ${props => (props.hasStepsForMobile ? "block" : "flex")};
 `;
 
 const DescriptionTitleContainer = styled.div``;
@@ -276,8 +277,13 @@ const SkipButton = styled(Button)`
   margin-right: 10px;
 `;
 
-const LeftBodyContainer = styled.div<{ fullWidth: boolean }>`
-  width: ${({ fullWidth }) => (fullWidth ? "100%" : "50%")};
+type LeftBodyContainerProps = {
+  fullWidth: boolean;
+  LongerWidth?: boolean;
+};
+
+const LeftBodyContainer = styled.div<LeftBodyContainerProps>`
+  width: ${props => (props.fullWidth ? "100%" : props.LongerWidth ? "70%" : "50%")};
   margin-right: 16px;
 `;
 

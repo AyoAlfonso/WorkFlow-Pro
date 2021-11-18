@@ -8,8 +8,8 @@ import "react-date-range/dist/theme/default.css";
 
 import { TrixEditor } from "react-trix";
 
-import { Dropzone } from "./dropzone"
-import { DropzoneWithCropper } from "./dropzone-with-cropper"
+import { Dropzone } from "./dropzone";
+import { DropzoneWithCropper } from "./dropzone-with-cropper";
 
 import { Input, Label, Select, TextArea, TextDiv } from "~/components/shared";
 
@@ -54,6 +54,7 @@ interface IFormBuilderProps {
   formData: any;
   formContainerStyle?: any;
   stepwise: boolean;
+  marginBottom?: string;
 }
 
 export const FormBuilder = ({
@@ -61,6 +62,7 @@ export const FormBuilder = ({
   formData,
   formFields,
   stepwise,
+  marginBottom,
 }: IFormBuilderProps): JSX.Element => {
   const classes = useStyles();
 
@@ -145,8 +147,8 @@ export const FormBuilder = ({
             date={
               R.pathOr(null, formKeys, formData)
                 ? new Date(
-                  moment.utc(R.pathOr(null, formKeys, formData)).format("YYYY-MM-DD HH:mm:ss"),
-                )
+                    moment.utc(R.pathOr(null, formKeys, formData)).format("YYYY-MM-DD HH:mm:ss"),
+                  )
                 : null
             }
             onChange={date => {
@@ -157,7 +159,7 @@ export const FormBuilder = ({
       case "HTML_EDITOR":
         return (
           <TrixEditor
-            className="custom-trix-class"
+            className="custom-trix-class trix-editor-onboarding"
             autoFocus={true}
             placeholder={placeholder ? placeholder : ""}
             value={R.pathOr("", formKeys, formData)}
@@ -193,18 +195,24 @@ export const FormBuilder = ({
     <Container>
       {formFields
         ? formFields.map((formField: IFormField, index: number) => {
-          return isPreviousStepComplete(index) ? (
-            <FormContainer key={index} style={Array.isArray(formContainerStyle) ?  formContainerStyle[index] : formContainerStyle}>
-              <Label>{formField.label}</Label>
-              {formComponent(formField)}
-              {formField.subText && (
-                <TextDiv fontSize={"11px"} color={"grey100"}>
-                  {formField.subText}
-                </TextDiv>
-              )}
-            </FormContainer>
-          ) : null;
-        })
+            return isPreviousStepComplete(index) ? (
+              <FormContainer
+                key={index}
+                marginBottom={marginBottom}
+                style={
+                  Array.isArray(formContainerStyle) ? formContainerStyle[index] : formContainerStyle
+                }
+              >
+                <FormLabel>{formField.label}</FormLabel>
+                {formComponent(formField)}
+                {formField.subText && (
+                  <TextDiv fontSize={"11px"} color={"grey100"}>
+                    {formField.subText}
+                  </TextDiv>
+                )}
+              </FormContainer>
+            ) : null;
+          })
         : null}
     </Container>
   );
@@ -215,8 +223,16 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const FormContainer = styled.div`
-  margin-bottom: 24px;
+type FormContainerProps = {
+  marginBottom?: string;
+}
+
+const FormContainer = styled.div<FormContainerProps>`
+  margin-bottom: ${props => props.marginBottom ? props.marginBottom : "24px"};
 `;
 
 const StyledOption = styled.option``;
+
+const FormLabel = styled(Label)`
+  margin-bottom: 10px;
+`;
