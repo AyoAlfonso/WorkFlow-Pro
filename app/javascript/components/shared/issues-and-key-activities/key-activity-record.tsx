@@ -50,7 +50,7 @@ export const KeyActivityRecord = observer(
       return <></>;
     }
     const { user } = keyActivity;
-
+console.log(keyActivity);
     useEffect(() => {
       setSelectedLabel(
         keyActivity.labels && keyActivity.labels.length > 0 ? keyActivity.labels[0] : null,
@@ -130,7 +130,6 @@ export const KeyActivityRecord = observer(
                   e.target.checked,
                   meetingId ? true : false,
                 );
-                keyActivityStore.fetchKeyActivitiesFromMeeting(meetingStore.currentMeeting.id);
               }}
               disabled={disabled}
             />
@@ -151,7 +150,6 @@ export const KeyActivityRecord = observer(
               }}
               onBlur={() => {
                 keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false);
-                keyActivityStore.fetchKeyActivitiesFromMeeting(meetingStore.currentMeeting.id);
               }}
               disabled={disabled}
             />
