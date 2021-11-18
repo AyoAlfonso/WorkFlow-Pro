@@ -12,7 +12,6 @@ class UserMailer < ApplicationMailer
     @greeting = params[:greeting]
     @cta_text = params[:cta_text]
     @cta_url = params[:cta_url]
-    @preheader = params[:preheader]
     mail(to: @user.email, subject: @subject)
   end
 
@@ -22,6 +21,8 @@ class UserMailer < ApplicationMailer
     @subject = params[:subject]
     @message = params[:message]
     @greeting = params[:greeting]
+    @preheader = params[:preheader]
+    @name = params[:name]
     @cta_text = params[:cta_text]
     @cta_url = params[:cta_url]
     mail(to: @user.email, subject: @subject)

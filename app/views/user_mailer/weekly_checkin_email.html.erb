@@ -1,42 +1,38 @@
-<div style="
-  font-size: 9pt;
-  white-space: normal;
-">
-<p><%= @preheader %></p>
+<h4 >
+  <%= @preheader %>
+</h4>
+
+<h4> Hi <%=@name%> 👋 ! <h4>
+<div style="font-size: 12pt;
+    font-weight: normal">Are you ready to complete your <strong style="color: #005FFE">Weekly Check In</strong>?
+Try to find time to fit this into your schedule before you forget.
 </div>
 
-<div style="
-  font-size: 14pt;
-  white-space: normal;
-">
-<p>Are you ready to complete your <strong style="color: #005FFE">Weekly Check In</strong>?
-Try to find time to fit this into your schedule before you forget.
-</p>
-<div>
-<div style="color: #005ffe; font-size: 12pt; margin: 0 auto;padding: 10px; justify-content: center;">
+<div style="display: flex; font-weight: normal; color: #005ffe; font-size: 12pt;margin: 5% auto 0px;padding: 10px; justify-content: center;">
   Here's a quick reminder of why we do this routine:
 </div>
 
-<p style="font-size: 14pt"><%= @message %></p>
+<h4><%= @message %></h4>
 
 <div style="
   display: flex;
   justify-content: center;
   padding: 10px;
-  margin-top: 30px; 
-  margin-bottom: 30px;
+  margin: 0 auto;
 ">
   <div style="
+    display: block;
     background-color: #005ffe;
     border-radius: 4px;
     color: #FFFFFF;
     font-weight: 500;
     font-size: 14pt;
-    padding: 8px 16px;
     text-align: center;
     cursor: pointer;
     line-height: 120%;
-    display: block;
+
+    padding: 5%;
+    font-weight: bold;
   ">
     <a target="_blank" style="text-decoration: none; color: #FFFFFF; cursor: pointer; line-height: 19.2px" href=<%= "#{ENV["HOST_URL"]}#{@cta_url}" %>>
       <%= @cta_text %>

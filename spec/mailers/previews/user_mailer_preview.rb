@@ -55,12 +55,14 @@ class UserMailerPreview < ActionMailer::Preview
     user = User.find(3)
     UserMailer.with(
       user: user,
-      subject: "#{user&.first_name}, Time for Your Check-in",
-      greeting: "Hi #{user.first_name}! 👋",
-      message: "Are you ready to complete your Weekly Check-in? Try to find time to fit this into your schedule before you forget.",
+      subject:"Weekly Check-in: Please add an update",
+      greeting: "",
+      name: "#{user&.first_name}",
+      message: "Share what you’ve accomplished with your teammates and see how they performed.",
+      preheader: "Preheader: You have some updates to provide for your Initiatives and KPIs in LynchPyn.",
       cta_text: "Complete Weekly Check-in",
       cta_url: "/weekly-check-in/#{user.id}/#{Date.today.strftime("%Y-%m-%d")}" #home
-    ).notification_email
+    ).weekly_checkin_email
   end
 
   def sync_meeting_email

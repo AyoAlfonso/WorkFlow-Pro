@@ -13,6 +13,7 @@ import { Icon, Text } from "~/components/shared";
 import { Container, HeaderContainer, HeaderText } from "../container-styles";
 import { observer } from "mobx-react";
 import { EditNotification } from "./";
+import {getNoticationName} from "./"
 import * as R from "ramda";
 
 export const Notifications = observer(
@@ -74,8 +75,7 @@ const NotificationTableRow = observer(
     return (
       <NotificationTableRowContainer>
         <NotificationTableRowColumn width={"30%"}>
-          {notificationType == "Weekly Checkin" && "Weekly Check In"}{" "}
-          {notificationType !== "Weekly Checkin" && notificationType}
+         { getNoticationName(notificationType)}
         </NotificationTableRowColumn>
         <NotificationTableRowColumn width={"40%"}>
           {`${validations[0].dayOfWeek} @ ${validations[0].timeOfDay}`}

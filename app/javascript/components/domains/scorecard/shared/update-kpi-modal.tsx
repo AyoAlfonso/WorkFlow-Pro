@@ -179,7 +179,7 @@ export const MiniUpdateKPIModal = observer(
               <FormElementContainer />
             </RowContainer>
           )}
-          <FormElementContainer>
+          <FormElementContainer gap={"0"}>
             <SaveButton onClick={handleSave}>Save</SaveButton>
           </FormElementContainer>
         </FormContainer>
@@ -190,7 +190,7 @@ export const MiniUpdateKPIModal = observer(
 
 const AdvancedSettingsButton = styled.div`
   font-size: 12px;
-  margin: 16px 0px;
+  margin: 0px;
   font-weight: bold;
   width: max-content;
   color: ${props => props.theme.colors.primary100};

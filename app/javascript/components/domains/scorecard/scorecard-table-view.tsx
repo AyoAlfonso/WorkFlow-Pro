@@ -71,6 +71,8 @@ export const ScorecardTableView = observer(
       backgroundGrey,
       greyActive,
       white,
+      tango,
+      dairyCream
     } = baseTheme.colors;
 
     const formatValue = (unitType: string, value: number) => {
@@ -320,7 +322,7 @@ export const ScorecardTableView = observer(
             if (parentKpi.length > relatedParentKpis.length) {
               return (
                 <StatusContainer>
-                  <StatusBadge fontSize={"12px"} background={fadedRed} color={warningRed}>
+                  <StatusBadge fontSize={"12px"} background={dairyCream} color={tango}>
                     Broken
                   </StatusBadge>
                 </StatusContainer>

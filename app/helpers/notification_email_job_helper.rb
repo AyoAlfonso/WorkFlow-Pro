@@ -33,10 +33,11 @@ module NotificationEmailJobHelper
   def send_weekly_checkin_email(user, notification_type)
     UserMailer.with(
       user: user,
-      subject: "#{user&.first_name}, Weekly Check-in: Please add an update",
-      greeting: "Hi #{user.first_name}! 👋",
+      subject:"Weekly Check-in: Please add an update",
+      greeting: "",
+      name: "#{user&.first_name}",
       message: "Share what you’ve accomplished with your teammates and see how they performed.",
-      preheader: "You have some updates to provide for your Initiatives and KPIs in LynchPyn.",
+      preheader: "Preheader: You have some updates to provide for your Initiatives and KPIs in LynchPyn.",
       cta_text: "Complete Weekly Check-in",
       cta_url: "/weekly-check-in/#{user.id}/#{Date.today.strftime("%Y-%m-%d")}"
     ).weekly_checkin_email.deliver_later

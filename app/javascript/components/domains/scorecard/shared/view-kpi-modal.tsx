@@ -82,6 +82,7 @@ export const ViewEditKPIModal = observer(
       primary100,
       white,
       grey100,
+      tango
     } = baseTheme.colors;
 
     const formatValue = (value: number, unitType: string) => {
@@ -121,8 +122,8 @@ export const ViewEditKPIModal = observer(
       if (kpi?.parentKpi.length > kpi?.relatedParentKpis.length) {
         return (
           <StatusBadgeContainer>
-            <BrokenCircleIcon />
-            <StatusBadge fontSize={"21px"} color={warningRed} background={white}>
+            <BrokenCircleIcon/>
+            <StatusBadge fontSize={"21px"} color={tango} background={white}>
               Broken
             </StatusBadge>
           </StatusBadgeContainer>
@@ -694,7 +695,7 @@ const KPIParentTypeText = styled.div`
 
 const BrokenCircleIcon = styled.div`
   display: inline-flex;
-  background: ${props => props.theme.colors.warningRed};
+  background: ${props => props.theme.colors.tango};
   width: 21px;
   height: 21px;
   border-radius: 50%;

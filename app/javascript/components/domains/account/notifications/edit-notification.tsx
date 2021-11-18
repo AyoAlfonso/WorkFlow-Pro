@@ -9,6 +9,7 @@ import * as R from "ramda";
 import { Container, HeaderContainer, HeaderText, IconContainer } from "../container-styles";
 import { TimePicker } from "./";
 import styled from "styled-components";
+import {getNoticationName} from "./"
 
 export const EditNotification = observer(
   (): JSX.Element => {
@@ -27,11 +28,7 @@ export const EditNotification = observer(
             <IconContainer pr="8px" onClick={() => notificationStore.resetNotificationToEdit()}>
               <Icon icon={"Chevron-Left"} size={"18px"} iconColor={"grey40"} />
             </IconContainer>
-            <HeaderText>
-              {notificationToEdit.notificationType == "Weekly Checkin" && "Weekly Check In"}{" "}
-              {notificationToEdit.notificationType !== "Weekly Checkin" &&
-                notificationToEdit.notificationType}
-            </HeaderText>
+            <HeaderText>{getNoticationName(notificationToEdit.notificationType)}</HeaderText>
           </HeaderTextAndIconContainer>
         </HeaderContainer>
         <BodyContainer>

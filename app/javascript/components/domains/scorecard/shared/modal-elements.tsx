@@ -46,6 +46,10 @@ type HeaderProps = {
   headerFontSize?: string;
 };
 
+type FormElementContainerProps = {
+  gap?: string
+}
+
 export const Header = styled.p<HeaderProps>`
   margin: 0px;
   font-size: ${props => (props.headerFontSize ? props.headerFontSize : "16px")};
@@ -67,11 +71,12 @@ export const FormContainer = styled.div`
   gap: 16px;
 `;
 
-export const FormElementContainer = styled.div`
+
+export const FormElementContainer = styled.div<FormElementContainerProps>`
   display: flex;
   width: 100%;
   flex-direction: column;
-  gap: 4px;
+  gap: ${props => (props.gap ? `${props.gap}px` : "4px")};
   .trix-kpi-modal {
     font-size: 12px;
     margin: 0px;
