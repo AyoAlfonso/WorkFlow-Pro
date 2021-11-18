@@ -111,9 +111,7 @@ export const ViewEditKPIModal = observer(
         setShowEditExistingKPIContainer(true);
       }
     };
-    useEffect(() => {
-      console.log("   drawGraph(kpi);");
-    }, [kpi]);
+
     const formatKpiType = kpiType => titleCase(kpiType);
     const renderStatus = () => {
       if (!kpi) {
@@ -239,7 +237,7 @@ export const ViewEditKPIModal = observer(
     const drawGraph = KPI => {
       const startWeek = (company.currentFiscalQuarter - 1) * 13 + 1;
       const weekNumbers = R.range(startWeek, company.currentFiscalWeek + 1);
-      const weeks = KPI?.period.get(company.currentFiscalYear)?.toJSON();
+      const weeks = KPI?.period.get(company.yearForCreatingAnnualInitiatives)?.toJSON();
       const currentQuarterData = weekNumbers.map(week => (weeks?.[week] ? weeks[week].score : 0));
       setData({
         labels: R.range(startWeek, startWeek + 13).map(weekToDate),
@@ -266,7 +264,7 @@ export const ViewEditKPIModal = observer(
         return;
       }
       setLoading(true);
-      const weeks = kpi.period.get(company.currentFiscalYear)?.toJSON();
+      const weeks = kpi.period.get(company.yearForCreatingAnnualInitiatives)?.toJSON();
       drawGraph(kpi);
       const targetText = formatValue(kpi.targetValue, kpi.unitType);
       setLogic(
@@ -491,7 +489,7 @@ export const ViewEditKPIModal = observer(
             kpiId={kpi.id}
             ownedById={kpi.ownedById}
             unitType={kpi.unitType}
-            year={company.currentFiscalYear}
+            year={company.yearForCreatingAnnualInitiatives}
             week={company.currentFiscalWeek}
             currentValue={value}
             headerText={"Update Current Week"}

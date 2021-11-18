@@ -92,8 +92,8 @@ export const KeyPerformanceIndicatorStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.deleteScorecardLog(id);
       if (response.ok) {
         showToast("Log deleted", ToastMessageConstants.SUCCESS);
-        scorecardStore.deleteScorecard(response.data.scorecardLog);
         self.kpi = response.data.kpi;
+        scorecardStore.mergeKPIS(response.data.kpi);
       }
     }),
   }))

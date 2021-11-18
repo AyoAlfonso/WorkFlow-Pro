@@ -60,7 +60,7 @@ export const MiniUpdateKPIModal = observer(
     const [selectedDueDate, setSelectedDueDate] = useState<any>(
       getMondayofDate(week, fiscalYearStart, year),
     );
-    console.log(setTargetWeek);
+
     const [currentWeek, setCurrentWeek] = useState<number>(week);
     const [comment, setComment] = useState("");
     const { owner_type, owner_id } = useParams();
@@ -70,6 +70,7 @@ export const MiniUpdateKPIModal = observer(
       const handleClickOutside = event => {
         if (optionsRef.current && !optionsRef.current.contains(event.target)) {
           setShowAdvancedSettings(false);
+          clearData();
         }
       };
       document.addEventListener("mousedown", handleClickOutside);
@@ -98,8 +99,7 @@ export const MiniUpdateKPIModal = observer(
         }
         keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
           setUpdateKPIModalOpen(false);
-          setTargetWeek(undefined);
-          setTargetValue(undefined);
+          clearData();
           setKpis(scorecardStore.kpis);
           history.push(`/scorecard/0/0`);
           setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
@@ -113,6 +113,12 @@ export const MiniUpdateKPIModal = observer(
     const closeModal = () => {
       setUpdateKPIModalOpen(false);
       setShowAdvancedSettings(false);
+      clearData();
+    };
+    const clearData = () => {
+      console.log("setTargetWeek");
+      setTargetWeek(undefined);
+      setTargetValue(undefined);
     };
     return (
       <ModalContainer
@@ -124,7 +130,9 @@ export const MiniUpdateKPIModal = observer(
       >
         <FormContainer>
           <FormElementContainer>
-            <InputHeaderWithComment fontSize={"14px"}>New value</InputHeaderWithComment>
+            <InputHeaderWithComment margin={"4px 0px"} fontSize={"14px"}>
+              New values
+            </InputHeaderWithComment>
             <InputFromUnitType
               unitType={unitType}
               placeholder={"Add the new value..."}
@@ -133,7 +141,12 @@ export const MiniUpdateKPIModal = observer(
             />
           </FormElementContainer>
           <FormElementContainer>
-            <InputHeaderWithComment comment={"optional"} fontSize={"14px"} childFontSize={"12px"}>
+            <InputHeaderWithComment
+              margin={"4px 0px"}
+              comment={"optional"}
+              fontSize={"14px"}
+              childFontSize={"12px"}
+            >
               Comment
             </InputHeaderWithComment>
             <StyledInput
@@ -155,7 +168,7 @@ export const MiniUpdateKPIModal = observer(
           {showAdvancedSettings && (
             <RowContainer>
               <FormElementContainer>
-                <InputHeaderWithComment>Date </InputHeaderWithComment>
+                <InputHeaderWithComment margin={"4px 0px"}>Date </InputHeaderWithComment>
 
                 <DueDateSelector
                   selectedDueDate={selectedDueDate}
@@ -177,7 +190,7 @@ export const MiniUpdateKPIModal = observer(
 
 const AdvancedSettingsButton = styled.div`
   font-size: 12px;
-  margin-top: 16px;
+  margin: 16px 0px;
   font-weight: bold;
   width: max-content;
   color: ${props => props.theme.colors.primary100};

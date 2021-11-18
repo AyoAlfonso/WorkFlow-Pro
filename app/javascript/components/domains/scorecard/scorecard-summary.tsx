@@ -211,6 +211,7 @@ const QuarterSummary = ({
   const weekToDate = (week: number): string =>
     moment(fiscalYearStart)
       .add(week, "w")
+      .year(currentFiscalYear)
       .startOf("week" as moment.unitOfTime.StartOf)
       .format("MMM D");
 
@@ -219,8 +220,8 @@ const QuarterSummary = ({
     const currentQuarterWeeks = R.range(startWeek, currentWeek + 1);
     const currentQuarterData = gatherData(currentQuarterWeeks);
     const lastQuarterStartWeek = (currentQuarter - 2) * 13 + 1;
-    const lastQuarterWeeks = R.range(lastQuarterStartWeek, lastQuarterStartWeek + 13);
-    const lastQuarterData = currentQuarter > 1 ? gatherData(lastQuarterWeeks) : [];
+    // const lastQuarterWeeks = R.range(lastQuarterStartWeek, lastQuarterStartWeek + 13);
+    // const lastQuarterData = currentQuarter > 1 ? gatherData(lastQuarterWeeks) : [];
     setCurrentWeekPercent(R.last(currentQuarterData).toFixed(2));
     setQuarterlyPercent(currentQuarterData.reduce((a, b) => a + b) / currentQuarterData.length);
     if (currentWeek != 1) {
@@ -238,15 +239,15 @@ const QuarterSummary = ({
           borderWidth: 1.5,
           tension: 0,
         },
-        {
-          label: "Last Quarter",
-          data: lastQuarterData,
-          fill: false,
-          backgroundColor: white,
-          borderColor: grey100,
-          borderWidth: 1.5,
-          tension: 0,
-        },
+        // {
+        //   label: "Last Quarter",
+        //   data: lastQuarterData,
+        //   fill: false,
+        //   backgroundColor: white,
+        //   borderColor: grey100,
+        //   borderWidth: 1.5,
+        //   tension: 0,
+        // },
       ],
     });
   }, [kpis]);
@@ -332,7 +333,7 @@ const QuarterSummary = ({
 
   return (
     <QuarterContainer>
-      <Header>This Quarterss</Header>
+      <Header>This Quarter</Header>
       <Text color={greyActive} fontSize={14} mt={4} mb={9}>
         {/* {t("scorecards.quarterlyGraphTitle")} */}
       </Text>
@@ -342,16 +343,16 @@ const QuarterSummary = ({
           {renderWeekDifference()}
         </StatsContainer>
         <QuarterLegendContainer>
-          <StatusBadgeContainer>
+          {/* <StatusBadgeContainer>
             <StatusBadge fontSize={"12px"} color={primary100} background={backgroundBlue}>
               • Current Quarter
             </StatusBadge>
-          </StatusBadgeContainer>
-          <StatusBadgeContainer>
+          </StatusBadgeContainer> */}
+          {/* <StatusBadgeContainer>
             <StatusBadge fontSize={"12px"} color={greyActive} background={backgroundGrey}>
               • Last Quarter
             </StatusBadge>
-          </StatusBadgeContainer>
+          </StatusBadgeContainer> */}
         </QuarterLegendContainer>
       </QuarterInfoContainer>
       <LineChartContainer>
@@ -509,7 +510,7 @@ const StatusBadgeContainer = styled.div``;
 
 const LineChartContainer = styled.div`
   position: relative;
-  overflow-x: auto;
+  overflow: hidden;
   height: 184px;
   width: 100%;
 `;

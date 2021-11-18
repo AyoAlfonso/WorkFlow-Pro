@@ -231,7 +231,7 @@ const BodyContainer = styled.div`
   display: flex;
   // height: 100%;
   flex-direction: column;
-  overflow-x: auto;
+  // overflow-x: auto;
   @media only screen and (max-width: 768px) {
     width: 100%;
     padding: 0;

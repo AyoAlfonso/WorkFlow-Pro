@@ -27,16 +27,32 @@ export const EditNotification = observer(
             <IconContainer pr="8px" onClick={() => notificationStore.resetNotificationToEdit()}>
               <Icon icon={"Chevron-Left"} size={"18px"} iconColor={"grey40"} />
             </IconContainer>
-            <HeaderText>{notificationToEdit.notificationType}</HeaderText>
+            <HeaderText>
+              {notificationToEdit.notificationType == "Weekly Checkin" && "Weekly Check In"}{" "}
+              {notificationToEdit.notificationType !== "Weekly Checkin" &&
+                notificationToEdit.notificationType}
+            </HeaderText>
           </HeaderTextAndIconContainer>
         </HeaderContainer>
         <BodyContainer>
           <NotificationEditTableColumn>
             <NotificationOptionsContainer>
-              <RenderNotificationTimeOptions />
+              {notificationToEdit.notificationType !== "Evening Reflection" && (
+                <RenderNotificationTimeOptions />
+              )}
+              {notificationToEdit.notificationType == "Evening Reflection" && (
+                <RenderNotificationTimeOptions beginLimit={"12:00 PM"} endLimit={"11:00 PM"} />
+              )}
             </NotificationOptionsContainer>
             <NotificationOptionsContainer>
-              <RenderNotificationDayOptions />
+              {notificationToEdit.notificationType !== "Weekly Checkin" && (
+                <RenderNotificationDayOptions days={["Friday", "Saturday", "Sunday", "Monday"]} />
+              )}
+              {notificationToEdit.notificationType == "Weekly Checkin" && (
+                <RenderNotificationDayOptions
+                  days={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]}
+                />
+              )}
             </NotificationOptionsContainer>
           </NotificationEditTableColumn>
           <SaveButtonContainer>
@@ -55,7 +71,7 @@ export const EditNotification = observer(
   },
 );
 
-const RenderNotificationTimeOptions = (): JSX.Element => {
+const RenderNotificationTimeOptions = ({ ...props }): JSX.Element => {
   const { t } = useTranslation();
   const [notificationTime, setNotificationTime] = useState();
   const { notificationStore } = useMst();
@@ -74,6 +90,8 @@ const RenderNotificationTimeOptions = (): JSX.Element => {
         onChange={e => {
           handleTimeOfDayChange(e.target.value);
         }}
+        beginLimit={props.beginLimit}
+        endLimit={props.endLimit}
         defaultValue={notificationToEdit.validations[0].timeOfDay}
         disabled={false}
       />
@@ -81,13 +99,16 @@ const RenderNotificationTimeOptions = (): JSX.Element => {
   );
 };
 
-const RenderNotificationDayOptions = (): JSX.Element => {
+interface RenderNotificationDayOptionsProps {
+  days: any[];
+}
+
+const RenderNotificationDayOptions = ({ days }: RenderNotificationDayOptionsProps): JSX.Element => {
   const { t } = useTranslation();
-  // let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-  let days = ["Friday", "Saturday", "Sunday", "Monday"];
   const [notificationDay, setNotificationDay] = useState();
   const { notificationStore } = useMst();
   const { notificationToEdit } = notificationStore;
+
   const dayOfWeek = notificationToEdit.validations[0].dayOfWeek;
   dayOfWeek === "Every Day" ? (days = ["Every Day"]) : null;
 
@@ -120,7 +141,7 @@ const RenderNotificationDayOptions = (): JSX.Element => {
 
 const NotificationOptionsContainer = styled.div`
   margin-bottom: 16px;
-`
+`;
 
 export const HeaderTextAndIconContainer = styled.div`
   display: flex;

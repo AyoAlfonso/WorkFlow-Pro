@@ -171,7 +171,6 @@ class Api::CompaniesController < Api::ApplicationController
     authorize @team
 
     TeamUserEnablement.create!(team_id: @team.id, user_id: current_user.id, role: 1)
-
     if params[:emails].present?
       @email_addresses = params[:emails].split(",")
       @email_addresses.each do |email|
@@ -198,7 +197,7 @@ class Api::CompaniesController < Api::ApplicationController
         end
       end
     end
-    @onboarding_company.update!(onboarding_status: "complete")
+   @onboarding_company.update!(onboarding_status: "complete")
     render json: @team
   end
 

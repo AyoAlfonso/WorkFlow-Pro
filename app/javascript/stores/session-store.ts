@@ -24,7 +24,6 @@ export const SessionStoreModel = types
     selectedUserPulse: types.maybeNull(UserPulseModel),
     companyStaticData: types.maybeNull(types.array(types.frozen())),
     selectedDailyLog: types.maybeNull(DailyLogModel),
-    cachedKPIData: types.maybeNull(types.frozen()),
   })
   .extend(withRootStore())
   .extend(withEnvironment())
@@ -74,7 +73,8 @@ export const SessionStoreModel = types
             response.data.companyName,
           );
         }
-      } catch {
+      } catch (e) {
+      
         // error messaging handled by API monitor
       }
       self.loading = false;
