@@ -52,7 +52,7 @@ export const KeyElementForm = ({
     setActionType("Add");
     setSelectedElement(null);
   };
-console.log(completionTargetValue.split(',').join(''));
+
   const createKeyElement = () => {
     const keyElementParams = {
       value: title,
