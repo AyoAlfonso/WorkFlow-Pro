@@ -31,12 +31,14 @@
         background-color: #ffffff;
         color: #000000;
       ">
+        <% if @greeting != "" %>
         <strong style="
 					font-size: 22pt;
 					padding: 5px 32px 30px;
 				">
 					<%= @greeting || "Let's Get Things Done!" %>
 				</strong>
+        <% end %>
 				<div style="
 					padding: 32px;
           line-height: 22.4px;
