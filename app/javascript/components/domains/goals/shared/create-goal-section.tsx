@@ -142,7 +142,6 @@ const CreateAnnualInitiativeCardContainer = styled(HomeContainerBorders)`
 const ActionsContainer = styled.div`
   display: flex;
   margin-top: 12px;
-  justify-content: center;
 `;
 
 const AddInitiativeButton = styled(Button)`

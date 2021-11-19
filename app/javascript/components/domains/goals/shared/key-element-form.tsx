@@ -9,6 +9,7 @@ import { baseTheme } from "~/themes/base";
 import { Store } from "@material-ui/icons";
 import { useMst } from "~/setup/root";
 import { InputFromUnitType } from "~/components/domains/scorecard/shared/modal-elements";
+import { OwnedBy } from "../../scorecard/shared/scorecard-owned-by";
 
 interface IKeyElementFormProps {
   onCreate: (keyElementParams: any) => void;
@@ -23,12 +24,12 @@ export const KeyElementForm = ({
   setActionType,
   setSelectedElement,
 }: IKeyElementFormProps): JSX.Element => {
-  const { userStore } = useMst();
+  const { userStore, sessionStore } = useMst();
   const { users } = userStore;
   const [title, setTitle] = useState<string>("");
   const [completionType, setCompletionType] = useState<string>("numerical");
-  const [completionTargetValue, setCompletionTargetValue] = useState<string>('');
-  const [ownedBy, setOwnedBy] = useState<number>(users?.[0].id);
+  const [completionTargetValue, setCompletionTargetValue] = useState<string>("");
+  const [ownedBy, setOwnedBy] = useState<any>(sessionStore.profile);
   const [condition, setCondition] = useState<number>(1);
 
   const selectOptions = [
@@ -46,7 +47,7 @@ export const KeyElementForm = ({
   const resetForm = () => {
     setTitle("");
     setCompletionType("numerical");
-    setCompletionTargetValue('');
+    setCompletionTargetValue("");
     setCondition(0);
     setOwnedBy(0);
     setActionType("Add");
@@ -61,7 +62,7 @@ export const KeyElementForm = ({
         ? completionTargetValue.split("$")[1]
         : completionTargetValue,
       greaterThan: Number(condition),
-      ownedBy,
+      ownedBy: ownedBy.id,
     };
     onCreate(keyElementParams);
   };
@@ -145,25 +146,16 @@ export const KeyElementForm = ({
           <InputHeaderContainer>
             <InputHeader>Owner</InputHeader>
           </InputHeaderContainer>
-          <Select
-            onChange={e => {
-              e.preventDefault();
-              setOwnedBy(e.currentTarget.value);
-            }}
-            value={ownedBy}
-            fontSize={12}
-            height={15}
-            pt={6}
-            pb={10}
-          >
-            {users
-              .filter(user => user.firstName)
-              .map(({ id, firstName, lastName }, index) => (
-                <option key={`option-${index}`} value={id}>
-                  {firstName} {lastName}
-                </option>
-              ))}
-          </Select>
+          <OwnedBy
+            ownedBy={ownedBy}
+            setOwnedBy={setOwnedBy}
+            marginLeft={"0px"}
+            marginTop={"auto"}
+            marginBottom={"auto"}
+            fontSize={"12px"}
+            disabled={false}
+            center={false}
+          />
         </FormElementContainer>
       </RowContainer>
 
@@ -219,10 +211,17 @@ export const KeyElementForm = ({
         )}
       </RowContainer>
       <ButtonRowContainer mt={completionType === "binary" ? "20px" : "0"}>
-        <Button variant={"primary"} onClick={handleSave} small disabled={!isValid}>
+        <Button
+          style={{ padding: "8px 16px" }}
+          variant={"primary"}
+          onClick={handleSave}
+          small
+          disabled={!isValid}
+        >
           <TextDiv fontSize={"12px"}>Save</TextDiv>
         </Button>
         <Button
+          style={{ padding: "8px 16px" }}
           variant={"primaryOutline"}
           onClick={handleSaveAndAddAnother}
           small

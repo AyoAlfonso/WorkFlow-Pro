@@ -36,8 +36,7 @@ export const KeyElement = observer(
     setShowKeyElementForm,
     setActionType,
     setSelectedElement,
-  }:
-  IKeyElementProps): JSX.Element => {
+  }: IKeyElementProps): JSX.Element => {
     const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
     const [element, setElement] = useState<any>(null);
     const [showOptions, setShowOptions] = useState<boolean>(false);
@@ -81,11 +80,11 @@ export const KeyElement = observer(
         element.completionCurrentValue == ""
           ? element.completionStartingValue
           : element.completionCurrentValue;
-      
+
       if (element.greaterThan === 1) {
-        return Math.min(Math.max(current - starting, 0) / (target - starting), 1) * 100;
+        return (current / target) * 100;
       } else {
-        return Math.min(Math.max(target - current, 0) / (target - starting), 1) * 100;
+        return current <= target ? 100 : ((target - current) / target) * 100;
       }
     };
 

@@ -219,6 +219,7 @@ export const ManualKPIModal = observer(
               <StyledInput
                 type={"text"}
                 value={title}
+                style={{ marginTop: "4px" }}
                 placeholder={"e.g. Employee NPS"}
                 onChange={e => {
                   localStorage.setItem("cachedKpiTitle", JSON.stringify(e.target.value));
@@ -280,6 +281,7 @@ export const ManualKPIModal = observer(
                   localStorage.setItem("cachedUnitType", JSON.stringify(e.target.value));
                   setUnitType(e.target.value);
                 }}
+                style={{ marginTop: "4px" }}
                 value={unitType}
                 fontSize={12}
                 height={15}
@@ -327,8 +329,9 @@ export const ManualKPIModal = observer(
                 value={greaterThan ? 1 : 0}
                 fontSize={12}
                 height={15}
-                pt={6}
+                style={{ marginTop: "4px" }}
                 pb={10}
+                mt={4}
               >
                 <option key={"greater-than"} value={1}>
                   Greater than or equal to
@@ -342,6 +345,7 @@ export const ManualKPIModal = observer(
               <InputHeaderWithComment fontSize={"14px"}>Target Value</InputHeaderWithComment>
               <InputFromUnitType
                 unitType={unitType}
+                style={{ marginTop: "4px" }}
                 placeholder={"0"}
                 onChange={e => {
                   handleChange(e, setTargetValue, "cachedTargetValue");
@@ -365,6 +369,7 @@ export const ManualKPIModal = observer(
                   name="needs-attention-threshold"
                   unitType={"percentage"}
                   placeholder={"90"}
+                  style={{ marginTop: "4px" }}
                   onChange={e => {
                     handleChange(e, setNeedsAttentionThreshold, "cacheNeedsAttentionThreshold");
                   }}
@@ -412,7 +417,6 @@ const ButtonContainer = styled.div`
 
 const AdvancedSettingsButton = styled.div`
   font-size: 12px;
-  margin-top: 16px;
   font-weight: bold;
   width: max-content;
   color: ${props => props.theme.colors.primary100};
