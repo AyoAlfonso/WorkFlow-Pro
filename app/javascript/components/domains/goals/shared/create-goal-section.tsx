@@ -102,7 +102,7 @@ type StyledButtonType = {
 
 const StyledButton = styled(Button)<StyledButtonType>`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: ${props => (props.width != "fill" ? props.width : "-webkit-fill-available")};
   padding-left: 0;
