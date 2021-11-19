@@ -390,7 +390,7 @@ True value of LynchPyn is in working together with others in your team and compa
     <FormBuilder
       formFields={leftBodyComponentProps[1].formFields}
       formData={formData}
-      formContainerStyle={{ height: "160px" }}
+      formContainerStyle={{ height: "155px" }}
       stepwise={false}
       marginBottom="20px"
     />,
@@ -414,7 +414,7 @@ True value of LynchPyn is in working together with others in your team and compa
     />,
   ];
 
-  const bulletContainerStyle = { height: "110px", paddingTop: "60px" };
+  const bulletContainerStyle = { height: "105px", paddingTop: "60px" };
 
   const rightBodyComponents = [
     <FormBuilder
