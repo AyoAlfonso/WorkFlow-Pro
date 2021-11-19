@@ -72,7 +72,7 @@ export const ScorecardTableView = observer(
       greyActive,
       white,
       tango,
-      dairyCream
+      dairyCream,
     } = baseTheme.colors;
 
     const formatValue = (unitType: string, value: number) => {
@@ -297,6 +297,10 @@ export const ScorecardTableView = observer(
             const { relatedParentKpis, parentKpi } = row.original.updateKPI;
             const { greaterThan } = row.original;
 
+            if (parentKpi.length > relatedParentKpis.length) {
+              quarterValue.color = tango;
+              quarterValue.background = dairyCream;
+            }
             return (
               <ScoreContainer background={quarterValue.background}>
                 <Score color={quarterValue.color}>

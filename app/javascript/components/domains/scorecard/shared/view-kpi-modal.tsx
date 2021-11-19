@@ -82,7 +82,7 @@ export const ViewEditKPIModal = observer(
       primary100,
       white,
       grey100,
-      tango
+      tango,
     } = baseTheme.colors;
 
     const formatValue = (value: number, unitType: string) => {
@@ -122,7 +122,7 @@ export const ViewEditKPIModal = observer(
       if (kpi?.parentKpi.length > kpi?.relatedParentKpis.length) {
         return (
           <StatusBadgeContainer>
-            <BrokenCircleIcon/>
+            <BrokenCircleIcon />
             <StatusBadge fontSize={"21px"} color={tango} background={white}>
               Broken
             </StatusBadge>
@@ -205,6 +205,7 @@ export const ViewEditKPIModal = observer(
     const weekToDate = (week: number): string =>
       moment(company.fiscalYearStart)
         .add(week, "w")
+        .year(company.currentFiscalYear)
         .startOf("week" as moment.unitOfTime.StartOf)
         .format("MMM D");
 

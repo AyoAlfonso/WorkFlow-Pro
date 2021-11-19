@@ -1,41 +1,37 @@
-<h4 >
-  <%= @preheader %>
-</h4>
-
-<h4> Hi <%=@name%> 👋 ! <h4>
+<h2> Hi <%=@name%> 👋 ! </h2>
 <div style="font-size: 12pt;
     font-weight: normal">Are you ready to complete your <strong style="color: #005FFE">Weekly Check In</strong>?
 Try to find time to fit this into your schedule before you forget.
 </div>
 
-<div style="display: flex; font-weight: normal; color: #005ffe; font-size: 12pt;margin: 5% auto 0px;padding: 10px; justify-content: center;">
-  Here's a quick reminder of why we do this routine:
-</div>
-
-<h4><%= @message %></h4>
-
-<div style="
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-  margin: 0 auto;
-">
-  <div style="
-    display: block;
-    background-color: #005ffe;
-    border-radius: 4px;
-    color: #FFFFFF;
-    font-weight: 500;
-    font-size: 14pt;
-    text-align: center;
-    cursor: pointer;
-    line-height: 120%;
-
-    padding: 5%;
-    font-weight: bold;
-  ">
-    <a target="_blank" style="text-decoration: none; color: #FFFFFF; cursor: pointer; line-height: 19.2px" href=<%= "#{ENV["HOST_URL"]}#{@cta_url}" %>>
-      <%= @cta_text %>
-    </a>
-  </div>
+<div style="margin-left: auto; margin-right: auto ">
+    <div style="display: flex; font-weight: normal; color: #005ffe; font-size: 12pt;margin: 5% auto 0px;padding: 10px; justify-content: center;">
+      Here's a quick reminder of why we do this routine:
+    </div>
+    <h4 style="font-size: 12pt;padding: 0px 10%">
+      <%= @message %>
+    </h4>
+    <div style="
+      display: flex;
+      justify-content: center;
+      padding: 10px;
+      margin: 0 auto;
+    ">
+        <div style="
+            background-color: #005FFE;
+            border-radius: 4px;
+            color: #FFFFFF;
+            font-weight: 500;
+            font-size: 14pt;
+            padding: 8px 16px;
+            text-align: center;
+            cursor: pointer;
+            line-height: 120%;
+            display: block;
+        ">
+          <a target="_blank" style="text-decoration: none; color: #FFFFFF; cursor: pointer; line-height: 19.2px" href=<%= "#{ENV["HOST_URL"]}#{@cta_url}" %>>
+            <%= @cta_text %>
+          </a>
+        </div>
+   </div>
 </div>
