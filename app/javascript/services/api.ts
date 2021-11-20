@@ -5,6 +5,7 @@ import * as R from "ramda";
 interface IScorecardProps {
   ownerType: string;
   ownerId: number;
+  showAll: boolean
 }
 export class Api {
   client: ApisauceInstance;
@@ -601,7 +602,7 @@ export class Api {
   }
 
   async getScorecard(props: IScorecardProps) {
-    return this.client.get(`scorecard/${props.ownerType}/${props.ownerId}`);
+    return this.client.get(`scorecard/${props.ownerType}/${props.ownerId}?show_all=${props.showAll}`);
   }
 
   async getCheckInTemplates() {
