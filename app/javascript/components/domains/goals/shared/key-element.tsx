@@ -72,7 +72,6 @@ export const KeyElement = observer(
 
     // Equation for calculating progress when target>starting current: (current - starting) / target
     // Equation for calculating progress when target<starting current: (starting - current) / target
-
     const completion = () => {
       const starting = element.completionStartingValue;
       const target = element.completionTargetValue;
@@ -84,7 +83,11 @@ export const KeyElement = observer(
       if (element.greaterThan === 1) {
         return (current / target) * 100;
       } else {
-        return current <= target ? 100 : ((target - current) / target) * 100;
+        return current <= target
+          ? 100
+          : current >= target * 2
+          ? 0
+          : ((target + target - current) / target) * 100;
       }
     };
 
