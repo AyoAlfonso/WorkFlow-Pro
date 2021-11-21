@@ -74,7 +74,6 @@ export const SessionStoreModel = types
           );
         }
       } catch (e) {
-      
         // error messaging handled by API monitor
       }
       self.loading = false;

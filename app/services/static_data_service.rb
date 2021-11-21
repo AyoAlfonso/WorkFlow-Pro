@@ -59,7 +59,7 @@ class StaticDataService < ApplicationService
       "1": {
         heading: "Foundational Four™",
         description: "Tell us more about your {displayFormat}.  If you don't have all the answers, enter as much as possible and continue.  You can also skip if you want to do this later.",
-        stepLabel: "Your {displayFormat}'s Foundational Four™",
+        stepLabel: "Your Foundational Four™",
       },
       "2": {
         heading: "Objectives",
