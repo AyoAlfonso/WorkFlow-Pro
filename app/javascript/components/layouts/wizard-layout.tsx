@@ -230,6 +230,7 @@ const BodyContainer = styled.div`
   width: 75%;
   position: relative;
   display: flex;
+  // height: 100%;
   flex-direction: column;
   // overflow-x: auto;
   @media only screen and (max-width: 768px) {
@@ -252,7 +253,7 @@ const DescriptionTitleContainer = styled.div``;
 
 const DescriptionText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
-  font-size: 12px;
+  font-size: 16px;
   margin-top: 8px;
 `;
 

@@ -73,7 +73,7 @@ export const ScorecardStoreModel = types
   .extend(withEnvironment())
   .views(self => ({}))
   .actions(self => ({
-    getScorecard: flow(function*({ ownerType, ownerId }) {
+    getScorecard: flow(function*({ ownerType, ownerId, showAll = false }) {
       try {
         if (ownerType == 0 && ownerId == 0) {
           return;
@@ -81,6 +81,7 @@ export const ScorecardStoreModel = types
         const response: ApiResponse<any> = yield self.environment.api.getScorecard({
           ownerType,
           ownerId,
+          showAll,
         });
 
         if (response.ok) {

@@ -16,6 +16,7 @@ import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities
 import { useParams } from "react-router-dom";
 import { Loading } from "~/components/shared";
 import { space, SpaceProps, color, ColorProps } from "styled-system";
+import { sortByDate } from "~/utils/sorting";
 interface ITeamKeyActivitiesBody {
   meeting?: boolean;
   includeAvatar?: boolean;
@@ -87,7 +88,7 @@ export const TeamKeyActivitiesBody = observer(
             }}
           />
           <KeyActivitiesListStyleContainer>
-            {keyActivitiesToShow.map(ka => (
+            {keyActivitiesToShow.sort(sortByDate).map(ka => (
               <KeyActivityRecord
                 key={ka.id}
                 keyActivity={ka}

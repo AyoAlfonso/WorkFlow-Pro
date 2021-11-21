@@ -90,17 +90,6 @@ You also have <%= @due_today.length %> Pyn<% if @due_today.length == 1 %> that i
 <% end %>
 
 <p>Don't forget to capture and share your key activities. <strong style="color: #F38374">Add your Pyns!</strong><p>
-
-<% if @habits.length > 0 %>
-  <p>You currently have <strong style="color: #6A56CB"><%= @habits.length %> Habit<% if @habits.length != 1 %>s<% end %></strong> active:</p>
-  <ul>
-  <% @habits.each do |habit| %>
-    <li>
-      <%= habit.name %> (<%= habit.frequency %> day<% if habit.frequency != 1 %>s<% end %> / week)
-    </li>
-  <% end %>
-  </ul>
-<% end %>
 </div>
 
 <div style="

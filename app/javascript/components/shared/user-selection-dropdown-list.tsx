@@ -13,7 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 interface IUserSelectionDropdownListProps {
   userList: Array<UserType>;
   onUserSelect: any;
-  setShowUsersList: any;
+  setShowUsersList?: any;
   setOwner?: any;
 }
 

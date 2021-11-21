@@ -26,6 +26,7 @@ export const TimePicker = ({ ...props }: ITimePickerProps): JSX.Element => {
   let timeValue = props.beginLimit || "6:00 AM";
   let lastValue;
   const endLimit = props.endLimit || "6:00 PM";
+
   const step = props.step || 30;
 
   const options = [];

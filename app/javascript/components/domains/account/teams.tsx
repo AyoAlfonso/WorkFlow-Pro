@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as R from "ramda";
 import { Checkbox, Label } from "@rebass/forms";
 import { observer } from "mobx-react";
@@ -40,6 +40,10 @@ export const Teams = observer(
     const [editTeamModalOpen, setEditTeamModalOpen] = useState<boolean>(false);
     const [selectedEditTeam, setSelectedEditTeam] = useState<any>({});
 
+    useEffect(() => {
+      teamStore.load()
+    }, [])
+
     const { t } = useTranslation();
     const teamsData = R.flatten(
       [].concat(
@@ -80,6 +84,7 @@ export const Teams = observer(
 
           <LeftAlignedColumnListTableContainer>
             {users
+              .slice()
               .sort((a, b) => {
                 if (!a.firstName || !b.firstName) {
                   return 0;
@@ -97,7 +102,7 @@ export const Teams = observer(
                           id={`${user.id}`}
                           defaultChecked={team.isALead(user)}
                           onChange={e => {
-                            userStore.updateUserTeamRole(user.id, team.id, e.target.checked);
+                            userStore.updateUserTeamLeadRole(user.id, team.id, e.target.checked);
                           }}
                         />
                       </Label>

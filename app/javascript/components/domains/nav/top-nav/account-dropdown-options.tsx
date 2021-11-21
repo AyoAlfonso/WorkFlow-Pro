@@ -175,7 +175,6 @@ export const AccountDropdownOptions = observer(
     };
 
     const renderCompanyCreationSelector = (): JSX.Element => {
-     
       if (onboardingCompany) {
         const displayFormat = R.path(["displayFormat"], onboardingCompany);
         return (

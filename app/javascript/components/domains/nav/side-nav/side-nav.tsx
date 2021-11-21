@@ -413,7 +413,7 @@ export const SideNavNoMst = (
         <> </>
       )}
 
-      {/* {company && checkIn ? (
+      {company && checkIn ? (
         <StyledNavLinkChildrenActive
           to={`/weekly-check-in/${userId}/${getWeekOf()}`}
           icon={"Check-in-page"}
@@ -422,7 +422,7 @@ export const SideNavNoMst = (
         </StyledNavLinkChildrenActive>
       ) : (
         <></>
-      )} */}
+      )}
 
       {company && company.accessCompany && showTeam ? (
         renderTeam(R.path(["length"], teams) || 0)

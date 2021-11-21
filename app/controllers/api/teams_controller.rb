@@ -48,7 +48,7 @@ class Api::TeamsController < Api::ApplicationController
   end
 
   def destroy
-    @team.destroy!
+    @team.soft_delete
     #TODO: make this restful
     @teams = policy_scope(Team).all
     render "api/teams/index"
@@ -81,6 +81,7 @@ class Api::TeamsController < Api::ApplicationController
         team_id: @team.id,
         user_id: user[:user_id],
         role: user[:meeting_lead],
+        team_manager: user[:team_manager]
       })
     end
     users_list

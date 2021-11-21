@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
@@ -21,17 +21,27 @@ import {
 } from "./key-elements/key-element-containers";
 import { KeyElementForm } from "./key-element-form";
 import { KeyElementModal } from "./key-element-modal";
-import { RoundButton, Text, TextDiv } from "~/components/shared";
+import { Text, TextDiv } from "~/components/shared";
 import "react-tabs/style/react-tabs.css";
 
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;
   type: string;
   disabled?: boolean;
+  setShowInitiatives?: Dispatch<SetStateAction<boolean>>;
+  setShowMilestones?: Dispatch<SetStateAction<boolean>>;
+  activeInitiatives?: number;
 }
 
 export const ContextTabs = observer(
-  ({ object, type, disabled }: IContextTabsProps): JSX.Element => {
+  ({
+    object,
+    type,
+    disabled,
+    setShowInitiatives,
+    setShowMilestones,
+    activeInitiatives,
+  }: IContextTabsProps): JSX.Element => {
     const {
       sessionStore,
       annualInitiativeStore,
@@ -59,7 +69,9 @@ export const ContextTabs = observer(
     const [focusOnLastInput, setFocusOnLastInput] = useState<boolean>(false);
     const [showKeyElementForm, setShowKeyElementForm] = useState<boolean>(false);
     const editable = currentUser.id == object.ownedById && !disabled;
-
+    const [activeTab, setActiveTab] = useState(
+      type == "quarterlyGoal" ? "milestones" : "aligned initiatives",
+    );
 
     const firstImportanceRef = useRef(null);
     const secondImportanceRef = useRef(null);
@@ -180,40 +192,22 @@ export const ContextTabs = observer(
     };
 
     const renderContextKeyElements = () => {
-      return showKeyElementForm ? (
-        <KeyElementModal
-          modalOpen={showKeyElementForm}
-          setModalOpen={setShowKeyElementForm}
-          action={showActionType}
-          setActionType={setActionType}
-          store={store}
-          type={type}
-          element={selectedElement}
-          setSelectedElement={setSelectedElement}
-        />
-      ) : (
+      return (
         <KeyElementsTabContainer>
           {object.keyElements.length > 0 && (
             <KeyElementContentContainer>{renderKeyElementsIndex()}</KeyElementContentContainer>
           )}
           {editable && (
-            <ButtonContainer
+            <StyledButton
+              small
+              variant={"grey"}
               onClick={() => {
                 setShowKeyElementForm(true);
               }}
             >
-              <RoundButton backgroundColor={"primary100"} size={"32px"}>
-                <Icon
-                  icon={"Plus"}
-                  size={"16px"}
-                  iconColor={baseTheme.colors.white}
-                  style={{ marginLeft: "8px", marginTop: "8px" }}
-                />
-              </RoundButton>
-              <TextDiv color={"primary100"} fontSize={"16px"} ml={"8px"}>
-                Add a Key Result
-              </TextDiv>
-            </ButtonContainer>
+              <CircularIcon icon={"Plus"} size={"12px"} />
+              <AddKeyElementText>Add a Key Result</AddKeyElementText>
+            </StyledButton>
           )}
         </KeyElementsTabContainer>
       );
@@ -249,27 +243,71 @@ export const ContextTabs = observer(
       }
     };
 
+    const initiativeTab = type == "annualInitiative" ? `Quartely Initiatives` : `Milestones`;
+
     return (
       <Container>
-        <Tabs defaultIndex={tabDefaultIndex()}>
-          <StyledTabList>
-            <StyledTab onClick={() => tabClicked(1)}>
-              <StyledTabTitle tabSelected={selectedContextTab == 1}>Importance </StyledTabTitle>
-            </StyledTab>
-            <StyledTab onClick={() => tabClicked(2)}>
-              <StyledTabTitle tabSelected={selectedContextTab == 2}>Description</StyledTabTitle>
-            </StyledTab>
-            <StyledTab onClick={() => tabClicked(3)}>
-              <StyledTabTitle tabSelected={selectedContextTab == 3}>Key Results</StyledTabTitle>
-            </StyledTab>
-          </StyledTabList>
-
-          <TabPanelContainer hideContent={hideContent}>
-            <StyledTabPanel>{renderContextImportance()}</StyledTabPanel>
-            <StyledTabPanel>{renderContextDescription()}</StyledTabPanel>
-            <StyledTabPanel style={{ padding: "0px" }}>{renderContextKeyElements()}</StyledTabPanel>
-          </TabPanelContainer>
-        </Tabs>
+        {showKeyElementForm && (
+          <KeyElementModal
+            modalOpen={showKeyElementForm}
+            setModalOpen={setShowKeyElementForm}
+            action={showActionType}
+            setActionType={setActionType}
+            store={store}
+            type={type}
+            element={selectedElement}
+            setSelectedElement={setSelectedElement}
+          />
+        )}
+        <OverviewTabsContainer>
+          {type == "quarterlyGoal" ? (
+            <>
+              <OverviewTabs
+                active={activeTab === "milestones" ? true : false}
+                onClick={() => {
+                  setActiveTab("milestones");
+                  setShowInitiatives(false);
+                  setShowMilestones(true);
+                }}
+              >
+                Milestones
+              </OverviewTabs>
+            </>
+          ) : (
+            <OverviewTabs
+              active={activeTab === "aligned initiatives" ? true : false}
+              onClick={() => {
+                setActiveTab("aligned initiatives");
+                setShowInitiatives(true);
+              }}
+            >
+              {`${initiativeTab} ${activeInitiatives > 0 ? `(${activeInitiatives})` : ""}`}
+            </OverviewTabs>
+          )}
+          <OverviewTabs
+            active={activeTab === "key results" ? true : false}
+            onClick={() => {
+              setActiveTab("key results");
+              setShowInitiatives(false);
+              setShowMilestones(false);
+            }}
+          >
+            Key Results
+          </OverviewTabs>
+          {type == "quarterlyGoal" && (
+            <OverviewTabs
+              active={activeTab === "aligned initiatives" ? true : false}
+              onClick={() => {
+                setActiveTab("aligned initiatives");
+                setShowInitiatives(true);
+                setShowMilestones(false);
+              }}
+            >
+              {`Supporting Initiatives ${activeInitiatives > 0 ? `(${activeInitiatives})` : ""}`}
+            </OverviewTabs>
+          )}
+        </OverviewTabsContainer>
+        <Container>{activeTab === "key results" && renderContextKeyElements()}</Container>
       </Container>
     );
   },
@@ -353,6 +391,38 @@ const ButtonContainer = styled.div`
   }
 `;
 
+const StyledButton = styled(Button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0;
+  padding-right: 0;
+  background-color: ${props => props.theme.colors.white};
+  border-color: ${props => props.theme.colors.white};
+  &: hover {
+    color: ${props => props.theme.colors.primary100};
+  }
+`;
+
+const CircularIcon = styled(Icon)`
+  box-shadow: 2px 2px 6px 0.5px rgb(0 0 0 / 20%);
+  color: ${props => props.theme.colors.white};
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  background-color: ${props => props.theme.colors.primary100};
+  &: hover {
+    background-color: ${props => props.theme.colors.primaryActive};
+  }
+`;
+
+const AddKeyElementText = styled(TextDiv)`
+  margin-left: 10px;
+  white-space: break-spaces;
+  color: ${props => props.theme.colors.primary100};
+  font-size: 12px;
+`;
+
 const ContextDescriptionContainer = styled.div`
   padding: 16px;
 `;
@@ -362,4 +432,30 @@ const StyledIcon = styled(Icon)`
   &: hover {
     color: ${props => props.theme.colors.greyActive};
   }
+`;
+
+type IOverviewTabs = {
+  active: boolean;
+};
+
+export const OverviewTabs = styled("span")<IOverviewTabs>`
+  margin-bottom: 0;
+  padding: 0 15px;
+  padding-bottom: 5px;
+  color: ${props => (props.active ? props.theme.colors.black : props.theme.colors.greyInactive)};
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 28px;
+  text-decoration: none;
+  border-bottom-width: ${props => (props.active ? `1px` : `0px`)};
+  border-bottom-color: ${props => props.theme.colors.primary100};
+  border-bottom-style: solid;
+  cursor: pointer;
+`;
+
+export const OverviewTabsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  margin-bottom: 24px;
 `;

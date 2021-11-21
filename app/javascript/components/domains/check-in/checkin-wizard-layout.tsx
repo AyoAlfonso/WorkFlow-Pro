@@ -124,7 +124,7 @@ type IButtonProps = {
 
 const NextButton = styled(Button)<IButtonProps>`
   width: 100%;
-  font-size: 12px;
+  font-size: 16px;
 `;
 
 const ButtonsContainer = styled.div`

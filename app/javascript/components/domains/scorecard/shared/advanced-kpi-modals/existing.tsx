@@ -28,6 +28,7 @@ interface IExistingProps {
   setShowFirstStage?: React.Dispatch<React.SetStateAction<boolean | null>>;
   existingSelectedKPIs: any[];
   originalKPI: number;
+  setShowAddManualKPIModal?: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const Existing = observer(
@@ -39,6 +40,7 @@ export const Existing = observer(
     setShowFirstStage,
     existingSelectedKPIs,
     originalKPI,
+    setShowAddManualKPIModal,
   }: IExistingProps): JSX.Element => {
     const [selectedKPIs, setSelectedKPIs] = useState(existingSelectedKPIs || []);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs || []);
@@ -159,6 +161,7 @@ export const Existing = observer(
           selectedKPIs={selectedKPIs}
           kpiModalType={kpiModalType}
           removeTagInput={removeTagInput}
+          setShowAddManualKPIModal={setShowAddManualKPIModal}
         />
         <StyledSecondLayer>
           <StyledLayerOne>

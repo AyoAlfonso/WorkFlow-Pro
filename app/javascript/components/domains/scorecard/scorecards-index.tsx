@@ -13,11 +13,11 @@ import { toJS, autorun } from "mobx";
 interface IScorecardsIndexProps {
   ownerType?: string;
   ownerId?: number;
-  miniEmbed?: boolean;
+  isMiniEmbed?: boolean;
 }
 
 export const ScorecardsIndex = observer(
-  ({ ownerType, ownerId, miniEmbed }: IScorecardsIndexProps): JSX.Element => {
+  ({ ownerType, ownerId, isMiniEmbed }: IScorecardsIndexProps): JSX.Element => {
     let { owner_type, owner_id } = useParams();
     owner_type = ownerType ? ownerType : owner_type;
     owner_id = ownerId ? ownerId : owner_id;
@@ -78,14 +78,14 @@ export const ScorecardsIndex = observer(
           ownerType={owner_type}
           ownerId={owner_id}
           setScorecardOwner={setScorecardOwner}
-          miniEmbed={miniEmbed}
+          isMiniEmbed={isMiniEmbed}
         />
         <ScorecardSummary
           kpis={kpis}
           currentWeek={companyStore.company.currentFiscalWeek}
           currentQuarter={companyStore.company.currentFiscalQuarter}
           fiscalYearStart={companyStore.company.fiscalYearStart}
-          currentFiscalYear={companyStore.company.currentFiscalYear}
+          currentFiscalYear={companyStore.company.yearForCreatingAnnualInitiatives}
         />
         <ScorecardTableView
           tableKPIs={tableKPIs}
@@ -93,7 +93,7 @@ export const ScorecardsIndex = observer(
           setKpis={setKPIs}
           viewEditKPIModalOpen={viewEditKPIModalOpen}
           setViewEditKPIModalOpen={setViewEditKPIModalOpen}
-          miniEmbed={miniEmbed}
+          isMiniEmbed={isMiniEmbed}
         />
       </Container>
     ) : (
@@ -102,7 +102,7 @@ export const ScorecardsIndex = observer(
           ownerType={owner_type}
           ownerId={owner_id}
           setScorecardOwner={setScorecardOwner}
-          miniEmbed={miniEmbed}
+          isMiniEmbed={isMiniEmbed}
         />
         <EmptyContainer>
           <EmptyTitle>Empty Scorecard</EmptyTitle>
@@ -112,7 +112,7 @@ export const ScorecardsIndex = observer(
             }`}{" "}
             has no KPIs yet. Add your first one here.
           </EmptySubtitle>
-          {!miniEmbed && (
+          {!isMiniEmbed && (
             <AddKPIsContainer>
               <AddKPIDropdown kpis={allKPIs} />
             </AddKPIsContainer>

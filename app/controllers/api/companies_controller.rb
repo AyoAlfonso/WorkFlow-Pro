@@ -33,7 +33,6 @@ class Api::CompaniesController < Api::ApplicationController
   end
 
   def show
-    # binding.pry
     render json: @company.as_json(only: ["id", "name", "phone_number", "rallying_cry", "fiscal_year_start", "timezone", "display_format", "forum_type"],
                                   methods: ["accountability_chart_content", "strategic_plan_content", "logo_url", "current_fiscal_week", "current_fiscal_quarter", "quarter_for_creating_quarterly_goals", "current_fiscal_year", "year_for_creating_annual_initiatives", "fiscal_year_range", "current_quarter_start_date", "next_quarter_start_date", "forum_meetings_year_range", "forum_intro_video", "forum_types"],
                                   include: {

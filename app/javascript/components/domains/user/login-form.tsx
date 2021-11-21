@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { baseTheme } from "../../../themes";
 // import styled from "styled-components";
 // import { observer } from "mobx-react";
+import { useHistory } from "react-router-dom";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
 
@@ -29,14 +30,7 @@ export const LoginForm = observer(
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { t } = useTranslation();
-
-    const resetPasswordFlow = () => {
-      if (email.length > 0) {
-        sessionStore.resetPassword(email);
-      } else {
-        showToast("Please enter an email for the reset password", ToastMessageConstants.ERROR);
-      }
-    };
+    const history = useHistory();
 
     if (sessionStore.loading) return <LoadingScreen />;
     return (
@@ -95,7 +89,7 @@ export const LoginForm = observer(
               >
                 {t("profile.loginForm.login")}
               </Button>
-              <TextInlineContainer color={"greyActive"} fontSize={1} onClick={resetPasswordFlow}>
+              <TextInlineContainer color={"greyActive"} fontSize={1} onClick={() => history.push('/forgotpassword')}>
                 {t("profile.loginForm.forgot")}
               </TextInlineContainer>
               <Text color={"greyInactive"}>
