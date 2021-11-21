@@ -46,6 +46,10 @@ type HeaderProps = {
   headerFontSize?: string;
 };
 
+type FormElementContainerProps = {
+  gap?: string
+}
+
 export const Header = styled.p<HeaderProps>`
   margin: 0px;
   font-size: ${props => (props.headerFontSize ? props.headerFontSize : "16px")};
@@ -67,11 +71,12 @@ export const FormContainer = styled.div`
   gap: 16px;
 `;
 
-export const FormElementContainer = styled.div`
+
+export const FormElementContainer = styled.div<FormElementContainerProps>`
   display: flex;
   width: 100%;
   flex-direction: column;
-  gap: 4px;
+  gap: ${props => (props.gap ? `${props.gap}px` : "4px")};
   .trix-kpi-modal {
     font-size: 12px;
     margin: 0px;
@@ -94,19 +99,21 @@ const InputHeaderContainer = styled.div`
 `;
 type InputHeaderProps = {
   fontSize?: string;
+  margin?: string;
 };
 
 const InputHeader = styled.p<InputHeaderProps>`
-  margin: 0px;
+  margin: ${props => (props.margin ? props.margin : "0px")};
   font-size: ${props => (props.fontSize ? props.fontSize : "12px")};
   font-weight: bold;
 `;
 
 type CommentTextProps = {
   fontSize?: string;
+  margin?: string;
 };
 const CommentText = styled.p<CommentTextProps>`
-  margin: 0px;
+  margin: ${props => (props.margin ? props.margin : "0px")};
   margin-top: auto;
   font-size: ${props => (props.fontSize ? props.fontSize : "9px")};
   color: ${props => props.theme.colors.grey100};
@@ -119,6 +126,7 @@ type ModalWithHeaderProps = {
   width?: string;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   headerFontSize?: string;
+  ref?: any;
 };
 
 export const ModalWithHeader = ({
@@ -209,6 +217,7 @@ type InputHeaderWithCommentProps = {
   children?: JSX.Element | JSX.Element[] | string;
   comment?: string;
   fontSize?: string;
+  margin?: string;
   childFontSize?: string;
 };
 
@@ -216,12 +225,19 @@ export const InputHeaderWithComment = ({
   children,
   comment,
   fontSize,
+  margin,
   childFontSize,
 }: InputHeaderWithCommentProps): JSX.Element => {
   return (
     <InputHeaderContainer>
-      <InputHeader fontSize={fontSize}>{children}</InputHeader>
-      {comment && <CommentText fontSize={childFontSize}>{comment}</CommentText>}
+      <InputHeader margin={margin} fontSize={fontSize}>
+        {children}
+      </InputHeader>
+      {comment && (
+        <CommentText margin={margin} fontSize={childFontSize}>
+          {comment}
+        </CommentText>
+      )}
     </InputHeaderContainer>
   );
 };
@@ -246,24 +262,3 @@ export const SaveButton = styled.div`
     background: ${props => props.theme.colors.primary80};
   }
 `;
-
-// export const CancelButton = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   width: 48px;
-//   height: 16px;
-//   font-size: 14px;
-//   font-weight: bold;
-//   color: ${props => props.theme.colors.red};
-//   background: ${props => props.theme.colors.primary100};
-//   border-radius: 4px;
-//   margin-top: 8px;
-//   margin-right: auto;
-//   padding: 8px 12px;
-
-//   &:hover {
-//     cursor: pointer;
-//     background: ${props => props.theme.colors.primary80};
-//   }
-// `;

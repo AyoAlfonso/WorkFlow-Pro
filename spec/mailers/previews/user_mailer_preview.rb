@@ -51,6 +51,20 @@ class UserMailerPreview < ActionMailer::Preview
     ).notification_email
   end
 
+  def checkin_reminder_email
+    user = User.find(3)
+    UserMailer.with(
+      user: user,
+      subject:"Weekly Check-in: Please add an update",
+      greeting: "",
+      name: "#{user&.first_name}",
+      message: "Share what you’ve accomplished with your teammates and see how they performed.",
+      preheader: "Preheader: You have some updates to provide for your Initiatives and KPIs in LynchPyn.",
+      cta_text: "Complete Weekly Check-in",
+      cta_url: "/weekly-check-in/#{user.id}/#{Date.today.strftime("%Y-%m-%d")}" #home
+    ).weekly_checkin_email
+  end
+
   def sync_meeting_email
     user = User.find(3)
     team = user.team_user_enablements.team_lead.last&.team

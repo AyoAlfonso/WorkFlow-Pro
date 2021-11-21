@@ -10,7 +10,7 @@ import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 
 interface NotesProps {
-  meeting: any;
+  meeting?: any;
   height?: string;
   hideSideBorders?: boolean;
 }
@@ -18,16 +18,16 @@ interface NotesProps {
 export const Notes = ({ meeting, height, hideSideBorders }: NotesProps): JSX.Element => {
   const { meetingStore, forumStore } = useMst();
 
-  const meetingType = meeting.meetingType;
+  const meetingType = meeting?.meetingType;
 
   const [editorText, setEditorText] = useState<any>(null);
 
   useEffect(() => {
-    const convertedMeetingNotes = htmlToDraft(meeting.notes ? meeting.notes : "");
+    const convertedMeetingNotes = htmlToDraft(meeting?.notes ? meeting?.notes : "");
     const contentState = ContentState.createFromBlockArray(convertedMeetingNotes.contentBlocks);
     const editorState = EditorState.createWithContent(contentState);
     setEditorText(editorState || EditorState.createEmpty());
-  }, [meeting.notes]);
+  }, [meeting?.notes]);
 
   return (
     <Container height={height}>
@@ -47,7 +47,7 @@ export const Notes = ({ meeting, height, hideSideBorders }: NotesProps): JSX.Ele
           onEditorStateChange={e => setEditorText(e)}
           onBlur={() => {
             const meetingObj = {
-              id: meeting.id,
+              id: meeting?.id,
               notes: draftToHtml(convertToRaw(editorText.getCurrentContent())),
             };
             if (meetingType == MeetingTypes.PERSONAL_WEEKLY) {

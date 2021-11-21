@@ -36,8 +36,7 @@ export const KeyElement = observer(
     setShowKeyElementForm,
     setActionType,
     setSelectedElement,
-  }:
-  IKeyElementProps): JSX.Element => {
+  }: IKeyElementProps): JSX.Element => {
     const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
     const [element, setElement] = useState<any>(null);
     const [showOptions, setShowOptions] = useState<boolean>(false);
@@ -73,7 +72,6 @@ export const KeyElement = observer(
 
     // Equation for calculating progress when target>starting current: (current - starting) / target
     // Equation for calculating progress when target<starting current: (starting - current) / target
-
     const completion = () => {
       const starting = element.completionStartingValue;
       const target = element.completionTargetValue;
@@ -82,10 +80,14 @@ export const KeyElement = observer(
           ? element.completionStartingValue
           : element.completionCurrentValue;
 
-      if (target >= starting) {
-        return Math.min(Math.max(current - starting, 0) / (target - starting), 1) * 100;
+      if (element.greaterThan === 1) {
+        return (current / target) * 100;
       } else {
-        return Math.min(Math.max(starting - current, 0) / (starting - target), 1) * 100;
+        return current <= target
+          ? 100
+          : current >= target * 2
+          ? 0
+          : ((target + target - current) / target) * 100;
       }
     };
 
@@ -312,7 +314,9 @@ const IconWrapper = styled.div`
   -ms-transform: rotate(90deg);
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
-  width: 10%;
+  align-self: flex-start;
+  // width: 10%;
+  margin-left: auto;
   &:hover {
     cursor: pointer;
     color: ${props => props.theme.colors.greyActive};

@@ -11,6 +11,7 @@ import { SubInitiativeCardsExpanded } from "../sub-initiative/sub-initiative-car
 import { observer } from "mobx-react";
 import { baseTheme } from "../../../../themes";
 import { IAnnualInitiativeCardExpandedProps } from "~/types/annual-initiative-cards";
+import { sortByDate } from "~/utils/sorting";
 
 export const AnnualInitiativeCardExpanded = observer(
   (props: IAnnualInitiativeCardExpandedProps): JSX.Element => {
@@ -47,7 +48,7 @@ export const AnnualInitiativeCardExpanded = observer(
     };
 
     const renderQuarterlyGoals = () => {
-      return annualInitiative.quarterlyGoals.map((quarterlyGoal, index) => {
+      return annualInitiative.quarterlyGoals.sort(sortByDate).map((quarterlyGoal, index) => {
         const showRender = showSubInitiativeCards && selectedSubInitiativeCards == index;
 
         return (
@@ -130,8 +131,8 @@ export const AnnualInitiativeCardExpanded = observer(
         }}
       >
         {showEditButton || renderEmptyState()}
-        {renderQuarterlyGoals()}
         {showCreateQuarterlyGoal && renderCreateGoal()}
+        {renderQuarterlyGoals()}
       </Container>
     );
   },
@@ -229,6 +230,6 @@ type CreateGoalContainerProps = {
 };
 const CreateGoalContainer = styled.div<CreateGoalContainerProps>`
   margin-top: 16px;
-  ${props => (props.show ? "" : "margin-left: 16px;")}
+  ${props => (props.show ? "" : "margin-right: 16px;")}
   margin-bottom: 16px;
 `;

@@ -23,6 +23,7 @@ import { titleCase } from "~/utils/camelize";
 import { ScorecardKPIDropdownOptions } from "./scorecard-dropdown-options";
 import "~/stylesheets/modules/trix-editor.css";
 import { debounce } from "lodash";
+import { Button } from "~/components/shared/button";
 
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -81,6 +82,7 @@ export const ViewEditKPIModal = observer(
       primary100,
       white,
       grey100,
+      tango,
     } = baseTheme.colors;
 
     const formatValue = (value: number, unitType: string) => {
@@ -96,11 +98,36 @@ export const ViewEditKPIModal = observer(
           return `${value}`;
       }
     };
+    const deleteKPI = () => {
+      if (confirm(`Are you sure you want to delete this KPI`)) {
+        keyPerformanceIndicatorStore.deleteKPI().then(() => {
+          closeModal();
+        });
+      }
+    };
+
+    const updateKPI = () => {
+      if (confirm(`Are you sure you want to edit this KPI`)) {
+        closeModal();
+        setShowEditExistingKPIContainer(true);
+      }
+    };
 
     const formatKpiType = kpiType => titleCase(kpiType);
     const renderStatus = () => {
       if (!kpi) {
         return;
+      }
+
+      if (kpi?.parentKpi.length > kpi?.relatedParentKpis.length) {
+        return (
+          <StatusBadgeContainer>
+            <BrokenCircleIcon />
+            <StatusBadge fontSize={"21px"} color={tango} background={white}>
+              Broken
+            </StatusBadge>
+          </StatusBadgeContainer>
+        );
       }
       if (value === undefined) {
         return (
@@ -178,6 +205,7 @@ export const ViewEditKPIModal = observer(
     const weekToDate = (week: number): string =>
       moment(company.fiscalYearStart)
         .add(week, "w")
+        .year(company.currentFiscalYear)
         .startOf("week" as moment.unitOfTime.StartOf)
         .format("MMM D");
 
@@ -207,18 +235,11 @@ export const ViewEditKPIModal = observer(
         keyPerformanceIndicatorStore.updateKPI(Object.assign({}, kpi, body), true);
       }, 500)();
     };
-    // useEffect(() => {
-    //   setLoading(true);
-    //   if (kpi) {
-    //     setDescription(kpi.description || descriptionTemplateForKPI);
-    //   }
-    //   setLoading(false);
-    // }, [kpi]);
 
     const drawGraph = KPI => {
       const startWeek = (company.currentFiscalQuarter - 1) * 13 + 1;
       const weekNumbers = R.range(startWeek, company.currentFiscalWeek + 1);
-      const weeks = KPI?.period.get(company.currentFiscalYear)?.toJSON();
+      const weeks = KPI?.period.get(company.yearForCreatingAnnualInitiatives)?.toJSON();
       const currentQuarterData = weekNumbers.map(week => (weeks?.[week] ? weeks[week].score : 0));
       setData({
         labels: R.range(startWeek, startWeek + 13).map(weekToDate),
@@ -237,12 +258,7 @@ export const ViewEditKPIModal = observer(
     };
 
     const closeModal = () => {
-      // setLoading(true);
       setViewEditKPIModalOpen(false);
-      // setKpiIdentifier(null);
-    };
-    const handleEditorChange = description => {
-      setDescription(description);
     };
 
     useEffect(() => {
@@ -250,7 +266,7 @@ export const ViewEditKPIModal = observer(
         return;
       }
       setLoading(true);
-      const weeks = kpi.period.get(company.currentFiscalYear)?.toJSON();
+      const weeks = kpi.period.get(company.yearForCreatingAnnualInitiatives)?.toJSON();
       drawGraph(kpi);
       const targetText = formatValue(kpi.targetValue, kpi.unitType);
       setLogic(
@@ -338,6 +354,45 @@ export const ViewEditKPIModal = observer(
                       </KPITypeContainer>
                     )}
                   </OwnerAndLogicContainer>
+                  {kpi?.parentKpi.length > kpi?.relatedParentKpis.length && (
+                    <MissingParentsErrorContainer shadow={true}>
+                      <MissingKPIIcon icon={"Warning-PO"} size={"24px"} iconColor={greyInactive} />
+                      <MissingParentsTexts>
+                        <MissingParentsErrorTitle>This KPI is Broken</MissingParentsErrorTitle>
+                        <MissingParentsErrorBody>
+                          One or more KPIs related to this Advacned Function KPI are removed. As a
+                          result this KPI cannot be calculated. We recommend that you edit this KPI
+                          to fix this issue.
+                        </MissingParentsErrorBody>
+                      </MissingParentsTexts>
+                      <MissingParentsButtons>
+                        <ButtonContainer>
+                          <KPIButton
+                            small
+                            variant={"primary"}
+                            m={1}
+                            style={{ width: "90%", fontSize: "12px", fontWeight: "bold" }}
+                            onClick={() => {
+                              updateKPI();
+                            }}
+                          >
+                            Edit
+                          </KPIButton>
+                          <KPIButton
+                            small
+                            variant={"redOutline"}
+                            m={1}
+                            style={{ width: "90%", fontSize: "12px", fontWeight: "bold" }}
+                            onClick={() => {
+                              deleteKPI();
+                            }}
+                          >
+                            Delete
+                          </KPIButton>
+                        </ButtonContainer>
+                      </MissingParentsButtons>
+                    </MissingParentsErrorContainer>
+                  )}
                   <ValueAndUpdateContainer>
                     <ValueText>{formatValue(value, kpi.unitType)}</ValueText>
 
@@ -413,6 +468,7 @@ export const ViewEditKPIModal = observer(
                                     .deleteScorecardLog(log.id)
                                     .then(() => {
                                       setCurrentLog();
+                                      setCurrentLog();
                                     });
                                 }}
                               >
@@ -435,7 +491,7 @@ export const ViewEditKPIModal = observer(
             kpiId={kpi.id}
             ownedById={kpi.ownedById}
             unitType={kpi.unitType}
-            year={company.currentFiscalYear}
+            year={company.yearForCreatingAnnualInitiatives}
             week={company.currentFiscalWeek}
             currentValue={value}
             headerText={"Update Current Week"}
@@ -489,7 +545,7 @@ const OwnerAndLogicContainer = styled.div`
   flex-direction: row;
   align-items: center;
   width: 100%;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 `;
 
 const OwnerAndLogicText = styled.div`
@@ -513,6 +569,8 @@ const ValueText = styled.p`
 `;
 
 const StatusBadgeContainer = styled.div`
+  display: flex;
+  align-items: center;
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 16px;
@@ -582,7 +640,9 @@ type ActivityLogTextProps = {
   mb?: number;
   fontSize?: string;
 };
-
+type MissingParentsErrorContainerProps = {
+  shadow: boolean;
+};
 const ActivityLogText = styled.p<ActivityLogTextProps>`
   font-size: ${props => props.fontSize || "12px"};
   margin-top: 0px;
@@ -632,4 +692,62 @@ const KPITypeIcon = styled(Icon)``;
 const KPIParentTypeText = styled.div`
   font-size: 12px;
   padding: 4px;
+`;
+
+const BrokenCircleIcon = styled.div`
+  display: inline-flex;
+  background: ${props => props.theme.colors.tango};
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  font-size: 21px;
+`;
+
+const MissingParentsErrorContainer = styled.div<MissingParentsErrorContainerProps>`
+  display: inline-flex;
+  background: ${props => props.theme.colors.grey10};
+  height: 75px;
+  padding: 20px;
+  margin: 0px 0px 15px;
+  border-radius: 8px;
+  box-shadow: ${props => (props.shadow ? "1px 3px 4px 2px rgba(0, 0, 0, .1)" : "0")};
+`;
+
+const MissingParentsErrorTitle = styled.div`
+  display: block;
+  color: ${props => props.theme.colors.grey100};
+  margin: 0 15px;
+`;
+
+const MissingParentsErrorBody = styled.div`
+  display: block;
+  color: #000;
+  margin: 15px;
+  font-size: 12px;
+`;
+
+const MissingParentsTexts = styled.div`
+  width: 90%;
+  display: inline-block;
+  margin-right: 80px;
+`;
+
+const MissingParentsButtons = styled.div`
+  display: inline-flex;
+`;
+
+const ButtonContainer = styled.div`
+  display: inline-block;
+  flex-direction: row;
+  align-items: baseline;
+`;
+
+const KPIButton = styled(Button)`
+  width: 90%;
+  font-size: 12px;
+  font-weight: bold;
+`;
+
+const MissingKPIIcon = styled(Icon)`
+  align-items: flex-start;
 `;

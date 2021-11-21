@@ -8,7 +8,7 @@ import { observer } from "mobx-react";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Input } from "~/components/shared/input";
 // import { LabelSelectionDropdownList } from "../../../shared/label-selection-dropdown-list";
-import { Source } from "./source";
+// import { Source } from "./source";
 import { Existing } from "./existing";
 import { RollUp } from "./roll-up";
 import { Average } from "./average";
@@ -24,6 +24,7 @@ interface IAdvancedKPIModalProps {
   setModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   existingSelectedKPIs?: any[];
   originalKPI?: number;
+  setShowAddManualKPIModal?: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const AdvancedKPIModal = observer(
@@ -36,6 +37,7 @@ export const AdvancedKPIModal = observer(
     setExternalManualKPIData,
     existingSelectedKPIs,
     originalKPI,
+    setShowAddManualKPIModal,
   }: IAdvancedKPIModalProps): JSX.Element => {
     const formattedKpiModalType = titleCase(kpiModalType);
     const optionsRef = useRef(null);
@@ -44,6 +46,7 @@ export const AdvancedKPIModal = observer(
       const handleClickOutside = event => {
         if (optionsRef.current && !optionsRef.current.contains(event.target)) {
           setModalOpen(false);
+          setShowAddManualKPIModal(false);
         }
       };
       document.addEventListener("mousedown", handleClickOutside);
@@ -71,6 +74,7 @@ export const AdvancedKPIModal = observer(
               setShowFirstStage={setShowFirstStage}
               existingSelectedKPIs={existingSelectedKPIs}
               originalKPI={originalKPI}
+              setShowAddManualKPIModal={setShowAddManualKPIModal}
             ></Existing>
           )}
           {["rollup", "roll up"].includes(kpiModalType) && (
@@ -82,6 +86,7 @@ export const AdvancedKPIModal = observer(
               setShowFirstStage={setShowFirstStage}
               existingSelectedKPIs={existingSelectedKPIs}
               originalKPI={originalKPI}
+              setShowAddManualKPIModal={setShowAddManualKPIModal}
             ></RollUp>
           )}
           {["average", "avr"].includes(kpiModalType) && (
@@ -93,6 +98,7 @@ export const AdvancedKPIModal = observer(
               setShowFirstStage={setShowFirstStage}
               existingSelectedKPIs={existingSelectedKPIs}
               originalKPI={originalKPI}
+              setShowAddManualKPIModal={setShowAddManualKPIModal}
             ></Average>
           )}
         </InnerContainer>

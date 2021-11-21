@@ -102,7 +102,7 @@ type StyledButtonType = {
 
 const StyledButton = styled(Button)<StyledButtonType>`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: ${props => (props.width != "fill" ? props.width : "-webkit-fill-available")};
   padding-left: 0;
@@ -145,10 +145,8 @@ const ActionsContainer = styled.div`
 `;
 
 const AddInitiativeButton = styled(Button)`
-  width: 120px;
   padding-right: 0;
-  width: 100%;
-  padding: 0;
+  padding: 8px 16px;
   &: hover {
     font-weight: bold;
     background-color: ${props => props.theme.colors.primaryActive};

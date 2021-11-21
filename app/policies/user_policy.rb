@@ -41,7 +41,11 @@ class UserPolicy < ApplicationPolicy
     update_avatar?
   end
 
-  def update_team_role?
+  def update_user_team_manager?
+    user_is_company_admin_of_current_company?
+  end
+
+  def update_user_team_lead_role?
     user_is_company_admin_of_current_company?
   end
 

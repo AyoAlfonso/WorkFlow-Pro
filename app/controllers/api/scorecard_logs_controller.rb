@@ -14,6 +14,9 @@ class Api::ScorecardLogsController < Api::ApplicationController
 
   def show
     @key_performance_indicators = policy_scope(KeyPerformanceIndicator).vieweable_by_entity(params[:owner_type], params[:owner_id])
+    if(params[:show_all])
+      @key_performance_indicators = policy_scope(KeyPerformanceIndicator).vieweable_by_entity_and_owner_id(params[:owner_type], params[:owner_id])
+    end
     authorize @key_performance_indicators
     @kpis = @key_performance_indicators.map do |kpi|
       kpi.as_json()

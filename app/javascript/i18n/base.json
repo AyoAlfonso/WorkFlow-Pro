@@ -43,6 +43,12 @@
           "currentlyLoggedIn": "You are logged in.",
           "termsDescription": "By clicking Log In you agree to our "
         },
+        "forgotPasswordForm": {
+          "email": "E-mail",
+          "recoverPassword": "Recover Password",
+          "emailMe": "Email Me A Recovery Link",
+          "emailSent": "An email has been sent. Please click the link when you get it."
+        },
         "profileUpdateForm": {
           "email": "E-mail",
           "firstName": "First Name",
@@ -352,6 +358,16 @@
       },
       "onboarding": {
         "continue": "Resume {{format}} creation"
+      },
+      "weeklyCheckIn": {
+        "milestones": {
+          "emptyText": "No Milestones",
+          "create": "You don't have any active Milestones. Visit the Objectives page to create an Initiative and Milestones"
+        },
+        "kpi": {
+          "emptyText": "No KPIs",
+          "create": "You don't have any active KPIs. Visit the Scorecard page to create a KPI."
+        }
       }
     }
   }

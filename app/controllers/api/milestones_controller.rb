@@ -14,10 +14,9 @@ class Api::MilestonesController < Api::ApplicationController
     render "/api/milestones/milestones_for_meeting"
   end
 
-
   def check_in_goals
-    @quarterly_goal_milestones = policy_scope(Milestone).current_week_for_user(get_beginning_of_last_or_current_work_week_date(params[:due_date].to_datetime), current_user, "QuarterlyGoal")
-    @subinitiative_milestones = policy_scope(Milestone).current_week_for_user(get_beginning_of_last_or_current_work_week_date(params[:due_date].to_datetime), current_user, "SubInitiative")
+    @quarterly_goal_milestones = policy_scope(Milestone).current_week_for_user(params[:due_date].to_datetime, current_user, "QuarterlyGoal")
+    @subinitiative_milestones = policy_scope(Milestone).current_week_for_user(params[:due_date].to_datetime, current_user, "SubInitiative")
     authorize @quarterly_goal_milestones 
     authorize @subinitiative_milestones
     render "/api/milestones/milestones_for_check_in"

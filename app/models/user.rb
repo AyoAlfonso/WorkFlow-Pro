@@ -82,12 +82,6 @@ class User < ApplicationRecord
     avatar.present? ? Rails.application.routes.url_helpers.rails_blob_url(avatar, host: ENV["ASSETS_HOST_URL"] || ENV["HOST_URL"]) : nil
   end
 
-  def as_json(options = [])
-    super({
-      methods: [:avatar_url],
-    })
-  end
-
   def role
     selected_user_company_enablement&.user_role&.name
   end
@@ -190,6 +184,8 @@ class User < ApplicationRecord
         notification.save
       end
     end
+
+    self.id
   end
 
   def team_meetings

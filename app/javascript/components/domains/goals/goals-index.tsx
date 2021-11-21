@@ -18,6 +18,7 @@ import { AnnualInitiativeType } from "~/types/annual-initiative";
 import { GoalsCoreFour } from "./goals-core-four";
 import { LynchPynBadge } from "../meetings-forum/components/lynchpyn-badge";
 import { SubInitiativeModalContent } from "./sub-initiative/sub-initiaitive-modal-content";
+import { sortByDate } from "~/utils/sorting";
 
 export const GoalsIndex = observer(
   (): JSX.Element => {
@@ -101,11 +102,11 @@ export const GoalsIndex = observer(
     const companyGoalsToShow = () => {
       switch (companyGoalsFilter) {
         case "open":
-          return companyGoals.activeAnnualInitiatives as Array<AnnualInitiativeType>;
+          return companyGoals.activeAnnualInitiatives.sort(sortByDate) as Array<AnnualInitiativeType>;
         case "me":
-          return companyGoals.myAnnualInitiatives;
+          return companyGoals.myAnnualInitiatives.sort(sortByDate);
         case "closed":
-          return companyGoals.closedAnnualInitiatives;
+          return companyGoals.closedAnnualInitiatives.sort(sortByDate);
         default:
           return companyGoals;
       }
@@ -201,12 +202,12 @@ export const GoalsIndex = observer(
               <RallyingCry rallyingCry={companyGoals.rallyingCry} />
 
               <InitiativesContainer>
-                {renderAnnualInitiatives(companyGoalsToShow(), "company")}
                 {companyPlanning && (
                   <CreateAnnualInitiativeContainer>
                     {renderCreateCompanyAnnualInitiativeSection("company")}
                   </CreateAnnualInitiativeContainer>
                 )}
+                {renderAnnualInitiatives(companyGoalsToShow(), "company")}
               </InitiativesContainer>
             </>
           )}
@@ -228,12 +229,12 @@ export const GoalsIndex = observer(
             <>
               <PersonalVision personalVision={personalGoals.personalVision} />
               <InitiativesContainer>
-                {renderAnnualInitiatives(personalGoalsToShow(), "personal")}
                 {personalPlanning && (
                   <CreateAnnualInitiativeContainer>
                     {renderCreateCompanyAnnualInitiativeSection("personal")}
                   </CreateAnnualInitiativeContainer>
                 )}
+                {renderAnnualInitiatives(personalGoalsToShow(), "personal")}
               </InitiativesContainer>
             </>
           )}
@@ -241,7 +242,7 @@ export const GoalsIndex = observer(
 
         <StyledModal
           isOpen={annualInitiativeModalOpen}
-          style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
+          style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
           onBackgroundClick={e => {
             setAnnualInitiativeModalOpen(false);
           }}
@@ -257,7 +258,7 @@ export const GoalsIndex = observer(
 
         <StyledModal
           isOpen={quarterlyGoalModalOpen}
-          style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
+          style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
           onBackgroundClick={e => {
             setQuarterlyGoalModalOpen(false);
           }}
@@ -277,7 +278,7 @@ export const GoalsIndex = observer(
 
         <StyledModal
           isOpen={subInitiativeModalOpen}
-          style={{ width: "60rem", maxHeight: "90%", overflow: "auto" }}
+          style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
           onBackgroundClick={e => {
             setSubInitiativeModalOpen(false);
           }}

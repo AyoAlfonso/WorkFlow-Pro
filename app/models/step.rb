@@ -35,6 +35,8 @@ class Step < ApplicationRecord
     "CompleteDailyPlanning",
     "ParkingLot",
     "Exploration",
-    "Scorecard"
+    "Scorecard",
+    "KPI",
+    "WeeklyMilestones"
   ]
 end

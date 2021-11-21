@@ -38,7 +38,7 @@ export const TeamDashboard = ({ team }: ITeamDashboardProps): JSX.Element => {
       }
       return (
         <EmbedContainer>
-          <ScorecardsIndex miniEmbed={true} ownerType={ownerType} ownerId={ownerId} />
+          <ScorecardsIndex isMiniEmbed={true} ownerType={ownerType} ownerId={ownerId} />
         </EmbedContainer>
       );
     }

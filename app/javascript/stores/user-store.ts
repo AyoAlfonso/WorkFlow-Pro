@@ -93,20 +93,35 @@ export const UserStoreModel = types
       } catch {}
       return false;
     }),
-    updateUserTeamRole: flow(function*(userId, teamId, canEdit){
-      const response: any = yield self.environment.api.updateUserTeamRole(userId, teamId, canEdit);
-        if (response.ok) {
-          const userIndex = self.users.findIndex(user => user.id == userId)
-          self.users[userIndex] = response.data
-          showToast("User updated", ToastMessageConstants.SUCCESS);
-          return true;
-        }
+    updateUserTeamLeadRole: flow(function*(userId, teamId, role) {
+      const response: any = yield self.environment.api.updateUserTeamLeadRole(userId, teamId, role);
+      if (response.ok) {
+        const userIndex = self.users.findIndex(user => user.id == userId);
+        self.users[userIndex] = response.data;
+        showToast("User updated", ToastMessageConstants.SUCCESS);
+        return true;
+      }
     }),
-    updateUserCompany: flow(function*(companyId){
+    updateUserTeamManagerStatus: flow(function*(userId, teamId, status) {
+      const response: any = yield self.environment.api.updateUserTeamManager(
+        userId,
+        teamId,
+        status,
+      );
+      if (response.ok) {
+        const userIndex = self.users.findIndex(user => user.id == userId);
+        self.users[userIndex] = response.data;
+        showToast("User updated", ToastMessageConstants.SUCCESS);
+        return true;
+      }
+    }),
+
+    // create your own function
+    updateUserCompany: flow(function*(companyId) {
       self.environment.api.switchCompanies(companyId).then(() => {
-        return true
-      })
-    })
+        return true;
+      });
+    }),
   }));
 
 type UserStoreType = typeof UserStoreModel.Type;

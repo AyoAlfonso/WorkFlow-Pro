@@ -14,6 +14,7 @@ import {
 import { useParams } from "react-router-dom";
 import * as moment from "moment";
 import { toJS } from "mobx";
+import { useTranslation } from "react-i18next";
 import { EmptyState } from "./empty-state";
 
 export const KpiComponent = observer(
@@ -22,6 +23,7 @@ export const KpiComponent = observer(
     const { createScorecardLog } = keyPerformanceIndicatorStore;
     const { kpis } = scorecardStore;
     const { company } = companyStore;
+    const { t } = useTranslation();
 
     const {
       profile: { id },
@@ -35,7 +37,7 @@ export const KpiComponent = observer(
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      scorecardStore.getScorecard({ ownerType: "user", ownerId: id }).then(() => setLoading(false));
+      scorecardStore.getScorecard({ ownerType: "user", ownerId: id, showAll: true }).then(() => setLoading(false));
       companyStore.load();
     }, [id]);
 
@@ -77,8 +79,8 @@ export const KpiComponent = observer(
         <>
           {!kpis.length ? (
             <EmptyState
-              heading={"No KPIs"}
-              infoText={`You don't have any active KPIs. Visit the Scorecard page to create a KPI.`}
+              heading={t("weeklyCheckIn.kpi.emptyText")}
+              infoText={t("weeklyCheckIn.kpi.create")}
             />
           ) : (
             <>

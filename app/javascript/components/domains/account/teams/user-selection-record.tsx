@@ -4,6 +4,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { Select } from "~/components/shared";
+import { UserSelectionDropdownList } from "./user-selection-dropdown";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import { Icon } from "~/components/shared/icon";
@@ -27,17 +28,8 @@ export const UserSelectionRecord = observer(
       memberListState[index] ? memberListState[index]["meetingLead"] : "",
     );
 
-    const renderUserSelections = (): Array<JSX.Element> => {
-      return users
-        .filter(user => user.status == "active")
-        .map((user, index) => {
-          return (
-            <MenuItem value={user.id} key={index}>
-              {`${user.firstName} ${user.lastName}`}
-            </MenuItem>
-          );
-        });
-    };
+    const userList = users.filter(user => user.status == "active");
+    let currentUser = userList.find(user => user.id === selectedUserId);
 
     const updateMemberListState = (field, value) => {
       const updatedMemberListState = memberListState;
@@ -51,23 +43,19 @@ export const UserSelectionRecord = observer(
     return (
       <Container>
         <SelectMemberContainer>
-          <Select
-            id="simple-select-outlined-for-users"
-            value={selectedUserId}
-            margin="dense"
-            width={"100%"}
-            native={false}
-            onChange={e => {
+          <UserSelectionDropdownList
+            userList={userList}
+            currentUser={currentUser}
+            setSelectedUserId={setSelectedUserId}
+            updateMemberListState={updateMemberListState}
+            onUserSelect={() => {
               if (!selectedUserId) {
                 setMeetingLead(1);
                 updateMemberListState("meetingLead", 1);
+                updateMemberListState("teamManager", false);
               }
-              setSelectedUserId(e.target.value);
-              updateMemberListState("userId", e.target.value);
             }}
-          >
-            {renderUserSelections()}
-          </Select>
+          />
         </SelectMemberContainer>
         <SelectMeetingLeadContainer>
           <Select
@@ -89,6 +77,7 @@ export const UserSelectionRecord = observer(
           onClick={() => {
             const removedList = R.omit([index], memberListState);
             setMemberListState(removedList);
+            currentUser = null;
             setSelectedUserId("");
             setMeetingLead("");
           }}
@@ -104,6 +93,7 @@ const Container = styled.div`
   display: flex;
   width: 100%;
   margin-bottom: 8px;
+  align-items: center;
 `;
 
 const StyledSelect = styled(Select)`
@@ -123,12 +113,14 @@ const SelectMemberContainer = styled.div`
 const SelectMeetingLeadContainer = styled.div`
   width: 20%;
   padding-right: 16px;
+  margin-top: 3px;
 `;
 
 const CloseIconContainer = styled.div`
   width: 10%;
   margin: auto;
   text-align: center;
+  margin: 3px 0 0 0;
   &: hover {
     cursor: pointer;
   }

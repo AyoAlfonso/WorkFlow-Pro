@@ -5,6 +5,7 @@ import * as R from "ramda";
 interface IScorecardProps {
   ownerType: string;
   ownerId: number;
+  showAll: boolean
 }
 export class Api {
   client: ApisauceInstance;
@@ -70,8 +71,12 @@ export class Api {
     return this.client.patch(`/users/${formData.id}`, formData);
   }
 
-  async updateUserTeamRole(userId, teamId, canEdit) {
-    return this.client.patch(`/update_user_team_role`, { userId, teamId, canEdit });
+  async updateUserTeamLeadRole(userId, teamId, role) {
+    return this.client.patch(`/update_user_team_lead_role`, { userId, teamId, role });
+  }
+
+  async updateUserTeamManager(userId, teamId, status) {
+    return this.client.patch(`/update_user_team_manager`, { userId, teamId, status });
   }
 
   async updateUserCompanyFirstTimeAccess(params) {
@@ -597,7 +602,7 @@ export class Api {
   }
 
   async getScorecard(props: IScorecardProps) {
-    return this.client.get(`scorecard/${props.ownerType}/${props.ownerId}`);
+    return this.client.get(`scorecard/${props.ownerType}/${props.ownerId}?show_all=${props.showAll}`);
   }
 
   async getCheckInTemplates() {

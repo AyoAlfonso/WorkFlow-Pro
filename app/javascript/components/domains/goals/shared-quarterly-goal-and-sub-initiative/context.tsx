@@ -1,17 +1,32 @@
-import * as React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import { ContextTabs } from "../shared/context-tabs";
 
 interface IContextProps {
   itemType: string;
   item: any;
+  setShowInitiatives?: Dispatch<SetStateAction<boolean>>;
+  setShowMilestones?: Dispatch<SetStateAction<boolean>>;
+  activeInitiatives?: number;
 }
 
-export const Context = ({ itemType, item }: IContextProps): JSX.Element => {
+export const Context = ({
+  itemType,
+  item,
+  setShowInitiatives,
+  setShowMilestones,
+  activeInitiatives,
+}: IContextProps): JSX.Element => {
   return (
     <Container>
       <ContextSectionContainer>
-        <ContextTabs object={item} type={itemType} />
+        <ContextTabs
+          activeInitiatives={activeInitiatives}
+          setShowInitiatives={setShowInitiatives}
+          setShowMilestones={setShowMilestones}
+          object={item}
+          type={itemType}
+        />
       </ContextSectionContainer>
     </Container>
   );

@@ -28,6 +28,9 @@ export const TeamModel = types
     get allTeamUserIds() {
       return self.teamUserEnablements.map(ue => ue.userId);
     },
+    get teamManager() {
+      return self.teamUserEnablements.filter(ue => ue.teamManager === true);
+    },
     get formattedAverageWeeklyUserEmotions() {
       if (!R.isNil(self.averageWeeklyUserEmotions)) {
         return self.averageWeeklyUserEmotions["emotionScores"].map((averages, index) => {

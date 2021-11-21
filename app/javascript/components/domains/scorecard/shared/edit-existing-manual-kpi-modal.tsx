@@ -171,6 +171,7 @@ export const AddExistingManualKPIModal = observer(
         setExternalManualKPIData={setManualKPIDataInput}
         existingSelectedKPIs={kpi.relatedParentKpis}
         originalKPI={kpi.id}
+        setShowAddManualKPIModal={setShowAddManualKPIModal}
       />
     ) : (
       !showFirstStage && (

@@ -63,9 +63,10 @@ export const TeamStoreModel = types
       );
       if (response.ok) {
         self.teams = response.data as any;
-        showToast("Invites sent", ToastMessageConstants.SUCCESS);
+        // showToast("Invites sent", ToastMessageConstants.SUCCESS);
         yield teamStore.fetchTeams();
       }
+      return response.data;
     }),
     deleteTeam: flow(function*(teamId) {
       const response: ApiResponse<any> = yield self.environment.api.deleteTeam(teamId);
