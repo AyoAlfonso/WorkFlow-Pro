@@ -12,6 +12,7 @@ class KeyPerformanceIndicator < ApplicationRecord
   # default_scope { where(published: true) }
 
   scope :sort_by_company, ->(company) { where(company_id: company.id) }
+  scope :exclude_advanced_kpis, ->() { where(parent_type: nil) }
 
 
   validates :title, :created_by, :viewers, :unit_type, :target_value, presence: true
