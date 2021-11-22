@@ -15,7 +15,6 @@ import { Icon } from "~/components/shared/icon";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
 import {
   KeyElementContentContainer,
-  KeyElementsTabContainer,
   KeyElementsFormHeader,
   KeyElementFormBackButtonContainer,
 } from "./key-elements/key-element-containers";
@@ -393,6 +392,7 @@ const ButtonContainer = styled.div`
 
 const StyledButton = styled(Button)`
   display: flex;
+  visibility: hidden;
   justify-content: center;
   align-items: center;
   padding-left: 0;
@@ -402,6 +402,14 @@ const StyledButton = styled(Button)`
   &: hover {
     color: ${props => props.theme.colors.primary100};
   }
+`;
+
+const KeyElementsTabContainer = styled.div`
+  height: 100%;
+  width: 100%;
+  &: hover ${StyledButton} {
+    visibility: visible;
+  };
 `;
 
 const CircularIcon = styled(Icon)`

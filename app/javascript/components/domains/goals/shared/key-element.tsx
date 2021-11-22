@@ -8,9 +8,17 @@ import { Checkbox, Label } from "@rebass/forms";
 import ContentEditable from "react-contenteditable";
 import { baseTheme } from "~/themes";
 import { StripedProgressBar } from "~/components/shared/progress-bars";
-import { Icon, Loading } from "~/components/shared";
+import {
+  Avatar,
+  ChevronDownIcon,
+  Icon,
+  Loading,
+  UserSelectionDropdownList,
+} from "~/components/shared";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
+import { OwnedBySection } from "~/components/domains/goals/shared/owned-by-section";
+import { FormElementContainer, InputFromUnitType } from "../../scorecard/shared/modal-elements";
 
 interface IKeyElementProps {
   elementId: number;
@@ -40,11 +48,21 @@ export const KeyElement = observer(
     const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
     const [element, setElement] = useState<any>(null);
     const [showOptions, setShowOptions] = useState<boolean>(false);
+    const [showList, setShowList] = useState<boolean>(false);
+    const [showUsersList, setShowUsersList] = useState<boolean>(false);
+    const [selectedUser, setSelectedUser] = useState<any>(null);
 
-    const { annualInitiativeStore, quarterlyGoalStore, subInitiativeStore } = useMst();
+    const {
+      annualInitiativeStore,
+      quarterlyGoalStore,
+      subInitiativeStore,
+      sessionStore,
+      userStore,
+    } = useMst();
     const optionsRef = useRef(null);
     const keyElementTitleRef = useRef(null);
     const keyElementCompletionTargetRef = useRef(null);
+    const dropdownRef = useRef<HTMLInputElement>(null);
 
     const getElement = () => {
       let item;
@@ -66,10 +84,66 @@ export const KeyElement = observer(
       getElement();
     }, [focusOnLastInput, optionsRef]);
 
+    useEffect(() => {
+      setSelectedUser(sessionStore.profile);
+    }, []);
+
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showList) return;
+
+        const node = dropdownRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowList(false);
+      };
+
+      if (showList) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showList]);
+
     if (!element) {
       return <Loading />;
     }
 
+    const companyUsers = userStore.users;
+
+    const renderUserSelectionList = (): JSX.Element => {
+      return showUsersList ? (
+        <div onClick={e => e.stopPropagation()}>
+          <UserSelectionDropdownList
+            userList={companyUsers}
+            onUserSelect={setSelectedUser}
+            setShowUsersList={setShowUsersList}
+          />
+        </div>
+      ) : (
+        <></>
+      );
+    };
+
+    const {
+      warningRed,
+      tango,
+      finePine,
+      grey30,
+      grey10,
+      almostPink,
+      lightYellow,
+      lightFinePine,
+      primary100,
+      primary20,
+    } = baseTheme.colors;
+    console.log(element, sessionStore.profile);
     // Equation for calculating progress when target>starting current: (current - starting) / target
     // Equation for calculating progress when target<starting current: (starting - current) / target
     const completion = () => {
@@ -102,6 +176,41 @@ export const KeyElement = observer(
       }
     };
 
+    const determineStatusLabel = status => {
+      switch (status) {
+        case "incomplete":
+          return (
+            <StatusBadge color={warningRed} backgroundColor={almostPink}>
+              Behind
+            </StatusBadge>
+          );
+        case "in_progress":
+          return (
+            <StatusBadge color={tango} backgroundColor={lightYellow}>
+              Needs Attention
+            </StatusBadge>
+          );
+        case "completed":
+          return (
+            <StatusBadge color={finePine} backgroundColor={lightFinePine}>
+              On Track
+            </StatusBadge>
+          );
+        case "done":
+          return (
+            <StatusBadge color={primary100} backgroundColor={primary20}>
+              Completed
+            </StatusBadge>
+          );
+        default:
+          return (
+            <StatusBadge color={grey30} backgroundColor={grey10}>
+              None
+            </StatusBadge>
+          );
+      }
+    };
+
     const sanitize = html => {
       const result = R.pipe(
         R.replace(/<div>/g, ""),
@@ -113,33 +222,28 @@ export const KeyElement = observer(
 
     const renderElementCompletionTargetValue = () => {
       if (element.completionType == "currency") {
-        return `/ ${completionSymbol()}${element.completionTargetValue}`;
+        return `${completionSymbol()}${element.completionTargetValue}`;
       } else {
-        return `/ ${element.completionTargetValue}${completionSymbol()}`;
+        return `${element.completionTargetValue}${completionSymbol()}`;
       }
     };
 
+    const statusArray = ["unstarted", "incomplete", "in_progress", "completed", "done"];
+
     return (
-      <KeyElementContainer>
-        {element.completionType === "binary" && (
-          <CheckboxContainer>
-            <Label>
-              <Checkbox
-                id={element.id}
-                name={element.id}
-                checked={checkboxValue}
-                onChange={e => {
-                  setCheckboxValue(e.target.checked);
-                  store.updateKeyElementStatus(element.id, e.target.checked);
-                }}
-                sx={{
-                  color: baseTheme.colors.primary100,
-                }}
-              />
-            </Label>
-          </CheckboxContainer>
-        )}
-        <ContentContainer>
+      <Container>
+        <TopContainer>
+          <AvatarContainer onClick={() => setShowUsersList(!showUsersList)}>
+            <Avatar
+              defaultAvatarColor={sessionStore.profile.defaultAvatarColor}
+              avatarUrl={sessionStore.profile.avatarUrl}
+              firstName={sessionStore.profile.firstName}
+              lastName={sessionStore.profile.lastName}
+              size={24}
+              marginLeft={"auto"}
+            />
+            {renderUserSelectionList()}
+          </AvatarContainer>
           <KeyElementStyledContentEditable
             innerRef={keyElementTitleRef}
             html={sanitize(element.value)}
@@ -158,64 +262,155 @@ export const KeyElement = observer(
             completed={checkboxValue.toString()} //CHRIS' NOTE: YOU CANT PASS A BOOLEAN VALUE INTO STYLED COMPONENTS.
             placeholder={"Title..."}
           />
-          {element.completionType !== "binary" && (
+        </TopContainer>
+        <KeyElementContainer>
+          {element.completionType === "binary" && (
+            // <CheckboxContainer>
+            //   <Label>
+            //     <Checkbox
+            //       id={element.id}
+            //       name={element.id}
+            //       checked={checkboxValue}
+            //       onChange={e => {
+            //         setCheckboxValue(e.target.checked);
+            //         store.updateKeyElementStatus(element.id, e.target.checked);
+            //       }}
+            //       sx={{
+            //         color: baseTheme.colors.primary100,
+            //       }}
+            //     />
+            //   </Label>
+            // </CheckboxContainer>
             <CompletionContainer>
-              <ProgressContainer>
-                <StyledContentEditable
-                  innerRef={keyElementCompletionTargetRef}
-                  html={sanitize(`${element.completionCurrentValue}`)}
-                  disabled={!editable}
-                  onChange={e => {
-                    if (!e.target.value.includes("<div>")) {
-                      store.updateKeyElementValue(
-                        "completionCurrentValue",
-                        element.id,
-                        e.target.value == "" ? "" : parseInt(e.target.value),
-                      );
-                    }
-                  }}
-                  onKeyDown={key => {
-                    if (key.keyCode == 13) {
-                      keyElementCompletionTargetRef.current.blur();
-                    }
-                  }}
-                  onBlur={() => store.update()}
-                  placeholder={element.completionType == "numerical" ? "..." : completionSymbol()}
-                />
-                <CompletionTextContainer>
-                  {renderElementCompletionTargetValue()}
-                </CompletionTextContainer>
-              </ProgressContainer>
-              <ProgressBarContainer>
-                <StripedProgressBar variant={"primary"} completed={completion()} />
-              </ProgressBarContainer>
+              <DropdownHeader
+                onClick={() => {
+                  setShowList(!showList);
+                }}
+                ref={dropdownRef}
+              >
+                {determineStatusLabel(element.status)}
+                <ChevronDownIcon />
+              </DropdownHeader>
+              {showList && (
+                <DropdownListContainer>
+                  <DropdownList>
+                    {statusArray.map((status, index) => (
+                      <ListItem
+                        onClick={() => {
+                          // updateStatus(status);
+                          setShowList(!showList);
+                        }}
+                        key={index}
+                        value={status}
+                      >
+                        {determineStatusLabel(status)}
+                      </ListItem>
+                    ))}
+                  </DropdownList>
+                </DropdownListContainer>
+              )}
             </CompletionContainer>
           )}
-        </ContentContainer>
-        {/* <OptionsButtonContainer> */}
-        {/* <StyledIcon icon={"Delete"} size={"12px"} /> */}
+          <ContentContainer>
+            {/* <KeyElementStyledContentEditable
+              innerRef={keyElementTitleRef}
+              html={sanitize(element.value)}
+              disabled={!editable}
+              onChange={e => {
+                if (!e.target.value.includes("<div>")) {
+                  store.updateKeyElementValue("value", element.id, e.target.value);
+                }
+              }}
+              onKeyDown={key => {
+                if (key.keyCode == 13) {
+                  keyElementTitleRef.current.blur();
+                }
+              }}
+              onBlur={() => store.update()}
+              completed={checkboxValue.toString()} //CHRIS' NOTE: YOU CANT PASS A BOOLEAN VALUE INTO STYLED COMPONENTS.
+              placeholder={"Title..."}
+            /> */}
+            {element.completionType !== "binary" && (
+              <CompletionContainer>
+                <DropdownHeader
+                  onClick={() => {
+                    setShowList(!showList);
+                  }}
+                  ref={dropdownRef}
+                >
+                  {determineStatusLabel(element.status)}
+                  <ChevronDownIcon />
+                </DropdownHeader>
+                {showList && (
+                  <DropdownListContainer>
+                    <DropdownList>
+                      {statusArray.map((status, index) => (
+                        <ListItem
+                          onClick={() => {
+                            // updateStatus(status);
+                            setShowList(!showList);
+                          }}
+                          key={index}
+                          value={status}
+                        >
+                          {determineStatusLabel(status)}
+                        </ListItem>
+                      ))}
+                    </DropdownList>
+                  </DropdownListContainer>
+                )}
+                <ValueInputContainer>
+                  <InputContainer>
+                    <InputFromUnitType
+                      unitType={''}
+                      placeholder="Add value..."
+                      onChange={e =>
+                        store.updateKeyElementValue(
+                          "completionCurrentValue",
+                          element.id,
+                          e.target.value == "" ? "" : parseInt(e.target.value),
+                        )
+                      }
+                      defaultValue={element.completionCurrentValue}
+                      onBlur={() => store.update()}
+                    />
+                    <SymbolContainer>{completionSymbol()}</SymbolContainer>
+                  </InputContainer>
+                </ValueInputContainer>
+                <ValueSpanContainer>
+                  <ValueSpan>{`${renderElementCompletionTargetValue()}`}</ValueSpan>
+                </ValueSpanContainer>
+                <ProgressBarContainer>
+                  <StripedProgressBar variant={element.status} completed={completion()} />
+                </ProgressBarContainer>
+              </CompletionContainer>
+            )}
+          </ContentContainer>
+          {/* <OptionsButtonContainer> */}
+          {/* <StyledIcon icon={"Delete"} size={"12px"} /> */}
 
-        <IconWrapper
-          onClick={e => {
-            e.stopPropagation();
-            setShowOptions(!showOptions);
-          }}
-        >
-          <Icon icon={"Options"} size={"16px"} iconColor={"grey60"} />
-        </IconWrapper>
-        {showOptions && (
-          <KeyElementsDropdownOptions
-            element={element}
-            setShowDropdownOptions={setShowOptions}
-            showOptions={showOptions}
-            setShowKeyElementForm={setShowKeyElementForm}
-            setActionType={setActionType}
-            setSelectedElement={setSelectedElement}
-            store={store}
-          />
-        )}
-        {/* </OptionsButtonContainer> */}
-      </KeyElementContainer>
+          <IconWrapper
+            onClick={e => {
+              e.stopPropagation();
+              setShowOptions(!showOptions);
+            }}
+          >
+            <Icon icon={"Options"} size={"16px"} iconColor={"grey60"} />
+          </IconWrapper>
+          {showOptions && (
+            <KeyElementsDropdownOptions
+              element={element}
+              setShowDropdownOptions={setShowOptions}
+              showOptions={showOptions}
+              setShowKeyElementForm={setShowKeyElementForm}
+              setActionType={setActionType}
+              setSelectedElement={setSelectedElement}
+              store={store}
+            />
+          )}
+          {/* </OptionsButtonContainer> */}
+        </KeyElementContainer>
+      </Container>
     );
   },
 );
@@ -223,7 +418,36 @@ export const KeyElement = observer(
 const KeyElementContainer = styled.div`
   display: flex;
   position: relative;
-  margin-bottom: 24px;
+  margin-bottom: 30px;
+  align-items: center;
+`;
+
+// TODO: Move to shared styling folder
+
+const IconWrapper = styled.div`
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  // width: 10%;
+  margin-left: auto;
+  display: none;
+  &:hover {
+    cursor: pointer;
+    color: ${props => props.theme.colors.greyActive};
+  }
+`;
+
+const Container = styled.div`
+  &: hover ${IconWrapper} {
+    display: block;
+  };
+`;
+
+const TopContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const ContentContainer = styled.div`
@@ -268,6 +492,11 @@ const KeyElementStyledContentEditable = styled(StyledContentEditable)<
   KeyElementStyledContentEditableType
 >`
   width: 100%;
+  padding-left: 0px;
+  border: none;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: none;
   text-decoration: ${props => (props.completed == "true" ? "line-through" : "")};
 `;
 
@@ -275,8 +504,9 @@ const CompletionContainer = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  // justify-content: flex-start;
   margin-top: 8px;
+  position: relative;
 `;
 
 const CompletionTextContainer = styled.div`
@@ -288,15 +518,8 @@ const CompletionTextContainer = styled.div`
   margin-right: 16px;
 `;
 
-const ProgressContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 25%;
-`;
-
 const ProgressBarContainer = styled.div`
-  width: 75%;
+  width: 20em;
 `;
 
 const StyledIcon = styled(Icon)`
@@ -306,19 +529,98 @@ const StyledIcon = styled(Icon)`
   }
 `;
 
-// TODO: Move to shared styling folder
+const DropdownHeader = styled("div")`
+  border: 1px solid ${props => props.theme.colors.greyInactive};
+  width: 145px;
+  padding: 8px 0px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  position: relative;
+  margin-right: 20px;
+`;
 
-const IconWrapper = styled.div`
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  transform: rotate(90deg);
-  align-self: flex-start;
-  // width: 10%;
-  margin-left: auto;
+type StatusBadgeProps = {
+  backgroundColor: string;
+  color: string;
+};
+
+const StatusBadge = styled("span")<StatusBadgeProps>`
+  display: inline-block;
+  font-size: 12px;
+  border-radius: 3px;
+  padding: 2px;
+  margin: 0 16px;
+  font-weight: bold;
+  background-color: ${props => props.backgroundColor};
+  color: ${props => props.color};
+`;
+
+const DropdownListContainer = styled("div")`
+  position: absolute;
+  margin-top: 30px;
+`;
+
+const DropdownList = styled("ul")`
+  background-color: ${props => props.theme.colors.white};
+  border-radius: 10px;
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  padding: 8px 0px;
+  position: absolute;
+  margin-top: 3px;
+  width: 145px;
+`;
+
+type ListItemProps = {
+  key: number;
+  value: string;
+  onClick: () => void;
+};
+
+const ListItem = styled("li")<ListItemProps>`
+  list-style: none;
+  padding: 5px 0px;
+  cursor: pointer;
   &:hover {
-    cursor: pointer;
-    color: ${props => props.theme.colors.greyActive};
+    background-color: #f6f6f6;
   }
+`;
+
+const ValueInputContainer = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  max-width: 145px;
+`;
+
+const ValueSpan = styled.span`
+  font-weight: bold;
+  display: inline-block;
+`;
+
+const ValueSpanContainer = styled.div`
+  width: 3em;
+  margin-left: 50px;
+  margin-right: 50px;
+  text-align: center;
+`;
+
+const AvatarContainer = styled.div`
+  margin-right: 10px;
+  &: hover {
+    cursor: pointer;
+  }
+`;
+
+const SymbolContainer = styled.span`
+  position: absolute;
+  top: 9px;
+  right: 7px;
+  font-size: 14px;
+`;
+
+const InputContainer = styled.div`
+ position: relative;
 `;
