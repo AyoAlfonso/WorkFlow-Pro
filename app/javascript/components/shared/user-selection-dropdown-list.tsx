@@ -77,6 +77,7 @@ export const UserSelectionDropdownList = ({
         openOnFocus={true}
         style={{ width: 300, height: "auto" }}
         freeSolo
+        clearOnEscape
         renderInput={params => (
           <TextField
             {...params}

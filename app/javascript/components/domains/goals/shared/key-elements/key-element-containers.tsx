@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const KeyElementContentContainer = styled.div`
   padding: 16px;
-  position: relative;
 `;
 
 export const KeyElementsTabContainer = styled.div`

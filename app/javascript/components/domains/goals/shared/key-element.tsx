@@ -17,7 +17,6 @@ import {
 } from "~/components/shared";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
-import { OwnedBySection } from "~/components/domains/goals/shared/owned-by-section";
 import { FormElementContainer, InputFromUnitType } from "../../scorecard/shared/modal-elements";
 
 interface IKeyElementProps {
@@ -85,7 +84,7 @@ export const KeyElement = observer(
     }, [focusOnLastInput, optionsRef]);
 
     useEffect(() => {
-      setSelectedUser(sessionStore.profile);
+      setSelectedUser(sessionStore.profile || element.ownedBy);
     }, []);
 
     useEffect(() => {
@@ -112,14 +111,14 @@ export const KeyElement = observer(
     }, [showList]);
 
     if (!element) {
-      return <Loading />;
+      return <></>;
     }
 
     const companyUsers = userStore.users;
 
     const renderUserSelectionList = (): JSX.Element => {
       return showUsersList ? (
-        <div style={{ position: "absolute" }} onClick={e => e.stopPropagation()}>
+        <div onClick={e => e.stopPropagation()}>
           <UserSelectionDropdownList
             userList={companyUsers}
             onUserSelect={setSelectedUser}
@@ -242,17 +241,6 @@ export const KeyElement = observer(
               size={24}
               marginLeft={"auto"}
             />
-            {renderUserSelectionList()}
-            {/* <OwnedBySection
-              ownedBy={element.ownedBy || sessionStore.profile}
-              marginLeft={"0px"}
-              marginRight={"0px"}
-              marginTop={"auto"}
-              marginBottom={"auto"}
-              type={type}
-              size={24}
-              hideName
-            /> */}
           </AvatarContainer>
           <KeyElementStyledContentEditable
             innerRef={keyElementTitleRef}
@@ -272,6 +260,7 @@ export const KeyElement = observer(
             completed={checkboxValue.toString()} //CHRIS' NOTE: YOU CANT PASS A BOOLEAN VALUE INTO STYLED COMPONENTS.
             placeholder={"Title..."}
           />
+          <SelectionListContainer>{renderUserSelectionList()}</SelectionListContainer>
         </TopContainer>
         <KeyElementContainer>
           {element.completionType === "binary" && (
@@ -323,24 +312,6 @@ export const KeyElement = observer(
             </CompletionContainer>
           )}
           <ContentContainer>
-            {/* <KeyElementStyledContentEditable
-              innerRef={keyElementTitleRef}
-              html={sanitize(element.value)}
-              disabled={!editable}
-              onChange={e => {
-                if (!e.target.value.includes("<div>")) {
-                  store.updateKeyElementValue("value", element.id, e.target.value);
-                }
-              }}
-              onKeyDown={key => {
-                if (key.keyCode == 13) {
-                  keyElementTitleRef.current.blur();
-                }
-              }}
-              onBlur={() => store.update()}
-              completed={checkboxValue.toString()} //CHRIS' NOTE: YOU CANT PASS A BOOLEAN VALUE INTO STYLED COMPONENTS.
-              placeholder={"Title..."}
-            /> */}
             {element.completionType !== "binary" && (
               <CompletionContainer>
                 <DropdownHeader
@@ -398,9 +369,6 @@ export const KeyElement = observer(
               </CompletionContainer>
             )}
           </ContentContainer>
-          {/* <OptionsButtonContainer> */}
-          {/* <StyledIcon icon={"Delete"} size={"12px"} /> */}
-
           <IconWrapper
             onClick={e => {
               e.stopPropagation();
@@ -420,7 +388,6 @@ export const KeyElement = observer(
               store={store}
             />
           )}
-          {/* </OptionsButtonContainer> */}
         </KeyElementContainer>
       </Container>
     );
@@ -455,7 +422,6 @@ const Container = styled.div`
   &: hover ${IconWrapper} {
     display: block;
   };
-  postion: absolute;
 `;
 
 const TopContainer = styled.div`
@@ -626,7 +592,6 @@ const AvatarContainer = styled.div`
   &: hover {
     cursor: pointer;
   }
-  position: relative;
 `;
 
 const SymbolContainer = styled.span`
@@ -638,4 +603,10 @@ const SymbolContainer = styled.span`
 
 const InputContainer = styled.div`
   position: relative;
+`;
+
+const SelectionListContainer = styled.div`
+  position: absolute;
+  margin-left: 50px;
+  margin-top: 20px;
 `;
