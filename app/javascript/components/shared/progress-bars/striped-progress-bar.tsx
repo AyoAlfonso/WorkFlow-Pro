@@ -33,6 +33,9 @@ const ProgressBarContainer = styled.div<ProgressBarContainerProps>`
         completed: {
           bg: "lightFinePine",
         },
+        done: {
+          bg: "primary20",
+        },
       },
     })}
 `;
@@ -53,13 +56,16 @@ const ProgressBarFillDiv = styled(motion.div)<ProgressBarFillDivProps>`
           background: buildRepeatingLinearGradient(props.theme.colors.grey30, 70, 5, "px", 20),
         },
         incomplete: {
-          background: buildRepeatingLinearGradient(props.theme.colors.warningRed, 70, 5, "px", -5),
+          background: buildRepeatingLinearGradient(props.theme.colors.warningRed, 70, 5, "px", 10),
         },
         in_progress: {
           background: buildRepeatingLinearGradient(props.theme.colors.tango, 70, 5, "px", 10),
         },
         completed: {
           background: buildRepeatingLinearGradient(props.theme.colors.finePine, 70, 5, "px", 20),
+        },
+        done: {
+          background: buildRepeatingLinearGradient(props.theme.colors.primary100, 70, 5, "px", 20),
         },
       },
     })};

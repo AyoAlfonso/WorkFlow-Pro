@@ -119,7 +119,7 @@ export const KeyElement = observer(
 
     const renderUserSelectionList = (): JSX.Element => {
       return showUsersList ? (
-        <div onClick={e => e.stopPropagation()}>
+        <div style={{ position: "absolute" }} onClick={e => e.stopPropagation()}>
           <UserSelectionDropdownList
             userList={companyUsers}
             onUserSelect={setSelectedUser}
@@ -235,14 +235,24 @@ export const KeyElement = observer(
         <TopContainer>
           <AvatarContainer onClick={() => setShowUsersList(!showUsersList)}>
             <Avatar
-              defaultAvatarColor={sessionStore.profile.defaultAvatarColor}
-              avatarUrl={sessionStore.profile.avatarUrl}
-              firstName={sessionStore.profile.firstName}
-              lastName={sessionStore.profile.lastName}
+              defaultAvatarColor={selectedUser?.defaultAvatarColor}
+              avatarUrl={selectedUser?.avatarUrl}
+              firstName={selectedUser?.firstName}
+              lastName={selectedUser?.lastName}
               size={24}
               marginLeft={"auto"}
             />
             {renderUserSelectionList()}
+            {/* <OwnedBySection
+              ownedBy={element.ownedBy || sessionStore.profile}
+              marginLeft={"0px"}
+              marginRight={"0px"}
+              marginTop={"auto"}
+              marginBottom={"auto"}
+              type={type}
+              size={24}
+              hideName
+            /> */}
           </AvatarContainer>
           <KeyElementStyledContentEditable
             innerRef={keyElementTitleRef}
@@ -295,16 +305,17 @@ export const KeyElement = observer(
                 <DropdownListContainer>
                   <DropdownList>
                     {statusArray.map((status, index) => (
-                      <ListItem
+                      <StatusBadgeContainer
                         onClick={() => {
-                          // updateStatus(status);
+                          store.updateKeyElementValue("status", element.id, status);
+                          // store.update();
                           setShowList(!showList);
                         }}
                         key={index}
                         value={status}
                       >
                         {determineStatusLabel(status)}
-                      </ListItem>
+                      </StatusBadgeContainer>
                     ))}
                   </DropdownList>
                 </DropdownListContainer>
@@ -345,16 +356,17 @@ export const KeyElement = observer(
                   <DropdownListContainer>
                     <DropdownList>
                       {statusArray.map((status, index) => (
-                        <ListItem
+                        <StatusBadgeContainer
                           onClick={() => {
-                            // updateStatus(status);
+                            store.updateKeyElementValue("status", element.id, status);
+                            // store.update();
                             setShowList(!showList);
                           }}
                           key={index}
                           value={status}
                         >
                           {determineStatusLabel(status)}
-                        </ListItem>
+                        </StatusBadgeContainer>
                       ))}
                     </DropdownList>
                   </DropdownListContainer>
@@ -362,7 +374,7 @@ export const KeyElement = observer(
                 <ValueInputContainer>
                   <InputContainer>
                     <InputFromUnitType
-                      unitType={''}
+                      unitType={""}
                       placeholder="Add value..."
                       onChange={e =>
                         store.updateKeyElementValue(
@@ -443,11 +455,13 @@ const Container = styled.div`
   &: hover ${IconWrapper} {
     display: block;
   };
+  postion: absolute;
 `;
 
 const TopContainer = styled.div`
   display: flex;
   align-items: center;
+  position: relative;
 `;
 
 const ContentContainer = styled.div`
@@ -573,13 +587,13 @@ const DropdownList = styled("ul")`
   width: 145px;
 `;
 
-type ListItemProps = {
+type StatusBadgeContainerProps = {
   key: number;
   value: string;
   onClick: () => void;
 };
 
-const ListItem = styled("li")<ListItemProps>`
+const StatusBadgeContainer = styled("li")<StatusBadgeContainerProps>`
   list-style: none;
   padding: 5px 0px;
   cursor: pointer;
@@ -612,6 +626,7 @@ const AvatarContainer = styled.div`
   &: hover {
     cursor: pointer;
   }
+  position: relative;
 `;
 
 const SymbolContainer = styled.span`
@@ -622,5 +637,5 @@ const SymbolContainer = styled.span`
 `;
 
 const InputContainer = styled.div`
- position: relative;
+  position: relative;
 `;

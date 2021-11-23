@@ -24,6 +24,7 @@ interface IOwnedBySectionProps {
   marginBottom?: string;
   nameWidth?: string;
   fontSize?: string;
+  hideName?: boolean;
 }
 
 export const OwnedBySection = observer(
@@ -35,6 +36,7 @@ export const OwnedBySection = observer(
     size,
     nameWidth,
     fontSize,
+    hideName,
     ...restProps
   }: IOwnedBySectionProps): JSX.Element => {
     const {
@@ -113,9 +115,11 @@ export const OwnedBySection = observer(
                 border={userIconBorder}
                 {...restProps}
               />
-              <OwnedByName fontSize={fontSize} nameWidth={nameWidth} type={"fieldLabel"}>
-                {owner?.firstName} {owner?.lastName}
-              </OwnedByName>
+              {!hideName && (
+                <OwnedByName fontSize={fontSize} nameWidth={nameWidth} type={"fieldLabel"}>
+                  {owner?.firstName} {owner?.lastName}
+                </OwnedByName>
+              )}
             </>
           )}
         </EditTriggerContainer>

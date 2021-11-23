@@ -288,7 +288,7 @@ export const ContextTabs = observer(
             onClick={() => {
               setActiveTab("key results");
               setShowInitiatives(false);
-              setShowMilestones(false);
+              setShowMilestones && setShowMilestones(false);
             }}
           >
             Key Results
