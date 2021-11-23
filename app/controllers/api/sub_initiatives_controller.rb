@@ -40,7 +40,9 @@ class Api::SubInitiativesController < Api::ApplicationController
   end
 
   def create_key_element
-    key_element = KeyElement.create!(elementable: @sub_initiative, value: params[:value], completion_type: params[:completion_type], completion_current_value: params[:completion_current_value], greater_than: params[:greater_than], completion_target_value: params[:completion_target_value])
+    key_element = KeyElement.create!(elementable: @sub_initiative, 
+      value: params[:value], completion_type: params[:completion_type], completion_current_value: params[:completion_current_value], greater_than: params[:greater_than], 
+      completion_target_value: params[:completion_target_value], owned_by_id: params[:owned_by])
     render json: { key_element: key_element, status: :ok }
   end
 
@@ -48,10 +50,9 @@ class Api::SubInitiativesController < Api::ApplicationController
     key_element = KeyElement.find(params[:key_element_id])
     @sub_initiative = policy_scope(SubInitiative).find(key_element.elementable_id)
     authorize @sub_initiative
-    key_element.update!(value: params[:value], completion_type: params[:completion_type],
-                        completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value],
-                        status: params[:status], owned_by_id: params[:owned_by], greater_than: params[:greater_than])
-    render json: { key_element: key_element }
+    key_element.update!(value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], owned_by_id: params[:owned_by],
+                        status: params[:status], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
+    render json: { key_element: key_element, status: :ok }
   end
 
   def delete_key_element
