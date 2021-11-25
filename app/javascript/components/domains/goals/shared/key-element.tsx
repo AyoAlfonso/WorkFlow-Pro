@@ -29,6 +29,7 @@ interface IKeyElementProps {
   setShowKeyElementForm: any;
   setActionType: any;
   setSelectedElement: any;
+  date?: any;
   // TODO: set correct type
 }
 
@@ -84,7 +85,7 @@ export const KeyElement = observer(
     }, [focusOnLastInput, optionsRef]);
 
     useEffect(() => {
-      setSelectedUser(sessionStore.profile || element.ownedBy);
+      setSelectedUser(element?.ownedBy || sessionStore.profile);
     }, []);
 
     useEffect(() => {
@@ -130,6 +131,17 @@ export const KeyElement = observer(
       );
     };
 
+    const parseTarget = target => {
+      let val = target.toString();
+      if (val?.includes("$")) {
+        val = val.split("$")[1];
+      }
+      if (val?.includes(",")) {
+        val = val.split(",").join("");
+      }
+      return Number(val);
+    };
+
     const {
       warningRed,
       tango,
@@ -142,7 +154,7 @@ export const KeyElement = observer(
       primary100,
       primary20,
     } = baseTheme.colors;
-    console.log(element, sessionStore.profile);
+    console.log(element, sessionStore.profile, parseTarget(element?.completionCurrentValue));
     // Equation for calculating progress when target>starting current: (current - starting) / target
     // Equation for calculating progress when target<starting current: (starting - current) / target
     const completion = () => {
@@ -347,13 +359,13 @@ export const KeyElement = observer(
                     <InputFromUnitType
                       unitType={""}
                       placeholder="Add value..."
-                      onChange={e =>
+                      onChange={e => {
                         store.updateKeyElementValue(
                           "completionCurrentValue",
                           element.id,
-                          e.target.value == "" ? "" : parseInt(e.target.value),
-                        )
-                      }
+                          e.target.value == "" ? "" : parseTarget(e.target.value),
+                        );
+                      }}
                       defaultValue={element.completionCurrentValue}
                       onBlur={() => store.update()}
                     />
@@ -409,7 +421,6 @@ const IconWrapper = styled.div`
   -ms-transform: rotate(90deg);
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
-  // width: 10%;
   margin-left: auto;
   display: none;
   &:hover {
@@ -454,7 +465,6 @@ const OptionsButtonContainer = styled.div`
 
 const StyledContentEditable = styled(ContentEditable)`
   box-sizing: border-box;
-  /* width: 100%; */
   padding-top: 5px;
   padding-bottom: 5px;
   padding-left: 16px;
@@ -484,7 +494,6 @@ const CompletionContainer = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  // justify-content: flex-start;
   margin-top: 8px;
   position: relative;
 `;
