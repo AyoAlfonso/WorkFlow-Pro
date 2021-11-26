@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_25_192809) do
+ActiveRecord::Schema.define(version: 2021_11_26_095948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -395,6 +395,21 @@ ActiveRecord::Schema.define(version: 2021_11_25_192809) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id", "notification_type"], name: "index_notifications_on_user_id_and_notification_type", unique: true
     t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "objective_logs", force: :cascade do |t|
+    t.bigint "owned_by_id"
+    t.string "objecteable_type"
+    t.bigint "objecteable_id"
+    t.integer "score"
+    t.string "note"
+    t.integer "fiscal_quarter"
+    t.integer "fiscal_year"
+    t.integer "week"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["objecteable_type", "objecteable_id"], name: "index_objective_logs_on_objecteable"
+    t.index ["owned_by_id"], name: "index_objective_logs_on_owned_by_id"
   end
 
   create_table "product_features", force: :cascade do |t|
