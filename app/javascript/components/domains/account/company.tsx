@@ -11,6 +11,7 @@ import { Button } from "~/components/shared/button";
 import { FileInput } from "./file-input";
 import { ImageCropperModal } from "~/components/shared/image-cropper-modal";
 import { TrixEditor } from "react-trix";
+import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { useHistory } from "react-router";
 import { toJS } from "mobx";
 
@@ -25,6 +26,11 @@ import {
   PhotoModificationButtonsSection,
   SaveButtonContainer,
 } from "./container-styles";
+
+const formatType = {
+  Milestones: "milestones",
+  KeyResults: "keyResults",
+};
 
 export const Company = observer(
   (): JSX.Element => {
@@ -48,6 +54,9 @@ export const Company = observer(
     const [logoImageForm, setLogoImageForm] = useState<FormData | null>(null);
     const [logoImageModalOpen, setLogoImageModalOpen] = useState<boolean>(false);
     const [executiveTeam, setExecutiveTeam] = useState<any>(null);
+    const [objectivesKeyType, setObjectivesKeyType] = useState<string>(
+      formatType[company.objectivesKeyType],
+    );
     const [annualInitiativeTitle, setAnnualInitiativeTitle] = useState<string>(
       sessionStore.annualInitiativeTitle,
     );
@@ -57,6 +66,7 @@ export const Company = observer(
     const [subInitiativeTitle, setSubInitiativeTitle] = useState<string>(
       sessionStore.subInitiativeTitle,
     );
+    const currentUser = sessionStore.profile;
 
     const { t } = useTranslation();
     const teams = toJS(teamStore.teams);
@@ -107,6 +117,8 @@ export const Company = observer(
       companyStore.deleteCompanyLogo();
     };
 
+    const ceoORAdmin = currentUser.role == RoleCEO || currentUser.role == RoleAdministrator;
+
     const save = () => {
       const promises: Array<Promise<any>> = [
         companyStore.updateCompany(
@@ -115,6 +127,9 @@ export const Company = observer(
             timezone,
             rallyingCry,
             forumType,
+            objectivesKeyType:
+              objectivesKeyType?.charAt(0).toUpperCase() +
+              objectivesKeyType?.slice(1),
             coreFourAttributes: {
               core_1: core1Content,
               core_2: core2Content,
@@ -153,6 +168,7 @@ export const Company = observer(
           }),
         );
       }
+
       Promise.all(promises).then(() => {
         setTimeout(history.go, 1000, 0);
       });
@@ -317,6 +333,28 @@ export const Company = observer(
                       </option>
                     ))}
                   </Select>
+                  {ceoORAdmin && (
+                    <>
+                      <Label htmlFor="objectives_key_type">{t("company.objectivesKeyType")}</Label>
+                      <Select
+                        onChange={e => {
+                          e.preventDefault();
+                          setObjectivesKeyType(e.currentTarget.value);
+                        }}
+                        value={objectivesKeyType}
+                        style={{ minWidth: "200px", marginBottom: "16px" }}
+                      >
+                        {company?.objectivesKeyTypes &&
+                          Object.entries(company?.objectivesKeyTypes).map(([name, id]) => (
+                            <option key={`option-${id}`} value={name as string}>
+                              {(name?.charAt(0).toUpperCase() + name.slice(1))
+                                .match(/[A-Z][a-z]+|[0-9]+/g)
+                                .join(" ")}
+                            </option>
+                          ))}
+                      </Select>
+                    </>
+                  )}
                   <Label htmlFor="rallying">{t("company.rallyingCry")}</Label>
                   <Input
                     name="rallyingCry"
