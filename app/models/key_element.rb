@@ -2,7 +2,7 @@ class KeyElement < ApplicationRecord
   include ActionView::Helpers::SanitizeHelper
 
   before_save :sanitize_value
-
+  has_many :objective_logs, as: :objecteable
   belongs_to :elementable, :polymorphic => true
   belongs_to :user, optional: true
 

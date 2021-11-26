@@ -48,7 +48,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
                   greater_than: params[:greater_than], completion_starting_value: params[:completion_starting_value],
                   owned_by_id: params[:owned_by], completion_current_value: params[:completion_current_value],
                   completion_target_value: params[:completion_target_value])
-    ObjectiveLogs.create!(objective_log_params)
+    ObjectiveLog.create!(objective_log_params)
     #MERGE IN MODEL
     render json: { key_element: key_element.as_json,  status: :ok }
   end
@@ -60,7 +60,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
     key_element.update!(value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], owned_by_id: params[:owned_by],
                         status: params[:status], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
 
-    ObjectiveLogs.create!(objective_log_params)
+    ObjectiveLog.create!(objective_log_params)
     render json: { key_element: key_element.as_json,  status: :ok }
   end
 
@@ -92,7 +92,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   end
 
   def objective_log_params
-    params.require(:objective_log_attributes).permit(:owned_by_id, :score, :note, :objective_id, :objective_type, :fiscal_quarter, :fiscal_year, :week)
+    params.require(:objective_log_attributes).permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :fiscal_quarter, :fiscal_year, :week)
   end
 
   def set_annual_initiative

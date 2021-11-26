@@ -398,18 +398,17 @@ ActiveRecord::Schema.define(version: 2021_11_26_095948) do
   end
 
   create_table "objective_logs", force: :cascade do |t|
-    t.bigint "key_performance_indicator_id", null: false
     t.bigint "owned_by_id"
+    t.string "objecteable_type"
+    t.bigint "objecteable_id"
     t.integer "score"
     t.string "note"
-    t.integer "objective_id"
-    t.string "objective_type"
     t.integer "fiscal_quarter"
     t.integer "fiscal_year"
     t.integer "week"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["key_performance_indicator_id"], name: "index_objective_logs_on_key_performance_indicator_id"
+    t.index ["objecteable_type", "objecteable_id"], name: "index_objective_logs_on_objecteable"
     t.index ["owned_by_id"], name: "index_objective_logs_on_owned_by_id"
   end
 
@@ -733,7 +732,6 @@ ActiveRecord::Schema.define(version: 2021_11_26_095948) do
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"
   add_foreign_key "notifications", "users"
-  add_foreign_key "objective_logs", "key_performance_indicators"
   add_foreign_key "product_features", "users"
   add_foreign_key "quarterly_goals", "annual_initiatives"
   add_foreign_key "questionnaire_attempts", "questionnaires"

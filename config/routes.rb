@@ -137,7 +137,7 @@ Rails.application.routes.draw do
     resources :scorecard_logs, only: [:create, :destroy]
 
     #objective_logs
-    resources :objective_logs, only: [:create, :destroy]
+    resources :objective_logs, only: [:destroy]
 
     #questionnaires
     resources :questionnaires, only: [:index]
