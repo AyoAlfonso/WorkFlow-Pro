@@ -37,7 +37,7 @@ export const KpiComponent = observer(
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      scorecardStore.getScorecard({ ownerType: "user", ownerId: id, showAll: true }).then(() => setLoading(false));
+      scorecardStore.getScorecard({ ownerType: "user", ownerId: id, manualKPI: true }).then(() => setLoading(false));
       companyStore.load();
     }, [id]);
 
