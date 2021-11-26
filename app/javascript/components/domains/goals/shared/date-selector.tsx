@@ -100,6 +100,7 @@ export const DateSelector = ({
 
 const DateSelectionContainer = styled.div`
   border-radius: 6px;
+  position: absolute;
 `;
 
 type IDueDateButtonContainer = {

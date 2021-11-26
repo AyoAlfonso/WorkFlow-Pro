@@ -43,7 +43,7 @@ export const UserSelectionDropdownList = ({
         onChange={(event, newValue) => {
           setValue(newValue);
           onUserSelect(newValue);
-          setOwner(newValue);
+          setOwner && setOwner(newValue);
           setShowUsersList(false);
         }}
         filterOptions={(options, params) => {

@@ -17,6 +17,7 @@ import {
 } from "~/components/shared";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
+import { toJS } from "mobx";
 import { FormElementContainer, InputFromUnitType } from "../../scorecard/shared/modal-elements";
 
 interface IKeyElementProps {
@@ -85,8 +86,11 @@ export const KeyElement = observer(
     }, [focusOnLastInput, optionsRef]);
 
     useEffect(() => {
-      setSelectedUser(element?.ownedBy || sessionStore.profile);
-    }, []);
+      if (element) {
+        const owner = userStore.users.find(user => user.id == element?.ownedById);
+        setSelectedUser(owner || sessionStore.profile);
+      }
+    }, [element?.ownedById]);
 
     useEffect(() => {
       const externalEventHandler = e => {
@@ -115,22 +119,6 @@ export const KeyElement = observer(
       return <></>;
     }
 
-    const companyUsers = userStore.users;
-
-    const renderUserSelectionList = (): JSX.Element => {
-      return showUsersList ? (
-        <div onClick={e => e.stopPropagation()}>
-          <UserSelectionDropdownList
-            userList={companyUsers}
-            onUserSelect={setSelectedUser}
-            setShowUsersList={setShowUsersList}
-          />
-        </div>
-      ) : (
-        <></>
-      );
-    };
-
     const parseTarget = target => {
       let val = target.toString();
       if (val?.includes("$")) {
@@ -154,7 +142,6 @@ export const KeyElement = observer(
       primary100,
       primary20,
     } = baseTheme.colors;
-    console.log(element, sessionStore.profile, parseTarget(element?.completionCurrentValue));
     // Equation for calculating progress when target>starting current: (current - starting) / target
     // Equation for calculating progress when target<starting current: (starting - current) / target
     const completion = () => {
@@ -187,7 +174,7 @@ export const KeyElement = observer(
       }
     };
 
-    const determineStatusLabel = status => {
+    const determineStatusLabel = (status: string) => {
       switch (status) {
         case "incomplete":
           return (
@@ -241,10 +228,55 @@ export const KeyElement = observer(
 
     const statusArray = ["unstarted", "incomplete", "in_progress", "completed", "done"];
 
+    const companyUsers = userStore.users;
+
+    const renderUserSelectionList = (): JSX.Element => {
+      return showUsersList ? (
+        <div onClick={e => e.stopPropagation()}>
+          <UserSelectionDropdownList
+            userList={companyUsers}
+            onUserSelect={updateOwnedById}
+            setShowUsersList={setShowUsersList}
+          />
+        </div>
+      ) : (
+        <></>
+      );
+    };
+
+    const updateKeyElement = (ownedBy) => {
+      const keyElementParams = {
+        value: element.value,
+        completionType: element.completionType,
+        completionTargetValue: element.completionTargetValue,
+        greaterThan: element.condition,
+        ownedBy: ownedBy,
+        status: element.status,
+      };
+      let id;
+
+      if (type == "annualInitiative") {
+        id = store.annualInitiative.id;
+      } else if (type == "quarterlyGoal") {
+        id = store.quarterlyGoal.id;
+      } else if (type == "subInitiative") {
+        id = store.subInitiative.id;
+      }
+      store.updateKeyElement(id, element.id, keyElementParams);
+    };
+
+    const updateOwnedById = newUser => {
+      setSelectedUser(newUser);
+      updateKeyElement(newUser.id);
+    };
+
     return (
       <Container>
         <TopContainer>
-          <AvatarContainer onClick={() => setShowUsersList(!showUsersList)}>
+          <AvatarContainer
+            onBlur={() => updateKeyElement(selectedUser.id)}
+            onClick={() => setShowUsersList(!showUsersList)}
+          >
             <Avatar
               defaultAvatarColor={selectedUser?.defaultAvatarColor}
               avatarUrl={selectedUser?.avatarUrl}
@@ -276,22 +308,6 @@ export const KeyElement = observer(
         </TopContainer>
         <KeyElementContainer>
           {element.completionType === "binary" && (
-            // <CheckboxContainer>
-            //   <Label>
-            //     <Checkbox
-            //       id={element.id}
-            //       name={element.id}
-            //       checked={checkboxValue}
-            //       onChange={e => {
-            //         setCheckboxValue(e.target.checked);
-            //         store.updateKeyElementStatus(element.id, e.target.checked);
-            //       }}
-            //       sx={{
-            //         color: baseTheme.colors.primary100,
-            //       }}
-            //     />
-            //   </Label>
-            // </CheckboxContainer>
             <CompletionContainer>
               <DropdownHeader
                 onClick={() => {
@@ -309,7 +325,12 @@ export const KeyElement = observer(
                       <StatusBadgeContainer
                         onClick={() => {
                           store.updateKeyElementValue("status", element.id, status);
-                          // store.update();
+                          updateKeyElement(selectedUser.id);
+                          if (status === "done") {
+                            store.updateKeyElementStatus(element.id, true);
+                          } else {
+                            store.updateKeyElementStatus(element.id, false);
+                          }
                           setShowList(!showList);
                         }}
                         key={index}
@@ -342,7 +363,7 @@ export const KeyElement = observer(
                         <StatusBadgeContainer
                           onClick={() => {
                             store.updateKeyElementValue("status", element.id, status);
-                            // store.update();
+                            updateKeyElement(selectedUser.id);
                             setShowList(!showList);
                           }}
                           key={index}

@@ -505,7 +505,7 @@ export const OverviewTabsContainer = styled.div`
 `;
 
 const DateContainer = styled.div`
-  margin-bottom: 30px;
+  margin-bottom: 60px;
   margin-top: -30px;
   width: fit-content;
 `;
@@ -516,4 +516,6 @@ const DateText = styled(Text)`
   margin-bottom: 5px;
 `;
 
-const DateDiv = styled.div``;
+const DateDiv = styled.div`
+  position: relative;
+`;
