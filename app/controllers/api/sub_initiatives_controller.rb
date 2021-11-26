@@ -42,7 +42,9 @@ class Api::SubInitiativesController < Api::ApplicationController
     key_element = KeyElement.create!(elementable: @sub_initiative, 
       value: params[:value], completion_type: params[:completion_type], completion_current_value: params[:completion_current_value], greater_than: params[:greater_than], 
       completion_target_value: params[:completion_target_value], owned_by_id: params[:owned_by])
-    render json: { key_element: key_element, status: :ok }
+    
+    ObjectiveLogs.create!(objective_log_params)
+    render json: { key_element: key_element.as_json, status: :ok }
   end
 
   def update_key_element
@@ -51,7 +53,9 @@ class Api::SubInitiativesController < Api::ApplicationController
     authorize @sub_initiative
     key_element.update!(value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], owned_by_id: params[:owned_by],
                         status: params[:status], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
-    render json: { key_element: key_element, status: :ok }
+    
+    ObjectiveLogs.create!(objective_log_params)
+    render json: { key_element: key_element.as_json, status: :ok }
   end
 
   def delete_key_element
@@ -72,6 +76,10 @@ class Api::SubInitiativesController < Api::ApplicationController
 
   def sub_initiative_params
     params.permit(:id, :created_by_id, :owned_by_id, :context_description, :quarterly_goal_id, :description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value], milestones_attributes: [:id, :description, :status], :importance => [])
+  end
+
+  def objective_log_params
+    params.require(:objective_log_attributes).permit(:owned_by_id, :score, :note, :objective_id, :objective_type, :fiscal_quarter, :fiscal_year, :week)
   end
 
   def set_sub_initiative

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_25_192809) do
+ActiveRecord::Schema.define(version: 2021_11_26_095948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -397,6 +397,22 @@ ActiveRecord::Schema.define(version: 2021_11_25_192809) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
+  create_table "objective_logs", force: :cascade do |t|
+    t.bigint "key_performance_indicator_id", null: false
+    t.bigint "owned_by_id"
+    t.integer "score"
+    t.string "note"
+    t.integer "objective_id"
+    t.string "objective_type"
+    t.integer "fiscal_quarter"
+    t.integer "fiscal_year"
+    t.integer "week"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["key_performance_indicator_id"], name: "index_objective_logs_on_key_performance_indicator_id"
+    t.index ["owned_by_id"], name: "index_objective_logs_on_owned_by_id"
+  end
+
   create_table "product_features", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.boolean "objective", default: true, null: false
@@ -717,6 +733,7 @@ ActiveRecord::Schema.define(version: 2021_11_25_192809) do
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"
   add_foreign_key "notifications", "users"
+  add_foreign_key "objective_logs", "key_performance_indicators"
   add_foreign_key "product_features", "users"
   add_foreign_key "quarterly_goals", "annual_initiatives"
   add_foreign_key "questionnaire_attempts", "questionnaires"

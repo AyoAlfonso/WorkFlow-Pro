@@ -54,7 +54,8 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
                   greater_than: params[:greater_than], completion_starting_value: params[:completion_starting_value],
                   completion_current_value: params[:completion_current_value], owned_by_id: params[:owned_by],
                   completion_target_value: params[:completion_target_value])
-    render json: { key_element: key_element, status: :ok }
+    ObjectiveLogs.create!(objective_log_params)
+    render json: { key_element: key_element.as_json, status: :ok }
   end
 
   def update_key_element
@@ -63,7 +64,9 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     authorize @quarterly_goal
     key_element.update!(value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], owned_by_id: params[:owned_by],
                         status: params[:status], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
-    render json: { key_element: key_element, status: :ok }
+    
+    ObjectiveLogs.create!(objective_log_params)
+    render json: { key_element: key_element.as_json, status: :ok }
   end
 
   def delete_key_element
@@ -87,6 +90,11 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
   def key_elements_params
     params.permit(key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value])
+  end
+
+
+  def objective_log_params
+    params.require(:objective_log_attributes).permit(:owned_by_id, :score, :note, :objective_id, :objective_type, :fiscal_quarter, :fiscal_year, :week)
   end
 
   def set_quarterly_goal
