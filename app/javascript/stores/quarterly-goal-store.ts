@@ -218,6 +218,18 @@ export const QuarterlyGoalStoreModel = types
     updateModelField(field, value) {
       self.quarterlyGoal[field] = value;
     },
+    keyElementTitle(id) {
+      const keyElement = self.quarterlyGoal.keyElements.find(ke => ke.id == id);
+      return keyElement?.value;
+    },
+    keyElementStatus(id) {
+      const keyElement = self.quarterlyGoal.keyElements.find(ke => ke.id == id);
+      return keyElement?.status;
+    },
+    keyElementCompletionType(id) {
+      const keyElement = self.quarterlyGoal.keyElements.find(ke => ke.id == id);
+      return keyElement?.completionType;
+    },
     updateKeyElementValue(field: string, id: number, value: number | string) {
       const keyElements = self.quarterlyGoal.keyElements;
       const keyElementIndex = keyElements.findIndex(ke => ke.id == id);

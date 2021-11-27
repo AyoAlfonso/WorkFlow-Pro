@@ -17,9 +17,11 @@ import { HomeContainerBorders } from "../../home/shared-components";
 import { RecordOptions } from "../shared/record-options";
 import { useTranslation } from "react-i18next";
 import { toJS } from "mobx";
+import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-elements";
 import { TrixEditor } from "react-trix";
 import { CreateGoalSection } from "../shared/create-goal-section";
 import { sortByDate } from "~/utils/sorting";
+import { ActivityLogs } from "../shared/activity-logs";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -61,7 +63,9 @@ export const QuarterlyGoalModalContent = observer(
     const [showInitiatives, setShowInitiatives] = useState<boolean>(false);
     const [showMilestones, setShowMilestones] = useState<boolean>(true);
     const [description, setDescription] = useState<string>("");
+    const [comment, setComment] = useState<string>("");
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
+    const [keyLogs, setKeyLogs] = useState([]);
 
     const descriptionTemplateForInitiatives = descriptionTemplatesFormatted.find(
       t => t.templateType == "initiatives",
@@ -75,6 +79,9 @@ export const QuarterlyGoalModalContent = observer(
         // setQuarterlyGoal(quarterlyGoalStore.quarterlyGoal);
         const quarterlyGoal = quarterlyGoalStore?.quarterlyGoal;
         if (quarterlyGoal) {
+          quarterlyGoal.keyElements.forEach(keyelement => {
+            setKeyLogs(prev => [...prev, ...keyelement.objectiveLogs]);
+          });
           setDescription(quarterlyGoal.contextDescription || descriptionTemplateForInitiatives);
           setQuarterlyGoal(quarterlyGoal);
         }
@@ -82,7 +89,11 @@ export const QuarterlyGoalModalContent = observer(
     }, []);
 
     if (quarterlyGoal == null) {
-      return <Loading />;
+      return (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      );
     }
 
     const handleChange = (html, text) => {
@@ -255,7 +266,24 @@ export const QuarterlyGoalModalContent = observer(
               }}
             />
           </TrixEditorContainer>
-          {/* <SubHeader>Activity</SubHeader> */}
+          <SubHeader>Activity</SubHeader>
+          <SectionContainer>
+            <FormElementContainer>
+              <StyledInput
+                placeholder={"Add a comment..."}
+                onChange={e => {
+                  setComment(e.target.value);
+                }}
+                // onBlur={() => {
+                //   if (!value) {
+                //     valueForComment = kpi.scorecardLogs[kpi.scorecardLogs?.length - 1]?.score;
+                //   }
+                //   handleBlur(kpi.id);
+                // }}
+              />
+            </FormElementContainer>
+            <ActivityLogs keyElements={keyLogs} store={quarterlyGoalStore} />
+          </SectionContainer>
         </Container>
       </>
     );
@@ -325,4 +353,12 @@ const SubHeader = styled.p`
 const TrixEditorContainer = styled.div`
   margin-top: 4px;
   width: 100%;
+`;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

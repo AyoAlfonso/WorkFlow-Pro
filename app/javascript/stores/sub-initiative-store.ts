@@ -171,6 +171,18 @@ export const SubInitiativeStoreModel = types
     updateModelField(field, value) {
       self.subInitiative[field] = value;
     },
+    keyElementTitle(id) {
+      const keyElement = self.subInitiative.keyElements.find(ke => ke.id == id);
+      return keyElement?.value;
+    },
+    keyElementStatus(id) {
+      const keyElement = self.subInitiative.keyElements.find(ke => ke.id == id);
+      return keyElement?.status;
+    },
+    keyElementCompletionType(id) {
+      const keyElement = self.subInitiative.keyElements.find(ke => ke.id == id);
+      return keyElement?.completionType;
+    },
     updateKeyElementValue(field: string, id: number, value: number) {
       let keyElements = self.subInitiative.keyElements;
       let keyElementIndex = keyElements.findIndex(ke => ke.id == id);
