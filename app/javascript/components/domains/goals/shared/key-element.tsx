@@ -226,8 +226,6 @@ export const KeyElement = observer(
       updateKeyElement(newUser.id);
     };
 
-    // console.log(toJS(element))
-
     return (
       <Container>
         <TopContainer>
