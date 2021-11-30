@@ -9,7 +9,7 @@ class ObjectiveLog < ApplicationRecord
 
   validates :score, :week, :fiscal_quarter, :fiscal_year, :objecteable_id, :owned_by_id, :objecteable_type, presence: true
 
-  scope :created_by_user, ->(user) { where(owned_by_id: user) }
+  scope :owned_by_user, ->(user) { where(owned_by_id: user) }
   scope :created_between, ->(date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
 
 end

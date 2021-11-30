@@ -51,6 +51,20 @@ class UserMailerPreview < ActionMailer::Preview
     ).notification_email
   end
 
+  def send_weekly_check_in_report_stats_email
+    user = User.find(3)
+    UserMailer.with(
+      user: user,
+      subject: "Weekly Report for Leadership Team",
+      greeting: "Leadership Team",
+      name: "",
+      message: "Share what you’ve accomplished with your teammates and see how they performed.",
+      preheader: " See your team’s progress towards the plan, from week of Nov 1 - Nov 6",
+      cta_text: "Complete Weekly Check-in",
+      cta_url: "/weekly-check-in/#{user.id}/#{Date.today.strftime("%Y-%m-%d")}" #home
+    ).weekly_check_in_report_stats_email
+  end
+
   def checkin_reminder_email
     user = User.find(3)
     UserMailer.with(
@@ -59,7 +73,7 @@ class UserMailerPreview < ActionMailer::Preview
       greeting: "",
       name: "#{user&.first_name}",
       message: "Share what you’ve accomplished with your teammates and see how they performed.",
-      preheader: "Preheader: You have some updates to provide for your Initiatives and KPIs in LynchPyn.",
+      preheader: "You have some updates to provide for your Initiatives and KPIs in LynchPyn.",
       cta_text: "Complete Weekly Check-in",
       cta_url: "/weekly-check-in/#{user.id}/#{Date.today.strftime("%Y-%m-%d")}" #home
     ).weekly_checkin_email
