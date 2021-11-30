@@ -74,10 +74,6 @@ class Api::SubInitiativesController < Api::ApplicationController
     params.permit(:id, :created_by_id, :owned_by_id, :context_description, :quarterly_goal_id, :description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value], milestones_attributes: [:id, :description, :status], :importance => [])
   end
 
-  def objective_log_params
-    params.require(:objective_log_attributes).permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :fiscal_quarter, :fiscal_year, :week)
-  end
-
   def set_sub_initiative
     @sub_initiative = policy_scope(SubInitiative).find(params[:id])
     authorize @sub_initiative

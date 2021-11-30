@@ -22,12 +22,6 @@ class Api::MilestonesController < Api::ApplicationController
     render "/api/milestones/milestones_for_check_in"
   end
 
-
-  # def index
-  #     (ObjectiveLog).owned_by_user
-  #     render json: { objective_log: @objective_log, status: :ok }
-  # end
-
   private
 
   def set_milestone

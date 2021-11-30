@@ -90,11 +90,6 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     params.permit(key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value])
   end
 
-
-  def objective_log_params
-    params.require(:objective_log_attributes).permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :fiscal_quarter, :fiscal_year, :week)
-  end
-
   def set_quarterly_goal
     @quarterly_goal = policy_scope(QuarterlyGoal).find(params[:id])
     authorize @quarterly_goal
