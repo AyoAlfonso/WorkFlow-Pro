@@ -54,13 +54,22 @@ export const KeyElementForm = ({
     setSelectedElement(null);
   };
 
+  const parseTarget = (target) => {
+    let val = target;
+    if (val.includes("$")) {
+      val = val.split("$")[1];
+    }
+    if (val.includes(",")) {
+      val = val.split(',').join('')
+    }
+    return val;
+  };
+
   const createKeyElement = () => {
     const keyElementParams = {
       value: title,
       completionType,
-      completionTargetValue: completionTargetValue.includes("$")
-        ? completionTargetValue.split("$")[1]
-        : completionTargetValue,
+      completionTargetValue: parseTarget(completionTargetValue),
       greaterThan: Number(condition),
       ownedBy: ownedBy.id,
     };

@@ -15,7 +15,6 @@ import { Icon } from "~/components/shared/icon";
 import { SubHeaderText } from "~/components/shared/sub-header-text";
 import {
   KeyElementContentContainer,
-  KeyElementsTabContainer,
   KeyElementsFormHeader,
   KeyElementFormBackButtonContainer,
 } from "./key-elements/key-element-containers";
@@ -23,6 +22,10 @@ import { KeyElementForm } from "./key-element-form";
 import { KeyElementModal } from "./key-element-modal";
 import { Text, TextDiv } from "~/components/shared";
 import "react-tabs/style/react-tabs.css";
+import { useTranslation } from "react-i18next";
+import { HtmlTooltip } from "~/components/shared/tooltip";
+import { DateSelector } from "./date-selector";
+import { set } from "immutable";
 
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;
@@ -42,6 +45,7 @@ export const ContextTabs = observer(
     setShowMilestones,
     activeInitiatives,
   }: IContextTabsProps): JSX.Element => {
+    const { t } = useTranslation();
     const {
       sessionStore,
       annualInitiativeStore,
@@ -72,6 +76,8 @@ export const ContextTabs = observer(
     const [activeTab, setActiveTab] = useState(
       type == "quarterlyGoal" ? "milestones" : "aligned initiatives",
     );
+    const [selectedDate, setSelectedDate] = useState<any>(new Date());
+    const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
     const firstImportanceRef = useRef(null);
     const secondImportanceRef = useRef(null);
@@ -214,23 +220,52 @@ export const ContextTabs = observer(
     };
 
     const renderKeyElementsIndex = () => {
-      return object.keyElements.map((element, index) => {
-        const lastKeyElement = index == object.keyElements.length - 1;
-        return (
-          <KeyElement
-            elementId={element.id}
-            store={store}
-            editable={editable}
-            key={element.id}
-            lastKeyElement={lastKeyElement}
-            focusOnLastInput={focusOnLastInput}
-            type={type}
-            setShowKeyElementForm={setShowKeyElementForm}
-            setActionType={setActionType}
-            setSelectedElement={setSelectedElement}
-          />
-        );
-      });
+      return (
+        <>
+          <DateContainer>
+            <HtmlTooltip
+              arrow={true}
+              open={showTooltip}
+              enterDelay={500}
+              leaveDelay={200}
+              title={<span>{t("keyElement.dateToolTip")}</span>}
+            >
+              <DateDiv
+                onMouseEnter={() => {
+                  setShowTooltip(true);
+                  setTimeout(() => {
+                    setShowTooltip(false);
+                  }, 5000);
+                }}
+                onMouseLeave={() => {
+                  setShowTooltip(false);
+                }}
+              >
+                <DateText>Date</DateText>
+                <DateSelector selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+              </DateDiv>
+            </HtmlTooltip>
+          </DateContainer>
+          {object.keyElements.map((element, index) => {
+            const lastKeyElement = index == object.keyElements.length - 1;
+            return (
+              <KeyElement
+                elementId={element.id}
+                store={store}
+                editable={editable}
+                key={element.id}
+                lastKeyElement={lastKeyElement}
+                focusOnLastInput={focusOnLastInput}
+                type={type}
+                setShowKeyElementForm={setShowKeyElementForm}
+                setActionType={setActionType}
+                setSelectedElement={setSelectedElement}
+                date={selectedDate}
+              />
+            );
+          })}
+        </>
+      );
     };
 
     const tabClicked = (index: number): void => {
@@ -289,7 +324,7 @@ export const ContextTabs = observer(
             onClick={() => {
               setActiveTab("key results");
               setShowInitiatives(false);
-              setShowMilestones(false);
+              setShowMilestones && setShowMilestones(false);
             }}
           >
             Key Results
@@ -393,6 +428,7 @@ const ButtonContainer = styled.div`
 
 const StyledButton = styled(Button)`
   display: flex;
+  visibility: hidden;
   justify-content: center;
   align-items: center;
   padding-left: 0;
@@ -402,6 +438,14 @@ const StyledButton = styled(Button)`
   &: hover {
     color: ${props => props.theme.colors.primary100};
   }
+`;
+
+const KeyElementsTabContainer = styled.div`
+  height: 100%;
+  width: 100%;
+  &: hover ${StyledButton} {
+    visibility: visible;
+  };
 `;
 
 const CircularIcon = styled(Icon)`
@@ -458,4 +502,20 @@ export const OverviewTabsContainer = styled.div`
   flex-direction: row;
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
   margin-bottom: 24px;
+`;
+
+const DateContainer = styled.div`
+  margin-bottom: 60px;
+  margin-top: -30px;
+  width: fit-content;
+`;
+
+const DateText = styled(Text)`
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+`;
+
+const DateDiv = styled.div`
+  position: relative;
 `;

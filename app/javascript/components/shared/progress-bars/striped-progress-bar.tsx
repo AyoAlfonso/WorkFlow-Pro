@@ -21,17 +21,20 @@ const ProgressBarContainer = styled.div<ProgressBarContainerProps>`
   ${props =>
     variant({
       variants: {
-        primary: {
-          bg: "primary40",
+        unstarted: {
+          bg: "grey10",
         },
-        success: {
-          bg: "fadedSuccess",
+        incomplete: {
+          bg: "almostPink",
         },
-        warning: {
-          bg: "peach",
+        in_progress: {
+          bg: "lightYellow",
         },
-        error: {
-          bg: "fadedRed",
+        completed: {
+          bg: "lightFinePine",
+        },
+        done: {
+          bg: "primary20",
         },
       },
     })}
@@ -49,29 +52,20 @@ const ProgressBarFillDiv = styled(motion.div)<ProgressBarFillDivProps>`
   ${props =>
     variant({
       variants: {
-        primary: {
+        unstarted: {
+          background: buildRepeatingLinearGradient(props.theme.colors.grey30, 70, 5, "px", 20),
+        },
+        incomplete: {
+          background: buildRepeatingLinearGradient(props.theme.colors.warningRed, 70, 5, "px", 10),
+        },
+        in_progress: {
+          background: buildRepeatingLinearGradient(props.theme.colors.tango, 70, 5, "px", 10),
+        },
+        completed: {
+          background: buildRepeatingLinearGradient(props.theme.colors.finePine, 70, 5, "px", 20),
+        },
+        done: {
           background: buildRepeatingLinearGradient(props.theme.colors.primary100, 70, 5, "px", 20),
-        },
-        success: {
-          background: buildRepeatingLinearGradient(
-            props.theme.colors.successGreen,
-            70,
-            5,
-            "px",
-            -5,
-          ),
-        },
-        warning: {
-          background: buildRepeatingLinearGradient(
-            props.theme.colors.cautionYellow,
-            70,
-            5,
-            "px",
-            10,
-          ),
-        },
-        error: {
-          background: buildRepeatingLinearGradient(props.theme.colors.warningRed, 70, 5, "px", 20),
         },
       },
     })};

@@ -88,7 +88,7 @@ const Container = styled.div`
   border-radius: 12px;
   z-index: 3;
   margin-left: 90%;
-  margin-top: 5px;
+  margin-top: 100px;
   height: auto;
   overflow: auto;
 `;
