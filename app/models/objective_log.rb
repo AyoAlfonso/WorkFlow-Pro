@@ -6,6 +6,9 @@ class ObjectiveLog < ApplicationRecord
   belongs_to :objecteable, :polymorphic => true, optional: true
   belongs_to :key_element, -> { where(objective_logs: { objecteable_type: "KeyElement" }) }, foreign_key: "objecteable_id", optional: true
   belongs_to :milestone, -> { where(objective_logs: { objecteable_type: "Milestone" }) }, foreign_key: "objecteable_id", optional: true
+  belongs_to :annual_initiative, -> { where(objective_logs: { objecteable_type: "AnnualInitiative" }) }, foreign_key: "objecteable_id", optional: true
+  belongs_to :sub_initiative, -> { where(objective_logs: { objecteable_type: "SubInitiative" }) }, foreign_key: "objecteable_id", optional: true
+  belongs_to :quarterly_goal, -> { where(objective_logs: { objecteable_type: "QuarterlyGoal" }) }, foreign_key: "objecteable_id", optional: true
 
   validates :score, :week, :fiscal_quarter, :fiscal_year, :objecteable_id, :owned_by_id, :objecteable_type, presence: true
 

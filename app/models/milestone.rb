@@ -1,7 +1,7 @@
 class Milestone < ApplicationRecord
   include HasCreator
 
-  enum status: { unstarted: 0, incomplete: 1, in_progress: 2, completed: 3, done: 4 }
+  enum status: { unstarted: 0, incomplete: 1, in_progress: 2, completed: 3 }
   belongs_to :milestoneable, :polymorphic => true, optional: true
 
   belongs_to :quarterly_goal, -> { where(milestones: { milestoneable_type: "QuarterlyGoal" }) }, foreign_key: "milestoneable_id", optional: true
