@@ -13,8 +13,10 @@ import { MilestoneCreateButton } from "../shared-quarterly-goal-and-sub-initiati
 import { WeeklyMilestones } from "../shared-quarterly-goal-and-sub-initiative/weekly-milestones";
 import { InitiativeHeader } from "../shared-quarterly-goal-and-sub-initiative/initiative-header";
 import { ShowMilestonesButton } from "../shared-quarterly-goal-and-sub-initiative/show-milestones-button";
+import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-elements";
 import { toJS } from "mobx";
 import { TrixEditor } from "react-trix";
+import { ActivityLogs } from "../shared/activity-logs";
 
 interface ISubInitiativeModalContentProps {
   subInitiativeId: number;
@@ -45,7 +47,9 @@ export const SubInitiativeModalContent = observer(
     );
     const [showInitiatives, setShowInitiatives] = useState<boolean>(true);
     const [description, setDescription] = useState<string>("");
+    const [comment, setComment] = useState<string>("");
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
+    const [keyLogs, setKeyLogs] = useState([]);
 
     const descriptionTemplateForInitiatives = descriptionTemplatesFormatted.find(
       t => t.templateType == "initiatives",
@@ -55,6 +59,9 @@ export const SubInitiativeModalContent = observer(
       subInitiativeStore.getSubInitiative(subInitiativeId).then(() => {
         const subInitiative = subInitiativeStore.subInitiative;
         if (subInitiative) {
+          subInitiative.keyElements.forEach(keyelement => {
+            setKeyLogs(prev => [...prev, ...keyelement.objectiveLogs]);
+          });
           setDescription(subInitiative.contextDescription || descriptionTemplateForInitiatives);
           setSubInitiative(subInitiative);
         }
@@ -62,7 +69,11 @@ export const SubInitiativeModalContent = observer(
     }, []);
 
     if (subInitiative == null) {
-      return <Loading />;
+      return (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      );
     }
 
     const handleChange = (html, text) => {
@@ -160,7 +171,24 @@ export const SubInitiativeModalContent = observer(
               }}
             />
           </TrixEditorContainer>
-          {/* <SubHeader>Activity</SubHeader> */}
+          <SubHeader>Activity</SubHeader>
+          <SectionContainer>
+            <FormElementContainer>
+              <StyledInput
+                placeholder={"Add a comment..."}
+                onChange={e => {
+                  setComment(e.target.value);
+                }}
+                // onBlur={() => {
+                //   if (!value) {
+                //     valueForComment = kpi.scorecardLogs[kpi.scorecardLogs?.length - 1]?.score;
+                //   }
+                //   handleBlur(kpi.id);
+                // }}
+              />
+            </FormElementContainer>
+            <ActivityLogs keyElements={keyLogs} store={subInitiativeStore} />
+          </SectionContainer>
         </Container>
       </>
     );
@@ -195,4 +223,12 @@ const SubHeader = styled.p`
 const TrixEditorContainer = styled.div`
   margin-top: 4px;
   width: 100%;
+`;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

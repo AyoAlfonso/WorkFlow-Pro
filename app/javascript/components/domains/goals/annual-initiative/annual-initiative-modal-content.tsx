@@ -2,7 +2,7 @@ import * as React from "react";
 import { HomeContainerBorders } from "../../home/shared-components";
 import styled from "styled-components";
 import { Text } from "../../../shared/text";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, memo } from "react";
 import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
 import * as R from "ramda";
@@ -22,8 +22,9 @@ import { GoalDropdownOptions } from "../shared/goal-dropdown-options";
 import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
 import { TrixEditor } from "react-trix";
 import { toJS } from "mobx";
-import moment from "moment";
+import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-elements";
 import { sortByDate } from "~/utils/sorting";
+import { ActivityLogs } from "../shared/activity-logs";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -33,7 +34,7 @@ interface IAnnualInitiativeModalContentProps {
   setQuarterlyGoalId: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const AnnualInitiativeModalContent = observer(
+export const AnnualInitiativeModalContent = memo(observer(
   ({
     annualInitiativeId,
     setAnnualInitiativeModalOpen,
@@ -57,8 +58,10 @@ export const AnnualInitiativeModalContent = observer(
     );
     const [showInitiatives, setShowInitiatives] = useState<boolean>(true);
     const [description, setDescription] = useState<string>("");
+    const [comment, setComment] = useState<string>("");
     const [annualInitiative, setAnnualInitiative] = useState(null);
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
+    const [keyLogs, setKeyLogs] = useState([]);
 
     const descriptionTemplateForObjective = descriptionTemplatesFormatted.find(
       t => t.templateType == "objectives",
@@ -75,8 +78,11 @@ export const AnnualInitiativeModalContent = observer(
 
     useEffect(() => {
       annualInitiativeStore.getAnnualInitiative(annualInitiativeId).then(() => {
-        const annualInitiative = annualInitiativeStore?.annualInitiative;
+        const annualInitiative = annualInitiativeStore.annualInitiative;
         if (annualInitiative) {
+          annualInitiative?.keyElements.forEach(keyelement => {
+            setKeyLogs(prev => [...prev, ...keyelement.objectiveLogs]);
+          });
           setDescription(annualInitiative.contextDescription || descriptionTemplateForObjective);
           setAnnualInitiative(annualInitiative);
         }
@@ -84,7 +90,11 @@ export const AnnualInitiativeModalContent = observer(
     }, []);
 
     if (annualInitiative == null) {
-      return <Loading />;
+      return (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      );
     }
 
     const handleChange = (html, text) => {
@@ -322,12 +332,32 @@ export const AnnualInitiativeModalContent = observer(
               }}
             />
           </TrixEditorContainer>
-          {/* <SubHeader>Activity</SubHeader> */}
+          <SubHeader>Activity</SubHeader>
+          <SectionContainer>
+            <FormElementContainer>
+              <StyledInput
+                placeholder={"Add a comment..."}
+                onChange={e => {
+                  setComment(e.target.value);
+                }}
+                // onBlur={() => {
+                //   if (!value) {
+                //     valueForComment = kpi.scorecardLogs[kpi.scorecardLogs?.length - 1]?.score;
+                //   }
+                //   handleBlur(kpi.id);
+                // }}
+              />
+            </FormElementContainer>
+            <ActivityLogs
+              keyElements={keyLogs}
+              store={annualInitiativeStore}
+            />
+          </SectionContainer>
         </Container>
       </>
     );
   },
-);
+));
 
 const Container = styled.div`
   min-width: 240px;
@@ -536,4 +566,12 @@ const SubHeader = styled.p`
 const TrixEditorContainer = styled.div`
   margin-top: 4px;
   width: 100%;
+`;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

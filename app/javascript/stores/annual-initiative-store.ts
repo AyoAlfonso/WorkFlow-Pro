@@ -91,7 +91,7 @@ export const AnnualInitiativeStoreModel = types
         const keyElements = self.annualInitiative.keyElements;
         const keyElementIndex = keyElements.findIndex(ke => ke.id == keyElementId);
         keyElements[keyElementIndex] = response.data.keyElement;
-        self.annualInitiative.keyElements = keyElements;
+        // self.annualInitiative.keyElements = keyElements;
         showToast("Key Result updated", ToastMessageConstants.SUCCESS);
         return response.data.keyElement;
       } catch (error) {
@@ -145,6 +145,18 @@ export const AnnualInitiativeStoreModel = types
   .actions(self => ({
     updateModelField(field, value) {
       self.annualInitiative[field] = value;
+    },
+    keyElementTitle(id) {
+      const keyElement = self.annualInitiative.keyElements.find(ke => ke.id == id);
+      return keyElement?.value;
+    },
+    keyElementStatus(id) {
+      const keyElement = self.annualInitiative.keyElements.find(ke => ke.id == id);
+      return keyElement?.status;
+    },
+    keyElementCompletionType(id) {
+      const keyElement = self.annualInitiative.keyElements.find(ke => ke.id == id);
+      return keyElement?.completionType;
     },
     updateKeyElementValue(field: string, id: number, value: number | string) {
       let keyElements = self.annualInitiative.keyElements;

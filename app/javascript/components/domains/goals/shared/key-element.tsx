@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as React from "react";
 import * as R from "ramda";
 import styled from "styled-components";
@@ -57,6 +58,7 @@ export const KeyElement = observer(
       annualInitiativeStore,
       quarterlyGoalStore,
       subInitiativeStore,
+      companyStore,
       sessionStore,
       userStore,
     } = useMst();
@@ -64,6 +66,8 @@ export const KeyElement = observer(
     const keyElementTitleRef = useRef(null);
     const keyElementCompletionTargetRef = useRef(null);
     const dropdownRef = useRef<HTMLInputElement>(null);
+
+    const company = companyStore.company;
 
     const getElement = () => {
       let item;
@@ -130,18 +134,6 @@ export const KeyElement = observer(
       return Number(val);
     };
 
-    const {
-      warningRed,
-      tango,
-      finePine,
-      grey30,
-      grey10,
-      almostPink,
-      lightYellow,
-      lightFinePine,
-      primary100,
-      primary20,
-    } = baseTheme.colors;
     // Equation for calculating progress when target>starting current: (current - starting) / target
     // Equation for calculating progress when target<starting current: (starting - current) / target
     const completion = () => {
@@ -163,52 +155,6 @@ export const KeyElement = observer(
       }
     };
 
-    const completionSymbol = () => {
-      switch (element.completionType) {
-        case "percentage":
-          return "%";
-        case "currency":
-          return "$";
-        default:
-          return "";
-      }
-    };
-
-    const determineStatusLabel = (status: string) => {
-      switch (status) {
-        case "incomplete":
-          return (
-            <StatusBadge color={warningRed} backgroundColor={almostPink}>
-              Behind
-            </StatusBadge>
-          );
-        case "in_progress":
-          return (
-            <StatusBadge color={tango} backgroundColor={lightYellow}>
-              Needs Attention
-            </StatusBadge>
-          );
-        case "completed":
-          return (
-            <StatusBadge color={finePine} backgroundColor={lightFinePine}>
-              On Track
-            </StatusBadge>
-          );
-        case "done":
-          return (
-            <StatusBadge color={primary100} backgroundColor={primary20}>
-              Completed
-            </StatusBadge>
-          );
-        default:
-          return (
-            <StatusBadge color={grey30} backgroundColor={grey10}>
-              None
-            </StatusBadge>
-          );
-      }
-    };
-
     const sanitize = html => {
       const result = R.pipe(
         R.replace(/<div>/g, ""),
@@ -220,9 +166,9 @@ export const KeyElement = observer(
 
     const renderElementCompletionTargetValue = () => {
       if (element.completionType == "currency") {
-        return `${completionSymbol()}${element.completionTargetValue}`;
+        return `${completionSymbol(element.completionType)}${element.completionTargetValue}`;
       } else {
-        return `${element.completionTargetValue}${completionSymbol()}`;
+        return `${element.completionTargetValue}${completionSymbol(element.completionType)}`;
       }
     };
 
@@ -244,7 +190,7 @@ export const KeyElement = observer(
       );
     };
 
-    const updateKeyElement = (ownedBy) => {
+    const updateKeyElement = ownedBy => {
       const keyElementParams = {
         value: element.value,
         completionType: element.completionType,
@@ -252,6 +198,16 @@ export const KeyElement = observer(
         greaterThan: element.condition,
         ownedBy: ownedBy,
         status: element.status,
+        objectiveLogAttributes: {
+          ownedById: ownedBy,
+          score: element.completionCurrentValue,
+          note: "",
+          objecteableId: element.id,
+          objecteableType: "KeyElement",
+          fiscalQuarter: company.currentFiscalQuarter,
+          fiscalYear: company.currentFiscalYear,
+          week: company.currentFiscalWeek,
+        },
       };
       let id;
 
@@ -388,9 +344,12 @@ export const KeyElement = observer(
                         );
                       }}
                       defaultValue={element.completionCurrentValue}
-                      onBlur={() => store.update()}
+                      onBlur={() => {
+                        store.update();
+                        updateKeyElement(selectedUser.id);
+                      }}
                     />
-                    <SymbolContainer>{completionSymbol()}</SymbolContainer>
+                    <SymbolContainer>{completionSymbol(element.completionType)}</SymbolContainer>
                   </InputContainer>
                 </ValueInputContainer>
                 <ValueSpanContainer>
@@ -426,6 +385,65 @@ export const KeyElement = observer(
     );
   },
 );
+
+const {
+  warningRed,
+  tango,
+  finePine,
+  grey30,
+  grey10,
+  almostPink,
+  lightYellow,
+  lightFinePine,
+  primary100,
+  primary20,
+} = baseTheme.colors;
+
+export const completionSymbol = type => {
+  switch (type) {
+    case "percentage":
+      return "%";
+    case "currency":
+      return "$";
+    default:
+      return "";
+  }
+};
+
+export const determineStatusLabel = (status: string) => {
+  switch (status) {
+    case "incomplete":
+      return (
+        <StatusBadge color={warningRed} backgroundColor={almostPink}>
+          Behind
+        </StatusBadge>
+      );
+    case "in_progress":
+      return (
+        <StatusBadge color={tango} backgroundColor={lightYellow}>
+          Needs Attention
+        </StatusBadge>
+      );
+    case "completed":
+      return (
+        <StatusBadge color={finePine} backgroundColor={lightFinePine}>
+          On Track
+        </StatusBadge>
+      );
+    case "done":
+      return (
+        <StatusBadge color={primary100} backgroundColor={primary20}>
+          Completed
+        </StatusBadge>
+      );
+    default:
+      return (
+        <StatusBadge color={grey30} backgroundColor={grey10}>
+          None
+        </StatusBadge>
+      );
+  }
+};
 
 const KeyElementContainer = styled.div`
   display: flex;
