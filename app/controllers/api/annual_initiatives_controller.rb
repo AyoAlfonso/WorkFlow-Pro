@@ -5,7 +5,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   respond_to :json
 
   def create
-    # @template_description = DescriptionTemplate.find_by(company_id: current_company.id, template_type: 1).body_content || ""
+  
     @annual_initiative = AnnualInitiative.new({
       created_by: current_user, owned_by: current_user,
       description: params[:description],
@@ -43,18 +43,21 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   end
 
   def create_key_element
-    key_element = KeyElement.create!(elementable: @annual_initiative, value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], completion_starting_value: params[:completion_current_value], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
-    render json: { key_element: key_element, status: :ok }
+    key_element = KeyElement.create!(elementable: @annual_initiative, 
+                  value: params[:value], completion_type: params[:completion_type],
+                  greater_than: params[:greater_than], completion_starting_value: params[:completion_starting_value],
+                  owned_by_id: params[:owned_by], completion_current_value: params[:completion_current_value],
+                  completion_target_value: params[:completion_target_value])
+    render json: { key_element: key_element.as_json,  status: :ok }
   end
 
   def update_key_element
     key_element = KeyElement.find(params[:key_element_id])
     @annual_initiative = policy_scope(AnnualInitiative).find(key_element.elementable_id)
     authorize @annual_initiative
-    key_element.update!(value: params[:value], completion_type: params[:completion_type],
-                        completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value],
-                        status: params[:status], owned_by_id: params[:owned_by], greater_than: params[:greater_than])
-    render json: { key_element: key_element, status: :ok }
+    key_element.update!(value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], owned_by_id: params[:owned_by],
+                        status: params[:status], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
+    render json: { key_element: key_element.as_json,  status: :ok }
   end
 
   def delete_key_element
@@ -82,6 +85,10 @@ class Api::AnnualInitiativesController < Api::ApplicationController
 
   def key_elements_params
     params.permit(key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value])
+  end
+
+  def objective_log_params
+    params.require(:objective_log_attributes).permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :fiscal_quarter, :fiscal_year, :week)
   end
 
   def set_annual_initiative

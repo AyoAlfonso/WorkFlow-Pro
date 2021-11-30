@@ -21,6 +21,7 @@ module NotificationEmailJobHelper
     ).notification_email.deliver_later
   end
 
+  # Report
   def send_end_of_week_stats_email(user, notification_type)
     UserMailer.with(
       user: user,
@@ -28,6 +29,15 @@ module NotificationEmailJobHelper
       greeting: "Hi #{user&.first_name}! 👋",
       message: "",
     ).end_of_week_stats.deliver_later
+  end
+
+  def send_weekly_check_in_report_stats_email
+    UserMailer.with(
+      user: user,
+      subject: "Weekly Report for Leadership Team",
+      greeting: "Leadership Team",
+      message: "",
+    ).weekly_check_in_report_stats.deliver_later
   end
 
   def send_weekly_checkin_email(user, notification_type)

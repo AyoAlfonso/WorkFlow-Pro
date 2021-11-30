@@ -107,6 +107,7 @@
         "strategicPlan": "The Plan",
         "timezone": "Location/Time Zone",
         "executiveTeam" : "Leadership Team",
+        "objectivesKeyType" : "Objectives Key Type",
         "createUser": {
           "addButton": "Create New User",
           "inviteYourTeam": "Invite your team"

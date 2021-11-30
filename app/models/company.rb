@@ -6,6 +6,7 @@ class Company < ApplicationRecord
   before_save :sanitize_rallying_cry
 
   enum display_format: { Company: 0, Forum: 1 }
+  enum objectives_key_type: { Milestones: 0, KeyResults: 1 }
   enum forum_type: { EO: 0, YPO: 1, Organisation: 2, Other: 3 }
   # has_many :users, dependent: :restrict_with_error #thi shas been replaced with default company
   has_many :annual_initiatives, dependent: :restrict_with_error
@@ -89,6 +90,10 @@ class Company < ApplicationRecord
 
   def forum_types
     Company.forum_types
+  end
+
+  def objectives_key_types
+    Company.objectives_key_types
   end
 
   private

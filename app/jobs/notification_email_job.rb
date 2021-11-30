@@ -25,6 +25,8 @@ class NotificationEmailJob
             send_weekly_planning_email(@user, notification_type)
           elsif notification_type == "Weekly Checkin"
             send_weekly_checkin_email(@user, notification_type)
+          elsif notification_type == "Weekly Checkin Report"
+            send_weekly_check_in_report_stats_email(@user, notification_type)
           elsif notification_type == "Weekly Alignment Meeting" && meeting_did_not_start_this_period("team_weekly")
               @user.team_user_enablements.team_lead.each do |team_lead_enablement|
               if Meeting.team_weekly_meetings.team_meetings(team_lead_enablement&.team&.id).for_week_of_date_started_only(get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)).blank?
