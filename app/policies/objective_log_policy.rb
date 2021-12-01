@@ -8,9 +8,8 @@ class ObjectiveLogPolicy < ApplicationPolicy
   end
 
   def destroy?
-     @record.owned_by == @user.id || user_is_company_admin_of_current_company?
+     @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
-
 
   class Scope
     attr_reader :user, :company, :scope

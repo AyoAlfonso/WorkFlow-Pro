@@ -183,6 +183,9 @@ Rails.application.routes.draw do
     get "/milestones/milestones_for_meeting", to: "milestones#milestones_for_meeting"
     get '/milestones/check_in/:due_date', to: "milestones#check_in_goals"
 
+    #key_element
+    get '/key_elements/check_in', to: "key_elements#check_in_key_elements"
+
     #user_pulses
     get "user_pulse_by_date", to: "user_pulses#user_pulse_by_date"
     post "/update_user_pulse", to: "user_pulses#create_or_update"

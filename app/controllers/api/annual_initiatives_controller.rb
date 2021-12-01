@@ -5,7 +5,6 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   respond_to :json
 
   def create
-  
     @annual_initiative = AnnualInitiative.new({
       created_by: current_user, owned_by: current_user,
       description: params[:description],
