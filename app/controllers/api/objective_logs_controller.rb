@@ -3,6 +3,10 @@ class Api::ObjectiveLogsController < Api::ApplicationController
   respond_to :json
   before_action :set_objective_log, only: [:show, :destroy]
 
+  def index
+    
+  end 
+
   def create
     @objective_log = ObjectiveLog.create!(objective_log_params)
     authorize @objective_log
@@ -22,7 +26,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
   end
 
   def objective_log_params
-    params.require(:objective_log).permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :fiscal_quarter, :fiscal_year, :week)
+    params.permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :fiscal_quarter, :fiscal_year, :week)
   end
 
 end

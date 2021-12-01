@@ -7,6 +7,7 @@ class QuarterlyGoal < ApplicationRecord
 
   belongs_to :annual_initiative
   has_many :milestones, as: :milestoneable
+  has_many :objective_logs, as: :objecteable
   has_many :key_elements, as: :elementable
   has_many :sub_initiatives, dependent: :destroy
   accepts_nested_attributes_for :key_elements, :milestones

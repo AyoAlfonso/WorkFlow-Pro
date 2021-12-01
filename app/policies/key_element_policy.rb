@@ -1,6 +1,6 @@
 
 class KeyElementPolicy < ApplicationPolicy
-  def check_in_key_results?
+  def check_in_key_elements?
     !user_can_observe_current_company?
   end
 
