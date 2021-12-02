@@ -4,7 +4,8 @@ class Api::ObjectiveLogsController < Api::ApplicationController
   before_action :set_objective_log, only: [:show, :destroy]
 
   def index
-    
+     objective_log = policy_scope(ObjectiveLog).where(objecteable_id: params[:id], objecteable_type: params[:type]).page(params[:page]).per(params[:per])
+     render json: { objective_log: objective_log, meta: { first_page: objective_log.first_page?, prev_page: objective_log.prev_page, next_page: objective_log.next_page, current_page: objective_log.current_page, total_pages: objective_log.total_pages, total_count: objective_log.total_count, size: objective_log.size }, status: :ok }
   end 
 
   def create

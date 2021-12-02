@@ -40,6 +40,9 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => "/sidekiq"
 
   scope module: :api, path: :api do
+    concern :paginatable do
+      get '(page/:page)', action: :index, on: :collection, as: ''
+    end
     resources :users, only: [:index, :create, :show, :update, :destroy] do
       collection do
         patch "/reset_password", to: "users#reset_password"
@@ -83,6 +86,7 @@ Rails.application.routes.draw do
     # team_issue_meeting_enablements
     resources :team_issue_meeting_enablements, only: [:index]
 
+   
     #key activities
     resources :key_activities, only: [:index, :create, :update, :destroy] do
       collection do
@@ -137,7 +141,7 @@ Rails.application.routes.draw do
     resources :scorecard_logs, only: [:create, :destroy]
 
     #objective_logs
-    resources :objective_logs, only: [:create, :destroy]
+    resources :objective_logs, only: [:create, :destroy], concerns: :paginatable
 
     #questionnaires
     resources :questionnaires, only: [:index]

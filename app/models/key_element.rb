@@ -32,17 +32,7 @@ class KeyElement < ApplicationRecord
 
   default_scope { order(id: :asc) }
 
-  def as_json(options = [])
-    super({include: {
-                  objective_logs: { methods: [:owned_by] }}
-    }).merge({ :period => self.period, })
-  end
 
-  def period
-     (self.objective_logs.empty?) ? {} : self.objective_logs.group_by { |log| log[:fiscal_year] }.map do |year, objective_log|
-        [year, objective_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
-        end.to_h
-  end
 
   private
 
