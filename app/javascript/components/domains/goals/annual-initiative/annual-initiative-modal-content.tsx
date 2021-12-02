@@ -80,9 +80,6 @@ export const AnnualInitiativeModalContent = memo(observer(
       annualInitiativeStore.getAnnualInitiative(annualInitiativeId).then(() => {
         const annualInitiative = annualInitiativeStore.annualInitiative;
         if (annualInitiative) {
-          annualInitiative?.keyElements.forEach(keyelement => {
-            setKeyLogs(prev => [...prev, ...keyelement.objectiveLogs]);
-          });
           setDescription(annualInitiative.contextDescription || descriptionTemplateForObjective);
           setAnnualInitiative(annualInitiative);
         }

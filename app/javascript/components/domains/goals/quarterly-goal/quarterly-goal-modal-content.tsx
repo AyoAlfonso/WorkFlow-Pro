@@ -79,9 +79,6 @@ export const QuarterlyGoalModalContent = observer(
         // setQuarterlyGoal(quarterlyGoalStore.quarterlyGoal);
         const quarterlyGoal = quarterlyGoalStore?.quarterlyGoal;
         if (quarterlyGoal) {
-          quarterlyGoal.keyElements.forEach(keyelement => {
-            setKeyLogs(prev => [...prev, ...keyelement.objectiveLogs]);
-          });
           setDescription(quarterlyGoal.contextDescription || descriptionTemplateForInitiatives);
           setQuarterlyGoal(quarterlyGoal);
         }

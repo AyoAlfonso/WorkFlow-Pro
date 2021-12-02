@@ -59,9 +59,6 @@ export const SubInitiativeModalContent = observer(
       subInitiativeStore.getSubInitiative(subInitiativeId).then(() => {
         const subInitiative = subInitiativeStore.subInitiative;
         if (subInitiative) {
-          subInitiative.keyElements.forEach(keyelement => {
-            setKeyLogs(prev => [...prev, ...keyelement.objectiveLogs]);
-          });
           setDescription(subInitiative.contextDescription || descriptionTemplateForInitiatives);
           setSubInitiative(subInitiative);
         }
