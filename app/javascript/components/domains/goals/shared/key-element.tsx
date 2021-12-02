@@ -32,6 +32,7 @@ interface IKeyElementProps {
   setActionType: any;
   setSelectedElement: any;
   date?: any;
+  initiativeId: number;
   // TODO: set correct type
 }
 
@@ -46,6 +47,7 @@ export const KeyElement = observer(
     setShowKeyElementForm,
     setActionType,
     setSelectedElement,
+    initiativeId,
   }: IKeyElementProps): JSX.Element => {
     const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
     const [element, setElement] = useState<any>(null);
@@ -145,7 +147,7 @@ export const KeyElement = observer(
           : element.completionCurrentValue;
 
       if (element.greaterThan === 1) {
-        return (current / target) * 100;
+        return Math.min(Math.max(current - starting, 0) / (target - starting), 1) * 100;
       } else {
         return current <= target
           ? 100
@@ -197,17 +199,8 @@ export const KeyElement = observer(
         completionTargetValue: element.completionTargetValue,
         greaterThan: element.condition,
         ownedBy: ownedBy,
+        completionCurrentValue: element.completionCurrentValue,
         status: element.status,
-        objectiveLogAttributes: {
-          ownedById: ownedBy,
-          score: element.completionCurrentValue,
-          note: "",
-          objecteableId: element.id,
-          objecteableType: "KeyElement",
-          fiscalQuarter: company.currentFiscalQuarter,
-          fiscalYear: company.currentFiscalYear,
-          week: company.currentFiscalWeek,
-        },
       };
       let id;
 
@@ -219,6 +212,22 @@ export const KeyElement = observer(
         id = store.subInitiative.id;
       }
       store.updateKeyElement(id, element.id, keyElementParams);
+    };
+
+    const createLog = () => {
+      const objectiveLog = {
+        ownedById: selectedUser.id,
+        score: element.completionCurrentValue,
+        note: "",
+        objecteableId: initiativeId,
+        objecteableType: type,
+        fiscalQuarter: company.currentFiscalQuarter,
+        fiscalYear: company.currentFiscalYear,
+        week: company.currentFiscalWeek,
+        // keyElementId: element.id,
+      };
+
+      store.createActivityLog(objectiveLog);
     };
 
     const updateOwnedById = newUser => {
@@ -335,7 +344,7 @@ export const KeyElement = observer(
                   <InputContainer>
                     <InputFromUnitType
                       unitType={""}
-                      placeholder="Add value..."
+                      placeholder="0"
                       onChange={e => {
                         store.updateKeyElementValue(
                           "completionCurrentValue",
@@ -345,8 +354,8 @@ export const KeyElement = observer(
                       }}
                       defaultValue={element.completionCurrentValue}
                       onBlur={() => {
-                        store.update();
                         updateKeyElement(selectedUser.id);
+                        createLog();
                       }}
                     />
                     <SymbolContainer>{completionSymbol(element.completionType)}</SymbolContainer>

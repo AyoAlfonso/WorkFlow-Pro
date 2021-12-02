@@ -243,6 +243,10 @@ export class Api {
     return this.client.get("/goals");
   }
 
+  async getObjectiveLogs(page: number, type: string, id: number) {
+    return this.client.get(`/objective_logs/page/${page}?type=${type}&id=${id}&per=10`)
+  }
+
   async getAnnualInitiative(id) {
     return this.client.get(`/annual_initiatives/${id}`);
   }
@@ -278,6 +282,10 @@ export class Api {
 
   async deleteAnnualInitiativeKeyElement(keyElementId) {
     return this.client.delete(`/annual_initiatives/delete_key_element/${keyElementId}`);
+  }
+
+  async createInitiativeLog(objectiveLogs) {
+    return this.client.post(`/objective_logs`, objectiveLogs);
   }
 
   async getQuarterlyGoal(id) {

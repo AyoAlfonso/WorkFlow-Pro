@@ -273,6 +273,7 @@ export const ContextTabs = observer(
                 setActionType={setActionType}
                 setSelectedElement={setSelectedElement}
                 date={selectedDate}
+                initiativeId={object.id}
               />
             );
           })}

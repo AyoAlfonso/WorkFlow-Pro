@@ -63,6 +63,12 @@ export const SubInitiativeModalContent = observer(
           setSubInitiative(subInitiative);
         }
       });
+      subInitiativeStore.getActivityLogs(1, "subInitiative", subInitiativeId).then(() => {
+        const objectiveLogs = subInitiativeStore.objectiveLogs;
+        if (objectiveLogs) {
+          setKeyLogs(toJS(objectiveLogs));
+        }
+      });
     }, []);
 
     if (subInitiative == null) {

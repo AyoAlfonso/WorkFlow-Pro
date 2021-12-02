@@ -76,11 +76,16 @@ export const QuarterlyGoalModalContent = observer(
 
     useEffect(() => {
       quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
-        // setQuarterlyGoal(quarterlyGoalStore.quarterlyGoal);
         const quarterlyGoal = quarterlyGoalStore?.quarterlyGoal;
         if (quarterlyGoal) {
           setDescription(quarterlyGoal.contextDescription || descriptionTemplateForInitiatives);
           setQuarterlyGoal(quarterlyGoal);
+        }
+      });
+      quarterlyGoalStore.getActivityLogs(1, "quarterlyGoal", quarterlyGoalId).then(() => {
+        const objectiveLogs = quarterlyGoalStore.objectiveLogs;
+        if (objectiveLogs) {
+          setKeyLogs(toJS(objectiveLogs));
         }
       });
     }, []);

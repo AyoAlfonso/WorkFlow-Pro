@@ -1,7 +1,7 @@
 import { types, getRoot } from "mobx-state-tree";
 import { UserModel } from "./user";
 
-export const KeyElementLogModel = types
+export const ObjectiveLogModel = types
   .model("ScorecardLogModel")
   .props({
     id: types.maybeNull(types.identifierNumber),

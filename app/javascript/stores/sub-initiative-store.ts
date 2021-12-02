@@ -5,11 +5,13 @@ import moment from "moment";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import il8n from "i18next";
+import { ObjectiveLogModel } from "~/models/objective-log";
 
 export const SubInitiativeStoreModel = types
   .model("SubInitiativeModel")
   .props({
     subInitiative: types.maybeNull(SubInitiativeModel),
+    objectiveLogs: types.maybeNull(types.array(ObjectiveLogModel)),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -108,6 +110,29 @@ export const SubInitiativeStoreModel = types
         return true;
       } catch {
         showToast("There was an error deleting the key result", ToastMessageConstants.ERROR);
+        return false;
+      }
+    }),
+    getActivityLogs: flow(function*(page, type, id) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.getObjectiveLogs(page, type, id);
+        if (response.status === "ok") {
+          self.objectiveLogs = response.objectiveLog;
+          return true;
+        }
+      } catch {
+        return false;
+      }
+    }),
+    createActivityLog: flow(function*(objectiveLog) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createInitiativeLog(objectiveLog);
+        if (response.ok) {
+          return true;
+        }
+      } catch {
         return false;
       }
     }),

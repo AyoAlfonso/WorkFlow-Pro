@@ -1,5 +1,4 @@
 import { types } from "mobx-state-tree";
-import { KeyElementLogModel } from "./keyelement-log";
 import { UserModel } from "./user";
 
 export const KeyElementModel = types
@@ -17,8 +16,6 @@ export const KeyElementModel = types
     completionCurrentValue: types.optional(types.union(types.number, types.string), ""), //add case for no entry value ''
     completionTargetValue: types.maybeNull(types.number),
     greaterThan: types.maybeNull(types.number),
-    objectiveLogs: types.maybeNull(types.array(KeyElementLogModel)),
-    period: types.maybeNull(types.frozen()),
   })
   .views(self => ({}))
   .actions(self => ({}));
