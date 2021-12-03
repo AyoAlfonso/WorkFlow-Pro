@@ -11,6 +11,7 @@ import { EmbedStep } from "~/components/domains/meetings/shared/embed-step";
 import { TextStep } from "~/components/domains/meetings/shared/text-step";
 import { WeeklyMilestones } from "./weekly-milestones";
 import { KpiComponent } from "./kpi";
+import { WeeklyKeyResults } from "./weekly-key-results";
 
 export interface ICheckinStepProps {
   checkin: IMeeting;
@@ -24,6 +25,8 @@ const StepComponent = (step: IStep, checkin: IMeeting) => {
           return <KpiComponent />;
         case "WeeklyMilestones":
           return <WeeklyMilestones />;
+        case "WeeklyKeyResults":
+          return <WeeklyKeyResults />;
         default:
           return <Text>This custom component has not been configured</Text>;
       }

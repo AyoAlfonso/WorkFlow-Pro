@@ -26,11 +26,11 @@ interface IKeyElementProps {
   store: any;
   editable: boolean;
   lastKeyElement: boolean;
-  focusOnLastInput: boolean;
+  focusOnLastInput?: boolean;
   type: string;
-  setShowKeyElementForm: any;
-  setActionType: any;
-  setSelectedElement: any;
+  setShowKeyElementForm?: any;
+  setActionType?: any;
+  setSelectedElement?: any;
   date?: any;
   initiativeId: number;
   // TODO: set correct type
@@ -62,6 +62,7 @@ export const KeyElement = observer(
       subInitiativeStore,
       companyStore,
       sessionStore,
+      keyElementStore,
       userStore,
     } = useMst();
     const optionsRef = useRef(null);
@@ -79,6 +80,8 @@ export const KeyElement = observer(
         item = quarterlyGoalStore.quarterlyGoal.keyElements.find(ke => ke.id == elementId);
       } else if (type == "subInitiative") {
         item = subInitiativeStore.subInitiative.keyElements.find(ke => ke.id == elementId);
+      } else if (type == "checkIn") {
+        item = keyElementStore.keyElementsForWeeklyCheckin.find(ke => ke.id == elementId);
       }
       setElement(item);
       setCheckboxValue(item["completedAt"] ? true : false);
@@ -364,24 +367,28 @@ export const KeyElement = observer(
                     />
                     <SymbolContainer>{completionSymbol(element.completionType)}</SymbolContainer>
                   </InputContainer>
+                  <ValueSpanContainer>
+                    <ValueSpan>{`${renderElementCompletionTargetValue()}`}</ValueSpan>
+                  </ValueSpanContainer>
                 </ValueInputContainer>
-                <ValueSpanContainer>
-                  <ValueSpan>{`${renderElementCompletionTargetValue()}`}</ValueSpan>
-                </ValueSpanContainer>
-                <ProgressBarContainer>
-                  <StripedProgressBar variant={element.status} completed={completion()} />
-                </ProgressBarContainer>
+                {type != "checkIn" && (
+                  <ProgressBarContainer>
+                    <StripedProgressBar variant={element.status} completed={completion()} />
+                  </ProgressBarContainer>
+                )}
               </CompletionContainer>
             )}
           </ContentContainer>
-          <IconWrapper
-            onClick={e => {
-              e.stopPropagation();
-              setShowOptions(!showOptions);
-            }}
-          >
-            <Icon icon={"Options"} size={"16px"} iconColor={"grey60"} />
-          </IconWrapper>
+          {type != "checkIn" && (
+            <IconWrapper
+              onClick={e => {
+                e.stopPropagation();
+                setShowOptions(!showOptions);
+              }}
+            >
+              <Icon icon={"Options"} size={"16px"} iconColor={"grey60"} />
+            </IconWrapper>
+          )}
           {showOptions && (
             <KeyElementsDropdownOptions
               element={element}
@@ -548,6 +555,9 @@ const CompletionContainer = styled.div`
   align-items: center;
   margin-top: 8px;
   position: relative;
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
 `;
 
 const CompletionTextContainer = styled.div`
@@ -572,7 +582,7 @@ const StyledIcon = styled(Icon)`
 
 const DropdownHeader = styled("div")`
   border: 1px solid ${props => props.theme.colors.greyInactive};
-  width: 145px;
+  min-width: 145px;
   padding: 8px 0px;
   border-radius: 5px;
   display: flex;
@@ -580,6 +590,10 @@ const DropdownHeader = styled("div")`
   cursor: pointer;
   position: relative;
   margin-right: 20px;
+  @media only screen and (max-width: 768px) {
+    margin-bottom: 20px;
+    width: 145px;
+  }
 `;
 
 type StatusBadgeProps = {
@@ -601,6 +615,9 @@ const StatusBadge = styled("span")<StatusBadgeProps>`
 const DropdownListContainer = styled("div")`
   position: absolute;
   margin-top: 30px;
+  @media only screen and (max-width: 768px) {
+    margin-top: -20px;
+  }
 `;
 
 const DropdownList = styled("ul")`
@@ -633,7 +650,6 @@ const ValueInputContainer = styled.div`
   align-items: center;
   display: flex;
   justify-content: space-between;
-  max-width: 145px;
 `;
 
 const ValueSpan = styled.span`
@@ -646,6 +662,16 @@ const ValueSpanContainer = styled.div`
   margin-left: 50px;
   margin-right: 50px;
   text-align: center;
+  @media only screen and (max-width: 768px) {
+    display: inline;
+  }
+`;
+
+const ValueSpanContainerMobile = styled.span`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: inline;
+  }
 `;
 
 const AvatarContainer = styled.div`
@@ -664,6 +690,10 @@ const SymbolContainer = styled.span`
 
 const InputContainer = styled.div`
   position: relative;
+  width: 145px;
+  @media only screen and (max-width: 768px) {
+    width: 148px;
+  }
 `;
 
 const SelectionListContainer = styled.div`

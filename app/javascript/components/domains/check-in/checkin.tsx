@@ -31,11 +31,13 @@ export const CheckIn = observer(
     useEffect(() => {
       validateWeekOf(weekOf, history, id);
       checkInTemplateStore.fetchCheckInTemplates();
-      if (companyStore.company.objectivesKeyType === "KeyResults") {
-        checkInTemplateStore.getCheckIn("Weekly Check-In");
-      } else if (companyStore.company.objectivesKeyType === "Milestones") {
-        checkInTemplateStore.getCheckIn("Weekly Check In");
-      }
+      companyStore.load().then(() => {
+        if (companyStore.company?.objectivesKeyType === "KeyResults") {
+          checkInTemplateStore.getCheckIn("Weekly Check-In");
+        } else if (companyStore.company?.objectivesKeyType === "Milestones") {
+          checkInTemplateStore.getCheckIn("Weekly Check In");
+        }
+      });
     }, []);
 
     const renderLoading = () => (
