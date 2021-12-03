@@ -1,6 +1,10 @@
 import * as React from "react";
 import * as R from "ramda";
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
+=======
+import { useEffect } from "react";
+>>>>>>> 5e295842 (added weekly key results)
 import { observer } from "mobx-react";
 import { Text } from "../../../shared/text";
 import { useMst } from "~/setup/root";
@@ -9,13 +13,17 @@ import { Loading } from "~/components/shared/loading";
 import { useParams } from "react-router-dom";
 import { toJS } from "mobx";
 import * as moment from "moment";
+<<<<<<< HEAD
 import { Avatar } from "~/components/shared";
+=======
+>>>>>>> 5e295842 (added weekly key results)
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "./empty-state";
 import { KeyElement } from "../../goals/shared/key-element";
 
 export const WeeklyKeyResults = observer(
   (props): JSX.Element => {
+<<<<<<< HEAD
     const { keyElementStore, userStore } = useMst();
     const { keyElementsForWeeklyCheckin } = keyElementStore;
     const { t } = useTranslation();
@@ -34,6 +42,13 @@ export const WeeklyKeyResults = observer(
     };
 
     const sortedKeyElements = keyElementsForWeeklyCheckin && groupBy(keyElementsForWeeklyCheckin);
+=======
+    const { keyElementStore } = useMst();
+    const { t } = useTranslation();
+
+    const { weekOf } = useParams();
+    const { keyElementsForWeeklyCheckin } = keyElementStore;
+>>>>>>> 5e295842 (added weekly key results)
 
     useEffect(() => {
       keyElementStore.getKeyElementsForWeeklyCheckIn();
@@ -58,6 +73,7 @@ export const WeeklyKeyResults = observer(
       </LoadingContainer>
     );
 
+<<<<<<< HEAD
     const groupKrs = () => {
       const keyElements = sortedKeyElements;
       const index = Object.values(keyElements);
@@ -66,6 +82,9 @@ export const WeeklyKeyResults = observer(
     };
 
     const renderKeyElements = (): JSX.Element => {
+=======
+    const renderMilestones = (): JSX.Element => {
+>>>>>>> 5e295842 (added weekly key results)
       return (
         <>
           {R.isNil(keyElementsForWeeklyCheckin) ? (
@@ -73,6 +92,7 @@ export const WeeklyKeyResults = observer(
           ) : (
             <>
               {renderHeading()}
+<<<<<<< HEAD
               {keyElementsForWeeklyCheckin &&
                 groupKrs().map((groupedKrs: Array<any>, index) => {
                   const user = userStore.users.find(
@@ -107,6 +127,22 @@ export const WeeklyKeyResults = observer(
                     </Container>
                   );
                 })}
+=======
+              {keyElementsForWeeklyCheckin?.map((kr, index) => {
+                const lastKeyElement = index == keyElementsForWeeklyCheckin.length - 1;
+                return (
+                  <Container key={kr.id}>
+                    <KeyElement
+                      elementId={kr.id}
+                      store={keyElementStore}
+                      editable={true}
+                      lastKeyElement={lastKeyElement}
+                      type={"checkIn"}
+                    />
+                  </Container>
+                );
+              })}
+>>>>>>> 5e295842 (added weekly key results)
             </>
           )}
         </>
@@ -115,11 +151,19 @@ export const WeeklyKeyResults = observer(
     return (
       <>
         {!R.isEmpty(keyElementsForWeeklyCheckin) ? (
+<<<<<<< HEAD
           <>{renderKeyElements()}</>
         ) : (
           <EmptyState
             heading={t("weeklyCheckIn.keyResults.emptyText")}
             infoText={t("weeklyCheckIn.keyResults.create")}
+=======
+          <>{renderMilestones()}</>
+        ) : (
+          <EmptyState
+            heading={t("weeklyCheckIn.milestones.emptyText")}
+            infoText={t("weeklyCheckIn.milestones.create")}
+>>>>>>> 5e295842 (added weekly key results)
           />
         )}
       </>
@@ -129,12 +173,17 @@ export const WeeklyKeyResults = observer(
 
 const Container = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+<<<<<<< HEAD
   padding-top: 15px;
   padding-bottom: 10px;
   @media only screen and (max-width: 768px) {
     padding: 0 16px;
     padding-top: 15px;
     padding-bottom: 10px;
+=======
+  @media only screen and (max-width: 768px) {
+    padding: 0 16px;
+>>>>>>> 5e295842 (added weekly key results)
   }
 `;
 
@@ -149,7 +198,11 @@ const BodyContainer = styled.div`
 `;
 
 const StyledText = styled.span`
+<<<<<<< HEAD
   font-size: 18px;
+=======
+  font-size: 16px;
+>>>>>>> 5e295842 (added weekly key results)
   font-weight: bold;
   margin-left: 5px;
 `;
@@ -160,9 +213,12 @@ const StyledHeader = styled.h1`
     font-size: 24px;
   }
 `;
+<<<<<<< HEAD
 
 const TopSection = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 25px;
 `;
+=======
+>>>>>>> 5e295842 (added weekly key results)

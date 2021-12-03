@@ -641,9 +641,12 @@ export class Api {
   async getWeeklyCheckinKeyElements() {
     return this.client.get(`key_elements/check_in`);
   }
+<<<<<<< HEAD
 
   async updateWeeklyCheckInKeyElements(id, value) {
     return this.client.put(`key_elements/${id}`, value);
   }
+=======
+>>>>>>> 5e295842 (added weekly key results)
   //async setJWT(jwt) {}
 }

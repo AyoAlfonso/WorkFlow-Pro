@@ -17,6 +17,7 @@ export const KeyElementStoreModel = types
       try {
         const response: any = yield env.api.getWeeklyCheckinKeyElements();
         self.keyElementsForWeeklyCheckin = response.data;
+<<<<<<< HEAD
         return response.data;
       } catch (error) {
         showToast("There was an error retrieving Key Results", ToastMessageConstants.ERROR);
@@ -44,6 +45,14 @@ export const KeyElementStoreModel = types
       self.keyElementsForWeeklyCheckin = keyElements;
     },
   }));
+=======
+      } catch (error) {
+        showToast("There was an error retrieving Key Results", ToastMessageConstants.ERROR);
+      }
+    })
+  }))
+  .actions(self => ({}));
+>>>>>>> 5e295842 (added weekly key results)
 
 type KeyElementStoreType = typeof KeyElementStoreModel.Type;
 export interface IKeyElementStore extends KeyElementStoreType {}
