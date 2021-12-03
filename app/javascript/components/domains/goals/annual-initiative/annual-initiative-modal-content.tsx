@@ -370,7 +370,7 @@ export const AnnualInitiativeModalContent = memo(
                   }}
                 />
               </FormElementContainer>
-              {/* <ActivityLogs keyElements={keyLogs} store={annualInitiativeStore} /> */}
+              <ActivityLogs keyElements={keyLogs} store={annualInitiativeStore} />
             </SectionContainer>
           </Container>
         </>

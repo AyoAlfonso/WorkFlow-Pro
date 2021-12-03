@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import { sortByDate } from "~/utils/sorting";
 import moment from "moment";
 import { observer } from "mobx-react";
-import { Avatar, } from "~/components/shared";
+import { Avatar } from "~/components/shared";
 import { completionSymbol, determineStatusLabel } from "./key-element";
 
 interface IActivityLogsProps {
@@ -15,9 +15,11 @@ interface IActivityLogsProps {
 
 export const ActivityLogs = observer(
   ({ keyElements, store }: IActivityLogsProps): JSX.Element => {
+    const { userStore } = useMst()
     return (
       <ActivityLogsContainer>
         {keyElements.sort(sortByDate).map(log => {
+          const user = userStore.users.find(user => user.id === log.ownedById)
           return (
             <ActivityLogContainer key={log.id}>
               <Avatar
@@ -25,27 +27,29 @@ export const ActivityLogs = observer(
                 marginLeft={"0px"}
                 marginTop={"0px"}
                 marginRight={"16px"}
-                firstName={log.ownedBy.firstName}
-                lastName={log.ownedBy.lastName}
-                defaultAvatarColor={log.ownedBy.defaultAvatarColor}
-                avatarUrl={log.ownedBy.avatarUrl}
+                firstName={user.firstName}
+                lastName={user.lastName}
+                defaultAvatarColor={user.defaultAvatarColor}
+                avatarUrl={user.avatarUrl}
               />
               <ActivityLogTextContainer>
                 <ActivityLogText fontSize={"14px"} mb={8}>
                   <b>
-                    {log.ownedBy.firstName} {log.ownedBy.lastName}
+                    {user.firstName} {user.lastName}
                   </b>{" "}
                   updated{" "}
                   <b>
-                    <u>{store?.keyElementTitle(log.objecteableId)}</u>
+                    <u>{log.childType === "keyElement" && store?.keyElementTitle(log.childId)}</u>
                   </b>{" "}
                   to{" "}
                   <b>
-                    <u>{`${log.score}${completionSymbol(
-                      store?.keyElementCompletionType(log.objecteableId),
-                    )}`}</u>
+                    <u>{`${log.score}${log.childType === "keyElement" &&
+                      completionSymbol(store?.keyElementCompletionType(log.childId))}`}</u>
                   </b>
-                  <span>{determineStatusLabel(store?.keyElementStatus(log.objecteableId))}</span>
+                  <span>
+                    {log.childType === "keyElement" &&
+                      determineStatusLabel(store?.keyElementStatus(log.childId))}
+                  </span>
                 </ActivityLogText>
                 {/* <ActivityLogText mb={4}>
                         <i>{log.note}</i>

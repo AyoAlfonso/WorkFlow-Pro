@@ -224,7 +224,8 @@ export const KeyElement = observer(
         fiscalQuarter: company.currentFiscalQuarter,
         fiscalYear: company.currentFiscalYear,
         week: company.currentFiscalWeek,
-        // keyElementId: element.id,
+        childType: "KeyElement",
+        childId: element.id
       };
 
       store.createActivityLog(objectiveLog);
