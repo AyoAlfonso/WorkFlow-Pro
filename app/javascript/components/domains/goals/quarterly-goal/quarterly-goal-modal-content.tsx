@@ -51,8 +51,13 @@ export const QuarterlyGoalModalContent = observer(
       quarterlyGoalStore,
       sessionStore,
       subInitiativeStore,
+      userStore,
+      companyStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
+
+    const { objectiveLogs } = quarterlyGoalStore;
+
     const currentUser = sessionStore.profile;
     const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
     const [showCreateSubInitiative, setShowCreateSubInitiative] = useState<boolean>(false);
@@ -65,7 +70,6 @@ export const QuarterlyGoalModalContent = observer(
     const [description, setDescription] = useState<string>("");
     const [comment, setComment] = useState<string>("");
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
-    const [keyLogs, setKeyLogs] = useState([]);
 
     const descriptionTemplateForInitiatives = descriptionTemplatesFormatted.find(
       t => t.templateType == "initiatives",
@@ -82,12 +86,7 @@ export const QuarterlyGoalModalContent = observer(
           setQuarterlyGoal(quarterlyGoal);
         }
       });
-      quarterlyGoalStore.getActivityLogs(1, "quarterlyGoal", quarterlyGoalId).then(() => {
-        const objectiveLogs = quarterlyGoalStore.objectiveLogs;
-        if (objectiveLogs) {
-          setKeyLogs(toJS(objectiveLogs));
-        }
-      });
+      quarterlyGoalStore.getActivityLogs(1, "quarterlyInitiative", quarterlyGoalId);
     }, []);
 
     if (quarterlyGoal == null) {
@@ -161,6 +160,21 @@ export const QuarterlyGoalModalContent = observer(
     )
       .toString()
       .slice(-2)}`;
+
+    const createLog = () => {
+      const objectiveLog = {
+        ownedById: sessionStore.profile.id,
+        score: 0,
+        note: comment,
+        objecteableId: quarterlyGoalId,
+        objecteableType: "quarterlyInitiative",
+        fiscalQuarter: companyStore.company.currentFiscalQuarter,
+        fiscalYear: companyStore.company.currentFiscalYear,
+        week: companyStore.company.currentFiscalWeek,
+      };
+
+      quarterlyGoalStore.createActivityLog(objectiveLog);
+    };
 
     return (
       <>
@@ -276,15 +290,33 @@ export const QuarterlyGoalModalContent = observer(
                 onChange={e => {
                   setComment(e.target.value);
                 }}
-                // onBlur={() => {
-                //   if (!value) {
-                //     valueForComment = kpi.scorecardLogs[kpi.scorecardLogs?.length - 1]?.score;
-                //   }
-                //   handleBlur(kpi.id);
-                // }}
+                value={comment}
+                onBlur={() => {
+                  if (!comment) {
+                    return;
+                  }
+                  createLog();
+                  setComment("");
+                }}
               />
             </FormElementContainer>
-            <ActivityLogs keyElements={keyLogs} store={quarterlyGoalStore} />
+            <ActivityLogsContainer>
+              {objectiveLogs
+                ?.slice()
+                .sort(sortByDate)
+                .map(log => {
+                  const user = userStore.users.find(user => user.id === log.ownedById);
+                  const keyElement = quarterlyGoalStore.findKeyElement(log.childId);
+                  return (
+                    <ActivityLogs
+                      log={log}
+                      user={user}
+                      keyElement={keyElement}
+                      store={quarterlyGoalStore}
+                    />
+                  );
+                })}
+            </ActivityLogsContainer>
           </SectionContainer>
         </Container>
       </>
@@ -363,4 +395,11 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const ActivityLogsContainer = styled.div`
+  width: 100%;
+  max-height: 500px;
+  margin-top: 24px;
+  overflow: auto;
 `;

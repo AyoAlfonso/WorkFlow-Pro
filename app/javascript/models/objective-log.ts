@@ -15,6 +15,14 @@ export const ObjectiveLogModel = types
     fiscalYear: types.maybeNull(types.number),
     createdAt: types.maybeNull(types.string),
     ownedBy: types.maybeNull(UserModel),
+    childId: types.maybeNull(types.number),
+    childType: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));
+
+type ObjectiveLogModelType = typeof ObjectiveLogModel.Type;
+type ObjectiveLogModelDataType = typeof ObjectiveLogModel.CreationType;
+
+export interface IObjectiveLog extends ObjectiveLogModelType { }
+export interface IObjectiveLogData extends ObjectiveLogModelDataType {}

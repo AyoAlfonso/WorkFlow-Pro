@@ -288,6 +288,10 @@ export class Api {
     return this.client.post(`/objective_logs`, objectiveLogs);
   }
 
+  async deleteInitiativeLog(id) {
+    return this.client.delete(`/objective_logs/${id}`)
+  }
+
   async getQuarterlyGoal(id) {
     return this.client.get(`/quarterly_goals/${id}`);
   }

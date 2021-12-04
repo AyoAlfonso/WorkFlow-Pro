@@ -26,6 +26,7 @@ import { useTranslation } from "react-i18next";
 import { HtmlTooltip } from "~/components/shared/tooltip";
 import { DateSelector } from "./date-selector";
 import { set } from "immutable";
+import { sortByDate } from "~/utils/sorting";
 
 interface IContextTabsProps {
   object: AnnualInitiativeType | QuarterlyGoalType;

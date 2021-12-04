@@ -48,9 +48,12 @@ export const AnnualInitiativeModalContent = memo(
         companyStore,
         sessionStore,
         quarterlyGoalStore,
+        userStore,
         descriptionTemplateStore: { descriptionTemplates },
       } = useMst();
       const currentUser = sessionStore.profile;
+
+      const { objectiveLogs } = annualInitiativeStore;
 
       const [showCreateQuarterlyGoal, setShowCreateQuarterlyGoal] = useState<boolean>(false);
       const [showAllQuarterlyGoals, setShowAllQuarterlyGoals] = useState<boolean>(false);
@@ -62,7 +65,6 @@ export const AnnualInitiativeModalContent = memo(
       const [comment, setComment] = useState<string>("");
       const [annualInitiative, setAnnualInitiative] = useState(null);
       const descriptionTemplatesFormatted = toJS(descriptionTemplates);
-      const [keyLogs, setKeyLogs] = useState([]);
 
       const descriptionTemplateForObjective = descriptionTemplatesFormatted.find(
         t => t.templateType == "objectives",
@@ -85,14 +87,7 @@ export const AnnualInitiativeModalContent = memo(
             setAnnualInitiative(annualInitiative);
           }
         });
-        annualInitiativeStore
-          .getActivityLogs(1, "annualInitiative", annualInitiativeId)
-          .then(() => {
-            const objectiveLogs = annualInitiativeStore.objectiveLogs;
-            if (objectiveLogs) {
-              setKeyLogs(toJS(objectiveLogs));
-            }
-          });
+        annualInitiativeStore.getActivityLogs(1, "annualInitiative", annualInitiativeId);
       }, []);
 
       if (annualInitiative == null) {
@@ -301,9 +296,7 @@ export const AnnualInitiativeModalContent = memo(
           week: companyStore.company.currentFiscalWeek,
         };
 
-        annualInitiativeStore.createActivityLog(objectiveLog).then(() => {
-          setComment("");
-        });
+        annualInitiativeStore.createActivityLog(objectiveLog);
       };
 
       return (
@@ -362,15 +355,33 @@ export const AnnualInitiativeModalContent = memo(
                   onChange={e => {
                     setComment(e.target.value);
                   }}
+                  value={comment}
                   onBlur={() => {
                     if (!comment) {
                       return;
                     }
                     createLog();
+                    setComment("");
                   }}
                 />
               </FormElementContainer>
-              <ActivityLogs keyElements={keyLogs} store={annualInitiativeStore} />
+              <ActivityLogsContainer>
+                {objectiveLogs
+                  ?.slice()
+                  .sort(sortByDate)
+                  .map(log => {
+                    const user = userStore.users.find(user => user.id === log.ownedById);
+                    const keyElement = annualInitiativeStore.findKeyElement(log.childId);
+                    return (
+                      <ActivityLogs
+                        log={log}
+                        user={user}
+                        keyElement={keyElement}
+                        store={annualInitiativeStore}
+                      />
+                    );
+                  })}
+              </ActivityLogsContainer>
             </SectionContainer>
           </Container>
         </>
@@ -594,4 +605,11 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const ActivityLogsContainer = styled.div`
+  width: 100%;
+  max-height: 500px;
+  margin-top: 24px;
+  overflow: auto;
 `;

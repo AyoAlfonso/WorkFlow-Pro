@@ -17,6 +17,7 @@ import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-
 import { toJS } from "mobx";
 import { TrixEditor } from "react-trix";
 import { ActivityLogs } from "../shared/activity-logs";
+import { sortByDate } from "~/utils/sorting";
 
 interface ISubInitiativeModalContentProps {
   subInitiativeId: number;
@@ -37,8 +38,13 @@ export const SubInitiativeModalContent = observer(
     const {
       subInitiativeStore,
       sessionStore,
+      userStore,
+      companyStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
+
+    const { objectiveLogs } = subInitiativeStore;
+
     const currentUser = sessionStore.profile;
     const [subInitiative, setSubInitiative] = useState<any>(null);
     const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
@@ -49,7 +55,6 @@ export const SubInitiativeModalContent = observer(
     const [description, setDescription] = useState<string>("");
     const [comment, setComment] = useState<string>("");
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
-    const [keyLogs, setKeyLogs] = useState([]);
 
     const descriptionTemplateForInitiatives = descriptionTemplatesFormatted.find(
       t => t.templateType == "initiatives",
@@ -63,12 +68,7 @@ export const SubInitiativeModalContent = observer(
           setSubInitiative(subInitiative);
         }
       });
-      subInitiativeStore.getActivityLogs(1, "subInitiative", subInitiativeId).then(() => {
-        const objectiveLogs = subInitiativeStore.objectiveLogs;
-        if (objectiveLogs) {
-          setKeyLogs(toJS(objectiveLogs));
-        }
-      });
+      subInitiativeStore.getActivityLogs(1, "subInitiative", subInitiativeId);
     }, []);
 
     if (subInitiative == null) {
@@ -96,6 +96,21 @@ export const SubInitiativeModalContent = observer(
     )
       .toString()
       .slice(-2)}`;
+
+    const createLog = () => {
+      const objectiveLog = {
+        ownedById: sessionStore.profile.id,
+        score: 0,
+        note: comment,
+        objecteableId: subInitiative.id,
+        objecteableType: "subInitiative",
+        fiscalQuarter: companyStore.company.currentFiscalQuarter,
+        fiscalYear: companyStore.company.currentFiscalYear,
+        week: companyStore.company.currentFiscalWeek,
+      };
+
+      subInitiativeStore.createActivityLog(objectiveLog);
+    };
 
     return (
       <>
@@ -182,15 +197,33 @@ export const SubInitiativeModalContent = observer(
                 onChange={e => {
                   setComment(e.target.value);
                 }}
-                // onBlur={() => {
-                //   if (!value) {
-                //     valueForComment = kpi.scorecardLogs[kpi.scorecardLogs?.length - 1]?.score;
-                //   }
-                //   handleBlur(kpi.id);
-                // }}
+                value={comment}
+                onBlur={() => {
+                  if (!comment) {
+                    return;
+                  }
+                  createLog();
+                  setComment("");
+                }}
               />
             </FormElementContainer>
-            <ActivityLogs keyElements={keyLogs} store={subInitiativeStore} />
+            <ActivityLogsContainer>
+              {objectiveLogs
+                ?.slice()
+                .sort(sortByDate)
+                .map(log => {
+                  const user = userStore.users.find(user => user.id === log.ownedById);
+                  const keyElement = subInitiativeStore.findKeyElement(log.childId);
+                  return (
+                    <ActivityLogs
+                      log={log}
+                      user={user}
+                      keyElement={keyElement}
+                      store={subInitiativeStore}
+                    />
+                  );
+                })}
+            </ActivityLogsContainer>
           </SectionContainer>
         </Container>
       </>
@@ -234,4 +267,11 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const ActivityLogsContainer = styled.div`
+  width: 100%;
+  max-height: 500px;
+  margin-top: 24px;
+  overflow: auto;
 `;

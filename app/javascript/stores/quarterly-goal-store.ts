@@ -131,8 +131,8 @@ export const QuarterlyGoalStoreModel = types
       const env = getEnv(self);
       try {
         const response: any = yield env.api.getObjectiveLogs(page, type, id);
-        if (response.status === "ok") {
-          self.objectiveLogs = response.objectiveLog;
+        if (response.ok) {
+          self.objectiveLogs = response.data.objectiveLog;
           return true;
         }
       } catch {
@@ -144,7 +144,23 @@ export const QuarterlyGoalStoreModel = types
       try {
         const response: any = yield env.api.createInitiativeLog(objectiveLog);
         if (response.ok) {
-          return true;
+          const updatedLogs = [...self.objectiveLogs, response.data.objectiveLog];
+          self.objectiveLogs = updatedLogs as any;
+          return response.data.objectiveLog;
+        }
+      } catch {
+        return false;
+      }
+    }),
+    deleteActivityLog: flow(function*(id) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.deleteInitiativeLog(id);
+        if (response.ok) {
+          const updatedLogs = self.objectiveLogs.filter(log => log.id != response.data.objectiveLog.id);
+          self.objectiveLogs = updatedLogs as any;
+          showToast("Log Deleted", ToastMessageConstants.SUCCESS);
+          return response.data.objectiveLog;
         }
       } catch {
         return false;
@@ -242,6 +258,10 @@ export const QuarterlyGoalStoreModel = types
   .actions(self => ({
     updateModelField(field, value) {
       self.quarterlyGoal[field] = value;
+    },
+    findKeyElement(id) {
+      const keyElement = self.quarterlyGoal.keyElements.find(ke => ke.id == id);
+      return keyElement;
     },
     keyElementTitle(id) {
       const keyElement = self.quarterlyGoal.keyElements.find(ke => ke.id == id);

@@ -197,7 +197,7 @@ export const KeyElement = observer(
         value: element.value,
         completionType: element.completionType,
         completionTargetValue: element.completionTargetValue,
-        greaterThan: element.condition,
+        greaterThan: element.greaterThan,
         ownedBy: ownedBy,
         completionCurrentValue: element.completionCurrentValue,
         status: element.status,
@@ -220,12 +220,12 @@ export const KeyElement = observer(
         score: element.completionCurrentValue,
         note: "",
         objecteableId: initiativeId,
-        objecteableType: type,
+        objecteableType: type === "quarterlyGoal" ? "quarterlyInitiative" : type,
         fiscalQuarter: company.currentFiscalQuarter,
         fiscalYear: company.currentFiscalYear,
         week: company.currentFiscalWeek,
         childType: "KeyElement",
-        childId: element.id
+        childId: element.id,
       };
 
       store.createActivityLog(objectiveLog);
@@ -292,6 +292,7 @@ export const KeyElement = observer(
                         onClick={() => {
                           store.updateKeyElementValue("status", element.id, status);
                           updateKeyElement(selectedUser.id);
+                          createLog();
                           if (status === "done") {
                             store.updateKeyElementStatus(element.id, true);
                           } else {
@@ -331,6 +332,7 @@ export const KeyElement = observer(
                             store.updateKeyElementValue("status", element.id, status);
                             updateKeyElement(selectedUser.id);
                             setShowList(!showList);
+                            createLog();
                           }}
                           key={index}
                           value={status}
@@ -350,7 +352,7 @@ export const KeyElement = observer(
                         store.updateKeyElementValue(
                           "completionCurrentValue",
                           element.id,
-                          e.target.value == "" ? "" : parseTarget(e.target.value),
+                          e.target.value == "" ? 0 : parseTarget(e.target.value),
                         );
                       }}
                       defaultValue={element.completionCurrentValue}
