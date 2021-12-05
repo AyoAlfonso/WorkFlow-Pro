@@ -88,8 +88,12 @@ export const WeeklyKeyResults = observer(
 
 const Container = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  padding-top: 15px;
+  padding-bottom: 10px;
   @media only screen and (max-width: 768px) {
     padding: 0 16px;
+    padding-top: 15px;
+    padding-bottom: 10px;
   }
 `;
 
