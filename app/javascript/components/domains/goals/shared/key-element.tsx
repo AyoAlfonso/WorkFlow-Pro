@@ -32,7 +32,7 @@ interface IKeyElementProps {
   setActionType?: any;
   setSelectedElement?: any;
   date?: any;
-  initiativeId: number;
+  initiativeId?: number;
   // TODO: set correct type
 }
 

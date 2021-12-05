@@ -34,7 +34,6 @@ interface IAnnualInitiativeModalContentProps {
   setQuarterlyGoalId: React.Dispatch<React.SetStateAction<number>>;
 }
 
-<<<<<<< HEAD
 export const AnnualInitiativeModalContent = memo(
   observer(
     ({
@@ -129,62 +128,6 @@ export const AnnualInitiativeModalContent = memo(
                 indicatorHeight={4}
                 marginBottom={16}
               />
-=======
-export const AnnualInitiativeModalContent = memo(observer(
-  ({
-    annualInitiativeId,
-    setAnnualInitiativeModalOpen,
-    setQuarterlyGoalModalOpen,
-    setSelectedAnnualInitiativeDescription,
-    setQuarterlyGoalId,
-  }: IAnnualInitiativeModalContentProps): JSX.Element => {
-    const {
-      annualInitiativeStore,
-      companyStore,
-      sessionStore,
-      quarterlyGoalStore,
-      descriptionTemplateStore: { descriptionTemplates },
-    } = useMst();
-    const currentUser = sessionStore.profile;
-
-    const [showCreateQuarterlyGoal, setShowCreateQuarterlyGoal] = useState<boolean>(false);
-    const [showAllQuarterlyGoals, setShowAllQuarterlyGoals] = useState<boolean>(false);
-    const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
-      false,
-    );
-    const [showInitiatives, setShowInitiatives] = useState<boolean>(true);
-    const [description, setDescription] = useState<string>("");
-    const [comment, setComment] = useState<string>("");
-    const [annualInitiative, setAnnualInitiative] = useState(null);
-    const descriptionTemplatesFormatted = toJS(descriptionTemplates);
-    const [keyLogs, setKeyLogs] = useState([]);
-
-    const descriptionTemplateForObjective = descriptionTemplatesFormatted.find(
-      t => t.templateType == "objectives",
-    )?.body.body;
-
-    const annualObjectiveValue = toJS(
-      sessionStore?.companyStaticData.find(company => company.field === "annual_objective").value,
-    );
-
-    const { t } = useTranslation();
-    const descriptionRef = useRef(null);
-
-    const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
-
-    useEffect(() => {
-      annualInitiativeStore.getAnnualInitiative(annualInitiativeId).then(() => {
-        const annualInitiative = annualInitiativeStore.annualInitiative;
-        if (annualInitiative) {
-          // annualInitiative?.keyElements.forEach(keyelement => {
-          //   setKeyLogs(prev => [...prev, ...keyelement.objectiveLogs]);
-          // });
-          setDescription(annualInitiative.contextDescription || descriptionTemplateForObjective);
-          setAnnualInitiative(annualInitiative);
-        }
-      });
-    }, []);
->>>>>>> 5e295842 (added weekly key results)
 
               <TopRowContainer>
                 <QuarterlyGoalDescription
