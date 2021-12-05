@@ -48,7 +48,6 @@ export const AnnualInitiativeModalContent = memo(
         companyStore,
         sessionStore,
         quarterlyGoalStore,
-        userStore,
         descriptionTemplateStore: { descriptionTemplates },
       } = useMst();
       const currentUser = sessionStore.profile;
@@ -365,23 +364,7 @@ export const AnnualInitiativeModalContent = memo(
                   }}
                 />
               </FormElementContainer>
-              <ActivityLogsContainer>
-                {objectiveLogs
-                  ?.slice()
-                  .sort(sortByDate)
-                  .map(log => {
-                    const user = userStore.users.find(user => user.id === log.ownedById);
-                    const keyElement = annualInitiativeStore.findKeyElement(log.childId);
-                    return (
-                      <ActivityLogs
-                        log={log}
-                        user={user}
-                        keyElement={keyElement}
-                        store={annualInitiativeStore}
-                      />
-                    );
-                  })}
-              </ActivityLogsContainer>
+              <ActivityLogs keyElements={objectiveLogs} store={annualInitiativeStore} />
             </SectionContainer>
           </Container>
         </>
@@ -605,11 +588,4 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const ActivityLogsContainer = styled.div`
-  width: 100%;
-  max-height: 500px;
-  margin-top: 24px;
-  overflow: auto;
 `;

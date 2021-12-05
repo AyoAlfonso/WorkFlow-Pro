@@ -51,7 +51,6 @@ export const QuarterlyGoalModalContent = observer(
       quarterlyGoalStore,
       sessionStore,
       subInitiativeStore,
-      userStore,
       companyStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
@@ -300,23 +299,7 @@ export const QuarterlyGoalModalContent = observer(
                 }}
               />
             </FormElementContainer>
-            <ActivityLogsContainer>
-              {objectiveLogs
-                ?.slice()
-                .sort(sortByDate)
-                .map(log => {
-                  const user = userStore.users.find(user => user.id === log.ownedById);
-                  const keyElement = quarterlyGoalStore.findKeyElement(log.childId);
-                  return (
-                    <ActivityLogs
-                      log={log}
-                      user={user}
-                      keyElement={keyElement}
-                      store={quarterlyGoalStore}
-                    />
-                  );
-                })}
-            </ActivityLogsContainer>
+            <ActivityLogs keyElements={objectiveLogs} store={quarterlyGoalStore} />
           </SectionContainer>
         </Container>
       </>
@@ -395,11 +378,4 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const ActivityLogsContainer = styled.div`
-  width: 100%;
-  max-height: 500px;
-  margin-top: 24px;
-  overflow: auto;
 `;

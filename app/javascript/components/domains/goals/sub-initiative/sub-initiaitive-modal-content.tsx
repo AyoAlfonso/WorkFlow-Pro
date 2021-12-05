@@ -38,7 +38,6 @@ export const SubInitiativeModalContent = observer(
     const {
       subInitiativeStore,
       sessionStore,
-      userStore,
       companyStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
@@ -207,23 +206,7 @@ export const SubInitiativeModalContent = observer(
                 }}
               />
             </FormElementContainer>
-            <ActivityLogsContainer>
-              {objectiveLogs
-                ?.slice()
-                .sort(sortByDate)
-                .map(log => {
-                  const user = userStore.users.find(user => user.id === log.ownedById);
-                  const keyElement = subInitiativeStore.findKeyElement(log.childId);
-                  return (
-                    <ActivityLogs
-                      log={log}
-                      user={user}
-                      keyElement={keyElement}
-                      store={subInitiativeStore}
-                    />
-                  );
-                })}
-            </ActivityLogsContainer>
+            <ActivityLogs keyElements={objectiveLogs} store={subInitiativeStore} />
           </SectionContainer>
         </Container>
       </>
@@ -267,11 +250,4 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const ActivityLogsContainer = styled.div`
-  width: 100%;
-  max-height: 500px;
-  margin-top: 24px;
-  overflow: auto;
 `;
