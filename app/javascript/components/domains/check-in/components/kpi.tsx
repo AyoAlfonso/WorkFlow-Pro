@@ -49,7 +49,7 @@ export const KpiComponent = observer(
           score: !value ? valueForComment : value,
           note: comment != "" ? comment : null,
           week: company.currentFiscalWeek,
-          fiscalYear: company.currentFiscalYear,
+          fiscalYear: company.yearForCreatingAnnualInitiatives,
           fiscalQuarter: Math.floor((company.currentFiscalWeek - 1) / 13) + 1,
         };
         createScorecardLog(log);
