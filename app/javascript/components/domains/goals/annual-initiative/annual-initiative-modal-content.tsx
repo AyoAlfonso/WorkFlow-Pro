@@ -79,6 +79,7 @@ export const AnnualInitiativeModalContent = memo(
       const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
 
       useEffect(() => {
+        annualInitiativeStore.getActivityLogs(1, "annualInitiative", annualInitiativeId);
         annualInitiativeStore.getAnnualInitiative(annualInitiativeId).then(() => {
           const annualInitiative = annualInitiativeStore.annualInitiative;
           if (annualInitiative) {
@@ -86,7 +87,6 @@ export const AnnualInitiativeModalContent = memo(
             setAnnualInitiative(annualInitiative);
           }
         });
-        annualInitiativeStore.getActivityLogs(1, "annualInitiative", annualInitiativeId);
       }, []);
 
       if (annualInitiative == null) {

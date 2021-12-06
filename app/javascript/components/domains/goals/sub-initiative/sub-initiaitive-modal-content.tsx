@@ -60,6 +60,7 @@ export const SubInitiativeModalContent = observer(
     )?.body.body;
 
     useEffect(() => {
+      subInitiativeStore.getActivityLogs(1, "subInitiative", subInitiativeId);
       subInitiativeStore.getSubInitiative(subInitiativeId).then(() => {
         const subInitiative = subInitiativeStore.subInitiative;
         if (subInitiative) {
@@ -67,7 +68,6 @@ export const SubInitiativeModalContent = observer(
           setSubInitiative(subInitiative);
         }
       });
-      subInitiativeStore.getActivityLogs(1, "subInitiative", subInitiativeId);
     }, []);
 
     if (subInitiative == null) {

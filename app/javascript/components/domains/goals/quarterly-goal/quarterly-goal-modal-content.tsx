@@ -78,6 +78,7 @@ export const QuarterlyGoalModalContent = observer(
     const { t } = useTranslation();
 
     useEffect(() => {
+      quarterlyGoalStore.getActivityLogs(1, "quarterlyInitiative", quarterlyGoalId);
       quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
         const quarterlyGoal = quarterlyGoalStore?.quarterlyGoal;
         if (quarterlyGoal) {
@@ -85,7 +86,6 @@ export const QuarterlyGoalModalContent = observer(
           setQuarterlyGoal(quarterlyGoal);
         }
       });
-      quarterlyGoalStore.getActivityLogs(1, "quarterlyInitiative", quarterlyGoalId);
     }, []);
 
     if (quarterlyGoal == null) {
