@@ -31,13 +31,20 @@ module NotificationEmailJobHelper
     ).end_of_week_stats.deliver_later
   end
 
-  def send_weekly_check_in_report_stats_email
+  def send_weekly_check_in_report_stats_email(user, notification_type, team)
     UserMailer.with(
       user: user,
       subject: "Weekly Report for Leadership Team",
-      greeting: "Leadership Team",
-      message: "",
-    ).weekly_check_in_report_stats.deliver_later
+      # greeting: "#{team.name} Team",
+      name: "",
+      message: "Share what you’ve accomplished with your teammates and see how they performed.",
+      preheader: " See your team’s progress towards the plan, from week of #{Time.now.beginning_of_week.strftime("%b %-d,")} -  #{Time.now.end_of_week.strftime("%b %-d,")}",
+      start_date: Time.now.beginning_of_week.strftime("%b %-d,"), 
+      end_date: Time.now.end_of_week.strftime("%b %-d,"),
+      # team: team,
+      cta_text: "See More in in Lynchpyn",
+      cta_url: ""
+    ).weekly_check_in_report_stats_email.deliver_later
   end
 
   def send_weekly_checkin_email(user, notification_type)
