@@ -64,6 +64,7 @@ export const QuarterlyGoalModalContent = observer(
       false,
     );
     const [quarterlyGoal, setQuarterlyGoal] = useState(null);
+    const [objectiveMeta, setObjectiveMeta] = useState(null);
     const [showInitiatives, setShowInitiatives] = useState<boolean>(false);
     const [showMilestones, setShowMilestones] = useState<boolean>(true);
     const [description, setDescription] = useState<string>("");
@@ -78,7 +79,9 @@ export const QuarterlyGoalModalContent = observer(
     const { t } = useTranslation();
 
     useEffect(() => {
-      quarterlyGoalStore.getActivityLogs(1, "quarterlyInitiative", quarterlyGoalId);
+      quarterlyGoalStore.getActivityLogs(1, "quarterlyInitiative", quarterlyGoalId).then(meta => {
+        setObjectiveMeta(meta);
+      });
       quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
         const quarterlyGoal = quarterlyGoalStore?.quarterlyGoal;
         if (quarterlyGoal) {
@@ -173,6 +176,14 @@ export const QuarterlyGoalModalContent = observer(
       };
 
       quarterlyGoalStore.createActivityLog(objectiveLog);
+    };
+
+    const getLogs = pageNumber => {
+      return quarterlyGoalStore
+        .getActivityLogs(pageNumber, "annualInitiative", quarterlyGoalId)
+        .then(meta => {
+          setObjectiveMeta(meta);
+        });
     };
 
     return (
@@ -299,7 +310,12 @@ export const QuarterlyGoalModalContent = observer(
                 }}
               />
             </FormElementContainer>
-            <ActivityLogs keyElements={objectiveLogs} store={quarterlyGoalStore} />
+            <ActivityLogs
+              keyElements={objectiveLogs}
+              store={quarterlyGoalStore}
+              meta={objectiveMeta}
+              getLogs={getLogs}
+            />
           </SectionContainer>
         </Container>
       </>

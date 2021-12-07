@@ -46,6 +46,7 @@ export const SubInitiativeModalContent = observer(
 
     const currentUser = sessionStore.profile;
     const [subInitiative, setSubInitiative] = useState<any>(null);
+    const [objectiveMeta, setObjectiveMeta] = useState(null);
     const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
@@ -60,7 +61,9 @@ export const SubInitiativeModalContent = observer(
     )?.body.body;
 
     useEffect(() => {
-      subInitiativeStore.getActivityLogs(1, "subInitiative", subInitiativeId);
+      subInitiativeStore.getActivityLogs(1, "subInitiative", subInitiativeId).then(meta => {
+        setObjectiveMeta(meta);
+      });
       subInitiativeStore.getSubInitiative(subInitiativeId).then(() => {
         const subInitiative = subInitiativeStore.subInitiative;
         if (subInitiative) {
@@ -109,6 +112,14 @@ export const SubInitiativeModalContent = observer(
       };
 
       subInitiativeStore.createActivityLog(objectiveLog);
+    };
+
+    const getLogs = pageNumber => {
+      return subInitiativeStore
+        .getActivityLogs(pageNumber, "annualInitiative", subInitiativeId)
+        .then(meta => {
+          setObjectiveMeta(meta);
+        });
     };
 
     return (
@@ -206,7 +217,12 @@ export const SubInitiativeModalContent = observer(
                 }}
               />
             </FormElementContainer>
-            <ActivityLogs keyElements={objectiveLogs} store={subInitiativeStore} />
+            <ActivityLogs
+              keyElements={objectiveLogs}
+              store={subInitiativeStore}
+              meta={objectiveMeta}
+              getLogs={getLogs}
+            />
           </SectionContainer>
         </Container>
       </>

@@ -116,10 +116,11 @@ export const SubInitiativeStoreModel = types
     getActivityLogs: flow(function*(page, type, id) {
       const env = getEnv(self);
       try {
+        self.objectiveLogs = null;
         const response: any = yield env.api.getObjectiveLogs(page, type, id);
         if (response.ok) {
           self.objectiveLogs = response.data.objectiveLog;
-          return true;
+          return response.data.meta;
         }
       } catch {
         return false;
