@@ -31,13 +31,29 @@ module NotificationEmailJobHelper
     ).end_of_week_stats.deliver_later
   end
 
-  def send_weekly_check_in_report_stats_email
+  def send_weekly_check_in_report_stats_email(user, notification_type, team)
+    previous_week_start = get_beginning_of_last_or_current_work_week_date(Time.now)
+    previous_week_end = previous_week_start + 6.days
+    kpis = (KeyPerformanceIndicator).vieweable_by_entity("team", team.id).as_json().map do |index, kpi|
+      return kpi["scorecard_logs"]?.last
+    end
+    KeyPerformanceIndicator.vieweable_by_entity("team", 2).where(title: 1).as_json()[0]
+    
+    ["scorecard_logs"][0]
     UserMailer.with(
       user: user,
       subject: "Weekly Report for Leadership Team",
-      greeting: "Leadership Team",
-      message: "",
-    ).weekly_check_in_report_stats.deliver_later
+      greeting: "",
+      name: "",
+      message: "Share what you’ve accomplished with your teammates and see how they performed.",
+      preheader: " See your team’s progress towards the plan, from week of #{Time.now.beginning_of_week.strftime("%b %-d,")} -  #{Time.now.end_of_week.strftime("%b %-d,")}",
+      start_date: previous_week_start.strftime("%b %-d,"), 
+      end_date: previous_week_end.strftime("%b %-d,"),
+      team: team,
+      kpis:kpis,
+      cta_text: "See More in in Lynchpyn",
+      cta_url: ""
+    ).weekly_check_in_report_stats_email.deliver_later
   end
 
   def send_weekly_checkin_email(user, notification_type)

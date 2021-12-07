@@ -1,4 +1,5 @@
 class UserMailerPreview < ActionMailer::Preview
+  include StatsHelper
   def notification_email
     message = <<~MESSAGE
       Hey, it's time to design your email!
@@ -53,15 +54,21 @@ class UserMailerPreview < ActionMailer::Preview
 
   def send_weekly_check_in_report_stats_email
     user = User.find(3)
+    team = user.team_user_enablements.team_lead.last&.team
+    previous_week_start = get_beginning_of_last_or_current_work_week_date(Time.now)
+    previous_week_end = previous_week_start + 6.days
     UserMailer.with(
       user: user,
       subject: "Weekly Report for Leadership Team",
-      greeting: "Leadership Team",
+      greeting: "#{team.name} Team",
       name: "",
       message: "Share what you’ve accomplished with your teammates and see how they performed.",
-      preheader: " See your team’s progress towards the plan, from week of Nov 1 - Nov 6",
-      cta_text: "Complete Weekly Check-in",
-      cta_url: "/weekly-check-in/#{user.id}/#{Date.today.strftime("%Y-%m-%d")}" #home
+      preheader: " See your team’s progress towards the plan, from week of #{Time.now.beginning_of_week.strftime("%b %-d,")} -  #{Time.now.end_of_week.strftime("%b %-d,")}",
+      start_date: previous_week_start.strftime("%b %-d,"), 
+      end_date: previous_week_end.strftime("%b %-d,"),
+      team: team,
+      cta_text: "See More in in Lynchpyn",
+      cta_url: ""
     ).weekly_check_in_report_stats_email
   end
 
