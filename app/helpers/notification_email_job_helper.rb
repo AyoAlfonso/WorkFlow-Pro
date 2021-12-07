@@ -32,16 +32,18 @@ module NotificationEmailJobHelper
   end
 
   def send_weekly_check_in_report_stats_email(user, notification_type, team)
+    previous_week_start = get_beginning_of_last_or_current_work_week_date(Time.now)
+    previous_week_end = previous_week_start + 6.days
     UserMailer.with(
       user: user,
       subject: "Weekly Report for Leadership Team",
-      # greeting: "#{team.name} Team",
+      greeting: "",
       name: "",
       message: "Share what you’ve accomplished with your teammates and see how they performed.",
       preheader: " See your team’s progress towards the plan, from week of #{Time.now.beginning_of_week.strftime("%b %-d,")} -  #{Time.now.end_of_week.strftime("%b %-d,")}",
-      start_date: Time.now.beginning_of_week.strftime("%b %-d,"), 
-      end_date: Time.now.end_of_week.strftime("%b %-d,"),
-      # team: team,
+      start_date: previous_week_start.strftime("%b %-d,"), 
+      end_date: previous_week_end.strftime("%b %-d,"),
+      team: team,
       cta_text: "See More in in Lynchpyn",
       cta_url: ""
     ).weekly_check_in_report_stats_email.deliver_later
