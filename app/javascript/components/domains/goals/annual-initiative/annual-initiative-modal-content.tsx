@@ -63,6 +63,7 @@ export const AnnualInitiativeModalContent = memo(
       const [description, setDescription] = useState<string>("");
       const [comment, setComment] = useState<string>("");
       const [annualInitiative, setAnnualInitiative] = useState(null);
+      const [objectiveMeta, setObjectiveMeta] = useState(null);
       const descriptionTemplatesFormatted = toJS(descriptionTemplates);
 
       const descriptionTemplateForObjective = descriptionTemplatesFormatted.find(
@@ -79,7 +80,11 @@ export const AnnualInitiativeModalContent = memo(
       const quarterlyGoalTitle = sessionStore.quarterlyGoalTitle;
 
       useEffect(() => {
-        annualInitiativeStore.getActivityLogs(1, "annualInitiative", annualInitiativeId);
+        annualInitiativeStore
+          .getActivityLogs(1, "annualInitiative", annualInitiativeId)
+          .then(meta => {
+            setObjectiveMeta(meta);
+          });
         annualInitiativeStore.getAnnualInitiative(annualInitiativeId).then(() => {
           const annualInitiative = annualInitiativeStore.annualInitiative;
           if (annualInitiative) {
@@ -298,6 +303,14 @@ export const AnnualInitiativeModalContent = memo(
         annualInitiativeStore.createActivityLog(objectiveLog);
       };
 
+      const getLogs = pageNumber => {
+        return annualInitiativeStore
+          .getActivityLogs(pageNumber, "annualInitiative", annualInitiativeId)
+          .then(meta => {
+            setObjectiveMeta(meta);
+          });
+      };
+
       return (
         <>
           {annualInitiative.closedAt && (
@@ -364,7 +377,12 @@ export const AnnualInitiativeModalContent = memo(
                   }}
                 />
               </FormElementContainer>
-              <ActivityLogs keyElements={objectiveLogs} store={annualInitiativeStore} />
+              <ActivityLogs
+                keyElements={objectiveLogs}
+                store={annualInitiativeStore}
+                meta={objectiveMeta}
+                getLogs={getLogs}
+              />
             </SectionContainer>
           </Container>
         </>
