@@ -1,6 +1,7 @@
 class KeyElement < ApplicationRecord
   include ActionView::Helpers::SanitizeHelper
   include HasOwner
+  include LogEnum
 
   before_save :sanitize_value
   has_many :objective_logs, as: :objecteable
@@ -14,7 +15,7 @@ class KeyElement < ApplicationRecord
   # completion_type of binary is boolean, if completed_at.present?
   # completion_type of currency is in cents (data type integer)
   enum completion_type: { binary: 0, numerical: 1, percentage: 2, currency: 3 }
-  enum status: { unstarted: 0, incomplete: 1, in_progress: 2, completed: 3, done: 4 }
+
 
   scope :current_week_for_user, ->(user, elementable_type) {
         elementable_type == "QuarterlyGoal" ?
