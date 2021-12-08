@@ -1,5 +1,6 @@
 class KeyElement < ApplicationRecord
   include ActionView::Helpers::SanitizeHelper
+  include HasOwner
 
   before_save :sanitize_value
   has_many :objective_logs, as: :objecteable
@@ -32,7 +33,22 @@ class KeyElement < ApplicationRecord
 
   default_scope { order(id: :asc) }
 
+  scope :filter_by_objective_logs_and_updated_on_key_elements, ->(updated_at){
+      where(_exists(ObjectiveLog.where("objective_logs.child_type = ? AND objective_logs.updated_at > ?", "KeyElement", updated_at)))
+  }
+  # Still in the process of using this remove the DP if not successful
+  scope :filter_by_objective_logs_and_updated_on_absent_key_elements, ->(updated_at){
+      where(_not_exists(ObjectiveLog.where("objective_logs.child_type = ?", "KeyElement")))
+  }
 
+
+  def self._not_exists(scope)
+    "NOT #{_exists(scope)}"
+  end
+
+  def self._exists(scope)
+    "EXISTS(#{scope.to_sql})"
+  end
 
   private
 

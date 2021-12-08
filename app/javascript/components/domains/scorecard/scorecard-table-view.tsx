@@ -16,7 +16,7 @@ import { ViewEditKPIModal } from "./shared/view-kpi-modal";
 import { MiniUpdateKPIModal } from "./shared/update-kpi-modal";
 import { AddExistingManualKPIModal } from "./shared/edit-existing-manual-kpi-modal";
 import { titleCase } from "~/utils/camelize";
-import { sortByDate } from "~/utils/sorting";
+import { sortByDateReverse } from "~/utils/sorting";
 
 import { toJS } from "mobx";
 // TODO: figure out better function for percent scores.
@@ -169,7 +169,7 @@ export const ScorecardTableView = observer(
 
     const data = useMemo(
       () =>
-        KPIs?.sort(sortByDate).map((kpi: any) => {
+        KPIs?.sort(sortByDateReverse).map((kpi: any) => {
           const targetText = formatValue(kpi.unitType, kpi.targetValue);
           const title = `${kpi.title}`;
           const logic = kpi.greaterThan

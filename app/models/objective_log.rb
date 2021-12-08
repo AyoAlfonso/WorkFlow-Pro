@@ -2,7 +2,7 @@ class ObjectiveLog < ApplicationRecord
   include ActionView::Helpers::SanitizeHelper
   include StatsHelper
   include HasOwner
-
+  
   belongs_to :objecteable, :polymorphic => true, optional: true
   belongs_to :key_element, -> { where(objective_logs: { objecteable_type: "KeyElement" }) }, foreign_key: "objecteable_id", optional: true
   belongs_to :milestone, -> { where(objective_logs: { objecteable_type: "Milestone" }) }, foreign_key: "objecteable_id", optional: true
