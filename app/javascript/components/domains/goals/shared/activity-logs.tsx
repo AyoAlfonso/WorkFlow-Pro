@@ -69,7 +69,7 @@ export const ActivityLogs = observer(
                             <b>
                               <u>{`${log.score}${completionSymbol(keyElement?.completionType)}`}</u>
                             </b>
-                            <span>{determineStatusLabel(keyElement?.status)}</span>
+                            <span>{determineStatusLabel(log.status || keyElement?.status)}</span>
                           </ActivityLogText>
                           <ActivityLogText>
                             <ActivityLogDate>

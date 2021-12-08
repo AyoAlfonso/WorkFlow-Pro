@@ -226,6 +226,7 @@ export const KeyElement = observer(
         week: company.currentFiscalWeek,
         childType: "KeyElement",
         childId: element.id,
+        status: element.status
       };
 
       store.createActivityLog(objectiveLog);

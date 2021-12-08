@@ -17,6 +17,7 @@ export const ObjectiveLogModel = types
     ownedBy: types.maybeNull(UserModel),
     childId: types.maybeNull(types.number),
     childType: types.maybeNull(types.string),
+    status: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));
@@ -24,5 +25,5 @@ export const ObjectiveLogModel = types
 type ObjectiveLogModelType = typeof ObjectiveLogModel.Type;
 type ObjectiveLogModelDataType = typeof ObjectiveLogModel.CreationType;
 
-export interface IObjectiveLog extends ObjectiveLogModelType { }
+export interface IObjectiveLog extends ObjectiveLogModelType {}
 export interface IObjectiveLogData extends ObjectiveLogModelDataType {}
