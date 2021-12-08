@@ -3,10 +3,11 @@ import { useHistory } from "react-router-dom";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import styled, { keyframes } from "styled-components";
-import { CheckMark } from "./checkmark/check-mark";
 import { Text } from "~/components/shared/text";
 import { Button } from "~/components/shared/button";
 import { getWeekOf } from "~/utils/date-time";
+
+const  SuccessLogo = require("~/assets/images/LynchPyn_success.gif");
 
 export const CheckInSuccess = observer((): JSX.Element => {
   const { sessionStore } = useMst();
@@ -28,7 +29,7 @@ export const CheckInSuccess = observer((): JSX.Element => {
 
   return (
     <Container>
-      <CheckMark />
+      <img src={SuccessLogo} alt="LynchPyn success logo" width="600" height="350px" />
       <HeaderText>Published!</HeaderText>
       <InfoText>Your updates have been saved.</InfoText>
       <RestartButton
