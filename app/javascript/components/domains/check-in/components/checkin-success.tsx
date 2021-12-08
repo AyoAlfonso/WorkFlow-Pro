@@ -7,42 +7,47 @@ import { Text } from "~/components/shared/text";
 import { Button } from "~/components/shared/button";
 import { getWeekOf } from "~/utils/date-time";
 
-const  SuccessLogo = require("~/assets/images/LynchPyn_success.gif");
+const SuccessLogo = require("~/assets/images/LynchPyn_success.gif");
 
-export const CheckInSuccess = observer((): JSX.Element => {
-  const { sessionStore } = useMst();
-  const id = sessionStore.profile.id;
+export const CheckInSuccess = observer(
+  (): JSX.Element => {
+    const { sessionStore } = useMst();
+    const id = sessionStore.profile.id;
 
-  const history = useHistory();
+    const history = useHistory();
 
-  useEffect(() => {
-    const redirectToHome = () => {
-      const width = window.innerWidth > 768;
-      if (width) {
-        setTimeout(() => {
-          history.push('/')
-        }, 3000)
-      }
-    }
-    redirectToHome();
-  }, [])
+    useEffect(() => {
+      const redirectToHome = () => {
+        const width = window.innerWidth > 768;
+        if (width) {
+          setTimeout(() => {
+            history.push("/");
+          }, 3000);
+        }
+      };
+      redirectToHome();
+    }, []);
 
-  return (
-    <Container>
-      <img src={SuccessLogo} alt="LynchPyn success logo" width="600" height="350px" />
-      <HeaderText>Published!</HeaderText>
-      <InfoText>Your updates have been saved.</InfoText>
-      <RestartButton
-        variant={"primary"}
-        small
-        disabled={false}
-        onClick={() => history.push(`/weekly-check-in/${id}/${getWeekOf()}`)}
-      >
-        Restart Check-in
-      </RestartButton>
-    </Container>
-  );
-});
+    return (
+      <Container>
+        <ImageContainer>
+          {/* <img src={SuccessLogo} alt="LynchPyn success logo" width="auto" height="450px" /> */}
+          <Image src={SuccessLogo} />
+        </ImageContainer>
+        <HeaderText>Published!</HeaderText>
+        <InfoText>Your updates have been saved.</InfoText>
+        <RestartButton
+          variant={"primary"}
+          small
+          disabled={false}
+          onClick={() => history.push(`/weekly-check-in/${id}/${getWeekOf()}`)}
+        >
+          Restart Check-in
+        </RestartButton>
+      </Container>
+    );
+  },
+);
 
 const Container = styled.div`
   display: flex;
@@ -50,6 +55,20 @@ const Container = styled.div`
   height: 100vh;
   align-items: center;
   justify-content: center;
+  width: 100vw;
+`;
+
+const ImageContainer = styled.div`
+  width: auto;
+  height: auto;
+`;
+
+const Image = styled.img`
+  height: 450px;
+  max-width: 100vw;
+  @media only screen and (max-width: 768px) {
+    height: 300px;
+  }
 `;
 
 const easeinAnimation = keyframes`
