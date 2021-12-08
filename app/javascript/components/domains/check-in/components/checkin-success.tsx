@@ -31,7 +31,6 @@ export const CheckInSuccess = observer(
     return (
       <Container>
         <ImageContainer>
-          {/* <img src={SuccessLogo} alt="LynchPyn success logo" width="auto" height="450px" /> */}
           <Image src={SuccessLogo} />
         </ImageContainer>
         <HeaderText>Published!</HeaderText>
