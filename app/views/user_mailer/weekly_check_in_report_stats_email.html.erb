@@ -3,34 +3,27 @@
 Weekly Report | <%=@start_date%> - <%=@end_date%> 
 
 <h2>KPIs</h2>
- <% @kpis.each do |kpi|  %>
-    <li> <%=kpi.title%>  (<%=kpi.owned_by.first_name%> <%=kpi.owned_by.last_name%>) 
-      <span style="color: <%= kpi.status == "On Target" ? "#00C3B3" :  kpi.status == "Needs Attention" ? "#FBB004" :  "#EB221B"  %>; font-weight:bold"> <% kpi.score%>/<%kpi.target_value%>  </span> 
-      <span style="display:block"> <span style="color: <% kpi.status == "On Target" ? "#00C3B3" :  kpi.status == "Needs Attention" ? "#FBB004" :  "#EB221B"  %>;font-weight:bold"> <% kpi.status %> </span> for the quarter  <% kpi.status == "On Target" ? ✔️ :  kpi.status == "Needs Attention" ? ⚠️  : 🚨 %>  </span> </span>
-    </li>
-<% end %>
 
   <ul>
-    <li>
-       Booked Work (Messi Anderson) <span style="color: #EB221B; font-weight:bold"> $125,000 / $200,000 </span> 
-      <span style="display:block">  <span style="color: #EB221B;font-weight:bold">Behind </span> for the quarter 🚨  </span> </span>
-    </li>
-      <br>
-    <li>
-      Accounts Receivables (Ayo Alfonso)  <span style="color: #00C3B3; font-weight:bold">  $35,698 / $50,000 </span> 
-      <span style="display:block">  <span style="color: #FBB004;font-weight:bold"> Needs Attention </span> for the quarter ⚠️  </span> </span>
-    </li>
-       <br>
-    <li>
-      Sales Calls (Fernanda Vela) <span style="color: #00C3B3; font-weight:bold">  121 / 120  </span> 
-      <span style="display:block">  <span style="color: #00C3B3;font-weight:bold">  On Target  </span> for the quarter ✔️  </span> </span>
-    </li>
+     <% @kpis.each do |kpi|  %>
+    <li> <%=kpi["title"]%>  (<%=kpi["first_name"]%> <%=kpi["last_name"]%>) 
+    <%= kpi["logStatus"] %>
+        <span style="color: <%= kpi["logStatus"] == "On Track" ? "#00C3B3" :  kpi["logStatus"] == "Needs Attention" ? "#FBB004" :  "#EB221B"  %>; font-weight:bold"> <%= kpi["logScore"]%>/<%=kpi["target_value"]%>  </span> 
+          <span style="display:block"> <span style="color: <%= kpi["logStatus"] == "On Track" ? "#00C3B3" :  kpi["logStatus"] == "Needs Attention" ? "#FBB004" :  "#EB221B"  %>;font-weight:bold"> <%= kpi["logStatus"] %> </span> for the quarter  <%= kpi["logStatus"] == "On Track" ?  '✔️' :  kpi["logStatus"] == "Needs Attention" ? '⚠️'  : '🚨' %>  </span> </span>
+        </li>
+           <br>
+    <% end %>
     </ul>
 
 <h2>Initiatives</h2>
      <ul>
-        <li>Create a list of open and upcoming RFPs involving new clients and start outreach (Steven Alves) - <span style="color: #00C3B3; font-weight:bold"> On Target ✔️ </span> </li>
-        <li>  Find and set up a tool or platform to house the playbook (Doug Berninger) - <span style="color: #FBB004;font-weight:bold"> Needs Attention ⚠️ </span>  </li>
+        <% @initiatives.each do |initiative|  %>
+        <li>
+            <%=initiative["value"]%> (<%=initiative["first_name"]%> <%=initiative["last_name"]%>) - <span style="color: <%= initiative["status"] == "done" ? "#075df6" : initiative["status"] == "completed" ? "#00C3B3" :  initiative["status"] == "in_progress" ? "#FBB004" : initiative["status"] == "incomplete" ? "#EB221B" : "" %>; font-weight:bold"> 
+              <%= initiative["status"] == "done" ?  "Done" : initiative["status"] == "completed" ? 'Completed' : initiative["status"] == "in_progress" ? "In Progress" : initiative["status"] == "incomplete" ? 'In complete' : '💬' %> 
+             <%= initiative["status"] == "done" ?  '✔️' : initiative["status"] == "completed" ? '✔️' : initiative["status"] == "in_progress" ? '⚠️' : initiative["status"] == "incomplete" ? '🚨' : '' %>  </span>
+          </li>
+        <% end %>
     </ul>
 
 <h2>Team</h2>

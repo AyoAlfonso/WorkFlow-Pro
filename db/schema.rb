@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_02_165957) do
+ActiveRecord::Schema.define(version: 2021_12_08_110359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -406,6 +406,7 @@ ActiveRecord::Schema.define(version: 2021_12_02_165957) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "child_id"
     t.string "child_type"
+    t.integer "status", default: 0
     t.index ["objecteable_type", "objecteable_id"], name: "index_objective_logs_on_objecteable"
     t.index ["owned_by_id"], name: "index_objective_logs_on_owned_by_id"
   end

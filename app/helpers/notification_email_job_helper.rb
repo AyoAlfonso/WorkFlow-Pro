@@ -34,23 +34,42 @@ module NotificationEmailJobHelper
   def send_weekly_check_in_report_stats_email(user, notification_type, team)
     previous_week_start = get_beginning_of_last_or_current_work_week_date(Time.now)
     previous_week_end = previous_week_start + 6.days
-    kpis = (KeyPerformanceIndicator).vieweable_by_entity("team", team.id).as_json().map do |index, kpi|
-      return kpi["scorecard_logs"]?.last
+    kpis = KeyPerformanceIndicator.vieweable_by_entity("team", team.id).filter_by_scorecard_logs_and_updated_at(previous_week_start).as_json().map do |kpi|
+      unless kpi["scorecard_logs"].blank?
+        log = kpi["scorecard_logs"].last
+            if (log.present?)
+              score  = kpi["greater_than"] ? (log["score"] / kpi["target_value"]) * 100 : ((kpi["target_value"] + kpi["target_value"] - log["score"]) / kpi["target_value"]) * 100;
+              kpi["logStatus"] = score >= 100 ? "On Track" : score >= kpi["needs_attention_threshold"] ?  "Needs Attention" :  "Behind" 
+              kpi["logScore"] = score.round(2)
+            end
+      end
+         kpi["first_name"] = kpi["owned_by"]["first_name"]
+         kpi["last_name"] = kpi["owned_by"]["last_name"]
+         kpi["target_value"] = kpi["target_value"].round(2)
+        kpi
     end
-    KeyPerformanceIndicator.vieweable_by_entity("team", 2).where(title: 1).as_json()[0]
-    
-    ["scorecard_logs"][0]
+
+   initiatives = KeyElement.where(owned_by_id: team.users.pluck(:id)).filter_by_objective_logs_and_updated_on_key_elements(previous_week_start).as_json({methods: [:owned_by],
+                   include: {
+                    objective_logs: { methods: [:user] }}
+    }).map do |element|
+         element["first_name"] = element["owned_by"]["first_name"]
+         element["last_name"] = element["owned_by"]["last_name"]
+         element
+    end
+
     UserMailer.with(
       user: user,
-      subject: "Weekly Report for Leadership Team",
-      greeting: "",
+      subject: "Weekly Report for #{team.name} Team",
+      greeting: "#{team.name} Team",
       name: "",
       message: "Share what you’ve accomplished with your teammates and see how they performed.",
-      preheader: " See your team’s progress towards the plan, from week of #{Time.now.beginning_of_week.strftime("%b %-d,")} -  #{Time.now.end_of_week.strftime("%b %-d,")}",
+      preheader: " See your team’s progress towards the plan, from week of #{previous_week_start.strftime("%b %-d,")} -  #{previous_week_end.strftime("%b %-d,")}",
       start_date: previous_week_start.strftime("%b %-d,"), 
       end_date: previous_week_end.strftime("%b %-d,"),
       team: team,
-      kpis:kpis,
+      kpis: kpis,
+      initiatives:initiatives,
       cta_text: "See More in in Lynchpyn",
       cta_url: ""
     ).weekly_check_in_report_stats_email.deliver_later
