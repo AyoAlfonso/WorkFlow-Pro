@@ -52,9 +52,7 @@ export const WeeklyKeyResults = observer(
 
     const renderLoading = () => (
       <LoadingContainer>
-        <BodyContainer>
-          <Loading />
-        </BodyContainer>
+        <Loading />
       </LoadingContainer>
     );
 
@@ -86,7 +84,7 @@ export const WeeklyKeyResults = observer(
                           avatarUrl={user?.avatarUrl}
                           firstName={user?.firstName}
                           lastName={user?.lastName}
-                          size={24}
+                          size={20}
                           marginLeft={"0"}
                         />
                         <StyledText>{groupedKrs[0]["elementableContextDescription"]}</StyledText>
@@ -139,17 +137,16 @@ const Container = styled.div`
 `;
 
 const LoadingContainer = styled.div`
-  height: 100%;
-`;
-
-const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 8px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 `;
 
 const StyledText = styled.span`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   margin-left: 5px;
 `;

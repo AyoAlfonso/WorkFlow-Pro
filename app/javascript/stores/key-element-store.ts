@@ -35,6 +35,15 @@ export const KeyElementStoreModel = types
         showToast("Something went wrong", ToastMessageConstants.ERROR);
       }
     }),
+    createActivityLog: flow(function*(objectiveLog) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createInitiativeLog(objectiveLog);
+        return response.data.objectiveLog
+      } catch {
+        return false;
+      }
+    }),
   }))
   .actions(self => ({
     updateKeyElementValue(field: string, id: number, value: number | string) {

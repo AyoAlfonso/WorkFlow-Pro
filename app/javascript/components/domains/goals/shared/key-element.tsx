@@ -218,20 +218,33 @@ export const KeyElement = observer(
         ? store.updateKeyElement(element.id, { value: element.value, status: element.status })
         : store.updateKeyElement(id, element.id, keyElementParams);
     };
+    
+    const typeForCheckIn = () => {
+      if (element.elementableType === "QuarterlyGoal") {
+        return "quarterlyInitiative";
+      } else if (element.elementableType === "SubInitiative") {
+        return "subInitiative";
+      }
+    };
 
     const createLog = () => {
       const objectiveLog = {
         ownedById: selectedUser.id,
         score: element.completionCurrentValue,
         note: "",
-        objecteableId: initiativeId,
-        objecteableType: type === "quarterlyGoal" ? "quarterlyInitiative" : type,
+        objecteableId: element.elementableId || initiativeId,
+        objecteableType:
+          type === "quarterlyGoal"
+            ? "quarterlyInitiative"
+            : type === "checkIn"
+            ? typeForCheckIn()
+            : type,
         fiscalQuarter: company.currentFiscalQuarter,
         fiscalYear: company.currentFiscalYear,
         week: company.currentFiscalWeek,
         childType: "KeyElement",
         childId: element.id,
-        status: element.status
+        status: element.status,
       };
 
       store.createActivityLog(objectiveLog);
@@ -301,6 +314,10 @@ export const KeyElement = observer(
                           store.updateKeyElementValue("status", element.id, status);
                           updateKeyElement(selectedUser.id);
                           createLog();
+                          if (type == "checkin") {
+                            setShowList(!showList);
+                            return;
+                          }
                           if (status === "done") {
                             store.updateKeyElementStatus(element.id, true);
                           } else {
