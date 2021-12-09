@@ -37,6 +37,7 @@ class Step < ApplicationRecord
     "Exploration",
     "Scorecard",
     "KPI",
-    "WeeklyMilestones"
+    "WeeklyMilestones",
+    "WeeklyKeyResults"
   ]
 end
