@@ -119,7 +119,7 @@ export const AnnualInitiativeModalContent = memo(
         const quarterlyGoalsToDisplay = showAllQuarterlyGoals
           ? allQuarterlyGoals
           : activeQuarterlyGoals;
-        return quarterlyGoalsToDisplay.sort(sortByDate).map((quarterlyGoal, index) => {
+        return quarterlyGoalsToDisplay.slice().sort(sortByDate).map((quarterlyGoal, index) => {
           return (
             <QuarterlyGoalContainer key={index}>
               <StatusBlockColorIndicator
@@ -249,7 +249,7 @@ export const AnnualInitiativeModalContent = memo(
                 <FilterOptionContainer underline={!showAllQuarterlyGoals}>
                   <FilterOption
                     onClick={() => setShowAllQuarterlyGoals(false)}
-                    active={!showAllQuarterlyGoals ? true : false}
+                    active={!showAllQuarterlyGoals}
                   >
                     Open
                   </FilterOption>
@@ -257,7 +257,7 @@ export const AnnualInitiativeModalContent = memo(
                 <FilterOptionContainer underline={showAllQuarterlyGoals}>
                   <FilterOption
                     onClick={() => setShowAllQuarterlyGoals(true)}
-                    active={showAllQuarterlyGoals ? true : false}
+                    active={showAllQuarterlyGoals}
                   >
                     All
                   </FilterOption>
