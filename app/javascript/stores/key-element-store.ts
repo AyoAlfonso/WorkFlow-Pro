@@ -17,10 +17,11 @@ export const KeyElementStoreModel = types
       try {
         const response: any = yield env.api.getWeeklyCheckinKeyElements();
         self.keyElementsForWeeklyCheckin = response.data;
+        return response.data;
       } catch (error) {
         showToast("There was an error retrieving Key Results", ToastMessageConstants.ERROR);
       }
-    })
+    }),
   }))
   .actions(self => ({}));
 

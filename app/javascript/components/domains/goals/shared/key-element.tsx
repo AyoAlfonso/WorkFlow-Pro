@@ -243,19 +243,21 @@ export const KeyElement = observer(
     return (
       <Container>
         <TopContainer>
-          <AvatarContainer
-            onBlur={() => updateKeyElement(selectedUser.id)}
-            onClick={() => setShowUsersList(!showUsersList)}
-          >
-            <Avatar
-              defaultAvatarColor={selectedUser?.defaultAvatarColor}
-              avatarUrl={selectedUser?.avatarUrl}
-              firstName={selectedUser?.firstName}
-              lastName={selectedUser?.lastName}
-              size={24}
-              marginLeft={"auto"}
-            />
-          </AvatarContainer>
+          {type !== "checkIn" && (
+            <AvatarContainer
+              onBlur={() => updateKeyElement(selectedUser.id)}
+              onClick={() => setShowUsersList(!showUsersList)}
+            >
+              <Avatar
+                defaultAvatarColor={selectedUser?.defaultAvatarColor}
+                avatarUrl={selectedUser?.avatarUrl}
+                firstName={selectedUser?.firstName}
+                lastName={selectedUser?.lastName}
+                size={24}
+                marginLeft={"auto"}
+              />
+            </AvatarContainer>
+          )}
           <KeyElementStyledContentEditable
             innerRef={keyElementTitleRef}
             html={sanitize(element.value)}

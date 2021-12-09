@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as R from "ramda";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Text } from "../../../shared/text";
 import { useMst } from "~/setup/root";
@@ -12,14 +12,28 @@ import * as moment from "moment";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "./empty-state";
 import { KeyElement } from "../../goals/shared/key-element";
+import { array } from "mobx-state-tree/dist/internal";
 
 export const WeeklyKeyResults = observer(
   (props): JSX.Element => {
     const { keyElementStore } = useMst();
+    const { keyElementsForWeeklyCheckin } = keyElementStore;
     const { t } = useTranslation();
 
     const { weekOf } = useParams();
-    const { keyElementsForWeeklyCheckin } = keyElementStore;
+
+    const groupBy = objectArray => {
+      return objectArray.reduce(function(acc, obj) {
+        const key = `${obj["elementableType"]}` + "_" + `${obj["elementableId"]}`;
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(obj);
+        return acc;
+      }, {});
+    };
+
+    const sortedKeyElements = keyElementsForWeeklyCheckin && groupBy(keyElementsForWeeklyCheckin);
 
     useEffect(() => {
       keyElementStore.getKeyElementsForWeeklyCheckIn();
@@ -44,6 +58,13 @@ export const WeeklyKeyResults = observer(
       </LoadingContainer>
     );
 
+    const groupKrs = () => {
+      const keyElements = sortedKeyElements;
+      const index = Object.values(keyElements);
+      const map = index.map(arry => arry);
+      return map;
+    };
+
     const renderMilestones = (): JSX.Element => {
       return (
         <>
@@ -52,20 +73,25 @@ export const WeeklyKeyResults = observer(
           ) : (
             <>
               {renderHeading()}
-              {keyElementsForWeeklyCheckin?.map((kr, index) => {
-                const lastKeyElement = index == keyElementsForWeeklyCheckin.length - 1;
-                return (
-                  <Container key={kr.id}>
-                    <KeyElement
-                      elementId={kr.id}
-                      store={keyElementStore}
-                      editable={true}
-                      lastKeyElement={lastKeyElement}
-                      type={"checkIn"}
-                    />
+              {keyElementsForWeeklyCheckin &&
+                groupKrs().map((groupedKrs: Array<any>, index) => (
+                  <Container key={index}>
+                    <div>{groupedKrs[0]["elementableId"]}</div>
+                    {groupedKrs.map((kr, index) => {
+                      const lastKeyElement = index == keyElementsForWeeklyCheckin.length - 1;
+                      return (
+                        <KeyElement
+                          elementId={kr.id}
+                          key={kr.id}
+                          store={keyElementStore}
+                          editable={true}
+                          lastKeyElement={lastKeyElement}
+                          type={"checkIn"}
+                        />
+                      );
+                    })}
                   </Container>
-                );
-              })}
+                ))}
             </>
           )}
         </>
