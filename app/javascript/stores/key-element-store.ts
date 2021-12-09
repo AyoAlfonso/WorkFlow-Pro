@@ -22,8 +22,28 @@ export const KeyElementStoreModel = types
         showToast("There was an error retrieving Key Results", ToastMessageConstants.ERROR);
       }
     }),
+    updateKeyElement: flow(function*(id, value) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.updateWeeklyCheckInKeyElements(id, value);
+
+        const keyElements = self.keyElementsForWeeklyCheckin;
+        const keyElementIndex = keyElements.findIndex(ke => ke.id == id);
+        keyElements[keyElementIndex] = response.data;
+        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
+      } catch {
+        showToast("Something went wrong", ToastMessageConstants.ERROR);
+      }
+    }),
   }))
-  .actions(self => ({}));
+  .actions(self => ({
+    updateKeyElementValue(field: string, id: number, value: number | string) {
+      let keyElements = self.keyElementsForWeeklyCheckin;
+      let keyElementIndex = keyElements.findIndex(ke => ke.id == id);
+      keyElements[keyElementIndex][field] = value;
+      self.keyElementsForWeeklyCheckin = keyElements;
+    },
+  }));
 
 type KeyElementStoreType = typeof KeyElementStoreModel.Type;
 export interface IKeyElementStore extends KeyElementStoreType {}

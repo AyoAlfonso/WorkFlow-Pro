@@ -214,7 +214,9 @@ export const KeyElement = observer(
       } else if (type == "subInitiative") {
         id = store.subInitiative.id;
       }
-      store.updateKeyElement(id, element.id, keyElementParams);
+      type == "checkIn"
+        ? store.updateKeyElement(element.id, { value: element.value, status: element.status })
+        : store.updateKeyElement(id, element.id, keyElementParams);
     };
 
     const createLog = () => {
@@ -261,7 +263,7 @@ export const KeyElement = observer(
           <KeyElementStyledContentEditable
             innerRef={keyElementTitleRef}
             html={sanitize(element.value)}
-            disabled={!editable}
+            disabled={!editable || type == "checkIn"}
             onChange={e => {
               if (!e.target.value.includes("<div>")) {
                 store.updateKeyElementValue("value", element.id, e.target.value);

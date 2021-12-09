@@ -17,6 +17,8 @@ export const KeyElementModel = types
     completionTargetValue: types.maybeNull(types.number),
     greaterThan: types.maybeNull(types.number),
     createdAt: types.maybeNull(types.string),
+    elementableContextDescription: types.maybeNull(types.string),
+    elementableOwnedBy: types.maybeNull(types.number),
   })
   .views(self => ({}))
   .actions(self => ({}));

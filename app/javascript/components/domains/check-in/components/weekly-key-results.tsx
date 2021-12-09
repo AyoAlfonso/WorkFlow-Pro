@@ -9,14 +9,14 @@ import { Loading } from "~/components/shared/loading";
 import { useParams } from "react-router-dom";
 import { toJS } from "mobx";
 import * as moment from "moment";
+import { Avatar } from "~/components/shared";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "./empty-state";
 import { KeyElement } from "../../goals/shared/key-element";
-import { array } from "mobx-state-tree/dist/internal";
 
 export const WeeklyKeyResults = observer(
   (props): JSX.Element => {
-    const { keyElementStore } = useMst();
+    const { keyElementStore, userStore } = useMst();
     const { keyElementsForWeeklyCheckin } = keyElementStore;
     const { t } = useTranslation();
 
@@ -65,7 +65,7 @@ export const WeeklyKeyResults = observer(
       return map;
     };
 
-    const renderMilestones = (): JSX.Element => {
+    const renderKeyElements = (): JSX.Element => {
       return (
         <>
           {R.isNil(keyElementsForWeeklyCheckin) ? (
@@ -74,24 +74,39 @@ export const WeeklyKeyResults = observer(
             <>
               {renderHeading()}
               {keyElementsForWeeklyCheckin &&
-                groupKrs().map((groupedKrs: Array<any>, index) => (
-                  <Container key={index}>
-                    <div>{groupedKrs[0]["elementableId"]}</div>
-                    {groupedKrs.map((kr, index) => {
-                      const lastKeyElement = index == keyElementsForWeeklyCheckin.length - 1;
-                      return (
-                        <KeyElement
-                          elementId={kr.id}
-                          key={kr.id}
-                          store={keyElementStore}
-                          editable={true}
-                          lastKeyElement={lastKeyElement}
-                          type={"checkIn"}
+                groupKrs().map((groupedKrs: Array<any>, index) => {
+                  const user = userStore.users.find(
+                    user => user.id == groupedKrs[0]["elementableOwnedBy"],
+                  );
+                  return (
+                    <Container key={index}>
+                      <TopSection>
+                        <Avatar
+                          defaultAvatarColor={user?.defaultAvatarColor}
+                          avatarUrl={user?.avatarUrl}
+                          firstName={user?.firstName}
+                          lastName={user?.lastName}
+                          size={24}
+                          marginLeft={"0"}
                         />
-                      );
-                    })}
-                  </Container>
-                ))}
+                        <StyledText>{groupedKrs[0]["elementableContextDescription"]}</StyledText>
+                      </TopSection>
+                      {groupedKrs.map((kr, index) => {
+                        const lastKeyElement = index == keyElementsForWeeklyCheckin.length - 1;
+                        return (
+                          <KeyElement
+                            elementId={kr.id}
+                            key={kr.id}
+                            store={keyElementStore}
+                            editable={true}
+                            lastKeyElement={lastKeyElement}
+                            type={"checkIn"}
+                          />
+                        );
+                      })}
+                    </Container>
+                  );
+                })}
             </>
           )}
         </>
@@ -100,11 +115,11 @@ export const WeeklyKeyResults = observer(
     return (
       <>
         {!R.isEmpty(keyElementsForWeeklyCheckin) ? (
-          <>{renderMilestones()}</>
+          <>{renderKeyElements()}</>
         ) : (
           <EmptyState
-            heading={t("weeklyCheckIn.milestones.emptyText")}
-            infoText={t("weeklyCheckIn.milestones.create")}
+            heading={t("weeklyCheckIn.keyResults.emptyText")}
+            infoText={t("weeklyCheckIn.keyResults.create")}
           />
         )}
       </>
@@ -134,7 +149,7 @@ const BodyContainer = styled.div`
 `;
 
 const StyledText = styled.span`
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   margin-left: 5px;
 `;
@@ -144,4 +159,10 @@ const StyledHeader = styled.h1`
   @media only screen and (max-width: 768px) {
     font-size: 24px;
   }
+`;
+
+const TopSection = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
 `;
