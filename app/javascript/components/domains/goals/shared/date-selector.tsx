@@ -24,14 +24,7 @@ export const DateSelector = ({
 }: IDateSelectorProps): JSX.Element => {
   const { t } = useTranslation();
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-  const [minEditableDate, setMinEditableDate] = useState<any>(null);
-
-  useEffect(() => {
-    if (minDate) {
-      const min= moment(minDate).toDate();
-      setMinEditableDate(min);
-    }
-  }, [])
+  const [minEditableDate, setMinEditableDate] = useState<any>(moment(minDate).toDate());
 
   return (
     <DateSelectionContainer>
@@ -75,7 +68,7 @@ export const DateSelector = ({
             showSelectionPreview={true}
             direction={"vertical"}
             calendarFocus={"backwards"}
-            minDate={minEditableDate || addDays(selectedDate, -90)}
+            minDate={moment(minDate).toDate() || addDays(selectedDate, -90)}
             maxDate={new Date()}
             scroll={{
               enabled: true,

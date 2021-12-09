@@ -226,7 +226,7 @@ export const ContextTabs = observer(
         initiative = object;
       }
 
-      const minDate = initiative.milestones[0].weekOf;
+      const minDate = initiative?.milestones[0].weekOf;
       return (
         <>
           {type === "annualInitiative" ? (
@@ -243,9 +243,6 @@ export const ContextTabs = observer(
                 <DateDiv
                   onMouseEnter={() => {
                     setShowTooltip(true);
-                    setTimeout(() => {
-                      setShowTooltip(false);
-                    }, 5000);
                   }}
                   onMouseLeave={() => {
                     setShowTooltip(false);
