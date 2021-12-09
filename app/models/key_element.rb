@@ -8,27 +8,27 @@ class KeyElement < ApplicationRecord
   belongs_to :elementable, :polymorphic => true
   belongs_to :user, optional: true
 
-  belongs_to :quarterly_goal, -> { where(key_elements: { elementable_type: "QuarterlyGoal" }) }, foreign_key: "elementable_id", optional: true
-  belongs_to :sub_initiative, -> { where(key_elements: { elementable_type: "SubInitiative" }) }, foreign_key: "elementable_id", optional: true
-  belongs_to :annual_initiative, -> { where(key_elements: { elementable_type: "AnnualInitiative" }) }, foreign_key: "elementable_id", optional: true
+  belongs_to :quarterly_goal, -> { where(key_elements: { elementable_type: "QuarterlyGoal" })  }, foreign_key: "elementable_id", optional: true
+  belongs_to :sub_initiative, -> { where(key_elements: { elementable_type: "SubInitiative" })  }, foreign_key: "elementable_id", optional: true
+
+  scope :optimized, -> { includes([:owned_by, :quarterly_goal, :sub_initiative]) }
 
   # completion_type of binary is boolean, if completed_at.present?
   # completion_type of currency is in cents (data type integer)
   enum completion_type: { binary: 0, numerical: 1, percentage: 2, currency: 3 }
 
-
-  scope :current_week_for_user, ->(user, elementable_type) {
+  scope :current_user_and_elementable_type, ->(user, elementable_type) {
         elementable_type == "QuarterlyGoal" ?
           includes(:quarterly_goal).where(quarterly_goals: { closed_at: nil })
           .where(
-          { owned_by_id: user }
+          { owned_by_id: user, elementable_type:  elementable_type  }
         ) 
         : elementable_type == "AnnualInitiative" ?
-          joins(:annual_initiative).where(annual_initiatives: { closed_at: nil})
+          includes(:annual_initiative).where(annual_initiatives: { closed_at: nil})
           .where(
-        { owned_by_id: user }
-        ) : joins(:sub_initiative).where(sub_initiatives: { closed_at: nil }).where(
-         { owned_by_id: user }
+        { owned_by_id: user,elementable_type:  elementable_type  }
+        ) : includes(:sub_initiative).where(sub_initiatives: { closed_at: nil }).where(
+         { owned_by_id: user, elementable_type:  elementable_type  }
         )
     }
 
@@ -42,6 +42,9 @@ class KeyElement < ApplicationRecord
       where(_not_exists(ObjectiveLog.where("objective_logs.child_type = ?", "KeyElement")))
   }
 
+  def elementable_data
+    self.elementable
+  end
 
   def self._not_exists(scope)
     "NOT #{_exists(scope)}"

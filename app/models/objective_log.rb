@@ -8,6 +8,7 @@ class ObjectiveLog < ApplicationRecord
   belongs_to :key_element, -> { where(objective_logs: { objecteable_type: "KeyElement" }) }, foreign_key: "objecteable_id", optional: true
   belongs_to :milestone, -> { where(objective_logs: { objecteable_type: "Milestone" }) }, foreign_key: "objecteable_id", optional: true
   belongs_to :annual_initiative, -> { where(objective_logs: { objecteable_type: "AnnualInitiative" }) }, foreign_key: "objecteable_id", optional: true
+ 
   belongs_to :sub_initiative, -> { where(objective_logs: { objecteable_type: "SubInitiative" }) }, foreign_key: "objecteable_id", optional: true
   belongs_to :quarterly_goal, -> { where(objective_logs: { objecteable_type: "QuarterlyGoal" }) }, foreign_key: "objecteable_id", optional: true
 
@@ -16,4 +17,5 @@ class ObjectiveLog < ApplicationRecord
   scope :owned_by_user, ->(user) { where(owned_by_id: user) }
   scope :created_between, ->(date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
   scope :sort_by_creation_date, -> { order(created_at: :desc) }
+
 end

@@ -34,9 +34,9 @@ class KeyPerformanceIndicator < ApplicationRecord
     }).merge({ :parent_type => self.parent_type, :period => self.period, :related_parent_kpis => self.related_parent_kpis })
   end
 
-    def self._not_exists(scope)
+  def self._not_exists(scope)
     "NOT #{_exists(scope)}"
-    end
+  end
 
   def self._exists(scope)
     "EXISTS(#{scope.to_sql})"
