@@ -1,0 +1,1 @@
+json.partial! @key_element, partial: "api/key_elements/key_element", as: :key_element

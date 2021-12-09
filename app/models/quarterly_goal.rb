@@ -42,7 +42,23 @@ class QuarterlyGoal < ApplicationRecord
       )
     end
   end
-
+ def derived_status 
+  previous_week_start = self.get_beginning_of_last_or_current_work_week_date(Time.now)
+  initiatives = KeyElement.filter_by_objective_logs_and_updated_on_key_elements(previous_week_start).as_json({methods: [:owned_by],
+                   include: {
+                    objective_logs: { methods: [:user] }}
+    }).map do |element|
+        unless element["objective_logs"].blank?
+        log = element["objective_logs"].last
+            if (log.present?)
+              score  = element["greater_than"] ? (element["score"] / element["completion_target_value"]) * 100 : ((element["completion_target_value"] + element["completion_target_value"] - log["score"]) / element["completion_target_value"]) * 100;
+              element["derived_status"] = score >= 100 ? "On Track" : score >= kpi["needs_attention_threshold"] ?  "Needs Attention" :  "Behind" 
+              element["derived_score"] = score.round(2)
+            end
+        end
+    end
+    return initiatives
+ end
   private
 
   def sanitize_description
