@@ -51,8 +51,12 @@ export const QuarterlyGoalModalContent = observer(
       quarterlyGoalStore,
       sessionStore,
       subInitiativeStore,
+      companyStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
+
+    const { objectiveLogs } = quarterlyGoalStore;
+
     const currentUser = sessionStore.profile;
     const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
     const [showCreateSubInitiative, setShowCreateSubInitiative] = useState<boolean>(false);
@@ -60,12 +64,12 @@ export const QuarterlyGoalModalContent = observer(
       false,
     );
     const [quarterlyGoal, setQuarterlyGoal] = useState(null);
+    const [objectiveMeta, setObjectiveMeta] = useState(null);
     const [showInitiatives, setShowInitiatives] = useState<boolean>(false);
     const [showMilestones, setShowMilestones] = useState<boolean>(true);
     const [description, setDescription] = useState<string>("");
     const [comment, setComment] = useState<string>("");
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
-    const [keyLogs, setKeyLogs] = useState([]);
 
     const descriptionTemplateForInitiatives = descriptionTemplatesFormatted.find(
       t => t.templateType == "initiatives",
@@ -75,8 +79,10 @@ export const QuarterlyGoalModalContent = observer(
     const { t } = useTranslation();
 
     useEffect(() => {
+      quarterlyGoalStore.getActivityLogs(1, "quarterlyInitiative", quarterlyGoalId).then(meta => {
+        setObjectiveMeta(meta);
+      });
       quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
-        // setQuarterlyGoal(quarterlyGoalStore.quarterlyGoal);
         const quarterlyGoal = quarterlyGoalStore?.quarterlyGoal;
         if (quarterlyGoal) {
           setDescription(quarterlyGoal.contextDescription || descriptionTemplateForInitiatives);
@@ -156,6 +162,29 @@ export const QuarterlyGoalModalContent = observer(
     )
       .toString()
       .slice(-2)}`;
+
+    const createLog = () => {
+      const objectiveLog = {
+        ownedById: sessionStore.profile.id,
+        score: 0,
+        note: comment,
+        objecteableId: quarterlyGoalId,
+        objecteableType: "quarterlyInitiative",
+        fiscalQuarter: companyStore.company.currentFiscalQuarter,
+        fiscalYear: companyStore.company.currentFiscalYear,
+        week: companyStore.company.currentFiscalWeek,
+      };
+
+      quarterlyGoalStore.createActivityLog(objectiveLog);
+    };
+
+    const getLogs = pageNumber => {
+      return quarterlyGoalStore
+        .getActivityLogs(pageNumber, "annualInitiative", quarterlyGoalId)
+        .then(meta => {
+          setObjectiveMeta(meta);
+        });
+    };
 
     return (
       <>
@@ -271,15 +300,22 @@ export const QuarterlyGoalModalContent = observer(
                 onChange={e => {
                   setComment(e.target.value);
                 }}
-                // onBlur={() => {
-                //   if (!value) {
-                //     valueForComment = kpi.scorecardLogs[kpi.scorecardLogs?.length - 1]?.score;
-                //   }
-                //   handleBlur(kpi.id);
-                // }}
+                value={comment}
+                onBlur={() => {
+                  if (!comment) {
+                    return;
+                  }
+                  createLog();
+                  setComment("");
+                }}
               />
             </FormElementContainer>
-            <ActivityLogs keyElements={keyLogs} store={quarterlyGoalStore} />
+            <ActivityLogs
+              keyElements={objectiveLogs}
+              store={quarterlyGoalStore}
+              meta={objectiveMeta}
+              getLogs={getLogs}
+            />
           </SectionContainer>
         </Container>
       </>

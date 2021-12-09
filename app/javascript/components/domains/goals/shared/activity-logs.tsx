@@ -1,74 +1,142 @@
 import React from "react";
+import * as R from "ramda";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import { useEffect, useState, useRef } from "react";
 import { sortByDate } from "~/utils/sorting";
 import moment from "moment";
 import { observer } from "mobx-react";
-import { Avatar, } from "~/components/shared";
+import { Avatar, Loading } from "~/components/shared";
+import Pagination from "@material-ui/lab/Pagination";
+import { toJS } from "mobx";
 import { completionSymbol, determineStatusLabel } from "./key-element";
 
 interface IActivityLogsProps {
   keyElements: any;
-  store: any;
+  store?: any;
+  meta?: any;
+  getLogs?: any;
 }
 
 export const ActivityLogs = observer(
-  ({ keyElements, store }: IActivityLogsProps): JSX.Element => {
+  ({ keyElements, store, meta, getLogs }: IActivityLogsProps): JSX.Element => {
+    const { userStore } = useMst();
+    const [page, setPage] = useState<number>(meta?.currentPage)
+
+    const handleChange = (event, value) => {
+      setPage(value)
+      getLogs(value);
+    };
+
     return (
-      <ActivityLogsContainer>
-        {keyElements.sort(sortByDate).map(log => {
-          return (
-            <ActivityLogContainer key={log.id}>
-              <Avatar
-                size={32}
-                marginLeft={"0px"}
-                marginTop={"0px"}
-                marginRight={"16px"}
-                firstName={log.ownedBy.firstName}
-                lastName={log.ownedBy.lastName}
-                defaultAvatarColor={log.ownedBy.defaultAvatarColor}
-                avatarUrl={log.ownedBy.avatarUrl}
-              />
-              <ActivityLogTextContainer>
-                <ActivityLogText fontSize={"14px"} mb={8}>
-                  <b>
-                    {log.ownedBy.firstName} {log.ownedBy.lastName}
-                  </b>{" "}
-                  updated{" "}
-                  <b>
-                    <u>{store?.keyElementTitle(log.objecteableId)}</u>
-                  </b>{" "}
-                  to{" "}
-                  <b>
-                    <u>{`${log.score}${completionSymbol(
-                      store?.keyElementCompletionType(log.objecteableId),
-                    )}`}</u>
-                  </b>
-                  <span>{determineStatusLabel(store?.keyElementStatus(log.objecteableId))}</span>
-                </ActivityLogText>
-                {/* <ActivityLogText mb={4}>
-                        <i>{log.note}</i>
-                      </ActivityLogText> */}
-                <ActivityLogText>
-                  <ActivityLogDate>{moment(log.createdAt).format("MMM D, YYYY")}</ActivityLogDate>
-                  <ActivityLogDelete
-                  // onClick={() => {
-                  //   keyPerformanceIndicatorStore.deleteScorecardLog(log.id).then(() => {
-                  //     setCurrentLog();
-                  //     setCurrentLog();
-                  //   });
-                  // }}
-                  >
-                    {" "}
-                    Delete
-                  </ActivityLogDelete>
-                </ActivityLogText>
-              </ActivityLogTextContainer>
-            </ActivityLogContainer>
-          );
-        })}
-      </ActivityLogsContainer>
+      <>
+        <ActivityLogsContainer>
+          {!keyElements ? (
+            <LoadingContainer>
+              <Loading />
+            </LoadingContainer>
+          ) : (
+            keyElements
+              ?.slice()
+              .sort(sortByDate)
+              .map(log => {
+                const user = userStore.users.find(user => user.id === log.ownedById);
+                const keyElement = store.findKeyElement(log.childId);
+                return (
+                  <ActivityLogContainer>
+                    {!log.note ? (
+                      <>
+                        <Avatar
+                          size={32}
+                          marginLeft={"0px"}
+                          marginTop={"0px"}
+                          marginRight={"16px"}
+                          firstName={user.firstName}
+                          lastName={user.lastName}
+                          defaultAvatarColor={user.defaultAvatarColor}
+                          avatarUrl={user.avatarUrl}
+                        />
+                        <ActivityLogTextContainer>
+                          <ActivityLogText fontSize={"14px"} mb={8}>
+                            <b>
+                              {user.firstName} {user.lastName}
+                            </b>{" "}
+                            updated{" "}
+                            <b>
+                              <u>{keyElement?.value}</u>
+                            </b>{" "}
+                            to{" "}
+                            <b>
+                              <u>{`${log.score}${completionSymbol(keyElement?.completionType)}`}</u>
+                            </b>
+                            <span>{determineStatusLabel(log.status || keyElement?.status)}</span>
+                          </ActivityLogText>
+                          <ActivityLogText>
+                            <ActivityLogDate>
+                              {moment(log.createdAt).format("MMM D, YYYY")}
+                            </ActivityLogDate>
+                            <ActivityLogDelete
+                              onClick={() => {
+                                store.deleteActivityLog(log.id);
+                              }}
+                            >
+                              {" "}
+                              Delete
+                            </ActivityLogDelete>
+                          </ActivityLogText>
+                        </ActivityLogTextContainer>
+                      </>
+                    ) : (
+                      <>
+                        <Avatar
+                          size={32}
+                          marginLeft={"0px"}
+                          marginTop={"0px"}
+                          marginRight={"16px"}
+                          firstName={user.firstName}
+                          lastName={user.lastName}
+                          defaultAvatarColor={user.defaultAvatarColor}
+                          avatarUrl={user.avatarUrl}
+                        />
+                        <ActivityLogTextContainer>
+                          <ActivityLogText fontSize={"14px"} mb={8}>
+                            <b>
+                              {user.firstName} {user.lastName}
+                            </b>{" "}
+                            posted a comment{" "}
+                          </ActivityLogText>
+                          <ActivityLogText mb={4}>
+                            <i>{log.note}</i>
+                          </ActivityLogText>
+                          <ActivityLogText>
+                            <ActivityLogDate>
+                              {moment(log.createdAt).format("MMM D, YYYY")}
+                            </ActivityLogDate>
+                            <ActivityLogDelete
+                              onClick={() => {
+                                store.deleteActivityLog(log.id);
+                              }}
+                            >
+                              {" "}
+                              Delete
+                            </ActivityLogDelete>
+                          </ActivityLogText>
+                        </ActivityLogTextContainer>
+                      </>
+                    )}
+                  </ActivityLogContainer>
+                );
+              })
+          )}
+        </ActivityLogsContainer>
+        {!R.isEmpty(toJS(keyElements))? (
+          <PaginationContainer>
+            <Pagination count={meta?.totalPages} page={page} size="small" onChange={handleChange} />
+          </PaginationContainer>
+        ) : (
+          <></>
+        )}
+      </>
     );
   },
 );
@@ -111,4 +179,19 @@ const ActivityLogText = styled.p<ActivityLogTextProps>`
   font-size: ${props => props.fontSize || "12px"};
   margin-top: 0px;
   margin-bottom: ${props => props.mb || 0}px;
+`;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PaginationContainer = styled.div`
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 `;

@@ -17,6 +17,7 @@ import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-
 import { toJS } from "mobx";
 import { TrixEditor } from "react-trix";
 import { ActivityLogs } from "../shared/activity-logs";
+import { sortByDate } from "~/utils/sorting";
 
 interface ISubInitiativeModalContentProps {
   subInitiativeId: number;
@@ -37,10 +38,15 @@ export const SubInitiativeModalContent = observer(
     const {
       subInitiativeStore,
       sessionStore,
+      companyStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
+
+    const { objectiveLogs } = subInitiativeStore;
+
     const currentUser = sessionStore.profile;
     const [subInitiative, setSubInitiative] = useState<any>(null);
+    const [objectiveMeta, setObjectiveMeta] = useState(null);
     const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
@@ -49,13 +55,15 @@ export const SubInitiativeModalContent = observer(
     const [description, setDescription] = useState<string>("");
     const [comment, setComment] = useState<string>("");
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
-    const [keyLogs, setKeyLogs] = useState([]);
 
     const descriptionTemplateForInitiatives = descriptionTemplatesFormatted.find(
       t => t.templateType == "initiatives",
     )?.body.body;
 
     useEffect(() => {
+      subInitiativeStore.getActivityLogs(1, "subInitiative", subInitiativeId).then(meta => {
+        setObjectiveMeta(meta);
+      });
       subInitiativeStore.getSubInitiative(subInitiativeId).then(() => {
         const subInitiative = subInitiativeStore.subInitiative;
         if (subInitiative) {
@@ -90,6 +98,29 @@ export const SubInitiativeModalContent = observer(
     )
       .toString()
       .slice(-2)}`;
+
+    const createLog = () => {
+      const objectiveLog = {
+        ownedById: sessionStore.profile.id,
+        score: 0,
+        note: comment,
+        objecteableId: subInitiative.id,
+        objecteableType: "subInitiative",
+        fiscalQuarter: companyStore.company.currentFiscalQuarter,
+        fiscalYear: companyStore.company.currentFiscalYear,
+        week: companyStore.company.currentFiscalWeek,
+      };
+
+      subInitiativeStore.createActivityLog(objectiveLog);
+    };
+
+    const getLogs = pageNumber => {
+      return subInitiativeStore
+        .getActivityLogs(pageNumber, "annualInitiative", subInitiativeId)
+        .then(meta => {
+          setObjectiveMeta(meta);
+        });
+    };
 
     return (
       <>
@@ -176,15 +207,22 @@ export const SubInitiativeModalContent = observer(
                 onChange={e => {
                   setComment(e.target.value);
                 }}
-                // onBlur={() => {
-                //   if (!value) {
-                //     valueForComment = kpi.scorecardLogs[kpi.scorecardLogs?.length - 1]?.score;
-                //   }
-                //   handleBlur(kpi.id);
-                // }}
+                value={comment}
+                onBlur={() => {
+                  if (!comment) {
+                    return;
+                  }
+                  createLog();
+                  setComment("");
+                }}
               />
             </FormElementContainer>
-            <ActivityLogs keyElements={keyLogs} store={subInitiativeStore} />
+            <ActivityLogs
+              keyElements={objectiveLogs}
+              store={subInitiativeStore}
+              meta={objectiveMeta}
+              getLogs={getLogs}
+            />
           </SectionContainer>
         </Container>
       </>

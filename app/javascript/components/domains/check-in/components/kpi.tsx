@@ -37,7 +37,9 @@ export const KpiComponent = observer(
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      scorecardStore.getScorecard({ ownerType: "user", ownerId: id, manualKPI: true }).then(() => setLoading(false));
+      scorecardStore
+        .getScorecard({ ownerType: "user", ownerId: id, manualKPI: true })
+        .then(() => setLoading(false));
       companyStore.load();
     }, [id]);
 
@@ -68,9 +70,7 @@ export const KpiComponent = observer(
 
     const renderLoading = () => (
       <LoadingContainer>
-        <BodyContainer>
-          <Loading />
-        </BodyContainer>
+        <Loading />
       </LoadingContainer>
     );
 
@@ -147,13 +147,13 @@ const Container = styled.div`
   }
 `;
 
-const LoadingContainer = styled.div``;
-
-const BodyContainer = styled.div`
+const LoadingContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 8px;
   justify-content: center;
+  align-items: center;
+  height: 100%;
 `;
 
 const StyledHeader = styled.h1`

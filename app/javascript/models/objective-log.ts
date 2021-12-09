@@ -1,7 +1,7 @@
 import { types, getRoot } from "mobx-state-tree";
 import { UserModel } from "./user";
 
-export const KeyElementLogModel = types
+export const ObjectiveLogModel = types
   .model("ScorecardLogModel")
   .props({
     id: types.maybeNull(types.identifierNumber),
@@ -15,6 +15,15 @@ export const KeyElementLogModel = types
     fiscalYear: types.maybeNull(types.number),
     createdAt: types.maybeNull(types.string),
     ownedBy: types.maybeNull(UserModel),
+    childId: types.maybeNull(types.number),
+    childType: types.maybeNull(types.string),
+    status: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));
+
+type ObjectiveLogModelType = typeof ObjectiveLogModel.Type;
+type ObjectiveLogModelDataType = typeof ObjectiveLogModel.CreationType;
+
+export interface IObjectiveLog extends ObjectiveLogModelType {}
+export interface IObjectiveLogData extends ObjectiveLogModelDataType {}

@@ -32,6 +32,7 @@ interface IKeyElementProps {
   setActionType: any;
   setSelectedElement: any;
   date?: any;
+  initiativeId: number;
   // TODO: set correct type
 }
 
@@ -46,6 +47,7 @@ export const KeyElement = observer(
     setShowKeyElementForm,
     setActionType,
     setSelectedElement,
+    initiativeId,
   }: IKeyElementProps): JSX.Element => {
     const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
     const [element, setElement] = useState<any>(null);
@@ -145,7 +147,7 @@ export const KeyElement = observer(
           : element.completionCurrentValue;
 
       if (element.greaterThan === 1) {
-        return (current / target) * 100;
+        return Math.min(Math.max(current - starting, 0) / (target - starting), 1) * 100;
       } else {
         return current <= target
           ? 100
@@ -195,19 +197,10 @@ export const KeyElement = observer(
         value: element.value,
         completionType: element.completionType,
         completionTargetValue: element.completionTargetValue,
-        greaterThan: element.condition,
+        greaterThan: element.greaterThan,
         ownedBy: ownedBy,
+        completionCurrentValue: element.completionCurrentValue,
         status: element.status,
-        objectiveLogAttributes: {
-          ownedById: ownedBy,
-          score: element.completionCurrentValue,
-          note: "",
-          objecteableId: element.id,
-          objecteableType: "KeyElement",
-          fiscalQuarter: company.currentFiscalQuarter,
-          fiscalYear: company.currentFiscalYear,
-          week: company.currentFiscalWeek,
-        },
       };
       let id;
 
@@ -219,6 +212,24 @@ export const KeyElement = observer(
         id = store.subInitiative.id;
       }
       store.updateKeyElement(id, element.id, keyElementParams);
+    };
+
+    const createLog = () => {
+      const objectiveLog = {
+        ownedById: selectedUser.id,
+        score: element.completionCurrentValue,
+        note: "",
+        objecteableId: initiativeId,
+        objecteableType: type === "quarterlyGoal" ? "quarterlyInitiative" : type,
+        fiscalQuarter: company.currentFiscalQuarter,
+        fiscalYear: company.currentFiscalYear,
+        week: company.currentFiscalWeek,
+        childType: "KeyElement",
+        childId: element.id,
+        status: element.status
+      };
+
+      store.createActivityLog(objectiveLog);
     };
 
     const updateOwnedById = newUser => {
@@ -282,6 +293,7 @@ export const KeyElement = observer(
                         onClick={() => {
                           store.updateKeyElementValue("status", element.id, status);
                           updateKeyElement(selectedUser.id);
+                          createLog();
                           if (status === "done") {
                             store.updateKeyElementStatus(element.id, true);
                           } else {
@@ -321,6 +333,7 @@ export const KeyElement = observer(
                             store.updateKeyElementValue("status", element.id, status);
                             updateKeyElement(selectedUser.id);
                             setShowList(!showList);
+                            createLog();
                           }}
                           key={index}
                           value={status}
@@ -335,18 +348,18 @@ export const KeyElement = observer(
                   <InputContainer>
                     <InputFromUnitType
                       unitType={""}
-                      placeholder="Add value..."
+                      placeholder="0"
                       onChange={e => {
                         store.updateKeyElementValue(
                           "completionCurrentValue",
                           element.id,
-                          e.target.value == "" ? "" : parseTarget(e.target.value),
+                          e.target.value == "" ? 0 : parseTarget(e.target.value),
                         );
                       }}
                       defaultValue={element.completionCurrentValue}
                       onBlur={() => {
-                        store.update();
                         updateKeyElement(selectedUser.id);
+                        createLog();
                       }}
                     />
                     <SymbolContainer>{completionSymbol(element.completionType)}</SymbolContainer>
