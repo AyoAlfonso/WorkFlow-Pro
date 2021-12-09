@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Popup from "reactjs-popup";
 import * as R from "ramda";
@@ -14,15 +14,18 @@ import { baseTheme } from "~/themes";
 interface IDateSelectorProps {
   selectedDate: any;
   setSelectedDate: any;
+  minDate: any;
 }
 
 export const DateSelector = ({
   selectedDate,
   setSelectedDate,
+  minDate,
 }: IDateSelectorProps): JSX.Element => {
   const { t } = useTranslation();
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-  
+  const [minEditableDate, setMinEditableDate] = useState<any>(moment(minDate).toDate());
+
   return (
     <DateSelectionContainer>
       <Popup
@@ -65,7 +68,7 @@ export const DateSelector = ({
             showSelectionPreview={true}
             direction={"vertical"}
             calendarFocus={"backwards"}
-            minDate={addDays(selectedDate, -90)}
+            minDate={moment(minDate).toDate() || addDays(selectedDate, -90)}
             maxDate={new Date()}
             scroll={{
               enabled: true,
@@ -78,7 +81,7 @@ export const DateSelector = ({
               setSelectedDate(date);
               setTimeout(() => {
                 setShowDatePicker(!showDatePicker);
-              })
+              });
             }}
           />
           <Button

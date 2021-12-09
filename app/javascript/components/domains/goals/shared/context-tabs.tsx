@@ -220,32 +220,44 @@ export const ContextTabs = observer(
     };
 
     const renderKeyElementsIndex = () => {
+      let initiative;
+
+      if (type != "annualInitiative") {
+        initiative = object;
+      }
+
+      const minDate = initiative?.milestones[0].weekOf;
       return (
         <>
-          <DateContainer>
-            <HtmlTooltip
-              arrow={true}
-              open={showTooltip}
-              enterDelay={500}
-              leaveDelay={200}
-              title={<span>{t("keyElement.dateToolTip")}</span>}
-            >
-              <DateDiv
-                onMouseEnter={() => {
-                  setShowTooltip(true);
-                  setTimeout(() => {
-                    setShowTooltip(false);
-                  }, 5000);
-                }}
-                onMouseLeave={() => {
-                  setShowTooltip(false);
-                }}
+          {type === "annualInitiative" ? (
+            <></>
+          ) : (
+            <DateContainer>
+              <HtmlTooltip
+                arrow={true}
+                open={showTooltip}
+                enterDelay={500}
+                leaveDelay={200}
+                title={<span>{t("keyElement.dateToolTip")}</span>}
               >
-                <DateText>Date</DateText>
-                <DateSelector selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-              </DateDiv>
-            </HtmlTooltip>
-          </DateContainer>
+                <DateDiv
+                  onMouseEnter={() => {
+                    setShowTooltip(true);
+                  }}
+                  onMouseLeave={() => {
+                    setShowTooltip(false);
+                  }}
+                >
+                  <DateText>Date</DateText>
+                  <DateSelector
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                    minDate={minDate}
+                  />
+                </DateDiv>
+              </HtmlTooltip>
+            </DateContainer>
+          )}
           {object.keyElements.map((element, index) => {
             const lastKeyElement = index == object.keyElements.length - 1;
             return (
