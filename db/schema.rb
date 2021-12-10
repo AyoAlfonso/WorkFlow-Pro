@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_17_200155) do
+ActiveRecord::Schema.define(version: 2021_12_08_110359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -152,6 +152,7 @@ ActiveRecord::Schema.define(version: 2021_11_17_200155) do
     t.integer "onboarding_status", default: 0
     t.string "customer_subscription_profile_id"
     t.integer "forum_type"
+    t.integer "objectives_key_type", default: 1
   end
 
   create_table "company_static_data", force: :cascade do |t|
@@ -314,7 +315,9 @@ ActiveRecord::Schema.define(version: 2021_11_17_200155) do
     t.string "description"
     t.datetime "closed_at"
     t.bigint "created_by_id"
+    t.bigint "user_id"
     t.bigint "company_id"
+    t.bigint "team_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "unit_type"
@@ -330,6 +333,8 @@ ActiveRecord::Schema.define(version: 2021_11_17_200155) do
     t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
+    t.index ["team_id"], name: "index_key_performance_indicators_on_team_id"
+    t.index ["user_id"], name: "index_key_performance_indicators_on_user_id"
   end
 
   create_table "meeting_templates", force: :cascade do |t|
@@ -390,6 +395,24 @@ ActiveRecord::Schema.define(version: 2021_11_17_200155) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id", "notification_type"], name: "index_notifications_on_user_id_and_notification_type", unique: true
     t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "objective_logs", force: :cascade do |t|
+    t.bigint "owned_by_id"
+    t.string "objecteable_type"
+    t.bigint "objecteable_id"
+    t.integer "score"
+    t.string "note"
+    t.integer "fiscal_quarter"
+    t.integer "fiscal_year"
+    t.integer "week"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "child_id"
+    t.string "child_type"
+    t.integer "status", default: 0
+    t.index ["objecteable_type", "objecteable_id"], name: "index_objective_logs_on_objecteable"
+    t.index ["owned_by_id"], name: "index_objective_logs_on_owned_by_id"
   end
 
   create_table "product_features", force: :cascade do |t|
@@ -705,7 +728,6 @@ ActiveRecord::Schema.define(version: 2021_11_17_200155) do
   add_foreign_key "key_activities", "companies"
   add_foreign_key "key_activities", "meetings"
   add_foreign_key "key_activities", "users"
-  add_foreign_key "key_performance_indicators", "companies"
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"

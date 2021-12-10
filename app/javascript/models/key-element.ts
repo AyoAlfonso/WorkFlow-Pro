@@ -16,6 +16,7 @@ export const KeyElementModel = types
     completionCurrentValue: types.optional(types.union(types.number, types.string), ""), //add case for no entry value ''
     completionTargetValue: types.maybeNull(types.number),
     greaterThan: types.maybeNull(types.number),
+    createdAt: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));

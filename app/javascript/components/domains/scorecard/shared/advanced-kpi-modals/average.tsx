@@ -120,6 +120,7 @@ export const Average = observer(
       setfilteredKPIs([]);
       setUnitType(type);
     };
+    
 
     const renderKPIListContent = (filteredArrays): Array<JSX.Element> => {
       const groupedKPIs = groupBy(filteredArrays);

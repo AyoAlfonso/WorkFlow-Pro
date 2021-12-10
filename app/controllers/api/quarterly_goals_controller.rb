@@ -11,7 +11,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
   def create
     company = current_company
-    # @template_description =  DescriptionTemplate.find_by(company_id: current_company.id, template_type: 1).body_content || ""
+   
     @quarterly_goal = QuarterlyGoal.new({
       created_by: current_user,
       owned_by: current_user,
@@ -48,18 +48,23 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def create_key_element
-    key_element = KeyElement.create!(elementable: @quarterly_goal, value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
-    render json: { key_element: key_element, status: :ok }
+    #create a param validator 
+    key_element = KeyElement.create!(elementable: @quarterly_goal,
+                  value: params[:value], completion_type: params[:completion_type],
+                  greater_than: params[:greater_than], completion_starting_value: params[:completion_starting_value],
+                  completion_current_value: params[:completion_current_value], owned_by_id: params[:owned_by],
+                  completion_target_value: params[:completion_target_value])
+    render json: { key_element: key_element.as_json, status: :ok }
   end
 
   def update_key_element
     key_element = KeyElement.find(params[:key_element_id])
     @quarterly_goal = policy_scope(QuarterlyGoal).find(key_element.elementable_id)
     authorize @quarterly_goal
-    key_element.update!(value: params[:value], completion_type: params[:completion_type],
-                        completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value],
-                        status: params[:status], owned_by_id: params[:owned_by], greater_than: params[:greater_than])
-    render json: { key_element: key_element }
+    key_element.update!(value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], owned_by_id: params[:owned_by],
+                        status: params[:status], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
+    
+    render json: { key_element: key_element.as_json, status: :ok }
   end
 
   def delete_key_element

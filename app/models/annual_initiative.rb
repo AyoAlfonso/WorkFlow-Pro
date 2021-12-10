@@ -9,9 +9,11 @@ class AnnualInitiative < ApplicationRecord
   has_many :quarterly_goals, dependent: :destroy
   has_many :sub_initiatives, through: :quarterly_goals
   has_many :comments, as: :commentable
+  has_many :objective_logs, as: :objecteable
+  has_many :milestones, as: :milestoneable
   # has_many :attachments
   has_many :key_elements, as: :elementable
-  accepts_nested_attributes_for :key_elements
+  accepts_nested_attributes_for :key_elements, :milestones
 
   scope :sort_by_created_date, -> { order(created_at: :asc) }
   scope :user_current_company, ->(company_id) { where(company_id: company_id) }

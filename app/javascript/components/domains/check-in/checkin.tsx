@@ -35,11 +35,9 @@ export const CheckIn = observer(
     }, []);
 
     const renderLoading = () => (
-      <Container>
-        <BodyContainer>
-          <Loading />
-        </BodyContainer>
-      </Container>
+      <BodyContainer>
+        <Loading />
+      </BodyContainer>
     );
 
     const StopMeetingButton = () => {
@@ -94,6 +92,8 @@ const BodyContainer = styled.div`
   flex-direction: column;
   margin-top: 8px;
   justify-content: center;
+  align-items: center;
+  height: 100vh;
 `;
 
 type IStopMeetingButton = {

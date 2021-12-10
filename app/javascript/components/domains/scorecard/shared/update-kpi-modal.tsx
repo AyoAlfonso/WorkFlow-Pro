@@ -116,7 +116,6 @@ export const MiniUpdateKPIModal = observer(
       clearData();
     };
     const clearData = () => {
-      console.log("setTargetWeek");
       setTargetWeek(undefined);
       setTargetValue(undefined);
     };

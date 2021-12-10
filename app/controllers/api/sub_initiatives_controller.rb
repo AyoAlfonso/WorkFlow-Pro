@@ -4,8 +4,7 @@ class Api::SubInitiativesController < Api::ApplicationController
   respond_to :json
 
   def create
-    # Release next version
-    @template_description = DescriptionTemplate.find_by(company_id: current_company.id, template_type: 2).body_content || ""
+    
     @sub_initiative = SubInitiative.new({
       created_by: current_user,
       owned_by: current_user,
@@ -40,18 +39,19 @@ class Api::SubInitiativesController < Api::ApplicationController
   end
 
   def create_key_element
-    key_element = KeyElement.create!(elementable: @sub_initiative, value: params[:value], completion_type: params[:completion_type], completion_current_value: params[:completion_current_value], greater_than: params[:greater_than], completion_target_value: params[:completion_target_value])
-    render json: { key_element: key_element, status: :ok }
+    key_element = KeyElement.create!(elementable: @sub_initiative, 
+      value: params[:value], completion_type: params[:completion_type], completion_current_value: params[:completion_current_value], greater_than: params[:greater_than], 
+      completion_target_value: params[:completion_target_value], owned_by_id: params[:owned_by])
+    render json: { key_element: key_element.as_json, status: :ok }
   end
 
   def update_key_element
     key_element = KeyElement.find(params[:key_element_id])
     @sub_initiative = policy_scope(SubInitiative).find(key_element.elementable_id)
     authorize @sub_initiative
-    key_element.update!(value: params[:value], completion_type: params[:completion_type],
-                        completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value],
-                        status: params[:status], owned_by_id: params[:owned_by], greater_than: params[:greater_than])
-    render json: { key_element: key_element }
+    key_element.update!(value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], owned_by_id: params[:owned_by],
+                        status: params[:status], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
+    render json: { key_element: key_element.as_json, status: :ok }
   end
 
   def delete_key_element

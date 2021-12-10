@@ -6,6 +6,7 @@ class Milestone < ApplicationRecord
 
   belongs_to :quarterly_goal, -> { where(milestones: { milestoneable_type: "QuarterlyGoal" }) }, foreign_key: "milestoneable_id", optional: true
   belongs_to :sub_initiative, -> { where(milestones: { milestoneable_type: "SubInitiative" }) }, foreign_key: "milestoneable_id", optional: true
+  belongs_to :annual_initiative, -> { where(milestones: { milestoneable_type: "AnnualInitiative" }) }, foreign_key: "milestoneable_id", optional: true
 
   default_scope { order(id: :asc) }
 
