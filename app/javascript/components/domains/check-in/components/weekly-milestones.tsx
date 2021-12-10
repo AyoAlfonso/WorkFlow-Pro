@@ -109,6 +109,8 @@ export const WeeklyMilestones = observer(
 
 const Container = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  padding-left: 16px;
+  padding-right: 16px;
   @media only screen and (max-width: 768px) {
     padding: 0 16px;
   }
