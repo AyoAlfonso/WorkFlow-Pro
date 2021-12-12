@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_26_095948) do
+ActiveRecord::Schema.define(version: 2021_12_08_110359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -408,6 +408,9 @@ ActiveRecord::Schema.define(version: 2021_11_26_095948) do
     t.integer "week"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "child_id"
+    t.string "child_type"
+    t.integer "status", default: 0
     t.index ["objecteable_type", "objecteable_id"], name: "index_objective_logs_on_objecteable"
     t.index ["owned_by_id"], name: "index_objective_logs_on_owned_by_id"
   end
@@ -725,9 +728,6 @@ ActiveRecord::Schema.define(version: 2021_11_26_095948) do
   add_foreign_key "key_activities", "companies"
   add_foreign_key "key_activities", "meetings"
   add_foreign_key "key_activities", "users"
-  add_foreign_key "key_performance_indicators", "companies"
-  add_foreign_key "key_performance_indicators", "teams"
-  add_foreign_key "key_performance_indicators", "users"
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"

@@ -27,7 +27,7 @@ export const WeeklyMilestones = observer(
 
     useEffect(() => {
       milestoneStore.getMilestonesForWeeklyCheckin(weekOf);
-    }, [ ]);
+    }, []);
 
     const renderHeading = (): JSX.Element => {
       return (
@@ -42,9 +42,7 @@ export const WeeklyMilestones = observer(
 
     const renderLoading = () => (
       <LoadingContainer>
-        <BodyContainer>
-          <Loading />
-        </BodyContainer>
+        <Loading />
       </LoadingContainer>
     );
 
@@ -117,13 +115,12 @@ const Container = styled.div`
 `;
 
 const LoadingContainer = styled.div`
-  height: 100%;
-`;
-
-const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 8px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 `;
 
 const AvatarContainer = styled.div`

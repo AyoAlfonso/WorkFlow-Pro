@@ -369,6 +369,9 @@
           "emptyText": "No KPIs",
           "create": "You don't have any active KPIs. Visit the Scorecard page to create a KPI."
         }
+      },
+      "keyElement": {
+        "dateToolTip": "Update the date if you wish to provide an update on your Key Results for a previous date."
       }
     }
   }

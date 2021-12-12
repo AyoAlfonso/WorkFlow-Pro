@@ -8,6 +8,7 @@ class SubInitiative < ApplicationRecord
   belongs_to :quarterly_goal
   has_many :milestones, as: :milestoneable
   has_many :key_elements, as: :elementable
+  has_many :objective_logs, as: :objecteable
   accepts_nested_attributes_for :key_elements, :milestones
 
   scope :owned_by_user, ->(user) { where(owned_by_id: user.id) }

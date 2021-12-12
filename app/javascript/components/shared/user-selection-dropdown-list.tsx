@@ -43,7 +43,7 @@ export const UserSelectionDropdownList = ({
         onChange={(event, newValue) => {
           setValue(newValue);
           onUserSelect(newValue);
-          setOwner(newValue);
+          setOwner && setOwner(newValue);
           setShowUsersList(false);
         }}
         filterOptions={(options, params) => {
@@ -77,6 +77,7 @@ export const UserSelectionDropdownList = ({
         openOnFocus={true}
         style={{ width: 300, height: "auto" }}
         freeSolo
+        clearOnEscape
         renderInput={params => (
           <TextField
             {...params}
