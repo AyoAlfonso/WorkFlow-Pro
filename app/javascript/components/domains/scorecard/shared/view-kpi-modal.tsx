@@ -106,6 +106,14 @@ export const ViewEditKPIModal = observer(
       }
     };
 
+    const closeKPI = () => {
+      if (confirm(`Are you sure you want to archive this KPI`)) {
+        keyPerformanceIndicatorStore.closeKPI().then(() => {
+          closeModal();
+        });
+      }
+    };
+
     const updateKPI = () => {
       if (confirm(`Are you sure you want to edit this KPI`)) {
         closeModal();
@@ -378,6 +386,18 @@ export const ViewEditKPIModal = observer(
                           >
                             Edit
                           </KPIButton>
+                          <KPIButton
+                            small
+                            variant={"primary"}
+                            m={1}
+                            style={{ width: "90%", fontSize: "12px", fontWeight: "bold" }}
+                            onClick={() => {
+                              closeKPI();
+                            }}
+                          >
+                            Close
+                          </KPIButton>
+
                           <KPIButton
                             small
                             variant={"redOutline"}

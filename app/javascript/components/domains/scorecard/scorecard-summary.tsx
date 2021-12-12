@@ -378,6 +378,7 @@ export const ScorecardSummary = ({
   currentFiscalYear,
 }: ScorecardSummaryProps): JSX.Element => {
   const KPIs = toJS(kpis);
+  console.log(KPIs)
   return (
     <Container>
       <WeekSummary kpis={KPIs} currentWeek={currentWeek} currentFiscalYear={currentFiscalYear} />

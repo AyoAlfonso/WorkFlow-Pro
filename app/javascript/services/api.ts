@@ -5,7 +5,7 @@ import * as R from "ramda";
 interface IScorecardProps {
   ownerType: string;
   ownerId: number;
-  showAll: boolean
+  showAll: boolean;
 }
 export class Api {
   client: ApisauceInstance;
@@ -244,7 +244,7 @@ export class Api {
   }
 
   async getObjectiveLogs(page: number, type: string, id: number) {
-    return this.client.get(`/objective_logs/page/${page}?type=${type}&id=${id}&per=10`)
+    return this.client.get(`/objective_logs/page/${page}?type=${type}&id=${id}&per=10`);
   }
 
   async getAnnualInitiative(id) {
@@ -289,7 +289,7 @@ export class Api {
   }
 
   async deleteInitiativeLog(id) {
-    return this.client.delete(`/objective_logs/${id}`)
+    return this.client.delete(`/objective_logs/${id}`);
   }
 
   async getQuarterlyGoal(id) {
@@ -604,6 +604,9 @@ export class Api {
   async deleteKPI(id) {
     return this.client.delete(`/key_performance_indicator/${id}`);
   }
+  async closeKPI(id) {
+    return this.client.patch(`/key_performance_indicator/close_kpi/${id}`);
+  }
 
   async createScorecardLog(scorecardLog) {
     return this.client.post(`scorecard_logs`, scorecardLog);
@@ -614,7 +617,9 @@ export class Api {
   }
 
   async getScorecard(props: IScorecardProps) {
-    return this.client.get(`scorecard/${props.ownerType}/${props.ownerId}?show_all=${props.showAll}`);
+    return this.client.get(
+      `scorecard/${props.ownerType}/${props.ownerId}?show_all=${props.showAll}`,
+    );
   }
 
   async getCheckInTemplates() {

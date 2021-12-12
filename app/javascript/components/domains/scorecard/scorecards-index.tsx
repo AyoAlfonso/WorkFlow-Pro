@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { useParams } from "react-router-dom";
+import { space, color } from "styled-system";
 import { Loading } from "../../shared/loading";
 import { ScorecardTableView } from "./scorecard-table-view";
 import { ScorecardSelector } from "./scorecard-selector";
@@ -35,6 +36,7 @@ export const ScorecardsIndex = observer(
     const [scorecardOwner, setScorecardOwner] = useState<any>({});
     const { allKPIs } = keyPerformanceIndicatorStore;
     const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(true);
+    const [kpiFilter, setkpiFilter] = useState<string>("open");
     const setKPIs = value => {
       setKpis([]);
       setKpis(value);
@@ -59,7 +61,52 @@ export const ScorecardsIndex = observer(
           .then(() => setLoading(false));
       }
     }, [owner_type, owner_id]);
+    const renderFilterOptions = () => {
+      return (
+        <FilterContainer>
+          <FilterOptionContainer underline={kpiFilter == "open"}>
+            <FilterOptions
+              onClick={() => setkpiFilter("open")}
+              color={kpiFilter == "open" ? "primary100" : "grey40"}
+            >
+              Open
+            </FilterOptions>
+          </FilterOptionContainer>
+          <FilterOptionContainer underline={kpiFilter == "closed"}>
+            <FilterOptions
+              onClick={() => setkpiFilter("closed")}
+              color={kpiFilter == "closed" ? "primary100" : "grey40"}
+            >
+              Closed
+            </FilterOptions>
+          </FilterOptionContainer>
+        </FilterContainer>
+      );
+    };
 
+   const allkpisToShow = ()=> {
+      switch (kpiFilter) {
+        case "open":
+          return keyPerformanceIndicatorStore.allOpenKPIs;
+        case "closed":
+          return keyPerformanceIndicatorStore.allClosedKPIs;
+        default:
+          return allKPIs;
+      }
+    };
+    /* Table KPIs are separated from allKPIs to optimize the rendering of the table */
+    const tableKPIsToShow = () => {
+      switch (kpiFilter) {
+        case "open":
+          return tableKPIs.filter(kpi => kpi.closedAt == null)
+        case "closed":
+          return tableKPIs.filter(kpi => kpi.closedAt !== null);
+        default:
+          return tableKPIs;
+      }
+    };
+    
+  
     if (
       loading ||
       !companyStore.company ||
@@ -81,14 +128,15 @@ export const ScorecardsIndex = observer(
           isMiniEmbed={isMiniEmbed}
         />
         <ScorecardSummary
-          kpis={kpis}
+          kpis={tableKPIsToShow()}
           currentWeek={companyStore.company.currentFiscalWeek}
           currentQuarter={companyStore.company.currentFiscalQuarter}
           fiscalYearStart={companyStore.company.fiscalYearStart}
           currentFiscalYear={companyStore.company.yearForCreatingAnnualInitiatives}
         />
+        {renderFilterOptions()}
         <ScorecardTableView
-          tableKPIs={tableKPIs}
+          tableKPIs={tableKPIsToShow()}
           allKPIs={allKPIs}
           setKpis={setKPIs}
           viewEditKPIModalOpen={viewEditKPIModalOpen}
@@ -149,3 +197,34 @@ const EmptySubtitle = styled.div`
 `;
 
 const AddKPIsContainer = styled.div``;
+
+const FilterContainer = styled.div`
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+`;
+type FilterOptionContainerType = {
+  underline: boolean;
+};
+const FilterOptionContainer = styled.div<FilterOptionContainerType>`
+  border-bottom: ${props => props.underline && `4px solid ${props.theme.colors.primary100}`};
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 4px;
+  margin-left: 4px;
+  margin-right: 4px;
+`;
+
+type FilterOptionsType = {
+  mr?: string;
+};
+
+const FilterOptions = styled.p<FilterOptionsType>`
+  ${space}
+  ${color}
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  margin-top: 4px;
+  margin-bottom: 0;
+`;

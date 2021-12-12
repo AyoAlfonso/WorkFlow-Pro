@@ -38,6 +38,13 @@ export const ScorecardKPIDropdownOptions = ({
       });
     }
   };
+  const closeKPI = () => {
+    if (confirm(`Are you sure you want to archive this KPI`)) {
+      keyPerformanceIndicatorStore.closeKPI().then(() => {
+        setModalOpen(false);
+      });
+    }
+  };
 
   const updateKPI = () => {
     if (confirm(`Are you sure you want to edit this KPI`)) {
@@ -54,6 +61,14 @@ export const ScorecardKPIDropdownOptions = ({
         </IconContainer>
         <OptionText> Edit KPI </OptionText>
       </OptionContainer>
+      {keyPerformanceIndicatorStore?.kpi.createdAt == null && (
+        <OptionContainer onClick={() => closeKPI()}>
+          <IconContainer>
+            <StyledIcon icon={"Edit-2"} size={"15px"} />
+          </IconContainer>
+          <OptionText> Close KPI </OptionText>
+        </OptionContainer>
+      )}
       <OptionContainer
         onClick={e => {
           deleteKPI();

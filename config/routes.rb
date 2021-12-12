@@ -135,7 +135,8 @@ Rails.application.routes.draw do
 
     #key_performance_indicators
     resources :key_performance_indicator, only: [:index, :show, :create, :update, :destroy]
-    
+    patch '/key_performance_indicator/close_kpi/:id', to: 'key_performance_indicator#close_kpi'
+
     #scorecards
     get "/scorecard/:owner_type/:owner_id", to: "scorecard_logs#show"
     resources :scorecard_logs, only: [:create, :destroy]
