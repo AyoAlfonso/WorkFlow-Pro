@@ -11,11 +11,13 @@ import { TrixEditor } from "react-trix";
 import { Dropzone } from "./dropzone";
 import { DropzoneWithCropper } from "./dropzone-with-cropper";
 
-import { Input, Label, Select, TextArea, TextDiv } from "~/components/shared";
+import { Button, Icon, Input, Label, Select, TextArea, TextDiv } from "~/components/shared";
 
 import moment from "moment";
 
 import { createStyles, makeStyles } from "@material-ui/core/styles";
+import { useState } from "react";
+import { KeyElementModal } from "~/components/domains/goals/shared/key-element-modal";
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -34,6 +36,7 @@ export enum EFieldType {
   Select = "SELECT",
   DateSelect = "DATE_SELECT",
   HtmlEditor = "HTML_EDITOR",
+  AddKeyResult = "ADD_KEY_RESULT",
 }
 
 interface IFormField {
@@ -65,6 +68,12 @@ export const FormBuilder = ({
   marginBottom,
 }: IFormBuilderProps): JSX.Element => {
   const classes = useStyles();
+  console.log(formData);
+
+  const [showKeyElementForm, setShowKeyElementForm] = useState<boolean>(false);
+  const [showActionType, setActionType] = useState<string>("Add");
+  const [selectedElement, setSelectedElement] = useState<number>(null);
+  const [showAddButton, setShowAddButton] = useState<boolean>(true);
 
   const formComponent = (formField: IFormField) => {
     const { fieldType, formKeys, options, callback, style, placeholder, rows } = formField;
@@ -156,6 +165,38 @@ export const FormBuilder = ({
             }}
           />
         );
+      case "ADD_KEY_RESULT":
+        return (
+          <>
+            {showAddButton && (
+              <StyledButton
+                small
+                variant={"grey"}
+                onClick={() => {
+                  setShowKeyElementForm(true);
+                }}
+              >
+                <CircularIcon icon={"Plus"} size={"12px"} />
+                <AddKeyElementText>Add a Key Result</AddKeyElementText>
+              </StyledButton>
+            )}
+            {showKeyElementForm && (
+              <KeyElementModal
+                modalOpen={showKeyElementForm}
+                setModalOpen={setShowKeyElementForm}
+                action={showActionType}
+                setActionType={setActionType}
+                store={null}
+                type={"onboarding"}
+                keysForOnboarding={formKeys}
+                callbackForOnboarding={callback}
+                element={selectedElement}
+                setSelectedElement={setSelectedElement}
+                showAddButton={setShowAddButton}
+              />
+            )}
+          </>
+        );
       case "HTML_EDITOR":
         return (
           <TrixEditor
@@ -225,14 +266,46 @@ const Container = styled.div`
 
 type FormContainerProps = {
   marginBottom?: string;
-}
+};
 
 const FormContainer = styled.div<FormContainerProps>`
-  margin-bottom: ${props => props.marginBottom ? props.marginBottom : "24px"};
+  margin-bottom: ${props => (props.marginBottom ? props.marginBottom : "24px")};
 `;
 
 const StyledOption = styled.option``;
 
 const FormLabel = styled(Label)`
   margin-bottom: 10px;
+`;
+
+const StyledButton = styled(Button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0;
+  padding-right: 0;
+  background-color: ${props => props.theme.colors.white};
+  border-color: ${props => props.theme.colors.white};
+  &: hover {
+    color: ${props => props.theme.colors.primary100};
+  }
+`;
+
+const CircularIcon = styled(Icon)`
+  box-shadow: 2px 2px 6px 0.5px rgb(0 0 0 / 20%);
+  color: ${props => props.theme.colors.white};
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  background-color: ${props => props.theme.colors.primary100};
+  &: hover {
+    background-color: ${props => props.theme.colors.primaryActive};
+  }
+`;
+
+const AddKeyElementText = styled(TextDiv)`
+  margin-left: 10px;
+  white-space: break-spaces;
+  color: ${props => props.theme.colors.primary100};
+  font-size: 12px;
 `;

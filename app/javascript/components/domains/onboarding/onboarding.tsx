@@ -15,6 +15,7 @@ import { AddPyns } from "./add-pyns";
 import { PynsSummary } from "./pyns-summary";
 import { parseAnnualInitiative } from "./annual-initiative-parser";
 import { observer } from "mobx-react";
+import { ScorecardsIndex } from "../scorecard/scorecards-index";
 
 interface IOnboardingProps {}
 
@@ -29,7 +30,7 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
 
   const loadOnboarding = useCallback(async () => {
     const { onboardingDisplayFormat, onboardingCompany } = companyStore;
- 
+
     if (!R.isNil(onboardingCompany)) {
       const signUpPurpose = R.path(["signUpPurpose"], onboardingCompany);
       const fiscalYearStart = new Date(R.path(["fiscalYearStart"], onboardingCompany));
@@ -79,7 +80,7 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
   const { onboardingCompany, onboardingDisplayFormat: onboardingDF } = companyStore;
   const { profile } = sessionStore;
   const requiredFields = ["name", "timezone", "fiscalYearStart"];
-  
+
   if (loading || R.isNil(profile) || !timeZones || R.isNil(companyStore)) {
     return <Loading />;
   }
@@ -173,11 +174,11 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
         }
       });
     } else if (currentStep === 3) {
-      submitPynsData().then(res => {
-        if (res === true) {
-          incrementStep();
-        }
-      });
+       submitFormState().then(res => {
+         if (res === true) {
+           incrementStep();
+         }
+       });
     } else if (currentStep === 4) {
       if (!teamData["emails"]) {
         //CHRIS' NOTE: THE INDENTATION IS ON PURPOSE. DO NOT FIX IT.
@@ -246,46 +247,6 @@ True value of LynchPyn is in working together with others in your team and compa
     {
       formFields: [
         {
-          label: `Why does ${R.pathOr("", ["name"], onboardingCompany)} exist?`,
-          fieldType: EFieldType.HtmlEditor,
-          formKeys: ["coreFourAttributes", "core_1"],
-          callback: setFormState,
-          style: { resize: "vertical" },
-          placeholder: "Type here...",
-        },
-        {
-          label: `How do ${R.pathOr(
-            "",
-            ["name"],
-            onboardingCompany,
-          )} employees and leaders behave? (AKA your core values)`,
-          fieldType: EFieldType.HtmlEditor,
-          formKeys: ["coreFourAttributes", "core_2"],
-          callback: setFormState,
-          style: { resize: "vertical" },
-          placeholder: "Type here...",
-        },
-        {
-          label: `What does ${R.pathOr("", ["name"], onboardingCompany)} do?`,
-          fieldType: EFieldType.HtmlEditor,
-          formKeys: ["coreFourAttributes", "core_3"],
-          callback: setFormState,
-          style: { resize: "vertical" },
-          placeholder: "Type here...",
-        },
-        {
-          label: `What sets ${R.pathOr("", ["name"], onboardingCompany)} apart from the rest?`,
-          fieldType: EFieldType.HtmlEditor,
-          formKeys: ["coreFourAttributes", "core_4"],
-          callback: setFormState,
-          style: { resize: "vertical" },
-          placeholder: "Type here...",
-        },
-      ],
-    },
-    {
-      formFields: [
-        {
           label:
             "What's the most important thing your company has to achieve in the upcoming year?",
           fieldType: EFieldType.TextField,
@@ -325,28 +286,55 @@ True value of LynchPyn is in working together with others in your team and compa
           style: { marginLeft: "2px" },
         },
         {
-          label: `What would be an achievable Milestone for this week to move you closer to "${R.pathOr(
+          label: `What is a measurable outcome required to achieve "${R.pathOr(
             "",
             ["annualInitiative", "quarterlyGoals", "0", "description"],
             goalData,
-          )}"`,
-          fieldType: EFieldType.TextField,
-          formKeys: ["annualInitiative", "quarterlyGoals", "0", "milestones", "0", "description"],
+          )}"? It should be a specific metric.`,
+          fieldType: EFieldType.AddKeyResult,
+          formKeys: ["annualInitiative", "quarterlyGoals", "0", "keyResults", "0"],
           callback: setGoalDataState,
-          subText: !R.view(
-            R.lensPath([
-              "annualInitiative",
-              "quarterlyGoals",
-              "0",
-              "milestones",
-              "0",
-              "description",
-            ]),
-            goalData,
-          )
-            ? ""
-            : "You're all done. Weekly Milestones are the final piece in the Objectives and Initiatives puzzle. Click next to see how this helps you prioritize each day.",
           style: { marginLeft: "2px" },
+        },
+      ],
+    },
+    {
+      formFields: [
+        {
+          label: `Why does ${R.pathOr("", ["name"], onboardingCompany)} exist?`,
+          fieldType: EFieldType.HtmlEditor,
+          formKeys: ["coreFourAttributes", "core_1"],
+          callback: setFormState,
+          style: { resize: "vertical" },
+          placeholder: "Type here...",
+        },
+        {
+          label: `How do ${R.pathOr(
+            "",
+            ["name"],
+            onboardingCompany,
+          )} employees and leaders behave? (AKA your core values)`,
+          fieldType: EFieldType.HtmlEditor,
+          formKeys: ["coreFourAttributes", "core_2"],
+          callback: setFormState,
+          style: { resize: "vertical" },
+          placeholder: "Type here...",
+        },
+        {
+          label: `What does ${R.pathOr("", ["name"], onboardingCompany)} do?`,
+          fieldType: EFieldType.HtmlEditor,
+          formKeys: ["coreFourAttributes", "core_3"],
+          callback: setFormState,
+          style: { resize: "vertical" },
+          placeholder: "Type here...",
+        },
+        {
+          label: `What sets ${R.pathOr("", ["name"], onboardingCompany)} apart from the rest?`,
+          fieldType: EFieldType.HtmlEditor,
+          formKeys: ["coreFourAttributes", "core_4"],
+          callback: setFormState,
+          style: { resize: "vertical" },
+          placeholder: "Type here...",
         },
       ],
     },
@@ -397,15 +385,9 @@ True value of LynchPyn is in working together with others in your team and compa
       formData={formData}
       stepwise={false}
     />,
+    <ScorecardsIndex ownerType={"company"} ownerId={onboardingCompany.id} />,
     <FormBuilder
       formFields={leftBodyComponentProps[1].formFields}
-      formData={formData}
-      formContainerStyle={{ height: "155px" }}
-      stepwise={false}
-      marginBottom="20px"
-    />,
-    <FormBuilder
-      formFields={leftBodyComponentProps[2].formFields}
       formData={goalData}
       formContainerStyle={[
         { height: "140px" },
@@ -415,7 +397,13 @@ True value of LynchPyn is in working together with others in your team and compa
       ]}
       stepwise={true}
     />,
-    <AddPyns formData={formData} />,
+    <FormBuilder
+      formFields={leftBodyComponentProps[2].formFields}
+      formData={formData}
+      formContainerStyle={{ height: "155px" }}
+      stepwise={false}
+      marginBottom="20px"
+    />,
     <FormBuilder
       formFields={leftBodyComponentProps[3].formFields}
       formData={teamData}
@@ -432,6 +420,8 @@ True value of LynchPyn is in working together with others in your team and compa
       formData={formData}
       stepwise={false}
     />,
+    null,
+    <GoalSummary formData={goalData} />,
     <>
       <BulletedList
         heading={"e.g. Southwest Airline"}
@@ -458,8 +448,7 @@ True value of LynchPyn is in working together with others in your team and compa
         containerStyle={bulletContainerStyle}
       />
     </>,
-    <GoalSummary formData={goalData} />,
-    <PynsSummary goalData={goalData} />,
+    // <PynsSummary goalData={goalData} />,
     <></>,
   ];
 

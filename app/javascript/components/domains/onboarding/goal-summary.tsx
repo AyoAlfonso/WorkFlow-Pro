@@ -9,17 +9,19 @@ import { AnnualInitiativeCard } from "~/components/domains/goals/annual-initiati
 import { QuarterlyGoalCard } from "~/components/domains/goals/quarterly-goal/quarterly-goal-card";
 import { MilestoneCard } from "~/components/domains/goals/milestone/milestone-card";
 import { TextDiv } from "~/components/shared";
+import { KeyElement } from "../goals/shared/key-element";
 
 interface IGoalSummaryProps {
   formData: any;
 }
 
 export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
+  console.log(formData)
   const annualInitiative = R.pathOr("", ["annualInitiative"], formData);
   const annualInitiativeFormatted = parseAnnualInitiative(annualInitiative);
   const rallyingCry = R.pathOr("", ["rallyingCry"], formData);
   const quarterlyGoal = R.pathOr("", ["quarterlyGoals", "0"], annualInitiativeFormatted);
-  const milestone = R.pathOr("", ["milestones", "0"], quarterlyGoal);
+  const keyResult = R.pathOr("", ["keyResults", "0"], quarterlyGoal);
   return (
     <Container>
       {!R.isEmpty(rallyingCry) && (
@@ -71,14 +73,15 @@ export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
           </QuarterlyGoalCardContainer>
         </SectionContainer>
       )}
-      {milestone?.description && (
+      {keyResult?.value && (
         <SectionContainer>
-          <MilestoneContainer>
+          <KeyResultContainer>
             <TextDiv fontSize={"16px"} color={"primary100"} mb={"8px"} fontWeight={"bold"}>
-              Weekly Milestone
+              Key Result
             </TextDiv>
-            <MilestoneCard milestone={milestone} editable={false} itemType={"quarterlyGoal"} />
-          </MilestoneContainer>
+            <KeyElement keyElement={keyResult} type={"onboarding"} editable={false} />
+            {/* <MilestoneCard milestone={milestone} editable={false} itemType={"quarterlyGoal"} /> */}
+          </KeyResultContainer>
         </SectionContainer>
       )}
     </Container>
@@ -140,7 +143,7 @@ const QuarterlyGoalCardContainer = styled.div`
   padding-bottom: 8px;
 `;
 
-const MilestoneContainer = styled.div``;
+const KeyResultContainer = styled.div``;
 
 const WrappedTextDiv = styled(TextDiv)`
   overflow-wrap: anywhere;
