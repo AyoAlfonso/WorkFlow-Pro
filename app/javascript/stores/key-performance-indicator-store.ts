@@ -15,16 +15,13 @@ export const KeyPerformanceIndicatorStoreModel = types
   .extend(withEnvironment())
   .views(self => ({
     get allOpenKPIs() {
-            console.log("allOpenKPIs")
-      return self.allKPIs.filter(kpi => {
-        kpi.closedAt == null;
-      });
+      console.log("allOpenKPIs");
+      return self.allKPIs;
+      // .filter(kpi => kpi.closedAt == null);
     },
     get allClosedKPIs() {
-      console.log("allClosedKPIs")
-      return self.allKPIs.filter(kpi => {
-        kpi.closedAt !== null;
-      });
+      console.log("allClosedKPIs");
+      return self.allKPIs.filter(kpi => kpi.closedAt !== null);
     },
   }))
   .actions(self => ({
@@ -87,11 +84,10 @@ export const KeyPerformanceIndicatorStoreModel = types
         showToast("KPI deleted", ToastMessageConstants.SUCCESS);
       }
     }),
-    closeKPI: flow(function*() {
+    toggleKPIStatus: flow(function*() {
       const { scorecardStore } = getRoot(self);
-      const response: ApiResponse<any> = yield self.environment.api.closeKPI(self.kpi.id);
-      scorecardStore.closeKPI(response.data.kpi);
-      self.allKPIs = R.filter(KPI => KPI.id != response.data.kpi.id, self.allKPIs);
+      const response: ApiResponse<any> = yield self.environment.api.toggleKPIStatus(self.kpi.id);
+      scorecardStore.mergeKPIS(response.data.kpi);
       if (response.ok) {
         showToast("KPI archived", ToastMessageConstants.SUCCESS);
       }

@@ -1,5 +1,5 @@
 class Api::KeyPerformanceIndicatorController < Api::ApplicationController
-  before_action :set_key_performance_indicator, only: [:show, :update, :destroy, :close_kpi]
+  before_action :set_key_performance_indicator, only: [:show, :update, :destroy, :close_kpi, :toggle_status]
 
   respond_to :json
 # TODO: Put as_json code into the kpi model 
@@ -52,6 +52,15 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
 
   def close_kpi
     @kpi.update!(closed_at: Date.today)
+    render json: { kpi: @kpi }
+  end
+
+  def toggle_status
+    closed_at = nil
+    unless @kpi.closed_at.present? 
+     closed_at = Date.today
+    end
+     @kpi.update!(closed_at: closed_at)
     render json: { kpi: @kpi }
   end
 

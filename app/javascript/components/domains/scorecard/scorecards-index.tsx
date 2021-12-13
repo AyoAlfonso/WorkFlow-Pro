@@ -60,7 +60,7 @@ export const ScorecardsIndex = observer(
           })
           .then(() => setLoading(false));
       }
-    }, [owner_type, owner_id]);
+    }, [owner_type, owner_id, kpis]);
     const renderFilterOptions = () => {
       return (
         <FilterContainer>
@@ -84,29 +84,30 @@ export const ScorecardsIndex = observer(
       );
     };
 
-   const allkpisToShow = ()=> {
+    const allkpisToShow = () => {
       switch (kpiFilter) {
         case "open":
-          return keyPerformanceIndicatorStore.allOpenKPIs;
+          // return toJS(kpis.filter(kpi => kpi.closedAt == null));
+        return keyPerformanceIndicatorStore.allOpenKPIs;
         case "closed":
-          return keyPerformanceIndicatorStore.allClosedKPIs;
+          return kpis
+        // return keyPerformanceIndicatorStore.allClosedKPIs;
         default:
-          return allKPIs;
+          return [];
       }
     };
     /* Table KPIs are separated from allKPIs to optimize the rendering of the table */
     const tableKPIsToShow = () => {
       switch (kpiFilter) {
         case "open":
-          return tableKPIs.filter(kpi => kpi.closedAt == null)
+          return scorecardStore.allOpenTableKPIs;
         case "closed":
-          return tableKPIs.filter(kpi => kpi.closedAt !== null);
+          return scorecardStore.allCloseTableKPIs;
         default:
           return tableKPIs;
       }
     };
-    
-  
+
     if (
       loading ||
       !companyStore.company ||

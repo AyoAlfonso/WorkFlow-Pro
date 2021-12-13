@@ -136,6 +136,8 @@ Rails.application.routes.draw do
     #key_performance_indicators
     resources :key_performance_indicator, only: [:index, :show, :create, :update, :destroy]
     patch '/key_performance_indicator/close_kpi/:id', to: 'key_performance_indicator#close_kpi'
+    patch '/key_performance_indicator/toggle_status/:id', to: 'key_performance_indicator#toggle_status'
+    # //change to toggle_status
 
     #scorecards
     get "/scorecard/:owner_type/:owner_id", to: "scorecard_logs#show"

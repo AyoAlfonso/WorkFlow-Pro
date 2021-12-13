@@ -108,7 +108,7 @@ export const ViewEditKPIModal = observer(
 
     const closeKPI = () => {
       if (confirm(`Are you sure you want to archive this KPI`)) {
-        keyPerformanceIndicatorStore.closeKPI().then(() => {
+        keyPerformanceIndicatorStore.toggleKPIStatus().then(() => {
           closeModal();
         });
       }
@@ -118,6 +118,14 @@ export const ViewEditKPIModal = observer(
       if (confirm(`Are you sure you want to edit this KPI`)) {
         closeModal();
         setShowEditExistingKPIContainer(true);
+      }
+    };
+
+    const openKPI = () => {
+      if (confirm(`Are you sure you want to open this KPI`)) {
+        keyPerformanceIndicatorStore.toggleKPIStatus().then(() => {
+          closeModal();
+        });
       }
     };
 
@@ -366,37 +374,45 @@ export const ViewEditKPIModal = observer(
                     <MissingParentsErrorContainer shadow={true}>
                       <MissingKPIIcon icon={"Warning-PO"} size={"24px"} iconColor={greyInactive} />
                       <MissingParentsTexts>
-                        <MissingParentsErrorTitle>This KPI is Broken</MissingParentsErrorTitle>
+                        <MissingParentsErrorTitle>
+                          {" "}
+                          {kpi.closedAt ? "This KPI is closed" : "This KPI is Broken"}
+                        </MissingParentsErrorTitle>
                         <MissingParentsErrorBody>
-                          One or more KPIs related to this Advacned Function KPI are removed. As a
-                          result this KPI cannot be calculated. We recommend that you edit this KPI
-                          to fix this issue.
+                          {kpi.closedAt
+                            ? "  You should open this KPI if you want to continue using it to track your scorecards"
+                            : `One or more KPIs related to this Advacned Function KPI are removed. As a
+                          result this KPI cannot be calculated. We should open this KPI for you to continue using it to track your scorecard 
+                          to fix this issue`}
                         </MissingParentsErrorBody>
                       </MissingParentsTexts>
                       <MissingParentsButtons>
                         <ButtonContainer>
-                          <KPIButton
-                            small
-                            variant={"primary"}
-                            m={1}
-                            style={{ width: "90%", fontSize: "12px", fontWeight: "bold" }}
-                            onClick={() => {
-                              updateKPI();
-                            }}
-                          >
-                            Edit
-                          </KPIButton>
-                          <KPIButton
-                            small
-                            variant={"primary"}
-                            m={1}
-                            style={{ width: "90%", fontSize: "12px", fontWeight: "bold" }}
-                            onClick={() => {
-                              closeKPI();
-                            }}
-                          >
-                            Close
-                          </KPIButton>
+                          {kpi.closedAt ? (
+                            <KPIButton
+                              small
+                              variant={"primary"}
+                              m={1}
+                              style={{ width: "90%", fontSize: "12px", fontWeight: "bold" }}
+                              onClick={() => {
+                                openKPI();
+                              }}
+                            >
+                              Open
+                            </KPIButton>
+                          ) : (
+                            <KPIButton
+                              small
+                              variant={"primary"}
+                              m={1}
+                              style={{ width: "90%", fontSize: "12px", fontWeight: "bold" }}
+                              onClick={() => {
+                                updateKPI();
+                              }}
+                            >
+                              Edit
+                            </KPIButton>
+                          )}
 
                           <KPIButton
                             small
@@ -724,6 +740,7 @@ const BrokenCircleIcon = styled.div`
 `;
 
 const MissingParentsErrorContainer = styled.div<MissingParentsErrorContainerProps>`
+  width: 95%;
   display: inline-flex;
   background: ${props => props.theme.colors.grey10};
   height: 75px;

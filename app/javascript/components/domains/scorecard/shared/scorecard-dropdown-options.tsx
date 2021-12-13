@@ -40,11 +40,20 @@ export const ScorecardKPIDropdownOptions = ({
   };
   const closeKPI = () => {
     if (confirm(`Are you sure you want to archive this KPI`)) {
-      keyPerformanceIndicatorStore.closeKPI().then(() => {
+      keyPerformanceIndicatorStore.toggleKPIStatus().then(() => {
         setModalOpen(false);
       });
     }
   };
+    const openKPI = () => {
+    if (confirm(`Are you sure you want to open this KPI`)) {
+      keyPerformanceIndicatorStore.toggleKPIStatus().then(() => {
+        setModalOpen(false);
+      });
+    }
+  };
+
+  
 
   const updateKPI = () => {
     if (confirm(`Are you sure you want to edit this KPI`)) {
@@ -55,13 +64,22 @@ export const ScorecardKPIDropdownOptions = ({
 
   return (
     <Container ref={optionsRef}>
+      {!keyPerformanceIndicatorStore?.kpi.closedAt && 
       <OptionContainer onClick={() => updateKPI()}>
         <IconContainer>
           <StyledIcon icon={"Edit-2"} size={"15px"} />
         </IconContainer>
         <OptionText> Edit KPI </OptionText>
       </OptionContainer>
-      {keyPerformanceIndicatorStore?.kpi.createdAt == null && (
+    }
+      {keyPerformanceIndicatorStore?.kpi.closedAt ? 
+       <OptionContainer onClick={() => openKPI()}>
+          <IconContainer>
+            <StyledIcon icon={"Edit-2"} size={"15px"} />
+          </IconContainer>
+          <OptionText> Open KPI </OptionText>
+        </OptionContainer>
+       : (
         <OptionContainer onClick={() => closeKPI()}>
           <IconContainer>
             <StyledIcon icon={"Edit-2"} size={"15px"} />

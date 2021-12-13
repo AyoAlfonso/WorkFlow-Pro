@@ -73,24 +73,12 @@ export const ScorecardStoreModel = types
   .extend(withEnvironment())
   .views(self => ({
     get allOpenTableKPIs() {
-      const kpis = [];
-      console.log("allOpenTableKPIs");
-       self.kpis.forEach(kpi => {
-        if (kpi.closedAt == null) {
-          kpis.push(kpi);
-        }
-      });
-      return kpis;
+      console.log("allOpenKPIs");
+    return JSON.parse(JSON.stringify(self.kpis.filter(kpi => kpi.closedAt == null)))
     },
-    get allClosedTableKPIs() {
-      const kpis = [];
-      console.log("allClosedTableKPIs");
-       self.kpis.forEach(kpi => {
-        if (kpi.closedAt !== null) {
-          kpis.push(kpi);
-        }
-      });
-      return kpis;
+    get allCloseTableKPIs() {
+      console.log("allClosedKPIs");
+      return JSON.parse(JSON.stringify((self.kpis.filter(kpi => kpi.closedAt))));
     },
   }))
   .actions(self => ({
@@ -137,6 +125,7 @@ export const ScorecardStoreModel = types
       const updatedKPIs = R.filter(KPI => KPI.id != kpi.id, self.kpis);
       self.kpis = updatedKPIs;
     },
+
     deleteScorecard(scorecardLog) {
       const kpiIndex = self.kpis.findIndex(KPI => KPI.id == scorecardLog.keyPerformanceIndicatorId);
       self.kpis[kpiIndex].scorecardLogs = self.kpis[kpiIndex].scorecardLogs.filter(

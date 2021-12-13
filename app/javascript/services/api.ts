@@ -604,9 +604,13 @@ export class Api {
   async deleteKPI(id) {
     return this.client.delete(`/key_performance_indicator/${id}`);
   }
-  async closeKPI(id) {
-    return this.client.patch(`/key_performance_indicator/close_kpi/${id}`);
+  async toggleKPIStatus(id) {
+    return this.client.patch(`/key_performance_indicator/toggle_status/${id}`);
   }
+   async openKPI(id) {
+    return this.client.patch(`/key_performance_indicator/open_kpi/${id}`);
+  }
+
 
   async createScorecardLog(scorecardLog) {
     return this.client.post(`scorecard_logs`, scorecardLog);
