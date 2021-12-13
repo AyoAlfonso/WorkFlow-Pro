@@ -150,6 +150,9 @@ export const KeyElement = observer(
     }, [element, type]);
 
     const isLogRecent = () => {
+      if (type == "onboarding") {
+        return false;
+      }
       const recentLogDate =
         moment(element.objectiveLogs[element.objectiveLogs?.length - 1]?.createdAt).format(
           "YYYY-MM-DD",
@@ -194,11 +197,12 @@ export const KeyElement = observer(
           : store.updateKeyElement(id, element.id, keyElementParams);
       if (res && showMessage) {
         showToast("Key Result updated", ToastMessageConstants.SUCCESS);
-      } return res;
+      }
+      return res;
     };
 
     const resetStatus = async () => {
-      if (!element || element.status == "unstarted") return;
+      if (!element || element.status == "unstarted" || type == "onboarding") return;
       const isUpdated = isLogRecent();
       if (isUpdated) {
         return;
