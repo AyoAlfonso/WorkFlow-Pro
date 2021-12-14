@@ -71,7 +71,16 @@ export const ScorecardStoreModel = types
     kpis: types.array(KeyPerformanceIndicatorModel),
   })
   .extend(withEnvironment())
-  .views(self => ({}))
+  .views(self => ({
+    get allOpenTableKPIs() {
+      console.log("allOpenKPIs");
+    return JSON.parse(JSON.stringify(self.kpis.filter(kpi => kpi.closedAt == null)))
+    },
+    get allCloseTableKPIs() {
+      console.log("allClosedKPIs");
+      return JSON.parse(JSON.stringify((self.kpis.filter(kpi => kpi.closedAt))));
+    },
+  }))
   .actions(self => ({
     getScorecard: flow(function*({ ownerType, ownerId, showAll = false }) {
       try {
@@ -112,6 +121,11 @@ export const ScorecardStoreModel = types
       const updatedKPIs = R.filter(KPI => KPI.id != kpi.id, self.kpis);
       self.kpis = updatedKPIs;
     },
+    closeKPI(kpi) {
+      const updatedKPIs = R.filter(KPI => KPI.id != kpi.id, self.kpis);
+      self.kpis = updatedKPIs;
+    },
+
     deleteScorecard(scorecardLog) {
       const kpiIndex = self.kpis.findIndex(KPI => KPI.id == scorecardLog.keyPerformanceIndicatorId);
       self.kpis[kpiIndex].scorecardLogs = self.kpis[kpiIndex].scorecardLogs.filter(

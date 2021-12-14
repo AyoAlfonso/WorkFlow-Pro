@@ -2,7 +2,7 @@ class QuarterlyGoal < ApplicationRecord
   include HasCreator
   include HasOwner
   include ActionView::Helpers::SanitizeHelper
-
+  include StatsHelper
   before_save :sanitize_description
 
   belongs_to :annual_initiative
@@ -42,23 +42,22 @@ class QuarterlyGoal < ApplicationRecord
       )
     end
   end
- def derived_status 
-  previous_week_start = self.get_beginning_of_last_or_current_work_week_date(Time.now)
-  initiatives = KeyElement.filter_by_objective_logs_and_updated_on_key_elements(previous_week_start).as_json({methods: [:owned_by],
-                   include: {
-                    objective_logs: { methods: [:user] }}
-    }).map do |element|
-        unless element["objective_logs"].blank?
-        log = element["objective_logs"].last
-            if (log.present?)
-              score  = element["greater_than"] ? (element["score"] / element["completion_target_value"]) * 100 : ((element["completion_target_value"] + element["completion_target_value"] - log["score"]) / element["completion_target_value"]) * 100;
-              element["derived_status"] = score >= 100 ? "On Track" : score >= kpi["needs_attention_threshold"] ?  "Needs Attention" :  "Behind" 
-              element["derived_score"] = score.round(2)
-            end
-        end
-    end
-    return initiatives
- end
+
+  def derived_status 
+      previous_week_start = get_beginning_of_last_or_current_work_week_date(Time.now)
+      objective_logs_scores = Array.new
+      self.key_elements.filter_by_objective_logs_and_updated_on_key_elements(previous_week_start).as_json({methods: [:owned_by],
+                      include: {
+                        objective_logs: { methods: [:owned_by] }}
+        }).map do |element|
+            completion_target_value = element["completion_target_value"] == 0 ? 1 : element["completion_target_value"]
+            score  = element["greater_than"] ? (element["completion_current_value"] / completion_target_value)  * 100 : ((element["completion_target_value"] + element["completion_target_value"] - element["completion_current_value"]) / completion_target_value) * 100;
+            objective_logs_scores.push(score.round(2))
+          end
+      avr_score = objective_logs_scores.sum.fdiv(objective_logs_scores.size) rescue 0
+      return avr_score >= 85 ? "On Track" : avr_score >= 70 ?  "Needs Attention" :  avr_score >= 1 ? "Behind" : "None"
+  end
+
   private
 
   def sanitize_description
