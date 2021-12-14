@@ -16,7 +16,7 @@ import { CreateGoalSection } from "../shared/create-goal-section";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import { RecordOptions } from "../shared/record-options";
-import { Loading, Avatar } from "~/components/shared";
+import { Loading, Avatar, Button } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { GoalDropdownOptions } from "../shared/goal-dropdown-options";
 import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
@@ -81,7 +81,7 @@ export const AnnualInitiativeModalContent = memo(
 
       useEffect(() => {
         annualInitiativeStore
-          .getActivityLogs(1, "annualInitiative", annualInitiativeId)
+          .getActivityLogs(1, "AnnualInitiative", annualInitiativeId)
           .then(meta => {
             setObjectiveMeta(meta);
           });
@@ -119,47 +119,53 @@ export const AnnualInitiativeModalContent = memo(
         const quarterlyGoalsToDisplay = showAllQuarterlyGoals
           ? allQuarterlyGoals
           : activeQuarterlyGoals;
-        return quarterlyGoalsToDisplay.slice().sort(sortByDate).map((quarterlyGoal, index) => {
-          return (
-            <QuarterlyGoalContainer key={index}>
-              <StatusBlockColorIndicator
-                milestones={quarterlyGoal.milestones || []}
-                indicatorWidth={"80px"}
-                indicatorHeight={4}
-                marginBottom={16}
-              />
+        return quarterlyGoalsToDisplay
+          .slice()
+          .sort(sortByDate)
+          .map((quarterlyGoal, index) => {
+            return (
+              <QuarterlyGoalContainer key={index}>
+                <StatusBlockColorIndicator
+                  milestones={quarterlyGoal.milestones || []}
+                  indicatorWidth={"80px"}
+                  indicatorHeight={4}
+                  marginBottom={16}
+                />
 
-              <TopRowContainer>
-                <QuarterlyGoalDescription
-                  onClick={() => {
-                    setAnnualInitiativeModalOpen(false);
-                    setQuarterlyGoalId(quarterlyGoal.id);
-                    setSelectedAnnualInitiativeDescription(annualInitiative.description);
-                    setQuarterlyGoalModalOpen(true);
-                  }}
-                >
-                  {quarterlyGoal.description}
-                </QuarterlyGoalDescription>
-                <QuarterlyGoalOptionContainer>
-                  <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} />
-                </QuarterlyGoalOptionContainer>
-              </TopRowContainer>
-              <BottomRowContainer>
-                {quarterlyGoal.ownedBy && (
-                  <QuarterlyGoalOwnerContainer>
-                    <Avatar
-                      firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
-                      lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
-                      defaultAvatarColor={R.path(["ownedBy", "defaultAvatarColor"], quarterlyGoal)}
-                      avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
-                      size={40}
-                    />
-                  </QuarterlyGoalOwnerContainer>
-                )}
-              </BottomRowContainer>
-            </QuarterlyGoalContainer>
-          );
-        });
+                <TopRowContainer>
+                  <QuarterlyGoalDescription
+                    onClick={() => {
+                      setAnnualInitiativeModalOpen(false);
+                      setQuarterlyGoalId(quarterlyGoal.id);
+                      setSelectedAnnualInitiativeDescription(annualInitiative.description);
+                      setQuarterlyGoalModalOpen(true);
+                    }}
+                  >
+                    {quarterlyGoal.description}
+                  </QuarterlyGoalDescription>
+                  <QuarterlyGoalOptionContainer>
+                    <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} />
+                  </QuarterlyGoalOptionContainer>
+                </TopRowContainer>
+                <BottomRowContainer>
+                  {quarterlyGoal.ownedBy && (
+                    <QuarterlyGoalOwnerContainer>
+                      <Avatar
+                        firstName={R.path(["ownedBy", "firstName"], quarterlyGoal)}
+                        lastName={R.path(["ownedBy", "lastName"], quarterlyGoal)}
+                        defaultAvatarColor={R.path(
+                          ["ownedBy", "defaultAvatarColor"],
+                          quarterlyGoal,
+                        )}
+                        avatarUrl={R.path(["ownedBy", "avatarUrl"], quarterlyGoal)}
+                        size={40}
+                      />
+                    </QuarterlyGoalOwnerContainer>
+                  )}
+                </BottomRowContainer>
+              </QuarterlyGoalContainer>
+            );
+          });
       };
 
       const renderDropdownOptions = (): JSX.Element => {
@@ -294,7 +300,7 @@ export const AnnualInitiativeModalContent = memo(
           score: 0,
           note: comment,
           objecteableId: annualInitiative.id,
-          objecteableType: "annualInitiative",
+          objecteableType: "AnnualInitiative",
           fiscalQuarter: companyStore.company.currentFiscalQuarter,
           fiscalYear: companyStore.company.currentFiscalYear,
           week: companyStore.company.currentFiscalWeek,
@@ -305,7 +311,7 @@ export const AnnualInitiativeModalContent = memo(
 
       const getLogs = pageNumber => {
         return annualInitiativeStore
-          .getActivityLogs(pageNumber, "annualInitiative", annualInitiativeId)
+          .getActivityLogs(pageNumber, "AnnualInitiative", annualInitiativeId)
           .then(meta => {
             setObjectiveMeta(meta);
           });
@@ -368,14 +374,19 @@ export const AnnualInitiativeModalContent = memo(
                     setComment(e.target.value);
                   }}
                   value={comment}
-                  onBlur={() => {
-                    if (!comment) {
-                      return;
-                    }
-                    createLog();
-                    setComment("");
-                  }}
                 />
+                {comment && (
+                  <PostButton
+                    small
+                    variant="primary"
+                    onClick={() => {
+                      createLog();
+                      setComment("");
+                    }}
+                  >
+                    Comment
+                  </PostButton>
+                )}
               </FormElementContainer>
               <ActivityLogs
                 keyElements={objectiveLogs}
@@ -606,4 +617,9 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const PostButton = styled(Button)`
+  margin-top: 10px;
+  font-size: 14px;
 `;
