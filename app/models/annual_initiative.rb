@@ -2,6 +2,7 @@ class AnnualInitiative < ApplicationRecord
   include HasCreator
   include HasOwner
   include ActionView::Helpers::SanitizeHelper
+  include StatsHelper
 
   before_save :sanitize_description
 
@@ -9,7 +10,7 @@ class AnnualInitiative < ApplicationRecord
   has_many :quarterly_goals, dependent: :destroy
   has_many :sub_initiatives, through: :quarterly_goals
   has_many :comments, as: :commentable
-  has_many :objective_logs, as: :objecteable
+  # has_many :objective_logs, as: :objecteable
   has_many :milestones, as: :milestoneable
   # has_many :attachments
   has_many :key_elements, as: :elementable
@@ -21,6 +22,9 @@ class AnnualInitiative < ApplicationRecord
   scope :for_company_id, ->(company_id) { where(company_id: company_id) }
   scope :for_company_current_year_and_future, ->(company_current_fiscal_year) { where("fiscal_year >= ?", company_current_fiscal_year) }
 
+ 
+    def derived_status 
+    end
   private
 
   def sanitize_description
