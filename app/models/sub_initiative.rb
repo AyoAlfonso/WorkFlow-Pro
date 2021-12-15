@@ -19,31 +19,38 @@ class SubInitiative < ApplicationRecord
     fiscal_quarter_start_date = company.current_fiscal_start_date + (13.weeks * (self.quarter-1))
     # fiscal_quarter_start_date = fiscal_quarter_start_date + 1.year if self.quarterly_goal.annual_initiative.fiscal_year >= company.current_fiscal_year
     fiscal_quarter_start_date_closest_monday = fiscal_quarter_start_date.monday? ? fiscal_quarter_start_date : fiscal_quarter_start_date.next_occurring(:monday)
-    13.times do |index|
-      Milestone.create!(
-        milestoneable: self,
-        description: "",
-        week: index + 1,
-        week_of: fiscal_quarter_start_date_closest_monday + (1.week * index),
-        created_by: current_user,
-      )
+    existing_milestone = check_for_existing_milestones_for_sub_initiatives(company,fiscal_quarter_start_date_closest_monday)
+    unless existing_milestone.present?
+      13.times do |index|
+        Milestone.create!(
+          milestoneable: self,
+          description: "",
+          week: index + 1,
+          week_of: fiscal_quarter_start_date_closest_monday + (1.week * index),
+          created_by: current_user,
+        )
+      end
     end
   end
 
-    def derived_status 
+  def check_for_existing_milestones_for_sub_initiatives(company, fiscal_quarter_start_date_closest_monday)
+    return Milestone.where(week: 1, week_of: fiscal_quarter_start_date_closest_monday + + (1.week * index) , milestoneable_type: "SubInitiative")
+  end
+
+  def derived_status 
         previous_week_start = get_beginning_of_last_or_current_work_week_date(Time.now)
-        objective_logs_scores = Array.new
+        objective_log_statuses = Array.new
         self.key_elements.filter_by_objective_logs_and_updated_on_key_elements(previous_week_start).as_json({methods: [:owned_by],
                         include: {
                           objective_logs: { methods: [:owned_by] }}
           }).map do |element|
               completion_target_value = element["completion_target_value"] == 0 ? 1 : element["completion_target_value"]
               score  = element["greater_than"] ? (element["completion_current_value"] / completion_target_value)  * 100 : ((element["completion_target_value"] + element["completion_target_value"] - element["completion_current_value"]) / completion_target_value) * 100;
-              objective_logs_scores.push(score.round(2))
+              status = score >= 85 ? "On Track" : score >= 70 ?  "Needs Attention" :  score >= 1 ? "Behind" : "None"
+              objective_log_statuses.push(status)  
             end
-        avr_score = objective_logs_scores.sum.fdiv(objective_logs_scores.size) rescue 0
-        return avr_score >= 85 ? "On Track" : avr_score >= 70 ?  "Needs Attention" :  avr_score >= 1 ? "Behind" : "None"
-    end
+        return objective_log_statuses
+  end
  
   def quarter
     self.quarterly_goal.quarter

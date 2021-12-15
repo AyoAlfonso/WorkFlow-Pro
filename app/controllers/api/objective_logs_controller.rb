@@ -12,6 +12,21 @@ class Api::ObjectiveLogsController < Api::ApplicationController
     @objective_log = ObjectiveLog.create!(objective_log_params)
     authorize @objective_log
     @objective_log.save!
+    #We want to save same values onto the Milestones that have expected week element 
+
+    existing_milestone = Milestone.where(week: params[:week], milestoneable_type: params[:objecteable_type], milestoneable_id: params[:objecteable_id],
+    week_of: params[:week_of])
+
+   unless existing_milestone.present?
+    Milestone.create(
+      milestoneable_type: params[:objecteable_type],
+      milestoneable_id: params[:objecteable_id] ,
+      week: params[:week],
+      week_of: params[:week_of],
+      description: "",
+      created_by: current_user,
+    )
+   end
     render json: { objective_log: @objective_log, status: :ok }
   end
   
