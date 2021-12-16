@@ -22,6 +22,8 @@ class AnnualInitiative < ApplicationRecord
   scope :for_company_id, ->(company_id) { where(company_id: company_id) }
   scope :for_company_current_year_and_future, ->(company_current_fiscal_year) { where("fiscal_year >= ?", company_current_fiscal_year) }
 
+
+  
   private
 
   def sanitize_description
