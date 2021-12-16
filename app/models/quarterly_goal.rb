@@ -47,7 +47,7 @@ class QuarterlyGoal < ApplicationRecord
   end
   
   def check_for_existing_milestones_for_quarterly_goal(company, fiscal_quarter_start_date_closest_monday)
-    return Milestone.where(week: 1, week_of: fiscal_quarter_start_date_closest_monday + + (1.week * index) , milestoneable_type: "QuarterlyGoal")
+    return Milestone.where(week: 1, week_of: fiscal_quarter_start_date_closest_monday , milestoneable_type: "QuarterlyGoal")
   end
 
   private

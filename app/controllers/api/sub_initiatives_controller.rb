@@ -41,6 +41,7 @@ class Api::SubInitiativesController < Api::ApplicationController
   end
 
   def create_key_element
+    # binding.pry
     key_element = KeyElement.create!(elementable: @sub_initiative, 
       value: params[:value], completion_type: params[:completion_type], completion_current_value: params[:completion_current_value], greater_than: params[:greater_than], 
       completion_target_value: params[:completion_target_value], owned_by_id: params[:owned_by])
@@ -72,6 +73,7 @@ class Api::SubInitiativesController < Api::ApplicationController
 
   private
   def create_milestones_for_sub_initiative
+        # binding.pry
     @sub_initiative.create_milestones_for_sub_initiative(current_user, current_company)
   end
 
