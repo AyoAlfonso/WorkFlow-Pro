@@ -510,7 +510,7 @@ export const ScorecardTableView = observer(
             >
               {R.range(1, 5).map((n: number) => (
                 <option key={n} value={n}>
-                  Q{n} {company.yearForCreatingAnnualInitiatives}
+                  Q{n} {company.currentFiscalYear}
                 </option>
               ))}
             </Select>

@@ -19,10 +19,6 @@ class KeyPerformanceIndicatorPolicy < ApplicationPolicy
     @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end
 
-  def close_kpi?
-    @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
-  end
-
   def toggle_status?
      @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end

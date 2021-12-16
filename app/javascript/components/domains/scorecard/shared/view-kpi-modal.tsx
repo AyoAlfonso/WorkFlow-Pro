@@ -380,7 +380,7 @@ export const ViewEditKPIModal = observer(
                         </MissingParentsErrorTitle>
                         <MissingParentsErrorBody>
                           {kpi.closedAt
-                            ? "  You should open this KPI if you want to continue using it to track your scorecards"
+                            ? `You have closed this KPI. If this was a mistake, click on "Open KPI" to reactivate this. You can also delete the KPI if you don't wish to keep the date for future reference.`
                             : `One or more KPIs related to this Advacned Function KPI are removed. As a
                           result this KPI cannot be calculated. We should open this KPI for you to continue using it to track your scorecard 
                           to fix this issue`}
