@@ -14,14 +14,24 @@ class Api::ObjectiveLogsController < Api::ApplicationController
     @objective_log.save!
     #We want to save same values onto the Milestones that have expected week element 
 
-    existing_milestone = Milestone.where(week: params[:week], milestoneable_type: params[:objecteable_type], milestoneable_id: params[:objecteable_id],
+    existing_milestone = Milestone.where(week: 1, milestoneable_type: params[:objecteable_type], milestoneable_id: params[:objecteable_id],
     week_of: params[:week_of])
+    
+    if params[:fiscal_quarter] = 1 
+       week =  weeks - 13.weeks
+    elsif  params[:fiscal_quarter] = 2
+       week =  26.weeks
+    elsif  params[:fiscal_quarter] = 3
+       week =  39.weeks
+    elsif params[:fiscal_quarter] = 4
+        week =  52.weeks
+    end
 
    unless existing_milestone.present?
     Milestone.create(
       milestoneable_type: params[:objecteable_type],
       milestoneable_id: params[:objecteable_id] ,
-      week: params[:week],
+      week: week,
       week_of: params[:week_of],
       description: "",
       created_by: current_user,
