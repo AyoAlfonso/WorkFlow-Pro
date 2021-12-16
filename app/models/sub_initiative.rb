@@ -20,6 +20,7 @@ class SubInitiative < ApplicationRecord
     # fiscal_quarter_start_date = fiscal_quarter_start_date + 1.year if self.quarterly_goal.annual_initiative.fiscal_year >= company.current_fiscal_year
     fiscal_quarter_start_date_closest_monday = fiscal_quarter_start_date.monday? ? fiscal_quarter_start_date : fiscal_quarter_start_date.next_occurring(:monday)
     existing_milestone = check_for_existing_milestones_for_sub_initiatives(company,fiscal_quarter_start_date_closest_monday)
+
     unless existing_milestone.present?
       13.times do |index|
         Milestone.create!(
@@ -34,7 +35,7 @@ class SubInitiative < ApplicationRecord
   end
 
   def check_for_existing_milestones_for_sub_initiatives(company, fiscal_quarter_start_date_closest_monday)
-    return Milestone.where(week: 1, week_of: fiscal_quarter_start_date_closest_monday + + (1.week * index) , milestoneable_type: "SubInitiative")
+    return Milestone.where(week: 1, week_of: fiscal_quarter_start_date_closest_monday , milestoneable_type: "SubInitiative")
   end
  
   def quarter
