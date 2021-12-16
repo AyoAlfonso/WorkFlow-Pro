@@ -3,7 +3,7 @@ json.description CGI::unescapeHTML(annual_initiative.description)
 json.owned_by do
   json.partial! annual_initiative.owned_by, partial: "api/users/user", as: :user
 end
-json.derived_status annual_initiative.derived_status
+# json.derived_status annual_initiative.derived_status
 # if the annual_initiative is in the current/future fiscal year then we only want to show present/future quarterly goals
 # if the annual_initiative is in the past, then we show all quarterly goals
 json.quarterly_goals annual_initiative.quarterly_goals.optimized do |quarterly_goal|
