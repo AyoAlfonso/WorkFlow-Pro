@@ -20,6 +20,8 @@ import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { toJS } from "mobx";
 import { FormElementContainer, InputFromUnitType } from "../../scorecard/shared/modal-elements";
+import moment from "moment";
+import { getWeekOf } from "~/utils/date-time";
 
 interface IKeyElementProps {
   elementId: number;
@@ -215,10 +217,14 @@ export const KeyElement = observer(
         id = store.subInitiative.id;
       }
       type == "checkIn"
-        ? store.updateKeyElement(element.id, { value: element.value, status: element.status })
+        ? store.updateKeyElement(element.id, {
+            value: element.value,
+            status: element.status,
+            // greaterThan: element.greaterThan || 1,
+          })
         : store.updateKeyElement(id, element.id, keyElementParams);
     };
-    
+
     const typeForCheckIn = () => {
       if (element.elementableType === "QuarterlyGoal") {
         return "quarterlyInitiative";
@@ -253,6 +259,17 @@ export const KeyElement = observer(
     const updateOwnedById = newUser => {
       setSelectedUser(newUser);
       updateKeyElement(newUser.id);
+    };
+
+    const isLogRecent = () => {
+      const recentLogDate = moment(
+        element.objectiveLogs[element.objectiveLogs.length - 1]?.createdAt,
+      ).format("YYYY-MM-DD");
+      if (recentLogDate === getWeekOf()) {
+        return true;
+      } else {
+        return moment(getWeekOf()).isBefore(recentLogDate);
+      }
     };
 
     return (
@@ -301,6 +318,7 @@ export const KeyElement = observer(
                   setShowList(!showList);
                 }}
                 ref={dropdownRef}
+                isLogRecent={type !== "checkIn" ? false : isLogRecent()}
               >
                 {determineStatusLabel(element.status)}
                 <ChevronDownIcon />
@@ -319,7 +337,7 @@ export const KeyElement = observer(
                             return;
                           }
                           if (status === "done") {
-                            store.updateKeyElementStatus(element.id, true);
+                             (element.id, true);
                           } else {
                             store.updateKeyElementStatus(element.id, false);
                           }
@@ -344,6 +362,7 @@ export const KeyElement = observer(
                     setShowList(!showList);
                   }}
                   ref={dropdownRef}
+                  isLogRecent={type !== "checkIn" ? false : isLogRecent()}
                 >
                   {determineStatusLabel(element.status)}
                   <ChevronDownIcon />
@@ -601,8 +620,14 @@ const StyledIcon = styled(Icon)`
   }
 `;
 
-const DropdownHeader = styled("div")`
-  border: 1px solid ${props => props.theme.colors.greyInactive};
+type DropdownHeaderProps = {
+  isLogRecent: boolean;
+};
+
+const DropdownHeader = styled("div")<DropdownHeaderProps>`
+  border: 1px solid
+    ${props =>
+      props.isLogRecent ? props.theme.colors.successGreen : props.theme.colors.greyInactive};
   min-width: 145px;
   padding: 8px 0px;
   border-radius: 5px;

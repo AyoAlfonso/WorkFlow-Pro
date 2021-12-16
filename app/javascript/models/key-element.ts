@@ -1,4 +1,5 @@
 import { types } from "mobx-state-tree";
+import { ObjectiveLogModel } from "./objective-log";
 import { UserModel } from "./user";
 
 export const KeyElementModel = types
@@ -20,6 +21,7 @@ export const KeyElementModel = types
     elementableType: types.maybeNull(types.string),
     elementableContextDescription: types.maybeNull(types.string),
     elementableOwnedBy: types.maybeNull(types.number),
+    objectiveLogs: types.maybeNull(types.array(ObjectiveLogModel)),
   })
   .views(self => ({}))
   .actions(self => ({}));
