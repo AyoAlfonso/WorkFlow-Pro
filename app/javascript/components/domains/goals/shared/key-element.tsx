@@ -265,6 +265,9 @@ export const KeyElement = observer(
       const recentLogDate = moment(
         element.objectiveLogs[element.objectiveLogs.length - 1]?.createdAt,
       ).format("YYYY-MM-DD");
+      if (!element.objectiveLogs[element.objectiveLogs.length - 1]) {
+        return false;
+      }
       if (recentLogDate === getWeekOf()) {
         return true;
       } else {
