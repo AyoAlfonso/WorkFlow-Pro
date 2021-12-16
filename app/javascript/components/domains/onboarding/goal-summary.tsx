@@ -16,12 +16,11 @@ interface IGoalSummaryProps {
 }
 
 export const GoalSummary = ({ formData }: IGoalSummaryProps): JSX.Element => {
-  console.log(formData)
   const annualInitiative = R.pathOr("", ["annualInitiative"], formData);
   const annualInitiativeFormatted = parseAnnualInitiative(annualInitiative);
   const rallyingCry = R.pathOr("", ["rallyingCry"], formData);
   const quarterlyGoal = R.pathOr("", ["quarterlyGoals", "0"], annualInitiativeFormatted);
-  const keyResult = R.pathOr("", ["keyResults", "0"], quarterlyGoal);
+  const keyResult = R.pathOr("", ["keyElements", "0"], quarterlyGoal);
   return (
     <Container>
       {!R.isEmpty(rallyingCry) && (

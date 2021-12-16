@@ -160,13 +160,15 @@ export const Onboarding: React.FC = observer((props: IOnboardingProps) => {
           incrementStep();
         }
       });
-    } else if (currentStep < 2) {
+    } else if (currentStep < 1) {
       // updateCompany
       submitFormState().then(res => {
         if (res === true) {
           incrementStep();
         }
       });
+    } else if (currentStep == 1) {
+      incrementStep();
     } else if (currentStep === 2) {
       submitGoalData().then(res => {
         if (res === true) {
@@ -292,7 +294,7 @@ True value of LynchPyn is in working together with others in your team and compa
             goalData,
           )}"? It should be a specific metric.`,
           fieldType: EFieldType.AddKeyResult,
-          formKeys: ["annualInitiative", "quarterlyGoals", "0", "keyResults", "0"],
+          formKeys: ["annualInitiative", "quarterlyGoals", "0", "keyElements", "0"],
           callback: setGoalDataState,
           style: { marginLeft: "2px" },
         },
@@ -385,7 +387,7 @@ True value of LynchPyn is in working together with others in your team and compa
       formData={formData}
       stepwise={false}
     />,
-    <ScorecardsIndex ownerType={"company"} ownerId={onboardingCompany.id} />,
+    <ScorecardsIndex ownerType={"company"} ownerId={companyStore.company?.id} />,
     <FormBuilder
       formFields={leftBodyComponentProps[1].formFields}
       formData={goalData}
@@ -594,7 +596,7 @@ True value of LynchPyn is in working together with others in your team and compa
         title={wizardTitles}
         description={wizardDescriptions}
         showCloseButton={false}
-        showSkipButton={currentStep === 1 || currentStep === 2}
+        showSkipButton={currentStep === 2}
         onCloseButtonClick={companyStore.closeOnboardingModal}
         onSkipButtonClick={() => setCurrentStep(c => c + 1)}
         onNextButtonClick={onNextButtonClick}

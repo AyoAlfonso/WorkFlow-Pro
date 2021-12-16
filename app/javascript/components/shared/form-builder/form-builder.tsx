@@ -68,7 +68,6 @@ export const FormBuilder = ({
   marginBottom,
 }: IFormBuilderProps): JSX.Element => {
   const classes = useStyles();
-  console.log(formData);
 
   const [showKeyElementForm, setShowKeyElementForm] = useState<boolean>(false);
   const [showActionType, setActionType] = useState<string>("Add");
