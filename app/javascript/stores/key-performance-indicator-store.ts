@@ -15,12 +15,10 @@ export const KeyPerformanceIndicatorStoreModel = types
   .extend(withEnvironment())
   .views(self => ({
     get allOpenKPIs() {
-      console.log("allOpenKPIs");
       return self.allKPIs;
       // .filter(kpi => kpi.closedAt == null);
     },
     get allClosedKPIs() {
-      console.log("allClosedKPIs");
       return self.allKPIs.filter(kpi => kpi.closedAt !== null);
     },
   }))

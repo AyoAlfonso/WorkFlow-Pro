@@ -50,21 +50,6 @@ class QuarterlyGoal < ApplicationRecord
     return Milestone.where(week: 1, week_of: fiscal_quarter_start_date_closest_monday + + (1.week * index) , milestoneable_type: "QuarterlyGoal")
   end
 
-  def derived_status 
-      previous_week_start = get_beginning_of_last_or_current_work_week_date(Time.now)
-      objective_log_statuses = Array.new
-      self.key_elements.filter_by_objective_logs_and_updated_on_key_elements(previous_week_start).as_json({methods: [:owned_by],
-                      include: {
-                        objective_logs: { methods: [:owned_by] }}
-        }).map do |element|
-            completion_target_value = element["completion_target_value"] == 0 ? 1 : element["completion_target_value"]
-            score  = element["greater_than"] ? (element["completion_current_value"] / completion_target_value)  * 100 : ((element["completion_target_value"] + element["completion_target_value"] - element["completion_current_value"]) / completion_target_value) * 100;
-            status = score >= 85 ? "On Track" : score >= 70 ?  "Needs Attention" :  score >= 1 ? "Behind" : "None"
-            objective_log_statuses.push(status)  
-          end
-      return objective_log_statuses
-  end
-
   private
 
   def sanitize_description
