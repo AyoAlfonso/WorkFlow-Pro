@@ -70,8 +70,6 @@ const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
     });
   }, [kpis]);
 
-  console.log(kpis)
-
   return (
     <WeekContainer>
       <Header>This Week</Header>

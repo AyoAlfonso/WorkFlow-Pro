@@ -73,11 +73,9 @@ export const ScorecardStoreModel = types
   .extend(withEnvironment())
   .views(self => ({
     get allOpenTableKPIs() {
-      console.log("allOpenKPIs");
     return JSON.parse(JSON.stringify(self.kpis.filter(kpi => kpi.closedAt == null)))
     },
     get allCloseTableKPIs() {
-      console.log("allClosedKPIs");
       return JSON.parse(JSON.stringify((self.kpis.filter(kpi => kpi.closedAt))));
     },
   }))

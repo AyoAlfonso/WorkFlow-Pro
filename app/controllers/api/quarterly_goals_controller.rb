@@ -1,6 +1,6 @@
 class Api::QuarterlyGoalsController < Api::ApplicationController
   before_action :set_quarterly_goal, only: [:show, :update, :destroy, :create_key_element, :update_key_element, :create_milestones, :close_goal]
-  before action :create_milestones_for_quarterly_goal, only: [:update, :create_key_element, :update_key_element ]
+  before_action :create_milestones_for_quarterly_goal, only: [:update, :create_key_element, :update_key_element ]
   respond_to :json
 
   def index
@@ -23,7 +23,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     })
     authorize @quarterly_goal
     @quarterly_goal.save!
-    @quarterly_goal.create_milestones_for_quarterly_goal(current_user, current_company)
+    create_milestones_for_quarterly_goal()
     render "/api/quarterly_goals/create"
   end
 
@@ -77,7 +77,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def create_milestones
-    @quarterly_goal.create_milestones_for_quarterly_goal(current_user, current_company)
+    create_milestones_for_quarterly_goal()
     render "api/quarterly_goals/create_milestones"
   end
 
