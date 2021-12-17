@@ -12,11 +12,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
     @objective_log = ObjectiveLog.create!(objective_log_params)
     authorize @objective_log
     @objective_log.save!
-    #We want to save same values onto the Milestones that have expected week element 
 
-    existing_milestone = Milestone.where(week: 1, milestoneable_type: params[:objecteable_type], milestoneable_id: params[:objecteable_id],
-    week_of: params[:week_of])
-    
     if params[:fiscal_quarter] = 1 
        week =  weeks - 13.weeks
     elsif  params[:fiscal_quarter] = 2
@@ -26,17 +22,40 @@ class Api::ObjectiveLogsController < Api::ApplicationController
     elsif params[:fiscal_quarter] = 4
         week =  52.weeks
     end
+    #We want to save same values onto the Milestones that have expected week element 
 
-   unless existing_milestone.present?
-    Milestone.create(
-      milestoneable_type: params[:objecteable_type],
-      milestoneable_id: params[:objecteable_id] ,
-      week: week,
-      week_of: params[:week_of],
-      description: "",
-      created_by: current_user,
-    )
-   end
+  existing_milestone = Milestone.where(week: week, milestoneable_type: params[:objecteable_type], milestoneable_id: params[:objecteable_id],
+    week_of: params[:week_of])
+
+  if existing_milestone.present?
+    existing_milestone.update!(status: params[:status])
+  end
+
+  unless existing_milestone.present?
+    if (params[:objecteable_type] == "QuarterlyGoal")
+     QuarterlyGoal.find(params[:objecteable_id]).create_milestones_for_quarterly_goal(current_user, current_company)
+     Milestone.create_or_update(
+        milestoneable_type: params[:objecteable_type],
+        milestoneable_id: params[:objecteable_id] ,
+        week: week,
+        week_of: params[:week_of],
+        status: params[:status],
+        description: "",
+        created_by: current_user,
+      )
+    elsif (params[:objecteable_type] == "SubInitiative")
+        SubInitiative.find(params[:objecteable_id]).create_milestones_for_quarterly_goal(current_user, current_company)
+        Milestone.create_or_update(
+        milestoneable_type: params[:objecteable_type],
+        milestoneable_id: params[:objecteable_id] ,
+        week: week,
+        week_of: params[:week_of],
+        status: params[:status],
+        description: "",
+        created_by: current_user,
+      )
+    end
+  end
     render json: { objective_log: @objective_log, status: :ok }
   end
   
