@@ -513,6 +513,11 @@ export const ScorecardTableView = observer(
                   Q{n} {company.currentFiscalYear}
                 </option>
               ))}
+              {/* {R.range(5, 9).map((n: number, index) => (
+                <option key={n} value={n}>
+                  Q{index+1} {company.currentFiscalYear}
+                </option>
+              ))} */}
             </Select>
           </TopRow>
           {tab == "KPIs" && (
