@@ -637,5 +637,13 @@ export class Api {
   async getWeeklyCheckinMilestones(weekOf) {
     return this.client.get(`milestones/check_in/${weekOf}`);
   }
+
+  async getWeeklyCheckinKeyElements() {
+    return this.client.get(`key_elements/check_in`);
+  }
+
+  async updateWeeklyCheckInKeyElements(id, value) {
+    return this.client.put(`key_elements/${id}`, value);
+  }
   //async setJWT(jwt) {}
 }

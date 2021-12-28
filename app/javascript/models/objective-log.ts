@@ -2,7 +2,7 @@ import { types, getRoot } from "mobx-state-tree";
 import { UserModel } from "./user";
 
 export const ObjectiveLogModel = types
-  .model("ScorecardLogModel")
+  .model("ObjectiveLogModel")
   .props({
     id: types.maybeNull(types.identifierNumber),
     ownedById: types.maybeNull(types.number),
