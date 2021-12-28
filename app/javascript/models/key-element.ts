@@ -22,6 +22,7 @@ export const KeyElementModel = types
     elementableContextDescription: types.maybeNull(types.string),
     elementableOwnedBy: types.maybeNull(types.number),
     objectiveLogs: types.maybeNull(types.array(ObjectiveLogModel)),
+    updatedAt: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));
