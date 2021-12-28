@@ -257,6 +257,7 @@ export const KeyElement = observer(
         childType: "KeyElement",
         childId: element.id,
         status: element.status,
+        weekOf: getWeekOf()
       };
 
       store.createActivityLog(objectiveLog);

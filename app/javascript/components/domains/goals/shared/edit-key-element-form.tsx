@@ -74,7 +74,7 @@ export const EditKeyElementForm = ({
     if (val.includes(",")) {
       val = val.split(",").join("");
     }
-    return Number(val);
+    return val;
   };
 
   const updateKeyElement = () => {
