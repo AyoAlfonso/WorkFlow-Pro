@@ -52,7 +52,10 @@ export const ContextTabs = observer(
       annualInitiativeStore,
       quarterlyGoalStore,
       subInitiativeStore,
+      companyStore,
     } = useMst();
+
+    const { company } = companyStore;
 
     const tabDefaultIndex = () => {
       if (
@@ -227,7 +230,7 @@ export const ContextTabs = observer(
         initiative = object;
       }
 
-      const minDate = initiative?.milestones[0].weekOf;
+      const minDate = initiative?.milestones[0]?.weekOf;
       return (
         <>
           {type === "annualInitiative" ? (
