@@ -52,7 +52,10 @@ export const ContextTabs = observer(
       annualInitiativeStore,
       quarterlyGoalStore,
       subInitiativeStore,
+      companyStore,
     } = useMst();
+
+    const { company } = companyStore;
 
     const tabDefaultIndex = () => {
       if (
@@ -65,6 +68,24 @@ export const ContextTabs = observer(
       }
     };
 
+    const defaultActiveTab = () => {
+      if (company?.objectivesKeyType === "KeyResults") {
+        setShowMilestones && setShowMilestones(false);
+        type == "subInitiative" && setShowInitiatives(false);
+        if (type == "quarterlyGoal" || type == "subInitiative") {
+          return "key results";
+        } else {
+          return "aligned initiatives";
+        }
+      } else {
+        if (type == "quarterlyGoal") {
+          return "milestones";
+        } else {
+          return "aligned initiatives";
+        }
+      }
+    };
+
     const currentUser = sessionStore.profile;
     const [selectedContextTab, setSelectedContextTab] = useState<number>(tabDefaultIndex() + 1);
     const [showActionType, setActionType] = useState<string>("Add");
@@ -74,9 +95,7 @@ export const ContextTabs = observer(
     const [focusOnLastInput, setFocusOnLastInput] = useState<boolean>(false);
     const [showKeyElementForm, setShowKeyElementForm] = useState<boolean>(false);
     const editable = currentUser.id == object.ownedById && !disabled;
-    const [activeTab, setActiveTab] = useState(
-      type == "quarterlyGoal" ? "milestones" : "aligned initiatives",
-    );
+    const [activeTab, setActiveTab] = useState(defaultActiveTab());
     const [selectedDate, setSelectedDate] = useState<any>(new Date());
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
@@ -227,7 +246,7 @@ export const ContextTabs = observer(
         initiative = object;
       }
 
-      const minDate = initiative?.milestones[0].weekOf;
+      const minDate = initiative?.milestones[0]?.weekOf;
       return (
         <>
           {type === "annualInitiative" ? (
@@ -311,17 +330,21 @@ export const ContextTabs = observer(
         <OverviewTabsContainer>
           {type == "quarterlyGoal" ? (
             <>
-              <OverviewTabs
-                active={activeTab === "milestones" ? true : false}
-                onClick={() => {
-                  setActiveTab("milestones");
-                  setShowInitiatives(false);
-                  setShowMilestones(true);
-                }}
-              >
-                Milestones
-              </OverviewTabs>
+              {company?.objectivesKeyType != "KeyResults" && (
+                <OverviewTabs
+                  active={activeTab === "milestones" ? true : false}
+                  onClick={() => {
+                    setActiveTab("milestones");
+                    setShowInitiatives(false);
+                    setShowMilestones(true);
+                  }}
+                >
+                  Milestones
+                </OverviewTabs>
+              )}
             </>
+          ) : type === "subInitiative" && company?.objectivesKeyType == "KeyResults" ? (
+            <></>
           ) : (
             <OverviewTabs
               active={activeTab === "aligned initiatives" ? true : false}

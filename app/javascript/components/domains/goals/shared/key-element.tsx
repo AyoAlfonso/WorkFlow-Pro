@@ -20,19 +20,21 @@ import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { toJS } from "mobx";
 import { FormElementContainer, InputFromUnitType } from "../../scorecard/shared/modal-elements";
+import moment from "moment";
+import { getWeekOf } from "~/utils/date-time";
 
 interface IKeyElementProps {
   elementId: number;
   store: any;
   editable: boolean;
   lastKeyElement: boolean;
-  focusOnLastInput: boolean;
+  focusOnLastInput?: boolean;
   type: string;
-  setShowKeyElementForm: any;
-  setActionType: any;
-  setSelectedElement: any;
+  setShowKeyElementForm?: any;
+  setActionType?: any;
+  setSelectedElement?: any;
   date?: any;
-  initiativeId: number;
+  initiativeId?: number;
   // TODO: set correct type
 }
 
@@ -62,6 +64,7 @@ export const KeyElement = observer(
       subInitiativeStore,
       companyStore,
       sessionStore,
+      keyElementStore,
       userStore,
     } = useMst();
     const optionsRef = useRef(null);
@@ -79,6 +82,8 @@ export const KeyElement = observer(
         item = quarterlyGoalStore.quarterlyGoal.keyElements.find(ke => ke.id == elementId);
       } else if (type == "subInitiative") {
         item = subInitiativeStore.subInitiative.keyElements.find(ke => ke.id == elementId);
+      } else if (type == "checkIn") {
+        item = keyElementStore.keyElementsForWeeklyCheckin.find(ke => ke.id == elementId);
       }
       setElement(item);
       setCheckboxValue(item["completedAt"] ? true : false);
@@ -211,7 +216,21 @@ export const KeyElement = observer(
       } else if (type == "subInitiative") {
         id = store.subInitiative.id;
       }
-      store.updateKeyElement(id, element.id, keyElementParams);
+      type == "checkIn"
+        ? store.updateKeyElement(element.id, {
+            value: element.value,
+            status: element.status,
+            // greaterThan: element.greaterThan || 1,
+          })
+        : store.updateKeyElement(id, element.id, keyElementParams);
+    };
+
+    const typeForCheckIn = () => {
+      if (element.elementableType === "QuarterlyGoal") {
+        return "quarterlyInitiative";
+      } else if (element.elementableType === "SubInitiative") {
+        return "subInitiative";
+      }
     };
 
     const createLog = () => {
@@ -219,14 +238,19 @@ export const KeyElement = observer(
         ownedById: selectedUser.id,
         score: element.completionCurrentValue,
         note: "",
-        objecteableId: initiativeId,
-        objecteableType: type === "quarterlyGoal" ? "quarterlyInitiative" : type,
+        objecteableId: element.elementableId || initiativeId,
+        objecteableType:
+          type === "quarterlyGoal"
+            ? "quarterlyInitiative"
+            : type === "checkIn"
+            ? typeForCheckIn()
+            : type,
         fiscalQuarter: company.currentFiscalQuarter,
         fiscalYear: company.currentFiscalYear,
         week: company.currentFiscalWeek,
         childType: "KeyElement",
         childId: element.id,
-        status: element.status
+        status: element.status,
       };
 
       store.createActivityLog(objectiveLog);
@@ -237,26 +261,42 @@ export const KeyElement = observer(
       updateKeyElement(newUser.id);
     };
 
+    const isLogRecent = () => {
+      const recentLogDate = moment(
+        element.objectiveLogs[element.objectiveLogs.length - 1]?.createdAt,
+      ).format("YYYY-MM-DD");
+      if (!element.objectiveLogs[element.objectiveLogs.length - 1]) {
+        return false;
+      }
+      if (recentLogDate === getWeekOf()) {
+        return true;
+      } else {
+        return moment(getWeekOf()).isBefore(recentLogDate);
+      }
+    };
+
     return (
       <Container>
         <TopContainer>
-          <AvatarContainer
-            onBlur={() => updateKeyElement(selectedUser.id)}
-            onClick={() => setShowUsersList(!showUsersList)}
-          >
-            <Avatar
-              defaultAvatarColor={selectedUser?.defaultAvatarColor}
-              avatarUrl={selectedUser?.avatarUrl}
-              firstName={selectedUser?.firstName}
-              lastName={selectedUser?.lastName}
-              size={24}
-              marginLeft={"auto"}
-            />
-          </AvatarContainer>
+          {type !== "checkIn" && (
+            <AvatarContainer
+              onBlur={() => updateKeyElement(selectedUser.id)}
+              onClick={() => setShowUsersList(!showUsersList)}
+            >
+              <Avatar
+                defaultAvatarColor={selectedUser?.defaultAvatarColor}
+                avatarUrl={selectedUser?.avatarUrl}
+                firstName={selectedUser?.firstName}
+                lastName={selectedUser?.lastName}
+                size={24}
+                marginLeft={"auto"}
+              />
+            </AvatarContainer>
+          )}
           <KeyElementStyledContentEditable
             innerRef={keyElementTitleRef}
             html={sanitize(element.value)}
-            disabled={!editable}
+            disabled={!editable || type == "checkIn"}
             onChange={e => {
               if (!e.target.value.includes("<div>")) {
                 store.updateKeyElementValue("value", element.id, e.target.value);
@@ -281,6 +321,7 @@ export const KeyElement = observer(
                   setShowList(!showList);
                 }}
                 ref={dropdownRef}
+                isLogRecent={type !== "checkIn" ? false : isLogRecent()}
               >
                 {determineStatusLabel(element.status)}
                 <ChevronDownIcon />
@@ -294,8 +335,12 @@ export const KeyElement = observer(
                           store.updateKeyElementValue("status", element.id, status);
                           updateKeyElement(selectedUser.id);
                           createLog();
+                          if (type == "checkin") {
+                            setShowList(!showList);
+                            return;
+                          }
                           if (status === "done") {
-                            store.updateKeyElementStatus(element.id, true);
+                             (element.id, true);
                           } else {
                             store.updateKeyElementStatus(element.id, false);
                           }
@@ -320,6 +365,7 @@ export const KeyElement = observer(
                     setShowList(!showList);
                   }}
                   ref={dropdownRef}
+                  isLogRecent={type !== "checkIn" ? false : isLogRecent()}
                 >
                   {determineStatusLabel(element.status)}
                   <ChevronDownIcon />
@@ -364,24 +410,28 @@ export const KeyElement = observer(
                     />
                     <SymbolContainer>{completionSymbol(element.completionType)}</SymbolContainer>
                   </InputContainer>
+                  <ValueSpanContainer>
+                    <ValueSpan>{`${renderElementCompletionTargetValue()}`}</ValueSpan>
+                  </ValueSpanContainer>
                 </ValueInputContainer>
-                <ValueSpanContainer>
-                  <ValueSpan>{`${renderElementCompletionTargetValue()}`}</ValueSpan>
-                </ValueSpanContainer>
-                <ProgressBarContainer>
-                  <StripedProgressBar variant={element.status} completed={completion()} />
-                </ProgressBarContainer>
+                {type != "checkIn" && (
+                  <ProgressBarContainer>
+                    <StripedProgressBar variant={element.status} completed={completion()} />
+                  </ProgressBarContainer>
+                )}
               </CompletionContainer>
             )}
           </ContentContainer>
-          <IconWrapper
-            onClick={e => {
-              e.stopPropagation();
-              setShowOptions(!showOptions);
-            }}
-          >
-            <Icon icon={"Options"} size={"16px"} iconColor={"grey60"} />
-          </IconWrapper>
+          {type != "checkIn" && (
+            <IconWrapper
+              onClick={e => {
+                e.stopPropagation();
+                setShowOptions(!showOptions);
+              }}
+            >
+              <Icon icon={"Options"} size={"16px"} iconColor={"grey60"} />
+            </IconWrapper>
+          )}
           {showOptions && (
             <KeyElementsDropdownOptions
               element={element}
@@ -548,6 +598,9 @@ const CompletionContainer = styled.div`
   align-items: center;
   margin-top: 8px;
   position: relative;
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
 `;
 
 const CompletionTextContainer = styled.div`
@@ -570,9 +623,15 @@ const StyledIcon = styled(Icon)`
   }
 `;
 
-const DropdownHeader = styled("div")`
-  border: 1px solid ${props => props.theme.colors.greyInactive};
-  width: 145px;
+type DropdownHeaderProps = {
+  isLogRecent: boolean;
+};
+
+const DropdownHeader = styled("div")<DropdownHeaderProps>`
+  border: 1px solid
+    ${props =>
+      props.isLogRecent ? props.theme.colors.successGreen : props.theme.colors.greyInactive};
+  min-width: 145px;
   padding: 8px 0px;
   border-radius: 5px;
   display: flex;
@@ -580,6 +639,10 @@ const DropdownHeader = styled("div")`
   cursor: pointer;
   position: relative;
   margin-right: 20px;
+  @media only screen and (max-width: 768px) {
+    margin-bottom: 20px;
+    width: 145px;
+  }
 `;
 
 type StatusBadgeProps = {
@@ -601,6 +664,9 @@ const StatusBadge = styled("span")<StatusBadgeProps>`
 const DropdownListContainer = styled("div")`
   position: absolute;
   margin-top: 30px;
+  @media only screen and (max-width: 768px) {
+    margin-top: -20px;
+  }
 `;
 
 const DropdownList = styled("ul")`
@@ -633,7 +699,6 @@ const ValueInputContainer = styled.div`
   align-items: center;
   display: flex;
   justify-content: space-between;
-  max-width: 145px;
 `;
 
 const ValueSpan = styled.span`
@@ -646,6 +711,16 @@ const ValueSpanContainer = styled.div`
   margin-left: 50px;
   margin-right: 50px;
   text-align: center;
+  @media only screen and (max-width: 768px) {
+    display: inline;
+  }
+`;
+
+const ValueSpanContainerMobile = styled.span`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: inline;
+  }
 `;
 
 const AvatarContainer = styled.div`
@@ -664,6 +739,10 @@ const SymbolContainer = styled.span`
 
 const InputContainer = styled.div`
   position: relative;
+  width: 145px;
+  @media only screen and (max-width: 768px) {
+    width: 148px;
+  }
 `;
 
 const SelectionListContainer = styled.div`

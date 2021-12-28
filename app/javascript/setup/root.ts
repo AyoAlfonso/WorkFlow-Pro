@@ -63,6 +63,9 @@ const initialState = {
   teamStore: {
     teams: [],
   },
+  keyElementStore: {
+    keyElementsForWeeklyCheckin: null,
+  },
   meetingStore: {
     currentMeeting: null,
     meetings: [],

@@ -51,15 +51,15 @@ export const ActivityLogs = observer(
                           marginLeft={"0px"}
                           marginTop={"0px"}
                           marginRight={"16px"}
-                          firstName={user.firstName}
-                          lastName={user.lastName}
-                          defaultAvatarColor={user.defaultAvatarColor}
-                          avatarUrl={user.avatarUrl}
+                          firstName={user?.firstName}
+                          lastName={user?.lastName}
+                          defaultAvatarColor={user?.defaultAvatarColor}
+                          avatarUrl={user?.avatarUrl}
                         />
                         <ActivityLogTextContainer>
                           <ActivityLogText fontSize={"14px"} mb={8}>
                             <b>
-                              {user.firstName} {user.lastName}
+                              {user?.firstName} {user?.lastName}
                             </b>{" "}
                             updated{" "}
                             <b>

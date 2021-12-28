@@ -38,6 +38,6 @@ class Step < ApplicationRecord
     "Scorecard",
     "KPI",
     "WeeklyMilestones",
-    "WeeklyKeyResults"
+    "WeeklyKeyResults",
   ]
 end
