@@ -14,26 +14,25 @@ class Api::ObjectiveLogsController < Api::ApplicationController
     @objective_log.save!
 
     if params[:fiscal_quarter] = 1 
-       week =  weeks - 13.weeks
+      week = params[:week]
     elsif  params[:fiscal_quarter] = 2
-       week =  26.weeks
+      week = 13 - params[:week]
     elsif  params[:fiscal_quarter] = 3
-       week =  39.weeks
+      week = 26 -  params[:week]
     elsif params[:fiscal_quarter] = 4
-        week =  52.weeks
+      week = 39 - params[:week] 
     end
     #We want to save same values onto the Milestones that have expected week element 
 
   existing_milestone = Milestone.where(week: week, milestoneable_type: params[:objecteable_type], milestoneable_id: params[:objecteable_id],
     week_of: params[:week_of])
 
-  if existing_milestone.present?
-    existing_milestone.update!(status: params[:status])
-  end
+  existing_milestone.update!(status: params[:status]) if existing_milestone.present?
 
   unless existing_milestone.present?
     if (params[:objecteable_type] == "QuarterlyGoal")
      QuarterlyGoal.find(params[:objecteable_id]).create_milestones_for_quarterly_goal(current_user, current_company)
+    #We should eagerly update the current week i.e params[:week] that is being logged
      Milestone.create_or_update(
         milestoneable_type: params[:objecteable_type],
         milestoneable_id: params[:objecteable_id] ,
@@ -44,7 +43,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
         created_by: current_user,
       )
     elsif (params[:objecteable_type] == "SubInitiative")
-        SubInitiative.find(params[:objecteable_id]).create_milestones_for_quarterly_goal(current_user, current_company)
+        SubInitiative.find(params[:objecteable_id]).create_milestones_for_sub_initiative(current_user, current_company)
         Milestone.create_or_update(
         milestoneable_type: params[:objecteable_type],
         milestoneable_id: params[:objecteable_id] ,
@@ -71,7 +70,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
   end
 
   def objective_log_params
-    params.permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :child_id, :child_type, :fiscal_quarter, :fiscal_year, :week, :status, :created_at)
+    params.permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :child_id, :child_type, :fiscal_quarter, :fiscal_year, :week, :week_of, :status, :created_at)
   end
 
 end
