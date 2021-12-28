@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useMst } from "~/setup/root";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
 import { observer } from "mobx-react";
-import { Loading, Avatar } from "~/components/shared";
+import { Loading, Avatar, Button } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
 import { MilestoneCreateButton } from "../shared-quarterly-goal-and-sub-initiative/milestone-create-button";
@@ -79,7 +79,7 @@ export const QuarterlyGoalModalContent = observer(
     const { t } = useTranslation();
 
     useEffect(() => {
-      quarterlyGoalStore.getActivityLogs(1, "quarterlyInitiative", quarterlyGoalId).then(meta => {
+      quarterlyGoalStore.getActivityLogs(1, "QuarterlyInitiative", quarterlyGoalId).then(meta => {
         setObjectiveMeta(meta);
       });
       quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
@@ -169,7 +169,7 @@ export const QuarterlyGoalModalContent = observer(
         score: 0,
         note: comment,
         objecteableId: quarterlyGoalId,
-        objecteableType: "quarterlyInitiative",
+        objecteableType: "QuarterlyInitiative",
         fiscalQuarter: companyStore.company.currentFiscalQuarter,
         fiscalYear: companyStore.company.currentFiscalYear,
         week: companyStore.company.currentFiscalWeek,
@@ -180,7 +180,7 @@ export const QuarterlyGoalModalContent = observer(
 
     const getLogs = pageNumber => {
       return quarterlyGoalStore
-        .getActivityLogs(pageNumber, "annualInitiative", quarterlyGoalId)
+        .getActivityLogs(pageNumber, "QuarterlyInitiative", quarterlyGoalId)
         .then(meta => {
           setObjectiveMeta(meta);
         });
@@ -301,14 +301,19 @@ export const QuarterlyGoalModalContent = observer(
                   setComment(e.target.value);
                 }}
                 value={comment}
-                onBlur={() => {
-                  if (!comment) {
-                    return;
-                  }
-                  createLog();
-                  setComment("");
-                }}
               />
+              {comment && (
+                <PostButton
+                  small
+                  variant="primary"
+                  onClick={() => {
+                    createLog();
+                    setComment("");
+                  }}
+                >
+                  Comment
+                </PostButton>
+              )}
             </FormElementContainer>
             <ActivityLogs
               keyElements={objectiveLogs}
@@ -394,4 +399,9 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const PostButton = styled(Button)`
+  margin-top: 10px;
+  font-size: 14px;
 `;

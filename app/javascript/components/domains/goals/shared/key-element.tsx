@@ -220,31 +220,37 @@ export const KeyElement = observer(
         ? store.updateKeyElement(element.id, {
             value: element.value,
             status: element.status,
-            // greaterThan: element.greaterThan || 1,
           })
         : store.updateKeyElement(id, element.id, keyElementParams);
     };
 
     const typeForCheckIn = () => {
       if (element.elementableType === "QuarterlyGoal") {
-        return "quarterlyInitiative";
+        return "QuarterlyInitiative";
       } else if (element.elementableType === "SubInitiative") {
-        return "subInitiative";
+        return "SubInitiative";
       }
     };
+
+    const getType = () => {
+      let formattedType;
+      if (type == "annualInitiative") {
+        formattedType = "AnnualInitiative";
+      } else if (type == "quarterlyGoal") {
+        formattedType = "QuarterlyInitiative";
+      } else if (type == "subInitiative") {
+        formattedType = "SubInitiative";
+      }
+      return formattedType;
+    }
 
     const createLog = () => {
       const objectiveLog = {
         ownedById: selectedUser.id,
         score: element.completionCurrentValue,
         note: "",
-        objecteableId: element.elementableId || initiativeId,
-        objecteableType:
-          type === "quarterlyGoal"
-            ? "quarterlyInitiative"
-            : type === "checkIn"
-            ? typeForCheckIn()
-            : type,
+        objecteableId: initiativeId,
+        objecteableType: type === 'checkIn' ? typeForCheckIn() : getType(),
         fiscalQuarter: company.currentFiscalQuarter,
         fiscalYear: company.currentFiscalYear,
         week: company.currentFiscalWeek,

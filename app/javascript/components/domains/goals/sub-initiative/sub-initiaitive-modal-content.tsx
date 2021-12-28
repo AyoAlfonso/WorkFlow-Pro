@@ -61,7 +61,7 @@ export const SubInitiativeModalContent = observer(
     )?.body.body;
 
     useEffect(() => {
-      subInitiativeStore.getActivityLogs(1, "subInitiative", subInitiativeId).then(meta => {
+      subInitiativeStore.getActivityLogs(1, "SubInitiative", subInitiativeId).then(meta => {
         setObjectiveMeta(meta);
       });
       subInitiativeStore.getSubInitiative(subInitiativeId).then(() => {
@@ -105,7 +105,7 @@ export const SubInitiativeModalContent = observer(
         score: 0,
         note: comment,
         objecteableId: subInitiative.id,
-        objecteableType: "subInitiative",
+        objecteableType: "SubInitiative",
         fiscalQuarter: companyStore.company.currentFiscalQuarter,
         fiscalYear: companyStore.company.currentFiscalYear,
         week: companyStore.company.currentFiscalWeek,
@@ -116,7 +116,7 @@ export const SubInitiativeModalContent = observer(
 
     const getLogs = pageNumber => {
       return subInitiativeStore
-        .getActivityLogs(pageNumber, "annualInitiative", subInitiativeId)
+        .getActivityLogs(pageNumber, "SubInitiative", subInitiativeId)
         .then(meta => {
           setObjectiveMeta(meta);
         });
@@ -208,14 +208,19 @@ export const SubInitiativeModalContent = observer(
                   setComment(e.target.value);
                 }}
                 value={comment}
-                onBlur={() => {
-                  if (!comment) {
-                    return;
-                  }
-                  createLog();
-                  setComment("");
-                }}
               />
+              {comment && (
+                <PostButton
+                  small
+                  variant="primary"
+                  onClick={() => {
+                    createLog();
+                    setComment("");
+                  }}
+                >
+                  Comment
+                </PostButton>
+              )}
             </FormElementContainer>
             <ActivityLogs
               keyElements={objectiveLogs}
@@ -266,4 +271,9 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const PostButton = styled(Button)`
+  margin-top: 10px;
+  font-size: 14px;
 `;
