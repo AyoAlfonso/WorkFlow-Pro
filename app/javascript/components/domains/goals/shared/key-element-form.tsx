@@ -77,7 +77,7 @@ export const KeyElementForm = ({
     const keyElementParams = {
       value: title,
       completionType,
-      completionTargetValue: parseTarget(completionTargetValue),
+      completionTargetValue: completionType == "binary" ? 0 : parseTarget(completionTargetValue),
       greaterThan: Number(condition),
       ownedBy: ownedBy.id,
     };
@@ -90,8 +90,7 @@ export const KeyElementForm = ({
   const isValid =
     !R.isEmpty(title) &&
     !R.isEmpty(completionType) &&
-    !R.isNil(completionTargetValue) &&
-    completionTargetValue &&
+    completionType == "binary" ? true : !R.isEmpty(completionTargetValue) &&
     !R.isNil(ownedBy) &&
     !R.isNil(condition);
 
