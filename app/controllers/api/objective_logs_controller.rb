@@ -70,7 +70,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
   end
 
   def objective_log_params
-    params.permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :child_id, :child_type, :fiscal_quarter, :fiscal_year, :week, :week_of, :status, :created_at)
+    params.permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :child_id, :child_type, :fiscal_quarter, :fiscal_year, :week, :status, :created_at)
   end
 
 end
