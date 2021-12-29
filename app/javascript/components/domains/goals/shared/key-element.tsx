@@ -24,10 +24,10 @@ import moment from "moment";
 import { getWeekOf } from "~/utils/date-time";
 
 interface IKeyElementProps {
-  elementId: number;
-  store: any;
+  elementId?: number;
+  store?: any;
   editable: boolean;
-  lastKeyElement: boolean;
+  lastKeyElement?: boolean;
   focusOnLastInput?: boolean;
   type: string;
   setShowKeyElementForm?: any;
@@ -35,6 +35,7 @@ interface IKeyElementProps {
   setSelectedElement?: any;
   date?: any;
   initiativeId?: number;
+  keyElement?: any;
   // TODO: set correct type
 }
 
@@ -50,14 +51,8 @@ export const KeyElement = observer(
     setActionType,
     setSelectedElement,
     initiativeId,
+    keyElement,
   }: IKeyElementProps): JSX.Element => {
-    const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
-    const [element, setElement] = useState<any>(null);
-    const [showOptions, setShowOptions] = useState<boolean>(false);
-    const [showList, setShowList] = useState<boolean>(false);
-    const [showUsersList, setShowUsersList] = useState<boolean>(false);
-    const [selectedUser, setSelectedUser] = useState<any>(null);
-
     const {
       annualInitiativeStore,
       quarterlyGoalStore,
@@ -67,6 +62,13 @@ export const KeyElement = observer(
       keyElementStore,
       userStore,
     } = useMst();
+    const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
+    const [element, setElement] = useState<any>(null);
+    const [showOptions, setShowOptions] = useState<boolean>(false);
+    const [showList, setShowList] = useState<boolean>(false);
+    const [showUsersList, setShowUsersList] = useState<boolean>(false);
+    const [selectedUser, setSelectedUser] = useState<any>(sessionStore.profile);
+
     const optionsRef = useRef(null);
     const keyElementTitleRef = useRef(null);
     const keyElementCompletionTargetRef = useRef(null);
@@ -84,6 +86,8 @@ export const KeyElement = observer(
         item = subInitiativeStore.subInitiative.keyElements.find(ke => ke.id == elementId);
       } else if (type == "checkIn") {
         item = keyElementStore.keyElementsForWeeklyCheckin.find(ke => ke.id == elementId);
+      } else if (type == "onboarding") {
+        item = keyElement;
       }
       setElement(item);
       setCheckboxValue(item["completedAt"] ? true : false);
@@ -257,6 +261,7 @@ export const KeyElement = observer(
         childType: "KeyElement",
         childId: element.id,
         status: element.status,
+        weekOf: getWeekOf()
       };
 
       store.createActivityLog(objectiveLog);
@@ -324,7 +329,7 @@ export const KeyElement = observer(
             <CompletionContainer>
               <DropdownHeader
                 onClick={() => {
-                  setShowList(!showList);
+                  setShowList(editable && !showList);
                 }}
                 ref={dropdownRef}
                 isLogRecent={type !== "checkIn" ? false : isLogRecent()}
@@ -368,7 +373,7 @@ export const KeyElement = observer(
               <CompletionContainer>
                 <DropdownHeader
                   onClick={() => {
-                    setShowList(!showList);
+                    setShowList(editable && !showList);
                   }}
                   ref={dropdownRef}
                   isLogRecent={type !== "checkIn" ? false : isLogRecent()}
@@ -413,6 +418,7 @@ export const KeyElement = observer(
                         updateKeyElement(selectedUser.id);
                         createLog();
                       }}
+                      disabled={!editable}
                     />
                     <SymbolContainer>{completionSymbol(element.completionType)}</SymbolContainer>
                   </InputContainer>
@@ -420,7 +426,10 @@ export const KeyElement = observer(
                     <ValueSpan>{`${renderElementCompletionTargetValue()}`}</ValueSpan>
                   </ValueSpanContainer>
                 </ValueInputContainer>
-                {type != "checkIn" && (
+                <ValueSpanContainer>
+                  <ValueSpan>{`${renderElementCompletionTargetValue()}`}</ValueSpan>
+                </ValueSpanContainer>
+                {type !== "onboarding" && type != "checkIn" && (
                   <ProgressBarContainer>
                     <StripedProgressBar variant={element.status} completed={completion()} />
                   </ProgressBarContainer>
@@ -428,7 +437,7 @@ export const KeyElement = observer(
               </CompletionContainer>
             )}
           </ContentContainer>
-          {type != "checkIn" && (
+          {type != "onboarding" && type != "checkIn" && (
             <IconWrapper
               onClick={e => {
                 e.stopPropagation();

@@ -8,6 +8,7 @@ import { Text } from "../../../shared/text";
 import ContentEditable from "react-contenteditable";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useTranslation } from "react-i18next";
+import { baseTheme } from "~/themes";
 import { toJS } from "mobx";
 import moment from "moment";
 
@@ -23,6 +24,7 @@ interface IInitiativeHeaderProps {
   showDropdownOptionsContainer: boolean;
   setShowDropdownOptionsContainer: React.Dispatch<React.SetStateAction<boolean>>;
   goalYearString: string;
+  derivedStatus?: string;
 }
 
 export const InitiativeHeader = ({
@@ -37,6 +39,7 @@ export const InitiativeHeader = ({
   showDropdownOptionsContainer,
   setShowDropdownOptionsContainer,
   goalYearString,
+  derivedStatus
 }: IInitiativeHeaderProps): JSX.Element => {
   const { quarterlyGoalStore, subInitiativeStore, sessionStore } = useMst();
   const { t } = useTranslation();
@@ -46,6 +49,54 @@ export const InitiativeHeader = ({
   const initiativeValue = toJS(
     sessionStore?.companyStaticData.find(company => company.field === initiativeType).value,
   );
+
+  const {
+    warningRed,
+    tango,
+    finePine,
+    grey30,
+    grey10,
+    almostPink,
+    lightYellow,
+    lightFinePine,
+    primary100,
+    primary20,
+  } = baseTheme.colors;
+
+  const determineStatusLabel = (status: string) => {
+    switch (status) {
+      case "incomplete":
+        return (
+          <StatusBadge color={warningRed} backgroundColor={almostPink}>
+            Behind
+          </StatusBadge>
+        );
+      case "in_progress":
+        return (
+          <StatusBadge color={tango} backgroundColor={lightYellow}>
+            Needs Attention
+          </StatusBadge>
+        );
+      case "completed":
+        return (
+          <StatusBadge color={finePine} backgroundColor={lightFinePine}>
+            On Track
+          </StatusBadge>
+        );
+      case "done":
+        return (
+          <StatusBadge color={primary100} backgroundColor={primary20}>
+            Completed
+          </StatusBadge>
+        );
+      default:
+        return (
+          <StatusBadge color={grey30} backgroundColor={grey10}>
+            None
+          </StatusBadge>
+        );
+    }
+  };
 
   return (
     <>
@@ -109,6 +160,7 @@ export const InitiativeHeader = ({
           )}
         </TitleContainer>
         <DetailsContainer>
+          {determineStatusLabel(derivedStatus)}
           <IconContainer>
             <Icon icon={"Initiative"} size={"16px"} iconColor={"grey80"} />
             <YearText type={"small"}>{initiativeValue}</YearText>
@@ -222,4 +274,21 @@ const ClosedStatusBannerContainer = styled.div`
   display: flex;
   justify-content: space-between;
   height: 20px;
+`;
+
+type StatusBadgeProps = {
+  backgroundColor: string;
+  color: string;
+};
+
+const StatusBadge = styled("span")<StatusBadgeProps>`
+  display: inline-block;
+  font-size: 16px;
+  white-space: nowrap;
+  border-radius: 3px;
+  padding: 2px 4px;
+  margin-right: 16px;
+  font-weight: bold;
+  background-color: ${props => props.backgroundColor};
+  color: ${props => props.color};
 `;

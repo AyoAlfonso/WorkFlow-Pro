@@ -22,6 +22,7 @@ import { TrixEditor } from "react-trix";
 import { CreateGoalSection } from "../shared/create-goal-section";
 import { sortByDate } from "~/utils/sorting";
 import { ActivityLogs } from "../shared/activity-logs";
+import { getWeekOf } from "~/utils/date-time";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -186,6 +187,12 @@ export const QuarterlyGoalModalContent = observer(
         });
     };
 
+    const getCurrentWeekStatus = () => {
+      const currentWeekOf = getWeekOf();
+      const milestone = quarterlyGoal.milestones.find(milestone => milestone.weekOf === currentWeekOf)
+      return milestone?.status
+    }
+
     return (
       <>
         <StatusBlockColorIndicator
@@ -209,6 +216,7 @@ export const QuarterlyGoalModalContent = observer(
                 showDropdownOptionsContainer={showDropdownOptionsContainer}
                 setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
                 goalYearString={goalYearString}
+                derivedStatus={getCurrentWeekStatus()}
               />
             </SectionContainer>
             <SectionContainer>

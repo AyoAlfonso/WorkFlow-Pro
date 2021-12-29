@@ -28,7 +28,7 @@ export const KeyPerformanceIndicatorStoreModel = types
       try {
         const response: any = yield env.api.getKPIs();
         if (response.ok) {
-          self.allKPIs = response.data;
+          self.allKPIs = response.data as any;
         }
       } catch (e) {
         showToast("There was an error loading the kpis", ToastMessageConstants.ERROR);

@@ -15,7 +15,11 @@ interface IKeyElementFormProps {
   onCreate: (keyElementParams: any) => void;
   onClose: () => void;
   setActionType: any;
+  type?: any;
   setSelectedElement: any;
+  keysForOnboarding?: any;
+  callbackForOnboarding?: any;
+  showAddButton?: any;
 }
 
 export const KeyElementForm = ({
@@ -23,6 +27,10 @@ export const KeyElementForm = ({
   onClose,
   setActionType,
   setSelectedElement,
+  type,
+  keysForOnboarding,
+  callbackForOnboarding,
+  showAddButton,
 }: IKeyElementFormProps): JSX.Element => {
   const { userStore, sessionStore } = useMst();
   const { users } = userStore;
@@ -54,13 +62,13 @@ export const KeyElementForm = ({
     setSelectedElement(null);
   };
 
-  const parseTarget = (target) => {
+  const parseTarget = target => {
     let val = target;
     if (val.includes("$")) {
       val = val.split("$")[1];
     }
     if (val.includes(",")) {
-      val = val.split(',').join('')
+      val = val.split(",").join("");
     }
     return val;
   };
@@ -73,6 +81,9 @@ export const KeyElementForm = ({
       greaterThan: Number(condition),
       ownedBy: ownedBy.id,
     };
+    if (type === "onboarding") {
+      return callbackForOnboarding(keysForOnboarding, keyElementParams);
+    }
     onCreate(keyElementParams);
   };
 
@@ -88,6 +99,7 @@ export const KeyElementForm = ({
     if (isValid) {
       createKeyElement();
       onClose();
+      showAddButton && showAddButton(false);
     }
   };
 
@@ -229,15 +241,17 @@ export const KeyElementForm = ({
         >
           <TextDiv fontSize={"12px"}>Save</TextDiv>
         </Button>
-        <Button
-          style={{ padding: "8px 16px" }}
-          variant={"primaryOutline"}
-          onClick={handleSaveAndAddAnother}
-          small
-          disabled={!isValid}
-        >
-          <TextDiv fontSize={"12px"}>Save & Add Another</TextDiv>
-        </Button>
+        {type !== "onboarding" && (
+          <Button
+            style={{ padding: "8px 16px" }}
+            variant={"primaryOutline"}
+            onClick={handleSaveAndAddAnother}
+            small
+            disabled={!isValid}
+          >
+            <TextDiv fontSize={"12px"}>Save & Add Another</TextDiv>
+          </Button>
+        )}
       </ButtonRowContainer>
     </Container>
   );
