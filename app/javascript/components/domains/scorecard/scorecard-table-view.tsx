@@ -46,8 +46,7 @@ export const ScorecardTableView = observer(
     const KPIs = toJS(tableKPIs);
 
     const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
-    const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
-    const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
+    const [quarter, setQuarter] = useState<number>(Math.floor((company.currentFiscalWeek - 1) / 13) + 1);
     const [targetWeek, setTargetWeek] = useState<number>(undefined);
     const [targetValue, setTargetValue] = useState<number>(undefined);
     const [tab, setTab] = useState<string>("KPIs");
@@ -585,10 +584,9 @@ export const ScorecardTableView = observer(
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
             setKpis={setKpis}
             updateKPI={updateKPI}
-            // setUpdateKPI={setUpdateKPI}
             setTargetWeek={setTargetWeek}
             setTargetValue={setTargetValue}
-            fiscalYearStart={fiscalYearStart}
+            fiscalYearStart={company.fiscalYearStart}
           />
         )}
       </>
