@@ -191,7 +191,6 @@ const QuarterSummary = ({
   };
 
   const gatherData = (weeks: [number]) => {
-    console.log(weeks, "weeks");
     return kpis
       ? weeks.map((weekIndex: number) => {
           return (
