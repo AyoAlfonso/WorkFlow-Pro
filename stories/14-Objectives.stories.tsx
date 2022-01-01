@@ -493,12 +493,12 @@ export const Objectives = () => {
                 showInactiveMilestones={showInactiveMilestones}
               /> 
               <WeeklyMilestones
-              editable={false}
-              allMilestones={allMilestones}
-              activeMilestones={activeMilestones}
-              showInactiveMilestones={showInactiveMilestones}
-              itemType={"quarterlyGoal"}
-            />
+                editable={false}
+                allMilestones={allMilestones}
+                activeMilestones={activeMilestones}
+                showInactiveMilestones={showInactiveMilestones}
+                itemType={"quarterlyGoal"}
+              />
               )
             `}
               language={"tsx"}
