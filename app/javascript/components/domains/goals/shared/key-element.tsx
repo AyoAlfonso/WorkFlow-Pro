@@ -36,6 +36,7 @@ interface IKeyElementProps {
   date?: any;
   initiativeId?: number;
   keyElement?: any;
+  noValueMargin?: boolean;
   // TODO: set correct type
 }
 
@@ -52,6 +53,7 @@ export const KeyElement = observer(
     setSelectedElement,
     initiativeId,
     keyElement,
+    noValueMargin,
   }: IKeyElementProps): JSX.Element => {
     const {
       annualInitiativeStore,
@@ -246,22 +248,22 @@ export const KeyElement = observer(
         formattedType = "SubInitiative";
       }
       return formattedType;
-    }
+    };
 
     const createLog = () => {
       const objectiveLog = {
         ownedById: selectedUser.id,
         score: element.completionCurrentValue,
         note: "",
-        objecteableId: initiativeId,
-        objecteableType: type === 'checkIn' ? typeForCheckIn() : getType(),
+        objecteableId: type === "checkIn" ? element.elementableId : initiativeId,
+        objecteableType: type === "checkIn" ? typeForCheckIn() : getType(),
         fiscalQuarter: company.currentFiscalQuarter,
         fiscalYear: company.currentFiscalYear,
         week: company.currentFiscalWeek,
         childType: "KeyElement",
         childId: element.id,
         status: element.status,
-        weekOf: getWeekOf()
+        weekOf: getWeekOf(),
       };
 
       store.createActivityLog(objectiveLog);
@@ -351,7 +353,7 @@ export const KeyElement = observer(
                             return;
                           }
                           if (status === "done") {
-                             (element.id, true);
+                            element.id, true;
                           } else {
                             store.updateKeyElementStatus(element.id, false);
                           }
@@ -422,13 +424,10 @@ export const KeyElement = observer(
                     />
                     <SymbolContainer>{completionSymbol(element.completionType)}</SymbolContainer>
                   </InputContainer>
-                  <ValueSpanContainer>
+                  <ValueSpanContainer noMarginRight={noValueMargin}>
                     <ValueSpan>{`${renderElementCompletionTargetValue()}`}</ValueSpan>
                   </ValueSpanContainer>
                 </ValueInputContainer>
-                <ValueSpanContainer>
-                  <ValueSpan>{`${renderElementCompletionTargetValue()}`}</ValueSpan>
-                </ValueSpanContainer>
                 {type !== "onboarding" && type != "checkIn" && (
                   <ProgressBarContainer>
                     <StripedProgressBar variant={element.status} completed={completion()} />
@@ -721,10 +720,14 @@ const ValueSpan = styled.span`
   display: inline-block;
 `;
 
-const ValueSpanContainer = styled.div`
+type IValueSpanContainer = {
+  noMarginRight?: boolean;
+}
+
+const ValueSpanContainer = styled.div<IValueSpanContainer>`
   width: 3em;
   margin-left: 50px;
-  margin-right: 50px;
+  margin-right: ${props => (props.noMarginRight ? "0px" : "50px")};
   text-align: center;
   @media only screen and (max-width: 768px) {
     display: inline;

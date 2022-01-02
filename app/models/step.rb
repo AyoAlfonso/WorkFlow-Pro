@@ -27,6 +27,7 @@ class Step < ApplicationRecord
     "Recap",
     "MeetingRating",
     "PersonalGoals",
+    "WeeklyPlanningKeyResults",
     "WeeklyReflection",
     "Milestones",
     "PersonalKeyActivities",

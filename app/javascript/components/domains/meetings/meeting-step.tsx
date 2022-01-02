@@ -29,6 +29,7 @@ import { Exploration } from "~/components/domains/meetings-forum/components/expl
 import { MonthlyReflection } from "~/components/domains/meetings-forum/components/monthly-reflection";
 import { ScorecardsIndex } from "~/components/domains/scorecard/scorecards-index";
 import { useMst } from "~/setup/root";
+import { PersonalKeyResults } from "./components/personal-key-results";
 
 export interface IMeetingStepProps {
   meeting: IMeeting;
@@ -68,6 +69,8 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
           return <WeeklyReflection />;
         case "Milestones":
           return <Milestones meetingType={meeting.meetingType} />;
+        case "WeeklyPlanningKeyResults":
+          return <PersonalKeyResults meetingType={meeting.meetingType} />;
         case "PersonalKeyActivities":
           return <PersonalKeyActivitiesWeekly />;
         case "YesterdayInReview":
