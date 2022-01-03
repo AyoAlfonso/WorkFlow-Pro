@@ -147,8 +147,10 @@ export const ScorecardTableView = observer(
       ];
       weeks.forEach(({ week, score }) => {
         const q = Math.floor((week - 1) / 13);
-        quarterScores[q][0] += score;
-        quarterScores[q][1]++;
+        if (quarterScores[q]) {
+          quarterScores[q][0] += score;
+          quarterScores[q][1]++;
+        }
       });
       return quarterScores.map(tuple =>
         tuple[0] === null ? null : getScorePercent(tuple[0] / tuple[1], target, greaterThan),
