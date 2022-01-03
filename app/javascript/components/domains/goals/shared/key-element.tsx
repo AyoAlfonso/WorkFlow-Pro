@@ -426,9 +426,6 @@ export const KeyElement = observer(
                     <ValueSpan>{`${renderElementCompletionTargetValue()}`}</ValueSpan>
                   </ValueSpanContainer>
                 </ValueInputContainer>
-                <ValueSpanContainer>
-                  <ValueSpan>{`${renderElementCompletionTargetValue()}`}</ValueSpan>
-                </ValueSpanContainer>
                 {type !== "onboarding" && type != "checkIn" && (
                   <ProgressBarContainer>
                     <StripedProgressBar variant={element.status} completed={completion()} />
