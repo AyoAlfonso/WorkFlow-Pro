@@ -16,7 +16,10 @@ module HasFiscalYear
   end
 
   def current_fiscal_year
+    #Usage: We use this to determine the fiscal year of the 
+    # 
     current_time = self.convert_to_their_timezone
+    # binding.pry
     #if the year start is the first of january it means the year end will be this calendar year
     (current_time >= current_year_fiscal_year_start && current_year_fiscal_year_start != Date.parse("#{current_time.year}-01-01")) ? current_time.year + 1 : current_time.year
   end
@@ -81,6 +84,7 @@ module HasFiscalYear
   def year_for_creating_annual_initiatives
     current_date = self.convert_to_their_timezone
     if current_year_fiscal_year_start > current_date
+      # if current, month, day > current_month_day  = -1.year
       within_4_weeks_range(current_year_fiscal_year_start) ? current_year_fiscal_year_start.year : current_date.year
     else
       within_4_weeks_range(current_year_fiscal_year_start + 1.year) ? current_year_fiscal_year_start.year + 1 : current_year_fiscal_year_start.year
