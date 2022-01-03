@@ -11,7 +11,6 @@ import { DragDropContext } from "react-beautiful-dnd";
 // stores
 import { IUserStore } from "../stores/user-store";
 // theme
-import {} from "styled-components/cssprop";
 import { baseTheme } from "../themes/base";
 import { GlobalStyles } from "./global-styles";
 
