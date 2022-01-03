@@ -29,6 +29,8 @@ module.exports = function(api) {
       ],
       (isProductionEnv || isDevelopmentEnv) && [
         "@babel/preset-env",
+        "@babel/preset-react",
+        "@babel/preset-flow",
         {
           forceAllTransforms: true,
           useBuiltIns: "entry",
