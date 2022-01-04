@@ -128,8 +128,7 @@ export const Company = observer(
             rallyingCry,
             forumType,
             objectivesKeyType:
-              objectivesKeyType?.charAt(0).toUpperCase() +
-              objectivesKeyType?.slice(1),
+              objectivesKeyType?.charAt(0).toUpperCase() + objectivesKeyType?.slice(1),
             coreFourAttributes: {
               core_1: core1Content,
               core_2: core2Content,
