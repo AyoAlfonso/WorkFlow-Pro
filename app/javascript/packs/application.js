@@ -8,6 +8,8 @@ require("turbolinks").start();
 require("@rails/activestorage").start();
 require("channels");
 require("trix");
+import "trix/dist/trix.css";
+import "trix/dist/trix.js";
 require("@rails/actiontext");
 import "react-toastify/dist/ReactToastify.css";
 import "react-step-progress-bar/styles.css";

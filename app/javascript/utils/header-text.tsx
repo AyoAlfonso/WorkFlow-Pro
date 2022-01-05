@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 export const HeaderText = observer(
   ({ location }): JSX.Element => {
-    const { sessionStore, companyStore, teamStore } = useMst();
+    const { sessionStore, companyStore, teamStore } = useMst()
     const { t } = useTranslation();
 
     const locationPath = location.pathname.split("/");
@@ -60,7 +60,7 @@ export const HeaderText = observer(
       case "scorecard":
         return <> {t("scorecards.indexTitle")} </>;
       case "weekly-check-in":
-        return <>{t("Weekly Check-in")}</>
+        return <>{t("Weekly Check-in")}</>;
       default:
         return <>{`${getGreetingTime(moment())} ${sessionStore.profile.firstName}`}</>;
     }

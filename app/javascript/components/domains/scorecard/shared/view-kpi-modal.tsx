@@ -410,7 +410,7 @@ export const ViewEditKPIModal = observer(
                     {data && <Line data={data} options={chartOptions} />}
                   </ChartContainer>
                   <SubHeader>Description</SubHeader>
-                  <TrixEditorContainer>
+                  {/* <TrixEditorContainer> */}
                     <TrixEditor
                       className={"trix-kpi-modal"}
                       autoFocus={true}
@@ -428,7 +428,7 @@ export const ViewEditKPIModal = observer(
                         });
                       }}
                     />
-                  </TrixEditorContainer>
+                  {/* </TrixEditorContainer> */}
                   <SubHeader>Activity</SubHeader>
                   <ActivityLogsContainer>
                     {R.sort(R.descend(R.prop("createdAt")), kpi.scorecardLogs).map(log => {
