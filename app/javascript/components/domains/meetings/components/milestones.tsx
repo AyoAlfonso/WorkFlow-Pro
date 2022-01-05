@@ -8,6 +8,8 @@ import { Loading } from "~/components/shared/loading";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { ColumnContainerParent, ColumnContainer } from "~/components/shared/styles/row-style";
+import { KeyElement } from "../../goals/shared/key-element";
+import { Avatar } from "~/components/shared";
 
 interface IMilestoneProps {
   meetingType?: string;
@@ -15,12 +17,27 @@ interface IMilestoneProps {
 
 export const Milestones = observer(
   ({ meetingType }: IMilestoneProps): JSX.Element => {
-    const { milestoneStore } = useMst();
+    const { milestoneStore, keyElementStore, userStore, companyStore } = useMst();
+    const { keyElementsForWeeklyCheckin } = keyElementStore;
 
     const [loading, setLoading] = useState<boolean>(true);
 
+    const groupBy = objectArray => {
+      return objectArray.reduce(function(acc, obj) {
+        const key = `${obj["elementableType"]}` + "_" + `${obj["elementableId"]}`;
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(obj);
+        return acc;
+      }, {});
+    };
+
+    const sortedKeyElements = keyElementsForWeeklyCheckin && groupBy(keyElementsForWeeklyCheckin);
+
     useEffect(() => {
-      milestoneStore.getMilestonesForPersonalMeeting().then(() => {
+      milestoneStore.getMilestonesForPersonalMeeting();
+      keyElementStore.getKeyElementsForWeeklyCheckIn().then(() => {
         setLoading(false);
       });
     }, []);
@@ -44,6 +61,51 @@ export const Milestones = observer(
       ));
     };
 
+    const groupKrs = () => {
+      const keyElements = sortedKeyElements;
+      const index = Object.values(keyElements);
+      const map = index.map(arry => arry);
+      return map;
+    };
+
+    const renderKeyResults = (): JSX.Element[] => {
+      return (
+        keyElementsForWeeklyCheckin &&
+        groupKrs().map((groupedKrs: Array<any>, index) => {
+          const user = userStore.users.find(user => user.id == groupedKrs[0]["elementableOwnedBy"]);
+          return (
+            <Container key={index}>
+              <TopSection>
+                <Avatar
+                  defaultAvatarColor={user?.defaultAvatarColor}
+                  avatarUrl={user?.avatarUrl}
+                  firstName={user?.firstName}
+                  lastName={user?.lastName}
+                  size={20}
+                  marginLeft={"0"}
+                />
+                <StyledTitle>{groupedKrs[0]["elementableContextDescription"]}</StyledTitle>
+              </TopSection>
+              {groupedKrs.map((kr, index) => {
+                const lastKeyElement = index == keyElementsForWeeklyCheckin.length - 1;
+                return (
+                  <KeyElement
+                    elementId={kr.id}
+                    key={kr.id}
+                    store={keyElementStore}
+                    editable={true}
+                    lastKeyElement={lastKeyElement}
+                    type={"checkIn"}
+                    noValueMargin={true}
+                  />
+                );
+              })}
+            </Container>
+          );
+        })
+      );
+    };
+
     return (
       <ColumnContainerParent>
         <ColumnContainer>
@@ -53,7 +115,11 @@ export const Milestones = observer(
             <HomeKeyActivities todayOnly={true} width={"100%"} />
           )}
         </ColumnContainer>
-        <ColumnContainer>{renderWeeklyMilestones()}</ColumnContainer>
+        <ColumnContainer>
+          {companyStore.company?.objectivesKeyType === "KeyResults"
+            ? renderKeyResults()
+            : renderWeeklyMilestones()}
+        </ColumnContainer>
       </ColumnContainerParent>
     );
   },
@@ -70,4 +136,20 @@ const StyledText = styled.h4`
   font-size: 20px;
   margin-bottom: 8px;
   margin-top: 0;
+`;
+
+const Container = styled.div`
+  margin-bottom: 50px;
+`;
+
+const TopSection = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+`;
+
+const StyledTitle = styled.span`
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 5px;
 `;
