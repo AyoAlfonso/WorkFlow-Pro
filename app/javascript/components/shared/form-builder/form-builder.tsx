@@ -5,8 +5,7 @@ import styled from "styled-components";
 import { Calendar } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-
-import { TrixEditor } from "react-trix";
+import ReactQuill from "react-quill";
 
 import { Dropzone } from "./dropzone";
 import { DropzoneWithCropper } from "./dropzone-with-cropper";
@@ -158,19 +157,13 @@ export const FormBuilder = ({
         );
       case "HTML_EDITOR":
         return (
-          <TrixEditor
+          <ReactQuill
             className="custom-trix-class trix-editor-onboarding"
-            autoFocus={true}
+            theme="snow"
             placeholder={placeholder ? placeholder : ""}
             value={R.pathOr("", formKeys, formData)}
-            mergeTags={[]}
-            onChange={(html, text) => {
-              callback(formKeys, html);
-            }}
-            onEditorReady={editor => {
-              editor.element.addEventListener("trix-file-accept", event => {
-                event.preventDefault();
-              });
+            onChange={(content, delta, source, editor) => {
+              callback(formKeys, editor.getHTML());
             }}
           />
         );
@@ -225,10 +218,10 @@ const Container = styled.div`
 
 type FormContainerProps = {
   marginBottom?: string;
-}
+};
 
 const FormContainer = styled.div<FormContainerProps>`
-  margin-bottom: ${props => props.marginBottom ? props.marginBottom : "24px"};
+  margin-bottom: ${props => (props.marginBottom ? props.marginBottom : "24px")};
 `;
 
 const StyledOption = styled.option``;

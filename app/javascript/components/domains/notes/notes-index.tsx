@@ -12,8 +12,7 @@ import "react-date-range/dist/theme/default.css";
 import { addDays } from "date-fns";
 import { baseTheme } from "~/themes/base";
 import ReactHtmlParser from "react-html-parser";
-import { TrixEditor } from "react-trix";
-
+import ReactQuill from "react-quill";
 import MeetingTypes from "~/constants/meeting-types";
 
 import {
@@ -280,13 +279,12 @@ export const NotesIndex = observer(
             }
           >
             {editMode ? (
-              <TrixEditor
+               <ReactQuill
                 className="custom-trix-class"
-                autoFocus={true}
-                mergeTags={[]}
+                theme="snow"
                 value={entryUpdate}
-                onChange={(html, text) => {
-                  setEntryUpdate(html);
+                onChange={(content, delta, source, editor) => {
+                  setEntryUpdate(editor.getHTML());
                 }}
               />
             ) : (

@@ -19,7 +19,7 @@ import {
   RowContainer,
 } from "./modal-elements";
 import { toJS } from "mobx";
-import { TrixEditor } from "react-trix";
+import ReactQuill from "react-quill";
 import { useHistory } from "react-router";
 
 interface ManualKPIModalProps {
@@ -234,15 +234,13 @@ export const ManualKPIModal = observer(
                 Description
               </InputHeaderWithComment>
               <TrixEditorContainer>
-                <TrixEditor
-                  className={"trix-kpi-modal"}
-                  autoFocus={false}
-                  placeholder={"Add a description..."}
-                  onChange={s => {
-                    setDescription(s);
-                  }}
+                <ReactQuill
+                  className="trix-kpi-modal"
+                  theme="snow"
                   value={description}
-                  mergeTags={[]}
+                  onChange={(content, delta, source, editor) => {
+                    setDescription(editor.getHTML());
+                  }}
                 />
               </TrixEditorContainer>
             </FormElementContainer>

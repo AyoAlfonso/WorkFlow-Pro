@@ -14,7 +14,7 @@ import { WeeklyMilestones } from "../shared-quarterly-goal-and-sub-initiative/we
 import { InitiativeHeader } from "../shared-quarterly-goal-and-sub-initiative/initiative-header";
 import { ShowMilestonesButton } from "../shared-quarterly-goal-and-sub-initiative/show-milestones-button";
 import { toJS } from "mobx";
-import { TrixEditor } from "react-trix";
+import ReactQuill from "react-quill";
 
 interface ISubInitiativeModalContentProps {
   subInitiativeId: number;
@@ -65,7 +65,7 @@ export const SubInitiativeModalContent = observer(
       return <Loading />;
     }
 
-    const handleChange = (html, text) => {
+    const handleChange = text => {
       setDescription(text);
     };
 
@@ -140,27 +140,21 @@ export const SubInitiativeModalContent = observer(
             )}
           </SubInitiativeBodyContainer>
           <SubHeader>Description</SubHeader>
-          <TrixEditorContainer
-            onBlur={() => {
-              subInitiativeStore.updateModelField("contextDescription", description);
-              subInitiativeStore.update();
-            }}
-          >
-            <TrixEditor
-              className={"trix-initiative-modal"}
-              autoFocus={true}
+          <TrixEditorContainer>
+            <ReactQuill
+              onBlur={() => {
+                subInitiativeStore.updateModelField("contextDescription", description);
+                subInitiativeStore.update();
+              }}
+              className="trix-initiative-modal"
+              theme="snow"
               placeholder={"Add a description..."}
-              onChange={handleChange}
               value={description}
-              mergeTags={[]}
-              onEditorReady={editor => {
-                editor.element.addEventListener("trix-file-accept", event => {
-                  event.preventDefault();
-                });
+              onChange={(content, delta, source, editor) => {
+                handleChange(editor.getHTML());
               }}
             />
           </TrixEditorContainer>
-          {/* <SubHeader>Activity</SubHeader> */}
         </Container>
       </>
     );

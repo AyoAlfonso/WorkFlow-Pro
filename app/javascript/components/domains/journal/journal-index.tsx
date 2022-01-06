@@ -10,7 +10,7 @@ import { toJS } from "mobx";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { addDays } from "date-fns";
-import { TrixEditor } from "react-trix";
+import ReactQuill from "react-quill";
 
 import {
   ActionButtonsContainer,
@@ -190,13 +190,12 @@ export const JournalIndex = observer(
             }
           >
             {editMode ? (
-              <TrixEditor
+              <ReactQuill
                 className="custom-trix-class"
-                autoFocus={true}
-                mergeTags={[]}
+                theme="snow"
                 value={entryUpdate}
-                onChange={(html, text) => {
-                  setEntryUpdate(html);
+                onChange={(content, delta, source, editor) => {
+                  setEntryUpdate(editor.getHTML());
                 }}
               />
             ) : (

@@ -20,10 +20,10 @@ import { Loading, Avatar } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { GoalDropdownOptions } from "../shared/goal-dropdown-options";
 import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
-import { TrixEditor } from "react-trix";
 import { toJS } from "mobx";
 import moment from "moment";
 import { sortByDate } from "~/utils/sorting";
+import ReactQuill from "react-quill";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -87,7 +87,7 @@ export const AnnualInitiativeModalContent = observer(
       return <Loading />;
     }
 
-    const handleChange = (html, text) => {
+    const handleChange = text => {
       setDescription(text);
     };
 
@@ -302,27 +302,21 @@ export const AnnualInitiativeModalContent = observer(
           </SectionContainer>
           {showInitiatives ? <SectionContainer>{renderGoals()}</SectionContainer> : <></>}
           <SubHeader>Description</SubHeader>
-          <TrixEditorContainer
-            onBlur={() => {
-              annualInitiativeStore.updateModelField("contextDescription", description);
-              annualInitiativeStore.update();
-            }}
-          >
-            <TrixEditor
-              className={"trix-objective-modal"}
-              autoFocus={true}
+          <TrixEditorContainer>
+            <ReactQuill
+              onBlur={() => {
+                annualInitiativeStore.updateModelField("contextDescription", description);
+                annualInitiativeStore.update();
+              }}
+              className="trix-objective-modal"
+              theme="snow"
               placeholder={"Add a description..."}
-              onChange={handleChange}
               value={description}
-              mergeTags={[]}
-              onEditorReady={editor => {
-                editor.element.addEventListener("trix-file-accept", event => {
-                  event.preventDefault();
-                });
+              onChange={(content, delta, source, editor) => {
+                handleChange(editor.getHTML());
               }}
             />
           </TrixEditorContainer>
-          {/* <SubHeader>Activity</SubHeader> */}
         </Container>
       </>
     );

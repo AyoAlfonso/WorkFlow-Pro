@@ -48,9 +48,6 @@ export const ScorecardTableView = observer(
     const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
     const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
     const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
-    console.log("math floor", Math.floor((company.currentFiscalWeek - 1) / 13) + 1);
-    console.log("math floor", Math.floor((company.currentFiscalWeek - 1) / 13) + 1);
-
     
     const [targetWeek, setTargetWeek] = useState<number>(undefined);
     const [targetValue, setTargetValue] = useState<number>(undefined);

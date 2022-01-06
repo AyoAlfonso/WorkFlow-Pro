@@ -17,9 +17,9 @@ import { HomeContainerBorders } from "../../home/shared-components";
 import { RecordOptions } from "../shared/record-options";
 import { useTranslation } from "react-i18next";
 import { toJS } from "mobx";
-import { TrixEditor } from "react-trix";
 import { CreateGoalSection } from "../shared/create-goal-section";
 import { sortByDate } from "~/utils/sorting";
+import ReactQuill from "react-quill";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -85,7 +85,7 @@ export const QuarterlyGoalModalContent = observer(
       return <Loading />;
     }
 
-    const handleChange = (html, text) => {
+    const handleChange = (text) => {
       setDescription(text);
     };
 
@@ -235,27 +235,21 @@ export const QuarterlyGoalModalContent = observer(
             )}
           </QuarterlyGoalBodyContainer>
           <SubHeader>Description</SubHeader>
-          <TrixEditorContainer
-            onBlur={() => {
-              quarterlyGoalStore.updateModelField("contextDescription", description);
-              quarterlyGoalStore.update();
-            }}
-          >
-            <TrixEditor
-              className={"trix-initiative-modal"}
-              autoFocus={true}
+          <TrixEditorContainer>
+            <ReactQuill
+              onBlur={() => {
+                quarterlyGoalStore.updateModelField("contextDescription", description);
+                quarterlyGoalStore.update();
+              }}
+              className="trix-initiative-modal"
+              theme="snow"
               placeholder={"Add a description..."}
-              onChange={handleChange}
               value={description}
-              mergeTags={[]}
-              onEditorReady={editor => {
-                editor.element.addEventListener("trix-file-accept", event => {
-                  event.preventDefault();
-                });
+              onChange={(content, delta, source, editor) => {
+                handleChange(editor.getHTML());
               }}
             />
           </TrixEditorContainer>
-          {/* <SubHeader>Activity</SubHeader> */}
         </Container>
       </>
     );

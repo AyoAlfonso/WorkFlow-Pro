@@ -10,10 +10,11 @@ import { Can } from "~/components/shared/auth/can";
 import { Button } from "~/components/shared/button";
 import { FileInput } from "./file-input";
 import { ImageCropperModal } from "~/components/shared/image-cropper-modal";
-import { TrixEditor } from "react-trix";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { useHistory } from "react-router";
 import { toJS } from "mobx";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 import {
   StretchContainer,
@@ -362,83 +363,42 @@ export const Company = observer(
                     }}
                     value={rallyingCry}
                   />
-                  <Label htmlFor="core1Content">{t("core.core1")}</Label>
-                  <TrixEditor
+                  <WYSIWYGLabel htmlFor="core1Content">{t("core.core1")}</WYSIWYGLabel>
+                  <ReactQuill
                     className="custom-trix-class"
-                    autoFocus={true}
+                    theme="snow"
                     placeholder="Please enter Why Do We Exist?"
                     value={core1Content}
-                    // uploadURL="https://domain.com/imgupload/receiving/post"
-                    // uploadData={{ key1: "value", key2: "value" }}
-                    //fileParamName="blob"
-                    mergeTags={[]}
-                    onChange={(html, text) => {
-                      setCore1Content(html);
-                    }}
-                    onEditorReady={editor => {
-                      editor.element.addEventListener("trix-file-accept", event => {
-                        event.preventDefault();
-                      });
-                    }}
+                    onChange={setCore1Content}
                   />
-                  <Label htmlFor="core_2">{t("core.core2")}</Label>
-                  <TrixEditor
+
+                  <WYSIWYGLabel htmlFor="core_2">{t("core.core2")}</WYSIWYGLabel>
+                  <ReactQuill
                     className="custom-trix-class"
-                    autoFocus={true}
+                    theme="snow"
                     placeholder="Please enter How Do We Behave?"
                     value={core2Content}
-                    // uploadURL="https://domain.com/imgupload/receiving/post"
-                    // uploadData={{ key1: "value", key2: "value" }}
-                    //fileParamName="blob"
-                    mergeTags={[]}
-                    onChange={(html, text) => {
-                      setCore2Content(html);
-                    }}
-                    onEditorReady={editor => {
-                      editor.element.addEventListener("trix-file-accept", event => {
-                        event.preventDefault();
-                      });
-                    }}
+                    onChange={setCore2Content}
                   />
-                  <Label htmlFor="core_3">{t("core.core3")}</Label>
-                  <TrixEditor
+
+                  <WYSIWYGLabel htmlFor="core_3">{t("core.core3")}</WYSIWYGLabel>
+                  <ReactQuill
                     className="custom-trix-class"
-                    autoFocus={true}
+                    theme="snow"
                     placeholder="Please enter How Do We Behave?"
                     value={core3Content}
-                    // uploadURL="https://domain.com/imgupload/receiving/post"
-                    // uploadData={{ key1: "value", key2: "value" }}
-                    //fileParamName="blob"
-                    mergeTags={[]}
-                    onChange={(html, text) => {
-                      setCore3Content(html);
-                    }}
-                    onEditorReady={editor => {
-                      editor.element.addEventListener("trix-file-accept", event => {
-                        event.preventDefault();
-                      });
-                    }}
+                    onChange={setCore3Content}
                   />
-                  <Label htmlFor="core_4">{t("core.core4")}</Label>
-                  <TrixEditor
+
+                  <WYSIWYGLabel htmlFor="core_4">{t("core.core4")}</WYSIWYGLabel>
+                  <ReactQuill
                     className="custom-trix-class"
-                    autoFocus={true}
-                    placeholder="Please enter 
-                    How Do We Succeed?"
+                    theme="snow"
+                    placeholder="Please enter How Do We Succeed?"
                     value={core4Content}
-                    // uploadURL="https://domain.com/imgupload/receiving/post"
-                    // uploadData={{ key1: "value", key2: "value" }}
-                    //fileParamName="blob"
-                    mergeTags={[]}
-                    onChange={(html, text) => {
-                      setCore4Content(html);
-                    }}
-                    onEditorReady={editor => {
-                      editor.element.addEventListener("trix-file-accept", event => {
-                        event.preventDefault();
-                      });
-                    }}
+                    onChange={setCore4Content}
                   />
+
                   <CompanyStaticDataSection>
                     <CompanyStaticDataArea>
                       <Label htmlFor="annualInitiative">Annual Objective</Label>
@@ -503,3 +463,7 @@ const CompanyStaticDataSection = styled.div`
 const CompanyStaticDataArea = styled.div`
   margin-top: 8px;
 `;
+
+const WYSIWYGLabel = styled(Label)`
+  margin: 15px 0px;
+`
