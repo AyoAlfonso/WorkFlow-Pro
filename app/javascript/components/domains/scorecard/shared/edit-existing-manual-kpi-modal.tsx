@@ -9,6 +9,7 @@ import { Select } from "~/components/shared/input";
 import { OwnedBy } from "./scorecard-owned-by";
 import { AdvancedKPIModal } from "./advanced-kpi-modals";
 import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 import {
   InputFromUnitType,
