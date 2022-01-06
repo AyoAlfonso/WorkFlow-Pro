@@ -60,7 +60,6 @@ export const MiniUpdateKPIModal = observer(
     const [selectedDueDate, setSelectedDueDate] = useState<any>(
       getMondayofDate(week, fiscalYearStart, year),
     );
-
     const [currentWeek, setCurrentWeek] = useState<number>(week);
     const [comment, setComment] = useState("");
     const { owner_type, owner_id } = useParams();
@@ -117,8 +116,8 @@ export const MiniUpdateKPIModal = observer(
       clearData();
     };
     const clearData = () => {
-      setTargetWeek(undefined);
-      setTargetValue(undefined);
+      typeof setTargetWeek === "function" ? setTargetWeek(undefined) : null;
+      typeof setTargetValue === "function" ? setTargetValue(undefined) : null;
     };
     return (
       <ModalContainer

@@ -48,7 +48,7 @@ export const ScorecardTableView = observer(
     const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
     const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
     const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
-    
+
     const [targetWeek, setTargetWeek] = useState<number>(undefined);
     const [targetValue, setTargetValue] = useState<number>(undefined);
     const [tab, setTab] = useState<string>("KPIs");
@@ -87,7 +87,6 @@ export const ScorecardTableView = observer(
       }
     };
     const formatKpiType = kpiType => titleCase(kpiType);
-
     const averageScorePercent = (scores: [number], target: number, greaterThan: boolean) => {
       return Math.min(
         Math.floor(
@@ -491,6 +490,14 @@ export const ScorecardTableView = observer(
       setHiddenColumns(getHiddenWeeks(q));
     };
 
+    const createGoalYearString =
+      company.currentFiscalYear ==
+      company.yearForCreatingAnnualInitiatives
+        ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+        : `FY${(company.currentFiscalYear - 1)
+            .toString()
+            .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
+
     return (
       <>
         <Container>
@@ -509,7 +516,7 @@ export const ScorecardTableView = observer(
             >
               {R.range(1, 5).map((n: number) => (
                 <option key={n} value={n}>
-                  Q{n} {company.yearForCreatingAnnualInitiatives}
+                  Q{n} {createGoalYearString}
                 </option>
               ))}
             </Select>

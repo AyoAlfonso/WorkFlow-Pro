@@ -41,7 +41,7 @@ export const AdvancedKPIModal = observer(
   }: IAdvancedKPIModalProps): JSX.Element => {
     const formattedKpiModalType = titleCase(kpiModalType);
     const optionsRef = useRef(null);
-
+    
     useEffect(() => {
       const handleClickOutside = event => {
         if (optionsRef.current && !optionsRef.current.contains(event.target)) {

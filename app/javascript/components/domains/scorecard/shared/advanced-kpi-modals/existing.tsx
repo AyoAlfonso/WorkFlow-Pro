@@ -45,7 +45,7 @@ export const Existing = observer(
     const [selectedKPIs, setSelectedKPIs] = useState(existingSelectedKPIs || []);
     const [filteredKPIs, setfilteredKPIs] = useState(KPIs || []);
     const [unitType, setUnitType] = useState("numerical");
-
+  
     useEffect(() => {
       if (unitType) {
         setfilteredKPIs(filterBasedOnUnitType(KPIs));
