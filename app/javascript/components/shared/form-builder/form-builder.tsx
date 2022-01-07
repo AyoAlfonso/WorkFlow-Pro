@@ -1,18 +1,20 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
-
 import { Calendar } from "react-date-range";
-import "react-date-range/dist/styles.css";
-import "react-date-range/dist/theme/default.css";
-import ReactQuill from "react-quill";
-
 import { Dropzone } from "./dropzone";
 import { DropzoneWithCropper } from "./dropzone-with-cropper";
-
 import { Input, Label, Select, TextArea, TextDiv } from "~/components/shared";
-
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
+import htmlToDraft from "html-to-draftjs";
+import draftToHtml from "draftjs-to-html";
 import moment from "moment";
+import "~/stylesheets/modules/rdw-editor-main.css";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 
@@ -64,6 +66,14 @@ export const FormBuilder = ({
   marginBottom,
 }: IFormBuilderProps): JSX.Element => {
   const classes = useStyles();
+  const [editorFormData, setEditorFormData] = useState(null);
+
+  useEffect(() => {
+    const convertedHtml = htmlToDraft(formData || {});
+    const contentState = ContentState.createFromBlockArray(convertedHtml.contentBlocks);
+    const editorState = EditorState.createWithContent(contentState);
+    setEditorFormData(editorState || EditorState.createEmpty());
+  }, [formData]);
 
   const formComponent = (formField: IFormField) => {
     const { fieldType, formKeys, options, callback, style, placeholder, rows } = formField;
@@ -157,13 +167,16 @@ export const FormBuilder = ({
         );
       case "HTML_EDITOR":
         return (
-          <ReactQuill
+          <Editor
             className="custom-trix-class trix-editor-onboarding"
-            theme="snow"
             placeholder={placeholder ? placeholder : ""}
-            value={R.pathOr("", formKeys, formData)}
-            onChange={(content, delta, source, editor) => {
-              callback(formKeys, editor.getHTML());
+            editorState={editorFormData}
+            onEditorStateChange={e => {
+              callback(
+                formKeys,
+                R.pathOr("", formKeys, draftToHtml(convertToRaw(e.getCurrentContent()))),
+              );
+              setEditorFormData(e);
             }}
           />
         );

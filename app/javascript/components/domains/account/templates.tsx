@@ -14,6 +14,13 @@ import ReactQuill from "react-quill";
 import { useHistory } from "react-router";
 import { toJS } from "mobx";
 
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
+import htmlToDraft from "html-to-draftjs";
+import draftToHtml from "draftjs-to-html";
+import "~/stylesheets/modules/rdw-editor-main.css";
+
 import {
   StretchContainer,
   BodyContainer,
@@ -40,8 +47,13 @@ export const Templates = observer(
     const [kpiTemplate, setKPITemplate] = useState(
       descriptionTemplatesFormatted?.find(t => t.templateType == "kpi"),
     );
+
+    const [kPIBodyBody, setKPIBodyBody] = useState<any>(null);
+    const [objectiveBodyBody, setObjectiveBodyBody] = useState<any>(null);
+    const [initiativeBodyBody, setinitiativeBodyBody] = useState<any>(null);
+
     const [initiativesTemplateBody, setInitiativesTemplateBody] = useState({} as any);
-    const [objectivesTemplateBody, setObjectivesTemplateBody] = useState( {} as any);
+    const [objectivesTemplateBody, setObjectivesTemplateBody] = useState({} as any);
     const [kpiTemplateBody, setKPITemplateBody] = useState({} as any);
 
     const { t } = useTranslation();
@@ -60,10 +72,34 @@ export const Templates = observer(
       descriptionTemplateStore.fetchDescriptiveTemplates();
       descriptionTemplatesFormatted?.map(t => {
         if (t.templateType == "kpi") {
+          const convertedHtmlKPITemplate = htmlToDraft(t.body.body);
+          const convertedHtmlKPITemplateContentState = ContentState.createFromBlockArray(
+            convertedHtmlKPITemplate.contentBlocks,
+          );
+          const editorStateKPITemplate = EditorState.createWithContent(
+            convertedHtmlKPITemplateContentState,
+          );
+          setKPIBodyBody(editorStateKPITemplate || EditorState.createEmpty());
           setKPITemplate(t);
         } else if (t.templateType == "objectives") {
+          const convertedHtmlObjectivesTemplate = htmlToDraft(t.body.body);
+          const convertedHtmlObjectiveTemplateContentState = ContentState.createFromBlockArray(
+            convertedHtmlObjectivesTemplate.contentBlocks,
+          );
+          const editorStateObjectiveTemplate = EditorState.createWithContent(
+            convertedHtmlObjectiveTemplateContentState,
+          );
+          setObjectiveBodyBody(editorStateObjectiveTemplate || EditorState.createEmpty());
           setObjectivesTemplate(t);
         } else if (t.templateType == "initiatives") {
+          const convertedHtmlInitiativeTemplate = htmlToDraft(t.body.body);
+          const convertedHtmlInitiativeTemplateContentState = ContentState.createFromBlockArray(
+            convertedHtmlInitiativeTemplate.contentBlocks,
+          );
+          const editorStateInitiativeTemplate = EditorState.createWithContent(
+            convertedHtmlInitiativeTemplateContentState,
+          );
+          setinitiativeBodyBody(editorStateInitiativeTemplate || EditorState.createEmpty());
           setInitiativesTemplate(t);
         }
       });
@@ -107,51 +143,58 @@ export const Templates = observer(
               <BodyContainer>
                 <PersonalInfoContainer>
                   <Label htmlFor="objectivesTemplate"> Objectives Templates </Label>
-                  <ReactQuill
+
+                  <Editor
                     className="custom-trix-class"
-                    theme="snow"
                     placeholder="Enter your Objectives Templates"
-                    value={objectivesTemplate?.body.body}
-                     onChange={(content, delta, source, editor) => {
-                      objectivesTemplate.body.body = editor.getHTML()
-                      setObjectivesTemplate(objectivesTemplate)
+                    editorState={objectiveBodyBody}
+                    onEditorStateChange={e => {
+                      objectivesTemplate.body.body = draftToHtml(
+                        convertToRaw(e.getCurrentContent()),
+                      );
+                      setObjectivesTemplate(objectivesTemplate);
+                      setObjectiveBodyBody(e);
                       setObjectivesTemplateBody({
                         id: objectivesTemplate.id,
                         title: objectivesTemplate.title,
-                        body: editor.getHTML(),
+                        body: objectivesTemplate.body.body,
                       });
                     }}
                   />
                   <Label htmlFor="initiativesTemplate"> Initiatives Templates </Label>
-                   <ReactQuill
+
+                  <Editor
                     className="custom-trix-class"
-                    theme="snow"
                     placeholder="Enter your Initiatives Templates"
-                    value={initiativesTemplate?.body.body}
-                     onChange={(content, delta, source, editor) => {
-                      initiativesTemplate.body.body = editor.getHTML()
-                      setInitiativesTemplate(initiativesTemplate)
+                    editorState={initiativeBodyBody}
+                    onEditorStateChange={e => {
+                      initiativesTemplate.body.body = draftToHtml(
+                        convertToRaw(e.getCurrentContent()),
+                      );
+                      setInitiativesTemplate(initiativesTemplate);
+                      setinitiativeBodyBody(e);
                       setInitiativesTemplateBody({
                         id: initiativesTemplate.id,
                         title: initiativesTemplate.title,
-                        body: editor.getHTML(),
+                        body: initiativesTemplate.body.body,
                       });
                     }}
                   />
 
                   <Label htmlFor="kpiTemplate"> KPI Templates </Label>
-                  <ReactQuill
+                 
+                  <Editor
                     className="custom-trix-class"
-                    theme="snow"
                     placeholder="Enter your KPI Templates"
-                    value={kpiTemplate?.body.body}
-                     onChange={(content, delta, source, editor) => {
-                      kpiTemplate.body.body = editor.getHTML()
-                      setKPITemplate(kpiTemplate)
+                    editorState={kPIBodyBody}
+                    onEditorStateChange={e => {
+                      kpiTemplate.body.body = draftToHtml(convertToRaw(e.getCurrentContent()));
+                      setKPITemplate(kpiTemplate);
+                      setKPIBodyBody(e);
                       setKPITemplateBody({
                         id: kpiTemplate.id,
                         title: kpiTemplate.title,
-                        body: editor.getHTML(),
+                        body: kpiTemplate.body.body,
                       });
                     }}
                   />

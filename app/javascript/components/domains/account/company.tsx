@@ -16,6 +16,13 @@ import { toJS } from "mobx";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
+import htmlToDraft from "html-to-draftjs";
+import draftToHtml from "draftjs-to-html";
+import "~/stylesheets/modules/rdw-editor-main.css";
+
 import {
   StretchContainer,
   BodyContainer,
@@ -47,10 +54,10 @@ export const Company = observer(
     const [timezone, setTimezone] = useState(company.timezone);
     const [forumType, setForumType] = useState(company.forumType);
     const [rallyingCry, setRallyingCry] = useState(company.rallyingCry);
-    const [core1Content, setCore1Content] = useState(company.coreFour.core1Content);
-    const [core2Content, setCore2Content] = useState(company.coreFour.core2Content);
-    const [core3Content, setCore3Content] = useState(company.coreFour.core3Content);
-    const [core4Content, setCore4Content] = useState(company.coreFour.core4Content);
+    const [core1Content, setCore1Content] = useState<any>(null);
+    const [core2Content, setCore2Content] = useState<any>(null);
+    const [core3Content, setCore3Content] = useState<any>(null);
+    const [core4Content, setCore4Content] = useState<any>(null);
     const [logoImageblub, setLogoImageblub] = useState<any | null>(null);
     const [logoImageForm, setLogoImageForm] = useState<FormData | null>(null);
     const [logoImageModalOpen, setLogoImageModalOpen] = useState<boolean>(false);
@@ -71,6 +78,46 @@ export const Company = observer(
 
     const { t } = useTranslation();
     const teams = toJS(teamStore.teams);
+    useEffect(() => {
+      // core1Content
+      const convertedHtmlCore1Content = htmlToDraft(company.coreFour.core1Content || "");
+      const core1ContentContentState = ContentState.createFromBlockArray(
+        convertedHtmlCore1Content.contentBlocks,
+      );
+
+      // core2Content
+      const convertedHtmlCore2Content = htmlToDraft(company.coreFour.core2Content || "");
+      const core2ContentContentState = ContentState.createFromBlockArray(
+        convertedHtmlCore2Content.contentBlocks,
+      );
+
+      // core3Content
+      const convertedHtmlCore3Content = htmlToDraft(company.coreFour.core3Content || "");
+      const core3ContentContentState = ContentState.createFromBlockArray(
+        convertedHtmlCore3Content.contentBlocks,
+      );
+
+      // core4Content
+      const convertedHtmlCore4Content = htmlToDraft(company.coreFour.core4Content || "");
+      const core4ContentContentState = ContentState.createFromBlockArray(
+        convertedHtmlCore4Content.contentBlocks,
+      );
+
+      const editorState1 = EditorState.createWithContent(core1ContentContentState);
+      const editorState2 = EditorState.createWithContent(core2ContentContentState);
+      const editorState3 = EditorState.createWithContent(core3ContentContentState);
+      const editorState4 = EditorState.createWithContent(core4ContentContentState);
+
+      setCore1Content(editorState1 || EditorState.createEmpty());
+      setCore2Content(editorState2 || EditorState.createEmpty());
+      setCore3Content(editorState3 || EditorState.createEmpty());
+      setCore3Content(editorState4 || EditorState.createEmpty());
+    }, [
+      company.coreFour.core1Content,
+      company.coreFour.core2Content,
+      company.coreFour.core3Content,
+      company.coreFour.core4Content,
+    ]);
 
     useEffect(() => {
       getLogo();
@@ -131,10 +178,10 @@ export const Company = observer(
             objectivesKeyType:
               objectivesKeyType?.charAt(0).toUpperCase() + objectivesKeyType?.slice(1),
             coreFourAttributes: {
-              core_1: core1Content,
-              core_2: core2Content,
-              core_3: core3Content,
-              core_4: core4Content,
+              core_1: draftToHtml(convertToRaw(core1Content.getCurrentContent())) || "",
+              core_2: draftToHtml(convertToRaw(core2Content.getCurrentContent())) || "",
+              core_3: draftToHtml(convertToRaw(core3Content.getCurrentContent())) || "",
+              core_4: draftToHtml(convertToRaw(core3Content.getCurrentContent())) || "",
             },
             companyStaticDatasAttributes: {
               0: {
@@ -364,41 +411,39 @@ export const Company = observer(
                     value={rallyingCry}
                   />
                   <WYSIWYGLabel htmlFor="core1Content">{t("core.core1")}</WYSIWYGLabel>
-                  <ReactQuill
+               
+                  <Editor
                     className="custom-trix-class"
-                    theme="snow"
                     placeholder="Please enter Why Do We Exist?"
-                    value={core1Content}
-                    onChange={setCore1Content}
+                    editorState={core1Content}
+                    onEditorStateChange={setCore1Content}
                   />
 
                   <WYSIWYGLabel htmlFor="core_2">{t("core.core2")}</WYSIWYGLabel>
-                  <ReactQuill
+
+                  <Editor
                     className="custom-trix-class"
-                    theme="snow"
                     placeholder="Please enter How Do We Behave?"
-                    value={core2Content}
-                    onChange={setCore2Content}
+                    editorState={core2Content}
+                    onEditorStateChange={setCore2Content}
                   />
 
                   <WYSIWYGLabel htmlFor="core_3">{t("core.core3")}</WYSIWYGLabel>
-                  <ReactQuill
-                    className="custom-trix-class"
-                    theme="snow"
+
+                  <Editor
+                    className="trix-objective-modal"
                     placeholder="Please enter How Do We Behave?"
-                    value={core3Content}
-                    onChange={setCore3Content}
+                    editorState={core3Content}
+                    onEditorStateChange={setCore3Content}
                   />
 
                   <WYSIWYGLabel htmlFor="core_4">{t("core.core4")}</WYSIWYGLabel>
-                  <ReactQuill
+                  <Editor
                     className="custom-trix-class"
-                    theme="snow"
                     placeholder="Please enter How Do We Succeed?"
-                    value={core4Content}
-                    onChange={setCore4Content}
+                    editorState={core4Content}
+                    onEditorStateChange={setCore4Content}
                   />
-
                   <CompanyStaticDataSection>
                     <CompanyStaticDataArea>
                       <Label htmlFor="annualInitiative">Annual Objective</Label>
@@ -466,4 +511,4 @@ const CompanyStaticDataArea = styled.div`
 
 const WYSIWYGLabel = styled(Label)`
   margin: 15px 0px;
-`
+`;

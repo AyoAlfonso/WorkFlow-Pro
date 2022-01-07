@@ -25,6 +25,13 @@ import { toJS } from "mobx";
 import { useHistory } from "react-router";
 import { Loading } from "~/components/shared/loading";
 
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 interface AddExistingManualKPIModalProps {
   kpiId?: number;
   showAddManualKPIModal: boolean;
@@ -47,7 +54,7 @@ export const AddExistingManualKPIModal = observer(
     const [title, setTitle] = useState<string>(undefined);
     const [kpi, setKpi] = useState(null);
     const [greaterThan, setGreaterThan] = useState<boolean>(true);
-    const [description, setDescription] = useState<string>();
+    const [description, setDescription] = useState<any>(null);
     const [unitType, setUnitType] = useState<string>(undefined);
     const [owner, setOwner] = useState(undefined);
     const [targetValue, setTargetValue] = useState<number>(undefined);
@@ -66,7 +73,7 @@ export const AddExistingManualKPIModal = observer(
           if (KPI) {
             setTitle(KPI.title);
             setOwner(KPI.ownedBy);
-            setDescription(KPI.description);
+            // setDescription(KPI.description);
             setGreaterThan(KPI.greaterThan);
             setUnitType(KPI.unitType);
             setTargetValue(KPI.targetValue);
@@ -99,10 +106,17 @@ export const AddExistingManualKPIModal = observer(
       }
     }, [kpi]);
 
+    useEffect(() => {
+      const convertedHtml = htmlToDraft(kpi?.description || "");
+      const contentState = ContentState.createFromBlockArray(convertedHtml.contentBlocks);
+      const editorState = EditorState.createWithContent(contentState);
+      setDescription(editorState || EditorState.createEmpty());
+    }, [kpi]);
+
     const resetModal = () => {
       setTitle(undefined);
       setGreaterThan(true);
-      setDescription(undefined);
+      setDescription(EditorState.createEmpty());
       setUnitType("numerical");
       setOwner(sessionStore?.profile);
       setTargetValue(undefined);
@@ -128,8 +142,9 @@ export const AddExistingManualKPIModal = observer(
         needsAttentionThreshold,
         id: kpi.id,
       };
+     
       if (description) {
-        updatedKpi.description = description;
+        updatedKpi.description = draftToHtml(convertToRaw(description.getCurrentContent()));
       }
       keyPerformanceIndicatorStore.updateKPI(updatedKpi).then(result => {
         if (!result) {
@@ -208,11 +223,16 @@ export const AddExistingManualKPIModal = observer(
                   Description
                 </InputHeaderWithComment>
                 <TrixEditorContainer>
-                  <ReactQuill
+                  {/* <ReactQuill
                     theme="snow"
                     placeholder={"Add a description..."}
                     value={description}
                     onChange={setDescription}
+                  /> */}
+                  <Editor
+                    placeholder={"Add a description..."}
+                    editorState={description}
+                    onEditorStateChange={e => setDescription(e)}
                   />
                 </TrixEditorContainer>
               </FormElementContainer>

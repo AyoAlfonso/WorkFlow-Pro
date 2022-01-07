@@ -19,6 +19,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "~/stylesheets/modules/react-easy-crop.css";
+import "~/stylesheets/modules/rdw-editor-main.css";
 import "~/stylesheets/modules/chatbot.css";
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)

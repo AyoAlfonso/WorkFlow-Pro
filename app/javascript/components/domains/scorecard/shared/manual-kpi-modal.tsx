@@ -22,6 +22,13 @@ import { toJS } from "mobx";
 import ReactQuill from "react-quill";
 import { useHistory } from "react-router";
 
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
+import htmlToDraft from "html-to-draftjs";
+import draftToHtml from "draftjs-to-html";
+import "~/stylesheets/modules/rdw-editor-main.css";
+
 interface ManualKPIModalProps {
   showAddManualKPIModal: boolean;
   setShowAddManualKPIModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -87,7 +94,8 @@ export const ManualKPIModal = observer(
     };
 
     const [greaterThan, setGreaterThan] = useState<boolean>(getgreaterThanValue());
-    const [description, setDescription] = useState<string>(externalManualKPIData?.description);
+    const [description, setDescription] =  useState<any>()
+    // useState<string>();
     const [unitType, setUnitType] = useState<string>(
       externalManualKPIData?.unitType || cachedUnitType || "numerical",
     );
@@ -120,9 +128,15 @@ export const ManualKPIModal = observer(
       const template = toJS(descriptionTemplateStore.descriptionTemplates).find(
         t => t.templateType == "kpi",
       );
+      let convertedHtml;
       if (template && !externalManualKPIData?.description) {
-        setDescription(template.body.body);
+       convertedHtml = htmlToDraft(template.body.body|| "");
+      } else {
+       convertedHtml = htmlToDraft(externalManualKPIData?.description|| "");
       }
+      const contentState = ContentState.createFromBlockArray(convertedHtml.contentBlocks);
+      const editorState = EditorState.createWithContent(contentState);
+      setDescription(editorState || EditorState.createEmpty());
     }, []);
 
     const resetModal = () => {
@@ -139,7 +153,7 @@ export const ManualKPIModal = observer(
     const clearData = () => {
       setTitle(undefined);
       setGreaterThan(true);
-      setDescription(undefined);
+      setDescription(EditorState.createEmpty());
       setUnitType("numerical");
       setOwner(sessionStore?.profile);
       setTargetValue(undefined);
@@ -173,7 +187,7 @@ export const ManualKPIModal = observer(
         needsAttentionThreshold,
       };
       if (description) {
-        kpi.description = description;
+        kpi.description = draftToHtml(convertToRaw(description.getCurrentContent()));
       }
       keyPerformanceIndicatorStore.createKPI(kpi).then(result => {
         if (!result) {
@@ -234,14 +248,19 @@ export const ManualKPIModal = observer(
                 Description
               </InputHeaderWithComment>
               <TrixEditorContainer>
-                <ReactQuill
+                {/* <ReactQuill
                   className="trix-kpi-modal"
                   theme="snow"
                   value={description}
                   onChange={(content, delta, source, editor) => {
                     setDescription(editor.getHTML());
                   }}
-                />
+                /> */}
+                 <Editor
+                    className="trix-kpi-modal"
+                    editorState={description}
+                    onEditorStateChange={e => setDescription(e)}
+                  />
               </TrixEditorContainer>
             </FormElementContainer>
           </RowContainer>

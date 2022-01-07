@@ -10,7 +10,10 @@ import { toJS } from "mobx";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { addDays } from "date-fns";
-import ReactQuill from "react-quill";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { EditorState } from "draft-js";
+import "~/stylesheets/modules/rdw-editor-main.css";
 
 import {
   ActionButtonsContainer,
@@ -59,7 +62,7 @@ export const JournalIndex = observer(
       },
     });
     const [editMode, setEditMode] = useState<boolean>(false);
-    const [entryUpdate, setEntryUpdate] = useState<string>("");
+    const [entryUpdate, setEntryUpdate] = useState<any>(editMode ? EditorState.createEmpty() : "");
 
     const { journalStore, sessionStore } = useMst();
 
@@ -190,13 +193,10 @@ export const JournalIndex = observer(
             }
           >
             {editMode ? (
-              <ReactQuill
+              <Editor
                 className="custom-trix-class"
-                theme="snow"
-                value={entryUpdate}
-                onChange={(content, delta, source, editor) => {
-                  setEntryUpdate(editor.getHTML());
-                }}
+                editorState={entryUpdate}
+                onEditorStateChange={e => setEntryUpdate(e)}
               />
             ) : (
               <EntryBodyCard>

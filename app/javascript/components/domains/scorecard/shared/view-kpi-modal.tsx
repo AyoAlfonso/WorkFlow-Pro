@@ -21,9 +21,16 @@ import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import { toJS } from "mobx";
 import { titleCase } from "~/utils/camelize";
 import { ScorecardKPIDropdownOptions } from "./scorecard-dropdown-options";
-import "~/stylesheets/modules/trix-editor.css";
+// import "~/stylesheets/modules/trix-editor.css";
 import { debounce } from "lodash";
 import { Button } from "~/components/shared/button";
+
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -58,7 +65,7 @@ export const ViewEditKPIModal = observer(
     const descriptionTemplateForKPI = descriptionTemplatesFormatted.find(
       t => t.templateType == "kpi",
     )?.body.body;
-    const [description, setDescription] = useState<string>("");
+    const [description, setDescription] = useState<any>(null);
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
@@ -221,7 +228,10 @@ export const ViewEditKPIModal = observer(
         keyPerformanceIndicatorStore.getKPI(kpiId).then(value => {
           const KPI = advancedKPI || keyPerformanceIndicatorStore?.kpi;
           if (KPI) {
-            setDescription(KPI.description || descriptionTemplateForKPI);
+             const convertedHtml = htmlToDraft(KPI?.description || descriptionTemplateForKPI || "");
+            const contentState = ContentState.createFromBlockArray(convertedHtml.contentBlocks);
+            const editorState = EditorState.createWithContent(contentState);
+            setDescription(editorState || EditorState.createEmpty());
             setCurrentLog();
             setKpi(KPI);
             setLoading(false);
@@ -411,16 +421,15 @@ export const ViewEditKPIModal = observer(
                   </ChartContainer>
                   <SubHeader>Description</SubHeader>
                   <TrixEditorContainer>
-                    <ReactQuill
-                      onBlur={() => {
-                        saveKPI({ description });
-                      }}
+                    <Editor
                       className="trix-kpi-modal"
-                      theme="snow"
-                      value={description}
-                      onChange={(content, delta, source, editor) => {
-                        setDescription(editor.getHTML());
+                      onBlur={() => {
+                        saveKPI({
+                          description: draftToHtml(convertToRaw(description.getCurrentContent())),
+                        });
                       }}
+                      editorState={description}
+                      onEditorStateChange={e => setDescription(e)}
                     />
                   </TrixEditorContainer>
                   <SubHeader>Activity</SubHeader>
