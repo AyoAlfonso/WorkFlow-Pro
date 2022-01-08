@@ -1,22 +1,19 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
+
 import { Calendar } from "react-date-range";
-import { Dropzone } from "./dropzone";
-import { DropzoneWithCropper } from "./dropzone-with-cropper";
-import { Input, Label, Select, TextArea, TextDiv } from "~/components/shared";
-import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw, ContentState } from "draft-js";
-import htmlToDraft from "html-to-draftjs";
-import draftToHtml from "draftjs-to-html";
-import moment from "moment";
-import "~/stylesheets/modules/rdw-editor-main.css";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
 import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
+import { Dropzone } from "./dropzone";
+import { DropzoneWithCropper } from "./dropzone-with-cropper";
+
+import { Input, Label, Select, TextArea, TextDiv } from "~/components/shared";
+
+import moment from "moment";
 
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 
@@ -71,20 +68,6 @@ export const FormBuilder = ({
 
   const formComponent = (formField: IFormField) => {
     const { fieldType, formKeys, options, callback, style, placeholder, rows } = formField;
-    const [editorFormData, setEditorFormData] = useState(null);
-    // console.log(formData, "formData");
-
-    // console.log(formKeys, fieldType, "formKeys");
-    // console.log(R.pathOr("", formKeys, formData));
-    // useEffect(() => {
-    //   if (fieldType == "HTML_EDITOR") {
-    //     const convertedHtml = htmlToDraft(R.pathOr("", formKeys, formData) || {});
-    //     const contentState = ContentState.createFromBlockArray(convertedHtml.contentBlocks);
-    //     const editorState = EditorState.createWithContent(contentState);
-    //     setEditorFormData(editorState || EditorState.createEmpty());
-    //   }
-    // }, [formData]);
-
     switch (fieldType) {
       case "TEXT_FIELD":
         return (
@@ -175,33 +158,15 @@ export const FormBuilder = ({
         );
       case "HTML_EDITOR":
         return (
-          <EditorContainer>
-            {/* <Editor
-              className="custom-trix-class trix-editor-onboarding"
-              placeholder={placeholder ? placeholder : ""}
-              editorState={editorFormData}
-              onEditorStateChange={e => {
-                callback(formKeys, draftToHtml(convertToRaw(e.getCurrentContent())));
-                setEditorFormData(e);
-              }}
-              toolbar={{
-                bold: { inDropdown: true },
-                italic: { inDropdown: true },
-                underline: { inDropdown: true },
-                list: { inDropdown: true },
-                link: { inDropdown: true },
-              }}
-            /> */}
-            <ReactQuill
-              className="custom-trix-class trix-editor-onboarding"
-              theme="snow"
-              placeholder={placeholder ? placeholder : ""}
-              value={R.pathOr("", formKeys, formData)}
-              onChange={(content, delta, source, editor) => {
-                callback(formKeys, editor.getHTML());
-              }}
-            />
-          </EditorContainer>
+          <ReactQuill
+            className="custom-trix-class trix-editor-onboarding"
+            theme="snow"
+            placeholder={placeholder ? placeholder : ""}
+            value={R.pathOr("", formKeys, formData)}
+            onChange={(content, delta, source, editor) => {
+              callback(formKeys, editor.getHTML());
+            }}
+          />
         );
     }
   };
@@ -255,16 +220,6 @@ const Container = styled.div`
 type FormContainerProps = {
   marginBottom?: string;
 };
-
-type EditorProps = {
-  marginBottom?: string;
-  marginTop?: string;
-};
-
-const EditorContainer = styled.div<EditorProps>`
-  margin-bottom: ${props => (props.marginBottom ? props.marginBottom : "24px")};
-  margin-top: ${props => (props.marginTop ? props.marginTop : "24px")};
-`;
 
 const FormContainer = styled.div<FormContainerProps>`
   margin-bottom: ${props => (props.marginBottom ? props.marginBottom : "24px")};
