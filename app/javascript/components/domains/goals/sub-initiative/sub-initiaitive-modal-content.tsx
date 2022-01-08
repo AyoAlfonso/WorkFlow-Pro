@@ -15,12 +15,6 @@ import { InitiativeHeader } from "../shared-quarterly-goal-and-sub-initiative/in
 import { ShowMilestonesButton } from "../shared-quarterly-goal-and-sub-initiative/show-milestones-button";
 import { toJS } from "mobx";
 import ReactQuill from "react-quill";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw, ContentState } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 interface ISubInitiativeModalContentProps {
   subInitiativeId: number;
@@ -50,7 +44,7 @@ export const SubInitiativeModalContent = observer(
       false,
     );
     const [showInitiatives, setShowInitiatives] = useState<boolean>(true);
-    const [description, setDescription] = useState<any>(null);
+    const [description, setDescription] = useState<string>("");
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
 
     const descriptionTemplateForInitiatives = descriptionTemplatesFormatted.find(
@@ -61,24 +55,20 @@ export const SubInitiativeModalContent = observer(
       subInitiativeStore.getSubInitiative(subInitiativeId).then(() => {
         const subInitiative = subInitiativeStore.subInitiative;
         if (subInitiative) {
-          const convertedHtml = htmlToDraft(
-            subInitiative.contextDescription || descriptionTemplateForInitiatives || "",
-          );
-          const contentState = ContentState.createFromBlockArray(convertedHtml.contentBlocks);
-          const editorState = EditorState.createWithContent(contentState);
-          setDescription(editorState || EditorState.createEmpty());
+          setDescription(subInitiative.contextDescription || descriptionTemplateForInitiatives);
           setSubInitiative(subInitiative);
         }
       });
     }, []);
 
-    useEffect(() => {
-      const subInitiative = subInitiativeStore?.subInitiative;
-    }, [subInitiativeStore.subInitiative, descriptionTemplateForInitiatives]);
-
     if (subInitiative == null) {
       return <Loading />;
     }
+
+    const handleChange = text => {
+      setDescription(text);
+    };
+
     const editable =
       currentUser.id == subInitiative.ownedById ||
       currentUser.role == RoleCEO ||
@@ -151,17 +141,18 @@ export const SubInitiativeModalContent = observer(
           </SubInitiativeBodyContainer>
           <SubHeader>Description</SubHeader>
           <TrixEditorContainer>
-            <Editor
-              className="trix-initiative-modal"
+            <ReactQuill
               onBlur={() => {
-                subInitiativeStore.updateModelField(
-                  "contextDescription",
-                  draftToHtml(convertToRaw(description.getCurrentContent())),
-                );
+                subInitiativeStore.updateModelField("contextDescription", description);
                 subInitiativeStore.update();
               }}
-              editorState={description}
-              onEditorStateChange={e => setDescription(e)}
+              className="trix-initiative-modal"
+              theme="snow"
+              placeholder={"Add a description..."}
+              value={description}
+              onChange={(content, delta, source, editor) => {
+                handleChange(editor.getHTML());
+              }}
             />
           </TrixEditorContainer>
         </Container>

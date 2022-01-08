@@ -21,13 +21,6 @@ import { CreateGoalSection } from "../shared/create-goal-section";
 import { sortByDate } from "~/utils/sorting";
 import ReactQuill from "react-quill";
 
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw, ContentState } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
   setQuarterlyGoalModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -67,7 +60,7 @@ export const QuarterlyGoalModalContent = observer(
     const [quarterlyGoal, setQuarterlyGoal] = useState(null);
     const [showInitiatives, setShowInitiatives] = useState<boolean>(false);
     const [showMilestones, setShowMilestones] = useState<boolean>(true);
-    const [description, setDescription] = useState<any>(null);
+    const [description, setDescription] = useState<string>("");
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
 
     const descriptionTemplateForInitiatives = descriptionTemplatesFormatted.find(
@@ -79,14 +72,10 @@ export const QuarterlyGoalModalContent = observer(
 
     useEffect(() => {
       quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
+        // setQuarterlyGoal(quarterlyGoalStore.quarterlyGoal);
         const quarterlyGoal = quarterlyGoalStore?.quarterlyGoal;
         if (quarterlyGoal) {
-          const convertedHtml = htmlToDraft(
-            quarterlyGoal.contextDescription || descriptionTemplateForInitiatives || "",
-          );
-          const contentState = ContentState.createFromBlockArray(convertedHtml.contentBlocks);
-          const editorState = EditorState.createWithContent(contentState);
-          setDescription(editorState || EditorState.createEmpty());
+          setDescription(quarterlyGoal.contextDescription || descriptionTemplateForInitiatives);
           setQuarterlyGoal(quarterlyGoal);
         }
       });
@@ -95,6 +84,10 @@ export const QuarterlyGoalModalContent = observer(
     if (quarterlyGoal == null) {
       return <Loading />;
     }
+
+    const handleChange = text => {
+      setDescription(text);
+    };
 
     const editable =
       currentUser.id == quarterlyGoal.ownedById ||
@@ -224,15 +217,9 @@ export const QuarterlyGoalModalContent = observer(
                   {editable && (
                     <CreateGoalContainer>
                       <CreateGoalSection
-                        placeholder={t("subInitiative.enterTitle", {
-                          title: subInitiativeTitle,
-                        })}
-                        addButtonText={`${t("subInitiative.add", {
-                          title: subInitiativeTitle,
-                        })}`}
-                        createButtonText={t("subInitiative.addGoal", {
-                          title: subInitiativeTitle,
-                        })}
+                        placeholder={t("subInitiative.enterTitle", { title: subInitiativeTitle })}
+                        addButtonText={`${t("subInitiative.add", { title: subInitiativeTitle })}`}
+                        createButtonText={t("subInitiative.addGoal", { title: subInitiativeTitle })}
                         showCreateGoal={showCreateSubInitiative}
                         setShowCreateGoal={setShowCreateSubInitiative}
                         createAction={subInitiativeStore.create}
@@ -249,17 +236,18 @@ export const QuarterlyGoalModalContent = observer(
           </QuarterlyGoalBodyContainer>
           <SubHeader>Description</SubHeader>
           <TrixEditorContainer>
-            <Editor
-              className="trix-initiative-modal"
+            <ReactQuill
               onBlur={() => {
-                quarterlyGoalStore.updateModelField(
-                  "contextDescription",
-                  draftToHtml(convertToRaw(description.getCurrentContent())),
-                );
+                quarterlyGoalStore.updateModelField("contextDescription", description);
                 quarterlyGoalStore.update();
               }}
-              editorState={description}
-              onEditorStateChange={e => setDescription(e)}
+              className="trix-initiative-modal"
+              theme="snow"
+              placeholder={"Add a description..."}
+              value={description}
+              onChange={(content, delta, source, editor) => {
+                handleChange(editor.getHTML());
+              }}
             />
           </TrixEditorContainer>
         </Container>

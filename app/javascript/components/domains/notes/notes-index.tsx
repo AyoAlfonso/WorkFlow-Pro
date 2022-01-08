@@ -39,10 +39,6 @@ import { Text } from "~/components/shared/text";
 import { Icon } from "~/components/shared/icon";
 import { Avatar } from "~/components/shared/avatar";
 import { Loading } from "~/components/shared";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState } from "draft-js";
-import "~/stylesheets/modules/rdw-editor-main.css";
 
 export interface INotesIndexProps {}
 
@@ -72,7 +68,7 @@ export const NotesIndex = observer(
     });
     const [noteTypeFilter, setNoteTypeFilter] = useState<any>({});
     const [editMode, setEditMode] = useState<boolean>(false);
-    const [entryUpdate, setEntryUpdate] = useState<any>(editMode ? EditorState.createEmpty() : "");
+    const [entryUpdate, setEntryUpdate] = useState<string>("");
 
     const { meetingStore, userStore, sessionStore, teamStore } = useMst();
 
@@ -283,10 +279,13 @@ export const NotesIndex = observer(
             }
           >
             {editMode ? (
-              <Editor
+              <ReactQuill
                 className="custom-trix-class"
-                editorState={entryUpdate}
-                onEditorStateChange={e => setEntryUpdate(e)}
+                theme="snow"
+                value={entryUpdate}
+                onChange={(content, delta, source, editor) => {
+                  setEntryUpdate(editor.getHTML());
+                }}
               />
             ) : (
               <EntryBodyCard>{ReactHtmlParser(selectedItem.notes)}</EntryBodyCard>

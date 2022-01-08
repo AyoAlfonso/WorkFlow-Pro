@@ -23,13 +23,7 @@ import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
 import { toJS } from "mobx";
 import moment from "moment";
 import { sortByDate } from "~/utils/sorting";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw, ContentState } from "draft-js";
-import htmlToDraft from "html-to-draftjs";
-import draftToHtml from "draftjs-to-html";
-import "~/stylesheets/modules/rdw-editor-main.css";
-
+import ReactQuill from "react-quill";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -62,7 +56,7 @@ export const AnnualInitiativeModalContent = observer(
       false,
     );
     const [showInitiatives, setShowInitiatives] = useState<boolean>(true);
-    const [description, setDescription] = useState<any>(null);
+    const [description, setDescription] = useState<string>("");
     const [annualInitiative, setAnnualInitiative] = useState(null);
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
 
@@ -83,23 +77,19 @@ export const AnnualInitiativeModalContent = observer(
       annualInitiativeStore.getAnnualInitiative(annualInitiativeId).then(() => {
         const annualInitiative = annualInitiativeStore?.annualInitiative;
         if (annualInitiative) {
+          setDescription(annualInitiative.contextDescription || descriptionTemplateForObjective);
           setAnnualInitiative(annualInitiative);
         }
       });
     }, []);
 
-    useEffect(() => {
-      const convertedHtml = htmlToDraft(
-        annualInitiative?.contextDescription || descriptionTemplateForObjective || "",
-      );
-      const contentState = ContentState.createFromBlockArray(convertedHtml.contentBlocks);
-      const editorState = EditorState.createWithContent(contentState);
-      setDescription(editorState || EditorState.createEmpty());
-    }, [annualInitiative?.contextDescription, descriptionTemplateForObjective]);
-
     if (annualInitiative == null) {
       return <Loading />;
     }
+
+    const handleChange = text => {
+      setDescription(text);
+    };
 
     const editable =
       (currentUser.id == annualInitiative.ownedById ||
@@ -313,19 +303,18 @@ export const AnnualInitiativeModalContent = observer(
           {showInitiatives ? <SectionContainer>{renderGoals()}</SectionContainer> : <></>}
           <SubHeader>Description</SubHeader>
           <TrixEditorContainer>
-            <Editor
+            <ReactQuill
               onBlur={() => {
-                annualInitiativeStore.updateModelField(
-                  "contextDescription",
-                  draftToHtml(convertToRaw(description.getCurrentContent())),
-                );
+                annualInitiativeStore.updateModelField("contextDescription", description);
                 annualInitiativeStore.update();
               }}
               className="trix-objective-modal"
               theme="snow"
               placeholder={"Add a description..."}
-              editorState={description}
-              onEditorStateChange={e => setDescription(e)}
+              value={description}
+              onChange={(content, delta, source, editor) => {
+                handleChange(editor.getHTML());
+              }}
             />
           </TrixEditorContainer>
         </Container>
