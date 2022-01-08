@@ -148,7 +148,8 @@
         "team": "Team",
         "company": "Company",
         "goals": "Objectives",
-        "forum": "Meeting",
+        "meeting": "Meeting",
+        "forum": "Forum",
         "meetings": "Meeting",
         "scorecards": "Scorecards",
         "checkin": "Check-in"
