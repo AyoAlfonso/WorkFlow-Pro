@@ -304,7 +304,7 @@ export const SideNavNoMst = (
             icon={"Team"}
             currentPathName={currentPathName}
           >
-            {t("navigation.forum")}
+            {type == "forum" ? t("navigation.forum") : t("navigation.meeting")}
           </StyledProgrammaticLinkChildrenActive>
         );
       default:
