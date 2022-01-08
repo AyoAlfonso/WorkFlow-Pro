@@ -72,18 +72,18 @@ export const FormBuilder = ({
   const formComponent = (formField: IFormField) => {
     const { fieldType, formKeys, options, callback, style, placeholder, rows } = formField;
     const [editorFormData, setEditorFormData] = useState(null);
-    console.log(formData, "formData");
+    // console.log(formData, "formData");
 
-    console.log(formKeys, fieldType, "formKeys");
-    console.log(R.pathOr("", formKeys, formData));
-    useEffect(() => {
-      if (fieldType == "HTML_EDITOR") {
-        const convertedHtml = htmlToDraft(R.pathOr("", formKeys, formData) || {});
-        const contentState = ContentState.createFromBlockArray(convertedHtml.contentBlocks);
-        const editorState = EditorState.createWithContent(contentState);
-        setEditorFormData(editorState || EditorState.createEmpty());
-      }
-    }, [formData]);
+    // console.log(formKeys, fieldType, "formKeys");
+    // console.log(R.pathOr("", formKeys, formData));
+    // useEffect(() => {
+    //   if (fieldType == "HTML_EDITOR") {
+    //     const convertedHtml = htmlToDraft(R.pathOr("", formKeys, formData) || {});
+    //     const contentState = ContentState.createFromBlockArray(convertedHtml.contentBlocks);
+    //     const editorState = EditorState.createWithContent(contentState);
+    //     setEditorFormData(editorState || EditorState.createEmpty());
+    //   }
+    // }, [formData]);
 
     switch (fieldType) {
       case "TEXT_FIELD":
