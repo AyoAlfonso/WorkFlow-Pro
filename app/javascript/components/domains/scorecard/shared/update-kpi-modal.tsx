@@ -83,7 +83,6 @@ export const MiniUpdateKPIModal = observer(
     }, [showAdvancedSettings]);
 
     const handleSave = () => {
-      console.log(Math.floor((currentWeek - 1) / 13) + 1);
       if (value != undefined) {
         const log = {
           keyPerformanceIndicatorId: kpiId,

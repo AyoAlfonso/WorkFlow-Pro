@@ -66,17 +66,23 @@ export const FormBuilder = ({
   marginBottom,
 }: IFormBuilderProps): JSX.Element => {
   const classes = useStyles();
-  const [editorFormData, setEditorFormData] = useState(null);
-
-  useEffect(() => {
-    const convertedHtml = htmlToDraft(formData || {});
-    const contentState = ContentState.createFromBlockArray(convertedHtml.contentBlocks);
-    const editorState = EditorState.createWithContent(contentState);
-    setEditorFormData(editorState || EditorState.createEmpty());
-  }, [formData]);
 
   const formComponent = (formField: IFormField) => {
     const { fieldType, formKeys, options, callback, style, placeholder, rows } = formField;
+    const [editorFormData, setEditorFormData] = useState(null);
+    console.log(formData, "formData");
+
+    console.log(formKeys, fieldType, "formKeys");
+    console.log(R.pathOr("", formKeys, formData));
+    useEffect(() => {
+      if (fieldType == "HTML_EDITOR") {
+        const convertedHtml = htmlToDraft(R.pathOr("", formKeys, formData) || {});
+        const contentState = ContentState.createFromBlockArray(convertedHtml.contentBlocks);
+        const editorState = EditorState.createWithContent(contentState);
+        setEditorFormData(editorState || EditorState.createEmpty());
+      }
+    }, [formData]);
+
     switch (fieldType) {
       case "TEXT_FIELD":
         return (
@@ -167,18 +173,33 @@ export const FormBuilder = ({
         );
       case "HTML_EDITOR":
         return (
-          <Editor
-            className="custom-trix-class trix-editor-onboarding"
-            placeholder={placeholder ? placeholder : ""}
-            editorState={editorFormData}
-            onEditorStateChange={e => {
-              callback(
-                formKeys,
-                R.pathOr("", formKeys, draftToHtml(convertToRaw(e.getCurrentContent()))),
-              );
-              setEditorFormData(e);
-            }}
-          />
+          <EditorContainer>
+            {/* <Editor
+              className="custom-trix-class trix-editor-onboarding"
+              placeholder={placeholder ? placeholder : ""}
+              editorState={editorFormData}
+              onEditorStateChange={e => {
+                callback(formKeys, draftToHtml(convertToRaw(e.getCurrentContent())));
+                setEditorFormData(e);
+              }}
+              toolbar={{
+                bold: { inDropdown: true },
+                italic: { inDropdown: true },
+                underline: { inDropdown: true },
+                list: { inDropdown: true },
+                link: { inDropdown: true },
+              }}
+            /> */}
+            <ReactQuill
+              className="custom-trix-class trix-editor-onboarding"
+              theme="snow"
+              placeholder={placeholder ? placeholder : ""}
+              value={R.pathOr("", formKeys, formData)}
+              onChange={(content, delta, source, editor) => {
+                callback(formKeys, editor.getHTML());
+              }}
+            />
+          </EditorContainer>
         );
     }
   };
@@ -232,6 +253,16 @@ const Container = styled.div`
 type FormContainerProps = {
   marginBottom?: string;
 };
+
+type EditorProps = {
+  marginBottom?: string;
+  marginTop?: string;
+};
+
+const EditorContainer = styled.div<EditorProps>`
+  margin-bottom: ${props => (props.marginBottom ? props.marginBottom : "24px")};
+  margin-top: ${props => (props.marginTop ? props.marginTop : "24px")};
+`;
 
 const FormContainer = styled.div<FormContainerProps>`
   margin-bottom: ${props => (props.marginBottom ? props.marginBottom : "24px")};
