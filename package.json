@@ -7,6 +7,9 @@
     "build-storybook": "build-storybook -c .storybook -o .out",
     "chromatic": "npx chromatic --project-token=csgzsa3zl9q --exit-zero-on-changes"
   },
+  "engines": {
+  "node": "14.17.3"
+},
   "dependencies": {
     "@activeadmin/activeadmin": "^2.7.0",
     "@babel/plugin-proposal-private-methods": "^7.14.5",

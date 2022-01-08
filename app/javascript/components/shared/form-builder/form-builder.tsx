@@ -16,6 +16,8 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
+import ReactQuill from "react-quill";
+
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme =>
