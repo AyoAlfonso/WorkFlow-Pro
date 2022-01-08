@@ -7,6 +7,9 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import "~/stylesheets/modules/quill.snow.css";
+import "~/stylesheets/modules/quill.bubble.css";
+import "~/stylesheets/modules/quill.core.css";
 
 import { Dropzone } from "./dropzone";
 import { DropzoneWithCropper } from "./dropzone-with-cropper";
