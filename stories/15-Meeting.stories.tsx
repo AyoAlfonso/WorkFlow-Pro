@@ -64,7 +64,7 @@ export const Meeting = () => {
   const childrenUnderDescription = () => (
     <ChildrenContainer>
       {renderVisibilityText()}
-      {/* <CheckInSideOptions checkIn={meeting} /> */} 
+      {/* <CheckInSideOptions checkIn={meeting} /> */}
     </ChildrenContainer>
   );
 
@@ -97,11 +97,7 @@ export const Meeting = () => {
       <>
         {currentStep > 0 && (
           <LeftButtonContainer>
-            <BackButton
-              small
-              variant={"primaryOutline"}
-              onClick={() => nextStep(currentStep - 1)}
-            >
+            <BackButton small variant={"primaryOutline"} onClick={() => nextStep(currentStep - 1)}>
               <StyledBackIcon icon={"Move2"} size={"15px"} iconColor={"primary100"} />
             </BackButton>
           </LeftButtonContainer>
@@ -127,14 +123,37 @@ export const Meeting = () => {
   };
 
   const renderStepsForMobile = () => (
-    <QuestionText type={"small"}>
-      {`Question ${currentStep + 1} / ${numberOfSteps}`}
-    </QuestionText>
+    <QuestionText type={"small"}>{`Question ${currentStep + 1} / ${numberOfSteps}`}</QuestionText>
   );
   return (
     <>
       <ContainerDiv>
         <h1>Wizard Layout</h1>
+        <CodeBlockDiv mb={"20px"}>
+          <CopyBlock
+            text={`
+              import * as React from "react";
+              import { WizardLayout } from "~/components/layouts/wizard-layout";
+              
+              <WizardLayout
+                title={meetingTitle()}
+                description={meetingDescription()}
+                customActionButton={actionButtons()}
+                childrenUnderDescription={childrenUnderDescription()}
+                showSkipButton={false}
+                singleComponent={meetingComponent()}
+                showLynchpynLogo={false}
+                showCloseButton={true}
+                onCloseButtonClick={closeButtonClick}
+                stepsForMobile={renderStepsForMobile()}
+                textUnderMobileButton={renderVisibilityText()}
+              />
+              )
+            `}
+            language={"tsx"}
+            theme={atomOneLight}
+          />
+        </CodeBlockDiv>
         <Container>
           <WizardLayout
             title={meetingTitle()}
