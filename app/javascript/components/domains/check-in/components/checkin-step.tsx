@@ -14,10 +14,10 @@ import { KpiComponent } from "./kpi";
 import { WeeklyKeyResults } from "./weekly-key-results";
 
 export interface ICheckinStepProps {
-  checkin: IMeeting;
+  checkin: any;
 }
 
-const StepComponent = (step: IStep, checkin: IMeeting) => { 
+const StepComponent = (step: IStep) => { 
   switch (step.stepType) {
     case "component":
       switch (step.componentToRender) { 
@@ -50,7 +50,7 @@ export const CheckinStep = observer(
     return (
       <BodyContainer>
         <StepComponentContainer>
-          {StepComponent(checkin.currentStepDetails, checkin)}
+          {StepComponent(checkin.currentStepDetails)}
         </StepComponentContainer>
       </BodyContainer>
     );
