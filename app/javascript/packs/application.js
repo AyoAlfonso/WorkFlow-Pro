@@ -4,14 +4,15 @@
 // that code so it'll be compiled.
 
 require("@rails/ujs").start();
+
 require("turbolinks").start();
 require("@rails/activestorage").start();
 require("channels");
-// require("trix");
+// require("trix")
 import "trix";
 require("@rails/actiontext");
 import "trix/dist/trix.css";
-import "trix/dist/trix.js";
+// import "trix/dist/trix.js";
 import "react-toastify/dist/ReactToastify.css";
 import "react-step-progress-bar/styles.css";
 import "react-vis/dist/style.css";
@@ -24,6 +25,9 @@ import "~/stylesheets/modules/chatbot.css";
 import "~/stylesheets/modules/quill.snow.css";
 import "~/stylesheets/modules/quill.bubble.css";
 import "~/stylesheets/modules/quill.core.css";
+// import "~/stylesheets/modules/trix.css";
+// import "~/stylesheets/js/trix.core";
+// import "~/stylesheets/js/trix.core";
 
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)
