@@ -62,7 +62,6 @@ class Api::CompaniesController < Api::ApplicationController
   end
 
   def get_onboarding_company
-    #logo_url
     user_company_enablements = UserCompanyEnablement.where(user_id: current_user.id)
     @onboarding_company = Company.where(id: user_company_enablements.pluck(:company_id), onboarding_status: :incomplete).last
     render json: @onboarding_company.as_json(only: ["id", "name", "phone_number", "rallying_cry", "fiscal_year_start", "timezone", "display_format", "forum_type", "objectives_key_type"],
@@ -167,7 +166,11 @@ class Api::CompaniesController < Api::ApplicationController
 
   def create_or_update_onboarding_team
     @team = Team.where(company_id: @onboarding_company.id)
-    @team = Team.create!(company_id: @onboarding_company.id, name: params[:team_name], settings: {}) unless Team.where(company_id:  @onboarding_company.id).present?
+
+    if Team.where(company_id: @onboarding_company.id).blank? 
+     @team = Team.create!(company_id: @onboarding_company.id, name: params[:team_name], settings: {})
+    end
+    
     @team.set_default_executive_team if Team.where(company_id: @team.company.id, executive: 1).blank?
     @team.set_default_avatar_color
     authorize @team

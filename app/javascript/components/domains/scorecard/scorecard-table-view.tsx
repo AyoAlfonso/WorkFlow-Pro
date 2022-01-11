@@ -167,7 +167,7 @@ export const ScorecardTableView = observer(
 
     const data = useMemo(
       () =>
-        KPIs?.map((kpi: any) => {
+        R.sort(R.ascend(R.prop("createdAt")), KPIs)?.map((kpi: any) => {
           const targetText = formatValue(kpi.unitType, kpi.targetValue);
           const title = `${kpi.title}`;
           const logic = kpi.greaterThan
@@ -491,8 +491,7 @@ export const ScorecardTableView = observer(
     };
 
     const createGoalYearString =
-      company.currentFiscalYear ==
-      company.yearForCreatingAnnualInitiatives
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
         ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
         : `FY${(company.currentFiscalYear - 1)
             .toString()
