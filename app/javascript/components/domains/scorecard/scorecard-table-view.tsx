@@ -490,6 +490,7 @@ export const ScorecardTableView = observer(
       setHiddenColumns(getHiddenWeeks(q));
     };
 
+  //Turn this into a shared function
     const createGoalYearString =
       company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
         ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`

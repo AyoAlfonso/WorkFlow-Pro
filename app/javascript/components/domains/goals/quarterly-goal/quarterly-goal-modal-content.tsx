@@ -48,6 +48,7 @@ export const QuarterlyGoalModalContent = observer(
     const {
       quarterlyGoalStore,
       sessionStore,
+      companyStore,
       subInitiativeStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
@@ -143,11 +144,14 @@ export const QuarterlyGoalModalContent = observer(
       });
     };
 
-    const goalYearString = `FY${quarterlyGoal.fiscalYear.toString().slice(-2)}/${(
-      quarterlyGoal.fiscalYear + 1
-    )
-      .toString()
-      .slice(-2)}`;
+    const goalYearString =
+      companyStore.company.currentFiscalYear ==
+      companyStore.company.yearForCreatingAnnualInitiatives
+        ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+        : `FY${(companyStore.company.currentFiscalYear - 1)
+            .toString()
+            .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
+
 
     return (
       <>

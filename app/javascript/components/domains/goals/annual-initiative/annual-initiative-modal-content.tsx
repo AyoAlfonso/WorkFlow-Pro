@@ -169,9 +169,14 @@ export const AnnualInitiativeModalContent = observer(
       );
     };
 
-    const goalYearString = `FY${annualInitiative.fiscalYear % 100}/${(annualInitiative.fiscalYear +
-      1) %
-      100}`;
+    const goalYearString =
+      companyStore.company.currentFiscalYear ==
+      companyStore.company.yearForCreatingAnnualInitiatives
+        ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+        : `FY${(companyStore.company.currentFiscalYear - 1)
+            .toString()
+            .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
+
 
     const renderHeader = (): JSX.Element => {
       return (
