@@ -48,7 +48,9 @@ export const ScorecardTableView = observer(
     const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
     const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
     const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
-
+    const [dropdownQuarter, setDropdownQuarter] = useState(
+      company.currentFiscalQuarter + "_" + company.yearForCreatingAnnualInitiatives,
+    );
     const [targetWeek, setTargetWeek] = useState<number>(undefined);
     const [targetValue, setTargetValue] = useState<number>(undefined);
     const [tab, setTab] = useState<string>("KPIs");
@@ -296,6 +298,7 @@ export const ScorecardTableView = observer(
           minWidth: "86px",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
+
             const { relatedParentKpis, parentKpi } = row.original.updateKPI;
             const { greaterThan } = row.original;
 
@@ -485,18 +488,33 @@ export const ScorecardTableView = observer(
       setHiddenColumns,
     } = tableInstance;
 
-    const handleQuarterSelect = q => {
+    const handleQuarterSelect = dq => {
+      console.log(dq);
+      console.log(dq.split("_"));
+      const [q, y] = dq.split("_");
+      setYear(y);
       setQuarter(q);
+      setDropdownQuarter(dq);
       setHiddenColumns(getHiddenWeeks(q));
     };
 
-  //Turn this into a shared function
+    //Turn this into a shared function
     const createGoalYearString =
       company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
         ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
         : `FY${(company.currentFiscalYear - 1)
             .toString()
             .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
+
+    const createPreviousGoalYearString =
+      //the step pattern makes sense define variables at top of func also
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? `FY${(company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
+        : `FY${(company.currentFiscalYear - 2).toString().slice(-2)}/${(
+            company.currentFiscalYear - 1
+          )
+            .toString()
+            .slice(-2)}`;
 
     return (
       <>
@@ -510,13 +528,21 @@ export const ScorecardTableView = observer(
               ))}
             </TabContainer>
             <Select
-              selection={quarter}
+              selection={dropdownQuarter}
               setSelection={handleQuarterSelect}
               id={"scorecard-quarter-selection"}
             >
               {R.range(1, 5).map((n: number) => (
-                <option key={n} value={n}>
-                  Q{n} {createGoalYearString}
+                <option
+                  key={n + "_" + createPreviousGoalYearString}
+                  value={n + "_" + createPreviousGoalYearString}
+                >
+                  Q{n} {createPreviousGoalYearString} {n + "_" + createPreviousGoalYearString}
+                </option>
+              ))}
+              {R.range(1, 5).map((n: number) => (
+                <option key={n + "_" + createGoalYearString} value={n + "_" + createGoalYearString}>
+                  Q{n} {createGoalYearString} {n + "_" + createGoalYearString}
                 </option>
               ))}
             </Select>
@@ -585,7 +611,8 @@ export const ScorecardTableView = observer(
             kpiId={updateKPI.id}
             ownedById={updateKPI.ownedById}
             unitType={updateKPI.unitType}
-            year={company.yearForCreatingAnnualInitiatives}
+            year={year || company.yearForCreatingAnnualInitiatives}
+            quarter={quarter}
             week={targetWeek || company.currentFiscalWeek}
             currentValue={targetValue || updateKPI.currentValue}
             headerText={targetWeek ? `Update Week ${targetWeek}` : " Update Current Week "}
