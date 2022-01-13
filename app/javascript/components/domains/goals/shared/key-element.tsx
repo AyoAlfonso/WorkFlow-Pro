@@ -36,8 +36,7 @@ interface IKeyElementProps {
   date?: any;
   initiativeId?: number;
   keyElement?: any;
-  noValueMargin?: boolean;
-  // TODO: set correct type
+  targetValueMargin?: string;
 }
 
 export const KeyElement = observer(
@@ -53,7 +52,7 @@ export const KeyElement = observer(
     setSelectedElement,
     initiativeId,
     keyElement,
-    noValueMargin,
+    targetValueMargin,
   }: IKeyElementProps): JSX.Element => {
     const {
       annualInitiativeStore,
@@ -424,9 +423,9 @@ export const KeyElement = observer(
                     />
                     <SymbolContainer>{completionSymbol(element.completionType)}</SymbolContainer>
                   </InputContainer>
-                  <ValueSpanContainer noMarginRight={noValueMargin}>
-                    <ValueSpan>{`${renderElementCompletionTargetValue()}`}</ValueSpan>
-                  </ValueSpanContainer>
+                  <TargetValueContainer marginRight={targetValueMargin}>
+                    <TargetValue>{`${renderElementCompletionTargetValue()}`}</TargetValue>
+                  </TargetValueContainer>
                 </ValueInputContainer>
                 {type !== "onboarding" && type != "checkIn" && (
                   <ProgressBarContainer>
@@ -715,26 +714,26 @@ const ValueInputContainer = styled.div`
   justify-content: space-between;
 `;
 
-const ValueSpan = styled.span`
+const TargetValue = styled.span`
   font-weight: bold;
   display: inline-block;
 `;
 
-type IValueSpanContainer = {
-  noMarginRight?: boolean;
+type ITargetValueContainer = {
+  marginRight?: string;
 }
 
-const ValueSpanContainer = styled.div<IValueSpanContainer>`
+const TargetValueContainer = styled.div<ITargetValueContainer>`
   width: 3em;
   margin-left: 50px;
-  margin-right: ${props => (props.noMarginRight ? "0px" : "50px")};
+  margin-right: ${props => (props.marginRight ? props.marginRight : "50px")};
   text-align: center;
   @media only screen and (max-width: 768px) {
     display: inline;
   }
 `;
 
-const ValueSpanContainerMobile = styled.span`
+const TargetValueContainerMobile = styled.span`
   display: none;
   @media only screen and (max-width: 768px) {
     display: inline;

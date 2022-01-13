@@ -72,7 +72,7 @@ export const Milestones = observer(
       return (
         keyElementsForWeeklyCheckin &&
         groupKrs().map((groupedKrs: Array<any>, index) => {
-          const user = userStore.users.find(user => user.id == groupedKrs[0]["elementableOwnedBy"]);
+          const user = userStore.users?.find(user => user.id == groupedKrs[0]["elementableOwnedBy"]);
           return (
             <Container key={index}>
               <TopSection>
@@ -96,7 +96,7 @@ export const Milestones = observer(
                     editable={true}
                     lastKeyElement={lastKeyElement}
                     type={"checkIn"}
-                    noValueMargin={true}
+                    targetValueMargin={"0"}
                   />
                 );
               })}
