@@ -26,8 +26,10 @@ export const KpiComponent = observer(
     const { t } = useTranslation();
 
     const {
-      profile: { id },
+      profile
     } = sessionStore;
+
+    const id = profile?.id
 
     const { weekOf } = useParams();
 
