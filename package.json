@@ -5,7 +5,8 @@
     "lint": "eslint app/javascript/**/*.ts[x]",
     "storybook": "start-storybook",
     "build-storybook": "build-storybook -c .storybook -o .out",
-    "chromatic": "npx chromatic --project-token=csgzsa3zl9q --exit-zero-on-changes"
+    "chromatic": "npx chromatic --project-token=csgzsa3zl9q --exit-zero-on-changes",
+    "test": "jest"
   },
   "dependencies": {
     "@activeadmin/activeadmin": "^2.7.0",
@@ -104,11 +105,14 @@
     "@babel/core": "^7.16.7",
     "@babel/preset-env": "^7.16.7",
     "@babel/preset-react": "^7.16.7",
+    "@babel/preset-typescript": "^7.16.7",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-info": "^5.3.19",
     "@storybook/addon-knobs": "^5.3.19",
     "@storybook/preset-typescript": "^3.0.0",
     "@storybook/react": "^5.3.19",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@types/jest": "^27.4.0",
     "@types/webpack-env": "^1.15.2",
     "@typescript-eslint/eslint-plugin": "^3.2.0",
     "@typescript-eslint/parser": "^3.2.0",
@@ -116,11 +120,13 @@
     "babel-preset-es2015": "^6.24.1",
     "chromatic": "^5.0.0",
     "eslint": "^7.2.0",
+    "jest": "^27.4.7",
     "react-code-blocks": "^0.0.7",
     "reactotron-apisauce": "^3.0.0",
     "reactotron-mst": "^3.1.3",
     "reactotron-react-js": "^3.3.7",
     "storybook-addon-i18next": "^1.3.0",
+    "ts-jest": "^27.1.2",
     "webpack-dev-server": "^3"
   }
 }

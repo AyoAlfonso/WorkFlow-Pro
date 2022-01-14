@@ -45,12 +45,30 @@ export const ScorecardTableView = observer(
     } = useMst();
     const KPIs = toJS(tableKPIs);
 
+    //Turn this into a shared function
+    const createGoalYearString =
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+        : `FY${(company.currentFiscalYear - 1)
+            .toString()
+            .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
+
+    const createPreviousGoalYearString =
+      //the step pattern makes sense define variables at top of func also
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? `FY${(company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
+        : `FY${(company.currentFiscalYear - 2).toString().slice(-2)}/${(
+            company.currentFiscalYear - 1
+          )
+            .toString()
+            .slice(-2)}`;
     const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
     const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
     const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
     const [dropdownQuarter, setDropdownQuarter] = useState(
-      company.currentFiscalQuarter + "_" + company.yearForCreatingAnnualInitiatives,
+      company.currentFiscalQuarter + "_" + createGoalYearString,
     );
+
     const [targetWeek, setTargetWeek] = useState<number>(undefined);
     const [targetValue, setTargetValue] = useState<number>(undefined);
     const [tab, setTab] = useState<string>("KPIs");
@@ -269,7 +287,16 @@ export const ScorecardTableView = observer(
           },
         },
         {
-          Header: () => <div style={{ textAlign: "left", fontSize: "14px" }}>KPIs</div>,
+          Header: () => (
+            <div
+              style={{
+                textAlign: "left",
+                fontSize: "14px",
+              }}
+            >
+              KPIs
+            </div>
+          ),
           accessor: "title",
           Cell: ({ value }) => {
             return (
@@ -477,7 +504,11 @@ export const ScorecardTableView = observer(
       hiddenColumns: getHiddenWeeks(quarter),
     };
 
-    const tableInstance = useTable({ columns, data, initialState });
+    const tableInstance = useTable({
+      columns,
+      data,
+      initialState,
+    });
 
     const {
       getTableProps,
@@ -489,32 +520,12 @@ export const ScorecardTableView = observer(
     } = tableInstance;
 
     const handleQuarterSelect = dq => {
-      console.log(dq);
-      console.log(dq.split("_"));
       const [q, y] = dq.split("_");
       setYear(y);
       setQuarter(q);
       setDropdownQuarter(dq);
       setHiddenColumns(getHiddenWeeks(q));
     };
-
-    //Turn this into a shared function
-    const createGoalYearString =
-      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
-        ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-        : `FY${(company.currentFiscalYear - 1)
-            .toString()
-            .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
-
-    const createPreviousGoalYearString =
-      //the step pattern makes sense define variables at top of func also
-      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
-        ? `FY${(company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
-        : `FY${(company.currentFiscalYear - 2).toString().slice(-2)}/${(
-            company.currentFiscalYear - 1
-          )
-            .toString()
-            .slice(-2)}`;
 
     return (
       <>
@@ -534,15 +545,42 @@ export const ScorecardTableView = observer(
             >
               {R.range(1, 5).map((n: number) => (
                 <option
-                  key={n + "_" + createPreviousGoalYearString}
-                  value={n + "_" + createPreviousGoalYearString}
+                  key={
+                    n +
+                    "_" +
+                    createPreviousGoalYearString +
+                    "_" +
+                    (company.yearForCreatingAnnualInitiatives - 1).toString()
+                  }
+                  value={
+                    n +
+                    "_" +
+                    createPreviousGoalYearString +
+                    "_" +
+                    (company.yearForCreatingAnnualInitiatives - 1).toString()
+                  }
                 >
-                  Q{n} {createPreviousGoalYearString} {n + "_" + createPreviousGoalYearString}
+                  Q{n} {createPreviousGoalYearString}
                 </option>
               ))}
               {R.range(1, 5).map((n: number) => (
-                <option key={n + "_" + createGoalYearString} value={n + "_" + createGoalYearString}>
-                  Q{n} {createGoalYearString} {n + "_" + createGoalYearString}
+                <option
+                  key={
+                    n +
+                    "_" +
+                    createGoalYearString +
+                    "_" +
+                    company.yearForCreatingAnnualInitiatives.toString()
+                  }
+                  value={
+                    n +
+                    "_" +
+                    createGoalYearString +
+                    "_" +
+                    company.yearForCreatingAnnualInitiatives.toString()
+                  }
+                >
+                  Q{n} {createGoalYearString}
                 </option>
               ))}
             </Select>
@@ -556,7 +594,10 @@ export const ScorecardTableView = observer(
                       {headerGroup.headers.map(column => (
                         <TableHeader
                           {...column.getHeaderProps({
-                            style: { width: column.width, minWidth: column.minWidth },
+                            style: {
+                              width: column.width,
+                              minWidth: column.minWidth,
+                            },
                           })}
                         >
                           {column.render("Header")}
