@@ -90,6 +90,7 @@ export interface IRootStore extends IStateTreeNode {
   keyActivityStore: IKeyActivityStore;
   labelStore: ILabelStore;
   sessionStore: ISessionStore;
+  companyStore: ICompanyStore;
   goalStore: IGoalStore;
   annualInitiativeStore: IAnnualInitiativeStore;
   descriptionTemplateStore: IDescriptionTemplateStore;

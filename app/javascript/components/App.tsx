@@ -83,12 +83,12 @@ export const App = observer(
         const width = window.innerWidth <= 768;
         const id = profile?.id;
         if (width) {
-          if (location.pathname.includes("check-in")) return
+          if (location.pathname.includes("check-in")) return;
           if (id) return history.push(`/weekly-check-in/${id}/${getWeekOf()}`);
         }
-      }
-      redirectToCheckIn()
-    }, [profile])
+      };
+      redirectToCheckIn();
+    }, [profile]);
 
     let noFeatures;
     let showGoalRoute;

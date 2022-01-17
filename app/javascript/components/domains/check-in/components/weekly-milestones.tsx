@@ -12,7 +12,7 @@ import styled from "styled-components";
 import { Loading } from "~/components/shared/loading";
 import { useParams } from "react-router-dom";
 import { toJS } from "mobx";
-import * as moment from "moment";
+import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { MilestoneCard } from "../../goals/milestone/milestone-card";
 import { EmptyState } from "./empty-state";
@@ -27,7 +27,7 @@ export const WeeklyMilestones = observer(
 
     useEffect(() => {
       milestoneStore.getMilestonesForWeeklyCheckin(weekOf);
-    }, [ ]);
+    }, []);
 
     const renderHeading = (): JSX.Element => {
       return (

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { useMst } from "~/setup/root";
+import { useMst } from "../../../setup/root";
 import { Avatar } from "~/components/shared/avatar";
 import { MultiOptionTypeSelectionDropdownList } from "~/components/shared/multi-option-type-selection-dropdown";
 import { Icon } from "~/components/shared/icon";
@@ -13,6 +13,7 @@ import { toJS } from "mobx";
 import Typography from "@material-ui/core/Typography";
 import { HtmlTooltip } from "~/components/shared/tooltip";
 import { Loading } from "../../shared/loading";
+import { Provider, rootStore } from "../../../setup/root";
 
 export interface IScorecardSelectorProps {
   ownerType: string;
@@ -21,118 +22,119 @@ export interface IScorecardSelectorProps {
   isMiniEmbed?: boolean;
 }
 
-export const ScorecardSelector = ({
-  ownerType,
-  ownerId,
-  setScorecardOwner,
-  isMiniEmbed,
-}: IScorecardSelectorProps): JSX.Element => {
-  const { userStore, teamStore, companyStore, sessionStore } = useMst();
-  const scorecardPro = sessionStore.profile?.productFeatures?.scorecardPro;
-  const [showUsersList, setShowUsersList] = useState<boolean>(false);
-  const [teams, setTeams] = useState<Array<any>>([]);
-  const [company, setCompany] = useState(null);
-  const [companyUsers, setCompanyUsers] = useState<Array<any>>([]);
-  const [currentScorecard, setCurrentScorecard] = useState<string>("company");
-  const [showScorecardProTooltip, setShowScorecardProTooltip] = useState(false);
-  const { primary100 } = baseTheme.colors;
+export const ScorecardSelector = observer(
+  ({
+    ownerType,
+    ownerId,
+    setScorecardOwner,
+    isMiniEmbed,
+  }: IScorecardSelectorProps): JSX.Element => {
+    const { userStore, teamStore, companyStore, sessionStore } = useMst();
+    const scorecardPro = sessionStore.profile?.productFeatures?.scorecardPro;
+    const [showUsersList, setShowUsersList] = useState<boolean>(false);
+    const [teams, setTeams] = useState<Array<any>>([]);
+    const [company, setCompany] = useState(null);
+    const [companyUsers, setCompanyUsers] = useState<Array<any>>([]);
+    const [currentScorecard, setCurrentScorecard] = useState<string>("company");
+    const [showScorecardProTooltip, setShowScorecardProTooltip] = useState(false);
+    const { primary100 } = baseTheme.colors;
 
-  const history = useHistory();
-
-  if (!companyStore.company || !userStore.users || !teamStore.teams || !ownerType || !ownerId) {
-    return <></>;
-  }
-
-  useEffect(() => {
-    let owner;
-    if (ownerType == "company") {
-      owner = company;
-    } else if (ownerType == "team") {
-      owner = teams.find(team => team.id == ownerId);
-    } else if (ownerType == "user") {
-      owner = companyUsers.find(user => user.id == ownerId);
+    const history = useHistory();
+    if (!companyStore.company || !userStore.users || !teamStore.teams || !ownerType || !ownerId) {
+      return <></>;
     }
 
-    if (owner) {
-      setScorecardOwner(owner);
-      setCurrentScorecard(`${owner?.name}${owner?.lastName ? " " + owner?.lastName : ""}`);
+    useEffect(() => {
+      let owner;
+      if (ownerType == "company") {
+        owner = company;
+      } else if (ownerType == "team") {
+        owner = teams.find(team => team.id == ownerId);
+      } else if (ownerType == "user") {
+        owner = companyUsers.find(user => user.id == ownerId);
+      }
+
+      if (owner) {
+        setScorecardOwner(owner);
+        setCurrentScorecard(`${owner?.name}${owner?.lastName ? " " + owner?.lastName : ""}`);
+      }
+    }, [teams, companyUsers, company, ownerType, ownerId]);
+
+    if (!teamStore.teams || !companyStore.company || !userStore.users) {
+      return <> </>;
     }
-  }, [teams, companyUsers, company, ownerType, ownerId]);
+    useEffect(() => {
+      const teams =
+        teamStore.teams &&
+        toJS(teamStore)
+          .teams.filter(team => team.active)
+          .map(team => {
+            return {
+              id: team.id,
+              type: "team",
+              executive: team.executive,
+              defaultAvatarColor: team.defaultAvatarColor,
+              name: team.name,
+            };
+          });
 
-  if (!teamStore.teams || !companyStore.company || !userStore.users) {
-    return <> </>;
-  }
-  useEffect(() => {
-    const teams =
-      teamStore.teams &&
-      toJS(teamStore)
-        .teams.filter(team => team.active)
-        .map(team => {
-          return {
-            id: team.id,
-            type: "team",
-            executive: team.executive,
-            defaultAvatarColor: team.defaultAvatarColor,
-            name: team.name,
-          };
-        });
+      const company = companyStore && {
+        id: companyStore.company.id,
+        type: "company",
+        defaultAvatarColor: "cautionYellow",
+        avatarUrl: companyStore.company.logoUrl,
+        name: companyStore.company.name,
+      };
 
-    const company = companyStore && {
-      id: companyStore.company.id,
-      type: "company",
-      defaultAvatarColor: "cautionYellow",
-      avatarUrl: companyStore.company.logoUrl,
-      name: companyStore.company.name,
+      const users =
+        userStore.users &&
+        toJS(userStore)
+          .users.filter(user => user.status == "active")
+          .map(user => {
+            return {
+              id: user.id,
+              type: "user",
+              defaultAvatarColor: user.defaultAvatarColor,
+              avatarUrl: user.avatarUrl,
+              name: user.firstName,
+              lastName: user.lastName,
+            };
+          });
+      setCompanyUsers(users);
+      setTeams(teams);
+      setCompany(company);
+    }, [teamStore.teams, companyStore.company, userStore.users]);
+
+    const ownerSelector = owner => {
+      history.push(`/scorecard/${owner.type}/${owner.id}`);
+      return {
+        ownerType: owner.type,
+        ownerId,
+      };
     };
 
-    const users =
-      userStore.users &&
-      toJS(userStore)
-        .users.filter(user => user.status == "active")
-        .map(user => {
-          return {
-            id: user.id,
-            type: "user",
-            defaultAvatarColor: user.defaultAvatarColor,
-            avatarUrl: user.avatarUrl,
-            name: user.firstName,
-            lastName: user.lastName,
-          };
-        });
-    setCompanyUsers(users);
-    setTeams(teams);
-    setCompany(company);
-  }, [teamStore.teams, companyStore.company, userStore.users]);
-
-  const ownerSelector = owner => {
-    history.push(`/scorecard/${owner.type}/${owner.id}`);
-    return {
-      ownerType: owner.type,
-      ownerId,
+    const renderUserSelectionList = (): JSX.Element => {
+      return (
+        <div onClick={e => e.stopPropagation()}>
+          <MultiOptionTypeSelectionDropdownList
+            userList={[...companyUsers, ...teams, company]}
+            onUserSelect={ownerSelector}
+            setShowUsersList={setShowUsersList}
+            title={"Scorecard"}
+            showUsersList
+          />
+        </div>
+      );
     };
-  };
 
-  const renderUserSelectionList = (): JSX.Element => {
     return (
-      <div onClick={e => e.stopPropagation()}>
-        <MultiOptionTypeSelectionDropdownList
-          userList={[...companyUsers, ...teams, company]}
-          onUserSelect={ownerSelector}
-          setShowUsersList={setShowUsersList}
-          title={"Scorecard"}
-          showUsersList
-        />
-      </div>
-    );
-  };
-
-  return (
-    <div
-      onClick={e => {
-        e.stopPropagation();
-      }}
-    >
-      <Container width={100}>
+      <Container
+        onClick={e => {
+          e.stopPropagation();
+        }}
+        data-testid="scorecard-selector"
+        width={100}
+      >
         <EditTriggerContainer
           editable={true && !isMiniEmbed}
           onClick={e => {
@@ -173,9 +175,9 @@ export const ScorecardSelector = ({
 
         {showUsersList ? renderUserSelectionList() : <></>}
       </Container>
-    </div>
-  );
-};
+    );
+  },
+);
 type EditTriggerContainerType = {
   editable: boolean;
 };

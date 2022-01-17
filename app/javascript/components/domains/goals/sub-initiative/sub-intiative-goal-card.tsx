@@ -13,7 +13,7 @@ import { RecordOptions } from "../shared/record-options";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
-import * as moment from "moment";
+import moment from "moment";
 
 interface ISubInitiativeCardProps {
   subInitiative: SubInitiativesType;

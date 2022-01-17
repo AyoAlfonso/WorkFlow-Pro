@@ -3,7 +3,7 @@ import { withEnvironment } from "~/lib/with-environment";
 import { HabitModel } from "~/models";
 import { ApiResponse } from "apisauce";
 import * as R from "ramda";
-import * as moment from "moment";
+import moment from "moment";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { showToast } from "~/utils/toast-message";
 

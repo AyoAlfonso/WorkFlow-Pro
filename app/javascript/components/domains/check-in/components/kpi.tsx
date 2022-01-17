@@ -12,7 +12,7 @@ import {
   InputFromUnitType,
 } from "../../scorecard/shared/modal-elements";
 import { useParams } from "react-router-dom";
-import * as moment from "moment";
+import moment from "moment";
 import { toJS } from "mobx";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "./empty-state";

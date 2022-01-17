@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as R from "ramda";
-import "react-step-progress-bar/styles.css";
+// import "react-step-progress-bar/styles.css";
 import { ProgressBar, Step } from "react-step-progress-bar";
 import { StepProgressBarIcon } from "./step-progress-bar-icon";
 import { baseTheme } from "~/themes";

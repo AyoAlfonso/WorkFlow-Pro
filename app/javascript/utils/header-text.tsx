@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import { useMst } from "~/setup/root";
-import * as moment from "moment";
+import moment from "moment";
 import { useTranslation } from "react-i18next";
 
 export const HeaderText = observer(
