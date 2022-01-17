@@ -16,6 +16,8 @@ import { ShowMilestonesButton } from "../shared-quarterly-goal-and-sub-initiativ
 import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-elements";
 import { toJS } from "mobx";
 import ReactQuill from "react-quill";
+import { ActivityLogs } from "../shared/activity-logs";
+
 
 interface ISubInitiativeModalContentProps {
   subInitiativeId: number;

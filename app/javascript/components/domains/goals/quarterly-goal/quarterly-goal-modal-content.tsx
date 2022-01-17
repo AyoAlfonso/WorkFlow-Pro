@@ -51,7 +51,6 @@ export const QuarterlyGoalModalContent = observer(
     const {
       quarterlyGoalStore,
       sessionStore,
-      companyStore,
       subInitiativeStore,
       companyStore,
       descriptionTemplateStore: { descriptionTemplates },

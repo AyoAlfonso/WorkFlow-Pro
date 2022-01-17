@@ -4,13 +4,18 @@
   "scripts": {
     "lint": "eslint app/javascript/**/*.ts[x]",
     "storybook": "start-storybook",
+    "test": "jest --watchAll  --coverage",
     "build-storybook": "build-storybook -c .storybook -o .out",
-    "chromatic": "npx chromatic --project-token=csgzsa3zl9q --exit-zero-on-changes",
-    "test": "jest"
-    
+    "chromatic": "npx chromatic --project-token=csgzsa3zl9q --exit-zero-on-changes"
   },
    "jest": {    
     "modulePathIgnorePatterns": ["/config"],
+    "collectCoverageFrom": [
+      "app/components/**/*.{ts,tsx}",
+      "!**/node_modules/**",
+      "!**/*.stories.{js,jsx}"
+    ],
+    "collectCoverage": true,
     "testMatch": [ "**/?(*.)+(test).[jt]s?(x)" ],
     "transform": {
       "^.+\\.ts?$": "ts-jest",
