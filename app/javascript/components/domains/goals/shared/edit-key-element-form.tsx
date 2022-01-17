@@ -9,6 +9,7 @@ import { Select } from "~/components/shared/input";
 import { Store } from "@material-ui/icons";
 import { useMst } from "~/setup/root";
 import { InputFromUnitType } from "~/components/domains/scorecard/shared/modal-elements";
+import { OwnedBy } from "../../scorecard/shared/scorecard-owned-by";
 
 interface IEditKeyElementFormProps {
   //   onCreate: (keyElementParams: any) => void;
@@ -27,7 +28,7 @@ export const EditKeyElementForm = ({
   onClose,
   type,
 }: IEditKeyElementFormProps): JSX.Element => {
-  const { userStore } = useMst();
+  const { userStore, sessionStore } = useMst();
   const { users } = userStore;
   const [title, setTitle] = useState<string>(element.value);
   const [completionType, setCompletionType] = useState<string>(element.completionType);
@@ -36,9 +37,14 @@ export const EditKeyElementForm = ({
     element.completionTargetValue,
   );
   const [condition, setCondition] = useState<number>(element.greaterThan);
-  const [ownedBy, setOwnedBy] = useState<number>(element.ownedById);
+  const [ownedBy, setOwnedBy] = useState<any>(null);
 
   const allUsers = [...users, { id: null, firstName: "None", lastName: "" }];
+
+  useEffect(() => {
+      const owner = userStore.users.find(user => user.id == element?.ownedById);
+      setOwnedBy(owner || sessionStore.profile);
+  }, []);
 
   const selectOptions = [
     { label: "Numerical #", value: "numerical" },
@@ -57,16 +63,28 @@ export const EditKeyElementForm = ({
     setCompletionType("numerical");
     setCompletionTargetValue(0);
     setCondition(0);
-    setOwnedBy(0);
+    setOwnedBy(null);
+  };
+
+  const parseTarget = target => {
+    let val = target.toString();
+    if (val.includes("$")) {
+      val = val.split("$")[1];
+    }
+    if (val.includes(",")) {
+      val = val.split(",").join("");
+    }
+    return val;
   };
 
   const updateKeyElement = () => {
     const keyElementParams = {
       value: title,
       completionType,
-      completionTargetValue,
+      completionTargetValue: parseTarget(completionTargetValue),
       greaterThan: condition,
-      ownedBy,
+      ownedBy: ownedBy.id,
+      status: element.status,
     };
     let id;
 
@@ -114,6 +132,10 @@ export const EditKeyElementForm = ({
     }
   };
 
+  if (ownedBy == null) {
+    return <></>;
+  }
+
   return (
     <Container>
       <RowContainer>
@@ -158,25 +180,16 @@ export const EditKeyElementForm = ({
           <InputHeaderContainer>
             <InputHeader>Owner</InputHeader>
           </InputHeaderContainer>
-          <Select
-            onChange={e => {
-              e.preventDefault();
-              setOwnedBy(e.currentTarget.value);
-            }}
-            value={ownedBy}
-            fontSize={12}
-            height={15}
-            pt={6}
-            pb={10}
-          >
-            {allUsers
-              .filter(user => user.firstName)
-              .map(({ id, firstName, lastName }, index) => (
-                <option key={`option-${index}`} value={id}>
-                  {firstName} {lastName}
-                </option>
-              ))}
-          </Select>
+          <OwnedBy
+            ownedBy={ownedBy}
+            setOwnedBy={setOwnedBy}
+            marginLeft={"0px"}
+            marginTop={"auto"}
+            marginBottom={"auto"}
+            fontSize={"12px"}
+            disabled={false}
+            center={false}
+          />
         </FormElementContainer>
       </RowContainer>
 
@@ -263,7 +276,7 @@ const RowContainer = styled.div<SpaceProps>`
   gap: 16px;
 `;
 const ButtonRowContainer = styled(RowContainer)`
-  margin: 5% 0px;
+  margin-top: 5%;
 `;
 
 const FormGroupContainer = styled.div<SpaceProps>`
@@ -288,7 +301,7 @@ const CompletionTypeContainer = styled.div`
 
 const InputHeader = styled.p`
   margin: 0px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
 `;
 

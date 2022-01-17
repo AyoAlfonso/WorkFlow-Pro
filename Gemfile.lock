@@ -466,6 +466,7 @@ DEPENDENCIES
   ice_cube (~> 0.16.3)
   image_processing (~> 1.2)
   jbuilder (~> 2.7)
+  kaminari
   letter_opener
   listen (~> 3.2)
   lograge

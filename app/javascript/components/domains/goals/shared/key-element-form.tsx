@@ -15,7 +15,11 @@ interface IKeyElementFormProps {
   onCreate: (keyElementParams: any) => void;
   onClose: () => void;
   setActionType: any;
+  type?: any;
   setSelectedElement: any;
+  keysForOnboarding?: any;
+  callbackForOnboarding?: any;
+  showAddButton?: any;
 }
 
 export const KeyElementForm = ({
@@ -23,6 +27,10 @@ export const KeyElementForm = ({
   onClose,
   setActionType,
   setSelectedElement,
+  type,
+  keysForOnboarding,
+  callbackForOnboarding,
+  showAddButton,
 }: IKeyElementFormProps): JSX.Element => {
   const { userStore, sessionStore } = useMst();
   const { users } = userStore;
@@ -54,24 +62,35 @@ export const KeyElementForm = ({
     setSelectedElement(null);
   };
 
+  const parseTarget = target => {
+    let val = target;
+    if (val.includes("$")) {
+      val = val.split("$")[1];
+    }
+    if (val.includes(",")) {
+      val = val.split(",").join("");
+    }
+    return val;
+  };
+
   const createKeyElement = () => {
     const keyElementParams = {
       value: title,
       completionType,
-      completionTargetValue: completionTargetValue.includes("$")
-        ? completionTargetValue.split("$")[1]
-        : completionTargetValue,
+      completionTargetValue: completionType == "binary" ? 0 : parseTarget(completionTargetValue),
       greaterThan: Number(condition),
       ownedBy: ownedBy.id,
     };
+    if (type === "onboarding") {
+      return callbackForOnboarding(keysForOnboarding, keyElementParams);
+    }
     onCreate(keyElementParams);
   };
 
   const isValid =
     !R.isEmpty(title) &&
     !R.isEmpty(completionType) &&
-    !R.isNil(completionTargetValue) &&
-    completionTargetValue &&
+    completionType == "binary" ? true : !R.isEmpty(completionTargetValue) &&
     !R.isNil(ownedBy) &&
     !R.isNil(condition);
 
@@ -79,6 +98,7 @@ export const KeyElementForm = ({
     if (isValid) {
       createKeyElement();
       onClose();
+      showAddButton && showAddButton(false);
     }
   };
 
@@ -220,15 +240,17 @@ export const KeyElementForm = ({
         >
           <TextDiv fontSize={"12px"}>Save</TextDiv>
         </Button>
-        <Button
-          style={{ padding: "8px 16px" }}
-          variant={"primaryOutline"}
-          onClick={handleSaveAndAddAnother}
-          small
-          disabled={!isValid}
-        >
-          <TextDiv fontSize={"12px"}>Save & Add Another</TextDiv>
-        </Button>
+        {type !== "onboarding" && (
+          <Button
+            style={{ padding: "8px 16px" }}
+            variant={"primaryOutline"}
+            onClick={handleSaveAndAddAnother}
+            small
+            disabled={!isValid}
+          >
+            <TextDiv fontSize={"12px"}>Save & Add Another</TextDiv>
+          </Button>
+        )}
       </ButtonRowContainer>
     </Container>
   );

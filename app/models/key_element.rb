@@ -1,28 +1,62 @@
 class KeyElement < ApplicationRecord
   include ActionView::Helpers::SanitizeHelper
+  include HasOwner
+  include LogEnum
 
   before_save :sanitize_value
-  has_many :objective_logs, as: :objecteable
+  has_many :objective_logs, as: :child
   belongs_to :elementable, :polymorphic => true
   belongs_to :user, optional: true
 
+  belongs_to :annual_initiative, -> { where(key_elements: { elementable_type: "AnnualInitiative" })  }, foreign_key: "elementable_id", optional: true
+  belongs_to :quarterly_goal, -> { where(key_elements: { elementable_type: "QuarterlyGoal" })  }, foreign_key: "elementable_id", optional: true
+  belongs_to :sub_initiative, -> { where(key_elements: { elementable_type: "SubInitiative" })  }, foreign_key: "elementable_id", optional: true
+  validates :completion_type, :status, :elementable_id, :elementable_type, :completion_target_value, :owned_by_id, :greater_than, presence: true
+
+  scope :optimized, -> { includes([:objective_logs, :annual_initiative, :owned_by, :quarterly_goal, :sub_initiative]) }
+# 
   # completion_type of binary is boolean, if completed_at.present?
   # completion_type of currency is in cents (data type integer)
   enum completion_type: { binary: 0, numerical: 1, percentage: 2, currency: 3 }
-  enum status: { unstarted: 0, incomplete: 1, in_progress: 2, completed: 3 }
+
+  scope :current_user_and_elementable_type, ->(user, elementable_type) {
+        elementable_type == "QuarterlyGoal" ?
+          includes(:quarterly_goal).where(quarterly_goals: { closed_at: nil })
+          .where(
+          { owned_by_id: user, elementable_type:  elementable_type  }
+        ) 
+        : elementable_type == "AnnualInitiative" ?
+          includes(:annual_initiative).where(annual_initiatives: { closed_at: nil})
+          .where(
+        { owned_by_id: user,elementable_type:  elementable_type  }
+        ) : includes(:sub_initiative).where(sub_initiatives: { closed_at: nil }).where(
+         { owned_by_id: user, elementable_type:  elementable_type  }
+        )
+    }
 
   default_scope { order(id: :asc) }
 
-  def as_json(options = [])
-    super({include: {
-                  objective_logs: { methods: [:owned_by] }}
-    }).merge({ :period => self.period, })
+  scope :filter_by_objective_logs_and_updated_on_key_elements, ->(updated_at){
+      where(_exists(ObjectiveLog.where("objective_logs.child_type = ? AND objective_logs.updated_at > ?", "KeyElement", updated_at)))
+  }
+  scope :filter_by_objective_logs_type, ->(){
+      where(_exists(ObjectiveLog.where("objective_logs.child_type = ?", "KeyElement")))
+  }
+  # Still in the process of using this, remove the Dependency if not successful
+  scope :filter_by_objective_logs_and_updated_on_absent_key_elements, ->(updated_at){
+      where(_not_exists(ObjectiveLog.where("objective_logs.child_type = ?", "KeyElement")))
+  }
+
+  def elementable_data
+    self.elementable
   end
 
-  def period
-     (self.objective_logs.empty?) ? {} : self.objective_logs.group_by { |log| log[:fiscal_year] }.map do |year, objective_log|
-        [year, objective_log.group_by(&:week).map { |k, v| [k, v[-1]] }.to_h]
-        end.to_h
+  def self._not_exists(scope)
+    "NOT #{_exists(scope)}"
+  end
+
+  def self._exists(scope)
+    "EXISTS(#{scope.to_sql})"
   end
 
   private

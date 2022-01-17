@@ -5,7 +5,6 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   respond_to :json
 
   def create
-  
     @annual_initiative = AnnualInitiative.new({
       created_by: current_user, owned_by: current_user,
       description: params[:description],
@@ -89,10 +88,6 @@ class Api::AnnualInitiativesController < Api::ApplicationController
 
   def key_elements_params
     params.permit(key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value])
-  end
-
-  def objective_log_params
-    params.require(:objective_log_attributes).permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :fiscal_quarter, :fiscal_year, :week)
   end
 
   def set_annual_initiative

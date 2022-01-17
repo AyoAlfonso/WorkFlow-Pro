@@ -28,6 +28,24 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: @subject)
   end
 
+  def weekly_check_in_report_stats_email
+    @user = params[:user]
+    @subject = params[:subject]
+    @message = params[:message]
+    @greeting = params[:greeting]
+    @preheader = params[:preheader]
+    @start_date = params[:start_date]
+    @end_date = params[:end_date]
+    @name = params[:name]
+    @team = params[:team]
+    @kpis = params[:kpis]
+    @initiatives = params[:initiatives]
+    @cta_text = params[:cta_text]
+    @cta_url = params[:cta_url]
+    mail(to: @user.email, subject: @subject)
+  end
+
+
   def weekly_planning_email
     @user = params[:user]
     @subject = params[:subject]

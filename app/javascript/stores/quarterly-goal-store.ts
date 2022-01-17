@@ -6,11 +6,13 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import * as R from "ramda";
 import il8n from "i18next";
+import { ObjectiveLogModel } from "~/models/objective-log";
 
 export const QuarterlyGoalStoreModel = types
   .model("QuarterlyGoalModel")
   .props({
     quarterlyGoal: types.maybeNull(QuarterlyGoalModel),
+    objectiveLogs: types.maybeNull(types.array(ObjectiveLogModel)),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -125,6 +127,46 @@ export const QuarterlyGoalStoreModel = types
         return false;
       }
     }),
+    getActivityLogs: flow(function*(page, type, id) {
+      const env = getEnv(self);
+      try {
+        self.objectiveLogs = null;
+        const response: any = yield env.api.getObjectiveLogs(page, type, id);
+        if (response.ok) {
+          self.objectiveLogs = response.data.objectiveLog;
+          return response.data.meta;
+        }
+      } catch {
+        return false;
+      }
+    }),
+    createActivityLog: flow(function*(objectiveLog) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createInitiativeLog(objectiveLog);
+        if (response.ok) {
+          const updatedLogs = [...self.objectiveLogs, response.data.objectiveLog];
+          self.objectiveLogs = updatedLogs as any;
+          return response.data.objectiveLog;
+        }
+      } catch {
+        return false;
+      }
+    }),
+    deleteActivityLog: flow(function*(id) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.deleteInitiativeLog(id);
+        if (response.ok) {
+          const updatedLogs = self.objectiveLogs.filter(log => log.id != response.data.objectiveLog.id);
+          self.objectiveLogs = updatedLogs as any;
+          showToast("Log Deleted", ToastMessageConstants.SUCCESS);
+          return response.data.objectiveLog;
+        }
+      } catch {
+        return false;
+      }
+    }),
     create: flow(function*(quarterlyGoalObject, inAnnualInitiative) {
       const env = getEnv(self);
       try {
@@ -217,6 +259,10 @@ export const QuarterlyGoalStoreModel = types
   .actions(self => ({
     updateModelField(field, value) {
       self.quarterlyGoal[field] = value;
+    },
+    findKeyElement(id) {
+      const keyElement = self.quarterlyGoal.keyElements.find(ke => ke.id == id);
+      return keyElement;
     },
     updateKeyElementValue(field: string, id: number, value: number | string) {
       const keyElements = self.quarterlyGoal.keyElements;

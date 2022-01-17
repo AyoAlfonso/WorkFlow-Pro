@@ -366,10 +366,17 @@
           "emptyText": "No Milestones",
           "create": "You don't have any active Milestones. Visit the Objectives page to create an Initiative and Milestones"
         },
+        "keyResults": {
+          "emptyText": "No Key Results",
+          "create": "You don't have any Key Results. Visit the Objectives page to create an Initiative and Milestones"
+        },
         "kpi": {
           "emptyText": "No KPIs",
           "create": "You don't have any active KPIs. Visit the Scorecard page to create a KPI."
         }
+      },
+      "keyElement": {
+        "dateToolTip": "Update the date if you wish to provide an update on your Key Results for a previous date."
       }
     }
   }

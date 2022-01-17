@@ -1,5 +1,6 @@
 class Api::SubInitiativesController < Api::ApplicationController
   before_action :set_sub_initiative, only: [:show, :update, :destroy, :create_key_element, :update_key_element, :create_milestones, :close_goal]
+  before_action :create_milestones_for_sub_initiative, only: [:update, :create_key_element, :update_key_element ]
 
   respond_to :json
 
@@ -15,6 +16,7 @@ class Api::SubInitiativesController < Api::ApplicationController
     })
     authorize @sub_initiative
     @sub_initiative.save!
+    create_milestones_for_sub_initiative()
     render "/api/sub_initiatives/create"
   end
 
@@ -68,18 +70,17 @@ class Api::SubInitiativesController < Api::ApplicationController
   end
 
   def create_milestones
-    @sub_initiative.create_milestones_for_sub_initiative(current_user, current_company)
+    create_milestones_for_sub_initiative()
     render "api/sub_initiatives/create_milestones"
   end
 
   private
+  def create_milestones_for_sub_initiative
+    @sub_initiative.create_milestones_for_sub_initiative(current_user, current_company)
+  end
 
   def sub_initiative_params
     params.permit(:id, :created_by_id, :owned_by_id, :context_description, :quarterly_goal_id, :description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value], milestones_attributes: [:id, :description, :status], :importance => [])
-  end
-
-  def objective_log_params
-    params.require(:objective_log_attributes).permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :fiscal_quarter, :fiscal_year, :week)
   end
 
   def set_sub_initiative

@@ -42,9 +42,7 @@ export const WeeklyMilestones = observer(
 
     const renderLoading = () => (
       <LoadingContainer>
-        <BodyContainer>
-          <Loading />
-        </BodyContainer>
+        <Loading />
       </LoadingContainer>
     );
 
@@ -111,19 +109,20 @@ export const WeeklyMilestones = observer(
 
 const Container = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  padding-left: 16px;
+  padding-right: 16px;
   @media only screen and (max-width: 768px) {
     padding: 0 16px;
   }
 `;
 
 const LoadingContainer = styled.div`
-  height: 100%;
-`;
-
-const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 8px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 `;
 
 const AvatarContainer = styled.div`

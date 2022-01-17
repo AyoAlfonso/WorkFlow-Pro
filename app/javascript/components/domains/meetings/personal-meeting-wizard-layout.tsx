@@ -1,6 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
+import { useMst } from "~/setup/root";
 import { MeetingStep } from "./meeting-step";
 import { WizardLayout } from "~/components/layouts/wizard-layout";
 import * as R from "ramda";
@@ -26,11 +27,35 @@ export const PersonalMeetingWizardLayout = observer(
     numberOfSteps,
     stepsComponent,
   }: ITeamMeetingProps): JSX.Element => {
+    const { companyStore } = useMst();
+
     const history = useHistory();
 
-    const meetingTitle = () => R.path(["currentStepDetails", "name"], meeting);
+    const getTitleForObjectiveKeyType = () => {
+      if (companyStore.company?.objectivesKeyType == "KeyResults") {
+        return "Key Results";
+      } else {
+        return "Milestones";
+      }
+    };
 
-    const meetingDescription = () => R.path(["currentStepDetails", "instructions"], meeting);
+    const getDescriptionForObjectiveKeyType = () => {
+      if (companyStore.company?.objectivesKeyType == "KeyResults") {
+        return "Review your list of Key Results. What must you accomplish this week to drive your Key Results? Create Pyns for each one.";
+      } else {
+        return R.path(["currentStepDetails", "instructions"], meeting);
+      }
+    }
+
+    const meetingTitle = () =>
+      R.path(["currentStepDetails", "name"], meeting) == "Milestones"
+        ? getTitleForObjectiveKeyType()
+        : R.path(["currentStepDetails", "name"], meeting);
+
+    const meetingDescription = () =>
+      R.path(["currentStepDetails", "name"], meeting) == "Milestones"
+        ? getDescriptionForObjectiveKeyType()
+        : R.path(["currentStepDetails", "instructions"], meeting);
 
     const childrenUnderDescription = () => (
       <ChildrenContainer>

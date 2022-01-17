@@ -14,9 +14,13 @@ import {
 
 interface ICreateKeyElementBodyProps {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  store: any;
+  store?: any;
   setSelectedElement: any;
   setActionType: any;
+  type?: any;
+  keysForOnboarding?: any;
+  callbackForOnboarding?: any;
+  showAddButton?: any;
 }
 
 export const CreateKeyElementBody = observer(
@@ -25,14 +29,22 @@ export const CreateKeyElementBody = observer(
     setModalOpen,
     setSelectedElement,
     setActionType,
+    type,
+    keysForOnboarding,
+    callbackForOnboarding,
+    showAddButton,
   }: ICreateKeyElementBodyProps): JSX.Element => {
     return (
       <KeyElementsTabContainer>
         <KeyElementContentContainer>
           <KeyElementForm
-            onCreate={store.createKeyElement}
+            onCreate={store ? store.createKeyElement : null}
             onClose={() => setModalOpen(false)}
             setSelectedElement={setSelectedElement}
+            keysForOnboarding={keysForOnboarding}
+            callbackForOnboarding={callbackForOnboarding}
+            showAddButton={showAddButton}
+            type={type}
             setActionType={setActionType}
           />
         </KeyElementContentContainer>
