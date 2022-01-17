@@ -46,3 +46,5 @@ build-storybook.log
 dump.rdb
 db/schema.rb
 /.out
+
+/coverage

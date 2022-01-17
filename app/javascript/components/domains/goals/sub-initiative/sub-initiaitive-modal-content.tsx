@@ -35,6 +35,7 @@ export const SubInitiativeModalContent = observer(
     const {
       subInitiativeStore,
       sessionStore,
+      companyStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
     const currentUser = sessionStore.profile;
@@ -77,11 +78,13 @@ export const SubInitiativeModalContent = observer(
     const allMilestones = subInitiative.milestones;
     const activeMilestones = subInitiative.activeMilestones;
 
-    const goalYearString = `FY${subInitiative.fiscalYear.toString().slice(-2)}/${(
-      subInitiative.fiscalYear + 1
-    )
-      .toString()
-      .slice(-2)}`;
+    const goalYearString =
+      companyStore.company.currentFiscalYear ==
+      companyStore.company.yearForCreatingAnnualInitiatives
+        ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+        : `FY${(companyStore.company.currentFiscalYear - 1)
+            .toString()
+            .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
 
     return (
       <>

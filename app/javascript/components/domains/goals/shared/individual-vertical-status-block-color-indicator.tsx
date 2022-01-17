@@ -4,7 +4,7 @@ import { baseTheme } from "../../../../themes";
 import { MilestoneType } from "~/types/milestone";
 import { useState, useEffect } from "react";
 import { useMst } from "~/setup/root";
-import * as moment from "moment";
+import moment from "moment";
 import { observer } from "mobx-react";
 
 interface IIndividualVerticalStatusBlockColorIndicatorProps {
