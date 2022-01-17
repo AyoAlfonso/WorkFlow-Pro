@@ -102,8 +102,8 @@ export const AnnualInitiativeModalContent = memo(
         );
       }
 
-      const handleChange = (html, text) => {
-        setDescription(text);
+      const handleChange = html => {
+        setDescription(html);
       };
 
       const editable =
@@ -114,13 +114,13 @@ export const AnnualInitiativeModalContent = memo(
 
       const activeQuarterlyGoals = annualInitiative.activeQuarterlyGoals;
       const allQuarterlyGoals = annualInitiative.quarterlyGoals;
-  const goalYearString =
-      companyStore.company.currentFiscalYear ==
-      companyStore.company.yearForCreatingAnnualInitiatives
-        ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-        : `FY${(companyStore.company.currentFiscalYear - 1)
-            .toString()
-            .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
+      const goalYearString =
+        companyStore.company.currentFiscalYear ==
+        companyStore.company.yearForCreatingAnnualInitiatives
+          ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+          : `FY${(companyStore.company.currentFiscalYear - 1)
+              .toString()
+              .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
 
       const renderQuarterlyGoals = () => {
         const quarterlyGoalsToDisplay = showAllQuarterlyGoals
@@ -197,8 +197,6 @@ export const AnnualInitiativeModalContent = memo(
         );
       };
 
-  
-
       const renderHeader = (): JSX.Element => {
         return (
           <HeaderContainer>
@@ -251,6 +249,76 @@ export const AnnualInitiativeModalContent = memo(
             </DetailsContainer>
           </HeaderContainer>
         );
+      };
+
+      const renderGoals = (): JSX.Element => {
+        return (
+          <>
+            <SubHeaderContainer>
+              <FilterOptionsContainer>
+                <FilterOptionContainer underline={!showAllQuarterlyGoals}>
+                  <FilterOption
+                    onClick={() => setShowAllQuarterlyGoals(false)}
+                    active={!showAllQuarterlyGoals}
+                  >
+                    Open
+                  </FilterOption>
+                </FilterOptionContainer>
+                <FilterOptionContainer underline={showAllQuarterlyGoals}>
+                  <FilterOption
+                    onClick={() => setShowAllQuarterlyGoals(true)}
+                    active={showAllQuarterlyGoals}
+                  >
+                    All
+                  </FilterOption>
+                </FilterOptionContainer>
+              </FilterOptionsContainer>
+            </SubHeaderContainer>
+            <QuarterlyGoalsContainer>
+              {renderQuarterlyGoals()}
+              {editable && (
+                <CreateGoalContainer>
+                  <CreateGoalSection
+                    placeholder={t("quarterlyGoal.enterTitle", { title: quarterlyGoalTitle })}
+                    addButtonText={`${t("quarterlyGoal.add", { title: quarterlyGoalTitle })} (Q${
+                      companyStore.company.quarterForCreatingQuarterlyGoals
+                    })`}
+                    createButtonText={t("quarterlyGoal.addGoal", { title: quarterlyGoalTitle })}
+                    showCreateGoal={showCreateQuarterlyGoal}
+                    setShowCreateGoal={setShowCreateQuarterlyGoal}
+                    createAction={quarterlyGoalStore.create}
+                    annualInitiativeId={annualInitiative.id}
+                    inAnnualInitiative={true}
+                    buttonWidth={"auto"}
+                  />
+                </CreateGoalContainer>
+              )}
+            </QuarterlyGoalsContainer>
+          </>
+        );
+      };
+
+      const createLog = () => {
+        const objectiveLog = {
+          ownedById: sessionStore.profile.id,
+          score: 0,
+          note: comment,
+          objecteableId: annualInitiative.id,
+          objecteableType: "AnnualInitiative",
+          fiscalQuarter: companyStore.company.currentFiscalQuarter,
+          fiscalYear: companyStore.company.currentFiscalYear,
+          week: companyStore.company.currentFiscalWeek,
+        };
+
+        annualInitiativeStore.createActivityLog(objectiveLog);
+      };
+
+      const getLogs = pageNumber => {
+        return annualInitiativeStore
+          .getActivityLogs(pageNumber, "AnnualInitiative", annualInitiativeId)
+          .then(meta => {
+            setObjectiveMeta(meta);
+          });
       };
 
       return (
