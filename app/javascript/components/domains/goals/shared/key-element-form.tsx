@@ -57,7 +57,6 @@ export const KeyElementForm = ({
     setCompletionType("numerical");
     setCompletionTargetValue("");
     setCondition(0);
-    setOwnedBy(0);
     setActionType("Add");
     setSelectedElement(null);
   };
