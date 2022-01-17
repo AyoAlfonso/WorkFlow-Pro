@@ -1,15 +1,13 @@
-export const getDerviedStatus = (milestones: Array<any>) => {
+export const getDerviedStatus = (keyResults: Array<any>) => {
   const statusValueArray = [];
-  for (let i = 0; i < milestones.length; i++) {
-    const value = getValue(milestones[i].status);
+  for (let i = 0; i < keyResults.length; i++) {
+    const value = getValue(keyResults[i].status);
     statusValueArray.push(value);
   }
 
   const avg = Math.floor(average(statusValueArray));
 
-  if (avg == 100) {
-    return "done";
-  } else if (avg >= 85) {
+ if (avg >= 85) {
     return "completed";
   } else if (85 > avg && avg >= 70) {
     return "in_progress";
@@ -27,6 +25,8 @@ const getValue = status => {
     case "in_progress":
       return 70;
     case "completed":
+      return 100;
+    case "done":
       return 100;
     default:
       return 0;

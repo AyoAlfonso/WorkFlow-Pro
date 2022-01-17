@@ -22,6 +22,7 @@ import { toJS } from "mobx";
 import { FormElementContainer, InputFromUnitType } from "../../scorecard/shared/modal-elements";
 import moment from "moment";
 import { getWeekOf } from "~/utils/date-time";
+import { getDerviedStatus } from "~/utils/get-derived-status";
 
 interface IKeyElementProps {
   elementId?: number;
@@ -37,6 +38,7 @@ interface IKeyElementProps {
   initiativeId?: number;
   keyElement?: any;
   targetValueMargin?: string;
+  object?: any;
 }
 
 export const KeyElement = observer(
@@ -53,6 +55,7 @@ export const KeyElement = observer(
     initiativeId,
     keyElement,
     targetValueMargin,
+    object,
   }: IKeyElementProps): JSX.Element => {
     const {
       annualInitiativeStore,
@@ -266,6 +269,7 @@ export const KeyElement = observer(
       };
 
       store.createActivityLog(objectiveLog);
+      company.objectivesKeyType === "KeyResults" && updateMilestoneStatus(objectiveLog.weekOf);
     };
 
     const updateOwnedById = newUser => {
@@ -284,6 +288,38 @@ export const KeyElement = observer(
         return true;
       } else {
         return moment(getWeekOf()).isBefore(recentLogDate);
+      }
+    };
+
+    const updateMilestoneStatus = async weekOf => {
+      if (type == "checkIn") {
+        const objectableType = typeForCheckIn();
+        let initiative;
+        let initiativeStore;
+
+        if (objectableType === "QuarterlyInitiative") {
+          initiativeStore = quarterlyGoalStore;
+          initiative = await quarterlyGoalStore.getQuarterlyGoal(element.elementableId);
+        } else {
+          initiativeStore = subInitiativeStore;
+          initiative = await subInitiativeStore.getSubInitiative(element.elementableId);
+        }
+
+        const milestoneForWeekOf =
+          initiative.milestones.find(milestone => milestone.weekOf === weekOf) || null;
+
+        if (milestoneForWeekOf) {
+          const status = getDerviedStatus(initiative?.keyElements);
+          initiativeStore.updateMilestoneStatus(milestoneForWeekOf.id, status);
+        }
+      } else {
+        const milestoneForWeekOf =
+          object?.milestones.find(milestone => milestone.weekOf === weekOf) || null;
+
+        if (milestoneForWeekOf) {
+          const status = getDerviedStatus(object?.keyElements);
+          store.updateMilestoneStatus(milestoneForWeekOf.id, status);
+        }
       }
     };
 
@@ -721,7 +757,7 @@ const TargetValue = styled.span`
 
 type ITargetValueContainer = {
   marginRight?: string;
-}
+};
 
 const TargetValueContainer = styled.div<ITargetValueContainer>`
   width: 3em;

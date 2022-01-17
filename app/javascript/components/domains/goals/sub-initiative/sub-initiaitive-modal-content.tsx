@@ -17,7 +17,8 @@ import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-
 import { toJS } from "mobx";
 import ReactQuill from "react-quill";
 import { ActivityLogs } from "../shared/activity-logs";
-
+import { sortByDate } from "~/utils/sorting";
+import { getWeekOf } from "~/utils/date-time";
 
 interface ISubInitiativeModalContentProps {
   subInitiativeId: number;
@@ -124,6 +125,14 @@ export const SubInitiativeModalContent = observer(
         });
     };
 
+    const getCurrentWeekStatus = () => {
+      const currentWeekOf = getWeekOf();
+      const milestone = subInitiative.milestones.find(
+        milestone => milestone.weekOf === currentWeekOf,
+      );
+      return milestone?.status;
+    };
+
     return (
       <>
         <StatusBlockColorIndicator
@@ -147,6 +156,7 @@ export const SubInitiativeModalContent = observer(
                 showDropdownOptionsContainer={showDropdownOptionsContainer}
                 setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
                 goalYearString={goalYearString}
+                derivedStatus={getCurrentWeekStatus()}
               />
             </SectionContainer>
             <SectionContainer>

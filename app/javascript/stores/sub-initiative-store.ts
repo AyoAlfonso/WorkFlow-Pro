@@ -26,6 +26,7 @@ export const SubInitiativeStoreModel = types
       try {
         const response: any = yield env.api.getSubInitiative(id);
         self.subInitiative = response.data;
+        return response.data;
       } catch {
         showToast(
           il8n.t("subInitiative.retrievalError", { title: self.title }),
