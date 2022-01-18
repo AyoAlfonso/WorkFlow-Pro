@@ -5,7 +5,7 @@ import * as R from "ramda";
 interface IScorecardProps {
   ownerType: string;
   ownerId: number;
-  showAll: boolean
+  showAll: boolean;
 }
 export class Api {
   client: ApisauceInstance;
@@ -521,8 +521,11 @@ export class Api {
     return this.client.get(`/annual_initiatives/team/${teamId}`);
   }
 
-  async createForumMeetingsForYear(teamId, currentYear) {
-    return this.client.post("/forum/create_meetings_for_year", { teamId, currentYear });
+  async createForumMeetingsForYear(teamId, currentYear, forumType) {
+    return this.client.post(`/forum/create_meetings_for_year/${forumType}`, {
+      teamId,
+      currentYear,
+    });
   }
 
   async searchForumMeetingsByDateRange(startDate, endDate, teamId) {
@@ -602,7 +605,9 @@ export class Api {
   }
 
   async getScorecard(props: IScorecardProps) {
-    return this.client.get(`scorecard/${props.ownerType}/${props.ownerId}?show_all=${props.showAll}`);
+    return this.client.get(
+      `scorecard/${props.ownerType}/${props.ownerId}?show_all=${props.showAll}`,
+    );
   }
 
   async getCheckInTemplates() {

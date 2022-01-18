@@ -20,7 +20,7 @@ class MeetingPolicy < ApplicationPolicy
   end
 
   def create?
-    if (@record.meeting_type == "team_weekly" || @record.meeting_type == "forum_monthly")
+    if (@record.meeting_type == "team_weekly" || @record.meeting_type == "forum_monthly" || @record.meeting_type == "organisation_forum_monthly")
       @user.team_lead_for?(@record.team)
     else
       !user_can_observe_current_company? #anyone can crate personal plans but observers
@@ -30,7 +30,7 @@ class MeetingPolicy < ApplicationPolicy
   def update?
     if (@record.meeting_type == "team_weekly")
       @record.hosted_by == @user || @user.team_lead_for?(@record.team)
-    elsif (@record.meeting_type == "forum_monthly")
+    elsif (@record.meeting_type == "forum_monthly") || (@record.meeting_type == "organisation_forum_monthly") 
       @user.team_user_enablements.pluck(:team_id).include?(@record.team_id)
     else
       @record.hosted_by == @user

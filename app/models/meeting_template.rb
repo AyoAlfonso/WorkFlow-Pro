@@ -7,6 +7,7 @@ class MeetingTemplate < ApplicationRecord
     team_weekly: 0,
     personal_weekly: 1,
     forum_monthly: 2,
+    organisation_forum_monthly: 4,
     personal_monthly: 3,
     personal_daily: 10
   }

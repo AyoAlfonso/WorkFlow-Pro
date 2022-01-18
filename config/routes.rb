@@ -159,7 +159,7 @@ Rails.application.routes.draw do
     get "/meetings/team_meetings/:id", to: "meetings#team_meetings"
 
     #forum-specific functions
-    post "/forum/create_meetings_for_year", to: "forums#create_meetings_for_year"
+    post "/forum/create_meetings_for_year/:forum_type", to: "forums#create_meetings_for_year"
     get "/forum/search_meetings_by_date_range", to: "forums#search_meetings_by_date_range"
 
     #meeting recap for team

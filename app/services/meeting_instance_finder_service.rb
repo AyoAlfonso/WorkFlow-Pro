@@ -20,7 +20,7 @@ class MeetingInstanceFinderService < ApplicationService
     when "team_weekly", "personal_weekly"
       week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(on_date_time)
       @meeting_scope.with_template(@meeting_template_id).for_week_of_date(week_to_review_start_time)
-    when "forum_monthly", "personal_monthly"
+    when "forum_monthly", "personal_monthly", "organisation_forum_monthly"
       @meeting_scope.with_template(@meeting_template_id).for_month_of_date(on_date_time)
     else
       raise ArgumentError.new("Meeting type not implemented for instance search")
