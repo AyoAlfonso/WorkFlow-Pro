@@ -1,4 +1,4 @@
-import * as humanizeString from "humanize-string"
+import humanizeString from "humanize-string"
 
 export const meetingTypeParser = (meetingType: string) : string => {
   switch(meetingType) {

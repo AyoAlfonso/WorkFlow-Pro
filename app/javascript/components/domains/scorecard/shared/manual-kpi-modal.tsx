@@ -19,7 +19,7 @@ import {
   RowContainer,
 } from "./modal-elements";
 import { toJS } from "mobx";
-import { TrixEditor } from "react-trix";
+import ReactQuill from "react-quill";
 import { useHistory } from "react-router";
 
 interface ManualKPIModalProps {
@@ -87,7 +87,7 @@ export const ManualKPIModal = observer(
     };
 
     const [greaterThan, setGreaterThan] = useState<boolean>(getgreaterThanValue());
-    const [description, setDescription] = useState<string>(externalManualKPIData?.description);
+    const [description, setDescription] = useState<any>("");
     const [unitType, setUnitType] = useState<string>(
       externalManualKPIData?.unitType || cachedUnitType || "numerical",
     );
@@ -113,6 +113,18 @@ export const ManualKPIModal = observer(
     const removeTagInput = id => {
       setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
     };
+    // useEffect(() => {
+    //   if (!descriptionTemplateStore.descriptionTemplates) {
+    //     descriptionTemplateStore.fetchDescriptiveTemplates();
+    //   }
+    //   const template = toJS(descriptionTemplateStore.descriptionTemplates).find(
+    //     t => t.templateType == "kpi",
+    //   );
+    //   if (template && !externalManualKPIData?.description) {
+    //     setDescription(template.body.body);
+    //   }
+    // }, []);
+
     useEffect(() => {
       if (!descriptionTemplateStore.descriptionTemplates) {
         descriptionTemplateStore.fetchDescriptiveTemplates();
@@ -122,8 +134,10 @@ export const ManualKPIModal = observer(
       );
       if (template && !externalManualKPIData?.description) {
         setDescription(template.body.body);
+      } else {
+        setDescription(externalManualKPIData?.description);
       }
-    }, []);
+    }, [descriptionTemplateStore.descriptionTemplates]);
 
     const resetModal = () => {
       clearData();
@@ -139,7 +153,7 @@ export const ManualKPIModal = observer(
     const clearData = () => {
       setTitle(undefined);
       setGreaterThan(true);
-      setDescription(undefined);
+      setDescription("");
       setUnitType("numerical");
       setOwner(sessionStore?.profile);
       setTargetValue(undefined);
@@ -234,15 +248,14 @@ export const ManualKPIModal = observer(
                 Description
               </InputHeaderWithComment>
               <TrixEditorContainer>
-                <TrixEditor
-                  className={"trix-kpi-modal"}
-                  autoFocus={false}
-                  placeholder={"Add a description..."}
-                  onChange={s => {
-                    setDescription(s);
-                  }}
+                <ReactQuill
+                  className="trix-kpi-modal"
+                  theme="snow"
+                  // defaultValue={description}
                   value={description}
-                  mergeTags={[]}
+                  onChange={(content, delta, source, editor) => {
+                    setDescription(editor.getHTML());
+                  }}
                 />
               </TrixEditorContainer>
             </FormElementContainer>

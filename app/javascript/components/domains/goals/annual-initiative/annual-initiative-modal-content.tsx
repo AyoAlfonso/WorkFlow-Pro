@@ -20,10 +20,10 @@ import { Loading, Avatar, Button } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { GoalDropdownOptions } from "../shared/goal-dropdown-options";
 import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
-import { TrixEditor } from "react-trix";
 import { toJS } from "mobx";
 import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-elements";
 import { sortByDate } from "~/utils/sorting";
+import ReactQuill from "react-quill";
 import { ActivityLogs } from "../shared/activity-logs";
 
 interface IAnnualInitiativeModalContentProps {
@@ -102,8 +102,8 @@ export const AnnualInitiativeModalContent = memo(
         );
       }
 
-      const handleChange = (html, text) => {
-        setDescription(text);
+      const handleChange = html => {
+        setDescription(html);
       };
 
       const editable =
@@ -114,6 +114,13 @@ export const AnnualInitiativeModalContent = memo(
 
       const activeQuarterlyGoals = annualInitiative.activeQuarterlyGoals;
       const allQuarterlyGoals = annualInitiative.quarterlyGoals;
+      const goalYearString =
+        companyStore.company.currentFiscalYear ==
+        companyStore.company.yearForCreatingAnnualInitiatives
+          ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+          : `FY${(companyStore.company.currentFiscalYear - 1)
+              .toString()
+              .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
 
       const renderQuarterlyGoals = () => {
         const quarterlyGoalsToDisplay = showAllQuarterlyGoals
@@ -189,9 +196,6 @@ export const AnnualInitiativeModalContent = memo(
           )
         );
       };
-
-      const goalYearString = `FY${annualInitiative.fiscalYear %
-        100}/${(annualInitiative.fiscalYear + 1) % 100}`;
 
       const renderHeader = (): JSX.Element => {
         return (
@@ -351,17 +355,17 @@ export const AnnualInitiativeModalContent = memo(
                 annualInitiativeStore.update();
               }}
             >
-              <TrixEditor
-                className={"trix-objective-modal"}
-                autoFocus={true}
+              <ReactQuill
+                onBlur={() => {
+                  annualInitiativeStore.updateModelField("contextDescription", description);
+                  annualInitiativeStore.update();
+                }}
+                className="trix-objective-modal"
+                theme="snow"
                 placeholder={"Add a description..."}
-                onChange={handleChange}
                 value={description}
-                mergeTags={[]}
-                onEditorReady={editor => {
-                  editor.element.addEventListener("trix-file-accept", event => {
-                    event.preventDefault();
-                  });
+                onChange={(content, delta, source, editor) => {
+                  handleChange(editor.getHTML());
                 }}
               />
             </TrixEditorContainer>

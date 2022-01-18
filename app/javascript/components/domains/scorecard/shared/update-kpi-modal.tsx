@@ -26,6 +26,7 @@ interface MiniUpdateKPIModalProps {
   ownedById: number;
   unitType: string;
   year: number;
+  quarter?: number;
   week: number;
   fiscalYearStart?: string;
   currentValue: number | undefined;
@@ -43,6 +44,7 @@ export const MiniUpdateKPIModal = observer(
     kpiId,
     unitType,
     year,
+    quarter,
     week,
     fiscalYearStart,
     currentValue,
@@ -60,7 +62,6 @@ export const MiniUpdateKPIModal = observer(
     const [selectedDueDate, setSelectedDueDate] = useState<any>(
       getMondayofDate(week, fiscalYearStart, year),
     );
-
     const [currentWeek, setCurrentWeek] = useState<number>(week);
     const [comment, setComment] = useState("");
     const { owner_type, owner_id } = useParams();
@@ -92,7 +93,7 @@ export const MiniUpdateKPIModal = observer(
           note: null,
           week: currentWeek,
           fiscalYear: year,
-          fiscalQuarter: Math.floor((currentWeek - 1) / 13) + 1,
+          fiscalQuarter: quarter || Math.floor((currentWeek - 1) / 13) + 1,
         };
         if (comment != "") {
           log.note = comment;
@@ -116,8 +117,8 @@ export const MiniUpdateKPIModal = observer(
       clearData();
     };
     const clearData = () => {
-      setTargetWeek(undefined);
-      setTargetValue(undefined);
+      typeof setTargetWeek === "function" ? setTargetWeek(undefined) : null;
+      typeof setTargetValue === "function" ? setTargetValue(undefined) : null;
     };
     return (
       <ModalContainer

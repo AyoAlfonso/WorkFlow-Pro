@@ -15,9 +15,9 @@ import { InitiativeHeader } from "../shared-quarterly-goal-and-sub-initiative/in
 import { ShowMilestonesButton } from "../shared-quarterly-goal-and-sub-initiative/show-milestones-button";
 import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-elements";
 import { toJS } from "mobx";
-import { TrixEditor } from "react-trix";
+import ReactQuill from "react-quill";
 import { ActivityLogs } from "../shared/activity-logs";
-import { sortByDate } from "~/utils/sorting";
+
 
 interface ISubInitiativeModalContentProps {
   subInitiativeId: number;
@@ -81,7 +81,7 @@ export const SubInitiativeModalContent = observer(
       );
     }
 
-    const handleChange = (html, text) => {
+    const handleChange = text => {
       setDescription(text);
     };
 
@@ -93,11 +93,13 @@ export const SubInitiativeModalContent = observer(
     const allMilestones = subInitiative.milestones;
     const activeMilestones = subInitiative.activeMilestones;
 
-    const goalYearString = `FY${subInitiative.fiscalYear.toString().slice(-2)}/${(
-      subInitiative.fiscalYear + 1
-    )
-      .toString()
-      .slice(-2)}`;
+    const goalYearString =
+      companyStore.company.currentFiscalYear ==
+      companyStore.company.yearForCreatingAnnualInitiatives
+        ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+        : `FY${(companyStore.company.currentFiscalYear - 1)
+            .toString()
+            .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
 
     const createLog = () => {
       const objectiveLog = {
@@ -179,23 +181,18 @@ export const SubInitiativeModalContent = observer(
             )}
           </SubInitiativeBodyContainer>
           <SubHeader>Description</SubHeader>
-          <TrixEditorContainer
-            onBlur={() => {
-              subInitiativeStore.updateModelField("contextDescription", description);
-              subInitiativeStore.update();
-            }}
-          >
-            <TrixEditor
-              className={"trix-initiative-modal"}
-              autoFocus={true}
+          <TrixEditorContainer>
+            <ReactQuill
+              onBlur={() => {
+                subInitiativeStore.updateModelField("contextDescription", description);
+                subInitiativeStore.update();
+              }}
+              className="trix-initiative-modal"
+              theme="snow"
               placeholder={"Add a description..."}
-              onChange={handleChange}
               value={description}
-              mergeTags={[]}
-              onEditorReady={editor => {
-                editor.element.addEventListener("trix-file-accept", event => {
-                  event.preventDefault();
-                });
+              onChange={(content, delta, source, editor) => {
+                handleChange(editor.getHTML());
               }}
             />
           </TrixEditorContainer>

@@ -15,7 +15,7 @@ import { Line } from "react-chartjs-2";
 import { baseTheme } from "~/themes/base";
 import { getScorePercent } from "../scorecard-table-view";
 import { MiniUpdateKPIModal } from "./update-kpi-modal";
-import { TrixEditor } from "react-trix";
+import ReactQuill from "react-quill";
 import { OwnedBySection } from "~/components/domains/goals/shared/owned-by-section";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import { toJS } from "mobx";
@@ -447,21 +447,15 @@ export const ViewEditKPIModal = observer(
                   </ChartContainer>
                   <SubHeader>Description</SubHeader>
                   <TrixEditorContainer>
-                    <TrixEditor
-                      className={"trix-kpi-modal"}
-                      autoFocus={true}
-                      placeholder={"Add a description..."}
-                      onChange={description => {
-                        setDescription(description);
+                    <ReactQuill
+                      onBlur={() => {
                         saveKPI({ description });
                       }}
+                      className="trix-kpi-modal"
+                      theme="snow"
                       value={description}
-                      mergeTags={[]}
-                      onEditorReady={editor => {
-                        setDescription(description);
-                        editor.element.addEventListener("trix-file-accept", event => {
-                          event.preventDefault();
-                        });
+                      onChange={(content, delta, source, editor) => {
+                        setDescription(editor.getHTML());
                       }}
                     />
                   </TrixEditorContainer>

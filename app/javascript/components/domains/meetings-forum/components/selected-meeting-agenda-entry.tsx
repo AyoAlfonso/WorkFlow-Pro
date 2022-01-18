@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
 import * as R from "ramda";
 import { observer } from "mobx-react";
-import * as moment from "moment";
+import moment from "moment";
 import { Text } from "~/components/shared/text";
 import { MeetingAgenda } from "../../meetings/components/meeting-agenda";
 import { Heading } from "~/components/shared";

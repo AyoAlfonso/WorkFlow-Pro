@@ -12,7 +12,7 @@ import {
   InputFromUnitType,
 } from "../../scorecard/shared/modal-elements";
 import { useParams } from "react-router-dom";
-import * as moment from "moment";
+import moment from "moment";
 import { toJS } from "mobx";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "./empty-state";
@@ -38,7 +38,7 @@ export const KpiComponent = observer(
 
     useEffect(() => {
       scorecardStore
-        .getScorecard({ ownerType: "user", ownerId: id, manualKPI: true })
+        .getScorecard({ ownerType: "user", ownerId: id, showAll: true })
         .then(() => setLoading(false));
       companyStore.load();
     }, [id]);

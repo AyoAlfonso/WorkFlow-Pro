@@ -304,7 +304,7 @@ export const SideNavNoMst = (
             icon={"Team"}
             currentPathName={currentPathName}
           >
-            {t("navigation.forum")}
+            {t("navigation.meeting")}
           </StyledProgrammaticLinkChildrenActive>
         );
       default:
@@ -312,7 +312,7 @@ export const SideNavNoMst = (
           <SideNavChildPopup
             trigger={
               <NavMenuIcon icon={"Team"} active={false} disableOnActive={false}>
-                {t("navigation.forum")}
+                {t("navigation.meeting")}
               </NavMenuIcon>
             }
             navOpen={startMeetingNavChildOpen}

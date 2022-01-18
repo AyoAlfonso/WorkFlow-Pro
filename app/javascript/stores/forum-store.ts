@@ -8,7 +8,7 @@ import MeetingTypes from "~/constants/meeting-types";
 import { ApiResponse } from "apisauce";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
-// import * as moment from "moment";
+// import moment from "moment";
 
 // we can piggy back off the teamStore's currentMeeting instead of upcoming meeting
 export const ForumStoreModel = types

@@ -45,5 +45,6 @@ build-storybook.log
 *.DS_Store
 dump.rdb
 db/schema.rb
-
 /.out
+
+coverage/

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { MilestoneType } from "~/types/milestone";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
-import * as moment from "moment";
+import moment from "moment";
 import { observer } from "mobx-react";
 import { ChevronDownIcon } from "../../../shared/input";
 import { baseTheme } from "../../../../themes";
@@ -20,7 +20,14 @@ interface MilestoneDropdownProps {
 
 export const MilestoneDropdown = observer(
   (props: MilestoneDropdownProps): JSX.Element => {
-    const { milestone, milestoneStatus, editable, fromMeeting, fromWeeklyCheckIn, itemType } = props;
+    const {
+      milestone,
+      milestoneStatus,
+      editable,
+      fromMeeting,
+      fromWeeklyCheckIn,
+      itemType,
+    } = props;
     const { quarterlyGoalStore, subInitiativeStore, milestoneStore } = useMst();
 
     const [showList, setShowList] = useState<boolean>(false);
@@ -52,7 +59,7 @@ export const MilestoneDropdown = observer(
     }, [showList]);
 
     const statusChangable = moment(milestone.weekOf).isSameOrBefore(moment(), "week");
-    
+
     const {
       warningRed,
       tango,
@@ -102,18 +109,18 @@ export const MilestoneDropdown = observer(
         milestoneStore.updateStatusFromWeeklyCheckIn(milestone.id, status);
       }
 
-        if (!fromMeeting) {
-          switch (itemType) {
-            case "quarterlyGoal":
-              quarterlyGoalStore.updateMilestoneStatus(milestone.id, status);
-              break;
-            case "subInitiative":
-              subInitiativeStore.updateMilestoneStatus(milestone.id, status);
-              break;
-            default:
-              break;
-          }
+      if (!fromMeeting) {
+        switch (itemType) {
+          case "quarterlyGoal":
+            quarterlyGoalStore.updateMilestoneStatus(milestone.id, status);
+            break;
+          case "subInitiative":
+            subInitiativeStore.updateMilestoneStatus(milestone.id, status);
+            break;
+          default:
+            break;
         }
+      }
     };
 
     const statusArray = ["unstarted", "incomplete", "in_progress", "completed"];

@@ -4,7 +4,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
   before_action :set_objective_log, only: [:show, :destroy]
 
   def index
-     objective_log = policy_scope(ObjectiveLog).where(objecteable_id: params[:id], objecteable_type: params[:type]).page(params[:page]).per(params[:per]).sort_by_creation_date
+     objective_log = policy_scope(ObjectiveLog).where(objecteable_id: params[:id], objecteable_type: params[:type]).page(params[:page]).per(params[:per]).sort_by_adjusted_date
      render json: { objective_log: objective_log, meta: { first_page: objective_log.first_page?, prev_page: objective_log.prev_page, next_page: objective_log.next_page, current_page: objective_log.current_page, total_pages: objective_log.total_pages, total_count: objective_log.total_count, size: objective_log.size }, status: :ok }
   end 
 
@@ -41,6 +41,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
         status: params[:status],
         description: "",
         created_by: current_user,
+        adjusted_date: params[:adjusted_date]
       )
     elsif (params[:objecteable_type] == "SubInitiative")
         SubInitiative.find(params[:objecteable_id]).create_milestones_for_sub_initiative(current_user, current_company)
@@ -52,6 +53,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
         status: params[:status],
         description: "",
         created_by: current_user,
+        adjusted_date: params[:adjusted_date]
       )
     end
   end
@@ -70,7 +72,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
   end
 
   def objective_log_params
-    params.permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :child_id, :child_type, :fiscal_quarter, :fiscal_year, :week, :status, :created_at)
+    params.permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :child_id, :child_type, :fiscal_quarter, :fiscal_year, :week, :status, :created_at, :adjusted_date)
   end
 
 end

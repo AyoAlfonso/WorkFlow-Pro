@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { Loading } from "~/components/shared/loading";
 import { useParams } from "react-router-dom";
 import { toJS } from "mobx";
-import * as moment from "moment";
+import moment from "moment";
 import { Avatar } from "~/components/shared";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "./empty-state";

@@ -2,7 +2,6 @@ import * as React from "react";
 import styled from "styled-components";
 import { color, layout, space } from "styled-system";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Text } from "./text";
 import { Icon } from "./icon";
 
