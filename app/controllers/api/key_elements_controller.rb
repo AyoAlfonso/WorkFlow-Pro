@@ -7,8 +7,9 @@ class Api::KeyElementsController < Api::ApplicationController
   def check_in_key_elements
     @quarterly_goal_key_elements = policy_scope(KeyElement).current_user_and_elementable_type(current_user, "QuarterlyGoal")
     @subinitiative_key_elements = policy_scope(KeyElement).current_user_and_elementable_type(current_user, "SubInitiative")
-   authorize  @subinitiative_key_elements
-   authorize @quarterly_goal_key_elements
+    # @subinitiative_key_elements = policy_scope(KeyElement).current_user_and_elementable_type(current_user, "SubInitiative")
+    authorize  @subinitiative_key_elements
+    authorize @quarterly_goal_key_elements
     render "/api/key_elements/key_elements_for_check_in"
   end
 
