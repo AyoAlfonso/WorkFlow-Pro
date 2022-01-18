@@ -56,6 +56,7 @@ export const KeyElement = observer(
     keyElement,
     targetValueMargin,
     object,
+    date,
   }: IKeyElementProps): JSX.Element => {
     const {
       annualInitiativeStore,
@@ -252,6 +253,16 @@ export const KeyElement = observer(
       return formattedType;
     };
 
+    const checkWeekOf = () => {
+      if (moment(date).format("MMM Do, YYYY") == moment(new Date()).format("MMM Do, YYYY")) {
+        return getWeekOf();
+      } else {
+        return moment(date)
+          .startOf("isoWeek")
+          .format("YYYY-MM-DD");
+      }
+    };
+
     const createLog = () => {
       const objectiveLog = {
         ownedById: selectedUser.id,
@@ -265,7 +276,8 @@ export const KeyElement = observer(
         childType: "KeyElement",
         childId: element.id,
         status: element.status,
-        weekOf: getWeekOf(),
+        weekOf: checkWeekOf(),
+        adjustedDate: date,
       };
 
       store.createActivityLog(objectiveLog);

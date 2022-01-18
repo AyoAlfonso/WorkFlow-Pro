@@ -73,7 +73,7 @@ export const ActivityLogs = observer(
                           </ActivityLogText>
                           <ActivityLogText>
                             <ActivityLogDate>
-                              {moment(log.createdAt).format("MMM D, YYYY")}
+                              {moment(log.adjustedDate || log.createdAt).format("MMM D, YYYY")}
                             </ActivityLogDate>
                             <ActivityLogDelete
                               onClick={() => {
