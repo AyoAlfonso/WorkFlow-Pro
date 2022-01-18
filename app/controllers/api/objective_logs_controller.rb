@@ -41,6 +41,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
         status: params[:status],
         description: "",
         created_by: current_user,
+        adjusted_date: params[:adjusted_date]
       )
     elsif (params[:objecteable_type] == "SubInitiative")
         SubInitiative.find(params[:objecteable_id]).create_milestones_for_sub_initiative(current_user, current_company)
@@ -52,6 +53,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
         status: params[:status],
         description: "",
         created_by: current_user,
+        adjusted_date: params[:adjusted_date]
       )
     end
   end
@@ -70,7 +72,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
   end
 
   def objective_log_params
-    params.permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :child_id, :child_type, :fiscal_quarter, :fiscal_year, :week, :status, :created_at)
+    params.permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :child_id, :child_type, :fiscal_quarter, :fiscal_year, :week, :status, :created_at, :adjusted_date)
   end
 
 end

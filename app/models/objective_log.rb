@@ -16,7 +16,7 @@ class ObjectiveLog < ApplicationRecord
 
   scope :owned_by_user, ->(user) { where(owned_by_id: user) }
   scope :created_between, ->(date_start, date_end) { where("created_at >= ? AND created_at < ?", date_start, date_end) }
-  scope :sort_by_creation_date, -> { order(created_at: :desc) }
+  scope :sort_by_creation_date, -> { order(adjusted_date: :desc) }
 
   # after_save :verify_company_static_data, :verify_description_templates
 
