@@ -8,44 +8,52 @@
     "build-storybook": "build-storybook -c .storybook -o .out",
     "chromatic": "npx chromatic --project-token=csgzsa3zl9q --exit-zero-on-changes"
   },
-   "jest": {    
-    "modulePathIgnorePatterns": ["/config"],
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "/config"
+    ],
     "collectCoverageFrom": [
       "app/components/**/*.{ts,tsx}",
       "!**/node_modules/**",
       "!**/*.stories.{js,jsx}"
     ],
     "collectCoverage": true,
-    "testMatch": [ "**/?(*.)+(test).[jt]s?(x)" ],
+    "testMatch": [
+      "**/?(*.)+(test).[jt]s?(x)"
+    ],
     "transform": {
       "^.+\\.ts?$": "ts-jest",
       "^.+\\.tsx?$": "ts-jest",
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
-   "roots": [
-    "<rootDir>",
-    "app"
-  ],
-  "modulePaths": [
-    "<rootDir>",
-    "app"
-  ],
-  "moduleDirectories": [
-    "node_modules",
-    "app"
-  ],
-  "moduleNameMapper": {
-      "^~(.*)$": "<rootDir>/app/javascript/$1"
+    "roots": [
+      "<rootDir>",
+      "app"
+    ],
+    "modulePaths": [
+      "<rootDir>",
+      "app"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "app"
+    ],
+    "moduleNameMapper": {
+      "^~(.*)$": "<rootDir>/app/javascript/$1",
+      "\\.(css|less|scss|sass|css?raw)$": "identity-obj-proxy"
     },
     "testEnvironment": "jsdom",
-    "extensionsToTreatAsEsm": [".ts"],
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
       "js",
       "jsx",
       "json"
-    ]},
+    ]
+  },
   "dependencies": {
     "@activeadmin/activeadmin": "^2.7.0",
     "@babel/plugin-proposal-private-methods": "^7.14.5",
@@ -160,6 +168,7 @@
     "babel-preset-es2015": "^6.24.1",
     "chromatic": "^5.0.0",
     "eslint": "^7.2.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.7",
     "react-code-blocks": "^0.0.7",
     "reactotron-apisauce": "^3.0.0",

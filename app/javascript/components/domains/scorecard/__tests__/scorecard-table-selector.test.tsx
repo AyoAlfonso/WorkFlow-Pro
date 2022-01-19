@@ -25,18 +25,6 @@ import { RootStoreModel } from "app/javascript/stores/root-store";
 describe("Renders Scorecard Table View", () => {
   describe("Pass Table props", () => {
     it("input", () => {
-      jest.mock("app/javascript/stores/company-store", () => {
-        return { token: "foobar" };
-      });
-
-      jest.mock("app/javascript/stores/team-store", () => {
-        return { token: "foobar" };
-      });
-
-      jest.mock("app/javascript/stores/user-store", () => {
-        return { token: "foobar" };
-      });
-      expect(2).toBeGreaterThan(1);
     
       rootStore.userStore.setUsersManually(dataState.userStore.users)
       rootStore.companyStore.setCompanyManually(dataState.companyStore.company)
