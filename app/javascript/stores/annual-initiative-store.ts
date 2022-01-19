@@ -92,11 +92,12 @@ export const AnnualInitiativeStoreModel = types
 
         const keyElements = self.annualInitiative.keyElements;
         const keyElementIndex = keyElements.findIndex(ke => ke.id == keyElementId);
-        keyElements[keyElementIndex] = response.data.keyElement;
+        keyElements[keyElementIndex] = response.data;
         self.annualInitiative.keyElements = keyElements;
         showToast("Key Result updated", ToastMessageConstants.SUCCESS);
-        return response.data.keyElement;
+        return response.data;
       } catch (error) {
+        console.log(error)
         showToast(il8n.t("annualInitiative.keyElementUpdateError"), ToastMessageConstants.ERROR);
         return false;
       }
