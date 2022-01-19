@@ -34,7 +34,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
      QuarterlyGoal.find(params[:objecteable_id]).create_milestones_for_quarterly_goal(current_user, current_company)
   
      #We should eagerly update the current week i.e params[:week] that is being logged
-     Milestone.update!(
+     Milestone.update(
         milestoneable_type: params[:objecteable_type],
         milestoneable_id: params[:objecteable_id] ,
         week: week,
@@ -45,7 +45,7 @@ class Api::ObjectiveLogsController < Api::ApplicationController
       )
     elsif (params[:objecteable_type] == "SubInitiative")
         SubInitiative.find(params[:objecteable_id]).create_milestones_for_sub_initiative(current_user, current_company)
-        Milestone.update!(
+        Milestone.update(
         milestoneable_type: params[:objecteable_type],
         milestoneable_id: params[:objecteable_id] ,
         week: week,
