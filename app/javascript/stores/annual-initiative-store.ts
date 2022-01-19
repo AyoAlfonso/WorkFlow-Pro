@@ -98,6 +98,7 @@ export const AnnualInitiativeStoreModel = types
         return response.data.keyElement;
       } catch (error) {
         showToast(il8n.t("annualInitiative.keyElementUpdateError"), ToastMessageConstants.ERROR);
+        return false;
       }
     }),
     deleteKeyElement: flow(function*(keyElementId) {

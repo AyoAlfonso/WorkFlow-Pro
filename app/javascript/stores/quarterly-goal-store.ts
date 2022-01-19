@@ -111,6 +111,7 @@ export const QuarterlyGoalStoreModel = types
         return response.data.keyElement;
       } catch (error) {
         showToast(il8n.t("quarterlyGoal.keyElementUpdateError"), ToastMessageConstants.ERROR);
+        return false;
       }
     }),
     deleteKeyElement: flow(function*(keyElementId) {

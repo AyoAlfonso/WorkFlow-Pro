@@ -206,7 +206,7 @@ export const KeyElement = observer(
       );
     };
 
-    const updateKeyElement = ownedBy => {
+    const updateKeyElement = async (ownedBy) => {
       const keyElementParams = {
         value: element.value,
         completionType: element.completionType,
@@ -225,12 +225,13 @@ export const KeyElement = observer(
       } else if (type == "subInitiative") {
         id = store.subInitiative.id;
       }
-      type == "checkIn"
+      const res = await type == "checkIn"
         ? store.updateKeyElement(element.id, {
             value: element.value,
             status: element.status,
           })
         : store.updateKeyElement(id, element.id, keyElementParams);
+      return res
     };
 
     const typeForCheckIn = () => {
@@ -288,12 +289,14 @@ export const KeyElement = observer(
       setSelectedUser(newUser);
       updateKeyElement(newUser.id);
     };
-
+    
     const isLogRecent = () => {
-      const recentLogDate = moment(
-        element.objectiveLogs[element.objectiveLogs.length - 1]?.createdAt,
-      ).format("YYYY-MM-DD");
-      if (!element.objectiveLogs[element.objectiveLogs.length - 1]) {
+      const recentLogDate =
+        moment(element.objectiveLogs[element.objectiveLogs?.length - 1]?.createdAt).format(
+          "YYYY-MM-DD",
+        ) || null;
+      if (!recentLogDate) return false;
+      if (!element.objectiveLogs[element.objectiveLogs?.length - 1]) {
         return false;
       }
       if (recentLogDate === getWeekOf()) {
@@ -381,7 +384,7 @@ export const KeyElement = observer(
                   setShowList(editable && !showList);
                 }}
                 ref={dropdownRef}
-                isLogRecent={type !== "checkIn" ? false : isLogRecent()}
+                isLogRecent={isLogRecent()}
               >
                 {determineStatusLabel(element.status)}
                 <ChevronDownIcon />
@@ -391,16 +394,19 @@ export const KeyElement = observer(
                   <DropdownList>
                     {statusArray.map((status, index) => (
                       <StatusBadgeContainer
-                        onClick={() => {
+                        onClick={async () => {
                           store.updateKeyElementValue("status", element.id, status);
-                          updateKeyElement(selectedUser.id);
-                          createLog();
+                          const res = await updateKeyElement(selectedUser.id);
+                          
+                          if (res) {
+                            createLog();
+                          }
                           if (type == "checkin") {
                             setShowList(!showList);
                             return;
                           }
                           if (status === "done") {
-                            element.id, true;
+                            store.updateKeyElementStatus(element.id, true);
                           } else {
                             store.updateKeyElementStatus(element.id, false);
                           }
@@ -425,7 +431,7 @@ export const KeyElement = observer(
                     setShowList(editable && !showList);
                   }}
                   ref={dropdownRef}
-                  isLogRecent={type !== "checkIn" ? false : isLogRecent()}
+                  isLogRecent={isLogRecent()}
                 >
                   {determineStatusLabel(element.status)}
                   <ChevronDownIcon />
@@ -435,11 +441,14 @@ export const KeyElement = observer(
                     <DropdownList>
                       {statusArray.map((status, index) => (
                         <StatusBadgeContainer
-                          onClick={() => {
+                          onClick={async () => {
                             store.updateKeyElementValue("status", element.id, status);
-                            updateKeyElement(selectedUser.id);
+                            const res = await updateKeyElement(selectedUser.id);
+                            
+                            if (res) {
+                              createLog();
+                            }
                             setShowList(!showList);
-                            createLog();
                           }}
                           key={index}
                           value={status}

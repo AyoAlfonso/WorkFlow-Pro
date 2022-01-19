@@ -100,6 +100,7 @@ export const SubInitiativeStoreModel = types
         return response.data.keyElement;
       } catch (error) {
         showToast(il8n.t("subInitiative.keyElementUpdateError"), ToastMessageConstants.ERROR);
+        return false;
       }
     }),
     deleteKeyElement: flow(function*(keyElementId) {
