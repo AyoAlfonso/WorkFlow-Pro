@@ -25,16 +25,16 @@ const ProgressBarContainer = styled.div<ProgressBarContainerProps>`
           bg: "grey10",
         },
         incomplete: {
-          bg: "almostPink",
+          bg: "grey10",
         },
         in_progress: {
-          bg: "lightYellow",
+          bg: "grey10",
         },
         completed: {
-          bg: "lightFinePine",
+          bg: "grey10",
         },
         done: {
-          bg: "primary20",
+          bg: "grey10",
         },
       },
     })}
@@ -59,7 +59,7 @@ const ProgressBarFillDiv = styled(motion.div)<ProgressBarFillDivProps>`
           background: buildRepeatingLinearGradient(props.theme.colors.warningRed, 70, 5, "px", 10),
         },
         in_progress: {
-          background: buildRepeatingLinearGradient(props.theme.colors.tango, 70, 5, "px", 10),
+          background: buildRepeatingLinearGradient(props.theme.colors.boldYellow, 70, 5, "px", 10),
         },
         completed: {
           background: buildRepeatingLinearGradient(props.theme.colors.finePine, 70, 5, "px", 20),
