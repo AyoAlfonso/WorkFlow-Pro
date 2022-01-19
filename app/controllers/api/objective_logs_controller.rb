@@ -27,35 +27,24 @@ class Api::ObjectiveLogsController < Api::ApplicationController
   existing_milestone = Milestone.where(week: week, milestoneable_type: params[:objecteable_type], milestoneable_id: params[:objecteable_id],
     week_of: params[:week_of])
 
-  existing_milestone.update!(status: params[:status]) if existing_milestone.present?
+  existing_milestone.update(status: params[:status]) if existing_milestone.present?
 
   unless existing_milestone.present?
     if (params[:objecteable_type] == "QuarterlyGoal")
-     QuarterlyGoal.find(params[:objecteable_id]).create_milestones_for_quarterly_goal(current_user, current_company)
+     QuarterlyGoal.find(params[:objecteable_id]).create_milestones_for_quarterly_goal(current_user, current_company, params[:fiscal_quarter])
   
      #We should eagerly update the current week i.e params[:week] that is being logged
-     Milestone.update(
-        milestoneable_type: params[:objecteable_type],
-        milestoneable_id: params[:objecteable_id] ,
-        week: week,
-        week_of: params[:week_of],
-        status: params[:status],
-        description: "",
-        created_by: current_user,
-        adjusted_date: params[:adjusted_date]
-      )
+      milestone = Milestone.where(milestoneable_type: params[:objecteable_type],
+      milestoneable_id: params[:objecteable_id], week_of: params[:week_of]).first
+      milestone.update(status: params[:status])
+
     elsif (params[:objecteable_type] == "SubInitiative")
-        SubInitiative.find(params[:objecteable_id]).create_milestones_for_sub_initiative(current_user, current_company)
-        Milestone.update(
-        milestoneable_type: params[:objecteable_type],
-        milestoneable_id: params[:objecteable_id] ,
-        week: week,
-        week_of: params[:week_of],
-        status: params[:status],
-        description: "",
-        created_by: current_user,
-        adjusted_date: params[:adjusted_date]
-      )
+        SubInitiative.find(params[:objecteable_id]).create_milestones_for_sub_initiative(current_user, current_company, params[:fiscal_quarter])
+   
+        #We should eagerly update the current week i.e params[:week] that is being logged
+        milestone = Milestone.where(milestoneable_type: params[:objecteable_type],
+        milestoneable_id: params[:objecteable_id], week_of: params[:week_of]).first
+        milestone.update(status: params[:status])
     end
   end
     render json: { objective_log: @objective_log, status: :ok }
