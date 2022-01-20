@@ -1,10 +1,10 @@
-import humanizeString from "humanize-string"
+import humanizeString from "humanize-string";
 
-export const meetingTypeParser = (meetingType: string) : string => {
-  switch(meetingType) {
+export const meetingTypeParser = (meetingType: string): string => {
+  switch (meetingType) {
     case "forum_monthly":
-      return "Forum Meeting"
+      return "Forum Meeting";
     default:
       return humanizeString(meetingType);
   }
-}
+};

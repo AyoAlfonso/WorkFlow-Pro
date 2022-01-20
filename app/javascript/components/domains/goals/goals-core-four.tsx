@@ -49,13 +49,23 @@ export const GoalsCoreFour = ({
   );
 };
 
-
 const CoreFourValues = observer(
   (): JSX.Element => {
     const {
       companyStore: { company },
     } = useMst();
     const { t } = useTranslation();
+
+    const instanceType = company.accessForum ? "forum" : "teams";
+
+    const Core1Content =
+      instanceType == "forum" ? "<span> Be Confidential <span>" : company.coreFour.core1Content;
+    const Core2Content =
+      instanceType == "forum" ? "<span> Be Real <span>" : company.coreFour.core2Content;
+    const Core3Content =
+      instanceType == "forum" ? "<span> Be Committed <span>" : company.coreFour.core3Content;
+    const Core4Content =
+      instanceType == "forum" ? "<span> Be Curious <span>" : company.coreFour.core4Content;
 
     return company ? (
       <Flex>
@@ -64,10 +74,7 @@ const CoreFourValues = observer(
             {t("core.core1")}
           </CoreFourHeaderText>
           <CoreFourBodyTextContainer>
-            <div
-              className="trix-content"
-              dangerouslySetInnerHTML={{ __html: company.coreFour.core1Content }}
-            ></div>
+            <div className="trix-content" dangerouslySetInnerHTML={{ __html: Core1Content }}></div>
           </CoreFourBodyTextContainer>
         </Box>
         <Box width={1 / 4} sx={boxStyle}>
@@ -75,10 +82,7 @@ const CoreFourValues = observer(
             {t("core.core2")}
           </CoreFourHeaderText>
           <CoreFourBodyTextContainer>
-            <div
-              className="trix-content"
-              dangerouslySetInnerHTML={{ __html: company.coreFour.core2Content }}
-            ></div>
+            <div className="trix-content" dangerouslySetInnerHTML={{ __html: Core2Content }}></div>
           </CoreFourBodyTextContainer>
         </Box>
         <Box width={1 / 4} sx={boxStyle}>
@@ -86,10 +90,7 @@ const CoreFourValues = observer(
             {t("core.core3")}
           </CoreFourHeaderText>
           <CoreFourBodyTextContainer>
-            <div
-              className="trix-content"
-              dangerouslySetInnerHTML={{ __html: company.coreFour.core3Content }}
-            ></div>
+            <div className="trix-content" dangerouslySetInnerHTML={{ __html: Core3Content }}></div>
           </CoreFourBodyTextContainer>
         </Box>
         <Box width={1 / 4} sx={boxStyle}>
@@ -97,10 +98,7 @@ const CoreFourValues = observer(
             {t("core.core4")}
           </CoreFourHeaderText>
           <CoreFourBodyTextContainer>
-            <div
-              className="trix-content"
-              dangerouslySetInnerHTML={{ __html: company.coreFour.core4Content }}
-            ></div>
+            <div className="trix-content" dangerouslySetInnerHTML={{ __html: Core4Content }}></div>
           </CoreFourBodyTextContainer>
         </Box>
       </Flex>
@@ -109,8 +107,6 @@ const CoreFourValues = observer(
     );
   },
 );
-
-
 
 export const CoreFourOnly = (): JSX.Element => (
   <div>
@@ -155,7 +151,6 @@ const CoreFourHeader = styled.div`
   display: flex;
   margin-top: -32px;
 `;
-
 
 const HideButtonContainer = styled.div`
   display: flex;

@@ -98,14 +98,16 @@ class Api::MeetingsController < Api::ApplicationController
     @meeting = case (params[:meeting_type])
       when "forum_monthly"
         policy_scope(Meeting).team_meetings(params[:team_id]).for_type(params[:meeting_type]).for_scheduled_start_date_range(current_user.convert_to_their_timezone.beginning_of_month, current_user.convert_to_their_timezone.end_of_month).last
+     when "organisation_forum_monthly"
+        policy_scope(Meeting).team_meetings(params[:team_id]).for_type(params[:meeting_type]).for_scheduled_start_date_range(current_user.convert_to_their_timezone.beginning_of_month, current_user.convert_to_their_timezone.end_of_month).last
       else
         nil
       end
 
     if @meeting.blank?
       #raise error
-      raise "No meeting has created beforehand for this period, please do that."
-    elsif @meeting.end_time.present? && @meeting.meeting_template_id == MeetingTemplate.forum_monthly.first.id
+      raise "No meeting has been created beforehand for this period, please do that."
+    elsif @meeting.end_time.present? && (@meeting.meeting_template_id == MeetingTemplate.forum_monthly.first.id || @meeting.meeting_template_id == MeetingTemplate.organisation_forum_monthly.first.id)
       old_meeting = @meeting
       @meeting = Meeting.create!({
         meeting_template_id: old_meeting.meeting_template_id,

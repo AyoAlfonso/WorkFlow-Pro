@@ -74,7 +74,11 @@ export const Section1ForumMeetings = observer(
               small
               variant={"grey"}
               onClick={() => {
-                forumStore.createMeetingsForYear(forumStore.currentForumTeamId, currentYear);
+                forumStore.createMeetingsForYear(
+                  forumStore.currentForumTeamId,
+                  currentYear,
+                  company.forumType,
+                );
               }}
             >
               <Icon icon={"Plus"} size={"20px"} />

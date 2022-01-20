@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 export const HeaderText = observer(
   ({ location }): JSX.Element => {
-    const { sessionStore, companyStore, teamStore } = useMst()
+    const { sessionStore, companyStore, teamStore } = useMst();
     const { t } = useTranslation();
 
     const locationPath = location.pathname.split("/");
