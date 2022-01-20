@@ -77,8 +77,7 @@ export const AnnualInitiativeStoreModel = types
           return response.data;
         }
         //api to show error
-      } catch (e) {
-        console.log(e)
+      } catch {
         showToast("There was an error creating the key element", ToastMessageConstants.ERROR);
       }
     }),
