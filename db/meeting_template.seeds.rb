@@ -232,8 +232,8 @@ mt3.update!(
 )
 
 
-mt5 = MeetingTemplate.where(meeting_type: :organisation_forum_monthly, name: "Organisation Forum_monthly Monthly").first_or_initialize
-mt5.steps.destroy_all if mt3.steps.count > 0
+mt5 = MeetingTemplate.where(meeting_type: :organisation_forum_monthly, name: "Organisation Forum Monthly").first_or_initialize
+mt5.steps.destroy_all if mt5.steps.count > 0
 mt5.update!(
   meeting_type: :organisation_forum_monthly,
   name: "Organisation Forum Monthly",

@@ -58,47 +58,55 @@ const CoreFourValues = observer(
 
     const instanceType = company.accessForum ? "forum" : "teams";
 
-    const Core1Content =
-      instanceType == "forum" ? "<span> Be Confidential <span>" : company.coreFour.core1Content;
-    const Core2Content =
-      instanceType == "forum" ? "<span> Be Real <span>" : company.coreFour.core2Content;
-    const Core3Content =
-      instanceType == "forum" ? "<span> Be Committed <span>" : company.coreFour.core3Content;
-    const Core4Content =
-      instanceType == "forum" ? "<span> Be Curious <span>" : company.coreFour.core4Content;
+    const core1Header = instanceType == "forum" ? "Be Confidential" : t("core.core1");
+    const core2Header = instanceType == "forum" ? "Be Real" : t("core.core2");
+    const core3Header = instanceType == "forum" ? "Be Committed" : t("core.core3");
+    const core4Header = instanceType == "forum" ? "Be Curious" : t("core.core4");
 
     return company ? (
       <Flex>
         <Box width={1 / 4} sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
-            {t("core.core1")}
+            {core1Header}
           </CoreFourHeaderText>
           <CoreFourBodyTextContainer>
-            <div className="trix-content" dangerouslySetInnerHTML={{ __html: Core1Content }}></div>
+            <div
+              className="trix-content"
+              dangerouslySetInnerHTML={{ __html: company.coreFour.core1Content }}
+            ></div>
           </CoreFourBodyTextContainer>
         </Box>
         <Box width={1 / 4} sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
-            {t("core.core2")}
+            {core2Header}
           </CoreFourHeaderText>
           <CoreFourBodyTextContainer>
-            <div className="trix-content" dangerouslySetInnerHTML={{ __html: Core2Content }}></div>
+            <div
+              className="trix-content"
+              dangerouslySetInnerHTML={{ __html: company.coreFour.core2Content }}
+            ></div>
           </CoreFourBodyTextContainer>
         </Box>
         <Box width={1 / 4} sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
-            {t("core.core3")}
+            {core3Header}
           </CoreFourHeaderText>
           <CoreFourBodyTextContainer>
-            <div className="trix-content" dangerouslySetInnerHTML={{ __html: Core3Content }}></div>
+            <div
+              className="trix-content"
+              dangerouslySetInnerHTML={{ __html: company.coreFour.core3Content }}
+            ></div>
           </CoreFourBodyTextContainer>
         </Box>
         <Box width={1 / 4} sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
-            {t("core.core4")}
+            {core4Header}
           </CoreFourHeaderText>
           <CoreFourBodyTextContainer>
-            <div className="trix-content" dangerouslySetInnerHTML={{ __html: Core4Content }}></div>
+            <div
+              className="trix-content"
+              dangerouslySetInnerHTML={{ __html: company.coreFour.core4Content }}
+            ></div>
           </CoreFourBodyTextContainer>
         </Box>
       </Flex>
