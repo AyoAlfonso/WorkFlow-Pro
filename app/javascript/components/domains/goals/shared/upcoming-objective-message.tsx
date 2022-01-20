@@ -18,7 +18,7 @@ export const UpcomingMessage = ({ fiscalTime, goalType }: IUpcomingMessageProps)
       </HeadingSection>
       <BodySection>
         <BodyText>
-          {t(`This ${goalType} is set ${fiscalTime}. Any updates made won't be reflected until the
+          {t(`This ${goalType} is set for ${fiscalTime}. Any updates made won't be reflected until the
           timeframe has begun. Please note that Objectives or initiatives created in the final four
           weeks of each fiscal timeframe will be automatically set to the following fiscal year or
           quarter`)}

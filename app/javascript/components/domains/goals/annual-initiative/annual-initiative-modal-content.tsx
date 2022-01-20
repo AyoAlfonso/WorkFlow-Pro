@@ -126,7 +126,6 @@ export const AnnualInitiativeModalContent = memo(
           : `FY${(companyStore.company.currentFiscalYear - 1)
               .toString()
               .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
-      // const goalYearString = `FY${annualInitiative.fiscalYear.toString().slice(-2)}`
 
       const renderQuarterlyGoals = () => {
         const quarterlyGoalsToDisplay = showAllQuarterlyGoals
