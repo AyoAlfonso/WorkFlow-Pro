@@ -28,8 +28,8 @@ class QuarterlyGoal < ApplicationRecord
 }
   scope :optimized, ->() { includes([:key_elements, :milestones, { owned_by: { avatar_attachment: :blob } }]) }
 
-  def create_milestones_for_quarterly_goal(current_user, company)
-    fiscal_quarter_start_date = company.current_fiscal_start_date + (13.weeks * (self.quarter-1))
+  def create_milestones_for_quarterly_goal(current_user, company, quarter=self.quarter)
+    fiscal_quarter_start_date = company.current_fiscal_start_date + (13.weeks * (quarter-1))
     # fiscal_quarter_start_date = fiscal_quarter_start_date + 1.year if self.annual_initiative.fiscal_year >= company.current_fiscal_year
     fiscal_quarter_start_date_closest_monday = fiscal_quarter_start_date.monday? ? fiscal_quarter_start_date : fiscal_quarter_start_date.next_occurring(:monday)
     existing_milestone = check_for_existing_milestones_for_quarterly_goal(company,fiscal_quarter_start_date_closest_monday)
