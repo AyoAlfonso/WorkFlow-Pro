@@ -39,9 +39,10 @@ export const InitiativeHeader = ({
   showDropdownOptionsContainer,
   setShowDropdownOptionsContainer,
   goalYearString,
-  derivedStatus
+  derivedStatus,
 }: IInitiativeHeaderProps): JSX.Element => {
-  const { quarterlyGoalStore, subInitiativeStore, sessionStore } = useMst();
+  const { quarterlyGoalStore, subInitiativeStore, sessionStore, companyStore } = useMst();
+  const { currentFiscalYear, currentFiscalQuarter } = companyStore.company;
   const { t } = useTranslation();
   const descriptionRef = useRef(null);
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
@@ -160,7 +161,14 @@ export const InitiativeHeader = ({
           )}
         </TitleContainer>
         <DetailsContainer>
-          {determineStatusLabel(derivedStatus)}
+          {currentFiscalYear <= item.fiscalYear && currentFiscalQuarter < item.quarter ? (
+            <UpcomingBadgeContainer>
+              <UpcomingCircleIcon />
+              <UpcomingText>Upcoming</UpcomingText>
+            </UpcomingBadgeContainer>
+          ) : (
+            determineStatusLabel(derivedStatus)
+          )}
           <IconContainer>
             <Icon icon={"Initiative"} size={"16px"} iconColor={"grey80"} />
             <YearText type={"small"}>{initiativeValue}</YearText>
@@ -291,4 +299,31 @@ const StatusBadge = styled("span")<StatusBadgeProps>`
   font-weight: bold;
   background-color: ${props => props.backgroundColor};
   color: ${props => props.color};
+`;
+
+export const UpcomingCircleIcon = styled.div`
+  display: inline-flex;
+  background: ${props => props.theme.colors.primary100};
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 21px;
+  margin-right: 8px;
+`;
+
+export const UpcomingText = styled(Text)`
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  color: ${props => props.theme.colors.primary100};
+`;
+
+export const UpcomingBadgeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding-right: 16px;
+  margin-right: 16px;
+  border-right: 1px solid ${props => props.theme.colors.greyInactive};
+  height: 25px;
+  align-self: center;
 `;

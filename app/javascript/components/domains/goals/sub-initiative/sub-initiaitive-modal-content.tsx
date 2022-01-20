@@ -19,6 +19,8 @@ import ReactQuill from "react-quill";
 import { ActivityLogs } from "../shared/activity-logs";
 import { sortByDate } from "~/utils/sorting";
 import { getWeekOf } from "~/utils/date-time";
+import { UpcomingMessage } from "../shared/upcoming-objective-message";
+
 
 interface ISubInitiativeModalContentProps {
   subInitiativeId: number;
@@ -42,6 +44,8 @@ export const SubInitiativeModalContent = observer(
       companyStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
+
+    const { currentFiscalYear, currentFiscalQuarter } = companyStore.company;
 
     const { objectiveLogs } = subInitiativeStore;
 
@@ -159,6 +163,10 @@ export const SubInitiativeModalContent = observer(
                 derivedStatus={getCurrentWeekStatus()}
               />
             </SectionContainer>
+            {currentFiscalYear <= subInitiative.fiscalYear &&
+              currentFiscalQuarter < subInitiative.quarter && (
+                <UpcomingMessage goalType="Objective" fiscalTime={`Q${subInitiative.quarter}`} />
+              )}
             <SectionContainer>
               <Context
                 setShowInitiatives={setShowInitiatives}

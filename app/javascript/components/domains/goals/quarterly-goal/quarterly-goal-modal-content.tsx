@@ -23,6 +23,7 @@ import ReactQuill from "react-quill";
 import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-elements";
 import { ActivityLogs } from "../shared/activity-logs";
 import { getWeekOf } from "~/utils/date-time";
+import { UpcomingMessage } from "../shared/upcoming-objective-message";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -55,6 +56,8 @@ export const QuarterlyGoalModalContent = observer(
       companyStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
+
+    const { currentFiscalYear, currentFiscalQuarter } = companyStore.company;
 
     const { objectiveLogs } = quarterlyGoalStore;
 
@@ -222,6 +225,10 @@ export const QuarterlyGoalModalContent = observer(
                 derivedStatus={getCurrentWeekStatus()}
               />
             </SectionContainer>
+            {currentFiscalYear <= quarterlyGoal.fiscalYear &&
+              currentFiscalQuarter < quarterlyGoal.quarter && (
+                <UpcomingMessage goalType="Objective" fiscalTime={`Q${quarterlyGoal.quarter}`} />
+              )}
             <SectionContainer>
               <Context
                 activeInitiatives={quarterlyGoal.subInitiatives.length}
