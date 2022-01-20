@@ -55,8 +55,8 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
                   greater_than: params[:greater_than], completion_starting_value: params[:completion_starting_value],
                   completion_current_value: params[:completion_current_value], owned_by_id: params[:owned_by],
                   completion_target_value: params[:completion_target_value])
-    # ObjectiveLog.create!(objective_log_params)
-    render json: { key_element: key_element.as_json, status: :ok }
+    # ObjectiveLog.create!(objective_log_params)  
+    render  template: "api/key_elements/_key_element", locals: { key_element: key_element }
   end
 
   def update_key_element

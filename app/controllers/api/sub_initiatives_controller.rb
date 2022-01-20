@@ -46,7 +46,7 @@ class Api::SubInitiativesController < Api::ApplicationController
       completion_target_value: params[:completion_target_value], owned_by_id: params[:owned_by])
     
     # ObjectiveLog.create!(objective_log_params)
-    render json: { key_element: key_element.as_json, status: :ok }
+    render  template: "api/key_elements/_key_element", locals: { key_element: key_element }
   end
 
   def update_key_element

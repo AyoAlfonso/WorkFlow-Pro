@@ -48,8 +48,8 @@ class Api::AnnualInitiativesController < Api::ApplicationController
                   owned_by_id: params[:owned_by], completion_current_value: params[:completion_current_value],
                   completion_target_value: params[:completion_target_value])
     # ObjectiveLog.create!(objective_log_params)
-    #MERGE IN MODEL
-    render json: { key_element: key_element.as_json,  status: :ok }
+    #MERGE IN MODEL 
+    render  template: "api/key_elements/_key_element", locals: { key_element: key_element }
   end
 
   def update_key_element
