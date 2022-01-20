@@ -83,10 +83,10 @@ export const QuarterlyGoalStoreModel = types
           keyElementParams,
         );
         if (response.ok) {
-          const updatedKeyElements = [...self.quarterlyGoal.keyElements, response.data.keyElement];
+          const updatedKeyElements = [...self.quarterlyGoal.keyElements, response.data];
           self.quarterlyGoal.keyElements = updatedKeyElements as any;
           showToast("Key Result created", ToastMessageConstants.SUCCESS);
-          return response.data.keyElement;
+          return response.data;
         }
         //api monitor to show error
       } catch {

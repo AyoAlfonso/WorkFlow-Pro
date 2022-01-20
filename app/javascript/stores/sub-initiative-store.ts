@@ -76,10 +76,10 @@ export const SubInitiativeStoreModel = types
           self.subInitiative.id,
           keyElementParams,
         );
-        const updatedKeyElements = [...self.subInitiative.keyElements, response.data.keyElement];
+        const updatedKeyElements = [...self.subInitiative.keyElements, response.data];
         self.subInitiative.keyElements = updatedKeyElements as any;
         showToast("Key Result created", ToastMessageConstants.SUCCESS);
-        return response.data.keyElement;
+        return response.data;
       } catch {
         showToast(il8n.t("subInitiative.keyElementCreationError"), ToastMessageConstants.ERROR);
       }

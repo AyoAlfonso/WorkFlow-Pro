@@ -70,14 +70,15 @@ export const AnnualInitiativeStoreModel = types
         if (response.ok) {
           const updatedKeyElements = [
             ...self.annualInitiative.keyElements,
-            response.data.keyElement,
+            response.data,
           ];
           self.annualInitiative.keyElements = updatedKeyElements as any;
           showToast("Key Result created", ToastMessageConstants.SUCCESS);
-          return response.data.keyElement;
+          return response.data;
         }
         //api to show error
-      } catch {
+      } catch (e) {
+        console.log(e)
         showToast("There was an error creating the key element", ToastMessageConstants.ERROR);
       }
     }),
