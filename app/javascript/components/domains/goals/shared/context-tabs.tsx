@@ -284,7 +284,7 @@ export const ContextTabs = observer(
               <KeyElement
                 elementId={element.id}
                 store={store}
-                editable={editable}
+                editable={true}
                 key={element.id}
                 lastKeyElement={lastKeyElement}
                 focusOnLastInput={focusOnLastInput}
@@ -294,7 +294,7 @@ export const ContextTabs = observer(
                 setSelectedElement={setSelectedElement}
                 date={selectedDate}
                 initiativeId={object.id}
-                object={type === "annualInitiative" ? null : object}
+                object={object}
               />
             );
           })}

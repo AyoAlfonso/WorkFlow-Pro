@@ -560,12 +560,15 @@ export const KeyElement = observer(
                           e.target.value == "" ? 0 : parseTarget(e.target.value),
                         );
                       }}
+                      onMouseEnter={async () => {
+                        await isEditable();
+                      }}
                       defaultValue={element.completionCurrentValue}
                       onBlur={() => {
                         updateKeyElement(selectedUser.id);
                         createLog();
                       }}
-                      disabled={!editable}
+                      disabled={!editable || disabled || !isOwner}
                     />
                     <SymbolContainer>{completionSymbol(element.completionType)}</SymbolContainer>
                   </InputContainer>

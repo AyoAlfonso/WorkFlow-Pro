@@ -97,7 +97,6 @@ export const KeyElementForm = ({
       return;
     } else {
       store.createMilestones(item.id);
-      console.log("here");
     }
   };
 
