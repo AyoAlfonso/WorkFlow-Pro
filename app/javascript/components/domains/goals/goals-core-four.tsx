@@ -56,7 +56,7 @@ const CoreFourValues = observer(
     } = useMst();
     const { t } = useTranslation();
 
-    const instanceType = company.accessForum ? "forum" : "teams";
+    const instanceType = company?.accessForum ? "forum" : "teams";
 
     const core1Header = instanceType == "forum" ? "Be Confidential" : t("core.core1");
     const core2Header = instanceType == "forum" ? "Be Real" : t("core.core2");
