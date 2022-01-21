@@ -90,7 +90,7 @@ export const QuarterlyGoalStoreModel = types
         }
         //api monitor to show error
       } catch {
-        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
+        showToast("There was an error creating the key result", ToastMessageConstants.ERROR);
         // showToast(il8n.t("quarterlyGoal.keyElementCreationError"), ToastMessageConstants.ERROR);
       }
     }),

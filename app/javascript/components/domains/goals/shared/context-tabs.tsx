@@ -326,6 +326,7 @@ export const ContextTabs = observer(
             type={type}
             element={selectedElement}
             setSelectedElement={setSelectedElement}
+            item={type === "annualInitiative" ? null : object}
           />
         )}
         <OverviewTabsContainer>
