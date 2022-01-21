@@ -430,7 +430,9 @@ export const KeyElement = observer(
                 title={
                   <span>
                     {!isOwner
-                      ? t("You cannot update a Key Result that doesn't belong to you")
+                      ? t(
+                          "This Key Result doesn't belong to you. You can only update a Key Result that belong to you",
+                        )
                       : t(`This Key Result is in the future. You can only update the status of Key Results
                     that have already begun.`)}
                   </span>
@@ -500,7 +502,9 @@ export const KeyElement = observer(
                   title={
                     <span>
                       {!isOwner
-                        ? t("You cannot update a Key Result that doesn't belong to you")
+                        ? t(
+                            "This Key Result doesn't belong to you. You can only update a Key Result that belong to you",
+                          )
                         : t(`This Key Result is in the future. You can only update the status of Key Results
                     that have already begun.`)}
                     </span>
