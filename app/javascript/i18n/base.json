@@ -167,6 +167,7 @@
         "createdOn" : "Originally created for",
         "emptyHeader": "Add your first Initiative",
         "keyElementCreationError": "There was an error creating the key element",
+        "keyElementUpdateError": "There was an error updating the key element",
         "emptyText": "Initiatives are quarterly efforts that help you get closer to reaching your Objective.",
         "emptyCta": "Activate \"Plan\" mode"
       },
