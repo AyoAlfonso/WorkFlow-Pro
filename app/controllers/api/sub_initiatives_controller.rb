@@ -69,7 +69,7 @@ class Api::SubInitiativesController < Api::ApplicationController
   end
 
   def create_milestones
-    create_milestones_for_sub_initiative()
+    create_milestones_for_sub_initiative
     render "api/sub_initiatives/create_milestones"
   end
 

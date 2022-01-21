@@ -23,7 +23,6 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     })
     authorize @quarterly_goal
     @quarterly_goal.save!
-    create_milestones_for_quarterly_goal()
     render "/api/quarterly_goals/create"
   end
 
@@ -77,7 +76,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def create_milestones
-    create_milestones_for_quarterly_goal()
+    create_milestones_for_quarterly_goal
     render "api/quarterly_goals/create_milestones"
   end
 
