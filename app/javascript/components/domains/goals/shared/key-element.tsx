@@ -19,10 +19,12 @@ import {
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { toJS } from "mobx";
+import { useTranslation } from "react-i18next";
 import { FormElementContainer, InputFromUnitType } from "../../scorecard/shared/modal-elements";
 import moment from "moment";
 import { getWeekOf } from "~/utils/date-time";
 import { getDerviedStatus } from "~/utils/get-derived-status";
+import { HtmlTooltip } from "~/components/shared/tooltip";
 
 interface IKeyElementProps {
   elementId?: number;
@@ -73,6 +75,10 @@ export const KeyElement = observer(
     const [showList, setShowList] = useState<boolean>(false);
     const [showUsersList, setShowUsersList] = useState<boolean>(false);
     const [selectedUser, setSelectedUser] = useState<any>(sessionStore.profile);
+    const [showTooltip, setShowTooltip] = useState<boolean>(false);
+    const [disabled, setDisabled] = useState<boolean>(false);
+
+    const { t } = useTranslation();
 
     const optionsRef = useRef(null);
     const keyElementTitleRef = useRef(null);
@@ -338,6 +344,43 @@ export const KeyElement = observer(
       }
     };
 
+    const isEditable = async () => {
+      if (type === "onboarding") return;
+      if (type == "checkIn") {
+        const objectableType = typeForCheckIn();
+        let initiative;
+
+        if (objectableType === "QuarterlyInitiative") {
+          initiative = await quarterlyGoalStore.getQuarterlyGoal(element.elementableId);
+        } else {
+          initiative = await subInitiativeStore.getSubInitiative(element.elementableId);
+        }
+
+        if (
+          company.currentFiscalYear <= initiative.fiscalYear &&
+          company.currentFiscalQuarter < initiative.quarter
+        ) {
+          setDisabled(true);
+          return true;
+        }
+      } else if (type !== "annualInitiative") {
+        if (
+          company.currentFiscalYear <= object.fiscalYear &&
+          company.currentFiscalQuarter < object.quarter
+        ) {
+          setDisabled(true);
+          return true;
+        }
+      } else if (type == "annualInitiative") {
+        if (company.currentFiscalYear < object.fiscalYear) {
+          setDisabled(true);
+          return true;
+        }
+      }
+    };
+
+    const isOwner = element.ownedById == sessionStore.profile.id;
+
     return (
       <Container>
         <TopContainer>
@@ -379,16 +422,39 @@ export const KeyElement = observer(
         <KeyElementContainer>
           {element.completionType === "binary" && (
             <CompletionContainer>
-              <DropdownHeader
-                onClick={() => {
-                  setShowList(editable && !showList);
-                }}
-                ref={dropdownRef}
-                isLogRecent={isLogRecent()}
+              <HtmlTooltip
+                arrow={true}
+                open={showTooltip}
+                enterDelay={500}
+                leaveDelay={200}
+                title={
+                  <span>
+                    {!isOwner
+                      ? t("You cannot update a Key Result that doesn't belong to you")
+                      : t(`This Key Result is in the future. You can only update the status of Key Results
+                    that have already begun.`)}
+                  </span>
+                }
               >
-                {determineStatusLabel(element.status)}
-                <ChevronDownIcon />
-              </DropdownHeader>
+                <DropdownHeader
+                  onClick={async () => {
+                    const disabled = await isEditable();
+                    setShowList(!disabled && editable && isOwner && !showList);
+                  }}
+                  onMouseEnter={async () => {
+                    const disabled = await isEditable();
+                    setShowTooltip(!isOwner || (disabled && true));
+                  }}
+                  onMouseLeave={() => {
+                    setShowTooltip(false);
+                  }}
+                  ref={dropdownRef}
+                  isLogRecent={isLogRecent()}
+                >
+                  {determineStatusLabel(element.status)}
+                  <ChevronDownIcon />
+                </DropdownHeader>
+              </HtmlTooltip>
               {showList && (
                 <DropdownListContainer>
                   <DropdownList>
@@ -426,16 +492,39 @@ export const KeyElement = observer(
           <ContentContainer>
             {element.completionType !== "binary" && (
               <CompletionContainer>
-                <DropdownHeader
-                  onClick={() => {
-                    setShowList(editable && !showList);
-                  }}
-                  ref={dropdownRef}
-                  isLogRecent={isLogRecent()}
+                <HtmlTooltip
+                  arrow={true}
+                  open={showTooltip}
+                  enterDelay={500}
+                  leaveDelay={200}
+                  title={
+                    <span>
+                      {!isOwner
+                        ? t("You cannot update a Key Result that doesn't belong to you")
+                        : t(`This Key Result is in the future. You can only update the status of Key Results
+                    that have already begun.`)}
+                    </span>
+                  }
                 >
-                  {determineStatusLabel(element.status)}
-                  <ChevronDownIcon />
-                </DropdownHeader>
+                  <DropdownHeader
+                    onClick={async () => {
+                      const disabled = await isEditable();
+                      setShowList(!disabled && editable && isOwner && !showList);
+                    }}
+                    onMouseEnter={async () => {
+                      const disabled = await isEditable();
+                      setShowTooltip(!isOwner || (disabled && true));
+                    }}
+                    onMouseLeave={() => {
+                      setShowTooltip(false);
+                    }}
+                    ref={dropdownRef}
+                    isLogRecent={isLogRecent()}
+                  >
+                    {determineStatusLabel(element.status)}
+                    <ChevronDownIcon />
+                  </DropdownHeader>
+                </HtmlTooltip>
                 {showList && (
                   <DropdownListContainer>
                     <DropdownList>

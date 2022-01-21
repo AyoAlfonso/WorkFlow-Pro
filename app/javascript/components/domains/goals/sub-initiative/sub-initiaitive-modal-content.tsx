@@ -20,8 +20,6 @@ import { ActivityLogs } from "../shared/activity-logs";
 import { sortByDate } from "~/utils/sorting";
 import { getWeekOf } from "~/utils/date-time";
 import { UpcomingMessage } from "../shared/upcoming-objective-message";
-import { sortByDate } from "~/utils/sorting";
-import { getWeekOf } from "~/utils/date-time";
 
 interface ISubInitiativeModalContentProps {
   subInitiativeId: number;
