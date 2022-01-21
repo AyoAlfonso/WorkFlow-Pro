@@ -76,8 +76,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def create_milestones
-    create_milestones_for_quarterly_goal
-    render "api/quarterly_goals/create_milestones"
+  render "api/quarterly_goals/create_milestones"
   end
 
   private
