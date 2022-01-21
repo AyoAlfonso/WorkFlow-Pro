@@ -31,20 +31,9 @@ class Api::ObjectiveLogsController < Api::ApplicationController
 
   unless existing_milestone.present?
     if (params[:objecteable_type] == "QuarterlyGoal")
-     QuarterlyGoal.find(params[:objecteable_id]).create_milestones_for_quarterly_goal(current_user, current_company, params[:fiscal_quarter])
-  
-     #We should eagerly update the current week i.e params[:week] that is being logged
-      milestone = Milestone.where(milestoneable_type: params[:objecteable_type],
-      milestoneable_id: params[:objecteable_id], week_of: params[:week_of]).first
-      milestone.update(status: params[:status])
-
+     QuarterlyGoal.find(params[:objecteable_id]).create_milestones_for_quarterly_goal(current_user, current_company)
     elsif (params[:objecteable_type] == "SubInitiative")
-        SubInitiative.find(params[:objecteable_id]).create_milestones_for_sub_initiative(current_user, current_company, params[:fiscal_quarter])
-   
-        #We should eagerly update the current week i.e params[:week] that is being logged
-        milestone = Milestone.where(milestoneable_type: params[:objecteable_type],
-        milestoneable_id: params[:objecteable_id], week_of: params[:week_of]).first
-        milestone.update(status: params[:status])
+     SubInitiative.find(params[:objecteable_id]).create_milestones_for_sub_initiative(current_user, current_company)
     end
   end
     render json: { objective_log: @objective_log, status: :ok }
