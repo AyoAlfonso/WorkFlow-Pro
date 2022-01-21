@@ -1,6 +1,6 @@
 class Api::SubInitiativesController < Api::ApplicationController
   before_action :set_sub_initiative, only: [:show, :update, :destroy, :create_key_element, :update_key_element, :create_milestones, :close_goal]
-  before_action :create_milestones_for_sub_initiative, only: [:update, :create_key_element, :update_key_element ]
+  # before_action :create_milestones_for_sub_initiative, only: [:update, :create_key_element, :update_key_element ]
 
   respond_to :json
 
@@ -16,7 +16,6 @@ class Api::SubInitiativesController < Api::ApplicationController
     })
     authorize @sub_initiative
     @sub_initiative.save!
-    create_milestones_for_sub_initiative()
     render "/api/sub_initiatives/create"
   end
 
