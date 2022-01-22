@@ -83,10 +83,10 @@ export const QuarterlyGoalStoreModel = types
           keyElementParams,
         );
         if (response.ok) {
-          const updatedKeyElements = [...self.quarterlyGoal.keyElements, response.data.keyElement];
+          const updatedKeyElements = [...self.quarterlyGoal.keyElements, response.data];
           self.quarterlyGoal.keyElements = updatedKeyElements as any;
           showToast("Key Result created", ToastMessageConstants.SUCCESS);
-          return response.data.keyElement;
+          return response.data;
         }
         //api monitor to show error
       } catch {
@@ -105,12 +105,13 @@ export const QuarterlyGoalStoreModel = types
         );
         const keyElements = self.quarterlyGoal.keyElements;
         const keyElementIndex = keyElements.findIndex(ke => ke.id == keyElementId);
-        keyElements[keyElementIndex] = response.data.keyElement;
+        keyElements[keyElementIndex] = response.data;
         self.quarterlyGoal.keyElements = keyElements;
         showToast("Key Result updated", ToastMessageConstants.SUCCESS);
-        return response.data.keyElement;
+        return response.data;
       } catch (error) {
         showToast(il8n.t("quarterlyGoal.keyElementUpdateError"), ToastMessageConstants.ERROR);
+        return false;
       }
     }),
     deleteKeyElement: flow(function*(keyElementId) {

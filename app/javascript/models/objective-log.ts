@@ -14,6 +14,7 @@ export const ObjectiveLogModel = types
     fiscalQuarter: types.maybeNull(types.number),
     fiscalYear: types.maybeNull(types.number),
     createdAt: types.maybeNull(types.string),
+    adjustedDate: types.maybeNull(types.string),
     ownedBy: types.maybeNull(UserModel),
     childId: types.maybeNull(types.number),
     childType: types.maybeNull(types.string),

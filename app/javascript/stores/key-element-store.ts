@@ -33,6 +33,7 @@ export const KeyElementStoreModel = types
         showToast("Key Result updated", ToastMessageConstants.SUCCESS);
       } catch {
         showToast("Something went wrong", ToastMessageConstants.ERROR);
+        return false;
       }
     }),
     createActivityLog: flow(function*(objectiveLog) {

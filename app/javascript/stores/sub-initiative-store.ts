@@ -76,10 +76,10 @@ export const SubInitiativeStoreModel = types
           self.subInitiative.id,
           keyElementParams,
         );
-        const updatedKeyElements = [...self.subInitiative.keyElements, response.data.keyElement];
+        const updatedKeyElements = [...self.subInitiative.keyElements, response.data];
         self.subInitiative.keyElements = updatedKeyElements as any;
         showToast("Key Result created", ToastMessageConstants.SUCCESS);
-        return response.data.keyElement;
+        return response.data;
       } catch {
         showToast(il8n.t("subInitiative.keyElementCreationError"), ToastMessageConstants.ERROR);
       }
@@ -94,12 +94,13 @@ export const SubInitiativeStoreModel = types
         );
         const keyElements = self.subInitiative.keyElements;
         const keyElementIndex = keyElements.findIndex(ke => ke.id == keyElementId);
-        keyElements[keyElementIndex] = response.data.keyElement;
+        keyElements[keyElementIndex] = response.data;
         self.subInitiative.keyElements = keyElements;
         showToast("Key Result updated", ToastMessageConstants.SUCCESS);
-        return response.data.keyElement;
+        return response.data;
       } catch (error) {
         showToast(il8n.t("subInitiative.keyElementUpdateError"), ToastMessageConstants.ERROR);
+        return false;
       }
     }),
     deleteKeyElement: flow(function*(keyElementId) {
