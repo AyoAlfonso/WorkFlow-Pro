@@ -16,13 +16,13 @@ interface IInitiativeHeaderProps {
   itemType: string;
   item: any;
   editable: boolean;
-  setAnnualInitiativeId: React.Dispatch<React.SetStateAction<number>>;
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setAnnualInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAnnualInitiativeId?: React.Dispatch<React.SetStateAction<number>>;
+  setModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setAnnualInitiativeModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   annualInitiativeId: number;
   annualInitiativeDescription: string;
-  showDropdownOptionsContainer: boolean;
-  setShowDropdownOptionsContainer: React.Dispatch<React.SetStateAction<boolean>>;
+  showDropdownOptionsContainer?: boolean;
+  setShowDropdownOptionsContainer?: React.Dispatch<React.SetStateAction<boolean>>;
   goalYearString: string;
   derivedStatus?: string;
 }
@@ -47,7 +47,7 @@ export const InitiativeHeader = ({
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
   const initiativeType = itemType == "quarterlyGoal" ? "quarterly_initiative" : "sub_initiative";
   const initiativeValue = toJS(
-    sessionStore?.companyStaticData.find(company => company.field === initiativeType).value,
+    sessionStore?.companyStaticData?.find(company => company.field === initiativeType).value,
   );
 
   const {

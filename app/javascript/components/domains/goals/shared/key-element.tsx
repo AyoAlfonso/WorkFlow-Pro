@@ -87,7 +87,7 @@ export const KeyElement = observer(
         item = subInitiativeStore.subInitiative.keyElements.find(ke => ke.id == elementId);
       } else if (type == "checkIn") {
         item = keyElementStore.keyElementsForWeeklyCheckin.find(ke => ke.id == elementId);
-      } else if (type == "onboarding") {
+      } else if (type == "onboarding" || type == "test") {
         item = keyElement;
       }
       setElement(item);

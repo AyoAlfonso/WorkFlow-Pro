@@ -94,7 +94,7 @@ export const ContextTabs = observer(
     const [selectedElement, setSelectedElement] = useState<number>(null);
     const [focusOnLastInput, setFocusOnLastInput] = useState<boolean>(false);
     const [showKeyElementForm, setShowKeyElementForm] = useState<boolean>(false);
-    const editable = currentUser.id == object.ownedById && !disabled;
+    const editable = currentUser?.id == object.ownedById && !disabled;
     const [activeTab, setActiveTab] = useState(defaultActiveTab());
     const [selectedDate, setSelectedDate] = useState<any>(new Date());
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
@@ -220,7 +220,7 @@ export const ContextTabs = observer(
     const renderContextKeyElements = () => {
       return (
         <KeyElementsTabContainer>
-          {object.keyElements.length > 0 && (
+          {object?.keyElements.length > 0 && (
             <KeyElementContentContainer>{renderKeyElementsIndex()}</KeyElementContentContainer>
           )}
           {editable && (
@@ -278,8 +278,8 @@ export const ContextTabs = observer(
               </HtmlTooltip>
             </DateContainer>
           )}
-          {object.keyElements.map((element, index) => {
-            const lastKeyElement = index == object.keyElements.length - 1;
+          {object?.keyElements.map((element, index) => {
+            const lastKeyElement = index == object?.keyElements.length - 1;
             return (
               <KeyElement
                 elementId={element.id}

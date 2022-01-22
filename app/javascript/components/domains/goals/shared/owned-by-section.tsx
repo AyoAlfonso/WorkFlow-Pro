@@ -73,9 +73,9 @@ export const OwnedBySection = observer(
 
     const companyUsers = userStore.users;
     const editable =
-      ((owner && owner.id == currentUser.id) ||
-        currentUser.role == RoleCEO ||
-        currentUser.role == RoleAdministrator) &&
+      ((owner && owner.id == currentUser?.id) ||
+        currentUser?.role == RoleCEO ||
+        currentUser?.role == RoleAdministrator) &&
       !disabled;
 
     const renderUserSelectionList = (): JSX.Element => {

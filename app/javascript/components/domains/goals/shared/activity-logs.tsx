@@ -41,7 +41,7 @@ export const ActivityLogs = observer(
               .sort(sortByDate)
               .map(log => {
                 const user = userStore.users.find(user => user.id === log.ownedById);
-                const keyElement = store.findKeyElement(log.childId);
+                const keyElement = store?.findKeyElement(log.childId);
                 return (
                   <ActivityLogContainer>
                     {!log.note ? (
