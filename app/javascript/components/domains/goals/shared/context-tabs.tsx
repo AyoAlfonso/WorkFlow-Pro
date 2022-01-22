@@ -294,6 +294,7 @@ export const ContextTabs = observer(
                 setSelectedElement={setSelectedElement}
                 date={selectedDate}
                 initiativeId={object.id}
+                object={type === "annualInitiative" ? null : object}
               />
             );
           })}

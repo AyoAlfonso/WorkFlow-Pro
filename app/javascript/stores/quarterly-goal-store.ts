@@ -27,6 +27,7 @@ export const QuarterlyGoalStoreModel = types
       try {
         const response: any = yield env.api.getQuarterlyGoal(id);
         self.quarterlyGoal = response.data;
+        return response.data;
       } catch {
         showToast(
           il8n.t("quarterlyGoal.retrievalError", { title: self.title }),
