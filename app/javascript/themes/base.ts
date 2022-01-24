@@ -64,7 +64,9 @@ export const baseTheme = {
     doveGray: "#707070",
     mystic: "#DADDE9",
     tango: "#EC6F25",
-    dairyCream: "#FADBC8"
+    dairyCream: "#FADBC8",
+    boldYellow: "#FBB004",
+    progressGreen: "#00C3B3",
   },
 
   fonts: {

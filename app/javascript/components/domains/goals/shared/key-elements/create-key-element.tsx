@@ -21,6 +21,7 @@ interface ICreateKeyElementBodyProps {
   keysForOnboarding?: any;
   callbackForOnboarding?: any;
   showAddButton?: any;
+  item?: any;
 }
 
 export const CreateKeyElementBody = observer(
@@ -33,6 +34,7 @@ export const CreateKeyElementBody = observer(
     keysForOnboarding,
     callbackForOnboarding,
     showAddButton,
+    item,
   }: ICreateKeyElementBodyProps): JSX.Element => {
     return (
       <KeyElementsTabContainer>
@@ -46,6 +48,8 @@ export const CreateKeyElementBody = observer(
             showAddButton={showAddButton}
             type={type}
             setActionType={setActionType}
+            item={item}
+            store={store}
           />
         </KeyElementContentContainer>
       </KeyElementsTabContainer>

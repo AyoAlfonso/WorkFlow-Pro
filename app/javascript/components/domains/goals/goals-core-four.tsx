@@ -56,16 +56,16 @@ const CoreFourValues = observer(
     } = useMst();
     const { t } = useTranslation();
 
-    const instanceType = company.accessForum ? "forum" : "teams";
+    const instanceType = company?.accessForum ? "forum" : "teams";
 
     const Core1Content =
-      instanceType == "forum" ? "<span> Be Confidential <span>" : company.coreFour.core1Content;
+      instanceType == "forum" ? "<span> Be Confidential <span>" : company?.coreFour.core1Content;
     const Core2Content =
-      instanceType == "forum" ? "<span> Be Real <span>" : company.coreFour.core2Content;
+      instanceType == "forum" ? "<span> Be Real <span>" : company?.coreFour.core2Content;
     const Core3Content =
-      instanceType == "forum" ? "<span> Be Committed <span>" : company.coreFour.core3Content;
+      instanceType == "forum" ? "<span> Be Committed <span>" : company?.coreFour.core3Content;
     const Core4Content =
-      instanceType == "forum" ? "<span> Be Curious <span>" : company.coreFour.core4Content;
+      instanceType == "forum" ? "<span> Be Curious <span>" : company?.coreFour.core4Content;
 
     return company ? (
       <Flex>

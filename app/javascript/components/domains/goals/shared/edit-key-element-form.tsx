@@ -82,6 +82,7 @@ export const EditKeyElementForm = ({
       value: title,
       completionType,
       completionTargetValue: parseTarget(completionTargetValue),
+      completionCurrentValue: element.completionCurrentValue,
       greaterThan: condition,
       ownedBy: ownedBy.id,
       status: element.status,

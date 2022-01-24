@@ -25,6 +25,8 @@ import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-
 import { sortByDate } from "~/utils/sorting";
 import ReactQuill from "react-quill";
 import { ActivityLogs } from "../shared/activity-logs";
+import { UpcomingMessage } from "../shared/upcoming-objective-message";
+import { UpcomingBadgeContainer, UpcomingCircleIcon, UpcomingText } from "../shared-quarterly-goal-and-sub-initiative/initiative-header";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -50,6 +52,9 @@ export const AnnualInitiativeModalContent = memo(
         quarterlyGoalStore,
         descriptionTemplateStore: { descriptionTemplates },
       } = useMst();
+
+      const { currentFiscalYear, currentFiscalQuarter } = companyStore.company;
+
       const currentUser = sessionStore.profile;
 
       const { objectiveLogs } = annualInitiativeStore;
@@ -227,6 +232,10 @@ export const AnnualInitiativeModalContent = memo(
               )}
             </TitleContainer>
             <DetailsContainer>
+              {currentFiscalYear < annualInitiative.fiscalYear && <UpcomingBadgeContainer>
+                <UpcomingCircleIcon />
+                <UpcomingText>Upcoming</UpcomingText>
+              </UpcomingBadgeContainer>}
               <IconContainer>
                 <Icon icon={"Initiative"} size={"16px"} iconColor={"grey80"} />
                 <YearText type={"small"}>{annualObjectiveValue}</YearText>
@@ -339,6 +348,7 @@ export const AnnualInitiativeModalContent = memo(
           )}
           <Container>
             {renderHeader()}
+            {currentFiscalYear < annualInitiative.fiscalYear && <UpcomingMessage fiscalTime={goalYearString} goalType="Initiative" />}
             <SectionContainer>
               <Context
                 activeInitiatives={activeQuarterlyGoals.length}

@@ -20,6 +20,8 @@ interface IKeyElementFormProps {
   keysForOnboarding?: any;
   callbackForOnboarding?: any;
   showAddButton?: any;
+  item?: any;
+  store?: any;
 }
 
 export const KeyElementForm = ({
@@ -31,8 +33,10 @@ export const KeyElementForm = ({
   keysForOnboarding,
   callbackForOnboarding,
   showAddButton,
+  item,
+  store,
 }: IKeyElementFormProps): JSX.Element => {
-  const { userStore, sessionStore } = useMst();
+  const { userStore, sessionStore, companyStore } = useMst();
   const { users } = userStore;
   const [title, setTitle] = useState<string>("");
   const [completionType, setCompletionType] = useState<string>("numerical");
@@ -57,7 +61,6 @@ export const KeyElementForm = ({
     setCompletionType("numerical");
     setCompletionTargetValue("");
     setCondition(0);
-    setOwnedBy(0);
     setActionType("Add");
     setSelectedElement(null);
   };
@@ -87,16 +90,25 @@ export const KeyElementForm = ({
     onCreate(keyElementParams);
   };
 
+  const createMilestones = () => {
+    if (companyStore.company.objectivesKeyType == "Milestones" || !item || type === "onboarding")
+      return;
+    if (item.milestones.length) {
+      return;
+    } else {
+      store.createMilestones(item.id);
+    }
+  };
+
   const isValid =
-    !R.isEmpty(title) &&
-    !R.isEmpty(completionType) &&
-    completionType == "binary" ? true : !R.isEmpty(completionTargetValue) &&
-    !R.isNil(ownedBy) &&
-    !R.isNil(condition);
+    !R.isEmpty(title) && !R.isEmpty(completionType) && completionType == "binary"
+      ? true
+      : !R.isEmpty(completionTargetValue) && !R.isNil(ownedBy) && !R.isNil(condition);
 
   const handleSave = () => {
     if (isValid) {
       createKeyElement();
+      createMilestones();
       onClose();
       showAddButton && showAddButton(false);
     }
@@ -105,6 +117,7 @@ export const KeyElementForm = ({
   const handleSaveAndAddAnother = () => {
     if (isValid) {
       createKeyElement();
+      createMilestones();
       resetForm();
     }
   };
