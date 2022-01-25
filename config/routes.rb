@@ -160,7 +160,7 @@ Rails.application.routes.draw do
 
     #forum-specific functions
     post "/forum/create_meetings_for_year/:forum_type", to: "forums#create_meetings_for_year"
-    get "/forum/search_meetings_by_date_range", to: "forums#search_meetings_by_date_range"
+    get "/forum/search_meetings_by_date_range/:meeting_type", to: "forums#search_meetings_by_date_range"
 
     #meeting recap for team
     get "/teams/:team_id/meetings/:id/meeting_recap", to: "meetings#meeting_recap"

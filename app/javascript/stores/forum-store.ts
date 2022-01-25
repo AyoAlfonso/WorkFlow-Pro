@@ -95,11 +95,12 @@ export const ForumStoreModel = types
         return response.data;
       }
     }),
-    searchForMeetingsByDateRange: flow(function*(startDate, endDate, teamId) {
+    searchForMeetingsByDateRange: flow(function*(startDate, endDate, teamId, meetingType) {
       const response: ApiResponse<any> = yield self.environment.api.searchForumMeetingsByDateRange(
         startDate,
         endDate,
         teamId,
+        meetingType,
       );
       if (response.ok) {
         self.searchedForumMeetings = response.data;

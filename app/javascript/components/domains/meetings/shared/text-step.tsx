@@ -3,14 +3,17 @@ import * as R from "ramda";
 import { IStep } from "~/models/step";
 import { Text } from "~/components/shared/text";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
+
 
 export interface ITextStepProps {
   step: IStep;
 }
 
 export const TextStep = ({ step }: ITextStepProps): JSX.Element => {
+  const { t } = useTranslation();
   if (R.isNil(step.descriptionTextContent)) {
-    return <Text>This text for the step is missing</Text>;
+    return <Text>{t("meeting.missingStep")}</Text>;
   }
 
   return (

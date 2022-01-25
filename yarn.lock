@@ -2751,6 +2751,10 @@ acorn@^7.4.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.1.tgz#feaed255973d2e77555b83dbc08851a6c63520fa"
   integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
 
+activeadmin_quill_editor@blocknotes/activeadmin_quill_editor:
+  version "0.3.4"
+  resolved "https://codeload.github.com/blocknotes/activeadmin_quill_editor/tar.gz/1cad5a10c3eb890ff5645e01d4c5138b0e92eb95"
+
 address@1.1.2, address@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/address/-/address-1.1.2.tgz#bf1116c9c758c51b7a933d296b72c221ed9428b6"
@@ -13949,10 +13953,10 @@ trim-newlines@^3.0.0:
   resolved "https://registry.yarnpkg.com/trim-newlines/-/trim-newlines-3.0.1.tgz#260a5d962d8b752425b32f3a7db0dcacd176c144"
   integrity sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==
 
-trix@^1.2.0:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/trix/-/trix-1.3.1.tgz#ccce8d9e72bf0fe70c8c019ff558c70266f8d857"
-  integrity sha512-BbH6mb6gk+AV4f2as38mP6Ucc1LE3OD6XxkZnAgPIduWXYtvg2mI3cZhIZSLqmMh9OITEpOBCCk88IVmyjU7bA==
+trix@^2.0.0-alpha.0:
+  version "2.0.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/trix/-/trix-2.0.0-alpha.0.tgz#dc47e935710d5c1dbcdebe252aed72b9341de247"
+  integrity sha512-JE2iiWE4rimzRv6Um87flkGAv4lsF6tin0XJ7yFFBdnFYjUVwMmLW7Z61kQyNorKU2XmhWMwiEEvqru9EcVjHQ==
 
 "true-case-path@^1.0.2":
   version "1.0.3"

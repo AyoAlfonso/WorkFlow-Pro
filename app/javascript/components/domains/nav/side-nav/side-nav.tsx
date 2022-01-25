@@ -390,7 +390,7 @@ export const SideNavNoMst = (
         >
           <SideNavChildLink to="/meetings/section_1" linkText={t("forum.annualHub")} />
           <SideNavChildLink to="/meetings/section_2" linkText={t("forum.upcomingHub")} />
-          <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")} />
+          {/* <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")}/> */}
         </SideNavChildPopup>
       ) : (
         <> </>

@@ -58,10 +58,10 @@ const CoreFourValues = observer(
 
     const instanceType = company?.accessForum ? "forum" : "teams";
 
-    const core1Header = instanceType == "forum" ? "Be Confidential" : t("core.core1");
-    const core2Header = instanceType == "forum" ? "Be Real" : t("core.core2");
-    const core3Header = instanceType == "forum" ? "Be Committed" : t("core.core3");
-    const core4Header = instanceType == "forum" ? "Be Curious" : t("core.core4");
+    const core1Header = instanceType == "forum" ? t("forumCore.core1") : t("core.core1");
+    const core2Header = instanceType == "forum" ? t("forumCore.core2") : t("core.core2");
+    const core3Header = instanceType == "forum" ? t("forumCore.core3") : t("core.core3");
+    const core4Header = instanceType == "forum" ? t("forumCore.core4") : t("core.core4");
 
     return company ? (
       <Flex>

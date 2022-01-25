@@ -105,7 +105,9 @@ export const SelectedMeetingAgendaEntry = observer(
                 />
               </form>
             </MeetingTimeContainer>
-
+            <MeetingTimeText>
+              {t("forum.averageRating")} : {selectedMeeting.averageRating}{" "}
+            </MeetingTimeText>
             {selectedMeeting.startTime && (
               <MeetingTimeText fontWeight={"bold"}>
                 {`${t("forum.actualStartTime")}: ${moment(selectedMeeting.startTime).format(

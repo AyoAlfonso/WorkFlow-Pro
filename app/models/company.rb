@@ -4,7 +4,7 @@ class Company < ApplicationRecord
   include HasFiscalYear
 
   before_save :sanitize_rallying_cry
-
+  store_accessor :preferences, :foundational_four, :company_objectives, :personal_objectives
   enum display_format: { Company: 0, Forum: 1 }
   enum objectives_key_type: { Milestones: 0, KeyResults: 1 }
   enum forum_type: { EO: 0, YPO: 1, Organisation: 2, Other: 3 }

@@ -95,6 +95,12 @@
         "core4": "How Do We Succeed?",
         "goalsTitle": "Foundational Four™"
       },
+        "forumCore": {
+        "core1": "Be Confidential",
+        "core2": "Be Real",
+        "core3": "Be Curious",
+        "core4": "Be Committed"
+      },
       "company": {
         "accountabilityChart": "Accountability Matrix",
         "name": "Company Name",
@@ -141,7 +147,8 @@
         "forumMeeting": "Forum Meeting",
         "emptyMeetingEntries": "Start creating meetings on the meetings page!",
         "scheduledStartTime": "Scheduled Start Date",
-        "actualStartTime": "Actual Start Date"
+        "actualStartTime": "Actual Start Date",
+        "averageRating": "Average Rating"
       },
       "navigation": {
         "planner": "Planner",
@@ -223,6 +230,8 @@
         "meetingRating": "Rate the Meeting",
         "goalProgress": "Goal Progress",
         "milestoneProgress": "Milestone Progress",
+        "missingImageURL": "This URL for the image is missing",
+        "missingStep": "This text for the step is missing",
         "tasksCompleted": "Pyns Completed",
         "issuesAddressed": "Issues Addressed",
         "sideOptions": {
