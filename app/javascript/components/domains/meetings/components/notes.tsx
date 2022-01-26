@@ -28,7 +28,7 @@ export const Notes = ({ meeting, height, hideSideBorders }: NotesProps): JSX.Ele
     const editorState = EditorState.createWithContent(contentState);
     setEditorText(editorState || EditorState.createEmpty());
   }, [meeting?.notes]);
-
+  
   return (
     <Container height={height}>
       <EditorWrapper height={height} hideSideBorders={hideSideBorders}>
@@ -54,7 +54,10 @@ export const Notes = ({ meeting, height, hideSideBorders }: NotesProps): JSX.Ele
               meetingStore.updatePersonalMeeting(meetingObj);
             } else if (meetingType == MeetingTypes.TEAM_WEEKLY) {
               meetingStore.updateMeeting(meetingObj);
-            } else if (meetingType == MeetingTypes.FORUM_MONTHLY) {
+            } else if (
+              meetingType == MeetingTypes.FORUM_MONTHLY ||
+              meetingType == MeetingTypes.ORGANISATION_FORUM_MONTHLY
+            ) {
               forumStore.updateMeeting(meetingObj, true);
             }
           }}
