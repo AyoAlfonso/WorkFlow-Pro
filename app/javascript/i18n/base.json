@@ -114,6 +114,11 @@
         "timezone": "Location/Time Zone",
         "executiveTeam" : "Leadership Team",
         "objectivesKeyType" : "Objectives Key Type",
+        "objectivesPageLayout": "Objectives Page Layout",
+        "layoutOptions": {
+          "coreFour": "Foundational Four™",
+          "personalGoals": "Personal Objectives"
+        },
         "createUser": {
           "addButton": "Create New User",
           "inviteYourTeam": "Invite your team"
