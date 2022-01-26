@@ -35,9 +35,14 @@ export const ForumAgendaSearch = observer(() => {
 
   const teamId = forumStore.currentForumTeamId || R.path([0, "id"], toJS(teams));
 
+  const meetingType =
+    companyStore?.company.forumType == "Organisation"
+      ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
+      : MeetingTypes.FORUM_MONTHLY;
+
   const fetchMeetings = (startDate, endDate) => {
     if (teamId) {
-      forumStore.searchForMeetingsByDateRange(startDate, endDate, teamId);
+      forumStore.searchForMeetingsByDateRange(startDate, endDate, teamId, meetingType);
     }
   };
 
@@ -132,13 +137,11 @@ export const ForumAgendaSearch = observer(() => {
   };
 
   const handleMeetingClick = () => {
-    meetingStore
-      .startNextMeeting(selectedMeeting.teamId, MeetingTypes.FORUM_MONTHLY)
-      .then(({ meeting }) => {
-        if (!R.isNil(meeting)) {
-          history.push(`/team/${meeting.teamId}/meeting/${meeting.id}`);
-        }
-      });
+    meetingStore.startNextMeeting(selectedMeeting.teamId, meetingType).then(({ meeting }) => {
+      if (!R.isNil(meeting)) {
+        history.push(`/team/${meeting.teamId}/meeting/${meeting.id}`);
+      }
+    });
   };
 
   const renderSelectedEntry = () => {

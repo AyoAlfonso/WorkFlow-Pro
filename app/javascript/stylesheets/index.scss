@@ -6,3 +6,7 @@
 .react-tabs__tab--selected {
   border-color: #e3e3e3
 }
+
+body.active_admin [data-aa-quill-editor] {
+  width: calc(50%) !important;
+}

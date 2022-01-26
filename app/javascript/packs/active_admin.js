@@ -5,5 +5,4 @@ import "@activeadmin/activeadmin";
 import "arctic_admin";
 import "@fortawesome/fontawesome-free/js/all.js";
 import "@fortawesome/fontawesome-free/css/all.css";
-require("trix");
-require("@rails/actiontext");
+require("activeadmin_quill_editor");

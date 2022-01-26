@@ -1,6 +1,8 @@
 class CheckInTemplatesStep < ApplicationRecord
   belongs_to :check_in_template
   
+  before_save :set_description_text
+
   enum step_type: { image: 0, component: 1, embedded_link: 2, description_text: 3 }
   has_one_attached :image
 
@@ -12,6 +14,10 @@ class CheckInTemplatesStep < ApplicationRecord
 
   def image_url
     image.present? ? Rails.application.routes.url_helpers.rails_blob_url(image, host: ENV["ASSETS_HOST_URL"] || ENV["HOST_URL"]) : nil
+  end
+
+  def set_description_text
+    self.description_text = self.description_text_content unless self.description_text_content.blank?
   end
 
   STEP_COMPONENTS = [

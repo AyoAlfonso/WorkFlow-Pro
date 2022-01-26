@@ -3,7 +3,6 @@ import { withEnvironment } from "../lib/with-environment";
 
 import { MeetingModel } from "../models/meeting";
 import { TeamModel } from "../models/team";
-import MeetingTypes from "~/constants/meeting-types";
 
 import { ApiResponse } from "apisauce";
 import { showToast } from "~/utils/toast-message";
@@ -24,7 +23,7 @@ export const ForumStoreModel = types
   .extend(withEnvironment())
   .views(self => ({}))
   .actions(self => ({
-    load: flow(function*(teamId, year) {
+    load: flow(function*(teamId, year, forumType) {
       if (teamId) {
         self.error = false;
         try {
@@ -35,7 +34,7 @@ export const ForumStoreModel = types
           // }
           const responseM: ApiResponse<any> = yield self.environment.api.searchSection1Meetings({
             team_id: teamId,
-            meeting_type: MeetingTypes.FORUM_MONTHLY,
+            meeting_type: forumType,
             fiscal_year: year,
           });
           if (responseM.ok) {
@@ -96,11 +95,12 @@ export const ForumStoreModel = types
         return response.data;
       }
     }),
-    searchForMeetingsByDateRange: flow(function*(startDate, endDate, teamId) {
+    searchForMeetingsByDateRange: flow(function*(startDate, endDate, teamId, meetingType) {
       const response: ApiResponse<any> = yield self.environment.api.searchForumMeetingsByDateRange(
         startDate,
         endDate,
         teamId,
+        meetingType,
       );
       if (response.ok) {
         self.searchedForumMeetings = response.data;

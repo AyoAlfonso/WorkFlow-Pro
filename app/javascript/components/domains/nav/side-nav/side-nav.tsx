@@ -273,9 +273,14 @@ export const SideNavNoMst = (
     }
   };
 
+  const forumType =
+    company?.forumType == "Organisation"
+      ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
+      : MeetingTypes.FORUM_MONTHLY;
+
   const history = useHistory();
   const handleForumMeetingClick = (team_id: number | string) => () => {
-    startNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
+    startNextMeeting(team_id, forumType).then(({ meeting }) => {
       if (!R.isNil(meeting)) {
         history.push(`/team/${team_id}/meeting/${meeting.id}`);
       }
@@ -385,7 +390,7 @@ export const SideNavNoMst = (
         >
           <SideNavChildLink to="/meetings/section_1" linkText={t("forum.annualHub")} />
           <SideNavChildLink to="/meetings/section_2" linkText={t("forum.upcomingHub")} />
-          <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")} />
+          {/* <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")}/> */}
         </SideNavChildPopup>
       ) : (
         <> </>

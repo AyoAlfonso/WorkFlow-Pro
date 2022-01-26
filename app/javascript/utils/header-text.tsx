@@ -42,8 +42,8 @@ export const HeaderText = observer(
             return <> {t("forum.annualHub")} </>;
           case "section_2":
             return <> {t("forum.upcomingHub")} </>;
-          case "agenda":
-            return <> {t("forum.agenda")} </>;
+          // case "agenda":
+          //   return <> {t("forum.agenda")} </>;
           default:
             return <></>;
         }

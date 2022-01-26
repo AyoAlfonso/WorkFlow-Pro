@@ -13,6 +13,7 @@ import { baseTheme } from "~/themes/base";
 import { toJS } from "mobx";
 import { ColumnContainer, ForumSectionContainer } from "~/components/shared/styles/row-style";
 import Popup from "reactjs-popup";
+import MeetingTypes from "~/constants/meeting-types";
 
 interface ISection1ForumMeetingsProps {
   company: any;
@@ -32,7 +33,11 @@ export const Section1ForumMeetings = observer(
 
     useEffect(() => {
       if (loading && teamId && company) {
-        forumStore.load(teamId, currentYear).then(() => setLoading(false));
+        const forumType =
+          company?.forumType == "Organisation"
+            ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
+            : MeetingTypes.FORUM_MONTHLY;
+        forumStore.load(teamId, currentYear, forumType).then(() => setLoading(false));
       }
     }, [company, teams.map(t => t.id), teamId]); //neeed to deal with swtiching year later
 
@@ -82,7 +87,7 @@ export const Section1ForumMeetings = observer(
               }}
             >
               <Icon icon={"Plus"} size={"20px"} />
-              <ButtonText>Create forum meetings</ButtonText>
+              <ButtonText>Create forum meetings </ButtonText>
             </StyledButton>
           );
         }
