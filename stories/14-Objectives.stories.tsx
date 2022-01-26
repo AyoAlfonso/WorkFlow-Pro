@@ -10,7 +10,7 @@ import { getEnv } from "mobx-state-tree";
 import { Router } from "react-router-dom";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
-import * as moment from "moment";
+import moment from "moment";
 import * as R from "ramda";
 import { WeeklyMilestones } from "~/components/domains/goals/shared-quarterly-goal-and-sub-initiative/weekly-milestones";
 import { KeyElement } from "~/components/domains/goals/shared/key-element";
