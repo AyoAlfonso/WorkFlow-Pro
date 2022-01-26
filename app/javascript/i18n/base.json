@@ -260,7 +260,7 @@
       },
       "meetingForum": {
         "exploration": {
-          "title": "1: Scheduled Exploration",
+          "title": "1: Scheduled Exploration or Curated Topic",
            "subTitle": "Four Step Forum Exploration™ Guide",
            "done": "Done"
         },
@@ -270,7 +270,7 @@
           "forumItems": "Topic"
         },
         "scheduledIssues": {
-          "title": "{{prefix}}Dynamic Explorations",
+          "title": "{{prefix}}Dynamic Topics",
           "subTitle": "Add topics you want to discuss in the Forum Hub of your next meeting"
         },
         "noUpcomingMeetingScheduled": "Scheduled meeting must be created in order to organize items onto it."
