@@ -27,7 +27,7 @@ export const HabitsHabitTracker = observer(
     const habitsToRender = showFourDays ? habit.recentLogsFourDays : habit.recentLogsFiveDays;
 
     const renderHabitLogs = () =>
-      habitsToRender.map(log => (
+      habitsToRender?.map(log => (
         <SelectionCell
           key={`${habit.id}-${log.logDate}`}
           onClick={() => {

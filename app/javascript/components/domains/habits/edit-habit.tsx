@@ -71,7 +71,7 @@ export const EditHabit = observer(
         </LoadingContainer>
       );
     }
-
+console.log(habit)
     return (
       <Container>
         <SubHeaderContainer>

@@ -22,10 +22,10 @@ export const HabitModel = types
   })
   .views(self => ({
     get completedCurrentWeekLogs() {
-      return self.currentWeekLogs.filter(log => !!log.id);
+      return self.currentWeekLogs?.filter(log => !!log.id);
     },
     get recentLogsFourDays() {
-      return self.currentWeekLogs.slice(0, 4);
+      return self.currentWeekLogs?.slice(0, 4);
     },
     get recentLogsFiveDays() {
       return self.currentWeekLogs;
