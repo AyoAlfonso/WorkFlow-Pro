@@ -56,9 +56,15 @@ export const Company = observer(
     const [logoImageForm, setLogoImageForm] = useState<FormData | null>(null);
     const [logoImageModalOpen, setLogoImageModalOpen] = useState<boolean>(false);
     const [executiveTeam, setExecutiveTeam] = useState<any>(null);
-    const [showCoreFour, setShowCoreFour] = useState<boolean>(false);
-    const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(false);
-    const [showPersonalGoals, setShowPersonalGoals] = useState<boolean>(false);
+    const [showCoreFour, setShowCoreFour] = useState<boolean>(
+      company?.preferences.foundationalFour
+    );
+    const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(
+      company?.preferences.companyObjectives
+    );
+    const [showPersonalGoals, setShowPersonalGoals] = useState<boolean>(
+      company?.preferences.personalObjectives
+    );
     const [objectivesKeyType, setObjectivesKeyType] = useState<string>(
       formatType[company.objectivesKeyType],
     );
@@ -139,6 +145,11 @@ export const Company = observer(
               core_2: core2Content,
               core_3: core3Content,
               core_4: core4Content,
+            },
+            preferences: {
+              foundationalFour: showCoreFour,
+              companyObjectives: showCompanyGoals,
+              personalObjectives: showPersonalGoals,
             },
             companyStaticDatasAttributes: {
               0: {
