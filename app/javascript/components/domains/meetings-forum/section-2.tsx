@@ -31,9 +31,14 @@ export const Section2 = observer(
       (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
     const instanceType = company && company.accessForum ? "forum" : "teams";
 
+    const forumType =
+      company?.forumType == "Organisation"
+        ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
+        : MeetingTypes.FORUM_MONTHLY;
+
     useEffect(() => {
       if (loading && teamId && company) {
-        meetingStore.startNextMeeting(teamId, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
+        meetingStore.startNextMeeting(teamId, forumType).then(({ meeting }) => {
           issueStore.fetchIssuesForTeam(teamId);
           issueStore.fetchTeamIssues(teamId).then(() => setLoading(false));
         });

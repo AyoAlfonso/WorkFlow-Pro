@@ -12,8 +12,6 @@ class Api::CompaniesController < Api::ApplicationController
       name: params[:name],
       timezone: params[:timezone],
       forum_type: params[:forum_type],
-      # TODO:
-      # preferences:  unless params[forum_type] == ""
     })
     authorize @company
     @company.save!

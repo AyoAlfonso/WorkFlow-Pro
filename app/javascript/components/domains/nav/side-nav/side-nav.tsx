@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { useMst } from "../../../../setup/root";
@@ -220,6 +220,7 @@ export const SideNavNoMst = (
   const [companyNavChildOpen, setCompanyNavChildOpen] = useState<boolean>(false);
   const [meetingsNavChildOpen, setMeetingsNavChildOpen] = useState<boolean>(false);
   const [startMeetingNavChildOpen, setStartMeetingNavChildOpen] = useState<boolean>(false);
+  const [forumType, setForumType] = useState<string>("");
   const showCompany = productFeatures && productFeatures.company;
   const showGoal = productFeatures && productFeatures.objective;
   const showPyn = productFeatures && productFeatures.pyns;
@@ -227,6 +228,15 @@ export const SideNavNoMst = (
   const showMeeting = productFeatures && productFeatures.meeting;
   const showScorecard = productFeatures && productFeatures.scorecard;
   const checkIn = productFeatures && productFeatures.checkIn;
+
+  useEffect(() => {
+    const forumType =
+      company?.forumType == "Organisation"
+        ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
+        : MeetingTypes.FORUM_MONTHLY;
+    setForumType(forumType);
+  }, [company]);
+
   const renderTeam = (teamLength: number) => {
     switch (teamLength) {
       case 0:
@@ -272,11 +282,6 @@ export const SideNavNoMst = (
         );
     }
   };
-
-  const forumType =
-    company?.forumType == "Organisation"
-      ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
-      : MeetingTypes.FORUM_MONTHLY;
 
   const history = useHistory();
   const handleForumMeetingClick = (team_id: number | string) => () => {
