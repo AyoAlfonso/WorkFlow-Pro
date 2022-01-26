@@ -9,6 +9,8 @@ import { observer } from "mobx-react";
 import { Can } from "~/components/shared/auth/can";
 import { Button } from "~/components/shared/button";
 import { FileInput } from "./file-input";
+import Switch from "~/components/shared/switch";
+import FormGroup from "@material-ui/core/FormGroup";
 import { ImageCropperModal } from "~/components/shared/image-cropper-modal";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { useHistory } from "react-router";
@@ -54,6 +56,15 @@ export const Company = observer(
     const [logoImageForm, setLogoImageForm] = useState<FormData | null>(null);
     const [logoImageModalOpen, setLogoImageModalOpen] = useState<boolean>(false);
     const [executiveTeam, setExecutiveTeam] = useState<any>(null);
+    const [showCoreFour, setShowCoreFour] = useState<boolean>(
+      company?.preferences.foundationalFour
+    );
+    const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(
+      company?.preferences.companyObjectives
+    );
+    const [showPersonalGoals, setShowPersonalGoals] = useState<boolean>(
+      company?.preferences.personalObjectives
+    );
     const [objectivesKeyType, setObjectivesKeyType] = useState<string>(
       formatType[company.objectivesKeyType],
     );
@@ -134,6 +145,11 @@ export const Company = observer(
               core_2: core2Content,
               core_3: core3Content,
               core_4: core4Content,
+            },
+            preferences: {
+              foundationalFour: showCoreFour,
+              companyObjectives: showCompanyGoals,
+              personalObjectives: showPersonalGoals,
             },
             companyStaticDatasAttributes: {
               0: {
@@ -354,6 +370,45 @@ export const Company = observer(
                       </Select>
                     </>
                   )}
+                  {ceoORAdmin && (
+                    <LayoutOptions>
+                      <Label htmlFor="objectives_page_layout">
+                        {t("company.objectivesPageLayout")}
+                      </Label>
+                      <LayoutOptionContainer>
+                        <LayoutOptionText>{t("company.layoutOptions.coreFour")}</LayoutOptionText>
+                        <FormGroup row>
+                          <Switch
+                            checked={showCoreFour}
+                            onChange={() => setShowCoreFour(!showCoreFour)}
+                            name="switch-checked"
+                          />
+                        </FormGroup>
+                      </LayoutOptionContainer>
+                      <LayoutOptionContainer>
+                        <LayoutOptionText>{`${companyStore.company.displayFormat} Objectives`}</LayoutOptionText>
+                        <FormGroup row>
+                          <Switch
+                            checked={showCompanyGoals}
+                            onChange={() => setShowCompanyGoals(!showCompanyGoals)}
+                            name="switch-checked"
+                          />
+                        </FormGroup>
+                      </LayoutOptionContainer>
+                      <LayoutOptionContainer>
+                        <LayoutOptionText>
+                          {t("company.layoutOptions.personalGoals")}
+                        </LayoutOptionText>
+                        <FormGroup row>
+                          <Switch
+                            checked={showPersonalGoals}
+                            onChange={() => setShowPersonalGoals(!showPersonalGoals)}
+                            name="switch-checked"
+                          />
+                        </FormGroup>
+                      </LayoutOptionContainer>
+                    </LayoutOptions>
+                  )}
                   <Label htmlFor="rallying">{t("company.rallyingCry")}</Label>
                   <Input
                     name="rallyingCry"
@@ -465,4 +520,19 @@ const CompanyStaticDataArea = styled.div`
 
 const WYSIWYGLabel = styled(Label)`
   margin: 15px 0px;
+`;
+
+const LayoutOptionContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+`;
+
+const LayoutOptionText = styled(Text)`
+  margin: 0;
+`;
+
+const LayoutOptions = styled.div`
+  margin-bottom: 15px;
 `;

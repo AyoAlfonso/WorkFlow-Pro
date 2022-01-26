@@ -37,6 +37,7 @@ export const CompanyModel = types
     forumTypes: types.map(types.number),
     objectivesKeyTypes: types.maybeNull(types.frozen()),
     objectivesKeyType: types.maybeNull(types.string),
+    preferences: types.maybeNull(types.frozen()),
   })
   .views(self => ({
     get accessCompany() {
