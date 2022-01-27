@@ -27,6 +27,7 @@ export const Section2 = observer(
 
     const { team_id } = useParams();
     const [loading, setLoading] = useState<boolean>(true);
+    const [noMeetingRecords, setNoMeetingRecords] = useState(false);
     const teamId =
       (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
     const instanceType = company && company.accessForum ? "forum" : "teams";
@@ -39,11 +40,23 @@ export const Section2 = observer(
     useEffect(() => {
       if (loading && teamId && company) {
         meetingStore.startNextMeeting(teamId, forumType).then(({ meeting }) => {
+          if (!meeting) {
+            setNoMeetingRecords(true);
+          }
           issueStore.fetchIssuesForTeam(teamId);
-          issueStore.fetchTeamIssues(teamId).then(() => setLoading(false));
+          issueStore.fetchTeamIssues(teamId);
+          // .then(() => setLoading(false));
+          setLoading(false);
         });
       }
     }, [company, teams.map(t => t.id), team_id]);
+    if (noMeetingRecords) {
+      return (
+        <NoMeetingRecords>
+          No meeting has been created beforehand for this period, please do that
+        </NoMeetingRecords>
+      );
+    }
 
     if (loading || R.isNil(upcomingForumMeeting) || upcomingForumMeeting.teamId != teamId) {
       return (
@@ -73,4 +86,10 @@ export const HeaderText = styled(HomeTitle)`
   font-size: 20pt;
   font-weight: bold;
   margin-left: 5px;
+`;
+
+export const NoMeetingRecords = styled.div`
+  display: inline-block;
+  font-size: 1em;
+  font-weight: bold;
 `;
