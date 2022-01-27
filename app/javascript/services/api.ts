@@ -401,7 +401,7 @@ export class Api {
   }
 
   async updateHabitLog(habitId: number, logDate: string) {
-    return this.client.put(`/habits/${habitId}/habit_logs/${logDate}`);
+    return this.client.put(`/habits/${habitId}/habit_logs/${logDate}`, {});
   }
 
   async getQuestionnaires() {

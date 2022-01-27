@@ -96,8 +96,7 @@ export const AnnualInitiativeStoreModel = types
         self.annualInitiative.keyElements = keyElements;
         showToast("Key Result updated", ToastMessageConstants.SUCCESS);
         return response.data;
-      } catch (error) {
-        console.log(error)
+      } catch {
         showToast(il8n.t("annualInitiative.keyElementUpdateError"), ToastMessageConstants.ERROR);
         return false;
       }
