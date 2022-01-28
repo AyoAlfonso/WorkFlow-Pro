@@ -184,8 +184,6 @@ class User < ApplicationRecord
         notification.save
       end
     end
-
-    self.id
   end
 
   def team_meetings
