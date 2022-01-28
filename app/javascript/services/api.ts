@@ -610,10 +610,9 @@ export class Api {
   async toggleKPIStatus(id) {
     return this.client.patch(`/key_performance_indicator/toggle_status/${id}`);
   }
-   async openKPI(id) {
+  async openKPI(id) {
     return this.client.patch(`/key_performance_indicator/open_kpi/${id}`);
   }
-
 
   async createScorecardLog(scorecardLog) {
     return this.client.post(`scorecard_logs`, scorecardLog);
@@ -639,6 +638,10 @@ export class Api {
 
   async getWeeklyCheckinMilestones(weekOf) {
     return this.client.get(`milestones/check_in/${weekOf}`);
+  }
+
+  async getWeeklyCheckinKeyElements() {
+    return this.client.get(`/key_elements/check_in`);
   }
   //async setJWT(jwt) {}
 }
