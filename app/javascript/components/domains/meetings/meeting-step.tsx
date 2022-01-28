@@ -63,7 +63,7 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
         case "ConversationStarter":
           return <ConversationStarter />;
         case "PersonalGoals":
-          return <PersonalGoals />;
+          return <PersonalGoals company={companyStore.company} meeting={meeting} />;
         case "WeeklyReflection":
           return <WeeklyReflection />;
         case "Milestones":

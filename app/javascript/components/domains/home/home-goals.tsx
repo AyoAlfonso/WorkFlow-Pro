@@ -14,8 +14,12 @@ import { TitleContainer } from "../goals/shared/title-container";
 import { RallyingCry } from "../goals/shared/rallying-cry";
 import { PersonalVision } from "../goals/shared/personal-vision";
 
+interface IHomeGoalsProps {
+  isForum?: boolean;
+}
+
 export const HomeGoals = observer(
-  (): JSX.Element => {
+  ({ isForum }: IHomeGoalsProps): JSX.Element => {
     const { goalStore, companyStore } = useMst();
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -115,25 +119,27 @@ export const HomeGoals = observer(
 
     return (
       <Container>
-        <CompanyInitiativesContainer>
-          <TitleContainer
-            goalsFilter={companyGoalsFilter}
-            setGoalsFilter={setCompanyGoalsFilter}
-            largeHomeTitle={true}
-            type={"Company"}
-            title={companyStore.company.name}
-            handleToggleChange={toggleCompanyPlanning}
-            toggleChecked={companyPlanning}
-            showInitiatives={showCompanyInitiatives}
-            setShowInitiatives={setShowCompanyInitiatives}
-          />
+        {!isForum && (
+          <CompanyInitiativesContainer>
+            <TitleContainer
+              goalsFilter={companyGoalsFilter}
+              setGoalsFilter={setCompanyGoalsFilter}
+              largeHomeTitle={true}
+              type={"Company"}
+              title={companyStore.company.name}
+              handleToggleChange={toggleCompanyPlanning}
+              toggleChecked={companyPlanning}
+              showInitiatives={showCompanyInitiatives}
+              setShowInitiatives={setShowCompanyInitiatives}
+            />
 
-          <RallyingCry rallyingCry={companyGoals.rallyingCry} />
+            <RallyingCry rallyingCry={companyGoals.rallyingCry} />
 
-          <InitiativesContainer>
-            {renderAnnualInitiatives(companyGoalsToShow(), "company")}
-          </InitiativesContainer>
-        </CompanyInitiativesContainer>
+            <InitiativesContainer>
+              {renderAnnualInitiatives(companyGoalsToShow(), "company")}
+            </InitiativesContainer>
+          </CompanyInitiativesContainer>
+        )}
 
         <PersonalVisionContainer>
           <TitleContainer
