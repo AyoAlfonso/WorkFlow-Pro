@@ -137,7 +137,7 @@ class Company < ApplicationRecord
         if self.forum_type == "Organisation"
           self.preferences = {:foundational_four => false,:company_objectives => true, :personal_objectives => true}
         else
-          self.preferences = {:foundational_four => false,:company_objectives => true, :personal_objectives => true}
+          self.preferences = {:foundational_four => true,:company_objectives => true, :personal_objectives => true}
         end
     end
   end
