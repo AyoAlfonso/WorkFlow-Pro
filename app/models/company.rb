@@ -140,5 +140,6 @@ class Company < ApplicationRecord
           self.preferences = {:foundational_four => true,:company_objectives => true, :personal_objectives => true}
         end
     end
+    self.save
   end
 end
