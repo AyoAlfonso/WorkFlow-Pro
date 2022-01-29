@@ -67,6 +67,7 @@ export const baseTheme = {
     dairyCream: "#FADBC8",
     boldYellow: "#FBB004",
     progressGreen: "#00C3B3",
+    dimPurple: "#6a56cb",
   },
 
   fonts: {
