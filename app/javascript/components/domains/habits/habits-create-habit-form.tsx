@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
 import { Button, Icon, Input, Label } from "~/components/shared";
 import { baseTheme } from "~/themes";
-import { genRandomColor } from "~/utils";
 import { Text } from "~/components/shared/text";
 
 interface ICreateHabitFormProps {
@@ -18,7 +17,7 @@ interface ICreateHabitFormState {
 const defaultCreateHabitFormState = {
   name: "",
   frequency: 1,
-  color: genRandomColor(),
+  color: baseTheme.colors.primary100,
 };
 export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.Element => {
   const { habitStore } = useMst();
@@ -45,13 +44,6 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
     baseTheme.colors.successGreen,
     baseTheme.colors.cavier,
   ];
-
-  useEffect(() => {
-    setCreateHabitFormState({
-      ...createHabitFormState,
-      color: habitColor,
-    });
-  }, []);
 
   return (
     <StyledForm>
