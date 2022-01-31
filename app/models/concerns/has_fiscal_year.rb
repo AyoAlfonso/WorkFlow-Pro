@@ -19,7 +19,6 @@ module HasFiscalYear
     #Usage: We use this to determine the fiscal year of the 
     # 
     current_time = self.convert_to_their_timezone
-    # binding.pry
     #if the year start is the first of january it means the year end will be this calendar year
     (current_time >= current_year_fiscal_year_start && current_year_fiscal_year_start != Date.parse("#{current_time.year}-01-01")) ? current_time.year + 1 : current_time.year
   end
@@ -91,6 +90,18 @@ module HasFiscalYear
     else
       current_year_fiscal_year_start.year
     end
+  end
+
+  def set_four_week_end_of_year_offset(year)
+    current_date = self.convert_to_their_timezone
+    temp_current_date = DateTime.new(year, current_date.month, current_date.day, 0, 0, 0, 0)
+    temp_current_year_fiscal_year_start = DateTime.new(year, current_year_fiscal_year_start.month, current_year_fiscal_year_start.day, 0, 0, 0, 0)
+   
+   if temp_current_date + 4.weeks >= temp_current_year_fiscal_year_start
+      year + 1
+   else
+      year
+   end  
   end
 
   def quarter_for_creating_quarterly_goals

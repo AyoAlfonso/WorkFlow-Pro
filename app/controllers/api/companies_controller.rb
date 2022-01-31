@@ -82,7 +82,7 @@ class Api::CompaniesController < Api::ApplicationController
       annual_initiative = AnnualInitiative.where(company_id: @onboarding_company.id,
                                                  created_by: current_user,
                                                  owned_by: current_user,
-                                                 fiscal_year: @onboarding_company.year_for_creating_annual_initiatives,
+                                                 fiscal_year: @onboarding_company.set_four_week_end_of_year_offset(@onboarding_company.year_for_creating_annual_initiatives),
                                                  context_description: "",
                                                  importance: ["", "", ""]).first_or_initialize
       annual_initiative.update!(description: params[:annual_initiative][:description])
