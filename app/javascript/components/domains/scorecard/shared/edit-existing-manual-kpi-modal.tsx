@@ -212,7 +212,9 @@ export const AddExistingManualKPIModal = observer(
                     theme="snow"
                     placeholder={"Add a description..."}
                     value={description}
-                    onChange={setDescription}
+                    onChange={(content, delta, source, editor) => {
+                      setDescription(editor.getHTML());
+                    }}
                   />
                 </TrixEditorContainer>
               </FormElementContainer>
