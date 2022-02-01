@@ -60,7 +60,7 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
         </NameInputContainer>
         <ColorContainer>
           <ColorBox
-            ml
+            ml={"18px"}
             backgroundColor={habitColor}
             onClick={() => setShowColorPicker(!showColorPicker)}
           />
@@ -211,7 +211,7 @@ const ColorOptionContainer = styled.div`
 
 type ColorBoxProps = {
   backgroundColor: string;
-  ml?: boolean;
+  ml?: string;
 };
 
 const ColorBox = styled.div<ColorBoxProps>`
@@ -220,15 +220,15 @@ const ColorBox = styled.div<ColorBoxProps>`
   display: inline-block;
   border-radius: 4px;
   background-color: ${props => props.backgroundColor && props.backgroundColor};
-  margin-left: ${props => (props.ml ? "18px" : "")};
+  margin-left: ${props => (props.ml ? props.ml : "")};
   cursor: pointer;
 `;
 
 const ColorPickerContainer = styled.div`
-  padding: 10px;
-  border-radius: 4px;
-  height: 100px;
-  width: 145px;
+  padding: 0.63em;
+  border-radius: 0.25em;
+  height: 6.25em;
+  width: 9.1em;
   display: block;
   overflow: break;
   position: absolute;
@@ -236,7 +236,7 @@ const ColorPickerContainer = styled.div`
   border: 1px solid ${props => props.theme.colors.greyActive};
   z-index: 20;
   background-color: ${props => props.theme.colors.white};
-  margin-top: 10px;
+  margin-top: 0.63em;
 `;
 
 const HeaderContainer = styled.div`
