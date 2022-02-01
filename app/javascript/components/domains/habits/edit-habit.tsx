@@ -145,7 +145,7 @@ export const EditHabit = observer(
           <ColorDisplayContainer>
             <SectionText> Color </SectionText>
             <ColorBox
-              ml
+              ml={"18px"}
               backgroundColor={habitColor}
               onClick={() => setShowColorPicker(!showColorPicker)}
             />
@@ -355,7 +355,7 @@ const BoldedDescriptionText = styled(Text)`
 
 type ColorBoxProps = {
   backgroundColor: string;
-  ml?: boolean;
+  ml?: string;
 };
 
 const ColorBox = styled.div<ColorBoxProps>`
@@ -364,7 +364,7 @@ const ColorBox = styled.div<ColorBoxProps>`
   display: inline-block;
   border-radius: 4px;
   background-color: ${props => props.backgroundColor && props.backgroundColor};
-  margin-left: ${props => (props.ml ? "18px" : "")};
+  margin-left: ${props => (props.ml ? props.ml : "")};
   cursor: pointer;
 `;
 
