@@ -151,8 +151,8 @@ ActiveRecord::Schema.define(version: 2022_01_28_122121) do
     t.integer "display_format", default: 0
     t.integer "onboarding_status", default: 0
     t.string "customer_subscription_profile_id"
-    t.integer "forum_type", default: 0
     t.integer "objectives_key_type", default: 1
+    t.integer "forum_type", default: 0
     t.jsonb "preferences", default: {}, null: false
     t.index ["preferences"], name: "index_companies_on_preferences", using: :gin
   end
@@ -727,6 +727,9 @@ ActiveRecord::Schema.define(version: 2022_01_28_122121) do
   add_foreign_key "key_activities", "companies"
   add_foreign_key "key_activities", "meetings"
   add_foreign_key "key_activities", "users"
+  add_foreign_key "key_performance_indicators", "companies"
+  add_foreign_key "key_performance_indicators", "teams"
+  add_foreign_key "key_performance_indicators", "users"
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"

@@ -21,9 +21,8 @@ class AnnualInitiative < ApplicationRecord
   scope :owned_by_user, ->(user) { where(owned_by_id: user.id).where(company_id: nil) }
   scope :for_company_id, ->(company_id) { where(company_id: company_id) }
   scope :for_company_current_year_and_future, ->(company_current_fiscal_year) { where("fiscal_year >= ?", company_current_fiscal_year) }
-
-
-  
+  scope :sort_by_closed_at, -> { where.not(closed_at: nil) }
+  scope :sort_by_not_closed_at, -> { where(closed_at: nil) }
   private
 
   def sanitize_description

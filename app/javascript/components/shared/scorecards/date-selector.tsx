@@ -13,15 +13,17 @@ import { Button } from "~/components/shared/button";
 import { getWeekOfDate } from "~/utils/date-time";
 
 interface IDueDateSelectorProps {
-  selectedDueDate: any;
+  selectedDueDate: Date;
   setSelectedDueDate: any;
   setCurrentWeek: any;
+  maxDate: Date;
 }
 
 export const DueDateSelector = ({
   selectedDueDate,
   setSelectedDueDate,
   setCurrentWeek,
+  maxDate,
 }: IDueDateSelectorProps): JSX.Element => {
   const { t } = useTranslation();
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
@@ -66,8 +68,8 @@ export const DueDateSelector = ({
             showSelectionPreview={true}
             direction={"vertical"}
             calendarFocus={"backwards"}
-            minDate={addDays(selectedDueDate, -90)}
-            maxDate={selectedDueDate}
+            minDate={addDays(maxDate, -90)}
+            maxDate={maxDate}
             scroll={{
               enabled: true,
               calendarWidth: 320,

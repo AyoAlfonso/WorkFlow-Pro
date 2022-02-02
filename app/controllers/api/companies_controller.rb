@@ -180,12 +180,11 @@ class Api::CompaniesController < Api::ApplicationController
   end
 
   def create_or_update_onboarding_team
-    @team = Team.where(company_id: @onboarding_company.id)
+    @team = Team.where(company_id: @onboarding_company.id).first
 
-    if Team.where(company_id: @onboarding_company.id).blank? 
+    if Team.where(company_id: @onboarding_company.id).first.blank? 
      @team = Team.create!(company_id: @onboarding_company.id, name: params[:team_name], settings: {})
     end
-    
     @team.set_default_executive_team if Team.where(company_id: @team.company.id, executive: 1).blank?
     @team.set_default_avatar_color
     authorize @team

@@ -13,12 +13,23 @@ class Api::GoalsController < Api::ApplicationController
 
   private  
   def get_user_goals
-    @user_goals = policy_scope(AnnualInitiative).owned_by_user(current_user).order(created_at: :desc) #.for_company_current_year_and_future(@company_current_fiscal_year)
+    if params[:status] == "closed"
+      @goals = policy_scope(AnnualInitiative).sort_by_closed_at
+    else 
+      @goals = policy_scope(AnnualInitiative).sort_by_not_closed_at
+    end 
+    
+   @user_goals = @goals.owned_by_user(current_user).order(created_at: :desc)
     authorize @user_goals
   end
 
   def get_company_goals
-    @company_goals = policy_scope(AnnualInitiative).user_current_company(current_company.id).order(created_at: :desc) #.for_company_current_year_and_future(@company_current_fiscal_year)
+    if params[:status] == "closed"
+      @goals = policy_scope(AnnualInitiative).sort_by_closed_at
+    else
+      @goals = policy_scope(AnnualInitiative).sort_by_not_closed_at
+    end
+    @company_goals = @goals.user_current_company(current_company.id).owned_by_user(current_user).order(created_at: :desc)
     authorize @company_goals
   end
 
