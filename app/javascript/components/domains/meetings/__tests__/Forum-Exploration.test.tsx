@@ -4,8 +4,12 @@ import { Exploration } from "../../meetings-forum/components/exploration";
 import { Provider, rootStore } from "../../../../setup/root";
 import { Section1 } from "../../meetings-forum/section-1";
 
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({ t: key => key }),
+}));
+
 describe("Renders Exploration Component", () => {
-  it("should render component", async () => {
+  it("should render the meeting exploration component", async () => {
     const component = await renderer.create(
       <Provider value={rootStore}>
         <Exploration />

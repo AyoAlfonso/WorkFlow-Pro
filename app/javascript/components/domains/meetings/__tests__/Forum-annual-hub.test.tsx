@@ -11,7 +11,7 @@ jest.mock("react-i18next", () => ({
 }));
 
 describe("Renders Annual Hub", () => {
-  it("should render component", async () => {
+  it("should render section 1 component for annual hub", async () => {
     const component = await renderer.create(
       <Provider value={rootStore}>
         <MemoryRouter initialEntries={["/meetings/section_1/1"]}>
