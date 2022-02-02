@@ -30,7 +30,7 @@ export const Section2 = observer(
     const [noMeetingRecords, setNoMeetingRecords] = useState(false);
     const teamId =
       (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
-    const instanceType = company && company.accessForum ? "forum" : "teams";
+    const instanceType = company && company?.accessForum ? "forum" : "teams";
 
     const forumType =
       company?.forumType == "Organisation"
@@ -49,14 +49,7 @@ export const Section2 = observer(
           setLoading(false);
         });
       }
-    }, [company, teams.map(t => t.id), team_id]);
-    if (noMeetingRecords) {
-      return (
-        <NoMeetingRecords>
-          No meeting has been created beforehand for this period, please do that
-        </NoMeetingRecords>
-      );
-    }
+    }, [company, teams?.map(t => t.id), team_id]);
 
     if (loading || R.isNil(upcomingForumMeeting) || upcomingForumMeeting.teamId != teamId) {
       return (
