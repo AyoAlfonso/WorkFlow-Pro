@@ -54,6 +54,7 @@ export const GoalsIndex = observer(
     const [showCoreFour, setShowCoreFour] = useState<boolean>(true);
     const [showCompanyInitiatives, setShowCompanyInitiatives] = useState<boolean>(true);
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
+    const [showLoading, setShowLoading] = useState<boolean>(false);
 
     const { t } = useTranslation();
     useEffect(() => {
@@ -63,6 +64,16 @@ export const GoalsIndex = observer(
       }
     }, []);
 
+    useEffect(() => {
+      if (companyGoalsFilter == "closed" || personalGoalsFilter == "closed") {
+        setShowLoading(true);
+        const res = getClosedGoal();
+        if (res) {
+          setShowLoading(false);
+        }
+      }
+    }, [companyGoalsFilter, personalGoalsFilter]);
+
     if (loading || R.isNil(goalStore.companyGoals) || !companyStore.company) {
       return <Loading />;
     }
@@ -71,6 +82,9 @@ export const GoalsIndex = observer(
     const companyGoals = goalStore.companyGoals;
     const personalGoals = goalStore.personalGoals;
     const annualInitiativeTitle = sessionStore.annualInitiativeTitle;
+
+    const closedCompanyGoals = goalStore.closedCompanyGoals;
+    const closedPersonalGoals = goalStore.closedPersonalGoals;
 
     const toggleCompanyPlanning = () => {
       if (companyPlanning) {
@@ -99,6 +113,12 @@ export const GoalsIndex = observer(
         setShowCoreFour(false);
       }
     };
+
+    const getClosedGoal = async () => {
+      const res = await goalStore.getClosedGoals();
+      return res;
+    };
+
     const companyGoalsToShow = () => {
       switch (companyGoalsFilter) {
         case "open":
@@ -108,7 +128,7 @@ export const GoalsIndex = observer(
         case "me":
           return companyGoals.myAnnualInitiatives.sort(sortByDate);
         case "closed":
-          return companyGoals.closedAnnualInitiatives.sort(sortByDate);
+          return closedCompanyGoals?.closedAnnualInitiatives.sort(sortByDate);
         default:
           return companyGoals;
       }
@@ -117,9 +137,9 @@ export const GoalsIndex = observer(
     const personalGoalsToShow = () => {
       switch (personalGoalsFilter) {
         case "open":
-          return personalGoals.activeAnnualInitiatives;
+          return personalGoals.activeAnnualInitiatives.sort(sortByDate);
         case "closed":
-          return personalGoals.closedAnnualInitiatives;
+          return closedPersonalGoals?.closedAnnualInitiatives.sort(sortByDate);
         default:
           return personalGoals;
       }
@@ -159,7 +179,7 @@ export const GoalsIndex = observer(
 
     const renderAnnualInitiatives = (annualInitiatives, type): JSX.Element => {
       const showEditButton = type == "company" ? companyPlanning : personalPlanning;
-      return annualInitiatives.map((annualInitiative, index) => {
+      return annualInitiatives?.map((annualInitiative, index) => {
         return (
           <AnnualInitiativeCard
             key={annualInitiative.id}
@@ -212,7 +232,13 @@ export const GoalsIndex = observer(
                       {renderCreateCompanyAnnualInitiativeSection("company")}
                     </CreateAnnualInitiativeContainer>
                   )}
-                  {renderAnnualInitiatives(companyGoalsToShow(), "company")}
+                  {showLoading ? (
+                    <LoadingContainer>
+                      <Loading />
+                    </LoadingContainer>
+                  ) : (
+                    renderAnnualInitiatives(companyGoalsToShow(), "company")
+                  )}
                 </InitiativesContainer>
               </>
             )}
@@ -241,7 +267,13 @@ export const GoalsIndex = observer(
                       {renderCreateCompanyAnnualInitiativeSection("personal")}
                     </CreateAnnualInitiativeContainer>
                   )}
-                  {renderAnnualInitiatives(personalGoalsToShow(), "personal")}
+                  {showLoading ? (
+                    <LoadingContainer>
+                      <Loading />
+                    </LoadingContainer>
+                  ) : (
+                    renderAnnualInitiatives(personalGoalsToShow(), "personal")
+                  )}
                 </InitiativesContainer>
               </>
             )}
@@ -334,3 +366,11 @@ const CreateAnnualInitiativeContainer = styled.div`
 `;
 
 const CompanyInitiativesContainer = styled.div``;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;

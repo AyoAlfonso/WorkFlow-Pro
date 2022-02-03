@@ -534,12 +534,12 @@ export const ScorecardTableView = observer(
     };
 
     //Turn this into a shared function
-    const createGoalYearString =
-      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
-        ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-        : `FY${(company.currentFiscalYear - 1)
-            .toString()
-            .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
+    // const createGoalYearString =
+    //   company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+    //     ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+    //     : `FY${(company.currentFiscalYear - 1)
+    //         .toString()
+    //         .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
 
     return (
       <>
