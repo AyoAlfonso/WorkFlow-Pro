@@ -199,7 +199,6 @@ export const KeyElement = observer(
 
     const resetStatus = async () => {
       if (!element || element.status == "unstarted") return;
-      console.log("then here")
       const isUpdated = isLogRecent();
       if (isUpdated) {
         return;
