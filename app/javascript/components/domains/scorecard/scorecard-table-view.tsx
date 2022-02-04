@@ -17,6 +17,8 @@ import { MiniUpdateKPIModal } from "./shared/update-kpi-modal";
 import { AddExistingManualKPIModal } from "./shared/edit-existing-manual-kpi-modal";
 import { titleCase } from "~/utils/camelize";
 import { toJS } from "mobx";
+import Tooltip from '@material-ui/core/Tooltip';
+//import { averageScore } from "./shared/parent-kpi-pop";
 // TODO: figure out better function for percent scores.
 export const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
   greaterThan ? (value / target) * 100 : ((target + target - value) / target) * 100;
@@ -42,6 +44,7 @@ export const ScorecardTableView = observer(
     const { t } = useTranslation();
     const {
       companyStore: { company },
+      scorecardStore: { kpis },
     } = useMst();
     const KPIs = toJS(tableKPIs);
 
@@ -133,6 +136,56 @@ export const ScorecardTableView = observer(
       }
     };
 
+    const totalScore = (
+      weeks: any,
+      parentType: string,
+    ) => {
+      const quarterScores = [
+        [null, 0],
+        [null, 0],
+        [null, 0],
+        [null, 0],
+      ];
+      weeks.forEach(({ week, score }) => {
+        const q = Math.floor((week - 1) / 13);
+        if (quarterScores[q]) {
+          quarterScores[q][0] += score;
+          quarterScores[q][1]++;
+        }
+      });
+      return quarterScores.map(tuple =>
+        //tuple[0] === null ? null : (parentType == 'avr' ? Math.round(tuple[0]) : tuple[0])
+        tuple[0] === null ? null : tuple[0]
+      );
+    };
+
+    const averageScore = (
+      weeks: any,
+      target: number,
+      greaterThan: boolean,
+      parentType: string,
+    ) => {
+      const getScore = (value: number, target: number, greaterThan: boolean) =>
+        greaterThan ? Math.round(value) : Math.round(target + target - value);
+
+      const quarterScores = [
+        [null, 0],
+        [null, 0],
+        [null, 0],
+        [null, 0],
+      ];
+      weeks.forEach(({ week, score }) => {
+        const q = Math.floor((week - 1) / 13);
+        if (quarterScores[q]) {
+          quarterScores[q][0] += score;
+          quarterScores[q][1]++;
+        }
+      });
+      return quarterScores.map(tuple =>
+        tuple[0] === null ? null : getScore(tuple[0] / tuple[1], target, greaterThan),
+      );
+    };
+
     const calcQuarterAverageScores = (
       weeks: any,
       target: number,
@@ -207,6 +260,18 @@ export const ScorecardTableView = observer(
             kpi.greaterThan,
             kpi.parentType,
           ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
+          
+          const averageScores = averageScore(
+            weeks,
+            kpi.targetValue,
+            kpi.greaterThan,
+            kpi.parentType,
+          );
+
+          const totalScores = totalScore(
+            weeks,
+            kpi.parentType,
+          );
 
           row.score = percentScores;
           row.status = percentScores;
@@ -215,6 +280,9 @@ export const ScorecardTableView = observer(
             : 0;
           row.updateKPI.currentWeek = weeks[weeks.length - 1] || 0;
           row.updateKPI.weeks = weeks;
+          row.targetValue = kpi.targetValue;
+          row.average = averageScores;
+          row.total = totalScores;
           return row;
         }),
       [KPIs],
@@ -296,14 +364,18 @@ export const ScorecardTableView = observer(
           minWidth: "86px",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
-            const { relatedParentKpis, parentKpi } = row.original.updateKPI;
+            const { relatedParentKpis, parentKpi, id } = row.original.updateKPI;
             const { greaterThan } = row.original;
+            //const total = (row.original.updateKPI.parentType == 'avr')? Math.round(row.original.total) : row.original.total;
+            //const kpiFound = kpis.find(kpi => kpi.id == id);
+            //number a
 
             if (parentKpi.length > relatedParentKpis.length) {
               quarterValue.color = tango;
               quarterValue.background = dairyCream;
             }
             return (
+              <Tooltip title= {<>{"Target: "} {row.original.targetValue}<br /> {"Average: "} {row.original.average}<br /> {"Total: "} {row.original.total}</>} placement="top" arrow>
               <ScoreContainer background={quarterValue.background}>
                 <Score color={quarterValue.color}>
                   {parentKpi.length > relatedParentKpis.length
@@ -315,6 +387,7 @@ export const ScorecardTableView = observer(
                     : "—"}
                 </Score>
               </ScoreContainer>
+              </Tooltip>
             );
           },
         },
@@ -378,7 +451,9 @@ export const ScorecardTableView = observer(
                     </EmptyWeekContainer>
                   ) : (
                     <WeekContainer>
-                      <WeekText color={value.color}>{value.score}</WeekText>
+                      <WeekText color={value.color}>
+                        {(parentType == "avr")? Math.round(value.score) : value.score}
+                        </WeekText>
                     </WeekContainer>
                   )}
                 </EmptyWeekContainer>
@@ -567,6 +642,7 @@ export const ScorecardTableView = observer(
             setKpis={setKpis}
             setViewEditKPIModalOpen={setViewEditKPIModalOpen}
             setShowEditExistingKPIContainer={setShowEditExistingKPIContainer}
+            setCurrentSelectedKpi={setCurrentSelectedKpi}
           />
         )}
 
@@ -750,6 +826,7 @@ const UpdateKPICellContainer = styled(UpdateKPIContainer)`
   display: ${props => (props.hover ? "flex" : "none")};
   height: 34px;
   border-radius: 4px;
+  margin: auto;
 `;
 
 const KPITitleContainer = styled.div`

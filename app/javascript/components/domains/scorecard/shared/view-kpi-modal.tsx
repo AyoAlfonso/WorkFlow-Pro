@@ -24,6 +24,8 @@ import { ScorecardKPIDropdownOptions } from "./scorecard-dropdown-options";
 import "~/stylesheets/modules/trix-editor.css";
 import { debounce } from "lodash";
 import { Button } from "~/components/shared/button";
+import { kpiPopup } from "./parent-kpi-popup";
+import { kpiViewerName } from "./parent-kpi-popup";
 
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -31,6 +33,7 @@ interface ViewEditKPIModalProps {
   viewEditKPIModalOpen: boolean;
   setKpis: any;
   setShowEditExistingKPIContainer: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentSelectedKpi?: React.Dispatch<any>;
 }
 
 export const ViewEditKPIModal = observer(
@@ -40,6 +43,7 @@ export const ViewEditKPIModal = observer(
     viewEditKPIModalOpen,
     setKpis,
     setShowEditExistingKPIContainer,
+    setCurrentSelectedKpi,
   }: ViewEditKPIModalProps): JSX.Element => {
     const {
       companyStore: { company },
@@ -62,6 +66,7 @@ export const ViewEditKPIModal = observer(
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
+    const [open, setOpen] = useState(false);
 
     const headerRef = useRef(null);
 
@@ -84,6 +89,8 @@ export const ViewEditKPIModal = observer(
       grey100,
       tango,
     } = baseTheme.colors;
+
+    const [functionColor, setFunctionColor] = useState(greyInactive);
 
     const formatValue = (value: number, unitType: string) => {
       if (value === undefined) {
@@ -257,8 +264,13 @@ export const ViewEditKPIModal = observer(
       });
     };
 
+    const closePopup = () => {
+      setOpen(false);
+    };
+
     const closeModal = () => {
       setViewEditKPIModalOpen(false);
+      closePopup();
     };
 
     useEffect(() => {
@@ -342,15 +354,21 @@ export const ViewEditKPIModal = observer(
                     </OwnerAndLogicText>
                     <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
-                      {R.uniq(kpi?.viewers.map(viewer => viewer.type)).join(", ")} KPI
+                      {R.uniq(kpi?.viewers.map(viewer => kpiViewerName(viewer))).join(", ")} KPI
                     </OwnerAndLogicText>
 
                     <Icon icon={"Initiative"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText>{logic}</OwnerAndLogicText>
                     {kpi?.parentType && (
                       <KPITypeContainer>
-                        <KPITypeIcon icon={"Function"} size={16} iconColor={greyInactive} />
-                        <KPIParentTypeText> {formatKpiType(kpi?.parentType)} </KPIParentTypeText>
+                        <KPITypeWrapper onMouseEnter={() => {setFunctionColor(primary100)}}
+                                        onMouseLeave={() => {setFunctionColor(greyInactive)}}
+                                        onClick={() => {setOpen(!open)}}
+                        >
+                          <KPITypeIcon icon={"Function"} size={16} iconColor={functionColor}/>
+                          <KPIParentTypeText> {formatKpiType(kpi?.parentType)} </KPIParentTypeText>
+                        </KPITypeWrapper>
+                        <Pop><PopupContainer>{kpiPopup(kpi, open, setOpen, setCurrentSelectedKpi, setViewEditKPIModalOpen)}</PopupContainer></Pop>
                       </KPITypeContainer>
                     )}
                   </OwnerAndLogicContainer>
@@ -498,6 +516,18 @@ export const ViewEditKPIModal = observer(
     );
   },
 );
+
+const PopupContainer = styled.div`
+  position: absolute;
+  padding-top: 15px;
+  //border: 1px solid black;
+`;
+
+const Pop = styled.div`
+  position: relative;
+  //padding-top: 15px;
+  //border: 1px solid black;
+`;
 
 const Container = styled.div`
   width: 100%;
@@ -681,6 +711,15 @@ const KPITypeContainer = styled.div`
   display: flex;
   color: ${props => props.theme.colors.grey100};
 `;
+
+const KPITypeWrapper = styled.div`
+display: flex;
+  &:hover {
+    cursor: pointer;
+    color: ${props => props.theme.colors.primary100};
+  }
+`;
+
 const KPITypeIcon = styled(Icon)``;
 
 const KPIParentTypeText = styled.div`

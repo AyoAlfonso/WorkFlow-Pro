@@ -145,7 +145,7 @@ export const GoalDropdownOptions = ({
         <IconContainer>
           <StyledIcon icon={"Checkmark"} size={"15px"} />
         </IconContainer>
-        <OptionText> Close {itemText} </OptionText>
+        <OptionText> Closeeeee {itemText} </OptionText>
       </OptionContainer>
       <OptionContainer onClick={() => deleteInitiative()}>
         <IconContainer>
