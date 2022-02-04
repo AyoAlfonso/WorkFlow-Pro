@@ -177,7 +177,6 @@ export const ScorecardTableView = observer(
       });
       return quarterScores.map(tuple =>
         tuple[0] === null ? null : (parentType == 'avr' ? (Math.round((tuple[0] + Number.EPSILON) * 100) / 100) : tuple[0])
-        //tuple[0] === null ? null : tuple[0]
       );
     };
 
@@ -397,9 +396,6 @@ export const ScorecardTableView = observer(
             const quarterValue = value[quarter - 1];
             const { relatedParentKpis, parentKpi, id } = row.original.updateKPI;
             const { greaterThan } = row.original;
-            //const total = (row.original.updateKPI.parentType == 'avr')? Math.round(row.original.total) : row.original.total;
-            //const kpiFound = kpis.find(kpi => kpi.id == id);
-            //number a
 
             if (parentKpi.length > relatedParentKpis.length) {
               quarterValue.color = tango;
