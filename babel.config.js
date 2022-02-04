@@ -18,6 +18,7 @@ module.exports = function(api) {
   return {
     presets: [
       "@babel/preset-flow",
+      "@babel/preset-typescript",
       isTestEnv && [
         "@babel/preset-env",
         {
@@ -33,7 +34,7 @@ module.exports = function(api) {
         {
           forceAllTransforms: true,
           useBuiltIns: "entry",
-          corejs: 3,
+          // corejs: 3,
           modules: false,
           exclude: ["transform-typeof-symbol"],
         },
