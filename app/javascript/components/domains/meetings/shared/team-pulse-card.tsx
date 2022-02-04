@@ -2,7 +2,7 @@ import * as React from "react";
 import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineMarkSeries } from "react-vis";
 import styled from "styled-components";
 import { baseTheme } from "~/themes";
-import * as moment from "moment";
+import moment from "moment";
 import "react-vis/dist/style.css";
 import {
   emotionA,

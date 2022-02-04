@@ -73,9 +73,9 @@ export const OwnedBySection = observer(
 
     const companyUsers = userStore.users;
     const editable =
-      ((owner && owner.id == currentUser.id) ||
-        currentUser.role == RoleCEO ||
-        currentUser.role == RoleAdministrator) &&
+      ((owner && owner.id == currentUser?.id) ||
+        currentUser?.role == RoleCEO ||
+        currentUser?.role == RoleAdministrator) &&
       !disabled;
 
     const renderUserSelectionList = (): JSX.Element => {
@@ -137,6 +137,7 @@ type ContainerProps = {
 const Container = styled.div<ContainerProps>`
   margin-left: 0px;
   width: ${props => `${props.width}%` || "auto"};
+  position: relative;
 `;
 
 const EditTriggerContainer = styled.div<EditTriggerContainerType>`

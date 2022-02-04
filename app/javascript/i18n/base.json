@@ -95,6 +95,12 @@
         "core4": "How Do We Succeed?",
         "goalsTitle": "Foundational Four™"
       },
+        "forumCore": {
+        "core1": "Be Confidential",
+        "core2": "Be Real",
+        "core3": "Be Curious",
+        "core4": "Be Committed"
+      },
       "company": {
         "accountabilityChart": "Accountability Matrix",
         "name": "Company Name",
@@ -107,7 +113,12 @@
         "strategicPlan": "The Plan",
         "timezone": "Location/Time Zone",
         "executiveTeam" : "Leadership Team",
-        "objectivesKeyType" : "Objectives Key Type",
+        "objectivesKeyType" : "Initiatives Tracking Method",
+        "objectivesPageLayout": "Objectives Page Layout",
+        "layoutOptions": {
+          "coreFour": "Foundational Four™",
+          "personalGoals": "Personal Objectives"
+        },
         "createUser": {
           "addButton": "Create New User",
           "inviteYourTeam": "Invite your team"
@@ -141,7 +152,8 @@
         "forumMeeting": "Forum Meeting",
         "emptyMeetingEntries": "Start creating meetings on the meetings page!",
         "scheduledStartTime": "Scheduled Start Date",
-        "actualStartTime": "Actual Start Date"
+        "actualStartTime": "Actual Start Date",
+        "averageRating": "Average Rating"
       },
       "navigation": {
         "planner": "Planner",
@@ -150,7 +162,7 @@
         "goals": "Objectives",
         "meeting": "Meeting",
         "forum": "Forum",
-        "meetings": "Meeting",
+        "meetings": "Management",
         "scorecards": "Scorecards",
         "checkin": "Check-in"
       },
@@ -167,6 +179,7 @@
         "createdOn" : "Originally created for",
         "emptyHeader": "Add your first Initiative",
         "keyElementCreationError": "There was an error creating the key element",
+        "keyElementUpdateError": "There was an error updating the key element",
         "emptyText": "Initiatives are quarterly efforts that help you get closer to reaching your Objective.",
         "emptyCta": "Activate \"Plan\" mode"
       },
@@ -223,6 +236,8 @@
         "meetingRating": "Rate the Meeting",
         "goalProgress": "Goal Progress",
         "milestoneProgress": "Milestone Progress",
+        "missingImageURL": "This URL for the image is missing",
+        "missingStep": "This text for the step is missing",
         "tasksCompleted": "Pyns Completed",
         "issuesAddressed": "Issues Addressed",
         "sideOptions": {
@@ -251,7 +266,7 @@
       },
       "meetingForum": {
         "exploration": {
-          "title": "1: Scheduled Exploration",
+          "title": "1: Scheduled Exploration or Curated Topic",
            "subTitle": "Four Step Forum Exploration™ Guide",
            "done": "Done"
         },
@@ -261,7 +276,7 @@
           "forumItems": "Topic"
         },
         "scheduledIssues": {
-          "title": "{{prefix}}Dynamic Explorations",
+          "title": "{{prefix}}Dynamic Topics",
           "subTitle": "Add topics you want to discuss in the Forum Hub of your next meeting"
         },
         "noUpcomingMeetingScheduled": "Scheduled meeting must be created in order to organize items onto it."
@@ -366,10 +381,17 @@
           "emptyText": "No Milestones",
           "create": "You don't have any active Milestones. Visit the Objectives page to create an Initiative and Milestones"
         },
+        "keyResults": {
+          "emptyText": "No Key Results",
+          "create": "You don't have any Key Results. Visit the Objectives page to create an Initiative and Milestones"
+        },
         "kpi": {
           "emptyText": "No KPIs",
           "create": "You don't have any active KPIs. Visit the Scorecard page to create a KPI."
         }
+      },
+      "keyElement": {
+        "dateToolTip": "Update the date if you wish to provide an update on your Key Results for a previous date."
       }
     }
   }

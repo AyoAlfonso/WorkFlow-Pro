@@ -151,8 +151,10 @@ ActiveRecord::Schema.define(version: 2022_02_03_212654) do
     t.integer "display_format", default: 0
     t.integer "onboarding_status", default: 0
     t.string "customer_subscription_profile_id"
-    t.integer "forum_type"
+    t.integer "forum_type", default: 0
     t.integer "objectives_key_type", default: 1
+    t.jsonb "preferences", default: {}, null: false
+    t.index ["preferences"], name: "index_companies_on_preferences", using: :gin
   end
 
   create_table "company_static_data", force: :cascade do |t|
@@ -320,6 +322,10 @@ ActiveRecord::Schema.define(version: 2022_02_03_212654) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "unit_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "unit_type"
+    t.float "target_value", default: 0.0
     t.boolean "is_deleted", default: false
     t.boolean "greater_than", default: true
     t.jsonb "viewers"
@@ -333,8 +339,6 @@ ActiveRecord::Schema.define(version: 2022_02_03_212654) do
     t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
-    t.index ["team_id"], name: "index_key_performance_indicators_on_team_id"
-    t.index ["user_id"], name: "index_key_performance_indicators_on_user_id"
   end
 
   create_table "meeting_templates", force: :cascade do |t|
@@ -411,6 +415,7 @@ ActiveRecord::Schema.define(version: 2022_02_03_212654) do
     t.integer "child_id"
     t.string "child_type"
     t.integer "status", default: 0
+    t.datetime "adjusted_date"
     t.index ["objecteable_type", "objecteable_id"], name: "index_objective_logs_on_objecteable"
     t.index ["owned_by_id"], name: "index_objective_logs_on_owned_by_id"
   end

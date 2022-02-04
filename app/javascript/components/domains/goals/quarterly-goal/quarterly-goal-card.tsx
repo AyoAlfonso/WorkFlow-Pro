@@ -67,7 +67,10 @@ export const QuarterlyGoalCard = observer(
     if (quarterlyGoal.closedAt != null) {
       statusBadge.description = `Closed - Q${quarterlyGoal.quarter}`;
       statusBadge.colors = { color: white, backgroundColor: grey100 };
-    } else if (currentFiscalYear < quarterlyGoal.quarter) {
+    } else if (
+      currentFiscalYear <= quarterlyGoal.fiscalYear &&
+      currentFiscalQuarter < quarterlyGoal.quarter
+    ) {
       statusBadge.description = `Upcoming - Q${quarterlyGoal.quarter}`;
       statusBadge.colors = { color: white, backgroundColor: primary100 };
     } else {

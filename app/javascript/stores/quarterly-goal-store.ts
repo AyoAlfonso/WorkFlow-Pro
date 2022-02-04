@@ -6,11 +6,13 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import * as R from "ramda";
 import il8n from "i18next";
+import { ObjectiveLogModel } from "~/models/objective-log";
 
 export const QuarterlyGoalStoreModel = types
   .model("QuarterlyGoalModel")
   .props({
     quarterlyGoal: types.maybeNull(QuarterlyGoalModel),
+    objectiveLogs: types.maybeNull(types.array(ObjectiveLogModel)),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -25,6 +27,7 @@ export const QuarterlyGoalStoreModel = types
       try {
         const response: any = yield env.api.getQuarterlyGoal(id);
         self.quarterlyGoal = response.data;
+        return response.data;
       } catch {
         showToast(
           il8n.t("quarterlyGoal.retrievalError", { title: self.title }),
@@ -80,14 +83,14 @@ export const QuarterlyGoalStoreModel = types
           keyElementParams,
         );
         if (response.ok) {
-          const updatedKeyElements = [...self.quarterlyGoal.keyElements, response.data.keyElement];
+          const updatedKeyElements = [...self.quarterlyGoal.keyElements, response.data];
           self.quarterlyGoal.keyElements = updatedKeyElements as any;
           showToast("Key Result created", ToastMessageConstants.SUCCESS);
-          return response.data.keyElement;
+          return response.data;
         }
         //api monitor to show error
       } catch {
-        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
+        showToast("There was an error creating the key result", ToastMessageConstants.ERROR);
         // showToast(il8n.t("quarterlyGoal.keyElementCreationError"), ToastMessageConstants.ERROR);
       }
     }),
@@ -102,12 +105,13 @@ export const QuarterlyGoalStoreModel = types
         );
         const keyElements = self.quarterlyGoal.keyElements;
         const keyElementIndex = keyElements.findIndex(ke => ke.id == keyElementId);
-        keyElements[keyElementIndex] = response.data.keyElement;
+        keyElements[keyElementIndex] = response.data;
         self.quarterlyGoal.keyElements = keyElements;
         showToast("Key Result updated", ToastMessageConstants.SUCCESS);
-        return response.data.keyElement;
+        return response.data;
       } catch (error) {
         showToast(il8n.t("quarterlyGoal.keyElementUpdateError"), ToastMessageConstants.ERROR);
+        return false;
       }
     }),
     deleteKeyElement: flow(function*(keyElementId) {
@@ -122,6 +126,46 @@ export const QuarterlyGoalStoreModel = types
         //api monitor to show error
       } catch {
         showToast("There was an error deleting the key result", ToastMessageConstants.ERROR);
+        return false;
+      }
+    }),
+    getActivityLogs: flow(function*(page, type, id) {
+      const env = getEnv(self);
+      try {
+        self.objectiveLogs = null;
+        const response: any = yield env.api.getObjectiveLogs(page, type, id);
+        if (response.ok) {
+          self.objectiveLogs = response.data.objectiveLog;
+          return response.data.meta;
+        }
+      } catch {
+        return false;
+      }
+    }),
+    createActivityLog: flow(function*(objectiveLog) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createInitiativeLog(objectiveLog);
+        if (response.ok) {
+          const updatedLogs = [...self.objectiveLogs, response.data.objectiveLog];
+          self.objectiveLogs = updatedLogs as any;
+          return response.data.objectiveLog;
+        }
+      } catch {
+        return false;
+      }
+    }),
+    deleteActivityLog: flow(function*(id) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.deleteInitiativeLog(id);
+        if (response.ok) {
+          const updatedLogs = self.objectiveLogs.filter(log => log.id != response.data.objectiveLog.id);
+          self.objectiveLogs = updatedLogs as any;
+          showToast("Log Deleted", ToastMessageConstants.SUCCESS);
+          return response.data.objectiveLog;
+        }
+      } catch {
         return false;
       }
     }),
@@ -217,6 +261,10 @@ export const QuarterlyGoalStoreModel = types
   .actions(self => ({
     updateModelField(field, value) {
       self.quarterlyGoal[field] = value;
+    },
+    findKeyElement(id) {
+      const keyElement = self.quarterlyGoal.keyElements.find(ke => ke.id == id);
+      return keyElement;
     },
     updateKeyElementValue(field: string, id: number, value: number | string) {
       const keyElements = self.quarterlyGoal.keyElements;

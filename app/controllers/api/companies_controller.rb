@@ -6,11 +6,19 @@ class Api::CompaniesController < Api::ApplicationController
   skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
 
   def create
+
+
+     unless params[:forum_type] == "Organisation"
+      preferences
+     end
     @company = Company.new({
       display_format: params[:display_format],
       fiscal_year_start: params[:fiscal_year_start],
       name: params[:name],
       timezone: params[:timezone],
+      forum_type: params[:forum_type],
+      # TODO:
+      preferences: preferences
     })
     authorize @company
     @company.save!
@@ -24,7 +32,7 @@ class Api::CompaniesController < Api::ApplicationController
     SignUpPurpose.create(company_id: @company[:id], purpose: params[:sign_up_purpose_attributes][:purpose]) if params[:sign_up_purpose_attributes].present?
     @user_role = UserRole.find_by(name: "CEO")
     UserCompanyEnablement.create(user_id: current_user.id, company_id: @company.id, user_role_id: @user_role.id)
-    render json: @company.as_json(only: ["id", "name", "phone_number", "rallying_cry", "fiscal_year_start", "timezone", "display_format"],
+    render json: @company.as_json(only: ["id", "name", "phone_number", "rallying_cry", "fiscal_year_start", "timezone", "preferences", "forum_type",   "display_format"],
                              methods: ["accountability_chart_content", "strategic_plan_content", "logo_url", "current_fiscal_quarter", "quarter_for_creating_quarterly_goals", "current_fiscal_year", "year_for_creating_annual_initiatives", "fiscal_year_range", "current_quarter_start_date", "next_quarter_start_date", "forum_meetings_year_range", "forum_intro_video"],
                              include: {
                                core_four: { methods: ["core_1_content", "core_2_content", "core_3_content", "core_4_content"] },
@@ -33,7 +41,7 @@ class Api::CompaniesController < Api::ApplicationController
   end
 
   def show
-    render json: @company.as_json(only: ["id", "name", "phone_number", "rallying_cry", "fiscal_year_start", "timezone", "display_format", "forum_type", "objectives_key_type"],
+    render json: @company.as_json(only: ["id", "name", "phone_number", "rallying_cry", "fiscal_year_start", "timezone", "preferences", "display_format", "forum_type", "objectives_key_type"],
                                   methods: ["accountability_chart_content", "strategic_plan_content", "logo_url", "current_fiscal_week", "current_fiscal_quarter", "quarter_for_creating_quarterly_goals", "current_fiscal_year", "year_for_creating_annual_initiatives", "fiscal_year_range", "current_quarter_start_date", "next_quarter_start_date", "forum_meetings_year_range", "forum_intro_video", "forum_types", "objectives_key_types"],
                                   include: {
                                     core_four: { methods: ["core_1_content", "core_2_content", "core_3_content", "core_4_content"] },
@@ -53,7 +61,7 @@ class Api::CompaniesController < Api::ApplicationController
     elsif params[:company][:logo].blank?
       @company.logo.purge
     end
-    render json: @company.as_json(only: ["id", "name", "phone_number", "rallying_cry", "fiscal_year_start", "timezone", "display_format", "forum_type", "objectives_key_type"],
+    render json: @company.as_json(only: ["id", "name", "phone_number", "rallying_cry", "fiscal_year_start", "timezone", "preferences", "display_format", "forum_type", "objectives_key_type"],
                                   methods: ["accountability_chart_content", "strategic_plan_content", "logo_url", "current_fiscal_quarter", "quarter_for_creating_quarterly_goals", "current_fiscal_year", "year_for_creating_annual_initiatives", "fiscal_year_range", "current_quarter_start_date", "next_quarter_start_date", "forum_meetings_year_range", "forum_intro_video"],
                                   include: {
                                     core_four: { methods: ["core_1_content", "core_2_content", "core_3_content", "core_4_content"] },
@@ -62,10 +70,9 @@ class Api::CompaniesController < Api::ApplicationController
   end
 
   def get_onboarding_company
-    #logo_url
     user_company_enablements = UserCompanyEnablement.where(user_id: current_user.id)
     @onboarding_company = Company.where(id: user_company_enablements.pluck(:company_id), onboarding_status: :incomplete).last
-    render json: @onboarding_company.as_json(only: ["id", "name", "phone_number", "rallying_cry", "fiscal_year_start", "timezone", "display_format", "forum_type", "objectives_key_type"],
+    render json: @onboarding_company.as_json(only: ["id", "name", "phone_number", "rallying_cry", "fiscal_year_start", "timezone", "preferences", "display_format", "forum_type", "objectives_key_type"],
                                         methods: ["accountability_chart_content", "strategic_plan_content", "current_fiscal_quarter", "logo_url", "quarter_for_creating_quarterly_goals", "current_fiscal_year", "year_for_creating_annual_initiatives", "fiscal_year_range", "current_quarter_start_date", "next_quarter_start_date", "forum_meetings_year_range", "forum_intro_video", "forum_types"],
                                         include: {
                                           core_four: { methods: ["core_1_content", "core_2_content", "core_3_content", "core_4_content"] },
@@ -105,8 +112,15 @@ class Api::CompaniesController < Api::ApplicationController
       end
 
       @milestone = @quarterly_goal.milestones.first
-      @milestone.update!(description: params[:annual_initiative][:quarterly_goals][0][:milestones][0][:description])
-
+      onboarding_milestone = params[:annual_initiative][:quarterly_goals][0][:milestones][0]
+      onboarding_key_element = params[:annual_initiative][:quarterly_goals][0][:key_elements][0]
+      @milestone.update!(description: onboarding_milestone[:description])
+      KeyElement.create!(elementable: @quarterly_goal,
+                  value: onboarding_key_element[:value], completion_type: onboarding_key_element[:completion_type],
+                  greater_than: onboarding_key_element[:greater_than],
+                  owned_by_id: onboarding_key_element[:owned_by],
+                  completion_target_value: onboarding_key_element[:completion_target_value])
+                  
       @annual_initiative = annual_initiative.as_json(only: [:id, :created_by, :owned_by, :importance, :description, :key_elements, :company_id, :context_description, :fiscal_year],
                                                      include: {
                                                        quarterly_goals: {
@@ -167,7 +181,11 @@ class Api::CompaniesController < Api::ApplicationController
 
   def create_or_update_onboarding_team
     @team = Team.where(company_id: @onboarding_company.id)
-    @team = Team.create!(company_id: @onboarding_company.id, name: params[:team_name], settings: {}) unless Team.where(company_id:  @onboarding_company.id).present?
+
+    if Team.where(company_id: @onboarding_company.id).blank? 
+     @team = Team.create!(company_id: @onboarding_company.id, name: params[:team_name], settings: {})
+    end
+    
     @team.set_default_executive_team if Team.where(company_id: @team.company.id, executive: 1).blank?
     @team.set_default_avatar_color
     authorize @team
@@ -217,13 +235,8 @@ class Api::CompaniesController < Api::ApplicationController
 
   def company_params
     #user should not be allowed to update the display_format once created
-    params.require(:company).permit(:name, :timezone, :fiscal_year_start, :forum_type, :objectives_key_type, :rallying_cry, sign_up_purpose_attributes: [:purpose], core_four_attributes: [:core_1, :core_2, :core_3, :core_4], company_static_datas_attributes: [:id, :value], description_templates_attributes: [:id, :title, :body])
+    params.require(:company).permit(:name, :timezone, :fiscal_year_start, :forum_type, :objectives_key_type, :rallying_cry, preferences: [:foundational_four, :company_objectives, :personal_objectives] , sign_up_purpose_attributes: [:purpose], core_four_attributes: [:core_1, :core_2, :core_3, :core_4], company_static_datas_attributes: [:id, :value], description_templates_attributes: [:id, :title, :body])
   end
-
-  # def new_company_params
-  #   when creating the company, allow the creation of a display_format
-  #   company_params
-  # end
 
   def set_company
     @company = params[:id] == "default" ? current_company : Company.find(params[:id])

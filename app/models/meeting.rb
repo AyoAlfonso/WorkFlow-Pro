@@ -84,7 +84,7 @@ class Meeting < ApplicationRecord
     elsif self.meeting_type == "team_weekly"
       time_for_title = hosted_by.convert_to_their_timezone(start_time)
       time_for_title.strftime("%A, %B %-d")
-    elsif self.meeting_type == "forum_monthly"
+    elsif (self.meeting_type == "forum_monthly") || (self.meeting_type == "organisation_forum_monthly")
       time_for_title = hosted_by.convert_to_their_timezone(start_time)
       time_for_title.strftime("%A, %B %-d")
     else

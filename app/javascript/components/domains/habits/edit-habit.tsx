@@ -52,6 +52,7 @@ export const EditHabit = observer(
     const { habitStore } = useMst();
     const [habitColor, setHabitColor] = useState<string>("");
     const [habitFrequency, setHabitFrequency] = useState<string>("");
+    const [showColorPicker, setShowColorPicker] = useState<boolean>(false);
 
     useEffect(() => {
       habitStore.getHabit(selectedHabitId).then(result => {
@@ -63,6 +64,17 @@ export const EditHabit = observer(
     const habitNameRef = useRef(null);
 
     const habit = habitStore.habit;
+
+    const colorArray = [
+      baseTheme.colors.mipBlue,
+      baseTheme.colors.primary100,
+      baseTheme.colors.dimPurple,
+      baseTheme.colors.grey100,
+      baseTheme.colors.yellowSea,
+      baseTheme.colors.warningRed,
+      baseTheme.colors.successGreen,
+      baseTheme.colors.cavier,
+    ];
 
     if (habit == null) {
       return (
@@ -130,25 +142,47 @@ export const EditHabit = observer(
           <FrequencyTextTime>times each week</FrequencyTextTime>
         </FrequencyContainer>
         <ColorContainer>
-          <SectionText> Color </SectionText>
-          <ColorInput
-            style={{
-              height: 60,
-              width: 60,
-              marginTop: "auto",
-              marginBottom: "auto",
-              border: "none",
-            }}
-            type={"color"}
-            onChange={({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
-              setHabitColor(value);
-            }}
-            onBlur={() => {
-              habitStore.updateHabitField("color", habitColor);
-              habitStore.updateCurrentHabit();
-            }}
-            value={habitColor}
-          />
+          <ColorDisplayContainer>
+            <SectionText> Color </SectionText>
+            <ColorBox
+              ml={"18px"}
+              backgroundColor={habitColor}
+              onClick={() => setShowColorPicker(!showColorPicker)}
+            />
+          </ColorDisplayContainer>
+          {showColorPicker ? (
+            <ColorPickerContainer
+              onBlur={() => {
+                setShowColorPicker(false);
+              }}
+            >
+              <HeaderContainer>
+                <SectionText>Change Color</SectionText>
+                <CloseIconContainer onClick={() => setShowColorPicker(false)}>
+                  <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
+                </CloseIconContainer>
+              </HeaderContainer>
+              <ColorsContainer>
+                {colorArray.map((color, index) => (
+                  <ColorOptionContainer key={index} onClick={() => {
+                    setHabitColor(color);
+                    habitStore.updateHabitField("color", color);
+                    habitStore.updateCurrentHabit();
+                    setShowColorPicker(false);
+                  }}>
+                    <ColorBox backgroundColor={color} />
+                    {habitColor == color && (
+                      <CheckMarkContainer>
+                        <Icon icon={"Checkmark"} size={"20px"} iconColor={"white"} />
+                      </CheckMarkContainer>
+                    )}
+                  </ColorOptionContainer>
+                ))}
+              </ColorsContainer>
+            </ColorPickerContainer>
+          ) : (
+            <></>
+          )}
         </ColorContainer>
         <OverviewContainer>
           <SectionText> Overview </SectionText>
@@ -269,8 +303,9 @@ const FrequencyInput = styled(Input)`
 `;
 
 const ColorContainer = styled.div`
-  display: flex;
+  // display: flex;
   margin-top: 16px;
+  position: relative;
 `;
 
 const ColorInput = styled(Input)`
@@ -316,4 +351,69 @@ const BoldedDescriptionText = styled(Text)`
   font-size: 16px;
   margin-top: auto;
   margin-bottom: auto;
+`;
+
+type ColorBoxProps = {
+  backgroundColor: string;
+  ml?: string;
+};
+
+const ColorBox = styled.div<ColorBoxProps>`
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: ${props => props.backgroundColor && props.backgroundColor};
+  margin-left: ${props => (props.ml ? props.ml : "")};
+  cursor: pointer;
+`;
+
+const ColorPickerContainer = styled.div`
+  padding: 10px;
+  border-radius: 4px;
+  height: 100px;
+  width: 145px;
+  display: block;
+  overflow: break;
+  position: absolute;
+  border: 1px solid ${props => props.theme.colors.greyActive};
+  z-index: 20;
+  background-color: ${props => props.theme.colors.white};
+  margin-top: 10px;
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+`;
+
+const ColorDisplayContainer = styled.div`
+  display: flex;
+`;
+
+const ColorsContainer = styled.div`
+  & :nth-child(4) {
+    margin-right: 0;
+  }
+  & :nth-child(8) {
+    margin-right: 0;
+  }
+`;
+
+const CloseIconContainer = styled.div`
+  cursor: pointer;
+`;
+
+const CheckMarkContainer = styled.div`
+  position: absolute;
+  top: 5px;
+  left: 5px;
+`;
+
+const ColorOptionContainer = styled.div`
+  position: relative;
+  display: inline-block;
+  margin-right: 8px;
 `;

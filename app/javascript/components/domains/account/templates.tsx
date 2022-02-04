@@ -106,7 +106,7 @@ export const Templates = observer(
             <>
               <BodyContainer>
                 <PersonalInfoContainer>
-                  <Label htmlFor="objectivesTemplate"> Objectives Templates </Label>
+                  <EditorLabel htmlFor="objectivesTemplate"> Objectives Templates </EditorLabel>
                   <ReactQuill
                     className="custom-trix-class"
                     theme="snow"
@@ -122,7 +122,7 @@ export const Templates = observer(
                       });
                     }}
                   />
-                  <Label htmlFor="initiativesTemplate"> Initiatives Templates </Label>
+                  <EditorLabel htmlFor="initiativesTemplate"> Initiatives Templates </EditorLabel>
                   <ReactQuill
                     className="custom-trix-class"
                     theme="snow"
@@ -139,7 +139,7 @@ export const Templates = observer(
                     }}
                   />
 
-                  <Label htmlFor="kpiTemplate"> KPI Templates </Label>
+                  <EditorLabel htmlFor="kpiTemplate"> KPI Templates </EditorLabel>
                   <ReactQuill
                     className="custom-trix-class"
                     theme="snow"
@@ -187,3 +187,6 @@ const CompanyStaticDataSection = styled.div`
 const CompanyStaticDataArea = styled.div`
   margin-top: 8px;
 `;
+
+const EditorLabel = styled(Label)`
+margin: 16px 0px`

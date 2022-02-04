@@ -1,5 +1,5 @@
 ActiveAdmin.register MeetingTemplate do
-  permit_params :name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed, :override_key, :description_text]
+  permit_params :name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed, :override_key, :description_text, :_destroy]
 
   index do
     selectable_column
@@ -45,6 +45,26 @@ ActiveAdmin.register MeetingTemplate do
       end
       redirect_to admin_meeting_template_path(@meeting_template), notice: "Meeting Template Created"
     end
+
+    def update 
+      @meeting_template = MeetingTemplate.find(params[:id])
+      @step_atrributes = params[:meeting_template][:steps_attributes]
+        if @step_atrributes.present?
+             @steps = @step_atrributes.values
+          @steps.each_with_index do |step, index|
+           params[:meeting_template][:steps_attributes][index.to_s]["description_text"] = step[:description_text_content]
+          end
+        end
+      if @meeting_template.update!(permitted_params)
+        flash[:alert] = @meeting_template.errors.full_messages
+         redirect_to admin_meeting_template_path(@meeting_template), notice: "Template updated"
+      end
+    end
+
+    def permitted_params
+      params.require(:meeting_template).permit(:name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed, :override_key, :description_text])
+    end
+ 
   end
 
   show do
@@ -97,9 +117,8 @@ ActiveAdmin.register MeetingTemplate do
       step.input :component_to_render, as: :select, collection: Step::STEP_COMPONENTS
       step.input :link_embed, input_html: { rows: 2 }
       step.input :override_key, input_html: { rows: 1 }
-
-      step.input :description_text, as: :action_text
-
+      step.input :description_text_content, as: :quill_editor,  input_html: { data: { options: { modules: { toolbar: [['bold', 'italic', 'underline'], ['link']] }, placeholder: 'Type something...', theme: 'snow' } } }
+    
       step.input :image, as: :file, hint: (step.object.try(:image_url) ? image_tag(step.object.image_url, style: "max-height: 150px;") : "No Image Selected")
     end
     f.actions

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
-import { Button, Input, Label } from "~/components/shared";
-import { genRandomColor } from "~/utils";
+import { Button, Icon, Input, Label } from "~/components/shared";
+import { baseTheme } from "~/themes";
 import { Text } from "~/components/shared/text";
 
 interface ICreateHabitFormProps {
@@ -17,19 +17,34 @@ interface ICreateHabitFormState {
 const defaultCreateHabitFormState = {
   name: "",
   frequency: 1,
-  color: genRandomColor(),
+  color: baseTheme.colors.primary100,
 };
 export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.Element => {
   const { habitStore } = useMst();
   const [createHabitFormState, setCreateHabitFormState] = useState<ICreateHabitFormState>(
     defaultCreateHabitFormState,
   );
+
+  const [habitColor, setHabitColor] = useState<string>(baseTheme.colors.primary100);
+  const [showColorPicker, setShowColorPicker] = useState<boolean>(false);
   const { name, frequency, color } = createHabitFormState;
   const { t } = useTranslation();
 
   const submitHabit = () => {
     habitStore.createHabit(createHabitFormState);
   };
+
+  const colorArray = [
+    baseTheme.colors.mipBlue,
+    baseTheme.colors.primary100,
+    baseTheme.colors.dimPurple,
+    baseTheme.colors.grey100,
+    baseTheme.colors.yellowSea,
+    baseTheme.colors.warningRed,
+    baseTheme.colors.successGreen,
+    baseTheme.colors.cavier,
+  ];
+
   return (
     <StyledForm>
       <NameAndColorContainer>
@@ -43,27 +58,51 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
             }
           />
         </NameInputContainer>
-        {/* Styling inline here as there seems to be a trick to styling height and width in
-      styled-components. Avoiding that complication here. */}
-        <StyledColorInput
-          style={{
-            height: 60,
-            width: 60,
-            marginTop: "auto",
-            marginBottom: "auto",
-            border: "none",
-            paddingTop: 7,
-            paddingBottom: 12,
-          }}
-          type={"color"}
-          onChange={({ target: { value } }: React.ChangeEvent<HTMLInputElement>) =>
-            setCreateHabitFormState({
-              ...createHabitFormState,
-              color: value,
-            })
-          }
-          value={color}
-        />
+        <ColorContainer>
+          <ColorBox
+            ml={"18px"}
+            backgroundColor={habitColor}
+            onClick={() => setShowColorPicker(!showColorPicker)}
+          />
+          {showColorPicker ? (
+            <ColorPickerContainer
+              onBlur={() => {
+                setShowColorPicker(false);
+              }}
+            >
+              <HeaderContainer>
+                <SectionText>Change Color</SectionText>
+                <CloseIconContainer onClick={() => setShowColorPicker(false)}>
+                  <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
+                </CloseIconContainer>
+              </HeaderContainer>
+              <ColorsContainer>
+                {colorArray.map((color, index) => (
+                  <ColorOptionContainer
+                    key={index}
+                    onClick={() => {
+                      setHabitColor(color);
+                      setCreateHabitFormState({
+                        ...createHabitFormState,
+                        color: color,
+                      });
+                      setShowColorPicker(false);
+                    }}
+                  >
+                    <ColorBox backgroundColor={color} />
+                    {habitColor == color && (
+                      <CheckMarkContainer>
+                        <Icon icon={"Checkmark"} size={"20px"} iconColor={"white"} />
+                      </CheckMarkContainer>
+                    )}
+                  </ColorOptionContainer>
+                ))}
+              </ColorsContainer>
+            </ColorPickerContainer>
+          ) : (
+            <></>
+          )}
+        </ColorContainer>
       </NameAndColorContainer>
 
       <FrequencyContainer>
@@ -99,6 +138,7 @@ const StyledForm = styled.form`
   margin-right: 28px;
   margin-top: 10px;
   margin-bottom: 25px;
+  display: relative;
 `;
 
 const StyledInput = styled(Input)`
@@ -113,6 +153,7 @@ const StyledColorInput = styled(StyledInput)`
 
 const NameAndColorContainer = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 const NameInputContainer = styled.div`
@@ -141,4 +182,70 @@ const FrequencyInput = styled(Input)`
   margin-bottom: 0;
   margin-left: 8px;
   margin-right: 8px;
+`;
+
+const ColorsContainer = styled.div`
+  & :nth-child(4) {
+    margin-right: 0;
+  }
+  & :nth-child(8) {
+    margin-right: 0;
+  }
+`;
+
+const CloseIconContainer = styled.div`
+  cursor: pointer;
+`;
+
+const CheckMarkContainer = styled.div`
+  position: absolute;
+  top: 5px;
+  left: 5px;
+`;
+
+const ColorOptionContainer = styled.div`
+  position: relative;
+  display: inline-block;
+  margin-right: 8px;
+`;
+
+type ColorBoxProps = {
+  backgroundColor: string;
+  ml?: string;
+};
+
+const ColorBox = styled.div<ColorBoxProps>`
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: ${props => props.backgroundColor && props.backgroundColor};
+  margin-left: ${props => (props.ml ? props.ml : "")};
+  cursor: pointer;
+`;
+
+const ColorPickerContainer = styled.div`
+  padding: 0.63em;
+  border-radius: 0.25em;
+  height: 6.25em;
+  width: 9.1em;
+  display: block;
+  overflow: break;
+  position: absolute;
+  right: 0px;
+  border: 1px solid ${props => props.theme.colors.greyActive};
+  z-index: 20;
+  background-color: ${props => props.theme.colors.white};
+  margin-top: 0.63em;
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+`;
+
+const ColorContainer = styled.div`
+  position: relative;
 `;

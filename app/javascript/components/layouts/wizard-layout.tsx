@@ -140,7 +140,7 @@ export const WizardLayout = ({
           </LynchpynLogoContainer>
         )}
       </DescriptionContainer>
-      <BodyContainer>
+      <BodyContainer hasStepsForMobile={stepsForMobile ? true : false}>
         {stepsForMobile && (
           <DesktopCloseButtonContainer>
             {stepsForMobile}
@@ -202,6 +202,7 @@ const MobileButtonContainer = styled.div`
   @media only screen and (max-width: 768px) {
     display: block;
     margin-left: 16px;
+    margin-bottom: 16px;
   }
 `;
 
@@ -223,9 +224,13 @@ const DescriptionBody = styled.div`
   height: 85%;
 `;
 
-const BodyContainer = styled.div`
-  padding-left: 16px;
-  padding-right: 16px;
+type BodyContainerProps = {
+  hasStepsForMobile: boolean;
+};
+
+const BodyContainer = styled.div<BodyContainerProps>`
+  padding-left: ${props => (props.hasStepsForMobile ? "0px" : "16px")};
+  padding-right: ${props => (props.hasStepsForMobile ? "0px" : "16px")};
   padding-top: 32px;
   width: 75%;
   position: relative;

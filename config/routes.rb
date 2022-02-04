@@ -40,6 +40,9 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => "/sidekiq"
 
   scope module: :api, path: :api do
+    concern :paginatable do
+      get '(page/:page)', action: :index, on: :collection, as: ''
+    end
     resources :users, only: [:index, :create, :show, :update, :destroy] do
       collection do
         patch "/reset_password", to: "users#reset_password"
@@ -83,6 +86,7 @@ Rails.application.routes.draw do
     # team_issue_meeting_enablements
     resources :team_issue_meeting_enablements, only: [:index]
 
+   
     #key activities
     resources :key_activities, only: [:index, :create, :update, :destroy] do
       collection do
@@ -131,13 +135,14 @@ Rails.application.routes.draw do
 
     #key_performance_indicators
     resources :key_performance_indicator, only: [:index, :show, :create, :update, :destroy]
-    
+    patch '/key_performance_indicator/toggle_status/:id', to: 'key_performance_indicator#toggle_status'
+
     #scorecards
     get "/scorecard/:owner_type/:owner_id", to: "scorecard_logs#show"
     resources :scorecard_logs, only: [:create, :destroy]
 
     #objective_logs
-    resources :objective_logs, only: [:destroy]
+    resources :objective_logs, only: [:create, :destroy], concerns: :paginatable
 
     #questionnaires
     resources :questionnaires, only: [:index]
@@ -159,8 +164,8 @@ Rails.application.routes.draw do
     get "/meetings/team_meetings/:id", to: "meetings#team_meetings"
 
     #forum-specific functions
-    post "/forum/create_meetings_for_year", to: "forums#create_meetings_for_year"
-    get "/forum/search_meetings_by_date_range", to: "forums#search_meetings_by_date_range"
+    post "/forum/create_meetings_for_year/:forum_type", to: "forums#create_meetings_for_year"
+    get "/forum/search_meetings_by_date_range/:meeting_type", to: "forums#search_meetings_by_date_range"
 
     #meeting recap for team
     get "/teams/:team_id/meetings/:id/meeting_recap", to: "meetings#meeting_recap"
@@ -182,6 +187,10 @@ Rails.application.routes.draw do
     resources :milestones, only: [:update]
     get "/milestones/milestones_for_meeting", to: "milestones#milestones_for_meeting"
     get '/milestones/check_in/:due_date', to: "milestones#check_in_goals"
+
+    #key_element
+    resources :key_elements, only: [:update]
+    get '/key_elements/check_in', to: "key_elements#check_in_key_elements"
 
     #user_pulses
     get "user_pulse_by_date", to: "user_pulses#user_pulse_by_date"

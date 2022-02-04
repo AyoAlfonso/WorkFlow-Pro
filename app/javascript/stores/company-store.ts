@@ -43,6 +43,10 @@ export const CompanyStoreModel = types
         return false;
       }
     }),
+    setCompanyManually(company) {
+      // DON'T USE IN MAIN APPLICATION, ONLY FOR TEST PURPOSES
+      self.company = company as any;
+    },
     updateCompany: flow(function*(fieldsAndValues: any, onboarding: boolean) {
       const env = getEnv(self);
       const companyId = onboarding ? self.onboardingCompany.id : self.company.id;

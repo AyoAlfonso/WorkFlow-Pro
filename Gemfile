@@ -25,6 +25,10 @@ gem 'dotenv-rails', '~> 2.7.5'
 gem 'roo', '~> 2.8.0'
 # Use Active Storage variant
 gem 'image_processing', '~> 1.2'
+gem 'activeadmin_quill_editor'
+gem 'active_admin_trix', '~> 0.0.3'
+
+gem 'kaminari'
 
 #Used in the console 
 gem 'awesome_print', require: 'ap'

@@ -51,7 +51,7 @@ export const MeetingWizardLayout = observer(
     };
 
     const meetingComponent = () => {
-      return meetingStarted || (company && company.accessForum) ? (
+      return meetingStarted ? (
         <MeetingStep meeting={meeting} />
       ) : (
         <CoreFourWrapper>

@@ -89,9 +89,13 @@ export const TeamOverview = observer(
     }
     const overviewType = company && company.accessForum ? "forum" : "teams";
     //based on
+    const forumType =
+      company?.forumType == "Organisation"
+        ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
+        : MeetingTypes.FORUM_MONTHLY;
 
     const handleForumMeetingClick = () => {
-      meetingStore.startNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
+      meetingStore.startNextMeeting(team_id, forumType).then(({ meeting }) => {
         if (!R.isNil(meeting)) {
           history.push(`/team/${team_id}/meeting/${meeting.id}`);
         }

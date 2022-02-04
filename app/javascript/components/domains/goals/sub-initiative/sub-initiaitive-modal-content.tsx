@@ -13,8 +13,13 @@ import { MilestoneCreateButton } from "../shared-quarterly-goal-and-sub-initiati
 import { WeeklyMilestones } from "../shared-quarterly-goal-and-sub-initiative/weekly-milestones";
 import { InitiativeHeader } from "../shared-quarterly-goal-and-sub-initiative/initiative-header";
 import { ShowMilestonesButton } from "../shared-quarterly-goal-and-sub-initiative/show-milestones-button";
+import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-elements";
 import { toJS } from "mobx";
 import ReactQuill from "react-quill";
+import { ActivityLogs } from "../shared/activity-logs";
+import { sortByDate } from "~/utils/sorting";
+import { getWeekOf } from "~/utils/date-time";
+import { UpcomingMessage } from "../shared/upcoming-objective-message";
 
 interface ISubInitiativeModalContentProps {
   subInitiativeId: number;
@@ -35,16 +40,24 @@ export const SubInitiativeModalContent = observer(
     const {
       subInitiativeStore,
       sessionStore,
+      companyStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
+
+    const { currentFiscalYear, currentFiscalQuarter } = companyStore.company;
+
+    const { objectiveLogs } = subInitiativeStore;
+
     const currentUser = sessionStore.profile;
     const [subInitiative, setSubInitiative] = useState<any>(null);
+    const [objectiveMeta, setObjectiveMeta] = useState(null);
     const [showInactiveMilestones, setShowInactiveMilestones] = useState<boolean>(false);
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
     const [showInitiatives, setShowInitiatives] = useState<boolean>(true);
     const [description, setDescription] = useState<string>("");
+    const [comment, setComment] = useState<string>("");
     const descriptionTemplatesFormatted = toJS(descriptionTemplates);
 
     const descriptionTemplateForInitiatives = descriptionTemplatesFormatted.find(
@@ -52,6 +65,9 @@ export const SubInitiativeModalContent = observer(
     )?.body.body;
 
     useEffect(() => {
+      subInitiativeStore.getActivityLogs(1, "SubInitiative", subInitiativeId).then(meta => {
+        setObjectiveMeta(meta);
+      });
       subInitiativeStore.getSubInitiative(subInitiativeId).then(() => {
         const subInitiative = subInitiativeStore.subInitiative;
         if (subInitiative) {
@@ -62,7 +78,11 @@ export const SubInitiativeModalContent = observer(
     }, []);
 
     if (subInitiative == null) {
-      return <Loading />;
+      return (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      );
     }
 
     const handleChange = text => {
@@ -77,11 +97,44 @@ export const SubInitiativeModalContent = observer(
     const allMilestones = subInitiative.milestones;
     const activeMilestones = subInitiative.activeMilestones;
 
-    const goalYearString = `FY${subInitiative.fiscalYear.toString().slice(-2)}/${(
-      subInitiative.fiscalYear + 1
-    )
-      .toString()
-      .slice(-2)}`;
+    const goalYearString =
+      companyStore.company.currentFiscalYear ==
+      companyStore.company.yearForCreatingAnnualInitiatives
+        ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+        : `FY${(companyStore.company.currentFiscalYear - 1)
+            .toString()
+            .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
+
+    const createLog = () => {
+      const objectiveLog = {
+        ownedById: sessionStore.profile.id,
+        score: 0,
+        note: comment,
+        objecteableId: subInitiative.id,
+        objecteableType: "SubInitiative",
+        fiscalQuarter: companyStore.company.currentFiscalQuarter,
+        fiscalYear: companyStore.company.currentFiscalYear,
+        week: companyStore.company.currentFiscalWeek,
+      };
+
+      subInitiativeStore.createActivityLog(objectiveLog);
+    };
+
+    const getLogs = pageNumber => {
+      return subInitiativeStore
+        .getActivityLogs(pageNumber, "SubInitiative", subInitiativeId)
+        .then(meta => {
+          setObjectiveMeta(meta);
+        });
+    };
+
+    const getCurrentWeekStatus = () => {
+      const currentWeekOf = getWeekOf();
+      const milestone = subInitiative.milestones.find(
+        milestone => milestone.weekOf === currentWeekOf,
+      );
+      return milestone?.status;
+    };
 
     return (
       <>
@@ -106,8 +159,13 @@ export const SubInitiativeModalContent = observer(
                 showDropdownOptionsContainer={showDropdownOptionsContainer}
                 setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
                 goalYearString={goalYearString}
+                derivedStatus={getCurrentWeekStatus()}
               />
             </SectionContainer>
+            {currentFiscalYear <= subInitiative.fiscalYear &&
+              currentFiscalQuarter < subInitiative.quarter && (
+                <UpcomingMessage goalType="Objective" fiscalTime={`Q${subInitiative.quarter}`} />
+              )}
             <SectionContainer>
               <Context
                 setShowInitiatives={setShowInitiatives}
@@ -155,6 +213,36 @@ export const SubInitiativeModalContent = observer(
               }}
             />
           </TrixEditorContainer>
+          <SubHeader>Activity</SubHeader>
+          <SectionContainer>
+            <FormElementContainer>
+              <StyledInput
+                placeholder={"Add a comment..."}
+                onChange={e => {
+                  setComment(e.target.value);
+                }}
+                value={comment}
+              />
+              {comment && (
+                <PostButton
+                  small
+                  variant="primary"
+                  onClick={() => {
+                    createLog();
+                    setComment("");
+                  }}
+                >
+                  Comment
+                </PostButton>
+              )}
+            </FormElementContainer>
+            <ActivityLogs
+              keyElements={objectiveLogs}
+              store={subInitiativeStore}
+              meta={objectiveMeta}
+              getLogs={getLogs}
+            />
+          </SectionContainer>
         </Container>
       </>
     );
@@ -189,4 +277,17 @@ const SubHeader = styled.p`
 const TrixEditorContainer = styled.div`
   margin-top: 4px;
   width: 100%;
+`;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PostButton = styled(Button)`
+  margin-top: 10px;
+  font-size: 14px;
 `;

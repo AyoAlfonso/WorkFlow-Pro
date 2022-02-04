@@ -273,9 +273,14 @@ export const SideNavNoMst = (
     }
   };
 
+  const forumType =
+    company?.forumType == "Organisation"
+      ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
+      : MeetingTypes.FORUM_MONTHLY;
+
   const history = useHistory();
   const handleForumMeetingClick = (team_id: number | string) => () => {
-    startNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
+    startNextMeeting(team_id, forumType).then(({ meeting }) => {
       if (!R.isNil(meeting)) {
         history.push(`/team/${team_id}/meeting/${meeting.id}`);
       }
@@ -304,7 +309,7 @@ export const SideNavNoMst = (
             icon={"Team"}
             currentPathName={currentPathName}
           >
-            {type == "forum" ? t("navigation.forum") : t("navigation.meeting")}
+            {t("navigation.meeting")}
           </StyledProgrammaticLinkChildrenActive>
         );
       default:
@@ -312,7 +317,7 @@ export const SideNavNoMst = (
           <SideNavChildPopup
             trigger={
               <NavMenuIcon icon={"Team"} active={false} disableOnActive={false}>
-                {t("navigation.forum")}
+                {t("navigation.meeting")}
               </NavMenuIcon>
             }
             navOpen={startMeetingNavChildOpen}
@@ -385,7 +390,7 @@ export const SideNavNoMst = (
         >
           <SideNavChildLink to="/meetings/section_1" linkText={t("forum.annualHub")} />
           <SideNavChildLink to="/meetings/section_2" linkText={t("forum.upcomingHub")} />
-          <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")} />
+          {/* <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")}/> */}
         </SideNavChildPopup>
       ) : (
         <> </>

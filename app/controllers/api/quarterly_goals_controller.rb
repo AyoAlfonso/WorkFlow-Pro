@@ -1,6 +1,6 @@
 class Api::QuarterlyGoalsController < Api::ApplicationController
   before_action :set_quarterly_goal, only: [:show, :update, :destroy, :create_key_element, :update_key_element, :create_milestones, :close_goal]
-
+  # before_action :create_milestones_for_quarterly_goal, only: [:update, :create_key_element, :update_key_element ]
   respond_to :json
 
   def index
@@ -54,8 +54,8 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
                   greater_than: params[:greater_than], completion_starting_value: params[:completion_starting_value],
                   completion_current_value: params[:completion_current_value], owned_by_id: params[:owned_by],
                   completion_target_value: params[:completion_target_value])
-    # ObjectiveLog.create!(objective_log_params)
-    render json: { key_element: key_element.as_json, status: :ok }
+    # ObjectiveLog.create!(objective_log_params)  
+    render  template: "api/key_elements/_key_element", locals: { key_element: key_element }
   end
 
   def update_key_element
@@ -64,9 +64,7 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     authorize @quarterly_goal
     key_element.update!(value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], owned_by_id: params[:owned_by],
                         status: params[:status], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
-    
-    # ObjectiveLog.create!(objective_log_params)
-    render json: { key_element: key_element.as_json, status: :ok }
+   render template: "api/key_elements/_key_element", locals: { key_element: key_element }
   end
 
   def delete_key_element
@@ -78,11 +76,15 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def create_milestones
-    @quarterly_goal.create_milestones_for_quarterly_goal(current_user, current_company)
-    render "api/quarterly_goals/create_milestones"
+   create_milestones_for_quarterly_goal
+  render "api/quarterly_goals/create_milestones"
   end
 
   private
+
+  def create_milestones_for_quarterly_goal
+    @quarterly_goal.create_milestones_for_quarterly_goal(current_user, current_company)
+  end
 
   def quarterly_goal_params
     params.permit(:id, :created_by_id, :owned_by_id, :context_description, :annual_initiative_id, :description, key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value], milestones_attributes: [:id, :description, :status], :importance => [])
@@ -90,11 +92,6 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
   def key_elements_params
     params.permit(key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value])
-  end
-
-
-  def objective_log_params
-    params.require(:objective_log_attributes).permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :fiscal_quarter, :fiscal_year, :week)
   end
 
   def set_quarterly_goal

@@ -30,6 +30,10 @@ export const UserStoreModel = types
     reset() {
       self.users = [] as any;
     },
+    setUsersManually(users) {
+      // DON'T USE IN MAIN APPLICATION, ONLY FOR TEST PURPOSES
+      self.users = users as any;
+    },
     inviteUser: flow(function*(formData) {
       try {
         const response: any = yield self.environment.api.inviteUser({ user: formData });

@@ -5,6 +5,4 @@ trix-toolbar .trix-button-group--file-tools {
 
 .trix-editor-onboarding {
   min-height: 3em !important;
-  max-height: 4em;
-  overflow-y: auto;
 }

@@ -1,12 +1,12 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import { useMst } from "~/setup/root";
-import * as moment from "moment";
+import moment from "moment";
 import { useTranslation } from "react-i18next";
 
 export const HeaderText = observer(
   ({ location }): JSX.Element => {
-    const { sessionStore, companyStore, teamStore } = useMst()
+    const { sessionStore, companyStore, teamStore } = useMst();
     const { t } = useTranslation();
 
     const locationPath = location.pathname.split("/");
@@ -42,8 +42,8 @@ export const HeaderText = observer(
             return <> {t("forum.annualHub")} </>;
           case "section_2":
             return <> {t("forum.upcomingHub")} </>;
-          case "agenda":
-            return <> {t("forum.agenda")} </>;
+          // case "agenda":
+          //   return <> {t("forum.agenda")} </>;
           default:
             return <></>;
         }

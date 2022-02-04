@@ -16,6 +16,8 @@ import { ViewEditKPIModal } from "./shared/view-kpi-modal";
 import { MiniUpdateKPIModal } from "./shared/update-kpi-modal";
 import { AddExistingManualKPIModal } from "./shared/edit-existing-manual-kpi-modal";
 import { titleCase } from "~/utils/camelize";
+import { sortByDateReverse } from "~/utils/sorting";
+
 import { toJS } from "mobx";
 import Tooltip from '@material-ui/core/Tooltip';
 //import { averageScore } from "./shared/parent-kpi-pop";
@@ -48,9 +50,29 @@ export const ScorecardTableView = observer(
     } = useMst();
     const KPIs = toJS(tableKPIs);
 
+    //Turn this into a shared function
+    const createGoalYearString =
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+        : `FY${(company.currentFiscalYear - 1)
+            .toString()
+            .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
+
+    const createPreviousGoalYearString =
+      //the step pattern makes sense define variables at top of func also
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? `FY${(company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
+        : `FY${(company.currentFiscalYear - 2).toString().slice(-2)}/${(
+            company.currentFiscalYear - 1
+          )
+            .toString()
+            .slice(-2)}`;
     const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
     const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
     const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
+    const [dropdownQuarter, setDropdownQuarter] = useState(
+      company.currentFiscalQuarter + "_" + createGoalYearString,
+    );
 
     const [targetWeek, setTargetWeek] = useState<number>(undefined);
     const [targetValue, setTargetValue] = useState<number>(undefined);
@@ -220,7 +242,7 @@ export const ScorecardTableView = observer(
 
     const data = useMemo(
       () =>
-        KPIs?.map((kpi: any) => {
+        KPIs?.sort(sortByDateReverse).map((kpi: any) => {
           const targetText = formatValue(kpi.unitType, kpi.targetValue);
           const title = `${kpi.title}`;
           const logic = kpi.greaterThan
@@ -335,7 +357,16 @@ export const ScorecardTableView = observer(
           },
         },
         {
-          Header: () => <div style={{ textAlign: "left", fontSize: "14px" }}>KPIs</div>,
+          Header: () => (
+            <div
+              style={{
+                textAlign: "left",
+                fontSize: "14px",
+              }}
+            >
+              KPIs
+            </div>
+          ),
           accessor: "title",
           Cell: ({ value }) => {
             return (
@@ -549,7 +580,11 @@ export const ScorecardTableView = observer(
       hiddenColumns: getHiddenWeeks(quarter),
     };
 
-    const tableInstance = useTable({ columns, data, initialState });
+    const tableInstance = useTable({
+      columns,
+      data,
+      initialState,
+    });
 
     const {
       getTableProps,
@@ -560,18 +595,13 @@ export const ScorecardTableView = observer(
       setHiddenColumns,
     } = tableInstance;
 
-    const handleQuarterSelect = q => {
+    const handleQuarterSelect = dq => {
+      const [q, y] = dq.split("_");
+      setYear(y);
       setQuarter(q);
+      setDropdownQuarter(dq);
       setHiddenColumns(getHiddenWeeks(q));
     };
-
-    const createGoalYearString =
-      company.currentFiscalYear ==
-      company.yearForCreatingAnnualInitiatives
-        ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-        : `FY${(company.currentFiscalYear - 1)
-            .toString()
-            .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
 
     return (
       <>
@@ -585,15 +615,55 @@ export const ScorecardTableView = observer(
               ))}
             </TabContainer>
             <Select
-              selection={quarter}
+              selection={dropdownQuarter}
               setSelection={handleQuarterSelect}
               id={"scorecard-quarter-selection"}
             >
               {R.range(1, 5).map((n: number) => (
-                <option key={n} value={n}>
+                <option
+                  key={
+                    n +
+                    "_" +
+                    createPreviousGoalYearString +
+                    "_" +
+                    (company.yearForCreatingAnnualInitiatives - 1).toString()
+                  }
+                  value={
+                    n +
+                    "_" +
+                    createPreviousGoalYearString +
+                    "_" +
+                    (company.yearForCreatingAnnualInitiatives - 1).toString()
+                  }
+                >
+                  Q{n} {createPreviousGoalYearString}
+                </option>
+              ))}
+              {R.range(1, 5).map((n: number) => (
+                <option
+                  key={
+                    n +
+                    "_" +
+                    createGoalYearString +
+                    "_" +
+                    company.yearForCreatingAnnualInitiatives.toString()
+                  }
+                  value={
+                    n +
+                    "_" +
+                    createGoalYearString +
+                    "_" +
+                    company.yearForCreatingAnnualInitiatives.toString()
+                  }
+                >
                   Q{n} {createGoalYearString}
                 </option>
               ))}
+              {/* {R.range(5, 9).map((n: number, index) => (
+                <option key={n} value={n}>
+                  Q{index+1} {company.currentFiscalYear}
+                </option>
+              ))} */}
             </Select>
           </TopRow>
           {tab == "KPIs" && (
@@ -605,7 +675,10 @@ export const ScorecardTableView = observer(
                       {headerGroup.headers.map(column => (
                         <TableHeader
                           {...column.getHeaderProps({
-                            style: { width: column.width, minWidth: column.minWidth },
+                            style: {
+                              width: column.width,
+                              minWidth: column.minWidth,
+                            },
                           })}
                         >
                           {column.render("Header")}
@@ -661,7 +734,8 @@ export const ScorecardTableView = observer(
             kpiId={updateKPI.id}
             ownedById={updateKPI.ownedById}
             unitType={updateKPI.unitType}
-            year={company.yearForCreatingAnnualInitiatives}
+            year={year || company.yearForCreatingAnnualInitiatives}
+            quarter={quarter}
             week={targetWeek || company.currentFiscalWeek}
             currentValue={targetValue || updateKPI.currentValue}
             headerText={targetWeek ? `Update Week ${targetWeek}` : " Update Current Week "}
