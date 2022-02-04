@@ -154,8 +154,8 @@ export const ScorecardTableView = observer(
         }
       });
       return quarterScores.map(tuple =>
-        //tuple[0] === null ? null : (parentType == 'avr' ? Math.round(tuple[0]) : tuple[0])
-        tuple[0] === null ? null : tuple[0]
+        tuple[0] === null ? null : (parentType == 'avr' ? (Math.round((tuple[0] + Number.EPSILON) * 100) / 100) : tuple[0])
+        //tuple[0] === null ? null : tuple[0]
       );
     };
 
