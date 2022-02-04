@@ -145,7 +145,7 @@ export const KeyElement = observer(
 
     useEffect(() => {
       if (type == "quarterlyGoal" || type == "subInitiative" || type == "checkIn") {
-        element && resetStatus();
+        resetStatus();
       }
     }, [element, type]);
 
@@ -198,8 +198,8 @@ export const KeyElement = observer(
     };
 
     const resetStatus = async () => {
-      if (!element) return;
-      if (element.status == "unstarted") return;
+      if (!element || element.status == "unstarted") return;
+      console.log("then here")
       const isUpdated = isLogRecent();
       if (isUpdated) {
         return;
