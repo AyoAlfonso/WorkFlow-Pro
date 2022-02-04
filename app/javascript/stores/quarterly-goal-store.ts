@@ -107,7 +107,6 @@ export const QuarterlyGoalStoreModel = types
         const keyElementIndex = keyElements.findIndex(ke => ke.id == keyElementId);
         keyElements[keyElementIndex] = response.data;
         self.quarterlyGoal.keyElements = keyElements;
-        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
         return response.data;
       } catch (error) {
         showToast(il8n.t("quarterlyGoal.keyElementUpdateError"), ToastMessageConstants.ERROR);
