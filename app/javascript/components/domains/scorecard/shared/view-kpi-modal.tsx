@@ -66,7 +66,7 @@ export const ViewEditKPIModal = observer(
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
-    const [open, setOpen] = useState(false);
+    const [popupOpen, setPopupOpen] = useState(false);
 
     const headerRef = useRef(null);
 
@@ -90,7 +90,7 @@ export const ViewEditKPIModal = observer(
       tango,
     } = baseTheme.colors;
 
-    const [functionColor, setFunctionColor] = useState(greyInactive);
+    const [functionIconColor, setFunctionIconColor] = useState(greyInactive);
 
     const formatValue = (value: number, unitType: string) => {
       if (value === undefined) {
@@ -281,7 +281,7 @@ export const ViewEditKPIModal = observer(
     };
 
     const closePopup = () => {
-      setOpen(false);
+      setPopupOpen(false);
     };
 
     const closeModal = () => {
@@ -377,14 +377,14 @@ export const ViewEditKPIModal = observer(
                     <OwnerAndLogicText>{logic}</OwnerAndLogicText>
                     {kpi?.parentType && (
                       <KPITypeContainer>
-                        <KPITypeWrapper onMouseEnter={() => {setFunctionColor(primary100)}}
-                                        onMouseLeave={() => {setFunctionColor(greyInactive)}}
-                                        onClick={() => {setOpen(!open)}}
+                        <KPITypeWrapper onMouseEnter={() => {setFunctionIconColor(primary100)}}
+                                        onMouseLeave={() => {setFunctionIconColor(greyInactive)}}
+                                        onClick={() => {setPopupOpen(!popupOpen)}}
                         >
-                          <KPITypeIcon icon={"Function"} size={16} iconColor={functionColor}/>
+                          <KPITypeIcon icon={"Function"} size={16} iconColor={functionIconColor}/>
                           <KPIParentTypeText> {formatKpiType(kpi?.parentType)} </KPIParentTypeText>
                         </KPITypeWrapper>
-                        <Pop><PopupContainer>{kpiPopup(kpi, open, setOpen, setCurrentSelectedKpi, setViewEditKPIModalOpen)}</PopupContainer></Pop>
+                        <Pop><PopupContainer>{kpiPopup(kpi, popupOpen, setPopupOpen, setCurrentSelectedKpi, setViewEditKPIModalOpen)}</PopupContainer></Pop>
                       </KPITypeContainer>
                     )}
                   </OwnerAndLogicContainer>
@@ -556,13 +556,10 @@ export const ViewEditKPIModal = observer(
 const PopupContainer = styled.div`
   position: absolute;
   padding-top: 15px;
-  //border: 1px solid black;
 `;
 
 const Pop = styled.div`
   position: relative;
-  //padding-top: 15px;
-  //border: 1px solid black;
 `;
 
 const Container = styled.div`

@@ -5,8 +5,7 @@ import styled from "styled-components"
 type StatusBadgeHoverProps = {
 	color: string;
 	background: string;
-  //padding?: string;
-  fontSize?: string;
+    fontSize?: string;
 	fontWeight?: string;
     height?: string;
     width?: string;
@@ -28,8 +27,4 @@ export const StatusBadgeHover = styled.div<StatusBadgeHoverProps>`
     justify-content: center;
     align-items: center;
     vertical-align: middle;
-    &:hover {
-        //height: ${props => props.hoverHeight || props.height ||"15px"};
-        //width: ${props => props.hoverWidth || props.width ||"15px"};
-    }
-`
+`;
