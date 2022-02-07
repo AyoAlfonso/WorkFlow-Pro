@@ -7,6 +7,8 @@ import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
 import { getMondayofDate } from "~/utils/date-time";
 import { DueDateSelector } from "~/components/shared/scorecards/date-selector";
+import { findNextMonday } from "~/utils/date-time";
+import moment from "moment";
 
 import {
   InputFromUnitType,
@@ -36,6 +38,7 @@ interface MiniUpdateKPIModalProps {
   updateKPI?: any;
   setTargetWeek?: React.Dispatch<React.SetStateAction<number>>;
   setTargetValue?: React.Dispatch<React.SetStateAction<number>>;
+  currentFiscalQuarter: any;
 }
 
 export const MiniUpdateKPIModal = observer(
@@ -52,14 +55,21 @@ export const MiniUpdateKPIModal = observer(
     setKpis,
     setTargetWeek,
     setTargetValue,
+    currentFiscalQuarter,
   }: MiniUpdateKPIModalProps): JSX.Element => {
     const history = useHistory();
+
+    const weekToDate = (week: number, year: number) =>
+      moment(findNextMonday(fiscalYearStart))
+        .year(year)
+        .add(week, "w")
+        .startOf("week" as moment.unitOfTime.StartOf)
+        .toDate();
+
     const { keyPerformanceIndicatorStore, sessionStore, scorecardStore } = useMst();
     const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
     const [value, setValue] = useState<number>(currentValue);
-    const [selectedDueDate, setSelectedDueDate] = useState<any>(
-      getMondayofDate(week, fiscalYearStart, year),
-    );
+    const [selectedDueDate, setSelectedDueDate] = useState<any>(weekToDate(week, year));
     const [currentWeek, setCurrentWeek] = useState<number>(week);
     const [comment, setComment] = useState("");
     const { owner_type, owner_id } = useParams();
@@ -79,7 +89,7 @@ export const MiniUpdateKPIModal = observer(
     }, [optionsRef, selectedDueDate]);
 
     useEffect(() => {
-      setSelectedDueDate(getMondayofDate(week, fiscalYearStart, year));
+      setSelectedDueDate(weekToDate(week, year));
     }, [showAdvancedSettings]);
 
     const handleSave = () => {
@@ -91,7 +101,7 @@ export const MiniUpdateKPIModal = observer(
           note: null,
           week: currentWeek,
           fiscalYear: year,
-          fiscalQuarter: Math.floor((currentWeek - 1) / 13) + 1,
+          fiscalQuarter: Math.round((currentWeek - 1) / 13) + 1,
         };
         if (comment != "") {
           log.note = comment;
@@ -109,6 +119,7 @@ export const MiniUpdateKPIModal = observer(
     const handleChange = e => {
       setValue(Number(e.target.value.replace(/[^0-9\.]+/g, "")));
     };
+
     const closeModal = () => {
       setUpdateKPIModalOpen(false);
       setShowAdvancedSettings(false);
@@ -158,7 +169,7 @@ export const MiniUpdateKPIModal = observer(
           <AdvancedSettingsButton
             onClick={() => {
               setShowAdvancedSettings(!showAdvancedSettings);
-              setSelectedDueDate(getMondayofDate(week, fiscalYearStart, year));
+              setSelectedDueDate(weekToDate(week, year));
             }}
           >
             Advanced Settings
@@ -172,6 +183,7 @@ export const MiniUpdateKPIModal = observer(
                   selectedDueDate={selectedDueDate}
                   setSelectedDueDate={setSelectedDueDate}
                   setCurrentWeek={setCurrentWeek}
+                  maxDate={weekToDate(week, year)}
                 />
               </FormElementContainer>
               <FormElementContainer />

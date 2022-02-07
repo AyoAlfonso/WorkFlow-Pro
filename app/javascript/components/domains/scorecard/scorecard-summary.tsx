@@ -10,6 +10,7 @@ import { Icon } from "~/components/shared/icon";
 import { getScorePercent } from "./scorecard-table-view";
 import { toJS } from "mobx";
 import { useTranslation } from "react-i18next";
+import {findNextMonday} from "~/utils/date-time"
 
 const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
   const [data, setData] = useState<Object>(null);
@@ -208,10 +209,10 @@ const QuarterSummary = ({
       : [];
   };
 
-  const weekToDate = (week: number): string =>
-    moment(fiscalYearStart)
-      .add(week, "w")
+const weekToDate = (week: number): string =>
+    moment(findNextMonday(fiscalYearStart))
       .year(currentFiscalYear)
+      .add(week, "w")
       .startOf("week" as moment.unitOfTime.StartOf)
       .format("MMM D");
 
@@ -226,7 +227,7 @@ const QuarterSummary = ({
         setLastWeekPercent(+currentQuarterData[currentQuarterData.length - 2]);
       }
     }
-
+ 
     setData({
       labels: R.range(startWeek, startWeek + 13).map((i: number) => weekToDate(i)),
       datasets: [

@@ -44,11 +44,14 @@ export const ScorecardTableView = observer(
       companyStore: { company },
     } = useMst();
     const KPIs = toJS(tableKPIs);
-
+    const setDefaultSelectionQuarter = (week, q) => {
+      return week == 13 ? 1 : week == 26 ? 2 : week == 39 ? 3 : q;
+    };
     const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
-    const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
+    const [quarter, setQuarter] = useState<number>(
+      setDefaultSelectionQuarter(company.currentFiscalWeek, company.currentFiscalQuarter),
+    );
     const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
-
     const [targetWeek, setTargetWeek] = useState<number>(undefined);
     const [targetValue, setTargetValue] = useState<number>(undefined);
     const [tab, setTab] = useState<string>("KPIs");
@@ -490,7 +493,7 @@ export const ScorecardTableView = observer(
       setHiddenColumns(getHiddenWeeks(q));
     };
 
-  //Turn this into a shared function
+    //Turn this into a shared function
     const createGoalYearString =
       company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
         ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
@@ -597,6 +600,7 @@ export const ScorecardTableView = observer(
             setTargetWeek={setTargetWeek}
             setTargetValue={setTargetValue}
             fiscalYearStart={fiscalYearStart}
+            currentFiscalQuarter={quarter}
           />
         )}
       </>
