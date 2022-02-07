@@ -35,7 +35,7 @@
     "arctic_admin": "^3.2.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "chart.js": "^2.9.3",
-    "core-js": "3",
+    "core-js": "2",
     "date-fns": "^2.16.1",
     "dotenv-webpack": "7.0.2",
     "draft-js": "^0.11.7",
