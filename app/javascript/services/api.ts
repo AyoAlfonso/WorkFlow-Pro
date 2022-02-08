@@ -261,7 +261,7 @@ export class Api {
   }
 
   async closeAnnualInitiative(id) {
-    return this.client.patch(`/annual_initiatives/close_initiative/${id}`);
+    return this.client.patch(`/annual_initiatives/close_initiative/${id}`, {});
   }
 
   async createAnnualInitiative(annualInitiativeObject) {
@@ -307,7 +307,7 @@ export class Api {
   }
 
   async closeQuarterlyGoal(id) {
-    return this.client.patch(`/quarterly_goals/close_goal/${id}`);
+    return this.client.patch(`/quarterly_goals/close_goal/${id}`, {});
   }
 
   async createQuarterlyGoalKeyElement(id, params) {
@@ -341,7 +341,7 @@ export class Api {
   }
 
   async closeSubInitiative(id) {
-    return this.client.patch(`/sub_initiatives/close_goal/${id}`);
+    return this.client.patch(`/sub_initiatives/close_goal/${id}`, {});
   }
 
   async createSubInitiativeKeyElement(id, params) {

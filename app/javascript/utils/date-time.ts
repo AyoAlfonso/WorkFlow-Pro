@@ -3,6 +3,13 @@ import * as R from "ramda";
 import moment from "moment";
 import { baseTheme } from "~/themes/base";
 
+export const findNextMonday = (date) => {
+  const daysOfWeek = [1,7,6,5,4,3,2];
+  const monday = new Date(date);
+  monday.setDate(monday.getDate()+daysOfWeek[monday.getDay()]);
+  return monday
+}
+
 moment.updateLocale("en", {
   week: {
     dow: 1,

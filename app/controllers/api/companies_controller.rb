@@ -8,17 +8,12 @@ class Api::CompaniesController < Api::ApplicationController
   def create
 
 
-     unless params[:forum_type] == "Organisation"
-      preferences
-     end
     @company = Company.new({
       display_format: params[:display_format],
       fiscal_year_start: params[:fiscal_year_start],
       name: params[:name],
       timezone: params[:timezone],
       forum_type: params[:forum_type],
-      # TODO:
-      preferences: preferences
     })
     authorize @company
     @company.save!
@@ -89,7 +84,7 @@ class Api::CompaniesController < Api::ApplicationController
       annual_initiative = AnnualInitiative.where(company_id: @onboarding_company.id,
                                                  created_by: current_user,
                                                  owned_by: current_user,
-                                                 fiscal_year: @onboarding_company.year_for_creating_annual_initiatives,
+                                                 fiscal_year: @onboarding_company.set_four_week_end_of_year_offset(@onboarding_company.year_for_creating_annual_initiatives),
                                                  context_description: "",
                                                  importance: ["", "", ""]).first_or_initialize
       annual_initiative.update!(description: params[:annual_initiative][:description])
@@ -180,12 +175,11 @@ class Api::CompaniesController < Api::ApplicationController
   end
 
   def create_or_update_onboarding_team
-    @team = Team.where(company_id: @onboarding_company.id)
+    @team = Team.where(company_id: @onboarding_company.id).first
 
-    if Team.where(company_id: @onboarding_company.id).blank? 
+    if Team.where(company_id: @onboarding_company.id).first.blank? 
      @team = Team.create!(company_id: @onboarding_company.id, name: params[:team_name], settings: {})
     end
-    
     @team.set_default_executive_team if Team.where(company_id: @team.company.id, executive: 1).blank?
     @team.set_default_avatar_color
     authorize @team

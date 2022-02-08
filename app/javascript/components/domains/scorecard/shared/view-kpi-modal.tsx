@@ -24,6 +24,7 @@ import { ScorecardKPIDropdownOptions } from "./scorecard-dropdown-options";
 import "~/stylesheets/modules/trix-editor.css";
 import { debounce } from "lodash";
 import { Button } from "~/components/shared/button";
+import { findNextMonday } from "~/utils/date-time";
 
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -219,9 +220,9 @@ export const ViewEditKPIModal = observer(
     };
 
     const weekToDate = (week: number): string =>
-      moment(company.fiscalYearStart)
+      moment(findNextMonday(company.fiscalYearStart))
+        .year(company.yearForCreatingAnnualInitiatives)
         .add(week, "w")
-        .year(company.currentFiscalYear)
         .startOf("week" as moment.unitOfTime.StartOf)
         .format("MMM D");
 
@@ -528,6 +529,8 @@ export const ViewEditKPIModal = observer(
             updateKPIModalOpen={updateKPIModalOpen}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
             setKpis={setKpis}
+            fiscalYearStart={company.fiscalYearStart}
+            currentFiscalQuarter={company.currentFiscalQuarter}
           />
         )}
       </>

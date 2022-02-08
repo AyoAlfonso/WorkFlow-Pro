@@ -10,7 +10,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
       description: params[:description],
       company_id: params[:type] == "company" ? current_company.id : nil,
       context_description: "", importance: ["", "", ""],
-      fiscal_year: current_company.year_for_creating_annual_initiatives,
+      fiscal_year: current_company.set_four_week_end_of_year_offset(current_company.year_for_creating_annual_initiatives)
     })
     authorize @annual_initiative
     @annual_initiative.save!
