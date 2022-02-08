@@ -85,7 +85,7 @@ export const RollUp = observer(
         return showToast("You can't add a KPI to be it's own parent.", ToastMessageConstants.INFO);
       }
       if (kpi.parentType != null) {
-        return showToast("You can't add an advanced KPI to an advanced KPI.", ToastMessageConstants.INFO);
+        return showToast("You can't add an advanced KPI to an advanced KPI.", ToastMessageConstants.WARNING);
       }
       const duplicateIndex = selectedKPIs.findIndex(selectedKPI => selectedKPI.id == kpi.id);
       if (duplicateIndex > -1) {
