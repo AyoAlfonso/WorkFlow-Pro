@@ -5,21 +5,20 @@ class Api::GoalsController < Api::ApplicationController
   def index
     @company = Company.find(current_company.id)
     @company_current_fiscal_year = @company.current_fiscal_year
-    # binding.pry
     @goals = policy_scope(AnnualInitiative)
     if params[:status] == "closed"
-      @goals = policy_scope(AnnualInitiative).sort_by_closed_at
+      @goals = policy_scope(AnnualInitiative).sort_by_closed_at.with_closed_quarterly_goals
     elsif params[:status] == "open"
-      @goals = policy_scope(AnnualInitiative).sort_by_not_closed_at
+      @goals = policy_scope(AnnualInitiative).sort_by_not_closed_at.with_open_quarterly_goals
     end
     
     @user_goals = @goals.owned_by_user(current_user).order(created_at: :desc)
 
     @goals = policy_scope(AnnualInitiative)
     if params[:status] == "closed"
-      @goals = policy_scope(AnnualInitiative).sort_by_closed_at
+      @goals = policy_scope(AnnualInitiative).sort_by_closed_at.with_closed_quarterly_goals
     elsif params[:status] == "open"
-      @goals = policy_scope(AnnualInitiative).sort_by_not_closed_at
+      @goals = policy_scope(AnnualInitiative).sort_by_not_closed_at.with_open_quarterly_goals 
     end
     @company_goals = @goals.user_current_company(current_company.id).order(created_at: :desc)
     

@@ -92,6 +92,18 @@ module HasFiscalYear
     end
   end
 
+  def set_four_week_end_of_year_offset(year)
+    current_date = self.convert_to_their_timezone
+    temp_current_date = DateTime.new(year, current_date.month, current_date.day, 0, 0, 0, 0)
+    temp_current_year_fiscal_year_start = DateTime.new(year, current_year_fiscal_year_start.month, current_year_fiscal_year_start.day, 0, 0, 0, 0)
+   
+   if temp_current_date + 4.weeks >= temp_current_year_fiscal_year_start
+      year + 1
+   else
+      year
+   end  
+  end
+
   def quarter_for_creating_quarterly_goals
     current_date = format_month_and_day(self.convert_to_their_timezone)
     if current_date.between?(current_fiscal_start_date, second_quarter_start_date())

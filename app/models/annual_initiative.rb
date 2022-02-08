@@ -23,6 +23,11 @@ class AnnualInitiative < ApplicationRecord
   scope :for_company_current_year_and_future, ->(company_current_fiscal_year) { where("fiscal_year >= ?", company_current_fiscal_year) }
   scope :sort_by_closed_at, -> { where.not(closed_at: nil) }
   scope :sort_by_not_closed_at, -> { where(closed_at: nil) }
+
+  # /could be reusable by more model association
+  scope :with_open_quarterly_goals, -> { joins(:quarterly_goals).where(quarterly_goals: { closed_at: nil }) }
+  scope :with_closed_quarterly_goals, -> { joins(:quarterly_goals).where.not(quarterly_goals: { closed_at: nil }) }
+
   private
 
   def sanitize_description
