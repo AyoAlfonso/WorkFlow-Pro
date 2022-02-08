@@ -24,6 +24,8 @@ import { FormElementContainer, InputFromUnitType } from "../../scorecard/shared/
 import moment from "moment";
 import { getWeekOf } from "~/utils/date-time";
 import { getDerviedStatus } from "~/utils/get-derived-status";
+import { ToastMessageConstants } from "~/constants/toast-types";
+import { showToast } from "~/utils/toast-message";
 import { HtmlTooltip } from "~/components/shared/tooltip";
 
 interface IKeyElementProps {
@@ -141,6 +143,71 @@ export const KeyElement = observer(
       };
     }, [showList]);
 
+    useEffect(() => {
+      if (type == "quarterlyGoal" || type == "subInitiative" || type == "checkIn") {
+        resetStatus();
+      }
+    }, [element, type]);
+
+    const isLogRecent = () => {
+      const recentLogDate =
+        moment(element.objectiveLogs[element.objectiveLogs?.length - 1]?.createdAt).format(
+          "YYYY-MM-DD",
+        ) || null;
+      const currentWeekOf = getWeekOf();
+      if (!recentLogDate) return false;
+      if (!element.objectiveLogs[element.objectiveLogs?.length - 1]) {
+        return false;
+      }
+      if (recentLogDate === currentWeekOf) {
+        return true;
+      } else {
+        return moment(currentWeekOf).isBefore(recentLogDate);
+      }
+    };
+
+    const updateKeyElement = async (ownedBy, showMessage) => {
+      const keyElementParams = {
+        value: element.value,
+        completionType: element.completionType,
+        completionTargetValue: element.completionTargetValue,
+        greaterThan: element.greaterThan,
+        ownedBy: ownedBy,
+        completionCurrentValue: element.completionCurrentValue,
+        status: element.status,
+      };
+      let id;
+
+      if (type == "annualInitiative") {
+        id = store.annualInitiative.id;
+      } else if (type == "quarterlyGoal") {
+        id = store.quarterlyGoal.id;
+      } else if (type == "subInitiative") {
+        id = store.subInitiative.id;
+      }
+      const res =
+        (await type) == "checkIn"
+          ? store.updateKeyElement(element.id, {
+              value: element.value,
+              status: element.status,
+            })
+          : store.updateKeyElement(id, element.id, keyElementParams);
+      if (res && showMessage) {
+        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
+      } return res;
+    };
+
+    const resetStatus = async () => {
+      if (!element || element.status == "unstarted") return;
+      const isUpdated = isLogRecent();
+      if (isUpdated) {
+        return;
+      } else {
+        store?.updateKeyElementValue("status", element?.id, "unstarted");
+        await updateKeyElement(selectedUser.id, false);
+      }
+    };
+
     if (!element) {
       return <></>;
     }
@@ -212,34 +279,6 @@ export const KeyElement = observer(
       );
     };
 
-    const updateKeyElement = async (ownedBy) => {
-      const keyElementParams = {
-        value: element.value,
-        completionType: element.completionType,
-        completionTargetValue: element.completionTargetValue,
-        greaterThan: element.greaterThan,
-        ownedBy: ownedBy,
-        completionCurrentValue: element.completionCurrentValue,
-        status: element.status,
-      };
-      let id;
-
-      if (type == "annualInitiative") {
-        id = store.annualInitiative.id;
-      } else if (type == "quarterlyGoal") {
-        id = store.quarterlyGoal.id;
-      } else if (type == "subInitiative") {
-        id = store.subInitiative.id;
-      }
-      const res = await type == "checkIn"
-        ? store.updateKeyElement(element.id, {
-            value: element.value,
-            status: element.status,
-          })
-        : store.updateKeyElement(id, element.id, keyElementParams);
-      return res
-    };
-
     const typeForCheckIn = () => {
       if (element.elementableType === "QuarterlyGoal") {
         return "QuarterlyInitiative";
@@ -293,23 +332,7 @@ export const KeyElement = observer(
 
     const updateOwnedById = newUser => {
       setSelectedUser(newUser);
-      updateKeyElement(newUser.id);
-    };
-    
-    const isLogRecent = () => {
-      const recentLogDate =
-        moment(element.objectiveLogs[element.objectiveLogs?.length - 1]?.createdAt).format(
-          "YYYY-MM-DD",
-        ) || null;
-      if (!recentLogDate) return false;
-      if (!element.objectiveLogs[element.objectiveLogs?.length - 1]) {
-        return false;
-      }
-      if (recentLogDate === getWeekOf()) {
-        return true;
-      } else {
-        return moment(getWeekOf()).isBefore(recentLogDate);
-      }
+      updateKeyElement(newUser.id, true);
     };
 
     const updateMilestoneStatus = async weekOf => {
@@ -386,7 +409,7 @@ export const KeyElement = observer(
         <TopContainer>
           {type !== "checkIn" && (
             <AvatarContainer
-              onBlur={() => updateKeyElement(selectedUser.id)}
+              onBlur={() => updateKeyElement(selectedUser.id, true)}
               onClick={() => setShowUsersList(!showUsersList)}
             >
               <Avatar
@@ -402,7 +425,7 @@ export const KeyElement = observer(
           <KeyElementStyledContentEditable
             innerRef={keyElementTitleRef}
             html={sanitize(element.value)}
-            disabled={!editable || type == "checkIn"}
+            disabled={!editable || type == "checkIn" || !isOwner || disabled}
             onChange={e => {
               if (!e.target.value.includes("<div>")) {
                 store.updateKeyElementValue("value", element.id, e.target.value);
@@ -412,6 +435,9 @@ export const KeyElement = observer(
               if (key.keyCode == 13) {
                 keyElementTitleRef.current.blur();
               }
+            }}
+            onMouseEnter={async () => {
+              await isEditable();
             }}
             onBlur={() => store.update()}
             completed={checkboxValue.toString()} //CHRIS' NOTE: YOU CANT PASS A BOOLEAN VALUE INTO STYLED COMPONENTS.
@@ -464,8 +490,8 @@ export const KeyElement = observer(
                       <StatusBadgeContainer
                         onClick={async () => {
                           store.updateKeyElementValue("status", element.id, status);
-                          const res = await updateKeyElement(selectedUser.id);
-                          
+                          const res = await updateKeyElement(selectedUser.id, true);
+
                           if (res) {
                             createLog();
                           }
@@ -536,8 +562,8 @@ export const KeyElement = observer(
                         <StatusBadgeContainer
                           onClick={async () => {
                             store.updateKeyElementValue("status", element.id, status);
-                            const res = await updateKeyElement(selectedUser.id);
-                            
+                            const res = await updateKeyElement(selectedUser.id, true);
+
                             if (res) {
                               createLog();
                             }
@@ -569,7 +595,7 @@ export const KeyElement = observer(
                       }}
                       defaultValue={element.completionCurrentValue}
                       onBlur={() => {
-                        updateKeyElement(selectedUser.id);
+                        updateKeyElement(selectedUser.id, true);
                         createLog();
                       }}
                       disabled={!editable || disabled || !isOwner}

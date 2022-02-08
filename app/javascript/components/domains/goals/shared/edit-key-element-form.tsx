@@ -8,6 +8,8 @@ import { baseTheme } from "~/themes/base";
 import { Select } from "~/components/shared/input";
 import { Store } from "@material-ui/icons";
 import { useMst } from "~/setup/root";
+import { ToastMessageConstants } from "~/constants/toast-types";
+import { showToast } from "~/utils/toast-message";
 import { InputFromUnitType } from "~/components/domains/scorecard/shared/modal-elements";
 import { OwnedBy } from "../../scorecard/shared/scorecard-owned-by";
 
@@ -96,7 +98,11 @@ export const EditKeyElementForm = ({
     } else if (type == "subInitiative") {
       id = store.subInitiative.id;
     }
-    store.updateKeyElement(id, element.id, keyElementParams);
+    store.updateKeyElement(id, element.id, keyElementParams).then((res) => {
+      if (res) {
+        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
+      }
+    });
   };
 
   const isValid =
