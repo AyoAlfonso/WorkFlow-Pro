@@ -21,7 +21,7 @@ export const CheckIn = observer(
     const {
       profile: { id },
     } = sessionStore;
-
+    
     const history = useHistory();
 
     const checkIn = checkInTemplateStore.currentCheckIn;
@@ -30,7 +30,9 @@ export const CheckIn = observer(
 
     useEffect(() => {
       validateWeekOf(weekOf, history, id);
+
       checkInTemplateStore.fetchCheckInTemplates();
+
       companyStore.load().then(() => {
         if (companyStore.company?.objectivesKeyType === "KeyResults") {
           checkInTemplateStore.getCheckIn("Weekly Check-In");
