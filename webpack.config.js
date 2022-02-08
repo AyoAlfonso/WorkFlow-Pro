@@ -12,6 +12,7 @@ module.exports = {
       config$: "./configs/app-config.js",
       react: "./vendor/react-master",
     },
+    plugins: [new Dotenv({ systemvars: true })],
     extensions: ["", "js", "jsx"],
     modules: ["node_modules", "bower_components", "shared", "/shared/vendor/modules"],
   },
