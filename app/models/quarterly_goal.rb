@@ -12,6 +12,8 @@ class QuarterlyGoal < ApplicationRecord
   accepts_nested_attributes_for :key_elements, :milestones
 
   scope :sort_by_created_date, -> { order(created_at: :asc) }
+  scope :sort_by_not_closed_at, -> { where(closed_at: nil) }
+  scope :sort_by_closed_at, -> { where.not(closed_at: nil) }
   scope :owned_by_user, ->(user) { where(owned_by_id: user.id) }
   scope :for_quarter, ->(quarter) { where(quarter: quarter) }
   scope :filter_by_team_id, ->(team_id) { where(owned_by_id: Team.find(team_id).users.pluck(:id)) }
@@ -25,7 +27,7 @@ class QuarterlyGoal < ApplicationRecord
     .where("(annual_initiatives.fiscal_year <= ? AND quarter <= ?)",
             company.current_fiscal_year, company.current_fiscal_quarter)
 }
-  scope :optimized, ->() { includes([:key_elements, :milestones, { owned_by: { avatar_attachment: :blob } }]) }
+  scope :optimized, ->() { includes([ :key_elements, :milestones, { owned_by: { avatar_attachment: :blob } }]) }
 
   def create_milestones_for_quarterly_goal(current_user, company)
     fiscal_quarter_start_date = company.current_fiscal_start_date + (13.weeks * (self.quarter-1))
