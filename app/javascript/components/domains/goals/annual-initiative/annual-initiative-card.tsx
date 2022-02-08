@@ -9,6 +9,7 @@ import { AnnualInitiativeCardExpanded } from "./annual-initiative-card-expanded"
 import { RecordOptions } from "../shared/record-options";
 import { useMst } from "~/setup/root";
 import { baseTheme } from "~/themes";
+import { HtmlTooltip } from "~/components/shared/tooltip";
 
 interface IAnnualInitiativeCardProps {
   annualInitiative: any;
@@ -52,6 +53,7 @@ export const AnnualInitiativeCard = observer(
     );
     const [selectedSubInitiativeCards, setSelectSubInitiativeCard] = useState<number>();
     const [showOptions, setShowOptions] = useState<string>(white);
+    const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
     const { companyStore } = useMst();
 
@@ -114,14 +116,30 @@ export const AnnualInitiativeCard = observer(
           }}
         >
           <HeaderContainer>
-            <DescriptionContainer onboarding={onboarding}>
-              <StyledText
-                closedInitiative={annualInitiative.closedInitiative}
+            <HtmlTooltip
+              arrow={true}
+              open={showTooltip}
+              enterDelay={500}
+              leaveDelay={200}
+              title={<span>{annualInitiative.description}</span>}
+            >
+              <DescriptionContainer
                 onboarding={onboarding}
+                onMouseEnter={() => {
+                  setShowTooltip(true);
+                }}
+                onMouseLeave={() => {
+                  setShowTooltip(false);
+                }}
               >
-                {annualInitiative.description}
-              </StyledText>
-            </DescriptionContainer>
+                <StyledText
+                  closedInitiative={annualInitiative.closedInitiative}
+                  onboarding={onboarding}
+                >
+                  {annualInitiative.description}
+                </StyledText>
+              </DescriptionContainer>
+            </HtmlTooltip>
             {!onboarding && (
               <IconContainer>
                 <RecordOptions
