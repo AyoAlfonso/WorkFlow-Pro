@@ -96,7 +96,6 @@ export const SubInitiativeStoreModel = types
         const keyElementIndex = keyElements.findIndex(ke => ke.id == keyElementId);
         keyElements[keyElementIndex] = response.data;
         self.subInitiative.keyElements = keyElements;
-        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
         return response.data;
       } catch (error) {
         showToast(il8n.t("subInitiative.keyElementUpdateError"), ToastMessageConstants.ERROR);

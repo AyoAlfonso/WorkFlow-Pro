@@ -11,6 +11,7 @@ import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
 import moment from "moment";
 import { observer } from "mobx-react";
+import { HtmlTooltip } from "~/components/shared/tooltip";
 
 interface IQuarterlyGoalCardProps {
   quarterlyGoal: QuarterlyGoalType;
@@ -50,6 +51,7 @@ export const QuarterlyGoalCard = observer(
     } = baseTheme.colors;
     const defaultOptionsColor = white;
     const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
+    const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
     let currentMilestone;
     const statusBadge = {
@@ -158,7 +160,24 @@ export const QuarterlyGoalCard = observer(
                   iconColor={grey100}
                 />
               )}
-              <StyledText>{quarterlyGoal.description}</StyledText>
+              <HtmlTooltip
+                arrow={true}
+                open={showTooltip}
+                enterDelay={500}
+                leaveDelay={200}
+                title={<span>{quarterlyGoal.description}</span>}
+              >
+                <DescriptionTextContainer
+                  onMouseEnter={() => {
+                    setShowTooltip(true);
+                  }}
+                  onMouseLeave={() => {
+                    setShowTooltip(false);
+                  }}
+                >
+                  <StyledText>{quarterlyGoal.description}</StyledText>
+                </DescriptionTextContainer>
+              </HtmlTooltip>
             </DescriptionContainer>
 
             {!onboarding && (
@@ -312,3 +331,5 @@ const MilestoneCountContainer = styled.div`
   color: ${props => props.theme.colors.grey100};
   margin-right: 5px;
 `;
+
+const DescriptionTextContainer = styled.div``;
