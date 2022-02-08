@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { baseTheme } from "../../../themes";
 import styled from "styled-components";
 import { getCroppedImg } from "~/lib/cropImage";
-import "~/stylesheets/utilities.css";
 import Cropper from "react-easy-crop";
 import { Button } from "~/components/shared/button";
 
