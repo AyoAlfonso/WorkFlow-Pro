@@ -335,8 +335,6 @@ ActiveRecord::Schema.define(version: 2022_02_03_212654) do
     t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
-    t.index ["team_id"], name: "index_key_performance_indicators_on_team_id"
-    t.index ["user_id"], name: "index_key_performance_indicators_on_user_id"
   end
 
   create_table "meeting_templates", force: :cascade do |t|
@@ -731,8 +729,6 @@ ActiveRecord::Schema.define(version: 2022_02_03_212654) do
   add_foreign_key "key_activities", "companies"
   add_foreign_key "key_activities", "meetings"
   add_foreign_key "key_activities", "users"
-  add_foreign_key "key_performance_indicators", "teams"
-  add_foreign_key "key_performance_indicators", "users"
   add_foreign_key "meetings", "meeting_templates"
   add_foreign_key "meetings", "teams"
   add_foreign_key "meetings", "users", column: "hosted_by_id"
