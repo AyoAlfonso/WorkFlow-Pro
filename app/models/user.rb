@@ -172,20 +172,23 @@ class User < ApplicationRecord
 
   def create_default_notifications
     Notification.notification_types.each do |k, v|
+      if (k == "weekly_checkin_report" &&  self.user_role_id == 3)
+         next
+      end
+
       notification = Notification.find_or_initialize_by(
         user_id: self.id,
         notification_type: v,
       )
-      unless notification.persisted?
-        notification.attributes = {
-          rule: IceCube::DefaultRules.send("default_#{k}_rule"),
-          method: :disabled,
-        }
-        notification.save
+    
+        unless notification.persisted?
+          notification.attributes = {
+            rule: IceCube::DefaultRules.send("default_#{k}_rule"),
+            method: :disabled,
+          }
+          notification.save
+        end
       end
-    end
-
-    self.id
   end
 
   def team_meetings

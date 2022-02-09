@@ -115,6 +115,7 @@ class Api::UsersController < Api::ApplicationController
     team_user_enablement = TeamUserEnablement.where(user_id: params[:user_id], team_id: params[:team_id]).first
     team_user_enablement.update!(role: params[:role] ? 1 : 0)
     @user = User.find(params[:user_id])
+    @user.create_default_notifications
     render "api/users/show"
   end
 

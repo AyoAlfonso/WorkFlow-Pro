@@ -33,7 +33,7 @@ class Company < ApplicationRecord
 
   enum onboarding_status: { incomplete: 0, complete: 1 }
 
-  after_create :create_company_static_data, :create_default_description_templates
+  after_create :create_company_static_data, :create_default_description_templates, :create_default_preferences
 
   scope :with_team, ->(team_id) { joins(:teams).where({ teams: { id: team_id } }) }
 
@@ -128,5 +128,18 @@ class Company < ApplicationRecord
     DefaultAdminTemplate.find_each do |template|
       DescriptionTemplate.create!(template_type: template.template_type, company_id: self.id, body: template.body, title: template.title)
     end
+  end
+  def create_default_preferences
+    if self.display_format == "Company"
+        self.preferences = {:foundational_four => true,:company_objectives => true, :personal_objectives => true}
+    end
+    if self.display_format == "Forum" &&
+        if self.forum_type == "Organisation"
+          self.preferences = {:foundational_four => false,:company_objectives => true, :personal_objectives => true}
+        else
+          self.preferences = {:foundational_four => true,:company_objectives => true, :personal_objectives => true}
+        end
+    end
+    self.save
   end
 end

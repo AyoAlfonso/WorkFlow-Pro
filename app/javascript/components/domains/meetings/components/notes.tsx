@@ -16,7 +16,7 @@ interface NotesProps {
 }
 
 export const Notes = ({ meeting, height, hideSideBorders }: NotesProps): JSX.Element => {
-  const { meetingStore, forumStore } = useMst();
+  const { meetingStore, forumStore, companyStore } = useMst();
 
   const meetingType = meeting?.meetingType;
 
@@ -28,7 +28,10 @@ export const Notes = ({ meeting, height, hideSideBorders }: NotesProps): JSX.Ele
     const editorState = EditorState.createWithContent(contentState);
     setEditorText(editorState || EditorState.createEmpty());
   }, [meeting?.notes]);
-
+  const forumType =
+    companyStore.company?.forumType == "Organisation"
+      ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
+      : MeetingTypes.FORUM_MONTHLY;
   return (
     <Container height={height}>
       <EditorWrapper height={height} hideSideBorders={hideSideBorders}>
@@ -54,7 +57,7 @@ export const Notes = ({ meeting, height, hideSideBorders }: NotesProps): JSX.Ele
               meetingStore.updatePersonalMeeting(meetingObj);
             } else if (meetingType == MeetingTypes.TEAM_WEEKLY) {
               meetingStore.updateMeeting(meetingObj);
-            } else if (meetingType == MeetingTypes.FORUM_MONTHLY) {
+            } else if (meetingType == forumType) {
               forumStore.updateMeeting(meetingObj, true);
             }
           }}

@@ -82,15 +82,26 @@ module HasFiscalYear
 
   def year_for_creating_annual_initiatives
     current_date = self.convert_to_their_timezone
-    #If the start date greater than 
     temp_current_date = DateTime.new(2010, current_date.month, current_date.day, 0, 0, 0, 0)
     temp_current_year_fiscal_year_start = DateTime.new(2010, current_year_fiscal_year_start.month, current_year_fiscal_year_start.day, 0, 0, 0, 0)
+
     if temp_current_year_fiscal_year_start > temp_current_date
        current_year_fiscal_year_start.year - 1
     else
       current_year_fiscal_year_start.year
-    #   within_4_weeks_range(current_year_fiscal_year_start + 1.year) ? current_year_fiscal_year_start.year + 1 : current_year_fiscal_year_start.year
     end
+  end
+
+  def set_four_week_end_of_year_offset(year)
+    current_date = self.convert_to_their_timezone
+    temp_current_date = DateTime.new(year, current_date.month, current_date.day, 0, 0, 0, 0)
+    temp_current_year_fiscal_year_start = DateTime.new(year, current_year_fiscal_year_start.month, current_year_fiscal_year_start.day, 0, 0, 0, 0)
+   
+   if temp_current_date + 4.weeks >= temp_current_year_fiscal_year_start
+      year + 1
+   else
+      year
+   end  
   end
 
   def quarter_for_creating_quarterly_goals

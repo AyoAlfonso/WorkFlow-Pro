@@ -79,6 +79,9 @@ export const App = observer(
     const location = useLocation();
 
     useEffect(() => {
+      if (!profile) {
+        return history.push("/");
+      }
       const redirectToCheckIn = () => {
         const width = window.innerWidth <= 768;
         const id = profile?.id;

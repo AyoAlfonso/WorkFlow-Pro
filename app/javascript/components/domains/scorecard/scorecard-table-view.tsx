@@ -20,7 +20,6 @@ import { sortByDateReverse } from "~/utils/sorting";
 
 import { toJS } from "mobx";
 import Tooltip from '@material-ui/core/Tooltip';
-//import { averageScore } from "./shared/parent-kpi-pop";
 // TODO: figure out better function for percent scores.
 export const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
   greaterThan ? (value / target) * 100 : ((target + target - value) / target) * 100;
@@ -67,8 +66,13 @@ export const ScorecardTableView = observer(
           )
             .toString()
             .slice(-2)}`;
+    const setDefaultSelectionQuarter = (week, q) => {
+      return week == 13 ? 1 : week == 26 ? 2 : week == 39 ? 3 : q;
+    };
     const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
-    const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
+    const [quarter, setQuarter] = useState<number>(
+      setDefaultSelectionQuarter(company.currentFiscalWeek, company.currentFiscalQuarter),
+    );
     const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
     const [dropdownQuarter, setDropdownQuarter] = useState(
       company.currentFiscalQuarter + "_" + createGoalYearString,
@@ -655,11 +659,6 @@ export const ScorecardTableView = observer(
                   Q{n} {createGoalYearString}
                 </option>
               ))}
-              {/* {R.range(5, 9).map((n: number, index) => (
-                <option key={n} value={n}>
-                  Q{index+1} {company.currentFiscalYear}
-                </option>
-              ))} */}
             </Select>
           </TopRow>
           {tab == "KPIs" && (
@@ -743,6 +742,7 @@ export const ScorecardTableView = observer(
             setTargetWeek={setTargetWeek}
             setTargetValue={setTargetValue}
             fiscalYearStart={fiscalYearStart}
+            currentFiscalQuarter={quarter}
           />
         )}
       </>

@@ -376,7 +376,7 @@ const ColorPickerContainer = styled.div`
   display: block;
   overflow: break;
   position: absolute;
-  border: 1px solid ${props => props.theme.colors.greyActive};
+  box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   z-index: 20;
   background-color: ${props => props.theme.colors.white};
   margin-top: 10px;

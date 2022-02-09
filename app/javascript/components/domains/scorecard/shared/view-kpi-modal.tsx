@@ -26,6 +26,7 @@ import { debounce } from "lodash";
 import { Button } from "~/components/shared/button";
 import { kpiPopup } from "./parent-kpi-popup";
 import { kpiViewerName } from "./parent-kpi-popup";
+import { findNextMonday } from "~/utils/date-time";
 
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -90,7 +91,7 @@ export const ViewEditKPIModal = observer(
       tango,
     } = baseTheme.colors;
 
-    const [functionIconColor, setFunctionIconColor] = useState(greyInactive);
+    const [functionSymbolIconColor, setFunctionSymbolIconColor] = useState(greyInactive);
 
     const formatValue = (value: number, unitType: string) => {
       if (value === undefined) {
@@ -226,9 +227,9 @@ export const ViewEditKPIModal = observer(
     };
 
     const weekToDate = (week: number): string =>
-      moment(company.fiscalYearStart)
+      moment(findNextMonday(company.fiscalYearStart))
+        .year(company.yearForCreatingAnnualInitiatives)
         .add(week, "w")
-        .year(company.currentFiscalYear)
         .startOf("week" as moment.unitOfTime.StartOf)
         .format("MMM D");
 
@@ -377,11 +378,11 @@ export const ViewEditKPIModal = observer(
                     <OwnerAndLogicText>{logic}</OwnerAndLogicText>
                     {kpi?.parentType && (
                       <KPITypeContainer>
-                        <KPITypeWrapper onMouseEnter={() => {setFunctionIconColor(primary100)}}
-                                        onMouseLeave={() => {setFunctionIconColor(greyInactive)}}
+                        <KPITypeWrapper onMouseEnter={() => {setFunctionSymbolIconColor(primary100)}}
+                                        onMouseLeave={() => {setFunctionSymbolIconColor(greyInactive)}}
                                         onClick={() => {setPopupOpen(!popupOpen)}}
                         >
-                          <KPITypeIcon icon={"Function"} size={16} iconColor={functionIconColor}/>
+                          <KPITypeIcon icon={"Function"} size={16} iconColor={functionSymbolIconColor}/>
                           <KPIParentTypeText> {formatKpiType(kpi?.parentType)} </KPIParentTypeText>
                         </KPITypeWrapper>
                         <Pop><PopupContainer>{kpiPopup(kpi, popupOpen, setPopupOpen, setCurrentSelectedKpi, setViewEditKPIModalOpen)}</PopupContainer></Pop>
@@ -546,6 +547,8 @@ export const ViewEditKPIModal = observer(
             updateKPIModalOpen={updateKPIModalOpen}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
             setKpis={setKpis}
+            fiscalYearStart={company.fiscalYearStart}
+            currentFiscalQuarter={company.currentFiscalQuarter}
           />
         )}
       </>
