@@ -144,7 +144,7 @@ export const KeyElement = observer(
     }, [showList]);
 
     useEffect(() => {
-      if (type == "quarterlyGoal" || type == "subInitiative" || type == "checkIn") {
+      if (type == "quarterlyGoal" || type == "subInitiative" || type !== "checkIn") {
         resetStatus();
       }
     }, [element, type]);
