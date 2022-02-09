@@ -9,17 +9,17 @@ end
 # json.derived_status annual_initiative.derived_status
 # if the annual_initiative is in the current/future fiscal year then we only want to show present/future quarterly goals
 # if the annual_initiative is in the past, then we show all quarterly goals
-    if @status == "closed"
-        json.quarterly_goals annual_initiative.quarterly_goals.optimized.sort_by_closed_at do |quarterly_goal|
-          json.partial! quarterly_goal, partial: "api/annual_initiatives/annual_initiative_closed", as: :quarterly_goal
-        end
-    elsif @status == "open"
-        json.quarterly_goals annual_initiative.quarterly_goals.optimized.sort_by_not_closed_at do |quarterly_goal|
-            json.partial! quarterly_goal, partial: "api/quarterly_goals/quarterly_goal", as: :quarterly_goal
-        end
-    else
-        json.quarterly_goals annual_initiative.quarterly_goals.optimized do |quarterly_goal|
-        json.partial! quarterly_goal, partial: "api/quarterly_goals/quarterly_goal", as: :quarterly_goal
+  if @status == "closed"
+      json.quarterly_goals annual_initiative.quarterly_goals.optimized.sort_by_closed do |quarterly_goal|
+        json.partial! quarterly_goal, partial: "api/quarterly_goals/quarterly_goals", as: :quarterly_goal
       end
+  elsif @status == "open"
+      json.quarterly_goals annual_initiative.quarterly_goals.optimized.sort_by_not_closed do |quarterly_goal|
+          json.partial! quarterly_goal, partial: "api/quarterly_goals/quarterly_goal", as: :quarterly_goal
+      end
+  else
+      json.quarterly_goals annual_initiative.quarterly_goals.optimized do |quarterly_goal|
+      json.partial! quarterly_goal, partial: "api/quarterly_goals/quarterly_goal", as: :quarterly_goal
     end
+  end
 

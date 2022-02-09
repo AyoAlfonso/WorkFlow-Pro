@@ -13,8 +13,8 @@ class QuarterlyGoal < ApplicationRecord
   accepts_nested_attributes_for :key_elements, :milestones
 
   scope :sort_by_created_date, -> { order(created_at: :asc) }
-  scope :sort_by_not_closed_at, -> { where(closed_at: nil) }
-  scope :sort_by_closed_at, -> { where.not(closed_at: nil) }
+  scope :sort_by_not_closed, -> { where(closed_at: nil) }
+  scope :sort_by_closed, -> { where.not(closed_at: nil) }
   scope :owned_by_user, ->(user) { where(owned_by_id: user.id) }
   scope :for_quarter, ->(quarter) { where(quarter: quarter) }
   scope :filter_by_team_id, ->(team_id) { where(owned_by_id: Team.find(team_id).users.pluck(:id)) }
