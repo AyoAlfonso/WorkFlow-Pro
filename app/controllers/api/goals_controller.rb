@@ -7,18 +7,18 @@ class Api::GoalsController < Api::ApplicationController
     @company_current_fiscal_year = @company.current_fiscal_year
     @goals = policy_scope(AnnualInitiative)
     if params[:status] == "closed"
-      @goals = policy_scope(AnnualInitiative).sort_by_closed_at
+      @goals = policy_scope(AnnualInitiative).sort_by_closed
     elsif params[:status] == "open"
-      @goals = policy_scope(AnnualInitiative).sort_by_not_closed_at
+      @goals = policy_scope(AnnualInitiative).sort_by_not_closed
     end
     
     @user_goals = @goals.owned_by_user(current_user).order(created_at: :desc)
 
     @goals = policy_scope(AnnualInitiative)
     if params[:status] == "closed"
-      @goals = policy_scope(AnnualInitiative).sort_by_closed_at
+      @goals = policy_scope(AnnualInitiative).sort_by_closed
     elsif params[:status] == "open"
-      @goals = policy_scope(AnnualInitiative).sort_by_not_closed_at 
+      @goals = policy_scope(AnnualInitiative).sort_by_not_closed
     end
     @company_goals = @goals.user_current_company(current_company.id).order(created_at: :desc)
     @status = params[:status]  

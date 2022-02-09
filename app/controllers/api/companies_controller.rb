@@ -8,9 +8,6 @@ class Api::CompaniesController < Api::ApplicationController
   def create
 
 
-     unless params[:forum_type] == "Organisation"
-      preferences
-     end
     @company = Company.new({
       display_format: params[:display_format],
       fiscal_year_start: params[:fiscal_year_start],

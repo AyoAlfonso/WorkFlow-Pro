@@ -643,5 +643,9 @@ export class Api {
   async getWeeklyCheckinKeyElements() {
     return this.client.get(`/key_elements/check_in`);
   }
+
+  async updateWeeklyCheckInKeyElements(id, value) {
+    return this.client.put(`/key_elements/${id}`, value);
+  }
   //async setJWT(jwt) {}
 }

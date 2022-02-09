@@ -160,13 +160,19 @@
   "devDependencies": {
     "@babel/core": "^7.16.7",
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 852bd24ca25c0aadf459efd858883e7d42e96947
     "@babel/preset-env": "^7.16.8",
     "@babel/preset-react": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
     "@jest/types": "^27.4.2",
+<<<<<<< HEAD
 =======
     "@babel/preset-env": "^7.16.7",
 >>>>>>> 1fbec77dcdfb4ba23fac4837e2cfaea6eddadc2f
+=======
+>>>>>>> 852bd24ca25c0aadf459efd858883e7d42e96947
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-info": "^5.3.19",
     "@storybook/addon-knobs": "^5.3.19",

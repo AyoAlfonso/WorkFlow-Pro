@@ -533,14 +533,6 @@ export const ScorecardTableView = observer(
       setHiddenColumns(getHiddenWeeks(q));
     };
 
-    //Turn this into a shared function
-    // const createGoalYearString =
-    //   company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
-    //     ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-    //     : `FY${(company.currentFiscalYear - 1)
-    //         .toString()
-    //         .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
-
     return (
       <>
         <Container>
@@ -597,11 +589,6 @@ export const ScorecardTableView = observer(
                   Q{n} {createGoalYearString}
                 </option>
               ))}
-              {/* {R.range(5, 9).map((n: number, index) => (
-                <option key={n} value={n}>
-                  Q{index+1} {company.currentFiscalYear}
-                </option>
-              ))} */}
             </Select>
           </TopRow>
           {tab == "KPIs" && (
