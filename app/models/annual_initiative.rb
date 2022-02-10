@@ -24,10 +24,12 @@ class AnnualInitiative < ApplicationRecord
   scope :sort_by_closed, -> { where('closed_at IS NOT ?', nil) }
   scope :sort_by_not_closed, -> { where(closed_at: nil) }
 
-
+  #We can make this a reusable pattern, when it used in multiple models
+  scope :sort_by_closed_quarterly_goals, ->() {
+      includes(:quarterly_goals).where.not(quarterly_goals: { closed_at: nil })
+    }
   
   private
-
   def sanitize_description
     self.description = strip_tags(description)
   end

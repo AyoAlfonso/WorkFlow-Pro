@@ -74,7 +74,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   def team
     @team_id = params[:team_id]
     @company = current_company
-    @annual_initiatives = policy_scope(AnnualInitiative).user_current_company(current_company.id).order(fiscal_year: :desc)  #.for_company_current_year_and_future(@company.current_fiscal_year)        
+    @annual_initiatives = policy_scope(AnnualInitiative).user_current_company(current_company.id).order(fiscal_year: :desc)
     authorize @annual_initiatives
     render "api/annual_initiatives/team"
   end
