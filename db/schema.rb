@@ -317,16 +317,18 @@ ActiveRecord::Schema.define(version: 2022_02_03_212654) do
     t.string "description"
     t.datetime "closed_at"
     t.bigint "created_by_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "unit_type"
+    t.integer "target_value", default: 0
     t.boolean "is_deleted", default: false
     t.boolean "greater_than", default: true
     t.jsonb "viewers"
     t.bigint "owned_by_id"
     t.float "needs_attention_threshold"
-    t.float "target_value", default: 0.0
     t.string "title"
     t.integer "parent_type"
     t.integer "parent_kpi", default: [], array: true
-    t.bigint "company_id"
     t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
