@@ -151,8 +151,8 @@ ActiveRecord::Schema.define(version: 2022_02_03_212654) do
     t.integer "display_format", default: 0
     t.integer "onboarding_status", default: 0
     t.string "customer_subscription_profile_id"
-    t.integer "objectives_key_type", default: 1
     t.integer "forum_type", default: 0
+    t.integer "objectives_key_type", default: 1
     t.jsonb "preferences", default: {}, null: false
     t.index ["preferences"], name: "index_companies_on_preferences", using: :gin
   end
@@ -332,6 +332,8 @@ ActiveRecord::Schema.define(version: 2022_02_03_212654) do
     t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
     t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
     t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
+    t.index ["team_id"], name: "index_key_performance_indicators_on_team_id"
+    t.index ["user_id"], name: "index_key_performance_indicators_on_user_id"
   end
 
   create_table "meeting_templates", force: :cascade do |t|
