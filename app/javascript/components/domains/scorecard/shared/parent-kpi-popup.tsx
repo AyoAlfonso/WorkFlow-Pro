@@ -223,8 +223,8 @@ export function kpiPopup(kpi, open, setOpen, setCurkpi, setModalOpen) {
                       lastName={k.ownedBy.lastName}
                       defaultAvatarColor={k.ownedBy.defaultAvatarColor}
                       avatarUrl={k.ownedBy.avatarUrl}
-                      size={16}
-                      marginLeft="7px"
+                      size={20}
+                      marginLeft="10px"
                       marginRight="5px"
                       marginTop="0"
                       marginBottom="0px"
@@ -283,7 +283,8 @@ const KPIPopup = styled.ul`
 `;
 
 const PopupHeader = styled.div`
-  padding-left: 11px;
+  padding-left: 16px;
+  padding-right: 16px;
   color: black;
   font-size: 16px;
   font-weight: bold;
@@ -294,7 +295,7 @@ const PopupHeader = styled.div`
 
 const Spacer = styled.div`
   display: inline-block;
-  width: 85px;
+  width: 81px;
   height: 0;
 `;
 
