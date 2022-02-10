@@ -47,7 +47,6 @@ export const KPIModalHeader = observer(
           <StyledClose>
             <CloseIconContainer
               onClick={() => {
-                props?.setShowAddManualKPIModal(false);
                 props.setModalOpen(false);
               }}
             >
