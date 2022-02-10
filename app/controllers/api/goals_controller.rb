@@ -4,10 +4,9 @@ class Api::GoalsController < Api::ApplicationController
 
   def index
     @company = Company.find(current_company.id)
-    @company_current_fiscal_year = @company.current_fiscal_year
     @goals = policy_scope(AnnualInitiative)
     if params[:status] == "closed"
-      @goals = policy_scope(AnnualInitiative).sort_by_closed
+      @goals = policy_scope(AnnualInitiative).sort_by_closed_quarterly_goals
     elsif params[:status] == "open"
       @goals = policy_scope(AnnualInitiative).sort_by_not_closed
     end
@@ -16,7 +15,7 @@ class Api::GoalsController < Api::ApplicationController
 
     @goals = policy_scope(AnnualInitiative)
     if params[:status] == "closed"
-      @goals = policy_scope(AnnualInitiative).sort_by_closed
+      @goals = policy_scope(AnnualInitiative).sort_by_closed_quarterly_goals
     elsif params[:status] == "open"
       @goals = policy_scope(AnnualInitiative).sort_by_not_closed
     end
