@@ -245,7 +245,7 @@ export function kpiPopup(kpi, open, setOpen, setCurkpi, setModalOpen) {
                 Associated KPIs
                 <Spacer/>
                 <CloseIconContainerdd onClick={() => {setOpen(false);}}>
-                    <StyledIcon icon={"Close"} size={12} />
+                    <StyledIcon icon={"Close"} size={16} />
                 </CloseIconContainerdd>
             </PopupHeader>
             {listItems}
@@ -285,7 +285,8 @@ const KPIPopup = styled.ul`
 const PopupHeader = styled.div`
   padding-left: 11px;
   color: black;
-  font-size: 13px;
+  font-size: 16px;
+  font-weight: bold;
   justify-self: right;
   margin-left: 0;
   margin-bottom: 11px;
@@ -293,7 +294,7 @@ const PopupHeader = styled.div`
 
 const Spacer = styled.div`
   display: inline-block;
-  width: 113px;
+  width: 85px;
   height: 0;
 `;
 
