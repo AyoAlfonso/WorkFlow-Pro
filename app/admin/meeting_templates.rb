@@ -62,7 +62,7 @@ ActiveAdmin.register MeetingTemplate do
     end
 
     def permitted_params
-      params.require(:meeting_template).permit(:name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed, :override_key, :description_text])
+      params.require(:meeting_template).permit(:name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed, :override_key, :description_text, :_destroy])
     end
  
   end
