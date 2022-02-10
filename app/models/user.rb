@@ -26,7 +26,7 @@ class User < ApplicationRecord
   has_many :daily_logs, dependent: :destroy
   has_one_attached :avatar
   has_many :questionnaire_attempts
-  has_many :product_features
+  has_many :product_features, dependent: :destroy
   has_many :key_performance_indicators
   has_many :score_card_logs
   has_many :habits, dependent: :destroy
