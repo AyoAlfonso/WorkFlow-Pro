@@ -12,6 +12,8 @@ export const GoalStoreModel = types
     companyGoals: types.maybeNull(GoalModel),
     personalGoals: types.maybeNull(GoalModel),
     teamGoals: types.maybeNull(types.array(AnnualInitiativeModel)),
+    closedCompanyGoals: types.maybeNull(GoalModel),
+    closedPersonalGoals: types.maybeNull(GoalModel),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -40,13 +42,26 @@ export const GoalStoreModel = types
     load: flow(function*() {
       const env = getEnv(self);
       try {
-        const response: any = yield env.api.getAllGoals();
+        const response: any = yield env.api.getAllGoals("open");
         if (response.ok) {
           self.companyGoals = response.data.company;
           self.personalGoals = response.data.user;
         }
       } catch {
         showToast("There was an error loading goals", ToastMessageConstants.ERROR);
+      }
+    }),
+    getClosedGoals: flow(function* () {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.getAllGoals("closed");
+        if (response.ok) {
+          self.closedCompanyGoals = response.data.company;
+          self.closedPersonalGoals = response.data.user;
+        }
+        return true;
+      } catch {
+        showToast("There was an error loading closed goals", ToastMessageConstants.ERROR);
       }
     }),
     getTeamGoals: flow(function*(teamId) {

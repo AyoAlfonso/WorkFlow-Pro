@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_28_122121) do
+ActiveRecord::Schema.define(version: 2022_02_03_212654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -317,15 +317,12 @@ ActiveRecord::Schema.define(version: 2022_01_28_122121) do
     t.string "description"
     t.datetime "closed_at"
     t.bigint "created_by_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.integer "unit_type"
-    t.float "target_value", default: 0.0
     t.boolean "is_deleted", default: false
     t.boolean "greater_than", default: true
     t.jsonb "viewers"
     t.bigint "owned_by_id"
     t.float "needs_attention_threshold"
+    t.float "target_value", default: 0.0
     t.string "title"
     t.integer "parent_type"
     t.integer "parent_kpi", default: [], array: true
@@ -481,7 +478,7 @@ ActiveRecord::Schema.define(version: 2022_01_28_122121) do
 
   create_table "scorecard_logs", force: :cascade do |t|
     t.bigint "key_performance_indicator_id", null: false
-    t.integer "score"
+    t.float "score"
     t.string "note"
     t.integer "fiscal_quarter"
     t.integer "fiscal_year"

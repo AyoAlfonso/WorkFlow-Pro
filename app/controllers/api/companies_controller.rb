@@ -14,6 +14,7 @@ class Api::CompaniesController < Api::ApplicationController
       name: params[:name],
       timezone: params[:timezone],
       forum_type: params[:forum_type],
+      # TODO:
     })
     authorize @company
     @company.save!

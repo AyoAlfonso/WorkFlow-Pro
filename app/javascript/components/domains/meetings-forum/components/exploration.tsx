@@ -52,7 +52,7 @@ export const Exploration = observer(
       if (currentMeeting) {
         issueStore.fetchTeamIssueMeetingEnablements(currentMeeting.id);
       }
-    }, [currentMeeting.teamId]);
+    }, [currentMeeting?.teamId]);
 
     if (R.isNil(currentTeam) || R.isNil(currentMeeting)) {
       return <Loading />;

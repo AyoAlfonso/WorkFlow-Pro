@@ -79,9 +79,6 @@ export const App = observer(
     const location = useLocation();
 
     useEffect(() => {
-      if (!profile) {
-        return history.push("/");
-      }
       const redirectToCheckIn = () => {
         const width = window.innerWidth <= 768;
         const id = profile?.id;
@@ -92,6 +89,14 @@ export const App = observer(
       };
       redirectToCheckIn();
     }, [profile]);
+
+    useEffect(() => {
+      setTimeout(() => {
+        if (!sessionStore?.loggedIn) {
+          return history.push("/");
+        }
+      }, 1000)
+    }, [sessionStore])
 
     let noFeatures;
     let showGoalRoute;

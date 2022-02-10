@@ -239,8 +239,8 @@ export class Api {
     return this.client.patch(`key_activities`, sortParams);
   }
 
-  async getAllGoals() {
-    return this.client.get("/goals");
+  async getAllGoals(status: string) {
+    return this.client.get(`/goals?status=${status}`);
   }
 
   async getObjectiveLogs(page: number, type: string, id: number) {
