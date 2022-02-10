@@ -54,7 +54,8 @@ export const GoalsIndex = observer(
     const [showCoreFour, setShowCoreFour] = useState<boolean>(true);
     const [showCompanyInitiatives, setShowCompanyInitiatives] = useState<boolean>(true);
     const [showPersonalInitiatives, setShowPersonalInitiatives] = useState<boolean>(true);
-    const [showLoading, setShowLoading] = useState<boolean>(false);
+    const [showCompanyLoading, setShowCompanyLoading] = useState<boolean>(false);
+    const [showPersonalLoading, setShowPersonalLoading] = useState<boolean>(false);
 
     const { t } = useTranslation();
     useEffect(() => {
@@ -65,14 +66,26 @@ export const GoalsIndex = observer(
     }, []);
 
     useEffect(() => {
-      if (companyGoalsFilter == "closed" || personalGoalsFilter == "closed") {
-        setShowLoading(true);
-        const res = getClosedGoal();
+      if (companyGoalsFilter == "closed") {
+        setShowCompanyLoading(true);
+        getClosedGoal().then((res) => {
         if (res) {
-          setShowLoading(false);
+          setShowCompanyLoading(false);
         }
+        });
       }
-    }, [companyGoalsFilter, personalGoalsFilter]);
+    }, [companyGoalsFilter]);
+
+    useEffect(() => {
+      if (personalGoalsFilter == "closed") {
+        setShowPersonalLoading(true);
+        getClosedGoal().then((res) => {
+        if (res) {
+          setShowPersonalLoading(false);
+        }
+        });
+      }
+    }, [personalGoalsFilter]);
 
     if (loading || R.isNil(goalStore.companyGoals) || !companyStore.company) {
       return <Loading />;
@@ -232,7 +245,7 @@ export const GoalsIndex = observer(
                       {renderCreateCompanyAnnualInitiativeSection("company")}
                     </CreateAnnualInitiativeContainer>
                   )}
-                  {showLoading ? (
+                  {showCompanyLoading ? (
                     <LoadingContainer>
                       <Loading />
                     </LoadingContainer>
@@ -267,7 +280,7 @@ export const GoalsIndex = observer(
                       {renderCreateCompanyAnnualInitiativeSection("personal")}
                     </CreateAnnualInitiativeContainer>
                   )}
-                  {showLoading ? (
+                  {showPersonalLoading ? (
                     <LoadingContainer>
                       <Loading />
                     </LoadingContainer>
@@ -373,4 +386,5 @@ const LoadingContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100%;
+  width: 100%;
 `;
