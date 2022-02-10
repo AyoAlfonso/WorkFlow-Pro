@@ -75,7 +75,6 @@ export const ScorecardTableView = observer(
     const [dropdownQuarter, setDropdownQuarter] = useState(
       company.currentFiscalQuarter + "_" + createGoalYearString,
     );
-
     const [targetWeek, setTargetWeek] = useState<number>(undefined);
     const [targetValue, setTargetValue] = useState<number>(undefined);
     const [tab, setTab] = useState<string>("KPIs");
