@@ -17,17 +17,19 @@
         "updateProfileAvatar": "Update Avatar",
         "growthPlan": "Billing & Plans",
         "notifications": "Notifications",
-        "security": "Security",
+        "security": "Reset Password",
         "switchCompanies": "Switch Profiles",
         "notificationsTable": {
-          "reminder": "Reminder",
-          "repeat": "Repeat",
-          "email": "Email"
+          "reminder": "REMINDER",
+          "repeat": "CADENCE",
+          "email": "EMAIL"
         },
         "editNotification": {
-          "reminder": "Reminder"
+          "day": "Day",
+          "time": "Time"
         },
         "meeting": "Meeting",
+        "customScorecard": "CUSTOM SCORECARD",
         "users": "Users",
         "teams": "Teams",
         "company": "Company",
@@ -67,13 +69,32 @@
           "password": "Password",
           "passwordConfirmation": "Password Confirmation",
           "updatePw": "Update Password",
-          "warningText": "Changing your password will log you out of all sessions Lynchpyn."
+          "warningText": "Changing your password will log you out of all Lynchpyn sessions."
         },
         "teamsManagement": {
           "header": "Manage Teams"
         },
+        "usersManagement": {
+          "header": "Manage Users"
+        },
+        "objectives": {
+          "header": "Objectives",
+          "general": {
+            "header": "GENERAL"
+          },
+          "statusUpdate": {
+            "header": "STATUS UPDATE",
+            "type": "Status Update Mode"
+          },
+          "coreFour": {
+            "header": "FOUNDATIONAL FOUR™"
+          },
+          "terminology": {
+            "header": "TERMINOLOGY"
+          }
+        },
         "meetingsManagement": {
-          "header": "Planning"
+          "header": "Meeting"
         },
         "habits": {
           "new": "Habit",
@@ -114,7 +135,7 @@
         "timezone": "Location/Time Zone",
         "executiveTeam" : "Leadership Team",
         "objectivesKeyType" : "Initiatives Tracking Method",
-        "objectivesPageLayout": "Objectives Page Layout",
+        "objectivesPageLayout": "Objectives Page Features",
         "layoutOptions": {
           "coreFour": "Foundational Four™",
           "personalGoals": "Personal Objectives"

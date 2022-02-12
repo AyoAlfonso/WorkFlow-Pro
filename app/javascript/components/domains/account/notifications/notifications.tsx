@@ -7,9 +7,10 @@ import {
   NotificationTableRowContainer,
   NotificationTableRowColumn,
   NotificationTableHeaderContainer,
+  TableHeader,
 } from "./notification-styles";
 import { IconContainer } from "../container-styles";
-import { Icon, Text } from "~/components/shared";
+import { Icon } from "~/components/shared";
 import { Container, HeaderContainer, HeaderText } from "../container-styles";
 import { observer } from "mobx-react";
 import { EditNotification } from "./";
@@ -110,13 +111,13 @@ const NotificationTableHeader = (): JSX.Element => {
     <NotificationTableHeaderContainer>
       <NotificationTableRowContainer>
         <NotificationTableRowColumn width={"30%"}>
-          <Text fontWeight={600}>{t("profile.notificationsTable.reminder")}</Text>
+          <TableHeader>{t("profile.notificationsTable.reminder")}</TableHeader>
         </NotificationTableRowColumn>
         <NotificationTableRowColumn width={"40%"}>
-          <Text fontWeight={600}>{t("profile.notificationsTable.repeat")}</Text>
+          <TableHeader>{t("profile.notificationsTable.repeat")}</TableHeader>
         </NotificationTableRowColumn>
         <NotificationTableRowColumn width={"10%"} justifyContent={"center"}>
-          <Text fontWeight={600}>{t("profile.notificationsTable.email")}</Text>
+          <TableHeader>{t("profile.notificationsTable.email")}</TableHeader>
         </NotificationTableRowColumn>
         <NotificationTableRowColumn
           width={"10%"}

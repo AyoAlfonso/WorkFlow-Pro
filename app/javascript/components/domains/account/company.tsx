@@ -47,36 +47,10 @@ export const Company = observer(
     const [name, setName] = useState(company.name);
     const [timezone, setTimezone] = useState(company.timezone);
     const [forumType, setForumType] = useState(company.forumType);
-    const [rallyingCry, setRallyingCry] = useState(company.rallyingCry);
-    const [core1Content, setCore1Content] = useState(company.coreFour.core1Content);
-    const [core2Content, setCore2Content] = useState(company.coreFour.core2Content);
-    const [core3Content, setCore3Content] = useState(company.coreFour.core3Content);
-    const [core4Content, setCore4Content] = useState(company.coreFour.core4Content);
     const [logoImageblub, setLogoImageblub] = useState<any | null>(null);
     const [logoImageForm, setLogoImageForm] = useState<FormData | null>(null);
     const [logoImageModalOpen, setLogoImageModalOpen] = useState<boolean>(false);
     const [executiveTeam, setExecutiveTeam] = useState<any>(null);
-    const [showCoreFour, setShowCoreFour] = useState<boolean>(
-      company?.preferences.foundationalFour
-    );
-    const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(
-      company?.preferences.companyObjectives
-    );
-    const [showPersonalGoals, setShowPersonalGoals] = useState<boolean>(
-      company?.preferences.personalObjectives
-    );
-    const [objectivesKeyType, setObjectivesKeyType] = useState<string>(
-      formatType[company.objectivesKeyType],
-    );
-    const [annualInitiativeTitle, setAnnualInitiativeTitle] = useState<string>(
-      sessionStore.annualInitiativeTitle,
-    );
-    const [quarterlyGoalTitle, setQuarterlyGoalTitle] = useState<string>(
-      sessionStore.quarterlyGoalTitle,
-    );
-    const [subInitiativeTitle, setSubInitiativeTitle] = useState<string>(
-      sessionStore.subInitiativeTitle,
-    );
     const currentUser = sessionStore.profile;
 
     const { t } = useTranslation();
@@ -136,38 +110,7 @@ export const Company = observer(
           {
             name,
             timezone,
-            rallyingCry,
             forumType,
-            objectivesKeyType:
-              objectivesKeyType?.charAt(0).toUpperCase() + objectivesKeyType?.slice(1),
-            coreFourAttributes: {
-              core_1: core1Content,
-              core_2: core2Content,
-              core_3: core3Content,
-              core_4: core4Content,
-            },
-            preferences: {
-              foundationalFour: showCoreFour,
-              companyObjectives: showCompanyGoals,
-              personalObjectives: showPersonalGoals,
-            },
-            companyStaticDatasAttributes: {
-              0: {
-                id: sessionStore.companyStaticData.find(item => item.field == "annual_objective")
-                  .id,
-                value: annualInitiativeTitle,
-              },
-              1: {
-                id: sessionStore.companyStaticData.find(
-                  item => item.field == "quarterly_initiative",
-                ).id,
-                value: quarterlyGoalTitle,
-              },
-              2: {
-                id: sessionStore.companyStaticData.find(item => item.field == "sub_initiative").id,
-                value: subInitiativeTitle,
-              },
-            },
           },
           false,
         ),
@@ -185,7 +128,7 @@ export const Company = observer(
       }
 
       Promise.all(promises).then(() => {
-        setTimeout(history.go, 1000, 0);
+        // setTimeout(history.go, 1000, 0);
       });
     };
 
@@ -348,143 +291,6 @@ export const Company = observer(
                       </option>
                     ))}
                   </Select>
-                  {ceoORAdmin && (
-                    <>
-                      <Label htmlFor="objectives_key_type">{t("company.objectivesKeyType")}</Label>
-                      <Select
-                        onChange={e => {
-                          e.preventDefault();
-                          setObjectivesKeyType(e.currentTarget.value);
-                        }}
-                        value={objectivesKeyType}
-                        style={{ minWidth: "200px", marginBottom: "16px" }}
-                      >
-                        {company?.objectivesKeyTypes &&
-                          Object.entries(company?.objectivesKeyTypes).map(([name, id]) => (
-                            <option key={`option-${id}`} value={name as string}>
-                              {(name?.charAt(0).toUpperCase() + name.slice(1))
-                                .match(/[A-Z][a-z]+|[0-9]+/g)
-                                .join(" ")}
-                            </option>
-                          ))}
-                      </Select>
-                    </>
-                  )}
-                  {ceoORAdmin && (
-                    <LayoutOptions>
-                      <Label htmlFor="objectives_page_layout">
-                        {t("company.objectivesPageLayout")}
-                      </Label>
-                      <LayoutOptionContainer>
-                        <LayoutOptionText>{t("company.layoutOptions.coreFour")}</LayoutOptionText>
-                        <FormGroup row>
-                          <Switch
-                            checked={showCoreFour}
-                            onChange={() => setShowCoreFour(!showCoreFour)}
-                            name="switch-checked"
-                          />
-                        </FormGroup>
-                      </LayoutOptionContainer>
-                      <LayoutOptionContainer>
-                        <LayoutOptionText>{`${companyStore.company.displayFormat} Objectives`}</LayoutOptionText>
-                        <FormGroup row>
-                          <Switch
-                            checked={showCompanyGoals}
-                            onChange={() => setShowCompanyGoals(!showCompanyGoals)}
-                            name="switch-checked"
-                          />
-                        </FormGroup>
-                      </LayoutOptionContainer>
-                      <LayoutOptionContainer>
-                        <LayoutOptionText>
-                          {t("company.layoutOptions.personalGoals")}
-                        </LayoutOptionText>
-                        <FormGroup row>
-                          <Switch
-                            checked={showPersonalGoals}
-                            onChange={() => setShowPersonalGoals(!showPersonalGoals)}
-                            name="switch-checked"
-                          />
-                        </FormGroup>
-                      </LayoutOptionContainer>
-                    </LayoutOptions>
-                  )}
-                  <Label htmlFor="rallying">{t("company.rallyingCry")}</Label>
-                  <Input
-                    name="rallyingCry"
-                    onChange={e => {
-                      setRallyingCry(e.target.value);
-                    }}
-                    value={rallyingCry}
-                  />
-                  <WYSIWYGLabel htmlFor="core1Content">{t("core.core1")}</WYSIWYGLabel>
-                  <ReactQuill
-                    className="custom-trix-class"
-                    theme="snow"
-                    placeholder="Please enter Why Do We Exist?"
-                    value={core1Content}
-                    onChange={setCore1Content}
-                  />
-
-                  <WYSIWYGLabel htmlFor="core_2">{t("core.core2")}</WYSIWYGLabel>
-                  <ReactQuill
-                    className="custom-trix-class"
-                    theme="snow"
-                    placeholder="Please enter How Do We Behave?"
-                    value={core2Content}
-                    onChange={setCore2Content}
-                  />
-
-                  <WYSIWYGLabel htmlFor="core_3">{t("core.core3")}</WYSIWYGLabel>
-                  <ReactQuill
-                    className="custom-trix-class"
-                    theme="snow"
-                    placeholder="Please enter How Do We Behave?"
-                    value={core3Content}
-                    onChange={setCore3Content}
-                  />
-
-                  <WYSIWYGLabel htmlFor="core_4">{t("core.core4")}</WYSIWYGLabel>
-                  <ReactQuill
-                    className="custom-trix-class"
-                    theme="snow"
-                    placeholder="Please enter How Do We Succeed?"
-                    value={core4Content}
-                    onChange={setCore4Content}
-                  />
-
-                  <CompanyStaticDataSection>
-                    <CompanyStaticDataArea>
-                      <Label htmlFor="annualInitiative">Annual Objective</Label>
-                      <Input
-                        name="annualInitiative"
-                        onChange={e => {
-                          setAnnualInitiativeTitle(e.target.value);
-                        }}
-                        value={annualInitiativeTitle}
-                      />
-                    </CompanyStaticDataArea>
-                    <CompanyStaticDataArea>
-                      <Label htmlFor="quarterlyGoal">Quarterly Initiative</Label>
-                      <Input
-                        name="quarterlyGoal"
-                        onChange={e => {
-                          setQuarterlyGoalTitle(e.target.value);
-                        }}
-                        value={quarterlyGoalTitle}
-                      />
-                    </CompanyStaticDataArea>
-                    <CompanyStaticDataArea>
-                      <Label htmlFor="subInitiative">Supporting Initiative</Label>
-                      <Input
-                        name="subInitiative"
-                        onChange={e => {
-                          setSubInitiativeTitle(e.target.value);
-                        }}
-                        value={subInitiativeTitle}
-                      />
-                    </CompanyStaticDataArea>
-                  </CompanyStaticDataSection>
                 </PersonalInfoContainer>
               </BodyContainer>
               <SaveButtonContainer>
@@ -493,7 +299,6 @@ export const Company = observer(
                   variant={"primary"}
                   onClick={save}
                   style={{
-                    marginLeft: "auto",
                     marginTop: "auto",
                     marginBottom: "24px",
                     marginRight: "24px",
@@ -509,30 +314,3 @@ export const Company = observer(
     );
   },
 );
-
-const CompanyStaticDataSection = styled.div`
-  margin-top: 16px;
-`;
-
-const CompanyStaticDataArea = styled.div`
-  margin-top: 8px;
-`;
-
-const WYSIWYGLabel = styled(Label)`
-  margin: 15px 0px;
-`;
-
-const LayoutOptionContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-`;
-
-const LayoutOptionText = styled(Text)`
-  margin: 0;
-`;
-
-const LayoutOptions = styled.div`
-  margin-bottom: 15px;
-`;
