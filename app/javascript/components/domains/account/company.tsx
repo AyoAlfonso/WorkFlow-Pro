@@ -135,9 +135,7 @@ export const Company = observer(
     return (
       <StretchContainer>
         <HeaderContainer>
-          <HeaderText>
-            {company.accessCompany ? t("profile.companyDetails") : t("profile.forumDetails")}
-          </HeaderText>
+          <HeaderText>{t("profile.generalSettings")}</HeaderText>
         </HeaderContainer>
 
         <Can

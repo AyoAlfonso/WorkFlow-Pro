@@ -33,8 +33,8 @@
         "users": "Users",
         "teams": "Teams",
         "company": "Company",
-        "editProfile": "Edit Profile",
-        "companyDetails": "Company Details",
+        "editProfile": "Profile",
+        "generalSettings": "General Settings",
         "forumDetails": "Forum Details",
         "descriptionTemplate": "Template Details",
         "loginForm": {
@@ -72,10 +72,10 @@
           "warningText": "Changing your password will log you out of all Lynchpyn sessions."
         },
         "teamsManagement": {
-          "header": "Manage Teams"
+          "header": "Teams"
         },
         "usersManagement": {
-          "header": "Manage Users"
+          "header": "Users"
         },
         "objectives": {
           "header": "Objectives",
