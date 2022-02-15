@@ -202,9 +202,9 @@ export function kpiPopup(kpi, open, setOpen, setCurkpi, setModalOpen) {
                             <StatusBadgeHover fontSize={"12px"}
                                               background={backgroundColor}
                                               color={fontColor}
-                                              height={"31px"}
-                                              width={"43px"}
-                                              hoverWidth={"31px"}
+                                              height={"32px"}
+                                              width={"48px"}
+                                              hoverWidth={"48px"}
                             >
                                 {progressScore(props.kpi)} %
                             </StatusBadgeHover>
@@ -352,28 +352,28 @@ const KPITitleContainer = styled.div`
 
 const KPITitle = styled.div`
   text-overflow: ellipsis;
-  font-size: 14px;
+  font-size: 16px;
   color: black;
-  max-width: 145px;
+  max-width: 135px;
   overflow: hidden;
 `;
 
 const LastUpdate = styled.div`
-  font-size: 9px;
+  font-size: 12px;
   margin-top: 5px;
   color: ${props => props.theme.colors.greyActive};
 `;
 
 const LastUpdateDate = styled.div`
-  font-size: 9px;
+  font-size: 12px;
   color: ${props => props.theme.colors.greyActive};
 `;
 
 const StatusContainer = styled.div`
   display: inline-block;
-  height: 31px;
-  width: 43px;
-  margin-top: 5px;
+  height: 32px;
+  width: 48px;
+  margin-top: 8px;
   justify-content: center;
   align-items: center;
   vertical-align: middle;
