@@ -68,3 +68,8 @@ export const TextNoMargin = props => (
     {props.children}
   </StyledTextNoMargin>
 );
+
+export const TableHeader = styled(Text)`
+  font-weight: bold;
+  color: ${props => props.theme.colors.grey100};
+`;
