@@ -12,6 +12,7 @@ import { Users } from "./users";
 import { Teams } from "./teams";
 import { Company } from "./company";
 import { TabsLayout } from "~/components/layouts/tabs-layout";
+import { Objectives } from "./objectives";
 
 export const AccountSettings = observer(
   (): JSX.Element => {
@@ -49,17 +50,21 @@ export const AccountSettings = observer(
         component: <Teams />,
       },
       {
-        name: companyStore.company.displayFormat,
+        name: "General Settings",
         component: <Company />,
       },
       {
-        name: "Security",
+        name: "Reset Password",
         component: <Security />,
       },
       {
         name: "Templates",
         component: <Templates />,
       },
+      {
+        name: "Objectives",
+        component: <Objectives />
+      }
     ];
 
     return <TabsLayout headerText={""} tabOptions={tabOptions} />;

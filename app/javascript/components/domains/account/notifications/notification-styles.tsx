@@ -9,6 +9,7 @@ import {
   space,
   SpaceProps,
 } from "styled-system";
+import { Text } from "~/components/shared";
 
 export const BodyContainer = styled.div`
   display: flex;
@@ -23,7 +24,6 @@ export const NotificationTableRowContainer = styled.div<ColorProps & SpaceProps>
   width: 100%;
   padding: 0 16px 0 16px;
   align-items: center;
-  justify-content: flex-start;
 `;
 
 export const NotificationTableRowColumn = styled.div<FlexboxProps & LayoutProps & SpaceProps>`
@@ -56,7 +56,10 @@ export const NotificationEditTableColumn = styled.div<FlexboxProps & LayoutProps
   ${layout}
   ${space}
   display: flex;
-  flex-direction: column;
-  width: 50%;
-  padding: 16px 16px 0 16px;
+  flex-direction: row;
+`;
+
+export const TableHeader = styled(Text)`
+  font-weight: bold;
+  color: ${props => props.theme.colors.grey100};
 `;

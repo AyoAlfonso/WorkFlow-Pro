@@ -134,7 +134,7 @@ export const Users = observer(
     return (
       <StretchContainer>
         <HeaderContainer>
-          <HeaderText>{t("profile.teamsManagement.header")}</HeaderText>
+          <HeaderText>{t("profile.usersManagement.header")}</HeaderText>
           <Can
             action={"create-user"}
             data={null}

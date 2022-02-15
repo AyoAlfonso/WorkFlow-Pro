@@ -66,13 +66,13 @@ export const TeamSettings = ({ team }: ITeamSettings): JSX.Element => {
         data={{ team, user: profile }}
         no={
           <TeamInfoContainer key={team.id}>
-            <Text fontSize={2}>{team.name}</Text>
-            <Text fontSize={1}> {t(`teams.customScorecard`)} </Text>
-
             <InputAndToggle>
-              <LabelContainer htmlFor="weekly_meeting_dashboard_link_embed">
-                You do not have access to this toggle
-              </LabelContainer>
+              <LabelAndNameContainer>
+                <StyledText>{team.name}</StyledText>
+                <LabelContainer htmlFor="weekly_meeting_dashboard_link_embed">
+                  You do not have access to this toggle
+                </LabelContainer>
+              </LabelAndNameContainer>
               <FormGroup row>
                 <StyledLabel
                   control={<Switch checked={toggleChecked} name="switch-checked" />}
@@ -91,13 +91,14 @@ export const TeamSettings = ({ team }: ITeamSettings): JSX.Element => {
         }
         yes={
           <TeamInfoContainer key={team.id}>
-            <Text fontSize={2}>{team.name}</Text>
-            <Text fontSize={1}> {t(`teams.customScorecard`)} </Text>
             <InputAndToggle>
-              <LabelContainer htmlFor="weekly_meeting_dashboard_link_embed">
-                You have access to your LynchPyn Scorecard by default in the meetings. To use your
-                own embedded scorecard or dashboard, activate the toggle.
-              </LabelContainer>
+              <LabelAndNameContainer>
+                <StyledText>{team.name}</StyledText>
+                <LabelContainer htmlFor="weekly_meeting_dashboard_link_embed">
+                  You have access to your LynchPyn Scorecard by default in the meetings. To use your
+                  own embedded scorecard or dashboard, activate the toggle.
+                </LabelContainer>
+              </LabelAndNameContainer>
               <FormGroup row>
                 <StyledLabel
                   control={
@@ -113,12 +114,13 @@ export const TeamSettings = ({ team }: ITeamSettings): JSX.Element => {
               </FormGroup>
             </InputAndToggle>
             {toggleChecked && (
-              <Input
+              <StyledInput
                 name="weekly_meeting_dashboard_link_embed"
                 value={teamSettingWeeklyDashboard}
                 onChange={e => {
                   saveSettings(e.target.value);
                 }}
+                placeholder="Enter embedded URL..."
               />
             )}
           </TeamInfoContainer>
@@ -133,8 +135,25 @@ const LabelContainer = styled(Label)`
   color: ${props => props.theme.colors.grey100};
 `;
 
+const LabelAndNameContainer = styled.div``;
+
 const InputAndToggle = styled.span`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
-const TeamInfoContainer = styled.div``;
+const TeamInfoContainer = styled.div`
+  margin-bottom: 20px;
+`;
+
+const StyledInput = styled(Input)`
+  &::placeholder {
+    font-size: 12px;
+  }
+`;
+
+const StyledText = styled(Text)`
+  font-size: 1em;
+  margin: 0;
+  margin-bottom: 16px;
+`;

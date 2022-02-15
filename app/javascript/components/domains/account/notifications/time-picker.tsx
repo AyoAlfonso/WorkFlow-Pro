@@ -11,6 +11,7 @@ export interface ITimePickerProps {
   endLimit?: string;
   step?: number;
   disabled?: boolean;
+  style?: object;
 }
 
 export const TimePicker = ({ ...props }: ITimePickerProps): JSX.Element => {
@@ -53,6 +54,7 @@ export const TimePicker = ({ ...props }: ITimePickerProps): JSX.Element => {
       onChange={props.onChange}
       name={props.name}
       disabled={props.disabled}
+      style={props.style}
     >
       {options}
     </Select>

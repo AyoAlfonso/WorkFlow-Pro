@@ -120,19 +120,7 @@ export const AccountProfile = observer(
                 />
               </PhotoContainer>
               <PhotoModificationButtonsSection>
-                <Button
-                  small
-                  variant={"redOutline"}
-                  onClick={deleteAvatar}
-                  mr={2}
-                  style={{ width: "120px" }}
-                >
-                  {t("general.remove")}
-                </Button>
-
-                <FileInput
-                  labelText={t("general.upload")}
-                  onChange={inputFileUpload} />
+                <FileInput labelText={t("general.upload")} onChange={inputFileUpload} />
 
                 {avatarImageModalOpen && (
                   <ImageCropperModal
@@ -143,6 +131,15 @@ export const AccountProfile = observer(
                     headerText={t("profile.updateProfileAvatar")}
                   />
                 )}
+                <Button
+                  small
+                  variant={"redOutline"}
+                  onClick={deleteAvatar}
+                  ml={2}
+                  style={{ width: "120px" }}
+                >
+                  {t("general.remove")}
+                </Button>
               </PhotoModificationButtonsSection>
             </ProfilePhotoWrapper>
           </ProfilePhotoSection>
@@ -153,7 +150,6 @@ export const AccountProfile = observer(
             variant={"primary"}
             onClick={save}
             style={{
-              marginLeft: "auto",
               marginTop: "auto",
               marginBottom: "24px",
               marginRight: "24px",
