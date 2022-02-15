@@ -121,26 +121,21 @@ export const AnnualInitiativeModalContent = memo(
           currentUser.role == RoleCEO ||
           currentUser.role == RoleAdministrator) &&
         !annualInitiative.closedInitiative;
-      
+
       const activeQuarterlyGoals = annualInitiative.activeQuarterlyGoals;
       const allQuarterlyGoals = annualInitiative.quarterlyGoals;
-      // const goalYearString =
-      //   companyStore.company.currentFiscalYear ==
-      //   companyStore.company.yearForCreatingAnnualInitiatives
-      //     ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-      //     : `FY${(companyStore.company.currentFiscalYear - 1)
-      //         .toString()
-      //         .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
 
-      const goalYearString =
-        1 + moment(companyStore.company.fiscalYearStart).month() > 1
-          ? `FY${annualInitiative.fiscalYear.toString().slice(-2)}/${(
-              annualInitiative.fiscalYear + 1
-            )
-              .toString()
-              .slice(-2)}`
-          : `FY${annualInitiative.fiscalYear.toString().slice(-2)}`;
+      const month = 1 + moment(companyStore.company.fiscalYearStart).month();
+      const day = moment(companyStore.company.fiscalYearStart).date();
+      const singleYearString = `FY${annualInitiative.fiscalYear.toString().slice(-2)}`;
+      const doubleYearString = `FY${annualInitiative.fiscalYear.toString().slice(-2)}/${(
+        annualInitiative.fiscalYear + 1
+      )
+        .toString()
+        .slice(-2)}`;
 
+      const goalYearString = month > 1 ? doubleYearString : month == 1 && day > 1 ? doubleYearString : singleYearString;
+  
       const renderQuarterlyGoals = () => {
         const quarterlyGoalsToDisplay = showAllQuarterlyGoals
           ? allQuarterlyGoals
