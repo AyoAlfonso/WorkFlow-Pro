@@ -17,6 +17,7 @@ export const CreateNewTeamModal = ({
       setModalOpen={setModalOpen}
       headerText={"Create Team"}
       width="480px"
+      headerFontSize="21px"
     >
       <ModifyTeamBody setModalOpen={setModalOpen} />
     </ModalWithHeader>

@@ -223,8 +223,8 @@ export function kpiPopup(kpi, open, setOpen, setCurkpi, setModalOpen) {
                       lastName={k.ownedBy.lastName}
                       defaultAvatarColor={k.ownedBy.defaultAvatarColor}
                       avatarUrl={k.ownedBy.avatarUrl}
-                      size={16}
-                      marginLeft="7px"
+                      size={20}
+                      marginLeft="10px"
                       marginRight="5px"
                       marginTop="0"
                       marginBottom="0px"
@@ -241,13 +241,14 @@ export function kpiPopup(kpi, open, setOpen, setCurkpi, setModalOpen) {
     
       return (
         <KPIPopup>
-            <PopupHeader>
-                Associated KPIs
-                <Spacer/>
-                <CloseIconContainerdd onClick={() => {setOpen(false);}}>
-                    <StyledIcon icon={"Close"} size={12} />
-                </CloseIconContainerdd>
-            </PopupHeader>
+          <PopupHeader>
+            <PopupHeaderText>
+              Associated KPIs
+            </PopupHeaderText>
+            <CloseIconContainerdd onClick={() => {setOpen(false);}}>
+              <StyledIcon icon={"Close"} size={16} />
+            </CloseIconContainerdd>
+          </PopupHeader>
             {listItems}
         </KPIPopup>
       )
@@ -283,23 +284,25 @@ const KPIPopup = styled.ul`
 `;
 
 const PopupHeader = styled.div`
-  padding-left: 11px;
-  color: black;
-  font-size: 13px;
-  justify-self: right;
-  margin-left: 0;
+  display: flex;
   margin-bottom: 11px;
+  justify-content: space-between;
 `;
 
-const Spacer = styled.div`
+const PopupHeaderText = styled.div`
   display: inline-block;
-  width: 113px;
-  height: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+  justify-self: right;
 `;
 
 const CloseIconContainerdd = styled.div`
   display: inline-block;
   justify-self: right;
+  margin-right: 16px;
   &:hover {
     cursor: pointer;
   }

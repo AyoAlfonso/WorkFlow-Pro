@@ -163,7 +163,6 @@ export const Templates = observer(
                   variant={"primary"}
                   onClick={save}
                   style={{
-                    marginLeft: "auto",
                     marginTop: "auto",
                     marginBottom: "24px",
                     marginRight: "24px",
