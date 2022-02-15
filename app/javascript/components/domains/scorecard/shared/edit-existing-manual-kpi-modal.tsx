@@ -102,7 +102,7 @@ export const AddExistingManualKPIModal = observer(
     const resetModal = () => {
       setTitle(undefined);
       setGreaterThan(true);
-      setDescription(undefined);
+      setDescription("");
       setUnitType("numerical");
       setOwner(sessionStore?.profile);
       setTargetValue(undefined);

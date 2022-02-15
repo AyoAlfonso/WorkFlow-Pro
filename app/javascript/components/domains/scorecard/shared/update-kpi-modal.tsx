@@ -28,7 +28,7 @@ interface MiniUpdateKPIModalProps {
   ownedById: number;
   unitType: string;
   year: number;
-  quarter?: number;
+  quarter?: any;
   week: number;
   fiscalYearStart?: string;
   currentValue: number | undefined;
@@ -91,11 +91,12 @@ export const MiniUpdateKPIModal = observer(
     }, [optionsRef, selectedDueDate]);
 
     useEffect(() => {
+  
       setSelectedDueDate(weekToDate(week, year));
     }, [showAdvancedSettings]);
 
     const handleSave = () => {
-      if (value != undefined) {
+      if (value) {
         const log = {
           keyPerformanceIndicatorId: kpiId,
           userId: sessionStore.profile.id,
@@ -103,11 +104,12 @@ export const MiniUpdateKPIModal = observer(
           note: null,
           week: currentWeek,
           fiscalYear: year,
-          fiscalQuarter: Math.round((currentWeek - 1) / 13) + 1,
+          fiscalQuarter: parseInt(quarter) || Math.round((currentWeek - 1) / 13) + 1,
         };
         if (comment != "") {
           log.note = comment;
         }
+      
         keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
           setUpdateKPIModalOpen(false);
           clearData();
@@ -119,7 +121,7 @@ export const MiniUpdateKPIModal = observer(
     };
 
     const handleChange = e => {
-      setValue(Number(e.target.value));
+      setValue(Number(e.target.value.replace(/[^0-9\.]+/g, "")));
     };
 
     const closeModal = () => {
@@ -186,6 +188,7 @@ export const MiniUpdateKPIModal = observer(
                   setSelectedDueDate={setSelectedDueDate}
                   setCurrentWeek={setCurrentWeek}
                   maxDate={weekToDate(week, year)}
+                  fiscalYearStart={fiscalYearStart}
                 />
               </FormElementContainer>
               <FormElementContainer />
