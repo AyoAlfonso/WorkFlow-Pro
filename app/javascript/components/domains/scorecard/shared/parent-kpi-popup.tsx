@@ -158,7 +158,7 @@ function progressScore(kpi) {
         kpi.parentType,
     )
     return (
-        ((percentScores[0] === null) ? 0 : percentScores[0])
+        Math.round((percentScores[0] === null) ? 0 : percentScores[0])
     );
 }
 

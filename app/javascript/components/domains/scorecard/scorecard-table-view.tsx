@@ -177,7 +177,15 @@ export const ScorecardTableView = observer(
       }
     };
 
-    const totalScore = (weeks: any, parentType: string) => {
+    const totalScore = (
+      weeks: any,
+      target: number,
+      greaterThan: boolean,
+      parentType: string,
+    ) => {
+      const getScore = (value: number, target: number, greaterThan: boolean) =>
+        greaterThan ? Math.round(value) : Math.round(target + target - value);
+
       const quarterScores = [
         [null, 0],
         [null, 0],
@@ -213,9 +221,10 @@ export const ScorecardTableView = observer(
       ];
       weeks.forEach(({ week, score }) => {
         const q = Math.floor((week - 1) / 13);
+        var numberscore = Number(score.toString().replace(/[^0-9.-]+/g, ""));
         if (quarterScores[q]) {
-          quarterScores[q][0] += score;
-          quarterScores[q][1]++;
+          quarterScores[q][0] += numberscore; // total score
+          quarterScores[q][1]++; // total number of weeks
         }
       });
       return quarterScores.map(tuple =>
@@ -311,7 +320,12 @@ export const ScorecardTableView = observer(
             kpi.parentType,
           );
 
-          const totalScores = totalScore(weeks, kpi.parentType);
+          const totalScores = totalScore(
+            weeks,
+            kpi.targetValue,
+            kpi.greaterThan,
+            kpi.parentType,
+          );
 
           row.score = percentScores;
           row.status = percentScores;

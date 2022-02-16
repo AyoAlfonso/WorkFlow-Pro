@@ -135,7 +135,7 @@ export const MiniUpdateKPIModal = observer(
     };
 
     const handleChange = e => {
-      setValue(Number(e.target.value.replace(/[^0-9\.]+/g, "")));
+      setValue(Number(e.target.value.replace(/[^0-9.-]+/g, "")));
     };
 
     const closeModal = () => {
