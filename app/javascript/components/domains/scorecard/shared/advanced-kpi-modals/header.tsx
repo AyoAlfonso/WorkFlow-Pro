@@ -71,6 +71,7 @@ const StyledSubHeader = styled.h3`
 const CloseIconContainer = styled.span`
   &:hover ${StyledIcon} {
     color: ${props => props.theme.colors.greyActive};
+    cursor: pointer;
   }
 `;
 

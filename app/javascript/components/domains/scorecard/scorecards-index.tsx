@@ -203,6 +203,9 @@ const FilterContainer = styled.div`
   display: flex;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 3px;
+  width: 8%;
+  float: left;
 `;
 type FilterOptionContainerType = {
   underline: boolean;

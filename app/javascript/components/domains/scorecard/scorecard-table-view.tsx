@@ -804,10 +804,11 @@ const TableContainer = styled.div`
 `;
 
 const TopRow = styled.div`
-  width: 100%;
+  width: 30%;
   display: flex;
   justify-content: space-between;
   margin-bottom: 16px;
+  float: right;
 `;
 
 const TabContainer = styled.div`
