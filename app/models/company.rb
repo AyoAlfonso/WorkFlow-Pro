@@ -9,19 +9,19 @@ class Company < ApplicationRecord
   enum objectives_key_type: { Milestones: 0, KeyResults: 1 }
   enum forum_type: { EO: 0, YPO: 1, Organisation: 2, Other: 3 }
   # has_many :users, dependent: :restrict_with_error #thi shas been replaced with default company
-  has_many :annual_initiatives, dependent: :restrict_with_error
-  has_many :teams, dependent: :restrict_with_error
+  has_many :annual_initiatives, dependent: :destroy
+  has_many :teams, dependent: :destroy
   has_many :company_static_datas, dependent: :destroy
   has_many :description_templates, dependent: :destroy
   has_one_attached :logo, dependent: :destroy
   has_one :sign_up_purpose, dependent: :destroy
-  accepts_nested_attributes_for :sign_up_purpose
+  accepts_nested_attributes_for :sign_up_purpose, :allow_destroy => true
 
   has_one :core_four, dependent: :destroy
   accepts_nested_attributes_for :core_four
 
-  has_many :user_company_enablements
-  has_many :users, through: :user_company_enablements
+  has_many :user_company_enablements,dependent: :destroy
+  has_many :users, through: :user_company_enablements, dependent: :destroy
 
   accepts_nested_attributes_for :description_templates, :allow_destroy => true
   accepts_nested_attributes_for :company_static_datas, :allow_destroy => true

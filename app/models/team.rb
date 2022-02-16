@@ -4,11 +4,11 @@ class Team < ApplicationRecord
   include ActiveRecordScope
   belongs_to :company
   has_many :team_user_enablements, dependent: :destroy
-  has_many :users, through: :team_user_enablements
-  has_many :issues
-  has_many :meetings
+  has_many :users, through: :team_user_enablements,  dependent: :destroy
+  has_many :issues,  dependent: :destroy
+  has_many :meetings, dependent: :destroy
   has_many :team_issues, dependent: :destroy
-  has_many :key_activities
+  has_many :key_activities,  dependent: :destroy
 
   store :settings, accessors: [:weekly_meeting_dashboard_link_embed], coder: JSON
 

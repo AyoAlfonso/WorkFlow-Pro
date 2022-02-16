@@ -28,7 +28,7 @@ interface MiniUpdateKPIModalProps {
   ownedById: number;
   unitType: string;
   year: number;
-  quarter?: number;
+  quarter?: any;
   week: number;
   fiscalYearStart?: string;
   currentValue: number | undefined;
@@ -39,7 +39,8 @@ interface MiniUpdateKPIModalProps {
   updateKPI?: any;
   setTargetWeek?: React.Dispatch<React.SetStateAction<number>>;
   setTargetValue?: React.Dispatch<React.SetStateAction<number>>;
-  currentFiscalQuarter: any;
+  // currentFiscalQuarter: any;
+  handleQuarterSelect?: any;
 }
 
 export const MiniUpdateKPIModal = observer(
@@ -57,9 +58,13 @@ export const MiniUpdateKPIModal = observer(
     setKpis,
     setTargetWeek,
     setTargetValue,
-    currentFiscalQuarter,
+    // currentFiscalQuarter,
+    handleQuarterSelect,
   }: MiniUpdateKPIModalProps): JSX.Element => {
     const history = useHistory();
+    const {
+      companyStore: { company },
+    } = useMst();
 
     const weekToDate = (week: number, year: number) =>
       moment(findNextMonday(fiscalYearStart))
@@ -94,8 +99,17 @@ export const MiniUpdateKPIModal = observer(
       setSelectedDueDate(weekToDate(week, year));
     }, [showAdvancedSettings]);
 
+    const setDefaultSelectionQuarter = week => {
+      return week <= 13 ? 1 : week <= 26 ? 2 : week <= 39 ? 3 : 4;
+    };
+    const createGoalYearString =
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+        : `FY${(company.currentFiscalYear - 1)
+            .toString()
+            .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
     const handleSave = () => {
-      if (value != undefined) {
+      if (value) {
         const log = {
           keyPerformanceIndicatorId: kpiId,
           userId: sessionStore.profile.id,
@@ -103,11 +117,13 @@ export const MiniUpdateKPIModal = observer(
           note: null,
           week: currentWeek,
           fiscalYear: year,
-          fiscalQuarter: Math.round((currentWeek - 1) / 13) + 1,
+          fiscalQuarter:
+            setDefaultSelectionQuarter(currentWeek) || Math.round((currentWeek - 1) / 13) + 1,
         };
         if (comment != "") {
           log.note = comment;
         }
+
         keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
           setUpdateKPIModalOpen(false);
           clearData();
@@ -186,6 +202,7 @@ export const MiniUpdateKPIModal = observer(
                   setSelectedDueDate={setSelectedDueDate}
                   setCurrentWeek={setCurrentWeek}
                   maxDate={weekToDate(week, year)}
+                  fiscalYearStart={fiscalYearStart}
                 />
               </FormElementContainer>
               <FormElementContainer />
