@@ -548,7 +548,6 @@ export const ViewEditKPIModal = observer(
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
             setKpis={setKpis}
             fiscalYearStart={company.fiscalYearStart}
-            currentFiscalQuarter={company.currentFiscalQuarter}
           />
         )}
       </>

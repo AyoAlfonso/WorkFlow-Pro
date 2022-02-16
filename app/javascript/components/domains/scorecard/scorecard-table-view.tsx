@@ -120,9 +120,6 @@ export const ScorecardTableView = observer(
       dairyCream,
     } = baseTheme.colors;
 
-    // const setTableData =  => {
-
-    // }
     const formatValue = (unitType: string, value: number) => {
       switch (unitType) {
         case "percentage":
@@ -259,17 +256,8 @@ export const ScorecardTableView = observer(
 
     useEffect(() => {
       handleQuarterSelect(dropdownQuarter);
+      localStorage.removeItem("cacheDropdownQuarter");
     }, [year]);
-
-    useEffect(() => {
-      handleQuarterSelect(
-        company.currentFiscalQuarter +
-          "_" +
-          createGoalYearString +
-          "_" +
-          company.yearForCreatingAnnualInitiatives.toString(),
-      );
-    }, []);
     const data = useMemo(
       () =>
         KPIs?.sort(sortByDateReverse).map((kpi: any) => {
@@ -397,7 +385,7 @@ export const ScorecardTableView = observer(
                 fontSize: "14px",
               }}
             >
-              KPIs {quarter} {company.currentFiscalQuarter}
+              KPIs
             </div>
           ),
           accessor: "title",
@@ -640,7 +628,6 @@ export const ScorecardTableView = observer(
       setYear(parseInt(year));
       setQuarter(quarter);
       setDropdownQuarter(dq);
-      localStorage.setItem("cacheDropdownQuarter", dq);
       setHiddenColumns(getHiddenWeeks(quarter));
     };
 
@@ -771,20 +758,16 @@ export const ScorecardTableView = observer(
             ownedById={updateKPI.ownedById}
             unitType={updateKPI.unitType}
             year={year || company.yearForCreatingAnnualInitiatives}
-            quarter={quarter}
             week={targetWeek || company.currentFiscalWeek}
             currentValue={targetValue || updateKPI.currentValue}
             headerText={targetWeek ? `Update Week ${targetWeek}` : " Update Current Week "}
             updateKPIModalOpen={updateKPIModalOpen}
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
-            // setTableData={setTableData}
             setKpis={setKpis}
             updateKPI={updateKPI}
-            // setUpdateKPI={setUpdateKPI}
             setTargetWeek={setTargetWeek}
             setTargetValue={setTargetValue}
             fiscalYearStart={fiscalYearStart}
-            currentFiscalQuarter={quarter}
             handleQuarterSelect={handleQuarterSelect}
           />
         )}

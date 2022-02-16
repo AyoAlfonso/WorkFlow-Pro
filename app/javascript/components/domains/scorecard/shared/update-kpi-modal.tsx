@@ -39,7 +39,7 @@ interface MiniUpdateKPIModalProps {
   updateKPI?: any;
   setTargetWeek?: React.Dispatch<React.SetStateAction<number>>;
   setTargetValue?: React.Dispatch<React.SetStateAction<number>>;
-  currentFiscalQuarter: any;
+  // currentFiscalQuarter: any;
   handleQuarterSelect?: any;
 }
 
@@ -58,10 +58,13 @@ export const MiniUpdateKPIModal = observer(
     setKpis,
     setTargetWeek,
     setTargetValue,
-    currentFiscalQuarter,
+    // currentFiscalQuarter,
     handleQuarterSelect,
   }: MiniUpdateKPIModalProps): JSX.Element => {
     const history = useHistory();
+    const {
+      companyStore: { company },
+    } = useMst();
 
     const weekToDate = (week: number, year: number) =>
       moment(findNextMonday(fiscalYearStart))
@@ -99,6 +102,12 @@ export const MiniUpdateKPIModal = observer(
     const setDefaultSelectionQuarter = week => {
       return week <= 13 ? 1 : week <= 26 ? 2 : week <= 39 ? 3 : 4;
     };
+    const createGoalYearString =
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+        : `FY${(company.currentFiscalYear - 1)
+            .toString()
+            .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
     const handleSave = () => {
       if (value) {
         const log = {
