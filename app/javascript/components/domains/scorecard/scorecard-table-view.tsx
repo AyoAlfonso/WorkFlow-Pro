@@ -186,7 +186,7 @@ export const ScorecardTableView = observer(
       ];
       weeks.forEach(({ week, score }) => {
         const q = Math.floor((week - 1) / 13);
-        console.log(q)
+        console.log(q);
         if (quarterScores[q]) {
           quarterScores[q][0] += score;
           quarterScores[q][1]++;
@@ -417,7 +417,7 @@ export const ScorecardTableView = observer(
           minWidth: "86px",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
-            console.log(quarter, value, quarterValue);
+            console.log(row, quarter, value, quarterValue, row.original);
             const { relatedParentKpis, parentKpi, id } = row.original.updateKPI;
             const { greaterThan } = row.original;
 
