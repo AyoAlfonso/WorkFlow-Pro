@@ -24,7 +24,7 @@ export const AnnualInitiativeCardMinimized = observer(
     showMinimizedCard,
   }: IAnnualInitiativeCardMinimizedProps): JSX.Element => {
     const { companyStore, sessionStore } = useMst();
-    const { currentFiscalYear } = companyStore.company;
+    const { yearForCreatingAnnualInitiatives } = companyStore.company;
     const {
       warningRed,
       cautionYellow,
@@ -51,7 +51,7 @@ export const AnnualInitiativeCardMinimized = observer(
       statusBadge.description = `Closed - FY${annualInitiative.fiscalYear %
         100}/${(annualInitiative.fiscalYear + 1) % 100}`;
       statusBadge.colors = { color: white, backgroundColor: grey100 };
-    } else if (currentFiscalYear < annualInitiative.fiscalYear) {
+    } else if (yearForCreatingAnnualInitiatives < annualInitiative.fiscalYear) {
       statusBadge.description = `Upcoming - FY${annualInitiative.fiscalYear %
         100}/${(annualInitiative.fiscalYear + 1) % 100}`;
       statusBadge.colors = { color: white, backgroundColor: primary100 };
