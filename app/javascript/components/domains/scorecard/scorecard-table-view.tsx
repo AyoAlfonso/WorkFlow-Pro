@@ -261,6 +261,15 @@ export const ScorecardTableView = observer(
       handleQuarterSelect(dropdownQuarter);
     }, [year]);
 
+    useEffect(() => {
+      handleQuarterSelect(
+        company.currentFiscalQuarter +
+          "_" +
+          createGoalYearString +
+          "_" +
+          company.yearForCreatingAnnualInitiatives.toString(),
+      );
+    }, []);
     const data = useMemo(
       () =>
         KPIs?.sort(sortByDateReverse).map((kpi: any) => {
@@ -473,10 +482,10 @@ export const ScorecardTableView = observer(
               <StatusContainer>
                 <StatusBadge
                   fontSize={"12px"}
-                  color={quarterValue.color}
-                  background={quarterValue.background}
+                  color={quarterValue?.color}
+                  background={quarterValue?.background}
                 >
-                  {quarterValue.text}
+                  {quarterValue?.text}
                 </StatusBadge>
               </StatusContainer>
             );
@@ -776,6 +785,7 @@ export const ScorecardTableView = observer(
             setTargetValue={setTargetValue}
             fiscalYearStart={fiscalYearStart}
             currentFiscalQuarter={quarter}
+            handleQuarterSelect={handleQuarterSelect}
           />
         )}
       </>

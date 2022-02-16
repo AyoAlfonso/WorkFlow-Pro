@@ -40,6 +40,7 @@ interface MiniUpdateKPIModalProps {
   setTargetWeek?: React.Dispatch<React.SetStateAction<number>>;
   setTargetValue?: React.Dispatch<React.SetStateAction<number>>;
   currentFiscalQuarter: any;
+  handleQuarterSelect?: any;
 }
 
 export const MiniUpdateKPIModal = observer(
@@ -58,6 +59,7 @@ export const MiniUpdateKPIModal = observer(
     setTargetWeek,
     setTargetValue,
     currentFiscalQuarter,
+    handleQuarterSelect,
   }: MiniUpdateKPIModalProps): JSX.Element => {
     const history = useHistory();
 
@@ -91,10 +93,12 @@ export const MiniUpdateKPIModal = observer(
     }, [optionsRef, selectedDueDate]);
 
     useEffect(() => {
-  
       setSelectedDueDate(weekToDate(week, year));
     }, [showAdvancedSettings]);
 
+    const setDefaultSelectionQuarter = week => {
+      return week <= 13 ? 1 : week <= 26 ? 2 : week <= 39 ? 3 : 4;
+    };
     const handleSave = () => {
       if (value) {
         const log = {
@@ -104,12 +108,13 @@ export const MiniUpdateKPIModal = observer(
           note: null,
           week: currentWeek,
           fiscalYear: year,
-          fiscalQuarter: parseInt(quarter) || Math.round((currentWeek - 1) / 13) + 1,
+          fiscalQuarter:
+            setDefaultSelectionQuarter(currentWeek) || Math.round((currentWeek - 1) / 13) + 1,
         };
         if (comment != "") {
           log.note = comment;
         }
-      
+
         keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
           setUpdateKPIModalOpen(false);
           clearData();
