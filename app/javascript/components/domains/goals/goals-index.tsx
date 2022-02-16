@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { AnnualInitiativeCard } from "./annual-initiative/annual-initiative-card";
 import { Loading } from "../../shared/loading";
 import Modal from "styled-react-modal";
+import moment from "moment";
 import { AnnualInitiativeModalContent } from "./annual-initiative/annual-initiative-modal-content";
 import { QuarterlyGoalModalContent } from "./quarterly-goal/quarterly-goal-modal-content";
 import { observer } from "mobx-react";
@@ -68,10 +69,10 @@ export const GoalsIndex = observer(
     useEffect(() => {
       if (companyGoalsFilter == "closed") {
         setShowCompanyLoading(true);
-        getClosedGoal().then((res) => {
-        if (res) {
-          setShowCompanyLoading(false);
-        }
+        getClosedGoal().then(res => {
+          if (res) {
+            setShowCompanyLoading(false);
+          }
         });
       }
     }, [companyGoalsFilter]);
@@ -79,10 +80,10 @@ export const GoalsIndex = observer(
     useEffect(() => {
       if (personalGoalsFilter == "closed") {
         setShowPersonalLoading(true);
-        getClosedGoal().then((res) => {
-        if (res) {
-          setShowPersonalLoading(false);
-        }
+        getClosedGoal().then(res => {
+          if (res) {
+            setShowPersonalLoading(false);
+          }
         });
       }
     }, [personalGoalsFilter]);
@@ -157,7 +158,7 @@ export const GoalsIndex = observer(
           return personalGoals;
       }
     };
-
+    
     const renderCreateCompanyAnnualInitiativeSection = (type): JSX.Element => {
       const showCreateAnnualInitiative =
         type == "company" ? showCreateCompanyAnnualInitiative : showCreatePersonalAnnualInitiative;
@@ -166,13 +167,35 @@ export const GoalsIndex = observer(
           ? setShowCreateCompanyAnnualInitiative
           : setShowCreatePersonalAnnualInitiative;
 
-      const createGoalYearString =
-        companyStore.company.currentFiscalYear ==
-        companyStore.company.yearForCreatingAnnualInitiatives
-          ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-          : `FY${(companyStore.company.currentFiscalYear - 1)
+      const today = moment();
+      const year = companyStore.company.yearForCreatingAnnualInitiatives;
+      const month = 1 + moment(companyStore.company.fiscalYearStart).month();
+      const day = moment(companyStore.company.fiscalYearStart).date();
+
+      const nextFiscalYearStart = moment(`${year + 1}/${month}/${day}`, "YYYY-MM-DD");
+
+      const weeksToNextFiscalYear = nextFiscalYearStart.diff(today, "week");
+
+      const singleYearString =
+        weeksToNextFiscalYear < 4
+          ? `FY${(companyStore.company.yearForCreatingAnnualInitiatives + 1).toString().slice(-2)}`
+          : `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`;
+
+      const doubleYearString =
+        weeksToNextFiscalYear < 4
+          ? `FY${(companyStore.company.yearForCreatingAnnualInitiatives + 1).toString().slice(-2)}/${(
+              companyStore.company.yearForCreatingAnnualInitiatives + 2
+            )
               .toString()
-              .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
+              .slice(-2)}`
+          : `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}/${(
+              companyStore.company.yearForCreatingAnnualInitiatives + 1
+            )
+              .toString()
+              .slice(-2)}`;
+
+      const createGoalYearString =
+        month > 1 ? doubleYearString : month == 1 && day > 1 ? doubleYearString : singleYearString;
 
       return (
         <CreateGoalSection
