@@ -377,7 +377,6 @@ export const SideNavNoMst = (
 
       {company &&
       company.accessForum &&
-      productFeatures.meeting &&
       !R.isNil(R.path(["0", "id"], teams)) ? (
         <SideNavChildPopup
           trigger={
