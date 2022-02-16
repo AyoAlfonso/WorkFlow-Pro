@@ -58,7 +58,7 @@ export const AnnualInitiativeModalContent = memo(
         descriptionTemplateStore: { descriptionTemplates },
       } = useMst();
 
-      const { currentFiscalYear, currentFiscalQuarter } = companyStore.company;
+      const { currentFiscalYear, yearForCreatingAnnualInitiatives } = companyStore.company;
 
       const currentUser = sessionStore.profile;
 
@@ -241,7 +241,7 @@ export const AnnualInitiativeModalContent = memo(
               )}
             </TitleContainer>
             <DetailsContainer>
-              {currentFiscalYear < annualInitiative.fiscalYear && (
+              {yearForCreatingAnnualInitiatives < annualInitiative.fiscalYear && (
                 <UpcomingBadgeContainer>
                   <UpcomingCircleIcon />
                   <UpcomingText>Upcoming</UpcomingText>
@@ -359,7 +359,7 @@ export const AnnualInitiativeModalContent = memo(
           )}
           <Container>
             {renderHeader()}
-            {currentFiscalYear < annualInitiative.fiscalYear && (
+            {yearForCreatingAnnualInitiatives < annualInitiative.fiscalYear && (
               <UpcomingMessage fiscalTime={goalYearString} goalType="Initiative" />
             )}
             <SectionContainer>

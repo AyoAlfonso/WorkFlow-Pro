@@ -395,7 +395,7 @@ export const KeyElement = observer(
           return true;
         }
       } else if (type == "annualInitiative") {
-        if (company.currentFiscalYear < object.fiscalYear) {
+        if (company.yearForCreatingAnnualInitiatives < object.fiscalYear) {
           setDisabled(true);
           return true;
         }
