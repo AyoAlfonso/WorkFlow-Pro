@@ -14,10 +14,10 @@ ActiveAdmin.register Company do
                 :display_format,
                 :forum_type,
                 :onboarding_status,
-                core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4],
-                company_static_datas_attributes: [:id, :value],
-                description_templates_attributes: [:id, :title, :body]
-  
+                core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4, :_destroy],
+                company_static_datas_attributes: [:id, :value,  :_destroy],
+                description_templates_attributes: [:id, :title, :body, :_destroy] 
+
   index do
     selectable_column
     id_column
