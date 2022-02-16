@@ -6,6 +6,7 @@ import { useEffect, useState, useRef, memo } from "react";
 import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
 import * as R from "ramda";
+import moment from "moment";
 import { UserDefaultIcon } from "~/components/shared/user-default-icon";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
 import { OwnedBySection } from "../shared/owned-by-section";
@@ -26,7 +27,11 @@ import { sortByDate } from "~/utils/sorting";
 import ReactQuill from "react-quill";
 import { ActivityLogs } from "../shared/activity-logs";
 import { UpcomingMessage } from "../shared/upcoming-objective-message";
-import { UpcomingBadgeContainer, UpcomingCircleIcon, UpcomingText } from "../shared-quarterly-goal-and-sub-initiative/initiative-header";
+import {
+  UpcomingBadgeContainer,
+  UpcomingCircleIcon,
+  UpcomingText,
+} from "../shared-quarterly-goal-and-sub-initiative/initiative-header";
 
 interface IAnnualInitiativeModalContentProps {
   annualInitiativeId: number;
@@ -119,14 +124,18 @@ export const AnnualInitiativeModalContent = memo(
 
       const activeQuarterlyGoals = annualInitiative.activeQuarterlyGoals;
       const allQuarterlyGoals = annualInitiative.quarterlyGoals;
-      const goalYearString =
-        companyStore.company.currentFiscalYear ==
-        companyStore.company.yearForCreatingAnnualInitiatives
-          ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-          : `FY${(companyStore.company.currentFiscalYear - 1)
-              .toString()
-              .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
 
+      const month = 1 + moment(companyStore.company.fiscalYearStart).month();
+      const day = moment(companyStore.company.fiscalYearStart).date();
+      const singleYearString = `FY${annualInitiative.fiscalYear.toString().slice(-2)}`;
+      const doubleYearString = `FY${annualInitiative.fiscalYear.toString().slice(-2)}/${(
+        annualInitiative.fiscalYear + 1
+      )
+        .toString()
+        .slice(-2)}`;
+
+      const goalYearString = month > 1 ? doubleYearString : month == 1 && day > 1 ? doubleYearString : singleYearString;
+  
       const renderQuarterlyGoals = () => {
         const quarterlyGoalsToDisplay = showAllQuarterlyGoals
           ? allQuarterlyGoals
@@ -232,10 +241,12 @@ export const AnnualInitiativeModalContent = memo(
               )}
             </TitleContainer>
             <DetailsContainer>
-              {currentFiscalYear < annualInitiative.fiscalYear && <UpcomingBadgeContainer>
-                <UpcomingCircleIcon />
-                <UpcomingText>Upcoming</UpcomingText>
-              </UpcomingBadgeContainer>}
+              {currentFiscalYear < annualInitiative.fiscalYear && (
+                <UpcomingBadgeContainer>
+                  <UpcomingCircleIcon />
+                  <UpcomingText>Upcoming</UpcomingText>
+                </UpcomingBadgeContainer>
+              )}
               <IconContainer>
                 <Icon icon={"Initiative"} size={"16px"} iconColor={"grey80"} />
                 <YearText type={"small"}>{annualObjectiveValue}</YearText>
@@ -348,7 +359,9 @@ export const AnnualInitiativeModalContent = memo(
           )}
           <Container>
             {renderHeader()}
-            {currentFiscalYear < annualInitiative.fiscalYear && <UpcomingMessage fiscalTime={goalYearString} goalType="Initiative" />}
+            {currentFiscalYear < annualInitiative.fiscalYear && (
+              <UpcomingMessage fiscalTime={goalYearString} goalType="Initiative" />
+            )}
             <SectionContainer>
               <Context
                 activeInitiatives={activeQuarterlyGoals.length}
