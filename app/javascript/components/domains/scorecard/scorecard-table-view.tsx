@@ -73,15 +73,12 @@ export const ScorecardTableView = observer(
           )
             .toString()
             .slice(-2)}`;
-    const setDefaultSelectionQuarter = (week, q) => {
-      return week == 13 ? 1 : week == 26 ? 2 : week == 39 ? 3 : q;
+    const setDefaultSelectionQuarter = week => {
+      return week == 13 ? 1 : week == 26 ? 2 : week == 39 ? 3 : 4;
     };
     const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
     const [quarter, setQuarter] = useState<number>(
-      setDefaultSelectionQuarter(
-        company.currentFiscalWeek,
-        Math.round((company.currentFiscalWeek - 1) / 13) + 1,
-      ),
+      setDefaultSelectionQuarter(company.currentFiscalWeek),
     );
     const cacheDropdownQuarter = !!getValueOfLocalStorage("cacheDropdownQuarter")
       ? getValueOfLocalStorage("cacheDropdownQuarter")
@@ -186,7 +183,7 @@ export const ScorecardTableView = observer(
       ];
       weeks.forEach(({ week, score }) => {
         const q = Math.floor((week - 1) / 13);
-        console.log(q);
+
         if (quarterScores[q]) {
           quarterScores[q][0] += score;
           quarterScores[q][1]++;
@@ -417,7 +414,6 @@ export const ScorecardTableView = observer(
           minWidth: "86px",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
-            console.log(row, quarter, value, quarterValue, row.original);
             const { relatedParentKpis, parentKpi, id } = row.original.updateKPI;
             const { greaterThan } = row.original;
 
