@@ -39,8 +39,6 @@ interface MiniUpdateKPIModalProps {
   updateKPI?: any;
   setTargetWeek?: React.Dispatch<React.SetStateAction<number>>;
   setTargetValue?: React.Dispatch<React.SetStateAction<number>>;
-  // currentFiscalQuarter: any;
-  handleQuarterSelect?: any;
 }
 
 export const MiniUpdateKPIModal = observer(
@@ -58,8 +56,6 @@ export const MiniUpdateKPIModal = observer(
     setKpis,
     setTargetWeek,
     setTargetValue,
-    // currentFiscalQuarter,
-    handleQuarterSelect,
   }: MiniUpdateKPIModalProps): JSX.Element => {
     const history = useHistory();
     const {
@@ -123,7 +119,14 @@ export const MiniUpdateKPIModal = observer(
         if (comment != "") {
           log.note = comment;
         }
-
+        localStorage.setItem(
+          "cacheDropdownQuarter",
+          setDefaultSelectionQuarter(currentWeek) +
+            "_" +
+            createGoalYearString +
+            "_" +
+            company.yearForCreatingAnnualInitiatives.toString(),
+        );
         keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
           setUpdateKPIModalOpen(false);
           clearData();
