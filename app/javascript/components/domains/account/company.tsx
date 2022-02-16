@@ -191,17 +191,16 @@ export const Company = observer(
                       )}
                     </PhotoContainer>
                     <PhotoModificationButtonsSection>
+                      <FileInput labelText={t("general.upload")} onChange={inputFileUpload} />
                       <Button
                         small
                         variant={"redOutline"}
                         onClick={deleteLogo}
-                        mr={2}
+                        ml={2}
                         style={{ width: "120px" }}
                       >
                         {t("general.remove")}
                       </Button>
-
-                      <FileInput labelText={t("general.upload")} onChange={inputFileUpload} />
 
                       {logoImageModalOpen && (
                         <ImageCropperModal
