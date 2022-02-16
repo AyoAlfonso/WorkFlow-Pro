@@ -24,6 +24,8 @@ import { ScorecardKPIDropdownOptions } from "./scorecard-dropdown-options";
 import "~/stylesheets/modules/trix-editor.css";
 import { debounce } from "lodash";
 import { Button } from "~/components/shared/button";
+import { kpiPopup } from "./parent-kpi-popup";
+import { kpiViewerName } from "./parent-kpi-popup";
 import { findNextMonday } from "~/utils/date-time";
 
 interface ViewEditKPIModalProps {
@@ -32,6 +34,7 @@ interface ViewEditKPIModalProps {
   viewEditKPIModalOpen: boolean;
   setKpis: any;
   setShowEditExistingKPIContainer: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentSelectedKpi?: React.Dispatch<any>;
 }
 
 export const ViewEditKPIModal = observer(
@@ -41,6 +44,7 @@ export const ViewEditKPIModal = observer(
     viewEditKPIModalOpen,
     setKpis,
     setShowEditExistingKPIContainer,
+    setCurrentSelectedKpi,
   }: ViewEditKPIModalProps): JSX.Element => {
     const {
       companyStore: { company },
@@ -63,6 +67,7 @@ export const ViewEditKPIModal = observer(
     const [showDropdownOptionsContainer, setShowDropdownOptionsContainer] = useState<boolean>(
       false,
     );
+    const [popupOpen, setPopupOpen] = useState(false);
 
     const headerRef = useRef(null);
 
@@ -86,6 +91,8 @@ export const ViewEditKPIModal = observer(
       tango,
     } = baseTheme.colors;
 
+    const [functionSymbolIconColor, setFunctionSymbolIconColor] = useState(greyInactive);
+
     const formatValue = (value: number, unitType: string) => {
       if (value === undefined) {
         return "...";
@@ -107,10 +114,26 @@ export const ViewEditKPIModal = observer(
       }
     };
 
+    const closeKPI = () => {
+      if (confirm(`Are you sure you want to archive this KPI`)) {
+        keyPerformanceIndicatorStore.toggleKPIStatus().then(() => {
+          closeModal();
+        });
+      }
+    };
+
     const updateKPI = () => {
       if (confirm(`Are you sure you want to edit this KPI`)) {
         closeModal();
         setShowEditExistingKPIContainer(true);
+      }
+    };
+
+    const openKPI = () => {
+      if (confirm(`Are you sure you want to open this KPI`)) {
+        keyPerformanceIndicatorStore.toggleKPIStatus().then(() => {
+          closeModal();
+        });
       }
     };
 
@@ -258,8 +281,13 @@ export const ViewEditKPIModal = observer(
       });
     };
 
+    const closePopup = () => {
+      setPopupOpen(false);
+    };
+
     const closeModal = () => {
       setViewEditKPIModalOpen(false);
+      closePopup();
     };
 
     useEffect(() => {
@@ -343,15 +371,21 @@ export const ViewEditKPIModal = observer(
                     </OwnerAndLogicText>
                     <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
-                      {R.uniq(kpi?.viewers.map(viewer => viewer.type)).join(", ")} KPI
+                      {R.uniq(kpi?.viewers.map(viewer => kpiViewerName(viewer))).join(", ")} KPI
                     </OwnerAndLogicText>
 
                     <Icon icon={"Initiative"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText>{logic}</OwnerAndLogicText>
                     {kpi?.parentType && (
                       <KPITypeContainer>
-                        <KPITypeIcon icon={"Function"} size={16} iconColor={greyInactive} />
-                        <KPIParentTypeText> {formatKpiType(kpi?.parentType)} </KPIParentTypeText>
+                        <KPITypeWrapper onMouseEnter={() => {setFunctionSymbolIconColor(primary100)}}
+                                        onMouseLeave={() => {setFunctionSymbolIconColor(greyInactive)}}
+                                        onClick={() => {setPopupOpen(!popupOpen)}}
+                        >
+                          <KPITypeIcon icon={"Function"} size={16} iconColor={functionSymbolIconColor}/>
+                          <KPIParentTypeText> {formatKpiType(kpi?.parentType)} </KPIParentTypeText>
+                        </KPITypeWrapper>
+                        <Pop><PopupContainer>{kpiPopup(kpi, popupOpen, setPopupOpen, setCurrentSelectedKpi, setViewEditKPIModalOpen)}</PopupContainer></Pop>
                       </KPITypeContainer>
                     )}
                   </OwnerAndLogicContainer>
@@ -359,26 +393,46 @@ export const ViewEditKPIModal = observer(
                     <MissingParentsErrorContainer shadow={true}>
                       <MissingKPIIcon icon={"Warning-PO"} size={"24px"} iconColor={greyInactive} />
                       <MissingParentsTexts>
-                        <MissingParentsErrorTitle>This KPI is Broken</MissingParentsErrorTitle>
+                        <MissingParentsErrorTitle>
+                          {" "}
+                          {kpi.closedAt ? "This KPI is closed" : "This KPI is Broken"}
+                        </MissingParentsErrorTitle>
                         <MissingParentsErrorBody>
-                          One or more KPIs related to this Advacned Function KPI are removed. As a
-                          result this KPI cannot be calculated. We recommend that you edit this KPI
-                          to fix this issue.
+                          {kpi.closedAt
+                            ? `You have closed this KPI. If this was a mistake, click on "Open KPI" to reactivate this. You can also delete the KPI if you don't wish to keep the date for future reference.`
+                            : `One or more KPIs related to this Advacned Function KPI are removed. As a
+                          result this KPI cannot be calculated. We should open this KPI for you to continue using it to track your scorecard 
+                          to fix this issue`}
                         </MissingParentsErrorBody>
                       </MissingParentsTexts>
                       <MissingParentsButtons>
                         <ButtonContainer>
-                          <KPIButton
-                            small
-                            variant={"primary"}
-                            m={1}
-                            style={{ width: "90%", fontSize: "12px", fontWeight: "bold" }}
-                            onClick={() => {
-                              updateKPI();
-                            }}
-                          >
-                            Edit
-                          </KPIButton>
+                          {kpi.closedAt ? (
+                            <KPIButton
+                              small
+                              variant={"primary"}
+                              m={1}
+                              style={{ width: "90%", fontSize: "12px", fontWeight: "bold" }}
+                              onClick={() => {
+                                openKPI();
+                              }}
+                            >
+                              Open
+                            </KPIButton>
+                          ) : (
+                            <KPIButton
+                              small
+                              variant={"primary"}
+                              m={1}
+                              style={{ width: "90%", fontSize: "12px", fontWeight: "bold" }}
+                              onClick={() => {
+                                updateKPI();
+                              }}
+                            >
+                              Edit
+                            </KPIButton>
+                          )}
+
                           <KPIButton
                             small
                             variant={"redOutline"}
@@ -494,13 +548,21 @@ export const ViewEditKPIModal = observer(
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
             setKpis={setKpis}
             fiscalYearStart={company.fiscalYearStart}
-            currentFiscalQuarter={company.currentFiscalQuarter}
           />
         )}
       </>
     );
   },
 );
+
+const PopupContainer = styled.div`
+  position: absolute;
+  padding-top: 15px;
+`;
+
+const Pop = styled.div`
+  position: relative;
+`;
 
 const Container = styled.div`
   width: 100%;
@@ -684,6 +746,15 @@ const KPITypeContainer = styled.div`
   display: flex;
   color: ${props => props.theme.colors.grey100};
 `;
+
+const KPITypeWrapper = styled.div`
+display: flex;
+  &:hover {
+    cursor: pointer;
+    color: ${props => props.theme.colors.primary100};
+  }
+`;
+
 const KPITypeIcon = styled(Icon)``;
 
 const KPIParentTypeText = styled.div`
@@ -701,6 +772,7 @@ const BrokenCircleIcon = styled.div`
 `;
 
 const MissingParentsErrorContainer = styled.div<MissingParentsErrorContainerProps>`
+  width: 95%;
   display: inline-flex;
   background: ${props => props.theme.colors.grey10};
   height: 75px;

@@ -48,8 +48,8 @@ class Api::AnnualInitiativesController < Api::ApplicationController
                   owned_by_id: params[:owned_by], completion_current_value: params[:completion_current_value],
                   completion_target_value: params[:completion_target_value])
     # ObjectiveLog.create!(objective_log_params)
-    #MERGE IN MODEL
-    render json: { key_element: key_element.as_json,  status: :ok }
+    #MERGE IN MODEL 
+    render  template: "api/key_elements/_key_element", locals: { key_element: key_element }
   end
 
   def update_key_element
@@ -58,9 +58,8 @@ class Api::AnnualInitiativesController < Api::ApplicationController
     authorize @annual_initiative
     key_element.update!(value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], owned_by_id: params[:owned_by],
                         status: params[:status], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
-
-    # ObjectiveLog.create!(objective_log_params)
-    render json: { key_element: key_element.as_json,  status: :ok }
+  
+    render  template: "api/key_elements/_key_element", locals: { key_element: key_element }
   end
 
   def delete_key_element
@@ -75,7 +74,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   def team
     @team_id = params[:team_id]
     @company = current_company
-    @annual_initiatives = policy_scope(AnnualInitiative).user_current_company(current_company.id).order(fiscal_year: :desc)  #.for_company_current_year_and_future(@company.current_fiscal_year)        
+    @annual_initiatives = policy_scope(AnnualInitiative).user_current_company(current_company.id).order(fiscal_year: :desc)
     authorize @annual_initiatives
     render "api/annual_initiatives/team"
   end
@@ -88,10 +87,6 @@ class Api::AnnualInitiativesController < Api::ApplicationController
 
   def key_elements_params
     params.permit(key_elements_attributes: [:id, :completed_at, :elementable_id, :value, :completion_type, :completion_current_value, :completion_target_value])
-  end
-
-  def objective_log_params
-    params.require(:objective_log_attributes).permit(:owned_by_id, :score, :note, :objecteable_id, :objecteable_type, :fiscal_quarter, :fiscal_year, :week)
   end
 
   def set_annual_initiative

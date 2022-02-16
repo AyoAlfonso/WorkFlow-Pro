@@ -26,7 +26,7 @@ ActiveAdmin.register CheckInTemplate do
       if @step_atrributes.present?
         @check_in_templates_steps = @step_atrributes.values
         @check_in_templates_steps.each do |step|
-          Step.create!({
+          CheckInTemplatesStep.create!({
             step_type: step[:step_type],
             order_index: step[:order_index],
             name: step[:name],

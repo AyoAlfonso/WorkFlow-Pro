@@ -119,6 +119,7 @@ export const EditUserModal = ({
       setModalOpen={setEditUserModalOpen}
       headerText={userId ? t("company.editUser.title") : t("company.createUser.addButton")}
       width="35rem"
+      headerFontSize="21px"
     >
       <Container>
         <FlexContainer>

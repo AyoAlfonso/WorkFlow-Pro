@@ -48,7 +48,7 @@ interface ITabsLayoutInterface {
 }
 
 export const TabsLayout = ({ headerText, tabOptions }: ITabsLayoutInterface): JSX.Element => {
-  const [selectedTab, setSelectedTab] = useState<string>(R.path([0, "name"], tabOptions));
+  const [selectedTab, setSelectedTab] = useState<string>("Profile");
 
   const renderOptionComponent = (): JSX.Element => {
     const indexForTabOptions = tabOptions.findIndex(tab => tab.name == selectedTab);
@@ -75,18 +75,48 @@ export const TabsLayout = ({ headerText, tabOptions }: ITabsLayoutInterface): JS
     });
   };
 
+  const navigation = [
+    {
+      header: "YOUR ACCOUNT",
+      subHeaders: ["Profile", "Notifications", "Reset Password"],
+    },
+    {
+      header: "COMPANY",
+      subHeaders: ["General Settings", "Users", "Teams"],
+    },
+    {
+      header: "FEATURES",
+      subHeaders: ["Meeting", "Objectives", "Templates"],
+    },
+  ];
+
   return (
     <Container>
-      <Header> {headerText}</Header>
-      <SelectionContainer>
-        <SelectionTabsContainer>{renderOptionHeaders()}</SelectionTabsContainer>
-      </SelectionContainer>
-      <DisplayBoxContainer selectedTab={selectedTab}>{renderOptionComponent()}</DisplayBoxContainer>
+      <SideBar>
+        {navigation.map(nav => (
+          <Section>
+            <SideBarHeader>{nav.header}</SideBarHeader>
+            {nav.subHeaders.map(sub => (
+              <SideBarSubHeader onClick={() => setSelectedTab(sub)} active={selectedTab == sub}>
+                {sub}
+              </SideBarSubHeader>
+            ))}
+          </Section>
+        ))}
+      </SideBar>
+      <ContentContainer>{renderOptionComponent()}</ContentContainer>
     </Container>
   );
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+  height: 100%;
+  margin-left: -40px;
+  margin-top: -31px;
+  margin-right: -40px;
+  height: calc(100vh - 130px);
+  display: flex;
+`;
 
 const Header = styled.p`
   font-size: 24px;
@@ -136,4 +166,52 @@ const DisplayBoxContainer = styled(HomeContainerBorders)<DisplayBoxContainerType
   width: 70%;
   margin-top: 10px;
   min-width: ${props => (props.selectedTab == "company" ? "1200px" : "950px")};
+`;
+
+const SideBar = styled.div`
+  width: 18%;
+  max-width: 240px;
+  background: ${props => props.theme.colors.backgroundGrey};
+  height: 100%;
+  padding: 32px;
+`;
+const SideBarHeader = styled(Text)`
+  font-size: 16px;
+  color: ${props => props.theme.colors.grey100};
+  text-align: left-align;
+  font-weight: bold;
+  margin: 0;
+  margin-bottom: 16px;
+`;
+
+type SideBarSubHeaderProps = {
+  active: boolean;
+};
+
+const SideBarSubHeader = styled(Text)<SideBarSubHeaderProps>`
+  font-size: 15px;
+  color: ${props => (props.active ? props.theme.colors.primary100 : props.theme.colors.black)};
+  margin: 0;
+  margin-left: 16px;
+  margin-bottom: 10px;
+  font-weight: ${props => (props.active ? "bold" : "normal")};
+  cursor: pointer;
+
+  &:hover {
+    color: ${props => props.theme.colors.primary100};
+    font-weight: bold;
+  }
+`;
+
+const Section = styled.div`
+  margin-bottom: 18px;
+`;
+
+const ContentContainer = styled.div`
+  padding: 32px;
+  width: 82%;
+  max-width: 1280px;
+  overflow-y: auto;
+  height: 100%;
+  overscroll-behavior: contain;
 `;

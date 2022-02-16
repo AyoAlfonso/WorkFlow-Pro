@@ -11,6 +11,10 @@ interface ICreateKeyElementModalProps {
   type: any;
   setSelectedElement: any;
   setActionType: any;
+  keysForOnboarding?: any;
+  callbackForOnboarding?: any;
+  showAddButton?: any;
+  item?: any;
 }
 
 ///we are rendering both the empty and full containers with one body and modal, if we separate t
@@ -24,6 +28,10 @@ export const KeyElementModal = ({
   type,
   setSelectedElement,
   setActionType,
+  keysForOnboarding,
+  callbackForOnboarding,
+  showAddButton,
+  item,
 }: ICreateKeyElementModalProps): JSX.Element => {
   return (
     <ModalWithHeader
@@ -44,8 +52,13 @@ export const KeyElementModal = ({
         <CreateKeyElementBody
           setModalOpen={setModalOpen}
           store={store}
+          keysForOnboarding={keysForOnboarding}
+          callbackForOnboarding={callbackForOnboarding}
+          type={type}
           setActionType={setActionType}
           setSelectedElement={setSelectedElement}
+          showAddButton={showAddButton}
+          item={item}
         />
       ) : (
         <EditKeyElementBody

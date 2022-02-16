@@ -26,8 +26,10 @@ export const KpiComponent = observer(
     const { t } = useTranslation();
 
     const {
-      profile: { id },
+      profile
     } = sessionStore;
+
+    const id = profile?.id
 
     const { weekOf } = useParams();
 
@@ -70,9 +72,7 @@ export const KpiComponent = observer(
 
     const renderLoading = () => (
       <LoadingContainer>
-        <BodyContainer>
-          <Loading />
-        </BodyContainer>
+        <Loading />
       </LoadingContainer>
     );
 
@@ -144,18 +144,20 @@ export const KpiComponent = observer(
 
 const Container = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  padding-left: 16px;
+  padding-right: 16px;
   @media only screen and (max-width: 768px) {
     padding: 0 16px;
   }
 `;
 
-const LoadingContainer = styled.div``;
-
-const BodyContainer = styled.div`
+const LoadingContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 8px;
   justify-content: center;
+  align-items: center;
+  height: 100%;
 `;
 
 const StyledHeader = styled.h1`

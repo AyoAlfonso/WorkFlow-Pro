@@ -6,12 +6,15 @@ class Api::CompaniesController < Api::ApplicationController
   skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
 
   def create
+
+
     @company = Company.new({
       display_format: params[:display_format],
       fiscal_year_start: params[:fiscal_year_start],
       name: params[:name],
       timezone: params[:timezone],
       forum_type: params[:forum_type],
+      # TODO:
     })
     authorize @company
     @company.save!
@@ -105,8 +108,15 @@ class Api::CompaniesController < Api::ApplicationController
       end
 
       @milestone = @quarterly_goal.milestones.first
-      @milestone.update!(description: params[:annual_initiative][:quarterly_goals][0][:milestones][0][:description])
-
+      onboarding_milestone = params[:annual_initiative][:quarterly_goals][0][:milestones][0]
+      onboarding_key_element = params[:annual_initiative][:quarterly_goals][0][:key_elements][0]
+      @milestone.update!(description: onboarding_milestone[:description])
+      KeyElement.create!(elementable: @quarterly_goal,
+                  value: onboarding_key_element[:value], completion_type: onboarding_key_element[:completion_type],
+                  greater_than: onboarding_key_element[:greater_than],
+                  owned_by_id: onboarding_key_element[:owned_by],
+                  completion_target_value: onboarding_key_element[:completion_target_value])
+                  
       @annual_initiative = annual_initiative.as_json(only: [:id, :created_by, :owned_by, :importance, :description, :key_elements, :company_id, :context_description, :fiscal_year],
                                                      include: {
                                                        quarterly_goals: {

@@ -43,12 +43,16 @@ const initialState = {
   goalStore: {
     companyGoals: null,
     personalGoals: null,
+    closedCompanyGoals: null,
+    closedPersonalGoals: null,
   },
   annualInitiativeStore: {
     annualInitiative: null,
+    objectiveLogs: null,
   },
   quarterlyGoalStore: {
     quarterlyGoal: null,
+    objectiveLogs: null,
   },
   habitStore: {
     habits: [],
@@ -60,6 +64,9 @@ const initialState = {
   journalStore: {},
   teamStore: {
     teams: [],
+  },
+  keyElementStore: {
+    keyElementsForWeeklyCheckin: null,
   },
   meetingStore: {
     currentMeeting: null,
@@ -82,6 +89,7 @@ const initialState = {
   },
   subInitiativeStore: {
     subInitiative: null,
+    objectiveLogs: null,
   },
   scorecardStore: {
     kpis: [],

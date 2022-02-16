@@ -28,6 +28,24 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: @subject)
   end
 
+  def weekly_check_in_report_stats_email
+    @user = params[:user]
+    @subject = params[:subject]
+    @message = params[:message]
+    @greeting = params[:greeting]
+    @preheader = params[:preheader]
+    @start_date = params[:start_date]
+    @end_date = params[:end_date]
+    @name = params[:name]
+    @team = params[:team]
+    @kpis = params[:kpis]
+    @initiatives = params[:initiatives]
+    @cta_text = params[:cta_text]
+    @cta_url = params[:cta_url]
+    mail(to: @user.email, subject: @subject)
+  end
+
+
   def weekly_planning_email
     @user = params[:user]
     @subject = params[:subject]
@@ -44,8 +62,6 @@ class UserMailer < ApplicationMailer
     @next_week_pyns = @user.key_activities.where(completed_at: nil).where("due_date <= ?", end_of_next_week)
     @next_quarterly_milestones = Milestone.current_week_for_user(beginning_of_next_week, @user, "QuarterlyGoal")
     @next_subinitiative_milestones = Milestone.current_week_for_user(beginning_of_next_week, @user, "SubInitiative")
-    # week_to_review_start_time = get_beginning_of_last_or_current_work_week_date(@user.time_in_user_timezone)
-    # @meeting = Meeting.first_or_create_for_weekly_planning_on_email(@user, week_to_review_start_time)
     @cta_text = params[:cta_text]
     @cta_url = params[:cta_url]
     mail(to: @user.email, subject: @subject)

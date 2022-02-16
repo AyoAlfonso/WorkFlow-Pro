@@ -4,7 +4,6 @@ import { space, SpaceProps } from "styled-system";
 
 export const Container = styled.div`
   width: 100%;
-  height: 600px;
 `;
 
 export const StretchContainer = styled.div`
@@ -15,12 +14,16 @@ export const StretchContainer = styled.div`
 
 export const BodyContainer = styled.div`
   display: flex;
-  padding: 16px;
 `;
 
-export const PersonalInfoContainer = styled.div`
+type PersonalInfoContainerProps = {
+  mr?: string;
+};
+
+export const PersonalInfoContainer = styled.div<PersonalInfoContainerProps>`
   width: 70%;
   padding-right: 10%;
+  margin-right: ${props => (props.mr ? props.mr : "")};
 `;
 
 type ProfilePhotoSectionType = {
@@ -38,17 +41,18 @@ export const ProfilePhotoWrapper = styled.div``;
 
 export const HeaderContainer = styled.div`
   align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #e3e3e3;
   display: flex;
   justify-content: space-between;
   height: 30px;
+  margin-bottom: 24px;
 `;
 
 export const HeaderText = styled(Text)`
   font-size: 20px;
   font-weight: bold;
+  font-family: Exo;
   margin: 0;
+  color: ${props => props.theme.colors.black};
 `;
 
 export const PhotoContainer = styled.div`
@@ -66,7 +70,7 @@ export const PhotoModificationButtonsSection = styled.div`
 
 export const SaveButtonContainer = styled.div`
   display: flex;
-  margin-top: 120px;
+  margin-top: 100px;
   margin-right: 20px;
 `;
 

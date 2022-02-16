@@ -15,13 +15,13 @@ class Company < ApplicationRecord
   has_many :description_templates, dependent: :destroy
   has_one_attached :logo, dependent: :destroy
   has_one :sign_up_purpose, dependent: :destroy
-  accepts_nested_attributes_for :sign_up_purpose
+  accepts_nested_attributes_for :sign_up_purpose, :allow_destroy => true
 
   has_one :core_four, dependent: :destroy
   accepts_nested_attributes_for :core_four
 
-  has_many :user_company_enablements, dependent: :destroy
-  has_many :users, through: :user_company_enablements
+  has_many :user_company_enablements,dependent: :destroy
+  has_many :users, through: :user_company_enablements, dependent: :destroy
 
   accepts_nested_attributes_for :description_templates, :allow_destroy => true
   accepts_nested_attributes_for :company_static_datas, :allow_destroy => true

@@ -47,4 +47,4 @@ dump.rdb
 db/schema.rb
 /.out
 
-/coverage
+coverage/

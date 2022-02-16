@@ -13,7 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 interface IUserSelectionDropdownListProps {
   userList: Array<UserType>;
   onUserSelect: any;
-  setShowUsersList?: any;
+  setShowUsersList: any;
   setOwner?: any;
 }
 
@@ -38,12 +38,15 @@ export const UserSelectionDropdownList = ({
 
   return (
     <ActionDropdownContainer>
+      <IconContainer onClick={() => setShowUsersList(false)}>
+        <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
+      </IconContainer>
       <Autocomplete
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue);
           onUserSelect(newValue);
-          setOwner(newValue);
+          setOwner && setOwner(newValue);
           setShowUsersList(false);
         }}
         filterOptions={(options, params) => {
@@ -77,6 +80,7 @@ export const UserSelectionDropdownList = ({
         openOnFocus={true}
         style={{ width: 300, height: "auto" }}
         freeSolo
+        clearOnEscape
         renderInput={params => (
           <TextField
             {...params}
@@ -102,6 +106,8 @@ const ActionDropdownContainer = styled.div`
   margin-top: 5px;
   height: auto;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
 `;
 
 const CloseIconContainer = styled.div`
@@ -122,4 +128,9 @@ const UserOptionText = styled(Text)`
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 12px;
+`;
+
+const IconContainer = styled.div`
+  margin-left: auto;
+  cursor: pointer;
 `;

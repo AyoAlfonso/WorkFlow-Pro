@@ -16,24 +16,24 @@ class User < ApplicationRecord
   before_save :sanitize_personal_vision
   after_create :create_default_notifications
   delegate :name, :timezone, to: :default_selected_company, prefix: "company", allow_nil: true
-  has_many :issues
-  has_many :key_activities
-  has_many :created_quarterly_goals, :foreign_key => "created_by_id", :class_name => "QuarterlyGoal"
-  has_many :owned_quarterly_goals, :foreign_key => "owned_by_id", :class_name => "QuarterlyGoal"
-  has_many :created_annual_initiatives, :foreign_key => "created_by_id", :class_name => "AnnualInitiative"
-  has_many :owned_annual_initiatives, :foreign_key => "owned_by_id", :class_name => "AnnualInitiative"
+  has_many :issues, dependent: :destroy
+  has_many :key_activities, dependent: :destroy
+  has_many :created_quarterly_goals, :foreign_key => "created_by_id", :class_name => "QuarterlyGoal", dependent: :destroy
+  has_many :owned_quarterly_goals, :foreign_key => "owned_by_id", :class_name => "QuarterlyGoal", dependent: :destroy
+  has_many :created_annual_initiatives, :foreign_key => "created_by_id", :class_name => "AnnualInitiative", dependent: :destroy
+  has_many :owned_annual_initiatives, :foreign_key => "owned_by_id", :class_name => "AnnualInitiative", dependent: :destroy
   has_many :meeting_ratings
   has_many :daily_logs, dependent: :destroy
-  has_one_attached :avatar
-  has_many :questionnaire_attempts
+  has_one_attached :avatar, dependent: :destroy
+  has_many :questionnaire_attempts, dependent: :destroy
   has_many :product_features, dependent: :destroy
-  has_many :key_performance_indicators
+  has_many :key_performance_indicators, dependent: :destroy
   has_many :score_card_logs
   has_many :habits, dependent: :destroy
   has_many :team_user_enablements, dependent: :destroy
   has_many :teams, through: :team_user_enablements
   has_many :notifications, dependent: :destroy
-  has_many :meetings, :foreign_key => "hosted_by_id"
+  has_many :meetings, :foreign_key => "hosted_by_id", dependent: :destroy
   has_many :user_company_enablements, dependent: :destroy
   has_many :companies, through: :user_company_enablements
   has_many :user_pulses, dependent: :destroy

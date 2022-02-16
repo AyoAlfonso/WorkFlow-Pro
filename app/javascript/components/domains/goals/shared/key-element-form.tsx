@@ -15,7 +15,13 @@ interface IKeyElementFormProps {
   onCreate: (keyElementParams: any) => void;
   onClose: () => void;
   setActionType: any;
+  type?: any;
   setSelectedElement: any;
+  keysForOnboarding?: any;
+  callbackForOnboarding?: any;
+  showAddButton?: any;
+  item?: any;
+  store?: any;
 }
 
 export const KeyElementForm = ({
@@ -23,8 +29,14 @@ export const KeyElementForm = ({
   onClose,
   setActionType,
   setSelectedElement,
+  type,
+  keysForOnboarding,
+  callbackForOnboarding,
+  showAddButton,
+  item,
+  store,
 }: IKeyElementFormProps): JSX.Element => {
-  const { userStore, sessionStore } = useMst();
+  const { userStore, sessionStore, companyStore } = useMst();
   const { users } = userStore;
   const [title, setTitle] = useState<string>("");
   const [completionType, setCompletionType] = useState<string>("numerical");
@@ -49,42 +61,63 @@ export const KeyElementForm = ({
     setCompletionType("numerical");
     setCompletionTargetValue("");
     setCondition(0);
-    setOwnedBy(0);
     setActionType("Add");
     setSelectedElement(null);
+  };
+
+  const parseTarget = target => {
+    let val = target;
+    if (val.includes("$")) {
+      val = val.split("$")[1];
+    }
+    if (val.includes(",")) {
+      val = val.split(",").join("");
+    }
+    return val;
   };
 
   const createKeyElement = () => {
     const keyElementParams = {
       value: title,
       completionType,
-      completionTargetValue: completionTargetValue.includes("$")
-        ? completionTargetValue.split("$")[1]
-        : completionTargetValue,
+      completionTargetValue: completionType == "binary" ? 0 : parseTarget(completionTargetValue),
       greaterThan: Number(condition),
       ownedBy: ownedBy.id,
     };
+    if (type === "onboarding") {
+      return callbackForOnboarding(keysForOnboarding, keyElementParams);
+    }
     onCreate(keyElementParams);
   };
 
+  const createMilestones = () => {
+    if (companyStore.company.objectivesKeyType == "Milestones" || !item || type === "onboarding")
+      return;
+    if (item.milestones.length) {
+      return;
+    } else {
+      store.createMilestones(item.id);
+    }
+  };
+
   const isValid =
-    !R.isEmpty(title) &&
-    !R.isEmpty(completionType) &&
-    !R.isNil(completionTargetValue) &&
-    completionTargetValue &&
-    !R.isNil(ownedBy) &&
-    !R.isNil(condition);
+    !R.isEmpty(title) && !R.isEmpty(completionType) && completionType == "binary"
+      ? true
+      : !R.isEmpty(completionTargetValue) && !R.isNil(ownedBy) && !R.isNil(condition);
 
   const handleSave = () => {
     if (isValid) {
       createKeyElement();
+      createMilestones();
       onClose();
+      showAddButton && showAddButton(false);
     }
   };
 
   const handleSaveAndAddAnother = () => {
     if (isValid) {
       createKeyElement();
+      createMilestones();
       resetForm();
     }
   };
@@ -220,15 +253,17 @@ export const KeyElementForm = ({
         >
           <TextDiv fontSize={"12px"}>Save</TextDiv>
         </Button>
-        <Button
-          style={{ padding: "8px 16px" }}
-          variant={"primaryOutline"}
-          onClick={handleSaveAndAddAnother}
-          small
-          disabled={!isValid}
-        >
-          <TextDiv fontSize={"12px"}>Save & Add Another</TextDiv>
-        </Button>
+        {type !== "onboarding" && (
+          <Button
+            style={{ padding: "8px 16px" }}
+            variant={"primaryOutline"}
+            onClick={handleSaveAndAddAnother}
+            small
+            disabled={!isValid}
+          >
+            <TextDiv fontSize={"12px"}>Save & Add Another</TextDiv>
+          </Button>
+        )}
       </ButtonRowContainer>
     </Container>
   );

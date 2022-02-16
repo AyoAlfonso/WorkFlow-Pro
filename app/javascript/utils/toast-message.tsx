@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ToastMessage } from "../components/shared/toaster";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { ToastMessageConstants } from "../constants/toast-types";
 import { baseTheme } from "../themes/base";
 

@@ -239,8 +239,12 @@ export class Api {
     return this.client.patch(`key_activities`, sortParams);
   }
 
-  async getAllGoals() {
-    return this.client.get("/goals");
+  async getAllGoals(status: string) {
+    return this.client.get(`/goals?status=${status}`);
+  }
+
+  async getObjectiveLogs(page: number, type: string, id: number) {
+    return this.client.get(`/objective_logs/page/${page}?type=${type}&id=${id}&per=10`);
   }
 
   async getAnnualInitiative(id) {
@@ -278,6 +282,14 @@ export class Api {
 
   async deleteAnnualInitiativeKeyElement(keyElementId) {
     return this.client.delete(`/annual_initiatives/delete_key_element/${keyElementId}`);
+  }
+
+  async createInitiativeLog(objectiveLogs) {
+    return this.client.post(`/objective_logs`, objectiveLogs);
+  }
+
+  async deleteInitiativeLog(id) {
+    return this.client.delete(`/objective_logs/${id}`);
   }
 
   async getQuarterlyGoal(id) {
@@ -389,7 +401,7 @@ export class Api {
   }
 
   async updateHabitLog(habitId: number, logDate: string) {
-    return this.client.put(`/habits/${habitId}/habit_logs/${logDate}`);
+    return this.client.put(`/habits/${habitId}/habit_logs/${logDate}`, {});
   }
 
   async getQuestionnaires() {
@@ -595,6 +607,12 @@ export class Api {
   async deleteKPI(id) {
     return this.client.delete(`/key_performance_indicator/${id}`);
   }
+  async toggleKPIStatus(id) {
+    return this.client.patch(`/key_performance_indicator/toggle_status/${id}`);
+  }
+  async openKPI(id) {
+    return this.client.patch(`/key_performance_indicator/open_kpi/${id}`);
+  }
 
   async createScorecardLog(scorecardLog) {
     return this.client.post(`scorecard_logs`, scorecardLog);
@@ -620,6 +638,14 @@ export class Api {
 
   async getWeeklyCheckinMilestones(weekOf) {
     return this.client.get(`milestones/check_in/${weekOf}`);
+  }
+
+  async getWeeklyCheckinKeyElements() {
+    return this.client.get(`/key_elements/check_in`);
+  }
+
+  async updateWeeklyCheckInKeyElements(id, value) {
+    return this.client.put(`/key_elements/${id}`, value);
   }
   //async setJWT(jwt) {}
 }

@@ -57,9 +57,9 @@ class StaticDataService < ApplicationService
         stepLabel: "Tell us more about yourself",
       },
       "1": {
-        heading: "Foundational Four™",
-        description: "Tell us more about your {displayFormat}.  If you don't have all the answers, enter as much as possible and continue.  You can also skip if you want to do this later.",
-        stepLabel: "Your Foundational Four™",
+        heading: "Scorecard",
+        description: "What are some key metrics that you wnat to keep an eye on? Add one or more KPIs and try updating them using the button on the the far left of each KPI.",
+        stepLabel: "Create your first KPI",
       },
       "2": {
         heading: "Objectives",
@@ -67,9 +67,9 @@ class StaticDataService < ApplicationService
         stepLabel: "Create your first Objective",
       },
       "3": {
-        heading: "Pyns",
-        description: "Pyns are the LynchPyn version of to-dos.  Review the Weekly Milestone you just defined; what can you do today towards it?  Add it as a Pyn.",
-        stepLabel: "Add your first Pyn",
+        heading: "Foundational Four™",
+        description: "Tell us more about your {displayFormat}.  If you don't have all the answers, enter as much as possible and continue.  You can also skip if you want to do this later.",
+        stepLabel: "Your Foundational Four™",
       },
       "4": {
         heading: "{teamFormatHeading}",

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_28_122121) do
+ActiveRecord::Schema.define(version: 2022_02_03_212654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -151,8 +151,8 @@ ActiveRecord::Schema.define(version: 2022_01_28_122121) do
     t.integer "display_format", default: 0
     t.integer "onboarding_status", default: 0
     t.string "customer_subscription_profile_id"
-    t.integer "objectives_key_type", default: 1
     t.integer "forum_type", default: 0
+    t.integer "objectives_key_type", default: 1
     t.jsonb "preferences", default: {}, null: false
     t.index ["preferences"], name: "index_companies_on_preferences", using: :gin
   end
@@ -317,9 +317,6 @@ ActiveRecord::Schema.define(version: 2022_01_28_122121) do
     t.string "description"
     t.datetime "closed_at"
     t.bigint "created_by_id"
-    t.bigint "user_id"
-    t.bigint "company_id"
-    t.bigint "team_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "unit_type"
@@ -485,7 +482,7 @@ ActiveRecord::Schema.define(version: 2022_01_28_122121) do
 
   create_table "scorecard_logs", force: :cascade do |t|
     t.bigint "key_performance_indicator_id", null: false
-    t.integer "score"
+    t.float "score"
     t.string "note"
     t.integer "fiscal_quarter"
     t.integer "fiscal_year"

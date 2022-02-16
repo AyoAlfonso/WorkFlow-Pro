@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Flex, Box } from "rebass";
-import { TextNoMargin } from "~/components/shared/text";
+import { TableHeader } from "~/components/shared/text";
 
 import styled from "styled-components";
 
@@ -33,9 +33,7 @@ export const Table = (props: TableProps) => {
         {headers.map((item, index) => {
           return (
             <Box key={`header-${index}`} px={2} width={widthCalc(index % columns)}>
-              <TextNoMargin fontSize={2} color={"black"}>
-                {item}
-              </TextNoMargin>
+              <TableHeader>{item.toUpperCase()}</TableHeader>
             </Box>
           );
         })}

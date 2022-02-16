@@ -8,6 +8,7 @@ import { showToast } from "../app/javascript/utils/toast-message";
 import { ToastMessageConstants } from "../app/javascript/constants/toast-types";
 import { Toaster, ToastMessage, CloseButton } from "../app/javascript/components/shared/toaster";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { baseTheme } from "../app/javascript/themes/base";
 
 export default { title: "Toast Messages", decorators: [withKnobs] };
