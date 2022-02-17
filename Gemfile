@@ -28,6 +28,7 @@ gem 'image_processing', '~> 1.2'
 gem 'activeadmin_quill_editor'
 gem 'active_admin_trix', '~> 0.0.3'
 
+
 gem 'kaminari'
 
 #Used in the console 

@@ -316,8 +316,8 @@
       },
       "issues": {
         "title": "Issues",
-        "forumHub": "Forum Hub",
-        "myHub": "My Hub"
+        "forumHub": "Forum Hub/Issues",
+        "myHub": "My Hub/Issues"
       },
       "journals": {
         "createMyDay": "Morning Routine",

@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import * as R from "ramda";
-import * as React from "react";
-import { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
+import { useTranslation } from "react-i18next";
 import { Avatar } from "../../shared/avatar";
 import { Icon } from "../../shared/icon";
 import { Heading, Text } from "../../shared";
@@ -39,10 +39,13 @@ export const HeaderBar = observer(
     const [showIssues, setShowIssues] = useState<boolean>(false);
     const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
 
-    const { sessionStore } = useMst();
+    const { sessionStore, companyStore } = useMst();
     const accountActionRef = useRef(null);
-
+    useEffect(() => {
+      companyStore.load();
+    }, [companyStore.company]);
     const location = useLocation();
+    const { t } = useTranslation();
 
     const renderUserAvatar = () => {
       return (
@@ -136,7 +139,9 @@ export const HeaderBar = observer(
                     setCreateKeyActivityModalOpen(false);
                   }}
                 >
-                  Issues
+                  {companyStore?.company?.displayFormat == "Forum"
+                    ? t("issues.forumHub")
+                    : t("issues.myHub")}
                 </IssuesButton>
               </IssuesButtonContainer>
               <PulseSelectorWrapper
