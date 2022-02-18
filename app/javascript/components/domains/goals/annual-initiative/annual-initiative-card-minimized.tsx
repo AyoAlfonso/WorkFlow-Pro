@@ -47,13 +47,42 @@ export const AnnualInitiativeCardMinimized = observer(
       return <Loading />;
     }
 
+    const today = moment();
+    const year = companyStore.company.yearForCreatingAnnualInitiatives;
+    const month = 1 + moment(companyStore.company.fiscalYearStart).month();
+    const day = moment(companyStore.company.fiscalYearStart).date();
+
+    const nextFiscalYearStart = moment(`${year + 1}/${month}/${day}`, "YYYY-MM-DD");
+
+    const weeksToNextFiscalYear = nextFiscalYearStart.diff(today, "week");
+
+    const singleYearString =
+      weeksToNextFiscalYear < 4
+        ? `FY${(companyStore.company.yearForCreatingAnnualInitiatives + 1).toString().slice(-2)}`
+        : `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`;
+
+    const doubleYearString =
+      weeksToNextFiscalYear < 4
+        ? `FY${(companyStore.company.yearForCreatingAnnualInitiatives + 1).toString().slice(-2)}/${(
+            companyStore.company.yearForCreatingAnnualInitiatives + 2
+          )
+            .toString()
+            .slice(-2)}`
+        : `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}/${(
+            companyStore.company.yearForCreatingAnnualInitiatives + 1
+          )
+            .toString()
+            .slice(-2)}`;
+
+    const upcomingYearString =
+      month > 1 ? doubleYearString : month == 1 && day > 1 ? doubleYearString : singleYearString;
+
     if (annualInitiative.closedAt != null) {
       statusBadge.description = `Closed - FY${annualInitiative.fiscalYear %
         100}/${(annualInitiative.fiscalYear + 1) % 100}`;
       statusBadge.colors = { color: white, backgroundColor: grey100 };
     } else if (yearForCreatingAnnualInitiatives < annualInitiative.fiscalYear) {
-      statusBadge.description = `Upcoming - FY${annualInitiative.fiscalYear %
-        100}/${(annualInitiative.fiscalYear + 1) % 100}`;
+      statusBadge.description = `Upcoming -${upcomingYearString}`;
       statusBadge.colors = { color: white, backgroundColor: primary100 };
     }
     const milestones = [
