@@ -76,7 +76,6 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def create_milestones
-    binding.pry
    create_milestones_for_quarterly_goal
   render "api/quarterly_goals/create_milestones"
   end
