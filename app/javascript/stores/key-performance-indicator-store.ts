@@ -82,12 +82,12 @@ export const KeyPerformanceIndicatorStoreModel = types
         showToast("KPI deleted", ToastMessageConstants.SUCCESS);
       }
     }),
-    toggleKPIStatus: flow(function*() {
+    toggleKPIStatus: flow(function*(direction) {
       const { scorecardStore } = getRoot(self);
       const response: ApiResponse<any> = yield self.environment.api.toggleKPIStatus(self.kpi.id);
       scorecardStore.mergeKPIS(response.data.kpi);
       if (response.ok) {
-        showToast("KPI archived", ToastMessageConstants.SUCCESS);
+        showToast(`KPI ${direction}`, ToastMessageConstants.SUCCESS);
       }
     }),
     createScorecardLog: flow(function*(scorecardlog) {

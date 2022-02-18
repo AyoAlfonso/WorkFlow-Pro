@@ -40,14 +40,14 @@ export const ScorecardKPIDropdownOptions = ({
   };
   const closeKPI = () => {
     if (confirm(`Are you sure you want to archive this KPI`)) {
-      keyPerformanceIndicatorStore.toggleKPIStatus().then(() => {
+      keyPerformanceIndicatorStore.toggleKPIStatus("archived").then(() => {
         setModalOpen(false);
       });
     }
   };
   const openKPI = () => {
     if (confirm(`Are you sure you want to open this KPI`)) {
-      keyPerformanceIndicatorStore.toggleKPIStatus().then(() => {
+      keyPerformanceIndicatorStore.toggleKPIStatus("opened").then(() => {
         setModalOpen(false);
       });
     }

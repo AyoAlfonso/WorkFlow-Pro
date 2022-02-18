@@ -97,9 +97,9 @@ module HasFiscalYear
     temp_current_date = DateTime.new(year, current_date.month, current_date.day, 0, 0, 0, 0)
     temp_current_year_fiscal_year_start = DateTime.new(year, current_year_fiscal_year_start.month, current_year_fiscal_year_start.day, 0, 0, 0, 0)
     
-    if current_fiscal_start_date.year == year
+    if current_fiscal_start_date.month == 1  && current_fiscal_start_date.day == 1
       return year
-    end 
+    end
 
    if temp_current_date + 4.weeks >= temp_current_year_fiscal_year_start
       year + 1
