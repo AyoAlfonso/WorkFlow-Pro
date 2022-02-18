@@ -36,10 +36,10 @@ export const Objectives = observer(
     const { t } = useTranslation();
 
     const [rallyingCry, setRallyingCry] = useState(company.rallyingCry);
-    const [core1Content, setCore1Content] = useState(company.coreFour.core1Content);
-    const [core2Content, setCore2Content] = useState(company.coreFour.core2Content);
-    const [core3Content, setCore3Content] = useState(company.coreFour.core3Content);
-    const [core4Content, setCore4Content] = useState(company.coreFour.core4Content);
+    const [core1Content, setCore1Content] = useState(company.coreFour.core1Content || "");
+    const [core2Content, setCore2Content] = useState(company.coreFour.core2Content || "");
+    const [core3Content, setCore3Content] = useState(company.coreFour.core3Content || "");
+    const [core4Content, setCore4Content] = useState(company.coreFour.core4Content || "");
     const [showCoreFour, setShowCoreFour] = useState<boolean>(
       company?.preferences.foundationalFour,
     );

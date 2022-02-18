@@ -15,8 +15,6 @@ import { ImageCropperModal } from "~/components/shared/image-cropper-modal";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { useHistory } from "react-router";
 import { toJS } from "mobx";
-import ReactQuill from "react-quill";
-
 import {
   StretchContainer,
   BodyContainer,

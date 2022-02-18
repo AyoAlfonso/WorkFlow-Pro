@@ -113,17 +113,6 @@ export const ManualKPIModal = observer(
     const removeTagInput = id => {
       setSelectedKPIs(selectedKPIs.filter(kpi => kpi.id != id));
     };
-    // useEffect(() => {
-    //   if (!descriptionTemplateStore.descriptionTemplates) {
-    //     descriptionTemplateStore.fetchDescriptiveTemplates();
-    //   }
-    //   const template = toJS(descriptionTemplateStore.descriptionTemplates).find(
-    //     t => t.templateType == "kpi",
-    //   );
-    //   if (template && !externalManualKPIData?.description) {
-    //     setDescription(template.body.body);
-    //   }
-    // }, []);
 
     useEffect(() => {
       if (!descriptionTemplateStore.descriptionTemplates) {
@@ -251,7 +240,6 @@ export const ManualKPIModal = observer(
                 <ReactQuill
                   className="trix-kpi-modal"
                   theme="snow"
-                  // defaultValue={description}
                   value={description}
                   onChange={(content, delta, source, editor) => {
                     setDescription(editor.getHTML());
