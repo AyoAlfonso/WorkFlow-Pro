@@ -389,7 +389,7 @@ export class Api {
   }
 
   async createQuarterlyGoalMilestones(quarterlyGoalId) {
-    return this.client.post(`/quarterly_goals/create_milestones/${quarterlyGoalId}`);
+    return this.client.post(`/quarterly_goals/create_milestones/${quarterlyGoalId}`, {});
   }
 
   async createSubInitiative(subInitiativeObject) {
@@ -397,7 +397,7 @@ export class Api {
   }
 
   async createSubInitiativeMilestones(subInitiativeId) {
-    return this.client.post(`/sub_initiatives/create_milestones/${subInitiativeId}`);
+    return this.client.post(`/sub_initiatives/create_milestones/${subInitiativeId}`, {});
   }
 
   async updateHabitLog(habitId: number, logDate: string) {
