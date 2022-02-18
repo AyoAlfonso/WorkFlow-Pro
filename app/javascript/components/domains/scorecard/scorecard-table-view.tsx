@@ -193,7 +193,7 @@ export const ScorecardTableView = observer(
         const q = Math.floor((week - 1) / 13);
 
         if (quarterScores[q]) {
-          quarterScores[q][0] += score;
+          quarterScores[q][0] += getScore(score, target, greaterThan);
           quarterScores[q][1]++;
         }
       });
