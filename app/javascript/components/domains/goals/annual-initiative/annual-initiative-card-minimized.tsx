@@ -24,7 +24,7 @@ export const AnnualInitiativeCardMinimized = observer(
     showMinimizedCard,
   }: IAnnualInitiativeCardMinimizedProps): JSX.Element => {
     const { companyStore, sessionStore } = useMst();
-    const { yearForCreatingAnnualInitiatives } = companyStore.company;
+    const { yearForCreatingAnnualInitiatives, currentFiscalYear } = companyStore.company;
     const {
       warningRed,
       cautionYellow,
@@ -74,6 +74,20 @@ export const AnnualInitiativeCardMinimized = observer(
             .toString()
             .slice(-2)}`;
 
+    const singleYearStringForInitiative = `FY${annualInitiative.fiscalYear.toString().slice(-2)}`;
+    const doubleYearStringForInitiative = `FY${annualInitiative.fiscalYear.toString().slice(-2)}/${(
+      annualInitiative.fiscalYear + 1
+    )
+      .toString()
+      .slice(-2)}`;
+
+    const goalYearString =
+      month > 1
+        ? doubleYearStringForInitiative
+        : month == 1 && day > 1
+        ? doubleYearStringForInitiative
+        : singleYearStringForInitiative;
+
     const upcomingYearString =
       month > 1 ? doubleYearString : month == 1 && day > 1 ? doubleYearString : singleYearString;
 
@@ -82,7 +96,9 @@ export const AnnualInitiativeCardMinimized = observer(
         100}/${(annualInitiative.fiscalYear + 1) % 100}`;
       statusBadge.colors = { color: white, backgroundColor: grey100 };
     } else if (yearForCreatingAnnualInitiatives < annualInitiative.fiscalYear) {
-      statusBadge.description = `Upcoming -${upcomingYearString}`;
+      statusBadge.description = `Upcoming - ${
+        upcomingYearString == goalYearString ? upcomingYearString : goalYearString
+      }`;
       statusBadge.colors = { color: white, backgroundColor: primary100 };
     }
     const milestones = [
