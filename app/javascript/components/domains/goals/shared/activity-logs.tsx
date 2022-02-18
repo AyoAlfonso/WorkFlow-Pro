@@ -21,10 +21,10 @@ interface IActivityLogsProps {
 export const ActivityLogs = observer(
   ({ keyElements, store, meta, getLogs }: IActivityLogsProps): JSX.Element => {
     const { userStore } = useMst();
-    const [page, setPage] = useState<number>(meta?.currentPage)
+    const [page, setPage] = useState<number>(meta?.currentPage);
 
     const handleChange = (event, value) => {
-      setPage(value)
+      setPage(value);
       getLogs(value);
     };
 
@@ -67,7 +67,11 @@ export const ActivityLogs = observer(
                             </b>{" "}
                             to{" "}
                             <b>
-                              <u>{`${log.score}${completionSymbol(keyElement?.completionType)}`}</u>
+                              <u>
+                                {keyElement?.completionType == "currency"
+                                  ? `${completionSymbol(keyElement?.completionType)}${log.score}`
+                                  : `${log.score}${completionSymbol(keyElement?.completionType)}`}
+                              </u>
                             </b>
                             <span>{determineStatusLabel(log.status || keyElement?.status)}</span>
                           </ActivityLogText>
@@ -129,7 +133,7 @@ export const ActivityLogs = observer(
               })
           )}
         </ActivityLogsContainer>
-        {!R.isEmpty(toJS(keyElements))? (
+        {!R.isEmpty(toJS(keyElements)) ? (
           <PaginationContainer>
             <Pagination count={meta?.totalPages} page={page} size="small" onChange={handleChange} />
           </PaginationContainer>
@@ -143,7 +147,7 @@ export const ActivityLogs = observer(
 
 const ActivityLogsContainer = styled.div`
   width: 100%;
-  max-height: 500px;
+  max-height: 560px;
   margin-top: 24px;
   overflow: auto;
 `;
