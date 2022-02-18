@@ -474,10 +474,16 @@ export const KeyElement = observer(
                     setShowList(!disabled && editable && isOwner && !showList);
                   }}
                   onMouseEnter={async () => {
+                    if (type == "onboarding") {
+                      return 
+                    }
                     const disabled = await isEditable();
                     setShowTooltip(!isOwner || (disabled && true));
                   }}
                   onMouseLeave={() => {
+                    if (type == "onboarding") {
+                      return;
+                    }
                     setShowTooltip(false);
                   }}
                   ref={dropdownRef}
@@ -546,6 +552,9 @@ export const KeyElement = observer(
                       setShowList(!disabled && editable && isOwner && !showList);
                     }}
                     onMouseEnter={async () => {
+                      if (type == "onboarding") {
+                        return;
+                      }
                       const disabled = await isEditable();
                       setShowTooltip(!isOwner || (disabled && true));
                     }}
@@ -595,6 +604,9 @@ export const KeyElement = observer(
                         );
                       }}
                       onMouseEnter={async () => {
+                        if (type == "onboarding") {
+                          return;
+                        }
                         await isEditable();
                       }}
                       defaultValue={element.completionCurrentValue}
