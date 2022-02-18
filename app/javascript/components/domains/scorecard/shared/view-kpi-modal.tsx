@@ -378,18 +378,39 @@ export const ViewEditKPIModal = observer(
                     <OwnerAndLogicText>{logic}</OwnerAndLogicText>
                     {kpi?.parentType && (
                       <KPITypeContainer>
-                        <KPITypeWrapper onMouseEnter={() => {setFunctionSymbolIconColor(primary100)}}
-                                        onMouseLeave={() => {setFunctionSymbolIconColor(greyInactive)}}
-                                        onClick={() => {setPopupOpen(!popupOpen)}}
+                        <KPITypeWrapper
+                          onMouseEnter={() => {
+                            setFunctionSymbolIconColor(primary100);
+                          }}
+                          onMouseLeave={() => {
+                            setFunctionSymbolIconColor(greyInactive);
+                          }}
+                          onClick={() => {
+                            setPopupOpen(!popupOpen);
+                          }}
                         >
-                          <KPITypeIcon icon={"Function"} size={16} iconColor={functionSymbolIconColor}/>
+                          <KPITypeIcon
+                            icon={"Function"}
+                            size={16}
+                            iconColor={functionSymbolIconColor}
+                          />
                           <KPIParentTypeText> {formatKpiType(kpi?.parentType)} </KPIParentTypeText>
                         </KPITypeWrapper>
-                        <Pop><PopupContainer>{kpiPopup(kpi, popupOpen, setPopupOpen, setCurrentSelectedKpi, setViewEditKPIModalOpen)}</PopupContainer></Pop>
+                        <Pop>
+                          <PopupContainer>
+                            {kpiPopup(
+                              kpi,
+                              popupOpen,
+                              setPopupOpen,
+                              setCurrentSelectedKpi,
+                              setViewEditKPIModalOpen,
+                            )}
+                          </PopupContainer>
+                        </Pop>
                       </KPITypeContainer>
                     )}
                   </OwnerAndLogicContainer>
-                  {kpi?.parentKpi.length > kpi?.relatedParentKpis.length && (
+                  {kpi?.parentKpi.length > kpi?.relatedParentKpis.length || kpi.closedAt ? (
                     <MissingParentsErrorContainer shadow={true}>
                       <MissingKPIIcon icon={"Warning-PO"} size={"24px"} iconColor={greyInactive} />
                       <MissingParentsTexts>
@@ -447,7 +468,7 @@ export const ViewEditKPIModal = observer(
                         </ButtonContainer>
                       </MissingParentsButtons>
                     </MissingParentsErrorContainer>
-                  )}
+                  ) : null}
                   <ValueAndUpdateContainer>
                     <ValueText>{formatValue(value, kpi.unitType)}</ValueText>
 
@@ -748,7 +769,7 @@ const KPITypeContainer = styled.div`
 `;
 
 const KPITypeWrapper = styled.div`
-display: flex;
+  display: flex;
   &:hover {
     cursor: pointer;
     color: ${props => props.theme.colors.primary100};
