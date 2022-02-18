@@ -264,6 +264,7 @@
         "sideOptions": {
           "agenda": "Agenda",
           "issues": "Issues",
+          "forumHub": "Forum Hub",
           "tasks": "Pyns",
           "notes": "Notes",
           "pyns": "Pyns"
@@ -316,8 +317,9 @@
       },
       "issues": {
         "title": "Issues",
-        "forumHub": "Forum Hub/Issues",
-        "myHub": "My Hub/Issues"
+        "myHub": "My Hub",
+        "forumHub":"Forum Hub",
+        "issues": "Issues"
       },
       "journals": {
         "createMyDay": "Morning Routine",

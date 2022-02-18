@@ -1,4 +1,5 @@
 class QuarterlyGoal < ApplicationRecord
+  acts_as_paranoid column: :deleted_at
   include HasCreator
   include HasOwner
   include ActionView::Helpers::SanitizeHelper
@@ -6,9 +7,9 @@ class QuarterlyGoal < ApplicationRecord
   before_save :sanitize_description
 
   belongs_to :annual_initiative
-  has_many :milestones, as: :milestoneable
-  has_many :objective_logs, as: :objecteable
-  has_many :key_elements, as: :elementable
+  has_many :milestones, as: :milestoneable, dependent: :destroy
+  has_many :objective_logs, as: :objecteable, dependent: :destroy
+  has_many :key_elements, as: :elementable, dependent: :destroy
   has_many :sub_initiatives, dependent: :destroy
   accepts_nested_attributes_for :key_elements, :milestones
 

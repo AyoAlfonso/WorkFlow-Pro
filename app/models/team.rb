@@ -1,11 +1,12 @@
 class Team < ApplicationRecord
   include HasDefaultAvatarColor
   include HasEmotionScores
+  acts_as_paranoid column: :deleted_at
   include ActiveRecordScope
   belongs_to :company
   has_many :team_user_enablements, dependent: :destroy
-  has_many :users, through: :team_user_enablements,  dependent: :destroy
-  has_many :issues,  dependent: :destroy
+  has_many :users, through: :team_user_enablements
+  has_many :issues
   has_many :meetings, dependent: :destroy
   has_many :team_issues, dependent: :destroy
   has_many :key_activities,  dependent: :destroy

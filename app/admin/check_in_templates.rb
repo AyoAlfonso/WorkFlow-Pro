@@ -39,7 +39,7 @@ ActiveAdmin.register CheckInTemplate do
           })
         end
       end
-      redirect_to admin_meeting_template_path(@check_in_template), notice: "Check In Template Created"
+      redirect_to admin_check_in_template_path(@check_in_template), notice: "Check In Template Created"
     end
   end
 

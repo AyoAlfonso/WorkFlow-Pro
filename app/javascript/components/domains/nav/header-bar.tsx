@@ -139,9 +139,9 @@ export const HeaderBar = observer(
                     setCreateKeyActivityModalOpen(false);
                   }}
                 >
-                  {companyStore?.company?.displayFormat == "Forum"
-                    ? t("issues.forumHub")
-                    : t("issues.myHub")}
+                  {companyStore?.company?.displayFormat === "Forum"
+                    ? t("issues.myHub")
+                    : t("issues.issues")}
                 </IssuesButton>
               </IssuesButtonContainer>
               <PulseSelectorWrapper

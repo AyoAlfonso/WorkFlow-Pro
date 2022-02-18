@@ -1,4 +1,5 @@
 class SubInitiative < ApplicationRecord
+  acts_as_paranoid column: :deleted_at
   include HasCreator
   include HasOwner
   include ActionView::Helpers::SanitizeHelper
@@ -7,9 +8,9 @@ class SubInitiative < ApplicationRecord
   before_save :sanitize_description
 
   belongs_to :quarterly_goal
-  has_many :milestones, as: :milestoneable
-  has_many :key_elements, as: :elementable
-  has_many :objective_logs, as: :objecteable
+  has_many :milestones, as: :milestoneable,  dependent: :destroy
+  has_many :key_elements, as: :elementable,  dependent: :destroy
+  has_many :objective_logs, as: :objecteable,  dependent: :destroy
   accepts_nested_attributes_for :key_elements, :milestones
 
   scope :owned_by_user, ->(user) { where(owned_by_id: user.id) }

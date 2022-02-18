@@ -27,8 +27,8 @@ class User < ApplicationRecord
   has_one_attached :avatar, dependent: :destroy
   has_many :questionnaire_attempts, dependent: :destroy
   has_many :product_features, dependent: :destroy
-  has_many :key_performance_indicators, dependent: :destroy
-  has_many :score_card_logs
+  has_many :key_performance_indicators
+  has_many :scorecard_logs,  dependent: :destroy
   has_many :habits, dependent: :destroy
   has_many :team_user_enablements, dependent: :destroy
   has_many :teams, through: :team_user_enablements

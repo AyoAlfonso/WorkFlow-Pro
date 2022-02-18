@@ -35,7 +35,7 @@ export const IssuesHeader = observer(
     }
 
     const renderHeaderTextForCompanyType = () => {
-      return company.displayFormat == "Forum" ? t("issues.forumHub") : t("issues.myHub");
+      return company.displayFormat == "Forum" ? t("issues.myHub") : t("issues.issues");
     };
 
     return (

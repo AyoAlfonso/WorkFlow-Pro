@@ -45,7 +45,7 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   end
 
   def destroy
-    @kpi.scorecard_logs.destroy_all
+    # @kpi.scorecard_logs.destroy_all
     @kpi.destroy! 
     render json: { kpi: @kpi.as_json(except: %w[created_at updated_at],methods: [:owned_by]),  status: :ok }
   end

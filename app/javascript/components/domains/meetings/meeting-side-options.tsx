@@ -9,6 +9,7 @@ import { KeyActivitiesBody } from "../key-activities/key-activities-body";
 import { Notes } from "./components/notes";
 import { MeetingAgenda } from "./components/meeting-agenda";
 import { IssuesBody } from "../issues/issues-body";
+import { useMst } from "~/setup/root";
 
 interface IMeetingSideOptionsProps {
   teamId?: string | number;
@@ -17,6 +18,11 @@ interface IMeetingSideOptionsProps {
 
 export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps): JSX.Element => {
   const { t } = useTranslation();
+
+  const {
+    companyStore: { company },
+  } = useMst();
+  const isForum = company?.displayFormat == "Forum";
 
   const [selectedTab, setSelectedTab] = useState<string>("agenda");
   const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
@@ -83,7 +89,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
       <SelectionContainer>
         <SelectionTabsContainer>
           {renderOption("agenda")}
-          {renderOption("issues")}
+          {renderOption(isForum ? "forumHub" : "issues")}
           {renderOption("pyns")}
           {renderOption("notes")}
         </SelectionTabsContainer>

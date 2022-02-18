@@ -133,7 +133,7 @@ export const Questionnaire = observer(
               title={
                 props.variant === "Monthly Reflection"
                   ? t("journals.monthlyReflection")
-                  : t("journals.weeklyReflectionTitle")
+                  : t("journals.weeklyReflection")
               }
             />
           }

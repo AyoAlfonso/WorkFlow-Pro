@@ -1,10 +1,11 @@
 class KeyElement < ApplicationRecord
+  acts_as_paranoid column: :deleted_at
   include ActionView::Helpers::SanitizeHelper
   include HasOwner
   include LogEnum
 
   before_save :sanitize_value
-  has_many :objective_logs, as: :child
+  has_many :objective_logs, as: :child, dependent: :destroy
   belongs_to :elementable, :polymorphic => true
   belongs_to :user, optional: true
 

@@ -144,7 +144,7 @@ export class Api {
   }
 
   async resendInvitation(userId) {
-    return this.client.patch(`/users/${userId}/resend_invitation`);
+    return this.client.patch(`/users/${userId}/resend_invitation`, {});
   }
 
   async signOut() {
@@ -608,10 +608,10 @@ export class Api {
     return this.client.delete(`/key_performance_indicator/${id}`);
   }
   async toggleKPIStatus(id) {
-    return this.client.patch(`/key_performance_indicator/toggle_status/${id}`);
+    return this.client.patch(`/key_performance_indicator/toggle_status/${id}`, {});
   }
   async openKPI(id) {
-    return this.client.patch(`/key_performance_indicator/open_kpi/${id}`);
+    return this.client.patch(`/key_performance_indicator/open_kpi/${id}`, {});
   }
 
   async createScorecardLog(scorecardLog) {
