@@ -74,9 +74,9 @@ export const AnnualInitiativeCardMinimized = observer(
             .toString()
             .slice(-2)}`;
 
-    const singleYearStringForInitiative = `FY${annualInitiative.fiscalYear.toString().slice(-2)}`;
-    const doubleYearStringForInitiative = `FY${annualInitiative.fiscalYear.toString().slice(-2)}/${(
-      annualInitiative.fiscalYear + 1
+    const singleYearStringForInitiative = `FY${annualInitiative?.fiscalYear?.toString().slice(-2)}`;
+    const doubleYearStringForInitiative = `FY${annualInitiative?.fiscalYear?.toString().slice(-2)}/${(
+      annualInitiative?.fiscalYear + 1
     )
       .toString()
       .slice(-2)}`;
