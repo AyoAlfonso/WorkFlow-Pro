@@ -56,7 +56,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
             meetingId={meeting.id}
           />
         );
-        case "forumHub":
+      case "forumHub":
         return (
           <IssuesBody
             showOpenIssues={showOpenIssues}
@@ -99,7 +99,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
           {renderOption("agenda")}
           {renderOption(isForum ? "forumHub" : "issues")}
           {renderOption("pyns")}
-          {renderOption("notes")}
+          {!isForum && renderOption("notes")}
         </SelectionTabsContainer>
       </SelectionContainer>
       <DisplayContentContainer>{renderDisplayContent()}</DisplayContentContainer>

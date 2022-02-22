@@ -39,13 +39,13 @@ export const MeetingWizardLayout = observer(
     const history = useHistory();
     const forumMode = company && company.accessForum;
     const meetingTitle = () => {
-      return meetingStarted || forumMode
+      return meetingStarted
         ? R.path(["currentStepDetails", "name"], meeting)
         : t("meeting.coreFourTitle");
     };
 
     const meetingDescription = () => {
-      return meetingStarted || forumMode
+      return meetingStarted
         ? R.path(["currentStepDetails", "instructions"], meeting)
         : t("meeting.reviewCoreFour");
     };
