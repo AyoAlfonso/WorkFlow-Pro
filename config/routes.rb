@@ -107,6 +107,7 @@ Rails.application.routes.draw do
     post '/annual_initiatives/create_key_element/:id', to: 'annual_initiatives#create_key_element'
     post 'annual_initiatives/:id/update_key_element/:key_element_id',  to: 'annual_initiatives#update_key_element'
     patch '/annual_initiatives/close_initiative/:id', to: 'annual_initiatives#close_initiative'
+    post '/annual_initiatives/duplicate/:id', to: 'annual_initiatives#duplicate'
     delete '/annual_initiatives/delete_key_element/:key_element_id', to: 'annual_initiatives#delete_key_element'
     get '/annual_initiatives/team/:team_id', to: "annual_initiatives#team"
 

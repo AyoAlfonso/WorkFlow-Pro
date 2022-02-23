@@ -7,6 +7,10 @@ class AnnualInitiativePolicy < ApplicationPolicy
     !user_can_observe_current_company?
   end
 
+  def duplicate?
+    !user_can_observe_current_company?
+  end
+
   def show?
     @record.owned_by == @user || @record.company.present? && (user_is_part_of_this_company?(@record.company) || user_can_observe_current_company?)
   end
