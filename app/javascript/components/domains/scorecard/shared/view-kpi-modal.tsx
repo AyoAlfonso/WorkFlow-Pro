@@ -227,9 +227,16 @@ export const ViewEditKPIModal = observer(
     };
 
     const weekToDate = (week: number): string =>
-      moment(findNextMonday(resetYearOfDateToCurrent(company.fiscalYearStart)))
-        .year(company.yearForCreatingAnnualInitiatives)
-        .add(week, "w")
+      moment(
+        findNextMonday(
+          resetYearOfDateToCurrent(
+            company.fiscalYearStart,
+            company.yearForCreatingAnnualInitiatives,
+          ),
+        ),
+      )
+        // .year(company.yearForCreatingAnnualInitiatives)
+        .add(week - 1, "w")
         .startOf("week" as moment.unitOfTime.StartOf)
         .format("MMM D");
 

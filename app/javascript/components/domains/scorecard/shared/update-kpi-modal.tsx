@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
 import { getMondayofDate } from "~/utils/date-time";
 import { DueDateSelector } from "~/components/shared/scorecards/date-selector";
-import { findNextMonday , resetYearOfDateToCurrent} from "~/utils/date-time";
+import { findNextMonday, resetYearOfDateToCurrent } from "~/utils/date-time";
 import moment from "moment";
 
 import {
@@ -63,9 +63,9 @@ export const MiniUpdateKPIModal = observer(
     } = useMst();
 
     const weekToDate = (week: number, year: number) =>
-      moment(findNextMonday(resetYearOfDateToCurrent(fiscalYearStart)))
-        .year(year)
-        .add(week, "w")
+      moment(findNextMonday(resetYearOfDateToCurrent(fiscalYearStart, year)))
+        // .year(year)
+        .add(week - 1, "w")
         .startOf("week" as moment.unitOfTime.StartOf)
         .toDate();
 

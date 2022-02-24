@@ -224,14 +224,22 @@ const QuarterSummary = ({
   };
 
   const weekToDate = (week: number): string =>
-    moment(findNextMonday(resetYearOfDateToCurrent(fiscalYearStart)))
-      .year(currentFiscalYear)
-      .add(week, "w")
+    moment(findNextMonday(resetYearOfDateToCurrent(fiscalYearStart, currentFiscalYear)))
+      // .year(currentFiscalYear)
+      .add(week - 1, "w")
       .startOf("week" as moment.unitOfTime.StartOf)
-      .format("MMM D");
+      .format("MMM D yyyy");
 
   useEffect(() => {
     const startWeek = (currentQuarter - 1) * 13 + 1;
+    console.log(
+      R.range(startWeek, startWeek + 13),
+      R.range(startWeek, startWeek + 13).map((i: number) => weekToDate(i)),
+      resetYearOfDateToCurrent(fiscalYearStart, currentFiscalYear),
+      fiscalYearStart,
+      currentFiscalYear,
+      "currentFiscalYear",
+    );
     const currentQuarterWeeks = R.range(startWeek, currentWeek + 1);
     const currentQuarterData = gatherData(currentQuarterWeeks);
     if (currentQuarterData.length > 0) {

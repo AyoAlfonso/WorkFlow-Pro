@@ -10,12 +10,12 @@ export const findNextMonday = date => {
   return monday;
 };
 
-export const resetYearOfDateToCurrent = (date, interceptor = "-") => {
+export const resetYearOfDateToCurrent = (date, currentFiscalYear, interceptor = "-") => {
   return date
     .split(interceptor)
     .map((e, i) => {
       if (i == 0) {
-        return new Date().getFullYear();
+        return currentFiscalYear || new Date().getFullYear();
       } else {
         return e;
       }
