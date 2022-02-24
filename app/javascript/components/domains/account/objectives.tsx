@@ -43,7 +43,7 @@ export const Objectives = observer(
     const [showCoreFour, setShowCoreFour] = useState<boolean>(
       company?.preferences.foundationalFour,
     );
-
+    
     const [logoImageForm, setLogoImageForm] = useState<FormData | null>(null);
     const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(
       company?.preferences.companyObjectives,
@@ -54,6 +54,7 @@ export const Objectives = observer(
     const [objectivesKeyType, setObjectivesKeyType] = useState<string>(
       formatType[company.objectivesKeyType],
     );
+    const [objectivesKeyTypes] = useState(company?.objectivesKeyTypes);
     const [annualInitiativeTitle, setAnnualInitiativeTitle] = useState<string>(
       sessionStore.annualInitiativeTitle,
     );
@@ -197,14 +198,13 @@ export const Objectives = observer(
               style={{ minWidth: "200px", marginBottom: "16px" }}
               disabled={!ceoORAdmin}
             >
-              {company?.objectivesKeyTypes &&
-                Object.entries(company?.objectivesKeyTypes).map(([name, id]) => (
-                  <option key={`option-${id}`} value={name as string}>
-                    {(name?.charAt(0).toUpperCase() + name.slice(1))
-                      .match(/[A-Z][a-z]+|[0-9]+/g)
-                      .join(" ")}
-                  </option>
-                ))}
+              {Object.keys(objectivesKeyTypes).map((key: string) => (
+                <option key={`option-${key}`} value={key}>
+                  {(key?.charAt(0).toUpperCase() + key.slice(1))
+                    .match(/[A-Z][a-z]+|[0-9]+/g)
+                    .join(" ")}
+                </option>
+              ))}
             </Select>
           </>
         </Section>
