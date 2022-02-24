@@ -1,5 +1,5 @@
 class Api::AnnualInitiativesController < Api::ApplicationController
-  before_action :set_annual_initiative, only: [:show, :update, :destroy, :create_key_element, :update_key_element,
+  before_action :set_annual_initiative, only: [:show, :duplicate, :update, :destroy, :create_key_element, :update_key_element,
                                                :close_initiative]
 
   respond_to :json
@@ -15,6 +15,11 @@ class Api::AnnualInitiativesController < Api::ApplicationController
     authorize @annual_initiative
     @annual_initiative.save!
     render json: { annual_initiative: @annual_initiative, status: :ok }
+  end
+
+  def duplicate
+    @annual_initiative.amoeba_dup.save
+    render json: { annual_initiative_id: @annual_initiative.id, status: :ok }
   end
 
   def show

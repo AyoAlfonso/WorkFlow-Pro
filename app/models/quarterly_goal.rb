@@ -1,5 +1,9 @@
 class QuarterlyGoal < ApplicationRecord
   acts_as_paranoid column: :deleted_at
+   amoeba do
+    enable
+    include_association :sub_initiatives
+   end
   include HasCreator
   include HasOwner
   include ActionView::Helpers::SanitizeHelper

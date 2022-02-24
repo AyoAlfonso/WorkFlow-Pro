@@ -1,5 +1,19 @@
 class AnnualInitiative < ApplicationRecord
   acts_as_paranoid column: :deleted_at
+
+  amoeba do
+    enable
+    recognize [:has_many, has_many: :through]
+    include_association :sub_initiatives
+    exclude_association :comments
+
+    customize(lambda { |original_post,new_post|
+       current_company = Company.find(new_post.company_id)
+       quarter = current_company.quarter_for_creating_quarterly_goals
+       new_post.quarterly_goals.map { |quarterly_goal| quarterly_goal.quarter = [0,2,3,4,1][quarter] }
+    })
+  end
+
   include HasCreator
   include HasOwner
   

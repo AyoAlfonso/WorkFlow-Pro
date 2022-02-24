@@ -56,6 +56,14 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
             meetingId={meeting.id}
           />
         );
+      case "forumHub":
+        return (
+          <IssuesBody
+            showOpenIssues={showOpenIssues}
+            setShowOpenIssues={setShowOpenIssues}
+            meetingId={meeting.id}
+          />
+        );
       case "pyns":
         return renderDisplayKeyActivities();
       case "notes":
@@ -91,7 +99,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
           {renderOption("agenda")}
           {renderOption(isForum ? "forumHub" : "issues")}
           {renderOption("pyns")}
-          {renderOption("notes")}
+          {!isForum && renderOption("notes")}
         </SelectionTabsContainer>
       </SelectionContainer>
       <DisplayContentContainer>{renderDisplayContent()}</DisplayContentContainer>

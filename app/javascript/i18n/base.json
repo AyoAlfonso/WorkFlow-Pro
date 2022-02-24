@@ -159,8 +159,8 @@
         "lastSevenDays": "In the last 7 Days"
       },
       "forum": {
-        "annualHub": "Annual Hub",
-        "upcomingHub": "Upcoming Hub",
+        "annualHub": "Meeting",
+        "upcomingHub": "Topics",
         "agenda": "Meeting Management",
         "explorationTopic": {
           "whoTitle": "Who",
@@ -264,7 +264,7 @@
         "sideOptions": {
           "agenda": "Agenda",
           "issues": "Issues",
-          "forumHub": "Forum Hub",
+          "forumHub": "Topics",
           "tasks": "Pyns",
           "notes": "Notes",
           "pyns": "Pyns"
@@ -293,7 +293,7 @@
            "done": "Done"
         },
         "parkingLotIssues": {
-          "title": "Forum Hub",
+          "title": "Forum Topics",
           "subTitle": "Topics members have shared",
           "forumItems": "Topic"
         },
@@ -317,8 +317,8 @@
       },
       "issues": {
         "title": "Issues",
-        "myHub": "My Hub",
-        "forumHub":"Forum Hub",
+        "myHub": "Topics",
+        "forumHub":"Topics",
         "issues": "Issues"
       },
       "journals": {

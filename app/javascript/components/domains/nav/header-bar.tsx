@@ -41,13 +41,16 @@ export const HeaderBar = observer(
 
     const { sessionStore, companyStore } = useMst();
     const accountActionRef = useRef(null);
+    
+    const { t } = useTranslation();
+    const issuesTitle =
+      companyStore?.company?.displayFormat === "Forum" ? t("issues.myHub") : t("issues.issues");
 
     useEffect(() => {
       companyStore.load();
     }, [companyStore.company]);
 
     const location = useLocation();
-    const { t } = useTranslation();
 
     const renderUserAvatar = () => {
       return (
@@ -95,7 +98,7 @@ export const HeaderBar = observer(
         showIssues && (
           <IssuesPopupContainer>
             <PopupHeaderContainer>
-              <PopupHeaderText>Issues</PopupHeaderText>
+              <PopupHeaderText> {issuesTitle}</PopupHeaderText>
               <CloseIconContainer onClick={() => setShowIssues(false)}>
                 <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
               </CloseIconContainer>
@@ -148,9 +151,7 @@ export const HeaderBar = observer(
                     setCreateKeyActivityModalOpen(false);
                   }}
                 >
-                  {companyStore?.company?.displayFormat === "Forum"
-                    ? t("issues.myHub")
-                    : t("issues.issues")}
+                  {issuesTitle}
                 </IssuesButton>
               </IssuesButtonContainer>
               <PulseSelectorWrapper
@@ -415,4 +416,4 @@ const PersonalInfoContainer = styled.div`
 const CloseIconContainer = styled.div`
   margin-left: auto;
   cursor: pointer;
-`
+`;
