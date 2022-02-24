@@ -5,7 +5,7 @@ class AnnualInitiative < ApplicationRecord
     enable
     recognize [:has_many, has_many: :through]
     include_association :sub_initiatives
-    exclude_association :comments
+    # exclude_association :comments
 
     customize(lambda { |original_post,new_post|
        current_company = Company.find(new_post.company_id)
@@ -25,7 +25,7 @@ class AnnualInitiative < ApplicationRecord
   belongs_to :company, optional: true
   has_many :quarterly_goals, dependent: :destroy
   has_many :sub_initiatives, through: :quarterly_goals, dependent: :destroy
-  has_many :comments, as: :commentable, dependent: :destroy
+  # has_many :comments, as: :commentable, dependent: :destroy
   has_many :milestones, as: :milestoneable, dependent: :destroy
   has_many :key_elements, as: :elementable, dependent: :destroy
   accepts_nested_attributes_for :key_elements, :milestones

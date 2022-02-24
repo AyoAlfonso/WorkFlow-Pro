@@ -38,6 +38,10 @@ export const InviteYourTeamBody = observer(
       if (numberOfUsersToInvite > remainingNumberOfUsers) {
         // TODO: SHOULD SHOW THE TOO MANY PEOPLE MODAL, BUT THAT IS ON PAUSE NOW
         // setShowUserLimitModal(true);
+          companyStore.inviteUsersToCompany(emailAddresses, selectedTeamId).then(() => {
+            setModalOpen(false);
+            setLoading(false);
+          });
         setLoading(false);
       } else {
         companyStore.inviteUsersToCompany(emailAddresses, selectedTeamId).then(() => {

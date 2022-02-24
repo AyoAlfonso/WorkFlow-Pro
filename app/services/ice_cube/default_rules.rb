@@ -35,7 +35,7 @@ class IceCube::DefaultRules
     schedule.to_h
   end
 
-  def default_weekly_check_in_report_rule
+  def self.default_weekly_check_in_report_rule
     schedule = IceCube::Schedule.new(Time.current - 7.days)
     schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:friday).hour_of_day(17).minute_of_hour(0))
     schedule.to_h
