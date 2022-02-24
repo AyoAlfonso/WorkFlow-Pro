@@ -406,7 +406,7 @@
         },
         "keyResults": {
           "emptyText": "No Key Results",
-          "create": "You don't have any Key Results. Visit the Objectives page to create an Initiative and Milestones"
+          "create": "You don't have any Key Results. Visit the Objectives page to create an Initiative and Key Results"
         },
         "kpi": {
           "emptyText": "No KPIs",
