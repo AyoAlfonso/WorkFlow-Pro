@@ -96,14 +96,7 @@ export const AnnualInitiativeCardExpanded = observer(
     };
 
     const renderCreateGoal = () => {
-      if (
-        !(
-          annualInitiative.fiscalYear == companyStore.company.currentFiscalYear &&
-          companyStore.company.currentFiscalQuarter == 4 &&
-          companyStore.company.quarterForCreatingQuarterlyGoals == 1
-        ) &&
-        showEditButton
-      ) {
+      if (showEditButton) {
         return (
           <CreateGoalContainer show={createQuarterlyGoalArea}>
             <CreateGoalSection
