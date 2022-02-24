@@ -42,58 +42,9 @@ export const HeaderBar = observer(
     const { sessionStore, companyStore } = useMst();
     const accountActionRef = useRef(null);
 
-    const keyActivitiesRef = useRef(null);
-    const issuesRef = useRef(null);
-
     useEffect(() => {
       companyStore.load();
     }, [companyStore.company]);
-
-    useEffect(() => {
-      const externalEventHandler = e => {
-        if (!showKeyActivities) return;
-
-        const node = keyActivitiesRef.current;
-
-        if (node && node.contains(e.target)) {
-          return;
-        }
-        setShowKeyActivities(false);
-      };
-
-      if (showKeyActivities) {
-        document.addEventListener("click", externalEventHandler);
-      } else {
-        document.removeEventListener("click", externalEventHandler);
-      }
-
-      return () => {
-        document.removeEventListener("click", externalEventHandler);
-      };
-    }, [showKeyActivities]);
-
-    useEffect(() => {
-      const externalEventHandler = e => {
-        if (!showIssues) return;
-
-        const node = issuesRef.current;
-
-        if (node && node.contains(e.target)) {
-          return;
-        }
-        setShowIssues(false);
-      };
-
-      if (showIssues) {
-        document.addEventListener("click", externalEventHandler);
-      } else {
-        document.removeEventListener("click", externalEventHandler);
-      }
-
-      return () => {
-        document.removeEventListener("click", externalEventHandler);
-      };
-    }, [showIssues]);
 
     const location = useLocation();
     const { t } = useTranslation();
@@ -126,7 +77,7 @@ export const HeaderBar = observer(
     const renderKeyActivitiesPopup = (): JSX.Element => {
       return (
         showKeyActivities && (
-          <KeyActivitiesPopupContainer ref={keyActivitiesRef}>
+          <KeyActivitiesPopupContainer>
             <PopupHeaderContainer>
               <PopupHeaderText>Pyns</PopupHeaderText>
               <CloseIconContainer onClick={() => setShowKeyActivities(false)}>
@@ -142,7 +93,7 @@ export const HeaderBar = observer(
     const renderIssuesPopup = (): JSX.Element => {
       return (
         showIssues && (
-          <IssuesPopupContainer ref={issuesRef}>
+          <IssuesPopupContainer>
             <PopupHeaderContainer>
               <PopupHeaderText>Issues</PopupHeaderText>
               <CloseIconContainer onClick={() => setShowIssues(false)}>
