@@ -60,7 +60,7 @@ export const KeyElementForm = ({
     setTitle("");
     setCompletionType("numerical");
     setCompletionTargetValue("");
-    setCondition(0);
+    setCondition(1);
     setActionType("Add");
     setSelectedElement(null);
   };
