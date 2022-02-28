@@ -60,6 +60,20 @@ export const AnnualInitiativeStoreModel = types
         showToast(`There was an error updating the ${self.title}`, ToastMessageConstants.ERROR);
       }
     }),
+    duplicateInitiative: flow(function*(id) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.duplicateAnnualInitiative(id);
+        const responseAnnualInitiative = response.data.annualInitiative;
+        self.annualInitiative = responseAnnualInitiative;
+        const { goalStore } = getRoot(self);
+        goalStore.load();
+        showToast(`${self.title} updated`, ToastMessageConstants.SUCCESS);
+        return responseAnnualInitiative;
+      } catch {
+        showToast(`There was an error updating the ${self.title}`, ToastMessageConstants.ERROR);
+      }
+    }),
     createKeyElement: flow(function*(keyElementParams) {
       const env = getEnv(self);
       try {

@@ -264,6 +264,10 @@ export class Api {
     return this.client.patch(`/annual_initiatives/close_initiative/${id}`, {});
   }
 
+  async duplicateAnnualInitiative(id) {
+    return this.client.post(`/annual_initiatives/duplicate/${id}`, {});
+  }
+
   async createAnnualInitiative(annualInitiativeObject) {
     return this.client.post(`/annual_initiatives`, annualInitiativeObject);
   }

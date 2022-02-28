@@ -89,6 +89,29 @@ export const GoalDropdownOptions = ({
     }
   };
 
+  const duplicateInitiative = () => {
+    if (itemType == "annualInitiative") {
+      if (
+        confirm(
+          `Are you sure you want to duplicate this ${t("annualInitiative.messageText", {
+            title: annualInitiativeTitle,
+          })}? Duplicating an Annual Objective will result in duplicating all of the related ${t("quarterlyGoal.messageText", {
+            title: quarterlyGoalTitle,
+          })}s as well`,
+        )
+      ) {
+        annualInitiativeStore.duplicateInitiative(itemId).then(() => {
+          closeModal();
+        });
+      }
+    }
+  };
+
+  const closeAndDuplicate = () => {
+    duplicateInitiative();
+    closeInitiative();
+  }
+
   const deleteInitiative = () => {
     if (itemType == "annualInitiative") {
       if (
@@ -146,6 +169,12 @@ export const GoalDropdownOptions = ({
           <StyledIcon icon={"Checkmark"} size={"15px"} />
         </IconContainer>
         <OptionText> Close {itemText} </OptionText>
+      </OptionContainer>
+      <OptionContainer onClick={() => closeAndDuplicate()}>
+        <IconContainer>
+          <StyledIcon icon={"Checkmark"} size={"15px"} />
+        </IconContainer>
+        <OptionText> Close and Duplicate {itemText} </OptionText>
       </OptionContainer>
       <OptionContainer onClick={() => deleteInitiative()}>
         <IconContainer>
