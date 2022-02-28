@@ -153,8 +153,8 @@ ActiveRecord::Schema.define(version: 2022_02_18_101408) do
     t.integer "display_format", default: 0
     t.integer "onboarding_status", default: 0
     t.string "customer_subscription_profile_id"
-    t.integer "forum_type", default: 0
     t.integer "objectives_key_type", default: 1
+    t.integer "forum_type", default: 0
     t.jsonb "preferences", default: {}, null: false
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_companies_on_deleted_at"
