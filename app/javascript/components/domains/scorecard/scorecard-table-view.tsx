@@ -24,6 +24,9 @@ import Tooltip from "@material-ui/core/Tooltip";
 export const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
   greaterThan ? (value / target) * 100 : ((target + target - value) / target) * 100;
 
+const getScore = (value: number, target: number, greaterThan: boolean) =>
+        greaterThan ? Math.round(value) : Math.round(target + target - value);
+
 type ScorecardTableViewProps = {
   tableKPIs: any;
   allKPIs: any[];
@@ -180,8 +183,7 @@ export const ScorecardTableView = observer(
       greaterThan: boolean,
       parentType: string,
     ) => {
-      const getScore = (value: number, target: number, greaterThan: boolean) =>
-        greaterThan ? Math.round(value) : Math.round(target + target - value);
+      
 
       const quarterScores = [
         [null, 0],
@@ -440,8 +442,8 @@ export const ScorecardTableView = observer(
                 title={
                   <>
                     {"Target: "} {row.original.targetValue}
-                    <br /> {"Average: "} {row.original.average}
-                    <br /> {"Total: "} {row.original.total}
+                    <br /> {"Average: "} {row.original.average[quarter - 1]}
+                    <br /> {"Total: "} {row.original.total[quarter - 1]}
                   </>
                 }
                 placement="top"
