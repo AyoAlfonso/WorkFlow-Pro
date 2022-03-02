@@ -32,14 +32,14 @@ ActiveAdmin.register Team do
 
   form do |f|
     f.inputs do
-      f.input :company
+      f.input :company, :collection => Company.where("name <> 'N/A'").order(:name)
       f.input :name
       if f.object.persisted?
         f.has_many :team_user_enablements, allow_destroy: true do |tu|
           if tu.object.persisted?
             tu.input :user, as: :select, collection: [tu.object.user], input_html: { disabled: false }
           else
-            tu.input :user, as: :select, collection: f.object.company.users.active_users_for_company(f.object.company.id).where.not(id: f.object.users), input_html: { disabled: tu.object.persisted? }
+            tu.input :user, as: :select, collection: Company.find(f.object.company.id).users.where.not(first_name: nil).order(:first_name), input_html: { disabled: tu.object.persisted? }
           end
           tu.input :role
         end
