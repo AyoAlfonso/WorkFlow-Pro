@@ -312,22 +312,15 @@ export const ScorecardTableView = observer(
             kpi.parentType,
           ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
 
-          const getQuarterWeeks = (w, q) => {
-            const start = (q == 1)? 0 : (q == 2)? 13 : (q == 3)? 26 : 39;
-            const end = start + 13;
-            const quarterWeeks = w.slice(start, end);
-            return quarterWeeks;
-          }
-
           const averageScores = averageScore(
-            getQuarterWeeks(weeks, quarter),
+            weeks,
             kpi.targetValue,
             kpi.greaterThan,
             kpi.parentType,
           );
 
           const totalScores = totalScore(
-            getQuarterWeeks(weeks, quarter),
+            weeks,
             kpi.targetValue,
             kpi.greaterThan,
             kpi.parentType,
