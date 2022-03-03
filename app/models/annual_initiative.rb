@@ -11,7 +11,7 @@ class AnnualInitiative < ApplicationRecord
   belongs_to :company, optional: true
   has_many :quarterly_goals, dependent: :destroy
   has_many :sub_initiatives, through: :quarterly_goals, dependent: :destroy
-  has_many :comments, as: :commentable, dependent: :destroy
+  # has_many :comments, as: :commentable, dependent: :destroy
   has_many :milestones, as: :milestoneable, dependent: :destroy
   has_many :key_elements, as: :elementable, dependent: :destroy
   accepts_nested_attributes_for :key_elements, :milestones
