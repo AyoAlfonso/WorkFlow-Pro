@@ -55,10 +55,11 @@ class Api::SubInitiativesController < Api::ApplicationController
     key_element.update!(value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], owned_by_id: params[:owned_by],
                         status: params[:status], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
     
-    # ObjectiveLog.create!(objective_log_params)
-    render json: { key_element: key_element.as_json, status: :ok }
+    render  template: "api/key_elements/_key_element", locals: { key_element: key_element }
+  end
 
   def delete_key_element
+    key_element = KeyElement.find(params[:key_element_id])
     key_element.destroy!
     @sub_initiative = policy_scope(SubInitiative).find(key_element.elementable_id)
     @company = current_company
