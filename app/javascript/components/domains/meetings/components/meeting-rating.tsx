@@ -8,7 +8,7 @@ import { Text } from "../../../shared/text";
 import { useMst } from "~/setup/root";
 import { Avatar } from "~/components/shared/avatar";
 import { useParams } from "react-router-dom";
-import { Input } from "~/components/shared/input";
+import { Input, Select } from "~/components/shared/input";
 import { baseTheme } from "~/themes/base";
 import { Button } from "~/components/shared/button";
 import { Loading } from "~/components/shared/loading";
@@ -91,6 +91,7 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
       .map((user, index) => {
         const score = scores.find(score => score.userId === user.id);
         const inputValue = R.isNil(score) ? "" : score.value;
+        const valueArray = [0, 1, 2, 3, 4, 5];
         return (
           <RowDiv key={index}>
             <AvatarNameContainer>
@@ -107,20 +108,19 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
               </Text>
             </AvatarNameContainer>
             <ScoreContainer>
-              <InputContainer>
-                <Input
-                  type="number"
-                  max="5"
-                  min="1"
-                  style={{
-                    border: `1px dashed ${baseTheme.colors.grey20}`,
-                    textAlign: "center",
-                    borderRadius: "10px",
-                  }}
+              <ValueContainer>
+                <Select
+                  name="userRating"
                   value={inputValue}
                   onChange={e => handleScoreChange(user, e.target.value)}
-                />
-              </InputContainer>
+                >
+                  {valueArray.map(num => (
+                    <option key={num} value={num == 0 ? "" : num}>
+                      {num == 0 ? "" : num}
+                    </option>
+                  ))}
+                </Select>
+              </ValueContainer>
               <ScoreDivider />
               <InputContainer>
                 <PlaceHolderInputDiv>
@@ -220,14 +220,20 @@ const InputContainer = styled.div`
   margin-left: 15px;
 `;
 
+const ValueContainer = styled.div`
+  height: 34px;
+  margin-left: 15px;
+  width: 60px;
+`;
+
 const PlaceHolderInputDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 47px;
+  width: 60px;
   height: 34px;
   border: 1px solid ${baseTheme.colors.grey20};
-  border-radius: 10px;
+  border-radius: 4px;
 `;
 
 const ButtonDiv = styled.div`

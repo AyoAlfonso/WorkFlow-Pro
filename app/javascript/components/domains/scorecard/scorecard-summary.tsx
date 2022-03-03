@@ -10,6 +10,7 @@ import { Icon } from "~/components/shared/icon";
 import { getScorePercent } from "./scorecard-table-view";
 import { toJS } from "mobx";
 import { useTranslation } from "react-i18next";
+import {findNextMonday} from "~/utils/date-time"
 
 const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
   const [data, setData] = useState<Object>(null);
@@ -208,10 +209,10 @@ const QuarterSummary = ({
       : [];
   };
 
-  const weekToDate = (week: number): string =>
-    moment(fiscalYearStart)
-      .add(week, "w")
+const weekToDate = (week: number): string =>
+    moment(findNextMonday(fiscalYearStart))
       .year(currentFiscalYear)
+      .add(week, "w")
       .startOf("week" as moment.unitOfTime.StartOf)
       .format("MMM D");
 
@@ -219,14 +220,14 @@ const QuarterSummary = ({
     const startWeek = (currentQuarter - 1) * 13 + 1;
     const currentQuarterWeeks = R.range(startWeek, currentWeek + 1);
     const currentQuarterData = gatherData(currentQuarterWeeks);
-    const lastQuarterStartWeek = (currentQuarter - 2) * 13 + 1;
-    // const lastQuarterWeeks = R.range(lastQuarterStartWeek, lastQuarterStartWeek + 13);
-    // const lastQuarterData = currentQuarter > 1 ? gatherData(lastQuarterWeeks) : [];
-    setCurrentWeekPercent(R.last(currentQuarterData).toFixed(2));
-    setQuarterlyPercent(currentQuarterData.reduce((a, b) => a + b) / currentQuarterData.length);
-    if (currentWeek != 1) {
-      setLastWeekPercent(+currentQuarterData[currentQuarterData.length - 2]);
+    if (currentQuarterData.length > 0) {
+      setCurrentWeekPercent(R.last(currentQuarterData)?.toFixed(2));
+      setQuarterlyPercent(currentQuarterData.reduce((a, b) => a + b) / currentQuarterData.length);
+      if (currentWeek != 1) {
+        setLastWeekPercent(+currentQuarterData[currentQuarterData.length - 2]);
+      }
     }
+ 
     setData({
       labels: R.range(startWeek, startWeek + 13).map((i: number) => weekToDate(i)),
       datasets: [
@@ -239,15 +240,6 @@ const QuarterSummary = ({
           borderWidth: 1.5,
           tension: 0,
         },
-        // {
-        //   label: "Last Quarter",
-        //   data: lastQuarterData,
-        //   fill: false,
-        //   backgroundColor: white,
-        //   borderColor: grey100,
-        //   borderWidth: 1.5,
-        //   tension: 0,
-        // },
       ],
     });
   }, [kpis]);
@@ -377,7 +369,7 @@ export const ScorecardSummary = ({
   fiscalYearStart,
   currentFiscalYear,
 }: ScorecardSummaryProps): JSX.Element => {
-  const KPIs = toJS(kpis);
+  const KPIs = JSON.parse(JSON.stringify((kpis)));
   return (
     <Container>
       <WeekSummary kpis={KPIs} currentWeek={currentWeek} currentFiscalYear={currentFiscalYear} />

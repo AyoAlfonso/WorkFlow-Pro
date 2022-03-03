@@ -7,6 +7,7 @@ class MeetingTemplate < ApplicationRecord
     team_weekly: 0,
     personal_weekly: 1,
     forum_monthly: 2,
+    organisation_forum_monthly: 4,
     personal_monthly: 3,
     personal_daily: 10
   }
@@ -22,7 +23,7 @@ class MeetingTemplate < ApplicationRecord
   scope :with_name, ->(name) { where(name: name) }
   #TODO: embedded link may be a setting on the user's components for meetings
   #each company may have a separate embedded link.
-
+  
   def total_duration
     #TODO: ADD CONDITIONAL TO LOOK FOR ANY OVERRIDE SETTINGS AND +/- THE DURATION
     #THIS NEEDS TO HAPPEN ON THE INDIVIDUAL STEP TOO (IN JBUILDER DECORATOR)

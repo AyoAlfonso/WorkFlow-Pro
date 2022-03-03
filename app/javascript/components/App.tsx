@@ -11,7 +11,6 @@ import { DragDropContext } from "react-beautiful-dnd";
 // stores
 import { IUserStore } from "../stores/user-store";
 // theme
-import {} from "styled-components/cssprop";
 import { baseTheme } from "../themes/base";
 import { GlobalStyles } from "./global-styles";
 
@@ -84,12 +83,20 @@ export const App = observer(
         const width = window.innerWidth <= 768;
         const id = profile?.id;
         if (width) {
-          if (location.pathname.includes("check-in")) return
+          if (location.pathname.includes("check-in")) return;
           if (id) return history.push(`/weekly-check-in/${id}/${getWeekOf()}`);
         }
-      }
-      redirectToCheckIn()
-    }, [profile])
+      };
+      redirectToCheckIn();
+    }, [profile]);
+
+    useEffect(() => {
+      setTimeout(() => {
+        if (!sessionStore?.loggedIn) {
+          return history.push("/");
+        }
+      }, 1000);
+    }, [sessionStore]);
 
     let noFeatures;
     let showGoalRoute;
@@ -272,12 +279,16 @@ export const App = observer(
                         {profile.productFeatures && profile.productFeatures.meeting && (
                           <>
                             <Route exact path="/meetings/agenda" component={ForumAgenda} />
+                            <Route exact path="/forum" component={ForumNotSetup} />
+                            <Route exact path="/forum/:team_id" component={TeamOverview} />
+                          </>
+                        )}
+                        {profile.productFeatures && (
+                          <>
                             <Route exact path="/meetings/section_1" component={Section1} />
                             <Route exact path="/meetings/section_1/:team_id" component={Section1} />
                             <Route exact path="/meetings/section_2" component={Section2} />
                             <Route exact path="/meetings/section_2/:team_id" component={Section2} />
-                            <Route exact path="/forum" component={ForumNotSetup} />
-                            <Route exact path="/forum/:team_id" component={TeamOverview} />
                           </>
                         )}
                       </Container>

@@ -6,10 +6,10 @@ import { BodyContainer, NotificationEditTableColumn } from "./notification-style
 import { Button, Icon, Input, Text } from "~/components/shared";
 import { Label, Select } from "~/components/shared/input";
 import * as R from "ramda";
-import { Container, HeaderContainer, HeaderText, IconContainer } from "../container-styles";
+import { Container, HeaderContainer, HeaderText } from "../container-styles";
 import { TimePicker } from "./";
 import styled from "styled-components";
-import {getNoticationName} from "./"
+import { getNoticationName } from "./";
 
 export const EditNotification = observer(
   (): JSX.Element => {
@@ -25,22 +25,15 @@ export const EditNotification = observer(
       <Container>
         <HeaderContainer>
           <HeaderTextAndIconContainer>
-            <IconContainer pr="8px" onClick={() => notificationStore.resetNotificationToEdit()}>
-              <Icon icon={"Chevron-Left"} size={"18px"} iconColor={"grey40"} />
-            </IconContainer>
+            <BackHeaderText onClick={() => notificationStore.resetNotificationToEdit()}>
+              {t("profile.notifications")}
+            </BackHeaderText>
+            <ChevronRight icon={"Chevron-Left"} size={"10px"} iconColor={"grey100"} />
             <HeaderText>{getNoticationName(notificationToEdit.notificationType)}</HeaderText>
           </HeaderTextAndIconContainer>
         </HeaderContainer>
         <BodyContainer>
           <NotificationEditTableColumn>
-            <NotificationOptionsContainer>
-              {notificationToEdit.notificationType !== "Evening Reflection" && (
-                <RenderNotificationTimeOptions />
-              )}
-              {notificationToEdit.notificationType == "Evening Reflection" && (
-                <RenderNotificationTimeOptions beginLimit={"12:00 PM"} endLimit={"11:00 PM"} />
-              )}
-            </NotificationOptionsContainer>
             <NotificationOptionsContainer>
               {notificationToEdit.notificationType !== "Weekly Checkin" && (
                 <RenderNotificationDayOptions days={["Friday", "Saturday", "Sunday", "Monday"]} />
@@ -49,6 +42,14 @@ export const EditNotification = observer(
                 <RenderNotificationDayOptions
                   days={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]}
                 />
+              )}
+            </NotificationOptionsContainer>
+            <NotificationOptionsContainer>
+              {notificationToEdit.notificationType !== "Evening Reflection" && (
+                <RenderNotificationTimeOptions />
+              )}
+              {notificationToEdit.notificationType == "Evening Reflection" && (
+                <RenderNotificationTimeOptions beginLimit={"12:00 PM"} endLimit={"11:00 PM"} />
               )}
             </NotificationOptionsContainer>
           </NotificationEditTableColumn>
@@ -80,8 +81,8 @@ const RenderNotificationTimeOptions = ({ ...props }): JSX.Element => {
   };
 
   return (
-    <>
-      <Label htmlFor="time">{t("profile.editNotification.reminder")}</Label>
+    <OptionContainer>
+      <Label htmlFor="time">{t("profile.editNotification.time")}</Label>
       <TimePicker
         name="notification-time"
         onChange={e => {
@@ -91,8 +92,9 @@ const RenderNotificationTimeOptions = ({ ...props }): JSX.Element => {
         endLimit={props.endLimit}
         defaultValue={notificationToEdit.validations[0].timeOfDay}
         disabled={false}
+        style={{ width: "18.75em" }}
       />
-    </>
+    </OptionContainer>
   );
 };
 
@@ -115,24 +117,28 @@ const RenderNotificationDayOptions = ({ days }: RenderNotificationDayOptionsProp
   };
 
   return (
-    <Select
-      name="day"
-      onChange={e => {
-        handleDayOfWeekChange(e.target.value);
-      }}
-      value={notificationDay}
-      defaultValue={dayOfWeek}
-      disabled={dayOfWeek === "Every Day"}
-    >
-      {R.map(
-        (day: string) => (
-          <option key={day} value={day}>
-            {day}
-          </option>
-        ),
-        days,
-      )}
-    </Select>
+    <OptionContainer>
+      <Label htmlFor="day">{t("profile.editNotification.day")}</Label>
+      <Select
+        name="day"
+        onChange={e => {
+          handleDayOfWeekChange(e.target.value);
+        }}
+        value={notificationDay}
+        defaultValue={dayOfWeek}
+        disabled={dayOfWeek === "Every Day"}
+        style={{ width: "18.75em"}}
+      >
+        {R.map(
+          (day: string) => (
+            <option key={day} value={day}>
+              {day}
+            </option>
+          ),
+          days,
+        )}
+      </Select>
+    </OptionContainer>
   );
 };
 
@@ -143,12 +149,27 @@ const NotificationOptionsContainer = styled.div`
 export const HeaderTextAndIconContainer = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 
 export const SaveButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
-  justify-content: flex-end;
   margin-top: 332px;
 `;
+
+const BackHeaderText = styled(HeaderText)`
+  color: ${props => props.theme.colors.grey100};
+  margin-right: .5em;
+  cursor: pointer;
+`;
+
+const ChevronRight = styled(Icon)`
+  transform: rotate(180deg);
+  margin-right: .5em;
+  margin-top: .25em;
+`;
+
+const OptionContainer = styled.div`
+  margin-right: 1.5em;
+`

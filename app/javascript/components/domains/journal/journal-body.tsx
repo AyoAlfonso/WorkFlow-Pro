@@ -130,7 +130,7 @@ export const JournalBody = observer(
               {...defaultJournalButtonProps}
               iconName={"Weekly"}
               iconColor={"primaryActive"}
-              text={t("journals.weeklyReflectionTitle")}
+              text={t("journals.weeklyReflection")}
               onClick={() =>
                 setQuestionnaireVariant(
                   QuestionnaireTypeConstants.weeklyReflection,

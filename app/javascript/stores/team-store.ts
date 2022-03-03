@@ -35,6 +35,10 @@ export const TeamStoreModel = types
         self.currentTeam = response.data;
       }
     }),
+    setTeamsManually(teams) {
+      // DON'T USE IN MAIN APPLICATION, ONLY FOR TEST PURPOSES
+      self.teams = teams as any;
+    },
     updateTeam: flow(function*(teamId, teamName, users) {
       const response: ApiResponse<any> = yield self.environment.api.updateTeam(
         teamId,

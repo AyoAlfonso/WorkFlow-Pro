@@ -112,7 +112,7 @@ export const Questionnaire = observer(
           width={"100%"}
           alignment={"left"}
           headerComponent={
-            <CardHeaderText fontSize={"16px"}>{t("journals.weeklyReflectionTitle")}</CardHeaderText>
+            <CardHeaderText fontSize={"16px"}>{t("journals.weeklyReflection")}</CardHeaderText>
           }
         >
           <CardBody>
@@ -131,9 +131,9 @@ export const Questionnaire = observer(
           headerComponent={
             <SurveyHeader
               title={
-                companyType === "Company"
-                  ? t("journals.weeklyReflectionTitle")
-                  : t("journals.monthlyReflection")
+                props.variant === "Monthly Reflection"
+                  ? t("journals.monthlyReflection")
+                  : t("journals.weeklyReflection")
               }
             />
           }

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import { useMst } from "~/setup/root";
-import * as moment from "moment";
+import moment from "moment";
 import { useTranslation } from "react-i18next";
 
 export const HeaderText = observer(
@@ -42,8 +42,8 @@ export const HeaderText = observer(
             return <> {t("forum.annualHub")} </>;
           case "section_2":
             return <> {t("forum.upcomingHub")} </>;
-          case "agenda":
-            return <> {t("forum.agenda")} </>;
+          // case "agenda":
+          //   return <> {t("forum.agenda")} </>;
           default:
             return <></>;
         }
@@ -60,7 +60,7 @@ export const HeaderText = observer(
       case "scorecard":
         return <> {t("scorecards.indexTitle")} </>;
       case "weekly-check-in":
-        return <>{t("Weekly Check-in")}</>
+        return <>{t("Weekly Check-in")}</>;
       default:
         return <>{`${getGreetingTime(moment())} ${sessionStore.profile.firstName}`}</>;
     }

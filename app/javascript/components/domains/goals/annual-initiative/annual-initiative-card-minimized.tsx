@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { color } from "styled-system";
 import { baseTheme } from "../../../../themes";
 import { Icon } from "../../../shared/icon";
-import * as moment from "moment";
+import moment from "moment";
 import { observer } from "mobx-react";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useMst } from "~/setup/root";
@@ -24,7 +24,7 @@ export const AnnualInitiativeCardMinimized = observer(
     showMinimizedCard,
   }: IAnnualInitiativeCardMinimizedProps): JSX.Element => {
     const { companyStore, sessionStore } = useMst();
-    const { currentFiscalYear } = companyStore.company;
+    const { yearForCreatingAnnualInitiatives, currentFiscalYear } = companyStore.company;
     const {
       warningRed,
       cautionYellow,
@@ -47,13 +47,58 @@ export const AnnualInitiativeCardMinimized = observer(
       return <Loading />;
     }
 
+    const today = moment();
+    const year = companyStore.company.yearForCreatingAnnualInitiatives;
+    const month = 1 + moment(companyStore.company.fiscalYearStart).month();
+    const day = moment(companyStore.company.fiscalYearStart).date();
+
+    const nextFiscalYearStart = moment(`${year + 1}/${month}/${day}`, "YYYY-MM-DD");
+
+    const weeksToNextFiscalYear = nextFiscalYearStart.diff(today, "week");
+
+    const singleYearString =
+      weeksToNextFiscalYear < 4
+        ? `FY${(companyStore.company.yearForCreatingAnnualInitiatives + 1).toString().slice(-2)}`
+        : `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`;
+
+    const doubleYearString =
+      weeksToNextFiscalYear < 4
+        ? `FY${(companyStore.company.yearForCreatingAnnualInitiatives + 1).toString().slice(-2)}/${(
+            companyStore.company.yearForCreatingAnnualInitiatives + 2
+          )
+            .toString()
+            .slice(-2)}`
+        : `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}/${(
+            companyStore.company.yearForCreatingAnnualInitiatives + 1
+          )
+            .toString()
+            .slice(-2)}`;
+
+    const singleYearStringForInitiative = `FY${annualInitiative?.fiscalYear?.toString().slice(-2)}`;
+    const doubleYearStringForInitiative = `FY${annualInitiative?.fiscalYear?.toString().slice(-2)}/${(
+      annualInitiative?.fiscalYear + 1
+    )
+      .toString()
+      .slice(-2)}`;
+
+    const goalYearString =
+      month > 1
+        ? doubleYearStringForInitiative
+        : month == 1 && day > 1
+        ? doubleYearStringForInitiative
+        : singleYearStringForInitiative;
+
+    const upcomingYearString =
+      month > 1 ? doubleYearString : month == 1 && day > 1 ? doubleYearString : singleYearString;
+
     if (annualInitiative.closedAt != null) {
       statusBadge.description = `Closed - FY${annualInitiative.fiscalYear %
         100}/${(annualInitiative.fiscalYear + 1) % 100}`;
       statusBadge.colors = { color: white, backgroundColor: grey100 };
-    } else if (currentFiscalYear < annualInitiative.fiscalYear) {
-      statusBadge.description = `Upcoming - FY${annualInitiative.fiscalYear %
-        100}/${(annualInitiative.fiscalYear + 1) % 100}`;
+    } else if (yearForCreatingAnnualInitiatives < annualInitiative.fiscalYear) {
+      statusBadge.description = `Upcoming - ${
+        upcomingYearString == goalYearString ? upcomingYearString : goalYearString
+      }`;
       statusBadge.colors = { color: white, backgroundColor: primary100 };
     }
     const milestones = [

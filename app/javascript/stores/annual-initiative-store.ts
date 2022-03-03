@@ -5,11 +5,13 @@ import moment from "moment";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { showToast } from "~/utils/toast-message";
 import il8n from "i18next";
+import { ObjectiveLogModel } from "~/models/objective-log";
 
 export const AnnualInitiativeStoreModel = types
   .model("AnnualInitiativeModel")
   .props({
     annualInitiative: types.maybeNull(AnnualInitiativeModel),
+    objectiveLogs: types.maybeNull(types.array(ObjectiveLogModel)),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -68,11 +70,11 @@ export const AnnualInitiativeStoreModel = types
         if (response.ok) {
           const updatedKeyElements = [
             ...self.annualInitiative.keyElements,
-            response.data.keyElement,
+            response.data,
           ];
           self.annualInitiative.keyElements = updatedKeyElements as any;
           showToast("Key Result created", ToastMessageConstants.SUCCESS);
-          return response.data.keyElement;
+          return response.data;
         }
         //api to show error
       } catch {
@@ -90,12 +92,12 @@ export const AnnualInitiativeStoreModel = types
 
         const keyElements = self.annualInitiative.keyElements;
         const keyElementIndex = keyElements.findIndex(ke => ke.id == keyElementId);
-        keyElements[keyElementIndex] = response.data.keyElement;
+        keyElements[keyElementIndex] = response.data;
         self.annualInitiative.keyElements = keyElements;
-        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
-        return response.data.keyElement;
-      } catch (error) {
+        return response.data;
+      } catch {
         showToast(il8n.t("annualInitiative.keyElementUpdateError"), ToastMessageConstants.ERROR);
+        return false;
       }
     }),
     deleteKeyElement: flow(function*(keyElementId) {
@@ -110,6 +112,48 @@ export const AnnualInitiativeStoreModel = types
         //api to show error
       } catch {
         showToast("There was an error deleting the key result", ToastMessageConstants.ERROR);
+        return false;
+      }
+    }),
+    getActivityLogs: flow(function*(page, type, id) {
+      const env = getEnv(self);
+      try {
+        self.objectiveLogs = null;
+        const response: any = yield env.api.getObjectiveLogs(page, type, id);
+        if (response.ok) {
+          self.objectiveLogs = response.data.objectiveLog;
+          return response.data.meta;
+        }
+      } catch {
+        return false;
+      }
+    }),
+    createActivityLog: flow(function*(objectiveLog) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createInitiativeLog(objectiveLog);
+        if (response.ok) {
+          const updatedLogs = [...self.objectiveLogs, response.data.objectiveLog];
+          self.objectiveLogs = updatedLogs as any;
+          return response.data.objectiveLog;
+        }
+      } catch {
+        return false;
+      }
+    }),
+    deleteActivityLog: flow(function*(id) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.deleteInitiativeLog(id);
+        if (response.ok) {
+          const updatedLogs = self.objectiveLogs.filter(
+            log => log.id != response.data.objectiveLog.id,
+          );
+          self.objectiveLogs = updatedLogs as any;
+          showToast("Log Deleted", ToastMessageConstants.SUCCESS);
+          return response.data.objectiveLog;
+        }
+      } catch {
         return false;
       }
     }),
@@ -145,6 +189,10 @@ export const AnnualInitiativeStoreModel = types
   .actions(self => ({
     updateModelField(field, value) {
       self.annualInitiative[field] = value;
+    },
+    findKeyElement(id) {
+      const keyElement = self.annualInitiative.keyElements.find(ke => ke.id == id);
+      return keyElement;
     },
     updateKeyElementValue(field: string, id: number, value: number | string) {
       let keyElements = self.annualInitiative.keyElements;

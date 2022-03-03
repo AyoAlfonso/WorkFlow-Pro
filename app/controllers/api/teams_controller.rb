@@ -48,7 +48,10 @@ class Api::TeamsController < Api::ApplicationController
   end
 
   def destroy
+    #we are doing to destructive operations here to keep the DB consistent, over time it won't be necessary as the data would have normalized,
+    # we can then remove the soft_delete 
     @team.soft_delete
+    @team.destroy!
     #TODO: make this restful
     @teams = policy_scope(Team).all
     render "api/teams/index"

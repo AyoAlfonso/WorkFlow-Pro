@@ -5,11 +5,13 @@ import moment from "moment";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import il8n from "i18next";
+import { ObjectiveLogModel } from "~/models/objective-log";
 
 export const SubInitiativeStoreModel = types
   .model("SubInitiativeModel")
   .props({
     subInitiative: types.maybeNull(SubInitiativeModel),
+    objectiveLogs: types.maybeNull(types.array(ObjectiveLogModel)),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -24,6 +26,7 @@ export const SubInitiativeStoreModel = types
       try {
         const response: any = yield env.api.getSubInitiative(id);
         self.subInitiative = response.data;
+        return response.data;
       } catch {
         showToast(
           il8n.t("subInitiative.retrievalError", { title: self.title }),
@@ -73,10 +76,10 @@ export const SubInitiativeStoreModel = types
           self.subInitiative.id,
           keyElementParams,
         );
-        const updatedKeyElements = [...self.subInitiative.keyElements, response.data.keyElement];
+        const updatedKeyElements = [...self.subInitiative.keyElements, response.data];
         self.subInitiative.keyElements = updatedKeyElements as any;
         showToast("Key Result created", ToastMessageConstants.SUCCESS);
-        return response.data.keyElement;
+        return response.data;
       } catch {
         showToast(il8n.t("subInitiative.keyElementCreationError"), ToastMessageConstants.ERROR);
       }
@@ -91,12 +94,12 @@ export const SubInitiativeStoreModel = types
         );
         const keyElements = self.subInitiative.keyElements;
         const keyElementIndex = keyElements.findIndex(ke => ke.id == keyElementId);
-        keyElements[keyElementIndex] = response.data.keyElement;
+        keyElements[keyElementIndex] = response.data;
         self.subInitiative.keyElements = keyElements;
-        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
-        return response.data.keyElement;
+        return response.data;
       } catch (error) {
         showToast(il8n.t("subInitiative.keyElementUpdateError"), ToastMessageConstants.ERROR);
+        return false;
       }
     }),
     deleteKeyElement: flow(function*(keyElementId) {
@@ -108,6 +111,48 @@ export const SubInitiativeStoreModel = types
         return true;
       } catch {
         showToast("There was an error deleting the key result", ToastMessageConstants.ERROR);
+        return false;
+      }
+    }),
+    getActivityLogs: flow(function*(page, type, id) {
+      const env = getEnv(self);
+      try {
+        self.objectiveLogs = null;
+        const response: any = yield env.api.getObjectiveLogs(page, type, id);
+        if (response.ok) {
+          self.objectiveLogs = response.data.objectiveLog;
+          return response.data.meta;
+        }
+      } catch {
+        return false;
+      }
+    }),
+    createActivityLog: flow(function*(objectiveLog) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.createInitiativeLog(objectiveLog);
+        if (response.ok) {
+          const updatedLogs = [...self.objectiveLogs, response.data.objectiveLog];
+          self.objectiveLogs = updatedLogs as any;
+          return response.data.objectiveLog;
+        }
+      } catch {
+        return false;
+      }
+    }),
+    deleteActivityLog: flow(function*(id) {
+      const env = getEnv(self);
+      try {
+        const response: any = yield env.api.deleteInitiativeLog(id);
+        if (response.ok) {
+          const updatedLogs = self.objectiveLogs.filter(
+            log => log.id != response.data.objectiveLog.id,
+          );
+          self.objectiveLogs = updatedLogs as any;
+          showToast("Log Deleted", ToastMessageConstants.SUCCESS);
+          return response.data.objectiveLog;
+        }
+      } catch {
         return false;
       }
     }),
@@ -170,6 +215,22 @@ export const SubInitiativeStoreModel = types
   .actions(self => ({
     updateModelField(field, value) {
       self.subInitiative[field] = value;
+    },
+    findKeyElement(id) {
+      const keyElement = self.subInitiative.keyElements.find(ke => ke.id == id);
+      return keyElement;
+    },
+    keyElementTitle(id) {
+      const keyElement = self.subInitiative.keyElements.find(ke => ke.id == id);
+      return keyElement?.value;
+    },
+    keyElementStatus(id) {
+      const keyElement = self.subInitiative.keyElements.find(ke => ke.id == id);
+      return keyElement?.status;
+    },
+    keyElementCompletionType(id) {
+      const keyElement = self.subInitiative.keyElements.find(ke => ke.id == id);
+      return keyElement?.completionType;
     },
     updateKeyElementValue(field: string, id: number, value: number) {
       let keyElements = self.subInitiative.keyElements;

@@ -36,8 +36,8 @@ export const InviteYourTeamBody = observer(
 
       const remainingNumberOfUsers = 15 - users.length;
       if (numberOfUsersToInvite > remainingNumberOfUsers) {
-        // TODO: SHOW THE TOO MANY PEOPLE MODAL
-        setShowUserLimitModal(true);
+        // TODO: SHOULD SHOW THE TOO MANY PEOPLE MODAL, BUT THAT IS ON PAUSE NOW
+        // setShowUserLimitModal(true);
         setLoading(false);
       } else {
         companyStore.inviteUsersToCompany(emailAddresses, selectedTeamId).then(() => {

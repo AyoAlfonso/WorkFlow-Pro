@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import * as R from "ramda";
-import * as React from "react";
-import { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
+import { useTranslation } from "react-i18next";
 import { Avatar } from "../../shared/avatar";
 import { Icon } from "../../shared/icon";
 import { Heading, Text } from "../../shared";
@@ -39,8 +39,64 @@ export const HeaderBar = observer(
     const [showIssues, setShowIssues] = useState<boolean>(false);
     const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
 
-    const { sessionStore } = useMst();
+    const { sessionStore, companyStore } = useMst();
     const accountActionRef = useRef(null);
+
+    const keyActivitiesRef = useRef(null);
+    const issuesRef = useRef(null);
+    const { t } = useTranslation();
+    const issuesTitle =
+      companyStore?.company?.displayFormat === "Forum" ? t("issues.myHub") : t("issues.issues");
+
+    useEffect(() => {
+      companyStore.load();
+    }, [companyStore.company]);
+
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showKeyActivities) return;
+
+        const node = keyActivitiesRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowKeyActivities(false);
+      };
+
+      if (showKeyActivities) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showKeyActivities]);
+
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showIssues) return;
+
+        const node = issuesRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowIssues(false);
+      };
+
+      if (showIssues) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showIssues]);
 
     const location = useLocation();
 
@@ -72,9 +128,12 @@ export const HeaderBar = observer(
     const renderKeyActivitiesPopup = (): JSX.Element => {
       return (
         showKeyActivities && (
-          <KeyActivitiesPopupContainer>
+          <KeyActivitiesPopupContainer ref={keyActivitiesRef}>
             <PopupHeaderContainer>
               <PopupHeaderText>Pyns</PopupHeaderText>
+              <CloseIconContainer onClick={() => setShowKeyActivities(false)}>
+                <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
+              </CloseIconContainer>
             </PopupHeaderContainer>
             <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"} />
           </KeyActivitiesPopupContainer>
@@ -85,9 +144,12 @@ export const HeaderBar = observer(
     const renderIssuesPopup = (): JSX.Element => {
       return (
         showIssues && (
-          <IssuesPopupContainer>
+          <IssuesPopupContainer ref={issuesRef}>
             <PopupHeaderContainer>
-              <PopupHeaderText>Issues</PopupHeaderText>
+              <PopupHeaderText> {issuesTitle}</PopupHeaderText>
+              <CloseIconContainer onClick={() => setShowIssues(false)}>
+                <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
+              </CloseIconContainer>
             </PopupHeaderContainer>
             <IssuesBody
               showOpenIssues={showOpenIssues}
@@ -98,6 +160,7 @@ export const HeaderBar = observer(
         )
       );
     };
+    
     return (
       <Wrapper>
         <Container>
@@ -136,7 +199,7 @@ export const HeaderBar = observer(
                     setCreateKeyActivityModalOpen(false);
                   }}
                 >
-                  Issues
+                  {issuesTitle}
                 </IssuesButton>
               </IssuesButtonContainer>
               <PulseSelectorWrapper
@@ -330,6 +393,7 @@ const PopupHeaderContainer = styled.div`
   padding-left: 10px;
   padding-right: 10px;
   height: 65px;
+  align-items: center;
 `;
 
 const PopupHeaderText = styled.h4`
@@ -395,4 +459,9 @@ const PersonalInfoContainer = styled.div`
     margin-right: 16px;
     pointer-events: none;
   }
+`;
+
+const CloseIconContainer = styled.div`
+  margin-left: auto;
+  cursor: pointer;
 `;

@@ -58,7 +58,6 @@ export const Security = (): JSX.Element => {
               onClick={changePassword}
               disabled={password == "" || password != passwordConfirmation}
               style={{
-                marginLeft: "auto",
                 marginTop: "auto",
                 marginBottom: "24px",
                 marginRight: "24px",

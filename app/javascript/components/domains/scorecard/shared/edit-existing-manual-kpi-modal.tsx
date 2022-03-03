@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { observer } from "mobx-react";
@@ -8,6 +8,9 @@ import { useMst } from "~/setup/root";
 import { Select } from "~/components/shared/input";
 import { OwnedBy } from "./scorecard-owned-by";
 import { AdvancedKPIModal } from "./advanced-kpi-modals";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
 import {
   InputFromUnitType,
   ModalWithHeader,
@@ -19,7 +22,6 @@ import {
   RowContainer,
 } from "./modal-elements";
 import { toJS } from "mobx";
-import { TrixEditor } from "react-trix";
 import { useHistory } from "react-router";
 import { Loading } from "~/components/shared/loading";
 
@@ -45,7 +47,7 @@ export const AddExistingManualKPIModal = observer(
     const [title, setTitle] = useState<string>(undefined);
     const [kpi, setKpi] = useState(null);
     const [greaterThan, setGreaterThan] = useState<boolean>(true);
-    const [description, setDescription] = useState<string>(undefined);
+    const [description, setDescription] = useState<string>("");
     const [unitType, setUnitType] = useState<string>(undefined);
     const [owner, setOwner] = useState(undefined);
     const [targetValue, setTargetValue] = useState<number>(undefined);
@@ -100,7 +102,7 @@ export const AddExistingManualKPIModal = observer(
     const resetModal = () => {
       setTitle(undefined);
       setGreaterThan(true);
-      setDescription(undefined);
+      setDescription("");
       setUnitType("numerical");
       setOwner(sessionStore?.profile);
       setTargetValue(undefined);
@@ -206,20 +208,12 @@ export const AddExistingManualKPIModal = observer(
                   Description
                 </InputHeaderWithComment>
                 <TrixEditorContainer>
-                  <TrixEditor
-                    className={"trix-kpi-modal"}
-                    autoFocus={false}
+                  <ReactQuill
+                    theme="snow"
                     placeholder={"Add a description..."}
-                    onChange={body => {
-                      setDescription(body);
-                    }}
                     value={description}
-                    mergeTags={[]}
-                    onEditorReady={editor => {
-                      setDescription(description);
-                      editor.element.addEventListener("trix-file-accept", event => {
-                        event.preventDefault();
-                      });
+                    onChange={(content, delta, source, editor) => {
+                      setDescription(editor.getHTML());
                     }}
                   />
                 </TrixEditorContainer>

@@ -7,7 +7,11 @@ const getMilestoneValues = quarterlyGoals => {
     if (Array.isArray(qg.milestones)) {
       return qg;
     } else {
-      return { ...qg, milestones: R.values(qg.milestones) };
+      return {
+        ...qg,
+        milestones: [{ description: "onboarding example" }],
+        keyElements: R.values(qg.keyElements),
+      };
     }
   });
 };

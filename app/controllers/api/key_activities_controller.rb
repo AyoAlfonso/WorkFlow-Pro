@@ -10,6 +10,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
     render "api/key_activities/index"
   end
 
+  
   def create
     creation_params = {
       user_id: params[:personal] ? current_user.id : params[:user_id],

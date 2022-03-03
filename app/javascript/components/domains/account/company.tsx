@@ -9,12 +9,12 @@ import { observer } from "mobx-react";
 import { Can } from "~/components/shared/auth/can";
 import { Button } from "~/components/shared/button";
 import { FileInput } from "./file-input";
+import Switch from "~/components/shared/switch";
+import FormGroup from "@material-ui/core/FormGroup";
 import { ImageCropperModal } from "~/components/shared/image-cropper-modal";
-import { TrixEditor } from "react-trix";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { useHistory } from "react-router";
 import { toJS } from "mobx";
-
 import {
   StretchContainer,
   BodyContainer,
@@ -45,27 +45,10 @@ export const Company = observer(
     const [name, setName] = useState(company.name);
     const [timezone, setTimezone] = useState(company.timezone);
     const [forumType, setForumType] = useState(company.forumType);
-    const [rallyingCry, setRallyingCry] = useState(company.rallyingCry);
-    const [core1Content, setCore1Content] = useState(company.coreFour.core1Content);
-    const [core2Content, setCore2Content] = useState(company.coreFour.core2Content);
-    const [core3Content, setCore3Content] = useState(company.coreFour.core3Content);
-    const [core4Content, setCore4Content] = useState(company.coreFour.core4Content);
     const [logoImageblub, setLogoImageblub] = useState<any | null>(null);
     const [logoImageForm, setLogoImageForm] = useState<FormData | null>(null);
     const [logoImageModalOpen, setLogoImageModalOpen] = useState<boolean>(false);
     const [executiveTeam, setExecutiveTeam] = useState<any>(null);
-    const [objectivesKeyType, setObjectivesKeyType] = useState<string>(
-      formatType[company.objectivesKeyType],
-    );
-    const [annualInitiativeTitle, setAnnualInitiativeTitle] = useState<string>(
-      sessionStore.annualInitiativeTitle,
-    );
-    const [quarterlyGoalTitle, setQuarterlyGoalTitle] = useState<string>(
-      sessionStore.quarterlyGoalTitle,
-    );
-    const [subInitiativeTitle, setSubInitiativeTitle] = useState<string>(
-      sessionStore.subInitiativeTitle,
-    );
     const currentUser = sessionStore.profile;
 
     const { t } = useTranslation();
@@ -125,34 +108,7 @@ export const Company = observer(
           {
             name,
             timezone,
-            rallyingCry,
             forumType,
-            objectivesKeyType:
-              objectivesKeyType?.charAt(0).toUpperCase() +
-              objectivesKeyType?.slice(1),
-            coreFourAttributes: {
-              core_1: core1Content,
-              core_2: core2Content,
-              core_3: core3Content,
-              core_4: core4Content,
-            },
-            companyStaticDatasAttributes: {
-              0: {
-                id: sessionStore.companyStaticData.find(item => item.field == "annual_objective")
-                  .id,
-                value: annualInitiativeTitle,
-              },
-              1: {
-                id: sessionStore.companyStaticData.find(
-                  item => item.field == "quarterly_initiative",
-                ).id,
-                value: quarterlyGoalTitle,
-              },
-              2: {
-                id: sessionStore.companyStaticData.find(item => item.field == "sub_initiative").id,
-                value: subInitiativeTitle,
-              },
-            },
           },
           false,
         ),
@@ -170,16 +126,14 @@ export const Company = observer(
       }
 
       Promise.all(promises).then(() => {
-        setTimeout(history.go, 1000, 0);
+        // setTimeout(history.go, 1000, 0);
       });
     };
 
     return (
       <StretchContainer>
         <HeaderContainer>
-          <HeaderText>
-            {company.accessCompany ? t("profile.companyDetails") : t("profile.forumDetails")}
-          </HeaderText>
+          <HeaderText>{t("profile.generalSettings")}</HeaderText>
         </HeaderContainer>
 
         <Can
@@ -235,17 +189,16 @@ export const Company = observer(
                       )}
                     </PhotoContainer>
                     <PhotoModificationButtonsSection>
+                      <FileInput labelText={t("general.upload")} onChange={inputFileUpload} />
                       <Button
                         small
                         variant={"redOutline"}
                         onClick={deleteLogo}
-                        mr={2}
+                        ml={2}
                         style={{ width: "120px" }}
                       >
                         {t("general.remove")}
                       </Button>
-
-                      <FileInput labelText={t("general.upload")} onChange={inputFileUpload} />
 
                       {logoImageModalOpen && (
                         <ImageCropperModal
@@ -333,145 +286,6 @@ export const Company = observer(
                       </option>
                     ))}
                   </Select>
-                  {ceoORAdmin && (
-                    <>
-                      <Label htmlFor="objectives_key_type">{t("company.objectivesKeyType")}</Label>
-                      <Select
-                        onChange={e => {
-                          e.preventDefault();
-                          setObjectivesKeyType(e.currentTarget.value);
-                        }}
-                        value={objectivesKeyType}
-                        style={{ minWidth: "200px", marginBottom: "16px" }}
-                      >
-                        {company?.objectivesKeyTypes &&
-                          Object.entries(company?.objectivesKeyTypes).map(([name, id]) => (
-                            <option key={`option-${id}`} value={name as string}>
-                              {(name?.charAt(0).toUpperCase() + name.slice(1))
-                                .match(/[A-Z][a-z]+|[0-9]+/g)
-                                .join(" ")}
-                            </option>
-                          ))}
-                      </Select>
-                    </>
-                  )}
-                  <Label htmlFor="rallying">{t("company.rallyingCry")}</Label>
-                  <Input
-                    name="rallyingCry"
-                    onChange={e => {
-                      setRallyingCry(e.target.value);
-                    }}
-                    value={rallyingCry}
-                  />
-                  <Label htmlFor="core1Content">{t("core.core1")}</Label>
-                  <TrixEditor
-                    className="custom-trix-class"
-                    autoFocus={true}
-                    placeholder="Please enter Why Do We Exist?"
-                    value={core1Content}
-                    // uploadURL="https://domain.com/imgupload/receiving/post"
-                    // uploadData={{ key1: "value", key2: "value" }}
-                    //fileParamName="blob"
-                    mergeTags={[]}
-                    onChange={(html, text) => {
-                      setCore1Content(html);
-                    }}
-                    onEditorReady={editor => {
-                      editor.element.addEventListener("trix-file-accept", event => {
-                        event.preventDefault();
-                      });
-                    }}
-                  />
-                  <Label htmlFor="core_2">{t("core.core2")}</Label>
-                  <TrixEditor
-                    className="custom-trix-class"
-                    autoFocus={true}
-                    placeholder="Please enter How Do We Behave?"
-                    value={core2Content}
-                    // uploadURL="https://domain.com/imgupload/receiving/post"
-                    // uploadData={{ key1: "value", key2: "value" }}
-                    //fileParamName="blob"
-                    mergeTags={[]}
-                    onChange={(html, text) => {
-                      setCore2Content(html);
-                    }}
-                    onEditorReady={editor => {
-                      editor.element.addEventListener("trix-file-accept", event => {
-                        event.preventDefault();
-                      });
-                    }}
-                  />
-                  <Label htmlFor="core_3">{t("core.core3")}</Label>
-                  <TrixEditor
-                    className="custom-trix-class"
-                    autoFocus={true}
-                    placeholder="Please enter How Do We Behave?"
-                    value={core3Content}
-                    // uploadURL="https://domain.com/imgupload/receiving/post"
-                    // uploadData={{ key1: "value", key2: "value" }}
-                    //fileParamName="blob"
-                    mergeTags={[]}
-                    onChange={(html, text) => {
-                      setCore3Content(html);
-                    }}
-                    onEditorReady={editor => {
-                      editor.element.addEventListener("trix-file-accept", event => {
-                        event.preventDefault();
-                      });
-                    }}
-                  />
-                  <Label htmlFor="core_4">{t("core.core4")}</Label>
-                  <TrixEditor
-                    className="custom-trix-class"
-                    autoFocus={true}
-                    placeholder="Please enter 
-                    How Do We Succeed?"
-                    value={core4Content}
-                    // uploadURL="https://domain.com/imgupload/receiving/post"
-                    // uploadData={{ key1: "value", key2: "value" }}
-                    //fileParamName="blob"
-                    mergeTags={[]}
-                    onChange={(html, text) => {
-                      setCore4Content(html);
-                    }}
-                    onEditorReady={editor => {
-                      editor.element.addEventListener("trix-file-accept", event => {
-                        event.preventDefault();
-                      });
-                    }}
-                  />
-                  <CompanyStaticDataSection>
-                    <CompanyStaticDataArea>
-                      <Label htmlFor="annualInitiative">Annual Objective</Label>
-                      <Input
-                        name="annualInitiative"
-                        onChange={e => {
-                          setAnnualInitiativeTitle(e.target.value);
-                        }}
-                        value={annualInitiativeTitle}
-                      />
-                    </CompanyStaticDataArea>
-                    <CompanyStaticDataArea>
-                      <Label htmlFor="quarterlyGoal">Quarterly Initiative</Label>
-                      <Input
-                        name="quarterlyGoal"
-                        onChange={e => {
-                          setQuarterlyGoalTitle(e.target.value);
-                        }}
-                        value={quarterlyGoalTitle}
-                      />
-                    </CompanyStaticDataArea>
-                    <CompanyStaticDataArea>
-                      <Label htmlFor="subInitiative">Supporting Initiative</Label>
-                      <Input
-                        name="subInitiative"
-                        onChange={e => {
-                          setSubInitiativeTitle(e.target.value);
-                        }}
-                        value={subInitiativeTitle}
-                      />
-                    </CompanyStaticDataArea>
-                  </CompanyStaticDataSection>
                 </PersonalInfoContainer>
               </BodyContainer>
               <SaveButtonContainer>
@@ -480,7 +294,6 @@ export const Company = observer(
                   variant={"primary"}
                   onClick={save}
                   style={{
-                    marginLeft: "auto",
                     marginTop: "auto",
                     marginBottom: "24px",
                     marginRight: "24px",
@@ -496,11 +309,3 @@ export const Company = observer(
     );
   },
 );
-
-const CompanyStaticDataSection = styled.div`
-  margin-top: 16px;
-`;
-
-const CompanyStaticDataArea = styled.div`
-  margin-top: 8px;
-`;

@@ -48,7 +48,7 @@ export const HabitScoreLineChart = ({
         pointHoverBorderWidth: 2,
         pointRadius: 3,
         pointHitRadius: 10,
-        data: dataToShow["data"],
+        data: [...dataToShow["data"]],
       },
     ],
   };

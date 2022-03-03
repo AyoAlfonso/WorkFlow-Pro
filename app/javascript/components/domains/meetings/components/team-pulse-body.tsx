@@ -31,7 +31,7 @@ export const TeamPulseBody = ({ meeting }: ITeamPulseBodyProps): JSX.Element => 
     percentageDifference = meeting.emotionScorePercentageDifferenceMonthly;
     periodDesc = "month";
   }
- 
+
   return (
     <Container>
       {teamEmotions > 0 && userEmotions.length ? (

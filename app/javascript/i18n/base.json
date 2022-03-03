@@ -17,22 +17,24 @@
         "updateProfileAvatar": "Update Avatar",
         "growthPlan": "Billing & Plans",
         "notifications": "Notifications",
-        "security": "Security",
+        "security": "Reset Password",
         "switchCompanies": "Switch Profiles",
         "notificationsTable": {
-          "reminder": "Reminder",
-          "repeat": "Repeat",
-          "email": "Email"
+          "reminder": "REMINDER",
+          "repeat": "CADENCE",
+          "email": "EMAIL"
         },
         "editNotification": {
-          "reminder": "Reminder"
+          "day": "Day",
+          "time": "Time"
         },
         "meeting": "Meeting",
+        "customScorecard": "CUSTOM SCORECARD",
         "users": "Users",
         "teams": "Teams",
         "company": "Company",
-        "editProfile": "Edit Profile",
-        "companyDetails": "Company Details",
+        "editProfile": "Profile",
+        "generalSettings": "General Settings",
         "forumDetails": "Forum Details",
         "descriptionTemplate": "Template Details",
         "loginForm": {
@@ -67,13 +69,32 @@
           "password": "Password",
           "passwordConfirmation": "Password Confirmation",
           "updatePw": "Update Password",
-          "warningText": "Changing your password will log you out of all sessions Lynchpyn."
+          "warningText": "Changing your password will log you out of all Lynchpyn sessions."
         },
         "teamsManagement": {
-          "header": "Manage Teams"
+          "header": "Teams"
+        },
+        "usersManagement": {
+          "header": "Users"
+        },
+        "objectives": {
+          "header": "Objectives",
+          "general": {
+            "header": "GENERAL"
+          },
+          "statusUpdate": {
+            "header": "STATUS UPDATE",
+            "type": "Status Update Mode"
+          },
+          "coreFour": {
+            "header": "FOUNDATIONAL FOUR™"
+          },
+          "terminology": {
+            "header": "TERMINOLOGY"
+          }
         },
         "meetingsManagement": {
-          "header": "Planning"
+          "header": "Meeting"
         },
         "habits": {
           "new": "Habit",
@@ -95,6 +116,12 @@
         "core4": "How Do We Succeed?",
         "goalsTitle": "Foundational Four™"
       },
+        "forumCore": {
+        "core1": "Be Confidential",
+        "core2": "Be Real",
+        "core3": "Be Curious",
+        "core4": "Be Committed"
+      },
       "company": {
         "accountabilityChart": "Accountability Matrix",
         "name": "Company Name",
@@ -107,7 +134,12 @@
         "strategicPlan": "The Plan",
         "timezone": "Location/Time Zone",
         "executiveTeam" : "Leadership Team",
-        "objectivesKeyType" : "Objectives Key Type",
+        "objectivesKeyType" : "Initiatives Tracking Method",
+        "objectivesPageLayout": "Objectives Page Features",
+        "layoutOptions": {
+          "coreFour": "Foundational Four™",
+          "personalGoals": "Personal Objectives"
+        },
         "createUser": {
           "addButton": "Create New User",
           "inviteYourTeam": "Invite your team"
@@ -127,8 +159,8 @@
         "lastSevenDays": "In the last 7 Days"
       },
       "forum": {
-        "annualHub": "Annual Hub",
-        "upcomingHub": "Upcoming Hub",
+        "annualHub": "Meeting",
+        "upcomingHub": "Topics",
         "agenda": "Meeting Management",
         "explorationTopic": {
           "whoTitle": "Who",
@@ -141,15 +173,17 @@
         "forumMeeting": "Forum Meeting",
         "emptyMeetingEntries": "Start creating meetings on the meetings page!",
         "scheduledStartTime": "Scheduled Start Date",
-        "actualStartTime": "Actual Start Date"
+        "actualStartTime": "Actual Start Date",
+        "averageRating": "Average Rating"
       },
       "navigation": {
         "planner": "Planner",
         "team": "Team",
         "company": "Company",
         "goals": "Objectives",
-        "forum": "Meeting",
-        "meetings": "Meeting",
+        "meeting": "Meeting",
+        "forum": "Forum",
+        "meetings": "Management",
         "scorecards": "Scorecards",
         "checkin": "Check-in"
       },
@@ -166,6 +200,7 @@
         "createdOn" : "Originally created for",
         "emptyHeader": "Add your first Initiative",
         "keyElementCreationError": "There was an error creating the key element",
+        "keyElementUpdateError": "There was an error updating the key element",
         "emptyText": "Initiatives are quarterly efforts that help you get closer to reaching your Objective.",
         "emptyCta": "Activate \"Plan\" mode"
       },
@@ -222,11 +257,14 @@
         "meetingRating": "Rate the Meeting",
         "goalProgress": "Goal Progress",
         "milestoneProgress": "Milestone Progress",
+        "missingImageURL": "This URL for the image is missing",
+        "missingStep": "This text for the step is missing",
         "tasksCompleted": "Pyns Completed",
         "issuesAddressed": "Issues Addressed",
         "sideOptions": {
           "agenda": "Agenda",
           "issues": "Issues",
+          "forumHub": "Topics",
           "tasks": "Pyns",
           "notes": "Notes",
           "pyns": "Pyns"
@@ -250,17 +288,17 @@
       },
       "meetingForum": {
         "exploration": {
-          "title": "1: Scheduled Exploration",
+          "title": "1: Scheduled Exploration or Curated Topic",
            "subTitle": "Four Step Forum Exploration™ Guide",
            "done": "Done"
         },
         "parkingLotIssues": {
-          "title": "Forum Hub",
+          "title": "Forum Topics",
           "subTitle": "Topics members have shared",
           "forumItems": "Topic"
         },
         "scheduledIssues": {
-          "title": "{{prefix}}Dynamic Explorations",
+          "title": "{{prefix}}Dynamic Topics",
           "subTitle": "Add topics you want to discuss in the Forum Hub of your next meeting"
         },
         "noUpcomingMeetingScheduled": "Scheduled meeting must be created in order to organize items onto it."
@@ -279,13 +317,15 @@
       },
       "issues": {
         "title": "Issues",
-        "forumHub": "Forum Hub",
-        "myHub": "My Hub"
+        "myHub": "Topics",
+        "forumHub":"Topics",
+        "issues": "Issues"
       },
       "journals": {
         "createMyDay": "Morning Routine",
         "thoughtChallenge": "I want to check-in",
         "eveningReflection": "Evening Reflection",
+        "weeklyReflection": "Weekly Reflection",
         "monthlyReflection": "Monthly Reflection",
         "title": "Journal",
         "headerNavTitle": "Journals",
@@ -296,7 +336,6 @@
         "pynBotNoEntriesWeekly": "No entries! Use the Evening Reflection journal to track daily entries.",
         "pynBotNoEntriesMonthly": "No entries! Use the Weekly Reflection journal to track weekly entries.",
         "confirmQuit": "Are you sure you want to quit?  Your journal entry will be lost",
-        "weeklyReflectionTitle": "Weekly Reflection",
         "weeklyReflectionCompleted": "Great job {{userName}}, You've completed your weekly reflection. Go to the next step to start planning for the week ahead!",
         "journalEntry": "Journal Entry",
         "selectEntry": "Select an entry to see your records",
@@ -365,10 +404,17 @@
           "emptyText": "No Milestones",
           "create": "You don't have any active Milestones. Visit the Objectives page to create an Initiative and Milestones"
         },
+        "keyResults": {
+          "emptyText": "No Key Results",
+          "create": "You don't have any Key Results. Visit the Objectives page to create an Initiative and Milestones"
+        },
         "kpi": {
           "emptyText": "No KPIs",
           "create": "You don't have any active KPIs. Visit the Scorecard page to create a KPI."
         }
+      },
+      "keyElement": {
+        "dateToolTip": "Update the date if you wish to provide an update on your Key Results for a previous date."
       }
     }
   }

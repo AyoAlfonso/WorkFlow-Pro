@@ -2,7 +2,7 @@ import { createBrowserHistory } from "history";
 import { syncHistoryWithStore, RouterModel } from "mst-react-router";
 import { identity } from "ramda";
 import { mst } from "reactotron-mst";
-import * as apisaucePlugin from "reactotron-apisauce";
+import apisaucePlugin from "reactotron-apisauce";
 import { default as reactotron } from "reactotron-react-js";
 
 import { Environment } from "../models/environment";

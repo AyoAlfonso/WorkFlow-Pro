@@ -13,7 +13,8 @@ import { RecordOptions } from "../shared/record-options";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useMst } from "~/setup/root";
 import { Icon } from "~/components/shared/icon";
-import * as moment from "moment";
+import moment from "moment";
+import { HtmlTooltip } from "~/components/shared/tooltip";
 
 interface ISubInitiativeCardProps {
   subInitiative: SubInitiativesType;
@@ -48,6 +49,7 @@ export const SubInitiativeGoalCard = observer(
     } = baseTheme.colors;
     const defaultOptionsColor = backgroundGrey;
     const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
+    const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
     let currentMilestone;
     const statusBadge = {
@@ -129,14 +131,29 @@ export const SubInitiativeGoalCard = observer(
           />
 
           <RowContainer mt={0} mb={0}>
-            <DescriptionContainer>
-              <StyledSubInitiativeIcon
-                icon={"Sub_initiative"}
-                size={"16px"}
-                iconColor={"#868DAA"}
-              />
-              <StyledText>{subInitiative.description}</StyledText>
-            </DescriptionContainer>
+            <HtmlTooltip
+              arrow={true}
+              open={showTooltip}
+              enterDelay={500}
+              leaveDelay={200}
+              title={<span>{subInitiative.description}</span>}
+            >
+              <DescriptionContainer
+                onMouseEnter={() => {
+                  setShowTooltip(true);
+                }}
+                onMouseLeave={() => {
+                  setShowTooltip(false);
+                }}
+              >
+                <StyledSubInitiativeIcon
+                  icon={"Sub_initiative"}
+                  size={"16px"}
+                  iconColor={"#868DAA"}
+                />
+                <StyledText>{subInitiative.description}</StyledText>
+              </DescriptionContainer>
+            </HtmlTooltip>
 
             <IconContainer>
               <RecordOptions type={"subInitiative"} id={subInitiative.id} iconColor={showOptions} />

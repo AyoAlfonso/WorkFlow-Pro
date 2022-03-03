@@ -12,7 +12,7 @@ import styled from "styled-components";
 import { Loading } from "~/components/shared/loading";
 import { useParams } from "react-router-dom";
 import { toJS } from "mobx";
-import * as moment from "moment";
+import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { MilestoneCard } from "../../goals/milestone/milestone-card";
 import { EmptyState } from "./empty-state";
@@ -27,7 +27,7 @@ export const WeeklyMilestones = observer(
 
     useEffect(() => {
       milestoneStore.getMilestonesForWeeklyCheckin(weekOf);
-    }, [ ]);
+    }, []);
 
     const renderHeading = (): JSX.Element => {
       return (
@@ -42,9 +42,7 @@ export const WeeklyMilestones = observer(
 
     const renderLoading = () => (
       <LoadingContainer>
-        <BodyContainer>
-          <Loading />
-        </BodyContainer>
+        <Loading />
       </LoadingContainer>
     );
 
@@ -111,19 +109,20 @@ export const WeeklyMilestones = observer(
 
 const Container = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  padding-left: 16px;
+  padding-right: 16px;
   @media only screen and (max-width: 768px) {
     padding: 0 16px;
   }
 `;
 
 const LoadingContainer = styled.div`
-  height: 100%;
-`;
-
-const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 8px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 `;
 
 const AvatarContainer = styled.div`

@@ -25,6 +25,7 @@ export const InviteYourTeamModal = ({
         headerText={t("company.createUser.inviteYourTeam")}
         subHeaderText={"Each member will get a link to set up their account"}
         width="480px"
+        headerFontSize="21px"
       >
         <InviteYourTeamBody
           setModalOpen={setModalOpen}

@@ -49,7 +49,6 @@ export const GoalsCoreFour = ({
   );
 };
 
-
 const CoreFourValues = observer(
   (): JSX.Element => {
     const {
@@ -57,11 +56,18 @@ const CoreFourValues = observer(
     } = useMst();
     const { t } = useTranslation();
 
+    const instanceType = company?.accessForum ? "forum" : "teams";
+
+    const core1Header = instanceType == "forum" ? t("forumCore.core1") : t("core.core1");
+    const core2Header = instanceType == "forum" ? t("forumCore.core2") : t("core.core2");
+    const core3Header = instanceType == "forum" ? t("forumCore.core3") : t("core.core3");
+    const core4Header = instanceType == "forum" ? t("forumCore.core4") : t("core.core4");
+
     return company ? (
       <Flex>
         <Box width={1 / 4} sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
-            {t("core.core1")}
+            {core1Header}
           </CoreFourHeaderText>
           <CoreFourBodyTextContainer>
             <div
@@ -72,7 +78,7 @@ const CoreFourValues = observer(
         </Box>
         <Box width={1 / 4} sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
-            {t("core.core2")}
+            {core2Header}
           </CoreFourHeaderText>
           <CoreFourBodyTextContainer>
             <div
@@ -83,7 +89,7 @@ const CoreFourValues = observer(
         </Box>
         <Box width={1 / 4} sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
-            {t("core.core3")}
+            {core3Header}
           </CoreFourHeaderText>
           <CoreFourBodyTextContainer>
             <div
@@ -94,7 +100,7 @@ const CoreFourValues = observer(
         </Box>
         <Box width={1 / 4} sx={boxStyle}>
           <CoreFourHeaderText fontSize={2} color={"primary100"}>
-            {t("core.core4")}
+            {core4Header}
           </CoreFourHeaderText>
           <CoreFourBodyTextContainer>
             <div
@@ -109,8 +115,6 @@ const CoreFourValues = observer(
     );
   },
 );
-
-
 
 export const CoreFourOnly = (): JSX.Element => (
   <div>
@@ -155,7 +159,6 @@ const CoreFourHeader = styled.div`
   display: flex;
   margin-top: -32px;
 `;
-
 
 const HideButtonContainer = styled.div`
   display: flex;

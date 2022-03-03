@@ -10,7 +10,7 @@ import { Can } from "~/components/shared/auth/can";
 import { Button } from "~/components/shared/button";
 import { FileInput } from "./file-input";
 import { ImageCropperModal } from "~/components/shared/image-cropper-modal";
-import { TrixEditor } from "react-trix";
+import ReactQuill from "react-quill";
 import { useHistory } from "react-router";
 import { toJS } from "mobx";
 
@@ -40,9 +40,9 @@ export const Templates = observer(
     const [kpiTemplate, setKPITemplate] = useState(
       descriptionTemplatesFormatted?.find(t => t.templateType == "kpi"),
     );
-    const [initiativesTemplateBody, setInitiativesTemplateBody] = useState({});
-    const [objectivesTemplateBody, setObjectivesTemplateBody] = useState({});
-    const [kpiTemplateBody, setKPITemplateBody] = useState({});
+    const [initiativesTemplateBody, setInitiativesTemplateBody] = useState({} as any);
+    const [objectivesTemplateBody, setObjectivesTemplateBody] = useState({} as any);
+    const [kpiTemplateBody, setKPITemplateBody] = useState({} as any);
 
     const { t } = useTranslation();
 
@@ -106,63 +106,52 @@ export const Templates = observer(
             <>
               <BodyContainer>
                 <PersonalInfoContainer>
-                  <Label htmlFor="objectivesTemplate"> Objectives Templates </Label>
-                  <TrixEditor
+                  <EditorLabel htmlFor="objectivesTemplate"> Objectives Templates </EditorLabel>
+                  <ReactQuill
                     className="custom-trix-class"
-                    autoFocus={true}
+                    theme="snow"
                     placeholder="Enter your Objectives Templates"
-                    value={objectivesTemplate.body.body}
-                    mergeTags={[]}
-                    onChange={(html, text) => {
+                    value={objectivesTemplate?.body.body}
+                    onChange={(content, delta, source, editor) => {
+                      objectivesTemplate.body.body = editor.getHTML();
+                      setObjectivesTemplate(objectivesTemplate);
                       setObjectivesTemplateBody({
                         id: objectivesTemplate.id,
                         title: objectivesTemplate.title,
-                        body: html,
-                      });
-                    }}
-                    onEditorReady={editor => {
-                      editor.element.addEventListener("trix-file-accept", event => {
-                        event.preventDefault();
+                        body: editor.getHTML(),
                       });
                     }}
                   />
-                  <Label htmlFor="initiativesTemplate"> Initiatives Templates </Label>
-                  <TrixEditor
+                  <EditorLabel htmlFor="initiativesTemplate"> Initiatives Templates </EditorLabel>
+                  <ReactQuill
                     className="custom-trix-class"
-                    autoFocus={true}
+                    theme="snow"
                     placeholder="Enter your Initiatives Templates"
-                    value={initiativesTemplate.body.body}
-                    mergeTags={[]}
-                    onChange={(html, text) => {
+                    value={initiativesTemplate?.body.body}
+                    onChange={(content, delta, source, editor) => {
+                      initiativesTemplate.body.body = editor.getHTML();
+                      setInitiativesTemplate(initiativesTemplate);
                       setInitiativesTemplateBody({
                         id: initiativesTemplate.id,
                         title: initiativesTemplate.title,
-                        body: html,
-                      });
-                    }}
-                    onEditorReady={editor => {
-                      editor.element.addEventListener("trix-file-accept", event => {
-                        event.preventDefault();
+                        body: editor.getHTML(),
                       });
                     }}
                   />
-                  <Label htmlFor="kpiTemplate"> KPI Templates </Label>
-                  <TrixEditor
+
+                  <EditorLabel htmlFor="kpiTemplate"> KPI Templates </EditorLabel>
+                  <ReactQuill
                     className="custom-trix-class"
-                    autoFocus={true}
+                    theme="snow"
                     placeholder="Enter your KPI Templates"
-                    value={kpiTemplate.body.body}
-                    mergeTags={[]}
-                    onChange={(html, text) => {
+                    value={kpiTemplate?.body.body}
+                    onChange={(content, delta, source, editor) => {
+                      kpiTemplate.body.body = editor.getHTML();
+                      setKPITemplate(kpiTemplate);
                       setKPITemplateBody({
                         id: kpiTemplate.id,
                         title: kpiTemplate.title,
-                        body: html,
-                      });
-                    }}
-                    onEditorReady={editor => {
-                      editor.element.addEventListener("trix-file-accept", event => {
-                        event.preventDefault();
+                        body: editor.getHTML(),
                       });
                     }}
                   />
@@ -174,7 +163,6 @@ export const Templates = observer(
                   variant={"primary"}
                   onClick={save}
                   style={{
-                    marginLeft: "auto",
                     marginTop: "auto",
                     marginBottom: "24px",
                     marginRight: "24px",
@@ -198,3 +186,6 @@ const CompanyStaticDataSection = styled.div`
 const CompanyStaticDataArea = styled.div`
   margin-top: 8px;
 `;
+
+const EditorLabel = styled(Label)`
+margin: 16px 0px`

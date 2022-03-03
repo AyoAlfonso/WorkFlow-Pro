@@ -41,7 +41,7 @@ ActiveAdmin.register DefaultAdminTemplate do
     h1 object.title
     f.input :title
     f.input :template_type, as: :select, collection: DescriptionTemplate.template_types.map { |dt| [dt[0].humanize.upcase, dt[0]] }
-    f.input :body, as: :action_text
+    f.input :body, as: :quill_editor,  input_html: {data: {options: { modules: { toolbar: [['bold', 'italic', 'underline'], ['link']] }, placeholder: 'Type something...', theme: 'snow' } } }
     f.actions
   end
 end

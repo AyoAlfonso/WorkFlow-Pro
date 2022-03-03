@@ -16,7 +16,7 @@ import { ViewEditKPIModal } from "./shared/view-kpi-modal";
 import { MiniUpdateKPIModal } from "./shared/update-kpi-modal";
 import { AddExistingManualKPIModal } from "./shared/edit-existing-manual-kpi-modal";
 import { titleCase } from "~/utils/camelize";
-//import { sortByDateReverse } from "~/utils/sorting";
+import { sortByDateReverse } from "~/utils/sorting";
 import { toJS } from "mobx";
 import Tooltip from "@material-ui/core/Tooltip";
 // TODO: figure out better function for percent scores.
@@ -47,9 +47,9 @@ export const ScorecardTableView = observer(
     const { t } = useTranslation();
     const {
       companyStore: { company },
+      scorecardStore: { kpis },
     } = useMst();
     const KPIs = toJS(tableKPIs);
-
     const getValueOfLocalStorage = key => {
       try {
         return localStorage.getItem(key);
@@ -78,7 +78,6 @@ export const ScorecardTableView = observer(
     const setDefaultSelectionQuarter = week => {
       return week == 13 ? 1 : week == 26 ? 2 : week == 39 ? 3 : 4;
     };
-
     const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
     const [quarter, setQuarter] = useState<number>(
       setDefaultSelectionQuarter(company.currentFiscalWeek),
@@ -131,7 +130,6 @@ export const ScorecardTableView = observer(
       }
     };
     const formatKpiType = kpiType => titleCase(kpiType);
-
     const averageScorePercent = (scores: [number], target: number, greaterThan: boolean) => {
       return Math.min(
         Math.floor(
@@ -267,10 +265,9 @@ export const ScorecardTableView = observer(
       handleQuarterSelect(dropdownQuarter);
       localStorage.removeItem("cacheDropdownQuarter");
     }, [year]);
-
     const data = useMemo(
       () =>
-        KPIs?.map((kpi: any) => {
+        KPIs?.sort(sortByDateReverse).map((kpi: any) => {
           const targetText = formatValue(kpi.unitType, kpi.targetValue);
           const title = `${kpi.title}`;
           const logic = kpi.greaterThan
@@ -295,7 +292,9 @@ export const ScorecardTableView = observer(
             owner: kpi.ownedBy,
             greaterThan: kpi.greaterThan,
           };
+
           const weeks = Object.values(kpi?.period?.[year] || {});
+
           weeks.forEach((week: any) => {
             const percentScore = getScorePercent(week?.score, kpi.targetValue, kpi.greaterThan);
             row[`wk_${week.week}`] = {
@@ -389,7 +388,16 @@ export const ScorecardTableView = observer(
           },
         },
         {
-          Header: () => <div style={{ textAlign: "left", fontSize: "14px" }}>KPIs</div>,
+          Header: () => (
+            <div
+              style={{
+                textAlign: "left",
+                fontSize: "14px",
+              }}
+            >
+              KPIs
+            </div>
+          ),
           accessor: "title",
           Cell: ({ value }) => {
             return (
@@ -418,7 +426,7 @@ export const ScorecardTableView = observer(
           minWidth: "86px",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
-            const { relatedParentKpis, parentKpi } = row.original.updateKPI;
+            const { relatedParentKpis, parentKpi, id } = row.original.updateKPI;
             const { greaterThan } = row.original;
 
             if (parentKpi.length > relatedParentKpis.length) {
@@ -610,7 +618,11 @@ export const ScorecardTableView = observer(
       hiddenColumns: getHiddenWeeks(quarter),
     };
 
-    const tableInstance = useTable({ columns, data, initialState });
+    const tableInstance = useTable({
+      columns,
+      data,
+      initialState,
+    });
 
     const {
       getTableProps,
@@ -676,7 +688,10 @@ export const ScorecardTableView = observer(
                       {headerGroup.headers.map(column => (
                         <TableHeader
                           {...column.getHeaderProps({
-                            style: { width: column.width, minWidth: column.minWidth },
+                            style: {
+                              width: column.width,
+                              minWidth: column.minWidth,
+                            },
                           })}
                         >
                           {column.render("Header")}
@@ -713,7 +728,7 @@ export const ScorecardTableView = observer(
             setKpis={setKpis}
             setViewEditKPIModalOpen={setViewEditKPIModalOpen}
             setShowEditExistingKPIContainer={setShowEditExistingKPIContainer}
-            //setCurrentSelectedKpi={setCurrentSelectedKpi}
+            setCurrentSelectedKpi={setCurrentSelectedKpi}
           />
         )}
 
@@ -740,7 +755,6 @@ export const ScorecardTableView = observer(
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
             setKpis={setKpis}
             updateKPI={updateKPI}
-            // setUpdateKPI={setUpdateKPI}
             setTargetWeek={setTargetWeek}
             setTargetValue={setTargetValue}
             fiscalYearStart={fiscalYearStart}

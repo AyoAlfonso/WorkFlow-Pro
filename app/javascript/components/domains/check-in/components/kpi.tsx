@@ -12,7 +12,7 @@ import {
   InputFromUnitType,
 } from "../../scorecard/shared/modal-elements";
 import { useParams } from "react-router-dom";
-import * as moment from "moment";
+import moment from "moment";
 import { toJS } from "mobx";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "./empty-state";
@@ -26,8 +26,10 @@ export const KpiComponent = observer(
     const { t } = useTranslation();
 
     const {
-      profile: { id },
+      profile
     } = sessionStore;
+
+    const id = profile?.id
 
     const { weekOf } = useParams();
 
@@ -37,7 +39,9 @@ export const KpiComponent = observer(
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      scorecardStore.getScorecard({ ownerType: "user", ownerId: id, manualKPI: true }).then(() => setLoading(false));
+      scorecardStore
+        .getScorecard({ ownerType: "user", ownerId: id, showAll: true })
+        .then(() => setLoading(false));
       companyStore.load();
     }, [id]);
 
@@ -68,9 +72,7 @@ export const KpiComponent = observer(
 
     const renderLoading = () => (
       <LoadingContainer>
-        <BodyContainer>
-          <Loading />
-        </BodyContainer>
+        <Loading />
       </LoadingContainer>
     );
 
@@ -142,18 +144,20 @@ export const KpiComponent = observer(
 
 const Container = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  padding-left: 16px;
+  padding-right: 16px;
   @media only screen and (max-width: 768px) {
     padding: 0 16px;
   }
 `;
 
-const LoadingContainer = styled.div``;
-
-const BodyContainer = styled.div`
+const LoadingContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 8px;
   justify-content: center;
+  align-items: center;
+  height: 100%;
 `;
 
 const StyledHeader = styled.h1`
