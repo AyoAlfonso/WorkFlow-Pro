@@ -341,6 +341,47 @@ export const ScorecardTableView = observer(
       [KPIs, year],
     );
 
+    const formatLargeNumbers = (n: number) => {
+      //return (largeNumber >= 1000000000000)? `${Math.floor(largeNumber / 1000000000000)}T` : (largeNumber >= 1000000000)?
+      if (n === Infinity) {
+        return n;
+      } else if (n >= 1000000000000) {
+        return `${Math.floor(n / 1000000000000)}T`;
+      } else if (n >= 1000000000) {
+        return `${Math.floor(n / 1000000000)}B`;
+      } else if (n >= 1000000) {
+        return `${Math.floor(n / 1000000)}M`;
+      } else if(n >= 1000) {
+        return `${Math.floor(n / 1000)}K`;
+      } else {
+        return `${n}`;
+      }
+    }
+
+    const findNumberFromLogic = (logic) => {
+      let n = logic.match(/[0-9]+[.]?[0-9]*/g)
+      //n.toString();
+      const num = Number(n.toString());
+      console.log(num);
+      return num;
+    }
+
+    const convertNumberInLogic = (logic) => {
+      return logic.replace(findNumberFromLogic(logic), formatLargeNumbers(findNumberFromLogic(logic)));
+    }
+
+    const formatUpdateNumber = (n) => {
+      if (typeof n === 'string') {
+        //if (n.match(/%$/g)){
+          let extr = n.match(/[0-9]+[.]*[0-9]*/g);
+          //n.replace("$", "")
+          return Number(n.replace("%", ""));
+        //}
+      } else {
+        return n;
+      }
+    }
+
     const columns = useMemo(
       () => [
         {
@@ -415,7 +456,7 @@ export const ScorecardTableView = observer(
                   <KPITitle>
                     {value.title} {value.parentType && `[${formatKpiType(value.parentType)}]`}
                   </KPITitle>
-                  <KPILogic>{value.logic}</KPILogic>
+                  <KPILogic>{convertNumberInLogic(value.logic)}</KPILogic>
                 </KPITextContainer>
               </KPITitleContainer>
             );
@@ -441,9 +482,9 @@ export const ScorecardTableView = observer(
               <Tooltip
                 title={
                   <>
-                    {"Target: "} {row.original.targetValue}
-                    <br /> {"Average: "} {row.original.average[quarter - 1]}
-                    <br /> {"Total: "} {row.original.total[quarter - 1]}
+                    {"Target: "} {formatLargeNumbers(row.original.targetValue)}
+                    <br /> {"Average: "} {formatLargeNumbers(row.original.average[quarter - 1])}
+                    <br /> {"Total: "} {formatLargeNumbers(row.original.total[quarter - 1])}
                   </>
                 }
                 placement="top"
@@ -454,7 +495,7 @@ export const ScorecardTableView = observer(
                     {parentKpi.length > relatedParentKpis.length
                       ? "—"
                       : quarterValue.percent
-                      ? `${quarterValue.percent}%`
+                      ? `${formatLargeNumbers(quarterValue.percent)}%`
                       : greaterThan
                       ? "0%"
                       : "—"}
@@ -525,7 +566,7 @@ export const ScorecardTableView = observer(
                   ) : (
                     <WeekContainer>
                       <WeekText color={value.color}>
-                        {parentType == "avr" ? Math.round(value.score) : value.score}
+                        {parentType == "avr" ? formatLargeNumbers(Math.round(value.score)) : formatLargeNumbers(formatUpdateNumber(value.score))}
                       </WeekText>
                     </WeekContainer>
                   )}
@@ -599,7 +640,7 @@ export const ScorecardTableView = observer(
                     <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
                   ) : (
                     <WeekContainer>
-                      <WeekText color={value.color}>{value.score}</WeekText>
+                      <WeekText color={value.color}>{formatLargeNumbers(value.score)}</WeekText>
                     </WeekContainer>
                   )}
                 </UpdateKPICellContainer>
