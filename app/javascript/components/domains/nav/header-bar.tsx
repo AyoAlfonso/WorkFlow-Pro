@@ -160,7 +160,7 @@ export const HeaderBar = observer(
         )
       );
     };
-    
+
     return (
       <Wrapper>
         <Container>
