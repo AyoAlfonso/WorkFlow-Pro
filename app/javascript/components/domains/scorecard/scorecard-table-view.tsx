@@ -677,6 +677,26 @@ export const ScorecardTableView = observer(
                   Q{n} {createPreviousGoalYearString}
                 </option>
               ))}
+              {R.range(1, 5).map((n: number) => (
+                <option
+                  key={
+                    n +
+                    "_" +
+                    createGoalYearString +
+                    "_" +
+                    company.yearForCreatingAnnualInitiatives.toString()
+                  }
+                  value={
+                    n +
+                    "_" +
+                    createGoalYearString +
+                    "_" +
+                    company.yearForCreatingAnnualInitiatives.toString()
+                  }
+                >
+                  Q{n} {createGoalYearString}
+                </option>
+              ))}
             </Select>
           </TopRow>
           {tab == "KPIs" && (
