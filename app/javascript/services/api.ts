@@ -5,7 +5,7 @@ import * as R from "ramda";
 interface IScorecardProps {
   ownerType: string;
   ownerId: number;
-  showAll: boolean
+  showAll: boolean;
 }
 export class Api {
   client: ApisauceInstance;
@@ -144,7 +144,7 @@ export class Api {
   }
 
   async resendInvitation(userId) {
-    return this.client.patch(`/users/${userId}/resend_invitation`);
+    return this.client.patch(`/users/${userId}/resend_invitation`, {});
   }
 
   async signOut() {
@@ -239,12 +239,12 @@ export class Api {
     return this.client.patch(`key_activities`, sortParams);
   }
 
-  async getAllGoals() {
-    return this.client.get("/goals");
+  async getAllGoals(status: string) {
+    return this.client.get(`/goals?status=${status}`);
   }
 
   async getObjectiveLogs(page: number, type: string, id: number) {
-    return this.client.get(`/objective_logs/page/${page}?type=${type}&id=${id}&per=10`)
+    return this.client.get(`/objective_logs/page/${page}?type=${type}&id=${id}&per=10`);
   }
 
   async getAnnualInitiative(id) {
@@ -261,7 +261,7 @@ export class Api {
   }
 
   async closeAnnualInitiative(id) {
-    return this.client.patch(`/annual_initiatives/close_initiative/${id}`);
+    return this.client.patch(`/annual_initiatives/close_initiative/${id}`, {});
   }
 
   async createAnnualInitiative(annualInitiativeObject) {
@@ -289,7 +289,7 @@ export class Api {
   }
 
   async deleteInitiativeLog(id) {
-    return this.client.delete(`/objective_logs/${id}`)
+    return this.client.delete(`/objective_logs/${id}`);
   }
 
   async getQuarterlyGoal(id) {
@@ -307,7 +307,7 @@ export class Api {
   }
 
   async closeQuarterlyGoal(id) {
-    return this.client.patch(`/quarterly_goals/close_goal/${id}`);
+    return this.client.patch(`/quarterly_goals/close_goal/${id}`, {});
   }
 
   async createQuarterlyGoalKeyElement(id, params) {
@@ -341,7 +341,7 @@ export class Api {
   }
 
   async closeSubInitiative(id) {
-    return this.client.patch(`/sub_initiatives/close_goal/${id}`);
+    return this.client.patch(`/sub_initiatives/close_goal/${id}`, {});
   }
 
   async createSubInitiativeKeyElement(id, params) {
@@ -389,7 +389,7 @@ export class Api {
   }
 
   async createQuarterlyGoalMilestones(quarterlyGoalId) {
-    return this.client.post(`/quarterly_goals/create_milestones/${quarterlyGoalId}`);
+    return this.client.post(`/quarterly_goals/create_milestones/${quarterlyGoalId}`, {});
   }
 
   async createSubInitiative(subInitiativeObject) {
@@ -397,11 +397,11 @@ export class Api {
   }
 
   async createSubInitiativeMilestones(subInitiativeId) {
-    return this.client.post(`/sub_initiatives/create_milestones/${subInitiativeId}`);
+    return this.client.post(`/sub_initiatives/create_milestones/${subInitiativeId}`, {});
   }
 
   async updateHabitLog(habitId: number, logDate: string) {
-    return this.client.put(`/habits/${habitId}/habit_logs/${logDate}`);
+    return this.client.put(`/habits/${habitId}/habit_logs/${logDate}`, {});
   }
 
   async getQuestionnaires() {
@@ -533,12 +533,15 @@ export class Api {
     return this.client.get(`/annual_initiatives/team/${teamId}`);
   }
 
-  async createForumMeetingsForYear(teamId, currentYear) {
-    return this.client.post("/forum/create_meetings_for_year", { teamId, currentYear });
+  async createForumMeetingsForYear(teamId, currentYear, forumType) {
+    return this.client.post(`/forum/create_meetings_for_year/${forumType}`, {
+      teamId,
+      currentYear,
+    });
   }
 
-  async searchForumMeetingsByDateRange(startDate, endDate, teamId) {
-    return this.client.get("/forum/search_meetings_by_date_range", {
+  async searchForumMeetingsByDateRange(startDate, endDate, teamId, meetingType) {
+    return this.client.get(`/forum/search_meetings_by_date_range/${meetingType}`, {
       startDate,
       endDate,
       teamId,
@@ -604,6 +607,12 @@ export class Api {
   async deleteKPI(id) {
     return this.client.delete(`/key_performance_indicator/${id}`);
   }
+  async toggleKPIStatus(id) {
+    return this.client.patch(`/key_performance_indicator/toggle_status/${id}`, {});
+  }
+  async openKPI(id) {
+    return this.client.patch(`/key_performance_indicator/open_kpi/${id}`, {});
+  }
 
   async createScorecardLog(scorecardLog) {
     return this.client.post(`scorecard_logs`, scorecardLog);
@@ -614,7 +623,9 @@ export class Api {
   }
 
   async getScorecard(props: IScorecardProps) {
-    return this.client.get(`scorecard/${props.ownerType}/${props.ownerId}?show_all=${props.showAll}`);
+    return this.client.get(
+      `scorecard/${props.ownerType}/${props.ownerId}?show_all=${props.showAll}`,
+    );
   }
 
   async getCheckInTemplates() {
@@ -627,6 +638,14 @@ export class Api {
 
   async getWeeklyCheckinMilestones(weekOf) {
     return this.client.get(`milestones/check_in/${weekOf}`);
+  }
+
+  async getWeeklyCheckinKeyElements() {
+    return this.client.get(`/key_elements/check_in`);
+  }
+
+  async updateWeeklyCheckInKeyElements(id, value) {
+    return this.client.put(`/key_elements/${id}`, value);
   }
   //async setJWT(jwt) {}
 }

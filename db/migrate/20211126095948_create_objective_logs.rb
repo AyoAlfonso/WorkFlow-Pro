@@ -10,5 +10,6 @@ class CreateObjectiveLogs < ActiveRecord::Migration[6.1]
       t.integer :week
       t.timestamps
     end
+    
   end
 end

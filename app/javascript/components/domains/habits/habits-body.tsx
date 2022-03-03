@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { HabitsHabitTracker } from "./habits-habit-tracker";
-import * as moment from "moment";
+import moment from "moment";
 import { EditHabit } from "./edit-habit";
 import { AccordionDetails } from "~/components/shared/accordion-components";
 import { HomeContainerBorders } from "~/components/domains/home/shared-components";
@@ -62,7 +62,7 @@ export const HabitsBody = observer(
       ));
 
     const daysToRender = windowDimensions.width > 1000 ? lastFiveDays : lastFourDays;
-    
+
     const dayNames = daysToRender.map((day, index) => (
       <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"12%"}>
         {moment(day).format("ddd")}

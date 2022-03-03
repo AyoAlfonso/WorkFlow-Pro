@@ -13,14 +13,22 @@ export const KeyPerformanceIndicatorStoreModel = types
     allKPIs: types.array(KeyPerformanceIndicatorModel),
   })
   .extend(withEnvironment())
-  .views(self => ({}))
+  .views(self => ({
+    get allOpenKPIs() {
+      return self.allKPIs;
+      // .filter(kpi => kpi.closedAt == null);
+    },
+    get allClosedKPIs() {
+      return self.allKPIs.filter(kpi => kpi.closedAt !== null);
+    },
+  }))
   .actions(self => ({
     load: flow(function*() {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.getKPIs();
         if (response.ok) {
-          self.allKPIs = response.data;
+          self.allKPIs = response.data as any;
         }
       } catch (e) {
         showToast("There was an error loading the kpis", ToastMessageConstants.ERROR);
@@ -72,6 +80,14 @@ export const KeyPerformanceIndicatorStoreModel = types
       self.allKPIs = R.filter(KPI => KPI.id != response.data.kpi.id, self.allKPIs);
       if (response.ok) {
         showToast("KPI deleted", ToastMessageConstants.SUCCESS);
+      }
+    }),
+    toggleKPIStatus: flow(function*(direction) {
+      const { scorecardStore } = getRoot(self);
+      const response: ApiResponse<any> = yield self.environment.api.toggleKPIStatus(self.kpi.id);
+      scorecardStore.mergeKPIS(response.data.kpi);
+      if (response.ok) {
+        showToast(`KPI ${direction}`, ToastMessageConstants.SUCCESS);
       }
     }),
     createScorecardLog: flow(function*(scorecardlog) {

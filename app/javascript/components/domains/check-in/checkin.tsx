@@ -17,11 +17,11 @@ interface CheckInProps {}
 
 export const CheckIn = observer(
   (props: CheckInProps): JSX.Element => {
-    const { checkInTemplateStore, sessionStore } = useMst();
+    const { checkInTemplateStore, sessionStore, companyStore } = useMst();
     const {
       profile: { id },
     } = sessionStore;
-
+    
     const history = useHistory();
 
     const checkIn = checkInTemplateStore.currentCheckIn;
@@ -29,9 +29,17 @@ export const CheckIn = observer(
     const { weekOf } = useParams();
 
     useEffect(() => {
-      checkInTemplateStore.fetchCheckInTemplates();
-      checkInTemplateStore.getCheckIn("Weekly Check In");
       validateWeekOf(weekOf, history, id);
+
+      checkInTemplateStore.fetchCheckInTemplates();
+
+      companyStore.load().then(() => {
+        if (companyStore.company?.objectivesKeyType === "KeyResults") {
+          checkInTemplateStore.getCheckIn("Weekly Check-In");
+        } else if (companyStore.company?.objectivesKeyType === "Milestones") {
+          checkInTemplateStore.getCheckIn("Weekly Check In");
+        }
+      });
     }, []);
 
     const renderLoading = () => (

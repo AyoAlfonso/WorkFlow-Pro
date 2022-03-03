@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_08_110359) do
+ActiveRecord::Schema.define(version: 2022_02_18_101408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,9 +100,11 @@ ActiveRecord::Schema.define(version: 2021_12_08_110359) do
     t.string "context_description"
     t.integer "fiscal_year"
     t.date "closed_at"
-    t.index ["company_id"], name: "index_annual_initiatives_on_company_id"
-    t.index ["created_by_id"], name: "index_annual_initiatives_on_created_by_id"
-    t.index ["owned_by_id"], name: "index_annual_initiatives_on_owned_by_id"
+    t.datetime "deleted_at"
+    t.index ["company_id"], name: "index_annual_initiatives_on_company_id", where: "(deleted_at IS NULL)"
+    t.index ["created_by_id"], name: "index_annual_initiatives_on_created_by_id", where: "(deleted_at IS NULL)"
+    t.index ["deleted_at"], name: "index_annual_initiatives_on_deleted_at"
+    t.index ["owned_by_id"], name: "index_annual_initiatives_on_owned_by_id", where: "(deleted_at IS NULL)"
   end
 
   create_table "check_in_templates", force: :cascade do |t|
@@ -151,8 +153,12 @@ ActiveRecord::Schema.define(version: 2021_12_08_110359) do
     t.integer "display_format", default: 0
     t.integer "onboarding_status", default: 0
     t.string "customer_subscription_profile_id"
-    t.integer "forum_type"
+    t.integer "forum_type", default: 0
     t.integer "objectives_key_type", default: 1
+    t.jsonb "preferences", default: {}, null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_companies_on_deleted_at"
+    t.index ["preferences"], name: "index_companies_on_preferences", where: "(deleted_at IS NULL)"
   end
 
   create_table "company_static_data", force: :cascade do |t|
@@ -307,21 +313,20 @@ ActiveRecord::Schema.define(version: 2021_12_08_110359) do
     t.integer "status", default: 0
     t.bigint "owned_by_id"
     t.integer "greater_than", default: 1
-    t.index ["elementable_type", "elementable_id"], name: "index_key_elements_on_elementable_type_and_elementable_id"
-    t.index ["owned_by_id"], name: "index_key_elements_on_owned_by_id"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_key_elements_on_deleted_at"
+    t.index ["elementable_type", "elementable_id"], name: "index_key_elements_on_elementable_type_and_elementable_id", where: "(deleted_at IS NULL)"
+    t.index ["owned_by_id"], name: "index_key_elements_on_owned_by_id", where: "(deleted_at IS NULL)"
   end
 
   create_table "key_performance_indicators", force: :cascade do |t|
     t.string "description"
     t.datetime "closed_at"
     t.bigint "created_by_id"
-    t.bigint "user_id"
-    t.bigint "company_id"
-    t.bigint "team_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "unit_type"
-    t.integer "target_value", default: 0
+    t.float "target_value", default: 0.0
     t.boolean "is_deleted", default: false
     t.boolean "greater_than", default: true
     t.jsonb "viewers"
@@ -330,11 +335,12 @@ ActiveRecord::Schema.define(version: 2021_12_08_110359) do
     t.string "title"
     t.integer "parent_type"
     t.integer "parent_kpi", default: [], array: true
-    t.index ["company_id"], name: "index_key_performance_indicators_on_company_id"
-    t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id"
-    t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id"
-    t.index ["team_id"], name: "index_key_performance_indicators_on_team_id"
-    t.index ["user_id"], name: "index_key_performance_indicators_on_user_id"
+    t.bigint "company_id"
+    t.datetime "deleted_at"
+    t.index ["company_id"], name: "index_key_performance_indicators_on_company_id", where: "(deleted_at IS NULL)"
+    t.index ["created_by_id"], name: "index_key_performance_indicators_on_created_by_id", where: "(deleted_at IS NULL)"
+    t.index ["deleted_at"], name: "index_key_performance_indicators_on_deleted_at"
+    t.index ["owned_by_id"], name: "index_key_performance_indicators_on_owned_by_id", where: "(deleted_at IS NULL)"
   end
 
   create_table "meeting_templates", force: :cascade do |t|
@@ -411,6 +417,7 @@ ActiveRecord::Schema.define(version: 2021_12_08_110359) do
     t.integer "child_id"
     t.string "child_type"
     t.integer "status", default: 0
+    t.datetime "adjusted_date"
     t.index ["objecteable_type", "objecteable_id"], name: "index_objective_logs_on_objecteable"
     t.index ["owned_by_id"], name: "index_objective_logs_on_owned_by_id"
   end
@@ -440,9 +447,11 @@ ActiveRecord::Schema.define(version: 2021_12_08_110359) do
     t.string "context_description"
     t.integer "quarter"
     t.date "closed_at"
-    t.index ["annual_initiative_id"], name: "index_quarterly_goals_on_annual_initiative_id"
-    t.index ["created_by_id"], name: "index_quarterly_goals_on_created_by_id"
-    t.index ["owned_by_id"], name: "index_quarterly_goals_on_owned_by_id"
+    t.datetime "deleted_at"
+    t.index ["annual_initiative_id"], name: "index_quarterly_goals_on_annual_initiative_id", where: "(deleted_at IS NULL)"
+    t.index ["created_by_id"], name: "index_quarterly_goals_on_created_by_id", where: "(deleted_at IS NULL)"
+    t.index ["deleted_at"], name: "index_quarterly_goals_on_deleted_at"
+    t.index ["owned_by_id"], name: "index_quarterly_goals_on_owned_by_id", where: "(deleted_at IS NULL)"
   end
 
   create_table "questionnaire_attempts", force: :cascade do |t|
@@ -472,6 +481,8 @@ ActiveRecord::Schema.define(version: 2021_12_08_110359) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "title"
     t.integer "limit_type", default: 0
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_questionnaires_on_deleted_at"
   end
 
   create_table "scheduled_groups", force: :cascade do |t|
@@ -482,7 +493,7 @@ ActiveRecord::Schema.define(version: 2021_12_08_110359) do
 
   create_table "scorecard_logs", force: :cascade do |t|
     t.bigint "key_performance_indicator_id", null: false
-    t.integer "score"
+    t.float "score"
     t.string "note"
     t.integer "fiscal_quarter"
     t.integer "fiscal_year"
@@ -538,9 +549,11 @@ ActiveRecord::Schema.define(version: 2021_12_08_110359) do
     t.date "closed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["created_by_id"], name: "index_sub_initiatives_on_created_by_id"
-    t.index ["owned_by_id"], name: "index_sub_initiatives_on_owned_by_id"
-    t.index ["quarterly_goal_id"], name: "index_sub_initiatives_on_quarterly_goal_id"
+    t.datetime "deleted_at"
+    t.index ["created_by_id"], name: "index_sub_initiatives_on_created_by_id", where: "(deleted_at IS NULL)"
+    t.index ["deleted_at"], name: "index_sub_initiatives_on_deleted_at"
+    t.index ["owned_by_id"], name: "index_sub_initiatives_on_owned_by_id", where: "(deleted_at IS NULL)"
+    t.index ["quarterly_goal_id"], name: "index_sub_initiatives_on_quarterly_goal_id", where: "(deleted_at IS NULL)"
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
@@ -619,7 +632,9 @@ ActiveRecord::Schema.define(version: 2021_12_08_110359) do
     t.integer "executive", default: 0
     t.boolean "custom_scorecard", default: false
     t.boolean "deleted", default: false
-    t.index ["company_id"], name: "index_teams_on_company_id"
+    t.datetime "deleted_at"
+    t.index ["company_id"], name: "index_teams_on_company_id", where: "(deleted_at IS NULL)"
+    t.index ["deleted_at"], name: "index_teams_on_deleted_at"
   end
 
   create_table "user_company_enablements", force: :cascade do |t|

@@ -1,5 +1,4 @@
 import { types } from "mobx-state-tree";
-import { maybeNull } from "mobx-state-tree/dist/internal";
 
 export const StepModel = types
   .model("StepModel")

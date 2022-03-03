@@ -13,10 +13,10 @@ import {
   HeaderText,
   PersonalInfoContainer,
 } from "./container-styles";
+import { Text } from "~/components/shared";
 
 const BodyContainer = styled.div`
   display: block;
-  padding: 16px;
 `;
 
 export const Meeting = (): JSX.Element => {
@@ -36,7 +36,16 @@ export const Meeting = (): JSX.Element => {
       <HeaderContainer>
         <HeaderText>{t("profile.meetingsManagement.header")}</HeaderText>
       </HeaderContainer>
+      <SubHeader>{t(`profile.customScorecard`)}</SubHeader>
       <BodyContainer>{teamsData}</BodyContainer>
     </StretchContainer>
   );
 };
+
+const SubHeader = styled(Text)`
+  color: ${props => props.theme.colors.grey100};
+  font-weight: bold;
+  font-size: 1em;
+  margin: 0;
+  margin-bottom: 1.3em;
+`;

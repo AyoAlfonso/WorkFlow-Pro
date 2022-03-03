@@ -3,12 +3,11 @@ import { withEnvironment } from "../lib/with-environment";
 
 import { MeetingModel } from "../models/meeting";
 import { TeamModel } from "../models/team";
-import MeetingTypes from "~/constants/meeting-types";
 
 import { ApiResponse } from "apisauce";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
-// import * as moment from "moment";
+// import moment from "moment";
 
 // we can piggy back off the teamStore's currentMeeting instead of upcoming meeting
 export const ForumStoreModel = types
@@ -24,7 +23,7 @@ export const ForumStoreModel = types
   .extend(withEnvironment())
   .views(self => ({}))
   .actions(self => ({
-    load: flow(function*(teamId, year) {
+    load: flow(function*(teamId, year, forumType) {
       if (teamId) {
         self.error = false;
         try {
@@ -35,7 +34,7 @@ export const ForumStoreModel = types
           // }
           const responseM: ApiResponse<any> = yield self.environment.api.searchSection1Meetings({
             team_id: teamId,
-            meeting_type: MeetingTypes.FORUM_MONTHLY,
+            meeting_type: forumType,
             fiscal_year: year,
           });
           if (responseM.ok) {
@@ -53,12 +52,13 @@ export const ForumStoreModel = types
         //assumes you know what the initial year is when you load
       }
     }),
-    createMeetingsForYear: flow(function*(teamId, currentYear) {
+    createMeetingsForYear: flow(function*(teamId, currentYear, forumType) {
       //should actually go to backend and create initial meetings
       try {
         const response: ApiResponse<any> = yield self.environment.api.createForumMeetingsForYear(
           teamId,
           currentYear,
+          forumType,
         );
         if (response.ok) {
           self.forumYearMeetings = response.data as any;
@@ -95,11 +95,12 @@ export const ForumStoreModel = types
         return response.data;
       }
     }),
-    searchForMeetingsByDateRange: flow(function*(startDate, endDate, teamId) {
+    searchForMeetingsByDateRange: flow(function*(startDate, endDate, teamId, meetingType) {
       const response: ApiResponse<any> = yield self.environment.api.searchForumMeetingsByDateRange(
         startDate,
         endDate,
         teamId,
+        meetingType,
       );
       if (response.ok) {
         self.searchedForumMeetings = response.data;

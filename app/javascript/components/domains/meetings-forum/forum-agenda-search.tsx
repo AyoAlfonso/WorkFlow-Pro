@@ -15,7 +15,7 @@ import { useMst } from "~/setup/root";
 import * as R from "ramda";
 import { toJS } from "mobx";
 import { observer } from "mobx-react";
-import * as moment from "moment";
+import moment from "moment";
 import { meetingTypeParser } from "~/components/shared/agenda/meeting-type-parser";
 import { Text } from "~/components/shared/text";
 import { SelectedMeetingAgendaEntry } from "./components/selected-meeting-agenda-entry";
@@ -35,15 +35,19 @@ export const ForumAgendaSearch = observer(() => {
 
   const teamId = forumStore.currentForumTeamId || R.path([0, "id"], toJS(teams));
 
+  const meetingType =
+    companyStore?.company.forumType == "Organisation"
+      ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
+      : MeetingTypes.FORUM_MONTHLY;
+
   const fetchMeetings = (startDate, endDate) => {
     if (teamId) {
-      forumStore.searchForMeetingsByDateRange(startDate, endDate, teamId);
+      forumStore.searchForMeetingsByDateRange(startDate, endDate, teamId, meetingType);
     }
   };
-  
+
   const { company } = companyStore;
   const instanceType = company && company.accessForum ? "forum" : "teams";
-
 
   const [selectedDateFilter, setSelectedDateFilter] = useState<string>(
     t("dateFilters.lastThirtyDays"),
@@ -133,13 +137,11 @@ export const ForumAgendaSearch = observer(() => {
   };
 
   const handleMeetingClick = () => {
-    meetingStore
-      .startNextMeeting(selectedMeeting.teamId, MeetingTypes.FORUM_MONTHLY)
-      .then(({ meeting }) => {
-        if (!R.isNil(meeting)) {
-          history.push(`/team/${meeting.teamId}/meeting/${meeting.id}`);
-        }
-      });
+    meetingStore.startNextMeeting(selectedMeeting.teamId, meetingType).then(({ meeting }) => {
+      if (!R.isNil(meeting)) {
+        history.push(`/team/${meeting.teamId}/meeting/${meeting.id}`);
+      }
+    });
   };
 
   const renderSelectedEntry = () => {
@@ -205,8 +207,7 @@ export const ForumAgendaSearch = observer(() => {
         customFilterOptions={filterOptions}
       />
       <StyledEntryContainer>{renderSelectedEntry()}</StyledEntryContainer>
-       {instanceType === "forum" && (
-          <LynchPynBadge/> )}
+      {instanceType === "forum" && <LynchPynBadge />}
     </Container>
   );
 });

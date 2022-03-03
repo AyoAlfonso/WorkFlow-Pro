@@ -21,10 +21,10 @@ interface IActivityLogsProps {
 export const ActivityLogs = observer(
   ({ keyElements, store, meta, getLogs }: IActivityLogsProps): JSX.Element => {
     const { userStore } = useMst();
-    const [page, setPage] = useState<number>(meta?.currentPage)
+    const [page, setPage] = useState<number>(meta?.currentPage);
 
     const handleChange = (event, value) => {
-      setPage(value)
+      setPage(value);
       getLogs(value);
     };
 
@@ -41,7 +41,7 @@ export const ActivityLogs = observer(
               .sort(sortByDate)
               .map(log => {
                 const user = userStore.users.find(user => user.id === log.ownedById);
-                const keyElement = store.findKeyElement(log.childId);
+                const keyElement = store?.findKeyElement(log.childId);
                 return (
                   <ActivityLogContainer>
                     {!log.note ? (
@@ -51,15 +51,15 @@ export const ActivityLogs = observer(
                           marginLeft={"0px"}
                           marginTop={"0px"}
                           marginRight={"16px"}
-                          firstName={user.firstName}
-                          lastName={user.lastName}
-                          defaultAvatarColor={user.defaultAvatarColor}
-                          avatarUrl={user.avatarUrl}
+                          firstName={user?.firstName}
+                          lastName={user?.lastName}
+                          defaultAvatarColor={user?.defaultAvatarColor}
+                          avatarUrl={user?.avatarUrl}
                         />
                         <ActivityLogTextContainer>
                           <ActivityLogText fontSize={"14px"} mb={8}>
                             <b>
-                              {user.firstName} {user.lastName}
+                              {user?.firstName} {user?.lastName}
                             </b>{" "}
                             updated{" "}
                             <b>
@@ -67,13 +67,17 @@ export const ActivityLogs = observer(
                             </b>{" "}
                             to{" "}
                             <b>
-                              <u>{`${log.score}${completionSymbol(keyElement?.completionType)}`}</u>
+                              <u>
+                                {keyElement?.completionType == "currency"
+                                  ? `${completionSymbol(keyElement?.completionType)}${log.score}`
+                                  : `${log.score}${completionSymbol(keyElement?.completionType)}`}
+                              </u>
                             </b>
                             <span>{determineStatusLabel(log.status || keyElement?.status)}</span>
                           </ActivityLogText>
                           <ActivityLogText>
                             <ActivityLogDate>
-                              {moment(log.createdAt).format("MMM D, YYYY")}
+                              {moment(log.adjustedDate || log.createdAt).format("MMM D, YYYY")}
                             </ActivityLogDate>
                             <ActivityLogDelete
                               onClick={() => {
@@ -129,7 +133,7 @@ export const ActivityLogs = observer(
               })
           )}
         </ActivityLogsContainer>
-        {!R.isEmpty(toJS(keyElements))? (
+        {!R.isEmpty(toJS(keyElements)) ? (
           <PaginationContainer>
             <Pagination count={meta?.totalPages} page={page} size="small" onChange={handleChange} />
           </PaginationContainer>
@@ -143,7 +147,7 @@ export const ActivityLogs = observer(
 
 const ActivityLogsContainer = styled.div`
   width: 100%;
-  max-height: 500px;
+  max-height: 560px;
   margin-top: 24px;
   overflow: auto;
 `;

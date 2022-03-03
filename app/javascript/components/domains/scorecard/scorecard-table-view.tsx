@@ -19,6 +19,7 @@ import { titleCase } from "~/utils/camelize";
 import { sortByDateReverse } from "~/utils/sorting";
 
 import { toJS } from "mobx";
+import Tooltip from "@material-ui/core/Tooltip";
 // TODO: figure out better function for percent scores.
 export const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
   greaterThan ? (value / target) * 100 : ((target + target - value) / target) * 100;
@@ -44,12 +45,51 @@ export const ScorecardTableView = observer(
     const { t } = useTranslation();
     const {
       companyStore: { company },
+      scorecardStore: { kpis },
     } = useMst();
     const KPIs = toJS(tableKPIs);
+    const getValueOfLocalStorage = key => {
+      try {
+        return localStorage.getItem(key);
+      } catch (error) {
+        false;
+      }
+    };
 
+    //Turn this into a shared function
+    const createGoalYearString =
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+        : `FY${(company.currentFiscalYear - 1)
+            .toString()
+            .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
+
+    const createPreviousGoalYearString =
+      //the step pattern makes sense define variables at top of func also
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? `FY${(company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
+        : `FY${(company.currentFiscalYear - 2).toString().slice(-2)}/${(
+            company.currentFiscalYear - 1
+          )
+            .toString()
+            .slice(-2)}`;
+    const setDefaultSelectionQuarter = week => {
+      return week == 13 ? 1 : week == 26 ? 2 : week == 39 ? 3 : 4;
+    };
     const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
-    const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
+    const [quarter, setQuarter] = useState<number>(
+      setDefaultSelectionQuarter(company.currentFiscalWeek),
+    );
+    const cacheDropdownQuarter = !!getValueOfLocalStorage("cacheDropdownQuarter")
+      ? getValueOfLocalStorage("cacheDropdownQuarter")
+      : company.currentFiscalQuarter +
+        "_" +
+        createGoalYearString +
+        "_" +
+        company.yearForCreatingAnnualInitiatives.toString();
+
     const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
+    const [dropdownQuarter, setDropdownQuarter] = useState<string>(cacheDropdownQuarter);
     const [targetWeek, setTargetWeek] = useState<number>(undefined);
     const [targetValue, setTargetValue] = useState<number>(undefined);
     const [tab, setTab] = useState<string>("KPIs");
@@ -88,7 +128,6 @@ export const ScorecardTableView = observer(
       }
     };
     const formatKpiType = kpiType => titleCase(kpiType);
-
     const averageScorePercent = (scores: [number], target: number, greaterThan: boolean) => {
       return Math.min(
         Math.floor(
@@ -135,6 +174,61 @@ export const ScorecardTableView = observer(
       }
     };
 
+    const totalScore = (
+      weeks: any,
+      target: number,
+      greaterThan: boolean,
+      parentType: string,
+    ) => {
+      const getScore = (value: number, target: number, greaterThan: boolean) =>
+        greaterThan ? Math.round(value) : Math.round(target + target - value);
+
+      const quarterScores = [
+        [null, 0],
+        [null, 0],
+        [null, 0],
+        [null, 0],
+      ];
+      weeks.forEach(({ week, score }) => {
+        const q = Math.floor((week - 1) / 13);
+
+        if (quarterScores[q]) {
+          quarterScores[q][0] += getScore(score, target, greaterThan);
+          quarterScores[q][1]++;
+        }
+      });
+      return quarterScores.map(tuple =>
+        tuple[0] === null
+          ? null
+          : parentType == "avr"
+          ? Math.round((tuple[0] + Number.EPSILON) * 100) / 100
+          : tuple[0],
+      );
+    };
+
+    const averageScore = (weeks: any, target: number, greaterThan: boolean, parentType: string) => {
+      const getScore = (value: number, target: number, greaterThan: boolean) =>
+        greaterThan ? Math.round(value) : Math.round(target + target - value);
+
+      const quarterScores = [
+        [null, 0],
+        [null, 0],
+        [null, 0],
+        [null, 0],
+      ];
+      weeks.forEach(({ week, score }) => {
+        const q = Math.floor((week - 1) / 13);
+        var numberscore = Number(score.toString().replace(/[^0-9.-]+/g, ""));
+        if (quarterScores[q]) {
+          quarterScores[q][0] += numberscore; // total score
+          quarterScores[q][1]++; // total number of weeks
+        }
+      });
+      return quarterScores.map(tuple =>
+        tuple[0] === null ? null : getScore(tuple[0] / tuple[1], target, greaterThan),
+      );
+    };
+
     const calcQuarterAverageScores = (
       weeks: any,
       target: number,
@@ -167,6 +261,10 @@ export const ScorecardTableView = observer(
       }
     };
 
+    useEffect(() => {
+      handleQuarterSelect(dropdownQuarter);
+      localStorage.removeItem("cacheDropdownQuarter");
+    }, [year]);
     const data = useMemo(
       () =>
         KPIs?.sort(sortByDateReverse).map((kpi: any) => {
@@ -194,7 +292,9 @@ export const ScorecardTableView = observer(
             owner: kpi.ownedBy,
             greaterThan: kpi.greaterThan,
           };
+
           const weeks = Object.values(kpi?.period?.[year] || {});
+
           weeks.forEach((week: any) => {
             const percentScore = getScorePercent(week?.score, kpi.targetValue, kpi.greaterThan);
             row[`wk_${week.week}`] = {
@@ -210,6 +310,20 @@ export const ScorecardTableView = observer(
             kpi.parentType,
           ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
 
+          const averageScores = averageScore(
+            weeks,
+            kpi.targetValue,
+            kpi.greaterThan,
+            kpi.parentType,
+          );
+
+          const totalScores = totalScore(
+            weeks,
+            kpi.targetValue,
+            kpi.greaterThan,
+            kpi.parentType,
+          );
+
           row.score = percentScores;
           row.status = percentScores;
           row.updateKPI.currentValue = weeks[weeks.length - 1]
@@ -217,9 +331,12 @@ export const ScorecardTableView = observer(
             : 0;
           row.updateKPI.currentWeek = weeks[weeks.length - 1] || 0;
           row.updateKPI.weeks = weeks;
+          row.targetValue = kpi.targetValue;
+          row.average = averageScores;
+          row.total = totalScores;
           return row;
         }),
-      [KPIs],
+      [KPIs, year],
     );
 
     const columns = useMemo(
@@ -240,7 +357,11 @@ export const ScorecardTableView = observer(
                 }}
               >
                 <UpdateKPIContainer
-                  disabled={value.parentType}
+                  disabled={
+                    value.parentType ||
+                    year != company.yearForCreatingAnnualInitiatives ||
+                    quarter != company.currentFiscalQuarter
+                  }
                   onClick={() => {
                     if (value.parentType) return;
                     if (!isMiniEmbed) {
@@ -269,7 +390,16 @@ export const ScorecardTableView = observer(
           },
         },
         {
-          Header: () => <div style={{ textAlign: "left", fontSize: "14px" }}>KPIs</div>,
+          Header: () => (
+            <div
+              style={{
+                textAlign: "left",
+                fontSize: "14px",
+              }}
+            >
+              KPIs
+            </div>
+          ),
           accessor: "title",
           Cell: ({ value }) => {
             return (
@@ -298,7 +428,7 @@ export const ScorecardTableView = observer(
           minWidth: "86px",
           Cell: ({ value, row }) => {
             const quarterValue = value[quarter - 1];
-            const { relatedParentKpis, parentKpi } = row.original.updateKPI;
+            const { relatedParentKpis, parentKpi, id } = row.original.updateKPI;
             const { greaterThan } = row.original;
 
             if (parentKpi.length > relatedParentKpis.length) {
@@ -306,17 +436,29 @@ export const ScorecardTableView = observer(
               quarterValue.background = dairyCream;
             }
             return (
-              <ScoreContainer background={quarterValue.background}>
-                <Score color={quarterValue.color}>
-                  {parentKpi.length > relatedParentKpis.length
-                    ? "—"
-                    : quarterValue.percent
-                    ? `${quarterValue.percent}%`
-                    : greaterThan
-                    ? "0%"
-                    : "—"}
-                </Score>
-              </ScoreContainer>
+              <Tooltip
+                title={
+                  <>
+                    {"Target: "} {row.original.targetValue}
+                    <br /> {"Average: "} {row.original.average}
+                    <br /> {"Total: "} {row.original.total}
+                  </>
+                }
+                placement="top"
+                arrow
+              >
+                <ScoreContainer background={quarterValue.background}>
+                  <Score color={quarterValue.color}>
+                    {parentKpi.length > relatedParentKpis.length
+                      ? "—"
+                      : quarterValue.percent
+                      ? `${quarterValue.percent}%`
+                      : greaterThan
+                      ? "0%"
+                      : "—"}
+                  </Score>
+                </ScoreContainer>
+              </Tooltip>
             );
           },
         },
@@ -340,10 +482,10 @@ export const ScorecardTableView = observer(
               <StatusContainer>
                 <StatusBadge
                   fontSize={"12px"}
-                  color={quarterValue.color}
-                  background={quarterValue.background}
+                  color={quarterValue?.color}
+                  background={quarterValue?.background}
                 >
-                  {quarterValue.text}
+                  {quarterValue?.text}
                 </StatusBadge>
               </StatusContainer>
             );
@@ -380,7 +522,9 @@ export const ScorecardTableView = observer(
                     </EmptyWeekContainer>
                   ) : (
                     <WeekContainer>
-                      <WeekText color={value.color}>{value.score}</WeekText>
+                      <WeekText color={value.color}>
+                        {parentType == "avr" ? Math.round(value.score) : value.score}
+                      </WeekText>
                     </WeekContainer>
                   )}
                 </EmptyWeekContainer>
@@ -476,7 +620,11 @@ export const ScorecardTableView = observer(
       hiddenColumns: getHiddenWeeks(quarter),
     };
 
-    const tableInstance = useTable({ columns, data, initialState });
+    const tableInstance = useTable({
+      columns,
+      data,
+      initialState,
+    });
 
     const {
       getTableProps,
@@ -487,9 +635,12 @@ export const ScorecardTableView = observer(
       setHiddenColumns,
     } = tableInstance;
 
-    const handleQuarterSelect = q => {
-      setQuarter(q);
-      setHiddenColumns(getHiddenWeeks(q));
+    const handleQuarterSelect = dq => {
+      const [quarter, z, year] = dq.split("_");
+      setYear(parseInt(year));
+      setQuarter(quarter);
+      setDropdownQuarter(dq);
+      setHiddenColumns(getHiddenWeeks(quarter));
     };
 
     return (
@@ -504,13 +655,48 @@ export const ScorecardTableView = observer(
               ))}
             </TabContainer>
             <Select
-              selection={quarter}
+              selection={dropdownQuarter}
               setSelection={handleQuarterSelect}
               id={"scorecard-quarter-selection"}
             >
               {R.range(1, 5).map((n: number) => (
-                <option key={n} value={n}>
-                  Q{n} {company.yearForCreatingAnnualInitiatives}
+                <option
+                  key={
+                    n +
+                    "_" +
+                    createPreviousGoalYearString +
+                    "_" +
+                    (company.yearForCreatingAnnualInitiatives - 1).toString()
+                  }
+                  value={
+                    n +
+                    "_" +
+                    createPreviousGoalYearString +
+                    "_" +
+                    (company.yearForCreatingAnnualInitiatives - 1).toString()
+                  }
+                >
+                  Q{n} {createPreviousGoalYearString}
+                </option>
+              ))}
+              {R.range(1, 5).map((n: number) => (
+                <option
+                  key={
+                    n +
+                    "_" +
+                    createGoalYearString +
+                    "_" +
+                    company.yearForCreatingAnnualInitiatives.toString()
+                  }
+                  value={
+                    n +
+                    "_" +
+                    createGoalYearString +
+                    "_" +
+                    company.yearForCreatingAnnualInitiatives.toString()
+                  }
+                >
+                  Q{n} {createGoalYearString}
                 </option>
               ))}
             </Select>
@@ -524,7 +710,10 @@ export const ScorecardTableView = observer(
                       {headerGroup.headers.map(column => (
                         <TableHeader
                           {...column.getHeaderProps({
-                            style: { width: column.width, minWidth: column.minWidth },
+                            style: {
+                              width: column.width,
+                              minWidth: column.minWidth,
+                            },
                           })}
                         >
                           {column.render("Header")}
@@ -561,6 +750,7 @@ export const ScorecardTableView = observer(
             setKpis={setKpis}
             setViewEditKPIModalOpen={setViewEditKPIModalOpen}
             setShowEditExistingKPIContainer={setShowEditExistingKPIContainer}
+            setCurrentSelectedKpi={setCurrentSelectedKpi}
           />
         )}
 
@@ -579,7 +769,7 @@ export const ScorecardTableView = observer(
             kpiId={updateKPI.id}
             ownedById={updateKPI.ownedById}
             unitType={updateKPI.unitType}
-            year={company.yearForCreatingAnnualInitiatives}
+            year={year || company.yearForCreatingAnnualInitiatives}
             week={targetWeek || company.currentFiscalWeek}
             currentValue={targetValue || updateKPI.currentValue}
             headerText={targetWeek ? `Update Week ${targetWeek}` : " Update Current Week "}
@@ -587,7 +777,6 @@ export const ScorecardTableView = observer(
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
             setKpis={setKpis}
             updateKPI={updateKPI}
-            // setUpdateKPI={setUpdateKPI}
             setTargetWeek={setTargetWeek}
             setTargetValue={setTargetValue}
             fiscalYearStart={fiscalYearStart}
@@ -609,10 +798,11 @@ const TableContainer = styled.div`
 `;
 
 const TopRow = styled.div`
-  width: 100%;
+  width: 30%;
   display: flex;
   justify-content: space-between;
   margin-bottom: 16px;
+  float: right;
 `;
 
 const TabContainer = styled.div`
@@ -744,6 +934,7 @@ const UpdateKPICellContainer = styled(UpdateKPIContainer)`
   display: ${props => (props.hover ? "flex" : "none")};
   height: 34px;
   border-radius: 4px;
+  margin: auto;
 `;
 
 const KPITitleContainer = styled.div`

@@ -52,7 +52,10 @@ export const ContextTabs = observer(
       annualInitiativeStore,
       quarterlyGoalStore,
       subInitiativeStore,
+      companyStore,
     } = useMst();
+
+    const { company } = companyStore;
 
     const tabDefaultIndex = () => {
       if (
@@ -65,6 +68,24 @@ export const ContextTabs = observer(
       }
     };
 
+    const defaultActiveTab = () => {
+      if (company?.objectivesKeyType === "KeyResults") {
+        setShowMilestones && setShowMilestones(false);
+        type == "subInitiative" && setShowInitiatives(false);
+        if (type == "quarterlyGoal" || type == "subInitiative") {
+          return "key results";
+        } else {
+          return "aligned initiatives";
+        }
+      } else {
+        if (type == "quarterlyGoal") {
+          return "milestones";
+        } else {
+          return "aligned initiatives";
+        }
+      }
+    };
+
     const currentUser = sessionStore.profile;
     const [selectedContextTab, setSelectedContextTab] = useState<number>(tabDefaultIndex() + 1);
     const [showActionType, setActionType] = useState<string>("Add");
@@ -73,10 +94,8 @@ export const ContextTabs = observer(
     const [selectedElement, setSelectedElement] = useState<number>(null);
     const [focusOnLastInput, setFocusOnLastInput] = useState<boolean>(false);
     const [showKeyElementForm, setShowKeyElementForm] = useState<boolean>(false);
-    const editable = currentUser.id == object.ownedById && !disabled;
-    const [activeTab, setActiveTab] = useState(
-      type == "quarterlyGoal" ? "milestones" : "aligned initiatives",
-    );
+    const editable = currentUser?.id == object.ownedById && !disabled;
+    const [activeTab, setActiveTab] = useState(defaultActiveTab());
     const [selectedDate, setSelectedDate] = useState<any>(new Date());
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
@@ -201,7 +220,7 @@ export const ContextTabs = observer(
     const renderContextKeyElements = () => {
       return (
         <KeyElementsTabContainer>
-          {object.keyElements.length > 0 && (
+          {object?.keyElements.length > 0 && (
             <KeyElementContentContainer>{renderKeyElementsIndex()}</KeyElementContentContainer>
           )}
           {editable && (
@@ -227,7 +246,7 @@ export const ContextTabs = observer(
         initiative = object;
       }
 
-      const minDate = initiative?.milestones[0].weekOf;
+      const minDate = initiative?.milestones[0]?.weekOf;
       return (
         <>
           {type === "annualInitiative" ? (
@@ -259,13 +278,13 @@ export const ContextTabs = observer(
               </HtmlTooltip>
             </DateContainer>
           )}
-          {object.keyElements.map((element, index) => {
-            const lastKeyElement = index == object.keyElements.length - 1;
+          {object?.keyElements.map((element, index) => {
+            const lastKeyElement = index == object?.keyElements.length - 1;
             return (
               <KeyElement
                 elementId={element.id}
                 store={store}
-                editable={editable}
+                editable={true}
                 key={element.id}
                 lastKeyElement={lastKeyElement}
                 focusOnLastInput={focusOnLastInput}
@@ -275,6 +294,7 @@ export const ContextTabs = observer(
                 setSelectedElement={setSelectedElement}
                 date={selectedDate}
                 initiativeId={object.id}
+                object={object}
               />
             );
           })}
@@ -306,22 +326,27 @@ export const ContextTabs = observer(
             type={type}
             element={selectedElement}
             setSelectedElement={setSelectedElement}
+            item={type === "annualInitiative" ? null : object}
           />
         )}
         <OverviewTabsContainer>
           {type == "quarterlyGoal" ? (
             <>
-              <OverviewTabs
-                active={activeTab === "milestones" ? true : false}
-                onClick={() => {
-                  setActiveTab("milestones");
-                  setShowInitiatives(false);
-                  setShowMilestones(true);
-                }}
-              >
-                Milestones
-              </OverviewTabs>
+              {company?.objectivesKeyType != "KeyResults" && (
+                <OverviewTabs
+                  active={activeTab === "milestones" ? true : false}
+                  onClick={() => {
+                    setActiveTab("milestones");
+                    setShowInitiatives(false);
+                    setShowMilestones(true);
+                  }}
+                >
+                  Milestones
+                </OverviewTabs>
+              )}
             </>
+          ) : type === "subInitiative" && company?.objectivesKeyType == "KeyResults" ? (
+            <></>
           ) : (
             <OverviewTabs
               active={activeTab === "aligned initiatives" ? true : false}

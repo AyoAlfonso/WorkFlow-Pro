@@ -10,7 +10,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
       description: params[:description],
       company_id: params[:type] == "company" ? current_company.id : nil,
       context_description: "", importance: ["", "", ""],
-      fiscal_year: current_company.year_for_creating_annual_initiatives,
+      fiscal_year: current_company.set_four_week_end_of_year_offset(current_company.year_for_creating_annual_initiatives)
     })
     authorize @annual_initiative
     @annual_initiative.save!
@@ -48,8 +48,8 @@ class Api::AnnualInitiativesController < Api::ApplicationController
                   owned_by_id: params[:owned_by], completion_current_value: params[:completion_current_value],
                   completion_target_value: params[:completion_target_value])
     # ObjectiveLog.create!(objective_log_params)
-    #MERGE IN MODEL
-    render json: { key_element: key_element.as_json,  status: :ok }
+    #MERGE IN MODEL 
+    render  template: "api/key_elements/_key_element", locals: { key_element: key_element }
   end
 
   def update_key_element
@@ -58,9 +58,8 @@ class Api::AnnualInitiativesController < Api::ApplicationController
     authorize @annual_initiative
     key_element.update!(value: params[:value], completion_type: params[:completion_type], greater_than: params[:greater_than], owned_by_id: params[:owned_by],
                         status: params[:status], completion_current_value: params[:completion_current_value], completion_target_value: params[:completion_target_value])
-
-    # ObjectiveLog.create!(objective_log_params)
-    render json: { key_element: key_element.as_json,  status: :ok }
+  
+    render  template: "api/key_elements/_key_element", locals: { key_element: key_element }
   end
 
   def delete_key_element
@@ -75,7 +74,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   def team
     @team_id = params[:team_id]
     @company = current_company
-    @annual_initiatives = policy_scope(AnnualInitiative).user_current_company(current_company.id).order(fiscal_year: :desc)  #.for_company_current_year_and_future(@company.current_fiscal_year)        
+    @annual_initiatives = policy_scope(AnnualInitiative).user_current_company(current_company.id).order(fiscal_year: :desc)
     authorize @annual_initiatives
     render "api/annual_initiatives/team"
   end

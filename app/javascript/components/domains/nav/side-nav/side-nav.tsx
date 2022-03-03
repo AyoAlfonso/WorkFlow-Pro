@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import { useMst } from "../../../../setup/root";
@@ -220,6 +220,7 @@ export const SideNavNoMst = (
   const [companyNavChildOpen, setCompanyNavChildOpen] = useState<boolean>(false);
   const [meetingsNavChildOpen, setMeetingsNavChildOpen] = useState<boolean>(false);
   const [startMeetingNavChildOpen, setStartMeetingNavChildOpen] = useState<boolean>(false);
+  const [forumType, setForumType] = useState<string>("");
   const showCompany = productFeatures && productFeatures.company;
   const showGoal = productFeatures && productFeatures.objective;
   const showPyn = productFeatures && productFeatures.pyns;
@@ -227,6 +228,15 @@ export const SideNavNoMst = (
   const showMeeting = productFeatures && productFeatures.meeting;
   const showScorecard = productFeatures && productFeatures.scorecard;
   const checkIn = productFeatures && productFeatures.checkIn;
+
+  useEffect(() => {
+    const forumType =
+      company?.forumType == "Organisation"
+        ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
+        : MeetingTypes.FORUM_MONTHLY;
+    setForumType(forumType);
+  }, [company]);
+
   const renderTeam = (teamLength: number) => {
     switch (teamLength) {
       case 0:
@@ -275,7 +285,7 @@ export const SideNavNoMst = (
 
   const history = useHistory();
   const handleForumMeetingClick = (team_id: number | string) => () => {
-    startNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
+    startNextMeeting(team_id, forumType).then(({ meeting }) => {
       if (!R.isNil(meeting)) {
         history.push(`/team/${team_id}/meeting/${meeting.id}`);
       }
@@ -304,7 +314,7 @@ export const SideNavNoMst = (
             icon={"Team"}
             currentPathName={currentPathName}
           >
-            {t("navigation.forum")}
+            {t("navigation.meeting")}
           </StyledProgrammaticLinkChildrenActive>
         );
       default:
@@ -312,7 +322,7 @@ export const SideNavNoMst = (
           <SideNavChildPopup
             trigger={
               <NavMenuIcon icon={"Team"} active={false} disableOnActive={false}>
-                {t("navigation.forum")}
+                {t("navigation.meeting")}
               </NavMenuIcon>
             }
             navOpen={startMeetingNavChildOpen}
@@ -367,7 +377,6 @@ export const SideNavNoMst = (
 
       {company &&
       company.accessForum &&
-      productFeatures.meeting &&
       !R.isNil(R.path(["0", "id"], teams)) ? (
         <SideNavChildPopup
           trigger={
@@ -385,7 +394,7 @@ export const SideNavNoMst = (
         >
           <SideNavChildLink to="/meetings/section_1" linkText={t("forum.annualHub")} />
           <SideNavChildLink to="/meetings/section_2" linkText={t("forum.upcomingHub")} />
-          <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")} />
+          {/* <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")}/> */}
         </SideNavChildPopup>
       ) : (
         <> </>

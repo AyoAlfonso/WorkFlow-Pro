@@ -14,9 +14,9 @@ ActiveAdmin.register Company do
                 :display_format,
                 :forum_type,
                 :onboarding_status,
-                core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4],
-                company_static_datas_attributes: [:id, :value],
-                description_templates_attributes: [:id, :title, :body]
+                core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4, :_destroy],
+                company_static_datas_attributes: [:id, :value,  :_destroy],
+                description_templates_attributes: [:id, :title, :body, :_destroy] 
 
   index do
     selectable_column
@@ -35,6 +35,45 @@ ActiveAdmin.register Company do
   filter :address
   filter :contact_email
   filter :phone_number
+
+  controller do
+   def update 
+      @company = Company.find(params[:id])
+      @core_four_attributes = params[:company][:core_four_attributes]
+      if @core_four_attributes.present?
+        # upgrade how you derive array here, it should be tied to the comp model 
+        [*1..4].each do |core| 
+         params[:company][:core_four_attributes]["core_#{core}" ] = @core_four_attributes["core_#{core}_content"]
+        end
+      end
+
+      @description_templates = params[:company][:description_templates_attributes]
+      if @description_templates.present?
+          @company.description_templates.each_with_index do |description_template, index|
+            puts index
+             params[:company][:description_templates_attributes][index.to_s]["body"] = @description_templates[index.to_s][:body_content]
+          end
+      end
+
+      if @company.update!(params.require(:company).permit(:address,:contact_email,:fiscal_year_start,:name,
+                :logo,
+                :phone_number,
+                :rallying_cry,
+                :accountability_chart_embed,
+                :strategic_plan_embed,
+                :timezone,
+                :display_format,
+                :forum_type,
+                :onboarding_status,
+                core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4],
+                company_static_datas_attributes: [:id, :value],
+                description_templates_attributes: [:id, :title, :body]))
+        flash[:alert] = @company.errors.full_messages
+         redirect_to admin_company_path(@company), notice: "Company updated"
+      end
+   end
+  end
+  
 
   show do
     h1 company.name
@@ -119,10 +158,11 @@ ActiveAdmin.register Company do
     h2 "Foundational Four "
     f.inputs do
       # Some hackery because trix editor was only displaying one field otherwise in the has_many
-      [:core_1, :core_2, :core_3, :core_4].each_with_index do |cf_field|
+      [:core_1, :core_2, :core_3, :core_4].each_with_index do |cf_field, index|
         f.label cf_field
         f.has_many :core_four, heading: false, allow_destroy: false, new_record: false do |cf|
-          cf.rich_text_area cf_field, { label: "Core #{index + 1}" }
+          cf_value = index == 0 ?  :core_1_content : index == 1 ? :core_2_content :  index == 2 ? :core_3_content  :  index == 3 ? :core_4_content  : null
+          cf.input cf_value, label: cf_field , as: :quill_editor,  input_html: {data: {options: { modules: { toolbar: [['bold', 'italic', 'underline'], ['link']] }, placeholder: 'Type something...', theme: 'snow' } } }
         end
       end
     end
@@ -141,7 +181,7 @@ ActiveAdmin.register Company do
     f.inputs do
       f.has_many :description_templates, allow_destroy: false, new_record: false do |tu|
         tu.input :title, input_html: { disabled: true }
-        tu.input :body, as: :action_text
+        tu.input :body_content, as: :quill_editor,  input_html: {data: {options: { modules: { toolbar: [['bold', 'italic', 'underline'], ['link']] }, placeholder: 'Type something...', theme: 'snow' } } }
       end
     end
     f.actions

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useMst } from "~/setup/root";
 import { StatusBlockColorIndicator } from "../shared/status-block-color-indicator";
 import { observer } from "mobx-react";
-import { Loading, Avatar } from "~/components/shared";
+import { Loading, Avatar, Button } from "~/components/shared";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import { Context } from "../shared-quarterly-goal-and-sub-initiative/context";
 import { MilestoneCreateButton } from "../shared-quarterly-goal-and-sub-initiative/milestone-create-button";
@@ -17,11 +17,13 @@ import { HomeContainerBorders } from "../../home/shared-components";
 import { RecordOptions } from "../shared/record-options";
 import { useTranslation } from "react-i18next";
 import { toJS } from "mobx";
-import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-elements";
-import { TrixEditor } from "react-trix";
 import { CreateGoalSection } from "../shared/create-goal-section";
 import { sortByDate } from "~/utils/sorting";
+import ReactQuill from "react-quill";
+import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-elements";
 import { ActivityLogs } from "../shared/activity-logs";
+import { getWeekOf } from "~/utils/date-time";
+import { UpcomingMessage } from "../shared/upcoming-objective-message";
 
 interface IQuarterlyGoalModalContentProps {
   quarterlyGoalId: number;
@@ -55,6 +57,8 @@ export const QuarterlyGoalModalContent = observer(
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
 
+    const { currentFiscalYear, currentFiscalQuarter } = companyStore.company;
+
     const { objectiveLogs } = quarterlyGoalStore;
 
     const currentUser = sessionStore.profile;
@@ -79,7 +83,7 @@ export const QuarterlyGoalModalContent = observer(
     const { t } = useTranslation();
 
     useEffect(() => {
-      quarterlyGoalStore.getActivityLogs(1, "quarterlyInitiative", quarterlyGoalId).then(meta => {
+      quarterlyGoalStore.getActivityLogs(1, "QuarterlyInitiative", quarterlyGoalId).then(meta => {
         setObjectiveMeta(meta);
       });
       quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
@@ -99,7 +103,7 @@ export const QuarterlyGoalModalContent = observer(
       );
     }
 
-    const handleChange = (html, text) => {
+    const handleChange = text => {
       setDescription(text);
     };
 
@@ -157,11 +161,14 @@ export const QuarterlyGoalModalContent = observer(
       });
     };
 
-    const goalYearString = `FY${quarterlyGoal.fiscalYear.toString().slice(-2)}/${(
-      quarterlyGoal.fiscalYear + 1
-    )
-      .toString()
-      .slice(-2)}`;
+    const goalYearString =
+      companyStore.company.currentFiscalYear ==
+      companyStore.company.yearForCreatingAnnualInitiatives
+        ? `FY${companyStore.company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
+        : `FY${(companyStore.company.currentFiscalYear - 1)
+            .toString()
+            .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
+
 
     const createLog = () => {
       const objectiveLog = {
@@ -169,7 +176,7 @@ export const QuarterlyGoalModalContent = observer(
         score: 0,
         note: comment,
         objecteableId: quarterlyGoalId,
-        objecteableType: "quarterlyInitiative",
+        objecteableType: "QuarterlyInitiative",
         fiscalQuarter: companyStore.company.currentFiscalQuarter,
         fiscalYear: companyStore.company.currentFiscalYear,
         week: companyStore.company.currentFiscalWeek,
@@ -180,11 +187,17 @@ export const QuarterlyGoalModalContent = observer(
 
     const getLogs = pageNumber => {
       return quarterlyGoalStore
-        .getActivityLogs(pageNumber, "annualInitiative", quarterlyGoalId)
+        .getActivityLogs(pageNumber, "QuarterlyInitiative", quarterlyGoalId)
         .then(meta => {
           setObjectiveMeta(meta);
         });
     };
+
+    const getCurrentWeekStatus = () => {
+      const currentWeekOf = getWeekOf();
+      const milestone = quarterlyGoal.milestones.find(milestone => milestone.weekOf === currentWeekOf)
+      return milestone?.status
+    }
 
     return (
       <>
@@ -209,8 +222,13 @@ export const QuarterlyGoalModalContent = observer(
                 showDropdownOptionsContainer={showDropdownOptionsContainer}
                 setShowDropdownOptionsContainer={setShowDropdownOptionsContainer}
                 goalYearString={goalYearString}
+                derivedStatus={getCurrentWeekStatus()}
               />
             </SectionContainer>
+            {currentFiscalYear <= quarterlyGoal.fiscalYear &&
+              currentFiscalQuarter < quarterlyGoal.quarter && (
+                <UpcomingMessage goalType="Objective" fiscalTime={`Q${quarterlyGoal.quarter}`} />
+              )}
             <SectionContainer>
               <Context
                 activeInitiatives={quarterlyGoal.subInitiatives.length}
@@ -272,23 +290,18 @@ export const QuarterlyGoalModalContent = observer(
             )}
           </QuarterlyGoalBodyContainer>
           <SubHeader>Description</SubHeader>
-          <TrixEditorContainer
-            onBlur={() => {
-              quarterlyGoalStore.updateModelField("contextDescription", description);
-              quarterlyGoalStore.update();
-            }}
-          >
-            <TrixEditor
-              className={"trix-initiative-modal"}
-              autoFocus={true}
+          <TrixEditorContainer>
+            <ReactQuill
+              onBlur={() => {
+                quarterlyGoalStore.updateModelField("contextDescription", description);
+                quarterlyGoalStore.update();
+              }}
+              className="trix-initiative-modal"
+              theme="snow"
               placeholder={"Add a description..."}
-              onChange={handleChange}
               value={description}
-              mergeTags={[]}
-              onEditorReady={editor => {
-                editor.element.addEventListener("trix-file-accept", event => {
-                  event.preventDefault();
-                });
+              onChange={(content, delta, source, editor) => {
+                handleChange(editor.getHTML());
               }}
             />
           </TrixEditorContainer>
@@ -301,14 +314,19 @@ export const QuarterlyGoalModalContent = observer(
                   setComment(e.target.value);
                 }}
                 value={comment}
-                onBlur={() => {
-                  if (!comment) {
-                    return;
-                  }
-                  createLog();
-                  setComment("");
-                }}
               />
+              {comment && (
+                <PostButton
+                  small
+                  variant="primary"
+                  onClick={() => {
+                    createLog();
+                    setComment("");
+                  }}
+                >
+                  Comment
+                </PostButton>
+              )}
             </FormElementContainer>
             <ActivityLogs
               keyElements={objectiveLogs}
@@ -394,4 +412,9 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const PostButton = styled(Button)`
+  margin-top: 10px;
+  font-size: 14px;
 `;

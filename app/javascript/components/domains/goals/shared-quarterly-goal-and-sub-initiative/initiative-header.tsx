@@ -8,6 +8,7 @@ import { Text } from "../../../shared/text";
 import ContentEditable from "react-contenteditable";
 import { OwnedBySection } from "../shared/owned-by-section";
 import { useTranslation } from "react-i18next";
+import { baseTheme } from "~/themes";
 import { toJS } from "mobx";
 import moment from "moment";
 
@@ -15,14 +16,15 @@ interface IInitiativeHeaderProps {
   itemType: string;
   item: any;
   editable: boolean;
-  setAnnualInitiativeId: React.Dispatch<React.SetStateAction<number>>;
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setAnnualInitiativeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAnnualInitiativeId?: React.Dispatch<React.SetStateAction<number>>;
+  setModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setAnnualInitiativeModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   annualInitiativeId: number;
   annualInitiativeDescription: string;
-  showDropdownOptionsContainer: boolean;
-  setShowDropdownOptionsContainer: React.Dispatch<React.SetStateAction<boolean>>;
+  showDropdownOptionsContainer?: boolean;
+  setShowDropdownOptionsContainer?: React.Dispatch<React.SetStateAction<boolean>>;
   goalYearString: string;
+  derivedStatus?: string;
 }
 
 export const InitiativeHeader = ({
@@ -37,15 +39,65 @@ export const InitiativeHeader = ({
   showDropdownOptionsContainer,
   setShowDropdownOptionsContainer,
   goalYearString,
+  derivedStatus,
 }: IInitiativeHeaderProps): JSX.Element => {
-  const { quarterlyGoalStore, subInitiativeStore, sessionStore } = useMst();
+  const { quarterlyGoalStore, subInitiativeStore, sessionStore, companyStore } = useMst();
+  const { currentFiscalYear, currentFiscalQuarter } = companyStore.company;
   const { t } = useTranslation();
   const descriptionRef = useRef(null);
   const mobxStore = itemType == "quarterlyGoal" ? quarterlyGoalStore : subInitiativeStore;
   const initiativeType = itemType == "quarterlyGoal" ? "quarterly_initiative" : "sub_initiative";
   const initiativeValue = toJS(
-    sessionStore?.companyStaticData.find(company => company.field === initiativeType).value,
+    sessionStore?.companyStaticData?.find(company => company.field === initiativeType).value,
   );
+
+  const {
+    warningRed,
+    tango,
+    finePine,
+    grey30,
+    grey10,
+    almostPink,
+    lightYellow,
+    lightFinePine,
+    primary100,
+    primary20,
+  } = baseTheme.colors;
+
+  const determineStatusLabel = (status: string) => {
+    switch (status) {
+      case "incomplete":
+        return (
+          <StatusBadge color={warningRed} backgroundColor={almostPink}>
+            Behind
+          </StatusBadge>
+        );
+      case "in_progress":
+        return (
+          <StatusBadge color={tango} backgroundColor={lightYellow}>
+            Needs Attention
+          </StatusBadge>
+        );
+      case "completed":
+        return (
+          <StatusBadge color={finePine} backgroundColor={lightFinePine}>
+            On Track
+          </StatusBadge>
+        );
+      case "done":
+        return (
+          <StatusBadge color={primary100} backgroundColor={primary20}>
+            Completed
+          </StatusBadge>
+        );
+      default:
+        return (
+          <StatusBadge color={grey30} backgroundColor={grey10}>
+            None
+          </StatusBadge>
+        );
+    }
+  };
 
   return (
     <>
@@ -109,6 +161,14 @@ export const InitiativeHeader = ({
           )}
         </TitleContainer>
         <DetailsContainer>
+          {currentFiscalYear <= item.fiscalYear && currentFiscalQuarter < item.quarter ? (
+            <UpcomingBadgeContainer>
+              <UpcomingCircleIcon />
+              <UpcomingText>Upcoming</UpcomingText>
+            </UpcomingBadgeContainer>
+          ) : (
+            determineStatusLabel(derivedStatus)
+          )}
           <IconContainer>
             <Icon icon={"Initiative"} size={"16px"} iconColor={"grey80"} />
             <YearText type={"small"}>{initiativeValue}</YearText>
@@ -222,4 +282,48 @@ const ClosedStatusBannerContainer = styled.div`
   display: flex;
   justify-content: space-between;
   height: 20px;
+`;
+
+type StatusBadgeProps = {
+  backgroundColor: string;
+  color: string;
+};
+
+const StatusBadge = styled("span")<StatusBadgeProps>`
+  display: inline-block;
+  font-size: 16px;
+  white-space: nowrap;
+  border-radius: 3px;
+  padding: 2px 4px;
+  margin-right: 16px;
+  font-weight: bold;
+  background-color: ${props => props.backgroundColor};
+  color: ${props => props.color};
+`;
+
+export const UpcomingCircleIcon = styled.div`
+  display: inline-flex;
+  background: ${props => props.theme.colors.primary100};
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 21px;
+  margin-right: 8px;
+`;
+
+export const UpcomingText = styled(Text)`
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  color: ${props => props.theme.colors.primary100};
+`;
+
+export const UpcomingBadgeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding-right: 16px;
+  margin-right: 16px;
+  border-right: 1px solid ${props => props.theme.colors.greyInactive};
+  height: 25px;
+  align-self: center;
 `;

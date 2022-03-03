@@ -1,5 +1,5 @@
 ActiveAdmin.register CheckInTemplate do
-  permit_params :name, :check_in_type, :description, check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :description_text]
+  permit_params :name, :check_in_type, :description, check_in_templates_steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :check_in_template_id, :image, :link_embed, :override_key, :_destroy]
 
   index do
     selectable_column
@@ -35,12 +35,11 @@ ActiveAdmin.register CheckInTemplate do
             component_to_render: step[:component_to_render],
             check_in_template_id: @check_in_template.id,
             image: step[:image],
-            override_key: step[:override_key],
-            description_text: step[:description_text],
+            override_key: step[:override_key]
           })
         end
       end
-      redirect_to admin_meeting_template_path(@check_in_template), notice: "Check In Template Created"
+      redirect_to admin_check_in_template_path(@check_in_template), notice: "Check In Template Created"
     end
   end
 
@@ -68,9 +67,6 @@ ActiveAdmin.register CheckInTemplate do
         column :image do |step|
           step.try(:image_url) ? image_tag(step.image_url, style: "max-height: 80px;") : "No Image Selected"
         end
-        column :description_text do |step|
-          step.description_text_content
-        end
       end
     end
   end
@@ -88,8 +84,7 @@ ActiveAdmin.register CheckInTemplate do
       step.input :duration, label: "Duration (in minutes)"
       step.input :instructions, input_html: { rows: 3 }
       step.input :component_to_render, as: :select, collection: Step::STEP_COMPONENTS
-      step.input :description_text, as: :action_text
-
+  
       step.input :image, as: :file, hint: (step.object.try(:image_url) ? image_tag(step.object.image_url, style: "max-height: 150px;") : "No Image Selected")
     end
     f.actions

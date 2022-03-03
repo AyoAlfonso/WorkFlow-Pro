@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as R from "ramda";
-import "react-step-progress-bar/styles.css";
+// import "react-step-progress-bar/styles.css";
 import { ProgressBar, Step } from "react-step-progress-bar";
 import { StepProgressBarIcon } from "./step-progress-bar-icon";
 import { baseTheme } from "~/themes";
@@ -33,7 +33,7 @@ export const StepProgressBar = ({
   const totalDuration = steps.reduce((acc, curr) => acc + curr.duration, 0);
 
   const isOverTime = () => {
-    if (currentStepIndex === steps[steps.length - 1].index) {
+    if (currentStepIndex === steps[steps.length - 1]?.index) {
       return false;
     } else if (currentStepIndex === steps[steps.length - 2].index) {
       return progressBarProps.percent === 100 ? true : false;
@@ -50,7 +50,7 @@ export const StepProgressBar = ({
 
   const isOneMinuteUntilNextStep = () => {
     const currentStepPosInSec = (calculatePercent() * totalDuration) / 100;
-    if (currentStepIndex === steps[steps.length - 1].index) {
+    if (currentStepIndex === steps[steps.length - 1]?.index) {
       return false;
     } else {
       const nextStepPosInSec = (steps[currentStepIndex + 1].position * totalDuration) / 100;

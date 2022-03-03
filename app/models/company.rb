@@ -1,26 +1,28 @@
 class Company < ApplicationRecord
+  acts_as_paranoid column: :deleted_at
   include ActionView::Helpers::SanitizeHelper
   include HasTimezone
   include HasFiscalYear
 
   before_save :sanitize_rallying_cry
-
+  store_accessor :preferences, :foundational_four, :company_objectives, :personal_objectives
   enum display_format: { Company: 0, Forum: 1 }
   enum objectives_key_type: { Milestones: 0, KeyResults: 1 }
   enum forum_type: { EO: 0, YPO: 1, Organisation: 2, Other: 3 }
   # has_many :users, dependent: :restrict_with_error #thi shas been replaced with default company
-  has_many :annual_initiatives, dependent: :restrict_with_error
-  has_many :teams, dependent: :restrict_with_error
+  has_many :annual_initiatives, dependent: :destroy
+  has_many :teams, dependent: :destroy
+
   has_many :company_static_datas, dependent: :destroy
   has_many :description_templates, dependent: :destroy
   has_one_attached :logo, dependent: :destroy
   has_one :sign_up_purpose, dependent: :destroy
-  accepts_nested_attributes_for :sign_up_purpose
+  accepts_nested_attributes_for :sign_up_purpose, :allow_destroy => true
 
   has_one :core_four, dependent: :destroy
   accepts_nested_attributes_for :core_four
 
-  has_many :user_company_enablements
+  has_many :user_company_enablements, dependent: :destroy
   has_many :users, through: :user_company_enablements
 
   accepts_nested_attributes_for :description_templates, :allow_destroy => true
@@ -33,7 +35,7 @@ class Company < ApplicationRecord
 
   enum onboarding_status: { incomplete: 0, complete: 1 }
 
-  after_create :create_company_static_data, :create_default_description_templates
+  after_create :create_company_static_data, :create_default_description_templates, :create_default_preferences
 
   scope :with_team, ->(team_id) { joins(:teams).where({ teams: { id: team_id } }) }
 
@@ -128,5 +130,18 @@ class Company < ApplicationRecord
     DefaultAdminTemplate.find_each do |template|
       DescriptionTemplate.create!(template_type: template.template_type, company_id: self.id, body: template.body, title: template.title)
     end
+  end
+  def create_default_preferences
+    if self.display_format == "Company"
+        self.preferences = {:foundational_four => true,:company_objectives => true, :personal_objectives => true}
+    end
+    if self.display_format == "Forum" &&
+        if self.forum_type == "Organisation"
+          self.preferences = {:foundational_four => false,:company_objectives => true, :personal_objectives => true}
+        else
+          self.preferences = {:foundational_four => true,:company_objectives => true, :personal_objectives => true}
+        end
+    end
+    self.save
   end
 end

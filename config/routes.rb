@@ -135,7 +135,8 @@ Rails.application.routes.draw do
 
     #key_performance_indicators
     resources :key_performance_indicator, only: [:index, :show, :create, :update, :destroy]
-    
+    patch '/key_performance_indicator/toggle_status/:id', to: 'key_performance_indicator#toggle_status'
+
     #scorecards
     get "/scorecard/:owner_type/:owner_id", to: "scorecard_logs#show"
     resources :scorecard_logs, only: [:create, :destroy]
@@ -163,8 +164,8 @@ Rails.application.routes.draw do
     get "/meetings/team_meetings/:id", to: "meetings#team_meetings"
 
     #forum-specific functions
-    post "/forum/create_meetings_for_year", to: "forums#create_meetings_for_year"
-    get "/forum/search_meetings_by_date_range", to: "forums#search_meetings_by_date_range"
+    post "/forum/create_meetings_for_year/:forum_type", to: "forums#create_meetings_for_year"
+    get "/forum/search_meetings_by_date_range/:meeting_type", to: "forums#search_meetings_by_date_range"
 
     #meeting recap for team
     get "/teams/:team_id/meetings/:id/meeting_recap", to: "meetings#meeting_recap"

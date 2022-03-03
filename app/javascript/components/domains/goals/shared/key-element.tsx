@@ -19,21 +19,30 @@ import {
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { toJS } from "mobx";
+import { useTranslation } from "react-i18next";
 import { FormElementContainer, InputFromUnitType } from "../../scorecard/shared/modal-elements";
+import moment from "moment";
+import { getWeekOf } from "~/utils/date-time";
+import { getDerviedStatus } from "~/utils/get-derived-status";
+import { ToastMessageConstants } from "~/constants/toast-types";
+import { showToast } from "~/utils/toast-message";
+import { HtmlTooltip } from "~/components/shared/tooltip";
 
 interface IKeyElementProps {
-  elementId: number;
-  store: any;
+  elementId?: number;
+  store?: any;
   editable: boolean;
-  lastKeyElement: boolean;
-  focusOnLastInput: boolean;
+  lastKeyElement?: boolean;
+  focusOnLastInput?: boolean;
   type: string;
-  setShowKeyElementForm: any;
-  setActionType: any;
-  setSelectedElement: any;
+  setShowKeyElementForm?: any;
+  setActionType?: any;
+  setSelectedElement?: any;
   date?: any;
-  initiativeId: number;
-  // TODO: set correct type
+  initiativeId?: number;
+  keyElement?: any;
+  targetValueMargin?: string;
+  object?: any;
 }
 
 export const KeyElement = observer(
@@ -48,22 +57,31 @@ export const KeyElement = observer(
     setActionType,
     setSelectedElement,
     initiativeId,
+    keyElement,
+    targetValueMargin,
+    object,
+    date,
   }: IKeyElementProps): JSX.Element => {
-    const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
-    const [element, setElement] = useState<any>(null);
-    const [showOptions, setShowOptions] = useState<boolean>(false);
-    const [showList, setShowList] = useState<boolean>(false);
-    const [showUsersList, setShowUsersList] = useState<boolean>(false);
-    const [selectedUser, setSelectedUser] = useState<any>(null);
-
     const {
       annualInitiativeStore,
       quarterlyGoalStore,
       subInitiativeStore,
       companyStore,
       sessionStore,
+      keyElementStore,
       userStore,
     } = useMst();
+    const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
+    const [element, setElement] = useState<any>(null);
+    const [showOptions, setShowOptions] = useState<boolean>(false);
+    const [showList, setShowList] = useState<boolean>(false);
+    const [showUsersList, setShowUsersList] = useState<boolean>(false);
+    const [selectedUser, setSelectedUser] = useState<any>(sessionStore.profile);
+    const [showTooltip, setShowTooltip] = useState<boolean>(false);
+    const [disabled, setDisabled] = useState<boolean>(false);
+
+    const { t } = useTranslation();
+
     const optionsRef = useRef(null);
     const keyElementTitleRef = useRef(null);
     const keyElementCompletionTargetRef = useRef(null);
@@ -79,6 +97,10 @@ export const KeyElement = observer(
         item = quarterlyGoalStore.quarterlyGoal.keyElements.find(ke => ke.id == elementId);
       } else if (type == "subInitiative") {
         item = subInitiativeStore.subInitiative.keyElements.find(ke => ke.id == elementId);
+      } else if (type == "checkIn") {
+        item = keyElementStore.keyElementsForWeeklyCheckin.find(ke => ke.id == elementId);
+      } else if (type == "onboarding" || type == "test") {
+        item = keyElement;
       }
       setElement(item);
       setCheckboxValue(item["completedAt"] ? true : false);
@@ -120,6 +142,75 @@ export const KeyElement = observer(
         document.removeEventListener("click", externalEventHandler);
       };
     }, [showList]);
+
+    useEffect(() => {
+      if (type == "quarterlyGoal" || type == "subInitiative" || type !== "checkIn") {
+        resetStatus();
+      }
+    }, [element, type]);
+
+    const isLogRecent = () => {
+      if (type == "onboarding") {
+        return false;
+      }
+      const recentLogDate =
+        moment(element.objectiveLogs[element.objectiveLogs?.length - 1]?.createdAt).format(
+          "YYYY-MM-DD",
+        ) || null;
+      const currentWeekOf = getWeekOf();
+      if (!recentLogDate) return false;
+      if (!element.objectiveLogs[element.objectiveLogs?.length - 1]) {
+        return false;
+      }
+      if (recentLogDate === currentWeekOf) {
+        return true;
+      } else {
+        return moment(currentWeekOf).isBefore(recentLogDate);
+      }
+    };
+
+    const updateKeyElement = async (ownedBy, showMessage) => {
+      const keyElementParams = {
+        value: element.value,
+        completionType: element.completionType,
+        completionTargetValue: element.completionTargetValue,
+        greaterThan: element.greaterThan,
+        ownedBy: ownedBy,
+        completionCurrentValue: element.completionCurrentValue,
+        status: element.status,
+      };
+      let id;
+
+      if (type == "annualInitiative") {
+        id = store.annualInitiative.id;
+      } else if (type == "quarterlyGoal") {
+        id = store.quarterlyGoal.id;
+      } else if (type == "subInitiative") {
+        id = store.subInitiative.id;
+      }
+      const res =
+        (await type) == "checkIn"
+          ? store.updateKeyElement(element.id, {
+              value: element.value,
+              status: element.status,
+            })
+          : store.updateKeyElement(id, element.id, keyElementParams);
+      if (res && showMessage) {
+        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
+      }
+      return res;
+    };
+
+    const resetStatus = async () => {
+      if (!element || element.status == "unstarted" || type == "onboarding") return;
+      const isUpdated = isLogRecent();
+      if (isUpdated) {
+        return;
+      } else {
+        store?.updateKeyElementValue("status", element?.id, "unstarted");
+        await updateKeyElement(selectedUser.id, false);
+      }
+    };
 
     if (!element) {
       return <></>;
@@ -192,26 +283,34 @@ export const KeyElement = observer(
       );
     };
 
-    const updateKeyElement = ownedBy => {
-      const keyElementParams = {
-        value: element.value,
-        completionType: element.completionType,
-        completionTargetValue: element.completionTargetValue,
-        greaterThan: element.greaterThan,
-        ownedBy: ownedBy,
-        completionCurrentValue: element.completionCurrentValue,
-        status: element.status,
-      };
-      let id;
-
-      if (type == "annualInitiative") {
-        id = store.annualInitiative.id;
-      } else if (type == "quarterlyGoal") {
-        id = store.quarterlyGoal.id;
-      } else if (type == "subInitiative") {
-        id = store.subInitiative.id;
+    const typeForCheckIn = () => {
+      if (element.elementableType === "QuarterlyGoal") {
+        return "QuarterlyInitiative";
+      } else if (element.elementableType === "SubInitiative") {
+        return "SubInitiative";
       }
-      store.updateKeyElement(id, element.id, keyElementParams);
+    };
+
+    const getType = () => {
+      let formattedType;
+      if (type == "annualInitiative") {
+        formattedType = "AnnualInitiative";
+      } else if (type == "quarterlyGoal") {
+        formattedType = "QuarterlyInitiative";
+      } else if (type == "subInitiative") {
+        formattedType = "SubInitiative";
+      }
+      return formattedType;
+    };
+
+    const checkWeekOf = () => {
+      if (moment(date).format("MMM Do, YYYY") == moment(new Date()).format("MMM Do, YYYY")) {
+        return getWeekOf();
+      } else {
+        return moment(date)
+          .startOf("isoWeek")
+          .format("YYYY-MM-DD");
+      }
     };
 
     const createLog = () => {
@@ -219,44 +318,118 @@ export const KeyElement = observer(
         ownedById: selectedUser.id,
         score: element.completionCurrentValue,
         note: "",
-        objecteableId: initiativeId,
-        objecteableType: type === "quarterlyGoal" ? "quarterlyInitiative" : type,
+        objecteableId: type === "checkIn" ? element.elementableId : initiativeId,
+        objecteableType: type === "checkIn" ? typeForCheckIn() : getType(),
         fiscalQuarter: company.currentFiscalQuarter,
         fiscalYear: company.currentFiscalYear,
         week: company.currentFiscalWeek,
         childType: "KeyElement",
         childId: element.id,
-        status: element.status
+        status: element.status,
+        weekOf: checkWeekOf(),
+        adjustedDate: date,
       };
 
       store.createActivityLog(objectiveLog);
+      company.objectivesKeyType === "KeyResults" && updateMilestoneStatus(objectiveLog.weekOf);
     };
 
     const updateOwnedById = newUser => {
       setSelectedUser(newUser);
-      updateKeyElement(newUser.id);
+      updateKeyElement(newUser.id, true);
     };
+
+    const updateMilestoneStatus = async weekOf => {
+      if (type == "checkIn") {
+        const objectableType = typeForCheckIn();
+        let initiative;
+        let initiativeStore;
+
+        if (objectableType === "QuarterlyInitiative") {
+          initiativeStore = quarterlyGoalStore;
+          initiative = await quarterlyGoalStore.getQuarterlyGoal(element.elementableId);
+        } else {
+          initiativeStore = subInitiativeStore;
+          initiative = await subInitiativeStore.getSubInitiative(element.elementableId);
+        }
+
+        const milestoneForWeekOf =
+          initiative.milestones.find(milestone => milestone.weekOf === weekOf) || null;
+
+        if (milestoneForWeekOf) {
+          const status = getDerviedStatus(initiative?.keyElements);
+          initiativeStore.updateMilestoneStatus(milestoneForWeekOf.id, status);
+        }
+      } else {
+        const milestoneForWeekOf =
+          object?.milestones.find(milestone => milestone.weekOf === weekOf) || null;
+
+        if (milestoneForWeekOf) {
+          const status = getDerviedStatus(object?.keyElements);
+          store.updateMilestoneStatus(milestoneForWeekOf.id, status);
+        }
+      }
+    };
+
+    const isEditable = async () => {
+      if (type === "onboarding") return;
+      if (type == "checkIn") {
+        const objectableType = typeForCheckIn();
+        let initiative;
+
+        if (objectableType === "QuarterlyInitiative") {
+          initiative = await quarterlyGoalStore.getQuarterlyGoal(element.elementableId);
+        } else {
+          initiative = await subInitiativeStore.getSubInitiative(element.elementableId);
+        }
+
+        if (
+          company.currentFiscalYear <= initiative.fiscalYear &&
+          company.currentFiscalQuarter < initiative.quarter
+        ) {
+          setDisabled(true);
+          return true;
+        }
+      } else if (type !== "annualInitiative") {
+        if (
+          company.currentFiscalYear <= object.fiscalYear &&
+          company.currentFiscalQuarter < object.quarter
+        ) {
+          setDisabled(true);
+          return true;
+        }
+      } else if (type == "annualInitiative") {
+        if (company.yearForCreatingAnnualInitiatives < object.fiscalYear) {
+          setDisabled(true);
+          return true;
+        }
+      }
+    };
+
+    const isOwner = element.ownedById == sessionStore.profile.id;
 
     return (
       <Container>
         <TopContainer>
-          <AvatarContainer
-            onBlur={() => updateKeyElement(selectedUser.id)}
-            onClick={() => setShowUsersList(!showUsersList)}
-          >
-            <Avatar
-              defaultAvatarColor={selectedUser?.defaultAvatarColor}
-              avatarUrl={selectedUser?.avatarUrl}
-              firstName={selectedUser?.firstName}
-              lastName={selectedUser?.lastName}
-              size={24}
-              marginLeft={"auto"}
-            />
-          </AvatarContainer>
+          {type !== "checkIn" && (
+            <AvatarContainer
+              onBlur={() => updateKeyElement(selectedUser.id, true)}
+              onClick={() => setShowUsersList(!showUsersList)}
+            >
+              <Avatar
+                defaultAvatarColor={selectedUser?.defaultAvatarColor}
+                avatarUrl={selectedUser?.avatarUrl}
+                firstName={selectedUser?.firstName}
+                lastName={selectedUser?.lastName}
+                size={24}
+                marginLeft={"auto"}
+              />
+            </AvatarContainer>
+          )}
           <KeyElementStyledContentEditable
             innerRef={keyElementTitleRef}
             html={sanitize(element.value)}
-            disabled={!editable}
+            disabled={!editable || type == "checkIn" || !isOwner || disabled}
             onChange={e => {
               if (!e.target.value.includes("<div>")) {
                 store.updateKeyElementValue("value", element.id, e.target.value);
@@ -267,6 +440,9 @@ export const KeyElement = observer(
                 keyElementTitleRef.current.blur();
               }
             }}
+            onMouseEnter={async () => {
+              await isEditable();
+            }}
             onBlur={() => store.update()}
             completed={checkboxValue.toString()} //CHRIS' NOTE: YOU CANT PASS A BOOLEAN VALUE INTO STYLED COMPONENTS.
             placeholder={"Title..."}
@@ -276,24 +452,63 @@ export const KeyElement = observer(
         <KeyElementContainer>
           {element.completionType === "binary" && (
             <CompletionContainer>
-              <DropdownHeader
-                onClick={() => {
-                  setShowList(!showList);
-                }}
-                ref={dropdownRef}
+              <HtmlTooltip
+                arrow={true}
+                open={showTooltip}
+                enterDelay={500}
+                leaveDelay={200}
+                title={
+                  <span>
+                    {!isOwner
+                      ? t(
+                          "This Key Result doesn't belong to you. You can only update a Key Result that belong to you",
+                        )
+                      : t(`This Key Result is in the future. You can only update the status of Key Results
+                    that have already begun.`)}
+                  </span>
+                }
               >
-                {determineStatusLabel(element.status)}
-                <ChevronDownIcon />
-              </DropdownHeader>
+                <DropdownHeader
+                  onClick={async () => {
+                    const disabled = await isEditable();
+                    setShowList(!disabled && editable && isOwner && !showList);
+                  }}
+                  onMouseEnter={async () => {
+                    if (type == "onboarding") {
+                      return 
+                    }
+                    const disabled = await isEditable();
+                    setShowTooltip(!isOwner || (disabled && true));
+                  }}
+                  onMouseLeave={() => {
+                    if (type == "onboarding") {
+                      return;
+                    }
+                    setShowTooltip(false);
+                  }}
+                  ref={dropdownRef}
+                  isLogRecent={isLogRecent()}
+                >
+                  {determineStatusLabel(element.status)}
+                  <ChevronDownIcon />
+                </DropdownHeader>
+              </HtmlTooltip>
               {showList && (
                 <DropdownListContainer>
                   <DropdownList>
                     {statusArray.map((status, index) => (
                       <StatusBadgeContainer
-                        onClick={() => {
+                        onClick={async () => {
                           store.updateKeyElementValue("status", element.id, status);
-                          updateKeyElement(selectedUser.id);
-                          createLog();
+                          const res = await updateKeyElement(selectedUser.id, true);
+
+                          if (res) {
+                            createLog();
+                          }
+                          if (type == "checkin") {
+                            setShowList(!showList);
+                            return;
+                          }
                           if (status === "done") {
                             store.updateKeyElementStatus(element.id, true);
                           } else {
@@ -315,25 +530,57 @@ export const KeyElement = observer(
           <ContentContainer>
             {element.completionType !== "binary" && (
               <CompletionContainer>
-                <DropdownHeader
-                  onClick={() => {
-                    setShowList(!showList);
-                  }}
-                  ref={dropdownRef}
+                <HtmlTooltip
+                  arrow={true}
+                  open={showTooltip}
+                  enterDelay={500}
+                  leaveDelay={200}
+                  title={
+                    <span>
+                      {!isOwner
+                        ? t(
+                            "This Key Result doesn't belong to you. You can only update a Key Result that belong to you",
+                          )
+                        : t(`This Key Result is in the future. You can only update the status of Key Results
+                    that have already begun.`)}
+                    </span>
+                  }
                 >
-                  {determineStatusLabel(element.status)}
-                  <ChevronDownIcon />
-                </DropdownHeader>
+                  <DropdownHeader
+                    onClick={async () => {
+                      const disabled = await isEditable();
+                      setShowList(!disabled && editable && isOwner && !showList);
+                    }}
+                    onMouseEnter={async () => {
+                      if (type == "onboarding") {
+                        return;
+                      }
+                      const disabled = await isEditable();
+                      setShowTooltip(!isOwner || (disabled && true));
+                    }}
+                    onMouseLeave={() => {
+                      setShowTooltip(false);
+                    }}
+                    ref={dropdownRef}
+                    isLogRecent={isLogRecent()}
+                  >
+                    {determineStatusLabel(element.status)}
+                    <ChevronDownIcon />
+                  </DropdownHeader>
+                </HtmlTooltip>
                 {showList && (
                   <DropdownListContainer>
                     <DropdownList>
                       {statusArray.map((status, index) => (
                         <StatusBadgeContainer
-                          onClick={() => {
+                          onClick={async () => {
                             store.updateKeyElementValue("status", element.id, status);
-                            updateKeyElement(selectedUser.id);
+                            const res = await updateKeyElement(selectedUser.id, true);
+
+                            if (res) {
+                              createLog();
+                            }
                             setShowList(!showList);
-                            createLog();
                           }}
                           key={index}
                           value={status}
@@ -356,32 +603,43 @@ export const KeyElement = observer(
                           e.target.value == "" ? 0 : parseTarget(e.target.value),
                         );
                       }}
+                      onMouseEnter={async () => {
+                        if (type == "onboarding") {
+                          return;
+                        }
+                        await isEditable();
+                      }}
                       defaultValue={element.completionCurrentValue}
                       onBlur={() => {
-                        updateKeyElement(selectedUser.id);
+                        updateKeyElement(selectedUser.id, true);
                         createLog();
                       }}
+                      disabled={!editable || disabled || !isOwner}
                     />
                     <SymbolContainer>{completionSymbol(element.completionType)}</SymbolContainer>
                   </InputContainer>
+                  <TargetValueContainer marginRight={targetValueMargin}>
+                    <TargetValue>{`${renderElementCompletionTargetValue()}`}</TargetValue>
+                  </TargetValueContainer>
                 </ValueInputContainer>
-                <ValueSpanContainer>
-                  <ValueSpan>{`${renderElementCompletionTargetValue()}`}</ValueSpan>
-                </ValueSpanContainer>
-                <ProgressBarContainer>
-                  <StripedProgressBar variant={element.status} completed={completion()} />
-                </ProgressBarContainer>
+                {type !== "onboarding" && type != "checkIn" && (
+                  <ProgressBarContainer>
+                    <StripedProgressBar variant={element.status} completed={completion()} />
+                  </ProgressBarContainer>
+                )}
               </CompletionContainer>
             )}
           </ContentContainer>
-          <IconWrapper
-            onClick={e => {
-              e.stopPropagation();
-              setShowOptions(!showOptions);
-            }}
-          >
-            <Icon icon={"Options"} size={"16px"} iconColor={"grey60"} />
-          </IconWrapper>
+          {type != "onboarding" && type != "checkIn" && (
+            <IconWrapper
+              onClick={e => {
+                e.stopPropagation();
+                setShowOptions(!showOptions);
+              }}
+            >
+              <Icon icon={"Options"} size={"16px"} iconColor={"grey60"} />
+            </IconWrapper>
+          )}
           {showOptions && (
             <KeyElementsDropdownOptions
               element={element}
@@ -548,6 +806,9 @@ const CompletionContainer = styled.div`
   align-items: center;
   margin-top: 8px;
   position: relative;
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
 `;
 
 const CompletionTextContainer = styled.div`
@@ -570,9 +831,15 @@ const StyledIcon = styled(Icon)`
   }
 `;
 
-const DropdownHeader = styled("div")`
-  border: 1px solid ${props => props.theme.colors.greyInactive};
-  width: 145px;
+type DropdownHeaderProps = {
+  isLogRecent: boolean;
+};
+
+const DropdownHeader = styled("div")<DropdownHeaderProps>`
+  border: 1px solid
+    ${props =>
+      props.isLogRecent ? props.theme.colors.successGreen : props.theme.colors.greyInactive};
+  min-width: 145px;
   padding: 8px 0px;
   border-radius: 5px;
   display: flex;
@@ -580,6 +847,10 @@ const DropdownHeader = styled("div")`
   cursor: pointer;
   position: relative;
   margin-right: 20px;
+  @media only screen and (max-width: 768px) {
+    margin-bottom: 20px;
+    width: 145px;
+  }
 `;
 
 type StatusBadgeProps = {
@@ -601,6 +872,9 @@ const StatusBadge = styled("span")<StatusBadgeProps>`
 const DropdownListContainer = styled("div")`
   position: absolute;
   margin-top: 30px;
+  @media only screen and (max-width: 768px) {
+    margin-top: -20px;
+  }
 `;
 
 const DropdownList = styled("ul")`
@@ -633,19 +907,32 @@ const ValueInputContainer = styled.div`
   align-items: center;
   display: flex;
   justify-content: space-between;
-  max-width: 145px;
 `;
 
-const ValueSpan = styled.span`
+const TargetValue = styled.span`
   font-weight: bold;
   display: inline-block;
 `;
 
-const ValueSpanContainer = styled.div`
+type ITargetValueContainer = {
+  marginRight?: string;
+};
+
+const TargetValueContainer = styled.div<ITargetValueContainer>`
   width: 3em;
   margin-left: 50px;
-  margin-right: 50px;
+  margin-right: ${props => (props.marginRight ? props.marginRight : "50px")};
   text-align: center;
+  @media only screen and (max-width: 768px) {
+    display: inline;
+  }
+`;
+
+const TargetValueContainerMobile = styled.span`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: inline;
+  }
 `;
 
 const AvatarContainer = styled.div`
@@ -664,6 +951,10 @@ const SymbolContainer = styled.span`
 
 const InputContainer = styled.div`
   position: relative;
+  width: 145px;
+  @media only screen and (max-width: 768px) {
+    width: 148px;
+  }
 `;
 
 const SelectionListContainer = styled.div`

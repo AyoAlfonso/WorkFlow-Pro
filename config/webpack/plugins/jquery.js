@@ -1,7 +1,8 @@
-const webpack = require('webpack')
+const webpack = require("webpack");
 
 module.exports = new webpack.ProvidePlugin({
-  "$":"jquery",
-  "jQuery":"jquery",
-  "window.jQuery":"jquery"
+  $: "jquery",
+  jQuery: "jquery",
+  "window.jQuery": "jquery",
+  Rails: ["@rails/ujs"],
 });

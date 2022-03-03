@@ -2,7 +2,7 @@ import { types } from "mobx-state-tree";
 import { UserModel } from "./user";
 import { MilestoneModel } from "./milestone";
 import { KeyElementModel } from "./key-element";
-import * as moment from "moment";
+import moment from "moment";
 import { SubInitiativeModel } from "./sub-initiative";
 
 export const QuarterlyGoalModel = types
@@ -22,7 +22,7 @@ export const QuarterlyGoalModel = types
     quarter: types.number,
     closedAt: types.maybeNull(types.string),
     fiscalYear: types.maybeNull(types.number),
-    subInitiatives: types.array(SubInitiativeModel)
+    subInitiatives: types.array(SubInitiativeModel),
   })
   .views(self => ({
     get activeMilestones() {

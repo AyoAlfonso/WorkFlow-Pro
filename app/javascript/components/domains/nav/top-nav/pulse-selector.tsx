@@ -14,7 +14,7 @@ import {
   emotionD,
   emotionE,
 } from "~/components/shared/pulse/pulse-icon";
-import * as moment from "moment";
+import moment from "moment";
 import { todaysDateFull } from "~/lib/date-helpers";
 import { DailyRecordPicker } from "~/components/shared/daily-record-picker";
 
@@ -102,7 +102,7 @@ export const PulseSelector = observer(
           return (
             <div style={{ position: "relative" }} onClick={() => setAttention(false)}>
               {emotionC(attention, 32)}
-              {attention && <NotificationBadge/>}
+              {attention && <NotificationBadge />}
             </div>
           );
       }
@@ -285,7 +285,7 @@ const PulseAnimation = keyframes`
   100% {
     box-shadow: 0 0 0 8px rgba(0, 0, 0, 0);
   }
-`
+`;
 
 const NotificationBadge = styled.span`
   background-color: ${props => props.theme.colors.primary100};
@@ -295,6 +295,6 @@ const NotificationBadge = styled.span`
   position: absolute;
   top: 0;
   right: 0;
-  transform: translate(50%,-50%);
+  transform: translate(50%, -50%);
   animation: ${PulseAnimation} 2s infinite;
-`
+`;

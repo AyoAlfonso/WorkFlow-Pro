@@ -47,7 +47,6 @@ export const KPIModalHeader = observer(
           <StyledClose>
             <CloseIconContainer
               onClick={() => {
-                props.setShowAddManualKPIModal(false);
                 props.setModalOpen(false);
               }}
             >
@@ -72,6 +71,7 @@ const StyledSubHeader = styled.h3`
 const CloseIconContainer = styled.span`
   &:hover ${StyledIcon} {
     color: ${props => props.theme.colors.greyActive};
+    cursor: pointer;
   }
 `;
 
