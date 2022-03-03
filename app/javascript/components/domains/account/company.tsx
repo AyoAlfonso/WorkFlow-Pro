@@ -113,7 +113,7 @@ export const Company = observer(
           false,
         ),
       ];
-      if (company.logoUrl) {
+      if (logoImageblub) {
         promises.push(companyStore.updateCompanyLogo(logoImageForm));
       }
       if (executiveTeam) {
