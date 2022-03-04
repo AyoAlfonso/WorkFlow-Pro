@@ -116,6 +116,7 @@ Rails.application.routes.draw do
     post '/quarterly_goals/create_key_element/:id', to: 'quarterly_goals#create_key_element'
     post 'quarterly_goals/:id/update_key_element/:key_element_id',  to: 'quarterly_goals#update_key_element'
     patch '/quarterly_goals/close_goal/:id', to: 'quarterly_goals#close_goal'
+    # post '/quarterly_goals/duplicate/:id', to: 'quarterly_goals#duplicate'
     delete '/quarterly_goals/delete_key_element/:key_element_id', to: 'quarterly_goals#delete_key_element'
     post '/quarterly_goals/create_milestones/:id', to: 'quarterly_goals#create_milestones'
 

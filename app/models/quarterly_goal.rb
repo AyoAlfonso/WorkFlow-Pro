@@ -58,6 +58,7 @@ class QuarterlyGoal < ApplicationRecord
     return Milestone.where(week: 1, week_of: fiscal_quarter_start_date_closest_monday , milestoneable_type: "QuarterlyGoal")
   end
 
+
   private
 
   def sanitize_description

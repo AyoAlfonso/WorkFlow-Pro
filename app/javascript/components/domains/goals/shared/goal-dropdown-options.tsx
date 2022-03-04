@@ -170,12 +170,12 @@ export const GoalDropdownOptions = ({
         </IconContainer>
         <OptionText> Close {itemText} </OptionText>
       </OptionContainer>
-      <OptionContainer onClick={() => closeAndDuplicate()}>
+      {/* <OptionContainer onClick={() => closeAndDuplicate()}>
         <IconContainer>
           <StyledIcon icon={"Checkmark"} size={"15px"} />
         </IconContainer>
         <OptionText> Close and Duplicate {itemText} </OptionText>
-      </OptionContainer>
+      </OptionContainer> */}
       <OptionContainer onClick={() => deleteInitiative()}>
         <IconContainer>
           <StyledIcon icon={"Delete"} size={"15px"} />
