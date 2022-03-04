@@ -17,7 +17,6 @@ import { MiniUpdateKPIModal } from "./shared/update-kpi-modal";
 import { AddExistingManualKPIModal } from "./shared/edit-existing-manual-kpi-modal";
 import { titleCase } from "~/utils/camelize";
 import { sortByDateReverse } from "~/utils/sorting";
-
 import { toJS } from "mobx";
 import Tooltip from "@material-ui/core/Tooltip";
 // TODO: figure out better function for percent scores.
@@ -183,8 +182,6 @@ export const ScorecardTableView = observer(
       greaterThan: boolean,
       parentType: string,
     ) => {
-      
-
       const quarterScores = [
         [null, 0],
         [null, 0],
@@ -208,10 +205,11 @@ export const ScorecardTableView = observer(
       );
     };
 
-    const averageScore = (weeks: any, target: number, greaterThan: boolean, parentType: string) => {
-      const getScore = (value: number, target: number, greaterThan: boolean) =>
-        greaterThan ? Math.round(value) : Math.round(target + target - value);
-
+    const averageScore = (
+      weeks: any,
+      target: number,
+      greaterThan: boolean,
+      parentType: string) => {
       const quarterScores = [
         [null, 0],
         [null, 0],
@@ -311,14 +309,12 @@ export const ScorecardTableView = observer(
             kpi.greaterThan,
             kpi.parentType,
           ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
-
           const averageScores = averageScore(
             weeks,
             kpi.targetValue,
             kpi.greaterThan,
             kpi.parentType,
           );
-
           const totalScores = totalScore(
             weeks,
             kpi.targetValue,

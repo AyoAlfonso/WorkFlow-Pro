@@ -41,7 +41,6 @@ export const HeaderBar = observer(
 
     const { sessionStore, companyStore } = useMst();
     const accountActionRef = useRef(null);
-    
     const { t } = useTranslation();
     const issuesTitle =
       companyStore?.company?.displayFormat === "Forum" ? t("issues.myHub") : t("issues.issues");
@@ -112,7 +111,7 @@ export const HeaderBar = observer(
         )
       );
     };
-    
+
     return (
       <Wrapper>
         <Container>
