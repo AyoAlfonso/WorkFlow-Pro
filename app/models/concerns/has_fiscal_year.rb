@@ -8,7 +8,6 @@ module HasFiscalYear
   end
 
   def current_fiscal_week
-    # binding.pry
     calculate_current_fiscal_week
   end
 
@@ -148,8 +147,8 @@ module HasFiscalYear
 
   def calculate_current_fiscal_week
     current_date = self.convert_to_their_timezone.to_date
-    if current_date.wday == 0 
-      # if we are already in monday we should jump into the week 
+    if current_date.wday == 1 
+      # if we are already in monday we should jump into the new week 
       # We have a Monday week start 
        Time.at((current_fiscal_start_date..current_date).count.days + 1.day).utc.strftime("%U").to_i
     else        
