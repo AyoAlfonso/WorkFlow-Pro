@@ -32,7 +32,7 @@ ActiveAdmin.register Team do
 
   form do |f|
     f.inputs do
-      f.input :company, :collection => Company.where("name <> 'N/A'").order(:name)
+      f.input :company, :collection => Company.where("name <> 'N/A'").order("LOWER(name)")
       f.input :name
       if f.object.persisted?
         f.has_many :team_user_enablements, allow_destroy: true do |tu|

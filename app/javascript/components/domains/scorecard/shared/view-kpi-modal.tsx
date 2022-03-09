@@ -24,9 +24,9 @@ import { ScorecardKPIDropdownOptions } from "./scorecard-dropdown-options";
 import "~/stylesheets/modules/trix-editor.css";
 import { debounce } from "lodash";
 import { Button } from "~/components/shared/button";
-import { kpiPopup } from "./parent-kpi-popup";
-import { kpiViewerName } from "./parent-kpi-popup";
-import { findNextMonday } from "~/utils/date-time";
+import { KPIPopup } from "./parent-kpi-popup";
+import { KPIViewerName } from "./parent-kpi-popup";
+import { findNextMonday, resetYearOfDateToCurrent } from "~/utils/date-time";
 
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -227,7 +227,7 @@ export const ViewEditKPIModal = observer(
     };
 
     const weekToDate = (week: number): string =>
-      moment(findNextMonday(company.fiscalYearStart))
+      moment(findNextMonday(resetYearOfDateToCurrent(company.fiscalYearStart)))
         .year(company.yearForCreatingAnnualInitiatives)
         .add(week, "w")
         .startOf("week" as moment.unitOfTime.StartOf)
@@ -371,7 +371,7 @@ export const ViewEditKPIModal = observer(
                     </OwnerAndLogicText>
                     <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
                     <OwnerAndLogicText style={{ textTransform: "capitalize" }}>
-                      {R.uniq(kpi?.viewers.map(viewer => kpiViewerName(viewer))).join(", ")} KPI
+                      {R.uniq(kpi?.viewers.map(viewer => KPIViewerName(viewer))).join(", ")} KPI
                     </OwnerAndLogicText>
 
                     <Icon icon={"Initiative"} iconColor={greyInactive} size={16} />
@@ -398,7 +398,7 @@ export const ViewEditKPIModal = observer(
                         </KPITypeWrapper>
                         <Pop>
                           <PopupContainer>
-                            {kpiPopup(
+                            {KPIPopup(
                               kpi,
                               popupOpen,
                               setPopupOpen,

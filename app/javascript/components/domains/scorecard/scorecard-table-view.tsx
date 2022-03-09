@@ -19,12 +19,13 @@ import { titleCase } from "~/utils/camelize";
 import { sortByDateReverse } from "~/utils/sorting";
 import { toJS } from "mobx";
 import Tooltip from "@material-ui/core/Tooltip";
+
 // TODO: figure out better function for percent scores.
 export const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
   greaterThan ? (value / target) * 100 : ((target + target - value) / target) * 100;
 
 const getScore = (value: number, target: number, greaterThan: boolean) =>
-        greaterThan ? Math.round(value) : Math.round(target + target - value);
+  greaterThan ? Math.round(value) : Math.round(target + target - value);
 
 type ScorecardTableViewProps = {
   tableKPIs: any;
@@ -176,12 +177,7 @@ export const ScorecardTableView = observer(
       }
     };
 
-    const totalScore = (
-      weeks: any,
-      target: number,
-      greaterThan: boolean,
-      parentType: string,
-    ) => {
+    const totalScore = (weeks: any, target: number, greaterThan: boolean, parentType: string) => {
       const quarterScores = [
         [null, 0],
         [null, 0],
@@ -190,7 +186,6 @@ export const ScorecardTableView = observer(
       ];
       weeks.forEach(({ week, score }) => {
         const q = Math.floor((week - 1) / 13);
-
         if (quarterScores[q]) {
           quarterScores[q][0] += getScore(score, target, greaterThan);
           quarterScores[q][1]++;
@@ -205,11 +200,7 @@ export const ScorecardTableView = observer(
       );
     };
 
-    const averageScore = (
-      weeks: any,
-      target: number,
-      greaterThan: boolean,
-      parentType: string) => {
+    const averageScore = (weeks: any, target: number, greaterThan: boolean, parentType: string) => {
       const quarterScores = [
         [null, 0],
         [null, 0],
@@ -218,7 +209,7 @@ export const ScorecardTableView = observer(
       ];
       weeks.forEach(({ week, score }) => {
         const q = Math.floor((week - 1) / 13);
-        var numberscore = Number(score.toString().replace(/[^0-9.-]+/g, ""));
+        const numberscore = Number(score.toString().replace(/[^0-9.-]+/g, ""));
         if (quarterScores[q]) {
           quarterScores[q][0] += numberscore; // total score
           quarterScores[q][1]++; // total number of weeks
@@ -243,13 +234,22 @@ export const ScorecardTableView = observer(
       ];
       weeks.forEach(({ week, score }) => {
         const q = Math.floor((week - 1) / 13);
-        if (quarterScores[q]) {
+        if (target == 0) {
+          quarterScores[q][0] -= score;
+          quarterScores[q][1]++;
+        } else if (quarterScores[q]) {
           quarterScores[q][0] += score;
           quarterScores[q][1]++;
         }
       });
       return quarterScores.map(tuple =>
-        tuple[0] === null ? null : getScorePercent(tuple[0] / tuple[1], target, greaterThan),
+        tuple[0] === null
+          ? null
+          : target == 0 && tuple[0] == 0
+          ? 100
+          : target == 0 && tuple[0] != 0
+          ? tuple[0]
+          : getScorePercent(tuple[0] / tuple[1], target, greaterThan),
       );
     };
 
@@ -315,12 +315,7 @@ export const ScorecardTableView = observer(
             kpi.greaterThan,
             kpi.parentType,
           );
-          const totalScores = totalScore(
-            weeks,
-            kpi.targetValue,
-            kpi.greaterThan,
-            kpi.parentType,
-          );
+          const totalScores = totalScore(weeks, kpi.targetValue, kpi.greaterThan, kpi.parentType);
 
           row.score = percentScores;
           row.status = percentScores;
