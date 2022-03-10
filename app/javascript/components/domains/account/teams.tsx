@@ -128,10 +128,7 @@ export const Teams = observer(
                   <StyledIconContainer
                     onClick={() => {
                       if (confirm("Are you sure you want to delete this team?")) {
-                        teamStore.deleteTeam(team.id).then(response => {
-                          console.log(response);
-                          showToast("Team deleted", ToastMessageConstants.SUCCESS);
-                        });
+                        teamStore.deleteTeam(team.id);
                       }
                     }}
                   >

@@ -75,7 +75,10 @@ export const TeamStoreModel = types
     deleteTeam: flow(function*(teamId) {
       const response: ApiResponse<any> = yield self.environment.api.deleteTeam(teamId);
       if (response.ok) {
+        showToast("Team deleted", ToastMessageConstants.SUCCESS);
         self.teams = response.data as any;
+      } else {
+        // showToast(response.data.message, ToastMessageConstants.INFO);
       }
     }),
   }))

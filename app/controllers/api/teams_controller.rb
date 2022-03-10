@@ -52,7 +52,8 @@ class Api::TeamsController < Api::ApplicationController
   def destroy
     #we are doing to destructive operations here to keep the DB consistent, over time it won't be necessary as the data would have normalized,
     # we can then remove the soft_delete 
-    return render json: { message: "An executive team cannot be deleted" }, status: :unprocessable_entity  unless if @team.executive = 0 
+    if @team.executive == 1
+     return render json: { message: "An executive team cannot be deleted" }, status: :unprocessable_entity 
     end
     @team.soft_delete
     @team.destroy!
