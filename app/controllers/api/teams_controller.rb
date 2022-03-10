@@ -7,10 +7,12 @@ class Api::TeamsController < Api::ApplicationController
 
   def index
     @teams = policy_scope(Team).all
+    @teams&.first.reset_default_team
     render "api/teams/index"
   end
 
   def show
+    Team.find(params[:id])&.reset_default_team
     fetch_additional_data
     render "api/teams/show"
   end
@@ -54,6 +56,7 @@ class Api::TeamsController < Api::ApplicationController
     @team.destroy!
     #TODO: make this restful
     @teams = policy_scope(Team).all
+    @teams&.first.reset_default_team
     render "api/teams/index"
   end
 
