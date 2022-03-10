@@ -328,8 +328,9 @@ const IssuesButtonContainer = styled.div`
 
 const IssuesPopupContainer = styled.div`
   position: absolute;
-  width: 268px;
+  width: 320px;
   height: 438px;
+  overflow-y: scroll;
   padding: 16px;
   padding-top: 0px;
   margin-left: -160px;
@@ -338,6 +339,10 @@ const IssuesPopupContainer = styled.div`
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 `;
+
+const IssuesCon = styled.div`
+  
+`
 
 const PopupHeaderContainer = styled.div`
   display: flex;
@@ -358,7 +363,7 @@ const PopupHeaderText = styled.h4`
 
 const KeyActivitiesPopupContainer = styled.div`
   position: absolute;
-  width: 268px;
+  width: 320px;
   height: 438px;
   padding: 16px;
   padding-top: 0px;
