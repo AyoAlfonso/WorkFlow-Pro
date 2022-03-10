@@ -64,7 +64,6 @@ export const MiniUpdateKPIModal = observer(
 
     const weekToDate = (week: number, year: number) =>
       moment(findNextMonday(resetYearOfDateToCurrent(fiscalYearStart, year)))
-        // .year(year)
         .add(week - 1, "w")
         .startOf("week" as moment.unitOfTime.StartOf)
         .toDate();

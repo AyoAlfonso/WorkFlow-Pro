@@ -41,8 +41,8 @@ export const Teams = observer(
     const [selectedEditTeam, setSelectedEditTeam] = useState<any>({});
 
     useEffect(() => {
-      teamStore.load()
-    }, [])
+      teamStore.load();
+    }, []);
 
     const { t } = useTranslation();
     const teamsData = R.flatten(
@@ -128,7 +128,8 @@ export const Teams = observer(
                   <StyledIconContainer
                     onClick={() => {
                       if (confirm("Are you sure you want to delete this team?")) {
-                        teamStore.deleteTeam(team.id).then(() => {
+                        teamStore.deleteTeam(team.id).then(response => {
+                          console.log(response);
                           showToast("Team deleted", ToastMessageConstants.SUCCESS);
                         });
                       }

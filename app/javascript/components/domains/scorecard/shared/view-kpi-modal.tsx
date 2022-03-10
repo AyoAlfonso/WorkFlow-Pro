@@ -235,7 +235,6 @@ export const ViewEditKPIModal = observer(
           ),
         ),
       )
-        // .year(company.yearForCreatingAnnualInitiatives)
         .add(week - 1, "w")
         .startOf("week" as moment.unitOfTime.StartOf)
         .format("MMM D");
