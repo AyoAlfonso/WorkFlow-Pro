@@ -180,8 +180,8 @@ export const IssueStoreModel = types
   }))
   .actions(self => ({
     updateIssueState(id, field, value) {
-      let issues = self.issues;
-      let issueIndex = issues.findIndex(issue => issue.id == id);
+      const issues = self.issues;
+      const issueIndex = issues.findIndex(issue => issue.id == id);
       issues[issueIndex][field] = value;
       self.issues = issues;
     },

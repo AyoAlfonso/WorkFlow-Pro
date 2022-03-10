@@ -8,13 +8,16 @@ import { Icon } from "../../shared/icon";
 import { observer } from "mobx-react";
 import { CreateIssueModal } from "./create-issue-modal";
 import { IssueEntry } from "./issue-entry";
+import Modal from "styled-react-modal";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { Loading } from "../../shared";
 import { sortByPosition } from "~/utils/sorting";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { HomeContainerBorders } from "../home/shared-components";
+import { IIssue } from "../../../models/issue";
 
 import { List } from "@material-ui/core";
+import { IssueModalContent } from "./issue-modal-content";
 
 interface IIssuesBodyProps {
   showOpenIssues: boolean;
@@ -39,6 +42,9 @@ export const IssuesBody = observer(
     } = useMst();
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
     const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
+
+    const [issueModalOpen, setIssueModalOpen] = useState<boolean>(false);
+    const [currentIssue, setCurrentIssue] = useState<IIssue | any>({});
 
     const openIssues = issueStore.openIssues;
     const closedIssues = issueStore.closedIssues;
@@ -74,6 +80,8 @@ export const IssuesBody = observer(
                   issue={issue}
                   dragHandleProps={...provided.dragHandleProps}
                   leftShareContainer={true}
+                  setIssueModalOpen={setIssueModalOpen}
+                  setCurrentIssue={setCurrentIssue}
                 />
               </IssueContainer>
             )}
@@ -115,10 +123,10 @@ export const IssuesBody = observer(
             <IssuesBodyContainer meeting={meetingId} noShadow={noShadow}>
               <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
                 <AddNewIssuePlus>
-                  <Icon icon={"Plus"} size={16} />
+                  <Icon icon={"Plus"} size={16} iconColor={"primary100"} />
                 </AddNewIssuePlus>
                 <AddNewIssueText>
-                  {`Add a ${company.displayFormat == "Forum" ? "Topic" : "Issue"}`}
+                  {`Add ${company.displayFormat == "Forum" ? "Topic" : "Issue"}`}
                 </AddNewIssueText>
               </AddNewIssueContainer>
               <IssuesContainer
@@ -126,12 +134,20 @@ export const IssuesBody = observer(
                 isDraggingOver={snapshot.isDraggingOver}
                 meeting={meetingId}
               >
-                <List>{renderIssuesList()}</List>
+                <IssuesList>{renderIssuesList()}</IssuesList>
                 {provided.placeholder}
               </IssuesContainer>
             </IssuesBodyContainer>
           )}
         </Droppable>
+        <StyledModal
+          isOpen={issueModalOpen}
+          onBackgroundClick={e => {
+            setIssueModalOpen(false);
+          }}
+        >
+          <IssueModalContent issue={currentIssue} setIssueModalOpen={setIssueModalOpen} />
+        </StyledModal>
       </>
     );
   },
@@ -153,13 +169,14 @@ const AddNewIssueText = styled.p`
 
 const AddNewIssueContainer = styled.div`
   display: flex;
+  align-items: center;
   cursor: pointer;
   margin-left: 8px;
   margin-right: 8px;
   padding-left: 4px;
   margin-bottom: -5px;
   &:hover ${AddNewIssueText} {
-    color: ${props => props.theme.colors.black};
+    color: ${props => props.theme.colors.primary100};
     font-weight: bold;
   }
   &:hover ${AddNewIssuePlus} {
@@ -173,11 +190,7 @@ type IssuesContainerType = {
 };
 
 const IssuesContainer = styled.div<IssuesContainerType>`
-  overflow-y: auto;
   margin-bottom: 8px;
-  height: 270px;
-  overflow-x: hidden;
-  padding-right: 5px;
   background-color: ${props =>
     props.isDraggingOver ? props.theme.colors.backgroundBlue : !props.meeting && "white"};
 `;
@@ -196,7 +209,6 @@ export const IssuesBodyContainer = styled(HomeContainerBorders)<IssuesBodyContai
   min-width: 224px;
   margin-right: 20px;
   box-shadow: ${props => (props.meeting || props.noShadow) && "none"};
-  height: inherit;
 `;
 
 export const FilterContainer = styled.div`
@@ -213,3 +225,19 @@ export const FilterOptions = styled.p<ColorProps & SpaceProps>`
   font-weight: 400;
   cursor: pointer;
 `;
+
+const StyledModal = Modal.styled`
+  width: 60rem;
+  min-height: 6.25em;
+  border-radius: 8px;
+  height: 50em;
+  max-height: 90%;
+  overflow: auto;
+  background-color: ${props => props.theme.colors.white};
+
+  @media only screen and (max-width: 768px) {
+    width: 23rem;
+  }
+`;
+
+const IssuesList = styled("div")``;
