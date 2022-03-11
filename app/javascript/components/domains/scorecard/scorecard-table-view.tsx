@@ -342,7 +342,6 @@ export const ScorecardTableView = observer(
     );
 
     const formatLargeNumbers = (n: number) => {
-      //return (largeNumber >= 1000000000000)? `${Math.floor(largeNumber / 1000000000000)}T` : (largeNumber >= 1000000000)?
       if (n === Infinity) {
         return n;
       } else if (n >= 1000000000000) {
@@ -360,9 +359,7 @@ export const ScorecardTableView = observer(
 
     const findNumberFromLogic = (logic) => {
       let n = logic.match(/[0-9]+[.]?[0-9]*/g)
-      //n.toString();
       const num = Number(n.toString());
-      console.log(num);
       return num;
     }
 
@@ -372,11 +369,8 @@ export const ScorecardTableView = observer(
 
     const formatUpdateNumber = (n) => {
       if (typeof n === 'string') {
-        //if (n.match(/%$/g)){
           let extr = n.match(/[0-9]+[.]*[0-9]*/g);
-          //n.replace("$", "")
           return Number(n.replace("%", ""));
-        //}
       } else {
         return n;
       }
