@@ -1,16 +1,22 @@
 class Issue < ApplicationRecord
+  include ActionView::Helpers::SanitizeHelper
+  amoeba do
+    enable
+    recognize [:has_one, :has_many, has_many: :through]
+  end
   enum priority: { low: 0, medium: 1, high: 2, frog: 3 }
   belongs_to :user
   belongs_to :team, optional: true
   belongs_to :company
   belongs_to :scheduled_group, optional: true
+  has_many :objective_logs, as: :objecteable, dependent: :destroy
 
   has_one :team_issue, dependent: :destroy, autosave: true
   accepts_nested_attributes_for :team_issue
-
   has_many :team_issue_meeting_enablements, through: :team_issue
 
   before_save :create_or_update_team_issue
+  before_save :sanitize_body
 
   acts_as_list scope: [:company_id, :user_id, :completed_at]
 
@@ -57,5 +63,10 @@ class Issue < ApplicationRecord
       team_issue_to_update.completed_at = self.completed_at
       # there is no else case because you cannot unshare an issue from the team, but you can switch which team it's associated with
     end
+  end
+  private
+
+  def sanitize_body
+    self.body = strip_tags(body)
   end
 end

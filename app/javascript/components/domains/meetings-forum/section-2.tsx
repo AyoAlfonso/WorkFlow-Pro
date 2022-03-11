@@ -31,7 +31,9 @@ export const Section2 = observer(
     const teamId =
       (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
     const instanceType = company && company?.accessForum ? "forum" : "teams";
-
+    const [currentYear, setCurrentYear] = useState<number>(
+      company.yearForCreatingAnnualInitiatives,
+    );
     const forumType =
       company?.forumType == "Organisation"
         ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
@@ -39,7 +41,7 @@ export const Section2 = observer(
 
     useEffect(() => {
       if (loading && teamId && company) {
-        meetingStore.startNextMeeting(teamId, forumType).then(({ meeting }) => {
+        meetingStore.startNextMeeting(teamId, forumType, currentYear).then(({ meeting }) => {
           if (!meeting) {
             setNoMeetingRecords(true);
           }

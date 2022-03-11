@@ -7,6 +7,10 @@ class IssuePolicy < ApplicationPolicy
     !user_can_observe_current_company?
   end
 
+  def duplicate?
+    !user_can_observe_current_company?
+  end
+
   def update?
     team_ids = @user.team_user_enablements.pluck(:team_id)
     @record.user == @user || (team_ids & @record.user.team_ids).length > 0

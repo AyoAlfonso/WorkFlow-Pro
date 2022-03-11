@@ -250,11 +250,12 @@ export const MeetingStoreModel = types
     createPersonalMonthlyMeeting: flow(function*() {
       return yield self.createPersonalMeetingOfType(MeetingTypes.PERSONAL_MONTHLY);
     }),
-    startNextMeeting: flow(function*(teamId, meetingType) {
+    startNextMeeting: flow(function*(teamId, meetingType, fiscalYear = null) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.getNextMeetingFor({
           teamId,
           meetingType,
+          fiscalYear,
         });
 
         if (response.ok) {

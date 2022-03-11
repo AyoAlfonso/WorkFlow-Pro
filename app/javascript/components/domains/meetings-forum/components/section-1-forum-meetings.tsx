@@ -29,7 +29,9 @@ export const Section1ForumMeetings = observer(
     } = useMst();
     const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
-    const [currentYear, setCurrentYear] = useState<number>(company.currentFiscalYear);
+    const [currentYear, setCurrentYear] = useState<number>(
+      company.yearForCreatingAnnualInitiatives,
+    );
 
     useEffect(() => {
       if (loading && teamId && company) {
@@ -42,7 +44,6 @@ export const Section1ForumMeetings = observer(
     }, [company, teams.map(t => t.id), teamId]); //neeed to deal with swtiching year later
 
     const currentTeam = teams.find(team => team.id == teamId);
-
     if (loading || !currentTeam) {
       return (
         <Container>
@@ -72,8 +73,8 @@ export const Section1ForumMeetings = observer(
     ));
 
     const renderCreateMeetingsButton = () => {
-      if (forumStore.forumYearMeetings.length < 0) {
-        if (company.currentFiscalYear <= currentYear) {
+      if (forumStore.forumYearMeetings.length < 12) {
+        if (company.currentFiscalYear >= currentYear) {
           return (
             <StyledButton
               small

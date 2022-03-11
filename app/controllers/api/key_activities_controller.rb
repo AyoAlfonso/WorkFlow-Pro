@@ -1,5 +1,5 @@
 class Api::KeyActivitiesController < Api::ApplicationController
-  before_action :set_key_activity, only: [:update, :destroy]
+  before_action :set_key_activity, only: [:update, :destroy, :duplicate]
 
   after_action :verify_authorized, except: [:index, :created_in_meeting, :resort_index, :update_multiple], unless: :skip_pundit?
 
@@ -15,6 +15,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
     creation_params = {
       user_id: params[:personal] ? current_user.id : params[:user_id],
       description: params[:description],
+      body: params[:body],
       priority: params[:priority],
       meeting_id: params[:personal] ? nil : params[:meeting_id],
       due_date: params[:due_date],
@@ -66,6 +67,11 @@ class Api::KeyActivitiesController < Api::ApplicationController
       @created_for = "general"
     end
     render "api/key_activities/update"
+  end
+
+  def duplicate
+    @key_activity.amoeba_dup.save
+    render json: { key_activity_id: @key_activity.id, status: :ok }
   end
 
   def update_multiple
@@ -125,7 +131,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
   private
 
   def key_activity_params
-    params.permit(:id, :user_id, :description, :completed_at, :priority, :complete,
+    params.permit(:id, :user_id, :description, :body, :completed_at, :priority, :complete,
                   :position, :meeting_id, :due_date, :personal, :scheduled_group_id, :team_id)
   end
 

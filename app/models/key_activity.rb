@@ -1,13 +1,18 @@
 class KeyActivity < ApplicationRecord
+  include ActionView::Helpers::SanitizeHelper
   include HasOrderByRelatedId
-
+  amoeba do
+    enable
+  end
   enum priority: { low: 0, medium: 1, high: 2, frog: 3 }
   belongs_to :user
   belongs_to :meeting, optional: true
   belongs_to :company
   belongs_to :scheduled_group, optional: true
   belongs_to :team, optional: true
-
+  has_many :objective_logs, as: :objecteable, dependent: :destroy
+  before_save :sanitize_body
+  
   acts_as_list scope: [:company_id, :user_id, :team_id, :scheduled_group_id]
 
   acts_as_taggable_on :labels
@@ -77,5 +82,10 @@ class KeyActivity < ApplicationRecord
     if scheduled_group_id.blank? && team_id.blank?
       errors.add(:base, "A valid list option for the Pyn must must be selected")
     end
+  end
+  private
+  
+  def sanitize_body
+    self.body = strip_tags(body)
   end
 end
