@@ -55,6 +55,7 @@ export const TeamOverview = observer(
     } = useMst();
 
     const { team_id } = useParams();
+
     const inDashboard = useRouteMatch("/team/:team_id/dashboard");
     const { t } = useTranslation();
 
@@ -117,11 +118,11 @@ export const TeamOverview = observer(
     };
 
     const handleMeetingManagementClick = () => {
-      history.push(`/meetings/section_1/${team_id}}`);
+      history.push(`/meetings/section_1/${team_id}`);
     };
 
     const handleForumTopicsClick = () => {
-      history.push(`/meetings/section_2/${team_id}}`);
+      history.push(`/meetings/section_2/${team_id}`);
     };
 
     const handleMeetingAgendaNotesClick = () => {

@@ -375,7 +375,7 @@ export const SideNavNoMst = (
         <> </>
       )}
 
-      {company && company.accessForum && !R.isNil(R.path(["0", "id"], teams)) ? (
+      {company &&  company.accessForum &&  forumType != "organisation_forum_monthly" && !R.isNil(R.path(["0", "id"], teams)) ? (
         <SideNavChildPopup
           trigger={
             <NavMenuIcon
