@@ -11,13 +11,6 @@ const mockFn = jest.fn();
 import { dataState } from "app/javascript/components/domains/scorecard/__tests__/scorecard-data/data-store";
 import { RootStoreModel } from "app/javascript/stores/root-store";
 
-// import { setupEnvironment } from "app/javascript/setup/environment";
-// const environment = setupEnvironment();
-// afterEach(cleanup);
-
-// const { keyPerformanceIndicatorStore } = useMst();
-// const { allKPIs } = keyPerformanceIndicatorStore;
-
 //we need to get all the props from the backend it will work
 //We will find a way to call it outside of the normal call stakc
 //We will test if all the headers are present, default and then the weeks 13 weeks in all

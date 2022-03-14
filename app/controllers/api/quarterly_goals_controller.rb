@@ -1,5 +1,5 @@
 class Api::QuarterlyGoalsController < Api::ApplicationController
-  before_action :set_quarterly_goal, only: [:show, :update, :destroy, :create_key_element, :update_key_element, :create_milestones, :close_goal]
+  before_action :set_quarterly_goal, only: [:show, :duplicate, :update, :destroy, :create_key_element, :update_key_element, :create_milestones, :close_goal]
   # before_action :create_milestones_for_quarterly_goal, only: [:update, :create_key_element, :update_key_element ]
   respond_to :json
 
@@ -24,6 +24,12 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     authorize @quarterly_goal
     @quarterly_goal.save!
     render "/api/quarterly_goals/create"
+  end
+
+
+  def duplicate
+    @quarterly_goal.amoeba_dup.save
+    render json: { quarterly_goal_id: @quarterly_goal.id, status: :ok }
   end
 
   def show

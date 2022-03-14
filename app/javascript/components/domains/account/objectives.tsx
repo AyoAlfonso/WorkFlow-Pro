@@ -124,7 +124,7 @@ export const Objectives = observer(
         ),
       ];
 
-      if (company.logoUrl) {
+      if (logoImageForm) {
         promises.push(companyStore.updateCompanyLogo(logoImageForm));
       }
 

@@ -72,7 +72,7 @@ export const Section1ForumMeetings = observer(
     ));
 
     const renderCreateMeetingsButton = () => {
-      if (forumStore.forumYearMeetings.length < 12) {
+      if (forumStore.forumYearMeetings.length < 0) {
         if (company.currentFiscalYear <= currentYear) {
           return (
             <StyledButton

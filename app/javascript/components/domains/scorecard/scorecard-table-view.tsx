@@ -17,7 +17,6 @@ import { MiniUpdateKPIModal } from "./shared/update-kpi-modal";
 import { AddExistingManualKPIModal } from "./shared/edit-existing-manual-kpi-modal";
 import { titleCase } from "~/utils/camelize";
 import { sortByDateReverse } from "~/utils/sorting";
-
 import { toJS } from "mobx";
 import Tooltip from "@material-ui/core/Tooltip";
 // TODO: figure out better function for percent scores.
@@ -183,8 +182,6 @@ export const ScorecardTableView = observer(
       greaterThan: boolean,
       parentType: string,
     ) => {
-      
-
       const quarterScores = [
         [null, 0],
         [null, 0],
@@ -208,10 +205,11 @@ export const ScorecardTableView = observer(
       );
     };
 
-    const averageScore = (weeks: any, target: number, greaterThan: boolean, parentType: string) => {
-      const getScore = (value: number, target: number, greaterThan: boolean) =>
-        greaterThan ? Math.round(value) : Math.round(target + target - value);
-
+    const averageScore = (
+      weeks: any,
+      target: number,
+      greaterThan: boolean,
+      parentType: string) => {
       const quarterScores = [
         [null, 0],
         [null, 0],
@@ -311,14 +309,12 @@ export const ScorecardTableView = observer(
             kpi.greaterThan,
             kpi.parentType,
           ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
-
           const averageScores = averageScore(
             weeks,
             kpi.targetValue,
             kpi.greaterThan,
             kpi.parentType,
           );
-
           const totalScores = totalScore(
             weeks,
             kpi.targetValue,
@@ -340,6 +336,41 @@ export const ScorecardTableView = observer(
         }),
       [KPIs, year],
     );
+
+    const formatLargeNumbers = (n: number) => {
+      if (n === Infinity) {
+        return n;
+      } else if (n >= 1000000000000) {
+        return `${Math.floor(n / 1000000000000)}T`;
+      } else if (n >= 1000000000) {
+        return `${Math.floor(n / 1000000000)}B`;
+      } else if (n >= 1000000) {
+        return `${Math.floor(n / 1000000)}M`;
+      } else if(n >= 1000) {
+        return `${Math.floor(n / 1000)}K`;
+      } else {
+        return `${n}`;
+      }
+    }
+
+    const findNumberFromLogic = (logic) => {
+      let n = logic.match(/[0-9]+[.]?[0-9]*/g)
+      const num = Number(n.toString());
+      return num;
+    }
+
+    const convertNumberInLogic = (logic) => {
+      return logic.replace(findNumberFromLogic(logic), formatLargeNumbers(findNumberFromLogic(logic)));
+    }
+
+    const formatUpdateNumber = (n) => {
+      if (typeof n === 'string') {
+          let extr = n.match(/[0-9]+[.]*[0-9]*/g);
+          return Number(n.replace("%", ""));
+      } else {
+        return n;
+      }
+    }
 
     const columns = useMemo(
       () => [
@@ -415,7 +446,7 @@ export const ScorecardTableView = observer(
                   <KPITitle>
                     {value.title} {value.parentType && `[${formatKpiType(value.parentType)}]`}
                   </KPITitle>
-                  <KPILogic>{value.logic}</KPILogic>
+                  <KPILogic>{convertNumberInLogic(value.logic)}</KPILogic>
                 </KPITextContainer>
               </KPITitleContainer>
             );
@@ -441,9 +472,9 @@ export const ScorecardTableView = observer(
               <Tooltip
                 title={
                   <>
-                    {"Target: "} {row.original.targetValue}
-                    <br /> {"Average: "} {row.original.average[quarter - 1]}
-                    <br /> {"Total: "} {row.original.total[quarter - 1]}
+                    {"Target: "} {formatLargeNumbers(row.original.targetValue)}
+                    <br /> {"Average: "} {formatLargeNumbers(row.original.average[quarter - 1])}
+                    <br /> {"Total: "} {formatLargeNumbers(row.original.total[quarter - 1])}
                   </>
                 }
                 placement="top"
@@ -454,7 +485,7 @@ export const ScorecardTableView = observer(
                     {parentKpi.length > relatedParentKpis.length
                       ? "—"
                       : quarterValue.percent
-                      ? `${quarterValue.percent}%`
+                      ? `${formatLargeNumbers(quarterValue.percent)}%`
                       : greaterThan
                       ? "0%"
                       : "—"}
@@ -525,7 +556,7 @@ export const ScorecardTableView = observer(
                   ) : (
                     <WeekContainer>
                       <WeekText color={value.color}>
-                        {parentType == "avr" ? Math.round(value.score) : value.score}
+                        {parentType == "avr" ? formatLargeNumbers(Math.round(value.score)) : formatLargeNumbers(formatUpdateNumber(value.score))}
                       </WeekText>
                     </WeekContainer>
                   )}
@@ -599,7 +630,7 @@ export const ScorecardTableView = observer(
                     <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
                   ) : (
                     <WeekContainer>
-                      <WeekText color={value.color}>{value.score}</WeekText>
+                      <WeekText color={value.color}>{formatLargeNumbers(value.score)}</WeekText>
                     </WeekContainer>
                   )}
                 </UpdateKPICellContainer>
