@@ -9,8 +9,7 @@ class Issue < ApplicationRecord
   belongs_to :team, optional: true
   belongs_to :company
   belongs_to :scheduled_group, optional: true
-  has_many :objective_logs, as: :objecteable, dependent: :destroy
-
+  has_many :comment_logs, as: :parent, dependent: :destroy
   has_one :team_issue, dependent: :destroy, autosave: true
   accepts_nested_attributes_for :team_issue
   has_many :team_issue_meeting_enablements, through: :team_issue
@@ -22,7 +21,7 @@ class Issue < ApplicationRecord
 
   acts_as_taggable_on :labels
 
-  scope :optimized, -> { includes([{ user: { avatar_attachment: :blob } }, :label_taggings, :labels]) }
+  scope :optimized, -> { includes([{ user: { avatar_attachment: :blob } }, :label_taggings, :labels, :comment_logs]) }
   scope :user_current_company, ->(company_id) { where(company_id: company_id) }
 
   scope :created_by_user, ->(user) { where(user: user) }

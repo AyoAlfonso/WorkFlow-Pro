@@ -147,6 +147,9 @@ Rails.application.routes.draw do
     #objective_logs
     resources :objective_logs, only: [:create, :destroy], concerns: :paginatable
 
+    #comment_logs
+    resources :comment_logs, only: [:create, :destroy], concerns: :paginatable
+    
     #questionnaires
     resources :questionnaires, only: [:index]
 

@@ -10,14 +10,15 @@ class KeyActivity < ApplicationRecord
   belongs_to :company
   belongs_to :scheduled_group, optional: true
   belongs_to :team, optional: true
-  has_many :objective_logs, as: :objecteable, dependent: :destroy
+  has_many :comment_logs, as: :parent, dependent: :destroy
+
   before_save :sanitize_body
   
   acts_as_list scope: [:company_id, :user_id, :team_id, :scheduled_group_id]
 
   acts_as_taggable_on :labels
 
-  scope :optimized, -> { includes([:user, :labels, :label_taggings]) }
+  scope :optimized, -> { includes([:user, :labels, :label_taggings, :comment_logs]) }
   scope :optimized_for_team, -> { includes([:taggings]) }
   scope :user_current_company, ->(company_id) { where(company_id: company_id) }
 

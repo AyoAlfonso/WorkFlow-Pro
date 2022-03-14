@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_10_125011) do
+ActiveRecord::Schema.define(version: 2022_03_14_211646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,6 +126,17 @@ ActiveRecord::Schema.define(version: 2022_03_10_125011) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["check_in_template_id"], name: "index_check_in_templates_steps_on_check_in_template_id"
+  end
+
+  create_table "comment_logs", force: :cascade do |t|
+    t.bigint "owned_by_id"
+    t.string "parent_type"
+    t.bigint "parent_id"
+    t.string "note"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["owned_by_id"], name: "index_comment_logs_on_owned_by_id"
+    t.index ["parent_type", "parent_id"], name: "index_comment_logs_on_parent"
   end
 
   create_table "comments", force: :cascade do |t|
