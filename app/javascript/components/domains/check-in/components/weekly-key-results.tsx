@@ -13,15 +13,12 @@ import { Avatar } from "~/components/shared";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "./empty-state";
 import { KeyElement } from "../../goals/shared/key-element";
-import { IssuesBody } from "../../issues/issues-body";
 
 export const WeeklyKeyResults = observer(
   (props): JSX.Element => {
     const { keyElementStore, userStore } = useMst();
     const { keyElementsForWeeklyCheckin } = keyElementStore;
     const { t } = useTranslation();
-    const [showIssues, setShowIssues] = useState<boolean>(false);
-    const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
 
     const { weekOf } = useParams();
 
@@ -115,7 +112,6 @@ export const WeeklyKeyResults = observer(
     };
     return (
       <>
-        <IssuesBody showOpenIssues={showOpenIssues} setShowOpenIssues={setShowOpenIssues} />
         {!R.isEmpty(keyElementsForWeeklyCheckin) ? (
           <>{renderKeyElements()}</>
         ) : (
