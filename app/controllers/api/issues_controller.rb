@@ -61,8 +61,9 @@ class Api::IssuesController < Api::ApplicationController
   end
   
   def duplicate
-    @issue.amoeba_dup.save
-    render json: { issue_id: @issue.id, status: :ok }
+    new_issue = @issue.amoeba_dup
+    new_issue.save
+    render json: { issue: new_issue, status: :ok }
   end
 
   def issues_for_meeting

@@ -111,7 +111,7 @@ export const Templates = observer(
                     className="custom-trix-class"
                     theme="snow"
                     placeholder="Enter your Objectives Templates"
-                    value={objectivesTemplate?.body.body}
+                    value={objectivesTemplate?.body.body || ""}
                     onChange={(content, delta, source, editor) => {
                       objectivesTemplate.body.body = editor.getHTML();
                       setObjectivesTemplate(objectivesTemplate);
@@ -127,7 +127,7 @@ export const Templates = observer(
                     className="custom-trix-class"
                     theme="snow"
                     placeholder="Enter your Initiatives Templates"
-                    value={initiativesTemplate?.body.body}
+                    value={initiativesTemplate?.body.body || ""}
                     onChange={(content, delta, source, editor) => {
                       initiativesTemplate.body.body = editor.getHTML();
                       setInitiativesTemplate(initiativesTemplate);
@@ -144,7 +144,7 @@ export const Templates = observer(
                     className="custom-trix-class"
                     theme="snow"
                     placeholder="Enter your KPI Templates"
-                    value={kpiTemplate?.body.body}
+                    value={kpiTemplate?.body.body || ""}
                     onChange={(content, delta, source, editor) => {
                       kpiTemplate.body.body = editor.getHTML();
                       setKPITemplate(kpiTemplate);
@@ -188,4 +188,5 @@ const CompanyStaticDataArea = styled.div`
 `;
 
 const EditorLabel = styled(Label)`
-margin: 16px 0px`
+  margin: 16px 0px;
+`;
