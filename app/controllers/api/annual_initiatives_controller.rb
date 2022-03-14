@@ -18,8 +18,8 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   end
 
   def duplicate
-    @annual_initiative.amoeba_dup
-    new_annual_initiative = @annual_initiative.save
+    new_annual_initiative = @annual_initiative.amoeba_dup
+    new_annual_initiative.save
     render json: { annual_initiative: new_annual_initiative, status: :ok }
   end
 
