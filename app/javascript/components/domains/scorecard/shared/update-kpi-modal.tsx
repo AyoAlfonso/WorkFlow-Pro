@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
 import { getMondayofDate } from "~/utils/date-time";
 import { DueDateSelector } from "~/components/shared/scorecards/date-selector";
-import { findNextMonday } from "~/utils/date-time";
+import { findNextMonday, resetYearOfDateToCurrent } from "~/utils/date-time";
 import moment from "moment";
 
 import {
@@ -63,9 +63,8 @@ export const MiniUpdateKPIModal = observer(
     } = useMst();
 
     const weekToDate = (week: number, year: number) =>
-      moment(findNextMonday(fiscalYearStart))
-        .year(year)
-        .add(week, "w")
+      moment(findNextMonday(resetYearOfDateToCurrent(fiscalYearStart, year)))
+        .add(week - 1, "w")
         .startOf("week" as moment.unitOfTime.StartOf)
         .toDate();
 
@@ -98,6 +97,7 @@ export const MiniUpdateKPIModal = observer(
     const setDefaultSelectionQuarter = week => {
       return week <= 13 ? 1 : week <= 26 ? 2 : week <= 39 ? 3 : 4;
     };
+    //DUPLICATE FUNCTION
     const createGoalYearString =
       company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
         ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
@@ -105,7 +105,7 @@ export const MiniUpdateKPIModal = observer(
             .toString()
             .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
     const handleSave = () => {
-      if (value) {
+      if (value != undefined) {
         const log = {
           keyPerformanceIndicatorId: kpiId,
           userId: sessionStore.profile.id,

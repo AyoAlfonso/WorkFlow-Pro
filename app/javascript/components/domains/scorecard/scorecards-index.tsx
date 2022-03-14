@@ -20,8 +20,8 @@ interface IScorecardsIndexProps {
 export const ScorecardsIndex = observer(
   ({ ownerType, ownerId, isMiniEmbed }: IScorecardsIndexProps): JSX.Element => {
     let { owner_type, owner_id } = useParams();
-    owner_type = ownerType ? ownerType : owner_type;
-    owner_id = ownerId ? ownerId : owner_id;
+    owner_type = ownerType || owner_type;
+    owner_id = ownerId || owner_id;
 
     const {
       companyStore,
@@ -84,18 +84,6 @@ export const ScorecardsIndex = observer(
       );
     };
 
-    const allkpisToShow = () => {
-      switch (kpiFilter) {
-        case "open":
-          // return toJS(kpis.filter(kpi => kpi.closedAt == null));
-        return keyPerformanceIndicatorStore.allOpenKPIs;
-        case "closed":
-          return kpis
-        // return keyPerformanceIndicatorStore.allClosedKPIs;
-        default:
-          return [];
-      }
-    };
     /* Table KPIs are separated from allKPIs to optimize the rendering of the table */
     const tableKPIsToShow = () => {
       switch (kpiFilter) {

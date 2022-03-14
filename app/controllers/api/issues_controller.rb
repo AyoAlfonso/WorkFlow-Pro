@@ -1,5 +1,5 @@
 class Api::IssuesController < Api::ApplicationController
-  before_action :set_issue, only: [:update, :destroy]
+  before_action :set_issue, only: [:update, :destroy, :duplicate]
 
   respond_to :json
 
@@ -9,7 +9,7 @@ class Api::IssuesController < Api::ApplicationController
   end
 
   def create
-    @issue = Issue.new({ user_id: params[:user_id], description: params[:description], priority: params[:priority], team_id: params[:team_id], position: params[:position], company_id: current_company.id, personal: params[:personal], label_list: params[:label] && params[:label][:name] })
+    @issue = Issue.new({ user_id: params[:user_id], description: params[:description], body: params[:body], priority: params[:priority], team_id: params[:team_id], position: params[:position], company_id: current_company.id, personal: params[:personal], label_list: params[:label] && params[:label][:name] })
     authorize @issue
     @issue.insert_at(1)
     @issue.save!
@@ -59,6 +59,11 @@ class Api::IssuesController < Api::ApplicationController
     @team_issues = TeamIssue.for_team(team_id).sort_by_position
     render "api/issues/destroy"
   end
+  
+  def duplicate
+    @issue.amoeba_dup.save
+    render json: { issue_id: @issue.id, status: :ok }
+  end
 
   def issues_for_meeting
     team_id = Meeting.find(params[:meeting_id]).team_id
@@ -93,7 +98,7 @@ class Api::IssuesController < Api::ApplicationController
   private
 
   def issue_params
-    params.permit(:user_id, :description, :completed_at, :priority, :team_id, :position, :personal)
+    params.permit(:user_id, :description,:body, :completed_at, :priority, :team_id, :position, :personal)
   end
 
   def set_issue

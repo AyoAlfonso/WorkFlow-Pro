@@ -79,6 +79,7 @@ Rails.application.routes.draw do
     get "/issues/issues_for_meeting", to: "issues#issues_for_meeting"
     get "/issues/issues_for_team", to: "issues#issues_for_team"
     patch "/issues", to: "issues#resort_index"
+    post '/issues/duplicate/:id', to: 'issues#duplicate'
 
     # team_issues
     resources :team_issues, only: [:index, :update]
@@ -95,7 +96,7 @@ Rails.application.routes.draw do
     end
     get "/key_activities/created_in_meeting", to: "key_activities#created_in_meeting"
     patch "/key_activities", to: "key_activities#resort_index"
-
+    post '/key_activities/duplicate/:id', to: 'key_activities#duplicate'
     #labels
     resources :labels, only: [:index, :create]
 
@@ -116,7 +117,7 @@ Rails.application.routes.draw do
     post '/quarterly_goals/create_key_element/:id', to: 'quarterly_goals#create_key_element'
     post 'quarterly_goals/:id/update_key_element/:key_element_id',  to: 'quarterly_goals#update_key_element'
     patch '/quarterly_goals/close_goal/:id', to: 'quarterly_goals#close_goal'
-    # post '/quarterly_goals/duplicate/:id', to: 'quarterly_goals#duplicate'
+    post '/quarterly_goals/duplicate/:id', to: 'quarterly_goals#duplicate'
     delete '/quarterly_goals/delete_key_element/:key_element_id', to: 'quarterly_goals#delete_key_element'
     post '/quarterly_goals/create_milestones/:id', to: 'quarterly_goals#create_milestones'
 

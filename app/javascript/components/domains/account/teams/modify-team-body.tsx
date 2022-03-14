@@ -103,7 +103,7 @@ export const ModifyTeamBody = observer(
 
     const teamManager = (): JSX.Element => {
       const userList = team ? team.users : userStore.users;
-      const currentUser = userList.find(user => user.id === teamManagerId)
+      const currentUser = userList.find(user => user.id === teamManagerId);
       return (
         <>
           <SelectMemberContainer>{headerText("Team Manager")}</SelectMemberContainer>
@@ -157,9 +157,7 @@ export const ModifyTeamBody = observer(
               variant={"redOutline"}
               onClick={() => {
                 if (confirm(`Are you sure you want to delete this team?`)) {
-                  teamStore.deleteTeam(team.id).then(() => {
-                    showToast("Team deleted", ToastMessageConstants.SUCCESS);
-                  });
+                  teamStore.deleteTeam(team.id);
                 }
               }}
             >

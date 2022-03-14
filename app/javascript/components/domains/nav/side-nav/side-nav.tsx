@@ -375,9 +375,7 @@ export const SideNavNoMst = (
         <> </>
       )}
 
-      {company &&
-      company.accessForum &&
-      !R.isNil(R.path(["0", "id"], teams)) ? (
+      {company &&  company.accessForum &&  forumType != "organisation_forum_monthly" && !R.isNil(R.path(["0", "id"], teams)) ? (
         <SideNavChildPopup
           trigger={
             <NavMenuIcon
@@ -392,8 +390,8 @@ export const SideNavNoMst = (
           setNavOpen={setMeetingsNavChildOpen}
           setOtherNavOpen={[setTeamNavChildOpen, setCompanyNavChildOpen]}
         >
-          <SideNavChildLink to="/meetings/section_1" linkText={t("forum.annualHub")} />
-          <SideNavChildLink to="/meetings/section_2" linkText={t("forum.upcomingHub")} />
+          <SideNavChildLink to="/meetings/section_1/" linkText={t("forum.annualHub")} />
+          <SideNavChildLink to="/meetings/section_2/" linkText={t("forum.upcomingHub")} />
           {/* <SideNavChildLink to="/meetings/agenda" linkText={t("forum.agenda")}/> */}
         </SideNavChildPopup>
       ) : (

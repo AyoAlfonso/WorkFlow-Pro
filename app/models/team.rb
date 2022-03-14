@@ -10,6 +10,7 @@ class Team < ApplicationRecord
   has_many :meetings, dependent: :destroy
   has_many :team_issues, dependent: :destroy
   has_many :key_activities,  dependent: :destroy
+  
 
   store :settings, accessors: [:weekly_meeting_dashboard_link_embed], coder: JSON
 
@@ -23,6 +24,13 @@ class Team < ApplicationRecord
 
   def active
     return !deleted
+  end
+
+  def reset_default_team
+    if Team.where(company_id: self.company.id, executive: 1).blank?
+      existing_available_team = Team.where(company_id: self.company.id, executive: 0).first
+      existing_available_team&.set_default_executive_team
+    end
   end
 
   def is_lead?(user)

@@ -10,19 +10,31 @@ export const findNextMonday = date => {
   return monday;
 };
 
+export const resetYearOfDateToCurrent = (date, currentFiscalYear, interceptor = "-") => {
+  return date
+    .split(interceptor)
+    .map((e, i) => {
+      if (i == 0) {
+        return currentFiscalYear || new Date().getFullYear();
+      } else {
+        return e;
+      }
+    })
+    .join(interceptor);
+};
+
 moment.updateLocale("en", {
   week: {
     dow: 1,
   },
 });
 
-  function sub(num) {
+function sub(num) {
   if (num <= 52) {
-   return num;
+    return num;
+  } else {
+    return sub(num - 52);
   }
-  else {
-   return (sub(num - 52));
- }
 }
 
 const MILLISECONDS_PER_SECOND = 1000;
@@ -34,7 +46,7 @@ export const getWeekDiff = (to, from) => {
   // Math.abs(new Date("Monday, 14 February 2022") - new Date("Sunday, 1 August 2021"))
   const dateDiff = Math.abs(+to - +new Date(from));
 
-  return sub(Math.ceil((dateDiff / (1000 * 60 * 60 * 24))/DAYS_OF_WEEK)) ;
+  return sub(Math.ceil(dateDiff / (1000 * 60 * 60 * 24) / DAYS_OF_WEEK));
 };
 
 export const dateStringToSeconds = dateString => {

@@ -25,6 +25,8 @@ import {
 } from "~/components/shared/styles/row-style";
 
 import { FutureTeamMeetingsContainer } from "./shared/future-team-meetings-container";
+import { TeamForumManagementContainer } from "./shared/team-forum-management-container";
+
 import { TeamIssuesContainer } from "./shared/team-issues-container";
 import { TeamPulsePanel } from "./shared/team-pulse-panel";
 
@@ -53,6 +55,7 @@ export const TeamOverview = observer(
     } = useMst();
 
     const { team_id } = useParams();
+
     const inDashboard = useRouteMatch("/team/:team_id/dashboard");
     const { t } = useTranslation();
 
@@ -94,6 +97,8 @@ export const TeamOverview = observer(
         ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
         : MeetingTypes.FORUM_MONTHLY;
 
+    //WE SHOULD ADD SOMETHING FOR THE START MEETING HERE
+    // handleMeetingClick RENAME FOR ALL PLACES THAT NEED IT HERE
     const handleForumMeetingClick = () => {
       meetingStore.startNextMeeting(team_id, forumType).then(({ meeting }) => {
         if (!R.isNil(meeting)) {
@@ -110,6 +115,18 @@ export const TeamOverview = observer(
           showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
         }
       });
+    };
+
+    const handleMeetingManagementClick = () => {
+      history.push(`/meetings/section_1/${team_id}`);
+    };
+
+    const handleForumTopicsClick = () => {
+      history.push(`/meetings/section_2/${team_id}`);
+    };
+
+    const handleMeetingAgendaNotesClick = () => {
+      history.push(`/meetings/section_1/`);
     };
 
     const renderUserSnapshotTable = (): JSX.Element => {
@@ -261,32 +278,64 @@ export const TeamOverview = observer(
               />
             )}
           </StyledOverviewAccordion>
-
-          <StyledOverviewAccordion
-            expanded={expanded == "team-issues-panel"}
-            onChange={handleToolsChange("team-issues-panel")}
-            elevation={0}
-          >
-            <TeamIssuesContainer
-              teamId={team_id}
-              title={t(`${overviewType}.teamIssuesTitle`)}
-              expanded={expanded}
-              handleChange={handleToolsChange}
-            />
+          <StyledOverviewAccordion>
+            {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
+              <TeamForumManagementContainer
+                titleText={t(`${overviewType}.teamMeetingsTitle`)}
+                buttonText={t("forum.meetingManagement")}
+                handleMeetingClick={handleMeetingManagementClick}
+              />
+            )}
+          </StyledOverviewAccordion>
+          <StyledOverviewAccordion>
+            {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
+              <TeamForumManagementContainer
+                titleText={t(`${overviewType}.teamMeetingsTitle`)}
+                buttonText={t("forum.forumTopics")}
+                handleMeetingClick={handleForumTopicsClick}
+              />
+            )}
           </StyledOverviewAccordion>
 
-          <StyledOverviewAccordion
-            expanded={expanded == "team-pulse-panel"}
-            onChange={handleToolsChange("team-pulse-panel")}
-            elevation={0}
-          >
-            <TeamPulsePanel
-              team={currentTeam}
-              title={t(`${overviewType}.teamsPulseTitle`)}
-              expanded={expanded}
-              handleChange={handleToolsChange}
-            />
+          <StyledOverviewAccordion>
+            {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
+              <TeamForumManagementContainer
+                titleText={t(`${overviewType}.teamMeetingsTitle`)}
+                buttonText={t("forum.meetingAgendaNotes")}
+                handleMeetingClick={handleMeetingAgendaNotesClick}
+              />
+            )}
           </StyledOverviewAccordion>
+
+          {overviewType === "teams" && (
+            <StyledOverviewAccordion
+              expanded={expanded == "team-issues-panel"}
+              onChange={handleToolsChange("team-issues-panel")}
+              elevation={0}
+            >
+              <TeamIssuesContainer
+                teamId={team_id}
+                title={t(`${overviewType}.teamIssuesTitle`)}
+                expanded={expanded}
+                handleChange={handleToolsChange}
+              />
+            </StyledOverviewAccordion>
+          )}
+
+          {overviewType === "teams" && (
+            <StyledOverviewAccordion
+              expanded={expanded == "team-pulse-panel"}
+              onChange={handleToolsChange("team-pulse-panel")}
+              elevation={0}
+            >
+              <TeamPulsePanel
+                team={currentTeam}
+                title={t(`${overviewType}.teamsPulseTitle`)}
+                expanded={expanded}
+                handleChange={handleToolsChange}
+              />
+            </StyledOverviewAccordion>
+          )}
         </ToolsWrapper>
         {overviewType === "forum" && <LynchPynBadge />}
       </Container>

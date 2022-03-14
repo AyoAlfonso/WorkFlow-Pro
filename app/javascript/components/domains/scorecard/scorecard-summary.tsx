@@ -10,7 +10,7 @@ import { Icon } from "~/components/shared/icon";
 import { getScorePercent } from "./scorecard-table-view";
 import { toJS } from "mobx";
 import { useTranslation } from "react-i18next";
-import {findNextMonday} from "~/utils/date-time"
+import { findNextMonday, resetYearOfDateToCurrent } from "~/utils/date-time";
 
 const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
   const [data, setData] = useState<Object>(null);
@@ -45,7 +45,12 @@ const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
         if (!week) {
           acc[0]++;
         } else {
-          const percentScore = getScorePercent(week.score, kpi.targetValue, kpi.greaterThan);
+          const percentScore =
+            kpi.targetValue == 0 && week.score == 0
+              ? 100
+              : kpi.targetValue == 0 && week.score != 0
+              ? -week.score
+              : getScorePercent(week.score, kpi.targetValue, kpi.greaterThan);
           if (percentScore >= 100) {
             acc[3]++;
           } else if (percentScore >= kpi.needsAttentionThreshold) {
@@ -201,7 +206,16 @@ const QuarterSummary = ({
 
               return (
                 acc +
-                (week ? Math.min(100, getScorePercent(week.score, targetValue, greaterThan)) : 0)
+                (week
+                  ? Math.min(
+                      100,
+                      kpi.targetValue == 0 && week.score == 0
+                        ? 100
+                        : kpi.targetValue == 0 && week.score != 0
+                        ? -week.score
+                        : getScorePercent(week.score, targetValue, greaterThan),
+                    )
+                  : 0)
               );
             }, 0) / kpis.length
           );
@@ -209,10 +223,9 @@ const QuarterSummary = ({
       : [];
   };
 
-const weekToDate = (week: number): string =>
-    moment(findNextMonday(fiscalYearStart))
-      .year(currentFiscalYear)
-      .add(week, "w")
+  const weekToDate = (week: number): string =>
+    moment(findNextMonday(resetYearOfDateToCurrent(fiscalYearStart, currentFiscalYear)))
+      .add(week - 1, "w")
       .startOf("week" as moment.unitOfTime.StartOf)
       .format("MMM D");
 
@@ -227,7 +240,7 @@ const weekToDate = (week: number): string =>
         setLastWeekPercent(+currentQuarterData[currentQuarterData.length - 2]);
       }
     }
- 
+
     setData({
       labels: R.range(startWeek, startWeek + 13).map((i: number) => weekToDate(i)),
       datasets: [
@@ -369,7 +382,7 @@ export const ScorecardSummary = ({
   fiscalYearStart,
   currentFiscalYear,
 }: ScorecardSummaryProps): JSX.Element => {
-  const KPIs = JSON.parse(JSON.stringify((kpis)));
+  const KPIs = JSON.parse(JSON.stringify(kpis));
   return (
     <Container>
       <WeekSummary kpis={KPIs} currentWeek={currentWeek} currentFiscalYear={currentFiscalYear} />
