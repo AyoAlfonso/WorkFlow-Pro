@@ -28,8 +28,9 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
 
   def duplicate
-    @quarterly_goal.amoeba_dup.save
-    render json: { quarterly_goal_id: @quarterly_goal.id, status: :ok }
+    @quarterly_goal.amoeba_dup
+    new_quarterly_goal = @quarterly_goal.save
+    render json: { quarterly_goal: new_quarterly_goal, status: :ok }
   end
 
   def show

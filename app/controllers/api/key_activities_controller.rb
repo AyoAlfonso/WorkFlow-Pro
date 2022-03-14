@@ -70,8 +70,9 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def duplicate
-    @key_activity.amoeba_dup.save
-    render json: { key_activity_id: @key_activity.id, status: :ok }
+    @key_activity.amoeba_dup
+    new_key_activity = @key_activity.save
+    render json: { key_activity: new_key_activity, status: :ok }
   end
 
   def update_multiple
