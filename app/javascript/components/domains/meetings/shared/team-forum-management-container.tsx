@@ -24,11 +24,11 @@ export const TeamForumManagementContainer = ({
       <HeaderContainerNoBorder>
         <div style={{ width: "30px" }} />
         <AccordionHeaderText>{buttonText}</AccordionHeaderText>
-      </HeaderContainerNoBorder>
+     </HeaderContainerNoBorder>
       <IconContainerWithPadding>
         <Icon icon={"Team"} size={16} iconColor={"blue"} />
       </IconContainerWithPadding>
-    </AccordionSummary>
+     </AccordionSummary> 
   );
 };
 

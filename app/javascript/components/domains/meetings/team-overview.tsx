@@ -278,34 +278,29 @@ export const TeamOverview = observer(
               />
             )}
           </StyledOverviewAccordion>
-          <StyledOverviewAccordion>
-            {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
-              <TeamForumManagementContainer
-                titleText={t(`${overviewType}.teamMeetingsTitle`)}
-                buttonText={t("forum.meetingManagement")}
-                handleMeetingClick={handleMeetingManagementClick}
-              />
-            )}
-          </StyledOverviewAccordion>
-          <StyledOverviewAccordion>
-            {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
-              <TeamForumManagementContainer
-                titleText={t(`${overviewType}.teamMeetingsTitle`)}
-                buttonText={t("forum.forumTopics")}
-                handleMeetingClick={handleForumTopicsClick}
-              />
-            )}
-          </StyledOverviewAccordion>
+          {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
+            <TeamForumManagementContainer
+              titleText={t(`${overviewType}.teamMeetingsTitle`)}
+              buttonText={t("forum.meetingManagement")}
+              handleMeetingClick={handleMeetingManagementClick}
+            />
+          )}
 
-          <StyledOverviewAccordion>
-            {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
-              <TeamForumManagementContainer
-                titleText={t(`${overviewType}.teamMeetingsTitle`)}
-                buttonText={t("forum.meetingAgendaNotes")}
-                handleMeetingClick={handleMeetingAgendaNotesClick}
-              />
-            )}
-          </StyledOverviewAccordion>
+          {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
+            <TeamForumManagementContainer
+              titleText={t(`${overviewType}.teamMeetingsTitle`)}
+              buttonText={t("forum.forumTopics")}
+              handleMeetingClick={handleForumTopicsClick}
+            />
+          )}
+
+          {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
+            <TeamForumManagementContainer
+              titleText={t(`${overviewType}.teamMeetingsTitle`)}
+              buttonText={t("forum.meetingAgendaNotes")}
+              handleMeetingClick={handleMeetingAgendaNotesClick}
+            />
+          )}
 
           {overviewType === "teams" && (
             <StyledOverviewAccordion
