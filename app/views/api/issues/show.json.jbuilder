@@ -1,0 +1,1 @@
+json.partial! @issue, partial:  "api/issues/issue", as: :issue
