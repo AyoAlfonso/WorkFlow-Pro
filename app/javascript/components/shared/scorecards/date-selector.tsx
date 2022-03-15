@@ -17,7 +17,7 @@ interface IDueDateSelectorProps {
   setSelectedDueDate: any;
   setCurrentWeek: any;
   maxDate: Date;
-  fiscalYearStart: string
+  fiscalYearStart: string;
 }
 
 export const DueDateSelector = ({
@@ -29,7 +29,6 @@ export const DueDateSelector = ({
 }: IDueDateSelectorProps): JSX.Element => {
   const { t } = useTranslation();
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-
   return (
     <Container>
       <DueDateSelectionContainer>

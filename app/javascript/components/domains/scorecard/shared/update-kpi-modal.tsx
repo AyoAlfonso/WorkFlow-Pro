@@ -28,7 +28,6 @@ interface MiniUpdateKPIModalProps {
   ownedById: number;
   unitType: string;
   year: number;
-  quarter?: any;
   week: number;
   fiscalYearStart?: string;
   currentValue: number | undefined;
@@ -39,6 +38,7 @@ interface MiniUpdateKPIModalProps {
   updateKPI?: any;
   setTargetWeek?: React.Dispatch<React.SetStateAction<number>>;
   setTargetValue?: React.Dispatch<React.SetStateAction<number>>;
+  current: boolean;
 }
 
 export const MiniUpdateKPIModal = observer(
@@ -46,7 +46,6 @@ export const MiniUpdateKPIModal = observer(
     kpiId,
     unitType,
     year,
-    quarter,
     week,
     fiscalYearStart,
     currentValue,
@@ -56,15 +55,16 @@ export const MiniUpdateKPIModal = observer(
     setKpis,
     setTargetWeek,
     setTargetValue,
+    current,
   }: MiniUpdateKPIModalProps): JSX.Element => {
     const history = useHistory();
     const {
       companyStore: { company },
     } = useMst();
 
-    const weekToDate = (week: number, year: number) =>
-      moment(findNextMonday(resetYearOfDateToCurrent(fiscalYearStart, year)))
-        .add(week - 1, "w")
+    const weekToDate = (week: number, year: number, weekOffset = -1) =>
+      moment(resetYearOfDateToCurrent(fiscalYearStart, year))
+        .add(week - weekOffset, "w")
         .startOf("week" as moment.unitOfTime.StartOf)
         .toDate();
 
@@ -97,7 +97,7 @@ export const MiniUpdateKPIModal = observer(
     const setDefaultSelectionQuarter = week => {
       return week <= 13 ? 1 : week <= 26 ? 2 : week <= 39 ? 3 : 4;
     };
-    //DUPLICATE FUNCTION
+
     const createGoalYearString =
       company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
         ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
@@ -204,8 +204,12 @@ export const MiniUpdateKPIModal = observer(
                   selectedDueDate={selectedDueDate}
                   setSelectedDueDate={setSelectedDueDate}
                   setCurrentWeek={setCurrentWeek}
-                  maxDate={weekToDate(week, year)}
-                  fiscalYearStart={fiscalYearStart}
+                  maxDate={
+                    current || week == company.currentFiscalWeek
+                      ? new Date()
+                      : weekToDate(week, year)
+                  }
+                  fiscalYearStart={resetYearOfDateToCurrent(fiscalYearStart, year)}
                 />
               </FormElementContainer>
               <FormElementContainer />

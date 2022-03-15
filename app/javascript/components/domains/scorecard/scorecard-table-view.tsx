@@ -773,6 +773,7 @@ export const ScorecardTableView = observer(
             setTargetWeek={setTargetWeek}
             setTargetValue={setTargetValue}
             fiscalYearStart={fiscalYearStart}
+            current={!targetWeek}
           />
         )}
       </>
