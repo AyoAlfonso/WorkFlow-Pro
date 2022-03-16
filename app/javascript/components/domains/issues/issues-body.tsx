@@ -82,6 +82,7 @@ export const IssuesBody = observer(
                   leftShareContainer={true}
                   setIssueModalOpen={setIssueModalOpen}
                   setCurrentIssue={setCurrentIssue}
+                  currentIssue={currentIssue}
                 />
               </IssueContainer>
             )}
