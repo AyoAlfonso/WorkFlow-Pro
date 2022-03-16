@@ -13,6 +13,7 @@ const initialState = {
   issueStore: {
     issues: [],
     loading: false,
+    commentLogs: null,
   },
   labelStore: {
     labelsList: [],

@@ -40,7 +40,7 @@ export const CreateIssueModal = ({
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
   const [selectedLabel, setSelectedLabel] = useState<any>(null);
-  const [personal, setPersonal] = useState<boolean>(false);
+  const [personal, setPersonal] = useState<boolean>(teamId ? false : true);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);

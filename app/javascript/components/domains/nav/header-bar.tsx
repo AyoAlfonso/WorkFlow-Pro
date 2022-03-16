@@ -102,11 +102,13 @@ export const HeaderBar = observer(
                 <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
               </CloseIconContainer>
             </PopupHeaderContainer>
-            <IssuesBody
-              showOpenIssues={showOpenIssues}
-              setShowOpenIssues={setShowOpenIssues}
-              noShadow
-            />
+            <IssuesContainer>
+              <IssuesBody
+                showOpenIssues={showOpenIssues}
+                setShowOpenIssues={setShowOpenIssues}
+                noShadow
+              />
+            </IssuesContainer>
           </IssuesPopupContainer>
         )
       );
@@ -329,7 +331,6 @@ const IssuesPopupContainer = styled.div`
   position: absolute;
   width: 320px;
   height: 438px;
-  overflow-y: scroll;
   padding: 16px;
   padding-top: 0px;
   margin-left: -160px;
@@ -420,4 +421,9 @@ const PersonalInfoContainer = styled.div`
 const CloseIconContainer = styled.div`
   margin-left: auto;
   cursor: pointer;
+`;
+
+const IssuesContainer = styled.div`
+  overflow-y: scroll;
+  height: 380px;
 `;

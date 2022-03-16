@@ -10,9 +10,19 @@ import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
 import { toJS } from "mobx";
 import * as R from "ramda";
-import { Avatar, Button, LabelSelection, DefaultStyledLabel, Select, Text } from "~/components/shared";
+import {
+  Avatar,
+  Button,
+  LabelSelection,
+  DefaultStyledLabel,
+  Select,
+  Text,
+} from "~/components/shared";
+import { CommentLogs } from "../shared-issues-key-activities/comment-logs";
 import { StyledInput, FormElementContainer } from "../scorecard/shared/modal-elements";
 import ReactQuill from "react-quill";
+import { OwnedBySection } from "../goals/shared/owned-by-section";
+import { OwnedBy } from "../scorecard/shared/scorecard-owned-by";
 
 interface IIssueModalContentProps {
   issue: IIssue;
@@ -25,25 +35,59 @@ export const IssueModalContent = observer(
   ({ issue, setIssueModalOpen, meetingId, teamId }: IIssueModalContentProps): JSX.Element => {
     const { issueStore, sessionStore } = useMst();
 
+    const { commentLogs } = issueStore;
+
     const teams = R.path(["profile", "currentCompanyUserTeams"], sessionStore);
+    const teamName = issue.teamId ? teams.find(team => team.id == issue.teamId).name : "";
 
     const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
     const [showShareModal, setShowShareModal] = useState<boolean>(false);
     const [selectedLabel, setSelectedLabel] = useState<any>(null);
-    const [description, setDescription] = useState<string>("");
+    const [description, setDescription] = useState<string>(issue.body);
     const [comment, setComment] = useState<string>("");
     const [showPriorities, setShowPriorities] = useState<boolean>(false);
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
+    const [commentMeta, setCommentMeta] = useState({});
 
     const issueRef = useRef(null);
     const prioritiesRef = useRef(null);
     const moveRef = useRef(null);
+    const optionsRef = useRef(null);
+
+    useEffect(() => {
+      issueStore.getCommentLogs(1, "Issues", issue.id).then(meta => {
+        setCommentMeta(meta);
+      });
+    }, []);
 
     useEffect(() => {
       const issueLabels = toJS(issue.labels);
       setSelectedLabel(issueLabels ? issueLabels[0] : null);
     }, [issue]);
+
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showOptions) return;
+
+        const node = optionsRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowOptions(false);
+      };
+
+      if (showOptions) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showOptions]);
 
     useEffect(() => {
       const externalEventHandler = e => {
@@ -95,7 +139,7 @@ export const IssueModalContent = observer(
       issueStore.updateLabel(issue.id, labelId, meetingId || teamId ? true : false);
     };
 
-    const priorityOptions = ["frog", "high", "medium"];
+    const priorityOptions = ["frog", "high", "medium", "low"];
 
     const renderPriorityIcon = (priority: string, size = 18, mr = 0) => {
       switch (priority) {
@@ -163,7 +207,7 @@ export const IssueModalContent = observer(
       issueStore.updateIssueState(issue.id, "priority", priority);
       issueStore.updateIssue(issue.id, meetingId || teamId ? true : false);
     };
-    console.log(issue.priority);
+
     const getPriorityText = text => {
       switch (text) {
         case "high":
@@ -173,7 +217,7 @@ export const IssueModalContent = observer(
         case "frog":
           return "LynchPyn Priority";
         default:
-          return "Priority";
+          return "No Priority";
       }
     };
 
@@ -195,67 +239,88 @@ export const IssueModalContent = observer(
       setDescription(html);
     };
 
+    const postComment = () => {
+      const commentLog = {
+        ownedById: sessionStore.profile.id,
+        note: comment,
+        parentType: "Issues",
+        parentId: issue.id,
+      };
+
+      issueStore.createCommentLog(commentLog);
+    };
+
+    const getLogs = pageNumber => {
+      return issueStore.getCommentLogs(pageNumber, "Issues", issue.id).then(meta => {
+        setCommentMeta(meta);
+      });
+    };
+
     const renderHeader = (): JSX.Element => {
       return (
         <HeaderContainer>
           <IconsContainer>
             <IconContainer display="flex">
               <Icon icon={"List"} size={"16px"} iconColor={"primary100"} mr="6px" />
-              <ListText>My Issues</ListText>
+              <ListText>{teamName || `My Issues`}</ListText>
             </IconContainer>
-            <IconContainer ml="auto" display="flex">
+            <IconContainer ref={optionsRef} ml="auto" display="flex">
               <StyledOptionContainer onClick={() => setShowOptions(!showOptions)}>
                 <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
                 {showOptions && (
                   <OptionsContainer>
                     <OptionContainer
-                      ref={moveRef}
-                      onClick={() => setShowShareModal(!showShareModal)}
+                      onClick={e => {
+                        e.stopPropagation();
+                        setShowShareModal(true);
+                      }}
                     >
-                      <StyledArrowIcon icon={"Arrow"} size={14} mr={16} iconColor={"greyActive"} />
-                      <OptionText>Share</OptionText>
+                      <Icon icon={"Move2"} size={14} mr={16} iconColor={"greyActive"} />
+                      <OptionText>Move</OptionText>
                       {showShareModal && (
-                        <ShareContainer>
+                        <ShareContainer ref={moveRef}>
                           <ShareTopSection>
                             <ShareIssueText>Move</ShareIssueText>
-                            {/* <IconContainer
-                              onClick={e => {
-                                e.stopPropagation();
-                                setShowShareModal(false);
-                              }}
-                            >
-                              <Icon icon="Close" size={12} iconColor={"greyInactive"} />
-                            </IconContainer> */}
                           </ShareTopSection>
 
                           <DestinationContainer>
                             <SendDestinationContainer>
-                              <StyledSelect
-                                id="country"
-                                name="country"
-                                value={selectedTeamId}
-                                onChange={e => setSelectedTeamId(parseInt(e.target.value))}
+                              <Select
+                                id="move-select"
+                                name="list"
+                                value={selectedTeamId || issue.teamId}
+                                onChange={e => {
+                                  e.stopPropagation();
+                                  setSelectedTeamId(parseInt(e.target.value));
+                                }}
+                                color={baseTheme.colors.greyActive}
+                                fontSize={14}
+                                pt={"0.25em"}
+                                pb={"0.25em"}
+                                br={"0.5em"}
                               >
-                                {[{ id: null, name: "Select a team" }, ...teams].map(
+                                {[{ id: null, name: "Select a List" }, ...teams].map(
                                   (value, key) => (
                                     <option key={key} value={value.id}>
                                       {value.name}
                                     </option>
                                   ),
                                 )}
-                              </StyledSelect>
+                              </Select>
                               <ButtonContainer>
                                 <StyledButton
                                   disabled={!selectedTeamId}
                                   onClick={() => {
+                                    issueStore.updateIssueState(issue.id, "personal", false);
                                     issueStore.updateIssueState(issue.id, "teamId", selectedTeamId);
                                     issueStore.updateIssue(issue.id).then(result => {
                                       if (result) {
                                         showToast(
-                                          "Issue shared with team.",
+                                          "Issue Moved Successfully.",
                                           ToastMessageConstants.SUCCESS,
                                         );
                                       }
+                                      setShowOptions(false);
                                     });
                                   }}
                                 >
@@ -267,12 +332,26 @@ export const IssueModalContent = observer(
                         </ShareContainer>
                       )}
                     </OptionContainer>
-                    <OptionContainer>
+                    <OptionContainer
+                      onClick={() => {
+                        issueStore.updateIssueState(issue.id, "teamId", null);
+                        issueStore.updateIssueState(issue.id, "personal", true);
+                        issueStore
+                          .updateIssue(issue.id, meetingId || teamId ? true : false)
+                          .then(() => setShowOptions(false));
+                      }}
+                    >
                       <Icon icon={"Lock"} size={14} mr={16} iconColor={"greyActive"} />
                       <OptionText>Lock</OptionText>
                     </OptionContainer>
                     <Divider />
-                    <OptionContainer>
+                    <OptionContainer
+                      onClick={() =>
+                        issueStore
+                          .duplicateIssue(issue.id)
+                          .then(res => res && setShowOptions(false))
+                      }
+                    >
                       <Icon icon={"Duplicate"} size={14} mr={16} iconColor={"greyActive"} />
                       <OptionText>Duplicate</OptionText>
                     </OptionContainer>
@@ -312,37 +391,45 @@ export const IssueModalContent = observer(
             onBlur={() => issueStore.updateIssue(issue.id, meetingId ? true : false)}
           />
           <BottomRowContainer>
-            <PriorityContainer onClick={() => setShowPriorities(true)}>
-              {renderPriorityIcon(issue.priority)}
-              {showPriorities && (
-                <PriorityDropdownContainer ref={prioritiesRef}>
-                  <PriorityTopSection>
-                    <PriorityIconContainer
-                      onClick={e => {
-                        e.stopPropagation();
-                        setShowPriorities(false);
-                      }}
-                    >
-                      <Icon icon="Close" size={12} iconColor={"greyInactive"} />
-                    </PriorityIconContainer>
-                  </PriorityTopSection>
-                  {priorityOptions.map((priority, index) => (
-                    <OptionContainer
-                      key={`${priority}-${index}`}
-                      onClick={() => {
-                        issueStore.updateIssueState(issue.id, "priority", priority);
-                        issueStore
-                          .updateIssue(issue.id, meetingId || teamId ? true : false)
-                          .then(() => setShowPriorities(false));
-                      }}
-                    >
-                      {renderPriorityIcon(priority, 14, 16)}
-                      <OptionText>{getPriorityText(priority)}</OptionText>
-                    </OptionContainer>
-                  ))}
-                </PriorityDropdownContainer>
-              )}
-            </PriorityContainer>
+            <IconContainer
+              onClick={() => setShowPriorities(true)}
+              display="flex"
+              cursor="pointer"
+              mr="0.5em"
+            >
+              <PriorityContainer>
+                {renderPriorityIcon(issue.priority)}
+                {showPriorities && (
+                  <PriorityDropdownContainer ref={prioritiesRef}>
+                    <PriorityTopSection>
+                      <PriorityIconContainer
+                        onClick={e => {
+                          e.stopPropagation();
+                          setShowPriorities(false);
+                        }}
+                      >
+                        <Icon icon="Close" size={12} iconColor={"greyInactive"} />
+                      </PriorityIconContainer>
+                    </PriorityTopSection>
+                    {priorityOptions.map((priority, index) => (
+                      <OptionContainer
+                        key={`${priority}-${index}`}
+                        onClick={() => {
+                          issueStore.updateIssueState(issue.id, "priority", priority);
+                          issueStore
+                            .updateIssue(issue.id, meetingId || teamId ? true : false)
+                            .then(() => setShowPriorities(false));
+                        }}
+                      >
+                        {renderPriorityIcon(priority, 14, 16)}
+                        <OptionText>{getPriorityText(priority)}</OptionText>
+                      </OptionContainer>
+                    ))}
+                  </PriorityDropdownContainer>
+                )}
+              </PriorityContainer>
+              <PriorityText>{getPriorityText(issue.priority)}</PriorityText>
+            </IconContainer>
             <LabelContainer>{renderLabel()}</LabelContainer>
             {issue.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
             <AvatarContainer>
@@ -354,6 +441,9 @@ export const IssueModalContent = observer(
                 size={25}
               />
             </AvatarContainer>
+            <OwnedByContainer>
+              <OwnedBy ownedBy={issue.user} size={25} disabled={true} />
+            </OwnedByContainer>
           </BottomRowContainer>
         </HeaderContainer>
       );
@@ -366,14 +456,14 @@ export const IssueModalContent = observer(
           <SubHeader>Description</SubHeader>
           <TrixEditorContainer
             onBlur={() => {
-              // annualInitiativeStore.updateModelField("contextDescription", description);
-              // annualInitiativeStore.update();
+              issueStore.updateIssueState(issue.id, "body", description);
+              issueStore.updateIssue(issue.id, meetingId || teamId ? true : false);
             }}
           >
             <ReactQuill
               onBlur={() => {
-                // annualInitiativeStore.updateModelField("contextDescription", description);
-                // annualInitiativeStore.update();
+                issueStore.updateIssueState(issue.id, "body", description);
+                issueStore.updateIssue(issue.id, meetingId || teamId ? true : false);
               }}
               className="trix-objective-modal"
               theme="snow"
@@ -400,7 +490,7 @@ export const IssueModalContent = observer(
                 small
                 variant="primary"
                 onClick={() => {
-                  // createLog();
+                  postComment();
                   setComment("");
                 }}
               >
@@ -408,6 +498,12 @@ export const IssueModalContent = observer(
               </PostButton>
             )}
           </FormElementContainer>
+          <CommentLogs
+            comments={commentLogs}
+            store={issueStore}
+            meta={commentMeta}
+            getLogs={getLogs}
+          />
         </SectionContainer>
       </Container>
     );
@@ -441,10 +537,12 @@ type IconContainerProps = {
   ml?: string;
   display?: string;
   cursor?: string;
+  mr?: string;
 };
 
 const IconContainer = styled.div<IconContainerProps>`
   margin-left: ${props => (props.ml ? props.ml : "none")};
+  margin-right: ${props => (props.mr ? props.mr : "none")};
   display: ${props => (props.display ? props.display : "block")};
   align-items: center;
   cursor: ${props => (props.cursor ? props.cursor : "default")};
@@ -455,11 +553,11 @@ const ListText = styled.span`
   color: ${props => props.theme.colors.black};
   font-family: Exo;
   font-weight: bold;
+  margin-top: 3px;
 `;
 
 const StyledOptionContainer = styled.div`
   cursor: pointer;
-  margin-top: -3px;
   position: relative;
 `;
 
@@ -508,6 +606,19 @@ const PriorityContainer = styled.div`
 
 const AvatarContainer = styled.div`
   margin-left: 8px;
+  display: none;
+
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const OwnedByContainer = styled.div`
+  margin-left: 8px;
+
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const SubHeader = styled.p`
@@ -651,4 +762,13 @@ const StyledButton = styled("button")<StyledButtonType>`
   border: none;
   padding: 0.4em 0;
   border-radius: 4px;
+`;
+
+const PriorityText = styled.span`
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 0.5em;
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
