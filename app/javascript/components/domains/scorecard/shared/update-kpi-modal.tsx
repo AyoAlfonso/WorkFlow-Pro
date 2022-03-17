@@ -71,7 +71,7 @@ export const MiniUpdateKPIModal = observer(
     const { keyPerformanceIndicatorStore, sessionStore, scorecardStore } = useMst();
     const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
     const [value, setValue] = useState<number>(currentValue);
-    const [selectedDueDate, setSelectedDueDate] = useState<any>(weekToDate(week, year));
+    const [selectedDueDate, setSelectedDueDate] = useState<any>(new Date());
     const [currentWeek, setCurrentWeek] = useState<number>(week);
     const [comment, setComment] = useState("");
     const { owner_type, owner_id } = useParams();
@@ -91,7 +91,7 @@ export const MiniUpdateKPIModal = observer(
     }, [optionsRef, selectedDueDate]);
 
     useEffect(() => {
-      setSelectedDueDate(weekToDate(week, year));
+      setSelectedDueDate(new Date());
     }, [showAdvancedSettings]);
 
     const setDefaultSelectionQuarter = week => {
@@ -190,7 +190,7 @@ export const MiniUpdateKPIModal = observer(
           <AdvancedSettingsButton
             onClick={() => {
               setShowAdvancedSettings(!showAdvancedSettings);
-              setSelectedDueDate(weekToDate(week, year));
+              setSelectedDueDate(new Date());
             }}
           >
             Advanced Settings
