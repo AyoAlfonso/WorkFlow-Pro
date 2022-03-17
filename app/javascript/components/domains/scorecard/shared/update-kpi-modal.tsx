@@ -5,7 +5,6 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
-import { getMondayofDate } from "~/utils/date-time";
 import { DueDateSelector } from "~/components/shared/scorecards/date-selector";
 import { findNextMonday, resetYearOfDateToCurrent } from "~/utils/date-time";
 import moment from "moment";
@@ -62,9 +61,9 @@ export const MiniUpdateKPIModal = observer(
       companyStore: { company },
     } = useMst();
 
-    const weekToDate = (week: number, year: number, weekOffset = -1) =>
-      moment(resetYearOfDateToCurrent(fiscalYearStart, year))
-        .add(week - weekOffset, "w")
+    const weekToDate = (week: number, year: number, weekOffset = 1) =>
+      moment(findNextMonday(resetYearOfDateToCurrent(fiscalYearStart, year)))
+        .add(week, "w")
         .startOf("week" as moment.unitOfTime.StartOf)
         .toDate();
 
@@ -205,7 +204,9 @@ export const MiniUpdateKPIModal = observer(
                   setSelectedDueDate={setSelectedDueDate}
                   setCurrentWeek={setCurrentWeek}
                   maxDate={
-                    current || week == company.weekNumber ? new Date() : weekToDate(week, year)
+                    current || week == company.currentFiscalWeek
+                      ? new Date()
+                      : weekToDate(week, year)
                   }
                   fiscalYearStart={resetYearOfDateToCurrent(fiscalYearStart, year)}
                 />

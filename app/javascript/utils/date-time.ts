@@ -37,28 +37,27 @@ function sub(num) {
   }
 }
 
+export const addInverse = (num: number): number => {
+  if (num <= 0) {
+    return addInverse(52 + num);
+  } else {
+    return num;
+  }
+};
 const MILLISECONDS_PER_SECOND = 1000;
 const SECONDS_PER_MINUTE = 60;
 const MINUTES_PER_HOUR = 60;
 const HOURS_PER_DAY = 24;
 const DAYS_OF_WEEK = 7;
 export const getWeekDiff = (to, from) => {
-  // Math.abs(new Date("Monday, 14 February 2022") - new Date("Sunday, 1 August 2021"))
   const dateDiff = Math.abs(+to - +new Date(from));
-
   return sub(Math.ceil(dateDiff / (1000 * 60 * 60 * 24) / DAYS_OF_WEEK));
 };
 
 export const dateStringToSeconds = dateString => {
   return new Date(dateString).getTime() / MILLISECONDS_PER_SECOND;
 };
-export const getWeekOfDate = date => moment(date).week();
-export const getMondayofDate = (week, fiscalYearStart, year) =>
-  moment(fiscalYearStart)
-    .add(week, "w")
-    .year(year)
-    .startOf("week" as moment.unitOfTime.StartOf)
-    .toDate();
+
 export const nowInSeconds = () => Math.round(Date.now() / MILLISECONDS_PER_SECOND);
 
 export const nowAsUTCString = () => new Date().toUTCString();
@@ -92,24 +91,13 @@ export const getWeekOf = () => {
   return formatedCurrentWeekOf;
 };
 
-export const getWeekNumber = (d, currentQuarterStartDate) => {
+export const getWeekNumber = (d, fiscalYearStart) => {
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  // Set to nearest Thursday: current date + 4 - current day number
-  // Make Sunday's day number 7
-  // d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
-  currentQuarterStartDate = new Date(currentQuarterStartDate);
-
-  // Get first day of year
+  fiscalYearStart = new Date(fiscalYearStart);
   const yearStart = new Date(
-    Date.UTC(
-      d.getUTCFullYear(),
-      currentQuarterStartDate.getMonth(),
-      currentQuarterStartDate.getDate(),
-    ),
+    Date.UTC(d.getUTCFullYear(), fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
   ) as any;
-
-  // Calculate full weeks to nearest Thursday
-  return Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+  return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7));
 };
 
 export const validateWeekOf = (weekOf, history, id) => {

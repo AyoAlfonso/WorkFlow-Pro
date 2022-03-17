@@ -80,7 +80,9 @@ export const ScorecardTableView = observer(
       return week == 13 ? 1 : week == 26 ? 2 : week == 39 ? 3 : 4;
     };
     const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
-    const [quarter, setQuarter] = useState<number>(setDefaultSelectionQuarter(company.weekNumber));
+    const [quarter, setQuarter] = useState<number>(
+      setDefaultSelectionQuarter(company.currentFiscalWeek),
+    );
     const cacheDropdownQuarter = !!getValueOfLocalStorage("cacheDropdownQuarter")
       ? getValueOfLocalStorage("cacheDropdownQuarter")
       : company.currentFiscalQuarter +
@@ -522,7 +524,7 @@ export const ScorecardTableView = observer(
               );
             }
             if (value === undefined) {
-              if (company.weekNumber < n) {
+              if (company.currentFiscalWeek < n) {
                 return (
                   <EmptyWeekContainer>
                     <EmptyWeek />
@@ -761,7 +763,7 @@ export const ScorecardTableView = observer(
             ownedById={updateKPI.ownedById}
             unitType={updateKPI.unitType}
             year={year || company.yearForCreatingAnnualInitiatives}
-            week={targetWeek || company.weekNumber}
+            week={targetWeek || company.currentFiscalWeek}
             currentValue={targetValue || updateKPI.currentValue}
             headerText={targetWeek ? `Update Week ${targetWeek}` : " Update Current Week "}
             updateKPIModalOpen={updateKPIModalOpen}
