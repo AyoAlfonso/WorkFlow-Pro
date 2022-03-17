@@ -97,7 +97,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
     <ModalWithHeader
       modalOpen={createKeyActivityModalOpen}
       setModalOpen={setCreateKeyActivityModalOpen}
-      headerText="Pyn"
+      headerText="Todo"
       width="640px"
       onCloseAction={resetFields}
     >
@@ -191,7 +191,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                 })
             }
           >
-            Add Pyn
+            Add Todo
           </StyledButton>
         </FlexContainer>
       </Container>

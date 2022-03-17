@@ -61,8 +61,14 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
       case "issues":
         return renderIssues();
       case "forumHub":
-        return renderIssues();
-      case "pyns":
+        return (
+          <IssuesBody
+            showOpenIssues={showOpenIssues}
+            setShowOpenIssues={setShowOpenIssues}
+            meetingId={meeting.id}
+          />
+        );
+      case "Todos":
         return renderDisplayKeyActivities();
       case "notes":
         return <Notes meeting={meeting} height={"auto"} />;
@@ -96,7 +102,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
         <SelectionTabsContainer>
           {renderOption("agenda")}
           {renderOption(isForum ? "forumHub" : "issues")}
-          {renderOption("pyns")}
+          {renderOption("Todos")}
           {!isForum && renderOption("notes")}
         </SelectionTabsContainer>
       </SelectionContainer>

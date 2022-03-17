@@ -52,7 +52,7 @@ export const Pyn = ({ pynDataKey, pyn, onEditPyn }: IPyn): JSX.Element => {
             pynRef.current.blur();
           }
         }}
-        placeholder={"New pyn..."}
+        placeholder={"New todo..."}
       />
     </PynContainer>
   );

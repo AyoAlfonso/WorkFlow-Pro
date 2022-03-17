@@ -88,7 +88,7 @@ export const HeaderBar = observer(
         showKeyActivities && (
           <KeyActivitiesPopupContainer>
             <PopupHeaderContainer>
-              <PopupHeaderText>Pyns</PopupHeaderText>
+              <PopupHeaderText>Todos</PopupHeaderText>
               <CloseIconContainer onClick={() => setShowKeyActivities(false)}>
                 <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
               </CloseIconContainer>
@@ -150,7 +150,7 @@ export const HeaderBar = observer(
                     setCreateKeyActivityModalOpen(false);
                   }}
                 >
-                  Pyns
+                  Todos
                 </KeyActivitiesButton>
               </KeyActivitiesButtonContainer>
               <IssuesButtonContainer>
