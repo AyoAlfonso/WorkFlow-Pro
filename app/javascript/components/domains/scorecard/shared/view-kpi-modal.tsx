@@ -268,7 +268,7 @@ export const ViewEditKPIModal = observer(
 
     const drawGraph = KPI => {
       const startWeek = (company.currentFiscalQuarter - 1) * 13 + 1;
-      const weekNumbers = R.range(startWeek, company.currentFiscalWeek + 1);
+      const weekNumbers = R.range(startWeek, company.weekNumber + 1);
       const weeks = KPI?.period.get(company.yearForCreatingAnnualInitiatives)?.toJSON();
       const currentQuarterData = weekNumbers.map(week => (weeks?.[week] ? weeks[week].score : 0));
       setData({
@@ -309,7 +309,7 @@ export const ViewEditKPIModal = observer(
           ? `Greater than or equal to ${targetText}`
           : `Less than or equal to ${targetText}`,
       );
-      const currentWeek = weeks?.[company.currentFiscalWeek];
+      const currentWeek = weeks?.[company.weekNumber];
       const score = currentWeek ? currentWeek?.score : undefined;
       setValue(score);
       setLoading(false);
@@ -568,7 +568,7 @@ export const ViewEditKPIModal = observer(
             ownedById={kpi.ownedById}
             unitType={kpi.unitType}
             year={company.yearForCreatingAnnualInitiatives}
-            week={company.currentFiscalWeek}
+            week={company.weekNumber}
             currentValue={value}
             headerText={"Update Current Week"}
             updateKPIModalOpen={updateKPIModalOpen}

@@ -205,9 +205,7 @@ export const MiniUpdateKPIModal = observer(
                   setSelectedDueDate={setSelectedDueDate}
                   setCurrentWeek={setCurrentWeek}
                   maxDate={
-                    current || week == company.currentFiscalWeek
-                      ? new Date()
-                      : weekToDate(week, year)
+                    current || week == company.weekNumber ? new Date() : weekToDate(week, year)
                   }
                   fiscalYearStart={resetYearOfDateToCurrent(fiscalYearStart, year)}
                 />
