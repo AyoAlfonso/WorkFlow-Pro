@@ -262,22 +262,22 @@
         "milestoneProgress": "Milestone Progress",
         "missingImageURL": "This URL for the image is missing",
         "missingStep": "This text for the step is missing",
-        "tasksCompleted": "Pyns Completed",
+        "tasksCompleted": "Todos Completed",
         "issuesAddressed": "Issues Addressed",
         "sideOptions": {
           "agenda": "Agenda",
           "issues": "Issues",
           "forumHub": "Topics",
-          "tasks": "Pyns",
+          "tasks": "Todos",
           "notes": "Notes",
-          "pyns": "Pyns"
+          "Todos": "Todos"
         },
         "noPermissions": "This meeting is not for this team, please go back to the team overview page and click start meeting.",
         "meetingComplete": "This meeting has already been completed.",
         "reviewCoreFour": "Review the Foundational Four™ as a team.",
         "coreFourTitle": "Foundational Four™",
         "saveRatings": "Save Ratings",
-        "teamsPyns": "Team's Pyns",
+        "teamsPyns": "Team's Todos",
         "teamIssues": {
           "parkingLotIssues": {
             "title": "{{teamName}} Issues",
@@ -360,19 +360,19 @@
       },
       "keyActivities": {
         "prioritiesTitle": "Today's Priorities",
-        "title": "Pyns",
-        "addTitle": "Add a Pyn",
+        "title": "Todos",
+        "addTitle": "Add Todo",
         "sortByPriority": "Sort By Priority",
         "sortByDueDate": "Sort by Due Date",
         "sortByDueDateAndPriority": "Sort by Due Date and Priority",
         "yesterdayTitle": "Finished Yesterday",
-        "yesterdayRemainingTitle": "Remaining Pyns",
-        "yesterdayUnfinishedText": "Unfinished Pyns from yesterday",
+        "yesterdayRemainingTitle": "Remaining Todos",
+        "yesterdayUnfinishedText": "Unfinished Todos from yesterday",
         "markAllYesterdayDone": "Mark all done",
         "weeklyListTitle": "Weekly List",
         "backlogTitle": "Master List",
-        "weeklyListDescription": "Pyns you have to get done this week.",
-        "backlogDescription": "Pyns you have to get done at some point."
+        "weeklyListDescription": "Todos you have to get done this week.",
+        "backlogDescription": "Todos you have to get done at some point."
       },
       "teams": {
         "teamMeetingsTitle": "Team Planning",

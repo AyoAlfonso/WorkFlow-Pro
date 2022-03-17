@@ -141,7 +141,7 @@ export const TeamOverview = observer(
               </TodayColumnContainer>
               <ColumnContainer>
                 <ColumnSubHeaderContainer>
-                  <Heading type={"h4"}>Today's Pyns</Heading>
+                  <Heading type={"h4"}>Today's Todos</Heading>
                 </ColumnSubHeaderContainer>
               </ColumnContainer>
             </ColumnContainerParent>

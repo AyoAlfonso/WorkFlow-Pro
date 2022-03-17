@@ -41,7 +41,7 @@ export const PersonalMeetingWizardLayout = observer(
 
     const getDescriptionForObjectiveKeyType = () => {
       if (companyStore.company?.objectivesKeyType == "KeyResults") {
-        return "Review your list of Key Results. What must you accomplish this week to drive your Key Results? Create Pyns for each one.";
+        return "Review your list of Key Results. What must you accomplish this week to drive your Key Results? Create Todos for each one.";
       } else {
         return R.path(["currentStepDetails", "instructions"], meeting);
       }
