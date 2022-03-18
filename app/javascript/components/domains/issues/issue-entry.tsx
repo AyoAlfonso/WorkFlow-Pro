@@ -225,7 +225,7 @@ export const IssueEntry = observer(
         case "frog":
           return "LynchPyn Priority";
         default:
-          return "Priority";
+          return "No Priority";
       }
     };
 
@@ -467,7 +467,7 @@ export const IssueEntry = observer(
                 firstName={issue.user.firstName}
                 lastName={issue.user.lastName}
                 avatarUrl={issue.user.avatarUrl}
-                size={25}
+                size={18}
               />
             </AvatarContainer>
           )}
@@ -662,8 +662,7 @@ const CheckboxContainer = styled.div``;
 
 const AvatarContainer = styled.div`
   margin-top: 1.5px;
-  margin-left: 8px;
-  margin-right: 4px;
+  margin-right: 8px;
 `;
 
 const ActionSubContainer = styled.div`
