@@ -18,12 +18,14 @@ interface IDueDateSelectorProps {
   setCurrentWeek: any;
   maxDate: Date;
   fiscalYearStart: string;
+  setOneYearBack: any;
 }
 
 export const DueDateSelector = ({
   selectedDueDate,
   setSelectedDueDate,
   setCurrentWeek,
+  setOneYearBack,
   maxDate,
   fiscalYearStart,
 }: IDueDateSelectorProps): JSX.Element => {
@@ -82,7 +84,8 @@ export const DueDateSelector = ({
             shownDate={selectedDueDate}
             onChange={date => {
               setSelectedDueDate(date);
-              setCurrentWeek(getWeekNumber(date, fiscalYearStart));
+              setCurrentWeek(getWeekNumber(date, fiscalYearStart).num);
+              setOneYearBack(true);
             }}
           />
         </Popup>

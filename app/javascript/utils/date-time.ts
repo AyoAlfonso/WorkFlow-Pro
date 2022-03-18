@@ -37,11 +37,12 @@ function sub(num) {
   }
 }
 
-export const addInverse = (num: number): number => {
+export const addInverse = (num: number, repeat = false): { num: number; repeat: boolean } => {
   if (num <= 0) {
-    return addInverse(52 + num);
+    repeat = true;
+    return addInverse(52 + num, repeat);
   } else {
-    return num;
+    return { num, repeat };
   }
 };
 const MILLISECONDS_PER_SECOND = 1000;

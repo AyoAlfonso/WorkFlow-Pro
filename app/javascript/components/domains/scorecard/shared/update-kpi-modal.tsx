@@ -72,6 +72,7 @@ export const MiniUpdateKPIModal = observer(
     const [value, setValue] = useState<number>(currentValue);
     const [selectedDueDate, setSelectedDueDate] = useState<any>(new Date());
     const [currentWeek, setCurrentWeek] = useState<number>(week);
+    const [oneYearBack, setOneYearBack] = useState<boolean>(false);
     const [comment, setComment] = useState("");
     const { owner_type, owner_id } = useParams();
     const optionsRef = useRef(null);
@@ -97,12 +98,23 @@ export const MiniUpdateKPIModal = observer(
       return week <= 13 ? 1 : week <= 26 ? 2 : week <= 39 ? 3 : 4;
     };
 
+    const lastYear = `FY${(company.currentFiscalYear - 1)
+      .toString()
+      .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
+
     const createGoalYearString =
       company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
         ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-        : `FY${(company.currentFiscalYear - 1)
+        : lastYear;
+
+    const createPreviousGoalYearString =
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? `FY${(company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
+        : `FY${(company.currentFiscalYear - 2).toString().slice(-2)}/${(
+            company.currentFiscalYear - 1
+          )
             .toString()
-            .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
+            .slice(-2)}`;
     const handleSave = () => {
       if (value != undefined) {
         const log = {
@@ -111,7 +123,7 @@ export const MiniUpdateKPIModal = observer(
           score: value,
           note: null,
           week: currentWeek,
-          fiscalYear: year,
+          fiscalYear: oneYearBack ? year - 1 : year,
           fiscalQuarter:
             setDefaultSelectionQuarter(currentWeek) || Math.round((currentWeek - 1) / 13) + 1,
         };
@@ -122,9 +134,11 @@ export const MiniUpdateKPIModal = observer(
           "cacheDropdownQuarter",
           setDefaultSelectionQuarter(currentWeek) +
             "_" +
-            createGoalYearString +
+            (oneYearBack ? createPreviousGoalYearString : createGoalYearString) +
             "_" +
-            company.yearForCreatingAnnualInitiatives.toString(),
+            (oneYearBack
+              ? (company.yearForCreatingAnnualInitiatives - 1).toString()
+              : company.yearForCreatingAnnualInitiatives.toString()),
         );
         keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
           setUpdateKPIModalOpen(false);
@@ -203,6 +217,7 @@ export const MiniUpdateKPIModal = observer(
                   selectedDueDate={selectedDueDate}
                   setSelectedDueDate={setSelectedDueDate}
                   setCurrentWeek={setCurrentWeek}
+                  setOneYearBack={setOneYearBack}
                   maxDate={
                     current || week == company.currentFiscalWeek
                       ? new Date()
