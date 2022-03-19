@@ -120,12 +120,6 @@ export const MiniUpdateKPIModal = observer(
             .toString()
             .slice(-2)}`;
     const handleSave = () => {
-      console.log(oneYearBack, "oneYearBack");
-      console.log(
-        setDefaultSelectionQuarter(currentWeek),
-        currentWeek,
-        "setDefaultSelectionQuarter",
-      );
 
       if (value != undefined) {
         const log = {
