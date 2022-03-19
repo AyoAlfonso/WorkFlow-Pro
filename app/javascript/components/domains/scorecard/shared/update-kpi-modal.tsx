@@ -62,7 +62,7 @@ export const MiniUpdateKPIModal = observer(
     } = useMst();
 
     const weekToDate = (week: number, year: number) =>
-      moment((resetYearOfDateToCurrent(fiscalYearStart, year)))
+      moment(resetYearOfDateToCurrent(fiscalYearStart, year))
         .add(week, "w")
         .startOf("week" as moment.unitOfTime.StartOf)
         .toDate();
@@ -214,7 +214,7 @@ export const MiniUpdateKPIModal = observer(
           {showAdvancedSettings && (
             <RowContainer>
               <FormElementContainer>
-                <InputHeaderWithComment margin={"4px 0px"}>Date </InputHeaderWithComment>
+                <InputHeaderWithComment margin={"4px 0px"}>Date</InputHeaderWithComment>
 
                 <DueDateSelector
                   selectedDueDate={selectedDueDate}
