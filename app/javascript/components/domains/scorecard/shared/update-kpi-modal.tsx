@@ -71,7 +71,7 @@ export const MiniUpdateKPIModal = observer(
     const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
     const [value, setValue] = useState<number>(currentValue);
     const [selectedDueDate, setSelectedDueDate] = useState<any>(
-      current || week == company.weekNumber ? new Date() : weekToDate(week, year),
+      current || week == company.currentFiscalWeek ? new Date() : weekToDate(week, year),
     );
     const [currentWeek, setCurrentWeek] = useState<number>(week);
     const [oneYearBack, setOneYearBack] = useState<boolean>(false);
@@ -94,8 +94,9 @@ export const MiniUpdateKPIModal = observer(
 
     useEffect(() => {
       setSelectedDueDate(
-        current || week == company.weekNumber ? new Date() : weekToDate(week, year),
+        current || week == company.currentFiscalWeek ? new Date() : weekToDate(week, year),
       );
+      console.log(week, company.weekNumber, company.currentFiscalWeek, "expcted");
     }, [showAdvancedSettings]);
 
     const setDefaultSelectionQuarter = week => {
@@ -120,7 +121,6 @@ export const MiniUpdateKPIModal = observer(
             .toString()
             .slice(-2)}`;
     const handleSave = () => {
-
       if (value != undefined) {
         const log = {
           keyPerformanceIndicatorId: kpiId,
@@ -223,7 +223,9 @@ export const MiniUpdateKPIModal = observer(
                   setCurrentWeek={setCurrentWeek}
                   setOneYearBack={setOneYearBack}
                   maxDate={
-                    current || week == company.weekNumber ? new Date() : weekToDate(week, year)
+                    current || week == company.currentFiscalWeek
+                      ? new Date()
+                      : weekToDate(week, year)
                   }
                   fiscalYearStart={resetYearOfDateToCurrent(fiscalYearStart, year)}
                 />
