@@ -97,9 +97,15 @@ export const getWeekNumber = (d, fiscalYearStart) => {
   fiscalYearStart = new Date(fiscalYearStart);
   const dayNum = d.getUTCDay() || 7;
   d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(
+  let yearStart: any = new Date(
     Date.UTC(d.getUTCFullYear(), fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
-  ) as any;
+  );
+  if (d < yearStart) {
+    yearStart = new Date(
+      Date.UTC(d.getUTCFullYear() - 1, fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
+    ) as any;
+    return addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7), true);
+  }
   return addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7));
 };
 

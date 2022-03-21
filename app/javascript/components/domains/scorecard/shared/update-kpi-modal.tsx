@@ -96,7 +96,6 @@ export const MiniUpdateKPIModal = observer(
       setSelectedDueDate(
         current || week == company.currentFiscalWeek ? new Date() : weekToDate(week, year),
       );
-      console.log(week, company.weekNumber, company.currentFiscalWeek, "expcted");
     }, [showAdvancedSettings]);
 
     const setDefaultSelectionQuarter = week => {
