@@ -475,7 +475,7 @@ export const KeyElement = observer(
                   }}
                   onMouseEnter={async () => {
                     if (type == "onboarding") {
-                      return 
+                      return;
                     }
                     const disabled = await isEditable();
                     setShowTooltip(!isOwner || (disabled && true));
