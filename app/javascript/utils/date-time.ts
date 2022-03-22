@@ -37,28 +37,28 @@ function sub(num) {
   }
 }
 
+export const addInverse = (num: number, repeat = false): { num: number; repeat: boolean } => {
+  if (num <= 0) {
+    repeat = true;
+    return addInverse(52 + num, repeat);
+  } else {
+    return { num, repeat };
+  }
+};
 const MILLISECONDS_PER_SECOND = 1000;
 const SECONDS_PER_MINUTE = 60;
 const MINUTES_PER_HOUR = 60;
 const HOURS_PER_DAY = 24;
 const DAYS_OF_WEEK = 7;
 export const getWeekDiff = (to, from) => {
-  // Math.abs(new Date("Monday, 14 February 2022") - new Date("Sunday, 1 August 2021"))
   const dateDiff = Math.abs(+to - +new Date(from));
-
   return sub(Math.ceil(dateDiff / (1000 * 60 * 60 * 24) / DAYS_OF_WEEK));
 };
 
 export const dateStringToSeconds = dateString => {
   return new Date(dateString).getTime() / MILLISECONDS_PER_SECOND;
 };
-export const getWeekOfDate = date => moment(date).week();
-export const getMondayofDate = (week, fiscalYearStart, year) =>
-  moment(fiscalYearStart)
-    .add(week, "w")
-    .year(year)
-    .startOf("week" as moment.unitOfTime.StartOf)
-    .toDate();
+
 export const nowInSeconds = () => Math.round(Date.now() / MILLISECONDS_PER_SECOND);
 
 export const nowAsUTCString = () => new Date().toUTCString();
@@ -90,6 +90,23 @@ export const getWeekOf = () => {
   const currentWeekOf = moment().startOf("isoWeek");
   const formatedCurrentWeekOf = moment(currentWeekOf).format("YYYY-MM-DD");
   return formatedCurrentWeekOf;
+};
+
+export const getWeekNumber = (d, fiscalYearStart) => {
+  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  fiscalYearStart = new Date(fiscalYearStart);
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  let yearStart: any = new Date(
+    Date.UTC(d.getUTCFullYear(), fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
+  );
+  if (d < yearStart) {
+    yearStart = new Date(
+      Date.UTC(d.getUTCFullYear() - 1, fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
+    ) as any;
+    return addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7), true);
+  }
+  return addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7));
 };
 
 export const validateWeekOf = (weekOf, history, id) => {
