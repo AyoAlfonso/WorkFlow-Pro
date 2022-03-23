@@ -375,7 +375,10 @@ export const SideNavNoMst = (
         <> </>
       )}
 
-      {company &&  company.accessForum &&  forumType != "organisation_forum_monthly" && !R.isNil(R.path(["0", "id"], teams)) ? (
+      {company &&
+      company.accessForum &&
+      forumType != "organisation_forum_monthly" &&
+      !R.isNil(R.path(["0", "id"], teams)) ? (
         <SideNavChildPopup
           trigger={
             <NavMenuIcon
@@ -431,11 +434,7 @@ export const SideNavNoMst = (
         <></>
       )}
 
-      {company && company.accessCompany && showTeam ? (
-        renderTeam(R.path(["length"], teams) || 0)
-      ) : (
-        <> </>
-      )}
+      {company && showTeam ? renderTeam(R.path(["length"], teams) || 0) : <> </>}
 
       {company && company.accessCompany && !showTeam ? (
         renderMeeting(R.path(["length"], teams) || 0, "team")
