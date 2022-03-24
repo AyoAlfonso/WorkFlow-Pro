@@ -52,7 +52,7 @@ export const KpiComponent = observer(
           userId: id,
           score: !value ? valueForComment : value,
           note: comment != "" ? comment : null,
-          week: company.currentFiscalWeek,
+          week: company.weekNumber,
           fiscalYear: company.yearForCreatingAnnualInitiatives,
           fiscalQuarter: Math.floor((company.currentFiscalWeek - 1) / 13) + 1,
         };

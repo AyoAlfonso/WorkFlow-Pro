@@ -61,8 +61,8 @@ export const MiniUpdateKPIModal = observer(
       companyStore: { company },
     } = useMst();
 
-    const weekToDate = (week: number, year: number, weekOffset = 1) =>
-      moment(findNextMonday(resetYearOfDateToCurrent(fiscalYearStart, year)))
+    const weekToDate = (week: number, year: number) =>
+      moment((resetYearOfDateToCurrent(fiscalYearStart, year)))
         .add(week, "w")
         .startOf("week" as moment.unitOfTime.StartOf)
         .toDate();
@@ -70,7 +70,9 @@ export const MiniUpdateKPIModal = observer(
     const { keyPerformanceIndicatorStore, sessionStore, scorecardStore } = useMst();
     const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
     const [value, setValue] = useState<number>(currentValue);
-    const [selectedDueDate, setSelectedDueDate] = useState<any>(new Date());
+    const [selectedDueDate, setSelectedDueDate] = useState<any>(
+      current || week == company.weekNumber ? new Date() : weekToDate(week, year),
+    );
     const [currentWeek, setCurrentWeek] = useState<number>(week);
     const [oneYearBack, setOneYearBack] = useState<boolean>(false);
     const [comment, setComment] = useState("");
@@ -91,7 +93,9 @@ export const MiniUpdateKPIModal = observer(
     }, [optionsRef, selectedDueDate]);
 
     useEffect(() => {
-      setSelectedDueDate(new Date());
+      setSelectedDueDate(
+        current || week == company.weekNumber ? new Date() : weekToDate(week, year),
+      );
     }, [showAdvancedSettings]);
 
     const setDefaultSelectionQuarter = week => {
@@ -203,7 +207,6 @@ export const MiniUpdateKPIModal = observer(
           <AdvancedSettingsButton
             onClick={() => {
               setShowAdvancedSettings(!showAdvancedSettings);
-              setSelectedDueDate(new Date());
             }}
           >
             Advanced Settings
@@ -219,9 +222,7 @@ export const MiniUpdateKPIModal = observer(
                   setCurrentWeek={setCurrentWeek}
                   setOneYearBack={setOneYearBack}
                   maxDate={
-                    current || week == company.currentFiscalWeek
-                      ? new Date()
-                      : weekToDate(week, year)
+                    current || week == company.weekNumber ? new Date() : weekToDate(week, year)
                   }
                   fiscalYearStart={resetYearOfDateToCurrent(fiscalYearStart, year)}
                 />

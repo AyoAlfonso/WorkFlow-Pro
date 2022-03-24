@@ -50,7 +50,7 @@ export const CompanyModel = types
       return formatEnumTypes(self.forumTypes);
     },
     get weekNumber() {
-      return getWeekNumber(new Date(), self.currentQuarterStartDate);
+      return getWeekNumber(new Date(), self.currentQuarterStartDate).num;
     },
   }))
   .actions(self => ({

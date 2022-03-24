@@ -95,10 +95,12 @@ export const getWeekOf = () => {
 export const getWeekNumber = (d, fiscalYearStart) => {
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   fiscalYearStart = new Date(fiscalYearStart);
+   const dayNum = d.getUTCDay() || 7;
+   d.setUTCDate(d.getUTCDate() + 4 - dayNum);
   const yearStart = new Date(
     Date.UTC(d.getUTCFullYear(), fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
   ) as any;
-  return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7));
+  return addInverse(Math.ceil(((d - yearStart + 1) / 86400000) / 7));
 };
 
 export const validateWeekOf = (weekOf, history, id) => {

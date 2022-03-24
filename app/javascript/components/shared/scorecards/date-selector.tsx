@@ -85,7 +85,7 @@ export const DueDateSelector = ({
             onChange={date => {
               setSelectedDueDate(date);
               setCurrentWeek(getWeekNumber(date, fiscalYearStart).num);
-              setOneYearBack(true);
+              setOneYearBack(getWeekNumber(date, fiscalYearStart).repeat);
             }}
           />
         </Popup>
