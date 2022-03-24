@@ -12,7 +12,7 @@ import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface IMultiOptionTypeSelectionDropdownList {
-  userList: Array<UserType>;
+  userList: any[];
   onUserSelect: any;
   setShowUsersList: React.Dispatch<React.SetStateAction<boolean>>;
   title?: string;
@@ -76,6 +76,60 @@ const useStyles = makeStyles({
   },
 });
 
+function alphabetically(ascending) {
+
+  return function (a, b) {
+
+    // equal items sort equally
+    if (a === b) {
+        return 0;
+    }
+    // nulls sort after anything else
+    else if (a === null) {
+        return 1;
+    }
+    else if (b === null) {
+        return -1;
+    }
+    ///
+    else if (a.type === "team" && a != null) {
+        return -1;
+    }
+    else if (b.type === "team" && b != null) {
+        return 1;
+    }
+    else if (a.type === "company") {
+        return -1;
+    }
+    else if (b.type === "company") {
+        return 1;
+    }
+    // otherwise, if we're ascending, lowest sorts first
+    else if (ascending) {
+        return a.name < b.name ? -1 : 1;
+    }
+    // if descending, highest sorts first
+    else { 
+        return a.name < b.name ? 1 : -1;
+    }
+
+  };
+
+}
+
+function typesort(ascending) {
+
+  return function (a, b) {
+    if (a.type === "company") {
+        return -1;
+    }
+    else if (b.type === "company") {
+        return 1;
+    }
+  };
+
+}
+
 export const MultiOptionTypeSelectionDropdownList = ({
   userList,
   title,
@@ -100,20 +154,20 @@ export const MultiOptionTypeSelectionDropdownList = ({
               setShowUsersList(false);
           }
         }}
-        filterOptions={(options, params) => {
-          const filtered = filter(options, params);
-          return filtered;
-        }}
+        // filterOptions={(options, params) => {
+        //   const filtered = filter(options, params);
+        //   return filtered;
+        // }}
         selectOnFocus
         clearOnBlur
         handleHomeEndKeys
         size={"small"}
         id="search-for-labels"
+<<<<<<< HEAD
         options={alphabeticallySortedList.sort(typesort())}
-        getOptionLabel={option => {
-            if(typeof option === 'object' && option !== null) {
-                return `${option.name} ${option.lastName}`;
-            }
+=======
+        //options={userList}
+        options={alphlist.sort(typesort(true))}
         
         }}
         renderOption={option => {
@@ -156,7 +210,7 @@ const ActionDropdownContainer = styled.div`
   padding: 10px;
   z-index: 2;
   height: auto;
-  overflow: auto;
+  overflow-y: scroll;
 `;
 
 const OptionContainer = styled.div`
