@@ -1,22 +1,28 @@
-import { Checkbox, Label } from "@rebass/forms";
+import { Label } from "@rebass/forms";
 import { observer } from "mobx-react";
 import React, { useRef, useState, useEffect } from "react";
-import ContentEditable from "react-contenteditable";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { baseTheme } from "../../../themes/base";
 import { Icon } from "../../shared/icon";
 import { KeyActivityPriorityIcon } from "./key-activity-priority-icon";
-import { Avatar, LabelSelection } from "~/components/shared";
+import { Avatar, LabelSelection, Text } from "~/components/shared";
 import { DateButton } from "~/components/shared/date-selection/date-button";
 import { addDays, parseISO } from "date-fns";
 import Popup from "reactjs-popup";
 import { Calendar } from "react-date-range";
 import { Button } from "~/components/shared/button";
+import { Checkbox } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 import { parseKeyActivityDueDate } from "~/utils/date-time";
 import moment from "moment";
 import * as R from "ramda";
+import { toJS } from "mobx";
+import Modal from "styled-react-modal";
+import { ScheduledGroupSelector } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
+import { KeyActivityModalContent } from "./key-activity-modal-content";
 
 interface IKeyActivityEntryProps {
   keyActivity: any;
@@ -25,18 +31,122 @@ interface IKeyActivityEntryProps {
 }
 
 export const KeyActivityEntry = observer(
-  ({ keyActivity, dragHandleProps, meetingId }: IKeyActivityEntryProps): JSX.Element => {
-    const { keyActivityStore } = useMst();
+  ({
+    keyActivity,
+    dragHandleProps,
+    meetingId,
+  }: IKeyActivityEntryProps): JSX.Element => {
+    const { keyActivityStore, sessionStore } = useMst();
     const keyActivityRef = useRef(null);
     const { t } = useTranslation();
     const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
     const [selectedDueDate, setSelectedDueDate] = useState<Date>(new Date(keyActivity.dueDate));
     const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
     const [selectedLabel, setSelectedLabel] = useState<any>(null);
+    const [showOptions, setShowOptions] = useState<boolean>(false);
+    const [showPriorities, setShowPriorities] = useState<boolean>(false);
+    const [showMoveModal, setShowMoveModal] = useState<boolean>(false);
+    const [spaceBelow, setSpaceBelow] = useState<number>(0);
+    const [spaceRight, setSpaceRight] = useState<number>(0);
+    const [selectedGroupId, setSelectedGroupId] = useState<number>(keyActivity.scheduledGroupId);
+    const [selectedTeamId, setSelectedTeamId] = useState<number>(keyActivity.teamId);
+    const [showMoveList, setShowMoveList] = useState<boolean>(false);
+    const [keyActivityModalOpen, setKeyActivityModalOpen] = useState<boolean>(false);
+
+    const optionsRef = useRef(null);
+    const prioritiesRef = useRef(null);
+    const moveRef = useRef(null);
+
+    const teams = R.path(["profile", "currentCompanyUserTeams"], sessionStore);
+    const groups = toJS(sessionStore.scheduledGroups);
+
+    const teamName = selectedGroupId
+      ? groups.find(group => group.id == selectedGroupId)?.name
+      : teams.find(group => group.id == selectedTeamId)?.name;
 
     useEffect(() => {
       setSelectedLabel(keyActivity.labels ? keyActivity.labels[0] : null);
     }, [keyActivity]);
+
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showOptions) return;
+
+        const node = optionsRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowOptions(false);
+      };
+
+      if (showOptions) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showOptions]);
+
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showPriorities) return;
+
+        const node = prioritiesRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowPriorities(false);
+      };
+
+      if (showPriorities) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showPriorities]);
+
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showMoveModal) return;
+
+        const node = moveRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowMoveModal(false);
+      };
+
+      if (showMoveModal) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showMoveModal]);
+
+    useEffect(() => {
+      const element = optionsRef.current;
+
+      const ele = element.getBoundingClientRect();
+      const height = window.innerHeight - ele.bottom;
+      setSpaceBelow(height);
+
+      const width = window.innerWidth - ele.right;
+      setSpaceRight(width);
+    }, [showOptions]);
 
     const updatePriority = () => {
       let priority = "";
@@ -96,161 +206,323 @@ export const KeyActivityEntry = observer(
       }
     };
 
+    const getPriorityText = text => {
+      switch (text) {
+        case "high":
+          return "High Priority";
+        case "medium":
+          return "Medium Priority";
+        case "frog":
+          return "LynchPyn Priority";
+        default:
+          return "No Priority";
+      }
+    };
+
+    const priorityOptions = ["frog", "high", "medium", "low"];
+
     return (
       <Container dragHandleProps={dragHandleProps}>
-        <LeftActionsContainer>
-          <CheckboxContainer key={keyActivity["id"]}>
-            <Checkbox
-              key={keyActivity["id"]}
-              checked={keyActivity["completedAt"] ? true : false}
-              sx={{
-                color: baseTheme.colors.primary100,
-              }}
-              onChange={e => {
-                keyActivityStore.updateKeyActivityStatus(
-                  keyActivity,
-                  e.target.checked,
-                  meetingId ? true : false,
-                );
-              }}
-            />
-          </CheckboxContainer>
-
-          <KeyActivityPriorityContainer onClick={() => updatePriority()}>
-            <KeyActivityPriorityIcon priority={keyActivity.priority} />
-          </KeyActivityPriorityContainer>
-        </LeftActionsContainer>
-        <RightContainer>
+        <TopSection>
           <RowContainer>
-            <InputContainer>
-              <StyledContentEditable
-                innerRef={keyActivityRef}
-                html={keyActivity.description}
-                onChange={e => handleDescriptionChange(e)}
-                onKeyDown={key => {
-                  if (key.keyCode == 13) {
-                    keyActivityRef.current.blur();
-                  }
+            <CheckboxContainer>
+              <Checkbox
+                checked={keyActivity["completedAt"] ? true : false}
+                onChange={e => {
+                  keyActivityStore.updateKeyActivityStatus(
+                    keyActivity,
+                    e.target.checked,
+                    meetingId ? true : false,
+                  );
                 }}
-                style={{
-                  textDecoration: keyActivity.completedAt && "line-through",
-                  cursor: "text",
-                }}
-                onBlur={() =>
-                  keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false)
-                }
+                style={{ color: baseTheme.colors.primary100 }}
+                size="small"
               />
+            </CheckboxContainer>
+            <TodoName
+              onClick={() => {
+                setKeyActivityModalOpen(true);
+              }}
+            >
+              {keyActivity.description}
+            </TodoName>
+            <RightActionContainer ref={optionsRef}>
+              <StyledOptionContainer onClick={() => setShowOptions(!showOptions)}>
+                <StyledOptionIcon icon={"Options"} size={"15px"} iconColor={"grey80"} />
+              </StyledOptionContainer>
+              {showOptions && (
+                <OptionsContainer rightDistance={spaceRight} bottomDistance={spaceBelow}>
+                  <OptionContainer
+                    onClick={() => {
+                      setKeyActivityModalOpen(true);
+                      setShowOptions(false);
+                    }}
+                  >
+                    <Icon icon={"Edit-2"} size={14} mr={16} iconColor={"greyActive"} />
+                    <OptionText>Edit</OptionText>
+                  </OptionContainer>
+                  <OptionContainer
+                    onClick={e => {
+                      e.stopPropagation();
+                      setShowMoveModal(true);
+                    }}
+                  >
+                    <Icon icon={"Move2"} size={14} mr={16} iconColor={"greyActive"} />
+                    <OptionText>Move</OptionText>
+                    {showMoveModal && (
+                      <ShareContainer ref={moveRef}>
+                        <MoveTopSection>
+                          <MoveText>Move</MoveText>
+                        </MoveTopSection>
 
-              {keyActivity.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
-
-              <ActionContainer>
-                <ActionSubContainer>
-                  {meetingId && (
-                    <AvatarContainer>
-                      <Avatar
-                        defaultAvatarColor={keyActivity.user.defaultAvatarColor}
-                        firstName={keyActivity.user.firstName}
-                        lastName={keyActivity.user.lastName}
-                        avatarUrl={keyActivity.user.avatarUrl}
-                        size={25}
-                      />
-                    </AvatarContainer>
-                  )}
-
-                  <DeleteButtonContainer
+                        <DestinationContainer>
+                          <SendDestinationContainer>
+                            <ListName onClick={() => setShowMoveList(!showMoveList)}>
+                              {teamName || `Select a list`}
+                              <Icon
+                                icon={"Chevron-Down"}
+                                size={"16px"}
+                                iconColor={baseTheme.colors.primary80}
+                              />
+                            </ListName>
+                            {showMoveList && (
+                              <ScheduledGroupSelector
+                                selectedGroupId={selectedGroupId}
+                                setSelectedGroupId={setSelectedGroupId}
+                                selectedTeamId={selectedTeamId}
+                                setSelectedTeamId={setSelectedTeamId}
+                                listOnly={true}
+                                setShowList={() => setShowMoveList(false)}
+                              />
+                            )}
+                            <ButtonContainer>
+                              <StyledButton
+                                disabled={!selectedTeamId && !selectedGroupId}
+                                onClick={e => {
+                                  e.stopPropagation();
+                                  keyActivityStore.updateKeyActivityState(
+                                    keyActivity.id,
+                                    "personal",
+                                    false,
+                                  );
+                                  keyActivityStore.updateKeyActivityState(
+                                    keyActivity.id,
+                                    "teamId",
+                                    selectedTeamId,
+                                  );
+                                  keyActivityStore.updateKeyActivityState(
+                                    keyActivity.id,
+                                    "scheduledGroupId",
+                                    selectedGroupId,
+                                  );
+                                  keyActivityStore
+                                    .updateKeyActivity(keyActivity.id, meetingId ? true : false)
+                                    .then(result => {
+                                      if (result) {
+                                        showToast(
+                                          "Todo Moved Successfully.",
+                                          ToastMessageConstants.SUCCESS,
+                                        );
+                                      }
+                                      setShowOptions(false);
+                                    });
+                                }}
+                              >
+                                Move
+                              </StyledButton>
+                            </ButtonContainer>
+                          </SendDestinationContainer>
+                        </DestinationContainer>
+                      </ShareContainer>
+                    )}
+                  </OptionContainer>
+                  <OptionContainer
+                    onClick={() => {
+                      keyActivityStore.updateKeyActivityState(keyActivity.id, "personal", true);
+                      keyActivityStore.updateKeyActivityState(keyActivity.id, "teamId", null);
+                      keyActivityStore
+                        .updateKeyActivity(keyActivity.id, meetingId ? true : false)
+                        .then(() => setShowOptions(false));
+                    }}
+                  >
+                    <Icon icon={"Lock"} size={14} mr={16} iconColor={"greyActive"} />
+                    <OptionText>Lock</OptionText>
+                  </OptionContainer>
+                  <Divider />
+                  <OptionContainer onClick={() => setShowPriorities(true)}>
+                    <KeyActivityPriorityIcon priority={keyActivity.priority} size={16} mr={16} />
+                    <OptionText>{getPriorityText(keyActivity.priority)}</OptionText>
+                    {showPriorities && (
+                      <PriorityDropdownContainer ref={prioritiesRef}>
+                        {priorityOptions.map((priority, index) => (
+                          <OptionContainer
+                            key={`${priority}-${index}`}
+                            onClick={() => {
+                              keyActivityStore.updateKeyActivityState(
+                                keyActivity.id,
+                                "priority",
+                                priority,
+                              );
+                              keyActivityStore
+                                .updateKeyActivity(keyActivity.id, meetingId ? true : false)
+                                .then(() => setShowPriorities(false));
+                            }}
+                          >
+                            <KeyActivityPriorityIcon size={14} mr={16} priority={priority} />
+                            <OptionText>{getPriorityText(priority)}</OptionText>
+                          </OptionContainer>
+                        ))}
+                      </PriorityDropdownContainer>
+                    )}
+                  </OptionContainer>
+                  <Divider />
+                  <OptionContainer
+                    onClick={() => {
+                      keyActivityStore
+                        .duplicateKeyActivity(keyActivity.id)
+                        .then(res => res && setShowOptions(false));
+                    }}
+                  >
+                    <Icon icon={"Duplicate"} size={14} mr={16} iconColor={"greyActive"} />
+                    <OptionText>Duplicate</OptionText>
+                  </OptionContainer>
+                  <OptionContainer
                     onClick={() =>
                       keyActivityStore.destroyKeyActivity(keyActivity.id, meetingId ? true : false)
                     }
                   >
-                    <Icon icon={"Delete"} size={20} style={{ marginTop: "2px" }} />
-                  </DeleteButtonContainer>
-                </ActionSubContainer>
-              </ActionContainer>
-            </InputContainer>
+                    <Icon icon={"Delete"} size={14} mr={16} iconColor={"warningRed"} />
+                    <OptionText color={baseTheme.colors.warningRed}>Delete</OptionText>
+                  </OptionContainer>
+                </OptionsContainer>
+              )}
+            </RightActionContainer>
           </RowContainer>
-
-          <BottomRowContainer>
-            <DateContainer>
-              <Popup
-                arrow={false}
-                closeOnDocumentClick
-                contentStyle={{
-                  border: "none",
-                  borderRadius: "6px",
-                  padding: 0,
-                  width: "auto",
-                }}
-                on="click"
-                onClose={() => {}}
-                onOpen={() => {}}
-                open={showDatePicker}
-                position="bottom center"
-                trigger={
-                  <DateButtonDiv>
-                    <DateButton
-                      onClick={() => {
-                        setShowDatePicker(true);
-                        setSelectedDueDate(new Date(parseISO(keyActivity.dueDate)));
-                      }}
-                      text={dueDateObj.text}
-                      displayColor={dueDateObj.color}
-                    />
-                  </DateButtonDiv>
-                }
-              >
-                <>
-                  <Calendar
-                    showDateDisplay={false}
-                    showMonthAndYearPickers={false}
-                    showSelectionPreview={true}
-                    direction={"vertical"}
-                    shownDate={new Date()}
-                    minDate={new Date()}
-                    maxDate={addDays(new Date(), 30)}
-                    scroll={{
-                      enabled: true,
-                      calendarWidth: 320,
-                      monthWidth: 320,
-                    }}
-                    rangeColors={[baseTheme.colors.primary80]}
-                    date={selectedDueDate}
-                    onChange={date => {
-                      setSelectedDueDate(date);
-                      updateDueDate(date);
-                    }}
-                  />
-                  <Button
-                    variant={"primary"}
-                    small
+        </TopSection>
+        <BottomRowContainer>
+          <KeyActivityPriorityContainer onClick={() => updatePriority()}>
+            <KeyActivityPriorityIcon priority={keyActivity.priority} />
+          </KeyActivityPriorityContainer>
+          {meetingId && (
+            <AvatarContainer>
+              <Avatar
+                defaultAvatarColor={keyActivity.user.defaultAvatarColor}
+                firstName={keyActivity.user.firstName}
+                lastName={keyActivity.user.lastName}
+                avatarUrl={keyActivity.user.avatarUrl}
+                size={18}
+              />
+            </AvatarContainer>
+          )}
+          {keyActivity.personal && (
+            <Icon icon={"Lock"} size={18} mr={"0.5em"} iconColor={"mipBlue"} />
+          )}
+          <DateContainer>
+            <Popup
+              arrow={false}
+              closeOnDocumentClick
+              contentStyle={{
+                border: "none",
+                borderRadius: "6px",
+                padding: 0,
+                width: "auto",
+              }}
+              on="click"
+              onClose={() => {}}
+              onOpen={() => {}}
+              open={showDatePicker}
+              position="bottom center"
+              trigger={
+                <DateButtonDiv>
+                  <DateButton
                     onClick={() => {
-                      setSelectedDueDate(null);
-                      updateDueDate(null);
+                      setShowDatePicker(true);
+                      setSelectedDueDate(new Date(parseISO(keyActivity.dueDate)));
                     }}
-                    mx={"auto"}
-                    my={"8px"}
-                  >
-                    {t("datePicker.clearDate")}
-                  </Button>
-                </>
-              </Popup>
-            </DateContainer>
-            {renderLabel()}
-          </BottomRowContainer>
-        </RightContainer>
+                    text={dueDateObj.text}
+                    displayColor={dueDateObj.color}
+                  />
+                </DateButtonDiv>
+              }
+            >
+              <>
+                <Calendar
+                  showDateDisplay={false}
+                  showMonthAndYearPickers={false}
+                  showSelectionPreview={true}
+                  direction={"vertical"}
+                  shownDate={new Date()}
+                  minDate={new Date()}
+                  maxDate={addDays(new Date(), 30)}
+                  scroll={{
+                    enabled: true,
+                    calendarWidth: 320,
+                    monthWidth: 320,
+                  }}
+                  rangeColors={[baseTheme.colors.primary80]}
+                  date={selectedDueDate}
+                  onChange={date => {
+                    setSelectedDueDate(date);
+                    updateDueDate(date);
+                  }}
+                />
+                <Button
+                  variant={"primary"}
+                  small
+                  onClick={() => {
+                    setSelectedDueDate(null);
+                    updateDueDate(null);
+                  }}
+                  mx={"auto"}
+                  my={"8px"}
+                >
+                  {t("datePicker.clearDate")}
+                </Button>
+              </>
+            </Popup>
+          </DateContainer>
+          <LabelContainer>{renderLabel()}</LabelContainer>
+        </BottomRowContainer>
+
+        <StyledModal
+          isOpen={keyActivityModalOpen}
+          onBackgroundClick={e => {
+            setKeyActivityModalOpen(false);
+          }}
+        >
+          <KeyActivityModalContent
+            keyActivity={keyActivity}
+            setKeyActivityModalOpen={setKeyActivityModalOpen}
+          />
+        </StyledModal>
       </Container>
     );
   },
 );
 
-const DeleteButtonContainer = styled.div`
-  margin-top: auto;
-  margin-bottom: auto;
-  color: ${props => props.theme.colors.grey60};
-  display: none;
-  &: hover {
-    cursor: pointer;
-    color: ${props => props.theme.colors.greyActive};
-  }
+const TopSection = styled.div``;
+
+const TodoName = styled(Text)`
+  margin: 0;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 20px;
+  width: 70%;
+  cursor: pointer;
+`;
+
+const RightActionContainer = styled.div`
+  margin-left: auto;
+  position: relative;
+`;
+
+const StyledOptionContainer = styled.div`
+  cursor: pointer;
+`;
+
+const StyledOptionIcon = styled(Icon)`
+  transform: rotate(90deg);
+  pointer-events: none;
 `;
 
 type ContainerProps = {
@@ -259,31 +531,79 @@ type ContainerProps = {
 
 const Container = styled.div<ContainerProps>`
   font-size: 14px;
-  width: inherit;
   padding: 4px 0px 4px 0px;
-  &:hover ${DeleteButtonContainer} {
-    display: block;
+  border-top: 1px solid ${props => props.theme.colors.greyInactive};
+  &: hover {
+    background: ${props => props.theme.colors.backgroundGrey};
   }
-  margin-left: 8px;
-  display: flex;
-  margin-right: 8px;
   &:active {
     background-color: ${props => props.dragHandleProps && props.theme.colors.grey20};
   }
 `;
 
-const InputContainer = styled.div`
-  display: flex;
-  width: 100%;
-  font-size: 14px;
-  padding: 4px 0px 4px 0px;
+type OCProps = {
+  bottomDistance: number;
+  rightDistance: number;
+};
+
+const OptionsContainer = styled.div<OCProps>`
+  position: absolute;
+  right: ${props => (props.rightDistance < 200 ? "1em" : "-2em")};
+  width: 20em;
+  bottom: ${props => props.bottomDistance < 250 && "2em"};
+  box-shadow: 0px 3px 6px #00000029;
+  padding: 1em 0;
+  z-index: 5;
+  opacity: 1;
+  border-radius: 0.625em;
+  background: ${props => props.theme.colors.white};
 `;
 
-const DateContainer = styled.div`
+const OptionContainer = styled.div`
+  display: flex;
+  position: relative;
+  align-items: center;
+  padding: 0.5em 1em;
+  cursor: pointer;
+
+  &:hover {
+    background: ${props => props.theme.colors.backgroundGrey};
+  }
+`;
+
+type OptionTextProps = {
+  color?: string;
+};
+
+const OptionText = styled.span<OptionTextProps>`
+  font-size: 0.75em;
+  color: ${props => (props.color ? props.color : props.theme.colors.black)};
+`;
+
+const Divider = styled.div`
+  border-top: 1px solid ${props => props.theme.colors.greyInactive};
+`;
+
+const PriorityDropdownContainer = styled.div`
+  position: absolute;
+  background: ${props => props.theme.colors.white};
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 8px;
+  width: 15em;
+  z-index: 10;
+  top: 25px;
+  right: 10px;
+`;
+
+type DateContainerProps = {
+  mr?: string;
+};
+
+const DateContainer = styled.div<DateContainerProps>`
   display: flex;
   align-items: center;
   width: inherit;
-  padding: 0px 0px 0px 10px;
+  margin-right: ${props => (props.mr ? props.mr : "0")};
 `;
 
 const DateButtonDiv = styled.div``;
@@ -297,63 +617,106 @@ export const KeyActivityPriorityContainer = styled.div`
   }
 `;
 
-const StyledContentEditable = styled(ContentEditable)`
-  padding-top: 5px;
-  padding-bottom: 5px;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 20px;
-  margin-left: 10px;
-  min-width: 105px;
-  width: 100%;
+const LabelContainer = styled.div`
+  margin-left: auto;
   margin-top: auto;
   margin-bottom: auto;
-  word-break: break-word;
+  // margin-right: .5em;
 `;
 
-const CheckboxContainer = props => (
-  <Label
-    {...props}
-    sx={{
-      width: "auto",
-      marginTop: "auto",
-      marginBottom: "auto",
-    }}
-  >
-    {props.children}
-  </Label>
-);
+const CheckboxContainer = styled.div``;
 
 export const AvatarContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
-  margin-left: 4px;
-  margin-right: 4px;
-`;
-
-const LeftActionsContainer = styled.div`
-  display: flex;
-`;
-
-const ActionContainer = styled.div`
-  display: flex;
-  margin-left: auto;
-  width: 60px;
-`;
-
-export const ActionSubContainer = styled.div`
-  margin-left: auto;
-  display: flex;
+  margin-right: 8px;
 `;
 
 const RowContainer = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 const BottomRowContainer = styled(RowContainer)`
-  margin-top: -5px;
+  margin-top: -4px;
+  margin-left: 36px;
 `;
 
-const RightContainer = styled.div`
-  width: -webkit-fill-available;
+const ShareContainer = styled.div`
+  display: block;
+  position: absolute;
+  background: ${props => props.theme.colors.white};
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 8px;
+  width: 15em;
+  padding: 0.5em;
+  z-index: 10;
+  top: 25px;
+  right: 10px;
+`;
+
+const MoveTopSection = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1em;
+`;
+
+const MoveText = styled(Text)`
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+`;
+
+const DestinationContainer = styled.div``;
+
+const SendDestinationContainer = styled.div`
+  position: relative;
+`;
+
+type StyledButtonType = {
+  disabled: boolean;
+};
+
+const StyledButton = styled("button")<StyledButtonType>`
+  background-color: ${props =>
+    props.disabled ? props.theme.colors.grey60 : props.theme.colors.primary100};
+  &: hover {
+    cursor: ${props => !props.disabled && "pointer"};
+  }
+  color: white;
+  outline: none;
+  border: none;
+  border-radius: 0.25em;
+  padding: 0.3em 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ButtonContainer = styled.div`
+  margin-top: 1em;
+`;
+
+const ListName = styled.div`
+  font-size: 14px;
+  border: 1px solid ${props => props.theme.colors.greyInactive};
+  display: flex;
+  align-items: center;
+  padding: 0.3em 0.4em;
+  border-radius: 4px;
+  justify-content: space-between;
+`;
+
+const StyledModal = Modal.styled`
+  width: 60rem;
+  min-height: 6.25em;
+  border-radius: 8px;
+  height: 50em;
+  max-height: 90%;
+  overflow: auto;
+  background-color: ${props => props.theme.colors.white};
+
+  @media only screen and (max-width: 768px) {
+    width: 23rem;
+  }
 `;

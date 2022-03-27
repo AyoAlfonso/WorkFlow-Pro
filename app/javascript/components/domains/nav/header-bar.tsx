@@ -86,7 +86,9 @@ export const HeaderBar = observer(
                 <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
               </CloseIconContainer>
             </PopupHeaderContainer>
-            <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"} />
+            <KeyActivitiesContainer>
+              <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"} />
+            </KeyActivitiesContainer>
           </KeyActivitiesPopupContainer>
         )
       );
@@ -357,7 +359,7 @@ const PopupHeaderText = styled.h4`
 
 const KeyActivitiesPopupContainer = styled.div`
   position: absolute;
-  width: 268px;
+  width: 320px;
   height: 438px;
   padding: 16px;
   padding-top: 0px;
@@ -387,6 +389,11 @@ const KeyActivitiesButton = styled.div`
     background: ${props => props.theme.colors.primary20};
     cursor: pointer;
   }
+`;
+
+const KeyActivitiesContainer = styled.div`
+  overflow-y: scroll;
+  height: 380px;
 `;
 
 const IssuesButton = styled.div`

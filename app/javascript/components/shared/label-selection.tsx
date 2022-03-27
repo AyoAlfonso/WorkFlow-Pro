@@ -51,7 +51,7 @@ export const LabelSelection = ({
             icon={"Label"}
             size={inlineEdit ? "10px" : "16px"}
             iconColor={selectedLabel.color ? selectedLabel.color : "grey60"}
-            style={{ marginLeft: "10px" }}
+            // style={{ marginLeft: "10px" }}
           />
           <StyledLabelText color={styledLabelTextColor()}>{selectedLabel.name}</StyledLabelText>
         </StyledLabel>
@@ -100,7 +100,7 @@ type StyledLabel = {
   inlineEdit: boolean;
 };
 
-const StyledLabel = styled(TextDiv)<StyledLabel>`
+export const StyledLabel = styled(TextDiv)<StyledLabel>`
   color: ${props => props.theme.colors.primary100};
   cursor: pointer;
   display: flex;

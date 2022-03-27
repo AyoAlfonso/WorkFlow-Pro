@@ -19,29 +19,32 @@ export const KeyActivityStoreModel = types
   .extend(withEnvironment())
   .views(self => ({
     filterKeyActivitiesByScheduledGroupName(scheduledGroupName, completed) {
-      let keyActivitiesForFiltering = completed ? self.completedKeyActivities : self.incompleteKeyActivities
+      let keyActivitiesForFiltering = completed
+        ? self.completedKeyActivities
+        : self.incompleteKeyActivities;
       const {
         sessionStore: { scheduledGroups },
       } = getRoot(self);
       const scheduledGroup = scheduledGroups.find(group => group.name == scheduledGroupName);
 
-      const filteredKeyActivities = 
-        scheduledGroupName == "Backlog" ? 
-          keyActivitiesForFiltering.filter(
-            keyActivity => keyActivity.scheduledGroupId == scheduledGroup.id && !keyActivity.completedAt
-          ) : 
-          keyActivitiesForFiltering.filter(
-            keyActivity => keyActivity.scheduledGroupId == scheduledGroup.id
-          )
+      const filteredKeyActivities =
+        scheduledGroupName == "Backlog"
+          ? keyActivitiesForFiltering.filter(
+              keyActivity =>
+                keyActivity.scheduledGroupId == scheduledGroup.id && !keyActivity.completedAt,
+            )
+          : keyActivitiesForFiltering.filter(
+              keyActivity => keyActivity.scheduledGroupId == scheduledGroup.id,
+            );
       return filteredKeyActivities;
     },
   }))
   .views(self => ({
     incompleteKeyActivitiesByScheduledGroupName(scheduledGroupName) {
-      return self.filterKeyActivitiesByScheduledGroupName(scheduledGroupName, false)
+      return self.filterKeyActivitiesByScheduledGroupName(scheduledGroupName, false);
     },
     completedKeyActivitiesByScheduledGroupName(scheduledGroupName) {
-      return self.filterKeyActivitiesByScheduledGroupName(scheduledGroupName, true)
+      return self.filterKeyActivitiesByScheduledGroupName(scheduledGroupName, true);
     },
     incompleteKeyActivitiesByTeamId(teamId) {
       const filteredKeyActivities = self.incompleteKeyActivities.filter(
@@ -52,8 +55,10 @@ export const KeyActivityStoreModel = types
   }))
   .views(self => ({
     get completedActivities() {
-      const sortByCompletedAt = (a,b) => { return new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()}
-      return R.sort(sortByCompletedAt, self.completedKeyActivities)
+      const sortByCompletedAt = (a, b) => {
+        return new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime();
+      };
+      return R.sort(sortByCompletedAt, self.completedKeyActivities);
     },
     get completedToday() {
       const today = new Date().getDate();
@@ -85,13 +90,13 @@ export const KeyActivityStoreModel = types
       return self.incompleteKeyActivitiesByScheduledGroupName("Weekly List");
     },
     get incompleteMasterKeyActivities() {
-      return self.incompleteKeyActivitiesByScheduledGroupName("Backlog")
+      return self.incompleteKeyActivitiesByScheduledGroupName("Backlog");
     },
     get completedMasterKeyActivities() {
-      return self.completedKeyActivitiesByScheduledGroupName("Backlog")
+      return self.completedKeyActivitiesByScheduledGroupName("Backlog");
     },
     get todaysPriorities() {
-      return self.incompleteKeyActivitiesByScheduledGroupName("Today")
+      return self.incompleteKeyActivitiesByScheduledGroupName("Today");
     },
   }))
   .views(self => ({
@@ -117,7 +122,7 @@ export const KeyActivityStoreModel = types
     },
   }))
   .actions(self => ({
-    fetchIncompleteKeyActivities: flow(function*(){
+    fetchIncompleteKeyActivities: flow(function*() {
       self.loading = true;
       const response: ApiResponse<any> = yield self.environment.api.getKeyActivities(false);
       self.finishLoading();
@@ -126,7 +131,22 @@ export const KeyActivityStoreModel = types
         self.loading = false;
       }
     }),
-    fetchCompleteKeyActivities: flow(function*(){
+    duplicateKeyActivity: flow(function*(id) {
+      const response: ApiResponse<any> = yield self.environment.api.duplicateKeyActivity(id);
+
+      if (response.ok) {
+        self.incompleteKeyActivities = [...self.incompleteKeyActivities, response.data.keyActivity] as any;
+
+        showToast(`Todo Duplicated Successfully`, ToastMessageConstants.SUCCESS);
+
+        return true;
+      } else {
+        showToast(`Something Went Wrong`, ToastMessageConstants.ERROR);
+
+        return false;
+      }
+    }),
+    fetchCompleteKeyActivities: flow(function*() {
       self.loading = true;
       const response: ApiResponse<any> = yield self.environment.api.getKeyActivities(true);
       self.finishLoading();
@@ -142,12 +162,12 @@ export const KeyActivityStoreModel = types
         fromTeamMeeting,
       );
       if (response.ok) {
-        const { createdFor, keyActivities, completedList } = response.data
-        if(createdFor == "meeting"){
-          self.keyActivitiesFromMeeting = keyActivities
+        const { createdFor, keyActivities, completedList } = response.data;
+        if (createdFor == "meeting") {
+          self.keyActivitiesFromMeeting = keyActivities;
         } else {
           if (completedList) {
-            self.completedKeyActivities = keyActivities
+            self.completedKeyActivities = keyActivities;
           } else {
             self.incompleteKeyActivities = keyActivities;
           }
@@ -162,14 +182,14 @@ export const KeyActivityStoreModel = types
         keyActivityObject,
       );
       if (response.ok) {
-        const { createdFor, keyActivities } = response.data
+        const { createdFor, keyActivities } = response.data;
 
         if (createdFor == "onboarding") {
-          self.keyActivitiesForOnboarding = keyActivities
-        } else if (createdFor == "meeting"){
-          self.keyActivitiesFromMeeting = keyActivities
+          self.keyActivitiesForOnboarding = keyActivities;
+        } else if (createdFor == "meeting") {
+          self.keyActivitiesFromMeeting = keyActivities;
         } else {
-          self.incompleteKeyActivities = keyActivities
+          self.incompleteKeyActivities = keyActivities;
         }
 
         showToast("Pyn created.", ToastMessageConstants.SUCCESS);
@@ -181,7 +201,7 @@ export const KeyActivityStoreModel = types
     }),
     updateKeyActivity: flow(function*(id, fromTeamMeeting = false) {
       let keyActivityObject = self.incompleteKeyActivities.find(ka => ka.id === id);
-      if(!keyActivityObject){
+      if (!keyActivityObject) {
         keyActivityObject = self.completedKeyActivities.find(ka => ka.id === id);
       }
 
@@ -191,12 +211,12 @@ export const KeyActivityStoreModel = types
       });
       self.finishLoading();
       if (response.ok) {
-        const { createdFor, keyActivities, completedList } = response.data
+        const { createdFor, keyActivities, completedList } = response.data;
         if (createdFor == "meeting") {
-          self.keyActivitiesFromMeeting = keyActivities
+          self.keyActivitiesFromMeeting = keyActivities;
         } else {
           if (completedList) {
-            self.completedKeyActivities = keyActivities
+            self.completedKeyActivities = keyActivities;
           } else {
             self.incompleteKeyActivities = keyActivities;
           }
@@ -211,13 +231,13 @@ export const KeyActivityStoreModel = types
         id,
         fromTeamMeeting,
       });
-      if (response.ok) {  
-        const { completedList, keyActivities} = response.data
-        if(fromTeamMeeting){
+      if (response.ok) {
+        const { completedList, keyActivities } = response.data;
+        if (fromTeamMeeting) {
           self.keyActivitiesFromMeeting = keyActivities;
         } else {
           if (completedList) {
-            self.completedKeyActivities = keyActivities
+            self.completedKeyActivities = keyActivities;
           } else {
             self.incompleteKeyActivities = keyActivities;
           }
@@ -251,7 +271,7 @@ export const KeyActivityStoreModel = types
     }),
   }))
   .actions(self => ({
-    fetchAllKeyActivities(){
+    fetchAllKeyActivities() {
       self.fetchCompleteKeyActivities();
       self.fetchIncompleteKeyActivities();
     },
@@ -260,7 +280,7 @@ export const KeyActivityStoreModel = types
         meeting_id,
       );
       if (response.ok) {
-        self.keyActivitiesFromMeeting = response.data
+        self.keyActivitiesFromMeeting = response.data;
         return true;
       } else {
         return false;
@@ -281,16 +301,16 @@ export const KeyActivityStoreModel = types
       }
     }),
     updateKeyActivityState(id, field, value) {
-      let keyActivities = self.incompleteKeyActivities
+      let keyActivities = self.incompleteKeyActivities;
       // we're trying to find where the key activity is in the store.
       // there are 3 different key activity lists, and the key activity can be in any of them
       // since we're updating the local state, we'll need to find where the key activity is stored in the store
       let keyActivityIndex = keyActivities.findIndex(ka => ka.id == id);
       if (keyActivityIndex == -1) {
-        keyActivities = self.completedKeyActivities
+        keyActivities = self.completedKeyActivities;
         keyActivityIndex = keyActivities.findIndex(ka => ka.id == id);
         if (keyActivityIndex == -1) {
-          keyActivities = self.keyActivitiesFromMeeting
+          keyActivities = self.keyActivitiesFromMeeting;
           keyActivityIndex = keyActivities.findIndex(ka => ka.id == id);
           keyActivities[keyActivityIndex][field] = value;
           self.keyActivitiesFromMeeting = keyActivities;

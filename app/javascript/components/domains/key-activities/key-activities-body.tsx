@@ -27,7 +27,11 @@ export const KeyActivitiesBody = observer(
     const [createKeyActivityModalOpen, setCreateKeyActivityModalOpen] = useState<boolean>(false);
 
     useEffect(() => {
-      keyActivityStore.fetchAllKeyActivities();
+      if (keyActivityStore.incompleteKeyActivities.length) {
+        return;
+      } else {
+        keyActivityStore.fetchAllKeyActivities();
+      }
     }, []);
 
     const weeklyKeyActivities = keyActivityStore.weeklyKeyActivities;
@@ -36,9 +40,7 @@ export const KeyActivitiesBody = observer(
 
     const renderKeyActivitiesList = (): any => {
       const { loading, loadingList } = keyActivityStore;
-      if (loading && loadingList === "weekly-activities") {
-        return <Loading />;
-      } else if (showAllKeyActivities) {
+      if (showAllKeyActivities) {
         const completedMasterActivitiesPresent = completedMasterActivities.length > 0;
         // this const for explicitly setting the container height of outstanding keyActivities is to prevent items from overlapping during drag and drop
         // because the container shrinks when the item is being dragged (each key activity entry is 78px in height)
@@ -62,7 +64,9 @@ export const KeyActivitiesBody = observer(
         return sortByPosition(weeklyKeyActivities).map((keyActivity, index) =>
           props.disableDrag ? (
             <KeyActivityContainer key={keyActivity["id"]}>
-              <KeyActivityEntry keyActivity={keyActivity} />
+              <KeyActivityEntry
+                keyActivity={keyActivity}
+              />
             </KeyActivityContainer>
           ) : (
             <Draggable
@@ -120,7 +124,9 @@ export const KeyActivitiesBody = observer(
     const renderCompletedMasterActivitiesList = (): Array<JSX.Element> => {
       return sortByPosition(completedMasterActivities).map((keyActivity, index) => (
         <KeyActivityContainer key={keyActivity["id"]}>
-          <KeyActivityEntry keyActivity={keyActivity} />
+          <KeyActivityEntry
+            keyActivity={keyActivity}
+          />
         </KeyActivityContainer>
       ));
     };
@@ -134,7 +140,7 @@ export const KeyActivitiesBody = observer(
         />
         <AddNewKeyActivityContainer onClick={() => setCreateKeyActivityModalOpen(true)}>
           <AddNewKeyActivityPlus>
-            <Icon icon={"Plus"} size={16} />
+            <Icon icon={"Plus"} size={16} iconColor={"primary100"} />
           </AddNewKeyActivityPlus>
           <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
@@ -165,6 +171,7 @@ type ContainerProps = {
 
 const Container = styled.div<ContainerProps>`
   ${color}
+  position: relative;
   padding: 0px 0px 6px 0px;
   border-left: ${props => props.borderLeft || `1px solid ${props.theme.colors.grey40}`};
 `;
@@ -190,7 +197,7 @@ const AddNewKeyActivityContainer = styled.div`
   margin-left: 8px;
   padding-left: 4px;
   &:hover ${AddNewKeyActivityText} {
-    color: ${props => props.theme.colors.black};
+    color: ${props => props.theme.colors.primary100};
     font-weight: bold;
   }
   &:hover ${AddNewKeyActivityPlus} {
@@ -208,6 +215,7 @@ const KeyActivitiesContainer = styled.div<KeyActivitiesContainerType>`
     props.isDraggingOver ? props.theme.colors.backgroundBlue : !props.meeting && "white"};
   overflow-y: auto;
   height: 308px;
+  // position: absolute;
 `;
 
 const KeyActivityContainer = styled.div<KeyActivityContainerType>`

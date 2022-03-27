@@ -221,6 +221,10 @@ export class Api {
     });
   }
 
+  async duplicateKeyActivity(id) {
+    return this.client.post(`/key_activities/duplicate/${id}`, {});
+  }
+
   async updateKeyActivity(keyActivityObject) {
     return this.client.patch(`/key_activities/${keyActivityObject.id}`, keyActivityObject);
   }
