@@ -12,6 +12,8 @@ interface IScheduledGroupSelectorProps {
   setSelectedGroupId: any;
   selectedTeamId: number;
   setSelectedTeamId: any;
+  listOnly?: boolean;
+  setShowList?: () => void;
 }
 
 export const ScheduledGroupSelector = observer(
@@ -20,6 +22,8 @@ export const ScheduledGroupSelector = observer(
     setSelectedGroupId,
     selectedTeamId,
     setSelectedTeamId,
+    listOnly,
+    setShowList,
   }: IScheduledGroupSelectorProps): JSX.Element => {
     const {
       sessionStore: { scheduledGroups, profile },
@@ -50,22 +54,33 @@ export const ScheduledGroupSelector = observer(
       };
     }, []);
 
-    const onItemSelect = (selection): void => {
+    const closeList = () => {
+      if (!setShowList) return
+      setShowList();
+    }
+
+    const onItemSelect = (selection, e): void => {
       setSelectedTeamId(null);
       setSelectedGroupId(selection);
       setShowDropdown(false);
+      setTimeout(() => {
+        closeList();
+      }, 0)
     };
 
-    const onTeamSelect = (teamId): void => {
+    const onTeamSelect = (teamId, e): void => {
       setSelectedTeamId(teamId);
       setSelectedGroupId(null);
       setShowDropdown(false);
+      setTimeout(() => {
+        closeList();
+      }, 0);
     };
 
     const renderTeams = () => {
       return profile.teams.map((team, index) => {
         return (
-          <OptionContainer onClick={() => onTeamSelect(team.id)} key={index}>
+          <OptionContainer onClick={(e) => onTeamSelect(team.id, e)} key={index}>
             <OptionInitialContainer>
               <InitialsGenerator name={team.name} />
             </OptionInitialContainer>
@@ -78,7 +93,7 @@ export const ScheduledGroupSelector = observer(
     const renderSelections = () => {
       return scheduledGroups.map((group, index) => {
         return (
-          <OptionContainer onClick={() => onItemSelect(group.id)} key={index}>
+          <OptionContainer onClick={(e) => onItemSelect(group.id, e)} key={index}>
             <OptionInitialContainer>
               <InitialsGenerator name={group.name} />
             </OptionInitialContainer>
@@ -90,19 +105,28 @@ export const ScheduledGroupSelector = observer(
 
     return (
       <Container ref={optionsRef}>
-        <PriorityDisplayButton onClick={() => setShowDropdown(!showDropdown)}>
-          <Icon icon={"List"} size={"16px"} />
-          {currentSelectedItem && (
-            <TextContainer>
-              <InitialsGenerator name={currentSelectedItem.name} />
-            </TextContainer>
-          )}
-        </PriorityDisplayButton>
-        {showDropdown && (
-          <SelectionContainer>
+        {listOnly ? (
+          <SelectionContainer fullWidth>
             {renderSelections()}
             {renderTeams()}
           </SelectionContainer>
+        ) : (
+          <>
+            <PriorityDisplayButton onClick={() => setShowDropdown(!showDropdown)}>
+              <Icon icon={"List"} size={"16px"} />
+              {currentSelectedItem && (
+                <TextContainer>
+                  <InitialsGenerator name={currentSelectedItem.name} />
+                </TextContainer>
+              )}
+            </PriorityDisplayButton>
+            {showDropdown && (
+              <SelectionContainer>
+                {renderSelections()}
+                {renderTeams()}
+              </SelectionContainer>
+            )}
+          </>
         )}
       </Container>
     );
@@ -140,8 +164,12 @@ const OptionInitialContainer = styled.div`
   margin-bottom: auto;
 `;
 
-const SelectionContainer = styled.div`
-  width: 150px;
+type SelectionContainerProps = {
+  fullWidth?: boolean;
+};
+
+const SelectionContainer = styled.div<SelectionContainerProps>`
+  width: ${props => (props.fullWidth ? "100%" : "150px")};
   padding-top: 8px;
   padding-bottom: 8px;
   position: absolute;

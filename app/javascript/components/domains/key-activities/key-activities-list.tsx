@@ -1,11 +1,15 @@
 import * as React from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { Loading } from "~/components/shared/loading";
+import Modal from "styled-react-modal";
+import { IKeyActivity } from "~/models/key-activity";
 import { ColumnContainer, ColumnSubHeaderContainer } from "~/components/shared/styles/row-style";
+import { KeyActivityModalContent } from "./key-activity-modal-content";
 interface IKeyActivitiesListProps {
   keyActivities: Array<any>;
   droppableId: string;
@@ -16,11 +20,15 @@ export const KeyActivitiesList = observer(
     const splittedDroppableId = droppableId.split("-");
     const updateId = splittedDroppableId[splittedDroppableId.length - 1];
 
+
+    const [keyActivityModalOpen, setKeyActivityModalOpen] = useState<boolean>(false);
+    const [currentKeyActivity, setCurrentKeyActivity] = useState<IKeyActivity | any>({});
+
     const { keyActivityStore } = useMst();
 
-    if (keyActivityStore.loading) {
-      return <Loading />;
-    }
+    // if (keyActivityStore.loading) {
+    //   return <Loading />;
+    // }
 
     const renderKeyActivitiesList = () => {
       return keyActivities.map((keyActivity, index) => {
@@ -49,6 +57,9 @@ export const KeyActivitiesList = observer(
                 <KeyActivityRecord
                   keyActivity={keyActivity}
                   dragHandleProps={...provided.dragHandleProps}
+                  setCurrentKeyActivity={setCurrentKeyActivity}
+                  setKeyActivityModalOpen={setKeyActivityModalOpen}
+                  currentKeyActivity={currentKeyActivity}
                 />
               </KeyActivityContainer>
             )}
@@ -70,6 +81,17 @@ export const KeyActivitiesList = observer(
             </KeyActivitiesContainer>
           )}
         </Droppable>
+        <StyledModal
+          isOpen={keyActivityModalOpen}
+          onBackgroundClick={e => {
+            setKeyActivityModalOpen(false);
+          }}
+        >
+          <KeyActivityModalContent
+            keyActivity={currentKeyActivity}
+            setKeyActivityModalOpen={setKeyActivityModalOpen}
+          />
+        </StyledModal>
       </KeyActivitiesListStyleContainer>
     );
   },
@@ -77,7 +99,7 @@ export const KeyActivitiesList = observer(
 
 //used internally or just for styling export
 export const KeyActivitiesListStyleContainer = styled.div`
-  margin-top: 10px;
+  // margin-top: 10px;
   height: 100%;
 `;
 
@@ -86,9 +108,9 @@ type KeyActivityContainerType = {
 };
 
 const KeyActivityContainer = styled.div<KeyActivityContainerType>`
-  border-bottom: ${props => props.borderBottom};
+  // border-bottom: ${props => props.borderBottom};
   margin-right: ${props => (props.borderBottom ? "8px" : "")};
-  margin-bottom: 8px;
+  // margin-bottom: 8px;
 `;
 
 type KeyActivitiesContainerType = {
@@ -117,3 +139,17 @@ export const KeyActivitiesListContainer = styled.div`
 export const KeyActivityColumnStyleListContainer = ColumnContainer;
 
 export const KeyActivityListSubHeaderContainer = ColumnSubHeaderContainer;
+
+const StyledModal = Modal.styled`
+  width: 60rem;
+  min-height: 6.25em;
+  border-radius: 8px;
+  height: 50em;
+  max-height: 90%;
+  overflow: auto;
+  background-color: ${props => props.theme.colors.white};
+
+  @media only screen and (max-width: 768px) {
+    width: 23rem;
+  }
+`;
