@@ -20,15 +20,10 @@ export const KeyActivitiesList = observer(
     const splittedDroppableId = droppableId.split("-");
     const updateId = splittedDroppableId[splittedDroppableId.length - 1];
 
-
     const [keyActivityModalOpen, setKeyActivityModalOpen] = useState<boolean>(false);
     const [currentKeyActivity, setCurrentKeyActivity] = useState<IKeyActivity | any>({});
 
     const { keyActivityStore } = useMst();
-
-    // if (keyActivityStore.loading) {
-    //   return <Loading />;
-    // }
 
     const renderKeyActivitiesList = () => {
       return keyActivities.map((keyActivity, index) => {
