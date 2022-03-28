@@ -206,6 +206,8 @@ Rails.application.routes.draw do
     #daily_logs
     resources :daily_logs, only: [:index]
 
+    resources :audit_logs, only: [:index], concerns: :paginatable
+
     resources :journal_entries, only: [:update, :destroy]
     #summaries
     get "/journals", to: "summaries#journals_by_date"

@@ -1,6 +1,8 @@
 class Api::KeyPerformanceIndicatorController < Api::ApplicationController
+  include UserActivityLogHelper
+  after_action :record_activities, only: [:create, :update, :destroy]
   before_action :set_key_performance_indicator, only: [:show, :update, :destroy, :toggle_status]
-
+ 
   respond_to :json
 # TODO: Put as_json code into the kpi model 
   def index
@@ -45,7 +47,6 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   end
 
   def destroy
-    # @kpi.scorecard_logs.destroy_all
     @kpi.destroy! 
     render json: { kpi: @kpi.as_json(except: %w[created_at updated_at],methods: [:owned_by]),  status: :ok }
   end
@@ -69,4 +70,8 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
     @kpi = policy_scope(KeyPerformanceIndicator).find(params[:id])
     authorize @kpi
   end
+  
+  def record_activities
+    record_activity("")
+  end 
 end

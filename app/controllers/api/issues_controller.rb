@@ -1,4 +1,7 @@
 class Api::IssuesController < Api::ApplicationController
+  include UserActivityLogHelper
+  after_action :record_activities, only: [:create, :update, :destroy, :duplicate]
+  
   before_action :set_issue, only: [:update, :destroy, :duplicate]
 
   respond_to :json
@@ -124,4 +127,8 @@ class Api::IssuesController < Api::ApplicationController
   def team_meeting_issues(team_id)
     policy_scope(Issue).where(team_id: team_id).sort_by_position_and_priority_and_created_at_and_completed_at
   end
+  
+  def record_activities
+    record_activity("")
+  end 
 end

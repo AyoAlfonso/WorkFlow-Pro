@@ -1,4 +1,6 @@
 class Api::TeamsController < Api::ApplicationController
+   include UserActivityLogHelper
+  after_action :record_activities, only: [:create_team_and_invite_users, :update]
   include StatsHelper
 
   respond_to :json
@@ -94,5 +96,9 @@ class Api::TeamsController < Api::ApplicationController
       })
     end
     users_list
+  end
+  
+  def record_activities
+    record_activity("")
   end
 end

@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include UserActivityLogHelper
   def timezones
     ActiveSupport::TimeZone.all.map &:to_s
   end

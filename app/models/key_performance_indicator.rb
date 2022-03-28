@@ -61,4 +61,5 @@ class KeyPerformanceIndicator < ApplicationRecord
   def sanitize_description
     self.description = strip_tags(description)
   end
+  
 end

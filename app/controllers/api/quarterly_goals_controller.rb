@@ -1,4 +1,6 @@
 class Api::QuarterlyGoalsController < Api::ApplicationController
+  include UserActivityLogHelper
+  after_action :record_activities, only: [:create, :duplicate, :update, :close_goal, :destroy, :update_key_element, :delete_key_element]
   before_action :set_quarterly_goal, only: [:show, :duplicate, :update, :destroy, :create_key_element, :update_key_element, :create_milestones, :close_goal]
   # before_action :create_milestones_for_quarterly_goal, only: [:update, :create_key_element, :update_key_element ]
   respond_to :json
@@ -112,4 +114,8 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
     @quarterly_goal = policy_scope(QuarterlyGoal).find(params[:id])
     authorize @quarterly_goal
   end
+
+  def record_activities
+    record_activity("")
+  end 
 end

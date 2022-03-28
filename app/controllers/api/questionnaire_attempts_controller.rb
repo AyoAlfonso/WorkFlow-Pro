@@ -1,4 +1,6 @@
 class Api::QuestionnaireAttemptsController < Api::ApplicationController
+  include UserActivityLogHelper
+  after_action :record_activities, only: [:create]
   respond_to :json
 
   before_action :skip_authorization, only: [:questionnaire_summary]
@@ -154,5 +156,9 @@ class Api::QuestionnaireAttemptsController < Api::ApplicationController
 
   def questionnaire_attempts_for_monthly
     @questionnaire_attempts = policy_scope(QuestionnaireAttempt).of_questionnaire_type("Weekly Reflection").within_last_four_weeks(current_user.time_in_user_timezone)
+  end
+   
+  def record_activities
+    record_activity("")
   end
 end

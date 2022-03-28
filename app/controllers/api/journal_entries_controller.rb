@@ -1,4 +1,6 @@
 class Api::JournalEntriesController < Api::ApplicationController
+  include UserActivityLogHelper
+  after_action :record_activities, only: [:update, :destroy]
   before_action :set_journal_entry, only: [:update, :destroy]
 
   def update
@@ -21,4 +23,8 @@ class Api::JournalEntriesController < Api::ApplicationController
   def journal_params
     params.permit(:body)
   end
+
+  def record_activities
+    record_activity("")
+  end 
 end
