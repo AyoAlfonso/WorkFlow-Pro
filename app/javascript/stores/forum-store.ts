@@ -39,7 +39,7 @@ export const ForumStoreModel = types
           });
           if (responseM.ok) {
             self.currentForumYear = year;
-            self.forumYearMeetings = responseM.data as any;
+            self.forumYearMeetings = responseM.data.reverse().slice(0, 12) as any;
           } else {
             self.error = true;
           }
