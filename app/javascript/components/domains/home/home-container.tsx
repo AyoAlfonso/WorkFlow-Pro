@@ -4,6 +4,7 @@ import { useMst } from "../../../setup/root";
 import { Loading } from "../../shared/loading";
 import { observer } from "mobx-react";
 import * as R from "ramda";
+import { MobileHomePersonalItems } from "./mobile-home-personal-items";
 
 export const HomeContainer = observer(
   (): JSX.Element => {
@@ -14,6 +15,11 @@ export const HomeContainer = observer(
     if (R.isNil(company)) {
       return <Loading />;
     }
-    return <HomePersonalItems />;
+    return (
+      <>
+        <HomePersonalItems />
+        <MobileHomePersonalItems />
+      </>
+    );
   },
 );
