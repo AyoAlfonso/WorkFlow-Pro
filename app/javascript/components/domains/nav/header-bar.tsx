@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as R from "ramda";
 import React, { useRef, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { useTranslation } from "react-i18next";
@@ -17,6 +17,8 @@ import { AccountDropdownOptions } from "./top-nav/account-dropdown-options";
 import { InviteYourTeamModal } from "../account/users/invite-your-team-modal";
 import { PulseSelectorWrapper } from "./top-nav/pulse-selector-wrapper";
 import { HeaderText } from "~/utils/header-text";
+import { baseTheme } from "~/themes";
+import { getWeekOf } from "~/utils/date-time";
 
 declare global {
   interface Window {
@@ -38,10 +40,14 @@ export const HeaderBar = observer(
     const [showKeyActivities, setShowKeyActivities] = useState<boolean>(false);
     const [showIssues, setShowIssues] = useState<boolean>(false);
     const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
+    const [showSideNav, setShowSideNav] = useState<boolean>(false);
 
     const { sessionStore, companyStore } = useMst();
     const accountActionRef = useRef(null);
     const { t } = useTranslation();
+    const history = useHistory();
+
+    const userId = sessionStore.profile.id;
     const issuesTitle =
       companyStore?.company?.displayFormat === "Forum" ? t("issues.myHub") : t("issues.issues");
 
@@ -51,13 +57,14 @@ export const HeaderBar = observer(
 
     const location = useLocation();
 
-    const renderUserAvatar = () => {
+    const renderUserAvatar = (size = 48) => {
       return (
         <Avatar
           firstName={sessionStore.profile.firstName}
           lastName={sessionStore.profile.lastName}
           defaultAvatarColor={sessionStore.profile.defaultAvatarColor}
           avatarUrl={sessionStore.profile.avatarUrl}
+          size={size}
         />
       );
     };
@@ -116,8 +123,15 @@ export const HeaderBar = observer(
       <Wrapper>
         <Container>
           <HeaderItemsContainer>
-            <LynchpynLogoContainer>
-              <img src={"/assets/LynchPyn-Logo-Blue_300x300"} width="48"></img>
+            <BurgerIconContainer
+              showBackground={showSideNav}
+              onClick={() => setShowSideNav(!showSideNav)}
+            >
+              {" "}
+              <Icon icon={showSideNav ? "Close" : "Burger"} size={"16px"} iconColor={"white"} />
+            </BurgerIconContainer>
+            <LynchpynLogoContainer onClick={() => history.push("/")}>
+              <img color="white" src={"/assets/LynchPyn-Logo_Favicon_White"} width="24"></img>
             </LynchpynLogoContainer>
             <ActionsContainer>
               <StyledHeading type={"h1"}>
@@ -173,13 +187,38 @@ export const HeaderBar = observer(
                   setCreateKeyActivityModalOpen(false);
                 }}
               >
-                {renderUserAvatar()}
+                <DesktopAvatar>{renderUserAvatar(48)}</DesktopAvatar>
+                <MobileAvatar>{renderUserAvatar(24)}</MobileAvatar>
               </PersonalInfoDisplayContainer>
               {renderKeyActivitiesPopup()}
               {renderIssuesPopup()}
               {renderActionDropdown()}
             </PersonalInfoContainer>
           </HeaderItemsContainer>
+          {showSideNav && (
+            <MobileSideMenu>
+              <MobileMenuOption onClick={() => history.push("/")}>
+                <Icon
+                  icon={"Planner"}
+                  mr="1em"
+                  size={"16px"}
+                  iconColor={baseTheme.colors.primary100}
+                />
+                Planner
+              </MobileMenuOption>
+              <MobileMenuOption
+                onClick={() => history.push(`/weekly-check-in/${userId}/${getWeekOf()}`)}
+              >
+                <Icon
+                  icon={"Check-in-page"}
+                  mr="1em"
+                  size={"16px"}
+                  iconColor={baseTheme.colors.primary100}
+                />
+                Check-In
+              </MobileMenuOption>
+            </MobileSideMenu>
+          )}
 
           <CreateIssueModal
             createIssueModalOpen={createIssueModalOpen}
@@ -211,7 +250,44 @@ const StyledHeading = styled(Heading)`
   margin-top: auto;
   margin-bottom: auto;
   @media only screen and (max-width: 768px) {
-    font-size: 24px;
+    font-size: 18px;
+    color: white;
+  }
+`;
+
+const MobileSideMenu = styled.div`
+  height: 100vh;
+  background: ${props => props.theme.colors.white};
+  z-index: 50;
+  width: 85vw;
+  position: fixed;
+  padding-top: 40px;
+`;
+
+const MobileMenuOption = styled.div`
+  font-size: 12px;
+  align-items: center;
+  padding: 5px 30px;
+  margin-bottom: 0.5em;
+
+  &:hover {
+    background: ${props => props.theme.colors.backgroundGrey};
+  }
+`;
+
+type BurgerIconContainerProps = {
+  showBackground: boolean;
+};
+
+const BurgerIconContainer = styled.div<BurgerIconContainerProps>`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: block;
+    margin-left: 1em;
+    margin-right: 0.5em;
+    background: ${props => (props.showBackground ? "#41639c" : "")};
+    padding: 0.3125em;
+    border-radius: 4px;
   }
 `;
 
@@ -219,7 +295,20 @@ const LynchpynLogoContainer = styled.div`
   display: none;
   @media only screen and (max-width: 768px) {
     display: block;
-    margin-left: 16px;
+    // margin-left: 16px;
+  }
+`;
+
+const DesktopAvatar = styled.div`
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const MobileAvatar = styled.div`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: block;
   }
 `;
 
@@ -249,7 +338,9 @@ const Wrapper = styled.div`
   @media only screen and (max-width: 768px) {
     margin-left: 0px;
     display: flex;
+    height: 40px;
     align-items: center;
+    background-color: ${props => props.theme.colors.mipBlue};
   }
 `;
 

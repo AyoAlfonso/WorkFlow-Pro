@@ -53,4 +53,7 @@ export const HomePersonalItems = (): JSX.Element => {
 export const Container = styled.div`
   display: flex;
   height: inherit;
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;

@@ -187,7 +187,7 @@ const DesktopCloseButtonContainer = styled.div`
     align-items: center;
     padding: 6px 16px;
     border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
-    background: ${props => props.theme.colors.backgroundGrey};
+    // background: ${props => props.theme.colors.backgroundGrey};
   }
 `;
 
