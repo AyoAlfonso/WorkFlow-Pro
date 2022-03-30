@@ -93,16 +93,39 @@ export const getWeekOf = () => {
 };
 
 export const getWeekNumber = (d, fiscalYearStart) => {
-  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+
   fiscalYearStart = new Date(fiscalYearStart);
   const dayNum = d.getUTCDay() || 7;
   d.setUTCDate(d.getUTCDate() + 4 - dayNum);
   let yearStart: any = new Date(
-    Date.UTC(d.getUTCFullYear(), fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
+    d.getUTCFullYear(),
+    fiscalYearStart.getUTCMonth(),
+    fiscalYearStart.getUTCDate(),
   );
-  if (d < yearStart) {
+  const daysAfterSixDays = new Date(
+    Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 6),
+  );
+
+  if (
+    yearStart.getUTCFullYear() === d.getUTCFullYear() &&
+    yearStart.getUTCMonth() == 0 &&
+    d.getUTCMonth() == 11 &&
+    d.getUTCFullYear() <= daysAfterSixDays.getUTCFullYear()
+  ) {
+    return addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7), true);
+  }
+  if (
+    yearStart.getUTCFullYear() === d.getUTCFullYear() &&
+    yearStart.getUTCMonth() == 0 &&
+    d.getUTCMonth() == 0 &&
+    d.getUTCFullYear() >= daysAfterSixDays.getUTCFullYear()
+  ) {
+    return addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7));
+  }
+  if (d.getTime() < yearStart.getTime()) {
     yearStart = new Date(
-      Date.UTC(d.getUTCFullYear() - 1, fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
+      Date.UTC(d.getUTCFullYear() - 1, fiscalYearStart.getUTCMonth(), fiscalYearStart.getUTCDay()),
     ) as any;
     return addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7), true);
   }
