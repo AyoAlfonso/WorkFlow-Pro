@@ -135,9 +135,9 @@ export const KeyActivityStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.duplicateKeyActivity(id);
 
       if (response.ok) {
-        self.incompleteKeyActivities = [...self.incompleteKeyActivities, response.data.keyActivity] as any;
+        self.incompleteKeyActivities = [...self.incompleteKeyActivities, response.data] as any;
 
-        showToast(`Todo Duplicated Successfully`, ToastMessageConstants.SUCCESS);
+        showToast(`ToDo Duplicated Successfully`, ToastMessageConstants.SUCCESS);
 
         return true;
       } else {

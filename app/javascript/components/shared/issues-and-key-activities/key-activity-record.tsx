@@ -354,7 +354,7 @@ export const KeyActivityRecord = observer(
                                     .then(result => {
                                       if (result) {
                                         showToast(
-                                          "Todo Moved Successfully.",
+                                          `${t("keyActivities.name")} Moved Successfully.`,
                                           ToastMessageConstants.SUCCESS,
                                         );
                                       }

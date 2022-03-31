@@ -49,7 +49,7 @@ export const KeyActivityModalContent = observer(
 
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const [showPriorities, setShowPriorities] = useState<boolean>(false);
-    const [description, setDescription] = useState<string>("");
+    const [description, setDescription] = useState<string>(keyActivity.body);
     const [comment, setComment] = useState<string>("");
     const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
     const [selectedLabel, setSelectedLabel] = useState<any>(null);
@@ -526,14 +526,14 @@ export const KeyActivityModalContent = observer(
           <SubHeader>Description</SubHeader>
           <TrixEditorContainer
             onBlur={() => {
-              // keyActivityStore.updateIssueState(issue.id, "body", description);
-              // keyActivityStore.updateIssue(issue.id, meetingId || teamId ? true : false);
+              keyActivityStore.updateKeyActivityState(keyActivity.id, "body", description);
+              keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false);
             }}
           >
             <ReactQuill
               onBlur={() => {
-                // keyActivityStore.updateIssueState(issue.id, "body", description);
-                // keyActivityStore.updateIssue(issue.id, meetingId || teamId ? true : false);
+                keyActivityStore.updateKeyActivityState(keyActivity.id, "body", description);
+                keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false);
               }}
               className="trix-objective-modal"
               theme="snow"

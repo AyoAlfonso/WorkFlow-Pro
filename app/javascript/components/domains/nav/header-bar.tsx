@@ -152,7 +152,7 @@ export const HeaderBar = observer(
                     setCreateKeyActivityModalOpen(false);
                   }}
                 >
-                  Todos
+                  {`${t("keyActivities.name")}s`}
                 </KeyActivitiesButton>
               </KeyActivitiesButtonContainer>
               <IssuesButtonContainer>
