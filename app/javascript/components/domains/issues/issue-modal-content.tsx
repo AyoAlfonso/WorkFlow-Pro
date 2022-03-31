@@ -17,6 +17,7 @@ import {
   DefaultStyledLabel,
   Select,
   Text,
+  StyledLabel,
 } from "~/components/shared";
 import { CommentLogs } from "../shared-issues-key-activities/comment-logs";
 import { StyledInput, FormElementContainer } from "../scorecard/shared/modal-elements";
@@ -521,6 +522,12 @@ const Container = styled.div`
 
   ${DefaultStyledLabel} {
     display: block;
+    font-size: 13px;
+  }
+
+  ${StyledLabel} {
+    font-size: 13px;
+  }
   }
 `;
 

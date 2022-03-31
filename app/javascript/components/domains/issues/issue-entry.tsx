@@ -206,10 +206,10 @@ export const IssueEntry = observer(
         default:
           return (
             <Icon
-              icon={!mr ? "Priority-Empty" : "Priority-None"}
+              icon={"Priority-None"}
               mr={mr}
               size={size}
-              iconColor={!mr ? baseTheme.colors.greyInactive : baseTheme.colors.greyActive}
+              iconColor={baseTheme.colors.greyActive}
               style={{ marginTop: "2px" }}
             />
           );
@@ -532,7 +532,7 @@ const CreateKeyActivityButtonContainer = styled.div`
 
 const Container = styled.div`
   font-size: 14px;
-  padding: 0.5em;
+  padding: 4px 0px;
   border-top: 1px solid ${props => props.theme.colors.greyInactive};
   &: hover {
     background: ${props => props.theme.colors.backgroundGrey};

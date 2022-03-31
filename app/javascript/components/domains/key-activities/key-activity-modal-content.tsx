@@ -31,6 +31,7 @@ import { parseKeyActivityDueDate } from "~/utils/date-time";
 import { useTranslation } from "react-i18next";
 import { KeyActivityPriorityIcon } from "./key-activity-priority-icon";
 import { ScheduledGroupSelector } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
+import { CommentLogs } from "../shared-issues-key-activities/comment-logs";
 
 interface IKeyActivityModalContentProps {
   keyActivity: IKeyActivity;
@@ -46,6 +47,8 @@ export const KeyActivityModalContent = observer(
   }: IKeyActivityModalContentProps): JSX.Element => {
     const { keyActivityStore, sessionStore } = useMst();
     const { t } = useTranslation();
+
+    const { commentLogs } = keyActivityStore;
 
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const [showPriorities, setShowPriorities] = useState<boolean>(false);
@@ -82,6 +85,12 @@ export const KeyActivityModalContent = observer(
     useEffect(() => {
       setSelectedLabel(keyActivity.labels ? keyActivity.labels[0] : null);
     }, [keyActivity]);
+
+    useEffect(() => {
+      keyActivityStore.getCommentLogs(1, "KeyActivity", keyActivity.id).then(meta => {
+        setCommentMeta(meta);
+      });
+    }, []);
 
     useEffect(() => {
       const element = optionsRef.current;
@@ -217,11 +226,13 @@ export const KeyActivityModalContent = observer(
 
     const priorityOptions = ["frog", "high", "medium", "low"];
 
-    // const getLogs = pageNumber => {
-    //   return issueStore.getCommentLogs(pageNumber, "Issues", issue.id).then(meta => {
-    //     setCommentMeta(meta);
-    //   });
-    // };
+    const getLogs = pageNumber => {
+      return keyActivityStore
+        .getCommentLogs(pageNumber, "KeyActivity", keyActivity.id)
+        .then(meta => {
+          setCommentMeta(meta);
+        });
+    };
 
     const postComment = () => {
       const commentLog = {
@@ -231,7 +242,7 @@ export const KeyActivityModalContent = observer(
         parentId: keyActivity.id,
       };
 
-      // issueStore.createCommentLog(commentLog);
+      keyActivityStore.createCommentLog(commentLog);
     };
 
     const renderHeader = (): JSX.Element => {
@@ -502,7 +513,9 @@ export const KeyActivityModalContent = observer(
               </Popup>
             </DateContainer>
             <LabelContainer>{renderLabel()}</LabelContainer>
-            {keyActivity.personal && <Icon icon={"Lock"} size={18} ml={"0.5em"} mr={"0.5em"} iconColor={"mipBlue"} />}
+            {keyActivity.personal && (
+              <Icon icon={"Lock"} size={18} ml={"0.5em"} mr={"0.5em"} iconColor={"mipBlue"} />
+            )}
             <AvatarContainer>
               <Avatar
                 defaultAvatarColor={keyActivity.user.defaultAvatarColor}
@@ -568,6 +581,12 @@ export const KeyActivityModalContent = observer(
               </PostButton>
             )}
           </FormElementContainer>
+          <CommentLogs
+            comments={commentLogs}
+            store={keyActivityStore}
+            meta={commentMeta}
+            getLogs={getLogs}
+          />
         </SectionContainer>
       </Container>
     );
