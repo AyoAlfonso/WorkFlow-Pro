@@ -81,7 +81,7 @@ export const HeaderBar = observer(
         showKeyActivities && (
           <KeyActivitiesPopupContainer>
             <PopupHeaderContainer>
-              <PopupHeaderText>Todos</PopupHeaderText>
+              <PopupHeaderText>ToDos</PopupHeaderText>
               <CloseIconContainer onClick={() => setShowKeyActivities(false)}>
                 <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
               </CloseIconContainer>

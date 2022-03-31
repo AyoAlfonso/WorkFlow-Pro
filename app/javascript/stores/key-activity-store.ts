@@ -5,6 +5,7 @@ import { showToast } from "~/utils/toast-message";
 import { withEnvironment } from "../lib/with-environment";
 import { KeyActivityModel } from "../models/key-activity";
 import * as R from "ramda";
+import { CommentLogModel } from "~/models/comment-logs";
 
 export const KeyActivityStoreModel = types
   .model("KeyActivityStoreModel")
@@ -13,6 +14,7 @@ export const KeyActivityStoreModel = types
     completedKeyActivities: types.array(KeyActivityModel),
     keyActivitiesFromMeeting: types.array(KeyActivityModel),
     keyActivitiesForOnboarding: types.array(KeyActivityModel),
+    commentLogs: types.maybeNull(types.array(CommentLogModel)),
     loading: types.maybeNull(types.boolean),
     loadingList: types.maybeNull(types.string),
   })
@@ -244,6 +246,54 @@ export const KeyActivityStoreModel = types
         }
         return true;
       } else {
+        return false;
+      }
+    }),
+    createCommentLog: flow(function*(log) {
+      try {
+        const response: any = yield self.environment.api.createCommentLog(log);
+        if (response.ok) {
+          self.commentLogs = [...self.commentLogs, response.data.commentLog] as any;
+          return true;
+        }
+      } catch (error) {
+        showToast(`Something Went Wrong, Please try again`, ToastMessageConstants.ERROR);
+        return false;
+      }
+    }),
+    getCommentLogs: flow(function*(page, type, id) {
+      try {
+        self.commentLogs = null;
+        const response: ApiResponse<any> = yield self.environment.api.getCommentLogs(
+          page,
+          type,
+          id,
+        );
+        if (response.ok) {
+          self.commentLogs = response.data.commentLog;
+          return response.data.meta;
+        }
+      } catch (error) {
+        showToast(`Something went wrong while fetching Comment Logs`, ToastMessageConstants.ERROR);
+        return false;
+      }
+    }),
+    deleteCommentLog: flow(function*(id) {
+      try {
+        const response: any = yield self.environment.api.deleteCommentLog(id);
+        if (response.ok) {
+          const updatedLogs = self.commentLogs.filter(
+            log => log.id !== response.data.commentLog.id,
+          );
+          self.commentLogs = updatedLogs as any;
+          showToast("Comment Deleted", ToastMessageConstants.SUCCESS);
+          return true;
+        }
+      } catch (error) {
+        showToast(
+          `Something went wrong while deleting comment, please try again`,
+          ToastMessageConstants.ERROR,
+        );
         return false;
       }
     }),

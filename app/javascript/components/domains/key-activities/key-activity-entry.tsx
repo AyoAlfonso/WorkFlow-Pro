@@ -418,7 +418,17 @@ export const KeyActivityEntry = observer(
             <Icon icon={"Lock"} size={18} mr={"0.5em"} iconColor={"mipBlue"} />
           )}
           <DateContainer>
-            <Popup
+            <DateButtonDiv>
+              <DateButton
+                onClick={() => {
+                  setShowDatePicker(true);
+                  setSelectedDueDate(new Date(parseISO(keyActivity.dueDate)));
+                }}
+                text={dueDateObj.text}
+                displayColor={dueDateObj.color}
+              />
+            </DateButtonDiv>
+            {/* <Popup
               arrow={false}
               closeOnDocumentClick
               contentStyle={{
@@ -479,7 +489,7 @@ export const KeyActivityEntry = observer(
                   {t("datePicker.clearDate")}
                 </Button>
               </>
-            </Popup>
+            </Popup> */}
           </DateContainer>
           <LabelContainer>{renderLabel()}</LabelContainer>
         </BottomRowContainer>
@@ -495,6 +505,67 @@ export const KeyActivityEntry = observer(
             setKeyActivityModalOpen={setKeyActivityModalOpen}
           />
         </StyledModal>
+        <DatePickerModal
+          isOpen={showDatePicker}
+          onBackgroundClick={e => {
+            setShowDatePicker(false);
+          }}
+        >
+          <DatePickerModalHeaderContainer>
+            <DatePickerModalHeader>Select Due Date</DatePickerModalHeader>
+            <IconContainer onClick={() => setShowDatePicker(false)}>
+              <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} ml="8px" />
+            </IconContainer>
+          </DatePickerModalHeaderContainer>
+          <>
+            <Calendar
+              showDateDisplay={false}
+              showMonthAndYearPickers={false}
+              showSelectionPreview={true}
+              direction={"vertical"}
+              shownDate={new Date()}
+              minDate={new Date()}
+              maxDate={addDays(new Date(), 30)}
+              scroll={{
+                enabled: true,
+                calendarWidth: 320,
+                monthWidth: 320,
+              }}
+              rangeColors={[baseTheme.colors.primary80]}
+              date={selectedDueDate}
+              onChange={date => {
+                setSelectedDueDate(date);
+                updateDueDate(date);
+              }}
+            />
+            <DatePickerModalButtonContainer>
+              <Button
+                variant={"primary"}
+                small
+                onClick={() => {
+                  setSelectedDueDate(null);
+                  updateDueDate(null);
+                }}
+                mr="1em"
+                // mx={"auto"}
+                // my={"8px"}
+              >
+                {t("datePicker.clearDate")}
+              </Button>
+              <Button
+                variant={"primary"}
+                small
+                onClick={() => {
+                  setShowDatePicker(false);
+                }}
+                // mx={"auto"}
+                // my={"8px"}
+              >
+                Done
+              </Button>
+            </DatePickerModalButtonContainer>
+          </>
+        </DatePickerModal>
       </Container>
     );
   },
@@ -719,4 +790,36 @@ const StyledModal = Modal.styled`
   @media only screen and (max-width: 768px) {
     width: 23rem;
   }
+`;
+
+const DatePickerModalHeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+`;
+
+const IconContainer = styled.div`
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+`;
+
+const DatePickerModalHeader = styled.h1`
+  text-align: center;
+  font-size: 18px;
+  margin: 0.5em auto;
+`;
+
+const DatePickerModal = Modal.styled`
+  width: fit-content;
+  border-radius: 8px;
+  height: fit-content;
+  background-color: ${props => props.theme.colors.white};
+  padding: 0.5em;
+`;
+
+const DatePickerModalButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

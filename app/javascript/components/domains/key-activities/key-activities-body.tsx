@@ -213,8 +213,8 @@ type KeyActivitiesContainerType = {
 const KeyActivitiesContainer = styled.div<KeyActivitiesContainerType>`
   background-color: ${props =>
     props.isDraggingOver ? props.theme.colors.backgroundBlue : !props.meeting && "white"};
-  overflow-y: auto;
-  height: 308px;
+  // overflow-y: auto;
+  // height: 308px;
   // position: absolute;
 `;
 
