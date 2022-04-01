@@ -126,7 +126,7 @@ export const TeamOverview = observer(
     };
 
     const handleMeetingAgendaNotesClick = () => {
-      history.push(`/meetings/section_1/`);
+      history.push(`/meetings/agenda`);
     };
 
     const renderUserSnapshotTable = (): JSX.Element => {
