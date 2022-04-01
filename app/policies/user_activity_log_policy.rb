@@ -1,4 +1,4 @@
-class UserActivityLogsPolicy < ApplicationPolicy
+class UserActivityLogPolicy < ApplicationPolicy
   def index?
      user_is_part_of_current_company? && @user.company_admin?(company)
   end
