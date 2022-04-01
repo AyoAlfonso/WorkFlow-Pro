@@ -25,7 +25,13 @@ interface IIssuesBodyProps {
 }
 
 export const IssuesBody = observer(
-  ({ showOpenIssues, setShowOpenIssues, meetingId, teamId, noShadow }: IIssuesBodyProps): JSX.Element => {
+  ({
+    showOpenIssues,
+    setShowOpenIssues,
+    meetingId,
+    teamId,
+    noShadow,
+  }: IIssuesBodyProps): JSX.Element => {
     const {
       issueStore,
       sessionStore,
@@ -179,8 +185,8 @@ const IssuesContainer = styled.div<IssuesContainerType>`
 const IssueContainer = styled.div``;
 
 type IssuesBodyContainerProps = {
-  meeting?: any,
-  noShadow?: boolean,
+  meeting?: any;
+  noShadow?: boolean;
 };
 
 export const IssuesBodyContainer = styled(HomeContainerBorders)<IssuesBodyContainerProps>`
