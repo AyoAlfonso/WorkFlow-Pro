@@ -134,8 +134,9 @@ export const AnnualInitiativeModalContent = memo(
         .toString()
         .slice(-2)}`;
 
-      const goalYearString = month > 1 ? doubleYearString : month == 1 && day > 1 ? doubleYearString : singleYearString;
-  
+      const goalYearString =
+        month > 1 ? doubleYearString : month == 1 && day > 1 ? doubleYearString : singleYearString;
+
       const renderQuarterlyGoals = () => {
         const quarterlyGoalsToDisplay = showAllQuarterlyGoals
           ? allQuarterlyGoals
@@ -387,9 +388,7 @@ export const AnnualInitiativeModalContent = memo(
                 theme="snow"
                 placeholder={"Add a description..."}
                 value={description}
-                onChange={(content, delta, source, editor) => {
-                  handleChange(editor.getHTML());
-                }}
+                onChange={handleChange}
               />
             </TrixEditorContainer>
             <SubHeader>Activity</SubHeader>
