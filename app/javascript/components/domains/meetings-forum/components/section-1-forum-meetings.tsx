@@ -74,24 +74,22 @@ export const Section1ForumMeetings = observer(
 
     const renderCreateMeetingsButton = () => {
       if (forumStore.forumYearMeetings.length < 12) {
-        if (company.currentFiscalYear >= currentYear) {
-          return (
-            <StyledButton
-              small
-              variant={"grey"}
-              onClick={() => {
-                forumStore.createMeetingsForYear(
-                  forumStore.currentForumTeamId,
-                  currentYear,
-                  company.forumType,
-                );
-              }}
-            >
-              <Icon icon={"Plus"} size={"20px"} />
-              <ButtonText>Create forum meetings </ButtonText>
-            </StyledButton>
-          );
-        }
+        return (
+          <StyledButton
+            small
+            variant={"grey"}
+            onClick={() => {
+              forumStore.createMeetingsForYear(
+                forumStore.currentForumTeamId,
+                currentYear,
+                company.forumType,
+              );
+            }}
+          >
+            <Icon icon={"Plus"} size={"20px"} />
+            <ButtonText>Create forum meetings</ButtonText>
+          </StyledButton>
+        );
       } else {
         return forumStore.forumYearMeetings.map(meeting => {
           return (
@@ -202,4 +200,11 @@ const YearOptions = styled(StyledHomeTitle)`
   &:hover {
     cursor: pointer;
   }
+`;
+const HeaderText = styled.span`
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 25px;
 `;

@@ -126,7 +126,7 @@ export const TeamOverview = observer(
     };
 
     const handleMeetingAgendaNotesClick = () => {
-      history.push(`/meetings/section_1/`);
+      history.push(`/meetings/agenda`);
     };
 
     const renderUserSnapshotTable = (): JSX.Element => {
@@ -283,6 +283,7 @@ export const TeamOverview = observer(
               titleText={t(`${overviewType}.teamMeetingsTitle`)}
               buttonText={t("forum.meetingManagement")}
               handleMeetingClick={handleMeetingManagementClick}
+              useIcon={false}
             />
           )}
 
@@ -291,6 +292,7 @@ export const TeamOverview = observer(
               titleText={t(`${overviewType}.teamMeetingsTitle`)}
               buttonText={t("forum.forumTopics")}
               handleMeetingClick={handleForumTopicsClick}
+              useIcon={false}
             />
           )}
 
@@ -299,6 +301,7 @@ export const TeamOverview = observer(
               titleText={t(`${overviewType}.teamMeetingsTitle`)}
               buttonText={t("forum.meetingAgendaNotes")}
               handleMeetingClick={handleMeetingAgendaNotesClick}
+              useIcon={false}
             />
           )}
 
