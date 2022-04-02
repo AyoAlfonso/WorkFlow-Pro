@@ -54,7 +54,8 @@ export const KpiComponent = observer(
           fiscalYear: company.yearForCreatingAnnualInitiatives,
           fiscalQuarter: Math.floor((company.currentFiscalWeek - 1) / 13) + 1,
         };
-        createScorecardLog(log);
+        createScorecardLog(log).then();
+        //to do add the scorecard to update frontend
       }
     };
 

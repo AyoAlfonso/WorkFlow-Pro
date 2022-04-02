@@ -73,6 +73,8 @@ export const MiniUpdateKPIModal = observer(
     const [selectedDueDate, setSelectedDueDate] = useState<any>(
       current || week == company.currentFiscalWeek ? new Date() : weekToDate(week, year),
     );
+    const [manualInputDate, setManualInputDate] = useState<any>("");
+
     const [currentWeek, setCurrentWeek] = useState<number>(week);
     const [oneYearBack, setOneYearBack] = useState<boolean>(false);
     const [comment, setComment] = useState("");
@@ -144,7 +146,7 @@ export const MiniUpdateKPIModal = observer(
               ? (company.yearForCreatingAnnualInitiatives - 1).toString()
               : company.yearForCreatingAnnualInitiatives.toString()),
         );
-        keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
+        keyPerformanceIndicatorStore.createScorecardLog(log, manualInputDate).then(() => {
           setUpdateKPIModalOpen(false);
           clearData();
           setKpis(scorecardStore.kpis);
@@ -221,6 +223,7 @@ export const MiniUpdateKPIModal = observer(
                   setSelectedDueDate={setSelectedDueDate}
                   setCurrentWeek={setCurrentWeek}
                   setOneYearBack={setOneYearBack}
+                  setManualInputDate={setManualInputDate}
                   maxDate={
                     current || week == company.currentFiscalWeek
                       ? new Date()

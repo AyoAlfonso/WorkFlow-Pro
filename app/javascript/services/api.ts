@@ -618,8 +618,8 @@ export class Api {
     return this.client.patch(`/key_performance_indicator/open_kpi/${id}`, {});
   }
 
-  async createScorecardLog(scorecardLog) {
-    return this.client.post(`scorecard_logs`, scorecardLog);
+  async createScorecardLog(scorecardLog, manualInputDate) {
+    return this.client.post(`scorecard_logs?manual_input_date=${manualInputDate}`, scorecardLog);
   }
 
   async deleteScorecardLog(id) {
