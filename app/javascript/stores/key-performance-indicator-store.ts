@@ -101,7 +101,7 @@ export const KeyPerformanceIndicatorStoreModel = types
         showToast("Log created", ToastMessageConstants.SUCCESS);
         scorecardStore.mergeKPIS(response.data.kpi);
         self.kpi = response.data.kpi;
-        return { scorecardLog: response.data.scorecardlog, kpis: scorecardStore.kpis };
+        return { log: response.data.scorecardLog };
       }
     }),
     deleteScorecardLog: flow(function*(id) {

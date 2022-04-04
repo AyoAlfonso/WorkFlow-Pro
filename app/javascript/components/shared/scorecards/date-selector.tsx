@@ -15,18 +15,14 @@ import { getWeekNumber, sub } from "~/utils/date-time";
 interface IDueDateSelectorProps {
   selectedDueDate: Date;
   setSelectedDueDate: any;
-  setCurrentWeek: any;
   setManualInputDate?: any;
   maxDate: Date;
   fiscalYearStart: string;
-  setOneYearBack: any;
 }
 
 export const DueDateSelector = ({
   selectedDueDate,
   setSelectedDueDate,
-  setCurrentWeek,
-  setOneYearBack,
   setManualInputDate,
   maxDate,
   fiscalYearStart,
@@ -87,11 +83,7 @@ export const DueDateSelector = ({
             shownDate={selectedDueDate}
             onChange={date => {
               setSelectedDueDate(date);
-              console.log(date, "params[:manual_input_date]");
               setManualInputDate(date);
-              const { num, repeat } = getWeekNumber(date, fiscalYearStart);
-              setCurrentWeek(sub(num));
-              setOneYearBack(repeat);
             }}
           />
         </Popup>

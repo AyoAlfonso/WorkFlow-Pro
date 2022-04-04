@@ -94,23 +94,14 @@ export const getWeekOf = () => {
 };
 
 export const getWeekNumber = (d, fiscalYearStart) => {
-  console.log(d);
-  console.log(d.getDate(), "DAte");
+
   d = new Date(d.getUTCFullYear(), d.getMonth(), d.getDate());
-  console.log(d, "DAt2e");
-  console.log(Date.UTC(d.getUTCFullYear(), d.getMonth(), d.getDate()));
-  console.log(d);
-  // console.log(typeof Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
   const trueDate = new Date(Date.UTC(d.getUTCFullYear(), d.getMonth(), d.getDate()));
   fiscalYearStart = new Date(fiscalYearStart);
-  // const dayNum = d.getDay() || 7;
-  // d.setDate(d.setDate() + 4 - dayNum);
   let yearStart: any = new Date(
     Date.UTC(d.getUTCFullYear(), fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
   );
   const daysAfterSixDays = new Date(Date.UTC(d.getUTCFullYear(), d.getMonth(), d.getDate() + 6));
-
-  console.log(d, trueDate, fiscalYearStart, yearStart);
   if (
     yearStart.getUTCFullYear() === d.getUTCFullYear() &&
     yearStart.getMonth() == 0 &&
@@ -127,15 +118,6 @@ export const getWeekNumber = (d, fiscalYearStart) => {
   ) {
     return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7));
   }
-
-  console.log(d, trueDate, fiscalYearStart, yearStart);
-  console.log(
-    trueDate.getTime() < yearStart.getTime(),
-    trueDate.getTime() > yearStart.getTime(),
-    addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7), false),
-    addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7), true),
-  );
-  console.log(true, "ffff3");
   if (
     trueDate.valueOf() < yearStart.valueOf() &&
     trueDate.getUTCFullYear() <= yearStart.getUTCFullYear()
@@ -146,16 +128,12 @@ export const getWeekNumber = (d, fiscalYearStart) => {
     return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7), true);
   }
 
-  console.log(true, "ffff1");
   if (trueDate.valueOf() > yearStart.valueOf()) {
     yearStart = new Date(
       Date.UTC(d.getUTCFullYear() - 1, fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
     ) as any;
-    console.log(true, "ffff-innn");
     return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7), false);
   }
-  console.log(addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7)), "ffff");
-
   return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7));
 };
 
