@@ -8,16 +8,13 @@ class Api::ScorecardLogsController < Api::ApplicationController
    manual_input_date = Date.strptime(params[:manual_input_date], '%Y-%m-%d').to_date unless params[:manual_input_date].empty? 
    # normal case after you passed the current fiscal start date
     if manual_input_date.present? &&  manual_input_date.monday? && manual_input_date > current_company.current_fiscal_start_date
-              # binding.pry
        4.times do |quarter_index| 
          break if @weekly_index.present? && @quarter_index.present?
      fiscal_quarter_start_date = current_company.current_fiscal_start_date + (13.weeks * (quarter_index))
      fiscal_quarter_start_date_closest_sunday = fiscal_quarter_start_date.sunday? ? fiscal_quarter_start_date : fiscal_quarter_start_date.next_occurring(:sunday)
      fiscal_quarter_start_date_new_year = current_company.current_fiscal_start_date - 1.year + (13.weeks * (quarter_index))
-        # binding.pry
         13.times do |weekly_index|
             if  manual_input_date > fiscal_quarter_start_date_closest_sunday  && manual_input_date <= fiscal_quarter_start_date_closest_sunday + (1.week * (weekly_index + 1))
-              
                 @quarter_index = quarter_index + 1
                 @weekly_index = weekly_index * quarter_index
                 params[:scorecard_log][:fiscal_quarter] = @quarter_index 
@@ -25,7 +22,6 @@ class Api::ScorecardLogsController < Api::ApplicationController
                 params[:scorecard_log][:fiscal_year] = (current_company.current_fiscal_start_date.year - manual_input_date.year < 0) ? fiscal_quarter_start_date_new_year.year  : fiscal_quarter_start_date.year 
                 break
             elsif manual_input_date <= fiscal_quarter_start_date_closest_sunday + (1.week * weekly_index) && manual_input_date >= fiscal_quarter_start_date.prev_occurring(:sunday) + (1.week * weekly_index) && manual_input_date < fiscal_quarter_start_date
-        # binding.pry
                  params[:scorecard_log][:fiscal_quarter] = 4
                  params[:scorecard_log][:week] = 52
                  params[:scorecard_log][:fiscal_year] = fiscal_quarter_start_date.year
@@ -47,13 +43,11 @@ class Api::ScorecardLogsController < Api::ApplicationController
             if  manual_input_date > fiscal_quarter_start_date_closest_sunday && manual_input_date <= fiscal_quarter_start_date_closest_sunday + (1.week * (weekly_index + 1))
                 @quarter_index = quarter_index + 1
                 @weekly_index = weekly_index
-                 # binding.pry
                 params[:scorecard_log][:fiscal_quarter] = @quarter_index 
                 params[:scorecard_log][:week] = ((quarter_index)* 13) + (weekly_index+1)
                 params[:scorecard_log][:fiscal_year] = fiscal_quarter_start_date.year
                 break
             elsif manual_input_date <= fiscal_quarter_start_date_closest_sunday + (1.week * weekly_index) && manual_input_date > fiscal_quarter_start_date_new_year.prev_occurring(:sunday) + (1.week * weekly_index)
-                  # binding.pry
                    params[:scorecard_log][:fiscal_quarter] = 4 
                    params[:scorecard_log][:week] = 52
                    params[:scorecard_log][:fiscal_year] = fiscal_quarter_start_date_new_year.year
@@ -97,7 +91,7 @@ class Api::ScorecardLogsController < Api::ApplicationController
     @scorecard_log.save!
    
     render json: { scorecard_log: @scorecard_log,
-      # kpi: @kpi.as_json(), 
+      kpi: @kpi.as_json(), 
       status: :ok }
   end
 
