@@ -7,6 +7,84 @@ import { baseTheme } from "~/themes";
 import { KeyActivitiesBody } from "../key-activities/key-activities-body";
 
 export const MobileHomePersonalItems = (): JSX.Element => {
+  const [currentTab, setCurrentTab] = useState<number>(0);
+  const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
+  const [questionnaireVariant, setQuestionnaireVariant] = useState<string>("");
+  const [expanded, setExpanded] = useState<string>("panel0");
+  const [showNavOptions, setShowNavOptions] = useState<boolean>(false);
+
+  const navRef = useRef<HTMLDivElement>(null);
+
+  const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : "");
+  };
+
+  useEffect(() => {
+    const externalEventHandler = e => {
+      if (!showNavOptions) return;
+
+      const node = navRef.current;
+
+      if (node && node.contains(e.target)) {
+        return;
+      }
+      setShowNavOptions(false);
+    };
+
+    if (showNavOptions) {
+      document.addEventListener("click", externalEventHandler);
+    } else {
+      document.removeEventListener("click", externalEventHandler);
+    }
+
+    return () => {
+      document.removeEventListener("click", externalEventHandler);
+    };
+  }, [showNavOptions]);
+
+  const headerTextString = () => {
+    switch (currentTab) {
+      case 0:
+        return "ToDos";
+      case 1:
+        return "Issues";
+      case 2:
+        return "Journal";
+      case 3:
+        return "Habits";
+      default:
+        return "ToDos";
+    }
+  };
+
+  const renderComponent = () => {
+    switch (currentTab) {
+      case 0:
+        return <MobileKeyActivitiesBody />;
+      case 1:
+        return (
+          <MobileIssuesBody
+            showOpenIssues={showOpenIssues}
+            setShowOpenIssues={setShowOpenIssues}
+            noShadow
+          />
+        );
+      case 2:
+        return (
+          <Journal
+            expanded={expanded}
+            handleChange={handleChange}
+            questionnaireVariant={questionnaireVariant}
+            setQuestionnaireVariant={setQuestionnaireVariant}
+          />
+        );
+      case 3:
+        return <HabitsBody />;
+      default:
+        return <MobileKeyActivitiesBody />;
+    }
+  };
+
   return (
     <Container>
       <HeaderContainer>
