@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_06_124940) do
+ActiveRecord::Schema.define(version: 2022_04_06_132348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -263,6 +263,8 @@ ActiveRecord::Schema.define(version: 2022_04_06_124940) do
     t.integer "cached_weighted_score", default: 0
     t.integer "cached_weighted_total", default: 0
     t.float "cached_weighted_average", default: 0.0
+    t.datetime "due_date"
+    t.integer "topic_type"
     t.index ["company_id"], name: "index_issues_on_company_id"
     t.index ["scheduled_group_id"], name: "index_issues_on_scheduled_group_id"
     t.index ["team_id"], name: "index_issues_on_team_id"

@@ -6,6 +6,7 @@ class Issue < ApplicationRecord
   end
   
   enum priority: { low: 0, medium: 1, high: 2, frog: 3 }
+  enum topic_type: { exploration: 0, brainstorm: 1, round_table: 2, learning: 3}
   belongs_to :user
   belongs_to :team, optional: true
   belongs_to :company
