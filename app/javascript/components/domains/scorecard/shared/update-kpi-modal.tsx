@@ -113,6 +113,13 @@ export const MiniUpdateKPIModal = observer(
         ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
         : lastYear;
 
+    const lastYearNumber = company.currentFiscalYear - 1;
+
+    const createGoalYearNumber =
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? company.yearForCreatingAnnualInitiatives
+        : lastYearNumber;
+
     const createPreviousGoalYearString =
       company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
         ? `FY${(company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
@@ -133,29 +140,32 @@ export const MiniUpdateKPIModal = observer(
           fiscalQuarter:
             setDefaultSelectionQuarter(currentWeek) || Math.round((currentWeek - 1) / 13) + 1,
         };
+
         if (comment != "") {
           log.note = comment;
         }
 
-        keyPerformanceIndicatorStore.createScorecardLog(log, manualInputDate).then(data => {
-          localStorage.setItem(
-            "cacheDropdownQuarter",
-            setDefaultSelectionQuarter(data.log.week) +
-              "_" +
-              (data.log.fiscalYear < company.yearForCreatingAnnualInitiatives
-                ? createPreviousGoalYearString
-                : createGoalYearString) +
-              "_" +
-              (data.log.fiscalYear < company.yearForCreatingAnnualInitiatives
-                ? (company.yearForCreatingAnnualInitiatives - 1).toString()
-                : company.yearForCreatingAnnualInitiatives.toString()),
-          );
-          setUpdateKPIModalOpen(false);
-          clearData();
-          setKpis(scorecardStore.kpis);
-          history.push(`/scorecard/0/0`);
-          setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
-        });
+        keyPerformanceIndicatorStore
+          .createScorecardLog(log, manualInputDate, createGoalYearNumber)
+          .then(data => {
+            localStorage.setItem(
+              "cacheDropdownQuarter",
+              setDefaultSelectionQuarter(data.log.week) +
+                "_" +
+                (data.log.fiscalYear < company.yearForCreatingAnnualInitiatives
+                  ? createPreviousGoalYearString
+                  : createGoalYearString) +
+                "_" +
+                (data.log.fiscalYear < company.yearForCreatingAnnualInitiatives
+                  ? (company.yearForCreatingAnnualInitiatives - 1).toString()
+                  : company.yearForCreatingAnnualInitiatives.toString()),
+            );
+            setUpdateKPIModalOpen(false);
+            clearData();
+            setKpis(scorecardStore.kpis);
+            history.push(`/scorecard/0/0`);
+            setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
+          });
       }
     };
 

@@ -90,11 +90,16 @@ export const KeyPerformanceIndicatorStoreModel = types
         showToast(`KPI ${direction}`, ToastMessageConstants.SUCCESS);
       }
     }),
-    createScorecardLog: flow(function*(scorecardlog, manualInputDate = "") {
+    createScorecardLog: flow(function*(
+      scorecardlog,
+      manualInputDate = "",
+      createGoalYearNumber = "",
+    ) {
       const { scorecardStore } = getRoot(self);
       const response: ApiResponse<any> = yield self.environment.api.createScorecardLog(
         scorecardlog,
         manualInputDate ? manualInputDate.toISOString().split("T")[0] : manualInputDate,
+        createGoalYearNumber,
       );
 
       if (response.ok) {
