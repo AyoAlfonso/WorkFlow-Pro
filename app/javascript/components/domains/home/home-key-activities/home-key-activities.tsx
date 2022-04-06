@@ -92,8 +92,8 @@ export const HomeKeyActivities = observer(
     const renderMiddleColumnHeader = () => {
       if (showCompletedItems) {
         return renderHeader(
-          "Completed Pyns",
-          "A list of your completed pyns.",
+          "Completed Todos",
+          "A list of your completed todos.",
           dynamicFilterDropdownOpen,
           setDynamicFilterDropdownOpen,
           selectedFilterGroupId,
@@ -110,7 +110,7 @@ export const HomeKeyActivities = observer(
         const teamName = teams.find(team => team.id == selectedFilterTeamId).name;
         return renderHeader(
           teamName,
-          "Pyns you are accountable for that are associated with this team.",
+          "Todos you are accountable for that are associated with this team.",
           dynamicFilterDropdownOpen,
           setDynamicFilterDropdownOpen,
         );

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { baseTheme } from "~/themes/base";
 
 import ContentEditable from "react-contenteditable";
+import { useTranslation } from "react-i18next";
 import { Checkbox, Label } from "@rebass/forms";
 import { TextDiv } from "~/components/shared";
 
@@ -17,6 +18,7 @@ interface IPyn {
 }
 
 export const Pyn = ({ pynDataKey, pyn, onEditPyn }: IPyn): JSX.Element => {
+  const { t } = useTranslation();
   const pynRef = useRef(null);
   const [isChecked, setIsChecked] = useState<boolean>(false);
   return (
@@ -52,7 +54,7 @@ export const Pyn = ({ pynDataKey, pyn, onEditPyn }: IPyn): JSX.Element => {
             pynRef.current.blur();
           }
         }}
-        placeholder={"New pyn..."}
+        placeholder={`New ${t("keyActivities.name")}...`}
       />
     </PynContainer>
   );

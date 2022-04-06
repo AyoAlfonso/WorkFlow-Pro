@@ -96,7 +96,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
         <SelectionTabsContainer>
           {renderOption("agenda")}
           {renderOption(isForum ? "forumHub" : "issues")}
-          {renderOption("pyns")}
+          {renderOption("Todos")}
           {!isForum && renderOption("notes")}
         </SelectionTabsContainer>
       </SelectionContainer>

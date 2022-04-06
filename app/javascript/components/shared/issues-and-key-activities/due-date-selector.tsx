@@ -125,4 +125,8 @@ const TextContainer = styled.div`
 const DueDateSelectionContainer = styled.div`
   border-radius: 6px;
   margin-left: 15px;
+
+  @media only screen and (max-width: 768px) {
+    margin-left: 8px;
+  }
 `;

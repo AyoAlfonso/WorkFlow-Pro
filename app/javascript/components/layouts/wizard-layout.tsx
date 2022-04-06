@@ -187,7 +187,7 @@ const DesktopCloseButtonContainer = styled.div`
     align-items: center;
     padding: 6px 16px;
     border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
-    background: ${props => props.theme.colors.backgroundGrey};
+    // background: ${props => props.theme.colors.backgroundGrey};
   }
 `;
 
@@ -221,7 +221,8 @@ const DescriptionBody = styled.div`
   padding-left: 10%;
   padding-right: 10%;
   margin-top: 32px;
-  height: 85%;
+  overflow: scroll;
+  // height: 85%;
 `;
 
 type BodyContainerProps = {

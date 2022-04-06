@@ -44,7 +44,7 @@ export const KeyActivitiesHeader = (props: KeyActivitiesHeaderProps): JSX.Elemen
 
   return (
     <Container>
-      <KeyActivitiesText> {title || "Pyns"} </KeyActivitiesText>
+      <KeyActivitiesText> {title || "Todos"} </KeyActivitiesText>
       {!hideFilter && (
         <FilterContainer>
           <FilterOptions

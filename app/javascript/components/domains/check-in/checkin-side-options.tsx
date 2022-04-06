@@ -36,7 +36,7 @@ export const CheckInSideOptions = ({ checkIn }: ICheckInSideOptionsProps): JSX.E
             meetingId={checkIn?.id}
           />
         );
-      case "Pyns":
+      case "ToDos":
         return renderDisplayKeyActivities();
       default:
         return (
@@ -66,7 +66,7 @@ export const CheckInSideOptions = ({ checkIn }: ICheckInSideOptionsProps): JSX.E
         <SelectionTabsContainer>
           {renderOption("Agenda")}
           {renderOption("Issues")}
-          {renderOption("Pyns")}
+          {renderOption("ToDos")}
         </SelectionTabsContainer>
       </SelectionContainer>
       <DisplayContentContainer>{renderDisplayContent()}</DisplayContentContainer>

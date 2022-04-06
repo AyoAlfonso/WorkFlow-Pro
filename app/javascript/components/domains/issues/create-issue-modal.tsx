@@ -13,8 +13,10 @@ import {
   FlexContainer,
   IssuePynModalContainer,
 } from "~/components/shared/styles/modals";
+import ReactQuill from "react-quill";
 import { UserSelectionDropdownList, Loading, LabelSelection, Icon } from "~/components/shared";
 import { PrioritySelector } from "~/components/shared/issues-and-key-activities/priority-selector";
+import { DueDateSelector } from "~/components/shared/issues-and-key-activities/due-date-selector";
 
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
@@ -40,7 +42,9 @@ export const CreateIssueModal = ({
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
   const [selectedLabel, setSelectedLabel] = useState<any>(null);
-  const [personal, setPersonal] = useState<boolean>(false);
+  const [personal, setPersonal] = useState<boolean>(teamId ? false : true);
+  const [description, setDescription] = useState<string>("");
+  const [selectedDueDate, setSelectedDueDate] = useState<Date>(null);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
@@ -71,6 +75,10 @@ export const CreateIssueModal = ({
     );
   };
 
+  const handleChange = html => {
+    setDescription(html);
+  };
+
   const newIssuePosition = issues.length > 0 ? issues[issues.length - 1].position + 1 : 0;
 
   return (
@@ -95,10 +103,25 @@ export const CreateIssueModal = ({
             }}
           />
         </TextInputFlexContainer>
+        <TrixEditorContainer>
+          <ReactQuill
+            className="trix-objective-modal"
+            theme="snow"
+            placeholder={"Description"}
+            value={description}
+            onChange={(content, delta, source, editor) => {
+              handleChange(editor.getHTML());
+            }}
+          />
+        </TrixEditorContainer>
         <FlexContainer>
           <PrioritySelector
             itemPriority={selectedPriority}
             setSelectedPriority={setSelectedPriority}
+          />
+          <DueDateSelector
+            selectedDueDate={selectedDueDate}
+            setSelectedDueDate={setSelectedDueDate}
           />
 
           <OptionsContainer>
@@ -143,6 +166,7 @@ export const CreateIssueModal = ({
                   label: selectedLabel,
                   personal: personal,
                   teamId: teamId,
+                  body: description
                 })
                 .then(result => {
                   if (result) {
@@ -197,4 +221,9 @@ const LockContainer = styled.div`
   &: hover {
     cursor: pointer;
   }
+`;
+
+const TrixEditorContainer = styled.div`
+  width: 100%;
+  margin-bottom: 10px;
 `;

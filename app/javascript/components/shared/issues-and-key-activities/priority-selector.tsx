@@ -40,17 +40,17 @@ export const PrioritySelector = ({
   const renderSelectedPriority = (): void => {
     switch (itemPriority) {
       case 1:
-        setIconName("Priority-High");
+        setIconName("Low-Priority");
         setIconColor("cautionYellow");
         setDisplayName("Medium Priority");
         break;
       case 2:
-        setIconName("Priority-Urgent");
+        setIconName("Medium-Priority");
         setIconColor("warningRed");
         setDisplayName("High Priority");
         break;
       case 3:
-        setIconName("Priority-MIP");
+        setIconName("High-Priority");
         setIconColor("mipBlue");
         setDisplayName("LynchPyn Priority");
         break;
@@ -66,15 +66,15 @@ export const PrioritySelector = ({
     return (
       <>
         <OptionContainer onClick={() => onItemSelect(3)}>
-          <Icon icon={"Priority-MIP"} size={"16px"} iconColor={"mipBlue"} />
+          <Icon icon={"High-Priority"} size={"16px"} iconColor={"mipBlue"} />
           <OptionText>LynchPyn Priority</OptionText>
         </OptionContainer>
         <OptionContainer onClick={() => onItemSelect(2)}>
-          <Icon icon={"Priority-Urgent"} size={"16px"} iconColor={"warningRed"} />
+          <Icon icon={"Medium-Priority"} size={"16px"} iconColor={"warningRed"} />
           <OptionText>High Priority</OptionText>
         </OptionContainer>
         <OptionContainer onClick={() => onItemSelect(1)}>
-          <Icon icon={"Priority-High"} size={"16px"} iconColor={"cautionYellow"} />
+          <Icon icon={"Low-Priority"} size={"16px"} iconColor={"cautionYellow"} />
           <OptionText>Medium Priority</OptionText>
         </OptionContainer>
         <OptionContainer onClick={() => onItemSelect(0)}>
@@ -120,6 +120,10 @@ const TextContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   color: ${props => props.theme.colors.greyActive};
+
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const SelectionContainer = styled.div`

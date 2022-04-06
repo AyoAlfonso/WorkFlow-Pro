@@ -60,6 +60,11 @@ const Container = styled.div`
   margin-bottom: 50px;
   padding-top: 96px;
   height: inherit;
+
+  @media only screen and (max-width: 768px) {
+    margin: 0;
+    padding-top: 64px;
+  }
 `;
 
 export interface IAppProps {
@@ -79,15 +84,16 @@ export const App = observer(
     const location = useLocation();
 
     useEffect(() => {
-      const redirectToCheckIn = () => {
+      const redirectHome = () => {
         const width = window.innerWidth <= 768;
         const id = profile?.id;
         if (width) {
           if (location.pathname.includes("check-in")) return;
-          if (id) return history.push(`/weekly-check-in/${id}/${getWeekOf()}`);
+          if (location.pathname === "/") return;
+          if (id) return history.push(`/`);
         }
       };
-      redirectToCheckIn();
+      redirectHome();
     }, [profile]);
 
     useEffect(() => {
