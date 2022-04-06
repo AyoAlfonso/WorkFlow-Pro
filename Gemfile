@@ -29,6 +29,7 @@ gem 'activeadmin_quill_editor'
 gem 'active_admin_trix', '~> 0.0.3'
 gem "paranoia", "~> 2.2"
 gem 'amoeba'
+gem 'acts_as_votable'
 
 
 gem 'kaminari'

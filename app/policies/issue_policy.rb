@@ -29,6 +29,10 @@ class IssuePolicy < ApplicationPolicy
     true
   end
 
+  def toggle_vote?
+    user_is_part_of_current_company?
+  end
+
   def meeting_recap?
     true
   end

@@ -12,7 +12,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable,
          :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: self, validate_on_invite: true
-
+  acts_as_voter
   before_save :sanitize_personal_vision
   after_create :create_default_notifications
   delegate :name, :timezone, to: :default_selected_company, prefix: "company", allow_nil: true

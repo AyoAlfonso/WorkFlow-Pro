@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_14_211646) do
+ActiveRecord::Schema.define(version: 2022_04_06_124940) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -256,6 +256,13 @@ ActiveRecord::Schema.define(version: 2022_03_14_211646) do
     t.boolean "personal", default: false
     t.bigint "scheduled_group_id"
     t.string "body"
+    t.integer "cached_votes_total", default: 0
+    t.integer "cached_votes_score", default: 0
+    t.integer "cached_votes_up", default: 0
+    t.integer "cached_votes_down", default: 0
+    t.integer "cached_weighted_score", default: 0
+    t.integer "cached_weighted_total", default: 0
+    t.float "cached_weighted_average", default: 0.0
     t.index ["company_id"], name: "index_issues_on_company_id"
     t.index ["scheduled_group_id"], name: "index_issues_on_scheduled_group_id"
     t.index ["team_id"], name: "index_issues_on_team_id"
@@ -650,6 +657,21 @@ ActiveRecord::Schema.define(version: 2022_03_14_211646) do
     t.index ["deleted_at"], name: "index_teams_on_deleted_at"
   end
 
+  create_table "user_activity_logs", force: :cascade do |t|
+    t.string "user_id"
+    t.string "browser"
+    t.string "ip_address"
+    t.string "location"
+    t.string "controller"
+    t.string "action"
+    t.string "params"
+    t.string "company_id"
+    t.string "team_id"
+    t.string "note"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "user_company_enablements", force: :cascade do |t|
     t.bigint "company_id", null: false
     t.bigint "user_id", null: false
@@ -736,6 +758,22 @@ ActiveRecord::Schema.define(version: 2022_03_14_211646) do
     t.datetime "created_at"
     t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
+  create_table "votes", force: :cascade do |t|
+    t.string "votable_type"
+    t.bigint "votable_id"
+    t.string "voter_type"
+    t.bigint "voter_id"
+    t.boolean "vote_flag"
+    t.string "vote_scope"
+    t.integer "vote_weight"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["votable_id", "votable_type", "vote_scope"], name: "index_votes_on_votable_id_and_votable_type_and_vote_scope"
+    t.index ["votable_type", "votable_id"], name: "index_votes_on_votable"
+    t.index ["voter_id", "voter_type", "vote_scope"], name: "index_votes_on_voter_id_and_voter_type_and_vote_scope"
+    t.index ["voter_type", "voter_id"], name: "index_votes_on_voter"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
