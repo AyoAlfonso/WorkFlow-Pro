@@ -17,6 +17,7 @@ import { ModalWithHeader } from "../../shared/modal-with-header";
 import { TextInput } from "../../shared/text-input";
 import { PrioritySelector } from "~/components/shared/issues-and-key-activities/priority-selector";
 import { DueDateSelector } from "~/components/shared/issues-and-key-activities/due-date-selector";
+import ReactQuill from "react-quill";
 import { ScheduledGroupSelector } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
 
 interface ICreateKeyActivityModalProps {
@@ -43,6 +44,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
   const [selectedLabel, setSelectedLabel] = useState<any>(null);
   const [selectedGroupId, setSelectedGroupId] = useState<number>(null);
   const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
+  const [description, setDescription] = useState<string>("");
 
   const initializeGroupAndTeam = () => {
     if (props.todayModalClicked) {
@@ -79,6 +81,10 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
     initializeGroupAndTeam();
   };
 
+  const handleChange = html => {
+    setDescription(html);
+  };
+
   const renderUserSelectionList = (): JSX.Element => {
     return showUsersList ? (
       <div onClick={e => e.stopPropagation()}>
@@ -97,7 +103,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
     <ModalWithHeader
       modalOpen={createKeyActivityModalOpen}
       setModalOpen={setCreateKeyActivityModalOpen}
-      headerText="Pyn"
+      headerText="Add ToDo"
       width="640px"
       onCloseAction={resetFields}
     >
@@ -117,6 +123,17 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
             }}
           />
         </TextInputFlexContainer>
+        <TrixEditorContainer>
+          <ReactQuill
+            className="trix-objective-modal"
+            theme="snow"
+            placeholder={"Description"}
+            value={description}
+            onChange={(content, delta, source, editor) => {
+              handleChange(editor.getHTML());
+            }}
+          />
+        </TrixEditorContainer>
         <FlexContainer>
           <PrioritySelector
             itemPriority={selectedPriority}
@@ -191,7 +208,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                 })
             }
           >
-            Add Pyn
+            Add ToDo
           </StyledButton>
         </FlexContainer>
       </Container>
@@ -233,4 +250,9 @@ const LockContainer = styled.div`
 const OptionsContainer = styled.div`
   margin-left: auto;
   display: flex;
+`;
+
+const TrixEditorContainer = styled.div`
+  width: 100%;
+  margin-bottom: 10px;
 `;

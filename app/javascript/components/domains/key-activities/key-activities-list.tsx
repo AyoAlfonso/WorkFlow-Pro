@@ -1,10 +1,12 @@
 import * as React from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { Loading } from "~/components/shared/loading";
+import { IKeyActivity } from "~/models/key-activity";
 import { ColumnContainer, ColumnSubHeaderContainer } from "~/components/shared/styles/row-style";
 interface IKeyActivitiesListProps {
   keyActivities: Array<any>;
@@ -17,10 +19,6 @@ export const KeyActivitiesList = observer(
     const updateId = splittedDroppableId[splittedDroppableId.length - 1];
 
     const { keyActivityStore } = useMst();
-
-    if (keyActivityStore.loading) {
-      return <Loading />;
-    }
 
     const renderKeyActivitiesList = () => {
       return keyActivities.map((keyActivity, index) => {
@@ -77,7 +75,7 @@ export const KeyActivitiesList = observer(
 
 //used internally or just for styling export
 export const KeyActivitiesListStyleContainer = styled.div`
-  margin-top: 10px;
+  // margin-top: 10px;
   height: 100%;
 `;
 
@@ -86,9 +84,9 @@ type KeyActivityContainerType = {
 };
 
 const KeyActivityContainer = styled.div<KeyActivityContainerType>`
-  border-bottom: ${props => props.borderBottom};
+  // border-bottom: ${props => props.borderBottom};
   margin-right: ${props => (props.borderBottom ? "8px" : "")};
-  margin-bottom: 8px;
+  // margin-bottom: 8px;
 `;
 
 type KeyActivitiesContainerType = {
@@ -117,3 +115,4 @@ export const KeyActivitiesListContainer = styled.div`
 export const KeyActivityColumnStyleListContainer = ColumnContainer;
 
 export const KeyActivityListSubHeaderContainer = ColumnSubHeaderContainer;
+

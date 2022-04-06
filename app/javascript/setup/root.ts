@@ -13,6 +13,7 @@ const initialState = {
   issueStore: {
     issues: [],
     loading: false,
+    commentLogs: null,
   },
   labelStore: {
     labelsList: [],
@@ -23,7 +24,12 @@ const initialState = {
     profile: null,
   },
   keyActivityStore: {
-    keyActivities: [],
+    incompleteKeyActivities: [],
+    completedKeyActivities: [],
+    keyActivitiesFromMeeting: [],
+    keyActivitiesForOnboarding: [],
+    loading: false,
+    loadingList: null,
   },
   companyStore: {
     company: null,

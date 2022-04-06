@@ -221,7 +221,8 @@ const DescriptionBody = styled.div`
   padding-left: 10%;
   padding-right: 10%;
   margin-top: 32px;
-  height: 85%;
+  overflow: scroll;
+  // height: 85%;
 `;
 
 type BodyContainerProps = {

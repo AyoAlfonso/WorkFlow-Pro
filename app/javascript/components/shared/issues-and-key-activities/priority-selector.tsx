@@ -120,6 +120,10 @@ const TextContainer = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   color: ${props => props.theme.colors.greyActive};
+
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const SelectionContainer = styled.div`

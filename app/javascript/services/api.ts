@@ -49,6 +49,22 @@ export class Api {
     return this.client.get("/issues");
   }
 
+  async duplicateIssue(id) {
+    return this.client.post(`/issues/duplicate/${id}`, {});
+  }
+
+  async createCommentLog(log) {
+    return this.client.post(`/comment_logs`, log);
+  }
+
+  async getCommentLogs(page: number, type: string, id: number) {
+    return this.client.get(`/comment_logs/page/${page}?type=${type}&id=${id}&per=10`);
+  }
+
+  async deleteCommentLog(id) {
+    return this.client.delete(`/comment_logs/${id}`);
+  }
+
   async getKeyActivities(completed) {
     return this.client.get("/key_activities", { completed });
   }
@@ -219,6 +235,10 @@ export class Api {
       idsToUpdate: keyActivitiesIdsString,
       completed: true,
     });
+  }
+
+  async duplicateKeyActivity(id) {
+    return this.client.post(`/key_activities/duplicate/${id}`, {});
   }
 
   async updateKeyActivity(keyActivityObject) {

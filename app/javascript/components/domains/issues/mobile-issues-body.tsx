@@ -3,7 +3,7 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { space, SpaceProps, color, ColorProps } from "styled-system";
 import { useMst } from "../../../setup/root";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Icon } from "../../shared/icon";
 import { observer } from "mobx-react";
 import { CreateIssueModal } from "./create-issue-modal";
@@ -13,9 +13,10 @@ import { Loading } from "../../shared";
 import { sortByPosition } from "~/utils/sorting";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { HomeContainerBorders } from "../home/shared-components";
-import { List } from "@material-ui/core";
+import { Issues } from "./issues-container";
+import { FilterContainer, FilterOptions } from "./issues-body";
 
-interface IIssuesBodyProps {
+interface IMobileIssuesBodyProps {
   showOpenIssues: boolean;
   setShowOpenIssues: React.Dispatch<React.SetStateAction<boolean>>;
   teamId?: number | string;
@@ -23,32 +24,74 @@ interface IIssuesBodyProps {
   noShadow?: boolean;
 }
 
-export const IssuesBody = observer(
+export const MobileIssuesBody = observer(
   ({
     showOpenIssues,
     setShowOpenIssues,
     meetingId,
     teamId,
     noShadow,
-  }: IIssuesBodyProps): JSX.Element => {
+  }: IMobileIssuesBodyProps): JSX.Element => {
     const {
       issueStore,
       sessionStore,
       companyStore: { company },
     } = useMst();
+
+    const teams = sessionStore.profile.currentCompanyUserTeams;
+
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
     const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
+    const [currentList, setCurrentList] = useState<string>("My Issues");
+    const [currentTeamId, setCurrentTeamId] = useState<number>(null);
+    const [listSelectorOpen, setListSelectorOpen] = useState<boolean>(false);
+
+    const listRef = useRef<HTMLDivElement>(null);
 
     const openIssues = issueStore.openIssues;
     const closedIssues = issueStore.closedIssues;
+    const listName = currentTeamId ? teams.find(team => team.id == currentTeamId).name : "";
 
     useEffect(() => {
       issueStore.fetchIssues();
     }, []);
 
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!listSelectorOpen) return;
+
+        const node = listRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setListSelectorOpen(false);
+      };
+
+      if (listSelectorOpen) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [listSelectorOpen]);
+
     if (R.isNil(issueStore.issues) || R.isNil(sessionStore.profile) || R.isNil(company)) {
       return <Loading />;
     }
+
+    const filteredIssues = () => {
+      if (!showOpenIssues) {
+        return closedIssues;
+      } else if (currentList) {
+        return openIssues.filter(issue => issue.personal);
+      } else {
+        return openIssues.filter(issue => issue.teamId === currentTeamId);
+      }
+    };
 
     const sortMenuOptions = [
       {
@@ -62,9 +105,54 @@ export const IssuesBody = observer(
       issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });
     };
 
+    const renderFilterTeamOptions = (): Array<JSX.Element> => {
+      return teams.map((team, index) => {
+        return (
+          <ListOption
+            key={team.id}
+            onClick={() => {
+              setCurrentList("");
+              setCurrentTeamId(team.id);
+              setListSelectorOpen(false);
+            }}
+          >
+            {team.name}
+          </ListOption>
+        );
+      });
+    };
+
+    const renderListSelector = (): JSX.Element => {
+      return (
+        <ListSelectorContainer ref={listRef}>
+          <IconContainer display="flex" onClick={() => setListSelectorOpen(!listSelectorOpen)}>
+            <Icon icon={"List"} size={"16px"} iconColor={"primary100"} mr="12px" />
+            <ListText>{listName || "My Issues"}</ListText>
+            <Icon icon={"Chevron-Down"} size={"16px"} iconColor={"primary100"} ml="8px" />
+          </IconContainer>
+          {listSelectorOpen && (
+            <ListDropdownContainer>
+              <ListOption
+                onClick={() => {
+                  setCurrentList("My Issues");
+                  setCurrentTeamId(null);
+                  setListSelectorOpen(false);
+                }}
+              >
+                My Issues
+              </ListOption>
+              {renderFilterTeamOptions()}
+            </ListDropdownContainer>
+          )}
+        </ListSelectorContainer>
+      );
+    };
+
     const renderIssuesList = (): Array<JSX.Element> => {
-      const issues = showOpenIssues ? openIssues : closedIssues;
-      return sortByPosition(issues.filter(issue => issue.user.id === sessionStore.profile.id)).map(
+      const issues = currentTeamId
+        ? filteredIssues()
+        : filteredIssues().filter(issue => issue.user.id === sessionStore.profile.id);
+      return sortByPosition(issues).map(
         (issue, index) => (
           <Draggable draggableId={`issue-${issue.id}`} index={index} key={issue.id} type={"issue"}>
             {provided => (
@@ -80,13 +168,13 @@ export const IssuesBody = observer(
         ),
       );
     };
-
     return (
       <>
         <CreateIssueModal
           createIssueModalOpen={createIssueModalOpen}
           setCreateIssueModalOpen={setCreateIssueModalOpen}
         />
+        {renderListSelector()}
         <FilterContainer>
           <FilterOptions
             onClick={() => setShowOpenIssues(true)}
@@ -182,8 +270,6 @@ const IssuesContainer = styled.div<IssuesContainerType>`
     props.isDraggingOver ? props.theme.colors.backgroundBlue : !props.meeting && "white"};
 `;
 
-const IssueContainer = styled.div``;
-
 type IssuesBodyContainerProps = {
   meeting?: any;
   noShadow?: boolean;
@@ -198,19 +284,57 @@ export const IssuesBodyContainer = styled(HomeContainerBorders)<IssuesBodyContai
   box-shadow: ${props => (props.meeting || props.noShadow) && "none"};
 `;
 
-export const FilterContainer = styled.div`
-  display: flex;
-  margin-left: auto;
-  justify-content: flex-end;
-  align-items: center;
+const IssueContainer = styled.div``;
+
+const ListDropdownContainer = styled.div`
+  position: absolute;
+  background: ${props => props.theme.colors.white};
+  width: 10em;
+  border-radius: 4px;
+  box-shadow: 0px 3px 6px #00000029;
+  z-index: 5;
+  padding: 1em 0;
 `;
 
-export const FilterOptions = styled.p<ColorProps & SpaceProps>`
-  ${space}
-  ${color}
-  font-size: 12px;
-  font-weight: 400;
-  cursor: pointer;
+const ListOption = styled.span`
+  display: block;
+  font-size: 0.875em;
+  color: ${props => props.theme.colors.black};
+  padding: 0.5em 1em;
+  &:hover {
+    background: ${props => props.theme.colors.backgroundGrey};
+  }
+`;
+
+const ListSelectorContainer = styled.div`
+  position: relative;
+  margin-top: 1.5em;
+  margin-left: 1em;
+  margin-bottom: 1em;
+`;
+
+type IconContainerProps = {
+  ml?: string;
+  display?: string;
+  cursor?: string;
+  mr?: string;
+};
+
+const IconContainer = styled.div<IconContainerProps>`
+  margin-left: ${props => (props.ml ? props.ml : "none")};
+  margin-right: ${props => (props.mr ? props.mr : "none")};
+  display: ${props => (props.display ? props.display : "block")};
+  align-items: center;
+  cursor: ${props => (props.cursor ? props.cursor : "default")};
+  position: relative;
+`;
+
+const ListText = styled.span`
+  font-size: 0.875em;
+  color: ${props => props.theme.colors.black};
+  font-family: Exo;
+  font-weight: bold;
+  margin-top: 3px;
 `;
 
 const IssuesList = styled("div")``;

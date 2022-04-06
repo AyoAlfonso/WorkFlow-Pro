@@ -4,10 +4,14 @@ import { baseTheme } from "../../../themes/base";
 
 interface IKeyActivityPriorityIconProps {
   priority: string;
+  size?: number;
+  mr?: number;
 }
 
 export const KeyActivityPriorityIcon = ({
   priority,
+  size = 18,
+  mr = 0,
 }: IKeyActivityPriorityIconProps): JSX.Element => {
   const { colors } = baseTheme;
 
@@ -17,7 +21,8 @@ export const KeyActivityPriorityIcon = ({
         return (
           <Icon
             icon={"Priority-High"}
-            size={24}
+            size={size}
+            mr={mr}
             iconColor={colors.cautionYellow}
             style={{ marginTop: "2px" }}
           />
@@ -26,7 +31,8 @@ export const KeyActivityPriorityIcon = ({
         return (
           <Icon
             icon={"Priority-Urgent"}
-            size={24}
+            size={size}
+            mr={mr}
             iconColor={colors.warningRed}
             style={{ marginTop: "2px" }}
           />
@@ -35,7 +41,8 @@ export const KeyActivityPriorityIcon = ({
         return (
           <Icon
             icon={"Priority-MIP"}
-            size={24}
+            size={size}
+            mr={mr}
             iconColor={colors.mipBlue}
             style={{ marginTop: "2px" }}
           />
@@ -43,9 +50,10 @@ export const KeyActivityPriorityIcon = ({
       default:
         return (
           <Icon
-            icon={"Priority-Empty"}
-            size={24}
-            iconColor={colors.greyInactive}
+            icon={"Priority-None"}
+            size={size}
+            mr={mr}
+            iconColor={colors.greyActive}
             style={{ marginTop: "2px" }}
           />
         );

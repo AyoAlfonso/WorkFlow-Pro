@@ -104,6 +104,10 @@ const StyledModal = Modal.styled`
   background-color: ${props => props.theme.colors.white};
   max-height: 720px;
   overflow: ${props => props.width || "auto"};
+
+  @media only screen and (max-width: 768px) {
+    width: 95% !important;
+  }
 `;
 
 const HeaderContainer = styled.div`
