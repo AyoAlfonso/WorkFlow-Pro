@@ -63,44 +63,28 @@ export const MobileHomePersonalItems = (): JSX.Element => {
   const renderComponent = () => {
     switch (currentTab) {
       case 0:
-        return (
-          <ComponentContainer active={currentTab == 0} >
-            <MobileKeyActivitiesBody />
-          </ComponentContainer>
-        );
+        return <MobileKeyActivitiesBody />;
       case 1:
         return (
-          <ComponentContainer active={currentTab == 1} >
-            <MobileIssuesBody
-              showOpenIssues={showOpenIssues}
-              setShowOpenIssues={setShowOpenIssues}
-              noShadow
-            />
-          </ComponentContainer>
+          <MobileIssuesBody
+            showOpenIssues={showOpenIssues}
+            setShowOpenIssues={setShowOpenIssues}
+            noShadow
+          />
         );
       case 2:
         return (
-          <ComponentContainer active={currentTab == 2}>
-            <Journal
-              expanded={expanded}
-              handleChange={handleChange}
-              questionnaireVariant={questionnaireVariant}
-              setQuestionnaireVariant={setQuestionnaireVariant}
-            />
-          </ComponentContainer>
+          <Journal
+            expanded={expanded}
+            handleChange={handleChange}
+            questionnaireVariant={questionnaireVariant}
+            setQuestionnaireVariant={setQuestionnaireVariant}
+          />
         );
       case 3:
-        return (
-          <ComponentContainer active={currentTab == 3} >
-            <HabitsBody />
-          </ComponentContainer>
-        );
+        return <HabitsBody />;
       default:
-        return (
-          <ComponentContainer active={currentTab == 0} >
-            <MobileKeyActivitiesBody />
-          </ComponentContainer>
-        );
+        return <MobileKeyActivitiesBody />;
     }
   };
 
@@ -188,16 +172,6 @@ const Container = styled.div`
   @media only screen and (max-width: 768px) {
     display: block;
   }
-`;
-
-type ComponentContainerProps = {
-  active?: boolean;
-}
-
-const ComponentContainer = styled.div<ComponentContainerProps>`
-  transition: 0.3s;
-
-  display: ${props => (props.active ? "block" : "none")};
 `;
 
 const HeaderContainer = styled.div`
