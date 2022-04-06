@@ -80,6 +80,7 @@ Rails.application.routes.draw do
     get "/issues/issues_for_team", to: "issues#issues_for_team"
     patch "/issues", to: "issues#resort_index"
     post '/issues/duplicate/:id', to: 'issues#duplicate'
+    patch 'issues/toggle_vote/:id', to: 'issues#toggle_vote'
 
     # team_issues
     resources :team_issues, only: [:index, :update]

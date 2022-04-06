@@ -80,6 +80,17 @@ class Api::IssuesController < Api::ApplicationController
     render "api/issues/issues_for_team"
   end
 
+  def toggle_vote
+    @issue = Issue.find(params[:id])
+    if current_user.voted_up_on? @issue
+      @issue.unliked_by current_user
+    else
+      @issue.upvote_by current_user
+    end
+
+    authorize @issue
+   render "api/issues/show"
+  end
   def resort_index
     if params[:meeting_id].present?
       meeting = Meeting.find(params[:meeting_id])
