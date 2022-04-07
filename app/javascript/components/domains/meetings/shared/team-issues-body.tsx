@@ -72,7 +72,7 @@ export const TeamIssuesBody = observer(
 
     const renderIssuesList = (): Array<JSX.Element> => {
       const issues = showOpenIssues ? openIssues : closedIssues;
-      return issues.filter(issue => issue.teamId === teamId).map((issue, index) => (
+      return issues.filter(issue => issue.teamId == teamId).map((issue, index) => (
         <IssueContainer key={issue["id"]}>
           <IssueEntry
             issue={issue}

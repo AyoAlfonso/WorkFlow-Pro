@@ -61,13 +61,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
       case "issues":
         return renderIssues();
       case "forumHub":
-        return (
-          <IssuesBody
-            showOpenIssues={showOpenIssues}
-            setShowOpenIssues={setShowOpenIssues}
-            meetingId={meeting.id}
-          />
-        );
+        return renderIssues();
       case "Todos":
         return renderDisplayKeyActivities();
       case "notes":
