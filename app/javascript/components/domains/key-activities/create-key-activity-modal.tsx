@@ -205,6 +205,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                     setSelectedPriority(0);
                     setSelectedLabel(null);
                     setPersonal(false);
+                    setDescription("");
                   }
                 })
             }

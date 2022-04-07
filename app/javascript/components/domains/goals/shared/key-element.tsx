@@ -169,7 +169,7 @@ export const KeyElement = observer(
       }
     };
 
-    const updateKeyElement = async (ownedBy, showMessage) => {
+    const updateKeyElement = async (ownedBy, showMessage = false) => {
       const keyElementParams = {
         value: element.value,
         completionType: element.completionType,
@@ -611,7 +611,7 @@ export const KeyElement = observer(
                       }}
                       defaultValue={element.completionCurrentValue}
                       onBlur={() => {
-                        updateKeyElement(selectedUser.id, true);
+                        updateKeyElement(selectedUser.id, false);
                         createLog();
                       }}
                       disabled={!editable || disabled || !isOwner}

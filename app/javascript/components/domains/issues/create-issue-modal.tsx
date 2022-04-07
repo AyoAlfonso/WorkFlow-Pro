@@ -45,6 +45,8 @@ export const CreateIssueModal = ({
   const [personal, setPersonal] = useState<boolean>(teamId ? false : true);
   const [description, setDescription] = useState<string>("");
   const [selectedDueDate, setSelectedDueDate] = useState<Date>(null);
+  const [topicType, setTopicType] = useState<string>("");
+  const [showOptions, setShowOptions] = useState<boolean>(false);
 
   useEffect(() => {
     setSelectedUser(sessionStore.profile);
@@ -56,6 +58,7 @@ export const CreateIssueModal = ({
 
   const companyUsers = userStore.users;
   const issues = issueStore.openIssues;
+  const isForum = companyStore.company.displayFormat == "Forum";
   const itemName =
     companyStore.company.displayFormat == "Forum"
       ? t("meetingForum.parkingLotIssues.forumItems")
@@ -81,11 +84,13 @@ export const CreateIssueModal = ({
 
   const newIssuePosition = issues.length > 0 ? issues[issues.length - 1].position + 1 : 0;
 
+  const topicTypesArray = ["Exploration", "Brainstorm", "Round Table", "Learning"];
+
   return (
     <ModalWithHeader
       modalOpen={createIssueModalOpen}
       setModalOpen={setCreateIssueModalOpen}
-      headerText={itemName}
+      headerText={`Add ${itemName}`}
       width="640px"
     >
       <Container>
@@ -103,6 +108,31 @@ export const CreateIssueModal = ({
             }}
           />
         </TextInputFlexContainer>
+        {isForum && (
+          <DropdownContainer>
+            <DropdownHeader onClick={() => setShowOptions(!showOptions)}>
+              {topicType || <DropdownHeaderText>Select topic type*</DropdownHeaderText>}
+              <IconContainer>
+                <Icon icon={"Chevron-Down"} size="12px" iconColor="greyInactive" />
+              </IconContainer>
+            </DropdownHeader>
+            {showOptions && (
+              <DropdownMenuContainer>
+                {topicTypesArray.map((topicType, index) => (
+                  <DropdownMenuItem
+                    key={`topic-${index}`}
+                    onClick={() => {
+                      setTopicType(topicType);
+                      setShowOptions(false);
+                    }}
+                  >
+                    {topicType}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContainer>
+            )}
+          </DropdownContainer>
+        )}
         <TrixEditorContainer>
           <ReactQuill
             className="trix-objective-modal"
@@ -119,10 +149,12 @@ export const CreateIssueModal = ({
             itemPriority={selectedPriority}
             setSelectedPriority={setSelectedPriority}
           />
-          <DueDateSelector
-            selectedDueDate={selectedDueDate}
-            setSelectedDueDate={setSelectedDueDate}
-          />
+          {isForum && (
+            <DueDateSelector
+              selectedDueDate={selectedDueDate}
+              setSelectedDueDate={setSelectedDueDate}
+            />
+          )}
 
           <OptionsContainer>
             <IssuePynModalContainer>
@@ -166,7 +198,9 @@ export const CreateIssueModal = ({
                   label: selectedLabel,
                   personal: personal,
                   teamId: teamId,
-                  body: description
+                  body: description,
+                  dueDate: selectedDueDate,
+                  topicType: topicType
                 })
                 .then(result => {
                   if (result) {
@@ -175,11 +209,12 @@ export const CreateIssueModal = ({
                     setSelectedPriority(0);
                     setSelectedLabel(null);
                     setPersonal(false);
+                    setDescription("");
                   }
                 })
             }
           >
-            Save
+            {`Add ${itemName}`}
           </StyledButton>
         </FlexContainer>
       </Container>
@@ -226,4 +261,56 @@ const LockContainer = styled.div`
 const TrixEditorContainer = styled.div`
   width: 100%;
   margin-bottom: 10px;
+`;
+
+const DropdownContainer = styled.div`
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+`;
+
+const DropdownHeader = styled.div`
+  display: flex;
+  align-items: center;
+  border: 1px solid ${baseTheme.colors.greyInactive};
+  color: ${baseTheme.colors.black};
+  border-radius: 6px;
+  padding: 0 0.5em;
+  font-size: 14px;
+  height: 33px;
+`;
+
+const IconContainer = styled.div`
+  border-left: 1px solid ${baseTheme.colors.greyInactive};
+  margin-left: auto;
+  padding-left: 0.5em;
+  display: flex;
+  align-items: center;
+`;
+
+const DropdownMenuContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  background: ${baseTheme.colors.white};
+  border-radius: 4px;
+  z-index: 5;
+  box-shadow: 0px 3px 6px #00000029;
+  margin-top: 10px;
+`;
+
+const DropdownMenuItem = styled.span`
+  display: block;
+  color: ${baseTheme.colors.black};
+  font-size: 14px;
+  padding: 0.5em;
+
+  &: hover {
+    color: ${baseTheme.colors.white};
+    background: ${baseTheme.colors.primary100};
+  }
+`;
+
+const DropdownHeaderText = styled.span`
+  font-size: 14px;
+  color: ${baseTheme.colors.grey100};
 `;

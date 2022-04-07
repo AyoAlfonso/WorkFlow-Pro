@@ -62,7 +62,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
         return renderIssues();
       case "forumHub":
         return renderIssues();
-      case "pyns":
+      case "Todos":
         return renderDisplayKeyActivities();
       case "notes":
         return <Notes meeting={meeting} height={"550px"} />;

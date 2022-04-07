@@ -35,7 +35,7 @@ export const IssueStoreModel = types
       return self.meetingTeamIssues.map(issue => issue.id);
     },
     get personalIssues() {
-      return self.issues.filter(issue => issue.personal)
+      return self.issues.filter(issue => issue.personal);
     },
   }))
   .views(self => ({
@@ -112,6 +112,16 @@ export const IssueStoreModel = types
       if (response.ok) {
         self.issues = response.data.issues;
         self.teamIssues = response.data.teamIssues;
+        return true;
+      } else {
+        return false;
+      }
+    }),
+    upvoteIssue: flow(function*(id, fromTeamMeeting = false) {
+      const response: ApiResponse<any> = yield self.environment.api.upvoteIssue(id);
+      if (response.ok) {
+        const updatedIssue = self.issues.findIndex(issue => issue.id == id);
+        self.issues[updatedIssue] = response.data;
         return true;
       } else {
         return false;
@@ -197,10 +207,13 @@ export const IssueStoreModel = types
           );
           self.commentLogs = updatedLogs as any;
           showToast("Comment Deleted", ToastMessageConstants.SUCCESS);
-          return true
+          return true;
         }
       } catch (error) {
-        showToast(`Something went wrong while deleting comment, please try again`, ToastMessageConstants.ERROR);
+        showToast(
+          `Something went wrong while deleting comment, please try again`,
+          ToastMessageConstants.ERROR,
+        );
         return false;
       }
     }),

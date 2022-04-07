@@ -183,6 +183,10 @@ export class Api {
     return this.client.patch(`/issues/${issue.id}`, { completed: value, fromTeamMeeting });
   }
 
+  async upvoteIssue(id) {
+    return this.client.patch(`/issues/toggle_vote/${id}`, {});
+  }
+
   async updateIssue(issueObject) {
     return this.client.patch(`/issues/${issueObject.id}`, issueObject);
   }
