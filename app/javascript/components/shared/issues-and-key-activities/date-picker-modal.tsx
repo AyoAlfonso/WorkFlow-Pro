@@ -1,11 +1,8 @@
 import * as React from "react";
-import { useState } from "react";
 import styled from "styled-components";
-import { parseKeyActivityDueDate } from "~/utils/date-time";
-import { DateButton } from "~/components/shared/date-selection/date-button";
 import { Calendar } from "react-date-range";
 import moment from "moment";
-import { parseISO, addDays } from "date-fns";
+import { addDays } from "date-fns";
 import { Icon } from "../../shared/icon";
 import Modal from "styled-react-modal";
 import { baseTheme } from "../../../themes/base";
@@ -109,7 +106,7 @@ export const DueDatePickerModal = ({
           direction={"vertical"}
           shownDate={new Date()}
           minDate={new Date()}
-          maxDate={addDays(new Date(), 30)}
+          maxDate={addDays(new Date(), 187)}
           scroll={{
             enabled: true,
             calendarWidth: 320,

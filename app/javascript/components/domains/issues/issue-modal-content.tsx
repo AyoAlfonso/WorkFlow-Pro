@@ -449,7 +449,7 @@ export const IssueModalContent = observer(
               onClick={() => setShowPriorities(true)}
               display="flex"
               cursor="pointer"
-              mr="1em"
+              mr="0.5em"
             >
               <PriorityContainer>
                 {renderPriorityIcon(issue.priority)}
@@ -930,6 +930,7 @@ const DateContainer = styled.div<DateContainerProps>`
   display: flex;
   align-items: center;
   width: inherit;
+  margin-left: 6px;
   margin-right: ${props => (props.mr ? props.mr : "0")};
   // padding: 0px 0px 0px 10px;
   // border: 1px solid ${props => props.theme.colors.borderGrey};
