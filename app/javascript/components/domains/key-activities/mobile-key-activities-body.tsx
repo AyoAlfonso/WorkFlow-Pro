@@ -28,13 +28,20 @@ export const MobileKeyActivitiesBody = observer(
     const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
     const [currentList, setCurrentList] = useState<string>("Today");
     const [currentTeamId, setCurrentTeamId] = useState<number>(null);
+    const [loading, setLoading] = useState<boolean>(
+      keyActivityStore.incompleteKeyActivities.length ? false : true
+    );
 
     const listRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+      if (keyActivityStore.incompleteKeyActivities.length) {
+        return 
+      } else {
       showCompletedItems
-        ? keyActivityStore.fetchCompleteKeyActivities()
-        : keyActivityStore.fetchIncompleteKeyActivities();
+        ? keyActivityStore.fetchCompleteKeyActivities().then(() => setLoading(false))
+        : keyActivityStore.fetchIncompleteKeyActivities().then(() => setLoading(false));
+      }
     }, [showCompletedItems]);
 
     useEffect(() => {
@@ -87,6 +94,12 @@ export const MobileKeyActivitiesBody = observer(
       : currentList === "Today"
       ? "Today's Priorities"
       : currentList;
+
+    const renderLoading = () => (
+      <LoadingContainer>
+        <Loading />
+      </LoadingContainer>
+    );
 
     const renderListSelector = (): JSX.Element => {
       return (
@@ -204,17 +217,21 @@ export const MobileKeyActivitiesBody = observer(
           </AddNewKeyActivityPlus>
           <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
-        <Droppable droppableId={droppableId} key={"keyActivity"}>
-          {(provided, snapshot) => (
-            <KeyActivitiesContainer
-              ref={provided.innerRef}
-              isDraggingOver={snapshot.isDraggingOver}
-            >
-              {renderKeyActivitiesList()}
-              {provided.placeholder}
-            </KeyActivitiesContainer>
-          )}
-        </Droppable>
+        {loading ? (
+          renderLoading()
+        ) : (
+          <Droppable droppableId={droppableId} key={"keyActivity"}>
+            {(provided, snapshot) => (
+              <KeyActivitiesContainer
+                ref={provided.innerRef}
+                isDraggingOver={snapshot.isDraggingOver}
+              >
+                {renderKeyActivitiesList()}
+                {provided.placeholder}
+              </KeyActivitiesContainer>
+            )}
+          </Droppable>
+        )}
       </Container>
     );
   },
@@ -322,4 +339,10 @@ const KeyActivityContainer = styled.div<KeyActivityContainerType>`
   // border-bottom: ${props => props.borderBottom};
   margin-right: ${props => (props.borderBottom ? "8px" : "")};
   // margin-bottom: 8px;
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

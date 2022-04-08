@@ -11,14 +11,23 @@ import { ColumnContainer, ColumnSubHeaderContainer } from "~/components/shared/s
 interface IKeyActivitiesListProps {
   keyActivities: Array<any>;
   droppableId: string;
+  loading?: boolean;
 }
 
 export const KeyActivitiesList = observer(
-  ({ keyActivities, droppableId }: IKeyActivitiesListProps): JSX.Element => {
+  ({ keyActivities, droppableId, loading }: IKeyActivitiesListProps): JSX.Element => {
     const splittedDroppableId = droppableId.split("-");
     const updateId = splittedDroppableId[splittedDroppableId.length - 1];
 
     const { keyActivityStore } = useMst();
+
+    if (loading) {
+      return (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      );
+    }
 
     const renderKeyActivitiesList = () => {
       return keyActivities.map((keyActivity, index) => {
@@ -116,3 +125,8 @@ export const KeyActivityColumnStyleListContainer = ColumnContainer;
 
 export const KeyActivityListSubHeaderContainer = ColumnSubHeaderContainer;
 
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
