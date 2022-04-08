@@ -114,6 +114,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
               marginBottom: "auto",
               paddingTop: "4px",
               paddingBottom: "4px",
+              fontSize: "14px",
             }}
           />
         </TextInputFlexContainer>
@@ -178,6 +179,7 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
                   scheduledGroupId: selectedGroupId,
                   teamId: selectedTeamId,
                   onboardingCompanyId: props.onboardingCompanyId,
+                  body: description,
                 })
                 .then(result => {
                   if (result) {

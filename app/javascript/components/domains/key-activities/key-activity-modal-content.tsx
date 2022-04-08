@@ -32,6 +32,7 @@ import { useTranslation } from "react-i18next";
 import { KeyActivityPriorityIcon } from "./key-activity-priority-icon";
 import { ScheduledGroupSelector } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
 import { CommentLogs } from "../shared-issues-key-activities/comment-logs";
+import { DueDatePickerModal } from "~/components/shared/issues-and-key-activities/date-picker-modal";
 
 interface IKeyActivityModalContentProps {
   keyActivity: IKeyActivity;
@@ -74,7 +75,7 @@ export const KeyActivityModalContent = observer(
     const teams = R.path(["profile", "currentCompanyUserTeams"], sessionStore);
     const groups = toJS(sessionStore.scheduledGroups);
 
-    const teamName = keyActivity.scheduledGroupId
+    const ListName = keyActivity.scheduledGroupId
       ? groups.find(group => group.id == keyActivity.scheduledGroupId)?.name
       : teams.find(group => group.id == keyActivity.teamId)?.name;
 
@@ -249,10 +250,10 @@ export const KeyActivityModalContent = observer(
       return (
         <HeaderContainer>
           <IconsContainer>
-            <IconContainer display="flex">
+            <ListContainer>
               <Icon icon={"List"} size={"16px"} iconColor={"primary100"} mr="6px" />
-              <ListText>{teamName || `My List`}</ListText>
-            </IconContainer>
+              <ListText>{ListName || `My List`}</ListText>
+            </ListContainer>
             <IconContainer ref={optionsRef} ml="auto" display="flex">
               <StyledOptionContainer onClick={() => setShowOptions(!showOptions)}>
                 <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
@@ -448,69 +449,16 @@ export const KeyActivityModalContent = observer(
               <PriorityText>{getPriorityText(keyActivity.priority)}</PriorityText>
             </IconContainer>
             <DateContainer mr="0.5em">
-              <Popup
-                arrow={false}
-                closeOnDocumentClick
-                contentStyle={{
-                  border: "none",
-                  borderRadius: "6px",
-                  padding: 0,
-                  width: "auto",
-                }}
-                on="click"
-                onClose={() => {}}
-                onOpen={() => {}}
-                open={showDatePicker}
-                position="bottom center"
-                trigger={
-                  <DateButtonDiv>
-                    <DateButton
-                      onClick={() => {
-                        setShowDatePicker(true);
-                        setSelectedDueDate(new Date(parseISO(keyActivity.dueDate)));
-                      }}
-                      text={dueDateObj.text}
-                      displayColor={dueDateObj.color}
-                      fontSize="13px"
-                    />
-                  </DateButtonDiv>
-                }
-              >
-                <>
-                  <Calendar
-                    showDateDisplay={false}
-                    showMonthAndYearPickers={false}
-                    showSelectionPreview={true}
-                    direction={"vertical"}
-                    shownDate={new Date()}
-                    minDate={new Date()}
-                    maxDate={addDays(new Date(), 30)}
-                    scroll={{
-                      enabled: true,
-                      calendarWidth: 320,
-                      monthWidth: 320,
-                    }}
-                    rangeColors={[baseTheme.colors.primary80]}
-                    date={selectedDueDate}
-                    onChange={date => {
-                      setSelectedDueDate(date);
-                      updateDueDate(date);
-                    }}
-                  />
-                  <Button
-                    variant={"primary"}
-                    small
-                    onClick={() => {
-                      setSelectedDueDate(null);
-                      updateDueDate(null);
-                    }}
-                    mx={"auto"}
-                    my={"8px"}
-                  >
-                    {t("datePicker.clearDate")}
-                  </Button>
-                </>
-              </Popup>
+              <DateButtonDiv>
+                <DateButton
+                  onClick={() => {
+                    setShowDatePicker(true);
+                    setSelectedDueDate(new Date(parseISO(keyActivity.dueDate)));
+                  }}
+                  text={dueDateObj.text}
+                  displayColor={dueDateObj.color}
+                />
+              </DateButtonDiv>
             </DateContainer>
             <LabelContainer>{renderLabel()}</LabelContainer>
             {keyActivity.personal && (
@@ -588,6 +536,13 @@ export const KeyActivityModalContent = observer(
             getLogs={getLogs}
           />
         </SectionContainer>
+        <DueDatePickerModal
+          selectedDueDate={selectedDueDate}
+          setSelectedDueDate={setSelectedDueDate}
+          updateDueDate={updateDueDate}
+          showDatePicker={showDatePicker}
+          setShowDatePicker={setShowDatePicker}
+        />
       </Container>
     );
   },
@@ -642,6 +597,12 @@ const ListText = styled.span`
   font-family: Exo;
   font-weight: bold;
   margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  @media only screen and (max-width: 768px) {
+    max-width: 75px;
+  }
 `;
 
 const StyledOptionContainer = styled.div`
@@ -883,4 +844,16 @@ const ListName = styled.div`
   padding: 0.3em 0.4em;
   border-radius: 4px;
   justify-content: space-between;
+`;
+
+const ListContainer = styled.div`
+  align-items: center;
+  display: flex;
+  border: 1px solid ${props => props.theme.colors.borderGrey};
+  border-radius: 4px;
+  padding: 0.2em 0.5em;
+  height: 20px;
+  @media only screen and (max-width: 768px) {
+    max-width: 6em;
+  }
 `;

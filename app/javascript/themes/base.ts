@@ -18,6 +18,7 @@ export const baseTheme = {
     greyActive: "#5E6277",
     greyInactive: "#CED1DD",
     grayShadow: "#00000029",
+    grey200: "#757575",
     grey100: "#868DAA",
     grey80: "#9EA3BB",
     grey60: "#B6BACC",

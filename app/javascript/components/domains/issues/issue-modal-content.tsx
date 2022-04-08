@@ -24,6 +24,11 @@ import { StyledInput, FormElementContainer } from "../scorecard/shared/modal-ele
 import ReactQuill from "react-quill";
 import { OwnedBySection } from "../goals/shared/owned-by-section";
 import { OwnedBy } from "../scorecard/shared/scorecard-owned-by";
+import moment from "moment";
+import { parseISO } from "date-fns";
+import { DateButton } from "~/components/shared/date-selection/date-button";
+import { DueDatePickerModal } from "~/components/shared/issues-and-key-activities/date-picker-modal";
+import { parseKeyActivityDueDate } from "~/utils/date-time";
 
 interface IIssueModalContentProps {
   issue: IIssue;
@@ -34,10 +39,11 @@ interface IIssueModalContentProps {
 
 export const IssueModalContent = observer(
   ({ issue, setIssueModalOpen, meetingId, teamId }: IIssueModalContentProps): JSX.Element => {
-    const { issueStore, sessionStore } = useMst();
+    const { issueStore, sessionStore, companyStore } = useMst();
 
     const { commentLogs } = issueStore;
 
+    const isForum = companyStore.company.displayFormat == "Forum";
     const teams = R.path(["profile", "currentCompanyUserTeams"], sessionStore);
     const teamName = issue.teamId ? teams.find(team => team.id == issue.teamId).name : "";
 
@@ -50,6 +56,9 @@ export const IssueModalContent = observer(
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const [selectedTeamId, setSelectedTeamId] = useState<number>(null);
     const [commentMeta, setCommentMeta] = useState({});
+    const [showTopics, setShowTopics] = useState<boolean>(false);
+    const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+    const [selectedDueDate, setSelectedDueDate] = useState<Date>(new Date(issue.dueDate));
 
     const issueRef = useRef(null);
     const prioritiesRef = useRef(null);
@@ -240,6 +249,17 @@ export const IssueModalContent = observer(
       setDescription(html);
     };
 
+    const updateDueDate = date => {
+      issueStore.updateIssueState(
+        issue["id"],
+        "dueDate",
+        R.isNil(date) ? null : moment(date).format("YYYY-MM-DD"),
+      );
+      issueStore.updateIssue(issue.id, meetingId || teamId ? true : false);
+    };
+
+    const dueDateObj = parseKeyActivityDueDate(issue);
+
     const postComment = () => {
       const commentLog = {
         ownedById: sessionStore.profile.id,
@@ -257,14 +277,47 @@ export const IssueModalContent = observer(
       });
     };
 
+    const topicTypesArray = ["exploration", "brainstorm", "round table", "learning"];
+
+    const issueTopicType = issue.topicType === "round_table" ? "round table" : issue.topicType;
+
     const renderHeader = (): JSX.Element => {
       return (
         <HeaderContainer>
           <IconsContainer>
-            <IconContainer display="flex">
-              <Icon icon={"List"} size={"16px"} iconColor={"primary100"} mr="6px" />
-              <ListText>{teamName || `My Issues`}</ListText>
-            </IconContainer>
+            <TopLeftIconContainer>
+              {isForum && issue.topicType && (
+                <TopicContainer>
+                  <TopicText onClick={() => setShowTopics(!showTopics)}>
+                    {issueTopicType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
+                  </TopicText>
+                  {showTopics && (
+                    <TopicTypeSelectionContainer>
+                      {topicTypesArray.map((topic, index) => {
+                        const formattedTopic = topic === "round table" ? "round_table" : topic;
+                        return (
+                          <TopicTypeOption
+                            key={`topic-${index}`}
+                            onClick={() => {
+                              issueStore.updateIssueState(issue.id, "topicType", formattedTopic);
+                              issueStore
+                                .updateIssue(issue.id, meetingId || teamId ? true : false)
+                                .then(() => setShowTopics(false));
+                            }}
+                          >
+                            {topic.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
+                          </TopicTypeOption>
+                        );
+                      })}
+                    </TopicTypeSelectionContainer>
+                  )}
+                </TopicContainer>
+              )}
+              <ListContainer>
+                <Icon icon={"List"} size={"16px"} iconColor={"primary100"} mr="6px" />
+                <ListText>{teamName || `My Issues`}</ListText>
+              </ListContainer>
+            </TopLeftIconContainer>
             <IconContainer ref={optionsRef} ml="auto" display="flex">
               <StyledOptionContainer onClick={() => setShowOptions(!showOptions)}>
                 <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
@@ -396,7 +449,7 @@ export const IssueModalContent = observer(
               onClick={() => setShowPriorities(true)}
               display="flex"
               cursor="pointer"
-              mr="0.5em"
+              mr="1em"
             >
               <PriorityContainer>
                 {renderPriorityIcon(issue.priority)}
@@ -431,8 +484,24 @@ export const IssueModalContent = observer(
               </PriorityContainer>
               <PriorityText>{getPriorityText(issue.priority)}</PriorityText>
             </IconContainer>
+            {isForum && (
+              <DateContainer mr="0.5em">
+                <DateButtonDiv>
+                  <DateButton
+                    onClick={() => {
+                      setShowDatePicker(true);
+                      setSelectedDueDate(new Date(parseISO(issue.dueDate)));
+                    }}
+                    text={dueDateObj.text}
+                    displayColor={dueDateObj.color}
+                  />
+                </DateButtonDiv>
+              </DateContainer>
+            )}
             <LabelContainer>{renderLabel()}</LabelContainer>
-            {issue.personal && <Icon icon={"Lock"} size={18} iconColor={"mipBlue"} />}
+            {issue.personal && (
+              <Icon icon={"Lock"} ml={"0.5em"} mr={"0.5em"} size={18} iconColor={"mipBlue"} />
+            )}
             <AvatarContainer>
               <Avatar
                 defaultAvatarColor={issue.user.defaultAvatarColor}
@@ -506,6 +575,14 @@ export const IssueModalContent = observer(
             getLogs={getLogs}
           />
         </SectionContainer>
+        <DueDatePickerModal
+          selectedDueDate={selectedDueDate}
+          setSelectedDueDate={setSelectedDueDate}
+          updateDueDate={updateDueDate}
+          showDatePicker={showDatePicker}
+          setShowDatePicker={setShowDatePicker}
+          showDateOptions
+        />
       </Container>
     );
   },
@@ -561,6 +638,12 @@ const ListText = styled.span`
   font-family: Exo;
   font-weight: bold;
   margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  @media only screen and (max-width: 768px) {
+    max-width: 75px;
+  }
 `;
 
 const StyledOptionContainer = styled.div`
@@ -743,11 +826,6 @@ const DestinationContainer = styled.div``;
 
 const SendDestinationContainer = styled.div``;
 
-const StyledSelect = styled(Select)`
-  // font-size: 12px;
-  // padding: 0px;
-`;
-
 const ButtonContainer = styled.div`
   margin-top: 1em;
 `;
@@ -779,3 +857,84 @@ const PriorityText = styled.span`
     display: none;
   }
 `;
+
+const TopLeftIconContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const TopicText = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid ${props => props.theme.colors.borderGrey};
+  padding: 0.2em 0.5em;
+  margin-right: 0.5em;
+  border-radius: 4px;
+  font-size: 0.875em;
+  color: ${props => props.theme.colors.black};
+  font-family: Exo;
+  font-weight: bold;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  @media only screen and (max-width: 768px) {
+    max-width: 6em;
+  }
+`;
+
+const TopicContainer = styled.div`
+  position: relative;
+`;
+
+const ListContainer = styled.div`
+  align-items: center;
+  display: flex;
+  border: 1px solid ${props => props.theme.colors.borderGrey};
+  border-radius: 4px;
+  padding: 0.2em 0.5em;
+  height: 20px;
+  @media only screen and (max-width: 768px) {
+    max-width: 6em;
+  }
+`;
+
+const TopicTypeSelectionContainer = styled.div`
+  position: absolute;
+  width: 6em;
+  background: ${baseTheme.colors.white};
+  border-radius: 4px;
+  z-index: 5;
+  box-shadow: 0px 3px 6px #00000029;
+  margin-top: 0.5em;
+`;
+
+const TopicTypeOption = styled.span`
+  display: block;
+  color: ${baseTheme.colors.black};
+  font-size: 14px;
+  padding: 0.5em;
+
+  &: hover {
+    color: ${baseTheme.colors.white};
+    background: ${baseTheme.colors.primary100};
+  }
+`;
+
+type DateContainerProps = {
+  mr?: string;
+};
+
+const DateContainer = styled.div<DateContainerProps>`
+  display: flex;
+  align-items: center;
+  width: inherit;
+  margin-right: ${props => (props.mr ? props.mr : "0")};
+  // padding: 0px 0px 0px 10px;
+  // border: 1px solid ${props => props.theme.colors.borderGrey};
+  // height: 1.5em;
+  // padding: 0 0.5em;
+`;
+
+const DateButtonDiv = styled.div``;

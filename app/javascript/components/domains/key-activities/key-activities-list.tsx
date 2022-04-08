@@ -13,10 +13,11 @@ import { KeyActivityModalContent } from "./key-activity-modal-content";
 interface IKeyActivitiesListProps {
   keyActivities: Array<any>;
   droppableId: string;
+  loading?: boolean;
 }
 
 export const KeyActivitiesList = observer(
-  ({ keyActivities, droppableId }: IKeyActivitiesListProps): JSX.Element => {
+  ({ keyActivities, droppableId, loading }: IKeyActivitiesListProps): JSX.Element => {
     const splittedDroppableId = droppableId.split("-");
     const updateId = splittedDroppableId[splittedDroppableId.length - 1];
 
@@ -24,6 +25,14 @@ export const KeyActivitiesList = observer(
     const [currentKeyActivity, setCurrentKeyActivity] = useState<IKeyActivity | any>({});
 
     const { keyActivityStore } = useMst();
+
+    if (loading) {
+      return (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      );
+    }
 
     const renderKeyActivitiesList = () => {
       return keyActivities.map((keyActivity, index) => {
@@ -135,16 +144,8 @@ export const KeyActivityColumnStyleListContainer = ColumnContainer;
 
 export const KeyActivityListSubHeaderContainer = ColumnSubHeaderContainer;
 
-const StyledModal = Modal.styled`
-  width: 60rem;
-  min-height: 6.25em;
-  border-radius: 8px;
-  height: 50em;
-  max-height: 90%;
-  overflow: auto;
-  background-color: ${props => props.theme.colors.white};
-
-  @media only screen and (max-width: 768px) {
-    width: 23rem;
-  }
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

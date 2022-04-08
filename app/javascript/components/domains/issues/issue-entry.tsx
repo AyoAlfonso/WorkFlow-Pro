@@ -286,6 +286,8 @@ export const IssueEntry = observer(
 
     const dueDateObj = parseKeyActivityDueDate(issue);
 
+    const issueTopicType = issue.topicType === "round_table" ? "round table" : issue.topicType;
+
     return (
       <Container {...dragHandleProps}>
         <LeftContainer>
@@ -328,7 +330,11 @@ export const IssueEntry = observer(
           <TopSection>
             <RowContainer>
               <TopicNameContainer>
-                {isForum && issue.topicType && <TopicText>{issue.topicType}</TopicText>}
+                {isForum && issue.topicType && (
+                  <TopicText>
+                    {issueTopicType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
+                  </TopicText>
+                )}
                 <IssuesName
                   onClick={() => {
                     setIssueModalOpen(true);

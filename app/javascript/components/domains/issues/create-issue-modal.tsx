@@ -78,7 +78,9 @@ export const CreateIssueModal = ({
 
   const newIssuePosition = issues.length > 0 ? issues[issues.length - 1].position + 1 : 0;
 
-  const topicTypesArray = ["Exploration", "Brainstorm", "Round Table", "Learning"];
+  const topicTypesArray = ["exploration", "brainstorm", "round table", "learning"];
+
+  const formattedTopicType = topicType === "round_table" ? "round table" : topicType;
 
   return (
     <ModalWithHeader
@@ -99,30 +101,36 @@ export const CreateIssueModal = ({
               marginBottom: "auto",
               paddingTop: "4px",
               paddingBottom: "4px",
+              fontSize: "14px",
             }}
           />
         </TextInputFlexContainer>
         {isForum && (
           <DropdownContainer>
             <DropdownHeader onClick={() => setShowOptions(!showOptions)}>
-              {topicType || <DropdownHeaderText>Select topic type*</DropdownHeaderText>}
+              {formattedTopicType.replace(/(^\w|\s\w)/g, m => m.toUpperCase()) || (
+                <DropdownHeaderText>Select topic type*</DropdownHeaderText>
+              )}
               <IconContainer>
                 <Icon icon={"Chevron-Down"} size="12px" iconColor="greyInactive" />
               </IconContainer>
             </DropdownHeader>
             {showOptions && (
               <DropdownMenuContainer>
-                {topicTypesArray.map((topicType, index) => (
-                  <DropdownMenuItem
-                    key={`topic-${index}`}
-                    onClick={() => {
-                      setTopicType(topicType);
-                      setShowOptions(false);
-                    }}
-                  >
-                    {topicType}
-                  </DropdownMenuItem>
-                ))}
+                {topicTypesArray.map((topicType, index) => {
+                  const formattedTopic = topicType === "round table" ? "round_table" : topicType;
+                  return (
+                    <DropdownMenuItem
+                      key={`topic-${index}`}
+                      onClick={() => {
+                        setTopicType(formattedTopic);
+                        setShowOptions(false);
+                      }}
+                    >
+                      {topicType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
+                    </DropdownMenuItem>
+                  );
+                })}
               </DropdownMenuContainer>
             )}
           </DropdownContainer>
@@ -179,7 +187,7 @@ export const CreateIssueModal = ({
         </FlexContainer>
         <FlexContainer>
           <StyledButton
-            disabled={issueDescription.length == 0}
+            disabled={issueDescription.length == 0 || !topicType}
             onClick={() =>
               issueStore
                 .createIssue({
@@ -194,7 +202,7 @@ export const CreateIssueModal = ({
                   teamId: teamId,
                   body: description,
                   dueDate: selectedDueDate,
-                  topicType: topicType
+                  topicType: topicType,
                 })
                 .then(result => {
                   if (result) {
@@ -266,16 +274,20 @@ const DropdownContainer = styled.div`
 const DropdownHeader = styled.div`
   display: flex;
   align-items: center;
-  border: 1px solid ${baseTheme.colors.greyInactive};
-  color: ${baseTheme.colors.black};
-  border-radius: 6px;
+  border: 1px solid ${baseTheme.colors.grey40};
+  color: #172b4d;
+  border-radius: 4px;
   padding: 0 0.5em;
   font-size: 14px;
   height: 33px;
+
+  &: focus-within {
+    border: 1px solid ${baseTheme.colors.primary100};
+  }
 `;
 
 const IconContainer = styled.div`
-  border-left: 1px solid ${baseTheme.colors.greyInactive};
+  border-left: 1px solid ${baseTheme.colors.grey40};
   margin-left: auto;
   padding-left: 0.5em;
   display: flex;
@@ -306,5 +318,5 @@ const DropdownMenuItem = styled.span`
 
 const DropdownHeaderText = styled.span`
   font-size: 14px;
-  color: ${baseTheme.colors.grey100};
+  color: ${baseTheme.colors.grey200};
 `;

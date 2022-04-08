@@ -25,6 +25,7 @@ const DateButtonContainer = styled.div<IDueDateButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 13px;
 
   &:hover {
     cursor: pointer;
