@@ -22,7 +22,7 @@ import { SelectedMeetingAgendaEntry } from "./components/selected-meeting-agenda
 import { TeamMeetingButton } from "~/components/shared/team-meeting-button";
 import MeetingTypes from "~/constants/meeting-types";
 import { LynchPynBadge } from "./components/lynchpyn-badge";
-
+import { Icon } from "~/components/shared";
 export const ForumAgendaSearch = observer(() => {
   const { t } = useTranslation();
   const history = useHistory();
@@ -191,24 +191,33 @@ export const ForumAgendaSearch = observer(() => {
   };
 
   return (
-    <Container>
-      <CalendarFilter
-        header={""}
-        dateFilter={dateFilter}
-        setDateFilter={setDateFilter}
-        selectedDateFilter={selectedDateFilter}
-        setSelectedDateFilter={setSelectedDateFilter}
-        dateSelectAction={dateSelectedAction}
-        additionalComponentsBelow={
-          <StyledItemListContainer>{renderItems()}</StyledItemListContainer>
-        }
-        width={"450px"}
-        maxDate={addDays(new Date(), 365)}
-        customFilterOptions={filterOptions}
-      />
-      <StyledEntryContainer>{renderSelectedEntry()}</StyledEntryContainer>
-      {instanceType === "forum" && <LynchPynBadge />}
-    </Container>
+    <>
+      <SubHeaderContainer>
+        <BackHeaderText onClick={() => history.push(`/meetings/agenda`)}>
+          {company?.name}
+        </BackHeaderText>
+        <ChevronRight icon={"Chevron-Left"} size={"10px"} iconColor={"grey100"} />
+        <BreadcrumbHeaderText> Meeting Agenda & Notes </BreadcrumbHeaderText>
+      </SubHeaderContainer>
+      <Container>
+        <CalendarFilter
+          header={""}
+          dateFilter={dateFilter}
+          setDateFilter={setDateFilter}
+          selectedDateFilter={selectedDateFilter}
+          setSelectedDateFilter={setSelectedDateFilter}
+          dateSelectAction={dateSelectedAction}
+          additionalComponentsBelow={
+            <StyledItemListContainer>{renderItems()}</StyledItemListContainer>
+          }
+          width={"450px"}
+          maxDate={addDays(new Date(), 365)}
+          customFilterOptions={filterOptions}
+        />
+        <StyledEntryContainer>{renderSelectedEntry()}</StyledEntryContainer>
+        {/* {instanceType === "forum" && <LynchPynBadge />} */}
+      </Container>
+    </>
   );
 });
 
@@ -249,4 +258,29 @@ const NoSelectedItemsContainer = styled.div`
   margin-top: 50px;
   margin-left: auto;
   margin-right: auto;
+`;
+
+const BreadcrumbHeaderText = styled.span`
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 25px;
+`;
+const BackHeaderText = styled(BreadcrumbHeaderText)`
+  color: ${props => props.theme.colors.grey100};
+  margin-right: 0.5em;
+  cursor: pointer;
+`;
+
+const ChevronRight = styled(Icon)`
+  transform: rotate(180deg);
+  margin-right: 0.5em;
+  margin-top: 0.25em;
+`;
+
+const SubHeaderContainer = styled.div`
+  display: flex;
+  height: 50px;
+  margin-bottom: 20px;
 `;

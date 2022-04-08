@@ -3,6 +3,7 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
+import { useHistory } from "react-router-dom";
 import {
   Text,
   Avatar,
@@ -39,6 +40,7 @@ export const Exploration = observer(
       companyStore: { company },
     } = useMst();
     const { t } = useTranslation();
+    const history = useHistory();
     const [userSelectionOpen, setUserSelectionOpen] = useState<boolean>(false);
     const [guideModalOpen, setGuideModalOpen] = useState<boolean>(false);
 
@@ -122,6 +124,13 @@ export const Exploration = observer(
 
     return (
       <>
+        <SubHeaderContainer>
+          <BackHeaderText onClick={() => history.push(`/team/${currentMeeting.teamId}`)}>
+            {company?.name}
+          </BackHeaderText>
+          <ChevronRight icon={"Chevron-Left"} size={"10px"} iconColor={"grey100"} />
+          <BreadcrumbHeaderText> Forum Topics </BreadcrumbHeaderText>
+        </SubHeaderContainer>
         {includeExplorationTopic && (
           <>
             <ColumnContainerParent alignItems={"baseline"}>
@@ -207,4 +216,29 @@ const HeaderSubText = styled.div`
   width: 30%;
   margin-right: 0px;
   color: ${props => props.theme.colors.primary100};
+`;
+
+const BreadcrumbHeaderText = styled.span`
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 25px;
+`;
+const BackHeaderText = styled(BreadcrumbHeaderText)`
+  color: ${props => props.theme.colors.grey100};
+  margin-right: 0.5em;
+  cursor: pointer;
+`;
+
+const ChevronRight = styled(Icon)`
+  transform: rotate(180deg);
+  margin-right: 0.5em;
+  margin-top: 0.25em;
+`;
+
+const SubHeaderContainer = styled.div`
+  display: flex;
+  height: 50px;
+  margin-bottom: 20px;
 `;

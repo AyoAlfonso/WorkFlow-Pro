@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { observer } from "mobx-react";
@@ -32,7 +33,7 @@ export const Section1ForumMeetings = observer(
     const [currentYear, setCurrentYear] = useState<number>(
       company.yearForCreatingAnnualInitiatives,
     );
-
+    const history = useHistory();
     useEffect(() => {
       if (loading && teamId && company) {
         const forumType =
@@ -105,6 +106,14 @@ export const Section1ForumMeetings = observer(
 
     return (
       <Container>
+        <SubHeaderContainer>
+          <BackHeaderText onClick={() => history.push(`/team/${teamId}`)}>
+            {company?.name}
+          </BackHeaderText>
+          <ChevronRight icon={"Chevron-Left"} size={"10px"} iconColor={"grey100"} />
+          <HeaderText> Meeting Management </HeaderText>
+          
+        </SubHeaderContainer>
         <SubHeaderContainer>
           <YearPlanContainer>
             <Popup
@@ -207,4 +216,16 @@ const HeaderText = styled.span`
   font-weight: bold;
   margin-top: 15px;
   margin-bottom: 25px;
+`;
+
+const BackHeaderText = styled(HeaderText)`
+  color: ${props => props.theme.colors.grey100};
+  margin-right: 0.5em;
+  cursor: pointer;
+`;
+
+const ChevronRight = styled(Icon)`
+  transform: rotate(180deg);
+  margin-right: 0.5em;
+  margin-top: 0.25em;
 `;

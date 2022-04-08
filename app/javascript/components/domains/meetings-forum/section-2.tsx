@@ -64,7 +64,7 @@ export const Section2 = observer(
     return (
       <Container>
         <Exploration includeExplorationTopic={false} />
-        {instanceType === "forum" && <LynchPynBadge />}
+        {/* {instanceType === "forum" && <LynchPynBadge />} */}
       </Container>
     );
   },
