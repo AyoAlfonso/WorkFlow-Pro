@@ -14,6 +14,13 @@ class Api::ScorecardLogsController < Api::ApplicationController
 
   def show
     @key_performance_indicators = policy_scope(KeyPerformanceIndicator).vieweable_by_entity(params[:owner_type], params[:owner_id])
+    if(current_user.user_role_id == 3 && params[:owner_type] == "user" )
+       @key_performance_indicators = @key_performance_indicators.where(owned_by_id: current_user.id)
+    elsif(current_user.user_role_id == 3 && params[:owner_type] == "team")
+      team_user_enablement = TeamUserEnablement.where(user_id: current.id, team_id: params[:owner_id]).first
+      @key_performance_indicators = [] if team_user_enablement.empty?
+    end
+
     if(params[:show_all].to_s.downcase == 'true')
       @key_performance_indicators = policy_scope(KeyPerformanceIndicator).vieweable_by_entity_and_owner_id(params[:owner_type], params[:owner_id]).exclude_advanced_kpis
     end
