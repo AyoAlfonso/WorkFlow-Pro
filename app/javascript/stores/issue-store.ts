@@ -117,7 +117,7 @@ export const IssueStoreModel = types
         return false;
       }
     }),
-    upvoteIssue: flow(function*(id, fromTeamMeeting = false) {
+    upvoteIssue: flow(function*(id) {
       const response: ApiResponse<any> = yield self.environment.api.upvoteIssue(id);
       if (response.ok) {
         const updatedIssue = self.issues.findIndex(issue => issue.id == id);
