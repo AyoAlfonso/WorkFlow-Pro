@@ -260,6 +260,11 @@ export const AccountDropdownOptions = observer(
               {t("notes.headerNavTitle")}
             </AccountOptionText>
           </Link>
+          <Link to="/audit-logs" style={{ textDecoration: "none", padding: "0" }}>
+            <AccountOptionText onClick={() => setShowAccountActions(false)}>
+              {t("Audit Logs")}
+            </AccountOptionText>
+          </Link>
         </DropdownSectionContainer>
 
         <StyledDivider />

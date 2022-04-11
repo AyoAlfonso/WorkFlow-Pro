@@ -105,6 +105,10 @@ const initialState = {
     checkInTemplates: [],
     currentCheckIn: null,
   },
+  auditLogStore: {
+    auditLog: null,
+    //objectiveLogs: null,
+  },
 };
 
 export const rootStore = RootStoreModel.create(initialState, environment);

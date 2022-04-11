@@ -27,6 +27,7 @@ import {
 } from "./key-performance-indicator-store";
 import { CheckInTemplateStoreModel, ICheckInTemplateStore } from "./check-in-template-store";
 import { IKeyElementStore, KeyElementStoreModel } from "./key-element-store";
+import { AuditLogStoreModel, IAuditLogStore } from "./audit-log-store"
 
 export const RootStoreModel = types
   .model("RootStoreModel")
@@ -56,6 +57,7 @@ export const RootStoreModel = types
     keyPerformanceIndicatorStore: KeyPerformanceIndicatorStoreModel,
     checkInTemplateStore: CheckInTemplateStoreModel,
     keyElementStore: KeyElementStoreModel,
+    auditLogStore: AuditLogStoreModel,
   })
   .views(self => ({}))
   .actions(self => ({
@@ -109,4 +111,5 @@ export interface IRootStore extends IStateTreeNode {
   keyPerformanceIndicatorStore: IKeyPerformanceIndicatorStore;
   checkInTemplateStore: ICheckInTemplateStore;
   keyElementStore: IKeyElementStore;
+  auditLogStore: IAuditLogStore;
 }

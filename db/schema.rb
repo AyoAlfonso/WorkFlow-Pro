@@ -357,6 +357,7 @@ ActiveRecord::Schema.define(version: 2022_04_06_132348) do
     t.jsonb "viewers"
     t.bigint "owned_by_id"
     t.float "needs_attention_threshold"
+    t.float "target_value"
     t.string "title"
     t.integer "parent_type"
     t.integer "parent_kpi", default: [], array: true
