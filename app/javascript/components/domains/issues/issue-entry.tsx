@@ -321,7 +321,7 @@ export const IssueEntry = observer(
         </LeftContainer>
         <RightContainer>
           <TopSection>
-            <RowContainer>
+            <RowContainer topicType={issue.topicType ? true : false}>
               <TopicNameContainer>
                 {isForum && issue.topicType && (
                   <TopicText>
@@ -538,15 +538,18 @@ export const IssueEntry = observer(
   },
 );
 
-const RowContainer = styled.div`
+type RowContainerProps = {
+  topicType?: boolean;
+};
+
+const RowContainer = styled.div<RowContainerProps>`
   display: flex;
-  // align-items: center;
-  padding-top: 0.6em;
+  padding-top: ${props => (props.topicType ? "0.8em" : "0.3em")};
 `;
 
-const BottomRowContainer = styled(RowContainer)`
-  margin-top: -4px;
-  // margin-left: 36px;
+const BottomRowContainer = styled("div")`
+  display: flex;
+  align-items: center;
   @media only screen and (max-width: 768px) {
     padding-right: 6px;
   }
@@ -692,6 +695,7 @@ const StyledOptionContainer = styled.div`
 `;
 
 const TopSection = styled.div`
+  margin-bottom: 5px;
   @media only screen and (max-width: 768px) {
     padding-right: 6px;
   }
