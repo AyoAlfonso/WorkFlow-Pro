@@ -65,7 +65,7 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
       case "pyns":
         return renderDisplayKeyActivities();
       case "notes":
-        return <Notes meeting={meeting} height={"550px"} />;
+        return <Notes meeting={meeting} height={"auto"} />;
       default:
         return (
           <MeetingAgenda
