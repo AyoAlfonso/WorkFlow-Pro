@@ -339,6 +339,7 @@ export const IssueEntry = observer(
                   onClick={() => {
                     setIssueModalOpen(true);
                   }}
+                  style={{ textDecoration: issue.completedAt && "line-through" }}
                 >
                   {issue.description}
                 </IssuesName>

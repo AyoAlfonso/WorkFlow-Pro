@@ -275,6 +275,7 @@ export const KeyActivityRecord = observer(
                 setKeyActivityModalOpen(true);
                 setCurrentKeyActivity(keyActivity);
               }}
+              style={{ textDecoration: keyActivity.completedAt && "line-through" }}
             >
               {keyActivity.description}
             </TodoName>
