@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { useEffect, useState, useRef } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { color } from "styled-system";
 import { useMst } from "../../../setup/root";
 import { Loading } from "../../shared";
@@ -94,7 +94,11 @@ export const MobileKeyActivitiesBody = observer(
           <IconContainer display="flex" onClick={() => setListSelectorOpen(!listSelectorOpen)}>
             <Icon icon={"List"} size={"16px"} iconColor={"primary100"} mr="12px" />
             <ListText>{listName}</ListText>
-            <Icon icon={"Chevron-Down"} size={"16px"} iconColor={"primary100"} ml="8px" />
+            {!listSelectorOpen ? (
+              <Icon icon={"Chevron-Down"} size={"16px"} iconColor={"primary100"} ml="8px" />
+            ) : (
+              <ChevronUp icon={"Chevron-Down"} size={"16px"} iconColor={"primary100"} ml="8px" />
+            )}
           </IconContainer>
           {listSelectorOpen && (
             <ListDropdownContainer>
@@ -220,6 +224,10 @@ export const MobileKeyActivitiesBody = observer(
   },
 );
 
+const ChevronUp = styled(Icon)`
+  transform: rotate(180deg);
+`;
+
 const Container = styled.div`
   ${color}
   position: relative;
@@ -249,6 +257,7 @@ const ListDropdownContainer = styled.div`
   box-shadow: 0px 3px 6px #00000029;
   z-index: 5;
   padding: 1em 0;
+  margin-top: 5px;
 `;
 
 const ListOption = styled.span`

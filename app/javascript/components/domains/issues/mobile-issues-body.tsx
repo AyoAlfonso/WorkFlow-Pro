@@ -133,7 +133,11 @@ export const MobileIssuesBody = observer(
           <IconContainer display="flex" onClick={() => setListSelectorOpen(!listSelectorOpen)}>
             <Icon icon={"List"} size={"16px"} iconColor={"primary100"} mr="12px" />
             <ListText>{listName}</ListText>
-            <Icon icon={"Chevron-Down"} size={"16px"} iconColor={"primary100"} ml="8px" />
+            {!listSelectorOpen ? (
+              <Icon icon={"Chevron-Down"} size={"16px"} iconColor={"primary100"} ml="8px" />
+            ) : (
+              <ChevronUp icon={"Chevron-Down"} size={"16px"} iconColor={"primary100"} ml="8px" />
+            )}
           </IconContainer>
           {listSelectorOpen && (
             <ListDropdownContainer>
@@ -297,6 +301,7 @@ const ListDropdownContainer = styled.div`
   box-shadow: 0px 3px 6px #00000029;
   z-index: 5;
   padding: 1em 0;
+  margin-top: 5px;
 `;
 
 const ListOption = styled.span`
@@ -341,3 +346,7 @@ const ListText = styled.span`
 `;
 
 const IssuesList = styled("div")``;
+
+const ChevronUp = styled(Icon)`
+  transform: rotate(180deg);
+`;
