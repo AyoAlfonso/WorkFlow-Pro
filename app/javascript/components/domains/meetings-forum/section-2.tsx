@@ -10,7 +10,8 @@ import MeetingTypes from "~/constants/meeting-types";
 import { LynchPynBadge } from "./components/lynchpyn-badge";
 import { HomeTitle } from "~/components/domains/home/shared-components";
 import { Loading } from "~/components/shared/loading";
-
+import { useHistory } from "react-router-dom";
+import { Icon } from "~/components/shared";
 import { Exploration } from "~/components/domains/meetings-forum/components/exploration";
 
 export const Section2 = observer(
@@ -23,9 +24,10 @@ export const Section2 = observer(
       issueStore,
       forumStore,
     } = useMst();
-    const { currentMeeting: upcomingForumMeeting } = meetingStore;
+    const { currentMeeting, currentMeeting: upcomingForumMeeting } = meetingStore;
 
     const { team_id } = useParams();
+    const history = useHistory();
     const [loading, setLoading] = useState<boolean>(true);
     const [noMeetingRecords, setNoMeetingRecords] = useState(false);
     const teamId =
@@ -34,6 +36,7 @@ export const Section2 = observer(
     const [currentYear, setCurrentYear] = useState<number>(
       company.yearForCreatingAnnualInitiatives,
     );
+    const currentTeam = teams.find(team => team.id == teamId);
     const forumType =
       company?.forumType == "Organisation"
         ? MeetingTypes.ORGANISATION_FORUM_MONTHLY
@@ -63,6 +66,13 @@ export const Section2 = observer(
 
     return (
       <Container>
+        <SubHeaderContainer>
+          <BackHeaderText onClick={() => history.push(`/team/${currentMeeting.teamId}`)}>
+            {currentTeam?.name}
+          </BackHeaderText>
+          <ChevronRight icon={"Chevron-Left"} size={"10px"} iconColor={"grey100"} />
+          <BreadcrumbHeaderText> Forum Topics </BreadcrumbHeaderText>
+        </SubHeaderContainer>
         <Exploration includeExplorationTopic={false} />
         {/* {instanceType === "forum" && <LynchPynBadge />} */}
       </Container>
@@ -87,4 +97,29 @@ export const NoMeetingRecords = styled.div`
   display: inline-block;
   font-size: 1em;
   font-weight: bold;
+`;
+
+const SubHeaderContainer = styled.div`
+  display: flex;
+  height: 50px;
+  margin-bottom: 20px;
+`;
+const BreadcrumbHeaderText = styled.span`
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 25px;
+`;
+
+const BackHeaderText = styled(BreadcrumbHeaderText)`
+  color: ${props => props.theme.colors.grey100};
+  margin-right: 0.5em;
+  cursor: pointer;
+`;
+
+const ChevronRight = styled(Icon)`
+  transform: rotate(180deg);
+  margin-right: 0.5em;
+  margin-top: 0.25em;
 `;

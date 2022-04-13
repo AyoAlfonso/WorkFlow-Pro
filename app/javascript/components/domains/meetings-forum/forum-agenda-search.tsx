@@ -56,7 +56,7 @@ export const ForumAgendaSearch = observer(() => {
 
   const defaultStartDate = new Date(companyStore.company.currentQuarterStartDate);
   const defaultEndDate = addDays(new Date(companyStore.company.nextQuarterStartDate), -1);
-
+  const currentTeam = teams.find(team => team.id == teamId);
   const quarterDateFilter = {
     startDate: defaultStartDate,
     endDate: defaultEndDate,
@@ -194,7 +194,7 @@ export const ForumAgendaSearch = observer(() => {
     <>
       <SubHeaderContainer>
         <BackHeaderText onClick={() => history.push(`/meetings/agenda`)}>
-          {company?.name}
+          {currentTeam?.name}
         </BackHeaderText>
         <ChevronRight icon={"Chevron-Left"} size={"10px"} iconColor={"grey100"} />
         <BreadcrumbHeaderText> Meeting Agenda & Notes </BreadcrumbHeaderText>

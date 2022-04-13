@@ -148,7 +148,6 @@ export const MiniUpdateKPIModal = observer(
         keyPerformanceIndicatorStore
           .createScorecardLog(log, manualInputDate, createGoalYearNumber)
           .then(data => {
-            console.log(data);
             localStorage.setItem(
               "cacheDropdownQuarter",
               setDefaultSelectionQuarter(data.log.week) +
