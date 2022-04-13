@@ -73,8 +73,10 @@ export const MiniUpdateKPIModal = observer(
     const [selectedDueDate, setSelectedDueDate] = useState<any>(
       current || week == company.currentFiscalWeek ? new Date() : weekToDate(week, year),
     );
+    const [manualInputDate, setManualInputDate] = useState<any>("");
+
     const [currentWeek, setCurrentWeek] = useState<number>(week);
-    const [oneYearBack, setOneYearBack] = useState<boolean>(false);
+    // const [oneYearBack, setOneYearBack] = useState<boolean>(false);
     const [comment, setComment] = useState("");
     const { owner_type, owner_id } = useParams();
     const optionsRef = useRef(null);
@@ -111,6 +113,13 @@ export const MiniUpdateKPIModal = observer(
         ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
         : lastYear;
 
+    const lastYearNumber = company.currentFiscalYear - 1;
+
+    const createGoalYearNumber =
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? company.yearForCreatingAnnualInitiatives
+        : lastYearNumber;
+
     const createPreviousGoalYearString =
       company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
         ? `FY${(company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
@@ -127,30 +136,36 @@ export const MiniUpdateKPIModal = observer(
           score: value,
           note: null,
           week: currentWeek,
-          fiscalYear: oneYearBack ? year - 1 : year,
+          fiscalYear: year,
           fiscalQuarter:
             setDefaultSelectionQuarter(currentWeek) || Math.round((currentWeek - 1) / 13) + 1,
         };
+
         if (comment != "") {
           log.note = comment;
         }
-        localStorage.setItem(
-          "cacheDropdownQuarter",
-          setDefaultSelectionQuarter(currentWeek) +
-            "_" +
-            (oneYearBack ? createPreviousGoalYearString : createGoalYearString) +
-            "_" +
-            (oneYearBack
-              ? (company.yearForCreatingAnnualInitiatives - 1).toString()
-              : company.yearForCreatingAnnualInitiatives.toString()),
-        );
-        keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
-          setUpdateKPIModalOpen(false);
-          clearData();
-          setKpis(scorecardStore.kpis);
-          history.push(`/scorecard/0/0`);
-          setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
-        });
+
+        keyPerformanceIndicatorStore
+          .createScorecardLog(log, manualInputDate, createGoalYearNumber)
+          .then(data => {
+            localStorage.setItem(
+              "cacheDropdownQuarter",
+              setDefaultSelectionQuarter(data.log.week) +
+                "_" +
+                (data.log.fiscalYear < company.yearForCreatingAnnualInitiatives
+                  ? createPreviousGoalYearString
+                  : createGoalYearString) +
+                "_" +
+                (data.log.fiscalYear < company.yearForCreatingAnnualInitiatives
+                  ? (company.yearForCreatingAnnualInitiatives - 1).toString()
+                  : company.yearForCreatingAnnualInitiatives.toString()),
+            );
+            setUpdateKPIModalOpen(false);
+            clearData();
+            setKpis(scorecardStore.kpis);
+            history.push(`/scorecard/0/0`);
+            setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
+          });
       }
     };
 
@@ -219,8 +234,7 @@ export const MiniUpdateKPIModal = observer(
                 <DueDateSelector
                   selectedDueDate={selectedDueDate}
                   setSelectedDueDate={setSelectedDueDate}
-                  setCurrentWeek={setCurrentWeek}
-                  setOneYearBack={setOneYearBack}
+                  setManualInputDate={setManualInputDate}
                   maxDate={
                     current || week == company.currentFiscalWeek
                       ? new Date()
