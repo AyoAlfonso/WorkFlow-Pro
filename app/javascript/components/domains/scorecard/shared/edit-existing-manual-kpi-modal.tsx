@@ -10,6 +10,7 @@ import { OwnedBy } from "./scorecard-owned-by";
 import { AdvancedKPIModal } from "./advanced-kpi-modals";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { RoleNormalUser } from "~/lib/constants";
 
 import {
   InputFromUnitType,
@@ -57,6 +58,7 @@ export const AddExistingManualKPIModal = observer(
     const [selectedTagInputCount, setSelectedTagInputCount] = useState(0);
     const [showFirstStage, setShowFirstStage] = useState(undefined);
     const [manualKPIDataInput, setManualKPIDataInput] = useState(undefined);
+    const currentUser = sessionStore.profile;
 
     useEffect(() => {
       if (!R.isNil(kpiId)) {
@@ -280,7 +282,7 @@ export const AddExistingManualKPIModal = observer(
                     marginTop={"auto"}
                     marginBottom={"auto"}
                     fontSize={"12px"}
-                    disabled={false}
+                    disabled={currentUser.role == RoleNormalUser}
                     center={false}
                   />
                 )}

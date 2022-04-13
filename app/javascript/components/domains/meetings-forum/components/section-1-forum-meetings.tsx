@@ -108,11 +108,10 @@ export const Section1ForumMeetings = observer(
       <Container>
         <SubHeaderContainer>
           <BackHeaderText onClick={() => history.push(`/team/${teamId}`)}>
-            {company?.name}
+            {currentTeam?.name}
           </BackHeaderText>
           <ChevronRight icon={"Chevron-Left"} size={"10px"} iconColor={"grey100"} />
           <HeaderText> Meeting Management </HeaderText>
-          
         </SubHeaderContainer>
         <SubHeaderContainer>
           <YearPlanContainer>

@@ -1,7 +1,4 @@
 class ScorecardLogPolicy < ApplicationPolicy
-  def index?
-    true
-  end
 
   def create?
     !user_can_observe_current_company?

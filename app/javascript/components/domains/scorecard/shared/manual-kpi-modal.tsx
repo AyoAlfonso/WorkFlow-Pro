@@ -21,6 +21,7 @@ import {
 import { toJS } from "mobx";
 import ReactQuill from "react-quill";
 import { useHistory } from "react-router";
+import { RoleNormalUser } from "~/lib/constants";
 
 interface ManualKPIModalProps {
   showAddManualKPIModal: boolean;
@@ -86,6 +87,7 @@ export const ManualKPIModal = observer(
       }
     };
 
+    const currentUser = sessionStore.profile;
     const [greaterThan, setGreaterThan] = useState<boolean>(getgreaterThanValue());
     const [description, setDescription] = useState<any>("");
     const [unitType, setUnitType] = useState<string>(
@@ -310,7 +312,7 @@ export const ManualKPIModal = observer(
                 marginTop={"auto"}
                 marginBottom={"auto"}
                 fontSize={"12px"}
-                disabled={false}
+                disabled={currentUser.role == RoleNormalUser}
                 center={false}
               />
             </FormElementContainer>

@@ -43,7 +43,6 @@ export const Exploration = observer(
     const history = useHistory();
     const [userSelectionOpen, setUserSelectionOpen] = useState<boolean>(false);
     const [guideModalOpen, setGuideModalOpen] = useState<boolean>(false);
-
     //a bit roundabout, we sould probably refactor the meeting step to pass in both team and meeting
     const currentTeam = (teams || []).find(team => team.id === currentMeeting.teamId);
 
@@ -124,13 +123,7 @@ export const Exploration = observer(
 
     return (
       <>
-        <SubHeaderContainer>
-          <BackHeaderText onClick={() => history.push(`/team/${currentMeeting.teamId}`)}>
-            {company?.name}
-          </BackHeaderText>
-          <ChevronRight icon={"Chevron-Left"} size={"10px"} iconColor={"grey100"} />
-          <BreadcrumbHeaderText> Forum Topics </BreadcrumbHeaderText>
-        </SubHeaderContainer>
+      
         {includeExplorationTopic && (
           <>
             <ColumnContainerParent alignItems={"baseline"}>
@@ -225,20 +218,5 @@ const BreadcrumbHeaderText = styled.span`
   margin-top: 15px;
   margin-bottom: 25px;
 `;
-const BackHeaderText = styled(BreadcrumbHeaderText)`
-  color: ${props => props.theme.colors.grey100};
-  margin-right: 0.5em;
-  cursor: pointer;
-`;
 
-const ChevronRight = styled(Icon)`
-  transform: rotate(180deg);
-  margin-right: 0.5em;
-  margin-top: 0.25em;
-`;
 
-const SubHeaderContainer = styled.div`
-  display: flex;
-  height: 50px;
-  margin-bottom: 20px;
-`;
