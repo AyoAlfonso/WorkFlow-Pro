@@ -75,24 +75,6 @@ export const QuarterlyGoalStoreModel = types
       );
       return responseQuarterlyGoal;
     }),
-    // duplicateGoal: flow(function*(id) {
-    //   const env = getEnv(self);
-    //   try {
-    //     const response: any = yield env.api.duplicateQuarterlyGoal(id);
-    //     const { goalStore, annualInitiativeStore } = getRoot(self);
-    //     const responseQuarterlyGoal = response.data;
-    //     self.quarterlyGoal = responseQuarterlyGoal;
-    //     const responseAnnualInitiative = yield annualInitiativeStore.getAnnualInitiative(
-    //       responseQuarterlyGoal.annualInitiativeId,
-    //     );
-
-    //     goalStore.updateAnnualInitiative(responseAnnualInitiative);
-    //     showToast(`${self.title} updated`, ToastMessageConstants.SUCCESS);
-    //     return responseAnnualInitiative;
-    //   } catch {
-    //     showToast(`There was an error updating the ${self.title}`, ToastMessageConstants.ERROR);
-    //   }
-    // }),
      duplicateGoal: flow(function*(id) {
       const env = getEnv(self);
       const { goalStore, annualInitiativeStore } = getRoot(self);

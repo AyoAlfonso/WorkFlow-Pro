@@ -657,7 +657,6 @@ export class Api {
   }
 
   async getAuditlogs() {
-    //console.log('audit');
     return this.client.get("/audit_logs");
   }
   //async setJWT(jwt) {}
