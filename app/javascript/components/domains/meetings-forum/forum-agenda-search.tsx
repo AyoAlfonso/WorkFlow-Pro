@@ -46,9 +46,6 @@ export const ForumAgendaSearch = observer(() => {
     }
   };
 
-  const { company } = companyStore;
-  const instanceType = company && company.accessForum ? "forum" : "teams";
-
   const [selectedDateFilter, setSelectedDateFilter] = useState<string>(
     t("dateFilters.lastThirtyDays"),
   );
@@ -193,7 +190,7 @@ export const ForumAgendaSearch = observer(() => {
   return (
     <>
       <SubHeaderContainer>
-        <BackHeaderText onClick={() => history.push(`/meetings/agenda`)}>
+        <BackHeaderText onClick={() => history.push(`/team/${teamId}`)}>
           {currentTeam?.name}
         </BackHeaderText>
         <ChevronRight icon={"Chevron-Left"} size={"10px"} iconColor={"grey100"} />
