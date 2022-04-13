@@ -40,6 +40,13 @@ export const GoalDropdownOptions = ({
   }, [optionsRef]);
 
   const itemText = itemType == "annualInitiative" ? "Objective" : "Initiative";
+  const quarterText = () => {
+    quarterlyGoalStore.getQuarterlyGoal(itemId);
+    const quarterlyGoal = quarterlyGoalStore?.quarterlyGoal;
+    if (quarterlyGoal) {
+          return `${quarterlyGoal.quarter + 1}`;
+    }
+  }
 
   const closeModal = () => {
     if (setModalOpen) {
@@ -89,26 +96,24 @@ export const GoalDropdownOptions = ({
     }
   };
 
-  const duplicateInitiative = () => {
-    if (itemType == "annualInitiative") {
+  const duplicateQuarterly = () => {
+    if (itemType == "quarterlyGoal") {
       if (
         confirm(
-          `Are you sure you want to duplicate this ${t("annualInitiative.messageText", {
-            title: annualInitiativeTitle,
-          })}? Duplicating an Annual Objective will result in duplicating all of the related ${t("quarterlyGoal.messageText", {
+          `Are you sure you want to duplicate this ${t("quarterlyGoal.messageText", {
             title: quarterlyGoalTitle,
-          })}s as well`,
+          })}?`,
         )
       ) {
-        annualInitiativeStore.duplicateInitiative(itemId).then(() => {
+        quarterlyGoalStore.duplicateGoal(itemId).then(() => {
           closeModal();
         });
       }
     }
-  };
+  }
 
-  const closeAndDuplicate = () => {
-    duplicateInitiative();
+  const closeAndDuplicateQuarterly = () => {
+    duplicateQuarterly();
     closeInitiative();
   }
 
@@ -152,38 +157,47 @@ export const GoalDropdownOptions = ({
     }
   };
 
-  return (
-    <Container ref={optionsRef}>
-      {/* 
-        // DONT HAVE THE PATTERN TO CREATE AN INITIATIVE YET.
-        {itemType == "quarterlyGoal" && (
-        <OptionContainer onClick={() => createSubInitiative()}>
+  if (itemType == "quarterlyGoal") {
+    return (
+      <Container ref={optionsRef}>
+        <OptionContainer onClick={() => closeInitiative()}>
           <IconContainer>
-            <StyledIcon icon={"Plus"} size={"15px"} />
+            <StyledIcon icon={"Checkmark"} size={"15px"} />
           </IconContainer>
-          <OptionText> Create Sub-Initiative </OptionText>
+          <OptionText> Close {itemText} </OptionText>
         </OptionContainer>
-      )} */}
-      <OptionContainer onClick={() => closeInitiative()}>
-        <IconContainer>
-          <StyledIcon icon={"Checkmark"} size={"15px"} />
-        </IconContainer>
-        <OptionText> Close {itemText} </OptionText>
-      </OptionContainer>
-      {/* <OptionContainer onClick={() => closeAndDuplicate()}>
-        <IconContainer>
-          <StyledIcon icon={"Checkmark"} size={"15px"} />
-        </IconContainer>
-        <OptionText> Close and Duplicate {itemText} </OptionText>
-      </OptionContainer> */}
-      <OptionContainer onClick={() => deleteInitiative()}>
-        <IconContainer>
-          <StyledIcon icon={"Delete"} size={"15px"} />
-        </IconContainer>
-        <OptionText> Delete {itemText} </OptionText>
-      </OptionContainer>
-    </Container>
-  );
+        <OptionContainer onClick={() => closeAndDuplicateQuarterly()}>
+         <IconContainer>
+           <StyledIcon icon={"Checkmark"} size={"15px"} />
+         </IconContainer>
+         <OptionText> {"Close & Carry Over to Q"} {quarterText()}</OptionText>
+        </OptionContainer>
+        <OptionContainer onClick={() => deleteInitiative()}>
+          <IconContainer>
+            <StyledIcon icon={"Delete"} size={"15px"} />
+          </IconContainer>
+          <OptionText> Delete {itemText} </OptionText>
+        </OptionContainer>
+      </Container>
+    );
+  } else {
+    return (
+      <Container ref={optionsRef}>
+        <OptionContainer onClick={() => closeInitiative()}>
+          <IconContainer>
+            <StyledIcon icon={"Checkmark"} size={"15px"} />
+          </IconContainer>
+          <OptionText> Close {itemText} </OptionText>
+        </OptionContainer>
+        <OptionContainer onClick={() => deleteInitiative()}>
+          <IconContainer>
+            <StyledIcon icon={"Delete"} size={"15px"} />
+          </IconContainer>
+          <OptionText> Delete {itemText} </OptionText>
+        </OptionContainer>
+      </Container>
+    );
+  }
 };
 
 const Container = styled.div`
