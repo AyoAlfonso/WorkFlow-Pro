@@ -314,6 +314,10 @@ export class Api {
     return this.client.patch(`/quarterly_goals/close_goal/${id}`, {});
   }
 
+  async duplicateQuarterlyGoal(id) {
+    return this.client.post(`/quarterly_goals/duplicate/${id}`, {});
+  }
+
   async createQuarterlyGoalKeyElement(id, params) {
     return this.client.post(`/quarterly_goals/create_key_element/${id}`, params);
   }
@@ -650,6 +654,11 @@ export class Api {
 
   async updateWeeklyCheckInKeyElements(id, value) {
     return this.client.put(`/key_elements/${id}`, value);
+  }
+
+  async getAuditlogs() {
+    //console.log('audit');
+    return this.client.get("/audit_logs");
   }
   //async setJWT(jwt) {}
 }

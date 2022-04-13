@@ -137,7 +137,6 @@ type ContainerProps = {
 const Container = styled.div<ContainerProps>`
   margin-left: 0px;
   width: ${props => `${props.width}%` || "auto"};
-  position: relative;
 `;
 
 const EditTriggerContainer = styled.div<EditTriggerContainerType>`
