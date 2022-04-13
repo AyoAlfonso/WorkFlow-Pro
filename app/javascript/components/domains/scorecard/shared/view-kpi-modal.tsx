@@ -358,18 +358,20 @@ export const ViewEditKPIModal = observer(
                         onBlur={() => keyPerformanceIndicatorStore.update()}
                       />
                     </Header>
-                    {currentUser.role == RoleNormalUser && currentUser.id == kpi.ownedById && (
-                      <DropdownOptions>
-                        {renderDropdownOptions()}
-                        <CloseIconContainer
-                          onClick={() => {
-                            closeModal();
-                          }}
-                        >
-                          <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
-                        </CloseIconContainer>
-                      </DropdownOptions>
-                    )}
+
+                    <DropdownOptions>
+                      {currentUser.id == kpi.ownedBy.id && renderDropdownOptions()}
+                      {currentUser.id != kpi.ownedBy.id &&
+                        currentUser.role != RoleNormalUser &&
+                        renderDropdownOptions()}
+                      <CloseIconContainer
+                        onClick={() => {
+                          closeModal();
+                        }}
+                      >
+                        <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
+                      </CloseIconContainer>
+                    </DropdownOptions>
                   </HeaderContainer>
                   <OwnerAndLogicContainer>
                     {renderStatus()}
@@ -381,9 +383,7 @@ export const ViewEditKPIModal = observer(
                         marginBottom={"auto"}
                         ownedBy={kpi.ownedBy}
                         type={"scorecard"}
-                        disabled={
-                          currentUser.role == RoleNormalUser && currentUser.id != kpi.ownedById
-                        }
+                        disabled={currentUser.role == RoleNormalUser}
                       />
                     </OwnerAndLogicText>
                     <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
