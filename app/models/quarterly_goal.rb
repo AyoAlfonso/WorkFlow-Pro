@@ -2,6 +2,9 @@ class QuarterlyGoal < ApplicationRecord
   acts_as_paranoid column: :deleted_at
    amoeba do
     enable
+      customize(lambda { |original_post,new_post|
+         new_post.quarter = [0,2,3,4,4][new_post.quarter]
+        })
     include_association :sub_initiatives
    end
   include HasCreator
