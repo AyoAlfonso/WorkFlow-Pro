@@ -11,6 +11,10 @@ class QuarterlyGoalPolicy < ApplicationPolicy
     @record.owned_by == @user || @record.annual_initiative.company.present? && (user_is_part_of_this_company?(@record.annual_initiative.company) || user_can_observe_current_company?)
   end
 
+  def duplicate?
+    !user_can_observe_current_company?
+  end
+
   def update?
     @record.created_by == @user || @record.owned_by == @user || user_is_company_admin_of_current_company?
   end

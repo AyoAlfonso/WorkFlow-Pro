@@ -10,6 +10,8 @@ import { AdvancedKPIModal } from "./advanced-kpi-modals";
 import { ManualKPIModal } from "./manual-kpi-modal";
 import { baseTheme } from "~/themes";
 import { HtmlTooltip } from "~/components/shared/tooltip";
+import { useParams } from "react-router-dom";
+import { RoleNormalUser } from "~/lib/constants";
 
 interface IAddKPIDropdownProps {
   kpis: any[];
@@ -28,7 +30,8 @@ export const AddKPIDropdown = observer(
     const [externalManualKPIData, setExternalManualKPIData] = useState({});
     const [showScorecardProTooltip, setShowScorecardProTooltip] = useState(false);
     const { greyInactive } = baseTheme.colors;
-
+    const currentUser = sessionStore.profile;
+    const { owner_type } = useParams();
     useEffect(() => {
       const handleClickOutside = event => {
         if (optionsRef.current && !optionsRef.current.contains(event.target)) {
@@ -49,7 +52,9 @@ export const AddKPIDropdown = observer(
       setAddKPIModal(false);
       setExternalManualKPIData(data);
     };
-    return (
+    return currentUser.role == RoleNormalUser && owner_type == "company" ? (
+      <> </>
+    ) : (
       <Container ref={optionsRef}>
         <StyledButton
           small

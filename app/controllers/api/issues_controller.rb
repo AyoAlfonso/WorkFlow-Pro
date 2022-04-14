@@ -14,6 +14,8 @@ class Api::IssuesController < Api::ApplicationController
     @issue.insert_at(1)
     @issue.save!
 
+    @issue.upvote_by current_user
+
     if params[:team_id]
       # USE HOOK TO CREATE A TEAM ISSUE IF IT DOESNT EXIST FOR @ISSUE
       @team_issues = TeamIssue.optimized.for_team(params[:team_id]).sort_by_position.exclude_personal_for_team

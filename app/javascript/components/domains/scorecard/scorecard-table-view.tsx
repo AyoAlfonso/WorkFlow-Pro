@@ -19,6 +19,7 @@ import { titleCase } from "~/utils/camelize";
 import { sortByDateReverse } from "~/utils/sorting";
 import { toJS } from "mobx";
 import Tooltip from "@material-ui/core/Tooltip";
+import { RoleNormalUser } from "~/lib/constants";
 
 // TODO: figure out better function for percent scores.
 export const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
@@ -49,6 +50,7 @@ export const ScorecardTableView = observer(
     const {
       companyStore: { company },
       scorecardStore: { kpis },
+      sessionStore,
     } = useMst();
     const KPIs = toJS(tableKPIs);
     const getValueOfLocalStorage = key => {
@@ -58,6 +60,7 @@ export const ScorecardTableView = observer(
         false;
       }
     };
+    const currentUser = sessionStore.profile;
 
     //Turn this into a shared function
     const createGoalYearString =
@@ -341,31 +344,34 @@ export const ScorecardTableView = observer(
         return `${Math.floor(n / 1000000000)}B`;
       } else if (n >= 1000000) {
         return `${Math.floor(n / 1000000)}M`;
-      } else if(n >= 1000) {
+      } else if (n >= 1000) {
         return `${Math.floor(n / 1000)}K`;
       } else {
         return `${n}`;
       }
-    }
+    };
 
-    const findNumberFromLogic = (logic) => {
-      let n = logic.match(/[0-9]+[.]?[0-9]*/g)
+    const findNumberFromLogic = logic => {
+      let n = logic.match(/[0-9]+[.]?[0-9]*/g);
       const num = Number(n.toString());
       return num;
-    }
+    };
 
-    const convertNumberInLogic = (logic) => {
-      return logic.replace(findNumberFromLogic(logic), formatLargeNumbers(findNumberFromLogic(logic)));
-    }
+    const convertNumberInLogic = logic => {
+      return logic.replace(
+        findNumberFromLogic(logic),
+        formatLargeNumbers(findNumberFromLogic(logic)),
+      );
+    };
 
-    const formatUpdateNumber = (n) => {
-      if (typeof n === 'string') {
-          let extr = n.match(/[0-9]+[.]*[0-9]*/g);
-          return Number(n.replace("%", ""));
+    const formatUpdateNumber = n => {
+      if (typeof n === "string") {
+        let extr = n.match(/[0-9]+[.]*[0-9]*/g);
+        return Number(n.replace("%", ""));
       } else {
         return n;
       }
-    }
+    };
 
     const columns = useMemo(
       () => [
@@ -388,7 +394,8 @@ export const ScorecardTableView = observer(
                   disabled={
                     value.parentType ||
                     year != company.yearForCreatingAnnualInitiatives ||
-                    quarter != company.currentFiscalQuarter
+                    quarter != company.currentFiscalQuarter ||
+                    (currentUser.role == RoleNormalUser && currentUser.id != value.ownedById)
                   }
                   onClick={() => {
                     if (value.parentType) return;
@@ -540,7 +547,6 @@ export const ScorecardTableView = observer(
           Cell: ({ value, row }) => {
             const i = row.id;
             const { parentType } = row.original.updateKPI;
-
             if (parentType) {
               return (
                 <EmptyWeekContainer>
@@ -551,7 +557,9 @@ export const ScorecardTableView = observer(
                   ) : (
                     <WeekContainer>
                       <WeekText color={value.color}>
-                        {parentType == "avr" ? formatLargeNumbers(Math.round(value.score)) : formatLargeNumbers(formatUpdateNumber(value.score))}
+                        {parentType == "avr"
+                          ? formatLargeNumbers(Math.round(value.score))
+                          : formatLargeNumbers(formatUpdateNumber(value.score))}
                       </WeekText>
                     </WeekContainer>
                   )}
@@ -577,7 +585,12 @@ export const ScorecardTableView = observer(
                   }}
                 >
                   <UpdateKPICellContainer
-                    disabled={parentType || false}
+                    disabled={
+                      parentType ||
+                      (currentUser.role == RoleNormalUser &&
+                        currentUser.id != row.original.updateKPI.ownedById) ||
+                      false
+                    }
                     onClick={() => {
                       if (parentType) return;
                       if (!isMiniEmbed) {
@@ -609,7 +622,12 @@ export const ScorecardTableView = observer(
                 }}
               >
                 <UpdateKPICellContainer
-                  disabled={parentType || false}
+                  disabled={
+                    parentType ||
+                    (currentUser.role == RoleNormalUser &&
+                      currentUser.id != row.original.updateKPI.ownedById) ||
+                    false
+                  }
                   onClick={() => {
                     if (parentType) return;
                     if (!isMiniEmbed) {

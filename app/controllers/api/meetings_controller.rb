@@ -162,7 +162,8 @@ class Api::MeetingsController < Api::ApplicationController
       weekly_milestone_progress(user)
     end
     @average_milestone_process_percentage = @milestone_progress_percentage_array.length == 0 ? 0 : (@milestone_progress_percentage_array.sum.to_f / @milestone_progress_percentage_array.length) * 100
-    last_meeting_end_time = Meeting.team_meetings(@meeting.team_id).sort_by_start_time.second.end_time
+
+    last_meeting_end_time = Meeting.team_meetings(@meeting.team_id)&.sort_by_start_time&.try(:second)&.end_time
     @key_activities = last_meeting_end_time.blank? ?
       KeyActivity.filter_by_team_meeting(@meeting.meeting_template_id, params[:team_id]).has_due_date.where("due_date <= ?", current_user.time_in_user_timezone.end_of_day) :
       KeyActivity.filter_by_team_meeting(@meeting.meeting_template_id, params[:team_id]).has_due_date.where(due_date: last_meeting_end_time..current_user.time_in_user_timezone.end_of_day)

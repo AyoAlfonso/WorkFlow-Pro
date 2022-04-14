@@ -642,8 +642,11 @@ export class Api {
     return this.client.patch(`/key_performance_indicator/open_kpi/${id}`, {});
   }
 
-  async createScorecardLog(scorecardLog) {
-    return this.client.post(`scorecard_logs`, scorecardLog);
+  async createScorecardLog(scorecardLog, manualInputDate, createGoalYearNumber: number) {
+    return this.client.post(
+      `scorecard_logs?manual_input_date=${manualInputDate}&?year_number=${createGoalYearNumber}`,
+      scorecardLog,
+    );
   }
 
   async deleteScorecardLog(id) {

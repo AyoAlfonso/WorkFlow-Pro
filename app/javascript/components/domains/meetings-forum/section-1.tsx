@@ -57,7 +57,7 @@ export const Section1 = observer(
       <Container>
         <Section1ForumMeetings company={company} teamId={teamId} />
 
-        {instanceType === "forum" && <LynchPynBadge />}
+        {/* {instanceType === "forum" && <LynchPynBadge />} */}
       </Container>
     );
   },

@@ -3,6 +3,7 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
+import { useHistory } from "react-router-dom";
 import {
   Text,
   Avatar,
@@ -39,9 +40,9 @@ export const Exploration = observer(
       companyStore: { company },
     } = useMst();
     const { t } = useTranslation();
+    const history = useHistory();
     const [userSelectionOpen, setUserSelectionOpen] = useState<boolean>(false);
     const [guideModalOpen, setGuideModalOpen] = useState<boolean>(false);
-
     //a bit roundabout, we sould probably refactor the meeting step to pass in both team and meeting
     const currentTeam = (teams || []).find(team => team.id === currentMeeting.teamId);
 
@@ -122,6 +123,7 @@ export const Exploration = observer(
 
     return (
       <>
+      
         {includeExplorationTopic && (
           <>
             <ColumnContainerParent alignItems={"baseline"}>
@@ -208,3 +210,13 @@ const HeaderSubText = styled.div`
   margin-right: 0px;
   color: ${props => props.theme.colors.primary100};
 `;
+
+const BreadcrumbHeaderText = styled.span`
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 25px;
+`;
+
+

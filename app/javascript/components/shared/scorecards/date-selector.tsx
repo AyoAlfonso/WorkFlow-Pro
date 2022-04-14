@@ -10,22 +10,20 @@ import { Calendar } from "react-date-range";
 import { addDays } from "date-fns";
 import { baseTheme } from "~/themes";
 import { Button } from "~/components/shared/button";
-import { getWeekNumber } from "~/utils/date-time";
+import { getWeekNumber, sub } from "~/utils/date-time";
 
 interface IDueDateSelectorProps {
   selectedDueDate: Date;
   setSelectedDueDate: any;
-  setCurrentWeek: any;
+  setManualInputDate?: any;
   maxDate: Date;
   fiscalYearStart: string;
-  setOneYearBack: any;
 }
 
 export const DueDateSelector = ({
   selectedDueDate,
   setSelectedDueDate,
-  setCurrentWeek,
-  setOneYearBack,
+  setManualInputDate,
   maxDate,
   fiscalYearStart,
 }: IDueDateSelectorProps): JSX.Element => {
@@ -73,6 +71,7 @@ export const DueDateSelector = ({
             calendarFocus={"backwards"}
             minDate={addDays(maxDate, -90)}
             maxDate={maxDate}
+            weekStartsOn={1}
             scroll={{
               enabled: true,
               calendarWidth: 320,
@@ -84,8 +83,7 @@ export const DueDateSelector = ({
             shownDate={selectedDueDate}
             onChange={date => {
               setSelectedDueDate(date);
-              setCurrentWeek(getWeekNumber(date, fiscalYearStart).num);
-              setOneYearBack(getWeekNumber(date, fiscalYearStart).repeat);
+              setManualInputDate(date);
             }}
           />
         </Popup>

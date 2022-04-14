@@ -45,7 +45,7 @@ export const HomePersonalItems = (): JSX.Element => {
         <Habits expanded={expanded} handleChange={handleChange} />
         <Issues expanded={expanded} handleChange={handleChange} />
       </ToolsWrapper>
-      {instanceType === "forum" && <LynchPynBadge />}
+      {/* {instanceType === "forum" && <LynchPynBadge />} */}
     </Container>
   );
 };

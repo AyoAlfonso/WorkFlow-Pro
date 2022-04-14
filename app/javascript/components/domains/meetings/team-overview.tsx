@@ -335,7 +335,7 @@ export const TeamOverview = observer(
             </StyledOverviewAccordion>
           )}
         </ToolsWrapper>
-        {overviewType === "forum" && <LynchPynBadge />}
+        {/* {overviewType === "forum" && <LynchPynBadge />} */}
       </Container>
     );
   },

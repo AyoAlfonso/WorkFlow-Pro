@@ -2,6 +2,7 @@ import { isToday, isTomorrow, isBefore, parseISO } from "date-fns";
 import * as R from "ramda";
 import moment from "moment";
 import { baseTheme } from "~/themes/base";
+// moment.tz.setDefault("America/New_York");
 
 export const findNextMonday = date => {
   const daysOfWeek = [1, 7, 6, 5, 4, 3, 2];
@@ -29,13 +30,13 @@ moment.updateLocale("en", {
   },
 });
 
-function sub(num) {
+export const sub = num => {
   if (num <= 52) {
     return num;
   } else {
     return sub(num - 52);
   }
-}
+};
 
 export const addInverse = (num: number, repeat = false): { num: number; repeat: boolean } => {
   if (num <= 0) {
@@ -93,43 +94,47 @@ export const getWeekOf = () => {
 };
 
 export const getWeekNumber = (d, fiscalYearStart) => {
-  d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
 
+  d = new Date(d.getUTCFullYear(), d.getMonth(), d.getDate());
+  const trueDate = new Date(Date.UTC(d.getUTCFullYear(), d.getMonth(), d.getDate()));
   fiscalYearStart = new Date(fiscalYearStart);
-  const dayNum = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
   let yearStart: any = new Date(
-    d.getUTCFullYear(),
-    fiscalYearStart.getUTCMonth(),
-    fiscalYearStart.getUTCDate(),
+    Date.UTC(d.getUTCFullYear(), fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
   );
-  const daysAfterSixDays = new Date(
-    Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 6),
-  );
-
+  const daysAfterSixDays = new Date(Date.UTC(d.getUTCFullYear(), d.getMonth(), d.getDate() + 6));
   if (
     yearStart.getUTCFullYear() === d.getUTCFullYear() &&
-    yearStart.getUTCMonth() == 0 &&
-    d.getUTCMonth() == 11 &&
+    yearStart.getMonth() == 0 &&
+    d.getMonth() == 11 &&
     d.getUTCFullYear() <= daysAfterSixDays.getUTCFullYear()
   ) {
-    return addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7), true);
+    return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7), true);
   }
   if (
     yearStart.getUTCFullYear() === d.getUTCFullYear() &&
-    yearStart.getUTCMonth() == 0 &&
-    d.getUTCMonth() == 0 &&
+    yearStart.getMonth() == 0 &&
+    d.getMonth() == 0 &&
     d.getUTCFullYear() >= daysAfterSixDays.getUTCFullYear()
   ) {
-    return addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7));
+    return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7));
   }
-  if (d.getTime() < yearStart.getTime()) {
+  if (
+    trueDate.valueOf() < yearStart.valueOf() &&
+    trueDate.getUTCFullYear() <= yearStart.getUTCFullYear()
+  ) {
     yearStart = new Date(
-      Date.UTC(d.getUTCFullYear() - 1, fiscalYearStart.getUTCMonth(), fiscalYearStart.getUTCDay()),
+      Date.UTC(d.getUTCFullYear() - 1, fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
     ) as any;
-    return addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7), true);
+    return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7), true);
   }
-  return addInverse(Math.ceil((d - yearStart + 1) / 86400000 / 7));
+
+  if (trueDate.valueOf() > yearStart.valueOf()) {
+    yearStart = new Date(
+      Date.UTC(d.getUTCFullYear() - 1, fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
+    ) as any;
+    return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7), false);
+  }
+  return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7));
 };
 
 export const validateWeekOf = (weekOf, history, id) => {

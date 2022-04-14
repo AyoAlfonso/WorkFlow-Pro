@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import * as R from "ramda";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
@@ -14,6 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import { HtmlTooltip } from "~/components/shared/tooltip";
 import { Loading } from "../../shared/loading";
 import { Provider, rootStore } from "../../../setup/root";
+import { RoleNormalUser } from "~/lib/constants";
 
 export interface IScorecardSelectorProps {
   ownerType: string;
@@ -30,6 +32,7 @@ export const ScorecardSelector = observer(
     isMiniEmbed,
   }: IScorecardSelectorProps): JSX.Element => {
     const { userStore, teamStore, companyStore, sessionStore } = useMst();
+    const currentUser = sessionStore.profile;
     const scorecardPro = sessionStore.profile?.productFeatures?.scorecardPro;
     const [showUsersList, setShowUsersList] = useState<boolean>(false);
     const [teams, setTeams] = useState<Array<any>>([]);
@@ -68,6 +71,14 @@ export const ScorecardSelector = observer(
         teamStore.teams &&
         toJS(teamStore)
           .teams.filter(team => team.active)
+          .filter(team => {
+            if (currentUser.role == RoleNormalUser) {
+              const selectedTeam = teamStore.teams.filter(rawTeam => team.id == rawTeam.id);
+              if (selectedTeam.length > 0) return selectedTeam[0]?.isAMember(currentUser);
+            } else {
+              return true;
+            }
+          })
           .map(team => {
             return {
               id: team.id,
@@ -90,6 +101,13 @@ export const ScorecardSelector = observer(
         userStore.users &&
         toJS(userStore)
           .users.filter(user => user.status == "active")
+          .filter(user => {
+            if (currentUser.role == RoleNormalUser) {
+              return currentUser.id == user.id;
+            } else {
+              return true;
+            }
+          })
           .map(user => {
             return {
               id: user.id,

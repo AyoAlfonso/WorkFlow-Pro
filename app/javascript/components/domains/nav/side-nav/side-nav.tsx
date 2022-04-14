@@ -372,7 +372,9 @@ export const SideNavNoMst = (
         </StyledNavLinkChildrenActive>
       )}
 
-      {company && company.accessForum && showMeeting ? (
+      {company && showTeam ? renderTeam(R.path(["length"], teams) || 0) : <> </>}
+
+      {company && company.accessForum && !showTeam && showMeeting ? (
         renderMeeting(R.path(["length"], teams) || 0, "forum")
       ) : (
         <> </>
@@ -436,8 +438,6 @@ export const SideNavNoMst = (
       ) : (
         <></>
       )}
-
-      {company && showTeam ? renderTeam(R.path(["length"], teams) || 0) : <> </>}
 
       {company && company.accessCompany && !showTeam ? (
         renderMeeting(R.path(["length"], teams) || 0, "team")
