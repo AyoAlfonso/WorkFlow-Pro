@@ -388,7 +388,10 @@ export const AnnualInitiativeModalContent = memo(
                 theme="snow"
                 placeholder={"Add a description..."}
                 value={description}
-                onChange={handleChange}
+                // onChange={handleChange}
+                onChange={(content, delta, source, editor) => {
+                  handleChange(editor.getHTML());
+                }}
               />
             </TrixEditorContainer>
             <SubHeader>Activity</SubHeader>
