@@ -98,7 +98,9 @@ export const AnnualInitiativeModalContent = memo(
         annualInitiativeStore.getAnnualInitiative(annualInitiativeId).then(() => {
           const annualInitiative = annualInitiativeStore.annualInitiative;
           if (annualInitiative) {
-            setDescription(annualInitiative.contextDescription || descriptionTemplateForObjective);
+            setDescription(
+              annualInitiative.contextDescription || descriptionTemplateForObjective || "",
+            );
             setAnnualInitiative(annualInitiative);
           }
         });
