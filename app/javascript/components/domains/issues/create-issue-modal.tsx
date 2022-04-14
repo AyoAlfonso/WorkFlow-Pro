@@ -88,6 +88,8 @@ export const CreateIssueModal = ({
 
   const formattedTopicType = topicType === "round_table" ? "round table" : topicType;
 
+  const isDisabled = isForum ? issueDescription.length == 0 || !topicType : issueDescription.length == 0;
+
   return (
     <ModalWithHeader
       modalOpen={createIssueModalOpen}
@@ -193,7 +195,7 @@ export const CreateIssueModal = ({
         </FlexContainer>
         <FlexContainer>
           <StyledButton
-            disabled={issueDescription.length == 0 || !topicType}
+            disabled={isDisabled}
             onClick={() =>
               issueStore
                 .createIssue({
