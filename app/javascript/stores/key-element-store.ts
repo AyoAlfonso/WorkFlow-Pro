@@ -30,7 +30,7 @@ export const KeyElementStoreModel = types
         const keyElements = self.keyElementsForWeeklyCheckin;
         const keyElementIndex = keyElements.findIndex(ke => ke.id == id);
         keyElements[keyElementIndex] = response.data;
-        showToast("Key Result updated", ToastMessageConstants.SUCCESS);
+        // showToast("Key Result updated", ToastMessageConstants.SUCCESS);
         return true;
       } catch {
         showToast("Something went wrong", ToastMessageConstants.ERROR);
