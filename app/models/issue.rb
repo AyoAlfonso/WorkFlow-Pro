@@ -4,7 +4,9 @@ class Issue < ApplicationRecord
     enable
     recognize [:has_one, :has_many, has_many: :through]
   end
+  
   enum priority: { low: 0, medium: 1, high: 2, frog: 3 }
+  enum topic_type: { exploration: 0, brainstorm: 1, round_table: 2, learning: 3}
   belongs_to :user
   belongs_to :team, optional: true
   belongs_to :company
@@ -20,6 +22,8 @@ class Issue < ApplicationRecord
   acts_as_list scope: [:company_id, :user_id, :completed_at]
 
   acts_as_taggable_on :labels
+
+  acts_as_votable
 
   scope :optimized, -> { includes([{ user: { avatar_attachment: :blob } }, :label_taggings, :labels, :comment_logs]) }
   scope :user_current_company, ->(company_id) { where(company_id: company_id) }
@@ -48,6 +52,10 @@ class Issue < ApplicationRecord
 
   def self.sort_by_position_and_priority_and_created_at_and_completed_at
     self.sort_by_position.sort_by_priority.sort_by_created_date.sort_by_completed_date
+  end
+
+  def upvoters
+   self.votes_for.up.by_type(User).voters
   end
 
   def self.owned_by_self_or_team_members(user)

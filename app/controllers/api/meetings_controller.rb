@@ -162,7 +162,8 @@ class Api::MeetingsController < Api::ApplicationController
       weekly_milestone_progress(user)
     end
     @average_milestone_process_percentage = @milestone_progress_percentage_array.length == 0 ? 0 : (@milestone_progress_percentage_array.sum.to_f / @milestone_progress_percentage_array.length) * 100
-    last_meeting_end_time = Meeting.team_meetings(@meeting.team_id).sort_by_start_time.second.end_time
+
+    last_meeting_end_time = Meeting.team_meetings(@meeting.team_id)&.sort_by_start_time&.try(:second)&.end_time
     @key_activities = last_meeting_end_time.blank? ?
       KeyActivity.filter_by_team_meeting(@meeting.meeting_template_id, params[:team_id]).has_due_date.where("due_date <= ?", current_user.time_in_user_timezone.end_of_day) :
       KeyActivity.filter_by_team_meeting(@meeting.meeting_template_id, params[:team_id]).has_due_date.where(due_date: last_meeting_end_time..current_user.time_in_user_timezone.end_of_day)
@@ -178,7 +179,7 @@ class Api::MeetingsController < Api::ApplicationController
   def set_additional_data
     search_meeting_components = {team_id: @meeting.team_id, meeting_type: @meeting.meeting_type, fiscal_year: current_user.convert_to_their_timezone.year}
     if @meeting.meeting_type === "organisation_forum_monthly" && params[:meeting].try(:[], :settings_forum_exploration_topic_owner_id).blank? && params[:meeting].try(:[], :settings_forum_exploration_topic).blank?
-      @meeting&.settings = MeetingSearch.new(policy_scope(Meeting),search_meeting_components ).search.where(original_creation: true).for_scheduled_start_date_range(current_user.convert_to_their_timezone.beginning_of_month, current_user.convert_to_their_timezone.end_of_month).last&.settings || {}
+      @meeting&.settings = MeetingSearch.new(policy_scope(Meeting),search_meeting_components ).search_forum_meeting_scope.where(original_creation: true).for_scheduled_start_date_range(current_user.convert_to_their_timezone.beginning_of_month, current_user.convert_to_their_timezone.end_of_month).last&.settings || {}
     end
     @team = @meeting.team_id ? Team.find(@meeting.team_id) : nil
     if @team.present?

@@ -193,6 +193,7 @@ export const KeyElement = observer(
           ? store.updateKeyElement(element.id, {
               value: element.value,
               status: element.status,
+              completionCurrentValue: element.completionCurrentValue,
             })
           : store.updateKeyElement(id, element.id, keyElementParams);
       if (res && showMessage) {
@@ -475,7 +476,7 @@ export const KeyElement = observer(
                   }}
                   onMouseEnter={async () => {
                     if (type == "onboarding") {
-                      return 
+                      return;
                     }
                     const disabled = await isEditable();
                     setShowTooltip(!isOwner || (disabled && true));

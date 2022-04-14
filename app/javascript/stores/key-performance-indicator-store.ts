@@ -90,17 +90,23 @@ export const KeyPerformanceIndicatorStoreModel = types
         showToast(`KPI ${direction}`, ToastMessageConstants.SUCCESS);
       }
     }),
-    createScorecardLog: flow(function*(scorecardlog) {
+    createScorecardLog: flow(function*(
+      scorecardlog,
+      manualInputDate = "",
+      createGoalYearNumber = "",
+    ) {
       const { scorecardStore } = getRoot(self);
       const response: ApiResponse<any> = yield self.environment.api.createScorecardLog(
         scorecardlog,
+        manualInputDate ? manualInputDate.toISOString().split("T")[0] : manualInputDate,
+        createGoalYearNumber,
       );
 
       if (response.ok) {
         showToast("Log created", ToastMessageConstants.SUCCESS);
         scorecardStore.mergeKPIS(response.data.kpi);
         self.kpi = response.data.kpi;
-        return { scorecardLog: response.data.scorecardlog, kpis: scorecardStore.kpis };
+        return { log: response.data.scorecardLog };
       }
     }),
     deleteScorecardLog: flow(function*(id) {

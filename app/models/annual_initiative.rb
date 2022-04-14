@@ -10,7 +10,7 @@ class AnnualInitiative < ApplicationRecord
     customize(lambda { |original_post,new_post|
        current_company = Company.find(new_post.company_id)
        quarter = current_company.quarter_for_creating_quarterly_goals
-       new_post.quarterly_goals.map { |quarterly_goal| quarterly_goal.quarter = [0,2,3,4,1][quarter] }
+       new_post.quarterly_goals.map { |quarterly_goal| quarterly_goal.quarter = [0,2,3,4,4][quarter] }
     })
   end
 

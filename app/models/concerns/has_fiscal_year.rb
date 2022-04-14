@@ -96,8 +96,6 @@ module HasFiscalYear
     current_date = self.convert_to_their_timezone
     temp_current_date = DateTime.new(year, current_date.month, current_date.day, 0, 0, 0, 0)
     temp_current_year_fiscal_year_start = DateTime.new(year, current_year_fiscal_year_start.month, current_year_fiscal_year_start.day, 0, 0, 0, 0)
-    
-    
     if current_fiscal_start_date.month == 1  && current_fiscal_start_date.day == 1
       return year
     end
@@ -147,7 +145,13 @@ module HasFiscalYear
 
   def calculate_current_fiscal_week
     current_date = self.convert_to_their_timezone.to_date
-    Time.at((current_date - current_fiscal_start_date).days.seconds).utc.strftime("%U").to_i
+    if current_date.wday == 1 
+      # if we are already in monday we should jump into the new week 
+      # We have a Monday week start 
+       Time.at((current_fiscal_start_date..current_date).count.days + 1.day).utc.strftime("%U").to_i
+    else        
+      Time.at((current_fiscal_start_date..current_date).count.days).utc.strftime("%U").to_i
+    end
   end
   
   def calculate_current_fiscal_quarter

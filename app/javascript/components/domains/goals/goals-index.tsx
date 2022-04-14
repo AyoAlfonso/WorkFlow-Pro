@@ -367,7 +367,7 @@ export const GoalsIndex = observer(
             showCreateMilestones={true}
           />
         </StyledModal>
-        {instanceType === "forum" && <LynchPynBadge />}
+        {/* {instanceType === "forum" && <LynchPynBadge />} */}
       </Container>
     );
   },

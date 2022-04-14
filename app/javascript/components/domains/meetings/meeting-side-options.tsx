@@ -22,8 +22,8 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
   const {
     companyStore: { company },
   } = useMst();
-  const isForum = company?.displayFormat == "Forum";
 
+  const isForum = company?.displayFormat == "Forum";
   const [selectedTab, setSelectedTab] = useState<string>("agenda");
   const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
 
@@ -39,35 +39,33 @@ export const MeetingSideOptions = ({ teamId, meeting }: IMeetingSideOptionsProps
     );
   };
 
+  const renderIssues = (): JSX.Element => {
+    return teamId ? (
+      <TeamIssuesBody
+        showOpenIssues={true}
+        showFilters={false}
+        teamId={teamId}
+        meetingId={meeting.id}
+      />
+    ) : (
+      <IssuesBody
+        showOpenIssues={showOpenIssues}
+        setShowOpenIssues={setShowOpenIssues}
+        meetingId={meeting.id}
+      />
+    );
+  };
+
   const renderDisplayContent = (): JSX.Element => {
     switch (selectedTab) {
       case "issues":
-        return teamId ? (
-          <TeamIssuesBody
-            showOpenIssues={true}
-            showFilters={false}
-            teamId={teamId}
-            meetingId={meeting.id}
-          />
-        ) : (
-          <IssuesBody
-            showOpenIssues={showOpenIssues}
-            setShowOpenIssues={setShowOpenIssues}
-            meetingId={meeting.id}
-          />
-        );
+        return renderIssues();
       case "forumHub":
-        return (
-          <IssuesBody
-            showOpenIssues={showOpenIssues}
-            setShowOpenIssues={setShowOpenIssues}
-            meetingId={meeting.id}
-          />
-        );
+        return renderIssues();
       case "pyns":
         return renderDisplayKeyActivities();
       case "notes":
-        return <Notes meeting={meeting} height={"550px"} />;
+        return <Notes meeting={meeting} height={"auto"} />;
       default:
         return (
           <MeetingAgenda

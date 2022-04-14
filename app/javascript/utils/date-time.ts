@@ -2,6 +2,7 @@ import { isToday, isTomorrow, isBefore, parseISO } from "date-fns";
 import * as R from "ramda";
 import moment from "moment";
 import { baseTheme } from "~/themes/base";
+// moment.tz.setDefault("America/New_York");
 
 export const findNextMonday = date => {
   const daysOfWeek = [1, 7, 6, 5, 4, 3, 2];
@@ -29,36 +30,36 @@ moment.updateLocale("en", {
   },
 });
 
-function sub(num) {
+export const sub = num => {
   if (num <= 52) {
     return num;
   } else {
     return sub(num - 52);
   }
-}
+};
 
+export const addInverse = (num: number, repeat = false): { num: number; repeat: boolean } => {
+  if (num <= 0) {
+    repeat = true;
+    return addInverse(52 + num, repeat);
+  } else {
+    return { num, repeat };
+  }
+};
 const MILLISECONDS_PER_SECOND = 1000;
 const SECONDS_PER_MINUTE = 60;
 const MINUTES_PER_HOUR = 60;
 const HOURS_PER_DAY = 24;
 const DAYS_OF_WEEK = 7;
 export const getWeekDiff = (to, from) => {
-  // Math.abs(new Date("Monday, 14 February 2022") - new Date("Sunday, 1 August 2021"))
   const dateDiff = Math.abs(+to - +new Date(from));
-
   return sub(Math.ceil(dateDiff / (1000 * 60 * 60 * 24) / DAYS_OF_WEEK));
 };
 
 export const dateStringToSeconds = dateString => {
   return new Date(dateString).getTime() / MILLISECONDS_PER_SECOND;
 };
-export const getWeekOfDate = date => moment(date).week();
-export const getMondayofDate = (week, fiscalYearStart, year) =>
-  moment(fiscalYearStart)
-    .add(week, "w")
-    .year(year)
-    .startOf("week" as moment.unitOfTime.StartOf)
-    .toDate();
+
 export const nowInSeconds = () => Math.round(Date.now() / MILLISECONDS_PER_SECOND);
 
 export const nowAsUTCString = () => new Date().toUTCString();
@@ -90,6 +91,50 @@ export const getWeekOf = () => {
   const currentWeekOf = moment().startOf("isoWeek");
   const formatedCurrentWeekOf = moment(currentWeekOf).format("YYYY-MM-DD");
   return formatedCurrentWeekOf;
+};
+
+export const getWeekNumber = (d, fiscalYearStart) => {
+
+  d = new Date(d.getUTCFullYear(), d.getMonth(), d.getDate());
+  const trueDate = new Date(Date.UTC(d.getUTCFullYear(), d.getMonth(), d.getDate()));
+  fiscalYearStart = new Date(fiscalYearStart);
+  let yearStart: any = new Date(
+    Date.UTC(d.getUTCFullYear(), fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
+  );
+  const daysAfterSixDays = new Date(Date.UTC(d.getUTCFullYear(), d.getMonth(), d.getDate() + 6));
+  if (
+    yearStart.getUTCFullYear() === d.getUTCFullYear() &&
+    yearStart.getMonth() == 0 &&
+    d.getMonth() == 11 &&
+    d.getUTCFullYear() <= daysAfterSixDays.getUTCFullYear()
+  ) {
+    return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7), true);
+  }
+  if (
+    yearStart.getUTCFullYear() === d.getUTCFullYear() &&
+    yearStart.getMonth() == 0 &&
+    d.getMonth() == 0 &&
+    d.getUTCFullYear() >= daysAfterSixDays.getUTCFullYear()
+  ) {
+    return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7));
+  }
+  if (
+    trueDate.valueOf() < yearStart.valueOf() &&
+    trueDate.getUTCFullYear() <= yearStart.getUTCFullYear()
+  ) {
+    yearStart = new Date(
+      Date.UTC(d.getUTCFullYear() - 1, fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
+    ) as any;
+    return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7), true);
+  }
+
+  if (trueDate.valueOf() > yearStart.valueOf()) {
+    yearStart = new Date(
+      Date.UTC(d.getUTCFullYear() - 1, fiscalYearStart.getMonth(), fiscalYearStart.getDate()),
+    ) as any;
+    return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7), false);
+  }
+  return addInverse(Math.ceil(((d - yearStart) / 86400000 + 1) / 7));
 };
 
 export const validateWeekOf = (weekOf, history, id) => {

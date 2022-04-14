@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_14_211646) do
+ActiveRecord::Schema.define(version: 2022_04_06_132348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -164,8 +164,8 @@ ActiveRecord::Schema.define(version: 2022_03_14_211646) do
     t.integer "display_format", default: 0
     t.integer "onboarding_status", default: 0
     t.string "customer_subscription_profile_id"
-    t.integer "objectives_key_type", default: 1
     t.integer "forum_type", default: 0
+    t.integer "objectives_key_type", default: 1
     t.jsonb "preferences", default: {}, null: false
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_companies_on_deleted_at"
@@ -256,6 +256,15 @@ ActiveRecord::Schema.define(version: 2022_03_14_211646) do
     t.boolean "personal", default: false
     t.bigint "scheduled_group_id"
     t.string "body"
+    t.integer "cached_votes_total", default: 0
+    t.integer "cached_votes_score", default: 0
+    t.integer "cached_votes_up", default: 0
+    t.integer "cached_votes_down", default: 0
+    t.integer "cached_weighted_score", default: 0
+    t.integer "cached_weighted_total", default: 0
+    t.float "cached_weighted_average", default: 0.0
+    t.datetime "due_date"
+    t.integer "topic_type"
     t.index ["company_id"], name: "index_issues_on_company_id"
     t.index ["scheduled_group_id"], name: "index_issues_on_scheduled_group_id"
     t.index ["team_id"], name: "index_issues_on_team_id"
@@ -740,6 +749,22 @@ ActiveRecord::Schema.define(version: 2022_03_14_211646) do
     t.datetime "created_at"
     t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
+  create_table "votes", force: :cascade do |t|
+    t.string "votable_type"
+    t.bigint "votable_id"
+    t.string "voter_type"
+    t.bigint "voter_id"
+    t.boolean "vote_flag"
+    t.string "vote_scope"
+    t.integer "vote_weight"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["votable_id", "votable_type", "vote_scope"], name: "index_votes_on_votable_id_and_votable_type_and_vote_scope"
+    t.index ["votable_type", "votable_id"], name: "index_votes_on_votable"
+    t.index ["voter_id", "voter_type", "vote_scope"], name: "index_votes_on_voter_id_and_voter_type_and_vote_scope"
+    t.index ["voter_type", "voter_id"], name: "index_votes_on_voter"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

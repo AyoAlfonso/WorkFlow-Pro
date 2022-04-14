@@ -27,6 +27,7 @@ import { Button } from "~/components/shared/button";
 import { KPIPopup } from "./parent-kpi-popup";
 import { KPIViewerName } from "./parent-kpi-popup";
 import { findNextMonday, resetYearOfDateToCurrent } from "~/utils/date-time";
+import { RoleNormalUser } from "~/lib/constants";
 
 interface ViewEditKPIModalProps {
   kpiId: number;
@@ -50,6 +51,7 @@ export const ViewEditKPIModal = observer(
       companyStore: { company },
       keyPerformanceIndicatorStore,
       scorecardStore,
+      sessionStore,
       descriptionTemplateStore: { descriptionTemplates },
     } = useMst();
 
@@ -74,6 +76,7 @@ export const ViewEditKPIModal = observer(
     if (R.isNil(keyPerformanceIndicatorStore) || R.isNil(kpiId)) {
       return <></>;
     }
+    const currentUser = sessionStore.profile;
 
     const {
       backgroundGrey,
@@ -335,7 +338,10 @@ export const ViewEditKPIModal = observer(
                       <StyledContentEditable
                         innerRef={headerRef}
                         html={kpi.title}
-                        disabled={false}
+                        disabled={
+                          (currentUser.role == RoleNormalUser && currentUser.id != kpi.ownedById) ||
+                          false
+                        }
                         onChange={e => {
                           if (!e.target.value.includes("<div>")) {
                             keyPerformanceIndicatorStore.updateKPITitle(
@@ -352,8 +358,12 @@ export const ViewEditKPIModal = observer(
                         onBlur={() => keyPerformanceIndicatorStore.update()}
                       />
                     </Header>
+
                     <DropdownOptions>
-                      {renderDropdownOptions()}
+                      {currentUser.id == kpi.ownedBy.id && renderDropdownOptions()}
+                      {currentUser.id != kpi.ownedBy.id &&
+                        currentUser.role != RoleNormalUser &&
+                        renderDropdownOptions()}
                       <CloseIconContainer
                         onClick={() => {
                           closeModal();
@@ -373,6 +383,7 @@ export const ViewEditKPIModal = observer(
                         marginBottom={"auto"}
                         ownedBy={kpi.ownedBy}
                         type={"scorecard"}
+                        disabled={currentUser.role == RoleNormalUser}
                       />
                     </OwnerAndLogicText>
                     <Icon icon={"Stats"} iconColor={greyInactive} size={16} />
@@ -479,7 +490,11 @@ export const ViewEditKPIModal = observer(
                     <ValueText>{formatValue(value, kpi.unitType)}</ValueText>
 
                     <UpdateProgressButton
-                      disabled={kpi?.parentType}
+                      disabled={
+                        kpi?.parentType ||
+                        (currentUser.role == RoleNormalUser && currentUser.id != kpi.ownedById) ||
+                        false
+                      }
                       onClick={() => {
                         setUpdateKPIModalOpen(true);
                       }}
@@ -494,6 +509,9 @@ export const ViewEditKPIModal = observer(
                   <SubHeader>Description</SubHeader>
                   <TrixEditorContainer>
                     <ReactQuill
+                      readOnly={
+                        currentUser.role == RoleNormalUser && currentUser.id != kpi.ownedById
+                      }
                       onBlur={() => {
                         saveKPI({ description });
                       }}
@@ -539,6 +557,10 @@ export const ViewEditKPIModal = observer(
                                 {moment(log.createdAt).format("MMM D, YYYY")}
                               </ActivityLogDate>
                               <ActivityLogDelete
+                                disabled={
+                                  currentUser.role == RoleNormalUser &&
+                                  currentUser.id != log.user.id
+                                }
                                 onClick={() => {
                                   keyPerformanceIndicatorStore
                                     .deleteScorecardLog(log.id)
@@ -575,6 +597,7 @@ export const ViewEditKPIModal = observer(
             setUpdateKPIModalOpen={setUpdateKPIModalOpen}
             setKpis={setKpis}
             fiscalYearStart={company.fiscalYearStart}
+            current={true}
           />
         )}
       </>
@@ -711,12 +734,17 @@ const ActivityLogDate = styled.span`
   font-size: 9px;
   color: ${props => props.theme.colors.grey100};
 `;
-
-const ActivityLogDelete = styled.span`
+type ActivityLogDeleteProps = {
+  disabled?: boolean;
+};
+const ActivityLogDelete = styled.span<ActivityLogDeleteProps>`
   font-size: 9px;
   color: ${props => props.theme.colors.grey100};
   margin-left: 8px;
+  opacity: ${props => (props.disabled ? "0.5" : "1.0")};
+  pointer-events: ${props => (props.disabled ? "none" : "all")};
   &:hover {
+    cursor: ${props => (props.disabled ? "none" : "pointer")};
     color: ${props => props.theme.colors.warningRed};
     cursor: pointer;
   }

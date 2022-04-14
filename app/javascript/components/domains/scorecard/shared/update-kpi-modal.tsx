@@ -5,7 +5,6 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { useTranslation } from "react-i18next";
 import { useMst } from "~/setup/root";
-import { getMondayofDate } from "~/utils/date-time";
 import { DueDateSelector } from "~/components/shared/scorecards/date-selector";
 import { findNextMonday, resetYearOfDateToCurrent } from "~/utils/date-time";
 import moment from "moment";
@@ -28,7 +27,6 @@ interface MiniUpdateKPIModalProps {
   ownedById: number;
   unitType: string;
   year: number;
-  quarter?: any;
   week: number;
   fiscalYearStart?: string;
   currentValue: number | undefined;
@@ -39,6 +37,7 @@ interface MiniUpdateKPIModalProps {
   updateKPI?: any;
   setTargetWeek?: React.Dispatch<React.SetStateAction<number>>;
   setTargetValue?: React.Dispatch<React.SetStateAction<number>>;
+  current: boolean;
 }
 
 export const MiniUpdateKPIModal = observer(
@@ -46,7 +45,6 @@ export const MiniUpdateKPIModal = observer(
     kpiId,
     unitType,
     year,
-    quarter,
     week,
     fiscalYearStart,
     currentValue,
@@ -56,6 +54,7 @@ export const MiniUpdateKPIModal = observer(
     setKpis,
     setTargetWeek,
     setTargetValue,
+    current,
   }: MiniUpdateKPIModalProps): JSX.Element => {
     const history = useHistory();
     const {
@@ -63,16 +62,21 @@ export const MiniUpdateKPIModal = observer(
     } = useMst();
 
     const weekToDate = (week: number, year: number) =>
-      moment(findNextMonday(resetYearOfDateToCurrent(fiscalYearStart, year)))
-        .add(week - 1, "w")
+      moment(resetYearOfDateToCurrent(fiscalYearStart, year))
+        .add(week, "w")
         .startOf("week" as moment.unitOfTime.StartOf)
         .toDate();
 
     const { keyPerformanceIndicatorStore, sessionStore, scorecardStore } = useMst();
     const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
     const [value, setValue] = useState<number>(currentValue);
-    const [selectedDueDate, setSelectedDueDate] = useState<any>(weekToDate(week, year));
+    const [selectedDueDate, setSelectedDueDate] = useState<any>(
+      current || week == company.currentFiscalWeek ? new Date() : weekToDate(week, year),
+    );
+    const [manualInputDate, setManualInputDate] = useState<any>("");
+
     const [currentWeek, setCurrentWeek] = useState<number>(week);
+    // const [oneYearBack, setOneYearBack] = useState<boolean>(false);
     const [comment, setComment] = useState("");
     const { owner_type, owner_id } = useParams();
     const optionsRef = useRef(null);
@@ -91,19 +95,39 @@ export const MiniUpdateKPIModal = observer(
     }, [optionsRef, selectedDueDate]);
 
     useEffect(() => {
-      setSelectedDueDate(weekToDate(week, year));
+      setSelectedDueDate(
+        current || week == company.currentFiscalWeek ? new Date() : weekToDate(week, year),
+      );
     }, [showAdvancedSettings]);
 
     const setDefaultSelectionQuarter = week => {
       return week <= 13 ? 1 : week <= 26 ? 2 : week <= 39 ? 3 : 4;
     };
-    //DUPLICATE FUNCTION
+
+    const lastYear = `FY${(company.currentFiscalYear - 1)
+      .toString()
+      .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
+
     const createGoalYearString =
       company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
         ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-        : `FY${(company.currentFiscalYear - 1)
+        : lastYear;
+
+    const lastYearNumber = company.currentFiscalYear - 1;
+
+    const createGoalYearNumber =
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? company.yearForCreatingAnnualInitiatives
+        : lastYearNumber;
+
+    const createPreviousGoalYearString =
+      company.currentFiscalYear == company.yearForCreatingAnnualInitiatives
+        ? `FY${(company.yearForCreatingAnnualInitiatives - 1).toString().slice(-2)}`
+        : `FY${(company.currentFiscalYear - 2).toString().slice(-2)}/${(
+            company.currentFiscalYear - 1
+          )
             .toString()
-            .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
+            .slice(-2)}`;
     const handleSave = () => {
       if (value != undefined) {
         const log = {
@@ -116,24 +140,32 @@ export const MiniUpdateKPIModal = observer(
           fiscalQuarter:
             setDefaultSelectionQuarter(currentWeek) || Math.round((currentWeek - 1) / 13) + 1,
         };
+
         if (comment != "") {
           log.note = comment;
         }
-        localStorage.setItem(
-          "cacheDropdownQuarter",
-          setDefaultSelectionQuarter(currentWeek) +
-            "_" +
-            createGoalYearString +
-            "_" +
-            company.yearForCreatingAnnualInitiatives.toString(),
-        );
-        keyPerformanceIndicatorStore.createScorecardLog(log).then(() => {
-          setUpdateKPIModalOpen(false);
-          clearData();
-          setKpis(scorecardStore.kpis);
-          history.push(`/scorecard/0/0`);
-          setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
-        });
+
+        keyPerformanceIndicatorStore
+          .createScorecardLog(log, manualInputDate, createGoalYearNumber)
+          .then(data => {
+            localStorage.setItem(
+              "cacheDropdownQuarter",
+              setDefaultSelectionQuarter(data.log.week) +
+                "_" +
+                (data.log.fiscalYear < company.yearForCreatingAnnualInitiatives
+                  ? createPreviousGoalYearString
+                  : createGoalYearString) +
+                "_" +
+                (data.log.fiscalYear < company.yearForCreatingAnnualInitiatives
+                  ? (company.yearForCreatingAnnualInitiatives - 1).toString()
+                  : company.yearForCreatingAnnualInitiatives.toString()),
+            );
+            setUpdateKPIModalOpen(false);
+            clearData();
+            setKpis(scorecardStore.kpis);
+            history.push(`/scorecard/0/0`);
+            setTimeout(history.push(`/scorecard/${owner_type}/${owner_id}`), 1000, 0);
+          });
       }
     };
 
@@ -190,7 +222,6 @@ export const MiniUpdateKPIModal = observer(
           <AdvancedSettingsButton
             onClick={() => {
               setShowAdvancedSettings(!showAdvancedSettings);
-              setSelectedDueDate(weekToDate(week, year));
             }}
           >
             Advanced Settings
@@ -198,14 +229,18 @@ export const MiniUpdateKPIModal = observer(
           {showAdvancedSettings && (
             <RowContainer>
               <FormElementContainer>
-                <InputHeaderWithComment margin={"4px 0px"}>Date </InputHeaderWithComment>
+                <InputHeaderWithComment margin={"4px 0px"}>Date</InputHeaderWithComment>
 
                 <DueDateSelector
                   selectedDueDate={selectedDueDate}
                   setSelectedDueDate={setSelectedDueDate}
-                  setCurrentWeek={setCurrentWeek}
-                  maxDate={weekToDate(week, year)}
-                  fiscalYearStart={fiscalYearStart}
+                  setManualInputDate={setManualInputDate}
+                  maxDate={
+                    current || week == company.currentFiscalWeek
+                      ? new Date()
+                      : weekToDate(week, year)
+                  }
+                  fiscalYearStart={resetYearOfDateToCurrent(fiscalYearStart, year)}
                 />
               </FormElementContainer>
               <FormElementContainer />

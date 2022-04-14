@@ -2,6 +2,9 @@ class QuarterlyGoal < ApplicationRecord
   acts_as_paranoid column: :deleted_at
    amoeba do
     enable
+      customize(lambda { |original_post,new_post|
+         new_post.quarter = [0,2,3,4,4][new_post.quarter]
+        })
     include_association :sub_initiatives
    end
   include HasCreator
@@ -40,7 +43,6 @@ class QuarterlyGoal < ApplicationRecord
     # fiscal_quarter_start_date = fiscal_quarter_start_date + 1.year if self.annual_initiative.fiscal_year >= company.current_fiscal_year
     fiscal_quarter_start_date_closest_monday = fiscal_quarter_start_date.monday? ? fiscal_quarter_start_date : fiscal_quarter_start_date.next_occurring(:monday)
     # existing_milestone = check_for_existing_milestones_for_quarterly_goal(company,fiscal_quarter_start_date_closest_monday)
-    
     # unless existing_milestone.present?
       13.times do |index|
         Milestone.create!(

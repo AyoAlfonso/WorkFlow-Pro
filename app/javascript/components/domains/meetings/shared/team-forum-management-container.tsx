@@ -8,12 +8,14 @@ interface ITeamForumManagementContainerProps {
   handleMeetingClick: any;
   titleText?: string;
   buttonText?: string;
+  useIcon?: boolean;
 }
 
 export const TeamForumManagementContainer = ({
   handleMeetingClick,
   titleText,
   buttonText = "Forum Meeting",
+  useIcon = true,
 }: ITeamForumManagementContainerProps): JSX.Element => {
   return (
     <AccordionSummary
@@ -24,11 +26,13 @@ export const TeamForumManagementContainer = ({
       <HeaderContainerNoBorder>
         <div style={{ width: "30px" }} />
         <AccordionHeaderText>{buttonText}</AccordionHeaderText>
-     </HeaderContainerNoBorder>
-      <IconContainerWithPadding>
-        <Icon icon={"Team"} size={16} iconColor={"blue"} />
-      </IconContainerWithPadding>
-     </AccordionSummary> 
+      </HeaderContainerNoBorder>
+      {useIcon && (
+        <IconContainerWithPadding>
+          <Icon icon={"Team"} size={16} iconColor={"blue"} />
+        </IconContainerWithPadding>
+      )}
+    </AccordionSummary>
   );
 };
 

@@ -25,11 +25,9 @@ export const KpiComponent = observer(
     const { company } = companyStore;
     const { t } = useTranslation();
 
-    const {
-      profile
-    } = sessionStore;
+    const { profile } = sessionStore;
 
-    const id = profile?.id
+    const id = profile?.id;
 
     const { weekOf } = useParams();
 
@@ -57,6 +55,7 @@ export const KpiComponent = observer(
           fiscalQuarter: Math.floor((company.currentFiscalWeek - 1) / 13) + 1,
         };
         createScorecardLog(log);
+        //to do add the scorecard to update frontend
       }
     };
 

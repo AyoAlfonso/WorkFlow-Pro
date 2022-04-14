@@ -1,6 +1,6 @@
 import { types, flow, getEnv } from "mobx-state-tree";
 import { CoreFourModel } from "./core-four";
-
+import { getWeekNumber } from "~/utils/date-time";
 //core four, accountability, strategic only for display_format companies
 
 const formatEnumTypes = types => {
@@ -48,6 +48,9 @@ export const CompanyModel = types
     },
     get forumTypesList() {
       return formatEnumTypes(self.forumTypes);
+    },
+    get weekNumber() {
+      return getWeekNumber(new Date(), self.currentQuarterStartDate).num;
     },
   }))
   .actions(self => ({
