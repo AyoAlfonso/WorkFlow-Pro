@@ -12,7 +12,7 @@ import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface IMultiOptionTypeSelectionDropdownList {
-  userList: any[];
+  userList: Array<UserType>;
   onUserSelect: any;
   setShowUsersList: React.Dispatch<React.SetStateAction<boolean>>;
   title?: string;
@@ -57,8 +57,7 @@ function alphabetically(ascending) {
 
 }
 
-function typesort(ascending) {
-
+function typesort() {
   return function (a, b) {
     if (a.type === "company") {
         return -1;
@@ -67,7 +66,6 @@ function typesort(ascending) {
         return 1;
     }
   };
-
 }
 
 const useStyles = makeStyles({
@@ -87,7 +85,7 @@ export const MultiOptionTypeSelectionDropdownList = ({
 }: IMultiOptionTypeSelectionDropdownList): JSX.Element => {
   const [value, setValue] = useState<any>(null);
   const classes = useStyles();
-  let alphlist = userList.sort(alphabetically(true));
+  const alphabeticallySortedList = userList.sort(alphabetically(true));
   return (
     <ActionDropdownContainer>
       <CloseIconContainer onClick={() => setShowUsersList(!showUsersList)}>
@@ -111,7 +109,7 @@ export const MultiOptionTypeSelectionDropdownList = ({
         handleHomeEndKeys
         size={"small"}
         id="search-for-labels"
-        options={alphlist.sort(typesort(true))}
+        options={alphabeticallySortedList.sort(typesort())}
         getOptionLabel={option => {
             if(typeof option === 'object' && option !== null) {
                 return `${option.name} ${option.lastName}`;
