@@ -19,7 +19,7 @@ interface ICommentLogsProps {
 
 export const CommentLogs = observer(
   ({ comments, meta, getLogs, store }: ICommentLogsProps): JSX.Element => {
-    const { userStore } = useMst();
+    const { userStore, sessionStore } = useMst();
     const [page, setPage] = useState<number>(meta?.currentPage);
 
     const handleChange = (event, value) => {
@@ -70,6 +70,7 @@ export const CommentLogs = observer(
                           onClick={() => {
                             store.deleteCommentLog(log.id);
                           }}
+                          disabled={sessionStore.profile.id !== log.ownedById}
                         >
                           {" "}
                           Delete
@@ -112,12 +113,17 @@ const CommentLogDate = styled.span`
   color: ${props => props.theme.colors.grey100};
 `;
 
-const CommentLogDelete = styled.span`
+type CommentLogDeleteProps = {
+  disabled: boolean;
+};
+
+const CommentLogDelete = styled.span<CommentLogDeleteProps>`
   font-size: 9px;
   color: ${props => props.theme.colors.grey100};
   margin-left: 8px;
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
   &:hover {
-    color: ${props => props.theme.colors.warningRed};
+    color: ${props => (props.disabled ? props.theme.colors.grey100 : props.theme.colors.warningRed)};
     cursor: pointer;
   }
 `;
