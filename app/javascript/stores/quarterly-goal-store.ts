@@ -75,6 +75,23 @@ export const QuarterlyGoalStoreModel = types
       );
       return responseQuarterlyGoal;
     }),
+     duplicateGoal: flow(function*(id) {
+      const env = getEnv(self);
+      const { goalStore, annualInitiativeStore } = getRoot(self);
+      const response: any = yield env.api.duplicateQuarterlyGoal(id);
+      const responseQuarterlyGoal = response.data;
+      self.quarterlyGoal = responseQuarterlyGoal;
+      const responseAnnualInitiative = yield annualInitiativeStore.getAnnualInitiative(
+        responseQuarterlyGoal.annualInitiativeId,
+      );
+
+      goalStore.updateAnnualInitiative(responseAnnualInitiative);
+      showToast(
+        il8n.t("quarterlyGoal.closed", { title: self.title }),
+        ToastMessageConstants.SUCCESS,
+      );
+      return responseQuarterlyGoal;
+    }),
     createKeyElement: flow(function*(keyElementParams) {
       const env = getEnv(self);
       try {
