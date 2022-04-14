@@ -24,15 +24,10 @@ export interface IAuditLogProps {}
 export const AuditLogsIndex = observer(
   (props: IAuditLogProps): JSX.Element => {
   const { auditLogStore } = useMst();
-  const { auditLog } = auditLogStore;
-
-  const getAuditlog = () => {
-    auditLogStore.getAudit();
-  };
+  const { auditLogs } = auditLogStore;
 
   useEffect(() => {
-    getAuditlog();
-    ////auditLogStore.getAudit();
+    auditLogStore.getAudit();
   });
 
   function createData(

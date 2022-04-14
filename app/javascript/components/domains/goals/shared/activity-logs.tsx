@@ -20,7 +20,7 @@ interface IActivityLogsProps {
 
 export const ActivityLogs = observer(
   ({ keyElements, store, meta, getLogs }: IActivityLogsProps): JSX.Element => {
-    const { userStore } = useMst();
+    const { userStore, sessionStore } = useMst();
     const [page, setPage] = useState<number>(meta?.currentPage);
 
     const handleChange = (event, value) => {
@@ -83,6 +83,7 @@ export const ActivityLogs = observer(
                               onClick={() => {
                                 store.deleteActivityLog(log.id);
                               }}
+                              disabled={sessionStore.profile.id !== log.ownedById}
                             >
                               {" "}
                               Delete
@@ -120,6 +121,7 @@ export const ActivityLogs = observer(
                               onClick={() => {
                                 store.deleteActivityLog(log.id);
                               }}
+                              disabled={sessionStore.profile.id !== log.ownedById}
                             >
                               {" "}
                               Delete
@@ -164,12 +166,18 @@ const ActivityLogDate = styled.span`
   color: ${props => props.theme.colors.grey100};
 `;
 
-const ActivityLogDelete = styled.span`
+type ActivityLogDeleteProps = {
+  disabled: boolean;
+};
+
+const ActivityLogDelete = styled.span<ActivityLogDeleteProps>`
   font-size: 9px;
   color: ${props => props.theme.colors.grey100};
+  pointer-events: ${props => (props.disabled ? "none" : "auto")};
   margin-left: 8px;
   &:hover {
-    color: ${props => props.theme.colors.warningRed};
+    color: ${props =>
+      props.disabled ? props.theme.colors.grey100 : props.theme.colors.warningRed};
     cursor: pointer;
   }
 `;

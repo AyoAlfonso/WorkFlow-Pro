@@ -106,7 +106,7 @@ const initialState = {
     currentCheckIn: null,
   },
   auditLogStore: {
-    auditLog: null,
+    auditLogs: [],
     //objectiveLogs: null,
   },
 };

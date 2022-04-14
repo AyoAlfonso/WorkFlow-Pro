@@ -11,7 +11,7 @@ export const AuditLogModel = types
     controller: types.maybeNull(types.string),
     action: types.maybeNull(types.string),
     params: types.maybeNull(types.string),
-    companyId: types.maybeNull(types.number), /// might be string
+    companyId: types.maybeNull(types.string), /// might be string
     teamId: types.maybeNull(types.string),
     note: types.maybeNull(types.string),
     createdAt: types.maybeNull(types.string),

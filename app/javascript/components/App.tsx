@@ -293,7 +293,9 @@ export const App = observer(
                         )}
                         <Route exact path="/journals" component={JournalIndex} />
                         <Route exact path="/notes" component={NotesIndex} />
-                        <Route exact path="/audit-logs" component={AuditLogsIndex} />
+                        {profile.role == "Admin" && (
+                          <Route exact path="/audit-logs" component={AuditLogsIndex} />
+                        )}
 
                         {profile.productFeatures && profile.productFeatures.meeting && (
                           <>

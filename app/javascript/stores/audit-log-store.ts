@@ -10,7 +10,7 @@ import il8n from "i18next";
 export const AuditLogStoreModel = types
   .model("AuditLogModel")
   .props({
-    auditLog: types.maybeNull(AuditLogModel),
+    auditLogs: types.array(AuditLogModel),
     //objectiveLogs: types.maybeNull(types.array(ObjectiveLogModel)),
   })
   .extend(withEnvironment())
@@ -20,14 +20,13 @@ export const AuditLogStoreModel = types
       const env = getEnv(self);
       try {
         const response: any = yield env.api.getAuditLogs();
-        console.log('audit');
-        self.auditLog = response.data;
-        return response.data;
+        self.auditLogs = response.data.userActivityLogs;
+        return response.data.meta;
       } catch {
         showToast(`There was an error fetching the audit log`, ToastMessageConstants.ERROR);
       }
     }),
-  }))
+  }));
 
 type AuditLogStoreType = typeof AuditLogStoreModel.Type;
 export interface IAuditLogStore extends AuditLogStoreType {
