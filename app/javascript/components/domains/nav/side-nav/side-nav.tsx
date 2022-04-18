@@ -363,13 +363,29 @@ export const SideNavNoMst = (
         )}
       </SideBarElement>
 
-      {showPyn && (
+      {company && showPyn ? (
         <StyledNavLinkChildrenActive to="/" icon={"Planner"} currentPathName={currentPathName}>
+          {t("navigation.planner")}
+        </StyledNavLinkChildrenActive>
+      ) : (
+        <StyledNavLinkChildrenActive
+          to={`/staticplanner`}
+          icon={"Planner"}
+          currentPathName={currentPathName}
+        >
           {t("navigation.planner")}
         </StyledNavLinkChildrenActive>
       )}
 
-      {company && showTeam ? renderTeam(R.path(["length"], teams) || 0) : <> </>}
+      {company && showTeam ? renderTeam(R.path(["length"], teams) || 0) : (
+        <StyledNavLinkChildrenActive
+          to={`/staticteams`}
+          icon={"Team"}
+          currentPathName={currentPathName}
+        >
+          {t("navigation.team")}
+        </StyledNavLinkChildrenActive>
+      )}
 
       {company && company.accessForum && !showTeam && showMeeting ? (
         renderMeeting(R.path(["length"], teams) || 0, "forum")
@@ -403,9 +419,17 @@ export const SideNavNoMst = (
         <> </>
       )}
 
-      {showGoal && (
+      {company && showGoal ? (
         <StyledNavLinkChildrenActive
           to="/goals"
+          icon={"New-Goals"}
+          currentPathName={currentPathName}
+        >
+          {t("navigation.goals")}
+        </StyledNavLinkChildrenActive>
+      ) : (
+        <StyledNavLinkChildrenActive
+          to={`/staticsgoals`}
           icon={"New-Goals"}
           currentPathName={currentPathName}
         >
@@ -422,7 +446,13 @@ export const SideNavNoMst = (
           {t("navigation.scorecards")}
         </StyledNavLinkChildrenActive>
       ) : (
-        <> </>
+        <StyledNavLinkChildrenActive
+          to={`/staticscorecards`}
+          icon={"Scorecard_New"}
+          currentPathName={currentPathName}
+        >
+          {t("navigation.scorecards")}
+        </StyledNavLinkChildrenActive>
       )}
 
       {company && checkIn ? (
@@ -433,7 +463,13 @@ export const SideNavNoMst = (
           {t("navigation.checkin")}
         </StyledNavLinkChildrenActive>
       ) : (
-        <></>
+        <StyledNavLinkChildrenActive
+          to={`/staticcheckin`}
+          icon={"Check-in-page"}
+          currentPathName={currentPathName}
+        >
+          {t("navigation.checkin")}
+        </StyledNavLinkChildrenActive>
       )}
 
       {company && company.accessCompany && !showTeam ? (

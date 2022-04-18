@@ -16,6 +16,7 @@ import { GlobalStyles } from "./global-styles";
 
 // components
 import { HomeContainer } from "./domains/home/home-container";
+import { DummyHome } from "./domains/home/dummy-home";
 import { useMst } from "../setup/root";
 import styled from "styled-components";
 import { IIssueStore } from "../stores/issue-store";
@@ -33,12 +34,15 @@ import { HeaderBar } from "./domains/nav/header-bar";
 import { SideNav } from "./domains/nav";
 import { Placeholder } from "./shared/placeholder";
 import { GoalsIndex } from "./domains/goals/goals-index";
+import { DummyGoalsIndex } from "./domains/goals/dummy-goals-index";
 import { TeamOverview } from "./domains/meetings/team-overview";
+import { DummyTeamOverview } from "./domains/meetings/dummy-team";
 import { Meeting } from "./domains/meetings/meeting";
 import { PersonalPlanning } from "./domains/meetings/personal-planning";
 import { JournalIndex } from "~/components/domains/journal/journal-index";
 import { NotesIndex } from "~/components/domains/notes/notes-index";
 import { ScorecardsIndex } from "~/components/domains/scorecard/scorecards-index";
+import { DummyScorecardsIndex } from "~/components/domains/scorecard/dummy-scorecards-index";
 
 import { Section1 } from "./domains/meetings-forum/section-1";
 import { Section2 } from "./domains/meetings-forum/section-2";
@@ -49,6 +53,7 @@ import { OnboardingModal } from "./domains/onboarding";
 
 import { Onboarding } from "./domains/onboarding";
 import { CheckIn } from "./domains/check-in/checkin";
+import { DummyCheckin } from "./domains/check-in/dummy-checkin";
 import { useEffect } from "react";
 import { getWeekOf } from "~/utils/date-time";
 import { CheckInSuccess } from "./domains/check-in/components/checkin-success";
@@ -237,6 +242,11 @@ export const App = observer(
                       "/meetings/section_1/:team_id",
                       "/meetings/section_2",
                       "/meetings/section_2/:team_id",
+                      "/staticplanner",
+                      "/staticgoals",
+                      "/staticscorecards",
+                      "/staticcheckin",
+                      "/staticteams",
                     ]}
                   >
                     <>
@@ -250,6 +260,12 @@ export const App = observer(
                         ) : (
                           <Route exact path="/" component={GoalsIndex} />
                         )}
+
+                        {<Route exact path="/staticgoals" component={DummyGoalsIndex} />}
+                        {<Route exact path="/staticplanner" component={DummyHome} />}
+                        {<Route exact path="/staticscorecards" component={DummyScorecardsIndex} />}
+                        {<Route exact path="/staticcheckin" component={DummyCheckin} />}
+                        {<Route exact path="/staticteams" component={DummyTeamOverview} />}
 
                         {showGoalRoute && <Route exact path="/goals" component={GoalsIndex} />}
                         {showTeamRoute && (
