@@ -45,11 +45,8 @@ export const GoalDropdownOptions = ({
 
   const itemText = itemType == "annualInitiative" ? "Objective" : "Initiative";
   const quarterText = () => {
-    if (quarter >= 4) {
-      return 4;
-    } else {
-      return quarter + 1;
-    }
+    const quarters = [1, 2, 3, 4, 4];
+    return quarters[quarter];
   }
 
   const closeModal = () => {
