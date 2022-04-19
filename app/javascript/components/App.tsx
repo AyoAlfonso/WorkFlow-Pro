@@ -42,7 +42,7 @@ import { PersonalPlanning } from "./domains/meetings/personal-planning";
 import { JournalIndex } from "~/components/domains/journal/journal-index";
 import { NotesIndex } from "~/components/domains/notes/notes-index";
 import { ScorecardsIndex } from "~/components/domains/scorecard/scorecards-index";
-import { DummyScorecardsIndex } from "~/components/domains/scorecard/dummy-scorecards-index";
+import { DummyScorecardsIndex } from "~/components/domains/scorecard/dummy-scorecards";
 
 import { Section1 } from "./domains/meetings-forum/section-1";
 import { Section2 } from "./domains/meetings-forum/section-2";

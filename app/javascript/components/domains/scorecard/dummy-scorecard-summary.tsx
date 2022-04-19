@@ -10,10 +10,11 @@ import { Icon } from "~/components/shared/icon";
 import { getScorePercent } from "./scorecard-table-view";
 import { toJS } from "mobx";
 import { useTranslation } from "react-i18next";
+import { dataState } from "./__tests__/scorecard-data/data-store";
 
-const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
-  const [data, setData] = useState<Object>(null);
-  const [onTrack, setOnTrack] = useState(0);
+const WeekSummary = ({}): JSX.Element => {
+   const [data, setData] = useState<Object>(null);
+   const [onTrack, setOnTrack] = useState(1);
   const {
     cavier,
     fadedCavier,
@@ -38,37 +39,18 @@ const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
   };
 
   useEffect(() => {
-    const dataPoints = kpis.reduce(
-      (acc: number[], kpi: any) => {
-        const week = kpi?.period[currentFiscalYear]?.[currentWeek];
-        if (!week) {
-          acc[0]++;
-        } else {
-          const percentScore = getScorePercent(week.score, kpi.targetValue, kpi.greaterThan);
-          if (percentScore >= 100) {
-            acc[3]++;
-          } else if (percentScore >= kpi.needsAttentionThreshold) {
-            acc[2]++;
-          } else {
-            acc[1]++;
-          }
-        }
-        return acc;
-      },
-      [0, 0, 0, 0],
-    ); // ["None", "Behind", "Needs Attention", "On Track"]
-    setOnTrack(dataPoints[3]);
+    //setOnTrack(1);
     setData({
       labels: ["None", "Behind", "NeedsAttention", "On Track"],
       datasets: [
         {
-          data: dataPoints,
+          data: [1, 1, 1, 1],
           backgroundColor: [grey100, warningRed, cautionYellow, successGreen],
         },
       ],
       hoveroffset: 4,
     });
-  }, [kpis]);
+  });
 
   return (
     <WeekContainer>
@@ -81,15 +63,15 @@ const WeekSummary = ({ kpis, currentWeek, currentFiscalYear }): JSX.Element => {
             </Text>
             <div>
               <Text fontSize={20} bold>
-                <OnTrackCount percentageOnTrack={onTrack / kpis.length}>{onTrack}</OnTrackCount> /{" "}
-                {kpis.length}
+                <OnTrackCount percentageOnTrack={1/4}>1</OnTrackCount> /{" "}
+                4
               </Text>
             </div>
             <Text fontSize={11} mt={8}>
               KPIs are On Track
             </Text>
           </DoughnutTextContainer>
-          {data && <StyledDoughnut data={data} options={chartOptions} width={200} height={200} />}
+          {<StyledDoughnut data={data} options={chartOptions} width={200} height={200} />}
         </DoughnutChartContainer>
         <WeekLegendContainer>
           <StatusBadgeContainer>
@@ -127,11 +109,6 @@ const Arrow = ({ up = true, color }) => {
 };
 
 const QuarterSummary = ({
-  kpis,
-  currentWeek,
-  currentQuarter,
-  fiscalYearStart,
-  currentFiscalYear,
 }): JSX.Element => {
   const [currentWeekPercent, setCurrentWeekPercent] = useState(0);
   const [quarterlyPercent, setQuarterlyPercent] = useState(0);
@@ -190,49 +167,13 @@ const QuarterSummary = ({
     maintainAspectRatio: false,
   };
 
-  const gatherData = (weeks: [number]) => {
-    return kpis
-      ? weeks.map((weekIndex: number) => {
-          return (
-            kpis.reduce((acc: number, kpi: any) => {
-              const week = kpi?.period[currentFiscalYear]?.[weekIndex];
-              const { targetValue, greaterThan } = kpi;
-
-              return (
-                acc +
-                (week ? Math.min(100, getScorePercent(week.score, targetValue, greaterThan)) : 0)
-              );
-            }, 0) / kpis.length
-          );
-        })
-      : [];
-  };
-
-  const weekToDate = (week: number): string =>
-    moment(fiscalYearStart)
-      .add(week, "w")
-      .year(currentFiscalYear)
-      .startOf("week" as moment.unitOfTime.StartOf)
-      .format("MMM D");
-
   useEffect(() => {
-    const startWeek = (currentQuarter - 1) * 13 + 1;
-    const currentQuarterWeeks = R.range(startWeek, currentWeek + 1);
-    const currentQuarterData = gatherData(currentQuarterWeeks);
-    if (currentQuarterData.length > 0) {
-      setCurrentWeekPercent(R.last(currentQuarterData)?.toFixed(2));
-      setQuarterlyPercent(currentQuarterData.reduce((a, b) => a + b) / currentQuarterData.length);
-      if (currentWeek != 1) {
-        setLastWeekPercent(+currentQuarterData[currentQuarterData.length - 2]);
-      }
-    }
-
     setData({
-      labels: R.range(startWeek, startWeek + 13).map((i: number) => weekToDate(i)),
+      labels: [ "Mar 7", "Mar 14", "Mar 21", "Mar 28", "Apr 4", "Apr 11", "Apr 18", "Apr 25", "May 2", "May 9", "May 16", "May 23", "May 30", ],
       datasets: [
         {
           label: "Current Quarter",
-          data: currentQuarterData,
+          data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
           fill: false,
           backgroundColor: white,
           borderColor: primary100,
@@ -241,22 +182,8 @@ const QuarterSummary = ({
         },
       ],
     });
-  }, [kpis]);
-  const { t } = useTranslation();
-
-  // const renderCurrentWeekPercent = () => {
-  //   return (
-  //     <Text ml={8} mr={16} fontSize={32} color={poppySunrise} bold>
-  //       {currentWeekPercent}%
-  //     </Text>
-  //   );
-  // };
-
+  });
   const renderGrade = percentGrade => {
-    if (isNaN(percentGrade)) {
-      return <></>;
-    }
-    if (percentGrade >= 85) {
       return (
         <>
           <Text ml={8} mr={16} fontSize={32} color={successGreen} bold>
@@ -264,86 +191,37 @@ const QuarterSummary = ({
           </Text>
         </>
       );
-    } else if (percentGrade < 85 && percentGrade >= 60) {
-      return (
-        <>
-          <Text ml={8} mr={16} fontSize={32} color={yellowSea} bold>
-            {quarterlyPercent.toFixed(2)}%
-          </Text>
-        </>
-      );
-    } else if (percentGrade < 60) {
-      return (
-        <>
-          <Text ml={8} mr={16} fontSize={32} color={warningRed} bold>
-            {quarterlyPercent.toFixed(2)}%
-          </Text>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <Text ml={8} mr={16} fontSize={32} color={warningRed} bold>
-            {quarterlyPercent.toFixed(2)}%
-          </Text>
-        </>
-      );
-    }
   };
 
   const renderWeekDifference = () => {
-    if (lastWeekPercent === null) {
-      return <></>;
-    } else {
-      const difference = +(currentWeekPercent - lastWeekPercent).toFixed(2);
-
       return (
         <>
-          {difference >= 0 ? (
+          {(
             <>
               <Arrow up={true} color={successGreen} />
               <Text color={successGreen} ml={4}>
-                {Number.isNaN(difference) ? 0 : difference}%
-              </Text>
-            </>
-          ) : (
-            <>
-              <Arrow up={false} color={warningRed} />
-              <Text color={warningRed} ml={4}>
-                {Number.isNaN(difference * -1) ? 0 : difference * -1}%
+                5%
               </Text>
             </>
           )}
           <Text color={greyActive} ml={8} fontSize={12}>
-            {t("scorecards.latestWeekComparison")}
+            {"compared to last week"}
           </Text>
         </>
       );
-    }
   };
 
   return (
     <QuarterContainer>
       <Header>This Quarter</Header>
       <Text color={greyActive} fontSize={14} mt={4} mb={9}>
-        {/* {t("scorecards.quarterlyGraphTitle")} */}
       </Text>
       <QuarterInfoContainer>
         <StatsContainer>
-          {renderGrade(quarterlyPercent)}
+          {renderGrade(40)}
           {renderWeekDifference()}
         </StatsContainer>
         <QuarterLegendContainer>
-          {/* <StatusBadgeContainer>
-            <StatusBadge fontSize={"12px"} color={primary100} background={backgroundBlue}>
-              • Current Quarter
-            </StatusBadge>
-          </StatusBadgeContainer> */}
-          {/* <StatusBadgeContainer>
-            <StatusBadge fontSize={"12px"} color={greyActive} background={backgroundGrey}>
-              • Last Quarter
-            </StatusBadge>
-          </StatusBadgeContainer> */}
         </QuarterLegendContainer>
       </QuarterInfoContainer>
       <LineChartContainer>
@@ -354,31 +232,13 @@ const QuarterSummary = ({
 };
 
 type ScorecardSummaryProps = {
-  kpis: any;
-  currentWeek: number;
-  currentQuarter: number;
-  fiscalYearStart: string;
-  currentFiscalYear: number;
 };
-
 export const DummyScorecardSummary = ({
-  kpis,
-  currentWeek,
-  currentQuarter,
-  fiscalYearStart,
-  currentFiscalYear,
 }: ScorecardSummaryProps): JSX.Element => {
-  const KPIs = toJS(kpis);
   return (
     <Container>
-      <WeekSummary kpis={KPIs} currentWeek={currentWeek} currentFiscalYear={currentFiscalYear} />
-      <QuarterSummary
-        kpis={KPIs}
-        currentWeek={currentWeek}
-        currentQuarter={currentQuarter}
-        fiscalYearStart={fiscalYearStart}
-        currentFiscalYear={currentFiscalYear}
-      />
+      <WeekSummary/>
+      <QuarterSummary/>
     </Container>
   );
 };
@@ -545,3 +405,4 @@ type ArrowIconContainerProps = {
 const ArrowIconContainer = styled.div<ArrowIconContainerProps>`
   transform: rotate(${props => (props.up ? 0 : 180)}deg);
 `;
+

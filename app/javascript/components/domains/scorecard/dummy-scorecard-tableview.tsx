@@ -19,52 +19,20 @@ import { titleCase } from "~/utils/camelize";
 import { toJS } from "mobx";
 import Tooltip from '@material-ui/core/Tooltip';
 import { BeenhereOutlined } from "@material-ui/icons";
-//import { averageScore } from "./shared/parent-kpi-pop";
-// TODO: figure out better function for percent scores.
-export const getScorePercent = (value: number, target: number, greaterThan: boolean) =>
-  greaterThan ? (value / target) * 100 : ((target + target - value) / target) * 100;
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 type DummyScorecardTableViewProps = {
-  tableKPIs: any;
-  allKPIs: any[];
-  setKpis: any;
-  setViewEditKPIModalOpen: any;
-  viewEditKPIModalOpen: any;
-  isMiniEmbed?: boolean;
 };
 
 export const DummyScorecardTableView = observer(
   ({
-    tableKPIs,
-    allKPIs,
-    setKpis,
-    viewEditKPIModalOpen,
-    setViewEditKPIModalOpen,
-    isMiniEmbed,
   }: DummyScorecardTableViewProps): JSX.Element => {
-    const { t } = useTranslation();
-    const {
-      companyStore: { company },
-      scorecardStore: { kpis },
-    } = useMst();
-    const KPIs = toJS(tableKPIs);
-
-    const [year, setYear] = useState<number>(company.yearForCreatingAnnualInitiatives);
-    const [quarter, setQuarter] = useState<number>(company.currentFiscalQuarter);
-    const [fiscalYearStart, setFiscalYearStart] = useState<string>(company.fiscalYearStart);
-
-    const [targetWeek, setTargetWeek] = useState<number>(undefined);
-    const [targetValue, setTargetValue] = useState<number>(undefined);
-    const [tab, setTab] = useState<string>("KPIs");
-    const [currentSelectedKpi, setCurrentSelectedKpi] = useState(undefined);
-    const [updateKPI, setUpdateKPI] = useState(undefined);
-    const [selectedKPIIcon, setSelectedKPIIcon] = useState(undefined);
-    const [selectedKPIWeek, setSelectedKPIWeek] = useState(undefined);
-    const [updateKPIModalOpen, setUpdateKPIModalOpen] = useState(false);
-    const [showEditExistingKPIContainer, setShowEditExistingKPIContainer] = useState<boolean>(
-      false,
-    );
-    const tabs = [t("scorecards.tabs.kpis"), t("scorecards.tabs.people")];
     const {
       fadedYellow,
       fadedGreen,
@@ -80,630 +48,104 @@ export const DummyScorecardTableView = observer(
       dairyCream,
     } = baseTheme.colors;
 
-    const formatValue = (unitType: string, value: number) => {
-      switch (unitType) {
-        case "percentage":
-          return `${Math.round(value * 1000) / 1000}%`;
-        case "currency":
-          return `$${value.toFixed(2)}`;
-        default:
-          return `${value}`;
-      }
-    };
-    const formatKpiType = kpiType => titleCase(kpiType);
-    const averageScorePercent = (scores: [number], target: number, greaterThan: boolean) => {
-      return Math.min(
-        Math.floor(
-          getScorePercent(
-            scores.reduce((acc, score) => acc + score, 0) / scores.length,
-            target,
-            greaterThan,
-          ),
-        ),
-        100,
-      );
-    };
-
-    const getStatusValue = (percentScore, needsAttentionThreshold) => {
-      const percent = Math.round(percentScore);
-      if (percentScore === null) {
-        return {
-          color: greyActive,
-          background: backgroundGrey,
-          percent,
-          text: "No Update",
-        };
-      } else if (percentScore >= 100) {
-        return {
-          color: successGreen,
-          background: fadedGreen,
-          percent,
-          text: "On Track",
-        };
-      } else if (percentScore >= needsAttentionThreshold) {
-        return {
-          color: poppySunrise,
-          background: fadedYellow,
-          percent,
-          text: "Needs Attention",
-        };
-      } else {
-        return {
-          color: warningRed,
-          background: fadedRed,
-          percent,
-          text: "Behind",
-        };
-      }
-    };
-
-    const totalScore = (
-      weeks: any,
-      parentType: string,
-    ) => {
-      const quarterScores = [
-        [null, 0],
-        [null, 0],
-        [null, 0],
-        [null, 0],
-      ];
-      weeks.forEach(({ week, score }) => {
-        const q = Math.floor((week - 1) / 13);
-        if (quarterScores[q]) {
-          quarterScores[q][0] += score;
-          quarterScores[q][1]++;
-        }
-      });
-      return quarterScores.map(tuple =>
-        tuple[0] === null ? null : (parentType == 'avr' ? Math.round((tuple[0] + Number.EPSILON) * 100) / 100 : tuple[0])
-        //tuple[0] === null ? null : tuple[0]
-      );
-    };
-
-    const averageScore = (
-      weeks: any,
-      target: number,
-      greaterThan: boolean,
-      parentType: string,
-    ) => {
-      const getScore = (value: number, target: number, greaterThan: boolean) =>
-        greaterThan ? Math.round(value) : Math.round(target + target - value);
-
-      const quarterScores = [
-        [null, 0],
-        [null, 0],
-        [null, 0],
-        [null, 0],
-      ];
-      weeks.forEach(({ week, score }) => {
-        const q = Math.floor((week - 1) / 13);
-        if (quarterScores[q]) {
-          quarterScores[q][0] += score;
-          quarterScores[q][1]++;
-        }
-      });
-      return quarterScores.map(tuple =>
-        tuple[0] === null ? null : getScore(tuple[0] / tuple[1], target, greaterThan),
-      );
-    };
-
-    const calcQuarterAverageScores = (
-      weeks: any,
-      target: number,
-      greaterThan: boolean,
-      parentType: string,
-    ) => {
-      const quarterScores = [
-        [null, 0],
-        [null, 0],
-        [null, 0],
-        [null, 0],
-      ];
-      weeks.forEach(({ week, score }) => {
-        const q = Math.floor((week - 1) / 13);
-        if (quarterScores[q]) {
-          quarterScores[q][0] += score;
-          quarterScores[q][1]++;
-        }
-      });
-      return quarterScores.map(tuple =>
-        tuple[0] === null ? null : getScorePercent(tuple[0] / tuple[1], target, greaterThan),
-      );
-    };
-
-    const getScoreValueColor = (percentScore: number) => {
-      if (percentScore >= 100) {
-        return successGreen;
-      } else {
-        return warningRed;
-      }
-    };
-
-    const data = useMemo(
-      () =>
-        KPIs?.map((kpi: any) => {
-          const targetText = "behind";
-          const title = "testtitle";
-          const logic = "greater than";
-
-          const row: any = {
-            updateKPI: {
-              id: kpi.id,
-              ownedById: kpi.ownedById,
-              unitType: kpi.unitType,
-              parentType: kpi.parentType,
-              relatedParentKpis: kpi.relatedParentKpis,
-              parentKpi: kpi.parentKpi,
-            },
-            title: {
-              title,
-              logic,
-              parentType: kpi.parentType,
-              id: kpi.id,
-            },
-            owner: kpi.ownedBy,
-            greaterThan: kpi.greaterThan,
-          };
-          const weeks = Object.values(kpi?.period?.[year] || {});
-          weeks.forEach((week: any) => {
-            const percentScore = getScorePercent(week?.score, kpi.targetValue, kpi.greaterThan);
-            row[`wk_${week.week}`] = {
-              score: formatValue(kpi.unitType, week?.score),
-              color: getScoreValueColor(percentScore),
-              id: kpi.id,
-            };
-          });
-          const percentScores = calcQuarterAverageScores(
-            weeks,
-            kpi.targetValue,
-            kpi.greaterThan,
-            kpi.parentType,
-          ).map(score => getStatusValue(score, kpi.needsAttentionThreshold));
-          
-          const averageScores = averageScore(
-            weeks,
-            kpi.targetValue,
-            kpi.greaterThan,
-            kpi.parentType,
-          );
-
-          const totalScores = totalScore(
-            weeks,
-            kpi.parentType,
-          );
-
-          row.score = percentScores;
-          row.status = percentScores;
-          row.updateKPI.currentValue = weeks[weeks.length - 1]
-            ? weeks[weeks.length - 1]["score"]
-            : 0;
-          row.updateKPI.currentWeek = weeks[weeks.length - 1] || 0;
-          row.updateKPI.weeks = weeks;
-          row.targetValue = kpi.targetValue;
-          row.average = averageScores;
-          row.total = totalScores;
-          return row;
-        }),
-      [KPIs],
-    );
-
-    const columns = useMemo(
-      () => [
-        {
-          Header: "",
-          accessor: "updateKPI",
-          width: "31px",
-          minWidth: "31px",
-          Cell: ({ value }) => {
-            return (
-              <UpdateKPIWrapper
-                onMouseEnter={() => {
-                  setSelectedKPIIcon(value.id);
-                }}
-                onMouseLeave={() => {
-                  setSelectedKPIIcon(null);
-                }}
-              >
-                <UpdateKPIContainer
-                  disabled={value.parentType}
-                  onClick={() => {
-                    if (value.parentType) return;
-                    if (!isMiniEmbed) {
-                      setUpdateKPI(value);
-                      setUpdateKPIModalOpen(true);
-                    }
-                  }}
-                >
-                  {selectedKPIIcon == value.id ? (
-                    <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
-                  ) : (
-                    <> </>
-                  )}
-                  {selectedKPIIcon !== value.id ? (
-                    <BlueUpdateKpiIcon
-                      icon={"Update_KPI_New"}
-                      size={16}
-                      hover={selectedKPIIcon == value.id}
-                    />
-                  ) : (
-                    <> </>
-                  )}
-                </UpdateKPIContainer>
-              </UpdateKPIWrapper>
-            );
-          },
-        },
-        {
-          Header: () => <div style={{ textAlign: "left", fontSize: "14px" }}>KPIs</div>,
-          accessor: "title",
-          Cell: ({ value }) => {
-            return (
-              <KPITitleContainer
-                onClick={() => {
-                  setCurrentSelectedKpi(value.id);
-                  setViewEditKPIModalOpen(true);
-                }}
-              >
-                <KPITextContainer>
-                  <KPITitle>
-                    {value.title} {value.parentType && `[${formatKpiType(value.parentType)}]`}
-                  </KPITitle>
-                  <KPILogic>{value.logic}</KPILogic>
-                </KPITextContainer>
-              </KPITitleContainer>
-            );
-          },
-          width: "21%",
-          minWidth: "216px",
-        },
-        {
-          Header: () => <div style={{ fontSize: "14px" }}>Score</div>,
-          accessor: "score",
-          width: "8%",
-          minWidth: "86px",
-          Cell: ({ value, row }) => {
-            const quarterValue = value[quarter - 1];
-            const { relatedParentKpis, parentKpi, id } = row.original.updateKPI;
-            const { greaterThan } = row.original;
-            //const total = (row.original.updateKPI.parentType == 'avr')? Math.round(row.original.total) : row.original.total;
-            //const kpiFound = kpis.find(kpi => kpi.id == id);
-            //number a
-
-            if (parentKpi.length > relatedParentKpis.length) {
-              quarterValue.color = tango;
-              quarterValue.background = dairyCream;
-            }
-            return (
-              <Tooltip title= {<>{"Target: "} {row.original.targetValue}<br /> {"Average: "} {row.original.average}<br /> {"Total: "} {row.original.total}</>} placement="top" arrow>
-              <ScoreContainer background={quarterValue.background}>
-                <Score color={quarterValue.color}>
-                  {parentKpi.length > relatedParentKpis.length
-                    ? "—"
-                    : quarterValue.percent
-                    ? `${quarterValue.percent}%`
-                    : greaterThan
-                    ? "0%"
-                    : "—"}
-                </Score>
-              </ScoreContainer>
-              </Tooltip>
-            );
-          },
-        },
-        {
-          Header: () => <div style={{ fontSize: "14px" }}>Status</div>,
-          accessor: "status",
-          Cell: ({ value, row }) => {
-            const quarterValue = value[quarter - 1];
-            const { relatedParentKpis, parentKpi } = row.original.updateKPI;
-
-            if (parentKpi.length > relatedParentKpis.length) {
-              return (
-                <StatusContainer>
-                  <StatusBadge fontSize={"12px"} background={dairyCream} color={tango}>
-                    Broken
-                  </StatusBadge>
-                </StatusContainer>
-              );
-            }
-            return (
-              <StatusContainer>
-                <StatusBadge
-                  fontSize={"12px"}
-                  color={quarterValue.color}
-                  background={quarterValue.background}
-                >
-                  {quarterValue.text}
-                </StatusBadge>
-              </StatusContainer>
-            );
-          },
-          width: "8%",
-          minWidth: "86px",
-        },
-        {
-          Header: () => <div style={{ fontSize: "14px" }}>Owner</div>,
-          accessor: "owner",
-          Cell: ({ value }) => {
-            return (
-              <OwnerContainer>
-                <DummyOwnedBy ownedBy={value} marginLeft={"0px"} disabled />
-              </OwnerContainer>
-            );
-          },
-          width: "17%",
-          minWidth: "160px",
-        },
-        ...R.range(1, 53).map((n, i) => ({
-          Header: () => <div style={{ fontSize: "14px" }}> {`WK ${n}`} </div>,
-          accessor: `wk_${n}`,
-          Cell: ({ value, row }) => {
-            const i = row.id;
-            const { parentType } = row.original.updateKPI;
-
-            if (parentType) {
-              return (
-                <EmptyWeekContainer>
-                  {value === undefined ? (
-                    <EmptyWeekContainer>
-                      <EmptyWeek />
-                    </EmptyWeekContainer>
-                  ) : (
-                    <WeekContainer>
-                      <WeekText color={value.color}>
-                        {(parentType == "avr")? Math.round(value.score) : value.score}
-                        </WeekText>
-                    </WeekContainer>
-                  )}
-                </EmptyWeekContainer>
-              );
-            }
-            if (value === undefined) {
-              if (company.currentFiscalWeek < n) {
-                return (
-                  <EmptyWeekContainer>
-                    <EmptyWeek />
-                  </EmptyWeekContainer>
-                );
-              }
-              return (
-                // TODO: REPETITION TURN INTO A PARENT COMPONENT AND PASS THE CHILDREN
-                <EmptyWeekContainer
-                  onMouseEnter={() => {
-                    setSelectedKPIWeek(`wk_${n}_${i}`);
-                  }}
-                  onMouseLeave={() => {
-                    setSelectedKPIWeek(null);
-                  }}
-                >
-                  <UpdateKPICellContainer
-                    disabled={parentType || false}
-                    onClick={() => {
-                      if (parentType) return;
-                      if (!isMiniEmbed) {
-                        setTargetWeek(n);
-                        setTargetValue(0);
-                        setUpdateKPI(row.original.updateKPI);
-                        setUpdateKPIModalOpen(true);
-                      }
-                    }}
-                    hover={selectedKPIWeek == `wk_${n}_${i}` ? true : false}
-                  >
-                    {selectedKPIWeek == `wk_${n}_${i}` ? (
-                      <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
-                    ) : (
-                      <> </>
-                    )}
-                  </UpdateKPICellContainer>
-                  {selectedKPIWeek !== `wk_${n}_${i}` ? <EmptyWeek /> : <> </>}
-                </EmptyWeekContainer>
-              );
-            }
-            return (
-              <EmptyWeekContainer
-                onMouseEnter={() => {
-                  setSelectedKPIWeek(`wk_${n}_${i}`);
-                }}
-                onMouseLeave={() => {
-                  setSelectedKPIWeek(null);
-                }}
-              >
-                <UpdateKPICellContainer
-                  disabled={parentType || false}
-                  onClick={() => {
-                    if (parentType) return;
-                    if (!isMiniEmbed) {
-                      setTargetWeek(n);
-                      setTargetValue(value.score);
-                      setUpdateKPI(row.original.updateKPI);
-                      setUpdateKPIModalOpen(true);
-                    }
-                  }}
-                  hover={selectedKPIWeek == `wk_${n}_${i}` || value}
-                >
-                  {selectedKPIWeek == `wk_${n}_${i}` ? (
-                    <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
-                  ) : (
-                    <WeekContainer>
-                      <WeekText color={value.color}>{value.score}</WeekText>
-                    </WeekContainer>
-                  )}
-                </UpdateKPICellContainer>
-              </EmptyWeekContainer>
-            );
-          },
-          width: "1fr",
-          minWidth: "64px",
-        })),
-      ],
-      [quarter, year, selectedKPIIcon, selectedKPIWeek],
-    );
-
-    const getHiddenWeeks = (q: number) =>
-      R.range(1, 53)
-        .filter(n => Math.floor((n - 1) / 13) != q - 1)
-        .map(n => `wk_${n}`);
-
-    const initialState = {
-      hiddenColumns: getHiddenWeeks(quarter),
-    };
-
-    const tableInstance = useTable({ columns, data, initialState });
-
-    const {
-      getTableProps,
-      getTableBodyProps,
-      headerGroups,
-      rows,
-      prepareRow,
-      setHiddenColumns,
-    } = tableInstance;
-
-    const handleQuarterSelect = q => {
-      setQuarter(q);
-      setHiddenColumns(getHiddenWeeks(q));
-    };
-
-    const createGoalYearString =
-      company.currentFiscalYear ==
-      company.yearForCreatingAnnualInitiatives
-        ? `FY${company.yearForCreatingAnnualInitiatives.toString().slice(-2)}`
-        : `FY${(company.currentFiscalYear - 1)
-            .toString()
-            .slice(-2)}/${company.currentFiscalYear.toString().slice(-2)}`;
-
-    return (
-      <>
+    function createData( update, kpi, score, status, owner, wk1, wk2, wk3, wk4, wk5, wk6, wk7, wk8, wk9, wk10, wk11, wk12, wk13 ) {
+      return { update, kpi, score, status, owner, wk1, wk2, wk3, wk4, wk5, wk6, wk7, wk8, wk9, wk10, wk11, wk12, wk13};
+    }
+   // <DummyOwnedBy ownedBy={value} marginLeft={"0px"} disabled />
+    const rows = [
+      createData(<BlueUpdateKpiIcon icon={"Update_KPI_New"} size={16}/> , "example", <StatusContainer> <StatusBadge fontSize={"12px"} background={fadedGreen} color={successGreen}> 100% </StatusBadge> </StatusContainer>, <StatusContainer> <StatusBadge fontSize={"12px"} background={fadedGreen} color={successGreen}> OnTrack </StatusBadge> </StatusContainer>, "ownedby", <WeekText color={successGreen}> 10 </WeekText>, " ", " ", " ", <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText> ),
+      createData(<BlueUpdateKpiIcon icon={"Update_KPI_New"} size={16}/> , "example", <StatusContainer> <StatusBadge fontSize={"12px"} background={fadedRed} color={warningRed}> 40% </StatusBadge> </StatusContainer>, <StatusContainer> <StatusBadge fontSize={"12px"} background={fadedRed} color={warningRed}> Behind </StatusBadge> </StatusContainer>, "ownedby", <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText> ),
+      createData(<BlueUpdateKpiIcon icon={"Update_KPI_New"} size={16}/> , "example", <StatusContainer> <StatusBadge fontSize={"12px"} background={backgroundGrey} color={greyActive}> - </StatusBadge> </StatusContainer>, <StatusContainer> <StatusBadge fontSize={"12px"} background={backgroundGrey} color={greyActive}> Broken </StatusBadge> </StatusContainer>, "ownedby", <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText> ),
+      createData(<BlueUpdateKpiIcon icon={"Update_KPI_New"} size={16}/> , "example", <StatusContainer> <StatusBadge fontSize={"12px"} background={fadedYellow} color={poppySunrise}> 60% </StatusBadge> </StatusContainer>, <StatusContainer> <StatusBadge fontSize={"12px"} background={fadedYellow} color={poppySunrise}> Needs Attention </StatusBadge> </StatusContainer>, "ownedby", <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText> ),
+    ];
+    <WeekText color={successGreen}> 10 </WeekText>
+    function BasicTable() {
+      return (
         <Container>
-          <TopRow>
-            <TabContainer>
-              {tabs.map(elem => (
-                <Tab key={elem} active={tab === elem} onClick={() => setTab(elem)}>
-                  {elem}
-                </Tab>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell align="right">KPIs</TableCell>
+                <TableCell align="right">Score</TableCell>
+                <TableCell align="right">Status</TableCell>
+                <TableCell align="right">Owner</TableCell>
+                <TableCell align="right">WK</TableCell>
+                <TableCell align="right">WK</TableCell>
+                <TableCell align="right">WK</TableCell>
+                <TableCell align="right">WK</TableCell>
+                <TableCell align="right">WK</TableCell>
+                <TableCell align="right">WK</TableCell>
+                <TableCell align="right">WK</TableCell>
+                <TableCell align="right">WK</TableCell>
+                <TableCell align="right">WK</TableCell>
+                <TableCell align="right">WK</TableCell>
+                <TableCell align="right">WK</TableCell>
+                <TableCell align="right">WK</TableCell>
+                <TableCell align="right">WK</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow>
+                  <TableCell component="th" scope="row">{row.update}</TableCell>
+                  <TableCell align="right">{row.kpi}</TableCell>
+                  <TableCell align="right">{row.score}</TableCell>
+                  <TableCell align="right">{row.status}</TableCell>
+                  <TableCell align="right">{row.owner}</TableCell>
+                  <TableCell align="right">{row.wk1}</TableCell>
+                  <TableCell align="right">{row.wk2}</TableCell>
+                  <TableCell align="right">{row.wk3}</TableCell>
+                  <TableCell align="right">{row.wk4}</TableCell>
+                  <TableCell align="right">{row.wk5}</TableCell>
+                  <TableCell align="right">{row.wk6}</TableCell>
+                  <TableCell align="right">{row.wk7}</TableCell>
+                  <TableCell align="right">{row.wk8}</TableCell>
+                  <TableCell align="right">{row.wk9}</TableCell>
+                  <TableCell align="right">{row.wk10}</TableCell>
+                  <TableCell align="right">{row.wk11}</TableCell>
+                  <TableCell align="right">{row.wk12}</TableCell>
+                  <TableCell align="right">{row.wk13}</TableCell>
+                </TableRow>
               ))}
-            </TabContainer>
-            <Select
-              selection={quarter}
-              setSelection={handleQuarterSelect}
-              id={"scorecard-quarter-selection"}
-            >
-              {R.range(1, 5).map((n: number) => (
-                <option key={n} value={n}>
-                  Q{n} {createGoalYearString}
-                </option>
-              ))}
-            </Select>
-          </TopRow>
-          {tab == "KPIs" && (
-            <TableContainer>
-              <Table {...getTableProps()}>
-                <TableHead>
-                  {headerGroups.map(headerGroup => (
-                    <TableRow {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map(column => (
-                        <TableHeader
-                          {...column.getHeaderProps({
-                            style: { width: column.width, minWidth: column.minWidth },
-                          })}
-                        >
-                          {column.render("Header")}
-                        </TableHeader>
-                      ))}
-                    </TableRow>
-                  ))}
-                </TableHead>
-                <TableBody {...getTableBodyProps()}>
-                  {rows.map(row => {
-                    prepareRow(row);
-                    return (
-                      <TableRow hover={true} {...row.getRowProps()}>
-                        {row.cells.map(cell => {
-                          return (
-                            <td {...cell.getCellProps()}>
-                              {cell.render("Cell", cell.getCellProps())}
-                            </td>
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-              {!isMiniEmbed && <AddKPIDropdown dropdownDirectionUp={true} kpis={allKPIs} />}
-            </TableContainer>
-          )}
+            </TableBody>
+          </Table>
+        </TableContainer>
         </Container>
-        {currentSelectedKpi && (
-          <ViewEditKPIModal
-            kpiId={currentSelectedKpi}
-            viewEditKPIModalOpen={viewEditKPIModalOpen}
-            setKpis={setKpis}
-            setViewEditKPIModalOpen={setViewEditKPIModalOpen}
-            setShowEditExistingKPIContainer={setShowEditExistingKPIContainer}
-            setCurrentSelectedKpi={setCurrentSelectedKpi}
-          />
-        )}
+      );
+    }
 
-        {showEditExistingKPIContainer && (
-          <AddExistingManualKPIModal
-            kpiId={currentSelectedKpi}
-            showAddManualKPIModal={showEditExistingKPIContainer}
-            setShowAddManualKPIModal={setShowEditExistingKPIContainer}
-            headerText={"Edit KPI"}
-            kpis={allKPIs}
-          />
-        )}
-
-        {updateKPI && (
-          <MiniUpdateKPIModal
-            kpiId={updateKPI.id}
-            ownedById={updateKPI.ownedById}
-            unitType={updateKPI.unitType}
-            year={company.yearForCreatingAnnualInitiatives}
-            week={targetWeek || company.currentFiscalWeek}
-            currentValue={targetValue || updateKPI.currentValue}
-            headerText={targetWeek ? `Update Week ${targetWeek}` : " Update Current Week "}
-            updateKPIModalOpen={updateKPIModalOpen}
-            setUpdateKPIModalOpen={setUpdateKPIModalOpen}
-            setKpis={setKpis}
-            updateKPI={updateKPI}
-            setTargetWeek={setTargetWeek}
-            setTargetValue={setTargetValue}
-            fiscalYearStart={fiscalYearStart}
-            current={!targetWeek}
-          />
-        )}
-      </>
-    );
-  },
+    return (<div>{BasicTable()}</div>);
+  }
 );
 
 const Container = styled.div`
   width: 100%;
   font-family: Lato;
+  z-index: -100;
   //border: 1px solid black;
 `;
 
-const TableContainer = styled.div`
-  width: 100%;
-  font-family: Lato;
-  //border: 1px solid black;
-`;
+// const TableContainer = styled.div`
+//   width: 100%;
+//   font-family: Lato;
+//   //border: 1px solid black;
+// `;
 
-const TopRow = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 16px;
-  //border: 1px solid black;
-`;
+// const TopRow = styled.div`
+//   width: 100%;
+//   display: flex;
+//   justify-content: space-between;
+//   margin-bottom: 16px;
+//   //border: 1px solid black;
+// `;
 
-const TabContainer = styled.div`
-  display: flex;
-  visibility: hidden;
-  //border: 1px solid black;
-`;
+// const TabContainer = styled.div`
+//   display: flex;
+//   visibility: hidden;
+//   //border: 1px solid black;
+// `;
 
 type TabProps = {
   active: boolean;
@@ -726,28 +168,28 @@ const Tab = styled.button<TabProps>`
 		opacity: 1;`}
 `;
 
-const Table = styled.table`
-  border-collapse: collapse;
-  display: -webkit-box;
-  padding-bottom: 16px;
-  font-size: 12px;
-  overflow-x: auto;
-  width: 100%;
-  //border: 1px solid black;
-`;
+// const Table = styled.table`
+//   border-collapse: collapse;
+//   display: -webkit-box;
+//   padding-bottom: 16px;
+//   font-size: 12px;
+//   overflow-x: auto;
+//   width: 100%;
+//   //border: 1px solid black;
+// `;
 
-const TableHead = styled.thead`
-  width: 100%;
-`;
+// const TableHead = styled.thead`
+//   width: 100%;
+// `;
 
-const TableBody = styled.tbody`
-  width: 100%;
-`;
+// const TableBody = styled.tbody`
+//   width: 100%;
+// `;
 
-const TableHeader = styled.th`
-  border: 1px solid ${props => props.theme.colors.borderGrey};
-  padding: 16px 8px;
-`;
+// const TableHeader = styled.th`
+//   border: 1px solid ${props => props.theme.colors.borderGrey};
+//   padding: 16px 8px;
+// `;
 
 const KPITitle = styled.div`
   display: block;
@@ -763,19 +205,19 @@ type TableRowProps = {
   hover?: boolean;
 };
 
-const TableRow = styled.tr<TableRowProps>`
-  width: 100%;
-  height: 48px;
-  ${props =>
-    props.hover &&
-    `&:hover {
-		background: ${props.theme.colors.backgroundBlue};
-		${KPITitle} {
-			font-weight: 800;
-			text-decoration: underline;
-		}
-	}`}
-`;
+// const TableRow = styled.tr<TableRowProps>`
+//   width: 100%;
+//   height: 48px;
+//   ${props =>
+//     props.hover &&
+//     `&:hover {
+// 		background: ${props.theme.colors.backgroundBlue};
+// 		${KPITitle} {
+// 			font-weight: 800;
+// 			text-decoration: underline;
+// 		}
+// 	}`}
+// `;
 
 type UpdateKpiIconProps = {
   hover?: boolean;

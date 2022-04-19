@@ -89,21 +89,21 @@ export const DummyCheckin = ({
     );
   };
 
-  const renderStepsComponent = (): JSX.Element => {
-    return (
-      customStepsComponent ||
-      (steps && (
-        <StepComponentContainer>
-          <SignUpWizardProgressBar
-            stepNames={steps}
-            currentStep={currentStep}
-            onStepClick={onStepClick}
-            clickDisabled={stepClickDisabled}
-          />
-        </StepComponentContainer>
-      ))
-    );
-  };
+  // const renderStepsComponent = (): JSX.Element => {
+  //   return (
+  //     customStepsComponent ||
+  //     (steps && (
+  //       <StepComponentContainer>
+  //         <SignUpWizardProgressBar
+  //           stepNames={steps}
+  //           currentStep={currentStep}
+  //           onStepClick={onStepClick}
+  //           clickDisabled={stepClickDisabled}
+  //         />
+  //       </StepComponentContainer>
+  //     ))
+  //   );
+  // };
   
   const renderBodyComponents = (): JSX.Element => {
     const hasRightBodyComponent = !R.isNil(R.path([currentStep], rightBodyComponents));

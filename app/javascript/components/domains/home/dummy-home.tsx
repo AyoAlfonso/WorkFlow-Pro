@@ -1,6 +1,6 @@
 import * as R from "ramda";
 import * as React from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useMst } from "../../../setup/root";
 import styled from "styled-components";
 import { Plan } from "./shared/plan-button";
@@ -28,12 +28,16 @@ import { AccordionSummaryInverse } from "~/components/shared/accordion-component
 import { JournalHeader } from "../journal/journal-header";
 import { JournalBody } from "../journal/journal-body";
 import { StyledOverviewAccordion } from "~/components/shared/styles/overview-styles";
+import { Checkbox, Label } from "@rebass/forms";
+import { baseTheme } from "~/themes/base";
+import ContentEditable from "react-contenteditable";
 
 
 export const DummyHome = (): JSX.Element => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState<string>("");
   const [questionnaireVariant, setQuestionnaireVariant] = useState<string>("");
+  const pynRef = useRef(null);
 
   const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : "");
@@ -119,10 +123,68 @@ export const DummyHome = (): JSX.Element => {
               <KeyActivitiesListStyleContainer>
                     <KeyActivitiesContainer>
                       <KeyActivityContainer>
-                        {/* <KeyActivityRecord
-                          keyActivity={keyActivity}
-                          dragHandleProps={...provided.dragHandleProps}
-                        /> */}
+                      <PynContainer>
+                        <Label
+                          sx={{
+                            width: "auto",
+                            marginTop: "auto",
+                            marginBottom: "auto",
+                          }}
+                        >
+                          <Checkbox
+                            checked={false}
+                            onChange={e => {
+                            }}
+                            sx={{
+                              color: baseTheme.colors.primary100,
+                            }}
+                          />
+                        </Label>
+                        <StyledContentEditable
+                          innerRef={pynRef}
+                          html={"pyn"}
+                          onChange={e => {
+                          }}
+                          style={{ cursor: "text" }}
+                          onKeyDown={key => {
+                            if (key.keyCode == 13) {
+                              pynRef.current.blur();
+                            }
+                          }}
+                          placeholder={"New pyn..."}
+                        />
+                      </PynContainer>
+                      <PynContainer>
+                        <Label
+                          sx={{
+                            width: "auto",
+                            marginTop: "auto",
+                            marginBottom: "auto",
+                          }}
+                        >
+                          <Checkbox
+                            checked={false}
+                            onChange={e => {
+                            }}
+                            sx={{
+                              color: baseTheme.colors.primary100,
+                            }}
+                          />
+                        </Label>
+                        <StyledContentEditable
+                          innerRef={pynRef}
+                          html={"example task"}
+                          onChange={e => {
+                          }}
+                          style={{ cursor: "text" }}
+                          onKeyDown={key => {
+                            if (key.keyCode == 13) {
+                              pynRef.current.blur();
+                            }
+                          }}
+                          placeholder={"New pyn..."}
+                        />
+                      </PynContainer>
                       </KeyActivityContainer>
                     </KeyActivitiesContainer>
               </KeyActivitiesListStyleContainer>
@@ -160,10 +222,37 @@ export const DummyHome = (): JSX.Element => {
               <KeyActivitiesListStyleContainer>
                     <KeyActivitiesContainer>
                       <KeyActivityContainer>
-                        {/* <KeyActivityRecord
-                          keyActivity={keyActivity}
-                          dragHandleProps={...provided.dragHandleProps}
-                        /> */}
+                      <PynContainer>
+                        <Label
+                          sx={{
+                            width: "auto",
+                            marginTop: "auto",
+                            marginBottom: "auto",
+                          }}
+                        >
+                          <Checkbox
+                            checked={false}
+                            onChange={e => {
+                            }}
+                            sx={{
+                              color: baseTheme.colors.primary100,
+                            }}
+                          />
+                        </Label>
+                        <StyledContentEditable
+                          innerRef={pynRef}
+                          html={"pyn"}
+                          onChange={e => {
+                          }}
+                          style={{ cursor: "text" }}
+                          onKeyDown={key => {
+                            if (key.keyCode == 13) {
+                              pynRef.current.blur();
+                            }
+                          }}
+                          placeholder={"New pyn..."}
+                        />
+                      </PynContainer>
                       </KeyActivityContainer>
                     </KeyActivitiesContainer>
               </KeyActivitiesListStyleContainer>
@@ -283,7 +372,7 @@ const Talktous = styled.div`
   line-spacing: 24;
  `;
   
-export const Container = styled.div`
+const Container = styled.div`
   display: flex;
   height: inherit;
   filter: blur(10px);
@@ -384,4 +473,30 @@ const KeyActivityContainer = styled.div<KeyActivityContainerType>`
 
 const KeyActivitiesContainer = styled.div`
   height: 100%;
+`;
+
+const PynContainer = styled.div`
+  height: 58px;
+  width: 95%;
+  border-radius: 10px;
+  box-shadow: 0px 3px 6px ${baseTheme.colors.grayShadow};
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 8px;
+  margin-top: 16px;
+`;
+
+const StyledContentEditable = styled(ContentEditable)`
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  margin-left: 10px;
+  min-width: 105px;
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+  word-break: break-word;
 `;

@@ -30,17 +30,15 @@ import { TeamDashboard } from "./team-dashboard";
 import { Heading } from "~/components/shared";
 import { Icon } from "~/components/shared/icon";
 import { IconContainerWithPadding } from "~/components/shared/icon";
+import { Checkbox, Label } from "@rebass/forms";
+import { baseTheme } from "~/themes/base";
+import ContentEditable from "react-contenteditable";
 
 interface ITeamOverviewProps {}
 
 export const DummyTeamOverview = observer(
   ({}: ITeamOverviewProps): JSX.Element => {
     const {
-      companyStore: { company },
-      teamStore,
-      meetingStore,
-      issueStore,
-      forumStore,
     } = useMst();
 
     const { team_id } = useParams();
@@ -49,56 +47,7 @@ export const DummyTeamOverview = observer(
 
     const [loading, setLoading] = useState<boolean>(true);
     const [expanded, setExpanded] = useState<string>("");
-    const handleToolsChange = (panel: string) => (
-      event: React.ChangeEvent<{}>,
-      isExpanded: boolean,
-    ) => {
-      setExpanded(isExpanded ? panel : "");
-    };
-
-    useEffect(() => {
-      teamStore
-        .getTeam(team_id)
-        .then(() => issueStore.fetchTeamIssues(team_id).then(() => setLoading(false)));
-    }, [team_id]);
-
-    const history = useHistory();
-    const currentTeam = teamStore.currentTeam;
-
-    if (
-      R.isNil(company) ||
-      !currentTeam ||
-      loading ||
-      R.isNil(meetingStore) ||
-      R.isNil(R.isNil(meetingStore.meetingTemplates))
-    ) {
-      return (
-        <Container>
-          <Loading />
-        </Container>
-      );
-    }
-    const overviewType = company && company.accessForum ? "forum" : "teams";
-    //based on
-
-    const handleForumMeetingClick = () => {
-      meetingStore.startNextMeeting(team_id, MeetingTypes.FORUM_MONTHLY).then(({ meeting }) => {
-        if (!R.isNil(meeting)) {
-          history.push(`/team/${team_id}/meeting/${meeting.id}`);
-        }
-      });
-    };
-
-    const handleMeetingClick = () => {
-      meetingStore.createMeeting(team_id).then(({ meeting }) => {
-        if (!R.isNil(meeting)) {
-          history.push(`/team/${team_id}/meeting/${meeting.id}`);
-        } else {
-          showToast("Failed to start meeting.", ToastMessageConstants.ERROR);
-        }
-      });
-    };
-
+    
     return (
       <Overlay>
         <Wrapper>
@@ -112,16 +61,13 @@ export const DummyTeamOverview = observer(
         <Subtext>
           Upgrade to a higher tier to get access to Team
         </Subtext>
-        {/* <Link to="http://go.lynchpyn.com/upgrade"> */}
         <Talktous
-        // type="button"
         onClick={(e) => {
           e.preventDefault();
           window.location.href='http://go.lynchpyn.com/upgrade';
         }}>
           Talk to us
         </Talktous>
-        {/* </Link> */}
       </Upgradetextcontainer>
       </Wrapper>
       <Container>
@@ -145,7 +91,7 @@ export const DummyTeamOverview = observer(
               </ColumnContainerParent>
             </TableHeaderContainer>
             <UserRecordContainer>
-               <ColumnContainer>
+              <ColumnContainer>
                 <TeamMemberInfoContainer>
                    <Avatar
                     defaultAvatarColor={"blue"}
@@ -155,12 +101,65 @@ export const DummyTeamOverview = observer(
                     marginLeft={"0px"}
                   />
                   <TeamMemberName>
-                {"firstName"} {"larstName"}
-              </TeamMemberName>
+                  {"firstName"} {"larstName"}
+                </TeamMemberName>
                   {/* {renderUserStatus(user)} */}
                 </TeamMemberInfoContainer>
               </ColumnContainer>
-              {/* <ColumnContainer>{renderUserPriorities(prioritiesToRender)}</ColumnContainer> */}
+              <ColumnContainer>
+              <PynContainer>
+                    <Label
+                      sx={{
+                        width: "auto",
+                        marginTop: "auto",
+                        marginBottom: "auto",
+                      }}
+                    >
+                      <Checkbox
+                        checked={false}
+                        onChange={e => {
+                        }}
+                        sx={{
+                          color: baseTheme.colors.primary100,
+                        }}
+                      />
+                    </Label>
+                    <StyledContentEditable
+                      html={"Example PYN"}
+                      onChange={e => {
+                      }}
+                      style={{ cursor: "text" }}
+                      onKeyDown={key => {}}
+                      placeholder={"New pyn..."}
+                    />
+                  </PynContainer>
+                  <PynContainer>
+                    <Label
+                      sx={{
+                        width: "auto",
+                        marginTop: "auto",
+                        marginBottom: "auto",
+                      }}
+                    >
+                      <Checkbox
+                        checked={false}
+                        onChange={e => {
+                        }}
+                        sx={{
+                          color: baseTheme.colors.primary100,
+                        }}
+                      />
+                    </Label>
+                    <StyledContentEditable
+                      html={"My Pyns to do"}
+                      onChange={e => {
+                      }}
+                      style={{ cursor: "text" }}
+                      onKeyDown={key => {}}
+                      placeholder={"New pyn..."}
+                    />
+                  </PynContainer>
+              </ColumnContainer>
             </UserRecordContainer>
             <UserRecordContainer>
                <ColumnContainer>
@@ -176,6 +175,60 @@ export const DummyTeamOverview = observer(
                 {"first last"}
               </TeamMemberName>
                 </TeamMemberInfoContainer>
+              </ColumnContainer>
+              <ColumnContainer>
+              <PynContainer>
+                    <Label
+                      sx={{
+                        width: "auto",
+                        marginTop: "auto",
+                        marginBottom: "auto",
+                      }}
+                    >
+                      <Checkbox
+                        checked={false}
+                        onChange={e => {
+                        }}
+                        sx={{
+                          color: baseTheme.colors.primary100,
+                        }}
+                      />
+                    </Label>
+                    <StyledContentEditable
+                      html={"Must get done tomorrow"}
+                      onChange={e => {
+                      }}
+                      style={{ cursor: "text" }}
+                      onKeyDown={key => {}}
+                      placeholder={"New pyn..."}
+                    />
+                  </PynContainer>
+                  <PynContainer>
+                    <Label
+                      sx={{
+                        width: "auto",
+                        marginTop: "auto",
+                        marginBottom: "auto",
+                      }}
+                    >
+                      <Checkbox
+                        checked={false}
+                        onChange={e => {
+                        }}
+                        sx={{
+                          color: baseTheme.colors.primary100,
+                        }}
+                      />
+                    </Label>
+                    <StyledContentEditable
+                      html={"Must get done example important task"}
+                      onChange={e => {
+                      }}
+                      style={{ cursor: "text" }}
+                      onKeyDown={key => {}}
+                      placeholder={"New pyn..."}
+                    />
+                  </PynContainer>
               </ColumnContainer>
             </UserRecordContainer>
             <UserRecordContainer>
@@ -193,6 +246,60 @@ export const DummyTeamOverview = observer(
               </TeamMemberName>
                 </TeamMemberInfoContainer>
               </ColumnContainer>
+              <ColumnContainer>
+              <PynContainer>
+                    <Label
+                      sx={{
+                        width: "auto",
+                        marginTop: "auto",
+                        marginBottom: "auto",
+                      }}
+                    >
+                      <Checkbox
+                        checked={false}
+                        onChange={e => {
+                        }}
+                        sx={{
+                          color: baseTheme.colors.primary100,
+                        }}
+                      />
+                    </Label>
+                    <StyledContentEditable
+                      html={"Next weeks example task"}
+                      onChange={e => {
+                      }}
+                      style={{ cursor: "text" }}
+                      onKeyDown={key => {}}
+                      placeholder={"New pyn..."}
+                    />
+                  </PynContainer>
+                  <PynContainer>
+                    <Label
+                      sx={{
+                        width: "auto",
+                        marginTop: "auto",
+                        marginBottom: "auto",
+                      }}
+                    >
+                      <Checkbox
+                        checked={false}
+                        onChange={e => {
+                        }}
+                        sx={{
+                          color: baseTheme.colors.primary100,
+                        }}
+                      />
+                    </Label>
+                    <StyledContentEditable
+                      html={"todays to do"}
+                      onChange={e => {
+                      }}
+                      style={{ cursor: "text" }}
+                      onKeyDown={key => {}}
+                      placeholder={"New pyn..."}
+                    />
+                  </PynContainer>
+              </ColumnContainer>
             </UserRecordContainer>
             
             
@@ -201,49 +308,45 @@ export const DummyTeamOverview = observer(
         <ToolsWrapper>
           <OverviewTabs>{t(`Tools`)}</OverviewTabs>
           <StyledOverviewAccordion expanded={false} elevation={1}>
-            {overviewType === "teams" && (
+            {(
               <FutureTeamMeetingsContainer
-                titleText={t(`${overviewType}.teamMeetingsTitle`)}
+                titleText={t(`teamMeetingsTitle`)}
                 buttonText={"Team Meeting"}
-                handleMeetingClick={handleMeetingClick}
+                handleMeetingClick={0}
               />
             )}
-            {overviewType === "forum" && (
+            {(
               <FutureTeamMeetingsContainer
-                titleText={t(`${overviewType}.teamMeetingsTitle`)}
-                buttonText={t("forum.forumMeeting")}
-                handleMeetingClick={handleForumMeetingClick}
+                titleText={t(`teamMeetingsTitle`)}
+                buttonText={t("forumMeeting")}
+                handleMeetingClick={0}
               />
             )}
           </StyledOverviewAccordion>
 
           <StyledOverviewAccordion
-            expanded={expanded == "team-issues-panel"}
-            onChange={handleToolsChange("team-issues-panel")}
+            expanded={false}
             elevation={-100}
           >
             <TeamIssuesContainer
               teamId={team_id}
-              title={t(`${overviewType}.teamIssuesTitle`)}
-              expanded={expanded}
-              handleChange={handleToolsChange}
+              title={t(`teamIssuesTitle`)}
+              expanded={"t"}
+              handleChange={0}
             />
           </StyledOverviewAccordion>
-
           <StyledOverviewAccordion
-            expanded={expanded == "team-pulse-panel"}
-            onChange={handleToolsChange("team-pulse-panel")}
-            elevation={100}
+            expanded={false}
+            elevation={-100}
           >
-            <TeamPulsePanel
-              team={currentTeam}
-              title={t(`${overviewType}.teamsPulseTitle`)}
-              expanded={expanded}
-              handleChange={handleToolsChange}
+            <TeamIssuesContainer
+              teamId={team_id}
+              title={t(`teamIssuesTitle`)}
+              expanded={"t"}
+              handleChange={0}
             />
           </StyledOverviewAccordion>
         </ToolsWrapper>
-        {overviewType === "forum" && <LynchPynBadge />}
       </Container>
       </Overlay>
     );
@@ -309,9 +412,9 @@ const Talktous = styled.div`
 
 const Container = styled.div`
   display: flex;
-  filter: blur(10px);
+ filter: blur(10px);
   position: absolute;
-  opacity: 0.35;
+ opacity: 0.35;
 `;
 
 const LeftContainer = styled.div`
@@ -455,4 +558,30 @@ const ToolsHeader = styled.div`
   justify-content: space-between;
   margin-top: 0;
   margin-bottom: 40px;
+`;
+
+const PynContainer = styled.div`
+  height: 58px;
+  width: 95%;
+  border-radius: 10px;
+  box-shadow: 0px 3px 6px ${baseTheme.colors.grayShadow};
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 8px;
+  margin-top: 16px;
+`;
+
+const StyledContentEditable = styled(ContentEditable)`
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  margin-left: 10px;
+  min-width: 105px;
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+  word-break: break-word;
 `;
