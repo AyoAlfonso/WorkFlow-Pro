@@ -3,6 +3,7 @@ class Api::GoalsController < Api::ApplicationController
   respond_to :json
 
   def index
+    # binding.pry
     @company = Company.find(current_company.id)
     @goals = policy_scope(AnnualInitiative)
     if params[:status] == "closed"
@@ -20,7 +21,7 @@ class Api::GoalsController < Api::ApplicationController
       @goals = policy_scope(AnnualInitiative).sort_by_not_closed
     end
     @company_goals = @goals.user_current_company(current_company.id).order(created_at: :desc)
-    @status = params[:status]  
+    # @status = params[:status]  
     if params[:status]
       return render "api/goals/index"
     end 
