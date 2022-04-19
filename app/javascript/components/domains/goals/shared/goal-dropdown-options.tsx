@@ -1,15 +1,18 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Icon } from "~/components/shared/icon";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMst } from "~/setup/root";
 import { useTranslation } from "react-i18next";
+import { showToast } from "~/utils/toast-message";
+import { ToastMessageConstants } from "~/constants/toast-types";
 
 interface IGoalDropdownOptionsProps {
   setShowDropdownOptions: any;
   setModalOpen?: any;
   itemType: string;
   itemId: number | string;
+  quarter?: number;
 }
 
 export const GoalDropdownOptions = ({
@@ -17,6 +20,7 @@ export const GoalDropdownOptions = ({
   setModalOpen,
   itemType,
   itemId,
+  quarter,
 }: IGoalDropdownOptionsProps): JSX.Element => {
   const { annualInitiativeStore, quarterlyGoalStore, subInitiativeStore, sessionStore } = useMst();
   const optionsRef = useRef(null);
@@ -41,10 +45,10 @@ export const GoalDropdownOptions = ({
 
   const itemText = itemType == "annualInitiative" ? "Objective" : "Initiative";
   const quarterText = () => {
-    quarterlyGoalStore.getQuarterlyGoal(itemId);
-    const quarterlyGoal = quarterlyGoalStore?.quarterlyGoal;
-    if (quarterlyGoal) {
-          return `${quarterlyGoal.quarter + 1}`;
+    if (quarter >= 4) {
+      return 4;
+    } else {
+      return quarter + 1;
     }
   }
 
@@ -98,16 +102,20 @@ export const GoalDropdownOptions = ({
 
   const duplicateQuarterly = () => {
     if (itemType == "quarterlyGoal") {
-      if (
-        confirm(
-          `Are you sure you want to duplicate this ${t("quarterlyGoal.messageText", {
-            title: quarterlyGoalTitle,
-          })}?`,
-        )
-      ) {
-        quarterlyGoalStore.duplicateGoal(itemId).then(() => {
-          closeModal();
-        });
+      if (quarter < 4) {
+        if (
+          confirm(
+            `Are you sure you want to duplicate this ${t("quarterlyGoal.messageText", {
+              title: quarterlyGoalTitle,
+            })}?`,
+          )
+        ) {
+          quarterlyGoalStore.duplicateGoal(itemId).then(() => {
+            closeModal();
+          });
+        }
+      } else {
+        showToast("Can not carry over from the 4th quarter", ToastMessageConstants.INFO)
       }
     }
   }

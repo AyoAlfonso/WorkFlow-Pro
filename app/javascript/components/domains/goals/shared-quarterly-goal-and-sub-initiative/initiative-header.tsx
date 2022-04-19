@@ -153,6 +153,7 @@ export const InitiativeHeader = ({
                 setParentModalOpen={setModalOpen}
                 itemType={itemType}
                 item={item}
+                quarter={quarterlyGoalStore.quarterlyGoal.quarter || companyStore.onboardingCompany.quarterForCreatingQuarterlyGoals}
               />
               <CloseIconContainer onClick={() => setModalOpen(false)}>
                 <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} />
