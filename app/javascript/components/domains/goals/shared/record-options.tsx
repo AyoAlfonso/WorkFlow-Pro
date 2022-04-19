@@ -11,10 +11,11 @@ interface IRecordOptionsProps {
   id: string | number;
   marginLeft?: string;
   iconColor?: string;
+  quarter?: number;
 }
 
 export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
-  const { type, id, marginLeft, iconColor } = props;
+  const { type, id, marginLeft, iconColor, quarter } = props;
 
   const optionsRef = useRef(null);
 
@@ -44,11 +45,19 @@ export const RecordOptions = (props: IRecordOptionsProps): JSX.Element => {
       </IconWrapper>
       {showOptions && (
         <DropdownOptionsContainer onClick={e => e.stopPropagation()}>
-          <GoalDropdownOptions
+          {quarter ? (<GoalDropdownOptions
             setShowDropdownOptions={setShowOptions}
             itemType={type}
             itemId={id}
+            quarter={quarter}
           />
+          ) : (
+            <GoalDropdownOptions
+              setShowDropdownOptions={setShowOptions}
+              itemType={type}
+              itemId={id}
+            />
+          )}
         </DropdownOptionsContainer>
       )}
     </Container>
