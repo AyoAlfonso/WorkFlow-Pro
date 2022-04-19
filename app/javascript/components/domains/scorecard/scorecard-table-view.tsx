@@ -335,42 +335,32 @@ export const ScorecardTableView = observer(
       [KPIs, year],
     );
 
-    const formatLargeNumbers = (n: number) => {
+    const largeToText = (n: number) => {
       if (n === Infinity) {
         return n;
       } else if (n >= 1000000000000) {
-        return `${Math.floor(n / 1000000000000)}T`;
+        return `${Math.round(((n / 1000000000000) + Number.EPSILON) * 100) / 100}T`;
       } else if (n >= 1000000000) {
-        return `${Math.floor(n / 1000000000)}B`;
+        return `${Math.round(((n / 1000000000) + Number.EPSILON) * 100) / 100}B`;
       } else if (n >= 1000000) {
-        return `${Math.floor(n / 1000000)}M`;
+        return `${Math.round(((n / 1000000) + Number.EPSILON) * 100) / 100}M`;
       } else if (n >= 1000) {
-        return `${Math.floor(n / 1000)}K`;
+        return `${Math.round(((n / 1000) + Number.EPSILON) * 100) / 100}K`;
       } else {
         return `${n}`;
       }
     };
 
-    const findNumberFromLogic = logic => {
-      let n = logic.match(/[0-9]+[.]?[0-9]*/g);
-      const num = Number(n.toString());
-      return num;
+    const findNumberText = logic => {
+      let t = logic.match(/[0-9]+[.]?[0-9]*/g);
+      return t;
     };
 
     const convertNumberInLogic = logic => {
       return logic.replace(
-        findNumberFromLogic(logic),
-        formatLargeNumbers(findNumberFromLogic(logic)),
+        findNumberText(logic),
+        largeToText(Number(findNumberText(logic))),
       );
-    };
-
-    const formatUpdateNumber = n => {
-      if (typeof n === "string") {
-        let extr = n.match(/[0-9]+[.]*[0-9]*/g);
-        return Number(n.replace("%", ""));
-      } else {
-        return n;
-      }
     };
 
     const columns = useMemo(
@@ -474,9 +464,9 @@ export const ScorecardTableView = observer(
               <Tooltip
                 title={
                   <>
-                    {"Target: "} {formatLargeNumbers(row.original.targetValue)}
-                    <br /> {"Average: "} {formatLargeNumbers(row.original.average[quarter - 1])}
-                    <br /> {"Total: "} {formatLargeNumbers(row.original.total[quarter - 1])}
+                    {"Target: "} {largeToText(row.original.targetValue)}
+                    <br /> {"Average: "} {largeToText(row.original.average[quarter - 1])}
+                    <br /> {"Total: "} {largeToText(row.original.total[quarter - 1])}
                   </>
                 }
                 placement="top"
@@ -487,7 +477,7 @@ export const ScorecardTableView = observer(
                     {parentKpi.length > relatedParentKpis.length
                       ? "—"
                       : quarterValue.percent
-                      ? `${formatLargeNumbers(quarterValue.percent)}%`
+                      ? `${largeToText(quarterValue.percent)}%`
                       : greaterThan
                       ? "0%"
                       : "—"}
@@ -557,9 +547,7 @@ export const ScorecardTableView = observer(
                   ) : (
                     <WeekContainer>
                       <WeekText color={value.color}>
-                        {parentType == "avr"
-                          ? formatLargeNumbers(Math.round(value.score))
-                          : formatLargeNumbers(formatUpdateNumber(value.score))}
+                        {convertNumberInLogic(value.score)}
                       </WeekText>
                     </WeekContainer>
                   )}
@@ -643,7 +631,7 @@ export const ScorecardTableView = observer(
                     <WhiteUpdateKpiIcon icon={"Update_KPI_New"} size={16} />
                   ) : (
                     <WeekContainer>
-                      <WeekText color={value.color}>{formatLargeNumbers(value.score)}</WeekText>
+                      <WeekText color={value.color}>{convertNumberInLogic(value.score)}</WeekText>
                     </WeekContainer>
                   )}
                 </UpdateKPICellContainer>
