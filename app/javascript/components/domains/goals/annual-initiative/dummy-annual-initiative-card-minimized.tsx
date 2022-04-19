@@ -6,25 +6,12 @@ import { Icon } from "../../../shared/icon";
 import moment from "moment";
 import { observer } from "mobx-react";
 import { DummyOwnedBySection } from "../shared/dummy-owned-by-section";
-import { useMst } from "~/setup/root";
-import { Loading } from "~/components/shared";
 
 interface IAnnualInitiativeCardMinimizedProps {
-  annualInitiative: any;
-  setShowMinimizedCard: React.Dispatch<React.SetStateAction<boolean>>;
-  disableOpen?: boolean;
-  showMinimizedCard?: boolean;
 }
 
 export const DummyAnnualInitiativeCardMinimized = observer(
-  ({
-    annualInitiative,
-    disableOpen,
-    setShowMinimizedCard,
-    showMinimizedCard,
-  }: IAnnualInitiativeCardMinimizedProps): JSX.Element => {
-    const { companyStore, sessionStore } = useMst();
-    const { currentFiscalYear } = companyStore.company;
+  ({}: IAnnualInitiativeCardMinimizedProps): JSX.Element => {
     const {
       warningRed,
       cautionYellow,
@@ -34,7 +21,6 @@ export const DummyAnnualInitiativeCardMinimized = observer(
       white,
       primary100,
     } = baseTheme.colors;
-    const milestoneCounts = [];
     const statusBadge = {
       description: "",
       colors: {
@@ -43,146 +29,22 @@ export const DummyAnnualInitiativeCardMinimized = observer(
       },
     };
 
-    if (annualInitiative == null) {
-      return <Loading />;
-    }
-
-    if (annualInitiative.closedAt != null) {
-      statusBadge.description = `Closed - FY${annualInitiative.fiscalYear %
-        100}/${(annualInitiative.fiscalYear + 1) % 100}`;
-      statusBadge.colors = { color: white, backgroundColor: grey100 };
-    } else if (currentFiscalYear < annualInitiative.fiscalYear) {
-      statusBadge.description = `Upcoming - FY${annualInitiative.fiscalYear %
-        100}/${(annualInitiative.fiscalYear + 1) % 100}`;
-      statusBadge.colors = { color: white, backgroundColor: primary100 };
-    }
-    const milestones = [
-      {
-        color: finePine,
-        count: 0,
-      },
-      {
-        color: cautionYellow,
-        count: 0,
-      },
-      {
-        color: warningRed,
-        count: 0,
-      },
-      {
-        color: grey40,
-        count: 0,
-      },
-    ];
-
-    const milestoneProgressCounter = goal => {
-      let currentMilestone = goal.milestones.find((milestone: { weekOf: moment.MomentInput }) =>
-        moment(milestone.weekOf).isSame(moment(), "week"),
-      );
-      if (!currentMilestone) {
-        currentMilestone = goal.milestones[goal.milestones.length - 1];
-      }
-
-      if (currentMilestone && currentMilestone.status) {
-        switch (currentMilestone.status) {
-          case "completed":
-            milestones[0].count++;
-            break;
-          case "in_progress":
-            milestones[1].count++;
-            break;
-          case "incomplete":
-            milestones[2].count++;
-            break;
-          case "unstarted":
-            milestones[3].count++;
-            break;
-        }
-      } else {
-        milestones[3].count++;
-      }
-    };
-    annualInitiative.quarterlyGoals.map(quarterlyGoal => {
-      milestoneProgressCounter(quarterlyGoal);
-      if (quarterlyGoal.subInitiatives) {
-        quarterlyGoal.subInitiatives.map(milestoneProgressCounter);
-      }
-    });
-
-    let gradient = "";
-    const annualQtrGoalsLength =
-      annualInitiative.quarterlyGoals.length +
-      annualInitiative.quarterlyGoals.reduce(
-        (acc: number, quarterlyGoal) =>
-          acc + (quarterlyGoal.subInitiatives ? quarterlyGoal.subInitiatives.length : 0),
-        0,
-      );
-    milestones.forEach((obj, index) => {
-      let margin = 0;
-      if (index > 0) {
-        let lastPercentage = 0;
-        let intialPercentage = 0;
-        Array.from({ length: index + 1 }).map((_, i) => {
-          lastPercentage += (milestones[i].count / annualQtrGoalsLength) * 100;
-        });
-        Array.from({ length: index }).map(
-          (_, i) => (intialPercentage += (milestones[i].count / annualQtrGoalsLength) * 100),
-        );
-        gradient += `, ${obj.color} ${intialPercentage}% ${lastPercentage}` + `% `;
-        margin = lastPercentage - intialPercentage;
-      } else {
-        gradient += `, ${obj.color} ${(obj.count / annualQtrGoalsLength) * 100}% `;
-        margin = (obj.count / annualQtrGoalsLength) * 100;
-      }
-      if (obj.count > 0) {
-        milestoneCounts.push(
-          <MilestoneCountContainer color={obj.color} margin={`${Math.floor(margin) / 2}%`}>
-            {obj.count}
-          </MilestoneCountContainer>,
-        );
-      }
-    });
-
-    const renderStatusSquares = () => {
-      gradient =
-        milestoneCounts.length == 0
-          ? `, ${finePine} 0% ,${cautionYellow} 0% 0% ,${warningRed} 0% 0% ,${grey40} 0% 100%`
-          : gradient;
-      return <GradientContainer gradient={gradient} />;
-    };
-
-    const renderCounts = () => {
-      if (milestoneCounts.length) return milestoneCounts;
-      return (
-        <MilestoneCountContainer color={grey40} margin={`auto`}>
-          {" "}
-          0{" "}
-        </MilestoneCountContainer>
-      );
-    };
-
     return (
-      <div
-        onClick={e => {
-          e.stopPropagation();
-        }}
-      >
+      <div>
         <RowContainer mt={0} mb={0}>
-          {(annualInitiative.ownedBy || sessionStore.profile) && (
-            <DummyOwnedBySection
-              color={"successGreen"}
-              firstname={"fn"}
-              lastname={"ln"}
-              disabled={true}
-              size={16}
-              nameWidth={"76px"}
-              fontSize={"12px"}
-              marginLeft={"16px"}
-              marginRight={"0px"}
-              marginTop={"auto"}
-              marginBottom={"auto"}
-            />
-          )}
+          <DummyOwnedBySection
+            color={"successGreen"}
+            firstname={"first"}
+            lastname={"last"}
+            disabled={true}
+            size={16}
+            nameWidth={"76px"}
+            fontSize={"12px"}
+            marginLeft={"16px"}
+            marginRight={"0px"}
+            marginTop={"auto"}
+            marginBottom={"auto"}
+          />
           <BadgeContainer>
             <StatusBadge
               color={statusBadge.colors.color}
@@ -193,42 +55,24 @@ export const DummyAnnualInitiativeCardMinimized = observer(
             </StatusBadge>
           </BadgeContainer>
         </RowContainer>
-        {disableOpen || (
+        {(
           <>
-            <InitiativeCountContainer>{renderCounts()}</InitiativeCountContainer>
-
-            <StatusSquareContainer>{renderStatusSquares()}</StatusSquareContainer>
           </>
         )}
 
-        <Container
-          onClick={e => {
-            if (!disableOpen) {
-              setShowMinimizedCard(!showMinimizedCard);
-            }
-          }}
-        >
-          {disableOpen ? (
+        <Container>
+          <MaximizeIconContainer>
+            <ShowInitiativeBar>
+              {" "}
+              {"Hide"} Initiatives{" "}
+            </ShowInitiativeBar>
             <StyledIcon
-              icon={"Chevron-Down"}
+              icon={"Chevron-Up"}
               size={"12px"}
-              iconColor={grey100}
+              iconColor={primary100}
               style={{ padding: "0px 5px" }}
             />
-          ) : (
-            <MaximizeIconContainer>
-              <ShowInitiativeBar>
-                {" "}
-                {showMinimizedCard ? "Show" : "Hide"} Initiatives{" "}
-              </ShowInitiativeBar>
-              <StyledIcon
-                icon={showMinimizedCard ? "Chevron-Down" : "Chevron-Up"}
-                size={"12px"}
-                iconColor={primary100} // TODOIT: ADD TO CONSTANT VARIABLES
-                style={{ padding: "0px 5px" }}
-              />
-            </MaximizeIconContainer>
-          )}
+          </MaximizeIconContainer>
         </Container>
       </div>
     );
@@ -244,7 +88,6 @@ const RowContainer = styled.div<RowContainerProps>`
   display: flex;
   margin-top: ${props => `${props.mt}%` || "auto"};
   margin-bottom: ${props => `${props.mb}%` || "auto"};
-  border: 1px solid black;
 `;
 
 const Container = styled.div`
@@ -259,7 +102,6 @@ const Container = styled.div`
   width: auto;
   height: 32px;
   cursor: pointer;
-  border: 1px solid black;
 `;
 
 type QuarterlyGoalIndicatorType = {
@@ -274,7 +116,6 @@ const QuarterlyGoalIndicator = styled.div<QuarterlyGoalIndicatorType>`
   margin-top: auto;
   margin-bottom: auto;
   border-radius: 3px;
-  border: 1px solid black;
 `;
 
 const MaximizeIconContainer = styled.div`
@@ -289,7 +130,6 @@ const MaximizeIconContainer = styled.div`
   &: hover {
     cursor: pointer;
   }
-  border: 1px solid black;
 `;
 
 const ShowInitiativeBar = styled.div`
@@ -298,14 +138,12 @@ const ShowInitiativeBar = styled.div`
   font-size: 12px;
   font-weight: bold;
   white-space: nowrap;
-  border: 1px solid black;
 `;
 //TODOIT: add blue color above to constants
 const StatusSquareContainer = styled.div`
   position: relative;
   display: flex;
   margin: 2px 0px 0px;
-  border: 1px solid black;
 `;
 
 const InitiativeCountContainer = styled.div`

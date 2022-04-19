@@ -77,16 +77,13 @@ export const DummyHome = (): JSX.Element => {
           <Subtext>
             Upgrade to a higher tier to get access to Pyns
           </Subtext>
-          {/* <Link to="http://go.lynchpyn.com/upgrade"> */}
           <Talktous
-          // type="button"
           onClick={(e) => {
             e.preventDefault();
             window.location.href='http://go.lynchpyn.com/upgrade';
           }}>
             Talk to Us
           </Talktous>
-          {/* </Link> */}
         </Upgradetextcontainer>
       </Wrapper>
       <Container>
@@ -102,21 +99,16 @@ export const DummyHome = (): JSX.Element => {
                 </HeaderRowContainer>
                 <HeaderRowContainer>
                   <KeyActivityListSubHeaderContainer>September 1st</KeyActivityListSubHeaderContainer>
-                  {/* {!R.isNil(scheduledGroupId) && ( */}
                      <SortContainer>
                       <Icon icon={"Sort"} size={12} iconColor="grey100" />
-                      {/* {sortFilterOpen && (
-                        <FilterDropdown setFilterOpen={setFilterOpen} scheduledGroupId={scheduledGroupId} />
-                      )} */}
                     </SortContainer>
-                   {/* )} */}
                 </HeaderRowContainer>
               </>
             </HeaderContainer>
             <KeyActivitiesListContainer>
               <CreateKeyActivityButtonContainer>
                 <AddNewKeyActivityPlus>
-                  <Icon icon={"Plus"} size={16} /*iconColor={plusIconColor}*//>
+                  <Icon icon={"Plus"} size={16}/>
                 </AddNewKeyActivityPlus>
                 <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
               </CreateKeyActivityButtonContainer>
@@ -201,21 +193,16 @@ export const DummyHome = (): JSX.Element => {
                 </HeaderRowContainer>
                 <HeaderRowContainer>
                   <KeyActivityListSubHeaderContainer>September 2nd</KeyActivityListSubHeaderContainer>
-                  {/* {!R.isNil(scheduledGroupId) && ( */}
                      <SortContainer>
                       <Icon icon={"Sort"} size={12} iconColor="grey100" />
-                      {/* {sortFilterOpen && (
-                        <FilterDropdown setFilterOpen={setFilterOpen} scheduledGroupId={scheduledGroupId} />
-                      )} */}
                     </SortContainer>
-                   {/* )} */}
                 </HeaderRowContainer>
               </>
             </HeaderContainer>
             <KeyActivitiesListContainer>
               <CreateKeyActivityButtonContainer>
                 <AddNewKeyActivityPlus>
-                  <Icon icon={"Plus"} size={16} /*iconColor={plusIconColor}*//>
+                  <Icon icon={"Plus"} size={16}/>
                 </AddNewKeyActivityPlus>
                 <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
               </CreateKeyActivityButtonContainer>
@@ -258,19 +245,6 @@ export const DummyHome = (): JSX.Element => {
               </KeyActivitiesListStyleContainer>
             </KeyActivitiesListContainer>
           </KeyActivityColumnStyleListContainer>
-          {/* <FilterContainer>
-            {renderFilterGroupOptions()}
-            {renderFilterCompletedOption()}
-            {renderFilterTeamOptions()}
-          </FilterContainer>
-          <CreateKeyActivityModal
-            createKeyActivityModalOpen={createKeyActivityModalOpen}
-            setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}
-            todayModalClicked={todayModalClicked}
-            defaultSelectedGroupId={selectedFilterGroupId}
-            defaultSelectedTeamId={selectedFilterTeamId}
-            todayFilterGroupId={selectedFilterGroupIdToday}
-          /> */}
         </KeyActivitiesWrapperContainer>
       <ToolsWrapper>
         <ToolsHeader type={"h2"} mt={0}>
@@ -304,10 +278,7 @@ export const DummyHome = (): JSX.Element => {
             {"journals"}{" "}
           </AccordionHeaderText>
         </HeaderContainerNoBorder>
-          {/* <JournalBody setQuestionnaireVariant={setQuestionnaireVariant} /> */}
         </StyledOverviewAccordion>
-        {/* <Habits expanded={expanded} handleChange={handleChange} />
-        <Issues expanded={expanded} handleChange={handleChange} /> */}
       </ToolsWrapper>
       {instanceType === "forum" && <LynchPynBadge />}
     </Container>
@@ -466,10 +437,6 @@ const KeyActivityContainer = styled.div<KeyActivityContainerType>`
   margin-right: ${props => (props.borderBottom ? "8px" : "")};
   margin-bottom: 8px;
 `;
-
-// type KeyActivitiesContainerType = {
-//   isDraggingOver: any;
-// };
 
 const KeyActivitiesContainer = styled.div`
   height: 100%;

@@ -429,7 +429,7 @@ export const SideNavNoMst = (
         </StyledNavLinkChildrenActive>
       ) : (
         <StyledNavLinkChildrenActive
-          to={`/staticsgoals`}
+          to={`/staticgoals`}
           icon={"New-Goals"}
           currentPathName={currentPathName}
         >

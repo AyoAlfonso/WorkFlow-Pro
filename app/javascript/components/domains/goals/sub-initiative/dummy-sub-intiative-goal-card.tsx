@@ -23,16 +23,7 @@ interface ISubInitiativeCardProps {
 }
 
 export const DummySubInitiativeGoalCard = observer(
-  (props: ISubInitiativeCardProps): JSX.Element => {
-    const {
-      subInitiative,
-      setSubInitiativeModalOpen,
-      setSubInitiativeId,
-      setSelectedAnnualInitiativeDescription,
-    } = props;
-
-    const { companyStore } = useMst();
-    const { currentFiscalYear, currentFiscalQuarter } = companyStore.company;
+  (): JSX.Element => {
     const {
       warningRed,
       fadedRed,
@@ -47,9 +38,9 @@ export const DummySubInitiativeGoalCard = observer(
       backgroundGrey,
     } = baseTheme.colors;
     const defaultOptionsColor = backgroundGrey;
-    const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
+    // const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
 
-    let currentMilestone;
+    // let currentMilestone;
     const statusBadge = {
       description: "",
       colors: {
@@ -58,76 +49,47 @@ export const DummySubInitiativeGoalCard = observer(
       },
     };
 
-    currentMilestone = subInitiative.milestones.find(milestone =>
-      moment(milestone.weekOf).isSame(moment(), "week"),
-    );
+    // currentMilestone = subInitiative.milestones.find(milestone =>
+    //   moment(milestone.weekOf).isSame(moment(), "week"),
+    // );
 
-    if (subInitiative.closedAt != null) {
-      statusBadge.description = `Closed - Q${subInitiative.quarter}`;
-      statusBadge.colors = { color: white, backgroundColor: grey100 };
-    } else if (currentFiscalYear < subInitiative.fiscalYear) {
-      statusBadge.description = `Upcoming - Q${subInitiative.quarter}`;
-      statusBadge.colors = { color: white, backgroundColor: primary100 };
-    } else {
-      if (!currentMilestone) {
-        currentMilestone = subInitiative.milestones[subInitiative.milestones.length - 1];
-      }
+    // if (subInitiative.closedAt != null) {
+    //   statusBadge.description = `Closed - Q${subInitiative.quarter}`;
+    //   statusBadge.colors = { color: white, backgroundColor: grey100 };
+    // } else if (currentFiscalYear < subInitiative.fiscalYear) {
+    //   statusBadge.description = `Upcoming - Q${subInitiative.quarter}`;
+    //   statusBadge.colors = { color: white, backgroundColor: primary100 };
+    // } else {
+    //   if (!currentMilestone) {
+    //     currentMilestone = subInitiative.milestones[subInitiative.milestones.length - 1];
+    //   }
 
-      if (currentMilestone && currentMilestone.status) {
-        switch (currentMilestone.status) {
-          case "completed":
-            statusBadge.description = "On Track";
-            statusBadge.colors = { color: finePine, backgroundColor: fadedGreen };
-            break;
-          case "in_progress":
-            statusBadge.description = "Needs Attention";
-            statusBadge.colors = { color: tango, backgroundColor: fadedYellow };
-            break;
-          case "incomplete":
-            statusBadge.description = "Behind";
-            statusBadge.colors = { color: warningRed, backgroundColor: fadedRed };
-            break;
-          case "unstarted":
-            statusBadge.description = "No update";
-            statusBadge.colors = { color: grey100, backgroundColor: backgroundGrey };
-            break;
-        }
-      }
-    }
+    //   if (currentMilestone && currentMilestone.status) {
+    //     switch (currentMilestone.status) {
+    //       case "completed":
+    //         statusBadge.description = "On Track";
+    //         statusBadge.colors = { color: finePine, backgroundColor: fadedGreen };
+    //         break;
+    //       case "in_progress":
+    //         statusBadge.description = "Needs Attention";
+    //         statusBadge.colors = { color: tango, backgroundColor: fadedYellow };
+    //         break;
+    //       case "incomplete":
+    //         statusBadge.description = "Behind";
+    //         statusBadge.colors = { color: warningRed, backgroundColor: fadedRed };
+    //         break;
+    //       case "unstarted":
+    //         statusBadge.description = "No update";
+    //         statusBadge.colors = { color: grey100, backgroundColor: backgroundGrey };
+    //         break;
+    //     }
+    //   }
+    // }
 
-    const startedMilestones = subInitiative.milestones
-      ? subInitiative.milestones.filter(milestone => milestone.status != "unstarted")
-      : [];
-
-    let userIconBorder = "";
-
-    const openSubInitiativeGoalModal = () => {
-      setSubInitiativeModalOpen(true);
-      setSubInitiativeId(subInitiative.id);
-      setSelectedAnnualInitiativeDescription(subInitiative.description);
-    };
 
     return (
       <>
-        <Container
-          onClick={e => {
-            e.stopPropagation();
-            openSubInitiativeGoalModal();
-          }}
-          onMouseEnter={e => {
-            setShowOptions(grey80);
-          }}
-          onMouseLeave={e => {
-            setShowOptions(defaultOptionsColor);
-          }}
-        >
-          <StatusBlockColorIndicator
-            milestones={subInitiative.milestones || []}
-            indicatorWidth={"100%"}
-            indicatorHeight={2}
-            marginTop={4}
-          />
-
+        <Container>
           <RowContainer mt={0} mb={0}>
             <DescriptionContainer>
               <StyledSubInitiativeIcon
@@ -135,16 +97,13 @@ export const DummySubInitiativeGoalCard = observer(
                 size={"16px"}
                 iconColor={"#868DAA"}
               />
-              <StyledText>{subInitiative.description}</StyledText>
+              <StyledText>description</StyledText>
             </DescriptionContainer>
 
             <IconContainer>
-              <RecordOptions type={"subInitiative"} id={subInitiative.id} iconColor={showOptions} />
             </IconContainer>
           </RowContainer>
           <RowContainer mt={0} mb={0}>
-            {/* // TODOIST: refactor the values of this component to get only */}
-            {subInitiative.ownedBy && (
               <DummyOwnedBySection
                 color={"successGreen"}
                 firstname={"fn"}
@@ -158,7 +117,6 @@ export const DummySubInitiativeGoalCard = observer(
                 fontSize={"12px"}
                 marginBottom={"auto"}
               />
-            )}
             <BadgeContainer>
               <StatusBadge
                 color={statusBadge.colors.color}

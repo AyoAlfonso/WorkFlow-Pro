@@ -103,7 +103,6 @@ export const DummyTeamOverview = observer(
                   <TeamMemberName>
                   {"firstName"} {"larstName"}
                 </TeamMemberName>
-                  {/* {renderUserStatus(user)} */}
                 </TeamMemberInfoContainer>
               </ColumnContainer>
               <ColumnContainer>
@@ -434,7 +433,6 @@ const TableHeaderContainer = styled.div`
   padding-bottom: 8px;
 `;
 
-//TODO: do not display border bottom if last record of users
 const UserRecordContainer = styled.div`
   display: flex;
   padding-top: 16px;

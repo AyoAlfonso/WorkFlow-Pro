@@ -1,141 +1,72 @@
 import * as React from "react";
 import * as R from "ramda";
+import { useState, useEffect } from "react";
+import { observer } from "mobx-react";
+import { toJS } from "mobx";
+import { CheckInWizardLayout } from "./checkin-wizard-layout";
 import styled from "styled-components";
-import { Heading } from "~/components/shared";
-import { Text } from "~/components/shared/text";
+import { useMst } from "../../../setup/root";
+import { useParams, useHistory } from "react-router-dom";
+import { Loading } from "~/components/shared/loading";
 import { Button } from "~/components/shared/button";
-import { SignUpWizardProgressBar } from "~/components/shared/sign-up-wizard/sign-up-wizard-progress-bar";
+import moment from "moment";
+import { HeaderBar } from "../nav";
+import { validateWeekOf } from "~/utils/date-time";
+import { Heading } from "../../shared";
+import { Text } from "~/components/shared/text";
+import { SignUpWizardProgressBar } from "../../shared/sign-up-wizard/sign-up-wizard-progress-bar";
 import { Icon } from "~/components/shared/icon";
-import { Onboarding } from "~/components/domains/onboarding";
-interface IWizardLayoutProps {
-  title: string;
-  description: string;
-  customActionButton?: JSX.Element;
-  showBackButton?: boolean;
-  showSkipButton?: boolean;
-  singleComponent?: JSX.Element;
-  leftBodyComponents?: Array<JSX.Element>;
-  rightBodyComponents?: Array<JSX.Element>;
-  steps?: Array<string>;
-  currentStep?: number;
-  customStepsComponent?: JSX.Element;
-  childrenUnderDescription?: JSX.Element;
-  showLynchpynLogo?: boolean;
-  showCloseButton?: boolean;
-  onCloseButtonClick?: any;
-  onBackButtonClick?: any;
-  onSkipButtonClick?: any;
-  onNextButtonClick?: any;
-  nextButtonDisabled?: boolean;
-  onStepClick?: (stepIndex: number) => void;
-  stepClickDisabled?: boolean;
-  completeButtonText?: string;
-  finalButtonDisabled?: boolean;
-  stepsForMobile?: JSX.Element;
-  textUnderMobileButton?: JSX.Element;
-}
+import { Onboarding } from "../onboarding";
+import { Avatar } from "~/components/shared";
+import {
+  StyledInput,
+  InputHeaderWithComment,
+  FormElementContainer,
+  InputFromUnitType,
+} from "../scorecard/shared/modal-elements";
 
-export const DummyCheckin = ({
-  title,
-  description,
-  customActionButton,
-  showBackButton = false,
-  showSkipButton = true,
-  singleComponent,
-  leftBodyComponents,
-  rightBodyComponents,
-  steps,
-  currentStep,
-  customStepsComponent,
-  childrenUnderDescription,
-  showLynchpynLogo = false,
-  showCloseButton = false,
-  onCloseButtonClick,
-  onBackButtonClick,
-  onSkipButtonClick,
-  onNextButtonClick,
-  nextButtonDisabled,
-  onStepClick,
-  stepClickDisabled,
-  completeButtonText,
-  finalButtonDisabled,
-  stepsForMobile,
-  textUnderMobileButton,
-}: IWizardLayoutProps): JSX.Element => {
-  const renderActionButtons = (): JSX.Element => {
-    return (
-      customActionButton || (
-        <>
-          {showBackButton && (
-            <BackButton small variant={"primaryOutline"} onClick={onBackButtonClick}>
-              <StyledBackIcon icon={"Move2"} size={"15px"} iconColor={"primary100"} />
-            </BackButton>
-          )}
-          {showSkipButton && (
-            <SkipButton small variant={"primaryOutline"} onClick={onSkipButtonClick}>
-              Skip
-            </SkipButton>
-          )}
-          <NextButton
-            small
-            variant={"primary"}
-            onClick={onNextButtonClick}
-            disabled={currentStep === steps.length - 1 ? finalButtonDisabled : nextButtonDisabled}
-          >
-            {currentStep === steps.length - 1 ? completeButtonText || "Complete" : "Next"}
-          </NextButton>
-        </>
-      )
-    );
-  };
+interface CheckInProps {}
 
-  // const renderStepsComponent = (): JSX.Element => {
-  //   return (
-  //     customStepsComponent ||
-  //     (steps && (
-  //       <StepComponentContainer>
-  //         <SignUpWizardProgressBar
-  //           stepNames={steps}
-  //           currentStep={currentStep}
-  //           onStepClick={onStepClick}
-  //           clickDisabled={stepClickDisabled}
-  //         />
-  //       </StepComponentContainer>
-  //     ))
-  //   );
-  // };
-  
-  const renderBodyComponents = (): JSX.Element => {
-    const hasRightBodyComponent = !R.isNil(R.path([currentStep], rightBodyComponents));
-    return (
-      singleComponent || (
-        <>
-          <LeftBodyContainer LongerWidth={Onboarding && currentStep == 1} fullWidth={!hasRightBodyComponent}>
-            {leftBodyComponents[currentStep]}
-          </LeftBodyContainer>
-          {hasRightBodyComponent && (
-            <RightBodyContainer> {rightBodyComponents[currentStep]}</RightBodyContainer>
-          )}
-        </>
-      )
-    );
-  };
-
-  const StopMeetingButton = () => {
+export const DummyCheckin = observer(
+  (props: CheckInProps): JSX.Element => {
+    const { checkInTemplateStore, sessionStore, companyStore } = useMst();
+    const StopMeetingButton = () => {
       return (
         <StopButton
           variant={"primary"}
-          onClick={() => {
-          }}
+          onClick={() => {}}
           small
           disabled={false}
         >
-          Publish Check-inin
+          Publish Check-in
         </StopButton>
       );
     };
 
-  return (
+    return (
+      <>
+          <Overlay>
+       <Wrapper>
+      <Upgradetextcontainer>
+        <IconWrapper>
+        <Icon icon={"Check-in-page"} size={160} iconColor={"#005FFE"} />
+        </IconWrapper>
+        <Boldtext>
+          Get the information you need to drive success in your business
+        </Boldtext>
+        <Subtext>
+          Upgrade to a higher tier to get access to Scorecard
+        </Subtext>
+        <Talktous
+        onClick={(e) => {
+          e.preventDefault();
+          window.location.href='http://go.lynchpyn.com/upgrade';
+        }}>
+          Talk to us
+        </Talktous>
+      </Upgradetextcontainer>
+      </Wrapper>
+      <BigContainer>
     <Container>
       <DescriptionContainer>
         <DescriptionBody>
@@ -145,7 +76,7 @@ export const DummyCheckin = ({
             </Heading>
           </DescriptionTitleContainer>
           <DescriptionText>description</DescriptionText>
-          <ButtonsContainer>{renderActionButtons()}</ButtonsContainer> {/* replace with stop button */}
+          <ButtonsContainer>{StopMeetingButton()}</ButtonsContainer>
           <ChildrenContainer>
             <StepText type={"small"}>
               <Icon icon={"Visibility"} size={"15px"} iconColor={"grey80"} />
@@ -165,28 +96,11 @@ export const DummyCheckin = ({
                   </OptionContainer>
                 </SelectionTabsContainer>
               </SelectionContainer>
-              {/* <DisplayContentContainer>{renderDisplayContent()}</DisplayContentContainer> */}
             </SideopContainer>
           </ChildrenContainer>
         </DescriptionBody>
-        {/* {showLynchpynLogo && (
-          <LynchpynLogoContainer>
-            <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="200"></img>
-          </LynchpynLogoContainer>
-        )} */}
       </DescriptionContainer>
       <BodyContainer hasStepsForMobile={false}>
-        {/* {stepsForMobile && (
-          <DesktopCloseButtonContainer>
-            {stepsForMobile}
-            {showCloseButton && (
-              <CloseButtonContainer onClick={onCloseButtonClick}>
-                <CloseText> Close </CloseText>
-                <Icon icon={"Close"} size={"16px"} iconColor={"grey100"} />
-              </CloseButtonContainer>
-            )}
-          </DesktopCloseButtonContainer>
-        )} */}
         <MobileContainer>
           {true && (
             <CloseButtonContainer>
@@ -196,22 +110,257 @@ export const DummyCheckin = ({
           )}
         </MobileContainer>
         <BodyContentContainer hasStepsForMobile={false}>
-          {/* {renderBodyComponents()} */}
           <CheckBodyContainer>
             <CheckStepComponentContainer>
-              <Text>This custom component has not been configured</Text>
+              <KContainer>
+                <SubHeaderText>
+                  {"KPIKPIkpikpiKPI>100"}
+                </SubHeaderText>
+                <ValueInputContainer>
+                  <FormElementContainer>
+                    <InputFromUnitType
+                      unitType={"numerical"}
+                      placeholder={"Add the new value..."}
+                      onChange={() => {}}
+                      defaultValue={0}
+                      onBlur={() => {}}
+                    />
+                  </FormElementContainer>
+                  <ValueSpan>{`${100}${""}`}</ValueSpan>
+                </ValueInputContainer>
+                <CommentContainer>
+                  <FormElementContainer>
+                    <InputHeaderWithComment
+                      comment={"optional"}
+                      fontSize={"14px"}
+                      childFontSize={"12px"}
+                    />
+                    <StyledInput
+                      placeholder={"Add a comment..."}
+                      onChange={e => {}}
+                      onBlur={() => {}}
+                    />
+                  </FormElementContainer>
+                </CommentContainer>
+              </KContainer>
             </CheckStepComponentContainer>
           </CheckBodyContainer>
-          {/* <MobileButtonContainer>
-            <ButtonsContainer>{renderActionButtons()}</ButtonsContainer>
-            {textUnderMobileButton && textUnderMobileButton}
-          </MobileButtonContainer> */}
+          <CheckBodyContainer>
+          <CheckStepComponentContainer>
+              <KContainer>
+                <SubHeaderText>
+                  {"KPIKPIkpikpiKPI>100"}
+                </SubHeaderText>
+                <ValueInputContainer>
+                  <FormElementContainer>
+                    <InputFromUnitType
+                      unitType={"numerical"}
+                      placeholder={"Add the new value..."}
+                      onChange={() => {}}
+                      defaultValue={0}
+                      onBlur={() => {}}
+                    />
+                  </FormElementContainer>
+                  <ValueSpan>{`${100}${""}`}</ValueSpan>
+                </ValueInputContainer>
+                <CommentContainer>
+                  <FormElementContainer>
+                    <InputHeaderWithComment
+                      comment={"optional"}
+                      fontSize={"14px"}
+                      childFontSize={"12px"}
+                    />
+                    <StyledInput
+                      placeholder={"Add a comment..."}
+                      onChange={e => {}}
+                      onBlur={() => {}}
+                    />
+                  </FormElementContainer>
+                </CommentContainer>
+              </KContainer>
+            </CheckStepComponentContainer>
+          </CheckBodyContainer>
+          <CheckBodyContainer>
+          <CheckStepComponentContainer>
+              <KContainer>
+                <SubHeaderText>
+                  {"KPIKPIkpikpiKPI>100"}
+                </SubHeaderText>
+                <ValueInputContainer>
+                  <FormElementContainer>
+                    <InputFromUnitType
+                      unitType={"numerical"}
+                      placeholder={"Add the new value..."}
+                      onChange={() => {}}
+                      defaultValue={0}
+                      onBlur={() => {}}
+                    />
+                  </FormElementContainer>
+                  <ValueSpan>{`${100}${""}`}</ValueSpan>
+                </ValueInputContainer>
+                <CommentContainer>
+                  <FormElementContainer>
+                    <InputHeaderWithComment
+                      comment={"optional"}
+                      fontSize={"14px"}
+                      childFontSize={"12px"}
+                    />
+                    <StyledInput
+                      placeholder={"Add a comment..."}
+                      onChange={e => {}}
+                      onBlur={() => {}}
+                    />
+                  </FormElementContainer>
+                </CommentContainer>
+              </KContainer>
+            </CheckStepComponentContainer>
+          </CheckBodyContainer>
+          <CheckBodyContainer>
+          <CheckStepComponentContainer>
+              <KContainer>
+                <SubHeaderText>
+                  {"KPIKPIkpikpiKPI>100"}
+                </SubHeaderText>
+                <ValueInputContainer>
+                  <FormElementContainer>
+                    <InputFromUnitType
+                      unitType={"numerical"}
+                      placeholder={"Add the new value..."}
+                      onChange={() => {}}
+                      defaultValue={0}
+                      onBlur={() => {}}
+                    />
+                  </FormElementContainer>
+                  <ValueSpan>{`${100}${""}`}</ValueSpan>
+                </ValueInputContainer>
+                <CommentContainer>
+                  <FormElementContainer>
+                    <InputHeaderWithComment
+                      comment={"optional"}
+                      fontSize={"14px"}
+                      childFontSize={"12px"}
+                    />
+                    <StyledInput
+                      placeholder={"Add a comment..."}
+                      onChange={e => {}}
+                      onBlur={() => {}}
+                    />
+                  </FormElementContainer>
+                </CommentContainer>
+              </KContainer>
+            </CheckStepComponentContainer>
+          </CheckBodyContainer>
         </BodyContentContainer>
-        {/* {renderStepsComponent()} */}
       </BodyContainer>
     </Container>
-  );
+    </BigContainer>
+    </Overlay>
+      </>
+    );
+  },
+);
+
+
+const LoadBodyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+type IStopMeetingButton = {
+  variant: string;
+  onClick: () => void;
+  small: boolean;
+  disabled: boolean;
 };
+
+const StopButton = styled(Button)<IStopMeetingButton>`
+  width: 100%;
+  margin: 0;
+  font-size: 16px;
+`;
+
+const HeaderContainer = styled.div`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const CheckInWizardContainer = styled.div`
+  @media only screen and (max-width: 768px) {
+    padding-top: 64px;
+  }
+`;
+
+const Overlay = styled.div`
+  position: relative;
+
+`;
+
+const Wrapper = styled.div`
+  height: 0;
+  width: 100%;
+  postion: absolute;
+  z-index: 10000;
+`;
+
+const Upgradetextcontainer = styled.div`
+  width:100%;
+  text-align: center;
+  border-top: 1px solid white;
+  z-index: 1000;
+`;
+
+const IconWrapper = styled.div`
+  margin-top: 120px;
+`;
+
+const Boldtext = styled.div`
+  font-family: exo;
+  font-weight: bold;
+  font-size: 36px;
+  line-spacing: 48;
+  text-align: center;
+  margin-top: 48px;
+  margin-bottom: 32px;
+  max-width: 720px;
+  display: inline-block;
+`;
+
+const Subtext = styled.div`
+  font-family: exo;
+  font-weight: regular;
+  font-size: 20px;
+  line-spacing: 27;
+  margin-bottom: 24px;
+`;
+
+const Talktous = styled.div`
+  width: 120px;
+  height: 28px;
+  background: #005FFE 0% 0% no-repeat padding-box;
+  border: 1px solid #005FFE;
+  border-radius: 4px;
+  opacity: 1;
+  font-family: lato;
+  font-weight: bold;
+  font-size: 12px;
+  color: #FFFFFF;
+  display: inline-block;
+  padding-top: 11px;
+  line-spacing: 24;
+ `;
+
+const BigContainer = styled.div`
+  filter: blur(10px);
+  position: absolute;
+  opacity: 0.35;
+  z-index: 0;
+`;
 
 const Container = styled.div`
   display: flex;
@@ -291,7 +440,8 @@ type BodyContentContainerProps = {
 const BodyContentContainer = styled.div<BodyContentContainerProps>`
   height: 100%;
   overflow-y: auto;
-  display: ${props => (props.hasStepsForMobile ? "block" : "flex")};
+  //display: ${props => (props.hasStepsForMobile ? "block" : "flex")};
+  //display: flex;
 `;
 
 const DescriptionTitleContainer = styled.div``;
@@ -389,19 +539,6 @@ const StyledBackIcon = styled(Icon)`
   transform: rotate(180deg);
 `;
 
-type IStopMeetingButton = {
-  variant: string;
-  onClick: () => void;
-  small: boolean;
-  disabled: boolean;
-};
-
-const StopButton = styled(Button)<IStopMeetingButton>`
-  width: 100%;
-  margin: 0;
-  font-size: 16px;
-`;
-
 const ChildrenContainer = styled.div``;
 
 const StepText = styled(Text)`
@@ -483,5 +620,50 @@ const CheckStepComponentContainer = styled.div`
   // margin-left: 8px;
   @media only screen and (max-width: 768px) {
     margin-left: 0;
+  }
+`;
+
+const KContainer = styled.div`
+border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+padding-left: 16px;
+padding-right: 16px;
+@media only screen and (max-width: 768px) {
+  padding: 0 16px;
+}
+`;
+
+const SubHeaderText = styled.span`
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 25px;
+`;
+
+const ValueInputContainer = styled.div`
+  width: 30%;
+  align-items: center;
+  display: flex;
+  margin-bottom: 20px;
+  justify-content: space-between;
+  @media only screen and (max-width: 768px) {
+    width: 70%;
+  }
+`;
+
+const ValueSpan = styled.span`
+  font-weight: bold;
+  display: inline-block;
+  margin-left: 50px;
+  @media only screen and (max-width: 768px) {
+    margin-left: 30px;
+  }
+`;
+
+const CommentContainer = styled.div`
+  width: 70%;
+  margin-bottom: 15px;
+  @media only screen and (max-width: 768px) {
+    width: 80%;
   }
 `;

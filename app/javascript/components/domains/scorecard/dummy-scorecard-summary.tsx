@@ -39,7 +39,6 @@ const WeekSummary = ({}): JSX.Element => {
   };
 
   useEffect(() => {
-    //setOnTrack(1);
     setData({
       labels: ["None", "Behind", "NeedsAttention", "On Track"],
       datasets: [

@@ -22,59 +22,6 @@ interface IScorecardsIndexProps {
 export const DummyScorecardsIndex = observer(
   ({}: IScorecardsIndexProps): JSX.Element => {
     const { primary100 } = baseTheme.colors;
-    // let { owner_type, owner_id } = useParams();
-    // owner_type = ownerType ? ownerType : owner_type;
-    // owner_id = ownerId ? ownerId : owner_id;
-
-    // const {
-    //   companyStore,
-    //   scorecardStore,
-    //   teamStore,
-    //   userStore,
-    //   keyPerformanceIndicatorStore,
-    // } = useMst();
-    // const [loading, setLoading] = useState<boolean>(true);
-    // const [kpis, setKpis] = useState([]);
-    // const [tableKPIs, setTableKPIs] = useState([]);
-    // const [scorecardOwner, setScorecardOwner] = useState<any>({});
-    // const { allKPIs } = keyPerformanceIndicatorStore;
-    // const [viewEditKPIModalOpen, setViewEditKPIModalOpen] = useState(true);
-    // const setKPIs = value => {
-    //   setKpis([]);
-    //   setKpis(value);
-    //   setViewEditKPIModalOpen(true);
-    // };
-    // useEffect(() => {
-    //   setLoading(true);
-    //   userStore.load();
-    //   teamStore.load();
-    //   keyPerformanceIndicatorStore.load();
-    //   companyStore.load();
-    // }, []);
-
-    // useEffect(() => {
-    //   if (owner_type && owner_id) {
-    //     scorecardStore
-    //       .getScorecard({ ownerType: owner_type, ownerId: owner_id })
-    //       .then(() => {
-    //         setKpis(scorecardStore.kpis);
-    //         setTableKPIs(scorecardStore.kpis);
-    //       })
-    //       .then(() => setLoading(false));
-    //   }
-    // }, [owner_type, owner_id]);
-
-    // if (
-    //   loading ||
-    //   !companyStore.company ||
-    //   !userStore.users ||
-    //   !teamStore.teams ||
-    //   !keyPerformanceIndicatorStore ||
-    //   !owner_type ||
-    //   !owner_id
-    // ) {
-    //   return <Loading />;
-    // }
 
     return (
       <Overlay>
@@ -90,7 +37,6 @@ export const DummyScorecardsIndex = observer(
                 Upgrade to a higher tier to get access to Scorecard
                 </Subtext>
                 <Talktous
-                // type="button"
                 onClick={(e) => {
                 e.preventDefault();
                 window.location.href='http://go.lynchpyn.com/upgrade';

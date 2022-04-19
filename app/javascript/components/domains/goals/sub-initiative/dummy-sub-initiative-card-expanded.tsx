@@ -2,7 +2,6 @@ import * as React from "react";
 import styled from "styled-components";
 import { Icon } from "../../../shared/icon";
 import { AnnualInitiativeType } from "~/types/annual-initiative";
-// import { CreateGoalSection } from "../shared/create-goal-section";
 import { HomeContainerBorders } from "../../home/shared-components";
 import { useState } from "react";
 import { useMst } from "~/setup/root";
@@ -12,49 +11,19 @@ import { observer } from "mobx-react";
 import { ISubInitiativeCardExpandedProps } from "~/types/sub-initiative-cards";
 
 export const DummySubInitiativeCardsExpanded = observer(
-  (props: ISubInitiativeCardExpandedProps): JSX.Element => {
-    const {
-      annualInitiative,
-      setSubInitiativeId,
-      selectedSubInitiativeCards,
-      setSubInitiativeModalOpen,
-      setSelectedAnnualInitiativeDescription,
-    } = props;
-
-    const { sessionStore } = useMst();
-
-    const renderSubInitiativeQuarterlyGoals = () => {
-      return annualInitiative.quarterlyGoals[selectedSubInitiativeCards].subInitiatives.map(
-        (subInitiative, index) => {
-          return (
-            <>
-              <LineContainer>
-                <svg height="16" width="2">
-                  <line x1="1" y1="4" x2="1" y2="16" />
-                </svg>
-              </LineContainer>
-              <InitiativesContainer>
-                <DummySubInitiativeGoalCard
-                  key={index}
-                  subInitiative={subInitiative}
-                  setSubInitiativeModalOpen={setSubInitiativeModalOpen}
-                  setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
-                  setSubInitiativeId={setSubInitiativeId}
-                />
-              </InitiativesContainer>
-            </>
-          );
-        },
-      );
-    };
-
+  (): JSX.Element => {
     return (
-      <Container
-        onClick={e => {
-          e.stopPropagation();
-        }}
-      >
-        {renderSubInitiativeQuarterlyGoals()}
+      <Container>
+        <>
+          <LineContainer>
+            <svg height="16" width="2">
+              <line x1="1" y1="4" x2="1" y2="16" />
+            </svg>
+          </LineContainer>
+          <InitiativesContainer>
+            <DummySubInitiativeGoalCard/>
+          </InitiativesContainer>
+        </>
       </Container>
     );
   },

@@ -52,15 +52,6 @@ export const DummyOwnedBy = observer(({
       onClick={() => setShowUsersList(!showUsersList)}
       center={center}
     >
-      {/* <Avatar
-        defaultAvatarColor={ownedBy.defaultAvatarColor}
-        avatarUrl={ownedBy.avatarUrl}
-        firstName={ownedBy.firstName}
-        lastName={ownedBy.lastName}
-        size={size || 20}
-        border={userIconBorder}
-        {...restProps}
-      /> */}
       <OwnedByName fontSize={fontSize} nameWidth={nameWidth} type={"fieldLabel"}>
         first name last name
       </OwnedByName>

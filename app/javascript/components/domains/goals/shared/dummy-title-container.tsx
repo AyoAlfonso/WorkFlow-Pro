@@ -14,15 +14,6 @@ import { Text } from "~/components/shared/text";
 import { useMst } from "~/setup/root";
 
 interface ITitleContainerProps {
-  goalsFilter: string;
-  setGoalsFilter: React.Dispatch<React.SetStateAction<string>>;
-  largeHomeTitle?: boolean;
-  title: string;
-  type?: string;
-  handleToggleChange: any;
-  toggleChecked: boolean;
-  showInitiatives: boolean;
-  setShowInitiatives: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const StyledLabel = withStyles({
@@ -33,45 +24,22 @@ const StyledLabel = withStyles({
 
 export const DummyTitleContainer = observer(
   ({
-    goalsFilter,
-    setGoalsFilter,
-    largeHomeTitle,
-    title,
-    type,
-    handleToggleChange,
-    toggleChecked,
-    showInitiatives,
-    setShowInitiatives,
   }: ITitleContainerProps): JSX.Element => {
-    const { sessionStore } = useMst();
-
     const renderFilterOptions = () => {
       return (
         <FilterContainer>
-          <FilterOptionContainer underline={goalsFilter == "open"}>
-            <FilterOptions
-              onClick={() => setGoalsFilter("open")}
-              color={goalsFilter == "open" ? "primary100" : "grey40"}
-            >
+          <FilterOptionContainer underline={true}>
+            <FilterOptions color={"primary100"}>
               Open
             </FilterOptions>
           </FilterOptionContainer>
-
-          {type == "Company" && (
-            <FilterOptionContainer underline={goalsFilter == "me"}>
-              <FilterOptions
-                onClick={() => setGoalsFilter("me")}
-                color={goalsFilter == "me" ? "primary100" : "grey40"}
-              >
-                Steven
-              </FilterOptions>
-            </FilterOptionContainer>
-          )}
-          <FilterOptionContainer underline={goalsFilter == "closed"}>
-            <FilterOptions
-              onClick={() => setGoalsFilter("closed")}
-              color={goalsFilter == "closed" ? "primary100" : "grey40"}
-            >
+          <FilterOptionContainer underline={false}>
+            <FilterOptions color={"grey40"}>
+              Steven
+            </FilterOptions>
+          </FilterOptionContainer>
+          <FilterOptionContainer underline={false}>
+            <FilterOptions color={"grey40"}>
               Closed
             </FilterOptions>
           </FilterOptionContainer>
@@ -81,35 +49,27 @@ export const DummyTitleContainer = observer(
 
     const renderHideButton = () => {
       return (
-        <HideButtonContainer onClick={() => setShowInitiatives(!showInitiatives)}>
-          <HideText>{showInitiatives ? "Hide" : "Show"} </HideText>
+        <HideButtonContainer>
+          <HideText>{"Hide"} </HideText>
           <HideIconContainer>
-            {showInitiatives ? (
               <HideIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
-            ) : (
-              <ShowIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
-            )}
           </HideIconContainer>
         </HideButtonContainer>
       );
     };
-
     return (
       <Container>
         <HomeTitleContainer>
-          {largeHomeTitle ? (
+          {true ? (
             <EnlargedHomeTitle> GCL Engineering </EnlargedHomeTitle>
           ) : (
             <HomeTitle> GCL Engineering </HomeTitle>
           )}
-
           <ToggleContainer>
             <FormGroup row>
               <StyledLabel
                 control={
                   <Switch
-                    checked={toggleChecked}
-                    onChange={handleToggleChange}
                     name="switch-checked"
                   />
                 }
@@ -129,46 +89,17 @@ export const DummyTitleContainer = observer(
 
 
 export const DummyUserTitleContainer = observer(
-  ({
-    goalsFilter,
-    setGoalsFilter,
-    largeHomeTitle,
-    title,
-    type,
-    handleToggleChange,
-    toggleChecked,
-    showInitiatives,
-    setShowInitiatives,
-  }: ITitleContainerProps): JSX.Element => {
-    const { sessionStore } = useMst();
-
+  ({}: ITitleContainerProps): JSX.Element => {
     const renderFilterOptions = () => {
       return (
         <FilterContainer>
-          <FilterOptionContainer underline={goalsFilter == "open"}>
-            <FilterOptions
-              onClick={() => setGoalsFilter("open")}
-              color={goalsFilter == "open" ? "primary100" : "grey40"}
-            >
+          <FilterOptionContainer underline={true}>
+            <FilterOptions color={"primary100"}>
               Open
             </FilterOptions>
           </FilterOptionContainer>
-
-          {type == "Company" && (
-            <FilterOptionContainer underline={goalsFilter == "me"}>
-              <FilterOptions
-                onClick={() => setGoalsFilter("me")}
-                color={goalsFilter == "me" ? "primary100" : "grey40"}
-              >
-                Steven
-              </FilterOptions>
-            </FilterOptionContainer>
-          )}
-          <FilterOptionContainer underline={goalsFilter == "closed"}>
-            <FilterOptions
-              onClick={() => setGoalsFilter("closed")}
-              color={goalsFilter == "closed" ? "primary100" : "grey40"}
-            >
+          <FilterOptionContainer underline={false}>
+            <FilterOptions color={"grey40"}>
               Closed
             </FilterOptions>
           </FilterOptionContainer>
@@ -178,14 +109,10 @@ export const DummyUserTitleContainer = observer(
 
     const renderHideButton = () => {
       return (
-        <HideButtonContainer onClick={() => setShowInitiatives(!showInitiatives)}>
-          <HideText>{showInitiatives ? "Hide" : "Show"} </HideText>
+        <HideButtonContainer>
+          <HideText>{"Hide"} </HideText>
           <HideIconContainer>
-            {showInitiatives ? (
               <HideIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
-            ) : (
-              <ShowIcon icon={"Hide_Show_L"} size={"15px"} iconColor={"greyInactive"} />
-            )}
           </HideIconContainer>
         </HideButtonContainer>
       );
@@ -194,7 +121,7 @@ export const DummyUserTitleContainer = observer(
     return (
       <Container>
         <HomeTitleContainer>
-          {largeHomeTitle ? (
+          {true ? (
             <EnlargedHomeTitle> Steven </EnlargedHomeTitle>
           ) : (
             <HomeTitle> Steven </HomeTitle>
@@ -204,11 +131,7 @@ export const DummyUserTitleContainer = observer(
             <FormGroup row>
               <StyledLabel
                 control={
-                  <Switch
-                    checked={toggleChecked}
-                    onChange={handleToggleChange}
-                    name="switch-checked"
-                  />
+                  <Switch name="switch-checked"/>
                 }
                 label="Plan"
                 labelPlacement="end"

@@ -7,11 +7,12 @@ import { Text } from "../../../shared/text";
 import { DummyAnnualInitiativeCardMinimized } from "./dummy-annual-initiative-card-minimized";
 import { DummyRecordOptions } from "../shared/dummy-record-options";
 import { baseTheme } from "~/themes";
+import { DummySubInitiativeCardsExpanded } from "~/components/domains/goals/sub-initiative/dummy-sub-initiative-card-expanded";
 
 interface IAnnualInitiativeCardProps {
 }
 
-export const DummyAnnualInitiativeCard = observer(
+export const DummyAnnualInitiativeTree = observer(
   ({}: IAnnualInitiativeCardProps): JSX.Element => {
     const { white, grey60 } = baseTheme.colors;
     const marginRight = "8px";
@@ -33,6 +34,7 @@ export const DummyAnnualInitiativeCard = observer(
           </HeaderContainer>
           <DummyAnnualInitiativeCardMinimized/>
         </Container>
+        <DummySubInitiativeCardsExpanded/>
       </ColumnContainer>
     );
   },

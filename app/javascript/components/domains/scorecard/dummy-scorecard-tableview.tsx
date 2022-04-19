@@ -127,26 +127,6 @@ const Container = styled.div`
   //border: 1px solid black;
 `;
 
-// const TableContainer = styled.div`
-//   width: 100%;
-//   font-family: Lato;
-//   //border: 1px solid black;
-// `;
-
-// const TopRow = styled.div`
-//   width: 100%;
-//   display: flex;
-//   justify-content: space-between;
-//   margin-bottom: 16px;
-//   //border: 1px solid black;
-// `;
-
-// const TabContainer = styled.div`
-//   display: flex;
-//   visibility: hidden;
-//   //border: 1px solid black;
-// `;
-
 type TabProps = {
   active: boolean;
 };
@@ -168,28 +148,6 @@ const Tab = styled.button<TabProps>`
 		opacity: 1;`}
 `;
 
-// const Table = styled.table`
-//   border-collapse: collapse;
-//   display: -webkit-box;
-//   padding-bottom: 16px;
-//   font-size: 12px;
-//   overflow-x: auto;
-//   width: 100%;
-//   //border: 1px solid black;
-// `;
-
-// const TableHead = styled.thead`
-//   width: 100%;
-// `;
-
-// const TableBody = styled.tbody`
-//   width: 100%;
-// `;
-
-// const TableHeader = styled.th`
-//   border: 1px solid ${props => props.theme.colors.borderGrey};
-//   padding: 16px 8px;
-// `;
 
 const KPITitle = styled.div`
   display: block;
@@ -204,20 +162,6 @@ const KPITitle = styled.div`
 type TableRowProps = {
   hover?: boolean;
 };
-
-// const TableRow = styled.tr<TableRowProps>`
-//   width: 100%;
-//   height: 48px;
-//   ${props =>
-//     props.hover &&
-//     `&:hover {
-// 		background: ${props.theme.colors.backgroundBlue};
-// 		${KPITitle} {
-// 			font-weight: 800;
-// 			text-decoration: underline;
-// 		}
-// 	}`}
-// `;
 
 type UpdateKpiIconProps = {
   hover?: boolean;
