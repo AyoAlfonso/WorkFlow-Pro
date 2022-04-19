@@ -189,13 +189,7 @@ export const ForumAgendaSearch = observer(() => {
 
   return (
     <>
-      <SubHeaderContainer>
-        <BackHeaderText onClick={() => history.push(`/team/${teamId}`)}>
-          {currentTeam?.name}
-        </BackHeaderText>
-        <ChevronRight icon={"Chevron-Left"} size={"10px"} iconColor={"grey100"} />
-        <BreadcrumbHeaderText> Meeting Agenda & Notes </BreadcrumbHeaderText>
-      </SubHeaderContainer>
+  
       <Container>
         <CalendarFilter
           header={""}
@@ -259,7 +253,7 @@ const NoSelectedItemsContainer = styled.div`
 
 const BreadcrumbHeaderText = styled.span`
   display: inline-block;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: bold;
   margin-top: 15px;
   margin-bottom: 25px;

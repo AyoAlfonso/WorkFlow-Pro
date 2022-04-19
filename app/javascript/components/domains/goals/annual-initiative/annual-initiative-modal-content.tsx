@@ -98,7 +98,9 @@ export const AnnualInitiativeModalContent = memo(
         annualInitiativeStore.getAnnualInitiative(annualInitiativeId).then(() => {
           const annualInitiative = annualInitiativeStore.annualInitiative;
           if (annualInitiative) {
-            setDescription(annualInitiative.contextDescription || descriptionTemplateForObjective);
+            setDescription(
+              annualInitiative.contextDescription || descriptionTemplateForObjective || "",
+            );
             setAnnualInitiative(annualInitiative);
           }
         });
@@ -388,7 +390,10 @@ export const AnnualInitiativeModalContent = memo(
                 theme="snow"
                 placeholder={"Add a description..."}
                 value={description}
-                onChange={handleChange}
+                // onChange={handleChange}
+                onChange={(content, delta, source, editor) => {
+                  handleChange(editor.getHTML());
+                }}
               />
             </TrixEditorContainer>
             <SubHeader>Activity</SubHeader>
