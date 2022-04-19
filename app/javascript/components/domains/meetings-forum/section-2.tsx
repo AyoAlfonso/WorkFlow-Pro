@@ -66,13 +66,6 @@ export const Section2 = observer(
 
     return (
       <Container>
-        <SubHeaderContainer>
-          <BackHeaderText onClick={() => history.push(`/team/${currentMeeting.teamId}`)}>
-            {currentTeam?.name}
-          </BackHeaderText>
-          <ChevronRight icon={"Chevron-Left"} size={"10px"} iconColor={"grey100"} />
-          <BreadcrumbHeaderText> Forum Topics </BreadcrumbHeaderText>
-        </SubHeaderContainer>
         <Exploration includeExplorationTopic={false} />
         {/* {instanceType === "forum" && <LynchPynBadge />} */}
       </Container>
@@ -106,7 +99,7 @@ const SubHeaderContainer = styled.div`
 `;
 const BreadcrumbHeaderText = styled.span`
   display: inline-block;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: bold;
   margin-top: 15px;
   margin-bottom: 25px;
