@@ -136,7 +136,6 @@ const EmptyContainer = styled.div`
   justify-content: center;
   gap: 16px;
   margin-block: 25vh;
-  //border: 1px solid black;
 `;
 
 const EmptyTitle = styled.div`
@@ -144,18 +143,15 @@ const EmptyTitle = styled.div`
   font-weight: bold;
   font-size: 48px;
   text-align: center;
-  //border: 1px solid black;
 `;
 
 const EmptySubtitle = styled.div`
   font-family: Exo;
   font-size: 20px;
   text-align: center;
-  //border: 1px solid black;
 `;
 
 const AddKPIsContainer = styled.div`
-  //border: 1px solid black;
 `;
 
 const StyledChevronIconContainer = styled.div`

@@ -131,16 +131,6 @@ export const DummyGoalDropdownOptions = ({
 
   return (
     <Container ref={optionsRef}>
-      {/* 
-        // DONT HAVE THE PATTERN TO CREATE AN INITIATIVE YET.
-        {itemType == "quarterlyGoal" && (
-        <OptionContainer onClick={() => createSubInitiative()}>
-          <IconContainer>
-            <StyledIcon icon={"Plus"} size={"15px"} />
-          </IconContainer>
-          <OptionText> Create Sub-Initiative </OptionText>
-        </OptionContainer>
-      )} */}
       <OptionContainer onClick={() => closeInitiative()}>
         <IconContainer>
           <StyledIcon icon={"Checkmark"} size={"15px"} />

@@ -38,9 +38,7 @@ export const DummySubInitiativeGoalCard = observer(
       backgroundGrey,
     } = baseTheme.colors;
     const defaultOptionsColor = backgroundGrey;
-    // const [showOptions, setShowOptions] = useState<string>(defaultOptionsColor);
 
-    // let currentMilestone;
     const statusBadge = {
       description: "",
       colors: {
@@ -48,44 +46,6 @@ export const DummySubInitiativeGoalCard = observer(
         color: "",
       },
     };
-
-    // currentMilestone = subInitiative.milestones.find(milestone =>
-    //   moment(milestone.weekOf).isSame(moment(), "week"),
-    // );
-
-    // if (subInitiative.closedAt != null) {
-    //   statusBadge.description = `Closed - Q${subInitiative.quarter}`;
-    //   statusBadge.colors = { color: white, backgroundColor: grey100 };
-    // } else if (currentFiscalYear < subInitiative.fiscalYear) {
-    //   statusBadge.description = `Upcoming - Q${subInitiative.quarter}`;
-    //   statusBadge.colors = { color: white, backgroundColor: primary100 };
-    // } else {
-    //   if (!currentMilestone) {
-    //     currentMilestone = subInitiative.milestones[subInitiative.milestones.length - 1];
-    //   }
-
-    //   if (currentMilestone && currentMilestone.status) {
-    //     switch (currentMilestone.status) {
-    //       case "completed":
-    //         statusBadge.description = "On Track";
-    //         statusBadge.colors = { color: finePine, backgroundColor: fadedGreen };
-    //         break;
-    //       case "in_progress":
-    //         statusBadge.description = "Needs Attention";
-    //         statusBadge.colors = { color: tango, backgroundColor: fadedYellow };
-    //         break;
-    //       case "incomplete":
-    //         statusBadge.description = "Behind";
-    //         statusBadge.colors = { color: warningRed, backgroundColor: fadedRed };
-    //         break;
-    //       case "unstarted":
-    //         statusBadge.description = "No update";
-    //         statusBadge.colors = { color: grey100, backgroundColor: backgroundGrey };
-    //         break;
-    //     }
-    //   }
-    // }
-
 
     return (
       <>
@@ -201,7 +161,6 @@ type StatusBadgeType = {
   backgroundColor: string;
 };
 
-// TODOIST: Update the color constant
 const StatusBadge = styled.div<StatusBadgeType>`
   font-size: 12px;
   font-weight: 900;

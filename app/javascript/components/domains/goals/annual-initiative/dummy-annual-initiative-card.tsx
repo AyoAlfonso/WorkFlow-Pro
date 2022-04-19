@@ -42,7 +42,6 @@ type ContainerProps = {
   onboarding: boolean;
 };
 
-// Avoid repetition and pass min-height as a prop
 const Container = styled(HomeContainerBorders)<ContainerProps>`
   width: 100%;
   min-width: 240px;
@@ -114,7 +113,6 @@ const StyledText = styled(Text)<StyledTextProps>`
     text-decoration: underline;
   }
 `;
-// TODOIT: Add the color in hover state above to constants
 
 const IconContainer = styled.div`
   margin-top: 16px;

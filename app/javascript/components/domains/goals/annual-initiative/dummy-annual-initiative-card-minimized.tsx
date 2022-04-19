@@ -139,7 +139,7 @@ const ShowInitiativeBar = styled.div`
   font-weight: bold;
   white-space: nowrap;
 `;
-//TODOIT: add blue color above to constants
+
 const StatusSquareContainer = styled.div`
   position: relative;
   display: flex;

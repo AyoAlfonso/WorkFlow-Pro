@@ -398,7 +398,6 @@ const KeyActivitiesListContainer = styled.div`
   height: 100%;
 `;
 
-//////
 
 const CreateKeyActivityButtonContainer = styled(HomeContainerBorders)`
   display: flex;

@@ -51,7 +51,6 @@ export const DummyScorecardTableView = observer(
     function createData( update, kpi, score, status, owner, wk1, wk2, wk3, wk4, wk5, wk6, wk7, wk8, wk9, wk10, wk11, wk12, wk13 ) {
       return { update, kpi, score, status, owner, wk1, wk2, wk3, wk4, wk5, wk6, wk7, wk8, wk9, wk10, wk11, wk12, wk13};
     }
-   // <DummyOwnedBy ownedBy={value} marginLeft={"0px"} disabled />
     const rows = [
       createData(<BlueUpdateKpiIcon icon={"Update_KPI_New"} size={16}/> , "example", <StatusContainer> <StatusBadge fontSize={"12px"} background={fadedGreen} color={successGreen}> 100% </StatusBadge> </StatusContainer>, <StatusContainer> <StatusBadge fontSize={"12px"} background={fadedGreen} color={successGreen}> OnTrack </StatusBadge> </StatusContainer>, "ownedby", <WeekText color={successGreen}> 10 </WeekText>, " ", " ", " ", <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText> ),
       createData(<BlueUpdateKpiIcon icon={"Update_KPI_New"} size={16}/> , "example", <StatusContainer> <StatusBadge fontSize={"12px"} background={fadedRed} color={warningRed}> 40% </StatusBadge> </StatusContainer>, <StatusContainer> <StatusBadge fontSize={"12px"} background={fadedRed} color={warningRed}> Behind </StatusBadge> </StatusContainer>, "ownedby", <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText>, <WeekText color={successGreen}> 10 </WeekText> ),
@@ -124,7 +123,6 @@ const Container = styled.div`
   width: 100%;
   font-family: Lato;
   z-index: -100;
-  //border: 1px solid black;
 `;
 
 type TabProps = {
@@ -141,7 +139,6 @@ const Tab = styled.button<TabProps>`
   border: 0;
   outline: 0;
   opacity: 0.5;
-  //border: 1px solid black;
   ${props =>
     props.active &&
     `border-bottom: 2px solid ${props.theme.colors.primary80};

@@ -14,8 +14,6 @@ import { Loading } from "~/components/shared";
 import { baseTheme } from "~/themes/base";
 
 interface IOwnedBySectionProps {
-  // ownedBy: UserType;
-  // type: string;
   color: string;
   firstname: string;
   lastname: string;
@@ -42,39 +40,6 @@ export const DummyOwnedBySection = observer(
     fontSize,
     ...restProps
   }: IOwnedBySectionProps): JSX.Element => {
-    // const {
-    //   userStore,
-    //   sessionStore,
-    //   annualInitiativeStore,
-    //   quarterlyGoalStore,
-    //   subInitiativeStore,
-    //   keyPerformanceIndicatorStore,
-    // } = useMst();
-    // const currentUser = sessionStore.profile;
-    // const [store, setStore] = useState<any>(null);
-    // const [showUsersList, setShowUsersList] = useState<boolean>(false);
-    // const [owner, setOwner] = useState(ownedBy || currentUser);
-
-    // if (R.isNil(userStore) || R.isNil(sessionStore)) {
-    //   return <></>;
-    // }
-
-    // useEffect(() => {
-    //   if (type == "annualInitiative") {
-    //     setStore(annualInitiativeStore);
-    //   } else if (type == "quarterlyGoal") {
-    //     setStore(quarterlyGoalStore);
-    //   } else if (type == "subInitiative") {
-    //     setStore(subInitiativeStore);
-    //   } else if (type == "scorecard") {
-    //     setStore(keyPerformanceIndicatorStore);
-    //   }
-    //   setOwner(ownedBy);
-    // }, [ownedBy]);
-
-    // if (R.isNil(owner)) {
-    //   return <Loading />;
-    // }
     const {
         fadedYellow,
         fadedGreen,
@@ -88,16 +53,6 @@ export const DummyOwnedBySection = observer(
 
     return (
       <Container width={100}>
-        {/* <EditTriggerContainer
-          editable={editable}
-          onClick={e => {
-            if (editable) {
-              setShowUsersList(!showUsersList);
-            }
-          }}
-        >
-          {owner && (
-            <> */}
               <Avatar
                 defaultAvatarColor={color}
                 firstName={firstname}
@@ -109,19 +64,10 @@ export const DummyOwnedBySection = observer(
               <OwnedByName fontSize={fontSize} nameWidth={nameWidth} type={"fieldLabel"}>
                 {firstname} {lastname}
               </OwnedByName>
-            {/* </>
-          )}
-        </EditTriggerContainer>
-        {renderUserSelectionList()} */}
       </Container>
     );
   },
 );
-
-// Duplicate make these shared styling
-// type EditTriggerContainerType = {
-//   editable: boolean;
-// };
 
 type ContainerProps = {
   width?: number;
@@ -133,14 +79,6 @@ const Container = styled.div<ContainerProps>`
   display: flex;
   align-items: center center;
 `;
-
-// const EditTriggerContainer = styled.div<EditTriggerContainerType>`
-//   display: flex;
-//   align-items: center center;
-//   &:hover {
-//     cursor: ${props => props.editable && "pointer"};
-//   }
-// `;
 
 const SubHeaderContainer = styled.div`
   display: flex;
