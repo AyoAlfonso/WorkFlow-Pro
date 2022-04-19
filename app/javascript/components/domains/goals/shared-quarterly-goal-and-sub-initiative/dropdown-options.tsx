@@ -10,6 +10,7 @@ interface IDropdownOptionsProps {
   setParentModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   itemType: string;
   item: any;
+  quarter?: number;
 }
 
 export const DropdownOptions = ({
@@ -19,18 +20,29 @@ export const DropdownOptions = ({
   setParentModalOpen,
   itemType,
   item,
+  quarter,
 }: IDropdownOptionsProps): JSX.Element => {
   return editable ? (
     <Container onClick={() => setShowDropdownOptionsContainer(!showDropdownOptionsContainer)}>
       <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
       {showDropdownOptionsContainer && (
         <GoalDropdownContainer>
+          {quarter ? (
           <GoalDropdownOptions
             setShowDropdownOptions={setShowDropdownOptionsContainer}
             setModalOpen={setParentModalOpen}
             itemType={itemType}
             itemId={item.id}
+            quarter={quarter}
           />
+          ) : (
+            <GoalDropdownOptions
+              setShowDropdownOptions={setShowDropdownOptionsContainer}
+              setModalOpen={setParentModalOpen}
+              itemType={itemType}
+              itemId={item.id}
+            />
+          )}
         </GoalDropdownContainer>
       )}
     </Container>
