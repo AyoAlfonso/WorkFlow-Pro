@@ -335,7 +335,7 @@ export const ScorecardTableView = observer(
       [KPIs, year],
     );
 
-    const largeToText = (n: number) => {
+    const largeNumToText = (n: number) => {
       if (n === Infinity) {
         return n;
       } else if (n >= 1000000000000) {
@@ -359,7 +359,7 @@ export const ScorecardTableView = observer(
     const convertNumberInLogic = logic => {
       return logic.replace(
         findNumberText(logic),
-        largeToText(Number(findNumberText(logic))),
+        largeNumToText(Number(findNumberText(logic))),
       );
     };
 
@@ -464,9 +464,9 @@ export const ScorecardTableView = observer(
               <Tooltip
                 title={
                   <>
-                    {"Target: "} {largeToText(row.original.targetValue)}
-                    <br /> {"Average: "} {largeToText(row.original.average[quarter - 1])}
-                    <br /> {"Total: "} {largeToText(row.original.total[quarter - 1])}
+                    {"Target: "} {largeNumToText(row.original.targetValue)}
+                    <br /> {"Average: "} {largeNumToText(row.original.average[quarter - 1])}
+                    <br /> {"Total: "} {largeNumToText(row.original.total[quarter - 1])}
                   </>
                 }
                 placement="top"
@@ -477,7 +477,7 @@ export const ScorecardTableView = observer(
                     {parentKpi.length > relatedParentKpis.length
                       ? "—"
                       : quarterValue.percent
-                      ? `${largeToText(quarterValue.percent)}%`
+                      ? `${largeNumToText(quarterValue.percent)}%`
                       : greaterThan
                       ? "0%"
                       : "—"}
