@@ -57,7 +57,7 @@ export const HeaderText = observer(
                 <BackHeaderText onClick={() => history.push(`/team/${teamId}`)}>
                   {currentTeam?.name}
                 </BackHeaderText>
-                <ChevronRight icon={"Chevron-Left"} size={"18px"} iconColor={"grey100"} />
+                <ChevronRight icon={"Chevron-Left"} size={"24px"} iconColor={"grey100"} />
                 <BreadcrumbHeaderText>Meeting Management </BreadcrumbHeaderText>
               </SubHeaderContainer>
             ) : (
@@ -71,7 +71,7 @@ export const HeaderText = observer(
                 <BackHeaderText onClick={() => history.push(`/team/${team.id}`)}>
                   {currentTeam?.name}
                 </BackHeaderText>
-                <ChevronRight icon={"Chevron-Left"} size={"18px"} iconColor={"grey100"} />
+                <ChevronRight icon={"Chevron-Left"} size={"24px"} iconColor={"grey100"} />
                 <BreadcrumbHeaderText> Forum Topics </BreadcrumbHeaderText>
               </SubHeaderContainer>
             ) : (
@@ -83,7 +83,7 @@ export const HeaderText = observer(
                 <BackHeaderText onClick={() => history.push(`/team/${currentTeam.id}`)}>
                   {currentTeam?.name}
                 </BackHeaderText>
-                <ChevronRight icon={"Chevron-Left"} size={"18px"} iconColor={"grey100"} />
+                <ChevronRight icon={"Chevron-Left"} size={"24px"} iconColor={"grey100"} />
                 <BreadcrumbHeaderText> Meeting Agenda & Notes </BreadcrumbHeaderText>
               </SubHeaderContainer>
             ) : (
@@ -113,7 +113,7 @@ export const HeaderText = observer(
 );
 const BreadcrumbHeaderText = styled.span`
   display: inline-block;
-  font-size: 24px;
+  font-size: 32px;
   font-weight: bold;
   margin-top: 15px;
   margin-bottom: 25px;
