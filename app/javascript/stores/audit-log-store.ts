@@ -16,12 +16,12 @@ export const AuditLogStoreModel = types
   .extend(withEnvironment())
   .views(self => ({}))
   .actions(self => ({
-    getAudit: flow(function*() {
+    getAudit: flow(function*(params) {
       const env = getEnv(self);
       try {
-        const response: any = yield env.api.getAuditLogs();
+        const response: any = yield env.api.getAuditLogs(params);
         self.auditLogs = response.data.userActivityLogs;
-        return response.data.meta;
+        return response.data;
       } catch {
         showToast(`There was an error fetching the audit log`, ToastMessageConstants.ERROR);
       }

@@ -659,8 +659,8 @@ export class Api {
     return this.client.put(`/key_elements/${id}`, value);
   }
 
-  async getAuditLogs() {
-    return this.client.get(`/audit_logs`);
+  async getAuditLogs(params) {
+    return this.client.get(`/audit_logs/${params}`);
   }
   //async setJWT(jwt) {}
 }

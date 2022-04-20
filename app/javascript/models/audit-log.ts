@@ -17,20 +17,7 @@ export const AuditLogModel = types
     createdAt: types.maybeNull(types.string),
     updatedAt: types.maybeNull(types.string),
   })
-  .views(self => ({
-    // get auditId() {
-    //   return self.id;
-    // },
-    // get auditAction() {
-    //   return self.action;
-    // },
-    // get auditLocation() {
-    //   return self.location;
-    // },
-    // get auditBrowser() {
-    //   return self.browser;
-    // },
-  }))
+  .views(self => ({}))
   .actions(self => ({}));
 
 type AuditLogModelType = typeof AuditLogModel.Type;

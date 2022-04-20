@@ -27,7 +27,7 @@ const MuiStyledInput = withStyles((theme: Theme) =>
       paddingLeft: "16px",
       paddingTop: "6px",
       paddingBottom: "8px",
-      width: "80px",
+      width: "85px",
     },
   }),
 )(InputBase);
