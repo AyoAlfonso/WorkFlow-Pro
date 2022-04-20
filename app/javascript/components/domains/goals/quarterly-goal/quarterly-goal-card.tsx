@@ -186,7 +186,7 @@ export const QuarterlyGoalCard = observer(
                   type={"quarterlyGoal"}
                   id={quarterlyGoal.id}
                   iconColor={showOptions}
-                  quarter={quarterlyGoal.quarter || companyStore.onboardingCompany.quarterForCreatingQuarterlyGoals}
+                  quarter={quarterlyGoal.quarter}
                 />
               </IconContainer>
             )}

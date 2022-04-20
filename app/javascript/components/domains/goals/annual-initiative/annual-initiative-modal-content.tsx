@@ -168,7 +168,7 @@ export const AnnualInitiativeModalContent = memo(
                     {quarterlyGoal.description}
                   </QuarterlyGoalDescription>
                   <QuarterlyGoalOptionContainer>
-                    <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} />
+                    <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} quarter={quarterlyGoal.quarter}/>
                   </QuarterlyGoalOptionContainer>
                 </TopRowContainer>
                 <BottomRowContainer>
