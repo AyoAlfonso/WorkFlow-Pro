@@ -16,6 +16,7 @@ import { AuditLogsSelector } from "./audit-logs-selector";
 import { addDays } from "date-fns";
 import moment from "moment";
 import { DateRangeSelectorModal } from "./date-range-selector-modal";
+import { CSVLink } from "react-csv";
 
 export interface IAuditLogProps {}
 
@@ -45,6 +46,7 @@ export const AuditLogsIndex = observer(
     });
 
     useEffect(() => {
+      companyStore.load().then(() => setOwnerId(companyStore.company?.id));
       auditLogStore.getAudit(`page/1?per=10`).then(res => {
         setAuditLogs(res.userActivityLogs);
         setMeta(res.meta);
@@ -58,6 +60,20 @@ export const AuditLogsIndex = observer(
       </LoadingContainer>
     );
 
+    const setFilteredAuditLogs = logs => {
+      let filteredLogs;
+      if (ownerType == "company") {
+        filteredLogs = logs.filter(log => log.companyId == ownerId);
+        setAuditLogs(filteredLogs);
+      } else if (ownerType == "user") {
+        filteredLogs = logs.filter(log => log.userId == ownerId);
+        setAuditLogs(filteredLogs);
+      } else {
+        filteredLogs = logs.filter(log => log.teamId == ownerId);
+        setAuditLogs(filteredLogs);
+      }
+    };
+
     const getLogs = pageNumber => {
       if (page === pageNumber) return;
 
@@ -68,16 +84,7 @@ export const AuditLogsIndex = observer(
         setMeta(meta);
         setPage(meta.currentPage);
         setLoading(false);
-        if (ownerType == "company") {
-          filteredLogs = userActivityLogs.filter(log => log.companyId == ownerId);
-          setAuditLogs(filteredLogs);
-        } else if (ownerType == "user") {
-          filteredLogs = userActivityLogs.filter(log => log.userId == ownerId);
-          setAuditLogs(filteredLogs);
-        } else {
-          filteredLogs = userActivityLogs.filter(log => log.teamId == ownerId);
-          setAuditLogs(filteredLogs);
-        }
+        setFilteredAuditLogs(userActivityLogs);
       });
     };
 
@@ -212,20 +219,10 @@ export const AuditLogsIndex = observer(
 
     const handleDateRange = e => {
       setSelection(e);
-      let filteredLogs;
       if (e == "all") {
         setLoading(true);
         auditLogStore.getAudit(`page/1?per=10`).then(res => {
-          if (ownerType == "company") {
-            filteredLogs = res.userActivityLogs.filter(log => log.companyId == ownerId);
-            setAuditLogs(filteredLogs);
-          } else if (ownerType == "user") {
-            filteredLogs = res.userActivityLogs.filter(log => log.userId == ownerId);
-            setAuditLogs(filteredLogs);
-          } else {
-            filteredLogs = res.userActivityLogs.filter(log => log.teamId == ownerId);
-            setAuditLogs(filteredLogs);
-          }
+          setFilteredAuditLogs(res.userActivityLogs);
           setMeta(res.meta);
           setLoading(false);
         });
@@ -236,16 +233,7 @@ export const AuditLogsIndex = observer(
           .format("YYYY-MM-DD");
         const endDate = moment().format("YYYY-MM-DD");
         auditLogStore.getAudit(`?from=${startDate}&to=${endDate}`).then(res => {
-          if (ownerType == "company") {
-            filteredLogs = res.userActivityLogs.filter(log => log.companyId == ownerId);
-            setAuditLogs(filteredLogs);
-          } else if (ownerType == "user") {
-            filteredLogs = res.userActivityLogs.filter(log => log.userId == ownerId);
-            setAuditLogs(filteredLogs);
-          } else {
-            filteredLogs = res.userActivityLogs.filter(log => log.teamId == ownerId);
-            setAuditLogs(filteredLogs);
-          }
+          setFilteredAuditLogs(res.userActivityLogs);
           setMeta(res.meta);
           setLoading(false);
         });
@@ -256,16 +244,7 @@ export const AuditLogsIndex = observer(
           .format("YYYY-MM-DD");
         const endDate = moment().format("YYYY-MM-DD");
         auditLogStore.getAudit(`?from=${startDate}&to=${endDate}`).then(res => {
-          if (ownerType == "company") {
-            filteredLogs = res.userActivityLogs.filter(log => log.companyId == ownerId);
-            setAuditLogs(filteredLogs);
-          } else if (ownerType == "user") {
-            filteredLogs = res.userActivityLogs.filter(log => log.userId == ownerId);
-            setAuditLogs(filteredLogs);
-          } else {
-            filteredLogs = res.userActivityLogs.filter(log => log.teamId == ownerId);
-            setAuditLogs(filteredLogs);
-          }
+          setFilteredAuditLogs(res.userActivityLogs);
           setMeta(res.meta);
           setLoading(false);
         });
@@ -276,16 +255,7 @@ export const AuditLogsIndex = observer(
           .format("YYYY-MM-DD");
         const endDate = moment().format("YYYY-MM-DD");
         auditLogStore.getAudit(`?from=${startDate}&to=${endDate}`).then(res => {
-          if (ownerType == "company") {
-            filteredLogs = res.userActivityLogs.filter(log => log.companyId == ownerId);
-            setAuditLogs(filteredLogs);
-          } else if (ownerType == "user") {
-            filteredLogs = res.userActivityLogs.filter(log => log.userId == ownerId);
-            setAuditLogs(filteredLogs);
-          } else {
-            filteredLogs = res.userActivityLogs.filter(log => log.teamId == ownerId);
-            setAuditLogs(filteredLogs);
-          }
+          setFilteredAuditLogs(res.userActivityLogs);
           setMeta(res.meta);
           setLoading(false);
         });
@@ -296,16 +266,7 @@ export const AuditLogsIndex = observer(
           .format("YYYY-MM-DD");
         const endDate = moment().format("YYYY-MM-DD");
         auditLogStore.getAudit(`?from=${startDate}&to=${endDate}`).then(res => {
-          if (ownerType == "company") {
-            filteredLogs = res.userActivityLogs.filter(log => log.companyId == ownerId);
-            setAuditLogs(filteredLogs);
-          } else if (ownerType == "user") {
-            filteredLogs = res.userActivityLogs.filter(log => log.userId == ownerId);
-            setAuditLogs(filteredLogs);
-          } else {
-            filteredLogs = res.userActivityLogs.filter(log => log.teamId == ownerId);
-            setAuditLogs(filteredLogs);
-          }
+          setFilteredAuditLogs(res.userActivityLogs);
           setMeta(res.meta);
           setLoading(false);
         });
@@ -313,26 +274,38 @@ export const AuditLogsIndex = observer(
     };
 
     const handleDateSelect = ranges => {
-      let filteredLogs;
       const startDate = moment(ranges.selection.startDate).format("YYYY-MM-DD");
       const endDate = moment(ranges.selection.endDate).format("YYYY-MM-DD");
       setLoading(true);
       auditLogStore.getAudit(`?from=${startDate}&to=${endDate}`).then(res => {
-        if (ownerType == "company") {
-          filteredLogs = res.userActivityLogs.filter(log => log.companyId == ownerId);
-          setAuditLogs(filteredLogs);
-        } else if (ownerType == "user") {
-          filteredLogs = res.userActivityLogs.filter(log => log.userId == ownerId);
-          setAuditLogs(filteredLogs);
-        } else {
-          filteredLogs = res.userActivityLogs.filter(log => log.teamId == ownerId);
-          setAuditLogs(filteredLogs);
-        }
+        setFilteredAuditLogs(res.userActivityLogs);
         setMeta(res.meta);
         setLoading(false);
       });
       setOpen(false);
     };
+
+    const csvData = auditLogs.map(auditLog => {
+      return {
+        user: auditLog.userId,
+        action: formatAction(auditLog.action),
+        controller: formatAction(auditLog.controller),
+        note: auditLog.note,
+        ipAddress: auditLog.ipAddress,
+        browser: auditLog.browser,
+        createdAt: auditLog.createdAt,
+      };
+    });
+
+    const csvHeaders = [
+      { label: "User", key: "user" },
+      { label: "Action", key: "action" },
+      { label: "Controller", key: "controller" },
+      { label: "Note", key: "note" },
+      { label: "IP Address", key: "ipAddress" },
+      { label: "Browser", key: "browser" },
+      { label: "Created At", key: "createdAt" },
+    ];
 
     return (
       <>
@@ -348,22 +321,27 @@ export const AuditLogsIndex = observer(
                 setOwnerId={setOwnerId}
                 setAuditLogs={setAuditLogs}
               />
-              <SelectContainer>
-                <Select selection={selection} setSelection={handleDateRange} id="audit-logs">
-                  <option value="all">All</option>
-                  <option value="last-7-days">Last 7 Days</option>
-                  <option value="last-2-weeks">Last 2 weeks</option>
-                  <option value="last-30-days">Last 30 Days</option>
-                  <option value="last-6-months">Last 6 Months</option>
-                </Select>
-                <CustomSelectButton
-                  onClick={() => {
-                    setOpen(true);
-                  }}
-                >
-                  Custom Range
-                </CustomSelectButton>
-              </SelectContainer>
+              <TopRow>
+                <SelectContainer>
+                  <Select selection={selection} setSelection={handleDateRange} id="audit-logs">
+                    <option value="all">All</option>
+                    <option value="last-7-days">Last 7 Days</option>
+                    <option value="last-2-weeks">Last 2 weeks</option>
+                    <option value="last-30-days">Last 30 Days</option>
+                    <option value="last-6-months">Last 6 Months</option>
+                  </Select>
+                  <CustomSelectButton
+                    onClick={() => {
+                      setOpen(true);
+                    }}
+                  >
+                    Custom Range
+                  </CustomSelectButton>
+                  <CsvButton filename="Audit-Logs.csv" data={csvData} headers={csvHeaders}>
+                    Download as CSV
+                  </CsvButton>
+                </SelectContainer>
+              </TopRow>
               <TableContainer>
                 <Table {...getTableProps()}>
                   <TableHead>
@@ -401,7 +379,7 @@ export const AuditLogsIndex = observer(
             </>
           )}
         </Container>
-        {!R.isEmpty(auditLogs) ? (
+        {!R.isEmpty(auditLogStore.auditLogs) ? (
           <PaginationContainer>
             <Pagination count={meta?.totalPages} page={page} size="small" onChange={handleChange} />
           </PaginationContainer>
@@ -496,11 +474,34 @@ const PaginationContainer = styled.div`
   justify-content: center;
 `;
 
+const TopRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1em;
+  width: 100%;
+  align-items: center;
+`;
+
 const SelectContainer = styled.div`
   display: flex;
   flex-grow: 1;
-  justify-content: flex-end;
-  margin-bottom: 1em;
+`;
+
+const CsvButton = styled(CSVLink)`
+  margin-left: auto;
+  border: 1px solid ${props => props.theme.colors.borderGrey};
+  text-decoration: none;
+  color: ${props => props.theme.colors.text};
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  border-radius: 4px;
+  padding: 0.5em;
+  &:hover {
+    background: ${props => props.theme.colors.primary100};
+    color: ${props => props.theme.colors.white};
+    border: 1px solid ${props => props.theme.colors.primary100};
+  }
 `;
 
 const CustomSelectButton = styled.div`
@@ -511,6 +512,8 @@ const CustomSelectButton = styled.div`
   border-radius: 4px;
   cursor: pointer;
   &:hover {
-    background: ${props => props.theme.colors.backgroundGrey};
+    background: ${props => props.theme.colors.primary100};
+    color: ${props => props.theme.colors.white};
+    border: 1px solid ${props => props.theme.colors.primary100};
   }
 `;

@@ -122,7 +122,7 @@ export const AuditLogsSelector = observer(
             userList={[...companyUsers, ...teams, company]}
             onUserSelect={ownerSelector}
             setShowUsersList={setShowUsersList}
-            title={"Scorecard"}
+            title={"Audit Logs"}
             showUsersList
           />
         </div>
