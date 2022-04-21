@@ -3,7 +3,9 @@ class KeyElement < ApplicationRecord
   include ActionView::Helpers::SanitizeHelper
   include HasOwner
   include LogEnum
-
+  amoeba do
+    enable
+  end
   before_save :sanitize_value
   has_many :objective_logs, as: :child, dependent: :destroy
   belongs_to :elementable, :polymorphic => true

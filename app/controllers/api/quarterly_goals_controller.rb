@@ -29,7 +29,17 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
 
   def duplicate
     new_quarterly_goal = @quarterly_goal.amoeba_dup
+    # binding.pry
     new_quarterly_goal.save
+    new_quarterly_goal.key_elements = @quarterly_goal.key_elements.map do |key_element| 
+      # key_element.elementable_id = new_quarterly_goal.id 
+      KeyElement.create!(elementable: new_quarterly_goal,
+                  value: key_element[:value], completion_type: key_element[:completion_type],
+                  greater_than: key_element[:greater_than], completion_starting_value: key_element[:completion_starting_value],
+                  completion_current_value: key_element[:completion_current_value], owned_by_id: key_element.owned_by_id,
+                  completion_target_value: key_element[:completion_target_value])
+    end
+    # new_quarterly_goal.save
     render json: { quarterly_goal: new_quarterly_goal, status: :ok }
   end
 
