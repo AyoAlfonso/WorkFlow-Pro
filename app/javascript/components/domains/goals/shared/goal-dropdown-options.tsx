@@ -173,9 +173,9 @@ export const GoalDropdownOptions = ({
         </OptionContainer>
         <OptionContainer onClick={() => closeAndDuplicateQuarterly()}>
          <IconContainer>
-           <StyledIcon icon={"Checkmark"} size={"15px"} />
+           <StyledIcon icon={"Duplicate"} size={"15px"} />
          </IconContainer>
-         <OptionText> {"Close & Carry Over to Q"}{quarterText()}</OptionText>
+         <OptionText> {"Carry Over to Q"}{quarterText()}</OptionText>
         </OptionContainer>
         <OptionContainer onClick={() => deleteInitiative()}>
           <IconContainer>
