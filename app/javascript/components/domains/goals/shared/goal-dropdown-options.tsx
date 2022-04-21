@@ -117,9 +117,11 @@ export const GoalDropdownOptions = ({
           quarterlyGoalStore.closeGoal(itemId).then(() => {
           closeModal();
           });
+          setShowDropdownOptions(false);
         }
       } else {
         showToast("Can not carry over from the 4th quarter", ToastMessageConstants.INFO);
+        setShowDropdownOptions(false);
       }
     }
   };
