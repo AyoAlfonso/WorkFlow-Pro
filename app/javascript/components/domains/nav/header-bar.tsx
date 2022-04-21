@@ -127,16 +127,18 @@ export const HeaderBar = observer(
       <Wrapper>
         <Container>
           <HeaderItemsContainer>
-            <BurgerIconContainer
-              showBackground={showSideNav}
-              onClick={() => setShowSideNav(!showSideNav)}
-            >
-              {" "}
-              <Icon icon={showSideNav ? "Close" : "Burger"} size={"16px"} iconColor={"white"} />
-            </BurgerIconContainer>
-            <LynchpynLogoContainer onClick={() => history.push("/")}>
-              <img color="white" src={"/assets/LynchPyn-Logo_Favicon_White"} width="24"></img>
-            </LynchpynLogoContainer>
+            <MobileLeftContainer>
+              <BurgerIconContainer
+                showBackground={showSideNav}
+                onClick={() => setShowSideNav(!showSideNav)}
+              >
+                {" "}
+                <Icon icon={showSideNav ? "Close" : "Burger"} size={"24px"} iconColor={"white"} />
+              </BurgerIconContainer>
+              <LynchpynLogoContainer onClick={() => history.push("/")}>
+                <img color="white" src={"/assets/LynchPyn-Logo_Favicon_White"} width="32"></img>
+              </LynchpynLogoContainer>
+            </MobileLeftContainer>
             <ActionsContainer>
               <StyledHeading type={"h1"}>
                 <HeaderText location={location} />
@@ -192,12 +194,13 @@ export const HeaderBar = observer(
                 }}
               >
                 <DesktopAvatar>{renderUserAvatar(48)}</DesktopAvatar>
-                <MobileAvatar>{renderUserAvatar(24)}</MobileAvatar>
               </PersonalInfoDisplayContainer>
               {renderKeyActivitiesPopup()}
               {renderIssuesPopup()}
               {renderActionDropdown()}
             </PersonalInfoContainer>
+
+            <MobileAvatar>{renderUserAvatar(32)}</MobileAvatar>
           </HeaderItemsContainer>
           {showSideNav && (
             <MobileSideMenu>
@@ -256,6 +259,12 @@ const StyledHeading = styled(Heading)`
   @media only screen and (max-width: 768px) {
     font-size: 18px;
     color: white;
+    margin-left: 1em;
+    margin-right: 1em;
+    width: inherit;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 `;
 
@@ -287,8 +296,6 @@ const BurgerIconContainer = styled.div<BurgerIconContainerProps>`
   display: none;
   @media only screen and (max-width: 768px) {
     display: block;
-    margin-left: 1em;
-    margin-right: 0.5em;
     background: ${props => (props.showBackground ? "#41639c" : "")};
     padding: 0.3125em;
     border-radius: 4px;
@@ -299,7 +306,6 @@ const LynchpynLogoContainer = styled.div`
   display: none;
   @media only screen and (max-width: 768px) {
     display: block;
-    // margin-left: 16px;
   }
 `;
 
@@ -313,6 +319,7 @@ const MobileAvatar = styled.div`
   display: none;
   @media only screen and (max-width: 768px) {
     display: block;
+    width: 20%;
   }
 `;
 
@@ -322,6 +329,10 @@ const HeaderItemsContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  @media only screen and (max-width: 768px) {
+    padding: 0 1em;
+  }
 `;
 
 const Container = styled.div`
@@ -342,7 +353,7 @@ const Wrapper = styled.div`
   @media only screen and (max-width: 768px) {
     margin-left: 0px;
     display: flex;
-    height: 40px;
+    height: 60px;
     align-items: center;
     background-color: ${props => props.theme.colors.mipBlue};
   }
@@ -354,6 +365,8 @@ const ActionsContainer = styled.div`
   @media only screen and (max-width: 768px) {
     margin-left: auto;
     margin-right: auto;
+    max-width: 60%;
+    display: flex;
   }
 `;
 
@@ -511,7 +524,7 @@ const PersonalInfoContainer = styled.div`
   right: 0;
   @media only screen and (max-width: 768px) {
     padding-right: 0px;
-    margin-right: 16px;
+    display: none;
     pointer-events: none;
   }
 `;
@@ -524,4 +537,12 @@ const CloseIconContainer = styled.div`
 const IssuesContainer = styled.div`
   overflow-y: scroll;
   height: 380px;
+`;
+
+const MobileLeftContainer = styled.div`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    width: 20%;
+    display: flex;
+  }
 `;
