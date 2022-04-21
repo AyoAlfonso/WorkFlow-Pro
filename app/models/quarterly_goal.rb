@@ -2,10 +2,11 @@ class QuarterlyGoal < ApplicationRecord
   acts_as_paranoid column: :deleted_at
    amoeba do
     enable
+    #  prepend :description => "Copy of "
+    include_association :sub_initiatives
       customize(lambda { |original_post,new_post|
          new_post.quarter = [0,2,3,4,4][new_post.quarter]
         })
-    include_association :sub_initiatives, :key_elements
    end
   include HasCreator
   include HasOwner
