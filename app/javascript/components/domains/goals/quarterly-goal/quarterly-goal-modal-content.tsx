@@ -89,7 +89,9 @@ export const QuarterlyGoalModalContent = observer(
       quarterlyGoalStore.getQuarterlyGoal(quarterlyGoalId).then(() => {
         const quarterlyGoal = quarterlyGoalStore?.quarterlyGoal;
         if (quarterlyGoal) {
-          setDescription(quarterlyGoal.contextDescription || descriptionTemplateForInitiatives);
+          setDescription(
+            quarterlyGoal.contextDescription || descriptionTemplateForInitiatives || "",
+          );
           setQuarterlyGoal(quarterlyGoal);
         }
       });
@@ -169,7 +171,6 @@ export const QuarterlyGoalModalContent = observer(
             .toString()
             .slice(-2)}/${companyStore.company.currentFiscalYear.toString().slice(-2)}`;
 
-
     const createLog = () => {
       const objectiveLog = {
         ownedById: sessionStore.profile.id,
@@ -195,9 +196,11 @@ export const QuarterlyGoalModalContent = observer(
 
     const getCurrentWeekStatus = () => {
       const currentWeekOf = getWeekOf();
-      const milestone = quarterlyGoal.milestones.find(milestone => milestone.weekOf === currentWeekOf)
-      return milestone?.status
-    }
+      const milestone = quarterlyGoal.milestones.find(
+        milestone => milestone.weekOf === currentWeekOf,
+      );
+      return milestone?.status;
+    };
 
     return (
       <>

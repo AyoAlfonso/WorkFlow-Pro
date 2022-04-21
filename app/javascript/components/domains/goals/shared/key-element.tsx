@@ -2,7 +2,7 @@
 import * as React from "react";
 import * as R from "ramda";
 import styled from "styled-components";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import "react-tabs/style/react-tabs.css";
 import { KeyElementsDropdownOptions } from "./key-elements/key-elements-options";
 import { Checkbox, Label } from "@rebass/forms";
@@ -105,6 +105,41 @@ export const KeyElement = observer(
       setElement(item);
       setCheckboxValue(item["completedAt"] ? true : false);
     };
+
+    const isEditable = useCallback(async () => {
+      if (type === "onboarding") return;
+      if (type == "checkIn") {
+        const objectableType = typeForCheckIn();
+        let initiative;
+
+        if (objectableType === "QuarterlyInitiative") {
+          initiative = await quarterlyGoalStore.getQuarterlyGoal(element.elementableId);
+        } else {
+          initiative = await subInitiativeStore.getSubInitiative(element.elementableId);
+        }
+
+        if (
+          company.currentFiscalYear <= initiative.fiscalYear &&
+          company.currentFiscalQuarter < initiative.quarter
+        ) {
+          setDisabled(true);
+          return true;
+        }
+      } else if (type !== "annualInitiative") {
+        if (
+          company.currentFiscalYear <= object.fiscalYear &&
+          company.currentFiscalQuarter < object.quarter
+        ) {
+          setDisabled(true);
+          return true;
+        }
+      } else if (type == "annualInitiative") {
+        if (company.yearForCreatingAnnualInitiatives < object.fiscalYear) {
+          setDisabled(true);
+          return true;
+        }
+      }
+    }, [element]);
 
     useEffect(() => {
       if (lastKeyElement && editable && focusOnLastInput) {
@@ -314,7 +349,7 @@ export const KeyElement = observer(
       }
     };
 
-    const createLog = () => {
+    const createLog = (updateMilestone = true) => {
       const objectiveLog = {
         ownedById: selectedUser.id,
         score: element.completionCurrentValue,
@@ -332,7 +367,7 @@ export const KeyElement = observer(
       };
 
       store.createActivityLog(objectiveLog);
-      company.objectivesKeyType === "KeyResults" && updateMilestoneStatus(objectiveLog.weekOf);
+      company.objectivesKeyType === "KeyResults" && updateMilestone && updateMilestoneStatus(objectiveLog.weekOf);
     };
 
     const updateOwnedById = newUser => {
@@ -368,41 +403,6 @@ export const KeyElement = observer(
         if (milestoneForWeekOf) {
           const status = getDerviedStatus(object?.keyElements);
           store.updateMilestoneStatus(milestoneForWeekOf.id, status);
-        }
-      }
-    };
-
-    const isEditable = async () => {
-      if (type === "onboarding") return;
-      if (type == "checkIn") {
-        const objectableType = typeForCheckIn();
-        let initiative;
-
-        if (objectableType === "QuarterlyInitiative") {
-          initiative = await quarterlyGoalStore.getQuarterlyGoal(element.elementableId);
-        } else {
-          initiative = await subInitiativeStore.getSubInitiative(element.elementableId);
-        }
-
-        if (
-          company.currentFiscalYear <= initiative.fiscalYear &&
-          company.currentFiscalQuarter < initiative.quarter
-        ) {
-          setDisabled(true);
-          return true;
-        }
-      } else if (type !== "annualInitiative") {
-        if (
-          company.currentFiscalYear <= object.fiscalYear &&
-          company.currentFiscalQuarter < object.quarter
-        ) {
-          setDisabled(true);
-          return true;
-        }
-      } else if (type == "annualInitiative") {
-        if (company.yearForCreatingAnnualInitiatives < object.fiscalYear) {
-          setDisabled(true);
-          return true;
         }
       }
     };
@@ -611,9 +611,9 @@ export const KeyElement = observer(
                         await isEditable();
                       }}
                       defaultValue={element.completionCurrentValue}
-                      onBlur={() => {
-                        updateKeyElement(selectedUser.id, true);
-                        createLog();
+                      onBlur={async () => {
+                        await updateKeyElement(selectedUser.id, true);
+                        createLog(false);
                       }}
                       disabled={!editable || disabled || !isOwner}
                     />

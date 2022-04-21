@@ -5,7 +5,7 @@ class QuarterlyGoal < ApplicationRecord
       customize(lambda { |original_post,new_post|
          new_post.quarter = [0,2,3,4,4][new_post.quarter]
         })
-    include_association :sub_initiatives
+    include_association :sub_initiatives, :key_elements
    end
   include HasCreator
   include HasOwner

@@ -19,7 +19,54 @@ interface IMultiOptionTypeSelectionDropdownList {
   showUsersList: boolean;
 }
 
-const filter = createFilterOptions<any>({ limit: 5 });
+const filter = createFilterOptions<any>();
+
+function alphabetically(ascending) {
+
+  return function (a, b) {
+
+    if (a === b) {
+        return 0;
+    }
+    else if (a === null) {
+        return 1;
+    }
+    else if (b === null) {
+        return -1;
+    }
+    else if (a.type === "team" && a != null) {
+        return -1;
+    }
+    else if (b.type === "team" && b != null) {
+        return 1;
+    }
+    else if (a.type === "company") {
+        return -1;
+    }
+    else if (b.type === "company") {
+        return 1;
+    }
+    else if (ascending) {
+        return a.name < b.name ? -1 : 1;
+    }
+    else { 
+        return a.name < b.name ? 1 : -1;
+    }
+
+  };
+
+}
+
+function typesort() {
+  return function (a, b) {
+    if (a.type === "company") {
+        return -1;
+    }
+    else if (b.type === "company") {
+        return 1;
+    }
+  };
+}
 
 const useStyles = makeStyles({
   textField: {
@@ -38,6 +85,7 @@ export const MultiOptionTypeSelectionDropdownList = ({
 }: IMultiOptionTypeSelectionDropdownList): JSX.Element => {
   const [value, setValue] = useState<any>(null);
   const classes = useStyles();
+  const alphabeticallySortedList = userList.sort(alphabetically(true));
   return (
     <ActionDropdownContainer>
       <CloseIconContainer onClick={() => setShowUsersList(!showUsersList)}>
@@ -61,7 +109,7 @@ export const MultiOptionTypeSelectionDropdownList = ({
         handleHomeEndKeys
         size={"small"}
         id="search-for-labels"
-        options={userList}
+        options={alphabeticallySortedList.sort(typesort())}
         getOptionLabel={option => {
             if(typeof option === 'object' && option !== null) {
                 return `${option.name} ${option.lastName}`;

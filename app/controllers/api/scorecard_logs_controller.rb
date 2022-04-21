@@ -131,8 +131,7 @@ class Api::ScorecardLogsController < Api::ApplicationController
     params.require(:scorecard_log).permit(:user_id, :score, :note, :key_performance_indicator_id, :fiscal_quarter, :fiscal_year, :week)
   end
   
-  def reset_year_to_upper_limit_or_lower_limit(proposed_year, lower_limit, upper_limit)
-    # binding.pry
+  def reset_year_to_upper_limit_or_lower_limit(proposed_year, lower_limit, upper_limit)   
      proposed_year <= lower_limit ? lower_limit : upper_limit
   end
 end

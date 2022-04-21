@@ -47,7 +47,7 @@ export const GoalDropdownOptions = ({
   const quarterText = () => {
     const quarters = [1, 2, 3, 4, 4];
     return quarters[quarter];
-  }
+  };
 
   const closeModal = () => {
     if (setModalOpen) {
@@ -61,9 +61,12 @@ export const GoalDropdownOptions = ({
         confirm(
           `Are you sure you want to close this ${t("annualInitiative.messageText", {
             title: annualInitiativeTitle,
-          })}? Closing an Annual Objective will result in closing all of the related ${t("quarterlyGoal.messageText", {
-            title: quarterlyGoalTitle,
-          })}s as well`,
+          })}? Closing an Annual Objective will result in closing all of the related ${t(
+            "quarterlyGoal.messageText",
+            {
+              title: quarterlyGoalTitle,
+            },
+          )}s as well`,
         )
       ) {
         annualInitiativeStore.closeInitiative(itemId).then(() => {
@@ -116,10 +119,10 @@ export const GoalDropdownOptions = ({
           });
         }
       } else {
-        showToast("Can not carry over from the 4th quarter", ToastMessageConstants.INFO)
+        showToast("Can not carry over from the 4th quarter", ToastMessageConstants.INFO);
       }
     }
-  }
+  };
 
   const closeAndDuplicateQuarterly = () => {
     duplicateQuarterly();
