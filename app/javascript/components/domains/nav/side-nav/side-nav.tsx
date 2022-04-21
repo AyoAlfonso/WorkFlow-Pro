@@ -369,7 +369,7 @@ export const SideNavNoMst = (
         </StyledNavLinkChildrenActive>
       ) : (
         <StyledNavLinkChildrenActive
-          to={`/staticplanner`}
+          to={`/static-planner`}
           icon={"Planner"}
           currentPathName={currentPathName}
         >
@@ -379,7 +379,7 @@ export const SideNavNoMst = (
 
       {company && showTeam ? renderTeam(R.path(["length"], teams) || 0) : (
         <StyledNavLinkChildrenActive
-          to={`/staticteams`}
+          to={`/static-teams`}
           icon={"Team"}
           currentPathName={currentPathName}
         >
@@ -429,7 +429,7 @@ export const SideNavNoMst = (
         </StyledNavLinkChildrenActive>
       ) : (
         <StyledNavLinkChildrenActive
-          to={`/staticgoals`}
+          to={`/static-goals`}
           icon={"New-Goals"}
           currentPathName={currentPathName}
         >
@@ -447,7 +447,7 @@ export const SideNavNoMst = (
         </StyledNavLinkChildrenActive>
       ) : (
         <StyledNavLinkChildrenActive
-          to={`/staticscorecards`}
+          to={`/static-scorecards`}
           icon={"Scorecard_New"}
           currentPathName={currentPathName}
         >
@@ -464,7 +464,7 @@ export const SideNavNoMst = (
         </StyledNavLinkChildrenActive>
       ) : (
         <StyledNavLinkChildrenActive
-          to={`/staticcheckin`}
+          to={`/static-checkin`}
           icon={"Check-in-page"}
           currentPathName={currentPathName}
         >

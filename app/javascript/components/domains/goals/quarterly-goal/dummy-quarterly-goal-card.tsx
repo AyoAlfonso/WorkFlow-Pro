@@ -114,14 +114,6 @@ export const DummyQuarterlyGoalCard = observer(
       setSelectedAnnualInitiativeDescription(annualInitiativeDescription);
     };
 
-    // const renderQuarterDisplay = () => {
-    //   if (companyStore.company.currentFiscalQuarter != quarterlyGoal.quarter) {
-    //     const quarter =
-    //       quarterlyGoal.quarter || companyStore.onboardingCompany.quarterForCreatingQuarterlyGoals;
-    //     return <QuarterText> Q{quarter}: </QuarterText>;
-    //   }
-    // };
-
     return (
       <>
         <Container

@@ -386,10 +386,3 @@ const RightContainer = styled.div`
   display: flex;
   margin-left: auto;
 `;
-
-// const AvatarContainer = styled.div`
-//   margin-left: 15px;
-//   &: hover {
-//     cursor: pointer;
-//   }
-// `;

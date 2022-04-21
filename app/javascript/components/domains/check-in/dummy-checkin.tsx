@@ -424,9 +424,7 @@ const BodyContainer = styled.div<BodyContainerProps>`
   width: 75%;
   position: relative;
   display: flex;
-  // height: 100%;
   flex-direction: column;
-  // overflow-x: auto;
   @media only screen and (max-width: 768px) {
     width: 100%;
     padding: 0;
@@ -440,8 +438,6 @@ type BodyContentContainerProps = {
 const BodyContentContainer = styled.div<BodyContentContainerProps>`
   height: 100%;
   overflow-y: auto;
-  //display: ${props => (props.hasStepsForMobile ? "block" : "flex")};
-  //display: flex;
 `;
 
 const DescriptionTitleContainer = styled.div``;

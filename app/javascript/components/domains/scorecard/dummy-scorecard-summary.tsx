@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import * as R from "ramda";
 import styled from "styled-components";
 import moment from "moment";
@@ -38,7 +38,7 @@ const WeekSummary = ({}): JSX.Element => {
     cutoutPercentage: 60,
   };
 
-  useEffect(() => {
+  useMemo(() => {
     setData({
       labels: ["None", "Behind", "NeedsAttention", "On Track"],
       datasets: [
@@ -49,7 +49,7 @@ const WeekSummary = ({}): JSX.Element => {
       ],
       hoveroffset: 4,
     });
-  });
+  }, []);
 
   return (
     <WeekContainer>
