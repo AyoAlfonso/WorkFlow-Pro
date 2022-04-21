@@ -68,7 +68,7 @@ export const HeaderText = observer(
           case "section_2":
             return isOrganisationCompany ? (
               <SubHeaderContainer>
-                <BackHeaderText onClick={() => history.push(`/team/${team.id}`)}>
+                <BackHeaderText onClick={() => history.push(`/team/${currentTeam.id}`)}>
                   {currentTeam?.name}
                 </BackHeaderText>
                 <ChevronRight icon={"Chevron-Left"} size={"24px"} iconColor={"grey100"} />
