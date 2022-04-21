@@ -110,6 +110,10 @@ export const GoalDropdownOptions = ({
           quarterlyGoalStore.duplicateGoal(itemId).then(() => {
             closeModal();
           });
+
+          quarterlyGoalStore.closeGoal(itemId).then(() => {
+          closeModal();
+          });
         }
       } else {
         showToast("Can not carry over from the 4th quarter", ToastMessageConstants.INFO)
@@ -119,7 +123,6 @@ export const GoalDropdownOptions = ({
 
   const closeAndDuplicateQuarterly = () => {
     duplicateQuarterly();
-    closeInitiative();
   }
 
   const deleteInitiative = () => {
