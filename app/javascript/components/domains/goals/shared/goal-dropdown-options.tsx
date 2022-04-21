@@ -113,17 +113,22 @@ export const GoalDropdownOptions = ({
           quarterlyGoalStore.duplicateGoal(itemId).then(() => {
             closeModal();
           });
+
+          quarterlyGoalStore.closeGoal(itemId).then(() => {
+          closeModal();
+          });
+          setShowDropdownOptions(false);
         }
       } else {
         showToast("Can not carry over from the 4th quarter", ToastMessageConstants.INFO);
+        setShowDropdownOptions(false);
       }
     }
   };
 
   const closeAndDuplicateQuarterly = () => {
     duplicateQuarterly();
-    closeInitiative();
-  };
+  }
 
   const deleteInitiative = () => {
     if (itemType == "annualInitiative") {
@@ -175,14 +180,10 @@ export const GoalDropdownOptions = ({
           <OptionText> Close {itemText} </OptionText>
         </OptionContainer>
         <OptionContainer onClick={() => closeAndDuplicateQuarterly()}>
-          <IconContainer>
-            <StyledIcon icon={"Checkmark"} size={"15px"} />
-          </IconContainer>
-          <OptionText>
-            {" "}
-            {"Close & Carry Over to Q"}
-            {quarterText()}
-          </OptionText>
+         <IconContainer>
+           <StyledIcon icon={"Duplicate"} size={"15px"} />
+         </IconContainer>
+         <OptionText> {"Carry Over to Q"}{quarterText()}</OptionText>
         </OptionContainer>
         <OptionContainer onClick={() => deleteInitiative()}>
           <IconContainer>
