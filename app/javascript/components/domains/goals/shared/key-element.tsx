@@ -238,7 +238,14 @@ export const KeyElement = observer(
     };
 
     const resetStatus = async () => {
-      if (!element || element.status == "unstarted" || type == "onboarding") return;
+      if (
+        !element ||
+        element.status == "unstarted" ||
+        type == "onboarding" ||
+        companyStore.company.currentFiscalQuarter < object.quarter
+      ) {
+        return;
+      }
       const isUpdated = isLogRecent();
       if (isUpdated) {
         return;
@@ -367,7 +374,9 @@ export const KeyElement = observer(
       };
 
       store.createActivityLog(objectiveLog);
-      company.objectivesKeyType === "KeyResults" && updateMilestone && updateMilestoneStatus(objectiveLog.weekOf);
+      company.objectivesKeyType === "KeyResults" &&
+        updateMilestone &&
+        updateMilestoneStatus(objectiveLog.weekOf);
     };
 
     const updateOwnedById = newUser => {
