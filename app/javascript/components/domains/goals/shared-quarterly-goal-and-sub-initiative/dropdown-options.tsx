@@ -27,7 +27,7 @@ export const DropdownOptions = ({
       <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
       {showDropdownOptionsContainer && (
         <GoalDropdownContainer>
-          {quarter ? (
+          {(quarter && !item.closedAt)? (
           <GoalDropdownOptions
             setShowDropdownOptions={setShowDropdownOptionsContainer}
             setModalOpen={setParentModalOpen}

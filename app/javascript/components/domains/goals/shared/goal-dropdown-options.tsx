@@ -170,7 +170,7 @@ export const GoalDropdownOptions = ({
     }
   };
 
-  if (itemType == "quarterlyGoal") {
+  if ((itemType == "quarterlyGoal") && quarter) {
     return (
       <Container ref={optionsRef}>
         <OptionContainer onClick={() => closeInitiative()}>
