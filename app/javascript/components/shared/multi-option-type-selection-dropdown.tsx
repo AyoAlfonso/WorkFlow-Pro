@@ -76,60 +76,6 @@ const useStyles = makeStyles({
   },
 });
 
-function alphabetically(ascending) {
-
-  return function (a, b) {
-
-    // equal items sort equally
-    if (a === b) {
-        return 0;
-    }
-    // nulls sort after anything else
-    else if (a === null) {
-        return 1;
-    }
-    else if (b === null) {
-        return -1;
-    }
-    ///
-    else if (a.type === "team" && a != null) {
-        return -1;
-    }
-    else if (b.type === "team" && b != null) {
-        return 1;
-    }
-    else if (a.type === "company") {
-        return -1;
-    }
-    else if (b.type === "company") {
-        return 1;
-    }
-    // otherwise, if we're ascending, lowest sorts first
-    else if (ascending) {
-        return a.name < b.name ? -1 : 1;
-    }
-    // if descending, highest sorts first
-    else { 
-        return a.name < b.name ? 1 : -1;
-    }
-
-  };
-
-}
-
-function typesort(ascending) {
-
-  return function (a, b) {
-    if (a.type === "company") {
-        return -1;
-    }
-    else if (b.type === "company") {
-        return 1;
-    }
-  };
-
-}
-
 export const MultiOptionTypeSelectionDropdownList = ({
   userList,
   title,
@@ -163,13 +109,7 @@ export const MultiOptionTypeSelectionDropdownList = ({
         handleHomeEndKeys
         size={"small"}
         id="search-for-labels"
-<<<<<<< HEAD
         options={alphabeticallySortedList.sort(typesort())}
-=======
-        //options={userList}
-        options={alphlist.sort(typesort(true))}
-        
-        }}
         renderOption={option => {
           return (
             <OptionContainer>
