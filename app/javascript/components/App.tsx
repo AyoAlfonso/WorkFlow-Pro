@@ -242,11 +242,11 @@ export const App = observer(
                       "/meetings/section_1/:team_id",
                       "/meetings/section_2",
                       "/meetings/section_2/:team_id",
-                      "/static-planner",
-                      "/static-goals",
-                      "/static-scorecards",
-                      "/static-checkin",
-                      "/static-teams",
+                      // "/static-planner",
+                      // "/static-goals",
+                      // "/static-scorecards",
+                      // "/static-checkin",
+                      // "/static-teams",
                     ]}
                   >
                     <>
@@ -261,11 +261,11 @@ export const App = observer(
                           <Route exact path="/" component={GoalsIndex} />
                         )}
 
-                        {<Route exact path="/static-goals" component={DummyGoalsIndex} />}
+                        {/* {<Route exact path="/static-goals" component={DummyGoalsIndex} />}
                         {<Route exact path="/static-planner" component={DummyHome} />}
                         {<Route exact path="/static-scorecards" component={DummyScorecardsIndex} />}
                         {<Route exact path="/static-checkin" component={DummyCheckin} />}
-                        {<Route exact path="/static-teams" component={DummyTeamOverview} />}
+                        {<Route exact path="/static-teams" component={DummyTeamOverview} />} */}
 
                         {showGoalRoute && <Route exact path="/goals" component={GoalsIndex} />}
                         {showTeamRoute && (
