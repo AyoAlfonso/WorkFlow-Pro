@@ -181,14 +181,24 @@ export const QuarterlyGoalCard = observer(
             </DescriptionContainer>
 
             {!onboarding && (
+              quarterlyGoal.closedAt ? (
               <IconContainer>
                 <RecordOptions
                   type={"quarterlyGoal"}
                   id={quarterlyGoal.id}
                   iconColor={showOptions}
-                  quarter={quarterlyGoal.quarter}
                 />
               </IconContainer>
+              ) : (
+                <IconContainer>
+                  <RecordOptions
+                    type={"quarterlyGoal"}
+                    id={quarterlyGoal.id}
+                    iconColor={showOptions}
+                    quarter={quarterlyGoal.quarter}
+                  />
+                </IconContainer>
+              )
             )}
           </RowContainer>
           <RowContainer mt={0} mb={0}>
