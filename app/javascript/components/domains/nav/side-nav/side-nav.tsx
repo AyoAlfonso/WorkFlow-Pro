@@ -363,7 +363,7 @@ export const SideNavNoMst = (
         )}
       </SideBarElement>
 
-      {company && showPyn ? (
+      {/* {company && showPyn ? (
         <StyledNavLinkChildrenActive to="/" icon={"Planner"} currentPathName={currentPathName}>
           {t("navigation.planner")}
         </StyledNavLinkChildrenActive>
@@ -375,9 +375,15 @@ export const SideNavNoMst = (
         >
           {t("navigation.planner")}
         </StyledNavLinkChildrenActive>
+      )} */}
+
+      {showPyn && (
+        <StyledNavLinkChildrenActive to="/" icon={"Planner"} currentPathName={currentPathName}>
+          {t("navigation.planner")}
+        </StyledNavLinkChildrenActive>
       )}
 
-      {company && showTeam ? renderTeam(R.path(["length"], teams) || 0) : (
+      {/* {company && showTeam ? renderTeam(R.path(["length"], teams) || 0) : (
         <StyledNavLinkChildrenActive
           to={`/static-teams`}
           icon={"Team"}
@@ -385,7 +391,9 @@ export const SideNavNoMst = (
         >
           {t("navigation.team")}
         </StyledNavLinkChildrenActive>
-      )}
+      )} */}
+
+      {company && showTeam ? renderTeam(R.path(["length"], teams) || 0) : <> </>}
 
       {company && company.accessForum && !showTeam && showMeeting ? (
         renderMeeting(R.path(["length"], teams) || 0, "forum")
@@ -419,7 +427,7 @@ export const SideNavNoMst = (
         <> </>
       )}
 
-      {company && showGoal ? (
+      {/* {company && showGoal ? (
         <StyledNavLinkChildrenActive
           to="/goals"
           icon={"New-Goals"}
@@ -430,6 +438,16 @@ export const SideNavNoMst = (
       ) : (
         <StyledNavLinkChildrenActive
           to={`/static-goals`}
+          icon={"New-Goals"}
+          currentPathName={currentPathName}
+        >
+          {t("navigation.goals")}
+        </StyledNavLinkChildrenActive>
+      )} */}
+
+      {showGoal && (
+        <StyledNavLinkChildrenActive
+          to="/goals"
           icon={"New-Goals"}
           currentPathName={currentPathName}
         >
@@ -446,13 +464,14 @@ export const SideNavNoMst = (
           {t("navigation.scorecards")}
         </StyledNavLinkChildrenActive>
       ) : (
-        <StyledNavLinkChildrenActive
-          to={`/static-scorecards`}
-          icon={"Scorecard_New"}
-          currentPathName={currentPathName}
-        >
-          {t("navigation.scorecards")}
-        </StyledNavLinkChildrenActive>
+        <></>
+        // <StyledNavLinkChildrenActive
+        //   to={`/static-scorecards`}
+        //   icon={"Scorecard_New"}
+        //   currentPathName={currentPathName}
+        // >
+        //   {t("navigation.scorecards")}
+        // </StyledNavLinkChildrenActive>
       )}
 
       {company && checkIn ? (
@@ -463,13 +482,14 @@ export const SideNavNoMst = (
           {t("navigation.checkin")}
         </StyledNavLinkChildrenActive>
       ) : (
-        <StyledNavLinkChildrenActive
-          to={`/static-checkin`}
-          icon={"Check-in-page"}
-          currentPathName={currentPathName}
-        >
-          {t("navigation.checkin")}
-        </StyledNavLinkChildrenActive>
+        <></>
+        // <StyledNavLinkChildrenActive
+        //   to={`/static-checkin`}
+        //   icon={"Check-in-page"}
+        //   currentPathName={currentPathName}
+        // >
+        //   {t("navigation.checkin")}
+        // </StyledNavLinkChildrenActive>
       )}
 
       {company && company.accessCompany && !showTeam ? (
