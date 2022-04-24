@@ -6,7 +6,6 @@ import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { Loading } from "~/components/shared/loading";
-import Modal from "styled-react-modal";
 import { IKeyActivity } from "~/models/key-activity";
 import { ColumnContainer, ColumnSubHeaderContainer } from "~/components/shared/styles/row-style";
 import { KeyActivityModalContent } from "./key-activity-modal-content";
@@ -22,7 +21,6 @@ export const KeyActivitiesList = observer(
     const updateId = splittedDroppableId[splittedDroppableId.length - 1];
 
     const [keyActivityModalOpen, setKeyActivityModalOpen] = useState<boolean>(false);
-    const [currentKeyActivity, setCurrentKeyActivity] = useState<IKeyActivity | any>({});
 
     const { keyActivityStore } = useMst();
 
@@ -61,9 +59,6 @@ export const KeyActivitiesList = observer(
                 <KeyActivityRecord
                   keyActivity={keyActivity}
                   dragHandleProps={...provided.dragHandleProps}
-                  setCurrentKeyActivity={setCurrentKeyActivity}
-                  setKeyActivityModalOpen={setKeyActivityModalOpen}
-                  currentKeyActivity={currentKeyActivity}
                 />
               </KeyActivityContainer>
             )}
@@ -85,17 +80,6 @@ export const KeyActivitiesList = observer(
             </KeyActivitiesContainer>
           )}
         </Droppable>
-        <StyledModal
-          isOpen={keyActivityModalOpen}
-          onBackgroundClick={e => {
-            setKeyActivityModalOpen(false);
-          }}
-        >
-          <KeyActivityModalContent
-            keyActivity={currentKeyActivity}
-            setKeyActivityModalOpen={setKeyActivityModalOpen}
-          />
-        </StyledModal>
       </KeyActivitiesListStyleContainer>
     );
   },

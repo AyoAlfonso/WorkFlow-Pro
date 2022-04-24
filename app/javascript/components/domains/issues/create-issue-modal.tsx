@@ -13,8 +13,10 @@ import {
   FlexContainer,
   IssuePynModalContainer,
 } from "~/components/shared/styles/modals";
+import ReactQuill from "react-quill";
 import { UserSelectionDropdownList, Loading, LabelSelection, Icon } from "~/components/shared";
 import { PrioritySelector } from "~/components/shared/issues-and-key-activities/priority-selector";
+import { DueDateSelector } from "~/components/shared/issues-and-key-activities/due-date-selector";
 
 interface ICreateIssueModalProps {
   createIssueModalOpen: boolean;
@@ -74,6 +76,10 @@ export const CreateIssueModal = ({
     ) : (
       <></>
     );
+  };
+
+  const handleChange = html => {
+    setDescription(html);
   };
 
   const newIssuePosition = issues.length > 0 ? issues[issues.length - 1].position + 1 : 0;

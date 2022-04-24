@@ -89,15 +89,16 @@ export const App = observer(
     const location = useLocation();
 
     useEffect(() => {
-      const redirectToCheckIn = () => {
+      const redirectHome = () => {
         const width = window.innerWidth <= 768;
         const id = profile?.id;
         if (width) {
           if (location.pathname.includes("check-in")) return;
-          if (id) return history.push(`/weekly-check-in/${id}/${getWeekOf()}`);
+          if (location.pathname === "/") return;
+          if (id) return history.push(`/`);
         }
       };
-      // redirectToCheckIn();
+      redirectHome();
     }, [profile]);
 
     useEffect(() => {

@@ -156,7 +156,7 @@ export const IssueModalContent = observer(
         case "medium":
           return (
             <Icon
-              icon={"Priority-High"}
+              icon={"Low-Priority"}
               mr={mr}
               size={size}
               iconColor={baseTheme.colors.cautionYellow}
@@ -166,7 +166,7 @@ export const IssueModalContent = observer(
         case "high":
           return (
             <Icon
-              icon={"Priority-Urgent"}
+              icon={"Medium-Priority"}
               mr={mr}
               size={size}
               iconColor={baseTheme.colors.warningRed}
@@ -176,7 +176,7 @@ export const IssueModalContent = observer(
         case "frog":
           return (
             <Icon
-              icon={"Priority-MIP"}
+              icon={"High-Priority"}
               mr={mr}
               size={size}
               iconColor={baseTheme.colors.mipBlue}
@@ -186,7 +186,7 @@ export const IssueModalContent = observer(
         default:
           return (
             <Icon
-              icon={!mr ? "Priority-Empty" : "Priority-None"}
+              icon={"Priority-None"}
               mr={mr}
               size={size}
               iconColor={!mr ? baseTheme.colors.greyInactive : baseTheme.colors.greyActive}

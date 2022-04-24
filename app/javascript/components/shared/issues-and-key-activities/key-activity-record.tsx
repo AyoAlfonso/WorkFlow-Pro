@@ -33,9 +33,6 @@ interface IKeyActivityRecordProps {
   disabled?: boolean;
   noBorder?: boolean;
   includeAvatar?: boolean;
-  currentKeyActivity?: any;
-  setKeyActivityModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  setCurrentKeyActivity?: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const KeyActivityRecord = observer(
@@ -46,8 +43,6 @@ export const KeyActivityRecord = observer(
     disabled,
     noBorder,
     includeAvatar = false,
-    currentKeyActivity,
-    setCurrentKeyActivity,
   }: IKeyActivityRecordProps): JSX.Element => {
     const { keyActivityStore, meetingStore, sessionStore } = useMst();
     const keyActivityRef = useRef(null);
@@ -273,7 +268,6 @@ export const KeyActivityRecord = observer(
             <TodoName
               onClick={() => {
                 setKeyActivityModalOpen(true);
-                setCurrentKeyActivity(keyActivity);
               }}
               style={{ textDecoration: keyActivity.completedAt && "line-through" }}
             >
@@ -288,7 +282,6 @@ export const KeyActivityRecord = observer(
                   <OptionContainer
                     onClick={() => {
                       setKeyActivityModalOpen(true);
-                      setCurrentKeyActivity(keyActivity);
                       setShowOptions(false);
                     }}
                   >
@@ -478,70 +471,6 @@ export const KeyActivityRecord = observer(
                 displayColor={dueDateObj.color}
               />
             </DateButtonDiv>
-            {/* <Popup
-              disabled={disabled}
-              arrow={false}
-              closeOnDocumentClick
-              contentStyle={{
-                border: "none",
-                borderRadius: "6px",
-                padding: 0,
-                width: "auto",
-                marginLeft: "175px",
-              }}
-              on="click"
-              onClose={() => {}}
-              onOpen={() => {}}
-              open={showDatePicker}
-              position={spaceBelow < 380 ? "top center" : "bottom center"}
-              trigger={
-                <DateButtonDiv>
-                  <DateButton
-                    onClick={() => {
-                      setShowDatePicker(true);
-                      setSelectedDueDate(new Date(parseISO(keyActivity.dueDate)));
-                    }}
-                    text={dueDateObj.text}
-                    displayColor={dueDateObj.color}
-                  />
-                </DateButtonDiv>
-              }
-            >
-              <>
-                <Calendar
-                  showDateDisplay={false}
-                  showMonthAndYearPickers={false}
-                  showSelectionPreview={true}
-                  direction={"vertical"}
-                  shownDate={new Date()}
-                  minDate={new Date()}
-                  maxDate={addDays(new Date(), 30)}
-                  scroll={{
-                    enabled: true,
-                    calendarWidth: 320,
-                    monthWidth: 320,
-                  }}
-                  rangeColors={[baseTheme.colors.primary80]}
-                  date={selectedDueDate}
-                  onChange={date => {
-                    setSelectedDueDate(date);
-                    updateDueDate(date);
-                  }}
-                />
-                <Button
-                  variant={"primary"}
-                  small
-                  onClick={() => {
-                    setSelectedDueDate(null);
-                    updateDueDate(null);
-                  }}
-                  mx={"auto"}
-                  my={"8px"}
-                >
-                  {t("datePicker.clearDate")}
-                </Button>
-              </>
-            </Popup> */}
           </DateContainer>
           <LabelContainer>{renderLabel()}</LabelContainer>
         </BottomRowContainer>
@@ -603,7 +532,11 @@ const Container = styled.div<ContainerProps>`
   }
 `;
 
-const TopSection = styled.div``;
+const TopSection = styled.div`
+  @media only screen and (max-width: 768px) {
+    padding-right: 6px;
+  }
+`;
 
 const TodoName = styled(Text)`
   margin: 0;
@@ -707,6 +640,9 @@ const RowContainer = styled.div`
 const BottomRowContainer = styled(RowContainer)`
   margin-top: -4px;
   margin-left: 36px;
+  @media only screen and (max-width: 768px) {
+    padding-right: 6px;
+  }
 `;
 
 const LabelContainer = styled.div`
@@ -732,7 +668,7 @@ const StyledModal = Modal.styled`
 
 const IconContainer = styled.div`
   position: absolute;
-  right: 0;
+  right: 12px;
   cursor: pointer;
 `;
 

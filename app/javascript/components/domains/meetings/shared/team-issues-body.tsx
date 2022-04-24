@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { color } from "styled-system";
 import { observer } from "mobx-react";
-import Modal from "styled-react-modal";
 import { CreateIssueModal } from "../../issues/create-issue-modal";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { Icon, Loading } from "~/components/shared";
@@ -17,7 +16,6 @@ import { useMst } from "~/setup/root";
 import * as R from "ramda";
 import { List } from "@material-ui/core";
 import { IIssue } from "~/models/issue";
-import { IssueModalContent } from "../../issues/issue-modal-content";
 
 interface ITeamIssuesBodyProps {
   showOpenIssues: boolean;
@@ -36,8 +34,6 @@ export const TeamIssuesBody = observer(
     const { showOpenIssues, setShowOpenIssues, teamId, meetingId, showFilters } = props;
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
     const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
-    const [currentIssue, setCurrentIssue] = useState<IIssue | any>({});
-    const [issueModalOpen, setIssueModalOpen] = useState<boolean>(false);
 
     const openIssues = issueStore.openIssues;
     const closedIssues = issueStore.closedIssues;
@@ -79,9 +75,6 @@ export const TeamIssuesBody = observer(
             pageEnd={true}
             meetingId={meetingId}
             teamId={teamId}
-            setIssueModalOpen={setIssueModalOpen}
-            setCurrentIssue={setCurrentIssue}
-            currentIssue={currentIssue}
           />
         </IssueContainer>
       ));
@@ -131,14 +124,6 @@ export const TeamIssuesBody = observer(
             <List>{renderIssuesList()}</List>
           </IssuesContainer>
         </IssuesBodyContainer>
-        <StyledModal
-          isOpen={issueModalOpen}
-          onBackgroundClick={e => {
-            setIssueModalOpen(false);
-          }}
-        >
-          <IssueModalContent issue={currentIssue} setIssueModalOpen={setIssueModalOpen} />
-        </StyledModal>
       </Container>
     );
   },
@@ -193,17 +178,3 @@ const IssuesContainer = styled.div<IssuesContainerProps>`
 `;
 
 const IssueContainer = styled.div``;
-
-const StyledModal = Modal.styled`
-  width: 60rem;
-  min-height: 6.25em;
-  border-radius: 8px;
-  height: 50em;
-  max-height: 90%;
-  overflow: auto;
-  background-color: ${props => props.theme.colors.white};
-
-  @media only screen and (max-width: 768px) {
-    width: 23rem;
-  }
-`;

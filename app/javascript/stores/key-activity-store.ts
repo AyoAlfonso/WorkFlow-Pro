@@ -194,10 +194,10 @@ export const KeyActivityStoreModel = types
           self.incompleteKeyActivities = keyActivities;
         }
 
-        showToast("Pyn created.", ToastMessageConstants.SUCCESS);
+        showToast("ToDo created.", ToastMessageConstants.SUCCESS);
         return true;
       } else {
-        showToast("There was a problem creating the pyn.", ToastMessageConstants.ERROR);
+        showToast("There was a problem creating the ToDo.", ToastMessageConstants.ERROR);
         return false;
       }
     }),

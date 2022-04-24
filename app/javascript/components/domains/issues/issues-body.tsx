@@ -14,8 +14,6 @@ import { Loading } from "../../shared";
 import { sortByPosition } from "~/utils/sorting";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { HomeContainerBorders } from "../home/shared-components";
-import { IIssue } from "../../../models/issue";
-
 import { List } from "@material-ui/core";
 import { IssueModalContent } from "./issue-modal-content";
 
@@ -42,9 +40,6 @@ export const IssuesBody = observer(
     } = useMst();
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
     const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
-
-    const [issueModalOpen, setIssueModalOpen] = useState<boolean>(false);
-    const [currentIssue, setCurrentIssue] = useState<IIssue | any>({});
 
     const openIssues = issueStore.openIssues;
     const closedIssues = issueStore.closedIssues;
@@ -80,9 +75,6 @@ export const IssuesBody = observer(
                   issue={issue}
                   dragHandleProps={...provided.dragHandleProps}
                   leftShareContainer={true}
-                  setIssueModalOpen={setIssueModalOpen}
-                  setCurrentIssue={setCurrentIssue}
-                  currentIssue={currentIssue}
                 />
               </IssueContainer>
             )}
@@ -141,14 +133,6 @@ export const IssuesBody = observer(
             </IssuesBodyContainer>
           )}
         </Droppable>
-        <StyledModal
-          isOpen={issueModalOpen}
-          onBackgroundClick={e => {
-            setIssueModalOpen(false);
-          }}
-        >
-          <IssueModalContent issue={currentIssue} setIssueModalOpen={setIssueModalOpen} />
-        </StyledModal>
       </>
     );
   },
@@ -166,6 +150,10 @@ const AddNewIssueText = styled.p`
   margin-left: 21px;
   color: ${props => props.theme.colors.grey80};
   line-height: 20pt;
+
+  @media only screen and (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const AddNewIssueContainer = styled.div`
@@ -225,20 +213,6 @@ export const FilterOptions = styled.p<ColorProps & SpaceProps>`
   font-size: 12px;
   font-weight: 400;
   cursor: pointer;
-`;
-
-const StyledModal = Modal.styled`
-  width: 60rem;
-  min-height: 6.25em;
-  border-radius: 8px;
-  height: 50em;
-  max-height: 90%;
-  overflow: auto;
-  background-color: ${props => props.theme.colors.white};
-
-  @media only screen and (max-width: 768px) {
-    width: 23rem;
-  }
 `;
 
 const IssuesList = styled("div")``;

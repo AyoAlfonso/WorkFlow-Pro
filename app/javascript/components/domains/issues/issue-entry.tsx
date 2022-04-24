@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { Icon } from "../../shared/icon";
 import { observer } from "mobx-react";
+import Modal from "styled-react-modal";
 import { baseTheme } from "../../../themes/base";
 import { useState, useRef, useEffect } from "react";
 import { Text } from "~/components/shared/text";
@@ -36,9 +37,6 @@ interface IIssueEntryProps {
   dragHandleProps?: any;
   leftShareContainer?: boolean;
   teamId?: number | string;
-  setIssueModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  setCurrentIssue?: React.Dispatch<React.SetStateAction<any>>;
-  currentIssue?: any;
 }
 
 export const IssueEntry = observer(
@@ -164,11 +162,6 @@ export const IssueEntry = observer(
       setSpaceRight(width);
     }, [showOptions]);
 
-    useEffect(() => {
-      const findIssue = issueStore.issues.find(issue => currentIssue?.id == issue.id)
-      setCurrentIssue(findIssue);
-    }, [issue])
-    
     const issueRef = useRef(null);
 
     const currentSelectedItem = issue.scheduledGroupId
@@ -180,7 +173,7 @@ export const IssueEntry = observer(
         case "medium":
           return (
             <Icon
-              icon={"Priority-High"}
+              icon={"Low-Priority"}
               mr={mr}
               size={size}
               iconColor={baseTheme.colors.cautionYellow}
@@ -190,7 +183,7 @@ export const IssueEntry = observer(
         case "high":
           return (
             <Icon
-              icon={"Priority-Urgent"}
+              icon={"Medium-Priority"}
               mr={mr}
               size={size}
               iconColor={baseTheme.colors.warningRed}
@@ -200,7 +193,7 @@ export const IssueEntry = observer(
         case "frog":
           return (
             <Icon
-              icon={"Priority-MIP"}
+              icon={"High-Priority"}
               mr={mr}
               size={size}
               iconColor={baseTheme.colors.mipBlue}

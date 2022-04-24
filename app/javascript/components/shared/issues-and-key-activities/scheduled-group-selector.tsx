@@ -6,6 +6,7 @@ import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
 import { Loading } from "../loading";
 import { InitialsGenerator } from "./initials-generator";
+import { baseTheme } from "~/themes";
 
 interface IScheduledGroupSelectorProps {
   selectedGroupId: number;
@@ -113,7 +114,7 @@ export const ScheduledGroupSelector = observer(
         ) : (
           <>
             <PriorityDisplayButton onClick={() => setShowDropdown(!showDropdown)}>
-              <Icon icon={"List"} size={"16px"} />
+              <Icon icon={"List"} size={"16px"} iconColor={baseTheme.colors.primary100} />
               {currentSelectedItem && (
                 <TextContainer>
                   <InitialsGenerator name={currentSelectedItem.name} />

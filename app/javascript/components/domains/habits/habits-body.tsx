@@ -115,6 +115,10 @@ const AccordionDetailsContainer = styled(AccordionDetails)`
   flex-direction: column;
   padding: 8px;
   margin-bottom: 8px;
+
+  @media only screen and (max-width: 768px) {
+    box-shadow: none;
+  }
 `;
 
 const HabitsTableHeaderCellWide = styled(HabitsTableHeaderCell)`

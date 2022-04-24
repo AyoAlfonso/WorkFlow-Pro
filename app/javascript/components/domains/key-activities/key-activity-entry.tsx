@@ -29,11 +29,7 @@ interface IKeyActivityEntryProps {
 }
 
 export const KeyActivityEntry = observer(
-  ({
-    keyActivity,
-    dragHandleProps,
-    meetingId,
-  }: IKeyActivityEntryProps): JSX.Element => {
+  ({ keyActivity, dragHandleProps, meetingId }: IKeyActivityEntryProps): JSX.Element => {
     const { keyActivityStore, sessionStore } = useMst();
     const keyActivityRef = useRef(null);
     const { t } = useTranslation();
@@ -454,7 +450,11 @@ export const KeyActivityEntry = observer(
   },
 );
 
-const TopSection = styled.div``;
+const TopSection = styled.div`
+  @media only screen and (max-width: 768px) {
+    padding-right: 6px;
+  }
+`;
 
 const TodoName = styled(Text)`
   margin: 0;
@@ -515,6 +515,10 @@ const OptionsContainer = styled.div<OCProps>`
   opacity: 1;
   border-radius: 0.625em;
   background: ${props => props.theme.colors.white};
+
+  @media only screen and (max-width: 280px) {
+    width: 14rem;
+  }
 `;
 
 const OptionContainer = styled.div`
@@ -598,6 +602,10 @@ const RowContainer = styled.div`
 const BottomRowContainer = styled(RowContainer)`
   margin-top: -4px;
   margin-left: 36px;
+
+  @media only screen and (max-width: 768px) {
+    padding-right: 6px;
+  }
 `;
 
 const ShareContainer = styled.div`
@@ -681,6 +689,6 @@ const StyledModal = Modal.styled`
 
 const IconContainer = styled.div`
   position: absolute;
-  right: 0;
+  right: 1em;
   cursor: pointer;
 `;

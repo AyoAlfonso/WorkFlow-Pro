@@ -20,7 +20,7 @@ export const KeyActivityPriorityIcon = ({
       case "medium":
         return (
           <Icon
-            icon={"Priority-High"}
+            icon={"Low-Priority"}
             size={size}
             mr={mr}
             iconColor={colors.cautionYellow}
@@ -30,7 +30,7 @@ export const KeyActivityPriorityIcon = ({
       case "high":
         return (
           <Icon
-            icon={"Priority-Urgent"}
+            icon={"Medium-Priority"}
             size={size}
             mr={mr}
             iconColor={colors.warningRed}
@@ -40,7 +40,7 @@ export const KeyActivityPriorityIcon = ({
       case "frog":
         return (
           <Icon
-            icon={"Priority-MIP"}
+            icon={"High-Priority"}
             size={size}
             mr={mr}
             iconColor={colors.mipBlue}

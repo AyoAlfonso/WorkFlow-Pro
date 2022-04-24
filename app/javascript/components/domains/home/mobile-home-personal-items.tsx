@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useMst } from "../../../setup/root";
 import { observer } from "mobx-react";
 import styled, { keyframes } from "styled-components";
@@ -196,8 +196,9 @@ const Container = styled.div`
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  padding: 0 1em 1em 1em;
+  padding: 0.5em 1em;
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  border-top: 1px solid ${props => props.theme.colors.borderGrey};
 `;
 
 const HeaderText = styled.span`
@@ -206,6 +207,7 @@ const HeaderText = styled.span`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 const RightIcon = styled(Icon)`

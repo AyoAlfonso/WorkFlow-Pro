@@ -202,30 +202,41 @@ export const HeaderBar = observer(
 
             <MobileAvatar>{renderUserAvatar(32)}</MobileAvatar>
           </HeaderItemsContainer>
-          {showSideNav && (
-            <MobileSideMenu>
-              <MobileMenuOption onClick={() => history.push("/")}>
-                <Icon
-                  icon={"Planner"}
-                  mr="1em"
-                  size={"16px"}
-                  iconColor={baseTheme.colors.primary100}
-                />
-                Planner
-              </MobileMenuOption>
-              <MobileMenuOption
-                onClick={() => history.push(`/weekly-check-in/${userId}/${getWeekOf()}`)}
-              >
-                <Icon
-                  icon={"Check-in-page"}
-                  mr="1em"
-                  size={"16px"}
-                  iconColor={baseTheme.colors.primary100}
-                />
-                Check-In
-              </MobileMenuOption>
-            </MobileSideMenu>
-          )}
+          {/* {showSideNav && ( */}
+          <MobileSideMenu showSideNav={showSideNav}>
+            <MobileMenuOption
+              showSideNav={showSideNav}
+              onClick={() => {
+                history.push("/");
+                setShowSideNav(false);
+              }}
+            >
+              <Icon
+                icon={"Planner"}
+                mr="1em"
+                size={"16px"}
+                iconColor={baseTheme.colors.primary100}
+              />
+              Planner
+            </MobileMenuOption>
+            <MobileMenuOption
+              showSideNav={showSideNav}
+              onClick={() => {
+                history.push(`/weekly-check-in/${userId}/${getWeekOf()}`);
+
+                setShowSideNav(false);
+              }}
+            >
+              <Icon
+                icon={"Check-in-page"}
+                mr="1em"
+                size={"16px"}
+                iconColor={baseTheme.colors.primary100}
+              />
+              Check-In
+            </MobileMenuOption>
+          </MobileSideMenu>
+          {/* )} */}
 
           <CreateIssueModal
             createIssueModalOpen={createIssueModalOpen}
@@ -268,20 +279,38 @@ const StyledHeading = styled(Heading)`
   }
 `;
 
-const MobileSideMenu = styled.div`
-  height: 100vh;
+type MobileSideMenuProps = {
+  showSideNav: boolean;
+};
+
+const MobileSideMenu = styled.div<MobileSideMenuProps>`
+  height: calc(100vh - 60px);
   background: ${props => props.theme.colors.white};
-  z-index: 50;
-  width: 85vw;
+  z-index: 2;
+  width: ${props => (props.showSideNav ? "85vw" : "0")};
   position: fixed;
   padding-top: 40px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.2s;
+  left: 0;
+  display: none;
+  margin-top: 10px;
+
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
 `;
 
-const MobileMenuOption = styled.div`
+const MobileMenuOption = styled.div<MobileSideMenuProps>`
   font-size: 12px;
   align-items: center;
   padding: 5px 30px;
   margin-bottom: 0.5em;
+  top: 0;
+  left: 0;
+  display: ${props => (props.showSideNav ? "block" : "none")};
+  width: 70vw;
+  transition: 0.2s;
 
   &:hover {
     background: ${props => props.theme.colors.backgroundGrey};
@@ -306,6 +335,9 @@ const LynchpynLogoContainer = styled.div`
   display: none;
   @media only screen and (max-width: 768px) {
     display: block;
+  }
+  @media only screen and (max-width: 360px) {
+    left: 2.6em;
   }
 `;
 
@@ -337,8 +369,12 @@ const HeaderItemsContainer = styled.div`
 
 const Container = styled.div`
   height: 64px;
-  border-bottom: ${props => `1px solid ${props.theme.colors.borderGrey}`};
   width: 100%;
+  border-bottom: ${props => `1px solid ${props.theme.colors.borderGrey}`};
+  @media only screen and (max-width: 768px) {
+    height: 40px;
+    border-bottom: none;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -444,11 +480,12 @@ const IssuesPopupContainer = styled.div`
   background: white;
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
-const IssuesCon = styled.div`
-  
-`
+const IssuesCon = styled.div``;
 
 const PopupHeaderContainer = styled.div`
   display: flex;
@@ -478,6 +515,9 @@ const KeyActivitiesPopupContainer = styled.div`
   background-color: white;
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 const KeyActivitiesButtonContainer = styled.div`
   display: flex;
