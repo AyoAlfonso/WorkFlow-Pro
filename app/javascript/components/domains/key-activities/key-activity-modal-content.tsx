@@ -688,13 +688,10 @@ const OptionsContainer = styled.div<OCProps>`
   opacity: 1;
   border-radius: 0.625em;
   background: ${props => props.theme.colors.white};
-<<<<<<< HEAD
-=======
 
   @media only screen and (max-width: 768px) {
     right: -1em;
   }
->>>>>>> 033462254975ff40d236e1fcec8974936794f238
 `;
 
 const OptionContainer = styled.div`
