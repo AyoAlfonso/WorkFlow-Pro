@@ -1,4 +1,6 @@
 class Api::SubInitiativesController < Api::ApplicationController
+  include UserActivityLogHelper
+  after_action :record_activities, only: [:update, :destroy, :create_key_element, :update_key_element, :create_milestones, :close_goal]
   before_action :set_sub_initiative, only: [:show, :update, :destroy, :create_key_element, :update_key_element, :create_milestones, :close_goal]
   # before_action :create_milestones_for_sub_initiative, only: [:update, :create_key_element, :update_key_element ]
 
@@ -84,5 +86,9 @@ class Api::SubInitiativesController < Api::ApplicationController
   def set_sub_initiative
     @sub_initiative = policy_scope(SubInitiative).find(params[:id])
     authorize @sub_initiative
+  end
+
+  def record_activities
+    record_activity("")
   end
 end

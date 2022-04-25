@@ -5,6 +5,7 @@ class KeyActivity < ApplicationRecord
     enable
     include_association :taggings
   end
+
   enum priority: { low: 0, medium: 1, high: 2, frog: 3 }
   belongs_to :user
   belongs_to :meeting, optional: true
@@ -90,4 +91,5 @@ class KeyActivity < ApplicationRecord
   def sanitize_body
     self.body = strip_tags(body)
   end
+
 end

@@ -41,6 +41,7 @@ import { Meeting } from "./domains/meetings/meeting";
 import { PersonalPlanning } from "./domains/meetings/personal-planning";
 import { JournalIndex } from "~/components/domains/journal/journal-index";
 import { NotesIndex } from "~/components/domains/notes/notes-index";
+import { AuditLogsIndex } from "./domains/audit-logs/audit-logs-index";
 import { ScorecardsIndex } from "~/components/domains/scorecard/scorecards-index";
 import { DummyScorecardsIndex } from "~/components/domains/scorecard/dummy-scorecards";
 
@@ -241,6 +242,7 @@ export const App = observer(
                       "/scorecard/:owner_type/:owner_id",
                       "/journals",
                       "/notes",
+                      "/audit-logs",
                       "/forum",
                       "/forum/:team_id",
                       "/meetings/agenda",
@@ -297,6 +299,9 @@ export const App = observer(
                         )}
                         <Route exact path="/journals" component={JournalIndex} />
                         <Route exact path="/notes" component={NotesIndex} />
+                        {profile.role == "Admin" && (
+                          <Route exact path="/audit-logs" component={AuditLogsIndex} />
+                        )}
 
                         {profile.productFeatures && profile.productFeatures.meeting && (
                           <>

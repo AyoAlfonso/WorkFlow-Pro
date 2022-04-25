@@ -1,4 +1,6 @@
 class Api::MilestonesController < Api::ApplicationController
+  include UserActivityLogHelper
+  after_action :record_activities, only: [:update]
   include StatsHelper
   respond_to :json
   before_action :set_milestone, only: [:update]
@@ -32,4 +34,8 @@ class Api::MilestonesController < Api::ApplicationController
   def milestone_params
     params.require(:milestone).permit(:id, :description, :status)
   end
+ 
+  def record_activities
+    record_activity("")
+  end 
 end

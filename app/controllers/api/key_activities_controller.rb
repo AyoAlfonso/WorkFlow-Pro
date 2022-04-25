@@ -1,7 +1,10 @@
 class Api::KeyActivitiesController < Api::ApplicationController
+  include UserActivityLogHelper
+  after_action :record_activities, only: [:create, :update, :destroy, :duplicate, :created_in_meeting]
   before_action :set_key_activity, only: [:update, :destroy, :duplicate]
-
   after_action :verify_authorized, except: [:index, :created_in_meeting, :resort_index, :update_multiple], unless: :skip_pundit?
+
+
 
   respond_to :json
 
@@ -149,4 +152,8 @@ class Api::KeyActivitiesController < Api::ApplicationController
     meeting = Meeting.find(meeting_id)
     KeyActivity.optimized.filter_by_team_meeting(meeting.meeting_template_id, meeting.team_id).sort_by_progressing_non_backlog_position
   end
+
+  def record_activities
+    record_activity("")
+  end 
 end

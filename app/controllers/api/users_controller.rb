@@ -1,7 +1,9 @@
 class Api::UsersController < Api::ApplicationController
   helper ApplicationHelper
+  include UserActivityLogHelper
   before_action :set_user, only: [:show, :update, :destroy, :resend_invitation]
   skip_before_action :authenticate_user!, only: [:reset_password]
+  after_action :record_activities, only: [:update, :destroy, :update_avatar, :delete_avatar, :update_user_team_lead_role,:update_user_team_manager, :update_company_first_time_access]
   before_action :skip_authorization, only: [:profile, :reset_password]
   respond_to :json
 
@@ -181,5 +183,9 @@ class Api::UsersController < Api::ApplicationController
     end
 
     tue_list
+  end
+
+  def record_activities
+    record_activity("")
   end
 end

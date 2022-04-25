@@ -1,5 +1,8 @@
 class Api::KeyElementsController < Api::ApplicationController
+  include UserActivityLogHelper
   include StatsHelper
+  after_action :record_activities, only: [:check_in_key_elements, :update]
+  
   respond_to :json
   before_action :set_key_element, only: [:update]
   before_action :skip_authorization, only: :check_in_key_elements
@@ -26,4 +29,7 @@ class Api::KeyElementsController < Api::ApplicationController
     authorize @key_element
   end
 
+  def record_activities
+    record_activity("")
+  end 
 end

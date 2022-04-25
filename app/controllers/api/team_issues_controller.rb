@@ -1,4 +1,6 @@
 class Api::TeamIssuesController < Api::ApplicationController
+  include UserActivityLogHelper
+  after_action :record_activities, only: [:update]
   respond_to :json
 
   def index
@@ -40,5 +42,9 @@ class Api::TeamIssuesController < Api::ApplicationController
 
   def team_meeting_params
     params.permit(:meeting_id, :meeting_enabled)
+  end
+
+  def record_activities
+    record_activity("")
   end
 end

@@ -12,7 +12,7 @@ import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface IMultiOptionTypeSelectionDropdownList {
-  userList: Array<UserType>;
+  userList: any[];
   onUserSelect: any;
   setShowUsersList: React.Dispatch<React.SetStateAction<boolean>>;
   title?: string;
@@ -100,22 +100,16 @@ export const MultiOptionTypeSelectionDropdownList = ({
               setShowUsersList(false);
           }
         }}
-        filterOptions={(options, params) => {
-          const filtered = filter(options, params);
-          return filtered;
-        }}
+        // filterOptions={(options, params) => {
+        //   const filtered = filter(options, params);
+        //   return filtered;
+        // }}
         selectOnFocus
         clearOnBlur
         handleHomeEndKeys
         size={"small"}
         id="search-for-labels"
         options={alphabeticallySortedList.sort(typesort())}
-        getOptionLabel={option => {
-            if(typeof option === 'object' && option !== null) {
-                return `${option.name} ${option.lastName}`;
-            }
-        
-        }}
         renderOption={option => {
           return (
             <OptionContainer>
@@ -156,7 +150,7 @@ const ActionDropdownContainer = styled.div`
   padding: 10px;
   z-index: 2;
   height: auto;
-  overflow: auto;
+  overflow-y: scroll;
 `;
 
 const OptionContainer = styled.div`

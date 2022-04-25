@@ -17,24 +17,55 @@ import { Text } from "~/components/shared/text";
 import { SignUpWizardProgressBar } from "../../shared/sign-up-wizard/sign-up-wizard-progress-bar";
 import { Icon } from "~/components/shared/icon";
 import { Onboarding } from "../onboarding";
-import { Avatar } from "~/components/shared";
-import {
-  StyledInput,
-  InputHeaderWithComment,
-  FormElementContainer,
-  InputFromUnitType,
-} from "../scorecard/shared/modal-elements";
 
 interface CheckInProps {}
 
-export const DummyCheckin = observer(
+export const Ci = observer(
   (props: CheckInProps): JSX.Element => {
     const { checkInTemplateStore, sessionStore, companyStore } = useMst();
+    const {
+      profile: { id },
+    } = sessionStore;
+    
+    const history = useHistory();
+
+    const checkIn = checkInTemplateStore.currentCheckIn;
+
+    const { weekOf } = useParams();
+
+    const closeButtonClick = () => {
+      if (confirm(`Are you sure you want to exit this weekly check-in?`)) {
+        history.push(`/`);
+      }
+    };
+
+    useEffect(() => {
+      validateWeekOf(weekOf, history, id);
+
+      checkInTemplateStore.fetchCheckInTemplates();
+
+      companyStore.load().then(() => {
+        if (companyStore.company?.objectivesKeyType === "KeyResults") {
+          checkInTemplateStore.getCheckIn("Weekly Check-In");
+        } else if (companyStore.company?.objectivesKeyType === "Milestones") {
+          checkInTemplateStore.getCheckIn("Weekly Check In");
+        }
+      });
+    }, []);
+
+    const renderLoading = () => (
+      <LoadBodyContainer>
+        <Loading />
+      </LoadBodyContainer>
+    );
+
     const StopMeetingButton = () => {
       return (
         <StopButton
           variant={"primary"}
-          onClick={() => {}}
+          onClick={() => {
+            history.push(`/check-in/success`);
+          }}
           small
           disabled={false}
         >
@@ -43,8 +74,15 @@ export const DummyCheckin = observer(
       );
     };
 
+    const nextStep = stepIndex => {
+      checkInTemplateStore.updateCurrentCheckIn(R.merge(checkIn, { currentStep: stepIndex }));
+    };
+
     return (
       <>
+        {R.isNil(checkIn) ? (
+          renderLoading()
+        ) : (
           <Overlay>
        <Wrapper>
       <Upgradetextcontainer>
@@ -57,13 +95,16 @@ export const DummyCheckin = observer(
         <Subtext>
           Upgrade to a higher tier to get access to Scorecard
         </Subtext>
+        {/* <Link to="http://go.lynchpyn.com/upgrade"> */}
         <Talktous
+        // type="button"
         onClick={(e) => {
           e.preventDefault();
           window.location.href='http://go.lynchpyn.com/upgrade';
         }}>
           Talk to us
         </Talktous>
+        {/* </Link> */}
       </Upgradetextcontainer>
       </Wrapper>
       <BigContainer>
@@ -96,11 +137,28 @@ export const DummyCheckin = observer(
                   </OptionContainer>
                 </SelectionTabsContainer>
               </SelectionContainer>
+              {/* <DisplayContentContainer>{renderDisplayContent()}</DisplayContentContainer> */}
             </SideopContainer>
           </ChildrenContainer>
         </DescriptionBody>
+        {/* {showLynchpynLogo && (
+          <LynchpynLogoContainer>
+            <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="200"></img>
+          </LynchpynLogoContainer>
+        )} */}
       </DescriptionContainer>
       <BodyContainer hasStepsForMobile={false}>
+        {/* {stepsForMobile && (
+          <DesktopCloseButtonContainer>
+            {stepsForMobile}
+            {showCloseButton && (
+              <CloseButtonContainer onClick={closeButtonClick())>
+                <CloseText> Close </CloseText>
+                <Icon icon={"Close"} size={"16px"} iconColor={"grey100"} />
+              </CloseButtonContainer>
+            )}
+          </DesktopCloseButtonContainer>
+        )} */}
         <MobileContainer>
           {true && (
             <CloseButtonContainer>
@@ -110,151 +168,53 @@ export const DummyCheckin = observer(
           )}
         </MobileContainer>
         <BodyContentContainer hasStepsForMobile={false}>
+          {/* {renderBodyComponents()} */}
           <CheckBodyContainer>
             <CheckStepComponentContainer>
-              <KContainer>
-                <SubHeaderText>
-                  {"KPIKPIkpikpiKPI>100"}
-                </SubHeaderText>
-                <ValueInputContainer>
-                  <FormElementContainer>
-                    <InputFromUnitType
-                      unitType={"numerical"}
-                      placeholder={"Add the new value..."}
-                      onChange={() => {}}
-                      defaultValue={0}
-                      onBlur={() => {}}
-                    />
-                  </FormElementContainer>
-                  <ValueSpan>{`${100}${""}`}</ValueSpan>
-                </ValueInputContainer>
-                <CommentContainer>
-                  <FormElementContainer>
-                    <InputHeaderWithComment
-                      comment={"optional"}
-                      fontSize={"14px"}
-                      childFontSize={"12px"}
-                    />
-                    <StyledInput
-                      placeholder={"Add a comment..."}
-                      onChange={e => {}}
-                      onBlur={() => {}}
-                    />
-                  </FormElementContainer>
-                </CommentContainer>
-              </KContainer>
+              <Text>This custom component has not been configured</Text>
             </CheckStepComponentContainer>
           </CheckBodyContainer>
           <CheckBodyContainer>
-          <CheckStepComponentContainer>
-              <KContainer>
-                <SubHeaderText>
-                  {"KPIKPIkpikpiKPI>100"}
-                </SubHeaderText>
-                <ValueInputContainer>
-                  <FormElementContainer>
-                    <InputFromUnitType
-                      unitType={"numerical"}
-                      placeholder={"Add the new value..."}
-                      onChange={() => {}}
-                      defaultValue={0}
-                      onBlur={() => {}}
-                    />
-                  </FormElementContainer>
-                  <ValueSpan>{`${100}${""}`}</ValueSpan>
-                </ValueInputContainer>
-                <CommentContainer>
-                  <FormElementContainer>
-                    <InputHeaderWithComment
-                      comment={"optional"}
-                      fontSize={"14px"}
-                      childFontSize={"12px"}
-                    />
-                    <StyledInput
-                      placeholder={"Add a comment..."}
-                      onChange={e => {}}
-                      onBlur={() => {}}
-                    />
-                  </FormElementContainer>
-                </CommentContainer>
-              </KContainer>
+            <CheckStepComponentContainer>
+              <Text>This custom component has not been configured</Text>
             </CheckStepComponentContainer>
           </CheckBodyContainer>
           <CheckBodyContainer>
-          <CheckStepComponentContainer>
-              <KContainer>
-                <SubHeaderText>
-                  {"KPIKPIkpikpiKPI>100"}
-                </SubHeaderText>
-                <ValueInputContainer>
-                  <FormElementContainer>
-                    <InputFromUnitType
-                      unitType={"numerical"}
-                      placeholder={"Add the new value..."}
-                      onChange={() => {}}
-                      defaultValue={0}
-                      onBlur={() => {}}
-                    />
-                  </FormElementContainer>
-                  <ValueSpan>{`${100}${""}`}</ValueSpan>
-                </ValueInputContainer>
-                <CommentContainer>
-                  <FormElementContainer>
-                    <InputHeaderWithComment
-                      comment={"optional"}
-                      fontSize={"14px"}
-                      childFontSize={"12px"}
-                    />
-                    <StyledInput
-                      placeholder={"Add a comment..."}
-                      onChange={e => {}}
-                      onBlur={() => {}}
-                    />
-                  </FormElementContainer>
-                </CommentContainer>
-              </KContainer>
+            <CheckStepComponentContainer>
+              <Text>This custom component has not been configured</Text>
             </CheckStepComponentContainer>
           </CheckBodyContainer>
           <CheckBodyContainer>
-          <CheckStepComponentContainer>
-              <KContainer>
-                <SubHeaderText>
-                  {"KPIKPIkpikpiKPI>100"}
-                </SubHeaderText>
-                <ValueInputContainer>
-                  <FormElementContainer>
-                    <InputFromUnitType
-                      unitType={"numerical"}
-                      placeholder={"Add the new value..."}
-                      onChange={() => {}}
-                      defaultValue={0}
-                      onBlur={() => {}}
-                    />
-                  </FormElementContainer>
-                  <ValueSpan>{`${100}${""}`}</ValueSpan>
-                </ValueInputContainer>
-                <CommentContainer>
-                  <FormElementContainer>
-                    <InputHeaderWithComment
-                      comment={"optional"}
-                      fontSize={"14px"}
-                      childFontSize={"12px"}
-                    />
-                    <StyledInput
-                      placeholder={"Add a comment..."}
-                      onChange={e => {}}
-                      onBlur={() => {}}
-                    />
-                  </FormElementContainer>
-                </CommentContainer>
-              </KContainer>
+            <CheckStepComponentContainer>
+              <Text>This custom component has not been configured</Text>
             </CheckStepComponentContainer>
           </CheckBodyContainer>
+          <CheckBodyContainer>
+            <CheckStepComponentContainer>
+              <Text>This custom component has not been configured</Text>
+            </CheckStepComponentContainer>
+          </CheckBodyContainer>
+          <CheckBodyContainer>
+            <CheckStepComponentContainer>
+              <Text>This custom component has not been configured</Text>
+            </CheckStepComponentContainer>
+          </CheckBodyContainer>
+          <CheckBodyContainer>
+            <CheckStepComponentContainer>
+              <Text>This custom component has not been configured</Text>
+            </CheckStepComponentContainer>
+          </CheckBodyContainer>
+          {/* <MobileButtonContainer>
+            <ButtonsContainer>{renderActionButtons()}</ButtonsContainer>
+            {textUnderMobileButton && textUnderMobileButton}
+          </MobileButtonContainer> */}
         </BodyContentContainer>
+        {/* {renderStepsComponent()} */}
       </BodyContainer>
     </Container>
     </BigContainer>
     </Overlay>
+        )}
       </>
     );
   },
@@ -424,7 +384,9 @@ const BodyContainer = styled.div<BodyContainerProps>`
   width: 75%;
   position: relative;
   display: flex;
+  // height: 100%;
   flex-direction: column;
+  // overflow-x: auto;
   @media only screen and (max-width: 768px) {
     width: 100%;
     padding: 0;
@@ -438,6 +400,8 @@ type BodyContentContainerProps = {
 const BodyContentContainer = styled.div<BodyContentContainerProps>`
   height: 100%;
   overflow-y: auto;
+  //display: ${props => (props.hasStepsForMobile ? "block" : "flex")};
+  //display: flex;
 `;
 
 const DescriptionTitleContainer = styled.div``;
@@ -535,6 +499,19 @@ const StyledBackIcon = styled(Icon)`
   transform: rotate(180deg);
 `;
 
+// type IStopMeetingButton = {
+//   variant: string;
+//   onClick: () => void;
+//   small: boolean;
+//   disabled: boolean;
+// };
+
+// const StopButton = styled(Button)<IStopMeetingButton>`
+//   width: 100%;
+//   margin: 0;
+//   font-size: 16px;
+// `;
+
 const ChildrenContainer = styled.div``;
 
 const StepText = styled(Text)`
@@ -616,50 +593,5 @@ const CheckStepComponentContainer = styled.div`
   // margin-left: 8px;
   @media only screen and (max-width: 768px) {
     margin-left: 0;
-  }
-`;
-
-const KContainer = styled.div`
-border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
-padding-left: 16px;
-padding-right: 16px;
-@media only screen and (max-width: 768px) {
-  padding: 0 16px;
-}
-`;
-
-const SubHeaderText = styled.span`
-  display: inline-block;
-  font-size: 18px;
-  font-weight: bold;
-  margin-top: 15px;
-  margin-bottom: 25px;
-`;
-
-const ValueInputContainer = styled.div`
-  width: 30%;
-  align-items: center;
-  display: flex;
-  margin-bottom: 20px;
-  justify-content: space-between;
-  @media only screen and (max-width: 768px) {
-    width: 70%;
-  }
-`;
-
-const ValueSpan = styled.span`
-  font-weight: bold;
-  display: inline-block;
-  margin-left: 50px;
-  @media only screen and (max-width: 768px) {
-    margin-left: 30px;
-  }
-`;
-
-const CommentContainer = styled.div`
-  width: 70%;
-  margin-bottom: 15px;
-  @media only screen and (max-width: 768px) {
-    width: 80%;
   }
 `;

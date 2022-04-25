@@ -38,6 +38,7 @@ export const AccountDropdownOptions = observer(
     const [selectedUserStatus, setSelectedUserStatus] = useState<string>(
       R.path(["profile", "currentDailyLog", "workStatus"], sessionStore),
     );
+    const isAdmin = sessionStore.profile.role == "Admin";
 
     const history = useHistory();
     const location = useLocation();
@@ -260,6 +261,13 @@ export const AccountDropdownOptions = observer(
               {t("notes.headerNavTitle")}
             </AccountOptionText>
           </Link>
+          {isAdmin && (
+            <Link to="/audit-logs" style={{ textDecoration: "none", padding: "0" }}>
+              <AccountOptionText onClick={() => setShowAccountActions(false)}>
+                {t("Audit Logs")}
+              </AccountOptionText>
+            </Link>
+          )}
         </DropdownSectionContainer>
 
         <StyledDivider />

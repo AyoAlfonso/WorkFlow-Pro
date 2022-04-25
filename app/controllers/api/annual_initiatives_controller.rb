@@ -1,7 +1,9 @@
 class Api::AnnualInitiativesController < Api::ApplicationController
+  include UserActivityLogHelper
+  after_action :record_activities, only: [:create, :duplicate, :update, :destroy, :create_key_element, :update_key_element,
+                                               :close_initiative]
   before_action :set_annual_initiative, only: [:show, :duplicate, :update, :destroy, :create_key_element, :update_key_element,
                                                :close_initiative]
-
   respond_to :json
 
   def create
@@ -99,4 +101,8 @@ class Api::AnnualInitiativesController < Api::ApplicationController
     @annual_initiative = policy_scope(AnnualInitiative).find(params[:id])
     authorize @annual_initiative
   end
+  
+  def record_activities
+    record_activity("")
+  end 
 end

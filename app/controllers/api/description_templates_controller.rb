@@ -1,4 +1,6 @@
 class Api::DescriptionTemplatesController < Api::ApplicationController
+  include UserActivityLogHelper
+  after_action :record_activities, only: [:update_or_create_templates, :update_template_body, :destroy]
   before_action :set_template, only: [:update, :destroy, :show]
   respond_to :json
 
@@ -46,4 +48,8 @@ class Api::DescriptionTemplatesController < Api::ApplicationController
     @template = policy_scope(DescriptionTemplate).find(params[:id])
     authorize @template
   end
+
+  def record_activities
+    record_activity("")
+  end 
 end

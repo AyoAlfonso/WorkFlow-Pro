@@ -53,16 +53,16 @@ export const OwnedBy = observer(({
       center={center}
     >
       <Avatar
-        defaultAvatarColor={ownedBy.defaultAvatarColor}
-        avatarUrl={ownedBy.avatarUrl}
-        firstName={ownedBy.firstName}
-        lastName={ownedBy.lastName}
+        defaultAvatarColor={ownedBy?.defaultAvatarColor}
+        avatarUrl={ownedBy?.avatarUrl}
+        firstName={ownedBy?.firstName}
+        lastName={ownedBy?.lastName}
         size={size || 20}
         border={userIconBorder}
         {...restProps}
       />
       <OwnedByName fontSize={fontSize} nameWidth={nameWidth} type={"fieldLabel"}>
-        {ownedBy.firstName} {ownedBy.lastName}
+        {ownedBy?.firstName} {ownedBy?.lastName}
       </OwnedByName>
       {!disabled && showUsersList && (
         <div onClick={e => e.stopPropagation()}>

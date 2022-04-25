@@ -663,6 +663,21 @@ ActiveRecord::Schema.define(version: 2022_04_06_132348) do
     t.index ["deleted_at"], name: "index_teams_on_deleted_at"
   end
 
+  create_table "user_activity_logs", force: :cascade do |t|
+    t.string "user_id"
+    t.string "browser"
+    t.string "ip_address"
+    t.string "location"
+    t.string "controller"
+    t.string "action"
+    t.string "params"
+    t.string "company_id"
+    t.string "team_id"
+    t.string "note"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "user_company_enablements", force: :cascade do |t|
     t.bigint "company_id", null: false
     t.bigint "user_id", null: false
