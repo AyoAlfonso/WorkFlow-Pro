@@ -15,6 +15,7 @@ import {
 import { useMst } from "~/setup/root";
 import * as R from "ramda";
 import { List } from "@material-ui/core";
+import { IIssue } from "~/models/issue";
 
 interface ITeamIssuesBodyProps {
   showOpenIssues: boolean;
@@ -67,9 +68,14 @@ export const TeamIssuesBody = observer(
 
     const renderIssuesList = (): Array<JSX.Element> => {
       const issues = showOpenIssues ? openIssues : closedIssues;
-      return issues.map((issue, index) => (
+      return issues.filter(issue => issue.teamId == teamId).map((issue, index) => (
         <IssueContainer key={issue["id"]}>
-          <IssueEntry issue={issue} pageEnd={true} meetingId={meetingId} teamId={teamId} />
+          <IssueEntry
+            issue={issue}
+            pageEnd={true}
+            meetingId={meetingId}
+            teamId={teamId}
+          />
         </IssueContainer>
       ));
     };
@@ -128,7 +134,7 @@ type ContainerProps = {
 };
 
 const Container = styled.div<ContainerProps>`
-  padding: 0px 0px 15px 0px;
+  // padding: 0px 0px 15px 0px;
   height: ${props => props.meeting && "inherit"};
 `;
 
@@ -166,10 +172,9 @@ type IssuesContainerProps = {
 };
 
 const IssuesContainer = styled.div<IssuesContainerProps>`
-  overflow-y: auto;
-  height: ${props => (props.meeting ? "inherit" : "260px")};
-  overflow-x: hidden;
-  padding-right: 8px;
+  // overflow-y: auto;
+  min-height: ${props => (props.meeting ? "inherit" : "260px")};
+  // overflow-x: hidden;
 `;
 
 const IssueContainer = styled.div``;

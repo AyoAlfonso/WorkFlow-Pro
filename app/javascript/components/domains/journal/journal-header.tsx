@@ -38,7 +38,7 @@ export const JournalHeader = ({
 
   return (
     <>
-      <AccordionSummary>
+      <AccordianContainer>
         <HeaderContainerNoBorder>
           <Icon
             icon={expanded === "panel0" ? "Chevron-Up" : "Chevron-Down"}
@@ -64,7 +64,7 @@ export const JournalHeader = ({
             </EndButton>
           </Link>
         </EndButtonContainer>
-      </AccordionSummary>
+      </AccordianContainer>
       <StyledModal isOpen={questionnaireVariant !== ""} transitionSpeed={1000}>
         {questionnaireVariant !== "" ? (
           <SurveyBot
@@ -117,4 +117,17 @@ const StyledModal = Modal.styled`
   right: 0;
   position: absolute;
   background-color: ${props => props.theme.colors.white};
+
+  @media only screen and (max-width: 768px) {
+    width: 95vw;
+    height: 90%;
+    min-width: 95vw;
+    position: static;
+  }
+`;
+
+const AccordianContainer = styled(AccordionSummary)`
+  @media only screen and (max-width: 768px) {
+    display: none !important;
+  }
 `;

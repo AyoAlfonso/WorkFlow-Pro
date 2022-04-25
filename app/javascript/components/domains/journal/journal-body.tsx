@@ -172,6 +172,10 @@ const AccordionDetailsContainer = styled(AccordionDetails)`
   width: 100%;
   min-width: 224px;
   margin-right: 20px;
+
+  @media only screen and (max-width: 768px) {
+    box-shadow: none;
+  }
 `;
 
 const ButtonContainer = styled.div`

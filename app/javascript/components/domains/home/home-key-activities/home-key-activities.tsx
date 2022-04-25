@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Icon } from "~/components/shared";
+import { Icon, Loading } from "~/components/shared";
 import { today, tomorrow } from "~/lib/date-helpers";
 import { observer } from "mobx-react";
 import { useMst } from "~/setup/root";
@@ -40,6 +40,7 @@ export const HomeKeyActivities = observer(
     const [todayFilterDropdownOpen, setTodayFilterDropdownOpen] = useState<boolean>(false);
     const [dynamicFilterDropdownOpen, setDynamicFilterDropdownOpen] = useState<boolean>(false);
     const [todayModalClicked, setTodayModalClicked] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const {
       keyActivityStore,
@@ -50,8 +51,8 @@ export const HomeKeyActivities = observer(
 
     useEffect(() => {
       showCompletedItems
-        ? keyActivityStore.fetchCompleteKeyActivities()
-        : keyActivityStore.fetchIncompleteKeyActivities();
+        ? keyActivityStore.fetchCompleteKeyActivities().then(() => setLoading(false))
+        : keyActivityStore.fetchIncompleteKeyActivities().then(() => setLoading(false));
     }, [showCompletedItems]);
 
     const todaysKeyActivities = keyActivityStore.incompleteKeyActivitiesByScheduledGroupName(
@@ -92,8 +93,8 @@ export const HomeKeyActivities = observer(
     const renderMiddleColumnHeader = () => {
       if (showCompletedItems) {
         return renderHeader(
-          "Completed Pyns",
-          "A list of your completed pyns.",
+          "Completed Todos",
+          "A list of your completed todos.",
           dynamicFilterDropdownOpen,
           setDynamicFilterDropdownOpen,
           selectedFilterGroupId,
@@ -110,7 +111,7 @@ export const HomeKeyActivities = observer(
         const teamName = teams.find(team => team.id == selectedFilterTeamId).name;
         return renderHeader(
           teamName,
-          "Pyns you are accountable for that are associated with this team.",
+          "Todos you are accountable for that are associated with this team.",
           dynamicFilterDropdownOpen,
           setDynamicFilterDropdownOpen,
         );
@@ -227,6 +228,7 @@ export const HomeKeyActivities = observer(
               <KeyActivitiesList
                 keyActivities={todaysKeyActivities}
                 droppableId={`todays-activities-${selectedFilterGroupIdToday}`}
+                loading={loading}
               />
             </KeyActivitiesListContainer>
           </SingleListContainer>
@@ -262,6 +264,7 @@ export const HomeKeyActivities = observer(
                 keyActivities={keyActivityStore.incompleteKeyActivitiesByScheduledGroupName(
                   "Weekly List",
                 )}
+                loading={loading}
                 droppableId={`scheduled-group-activities-${sessionStore.getScheduledGroupIdByName(
                   "Weekly List",
                 )}`}
@@ -301,6 +304,7 @@ export const HomeKeyActivities = observer(
               />
               <KeyActivitiesList
                 keyActivities={todaysKeyActivities}
+                loading={loading}
                 droppableId={`todays-activities-${selectedFilterGroupIdToday}`}
               />
             </KeyActivitiesListContainer>
@@ -316,6 +320,7 @@ export const HomeKeyActivities = observer(
               />
               <KeyActivitiesList
                 keyActivities={filteredKeyActivities()}
+                loading={loading}
                 droppableId={
                   selectedFilterGroupName
                     ? `scheduled-group-activities-${selectedFilterGroupId}`

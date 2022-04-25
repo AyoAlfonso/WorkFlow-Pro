@@ -170,7 +170,7 @@ export const SurveyBot = observer(
         hideBotAvatar={true}
         hideUserAvatar={true}
         contentStyle={{
-          height: props.fromDailyPlanning ? window.innerHeight - 250 : "84%"
+          height: props.fromDailyPlanning ? window.innerHeight - 250 : "80%"
         }}
         // header and footer are 120px total
         // these hard-coded values are required to make the chatbot fit inside the Journal widget :(

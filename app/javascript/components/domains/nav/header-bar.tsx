@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as R from "ramda";
 import React, { useRef, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useMst } from "../../../setup/root";
 import { useTranslation } from "react-i18next";
@@ -17,6 +17,8 @@ import { AccountDropdownOptions } from "./top-nav/account-dropdown-options";
 import { InviteYourTeamModal } from "../account/users/invite-your-team-modal";
 import { PulseSelectorWrapper } from "./top-nav/pulse-selector-wrapper";
 import { HeaderText } from "~/utils/header-text";
+import { baseTheme } from "~/themes";
+import { getWeekOf } from "~/utils/date-time";
 
 declare global {
   interface Window {
@@ -38,10 +40,14 @@ export const HeaderBar = observer(
     const [showKeyActivities, setShowKeyActivities] = useState<boolean>(false);
     const [showIssues, setShowIssues] = useState<boolean>(false);
     const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
+    const [showSideNav, setShowSideNav] = useState<boolean>(false);
 
     const { sessionStore, companyStore } = useMst();
     const accountActionRef = useRef(null);
     const { t } = useTranslation();
+    const history = useHistory();
+
+    const userId = sessionStore.profile.id;
     const issuesTitle =
       companyStore?.company?.displayFormat === "Forum" ? t("issues.myHub") : t("issues.issues");
 
@@ -51,13 +57,14 @@ export const HeaderBar = observer(
 
     const location = useLocation();
 
-    const renderUserAvatar = () => {
+    const renderUserAvatar = (size = 48) => {
       return (
         <Avatar
           firstName={sessionStore.profile.firstName}
           lastName={sessionStore.profile.lastName}
           defaultAvatarColor={sessionStore.profile.defaultAvatarColor}
           avatarUrl={sessionStore.profile.avatarUrl}
+          size={size}
         />
       );
     };
@@ -81,12 +88,14 @@ export const HeaderBar = observer(
         showKeyActivities && (
           <KeyActivitiesPopupContainer>
             <PopupHeaderContainer>
-              <PopupHeaderText>Pyns</PopupHeaderText>
+              <PopupHeaderText>ToDos</PopupHeaderText>
               <CloseIconContainer onClick={() => setShowKeyActivities(false)}>
                 <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
               </CloseIconContainer>
             </PopupHeaderContainer>
-            <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"} />
+            <KeyActivitiesContainer>
+              <KeyActivitiesBody showAllKeyActivities={false} borderLeft={"none"} />
+            </KeyActivitiesContainer>
           </KeyActivitiesPopupContainer>
         )
       );
@@ -102,11 +111,13 @@ export const HeaderBar = observer(
                 <Icon icon={"Close"} size={"16px"} iconColor={"grey60"} />
               </CloseIconContainer>
             </PopupHeaderContainer>
-            <IssuesBody
-              showOpenIssues={showOpenIssues}
-              setShowOpenIssues={setShowOpenIssues}
-              noShadow
-            />
+            <IssuesContainer>
+              <IssuesBody
+                showOpenIssues={showOpenIssues}
+                setShowOpenIssues={setShowOpenIssues}
+                noShadow
+              />
+            </IssuesContainer>
           </IssuesPopupContainer>
         )
       );
@@ -116,9 +127,18 @@ export const HeaderBar = observer(
       <Wrapper>
         <Container>
           <HeaderItemsContainer>
-            <LynchpynLogoContainer>
-              <img src={"/assets/LynchPyn-Logo-Blue_300x300"} width="48"></img>
-            </LynchpynLogoContainer>
+            <MobileLeftContainer>
+              <BurgerIconContainer
+                showBackground={showSideNav}
+                onClick={() => setShowSideNav(!showSideNav)}
+              >
+                {" "}
+                <Icon icon={showSideNav ? "Close" : "Burger"} size={"24px"} iconColor={"white"} />
+              </BurgerIconContainer>
+              <LynchpynLogoContainer onClick={() => history.push("/")}>
+                <img color="white" src={"/assets/LynchPyn-Logo_Favicon_White"} width="32"></img>
+              </LynchpynLogoContainer>
+            </MobileLeftContainer>
             <ActionsContainer>
               <StyledHeading type={"h1"}>
                 <HeaderText location={location} />
@@ -136,7 +156,7 @@ export const HeaderBar = observer(
                     setCreateKeyActivityModalOpen(false);
                   }}
                 >
-                  Pyns
+                  {`${t("keyActivities.name")}s`}
                 </KeyActivitiesButton>
               </KeyActivitiesButtonContainer>
               <IssuesButtonContainer>
@@ -173,13 +193,50 @@ export const HeaderBar = observer(
                   setCreateKeyActivityModalOpen(false);
                 }}
               >
-                {renderUserAvatar()}
+                <DesktopAvatar>{renderUserAvatar(48)}</DesktopAvatar>
               </PersonalInfoDisplayContainer>
               {renderKeyActivitiesPopup()}
               {renderIssuesPopup()}
               {renderActionDropdown()}
             </PersonalInfoContainer>
+
+            <MobileAvatar>{renderUserAvatar(32)}</MobileAvatar>
           </HeaderItemsContainer>
+          {/* {showSideNav && ( */}
+          <MobileSideMenu showSideNav={showSideNav}>
+            <MobileMenuOption
+              showSideNav={showSideNav}
+              onClick={() => {
+                history.push("/");
+                setShowSideNav(false);
+              }}
+            >
+              <Icon
+                icon={"Planner"}
+                mr="1em"
+                size={"16px"}
+                iconColor={baseTheme.colors.primary100}
+              />
+              Planner
+            </MobileMenuOption>
+            <MobileMenuOption
+              showSideNav={showSideNav}
+              onClick={() => {
+                history.push(`/weekly-check-in/${userId}/${getWeekOf()}`);
+
+                setShowSideNav(false);
+              }}
+            >
+              <Icon
+                icon={"Check-in-page"}
+                mr="1em"
+                size={"16px"}
+                iconColor={baseTheme.colors.primary100}
+              />
+              Check-In
+            </MobileMenuOption>
+          </MobileSideMenu>
+          {/* )} */}
 
           <CreateIssueModal
             createIssueModalOpen={createIssueModalOpen}
@@ -211,7 +268,66 @@ const StyledHeading = styled(Heading)`
   margin-top: auto;
   margin-bottom: auto;
   @media only screen and (max-width: 768px) {
-    font-size: 24px;
+    font-size: 18px;
+    color: white;
+    margin-left: 1em;
+    margin-right: 1em;
+    width: inherit;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+`;
+
+type MobileSideMenuProps = {
+  showSideNav: boolean;
+};
+
+const MobileSideMenu = styled.div<MobileSideMenuProps>`
+  height: calc(100vh - 60px);
+  background: ${props => props.theme.colors.white};
+  z-index: 2;
+  width: ${props => (props.showSideNav ? "85vw" : "0")};
+  position: fixed;
+  padding-top: 40px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.2s;
+  left: 0;
+  display: none;
+  margin-top: 10px;
+
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const MobileMenuOption = styled.div<MobileSideMenuProps>`
+  font-size: 12px;
+  align-items: center;
+  padding: 5px 30px;
+  margin-bottom: 0.5em;
+  top: 0;
+  left: 0;
+  display: ${props => (props.showSideNav ? "block" : "none")};
+  width: 70vw;
+  transition: 0.2s;
+
+  &:hover {
+    background: ${props => props.theme.colors.backgroundGrey};
+  }
+`;
+
+type BurgerIconContainerProps = {
+  showBackground: boolean;
+};
+
+const BurgerIconContainer = styled.div<BurgerIconContainerProps>`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: block;
+    background: ${props => (props.showBackground ? "#41639c" : "")};
+    padding: 0.3125em;
+    border-radius: 4px;
   }
 `;
 
@@ -219,7 +335,23 @@ const LynchpynLogoContainer = styled.div`
   display: none;
   @media only screen and (max-width: 768px) {
     display: block;
-    margin-left: 16px;
+  }
+  @media only screen and (max-width: 360px) {
+    left: 2.6em;
+  }
+`;
+
+const DesktopAvatar = styled.div`
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const MobileAvatar = styled.div`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: block;
+    width: 20%;
   }
 `;
 
@@ -229,12 +361,20 @@ const HeaderItemsContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  @media only screen and (max-width: 768px) {
+    padding: 0 1em;
+  }
 `;
 
 const Container = styled.div`
   height: 64px;
-  border-bottom: ${props => `1px solid ${props.theme.colors.borderGrey}`};
   width: 100%;
+  border-bottom: ${props => `1px solid ${props.theme.colors.borderGrey}`};
+  @media only screen and (max-width: 768px) {
+    height: 40px;
+    border-bottom: none;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -249,7 +389,9 @@ const Wrapper = styled.div`
   @media only screen and (max-width: 768px) {
     margin-left: 0px;
     display: flex;
+    height: 60px;
     align-items: center;
+    background-color: ${props => props.theme.colors.mipBlue};
   }
 `;
 
@@ -259,6 +401,8 @@ const ActionsContainer = styled.div`
   @media only screen and (max-width: 768px) {
     margin-left: auto;
     margin-right: auto;
+    max-width: 60%;
+    display: flex;
   }
 `;
 
@@ -327,7 +471,7 @@ const IssuesButtonContainer = styled.div`
 
 const IssuesPopupContainer = styled.div`
   position: absolute;
-  width: 268px;
+  width: 320px;
   height: 438px;
   padding: 16px;
   padding-top: 0px;
@@ -336,7 +480,12 @@ const IssuesPopupContainer = styled.div`
   background: white;
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
+
+const IssuesCon = styled.div``;
 
 const PopupHeaderContainer = styled.div`
   display: flex;
@@ -357,7 +506,7 @@ const PopupHeaderText = styled.h4`
 
 const KeyActivitiesPopupContainer = styled.div`
   position: absolute;
-  width: 268px;
+  width: 320px;
   height: 438px;
   padding: 16px;
   padding-top: 0px;
@@ -366,6 +515,9 @@ const KeyActivitiesPopupContainer = styled.div`
   background-color: white;
   box-shadow: 1px 3px 4px 2px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 const KeyActivitiesButtonContainer = styled.div`
   display: flex;
@@ -389,6 +541,11 @@ const KeyActivitiesButton = styled.div`
   }
 `;
 
+const KeyActivitiesContainer = styled.div`
+  overflow-y: scroll;
+  height: 380px;
+`;
+
 const IssuesButton = styled.div`
   color: ${props => props.theme.colors.primary100};
   font-weight: bold;
@@ -407,7 +564,7 @@ const PersonalInfoContainer = styled.div`
   right: 0;
   @media only screen and (max-width: 768px) {
     padding-right: 0px;
-    margin-right: 16px;
+    display: none;
     pointer-events: none;
   }
 `;
@@ -415,4 +572,17 @@ const PersonalInfoContainer = styled.div`
 const CloseIconContainer = styled.div`
   margin-left: auto;
   cursor: pointer;
+`;
+
+const IssuesContainer = styled.div`
+  overflow-y: scroll;
+  height: 380px;
+`;
+
+const MobileLeftContainer = styled.div`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    width: 20%;
+    display: flex;
+  }
 `;

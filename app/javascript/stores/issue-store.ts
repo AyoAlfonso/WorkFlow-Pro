@@ -6,6 +6,7 @@ import { TeamIssueModel } from "../models/team-issue";
 import { ApiResponse } from "apisauce";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import { CommentLogModel } from "~/models/comment-logs";
 
 export const IssueStoreModel = types
   .model("IssueStoreModel")
@@ -14,6 +15,7 @@ export const IssueStoreModel = types
     teamIssues: types.array(TeamIssueModel),
     meetingTeamIssues: types.array(IssueModel),
     loading: types.maybeNull(types.boolean),
+    commentLogs: types.maybeNull(types.array(CommentLogModel)),
   })
   .extend(withEnvironment())
   .views(self => ({
@@ -31,6 +33,9 @@ export const IssueStoreModel = types
     },
     get meetingTeamIssueIds() {
       return self.meetingTeamIssues.map(issue => issue.id);
+    },
+    get personalIssues() {
+      return self.issues.filter(issue => issue.personal);
     },
   }))
   .views(self => ({
@@ -112,6 +117,16 @@ export const IssueStoreModel = types
         return false;
       }
     }),
+    upvoteIssue: flow(function*(id) {
+      const response: ApiResponse<any> = yield self.environment.api.upvoteIssue(id);
+      if (response.ok) {
+        const updatedIssue = self.issues.findIndex(issue => issue.id == id);
+        self.issues[updatedIssue] = response.data;
+        return true;
+      } else {
+        return false;
+      }
+    }),
     updateIssuePosition: flow(function*(id, newPosition, fromTeamMeeting = false) {
       let issueObject = self.issues.find(issue => issue.id == id);
       const newIssueObject = {
@@ -130,6 +145,17 @@ export const IssueStoreModel = types
         return false;
       }
     }),
+    duplicateIssue: flow(function*(id) {
+      const response: ApiResponse<any> = yield self.environment.api.duplicateIssue(id);
+      if (response.ok) {
+        self.issues = [...self.issues, response.data] as any;
+        showToast(`Issue Duplicated Successfully`, ToastMessageConstants.SUCCESS);
+        return true;
+      } else {
+        showToast(`Something Went Wrong`, ToastMessageConstants.ERROR);
+        return false;
+      }
+    }),
     destroyIssue: flow(function*(id, fromTeamMeeting = false) {
       const response: ApiResponse<any> = yield self.environment.api.destroyIssue({
         id,
@@ -140,6 +166,54 @@ export const IssueStoreModel = types
         self.teamIssues = response.data.teamIssues;
         return true;
       } else {
+        return false;
+      }
+    }),
+    createCommentLog: flow(function*(log) {
+      try {
+        const response: any = yield self.environment.api.createCommentLog(log);
+        if (response.ok) {
+          self.commentLogs = [...self.commentLogs, response.data.commentLog] as any;
+          return true;
+        }
+      } catch (error) {
+        showToast(`Something Went Wrong, Please try again`, ToastMessageConstants.ERROR);
+        return false;
+      }
+    }),
+    getCommentLogs: flow(function*(page, type, id) {
+      try {
+        self.commentLogs = null;
+        const response: ApiResponse<any> = yield self.environment.api.getCommentLogs(
+          page,
+          type,
+          id,
+        );
+        if (response.ok) {
+          self.commentLogs = response.data.commentLog;
+          return response.data.meta;
+        }
+      } catch (error) {
+        showToast(`Something went wrong while fetching Comment Logs`, ToastMessageConstants.ERROR);
+        return false;
+      }
+    }),
+    deleteCommentLog: flow(function*(id) {
+      try {
+        const response: any = yield self.environment.api.deleteCommentLog(id);
+        if (response.ok) {
+          const updatedLogs = self.commentLogs.filter(
+            log => log.id !== response.data.commentLog.id,
+          );
+          self.commentLogs = updatedLogs as any;
+          showToast("Comment Deleted", ToastMessageConstants.SUCCESS);
+          return true;
+        }
+      } catch (error) {
+        showToast(
+          `Something went wrong while deleting comment, please try again`,
+          ToastMessageConstants.ERROR,
+        );
         return false;
       }
     }),
@@ -180,8 +254,8 @@ export const IssueStoreModel = types
   }))
   .actions(self => ({
     updateIssueState(id, field, value) {
-      let issues = self.issues;
-      let issueIndex = issues.findIndex(issue => issue.id == id);
+      const issues = self.issues;
+      const issueIndex = issues.findIndex(issue => issue.id == id);
       issues[issueIndex][field] = value;
       self.issues = issues;
     },

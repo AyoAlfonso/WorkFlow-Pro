@@ -1,5 +1,6 @@
 import { types } from "mobx-state-tree";
 import { LabelModel } from "./";
+import { UserModel } from "./user";
 
 export const IssueModel = types
   .model("IssueModel")
@@ -13,7 +14,13 @@ export const IssueModel = types
     position: types.maybeNull(types.number),
     labels: types.maybeNull(types.array(LabelModel)),
     scheduledGroupId: types.maybeNull(types.number),
-    personal: types.maybeNull(types.boolean)
+    personal: types.maybeNull(types.boolean),
+    userId: types.maybeNull(types.number),
+    body: types.maybeNull(types.string),
+    upvoters: types.maybeNull(types.array(UserModel)),
+    dueDate: types.maybeNull(types.string),
+    cachedVotesTotal: types.maybeNull(types.number),
+    topicType: types.maybeNull(types.string),
   })
   .views(self => ({}))
   .actions(self => ({}));

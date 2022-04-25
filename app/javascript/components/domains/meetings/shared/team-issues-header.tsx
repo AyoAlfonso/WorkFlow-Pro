@@ -42,7 +42,7 @@ export const TeamIssuesHeader = ({
 
   return (
     <HeaderContainer>
-      <HeaderText> {issuesText || t("issues.title") || "Issues"} </HeaderText>
+      <HeaderText> {issuesText || t("issues.issues") || "Issues"} </HeaderText>
       <FilterContainer>
         <FilterOptions
           onClick={() => setShowOpenIssues(true)}

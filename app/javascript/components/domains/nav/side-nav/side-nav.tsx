@@ -32,6 +32,9 @@ const StyledSideNav = styled.div`
   box-shadow: 0px 3px 6px #00000029;
   display: flex;
   flex-direction: column;
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 type SideBarElementType = {

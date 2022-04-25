@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { Icon } from "../../shared/icon";
 import Popup from "reactjs-popup";
@@ -22,10 +22,25 @@ export const DueDateSelector = ({
 }: IDueDateSelectorProps): JSX.Element => {
   const { t } = useTranslation();
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+  const [spaceBelow, setSpaceBelow] = useState<number>(0);
+  const [spaceRight, setSpaceRight] = useState<number>(0);
+
+  const datePickerRef = useRef(null);
+
+  useEffect(() => {
+    const element = datePickerRef.current;
+
+    const ele = element.getBoundingClientRect();
+    const height = window.innerHeight - ele.bottom;
+    setSpaceBelow(height);
+
+    const width = window.innerWidth - ele.right;
+    setSpaceRight(width);
+  }, [showDatePicker]);
 
   return (
     <Container>
-      <DueDateSelectionContainer>
+      <DueDateSelectionContainer ref={datePickerRef}>
         <Popup
           arrow={false}
           closeOnDocumentClick
@@ -39,7 +54,7 @@ export const DueDateSelector = ({
           onClose={() => {}}
           onOpen={() => {}}
           open={showDatePicker}
-          position="bottom right"
+          position={spaceBelow < 380 ? "top center" : "bottom center"}
           trigger={
             <DueDateButtonContainer
               onClick={() => {
@@ -100,7 +115,7 @@ const Container = styled.div`
 
 type IDueDateButtonContainer = {
   dateSelected?: boolean;
-}
+};
 
 const DueDateButtonContainer = styled.div<IDueDateButtonContainer>`
   display: flex;
@@ -125,4 +140,8 @@ const TextContainer = styled.div`
 const DueDateSelectionContainer = styled.div`
   border-radius: 6px;
   margin-left: 15px;
+
+  @media only screen and (max-width: 768px) {
+    margin-left: 8px;
+  }
 `;
