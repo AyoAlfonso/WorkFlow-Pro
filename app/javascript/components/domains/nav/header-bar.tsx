@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { Avatar } from "../../shared/avatar";
 import { Icon } from "../../shared/icon";
 import { Heading, Text } from "../../shared";
+import { Button } from "~/components/shared/button";
 import { CreateIssueModal } from "../issues/create-issue-modal";
 import { IssuesBody } from "../issues/issues-body";
 import { KeyActivitiesBody } from "../key-activities/key-activities-body";
@@ -108,6 +109,8 @@ export const HeaderBar = observer(
       };
     }, [showProfileNav]);
 
+    const locationPath = location.pathname.split("/");
+
     const renderUserAvatar = (size = 48) => {
       return (
         <Avatar
@@ -197,6 +200,20 @@ export const HeaderBar = observer(
               <StyledHeading type={"h1"}>
                 <HeaderText location={location} />
               </StyledHeading>
+              {locationPath[1] === "check-in" && (
+                <CheckInButtonContainer>
+                  <Button
+                    variant="primary"
+                    style={{ display: "flex" }}
+                    onClick={() => console.log("do something")}
+                    width="max-content"
+                    small
+                  >
+                    <Icon icon={"Plus"} size={"16px"} iconColor={"white"} mr="0.5em" />
+                    New Check-in
+                  </Button>
+                </CheckInButtonContainer>
+              )}
             </ActionsContainer>
             <PersonalInfoContainer ref={accountActionRef}>
               <KeyActivitiesButtonContainer>
@@ -676,5 +693,12 @@ const MobileLeftContainer = styled.div`
   @media only screen and (max-width: 768px) {
     width: 20%;
     display: flex;
+  }
+`;
+
+const CheckInButtonContainer = styled.div`
+  margin-left: 32px;
+  @media only screen and (max-width: 768px) {
+    display: none;
   }
 `;

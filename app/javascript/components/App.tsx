@@ -53,12 +53,13 @@ import { ForumWelcomeModal } from "./shared/forum-welcome-modal";
 import { OnboardingModal } from "./domains/onboarding";
 
 import { Onboarding } from "./domains/onboarding";
-import { CheckIn } from "./domains/check-in/checkin";
+import { WeeklyCheckIn } from "./domains/check-in/weekly-checkin";
 import { DummyCheckin } from "./domains/check-in/dummy-checkin";
 import { useEffect } from "react";
 import { getWeekOf } from "~/utils/date-time";
 import { CheckInSuccess } from "./domains/check-in/components/checkin-success";
 import { ForgotPasswordForm } from "./domains/user/forgot-password-form";
+import { CheckIn } from "./domains/check-in/check-in-index";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -250,6 +251,7 @@ export const App = observer(
                       "/meetings/section_1/:team_id",
                       "/meetings/section_2",
                       "/meetings/section_2/:team_id",
+                      "/check-in",
                       // "/static-planner",
                       // "/static-goals",
                       // "/static-scorecards",
@@ -318,6 +320,10 @@ export const App = observer(
                             <Route exact path="/meetings/section_2/:team_id" component={Section2} />
                           </>
                         )}
+
+                        {profile.productFeatures && profile.productFeatures.checkIn && (
+                          <Route exact path="/check-in" component={CheckIn} />
+                        )}
                       </Container>
                     </>
                   </Route>
@@ -341,7 +347,11 @@ export const App = observer(
                     </>
                   </Route>
                   <>
-                    <Route exact path="/weekly-check-in/:userId/:weekOf" component={CheckIn} />
+                    <Route
+                      exact
+                      path="/weekly-check-in/:userId/:weekOf"
+                      component={WeeklyCheckIn}
+                    />
                     <Route exact path="/check-in/success" component={CheckInSuccess} />
                   </>
                 </Switch>
