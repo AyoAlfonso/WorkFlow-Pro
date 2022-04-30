@@ -124,7 +124,7 @@ export const Templates = observer(
                     placeholder="Enter your Objectives Templates"
                     value={objectivesTemplate?.body.body || ""}
                     onChange={(content, delta, source, editor) => {
-                      objectivesTemplate?.body.body = editor.getHTML();
+                      objectivesTemplate.body.body = editor.getHTML();
                       setObjectivesTemplate(objectivesTemplate);
                       setObjectivesTemplateBody({
                         id: objectivesTemplate.id,
@@ -143,7 +143,7 @@ export const Templates = observer(
                     placeholder="Enter your Initiatives Templates"
                     value={initiativesTemplate?.body.body || ""}
                     onChange={(content, delta, source, editor) => {
-                      initiativesTemplate?.body.body = editor.getHTML();
+                      initiativesTemplate.body.body = editor.getHTML();
                       setInitiativesTemplate(initiativesTemplate);
                       setInitiativesTemplateBody({
                         id: initiativesTemplate.id,
@@ -161,9 +161,9 @@ export const Templates = observer(
                       toolbar: DndItems,
                     }}
                     placeholder="Enter your KPI Templates"
-                    value={kpiTemplate?.body.body || ""}
+                    value={kpiTemplate.body.body || ""}
                     onChange={(content, delta, source, editor) => {
-                      kpiTemplate?.body.body = editor.getHTML();
+                      kpiTemplate.body.body = editor.getHTML();
                       setKPITemplate(kpiTemplate);
                       setKPITemplateBody({
                         id: kpiTemplate.id,

@@ -23,7 +23,7 @@ class Habit < ApplicationRecord
 
   # Builds weekly log objects for days of the week that don't have log
   def current_week_logs
-    (0..4).map do |index|
+    (0..6).map do |index|
       date = (self.user.convert_to_their_timezone - index.days).to_date
       self.habit_logs.find { |wl| wl.log_date == date } ||
         HabitLog.new(
