@@ -22,19 +22,23 @@ export const TeamSelectionDropdown = observer(
   ({ teamsList, onTeamSelect }: ITeamSelectionDropdownProps): JSX.Element => {
     const { teamStore } = useMst();
     const [value, setValue] = useState<any>(null);
-    
+
     return (
       <ActionDropdownContainer marginLeft="0px">
         <Autocomplete
           value={value}
           onChange={(event, newValue) => {
             if (newValue.inputValue) {
-              return teamStore.createTeamAndInviteUsers(newValue.inputValue, {}).then(response => {
-                showToast("Team created", ToastMessageConstants.SUCCESS);
-                const newTeam = response.find(team => team.name === newValue.inputValue);
-                setValue(newTeam);
-                onTeamSelect(newTeam?.id);
-              });
+              return teamStore
+                .createTeamAndInviteUsers(newValue.inputValue, null, {
+                  note: `Created Team and invited users via the team module on settings page `,
+                })
+                .then(response => {
+                  showToast("Team created", ToastMessageConstants.SUCCESS);
+                  const newTeam = response.find(team => team.name === newValue.inputValue);
+                  setValue(newTeam);
+                  onTeamSelect(newTeam?.id);
+                });
             }
             setValue(newValue);
             onTeamSelect(newValue?.id);

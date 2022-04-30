@@ -1,7 +1,10 @@
 import { create, ApisauceInstance } from "apisauce";
 import { camelizeResponse, decamelizeRequest } from "../utils";
 import * as R from "ramda";
-
+//  `?note=${getNote(metadata)}`;
+function getNote(metadata: any) {
+  return metadata?.note || "";
+}
 interface IScorecardProps {
   ownerType: string;
   ownerId: number;
@@ -83,28 +86,33 @@ export class Api {
     return response;
   }
 
-  async updateUser(formData) {
-    return this.client.patch(`/users/${formData.id}`, formData);
+  async updateUser(formData, metadata) {
+    return this.client.patch(`/users/${formData.id}?note=${getNote(metadata)}`, formData);
   }
 
-  async updateUserTeamLeadRole(userId, teamId, role) {
-    return this.client.patch(`/update_user_team_lead_role`, { userId, teamId, role });
+  async updateUserTeamLeadRole(userId, teamId, role, metadata) {
+    return this.client.patch(`/update_user_team_lead_role`, { userId, teamId, role }, metadata);
   }
 
-  async updateUserTeamManager(userId, teamId, status) {
-    return this.client.patch(`/update_user_team_manager`, { userId, teamId, status });
+  async updateUserTeamManager(userId, teamId, status, metadata) {
+    return this.client.patch(`/update_user_team_manager?note=${getNote(metadata)}`, {
+      userId,
+      teamId,
+      status,
+      metadata,
+    });
   }
 
   async updateUserCompanyFirstTimeAccess(params) {
     return this.client.patch(`/update_company_first_time_access`, params);
   }
 
-  async updateAvatar(formData) {
-    return this.client.patch("/avatar", formData);
+  async updateAvatar(formData, metadata) {
+    return this.client.patch(`/avatar?note=${getNote(metadata)}`, formData);
   }
 
-  async deleteAvatar() {
-    return this.client.delete("/avatar");
+  async deleteAvatar(metadata) {
+    return this.client.delete(`/avatar?note=${getNote(metadata)}`);
   }
 
   async getCompany(companyId) {
@@ -115,16 +123,16 @@ export class Api {
     return this.client.post(`/companies`, formData);
   }
 
-  async updateCompany(formData) {
-    return this.client.patch(`/companies/${formData.id}`, formData);
+  async updateCompany(formData, metadata) {
+    return this.client.patch(`/companies/${formData.id}?note=${getNote(metadata)}`, formData);
   }
 
-  async updateCompanyLogo(companyId, formData) {
-    return this.client.patch(`/companies/${companyId}/logo`, formData);
+  async updateCompanyLogo(companyId, formData, metadata) {
+    return this.client.patch(`/companies/${companyId}/logo?note=${getNote(metadata)}`, formData);
   }
 
-  async deleteLogo(companyId) {
-    return this.client.delete(`/companies/${companyId}/logo`);
+  async deleteLogo(companyId, metadata) {
+    return this.client.delete(`/companies/${companyId}/logo?note=${getNote(metadata)}`);
   }
 
   async getOnboardingCompany() {
@@ -155,12 +163,12 @@ export class Api {
     return this.client.post(`/users`, formData);
   }
 
-  async deactivateUser(userId) {
-    return this.client.delete(`/users/${userId}`);
+  async deactivateUser(userId, metadata) {
+    return this.client.delete(`/users/${userId}?note=${getNote(metadata)}`);
   }
 
-  async resendInvitation(userId) {
-    return this.client.patch(`/users/${userId}/resend_invitation`, {});
+  async resendInvitation(userId, metadata) {
+    return this.client.patch(`/users/${userId}/resend_invitation?note=${getNote(metadata)}`, {});
   }
 
   async signOut() {
@@ -468,16 +476,16 @@ export class Api {
     return this.client.get(`/teams/${id}`);
   }
 
-  async updateTeam(teamId, teamName, users) {
-    return this.client.patch(`/teams/${teamId}`, { teamName, users });
+  async updateTeam(teamId, teamName, users, metadata) {
+    return this.client.patch(`/teams/${teamId}?note=${getNote(metadata)}`, { teamName, users });
   }
 
-  async updateTeamSettings(formData) {
-    return this.client.patch(`/teams/${formData.id}`, formData);
+  async updateTeamSettings(formData, metadata) {
+    return this.client.patch(`/teams/${formData.id}?note=${getNote(metadata)}`, formData);
   }
 
-  async deleteTeam(id) {
-    return this.client.delete(`/teams/${id}`);
+  async deleteTeam(id, metadata) {
+    return this.client.delete(`/teams/${id}?note=${getNote(metadata)}`);
   }
 
   async getMeetingTemplates() {
@@ -488,12 +496,18 @@ export class Api {
     return this.client.get(`/description_templates`);
   }
 
-  async updateDescriptiveTemplates(descriptionTemplates) {
-    return this.client.post(`/description_templates/create_templates`, descriptionTemplates);
+  async updateDescriptiveTemplates(descriptionTemplates, metadata) {
+    return this.client.post(
+      `/description_templates/create_templates?note=${getNote(metadata)}`,
+      descriptionTemplates,
+    );
   }
 
-  async updateDescriptiveTemplatesBody(formData) {
-    return this.client.patch(`/description_templates/update_templates`, formData);
+  async updateDescriptiveTemplatesBody(formData, metadata) {
+    return this.client.patch(
+      `/description_templates/update_templates?note=${getNote(metadata)}`,
+      formData,
+    );
   }
 
   async deleteDescriptionTemplates(id) {
@@ -543,8 +557,8 @@ export class Api {
     return this.client.get(`/notifications`);
   }
 
-  async updateNotification(notification) {
-    return this.client.put(`/notifications/${notification.id}`, {
+  async updateNotification(notification, metadata) {
+    return this.client.put(`/notifications/${notification.id}?note=${getNote(metadata)}`, {
       notification: notification,
     });
   }
@@ -598,12 +612,18 @@ export class Api {
     return this.client.post(`/labels`, { labelObject });
   }
 
-  async inviteUsersToCompany(emailAddresses, teamId) {
-    return this.client.post(`/invite_users_to_company`, { emailAddresses, teamId });
+  async inviteUsersToCompany(emailAddresses, teamId, metadata) {
+    return this.client.post(`/invite_users_to_company?note=${getNote(metadata)}`, {
+      emailAddresses,
+      teamId,
+    });
   }
 
-  async createTeamAndInviteUsers(teamName, users) {
-    return this.client.post(`/create_team_and_invite_users`, { teamName, users });
+  async createTeamAndInviteUsers(teamName, users, metadata) {
+    return this.client.post(`/create_team_and_invite_users?note=${getNote(metadata)}`, {
+      teamName,
+      users,
+    });
   }
 
   async getEmotionAdjectives() {

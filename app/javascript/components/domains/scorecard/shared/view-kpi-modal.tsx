@@ -16,6 +16,7 @@ import { baseTheme } from "~/themes/base";
 import { getScorePercent } from "../scorecard-table-view";
 import { MiniUpdateKPIModal } from "./update-kpi-modal";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
 import { OwnedBySection } from "~/components/domains/goals/shared/owned-by-section";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import { toJS } from "mobx";
@@ -517,6 +518,9 @@ export const ViewEditKPIModal = observer(
                       }}
                       className="trix-kpi-modal"
                       theme="snow"
+                      modules={{
+                        toolbar: DndItems,
+                      }}
                       value={description}
                       onChange={(content, delta, source, editor) => {
                         setDescription(editor.getHTML());

@@ -14,7 +14,7 @@ import { Icon } from "~/components/shared";
 import { Container, HeaderContainer, HeaderText } from "../container-styles";
 import { observer } from "mobx-react";
 import { EditNotification } from "./";
-import {getNoticationName} from "./"
+import { getNoticationName } from "./";
 import * as R from "ramda";
 
 export const Notifications = observer(
@@ -69,14 +69,16 @@ const NotificationTableRow = observer(
       } else {
         notification.changeMethod("disabled");
       }
-      notificationStore.update(notification);
+      notificationStore.update(notification, {
+        note: "Updated notifications on settings module",
+      });
     };
 
     const { method, notificationType, validations } = notification;
     return (
       <NotificationTableRowContainer>
         <NotificationTableRowColumn width={"30%"}>
-         { getNoticationName(notificationType)}
+          {getNoticationName(notificationType)}
         </NotificationTableRowColumn>
         <NotificationTableRowColumn width={"40%"}>
           {`${validations[0].dayOfWeek} @ ${validations[0].timeOfDay}`}

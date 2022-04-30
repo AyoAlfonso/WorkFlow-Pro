@@ -1,6 +1,8 @@
 class Api::CompaniesController < Api::ApplicationController
   include TeamUserEnablementAttributeParser
+  include UserActivityLogHelper
   respond_to :json
+  after_action :record_activities, only: [:create, :update_logo, :delete_logo, :update, :destroy, :create_or_update_onboarding_goals, :create_or_update_onboarding_key_activities, :create_or_update_onboarding_team]
   before_action :set_company, only: [:show, :update, :update_logo, :delete_logo]
   before_action :set_onboarding_company, only: [:create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
   skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]

@@ -49,7 +49,10 @@ export const Users = observer(
 
     const { t } = useTranslation();
 
-    const resend = userId => userStore.resendInvitation(userId);
+    const resend = userId =>
+      userStore.resendInvitation(userId, {
+        note: `Resent user invitation via the users module on settings page `,
+      });
 
     const usersData = R.flatten(
       [].concat(

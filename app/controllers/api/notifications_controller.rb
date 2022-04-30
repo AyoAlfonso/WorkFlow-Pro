@@ -1,5 +1,7 @@
 class Api::NotificationsController < Api::ApplicationController
   respond_to :json
+  include UserActivityLogHelper
+  after_action :record_activities, only: [:update]
   before_action :set_notifications, only: [:index]
   before_action :set_notification, only: [:update]
 
@@ -26,5 +28,9 @@ class Api::NotificationsController < Api::ApplicationController
 
   def notification_params
     params.require(:notification).permit(:method, validations: [:time_of_day, :day_of_week])
+  end
+
+  def record_activities
+    record_activity(params[:note])
   end
 end

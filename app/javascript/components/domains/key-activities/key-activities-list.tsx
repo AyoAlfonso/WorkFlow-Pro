@@ -15,6 +15,15 @@ interface IKeyActivitiesListProps {
   loading?: boolean;
 }
 
+function getStyle(style, snapshot) {
+  if (!snapshot.isDropAnimating) {
+    return style;
+  }
+  return {
+    ...style,
+
+  };
+}
 export const KeyActivitiesList = observer(
   ({ keyActivities, droppableId, loading }: IKeyActivitiesListProps): JSX.Element => {
     const splittedDroppableId = droppableId.split("-");
@@ -24,7 +33,7 @@ export const KeyActivitiesList = observer(
 
     const { keyActivityStore } = useMst();
 
-    if (loading) {
+    if (loading && keyActivityStore.loading) {
       return (
         <LoadingContainer>
           <Loading />
@@ -68,12 +77,14 @@ export const KeyActivitiesList = observer(
     };
 
     return (
+      // <></>
       <KeyActivitiesListStyleContainer>
         <Droppable droppableId={droppableId} key={"keyActivity"}>
           {(provided, snapshot) => (
             <KeyActivitiesContainer
               ref={provided.innerRef}
               isDraggingOver={snapshot.isDraggingOver}
+              // style={getStyle(provided.draggableProps.style, snapshot)}
             >
               {renderKeyActivitiesList()}
               {provided.placeholder}
@@ -121,6 +132,7 @@ export const KeyActivitiesWrapperContainer = styled.div<ContainerProps>`
 
 export const KeyActivitiesListContainer = styled.div`
   height: 100%;
+  transition-duration: 1s;
 `;
 
 //column stles and subheader styles match row-styles in overall,

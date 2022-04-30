@@ -65,17 +65,25 @@ export const ModifyTeamBody = observer(
 
     const updateTeam = () => {
       if (team) {
-        teamStore.updateTeam(team.id, teamName, memberListState).then(() => {
-          setModalOpen(false);
-          userStore.load();
-        });
+        teamStore
+          .updateTeam(team.id, teamName, memberListState, {
+            note: `Updated Team via the team module on settings page `,
+          })
+          .then(() => {
+            setModalOpen(false);
+            userStore.load();
+          });
       } else {
-        teamStore.createTeamAndInviteUsers(teamName, memberListState).then(() => {
-          showToast("Team created", ToastMessageConstants.SUCCESS);
-          showToast("Invites sent", ToastMessageConstants.SUCCESS);
-          setModalOpen(false);
-          teamStore.load();
-        });
+        teamStore
+          .createTeamAndInviteUsers(teamName, memberListState, {
+            note: `Created Team and invited users via the team module on settings page `,
+          })
+          .then(() => {
+            showToast("Team created", ToastMessageConstants.SUCCESS);
+            showToast("Invites sent", ToastMessageConstants.SUCCESS);
+            setModalOpen(false);
+            teamStore.load();
+          });
       }
     };
 
@@ -157,7 +165,9 @@ export const ModifyTeamBody = observer(
               variant={"redOutline"}
               onClick={() => {
                 if (confirm(`Are you sure you want to delete this team?`)) {
-                  teamStore.deleteTeam(team.id);
+                  teamStore.deleteTeam(team.id, {
+                    note: `Deleted Team via the teams module on settings page `,
+                  });
                 }
               }}
             >

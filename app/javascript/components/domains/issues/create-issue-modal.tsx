@@ -14,6 +14,7 @@ import {
   IssuePynModalContainer,
 } from "~/components/shared/styles/modals";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
 import { UserSelectionDropdownList, Loading, LabelSelection, Icon } from "~/components/shared";
 import { PrioritySelector } from "~/components/shared/issues-and-key-activities/priority-selector";
 import { DueDateSelector } from "~/components/shared/issues-and-key-activities/due-date-selector";
@@ -88,7 +89,9 @@ export const CreateIssueModal = ({
 
   const formattedTopicType = topicType === "round_table" ? "round table" : topicType;
 
-  const isDisabled = isForum ? issueDescription.length == 0 || !topicType : issueDescription.length == 0;
+  const isDisabled = isForum
+    ? issueDescription.length == 0 || !topicType
+    : issueDescription.length == 0;
 
   return (
     <ModalWithHeader
@@ -147,6 +150,9 @@ export const CreateIssueModal = ({
           <ReactQuill
             className="trix-objective-modal"
             theme="snow"
+            modules={{
+              toolbar: DndItems,
+            }}
             placeholder={"Description"}
             value={description}
             onChange={(content, delta, source, editor) => {

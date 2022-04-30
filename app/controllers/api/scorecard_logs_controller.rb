@@ -1,5 +1,7 @@
 class Api::ScorecardLogsController < Api::ApplicationController
   include StatsHelper
+  include UserActivityLogHelper
+  after_action :record_activities, only: [:create, :destroy]
   respond_to :json
   before_action :set_scorecard_log, only: [:destroy]
 
@@ -134,4 +136,8 @@ class Api::ScorecardLogsController < Api::ApplicationController
   def reset_year_to_upper_limit_or_lower_limit(proposed_year, lower_limit, upper_limit)   
      proposed_year <= lower_limit ? lower_limit : upper_limit
   end
+
+  def record_activities
+    record_activity(params[:note])
+  end 
 end

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import styled from "styled-components";
 import { useMst } from "~/setup/root";
 import { observer } from "mobx-react";
@@ -31,6 +31,7 @@ export const ParkingLotIssues = observer(
         closedMeetingScheduledTeamIssues,
         sortIssuesByPriority,
       },
+      issueStore,
     } = useMst();
     const { t } = useTranslation();
 
@@ -41,6 +42,8 @@ export const ParkingLotIssues = observer(
       },
     ];
 
+    const { loading, teamIssues } = issueStore;
+
     const handleSortMenuItemClick = value => {
       setSortOptionsOpen(false);
       sortIssuesByPriority({
@@ -50,18 +53,26 @@ export const ParkingLotIssues = observer(
       });
     };
 
-    const renderIssuesList = (): Array<JSX.Element> => {
+    const issuesData = useMemo(() => {
       const issues = showOpenIssues
         ? openMeetingParkingLotTeamIssues
         : closedMeetingParkingLotTeamIssues;
       const startIndex = showOpenIssues
         ? openMeetingScheduledTeamIssues.length
         : closedMeetingScheduledTeamIssues.length;
+      return { issues, startIndex };
+    }, [
+      showOpenIssues,
+      openMeetingParkingLotTeamIssues,
+      closedMeetingParkingLotTeamIssues,
+      closedMeetingScheduledTeamIssues,
+    ]);
 
-      return issues.map((teamIssue, index) => (
+    const renderIssuesList = (): Array<JSX.Element> => {
+      return issuesData.issues.map((teamIssue, index) => (
         <Draggable
           draggableId={`team_issue-${teamIssue.id}:meeting_id-${upcomingForumMeeting.id}`}
-          index={startIndex + index}
+          index={issuesData.startIndex + index}
           key={teamIssue["id"]}
           type={"team-issue"}
         >
@@ -125,7 +136,11 @@ export const ParkingLotIssues = observer(
           </AddNewIssueContainer>
           <Droppable droppableId="team-parking-lot-issues" key={"issue"}>
             {(provided, snapshot) => (
-              <IssuesContainer ref={provided.innerRef} isDraggingOver={snapshot.isDraggingOver}>
+              <IssuesContainer
+                ref={provided.innerRef}
+                isDraggingOver={snapshot.isDraggingOver}
+                {...provided.droppableProps}
+              >
                 {renderIssuesList()}
                 {provided.placeholder}
               </IssuesContainer>
@@ -190,6 +205,9 @@ export const AddNewIssueContainer = styled(HomeContainerBorders)`
   }
 `;
 
+export const DraggableItem = styled(Draggable)`
+  width: 100%;
+`;
 export const IssuesContainer = styled.div<IssuesContainerType>`
   background-color: ${props =>
     props.isDraggingOver ? props.theme.colors.backgroundBlue : "white"};

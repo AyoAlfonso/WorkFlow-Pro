@@ -22,6 +22,7 @@ import {
 import { CommentLogs } from "../shared-issues-key-activities/comment-logs";
 import { StyledInput, FormElementContainer } from "../scorecard/shared/modal-elements";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
 import { OwnedBySection } from "../goals/shared/owned-by-section";
 import { OwnedBy } from "../scorecard/shared/scorecard-owned-by";
 import moment from "moment";
@@ -537,6 +538,9 @@ export const IssueModalContent = observer(
               }}
               className="trix-objective-modal"
               theme="snow"
+              modules={{
+                toolbar: DndItems,
+              }}
               placeholder={"Add a description..."}
               value={description}
               onChange={(content, delta, source, editor) => {

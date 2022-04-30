@@ -24,6 +24,7 @@ import { addDays, parseISO } from "date-fns";
 import Popup from "reactjs-popup";
 import { Calendar } from "react-date-range";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
 import { OwnedBySection } from "../goals/shared/owned-by-section";
 import { OwnedBy } from "../scorecard/shared/scorecard-owned-by";
 import moment from "moment";
@@ -498,6 +499,9 @@ export const KeyActivityModalContent = observer(
               }}
               className="trix-objective-modal"
               theme="snow"
+              modules={{
+                toolbar: DndItems,
+              }}
               placeholder={"Add a description..."}
               value={description}
               onChange={(content, delta, source, editor) => {

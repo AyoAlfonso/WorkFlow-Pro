@@ -6,7 +6,7 @@ import { Calendar } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import ReactQuill from "react-quill";
-
+import { DndItems } from "~/components/shared/dnd-editor";
 
 import { Dropzone } from "./dropzone";
 import { DropzoneWithCropper } from "./dropzone-with-cropper";
@@ -201,6 +201,9 @@ export const FormBuilder = ({
           <ReactQuill
             className="custom-trix-class trix-editor-onboarding"
             theme="snow"
+            modules={{
+              toolbar: DndItems,
+            }}
             placeholder={placeholder ? placeholder : ""}
             value={R.pathOr("", formKeys, formData)}
             onChange={(content, delta, source, editor) => {

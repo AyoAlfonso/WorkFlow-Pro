@@ -46,9 +46,9 @@ export const UserStoreModel = types
       } catch {}
       return false;
     }),
-    resendInvitation: flow(function*(userId) {
+    resendInvitation: flow(function*(userId, metadata) {
       try {
-        const response: any = yield self.environment.api.resendInvitation(userId);
+        const response: any = yield self.environment.api.resendInvitation(userId, metadata);
         if (response.ok) {
           showToast("Invitation resent", ToastMessageConstants.SUCCESS);
         }
@@ -65,12 +65,15 @@ export const UserStoreModel = types
       self.reset();
       yield self.fetchUsers();
     }),
-    updateUser: flow(function*(formData) {
+    updateUser: flow(function*(formData, metadata = {}) {
       try {
-        const response: any = yield self.environment.api.updateUser({
-          user: formData,
-          id: formData.id,
-        });
+        const response: any = yield self.environment.api.updateUser(
+          {
+            user: formData,
+            id: formData.id,
+          },
+          metadata,
+        );
         if (response.ok) {
           const { sessionStore } = getRoot(self);
           //if user updated is self, update profile as well
@@ -85,9 +88,9 @@ export const UserStoreModel = types
         }
       } catch {}
     }),
-    deactivateUser: flow(function*(userId) {
+    deactivateUser: flow(function*(userId, metadata = {}) {
       try {
-        const response: any = yield self.environment.api.deactivateUser(userId);
+        const response: any = yield self.environment.api.deactivateUser(userId, metadata);
         //update the user in the array
         self.setUserInUsers(response.data);
         if (response.ok) {
@@ -97,8 +100,13 @@ export const UserStoreModel = types
       } catch {}
       return false;
     }),
-    updateUserTeamLeadRole: flow(function*(userId, teamId, role) {
-      const response: any = yield self.environment.api.updateUserTeamLeadRole(userId, teamId, role);
+    updateUserTeamLeadRole: flow(function*(userId, teamId, role, metadata) {
+      const response: any = yield self.environment.api.updateUserTeamLeadRole(
+        userId,
+        teamId,
+        role,
+        metadata,
+      );
       if (response.ok) {
         const userIndex = self.users.findIndex(user => user.id == userId);
         self.users[userIndex] = response.data;
@@ -106,11 +114,12 @@ export const UserStoreModel = types
         return true;
       }
     }),
-    updateUserTeamManagerStatus: flow(function*(userId, teamId, status) {
+    updateUserTeamManagerStatus: flow(function*(userId, teamId, status, metadata) {
       const response: any = yield self.environment.api.updateUserTeamManager(
         userId,
         teamId,
         status,
+        metadata,
       );
       if (response.ok) {
         const userIndex = self.users.findIndex(user => user.id == userId);

@@ -20,6 +20,7 @@ import { toJS } from "mobx";
 import { CreateGoalSection } from "../shared/create-goal-section";
 import { sortByDate } from "~/utils/sorting";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
 import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-elements";
 import { ActivityLogs } from "../shared/activity-logs";
 import { getWeekOf } from "~/utils/date-time";
@@ -301,6 +302,9 @@ export const QuarterlyGoalModalContent = observer(
               }}
               className="trix-initiative-modal"
               theme="snow"
+              modules={{
+                toolbar: DndItems,
+              }}
               placeholder={"Add a description..."}
               value={description}
               onChange={(content, delta, source, editor) => {

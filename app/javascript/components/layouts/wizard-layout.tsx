@@ -104,13 +104,16 @@ export const WizardLayout = ({
       ))
     );
   };
-  
+
   const renderBodyComponents = (): JSX.Element => {
     const hasRightBodyComponent = !R.isNil(R.path([currentStep], rightBodyComponents));
     return (
       singleComponent || (
         <>
-          <LeftBodyContainer LongerWidth={Onboarding && currentStep == 1} fullWidth={!hasRightBodyComponent}>
+          <LeftBodyContainer
+            LongerWidth={Onboarding && currentStep == 1}
+            fullWidth={!hasRightBodyComponent}
+          >
             {leftBodyComponents[currentStep]}
           </LeftBodyContainer>
           {hasRightBodyComponent && (
@@ -209,6 +212,9 @@ const MobileButtonContainer = styled.div`
 const DescriptionContainer = styled.div`
   min-width: 320px;
   width: 25%;
+  overflow: hidden;
+  // -ms-overflow-style: none;
+  // scrollbar-width: none;
   background-color: ${props => props.theme.colors.backgroundGrey};
   display: flex;
   flex-direction: column;
@@ -221,8 +227,8 @@ const DescriptionBody = styled.div`
   padding-left: 10%;
   padding-right: 10%;
   margin-top: 32px;
-  overflow: scroll;
-  // height: 85%;
+  // overflow: hidden;
+  // scrollbar-width: none;
 `;
 
 type BodyContainerProps = {

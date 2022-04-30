@@ -1,6 +1,6 @@
 class Api::UserPulsesController < Api::ApplicationController
   respond_to :json
-
+  
   def user_pulse_by_date
     date = current_user.convert_to_their_timezone(params[:date].to_date)
     @user_pulse = current_user.user_pulse_for_display(date)

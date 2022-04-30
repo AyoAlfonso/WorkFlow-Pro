@@ -95,7 +95,12 @@ export const EditUserModal = ({
   const updateUser = () => {
     if (!R.isNil(userId)) {
       userStore
-        .updateUser({ id: userId, email, firstName, lastName, teams, title, userRoleId })
+        .updateUser(
+          { id: userId, email, firstName, lastName, teams, title, userRoleId },
+          {
+            note: `Updated User profile via the Company Users module  on settings page `,
+          },
+        )
         .then(() => {
           teamStore.fetchTeams();
         });
@@ -104,12 +109,16 @@ export const EditUserModal = ({
 
   const deactivateUser = () => {
     if (!R.isNil(userId)) {
-      userStore.deactivateUser(userId).then(success => {
-        if (success == true) {
-          setEditUserModalOpen(false);
-          resetUser();
-        }
-      });
+      userStore
+        .deactivateUser(userId, {
+          note: `Deactivated User profile via the Company Users module on settings page `,
+        })
+        .then(success => {
+          if (success == true) {
+            setEditUserModalOpen(false);
+            resetUser();
+          }
+        });
     }
   };
 

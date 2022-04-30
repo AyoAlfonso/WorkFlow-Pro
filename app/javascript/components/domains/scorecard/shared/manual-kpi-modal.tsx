@@ -20,6 +20,7 @@ import {
 } from "./modal-elements";
 import { toJS } from "mobx";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
 import { useHistory } from "react-router";
 import { RoleNormalUser } from "~/lib/constants";
 
@@ -242,6 +243,9 @@ export const ManualKPIModal = observer(
                 <ReactQuill
                   className="trix-kpi-modal"
                   theme="snow"
+                  modules={{
+                    toolbar: DndItems,
+                  }}
                   value={description}
                   onChange={(content, delta, source, editor) => {
                     setDescription(editor.getHTML());

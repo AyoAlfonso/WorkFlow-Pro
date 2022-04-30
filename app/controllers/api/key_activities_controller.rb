@@ -1,6 +1,6 @@
 class Api::KeyActivitiesController < Api::ApplicationController
   include UserActivityLogHelper
-  after_action :record_activities, only: [:create, :update, :destroy, :duplicate, :created_in_meeting]
+  after_action :record_activities, only: [:create, :update, :destroy, :duplicate, :created_in_meeting, :update_multiple]
   before_action :set_key_activity, only: [:update, :destroy, :duplicate]
   after_action :verify_authorized, except: [:index, :created_in_meeting, :resort_index, :update_multiple], unless: :skip_pundit?
 
@@ -49,6 +49,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def update
+    # binding.pry
     @key_activity_previously_completed = @key_activity.completed_at.present?
     merged_key_activity_params = params[:label_list].present? ? key_activity_params.merge(label_list: ActsAsTaggableOn::Tag.find(params[:label_list]) || params[:label_list]) : key_activity_params
 
@@ -154,6 +155,6 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def record_activities
-    record_activity("")
+    record_activity(params[:note])
   end 
 end

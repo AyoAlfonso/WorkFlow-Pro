@@ -18,6 +18,7 @@ import { TextInput } from "../../shared/text-input";
 import { PrioritySelector } from "~/components/shared/issues-and-key-activities/priority-selector";
 import { DueDateSelector } from "~/components/shared/issues-and-key-activities/due-date-selector";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
 import { ScheduledGroupSelector } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
 
 interface ICreateKeyActivityModalProps {
@@ -128,6 +129,9 @@ export const CreateKeyActivityModal = (props: ICreateKeyActivityModalProps): JSX
           <ReactQuill
             className="trix-objective-modal"
             theme="snow"
+            modules={{
+              toolbar: DndItems,
+            }}
             placeholder={"Description"}
             value={description}
             onChange={(content, delta, source, editor) => {

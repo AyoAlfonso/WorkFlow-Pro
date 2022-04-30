@@ -163,6 +163,7 @@ export const KeyActivityStoreModel = types
         value,
         fromTeamMeeting,
       );
+      self.loading = true;
       if (response.ok) {
         const { createdFor, keyActivities, completedList } = response.data;
         if (createdFor == "meeting") {
@@ -174,8 +175,10 @@ export const KeyActivityStoreModel = types
             self.incompleteKeyActivities = keyActivities;
           }
         }
+        self.finishLoading();
         return true;
       } else {
+        self.finishLoading();
         return false;
       }
     }),
@@ -211,7 +214,8 @@ export const KeyActivityStoreModel = types
         ...keyActivityObject,
         fromTeamMeeting,
       });
-      self.finishLoading();
+      self.loading = true;
+
       if (response.ok) {
         const { createdFor, keyActivities, completedList } = response.data;
         if (createdFor == "meeting") {
@@ -223,8 +227,10 @@ export const KeyActivityStoreModel = types
             self.incompleteKeyActivities = keyActivities;
           }
         }
+        self.finishLoading();
         return true;
       } else {
+        self.finishLoading();
         return false;
       }
     }),

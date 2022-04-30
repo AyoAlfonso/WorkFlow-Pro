@@ -46,6 +46,9 @@ export const TeamSettings = ({ team }: ITeamSettings): JSX.Element => {
         settings,
       },
       true,
+      {
+        note: `Updated Team Settings via team module on settings page `,
+      },
     );
   };
   const handleToggleChange = () => {
@@ -53,10 +56,16 @@ export const TeamSettings = ({ team }: ITeamSettings): JSX.Element => {
     if (toggleChecked == false) {
       saveSettings(null);
     }
-    teamStore.updateTeamSettings({
-      id: team.id,
-      customScorecard: !toggleChecked,
-    });
+    teamStore.updateTeamSettings(
+      {
+        id: team.id,
+        customScorecard: !toggleChecked,
+      },
+      null,
+      {
+        note: `Toggled the Team setting to use own embedded scorecard via team module on settings page `,
+      },
+    );
   };
 
   return (

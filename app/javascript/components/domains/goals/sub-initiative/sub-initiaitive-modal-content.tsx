@@ -16,6 +16,7 @@ import { ShowMilestonesButton } from "../shared-quarterly-goal-and-sub-initiativ
 import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-elements";
 import { toJS } from "mobx";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
 import { ActivityLogs } from "../shared/activity-logs";
 import { sortByDate } from "~/utils/sorting";
 import { getWeekOf } from "~/utils/date-time";
@@ -206,6 +207,9 @@ export const SubInitiativeModalContent = observer(
               }}
               className="trix-initiative-modal"
               theme="snow"
+              modules={{
+                toolbar: DndItems,
+              }}
               placeholder={"Add a description..."}
               value={description}
               onChange={(content, delta, source, editor) => {

@@ -9,6 +9,7 @@ import { Select } from "~/components/shared/input";
 import { OwnedBy } from "./scorecard-owned-by";
 import { AdvancedKPIModal } from "./advanced-kpi-modals";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
 import "react-quill/dist/quill.snow.css";
 import { RoleNormalUser } from "~/lib/constants";
 
@@ -212,6 +213,9 @@ export const AddExistingManualKPIModal = observer(
                 <TrixEditorContainer>
                   <ReactQuill
                     theme="snow"
+                    modules={{
+                      toolbar: DndItems,
+                    }}
                     placeholder={"Add a description..."}
                     value={description}
                     onChange={(content, delta, source, editor) => {

@@ -18,7 +18,9 @@ export const EditNotification = observer(
     const { notificationToEdit } = notificationStore;
 
     const updateNotification = notification => {
-      notificationStore.update(notification);
+      notificationStore.update(notification, {
+        note: `Updated notifications on settings module ${notificationToEdit.notificationType}`,
+      });
     };
 
     return (
@@ -127,7 +129,7 @@ const RenderNotificationDayOptions = ({ days }: RenderNotificationDayOptionsProp
         value={notificationDay}
         defaultValue={dayOfWeek}
         disabled={dayOfWeek === "Every Day"}
-        style={{ width: "18.75em"}}
+        style={{ width: "18.75em" }}
       >
         {R.map(
           (day: string) => (
@@ -160,16 +162,16 @@ export const SaveButtonContainer = styled.div`
 
 const BackHeaderText = styled(HeaderText)`
   color: ${props => props.theme.colors.grey100};
-  margin-right: .5em;
+  margin-right: 0.5em;
   cursor: pointer;
 `;
 
 const ChevronRight = styled(Icon)`
   transform: rotate(180deg);
-  margin-right: .5em;
-  margin-top: .25em;
+  margin-right: 0.5em;
+  margin-top: 0.25em;
 `;
 
 const OptionContainer = styled.div`
   margin-right: 1.5em;
-`
+`;

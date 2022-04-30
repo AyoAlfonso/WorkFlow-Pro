@@ -129,6 +129,6 @@ class Api::IssuesController < Api::ApplicationController
   end
   
   def record_activities
-    record_activity("")
+    record_activity(params[:note])
   end 
 end

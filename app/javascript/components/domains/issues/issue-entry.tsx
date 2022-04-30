@@ -558,6 +558,7 @@ const BottomRowContainer = styled("div")`
 const Container = styled.div`
   font-size: 14px;
   padding: 0px 0px 4px 0px;
+  width: 100%;
   border-top: 1px solid ${props => props.theme.colors.greyInactive};
   &: hover {
     background: ${props => props.theme.colors.backgroundGrey};

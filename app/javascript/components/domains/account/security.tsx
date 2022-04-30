@@ -23,10 +23,15 @@ export const Security = (): JSX.Element => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const changePassword = () =>
-    sessionStore.updatePassword({
-      password,
-      passwordConfirmation,
-    });
+    sessionStore.updatePassword(
+      {
+        password,
+        passwordConfirmation,
+      },
+      {
+        note: `Updated password on settings module`,
+      },
+    );
   return (
     <Container>
       <HeaderContainer>

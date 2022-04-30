@@ -1,7 +1,7 @@
 class Api::MeetingsController < Api::ApplicationController
   include UserActivityLogHelper
-  after_action :record_activities, only: [:create, :update, :destroy]
   include StatsHelper
+  after_action :record_activities, only: [:create, :update, :destroy]
   before_action :set_meeting, only: [:update, :destroy, :show]
   after_action :verify_authorized, except: [:index, :search, :search_section_1_meetings], unless: :skip_pundit?
   after_action :verify_policy_scoped, only: [:index, :search, :search_section_1_meetings], unless: :skip_pundit?
@@ -233,6 +233,6 @@ class Api::MeetingsController < Api::ApplicationController
   end
 
   def record_activities
-    record_activity("")
+    record_activity(params[:note])
   end 
 end

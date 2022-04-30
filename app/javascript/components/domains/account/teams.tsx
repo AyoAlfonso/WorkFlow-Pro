@@ -102,7 +102,9 @@ export const Teams = observer(
                           id={`${user.id}`}
                           defaultChecked={team.isALead(user)}
                           onChange={e => {
-                            userStore.updateUserTeamLeadRole(user.id, team.id, e.target.checked);
+                            userStore.updateUserTeamLeadRole(user.id, team.id, e.target.checked, {
+                              note: `Updated User Team lead role via the company team module on settings page `,
+                            });
                           }}
                         />
                       </Label>
@@ -128,7 +130,9 @@ export const Teams = observer(
                   <StyledIconContainer
                     onClick={() => {
                       if (confirm("Are you sure you want to delete this team?")) {
-                        teamStore.deleteTeam(team.id);
+                        teamStore.deleteTeam(team.id, {
+                          note: `Deleted Team via the teams module on settings page `,
+                        });
                       }
                     }}
                   >

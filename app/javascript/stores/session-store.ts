@@ -48,7 +48,6 @@ export const SessionStoreModel = types
     },
   }))
   .actions(self => ({
-
     setProfileData(updatedData) {
       self.profile = { ...toJS(self.profile), ...updatedData }; //fields to be updated should be filtered
     },
@@ -78,12 +77,13 @@ export const SessionStoreModel = types
       }
       self.loading = false;
     }),
-    updateUser: flow(function*(fieldsAndValues, successMessageOverride = null) {
+    updateUser: flow(function*(fieldsAndValues, metadata) {
       self.loading = true;
       const { userStore } = getRoot(self);
       try {
         const response = yield self.environment.api.updateUser(
           Object.assign({ user: fieldsAndValues }, { id: self.profile.id }),
+          metadata,
         );
 
         if (response.ok) {
@@ -134,10 +134,10 @@ export const SessionStoreModel = types
         self.loading = false;
       }
     }),
-    updateAvatar: flow(function*(formData) {
+    updateAvatar: flow(function*(formData, metadata) {
       self.loading = true;
       try {
-        const response = yield self.environment.api.updateAvatar(formData);
+        const response = yield self.environment.api.updateAvatar(formData, metadata);
         if (response.ok) {
           self.profile.setAvatarUrl(response.data.avatarUrl);
           const { userStore } = getRoot(self);
@@ -148,10 +148,10 @@ export const SessionStoreModel = types
       }
       self.loading = false;
     }),
-    deleteAvatar: flow(function*() {
+    deleteAvatar: flow(function*(metadata) {
       self.loading = true;
       try {
-        const response = yield self.environment.api.deleteAvatar();
+        const response = yield self.environment.api.deleteAvatar(metadata);
         if (response.ok) {
           self.profile.setAvatarUrl(response.data.avatarUrl);
           const { userStore } = getRoot(self);
@@ -162,11 +162,12 @@ export const SessionStoreModel = types
       }
       self.loading = false;
     }),
-    updatePassword: flow(function*(fieldsAndValues) {
+    updatePassword: flow(function*(fieldsAndValues, metadata = {}) {
       self.loading = true;
       try {
         const response = yield self.environment.api.updateUser(
           Object.assign({ user: fieldsAndValues }, { id: self.profile.id }),
+          metadata,
         );
 
         if (response.ok) {
@@ -237,14 +238,8 @@ export const SessionStoreModel = types
       }
       self.loading = false;
     }),
-    // logoutRequest: flow(function* () {
-    // yield self.environment.api.logout();
-    // self.loggedIn = false;
-    // }),
     logoutRequest: flow(function*() {
       const response: any = yield self.environment.api.signOut();
-      if (response.ok) {
-      }
       self.loggedIn = false;
     }),
     resetPassword: flow(function*(email) {
@@ -262,7 +257,7 @@ export const SessionStoreModel = types
       self.profile[field] = value;
     },
     updateProfileFromModel() {
-      self.updateUser(self.profile);
+      self.updateUser(self.profile, {});
     },
   }));
 

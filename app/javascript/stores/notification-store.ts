@@ -36,9 +36,10 @@ export const NotificationStoreModel = types
       self.reset();
       yield self.fetchNotifications();
     }),
-    update: flow(function*(notification) {
+    update: flow(function*(notification, metadata) {
       const response: ApiResponse<any> = yield self.environment.api.updateNotification(
         notification,
+        metadata,
       );
       if (response.ok) {
         self.notifications = response.data;

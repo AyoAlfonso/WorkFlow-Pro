@@ -11,6 +11,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { addDays } from "date-fns";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
 
 import {
   ActionButtonsContainer,
@@ -193,6 +194,9 @@ export const JournalIndex = observer(
               <ReactQuill
                 className="custom-trix-class"
                 theme="snow"
+                modules={{
+                  toolbar: DndItems,
+                }}
                 value={entryUpdate}
                 onChange={(content, delta, source, editor) => {
                   setEntryUpdate(editor.getHTML());

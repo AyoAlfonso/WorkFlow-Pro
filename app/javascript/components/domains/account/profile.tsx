@@ -35,46 +35,53 @@ export const AccountProfile = observer(
     const [avatarImageModalOpen, setAvatarImageModalOpen] = useState<boolean>(false);
 
     const { t } = useTranslation();
-    const submitAvatar = async (image) => {
+    const submitAvatar = async image => {
       const form = new FormData();
       form.append("avatar", image);
-      await sessionStore.updateAvatar(form);
+      await sessionStore.updateAvatar(form, {
+        note: `Updated Avatar via the User Profile module on settings page `,
+      });
     };
 
-    const readFile = (file) => {
-      return new Promise((resolve) => {
-        const reader = new FileReader()
-        reader.addEventListener('load', () => resolve(reader.result), false)
-        reader.readAsDataURL(file)
-      })
-    }
+    const readFile = file => {
+      return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => resolve(reader.result), false);
+        reader.readAsDataURL(file);
+      });
+    };
 
-    const pickAvatarImageblob = async (file) => {
-      setAvatarImageblub(file)
-      setAvatarImageModalOpen(!avatarImageModalOpen)
+    const pickAvatarImageblob = async file => {
+      setAvatarImageblub(file);
+      setAvatarImageModalOpen(!avatarImageModalOpen);
     };
 
     const inputFileUpload = async (files: FileList) => {
-      const imageDataUrl = await readFile(files[0])
-      pickAvatarImageblob(imageDataUrl)
-    }
+      const imageDataUrl = await readFile(files[0]);
+      pickAvatarImageblob(imageDataUrl);
+    };
 
     const deleteAvatar = async () => {
-      await sessionStore.deleteAvatar();
+      await sessionStore.deleteAvatar({
+        note: "Deleted Avater on profile settings module",
+      });
     };
 
     const save = () =>
-      sessionStore.updateUser({
-        email,
-        firstName,
-        lastName,
-        timezone,
-      });
+      sessionStore.updateUser(
+        {
+          email,
+          firstName,
+          lastName,
+          timezone,
+        },
+        { note: "Edited " + t("profile.editProfile") + " on settings module" },
+      );
 
     return (
       <Container>
         <HeaderContainer>
-          <HeaderText>{t("profile.editProfile")}</HeaderText>
+          <HeaderText> {t("profile.editProfile")}</HeaderText>
         </HeaderContainer>
         <BodyContainer>
           <PersonalInfoContainer>

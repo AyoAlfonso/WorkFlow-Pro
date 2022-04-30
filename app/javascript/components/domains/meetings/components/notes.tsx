@@ -84,7 +84,7 @@ type EditorWrapperProps = {
 const EditorWrapper = styled.div<EditorWrapperProps>`
   height: ${props => props.height || "300px"};
   overflow-y: auto;
-  max-height: 30rem;
+  max-height: 35rem;
   border: ${props => !props.hideSideBorders && `1px solid ${props.theme.colors.borderGrey}`};
   padding-left: 8px;
   padding-right: 8px;

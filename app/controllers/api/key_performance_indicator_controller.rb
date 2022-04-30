@@ -72,6 +72,6 @@ class Api::KeyPerformanceIndicatorController < Api::ApplicationController
   end
   
   def record_activities
-    record_activity("")
+    record_activity(params[:note])
   end 
 end

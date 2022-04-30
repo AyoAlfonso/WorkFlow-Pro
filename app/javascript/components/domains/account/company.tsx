@@ -75,7 +75,9 @@ export const Company = observer(
       const form = new FormData();
       form.append("logo", image);
       setLogoImageForm(form);
-      await companyStore.updateCompanyLogo(form);
+      await companyStore.updateCompanyLogo(form, {
+        note: `Updated company logo via company module on settings page `,
+      });
     };
 
     const pickLogoImageblob = async file => {
@@ -97,7 +99,9 @@ export const Company = observer(
     };
 
     const deleteLogo = () => {
-      companyStore.deleteCompanyLogo();
+      companyStore.deleteCompanyLogo({
+        note: `Deleted company logo via company module on settings page `,
+      });
     };
 
     const ceoORAdmin = currentUser.role == RoleCEO || currentUser.role == RoleAdministrator;
@@ -111,17 +115,30 @@ export const Company = observer(
             forumType,
           },
           false,
+          {
+            note: `Updated Company information on General settings module`,
+          },
         ),
       ];
       if (logoImageForm) {
-        promises.push(companyStore.updateCompanyLogo(logoImageForm));
+        promises.push(
+          companyStore.updateCompanyLogo(logoImageForm, {
+            note: `Updated company logo via company module on settings page `,
+          }),
+        );
       }
       if (executiveTeam) {
         promises.push(
-          teamStore.updateTeamSettings({
-            id: executiveTeam,
-            executive: 1,
-          }),
+          teamStore.updateTeamSettings(
+            {
+              id: executiveTeam,
+              executive: 1,
+            },
+            null,
+            {
+              note: `Updated company setting for executive user via company module on settings page `,
+            },
+          ),
         );
       }
 

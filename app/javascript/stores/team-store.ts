@@ -39,11 +39,12 @@ export const TeamStoreModel = types
       // DON'T USE IN MAIN APPLICATION, ONLY FOR TEST PURPOSES
       self.teams = teams as any;
     },
-    updateTeam: flow(function*(teamId, teamName, users) {
+    updateTeam: flow(function*(teamId, teamName, users, metadata) {
       const response: ApiResponse<any> = yield self.environment.api.updateTeam(
         teamId,
         teamName,
         users,
+        metadata,
       );
       if (response.ok) {
         self.currentTeam = response.data.team;
@@ -51,19 +52,23 @@ export const TeamStoreModel = types
         showToast("Updated team", ToastMessageConstants.SUCCESS);
       }
     }),
-    updateTeamSettings: flow(function*(formData, silent = false) {
-      const response: ApiResponse<any> = yield self.environment.api.updateTeamSettings(formData);
+    updateTeamSettings: flow(function*(formData, silent = false, metadata = {}) {
+      const response: ApiResponse<any> = yield self.environment.api.updateTeamSettings(
+        formData,
+        metadata,
+      );
       if (response.ok) {
         self.currentTeam = response.data.team;
         self.teams = response.data.teams;
         if (!silent) showToast("Updated team settings", ToastMessageConstants.SUCCESS);
       }
     }),
-    createTeamAndInviteUsers: flow(function*(teamName, users) {
+    createTeamAndInviteUsers: flow(function*(teamName, users, metadata) {
       const { teamStore } = getRoot(self);
       const response: ApiResponse<any> = yield self.environment.api.createTeamAndInviteUsers(
         teamName,
         users,
+        metadata,
       );
       if (response.ok) {
         self.teams = response.data as any;
@@ -72,8 +77,10 @@ export const TeamStoreModel = types
       }
       return response.data;
     }),
-    deleteTeam: flow(function*(teamId) {
-      const response: ApiResponse<any> = yield self.environment.api.deleteTeam(teamId);
+    deleteTeam: flow(function*(teamId, metadata) {
+      const response: ApiResponse<any> = yield self.environment.api.deleteTeam(teamId, {
+        note: `Deleted Team via the teams module on settings page `,
+      });
       if (response.ok) {
         showToast("Team deleted", ToastMessageConstants.SUCCESS);
         self.teams = response.data as any;

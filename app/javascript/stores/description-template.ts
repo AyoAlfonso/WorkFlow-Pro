@@ -20,10 +20,11 @@ export const DescriptionTemplateStoreModel = types
     }),
   }))
   .actions(self => ({
-    updateDescriptiveTemplates: flow(function*(templates) {
+    updateDescriptiveTemplates: flow(function*(templates, metadata) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.updateDescriptiveTemplates(
           templates,
+          metadata,
         );
         if (response.ok) {
           self.descriptionTemplates = response.data.templates;
@@ -33,10 +34,11 @@ export const DescriptionTemplateStoreModel = types
         // caught bv Api Monitor
       }
     }),
-    updateDescriptiveTemplatesBody: flow(function*(formData) {
+    updateDescriptiveTemplatesBody: flow(function*(formData, metadata) {
       try {
         const response: ApiResponse<any> = yield self.environment.api.updateDescriptiveTemplatesBody(
           formData,
+          metadata,
         );
         if (response.ok) {
           self.descriptionTemplates = response.data.templates;

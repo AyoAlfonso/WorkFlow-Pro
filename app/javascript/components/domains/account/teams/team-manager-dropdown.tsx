@@ -50,7 +50,9 @@ export const TeamManagerDropdownList = ({
         value={value}
         onChange={(event, newValue) => {
           if (team) {
-            userStore.updateUserTeamManagerStatus(newValue.id, team.id, true);
+            userStore.updateUserTeamManagerStatus(newValue.id, team.id, true, {
+              note: `Updated user and team manager status via the team manager module on settings page `,
+            });
           }
           setValue(newValue);
           setTeamManagerId(newValue.id);

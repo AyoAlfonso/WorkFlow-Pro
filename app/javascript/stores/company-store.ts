@@ -47,12 +47,13 @@ export const CompanyStoreModel = types
       // DON'T USE IN MAIN APPLICATION, ONLY FOR TEST PURPOSES
       self.company = company as any;
     },
-    updateCompany: flow(function*(fieldsAndValues: any, onboarding: boolean) {
+    updateCompany: flow(function*(fieldsAndValues: any, onboarding: boolean, metadata = {}) {
       const env = getEnv(self);
       const companyId = onboarding ? self.onboardingCompany.id : self.company.id;
       try {
         const response: any = yield env.api.updateCompany(
           Object.assign({ company: fieldsAndValues }, { id: companyId }),
+          metadata,
         );
         if (response.ok) {
           if (onboarding) {
@@ -70,10 +71,10 @@ export const CompanyStoreModel = types
         return false;
       }
     }),
-    updateCompanyLogo: flow(function*(formData) {
+    updateCompanyLogo: flow(function*(formData, metadata) {
       const env = getEnv(self);
       try {
-        const response = yield env.api.updateCompanyLogo(self.company.id, formData);
+        const response = yield env.api.updateCompanyLogo(self.company.id, formData, metadata);
         if (response.ok) {
           self.company.setLogoUrl(response.data.logoUrl);
         }
@@ -81,10 +82,10 @@ export const CompanyStoreModel = types
         showToast("There was an error adding the company logo", ToastMessageConstants.ERROR);
       }
     }),
-    deleteCompanyLogo: flow(function*() {
+    deleteCompanyLogo: flow(function*(metadata) {
       const env = getEnv(self);
       try {
-        const response = yield env.api.deleteLogo(self.company.id);
+        const response = yield env.api.deleteLogo(self.company.id, metadata);
         if (response.ok) {
           self.company.setLogoUrl(response.data.logoUrl);
         }
@@ -92,11 +93,11 @@ export const CompanyStoreModel = types
         showToast("There was an error removing the company logo", ToastMessageConstants.ERROR);
       }
     }),
-    inviteUsersToCompany: flow(function*(emailAddresses, teamId) {
+    inviteUsersToCompany: flow(function*(emailAddresses, teamId, metadata) {
       const env = getEnv(self);
       const { userStore } = getRoot(self);
       try {
-        const response = yield env.api.inviteUsersToCompany(emailAddresses, teamId);
+        const response = yield env.api.inviteUsersToCompany(emailAddresses, teamId, metadata);
         if (response.ok) {
           showToast("Invites sent", ToastMessageConstants.SUCCESS);
           yield userStore.fetchUsers();

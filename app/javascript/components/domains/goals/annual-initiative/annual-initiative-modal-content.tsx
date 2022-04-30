@@ -25,6 +25,7 @@ import { toJS } from "mobx";
 import { StyledInput, FormElementContainer } from "../../scorecard/shared/modal-elements";
 import { sortByDate } from "~/utils/sorting";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
 import { ActivityLogs } from "../shared/activity-logs";
 import { UpcomingMessage } from "../shared/upcoming-objective-message";
 import {
@@ -168,12 +169,15 @@ export const AnnualInitiativeModalContent = memo(
                     {quarterlyGoal.description}
                   </QuarterlyGoalDescription>
                   <QuarterlyGoalOptionContainer>
-                    { quarterlyGoal.closedAt ? (
-                      <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id}/>
-                      ) : (
-                      <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} quarter={quarterlyGoal.quarter}/>
-                      )
-                    }
+                    {quarterlyGoal.closedAt ? (
+                      <RecordOptions type={"quarterlyGoal"} id={quarterlyGoal.id} />
+                    ) : (
+                      <RecordOptions
+                        type={"quarterlyGoal"}
+                        id={quarterlyGoal.id}
+                        quarter={quarterlyGoal.quarter}
+                      />
+                    )}
                   </QuarterlyGoalOptionContainer>
                 </TopRowContainer>
                 <BottomRowContainer>
@@ -393,6 +397,9 @@ export const AnnualInitiativeModalContent = memo(
                 }}
                 className="trix-objective-modal"
                 theme="snow"
+                modules={{
+                  toolbar: DndItems,
+                }}
                 placeholder={"Add a description..."}
                 value={description}
                 // onChange={handleChange}

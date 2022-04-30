@@ -12,6 +12,8 @@ import FormGroup from "@material-ui/core/FormGroup";
 import { ImageCropperModal } from "~/components/shared/image-cropper-modal";
 import { RoleCEO, RoleAdministrator } from "~/lib/constants";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
+
 import {
   StretchContainer,
   HeaderContainer,
@@ -43,7 +45,7 @@ export const Objectives = observer(
     const [showCoreFour, setShowCoreFour] = useState<boolean>(
       company?.preferences.foundationalFour,
     );
-    
+
     const [logoImageForm, setLogoImageForm] = useState<FormData | null>(null);
     const [showCompanyGoals, setShowCompanyGoals] = useState<boolean>(
       company?.preferences.companyObjectives,
@@ -121,11 +123,18 @@ export const Objectives = observer(
             },
           },
           false,
+          {
+            note: `Updated Company via the objectives module on settings page `,
+          },
         ),
       ];
 
       if (logoImageForm) {
-        promises.push(companyStore.updateCompanyLogo(logoImageForm));
+        promises.push(
+          companyStore.updateCompanyLogo(logoImageForm, {
+            note: `Updated company logo via objectives module on settings page `,
+          }),
+        );
       }
 
       Promise.all(promises).then(() => {
@@ -214,6 +223,9 @@ export const Objectives = observer(
           <ReactQuill
             className="custom-trix-class"
             theme="snow"
+            modules={{
+              toolbar: DndItems,
+            }}
             placeholder="Please enter Why Do We Exist?"
             value={core1Content}
             onChange={setCore1Content}
@@ -223,6 +235,9 @@ export const Objectives = observer(
           <ReactQuill
             className="custom-trix-class"
             theme="snow"
+            modules={{
+              toolbar: DndItems,
+            }}
             placeholder="Please enter How Do We Behave?"
             value={core2Content}
             onChange={setCore2Content}
@@ -232,6 +247,9 @@ export const Objectives = observer(
           <ReactQuill
             className="custom-trix-class"
             theme="snow"
+            modules={{
+              toolbar: DndItems,
+            }}
             placeholder="Please enter How Do We Behave?"
             value={core3Content}
             onChange={setCore3Content}
@@ -241,6 +259,9 @@ export const Objectives = observer(
           <ReactQuill
             className="custom-trix-class"
             theme="snow"
+            modules={{
+              toolbar: DndItems,
+            }}
             placeholder="Please enter How Do We Succeed?"
             value={core4Content}
             onChange={setCore4Content}

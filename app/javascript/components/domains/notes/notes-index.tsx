@@ -13,6 +13,7 @@ import { addDays } from "date-fns";
 import { baseTheme } from "~/themes/base";
 import ReactHtmlParser from "react-html-parser";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
 import MeetingTypes from "~/constants/meeting-types";
 
 import {
@@ -282,6 +283,9 @@ export const NotesIndex = observer(
               <ReactQuill
                 className="custom-trix-class"
                 theme="snow"
+                modules={{
+                  toolbar: DndItems,
+                }}
                 value={entryUpdate}
                 onChange={(content, delta, source, editor) => {
                   setEntryUpdate(editor.getHTML());

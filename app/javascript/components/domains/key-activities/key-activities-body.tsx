@@ -39,7 +39,6 @@ export const KeyActivitiesBody = observer(
     const completedMasterActivities = keyActivityStore.completedMasterKeyActivities;
 
     const renderKeyActivitiesList = (): any => {
-      const { loading, loadingList } = keyActivityStore;
       if (showAllKeyActivities) {
         const completedMasterActivitiesPresent = completedMasterActivities.length > 0;
         // this const for explicitly setting the container height of outstanding keyActivities is to prevent items from overlapping during drag and drop
@@ -64,9 +63,7 @@ export const KeyActivitiesBody = observer(
         return sortByPosition(weeklyKeyActivities).map((keyActivity, index) =>
           props.disableDrag ? (
             <KeyActivityContainer key={keyActivity["id"]}>
-              <KeyActivityEntry
-                keyActivity={keyActivity}
-              />
+              <KeyActivityEntry keyActivity={keyActivity} />
             </KeyActivityContainer>
           ) : (
             <Draggable
@@ -124,9 +121,7 @@ export const KeyActivitiesBody = observer(
     const renderCompletedMasterActivitiesList = (): Array<JSX.Element> => {
       return sortByPosition(completedMasterActivities).map((keyActivity, index) => (
         <KeyActivityContainer key={keyActivity["id"]}>
-          <KeyActivityEntry
-            keyActivity={keyActivity}
-          />
+          <KeyActivityEntry keyActivity={keyActivity} />
         </KeyActivityContainer>
       ));
     };

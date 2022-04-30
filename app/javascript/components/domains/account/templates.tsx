@@ -11,6 +11,7 @@ import { Button } from "~/components/shared/button";
 import { FileInput } from "./file-input";
 import { ImageCropperModal } from "~/components/shared/image-cropper-modal";
 import ReactQuill from "react-quill";
+import { DndItems } from "~/components/shared/dnd-editor";
 import { useHistory } from "react-router";
 import { toJS } from "mobx";
 
@@ -76,20 +77,27 @@ export const Templates = observer(
       const flattenedInitiativesTemplate = removeProperty(propKey, initiativesTemplate);
       const flattenedKPITemplate = removeProperty(propKey, kpiTemplate);
 
-      descriptionTemplateStore.updateDescriptiveTemplates({
-        descriptionTemplate: [
-          flattenedobjectivesTemplate,
-          flattenedInitiativesTemplate,
-          flattenedKPITemplate,
-        ],
-      });
+      descriptionTemplateStore.updateDescriptiveTemplates(
+        {
+          descriptionTemplate: [
+            flattenedobjectivesTemplate,
+            flattenedInitiativesTemplate,
+            flattenedKPITemplate,
+          ],
+        },
+        {
+          note: `Updated Templates via the temaplates module on settings page `,
+        },
+      );
       const form = new FormData();
       createFormData(form, "description_templates_attributes", [
         initiativesTemplateBody,
         objectivesTemplateBody,
         kpiTemplateBody,
       ]);
-      descriptionTemplateStore.updateDescriptiveTemplatesBody(form);
+      descriptionTemplateStore.updateDescriptiveTemplatesBody(form, {
+        note: `Updated Templates body via the templates module on settings page `,
+      });
     };
 
     return (
@@ -110,10 +118,13 @@ export const Templates = observer(
                   <ReactQuill
                     className="custom-trix-class"
                     theme="snow"
+                    modules={{
+                      toolbar: DndItems,
+                    }}
                     placeholder="Enter your Objectives Templates"
                     value={objectivesTemplate?.body.body || ""}
                     onChange={(content, delta, source, editor) => {
-                      objectivesTemplate.body.body = editor.getHTML();
+                      objectivesTemplate?.body.body = editor.getHTML();
                       setObjectivesTemplate(objectivesTemplate);
                       setObjectivesTemplateBody({
                         id: objectivesTemplate.id,
@@ -126,10 +137,13 @@ export const Templates = observer(
                   <ReactQuill
                     className="custom-trix-class"
                     theme="snow"
+                    modules={{
+                      toolbar: DndItems,
+                    }}
                     placeholder="Enter your Initiatives Templates"
                     value={initiativesTemplate?.body.body || ""}
                     onChange={(content, delta, source, editor) => {
-                      initiativesTemplate.body.body = editor.getHTML();
+                      initiativesTemplate?.body.body = editor.getHTML();
                       setInitiativesTemplate(initiativesTemplate);
                       setInitiativesTemplateBody({
                         id: initiativesTemplate.id,
@@ -143,10 +157,13 @@ export const Templates = observer(
                   <ReactQuill
                     className="custom-trix-class"
                     theme="snow"
+                    modules={{
+                      toolbar: DndItems,
+                    }}
                     placeholder="Enter your KPI Templates"
                     value={kpiTemplate?.body.body || ""}
                     onChange={(content, delta, source, editor) => {
-                      kpiTemplate.body.body = editor.getHTML();
+                      kpiTemplate?.body.body = editor.getHTML();
                       setKPITemplate(kpiTemplate);
                       setKPITemplateBody({
                         id: kpiTemplate.id,
