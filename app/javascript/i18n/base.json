@@ -177,6 +177,7 @@
         "meetingAgenda": "Meeting Agenda",
         "emptyMeetingEntries": "Start creating meetings on the meetings page!",
         "scheduledStartTime": "Scheduled Start Date",
+        "DateRange": "Date Range",
         "actualStartTime": "Actual Start Date",
         "averageRating": "Average Rating"
       },

@@ -247,4 +247,7 @@ class Api::CompaniesController < Api::ApplicationController
 
   def decode_logo
   end
+  def record_activities
+    record_activity(params[:note])
+  end 
 end

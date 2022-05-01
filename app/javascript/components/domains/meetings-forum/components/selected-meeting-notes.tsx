@@ -14,9 +14,7 @@ interface ISelectedMeetingNotes {
 export const SelectedMeetingNotes = observer(({ selectedMeetingId }: ISelectedMeetingNotes) => {
   const { t } = useTranslation();
 
-  const {
-    forumStore,
-  } = useMst();
+  const { forumStore } = useMst();
 
   const selectedMeeting = forumStore.searchedForumMeetings.find(
     meeting => meeting.id == selectedMeetingId,
@@ -35,6 +33,7 @@ export const SelectedMeetingNotes = observer(({ selectedMeetingId }: ISelectedMe
 const Container = styled(Card)`
   margin-left: 16px;
   min-width: 375px;
+  margin-top: 1rem;
 `;
 
 const NotesHeader = styled.div`

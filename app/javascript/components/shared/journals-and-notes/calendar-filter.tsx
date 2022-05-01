@@ -15,6 +15,8 @@ import styled from "styled-components";
 interface ICalendarFilterProps {
   header: string;
   dateFilter: any;
+  headerSize?: string;
+  headerFontSize?: string;
   setDateFilter: React.Dispatch<React.SetStateAction<any>>;
   setSelectedItem?: React.Dispatch<React.SetStateAction<any>>;
   selectedDateFilter: string;
@@ -31,6 +33,8 @@ interface ICalendarFilterProps {
 
 export const CalendarFilter = ({
   header,
+  headerSize = "h1",
+  headerFontSize = "24px",
   dateFilter,
   setDateFilter,
   setSelectedItem,
@@ -111,7 +115,7 @@ export const CalendarFilter = ({
   return (
     <Container width={width}>
       <HeadingContainer>
-        <Heading type={"h1"} fontSize={"24px"}>
+        <Heading type={headerSize} fontSize={headerFontSize}>
           {header}
         </Heading>
       </HeadingContainer>

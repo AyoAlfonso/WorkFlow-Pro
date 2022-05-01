@@ -18,6 +18,7 @@ import { observer } from "mobx-react";
 import moment from "moment";
 import { meetingTypeParser } from "~/components/shared/agenda/meeting-type-parser";
 import { Text } from "~/components/shared/text";
+import { Heading } from "~/components/shared";
 import { SelectedMeetingAgendaEntry } from "./components/selected-meeting-agenda-entry";
 import { TeamMeetingButton } from "~/components/shared/team-meeting-button";
 import MeetingTypes from "~/constants/meeting-types";
@@ -144,14 +145,12 @@ export const ForumAgendaSearch = observer(() => {
   const renderSelectedEntry = () => {
     if (selectedMeeting) {
       //TODO may want to look at actual start time
-      const inCurrentMonth = moment(selectedMeeting.scheduledStartTime).isSame(moment(), "month");
       const inCurrentOrFutureMonth = moment(selectedMeeting.scheduledStartTime).isSameOrAfter(
         moment(),
         "month",
       );
       return (
         <>
-          <TeamMeetingButton handleMeetingClick={handleMeetingClick} disabled={!inCurrentMonth} />
           <SelectedEntryContainer>
             <SelectedMeetingAgendaEntry
               selectedMeetingId={selectedMeeting.id}
@@ -171,40 +170,48 @@ export const ForumAgendaSearch = observer(() => {
 
   const renderItems = () => {
     if (!R.isNil(forumStore.searchedForumMeetings)) {
-      return forumStore.searchedForumMeetings.map((meeting, index) => (
-        <MeetingResultContainer key={index}>
-          <MeetingDateText>
-            {moment(meeting.scheduledStartTime).format("ddd, MMM D")}
-          </MeetingDateText>
-          <ItemCard
-            titleText={moment(meeting.scheduledStartTime).format("LT")}
-            bodyText={meetingTypeParser(meeting.meetingType)}
-            onClick={() => setSelectedMeeting(meeting)}
-            selected={!R.isNil(selectedMeeting) ? selectedMeeting.id === meeting.id : false}
-          />
-        </MeetingResultContainer>
-      ));
+      return (
+        <>
+          <StyledHeading type={"h3"}>{t("forum.DateRange")}</StyledHeading>
+          {forumStore.searchedForumMeetings.map((meeting, index) => (
+            <MeetingResultContainer key={index}>
+              <MeetingDateText>
+                {moment(meeting.scheduledStartTime).format("ddd, MMM D")}
+              </MeetingDateText>
+
+              <ItemCard
+                titleText={`
+                  ${moment(meeting.scheduledStartTime).format("LT")} |
+                  ${teams.find(team => team.id == meeting.teamId)?.name}
+                  `}
+                bodyText={meetingTypeParser(meeting.meetingType)}
+                onClick={() => setSelectedMeeting(meeting)}
+                selected={!R.isNil(selectedMeeting) ? selectedMeeting.id === meeting.id : false}
+              />
+            </MeetingResultContainer>
+          ))}
+        </>
+      );
     }
   };
 
   return (
     <>
-  
       <Container>
         <CalendarFilter
-          header={""}
+          header={`Organisationl ` + t("forum.forumMeeting")}
+          headerSize="h2"
+          headerFontSize="24px"
           dateFilter={dateFilter}
           setDateFilter={setDateFilter}
           selectedDateFilter={selectedDateFilter}
           setSelectedDateFilter={setSelectedDateFilter}
           dateSelectAction={dateSelectedAction}
-          additionalComponentsBelow={
-            <StyledItemListContainer>{renderItems()}</StyledItemListContainer>
-          }
           width={"450px"}
           maxDate={addDays(new Date(), 365)}
           customFilterOptions={filterOptions}
         />
+        <StyledItemListContainer>{renderItems()}</StyledItemListContainer>
         <StyledEntryContainer>{renderSelectedEntry()}</StyledEntryContainer>
         {/* {instanceType === "forum" && <LynchPynBadge />} */}
       </Container>
@@ -229,10 +236,10 @@ const StyledEntryContainer = styled(EntryContainer)`
 `;
 
 const StyledItemListContainer = styled(ItemListContainer)`
-  padding: 5px;
-  margin-top: 15px;
-  margin-left: -5px;
-  overflow-y: unset;
+  min-width: 300px;
+  margin-top: 0px;
+  margin-right: 0rem;
+  margin-bottom: 0rem;
 `;
 
 const MeetingResultContainer = styled.div``;
@@ -243,6 +250,12 @@ const MeetingDateText = styled(Text)`
   margin-left: 8px;
   font-size: 12px;
   font-weight: bold;
+`;
+
+const StyledHeading = styled(Heading)`
+  margin-bottom: 1rem;
+  font-size: 26px;
+  margin-top: 0.5rem;
 `;
 
 const NoSelectedItemsContainer = styled.div`
