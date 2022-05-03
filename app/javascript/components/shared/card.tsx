@@ -27,6 +27,9 @@ export const Card = (props: ICardProps): JSX.Element => {
 export const CardHeaderText = styled.h4<TypographyProps>`
   ${typography}
 `;
+export const CardBottomText = styled.h5<TypographyProps>`
+  ${typography}
+`;
 
 export const CardBody = styled.div<LayoutProps>`
   ${layout}

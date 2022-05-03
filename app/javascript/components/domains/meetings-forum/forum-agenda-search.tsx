@@ -172,7 +172,7 @@ export const ForumAgendaSearch = observer(() => {
     if (!R.isNil(forumStore.searchedForumMeetings)) {
       return (
         <>
-          <StyledHeading type={"h3"}>{t("forum.DateRange")}</StyledHeading>
+          <StyledHeading type={"h2"}>{`Meetings`}</StyledHeading>
           {forumStore.searchedForumMeetings.map((meeting, index) => (
             <MeetingResultContainer key={index}>
               <MeetingDateText>
@@ -199,7 +199,7 @@ export const ForumAgendaSearch = observer(() => {
     <>
       <Container>
         <CalendarFilter
-          header={`Organisationl ` + t("forum.forumMeeting")}
+          header={t("forum.DateRange")}
           headerSize="h2"
           headerFontSize="24px"
           dateFilter={dateFilter}
@@ -240,6 +240,7 @@ const StyledItemListContainer = styled(ItemListContainer)`
   margin-top: 0px;
   margin-right: 0rem;
   margin-bottom: 0rem;
+  margin-left: 5%;
 `;
 
 const MeetingResultContainer = styled.div``;
@@ -256,6 +257,7 @@ const StyledHeading = styled(Heading)`
   margin-bottom: 1rem;
   font-size: 26px;
   margin-top: 0.5rem;
+  font-family: exo;
 `;
 
 const NoSelectedItemsContainer = styled.div`

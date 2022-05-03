@@ -5,6 +5,7 @@ import { useMst } from "~/setup/root";
 import * as R from "ramda";
 import { observer } from "mobx-react";
 import moment from "moment";
+import { HtmlTooltip } from "~/components/shared/tooltip";
 import { Text } from "~/components/shared/text";
 import { MeetingAgenda } from "../../meetings/components/meeting-agenda";
 import { Heading } from "~/components/shared";
@@ -62,7 +63,9 @@ export const SelectedMeetingAgendaEntry = observer(
     const [showAverageRating, setshowAverageRating] = useState<boolean>(false);
     const [showActualStartTime, setShowActualStartTime] = useState<boolean>(false);
     const [showMeetingAgenda, setShowMeetingAgenda] = useState<boolean>(false);
-
+    const [showAverageRatingTooltip, setShowAverageRatingTooltip] = useState<boolean>(false);
+    const [showActualStartTimeTooltip, setShowActualStartTimeTooltip] = useState<boolean>(false);
+    const [showLocationTooltip, setShowLocationTooltip] = useState<boolean>(false);
     useEffect(() => {
       setLocation(R.path(["forumLocation"], selectedMeeting.settings));
       setNewScheduledStartTime(selectedMeeting.scheduledStartTime);
@@ -138,93 +141,115 @@ export const SelectedMeetingAgendaEntry = observer(
     return (
       <Container>
         <ChildContainer>
-          <MeetingHeader>
-            <StyledHeading type={"h3"}>
-              {" "}
-              {overviewType === "forum" &&
-                forumType == "organisation_forum_monthly" &&
-                "Organisational"}{" "}
-              {t("forum.forumMeeting")}
-            </StyledHeading>
+          <StyledHeading type={"h3"}>
+            {" "}
+            {overviewType === "forum" &&
+              forumType == "organisation_forum_monthly" &&
+              "Organizational"}{" "}
+            {t("forum.forumMeeting")}
+          </StyledHeading>
+          <StyledChevronIconContainer
+            onClick={e => {
+              e.stopPropagation();
+              setShowScheduledStartDate(!showScheduledStartDate);
+            }}
+          >
+            <MeetingSectionHeaderText>{`${t(
+              "forum.scheduledStartTime",
+            )}: `}</MeetingSectionHeaderText>
+            <StyledChevronIcon
+              icon={showScheduledStartDate ? "Chevron-Up" : "Chevron-Down"}
+              size={"12px"}
+              iconColor={showScheduledStartDate ? "grey100" : "primary100"}
+            />{" "}
+          </StyledChevronIconContainer>
+          {showScheduledStartDate ? renderScheduledStartDate() : <></>}
+
+          <HtmlTooltip
+            arrow={true}
+            open={showActualStartTimeTooltip}
+            enterDelay={500}
+            leaveDelay={200}
+            title={<span>There is no actual start time data from the meeting yet</span>}
+          >
             <StyledChevronIconContainer
               onClick={e => {
                 e.stopPropagation();
-                setShowScheduledStartDate(!showScheduledStartDate);
+                if (!selectedMeeting.startTime) return;
+                setShowActualStartTime(!showActualStartTime);
+              }}
+              onMouseEnter={() => {
+                setShowActualStartTimeTooltip(!selectedMeeting.startTime && true);
+              }}
+              onMouseLeave={() => {
+                setShowActualStartTimeTooltip(false);
               }}
             >
-              <MeetingTimeText>{`${t("forum.scheduledStartTime")}: `}</MeetingTimeText>
+              <MeetingSectionHeaderText>
+                {`${t("forum.actualStartTime")}`}{" "}
+              </MeetingSectionHeaderText>
               <StyledChevronIcon
-                icon={showScheduledStartDate ? "Chevron-Up" : "Chevron-Down"}
+                icon={showActualStartTime ? "Chevron-Up" : "Chevron-Down"}
                 size={"12px"}
-                iconColor={showScheduledStartDate ? "grey100" : "primary100"}
-              />{" "}
+                iconColor={showActualStartTime ? "grey100" : "primary100"}
+              />
             </StyledChevronIconContainer>
-            {showScheduledStartDate ? renderScheduledStartDate() : <></>}
-            <StyledChevronIconContainer
-              onClick={e => {
-                e.stopPropagation();
-                setshowAverageRating(!showAverageRating);
-              }}
-            >
-              <MeetingTimeText> {t("forum.averageRating")}</MeetingTimeText>
-              <StyledChevronIcon
-                icon={showAverageRating ? "Chevron-Up" : "Chevron-Down"}
-                size={"12px"}
-                iconColor={showAverageRating ? "grey100" : "primary100"}
-              />{" "}
-            </StyledChevronIconContainer>
-            {showAverageRating ? selectedMeeting.averageRating : <></>}
-            {selectedMeeting.startTime && (
-              <StyledChevronIconContainer
-                onClick={e => {
-                  e.stopPropagation();
-                  setShowActualStartTime(!showActualStartTime);
-                }}
-              >
-                <MeetingTimeText> {`${t("forum.actualStartTime")}`} </MeetingTimeText>
-                <StyledChevronIcon
-                  icon={showActualStartTime ? "Chevron-Up" : "Chevron-Down"}
-                  size={"12px"}
-                  iconColor={showActualStartTime ? "grey100" : "primary100"}
-                />{" "}
-              </StyledChevronIconContainer>
-            )}{" "}
-            {showActualStartTime &&
-              `${moment(selectedMeeting.startTime).format("dddd, MMMM D, LT")}`}
+          </HtmlTooltip>
+
+          {showActualStartTime &&
+            selectedMeeting.startTime &&
+            `${moment(selectedMeeting.startTime).format("dddd, MMMM D, LT")}`}
+
+          <HtmlTooltip
+            arrow={true}
+            open={showLocationTooltip}
+            enterDelay={500}
+            leaveDelay={200}
+            title={<span>There is no location data for the meeting yet</span>}
+          >
             {disabled ? (
               <>
                 <StyledChevronIconContainer
                   onClick={e => {
                     e.stopPropagation();
+                    if (!location) return;
                     setShowLocation(!showLocation);
                   }}
+                  onMouseEnter={() => {
+                    setShowLocationTooltip(!location && true);
+                  }}
+                  onMouseLeave={() => {
+                    setShowLocationTooltip(false);
+                  }}
                 >
-                  <MeetingTimeText> Location</MeetingTimeText>
+                  <MeetingSectionHeaderText> Location</MeetingSectionHeaderText>
                   <StyledChevronIcon
                     icon={showLocation ? "Chevron-Up" : "Chevron-Down"}
                     size={"12px"}
                     iconColor={showLocation ? "grey100" : "primary100"}
                   />{" "}
                 </StyledChevronIconContainer>
-                {showLocation && <MeetingTimeText> {location}</MeetingTimeText>}
+                {showLocation && <MeetingSectionHeaderText> {location}</MeetingSectionHeaderText>}
               </>
             ) : (
-              <LocationContainer>
-                <StyledContentEditable
-                  innerRef={locationRef}
-                  placeholder={"Enter the location"}
-                  html={location || ""}
-                  onChange={handleChangeLocation}
-                  onKeyDown={key => {
-                    if (key.keyCode == 13) {
-                      locationRef.current.blur();
-                    }
-                  }}
-                  onBlur={handleBlurLocation}
-                />
-              </LocationContainer>
+              <>
+                <LocationContainer>
+                  <StyledContentEditable
+                    innerRef={locationRef}
+                    placeholder={"Enter the location"}
+                    html={location || ""}
+                    onChange={handleChangeLocation}
+                    onKeyDown={key => {
+                      if (key.keyCode == 13) {
+                        locationRef.current.blur();
+                      }
+                    }}
+                    onBlur={handleBlurLocation}
+                  />
+                </LocationContainer>
+              </>
             )}
-          </MeetingHeader>
+          </HtmlTooltip>
 
           <StyledChevronIconContainer
             onClick={e => {
@@ -232,7 +257,7 @@ export const SelectedMeetingAgendaEntry = observer(
               setShowMeetingAgenda(!showMeetingAgenda);
             }}
           >
-            <MeetingTimeText>{`${t("forum.meetingAgenda")} `}</MeetingTimeText>
+            <MeetingSectionHeaderText>{`${t("forum.meetingAgenda")} `}</MeetingSectionHeaderText>
             <StyledChevronIcon
               icon={showMeetingAgenda ? "Chevron-Up" : "Chevron-Down"}
               size={"12px"}
@@ -241,13 +266,44 @@ export const SelectedMeetingAgendaEntry = observer(
           </StyledChevronIconContainer>
           {showMeetingAgenda ? renderMeetingAgenda() : <></>}
 
+          <HtmlTooltip
+            arrow={true}
+            open={showAverageRatingTooltip}
+            enterDelay={500}
+            leaveDelay={200}
+            title={<span>There is no average rating data from the meeting yet</span>}
+          >
+            <StyledChevronIconContainer
+              onClick={e => {
+                e.stopPropagation();
+                if (!selectedMeeting.averageRating) return;
+                setshowAverageRating(!showAverageRating);
+              }}
+              onMouseEnter={() => {
+                setShowAverageRatingTooltip(!selectedMeeting.averageRating && true);
+              }}
+              onMouseLeave={() => {
+                setShowAverageRatingTooltip(false);
+              }}
+            >
+              <MeetingSectionHeaderText> {t("forum.averageRating")}</MeetingSectionHeaderText>
+              <StyledChevronIcon
+                icon={showAverageRating ? "Chevron-Up" : "Chevron-Down"}
+                size={"12px"}
+                iconColor={showAverageRating ? "grey100" : "primary100"}
+              />{" "}
+            </StyledChevronIconContainer>
+          </HtmlTooltip>
+
+          {showAverageRating ? selectedMeeting.averageRating : <></>}
+
           <StyledChevronIconContainer
             onClick={e => {
               e.stopPropagation();
               setShowNotes(!showNotes);
             }}
           >
-            <MeetingTimeText> Notes</MeetingTimeText>
+            <MeetingSectionHeaderText> Notes</MeetingSectionHeaderText>
             <StyledChevronIcon
               icon={showNotes ? "Chevron-Up" : "Chevron-Down"}
               size={"12px"}
@@ -286,7 +342,7 @@ const StyledHeading = styled(Heading)`
   font-size: 26px;
 `;
 
-const MeetingTimeText = styled(Text)`
+const MeetingSectionHeaderText = styled(Text)`
   font-size: 16px;
   color: ${props => props.theme.colors.black};
   margin-bottom: 0;

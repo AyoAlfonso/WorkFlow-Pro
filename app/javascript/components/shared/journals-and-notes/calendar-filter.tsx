@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import {
   HeadingContainer,
   BodyContainer,
@@ -11,6 +11,8 @@ import { addDays } from "date-fns";
 import { DateRange } from "react-date-range";
 import { baseTheme } from "~/themes/base";
 import styled from "styled-components";
+import { Icon } from "~/components/shared/icon";
+import { TypographyProps } from "styled-system";
 
 interface ICalendarFilterProps {
   header: string;
@@ -51,6 +53,7 @@ export const CalendarFilter = ({
 }: ICalendarFilterProps) => {
   const { t } = useTranslation();
 
+  const [showCustomDateRange, setShowCustomDateRange] = useState(false);
   const filterOptions = customFilterOptions || [
     {
       label: t("dateFilters.today"),
@@ -112,6 +115,31 @@ export const CalendarFilter = ({
       />
     ));
 
+  const renderCustomDateRange = (): JSX.Element => {
+    return (
+      <DateRange
+        showDateDisplay={false}
+        showMonthAndYearPickers={false}
+        ranges={[...Object.values(dateFilter)]}
+        onChange={ranges => {
+          setSelectedDateFilter("");
+          handleDateSelect(ranges);
+        }}
+        shownDate={new Date()}
+        showSelectionPreview={true}
+        direction={"vertical"}
+        minDate={minDate || addDays(new Date(), -90)}
+        maxDate={maxDate || new Date()}
+        scroll={{
+          enabled: true,
+          calendarWidth: 320,
+          monthWidth: 320,
+        }}
+        rangeColors={[baseTheme.colors.primary80]}
+      />
+    );
+  };
+
   return (
     <Container width={width}>
       <HeadingContainer>
@@ -123,26 +151,22 @@ export const CalendarFilter = ({
         <StyledFilterContainer>
           <Card headerComponent={<CardHeaderText fontSize={"16px"}>Filter</CardHeaderText>}>
             {renderDateFilterOptions()}
-            <DateRange
-              showDateDisplay={false}
-              showMonthAndYearPickers={false}
-              ranges={[...Object.values(dateFilter)]}
-              onChange={ranges => {
-                setSelectedDateFilter("");
-                handleDateSelect(ranges);
-              }}
-              shownDate={new Date()}
-              showSelectionPreview={true}
-              direction={"vertical"}
-              minDate={minDate || addDays(new Date(), -90)}
-              maxDate={maxDate || new Date()}
-              scroll={{
-                enabled: true,
-                calendarWidth: 320,
-                monthWidth: 320,
-              }}
-              rangeColors={[baseTheme.colors.primary80]}
-            />
+            <CardBottomText>
+              <StyledChevronIconContainer
+                onClick={e => {
+                  e.stopPropagation();
+                  setShowCustomDateRange(!showCustomDateRange);
+                }}
+              >
+                Custom Range
+                <StyledChevronIcon
+                  icon={showCustomDateRange ? "Chevron-Up" : "Chevron-Down"}
+                  size={"12px"}
+                  iconColor={showCustomDateRange ? "grey100" : "primary100"}
+                />
+              </StyledChevronIconContainer>
+              {showCustomDateRange ? renderCustomDateRange() : <></>}
+            </CardBottomText>
           </Card>
           {additionalComponentsBelow}
         </StyledFilterContainer>
@@ -155,10 +179,23 @@ export const CalendarFilter = ({
 type ContainerProps = {
   width?: string;
 };
+const StyledChevronIcon = styled(Icon)`
+  display: inline-block;
+  padding: 0px 15px;
+`;
 
+const StyledChevronIconContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+`;
 const Container = styled.div<ContainerProps>`
   width: ${props => props.width};
   min-width: 370px;
+`;
+
+const CardBottomText = styled.h5<TypographyProps>`
+  margin: 1rem 1rem 1rem;
 `;
 
 const StyledFilterContainer = styled(FilterContainer)`
