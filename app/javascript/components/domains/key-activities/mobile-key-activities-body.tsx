@@ -103,7 +103,6 @@ export const MobileKeyActivitiesBody = observer(
           {listSelectorOpen && (
             <ListDropdownContainer>
               {renderFilterGroupOptions()}
-              {renderFilterTeamOptions()}
               <ListOption
                 onClick={() => {
                   setShowCompletedItems(true);

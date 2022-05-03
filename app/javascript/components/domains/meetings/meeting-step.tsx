@@ -81,7 +81,7 @@ const StepComponent = (step: IStep, meeting: IMeeting) => {
         case "MeetingRating":
           return <MeetingRating />;
         case "KeyActivities":
-          return <TeamKeyActivities />;
+          return <TeamKeyActivities meeting={meeting} />;
         case "Goals":
           return <MeetingGoals />;
         case "Issues":

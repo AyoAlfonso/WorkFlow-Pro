@@ -55,6 +55,10 @@ export const TeamIssuesBody = observer(
         label: "Sort by Priority",
         value: "by_priority",
       },
+      {
+        label: "Sort by Upvotes",
+        value: "by_upvotes",
+      },
     ];
 
     if (issueStore.loading) {
@@ -121,7 +125,7 @@ export const TeamIssuesBody = observer(
             </AddNewIssueText>
           </AddNewIssueContainer>
           <IssuesContainer meeting={meetingId ? true : false}>
-            <List>{renderIssuesList()}</List>
+            <IssuesList>{renderIssuesList()}</IssuesList>
           </IssuesContainer>
         </IssuesBodyContainer>
       </Container>
@@ -173,8 +177,10 @@ type IssuesContainerProps = {
 
 const IssuesContainer = styled.div<IssuesContainerProps>`
   // overflow-y: auto;
-  min-height: ${props => (props.meeting ? "inherit" : "260px")};
+  // min-height: ${props => (props.meeting ? "inherit" : "260px")};
   // overflow-x: hidden;
 `;
 
 const IssueContainer = styled.div``;
+
+const IssuesList = styled("div")``;

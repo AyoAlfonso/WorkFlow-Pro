@@ -218,6 +218,7 @@ const DescriptionContainer = styled.div`
   background-color: ${props => props.theme.colors.backgroundGrey};
   display: flex;
   flex-direction: column;
+  height: inherit;
   @media only screen and (max-width: 768px) {
     display: none;
   }
@@ -227,8 +228,9 @@ const DescriptionBody = styled.div`
   padding-left: 10%;
   padding-right: 10%;
   margin-top: 32px;
-  // overflow: hidden;
-  // scrollbar-width: none;
+  overflow: auto;
+  // height: 85%;
+  height: inherit;
 `;
 
 type BodyContainerProps = {

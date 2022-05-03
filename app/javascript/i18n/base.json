@@ -97,7 +97,7 @@
           "header": "Meeting"
         },
         "habits": {
-          "new": "Habit",
+          "new": "Add Habit",
           "form": {
             "inputs": {
               "name": "Name",

@@ -30,7 +30,7 @@ export const AuditLogsSelector = observer(
     const { auditLogs } = auditLogStore;
 
     const [teams, setTeams] = useState<Array<any>>([]);
-    const [company, setCompany] = useState(null);
+    const [company, setCompany] = useState({});
     const [companyUsers, setCompanyUsers] = useState<Array<any>>([]);
     const [showUsersList, setShowUsersList] = useState<boolean>(false);
     const [currentLog, setCurrentLog] = useState<string>("company");

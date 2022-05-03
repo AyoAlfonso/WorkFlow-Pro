@@ -109,7 +109,6 @@ export const ScheduledGroupSelector = observer(
         {listOnly ? (
           <SelectionContainer fullWidth>
             {renderSelections()}
-            {renderTeams()}
           </SelectionContainer>
         ) : (
           <>
@@ -124,7 +123,6 @@ export const ScheduledGroupSelector = observer(
             {showDropdown && (
               <SelectionContainer>
                 {renderSelections()}
-                {renderTeams()}
               </SelectionContainer>
             )}
           </>

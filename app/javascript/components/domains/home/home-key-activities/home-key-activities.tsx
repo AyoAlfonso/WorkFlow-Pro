@@ -332,7 +332,7 @@ export const HomeKeyActivities = observer(
           <FilterContainer>
             {renderFilterGroupOptions()}
             {renderFilterCompletedOption()}
-            {renderFilterTeamOptions()}
+            {/* {renderFilterTeamOptions()} */}
           </FilterContainer>
           <CreateKeyActivityModal
             createKeyActivityModalOpen={createKeyActivityModalOpen}

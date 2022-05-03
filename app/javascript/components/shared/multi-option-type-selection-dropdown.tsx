@@ -94,22 +94,27 @@ export const MultiOptionTypeSelectionDropdownList = ({
       <Autocomplete
         value={value}
         onChange={(event, newValue) => {
-          if(typeof newValue === 'object' && newValue !== null) {
-              setValue(newValue);
-              onUserSelect(newValue);
-              setShowUsersList(false);
+          if (typeof newValue === "object" && newValue !== null) {
+            setValue(newValue);
+            onUserSelect(newValue);
+            setShowUsersList(false);
           }
         }}
-        // filterOptions={(options, params) => {
-        //   const filtered = filter(options, params);
-        //   return filtered;
-        // }}
+        filterOptions={(options, params) => {
+          const filtered = filter(options, params);
+          return filtered;
+        }}
         selectOnFocus
         clearOnBlur
         handleHomeEndKeys
         size={"small"}
         id="search-for-labels"
         options={alphabeticallySortedList.sort(typesort())}
+        getOptionLabel={option => {
+          if (typeof option === "object" && option !== null) {
+            return `${option.name} ${option.lastName}`;
+          }
+        }}
         renderOption={option => {
           return (
             <OptionContainer>

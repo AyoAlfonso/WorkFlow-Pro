@@ -69,9 +69,7 @@ export const KeyActivityRecord = observer(
     const teams = R.path(["profile", "currentCompanyUserTeams"], sessionStore);
     const groups = toJS(sessionStore.scheduledGroups);
 
-    const teamName = selectedGroupId
-      ? groups.find(group => group.id == selectedGroupId)?.name
-      : teams.find(group => group.id == selectedTeamId)?.name;
+    const listName = selectedGroupId && groups.find(group => group.id == selectedGroupId)?.name;
 
     if (!keyActivity) {
       return <></>;
@@ -248,12 +246,13 @@ export const KeyActivityRecord = observer(
     const priorityOptions = ["frog", "high", "medium", "low"];
 
     return (
-      <Container dragHandleProps={dragHandleProps} noBorder={noBorder}>
+      <Container disabled={disabled} dragHandleProps={dragHandleProps} noBorder={noBorder}>
         <TopSection>
           <RowContainer>
             <CheckboxContainer>
               <Checkbox
                 checked={keyActivity["completedAt"] ? true : false}
+                disabled={disabled}
                 onChange={e => {
                   keyActivityStore.updateKeyActivityStatus(
                     keyActivity,
@@ -266,7 +265,9 @@ export const KeyActivityRecord = observer(
               />
             </CheckboxContainer>
             <TodoName
+              disabled={disabled}
               onClick={() => {
+                if (disabled) return;
                 setKeyActivityModalOpen(true);
               }}
               style={{ textDecoration: keyActivity.completedAt && "line-through" }}
@@ -274,7 +275,13 @@ export const KeyActivityRecord = observer(
               {keyActivity.description}
             </TodoName>
             <RightActionContainer ref={optionsRef}>
-              <StyledOptionContainer onClick={() => setShowOptions(!showOptions)}>
+              <StyledOptionContainer
+                disabled={disabled}
+                onClick={() => {
+                  if (disabled) return;
+                  setShowOptions(!showOptions);
+                }}
+              >
                 <StyledOptionIcon icon={"Options"} size={"15px"} iconColor={"grey80"} />
               </StyledOptionContainer>
               {showOptions && (
@@ -305,7 +312,7 @@ export const KeyActivityRecord = observer(
                         <DestinationContainer>
                           <SendDestinationContainer>
                             <ListName onClick={() => setShowMoveList(!showMoveList)}>
-                              {teamName || `Select a list`}
+                              {listName || `Select a list`}
                               <Icon
                                 icon={"Chevron-Down"}
                                 size={"16px"}
@@ -365,7 +372,11 @@ export const KeyActivityRecord = observer(
                   </OptionContainer>
                   <OptionContainer
                     onClick={() => {
-                      keyActivityStore.updateKeyActivityState(keyActivity.id, "personal", true);
+                      keyActivityStore.updateKeyActivityState(
+                        keyActivity.id,
+                        "personal",
+                        !keyActivity.personal,
+                      );
                       if (keyActivity.scheduledGroupId) {
                         keyActivityStore.updateKeyActivityState(keyActivity.id, "teamId", null);
                       } else {
@@ -381,8 +392,13 @@ export const KeyActivityRecord = observer(
                         .then(() => setShowOptions(false));
                     }}
                   >
-                    <Icon icon={"Lock"} size={14} mr={16} iconColor={"greyActive"} />
-                    <OptionText>Lock</OptionText>
+                    <Icon
+                      icon={"Lock"}
+                      size={14}
+                      mr={16}
+                      iconColor={keyActivity.personal ? "mipBlue" : "greyActive"}
+                    />
+                    <OptionText>{keyActivity.personal ? "Unlock" : "Lock"}</OptionText>
                   </OptionContainer>
                   <Divider />
                   <OptionContainer onClick={() => setShowPriorities(true)}>
@@ -437,6 +453,7 @@ export const KeyActivityRecord = observer(
         </TopSection>
         <BottomRowContainer>
           <KeyActivityPriorityContainer
+            disabled={disabled}
             onClick={() => {
               if (!disabled) {
                 updatePriority();
@@ -452,7 +469,7 @@ export const KeyActivityRecord = observer(
                 avatarUrl={user.avatarUrl}
                 firstName={user.firstName}
                 lastName={user.lastName}
-                size={24}
+                size={18}
                 marginLeft={"auto"}
               />
             </AvatarContainer>
@@ -463,7 +480,9 @@ export const KeyActivityRecord = observer(
           <DateContainer ref={datePickerRef}>
             <DateButtonDiv>
               <DateButton
+                disabled={disabled}
                 onClick={() => {
+                  if (disabled) return;
                   setShowDatePicker(true);
                   setSelectedDueDate(new Date(parseISO(keyActivity.dueDate)));
                 }}
@@ -483,6 +502,7 @@ export const KeyActivityRecord = observer(
           <KeyActivityModalContent
             keyActivity={keyActivity}
             setKeyActivityModalOpen={setKeyActivityModalOpen}
+            meetingId={meetingId}
           />
         </StyledModal>
         <DueDatePickerModal
@@ -502,8 +522,12 @@ const RightActionContainer = styled.div`
   position: relative;
 `;
 
-const StyledOptionContainer = styled.div`
-  cursor: pointer;
+type StyledOptionContainerProps = {
+  disabled?: boolean;
+};
+
+const StyledOptionContainer = styled.div<StyledOptionContainerProps>`
+  cursor: ${props => (props.disabled ? "auto" : "pointer")};
 `;
 
 const StyledOptionIcon = styled(Icon)`
@@ -514,6 +538,7 @@ const StyledOptionIcon = styled(Icon)`
 type ContainerProps = {
   dragHandleProps?: any;
   noBorder?: any;
+  disabled?: boolean;
 };
 
 const Container = styled.div<ContainerProps>`
@@ -521,7 +546,7 @@ const Container = styled.div<ContainerProps>`
   padding: 4px 0px 4px 0px;
   border-top: 1px solid ${props => props.theme.colors.greyInactive};
   &: hover {
-    background: ${props => props.theme.colors.backgroundGrey};
+    background: ${props => (props.disabled ? "" : props.theme.colors.backgroundGrey)};
   }
   &:active {
     background-color: ${props => props.dragHandleProps && props.theme.colors.grey20};
@@ -538,13 +563,17 @@ const TopSection = styled.div`
   }
 `;
 
-const TodoName = styled(Text)`
+type TodoNameProps = {
+  disabled: boolean;
+};
+
+const TodoName = styled(Text)<TodoNameProps>`
   margin: 0;
   font-size: 15px;
   font-weight: 400;
   line-height: 20px;
   width: 70%;
-  cursor: pointer;
+  cursor: ${props => (props.disabled ? "auto" : "pointer")};
 `;
 
 type OCProps = {
@@ -615,12 +644,16 @@ const DateContainer = styled.div<DateContainerProps>`
 
 const DateButtonDiv = styled.div``;
 
-export const KeyActivityPriorityContainer = styled.div`
+type KeyActivityPriorityContainerProps = {
+  disabled: boolean;
+};
+
+export const KeyActivityPriorityContainer = styled.div<KeyActivityPriorityContainerProps>`
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 8px;
   &:hover {
-    cursor: pointer;
+    cursor: ${props => (props.disabled ? "auto" : "pointer")};
   }
 `;
 

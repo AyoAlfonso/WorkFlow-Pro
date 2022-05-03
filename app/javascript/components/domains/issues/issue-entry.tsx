@@ -412,15 +412,20 @@ export const IssueEntry = observer(
                     </OptionContainer>
                     <OptionContainer
                       onClick={() => {
-                        issueStore.updateIssueState(issue.id, "personal", true);
+                        issueStore.updateIssueState(issue.id, "personal", !issue.personal);
                         issueStore.updateIssueState(issue.id, "teamId", null);
                         issueStore
                           .updateIssue(issue.id, meetingId || teamId ? true : false)
                           .then(() => setShowOptions(false));
                       }}
                     >
-                      <Icon icon={"Lock"} size={14} mr={16} iconColor={"greyActive"} />
-                      <OptionText>Lock</OptionText>
+                      <Icon
+                        icon={"Lock"}
+                        size={14}
+                        mr={16}
+                        iconColor={issue.personal ? "mipBlue" : "greyActive"}
+                      />
+                      <OptionText>{issue.personal ? "Unlock" : "Lock"}</OptionText>
                     </OptionContainer>
                     <Divider />
                     <OptionContainer onClick={() => setShowPriorities(true)}>

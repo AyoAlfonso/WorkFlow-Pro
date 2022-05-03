@@ -51,7 +51,6 @@ export const CheckInWizardLayout = observer(
 
     const childrenUnderDescription = () => (
       <ChildrenContainer>
-        {renderVisibilityText()}
         <CheckInSideOptions checkIn={checkIn} />
       </ChildrenContainer>
     );

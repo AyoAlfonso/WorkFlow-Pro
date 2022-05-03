@@ -48,6 +48,10 @@ export const ScheduledIssues = observer(
         label: "Sort by Priority",
         value: "by_priority",
       },
+      {
+        label: "Sort by Upvotes",
+        value: "by_upvotes",
+      },
     ];
 
     const handleSortMenuItemClick = value => {
@@ -126,7 +130,7 @@ export const ScheduledIssues = observer(
           />
           <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
             <AddNewIssuePlus>
-              <Icon icon={"Plus"} size={20} />
+              <Icon icon={"Plus"} size={20} iconColor={"primary100"} />
             </AddNewIssuePlus>
             <AddNewIssueText> Add a Topic</AddNewIssueText>
           </AddNewIssueContainer>
@@ -147,7 +151,6 @@ export const ScheduledIssues = observer(
 const DescriptionText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
   font-size: 12px;
-  margin-bottom: 25px;
   margin-left: 0;
   width: 70%;
 `;

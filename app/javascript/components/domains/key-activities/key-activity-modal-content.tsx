@@ -47,7 +47,7 @@ export const KeyActivityModalContent = observer(
     setKeyActivityModalOpen,
     meetingId,
   }: IKeyActivityModalContentProps): JSX.Element => {
-    const { keyActivityStore, sessionStore } = useMst();
+    const { keyActivityStore, sessionStore, userStore } = useMst();
     const { t } = useTranslation();
 
     const { commentLogs } = keyActivityStore;
@@ -75,6 +75,9 @@ export const KeyActivityModalContent = observer(
 
     const teams = R.path(["profile", "currentCompanyUserTeams"], sessionStore);
     const groups = toJS(sessionStore.scheduledGroups);
+
+    const keyActivityUser =
+      keyActivity.userId && userStore.users.find(user => user.id == keyActivity.userId);
 
     const ListName = keyActivity.scheduledGroupId
       ? groups.find(group => group.id == keyActivity.scheduledGroupId)?.name
@@ -246,7 +249,7 @@ export const KeyActivityModalContent = observer(
 
       keyActivityStore.createCommentLog(commentLog);
     };
-
+    
     const renderHeader = (): JSX.Element => {
       return (
         <HeaderContainer>
@@ -467,15 +470,17 @@ export const KeyActivityModalContent = observer(
             )}
             <AvatarContainer>
               <Avatar
-                defaultAvatarColor={keyActivity.user.defaultAvatarColor}
-                firstName={keyActivity.user.firstName}
-                lastName={keyActivity.user.lastName}
-                avatarUrl={keyActivity.user.avatarUrl}
+                defaultAvatarColor={
+                  keyActivity.user?.defaultAvatarColor || keyActivityUser.defaultAvatarColor
+                }
+                firstName={keyActivity.user?.firstName || keyActivityUser.firstName}
+                lastName={keyActivity.user?.lastName || keyActivityUser.lastName}
+                avatarUrl={keyActivity.user?.avatarUrl || keyActivityUser.avatarUrl}
                 size={25}
               />
             </AvatarContainer>
             <OwnedByContainer>
-              <OwnedBy ownedBy={keyActivity.user} size={25} disabled={true} />
+              <OwnedBy ownedBy={keyActivity.user || keyActivityUser} size={25} disabled={true} />
             </OwnedByContainer>
           </BottomRowContainer>
         </HeaderContainer>

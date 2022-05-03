@@ -333,15 +333,24 @@ export const KeyActivityEntry = observer(
                   </OptionContainer>
                   <OptionContainer
                     onClick={() => {
-                      keyActivityStore.updateKeyActivityState(keyActivity.id, "personal", true);
+                      keyActivityStore.updateKeyActivityState(
+                        keyActivity.id,
+                        "personal",
+                        !keyActivity.personal,
+                      );
                       keyActivityStore.updateKeyActivityState(keyActivity.id, "teamId", null);
                       keyActivityStore
                         .updateKeyActivity(keyActivity.id, meetingId ? true : false)
                         .then(() => setShowOptions(false));
                     }}
                   >
-                    <Icon icon={"Lock"} size={14} mr={16} iconColor={"greyActive"} />
-                    <OptionText>Lock</OptionText>
+                    <Icon
+                      icon={"Lock"}
+                      size={14}
+                      mr={16}
+                      iconColor={keyActivity.personal ? "mipBlue" : "greyActive"}
+                    />
+                    <OptionText>{keyActivity.personal ? "Unlock" : "Lock"}</OptionText>
                   </OptionContainer>
                   <Divider />
                   <OptionContainer onClick={() => setShowPriorities(true)}>

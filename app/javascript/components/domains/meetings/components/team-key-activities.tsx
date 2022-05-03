@@ -11,15 +11,19 @@ import { KeyActivitiesHeader } from "~/components/domains/key-activities/key-act
 import { TeamKeyActivitiesBody } from "../shared/team-key-activities-body";
 import { useTranslation } from "react-i18next";
 
+interface ITeamKeyActivitiesProps {
+  meeting: any;
+}
+
 export const TeamKeyActivities = observer(
-  (props: {}): JSX.Element => {
+  ({ meeting }: ITeamKeyActivitiesProps): JSX.Element => {
     const { t } = useTranslation();
     return (
       <KeyActivitiesWrapperContainer width={"100%"}>
         <SingleListContainer>
           <KeyActivitiesHeader title={t("meeting.teamsPyns")} />
           <KeyActivityListSubHeaderContainer>{today}</KeyActivityListSubHeaderContainer>
-          <TeamKeyActivitiesBody includeAvatar={true} />
+          <TeamKeyActivitiesBody meeting={meeting} includeAvatar={true} />
         </SingleListContainer>
       </KeyActivitiesWrapperContainer>
     );

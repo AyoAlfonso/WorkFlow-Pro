@@ -126,8 +126,9 @@ export const HabitsCreateHabitForm = ({ onSubmit }: ICreateHabitFormProps): JSX.
           onSubmit && onSubmit();
         }}
         variant={"primary"}
+        small
       >
-        {t("general.save")}
+        {t("Add Habit")}
       </Button>
     </StyledForm>
   );
