@@ -24,7 +24,7 @@ export const HabitsHabitTracker = observer(
     setSelectedHabitId,
     showFourDays,
   }: IHabitsHabitTrackerProps): JSX.Element => {
-    const habitsToRender = showFourDays ? habit.recentLogsFourDays : habit.recentLogsFiveDays;
+    const habitsToRender = showFourDays ? habit.recentLogsFourDays : habit.recentLogsFewDays;
 
     const renderHabitLogs = () =>
       habitsToRender.map(log => (

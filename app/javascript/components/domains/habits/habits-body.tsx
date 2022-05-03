@@ -24,7 +24,7 @@ export const HabitsBody = observer(
   (): JSX.Element => {
     const {
       habitStore,
-      habitStore: { habits, lastFourDays, lastFiveDays },
+      habitStore: { habits, lastFourDays, lastFewDays },
     } = useMst();
     const { t } = useTranslation();
 
@@ -62,15 +62,15 @@ export const HabitsBody = observer(
             onUpdate={(habitId, logDate) => habitStore.updateHabitLog(habitId, logDate)}
             setShowIndividualHabit={setShowIndividualHabit}
             setSelectedHabitId={setSelectedHabitId}
-            showFourDays={!(windowDimensions.width > 1000)}
+            showFourDays={!(windowDimensions.width > 300)}
           />
         </HabitsTableRow>
       ));
 
-    const daysToRender = windowDimensions.width > 1000 ? lastFiveDays : lastFourDays;
+    const daysToRender = windowDimensions.width > 300 ? lastFewDays : lastFourDays;
 
     const dayNames = daysToRender.map((day, index) => (
-      <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"100%"}>
+      <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"12%"}>
         {moment(day).format("ddd")}
       </HabitsTableHeaderCell>
     ));
@@ -144,7 +144,7 @@ const AccordionDetailsContainer = styled(AccordionDetails)`
 `;
 
 const HabitsTableHeaderCellWide = styled(HabitsTableHeaderCell)`
-  width: 100%;
+  width: 40%;
 `;
 
 const AddNewHabitPlus = styled.div`
