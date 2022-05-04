@@ -12,6 +12,8 @@ class KeyActivityResortService < ApplicationService
     case @sort_type
     when "by_priority"
       sorted_key_activities = @key_activities.is_in_scheduled_group_id(scheduled_group_id).sort_by_priority.sort_by_created_date
+    when "by_upvotes"
+      sorted_key_activities = @key_activities.is_in_scheduled_group_id(scheduled_group_id).sort_by_upvotes.sort_by_created_date
     when "by_due_date"
       sorted_key_activities = @key_activities.is_in_scheduled_group_id(scheduled_group_id).sort_by_due_date.sort_by_created_date
     when "by_due_date_and_priority"

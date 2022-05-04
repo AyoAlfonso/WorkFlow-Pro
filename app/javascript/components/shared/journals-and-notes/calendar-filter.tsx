@@ -200,10 +200,10 @@ const CardBottomText = styled.h5<TypographyProps>`
 
 const StyledFilterContainer = styled(FilterContainer)`
   max-height: 80vh;
+  padding: 0.5rem;
 `;
 
 const StyledBodyContainer = styled(BodyContainer)`
   display: block;
   overflow-y: auto;
-  padding-left: 4px;
 `;

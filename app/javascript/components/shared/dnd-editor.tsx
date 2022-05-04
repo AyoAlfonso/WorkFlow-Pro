@@ -4,8 +4,6 @@ export const DndItems = [
   "underline",
   "strike",
   "blockquote",
-  "list",
-  "bullet",
-  "indent",
   "link",
+  { list: "ordered" },
 ];

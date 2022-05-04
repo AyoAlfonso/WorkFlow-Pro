@@ -18,6 +18,7 @@ import { SelectedMeetingNotes } from "./selected-meeting-notes";
 import { Subject } from "@material-ui/icons";
 import MeetingTypes from "~/constants/meeting-types";
 import { Icon } from "~/components/shared/icon";
+import { meetingTypeParser } from "~/components/shared/agenda/meeting-type-parser";
 
 interface ISelectedMeetingAgendaEntry {
   selectedMeetingId: string | number;
@@ -141,12 +142,8 @@ export const SelectedMeetingAgendaEntry = observer(
     return (
       <Container>
         <ChildContainer>
-          <StyledHeading type={"h3"}>
-            {" "}
-            {overviewType === "forum" &&
-              forumType == "organisation_forum_monthly" &&
-              "Organizational"}{" "}
-            {t("forum.forumMeeting")}
+          <StyledHeading type={"h2"}>
+            {meetingTypeParser(selectedMeeting.meetingType)}
           </StyledHeading>
           <StyledChevronIconContainer
             onClick={e => {
@@ -200,20 +197,20 @@ export const SelectedMeetingAgendaEntry = observer(
             selectedMeeting.startTime &&
             `${moment(selectedMeeting.startTime).format("dddd, MMMM D, LT")}`}
 
-          <HtmlTooltip
-            arrow={true}
-            open={showLocationTooltip}
-            enterDelay={500}
-            leaveDelay={200}
-            title={<span>There is no location data for the meeting yet</span>}
-          >
-            {disabled ? (
+          {disabled ? (
+            <HtmlTooltip
+              arrow={true}
+              open={showLocationTooltip}
+              enterDelay={500}
+              leaveDelay={200}
+              title={<span>There is no location data for the meeting yet</span>}
+            >
               <>
                 <StyledChevronIconContainer
                   onClick={e => {
                     e.stopPropagation();
-                    if (!location) return;
                     setShowLocation(!showLocation);
+                    if (!location) return;
                   }}
                   onMouseEnter={() => {
                     setShowLocationTooltip(!location && true);
@@ -231,25 +228,23 @@ export const SelectedMeetingAgendaEntry = observer(
                 </StyledChevronIconContainer>
                 {showLocation && <MeetingSectionHeaderText> {location}</MeetingSectionHeaderText>}
               </>
-            ) : (
-              <>
-                <LocationContainer>
-                  <StyledContentEditable
-                    innerRef={locationRef}
-                    placeholder={"Enter the location"}
-                    html={location || ""}
-                    onChange={handleChangeLocation}
-                    onKeyDown={key => {
-                      if (key.keyCode == 13) {
-                        locationRef.current.blur();
-                      }
-                    }}
-                    onBlur={handleBlurLocation}
-                  />
-                </LocationContainer>
-              </>
-            )}
-          </HtmlTooltip>
+            </HtmlTooltip>
+          ) : (
+            <LocationContainer>
+              <StyledContentEditable
+                innerRef={locationRef}
+                placeholder={"Enter the location"}
+                html={location || ""}
+                onChange={handleChangeLocation}
+                onKeyDown={key => {
+                  if (key.keyCode == 13) {
+                    locationRef.current.blur();
+                  }
+                }}
+                onBlur={handleBlurLocation}
+              />
+            </LocationContainer>
+          )}
 
           <StyledChevronIconContainer
             onClick={e => {
