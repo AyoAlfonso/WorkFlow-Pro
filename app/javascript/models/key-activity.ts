@@ -19,6 +19,7 @@ export const KeyActivityModel = types
     scheduledGroupId: types.maybeNull(types.number),
     teamId: types.maybeNull(types.number),
     movedToTodayOn: types.maybeNull(types.string),
+    userId: types.maybeNull(types.number)
   })
   .views(self => ({}))
   .actions(self => ({}));

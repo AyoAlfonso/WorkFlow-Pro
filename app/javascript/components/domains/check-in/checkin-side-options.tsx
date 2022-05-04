@@ -75,7 +75,7 @@ export const CheckInSideOptions = ({ checkIn }: ICheckInSideOptionsProps): JSX.E
 };
 
 const Container = styled.div`
-  height: inherit;
+  // height: inherit;
 `;
 
 const SelectionContainer = styled.div`

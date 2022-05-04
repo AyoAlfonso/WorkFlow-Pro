@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import { Loading } from "~/components/shared";
 import { space, SpaceProps, color, ColorProps } from "styled-system";
 import { sortByDate } from "~/utils/sorting";
+import {toJS} from 'mobx'
 interface ITeamKeyActivitiesBody {
   meeting?: boolean;
   includeAvatar?: boolean;
@@ -59,6 +60,7 @@ export const TeamKeyActivitiesBody = observer(
       ? todaysKeyActivities.filter(ka => ka.completedAt === null)
       : todaysKeyActivities.filter(ka => ka.completedAt);
     const todayFilterGroupId = scheduledGroups.find(group => group.name == "Today").id;
+    
     return (
       <>
         <KeyActivitiesListContainer>
@@ -119,8 +121,8 @@ const KeyActivitiesListContainer = styled.div`
 
 const KeyActivitiesListStyleContainer = styled.div`
   height: inherit;
-  overflow-y: auto;
-  margin-top: 16px;
+  // overflow-y: auto;
+  // margin-top: 16px;
 `;
 
 export const FilterContainer = styled.div`

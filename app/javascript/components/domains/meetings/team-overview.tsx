@@ -155,7 +155,7 @@ export const TeamOverview = observer(
       return (
         <KeyActivitiesListStyleContainer>
           {keyActivities.map(keyActivity => {
-            return <KeyActivityRecord key={keyActivity.id} keyActivity={keyActivity} />;
+            return <KeyActivityRecord key={keyActivity.id} keyActivity={keyActivity} disabled />;
           })}
         </KeyActivitiesListStyleContainer>
       );

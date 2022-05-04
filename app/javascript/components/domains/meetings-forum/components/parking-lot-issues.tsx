@@ -40,6 +40,10 @@ export const ParkingLotIssues = observer(
         label: "Sort by Priority",
         value: "by_priority",
       },
+      {
+        label: "Sort by Upvotes",
+        value: "by_upvotes",
+      },
     ];
 
     const { loading, teamIssues } = issueStore;
@@ -130,7 +134,7 @@ export const ParkingLotIssues = observer(
           />
           <AddNewIssueContainer onClick={() => setCreateIssueModalOpen(true)}>
             <AddNewIssuePlus>
-              <Icon icon={"Plus"} size={20} />
+              <Icon icon={"Plus"} size={20} iconColor={"primary100"} />
             </AddNewIssuePlus>
             <AddNewIssueText> Add a Topic</AddNewIssueText>
           </AddNewIssueContainer>
@@ -192,12 +196,12 @@ export const AddNewIssueText = styled.p`
   line-height: 20pt;
 `;
 
-export const AddNewIssueContainer = styled(HomeContainerBorders)`
+export const AddNewIssueContainer = styled.div`
   display: flex;
-  margin: 8px 5px 8px 5px;
+  // margin: 8px 5px 8px 5px;
   cursor: pointer;
   &:hover ${AddNewIssueText} {
-    color: ${props => props.theme.colors.black};
+    color: ${props => props.theme.colors.primary100};
     font-weight: bold;
   }
   &:hover ${AddNewIssuePlus} {
@@ -214,9 +218,9 @@ export const IssuesContainer = styled.div<IssuesContainerType>`
   min-height: 320px;
 `;
 
-export const IssueContainer = styled(HomeContainerBorders)`
-  display: flex;
-  margin: 8px 5px 8px 5px;
+export const IssueContainer = styled.div`
+  // display: flex;
+  // margin: 8px 5px 8px 5px;
 `;
 
 export type IssuesContainerType = {

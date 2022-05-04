@@ -103,6 +103,10 @@ export const MobileIssuesBody = observer(
         label: "Sort by Priority",
         value: "by_priority",
       },
+      {
+        label: "Sort by Upvotes",
+        value: "by_upvotes",
+      },
     ];
 
     const handleSortMenuItemClick = value => {

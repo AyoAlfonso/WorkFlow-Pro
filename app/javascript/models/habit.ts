@@ -27,7 +27,7 @@ export const HabitModel = types
     get recentLogsFourDays() {
       return self.currentWeekLogs.slice(0, 4);
     },
-    get recentLogsFiveDays() {
+    get recentLogsFewDays() {
       return self.currentWeekLogs;
     },
   }))

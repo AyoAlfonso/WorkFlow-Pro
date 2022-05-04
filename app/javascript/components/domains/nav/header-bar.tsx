@@ -19,6 +19,7 @@ import { PulseSelectorWrapper } from "./top-nav/pulse-selector-wrapper";
 import { HeaderText } from "~/utils/header-text";
 import { baseTheme } from "~/themes";
 import { getWeekOf } from "~/utils/date-time";
+import { MobileAccountDropdownOptions } from "./top-nav/mobile-account-dropdown-options";
 
 declare global {
   interface Window {
@@ -41,21 +42,71 @@ export const HeaderBar = observer(
     const [showIssues, setShowIssues] = useState<boolean>(false);
     const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
     const [showSideNav, setShowSideNav] = useState<boolean>(false);
+    const [showProfileNav, setShowProfileNav] = useState<boolean>(false);
 
     const { sessionStore, companyStore } = useMst();
     const accountActionRef = useRef(null);
     const { t } = useTranslation();
     const history = useHistory();
 
+    const mobileNavMenuRef = useRef(null)
+    const profileNavRef = useRef(null)
+
     const userId = sessionStore.profile.id;
     const issuesTitle =
       companyStore?.company?.displayFormat === "Forum" ? t("issues.myHub") : t("issues.issues");
+
+    const location = useLocation();
 
     useEffect(() => {
       companyStore.load();
     }, [companyStore.company]);
 
-    const location = useLocation();
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showSideNav) return;
+
+        const node = mobileNavMenuRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowSideNav(false);
+      };
+
+      if (showSideNav) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showSideNav]);
+
+    useEffect(() => {
+      const externalEventHandler = e => {
+        if (!showProfileNav) return;
+
+        const node = profileNavRef.current;
+
+        if (node && node.contains(e.target)) {
+          return;
+        }
+        setShowProfileNav(false);
+      };
+
+      if (showProfileNav) {
+        document.addEventListener("click", externalEventHandler);
+      } else {
+        document.removeEventListener("click", externalEventHandler);
+      }
+
+      return () => {
+        document.removeEventListener("click", externalEventHandler);
+      };
+    }, [showProfileNav]);
 
     const renderUserAvatar = (size = 48) => {
       return (
@@ -130,7 +181,10 @@ export const HeaderBar = observer(
             <MobileLeftContainer>
               <BurgerIconContainer
                 showBackground={showSideNav}
-                onClick={() => setShowSideNav(!showSideNav)}
+                onClick={() => {
+                  setShowProfileNav(false);
+                  setShowSideNav(!showSideNav);
+                }}
               >
                 {" "}
                 <Icon icon={showSideNav ? "Close" : "Burger"} size={"24px"} iconColor={"white"} />
@@ -200,10 +254,17 @@ export const HeaderBar = observer(
               {renderActionDropdown()}
             </PersonalInfoContainer>
 
-            <MobileAvatar>{renderUserAvatar(32)}</MobileAvatar>
+            <MobileAvatar
+              onClick={() => {
+                setShowSideNav(false);
+                setShowProfileNav(!showProfileNav);
+              }}
+            >
+              {renderUserAvatar(32)}
+            </MobileAvatar>
           </HeaderItemsContainer>
           {/* {showSideNav && ( */}
-          <MobileSideMenu showSideNav={showSideNav}>
+          <MobileNavMenu showSideNav={showSideNav} ref={mobileNavMenuRef}>
             <MobileMenuOption
               showSideNav={showSideNav}
               onClick={() => {
@@ -235,8 +296,17 @@ export const HeaderBar = observer(
               />
               Check-In
             </MobileMenuOption>
-          </MobileSideMenu>
-          {/* )} */}
+          </MobileNavMenu>
+          <MobileProfileNav showProfileNav={showProfileNav} ref={profileNavRef}>
+            <MobileAccountDropdownOptions
+              accountActionRef={accountActionRef}
+              setShowAccountActions={setShowAccountActions}
+              showCompanyOptions={showCompanyOptions}
+              setShowCompanyOptions={setShowCompanyOptions}
+              setInviteTeamModalOpen={setInviteTeamModalOpen}
+              setShowProfileNav={setShowProfileNav}
+            />
+          </MobileProfileNav>
 
           <CreateIssueModal
             createIssueModalOpen={createIssueModalOpen}
@@ -279,11 +349,11 @@ const StyledHeading = styled(Heading)`
   }
 `;
 
-type MobileSideMenuProps = {
+type MobileNavMenuProps = {
   showSideNav: boolean;
 };
 
-const MobileSideMenu = styled.div<MobileSideMenuProps>`
+const MobileNavMenu = styled.div<MobileNavMenuProps>`
   height: calc(100vh - 60px);
   background: ${props => props.theme.colors.white};
   z-index: 2;
@@ -301,7 +371,29 @@ const MobileSideMenu = styled.div<MobileSideMenuProps>`
   }
 `;
 
-const MobileMenuOption = styled.div<MobileSideMenuProps>`
+type MobileProfileNavProps = {
+  showProfileNav: boolean;
+};
+
+const MobileProfileNav = styled.div<MobileProfileNavProps>`
+  height: calc(100vh - 60px);
+  background: ${props => props.theme.colors.white};
+  z-index: 2;
+  width: ${props => (props.showProfileNav ? "85vw" : "0")};
+  position: fixed;
+  padding-top: 40px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.2s;
+  right: 0;
+  display: none;
+  margin-top: 10px;
+
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const MobileMenuOption = styled.div<MobileNavMenuProps>`
   font-size: 12px;
   align-items: center;
   padding: 5px 30px;
@@ -542,7 +634,7 @@ const KeyActivitiesButton = styled.div`
 `;
 
 const KeyActivitiesContainer = styled.div`
-  overflow-y: scroll;
+  overflow-y: auto;
   height: 380px;
 `;
 
@@ -575,7 +667,7 @@ const CloseIconContainer = styled.div`
 `;
 
 const IssuesContainer = styled.div`
-  overflow-y: scroll;
+  overflow-y: auto;
   height: 380px;
 `;
 

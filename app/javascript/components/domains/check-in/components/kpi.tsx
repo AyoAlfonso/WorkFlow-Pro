@@ -16,8 +16,6 @@ import moment from "moment";
 import { toJS } from "mobx";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "./empty-state";
-import { Journal } from "~/components/domains/journal/journal-widget";
-import { Habits } from "~/components/domains/habits/habits-widget";
 
 export const KpiComponent = observer(
   (props): JSX.Element => {
@@ -37,13 +35,6 @@ export const KpiComponent = observer(
     const [value, setValue] = useState(undefined);
     const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(true);
-
-    //////
-    const [expanded, setExpanded] = useState<string>("");
-    const [questionnaireVariant, setQuestionnaireVariant] = useState<string>("");
-    const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : "");
-    };
 
     useEffect(() => {
       scorecardStore
@@ -95,13 +86,6 @@ export const KpiComponent = observer(
           ) : (
             <>
               {renderHeading()}
-              <Journal
-                expanded={expanded}
-                handleChange={handleChange}
-                questionnaireVariant={questionnaireVariant}
-                setQuestionnaireVariant={setQuestionnaireVariant}
-              />
-              <Habits expanded={expanded} handleChange={handleChange} />
               {kpis.map(kpi => (
                 <Container key={kpi.id}>
                   <SubHeaderText>

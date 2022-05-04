@@ -6,6 +6,7 @@ import { withEnvironment } from "../lib/with-environment";
 import { KeyActivityModel } from "../models/key-activity";
 import * as R from "ramda";
 import { CommentLogModel } from "~/models/comment-logs";
+import { toJS } from "mobx";
 
 export const KeyActivityStoreModel = types
   .model("KeyActivityStoreModel")

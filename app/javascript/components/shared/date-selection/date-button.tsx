@@ -8,11 +8,23 @@ interface IDueDateButtonProps {
   onClick?: () => void;
   text?: string;
   fontSize?: string;
+  disabled?: boolean;
 }
 
-export const DateButton = ({ onClick, text, displayColor, fontSize }: IDueDateButtonProps): JSX.Element => {
+export const DateButton = ({
+  onClick,
+  text,
+  displayColor,
+  fontSize,
+  disabled,
+}: IDueDateButtonProps): JSX.Element => {
   return (
-    <DateButtonContainer onClick={onClick} displayColor={displayColor} fontSize={fontSize}>
+    <DateButtonContainer
+      disabled={disabled}
+      onClick={onClick}
+      displayColor={displayColor}
+      fontSize={fontSize}
+    >
       <Icon icon={"Deadline-Calendar"} iconColor={"inherit"} size={"16px"} mr={text ? "8px" : ""} />
       {text}
     </DateButtonContainer>
@@ -28,7 +40,7 @@ const DateButtonContainer = styled.div<IDueDateButtonProps>`
   font-size: 13px;
 
   &:hover {
-    cursor: pointer;
+    cursor: ${props => (props.disabled ? "auto" : "pointer")};
     filter: brightness(80%);
   }
 `;

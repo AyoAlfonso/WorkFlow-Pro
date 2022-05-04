@@ -12,12 +12,15 @@ export const HabitStoreModel = types
   .props({
     habits: types.array(HabitModel),
     habit: types.maybeNull(HabitModel),
-    lastFiveDays: types.array(types.frozen()),
+    lastFewDays: types.array(types.frozen()),
   })
   .extend(withEnvironment())
   .views(self => ({
     get lastFourDays() {
-      return self.lastFiveDays.slice(0, 4);
+      return self.lastFewDays.slice(0, 4);
+    },
+    get lastFiveDays() {
+      return self.lastFewDays.slice(0, 5);
     },
     get totalFrequency() {
       return self.habits.reduce((sum, habit) => sum + (habit.frequency || 0), 0);
@@ -64,7 +67,7 @@ export const HabitStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.getHabits();
       if (response.ok) {
         self.habits = response.data.habits;
-        self.lastFiveDays = response.data.lastFiveDays;
+        self.lastFewDays = response.data.lastFewDays;
       }
     }),
     fetchHabitsForPersonalPlanning: flow(function*() {
