@@ -121,7 +121,7 @@ export const ScorecardSelector = observer(
       setCompanyUsers(users);
       setTeams(teams);
       setCompany(company);
-    }, [teamStore.teams, companyStore.company, userStore.users]);
+    }, []);
 
     const ownerSelector = owner => {
       history.push(`/scorecard/${owner.type}/${owner.id}`);

@@ -44,10 +44,7 @@ export const ScorecardsIndex = observer(
     };
     useEffect(() => {
       setLoading(true);
-      userStore.load();
-      teamStore.load();
       keyPerformanceIndicatorStore.load();
-      companyStore.load();
     }, []);
 
     useEffect(() => {
