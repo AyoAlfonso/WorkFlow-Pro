@@ -1,15 +1,19 @@
 class TeamIssueResortService < ApplicationService
   attr_accessor :team_issues, :meeting
 
-  def initialize(team_issues, meeting)
+  def initialize(team_issues, meeting, sort_type)
     @team_issues = team_issues
     @meeting = meeting
+    @sort_type = sort_type
   end
 
   def call
     #reposition items that are part of meeting as the first ones, then sort the rest by priority
     sorted_meeting_team_issues = @team_issues.where(id: meeting.team_issue_meeting_enablements.pluck(:id)).sort_by_position.sort_by_completed_date
     sorted_team_issues = @team_issues.where.not(id: meeting.team_issue_meeting_enablements.pluck(:id)).sort_by_issue_priority.sort_by_completed_date
+    if @sort_type == 'by_upvotes'
+      sorted_team_issues = sorted_team_issues.sort_by_issue_upvotes
+    end
     reset_positions(sorted_meeting_team_issues, sorted_team_issues)
   end
 

@@ -101,11 +101,14 @@ class Api::IssuesController < Api::ApplicationController
       meeting = Meeting.find(params[:meeting_id])
       team_id = meeting.team_id
       @issues = team_meeting_issues(team_id).exclude_personal_for_team
-      @team_issues = TeamIssueResortService.call(TeamIssue.for_team(team_id).exclude_personal_for_team, meeting).sort_by_position
+      @team_issues = TeamIssueResortService.call(TeamIssue.for_team(team_id).exclude_personal_for_team, meeting,params[:sort]).sort_by_position
       @meeting_team_issues = Issue.for_meeting(params[:meeting_id]).exclude_personal_for_team
     elsif params[:team_id].present? && params[:meeting_id].blank?
       @issues = IssueResortService.call(policy_scope(Issue).where(team_id: params[:team_id])).exclude_personal_for_team
       @team_issues = TeamIssue.for_team(params[:team_id]).sort_by_position.exclude_personal_for_team
+       if params[:sort].present?
+        @team_issues = @team_issues.sort_by_issue_upvotes
+       end
     else
       @issues = IssueResortService.call(policy_scope(Issue).where(user_id: current_user.id))
     end

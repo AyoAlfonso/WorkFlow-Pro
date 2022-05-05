@@ -13,6 +13,7 @@ class TeamIssue < ApplicationRecord
   scope :complete, -> { where.not(completed_at: nil) }
   scope :incomplete, -> { where(completed_at: nil) }
   scope :optimized, -> { includes(issue: [{ user: { avatar_attachment: :blob } }, :labels, :label_taggings]) }
+  scope :sort_by_issue_upvotes, -> { joins(:issue).merge(Issue.order(cached_votes_total: :desc)) }
 
   scope :sort_by_completed_date, -> { order(completed_at: :desc) }
 
