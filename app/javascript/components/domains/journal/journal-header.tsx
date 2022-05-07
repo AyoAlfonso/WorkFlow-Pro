@@ -56,7 +56,6 @@ const getWindowDimensions = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   
-  console.log(windowDimensions.availHeight);
   return (
     <>
       <AccordianContainer>
