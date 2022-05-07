@@ -32,10 +32,10 @@ export const ParkingLotIssues = observer(
         sortIssuesByPriority,
       },
       issueStore,
-      companyStore
+      companyStore,
     } = useMst();
     const { t } = useTranslation();
-    const isForum = companyStore.company?.displayFormat == "Forum"
+    const isForum = companyStore.company?.displayFormat == "Forum";
 
     const sortOptionsForCompany = [
       {
@@ -55,7 +55,7 @@ export const ParkingLotIssues = observer(
       },
       {
         label: "Sort by Due Date",
-        value: "by_dueDate",
+        value: "by_due_date",
       },
       {
         label: "Sort by Priority",
@@ -63,7 +63,7 @@ export const ParkingLotIssues = observer(
       },
     ];
 
-    const sortMenuOptions = isForum ? sortOptionsForForum : sortOptionsForCompany
+    const sortMenuOptions = isForum ? sortOptionsForForum : sortOptionsForCompany;
 
     const { loading, teamIssues } = issueStore;
 

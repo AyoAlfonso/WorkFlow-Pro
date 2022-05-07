@@ -48,7 +48,7 @@ export const TeamIssuesHeader = ({
     },
     {
       label: "Sort by Due Date",
-      value: "by_dueDate",
+      value: "by_due_date",
     },
     {
       label: "Sort by Priority",
