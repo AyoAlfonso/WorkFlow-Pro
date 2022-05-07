@@ -207,7 +207,7 @@ export const ForumAgendaSearch = observer(() => {
           selectedDateFilter={selectedDateFilter}
           setSelectedDateFilter={setSelectedDateFilter}
           dateSelectAction={dateSelectedAction}
-          width={"450px"}
+          width={"20%"}
           maxDate={addDays(new Date(), 365)}
           customFilterOptions={filterOptions}
         />
@@ -221,26 +221,39 @@ export const ForumAgendaSearch = observer(() => {
 
 const Container = styled.div`
   display: flex;
+
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+    padding: 1em;
+  }
 `;
 
 const SelectedEntryContainer = styled.div`
-  margin-left: 50px;
+  // margin-left: 50px;
   padding-right: 5px;
   display: flex;
 `;
 
 const StyledEntryContainer = styled(EntryContainer)`
-  width: 100%;
+  width: 60%;
   padding: 0;
   max-height: inherit;
+  @media only screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const StyledItemListContainer = styled(ItemListContainer)`
-  min-width: 300px;
+  // min-width: 300px;
+  width: 20%;
   margin-top: 0px;
   margin-right: 0rem;
   margin-bottom: 0rem;
-  margin-left: 5%;
+  // margin-left: 5%;
+  @media only screen and (max-width: 768px) {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
 `;
 
 const MeetingResultContainer = styled.div``;
