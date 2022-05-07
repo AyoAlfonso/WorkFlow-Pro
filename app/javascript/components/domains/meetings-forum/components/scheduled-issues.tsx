@@ -40,19 +40,38 @@ export const ScheduledIssues = observer(
         openMeetingScheduledTeamIssues,
         closedMeetingScheduledTeamIssues,
       },
+      companyStore,
     } = useMst();
     const { t } = useTranslation();
+    const isForum = companyStore.company?.displayFormat == "Forum";
 
-    const sortMenuOptions = [
-      {
-        label: "Sort by Priority",
-        value: "by_priority",
-      },
+    const sortOptionsForCompany = [
       {
         label: "Sort by Upvotes",
         value: "by_upvotes",
       },
+      {
+        label: "Sort by Priority",
+        value: "by_priority",
+      },
     ];
+
+    const sortOptionsForForum = [
+      {
+        label: "Sort by Upvotes",
+        value: "by_upvotes",
+      },
+      {
+        label: "Sort by Due Date",
+        value: "by_dueDate",
+      },
+      {
+        label: "Sort by Priority",
+        value: "by_priority",
+      },
+    ];
+
+    const sortMenuOptions = isForum ? sortOptionsForForum : sortOptionsForCompany;
 
     const handleSortMenuItemClick = value => {
       setSortOptionsOpen(false);
