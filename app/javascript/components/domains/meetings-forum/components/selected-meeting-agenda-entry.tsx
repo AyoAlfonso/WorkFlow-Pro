@@ -145,167 +145,171 @@ export const SelectedMeetingAgendaEntry = observer(
           <StyledHeading type={"h2"}>
             {meetingTypeParser(selectedMeeting.meetingType)}
           </StyledHeading>
-          <StyledChevronIconContainer
-            onClick={e => {
-              e.stopPropagation();
-              setShowScheduledStartDate(!showScheduledStartDate);
-            }}
-          >
-            <MeetingSectionHeaderText>{`${t(
-              "forum.scheduledStartTime",
-            )}: `}</MeetingSectionHeaderText>
-            <StyledChevronIcon
-              icon={showScheduledStartDate ? "Chevron-Up" : "Chevron-Down"}
-              size={"12px"}
-              iconColor={showScheduledStartDate ? "grey100" : "primary100"}
-            />{" "}
-          </StyledChevronIconContainer>
-          {showScheduledStartDate ? renderScheduledStartDate() : <></>}
-
-          <HtmlTooltip
-            arrow={true}
-            open={showActualStartTimeTooltip}
-            enterDelay={500}
-            leaveDelay={200}
-            title={<span>There is no actual start time data from the meeting yet</span>}
-          >
+          <InformationContainer>
             <StyledChevronIconContainer
               onClick={e => {
                 e.stopPropagation();
-                if (!selectedMeeting.startTime) return;
-                setShowActualStartTime(!showActualStartTime);
-              }}
-              onMouseEnter={() => {
-                setShowActualStartTimeTooltip(!selectedMeeting.startTime && true);
-              }}
-              onMouseLeave={() => {
-                setShowActualStartTimeTooltip(false);
+                setShowScheduledStartDate(!showScheduledStartDate);
               }}
             >
-              <MeetingSectionHeaderText>
-                {`${t("forum.actualStartTime")}`}{" "}
-              </MeetingSectionHeaderText>
+              <MeetingSectionHeaderText>{`${t(
+                "forum.scheduledStartTime",
+              )}: `}</MeetingSectionHeaderText>
               <StyledChevronIcon
-                icon={showActualStartTime ? "Chevron-Up" : "Chevron-Down"}
+                icon={showScheduledStartDate ? "Chevron-Up" : "Chevron-Down"}
                 size={"12px"}
-                iconColor={showActualStartTime ? "grey100" : "primary100"}
-              />
-            </StyledChevronIconContainer>
-          </HtmlTooltip>
-
-          {showActualStartTime &&
-            selectedMeeting.startTime &&
-            `${moment(selectedMeeting.startTime).format("dddd, MMMM D, LT")}`}
-
-          {disabled ? (
-            <HtmlTooltip
-              arrow={true}
-              open={showLocationTooltip}
-              enterDelay={500}
-              leaveDelay={200}
-              title={<span>There is no location data for the meeting yet</span>}
-            >
-              <>
-                <StyledChevronIconContainer
-                  onClick={e => {
-                    e.stopPropagation();
-                    setShowLocation(!showLocation);
-                    if (!location) return;
-                  }}
-                  onMouseEnter={() => {
-                    setShowLocationTooltip(!location && true);
-                  }}
-                  onMouseLeave={() => {
-                    setShowLocationTooltip(false);
-                  }}
-                >
-                  <MeetingSectionHeaderText> Location</MeetingSectionHeaderText>
-                  <StyledChevronIcon
-                    icon={showLocation ? "Chevron-Up" : "Chevron-Down"}
-                    size={"12px"}
-                    iconColor={showLocation ? "grey100" : "primary100"}
-                  />{" "}
-                </StyledChevronIconContainer>
-                {showLocation && <MeetingSectionHeaderText> {location}</MeetingSectionHeaderText>}
-              </>
-            </HtmlTooltip>
-          ) : (
-            <LocationContainer>
-              <StyledContentEditable
-                innerRef={locationRef}
-                placeholder={"Enter the location"}
-                html={location || ""}
-                onChange={handleChangeLocation}
-                onKeyDown={key => {
-                  if (key.keyCode == 13) {
-                    locationRef.current.blur();
-                  }
-                }}
-                onBlur={handleBlurLocation}
-              />
-            </LocationContainer>
-          )}
-
-          <StyledChevronIconContainer
-            onClick={e => {
-              e.stopPropagation();
-              setShowMeetingAgenda(!showMeetingAgenda);
-            }}
-          >
-            <MeetingSectionHeaderText>{`${t("forum.meetingAgenda")} `}</MeetingSectionHeaderText>
-            <StyledChevronIcon
-              icon={showMeetingAgenda ? "Chevron-Up" : "Chevron-Down"}
-              size={"12px"}
-              iconColor={showMeetingAgenda ? "grey100" : "primary100"}
-            />{" "}
-          </StyledChevronIconContainer>
-          {showMeetingAgenda ? renderMeetingAgenda() : <></>}
-
-          <HtmlTooltip
-            arrow={true}
-            open={showAverageRatingTooltip}
-            enterDelay={500}
-            leaveDelay={200}
-            title={<span>There is no average rating data from the meeting yet</span>}
-          >
-            <StyledChevronIconContainer
-              onClick={e => {
-                e.stopPropagation();
-                if (!selectedMeeting.averageRating) return;
-                setshowAverageRating(!showAverageRating);
-              }}
-              onMouseEnter={() => {
-                setShowAverageRatingTooltip(!selectedMeeting.averageRating && true);
-              }}
-              onMouseLeave={() => {
-                setShowAverageRatingTooltip(false);
-              }}
-            >
-              <MeetingSectionHeaderText> {t("forum.averageRating")}</MeetingSectionHeaderText>
-              <StyledChevronIcon
-                icon={showAverageRating ? "Chevron-Up" : "Chevron-Down"}
-                size={"12px"}
-                iconColor={showAverageRating ? "grey100" : "primary100"}
+                iconColor={showScheduledStartDate ? "grey100" : "primary100"}
               />{" "}
             </StyledChevronIconContainer>
-          </HtmlTooltip>
+            {showScheduledStartDate ? renderScheduledStartDate() : <></>}
 
-          {showAverageRating ? selectedMeeting.averageRating : <></>}
+            <HtmlTooltip
+              arrow={true}
+              open={showActualStartTimeTooltip}
+              enterDelay={500}
+              leaveDelay={200}
+              title={<span>There is no actual start time data from the meeting yet</span>}
+            >
+              <StyledChevronIconContainer
+                onClick={e => {
+                  e.stopPropagation();
+                  if (!selectedMeeting.startTime) return;
+                  setShowActualStartTime(!showActualStartTime);
+                }}
+                onMouseEnter={() => {
+                  setShowActualStartTimeTooltip(!selectedMeeting.startTime && true);
+                }}
+                onMouseLeave={() => {
+                  setShowActualStartTimeTooltip(false);
+                }}
+              >
+                <MeetingSectionHeaderText>
+                  {`${t("forum.actualStartTime")}`}{" "}
+                </MeetingSectionHeaderText>
+                <StyledChevronIcon
+                  icon={showActualStartTime ? "Chevron-Up" : "Chevron-Down"}
+                  size={"12px"}
+                  iconColor={showActualStartTime ? "grey100" : "primary100"}
+                />
+              </StyledChevronIconContainer>
+            </HtmlTooltip>
 
-          <StyledChevronIconContainer
-            onClick={e => {
-              e.stopPropagation();
-              setShowNotes(!showNotes);
-            }}
-          >
-            <MeetingSectionHeaderText> Notes</MeetingSectionHeaderText>
-            <StyledChevronIcon
-              icon={showNotes ? "Chevron-Up" : "Chevron-Down"}
-              size={"12px"}
-              iconColor={showNotes ? "grey100" : "primary100"}
-            />{" "}
-          </StyledChevronIconContainer>
-          {showNotes ? renderNotes() : <></>}
+            {showActualStartTime && selectedMeeting.startTime && (
+              <DateValue>{`${moment(selectedMeeting.startTime).format(
+                "dddd, MMMM D, LT",
+              )}`}</DateValue>
+            )}
+
+            {disabled ? (
+              <HtmlTooltip
+                arrow={true}
+                open={showLocationTooltip}
+                enterDelay={500}
+                leaveDelay={200}
+                title={<span>There is no location data for the meeting yet</span>}
+              >
+                <>
+                  <StyledChevronIconContainer
+                    onClick={e => {
+                      e.stopPropagation();
+                      setShowLocation(!showLocation);
+                      if (!location) return;
+                    }}
+                    onMouseEnter={() => {
+                      setShowLocationTooltip(!location && true);
+                    }}
+                    onMouseLeave={() => {
+                      setShowLocationTooltip(false);
+                    }}
+                  >
+                    <MeetingSectionHeaderText> Location</MeetingSectionHeaderText>
+                    <StyledChevronIcon
+                      icon={showLocation ? "Chevron-Up" : "Chevron-Down"}
+                      size={"12px"}
+                      iconColor={showLocation ? "grey100" : "primary100"}
+                    />{" "}
+                  </StyledChevronIconContainer>
+                  {showLocation && <MeetingSectionHeaderText> {location}</MeetingSectionHeaderText>}
+                </>
+              </HtmlTooltip>
+            ) : (
+              <LocationContainer>
+                <StyledContentEditable
+                  innerRef={locationRef}
+                  placeholder={"Enter the location"}
+                  html={location || ""}
+                  onChange={handleChangeLocation}
+                  onKeyDown={key => {
+                    if (key.keyCode == 13) {
+                      locationRef.current.blur();
+                    }
+                  }}
+                  onBlur={handleBlurLocation}
+                />
+              </LocationContainer>
+            )}
+
+            <StyledChevronIconContainer
+              onClick={e => {
+                e.stopPropagation();
+                setShowMeetingAgenda(!showMeetingAgenda);
+              }}
+            >
+              <MeetingSectionHeaderText>{`${t("forum.meetingAgenda")} `}</MeetingSectionHeaderText>
+              <StyledChevronIcon
+                icon={showMeetingAgenda ? "Chevron-Up" : "Chevron-Down"}
+                size={"12px"}
+                iconColor={showMeetingAgenda ? "grey100" : "primary100"}
+              />{" "}
+            </StyledChevronIconContainer>
+            {showMeetingAgenda ? renderMeetingAgenda() : <></>}
+
+            <HtmlTooltip
+              arrow={true}
+              open={showAverageRatingTooltip}
+              enterDelay={500}
+              leaveDelay={200}
+              title={<span>There is no average rating data from the meeting yet</span>}
+            >
+              <StyledChevronIconContainer
+                onClick={e => {
+                  e.stopPropagation();
+                  if (!selectedMeeting.averageRating) return;
+                  setshowAverageRating(!showAverageRating);
+                }}
+                onMouseEnter={() => {
+                  setShowAverageRatingTooltip(!selectedMeeting.averageRating && true);
+                }}
+                onMouseLeave={() => {
+                  setShowAverageRatingTooltip(false);
+                }}
+              >
+                <MeetingSectionHeaderText> {t("forum.averageRating")}</MeetingSectionHeaderText>
+                <StyledChevronIcon
+                  icon={showAverageRating ? "Chevron-Up" : "Chevron-Down"}
+                  size={"12px"}
+                  iconColor={showAverageRating ? "grey100" : "primary100"}
+                />{" "}
+              </StyledChevronIconContainer>
+            </HtmlTooltip>
+
+            {showAverageRating ? selectedMeeting.averageRating : <></>}
+
+            <StyledChevronIconContainer
+              onClick={e => {
+                e.stopPropagation();
+                setShowNotes(!showNotes);
+              }}
+            >
+              <MeetingSectionHeaderText> Notes</MeetingSectionHeaderText>
+              <StyledChevronIcon
+                icon={showNotes ? "Chevron-Up" : "Chevron-Down"}
+                size={"12px"}
+                iconColor={showNotes ? "grey100" : "primary100"}
+              />{" "}
+            </StyledChevronIconContainer>
+            {showNotes ? renderNotes() : <></>}
+          </InformationContainer>
         </ChildContainer>
       </Container>
     );
@@ -314,9 +318,9 @@ export const SelectedMeetingAgendaEntry = observer(
 
 const Container = styled.div`
   width: 100%;
-  min-width: 300px;
-  display: flex;
-  justify-content: space-around;
+  // min-width: 300px;
+  // display: flex;
+  // justify-content: space-around;
 `;
 const StyledChevronIcon = styled(Icon)`
   display: inline-block;
@@ -374,6 +378,15 @@ const MeetingAgendaContainer = styled.div`
 `;
 
 const ChildContainer = styled.div`
-  width: 50%;
-  min-width: 375px;
+  // width: 50%;
+  // min-width: 375px;
+`;
+
+const DateValue = styled.span`
+  display: inline-block;
+  padding-top: 1em;
+`;
+
+const InformationContainer = styled.div`
+  padding: 0.5em;
 `;

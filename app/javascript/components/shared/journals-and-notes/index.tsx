@@ -47,6 +47,9 @@ export const ItemListContainer = styled.div`
   max-height: 70vh;
   padding: 15px 25px 15px 25px;
   overflow-y: auto;
+  @media only screen and (max-width: 768px) {
+    padding: 0;
+  }
 `;
 
 export const EntryContainer = styled.div`

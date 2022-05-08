@@ -5,12 +5,13 @@ import {
   FilterContainer,
   FilterOption,
 } from "~/components/shared/journals-and-notes";
-import { Heading, Card, CardHeaderText } from "~/components/shared";
+import { Heading, Card, CardHeaderText, Button } from "~/components/shared";
 import { useTranslation } from "react-i18next";
 import { addDays } from "date-fns";
 import { DateRange } from "react-date-range";
 import { baseTheme } from "~/themes/base";
 import styled from "styled-components";
+import Modal from "styled-react-modal";
 import { Icon } from "~/components/shared/icon";
 import { TypographyProps } from "styled-system";
 
@@ -117,26 +118,48 @@ export const CalendarFilter = ({
 
   const renderCustomDateRange = (): JSX.Element => {
     return (
-      <DateRange
-        showDateDisplay={false}
-        showMonthAndYearPickers={false}
-        ranges={[...Object.values(dateFilter)]}
-        onChange={ranges => {
-          setSelectedDateFilter("");
-          handleDateSelect(ranges);
-        }}
-        shownDate={new Date()}
-        showSelectionPreview={true}
-        direction={"vertical"}
-        minDate={minDate || addDays(new Date(), -90)}
-        maxDate={maxDate || new Date()}
-        scroll={{
-          enabled: true,
-          calendarWidth: 320,
-          monthWidth: 320,
-        }}
-        rangeColors={[baseTheme.colors.primary80]}
-      />
+      <DateRangeModal
+        isOpen={showCustomDateRange}
+        onBackgroundClick={() => setShowCustomDateRange(false)}
+      >
+        <DatePickerModalHeaderContainer>
+          <DatePickerModalHeader>Select Date Range</DatePickerModalHeader>
+          <DateModalIconContainer onClick={() => setShowCustomDateRange(false)}>
+            <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} ml="8px" />
+          </DateModalIconContainer>
+        </DatePickerModalHeaderContainer>
+        <DateRange
+          showDateDisplay={false}
+          showMonthAndYearPickers={false}
+          ranges={[...Object.values(dateFilter)]}
+          onChange={ranges => {
+            setSelectedDateFilter("");
+            handleDateSelect(ranges);
+          }}
+          shownDate={new Date()}
+          showSelectionPreview={true}
+          direction={"vertical"}
+          minDate={minDate || addDays(new Date(), -90)}
+          maxDate={maxDate || new Date()}
+          scroll={{
+            enabled: true,
+            calendarWidth: 320,
+            monthWidth: 320,
+          }}
+          rangeColors={[baseTheme.colors.primary80]}
+        />
+        <Button
+          variant={"primary"}
+          small
+          onClick={() => {
+            setShowCustomDateRange(false);
+          }}
+          ml="0.5em"
+          mt="0.5em"
+        >
+          Done
+        </Button>
+      </DateRangeModal>
     );
   };
 
@@ -184,6 +207,14 @@ const StyledChevronIcon = styled(Icon)`
   padding: 0px 15px;
 `;
 
+const DateRangeModal = Modal.styled`
+  width: fit-content;
+  border-radius: 8px;
+  height: fit-content;
+  background-color: ${props => props.theme.colors.white};
+  padding: 0.5em;
+`;
+
 const StyledChevronIconContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -191,7 +222,11 @@ const StyledChevronIconContainer = styled.div`
 `;
 const Container = styled.div<ContainerProps>`
   width: ${props => props.width};
-  min-width: 370px;
+  // min-width: 370px;
+  @media only screen and (max-width: 768px) {
+    width: 100%;
+    margin-bottom: 1em;
+  }
 `;
 
 const CardBottomText = styled.h5<TypographyProps>`
@@ -206,4 +241,21 @@ const StyledFilterContainer = styled(FilterContainer)`
 const StyledBodyContainer = styled(BodyContainer)`
   display: block;
   overflow-y: auto;
+`;
+
+const DatePickerModalHeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+`;
+
+const DatePickerModalHeader = styled.h1`
+  font-size: 18px;
+`;
+
+const DateModalIconContainer = styled.div`
+  margin-left: auto;
+  cursor: pointer;
 `;
