@@ -31,6 +31,7 @@ class Issue < ApplicationRecord
   scope :created_by_user, ->(user) { where(user: user) }
   scope :sort_by_priority, -> { order(priority: :desc) }
   scope :sort_by_upvotes, -> { order(cached_votes_total: :desc) }
+  scope :sort_by_due_date, -> {  where.not(due_date: nil).order(due_date: :asc) }
 
   scope :sort_by_created_date, -> { order(created_at: :asc) }
   scope :sort_by_completed_date, -> { order(completed_at: :asc) }

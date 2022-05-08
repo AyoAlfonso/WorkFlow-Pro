@@ -49,7 +49,6 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def update
-    # binding.pry
     @key_activity_previously_completed = @key_activity.completed_at.present?
     merged_key_activity_params = params[:label_list].present? ? key_activity_params.merge(label_list: ActsAsTaggableOn::Tag.find(params[:label_list]) || params[:label_list]) : key_activity_params
 

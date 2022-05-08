@@ -101,16 +101,31 @@ class Api::IssuesController < Api::ApplicationController
       meeting = Meeting.find(params[:meeting_id])
       team_id = meeting.team_id
       @issues = team_meeting_issues(team_id).exclude_personal_for_team
-      @team_issues = TeamIssueResortService.call(TeamIssue.for_team(team_id).exclude_personal_for_team, meeting,params[:sort]).sort_by_position
+      @team_issues = TeamIssueResortService.call(TeamIssue.for_team(team_id).exclude_personal_for_team, meeting)
+      if params[:sort].nil?
+       @team_issues = @team_issues.sort_by_position
+      end
       @meeting_team_issues = Issue.for_meeting(params[:meeting_id]).exclude_personal_for_team
     elsif params[:team_id].present? && params[:meeting_id].blank?
       @issues = IssueResortService.call(policy_scope(Issue).where(team_id: params[:team_id])).exclude_personal_for_team
-      @team_issues = TeamIssue.for_team(params[:team_id]).sort_by_position.exclude_personal_for_team
-       if params[:sort].present?
-        @team_issues = @team_issues.sort_by_issue_upvotes
-       end
+      @team_issues = TeamIssue.for_team(params[:team_id]).exclude_personal_for_team
+      if params[:sort].nil?
+       @team_issues = @team_issues.sort_by_position
+      end
     else
       @issues = IssueResortService.call(policy_scope(Issue).where(user_id: current_user.id))
+    end
+
+    case params[:sort]
+    when "by_priority"
+      @issues = @issues.sort_by_priority.sort_by_due_date
+      @team_issues = @team_issues.sort_by_issue_priority.sort_by_issue_due_date
+    when "by_upvotes"
+      @issues = @issues.sort_by_upvotes.sort_by_priority
+      @team_issues = @team_issues.sort_by_issue_upvotes.sort_by_issue_due_date.sort_by_issue_priority
+    when "by_due_date"
+      @issues = @issues.sort_by_due_date.sort_by_priority
+      @team_issues = @team_issues.sort_by_issue_due_date.sort_by_issue_priority
     end
     authorize @issues
     render "api/issues/resort"
@@ -128,9 +143,12 @@ class Api::IssuesController < Api::ApplicationController
   end
 
   def team_meeting_issues(team_id)
-    policy_scope(Issue).where(team_id: team_id).sort_by_position_and_priority_and_created_at_and_completed_at
+    if params[:sort].present?
+          policy_scope(Issue).where(team_id: team_id)
+    else
+       policy_scope(Issue).where(team_id: team_id).sort_by_position_and_priority_and_created_at_and_completed_at
+    end
   end
-  
   def record_activities
     record_activity(params[:note])
   end 
