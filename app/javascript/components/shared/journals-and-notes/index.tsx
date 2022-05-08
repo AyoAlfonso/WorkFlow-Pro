@@ -30,7 +30,7 @@ export const BodyRightContainer = styled.div`
   display: grid;
   grid-template-columns: minmax(205px, 1fr) minmax(440px, 3fr);
   width: 100%;
-  margin-top: 75px;
+  // margin-top: 75px;
 `;
 
 export const FilterContainer = styled.div`
@@ -153,7 +153,7 @@ export const EntryBodyCard = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   border-radius: 10px;
-  box-shadow: 1px 3px 6px 1px rgba(0, 0, 0, 0.15);
+  // box-shadow: 1px 3px 6px 1px rgba(0, 0, 0, 0.15);
   margin: 8px;
   padding: 8px;
 `;

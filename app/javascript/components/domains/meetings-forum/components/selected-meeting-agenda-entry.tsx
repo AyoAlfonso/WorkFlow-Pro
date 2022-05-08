@@ -233,20 +233,44 @@ export const SelectedMeetingAgendaEntry = observer(
                 </>
               </HtmlTooltip>
             ) : (
-              <LocationContainer>
-                <StyledContentEditable
-                  innerRef={locationRef}
-                  placeholder={"Enter the location"}
-                  html={location || ""}
-                  onChange={handleChangeLocation}
-                  onKeyDown={key => {
-                    if (key.keyCode == 13) {
-                      locationRef.current.blur();
-                    }
+              <>
+                <StyledChevronIconContainer
+                  onClick={e => {
+                    e.stopPropagation();
+                    setShowLocation(!showLocation);
+                    if (!location) return;
                   }}
-                  onBlur={handleBlurLocation}
-                />
-              </LocationContainer>
+                  onMouseEnter={() => {
+                    setShowLocationTooltip(!location && true);
+                  }}
+                  onMouseLeave={() => {
+                    setShowLocationTooltip(false);
+                  }}
+                >
+                  <LocationHeaderText> Location</LocationHeaderText>
+                  <StyledChevronIcon
+                    icon={showLocation ? "Chevron-Up" : "Chevron-Down"}
+                    size={"12px"}
+                    iconColor={showLocation ? "grey100" : "primary100"}
+                  />
+                </StyledChevronIconContainer>
+                {showLocation && (
+                  <LocationContainer>
+                    <StyledContentEditable
+                      innerRef={locationRef}
+                      placeholder={"Enter the location"}
+                      html={location || ""}
+                      onChange={handleChangeLocation}
+                      onKeyDown={key => {
+                        if (key.keyCode == 13) {
+                          locationRef.current.blur();
+                        }
+                      }}
+                      onBlur={handleBlurLocation}
+                    />
+                  </LocationContainer>
+                )}
+              </>
             )}
 
             <StyledChevronIconContainer
@@ -348,7 +372,9 @@ const MeetingSectionHeaderText = styled(Text)`
   margin-top: 0;
   font-weight: bold;
 `;
-
+const LocationHeaderText = styled(MeetingSectionHeaderText)`
+  padding-top: 1em;
+`;
 const LocationContainer = styled.div`
   display: flex;
   margin: 6px;
@@ -360,10 +386,8 @@ const StyledContentEditable = styled(ContentEditable)`
   border-radius: 5px;
   border: ${props => `1px solid ${props.theme.colors.borderGrey}`};
   box-shadow: 0px 3px 6px #f5f5f5;
-  padding-left: 16px;
-  padding-right: 16px;
   width: 100%;
-  margin: 8px;
+  margin: 8px 0px;
 `;
 
 const MeetingTimeContainer = styled.div`

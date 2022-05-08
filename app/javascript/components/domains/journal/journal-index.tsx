@@ -230,6 +230,7 @@ export const JournalIndex = observer(
           selectedDateFilter={selectedDateFilter}
           setSelectedDateFilter={setSelectedDateFilter}
           setLoading={setLoading}
+          width={"20%"}
           dateSelectAction={dateSelectedAction}
         />
 
