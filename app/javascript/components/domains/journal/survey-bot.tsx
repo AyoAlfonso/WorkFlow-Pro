@@ -151,52 +151,54 @@ export const SurveyBot = observer(
     }
 
     return (
-      <ChatBot
-        botDelay={1000}
-        bubbleOptionStyle={{
-          backgroundColor: baseTheme.colors.primary100,
-          color: "white",
-          boxShadow: "2px 2px 2px rgba(0, 0, 0, 0.3)",
-          cursor: "pointer",
-        }}
-        headerComponent={
-          <SurveyHeader
-            title={questionnaireVariant.title}
-            optionalActionsComponent={props.optionalActionsComponent}
-          />
-        }
-        steps={steps}
-        width={"100%"}
-        hideBotAvatar={true}
-        hideUserAvatar={true}
-        contentStyle={{
-          height: props.fromDailyPlanning ? window.innerHeight - 250 : "80%"
-        }}
-        // header and footer are 120px total
-        // these hard-coded values are required to make the chatbot fit inside the Journal widget :(
-        style={{ height: props.fromDailyPlanning ? window.innerHeight - 130 :  "100%" }}
-        enableSmoothScroll={true}
-        userDelay={200}
-        zIndex={1}
-        handleEnd={async ({ renderedSteps, steps, values: answers }) => {
-          const optionalParams = selectedDailyLog ? { logDate: selectedDailyLog.logDate } : {};
-          await questionnaireStore.createQuestionnaireAttempt(
-            questionnaireVariant.id,
-            {
-              renderedSteps,
-              steps,
-              answers,
-            },
-            questionnaireVariant.title,
-            optionalParams,
-          );
-          if (typeof props.endFn === "function") {
-            setTimeout(() => {
-              props.endFn();
-            }, 2000);
+      <ChatBotContainer>
+        <ChatBot
+          botDelay={1000}
+          bubbleOptionStyle={{
+            backgroundColor: baseTheme.colors.primary100,
+            color: "white",
+            boxShadow: "2px 2px 2px rgba(0, 0, 0, 0.3)",
+            cursor: "pointer",
+          }}
+          headerComponent={
+            <SurveyHeader
+              title={questionnaireVariant.title}
+              optionalActionsComponent={props.optionalActionsComponent}
+            />
           }
-        }}
-      />
+          steps={steps}
+          width={"100%"}
+          hideBotAvatar={true}
+          hideUserAvatar={true}
+          contentStyle={{
+            height: props.fromDailyPlanning ? window.innerHeight - 250 : "80%",
+          }}
+          // header and footer are 120px total
+          // these hard-coded values are required to make the chatbot fit inside the Journal widget :(
+          style={{ height: props.fromDailyPlanning ? window.innerHeight - 130 : "100%" }}
+          enableSmoothScroll={true}
+          userDelay={200}
+          zIndex={1}
+          handleEnd={async ({ renderedSteps, steps, values: answers }) => {
+            const optionalParams = selectedDailyLog ? { logDate: selectedDailyLog.logDate } : {};
+            await questionnaireStore.createQuestionnaireAttempt(
+              questionnaireVariant.id,
+              {
+                renderedSteps,
+                steps,
+                answers,
+              },
+              questionnaireVariant.title,
+              optionalParams,
+            );
+            if (typeof props.endFn === "function") {
+              setTimeout(() => {
+                props.endFn();
+              }, 2000);
+            }
+          }}
+        />
+      </ChatBotContainer>
     );
   },
 );
@@ -240,20 +242,30 @@ const exampleSteps = [
 
 export const SurveyBotNoMst = (props: ISurveyBotProps): JSX.Element => {
   return (
-    <ChatBot
-      botAvatar={botAvatarPath}
-      userAvatar={userAvatarUrlForStorybook}
-      botDelay={1000}
-      headerComponent={
-        <SurveyHeader title={"Survey"} optionalActionsComponent={props.optionalActionsComponent} />
-      }
-      steps={exampleSteps}
-      width={"100%"}
-      contentStyle={{ height: "300px" }}
-      // header and footer are 120px total
-      style={{ height: "420px" }}
-      enableSmoothScroll={true}
-      userDelay={200}
-    />
+    <ChatBotContainer>
+      <ChatBot
+        botAvatar={botAvatarPath}
+        userAvatar={userAvatarUrlForStorybook}
+        botDelay={1000}
+        headerComponent={
+          <SurveyHeader
+            title={"Survey"}
+            optionalActionsComponent={props.optionalActionsComponent}
+          />
+        }
+        steps={exampleSteps}
+        width={"100%"}
+        contentStyle={{ height: "300px" }}
+        // header and footer are 120px total
+        style={{ height: "420px" }}
+        enableSmoothScroll={true}
+        userDelay={200}
+      />
+    </ChatBotContainer>
   );
 };
+
+const ChatBotContainer = styled.div`
+  overflow-y: auto;
+  height: 100%;
+`;

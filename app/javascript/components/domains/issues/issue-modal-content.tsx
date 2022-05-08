@@ -170,7 +170,7 @@ export const IssueModalContent = observer(
               icon={"Medium-Priority"}
               mr={mr}
               size={size}
-              iconColor={baseTheme.colors.warningRed}
+              iconColor={baseTheme.colors.tango}
               style={{ marginTop: "2px" }}
             />
           );
@@ -180,7 +180,7 @@ export const IssueModalContent = observer(
               icon={"High-Priority"}
               mr={mr}
               size={size}
-              iconColor={baseTheme.colors.mipBlue}
+              iconColor={baseTheme.colors.warningRed}
               style={{ marginTop: "2px" }}
             />
           );

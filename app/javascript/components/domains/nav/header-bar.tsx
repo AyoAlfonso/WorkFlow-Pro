@@ -301,8 +301,6 @@ export const HeaderBar = observer(
             <MobileAccountDropdownOptions
               accountActionRef={accountActionRef}
               setShowAccountActions={setShowAccountActions}
-              showCompanyOptions={showCompanyOptions}
-              setShowCompanyOptions={setShowCompanyOptions}
               setInviteTeamModalOpen={setInviteTeamModalOpen}
               setShowProfileNav={setShowProfileNav}
             />
@@ -636,6 +634,7 @@ const KeyActivitiesButton = styled.div`
 const KeyActivitiesContainer = styled.div`
   overflow-y: auto;
   height: 380px;
+  overflow-x: hidden;
 `;
 
 const IssuesButton = styled.div`
@@ -669,6 +668,7 @@ const CloseIconContainer = styled.div`
 const IssuesContainer = styled.div`
   overflow-y: auto;
   height: 380px;
+  overflow-x: hidden;
 `;
 
 const MobileLeftContainer = styled.div`

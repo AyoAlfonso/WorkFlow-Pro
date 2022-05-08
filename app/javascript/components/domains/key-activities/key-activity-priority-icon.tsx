@@ -33,7 +33,7 @@ export const KeyActivityPriorityIcon = ({
             icon={"Medium-Priority"}
             size={size}
             mr={mr}
-            iconColor={colors.warningRed}
+            iconColor={colors.tango}
             style={{ marginTop: "2px" }}
           />
         );
@@ -43,7 +43,7 @@ export const KeyActivityPriorityIcon = ({
             icon={"High-Priority"}
             size={size}
             mr={mr}
-            iconColor={colors.mipBlue}
+            iconColor={colors.warningRed}
             style={{ marginTop: "2px" }}
           />
         );

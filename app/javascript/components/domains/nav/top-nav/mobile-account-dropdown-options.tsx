@@ -15,8 +15,6 @@ import { UserStatus } from "~/components/shared/user-status";
 interface IMobileAccountDropdownOptionsProps {
   accountActionRef: any;
   setShowAccountActions: any;
-  showCompanyOptions: boolean;
-  setShowCompanyOptions: any;
   setInviteTeamModalOpen: any;
   setShowProfileNav: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -25,13 +23,12 @@ export const MobileAccountDropdownOptions = observer(
   ({
     accountActionRef,
     setShowAccountActions,
-    showCompanyOptions,
-    setShowCompanyOptions,
     setInviteTeamModalOpen,
     setShowProfileNav,
   }: IMobileAccountDropdownOptionsProps): JSX.Element => {
     const { sessionStore, companyStore, userStore } = useMst();
 
+    const [showMobileCompanyOptions, setShowMobileCompanyOptions] = useState<boolean>(false);
     const [selectedUserStatus, setSelectedUserStatus] = useState<string>(
       R.path(["profile", "currentDailyLog", "workStatus"], sessionStore),
     );
@@ -78,9 +75,8 @@ export const MobileAccountDropdownOptions = observer(
       if (parsedProfile.companyProfiles.length > 1) {
         return (
           <WorkspaceContainer
-            onClick={e => {
-              e.stopPropagation();
-              setShowCompanyOptions(!showCompanyOptions);
+            onClick={() => {
+              setShowMobileCompanyOptions(!showMobileCompanyOptions);
             }}
           >
             <LeftWorkspaceContainer>
@@ -88,7 +84,7 @@ export const MobileAccountDropdownOptions = observer(
               <CompanyText type={"small"}>{R.path(["company", "name"], companyStore)}</CompanyText>
             </LeftWorkspaceContainer>
             <RightWorkspaceContainer>
-              {!showCompanyOptions ? (
+              {!showMobileCompanyOptions ? (
                 <ChevronUp icon={"Chevron-Down"} size={"15px"} iconColor={"grey80"} />
               ) : (
                 <Icon icon={"Chevron-Down"} size={"15px"} iconColor={"grey80"} />
@@ -149,7 +145,7 @@ export const MobileAccountDropdownOptions = observer(
         <StyledDivider />
         <DropdownSectionContainer>
           {renderWorkspaceDisplay()}
-          {showCompanyOptions && (
+          {showMobileCompanyOptions && (
             <CompanyDropdownContainer>
               <CompanyOptionsContainer>{renderCompanyOptions()}</CompanyOptionsContainer>
             </CompanyDropdownContainer>
@@ -162,7 +158,7 @@ export const MobileAccountDropdownOptions = observer(
             onClick={() => {
               setInviteTeamModalOpen(true);
               setShowAccountActions(false);
-              setShowProfileNav(false)
+              setShowProfileNav(false);
             }}
           >
             Invite Users
@@ -289,6 +285,7 @@ const RightWorkspaceContainer = styled.div`
   margin-left: auto;
   margin-top: auto;
   margin-bottom: auto;
+  pointer-events: none;
 `;
 
 const ChevronUp = styled(Icon)`

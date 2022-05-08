@@ -70,13 +70,15 @@ export const HabitsBody = observer(
     const daysToRender = windowDimensions.width > 300 ? lastFewDays : lastFourDays;
 
     const dayNames = daysToRender.map((day, index) => (
-      <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"12%"}>
+      <HabitsTableHeaderCell fontWeight={"normal"} key={index} width={"50%"}>
         {moment(day).format("ddd")}
       </HabitsTableHeaderCell>
     ));
 
     const dayDates = daysToRender.map((day, index) => (
-      <HabitsTableHeaderCell key={index}>{moment(day).format("DD")}</HabitsTableHeaderCell>
+      <HabitsTableHeaderCell key={index}>
+        {moment(day).format("DD")}
+      </HabitsTableHeaderCell>
     ));
 
     return showIndividualHabit ? (
@@ -144,7 +146,7 @@ const AccordionDetailsContainer = styled(AccordionDetails)`
 `;
 
 const HabitsTableHeaderCellWide = styled(HabitsTableHeaderCell)`
-  width: 40%;
+  width: 100%;
 `;
 
 const AddNewHabitPlus = styled.div`
