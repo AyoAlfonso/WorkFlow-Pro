@@ -36,29 +36,6 @@ export const JournalHeader = ({
     setQuestionnaireVariant("");
     window.openWidget && window.openWidget();
   };
-  const getWindowDimensions = () => {
-    const {
-      innerWidth: width,
-      innerHeight: height,
-      screen: { availHeight },
-    } = window;
-    return {
-      width,
-      height,
-      availHeight,
-    };
-  };
-
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowDimensions(getWindowDimensions());
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
   
   return (
     <>
