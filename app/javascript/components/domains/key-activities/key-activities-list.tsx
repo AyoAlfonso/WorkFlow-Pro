@@ -9,6 +9,7 @@ import { Loading } from "~/components/shared/loading";
 import { IKeyActivity } from "~/models/key-activity";
 import { ColumnContainer, ColumnSubHeaderContainer } from "~/components/shared/styles/row-style";
 import { KeyActivityModalContent } from "./key-activity-modal-content";
+import { sortByPosition } from "~/utils/sorting";
 interface IKeyActivitiesListProps {
   keyActivities: Array<any>;
   droppableId: string;
@@ -21,7 +22,6 @@ function getStyle(style, snapshot) {
   }
   return {
     ...style,
-
   };
 }
 export const KeyActivitiesList = observer(
@@ -42,7 +42,7 @@ export const KeyActivitiesList = observer(
     }
 
     const renderKeyActivitiesList = () => {
-      return keyActivities.map((keyActivity, index) => {
+      return sortByPosition(keyActivities).map((keyActivity, index) => {
         const draggableId = () => {
           if (isNaN(parseInt(updateId))) {
             return `keyActivity-${keyActivity.id}`;
@@ -69,6 +69,7 @@ export const KeyActivitiesList = observer(
                   keyActivity={keyActivity}
                   dragHandleProps={...provided.dragHandleProps}
                 />
+                {provided.placeholder}
               </KeyActivityContainer>
             )}
           </Draggable>

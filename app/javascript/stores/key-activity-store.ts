@@ -205,7 +205,7 @@ export const KeyActivityStoreModel = types
         return false;
       }
     }),
-    updateKeyActivity: flow(function*(id, fromTeamMeeting = false) {
+    updateKeyActivity: flow(function*(id, fromTeamMeeting = false, dnd = false) {
       let keyActivityObject = self.incompleteKeyActivities.find(ka => ka.id === id);
       if (!keyActivityObject) {
         keyActivityObject = self.completedKeyActivities.find(ka => ka.id === id);
@@ -218,16 +218,19 @@ export const KeyActivityStoreModel = types
       self.loading = true;
 
       if (response.ok) {
-        const { createdFor, keyActivities, completedList } = response.data;
-        if (createdFor == "meeting") {
-          self.keyActivitiesFromMeeting = keyActivities;
-        } else {
-          if (completedList) {
-            self.completedKeyActivities = keyActivities;
+        if (!dnd) {
+          const { createdFor, keyActivities, completedList } = response.data;
+          if (createdFor == "meeting") {
+            self.keyActivitiesFromMeeting = keyActivities;
           } else {
-            self.incompleteKeyActivities = keyActivities;
+            if (completedList) {
+              self.completedKeyActivities = keyActivities;
+            } else {
+              self.incompleteKeyActivities = keyActivities;
+            }
           }
         }
+
         self.finishLoading();
         return true;
       } else {

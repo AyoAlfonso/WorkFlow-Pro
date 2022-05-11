@@ -184,7 +184,7 @@ export const App = observer(
           );
           keyActivityStore.updateKeyActivityState(keyActivityId, "scheduledGroupId", null);
         }
-        keyActivityStore.updateKeyActivity(keyActivityId);
+        keyActivityStore.updateKeyActivity(keyActivityId, null, true);
       } else if (R.includes("team_issue", draggableId)) {
         //something to handle team issue meeting enablement creation / deletion depnding on droppable type
         //in the create simply create it
