@@ -103,6 +103,6 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   end
   
   def record_activities
-    record_activity(params[:note])
+      record_activity(params[:note],"Annual Objectives " )
   end 
 end

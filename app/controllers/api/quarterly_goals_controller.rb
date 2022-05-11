@@ -116,6 +116,6 @@ class Api::QuarterlyGoalsController < Api::ApplicationController
   end
 
   def record_activities
-    record_activity(params[:note])
+    record_activity(params[:note],"Quarterly Initiatives" )
   end 
 end

@@ -154,7 +154,7 @@ export const SelectedMeetingAgendaEntry = observer(
             >
               <MeetingSectionHeaderText>{`${t(
                 "forum.scheduledStartTime",
-              )}: `}</MeetingSectionHeaderText>
+              )} `}</MeetingSectionHeaderText>
               <StyledChevronIcon
                 icon={showScheduledStartDate ? "Chevron-Up" : "Chevron-Down"}
                 size={"12px"}
@@ -234,7 +234,7 @@ export const SelectedMeetingAgendaEntry = observer(
               </HtmlTooltip>
             ) : (
               <>
-                <StyledChevronIconContainer
+                <LocationChevronIconContainer
                   onClick={e => {
                     e.stopPropagation();
                     setShowLocation(!showLocation);
@@ -247,13 +247,13 @@ export const SelectedMeetingAgendaEntry = observer(
                     setShowLocationTooltip(false);
                   }}
                 >
-                  <LocationHeaderText> Location</LocationHeaderText>
+                  <MeetingSectionHeaderText> Location </MeetingSectionHeaderText>
                   <StyledChevronIcon
                     icon={showLocation ? "Chevron-Up" : "Chevron-Down"}
                     size={"12px"}
                     iconColor={showLocation ? "grey100" : "primary100"}
                   />
-                </StyledChevronIconContainer>
+                </LocationChevronIconContainer>
                 {showLocation && (
                   <LocationContainer>
                     <StyledContentEditable
@@ -372,9 +372,6 @@ const MeetingSectionHeaderText = styled(Text)`
   margin-top: 0;
   font-weight: bold;
 `;
-const LocationHeaderText = styled(MeetingSectionHeaderText)`
-  padding-top: 1em;
-`;
 const LocationContainer = styled.div`
   display: flex;
   margin: 6px;
@@ -387,7 +384,7 @@ const StyledContentEditable = styled(ContentEditable)`
   border: ${props => `1px solid ${props.theme.colors.borderGrey}`};
   box-shadow: 0px 3px 6px #f5f5f5;
   width: 100%;
-  margin: 8px 0px;
+  margin: 8px -1%;
 `;
 
 const MeetingTimeContainer = styled.div`
@@ -413,4 +410,9 @@ const DateValue = styled.span`
 
 const InformationContainer = styled.div`
   padding: 0.5em;
+`;
+
+const LocationChevronIconContainer = styled(StyledChevronIconContainer)`
+  display: flex;
+  align-items: flex-end;
 `;

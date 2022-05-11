@@ -304,7 +304,7 @@
         },
         "scheduledIssues": {
           "title": "{{prefix}}Dynamic Topics",
-          "subTitle": "Add topics you want to discuss in the Forum Hub of your next meeting"
+          "subTitle": "Add topics to your next meeting's Forum Hub"
         },
         "noUpcomingMeetingScheduled": "Scheduled meeting must be created in order to organize items onto it."
       },

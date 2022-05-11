@@ -254,7 +254,7 @@ export const Count = styled.div`
 const DescriptionText = styled(Text)`
   color: ${props => props.theme.colors.greyActive};
   font-size: 12px;
-  margin-bottom: 25px;
+  // margin-bottom: 25px;
   margin-left: 0;
   width: 70%;
 `;
