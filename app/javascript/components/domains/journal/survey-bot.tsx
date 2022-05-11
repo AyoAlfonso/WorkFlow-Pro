@@ -171,7 +171,13 @@ export const SurveyBot = observer(
           hideBotAvatar={true}
           hideUserAvatar={true}
           contentStyle={{
-            height: props.fromDailyPlanning ? window.innerHeight - 250 : "80%",
+            height: props.fromDailyPlanning
+              ? window.innerHeight - 250
+              : window.innerHeight <= 670
+              ? "77%"
+              : window.innerWidth <= 768
+              ? "80%"
+              : "84%",
           }}
           // header and footer are 120px total
           // these hard-coded values are required to make the chatbot fit inside the Journal widget :(
@@ -211,6 +217,9 @@ const HeaderDiv = styled.div`
   padding-left: 20px;
   padding-right: 20px;
   border-bottom: 1px solid ${props => props.theme.colors.borderGrey};
+  @media only screen and (max-width: 768px) {
+    height: 10%;
+  }
 `;
 
 export const SurveyHeader = ({ title, optionalActionsComponent = undefined }) => {

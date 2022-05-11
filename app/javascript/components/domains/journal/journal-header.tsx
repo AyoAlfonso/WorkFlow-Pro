@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { SurveyBot } from "./survey-bot";
@@ -36,25 +36,6 @@ export const JournalHeader = ({
     setQuestionnaireVariant("");
     window.openWidget && window.openWidget();
   };
-const getWindowDimensions = () => {
-  const { innerWidth: width, innerHeight: height, screen: {availHeight} } = window;
-  return {
-    width,
-    height,
-    availHeight,
-  };
-};
-  
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-  
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowDimensions(getWindowDimensions());
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
   
   return (
     <>
@@ -86,7 +67,6 @@ const getWindowDimensions = () => {
         </EndButtonContainer>
       </AccordianContainer>
       <StyledModal
-        height={windowDimensions.availHeight}
         isOpen={questionnaireVariant !== ""}
         transitionSpeed={1000}
       >
@@ -132,11 +112,7 @@ const EndButton = styled.div`
   font-weight: 400;
 `;
 
-type StyledModalProps = {
-  height?: number;
-}
-
-const StyledModal = Modal.styled<StyledModalProps>`
+const StyledModal = Modal.styled`
   width: 30rem;
   //min-width: 30rem;
   max-width: 100%;
@@ -149,7 +125,7 @@ const StyledModal = Modal.styled<StyledModalProps>`
 
   @media only screen and (max-width: 768px) {
     width: 95vw;
-    height: ${props => props.height && `calc(${props.height * 0.9}px)` };
+    height: 70%;
     min-width: 95vw;
     position: static;
   }
