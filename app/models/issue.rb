@@ -3,15 +3,6 @@ class Issue < ApplicationRecord
   amoeba do
     enable
     recognize [:has_one, :has_many, has_many: :through]
-     customize(lambda { |original_post,new_post|
-       new_post.cached_votes_total = 0
-      new_post.cached_votes_score=   0
-      new_post.cached_votes_up= 0
-      new_post.cached_votes_down=  0
-      new_post.cached_weighted_score= 0
-      new_post.cached_weighted_total=  0
-      new_post.cached_weighted_average= 0.0
-    })
   end
   
   enum priority: { low: 0, medium: 1, high: 2, frog: 3 }
@@ -67,7 +58,6 @@ class Issue < ApplicationRecord
   end
 
   def upvoters
-    # binding.pry
    if self.votes_for.up.by_type(User).voters.any?
      self.votes_for.up.by_type(User).voters
    else

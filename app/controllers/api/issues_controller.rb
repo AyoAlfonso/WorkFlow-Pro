@@ -66,8 +66,15 @@ class Api::IssuesController < Api::ApplicationController
   end
   
   def duplicate
-    # binding.pry
     new_issue = @issue.dup
+    new_issue.cached_votes_total = 0
+    new_issue.cached_votes_score =   0
+    new_issue.cached_votes_up = 0
+    new_issue.cached_votes_down =  0
+    new_issue.cached_weighted_score = 0
+    new_issue.cached_weighted_total =  0
+    new_issue.cached_weighted_average = 0.0
+
     new_issue.save
     @issue = new_issue
     render "api/issues/show"
