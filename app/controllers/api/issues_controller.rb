@@ -48,7 +48,7 @@ class Api::IssuesController < Api::ApplicationController
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
     end
-    @team_issues = TeamIssue.optimized.for_team(@issue.team_id).sort_by_position
+    @team_issues = TeamIssue.optimized.for_team(@issue.team_id).sort_by_position.exclude_personal_for_team
     render "api/issues/update"
   end
 
@@ -61,7 +61,7 @@ class Api::IssuesController < Api::ApplicationController
     else
       @issues_to_render = policy_scope(Issue).sort_by_position_and_priority_and_created_at_and_completed_at
     end
-    @team_issues = TeamIssue.for_team(team_id).sort_by_position
+    @team_issues = TeamIssue.for_team(team_id).sort_by_position.exclude_personal_for_team
     render "api/issues/destroy"
   end
   

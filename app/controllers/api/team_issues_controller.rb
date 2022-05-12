@@ -29,7 +29,7 @@ class Api::TeamIssuesController < Api::ApplicationController
       @team_issues = TeamIssue.for_team(@team_issue.team_id).sort_by_position.exclude_personal_for_team
       @meeting_team_issues = Issue.for_meeting(params[:meeting_id]).exclude_personal_for_team
     else
-      @team_issues = TeamIssue.for_team(@team_issue.team_id).sort_by_position.exclude_personal_for_team
+      @team_issues = TeamIssue.for_team(@team_issue.team_id).sort_by_position
     end
     render "api/team_issues/update"
   end
