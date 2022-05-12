@@ -3,6 +3,9 @@ class Issue < ApplicationRecord
   amoeba do
     enable
     recognize [:has_one, :has_many, has_many: :through]
+  customize(lambda { |original_post,new_post|
+       new_post.cached_votes_total = 0
+    })
   end
   
   enum priority: { low: 0, medium: 1, high: 2, frog: 3 }
