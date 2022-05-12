@@ -3,8 +3,14 @@ class Issue < ApplicationRecord
   amoeba do
     enable
     recognize [:has_one, :has_many, has_many: :through]
-  customize(lambda { |original_post,new_post|
+     customize(lambda { |original_post,new_post|
        new_post.cached_votes_total = 0
+      new_post.cached_votes_score=   0
+      new_post.cached_votes_up= 0
+      new_post.cached_votes_down=  0
+      new_post.cached_weighted_score= 0
+      new_post.cached_weighted_total=  0
+      new_post.cached_weighted_average= 0.0
     })
   end
   
@@ -61,7 +67,12 @@ class Issue < ApplicationRecord
   end
 
   def upvoters
-   self.votes_for.up.by_type(User).voters
+    # binding.pry
+   if self.votes_for.up.by_type(User).voters.any?
+     self.votes_for.up.by_type(User).voters
+   else
+    []
+   end
   end
 
   def self.owned_by_self_or_team_members(user)
