@@ -17,6 +17,10 @@ import { addDays } from "date-fns";
 import moment from "moment";
 import { DateRangeSelectorModal } from "./date-range-selector-modal";
 import { CSVLink } from "react-csv";
+import Modal from "styled-react-modal";
+import { AnnualInitiativeModalContent } from "../goals/annual-initiative/annual-initiative-modal-content";
+import { QuarterlyGoalModalContent } from "../goals/quarterly-goal/quarterly-goal-modal-content";
+import { SubInitiativeModalContent } from "../goals/sub-initiative/sub-initiaitive-modal-content";
 
 export interface IAuditLogProps {}
 
@@ -32,6 +36,15 @@ export const AuditLogsIndex = observer(
     const [ownerType, setOwnerType] = useState<string>("company");
     const [selection, setSelection] = useState<string>("all");
     const [open, setOpen] = useState<boolean>(false);
+    const [objectInView, setObjectInView] = useState<string>("");
+    const [objectInViewConfirm, setObjectInViewConfirm] = useState<boolean>(true);
+    const [annualInitiativeId, setAnnualInitiativeId] = useState<number>(null);
+    const [quarterlyGoalId, setQuarterlyGoalId] = useState<number>(null);
+    const [subInitiativeId, setSubInitiativeId] = useState<number>(null);
+    const [annualInitiativeDescription, setSelectedAnnualInitiativeDescription] = useState<string>(
+      "",
+    );
+
     const [dateFilter, setDateFilter] = useState<any>({
       selection: {
         startDate: addDays(new Date(), -30),
@@ -386,6 +399,62 @@ export const AuditLogsIndex = observer(
         ) : (
           <></>
         )}
+
+        {objectInView == "annual_initiative" ? (
+          <StyledModal
+            isOpen={true}
+            style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
+            onBackgroundClick={e => {
+              setObjectInView("");
+            }}
+          >
+            <AnnualInitiativeModalContent
+              annualInitiativeId={annualInitiativeId}
+              setAnnualInitiativeModalOpen={setObjectInViewConfirm}
+              setQuarterlyGoalModalOpen={setObjectInViewConfirm}
+              setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
+              setQuarterlyGoalId={setQuarterlyGoalId}
+            />
+          </StyledModal>
+        ) : objectInView == "quarterly_goal" ? (
+          <StyledModal
+            isOpen={true}
+            style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
+            onBackgroundClick={e => {
+              setObjectInView("");
+            }}
+          >
+            <QuarterlyGoalModalContent
+              quarterlyGoalId={quarterlyGoalId}
+              setQuarterlyGoalModalOpen={setObjectInViewConfirm}
+              setAnnualInitiativeId={setAnnualInitiativeId}
+              annualInitiativeDescription={""}
+              setAnnualInitiativeModalOpen={setObjectInViewConfirm}
+              showCreateMilestones={true}
+              setSubInitiativeId={setSubInitiativeId}
+              setSubInitiativeModalOpen={setObjectInViewConfirm}
+              setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
+            />
+          </StyledModal>
+        ) : objectInView == "sub_initiative" ? (
+          <StyledModal
+            isOpen={true}
+            style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
+            onBackgroundClick={e => {
+              setObjectInView("");
+            }}
+          >
+            <SubInitiativeModalContent
+              subInitiativeId={subInitiativeId}
+              setSubInitiativeModalOpen={setObjectInViewConfirm}
+              annualInitiativeDescription={""}
+              setAnnualInitiativeId={setAnnualInitiativeId}
+              showCreateMilestones={true}
+            />
+          </StyledModal>
+        ) : (
+          <> </>
+        )}
         <DateRangeSelectorModal
           handleDateSelect={handleDateSelect}
           open={open}
@@ -486,7 +555,12 @@ const SelectContainer = styled.div`
   display: flex;
   flex-grow: 1;
 `;
-
+const StyledModal = Modal.styled`
+  width: 30rem;
+  min-height: 100px;
+  border-radius: 8px;
+  background-color: ${props => props.theme.colors.white};
+`;
 const CsvButton = styled(CSVLink)`
   margin-left: auto;
   border: 1px solid ${props => props.theme.colors.borderGrey};

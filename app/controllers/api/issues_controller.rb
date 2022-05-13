@@ -126,27 +126,17 @@ class Api::IssuesController < Api::ApplicationController
 
     case params[:sort]
     when "by_priority"
-      @issues = @issues.sort_by_priority.sort_by_due_date
-      # if(params[:nested])
+      @issues = @issues&.sort_by_priority.sort_by_due_date
         @team_issues = @team_issues&.sort_by_issue_priority&.sort_by_issue_due_date
-      # else 
-      #    @team_issues = @team_issues.sort_by_issue_priority.sort_by_issue_due_date
-      # end
+  
     when "by_upvotes"
-      binding.pry
-      @issues = @issues.sort_by_upvotes.sort_by_priority
-      # if(params[:nested])
+      @issues = @issues&.sort_by_upvotes.sort_by_priority
+  
       @team_issues = @team_issues&.sort_by_issue_upvotes&.sort_by_issue_due_date&.sort_by_issue_priority
-      # else
-      #   @team_issues = @team_issues.sort_by_issue_due_date.sort_by_issue_priority
-      # end
+  
     when "by_due_date"
-      @issues = @issues.sort_by_due_date.sort_by_priority
-      # if(params[:nested])
+      @issues = @issues&.sort_by_due_date.sort_by_priority
       @team_issues = @team_issues&.sort_by_issue_due_date&.sort_by_issue_priority
-      # else
-      # @team_issues = @team_issues.sort_by_due_date
-      # end
     end
     authorize @issues
     render "api/issues/resort"

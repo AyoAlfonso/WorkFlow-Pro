@@ -6,7 +6,8 @@ class IssueResortService < ApplicationService
   end
 
   def call
-    sorted_issues = @issues.sort_by_priority.sort_by_created_date
+    sorted_issues = @issues
+    # .sort_by_created_date
     reset_positions(sorted_issues)
   end
 
