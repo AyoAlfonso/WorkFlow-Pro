@@ -21,6 +21,7 @@ import Modal from "styled-react-modal";
 import { AnnualInitiativeModalContent } from "../goals/annual-initiative/annual-initiative-modal-content";
 import { QuarterlyGoalModalContent } from "../goals/quarterly-goal/quarterly-goal-modal-content";
 import { SubInitiativeModalContent } from "../goals/sub-initiative/sub-initiaitive-modal-content";
+import { Button } from "~/components/shared/button";
 
 export interface IAuditLogProps {}
 
@@ -44,6 +45,7 @@ export const AuditLogsIndex = observer(
     const [annualInitiativeDescription, setSelectedAnnualInitiativeDescription] = useState<string>(
       "",
     );
+    const [objectId, setObjectId] = useState<number>(null);
 
     const [dateFilter, setDateFilter] = useState<any>({
       selection: {
@@ -123,6 +125,7 @@ export const AuditLogsIndex = observer(
             controller: formatAction(auditLog.controller),
             user: auditLog.userId,
             note: auditLog.note,
+            item: { itemId: auditLog.itemId, controller: auditLog.controller },
             action: formatAction(auditLog.action),
             company: auditLog.companyId,
             team: auditLog.teamId,
@@ -173,6 +176,25 @@ export const AuditLogsIndex = observer(
           accessor: "note",
           Cell: ({ value }) => {
             return <TableHeaderText>{value}</TableHeaderText>;
+          },
+          width: "100%",
+          minWidth: "150px",
+        },
+        {
+          Header: () => <TableHeaderText> Item </TableHeaderText>,
+          accessor: "item",
+          Cell: ({ value }) => {
+            <Button
+              small
+              variant={"primary"}
+              onClick={() => {
+                setObjectInView(value.controller);
+                setObjectId(value.item);
+              }}
+              // style={{}}
+            >
+              View Item with ID {value}
+            </Button>;
           },
           width: "100%",
           minWidth: "150px",
@@ -400,7 +422,7 @@ export const AuditLogsIndex = observer(
           <></>
         )}
 
-        {objectInView == "annual_initiative" ? (
+        {objectInView == "annual_initiatives" ? (
           <StyledModal
             isOpen={true}
             style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
@@ -409,14 +431,14 @@ export const AuditLogsIndex = observer(
             }}
           >
             <AnnualInitiativeModalContent
-              annualInitiativeId={annualInitiativeId}
+              annualInitiativeId={objectId}
               setAnnualInitiativeModalOpen={setObjectInViewConfirm}
               setQuarterlyGoalModalOpen={setObjectInViewConfirm}
               setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
               setQuarterlyGoalId={setQuarterlyGoalId}
             />
           </StyledModal>
-        ) : objectInView == "quarterly_goal" ? (
+        ) : objectInView == "quarterly_goals" ? (
           <StyledModal
             isOpen={true}
             style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
@@ -425,7 +447,7 @@ export const AuditLogsIndex = observer(
             }}
           >
             <QuarterlyGoalModalContent
-              quarterlyGoalId={quarterlyGoalId}
+              quarterlyGoalId={objectId}
               setQuarterlyGoalModalOpen={setObjectInViewConfirm}
               setAnnualInitiativeId={setAnnualInitiativeId}
               annualInitiativeDescription={""}
@@ -436,7 +458,7 @@ export const AuditLogsIndex = observer(
               setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
             />
           </StyledModal>
-        ) : objectInView == "sub_initiative" ? (
+        ) : objectInView == "sub_initiatives" ? (
           <StyledModal
             isOpen={true}
             style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
@@ -445,7 +467,7 @@ export const AuditLogsIndex = observer(
             }}
           >
             <SubInitiativeModalContent
-              subInitiativeId={subInitiativeId}
+              subInitiativeId={objectId}
               setSubInitiativeModalOpen={setObjectInViewConfirm}
               annualInitiativeDescription={""}
               setAnnualInitiativeId={setAnnualInitiativeId}

@@ -9,6 +9,7 @@ export const AuditLogModel = types
     ipAddress: types.maybeNull(types.string),
     location: types.maybeNull(types.string),
     controller: types.maybeNull(types.string),
+    itemId: types.maybeNull(types.string),
     action: types.maybeNull(types.string),
     params: types.maybeNull(types.string),
     companyId: types.maybeNull(types.string), /// might be string
