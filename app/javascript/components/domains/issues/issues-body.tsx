@@ -84,7 +84,7 @@ export const IssuesBody = observer(
 
     const handleSortMenuItemClick = value => {
       setSortOptionsOpen(false);
-      issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });
+      issueStore.sortIssues({ sort: value, teamId: teamId, meetingId: meetingId, nested: false });
     };
 
     const renderIssuesList = (): Array<JSX.Element> => {

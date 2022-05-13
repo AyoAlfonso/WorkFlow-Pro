@@ -32,7 +32,7 @@ export const AuditLogsIndex = observer(
     const [auditLogs, setAuditLogs] = useState([]);
     const [meta, setMeta] = useState(null);
     const [page, setPage] = useState<number>(1);
-    const [ownerId, setOwnerId] = useState<number>(companyStore?.company?.id);
+    const [ownerId, setOwnerId] = useState<number>(companyStore.company?.id);
     const [ownerType, setOwnerType] = useState<string>("company");
     const [selection, setSelection] = useState<string>("all");
     const [open, setOpen] = useState<boolean>(false);
@@ -58,56 +58,9 @@ export const AuditLogsIndex = observer(
       },
     });
 
-    useEffect(() => {
-      companyStore.load().then(() => setOwnerId(companyStore.company?.id));
-      auditLogStore.getAudit(`page/1?per=10`).then(res => {
-        setAuditLogs(res.userActivityLogs);
-        setMeta(res.meta);
-        setLoading(false);
-      });
-    }, []);
-
-    const renderLoading = () => (
-      <LoadingContainer>
-        <Loading />
-      </LoadingContainer>
-    );
-
-    const setFilteredAuditLogs = logs => {
-      let filteredLogs;
-      if (ownerType == "company") {
-        filteredLogs = logs.filter(log => log.companyId == ownerId);
-        setAuditLogs(filteredLogs);
-      } else if (ownerType == "user") {
-        filteredLogs = logs.filter(log => log.userId == ownerId);
-        setAuditLogs(filteredLogs);
-      } else {
-        filteredLogs = logs.filter(log => log.teamId == ownerId);
-        setAuditLogs(filteredLogs);
-      }
-    };
-
-    const getLogs = pageNumber => {
-      if (page === pageNumber) return;
-
-      setLoading(true);
-      return auditLogStore.getAudit(`page/${pageNumber}?per=10`).then(res => {
-        const { userActivityLogs, meta } = res;
-        let filteredLogs;
-        setMeta(meta);
-        setPage(meta.currentPage);
-        setLoading(false);
-        setFilteredAuditLogs(userActivityLogs);
-      });
-    };
-
-    const handleChange = (event, value) => {
-      setPage(value);
-      getLogs(value);
-    };
-
     const formatAction = (action: string) => {
-      const splitAction = action.split("_");
+      if (!action) return;
+      const splitAction = action?.split("_");
       if (splitAction[1]) {
         return splitAction.join(" ").replace(/(^\w|\s\w)/g, m => m.toUpperCase());
       } else {
@@ -120,7 +73,7 @@ export const AuditLogsIndex = observer(
         auditLogs.map(auditLog => {
           return {
             id: auditLog.id,
-            controller: formatAction(auditLog.controller),
+            feature: formatAction(auditLog.controller),
             user: auditLog.userId,
             note: auditLog.note,
             action: formatAction(auditLog.action),
@@ -148,7 +101,7 @@ export const AuditLogsIndex = observer(
             );
           },
           width: "100%",
-          minWidth: "160px",
+          minWidth: "140px",
         },
         {
           Header: () => <TableHeaderText>Action</TableHeaderText>,
@@ -160,13 +113,13 @@ export const AuditLogsIndex = observer(
           minWidth: "160px",
         },
         {
-          Header: () => <TableHeaderText>Controller</TableHeaderText>,
-          accessor: "controller",
+          Header: () => <TableHeaderText>Feature</TableHeaderText>,
+          accessor: "feature",
           Cell: ({ value }) => {
             return <div style={{ fontSize: "14px", textAlign: "center" }}>{value}</div>;
           },
           width: "100%",
-          minWidth: "160px",
+          minWidth: "140px",
         },
         {
           Header: () => <TableHeaderText>Note</TableHeaderText>,
@@ -175,7 +128,7 @@ export const AuditLogsIndex = observer(
             return <TableHeaderText>{value}</TableHeaderText>;
           },
           width: "100%",
-          minWidth: "150px",
+          minWidth: "170px",
         },
         {
           Header: () => <TableHeaderText>IP Address</TableHeaderText>,
@@ -229,6 +182,15 @@ export const AuditLogsIndex = observer(
     const tableInstance = useTable({ columns, data });
 
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
+
+    useEffect(() => {
+      companyStore.load().then(() => setOwnerId(companyStore.company?.id));
+      auditLogStore.getAudit(`page/1?per=10`).then(res => {
+        setAuditLogs(res.userActivityLogs);
+        setMeta(res.meta);
+        setLoading(false);
+      });
+    }, []);
 
     const handleDateRange = e => {
       setSelection(e);
@@ -298,6 +260,39 @@ export const AuditLogsIndex = observer(
       setOpen(false);
     };
 
+    const setFilteredAuditLogs = logs => {
+      let filteredLogs;
+      if (ownerType == "company") {
+        filteredLogs = logs.filter(log => log.companyId == ownerId);
+        setAuditLogs(filteredLogs);
+      } else if (ownerType == "user") {
+        filteredLogs = logs.filter(log => log.userId == ownerId);
+        setAuditLogs(filteredLogs);
+      } else {
+        filteredLogs = logs.filter(log => log.teamId == ownerId);
+        setAuditLogs(filteredLogs);
+      }
+    };
+
+    const getLogs = pageNumber => {
+      if (page === pageNumber) return;
+
+      setLoading(true);
+      return auditLogStore.getAudit(`page/${pageNumber}?per=10`).then(res => {
+        const { userActivityLogs, meta } = res;
+        let filteredLogs;
+        setMeta(meta);
+        setPage(meta.currentPage);
+        setLoading(false);
+        setFilteredAuditLogs(userActivityLogs);
+      });
+    };
+
+    const handleChange = (event, value) => {
+      setPage(value);
+      getLogs(value);
+    };
+
     const csvData = auditLogs.map(auditLog => {
       return {
         user: auditLog.userId,
@@ -320,6 +315,12 @@ export const AuditLogsIndex = observer(
       { label: "Created At", key: "createdAt" },
     ];
 
+    const renderLoading = () => (
+      <LoadingContainer>
+        <Loading />
+      </LoadingContainer>
+    );
+
     return (
       <>
         <Container>
@@ -334,6 +335,7 @@ export const AuditLogsIndex = observer(
                 setOwnerId={setOwnerId}
                 setAuditLogs={setAuditLogs}
               />
+              <TableContainer>
               <TopRow>
                 <SelectContainer>
                   <Select selection={selection} setSelection={handleDateRange} id="audit-logs">
@@ -355,7 +357,6 @@ export const AuditLogsIndex = observer(
                   </CsvButton>
                 </SelectContainer>
               </TopRow>
-              <TableContainer>
                 <Table {...getTableProps()}>
                   <TableHead>
                     {headerGroups.map(headerGroup => (
@@ -388,17 +389,22 @@ export const AuditLogsIndex = observer(
                     })}
                   </TableBody>
                 </Table>
+                {!R.isEmpty(auditLogStore.auditLogs) ? (
+                  <PaginationContainer>
+                    <Pagination
+                      count={meta?.totalPages}
+                      page={page}
+                      size="small"
+                      onChange={handleChange}
+                    />
+                  </PaginationContainer>
+                ) : (
+                  <></>
+                )}
               </TableContainer>
             </>
           )}
         </Container>
-        {!R.isEmpty(auditLogStore.auditLogs) ? (
-          <PaginationContainer>
-            <Pagination count={meta?.totalPages} page={page} size="small" onChange={handleChange} />
-          </PaginationContainer>
-        ) : (
-          <></>
-        )}
 
         {objectInView == "annual_initiative" ? (
           <StyledModal
@@ -467,7 +473,7 @@ export const AuditLogsIndex = observer(
   },
 );
 const TableContainer = styled.div`
-  width: 100%;
+  max-width: fit-content;
   font-family: Lato;
 `;
 

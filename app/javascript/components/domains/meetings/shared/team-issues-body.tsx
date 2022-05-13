@@ -67,21 +67,18 @@ export const TeamIssuesBody = observer(
 
     const handleSortMenuItemClick = value => {
       setSortOptionsOpen(false);
-      issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });
+      issueStore.sortIssues({ sort: value, teamId: teamId, meetingId: meetingId, nested: true });
     };
 
     const renderIssuesList = (): Array<JSX.Element> => {
       const issues = showOpenIssues ? openIssues : closedIssues;
-      return issues.filter(issue => issue.teamId == teamId).map((issue, index) => (
-        <IssueContainer key={issue["id"]}>
-          <IssueEntry
-            issue={issue}
-            pageEnd={true}
-            meetingId={meetingId}
-            teamId={teamId}
-          />
-        </IssueContainer>
-      ));
+      return issues
+        .filter(issue => issue.teamId == teamId)
+        .map((issue, index) => (
+          <IssueContainer key={issue["id"]}>
+            <IssueEntry issue={issue} pageEnd={true} meetingId={meetingId} teamId={teamId} />
+          </IssueContainer>
+        ));
     };
 
     return (

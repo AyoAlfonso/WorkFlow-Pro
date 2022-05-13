@@ -29,7 +29,7 @@ export const ParkingLotIssues = observer(
         closedMeetingParkingLotTeamIssues,
         openMeetingParkingLotTeamIssues,
         closedMeetingScheduledTeamIssues,
-        sortIssuesByPriority,
+        sortIssues,
       },
       issueStore,
       companyStore,
@@ -69,27 +69,20 @@ export const ParkingLotIssues = observer(
 
     const handleSortMenuItemClick = value => {
       setSortOptionsOpen(false);
-      sortIssuesByPriority({
+      sortIssues({
         sort: value,
         teamId: teamId,
         meetingId: upcomingForumMeeting.id,
+        nested: true,
       });
     };
 
-    const issuesData = useMemo(() => {
-      const issues = showOpenIssues
-        ? openMeetingParkingLotTeamIssues
-        : closedMeetingParkingLotTeamIssues;
-      const startIndex = showOpenIssues
+    const issuesData = {
+      issues: showOpenIssues ? openMeetingParkingLotTeamIssues : closedMeetingParkingLotTeamIssues,
+      startIndex: showOpenIssues
         ? openMeetingScheduledTeamIssues.length
-        : closedMeetingScheduledTeamIssues.length;
-      return { issues, startIndex };
-    }, [
-      showOpenIssues,
-      openMeetingParkingLotTeamIssues,
-      closedMeetingParkingLotTeamIssues,
-      closedMeetingScheduledTeamIssues,
-    ]);
+        : closedMeetingScheduledTeamIssues.length,
+    };
 
     const renderIssuesList = (): Array<JSX.Element> => {
       return issuesData.issues.map((teamIssue, index) => (
