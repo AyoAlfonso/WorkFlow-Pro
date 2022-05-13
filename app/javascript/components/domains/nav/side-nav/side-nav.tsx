@@ -522,6 +522,7 @@ export const SideNavNoMst = (
               icon={"Company"}
               active={isNavMenuIconActive(currentPathName, "/company")}
               disableOnActive={false}
+              showSubMenuIcon={true}
             >
               {t("navigation.company")}
             </NavMenuIcon>
