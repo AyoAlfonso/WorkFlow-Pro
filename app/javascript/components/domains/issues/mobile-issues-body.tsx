@@ -130,7 +130,7 @@ export const MobileIssuesBody = observer(
 
     const handleSortMenuItemClick = value => {
       setSortOptionsOpen(false);
-      issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });
+      issueStore.sortIssues({ sort: value, teamId: teamId, meetingId: meetingId });
     };
 
     const renderFilterTeamOptions = (): Array<JSX.Element> => {

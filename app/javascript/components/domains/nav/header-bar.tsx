@@ -275,7 +275,7 @@ export const HeaderBar = observer(
               <Icon
                 icon={"Planner"}
                 mr="1em"
-                size={"16px"}
+                size={"24px"}
                 iconColor={baseTheme.colors.primary100}
               />
               Planner
@@ -291,7 +291,7 @@ export const HeaderBar = observer(
               <Icon
                 icon={"Check-in-page"}
                 mr="1em"
-                size={"16px"}
+                size={"24px"}
                 iconColor={baseTheme.colors.primary100}
               />
               Check-In
@@ -392,13 +392,13 @@ const MobileProfileNav = styled.div<MobileProfileNavProps>`
 `;
 
 const MobileMenuOption = styled.div<MobileNavMenuProps>`
-  font-size: 12px;
+  font-size: 14px;
   align-items: center;
   padding: 5px 30px;
   margin-bottom: 0.5em;
   top: 0;
   left: 0;
-  display: ${props => (props.showSideNav ? "block" : "none")};
+  display: ${props => (props.showSideNav ? "flex" : "none")};
   width: 70vw;
   transition: 0.2s;
 

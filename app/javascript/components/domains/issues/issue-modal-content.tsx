@@ -18,9 +18,11 @@ import {
   Select,
   Text,
   StyledLabel,
+  UserSelectionDropdownList,
 } from "~/components/shared";
 import { CommentLogs } from "../shared-issues-key-activities/comment-logs";
 import { StyledInput, FormElementContainer } from "../scorecard/shared/modal-elements";
+import { useTranslation } from "react-i18next";
 import ReactQuill from "react-quill";
 import { DndItems } from "~/components/shared/dnd-editor";
 import { OwnedBySection } from "../goals/shared/owned-by-section";
@@ -40,13 +42,17 @@ interface IIssueModalContentProps {
 
 export const IssueModalContent = observer(
   ({ issue, setIssueModalOpen, meetingId, teamId }: IIssueModalContentProps): JSX.Element => {
-    const { issueStore, sessionStore, companyStore } = useMst();
+    const { issueStore, sessionStore, companyStore, userStore } = useMst();
 
     const { commentLogs } = issueStore;
+
+    const { t } = useTranslation();
 
     const isForum = companyStore.company.displayFormat == "Forum";
     const teams = R.path(["profile", "currentCompanyUserTeams"], sessionStore);
     const teamName = issue.teamId ? teams.find(team => team.id == issue.teamId).name : "";
+    const issuesTitle =
+      companyStore?.company?.displayFormat === "Forum" ? t("issues.forumTitle") : t("issues.title");
 
     const [showLabelsList, setShowLabelsList] = useState<boolean>(false);
     const [showShareModal, setShowShareModal] = useState<boolean>(false);
@@ -60,11 +66,14 @@ export const IssueModalContent = observer(
     const [showTopics, setShowTopics] = useState<boolean>(false);
     const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
     const [selectedDueDate, setSelectedDueDate] = useState<Date>(new Date(issue.dueDate));
+    const [showUsersList, setShowUsersList] = useState<boolean>(false);
 
     const issueRef = useRef(null);
     const prioritiesRef = useRef(null);
     const moveRef = useRef(null);
     const optionsRef = useRef(null);
+
+    const companyUsers = userStore.users;
 
     useEffect(() => {
       issueStore.getCommentLogs(1, "Issues", issue.id).then(meta => {
@@ -243,6 +252,27 @@ export const IssueModalContent = observer(
           afterLabelSelectAction={updateLabel}
           marginLeftDropdownList={"-80px"}
         />
+      );
+    };
+
+    const updateUser = newUser => {
+      issueStore.updateIssueState(issue["id"], "userId", newUser.id);
+      issueStore.updateIssue(issue.id, meetingId || teamId ? true : false).then(() => {
+        showToast(t(`${issuesTitle} updated successfully`), ToastMessageConstants.SUCCESS);
+      });
+    };
+
+    const renderUserSelectionList = (): JSX.Element => {
+      return showUsersList ? (
+        <div onClick={e => e.stopPropagation()}>
+          <UserSelectionDropdownList
+            userList={companyUsers}
+            onUserSelect={updateUser}
+            setShowUsersList={setShowUsersList}
+          />
+        </div>
+      ) : (
+        <></>
       );
     };
 
@@ -503,18 +533,21 @@ export const IssueModalContent = observer(
             {issue.personal && (
               <Icon icon={"Lock"} ml={"0.5em"} mr={"0.5em"} size={18} iconColor={"mipBlue"} />
             )}
-            <AvatarContainer>
-              <Avatar
-                defaultAvatarColor={issue.user.defaultAvatarColor}
-                firstName={issue.user.firstName}
-                lastName={issue.user.lastName}
-                avatarUrl={issue.user.avatarUrl}
-                size={25}
-              />
-            </AvatarContainer>
-            <OwnedByContainer>
-              <OwnedBy ownedBy={issue.user} size={25} disabled={true} />
-            </OwnedByContainer>
+            <OwnerContainer>
+              <AvatarContainer>
+                <Avatar
+                  defaultAvatarColor={issue.user.defaultAvatarColor}
+                  firstName={issue.user.firstName}
+                  lastName={issue.user.lastName}
+                  avatarUrl={issue.user.avatarUrl}
+                  size={25}
+                />
+              </AvatarContainer>
+              <OwnedByContainer onClick={() => setShowUsersList(!showUsersList)}>
+                <OwnedBy ownedBy={issue.user} size={25} disabled={true} />
+              </OwnedByContainer>
+              <SelectionListContainer>{renderUserSelectionList()}</SelectionListContainer>
+            </OwnerContainer>
           </BottomRowContainer>
         </HeaderContainer>
       );
@@ -709,6 +742,19 @@ const AvatarContainer = styled.div`
 
 const OwnedByContainer = styled.div`
   margin-left: 8px;
+  cursor: pointer;
+
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const OwnerContainer = styled.div`
+  position: relative;
+`;
+
+const SelectionListContainer = styled.div`
+  position: absolute;
 
   @media only screen and (max-width: 768px) {
     display: none;

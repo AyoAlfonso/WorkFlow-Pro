@@ -60,7 +60,7 @@ export const TeamIssuesHeader = ({
 
   const handleSortMenuItemClick = value => {
     setSortOptionsOpen(false);
-    issueStore.sortIssuesByPriority({ sort: value, teamId: teamId, meetingId: meetingId });
+    issueStore.sortIssues({ sort: value, teamId: teamId, meetingId: meetingId, nested: true });
   };
 
   return (

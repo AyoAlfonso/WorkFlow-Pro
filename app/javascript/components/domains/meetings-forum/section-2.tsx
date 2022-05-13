@@ -34,7 +34,7 @@ export const Section2 = observer(
       (team_id && parseInt(team_id)) || forumStore.currentForumTeamId || R.path(["0", "id"], teams);
     const instanceType = company && company?.accessForum ? "forum" : "teams";
     const [currentYear, setCurrentYear] = useState<number>(
-      company.yearForCreatingAnnualInitiatives,
+      company?.yearForCreatingAnnualInitiatives,
     );
     const currentTeam = teams.find(team => team.id == teamId);
     const forumType =

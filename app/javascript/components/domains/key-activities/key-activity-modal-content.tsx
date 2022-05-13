@@ -17,6 +17,7 @@ import {
   DefaultStyledLabel,
   Text,
   StyledLabel,
+  UserSelectionDropdownList,
 } from "~/components/shared";
 import { StyledInput, FormElementContainer } from "../scorecard/shared/modal-elements";
 import { DateButton } from "~/components/shared/date-selection/date-button";
@@ -52,6 +53,9 @@ export const KeyActivityModalContent = observer(
 
     const { commentLogs } = keyActivityStore;
 
+    const keyActivityUser =
+      keyActivity.userId && userStore.users.find(user => user.id == keyActivity.userId);
+
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const [showPriorities, setShowPriorities] = useState<boolean>(false);
     const [description, setDescription] = useState<string>(keyActivity.body);
@@ -67,6 +71,8 @@ export const KeyActivityModalContent = observer(
     const [showMoveList, setShowMoveList] = useState<boolean>(false);
     const [showMoveModal, setShowMoveModal] = useState<boolean>(false);
     const [commentMeta, setCommentMeta] = useState({});
+    const [showUsersList, setShowUsersList] = useState<boolean>(false);
+    const [selectedUser, setSelectedUser] = useState(keyActivity.user || keyActivityUser);
 
     const optionsRef = useRef(null);
     const prioritiesRef = useRef(null);
@@ -75,9 +81,7 @@ export const KeyActivityModalContent = observer(
 
     const teams = R.path(["profile", "currentCompanyUserTeams"], sessionStore);
     const groups = toJS(sessionStore.scheduledGroups);
-
-    const keyActivityUser =
-      keyActivity.userId && userStore.users.find(user => user.id == keyActivity.userId);
+    const companyUsers = userStore.users;
 
     const ListName = keyActivity.scheduledGroupId
       ? groups.find(group => group.id == keyActivity.scheduledGroupId)?.name
@@ -187,6 +191,14 @@ export const KeyActivityModalContent = observer(
       setDescription(html);
     };
 
+    const updateUser = newUser => {
+      setSelectedUser(newUser);
+      keyActivityStore.updateKeyActivityState(keyActivity["id"], "userId", newUser.id);
+      keyActivityStore.updateKeyActivity(keyActivity.id, meetingId ? true : false).then(() => {
+        showToast(t("ToDo updated successfully"), ToastMessageConstants.SUCCESS);
+      });
+    };
+
     const dueDateObj = parseKeyActivityDueDate(keyActivity);
 
     const updateDueDate = date => {
@@ -213,6 +225,20 @@ export const KeyActivityModalContent = observer(
 
     const updateLabel = labelId => {
       keyActivityStore.updateLabel(keyActivity.id, labelId);
+    };
+
+    const renderUserSelectionList = (): JSX.Element => {
+      return showUsersList ? (
+        <div onClick={e => e.stopPropagation()}>
+          <UserSelectionDropdownList
+            userList={companyUsers}
+            onUserSelect={updateUser}
+            setShowUsersList={setShowUsersList}
+          />
+        </div>
+      ) : (
+        <></>
+      );
     };
 
     const renderLabel = () => {
@@ -249,7 +275,7 @@ export const KeyActivityModalContent = observer(
 
       keyActivityStore.createCommentLog(commentLog);
     };
-    
+
     const renderHeader = (): JSX.Element => {
       return (
         <HeaderContainer>
@@ -468,20 +494,23 @@ export const KeyActivityModalContent = observer(
             {keyActivity.personal && (
               <Icon icon={"Lock"} size={18} ml={"0.5em"} mr={"0.5em"} iconColor={"mipBlue"} />
             )}
-            <AvatarContainer>
-              <Avatar
-                defaultAvatarColor={
-                  keyActivity.user?.defaultAvatarColor || keyActivityUser.defaultAvatarColor
-                }
-                firstName={keyActivity.user?.firstName || keyActivityUser.firstName}
-                lastName={keyActivity.user?.lastName || keyActivityUser.lastName}
-                avatarUrl={keyActivity.user?.avatarUrl || keyActivityUser.avatarUrl}
-                size={25}
-              />
-            </AvatarContainer>
-            <OwnedByContainer>
-              <OwnedBy ownedBy={keyActivity.user || keyActivityUser} size={25} disabled={true} />
-            </OwnedByContainer>
+            <OwnerContainer>
+              <AvatarContainer>
+                <Avatar
+                  defaultAvatarColor={
+                    keyActivity.user?.defaultAvatarColor || keyActivityUser.defaultAvatarColor
+                  }
+                  firstName={keyActivity.user?.firstName || keyActivityUser.firstName}
+                  lastName={keyActivity.user?.lastName || keyActivityUser.lastName}
+                  avatarUrl={keyActivity.user?.avatarUrl || keyActivityUser.avatarUrl}
+                  size={25}
+                />
+              </AvatarContainer>
+              <OwnedByContainer onClick={() => setShowUsersList(!showUsersList)}>
+                <OwnedBy ownedBy={keyActivity.user || keyActivityUser} size={25} disabled={true} />
+              </OwnedByContainer>
+              <SelectionListContainer>{renderUserSelectionList()}</SelectionListContainer>
+            </OwnerContainer>
           </BottomRowContainer>
         </HeaderContainer>
       );
@@ -763,6 +792,19 @@ const AvatarContainer = styled.div`
 
 const OwnedByContainer = styled.div`
   margin-left: 8px;
+  cursor: pointer;
+
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const OwnerContainer = styled.div`
+  position: relative;
+`;
+
+const SelectionListContainer = styled.div`
+  position: absolute;
 
   @media only screen and (max-width: 768px) {
     display: none;

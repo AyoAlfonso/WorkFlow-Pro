@@ -324,6 +324,7 @@
         "title": "Issue",
         "myHub": "Topics",
         "forumHub":"Topics",
+        "forumTitle": "Topic",
         "issues": "Issues"
       },
       "journals": {
