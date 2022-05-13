@@ -35,10 +35,6 @@ export const AuditLogsSelector = observer(
     const [showUsersList, setShowUsersList] = useState<boolean>(false);
     const [currentLog, setCurrentLog] = useState<string>("company");
 
-    if (!companyStore.company || !userStore.users || !teamStore.teams || !ownerType || !ownerId) {
-      return <></>;
-    }
-
     useEffect(() => {
       let owner;
       if (ownerType == "company") {
@@ -128,6 +124,10 @@ export const AuditLogsSelector = observer(
         </div>
       );
     };
+
+    if (!companyStore.company || !userStore.users || !teamStore.teams || !ownerType || !ownerId) {
+      return <></>;
+    }
 
     return (
       <Container

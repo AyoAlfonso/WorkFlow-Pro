@@ -73,14 +73,20 @@ const StyledNavLink = styled(NavLink)<StyledNavLinkType>`
 `;
 
 const IconContainer = styled.div`
-  width: 48px;
-  height: 48px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 8px;
   padding: 0px;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+`;
+
+const StyledRightIcon = styled(Icon)`
+  position: absolute;
+  right: 8px;
+  transform: rotate(180deg);
 `;
 
 interface SideNavChildPopupContainerProps {
@@ -89,8 +95,9 @@ interface SideNavChildPopupContainerProps {
 }
 
 const SideNavChildContainer = styled.div<SideNavChildPopupContainerProps>`
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
   transition: 0.3s;
   background-color: ${props => (props.active ? "rgba(0,0,0,0.25)" : "rgba(0,0,0,0)")};
   ${props =>
@@ -114,15 +121,15 @@ interface INavMenuIconTextProps {
 
 const NavMenuIconText = styled.h4<INavMenuIconTextProps>`
   text-align: center;
-  font-size: 15px;
-  margin-top: 8px;
-  margin-bottom: 0;
+  font-size: 12px;
+  margin: 0;
   color: ${props => (props.active ? props.theme.colors.white : props.theme.colors.greyInactive)};
 `;
 interface INavMenuIconProps {
   active?: boolean;
   disableOnActive?: boolean;
   icon: string;
+  showSubMenuIcon?: boolean;
 }
 
 const NavMenuIcon: React.FunctionComponent<INavMenuIconProps> = ({
@@ -130,11 +137,15 @@ const NavMenuIcon: React.FunctionComponent<INavMenuIconProps> = ({
   disableOnActive = true,
   children,
   icon,
+  showSubMenuIcon,
 }) => {
   return (
     <SideNavChildContainer active={active} disableOnActive={disableOnActive}>
       <IconContainer>
-        <StyledIcon icon={icon} size={"32px"} active={active} m={"auto"} />
+        <StyledIcon icon={icon} size={"16px"} active={active} m={"auto"} />
+        {showSubMenuIcon && (
+          <StyledRightIcon icon={"Chevron-Left"} size={"8px"} iconColor={"white"} />
+        )}
       </IconContainer>
       <NavMenuIconText active={active}>{children}</NavMenuIconText>
     </SideNavChildContainer>
@@ -147,6 +158,7 @@ interface StyledNavLinkChildrenActiveProps {
   children: any;
   disabled?: boolean;
   currentPathName?: string;
+  showSubMenuIcon?: boolean;
 }
 
 const StyledNavLinkChildrenActive = ({
@@ -155,12 +167,13 @@ const StyledNavLinkChildrenActive = ({
   children,
   disabled,
   currentPathName,
+  showSubMenuIcon,
 }: StyledNavLinkChildrenActiveProps): JSX.Element => {
   const isActive = isNavMenuIconActive(currentPathName, to);
   // CHRIS' NOTE: CANT PASS BOOLEAN TO STYLED COMPONENTS, HENCE THE TOSTRING()
   return (
     <StyledNavLink to={to} disabled={disabled}>
-      <NavMenuIcon active={isActive} icon={icon}>
+      <NavMenuIcon active={isActive} icon={icon} showSubMenuIcon={showSubMenuIcon}>
         {children}
       </NavMenuIcon>
     </StyledNavLink>
@@ -270,6 +283,7 @@ export const SideNavNoMst = (
                 icon={"Team"}
                 active={isNavMenuIconActive(currentPathName, "/team")}
                 disableOnActive={false}
+                showSubMenuIcon={true}
               >
                 {t("navigation.team")}
               </NavMenuIcon>

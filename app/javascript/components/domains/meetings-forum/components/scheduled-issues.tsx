@@ -35,11 +35,7 @@ export const ScheduledIssues = observer(
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
 
     const {
-      issueStore: {
-        sortIssuesByPriority,
-        openMeetingScheduledTeamIssues,
-        closedMeetingScheduledTeamIssues,
-      },
+      issueStore: { sortIssues, openMeetingScheduledTeamIssues, closedMeetingScheduledTeamIssues },
       companyStore,
     } = useMst();
     const { t } = useTranslation();
@@ -75,10 +71,11 @@ export const ScheduledIssues = observer(
 
     const handleSortMenuItemClick = value => {
       setSortOptionsOpen(false);
-      sortIssuesByPriority({
+      sortIssues({
         sort: value,
         teamId: teamId,
         meetingId: upcomingForumMeeting.id,
+        nested: true,
       });
     };
 

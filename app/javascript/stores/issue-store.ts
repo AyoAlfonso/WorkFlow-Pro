@@ -111,7 +111,11 @@ export const IssueStoreModel = types
       });
       if (response.ok) {
         self.issues = response.data.issues;
-        self.teamIssues = response.data.teamIssues;
+        if (self.teamIssues.length && !response.data.teamIssues.length) {
+          return;
+        } else {
+          self.teamIssues = response.data.teamIssues;
+        }
         return true;
       } else {
         return false;
@@ -306,7 +310,7 @@ export const IssueStoreModel = types
     }),
   }))
   .actions(self => ({
-    sortIssuesByPriority: flow(function*(sortParams) {
+    sortIssues: flow(function*(sortParams) {
       const response: ApiResponse<any> = yield self.environment.api.resortIssues(sortParams);
       if (response.ok) {
         self.issues = response.data.issues as any;
