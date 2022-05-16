@@ -53,14 +53,14 @@ export const KeyActivitiesList = observer(
 
         return (
           <Draggable
-            draggableId={draggableId()}
+            draggableId={`keyActivity-${keyActivity.id}`}
             index={index}
             key={keyActivity["id"]}
             type={"keyActivity"}
           >
             {provided => (
               <KeyActivityContainer
-                key={keyActivity["id"]}
+                // key={keyActivity["id"]}
                 ref={provided.innerRef}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
@@ -80,11 +80,12 @@ export const KeyActivitiesList = observer(
     return (
       // <></>
       <KeyActivitiesListStyleContainer>
-        <Droppable droppableId={droppableId} key={"keyActivity"}>
+        <Droppable droppableId={droppableId} key={droppableId}>
           {(provided, snapshot) => (
             <KeyActivitiesContainer
               ref={provided.innerRef}
-              isDraggingOver={snapshot.isDraggingOver}
+              {...provided.droppableProps}
+              // isDraggingOver={snapshot.isDraggingOver}
               // style={getStyle(provided.draggableProps.style, snapshot)}
             >
               {renderKeyActivitiesList()}
@@ -114,7 +115,7 @@ const KeyActivityContainer = styled.div<KeyActivityContainerType>`
 `;
 
 type KeyActivitiesContainerType = {
-  isDraggingOver: any;
+  // isDraggingOver: any;
 };
 
 const KeyActivitiesContainer = styled.div<KeyActivitiesContainerType>`

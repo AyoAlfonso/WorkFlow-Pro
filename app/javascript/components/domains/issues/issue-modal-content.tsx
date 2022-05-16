@@ -476,45 +476,45 @@ export const IssueModalContent = observer(
             onBlur={() => issueStore.updateIssue(issue.id, meetingId ? true : false)}
           />
           <BottomRowContainer>
-            <IconContainer
-              onClick={() => setShowPriorities(true)}
-              display="flex"
-              cursor="pointer"
-              mr="0.5em"
-            >
-              <PriorityContainer>
-                {renderPriorityIcon(issue.priority)}
-                {showPriorities && (
-                  <PriorityDropdownContainer ref={prioritiesRef}>
-                    <PriorityTopSection>
-                      <PriorityIconContainer
-                        onClick={e => {
-                          e.stopPropagation();
-                          setShowPriorities(false);
-                        }}
-                      >
-                        <Icon icon="Close" size={12} iconColor={"greyInactive"} />
-                      </PriorityIconContainer>
-                    </PriorityTopSection>
-                    {priorityOptions.map((priority, index) => (
-                      <OptionContainer
-                        key={`${priority}-${index}`}
-                        onClick={() => {
-                          issueStore.updateIssueState(issue.id, "priority", priority);
-                          issueStore
-                            .updateIssue(issue.id, meetingId || teamId ? true : false)
-                            .then(() => setShowPriorities(false));
-                        }}
-                      >
-                        {renderPriorityIcon(priority, 14, 16)}
-                        <OptionText>{getPriorityText(priority)}</OptionText>
-                      </OptionContainer>
-                    ))}
-                  </PriorityDropdownContainer>
-                )}
-              </PriorityContainer>
-              <PriorityText>{getPriorityText(issue.priority)}</PriorityText>
-            </IconContainer>
+            <OptionWrapper>
+              <IconContainer
+                onClick={() => setShowPriorities(true)}
+                display="flex"
+                cursor="pointer"
+                mr="0.5em"
+              >
+                <PriorityContainer>{renderPriorityIcon(issue.priority)}</PriorityContainer>
+                <PriorityText>{getPriorityText(issue.priority)}</PriorityText>
+              </IconContainer>
+              {showPriorities && (
+                <PriorityDropdownContainer ref={prioritiesRef}>
+                  <PriorityTopSection>
+                    <PriorityIconContainer
+                      onClick={e => {
+                        e.stopPropagation();
+                        setShowPriorities(false);
+                      }}
+                    >
+                      <Icon icon="Close" size={12} iconColor={"greyInactive"} />
+                    </PriorityIconContainer>
+                  </PriorityTopSection>
+                  {priorityOptions.map((priority, index) => (
+                    <OptionContainer
+                      key={`${priority}-${index}`}
+                      onClick={() => {
+                        issueStore.updateIssueState(issue.id, "priority", priority);
+                        issueStore
+                          .updateIssue(issue.id, meetingId || teamId ? true : false)
+                          .then(() => setShowPriorities(false));
+                      }}
+                    >
+                      {renderPriorityIcon(priority, 14, 16)}
+                      <OptionText>{getPriorityText(priority)}</OptionText>
+                    </OptionContainer>
+                  ))}
+                </PriorityDropdownContainer>
+              )}
+            </OptionWrapper>
             {isForum && (
               <DateContainer mr="0.5em">
                 <DateButtonDiv>
@@ -801,6 +801,10 @@ const PriorityTopSection = styled.div`
 
 const PriorityIconContainer = styled.div`
   margin-left: auto;
+`;
+
+const OptionWrapper = styled.div`
+  position: relative;
 `;
 
 const OptionContainer = styled.div`

@@ -8,14 +8,12 @@ import { Icon } from "../../shared/icon";
 import { observer } from "mobx-react";
 import { CreateIssueModal } from "./create-issue-modal";
 import { IssueEntry } from "./issue-entry";
-import Modal from "styled-react-modal";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { Loading } from "../../shared";
 import { sortByPosition } from "~/utils/sorting";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { HomeContainerBorders } from "../home/shared-components";
-import { List } from "@material-ui/core";
-import { IssueModalContent } from "./issue-modal-content";
+import { toJS } from "mobx";
 
 interface IIssuesBodyProps {
   showOpenIssues: boolean;
@@ -89,7 +87,7 @@ export const IssuesBody = observer(
 
     const renderIssuesList = (): Array<JSX.Element> => {
       const issues = showOpenIssues ? openIssues : closedIssues;
-      return sortByPosition(issues.filter(issue => issue.user.id === sessionStore.profile.id)).map(
+      return issues.filter(issue => issue.user.id === sessionStore.profile.id).map(
         (issue, index) => (
           <Draggable draggableId={`issue-${issue.id}`} index={index} key={issue.id} type={"issue"}>
             {provided => (
