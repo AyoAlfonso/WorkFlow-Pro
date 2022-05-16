@@ -14,6 +14,7 @@ export const IssueStoreModel = types
     issues: types.array(IssueModel),
     teamIssues: types.array(TeamIssueModel),
     meetingTeamIssues: types.array(IssueModel),
+    teamOverviewIssues: types.array(IssueModel),
     loading: types.maybeNull(types.boolean),
     commentLogs: types.maybeNull(types.array(CommentLogModel)),
   })
@@ -238,6 +239,17 @@ export const IssueStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.getIssuesForTeam(teamId);
       if (response.ok) {
         self.issues = response.data.issues;
+        self.loading = false;
+        return true;
+      } else {
+        return false;
+      }
+    }),
+    fetchIssuesForTeamOverview: flow(function*(teamId) {
+      self.loading = true;
+      const response: ApiResponse<any> = yield self.environment.api.getIssuesForTeam(teamId);
+      if (response.ok) {
+        self.teamOverviewIssues = response.data.issues;
         self.loading = false;
         return true;
       } else {
