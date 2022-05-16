@@ -121,7 +121,7 @@ interface INavMenuIconTextProps {
 
 const NavMenuIconText = styled.h4<INavMenuIconTextProps>`
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
   margin: 0;
   color: ${props => (props.active ? props.theme.colors.white : props.theme.colors.greyInactive)};
 `;
@@ -142,7 +142,7 @@ const NavMenuIcon: React.FunctionComponent<INavMenuIconProps> = ({
   return (
     <SideNavChildContainer active={active} disableOnActive={disableOnActive}>
       <IconContainer>
-        <StyledIcon icon={icon} size={"16px"} active={active} m={"auto"} />
+        <StyledIcon icon={icon} size={"24px"} active={active} m={"auto"} />
         {showSubMenuIcon && (
           <StyledRightIcon icon={"Chevron-Left"} size={"8px"} iconColor={"white"} />
         )}

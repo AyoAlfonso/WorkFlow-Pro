@@ -271,6 +271,7 @@ export const KeyActivityStoreModel = types
             self.incompleteKeyActivities = keyActivities;
           }
         }
+        showToast("ToDo Deleted", ToastMessageConstants.SUCCESS);
         return true;
       } else {
         return false;

@@ -284,7 +284,7 @@ export const KeyActivityModalContent = observer(
               <ListText>{ListName || `My List`}</ListText>
             </ListContainer>
             <IconContainer ref={optionsRef} ml="auto" display="flex">
-              <ActionContainer>
+              <OptionWrapper>
                 <StyledOptionContainer onClick={() => setShowOptions(!showOptions)}>
                   <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
                 </StyledOptionContainer>
@@ -419,7 +419,7 @@ export const KeyActivityModalContent = observer(
                     </OptionContainer>
                   </OptionsContainer>
                 )}
-              </ActionContainer>
+              </OptionWrapper>
               <IconContainer cursor="pointer" onClick={() => setKeyActivityModalOpen(false)}>
                 <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} ml="8px" />
               </IconContainer>
@@ -723,7 +723,7 @@ const PriorityIconContainer = styled.div`
 type OCProps = {
   bottomDistance: number;
   rightDistance: number;
-  mt?: string
+  mt?: string;
 };
 
 const OptionWrapper = styled.div`
@@ -732,7 +732,7 @@ const OptionWrapper = styled.div`
 
 const OptionsContainer = styled.div<OCProps>`
   position: absolute;
-  right: ${props => (props.rightDistance < 200 ? "1em" : "-2em")};
+  right: -2em;
   width: 20em;
   bottom: ${props => props.bottomDistance < 250 && "2em"};
   box-shadow: 0px 3px 6px #00000029;
@@ -741,11 +741,6 @@ const OptionsContainer = styled.div<OCProps>`
   opacity: 1;
   border-radius: 0.625em;
   background: ${props => props.theme.colors.white};
-  margin-top: ${props => props.mt ? props.mt : "0px"};
-
-  @media only screen and (max-width: 768px) {
-    right: -1em;
-  }
 `;
 
 const OptionContainer = styled.div`
@@ -931,5 +926,5 @@ const ListContainer = styled.div`
 
 const ActionContainer = styled.div`
   postion: relative;
-  display: flex;
-`
+  border: 1px solid;
+`;
