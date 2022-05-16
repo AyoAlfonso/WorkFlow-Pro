@@ -326,7 +326,6 @@ export const Meeting = () => {
             variant={"primary"}
             onClick={() => {
               nextStep(currentStep + 1);
-              console.log("clicked");
               console.log(currentStep);
             }}
             disabled={currentStep >= numberOfSteps}

@@ -1,6 +1,7 @@
-import * as React from "react";
+// import * as React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 import { observer } from "mobx-react";
@@ -10,10 +11,19 @@ import { IKeyActivity } from "~/models/key-activity";
 import { ColumnContainer, ColumnSubHeaderContainer } from "~/components/shared/styles/row-style";
 import { KeyActivityModalContent } from "./key-activity-modal-content";
 import { sortByPosition } from "~/utils/sorting";
+import { toJS } from "mobx";
+// import Box from "@mui/material/Box";
+// import Skeleton from "@mui/material/Skeleton";
+// import { Skeleton } from "react-loading-skeleton";
+// import "react-loading-skeleton/dist/skeleton.css";
+
+import ContentLoader from "react-content-loader";
+
 interface IKeyActivitiesListProps {
   keyActivities: Array<any>;
   droppableId: string;
   loading?: boolean;
+  keyActivityStoreLoading?: boolean;
 }
 
 function getStyle(style, snapshot) {
@@ -25,15 +35,22 @@ function getStyle(style, snapshot) {
   };
 }
 export const KeyActivitiesList = observer(
-  ({ keyActivities, droppableId, loading }: IKeyActivitiesListProps): JSX.Element => {
+  ({
+    keyActivities,
+    droppableId,
+    loading,
+    keyActivityStoreLoading,
+  }: IKeyActivitiesListProps): JSX.Element => {
     const splittedDroppableId = droppableId.split("-");
     const updateId = splittedDroppableId[splittedDroppableId.length - 1];
 
     const [keyActivityModalOpen, setKeyActivityModalOpen] = useState<boolean>(false);
 
+    const data = React.useMemo(() => sortByPosition(keyActivities), [keyActivities]);
+
     const { keyActivityStore } = useMst();
 
-    if (loading && keyActivityStore.loading) {
+    if (loading) {
       return (
         <LoadingContainer>
           <Loading />
@@ -41,8 +58,31 @@ export const KeyActivitiesList = observer(
       );
     }
 
+    if (keyActivityStore.loading) {
+      return (
+        <KeyActivitiesListStyleContainer>
+          <ContentLoader
+            speed={2}
+            width={300}
+            height={160}
+            viewBox="0 0 400 160"
+            backgroundColor="#f3f3f3"
+            foregroundColor="#ecebeb"
+          ></ContentLoader>
+          <ContentLoader
+            speed={2}
+            width={300}
+            height={160}
+            viewBox="0 0 400 160"
+            backgroundColor="#f3f3f3"
+            foregroundColor="#ecebeb"
+          ></ContentLoader>
+        </KeyActivitiesListStyleContainer>
+      );
+    }
+
     const renderKeyActivitiesList = () => {
-      return sortByPosition(keyActivities).map((keyActivity, index) => {
+      return data.map((keyActivity, index) => {
         const draggableId = () => {
           if (isNaN(parseInt(updateId))) {
             return `keyActivity-${keyActivity.id}`;
@@ -66,6 +106,7 @@ export const KeyActivitiesList = observer(
                 {...provided.dragHandleProps}
               >
                 <KeyActivityRecord
+                  key={keyActivity["id"]}
                   keyActivity={keyActivity}
                   dragHandleProps={...provided.dragHandleProps}
                 />
@@ -80,12 +121,11 @@ export const KeyActivitiesList = observer(
     return (
       // <></>
       <KeyActivitiesListStyleContainer>
-        <Droppable droppableId={droppableId} key={"keyActivity"}>
+        <Droppable droppableId={droppableId}>
           {(provided, snapshot) => (
             <KeyActivitiesContainer
               ref={provided.innerRef}
               isDraggingOver={snapshot.isDraggingOver}
-              // style={getStyle(provided.draggableProps.style, snapshot)}
             >
               {renderKeyActivitiesList()}
               {provided.placeholder}

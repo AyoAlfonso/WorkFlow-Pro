@@ -1,6 +1,6 @@
 module UserActivityLogHelper
     
-  def record_activity(note, controller=nil)
+  def record_activity(note, controller=nil, item)
       controller_name = controller if controller.present?
       @activity = UserActivityLog.new
       @activity.user = current_user
@@ -11,6 +11,7 @@ module UserActivityLogHelper
       @activity.action = action_name 
       @activity.company = current_company
       @activity.params = params.inspect
+      @activity.item = item
       @activity.save
   end
 

@@ -1,5 +1,5 @@
 import * as React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
 import { useMst } from "~/setup/root";
 import { Button } from "~/components/shared/button";
@@ -74,6 +74,8 @@ export const SubInitiativeModalContent = observer(
         if (subInitiative) {
           setDescription(subInitiative.contextDescription || descriptionTemplateForInitiatives);
           setSubInitiative(subInitiative);
+        } else {
+          setSubInitiativeModalOpen(false);
         }
       });
     }, []);
@@ -263,6 +265,14 @@ const Container = styled.div`
   padding-right: auto;
 `;
 
+const easeinAnimation = keyframes`
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`;
 const SubInitiativeBodyContainer = styled.div``;
 
 const SectionContainer = styled.div``;
@@ -288,6 +298,7 @@ const LoadingContainer = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
+  animation: 1s ease-out 0s 1 ${easeinAnimation};
   align-items: center;
 `;
 

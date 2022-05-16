@@ -187,6 +187,6 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def record_activities
-    record_activity(params[:note])
+    record_activity(params[:note], nil, params[:id])
   end
 end

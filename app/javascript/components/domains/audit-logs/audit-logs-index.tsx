@@ -22,7 +22,7 @@ import { AnnualInitiativeModalContent } from "../goals/annual-initiative/annual-
 import { QuarterlyGoalModalContent } from "../goals/quarterly-goal/quarterly-goal-modal-content";
 import { SubInitiativeModalContent } from "../goals/sub-initiative/sub-initiaitive-modal-content";
 import { Button } from "~/components/shared/button";
-
+import { KeyActivityModalContentWrapper } from "../key-activities/key-activity-modal-content-wrapper";
 export interface IAuditLogProps {}
 
 export const AuditLogsIndex = observer(
@@ -46,7 +46,6 @@ export const AuditLogsIndex = observer(
       "",
     );
     const [objectId, setObjectId] = useState<number>(null);
-
     const [dateFilter, setDateFilter] = useState<any>({
       selection: {
         startDate: addDays(new Date(), -30),
@@ -78,7 +77,7 @@ export const AuditLogsIndex = observer(
             feature: formatAction(auditLog.controller),
             user: auditLog.userId,
             note: auditLog.note,
-            item: { itemId: auditLog.itemId, controller: auditLog.controller },
+            item: { item: auditLog.item, controller: auditLog.controller },
             action: formatAction(auditLog.action),
             company: auditLog.companyId,
             team: auditLog.teamId,
@@ -137,17 +136,31 @@ export const AuditLogsIndex = observer(
           Header: () => <TableHeaderText> Item </TableHeaderText>,
           accessor: "item",
           Cell: ({ value }) => {
-            <Button
-              small
-              variant={"primary"}
-              onClick={() => {
-                setObjectInView(value.controller);
-                setObjectId(value.item);
-              }}
-              // style={{}}
-            >
-              View Item with ID {value}
-            </Button>;
+            const buttonText = value.item ? (
+              <OwnerContainer>
+                <Button
+                  small
+                  variant={"primary"}
+                  onClick={() => {
+                    setObjectInView(value.controller);
+                    setObjectId(value.item);
+                    setObjectInViewConfirm(true);
+                  }}
+                  style={{
+                    fontSize: "10px",
+                    textAlign: "center",
+                    height: "2rem",
+                    // margin: "0px 25%",
+                  }}
+                >
+                  View Item with ID {value.item}
+                </Button>
+              </OwnerContainer>
+            ) : (
+              <> </> // <OwnerContainer> "..." </OwnerContainer>
+            );
+
+            return buttonText;
           },
           width: "100%",
           minWidth: "150px",
@@ -358,27 +371,27 @@ export const AuditLogsIndex = observer(
                 setAuditLogs={setAuditLogs}
               />
               <TableContainer>
-              <TopRow>
-                <SelectContainer>
-                  <Select selection={selection} setSelection={handleDateRange} id="audit-logs">
-                    <option value="all">All</option>
-                    <option value="last-7-days">Last 7 Days</option>
-                    <option value="last-2-weeks">Last 2 weeks</option>
-                    <option value="last-30-days">Last 30 Days</option>
-                    <option value="last-6-months">Last 6 Months</option>
-                  </Select>
-                  <CustomSelectButton
-                    onClick={() => {
-                      setOpen(true);
-                    }}
-                  >
-                    Custom Range
-                  </CustomSelectButton>
-                  <CsvButton filename="Audit-Logs.csv" data={csvData} headers={csvHeaders}>
-                    Download as CSV
-                  </CsvButton>
-                </SelectContainer>
-              </TopRow>
+                <TopRow>
+                  <SelectContainer>
+                    <Select selection={selection} setSelection={handleDateRange} id="audit-logs">
+                      <option value="all">All</option>
+                      <option value="last-7-days">Last 7 Days</option>
+                      <option value="last-2-weeks">Last 2 weeks</option>
+                      <option value="last-30-days">Last 30 Days</option>
+                      <option value="last-6-months">Last 6 Months</option>
+                    </Select>
+                    <CustomSelectButton
+                      onClick={() => {
+                        setOpen(true);
+                      }}
+                    >
+                      Custom Range
+                    </CustomSelectButton>
+                    <CsvButton filename="Audit-Logs.csv" data={csvData} headers={csvHeaders}>
+                      Download as CSV
+                    </CsvButton>
+                  </SelectContainer>
+                </TopRow>
                 <Table {...getTableProps()}>
                   <TableHead>
                     {headerGroups.map(headerGroup => (
@@ -428,9 +441,9 @@ export const AuditLogsIndex = observer(
           )}
         </Container>
 
-        {objectInView == "annual_initiatives" ? (
+        {objectInView == "Annual Objectives" ? (
           <StyledModal
-            isOpen={true}
+            isOpen={objectInViewConfirm}
             style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
             onBackgroundClick={e => {
               setObjectInView("");
@@ -444,9 +457,9 @@ export const AuditLogsIndex = observer(
               setQuarterlyGoalId={setQuarterlyGoalId}
             />
           </StyledModal>
-        ) : objectInView == "quarterly_goals" ? (
+        ) : objectInView == "Quarterly Initiatives" ? (
           <StyledModal
-            isOpen={true}
+            isOpen={objectInViewConfirm}
             style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
             onBackgroundClick={e => {
               setObjectInView("");
@@ -464,9 +477,22 @@ export const AuditLogsIndex = observer(
               setSelectedAnnualInitiativeDescription={setSelectedAnnualInitiativeDescription}
             />
           </StyledModal>
-        ) : objectInView == "sub_initiatives" ? (
+        ) : objectInView == "To Dos" ? (
           <StyledModal
-            isOpen={true}
+            isOpen={objectInViewConfirm}
+            style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
+            onBackgroundClick={e => {
+              setObjectInView("");
+            }}
+          >
+            <KeyActivityModalContentWrapper
+              setKeyActivityModalOpen={setObjectInViewConfirm}
+              keyActivityId={objectId}
+            />
+          </StyledModal>
+        ) : objectInView == "Supporting Initiative" ? (
+          <StyledModal
+            isOpen={objectInViewConfirm}
             style={{ width: "60rem", height: "800px", maxHeight: "90%", overflow: "auto" }}
             onBackgroundClick={e => {
               setObjectInView("");
@@ -619,3 +645,10 @@ const CustomSelectButton = styled.div`
     border: 1px solid ${props => props.theme.colors.primary100};
   }
 `;
+// const OwnerContainer = styled.div`
+//   display: flex;
+//   height: 100%;
+//   width: 100%;
+//   justify-content: center;
+//   align-items: center;
+// `;

@@ -1,7 +1,7 @@
 class Api::KeyActivitiesController < Api::ApplicationController
   include UserActivityLogHelper
   after_action :record_activities, only: [:create, :update, :destroy, :duplicate, :created_in_meeting, :update_multiple]
-  before_action :set_key_activity, only: [:update, :destroy, :duplicate]
+  before_action :set_key_activity, only: [:update, :show, :destroy, :duplicate]
   after_action :verify_authorized, except: [:index, :created_in_meeting, :resort_index, :update_multiple], unless: :skip_pundit?
 
 
@@ -49,6 +49,7 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def update
+    # binding.pry
     @key_activity_previously_completed = @key_activity.completed_at.present?
     merged_key_activity_params = params[:label_list].present? ? key_activity_params.merge(label_list: ActsAsTaggableOn::Tag.find(params[:label_list]) || params[:label_list]) : key_activity_params
 
@@ -66,7 +67,8 @@ class Api::KeyActivitiesController < Api::ApplicationController
       @key_activities_to_render = team_meeting_activities(@key_activity.meeting_id).exclude_personal_for_team
       @created_for = "meeting"
     else
-      @key_activities_to_render = policy_scope(KeyActivity).completed_state_and_owned_by_current_user(@key_activity_previously_completed, current_user).sort_by_position
+      @key_activities_to_render = policy_scope(KeyActivity).completed_state_and_owned_by_current_user(@key_activity_previously_completed, current_user)
+      # .sort_by_position
       @created_for = "general"
     end
     render "api/key_activities/update"
@@ -75,7 +77,14 @@ class Api::KeyActivitiesController < Api::ApplicationController
   def duplicate
     @new_key_activity = @key_activity.amoeba_dup
     @new_key_activity.save
-    render "api/key_activities/duplicated_key_activity"
+    render "api/key_activities/show_single_key_activity"
+  end
+
+  def show
+    # binding.pry
+    @new_key_activity = @key_activity
+    authorize @key_activity
+    render "api/key_activities/show_single_key_activity"
   end
 
   def update_multiple
@@ -154,6 +163,8 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def record_activities
-    record_activity(params[:note])
+    # binding.pry
+
+    record_activity(params[:note], "To Dos", params[:id])
   end 
 end

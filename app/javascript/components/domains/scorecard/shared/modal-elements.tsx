@@ -47,8 +47,8 @@ type HeaderProps = {
 };
 
 type FormElementContainerProps = {
-  gap?: string
-}
+  gap?: string;
+};
 
 export const Header = styled.p<HeaderProps>`
   margin: 0px;
@@ -70,7 +70,6 @@ export const FormContainer = styled.div`
   padding: 16px;
   gap: 16px;
 `;
-
 
 export const FormElementContainer = styled.div<FormElementContainerProps>`
   display: flex;
@@ -137,6 +136,7 @@ export const ModalWithHeader = ({
   width,
   headerFontSize,
 }: ModalWithHeaderProps): JSX.Element => {
+
   return (
     <StyledModal
       isOpen={isOpen}

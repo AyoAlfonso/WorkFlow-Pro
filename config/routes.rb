@@ -90,7 +90,7 @@ Rails.application.routes.draw do
 
    
     #key activities
-    resources :key_activities, only: [:index, :create, :update, :destroy] do
+    resources :key_activities, only: [:index, :show, :create, :update, :destroy] do
       collection do
         patch "/update_multiple", to: "key_activities#update_multiple"
       end

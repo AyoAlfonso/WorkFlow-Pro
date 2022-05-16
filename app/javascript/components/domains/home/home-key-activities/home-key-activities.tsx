@@ -49,6 +49,7 @@ export const HomeKeyActivities = observer(
     } = useMst();
     const { t } = useTranslation();
 
+
     useEffect(() => {
       showCompletedItems
         ? keyActivityStore.fetchCompleteKeyActivities().then(() => setLoading(false))
@@ -229,6 +230,7 @@ export const HomeKeyActivities = observer(
                 keyActivities={todaysKeyActivities}
                 droppableId={`todays-activities-${selectedFilterGroupIdToday}`}
                 loading={loading}
+                keyActivityStoreLoading={keyActivityStore.loading}
               />
             </KeyActivitiesListContainer>
           </SingleListContainer>
@@ -268,6 +270,7 @@ export const HomeKeyActivities = observer(
                 droppableId={`scheduled-group-activities-${sessionStore.getScheduledGroupIdByName(
                   "Weekly List",
                 )}`}
+                keyActivityStoreLoading={keyActivityStore.loading}
               />
             </KeyActivitiesListContainer>
           </SingleListContainer>
@@ -306,6 +309,7 @@ export const HomeKeyActivities = observer(
                 keyActivities={todaysKeyActivities}
                 loading={loading}
                 droppableId={`todays-activities-${selectedFilterGroupIdToday}`}
+                keyActivityStoreLoading={keyActivityStore.loading}
               />
             </KeyActivitiesListContainer>
           </KeyActivityColumnStyleListContainer>
@@ -326,6 +330,7 @@ export const HomeKeyActivities = observer(
                     ? `scheduled-group-activities-${selectedFilterGroupId}`
                     : `team-activities-${selectedFilterTeamId}`
                 }
+                keyActivityStoreLoading={keyActivityStore.loading}
               />
             </KeyActivitiesListContainer>
           </KeyActivityColumnStyleListContainer>

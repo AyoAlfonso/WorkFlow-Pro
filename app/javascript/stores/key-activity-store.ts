@@ -16,6 +16,7 @@ export const KeyActivityStoreModel = types
     keyActivitiesFromMeeting: types.array(KeyActivityModel),
     keyActivitiesForOnboarding: types.array(KeyActivityModel),
     commentLogs: types.maybeNull(types.array(CommentLogModel)),
+    currentKeyActivity: types.maybeNull(KeyActivityModel),
     loading: types.maybeNull(types.boolean),
     loadingList: types.maybeNull(types.string),
   })
@@ -158,6 +159,17 @@ export const KeyActivityStoreModel = types
         self.loading = false;
       }
     }),
+    fetchKeyActivity: flow(function*(id) {
+      self.loading = true;
+      // const env = getEnv(self);
+
+      const response: ApiResponse<any> = yield self.environment.api.getKeyActivity(id);
+      self.finishLoading();
+      if (response.ok) {
+        self.currentKeyActivity = response.data;
+        self.loading = false;
+      }
+    }),
     updateKeyActivityStatus: flow(function*(keyActivity, value, fromTeamMeeting = false) {
       const response: ApiResponse<any> = yield self.environment.api.updateKeyActivityStatus(
         keyActivity,
@@ -218,20 +230,25 @@ export const KeyActivityStoreModel = types
       self.loading = true;
 
       if (response.ok) {
-        if (!dnd) {
-          const { createdFor, keyActivities, completedList } = response.data;
-          if (createdFor == "meeting") {
-            self.keyActivitiesFromMeeting = keyActivities;
+        // if (!dnd) {
+        const { createdFor, keyActivities, completedList } = response.data;
+        if (createdFor == "meeting") {
+          self.keyActivitiesFromMeeting = keyActivities;
+        } else {
+          if (completedList) {
+            self.completedKeyActivities = keyActivities;
           } else {
-            if (completedList) {
-              self.completedKeyActivities = keyActivities;
-            } else {
-              self.incompleteKeyActivities = keyActivities;
-            }
+            self.incompleteKeyActivities = keyActivities;
           }
         }
+        setTimeout(
+          () => {
+            self.finishLoading();
+          },
+          0.0001,
+          0,
+        );
 
-        self.finishLoading();
         return true;
       } else {
         self.finishLoading();

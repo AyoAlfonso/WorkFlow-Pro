@@ -82,7 +82,7 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   def team
     @team_id = params[:team_id]
     @company = current_company
-    @annual_initiatives = policy_scope(AnnualInitiative).user_current_company(current_company.id).order(fiscal_year: :desc)
+    @annual_initiatives = policy_scope(AnnualInitiative).user_current_company(current_company.id).order(fiscal_year: :desc).sort_by_not_closed.order(created_at: :desc)
     authorize @annual_initiatives
     render "api/annual_initiatives/team"
   end
@@ -103,6 +103,6 @@ class Api::AnnualInitiativesController < Api::ApplicationController
   end
   
   def record_activities
-      record_activity(params[:note],"Annual Objectives " )
+      record_activity(params[:note],"Annual Objectives", params[:id] )
   end 
 end

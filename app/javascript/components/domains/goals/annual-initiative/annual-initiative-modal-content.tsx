@@ -103,6 +103,8 @@ export const AnnualInitiativeModalContent = memo(
               annualInitiative.contextDescription || descriptionTemplateForObjective || "",
             );
             setAnnualInitiative(annualInitiative);
+          } else {
+            setAnnualInitiativeModalOpen(false);
           }
         });
       }, []);

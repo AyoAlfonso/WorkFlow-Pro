@@ -94,6 +94,8 @@ export const QuarterlyGoalModalContent = observer(
             quarterlyGoal.contextDescription || descriptionTemplateForInitiatives || "",
           );
           setQuarterlyGoal(quarterlyGoal);
+        } else {
+          setQuarterlyGoalModalOpen(false);
         }
       });
     }, []);

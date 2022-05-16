@@ -71,6 +71,9 @@ export class Api {
   async getKeyActivities(completed) {
     return this.client.get("/key_activities", { completed });
   }
+  async getKeyActivity(id) {
+    return this.client.get(`/key_activities/${id}`);
+  }
 
   async login(email, password) {
     return this.client.post("/users/sign_in", { user: { email, password } });
@@ -477,7 +480,10 @@ export class Api {
   }
 
   async updateTeam(teamId, teamName, users, metadata) {
-    return this.client.patch(`/teams/${teamId}?note=${getNote(metadata)}`, { teamName, users });
+    return this.client.patch(`/teams/${teamId}?note=${getNote(metadata)}`, {
+      teamName,
+      users,
+    });
   }
 
   async updateTeamSettings(formData, metadata) {

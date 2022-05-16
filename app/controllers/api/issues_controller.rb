@@ -161,6 +161,7 @@ class Api::IssuesController < Api::ApplicationController
     end
   end
   def record_activities
-    record_activity(params[:note])
+   controller = "Topics" if current_company.display_format == "Forum"
+    record_activity(params[:note], controller, params[:id])
   end 
 end

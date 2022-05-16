@@ -25,6 +25,10 @@ class KeyActivityPolicy < ApplicationPolicy
     true
   end
 
+  def show?
+    !user_can_observe_current_company?
+  end
+
   def meeting_recap?
     true
   end
