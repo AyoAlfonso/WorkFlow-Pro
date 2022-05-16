@@ -297,14 +297,16 @@ export const KeyActivityRecord = observer(
                     <Icon icon={"Edit-2"} size={14} mr={16} iconColor={"greyActive"} />
                     <OptionText>Edit</OptionText>
                   </OptionContainer>
-                  <OptionContainer
-                    onClick={e => {
-                      e.stopPropagation();
-                      setShowMoveModal(true);
-                    }}
-                  >
-                    <Icon icon={"Move2"} size={14} mr={16} iconColor={"greyActive"} />
-                    <OptionText>Move</OptionText>
+                  <OptionWrapper>
+                    <OptionContainer
+                      onClick={e => {
+                        e.stopPropagation();
+                        setShowMoveModal(true);
+                      }}
+                    >
+                      <Icon icon={"Move2"} size={14} mr={16} iconColor={"greyActive"} />
+                      <OptionText>Move</OptionText>
+                    </OptionContainer>
                     {showMoveModal && (
                       <MoveContainer ref={moveRef}>
                         <MoveTopSection>
@@ -371,7 +373,7 @@ export const KeyActivityRecord = observer(
                         </DestinationContainer>
                       </MoveContainer>
                     )}
-                  </OptionContainer>
+                  </OptionWrapper>
                   <OptionContainer
                     onClick={() => {
                       keyActivityStore.updateKeyActivityState(
@@ -403,9 +405,11 @@ export const KeyActivityRecord = observer(
                     <OptionText>{keyActivity.personal ? "Unlock" : "Lock"}</OptionText>
                   </OptionContainer>
                   <Divider />
-                  <OptionContainer onClick={() => setShowPriorities(true)}>
-                    <KeyActivityPriorityIcon priority={keyActivity.priority} size={16} mr={16} />
-                    <OptionText>{getPriorityText(keyActivity.priority)}</OptionText>
+                  <OptionWrapper>
+                    <OptionContainer onClick={() => setShowPriorities(true)}>
+                      <KeyActivityPriorityIcon priority={keyActivity.priority} size={16} mr={16} />
+                      <OptionText>{getPriorityText(keyActivity.priority)}</OptionText>
+                    </OptionContainer>
                     {showPriorities && (
                       <PriorityDropdownContainer ref={prioritiesRef}>
                         {priorityOptions.map((priority, index) => (
@@ -428,7 +432,7 @@ export const KeyActivityRecord = observer(
                         ))}
                       </PriorityDropdownContainer>
                     )}
-                  </OptionContainer>
+                  </OptionWrapper>
                   <Divider />
                   <OptionContainer
                     onClick={() => {
@@ -573,7 +577,7 @@ const TodoName = styled(Text)<TodoNameProps>`
   margin: 0;
   font-size: 15px;
   font-weight: 400;
-  line-height: 20px;
+  line-height: 15px;
   width: 70%;
   cursor: ${props => (props.disabled ? "auto" : "pointer")};
 `;
@@ -594,6 +598,10 @@ const OptionsContainer = styled.div<OCProps>`
   opacity: 1;
   border-radius: 0.625em;
   background: ${props => props.theme.colors.white};
+`;
+
+const OptionWrapper = styled.div`
+  position: relative;
 `;
 
 const OptionContainer = styled.div`
@@ -673,7 +681,7 @@ const RowContainer = styled.div`
 `;
 
 const BottomRowContainer = styled(RowContainer)`
-  margin-top: -4px;
+  // margin-top: -4px;
   margin-left: 36px;
   @media only screen and (max-width: 768px) {
     padding-right: 6px;

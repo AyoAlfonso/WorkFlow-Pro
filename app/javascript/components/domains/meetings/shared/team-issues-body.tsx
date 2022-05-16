@@ -35,8 +35,8 @@ export const TeamIssuesBody = observer(
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
     const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
 
-    const openIssues = issueStore.openIssues;
-    const closedIssues = issueStore.closedIssues;
+    const openIssues = issueStore.teamOverviewIssues.filter(issue => issue.completedAt === null);
+    const closedIssues = issueStore.closedIssues.filter(issue => issue.completedAt !== null);
 
     if (R.isNil(company)) {
       return <Loading />;
@@ -44,7 +44,7 @@ export const TeamIssuesBody = observer(
 
     useEffect(() => {
       if (teamId) {
-        issueStore.fetchIssuesForTeam(teamId);
+        issueStore.fetchIssuesForTeamOverview(teamId);
       } else {
         issueStore.fetchIssues();
       }

@@ -407,7 +407,7 @@ export const KeyElement = observer(
         }
       } else {
         const milestoneForWeekOf =
-          object?.milestones.find(milestone => milestone.weekOf === weekOf) || null;
+          object?.milestones?.find(milestone => milestone.weekOf === weekOf) || null;
 
         if (milestoneForWeekOf) {
           const status = getDerviedStatus(object?.keyElements);

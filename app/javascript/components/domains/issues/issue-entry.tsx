@@ -353,9 +353,11 @@ export const IssueEntry = observer(
                       <Icon icon={"Edit-2"} size={14} mr={16} iconColor={"greyActive"} />
                       <OptionText>Edit</OptionText>
                     </OptionContainer>
-                    <OptionContainer onClick={() => setShowShareModal(true)}>
-                      <Icon icon={"Move2"} size={14} mr={16} iconColor={"greyActive"} />
-                      <OptionText>Move</OptionText>
+                    <OptionWrapper>
+                      <OptionContainer onClick={() => setShowShareModal(true)}>
+                        <Icon icon={"Move2"} size={14} mr={16} iconColor={"greyActive"} />
+                        <OptionText>Move</OptionText>
+                      </OptionContainer>
                       {showShareModal && (
                         <ShareContainer ref={moveRef}>
                           <ShareTopSection>
@@ -409,7 +411,7 @@ export const IssueEntry = observer(
                           </DestinationContainer>
                         </ShareContainer>
                       )}
-                    </OptionContainer>
+                    </OptionWrapper>
                     <OptionContainer
                       onClick={() => {
                         issueStore.updateIssueState(issue.id, "personal", !issue.personal);
@@ -428,9 +430,11 @@ export const IssueEntry = observer(
                       <OptionText>{issue.personal ? "Unlock" : "Lock"}</OptionText>
                     </OptionContainer>
                     <Divider />
-                    <OptionContainer onClick={() => setShowPriorities(true)}>
-                      {renderPriorityIcon(issue.priority, 16, 16)}
-                      <OptionText>{getPriorityText(issue.priority)}</OptionText>
+                    <OptionWrapper>
+                      <OptionContainer onClick={() => setShowPriorities(true)}>
+                        {renderPriorityIcon(issue.priority, 16, 16)}
+                        <OptionText>{getPriorityText(issue.priority)}</OptionText>
+                      </OptionContainer>
                       {showPriorities && (
                         <PriorityDropdownContainer ref={prioritiesRef}>
                           <PriorityTopSection></PriorityTopSection>
@@ -450,7 +454,7 @@ export const IssueEntry = observer(
                           ))}
                         </PriorityDropdownContainer>
                       )}
-                    </OptionContainer>
+                    </OptionWrapper>
                     <Divider />
                     <OptionContainer
                       onClick={() =>
@@ -723,6 +727,10 @@ const OptionsContainer = styled.div<OCProps>`
   opacity: 1;
   border-radius: 0.625em;
   background: ${props => props.theme.colors.white};
+`;
+
+const OptionWrapper = styled.div`
+  position: relative;
 `;
 
 const OptionContainer = styled.div`

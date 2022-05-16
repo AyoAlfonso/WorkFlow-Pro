@@ -87,9 +87,8 @@ export const KeyActivityModalContent = observer(
       ? groups.find(group => group.id == keyActivity.scheduledGroupId)?.name
       : teams.find(group => group.id == keyActivity.teamId)?.name;
 
-    const selectedGroupName = selectedGroupId
-      ? groups.find(group => group.id == selectedGroupId)?.name
-      : teams.find(group => group.id == selectedTeamId)?.name;
+    const selectedGroupName =
+      selectedGroupId && groups.find(group => group.id == selectedGroupId)?.name;
 
     useEffect(() => {
       setSelectedLabel(keyActivity.labels ? keyActivity.labels[0] : null);
@@ -285,34 +284,43 @@ export const KeyActivityModalContent = observer(
               <ListText>{ListName || `My List`}</ListText>
             </ListContainer>
             <IconContainer ref={optionsRef} ml="auto" display="flex">
-              <StyledOptionContainer onClick={() => setShowOptions(!showOptions)}>
-                <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
+              <ActionContainer>
+                <StyledOptionContainer onClick={() => setShowOptions(!showOptions)}>
+                  <StyledOptionIcon icon={"Options"} size={"16px"} iconColor={"grey80"} />
+                </StyledOptionContainer>
                 {showOptions && (
-                  <OptionsContainer rightDistance={spaceRight} bottomDistance={spaceBelow}>
-                    <OptionContainer
-                      onClick={e => {
-                        e.stopPropagation();
-                        setShowMoveModal(true);
-                      }}
-                    >
-                      <Icon icon={"Move2"} size={14} mr={16} iconColor={"greyActive"} />
-                      <OptionText>Move</OptionText>
+                  <OptionsContainer
+                    rightDistance={spaceRight}
+                    bottomDistance={spaceBelow}
+                    mt="20px"
+                  >
+                    <OptionWrapper ref={moveRef}>
+                      <OptionContainer
+                        onClick={e => {
+                          // e.stopPropagation();
+                          setShowMoveModal(!showMoveModal);
+                        }}
+                      >
+                        <Icon icon={"Move2"} size={14} mr={16} iconColor={"greyActive"} />
+                        <OptionText>Move</OptionText>
+                      </OptionContainer>
                       {showMoveModal && (
-                        <MoveContainer ref={moveRef}>
+                        <MoveContainer>
                           <MoveTopSection>
                             <MoveText>Move</MoveText>
                           </MoveTopSection>
 
                           <DestinationContainer>
                             <SendDestinationContainer>
-                              <ListName onClick={() => setShowMoveList(!showMoveList)}>
+                              <ListContainer onClick={() => setShowMoveList(!showMoveList)}>
                                 {selectedGroupName || `Select a list`}
                                 <Icon
                                   icon={"Chevron-Down"}
                                   size={"16px"}
                                   iconColor={baseTheme.colors.primary80}
+                                  ml="auto"
                                 />
-                              </ListName>
+                              </ListContainer>
                               {showMoveList && (
                                 <ScheduledGroupSelector
                                   selectedGroupId={selectedGroupId}
@@ -363,7 +371,7 @@ export const KeyActivityModalContent = observer(
                           </DestinationContainer>
                         </MoveContainer>
                       )}
-                    </OptionContainer>
+                    </OptionWrapper>
                     <OptionContainer
                       onClick={e => {
                         e.stopPropagation();
@@ -411,7 +419,7 @@ export const KeyActivityModalContent = observer(
                     </OptionContainer>
                   </OptionsContainer>
                 )}
-              </StyledOptionContainer>
+              </ActionContainer>
               <IconContainer cursor="pointer" onClick={() => setKeyActivityModalOpen(false)}>
                 <Icon icon={"Close"} size={"16px"} iconColor={"grey80"} ml="8px" />
               </IconContainer>
@@ -435,49 +443,51 @@ export const KeyActivityModalContent = observer(
             }
           />
           <BottomRowContainer>
-            <IconContainer
-              onClick={() => setShowPriorities(true)}
-              display="flex"
-              cursor="pointer"
-              mr="1em"
-            >
-              <PriorityContainer>
-                <KeyActivityPriorityIcon priority={keyActivity.priority} />
-                {showPriorities && (
-                  <PriorityDropdownContainer ref={prioritiesRef}>
-                    <PriorityTopSection>
-                      <PriorityIconContainer
-                        onClick={e => {
-                          e.stopPropagation();
-                          setShowPriorities(false);
-                        }}
-                      >
-                        <Icon icon="Close" size={12} iconColor={"greyInactive"} />
-                      </PriorityIconContainer>
-                    </PriorityTopSection>
-                    {priorityOptions.map((priority, index) => (
-                      <OptionContainer
-                        key={`${priority}-${index}`}
-                        onClick={() => {
-                          keyActivityStore.updateKeyActivityState(
-                            keyActivity.id,
-                            "priority",
-                            priority,
-                          );
-                          keyActivityStore
-                            .updateKeyActivity(keyActivity.id, meetingId ? true : false)
-                            .then(() => setShowPriorities(false));
-                        }}
-                      >
-                        <KeyActivityPriorityIcon size={14} mr={16} priority={priority} />
-                        <OptionText>{getPriorityText(priority)}</OptionText>
-                      </OptionContainer>
-                    ))}
-                  </PriorityDropdownContainer>
-                )}
-              </PriorityContainer>
-              <PriorityText>{getPriorityText(keyActivity.priority)}</PriorityText>
-            </IconContainer>
+            <OptionWrapper>
+              <IconContainer
+                onClick={() => setShowPriorities(true)}
+                display="flex"
+                cursor="pointer"
+                mr="1em"
+              >
+                <PriorityContainer>
+                  <KeyActivityPriorityIcon priority={keyActivity.priority} />
+                </PriorityContainer>
+                <PriorityText>{getPriorityText(keyActivity.priority)}</PriorityText>
+              </IconContainer>
+              {showPriorities && (
+                <PriorityDropdownContainer ref={prioritiesRef}>
+                  <PriorityTopSection>
+                    <PriorityIconContainer
+                      onClick={e => {
+                        e.stopPropagation();
+                        setShowPriorities(false);
+                      }}
+                    >
+                      <Icon icon="Close" size={12} iconColor={"greyInactive"} />
+                    </PriorityIconContainer>
+                  </PriorityTopSection>
+                  {priorityOptions.map((priority, index) => (
+                    <OptionContainer
+                      key={`${priority}-${index}`}
+                      onClick={() => {
+                        keyActivityStore.updateKeyActivityState(
+                          keyActivity.id,
+                          "priority",
+                          priority,
+                        );
+                        keyActivityStore
+                          .updateKeyActivity(keyActivity.id, meetingId ? true : false)
+                          .then(() => setShowPriorities(false));
+                      }}
+                    >
+                      <KeyActivityPriorityIcon size={14} mr={16} priority={priority} />
+                      <OptionText>{getPriorityText(priority)}</OptionText>
+                    </OptionContainer>
+                  ))}
+                </PriorityDropdownContainer>
+              )}
+            </OptionWrapper>
             <DateContainer mr="0.5em">
               <DateButtonDiv>
                 <DateButton
@@ -713,7 +723,12 @@ const PriorityIconContainer = styled.div`
 type OCProps = {
   bottomDistance: number;
   rightDistance: number;
+  mt?: string
 };
+
+const OptionWrapper = styled.div`
+  position: relative;
+`;
 
 const OptionsContainer = styled.div<OCProps>`
   position: absolute;
@@ -726,6 +741,7 @@ const OptionsContainer = styled.div<OCProps>`
   opacity: 1;
   border-radius: 0.625em;
   background: ${props => props.theme.colors.white};
+  margin-top: ${props => props.mt ? props.mt : "0px"};
 
   @media only screen and (max-width: 768px) {
     right: -1em;
@@ -912,3 +928,8 @@ const ListContainer = styled.div`
     max-width: 6em;
   }
 `;
+
+const ActionContainer = styled.div`
+  postion: relative;
+  display: flex;
+`
