@@ -184,7 +184,7 @@ export const MobileIssuesBody = observer(
       const issues = currentTeamId
         ? filteredIssues()
         : filteredIssues().filter(issue => issue.user.id === sessionStore.profile.id);
-      return sortByPosition(issues).map((issue, index) => (
+      return issues.map((issue, index) => (
         <Draggable draggableId={`issue-${issue.id}`} index={index} key={issue.id} type={"issue"}>
           {provided => (
             <IssueContainer ref={provided.innerRef} {...provided.draggableProps}>
