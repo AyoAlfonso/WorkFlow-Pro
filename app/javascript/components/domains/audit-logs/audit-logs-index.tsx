@@ -29,7 +29,7 @@ export const AuditLogsIndex = observer(
   (props: IAuditLogProps): JSX.Element => {
     const { auditLogStore, userStore, teamStore, companyStore } = useMst();
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState<boolean>(true);
     const [auditLogs, setAuditLogs] = useState([]);
     const [meta, setMeta] = useState(null);
     const [page, setPage] = useState<number>(1);
@@ -230,14 +230,11 @@ export const AuditLogsIndex = observer(
     const handleDateRange = e => {
       setSelection(e);
       if (e == "all") {
-        setLoading(true);
         auditLogStore.getAudit(`page/1?per=10`).then(res => {
           setFilteredAuditLogs(res.userActivityLogs);
           setMeta(res.meta);
-          setLoading(false);
         });
       } else if (e == "last-7-days") {
-        setLoading(true);
         const startDate = moment()
           .subtract(7, "days")
           .format("YYYY-MM-DD");
@@ -245,10 +242,8 @@ export const AuditLogsIndex = observer(
         auditLogStore.getAudit(`?from=${startDate}&to=${endDate}`).then(res => {
           setFilteredAuditLogs(res.userActivityLogs);
           setMeta(res.meta);
-          setLoading(false);
         });
       } else if (e == "last-2-weeks") {
-        setLoading(true);
         const startDate = moment()
           .subtract(14, "days")
           .format("YYYY-MM-DD");
@@ -256,10 +251,8 @@ export const AuditLogsIndex = observer(
         auditLogStore.getAudit(`?from=${startDate}&to=${endDate}`).then(res => {
           setFilteredAuditLogs(res.userActivityLogs);
           setMeta(res.meta);
-          setLoading(false);
         });
       } else if (e == "last-30-days") {
-        setLoading(true);
         const startDate = moment()
           .subtract(30, "days")
           .format("YYYY-MM-DD");
@@ -267,10 +260,8 @@ export const AuditLogsIndex = observer(
         auditLogStore.getAudit(`?from=${startDate}&to=${endDate}`).then(res => {
           setFilteredAuditLogs(res.userActivityLogs);
           setMeta(res.meta);
-          setLoading(false);
         });
       } else {
-        setLoading(true);
         const startDate = moment()
           .subtract(6, "months")
           .format("YYYY-MM-DD");
@@ -278,7 +269,6 @@ export const AuditLogsIndex = observer(
         auditLogStore.getAudit(`?from=${startDate}&to=${endDate}`).then(res => {
           setFilteredAuditLogs(res.userActivityLogs);
           setMeta(res.meta);
-          setLoading(false);
         });
       }
     };
@@ -286,11 +276,9 @@ export const AuditLogsIndex = observer(
     const handleDateSelect = ranges => {
       const startDate = moment(ranges.selection.startDate).format("YYYY-MM-DD");
       const endDate = moment(ranges.selection.endDate).format("YYYY-MM-DD");
-      setLoading(true);
       auditLogStore.getAudit(`?from=${startDate}&to=${endDate}`).then(res => {
         setFilteredAuditLogs(res.userActivityLogs);
         setMeta(res.meta);
-        setLoading(false);
       });
       setOpen(false);
     };
@@ -312,13 +300,11 @@ export const AuditLogsIndex = observer(
     const getLogs = pageNumber => {
       if (page === pageNumber) return;
 
-      setLoading(true);
       return auditLogStore.getAudit(`page/${pageNumber}?per=10`).then(res => {
         const { userActivityLogs, meta } = res;
         let filteredLogs;
         setMeta(meta);
         setPage(meta.currentPage);
-        setLoading(false);
         setFilteredAuditLogs(userActivityLogs);
       });
     };
