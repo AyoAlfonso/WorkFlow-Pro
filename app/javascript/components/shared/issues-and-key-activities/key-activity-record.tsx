@@ -78,7 +78,6 @@ export const KeyActivityRecord = observer(
     const { user } = keyActivity;
 
     useEffect(() => {
-      // console.log(keyActivity, keyActivityStore.loading);
       setSelectedLabel(
         keyActivity.labels && keyActivity.labels.length > 0 ? keyActivity.labels[0] : null,
       );

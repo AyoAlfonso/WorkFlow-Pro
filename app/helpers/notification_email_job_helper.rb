@@ -63,7 +63,7 @@ module NotificationEmailJobHelper
       subject: "Weekly Report for #{team.name} Team",
       greeting: "#{team.name} Team",
       name: "",
-      message: "Share what you’ve accomplished with your teammates and see how they performed.",
+      message: "",
       preheader: " See your team’s progress towards the plan, from week of #{previous_week_start.strftime("%b %-d,")} -  #{previous_week_end.strftime("%b %-d,")}",
       start_date: previous_week_start.strftime("%b %-d,"), 
       end_date: previous_week_end.strftime("%b %-d,"),
@@ -81,7 +81,7 @@ module NotificationEmailJobHelper
       subject:"Weekly Check-in: Please add an update",
       greeting: "",
       name: "#{user&.first_name}",
-      message: "Share what you’ve accomplished with your teammates and see how they performed.",
+      message: "",
       preheader: "Preheader: You have some updates to provide for your Initiatives and KPIs in LynchPyn.",
       cta_text: "Complete Weekly Check-in",
       cta_url: "/weekly-check-in/#{user.id}/#{Date.today.strftime("%Y-%m-%d")}"

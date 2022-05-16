@@ -69,14 +69,6 @@ export const KeyActivitiesList = observer(
             backgroundColor="#f3f3f3"
             foregroundColor="#ecebeb"
           ></ContentLoader>
-          <ContentLoader
-            speed={2}
-            width={300}
-            height={160}
-            viewBox="0 0 400 160"
-            backgroundColor="#f3f3f3"
-            foregroundColor="#ecebeb"
-          ></ContentLoader>
         </KeyActivitiesListStyleContainer>
       );
     }

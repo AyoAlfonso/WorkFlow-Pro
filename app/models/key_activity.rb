@@ -47,7 +47,7 @@ class KeyActivity < ApplicationRecord
   scope :sort_by_priority_and_created_at, -> { sort_by_priority.sort_by_created_date }
   scope :sort_by_position_priority_and_created_at, -> { sort_by_position.sort_by_priority.sort_by_created_date }
   scope :sort_by_progressing_non_backlog_position, -> { order('scheduled_group_id::integer ASC')}
-  scope :sort_by_due_date, -> { order(due_date: :asc) }
+  scope :sort_by_due_date, -> { order("due_date ASC NULLS LAST") }
   scope :completed_state_and_owned_by_current_user, ->(completed, user) { (completed ? where.not(completed_at: nil) : where(completed_at: nil)).owned_by_user(user) }
 
   scope :exclude_personal_for_team, -> { where.not(personal: true) }

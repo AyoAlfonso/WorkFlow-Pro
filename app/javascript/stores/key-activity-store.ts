@@ -245,7 +245,7 @@ export const KeyActivityStoreModel = types
           () => {
             self.finishLoading();
           },
-          0.0001,
+          0.1,
           0,
         );
 

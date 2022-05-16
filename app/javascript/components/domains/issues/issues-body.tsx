@@ -13,7 +13,6 @@ import { Loading } from "../../shared";
 import { sortByPosition } from "~/utils/sorting";
 import { WidgetHeaderSortButtonMenu } from "~/components/shared/widget-header-sort-button-menu";
 import { HomeContainerBorders } from "../home/shared-components";
-import { toJS } from "mobx";
 
 interface IIssuesBodyProps {
   showOpenIssues: boolean;

@@ -58,7 +58,7 @@ export const HeaderText = observer(
                   {currentTeam?.name}
                 </BackHeaderText>
                 <ChevronRight icon={"Chevron-Left"} size={"24px"} iconColor={"grey100"} />
-                <BreadcrumbHeaderText>Meeting Management </BreadcrumbHeaderText>
+                <BreadcrumbHeaderText> {t("forum.scheduledTopics")} </BreadcrumbHeaderText>
               </SubHeaderContainer>
             ) : (
               <> {t("forum.annualHub")} </>
@@ -72,7 +72,7 @@ export const HeaderText = observer(
                   {currentTeam?.name}
                 </BackHeaderText>
                 <ChevronRight icon={"Chevron-Left"} size={"24px"} iconColor={"grey100"} />
-                <BreadcrumbHeaderText> Forum Topics </BreadcrumbHeaderText>
+                <BreadcrumbHeaderText> {t("forum.topicsVault")} </BreadcrumbHeaderText>
               </SubHeaderContainer>
             ) : (
               <> {t("forum.upcomingHub")} </>
@@ -84,7 +84,7 @@ export const HeaderText = observer(
                   {currentTeam?.name}
                 </BackHeaderText>
                 <ChevronRight icon={"Chevron-Left"} size={"24px"} iconColor={"grey100"} />
-                <BreadcrumbHeaderText> Meeting Agenda & Notes </BreadcrumbHeaderText>
+                <BreadcrumbHeaderText> {t("forum.meetingManagement")}</BreadcrumbHeaderText>
               </SubHeaderContainer>
             ) : (
               <> {t("forum.meetingAgenda")} </>

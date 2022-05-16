@@ -49,7 +49,6 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def update
-    # binding.pry
     @key_activity_previously_completed = @key_activity.completed_at.present?
     merged_key_activity_params = params[:label_list].present? ? key_activity_params.merge(label_list: ActsAsTaggableOn::Tag.find(params[:label_list]) || params[:label_list]) : key_activity_params
 
@@ -81,7 +80,6 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def show
-    # binding.pry
     @new_key_activity = @key_activity
     authorize @key_activity
     render "api/key_activities/show_single_key_activity"
@@ -163,8 +161,6 @@ class Api::KeyActivitiesController < Api::ApplicationController
   end
 
   def record_activities
-    # binding.pry
-
     record_activity(params[:note], "To Dos", params[:id])
   end 
 end

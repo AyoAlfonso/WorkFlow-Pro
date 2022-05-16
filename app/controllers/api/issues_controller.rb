@@ -127,7 +127,7 @@ class Api::IssuesController < Api::ApplicationController
     case params[:sort]
     when "by_priority"
       @issues = @issues&.sort_by_priority.sort_by_due_date
-        @team_issues = @team_issues&.sort_by_issue_priority&.sort_by_issue_due_date
+      @team_issues = @team_issues&.sort_by_issue_priority&.sort_by_issue_due_date
   
     when "by_upvotes"
       @issues = @issues&.sort_by_upvotes.sort_by_priority

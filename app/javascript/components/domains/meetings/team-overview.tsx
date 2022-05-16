@@ -281,7 +281,7 @@ export const TeamOverview = observer(
           {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
             <TeamForumManagementContainer
               titleText={t(`${overviewType}.teamMeetingsTitle`)}
-              buttonText={t("forum.meetingManagement")}
+              buttonText={t("forum.scheduledTopics")}
               handleMeetingClick={handleMeetingManagementClick}
               useIcon={false}
             />
@@ -290,7 +290,7 @@ export const TeamOverview = observer(
           {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
             <TeamForumManagementContainer
               titleText={t(`${overviewType}.teamMeetingsTitle`)}
-              buttonText={t("forum.forumTopics")}
+              buttonText={t("forum.topicsVault")}
               handleMeetingClick={handleForumTopicsClick}
               useIcon={false}
             />
@@ -299,7 +299,7 @@ export const TeamOverview = observer(
           {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
             <TeamForumManagementContainer
               titleText={t(`${overviewType}.teamMeetingsTitle`)}
-              buttonText={t("forum.meetingAgendaNotes")}
+              buttonText={t("forum.meetingManagement")}
               handleMeetingClick={handleMeetingAgendaNotesClick}
               useIcon={false}
             />
