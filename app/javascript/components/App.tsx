@@ -137,7 +137,7 @@ export const App = observer(
 
       if (R.includes("keyActivity", draggableId)) {
         const keyActivityId = parseInt(R.replace("keyActivity-", "", draggableId));
-        // keyActivityStore.updateKeyActivityState(keyActivityId, "position", newPosition + 1);
+        keyActivityStore.updateKeyActivityState(keyActivityId, "position", newPosition + 1);
         if (destination.droppableId === "weekly-activities") {
           keyActivityStore.startLoading("weekly-activities");
           keyActivityStore.updateKeyActivityState(
@@ -184,8 +184,6 @@ export const App = observer(
           );
           keyActivityStore.updateKeyActivityState(keyActivityId, "scheduledGroupId", null);
         }
-
-        keyActivityStore.updateKeyActivityState(keyActivityId, "position", newPosition + 1);
         keyActivityStore.updateKeyActivity(keyActivityId, null, true);
       } else if (R.includes("team_issue", draggableId)) {
         //something to handle team issue meeting enablement creation / deletion depnding on droppable type

@@ -741,11 +741,6 @@ const OptionsContainer = styled.div<OCProps>`
   opacity: 1;
   border-radius: 0.625em;
   background: ${props => props.theme.colors.white};
-  // margin-top: ${props => (props.mt ? props.mt : "0px")};
-
-  @media only screen and (max-width: 768px) {
-    // right: -1em;
-  }
 `;
 
 const OptionContainer = styled.div`
