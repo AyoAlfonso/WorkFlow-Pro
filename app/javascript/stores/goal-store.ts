@@ -25,17 +25,11 @@ export const GoalStoreModel = types
             annualInitiatives.push(goal);
           }
         } else if (!goal.closedAt && goal.quarterlyGoals.length > 0) {
-          annualInitiatives.push({ ...goal, quarterlyGoals: goal.openQuarterlyGoals });
+          annualInitiatives.push({
+            ...goal,
+            quarterlyGoals: goal.openQuarterlyGoals,
+          });
         }
-        /*
-         else if (!goal.closedAt) {
-          if (goal.openQuarterlyGoals.length > 0) {
-            const clonedGoal = R.clone(goal);
-            clonedGoal.quarterlyGoals = goal.openQuarterlyGoals as any;
-            annualInitiatives.push(clonedGoal);
-          }
-        }
-        */
       });
       return annualInitiatives;
     },
