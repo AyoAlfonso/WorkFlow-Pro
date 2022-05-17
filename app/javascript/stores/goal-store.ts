@@ -20,10 +20,12 @@ export const GoalStoreModel = types
     get activeTeamGoals() {
       const annualInitiatives = [];
       self.teamGoals.forEach(goal => {
-        if (!goal.closedAt && goal.quarterlyGoals.length >= 0) {
+        if (!goal.closedAt && goal.quarterlyGoals.length == 0) {
           if (!R.contains(goal.id, R.pluck("id", annualInitiatives))) {
             annualInitiatives.push(goal);
           }
+        } else if (!goal.closedAt && goal.quarterlyGoals.length > 0) {
+          annualInitiatives.push({ ...goal, quarterlyGoals: goal.openQuarterlyGoals });
         }
         /*
          else if (!goal.closedAt) {
@@ -51,7 +53,7 @@ export const GoalStoreModel = types
         showToast("There was an error loading goals", ToastMessageConstants.ERROR);
       }
     }),
-    getClosedGoals: flow(function* () {
+    getClosedGoals: flow(function*() {
       const env = getEnv(self);
       try {
         const response: any = yield env.api.getAllGoals("closed");
