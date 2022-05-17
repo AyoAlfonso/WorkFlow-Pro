@@ -391,8 +391,13 @@ export const KeyActivityModalContent = observer(
                           .then(() => setShowOptions(false));
                       }}
                     >
-                      <Icon icon={"Lock"} size={14} mr={16} iconColor={"greyActive"} />
-                      <OptionText>Lock</OptionText>
+                      <Icon
+                        icon={"Lock"}
+                        size={14}
+                        mr={16}
+                        iconColor={keyActivity.personal ? "mipBlue" : "greyActive"}
+                      />
+                      <OptionText>{keyActivity.personal ? "Unlock" : "Lock"}</OptionText>
                     </OptionContainer>
                     <Divider />
                     <OptionContainer

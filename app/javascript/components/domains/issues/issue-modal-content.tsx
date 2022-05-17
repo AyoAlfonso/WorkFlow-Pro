@@ -426,8 +426,8 @@ export const IssueModalContent = observer(
                           .then(() => setShowOptions(false));
                       }}
                     >
-                      <Icon icon={"Lock"} size={14} mr={16} iconColor={"greyActive"} />
-                      <OptionText>Lock</OptionText>
+                      <Icon icon={"Lock"} size={14} mr={16} iconColor={issue.personal ? "mipBlue" : "greyActive"} />
+                      <OptionText>{issue.personal ? "Unlock" : "Lock"}</OptionText>
                     </OptionContainer>
                     <Divider />
                     <OptionContainer
