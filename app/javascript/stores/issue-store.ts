@@ -105,11 +105,28 @@ export const IssueStoreModel = types
       }
     }),
     updateIssue: flow(function*(id, fromTeamMeeting = false) {
-      let issueObject = self.issues.find(issue => issue.id == id);
-      const response: ApiResponse<any> = yield self.environment.api.updateIssue({
-        ...issueObject,
-        fromTeamMeeting,
-      });
+      const issueObject = self.issues.find(issue => issue.id == id);
+      let response;
+      if (!issueObject) {
+        const teamIssueObject = self.teamIssues.find(issue => issue.issueId == id)?.issue;
+        if (!teamIssueObject) {
+          const teamOverviewIssueObject = self.teamOverviewIssues.find(issue => issue.id == id);
+          response = yield self.environment.api.updateIssue({
+            ...teamOverviewIssueObject,
+            fromTeamMeeting,
+          });
+        } else {
+          response = yield self.environment.api.updateIssue({
+            ...teamIssueObject,
+            fromTeamMeeting,
+          });
+        }
+      } else {
+        response = yield self.environment.api.updateIssue({
+          ...issueObject,
+          fromTeamMeeting,
+        });
+      }
       if (response.ok) {
         self.issues = response.data.issues;
         if (self.teamIssues.length && !response.data.teamIssues.length) {
@@ -272,8 +289,20 @@ export const IssueStoreModel = types
     updateIssueState(id, field, value) {
       const issues = self.issues;
       const issueIndex = issues.findIndex(issue => issue.id == id);
-      issues[issueIndex][field] = value;
-      self.issues = issues;
+      if (issueIndex == -1) {
+        const teamIssues = self.teamIssues as any;
+        const teamIssueIndex = teamIssues.findIndex(issue => issue.issueId == id);
+        if (teamIssueIndex == -1) {
+          const teamOverviewIssues = self.teamOverviewIssues as any;
+          const teamOverviewIssueIndex = teamOverviewIssues.findIndex(issue => issue.id == id);
+          teamOverviewIssues[teamOverviewIssueIndex][field] = value;
+        } else {
+          teamIssues[teamIssueIndex].issue[field] = value;
+        }
+      } else {
+        issues[issueIndex][field] = value;
+        self.issues = issues;
+      }
     },
     reset() {
       self.issues = [] as any;

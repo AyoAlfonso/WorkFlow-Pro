@@ -35,8 +35,12 @@ export const TeamIssuesBody = observer(
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
     const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
 
-    const openIssues = issueStore.teamOverviewIssues.filter(issue => issue.completedAt === null);
-    const closedIssues = issueStore.closedIssues.filter(issue => issue.completedAt !== null);
+    const openIssues = !teamId
+      ? issueStore.openIssues
+      : issueStore.teamOverviewIssues.filter(issue => issue.completedAt === null);
+    const closedIssues = !teamId
+      ? issueStore.closedIssues
+      : issueStore.teamOverviewIssues.filter(issue => issue.completedAt !== null);
 
     if (R.isNil(company)) {
       return <Loading />;

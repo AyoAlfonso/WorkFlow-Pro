@@ -525,7 +525,7 @@ export const IssueEntry = observer(
               setIssueModalOpen(false);
             }}
           >
-            <IssueModalContent issue={issue} setIssueModalOpen={setIssueModalOpen} />
+            <IssueModalContent issue={issue} setIssueModalOpen={setIssueModalOpen} meetingId={meetingId} teamId={teamId} />
           </StyledModal>
         </RightContainer>
 

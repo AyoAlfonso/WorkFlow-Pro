@@ -426,7 +426,12 @@ export const IssueModalContent = observer(
                           .then(() => setShowOptions(false));
                       }}
                     >
-                      <Icon icon={"Lock"} size={14} mr={16} iconColor={issue.personal ? "mipBlue" : "greyActive"} />
+                      <Icon
+                        icon={"Lock"}
+                        size={14}
+                        mr={16}
+                        iconColor={issue.personal ? "mipBlue" : "greyActive"}
+                      />
                       <OptionText>{issue.personal ? "Unlock" : "Lock"}</OptionText>
                     </OptionContainer>
                     <Divider />
@@ -969,6 +974,7 @@ const TopicTypeOption = styled.span`
   color: ${baseTheme.colors.black};
   font-size: 14px;
   padding: 0.5em;
+  cursor: pointer;
 
   &: hover {
     color: ${baseTheme.colors.white};
