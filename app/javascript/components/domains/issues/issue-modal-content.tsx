@@ -231,11 +231,11 @@ export const IssueModalContent = observer(
     const getPriorityText = text => {
       switch (text) {
         case "high":
-          return "High Priority";
-        case "medium":
           return "Medium Priority";
+        case "medium":
+          return "Low Priority";
         case "frog":
-          return "LynchPyn Priority";
+          return "High Priority";
         default:
           return "No Priority";
       }

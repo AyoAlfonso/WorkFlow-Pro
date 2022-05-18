@@ -42,17 +42,17 @@ export const PrioritySelector = ({
       case 1:
         setIconName("Low-Priority");
         setIconColor("cautionYellow");
-        setDisplayName("Medium Priority");
+        setDisplayName("Low Priority");
         break;
       case 2:
         setIconName("Medium-Priority");
-        setIconColor("warningRed");
-        setDisplayName("High Priority");
+        setIconColor("tango");
+        setDisplayName("Medium Priority");
         break;
       case 3:
         setIconName("High-Priority");
-        setIconColor("mipBlue");
-        setDisplayName("LynchPyn Priority");
+        setIconColor("warningRed");
+        setDisplayName("High Priority");
         break;
       default:
         setIconName("Priority-None");
@@ -66,16 +66,16 @@ export const PrioritySelector = ({
     return (
       <>
         <OptionContainer onClick={() => onItemSelect(3)}>
-          <Icon icon={"High-Priority"} size={"16px"} iconColor={"mipBlue"} />
-          <OptionText>LynchPyn Priority</OptionText>
+          <Icon icon={"High-Priority"} size={"16px"} iconColor={"warningRed"} />
+          <OptionText>High Priority</OptionText>
         </OptionContainer>
         <OptionContainer onClick={() => onItemSelect(2)}>
-          <Icon icon={"Medium-Priority"} size={"16px"} iconColor={"warningRed"} />
-          <OptionText>High Priority</OptionText>
+          <Icon icon={"Medium-Priority"} size={"16px"} iconColor={"tango"} />
+          <OptionText>Medium Priority</OptionText>
         </OptionContainer>
         <OptionContainer onClick={() => onItemSelect(1)}>
           <Icon icon={"Low-Priority"} size={"16px"} iconColor={"cautionYellow"} />
-          <OptionText>Medium Priority</OptionText>
+          <OptionText>Low Priority</OptionText>
         </OptionContainer>
         <OptionContainer onClick={() => onItemSelect(0)}>
           <Icon icon={"Priority-None"} size={"16px"} iconColor={"greyActive"} />
