@@ -72,7 +72,7 @@ export class Api {
     return this.client.get("/key_activities", { completed });
   }
   async getKeyActivity(id) {
-    return this.client.get(`/key_activities/${id}`);
+    return this.client.get(`/key_activities/show/${id}`);
   }
 
   async login(email, password) {
