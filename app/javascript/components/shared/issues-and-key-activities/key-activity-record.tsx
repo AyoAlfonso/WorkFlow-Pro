@@ -25,6 +25,7 @@ import { KeyActivityModalContent } from "~/components/domains/key-activities/key
 import { ScheduledGroupSelector } from "./scheduled-group-selector";
 import { StyledLabel } from "../label-selection";
 import { DueDatePickerModal } from "./date-picker-modal";
+import ContentEditable from "react-contenteditable";
 
 interface IKeyActivityRecordProps {
   keyActivity: any;
@@ -234,11 +235,11 @@ export const KeyActivityRecord = observer(
     const getPriorityText = text => {
       switch (text) {
         case "high":
-          return "High Priority";
-        case "medium":
           return "Medium Priority";
+        case "medium":
+          return "Low Priority";
         case "frog":
-          return "LynchPyn Priority";
+          return "High Priority";
         default:
           return "No Priority";
       }
@@ -265,16 +266,17 @@ export const KeyActivityRecord = observer(
                 size="small"
               />
             </CheckboxContainer>
-            <TodoName
-              disabled={disabled}
+            <StyledContentEditable
               onClick={() => {
-                if (disabled) return;
                 setKeyActivityModalOpen(true);
               }}
+              innerRef={keyActivityRef}
+              html={keyActivity.description}
+              disabled
+              onChange={() => {}}
+              onKeyDown={() => {}}
               style={{ textDecoration: keyActivity.completedAt && "line-through" }}
-            >
-              {keyActivity.description}
-            </TodoName>
+            />
             <RightActionContainer ref={optionsRef}>
               <StyledOptionContainer
                 disabled={disabled}
@@ -568,17 +570,13 @@ const TopSection = styled.div`
   }
 `;
 
-type TodoNameProps = {
-  disabled: boolean;
-};
-
-const TodoName = styled(Text)<TodoNameProps>`
+const StyledContentEditable = styled(ContentEditable)`
   margin: 0;
   font-size: 15px;
   font-weight: 400;
   line-height: 15px;
   width: 70%;
-  cursor: ${props => (props.disabled ? "auto" : "pointer")};
+  cursor: pointer;
 `;
 
 type OCProps = {

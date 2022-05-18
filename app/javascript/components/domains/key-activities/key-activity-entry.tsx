@@ -21,6 +21,7 @@ import Modal from "styled-react-modal";
 import { ScheduledGroupSelector } from "~/components/shared/issues-and-key-activities/scheduled-group-selector";
 import { KeyActivityModalContent } from "./key-activity-modal-content";
 import { DueDatePickerModal } from "~/components/shared/issues-and-key-activities/date-picker-modal";
+import ContentEditable from "react-contenteditable";
 
 interface IKeyActivityEntryProps {
   keyActivity: any;
@@ -203,11 +204,11 @@ export const KeyActivityEntry = observer(
     const getPriorityText = text => {
       switch (text) {
         case "high":
-          return "High Priority";
-        case "medium":
           return "Medium Priority";
+        case "medium":
+          return "Low Priority";
         case "frog":
-          return "LynchPyn Priority";
+          return "High Priority";
         default:
           return "No Priority";
       }
@@ -233,14 +234,17 @@ export const KeyActivityEntry = observer(
                 size="small"
               />
             </CheckboxContainer>
-            <TodoName
+            <StyledContentEditable
               onClick={() => {
                 setKeyActivityModalOpen(true);
               }}
+              innerRef={keyActivityRef}
+              html={keyActivity.description}
+              disabled
+              onChange={() => {}}
+              onKeyDown={() => {}}
               style={{ textDecoration: keyActivity.completedAt && "line-through" }}
-            >
-              {keyActivity.description}
-            </TodoName>
+            />
             <RightActionContainer ref={optionsRef}>
               <StyledOptionContainer onClick={() => setShowOptions(!showOptions)}>
                 <StyledOptionIcon icon={"Options"} size={"15px"} iconColor={"grey80"} />
@@ -470,6 +474,15 @@ const TopSection = styled.div`
 `;
 
 const TodoName = styled(Text)`
+  margin: 0;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 15px;
+  width: 70%;
+  cursor: pointer;
+`;
+
+const StyledContentEditable = styled(ContentEditable)`
   margin: 0;
   font-size: 15px;
   font-weight: 400;

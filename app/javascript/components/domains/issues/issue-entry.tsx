@@ -29,6 +29,7 @@ import { DateButton } from "~/components/shared/date-selection/date-button";
 import moment from "moment";
 import { parseISO } from "date-fns";
 import { DueDatePickerModal } from "~/components/shared/issues-and-key-activities/date-picker-modal";
+import ContentEditable from "react-contenteditable";
 
 interface IIssueEntryProps {
   issue: any;
@@ -216,11 +217,11 @@ export const IssueEntry = observer(
     const getPriorityText = text => {
       switch (text) {
         case "high":
-          return "High Priority";
-        case "medium":
           return "Medium Priority";
+        case "medium":
+          return "Low Priority";
         case "frog":
-          return "LynchPyn Priority";
+          return "High Priority";
         default:
           return "No Priority";
       }
@@ -328,14 +329,17 @@ export const IssueEntry = observer(
                     {issueTopicType.replace(/(^\w|\s\w)/g, m => m.toUpperCase())}
                   </TopicText>
                 )}
-                <IssuesName
+                <StyledContentEditable
                   onClick={() => {
                     setIssueModalOpen(true);
                   }}
+                  innerRef={issueRef}
+                  html={issue.description}
+                  disabled
+                  onChange={() => {}}
+                  onKeyDown={() => {}}
                   style={{ textDecoration: issue.completedAt && "line-through" }}
-                >
-                  {issue.description}
-                </IssuesName>
+                />
               </TopicNameContainer>
 
               <RightActionContainer ref={optionsRef}>
@@ -525,7 +529,12 @@ export const IssueEntry = observer(
               setIssueModalOpen(false);
             }}
           >
-            <IssueModalContent issue={issue} setIssueModalOpen={setIssueModalOpen} />
+            <IssueModalContent
+              issue={issue}
+              setIssueModalOpen={setIssueModalOpen}
+              meetingId={meetingId}
+              teamId={teamId}
+            />
           </StyledModal>
         </RightContainer>
 
@@ -685,11 +694,11 @@ const LabelContainer = styled.div`
   // margin-right: .5em;
 `;
 
-const IssuesName = styled(Text)`
+const StyledContentEditable = styled(ContentEditable)`
   margin: 0;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
-  line-height: 20px;
+  line-height: 15px;
   width: 70%;
   cursor: pointer;
 `;
