@@ -66,18 +66,26 @@ class Api::IssuesController < Api::ApplicationController
   end
   
   def duplicate
-    new_issue = @issue.dup
-    new_issue.cached_votes_total = 0
-    new_issue.cached_votes_score =   0
-    new_issue.cached_votes_up = 0
-    new_issue.cached_votes_down =  0
-    new_issue.cached_weighted_score = 0
-    new_issue.cached_weighted_total =  0
-    new_issue.cached_weighted_average = 0.0
+    current_issue = @issue.dup
+    current_issue.cached_votes_total = 0
+    current_issue.cached_votes_score =   0
+    current_issue.cached_votes_up = 0
+    current_issue.cached_votes_down =  0
+    current_issue.cached_weighted_score = 0
+    current_issue.cached_weighted_total =  0
+    current_issue.cached_weighted_average = 0.0
 
-    new_issue.save
-    @issue = new_issue
+    current_issue.save
+    if(@issue.team_id)
+      @issue = current_issue
+      @team_issue = TeamIssue.create(issue_id: @issue.id, team_id: @issue.team_id, position:@issue.position)
+         if params[:meeting_id]
+           TeamIssueMeetingEnablement.where(meeting_id: params[:meeting_id], team_issue_id: @team_issue.id).first_or_create(meeting_id: params[:meeting_id], team_issue_id: @team_issue.id)
+         end
+      render "api/team_issues/show_team_issue"
+    elsif @issue.team_id.nil?
     render "api/issues/show"
+    end
   end
 
   def issues_for_meeting
