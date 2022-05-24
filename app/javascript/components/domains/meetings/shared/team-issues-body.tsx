@@ -35,23 +35,16 @@ export const TeamIssuesBody = observer(
     const [createIssueModalOpen, setCreateIssueModalOpen] = useState<boolean>(false);
     const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
 
-    const openIssues = !teamId
-      ? issueStore.openIssues
-      : issueStore.teamOverviewIssues.filter(issue => issue.completedAt === null);
-    const closedIssues = !teamId
-      ? issueStore.closedIssues
-      : issueStore.teamOverviewIssues.filter(issue => issue.completedAt !== null);
+    const openIssues = issueStore.openTeamIssues
+    
+    const closedIssues = issueStore.closedTeamIssues;
 
     if (R.isNil(company)) {
       return <Loading />;
     }
 
     useEffect(() => {
-      if (teamId) {
-        issueStore.fetchIssuesForTeamOverview(teamId);
-      } else {
-        issueStore.fetchIssues();
-      }
+      issueStore.fetchTeamIssues(teamId);
     }, []);
 
     const sortMenuOptions = [
@@ -76,13 +69,11 @@ export const TeamIssuesBody = observer(
 
     const renderIssuesList = (): Array<JSX.Element> => {
       const issues = showOpenIssues ? openIssues : closedIssues;
-      return issues
-        .filter(issue => issue.teamId == teamId)
-        .map((issue, index) => (
-          <IssueContainer key={issue["id"]}>
-            <IssueEntry issue={issue} pageEnd={true} meetingId={meetingId} teamId={teamId} />
-          </IssueContainer>
-        ));
+      return issues.map(issue => (
+        <IssueContainer key={issue["id"]}>
+          <IssueEntry issue={issue.issue} pageEnd={true} meetingId={meetingId} teamId={teamId} />
+        </IssueContainer>
+      ));
     };
 
     return (

@@ -98,6 +98,7 @@ export const ScheduledIssues = observer(
                 meetingId={upcomingForumMeeting.id}
                 dragHandleProps={...provided.dragHandleProps}
                 pageEnd={true}
+                scheduledIssue={true}
               />
             </IssueContainer>
           )}

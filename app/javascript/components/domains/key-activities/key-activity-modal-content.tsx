@@ -475,7 +475,8 @@ export const KeyActivityModalContent = observer(
                   {priorityOptions.map((priority, index) => (
                     <OptionContainer
                       key={`${priority}-${index}`}
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         keyActivityStore.updateKeyActivityState(
                           keyActivity.id,
                           "priority",
@@ -723,6 +724,7 @@ const PriorityTopSection = styled.div`
 
 const PriorityIconContainer = styled.div`
   margin-left: auto;
+  cursor: pointer;
 `;
 
 type OCProps = {

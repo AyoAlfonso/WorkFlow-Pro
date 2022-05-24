@@ -1,5 +1,5 @@
 import * as R from "ramda";
-import { types, flow, getRoot } from "mobx-state-tree";
+import { types, flow, getRoot, cast } from "mobx-state-tree";
 import { withEnvironment } from "../lib/with-environment";
 import { IssueModel } from "../models/issue";
 import { TeamIssueModel } from "../models/team-issue";
@@ -95,8 +95,12 @@ export const IssueStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.createIssue(issueObject);
       if (response.ok) {
         self.issues = response.data.issues;
-        self.teamIssues = response.data.teamIssues;
-        self.meetingTeamIssues = response.data.meetingTeamIssues;
+        if (response.data.teamIssues.length >= self.teamIssues.length) {
+          self.teamIssues = response.data.teamIssues;
+        }
+        if (response.data.meetingTeamIssues.length >= self.meetingTeamIssues.length) {
+          self.meetingTeamIssues = response.data.meetingTeamIssues;
+        }
         showToast(`${itemName} created.`, ToastMessageConstants.SUCCESS);
         return true;
       } else {
@@ -129,9 +133,7 @@ export const IssueStoreModel = types
       }
       if (response.ok) {
         self.issues = response.data.issues;
-        if (self.teamIssues.length && !response.data.teamIssues.length) {
-          return;
-        } else {
+        if (response.data.teamIssues.length >= self.teamIssues.length) {
           self.teamIssues = response.data.teamIssues;
         }
         return true;
@@ -167,10 +169,15 @@ export const IssueStoreModel = types
         return false;
       }
     }),
-    duplicateIssue: flow(function*(id) {
-      const response: ApiResponse<any> = yield self.environment.api.duplicateIssue(id);
+    duplicateIssue: flow(function*(id, meetingId = null) {
+      const response: ApiResponse<any> = yield self.environment.api.duplicateIssue(id, meetingId);
       if (response.ok) {
-        self.issues = [...self.issues, response.data] as any;
+        if (response.data.teamId) {
+          self.issues = cast([...self.issues, response.data.issue]);
+          self.teamIssues = cast([...self.teamIssues, response.data]);
+        } else {
+          self.issues = cast([...self.issues, response.data]);
+        }
         showToast(`Issue Duplicated Successfully`, ToastMessageConstants.SUCCESS);
         return true;
       } else {
@@ -185,7 +192,9 @@ export const IssueStoreModel = types
       });
       if (response.ok) {
         self.issues = response.data.issues;
-        self.teamIssues = response.data.teamIssues;
+        if (response.data.teamIssues.length) {
+          self.teamIssues = response.data.teamIssues;
+        }
         return true;
       } else {
         return false;

@@ -52,8 +52,12 @@ export class Api {
     return this.client.get("/issues");
   }
 
-  async duplicateIssue(id) {
-    return this.client.post(`/issues/duplicate/${id}`, {});
+  async duplicateIssue(id, meetingId = null) {
+    if (meetingId) {
+      return this.client.post(`/issues/duplicate/${id}?meetingId=${meetingId}`, {});
+    } else {
+      return this.client.post(`/issues/duplicate/${id}`, {});
+    }
   }
 
   async createCommentLog(log) {
