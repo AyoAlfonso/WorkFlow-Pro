@@ -78,13 +78,13 @@ class Api::IssuesController < Api::ApplicationController
     current_issue.save
     @issue = current_issue
     if(@issue.team_id)
-      @team_issue = TeamIssue.create(issue_id: current_issue.id, team_id: current_issue.team_id, position: current_issue.position)
-         if params[:meeting_id]
-           TeamIssueMeetingEnablement.where(meeting_id: params[:meeting_id], team_issue_id: @team_issue.id).first_or_create(meeting_id: params[:meeting_id], team_issue_id: @team_issue.id)
-         end
+      @team_issue = TeamIssue.where(issue_id: current_issue.id).first_or_create!(issue_id: current_issue.id, team_id: current_issue.team_id, position: current_issue.position)
+      if params[:meeting_id]
+        TeamIssueMeetingEnablement.where(meeting_id: params[:meeting_id], team_issue_id: @team_issue.id).first_or_create(meeting_id: params[:meeting_id], team_issue_id: @team_issue.id)
+      end
       render "api/team_issues/show_team_issue"
-    elsif @issue.team_id.nil?
-    render "api/issues/show"
+    else
+      render "api/issues/show"
     end
   end
 
