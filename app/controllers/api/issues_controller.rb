@@ -76,9 +76,9 @@ class Api::IssuesController < Api::ApplicationController
     current_issue.cached_weighted_average = 0.0
 
     current_issue.save
+    @issue = current_issue
     if(@issue.team_id)
-      @issue = current_issue
-      @team_issue = TeamIssue.create(issue_id: @issue.id, team_id: @issue.team_id, position:@issue.position)
+      @team_issue = TeamIssue.create(issue_id: current_issue.id, team_id: current_issue.team_id, position: current_issue.position)
          if params[:meeting_id]
            TeamIssueMeetingEnablement.where(meeting_id: params[:meeting_id], team_issue_id: @team_issue.id).first_or_create(meeting_id: params[:meeting_id], team_issue_id: @team_issue.id)
          end
