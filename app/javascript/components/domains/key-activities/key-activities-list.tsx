@@ -58,20 +58,20 @@ export const KeyActivitiesList = observer(
       );
     }
 
-    if (keyActivityStore.loading) {
-      return (
-        <KeyActivitiesListStyleContainer>
-          <ContentLoader
-            speed={2}
-            width={300}
-            height={160}
-            viewBox="0 0 400 160"
-            backgroundColor="#f3f3f3"
-            foregroundColor="#ecebeb"
-          ></ContentLoader>
-        </KeyActivitiesListStyleContainer>
-      );
-    }
+    // if (keyActivityStore.loading) {
+    //   return (
+    //     <KeyActivitiesListStyleContainer>
+    //       <ContentLoader
+    //         speed={2}
+    //         width={300}
+    //         height={160}
+    //         viewBox="0 0 400 160"
+    //         backgroundColor="#f3f3f3"
+    //         foregroundColor="#ecebeb"
+    //       ></ContentLoader>
+    //     </KeyActivitiesListStyleContainer>
+    //   );
+    // }
 
     const renderKeyActivitiesList = () => {
       return data.map((keyActivity, index) => {

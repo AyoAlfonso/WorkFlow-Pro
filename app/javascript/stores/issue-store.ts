@@ -170,15 +170,20 @@ export const IssueStoreModel = types
       }
     }),
     duplicateIssue: flow(function*(id, meetingId = null) {
+      const { companyStore } = getRoot(self);
+      const itemName = companyStore.company.displayFormat == "Forum" ? "Topic" : "Issue";
       const response: ApiResponse<any> = yield self.environment.api.duplicateIssue(id, meetingId);
       if (response.ok) {
+        if (meetingId) {
+          self.meetingTeamIssues = cast([...self.meetingTeamIssues, response.data.issue]);
+        }
         if (response.data.teamId) {
           self.issues = cast([...self.issues, response.data.issue]);
           self.teamIssues = cast([...self.teamIssues, response.data]);
         } else {
           self.issues = cast([...self.issues, response.data]);
         }
-        showToast(`Issue Duplicated Successfully`, ToastMessageConstants.SUCCESS);
+        showToast(`${itemName} Duplicated Successfully`, ToastMessageConstants.SUCCESS);
         return true;
       } else {
         showToast(`Something Went Wrong`, ToastMessageConstants.ERROR);
@@ -364,7 +369,9 @@ export const IssueStoreModel = types
       const response: ApiResponse<any> = yield self.environment.api.resortIssues(sortParams);
       if (response.ok) {
         self.issues = response.data.issues as any;
-        self.teamIssues = response.data.teamIssues as any;
+        if (response.data.teamIssues.length >= self.teamIssues.length) {
+          self.teamIssues = response.data.teamIssues;
+        }
         return true;
       } else {
         return false;

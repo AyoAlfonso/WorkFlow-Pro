@@ -54,7 +54,7 @@ export class Api {
 
   async duplicateIssue(id, meetingId = null) {
     if (meetingId) {
-      return this.client.post(`/issues/duplicate/${id}?meetingId=${meetingId}`, {});
+      return this.client.post(`/issues/duplicate/${id}?meeting_id=${meetingId}`, {});
     } else {
       return this.client.post(`/issues/duplicate/${id}`, {});
     }
