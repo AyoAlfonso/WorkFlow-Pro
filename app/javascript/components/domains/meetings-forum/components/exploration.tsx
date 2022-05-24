@@ -47,12 +47,12 @@ export const Exploration = observer(
     const currentTeam = (teams || []).find(team => team.id === currentMeeting.teamId);
 
     useEffect(() => {
-      issueStore.fetchTeamIssues(currentMeeting.teamId); //ASSUMPTIONS: must have team id for parking lot
-
       //TODO: should we just include the meeting_ids with the team_issues themselves?
       if (currentMeeting) {
         issueStore.fetchTeamIssueMeetingEnablements(currentMeeting.id);
       }
+      issueStore.fetchTeamIssues(currentMeeting.teamId); //ASSUMPTIONS: must have team id for parking lot
+
     }, [currentMeeting?.teamId]);
 
     if (R.isNil(currentTeam) || R.isNil(currentMeeting)) {

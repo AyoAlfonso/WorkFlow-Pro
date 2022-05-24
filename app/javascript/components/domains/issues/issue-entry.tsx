@@ -38,6 +38,7 @@ interface IIssueEntryProps {
   dragHandleProps?: any;
   leftShareContainer?: boolean;
   teamId?: number | string;
+  scheduledIssue?: boolean;
 }
 
 export const IssueEntry = observer(
@@ -49,7 +50,15 @@ export const IssueEntry = observer(
       sessionStore: { scheduledGroups },
       companyStore,
     } = useMst();
-    const { issue, pageEnd, meetingId, dragHandleProps, leftShareContainer, teamId } = props;
+    const {
+      issue,
+      pageEnd,
+      meetingId,
+      dragHandleProps,
+      leftShareContainer,
+      teamId,
+      scheduledIssue,
+    } = props;
 
     const { t } = useTranslation();
 
@@ -463,7 +472,7 @@ export const IssueEntry = observer(
                     <OptionContainer
                       onClick={() =>
                         issueStore
-                          .duplicateIssue(issue.id)
+                          .duplicateIssue(issue.id, scheduledIssue ? meetingId : null)
                           .then(res => res && setShowOptions(false))
                       }
                     >
@@ -696,9 +705,9 @@ const LabelContainer = styled.div`
 
 const StyledContentEditable = styled(ContentEditable)`
   margin: 0;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
-  line-height: 15px;
+  line-height: 20px;
   width: 70%;
   cursor: pointer;
 `;

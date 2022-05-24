@@ -484,9 +484,9 @@ const TodoName = styled(Text)`
 
 const StyledContentEditable = styled(ContentEditable)`
   margin: 0;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
-  line-height: 15px;
+  line-height: 20px;
   width: 70%;
   cursor: pointer;
 `;
