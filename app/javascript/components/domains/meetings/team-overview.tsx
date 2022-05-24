@@ -278,7 +278,7 @@ export const TeamOverview = observer(
               />
             )}
           </StyledOverviewAccordion>
-          {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
+          {overviewType === "forum" && (
             <TeamForumManagementContainer
               titleText={t(`${overviewType}.teamMeetingsTitle`)}
               buttonText={t("forum.scheduledTopics")}
@@ -287,7 +287,7 @@ export const TeamOverview = observer(
             />
           )}
 
-          {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
+          {overviewType === "forum" && (
             <TeamForumManagementContainer
               titleText={t(`${overviewType}.teamMeetingsTitle`)}
               buttonText={t("forum.topicsVault")}
@@ -296,7 +296,7 @@ export const TeamOverview = observer(
             />
           )}
 
-          {overviewType === "forum" && forumType == "organisation_forum_monthly" && (
+          {overviewType === "forum" && (
             <TeamForumManagementContainer
               titleText={t(`${overviewType}.teamMeetingsTitle`)}
               buttonText={t("forum.meetingManagement")}
