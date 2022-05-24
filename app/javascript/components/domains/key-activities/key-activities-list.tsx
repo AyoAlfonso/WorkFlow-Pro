@@ -12,10 +12,6 @@ import { ColumnContainer, ColumnSubHeaderContainer } from "~/components/shared/s
 import { KeyActivityModalContent } from "./key-activity-modal-content";
 import { sortByPosition } from "~/utils/sorting";
 import { toJS } from "mobx";
-// import Box from "@mui/material/Box";
-// import Skeleton from "@mui/material/Skeleton";
-// import { Skeleton } from "react-loading-skeleton";
-// import "react-loading-skeleton/dist/skeleton.css";
 
 import ContentLoader from "react-content-loader";
 
@@ -57,21 +53,6 @@ export const KeyActivitiesList = observer(
         </LoadingContainer>
       );
     }
-
-    // if (keyActivityStore.loading) {
-    //   return (
-    //     <KeyActivitiesListStyleContainer>
-    //       <ContentLoader
-    //         speed={2}
-    //         width={300}
-    //         height={160}
-    //         viewBox="0 0 400 160"
-    //         backgroundColor="#f3f3f3"
-    //         foregroundColor="#ecebeb"
-    //       ></ContentLoader>
-    //     </KeyActivitiesListStyleContainer>
-    //   );
-    // }
 
     const renderKeyActivitiesList = () => {
       return data.map((keyActivity, index) => {

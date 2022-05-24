@@ -172,7 +172,13 @@ export const IssueStoreModel = types
     duplicateIssue: flow(function*(id, meetingId = null) {
       const { companyStore } = getRoot(self);
       const itemName = companyStore.company.displayFormat == "Forum" ? "Topic" : "Issue";
-      const response: ApiResponse<any> = yield self.environment.api.duplicateIssue(id, meetingId);
+      let response: ApiResponse<any>;
+      const query = `?meeting_id=${meetingId}`;
+      if (meetingId) {
+        response = yield self.environment.api.duplicateIssue(id, query)
+      } else {
+        response = yield self.environment.api.duplicateIssue(id);
+      }
       if (response.ok) {
         if (meetingId) {
           self.meetingTeamIssues = cast([...self.meetingTeamIssues, response.data.issue]);
