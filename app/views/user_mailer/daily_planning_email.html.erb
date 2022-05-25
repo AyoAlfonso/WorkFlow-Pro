@@ -34,7 +34,7 @@ You have <strong style="color: #005FFE"><%= @todays_list.length %> ToDo<% if @to
 <% end %>
 <% if @due_today.length > 0 %>
   <p>📆
-You also have <%= @due_today.length %> Pyn<% if @due_today.length == 1 %> that is due today but hasn't been added to your list:
+You also have <%= @due_today.length %> ToDo<% if @due_today.length == 1 %> that is due today but hasn't been added to your list:
     <% else %>s that are due today but haven't been added to your list:
     <% end %>
   </p>

@@ -55,16 +55,13 @@ ActiveAdmin.register MeetingTemplate do
            params[:meeting_template][:steps_attributes][index.to_s]["description_text"] = step[:description_text_content]
           end
         end
-      if @meeting_template.update!(permitted_params)
+      if @meeting_template.update!(params.require(:meeting_template).permit(:name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed, :override_key, :description_text, :_destroy]))
         flash[:alert] = @meeting_template.errors.full_messages
          redirect_to admin_meeting_template_path(@meeting_template), notice: "Template updated"
       end
     end
-
-    def permitted_params
-      params.require(:meeting_template).permit(:name, :meeting_type, :duration, :description, steps_attributes: [:id, :name, :step_type, :order_index, :instructions, :duration, :component_to_render, :meeting_template_id, :image, :link_embed, :override_key, :description_text, :_destroy])
-    end
- 
+  
+    
   end
 
   show do
