@@ -17,7 +17,14 @@ class OrganisationForumMeetingSetupService
     company_date_for_start_on = company.date_for_start_on(fiscal_year)
     months_requiring_meetings = 12.times.map { |i| (company_date_for_start_on + i.months) }.reject { |date| already_created_months.include?(date.strftime("%B %Y")) }
 
-    meeting_template_id = MeetingTemplate.organisation_forum_monthly.first.try(:id)
+   meeting_template_id = case company.organisational_forum_type
+    when "3-Hours"
+     MeetingTemplate.organisation_forum_monthly.second.try(:id)
+    when "2-Hours"
+     MeetingTemplate.organisation_forum_monthly.first.try(:id)
+    else 
+     MeetingTemplate.organisation_forum_monthly.first.try(:id)
+    end
     raise "No Organisational forum monthly template seeded" if meeting_template_id.blank?
     new_meetings = months_requiring_meetings.map do |meeting_date|
       Meeting.create({

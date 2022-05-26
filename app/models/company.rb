@@ -9,6 +9,7 @@ class Company < ApplicationRecord
   enum display_format: { Company: 0, Forum: 1 }
   enum objectives_key_type: { Milestones: 0, KeyResults: 1 }
   enum forum_type: { EO: 0, YPO: 1, Organisation: 2, Other: 3 }
+  enum organisational_forum_type: {"1-Hour": 0, "2-Hours":1, "3-Hours":2}
   # has_many :users, dependent: :restrict_with_error #thi shas been replaced with default company
   has_many :annual_initiatives, dependent: :destroy
   has_many :teams, dependent: :destroy
@@ -92,6 +93,10 @@ class Company < ApplicationRecord
 
   def forum_types
     Company.forum_types
+  end
+  
+  def organisational_forum_types
+    Company.organisational_forum_types
   end
 
   def objectives_key_types

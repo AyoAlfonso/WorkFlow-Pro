@@ -74,7 +74,7 @@ export const Section1ForumMeetings = observer(
     ));
 
     const renderCreateMeetingsButton = () => {
-      if (forumStore.forumYearMeetings.length < 12) {
+      if (forumStore.forumYearMeetings.length < 1) {
         return (
           <StyledButton
             small

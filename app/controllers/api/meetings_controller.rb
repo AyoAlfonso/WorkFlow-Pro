@@ -112,7 +112,7 @@ class Api::MeetingsController < Api::ApplicationController
     if @meeting.blank?
       #raise error
       raise "No meeting has been created beforehand for this period, please do that."
-    elsif @meeting.end_time.present? && (@meeting.meeting_template_id == MeetingTemplate.forum_monthly.first.id || @meeting.meeting_template_id == MeetingTemplate.organisation_forum_monthly.first.id)
+    elsif @meeting.end_time.present? && (@meeting.meeting_template_id == MeetingTemplate.forum_monthly.first.id || @meeting.meeting_template_id == MeetingTemplate.organisation_forum_monthly.first.id || @meeting.meeting_template_id == MeetingTemplate.organisation_forum_monthly.second.id)
       old_meeting = @meeting
       @meeting = Meeting.create!({
         meeting_template_id: old_meeting.meeting_template_id,

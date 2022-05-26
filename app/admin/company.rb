@@ -13,6 +13,7 @@ ActiveAdmin.register Company do
                 :timezone,
                 :display_format,
                 :forum_type,
+                :organisational_forum_type,
                 :onboarding_status,
                 core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4, :_destroy],
                 company_static_datas_attributes: [:id, :value,  :_destroy],
@@ -64,6 +65,7 @@ ActiveAdmin.register Company do
                 :timezone,
                 :display_format,
                 :forum_type,
+                :organisational_forum_type,
                 :onboarding_status,
                 core_four_attributes: [:id, :core_1, :core_2, :core_3, :core_4],
                 company_static_datas_attributes: [:id, :value],
@@ -91,6 +93,7 @@ ActiveAdmin.register Company do
       row :timezone
       row :display_format
       row :forum_type
+      row :organisational_forum_type
     end
     br
     panel "#{I18n.t("core_four")}" do
@@ -154,6 +157,7 @@ ActiveAdmin.register Company do
       f.input :onboarding_status
       f.input :display_format, as: :select, collection: Company.display_formats.keys
       f.input :forum_type, as: :select, collection: Company.forum_types.keys
+      f.input :organisational_forum_type,  as: :select, collection: Company.organisational_forum_types.keys
     end
     h2 "Foundational Four "
     f.inputs do

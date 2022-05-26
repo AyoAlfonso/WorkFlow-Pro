@@ -37,7 +37,7 @@ class Meeting < ApplicationRecord
   scope :personal_monthly_meetings, -> { joins(:meeting_template).where(meeting_templates: { meeting_type: :personal_monthly }) }
   scope :forum_monthly_meetings, -> { joins(:meeting_template).where(meeting_templates: { meeting_type: :forum_monthly }) }
   scope :for_type, ->(meeting_type) { joins(:meeting_template).where(meeting_templates: { meeting_type: MeetingTemplate.meeting_types[meeting_type.to_sym] }) }
-
+  scope :for_meeting_template, -> (meeting_template_id) {where(meeting_template_id:meeting_template_id)}
   scope :for_scheduled_start_date_range, ->(start_date_time, end_date_time) { where("meetings.scheduled_start_time >= ? AND meetings.scheduled_start_time <= ?", start_date_time, end_date_time) }
 
   #TODO: modify scope to fetch completed meetings if recent, sort by 'type', 'incomplete', and 'date created' to show most recent ones

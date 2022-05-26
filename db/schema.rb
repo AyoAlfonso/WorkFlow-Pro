@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_13_112534) do
+ActiveRecord::Schema.define(version: 2022_05_25_235245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -168,6 +168,7 @@ ActiveRecord::Schema.define(version: 2022_05_13_112534) do
     t.integer "objectives_key_type", default: 1
     t.jsonb "preferences", default: {}, null: false
     t.datetime "deleted_at"
+    t.integer "organisational_forum_type"
     t.index ["deleted_at"], name: "index_companies_on_deleted_at"
     t.index ["preferences"], name: "index_companies_on_preferences", where: "(deleted_at IS NULL)"
   end
