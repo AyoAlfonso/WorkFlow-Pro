@@ -276,7 +276,6 @@ export const SessionStoreModel = types
             self.loadProfile();
             staticDataStore.load();
             companyStore.load();
-            localStorage.getItem("Authorization");
             userStore.load();
             teamStore.load();
             keyActivityStore.load();

@@ -28,6 +28,20 @@ export class Api {
       withCredentials: true, //allow cookies to be sent if its from same domain
     });
 
+    this.client.axiosInstance.interceptors.request.use(
+      config => {
+        const token = localStorage?.getItem("Authorization") || {};
+        if (token) {
+          console.log(token, "token");
+          config.headers.Authorization = token;
+        }
+        return config;
+      },
+      error => {
+        Promise.reject(error);
+      },
+    );
+
     this.client.addResponseTransform(response => {
       response.data = camelizeResponse(response.data);
     });

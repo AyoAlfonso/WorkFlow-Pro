@@ -6,9 +6,7 @@ require "uri"
 
 class  AuthorizationController <  ApplicationController                              
   skip_before_action :verify_authenticity_token
-# binding.pry
  def google_oauth2
-  # binding.pry
    url = URI.parse("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{params["access_token"]}")                  
   #  https = Net::HTTP.new(url.host, url.port)          
   #   https.use_ssl = true

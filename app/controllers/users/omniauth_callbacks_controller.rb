@@ -1,5 +1,5 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-    binding.pry
+    # binding.pry
       # You need to implement the method below in your model (e.g. app/models/user.rb)
       @user = User.find(2)
       User.from_omniauth(request.env['omniauth.auth'])

@@ -117,7 +117,13 @@ export const LoginForm = observer(
               >
                 {t("profile.loginForm.login")}
               </Button>
-              {/* <GoogleAuthButton onClick={() => login()}>Sign in with Google 🚀 </GoogleAuthButton> */}
+              {/* <GoogleAuthButton onClick={() => login()}>
+                <GoogleAuthContent>
+                  <img src={"assets/Google-Transparent-logo_500x500.png"} width="20"></img>
+                </GoogleAuthContent>
+
+                <GoogleAuthContent> Sign in with Google </GoogleAuthContent>
+              </GoogleAuthButton> */}
               <TextInlineContainer
                 color={"greyActive"}
                 fontSize={1}
@@ -144,12 +150,18 @@ const TextInlineContainer = styled.div<ColorProps & TypographyProps>`
   &:hover {
     cursor: pointer;
   }
+  margin-top: 5px;
 `;
 
 const GoogleAuthButton = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  margin-right: 15px;
-  margin-bottom; 15px;
+  border-radius: 5px;
+  padding: 0.5rem;
+  box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
+  cursor: pointer;
+`;
+const GoogleAuthContent = styled.span`
+  margin: 0px 5px;
 `;

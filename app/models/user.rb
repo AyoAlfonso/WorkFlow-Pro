@@ -191,7 +191,6 @@ class User < ApplicationRecord
 
 
   def generate_jwt(user)
-    # binding.pry
     random_token = SecureRandom.uuid
     iat = Time.now.to_i
     token = JWT.encode({ sub: self.id.to_s,
