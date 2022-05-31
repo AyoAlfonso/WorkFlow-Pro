@@ -14,7 +14,7 @@ class KeyActivity < ApplicationRecord
   belongs_to :team, optional: true
   has_many :comment_logs, as: :parent, dependent: :destroy
 
-  before_save :sanitize_body
+  # before_save :sanitize_body
   
   acts_as_list scope: [:company_id, :user_id, :team_id, :scheduled_group_id]
 
@@ -88,8 +88,8 @@ class KeyActivity < ApplicationRecord
   end
   private
   
-  def sanitize_body
-    self.body = strip_tags(body)
-  end
+  # def sanitize_body
+  #   self.body = strip_tags(body)
+  # end
 
 end
