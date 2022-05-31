@@ -30,33 +30,12 @@ export const LoginForm = observer(
     const { sessionStore } = useMst();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    // const [googleAuth, setGoogleAuth] = useState(null);
     const { t } = useTranslation();
     const history = useHistory();
     const responseGoogle = response => {
-      console.log("google_oauth2", response);
       sessionStore.logInWithProvider("google_oauth2", response);
     };
-    const responseGoogleFailure = response => {
-      console.log("google_oauth2 failure", response);
-      // sessionStore.logInWithProvider("google_oauth2", response);
-    };
 
-    const googleHandler = () => {
-      // googleAuth.grantOfflineAccess().then(responseGoogle);
-    };
-    // useEffect(() => {
-    //   // Initialize the GoogleAuth object
-    //   gapi.load("auth2", function foo() {
-    //     const auth = gapi.auth2.init({
-    //       client_id: process.env.GOOGLE_CLIENT_ID,
-    //       scope: "email profile",
-    //       ux_mode: "redirect",
-    //     });
-    //     setGoogleAuth(auth);
-    //     console.log("Init");
-    //   });
-    // }, []);
     const login = useGoogleLogin({
       onSuccess: tokenResponse => responseGoogle(tokenResponse),
     });
