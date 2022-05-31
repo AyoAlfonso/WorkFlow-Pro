@@ -1,6 +1,7 @@
 import { create, ApisauceInstance } from "apisauce";
 import { camelizeResponse, decamelizeRequest } from "../utils";
 import * as R from "ramda";
+
 //  `?note=${getNote(metadata)}`;
 function getNote(metadata: any) {
   return metadata?.note || "";
@@ -31,7 +32,7 @@ export class Api {
     this.client.axiosInstance.interceptors.request.use(
       config => {
         const token = localStorage?.getItem("Authorization") || {};
-        if (token) {
+        if (!R.isEmpty(token)) {
           console.log(token, "token");
           config.headers.Authorization = token;
         }
