@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::Allowlist
+  devise :omniauthable, omniauth_providers: [:google_oauth2]
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, :trackable and :omniauthable
   include ActionView::Helpers::SanitizeHelper
@@ -153,6 +154,24 @@ class User < ApplicationRecord
     super
   end
 
+  def self.create_user_for_google(access_token)
+    data = access_token.info
+    # unactivated_user = CompanyUnactivatedUserEnablement.where(email :data['email'])
+    user = User.where(email: data['email']).first
+    unless user
+        user = User.create!(name: data['name'],
+           email: data['email'],
+           password: Devise.friendly_token[0,20],
+           company_id: 2,
+           provider:"google_oauth2",
+          #  unactivated_user.company,
+           default_selected_company_id: 2
+          #  unactivated_user.company
+        )
+    end
+    user
+  end
+
   # devise_invitable invite! method overriden
   def invite!(*args)
     super(*args)
@@ -169,6 +188,23 @@ class User < ApplicationRecord
   #   super
   #   #do_something(token, payload)
   # end
+
+
+  def generate_jwt(user)
+    # binding.pry
+    random_token = SecureRandom.uuid
+    iat = Time.now.to_i
+    token = JWT.encode({ sub: self.id.to_s,
+                scp: 'user',
+                aud: nil,
+                iat:iat,
+                jti: random_token,
+                exp:  8.hours.from_now.to_i}, 
+                ENV["DEVISE_JWT_SECRET_KEY"]
+               )
+    AllowlistedJwt.create!(aud: nil, exp: Time.now + 8.hours, jti: random_token, user_id: self.id)
+   return token
+  end
 
   def create_default_notifications
     Notification.notification_types.each do |k, v|

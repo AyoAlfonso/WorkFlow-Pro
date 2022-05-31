@@ -35,7 +35,7 @@ export const HeaderText = observer(
 
     const currentTeam = teamStore.teams.find(team => team.id == teamId);
 
-    const isOrganisationCompany = companyStore.company?.forumType == "Organisation";
+    const isForum = companyStore.company?.displayFormat == "Forum";
     switch (locationPath[1]) {
       case "team":
       case "forum":
@@ -52,7 +52,7 @@ export const HeaderText = observer(
       case "meetings":
         switch (subPath) {
           case "section_1": {
-            return isOrganisationCompany ? (
+            return isForum ? (
               <SubHeaderContainer>
                 <BackHeaderText onClick={() => history.push(`/team/${teamId}`)}>
                   {currentTeam?.name}
@@ -66,7 +66,7 @@ export const HeaderText = observer(
           }
 
           case "section_2":
-            return isOrganisationCompany ? (
+            return isForum ? (
               <SubHeaderContainer>
                 <BackHeaderText onClick={() => history.push(`/team/${currentTeam.id}`)}>
                   {currentTeam?.name}
@@ -78,7 +78,7 @@ export const HeaderText = observer(
               <> {t("forum.upcomingHub")} </>
             );
           case "agenda":
-            return isOrganisationCompany ? (
+            return isForum ? (
               <SubHeaderContainer>
                 <BackHeaderText onClick={() => history.push(`/team/${currentTeam.id}`)}>
                   {currentTeam?.name}

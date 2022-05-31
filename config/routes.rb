@@ -11,13 +11,14 @@ Rails.application.routes.draw do
                sessions: "sessions",
                registrations: "registrations",
                invitations: "invitations",
+               omniauth_callbacks: 'authorization' 
              }, skip: [:confirmations, :passwords]
 
   devise_scope :user do
     get "/confirmation/new", to: "confirmations#new", format: :html, as: :new_user_confirmation
     get "/confirmation", to: "confirmations#show", format: :html, as: :user_confirmation
     post "/confirmation", to: "confirmations#create", format: :html, as: nil
-
+    
     get "/passwords/edit", to: "devise/passwords#edit", format: :html, as: :edit_user_password
     patch "/password", to: "devise/passwords#update", format: :html, as: :user_password
     put "/password", to: "devise/passwords#update", format: :html, as: nil

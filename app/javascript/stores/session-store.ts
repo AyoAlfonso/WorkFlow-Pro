@@ -11,6 +11,7 @@ import { registerIdentity } from "~/components/shared/analytics";
 import { ScheduledGroupModel } from "~/models/scheduled-group";
 import { UserPulseModel } from "~/models/user-pulse";
 import { DailyLogModel } from "~/models/daily-log";
+import Cookies from "js-cookie";
 
 export const SessionStoreModel = types
   .model("SessionStoreModel")
@@ -238,7 +239,60 @@ export const SessionStoreModel = types
       }
       self.loading = false;
     }),
+    logInWithProvider: flow(function*(provider, responsebody) {
+      self.loading = true;
+      //may want to show a loading modal here
+      const env = getEnv(self);
+      const {
+        companyStore,
+        teamStore,
+        userStore,
+        meetingStore,
+        notificationStore,
+        keyActivityStore,
+        labelStore,
+        staticDataStore,
+      } = getRoot(self);
+      try {
+        const response: any = yield self.environment.api.logInWithProvider(provider, responsebody);
+        if (response.ok) {
+          const newJWT = R.path(["headers", "authorization"], response);
+          console.log(newJWT, "newJWT-newJWT", response);
+          if (newJWT && newJWT.startsWith("Bearer")) {
+            console.log(newJWT, "in!");
+            //default cookie set for rails.  Alternative cookies could be done:
+            //https://github.com/js-cookie/js-cookie#cookie-attributes
+            // by default cookie removed when browser closed
+            // Cookies.set("Authorization", newJWT, {
+            //   sameSite: true,
+            //   httpOnly: true,
+            //   expires: 365,
+            // });
+
+            //TODO SET TOKEN INTO COOKIE
+            //env.api.setJWT(newJWT);
+            localStorage.setItem("Authorization", newJWT);
+
+            self.loadProfile();
+            staticDataStore.load();
+            companyStore.load();
+            localStorage.getItem("Authorization");
+            userStore.load();
+            teamStore.load();
+            keyActivityStore.load();
+            meetingStore.load();
+            labelStore.fetchLabels();
+            notificationStore.load();
+            companyStore.getOnboardingCompany();
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      self.loading = false;
+    }),
     logoutRequest: flow(function*() {
+      localStorage.removeItem("Authorization");
       const response: any = yield self.environment.api.signOut();
       self.loggedIn = false;
     }),

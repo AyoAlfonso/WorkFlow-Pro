@@ -65,6 +65,7 @@ export const UserStoreModel = types
       self.reset();
       yield self.fetchUsers();
     }),
+
     updateUser: flow(function*(formData, metadata = {}) {
       try {
         const response: any = yield self.environment.api.updateUser(

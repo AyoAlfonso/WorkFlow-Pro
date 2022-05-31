@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_25_235245) do
+ActiveRecord::Schema.define(version: 2022_05_29_193153) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -744,6 +744,7 @@ ActiveRecord::Schema.define(version: 2022_05_25_235245) do
     t.string "title"
     t.datetime "deleted_at"
     t.bigint "default_selected_company_id"
+    t.string "provider"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["default_selected_company_id"], name: "index_users_on_default_selected_company_id"

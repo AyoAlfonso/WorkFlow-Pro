@@ -1,21 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { baseTheme } from "../../../themes";
 // import styled from "styled-components";
 // import { observer } from "mobx-react";
 import { useHistory } from "react-router-dom";
 import { observer } from "mobx-react";
 import { useMst } from "../../../setup/root";
-
+// import GoogleLogin from "react-google-login";
 import { Button } from "../../shared/button";
 import { Icon } from "../../shared/icon";
 import { Flex, Box } from "rebass";
 import { Label, Input } from "../../shared/input";
 import { TextNoMargin, Text } from "~/components/shared/text";
+import { gapi } from "gapi-script";
 
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { LoadingScreen } from "./loading-screen";
-
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { color, ColorProps, typography, TypographyProps } from "styled-system";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
@@ -29,9 +30,36 @@ export const LoginForm = observer(
     const { sessionStore } = useMst();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    // const [googleAuth, setGoogleAuth] = useState(null);
     const { t } = useTranslation();
     const history = useHistory();
+    const responseGoogle = response => {
+      console.log("google_oauth2", response);
+      sessionStore.logInWithProvider("google_oauth2", response);
+    };
+    const responseGoogleFailure = response => {
+      console.log("google_oauth2 failure", response);
+      // sessionStore.logInWithProvider("google_oauth2", response);
+    };
 
+    const googleHandler = () => {
+      // googleAuth.grantOfflineAccess().then(responseGoogle);
+    };
+    // useEffect(() => {
+    //   // Initialize the GoogleAuth object
+    //   gapi.load("auth2", function foo() {
+    //     const auth = gapi.auth2.init({
+    //       client_id: process.env.GOOGLE_CLIENT_ID,
+    //       scope: "email profile",
+    //       ux_mode: "redirect",
+    //     });
+    //     setGoogleAuth(auth);
+    //     console.log("Init");
+    //   });
+    // }, []);
+    const login = useGoogleLogin({
+      onSuccess: tokenResponse => responseGoogle(tokenResponse),
+    });
     if (sessionStore.loading) return <LoadingScreen />;
     return (
       <Flex
@@ -89,7 +117,12 @@ export const LoginForm = observer(
               >
                 {t("profile.loginForm.login")}
               </Button>
-              <TextInlineContainer color={"greyActive"} fontSize={1} onClick={() => history.push('/forgotpassword')}>
+              {/* <GoogleAuthButton onClick={() => login()}>Sign in with Google 🚀 </GoogleAuthButton> */}
+              <TextInlineContainer
+                color={"greyActive"}
+                fontSize={1}
+                onClick={() => history.push("/forgotpassword")}
+              >
                 {t("profile.loginForm.forgot")}
               </TextInlineContainer>
               <Text color={"greyInactive"}>
@@ -111,4 +144,12 @@ const TextInlineContainer = styled.div<ColorProps & TypographyProps>`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const GoogleAuthButton = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 15px;
+  margin-bottom; 15px;
 `;

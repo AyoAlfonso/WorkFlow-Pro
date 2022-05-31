@@ -13,6 +13,7 @@ interface IScorecardProps {
 export class Api {
   client: ApisauceInstance;
   token: string;
+  client2: ApisauceInstance;
 
   constructor() {
     const companyId = localStorage.getItem("companyId");
@@ -34,6 +35,25 @@ export class Api {
     this.client.addRequestTransform(request => {
       request.params = decamelizeRequest(request.params);
     });
+
+    this.client2 = create({
+      baseURL: "/",
+      headers: {
+        "Cache-Control": "no-cache",
+        "Content-Type": "application/json",
+        "Current-Company-ID": companyId == "undefined" || !companyId ? "" : companyId,
+      },
+      timeout: 30000,
+      withCredentials: true, //allow cookies to be sent if its from same domain
+    });
+
+    this.client2.addResponseTransform(response => {
+      response.data = camelizeResponse(response.data);
+    });
+
+    this.client2.addRequestTransform(request => {
+      request.params = decamelizeRequest(request.params);
+    });
   }
 
   addMonitor(monitor) {
@@ -46,6 +66,11 @@ export class Api {
 
   async getUsers() {
     return this.client.get("/users");
+  }
+
+  async logInWithProvider(provider, response) {
+    // this.client.setBaseURL("/");
+    return this.client2.post(`/auth/${provider}/callback`, response);
   }
 
   async getIssues() {

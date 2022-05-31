@@ -74,7 +74,8 @@ class Api::UsersController < Api::ApplicationController
           email: sanitized_email,
           company_id: current_company.id,
           default_selected_company_id: current_company.id,
-          password: ENV["DEFAULT_PASSWORD"] || "password",
+          password: ENV["DEFAULT_PASSWORD"] || 'password' 
+          # TODO: Devise.friendly_token[0,20], we should migrate to this 
         })
         @user.invite!
         @user.assign_attributes({

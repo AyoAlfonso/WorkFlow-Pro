@@ -30,7 +30,7 @@ gem 'active_admin_trix', '~> 0.0.3'
 gem "paranoia", "~> 2.2"
 gem 'amoeba'
 gem 'acts_as_votable'
-
+gem 'devise_token_auth'
 
 gem 'kaminari'
 
@@ -42,7 +42,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'activeadmin', '~> 2.9.0'
 gem 'acts_as_list', '~> 1.0.2'
 gem 'arctic_admin', '~> 3.2.0'
-gem 'devise', '~> 4.7.2'
+gem 'devise', '~> 4.8.0'
 gem 'devise_invitable'
 gem 'devise-jwt', '0.7.0'
 gem 'ice_cube', '~>  0.16.3'
@@ -62,7 +62,8 @@ gem "aws-sdk-s3", require: false
 gem 'rack-cors'
 gem 'faraday'
 gem "lograge"
-
+gem 'omniauth'
+gem 'omniauth-google-oauth2'
 gem 'exception_notification'
 
 group :development, :test do
