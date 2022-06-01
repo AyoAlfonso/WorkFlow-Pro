@@ -31,7 +31,7 @@ export const CheckInCard = (): JSX.Element => {
             Check-in
           </Button>
           <Button
-            variant={"greyOutLine"}
+            variant={"greyOutline"}
             mr="1em"
             width="80px"
             fontSize="12px"
@@ -50,6 +50,14 @@ export const CheckInCard = (): JSX.Element => {
   );
 };
 
+const IconContainer = styled.div`
+  display: none;
+  cursor: pointer;
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+`;
+
 const Container = styled.div`
   padding: 1em;
   display: flex;
@@ -58,6 +66,9 @@ const Container = styled.div`
 
   &:hover {
     background-color: ${props => props.theme.colors.backgroundBlue};
+    ${IconContainer} {
+      display: block;
+    }
   }
 `;
 
@@ -120,10 +131,4 @@ const StreakCount = styled.span`
   border: 1px solid ${props => props.theme.colors.greyActive};
   font-size: 0.75em;
   color: ${props => props.theme.colors.greyActive};
-`;
-
-const IconContainer = styled.div`
-  @media only screen and (max-width: 768px) {
-    display: none;
-  }
 `;

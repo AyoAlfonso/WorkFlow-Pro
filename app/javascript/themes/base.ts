@@ -69,6 +69,8 @@ export const baseTheme = {
     boldYellow: "#FBB004",
     progressGreen: "#00C3B3",
     dimPurple: "#6a56cb",
+    neonLemon: "#a2d521",
+    skyBlue: "#B9D2FC",
   },
 
   fonts: {

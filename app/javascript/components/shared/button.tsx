@@ -82,7 +82,7 @@ const StyledButton = styled.button<IButtonProps>`
           paddingLeft: "6px",
           paddingRight: "6px",
         },
-        greyOutLine: {
+        greyOutline: {
           bg: "transparent",
           borderColor: props.disabled ? "greyInactive" : "greyActive",
           color: props.disabled ? "greyInactive" : "greyActive",

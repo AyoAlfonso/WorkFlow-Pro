@@ -59,7 +59,10 @@ import { useEffect } from "react";
 import { getWeekOf } from "~/utils/date-time";
 import { CheckInSuccess } from "./domains/check-in/components/checkin-success";
 import { ForgotPasswordForm } from "./domains/user/forgot-password-form";
-import { CheckIn } from "./domains/check-in/check-in-index";
+import { CheckIn } from "./domains/check-in/checkin-index";
+import { NewCheckIn } from "./domains/check-in/new-checkin-index";
+import { NewCheckinLayout } from "./domains/check-in/new-checkin-layout";
+import { CheckInBuilderLayout } from "./domains/check-in/checkin-builder-layout";
 
 const Container = styled.div`
   margin-left: 136px;
@@ -103,13 +106,13 @@ export const App = observer(
       redirectHome();
     }, [profile]);
 
-    useEffect(() => {
-      setTimeout(() => {
-        if (!sessionStore?.loggedIn) {
-          return history.push("/");
-        }
-      }, 1000);
-    }, [sessionStore]);
+    // useEffect(() => {
+    //   setTimeout(() => {
+    //     if (!sessionStore?.loggedIn) {
+    //       return history.push("/");
+    //     }
+    //   }, 1000);
+    // }, [sessionStore]);
 
     let noFeatures;
     let showGoalRoute;
@@ -353,6 +356,8 @@ export const App = observer(
                       component={WeeklyCheckIn}
                     />
                     <Route exact path="/check-in/success" component={CheckInSuccess} />
+                    <Route exact path="/check-in/templates" component={NewCheckinLayout} />
+                    <Route exact path="/check-in/build" component={CheckInBuilderLayout} />
                   </>
                 </Switch>
               ) : (

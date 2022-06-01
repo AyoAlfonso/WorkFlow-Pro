@@ -98,6 +98,7 @@ const Container = styled.div`
 
 const StyledSelect = styled(Select)`
   width: -webkit-fill-available;
+  width: -moz-available;
 `;
 
 const StyledFormControl = styled(FormControl)`

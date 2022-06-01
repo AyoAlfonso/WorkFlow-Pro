@@ -205,7 +205,7 @@ export const HeaderBar = observer(
                   <Button
                     variant="primary"
                     style={{ display: "flex" }}
-                    onClick={() => console.log("do something")}
+                    onClick={() => history.push("/check-in/templates")}
                     width="max-content"
                     small
                   >

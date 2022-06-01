@@ -16,82 +16,80 @@ import { validateWeekOf } from "~/utils/date-time";
 interface WeeklyCheckInProps {}
 
 export const WeeklyCheckIn = observer(
-         (props: WeeklyCheckInProps): JSX.Element => {
-           const { checkInTemplateStore, sessionStore, companyStore } = useMst();
-           const {
-             profile: { id },
-           } = sessionStore;
+  (props: WeeklyCheckInProps): JSX.Element => {
+    const { checkInTemplateStore, sessionStore, companyStore } = useMst();
+    const {
+      profile: { id },
+    } = sessionStore;
 
-           const history = useHistory();
+    const history = useHistory();
 
-           const checkIn = checkInTemplateStore.currentCheckIn;
+    const checkIn = checkInTemplateStore.currentCheckIn;
 
-           const { weekOf } = useParams();
+    const { weekOf } = useParams();
 
-           useEffect(() => {
-             validateWeekOf(weekOf, history, id);
+    useEffect(() => {
+      validateWeekOf(weekOf, history, id);
 
-             checkInTemplateStore.fetchCheckInTemplates();
+      checkInTemplateStore.fetchCheckInTemplates();
 
-             companyStore.load().then(() => {
-               if (companyStore.company?.objectivesKeyType === "KeyResults") {
-                 checkInTemplateStore.getCheckIn("Weekly Check-In");
-               } else if (companyStore.company?.objectivesKeyType === "Milestones") {
-                 checkInTemplateStore.getCheckIn("Weekly Check In");
-               }
-             });
-           }, []);
+      companyStore.load().then(() => {
+        if (companyStore.company?.objectivesKeyType === "KeyResults") {
+          checkInTemplateStore.getCheckIn("Weekly Check-In");
+        } else if (companyStore.company?.objectivesKeyType === "Milestones") {
+          checkInTemplateStore.getCheckIn("Weekly Check In");
+        }
+      });
+    }, []);
 
-           const renderLoading = () => (
-             <BodyContainer>
-               <Loading />
-             </BodyContainer>
-           );
+    const renderLoading = () => (
+      <BodyContainer>
+        <Loading />
+      </BodyContainer>
+    );
 
-           const StopMeetingButton = () => {
-             return (
-               <StopButton
-                 variant={"primary"}
-                 onClick={() => {
-                   history.push(`/check-in/success`);
-                 }}
-                 small
-                 disabled={false}
-               >
-                 Publish Check-in
-               </StopButton>
-             );
-           };
+    const StopMeetingButton = () => {
+      return (
+        <StopButton
+          variant={"primary"}
+          onClick={() => {
+            history.push(`/check-in/success`);
+          }}
+          small
+          disabled={false}
+        >
+          Publish Check-in
+        </StopButton>
+      );
+    };
 
-           const nextStep = stepIndex => {
-             checkInTemplateStore.updateCurrentCheckIn(
-               R.merge(checkIn, { currentStep: stepIndex }),
-             );
-           };
+    const nextStep = stepIndex => {
+      checkInTemplateStore.updateCurrentCheckIn(R.merge(checkIn, { currentStep: stepIndex }));
+    };
 
-           return (
-             <>
-               {R.isNil(checkIn) ? (
-                 renderLoading()
-               ) : (
-                 <>
-                   <HeaderContainer>
-                     <HeaderBar />
-                   </HeaderContainer>
-                   <CheckInWizardContainer>
-                     <CheckInWizardLayout
-                       checkIn={checkIn}
-                       numberOfSteps={checkIn.checkInTemplatesSteps.length}
-                       stopMeetingButton={<StopMeetingButton />}
-                       onNextButtonClick={nextStep}
-                     />
-                   </CheckInWizardContainer>
-                 </>
-               )}
-             </>
-           );
-         },
-       );
+    return (
+      <>
+        {R.isNil(checkIn) ? (
+          renderLoading()
+        ) : (
+          <>
+            <HeaderContainer>
+              <HeaderBar />
+            </HeaderContainer>
+            <CheckInWizardContainer>
+              <CheckInWizardLayout
+                checkIn={checkIn}
+                numberOfSteps={checkIn.checkInTemplatesSteps.length}
+                stopMeetingButton={<StopMeetingButton />}
+                onNextButtonClick={nextStep}
+              />
+            </CheckInWizardContainer>
+          </>
+        )}
+      </>
+    );
+  },
+);
 
 const Container = styled.div`
   height: 100%;

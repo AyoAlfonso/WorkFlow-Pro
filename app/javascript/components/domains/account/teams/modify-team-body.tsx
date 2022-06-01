@@ -197,6 +197,7 @@ const StyledHeading = styled(Heading)`
 
 const StyledTextField = styled(TextField)`
   width: -webkit-fill-available;
+  width: -moz-available;
 `;
 
 const AddNewUserContainer = styled.div`

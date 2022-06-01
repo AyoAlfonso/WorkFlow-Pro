@@ -149,7 +149,7 @@ export const WizardLayout = ({
             {stepsForMobile}
             {showCloseButton && (
               <CloseButtonContainer onClick={onCloseButtonClick}>
-                <CloseText> Close </CloseText>
+                <CloseText> Exit </CloseText>
                 <Icon icon={"Close"} size={"16px"} iconColor={"grey100"} />
               </CloseButtonContainer>
             )}
@@ -158,7 +158,7 @@ export const WizardLayout = ({
         <MobileContainer>
           {showCloseButton && (
             <CloseButtonContainer onClick={onCloseButtonClick}>
-              <CloseText> Close </CloseText>
+              <CloseText> Exit </CloseText>
               <Icon icon={"Close"} size={"16px"} iconColor={"greyInactive"} />
             </CloseButtonContainer>
           )}
