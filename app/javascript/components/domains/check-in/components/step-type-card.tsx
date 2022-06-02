@@ -2,38 +2,60 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { Icon } from "~/components/shared";
+import { StepCardProps } from "../data/step-data";
+import { SelectedStepType } from "../steps-selector-page";
 
 interface StepTypeCardProps {
-  iconName: string;
-  stepType: string;
-  description: string;
-  iconColor: string;
+  step: StepCardProps;
   setSelectedSteps: React.Dispatch<React.SetStateAction<Array<any>>>;
   setShowStepsModal?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsChanging?: React.Dispatch<React.SetStateAction<boolean>>;
+  isChanging?: boolean;
+  stepToPreview?: SelectedStepType;
+  selectedSteps?: Array<SelectedStepType>;
 }
 
 export const StepTypeCard = ({
-  iconName,
-  stepType,
-  description,
-  iconColor,
+  step,
   setSelectedSteps,
   setShowStepsModal,
+  setIsChanging,
+  isChanging,
+  stepToPreview,
+  selectedSteps,
 }: StepTypeCardProps): JSX.Element => {
   const { t } = useTranslation();
-
+  const {iconName, stepName, description, question, iconColor} = step
   return (
     <Container
       onClick={() => {
-        setSelectedSteps(steps => [...steps, { stepType, iconName, position: steps.length + 1 }]);
-        setShowStepsModal && setShowStepsModal(false);
+        if (isChanging) {
+          const steps = selectedSteps;
+          const stepIndex = steps.findIndex(step => step.position == stepToPreview.position);
+          steps[stepIndex].stepType = stepName;
+          steps[stepIndex].iconName = iconName;
+          setSelectedSteps(steps);
+          setIsChanging(false);
+          setShowStepsModal(false);
+        } else {
+          setSelectedSteps(steps => [
+            ...steps,
+            {
+              stepType: stepName,
+              iconName: iconName,
+              question: question,
+              position: steps.length + 1,
+            },
+          ]);
+          setShowStepsModal && setShowStepsModal(false);
+        }
       }}
     >
       <IconContainer>
         <Icon icon={iconName} size="64px" iconColor={iconColor} />
       </IconContainer>
       <TextContainer>
-        <StepName>{t(`${stepType}`)}</StepName>
+        <StepName>{t(`${stepName}`)}</StepName>
         <Description>{t(`${description}`)}</Description>
       </TextContainer>
     </Container>

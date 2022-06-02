@@ -2,24 +2,40 @@ import * as React from "react";
 import styled from "styled-components";
 import { Icon } from "~/components/shared";
 import ContentEditable from "react-contenteditable";
+import { SelectedStepType } from "../steps-selector-page";
 
 interface StepPreviewCardProps {
-  stepType: string;
-  iconName: string;
+  step: SelectedStepType;
   deleteStep: any;
-  selected: boolean;
+  selected?: boolean;
+  setShowStepsModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsChanging: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedSteps: React.Dispatch<React.SetStateAction<Array<any>>>;
+  selectedSteps?: Array<SelectedStepType>;
 }
 
 export const StepPreviewCard = ({
-  stepType,
-  iconName,
+  step,
   deleteStep,
-  selected
+  selected,
+  setShowStepsModal,
+  setIsChanging,
+  setSelectedSteps,
+  selectedSteps,
 }: StepPreviewCardProps): JSX.Element => {
+  const { stepType, iconName, position, question } = step
+  
+  const handleChange = (e: any) => {
+    const steps = [...selectedSteps];
+    const stepIndex = steps.findIndex(step => step.position == position);
+    steps[stepIndex].question = e.target.value;
+    setSelectedSteps(steps);
+  }
+
   return (
-    <Container>
+    <Container selected={selected}>
       <IconContainer>
-        <Icon icon={"Move"} size={14} mr={"1em"} iconColor={"greyActive"} />
+        <Icon icon={"DnD"} size={14} mr={"1em"} iconColor={"greyActive"} />
       </IconContainer>
       <BodyContainer>
         <HeaderContainer>
@@ -28,7 +44,12 @@ export const StepPreviewCard = ({
             <StepTypeText>{stepType}</StepTypeText>
           </StepTypeContainer>
           <OptionsContainer>
-            <IconContainer>
+            <IconContainer
+              onClick={() => {
+                setShowStepsModal(true);
+                setIsChanging(true);
+              }}
+            >
               <Icon icon={"Change"} size={"1em"} mr={"0.5em"} iconColor={"grey100"} />
             </IconContainer>
             <IconContainer onClick={() => deleteStep()}>
@@ -36,14 +57,19 @@ export const StepPreviewCard = ({
             </IconContainer>
           </OptionsContainer>
         </HeaderContainer>
-        <StepQuestion type="text" value="What are you working on?" />
+        <StepQuestion type="text" name="question" onChange={handleChange} value={question} />
       </BodyContainer>
     </Container>
   );
 };
 
-const Container = styled.div`
-  background-color: ${props => props.theme.colors.white};
+type ContainerProps = {
+  selected: boolean;
+};
+
+const Container = styled.div<ContainerProps>`
+  background-color: ${props =>
+    props.selected ? props.theme.colors.backgroundGrey : props.theme.colors.white};
   box-shadow: 0px 3px 6px #00000029;
   padding: 1em;
   display: flex;
@@ -54,7 +80,7 @@ const Container = styled.div`
   margin-bottom: 1em;
 
   &: hover {
-    border: 1px solid ${props => props.theme.colors.primary100};
+    outline: 1px solid ${props => props.theme.colors.primary100};
   }
 
   @media only screen and (max-width: 768px) {
@@ -100,6 +126,7 @@ const StepQuestion = styled.input`
   border: 0px;
   border-radius: 2px;
   padding: 0.5em;
+  padding-left: 0;
 
   &:focus {
     outline: 1px solid ${props => props.theme.colors.primary100};

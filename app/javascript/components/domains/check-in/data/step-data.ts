@@ -1,8 +1,9 @@
-interface StepCardProps {
+export interface StepCardProps {
   iconName: string;
   stepName: string;
   description: string;
   iconColor: string;
+  question?: string;
 }
 
 export const questionsArray: Array<StepCardProps> = [
@@ -11,30 +12,35 @@ export const questionsArray: Array<StepCardProps> = [
     iconColor: "primary100",
     stepName: "Open-ended",
     description: "Ask users to enter ansers with any kind of written text.",
+    question: "What are you working on?",
   },
   {
     iconName: "Numerical",
     iconColor: "dimPurple",
     stepName: "Numeric",
     description: "Users can respond using numbers only.",
+    question: "How productive were you today?",
   },
   {
     iconName: "Sentiment",
     iconColor: "yellowSea",
     stepName: "Sentiment",
     description: "Users can select from a 5 point sentiment scale",
+    question: "How was your day?",
   },
   {
     iconName: "Agreement-Scale",
     iconColor: "progressGreen",
     stepName: "Agreement Scale",
     description: "Users can respond on a scale between strongly agree and disagree.",
+    question: "My work gives me a sense of purpose?",
   },
   {
     iconName: "YesNo",
     iconColor: "cavier",
     stepName: "Yes/No",
     description: "Ask a simple yes or no question.",
+    question: "Is anything blocking you?",
   },
 ];
 
@@ -70,7 +76,7 @@ export const widgetArray: Array<StepCardProps> = [
     description: "Updates on KPIs owned by the user",
   },
   {
-    iconName: "Change",
+    iconName: "Habits",
     iconColor: "cavier",
     stepName: "Habits",
     description: "Reviewing and updating habits and streaks.",

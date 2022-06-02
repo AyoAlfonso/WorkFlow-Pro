@@ -7,15 +7,31 @@ import { StepOptionsModal } from "./components/step-options-modal";
 import { StepPreviewCard } from "./components/step-preview-card";
 import { StepsPreview } from "./steps-preview";
 
-export const StepsSelectorPage = (): JSX.Element => {
-  const [selectedSteps, setSelectedSteps] = useState([]);
-  const [showStepsModal, setShowStepsModal] = useState<boolean>(false);
-  const [stepToPreview, setStepToPreview] = useState({});
-  console.log(stepToPreview);
+export interface SelectedStepType {
+  stepType: string;
+  iconName: string;
+  question?: string;
+  position: number;
+}
 
-  const deleteStep = (step) => {
-    setSelectedSteps(selectedSteps.filter(s => s.position !== step.position));
-  }
+export const StepsSelectorPage = (): JSX.Element => {
+  const [selectedSteps, setSelectedSteps] = useState<Array<SelectedStepType>>([]);
+  const [showStepsModal, setShowStepsModal] = useState<boolean>(false);
+  const [stepToPreview, setStepToPreview] = useState<SelectedStepType>();
+  const [isChanging, setIsChanging] = useState<boolean>(false);
+
+  const deleteStep = step => {
+    let position = 0;
+    const filteredSteps = selectedSteps.filter(s => s.position !== step.position);
+    const updatedSelectedSteps = filteredSteps.map(newStep => {
+      position += 1;
+      return {
+        ...newStep,
+        position,
+      };
+    });
+    setSelectedSteps(updatedSelectedSteps);
+  };
 
   return (
     <Container>
@@ -26,9 +42,11 @@ export const StepsSelectorPage = (): JSX.Element => {
             <StepCardContainer key={step.position} onClick={() => setStepToPreview(step)}>
               <StepPreviewCard
                 deleteStep={() => deleteStep(step)}
-                stepType={step.stepType}
-                iconName={step.iconName}
-                selected={stepToPreview === step}
+                step={step}
+                setShowStepsModal={setShowStepsModal}
+                setIsChanging={setIsChanging}
+                setSelectedSteps={setSelectedSteps}
+                selectedSteps={selectedSteps}
               />
             </StepCardContainer>
           ))}
@@ -53,6 +71,10 @@ export const StepsSelectorPage = (): JSX.Element => {
         setSelectedSteps={setSelectedSteps}
         setModalOpen={setShowStepsModal}
         modalOpen={showStepsModal}
+        isChanging={isChanging}
+        setIsChanging={setIsChanging}
+        stepToPreview={stepToPreview}
+        selectedSteps={selectedSteps}
       />
     </Container>
   );
@@ -63,7 +85,9 @@ const Container = styled.div`
   gap: 0 2em;
 `;
 
-const StepCardsContainer = styled.div``;
+const StepCardsContainer = styled.div`
+  margin: 0 1px;
+`;
 
 const StepCardContainer = styled.div`
   width: fit-content;

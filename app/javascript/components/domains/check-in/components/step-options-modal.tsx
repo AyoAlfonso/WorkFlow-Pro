@@ -2,18 +2,27 @@ import * as React from "react";
 import styled from "styled-components";
 import Modal from "styled-react-modal";
 import { Icon } from "~/components/shared";
+import { SelectedStepType } from "../steps-selector-page";
 import { StepOptions } from "./step-options";
 
 interface StepOptionsModalProps {
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedSteps: React.Dispatch<React.SetStateAction<Array<any>>>;
+  setIsChanging?: React.Dispatch<React.SetStateAction<boolean>>;
+  isChanging?: boolean;
+  stepToPreview: SelectedStepType;
+  selectedSteps: Array<SelectedStepType>;
 }
 
 export const StepOptionsModal = ({
   modalOpen,
   setModalOpen,
   setSelectedSteps,
+  setIsChanging,
+  isChanging,
+  stepToPreview,
+  selectedSteps,
 }: StepOptionsModalProps): JSX.Element => {
   return (
     <StyledModal isOpen={modalOpen} onBackgroundClick={() => setModalOpen(false)}>
@@ -24,7 +33,14 @@ export const StepOptionsModal = ({
             <Icon icon={"Close"} size={"14px"} iconColor={"grey80"} />
           </IconContainer>
         </HeaderContainer>
-        <StepOptions setShowStepsModal={setModalOpen} setSelectedSteps={setSelectedSteps} />
+        <StepOptions
+          isChanging={isChanging}
+          setIsChanging={setIsChanging}
+          setShowStepsModal={setModalOpen}
+          setSelectedSteps={setSelectedSteps}
+          stepToPreview={stepToPreview}
+          selectedSteps={selectedSteps}
+        />
       </Container>
     </StyledModal>
   );
