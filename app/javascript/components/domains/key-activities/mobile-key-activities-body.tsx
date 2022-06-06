@@ -12,6 +12,8 @@ import { useTranslation } from "react-i18next";
 import { sortByPosition } from "~/utils/sorting";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 import { Teams } from "../account/teams";
+import { KeyActivitiesList } from "./key-activities-list";
+import { toJS } from "mobx";
 
 interface IMobileKeyActivitiesBodyProps {}
 
@@ -61,14 +63,10 @@ export const MobileKeyActivitiesBody = observer(
     }, [listSelectorOpen]);
 
     const selectedFilterGroupId = sessionStore.getScheduledGroupIdByName(currentList);
-
+    
     const completedKeyActivities = keyActivityStore.completedActivities;
 
-    const droppableId = currentList
-      ? `scheduled-group-activities-${selectedFilterGroupId}`
-      : `team-activities-${currentTeamId}`;
-    const splittedDroppableId = droppableId.split("-");
-    const updateId = splittedDroppableId[splittedDroppableId.length - 1];
+    const droppableId = `scheduled-group-activities-${selectedFilterGroupId}`;
 
     const filteredKeyActivities = () => {
       if (showCompletedItems) {
@@ -157,41 +155,6 @@ export const MobileKeyActivitiesBody = observer(
 
     const keyActivities = filteredKeyActivities();
 
-    const renderKeyActivitiesList = () => {
-      return keyActivities.map((keyActivity, index) => {
-        const draggableId = () => {
-          if (isNaN(parseInt(updateId))) {
-            return `keyActivity-${keyActivity.id}`;
-          } else {
-            return `keyActivity-${keyActivity.id}-${updateId}`;
-          }
-        };
-
-        return (
-          <Draggable
-            draggableId={draggableId()}
-            index={index}
-            key={keyActivity["id"]}
-            type={"keyActivity"}
-          >
-            {provided => (
-              <KeyActivityContainer
-                key={keyActivity["id"]}
-                ref={provided.innerRef}
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-              >
-                <KeyActivityRecord
-                  keyActivity={keyActivity}
-                  dragHandleProps={...provided.dragHandleProps}
-                />
-              </KeyActivityContainer>
-            )}
-          </Draggable>
-        );
-      });
-    };
-
     return (
       <Container>
         <CreateKeyActivityModal
@@ -207,17 +170,11 @@ export const MobileKeyActivitiesBody = observer(
           </AddNewKeyActivityPlus>
           <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
-        <Droppable droppableId={droppableId} key={"keyActivity"}>
-          {(provided, snapshot) => (
-            <KeyActivitiesContainer
-              ref={provided.innerRef}
-              isDraggingOver={snapshot.isDraggingOver}
-            >
-              {renderKeyActivitiesList()}
-              {provided.placeholder}
-            </KeyActivitiesContainer>
-          )}
-        </Droppable>
+        <KeyActivitiesList
+          keyActivities={keyActivities}
+          droppableId={droppableId}
+          keyActivityStoreLoading={keyActivityStore.loading}
+        />
       </Container>
     );
   },

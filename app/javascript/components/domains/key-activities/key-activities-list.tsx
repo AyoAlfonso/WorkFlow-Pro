@@ -68,7 +68,7 @@ export const KeyActivitiesList = observer(
           <Draggable
             draggableId={`keyActivity-${keyActivity.id}`}
             index={index}
-            key={keyActivity["id"]}
+            key={`keyActivity-${keyActivity.id}`}
             type={"keyActivity"}
           >
             {provided => (
@@ -99,7 +99,7 @@ export const KeyActivitiesList = observer(
             <KeyActivitiesContainer
               ref={provided.innerRef}
               {...provided.droppableProps}
-              // isDraggingOver={snapshot.isDraggingOver}
+              isDraggingOver={snapshot.isDraggingOver}
               // style={getStyle(provided.draggableProps.style, snapshot)}
             >
               {renderKeyActivitiesList()}
