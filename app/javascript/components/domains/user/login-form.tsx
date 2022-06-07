@@ -96,13 +96,13 @@ export const LoginForm = observer(
               >
                 {t("profile.loginForm.login")}
               </Button>
-              {/* <GoogleAuthButton onClick={() => login()}>
+              <GoogleAuthButton onClick={() => login()}>
                 <GoogleAuthContent>
                   <img src={"assets/Google-Transparent-logo_500x500.png"} width="20"></img>
                 </GoogleAuthContent>
 
                 <GoogleAuthContent> Sign in with Google </GoogleAuthContent>
-              </GoogleAuthButton> */}
+              </GoogleAuthButton>
               <TextInlineContainer
                 color={"greyActive"}
                 fontSize={1}

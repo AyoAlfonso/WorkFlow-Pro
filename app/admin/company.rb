@@ -158,6 +158,7 @@ ActiveAdmin.register Company do
       f.input :display_format, as: :select, collection: Company.display_formats.keys
       f.input :forum_type, as: :select, collection: Company.forum_types.keys
       f.input :organisational_forum_type,  as: :select, collection: Company.organisational_forum_types.keys
+
     end
     h2 "Foundational Four "
     f.inputs do
@@ -175,6 +176,9 @@ ActiveAdmin.register Company do
     f.label :strategic_plan
     f.input :strategic_plan_embed, input_html: { rows: 5 }
 
+    f.label :strategic_plan
+    f.input :strategic_plan_embed, input_html: { rows: 5 }
+
     f.inputs do
       f.has_many :company_static_datas, allow_destroy: false, new_record: false do |tu|
         tu.input :field, input_html: { disabled: true }
@@ -188,6 +192,11 @@ ActiveAdmin.register Company do
         tu.input :body_content, as: :quill_editor,  input_html: {data: {options: { modules: { toolbar: [['bold', 'italic', 'underline'], ['link']] }, placeholder: 'Type something...', theme: 'snow' } } }
       end
     end
+    # f.inputs :email_invitees
+        # html_attributes do
+          # {:maxlength => 600}
+        # end
+    # end 
     f.actions
   end
 end

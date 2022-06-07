@@ -7,36 +7,25 @@ require "uri"
 class  AuthorizationController <  ApplicationController                              
   skip_before_action :verify_authenticity_token
  def google_oauth2
-   url = URI.parse("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{params["access_token"]}")                  
-  #  https = Net::HTTP.new(url.host, url.port)          
-  #   https.use_ssl = true
-  # request = Net::HTTP::Get.new(url)
 
-  #     request["Content-Type"] = "application/json"
-  # response  =   https.request(request)
-      #  response.
-  google_response = Net::HTTP.get_response(url)
+   url = URI.parse("https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=#{params["access_token"]}")                  
 
-  #  if @user.persisted?
-  #  @user = User.create_user_for_google(response)     
-  @user = User.find(2) 
+  http = Net::HTTP.new(url.host, url.port);
+  http.use_ssl = true
+  request = Net::HTTP::Get.new(url)
 
-   token= @user.generate_jwt(@user)                      
-  #  @user.save
-  # sign_in_and_redirect @user, event: :authentication
-  #  set_headers(token)
-    headers['Authorization'] = "Bearer " + (token).to_s
-   render json:@user
- end
-
-#  private                                            
-    # def set_headers(token)
+  # we want to add to comp
+  response = http.request(request)
+  if JSON.parse(response.body)["email_verified"] 
+   @email = JSON.parse(response.body)["email"]
+   
+  end
   
-    # headers['client'] =  (token['client']).to_s
-    # headers['expiry'] =  (token['expiry']).to_s
-    # headers['uid'] = @user.id             
-    # headers['token-type'] = (token['token-type']).to_s                  
-    # end
-
+  # @user = User.find(2)
+  # User.find
+  token = @user.generate_jwt(@user)                      
+  headers['Authorization'] = "Bearer " + (token).to_s
+  render json:@user
+ end
 end
 
