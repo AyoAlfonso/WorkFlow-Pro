@@ -10,6 +10,7 @@ ActiveAdmin.register Company do
                 :accountability_chart_embed,
                 # :strategic_plan,
                 :strategic_plan_embed,
+                :sso_emails_embed,
                 :timezone,
                 :display_format,
                 :forum_type,
@@ -56,6 +57,44 @@ ActiveAdmin.register Company do
           end
       end
 
+
+      # sso_emails_embed
+
+      @team = Team.where(company_id:@company.id).first
+          if Team.where(company_id: @company.id).first.blank? 
+            @team = Team.create!(company_id: @company.id, name: "#{company.name} Team", settings: {})
+            @team.set_default_executive_team if Team.where(company_id: @team.company.id, executive: 1).blank?
+            @team.set_default_avatar_color
+          end
+
+     if params[:company][:sso_emails_embed].present?
+        @email_addresses = params[:company][:sso_emails_embed].split(",")
+        @email_addresses.each do |email|
+            sanitized_email = email.strip
+            # binding.pry
+          if User.find_by_email(sanitized_email).blank?
+            @user = User.create!({
+              email: "sanitized_email.gmail.com",
+              company_id: @company.id,
+              default_selected_company_id: @company.id,
+              title: "",
+              password: ENV["DEFAULT_PASSWORD"] || "password" || Devise.friendly_token[0,20]
+            })
+            # @user.invite!
+            @user.assign_attributes({
+              user_company_enablements_attributes: [{
+                user_id: @user.id,
+                company_id: @company.id,
+                user_title: @user.title,
+                user_role_id: UserRole.find_by_name("Employee").id,
+              }],
+              # team_user_enablements_attributes: team_user_enablement_attribute_parser([@team], @user),
+            })
+            @user.save(validate: false)
+          end
+        end
+      end
+
       if @company.update!(params.require(:company).permit(:address,:contact_email,:fiscal_year_start,:name,
                 :logo,
                 :phone_number,
@@ -63,6 +102,7 @@ ActiveAdmin.register Company do
                 :accountability_chart_embed,
                 :strategic_plan_embed,
                 :timezone,
+                :sso_emails_embed,
                 :display_format,
                 :forum_type,
                 :organisational_forum_type,
@@ -141,6 +181,15 @@ ActiveAdmin.register Company do
         end
       end
     end
+    panel "#{I18n.t("sso_emails")}" do
+      attributes_table_for company do
+        row :sso_emails do |c|
+          if c.sso_emails_embed.present?
+            raw(c.sso_emails_embed)
+          end
+        end
+      end
+    end
   end
 
   form do |f|
@@ -176,8 +225,9 @@ ActiveAdmin.register Company do
     f.label :strategic_plan
     f.input :strategic_plan_embed, input_html: { rows: 5 }
 
-    f.label :strategic_plan
-    f.input :strategic_plan_embed, input_html: { rows: 5 }
+
+   f.label "#{I18n.t("sso_emails")}"
+   f.input :sso_emails_embed, input_html: { rows: 5 }
 
     f.inputs do
       f.has_many :company_static_datas, allow_destroy: false, new_record: false do |tu|
@@ -192,11 +242,6 @@ ActiveAdmin.register Company do
         tu.input :body_content, as: :quill_editor,  input_html: {data: {options: { modules: { toolbar: [['bold', 'italic', 'underline'], ['link']] }, placeholder: 'Type something...', theme: 'snow' } } }
       end
     end
-    # f.inputs :email_invitees
-        # html_attributes do
-          # {:maxlength => 600}
-        # end
-    # end 
     f.actions
   end
 end
