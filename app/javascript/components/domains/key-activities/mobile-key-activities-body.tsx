@@ -60,10 +60,10 @@ export const MobileKeyActivitiesBody = observer(
       return () => {
         document.removeEventListener("click", externalEventHandler);
       };
-    }, [listSelectorOpen]);
+    }, []);
 
     const selectedFilterGroupId = sessionStore.getScheduledGroupIdByName(currentList);
-    
+
     const completedKeyActivities = keyActivityStore.completedActivities;
 
     const droppableId = `scheduled-group-activities-${selectedFilterGroupId}`;
@@ -152,8 +152,16 @@ export const MobileKeyActivitiesBody = observer(
         );
       });
     };
-
     const keyActivities = filteredKeyActivities();
+    const renderKeyActivitiesList = (): JSX.Element => {
+      return (
+        <KeyActivitiesList
+          keyActivities={keyActivities}
+          droppableId={droppableId}
+          keyActivityStoreLoading={keyActivityStore.loading}
+        />
+      );
+    };
 
     return (
       <Container>
@@ -170,11 +178,7 @@ export const MobileKeyActivitiesBody = observer(
           </AddNewKeyActivityPlus>
           <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
-        <KeyActivitiesList
-          keyActivities={keyActivities}
-          droppableId={droppableId}
-          keyActivityStoreLoading={keyActivityStore.loading}
-        />
+        {renderKeyActivitiesList()}
       </Container>
     );
   },

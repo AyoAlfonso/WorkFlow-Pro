@@ -33,7 +33,6 @@ export class Api {
       config => {
         const token = localStorage?.getItem("Authorization") || {};
         if (!R.isEmpty(token)) {
-          console.log(token, "token");
           config.headers.Authorization = token;
         }
         return config;
