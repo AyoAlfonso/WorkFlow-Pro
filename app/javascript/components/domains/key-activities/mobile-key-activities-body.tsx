@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import { sortByPosition } from "~/utils/sorting";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 import { Teams } from "../account/teams";
-import { KeyActivitiesList } from "./key-activities-list";
+import { MobileKeyActivitiesList } from "./mobile-key-activities-list";
 
 import { toJS } from "mobx";
 
@@ -155,7 +155,7 @@ export const MobileKeyActivitiesBody = observer(
 
     const renderKeyActivitiesList = (): JSX.Element => {
       return (
-        <KeyActivitiesList
+        <MobileKeyActivitiesList
           keyActivities={currentListOfActivities}
           droppableId={droppableId}
           keyActivityStoreLoading={keyActivityStore.loading}
