@@ -84,10 +84,6 @@ export const MobileIssuesBody = observer(
       };
     }, [listSelectorOpen]);
 
-    if (R.isNil(issueStore.issues) || R.isNil(sessionStore.profile) || R.isNil(company)) {
-      return <Loading />;
-    }
-
     const filteredIssues = () => {
       if (!showOpenIssues) {
         return closedIssues;

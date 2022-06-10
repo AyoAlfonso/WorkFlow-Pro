@@ -32,6 +32,16 @@ export const MobileKeyActivitiesBody = observer(
     const [currentTeamId, setCurrentTeamId] = useState<number>(null);
 
     const listRef = useRef<HTMLDivElement>(null);
+    const listName = currentTeamId
+      ? teams.find(group => group.id == currentTeamId)?.name
+      : showCompletedItems
+      ? "Completed"
+      : currentList === "Today"
+      ? "Today's Priorities"
+      : currentList;
+    const selectedFilterGroupId = sessionStore.getScheduledGroupIdByName(currentList);
+    const droppableId = `scheduled-group-activities-${selectedFilterGroupId}`;
+    const completedKeyActivities = keyActivityStore.completedActivities;
 
     useEffect(() => {
       showCompletedItems
@@ -60,13 +70,7 @@ export const MobileKeyActivitiesBody = observer(
       return () => {
         document.removeEventListener("click", externalEventHandler);
       };
-    }, []);
-
-    const selectedFilterGroupId = sessionStore.getScheduledGroupIdByName(currentList);
-
-    const completedKeyActivities = keyActivityStore.completedActivities;
-
-    const droppableId = `scheduled-group-activities-${selectedFilterGroupId}`;
+    }, [listSelectorOpen]);
 
     const filteredKeyActivities = () => {
       if (showCompletedItems) {
@@ -78,13 +82,7 @@ export const MobileKeyActivitiesBody = observer(
       }
     };
 
-    const listName = currentTeamId
-      ? teams.find(group => group.id == currentTeamId)?.name
-      : showCompletedItems
-      ? "Completed"
-      : currentList === "Today"
-      ? "Today's Priorities"
-      : currentList;
+    const currentListOfActivities = filteredKeyActivities();
 
     const renderListSelector = (): JSX.Element => {
       return (
@@ -152,13 +150,14 @@ export const MobileKeyActivitiesBody = observer(
         );
       });
     };
-    const keyActivities = filteredKeyActivities();
+
     const renderKeyActivitiesList = (): JSX.Element => {
       return (
         <KeyActivitiesList
-          keyActivities={keyActivities}
+          keyActivities={currentListOfActivities}
           droppableId={droppableId}
           keyActivityStoreLoading={keyActivityStore.loading}
+          mobile={true}
         />
       );
     };
@@ -178,7 +177,7 @@ export const MobileKeyActivitiesBody = observer(
           </AddNewKeyActivityPlus>
           <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
-        {renderKeyActivitiesList()}
+        {currentListOfActivities && renderKeyActivitiesList()}
       </Container>
     );
   },

@@ -20,6 +20,7 @@ interface IKeyActivitiesListProps {
   droppableId: string;
   loading?: boolean;
   keyActivityStoreLoading?: boolean;
+  mobile?: boolean;
 }
 
 function getStyle(style, snapshot) {
@@ -36,6 +37,7 @@ export const KeyActivitiesList = observer(
     droppableId,
     loading,
     keyActivityStoreLoading,
+    mobile = false,
   }: IKeyActivitiesListProps): JSX.Element => {
     const splittedDroppableId = droppableId.split("-");
     const updateId = splittedDroppableId[splittedDroppableId.length - 1];
@@ -44,14 +46,24 @@ export const KeyActivitiesList = observer(
 
     const data = React.useMemo(() => sortByPosition(keyActivities), [keyActivities]);
 
-    const { keyActivityStore } = useMst();
+    // const { keyActivityStore } = useMst();
 
-    if (loading) {
-      return (
-        <LoadingContainer>
-          <Loading />
-        </LoadingContainer>
-      );
+    if (mobile) {
+      if (loading && !droppableId && keyActivityStoreLoading) {
+        return (
+          <LoadingContainer>
+            <Loading />
+          </LoadingContainer>
+        );
+      }
+    } else {
+      if (loading && keyActivityStoreLoading) {
+        return (
+          <LoadingContainer>
+            <Loading />
+          </LoadingContainer>
+        );
+      }
     }
 
     const renderKeyActivitiesList = () => {
