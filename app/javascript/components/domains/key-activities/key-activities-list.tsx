@@ -46,24 +46,13 @@ export const KeyActivitiesList = observer(
 
     const data = React.useMemo(() => sortByPosition(keyActivities), [keyActivities]);
 
-    // const { keyActivityStore } = useMst();
 
-    if (mobile) {
-      if (loading && !droppableId && keyActivityStoreLoading) {
-        return (
-          <LoadingContainer>
-            <Loading />
-          </LoadingContainer>
-        );
-      }
-    } else {
-      if (loading && keyActivityStoreLoading) {
-        return (
-          <LoadingContainer>
-            <Loading />
-          </LoadingContainer>
-        );
-      }
+    if (!droppableId && keyActivityStoreLoading) {
+      return (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      );
     }
 
     const renderKeyActivitiesList = () => {

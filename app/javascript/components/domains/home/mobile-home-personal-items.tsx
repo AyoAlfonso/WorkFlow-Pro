@@ -28,17 +28,13 @@ export const MobileHomePersonalItems = observer(
     const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : "");
     };
-
-    // if (R.isNil(company)) {
-    //   return <> </>;
-    // }
-
+    
     const headerTextString = () => {
       switch (currentTab) {
         case 0:
-          return company.displayFormat == "Forum" ? "Topics" : "Issues";
-        case 1:
           return "ToDos";
+        case 1:
+          return company.displayFormat == "Forum" ? "Topics" : "Issues";
         case 2:
           return "Journal";
         case 3:
