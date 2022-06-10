@@ -28,7 +28,7 @@ export const MobileHomePersonalItems = observer(
     const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : "");
     };
-    
+
     const headerTextString = () => {
       switch (currentTab) {
         case 0:
@@ -97,7 +97,7 @@ export const MobileHomePersonalItems = observer(
         case 3:
           return <HabitsBody />;
         default:
-          return <></>;
+          return renderMobileKeyActivitiesBody();
       }
     };
 

@@ -37,17 +37,24 @@ export const KeyActivitiesList = observer(
     droppableId,
     loading,
     keyActivityStoreLoading,
-    mobile = false,
+    mobile = null,
   }: IKeyActivitiesListProps): JSX.Element => {
     const splittedDroppableId = droppableId.split("-");
     const updateId = splittedDroppableId[splittedDroppableId.length - 1];
-
-    const [keyActivityModalOpen, setKeyActivityModalOpen] = useState<boolean>(false);
-
     const data = React.useMemo(() => sortByPosition(keyActivities), [keyActivities]);
 
+    if (mobile == null) {
+      return <></>;
+    }
+    if (mobile && droppableId && keyActivityStoreLoading) {
+      return (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      );
+    }
 
-    if (!droppableId && keyActivityStoreLoading) {
+    if (loading && !mobile && keyActivityStoreLoading) {
       return (
         <LoadingContainer>
           <Loading />

@@ -37,6 +37,8 @@ export const AddPyns = observer(
           <KeyActivitiesList
             keyActivities={toJS(keyActivityStore.keyActivitiesForOnboarding)}
             droppableId={`todays-activities`}
+            mobile={false}
+            // loading={keyActivityStore.loading}
           />
         </KeyActivitiesListContainer>
 

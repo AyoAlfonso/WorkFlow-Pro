@@ -13,6 +13,7 @@ import { sortByPosition } from "~/utils/sorting";
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 import { Teams } from "../account/teams";
 import { KeyActivitiesList } from "./key-activities-list";
+
 import { toJS } from "mobx";
 
 interface IMobileKeyActivitiesBodyProps {}
@@ -30,6 +31,7 @@ export const MobileKeyActivitiesBody = observer(
     const [showCompletedItems, setShowCompletedItems] = useState<boolean>(false);
     const [currentList, setCurrentList] = useState<string>("Today");
     const [currentTeamId, setCurrentTeamId] = useState<number>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const listRef = useRef<HTMLDivElement>(null);
     const listName = currentTeamId
@@ -45,8 +47,8 @@ export const MobileKeyActivitiesBody = observer(
 
     useEffect(() => {
       showCompletedItems
-        ? keyActivityStore.fetchCompleteKeyActivities()
-        : keyActivityStore.fetchIncompleteKeyActivities();
+        ? keyActivityStore.fetchCompleteKeyActivities().then(() => setLoading(false))
+        : keyActivityStore.fetchIncompleteKeyActivities().then(() => setLoading(false));
     }, [showCompletedItems]);
 
     useEffect(() => {
@@ -158,6 +160,7 @@ export const MobileKeyActivitiesBody = observer(
           droppableId={droppableId}
           keyActivityStoreLoading={keyActivityStore.loading}
           mobile={true}
+          loading={loading}
         />
       );
     };
@@ -177,7 +180,7 @@ export const MobileKeyActivitiesBody = observer(
           </AddNewKeyActivityPlus>
           <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
         </AddNewKeyActivityContainer>
-        {currentListOfActivities && renderKeyActivitiesList()}
+        {renderKeyActivitiesList()}
       </Container>
     );
   },
