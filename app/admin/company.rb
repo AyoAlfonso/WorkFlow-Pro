@@ -71,7 +71,6 @@ ActiveAdmin.register Company do
         @email_addresses = params[:company][:sso_emails_embed].split(",")
         @email_addresses.each do |email|
             sanitized_email = email.strip
-            # binding.pry
           if User.find_by_email(sanitized_email).blank?
             @user = User.create!({
               email: "sanitized_email.gmail.com",
@@ -80,6 +79,7 @@ ActiveAdmin.register Company do
               title: "",
               password: ENV["DEFAULT_PASSWORD"] || "password" || Devise.friendly_token[0,20]
             })
+            # UserCompanyEnablement.create(user_id: @user.id, company_id: @company.id, user_role_id: "")
             # @user.invite!
             @user.assign_attributes({
               user_company_enablements_attributes: [{
