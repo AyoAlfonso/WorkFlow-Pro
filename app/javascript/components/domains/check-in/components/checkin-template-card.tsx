@@ -56,8 +56,8 @@ const Container = styled.div`
   background: ${props => props.theme.colors.white};
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 1em;
-  width: 40%;
-  max-width: 440px;
+  // width: 40%;
+  // max-width: 440px;
   height: 150px;
   padding: 1em 1.5em;
   position: relative;

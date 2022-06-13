@@ -120,6 +120,7 @@ export const CheckInBuilderLayout = observer(
           showCloseButton={true}
           onCloseButtonClick={closeButtonClick}
           showBackButton={false}
+          bodyContainerOverflow={"hidden"}
         />
       </Container>
     );

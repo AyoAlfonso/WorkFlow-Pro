@@ -125,7 +125,8 @@ const OverviewTab = styled("span")<IOverviewTab>`
 `;
 
 const CheckInTemplateCardsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  // flex-wrap: wrap;
   gap: 1em 2em;
 `;

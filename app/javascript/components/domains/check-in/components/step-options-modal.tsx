@@ -8,11 +8,12 @@ import { StepOptions } from "./step-options";
 interface StepOptionsModalProps {
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedSteps: React.Dispatch<React.SetStateAction<Array<any>>>;
+  setSelectedSteps: React.Dispatch<React.SetStateAction<Array<SelectedStepType>>>;
   setIsChanging?: React.Dispatch<React.SetStateAction<boolean>>;
   isChanging?: boolean;
   stepToPreview: SelectedStepType;
   selectedSteps: Array<SelectedStepType>;
+  setTodoModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const StepOptionsModal = ({
@@ -23,6 +24,7 @@ export const StepOptionsModal = ({
   isChanging,
   stepToPreview,
   selectedSteps,
+  setTodoModalOpen,
 }: StepOptionsModalProps): JSX.Element => {
   return (
     <StyledModal isOpen={modalOpen} onBackgroundClick={() => setModalOpen(false)}>
@@ -40,6 +42,7 @@ export const StepOptionsModal = ({
           setSelectedSteps={setSelectedSteps}
           stepToPreview={stepToPreview}
           selectedSteps={selectedSteps}
+          setTodoModalOpen={setTodoModalOpen}
         />
       </Container>
     </StyledModal>

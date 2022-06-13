@@ -33,6 +33,7 @@ interface IWizardLayoutProps {
   finalButtonDisabled?: boolean;
   stepsForMobile?: JSX.Element;
   textUnderMobileButton?: JSX.Element;
+  bodyContainerOverflow?: string;
 }
 
 export const WizardLayout = ({
@@ -61,6 +62,7 @@ export const WizardLayout = ({
   finalButtonDisabled,
   stepsForMobile,
   textUnderMobileButton,
+  bodyContainerOverflow,
 }: IWizardLayoutProps): JSX.Element => {
   const renderActionButtons = (): JSX.Element => {
     return (
@@ -143,7 +145,7 @@ export const WizardLayout = ({
           </LynchpynLogoContainer>
         )}
       </DescriptionContainer>
-      <BodyContainer hasStepsForMobile={stepsForMobile ? true : false}>
+      <BodyContainer overflow={bodyContainerOverflow} hasStepsForMobile={stepsForMobile ? true : false}>
         {stepsForMobile && (
           <DesktopCloseButtonContainer>
             {stepsForMobile}
@@ -235,6 +237,7 @@ const DescriptionBody = styled.div`
 
 type BodyContainerProps = {
   hasStepsForMobile: boolean;
+  overflow?: string;
 };
 
 const BodyContainer = styled.div<BodyContainerProps>`
@@ -247,6 +250,7 @@ const BodyContainer = styled.div<BodyContainerProps>`
   // height: 100%;
   flex-direction: column;
   // overflow-x: auto;
+  overflow: ${props => (props.overflow && props.overflow)};
   @media only screen and (max-width: 768px) {
     width: 100%;
     padding: 0;

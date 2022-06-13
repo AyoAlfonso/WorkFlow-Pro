@@ -5,12 +5,13 @@ import { SelectedStepType } from "../steps-selector-page";
 import { StepTypeCard } from "./step-type-card";
 
 interface StepOptionsProps {
-  setSelectedSteps: React.Dispatch<React.SetStateAction<Array<any>>>;
+  setSelectedSteps: React.Dispatch<React.SetStateAction<Array<SelectedStepType>>>;
   setShowStepsModal?: React.Dispatch<React.SetStateAction<boolean>>;
   setIsChanging?: React.Dispatch<React.SetStateAction<boolean>>;
   isChanging?: boolean;
   stepToPreview?: SelectedStepType;
   selectedSteps?: Array<SelectedStepType>;
+  setTodoModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const StepOptions = ({
@@ -20,6 +21,7 @@ export const StepOptions = ({
   isChanging,
   stepToPreview,
   selectedSteps,
+  setTodoModalOpen,
 }: StepOptionsProps): JSX.Element => {
   return (
     <Container>
@@ -35,6 +37,7 @@ export const StepOptions = ({
             selectedSteps={selectedSteps}
             setSelectedSteps={setSelectedSteps}
             setShowStepsModal={setShowStepsModal}
+            setTodoModalOpen={setTodoModalOpen}
           />
         ))}
       </QuestionsContainer>
@@ -50,6 +53,7 @@ export const StepOptions = ({
             selectedSteps={selectedSteps}
             setSelectedSteps={setSelectedSteps}
             setShowStepsModal={setShowStepsModal}
+            setTodoModalOpen={setTodoModalOpen}
           />
         ))}
       </WidgetContainer>

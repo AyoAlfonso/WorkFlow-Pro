@@ -4,6 +4,7 @@ export interface StepCardProps {
   description: string;
   iconColor: string;
   question?: string;
+  variant?: string;
 }
 
 export const questionsArray: Array<StepCardProps> = [
@@ -55,6 +56,7 @@ export const widgetArray: Array<StepCardProps> = [
     iconName: "New-Goals",
     iconColor: "primary100",
     stepName: "Objectives",
+    variant: "Objectives",
     description: "Overview of Foundational Four and Company and Personal Objectives.",
   },
   {
@@ -67,48 +69,56 @@ export const widgetArray: Array<StepCardProps> = [
     iconName: "Alert",
     iconColor: "yellowSea",
     stepName: "Issues",
+    variant: "My Issues",
     description: "Keep track of issues and roadblocks that are hindering progress",
   },
   {
     iconName: "Scorecard_New",
     iconColor: "primary100",
     stepName: "KPIs",
+    variant: "KPIs",
     description: "Updates on KPIs owned by the user",
   },
   {
     iconName: "Habits",
     iconColor: "cavier",
     stepName: "Habits",
+    variant: "My Habits",
     description: "Reviewing and updating habits and streaks.",
   },
   {
     iconName: "Conversation-Starter",
     iconColor: "dimPurple",
     stepName: "Conversation Starter",
+    variant: "Conversation Starter",
     description: "A random prompt that makes it easy to share fun facts about yourself.",
   },
   {
     iconName: "Stats",
     iconColor: "neonLemon",
     stepName: "Weekly Review",
+    variant: "Weekly Review",
     description: "Summary of weekly activities and progress",
   },
   {
     iconName: "PM-Check-in",
     iconColor: "mipBlue",
     stepName: "Evening Reflection",
+    variant: "Evening Reflection",
     description: "Series of questions for a personal reflection at the end of each day",
   },
   {
     iconName: "Weekly-Milestones",
     iconColor: "dimPurple",
     stepName: "Weekly Reflection",
+    variant: "Weekly Reflection",
     description: "Series of questions for a personal reflection at the end of each week",
   },
   {
     iconName: "EoM",
     iconColor: "cavier",
     stepName: "Monthly Reflection",
+    variant: "Monthly Reflection",
     description: "Series of questions for a personal reflection at the end of each month",
   },
 ];

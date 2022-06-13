@@ -16,6 +16,7 @@ import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { MilestoneCard } from "../../goals/milestone/milestone-card";
 import { EmptyState } from "./empty-state";
+import { getWeekOf } from "~/utils/date-time";
 
 export const WeeklyMilestones = observer(
   (props): JSX.Element => {
@@ -25,8 +26,10 @@ export const WeeklyMilestones = observer(
     const { weekOf } = useParams();
     const { milestonesForWeeklyCheckin } = milestoneStore;
 
+    const currentWeekOf = weekOf || getWeekOf()
+
     useEffect(() => {
-      milestoneStore.getMilestonesForWeeklyCheckin(weekOf);
+      milestoneStore.getMilestonesForWeeklyCheckin(currentWeekOf);
     }, []);
 
     const renderHeading = (): JSX.Element => {

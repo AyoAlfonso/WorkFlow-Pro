@@ -12,7 +12,7 @@ import { Button } from "~/components/shared/button";
 interface IDueDatePickerModalProps {
   selectedDueDate: Date;
   setSelectedDueDate: React.Dispatch<React.SetStateAction<Date>>;
-  updateDueDate: any;
+  updateDueDate?: any;
   showDatePicker: boolean;
   setShowDatePicker: React.Dispatch<React.SetStateAction<boolean>>;
   showDateOptions?: boolean;
@@ -116,7 +116,7 @@ export const DueDatePickerModal = ({
           date={selectedDueDate}
           onChange={date => {
             setSelectedDueDate(date);
-            updateDueDate(date);
+            updateDueDate && updateDueDate(date);
             setShowDatePicker(false);
           }}
         />

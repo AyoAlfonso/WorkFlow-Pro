@@ -371,6 +371,7 @@
         "sortByDueDateAndPriority": "Sort by Due Date and Priority",
         "yesterdayTitle": "Finished Yesterday",
         "yesterdayRemainingTitle": "Remaining ToDos",
+        "outstandingTitle": "Outstanding ToDos",
         "yesterdayUnfinishedText": "Unfinished ToDos from yesterday",
         "markAllYesterdayDone": "Mark all done",
         "weeklyListTitle": "Weekly List",

@@ -3,6 +3,7 @@ import * as R from "ramda";
 import styled from "styled-components";
 import { BasicStep } from "./basic-step";
 import { StepsSelectorPage } from "./steps-selector-page";
+import { SetupPage } from "./setup-page";
 
 interface CheckinBuilderStepsProps {
   step: any;
@@ -25,6 +26,13 @@ const stepComponent = step => {
         <>
           <CheckinName>{checkinName}</CheckinName>
           <StepsSelectorPage />
+        </>
+      );
+    case "setup":
+      return (
+        <>
+          <CheckinName>{checkinName}</CheckinName>
+          <SetupPage />
         </>
       );
     default:

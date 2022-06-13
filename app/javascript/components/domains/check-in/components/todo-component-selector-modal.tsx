@@ -1,32 +1,51 @@
 import * as React from "react";
 import styled from "styled-components";
 import Modal from "styled-react-modal";
+import { useMst } from "~/setup/root";
+import { observer } from "mobx-react";
 import { Icon } from "~/components/shared";
+import { StepCardProps } from "../data/step-data";
+import { SelectedStepType } from "../steps-selector-page";
 
 interface TodoComponentSelectorModalProps {
-  modalOpen: boolean;
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  todoModalOpen: boolean;
+  setTodoModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  step?: StepCardProps;
+  setSelectedSteps?: React.Dispatch<React.SetStateAction<Array<SelectedStepType>>>;
+  stepToPreview?: SelectedStepType;
+  setIsChanging?: React.Dispatch<React.SetStateAction<boolean>>;
+  isChanging?: boolean;
+  selectedSteps?: Array<SelectedStepType>;
 }
 
-export const TodoComponentSelectorModal = ({
-  modalOpen,
-  setModalOpen,
+export const TodoComponentSelectorModal = observer(({
+  todoModalOpen,
+  setTodoModalOpen,
+  step,
+  setSelectedSteps,
+  stepToPreview,
+  setIsChanging,
+  isChanging,
+  selectedSteps,
 }: TodoComponentSelectorModalProps): JSX.Element => {
+  const { companyStore } = useMst();
+  const isKeyResults = companyStore.company?.objectivesKeyType === "KeyResults";
+
   const todoList = [
     "Today's Priorities",
     "Weekly List",
-    "Weekly List + Key Results",
+    `Weekly List + ${isKeyResults ? "Key Results" : "Milestones"}`,
     "Weekly List + Master List",
     "Today's Priorities + Weekly List",
     "Outstanding ToDos",
   ];
 
   return (
-    <StyledModal isOpen={modalOpen} onBackgroundClick={() => setModalOpen(false)}>
+    <StyledModal isOpen={todoModalOpen} onBackgroundClick={() => setTodoModalOpen(false)}>
       <Container>
         <HeaderContainer>
           <HeaderText>Select a step type</HeaderText>
-          <IconContainer onClick={() => setModalOpen(false)}>
+          <IconContainer onClick={() => setTodoModalOpen(false)}>
             <Icon icon={"Close"} size={"14px"} iconColor={"grey80"} />
           </IconContainer>
         </HeaderContainer>
@@ -40,14 +59,39 @@ export const TodoComponentSelectorModal = ({
           </DescriptionTextContainer>
         </DescriptionContainer>
         {todoList.map((todo, index) => (
-          <ToDoComponentContainer key={`option-${index}`}>
+          <ToDoComponentContainer
+            onClick={() => {
+              if (isChanging) {
+                const steps = selectedSteps;
+                const stepIndex = steps.findIndex(step => step.orderIndex == stepToPreview.orderIndex);
+                steps[stepIndex].stepType = step.stepName;
+                steps[stepIndex].iconName = step.iconName;
+                steps[stepIndex].variant = todo;
+                setSelectedSteps(steps);
+                setIsChanging(false);
+                setTodoModalOpen(false);
+              } else {
+                setSelectedSteps(steps => [
+                  ...steps,
+                  {
+                    stepType: step.stepName,
+                    iconName: step.iconName,
+                    variant: todo,
+                    orderIndex: steps.length + 1,
+                  },
+                ]);
+                setTodoModalOpen(false);
+              }
+            }}
+            key={`option-${index}`}
+          >
             <TodosText>{todo}</TodosText>
           </ToDoComponentContainer>
         ))}
       </Container>
     </StyledModal>
   );
-};
+});
 
 const StyledModal = Modal.styled`
   width: 700px;

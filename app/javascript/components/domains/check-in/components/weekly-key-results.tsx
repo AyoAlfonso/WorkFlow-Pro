@@ -13,6 +13,7 @@ import { Avatar } from "~/components/shared";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "./empty-state";
 import { KeyElement } from "../../goals/shared/key-element";
+import { getWeekOf } from "~/utils/date-time";
 
 export const WeeklyKeyResults = observer(
   (props): JSX.Element => {
@@ -21,6 +22,7 @@ export const WeeklyKeyResults = observer(
     const { t } = useTranslation();
 
     const { weekOf } = useParams();
+    const currentWeekOf = weekOf || getWeekOf();
 
     const groupBy = objectArray => {
       return objectArray.reduce(function(acc, obj) {
@@ -44,7 +46,7 @@ export const WeeklyKeyResults = observer(
         <Container>
           <StyledHeader>
             What's the status on your Key Results from week of{" "}
-            <u>{moment(weekOf).format("MMMM D")}</u>?
+            <u>{moment(currentWeekOf).format("MMMM D")}</u>?
           </StyledHeader>
         </Container>
       );

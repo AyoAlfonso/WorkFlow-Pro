@@ -24,6 +24,7 @@ export interface IHomeKeyActivities {
   weeklyOnly?: boolean;
   width?: string;
   setQuestionnaireVariant?: React.Dispatch<React.SetStateAction<string>>;
+  hideListSelector?: boolean;
 }
 
 export const HomeKeyActivities = observer(
@@ -32,6 +33,7 @@ export const HomeKeyActivities = observer(
     weeklyOnly = false,
     width,
     setQuestionnaireVariant,
+    hideListSelector,
   }: IHomeKeyActivities): JSX.Element => {
     const [selectedFilterGroupName, setSelectedFilterGroupName] = useState<string>("Weekly List");
     const [selectedFilterTeamId, setSelectedFilterTeamId] = useState<number>(null);
@@ -48,7 +50,6 @@ export const HomeKeyActivities = observer(
       sessionStore: { scheduledGroups },
     } = useMst();
     const { t } = useTranslation();
-
 
     useEffect(() => {
       showCompletedItems
@@ -334,11 +335,13 @@ export const HomeKeyActivities = observer(
               />
             </KeyActivitiesListContainer>
           </KeyActivityColumnStyleListContainer>
-          <FilterContainer>
-            {renderFilterGroupOptions()}
-            {renderFilterCompletedOption()}
-            {/* {renderFilterTeamOptions()} */}
-          </FilterContainer>
+          {!hideListSelector && (
+            <FilterContainer>
+              {renderFilterGroupOptions()}
+              {renderFilterCompletedOption()}
+              {/* {renderFilterTeamOptions()} */}
+            </FilterContainer>
+          )}
           <CreateKeyActivityModal
             createKeyActivityModalOpen={createKeyActivityModalOpen}
             setCreateKeyActivityModalOpen={setCreateKeyActivityModalOpen}

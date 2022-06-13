@@ -1,21 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useMst } from "~/setup/root";
+import { observer } from "mobx-react";
 import styled from "styled-components";
 import { Icon } from "~/components/shared";
 import { StepCardProps } from "../data/step-data";
 import { SelectedStepType } from "../steps-selector-page";
+import { variant } from "styled-system";
 
 interface StepTypeCardProps {
   step: StepCardProps;
-  setSelectedSteps: React.Dispatch<React.SetStateAction<Array<any>>>;
+  setSelectedSteps: React.Dispatch<React.SetStateAction<Array<SelectedStepType>>>;
   setShowStepsModal?: React.Dispatch<React.SetStateAction<boolean>>;
   setIsChanging?: React.Dispatch<React.SetStateAction<boolean>>;
   isChanging?: boolean;
   stepToPreview?: SelectedStepType;
   selectedSteps?: Array<SelectedStepType>;
+  setTodoModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const StepTypeCard = ({
+export const StepTypeCard = observer(({
   step,
   setSelectedSteps,
   setShowStepsModal,
@@ -23,44 +27,80 @@ export const StepTypeCard = ({
   isChanging,
   stepToPreview,
   selectedSteps,
+  setTodoModalOpen,
 }: StepTypeCardProps): JSX.Element => {
+  const { companyStore } = useMst();
+  const isKeyResults = companyStore.company?.objectivesKeyType === "KeyResults";
+  const isForum = companyStore.company?.displayFormat == "Forum"
+
   const { t } = useTranslation();
-  const {iconName, stepName, description, question, iconColor} = step
+  const { iconName, stepName, description, question, iconColor, variant } = step;
+
+  const initiativeVariant = isKeyResults ? "Key Results" : "Milestones";
+
+  const handleClick = () => {
+    if (isChanging && stepName == "ToDos") {
+      setShowStepsModal && setShowStepsModal(false);
+      setTodoModalOpen(true);
+    } else if (isChanging) {
+      const steps = selectedSteps;
+      const stepIndex = steps.findIndex(step => step.orderIndex == stepToPreview.orderIndex);
+      steps[stepIndex].stepType = stepName;
+      steps[stepIndex].iconName = iconName;
+      setSelectedSteps(steps);
+      setIsChanging(false);
+      setShowStepsModal(false);
+    } else if (stepName == "ToDos") {
+      setShowStepsModal && setShowStepsModal(false);
+      setTodoModalOpen(true);
+    } else if (stepName == "Initiatives") {
+      setSelectedSteps(steps => [
+        ...steps,
+        {
+          stepType: stepName,
+          iconName: iconName,
+          variant: initiativeVariant,
+          orderIndex: steps.length + 1,
+        },
+      ]);
+      setShowStepsModal && setShowStepsModal(false);
+    } else {
+      setSelectedSteps(steps => [
+        ...steps,
+        {
+          stepType: stepName,
+          iconName: iconName,
+          question: question,
+          variant: variant,
+          orderIndex: steps.length + 1,
+        },
+      ]);
+      setShowStepsModal && setShowStepsModal(false);
+    }
+  };
+
+  const formatIssue = str => {
+    if (isForum) {
+      return "Topics"
+    } else {
+      return str
+    }
+  }
+
+  const formattedStepName = stepName == "Issues" ? formatIssue(stepName) : stepName;
+
   return (
-    <Container
-      onClick={() => {
-        if (isChanging) {
-          const steps = selectedSteps;
-          const stepIndex = steps.findIndex(step => step.position == stepToPreview.position);
-          steps[stepIndex].stepType = stepName;
-          steps[stepIndex].iconName = iconName;
-          setSelectedSteps(steps);
-          setIsChanging(false);
-          setShowStepsModal(false);
-        } else {
-          setSelectedSteps(steps => [
-            ...steps,
-            {
-              stepType: stepName,
-              iconName: iconName,
-              question: question,
-              position: steps.length + 1,
-            },
-          ]);
-          setShowStepsModal && setShowStepsModal(false);
-        }
-      }}
-    >
+    <Container onClick={handleClick}>
       <IconContainer>
         <Icon icon={iconName} size="64px" iconColor={iconColor} />
       </IconContainer>
       <TextContainer>
-        <StepName>{t(`${stepName}`)}</StepName>
+        <StepName>{t(`${formattedStepName}`)}</StepName>
         <Description>{t(`${description}`)}</Description>
       </TextContainer>
     </Container>
   );
-};
+});
 
 const Container = styled.div`
   background: ${props => props.theme.colors.white};
