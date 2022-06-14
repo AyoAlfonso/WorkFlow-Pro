@@ -20,6 +20,7 @@ import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { color, ColorProps, typography, TypographyProps } from "styled-system";
 import { showToast } from "~/utils/toast-message";
 import { ToastMessageConstants } from "~/constants/toast-types";
+import { useMsal, AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
 
 const LogoHeaderDiv = styled.div`
   text-align: center;
@@ -32,6 +33,7 @@ export const LoginForm = observer(
     const [password, setPassword] = useState("");
     const { t } = useTranslation();
     const history = useHistory();
+    const { instance } = useMsal();
     const responseGoogle = response => {
       sessionStore.logInWithProvider("google_oauth2", response);
     };
@@ -39,6 +41,10 @@ export const LoginForm = observer(
     const login = useGoogleLogin({
       onSuccess: tokenResponse => responseGoogle(tokenResponse),
     });
+    const microsoftLoginHandler = instance => {
+      instance.loginPopup();
+    };
+
     if (sessionStore.loading) return <LoadingScreen />;
     return (
       <Flex
@@ -103,6 +109,10 @@ export const LoginForm = observer(
 
                 <GoogleAuthContent> Sign in with Google </GoogleAuthContent>
               </GoogleAuthButton>
+              <MicrosoftAuthButton onClick={() => microsoftLoginHandler(instance)}>
+                {" "}
+                Sign in with Microsoft
+              </MicrosoftAuthButton>
               <TextInlineContainer
                 color={"greyActive"}
                 fontSize={1}
@@ -141,6 +151,11 @@ const GoogleAuthButton = styled.div`
   box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
   cursor: pointer;
 `;
+
+const MicrosoftAuthButton = styled(GoogleAuthButton)<ColorProps>`
+  ${color}
+`;
+
 const GoogleAuthContent = styled.span`
   margin: 0px 5px;
 `;

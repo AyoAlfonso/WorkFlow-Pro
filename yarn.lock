@@ -42,6 +42,11 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
+"@azure/msal-react@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@azure/msal-react/-/msal-react-1.4.2.tgz#b9cce37e977cfca2b70018ebacb5d38c0038aff6"
+  integrity sha512-5d663wBJRhnAM16QSR2wHEKFonI3STNpOuq1Tmelg2fAyOXZUxyCxyFlWOE/FZuhbXS3C4VmLHaEYHMnofRcyQ==
+
 "@babel/code-frame@7.12.11":
   version "7.12.11"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.12.11.tgz#f4ad435aa263db935b8f10f2c552d23fb716a63f"
