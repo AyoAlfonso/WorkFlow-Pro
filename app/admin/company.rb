@@ -73,16 +73,14 @@ ActiveAdmin.register Company do
         params[:company][:sso_emails_embed].each do |email|
    
             sanitized_email = email.strip
-          if !"".empty? && User.find_by_email(sanitized_email).blank?
+          if !sanitized_email.empty? && User.find_by_email(sanitized_email).blank?
             @user = User.create!({
-              email: "sanitized_email.gmail.com",
+              email: sanitized_email,
               company_id: @company.id,
               default_selected_company_id: @company.id,
               title: "",
               password: ENV["DEFAULT_PASSWORD"] || "password" || Devise.friendly_token[0,20]
             })
-            # UserCompanyEnablement.create(user_id: @user.id, company_id: @company.id, user_role_id: "")
-            # @user.invite!
             @user.assign_attributes({
               user_company_enablements_attributes: [{
                 user_id: @user.id,
@@ -90,12 +88,12 @@ ActiveAdmin.register Company do
                 user_title: @user.title,
                 user_role_id: UserRole.find_by_name("Employee").id,
               }],
-              # team_user_enablements_attributes: team_user_enablement_attribute_parser([@team], @user),
             })
             @user.save(validate: false)
           end
         end
-      end
+    end
+
      params[:company][:sso_emails_embed] = params[:company][:sso_emails_embed].join(",")
        if @company.update!(params.require(:company).permit(:address,:contact_email,:fiscal_year_start,:name,
                 :logo,
