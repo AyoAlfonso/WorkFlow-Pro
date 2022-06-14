@@ -67,19 +67,17 @@ ActiveAdmin.register Company do
             @team.set_default_avatar_color
           end
 
-     if params[:company][:sso_emails_embed].present?
-        
-       params[:company][:sso_emails_embed] = params[:company][:sso_emails_embed].split(",").compact.map(&:strip).reverse.uniq
-        params[:company][:sso_emails_embed].each do |email|
-   
-            sanitized_email = email.strip
+      if params[:company][:sso_emails_embed].present?
+        @new_sso_emails = params[:company][:sso_emails_embed].split(",").compact.map(&:strip).reverse.uniq
+        @new_sso_emails.each do |email|
+          sanitized_email = email.strip
           if !sanitized_email.empty? && User.find_by_email(sanitized_email).blank?
             @user = User.create!({
               email: sanitized_email,
               company_id: @company.id,
               default_selected_company_id: @company.id,
               title: "",
-              password: ENV["DEFAULT_PASSWORD"] || "password" || Devise.friendly_token[0,20]
+              password: Devise.friendly_token[0,20]
             })
             @user.assign_attributes({
               user_company_enablements_attributes: [{
@@ -90,11 +88,13 @@ ActiveAdmin.register Company do
               }],
             })
             @user.save(validate: false)
+            params[:company][:sso_emails_embed].push(sanitized_email)
           end
+      
         end
-    end
+      end
 
-     params[:company][:sso_emails_embed] = params[:company][:sso_emails_embed].join(",")
+       params[:company][:sso_emails_embed] = @new_sso_emails.join(",")
        if @company.update!(params.require(:company).permit(:address,:contact_email,:fiscal_year_start,:name,
                 :logo,
                 :phone_number,
