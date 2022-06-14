@@ -9,15 +9,19 @@ import { Milestones } from "../meetings/components/milestones";
 import { PersonalGoals } from "../meetings/components/personal-goals";
 import { PersonalKeyActivitiesWeekly } from "../meetings/components/personal-key-activities-weekly";
 import { WeeklyReflection } from "../meetings/components/weekly-reflection";
+import { CheckinReflection } from "./components/check-in-reflection";
 import { KpiComponent } from "./components/kpi";
 import { NumericalStep } from "./components/numerical-step";
 import { OpenEndedPreview } from "./components/open-ended-preview";
 import { SelectionScale } from "./components/selection-scale";
 import { WeeklyKeyResults } from "./components/weekly-key-results";
 import { WeeklyMilestones } from "./components/weekly-milestones";
+import { WeeklyReview } from "./components/weekly-review";
 import { YesNoPreview } from "./components/yes-no-preview";
 import { OutstandingTodos } from "./outstanding-todos";
 import { SelectedStepType } from "./steps-selector-page";
+import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
+import { MobileKeyActivitiesBody } from "../key-activities/mobile-key-activities-body";
 
 interface StepsPreviewProps {
   step: SelectedStepType;
@@ -49,15 +53,29 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
           case "Weekly List + Milestones":
             return <Milestones showWeekly />;
           case "Weekly List + Master List":
-            return <PersonalKeyActivitiesWeekly />;
+            return (
+              <>
+                <DesktopContainer>
+                  <PersonalKeyActivitiesWeekly />
+                </DesktopContainer>
+                <MobileContainer>
+                  <MobileKeyActivitiesBody WeeklyMaster={true} />
+                </MobileContainer>
+              </>
+            );
           case "Today's Priorities + Weekly List":
-            return <DailyPlanning hideListSelector={true} />;
+            return (
+              <>
+                <DesktopContainer>
+                  <DailyPlanning hideListSelector={true} />
+                </DesktopContainer>
+                <MobileContainer>
+                  <MobileKeyActivitiesBody TodayWeekly={true} />
+                </MobileContainer>
+              </>
+            );
           case "Outstanding ToDos":
             return <OutstandingTodos />;
-          case "Conversation Starter":
-            return <ConversationStarter />;
-          case "Weekly Reflection":
-            return <WeeklyReflection />;
           default:
             return <></>;
         }
@@ -81,9 +99,19 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
           />
         );
       case "KPIs":
-        return <KpiComponent />
+        return <KpiComponent />;
       case "Habits":
         return <HabitsBody />;
+      case "Conversation Starter":
+        return <ConversationStarter />;
+      case "Weekly Review":
+        return <WeeklyReview />;
+      case "Weekly Reflection":
+        return <CheckinReflection variant={QuestionnaireTypeConstants.weeklyReflection} />;
+      case "Monthly Reflection":
+        return <CheckinReflection variant={QuestionnaireTypeConstants.monthlyReflection} />;
+      case "Evening Reflection":
+        return <CheckinReflection variant={QuestionnaireTypeConstants.eveningReflection} />;
       default:
         return <></>;
     }
@@ -99,3 +127,16 @@ const Container = styled.div`
   // overflow-x: auto;
   overscroll-behavior: contain;
 `;
+
+const DesktopContainer = styled.div`
+  @media (max-width: 768px) {
+    display: none;
+  }
+`
+
+const MobileContainer = styled.div`
+  display: none;
+  @media (max-width: 768px) {
+    display: block;
+  }
+  `

@@ -10,6 +10,7 @@ import { PersonalHabitSummary } from "~/components/domains/meetings/shared/perso
 import { ColumnContainerParent, ColumnContainer } from "~/components/shared/styles/row-style";
 
 import { useMst } from "~/setup/root";
+import { toJS } from "mobx";
 
 export const WeeklyReflection = (props: {}): JSX.Element => {
   const {
@@ -19,7 +20,7 @@ export const WeeklyReflection = (props: {}): JSX.Element => {
   if (R.isNil(meeting)) {
     return <Loading />;
   }
-
+console.log(toJS(meeting.statsForWeek));
   return (
     <ColumnContainerParent minWidth={"650px"}>
       <ColumnContainer minWidth={"325px"}>

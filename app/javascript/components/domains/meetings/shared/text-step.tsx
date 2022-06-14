@@ -35,6 +35,11 @@ export const TextStepDiv = styled.div`
   font-family: exo;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 768px) {
+    min-width: 100%;
+    font-size: 32px;
+  }
 `;
 
 export const TextStepContainer = styled.div`
