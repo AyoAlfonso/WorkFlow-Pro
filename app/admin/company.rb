@@ -68,10 +68,12 @@ ActiveAdmin.register Company do
           end
 
      if params[:company][:sso_emails_embed].present?
-        @email_addresses = params[:company][:sso_emails_embed].split(",")
-        @email_addresses.each do |email|
+        
+       params[:company][:sso_emails_embed] = params[:company][:sso_emails_embed].split(",").compact.map(&:strip).reverse.uniq
+        params[:company][:sso_emails_embed].each do |email|
+   
             sanitized_email = email.strip
-          if User.find_by_email(sanitized_email).blank?
+          if !"".empty? && User.find_by_email(sanitized_email).blank?
             @user = User.create!({
               email: "sanitized_email.gmail.com",
               company_id: @company.id,
@@ -94,8 +96,8 @@ ActiveAdmin.register Company do
           end
         end
       end
-
-      if @company.update!(params.require(:company).permit(:address,:contact_email,:fiscal_year_start,:name,
+     params[:company][:sso_emails_embed] = params[:company][:sso_emails_embed].join(",")
+       if @company.update!(params.require(:company).permit(:address,:contact_email,:fiscal_year_start,:name,
                 :logo,
                 :phone_number,
                 :rallying_cry,

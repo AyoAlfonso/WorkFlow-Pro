@@ -80,7 +80,6 @@ class Company < ApplicationRecord
   end
 
   def sso_emails_content
-    # binding.pry
     sso_emails_embed
   end
 
