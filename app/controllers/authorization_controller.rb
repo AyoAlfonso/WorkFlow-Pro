@@ -18,9 +18,11 @@ class  AuthorizationController <  ApplicationController
   response = http.request(request)
   if JSON.parse(response.body)["email_verified"] 
    @email = JSON.parse(response.body)["email"]
-   @user  = User.find(email: @email)
-   @user_company_enablement =  UserCompanyEnablement.find(user_id: @user)
-   @token = @user.generate_jwt(@user) if @user && user_company_enablement
+   @user  = User.find_by(email: @email)
+   @user.provider = "google_auth"
+   @user.save(validate: false)
+   @user_company_enablement = UserCompanyEnablement.find_by(user_id: @user.id)
+   @token = @user.generate_jwt(@user) if @user && @user_company_enablement
   end
                  
   headers['Authorization'] = "Bearer " + (@token).to_s

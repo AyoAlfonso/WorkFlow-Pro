@@ -57,9 +57,6 @@ ActiveAdmin.register Company do
           end
       end
 
-
-      # sso_emails_embed
-
       @team = Team.where(company_id:@company.id).first
           if Team.where(company_id: @company.id).first.blank? 
             @team = Team.create!(company_id: @company.id, name: "#{company.name} Team", settings: {})
@@ -77,6 +74,7 @@ ActiveAdmin.register Company do
               company_id: @company.id,
               default_selected_company_id: @company.id,
               title: "",
+              confirmed_at: Time.now,
               password: Devise.friendly_token[0,20]
             })
             @user.assign_attributes({
@@ -88,7 +86,6 @@ ActiveAdmin.register Company do
               }],
             })
             @user.save(validate: false)
-            params[:company][:sso_emails_embed].push(sanitized_email)
           end
       
         end
