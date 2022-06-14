@@ -8,7 +8,7 @@ class  AuthorizationController <  ApplicationController
  skip_before_action :verify_authenticity_token
  def google_oauth2
 
-   url = URI.parse("https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=#{params["access_token"]}")                  
+  url = URI.parse("https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=#{params["access_token"]}")                  
 
   http = Net::HTTP.new(url.host, url.port);
   http.use_ssl = true
@@ -34,7 +34,6 @@ class  AuthorizationController <  ApplicationController
 
   def microsoft_oauth2
    @token = ""
-   
   if params["username"]
    @email = params["username"]
    @user = User.find_by(email: @email)
@@ -46,6 +45,6 @@ class  AuthorizationController <  ApplicationController
                  
   headers['Authorization'] = "Bearer " + (@token).to_s
   render json:@user
- end
+  end
 end
 

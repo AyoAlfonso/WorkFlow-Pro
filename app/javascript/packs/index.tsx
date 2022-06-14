@@ -28,7 +28,7 @@ export const loginRequest = {
   scopes: ["User.Read"],
 };
 
-ntListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
   const msalInstance = new PublicClientApplication(msalConfig);
 
   ReactDOM.render(
