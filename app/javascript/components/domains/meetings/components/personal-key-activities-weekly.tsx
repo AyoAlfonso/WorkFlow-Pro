@@ -52,6 +52,7 @@ export const PersonalKeyActivitiesWeekly = observer(
                 "Weekly List",
               )}
               droppableId={`scheduled-group-activities-${selectedFilterGroupIdWeekly}`}
+              mobile={false}
             />
           </KeyActivitiesListContainer>
         </KeyActivityColumnStyleListContainer>
@@ -75,6 +76,7 @@ export const PersonalKeyActivitiesWeekly = observer(
                 "Backlog",
               )}
               droppableId={`scheduled-group-activities-${selectedFilterGroupIdBacklog}`}
+              mobile={false}
             />
           </KeyActivitiesListContainer>
         </KeyActivityColumnStyleListContainer>

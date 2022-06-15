@@ -31,7 +31,7 @@ function getStyle(style, snapshot) {
     ...style,
   };
 }
-export const KeyActivitiesList = observer(
+export const MobileKeyActivitiesList = observer(
   ({
     keyActivities,
     droppableId,
@@ -42,12 +42,10 @@ export const KeyActivitiesList = observer(
     const splittedDroppableId = droppableId.split("-");
     const updateId = splittedDroppableId[splittedDroppableId.length - 1];
     const data = React.useMemo(() => sortByPosition(keyActivities), [keyActivities]);
-    const width = window.innerWidth <= 768;
+    const width = window.innerWidth > 768;
     if (mobile == null || width) {
       return <></>;
     }
-
-
     const renderKeyActivitiesList = () => {
       return data.map((keyActivity, index) => {
         const draggableId = () => {
