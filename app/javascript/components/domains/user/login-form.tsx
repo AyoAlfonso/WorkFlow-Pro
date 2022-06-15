@@ -12,7 +12,6 @@ import { Flex, Box } from "rebass";
 import { Label, Input } from "../../shared/input";
 import { TextNoMargin, Text } from "~/components/shared/text";
 import { gapi } from "gapi-script";
-
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { LoadingScreen } from "./loading-screen";
@@ -47,7 +46,14 @@ export const LoginForm = observer(
           ...loginRequest,
         };
         instance.acquireTokenPopup(request).then(response => {
-          sessionStore.logInWithProvider("microsoft_oauth2", response?.account);
+          if (response?.account) {
+            sessionStore.logInWithProvider("microsoft_oauth2", response?.account);
+          } else {
+            showToast(
+              "User couldn't authenticate with microsoft. Please try another email.",
+              ToastMessageConstants.ERROR,
+            );
+          }
         });
       }
     };
@@ -80,54 +86,85 @@ export const LoginForm = observer(
               <Text color={"black"} fontSize={3}>
                 {t("profile.loginForm.login")}
               </Text>
-              <Label htmlFor="email">{t("profile.loginForm.email")}</Label>
-              <Input
-                name="email"
-                onChange={e => setEmail(e.target.value)}
-                onKeyDown={key => {
-                  if (key.keyCode == 13) {
-                    sessionStore.login(email, password);
-                  }
-                }}
-              />
-              <Label>{t("profile.loginForm.password")}</Label>
-              <Input
-                name="password"
-                type="password"
-                onChange={e => setPassword(e.target.value)}
-                onKeyDown={key => {
-                  if (key.keyCode == 13) {
-                    sessionStore.login(email, password);
-                  }
-                }}
-              />
-              <Button
-                small
-                variant={"primary"}
-                style={{ width: "100%", marginTop: "15px", marginBottom: "15px" }}
-                onClick={() => sessionStore.login(email, password)}
-              >
-                {t("profile.loginForm.login")}
-              </Button>
-              <GoogleAuthButton onClick={() => login()}>
-                <OAuthContent>
-                  <img src={"assets/Google-Transparent-logo_500x500.png"} width="20"></img>
-                </OAuthContent>
 
-                <OAuthContent> Sign in with Google </OAuthContent>
-              </GoogleAuthButton>
-
-              <MicrosoftAuthButton onClick={() => microsoftLoginHandler(instance)}>
-                <OAuthContent>
-                  <Image
-                    sx={{
-                      height: 24,
+              {!sessionStore.logginError ? (
+                <>
+                  <Label htmlFor="email">{t("profile.loginForm.email")}</Label>
+                  <Input
+                    name="email"
+                    onChange={e => setEmail(e.target.value)}
+                    onKeyDown={key => {
+                      if (key.keyCode == 13) {
+                        sessionStore.login(email, password);
+                      }
                     }}
-                    src={require("~/assets/images/ms-transaparent-logo.svg")}
                   />
-                </OAuthContent>
-                <OAuthContent> Sign in with Microsoft </OAuthContent>
-              </MicrosoftAuthButton>
+                  <Label>{t("profile.loginForm.password")}</Label>
+                  <Input
+                    name="password"
+                    type="password"
+                    onChange={e => setPassword(e.target.value)}
+                    onKeyDown={key => {
+                      if (key.keyCode == 13) {
+                        sessionStore.login(email, password);
+                      }
+                    }}
+                  />
+
+                  <Button
+                    small
+                    variant={"primary"}
+                    style={{ width: "100%", marginTop: "15px", marginBottom: "15px" }}
+                    onClick={() => sessionStore.login(email, password)}
+                  >
+                    {t("profile.loginForm.login")}
+                  </Button>
+                  <GoogleAuthButton onClick={() => login()}>
+                    <OAuthContent>
+                      <img src={"assets/Google-Transparent-logo_500x500.png"} width="20"></img>
+                    </OAuthContent>
+                    <OAuthContent> Sign in with Google </OAuthContent>
+                  </GoogleAuthButton>
+                  <MicrosoftAuthButton onClick={() => microsoftLoginHandler(instance)}>
+                    <OAuthContent>
+                      <Image
+                        sx={{
+                          height: 24,
+                        }}
+                        src={require("~/assets/images/ms-transaparent-logo.svg")}
+                      />
+                    </OAuthContent>
+                    <OAuthContent> Sign in with Microsoft </OAuthContent>
+                  </MicrosoftAuthButton>
+                </>
+              ) : (
+                <>
+                  <div>{sessionStore.logginError}</div>
+
+                  {sessionStore.logginError && sessionStore.logginErrorType == "google_auth" ? (
+                    <GoogleAuthButton onClick={() => login()}>
+                      <OAuthContent>
+                        <img src={"assets/Google-Transparent-logo_500x500.png"} width="20"></img>
+                      </OAuthContent>
+
+                      <OAuthContent> Sign in with Google </OAuthContent>
+                    </GoogleAuthButton>
+                  ) : null}
+                  {sessionStore.logginError && sessionStore.logginErrorType == "microsoft_oauth" ? (
+                    <MicrosoftAuthButton onClick={() => microsoftLoginHandler(instance)}>
+                      <OAuthContent>
+                        <Image
+                          sx={{
+                            height: 24,
+                          }}
+                          src={require("~/assets/images/ms-transaparent-logo.svg")}
+                        />
+                      </OAuthContent>
+                      <OAuthContent> Sign in with Microsoft </OAuthContent>
+                    </MicrosoftAuthButton>
+                  ) : null}
+                </>
+              )}
 
               <TextInlineContainer
                 color={"greyActive"}
@@ -164,7 +201,7 @@ const GoogleAuthButton = styled.div`
   align-items: center;
   border-radius: 5px;
   padding: 0.5rem;
-  box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
+  box-shadow: rgb(0 0 0 / 24%) 1px 0px 4px;
   cursor: pointer;
   margin: 5% 0px;
 `;

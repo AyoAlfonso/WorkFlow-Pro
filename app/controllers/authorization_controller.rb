@@ -14,14 +14,13 @@ class  AuthorizationController <  ApplicationController
   http.use_ssl = true
   request = Net::HTTP::Get.new(url)
 
-  # we want to add to comp
   response = http.request(request)
   @token = ""
   if JSON.parse(response.body)["email_verified"] 
    @email = JSON.parse(response.body)["email"]
    @user  = User.find_by(email: @email)
     if @user.present?
-      @user.provider = "google_auth"
+      @user.provider = "google_auth" if @user.provider.nil?
       @user.save(validate: false)
       @user_company_enablement = UserCompanyEnablement.find_by(user_id: @user.id)
       @token = @user.generate_jwt(@user) if @user && @user_company_enablement
@@ -38,7 +37,7 @@ class  AuthorizationController <  ApplicationController
       if params["username"]
         @email = params["username"]
         @user = User.find_by(email: @email)
-        @user.provider = "microsoft_oauth"
+        @user.provider = "microsoft_oauth" if @user.provider.nil?
         @user.save(validate: false)
         @user_company_enablement = UserCompanyEnablement.find_by(user_id: @user.id)
         @token = @user.generate_jwt(@user) if @user && @user_company_enablement
@@ -47,7 +46,6 @@ class  AuthorizationController <  ApplicationController
       else
         return  render json: { error: "This user doesn't exist in our records", status: 412 } 
       end
-
   end        
   
 end

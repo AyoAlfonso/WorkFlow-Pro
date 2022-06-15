@@ -43,7 +43,6 @@ export const ForumStoreModel = types
               responseM.data && responseM.data.length > 12
                 ? responseM.data.slice(0, -12)
                 : (responseM.data as any);
-            console.log(self.forumYearMeetings, "self.forumYearMeetings");
           } else {
             self.error = true;
           }
