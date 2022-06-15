@@ -22,6 +22,7 @@ import { OutstandingTodos } from "./outstanding-todos";
 import { SelectedStepType } from "./steps-selector-page";
 import { QuestionnaireTypeConstants } from "../../../constants/questionnaire-types";
 import { MobileKeyActivitiesBody } from "../key-activities/mobile-key-activities-body";
+import { MobileTodosInitiatives } from "./components/mobile-todos-initiatives";
 
 interface StepsPreviewProps {
   step: SelectedStepType;
@@ -49,9 +50,27 @@ export const StepsPreview = ({ step }: StepsPreviewProps): JSX.Element => {
           case "Weekly List":
             return <HomeKeyActivities weeklyOnly={true} width={"100%"} />;
           case "Weekly List + Key Results":
-            return <Milestones showWeekly />;
+            return (
+              <>
+                <DesktopContainer>
+                  <Milestones showWeekly />
+                </DesktopContainer>
+                <MobileContainer>
+                  <MobileTodosInitiatives />
+                </MobileContainer>
+              </>
+            );
           case "Weekly List + Milestones":
-            return <Milestones showWeekly />;
+            return (
+              <>
+                <DesktopContainer>
+                  <Milestones showWeekly />
+                </DesktopContainer>
+                <MobileContainer>
+                  <MobileTodosInitiatives />
+                </MobileContainer>
+              </>
+            );
           case "Weekly List + Master List":
             return (
               <>
@@ -132,11 +151,11 @@ const DesktopContainer = styled.div`
   @media (max-width: 768px) {
     display: none;
   }
-`
+`;
 
 const MobileContainer = styled.div`
   display: none;
   @media (max-width: 768px) {
     display: block;
   }
-  `
+`;
