@@ -8,8 +8,6 @@ class Api::CompaniesController < Api::ApplicationController
   skip_after_action :verify_authorized, only: [:get_onboarding_company, :create_or_update_onboarding_goals, :get_onboarding_goals, :create_or_update_onboarding_key_activities, :get_onboarding_key_activities, :create_or_update_onboarding_team]
 
   def create
-
-
     @company = Company.new({
       display_format: params[:display_format],
       fiscal_year_start: params[:fiscal_year_start],

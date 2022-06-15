@@ -257,9 +257,7 @@ export const SessionStoreModel = types
         const response: any = yield self.environment.api.logInWithProvider(provider, responsebody);
         if (response.ok) {
           const newJWT = R.path(["headers", "authorization"], response);
-          console.log(newJWT, "newJWT-newJWT", response);
           if (newJWT && newJWT.startsWith("Bearer")) {
-            console.log(newJWT, "in!");
             //default cookie set for rails.  Alternative cookies could be done:
             //https://github.com/js-cookie/js-cookie#cookie-attributes
             // by default cookie removed when browser closed

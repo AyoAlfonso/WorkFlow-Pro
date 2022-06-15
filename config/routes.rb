@@ -69,12 +69,16 @@ Rails.application.routes.draw do
         patch "logo", to: "companies#update_logo"
       end
     end
+
+   resources :check_in_template, only: [:create, :show, :update]
+
     get "/onboarding", to: "companies#get_onboarding_company"
     get "onboarding/:company_id/goals", to: "companies#get_onboarding_goals"
     post "/onboarding/:company_id/goals", to: "companies#create_or_update_onboarding_goals"
     get "/onboarding/:company_id/key_activities/", to: "companies#get_onboarding_key_activities"
     post "/onboarding/:company_id/key_activities", to: "companies#create_or_update_onboarding_key_activities"
     post "/onboarding/:company_id/team", to: "companies#create_or_update_onboarding_team"
+    
     # issues
     resources :issues, only: [:index, :create, :update, :destroy]
     get "/issues/issues_for_meeting", to: "issues#issues_for_meeting"
@@ -88,7 +92,6 @@ Rails.application.routes.draw do
 
     # team_issue_meeting_enablements
     resources :team_issue_meeting_enablements, only: [:index]
-
    
     #key activities
     resources :key_activities, only: [:index, :create, :update, :destroy] do

@@ -23,6 +23,7 @@ import { ToastMessageConstants } from "~/constants/toast-types";
 import { useMsal, AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
 import { loginRequest, msalConfig } from "~/packs";
 import { PublicClientApplication } from "@azure/msal-browser";
+import { Image } from "rebass";
 
 export const LoginForm = observer(
   (): JSX.Element => {
@@ -109,19 +110,23 @@ export const LoginForm = observer(
                 {t("profile.loginForm.login")}
               </Button>
               <GoogleAuthButton onClick={() => login()}>
-                <GoogleAuthContent>
+                <OAuthContent>
                   <img src={"assets/Google-Transparent-logo_500x500.png"} width="20"></img>
-                </GoogleAuthContent>
+                </OAuthContent>
 
-                <GoogleAuthContent> Sign in with Google </GoogleAuthContent>
+                <OAuthContent> Sign in with Google </OAuthContent>
               </GoogleAuthButton>
-              <MicrosoftAuthButton
-                backgroundColor={"mipBlue"}
-                color={"grey10"}
-                onClick={() => microsoftLoginHandler(instance)}
-              >
-                {" "}
-                Sign in with Microsoft
+
+              <MicrosoftAuthButton onClick={() => microsoftLoginHandler(instance)}>
+                <OAuthContent>
+                  <Image
+                    sx={{
+                      height: 24,
+                    }}
+                    src={require("~/assets/images/ms-transaparent-logo.svg")}
+                  />
+                </OAuthContent>
+                <OAuthContent> Sign in with Microsoft </OAuthContent>
               </MicrosoftAuthButton>
 
               <TextInlineContainer
@@ -161,12 +166,22 @@ const GoogleAuthButton = styled.div`
   padding: 0.5rem;
   box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
   cursor: pointer;
+  margin: 5% 0px;
 `;
 
 const MicrosoftAuthButton = styled(GoogleAuthButton)<ColorProps>`
   ${color}
+  border-radius: 0px;
+  box-shadow: none;
+  border-style: solid;
+  border-color: ${props => props.theme.colors.microsoftGray};
+  border-width: 1.5px;
 `;
 
-const GoogleAuthContent = styled.span`
+const OAuthContent = styled.span`
   margin: 0px 5px;
+`;
+
+const BskContainer = styled.div`
+  margin-top: 15px;
 `;
