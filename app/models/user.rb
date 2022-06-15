@@ -154,24 +154,6 @@ class User < ApplicationRecord
     super
   end
 
-  def self.create_user_for_google(access_token)
-    data = access_token.info
-    # unactivated_user = CompanyUnactivatedUserEnablement.where(email :data['email'])
-    user = User.where(email: data['email']).first
-    unless user
-        user = User.create!(name: data['name'],
-           email: data['email'],
-           password: Devise.friendly_token[0,20],
-           company_id: 2,
-           provider:"google_oauth2",
-          #  unactivated_user.company,
-           default_selected_company_id: 2
-          #  unactivated_user.company
-        )
-    end
-    user
-  end
-
   # devise_invitable invite! method overriden
   def invite!(*args)
     super(*args)

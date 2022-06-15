@@ -5,38 +5,48 @@ require "json"
 require "uri"
 
 class  AuthorizationController <  ApplicationController                              
-  skip_before_action :verify_authenticity_token
+ skip_before_action :verify_authenticity_token
  def google_oauth2
-   url = URI.parse("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{params["access_token"]}")                  
-  #  https = Net::HTTP.new(url.host, url.port)          
-  #   https.use_ssl = true
-  # request = Net::HTTP::Get.new(url)
 
-  #     request["Content-Type"] = "application/json"
-  # response  =   https.request(request)
-      #  response.
-  google_response = Net::HTTP.get_response(url)
+  url = URI.parse("https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=#{params["access_token"]}")                  
 
-  #  if @user.persisted?
-  #  @user = User.create_user_for_google(response)     
-  @user = User.find(2) 
+  http = Net::HTTP.new(url.host, url.port);
+  http.use_ssl = true
+  request = Net::HTTP::Get.new(url)
 
-   token= @user.generate_jwt(@user)                      
-  #  @user.save
-  # sign_in_and_redirect @user, event: :authentication
-  #  set_headers(token)
-    headers['Authorization'] = "Bearer " + (token).to_s
-   render json:@user
+  response = http.request(request)
+  @token = ""
+  if JSON.parse(response.body)["email_verified"] 
+   @email = JSON.parse(response.body)["email"]
+   @user  = User.find_by(email: @email)
+    if @user.present?
+      @user.provider = "google_auth" if @user.provider.nil?
+      @user.save(validate: false)
+      @user_company_enablement = UserCompanyEnablement.find_by(user_id: @user.id)
+      @token = @user.generate_jwt(@user) if @user && @user_company_enablement
+      headers['Authorization'] = "Bearer " + (@token).to_s
+      render json:@user
+    else
+      return render json: { error: "This user doesn't exist in our records", status: 412 } 
+    end
+  end
  end
 
-#  private                                            
-    # def set_headers(token)
+  def microsoft_oauth2
+    @token = ""
+      if params["username"]
+        @email = params["username"]
+        @user = User.find_by(email: @email)
+        @user.provider = "microsoft_oauth" if @user.provider.nil?
+        @user.save(validate: false)
+        @user_company_enablement = UserCompanyEnablement.find_by(user_id: @user.id)
+        @token = @user.generate_jwt(@user) if @user && @user_company_enablement
+        headers['Authorization'] = "Bearer " + (@token).to_s
+        return render json:@user
+      else
+        return  render json: { error: "This user doesn't exist in our records", status: 412 } 
+      end
+  end        
   
-    # headers['client'] =  (token['client']).to_s
-    # headers['expiry'] =  (token['expiry']).to_s
-    # headers['uid'] = @user.id             
-    # headers['token-type'] = (token['token-type']).to_s                  
-    # end
-
 end
 

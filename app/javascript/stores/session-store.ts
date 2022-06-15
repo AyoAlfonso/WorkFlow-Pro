@@ -25,6 +25,8 @@ export const SessionStoreModel = types
     selectedUserPulse: types.maybeNull(UserPulseModel),
     companyStaticData: types.maybeNull(types.array(types.frozen())),
     selectedDailyLog: types.maybeNull(DailyLogModel),
+    logginError: types.maybeNull(types.string),
+    logginErrorType: types.maybeNull(types.string),
   })
   .extend(withRootStore())
   .extend(withEnvironment())
@@ -233,13 +235,25 @@ export const SessionStoreModel = types
             notificationStore.load();
             companyStore.getOnboardingCompany();
           }
+        } else {
+          if (response.data.errorType == "microsoft_oauth") {
+            self.logginError = response.data.error;
+            self.logginErrorType = response.data.errorType;
+          }
+
+          if (response.data.errorType == "google_auth") {
+            self.logginError = response.data.error;
+            self.logginErrorType = response.data.errorType;
+          }
         }
-      } catch {
+      } catch (error) {
         // error messaging handled by API monitor
       }
+
       self.loading = false;
     }),
     logInWithProvider: flow(function*(provider, responsebody) {
+      self.logginError = null;
       self.loading = true;
       //may want to show a loading modal here
       const env = getEnv(self);
@@ -282,6 +296,11 @@ export const SessionStoreModel = types
             labelStore.fetchLabels();
             notificationStore.load();
             companyStore.getOnboardingCompany();
+          } else {
+            showToast(
+              "User email couldn't be authenticated.  Please try another email.",
+              ToastMessageConstants.ERROR,
+            );
           }
         }
       } catch (error) {

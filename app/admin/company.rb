@@ -10,6 +10,7 @@ ActiveAdmin.register Company do
                 :accountability_chart_embed,
                 # :strategic_plan,
                 :strategic_plan_embed,
+                :sso_emails_embed,
                 :timezone,
                 :display_format,
                 :forum_type,
@@ -56,13 +57,49 @@ ActiveAdmin.register Company do
           end
       end
 
-      if @company.update!(params.require(:company).permit(:address,:contact_email,:fiscal_year_start,:name,
+      @team = Team.where(company_id:@company.id).first
+          if Team.where(company_id: @company.id).first.blank? 
+            @team = Team.create!(company_id: @company.id, name: "#{company.name} Team", settings: {})
+            @team.set_default_executive_team if Team.where(company_id: @team.company.id, executive: 1).blank?
+            @team.set_default_avatar_color
+          end
+
+      if params[:company][:sso_emails_embed].present?
+        @new_sso_emails = params[:company][:sso_emails_embed].split(",").compact.map(&:strip).reverse.uniq
+        @new_sso_emails.each do |email|
+          sanitized_email = email.strip
+          if !sanitized_email.empty? && User.find_by_email(sanitized_email).blank?
+            @user = User.create!({
+              email: sanitized_email,
+              company_id: @company.id,
+              default_selected_company_id: @company.id,
+              title: "",
+              confirmed_at: Time.now,
+              password: Devise.friendly_token[0,20]
+            })
+            @user.assign_attributes({
+              user_company_enablements_attributes: [{
+                user_id: @user.id,
+                company_id: @company.id,
+                user_title: @user.title,
+                user_role_id: UserRole.find_by_name("Employee").id,
+              }],
+            })
+            @user.save(validate: false)
+          end
+      
+        end
+      end
+
+       params[:company][:sso_emails_embed] = @new_sso_emails.join(",")
+       if @company.update!(params.require(:company).permit(:address,:contact_email,:fiscal_year_start,:name,
                 :logo,
                 :phone_number,
                 :rallying_cry,
                 :accountability_chart_embed,
                 :strategic_plan_embed,
                 :timezone,
+                :sso_emails_embed,
                 :display_format,
                 :forum_type,
                 :organisational_forum_type,
@@ -141,6 +178,15 @@ ActiveAdmin.register Company do
         end
       end
     end
+    panel "#{I18n.t("sso_emails")}" do
+      attributes_table_for company do
+        row :sso_emails do |c|
+          if c.sso_emails_embed.present?
+            raw(c.sso_emails_embed)
+          end
+        end
+      end
+    end
   end
 
   form do |f|
@@ -158,6 +204,7 @@ ActiveAdmin.register Company do
       f.input :display_format, as: :select, collection: Company.display_formats.keys
       f.input :forum_type, as: :select, collection: Company.forum_types.keys
       f.input :organisational_forum_type,  as: :select, collection: Company.organisational_forum_types.keys
+
     end
     h2 "Foundational Four "
     f.inputs do
@@ -174,6 +221,10 @@ ActiveAdmin.register Company do
     f.input :accountability_chart_embed, input_html: { rows: 5 }
     f.label :strategic_plan
     f.input :strategic_plan_embed, input_html: { rows: 5 }
+
+
+   f.label "#{I18n.t("sso_emails")}"
+   f.input :sso_emails_embed, input_html: { rows: 5 }
 
     f.inputs do
       f.has_many :company_static_datas, allow_destroy: false, new_record: false do |tu|

@@ -16,6 +16,7 @@ export const baseTheme = {
     primary20: "#CCDFFF",
     darkGrey: "#43425D",
     greyActive: "#5E6277",
+    microsoftGray: "#0d04044f",
     greyInactive: "#CED1DD",
     grayShadow: "#00000029",
     grey200: "#757575",

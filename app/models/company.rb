@@ -79,6 +79,10 @@ class Company < ApplicationRecord
     strategic_plan_embed
   end
 
+  def sso_emails_content
+    sso_emails_embed
+  end
+
   def date_for_start_on(fiscal_year)
     result = self.current_fiscal_start_date
     if fiscal_year.to_i != self.year_for_creating_annual_initiatives

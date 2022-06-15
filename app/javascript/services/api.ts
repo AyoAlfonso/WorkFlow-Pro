@@ -14,7 +14,7 @@ interface IScorecardProps {
 export class Api {
   client: ApisauceInstance;
   token: string;
-  client2: ApisauceInstance;
+  rootClient: ApisauceInstance;
 
   constructor() {
     const companyId = localStorage.getItem("companyId");
@@ -50,7 +50,7 @@ export class Api {
       request.params = decamelizeRequest(request.params);
     });
 
-    this.client2 = create({
+    this.rootClient = create({
       baseURL: "/",
       headers: {
         "Cache-Control": "no-cache",
@@ -61,11 +61,11 @@ export class Api {
       withCredentials: true, //allow cookies to be sent if its from same domain
     });
 
-    this.client2.addResponseTransform(response => {
+    this.rootClient.addResponseTransform(response => {
       response.data = camelizeResponse(response.data);
     });
 
-    this.client2.addRequestTransform(request => {
+    this.rootClient.addRequestTransform(request => {
       request.params = decamelizeRequest(request.params);
     });
   }
@@ -83,8 +83,7 @@ export class Api {
   }
 
   async logInWithProvider(provider, response) {
-    // this.client.setBaseURL("/");
-    return this.client2.post(`/auth/${provider}/callback`, response);
+    return this.rootClient.post(`/auth/${provider}/callback`, response);
   }
 
   async getIssues() {
