@@ -18,8 +18,6 @@ export const SessionStoreModel = types
   .props({
     loading: types.boolean,
     loggedIn: types.boolean,
-    logginError: types.maybeNull(types.string),
-    logginErrorType: types.maybeNull(types.string),
     //profile details added as a profile model
     profile: types.maybeNull(UserModel),
     staticData: types.maybeNull(StaticModel),
@@ -27,6 +25,8 @@ export const SessionStoreModel = types
     selectedUserPulse: types.maybeNull(UserPulseModel),
     companyStaticData: types.maybeNull(types.array(types.frozen())),
     selectedDailyLog: types.maybeNull(DailyLogModel),
+    logginError: types.maybeNull(types.string),
+    logginErrorType: types.maybeNull(types.string),
   })
   .extend(withRootStore())
   .extend(withEnvironment())
