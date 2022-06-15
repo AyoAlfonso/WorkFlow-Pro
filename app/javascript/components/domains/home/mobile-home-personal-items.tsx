@@ -252,8 +252,7 @@ const NavContainer = styled.div`
   position: relative;
 `;
 
-const ComponentContainer = styled.div`
-`;
+const ComponentContainer = styled.div``;
 
 const ChevronUp = styled(Icon)`
   transform: rotate(180deg);

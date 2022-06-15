@@ -15,7 +15,7 @@ interface ICheckInSideOptionsProps {
 export const CheckInSideOptions = ({ checkIn }: ICheckInSideOptionsProps): JSX.Element => {
   const { t } = useTranslation();
 
-  const [selectedTab, setSelectedTab] = useState<string>("Agenda");
+  const [selectedTab, setSelectedTab] = useState<string>("Steps");
   const [showOpenIssues, setShowOpenIssues] = useState<boolean>(true);
 
   const renderOption = (value: string): JSX.Element => {
@@ -64,7 +64,7 @@ export const CheckInSideOptions = ({ checkIn }: ICheckInSideOptionsProps): JSX.E
     <Container>
       <SelectionContainer>
         <SelectionTabsContainer>
-          {renderOption("Agenda")}
+          {renderOption("Steps")}
           {renderOption("Issues")}
           {renderOption("ToDos")}
         </SelectionTabsContainer>
