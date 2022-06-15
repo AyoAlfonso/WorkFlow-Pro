@@ -246,7 +246,10 @@ export const SessionStoreModel = types
             self.logginErrorType = response.data.errorType;
           }
         }
-      } catch (error) {}
+      } catch (error) {
+        // error messaging handled by API monitor
+      }
+
       self.loading = false;
     }),
     logInWithProvider: flow(function*(provider, responsebody) {
