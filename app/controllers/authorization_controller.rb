@@ -29,7 +29,7 @@ class  AuthorizationController <  ApplicationController
       headers['Authorization'] = "Bearer " + (@token).to_s
       render json:@user
     else
-       headers['Authorization'] = ""
+       headers['Authorization'] =  @token
       return render json: { error: "This user doesn't exist in our records", status: 412 } 
     end
   end
@@ -47,7 +47,7 @@ class  AuthorizationController <  ApplicationController
         headers['Authorization'] = "Bearer " + (@token).to_s
         return render json:@user
       else
-        headers['Authorization'] = ""
+        headers['Authorization'] =  @token
         return  render json: { error: "This user doesn't exist in our records", status: 412 } 
       end
   end
