@@ -245,6 +245,10 @@ export const SessionStoreModel = types
             self.logginError = response.data.error;
             self.logginErrorType = response.data.errorType;
           }
+          if (response.data.errorType == "no_auth") {
+            self.logginError = response.data.error;
+            self.logginErrorType = response.data.errorType;
+          }
         }
       } catch (error) {
         // error messaging handled by API monitor
@@ -301,6 +305,11 @@ export const SessionStoreModel = types
               "User email couldn't be authenticated.  Please try another email.",
               ToastMessageConstants.ERROR,
             );
+          }
+        } else {
+          if (response.data.errorType == "no_auth") {
+            self.logginError = response.data.error;
+            self.logginErrorType = response.data.errorType;
           }
         }
       } catch (error) {

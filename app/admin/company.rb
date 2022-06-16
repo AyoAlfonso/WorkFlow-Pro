@@ -75,7 +75,8 @@ ActiveAdmin.register Company do
               default_selected_company_id: @company.id,
               title: "",
               confirmed_at: Time.now,
-              password: Devise.friendly_token[0,20]
+              password: Devise.friendly_token[0,20],
+              provider: "no_auth"
             })
             @user.assign_attributes({
               user_company_enablements_attributes: [{
@@ -91,7 +92,7 @@ ActiveAdmin.register Company do
         end
       end
 
-       params[:company][:sso_emails_embed] = @new_sso_emails.join(",")
+       params[:company][:sso_emails_embed] = @new_sso_emails&.join(",")
        if @company.update!(params.require(:company).permit(:address,:contact_email,:fiscal_year_start,:name,
                 :logo,
                 :phone_number,

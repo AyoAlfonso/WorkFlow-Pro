@@ -11,7 +11,6 @@ Rails.application.routes.draw do
                sessions: "sessions",
                registrations: "registrations",
                invitations: "invitations",
-               omniauth_callbacks: 'authorization'
              }, skip: [:confirmations, :passwords]
 
   devise_scope :user do
@@ -221,10 +220,12 @@ Rails.application.routes.draw do
 
   scope path: :auth do
    post "microsoft_oauth2/callback", to: "authorization#microsoft_oauth2"
+   post "go_oauth2/callback", to: "authorization#google_oauth2"
   end
   scope module: :integrations, path: :integrations do
     #pabbly_subscriptions
     post "/pabbly_subscriptions", to: "pabbly_subscriptions#create_company_and_user"
+
   end
 
   root "react_app#index"

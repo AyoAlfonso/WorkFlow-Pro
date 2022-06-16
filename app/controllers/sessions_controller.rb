@@ -8,11 +8,11 @@ class SessionsController < Devise::SessionsController
     @attempting_user = User.find_by(email: params["session"]["user"]["email"])
 
     if "microsoft_oauth" ==  @attempting_user.provider
-        return render json: { error: "This user registered with Microsoft. Please login with the Microsoft Button", error_type: "microsoft_oauth"}, status: 301
+      return render json: { error: "This user registered with Microsoft. Please login with the Microsoft Button", error_type: "microsoft_oauth"}, status: 301
     end
     if "google_auth" ==  @attempting_user.provider
-       return render json: { error: "This user registered with Google. Please login with the Google Button",  error_type: "google_auth"}, status: 301
-  
+      return render json: { error: "This user registered with Google. Please login with the Google Button",  error_type: "google_auth"}, status: 301
+      
     end
     self.resource = warden.authenticate!(auth_options)
     set_flash_message!(:notice, :signed_in)

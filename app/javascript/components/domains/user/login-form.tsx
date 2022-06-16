@@ -33,7 +33,7 @@ export const LoginForm = observer(
     const history = useHistory();
     const instance = new PublicClientApplication(msalConfig);
     const responseGoogle = response => {
-      sessionStore.logInWithProvider("google_oauth2", response);
+      sessionStore.logInWithProvider("go_oauth2", response);
     };
 
     const login = useGoogleLogin({
@@ -136,6 +136,42 @@ export const LoginForm = observer(
                     </OAuthContent>
                     <OAuthContent> Sign in with Microsoft </OAuthContent>
                   </MicrosoftAuthButton>
+                </>
+              ) : sessionStore.logginError && sessionStore.logginErrorType == "no_auth" ? (
+                <>
+                  <Text mb={2} color={"black"} fontSize={1}>
+                    {sessionStore.logginError}
+                  </Text>
+
+                  <Label htmlFor="email">{t<string>("profile.loginForm.email")}</Label>
+                  <Input
+                    name="email"
+                    onChange={e => setEmail(e.target.value)}
+                    onKeyDown={key => {
+                      if (key.keyCode == 13) {
+                        sessionStore.login(email, password);
+                      }
+                    }}
+                  />
+                  <Label>{t<string>("profile.loginForm.password")}</Label>
+                  <Input
+                    name="password"
+                    type="password"
+                    onChange={e => setPassword(e.target.value)}
+                    onKeyDown={key => {
+                      if (key.keyCode == 13) {
+                        sessionStore.login(email, password);
+                      }
+                    }}
+                  />
+                  <Button
+                    small
+                    variant={"primary"}
+                    style={{ width: "100%", marginTop: "15px", marginBottom: "15px" }}
+                    onClick={() => sessionStore.login(email, password)}
+                  >
+                    {t<string>("profile.loginForm.login")}
+                  </Button>
                 </>
               ) : (
                 <>
