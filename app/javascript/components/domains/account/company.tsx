@@ -150,7 +150,7 @@ export const Company = observer(
     return (
       <StretchContainer>
         <HeaderContainer>
-          <HeaderText>{t("profile.generalSettings")}</HeaderText>
+          <HeaderText>{t<string>("profile.generalSettings")}</HeaderText>
         </HeaderContainer>
 
         <Can
@@ -169,9 +169,11 @@ export const Company = observer(
                   value={company.name}
                 />
 
-                <Label htmlFor="fiscal_year_start">{t("company.fiscalYearStartDate")}</Label>
+                <Label htmlFor="fiscal_year_start">
+                  {t<string>("company.fiscalYearStartDate")}
+                </Label>
                 <Input disabled={true} name="fiscal_year_start" value={company.fiscalYearStart} />
-                <Label htmlFor="timezone">{t("company.timezone")}</Label>
+                <Label htmlFor="timezone">{t<string>("company.timezone")}</Label>
                 <Input
                   disabled={true}
                   name="timezone"
@@ -206,7 +208,10 @@ export const Company = observer(
                       )}
                     </PhotoContainer>
                     <PhotoModificationButtonsSection>
-                      <FileInput labelText={t("general.upload")} onChange={inputFileUpload} />
+                      <FileInput
+                        labelText={t<string>("general.upload")}
+                        onChange={inputFileUpload}
+                      />
                       <Button
                         small
                         variant={"redOutline"}
@@ -214,7 +219,7 @@ export const Company = observer(
                         ml={2}
                         style={{ width: "120px" }}
                       >
-                        {t("general.remove")}
+                        {t<string>("general.remove")}
                       </Button>
 
                       {logoImageModalOpen && (
@@ -223,7 +228,7 @@ export const Company = observer(
                           uploadCroppedImage={submitLogo}
                           modalOpen={logoImageModalOpen}
                           setModalOpen={setLogoImageModalOpen}
-                          headerText={t("company.updateLogo")}
+                          headerText={t<string>("company.updateLogo")}
                         />
                       )}
                     </PhotoModificationButtonsSection>
@@ -240,7 +245,7 @@ export const Company = observer(
                   />
                   {company.accessForum && (
                     <>
-                      <Label htmlFor="forum_type">{t("company.forumType")}</Label>
+                      <Label htmlFor="forum_type">{t<string>("company.forumType")}</Label>
                       <Select
                         name="forum_type"
                         onChange={e => {
@@ -260,14 +265,16 @@ export const Company = observer(
                       <div style={{ marginBottom: "16px" }} />
                     </>
                   )}
-                  <Label htmlFor="fiscal_year_start">{t("company.fiscalYearStartDate")}</Label>
+                  <Label htmlFor="fiscal_year_start">
+                    {t<string>("company.fiscalYearStartDate")}
+                  </Label>
                   <Input
                     disabled={true}
                     name="fiscal_year_start"
                     onChange={() => {}}
                     value={company.fiscalYearStart}
                   />
-                  <Label htmlFor="timezone">{t("company.timezone")}</Label>
+                  <Label htmlFor="timezone">{t<string>("company.timezone")}</Label>
                   <Select
                     name="timezone"
                     onChange={e => {
@@ -285,10 +292,10 @@ export const Company = observer(
                     )}
                   </Select>
                   <Text color={"greyActive"} fontSize={1}>
-                    To modify Fiscal Start Date, {t("company.accountabilityChart")}, or The{" "}
+                    To modify Fiscal Start Date, {t<string>("company.accountabilityChart")}, or The{" "}
                     {company.name} Plan, please contact LynchPyn support.
                   </Text>
-                  <Label htmlFor="executive_team">{t("company.executiveTeam")}</Label>
+                  <Label htmlFor="executive_team">{t<string>("company.executiveTeam")}</Label>
                   <Select
                     onChange={e => {
                       e.preventDefault();
@@ -316,7 +323,7 @@ export const Company = observer(
                     marginRight: "24px",
                   }}
                 >
-                  {t("general.save")}
+                  {t<string>("general.save")}
                 </Button>
               </SaveButtonContainer>
             </>

@@ -144,7 +144,7 @@ export const MeetingRating = (props: IMeetingRatingProps): JSX.Element => {
         </BodyContainer>
         <ButtonDiv>
           <Button variant={"primaryOutline"} onClick={saveScores} small>
-            {t("meeting.saveRatings")}
+            {t<string>("meeting.saveRatings")}
           </Button>
         </ButtonDiv>
       </CardBody>

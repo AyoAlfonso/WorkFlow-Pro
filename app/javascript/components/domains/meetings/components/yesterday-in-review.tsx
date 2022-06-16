@@ -27,7 +27,7 @@ export const YesterdayInReview = observer(
     return (
       <KeyActivitiesWrapperContainer width={"100%"}>
         <KeyActivityColumnStyleListContainer>
-          <KeyActivitiesHeader title={t("keyActivities.yesterdayTitle")} />
+          <KeyActivitiesHeader title={t<string>("keyActivities.yesterdayTitle")} />
           <KeyActivityListSubHeaderContainer>{yesterday}</KeyActivityListSubHeaderContainer>
           <KeyActivitiesListStyleContainer>
             {finishedYesterdayPyns.map(ka => (
@@ -36,9 +36,9 @@ export const YesterdayInReview = observer(
           </KeyActivitiesListStyleContainer>
         </KeyActivityColumnStyleListContainer>
         <KeyActivityColumnStyleListContainer>
-          <KeyActivitiesHeader title={t("keyActivities.yesterdayRemainingTitle")} />
+          <KeyActivitiesHeader title={t<string>("keyActivities.yesterdayRemainingTitle")} />
           <KeyActivityListSubHeaderContainer>
-            {t("keyActivities.yesterdayUnfinishedText")}
+            {t<string>("keyActivities.yesterdayUnfinishedText")}
           </KeyActivityListSubHeaderContainer>
           <KeyActivitiesListStyleContainer>
             {remainingPyns.map(ka => (
@@ -57,7 +57,7 @@ export const YesterdayInReview = observer(
                 });
               }}
             >
-              {t("keyActivities.markAllYesterdayDone")}
+              {t<string>("keyActivities.markAllYesterdayDone")}
             </MarkDoneButton>
           </ButtonContainer>
         </KeyActivityColumnStyleListContainer>

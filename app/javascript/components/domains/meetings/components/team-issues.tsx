@@ -51,21 +51,21 @@ export const TeamIssues = observer(
     return (
       <ColumnContainerParent>
         <ColumnContainer>
-          <HeaderText text={t("meeting.teamIssues.scheduledIssues.title")} />
+          <HeaderText text={t<string>("meeting.teamIssues.scheduledIssues.title")} />
           <ScheduledIssues
             teamId={currentMeeting.teamId}
             upcomingForumMeeting={currentMeeting}
-            descriptionText={t("meeting.teamIssues.scheduledIssues.subTitle")}
+            descriptionText={t<string>("meeting.teamIssues.scheduledIssues.subTitle")}
           />
         </ColumnContainer>
         <ColumnContainer>
           <HeaderText
-            text={t("meeting.teamIssues.parkingLotIssues.title", { teamName: "Team" })}
+            text={t<string>("meeting.teamIssues.parkingLotIssues.title", { teamName: "Team" })}
           />
           <ParkingLotIssues
             teamId={currentMeeting.teamId}
             upcomingForumMeeting={currentMeeting}
-            descriptionText={t("meeting.teamIssues.parkingLotIssues.subTitle")}
+            descriptionText={t<string>("meeting.teamIssues.parkingLotIssues.subTitle")}
           />
         </ColumnContainer>
       </ColumnContainerParent>

@@ -29,7 +29,7 @@ export const Status = ({ status }: { status: string }): JSX.Element => {
     <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
       <ActiveDot color={R.path([status, "color"], settings)} />
       <Text fontSize={1} color={"black"}>
-        {t(`status.${status}`)}
+        {t<string>(`status.${status}`)}
       </Text>
     </div>
   );

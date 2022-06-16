@@ -210,7 +210,7 @@ export const NotesIndex = observer(
 
     const renderSelectedEntry = () => {
       return R.isNil(selectedItem) ? (
-        <NoSelectedItems text={t("notes.startAdding")} />
+        <NoSelectedItems text={t<string>("notes.startAdding")} />
       ) : (
         <>
           <EntryHeadingContainer>{renderSelectedEntryHeading(selectedItem)}</EntryHeadingContainer>
@@ -221,7 +221,7 @@ export const NotesIndex = observer(
             headerComponent={
               <EntryCardHeaderContainer>
                 <Text fontSize={"12px"} fontWeight={600}>
-                  {t("notes.meetingNotes")}
+                  {t<string>("notes.meetingNotes")}
                 </Text>
                 <ActionButtonsContainer>
                   {editMode && (

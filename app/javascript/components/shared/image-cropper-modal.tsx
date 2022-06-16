@@ -76,10 +76,10 @@ export const ImageCropperModal = ({
             setModalOpen(!modalOpen);
           }}
         >
-          {t("general.save")}
+          {t<string>("general.save")}
         </StyledButton>
         <StyledButton small variant={"redOutline"} m={1} onClick={() => setModalOpen(!modalOpen)}>
-          {t("general.cancel")}
+          {t<string>("general.cancel")}
         </StyledButton>
       </ButtonContainer>
     </ModalWithHeader>

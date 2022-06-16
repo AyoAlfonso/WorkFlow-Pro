@@ -152,7 +152,7 @@ export const SelectedMeetingAgendaEntry = observer(
                 setShowScheduledStartDate(!showScheduledStartDate);
               }}
             >
-              <MeetingSectionHeaderText>{`${t(
+              <MeetingSectionHeaderText>{`${t<string>(
                 "forum.scheduledStartTime",
               )} `}</MeetingSectionHeaderText>
               <StyledChevronIcon
@@ -184,7 +184,7 @@ export const SelectedMeetingAgendaEntry = observer(
                 }}
               >
                 <MeetingSectionHeaderText>
-                  {`${t("forum.actualStartTime")}`}{" "}
+                  {`${t<string>("forum.actualStartTime")}`}{" "}
                 </MeetingSectionHeaderText>
                 <StyledChevronIcon
                   icon={showActualStartTime ? "Chevron-Up" : "Chevron-Down"}
@@ -279,7 +279,9 @@ export const SelectedMeetingAgendaEntry = observer(
                 setShowMeetingAgenda(!showMeetingAgenda);
               }}
             >
-              <MeetingSectionHeaderText>{`${t("forum.meetingAgenda")} `}</MeetingSectionHeaderText>
+              <MeetingSectionHeaderText>{`${t<string>(
+                "forum.meetingAgenda",
+              )} `}</MeetingSectionHeaderText>
               <StyledChevronIcon
                 icon={showMeetingAgenda ? "Chevron-Up" : "Chevron-Down"}
                 size={"12px"}
@@ -308,7 +310,10 @@ export const SelectedMeetingAgendaEntry = observer(
                   setShowAverageRatingTooltip(false);
                 }}
               >
-                <MeetingSectionHeaderText> {t("forum.averageRating")}</MeetingSectionHeaderText>
+                <MeetingSectionHeaderText>
+                  {" "}
+                  {t<string>("forum.averageRating")}
+                </MeetingSectionHeaderText>
                 <StyledChevronIcon
                   icon={showAverageRating ? "Chevron-Up" : "Chevron-Down"}
                   size={"12px"}

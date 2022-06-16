@@ -81,21 +81,21 @@ export const AccountProfile = observer(
     return (
       <Container>
         <HeaderContainer>
-          <HeaderText> {t("profile.editProfile")}</HeaderText>
+          <HeaderText> {t<string>("profile.editProfile")}</HeaderText>
         </HeaderContainer>
         <BodyContainer>
           <PersonalInfoContainer>
-            <Label htmlFor="email">{t("profile.profileUpdateForm.email")}</Label>
+            <Label htmlFor="email">{t<string>("profile.profileUpdateForm.email")}</Label>
             <Input name="email" onChange={e => setEmail(e.target.value)} value={email} />
-            <Label htmlFor="firstName">{t("profile.profileUpdateForm.firstName")}</Label>
+            <Label htmlFor="firstName">{t<string>("profile.profileUpdateForm.firstName")}</Label>
             <Input
               name="firstName"
               onChange={e => setFirstName(e.target.value)}
               value={firstName}
             />
-            <Label htmlFor="lastName">{t("profile.profileUpdateForm.lastName")}</Label>
+            <Label htmlFor="lastName">{t<string>("profile.profileUpdateForm.lastName")}</Label>
             <Input name="lastName" onChange={e => setLastName(e.target.value)} value={lastName} />
-            <Label htmlFor="timezone">{t("profile.profileUpdateForm.timezone")}</Label>
+            <Label htmlFor="timezone">{t<string>("profile.profileUpdateForm.timezone")}</Label>
             <Select
               name="timezone"
               onChange={e => {
@@ -127,7 +127,7 @@ export const AccountProfile = observer(
                 />
               </PhotoContainer>
               <PhotoModificationButtonsSection>
-                <FileInput labelText={t("general.upload")} onChange={inputFileUpload} />
+                <FileInput labelText={t<string>("general.upload")} onChange={inputFileUpload} />
 
                 {avatarImageModalOpen && (
                   <ImageCropperModal
@@ -135,7 +135,7 @@ export const AccountProfile = observer(
                     uploadCroppedImage={submitAvatar}
                     modalOpen={avatarImageModalOpen}
                     setModalOpen={setAvatarImageModalOpen}
-                    headerText={t("profile.updateProfileAvatar")}
+                    headerText={t<string>("profile.updateProfileAvatar")}
                   />
                 )}
                 <Button
@@ -145,7 +145,7 @@ export const AccountProfile = observer(
                   ml={2}
                   style={{ width: "120px" }}
                 >
-                  {t("general.remove")}
+                  {t<string>("general.remove")}
                 </Button>
               </PhotoModificationButtonsSection>
             </ProfilePhotoWrapper>
@@ -162,7 +162,7 @@ export const AccountProfile = observer(
               marginRight: "24px",
             }}
           >
-            {t("general.save")}
+            {t<string>("general.save")}
           </Button>
         </SaveButtonContainer>
       </Container>

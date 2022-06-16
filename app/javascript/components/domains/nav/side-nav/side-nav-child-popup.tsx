@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Popup from "reactjs-popup";
-import "~/stylesheets/modules/reactjs-popup.css"
+import "~/stylesheets/modules/reactjs-popup.css";
 import { CSSProperties } from "react";
 // import { SideNavDrawer } from "./side-nav-drawer";
 
@@ -36,6 +36,7 @@ interface ISideNavChildPopupProps {
   navOpen: boolean;
   setNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setOtherNavOpen: Array<React.Dispatch<React.SetStateAction<boolean>>>;
+  children?: React.ReactNode;
 }
 export const SideNavChildPopup: React.FunctionComponent<ISideNavChildPopupProps> = ({
   children,

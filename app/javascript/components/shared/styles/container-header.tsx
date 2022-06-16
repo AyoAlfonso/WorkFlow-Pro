@@ -26,8 +26,11 @@ export const HeaderContainerNoBorder = styled.div`
   padding-left: 10px;
   padding-right: 10px;
 `;
+type HeaderTextProps = {
+  children?: React.ReactNode | React.ReactNode[];
+};
 
-export const HeaderText = styled.h4`
+export const HeaderText = styled.h4<HeaderTextProps>`
   display: flex;
   justify-content: center;
   align-items: center;

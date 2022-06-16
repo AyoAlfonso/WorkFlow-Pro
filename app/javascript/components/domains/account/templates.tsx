@@ -103,7 +103,7 @@ export const Templates = observer(
     return (
       <StretchContainer>
         <HeaderContainer>
-          <HeaderText>{t("profile.descriptionTemplate")}</HeaderText>
+          <HeaderText>{t<string>("profile.descriptionTemplate")}</HeaderText>
         </HeaderContainer>
 
         <Can
@@ -185,7 +185,7 @@ export const Templates = observer(
                     marginRight: "24px",
                   }}
                 >
-                  {t("general.save")}
+                  {t<string>("general.save")}
                 </Button>
               </SaveButtonContainer>
             </>

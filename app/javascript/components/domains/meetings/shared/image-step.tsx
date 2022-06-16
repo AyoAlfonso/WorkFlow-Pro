@@ -13,7 +13,7 @@ export const ImageStep = ({ step }: IImageStepProps): JSX.Element => {
   const { t } = useTranslation();
 
   if (R.isNil(step.imageUrl)) {
-    return <Text> {t("meeting.missingImageURL")}</Text>;
+    return <Text> {t<string>("meeting.missingImageURL")}</Text>;
   }
 
   return (

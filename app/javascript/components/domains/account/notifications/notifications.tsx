@@ -39,7 +39,7 @@ export const Notifications = observer(
       return (
         <Container>
           <HeaderContainer>
-            <HeaderText>{t("profile.notifications")}</HeaderText>
+            <HeaderText>{t<string>("profile.notifications")}</HeaderText>
           </HeaderContainer>
           <BodyContainer>
             <NotificationTableHeader />
@@ -113,13 +113,13 @@ const NotificationTableHeader = (): JSX.Element => {
     <NotificationTableHeaderContainer>
       <NotificationTableRowContainer>
         <NotificationTableRowColumn width={"30%"}>
-          <TableHeader>{t("profile.notificationsTable.reminder")}</TableHeader>
+          <TableHeader>{t<string>("profile.notificationsTable.reminder")}</TableHeader>
         </NotificationTableRowColumn>
         <NotificationTableRowColumn width={"40%"}>
-          <TableHeader>{t("profile.notificationsTable.repeat")}</TableHeader>
+          <TableHeader>{t<string>("profile.notificationsTable.repeat")}</TableHeader>
         </NotificationTableRowColumn>
         <NotificationTableRowColumn width={"10%"} justifyContent={"center"}>
-          <TableHeader>{t("profile.notificationsTable.email")}</TableHeader>
+          <TableHeader>{t<string>("profile.notificationsTable.email")}</TableHeader>
         </NotificationTableRowColumn>
         <NotificationTableRowColumn
           width={"10%"}

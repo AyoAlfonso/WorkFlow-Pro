@@ -394,7 +394,7 @@ export const ManualKPIModal = observer(
               style={{ width: "50%", fontSize: "small" }}
               onClick={handleSave}
             >
-              {t("general.save")}
+              {t<string>("general.save")}
             </Button>
             <Button
               small
@@ -406,7 +406,7 @@ export const ManualKPIModal = observer(
                 clearCacheKPIModalData();
               }}
             >
-              {t("general.cancel")}
+              {t<string>("general.cancel")}
             </Button>
           </ButtonContainer>
         </FormContainer>

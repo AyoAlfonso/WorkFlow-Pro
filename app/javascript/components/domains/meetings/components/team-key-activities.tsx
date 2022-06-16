@@ -21,7 +21,7 @@ export const TeamKeyActivities = observer(
     return (
       <KeyActivitiesWrapperContainer width={"100%"}>
         <SingleListContainer>
-          <KeyActivitiesHeader title={t("meeting.teamsPyns")} />
+          <KeyActivitiesHeader title={t<string>("meeting.teamsPyns")} />
           <KeyActivityListSubHeaderContainer>{today}</KeyActivityListSubHeaderContainer>
           <TeamKeyActivitiesBody meeting={meeting} includeAvatar={true} />
         </SingleListContainer>

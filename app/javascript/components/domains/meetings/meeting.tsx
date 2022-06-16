@@ -72,7 +72,7 @@ export const Meeting = observer(
     const renderNoPermissions = () => (
       <Container>
         <BodyContainer>
-          <Text fontSize={2}>{t("meeting.noPermissions")}</Text>
+          <Text fontSize={2}>{t<string>("meeting.noPermissions")}</Text>
         </BodyContainer>
       </Container>
     );
@@ -97,7 +97,7 @@ export const Meeting = observer(
           </DateAndButtonContainer>
         </HeaderContainer>
         <BodyContainer>
-          <Text fontSize={2}>{t("meeting.meetingComplete")}</Text>
+          <Text fontSize={2}>{t<string>("meeting.meetingComplete")}</Text>
         </BodyContainer>
       </Container>
     );

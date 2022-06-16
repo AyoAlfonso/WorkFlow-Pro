@@ -21,7 +21,8 @@ interface IButtonProps extends StyledSystemProps {
   small?: boolean;
   style?: object;
   fontOverride?: string;
-  color?: any
+  color?: any;
+  children?: React.ReactNode;
   // width?:any
 }
 

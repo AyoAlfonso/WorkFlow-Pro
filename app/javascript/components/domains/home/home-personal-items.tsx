@@ -33,7 +33,7 @@ export const HomePersonalItems = (): JSX.Element => {
       <HomeKeyActivities setQuestionnaireVariant={setQuestionnaireVariant} />
       <ToolsWrapper>
         <ToolsHeader type={"h2"} mt={0}>
-          {t("My Tools")}
+          {t<string>("My Tools")}
         </ToolsHeader>
         <Plan />
         <Journal

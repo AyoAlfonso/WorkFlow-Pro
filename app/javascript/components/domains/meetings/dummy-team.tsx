@@ -17,7 +17,7 @@ import { KeyActivitiesListStyleContainer } from "~/components/domains/key-activi
 import { KeyActivityRecord } from "~/components/shared/issues-and-key-activities/key-activity-record";
 
 import { today } from "~/lib/date-helpers";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import { FutureTeamMeetingsContainer } from "./shared/future-team-meetings-container";
 import { TeamIssuesContainer } from "./shared/team-issues-container";
@@ -38,8 +38,7 @@ interface ITeamOverviewProps {}
 
 export const DummyTeamOverview = observer(
   ({}: ITeamOverviewProps): JSX.Element => {
-    const {
-    } = useMst();
+    const {} = useMst();
 
     const { team_id } = useParams();
     const inDashboard = useRouteMatch("/team/:team_id/dashboard");
@@ -47,66 +46,63 @@ export const DummyTeamOverview = observer(
 
     const [loading, setLoading] = useState<boolean>(true);
     const [expanded, setExpanded] = useState<string>("");
-    
+
     return (
       <Overlay>
         <Wrapper>
-      <Upgradetextcontainer>
-        <IconWrapper>
-        <Icon icon={"Team"} size={160} iconColor={"#005FFE"} />
-        </IconWrapper>
-        <Boldtext>
-          Get the information you need to drive success in your business
-        </Boldtext>
-        <Subtext>
-          Upgrade to a higher tier to get access to Team
-        </Subtext>
-        <Talktous
-        onClick={(e) => {
-          e.preventDefault();
-          window.location.href='http://go.lynchpyn.com/upgrade';
-        }}>
-          Talk to us
-        </Talktous>
-      </Upgradetextcontainer>
-      </Wrapper>
-      <Container>
-        <LeftContainer>
-          <OverviewTabsContainer>
-            <OverviewTabs>{t(`Team Snapshot`)}</OverviewTabs>
-          </OverviewTabsContainer>
-          <TableContainer>
-            <TableHeaderContainer>
-              <ColumnContainerParent>
-                <TodayColumnContainer>
-                  <ColumnSubHeaderContainer>
-                    <TodayText type={"paragraph"}>September 1st</TodayText>
-                  </ColumnSubHeaderContainer>
-                </TodayColumnContainer>
+          <Upgradetextcontainer>
+            <IconWrapper>
+              <Icon icon={"Team"} size={160} iconColor={"#005FFE"} />
+            </IconWrapper>
+            <Boldtext>Get the information you need to drive success in your business</Boldtext>
+            <Subtext>Upgrade to a higher tier to get access to Team</Subtext>
+            <Talktous
+              onClick={e => {
+                e.preventDefault();
+                window.location.href = "http://go.lynchpyn.com/upgrade";
+              }}
+            >
+              Talk to us
+            </Talktous>
+          </Upgradetextcontainer>
+        </Wrapper>
+        <Container>
+          <LeftContainer>
+            <OverviewTabsContainer>
+              <OverviewTabs>{t<string>(`Team Snapshot`)}</OverviewTabs>
+            </OverviewTabsContainer>
+            <TableContainer>
+              <TableHeaderContainer>
+                <ColumnContainerParent>
+                  <TodayColumnContainer>
+                    <ColumnSubHeaderContainer>
+                      <TodayText type={"paragraph"}>September 1st</TodayText>
+                    </ColumnSubHeaderContainer>
+                  </TodayColumnContainer>
+                  <ColumnContainer>
+                    <ColumnSubHeaderContainer>
+                      <Heading type={"h4"}>Today's Pyns</Heading>
+                    </ColumnSubHeaderContainer>
+                  </ColumnContainer>
+                </ColumnContainerParent>
+              </TableHeaderContainer>
+              <UserRecordContainer>
                 <ColumnContainer>
-                  <ColumnSubHeaderContainer>
-                    <Heading type={"h4"}>Today's Pyns</Heading>
-                  </ColumnSubHeaderContainer>
+                  <TeamMemberInfoContainer>
+                    <Avatar
+                      defaultAvatarColor={"blue"}
+                      firstName={"firstName"}
+                      lastName={"lastname"}
+                      size={45}
+                      marginLeft={"0px"}
+                    />
+                    <TeamMemberName>
+                      {"firstName"} {"larstName"}
+                    </TeamMemberName>
+                  </TeamMemberInfoContainer>
                 </ColumnContainer>
-              </ColumnContainerParent>
-            </TableHeaderContainer>
-            <UserRecordContainer>
-              <ColumnContainer>
-                <TeamMemberInfoContainer>
-                   <Avatar
-                    defaultAvatarColor={"blue"}
-                    firstName={"firstName"}
-                    lastName={"lastname"}
-                    size={45}
-                    marginLeft={"0px"}
-                  />
-                  <TeamMemberName>
-                  {"firstName"} {"larstName"}
-                </TeamMemberName>
-                </TeamMemberInfoContainer>
-              </ColumnContainer>
-              <ColumnContainer>
-              <PynContainer>
+                <ColumnContainer>
+                  <PynContainer>
                     <Label
                       sx={{
                         width: "auto",
@@ -116,8 +112,7 @@ export const DummyTeamOverview = observer(
                     >
                       <Checkbox
                         checked={false}
-                        onChange={e => {
-                        }}
+                        onChange={e => {}}
                         sx={{
                           color: baseTheme.colors.primary100,
                         }}
@@ -125,8 +120,7 @@ export const DummyTeamOverview = observer(
                     </Label>
                     <StyledContentEditable
                       html={"Example PYN"}
-                      onChange={e => {
-                      }}
+                      onChange={e => {}}
                       style={{ cursor: "text" }}
                       onKeyDown={key => {}}
                       placeholder={"New pyn..."}
@@ -142,8 +136,7 @@ export const DummyTeamOverview = observer(
                     >
                       <Checkbox
                         checked={false}
-                        onChange={e => {
-                        }}
+                        onChange={e => {}}
                         sx={{
                           color: baseTheme.colors.primary100,
                         }}
@@ -151,32 +144,29 @@ export const DummyTeamOverview = observer(
                     </Label>
                     <StyledContentEditable
                       html={"My Pyns to do"}
-                      onChange={e => {
-                      }}
+                      onChange={e => {}}
                       style={{ cursor: "text" }}
                       onKeyDown={key => {}}
                       placeholder={"New pyn..."}
                     />
                   </PynContainer>
-              </ColumnContainer>
-            </UserRecordContainer>
-            <UserRecordContainer>
-               <ColumnContainer>
-                <TeamMemberInfoContainer>
-                   <Avatar
-                    defaultAvatarColor={"green"}
-                    firstName={"firstName"}
-                    lastName={"lastname"}
-                    size={45}
-                    marginLeft={"0px"}
-                  />
-                  <TeamMemberName>
-                {"first last"}
-              </TeamMemberName>
-                </TeamMemberInfoContainer>
-              </ColumnContainer>
-              <ColumnContainer>
-              <PynContainer>
+                </ColumnContainer>
+              </UserRecordContainer>
+              <UserRecordContainer>
+                <ColumnContainer>
+                  <TeamMemberInfoContainer>
+                    <Avatar
+                      defaultAvatarColor={"green"}
+                      firstName={"firstName"}
+                      lastName={"lastname"}
+                      size={45}
+                      marginLeft={"0px"}
+                    />
+                    <TeamMemberName>{"first last"}</TeamMemberName>
+                  </TeamMemberInfoContainer>
+                </ColumnContainer>
+                <ColumnContainer>
+                  <PynContainer>
                     <Label
                       sx={{
                         width: "auto",
@@ -186,8 +176,7 @@ export const DummyTeamOverview = observer(
                     >
                       <Checkbox
                         checked={false}
-                        onChange={e => {
-                        }}
+                        onChange={e => {}}
                         sx={{
                           color: baseTheme.colors.primary100,
                         }}
@@ -195,8 +184,7 @@ export const DummyTeamOverview = observer(
                     </Label>
                     <StyledContentEditable
                       html={"Must get done tomorrow"}
-                      onChange={e => {
-                      }}
+                      onChange={e => {}}
                       style={{ cursor: "text" }}
                       onKeyDown={key => {}}
                       placeholder={"New pyn..."}
@@ -212,8 +200,7 @@ export const DummyTeamOverview = observer(
                     >
                       <Checkbox
                         checked={false}
-                        onChange={e => {
-                        }}
+                        onChange={e => {}}
                         sx={{
                           color: baseTheme.colors.primary100,
                         }}
@@ -221,32 +208,29 @@ export const DummyTeamOverview = observer(
                     </Label>
                     <StyledContentEditable
                       html={"Must get done example important task"}
-                      onChange={e => {
-                      }}
+                      onChange={e => {}}
                       style={{ cursor: "text" }}
                       onKeyDown={key => {}}
                       placeholder={"New pyn..."}
                     />
                   </PynContainer>
-              </ColumnContainer>
-            </UserRecordContainer>
-            <UserRecordContainer>
-               <ColumnContainer>
-                <TeamMemberInfoContainer>
-                   <Avatar
-                    defaultAvatarColor={"yellow"}
-                    firstName={"firstName"}
-                    lastName={"lastname"}
-                    size={45}
-                    marginLeft={"0px"}
-                  />
-                  <TeamMemberName>
-                {"bob wright"}
-              </TeamMemberName>
-                </TeamMemberInfoContainer>
-              </ColumnContainer>
-              <ColumnContainer>
-              <PynContainer>
+                </ColumnContainer>
+              </UserRecordContainer>
+              <UserRecordContainer>
+                <ColumnContainer>
+                  <TeamMemberInfoContainer>
+                    <Avatar
+                      defaultAvatarColor={"yellow"}
+                      firstName={"firstName"}
+                      lastName={"lastname"}
+                      size={45}
+                      marginLeft={"0px"}
+                    />
+                    <TeamMemberName>{"bob wright"}</TeamMemberName>
+                  </TeamMemberInfoContainer>
+                </ColumnContainer>
+                <ColumnContainer>
+                  <PynContainer>
                     <Label
                       sx={{
                         width: "auto",
@@ -256,8 +240,7 @@ export const DummyTeamOverview = observer(
                     >
                       <Checkbox
                         checked={false}
-                        onChange={e => {
-                        }}
+                        onChange={e => {}}
                         sx={{
                           color: baseTheme.colors.primary100,
                         }}
@@ -265,8 +248,7 @@ export const DummyTeamOverview = observer(
                     </Label>
                     <StyledContentEditable
                       html={"Next weeks example task"}
-                      onChange={e => {
-                      }}
+                      onChange={e => {}}
                       style={{ cursor: "text" }}
                       onKeyDown={key => {}}
                       placeholder={"New pyn..."}
@@ -282,8 +264,7 @@ export const DummyTeamOverview = observer(
                     >
                       <Checkbox
                         checked={false}
-                        onChange={e => {
-                        }}
+                        onChange={e => {}}
                         sx={{
                           color: baseTheme.colors.primary100,
                         }}
@@ -291,62 +272,53 @@ export const DummyTeamOverview = observer(
                     </Label>
                     <StyledContentEditable
                       html={"todays to do"}
-                      onChange={e => {
-                      }}
+                      onChange={e => {}}
                       style={{ cursor: "text" }}
                       onKeyDown={key => {}}
                       placeholder={"New pyn..."}
                     />
                   </PynContainer>
-              </ColumnContainer>
-            </UserRecordContainer>
-            
-            
-          </TableContainer>
-        </LeftContainer>
-        <ToolsWrapper>
-          <OverviewTabs>{t(`Tools`)}</OverviewTabs>
-          <StyledOverviewAccordion expanded={false} elevation={1}>
-            {(
-              <FutureTeamMeetingsContainer
-                titleText={t(`teamMeetingsTitle`)}
-                buttonText={"Team Meeting"}
-                handleMeetingClick={0}
-              />
-            )}
-            {(
-              <FutureTeamMeetingsContainer
-                titleText={t(`teamMeetingsTitle`)}
-                buttonText={t("forumMeeting")}
-                handleMeetingClick={0}
-              />
-            )}
-          </StyledOverviewAccordion>
+                </ColumnContainer>
+              </UserRecordContainer>
+            </TableContainer>
+          </LeftContainer>
+          <ToolsWrapper>
+            <OverviewTabs>{t<string>(`Tools`)}</OverviewTabs>
+            <StyledOverviewAccordion expanded={false} elevation={1}>
+              {
+                <FutureTeamMeetingsContainer
+                  titleText={t<string>(`teamMeetingsTitle`)}
+                  buttonText={"Team Meeting"}
+                  handleMeetingClick={0}
+                />
+              }
+              {
+                <FutureTeamMeetingsContainer
+                  titleText={t<string>(`teamMeetingsTitle`)}
+                  buttonText={t<string>("forumMeeting")}
+                  handleMeetingClick={0}
+                />
+              }
+            </StyledOverviewAccordion>
 
-          <StyledOverviewAccordion
-            expanded={false}
-            elevation={-100}
-          >
-            <TeamIssuesContainer
-              teamId={team_id}
-              title={t(`teamIssuesTitle`)}
-              expanded={"t"}
-              handleChange={0}
-            />
-          </StyledOverviewAccordion>
-          <StyledOverviewAccordion
-            expanded={false}
-            elevation={-100}
-          >
-            <TeamIssuesContainer
-              teamId={team_id}
-              title={t(`teamIssuesTitle`)}
-              expanded={"t"}
-              handleChange={0}
-            />
-          </StyledOverviewAccordion>
-        </ToolsWrapper>
-      </Container>
+            <StyledOverviewAccordion expanded={false} elevation={-100}>
+              <TeamIssuesContainer
+                teamId={team_id}
+                title={t<string>(`teamIssuesTitle`)}
+                expanded={"t"}
+                handleChange={0}
+              />
+            </StyledOverviewAccordion>
+            <StyledOverviewAccordion expanded={false} elevation={-100}>
+              <TeamIssuesContainer
+                teamId={team_id}
+                title={t<string>(`teamIssuesTitle`)}
+                expanded={"t"}
+                handleChange={0}
+              />
+            </StyledOverviewAccordion>
+          </ToolsWrapper>
+        </Container>
       </Overlay>
     );
   },
@@ -354,7 +326,6 @@ export const DummyTeamOverview = observer(
 
 const Overlay = styled.div`
   position: relative;
-
 `;
 
 const Wrapper = styled.div`
@@ -364,7 +335,7 @@ const Wrapper = styled.div`
 `;
 
 const Upgradetextcontainer = styled.div`
-  width:100%;
+  width: 100%;
   text-align: center;
   border-top: 1px solid white;
 `;
@@ -396,24 +367,24 @@ const Subtext = styled.div`
 const Talktous = styled.div`
   width: 120px;
   height: 28px;
-  background: #005FFE 0% 0% no-repeat padding-box;
-  border: 1px solid #005FFE;
+  background: #005ffe 0% 0% no-repeat padding-box;
+  border: 1px solid #005ffe;
   border-radius: 4px;
   opacity: 1;
   font-family: lato;
   font-weight: bold;
   font-size: 12px;
-  color: #FFFFFF;
+  color: #ffffff;
   display: inline-block;
   padding-top: 11px;
   line-spacing: 24;
- `;
+`;
 
 const Container = styled.div`
   display: flex;
- filter: blur(10px);
+  filter: blur(10px);
   position: absolute;
- opacity: 0.35;
+  opacity: 0.35;
 `;
 
 const LeftContainer = styled.div`

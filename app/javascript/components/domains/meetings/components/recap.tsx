@@ -111,7 +111,7 @@ export const Recap = observer(
     return (
       <Container>
         <SingleListContainer>
-          <KeyActivitiesHeader title={t("meeting.teamsPyns")} />
+          <KeyActivitiesHeader title={t<string>("meeting.teamsPyns")} />
           <KeyActivityListSubHeaderContainer>{today}</KeyActivityListSubHeaderContainer>
           <TeamKeyActivitiesBody includeAvatar={true} />
         </SingleListContainer>

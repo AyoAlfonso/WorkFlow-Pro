@@ -40,7 +40,7 @@ export const GoalsCoreFour = ({
   return (
     <Container>
       <CoreFourHeader>
-        <CoreFourTitle>{t("core.goalsTitle")}</CoreFourTitle>
+        <CoreFourTitle>{t<string>("core.goalsTitle")}</CoreFourTitle>
         {renderHideButton()}
       </CoreFourHeader>
 

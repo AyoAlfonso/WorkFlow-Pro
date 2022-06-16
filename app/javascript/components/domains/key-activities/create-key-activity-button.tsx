@@ -19,7 +19,7 @@ export const CreateKeyActivityButton = ({
       <AddNewKeyActivityPlus>
         <Icon icon={"Plus"} size={16} iconColor={"primary100"} />
       </AddNewKeyActivityPlus>
-      <AddNewKeyActivityText> {t("keyActivities.addTitle")}</AddNewKeyActivityText>
+      <AddNewKeyActivityText> {t<string>("keyActivities.addTitle")}</AddNewKeyActivityText>
     </Container>
   );
 };

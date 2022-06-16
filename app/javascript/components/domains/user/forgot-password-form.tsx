@@ -71,13 +71,13 @@ export const ForgotPasswordForm = observer(
         >
           <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="120"></img>
           <Text color={"black"} fontSize={3}>
-            {t("profile.forgotPasswordForm.recoverPassword")}
+            {t<string>("profile.forgotPasswordForm.recoverPassword")}
           </Text>
           {emailSent ? (
-            <SentEmailText>{t("profile.forgotPasswordForm.emailSent")}</SentEmailText>
+            <SentEmailText>{t<string>("profile.forgotPasswordForm.emailSent")}</SentEmailText>
           ) : (
             <>
-              <Label htmlFor="email">{t("profile.loginForm.email")}</Label>
+              <Label htmlFor="email">{t<string>("profile.loginForm.email")}</Label>
               <Input
                 name="email"
                 onChange={e => setEmail(e.target.value)}
@@ -94,7 +94,7 @@ export const ForgotPasswordForm = observer(
                 disabled={!email || loading}
                 onClick={resetPasswordFlow}
               >
-                {t("profile.forgotPasswordForm.emailMe")}
+                {t<string>("profile.forgotPasswordForm.emailMe")}
               </Button>
             </>
           )}

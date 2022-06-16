@@ -79,17 +79,17 @@ export const LoginForm = observer(
           }}
         >
           {sessionStore.loggedIn ? (
-            <Label>{t("profile.loginForm.currentlyLoggedIn")}</Label>
+            <Label>{t<string>("profile.loginForm.currentlyLoggedIn")}</Label>
           ) : (
             <>
               <img src={"/assets/LynchPyn-Logo_Horizontal-Blue"} width="120"></img>
               <Text color={"black"} fontSize={3}>
-                {t("profile.loginForm.login")}
+                {t<string>("profile.loginForm.login")}
               </Text>
 
               {!sessionStore.logginError ? (
                 <>
-                  <Label htmlFor="email">{t("profile.loginForm.email")}</Label>
+                  <Label htmlFor="email">{t<string>("profile.loginForm.email")}</Label>
                   <Input
                     name="email"
                     onChange={e => setEmail(e.target.value)}
@@ -99,7 +99,7 @@ export const LoginForm = observer(
                       }
                     }}
                   />
-                  <Label>{t("profile.loginForm.password")}</Label>
+                  <Label>{t<string>("profile.loginForm.password")}</Label>
                   <Input
                     name="password"
                     type="password"
@@ -117,7 +117,7 @@ export const LoginForm = observer(
                     style={{ width: "100%", marginTop: "15px", marginBottom: "15px" }}
                     onClick={() => sessionStore.login(email, password)}
                   >
-                    {t("profile.loginForm.login")}
+                    {t<string>("profile.loginForm.login")}
                   </Button>
                   <GoogleAuthButton onClick={() => login()}>
                     <OAuthContent>
@@ -171,10 +171,10 @@ export const LoginForm = observer(
                 fontSize={1}
                 onClick={() => history.push("/forgotpassword")}
               >
-                {t("profile.loginForm.forgot")}
+                {t<string>("profile.loginForm.forgot")}
               </TextInlineContainer>
               <Text color={"greyInactive"}>
-                {t("profile.loginForm.termsDescription")}
+                {t<string>("profile.loginForm.termsDescription")}
                 <a href="https://lynchpyn.com/terms-of-use/">Terms of Use</a> and{" "}
                 <a href="https://lynchpyn.com/privacy-policy/">Privacy Policy</a>
               </Text>

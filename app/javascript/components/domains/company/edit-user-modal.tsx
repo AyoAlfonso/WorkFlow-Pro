@@ -138,28 +138,30 @@ export const EditUserModal = ({
             no={<></>}
             yes={
               <FormContainer>
-                <Label htmlFor="email">{t("profile.profileUpdateForm.email")}</Label>
+                <Label htmlFor="email">{t<string>("profile.profileUpdateForm.email")}</Label>
                 <Input
                   name="email"
                   value={email}
                   disabled={userId ? true : false}
                   onChange={e => setEmail(e.target.value)}
                 />
-                <Label htmlFor="firstName">{t("profile.profileUpdateForm.firstName")}</Label>
+                <Label htmlFor="firstName">
+                  {t<string>("profile.profileUpdateForm.firstName")}
+                </Label>
                 <Input
                   name="firstName"
                   onChange={e => setFirstName(e.target.value)}
                   value={firstName}
                 />
-                <Label htmlFor="lastName">{t("profile.profileUpdateForm.lastName")}</Label>
+                <Label htmlFor="lastName">{t<string>("profile.profileUpdateForm.lastName")}</Label>
                 <Input
                   name="lastName"
                   onChange={e => setLastName(e.target.value)}
                   value={lastName}
                 />
-                <Label htmlFor="title">{t("profile.profileUpdateForm.title")}</Label>
+                <Label htmlFor="title">{t<string>("profile.profileUpdateForm.title")}</Label>
                 <Input name="title" onChange={e => setTitle(e.target.value)} value={title} />
-                <Label htmlFor="userRole">{t("profile.profileUpdateForm.role")}</Label>
+                <Label htmlFor="userRole">{t<string>("profile.profileUpdateForm.role")}</Label>
                 <Select
                   name="userRole"
                   onChange={e => {
@@ -199,13 +201,13 @@ export const EditUserModal = ({
                       variant={"primary"}
                     >
                       {userId
-                        ? t("profile.profileUpdateForm.save")
-                        : t("profile.profileUpdateForm.inviteUser")}
+                        ? t<string>("profile.profileUpdateForm.save")
+                        : t<string>("profile.profileUpdateForm.inviteUser")}
                     </Button>
 
                     {userId ? (
                       <Button small variant={"redOutline"} onClick={deactivateUser} width={"200px"}>
-                        {t("profile.profileUpdateForm.deactivate")}
+                        {t<string>("profile.profileUpdateForm.deactivate")}
                       </Button>
                     ) : (
                       <></>
