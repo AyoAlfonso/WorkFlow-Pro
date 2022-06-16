@@ -6,8 +6,10 @@ require "uri"
 
 class  AuthorizationController <  ApplicationController                              
  skip_before_action :verify_authenticity_token
- def google_oauth2
 
+#  binding.pry
+ def google_oauth2
+  # binding.pry
   url = URI.parse("https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=#{params["access_token"]}")                  
 
   http = Net::HTTP.new(url.host, url.port);
@@ -27,6 +29,7 @@ class  AuthorizationController <  ApplicationController
       headers['Authorization'] = "Bearer " + (@token).to_s
       render json:@user
     else
+       headers['Authorization'] = ""
       return render json: { error: "This user doesn't exist in our records", status: 412 } 
     end
   end
@@ -44,9 +47,9 @@ class  AuthorizationController <  ApplicationController
         headers['Authorization'] = "Bearer " + (@token).to_s
         return render json:@user
       else
+        headers['Authorization'] = ""
         return  render json: { error: "This user doesn't exist in our records", status: 412 } 
       end
-  end        
-  
+  end
 end
 

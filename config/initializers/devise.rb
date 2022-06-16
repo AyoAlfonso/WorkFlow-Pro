@@ -303,6 +303,7 @@ Devise.setup do |config|
     
     jwt.dispatch_requests = [
       ['POST', %r{^/users/sign_in$}],
+    #  ['POST', %r{^/auth/google_oauth2/callback$}]
     ]
   
     jwt.revocation_requests = [

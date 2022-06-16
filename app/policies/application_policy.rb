@@ -37,6 +37,9 @@ class ApplicationPolicy
 
   ##helpers
   def user_is_part_of_this_company?(company)
+    if company.nil?
+       false
+    end
     enablement = @user.user_company_enablements.find_by_company_id(company.id)
     enablement.present? && enablement&.user_role&.name != UserRole::COACH
   end

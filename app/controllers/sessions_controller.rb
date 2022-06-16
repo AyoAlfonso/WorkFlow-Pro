@@ -1,7 +1,6 @@
 class SessionsController < Devise::SessionsController
   skip_before_action :verify_authenticity_token
-  # after_filter :handle_failed_login, :only => :new
-  respond_to :json
+
   #default for json api
   # protect_from_forgery if: -> { request.format.html? }
 
@@ -21,4 +20,6 @@ class SessionsController < Devise::SessionsController
     yield resource if block_given?
     respond_with resource, location: after_sign_in_path_for(resource)
   end
+
+  respond_to :json
 end
