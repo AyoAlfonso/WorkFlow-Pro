@@ -13,7 +13,6 @@ import { KeyActivityModalContent } from "./key-activity-modal-content";
 import { sortByPosition } from "~/utils/sorting";
 import { toJS } from "mobx";
 
-import ContentLoader from "react-content-loader";
 
 interface IKeyActivitiesListProps {
   keyActivities: Array<any>;
