@@ -29,7 +29,7 @@ class  AuthorizationController <  ApplicationController
    @email = JSON.parse(response.body)["email"]
    @user  = User.find_by(email: @email)
 
-    if @user.provider.nil?
+    if @user.nil? || @user.provider.nil?
       return render json: { error: "This user has not added to any SSO list. Please login with email & password",  error_type: "no_auth"}, status: 301
     end
 
@@ -52,7 +52,7 @@ class  AuthorizationController <  ApplicationController
       if params["username"]
         @email = params["username"]
         @user = User.find_by(email: @email)
-       if @user.provider.nil?
+       if @user.nil? || @user.provider.nil?
         return render json: { error: "This user has not added to any SSO list. Please login with email & password",  error_type: "no_auth"}, status: 301
        end
         @user.provider = "microsoft_oauth" if @user.provider == "no_auth"
